@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:28:48 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,15 +264,11 @@ OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow* _p
     m_aMenu.reset(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
 
     m_aTBPreview.SetOutStyle(TOOLBOX_STYLE_FLAT);
-    m_aTBPreview.InsertItem(SID_DB_APP_DISABLE_PREVIEW,m_aMenu->GetItemText(SID_DB_APP_DISABLE_PREVIEW),TIB_DROPDOWN|TIB_AUTOSIZE|TIB_RADIOCHECK);
+    m_aTBPreview.InsertItem(SID_DB_APP_DISABLE_PREVIEW,m_aMenu->GetItemText(SID_DB_APP_DISABLE_PREVIEW),TIB_LEFT|TIB_DROPDOWN|TIB_AUTOSIZE|TIB_RADIOCHECK);
     m_aTBPreview.SetHelpId(HID_APP_VIEW_PREVIEW_CB);
-    m_aTBPreview.SetSelectHdl( LINK( this, OAppDetailPageHelper, OnToolBoxSelected ) );
-    m_aTBPreview.SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnToolBoxClicked ) );
+    m_aTBPreview.SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
     m_aTBPreview.EnableMenuStrings();
     m_aTBPreview.Enable(!m_pBorderWin->getView()->getCommandController()->isDataSourceReadOnly());
-
-    m_aPreviewTimer.SetTimeoutHdl( LINK( this, OAppDetailPageHelper, PreviewChangeHdl) );
-    m_aPreviewTimer.SetTimeout( 300 );
 
     m_aBorder.SetUniqueId(UID_APP_VIEW_PREVIEW_1);
 
@@ -939,8 +935,6 @@ void OAppDetailPageHelper::Resize()
     {
         Size aFLSize = LogicToPixel( Size( 2, 6 ), MAP_APPFONT );
         sal_Int32 n6PPT = aFLSize.Height();
-        Size aFTSize = LogicToPixel( Size( 8, 14 ), MAP_APPFONT );
-        sal_Int32 n14PPT = aFTSize.Height();
         long nHalfOutputWidth = static_cast<long>(nOutputWidth * 0.5);
 
         pWindow->SetPosSizePixel( Point(0, 0), Size(nHalfOutputWidth - n6PPT, nOutputHeight) );
@@ -948,62 +942,16 @@ void OAppDetailPageHelper::Resize()
         m_aFL.SetPosSizePixel( Point(nHalfOutputWidth , 0 ), Size(aFLSize.Width(), nOutputHeight ) );
 
         String sText = m_aTBPreview.GetItemText(SID_DB_APP_DISABLE_PREVIEW);
-        long nTextWidth = m_aTBPreview.GetTextWidth(sText);
-        m_aTBPreview.SetPosSizePixel(   Point(nOutputWidth - 2*n6PPT - nTextWidth, 0 ),
-                                        Size(nTextWidth + n6PPT, n14PPT) );
+        Size aTBSize = m_aTBPreview.CalcWindowSizePixel();
+        m_aTBPreview.SetPosSizePixel(   Point(nOutputWidth - aTBSize.getWidth(), 0 ),
+                                        aTBSize );
 
-        m_aBorder.SetPosSizePixel(      Point(nHalfOutputWidth + aFLSize.Width() + n6PPT, n14PPT + n6PPT ),
-                                        Size(nHalfOutputWidth - aFLSize.Width() - n6PPT, nOutputHeight - 2*n6PPT - n14PPT) );
+        m_aBorder.SetPosSizePixel(      Point(nHalfOutputWidth + aFLSize.Width() + n6PPT, aTBSize.getHeight() + n6PPT ),
+                                        Size(nHalfOutputWidth - aFLSize.Width() - n6PPT, nOutputHeight - 2*n6PPT - aTBSize.getHeight()) );
         m_aPreview.SetPosSizePixel(     Point(0,0),m_aBorder.GetSizePixel() );
         m_aDocumentInfo.SetPosSizePixel(Point(0,0),m_aBorder.GetSizePixel() );
         m_pTablePreview->SetPosSizePixel(Point(0,0),m_aBorder.GetSizePixel() );
     }
-}
-// -----------------------------------------------------------------------------
-IMPL_LINK( OAppDetailPageHelper, PreviewChangeHdl, void*, EMPTY )
-{
-    m_aTBPreview.EndSelection();
-
-    // tell the toolbox that the item is pressed down
-    m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, sal_True );
-
-    // simulate a mouse move (so the "down" state is really painted)
-    Point aPoint = m_aTBPreview.GetItemRect( SID_DB_APP_DISABLE_PREVIEW ).TopLeft();
-    MouseEvent aMove( aPoint, 0, MOUSE_SIMPLEMOVE | MOUSE_SYNTHETIC );
-    m_aTBPreview.MouseMove( aMove );
-
-    m_aTBPreview.Update();
-
-    // execute the menu
-    IController* pControler = getBorderWin()->getView()->getCommandController();
-    ::std::auto_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
-
-    sal_uInt16 pActions[] = { SID_DB_APP_DISABLE_PREVIEW
-                            , SID_DB_APP_VIEW_DOC_PREVIEW
-                            , SID_DB_APP_VIEW_DOCINFO_PREVIEW
-    };
-
-    for(sal_Int32 i=0; i < sizeof(pActions)/sizeof(pActions[0]);++i)
-    {
-        aMenu->CheckItem(pActions[i],m_aMenu->IsItemChecked(pActions[i]));
-    }
-    aMenu->EnableItem( SID_DB_APP_VIEW_DOCINFO_PREVIEW, pControler->isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) );
-
-    // no disabled entries
-    aMenu->RemoveDisabledEntries();
-
-    sal_uInt16 nSelectedAction = aMenu->Execute(&m_aTBPreview, m_aTBPreview.GetItemRect( SID_DB_APP_DISABLE_PREVIEW ));
-    // "cleanup" the toolbox state
-    MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
-    m_aTBPreview.MouseMove( aLeave );
-    m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, sal_False);
-    if ( nSelectedAction )
-    {
-        m_aTBPreview.SetItemText(SID_DB_APP_DISABLE_PREVIEW, aMenu->GetItemText(nSelectedAction));
-        Resize();
-        getBorderWin()->getView()->getCommandController()->executeChecked(nSelectedAction);
-    }
-    return 0;
 }
 // -----------------------------------------------------------------------------
 PreviewMode OAppDetailPageHelper::getPreviewMode()
@@ -1193,16 +1141,49 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
     }
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK(OAppDetailPageHelper, OnToolBoxClicked, ToolBox*, pToolBox)
+IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, pToolBox)
 {
-    m_aPreviewTimer.Start();
-    return 0L;
-}
-// -----------------------------------------------------------------------------
-IMPL_LINK(OAppDetailPageHelper, OnToolBoxSelected, ToolBox*, pToolBox)
-{
-    if ( m_aPreviewTimer.IsActive() )
-        m_aPreviewTimer.Stop();
+    m_aTBPreview.EndSelection();
+
+    // tell the toolbox that the item is pressed down
+    m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, sal_True );
+
+    // simulate a mouse move (so the "down" state is really painted)
+    Point aPoint = m_aTBPreview.GetItemRect( SID_DB_APP_DISABLE_PREVIEW ).TopLeft();
+    MouseEvent aMove( aPoint, 0, MOUSE_SIMPLEMOVE | MOUSE_SYNTHETIC );
+    m_aTBPreview.MouseMove( aMove );
+
+    m_aTBPreview.Update();
+
+    // execute the menu
+    IController* pControler = getBorderWin()->getView()->getCommandController();
+    ::std::auto_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
+
+    sal_uInt16 pActions[] = { SID_DB_APP_DISABLE_PREVIEW
+                            , SID_DB_APP_VIEW_DOC_PREVIEW
+                            , SID_DB_APP_VIEW_DOCINFO_PREVIEW
+    };
+
+    for(sal_Int32 i=0; i < sizeof(pActions)/sizeof(pActions[0]);++i)
+    {
+        aMenu->CheckItem(pActions[i],m_aMenu->IsItemChecked(pActions[i]));
+    }
+    aMenu->EnableItem( SID_DB_APP_VIEW_DOCINFO_PREVIEW, pControler->isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) );
+
+    // no disabled entries
+    aMenu->RemoveDisabledEntries();
+
+    sal_uInt16 nSelectedAction = aMenu->Execute(&m_aTBPreview, m_aTBPreview.GetItemRect( SID_DB_APP_DISABLE_PREVIEW ));
+    // "cleanup" the toolbox state
+    MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
+    m_aTBPreview.MouseMove( aLeave );
+    m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, sal_False);
+    if ( nSelectedAction )
+    {
+        m_aTBPreview.SetItemText(SID_DB_APP_DISABLE_PREVIEW, aMenu->GetItemText(nSelectedAction));
+        Resize();
+        getBorderWin()->getView()->getCommandController()->executeChecked(nSelectedAction,Sequence<PropertyValue>());
+    }
     return 0L;
 }
 // -----------------------------------------------------------------------------
