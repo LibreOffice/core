@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcommon.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:45:44 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ String RID_STR_QRY_TITLE
     Text[ arabic ] = "«·«” ›”«— #";
     Text[ turkish ] = "Sorgu #";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Consulta #";
 };
 String RID_STR_TBL_TITLE
 {
@@ -114,5 +115,6 @@ String RID_STR_TBL_TITLE
     Text[ arabic ] = "«·ÃœÊ· #";
     Text[ turkish ] = "Tablo #";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tabla #";
 };
 
