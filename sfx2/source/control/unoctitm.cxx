@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:27:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,15 +909,17 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         // Retrieve metric from pool to have correct sub ID when calling QueryValue
         USHORT     nSubId( 0 );
         SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
-        if ( pDispatcher && pBindings )
+        if ( pDispatcher )
         {
-            SfxStateCache *pCache = pBindings->GetStateCache( nSID );
-            if ( pCache )
-            {
-                const SfxSlotServer *pServer = pCache->GetSlotServer( *pDispatcher );
-                if ( pServer )
-                    eMapUnit = GetCoreMetric( pDispatcher->GetShell( pServer->GetShellLevel() )->GetPool(), nSID );
-            }
+            // retrieve the core metric
+            // it's enough to check the objectshell, the only shell that does not use the pool of the document
+            // is SfxViewFrame, but it hasn't any metric parameters
+            // TODO/LATER: what about the FormShell? Does it use any metric data?! Perhaps it should use the Pool of the document!
+            SfxViewFrame* pFrame = pDispatcher->GetFrame();
+            if ( pFrame )
+                eMapUnit = GetCoreMetric( pFrame->GetObjectShell()->GetPool(), nSID );
+            else
+                eMapUnit = GetCoreMetric( SFX_APP()->GetPool(), nSID );
         }
 
         if ( eMapUnit == SFX_MAPUNIT_TWIP )
