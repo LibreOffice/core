@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:41:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,13 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
+#include <com/sun/star/graphic/XGraphic.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICRENDERER_HPP_
+#include <com/sun/star/graphic/XGraphicRenderer.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
@@ -578,7 +585,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     OUString aFilterName, aMediaType;
     URL aURL;
 
-    com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOutputStream;
+    com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >         xOutputStream;
+    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicRenderer > xGraphicRenderer;
     {
         sal_Int32 nArgs = aDescriptor.getLength();
         const PropertyValue* pValues = aDescriptor.getConstArray();
@@ -602,6 +610,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
             {
                 pValues->Value >>= xOutputStream;
+            }
+            else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicRenderer" ) ) )
+            {
+                pValues->Value >>= xGraphicRenderer;
             }
             else if( pValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )  // for compatibility reasons, deprecated
             {
@@ -1000,7 +1012,12 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         else
         {
             // now we have a graphic, so export it
-            if( xOutputStream.is() )
+            if( xGraphicRenderer.is() )
+            {
+                // render graphic directly into given renderer
+                xGraphicRenderer->render( aGraphic.GetXGraphic() );
+            }
+            else if( xOutputStream.is() )
             {
                 // TODO: Either utilize optional XSeekable functionality for the
                 // SvOutputStream, or adapt the graphic filter to not seek anymore.
