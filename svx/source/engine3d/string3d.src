@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,11 @@ String RID_SVX_3D_CREATE_LATHE
     Text [ dutch ] = "3D-rotatieobjecten maken" ;
     Text [ swedish ] = "Skapa 3D-rotationsobjekt" ;
     Text [ danish ] = "Opret 3D-rotationslegeme" ;
-    Text [ portuguese_brazilian ] = "Erstelle 3D-Rotationsobjekt" ;
+    Text [ portuguese_brazilian ] = "Criar objeto de rotação 3D" ;
     Text [ portuguese ] = "Criar objectos de rotação 3D" ;
     Text[ chinese_simplified ] = "å»ºç«‹3ç»´æ—‹è½¬ä½“";
     Text[ russian ] = "Ñîçäàòü òğåõìåğíûé îáúåêò âğàùåíèÿ";
-    Text[ polish ] = "Utwórz 3-W obiekt obrotowy";
+    Text[ polish ] = "Utwórz obiekt obrotowy 3D";
     Text[ japanese ] = "3D å›è»¢ä½“ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ";
     Text[ chinese_traditional ] = "å»ºç«‹ 3D æ—‹è½‰é«”";
     Text[ arabic ] = "ÅäÔÇÁ ßÇÆä ÇÓÊÏÇÑÉ ËáÇËí ÇáÃÈÚÇÏ";
@@ -89,6 +89,9 @@ String RID_SVX_3D_CREATE_LATHE
     Text[ catalan ] = "Crea un objecte de gir 3D";
     Text[ finnish ] = "Luo 3D-pyörähdyskappale";
     Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸§à¸±à¸•à¸–à¸¸à¸«à¸¡à¸¸à¸™ 3à¸¡à¸´à¸•à¸´";
+    Text[ czech ] = "VytvoÅ™it 3D rotaÄnÃ­ objekt";
+    Text[ hebrew ] = "â€®×™×¦×™×¨×ª ×¢×¦× ×¡×™×‘×•×‘×™ ×ª×œ×ª ××™××“×™â€¬";
+    Text[ hindi ] = "3D à¤˜à¥à¤®à¤¾à¤µ à¤µà¤¸à¥à¤¤à¥ à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
 };
 String RID_SVX_3D_UNDO_EXCHANGE_PASTE
 {
@@ -98,7 +101,7 @@ String RID_SVX_3D_UNDO_EXCHANGE_PASTE
     Text [ ENGLISH ] = "Paste object(s)" ;
     Text [ norwegian ] = "Lim inn objekt(er)" ;
     Text [ italian ] = "Incolla oggetti" ;
-    Text [ portuguese_brazilian ] = "Colar objeto(s)" ;
+    Text [ portuguese_brazilian ] = "Inserir objeto(s)" ;
     Text [ portuguese ] = "Inserir objecto(s)" ;
     Text [ finnish ] = "Lisää objekti(t)" ;
     Text [ danish ] = "Indsæt objekt(er)" ;
@@ -109,7 +112,7 @@ String RID_SVX_3D_UNDO_EXCHANGE_PASTE
     Text [ english_us ] = "Insert object(s)" ;
     Text[ chinese_simplified ] = "æ’å…¥å¯¹è±¡";
     Text[ russian ] = "Âñòàâèòü îáúåêò(û)";
-    Text[ polish ] = "Wstaw obiekt (y)";
+    Text[ polish ] = "Wstaw obiekt(y)";
     Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ¿å…¥";
     Text[ chinese_traditional ] = "æ’å…¥ç‰©ä»¶";
     Text[ arabic ] = "ÅÏÑÇÌ ßÇÆä/ßÇÆäÇÊ";
@@ -119,6 +122,9 @@ String RID_SVX_3D_UNDO_EXCHANGE_PASTE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix objecte(s)";
     Text[ thai ] = "à¹à¸—à¸£à¸à¸§à¸±à¸•à¸–à¸¸";
+    Text[ czech ] = "VloÅ¾it objekt(y)";
+    Text[ hebrew ] = "â€®×”×›× ×¡×ª ×¢×¦××™×â€¬";
+    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤œà¥‹à¤¡à¤¼à¥‹";
 };
 String RID_SVX_3D_UNDO_SEGMENTS
 {
@@ -132,7 +138,7 @@ String RID_SVX_3D_UNDO_SEGMENTS
     Text [ swedish ] = "Antal segment" ;
     Text [ danish ] = "Antal segmenter" ;
     Text [ portuguese ] = "Número de segmentos" ;
-    Text [ portuguese_brazilian ] = "Anzahl Segmente" ;
+    Text [ portuguese_brazilian ] = "Número de segmentos" ;
     Text[ chinese_simplified ] = "åˆ†æ®µæ•°ç›®";
     Text[ russian ] = "Êîëè÷åñòâî ñåãìåíòîâ";
     Text[ polish ] = "Liczba segmentów";
@@ -146,6 +152,9 @@ String RID_SVX_3D_UNDO_SEGMENTS
     Text[ catalan ] = "Nombre de segments";
     Text[ finnish ] = "Osioiden määrä";
     Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸ªà¹ˆà¸§à¸™";
+    Text[ czech ] = "PoÄet ÄÃ¡stÃ­";
+    Text[ hebrew ] = "â€®××¡×¤×¨ ×”×§×˜×¢×™×â€¬";
+    Text[ hindi ] = "à¤–à¤£à¥à¤¡à¥‹à¤‚ à¤•à¥€ à¤¸à¤‚à¤–à¥à¤¯à¤¾";
 };
 String RID_SVX_3D_UNDO_DEEPTH
 {
@@ -159,7 +168,7 @@ String RID_SVX_3D_UNDO_DEEPTH
     Text [ swedish ] = "Objektdjup" ;
     Text [ danish ] = "Objektdybde" ;
     Text [ portuguese ] = "Profundidade do objecto" ;
-    Text [ portuguese_brazilian ] = "Objekttiefe" ;
+    Text [ portuguese_brazilian ] = "Profundidade do objeto" ;
     Text[ chinese_simplified ] = "å¯¹è±¡æ·±åº¦";
     Text[ russian ] = "Ãëóáèíà îáúåêòà";
     Text[ polish ] = "G³êbia obiektu";
@@ -173,6 +182,9 @@ String RID_SVX_3D_UNDO_DEEPTH
     Text[ catalan ] = "Profunditat de l'objecte";
     Text[ finnish ] = "Objektin syvyys";
     Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸¥à¸¶à¸à¸‚à¸­à¸‡à¸§à¸±à¸•à¸–à¸¸";
+    Text[ czech ] = "Hloubka objektu";
+    Text[ hebrew ] = "â€®×¢×•××§ ×”×¢×¦×â€¬";
+    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤•à¥€ à¤—à¤¹à¤°à¤¾à¤ˆ";
 };
 String RID_SVX_3D_UNDO_FOCAL
 {
@@ -186,10 +198,10 @@ String RID_SVX_3D_UNDO_FOCAL
     Text [ swedish ] = "Kamerabrännvidd" ;
     Text [ danish ] = "Kamerabrændvidde" ;
     Text [ portuguese ] = "Distância focal" ;
-    Text [ portuguese_brazilian ] = "Kamerabrennweite" ;
+    Text [ portuguese_brazilian ] = "Distância focal" ;
     Text[ chinese_simplified ] = "ç…§ç›¸æœºç„¦è·";
     Text[ russian ] = "Ôîêóñíîå ğàññòîÿíèå";
-    Text[ polish ] = "Ogniskowa kamery";
+    Text[ polish ] = "Ogniskowa";
     Text[ japanese ] = "ã‚«ãƒ¡ãƒ©ã®ç„¦ç‚¹è·é›¢";
     Text[ chinese_traditional ] = "ç…§ç›¸æ©Ÿç„¦è·";
     Text[ arabic ] = "ÇáØæá ÇáÈÄÑí ááßÇãíÑÇ";
@@ -200,6 +212,9 @@ String RID_SVX_3D_UNDO_FOCAL
     Text[ catalan ] = "Longitud focal";
     Text[ finnish ] = "Polttoväli";
     Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸¢à¸²à¸§à¸ˆà¸¸à¸”à¸£à¸§à¸¡";
+    Text[ czech ] = "OhniskovÃ¡ vzdÃ¡lenost";
+    Text[ hebrew ] = "â€®××¨×—×§ ××™×§×•×“â€¬";
+    Text[ hindi ] = "à¤¤à¤¾à¤² à¤•à¥‡ à¤®à¤§à¥à¤¯ à¤¸à¥‡ à¤‰à¤¸à¤•à¥‡ à¤•à¥‡à¤¨à¥à¤¦à¥à¤° à¤¤à¤• à¤•à¥€ à¤¦à¥‚à¤°à¥€";
 };
 String RID_SVX_3D_UNDO_CAMPOS
 {
@@ -213,7 +228,7 @@ String RID_SVX_3D_UNDO_CAMPOS
     Text [ swedish ] = "Kameraposition" ;
     Text [ danish ] = "Kameraposition" ;
     Text [ portuguese ] = "Posição da câmara" ;
-    Text [ portuguese_brazilian ] = "Kameraposition" ;
+    Text [ portuguese_brazilian ] = "Posição da camera" ;
     Text[ chinese_simplified ] = "ç…§ç›¸æœºä½ç½®";
     Text[ russian ] = "Ïîëîæåíèå êàìåğû";
     Text[ polish ] = "Pozycja kamery";
@@ -227,6 +242,9 @@ String RID_SVX_3D_UNDO_CAMPOS
     Text[ catalan ] = "Posició de la càmara";
     Text[ finnish ] = "Kameran sijainti";
     Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¸à¸¥à¹‰à¸­à¸‡";
+    Text[ czech ] = "UmÃ­stÄ›nÃ­ kamery";
+    Text[ hebrew ] = "â€®××™×§×•× ××¦×œ××”â€¬";
+    Text[ hindi ] = "à¤•à¥‡à¤®à¤°à¤¾ à¤•à¤¾ à¤¸à¥à¤¥à¤¾à¤¨";
 };
 String RID_SVX_3D_UNDO_ROTATE
 {
@@ -240,10 +258,10 @@ String RID_SVX_3D_UNDO_ROTATE
     Text [ swedish ] = "Rotera 3D-objekt" ;
     Text [ danish ] = "Roter 3D-objekt" ;
     Text [ portuguese ] = "Rodar objecto 3D" ;
-    Text [ portuguese_brazilian ] = "3D-Objekt rotieren" ;
+    Text [ portuguese_brazilian ] = "Girar objeto 3D" ;
     Text[ chinese_simplified ] = "æ—‹è½¬ 3 ç»´å¯¹è±¡";
     Text[ russian ] = "Âğàùàòü òğåõìåğíûé îáúåêò";
-    Text[ polish ] = "Obróæ obiekt 3-W";
+    Text[ polish ] = "Obróæ obiekt 3D";
     Text[ japanese ] = "3D ä½“ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å›è»¢";
     Text[ chinese_traditional ] = "æ—‹è½‰ 3D ç‰©ä»¶";
     Text[ arabic ] = "ÇÓÊÏÇÑÉ ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
@@ -254,6 +272,9 @@ String RID_SVX_3D_UNDO_ROTATE
     Text[ catalan ] = "Gira l'objecte 3D";
     Text[ finnish ] = "Kierrä 3D-kappaletta";
     Text[ thai ] = "à¸«à¸¡à¸¸à¸™à¸§à¸±à¸•à¸–à¸¸ 3à¸¡à¸´à¸•à¸´";
+    Text[ czech ] = "OtoÄit 3D objekt";
+    Text[ hebrew ] = "â€®×¡×™×‘×•×‘ ×¢×¦× ×ª×œ×ª ××™××“×™â€¬";
+    Text[ hindi ] = "3D à¤µà¤¸à¥à¤¤à¥ à¤•à¥‹ à¤˜à¥à¤®à¤¾à¤“";
 };
 String RID_SVX_3D_UNDO_EXTRUDE
 {
@@ -267,7 +288,7 @@ String RID_SVX_3D_UNDO_EXTRUDE
     Text [ swedish ] = "Skapa extrusionsobjekt" ;
     Text [ danish ] = "Opret ekstruderingsobjekt" ;
     Text [ portuguese ] = "Criar objecto de extrusão" ;
-    Text [ portuguese_brazilian ] = "Extrusionsobjekt erstellen" ;
+    Text [ portuguese_brazilian ] = "Criar um objeto de extrusão" ;
     Text[ chinese_simplified ] = "ç”Ÿæˆæ¨¡å‹å¼å¯¹è±¡";
     Text[ russian ] = "Ñîçäàòü îáúåêò ıêñòğóçèè";
     Text[ polish ] = "Utwórz obiekt wyt³aczany";
@@ -281,6 +302,9 @@ String RID_SVX_3D_UNDO_EXTRUDE
     Text[ catalan ] = "Crea un objecte d'extrusió";
     Text[ finnish ] = "Luo pursotuskappale";
     Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸§à¸±à¸•à¸–à¸¸à¹‚à¸œà¸¥à¹ˆà¸­à¸­à¸à¸¡à¸²";
+    Text[ czech ] = "VytvoÅ™it protaÅ¾enÃ½ objekt";
+    Text[ hebrew ] = "â€®×™×¦×™×¨×ª ×¢×¦× ×©×™×—×•×œâ€¬";
+    Text[ hindi ] = "à¤¨à¤¿à¤·à¥à¤•à¤¾à¤¸à¤¨ à¤µà¤¸à¥à¤¤à¥ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
 };
 String RID_SVX_3D_UNDO_LATHE
 {
@@ -296,7 +320,7 @@ String RID_SVX_3D_UNDO_LATHE
     Text [ swedish ] = "Skapa rotationsobjekt" ;
     Text [ danish ] = "Opret rotationslegeme" ;
     Text [ portuguese ] = "Criar objecto de rotação" ;
-    Text [ portuguese_brazilian ] = "Rotationsk?per erstellen" ;
+    Text [ portuguese_brazilian ] = "Criar um objeto de rotação" ;
     Text[ chinese_simplified ] = "åˆ¶ä½œæ—‹è½¬ä½“";
     Text[ russian ] = "Ñîçäàòü îáúåêò âğàùåíèÿ";
     Text[ polish ] = "Utwórz obiekt obrotowy";
@@ -310,6 +334,9 @@ String RID_SVX_3D_UNDO_LATHE
     Text[ catalan ] = "Crea un objecte de gir";
     Text[ finnish ] = "Luo pyörähdyskappale";
     Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸§à¸±à¸•à¸–à¸¸à¸«à¸¡à¸¸à¸™";
+    Text[ czech ] = "VytvoÅ™it rotaÄnÃ­ objekt";
+    Text[ hebrew ] = "â€®×™×¦×™×¨×ª ×¢×¦× ×¡×™×‘×•×‘×™â€¬";
+    Text[ hindi ] = "à¤˜à¥à¤®à¤¾à¤µ à¤µà¤¸à¥à¤¤à¥ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
 };
 String RID_SVX_3D_UNDO_BREAK_LATHE
 {
@@ -319,7 +346,7 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text [ ENGLISH ] = "Break 3-D object" ;
     Text [ english_us ] = "Split 3D object" ;
     Text [ portuguese ] = "Subdividir objecto 3-D" ;
-    Text [ portuguese_brazilian ] = "Rotationsk?per aufbrechen" ;
+    Text [ portuguese_brazilian ] = "Subdividir objeto 3D" ;
     Text [ swedish ] = "Dela upp 3D-objekt" ;
     Text [ danish ] = "Opdel 3D-rotationslegeme" ;
     Text [ italian ] = "Separa oggetto 3D" ;
@@ -328,7 +355,7 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text [ dutch ] = "3D-object opsplitsen" ;
     Text[ chinese_simplified ] = "åˆ†å¼€3ç»´å¯¹è±¡";
     Text[ russian ] = "Ğàçáèòü òğåõìåğíûé îáúåêò";
-    Text[ polish ] = "Rozdziel obiekt 3-W";
+    Text[ polish ] = "Podziel obiekt 3D";
     Text[ japanese ] = "3D ä½“ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’åˆ‡ã‚Šé›¢ã™";
     Text[ chinese_traditional ] = "åˆ†é–‹ 3D ç‰©ä»¶";
     Text[ arabic ] = "ÊŞÓíã ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
@@ -339,6 +366,9 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text[ catalan ] = "Divideix l'objecte 3D";
     Text[ finnish ] = "Pura 3D-kappale";
     Text[ thai ] = "à¹à¸¢à¸à¸§à¸±à¸•à¸–à¸¸ 3à¸¡à¸´à¸•à¸´";
+    Text[ czech ] = "RozdÄ›lit 3D objekt";
+    Text[ hebrew ] = "â€®×‘×§×™×¢×ª ×¢×¦× ×ª×œ×ª ××™××“×™â€¬";
+    Text[ hindi ] = "3D à¤µà¤¸à¥à¤¤à¥ à¤•à¥‹ à¤…à¤²à¤—à¤¾à¤¨à¤¾";
 };
 String RID_SVX_3D_UNDO_ATTRIBUTES
 {
@@ -346,7 +376,7 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text [ ENGLISH ] = "3D attributes" ;
     Text [ portuguese ] = "Atributos 3-D" ;
     Text [ english_us ] = "3D Attributes" ;
-    Text [ portuguese_brazilian ] = "3D-Attribute" ;
+    Text [ portuguese_brazilian ] = "Atributos 3D" ;
     Text [ swedish ] = "3D-attribut" ;
     Text [ danish ] = "3D-attributter" ;
     Text [ italian ] = "Attributi 3D" ;
@@ -355,7 +385,7 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text [ dutch ] = "3D-attributen" ;
     Text[ chinese_simplified ] = "3ç»´å±æ€§";
     Text[ russian ] = "Òğåõìåğíûå àòğèáóòû";
-    Text[ polish ] = "Atrybuty 3-W";
+    Text[ polish ] = "Atrybuty 3D";
     Text[ japanese ] = "3D ä½“ã®å±æ€§";
     Text[ chinese_traditional ] = "3D å±¬æ€§";
     Text[ arabic ] = "ÓãÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
@@ -366,8 +396,24 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text[ catalan ] = "Atributs de 3D";
     Text[ finnish ] = "3D-määritteet";
     Text[ thai ] = "à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°3à¸¡à¸´à¸•à¸´";
+    Text[ czech ] = "3D atributy";
+    Text[ hebrew ] = "â€®×ª×›×•× ×•×ª ×ª×œ×ª ××™××“×™×•×ªâ€¬";
+    Text[ hindi ] = "3D à¤à¤Ÿà¥à¤°à¤¿à¤¬à¥à¤¯à¥‚à¤Ÿà¥à¤¸";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
