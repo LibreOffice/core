@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 14:04:32 $
+ *  last change: $Author: bm $ $Date: 2002-07-26 07:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ namespace svt
     {
         if (nColumnId == HANDLE_ID)
         {
-            if (bPaintStatus)
+             if (bPaintStatus)
                 PaintStatusCell(rDev, rRect);
         }
         else
@@ -419,13 +419,19 @@ namespace svt
             return;
 
         RowStatus eStatus = GetRowStatus( nPaintRow );
-        if ( eStatus == CLEAN )
+        sal_Int32 nBrowserFlags = GetBrowserFlags();
+
+        if (nBrowserFlags & EBBF_NO_HANDLE_COLUMN_CONTENT)
             return;
 
-        if (GetBrowserFlags() & EBBF_NOROWPICTURE)
-            return;
-
-        if (rDev.GetOutDevType() == OUTDEV_WINDOW)
+        // draw the text of the header column
+        if (nBrowserFlags & EBBF_HANDLE_COLUMN_TEXT )
+        {
+            rDev.DrawText( rRect, GetCellText( nPaintRow, 0 ),
+                           TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_CLIP );
+        }
+        // draw an image
+        else if (eStatus != CLEAN && rDev.GetOutDevType() == OUTDEV_WINDOW)
         {
             Image aImage(GetImage(eStatus));
             // calc the image position
@@ -541,6 +547,7 @@ namespace svt
     //------------------------------------------------------------------------------
     void EditBrowseBox::MouseButtonUp( const BrowserMouseEvent& rEvt )
     {
+        // unused variables.  Sideeffects?
         sal_uInt16  nColPos = GetColumnPos( rEvt.GetColumnId() );
         long    nRow = rEvt.GetRow();
 
@@ -922,10 +929,14 @@ namespace svt
             Window& rWindow = GetDataWindow();
             // don't paint too much
             // update the status immediatly if possible
-            if ((nEditRow >= 0) && (GetBrowserFlags() & EBBF_NOROWPICTURE) == 0)
+            if ((nEditRow >= 0) && (GetBrowserFlags() & EBBF_NO_HANDLE_COLUMN_CONTENT) == 0)
             {
                 Rectangle aRect = GetFieldRectPixel(nEditRow, 0, sal_False );
-                pTHIS->bPaintStatus = sal_False;
+                // status cell should be painted if and only if text is displayed
+                // note: bPaintStatus is mutable, but Solaris has problems with assigning
+                // probably because it is part of a bitfield
+                pTHIS->bPaintStatus = static_cast< sal_Bool >
+                    (( GetBrowserFlags() & EBBF_HANDLE_COLUMN_TEXT ) == EBBF_HANDLE_COLUMN_TEXT );
                 rWindow.Paint(aRect);
                 pTHIS->bPaintStatus = sal_True;
             }
@@ -979,7 +990,7 @@ namespace svt
         long nNewRow = GetCurRow();
         if (nEditRow != nNewRow)
         {
-            if ((GetBrowserFlags() & EBBF_NOROWPICTURE) == 0)
+            if ((GetBrowserFlags() & EBBF_NO_HANDLE_COLUMN_CONTENT) == 0)
                 InvalidateStatusCell(nNewRow);
             nEditRow = nNewRow;
         }
@@ -1319,7 +1330,8 @@ namespace svt
         if (m_nBrowserFlags == nFlags)
             return;
 
-        sal_Bool RowPicturesChanges = ((m_nBrowserFlags & EBBF_NOROWPICTURE) != (nFlags & EBBF_NOROWPICTURE));
+        sal_Bool RowPicturesChanges = ((m_nBrowserFlags & EBBF_NO_HANDLE_COLUMN_CONTENT) !=
+                                       (nFlags & EBBF_NO_HANDLE_COLUMN_CONTENT));
         m_nBrowserFlags = nFlags;
 
         if (RowPicturesChanges)
@@ -1489,6 +1501,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2002/06/21 14:04:32  oj
+ *  #99812# new helper method used to know if accessible object was already created
+ *
  *  Revision 1.11  2002/06/21 08:29:15  oj
  *  #99812# correct event notifications to make the browsebox accessible
  *
