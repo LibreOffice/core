@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:31:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                     //=====
                 }
 
-                if( pView->HasMarkedObj() )
+                if( pView->AreObjectsMarked() )
                     pView->SetAttrToMarked( *rReq.GetArgs(), FALSE );
                 else
                     pView->SetDefaultAttr( *rReq.GetArgs(), FALSE);
@@ -451,13 +451,13 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
         case SID_ATTR_TRANSFORM:
             {
-                if ( pView->HasMarkedObj() )
+                if ( pView->AreObjectsMarked() )
                 {
                     const SfxItemSet* pArgs = rReq.GetArgs();
 
                     if( !pArgs )
                     {
-                        const SdrMarkList& rMarkList = pView->GetMarkList();
+                        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                         if( rMarkList.GetMark(0) != 0 )
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
@@ -527,9 +527,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
 {
     ScDrawView*         pView       = pViewData->GetScDrawView();
-    BOOL                bHasMarked  = pView->HasMarkedObj();
+    BOOL                bHasMarked  = pView->AreObjectsMarked();
     const SdrObject*    pObj        = NULL;
-    const SdrMarkList&  rMarkList   = pView->GetMarkList();
+    const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetObj();
@@ -573,7 +573,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
 void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
-    BOOL        bHasMarked  = pView->HasMarkedObj();
+    BOOL        bHasMarked  = pView->AreObjectsMarked();
 
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
@@ -615,7 +615,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
 void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT nTabPage )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
-    BOOL        bHasMarked  = pView->HasMarkedObj();
+    BOOL        bHasMarked  = pView->AreObjectsMarked();
     SfxItemSet  aNewAttr    ( pView->GetDefaultAttr() );
 
     if( bHasMarked )
