@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:29:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,85 +746,104 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
 
         case WID_PAGE_HEADERVISIBLE:
-        {
-            sal_Bool bVisible;
-            if( ! ( aValue >>= bVisible ) )
-                throw lang::IllegalArgumentException();
-
-            GetPage()->getHeaderFooterSettings().mbHeaderVisible = bVisible;
-            break;
-        }
         case WID_PAGE_HEADERTEXT:
-        {
-            OUString aText;
-            if( ! ( aValue >>= aText ) )
-                throw lang::IllegalArgumentException();
-
-            GetPage()->getHeaderFooterSettings().maHeaderText = aText;
-            break;
-        }
         case WID_PAGE_FOOTERVISIBLE:
-        {
-            sal_Bool bVisible;
-            if( ! ( aValue >>= bVisible ) )
-                throw lang::IllegalArgumentException();
-
-            GetPage()->getHeaderFooterSettings().mbFooterVisible = bVisible;
-            break;
-        }
         case WID_PAGE_FOOTERTEXT:
-        {
-            OUString aText;
-            if( ! ( aValue >>= aText ) )
-                throw lang::IllegalArgumentException();
-
-            GetPage()->getHeaderFooterSettings().maFooterText = aText;
-            break;
-        }
         case WID_PAGE_PAGENUMBERVISIBLE:
-        {
-            sal_Bool bVisible;
-            if( ! ( aValue >>= bVisible ) )
-                throw lang::IllegalArgumentException();
-
-            GetPage()->getHeaderFooterSettings().mbSlideNumberVisible = bVisible;
-            break;
-        }
         case WID_PAGE_DATETIMEVISIBLE:
-        {
-            sal_Bool bVisible;
-            if( ! ( aValue >>= bVisible ) )
-                throw lang::IllegalArgumentException();
-
-            GetPage()->getHeaderFooterSettings().mbDateTimeVisible = bVisible;
-            break;
-        }
         case WID_PAGE_DATETIMEFIXED:
-        {
-            sal_Bool bVisible;
-            if( ! ( aValue >>= bVisible ) )
-                throw lang::IllegalArgumentException();
-
-            GetPage()->getHeaderFooterSettings().mbDateTimeIsFixed = bVisible;
-            break;
-        }
         case WID_PAGE_DATETIMETEXT:
-        {
-            OUString aText;
-            if( ! ( aValue >>= aText ) )
-                throw lang::IllegalArgumentException();
-
-            GetPage()->getHeaderFooterSettings().maDateTimeText = aText;
-            break;
-        }
         case WID_PAGE_DATETIMEFORMAT:
         {
-            sal_Int32 nValue;
-            if( ! ( aValue >>= nValue ) )
-                throw lang::IllegalArgumentException();
+            sd::HeaderFooterSettings aHeaderFooterSettings( GetPage()->getHeaderFooterSettings() );
 
-            GetPage()->getHeaderFooterSettings().meDateTimeFormat = nValue;
-            break;
+            switch( pMap->nWID )
+            {
+            case WID_PAGE_HEADERVISIBLE:
+            {
+                sal_Bool bVisible;
+                if( ! ( aValue >>= bVisible ) )
+                    throw lang::IllegalArgumentException();
+
+                aHeaderFooterSettings.mbHeaderVisible = bVisible;
+                break;
+            }
+            case WID_PAGE_HEADERTEXT:
+            {
+                OUString aText;
+                if( ! ( aValue >>= aText ) )
+                    throw lang::IllegalArgumentException();
+
+                aHeaderFooterSettings.maHeaderText = aText;
+                break;
+            }
+            case WID_PAGE_FOOTERVISIBLE:
+            {
+                sal_Bool bVisible;
+                if( ! ( aValue >>= bVisible ) )
+                    throw lang::IllegalArgumentException();
+
+                aHeaderFooterSettings.mbFooterVisible = bVisible;
+                break;
+            }
+            case WID_PAGE_FOOTERTEXT:
+            {
+                OUString aText;
+                if( ! ( aValue >>= aText ) )
+                    throw lang::IllegalArgumentException();
+
+                aHeaderFooterSettings.maFooterText = aText;
+                break;
+            }
+            case WID_PAGE_PAGENUMBERVISIBLE:
+            {
+                sal_Bool bVisible;
+                if( ! ( aValue >>= bVisible ) )
+                    throw lang::IllegalArgumentException();
+
+                aHeaderFooterSettings.mbSlideNumberVisible = bVisible;
+                break;
+            }
+            case WID_PAGE_DATETIMEVISIBLE:
+            {
+                sal_Bool bVisible;
+                if( ! ( aValue >>= bVisible ) )
+                    throw lang::IllegalArgumentException();
+
+                aHeaderFooterSettings.mbDateTimeVisible = bVisible;
+                break;
+            }
+            case WID_PAGE_DATETIMEFIXED:
+            {
+                sal_Bool bVisible;
+                if( ! ( aValue >>= bVisible ) )
+                    throw lang::IllegalArgumentException();
+
+                aHeaderFooterSettings.mbDateTimeIsFixed = bVisible;
+                break;
+            }
+            case WID_PAGE_DATETIMETEXT:
+            {
+                OUString aText;
+                if( ! ( aValue >>= aText ) )
+                    throw lang::IllegalArgumentException();
+
+                aHeaderFooterSettings.maDateTimeText = aText;
+                break;
+            }
+            case WID_PAGE_DATETIMEFORMAT:
+            {
+                sal_Int32 nValue;
+                if( ! ( aValue >>= nValue ) )
+                    throw lang::IllegalArgumentException();
+
+                aHeaderFooterSettings.meDateTimeFormat = nValue;
+                break;
+            }
+            }
+
+            if( !(aHeaderFooterSettings == GetPage()->getHeaderFooterSettings()) )
+                GetPage()->setHeaderFooterSettings( aHeaderFooterSettings );
         }
 
         case WID_PAGE_LDBITMAP:
