@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:23:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,46 @@ FmFormPage::~FmFormPage()
 //------------------------------------------------------------------
 void FmFormPage::SetModel(SdrModel* pNewModel)
 {
+    /* #35055# */
+    // we want to call the super's "SetModel" method even if the model is the
+    // same, in case code somewhere in the system depends on it.  But our code
+    // doesn't, so get the old model to do a check.
+    SdrModel *pOldModel = GetModel();
+
+
     SdrPage::SetModel( pNewModel );
+
+
+    /* #35055# */
+    if(pOldModel != pNewModel)
+    {
+        try
+        {
+            if(pImpl == NULL  ||  !pImpl->xForms.is())
+            {
+                pImpl->Init();
+            }
+            else
+            {
+                // we don't want to call "pImpl->Init()" directly, because it creates
+                // a new Forms collection -- we want to keep the current collection,
+                // just reset the model with which it's associated.
+
+                FmFormModel* pDrawModel = (FmFormModel*) GetModel();
+                SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
+                if( pObjShell )
+                    pImpl->xModel = pObjShell->GetModel();
+
+                ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xAsChild(pImpl->xForms, ::com::sun::star::uno::UNO_QUERY);
+                if (xAsChild.is())
+                    xAsChild->setParent( pImpl->xModel );
+            }
+        }
+        catch( ::com::sun::star::uno::Exception ex )
+        {
+            OSL_ENSURE( sal_False, "UNO Exception caught resetting model for pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
+        }
+    }
 }
 
 //------------------------------------------------------------------
