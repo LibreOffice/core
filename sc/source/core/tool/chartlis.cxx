@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartlis.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-12-13 12:38:55 $
+ *  last change: $Author: sab $ $Date: 2001-03-20 11:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ void ScChartListenerCollection::UpdateDirtyCharts()
         ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
         if ( pCL->IsDirty() )
             pCL->Update();
-        if ( aTimer.IsActive() )
+        if ( aTimer.IsActive() && !pDoc->IsImportingXML())
             break;                      // da kam einer dazwischen
     }
 }
