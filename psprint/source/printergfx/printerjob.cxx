@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:57:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ AppendPS (FILE* pDst, osl::File* pSrc, sal_uChar* pBuffer,
     pSrc->setPos (osl_Pos_Absolut, 0);
 
     sal_uInt64 nIn;
-    sal_uInt64 nOut;
+    sal_uInt64 nOut = 0;
     do
     {
         pSrc->read  (pBuffer, nBlockSize, nIn);
