@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-24 16:38:13 $
+ *  last change: $Author: mba $ $Date: 2001-04-27 10:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,6 +824,12 @@ void SAL_CALL SfxBaseModel::disconnectController( const REFERENCE< XCONTROLLER >
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     sal_uInt32 nOldCount = m_pData->m_seqControllers.getLength();
+    if ( !nOldCount )
+    {
+        DBG_ERROR("Somebody forgot to call connectController!");
+        return;
+    }
+
     SEQUENCE< REFERENCE< XCONTROLLER > > aNewSeq( nOldCount - 1 );
     for ( sal_uInt32 nOld = 0, nNew = 0; nOld < nOldCount; ++nOld )
         if ( xController != m_pData->m_seqControllers.getConstArray()[nOld] )
