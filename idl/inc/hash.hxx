@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hash.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ public:
 class SvStringHashTable;
 class SvStringHashEntry : public SvRefBase
 {
-friend SvStringHashTable;
+friend class SvStringHashTable;
     ByteString  aName;
     UINT32  nHashId;
     ULONG   nValue;
