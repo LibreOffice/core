@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 12:22:16 $
+ *  last change: $Author: oj $ $Date: 2001-07-04 14:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1629,7 +1629,10 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
     {
         bDataFound = Move(eDelPosition, 1, bRetrieveData);
         if (bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
+        {
+            m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
             bDone = (--nDelOffset) == 0;
+        }
         else
             bDone = FALSE;
     }
@@ -1641,7 +1644,10 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
         if (eCursorPosition != OFileTable::FILE_RELATIVE)
             bDone = bDataFound && (m_bShowDeleted || !m_aRow->isDeleted());
         else if (bDataFound && (m_bShowDeleted || !m_aRow->isDeleted()))
+        {
+            m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
             bDone = (--nDelOffset) == 0;
+        }
         else
             bDone = FALSE;
     }
