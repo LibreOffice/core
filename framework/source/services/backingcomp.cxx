@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:33:46 $
+ *  last change: $Author: vg $ $Date: 2003-05-15 10:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,10 @@
 
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
 #endif
 
 namespace framework
@@ -633,25 +637,39 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     m_xStatus = css::uno::Reference< css::task::XStatusIndicatorFactory >(static_cast< ::cppu::OWeakObject* >(pIndicatorFactoryHelper), css::uno::UNO_QUERY);
 
     // load the default menu from the ofa resource
-    ResMgr*               pOfaResMgr = CREATERESMGR(ofa);
-    INetURLObject         aResFile  (URIHelper::SmartRelToAbs(pOfaResMgr->GetFileName()));
-    ::rtl::OUStringBuffer sMenuRes(256);
-    sMenuRes.appendAscii("private:resource/");
-    sMenuRes.append     (aResFile.GetName() );
-    sMenuRes.appendAscii("/261"             );
-
-    css::util::URL aURL;
-    aURL.Complete = sMenuRes.makeStringAndClear();
-    css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
-    if (xParser.is())
-        xParser->parseStrict(aURL);
-
-    css::uno::Reference< css::frame::XDispatchProvider > xProvider(m_xFrame, css::uno::UNO_QUERY);
-    if (xProvider.is())
+    ResMgr* pOfaResMgr = CREATERESMGR(ofa);
+    if (pOfaResMgr)
     {
-        css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, SPECIALTARGET_MENUBAR, 0);
-        if (xDispatch.is())
-            xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue>());
+        ::rtl::OUString sResPath(pOfaResMgr->GetFileName());
+        ::rtl::OUString sResFile;
+        if (::osl::FileBase::getFileURLFromSystemPath(sResPath, sResFile) == ::osl::FileBase::E_None)
+        {
+            INetURLObject aResFile(sResFile);
+            String        sResName = aResFile.GetName();
+
+            if (sResName.Len())
+            {
+                ::rtl::OUStringBuffer sMenuRes(256);
+                sMenuRes.appendAscii("private:resource/");
+                sMenuRes.append     (sResName           );
+                sMenuRes.appendAscii("/261"             );
+
+                css::util::URL aURL;
+                aURL.Complete = sMenuRes.makeStringAndClear();
+
+                css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
+                if (xParser.is())
+                    xParser->parseStrict(aURL);
+
+                css::uno::Reference< css::frame::XDispatchProvider > xProvider(m_xFrame, css::uno::UNO_QUERY);
+                if (xProvider.is())
+                {
+                    css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, SPECIALTARGET_MENUBAR, 0);
+                    if (xDispatch.is())
+                        xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue>());
+                }
+            }
+        }
     }
 
     // establish listening for key accelerators
