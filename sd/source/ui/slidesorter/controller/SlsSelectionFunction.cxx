@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:28:33 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1162,6 +1162,8 @@ void SelectionFunction::UpdateSubstitution (const Point& rMouseModelPosition)
 }
 
 
+
+
 void SelectionFunction::GotoNextPage (int nOffset)
 {
     SdPage* pPage = mrController.GetViewShell().GetActualPage();
@@ -1174,6 +1176,7 @@ void SelectionFunction::GotoNextPage (int nOffset)
     if (nIndex < 0)
         nIndex = 0;
 
+    mrController.GetFocusManager().SetFocusedPage(nIndex);
     mrController.GetPageSelector().SetCurrentPage(nIndex);
 }
 
