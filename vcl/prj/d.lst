@@ -31,7 +31,6 @@ hedabu: ..\inc\alpha.hxx %_DEST%\inc%_EXT%\vcl\alpha.hxx
 hedabu: ..\inc\animate.hxx %_DEST%\inc%_EXT%\vcl\animate.hxx
 hedabu: ..\inc\apptypes.hxx %_DEST%\inc%_EXT%\vcl\apptypes.hxx
 hedabu: ..\inc\bitmap.hxx %_DEST%\inc%_EXT%\vcl\bitmap.hxx
-hedabu: ..\inc\bitmap.inl %_DEST%\inc%_EXT%\vcl\bitmap.inl
 hedabu: ..\inc\bitmapex.hxx %_DEST%\inc%_EXT%\vcl\bitmapex.hxx
 hedabu: ..\inc\bmpacc.hxx %_DEST%\inc%_EXT%\vcl\bmpacc.hxx
 hedabu: ..\inc\btndlg.hxx %_DEST%\inc%_EXT%\vcl\btndlg.hxx
