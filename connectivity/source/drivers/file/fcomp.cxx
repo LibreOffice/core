@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:14:00 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 11:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,13 +338,13 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode)
     OSQLParseNode *pOptEscape;
     sal_Unicode cEscape = L'\0';
 
-    if (SQL_ISTOKEN(pPredicateNode->getChild(1),NOT))
+    if (pPredicateNode->count() == 5)
         ePredicateType = SQL_PRED_NOTLIKE;
     else
         ePredicateType = SQL_PRED_LIKE;
 
-    pAtom = pPredicateNode->getChild(3);
-    pOptEscape = pPredicateNode->getChild(4);
+    pAtom       = pPredicateNode->getChild(pPredicateNode->count()-2);
+    pOptEscape  = pPredicateNode->getChild(pPredicateNode->count()-1);
 
     if (!(pAtom->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(pAtom,parameter)))
     {
@@ -433,8 +433,9 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode)
                 //  m_rCursor.aStatus.SetInvalidStatement();
             }
         }
-        catch(...)
+        catch(Exception &e)
         {
+            OSL_ENSHURE(0,"OPredicateCompiler::execute_Operand Exception");
         }
     }
     else if (SQL_ISRULE(pPredicateNode,parameter))
@@ -479,8 +480,9 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode)
                 pOperand->getValue() >>= aVal;
                 pOperand->setValue(makeAny(aVal.toDouble()));
             }
-            catch( ... )
+            catch( Exception & )
             {
+                OSL_ENSHURE(0,"OPredicateCompiler::execute_Operand Exception");
 //              m_rCursor.aStatus.Set(SQL_STAT_ERROR,
 //                          String::CreateFromAscii("S1C00"),
 //                          m_rCursor.aStatus.CreateErrorMessage(String(OResId(STR_STAT_SQL_DATATYPE_MISMATCH))),
@@ -542,4 +544,7 @@ sal_Bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
         delete pOperand;
     return bResult;
 }
+// -----------------------------------------------------------------------------
+
+
 
