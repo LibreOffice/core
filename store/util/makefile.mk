@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 11:09:22 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:56:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,9 @@ SHL1STDLIBS=	$(SALLIB)
 .IF "$(OS)"=="FREEBSD"
 SHL1STDLIBS+= 	-lsupc++
 .ELSE
+.IF "$(OS)"!="MACOSX"
 SHL1STDLIBS+= 	-lsupc++ -lgcc_s
+.ENDIF
 .ENDIF
 .ENDIF
 
