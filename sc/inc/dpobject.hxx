@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:29:03 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_DPOBJECT_HXX
 #define SC_DPOBJECT_HXX
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
@@ -121,7 +125,7 @@ struct ScDPServiceDesc
 };
 
 
-class ScDPObject : public DataObject
+class SC_DLLPUBLIC ScDPObject : public DataObject
 {
 private:
     ScDocument*             pDoc;
@@ -143,8 +147,8 @@ private:
     long                    nHeaderRows;    // page fields plus filter button
 
 
-    void                CreateObjects();
-    void                CreateOutput();
+    SC_DLLPRIVATE void              CreateObjects();
+    SC_DLLPRIVATE void              CreateOutput();
 
 public:
                 ScDPObject( ScDocument* pD );
