@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:44:37 $
+#   last change: $Author: mav $ $Date: 2003-08-05 07:51:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..$/..$/..
 PRJNAME=extensions
-TARGET=so_activex
+TARGET=uno_activex
 
 use_shl_versions=
 
@@ -91,14 +91,24 @@ RCFILES=\
 RCDEPN=$(MISC)$/envsettings.h
 
 SLOFILES=\
-    $(SLO)$/so_activex.obj \
-    $(SLO)$/SOActiveX.obj \
-    $(SLO)$/SOComWindowPeer.obj \
-    $(SLO)$/SODispatchInterceptor.obj \
+    $(SLO)$/uno_activex.obj \
+    $(SLO)$/UNOActiveX.obj \
+    $(SLO)$/officeconnection.obj \
+    $(SLO)$/initwindowpeer.obj \
+    $(SLO)$/intercept.obj \
+    $(SLO)$/outputistream.obj \
     $(SLO)$/StdAfx2.obj
+
+EXCEPTIONSFILES=\
+    $(SLO)$/UNOActiveX.obj \
+    $(SLO)$/officeconnection.obj \
+    $(SLO)$/outputistream.obj
 
 SHL1TARGET=$(TARGET)
 SHL1STDLIBS=\
+    $(SALLIB) \
+    $(CPPULIB) \
+    $(CPPUHELPERLIB) \
     uuid.lib \
     advapi32.lib \
     ole32.lib \
