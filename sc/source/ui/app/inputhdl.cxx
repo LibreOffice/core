@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:37:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1761,6 +1761,8 @@ void ScInputHandler::DataChanged( BOOL bFromTopNotify )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (pActiveView && pActiveViewSh)
     {
+        ScViewData* pViewData = pActiveViewSh->GetViewData();
+
         BOOL bNeedGrow = ( nEditAdjust != SVX_ADJUST_LEFT );        // rechtsbuendig immer
         if (!bNeedGrow)
         {
@@ -1769,11 +1771,15 @@ void ScInputHandler::DataChanged( BOOL bFromTopNotify )
             aSel.Adjust();
             bNeedGrow = ( aSel.nEndPos != pEngine->GetTextLen(aSel.nEndPara) );
         }
+        if (!bNeedGrow)
+        {
+            bNeedGrow = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+        }
         if (bNeedGrow)
         {
-                                // Inplace-View anpassen
-            pActiveViewSh->GetViewData()->EditGrowY();
-            pActiveViewSh->GetViewData()->EditGrowX();
+            // adjust inplace view
+            pViewData->EditGrowY();
+            pViewData->EditGrowX();
         }
     }
 
