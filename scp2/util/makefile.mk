@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: is $ $Date: 2004-02-10 17:45:40 $
+#   last change: $Author: hr $ $Date: 2004-03-09 10:14:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,6 +120,7 @@ SCP1FILES  = installation_ooo.par          \
              file_lingu.par                \
              module_xsltfilter.par         \
              file_xsltfilter.par           \
+             starregistryitem_xsltfilter.par \
              module_python.par             \
              file_python.par               \
              procedure_python.par          \
