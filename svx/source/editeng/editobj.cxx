@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-07 18:25:16 $
+ *  last change: $Author: mt $ $Date: 2001-03-21 15:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,6 +601,7 @@ BinTextObject::BinTextObject( SfxItemPool* pP ) :
 BinTextObject::BinTextObject( const BinTextObject& r ) :
     EditTextObject( r )
 {
+    nVersion = r.nVersion;
     nMetric = r.nMetric;
     nUserType = r.nUserType;
     nObjSettings = r.nObjSettings;
