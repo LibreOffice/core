@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeimpars.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:51:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,10 @@ ULONG ScEEImport::Read( SvStream& rStream )
 {
     ULONG nErr = pParser->Read( rStream );
 
-    USHORT nEndCol, nEndRow;
+    SCCOL nEndCol;
+    SCROW nEndRow;
     pParser->GetDimensions( nEndCol, nEndRow );
-    if ( nEndCol )
+    if ( nEndCol != 0 )
     {
         nEndCol += aRange.aStart.Col() - 1;
         if ( nEndCol > MAXCOL )
@@ -150,7 +151,7 @@ ULONG ScEEImport::Read( SvStream& rStream )
     }
     else
         nEndCol = aRange.aStart.Col();
-    if ( nEndRow )
+    if ( nEndRow != 0 )
     {
         nEndRow += aRange.aStart.Row() - 1;
         if ( nEndRow > MAXROW )
@@ -170,15 +171,19 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
         ScGlobal::GetRscString( STR_LOAD_DOC ), pParser->Count() );
     ULONG nProgress = 0;
 
-    USHORT nStartCol, nStartRow, nTab, nEndCol, nEndRow,
-        nOverlapRowMax, nLastMergedRow, nMergeColAdd;
+    SCCOL nStartCol, nEndCol;
+        SCROW nStartRow, nEndRow;
+        SCTAB nTab;
+        SCROW nOverlapRowMax, nLastMergedRow;
+        SCCOL nMergeColAdd;
     nStartCol = aRange.aStart.Col();
     nStartRow = aRange.aStart.Row();
     nTab = aRange.aStart.Tab();
     nEndCol = aRange.aEnd.Col();
     nEndRow = aRange.aEnd.Row();
-    nOverlapRowMax = nMergeColAdd = 0;
-    nLastMergedRow = (USHORT)~0;
+    nOverlapRowMax = 0;
+    nMergeColAdd = 0;
+    nLastMergedRow = SCROW_MAX;
     BOOL bHasGraphics = FALSE;
     ScEEParseEntry* pE;
 
@@ -189,10 +194,10 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     ScRangeName* pRangeNames = pDoc->GetRangeName();
     for ( pE = pParser->First(); pE; pE = pParser->Next() )
     {
-        USHORT nRow = nStartRow + pE->nRow;
+        SCROW nRow = nStartRow + pE->nRow;
         if ( nRow != nLastMergedRow )
             nMergeColAdd = 0;
-        USHORT nCol = nStartCol + pE->nCol + nMergeColAdd;
+        SCCOL nCol = nStartCol + pE->nCol + nMergeColAdd;
         // RowMerge feststellen, pures ColMerge und ColMerge der ersten
         // MergeRow bereits beim parsen
         if ( nRow <= nOverlapRowMax )
@@ -208,7 +213,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
         // fuer zweiten Durchlauf eintragen
         pE->nCol = nCol;
         pE->nRow = nRow;
-        if ( nCol <= MAXCOL && nRow <= MAXROW )
+        if ( ValidCol(nCol) && ValidRow(nRow) )
         {
             SfxItemSet aSet = pEngine->GetAttribs( pE->aSel );
             // Default raus, wir setzen selber links/rechts je nachdem ob Text
@@ -332,7 +337,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
                 // nachtraeglichem ScDocument DoMerge
                 ScMergeAttr aMerge( pE->nColOverlap, pE->nRowOverlap );
                 rSet.Put( aMerge );
-                USHORT nRO;
+                SCROW nRO;
                 if ( pE->nColOverlap > 1 )
                     pDoc->ApplyFlagsTab( nCol+1, nRow,
                         nCol + pE->nColOverlap - 1, nRow, nTab,
@@ -461,7 +466,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
         {
             nProgress = 0;
             pProgress->SetState( nProgress, nEndCol - nStartCol + 1 );
-            for ( USHORT nCol = nStartCol; nCol <= nEndCol; nCol++ )
+            for ( SCCOL nCol = nStartCol; nCol <= nEndCol; nCol++ )
             {
                 USHORT nWidth = (USHORT)(ULONG) pColWidths->Get( nCol );
                 if ( nWidth )
@@ -481,7 +486,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
             nPPTX, nPPTY, aZoom, aZoom, FALSE );
         if ( pRowHeights->Count() )
         {
-            for ( USHORT nRow = nStartRow; nRow <= nEndRow; nRow++ )
+            for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow++ )
             {
                 USHORT nHeight = (USHORT)(ULONG) pRowHeights->Get( nRow );
                 if ( nHeight > pDoc->FastGetRowHeight( nRow, nTab ) )
@@ -495,9 +500,9 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
         {
             if ( pE->pImageList )
             {
-                USHORT nCol = pE->nCol;
-                USHORT nRow = pE->nRow;
-                if ( nCol <= MAXCOL && nRow <= MAXROW )
+                SCCOL nCol = pE->nCol;
+                SCROW nRow = pE->nRow;
+                if ( ValidCol(nCol) && ValidRow(nRow) )
                     InsertGraphic( nCol, nRow, nTab, pE );
             }
         }
@@ -507,7 +512,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
 }
 
 
-BOOL ScEEImport::GraphicSize( USHORT nCol, USHORT nRow, USHORT nTab,
+BOOL ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
         ScEEParseEntry* pE )
 {
     ScHTMLImageList* pIL = pE->pImageList;
@@ -540,8 +545,8 @@ BOOL ScEEImport::GraphicSize( USHORT nCol, USHORT nRow, USHORT nTab,
     Table* pColWidths = pParser->GetColWidths();
     long nThisWidth = (long) pColWidths->Get( nCol );
     long nColWidths = nThisWidth;
-    USHORT nColSpanCol = nCol + pE->nColOverlap;
-    for ( USHORT nC = nCol + 1; nC < nColSpanCol; nC++ )
+    SCCOL nColSpanCol = nCol + pE->nColOverlap;
+    for ( SCCOL nC = nCol + 1; nC < nColSpanCol; nC++ )
     {
         nColWidths += (long) pColWidths->Get( nC );
     }
@@ -553,11 +558,11 @@ BOOL ScEEImport::GraphicSize( USHORT nCol, USHORT nRow, USHORT nTab,
             pColWidths->Insert( nCol, (void*)(nWidth - nColWidths) );
     }
     // Zeilenhoehen, Differenz auf alle betroffenen Zeilen verteilen
-    USHORT nRowSpan = pE->nRowOverlap;
+    SCROW nRowSpan = pE->nRowOverlap;
     nHeight /= nRowSpan;
     if ( nHeight == 0 )
         nHeight = 1;        // fuer eindeutigen Vergleich
-    for ( USHORT nR = nRow; nR < nRow + nRowSpan; nR++ )
+    for ( SCROW nR = nRow; nR < nRow + nRowSpan; nR++ )
     {
         long nRowHeight = (long) pRowHeights->Get( nR );
         if ( nHeight > nRowHeight )
@@ -572,7 +577,7 @@ BOOL ScEEImport::GraphicSize( USHORT nCol, USHORT nRow, USHORT nTab,
 }
 
 
-void ScEEImport::InsertGraphic( USHORT nCol, USHORT nRow, USHORT nTab,
+void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         ScEEParseEntry* pE )
 {
     ScHTMLImageList* pIL = pE->pImageList;
@@ -584,7 +589,7 @@ void ScEEImport::InsertGraphic( USHORT nCol, USHORT nRow, USHORT nTab,
         pDoc->InitDrawLayer();
         pModel = pDoc->GetDrawLayer();
     }
-    SdrPage* pPage = pModel->GetPage( nTab );
+    SdrPage* pPage = pModel->GetPage( static_cast<sal_uInt16>(nTab) );
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
 
     Point aCellInsertPos(
