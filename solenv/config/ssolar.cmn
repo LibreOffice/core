@@ -17,6 +17,7 @@ common
 		*deliver
         *copyprj
 		__mgrdir
+        rsc_once
 		BIG_GOODIES
 		BIG_SVX
 		BIG_TOOLS
