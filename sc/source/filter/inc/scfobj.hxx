@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfobj.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,18 @@
 #ifndef SC_SCFOBJ_HXX
 #define SC_SCFOBJ_HXX
 
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
+
 class ScDocument;
+class Rectangle;
 
 class Sc10InsertObject
 {
 public:
-    static void InsertChart( ScDocument* pDoc, USHORT nDestTab, const Rectangle& rRect,
-                                USHORT nSrcTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 );
+    static void InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
+                                SCTAB nSrcTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 );
 };
 
 
