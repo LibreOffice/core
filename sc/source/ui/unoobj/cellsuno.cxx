@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-24 09:07:47 $
+ *  last change: $Author: sab $ $Date: 2001-10-30 11:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,7 +1205,8 @@ ScCellRangesBase::ScCellRangesBase() :
     pCurrentDataSet( NULL ),
     pValueListener( NULL ),
     bValueChangePosted( FALSE ),
-    pMarkData( NULL )
+    pMarkData( NULL ),
+    aValueListeners( 0 )
 {
 }
 
@@ -1219,7 +1220,8 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     pCurrentDataSet( NULL ),
     pValueListener( NULL ),
     bValueChangePosted( FALSE ),
-    pMarkData( NULL )
+    pMarkData( NULL ),
+    aValueListeners( 0 )
 {
     ScRange aCellRange = rR;
     aCellRange.Justify();
@@ -1240,7 +1242,8 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
     pCurrentDataSet( NULL ),
     pValueListener( NULL ),
     bValueChangePosted( FALSE ),
-    pMarkData( NULL )
+    pMarkData( NULL ),
+    aValueListeners( 0 )
 {
     if (pDocShell)  // Null, wenn per createInstance erzeugt...
         pDocShell->GetDocument()->AddUnoObject(*this);
