@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:25:39 $
+ *  last change: $Author: dbo $ $Date: 2001-11-26 17:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,42 +500,6 @@ Reference< ::test::XInterfaceTest > SAL_CALL OTestFactory::createInterfaceTest( 
 
 
 
-/********************************************************
- *
- ********************************************************/
-/*Any OConnectCallback::queryInterface( const Type & aType )
-{
-    Any a = ::cppu::queryInterface( aType,
-            SAL_STATIC_CAST( XConnectCallback * , this ) );
-    if( a.hasValue() )
-    {
-        return a;
-    }
-    return OWeakObject::queryInterface( aType );
-}
-
-
-void SAL_CALL OConnectCallback::attemptConnect(
-        const Reference< XConnectionServerSide >& connection )
-        throw(SecurityException, ::com::sun::star::uno::RuntimeException)
-{
-    // TODO
-    // user verification
-    if( L"bad guy" == connection->getUser() &&
-        L"secret" == connection->getPassword() )
-    {
-        Reference< XInterface > rInterface(
-            ( XInterface * ) (::cppu::OWeakObject *) new OTestFactory() );
-        connection->provideRemoteObject( rInterface );
-    }
-    else
-    {
-        throw SecurityException();
-    }
-}
-
-*/
-
 
 //  class OInstanceProvider :
 //      public ::cppu::OWeakObject,
@@ -551,7 +515,6 @@ void SAL_CALL OConnectCallback::attemptConnect(
 //      void        SAL_CALL release()                       { OWeakObject::release(); }
 
 //  public:
-//      // XConnectCallback
 //      virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
 //             getInstance( const ::rtl::OUString& sObjectName )
 //                   throw( ::com::sun::star::container::NoSuchElementException,

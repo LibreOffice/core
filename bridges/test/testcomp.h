@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomp.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-16 09:42:20 $
+ *  last change: $Author: dbo $ $Date: 2001-11-26 17:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,28 +161,6 @@ public:
 
 };
 
-/*
-class OConnectCallback :
-    public ::cppu::OWeakObject,
-    public XConnectCallback
-{
-public:
-    OConnectCallback( ){}
-    ~OConnectCallback(){ printf( "callback dies\n" );}
-public:
-    // XInterface
-    Any         SAL_CALL queryInterface( const Type & aType);
-    void        SAL_CALL acquire()                       { OWeakObject::acquire(); }
-    void        SAL_CALL release()                       { OWeakObject::release(); }
-
-public:
-    // XConnectCallback
-    virtual void SAL_CALL attemptConnect(
-        const Reference< XConnectionServerSide >& connection )
-        throw(SecurityException, RuntimeException);
-};
-
-*/
 
 class OInstanceProvider :
     public ::cppu::OWeakObject,
@@ -201,7 +179,6 @@ public:
     void        SAL_CALL release()                       { OWeakObject::release(); }
 
 public:
-    // XConnectCallback
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
            getInstance( const ::rtl::OUString& sObjectName )
                  throw( ::com::sun::star::container::NoSuchElementException,
