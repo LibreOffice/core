@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:27:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHIC_BITMAP[] = "GraphicBi
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHIC_SIZE[] = "GraphicSize";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_VERT_ORIENT[] = "VertOrient";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_NUMBERINGTYPE[] = "NumberingType";
+static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_HEADING_STYLE_NAME[] = "HeadingStyleName";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_PREFIX[] = "Prefix";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_SUFFIX[] = "Suffix";
 static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_ADJUST[] = "Adjust";
@@ -290,7 +291,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         {
             rProp.Value >>= nDisplayLevels;
             if( nDisplayLevels > nLevel+1 )
-                nDisplayLevels = nLevel+1;
+                nDisplayLevels = static_cast<sal_Int16>( nLevel )+1;
         }
         else if( rProp.Name.equalsAsciiL( XML_UNO_NAME_NRULE_CHAR_STYLE_NAME, sizeof(XML_UNO_NAME_NRULE_CHAR_STYLE_NAME)-1 ) )
         {
@@ -815,4 +816,46 @@ void SvxXMLNumRuleExport::exportStyles( sal_Bool bUsed,
             }
         }
     }
+}
+
+sal_Bool SvxXMLNumRuleExport::GetOutlineStyles( XMLStringVector& rStyleNames,
+   const ::com::sun::star::uno::Reference<
+                   ::com::sun::star::frame::XModel > & rModel   )
+{
+    Reference< XChapterNumberingSupplier > xCNSupplier( rModel,
+                                                        UNO_QUERY );
+    sal_Int32 nLevels = 0;
+    Reference< XIndexReplace > xNumRule;
+    if( xCNSupplier.is() )
+    {
+        xNumRule = xCNSupplier->getChapterNumberingRules();
+        if( xNumRule.is() )
+            nLevels = xNumRule->getCount();
+    }
+
+    rStyleNames.resize( nLevels );
+    for( sal_Int32 i=0; i<nLevels; i++ )
+    {
+        uno::Any aEntry( xNumRule->getByIndex( i ) );
+        uno::Sequence<beans::PropertyValue> aSeq;
+        if( aEntry >>= aSeq )
+        {
+            sal_Int32 nCount = aSeq.getLength();
+            const beans::PropertyValue* pPropArray = aSeq.getConstArray();
+            for( sal_Int32 j=0; j<nCount; j++ )
+            {
+                const beans::PropertyValue& rProp = pPropArray[j];
+
+                if( rProp.Name.equalsAsciiL(
+                            XML_UNO_NAME_NRULE_HEADING_STYLE_NAME,
+                            sizeof(XML_UNO_NAME_NRULE_HEADING_STYLE_NAME)-1 ) )
+                {
+                    rProp.Value >>= rStyleNames[i];
+                    break;
+                }
+            }
+        }
+    }
+
+    return nLevels != 0;
 }
