@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PersAttrListTContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:17:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@ class XMLPersAttrListTContext : public XMLTransformerContext
     ::rtl::OUString m_aElemQName;
     sal_uInt16 m_nActionMap;
 
+protected:
+
+    void SetExportQName( const ::rtl::OUString& r ) { m_aElemQName = r; }
 
 public:
     TYPEINFO();
