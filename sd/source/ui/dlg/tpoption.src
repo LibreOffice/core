@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:07:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,9 +656,8 @@ TabPage TP_OPTIONS_MISC
         Pos = MAP_APPFONT ( 12 , 53  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
-        Text = "Mit ~Autopiloten starten" ;
-        Text [ ENGLISH ] = "~Start with autopilot" ;
-        Text [ english_us ] = "Start with AutoPilot" ;
+        Text = "Mit ~Assistent starten" ;
+        Text [ english_us ] = "Start with ~wizard" ;
         Text[ portuguese ] = "Iniciar com A~utoPiloto";
         Text[ russian ] = "Создавать с помощью Мастера";
         Text[ dutch ] = "~Met AutoPiloot starten";
