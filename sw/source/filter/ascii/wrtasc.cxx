@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtasc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 12:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #endif
 
-
 //-----------------------------------------------------------------
 
 SwASCWriter::SwASCWriter( const String& rFltNm )
@@ -111,8 +110,11 @@ SwASCWriter::SwASCWriter( const String& rFltNm )
 
     switch( 5 <= rFltNm.Len() ? rFltNm.GetChar( 4 ) : 0 )
     {
-    case 'D':   aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );
+    case 'D':
+#if !defined(PM2)
+                aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );
                 aNewOpts.SetParaFlags( LINEEND_CRLF );
+#endif
                 if( 5 < rFltNm.Len() )
                     switch( rFltNm.Copy( 5 ).ToInt32() )
                     {
@@ -125,14 +127,25 @@ SwASCWriter::SwASCWriter( const String& rFltNm )
                     }
                 break;
 
-    case 'A':   aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+    case 'A':
+#if !defined(WIN) && !defined(WNT)
+                aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                 aNewOpts.SetParaFlags( LINEEND_CRLF );
+#endif
                 break;
-    case 'M':   aNewOpts.SetCharSet( RTL_TEXTENCODING_APPLE_ROMAN );
+
+    case 'M':
+#if !defined(MAC)
+                aNewOpts.SetCharSet( RTL_TEXTENCODING_APPLE_ROMAN );
                 aNewOpts.SetParaFlags( LINEEND_CR );
+#endif
                 break;
-    case 'X':   aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+
+    case 'X':
+#if !defined(UNX)
+                aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                 aNewOpts.SetParaFlags( LINEEND_LF );
+#endif
                 break;
 
     default:
@@ -176,6 +189,9 @@ ULONG SwASCWriter::WriteStream()
     BOOL bWriteSttTag = bUCS2_WithStartChar &&
                     RTL_TEXTENCODING_UCS2 == GetAsciiOptions().GetCharSet();
 
+    rtl_TextEncoding eOld = Strm().GetStreamCharSet();
+    Strm().SetStreamCharSet( GetAsciiOptions().GetCharSet() );
+
     // gebe alle Bereich des Pams in das ASC-File aus.
     do {
         BOOL bTstFly = TRUE;
@@ -218,7 +234,7 @@ ULONG SwASCWriter::WriteStream()
                 {
                     if( bWriteSttTag )
                     {
-                        Strm() << short(-257);
+                        Strm().StartWritingUnicodeText();
                         bWriteSttTag = FALSE;
                     }
                     Out( aASCNodeFnTab, *pNd, *this );
@@ -236,6 +252,8 @@ ULONG SwASCWriter::WriteStream()
         }
     } while( CopyNextPam( &pPam ) );        // bis alle Pam bearbeitet
 
+    Strm().SetStreamCharSet( eOld );
+
     if( bShowProgress )
         ::EndProgress( pDoc->GetDocShell() );
 
@@ -252,11 +270,14 @@ void GetASCWriter( const String& rFltNm, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ascii/wrtasc.cxx,v 1.1.1.1 2000-09-18 17:14:53 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ascii/wrtasc.cxx,v 1.2 2001-01-19 12:40:07 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:53  hr
+      initial import
+
       Revision 1.61  2000/09/18 16:04:39  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascatr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 12:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,53 +124,31 @@
  * fuer alle Nodes, Attribute, Formate und Chars.
  */
 
-void lcl_WriteString( SvStream& rOut, const String& rStr,
-                      rtl_TextEncoding eSrcSet, rtl_TextEncoding eDest );
-
 class SwASC_AttrIter
 {
-    SvPtrarr aTxtAtrArr;
-    SvUShorts aChrSetArr;
     SwASCWriter& rWrt;
     const SwTxtNode& rNd;
     xub_StrLen nAktSwPos;
-    rtl_TextEncoding eNdChrSet;
 
     xub_StrLen SearchNext( xub_StrLen nStartPos );
-    BOOL SetCharSet( const SwTxtAttr& rTxtAttr, BOOL bStart );
 
 public:
     SwASC_AttrIter( SwASCWriter& rWrt, const SwTxtNode& rNd, xub_StrLen nStt );
 
-    void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos()      { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
-    xub_StrLen WhereNext() const                    { return nAktSwPos; }
-    rtl_TextEncoding GetNextCharSet() const;
-    rtl_TextEncoding GetNodeCharSet() const     { return eNdChrSet; }
-
-    BOOL OutAttr( xub_StrLen nSwPos, rtl_TextEncoding eChrSet );
+    xub_StrLen WhereNext() const        { return nAktSwPos; }
+    BOOL OutAttr( xub_StrLen nSwPos );
 };
 
 
 SwASC_AttrIter::SwASC_AttrIter( SwASCWriter& rWr, const SwTxtNode& rTxtNd,
                                 xub_StrLen nStt )
-    : rWrt( rWr ), rNd( rTxtNd ), nAktSwPos( 0 ),
-    aTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 )
+    : rWrt( rWr ), rNd( rTxtNd ), nAktSwPos( 0 )
 {
-    // Attributwechsel an Pos 0 wird ignoriert, da davon ausgegangen
-    // wird, dass am Absatzanfang sowieso die Attribute neu ausgegeben
-    // werden.
-    eNdChrSet = ((SvxFontItem&)rNd.SwCntntNode::GetAttr(
-                                        RES_CHRATR_FONT )).GetCharSet();
     nAktSwPos = SearchNext( nStt + 1 );
 }
 
-rtl_TextEncoding SwASC_AttrIter::GetNextCharSet() const
-{
-    if( aChrSetArr.Count() )
-        return (rtl_TextEncoding )aChrSetArr[ aChrSetArr.Count() - 1 ];
-    return eNdChrSet;
-}
 
 xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
 {
@@ -190,65 +168,21 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             nPos = *pHt->GetStart();    // gibt erstes Attr-Zeichen
             pPos = pHt->GetEnd();
+            if( !pPos )
+            {
+                if( nPos >= nStartPos && nPos <= nMinPos )
+                    nMinPos = nPos;
 
-            if( nPos >= nStartPos && nPos <= nMinPos &&
-                ( !pPos || SetCharSet( *pHt, TRUE ) ) )
-                nMinPos = nPos;
-
-            if( pPos ? ( (nPos = *pPos) >= nStartPos && nPos <= nMinPos &&
-                         SetCharSet( *pHt, FALSE ) )
-                     : (( ++nPos ) >= nStartPos && nPos < nMinPos) )
-                nMinPos = nPos;
+                if( ( ++nPos ) >= nStartPos && nPos < nMinPos )
+                    nMinPos = nPos;
+            }
         }
     }
     return nMinPos;
 }
 
-BOOL SwASC_AttrIter::SetCharSet( const SwTxtAttr& rAttr, BOOL bStart )
-{
-    void* p = 0;
-    rtl_TextEncoding eChrSet;
-    const SfxPoolItem& rItem = rAttr.GetAttr();
-    switch( rItem.Which() )
-    {
-    case RES_CHRATR_FONT:
-        p = (void*)&rAttr;
-        eChrSet = ((SvxFontItem&)rItem).GetCharSet();
-        break;
 
-    case RES_TXTATR_CHARFMT:
-        {
-            const SfxPoolItem* pItem;
-            if( ((SwFmtCharFmt&)rItem).GetCharFmt() && SFX_ITEM_SET ==
-                ((SwFmtCharFmt&)rItem).GetCharFmt()->GetItemState(
-                    RES_CHRATR_FONT, TRUE, &pItem ))
-            {
-                eChrSet = ((SvxFontItem*)pItem)->GetCharSet();
-                p = (void*)&rAttr;
-            }
-        }
-        break;
-    }
-
-    if( p )
-    {
-        USHORT nPos;
-        if( bStart )
-        {
-            nPos = aChrSetArr.Count();
-            aChrSetArr.Insert( eChrSet, nPos );
-            aTxtAtrArr.Insert( p, nPos );
-        }
-        else if( USHRT_MAX != ( nPos = aTxtAtrArr.GetPos( p )) )
-        {
-            aTxtAtrArr.Remove( nPos );
-            aChrSetArr.Remove( nPos );
-        }
-    }
-    return 0 != p;
-}
-
-BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos, rtl_TextEncoding eChrSet )
+BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
 {
     BOOL bRet = FALSE;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
@@ -288,8 +222,7 @@ BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos, rtl_TextEncoding eChrSet )
                     break;
                 }
                 if( sOut.Len() )
-                    ::lcl_WriteString( rWrt.Strm(), sOut, eChrSet,
-                                        rWrt.GetAsciiOptions().GetCharSet() );
+                    rWrt.Strm().WriteUnicodeOrByteText( sOut );
             }
             else if( nSwPos < *pHt->GetStart() )
                 break;
@@ -314,11 +247,9 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         nEnde = rWrt.pCurPam->GetMark()->nContent.GetIndex();
 
     SwASC_AttrIter aAttrIter( (SwASCWriter&)rWrt, rNd, nStrPos );
-    rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
-    rtl_TextEncoding eSet = rWrt.GetAsciiOptions().GetCharSet();
 
     if( !nStrPos )
-        ::lcl_WriteString( rWrt.Strm(), rNd.GetNumString(), eChrSet, eSet );
+        rWrt.Strm().WriteUnicodeOrByteText( rNd.GetNumString() );
 
     String aStr( rNd.GetTxt() );
     if( rWrt.bASCII_ParaAsBlanc )
@@ -326,46 +257,23 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     do {
         xub_StrLen nNextAttr = aAttrIter.WhereNext();
-        rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
 
         if( nNextAttr > nEnde )
             nNextAttr = nEnde;
 
-        if( !aAttrIter.OutAttr( nStrPos, eChrSet ))
-            ::lcl_WriteString( rWrt.Strm(),
-                                aStr.Copy( nStrPos, nNextAttr - nStrPos ),
-                                  eChrSet, eSet );
+        if( !aAttrIter.OutAttr( nStrPos ))
+            rWrt.Strm().WriteUnicodeOrByteText(
+                                aStr.Copy( nStrPos, nNextAttr - nStrPos ));
         nStrPos = nNextAttr;
-        eChrSet = eNextChrSet;
         aAttrIter.NextPos();
     } while( nStrPos < nEnde );
 
     if( !bLastNd ||
         ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
             && !nStrPos && nEnde == nNodeEnde )
-        ::lcl_WriteString( rWrt.Strm(), ((SwASCWriter&)rWrt).GetLineEnd(),
-                              RTL_TEXTENCODING_MS_1252, eSet );
+        rWrt.Strm().WriteUnicodeOrByteText( ((SwASCWriter&)rWrt).GetLineEnd());
 
     return rWrt;
-}
-
-void lcl_WriteString( SvStream& rStream, const String& rStr,
-                      rtl_TextEncoding eSrcSet, rtl_TextEncoding eDestSet )
-{
-    if( rStr.Len() )
-    {
-        if( RTL_TEXTENCODING_UCS2 == eDestSet )
-            rStream.Write( rStr.GetBuffer(), rStr.Len() * sizeof( sal_Unicode ));
-        else if( RTL_TEXTENCODING_UCS4 == eDestSet )
-        {
-            // ????
-        }
-        else
-        {
-            ByteString sOut( rStr, eDestSet );
-            rStream << sOut.GetBuffer();
-        }
-    }
 }
 
 /*
@@ -385,11 +293,14 @@ SwNodeFnTab aASCNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ascii/ascatr.cxx,v 1.1.1.1 2000-09-18 17:14:53 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ascii/ascatr.cxx,v 1.2 2001-01-19 12:40:07 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:53  hr
+      initial import
+
       Revision 1.59  2000/09/18 16:04:38  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 12:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,8 +581,11 @@ void AsciiReader::SetFltName( const String& rFltNm )
         SwAsciiOptions aNewOpts;
         switch( rFltNm.GetChar( 4 ) )
         {
-        case 'D':   aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );
+        case 'D':
+#if !defined(PM2)
+                    aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );
                     aNewOpts.SetParaFlags( LINEEND_CRLF );
+#endif
                     if( 5 < rFltNm.Len() )
                         switch( rFltNm.Copy( 5 ).ToInt32() )
                         {
@@ -595,14 +598,23 @@ void AsciiReader::SetFltName( const String& rFltNm )
                         }
                     break;
 
-        case 'A':   aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+        case 'A':
+#if !defined(WIN) && !defined(WNT)
+                    aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                     aNewOpts.SetParaFlags( LINEEND_CRLF );
+#endif
                     break;
-        case 'M':   aNewOpts.SetCharSet( RTL_TEXTENCODING_APPLE_ROMAN );
+        case 'M':
+#if !defined(MAC)
+                    aNewOpts.SetCharSet( RTL_TEXTENCODING_APPLE_ROMAN );
                     aNewOpts.SetParaFlags( LINEEND_CR );
+#endif
                     break;
-        case 'X':   aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+        case 'X':
+#if !defined(UNX)
+                    aNewOpts.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                     aNewOpts.SetParaFlags( LINEEND_LF );
+#endif
                     break;
 
         default:
@@ -911,16 +923,10 @@ void SwASCIIParser::ReadChars()
 
 void SwASCIIParser::ReadUnicode()
 {
-    BOOL bSwapUnicode = FALSE;
     long nReadCnt = 0;
 
-    sal_Int16 nFlag;
-    rInput >> nFlag;
-
-    if( -2 == nFlag )
-        bSwapUnicode = TRUE;                // must be swapped
-    else if( -257 != nFlag )                  // notthing to do
-        rInput.SeekRel( sizeof( nFlag ) );  // no tag at start
+    rInput.StartReadingUnicodeText();
+    BOOL bSwapUnicode = rInput.IsEndianSwap();
 
     sal_Unicode *pStt = (sal_Unicode*)pArr, *pEnd = pStt, *pLastStt = pStt;
 
@@ -1092,11 +1098,14 @@ void SwASCIIParser::ReadUnicode()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ascii/parasc.cxx,v 1.1.1.1 2000-09-18 17:14:53 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ascii/parasc.cxx,v 1.2 2001-01-19 12:40:07 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:53  hr
+      initial import
+
       Revision 1.25  2000/09/18 16:04:39  willem.vandorp
       OpenOffice header added.
 
