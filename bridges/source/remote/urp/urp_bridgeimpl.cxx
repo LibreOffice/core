@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 11:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 #include <osl/thread.h>
 
 #include <bridges/remote/helper.hxx>
+
+#include <algorithm>
 
 #include "urp_bridgeimpl.hxx"
 
