@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:53:56 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 07:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ ModelessDialog RID_SCDLG_CHANGES
         QuickHelpText [ portuguese ] = "Afastar/Aproximar" ;
     QuickHelpText[ russian ] = "Óìåíüøèòü/Óâåëè÷èòü";
         QuickHelpText[ polish ] = "Pomniejsz/Powiêksz";
-        QuickHelpText[ japanese ] = "k¬/Šg‘å";
+        QuickHelpText[ japanese ] = "k¬/Šg‘å!";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡/·Å´ó";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p/©ñ¤j";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ/ÊßÈíÑ";
@@ -166,7 +166,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Inserted Column" ;
         Text [ portuguese ] = "Coluna inserida" ;
         Text [ english_us ] = "Column inserted" ;
-        Text [ portuguese_brazilian ] = "Spalte eingefügt" ;
+        Text [ portuguese_brazilian ] = "Spalte eingef?t" ;
         Text [ swedish ] = "Kolumn infogad" ;
         Text [ danish ] = "Kolonne indsat" ;
         Text [ italian ] = "Colonna inserita" ;
@@ -187,7 +187,7 @@ ModelessDialog RID_SCDLG_CHANGES
     Text[ danish ] = "Kolonne indsat";
     Text[ swedish ] = "Kolumn infogad";
     Text[ polish ] = "Wstawiona kolumna";
-    Text[ portuguese_brazilian ] = "Spalte eingefügt";
+    Text[ portuguese_brazilian ] = "Spalte eingef?t";
     Text[ japanese ] = "—ñ‚ª‘}“ü‚³‚ê‚Ü‚µ‚½";
     Text[ chinese_simplified ] = "¼ÓÈëµÄÁĞ";
     Text[ chinese_traditional ] = "Äæ¤w¸g´¡¤J";
@@ -207,7 +207,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Inserted Row" ;
         Text [ portuguese ] = "Linha inserida" ;
         Text [ english_us ] = "Row inserted " ;
-        Text [ portuguese_brazilian ] = "Zeile eingefügt" ;
+        Text [ portuguese_brazilian ] = "Zeile eingef?t" ;
         Text [ swedish ] = "Rad infogad" ;
         Text [ danish ] = "Række indsat" ;
         Text [ italian ] = "Riga inserita" ;
@@ -235,7 +235,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Inserted Sheet" ;
         Text [ portuguese ] = "Tabela inserida" ;
         Text [ english_us ] = "Sheet inserted " ;
-        Text [ portuguese_brazilian ] = "Tabelle eingefügt" ;
+        Text [ portuguese_brazilian ] = "Tabelle eingef?t" ;
         Text [ swedish ] = "Tabell infogad" ;
         Text [ danish ] = "Ark indsat" ;
         Text [ italian ] = "Tabella inserita" ;
@@ -263,7 +263,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Deleted Column" ;
         Text [ portuguese ] = "Coluna eliminada" ;
         Text [ english_us ] = "Column deleted" ;
-        Text [ portuguese_brazilian ] = "Spalte gelöscht" ;
+        Text [ portuguese_brazilian ] = "Spalte gel?cht" ;
         Text [ swedish ] = "Kolumn raderad" ;
         Text [ danish ] = "Kolonne slettet" ;
         Text [ italian ] = "Colonna cancellata" ;
@@ -291,7 +291,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Deleted Row" ;
         Text [ portuguese ] = "Linha eliminada" ;
         Text [ english_us ] = "Row deleted" ;
-        Text [ portuguese_brazilian ] = "Zeile gelöscht" ;
+        Text [ portuguese_brazilian ] = "Zeile gel?cht" ;
         Text [ swedish ] = "Rad raderad" ;
         Text [ danish ] = "Række slettet" ;
         Text [ italian ] = "Riga cancellata" ;
@@ -319,7 +319,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Deleted Sheet" ;
         Text [ portuguese ] = "Tabela eliminada" ;
         Text [ english_us ] = "Sheet deleted" ;
-        Text [ portuguese_brazilian ] = "Tabelle gelöscht" ;
+        Text [ portuguese_brazilian ] = "Tabelle gel?cht" ;
         Text [ swedish ] = "Tabell raderad" ;
         Text [ danish ] = "Ark slettet" ;
         Text [ italian ] = "Tabella cancellata" ;
@@ -375,7 +375,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Changed Cell" ;
         Text [ portuguese ] = "Conteúdo modificado" ;
         Text [ english_us ] = "Changed contents" ;
-        Text [ portuguese_brazilian ] = "Inhaltsänderung" ;
+        Text [ portuguese_brazilian ] = "Inhalts?nderung" ;
         Text [ swedish ] = "Innehållsändring" ;
         Text [ danish ] = "Indholdsændring" ;
         Text [ italian ] = "Modifica contenuto" ;
@@ -384,7 +384,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Inhoudsverandering" ;
         Text[ chinese_simplified ] = "ÄÚÈİ¸ü¸Ä";
         Text[ russian ] = "Èçìåíåíèå ñîäåğæèìîãî";
-        Text[ polish ] = "Zmiana zawartoœci";
+        Text[ polish ] = "Zmiana zawarto?ci";
         Text[ japanese ] = "“à—e‚Ì•ÏX";
         Text[ chinese_traditional ] = "¤º®eÅÜ§ó";
         Text[ arabic ] = "ÊÛííÑ ÇáãÍÊæíÇÊ";
@@ -403,7 +403,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Changed Cell" ;
         Text [ portuguese ] = "Conteúdo modificado" ;
         Text [ english_us ] = "Changed contents" ;
-        Text [ portuguese_brazilian ] = "Inhaltsänderung" ;
+        Text [ portuguese_brazilian ] = "Inhalts?nderung" ;
         Text [ swedish ] = "Innehållsändring" ;
         Text [ danish ] = "Indholdsændring" ;
         Text [ italian ] = "Modifica contenuto" ;
@@ -412,7 +412,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ dutch ] = "Inhoudsverandering" ;
         Text[ chinese_simplified ] = "ÄÚÈİ¸ü¸Ä";
         Text[ russian ] = "Èçìåíåíèå ñîäåğæèìîãî";
-        Text[ polish ] = "Zmiana zawartoœci";
+        Text[ polish ] = "Zmiana zawarto?ci";
         Text[ japanese ] = "“à—e‚Ì•ÏX";
         Text[ chinese_traditional ] = "¤º®eÅÜ§ó";
         Text[ arabic ] = "ÊÛííÑ ÇáãÍÊæíÇÊ";
@@ -431,7 +431,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "acceptable Changing to " ;
         Text [ portuguese ] = "Modificado para " ;
         Text [ english_us ] = "Changed to " ;
-        Text [ portuguese_brazilian ] = "Änderung zu " ;
+        Text [ portuguese_brazilian ] = "?nderung zu " ;
         Text [ swedish ] = "Ändring till  " ;
         Text [ danish ] = "Ændring til " ;
         Text [ italian ] = "Modificato in " ;
@@ -487,7 +487,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text [ ENGLISH ] = "Reject Changes" ;
         Text [ portuguese ] = "Modificações rejeitadas" ;
         Text [ english_us ] = "Changes rejected" ;
-        Text [ portuguese_brazilian ] = "Änderung verworfen" ;
+        Text [ portuguese_brazilian ] = "?nderung verworfen" ;
         Text [ swedish ] = "Ändring tillbakavisad" ;
         Text [ danish ] = "Ændring forkastet" ;
         Text [ italian ] = "Modifiche rigettate" ;
@@ -638,7 +638,7 @@ ModelessDialog RID_SCDLG_CHANGES
         File = "basbrk.bmp" ;
     };
     Text [ english_us ] = "Accept or Reject Changes" ;
-    Text [ portuguese_brazilian ] = "Änderungen akzeptieren" ;
+    Text [ portuguese_brazilian ] = "?nderungen akzeptieren" ;
     Text [ swedish ] = "Acceptera eller avslå ändringar" ;
     Text [ danish ] = "Accepter eller forkast ændringerne" ;
     Text [ italian ] = "Accetta o rifiuta modifiche" ;
