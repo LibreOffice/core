@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:57:52 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:58:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=web
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -75,19 +73,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        wdrwbase.cxx	\
-        wformsh.cxx	\
-        wgrfsh.cxx	\
-        wlistsh.cxx	\
-        wolesh.cxx	\
-        wtabsh.cxx	\
-        wfrmsh.cxx	\
-        wtextsh.cxx	\
-        wdocsh.cxx	\
-        wview.cxx
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         web.src	\
         webport.src
 
