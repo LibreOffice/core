@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 10:06:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,15 @@ using namespace com::sun::star;
 
 const GUID* guidList[ SUPPORTED_FACTORIES_NUM ] = {
     &OID_WriterTextServer,
-//  &OID_WriterWebServer,
-//  &OID_WriterGlobalServer,
+    &OID_WriterOASISTextServer,
     &OID_CalcServer,
+    &OID_CalcOASISServer,
     &OID_DrawingServer,
+    &OID_DrawingOASISServer,
     &OID_PresentationServer,
-    &OID_MathServer
+    &OID_PresentationOASISServer,
+    &OID_MathServer,
+    &OID_MathOASISServer
 };
 
 class CurThreadData
