@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:42:26 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,8 @@ const SfxConstant __FAR_DATA aConstants[] =
 
 StarBASIC* SfxApplication::GetBasic_Impl() const
 {
-    return pImp->pBasicMgr ? pImp->pBasicMgr->GetLib(0) : NULL;
+    BasicManager* pBasMgr = GetAppBasicManager();
+    return pBasMgr ? pBasMgr->GetLib(0) : NULL;
 }
 
 //------------------------------------------------------------------------
@@ -637,7 +638,8 @@ BasicManager* SfxApplication::GetBasicManager()
         // sicherheitshalber
         EnterBasicCall();
 
-    if ( !pImp->pBasicMgr )
+    BasicManager* pBasMgr = GetAppBasicManager();
+    if ( !pBasMgr )
     {
         // Directory bestimmen
         SvtPathOptions aPathCFG;
@@ -653,18 +655,18 @@ BasicManager* SfxApplication::GetBasicManager()
         INetURLObject aAppBasic( SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(progurl)") ) );
         aAppBasic.insertName( Application::GetAppName() );
 
-        BasicManager* pBasicManager = new BasicManager( new StarBASIC, &aAppBasicDir );
-        pImp->pBasicMgr = pBasicManager;
+        pBasMgr = new BasicManager( new StarBASIC, &aAppBasicDir );
+        SetAppBasicManager( pBasMgr );
 
         // Als Destination das erste Dir im Pfad:
         String aFileName( aAppBasic.getName() );
         aAppBasic = INetURLObject( aAppBasicDir.GetToken(1) );
         DBG_ASSERT( aAppBasic.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
         aAppBasic.insertName( aFileName );
-        pImp->pBasicMgr->SetStorageName( aAppBasic.PathToFileName() );
+        pBasMgr->SetStorageName( aAppBasic.PathToFileName() );
 
         // globale Variablen
-        StarBASIC *pBas = pImp->pBasicMgr->GetLib(0);
+        StarBASIC *pBas = pBasMgr->GetLib(0);
         sal_Bool bBasicWasModified = pBas->IsModified();
 
         Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
@@ -678,11 +680,11 @@ BasicManager* SfxApplication::GetBasicManager()
 
         // Basic container
         SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer
-            ( DEFINE_CONST_UNICODE( "StarBasic" ), pBasicManager );
+            ( DEFINE_CONST_UNICODE( "StarBasic" ), pBasMgr );
         pBasicCont->acquire();  // Hold via UNO
         Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
         pImp->pBasicLibContainer = pBasicCont;
-        pBasicCont->setBasicManager( pBasicManager );
+        pBasicCont->setBasicManager( pBasMgr );
 
         // Dialog container
         SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( uno::Reference< embed::XStorage >() );
@@ -692,7 +694,7 @@ BasicManager* SfxApplication::GetBasicManager()
 
         LibraryContainerInfo* pInfo = new LibraryContainerInfo
             ( xBasicCont, xDialogCont, static_cast< OldBasicPassword* >( pBasicCont ) );
-        pBasicManager->SetLibraryContainerInfo( pInfo );
+        pBasMgr->SetLibraryContainerInfo( pInfo );
 
         Any aBasicCont;
         aBasicCont <<= xBasicCont;
@@ -725,13 +727,15 @@ BasicManager* SfxApplication::GetBasicManager()
             pBas->SetModified( sal_False );
     }
 
-    return pImp->pBasicMgr;
+    return pBasMgr;
 }
 
 //--------------------------------------------------------------------
 
 Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
 {
+    if( !pImp->pDialogLibContainer )
+        GetBasicManager();
     Reference< XLibraryContainer > xRet
         = static_cast< XLibraryContainer* >( pImp->pDialogLibContainer );
     return xRet;
@@ -741,6 +745,8 @@ Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
 
 Reference< XLibraryContainer > SfxApplication::GetBasicContainer()
 {
+    if( !pImp->pBasicLibContainer )
+        GetBasicManager();
     Reference< XLibraryContainer > xRet
         = static_cast< XLibraryContainer* >( pImp->pBasicLibContainer );
     return xRet;
