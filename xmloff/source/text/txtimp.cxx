@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-25 06:57:28 $
+ *  last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@
 #ifndef _XMLTEXTFRAMECONTEXT_HXX
 #include "XMLTextFrameContext.hxx"
 #endif
+#ifndef _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
+#include "XMLTextFrameHyperlinkContext.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::std;
@@ -167,6 +170,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_unordered_list,  XML_TOK_TEXT_UNORDERED_LIST },
     { XML_NAMESPACE_TEXT, sXML_text_box,        XML_TOK_TEXT_TEXTBOX_PAGE },
     { XML_NAMESPACE_OFFICE, sXML_image,         XML_TOK_TEXT_IMAGE_PAGE },
+    { XML_NAMESPACE_DRAW, sXML_a,               XML_TOK_DRAW_A_PAGE },
     { XML_NAMESPACE_TABLE,sXML_table,           XML_TOK_TABLE_TABLE         },
 //  { XML_NAMESPACE_TABLE,sXML_sub_table,       XML_TOK_TABLE_SUBTABLE      },
     { XML_NAMESPACE_TEXT, sXML_variable_decls,  XML_TOK_TEXT_VARFIELD_DECLS },
@@ -196,6 +200,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
 
     { XML_NAMESPACE_TEXT, sXML_text_box, XML_TOK_TEXT_TEXTBOX },
     { XML_NAMESPACE_OFFICE, sXML_image, XML_TOK_TEXT_IMAGE },
+    { XML_NAMESPACE_DRAW, sXML_a,               XML_TOK_DRAW_A },
 
     // sender fields
     { XML_NAMESPACE_TEXT, sXML_sender_firstname,XML_TOK_TEXT_SENDER_FIRSTNAME},
@@ -363,6 +368,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextHyperlinkAttrTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_target_frame_name, XML_TOK_TEXT_HYPERLINK_TARGET_FRAME },
     { XML_NAMESPACE_TEXT, sXML_style_name, XML_TOK_TEXT_HYPERLINK_STYLE_NAME },
     { XML_NAMESPACE_TEXT, sXML_visited_style_name, XML_TOK_TEXT_HYPERLINK_VIS_STYLE_NAME },
+    { XML_NAMESPACE_OFFICE, sXML_server_map, XML_TOK_TEXT_HYPERLINK_SERVER_MAP },
     XML_TOKEN_MAP_END
 };
 XMLTextImportHelper::XMLTextImportHelper(
@@ -855,6 +861,19 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                                                 XML_TEXT_FRAME_GRAPHIC );
         }
         break;
+
+    case XML_TOK_DRAW_A_PAGE:
+        if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
+        {
+            TextContentAnchorType eAnchorType =
+                XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
+                                               : TextContentAnchorType_AT_PAGE;
+            pContext = new XMLTextFrameHyperlinkContext( rImport, nPrefix,
+                                                rLocalName, xAttrList,
+                                                eAnchorType );
+        }
+        break;
+
 
 
     }

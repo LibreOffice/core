@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLTextFrameContext.hxx,v $
+ *  $RCSfile: XMLTextFrameHyperlinkContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
+ *  last change: $Author: mib $ $Date: 2000-09-26 08:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _XMLTEXTFRAMECONTEXT_HXX
-#define _XMLTEXTFRAMECONTEXT_HXX
+#ifndef _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
+#define _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
 
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -75,48 +75,26 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
-#define XML_TEXT_FRAME_TEXTBOX 1
-#define XML_TEXT_FRAME_GRAPHIC 2
 
-class XMLTextFrameContext : public SvXMLImportContext
+class XMLTextFrameHyperlinkContext : public SvXMLImportContext
 {
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::text::XTextCursor > xOldTextCursor;
-    ::com::sun::star::uno::Reference <
-        ::com::sun::star::beans::XPropertySet > xPropSet;
-
-    const ::rtl::OUString sWidth;
-    const ::rtl::OUString sRelativeWidth;
-    const ::rtl::OUString sHeight;
-    const ::rtl::OUString sRelativeHeight;
-    const ::rtl::OUString sSizeType;
-    const ::rtl::OUString sSizeRelative;
-    const ::rtl::OUString sHoriOrientPosition;
-    const ::rtl::OUString sVertOrientPosition;
-    const ::rtl::OUString sChainNextName;
-    const ::rtl::OUString sAnchorType;
-    const ::rtl::OUString sAnchorPageNo;
-    const ::rtl::OUString sGraphicURL;
-    const ::rtl::OUString sGraphicFilter;
-    const ::rtl::OUString sAlternativeText;
-    const ::rtl::OUString sFrameStyleName;
-    const ::rtl::OUString sTextBoxServiceName;
-    const ::rtl::OUString sGraphicServiceName;
-
-    ::rtl::OUString sDesc;
+    ::rtl::OUString              sHRef;
+    ::rtl::OUString              sName;
+    ::rtl::OUString              sTargetFrameName;
+    ::com::sun::star::text::TextContentAnchorType eAnchorType;
+    sal_Bool                    bMap;
 
 public:
 
     TYPEINFO();
 
-    XMLTextFrameContext( SvXMLImport& rImport,
+    XMLTextFrameHyperlinkContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            ::com::sun::star::text::TextContentAnchorType eAnchorType,
-            sal_uInt16 nType );
-    virtual ~XMLTextFrameContext();
+            ::com::sun::star::text::TextContentAnchorType eAnchorType );
+    virtual ~XMLTextFrameHyperlinkContext();
 
     virtual void EndElement();
 
@@ -124,11 +102,6 @@ public:
                 const ::rtl::OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-
-    void SetHyperlink( const ::rtl::OUString& rHRef,
-                       const ::rtl::OUString& rName,
-                       const ::rtl::OUString& rTargetFrameName,
-                       sal_Bool bMap );
 };
 
 

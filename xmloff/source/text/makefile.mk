@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mib $ $Date: 2000-09-21 09:48:30 $
+#   last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ CXXFILES = \
         XMLTextNumRuleInfo.cxx \
         XMLTextColumnsExport.cxx \
         XMLTextFrameContext.cxx \
+        XMLTextFrameHyperlinkContext.cxx \
         XMLTextListAutoStylePool.cxx \
         XMLTextListBlockContext.cxx \
         XMLTextPropertySetContext.cxx \
@@ -127,6 +128,7 @@ SLOFILES =	\
         $(SLO)$/XMLTextColumnsContext.obj \
         $(SLO)$/XMLTextColumnsExport.obj \
         $(SLO)$/XMLTextFrameContext.obj \
+        $(SLO)$/XMLTextFrameHyperlinkContext.obj \
         $(SLO)$/XMLTextListAutoStylePool.obj \
         $(SLO)$/XMLTextListBlockContext.obj \
         $(SLO)$/XMLFootnoteImportContext.obj \

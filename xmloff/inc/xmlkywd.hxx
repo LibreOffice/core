@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-25 07:11:38 $
+ *  last change: $Author: mib $ $Date: 2000-09-26 08:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,6 +818,7 @@ XML_CONSTASCII_ACTION( sXML_sequence_decl, "sequence-decl" );
 XML_CONSTASCII_ACTION( sXML_sequence_decls, "sequence-decls" );
 XML_CONSTASCII_ACTION( sXML_sequence_ref, "sequence-ref" );
 XML_CONSTASCII_ACTION( sXML_series, "series" );
+XML_CONSTASCII_ACTION( sXML_server_map, "server-map" );
 XML_CONSTASCII_ACTION( sXML_shadow, "shadow" );
 XML_CONSTASCII_ACTION( sXML_shadow_color , "shadow-color" );
 XML_CONSTASCII_ACTION( sXML_shadow_offset_x , "shadow-offset-x" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-25 15:19:28 $
+ *  last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,16 +1183,54 @@ void XMLTextParagraphExport::addTextFrameAttributes(
     }
 }
 
+void XMLTextParagraphExport::_exportTextFrame(
+        const Reference < XPropertySet > & rPropSet,
+        const Reference < XPropertySetInfo > & rPropSetInfo )
+{
+    Reference < XTextFrame > xTxtFrame( rPropSet, UNO_QUERY );
+    Reference < XText > xTxt = xTxtFrame->getText();
+
+    OUString sStyle;
+    Any aAny;
+    if( rPropSetInfo->hasPropertyByName( sFrameStyleName ) )
+    {
+        aAny = rPropSet->getPropertyValue( sFrameStyleName );
+        aAny >>= sStyle;
+    }
+
+    OUString sAutoStyle( sStyle );
+    sAutoStyle = Find( XML_STYLE_FAMILY_SD_GRAPHICS_ID, rPropSet, sStyle );
+    if( sAutoStyle.getLength() )
+        GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_style_name,
+                                  sAutoStyle );
+    addTextFrameAttributes( rPropSet );
+
+    // text:chain-next-name
+    if( rPropSetInfo->hasPropertyByName( sChainNextName ) )
+    {
+        OUString sNext;
+        aAny = rPropSet->getPropertyValue( sChainNextName );
+        if( (aAny >>= sNext) && sNext.getLength() > 0 )
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                      sXML_chain_next_name,
+                                      sNext );
+    }
+
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                              sXML_text_box, sal_False, sal_True );
+    exportText( xTxt, sal_False );
+}
+
 void XMLTextParagraphExport::exportTextFrame(
         const Reference < XTextContent > & rTxtCntnt,
         sal_Bool bAutoStyles )
 {
     Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
-    Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
-    Reference < XText > xTxt = xTxtFrame->getText();
 
     if( bAutoStyles )
     {
+        Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
+        Reference < XText > xTxt = xTxtFrame->getText();
         Add( XML_STYLE_FAMILY_SD_GRAPHICS_ID, xPropSet );
         exportText( xTxt, bAutoStyles );
     }
@@ -1200,35 +1238,75 @@ void XMLTextParagraphExport::exportTextFrame(
     {
         Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
-        OUString sStyle;
-        Any aAny;
-        if( xPropSetInfo->hasPropertyByName( sFrameStyleName ) )
+        Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
+        if( xPropState.is() &&
+            xPropSetInfo->hasPropertyByName( sHyperLinkURL ) &&
+            PropertyState_DIRECT_VALUE ==
+                                xPropState->getPropertyState( sHyperLinkURL ) )
         {
-            aAny = xPropSet->getPropertyValue( sFrameStyleName );
-            aAny >>= sStyle;
+            addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                                      sXML_a, sal_False, sal_False );
+            _exportTextFrame( xPropSet, xPropSetInfo );
         }
-
-        OUString sAutoStyle( sStyle );
-        sAutoStyle = Find( XML_STYLE_FAMILY_SD_GRAPHICS_ID, xPropSet, sStyle );
-        if( sAutoStyle.getLength() )
-            GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_style_name,
-                                      sAutoStyle );
-        addTextFrameAttributes( xPropSet );
-
-        // text:chain-next-name
-        if( xPropSetInfo->hasPropertyByName( sChainNextName ) )
+        else
         {
-            OUString sNext;
-            aAny = xPropSet->getPropertyValue( sChainNextName );
-            if( (aAny >>= sNext) && sNext.getLength() > 0 )
-                GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                          sXML_chain_next_name,
-                                            sNext );
+            _exportTextFrame( xPropSet, xPropSetInfo );
         }
+    }
+}
 
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                  sXML_text_box, sal_False, sal_True );
-        exportText( xTxt, sal_False );
+void XMLTextParagraphExport::_exportTextGraphic(
+        const Reference < XPropertySet > & rPropSet,
+        const Reference < XPropertySetInfo > & rPropSetInfo )
+{
+    OUString sStyle;
+    Any aAny;
+    if( rPropSetInfo->hasPropertyByName( sFrameStyleName ) )
+    {
+        aAny = rPropSet->getPropertyValue( sFrameStyleName );
+        aAny >>= sStyle;
+    }
+
+    OUString sAutoStyle( sStyle );
+    sAutoStyle = Find( XML_STYLE_FAMILY_SD_GRAPHICS_ID, rPropSet, sStyle );
+    if( sAutoStyle.getLength() )
+        GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_style_name,
+                                  sAutoStyle );
+    addTextFrameAttributes( rPropSet );
+
+    // xlink:href
+    OUString sURL;
+    aAny = rPropSet->getPropertyValue( sGraphicURL );
+    aAny >>= sURL;
+    GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
+    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
+                                   sXML_simple );
+    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show,
+                                   sXML_embed );
+    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
+                                   sXML_onRequest );
+
+    // office:filter-name
+    OUString sGrfFilter;
+    aAny = rPropSet->getPropertyValue( sGraphicFilter );
+    aAny >>= sGrfFilter;
+    if( sGrfFilter.getLength() )
+        GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_filter_name,
+                                  sGrfFilter );
+
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE,
+                              sXML_image, sal_False, sal_True );
+
+    // svg:desc
+    OUString sAltText;
+    aAny = rPropSet->getPropertyValue( sAlternativeText );
+    aAny >>= sAltText;
+    if( sAltText.getLength() )
+    {
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE,
+                                  sXML_desc, sal_True, sal_False );
+        GetExport().GetDocHandler()->characters( sAltText );
     }
 }
 
@@ -1246,53 +1324,20 @@ void XMLTextParagraphExport::exportTextGraphic(
     {
         Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
-        OUString sStyle;
-        Any aAny;
-        if( xPropSetInfo->hasPropertyByName( sFrameStyleName ) )
+        Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
+        if( xPropState.is() &&
+            xPropSetInfo->hasPropertyByName( sHyperLinkURL ) &&
+            PropertyState_DIRECT_VALUE ==
+                                xPropState->getPropertyState( sHyperLinkURL ) )
         {
-            aAny = xPropSet->getPropertyValue( sFrameStyleName );
-            aAny >>= sStyle;
+            addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                                      sXML_a, sal_False, sal_False );
+            _exportTextGraphic( xPropSet, xPropSetInfo );
         }
-
-        OUString sAutoStyle( sStyle );
-        sAutoStyle = Find( XML_STYLE_FAMILY_SD_GRAPHICS_ID, xPropSet, sStyle );
-        if( sAutoStyle.getLength() )
-            GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_style_name,
-                                      sAutoStyle );
-        addTextFrameAttributes( xPropSet );
-
-        // xlink:href
-        OUString sURL;
-        aAny = xPropSet->getPropertyValue( sGraphicURL );
-        aAny >>= sURL;
-        GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
-        GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
-                                       sXML_simple );
-        GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show,
-                                       sXML_embed );
-        GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
-                                       sXML_onRequest );
-
-        // office:filter-name
-        OUString sGrfFilter;
-        aAny = xPropSet->getPropertyValue( sGraphicFilter );
-        aAny >>= sGrfFilter;
-        if( sGrfFilter.getLength() )
-            GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_filter_name,
-                                      sGrfFilter );
-
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE,
-                                  sXML_image, sal_False, sal_True );
-
-        // svg:desc
-        OUString sAltText;
-        aAny = xPropSet->getPropertyValue( sAlternativeText );
-        aAny >>= sAltText;
-        if( sAltText.getLength() )
+        else
         {
-            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE,
-                                      sXML_desc, sal_True, sal_False );
-            GetExport().GetDocHandler()->characters( sAltText );
+            _exportTextGraphic( xPropSet, xPropSetInfo );
         }
     }
 }
@@ -1303,13 +1348,12 @@ void XMLTextParagraphExport::exportTextEmbedded(
 {
 }
 
-void XMLTextParagraphExport::exportTextRangeText(
+void XMLTextParagraphExport::_exportTextRange(
         const Reference < XTextRange > & rTextRange,
-        sal_Bool bAutoStyles,
+        const Reference < XPropertySet > & rPropSet,
         sal_Bool& rPrevCharIsSpace )
 {
-    Reference < XPropertySet > xPropSet( rTextRange, UNO_QUERY );
-    OUString sStyle = FindTextStyle( xPropSet );
+    OUString sStyle = FindTextStyle( rPropSet );
     OUString sText = rTextRange->getString();
     if( sStyle.getLength() )
     {
@@ -1325,6 +1369,70 @@ void XMLTextParagraphExport::exportTextRangeText(
     }
 }
 
+void XMLTextParagraphExport::addHyperlinkAttributes(
+        const Reference < XPropertySet > & rPropSet,
+        const Reference < XPropertyState > & rPropState,
+        const Reference < XPropertySetInfo > & rPropSetInfo )
+{
+    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK,
+                                   sXML_type, sXML_simple );
+
+    OUString sTmp;
+    Any aAny = rPropSet->getPropertyValue( sHyperLinkURL );
+    aAny >>= sTmp;
+    GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sTmp );
+
+    if( rPropSetInfo->hasPropertyByName( sHyperLinkName ) &&
+        ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
+                    rPropState->getPropertyState( sHyperLinkName ) ) )
+    {
+        aAny = rPropSet->getPropertyValue( sHyperLinkName );
+        aAny >>= sTmp;
+        GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_name,
+                                  sTmp );
+    }
+
+    if( rPropSetInfo->hasPropertyByName( sHyperLinkTarget ) &&
+        ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
+                    rPropState->getPropertyState( sHyperLinkTarget ) ) )
+    {
+        aAny = rPropSet->getPropertyValue( sHyperLinkTarget );
+        aAny >>= sTmp;
+        if( sTmp.getLength() )
+        {
+            GetExport().AddAttribute( XML_NAMESPACE_OFFICE,
+                                      sXML_target_frame_name, sTmp );
+            const sal_Char *pStr =
+                sTmp.equalsAsciiL( "_blank", sizeof("_blank")-1 )
+                    ? sXML_new : sXML_replace;
+            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK,
+                                      sXML_show, pStr );
+        }
+    }
+
+    if( rPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName ) &&
+        ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
+            rPropState->getPropertyState( sUnvisitedCharStyleName ) ) )
+    {
+        aAny = rPropSet->getPropertyValue( sUnvisitedCharStyleName );
+        aAny >>= sTmp;
+        if( sTmp.getLength() )
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                      sXML_style_name, sTmp );
+    }
+
+    if( rPropSetInfo->hasPropertyByName( sVisitedCharStyleName ) &&
+        ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
+            rPropState->getPropertyState( sVisitedCharStyleName ) ) )
+    {
+        aAny = rPropSet->getPropertyValue( sVisitedCharStyleName );
+        aAny >>= sTmp;
+        if( sTmp.getLength() )
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                      sXML_visited_style_name, sTmp );
+    }
+}
+
 void XMLTextParagraphExport::exportTextRange(
         const Reference < XTextRange > & rTextRange,
         sal_Bool bAutoStyles,
@@ -1337,7 +1445,6 @@ void XMLTextParagraphExport::exportTextRange(
     }
     else
     {
-        sal_Bool bHyperlink = sal_False;
         Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
         Reference < XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
@@ -1346,71 +1453,14 @@ void XMLTextParagraphExport::exportTextRange(
             PropertyState_DIRECT_VALUE ==
                                 xPropState->getPropertyState( sHyperLinkURL ) )
         {
-            GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK,
-                                           sXML_type, sXML_simple );
-
-            OUString sTmp;
-            Any aAny = xPropSet->getPropertyValue( sHyperLinkURL );
-            aAny >>= sTmp;
-            GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sTmp );
-
-            if( xPropSetInfo->hasPropertyByName( sHyperLinkName ) &&
-                ( !xPropState.is() || PropertyState_DIRECT_VALUE ==
-                            xPropState->getPropertyState( sHyperLinkName ) ) )
-            {
-                aAny = xPropSet->getPropertyValue( sHyperLinkName );
-                aAny >>= sTmp;
-                GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_name,
-                                          sTmp );
-            }
-
-            if( xPropSetInfo->hasPropertyByName( sHyperLinkTarget ) &&
-                ( !xPropState.is() || PropertyState_DIRECT_VALUE ==
-                            xPropState->getPropertyState( sHyperLinkTarget ) ) )
-            {
-                aAny = xPropSet->getPropertyValue( sHyperLinkTarget );
-                aAny >>= sTmp;
-                if( sTmp.getLength() )
-                {
-                    GetExport().AddAttribute( XML_NAMESPACE_OFFICE,
-                                              sXML_target_frame_name, sTmp );
-                    const sal_Char *pStr =
-                        sTmp.equalsAsciiL( "_blank", sizeof("_blank")-1 )
-                            ? sXML_new : sXML_replace;
-                    GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK,
-                                              sXML_show, pStr );
-                }
-            }
-
-            if( xPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName ) &&
-                ( !xPropState.is() || PropertyState_DIRECT_VALUE ==
-                    xPropState->getPropertyState( sUnvisitedCharStyleName ) ) )
-            {
-                aAny = xPropSet->getPropertyValue( sUnvisitedCharStyleName );
-                aAny >>= sTmp;
-                if( sTmp.getLength() )
-                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                              sXML_style_name, sTmp );
-            }
-
-            if( xPropSetInfo->hasPropertyByName( sVisitedCharStyleName ) &&
-                ( !xPropState.is() || PropertyState_DIRECT_VALUE ==
-                    xPropState->getPropertyState( sVisitedCharStyleName ) ) )
-            {
-                aAny = xPropSet->getPropertyValue( sVisitedCharStyleName );
-                aAny >>= sTmp;
-                if( sTmp.getLength() )
-                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                              sXML_visited_style_name, sTmp );
-            }
-
+            addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                                       sXML_a, sal_False, sal_False );
-            exportTextRangeText( rTextRange, bAutoStyles, rPrevCharIsSpace );
+            _exportTextRange( rTextRange, xPropSet, rPrevCharIsSpace );
         }
         else
         {
-            exportTextRangeText( rTextRange, bAutoStyles, rPrevCharIsSpace );
+            _exportTextRange( rTextRange, xPropSet, rPrevCharIsSpace );
         }
     }
 }

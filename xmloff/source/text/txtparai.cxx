@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-25 06:57:28 $
+ *  last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #endif
 #ifndef _XMLTEXTFRAMECONTEXT_HXX
 #include "XMLTextFrameContext.hxx"
+#endif
+#ifndef _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
+#include "XMLTextFrameHyperlinkContext.hxx"
 #endif
 
 using namespace ::rtl;
@@ -713,6 +716,12 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                                             rLocalName, xAttrList,
                                             TextContentAnchorType_AS_CHARACTER,
                                             XML_TEXT_FRAME_GRAPHIC );
+        break;
+
+    case XML_TOK_DRAW_A:
+        pContext = new XMLTextFrameHyperlinkContext( rImport, nPrefix,
+                                            rLocalName, xAttrList,
+                                            TextContentAnchorType_AS_CHARACTER );
         break;
 
     default:

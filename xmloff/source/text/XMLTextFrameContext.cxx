@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-25 06:56:34 $
+ *  last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,4 +525,37 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 }
 
 
+void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,
+                       const OUString& rName,
+                       const OUString& rTargetFrameName,
+                       sal_Bool bMap )
+{
+    if( !xPropSet.is() )
+        return;
+
+    UniReference< XMLTextImportHelper > xTxtImp = GetImport().GetTextImport();
+    Reference < XPropertySetInfo > xPropSetInfo =
+        xPropSet->getPropertySetInfo();
+    if( !xPropSetInfo.is() ||
+        !xPropSetInfo->hasPropertyByName( xTxtImp->sHyperLinkURL ) )
+        return;
+
+    Any aAny;
+    aAny <<= rHRef;
+    xPropSet->setPropertyValue( xTxtImp->sHyperLinkURL, aAny );
+
+    if( xPropSetInfo->hasPropertyByName( xTxtImp->sHyperLinkName ) )
+    {
+        aAny <<= rName;
+        xPropSet->setPropertyValue( xTxtImp->sHyperLinkName, aAny );
+    }
+
+    if( xPropSetInfo->hasPropertyByName( xTxtImp->sHyperLinkTarget ) )
+    {
+        aAny <<= rTargetFrameName;
+        xPropSet->setPropertyValue( xTxtImp->sHyperLinkTarget, aAny );
+    }
+
+    // TODO: Map
+}
 
