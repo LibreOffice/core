@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:41:26 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1017,6 +1017,7 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
 
     const SfxPoolItem*      GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nWhich ) const;
     const ScPatternAttr*    GetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
     const ScPatternAttr*    GetSelectionPattern( const ScMarkData& rMark, BOOL bDeep = TRUE );
     ScPatternAttr*          CreateSelectionPattern( const ScMarkData& rMark, BOOL bDeep = TRUE );
 
