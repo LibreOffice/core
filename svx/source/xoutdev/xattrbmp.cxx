@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-27 16:44:41 $
+ *  last change: $Author: cl $ $Date: 2001-03-07 13:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,12 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
 #include <toolkit/unohlp.hxx>
+
+#ifndef _SFXSTYLE_HXX
+#include <svtools/style.hxx>
+#endif
+
+#include "dialogs.hrc"
 #include "xattr.hxx"
 #include "xtable.hxx"
 #include "xoutx.hxx"
@@ -74,6 +80,10 @@
 
 #ifndef SVX_LIGHT
 #include "unoapi.hxx"
+#endif
+
+#ifndef _SVDMODEL_HXX
+#include "svdmodel.hxx"
 #endif
 
 #define GLOBALOVERFLOW
@@ -822,5 +832,30 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE
     return sal_False;
 }
 
+BOOL XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+{
+    return ((XFillBitmapItem*)p1)->GetValue().GetGraphicObject().GetUniqueID() ==
+           ((XFillBitmapItem*)p2)->GetValue().GetGraphicObject().GetUniqueID();
+}
 
+XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
+{
+    if( pModel )
+    {
+        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+                                                                XATTR_FILLBITMAP,
+                                                                &pModel->GetItemPool(),
+                                                                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                                                                XFillBitmapItem::CompareValueFunc,
+                                                                RID_SVXSTR_BMP21,
+                                                                pModel->GetBitmapList() );
 
+        // if the given name is not valid, replace it!
+        if( aUniqueName != GetName() )
+        {
+            return new XFillBitmapItem( aUniqueName, aXOBitmap );
+        }
+    }
+
+    return (XFillBitmapItem*)this;
+}

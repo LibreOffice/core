@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-27 16:44:41 $
+ *  last change: $Author: cl $ $Date: 2001-03-07 13:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,14 @@
 #include "unoapi.hxx"
 #endif
 
+#ifndef _SFXSTYLE_HXX
+#include <svtools/style.hxx>
+#endif
+
 #include <tools/bigint.hxx>
 #include <svtools/itemset.hxx>
 #include "dialogs.hrc"
+#include "svdstr.hrc"
 #include "xattr.hxx"
 #include "xtable.hxx"
 #include "xoutx.hxx"
@@ -113,6 +118,10 @@
 #include "itemtype.hxx"
 #include "xdef.hxx"
 #include "unomid.hxx"
+
+#ifndef _SVDMODEL_HXX
+#include "svdmodel.hxx"
+#endif
 
 #define GLOBALOVERFLOW
 
@@ -276,6 +285,129 @@ SvStream& NameOrIndex::Store( SvStream& rOut, USHORT nItemVersion ) const
     SfxStringItem::Store( rOut, nItemVersion );
     rOut << (INT32)nPalIndex;
     return rOut;
+}
+
+/** this static checks if the given NameOrIndex item has a unique name for its value.
+    The returned String is a unique name for an item with this value in both given pools.
+    Argument pPool2 can be null.
+    If returned string equals NameOrIndex->GetName(), the name was already unique.
+*/
+String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* pPool2, SvxCompareValueFunc pCompareValueFunc, USHORT nPrefixResId, XPropertyList* pDefaults )
+{
+    sal_Bool bForceNew = sal_False;
+
+    String aUniqueName( pCheckItem->GetName() );
+
+    // 2. if we have a name check if there is already an item with the
+    // same name in the documents pool with a different line end or start
+
+    if( aUniqueName.Len() && pPool1 )
+    {
+        const sal_uInt16 nCount = pPool1->GetItemCount( nWhich );
+
+        const NameOrIndex *pItem;
+        for( sal_uInt16 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (NameOrIndex*)pPool1->GetItem( nWhich, nSurrogate );
+
+            if( pItem && ( pItem->GetName() == pCheckItem->GetName() ) )
+            {
+                // if there is already an item with the same name and the same
+                // value its ok to set it
+                if( !pCompareValueFunc( pItem, pCheckItem ) )
+                {
+                    // same name but different value, we need a new name for this item
+                    aUniqueName = String();
+                    bForceNew = sal_True;
+                }
+                break;
+            }
+        }
+    }
+
+    if( aUniqueName.Len() && pPool2 )
+    {
+        const sal_uInt16 nCount = pPool2->GetItemCount( nWhich );
+
+        const NameOrIndex *pItem;
+        for( sal_uInt16 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        {
+            pItem = (NameOrIndex*)pPool2->GetItem( nWhich, nSurrogate );
+
+            if( pItem && ( pItem->GetName() == pCheckItem->GetName() ) )
+            {
+                // if there is already an item with the same name and the same
+                // value its ok to set it
+                if( !pCompareValueFunc( pItem, pCheckItem ) )
+                {
+                    // same name but different value, we need a new name for this item
+                    aUniqueName = String();
+                    bForceNew = sal_True;
+                }
+                break;
+            }
+        }
+    }
+
+    // if we have no name yet, find existing item with same conent or
+    // create a unique name
+    if( aUniqueName.Len() == 0 )
+    {
+        sal_Int32 nUserIndex = 1;
+        const ResId aRes(SVX_RES(nPrefixResId));
+        const String aUser( aRes );
+
+        if( pPool1 )
+        {
+            const sal_uInt16 nCount = pPool1->GetItemCount( nWhich );
+            const NameOrIndex *pItem;
+            for( sal_uInt16 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                pItem = (NameOrIndex*)pPool1->GetItem( nWhich, nSurrogate );
+
+                if( pItem && pItem->GetName().Len() )
+                {
+                    if( !bForceNew && pCompareValueFunc( pItem, pCheckItem ) )
+                        return pItem->GetName();
+
+                    if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                    {
+                        sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                        if( nThisIndex >= nUserIndex )
+                            nUserIndex = nThisIndex + 1;
+                    }
+                }
+            }
+        }
+
+        if( pPool2 )
+        {
+            const sal_uInt16 nCount = pPool2->GetItemCount( nWhich );
+            const NameOrIndex *pItem;
+            for( sal_uInt16 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                pItem = (NameOrIndex*)pPool2->GetItem( nWhich, nSurrogate );
+
+                if( pItem && pItem->GetName().Len() )
+                {
+                    if( !bForceNew && pCompareValueFunc( pItem, pCheckItem ) )
+                        return pItem->GetName();
+
+                    if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                    {
+                        sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                        if( nThisIndex >= nUserIndex )
+                            nUserIndex = nThisIndex + 1;
+                    }
+                }
+            }
+        }
+
+        aUniqueName = aUser;
+        aUniqueName += String::CreateFromInt32( nUserIndex );
+    }
+
+    return aUniqueName;
 }
 
 //*************************************************************************
@@ -881,6 +1013,32 @@ sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE n
     return sal_True;
 }
 
+BOOL XLineDashItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+{
+    return ((XLineDashItem*)p1)->GetValue() == ((XLineDashItem*)p2)->GetValue();
+}
+
+XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
+{
+    if( pModel )
+    {
+        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+                                                                XATTR_LINEDASH,
+                                                                &pModel->GetItemPool(),
+                                                                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                                                                XLineDashItem::CompareValueFunc,
+                                                                RID_SVXSTR_DASH11,
+                                                                pModel->GetDashList() );
+
+        // if the given name is not valid, replace it!
+        if( aUniqueName != GetName() )
+        {
+            return new XLineDashItem( aUniqueName, aDash );
+        }
+    }
+
+    return (XLineDashItem*)this;
+}
 
 // -------------------
 // class XLineWidthItem
@@ -1380,6 +1538,224 @@ sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
     return sal_False;
 }
 
+/** this function searches in both the models pool and the styles pool for XLineStartItem
+    and XLineEndItem with the same value or name and returns an item with the value of
+    this item and a unique name for an item with this value. */
+XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
+{
+    if( pModel )
+    {
+        XLineStartItem* pTempItem = NULL;
+        const XLineStartItem* pLineStartItem = this;
+
+        String aUniqueName( GetName() );
+
+        if( aXPolygon.GetPointCount() == 0 )
+        {
+            // if the polygon is empty, check if the name is empty
+            if( aUniqueName.Len() == 0 )
+                return (XLineStartItem*)this;
+
+            // force empty name for empty polygons
+            return new XLineStartItem( String(), aXPolygon );
+        }
+
+        if( aXPolygon.GetPointCount() > 1 )
+        {
+            // check if the polygon is closed
+            if( aXPolygon[0] != aXPolygon[aXPolygon.GetPointCount() - 1] )
+            {
+                // force a closed polygon
+                XPolygon aNewPolygon( aXPolygon );
+                aNewPolygon[ aXPolygon.GetPointCount() ] = aXPolygon[0];
+                pTempItem = new XLineStartItem( aUniqueName, aNewPolygon );
+                pLineStartItem = pTempItem;
+            }
+        }
+
+        sal_Bool bForceNew = sal_False;
+
+        // 2. if we have a name check if there is already an item with the
+        // same name in the documents pool with a different line end or start
+
+        sal_uInt16 nCount, nSurrogate;
+
+        const SfxItemPool* pPool1 = &pModel->GetItemPool();
+        if( aUniqueName.Len() && pPool1 )
+        {
+            nCount = pPool1->GetItemCount( XATTR_LINESTART );
+
+            for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem( XATTR_LINESTART, nSurrogate );
+
+                if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
+                {
+                    // if there is already an item with the same name and the same
+                    // value its ok to set it
+                    if( pItem->GetValue() != pLineStartItem->GetValue() )
+                    {
+                        // same name but different value, we need a new name for this item
+                        aUniqueName = String();
+                        bForceNew = sal_True;
+                    }
+                    break;
+                }
+            }
+
+            if( !bForceNew )
+            {
+                nCount = pPool1->GetItemCount( XATTR_LINEEND );
+
+                for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+                {
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem( XATTR_LINEEND, nSurrogate );
+
+                    if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
+                    {
+                        // if there is already an item with the same name and the same
+                        // value its ok to set it
+                        if( pItem->GetValue() != pLineStartItem->GetValue() )
+                        {
+                            // same name but different value, we need a new name for this item
+                            aUniqueName = String();
+                            bForceNew = sal_True;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        const SfxItemPool* pPool2 = pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL;
+        if( aUniqueName.Len() && pPool2)
+        {
+            nCount = pPool2->GetItemCount( XATTR_LINESTART );
+            for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                const XLineStartItem* pItem = (const XLineStartItem*)pPool2->GetItem( XATTR_LINESTART, nSurrogate );
+
+                if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
+                {
+                    // if there is already an item with the same name and the same
+                    // value its ok to set it
+                    if( pItem->GetValue() != pLineStartItem->GetValue() )
+                    {
+                        // same name but different value, we need a new name for this item
+                        aUniqueName = String();
+                        bForceNew = sal_True;
+                    }
+                    break;
+                }
+            }
+
+            if( !bForceNew )
+            {
+                nCount = pPool2->GetItemCount( XATTR_LINEEND );
+                for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+                {
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool2->GetItem( XATTR_LINEEND, nSurrogate );
+
+                    if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
+                    {
+                        // if there is already an item with the same name and the same
+                        // value its ok to set it
+                        if( pItem->GetValue() != pLineStartItem->GetValue() )
+                        {
+                            // same name but different value, we need a new name for this item
+                            aUniqueName = String();
+                            bForceNew = sal_True;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        // if we have no name yet, find existing item with same conent or
+        // create a unique name
+        if( aUniqueName.Len() == 0 )
+        {
+            sal_Bool bFoundExisting = sal_False;
+
+            sal_Int32 nUserIndex = 1;
+            const ResId aRes(SVX_RES(RID_SVXSTR_LINEEND));
+            const String aUser( aRes );
+
+            if( pPool1 )
+            {
+                nCount = pPool1->GetItemCount( XATTR_LINESTART );
+                for( sal_uInt16 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+                {
+                    const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem( XATTR_LINESTART, nSurrogate );
+
+                    if( pItem && pItem->GetName().Len() )
+                    {
+                        if( !bForceNew && pItem->GetValue() == pLineStartItem->GetValue() )
+                        {
+                            aUniqueName = pItem->GetName();
+                            bFoundExisting = sal_True;
+                            break;
+                        }
+
+                        if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                        {
+                            sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                            if( nThisIndex >= nUserIndex )
+                                nUserIndex = nThisIndex + 1;
+                        }
+                    }
+                }
+
+                nCount = pPool1->GetItemCount( XATTR_LINEEND );
+                for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+                {
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem( XATTR_LINEEND, nSurrogate );
+
+                    if( pItem && pItem->GetName().Len() )
+                    {
+                        if( !bForceNew && pItem->GetValue() == pLineStartItem->GetValue() )
+                        {
+                            aUniqueName = pItem->GetName();
+                            bFoundExisting = sal_True;
+                            break;
+                        }
+
+                        if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                        {
+                            sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                            if( nThisIndex >= nUserIndex )
+                                nUserIndex = nThisIndex + 1;
+                        }
+                    }
+                }
+            }
+
+            if( !bFoundExisting )
+            {
+                aUniqueName = aUser;
+                aUniqueName += sal_Unicode(' ');
+                aUniqueName += String::CreateFromInt32( nUserIndex );
+            }
+        }
+
+        // if the given name is not valid, replace it!
+        if( aUniqueName != GetName() || pTempItem )
+        {
+            if( pTempItem )
+            {
+                pTempItem->SetName( aUniqueName );
+                return pTempItem;
+            }
+            else
+            {
+                return new XLineStartItem( aUniqueName, aXPolygon );
+            }
+        }
+    }
+
+    return (XLineStartItem*)this;
+}
 
 // ---------------------
 // class XLineEndItem
@@ -1569,6 +1945,227 @@ const XPolygon& XLineEndItem::GetValue(const XLineEndTable* pTable) const
     else
         return pTable->Get(GetIndex())->GetLineEnd();
 }
+
+
+/** this function searches in both the models pool and the styles pool for XLineStartItem
+    and XLineEndItem with the same value or name and returns an item with the value of
+    this item and a unique name for an item with this value. */
+XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
+{
+    if( pModel )
+    {
+        XLineEndItem* pTempItem = NULL;
+        const XLineEndItem* pLineEndItem = this;
+
+        String aUniqueName( GetName() );
+
+        if( aXPolygon.GetPointCount() == 0 )
+        {
+            // if the polygon is empty, check if the name is empty
+            if( aUniqueName.Len() == 0 )
+                return (XLineEndItem*)this;
+
+            // force empty name for empty polygons
+            return new XLineEndItem( String(), aXPolygon );
+        }
+
+        if( aXPolygon.GetPointCount() > 1 )
+        {
+            // check if the polygon is closed
+            if( aXPolygon[0] != aXPolygon[aXPolygon.GetPointCount() - 1] )
+            {
+                // force a closed polygon
+                XPolygon aNewPolygon( aXPolygon );
+                aNewPolygon[ aXPolygon.GetPointCount() ] = aXPolygon[0];
+                pTempItem = new XLineEndItem( aUniqueName, aNewPolygon );
+                pLineEndItem = pTempItem;
+            }
+        }
+
+        sal_Bool bForceNew = sal_False;
+
+        // 2. if we have a name check if there is already an item with the
+        // same name in the documents pool with a different line end or start
+
+        sal_uInt16 nCount, nSurrogate;
+
+        const SfxItemPool* pPool1 = &pModel->GetItemPool();
+        if( aUniqueName.Len() && pPool1 )
+        {
+            nCount = pPool1->GetItemCount( XATTR_LINESTART );
+
+            for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem( XATTR_LINESTART, nSurrogate );
+
+                if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
+                {
+                    // if there is already an item with the same name and the same
+                    // value its ok to set it
+                    if( pItem->GetValue() != pLineEndItem->GetValue() )
+                    {
+                        // same name but different value, we need a new name for this item
+                        aUniqueName = String();
+                        bForceNew = sal_True;
+                    }
+                    break;
+                }
+            }
+
+            if( !bForceNew )
+            {
+                nCount = pPool1->GetItemCount( XATTR_LINEEND );
+
+                for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+                {
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem( XATTR_LINEEND, nSurrogate );
+
+                    if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
+                    {
+                        // if there is already an item with the same name and the same
+                        // value its ok to set it
+                        if( pItem->GetValue() != pLineEndItem->GetValue() )
+                        {
+                            // same name but different value, we need a new name for this item
+                            aUniqueName = String();
+                            bForceNew = sal_True;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        const SfxItemPool* pPool2 = pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL;
+        if( aUniqueName.Len() && pPool2)
+        {
+            nCount = pPool2->GetItemCount( XATTR_LINESTART );
+            for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+            {
+                const XLineStartItem* pItem = (const XLineStartItem*)pPool2->GetItem( XATTR_LINESTART, nSurrogate );
+
+                if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
+                {
+                    // if there is already an item with the same name and the same
+                    // value its ok to set it
+                    if( pItem->GetValue() != pLineEndItem->GetValue() )
+                    {
+                        // same name but different value, we need a new name for this item
+                        aUniqueName = String();
+                        bForceNew = sal_True;
+                    }
+                    break;
+                }
+            }
+
+            if( !bForceNew )
+            {
+                nCount = pPool2->GetItemCount( XATTR_LINEEND );
+                for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+                {
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool2->GetItem( XATTR_LINEEND, nSurrogate );
+
+                    if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
+                    {
+                        // if there is already an item with the same name and the same
+                        // value its ok to set it
+                        if( pItem->GetValue() != pLineEndItem->GetValue() )
+                        {
+                            // same name but different value, we need a new name for this item
+                            aUniqueName = String();
+                            bForceNew = sal_True;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        // if we have no name yet, find existing item with same conent or
+        // create a unique name
+        if( aUniqueName.Len() == 0 )
+        {
+            sal_Bool bFoundExisting = sal_False;
+
+            sal_Int32 nUserIndex = 1;
+            const ResId aRes(SVX_RES(RID_SVXSTR_LINEEND));
+            const String aUser( aRes );
+
+            if( pPool1 )
+            {
+                nCount = pPool1->GetItemCount( XATTR_LINESTART );
+                for( sal_uInt16 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+                {
+                    const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem( XATTR_LINESTART, nSurrogate );
+
+                    if( pItem && pItem->GetName().Len() )
+                    {
+                        if( !bForceNew && pItem->GetValue() == pLineEndItem->GetValue() )
+                        {
+                            aUniqueName = pItem->GetName();
+                            bFoundExisting = sal_True;
+                            break;
+                        }
+
+                        if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                        {
+                            sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                            if( nThisIndex >= nUserIndex )
+                                nUserIndex = nThisIndex + 1;
+                        }
+                    }
+                }
+
+                nCount = pPool1->GetItemCount( XATTR_LINEEND );
+                for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+                {
+                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem( XATTR_LINEEND, nSurrogate );
+
+                    if( pItem && pItem->GetName().Len() )
+                    {
+                        if( !bForceNew && pItem->GetValue() == pLineEndItem->GetValue() )
+                        {
+                            aUniqueName = pItem->GetName();
+                            bFoundExisting = sal_True;
+                            break;
+                        }
+
+                        if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+                        {
+                            sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
+                            if( nThisIndex >= nUserIndex )
+                                nUserIndex = nThisIndex + 1;
+                        }
+                    }
+                }
+            }
+
+            if( !bFoundExisting )
+            {
+                aUniqueName = aUser;
+                aUniqueName += sal_Unicode(' ');
+                aUniqueName += String::CreateFromInt32( nUserIndex );
+            }
+        }
+
+        // if the given name is not valid, replace it!
+        if( aUniqueName != GetName() || pTempItem )
+        {
+            if( pTempItem )
+            {
+                pTempItem->SetName( aUniqueName );
+                return pTempItem;
+            }
+            else
+            {
+                return new XLineEndItem( aUniqueName, aXPolygon );
+            }
+        }
+    }
+
+    return (XLineEndItem*)this;
+}
+
 
 //------------------------------------------------------------------------
 
@@ -2612,7 +3209,6 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, USHORT nItemVersion ) const
     {
         rOut << (INT16)aGradient.GetGradientStyle();
 
-#ifdef VCL
         USHORT nTmp;
 
         nTmp = VCLTOSVCOL( aGradient.GetStartColor().GetRed() ); rOut << nTmp;
@@ -2621,14 +3217,6 @@ SvStream& XFillGradientItem::Store( SvStream& rOut, USHORT nItemVersion ) const
         nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetRed() ); rOut << nTmp;
         nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetGreen() ); rOut << nTmp;
         nTmp = VCLTOSVCOL( aGradient.GetEndColor().GetBlue() ); rOut << nTmp;
-#else
-        rOut << aGradient.GetStartColor().GetRed();
-        rOut << aGradient.GetStartColor().GetGreen();
-        rOut << aGradient.GetStartColor().GetBlue();
-        rOut << aGradient.GetEndColor().GetRed();
-        rOut << aGradient.GetEndColor().GetGreen();
-        rOut << aGradient.GetEndColor().GetBlue();
-#endif
 
         rOut << (INT32) aGradient.GetAngle();
         rOut << aGradient.GetBorder();
@@ -2761,6 +3349,33 @@ sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BY
     return sal_True;
 }
 
+BOOL XFillGradientItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+{
+    return ((XFillGradientItem*)p1)->GetValue() == ((XFillGradientItem*)p2)->GetValue();
+}
+
+XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) const
+{
+    if( pModel )
+    {
+        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+                                                                XATTR_FILLGRADIENT,
+                                                                &pModel->GetItemPool(),
+                                                                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                                                                XFillGradientItem::CompareValueFunc,
+                                                                RID_SVXSTR_GRADIENT,
+                                                                pModel->GetGradientList() );
+
+        // if the given name is not valid, replace it!
+        if( aUniqueName != GetName() )
+        {
+            return new XFillGradientItem( aUniqueName, aGradient );
+        }
+    }
+
+    return (XFillGradientItem*)this;
+}
+
 // ----------------------------------
 // class XFillFloatTransparenceItem -
 // ----------------------------------
@@ -2890,6 +3505,34 @@ SfxItemPresentation XFillFloatTransparenceItem::GetPresentation(    SfxItemPrese
                                                                     const International * pInternational ) const
 {
     return XFillGradientItem::GetPresentation( ePres, eCoreUnit, ePresUnit, rText, pInternational );
+}
+
+BOOL XFillFloatTransparenceItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+{
+    return  ((XFillFloatTransparenceItem*)p1)->IsEnabled() == ((XFillFloatTransparenceItem*)p2)->IsEnabled() &&
+            ((XFillFloatTransparenceItem*)p1)->GetValue()  == ((XFillFloatTransparenceItem*)p2)->GetValue();
+}
+
+XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrModel* pModel ) const
+{
+    if( pModel )
+    {
+        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+                                                                XATTR_FILLFLOATTRANSPARENCE,
+                                                                &pModel->GetItemPool(),
+                                                                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                                                                XFillFloatTransparenceItem::CompareValueFunc,
+                                                                SIP_XA_FILLFLOATTRANSPARENCE,
+                                                                NULL );
+
+        // if the given name is not valid, replace it!
+        if( aUniqueName != GetName() )
+        {
+            return new XFillFloatTransparenceItem( aUniqueName, GetValue(), bEnabled );
+        }
+    }
+
+    return (XFillFloatTransparenceItem*)this;
 }
 
 // -------------
@@ -3224,6 +3867,32 @@ sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
     return sal_True;
 }
 
+BOOL XFillHatchItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
+{
+    return ((XFillHatchItem*)p1)->GetValue() == ((XFillHatchItem*)p2)->GetValue();
+}
+
+XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
+{
+    if( pModel )
+    {
+        const String aUniqueName = NameOrIndex::CheckNamedItem( this,
+                                                                XATTR_FILLHATCH,
+                                                                &pModel->GetItemPool(),
+                                                                pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
+                                                                XFillHatchItem::CompareValueFunc,
+                                                                RID_SVXSTR_HATCH10,
+                                                                pModel->GetHatchList() );
+
+        // if the given name is not valid, replace it!
+        if( aUniqueName != GetName() )
+        {
+            return new XFillHatchItem( aUniqueName, aHatch );
+        }
+    }
+
+    return (XFillHatchItem*)this;
+}
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                          FormText-Attribute
