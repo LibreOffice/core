@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:49 $
+ *  last change: $Author: dbo $ $Date: 2000-11-29 17:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,12 @@
  ************************************************************************/
 
 #define LEAK_STATIC_DATA
+
+#ifdef DEBUG
 #define TRACE(x) OSL_TRACE(x)
-//  #define TRACE(x)
+#else
+#define TRACE(x)
+#endif
 
 #pragma warning( disable : 4237 )
 #include <stl/hash_map>
@@ -519,13 +523,31 @@ sal_Int32 msci_filterCppException(
                 if (pExcTypeDescr)
                 {
                     // construct uno exception any
-                    uno_any_constructAndConvert( pUnoExc, (void *)pRecord->ExceptionInformation[1],
-                                                 pExcTypeDescr, pCpp2Uno );
-                    uno_destructData( (void *)pRecord->ExceptionInformation[1],
-                                      pExcTypeDescr, cpp_release );
+                    uno_any_constructAndConvert(
+                        pUnoExc, (void *)pRecord->ExceptionInformation[1],
+                        pExcTypeDescr, pCpp2Uno );
+                    uno_destructData(
+                        (void *)pRecord->ExceptionInformation[1],
+                        pExcTypeDescr, cpp_release );
                     typelib_typedescription_release( pExcTypeDescr );
-                    return EXCEPTION_EXECUTE_HANDLER;
                 }
+                else // type not found!
+                {
+                    RuntimeException aRE(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("exception type not found: ") ) +
+                        aUNOname, Reference< XInterface >() );
+                    const Type & rType = ::getCppuType( &aRE );
+                    uno_type_any_constructAndConvert(
+                        pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
+#ifdef _DEBUG
+                    OString aStr( OUStringToOString( aUNOname, RTL_TEXTENCODING_ASCII_US ) );
+                    aStr += OString(" : unkonwn exception has been thrown: leaking!");
+                    OSL_ENSURE( 0, aStr.getStr() );
+#endif
+                    // though this unknown exception leaks now, no user-defined exception
+                    // is ever thrown thru the binary C-UNO dispatcher call stack.
+                }
+                return EXCEPTION_EXECUTE_HANDLER;
             }
         }
     }
