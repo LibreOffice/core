@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-15 08:57:54 $
+ *  last change: $Author: jp $ $Date: 2001-08-24 09:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2759,6 +2759,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
         break;
     }
 
+    USHORT nOldFlyArrCnt = aFlyArr.Count();
     if( !pSttIdx )
         SkipGroup();
     else
@@ -2812,11 +2813,22 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
     // vom FlyFmt noch die richtigen Attribute setzen
     if( pTxtAttr && RES_TXTATR_FLYCNT == pTxtAttr->Which() )
     {
-        ASSERT( aFlyArr.Count(), "kein Fly definiert" );
-        SwFlySave* pFlySave = aFlyArr[ aFlyArr.Count()-1 ];
-        pFlySave->aFlySet.ClearItem( RES_ANCHOR );
-        pHdFtFmt->SetAttr( pFlySave->aFlySet );
-        aFlyArr.DeleteAndDestroy( aFlyArr.Count() - 1 );
+        // is add a new fly ?
+        if( nOldFlyArrCnt < aFlyArr.Count() )
+        {
+            SwFlySave* pFlySave = aFlyArr[ aFlyArr.Count()-1 ];
+            pFlySave->aFlySet.ClearItem( RES_ANCHOR );
+            pHdFtFmt->SetAttr( pFlySave->aFlySet );
+            aFlyArr.DeleteAndDestroy( aFlyArr.Count() - 1 );
+        }
+        else
+        {
+            // no, so remove the created textattribute
+            SwFrmFmt* pFlyFmt = pTxtAttr->GetFlyCnt().GetFrmFmt();
+            // remove the pam from the flynode
+            *pPam->GetPoint() = aSavePos;
+            pDoc->DelLayoutFmt( pFlyFmt );
+        }
     }
 
     bFootnoteAutoNum = FALSE;       // default auf aus!
