@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:31:07 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:18:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -532,11 +532,17 @@ sub replace_minor_in_pathes
     {
         my $line = ${$patharrayref}[$i];
 
-        $line =~ s/\{minor\}/$installer::globals::minor/g;
-
-        # no difference for minor and minornonpre (ToDo ?)
-
-        $line =~ s/\{minornonpre\}/$installer::globals::minor/g;
+        if ( $installer::globals::minor )
+        {
+            $line =~ s/\{minor\}/$installer::globals::minor/g;
+            # no difference for minor and minornonpre (ToDo ?)
+            $line =~ s/\{minornonpre\}/$installer::globals::minor/g;
+        }
+        else    # building without a minor
+        {
+            $line =~ s/\.\{minor\}//g;
+            $line =~ s/\.\{minornonpre\}//g;
+        }
 
         ${$patharrayref}[$i] = $line;
     }
