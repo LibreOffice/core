@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:40:46 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 15:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3549,8 +3549,9 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const REFERENCE< XSTORAGE >& xStora
 
         SfxMedium* pMedium = new SfxMedium( xStorage );
 
-        SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
-        //SfxAllItemSet aSet( SFX_APP()->GetPool() );
+        // after i36090 is fixed the pool from object shell can be used
+        // SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
+        SfxAllItemSet aSet( SFX_APP()->GetPool() );
 
         TransformParameters( SID_OPENDOC, aMediaDescriptor, aSet );
         pMedium->GetItemSet()->Put( aSet );
