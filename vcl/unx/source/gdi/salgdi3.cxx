@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-19 17:26:17 $
+ *  last change: $Author: pl $ $Date: 2002-07-20 16:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,11 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #if !( defined(FREEBSD) || defined(NETBSD) )
 #include <alloca.h>
 #endif
@@ -1483,9 +1488,9 @@ void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout )
             long nXOffset = 0;
             for( int j = 0; j < nGlyphs; j++ )
             {
-                nXOffset += aWidthAry[ i ];
+                nXOffset += aWidthAry[ j ];
                 aIdxAry[ j ] = nXOffset / nUnitsPerPixel;
-                aUnicodes[i] = bIsTruetype ? 0 : aGlyphAry[i];
+                aUnicodes[j] = bIsTruetype ? 0 : aGlyphAry[j];
             }
 
             maGraphicsData.m_pPrinterGfx->DrawGlyphs( aPos, (unsigned long*)aGlyphAry, aUnicodes, nGlyphs, aIdxAry );
@@ -2475,4 +2480,135 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
 }
 #endif // ENABLE_CTL
 
+//--------------------------------------------------------------------------
+
+BOOL SalGraphics::CreateFontSubset(
+                                   const rtl::OUString& rToFile,
+                                   ImplFontData* pFont,
+                                   long* pGlyphIDs,
+                                   sal_uInt8* pEncoding,
+                                   sal_Int32* pWidths,
+                                   int nGlyphs,
+                                   FontSubsetInfo& rInfo
+                                   )
+{
+#ifndef _USE_PRINT_EXTENSION_
+    // in this context the sysdata member of pFont should
+    // contain a fontID as the X fonts should be filtered
+    // out of the font list available to PDF export (for
+    // which this method was created). The correct way would
+    // be to have the GlyphCache search for the ImplFontData pFont
+    psp::fontID aFont = (psp::fontID)pFont->mpSysData;
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+
+    psp::PrintFontInfo aFontInfo;
+    if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
+        return FALSE;
+
+    // fill in font info
+    switch( aFontInfo.m_eType )
+    {
+        case psp::fonttype::TrueType: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TRUETYPE;break;
+        case psp::fonttype::Type1: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TYPE1;break;
+        default:
+            return FALSE;
+    }
+    rInfo.m_nAscent     = aFontInfo.m_nAscend;
+    rInfo.m_nDescent    = aFontInfo.m_nDescend;
+    rInfo.m_aPSName     = rMgr.getPSName( aFont );
+
+    int xMin, yMin, xMax, yMax;
+    rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
+
+    if( ! rMgr.createFontSubset( aFont,
+                                 rToFile,
+                                 pGlyphIDs,
+                                 pEncoding,
+                                 pWidths,
+                                 nGlyphs
+                                 ) )
+        return FALSE;
+
+    rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
+    rInfo.m_nCapHeight  = yMax; // Well ...
+
+    return TRUE;
+#else
+    return FALSE;
+#endif
+}
+
+//--------------------------------------------------------------------------
+
+const void* SalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+{
+#ifndef _USE_PRINT_EXTENSION_
+    // in this context the sysdata member of pFont should
+    // contain a fontID as the X fonts should be filtered
+    // out of the font list available to PDF export (for
+    // which this method was created). The correct way would
+    // be to have the GlyphCache search for the ImplFontData pFont
+    psp::fontID aFont = (psp::fontID)pFont->mpSysData;
+    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+
+    psp::PrintFontInfo aFontInfo;
+    if( ! rMgr.getFontInfo( aFont, aFontInfo ) )
+        return NULL;
+
+    // fill in font info
+    switch( aFontInfo.m_eType )
+    {
+        case psp::fonttype::TrueType: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TRUETYPE;break;
+        case psp::fonttype::Type1: rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TYPE1;break;
+        default:
+            return NULL;
+    }
+    rInfo.m_nAscent     = aFontInfo.m_nAscend;
+    rInfo.m_nDescent    = aFontInfo.m_nDescend;
+    rInfo.m_aPSName     = rMgr.getPSName( aFont );
+
+    int xMin, yMin, xMax, yMax;
+    rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
+
+    psp::CharacterMetric aMetrics[256];
+    sal_Unicode nFirstChar = 0;
+    sal_Unicode nLastChar = 255;
+    if( aFontInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL && aFontInfo.m_eType == psp::fonttype::Type1 )
+    {
+        nFirstChar = 0xf000;
+        nLastChar = 0xf0ff;
+    }
+    if( ! rMgr.getMetrics( aFont, nFirstChar, nLastChar, aMetrics ) )
+        return NULL;
+
+    OString aSysPath = rMgr.getFontFileSysPath( aFont );
+    struct stat aStat;
+    if( stat( aSysPath.getStr(), &aStat ) )
+        return NULL;
+    int fd = open( aSysPath.getStr(), O_RDONLY );
+    if( fd < 0 )
+        return NULL;
+    void* pFile = mmap( NULL, aStat.st_size, PROT_READ, MAP_SHARED, fd, 0 );
+    close( fd );
+    if( pFile == MAP_FAILED )
+        return NULL;
+
+    *pDataLen = aStat.st_size;
+
+    rInfo.m_aFontBBox   = Rectangle( Point( xMin, yMin ), Size( xMax-xMin, yMax-yMin ) );
+    rInfo.m_nCapHeight  = yMax; // Well ...
+
+    for( int i = 0; i < 256; i++ )
+        pWidths[i] = (aMetrics[i].width > 0 ? aMetrics[i].width : 0);
+
+    return pFile;
+#else
+    return NULL;
+#endif
+}
+
+void SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
+{
+    munmap( (char*)pData, nLen );
+}
 // ===========================================================================
