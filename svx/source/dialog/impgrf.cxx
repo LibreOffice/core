@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-07 14:24:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,16 +124,6 @@ using namespace com::sun::star::uno;
 #define IMPGRF_INIKEY_PREVIEW       "ImportGraphicPreview"
 #define IMPGRF_CONFIGNAME           String(DEFINE_CONST_UNICODE("ImportGraphicDialog"))
 
-
-// C-Funktion ------------------------------------------------------------
-
-USHORT GetImportFormatCount( GraphicFilter& rFlt )
-{
-    if ( rFlt.GetImportFormatCount() )
-        return rFlt.GetImportFormatCount();
-    else
-        return 4;
-}
 
 // -----------------------------------------------------------------------
 
