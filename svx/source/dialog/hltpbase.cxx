@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 16:17:53 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,8 @@ long SvxHyperURLBox::PreNotify( NotifyEvent& rNEvt )
 SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
                                                    const ResId &rResId,
                                                    const SfxItemSet& rItemSet)
-:   mpGrpMore               ( NULL ),
+:   IconChoicePage          ( pParent, rResId, rItemSet ),
+    mpGrpMore               ( NULL ),
     mpFtFrame               ( NULL ),
     mpCbbFrame              ( NULL ),
     mpFtForm                ( NULL ),
@@ -340,7 +341,6 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
     mpFtText                ( NULL ),
     mpEdText                ( NULL ),
     mpBtScript              ( NULL ),
-    IconChoicePage          ( pParent, rResId, rItemSet ),
     mpDialog                ( pParent ),
     mbStdControlsInit       ( FALSE )
 {
