@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-15 10:22:00 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ arabic ] = "ΓδγΗΨ ίΗΖδΗΚ ΥζΡΙ";
             Text[ greek ] = "Στυλ αντικειμένων γραφικών";
             Text[ korean ] = "±Χ·‘ΗΘ°³ΓΌ ΐ―Ηό";
-            Text[ turkish ] = "Grafik biηimi";
+            Text[ turkish ] = "Grafik nesne biηimi";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
             StyleImage = Image
             {
@@ -738,7 +738,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ arabic ] = "ΓδγΗΨ ίΗΖδ ΪΡΦ ΚήΟνγν";
             Text[ greek ] = "Πρότυπα αντικειμένων παρουσίασης";
             Text[ korean ] = "ΗΑΈ®Α¨ΕΧΐΜΌΗ °³ΓΌ ΐ―Ηό";
-            Text[ turkish ] = "Sunu nesneleri biηimi";
+            Text[ turkish ] = "Sunu nesne biηimi";
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
             StyleImage = Image
             {
