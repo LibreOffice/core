@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 07:42:45 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 12:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,10 +311,15 @@ hidspecial SID_FM_ADDTABLE                              { HelpId = SID_FM_ADDTAB
 hidspecial SID_SBA_CLEAR_QUERY                          { HelpId = SID_SBA_CLEAR_QUERY ; };
 hidspecial SID_FM_EXECUTE                               { HelpId = SID_FM_EXECUTE ; };
 
+hidspecial HID_DSADMIN_SQL92CHECK                       { HelpId = HID_DSADMIN_SQL92CHECK ; };
+
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.42  2002/07/09 07:42:45  oj
+ *  #96306# remove unused helpids
+ *
  *  Revision 1.41  2002/07/04 14:46:41  jmarmion
  *  #100796##100798# insert new helpids
  *
