@@ -22,10 +22,20 @@ F4_DRAW = \
     StarDraw_5_0_Vorlage \
     StarOffice_XML__Draw_ \
     draw_StarOffice_XML_Draw_Template \
-    draw_pdf_Export\
-    draw8\
+    draw_pdf_Export \
+    draw8 \
     draw8_template
 
+# -----------------------------------------------
+# count = 6
+F4_UI_DRAW = \
+    StarDraw_3_0_Vorlage_ui \
+    StarDraw_5_0_Vorlage_ui \
+    StarOffice_XML__Draw__ui \
+    draw_StarOffice_XML_Draw_Template_ui \
+    draw8_ui \
+    draw8_template_ui
+    
 # -----------------------------------------------
 # count = 0
 L4_DRAW =
@@ -35,15 +45,22 @@ L4_DRAW =
 C4_DRAW =
 
 # -----------------------------------------------
-TYPES_4fcfg_draw           = $(foreach,i,$(T4_DRAW) types$/$i.xcu          )
-FILTERS_4fcfg_draw         = $(foreach,i,$(F4_DRAW) filters$/$i.xcu        )
-FRAMELOADERS_4fcfg_draw    = $(foreach,i,$(L4_DRAW) frameloaders$/$i.xcu   )
-CONTENTHANDLERS_4fcfg_draw = $(foreach,i,$(C4_DRAW) contenthandlers$/$i.xcu)
+TYPES_4fcfg_draw           = $(foreach,i,$(T4_DRAW)    types$/$i.xcu                    )
+FILTERS_4fcfg_draw         = $(foreach,i,$(F4_DRAW)    filters$/$i.xcu                  )
+UI_FILTERS_4fcfg_draw      = $(foreach,i,$(F4_UI_DRAW) $(DIR_LOCFRAG)$/filters$/$i.xcu  )
+FRAMELOADERS_4fcfg_draw    = $(foreach,i,$(L4_DRAW)    frameloaders$/$i.xcu             )
+CONTENTHANDLERS_4fcfg_draw = $(foreach,i,$(C4_DRAW)    contenthandlers$/$i.xcu          )
 
 # -----------------------------------------------
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_draw = \
     $(TYPES_4fcfg_draw) \
-    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
+    $(FILTERS_4fcfg_draw) \
+    $(UI_FILTERS_4fcfg_draw) \
     $(FRAMELOADERS_4fcfg_draw) \
     $(CONTENTHANDLERS_4fcfg_draw)
+    
+ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_draw)
+
+ALL_PACKAGES+=draw
+
