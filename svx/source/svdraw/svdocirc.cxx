@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-11 11:56:32 $
+ *  last change: $Author: aw $ $Date: 2001-01-18 10:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1504,14 +1504,21 @@ void SdrCircObj::ImpSetCircInfoToAttr()
 
     if(eNewKindA != eOldKindA || nStartWink != nOldStartWink || nEndWink != nOldEndWink)
     {
+        // #81921# since SetItem() implicitly calls ImpSetAttrToCircInfo()
+        // setting the item directly is necessary here.
+        ImpForceItemSet();
+
         if(eNewKindA != eOldKindA)
-            SetItem(SdrCircKindItem(eNewKindA));
+            mpObjectItemSet->Put(SdrCircKindItem(eNewKindA));
 
         if(nStartWink != nOldStartWink)
-            SetItem(SdrCircStartAngleItem(nStartWink));
+            mpObjectItemSet->Put(SdrCircStartAngleItem(nStartWink));
 
         if(nEndWink != nOldEndWink)
-            SetItem(SdrCircEndAngleItem(nEndWink));
+            mpObjectItemSet->Put(SdrCircEndAngleItem(nEndWink));
+
+        SetXPolyDirty();
+        ImpSetAttrToCircInfo();
     }
 }
 
