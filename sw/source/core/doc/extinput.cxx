@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:03:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,35 +246,6 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
         if( rData.GetTextAttr() )
             aAttrs.Insert( rData.GetTextAttr(), rData.GetText().Len(), 0 );
     }
-}
-
-void SwExtTextInput::SetFontForPos( USHORT nPos, Font& rFont )
-{
-}
-
-void SwExtTextInput::InvalidateRange()      // das Layout anstossen
-{
-    ULONG nEndNd = GetMark()->nNode.GetIndex(),
-            nSttNd = GetPoint()->nNode.GetIndex();
-    xub_StrLen nEndCnt = GetMark()->nContent.GetIndex(),
-                nSttCnt = GetPoint()->nContent.GetIndex();
-
-    if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
-    {
-        ULONG nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
-        nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (xub_StrLen)nTmp;
-    }
-
-    SwUpdateAttr aHt( 0, 0, RES_FMT_CHG );
-    SwNodes& rNds = GetDoc()->GetNodes();
-    SwNode* pNd;
-    for( ULONG n = nSttNd; n <= nEndNd; ++n )
-        if( ND_TEXTNODE == ( pNd = rNds[ n ] )->GetNodeType() )
-        {
-            aHt.nStart = n == nSttNd ? nSttCnt : 0;
-            aHt.nEnd = n == nEndNd ? nEndCnt : ((SwTxtNode*)pNd)->GetTxt().Len();
-            ((SwTxtNode*)pNd)->Modify( &aHt, &aHt );
-        }
 }
 
 void SwExtTextInput::SetOverwriteCursor( BOOL bFlag )
