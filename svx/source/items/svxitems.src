@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:02:33 $
+ *  last change: $Author: ama $ $Date: 2001-04-10 14:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7691,6 +7691,31 @@ String RID_SVXITEMS_RELIEF_ENGRAVED
     Text[ chinese_traditional ] = "ÀJ¨è";
     Text[ turkish ] = "Engrave";
     Text[ arabic ] = "ÍÝÑ";
+};
+String RID_SVXITEMS_PARAVERTALIGN_AUTO
+{
+    Text = "Textausrichtung automatisch";
+    Text [ English ] = "text alignment automatically";
+};
+String RID_SVXITEMS_PARAVERTALIGN_BASELINE
+{
+    Text = "Textausrichtung Grundlinie";
+    Text [ English ] = "text alignment baseline";
+};
+String RID_SVXITEMS_PARAVERTALIGN_TOP
+{
+    Text = "Textausrichtung oben";
+    Text [ English ] = "text alignment top";
+};
+String RID_SVXITEMS_PARAVERTALIGN_CENTER
+{
+    Text = "Textausrichtung zentriert";
+    Text [ English ] = "text alignment center";
+};
+String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
+{
+    Text = "Textausrichtung unten";
+    Text [ English ] = "text alignment bottom";
 };
 
  // ********************************************************************** EOF

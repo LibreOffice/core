@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-23 10:37:05 $
+ *  last change: $Author: ama $ $Date: 2001-04-10 14:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ using namespace ::com::sun::star;
 #define ITEMID_SCRIPTSPACE  0
 #define ITEMID_HANGINGPUNCTUATION 0
 #define ITEMID_FORBIDDENRULE 0
+#define ITEMID_PARAVERTALIGN 0
 
 #include <tools/rtti.hxx>
 #include <svtools/sbx.hxx>
@@ -117,6 +118,7 @@ using namespace ::com::sun::star;
 #include "scriptspaceitem.hxx"
 #include "hngpnctitem.hxx"
 #include "forbiddenruleitem.hxx"
+#include "paravertalignitem.hxx"
 
 
 // xml stuff
@@ -166,6 +168,7 @@ TYPEINIT1_AUTOFACTORY(SvxPageModelItem, SfxStringItem);
 TYPEINIT1_AUTOFACTORY(SvxScriptSpaceItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxHangingPunctuationItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxForbiddenRuleItem, SfxBoolItem);
+TYPEINIT1_AUTOFACTORY(SvxParaVertAlignItem, SfxUInt16Item);
 
 
 SV_IMPL_VARARR_SORT( SvxTabStopArr, SvxTabStop )
@@ -1924,6 +1927,91 @@ SfxItemPresentation SvxForbiddenRuleItem::GetPresentation(
         break;
     }
     return SFX_ITEM_PRESENTATION_NONE;
+}
+
+/*************************************************************************
+|*    class SvxParaVertAlignItem
+*************************************************************************/
+
+SvxParaVertAlignItem::SvxParaVertAlignItem( sal_uInt16 nValue,
+    const sal_uInt16 nW )
+    : SfxUInt16Item( nW, nValue )
+{
+}
+
+SfxPoolItem* SvxParaVertAlignItem::Clone( SfxItemPool* ) const
+{
+    return new SvxParaVertAlignItem( GetValue(), Which() );
+}
+
+SfxPoolItem* SvxParaVertAlignItem::Create( SvStream& rStrm, USHORT ) const
+{
+    sal_uInt16 nVal;
+    rStrm >> nVal;
+    return new SvxParaVertAlignItem( nVal, Which() );
+}
+
+SvStream& SvxParaVertAlignItem::Store( SvStream & rStrm, USHORT ) const
+{
+    rStrm << GetValue();
+    return rStrm;
+}
+
+USHORT SvxParaVertAlignItem::GetVersion( USHORT nFFVer ) const
+{
+    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
+}
+
+SfxItemPresentation SvxParaVertAlignItem::GetPresentation(
+        SfxItemPresentation ePres,
+        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+        String &rText, const International*  ) const
+{
+    switch( ePres )
+    {
+    case SFX_ITEM_PRESENTATION_NONE:
+        rText.Erase();
+        break;
+    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SFX_ITEM_PRESENTATION_COMPLETE:
+        {
+            USHORT nTmp;
+            switch( GetValue() )
+            {
+                case AUTOMATIC: nTmp = RID_SVXITEMS_PARAVERTALIGN_AUTO; break;
+                case TOP:       nTmp = RID_SVXITEMS_PARAVERTALIGN_TOP; break;
+                case CENTER:    nTmp = RID_SVXITEMS_PARAVERTALIGN_CENTER; break;
+                case BOTTOM:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BOTTOM; break;
+                default:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BASELINE; break;
+            }
+            rText = SVX_RESSTR( nTmp );
+            return ePres;
+        }
+        break;
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
+sal_Bool SvxParaVertAlignItem::QueryValue( com::sun::star::uno::Any& rVal,
+                                           BYTE nMemberId ) const
+{
+    rVal <<= (sal_Int16)GetValue();
+    return sal_True;
+}
+
+sal_Bool SvxParaVertAlignItem::PutValue( const com::sun::star::uno::Any& rVal,
+                                         BYTE nMemberId )
+{
+    sal_Int16 nVal;
+    rVal >>= nVal;
+    SetValue( (USHORT)nVal );
+    return sal_True;
+}
+
+int SvxParaVertAlignItem::operator==( const SfxPoolItem& rItem ) const
+{
+    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    return SfxUInt16Item::operator==( rItem );
 }
 
 
