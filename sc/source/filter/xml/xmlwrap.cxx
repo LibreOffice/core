@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 07:28:26 $
+ *  last change: $Author: sab $ $Date: 2001-08-03 18:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,9 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
 
         if(!bStylesOnly)
         {
-            uno::Sequence<uno::Any> aMetaArgs(0);
+            uno::Sequence<uno::Any> aMetaArgs(1);
+            uno::Any* pMetaArgs = aMetaArgs.getArray();
+            pMetaArgs[0] <<= xInfoSet;
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import start" );
 
