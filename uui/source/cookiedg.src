@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cookiedg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:09:03 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 11:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ModalDialog DLG_COOKIES
         Text[ japanese ] = "σ‚―“ό‚κ‚ι(~S)";
         Text[ chinese_traditional ] = "±µ¨ό(~S)";
         Text[ greek ] = "Αποστολή";
-        Text[ korean ] = "ΐόΌΫ";
+        Text[ korean ] = "ΐόΌΫ(~S)";
         Text[ arabic ] = "ΕΡΣΗα";
         Text[ turkish ] = "Gφnder";
     };
@@ -140,7 +140,7 @@ ModalDialog DLG_COOKIES
         Text[ japanese ] = "–³‹‚·‚ι(~G)";
         Text[ chinese_traditional ] = "©Ώ²¤(~G)";
         Text[ greek ] = "Παράβλεψη";
-        Text[ korean ] = "Ή«½Γ";
+        Text[ korean ] = "Ή«½Γ(~G)";
         Text[ arabic ] = "ΚΜΗεα";
         Text[ turkish ] = "Yok say";
     };
@@ -165,7 +165,7 @@ ModalDialog DLG_COOKIES
         Text[ japanese ] = "–‰ρm”F‚·‚ι(~N)";
         Text[ chinese_traditional ] = "½T»{(~N)";
         Text[ greek ] = "Διαλογικά";
-        Text[ korean ] = "΄λΘ­½Δ";
+        Text[ korean ] = "΄λΘ­½Δ(~N)";
         Text[ arabic ] = "ΚέΗΪα";
         Text[ turkish ] = "Etkileώimli";
     };
@@ -215,7 +215,7 @@ ModalDialog DLG_COOKIES
         Text[ japanese ] = "–³‹‚·‚ι(~I)";
         Text[ chinese_traditional ] = "©Ώ²¤(~I)";
         Text[ greek ] = "Παράβλεψη";
-        Text[ korean ] = "Ή«½Γ";
+        Text[ korean ] = "Ή«½Γ(~I)";
         Text[ arabic ] = "ΚΜΗεα";
         Text[ turkish ] = "Yok say";
     };
@@ -241,7 +241,7 @@ ModalDialog DLG_COOKIES
         Text[ japanese ] = "σ‚―“ό‚κ‚ι(~S)";
         Text[ chinese_traditional ] = "±µ¨ό(~S)";
         Text[ greek ] = "Α~ποστολή";
-        Text[ korean ] = "ΐόΌΫ";
+        Text[ korean ] = "ΐόΌΫ(~S)";
         Text[ arabic ] = "ΕΡΣΗα";
         Text[ turkish ] = "Gφnder";
     };
