@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-06 20:15:28 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,8 +496,8 @@ ModalDialog RID_DLG_MAPPING
     Text[ polish ] = "Przyporz¹dkowanie kolumn tabeli %1";
     Text[ portuguese_brazilian ] = "Column assignment for table %1";
     Text[ japanese ] = "%1 ãƒ†ãƒ¼ãƒ–ãƒ«ã®åˆ—åˆ†é¡";
-    Text[ korean ] = "í‘œ %1ì˜ ì—´ ë ˆì´ì•„ì›ƒ";
-    Text[ chinese_simplified ] = "ä¸ºè¡¨æ ¼ %1 ç¼–æ’è®¾è®¡åˆ—";
+    Text[ korean ] = "%1 í…Œì´ë¸”ì˜ ì—´ ë ˆì´ì•„ì›ƒ";
+    Text[ chinese_simplified ] = "ç¼–æ’ %1 è¡¨æ ¼çš„åˆ—";
     Text[ chinese_traditional ] = "ç·¨æ’ %1 è¡¨æ ¼çš„æ¬„";
     Text[ turkish ] = "Tablo %1 için sütun düzeni";
     Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ ááÌÏæá %1";
@@ -580,9 +580,9 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ french ] = "Sélection de la source de données";
     Text[ spanish ] = "Selección de la fuente de datos";
     Text[ finnish ] = "Valitse tietolähde";
-    Text[ italian ] = "Selezione della sorgente dati";
+    Text[ italian ] = "Seleziona sorgente dati";
     Text[ danish ] = "Vælg datakilde";
-    Text[ swedish ] = "Urval av datakälla";
+    Text[ swedish ] = "Välj datakälla";
     Text[ polish ] = "Wybór Ÿród³a danych";
     Text[ portuguese_brazilian ] = "Select data source";
     Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã®é¸æŠ";
@@ -591,4 +591,6 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æº";
     Text[ turkish ] = "Veri kaynağı seçimi";
     Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ ÇáÈíÇäÇÊ";
+    Text[ catalan ] = "Seleccioneu la font de dades";
+    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
