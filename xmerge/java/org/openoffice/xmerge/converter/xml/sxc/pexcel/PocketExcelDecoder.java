@@ -278,27 +278,20 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         String op1,op2;
 
         for (int i = 1;i<inputString.length();i++) {
-
             char ch = inputString.charAt(i);        // Check to see if this is a cell or an operator
-            if(((ch>='a') && (ch<='z')) || (ch>='A') && (ch<='Z'))  {
-                int interval = 1;
-                char nextRef = inputString.charAt(i+interval);
-                if(((nextRef>='a') && (nextRef<='z')) || (nextRef>='A') && (nextRef<='Z')) { // if cell col > 26
-                    interval++;
-                    nextRef = inputString.charAt(i+interval);
+            int interval=0;
+            while(ch!='.') {
+                interval++;
+                ch = inputString.charAt(i+interval);
+            }
+            nextChar = inputString.substring(i,i+interval);
+            i += interval;
+
+            ch = nextChar.charAt(0);
+            if(ch>='0' && ch<='9') {
+                Double myDo = new Double(Double.longBitsToDouble(Long.parseLong(nextChar)));
+                nextChar = myDo.toString();
                 }
-                while(nextRef>='0' && nextRef<='9') {
-                // Keep reading until we reach another operator or cell reference
-                    interval++;
-                    if((i+interval)<inputString.length())
-                        nextRef = inputString.charAt(i+interval);
-                    else
-                        nextRef = 0;
-                }
-                nextChar = inputString.substring(i,i+interval); // if cell then read all of the cell reference
-                i += interval-1;
-            } else
-                nextChar = inputString.substring(i,i+1);
 
             if (    nextChar.equals("+") ||
                     nextChar.equals("-") ||

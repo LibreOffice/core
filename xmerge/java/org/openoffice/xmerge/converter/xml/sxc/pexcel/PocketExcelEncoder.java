@@ -161,7 +161,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
     }
 
     /**
-     * This is a necessary evil because we don't currently support fomula.
+     * This is a necessary evil because we don't currently support functions.
      * Hopefully one day we will and we will not have to validate every single
      * cell
      *
@@ -301,6 +301,21 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
                 }
                 nextChar = inputString.substring(i,i+interval); // if cell then read all of the cell reference
                 i += interval-1;
+            } else if(ch>='0' && ch<='9') {
+                int numInterval = 1;
+                char nextRef;
+                if((i+numInterval)<inputString.length()) {
+                    nextRef = inputString.charAt(i+numInterval);
+                    while(nextRef>='0' && nextRef<='9') {
+                        numInterval++;
+                        if((i+numInterval)<inputString.length())
+                            nextRef = inputString.charAt(i+numInterval);
+                        else
+                            nextRef = 0;
+                    }
+                }
+                nextChar = inputString.substring(i,i+numInterval);
+                i += numInterval-1;
             } else
                 nextChar = inputString.substring(i,i+1);
 
@@ -310,7 +325,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
             if (nextChar.equals(")")) {
                 topOfStack = (String)aStack.pop();
                 while (!topOfStack.equals("(") && !aStack.empty()) {
-                    outputString += topOfStack;
+                    outputString += topOfStack + ".";
                     topOfStack = (String)aStack.pop();
                 }
             } else if (nextChar.equals("(") || i==1) {
@@ -325,19 +340,19 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
                     topOfStack = (String)aStack.peek();
                 while (getPriority(nextChar) <= getPriority(topOfStack) && !aStack.empty()) {
                     topOfStack = (String)aStack.pop();
-                    outputString += topOfStack;
+                    outputString += topOfStack + ".";
                     if(!aStack.empty())
                         topOfStack = (String)aStack.peek();
                     }
                 }
                 aStack.push(nextChar);
             } else {
-                outputString += nextChar;
+                outputString += nextChar + ".";
             }
         }
         while(!aStack.empty()) {
             topOfStack = (String)aStack.pop();
-            outputString += topOfStack;
+            outputString += topOfStack + ".";
         }
         return outputString;
     }
@@ -357,7 +372,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
 
         if (cellContents.startsWith("=")) {
             cellContents = parseFormula(cellContents);
-            Debug.log(Debug.TRACE,"Parsing Formula");
+            Debug.log(Debug.TRACE,"Parsing Formula " + cellContents);
         }
         if(cellContents.length()>0)
             wb.addCell(row, column, fmt, cellContents);
