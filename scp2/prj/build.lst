@@ -12,11 +12,11 @@ cp    scp2\source\impress         nmake    -    all    cp_impress NULL
 cp    scp2\source\javafilter      nmake    -    all    cp_javafilter NULL
 cp    scp2\source\kde             nmake    -    all    cp_kde NULL
 cp    scp2\source\lingu           nmake    -    all    cp_lingu NULL
+cp    scp2\source\mailcap         nmake    -    all    cp_mailcap NULL
 cp    scp2\source\math            nmake    -    all    cp_math NULL
 cp    scp2\source\ooo             nmake    -    all    cp_ooo NULL
 cp    scp2\source\python          nmake    -    all    cp_python NULL
-cp    scp2\source\quickstart      nmake    -    all    cp_quickstart NULL
 cp    scp2\source\testtool        nmake    -    all    cp_testtool NULL
 cp    scp2\source\writer          nmake    -    all    cp_writer NULL
 cp    scp2\source\xsltfilter      nmake    -    all    cp_xsltfilter NULL
-cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_calc cp_cde cp_crashrep cp_draw cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_lingu cp_math cp_ooo cp_python cp_quickstart cp_testtool cp_writer cp_xsltfilter NULL
+cp    scp2\util                   nmake    -    all    cp_util cp_activex cp_calc cp_cde cp_crashrep cp_draw cp_gnome cp_graphicfilter cp_impress cp_javafilter cp_kde cp_lingu cp_mailcap cp_math cp_ooo cp_python cp_testtool cp_writer cp_xsltfilter NULL
