@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetforquery.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2001-12-03 13:34:50 $
+ *  last change: $Author: abi $ $Date: 2002-10-25 09:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
             rtl::OUString::createFromAscii( "/" )                  +
             m_aURLParameter.get_module()                           +
             rtl::OUString::createFromAscii( ".idx/" );
+
+        if(queryList.size() > 1)
+            hitCount = 2000;
 
         for( i = 0; i < queryList.size(); ++i )
         {
