@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:18:33 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,15 +1279,15 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "Ò»Ôª/¶şÔªÔËËã·û";
+            Text[ chinese_simplified ] = "Ò»Ôª/¶şÔªÔËËã·û(~U)";
             Text[ russian ] = "Óíàğíûå/Áèíàğíûå îïåğàòîğû";
             Text[ polish ] = "Unarne/binarne operatory";
             Text[ japanese ] = "’P€¥“ñ€‰‰Zq(~U)";
-            Text[ chinese_traditional ] = "¤@¤¸/¤G¤¸¹Bºâ²Å";
+            Text[ chinese_traditional ] = "¤@¤¸/¤G¤¸¹Bºâ²Å(~U)";
             Text[ dutch ] = "~Unaire/binaire operatoren";
-            Text[ chinese_simplified ] = "Ò»Ôª/¶şÔªÔËËã·û";
+            Text[ chinese_simplified ] = "Ò»Ôª/¶şÔªÔËËã·û(~U)";
             Text[ greek ] = "Åíá~äéêïß/Äõáäéêïß ôåëåóôİò";
-            Text[ korean ] = "´ÜÇ×/ÀÌÇ× ¿¬»êÀÚ";
+            Text[ korean ] = "´ÜÇ×/ÀÌÇ× ¿¬»êÀÚ(~U)";
             Text[ arabic ] = "ÚæÇãá ÊÔÛíá ÃÍÇÏíÉ/ËäÇÆíÉ";
             Text[ turkish ] = "Birli/ikili işleçler";
             Text[ language_user1 ] = " ";
@@ -1447,15 +1447,15 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "¹ØÏµ";
+            Text[ chinese_simplified ] = "¹ØÏµ(~R)";
             Text[ russian ] = "Îòíîøåíèÿ";
             Text[ polish ] = "Relacje";
-            Text[ japanese ] = "”äŠr‰‰Z";
-            Text[ chinese_traditional ] = "Ãö«Y";
+            Text[ japanese ] = "”äŠr‰‰Z(~R)";
+            Text[ chinese_traditional ] = "Ãö«Y(~R)";
             Text[ dutch ] = "~Relaties";
-            Text[ chinese_simplified ] = "¹ØÏµ";
+            Text[ chinese_simplified ] = "¹ØÏµ(~R)";
             Text[ greek ] = "~Ó÷İóåéò";
-            Text[ korean ] = "°ü°è";
+            Text[ korean ] = "°ü°è(~R)";
             Text[ arabic ] = "ÚáÇŞÇÊ";
             Text[ turkish ] = "İlişkiler";
             Text[ language_user1 ] = " ";
@@ -1621,15 +1621,15 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "ÊıÁ¿¼ÆËã";
+            Text[ chinese_simplified ] = "ÊıÁ¿¼ÆËã(~S)";
             Text[ russian ] = "Îïåğàöèè ìíîæåñòâà";
             Text[ polish ] = "Operacje na zbiorach";
-            Text[ japanese ] = "W‡‰‰Z";
-            Text[ chinese_traditional ] = "¼Æ¶q­pºâ";
+            Text[ japanese ] = "W‡‰‰Z(~S)";
+            Text[ chinese_traditional ] = "¼Æ¶q­pºâ(~S)";
             Text[ dutch ] = "~Definities";
-            Text[ chinese_simplified ] = "ÊıÁ¿¼ÆËã";
+            Text[ chinese_simplified ] = "ÊıÁ¿¼ÆËã(~S)";
             Text[ greek ] = "~ĞñÜîåéò óõíüëùí";
-            Text[ korean ] = "ÁıÇÕ¡¡¿¬»ê";
+            Text[ korean ] = "ÁıÇÕ¡¡¿¬»ê(~S)";
             Text[ arabic ] = "ãÌãæÚÉ ÚãáíÇÊ";
             Text[ turkish ] = "Küme işlemleri";
             Text[ language_user1 ] = " ";
@@ -1847,15 +1847,15 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "º¯Êı";
+            Text[ chinese_simplified ] = "º¯Êı(~F)";
             Text[ russian ] = "Ôóíêöèè";
             Text[ polish ] = "Funkcje";
-            Text[ japanese ] = "ŠÖ”";
-            Text[ chinese_traditional ] = "¨ç¼Æ";
+            Text[ japanese ] = "ŠÖ”(~F)";
+            Text[ chinese_traditional ] = "¨ç¼Æ(~F)";
             Text[ dutch ] = "~Functies";
-            Text[ chinese_simplified ] = "º¯Êı";
+            Text[ chinese_simplified ] = "º¯Êı(~F)";
             Text[ greek ] = "~ÓõíáñôŞóåéò";
-            Text[ korean ] = "ÇÔ¼ö";
+            Text[ korean ] = "ÇÔ¼ö(~F)";
             Text[ arabic ] = "ÏÇáÇÊ";
             Text[ turkish ] = "Fonksiyon";
             Text[ language_user1 ] = " ";
@@ -1963,15 +1963,15 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "ÔËËã·û";
+            Text[ chinese_simplified ] = "ÔËËã·û(~P)";
             Text[ russian ] = "Îïåğàòîğû";
             Text[ polish ] = "Operatory";
-            Text[ japanese ] = "‰‰Zq";
-            Text[ chinese_traditional ] = "¹Bºâ²Å";
+            Text[ japanese ] = "‰‰Zq(~P)";
+            Text[ chinese_traditional ] = "¹Bºâ²Å(~P)";
             Text[ dutch ] = "O~peratoren";
-            Text[ chinese_simplified ] = "ÔËËã·û";
+            Text[ chinese_simplified ] = "ÔËËã·û(~P)";
             Text[ greek ] = "~Ôåëåóôİò";
-            Text[ korean ] = "¿¬»ê";
+            Text[ korean ] = "¿¬»ê(~P)";
             Text[ arabic ] = "ÚæÇãá ÇáÊÔÛíá";
             Text[ turkish ] = "İşleçler";
             Text[ language_user1 ] = " ";
@@ -2143,15 +2143,15 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "ÊôĞÔ";
+            Text[ chinese_simplified ] = "ÊôĞÔ(~A)";
             Text[ russian ] = "Àòğèáóòû";
             Text[ polish ] = "Atrybuty";
-            Text[ japanese ] = "‘®«";
-            Text[ chinese_traditional ] = "Äİ©Ê";
+            Text[ japanese ] = "‘®«(~A)";
+            Text[ chinese_traditional ] = "Äİ©Ê(~A)";
             Text[ dutch ] = "~Attributen";
-            Text[ chinese_simplified ] = "ÊôĞÔ";
+            Text[ chinese_simplified ] = "ÊôĞÔ(~A)";
             Text[ greek ] = "~Éäéüôçôåò";
-            Text[ korean ] = "¼Ó¼º";
+            Text[ korean ] = "¼Ó¼º(~A)";
             Text[ arabic ] = "ÓãÇÊ";
             Text[ turkish ] = "Öznitelikler";
             Text[ language_user1 ] = " ";
@@ -2327,15 +2327,15 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "À¨ºÅ";
+            Text[ chinese_simplified ] = "À¨ºÅ(~B)";
             Text[ russian ] = "Ñêîáêè";
             Text[ polish ] = "Nawiasy";
-            Text[ japanese ] = "Š‡ŒÊ";
-            Text[ chinese_traditional ] = "¬A¸¹";
+            Text[ japanese ] = "‚©‚Á‚±(~B)";
+            Text[ chinese_traditional ] = "¬A¸¹(~B)";
             Text[ dutch ] = "~Haakjes";
-            Text[ chinese_simplified ] = "À¨ºÅ";
+            Text[ chinese_simplified ] = "À¨ºÅ(~B)";
             Text[ greek ] = "~Ğáñåíèİóåéò";
-            Text[ korean ] = "°ıÈ£";
+            Text[ korean ] = "°ıÈ£(~B)";
             Text[ arabic ] = "ÃŞæÇÓ";
             Text[ turkish ] = "Ayraçlar";
             Text[ language_user1 ] = " ";
@@ -2525,15 +2525,15 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "¸ñÊ½(~O)";
+            Text[ chinese_simplified ] = "¸ñÊ½(~M)";
             Text[ russian ] = "Ôîğìàòû";
             Text[ polish ] = "Formatowania";
-            Text[ japanese ] = "‘®İ’è(~O)";
-            Text[ chinese_traditional ] = "®æ¦¡(~O)";
+            Text[ japanese ] = "‘®İ’è(~M)";
+            Text[ chinese_traditional ] = "®æ¦¡(~M)";
             Text[ dutch ] = "~Opmaak";
-            Text[ chinese_simplified ] = "¸ñÊ½(~O)";
+            Text[ chinese_simplified ] = "¸ñÊ½(~M)";
             Text[ greek ] = "Ìïñ~öïğïéŞóåéò";
-            Text[ korean ] = "Æ÷¸ËÆÃ";
+            Text[ korean ] = "Æ÷¸ËÆÃ(~M)";
             Text[ arabic ] = "ÊäÓíŞ";
             Text[ turkish ] = "Format";
             Text[ language_user1 ] = " ";
@@ -2681,15 +2681,15 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text[ chinese_simplified ] = "ÆäËû";
+            Text[ chinese_simplified ] = "ÆäËû(~O)";
             Text[ russian ] = "Ïğî÷åå";
             Text[ polish ] = "Inne";
-            Text[ japanese ] = "‚»‚Ì‘¼";
-            Text[ chinese_traditional ] = "¨ä¥L";
+            Text[ japanese ] = "‚»‚Ì‘¼(~O)";
+            Text[ chinese_traditional ] = "¨ä¥L(~O)";
             Text[ dutch ] = "D~iversen";
-            Text[ chinese_simplified ] = "ÆäËû";
+            Text[ chinese_simplified ] = "ÆäËû(~O)";
             Text[ greek ] = "~ÄéÜöïñá";
-            Text[ korean ] = "±âÅ¸";
+            Text[ korean ] = "±âÅ¸(~O)";
             Text[ arabic ] = "ãÇ ÚÏì Ğáß";
             Text[ turkish ] = "Diğer";
             Text[ language_user1 ] = " ";
