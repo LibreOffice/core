@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:24:38 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ public:
     sal_Bool GUIStoreModel(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
                     const ::rtl::OUString& aSlotName,
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsSequence );
+                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsSequence);
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SearchForFilter(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery >& xFilterQuery,
@@ -151,6 +151,12 @@ public:
                                     ::rtl::OUString aOldUIName,
                                     ::rtl::OUString aDefUIName,
                                     sal_Bool bCanProceedFurther );
+
+    static void ExecuteFilterDialog( SfxStoringHelper& _rStorageHelper
+                                    ,const ::rtl::OUString& sFilterName
+                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel
+                                    ,/*OUT*/::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgsSequence
+                                );
 };
 
 #endif
