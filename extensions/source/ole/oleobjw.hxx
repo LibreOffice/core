@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:40 $
+ *  last change: $Author: jl $ $Date: 2000-10-12 12:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,6 @@ public:
 
     ~IUnknownWrapper_Impl();
 
-    // XIdlClassProvider
-//  virtual Sequence< Reference<XIdlClass > > getIdlClasses( void );
 
     // XInvokation
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw(RuntimeException);
@@ -128,25 +126,15 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException);
 
-    // XUnoTunnel ------------------------------------------------------------------------------------------
-//    virtual sal_Int64 SAL_CALL getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw( RuntimeException);
-
-    // Helper for XUnoTunnel --------------------------------------------------------------------------------
-//  static Sequence<sal_Int8> getUnoTunnelId();
-
+    // ------------------------------------------------------------------------------------------------------------------
     virtual Any invokeWithDispIdUnoTlb(DISPID dispID, const Sequence< Any >& Params, Sequence<sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
-    // Is used for OleClient service
+    // Is used for OleObjectFactory service
     virtual Any invokeWithDispIdComTlb(DISPID dispID,
                           const Sequence< Any >& Params,
                           Sequence< sal_Int16 >& OutParamIndex,
                           Sequence< Any >& OutParam)
               throw ( IllegalArgumentException, CannotConvertException,
                       InvocationTargetException, RuntimeException);
-    void processOutParameters( VARIANT* pOrgParams,
-                               VARIANT* pResultParams,
-                               sal_uInt32 n,
-                               Sequence< sal_Int16 >& OutParamIndex,
-                               Sequence< Any >& OutParam);
 
     virtual void setValueWithDispId(DISPID dispID, const Any& Value) throw ( UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException);
     virtual Any getValueWithDispId(DISPID dispID) throw (UnknownPropertyException, RuntimeException );
@@ -189,14 +177,6 @@ protected:
     sal_Bool isJScriptObject();
     // -------------------------------------------------------------------------------
 
-//  void processOutParameters( VARIANT* pOrgParams,
-//                             VARIANT* pResultParams,
-//                             sal_uInt32 n,
-//                             Sequence< sal_Int16 >& OutParamIndex,
-//                             Sequence< Any >& OutParam);
-
-
-
     DispIdMap::iterator getDispIdEntry(const OUString& name);
     // If UNO interfaces are being implemented in JScript objects, VB or C++ COM objects
     // and those are passed as parameter to a UNO interface function, then
@@ -230,6 +210,7 @@ protected:
     // keeps the modes of parameters of the current function call
     // These values correspond to Windows PARAMFLAGS constants ( PARAMFLAG_FIN, PARAMFLAG_FOUT)
     // The Sequence contains only the in and out flag
+    // The length of the sequence reprensentsf the number of parameters.
     Sequence< sal_Int32> m_seqCurrentParamTypes;
     // contains the VARTYPES of the parameters of the current call
     Sequence<sal_uInt16> m_seqCurrentVartypes;
