@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-06 12:31:00 $
+ *  last change: $Author: sb $ $Date: 2000-12-07 18:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3405,27 +3405,12 @@ sal_Bool SAL_CALL shell::checkMountPoint( const rtl::OUString&  aUnqPath,
         rtl::OUString aDir   = m_vecMountPoint[j].m_aDirectory;
         sal_Int32 nL = aAlias.getLength();
 
-#ifdef UNX
-        rtl::OUString   aRealUnqPath;
-        oslFileError    error = osl_File_E_None;
-
-        if ( !aRealUnqPath.pData->length )
-            error = osl_getRealPath( aUnqPath.pData, &aRealUnqPath.pData );
-
-        if ( osl_File_E_None == error && aRealUnqPath.compareTo( aAlias,nL ) == 0 )
-        {
-            aRedirectedPath = aDir;
-            aRedirectedPath += aUnqPath.copy( nL );
-            return true;
-        }
-#else
         if( aUnqPath.compareTo( aAlias,nL ) == 0 )
         {
             aRedirectedPath = aDir;
             aRedirectedPath += aUnqPath.copy( nL );
             return true;
         }
-#endif
     }
 
     return false;
