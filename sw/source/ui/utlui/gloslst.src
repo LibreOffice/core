@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:21:54 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 21:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     Text[ catalan ] = "Seleccionar módulo de texto:  ";
     Text[ finnish ] = "Valitse automaattinen teksti: ";
 };
+
 
 
 
