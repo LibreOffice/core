@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macro.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:31:12 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ SfxMacroStatement::SfxMacroStatement
     pDummy( 0 )
 {
     aStatement = rTarget;
-    aStatement += 0x002E; // '.' = 2Eh
+    aStatement += '.';
     GenerateNameAndArgs_Impl( SfxRequest::GetRecordingMacro(), rSlot, bRequestDone, aArgs);
 }
 
@@ -364,10 +364,9 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
 */
 
 {
-    // '.' = 2Eh
-    if ( aStatement.Len() && aStatement.GetChar( aStatement.Len() - 1 ) != 0x002E &&
-        rSlot.pName[0] != 0x002E )
-        aStatement += 0x002E;
+    if ( aStatement.Len() && aStatement.GetChar( aStatement.Len() - 1 ) != '.'
+         && rSlot.pName[0] != '.' )
+        aStatement += '.';
 
     // der Name des Slots ist der Name der Methode / des Properties
     aStatement += String::CreateFromAscii(rSlot.pName);
@@ -449,9 +448,9 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                         bPrevReplaced = FALSE;
 
                     // Argument in Anf"uhrungszeichen
-                    aArg = 0x0022; // '"' = 22h
+                    aArg = '"';
                     aArg += aRecordable;
-                    aArg += 0x0022;
+                    aArg += '"';
                 }
 /*
                 case SbxBYTE:
@@ -476,7 +475,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
     else
         aStatement.Erase( aStatement.Len() - 1, 1 );
     if ( rSlot.IsMode(SFX_SLOT_METHOD) )
-        aStatement += 0x0029; // ')' = 29h
+        aStatement += ')';
 
     if ( !bRequestDone )
         // nicht als "Done()" gekennzeichnete Statements auskommentieren
