@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-18 16:14:31 $
+ *  last change: $Author: sj $ $Date: 2002-01-31 17:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,7 +713,7 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
                 {
                     sal_uInt16 nPgNum = 0;
                     sal_uInt16 nPageCount = pDoc->GetSdPageCount( PK_STANDARD );
-                    sal_uInt16 nPageNumber = ( (sal_uInt16)( ( GetPage()->GetPageNum() - 1 ) >> 1 ) + 1 );
+                    sal_uInt16 nPageNumber = (sal_uInt16)( ( GetPage()->GetPageNum() - 1 ) >> 1 );
                     while( nPgNum < nPageCount )
                     {
                         pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PK_STANDARD ), nPgNum == nPageNumber );
