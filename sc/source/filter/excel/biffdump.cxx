@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:14:48 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,6 +372,20 @@ inline static void lcl_AddOnOff( ByteString& rString, bool bFlag )
     lcl_AddFlag( rString, bFlag, "on", "off" );
 }
 
+static void lcl_AddEnum(
+        ByteString& rString, sal_Int32 nValue, const sal_Char* ppcEnums[], sal_Int32 nSize,
+        const sal_Char* pcDefault = 0, sal_Int32 nOffset = 0 )
+{
+    nValue -= nOffset;
+    const sal_Char* pcText = "!UNKNOWN!";
+    if( (0 <= nValue) && (nValue < nSize) && ppcEnums[ nValue ] )
+        pcText = ppcEnums[ nValue ];
+    else if( pcDefault )
+        pcText = pcDefault;
+    if( *pcText )   // nonempty string
+        rString.Append( " (" ).Append( pcText ).Append( ')' );
+}
+
 
 
 IdRangeList::~IdRangeList()
@@ -580,20 +594,20 @@ static BOOL AddUNICODEString( ByteString& rStr, XclImpStream& rStrm, const BOOL 
     bool    b16Bit, bFarEast, bRichString;
     ULONG   nSeek = rStrm.ReadUniStringExtHeader( b16Bit, bRichString, bFarEast, nCrun, nExtLen, nGrbit );
 
-    rStr += "[l=";
+    rStr += "(l=";
     __AddDec( rStr, nLen );
-    rStr += ", f=";
+    rStr += " f=";
     __AddHex( rStr, nGrbit );
-    rStr += " (";
+    rStr += " ";
     rStr += b16Bit ? "16-Bit" : "8-Bit";
 
     if( bRichString && bFarEast )
-        rStr += ", Rich, FarEast";
+        rStr += " rich far-east";
     else if( bRichString && !bFarEast )
-        rStr += ", Rich";
+        rStr += " rich";
     else if ( !bRichString && bFarEast )
-        rStr += ", FarEast";
-    rStr += ")]: \'";
+        rStr += " far-east";
+    rStr += ") '";
 
     ByteString aData( rStrm.ReadRawUniString( nLen, b16Bit ), RTL_TEXTENCODING_MS_1252 );
 
@@ -669,7 +683,7 @@ DUMP_ERR::~DUMP_ERR()
 #define PRINT()                 Print( t )
 #define PreDump(LEN)            {rIn.PushPosition();ContDump(LEN);rIn.PopPosition();}
 #define ADDCELLHEAD()           {UINT16 nR,nC,nX;rIn>>nR>>nC>>nX;__AddCellHead(t,nC,nR,nX);}
-#define STARTFLAG()             {ADDTEXT( "flags (" ); __AddHex( t, __nFlags ); ADDTEXT( "):" );}
+#define STARTFLAG()             {ADDTEXT( "flags=" ); __AddHex( t, __nFlags ); ADDTEXT( " " );}
 #define ADDFLAG(mask,text)      {if( __nFlags & mask ) t.Append( ' ' ).Append( text );}
 #define ADDRESERVED(mask)       ADDFLAG(mask,"!RESERVED!")
 
@@ -1084,14 +1098,13 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 }
             }
             break;
-            case 0x18:
+            case 0x0018:
             case 0x0218:        // NAME
             {
-                UINT8   nNameText, n8;
-                UINT16  nNameDef, n16;
+                sal_uInt8 nKey, nNameLen, nMenuLen, nDescrLen, nHelpLen, nStatusLen;
+                sal_uInt16 nFmlaSize, nRes, nTab;
 
-                PreDump( nL );
-                rIn >> __nFlags >> n8 >> nNameText >> nNameDef >> n16 >> n16 >> n8 >> n8 >> n8 >> n8;
+                rIn >> __nFlags >> nKey >> nNameLen >> nFmlaSize >> nRes >> nTab >> nMenuLen >> nDescrLen >> nHelpLen >> nStatusLen;
                 LINESTART();
                 STARTFLAG();
                 ADDFLAG( 0x0001, "fHidden" );
@@ -1102,58 +1115,76 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDFLAG( 0x0020, "fBuiltIn" );
                 ADDFLAG( 0x1000, "fBig" );
                 ADDRESERVED( 0xE000 );
-                ADDTEXT( "   Fn grp index: " );
+                ADDTEXT( "   func-group-idx=" );
                 __AddDec( t, (UINT16)((__nFlags & 0x0FC0) >> 6) );
+                ADDTEXT( "   shortcut=" );      __AddHex( t, nKey );
                 PRINT();
 
-                ByteString  sTemp;
                 LINESTART();
-                ADDTEXT( "NAMETEXT[" );
-                __AddDec( t, nNameText );
-                ADDTEXT( "] = " );
-                if( nNameText )
-                    sTemp = GETSTR( rIn.ReadUniString( nNameText ) );
-                else
-                    rIn >> n8;
-                if( (__nFlags & 0x0020) && (nNameText == 1) )
+                ADDTEXT( "fmla-size=" );        __AddDec( t, nFmlaSize );
+                ADDTEXT( "   reserved=" );      __AddHex( t, nRes );
+                ADDTEXT( "   tab=" );           __AddDec( t, nTab );
+                if( !nTab ) ADDTEXT( " (global)" );
+                PRINT();
+
+                LINESTART();
+                sal_uInt16 nBuiltIn = 0;
+                bool bBuiltIn = (nNameLen == 1) && (__nFlags & 0x0020);
+                if( bBuiltIn )
                 {
-                    UINT8 nAutoname = (UINT8)(sTemp.GetChar( 0 ));
-                    ADDTEXT( "(" );
-                    __AddHex( t, nAutoname );
-                    ADDTEXT( ") " );
-                    switch( nAutoname )
-                    {
-                        case 0x00:  ADDTEXT( "Consolidate_Area" );  break;
-                        case 0x01:  ADDTEXT( "Auto_Open" );         break;
-                        case 0x02:  ADDTEXT( "Auto_Close" );        break;
-                        case 0x03:  ADDTEXT( "Extract" );           break;
-                        case 0x04:  ADDTEXT( "Database" );          break;
-                        case 0x05:  ADDTEXT( "Criteria" );          break;
-                        case 0x06:  ADDTEXT( "Print_Area" );        break;
-                        case 0x07:  ADDTEXT( "Print_Titles" );      break;
-                        case 0x08:  ADDTEXT( "Recorder" );          break;
-                        case 0x09:  ADDTEXT( "Data_Form" );         break;
-                        case 0x0A:  ADDTEXT( "Auto_Activate" );     break;
-                        case 0x0B:  ADDTEXT( "Auto_Deactivate" );   break;
-                        case 0x0C:  ADDTEXT( "Sheet_Title" );       break;
-                        case 0x0D:  ADDTEXT( "AutoFilter" );        break;
-                        default:    ADDTEXT( pU );
-                    }
+                    rIn.PushPosition();
+                    sal_uInt8 nStrFlags;
+                    rIn >> nStrFlags;
+                    nBuiltIn = (nStrFlags & 1) ? rIn.ReaduInt16() : rIn.ReaduInt8();
+                    rIn.PopPosition();
                 }
-                else
+                ADDTEXT( "name=" );
+                AddUNICODEString( t, rIn, false, nNameLen );
+                if( bBuiltIn )
                 {
-                    ADDTEXT( "\"" );
-                    t += sTemp;
-                    ADDTEXT( "\"" );
+                    static const sal_Char* ppcNames[] = {
+                        "Consolidate_Area", "Auto_Open", "Auto_Close", "Extract", "Database",
+                        "Criteria", "Print_Area", "Print_Titles", "Recorder", "Data_Form",
+                        "Auto_Activate", "Auto_Deactivate", "Sheet_Title", "_FilterDatabase" };
+                    lcl_AddEnum( t, nBuiltIn, ppcNames, STATIC_TABLE_SIZE( ppcNames ) );
                 }
                 PRINT();
-                LINESTART();
-                t += "NAMEDEF[";
-                __AddDec( t, nNameDef );
-                t += "] (formula?)";
-                PRINT();
-                if ( nNameDef && rIn.GetRecLeft() > 0 )
-                    FormulaDump( ((rIn.GetRecLeft() < nNameDef) ? UINT16(rIn.GetRecLeft()) : nNameDef), FT_RangeName );
+
+                if( nFmlaSize && (rIn.GetRecLeft() > 0) )
+                {
+                    LINESTART();
+                    ADDTEXT( "name-definition=" );
+                    PRINT();
+                    FormulaDump( nFmlaSize, FT_RangeName );
+                }
+                if( nMenuLen )
+                {
+                    LINESTART();
+                    ADDTEXT( "menu-text=" );
+                    AddUNICODEString( t, rIn, false, nMenuLen );
+                    PRINT();
+                }
+                if( nDescrLen )
+                {
+                    LINESTART();
+                    ADDTEXT( "menu-text=" );
+                    AddUNICODEString( t, rIn, false, nDescrLen );
+                    PRINT();
+                }
+                if( nHelpLen )
+                {
+                    LINESTART();
+                    ADDTEXT( "menu-text=" );
+                    AddUNICODEString( t, rIn, false, nHelpLen );
+                    PRINT();
+                }
+                if( nStatusLen )
+                {
+                    LINESTART();
+                    ADDTEXT( "menu-text=" );
+                    AddUNICODEString( t, rIn, false, nStatusLen );
+                    PRINT();
+                }
             }
             break;
             case 0x001D:        // SELECTION - list of selections
