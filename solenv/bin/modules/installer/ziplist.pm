@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-30 16:37:25 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:48:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -672,11 +672,13 @@ sub set_manufacturer
     {
         $installer::globals::isopensourceproduct = 1;
         $installer::globals::manufacturer = $openofficeproductname;
+        $installer::globals::longmanufacturer = $openofficeproductname;
     }
     else
     {
         $installer::globals::isopensourceproduct = 0;
         $installer::globals::manufacturer = $sunname;
+        $installer::globals::longmanufacturer = $sunname . ", Inc.";
     }
 }
 
