@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcli.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:32:09 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@ SwOleClient::SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObj
     SetObject( xObj.GetObject() );
 }
 
-
 void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
 {
     //Der Server moechte die Clientgrosse verandern.
@@ -132,6 +131,9 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
     {
         // size has changed, so first change visual area of the object before we resize its view
         // without this the object always would be scaled - now it has the choice
+
+        // TODO/LEAN: getMapUnit still needs running state
+        svt::EmbeddedObjectRef::TryRunningState( GetObject() );
         MapMode aObjectMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) ) );
         MapMode aClientMap( GetEditWin()->GetMapMode().GetMapUnit() );
 
@@ -174,6 +176,9 @@ void SwOleClient::ViewChanged()
     //beruecksichtigt werden. Rueckwirkung auf das Objekt werden von
     //CalcAndSetScale() der WrtShell beruecksichtig, wenn die Groesse/Pos des
     //Rahmens in der Core sich veraendert.
+
+    // TODO/LEAN: getMapUnit still needs running state
+    svt::EmbeddedObjectRef::TryRunningState( GetObject() );
     awt::Size aSz = GetObject()->getVisualAreaSize( GetAspect() );
     Size aVisSize( aSz.Width, aSz.Height );
 
