@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: dvo $ $Date: 2002-07-26 13:14:52 $
+ *  last change: $Author: tl $ $Date: 2002-08-13 13:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3374,6 +3374,11 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
         {
             switch(pMap->nWID)
             {
+                case  FN_UNO_ANCHOR_TYPES:
+                case  FN_UNO_TEXT_WRAP:
+                case  FN_UNO_ANCHOR_TYPE:
+                    SwXParagraph::getDefaultTextContentValue(aRet, OUString(), pMap->nWID);
+                break;
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
                     sal_Bool bTemp = bFirstRowAsLabel;
