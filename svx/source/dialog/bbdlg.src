@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bbdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 13:57:28 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,19 +68,8 @@ TabDialog RID_SVXDLG_BBDLG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 328 , 155 ) ;
-    Text = "Umrandung / Hintergrund" ;
-    Text [ ENGLISH ] = "Border / Background" ;
-    Text [ norwegian ] = "Border / Background" ;
-    Text [ italian ] = "Bordo / Sfondo" ;
-    Text [ portuguese_brazilian ] = "Borda / Plano de Fundo" ;
-    Text [ portuguese ] = "Contorno/Plano de fundo" ;
-    Text [ finnish ] = "Reuna / tausta" ;
-    Text [ danish ] = "Kant / baggrund" ;
-    Text [ french ] = "Bordure / Arrière-plan" ;
-    Text [ swedish ] = "Inramning/ Bakgrund" ;
-    Text [ dutch ] = "Omranding / achtergrond" ;
-    Text [ spanish ] = "Bordes / Fondo" ;
-    Text [ english_us ] = "Border / Background" ;
+    Text [ de ] = "Umrandung / Hintergrund" ;
+    Text [ en-US ] = "Border / Background" ;
     Moveable = TRUE ;
      // Closeable = TRUE; hat ja einen OKButton
     TabControl 1
@@ -93,93 +82,20 @@ TabDialog RID_SVXDLG_BBDLG
             PageItem
             {
                 Identifier = RID_SVXPAGE_BORDER ;
-                Text = "Umrandung" ;
-                Text [ ENGLISH ] = "Border" ;
-                Text [ norwegian ] = "Border" ;
-                Text [ italian ] = "Bordo" ;
-                Text [ portuguese_brazilian ] = "Bordas" ;
-                Text [ portuguese ] = "Contornos" ;
-                Text [ finnish ] = "Reunat" ;
-                Text [ danish ] = "Kanter" ;
-                Text [ french ] = "Bordure" ;
-                Text [ swedish ] = "Inramning" ;
-                Text [ dutch ] = "Omranding" ;
-                Text [ spanish ] = "Bordes" ;
-                Text [ english_us ] = "Borders" ;
-                Text[ chinese_simplified ] = "è¾¹æ¡†";
-                Text[ russian ] = "Îáğàìëåíèå";
-                Text[ polish ] = "Krawêdzie";
-                Text[ japanese ] = "å¤–æ ";
-                Text[ chinese_traditional ] = "é‚Šæ¡†";
-                Text[ arabic ] = "ÇáÍÏæÏ";
-                Text[ greek ] = "Ğåñßãñáììá";
-                Text[ korean ] = "í…Œë‘ë¦¬";
-                Text[ turkish ] = "Kenarlık";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Vores";
-                Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
-                Text[ czech ] = "Okraje";
-                Text[ hebrew ] = "â€®××¡×’×¨×•×ªâ€¬";
-                Text[ hindi ] = "à¤•à¤¿à¤¨à¤¾à¤°à¥‡à¤‚";
-                Text[ slovak ] = "Okraje";
-                Text[ hungarian ] = "SzegÃ©lyek";
-                Text[ slovenian ] = "Obrobe";
+                Text [ de ] = "Umrandung" ;
+                Text [ en-US ] = "Borders" ;
+                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_BACKGROUND ;
-                Text = "Hintergrund" ;
-                Text [ ENGLISH ] = "Background" ;
-                Text [ norwegian ] = "Background" ;
-                Text [ italian ] = "Sfondo" ;
-                Text [ portuguese_brazilian ] = "Plano de Fundo" ;
-                Text [ portuguese ] = "Plano de fundo" ;
-                Text [ finnish ] = "Tausta" ;
-                Text [ danish ] = "Baggrund" ;
-                Text [ french ] = "Arrière-plan" ;
-                Text [ swedish ] = "Bakgrund" ;
-                Text [ dutch ] = "Achtergrond" ;
-                Text [ spanish ] = "Fondo" ;
-                Text [ english_us ] = "Background" ;
-                Text[ chinese_simplified ] = "èƒŒæ™¯";
-                Text[ russian ] = "Ôîí";
-                Text[ polish ] = "T³o";
-                Text[ japanese ] = "èƒŒæ™¯";
-                Text[ chinese_traditional ] = "èƒŒæ™¯";
-                Text[ arabic ] = "ÇáÎáİíÉ";
-                Text[ greek ] = "Öüíôï";
-                Text[ korean ] = "ë°°ê²½";
-                Text[ turkish ] = "Artalan";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Fons";
-                Text[ thai ] = "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
-                Text[ czech ] = "PozadÃ­";
-                Text[ hebrew ] = "â€®×¨×§×¢â€¬";
-                Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤—";
-                Text[ slovak ] = "Pozadie";
-                Text[ hungarian ] = "HÃ¡ttÃ©r";
-                Text[ slovenian ] = "Ozadje";
+                Text [ de ] = "Hintergrund" ;
+                Text [ en-US ] = "Background" ;
+                Text [ x-comment ] = " ";
             };
         };
     };
-    Text[ chinese_simplified ] = "è¾¹æ¡†å’ŒèƒŒæ™¯";
-    Text[ russian ] = "Îáğàìëåíèå / Ôîí";
-    Text[ polish ] = "KrawêdŸ/t³o";
-    Text[ japanese ] = "å¤–æ /èƒŒæ™¯";
-    Text[ chinese_traditional ] = "é‚Šæ¡†å’ŒèƒŒæ™¯";
-    Text[ arabic ] = "ÇáÍÏæÏ / ÇáÎáİíÉ";
-    Text[ greek ] = "Ğëáßóéï / Öüíôï";
-    Text[ korean ] = "í…Œë‘ë¦¬ / ë°°ê²½";
-    Text[ turkish ] = "Kenarlık / Artalan";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Vora / Fons";
-    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š / à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
-    Text[ czech ] = "Okraje / PozadÃ­";
-    Text[ hebrew ] = "Umrandung / Hintergrund";
-    Text[ hindi ] = "à¤•à¤¿à¤¨à¤¾à¤°à¤¾ / à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤—";
-    Text[ slovak ] = "Okraje / Pozadie";
-    Text[ hungarian ] = "SzegÃ©ly Ã©s hÃ¡ttÃ©r";
-    Text[ slovenian ] = "Obroba / ozadje";
+    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
