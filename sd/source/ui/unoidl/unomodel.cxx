@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:09:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,12 @@
 #include <svx/xmlgrhlp.hxx>
 #endif
 
-#include <docshell.hxx>
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
 
 #ifndef _SD_UNODOCUMENTSETTINGS_HXX_
 #include <UnoDocumentSettings.hxx>
@@ -190,9 +195,15 @@
 #include <unopback.hxx>
 #include <unogstyl.hxx>
 #include <unokywds.hxx>
-#include <frmview.hxx>
-#include "clview.hxx"
-#include "viewshel.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
+#ifndef SD_CLIENT_VIEW_HXX
+#include "ClientView.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "app.hrc"
 
 using namespace ::osl;
@@ -208,18 +219,17 @@ extern uno::Reference< uno::XInterface > SdUnoCreatePool( SdDrawDocument* pDrawM
 class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
                                  public SfxListener
 {
-private:
-    SdrModel*   mpModel;
-
-protected:
-    virtual void onChange();
-
 public:
     SdUnoForbiddenCharsTable( SdrModel* pModel );
     ~SdUnoForbiddenCharsTable();
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
+protected:
+    virtual void onChange();
+
+private:
+    SdrModel*   mpModel;
 };
 
 SdUnoForbiddenCharsTable::SdUnoForbiddenCharsTable( SdrModel* pModel )
@@ -286,7 +296,7 @@ const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
 }
 
 // this ctor is used from the DocShell
-SdXImpressDocument::SdXImpressDocument( SdDrawDocShell* pShell ) throw()
+SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell ) throw()
 :   SfxBaseModel( pShell ),
     pDocShell( pShell ),
     aPropSet( ImplGetDrawModelPropertyMap() ),
@@ -699,7 +709,9 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
                 sal_uInt32 i;
                 for( i = 0; i < pFrameViewList->Count(); i++ )
                 {
-                    FrameView* pFrameView = (FrameView*) pFrameViewList->GetObject(i);
+                    ::sd::FrameView* pFrameView =
+                          static_cast< ::sd::FrameView*>(
+                              pFrameViewList->GetObject(i));
 
                     if(pFrameView)
                     {
@@ -730,13 +742,14 @@ void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container:
         DBG_ASSERT( pFrameViewList, "No FrameViewList?" );
         if( pFrameViewList )
         {
-            FrameView* pFrameView;
+            ::sd::FrameView* pFrameView;
 
             sal_uInt32 i;
             for ( i = 0; i < pFrameViewList->Count(); i++)
             {
                 // Ggf. FrameViews loeschen
-                pFrameView = (FrameView*) pFrameViewList->GetObject(i);
+                pFrameView = static_cast< ::sd::FrameView*>(
+                    pFrameViewList->GetObject(i));
 
                 if (pFrameView)
                     delete pFrameView;
@@ -750,7 +763,7 @@ void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container:
             {
                 if( xData->getByIndex( nIndex ) >>= aSeq )
                 {
-                    pFrameView = new FrameView( pDoc );
+                    pFrameView = new ::sd::FrameView( pDoc );
                     pFrameView->ReadUserDataSequence( aSeq );
                     pFrameViewList->Insert( pFrameView );
                 }
@@ -957,12 +970,14 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Background" ) ) )
     {
-        return uno::Reference< uno::XInterface >( (uno::XWeak*)(new SdUnoPageBackground( pDoc )) );
+        return uno::Reference< uno::XInterface >(
+            static_cast<uno::XWeak*>(new SdUnoPageBackground( pDoc )));
     }
 
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.style.Style") ) )
     {
-        uno::Reference< style::XStyle > xStyle( new SdUnoGraphicStyle() );
+        uno::Reference<uno::XInterface> xStyle(
+            static_cast<uno::XWeak*>(new SdUnoGraphicStyle()));
         return xStyle;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Defaults") ) )
@@ -1543,13 +1558,13 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
             if( pOut )
             {
-                SdClientView*           pView = new SdClientView( pDocShell, pOut, NULL );
+                ::sd::ClientView* pView = new ::sd::ClientView( pDocShell, pOut, NULL );
                 Rectangle               aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
                 Region                  aRegion( aVisArea );
                 Point                   aOrigin;
 
-                SdViewShell* pOldViewSh = pDocShell->GetViewShell();
-                SdView* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : NULL;
+                ::sd::ViewShell* pOldViewSh = pDocShell->GetViewShell();
+                ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : NULL;
                 ImplRenderPaintProc aImplRenderPaintProc( pDoc->GetLayerAdmin(),
                     pOldSdView ? pOldSdView->GetPageViewPvNum( 0 ) : NULL );
                 const Link aRenderPaintProc( LINK( &aImplRenderPaintProc, ImplRenderPaintProc, _ImplRenderPaintProc ) );
@@ -1568,7 +1583,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                 if( xModel == pDocShell->GetModel() )
                 {
-                    pView->ShowPage( pDoc->GetSdPage( nPageNumber - 1, PK_STANDARD ), aOrigin );
+                    pView->ShowPage( pDoc->GetSdPage(
+                        (USHORT)nPageNumber - 1, PK_STANDARD ), aOrigin );
                     SdrPageView* pPV = pView->GetPageViewPvNum( 0 );
                     pPV->InitRedraw( pOut, aRegion, 0, &aRenderPaintProc );
                 }
@@ -1658,12 +1674,16 @@ void SAL_CALL SdXImpressDocument::setPrinter( const uno::Sequence< beans::Proper
     SfxPrinter* pPrinter = NULL;
     sal_uInt16 nChangeFlags = 0;
     impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
-    SdViewShell* pSdViewSh = PTR_CAST( SdViewShell,pViewSh);
+    ::sd::ViewShell* pSdViewSh = PTR_CAST(::sd::ViewShell,pViewSh);
     // set new printer
     if ( pSdViewSh && pPrinter )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        pSdViewSh->SetPrinterOptDlg( pPrinter, nChangeFlags,FALSE ); //do not show the dialog here
+        //do not show the dialog here
+        pSdViewSh->GetViewShellBase().SetPrinterOptDlg (
+            pPrinter,
+            nChangeFlags,
+            FALSE );
     }
 }
 
@@ -2047,7 +2067,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                                 pRefNotesPage->GetUppBorder(),
                                 pRefNotesPage->GetRgtBorder(),
                                 pRefNotesPage->GetLwrBorder() );
-        pDoc->InsertMasterPage(pMNotesPage,  nInsertPos + 1);
+        pDoc->InsertMasterPage(pMNotesPage,  (USHORT)nInsertPos + 1);
 //      pMNotesPage->InsertMasterPage( pMPage->GetPageNum() );
         pMNotesPage->SetLayoutName( aLayoutName );
         pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
