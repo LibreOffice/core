@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQueryHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #endif
 
 using namespace connectivity::mozab;
+
 
 NS_IMPL_THREADSAFE_ISUPPORTS1(connectivity::mozab::MQueryHelper,nsIAbDirectoryQueryResultListener)
 
@@ -244,18 +245,24 @@ MQueryHelper::getByIndex( sal_Int32 nRow, ::rtl::OUString& _rError )
         // Obtain the Mutex - don't use a guard as we want to be able to release
         // and acquire again...
         m_aMutex.acquire();
-        if ( nRow > m_aResults.size() ) {
-            if ( m_bQueryComplete ) {
+        if ( nRow > m_aResults.size() )
+        {
+            if ( m_bQueryComplete )
+            {
                 m_bAtEnd = sal_True;
                 m_aMutex.release();
                 return( NULL );
-            } else {
+            }
+            else
+            {
                 clearResultOrComplete();
                 m_aMutex.release();
                 if ( !waitForResultOrComplete( _rError ) )
                     return( NULL );
             }
-        } else {
+        }
+        else
+        {
             m_aMutex.release();
             return( m_aResults[ nRow -1 ] );
         }

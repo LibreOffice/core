@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MPreparedStatement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:38:07 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,13 @@
  ************************************************************************/
 #ifndef CONNECTIVITY_SPREPAREDSTATEMENT_HXX
 #define CONNECTIVITY_SPREPAREDSTATEMENT_HXX
-#include "MResultSet.hxx"
-#include "MStatement.hxx"
 
+#ifndef CONNECTIVITY_SRESULTSET_HXX
+#include "MResultSet.hxx"
+#endif
+#ifndef CONNECTIVITY_SSTATEMENT_HXX
+#include "MStatement.hxx"
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #endif
@@ -72,11 +76,14 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDBATCHEXECUTION_HPP_
-#include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
-#endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XMULTIPLERESULTS_HPP_
+#include <com/sun/star/sdbc/XMultipleResults.hpp>
+#endif
+#ifndef _CPPUHELPER_COMPBASE5_HXX_
+#include <cppuhelper/compbase5.hxx>
 #endif
 
 namespace connectivity
@@ -87,8 +94,8 @@ namespace connectivity
         class OBoundParam;
         typedef ::cppu::ImplHelper5<    ::com::sun::star::sdbc::XPreparedStatement,
                                         ::com::sun::star::sdbc::XParameters,
-                                        ::com::sun::star::sdbc::XPreparedBatchExecution,
                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                        ::com::sun::star::sdbc::XMultipleResults,
                                         ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
 
         class OPreparedStatement :  public  OStatement_BASE2,
@@ -190,14 +197,14 @@ namespace connectivity
             virtual void SAL_CALL setClob( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setArray( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearParameters(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // XPreparedBatchExecution
-            virtual void SAL_CALL addBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XCloseable
             virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XResultSetMetaDataSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            // XMultipleResults
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MTypeConverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-11-07 16:55:18 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,6 @@ using namespace connectivity::mozab;
 // -------------------------------------------------------------------------
 void MTypeConverter::ouStringToNsString(::rtl::OUString const &ous, nsString &nss)
 {
-    OSL_TRACE( "IN MTypeConverter::OUStringToNsString()\n" );
-
     // Convert to ::rtl::OString (utf-8 encoding).
     ::rtl::OString os(ous,ous.getLength(), RTL_TEXTENCODING_UTF8);
 
@@ -84,14 +82,10 @@ void MTypeConverter::ouStringToNsString(::rtl::OUString const &ous, nsString &ns
     NS_ConvertUTF8toUCS2 mozString(cs, csLen);
     //const PRUnichar* uniMozString = (const PRUnichar*) mozString;
     nss = mozString; // temp.
-
-    OSL_TRACE( "\tOUT MTypeConverter::OUStringToNsString()\n" );
 }
 // -------------------------------------------------------------------------
 void MTypeConverter::nsStringToOUString(nsString const &nss, ::rtl::OUString &ous)
 {
-    OSL_TRACE( "IN MTypeConverter::nsStringToOUString()\n" );
-
     // Get clone of buffer.
     PRUnichar *uc = ToNewUnicode(nss);
     sal_Int32 nssLen = nss.Length();
@@ -101,72 +95,50 @@ void MTypeConverter::nsStringToOUString(nsString const &nss, ::rtl::OUString &ou
     ous = _ous;
 
     nsMemory::Free(uc);
-
-    OSL_TRACE( "\tOUT MTypeConverter::nsStringToOUString()\n" );
 }
 // -------------------------------------------------------------------------
 void MTypeConverter::prUnicharToOUString(PRUnichar const *pru, ::rtl::OUString &ous)
 {
-    OSL_TRACE( "IN MTypeConverter::prUniCharToOUString()\n" );
-
     // TODO, specify length.
     ::rtl::OUString _ous(pru);
     ous = _ous;
-
-    OSL_TRACE( "\tOUT MTypeConverter::prUniCharToOUString()\n" );
 }
 // -------------------------------------------------------------------------
 char *MTypeConverter::ouStringToCCharStringUtf8(::rtl::OUString const &ous)
 {
-    OSL_TRACE( "IN MTypeConverter::OUStringToCCharStringUtf8()\n" );
-
     // Convert to ::rtl::OString,
     ::rtl::OString os(ous,ous.getLength(), RTL_TEXTENCODING_UTF8);
 
     const char *cs = os.getStr();
 
-    OSL_TRACE( "\tOUT MTypeConverter::OUStringToCCharStringUtf8()\n" );
     return(strdup(cs));
 }
 // -------------------------------------------------------------------------
 char *MTypeConverter::ouStringToCCharStringAscii(::rtl::OUString const &ous)
 {
-    OSL_TRACE( "IN MTypeConverter::OUStringToCCharStringAscii()\n" );
-
     // Convert ::rtl::OUString to ::rtl::OString,
     ::rtl::OString os(ous,ous.getLength(), RTL_TEXTENCODING_ASCII_US);
 
-    OSL_TRACE( "\tOUT MTypeConverter::OUStringToCCharStringAscii()\n" );
     return(strdup(os.getStr()));
 }
 // -------------------------------------------------------------------------
 char *MTypeConverter::nsStringToCCharStringAscii(nsString const &nss)
 {
-    OSL_TRACE( "IN MTypeConverter::nsStringToCCharStringAscii()\n" );
-
     char cs[1024];
     nss.ToCString(cs, 1024);
 
-    OSL_TRACE( "\tOUT MTypeConverter::nsStringToCCharStringAscii()\n" );
     return(strdup(cs));
 }
 // -------------------------------------------------------------------------
 ::std::string MTypeConverter::ouStringToStlString(::rtl::OUString const &ous)
 {
-    OSL_TRACE( "IN MTypeConverter::ouStringToStlString()\n" );
-
     // Convert ::rtl::OUString to ::rtl::OString.
     ::rtl::OString os(ous,ous.getLength(),RTL_TEXTENCODING_ASCII_US);
-
-    OSL_TRACE( "\tOUT MTypeConverter::ouStringToStlString()\n" );
     return( ::std::string(os.getStr()));
 }
 // -------------------------------------------------------------------------
 ::std::string MTypeConverter::nsStringToStlString(nsString const &nss)
 {
-    OSL_TRACE( "IN MTypeConverter::nsStringToStlString()\n" );
-
-    OSL_TRACE( "\tOUT MTypeConverter::nsStringToStlString()\n" );
     return( ::std::string(nss.GetBuffer()));
 }
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MNameMapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:23 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 
 #include <MNameMapper.hxx>
 
-#ifdef DEBUG
+#ifdef _DEBUG
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* DEBUG */
+#else /* _DEBUG */
 # define OUtoCStr( x ) ("dummy")
-#endif /* DEBUG */
+#endif /* _DEBUG */
 
 
 using namespace connectivity::mozab;

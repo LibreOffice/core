@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MNSInclude.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-13 15:39:38 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,13 @@
 
 
 // Turn off DEBUG Assertions
-#ifdef DEBUG
-# define MOZ_TMP_UDEBUG DEBUG
-# undef DEBUG
+#ifdef _DEBUG
+# define MOZ_TMP_UDEBUG _DEBUG
+# undef _DEBUG
 #endif
 #include <nsDebug.h>
 #ifdef MOZ_TMP_UDEBUG
-# define DEBUG MOZ_TMP_UDEBUG
+# define _DEBUG MOZ_TMP_UDEBUG
 #endif
 
 #include <xp_core.h>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@
 #include "MTypeConverter.hxx"
 #endif
 
-#ifdef DEBUG
+#ifdef _DEBUG
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* DEBUG */
+#else /* _DEBUG */
 # define OUtoCStr( x ) ("dummy")
-#endif /* DEBUG */
+#endif /* _DEBUG */
 
 static NS_DEFINE_CID(kRDFServiceCID, NS_RDFSERVICE_CID);
 static NS_DEFINE_CID(kAbDirectoryQueryArgumentsCID, NS_ABDIRECTORYQUERYARGUMENTS_CID);
@@ -200,8 +200,6 @@ void MQuery::setAddressbook(::rtl::OUString &ab)
     m_aAddressbook = ab;
 
     OSL_TRACE("\tOUT MQuery::setAddressbook()\n");
-
-    return;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString MQuery::getAddressbook() const
@@ -220,8 +218,6 @@ void MQuery::setMaxNrOfReturns(const sal_Int32 mnr)
 
     m_nMaxNrOfReturns = mnr;
     OSL_TRACE("\tOUT MQuery::setMaxNrOfReturns()\n" );
-
-    return;
 }
 // -------------------------------------------------------------------------
 sal_Int32 MQuery::getMaxNrOfReturns() const
@@ -240,8 +236,6 @@ void MQuery::setQuerySubDirs(sal_Bool &qsd)
 
     m_bQuerySubDirs = qsd;
     OSL_TRACE("\tOUT MQuery::setQuerySubDirs()\n");
-
-    return;
 }
 // -------------------------------------------------------------------------
 sal_Bool MQuery::getQuerySubDirs() const
@@ -288,7 +282,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
             // Set the 'name' property of the boolString.
             // Check if it's an alias first...
             rtl::OUString attrName;
-            ::std::map< ::rtl::OUString, ::rtl::OUString>::iterator aIterMap;
+            ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap;
             aIterMap = _aQuery->getColumnAliasMap().find(evStr->getName());
             if (aIterMap == _aQuery->getColumnAliasMap().end()) {
                 // Not found.
@@ -423,7 +417,7 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
         NS_ENSURE_SUCCESS(rv, rv);
         OSL_TRACE("Using the directoryQueryProxy\n");
     }
-#ifdef DEBUG
+#ifdef _DEBUG
     else
         OSL_TRACE("Not using a Query Proxy, Query i/f supported by directory\n");
 #endif /* DEBUG */
@@ -443,7 +437,9 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
     {
         ::std::string aAttrName = MTypeConverter::ouStringToStlString(*aIterAttr);
         returnProperties[count] = strdup( aAttrName.c_str() );
+#ifdef _DEBUG
         OSL_TRACE("returnProperties[%d] = %s\n", count, returnProperties[count] );
+#endif
     }
     returnProperties[count] = NULL;
 
@@ -469,6 +465,7 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
     for ( sal_Int32 j = 0; returnProperties && returnProperties[j]; j++ ) {
         free( returnProperties[j] );    // use free for mem allocated with strdup()
     }
+    delete [] returnProperties;
 
     if (NS_FAILED(rv))  {
         m_aQueryDirectory->contextId = -1;
@@ -476,9 +473,12 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
         OSL_TRACE("\tOUT MQuery::executeQuery()\n");
         m_aQueryHelper->notifyQueryError() ;
         return(-1);
-    } else {
+    }
+#ifdef _DEBUG
+    else {
         OSL_TRACE( "****** DoQuery succeeded \n");
     }
+#endif
 
     OSL_TRACE("\tOUT MQuery::executeQuery()\n");
 
@@ -545,12 +545,8 @@ MQuery::checkRowAvailable( sal_Int32 nDBRow )
 
 // -------------------------------------------------------------------------
 sal_Bool
-MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow, rtl::OUString& aDBColumnName, sal_Int32 nType )
+MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString& aDBColumnName, sal_Int32 nType ) const
 {
-    rtl::OUString   sValue;
-
-    OSL_TRACE( "IN MQuery::getRowValue()\n");
-
     MQueryHelperResultEntry*   xResEntry = m_aQueryHelper->getByIndex( nDBRow, m_aErrorString );
 
     OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
@@ -560,24 +556,22 @@ MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow, rtl::OUString& aDBC
         rValue.setNull();
         return sal_False;
     }
-    ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap;
-    switch ( nType ) {
+    switch ( nType )
+    {
         case DataType::VARCHAR:
-            aIterMap = m_aColumnAliasMap.find(aDBColumnName);
-            if (aIterMap != m_aColumnAliasMap.end()) {
-                sValue = xResEntry->getValue(aIterMap->second);
-            } else {
-                sValue = xResEntry->getValue( aDBColumnName );
+            {
+                ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap = m_aColumnAliasMap.find(aDBColumnName);
+                if (aIterMap != m_aColumnAliasMap.end())
+                    rValue = xResEntry->getValue(aIterMap->second);
+                else
+                    rValue = xResEntry->getValue( aDBColumnName );
             }
-            rValue = sValue;
             break;
         default:
-            OSL_TRACE("Unknown DataType : %d\n", nType );
             rValue.setNull();
             break;
     }
 
-    OSL_TRACE( "\tOUT MQuery::getRowValue()\n");
     return sal_True;
 }
 // -------------------------------------------------------------------------

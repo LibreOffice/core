@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MStatement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:38:07 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XMULTIPLERESULTS_HPP_
-#include <com/sun/star/sdbc/XMultipleResults.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XBATCHEXECUTION_HPP_
 #include <com/sun/star/sdbc/XBatchExecution.hpp>
 #endif
@@ -79,14 +76,11 @@
 #ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
-#include <com/sun/star/util/XCancellable.hpp>
-#endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
-#ifndef _CPPUHELPER_COMPBASE5_HXX_
-#include <cppuhelper/compbase5.hxx>
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#include <cppuhelper/compbase3.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -122,11 +116,9 @@ namespace connectivity
     {
         class OResultSet;
 
-        typedef ::cppu::WeakComponentImplHelper5<   ::com::sun::star::sdbc::XStatement,
+        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::util::XCancellable,
-                                                    ::com::sun::star::sdbc::XCloseable,
-                                                    ::com::sun::star::sdbc::XMultipleResults> OStatement_BASE;
+                                                    ::com::sun::star::sdbc::XCloseable> OStatement_BASE;
 
         //**************************************************************
         //************ Class: OStatement_Base
@@ -228,15 +220,8 @@ namespace connectivity
             // XWarningsSupplier
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // XCancellable
-            virtual void SAL_CALL cancel(  ) throw(::com::sun::star::uno::RuntimeException);
             // XCloseable
             virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // XMultipleResults
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
         };
 
         class OStatement_BASE2  :public OStatement_Base
@@ -254,7 +239,6 @@ namespace connectivity
         };
 
         class OStatement :  public OStatement_BASE2,
-                            public ::com::sun::star::sdbc::XBatchExecution,
                             public ::com::sun::star::lang::XServiceInfo
         {
         protected:
@@ -267,10 +251,6 @@ namespace connectivity
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
-            // XBatchExecution
-            virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
     }
 }

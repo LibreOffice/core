@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:22 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,7 @@
 #ifndef _CONNECTIVITY_OSUBCOMPONENT_HXX_
 #include "OSubComponent.hxx"
 #endif
-#ifndef INCLUDED_MAP
-#include <map>
-#define INCLUDED_MAP
-#endif
+//  #include <map>
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
@@ -91,9 +88,6 @@
 #endif
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
-#endif
-#ifndef _CONNECTIVITY_OTYPEINFO_HXX_
-#include "OTypeInfo.hxx"
 #endif
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
@@ -111,7 +105,6 @@ namespace connectivity
 
 
         typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
-        typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
 
         class OConnection : public OConnection_BASE,
                             public connectivity::OSubComponent<OConnection, OConnection_BASE>
@@ -134,11 +127,6 @@ namespace connectivity
             ::rtl::OUString                         m_sUser;        // the user name
             MozabDriver*                            m_pDriver;      //  Pointer to the owning
                                                                     //  driver object
-
-            sal_Bool                                m_bClosed;
-            sal_Bool                                m_bUseCatalog;  // should we use the catalog on filebased databases
-            sal_Bool                                m_bUseOldDateFormat;
-
             // Store Catalog
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>         m_xCatalog;
             // Start of Additions from the land of mozilla
@@ -192,10 +180,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             //
-
-            sal_Bool        isCatalogUsed() const { return m_bUseCatalog; }
             ::rtl::OUString getUserName() const { return m_sUser; }
-
             MozabDriver*    getDriver() const { return m_pDriver;}
 
             // Added to enable me to use SQLInterpreter which requires an

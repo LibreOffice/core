@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,15 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
+#include <com/sun/star/sdbc/ColumnSearch.hpp>
 
 #include <vector>
 
-#ifdef DEBUG
+#ifdef _DEBUG
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* DEBUG */
+#else /* _DEBUG */
 # define OUtoCStr( x ) ("dummy")
-#endif /* DEBUG */
+#endif /* _DEBUG */
 
 using namespace connectivity::mozab;
 using namespace connectivity;

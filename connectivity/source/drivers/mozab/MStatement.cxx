@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:56 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,16 +108,24 @@
 #include <algorithm>
 
 
+#ifndef CONNECTIVITY_SDRIVER_HXX
 #include "MDriver.hxx"
+#endif
+#ifndef CONNECTIVITY_SSTATEMENT_HXX
 #include "MStatement.hxx"
+#endif
+#ifndef CONNECTIVITY_SCONNECTION_HXX
 #include "MConnection.hxx"
+#endif
+#ifndef CONNECTIVITY_SRESULTSET_HXX
 #include "MResultSet.hxx"
+#endif
 
-#ifdef DEBUG
+#ifdef _DEBUG
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* DEBUG */
+#else /* _DEBUG */
 # define OUtoCStr( x ) ("dummy")
-#endif /* DEBUG */
+#endif /* _DEBUG */
 
 
 using namespace ::comphelper;
@@ -128,7 +136,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
@@ -196,15 +203,6 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
 }
 // -------------------------------------------------------------------------
-
-void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-    // cancel the current sql statement
-}
-// -------------------------------------------------------------------------
-
 void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
 {
     {
@@ -244,13 +242,6 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
     m_xResultSet = Reference< XResultSet>();
 }
 // -------------------------------------------------------------------------
-
-void SAL_CALL OStatement::clearBatch(  ) throw(SQLException, RuntimeException)
-{
-    // if you support batches clear it here
-}
-// -------------------------------------------------------------------------
-
 void OStatement_Base::parseSql( const ::rtl::OUString& sql )
     throw ( SQLException, RuntimeException )
 {
@@ -260,7 +251,7 @@ void OStatement_Base::parseSql( const ::rtl::OUString& sql )
 
     m_pParseTree = m_aParser.parseTree(aErr,sql);
 
-#ifdef DEBUG
+#ifdef _DEBUG
     {
         const char* str = OUtoCStr(sql);
         OSL_TRACE("ParseSQL: %s\n", OUtoCStr( sql ) );
@@ -276,10 +267,12 @@ void OStatement_Base::parseSql( const ::rtl::OUString& sql )
             ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Driver requires a single table to be specified in query"),NULL);
 
         // at this moment we support only one table per select statement
+#ifdef _DEBUG
         OSQLTables::const_iterator citer;
         for( citer = xTabs.begin(); citer != xTabs.end(); ++citer ) {
             OSL_TRACE("SELECT Table : %s\n", OUtoCStr(citer->first) );
         }
+#endif
 
         OSL_ENSURE( xTabs.begin() != xTabs.end(), "Need a Table");
 
@@ -358,72 +351,19 @@ Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLEx
     return (Reference< XConnection >)m_pConnection;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 SAL_CALL OStatement_Base::getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
-{
-    return 0;
-}
-// -------------------------------------------------------------------------
-
 Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    Any aRet = ::cppu::queryInterface(rType,static_cast< XBatchExecution*> (this));
+    Any aRet = ::cppu::queryInterface(rType,static_cast< XServiceInfo*> (this));
     if(!aRet.hasValue())
         aRet = OStatement_Base::queryInterface(rType);
     return aRet;
 }
 // -------------------------------------------------------------------------
-
-void SAL_CALL OStatement::addBatch( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
-    m_aBatchList.push_back(sql);
-}
-// -------------------------------------------------------------------------
-Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    return Sequence< sal_Int32 >();
-}
-// -------------------------------------------------------------------------
-
-
 sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    // the return values gives information about how many rows are affected by executing the sql statement
     return 0;
 
 }
-// -------------------------------------------------------------------------
-
-Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-//  return our save resultset here
-    return m_xResultSet;
-}
-// -------------------------------------------------------------------------
-
-sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    // if your driver supports more than only one resultset
-    // and has one more at this moment return true
-    return sal_False;
-}
-// -------------------------------------------------------------------------
-
 // -------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
 {
@@ -449,7 +389,7 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 {
     // this properties are define by the service resultset
     // they must in alphabetic order
-    Sequence< Property > aProps(10);
+    Sequence< Property > aProps(9);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
     DECL_PROP0(CURSORNAME,  ::rtl::OUString);
@@ -461,7 +401,6 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
     DECL_PROP0(QUERYTIMEOUT,sal_Int32);
     DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
     DECL_PROP0(RESULTSETTYPE,sal_Int32);
-    DECL_BOOL_PROP0(USEBOOKMARKS);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
@@ -492,13 +431,11 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
         case PROPERTY_ID_QUERYTIMEOUT:
         case PROPERTY_ID_MAXFIELDSIZE:
         case PROPERTY_ID_MAXROWS:
-        case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
         case PROPERTY_ID_FETCHDIRECTION:
         case PROPERTY_ID_FETCHSIZE:
         case PROPERTY_ID_ESCAPEPROCESSING:
-        case PROPERTY_ID_USEBOOKMARKS:
         default:
             ;
     }
@@ -511,13 +448,11 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
         case PROPERTY_ID_QUERYTIMEOUT:
         case PROPERTY_ID_MAXFIELDSIZE:
         case PROPERTY_ID_MAXROWS:
-        case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
         case PROPERTY_ID_FETCHDIRECTION:
         case PROPERTY_ID_FETCHSIZE:
         case PROPERTY_ID_ESCAPEPROCESSING:
-        case PROPERTY_ID_USEBOOKMARKS:
         default:
             ;
     }
@@ -562,11 +497,15 @@ void OStatement_Base::createColumnMapping()
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
     // now check which columns are bound
+#ifdef _DEBUG
     for ( i = 0; i < m_aColMapping.size(); i++ )
         OSL_TRACE("BEFORE Mapped: %d -> %d", i, m_aColMapping[i] );
+#endif
     OResultSet::setBoundedColumns(m_aRow,xColumns,xNames,sal_True,m_xDBMetaData,m_aColMapping);
+#ifdef _DEBUG
     for ( i = 0; i < m_aColMapping.size(); i++ )
         OSL_TRACE("AFTER  Mapped: %d -> %d", i, m_aColMapping[i] );
+#endif
 }
 // -----------------------------------------------------------------------------
 

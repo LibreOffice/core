@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,11 @@
 #include <connectivity/dbexception.hxx>
 #endif
 
-#ifdef DEBUG
+#ifdef _DEBUG
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* DEBUG */
+#else /* _DEBUG */
 # define OUtoCStr( x ) ("dummy")
-#endif /* DEBUG */
+#endif /* _DEBUG */
 
 extern "C" void*  SAL_CALL OMozabConnection_CreateInstance(void* _pDriver)
 {
@@ -171,10 +171,7 @@ const sal_Char* OConnection::getSDBC_SCHEME_OUTLOOK_EXPRESS()
 OConnection::OConnection(MozabDriver*   _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          m_pDriver(_pDriver),
-                         m_bClosed(sal_False),
                          m_xMetaData(NULL),
-                         m_bUseCatalog(sal_False),
-                         m_bUseOldDateFormat(sal_False),
                          m_nAnonABCount( 0 ),
                          m_nMaxResultRecords( -1 ),
                          m_UsesFactory(sal_False),
@@ -233,8 +230,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     }
 
     OSL_TRACE("URI = %s\n", ((OUtoCStr(aAddrbookURI)) ? (OUtoCStr(aAddrbookURI)):("NULL")) );
-    OSL_TRACE("Scheme = %s\n", ((OUtoCStr(aAddrbookScheme)) ?
-                                 (OUtoCStr(aAddrbookScheme)):("NULL")) );
+    OSL_TRACE("Scheme = %s\n", ((OUtoCStr(aAddrbookScheme)) ?  (OUtoCStr(aAddrbookScheme)):("NULL")) );
 
     //
     // Now we have a URI convert it to a MozillaURI
@@ -329,9 +325,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
                     ::rtl::OUString::createFromAscii("Invalid subschema provided"),NULL);
     }
 
-    OSL_TRACE("Moz URI = %s, %s\n", ((OUtoCStr(m_sMozillaURI)) ?
-                                  (OUtoCStr(m_sMozillaURI)):("NULL")),
-                                  m_UsesFactory ? "uses factory" : "no factory");
+    OSL_TRACE("Moz URI = %s, %s\n", ((OUtoCStr(m_sMozillaURI)) ? (OUtoCStr(m_sMozillaURI)):("NULL")),m_UsesFactory ? "uses factory" : "no factory");
     OSL_TRACE( "\tOUT OConnection::construct()\n" );
 
     // Test connection by getting to get the Table Names
@@ -519,7 +513,6 @@ void OConnection::disposing()
     }
     m_aStatements.clear();
 
-    m_bClosed   = sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
 
     dispose_ChildImpl();
@@ -550,4 +543,7 @@ MNameMapper* OConnection::getNameMapper ()
 
     return m_aNameMapper;
 }
+// -----------------------------------------------------------------------------
 
+
+ 

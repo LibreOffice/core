@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,16 +67,17 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
 
+#ifndef CONNECTIVITY_SCONNECTION_HXX
 #include "MConnection.hxx"
+#endif
+#ifndef _CONNECTIVITY_MOZAB_TABLE_HXX_
 #include "MTable.hxx"
+#endif
 
 namespace connectivity
 {
@@ -101,7 +102,7 @@ namespace connectivity
             // OResultSetMetaData(OConnection*  _pConnection) : m_pConnection(_pConnection){}
             OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
                                const ::rtl::OUString& _aTableName,OTable* _pTable)
-                 : m_xColumns(_rxColumns), m_aTableName(_aTableName), m_pTable(_pTable) {}
+                 : m_xColumns(_rxColumns), m_aTableName(_aTableName), m_pTable(_pTable){}
 
 
             /// Avoid ambigous cast error from the compiler.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:56 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,25 +82,15 @@
 #ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
-#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
-#include <com/sun/star/sdbc/XRowUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
-#include <com/sun/star/sdbcx/XRowLocate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDELETEROWS_HPP_
-#include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE12_HXX_
-#include <cppuhelper/compbase12.hxx>
+#ifndef _CPPUHELPER_COMPBASE8_HXX_
+#include <cppuhelper/compbase8.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
+#ifndef CONNECTIVITY_SSTATEMENT_HXX
 #include "MStatement.hxx"
+#endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
@@ -123,15 +113,11 @@ namespace connectivity
         /*
         **  java_sql_ResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
+        typedef ::cppu::WeakComponentImplHelper8<      ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
                                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                         ::com::sun::star::util::XCancellable,
                                                         ::com::sun::star::sdbc::XWarningsSupplier,
-                                                        ::com::sun::star::sdbc::XResultSetUpdate,
-                                                        ::com::sun::star::sdbc::XRowUpdate,
-                                                        ::com::sun::star::sdbcx::XRowLocate,
-                                                        ::com::sun::star::sdbcx::XDeleteRows,
                                                         ::com::sun::star::sdbc::XCloseable,
                                                         ::com::sun::star::sdbc::XColumnLocate,
                                                         ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
@@ -147,23 +133,11 @@ namespace connectivity
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
-            TVoidVector                                 m_aBindVector;
-            ::std::vector<sal_Int32>                    m_aLengthVector;
             OStatement_Base*                            m_pStatement;
             ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
-            rtl_TextEncoding                            m_nTextEncoding;
             sal_uInt32                                  m_nRowPos;
-            sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
             sal_Bool                                    m_bWasNull;
-            sal_Bool                                    m_bBOF;                 // before first record
-            sal_Bool                                    m_bEOF;                 // after last record
-            sal_Bool                                    m_bLastRecord;
-            sal_Bool                                    m_bFreeHandle;
-            sal_Bool                                    m_bInserting;
-            sal_Bool                                    m_bFetchData;           // true when SQLGetaData can be called in any order or when fetching data for m_aRow
-
-            sal_Bool                                    m_nIsBookmarkable;
             sal_Int32                                   m_nFetchSize;
             sal_Int32                                   m_nResultSetType;
             sal_Int32                                   m_nFetchDirection;
@@ -173,23 +147,6 @@ namespace connectivity
 
             connectivity::OSQLParseTreeIterator&        m_aSQLIterator;
             const connectivity::OSQLParseNode*          m_pParseTree;
-
-            // sal_Bool  isBookmarkable()           const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // sal_Int32 getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // sal_Int32 getResultSetType()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // sal_Int32 getFetchDirection()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // sal_Int32 getFetchSize()         const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // ::rtl::OUString getCursorName()      const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-            // void setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // void setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-
-            // void fillRow(sal_Int32 _nToColumn);
-            // void allocBuffer(sal_Bool _bAllocRow);
-            // void releaseBuffer();
-
-
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
@@ -284,44 +241,8 @@ namespace connectivity
             // XWarningsSupplier
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // XResultSetUpdate
-            virtual void SAL_CALL insertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL deleteRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // XRowUpdate
-            virtual void SAL_CALL updateNull( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateFloat( sal_Int32 columnIndex, float x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateDouble( sal_Int32 columnIndex, double x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateBytes( sal_Int32 columnIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateBinaryStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XColumnLocate
             virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // XRowLocate
-            virtual ::com::sun::star::uno::Any SAL_CALL getBookmark(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL compareBookmarks( const ::com::sun::star::uno::Any& first, const ::com::sun::star::uno::Any& second ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // XDeleteRows
-            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-
 protected:
             MQuery                   m_aQuery;
             OTable*                  m_pTable;
@@ -332,6 +253,7 @@ protected:
             ::std::vector<sal_Int32> m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
             ::std::vector<sal_Int32> m_aOrderbyColumnNumber;
             ::std::vector<sal_Int16> m_aOrderbyAscending;
+            ::com::sun::star::uno::Sequence< ::rtl::OUString> m_aColumnNames;
             OValueRow                m_aRow;
             OValueRow                m_aParameterRow;
             ::std::vector< ::rtl::OUString> m_aAttributeStrings;
@@ -378,9 +300,13 @@ public:
                                                 ::com::sun::star::uno::RuntimeException);
 
             void setTable(OTable* _rTable)
-                      { m_pTable = _rTable; m_pTable->acquire();
-                        m_xTableColumns = m_pTable->getColumns();
-                      }
+            {
+                m_pTable = _rTable;
+                m_pTable->acquire();
+                m_xTableColumns = m_pTable->getColumns();
+                if(m_xTableColumns.is())
+                    m_aColumnNames = m_xTableColumns->getElementNames();
+            }
 
             void setParameterRow(const OValueRow& _rParaRow)
                       { m_aParameterRow = _rParaRow; }

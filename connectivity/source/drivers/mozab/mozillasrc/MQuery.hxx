@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
+ *  last change: $Author: oj $ $Date: 2001-11-26 13:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,8 +239,8 @@ namespace connectivity
             MQueryExpression                m_aExpr;
             ::std::map< ::rtl::OUString,
                         ::rtl::OUString>    m_aColumnAliasMap;
-            ::rtl::OUString                 m_aErrorString;
-            sal_Bool                        m_aErrorOccurred;
+            mutable ::rtl::OUString         m_aErrorString;
+            mutable sal_Bool                m_aErrorOccurred;
 
             void construct();
         protected:
@@ -257,8 +257,8 @@ namespace connectivity
             void                            setAddressbook( ::rtl::OUString&);
             ::rtl::OUString                 getAddressbook(void) const;
 
-            ::std::map< ::rtl::OUString,
-                        ::rtl::OUString>   &getColumnAliasMap() { return m_aColumnAliasMap; }
+            const ::std::map< ::rtl::OUString,::rtl::OUString>&
+                                            getColumnAliasMap() const { return m_aColumnAliasMap; }
 
             void                            setExpression( MQueryExpression &_expr );
 
@@ -281,8 +281,9 @@ namespace connectivity
             sal_Bool                        checkRowAvailable( sal_Int32 nDBRow );
 
             sal_Bool                        getRowValue( connectivity::ORowSetValue& rValue,
-                                                         sal_Int32 nDBRow, rtl::OUString& aDBColumnName,
-                                                         sal_Int32 nType );
+                                                         sal_Int32 nDBRow,
+                                                         const rtl::OUString& aDBColumnName,
+                                                         sal_Int32 nType ) const;
 
         public:
             MQuery();
