@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-11 05:20:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ Menu MN_READONLY_POPUP
             Text [ swedish ] = "~Öppna" ;
             Text [ danish ] = "~Åbn" ;
             Text [ portuguese ] = "~Abrir" ;
-            Text [ portuguese_brazilian ] = "~Öffnen" ;
+            Text [ portuguese_brazilian ] = "~?ffnen" ;
             Text[ chinese_simplified ] = "´ò¿ª(~O)";
             Text[ russian ] = "Îòêğûòü";
             Text[ polish ] = "Otwórz";
@@ -111,7 +111,7 @@ Menu MN_READONLY_POPUP
             Text [ swedish ] = "Öppna i nytt ~fönster" ;
             Text [ danish ] = "Åbn i nyt vindue" ;
             Text [ portuguese ] = "Nova ~janela" ;
-            Text [ portuguese_brazilian ] = "Öffnen in neuem ~Fenster" ;
+            Text [ portuguese_brazilian ] = "?ffnen in neuem ~Fenster" ;
             Text[ chinese_simplified ] = "Ê¹ÓÃĞÂÊÓ´°´ò¿ª(~W)";
             Text[ russian ] = "Îòêğûòü â íîâîì îêíå";
             Text[ polish ] = "Otwórz w nowym oknie";
@@ -181,7 +181,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Opnieuw laden";
             Text[ chinese_simplified ] = "ÖØĞÂ×°Èë(~L)";
             Text[ greek ] = "Åğá~íáöüñôùóç";
-            Text[ korean ] = "Àç ·Îµå(~L)";
+            Text[ korean ] = "´Ù½Ã ·Îµå(~L)";
             Text[ turkish ] = "Yeniden yükle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Recargar";
@@ -234,7 +234,7 @@ Menu MN_READONLY_POPUP
             Text [ portuguese_brazilian ] = "HTM~L - Quelltext" ;
             Text[ chinese_simplified ] = "HT~ML Ô´ÎÄ±¾";
             Text[ russian ] = "Èñõîäíûé òåêñò HTM~L";
-            Text[ polish ] = "Tekst Ÿród³owy HTML";
+            Text[ polish ] = "Tekst ?ród³owy HTML";
             Text[ japanese ] = "HT~ML ¿°½Ã·½Ä";
             Text[ chinese_traditional ] = "HT~ML ­ì©lÀÉ";
             Text[ arabic ] = "HTML ãÕÏÑ";
@@ -292,7 +292,7 @@ Menu MN_READONLY_POPUP
             Text [ swedish ] = "~Bakåt" ;
             Text [ danish ] = "~Tilbage" ;
             Text [ portuguese ] = "~Anterior" ;
-            Text [ portuguese_brazilian ] = "~Rückwärts" ;
+            Text [ portuguese_brazilian ] = "~R?kw?rts" ;
             Text[ chinese_simplified ] = "Ïòºó(~B)";
             Text[ russian ] = "Íàçàä";
             Text[ polish ] = "Wstecz";
@@ -322,7 +322,7 @@ Menu MN_READONLY_POPUP
             Text [ swedish ] = "~Framåt" ;
             Text [ danish ] = "~Næste" ;
             Text [ portuguese ] = "~Seguinte" ;
-            Text [ portuguese_brazilian ] = "~Vorwärts" ;
+            Text [ portuguese_brazilian ] = "~Vorw?rts" ;
             Text[ chinese_simplified ] = "ÏòÇ°(~F)";
             Text[ russian ] = "Âïåğåä";
             Text[ polish ] = "Do przodu";
@@ -444,7 +444,7 @@ Menu MN_READONLY_POPUP
             };
             Text [ portuguese ] = "~Adicionar imagem" ;
             Text [ english_us ] = "Add Graphics" ;
-            Text [ portuguese_brazilian ] = "Grafik hinzuf~ügen" ;
+            Text [ portuguese_brazilian ] = "Grafik hinzuf~?en" ;
             Text [ swedish ] = "Lägg till ~grafik" ;
             Text [ danish ] = "Tilføj grafik" ;
             Text [ italian ] = "Aggi~ungi immagine" ;
@@ -570,7 +570,7 @@ Menu MN_READONLY_POPUP
                 };
             };
             Text [ english_us ] = "Add Background" ;
-            Text [ portuguese_brazilian ] = "H~intergrund hinzufügen" ;
+            Text [ portuguese_brazilian ] = "H~intergrund hinzuf?en" ;
             Text [ swedish ] = "Lägg till ~bakgrund" ;
             Text [ danish ] = "Tilføj baggrund" ;
             Text [ italian ] = "Aggiungi sfon~do" ;
@@ -786,7 +786,7 @@ String STR_CHAIN_OK
     Text [ english ] = "Klick the left mouse button to chain the Frames." ;
     Text [ portuguese ] = "Clique no botão esquerdo do rato para ligar as molduras." ;
     Text [ english_us ] = "Click the left mouse button to link the frames." ;
-    Text [ portuguese_brazilian ] = "Betätigen Sie die linke Maustaste um die Rahmen zu verketten." ;
+    Text [ portuguese_brazilian ] = "Bet?tigen Sie die linke Maustaste um die Rahmen zu verketten." ;
     Text [ swedish ] = "Klicka på den vänstra musknappen för att länka ramarna." ;
     Text [ danish ] = "Klik på venstre museknap for at kæde rammerne." ;
     Text [ italian ] = "Per collegare la cornice cliccate con il tasto sinistro del mouse." ;
@@ -858,7 +858,7 @@ String STR_CHAIN_IS_IN_CHAIN
     Text[ dutch ] = "Het doelkader is reeds gekoppeld.";
     Text[ chinese_simplified ] = "ÒÑ¾­Á´½ÓÄ¿±ê¿ò¡£";
     Text[ greek ] = "Ôï ğëáßóéï ğñïïñéóìïı åßíáé Şäç óõíäåäåìİíï.";
-    Text[ korean ] = "¸ñÇ¥ ÇÁ·¹ÀÓÀº ÀÌ¹Ì ¿¬°á µÇ¾î ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "¸ñÇ¥ ÇÁ·¹ÀÓÀº ÀÌ¹Ì ¿¬°áµÇ¾î ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Hedef çerçeve bağlantısı oluşturulmuş durumda.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El marco destino ya está vinculado.";
@@ -870,7 +870,7 @@ String STR_CHAIN_WRONG_AREA
     Text [ english ] = "The target is in an invalid area." ;
     Text [ portuguese ] = "A moldura de destino encontra-se numa área que não permite a ligação." ;
     Text [ english_us ] = "The target frame for the link is in an invalid area." ;
-    Text [ portuguese_brazilian ] = "Der Zielrahmen steht in einem Bereich in dem keine Verkettung möglich ist." ;
+    Text [ portuguese_brazilian ] = "Der Zielrahmen steht in einem Bereich in dem keine Verkettung m?lich ist." ;
     Text [ swedish ] = "Målramen finns i ett område där ingen länkning är möjlig." ;
     Text [ danish ] = "Målrammen befinder sig i et område hvor sammenkædning ikke er mulig." ;
     Text [ italian ] = "La cornice di destinazione si trova in un'area nella quale non sono possibili collegamenti." ;
@@ -935,14 +935,14 @@ String STR_CHAIN_SOURCE_CHAINED
     Text [ dutch ] = "Het bronkader is reeds basis van een koppeling." ;
     Text[ chinese_simplified ] = "Õâ¸öÀ´Ô´¿òÒÑ¾­ÊÇÒ»¸öÁ´½ÓµÄÀ´Ô´¿ò¡£";
     Text[ russian ] = "Èñõîäíàÿ ğàìêà óæå ÿâëÿåòñÿ èñòî÷íèêîì ñâÿçè.";
-    Text[ polish ] = "Ramka Ÿród³owa jest ju¿ Ÿród³em po³¹czenia.";
+    Text[ polish ] = "Ramka ?ród³owa jest ju¿ ?ród³em po³¹czenia.";
     Text[ japanese ] = "‚±‚ÌÃ·½Ä˜g‚É‚Í•Ê‚ÌÃ·½Ä˜g‚ª‚·‚Å‚É˜AŒ‹‚µ‚Ä‚¢‚Ü‚·B";
     Text[ chinese_traditional ] = "³o­Ó¨Ó·½°T®Ø¤w¸g¬O¤@­Ó³sµ²ªº·½°T®Ø¡C";
     Text[ arabic ] = "ßÇÏÑ ÇáãÕÏÑ åæ ãÓÈŞÇğ ãÕÏÑ ÇáÊÓáÓá.";
     Text[ dutch ] = "Het bronkader is reeds basis van een koppeling.";
     Text[ chinese_simplified ] = "Õâ¸öÀ´Ô´¿òÒÑ¾­ÊÇÒ»¸öÁ´½ÓµÄÀ´Ô´¿ò¡£";
     Text[ greek ] = "Ôï ğëáßóéï ğñïİëåõóçò åßíáé Şäç ç ğñïİëåõóç ìéáò óıíäåóçò.";
-    Text[ korean ] = "¼Ò½º ÇÁ·¹ÀÓÀº ÀÌ¹Ì¿¬°áÀÇ ¼Ò½ºÀÔ´Ï´Ù.";
+    Text[ korean ] = "¼Ò½º ÇÁ·¹ÀÓÀº ÀÌ¹Ì ¿¬°áÀÇ ¼Ò½ºÀÔ´Ï´Ù.";
     Text[ turkish ] = "Kaynak çerçeve zaten bir bağlantı zincirinin kaynağı.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El marco origen ya es la fuente de un vínculo.";
@@ -954,7 +954,7 @@ String STR_CHAIN_SELF
     Text [ english ] = "a chain connot be closed." ;
     Text [ portuguese ] = "Impossível uma sequência fechada." ;
     Text [ english_us ] = "A closed link is not possible." ;
-    Text [ portuguese_brazilian ] = "Eine geschlossene Kette ist nicht möglich." ;
+    Text [ portuguese_brazilian ] = "Eine geschlossene Kette ist nicht m?lich." ;
     Text [ swedish ] = "En sluten kedja är inte möjlig." ;
     Text [ danish ] = "En lukket kæde er ikke mulig." ;
     Text [ italian ] = "Un collegamento chiuso non è possibile." ;
@@ -982,7 +982,7 @@ String STR_REDLINE_INSERT
     Text [ english ] = "Inserted" ;
     Text [ portuguese ] = "Inserido" ;
     Text [ english_us ] = "Inserted" ;
-    Text [ portuguese_brazilian ] = "Eingefügt" ;
+    Text [ portuguese_brazilian ] = "Eingef?t" ;
     Text [ swedish ] = "Infogad" ;
     Text [ danish ] = "Indsat" ;
     Text [ italian ] = "Inserito" ;
@@ -1010,7 +1010,7 @@ String STR_REDLINE_DELETE
     Text [ english ] = "Deleted" ;
     Text [ portuguese ] = "Eliminado" ;
     Text [ english_us ] = "Deleted" ;
-    Text [ portuguese_brazilian ] = "Gelöscht" ;
+    Text [ portuguese_brazilian ] = "Gel?cht" ;
     Text [ swedish ] = "Raderat" ;
     Text [ danish ] = "Slettet" ;
     Text [ italian ] = "Cancellato" ;
@@ -1066,7 +1066,7 @@ String STR_REDLINE_TABLE
     Text [ english ] = "Table changed" ;
     Text [ portuguese ] = "Tabela modificada" ;
     Text [ english_us ] = "Table changed" ;
-    Text [ portuguese_brazilian ] = "Tabelle verändert" ;
+    Text [ portuguese_brazilian ] = "Tabelle ver?ndert" ;
     Text [ swedish ] = "Tabell ändrad" ;
     Text [ danish ] = "Tabel ændret" ;
     Text [ italian ] = "Tabella modificata" ;
@@ -1150,7 +1150,7 @@ String STR_FTNNOTE
     Text [ ENGLISH ] = "Footnote: " ;
     Text [ portuguese ] = "Nota de rodapé: " ;
     Text [ english_us ] = "Footnote: " ;
-    Text [ portuguese_brazilian ] = "Fußnote: " ;
+    Text [ portuguese_brazilian ] = "Fu?note: " ;
     Text [ swedish ] = "Fotnot:  " ;
     Text [ danish ] = "Fodnote: " ;
     Text [ italian ] = "Nota a piè pagina: " ;
@@ -1194,7 +1194,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ arabic ] = "ÊŞÚ ÚáÇãÉ ÇáßÊÇÈÉ Ãæ ÇáÊÍÏíÏ İí ãæÖÚ ãÍãí ÖÏ ÇáßÊÇÈÉ.\náåĞÇ áÇ íãßä ŞÈæá ÃíÉ ÊÛííÑÇÊ.";
     MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
     MESSAGE[ chinese_simplified ] = "ÊäÈë¹â±ê»òÑ¡ÖĞµÈÄÚÈİÊÇÒ»¸öÊÜ±£»¤µÄ¡£\nÎŞ·¨¸ü¸Ä·À¸²Ğ´µÄÄÚÈİ¡£";
-    MESSAGE[ greek ] = "Ôï óçìÜäé ôçò åããñáöŞò Ş ç åğéëïãŞ âñßóêåôáé óå ìßá ğñïóôáôåõüìåíç èİóç.\nÃé áõôü ôï ëüãï äåí ìğïñïıí íá ãßíïõí äåêôİò ïğïéåóäŞğïôå ôñïğïğïéŞóåéò.";
+    MESSAGE[ greek ] = "Ôï óçìÜäé ôçò åããñáöŞò Ş ç åğéëïãŞ âñßóêåôáé óå ìßá ğñïóôáôåõüìåíç èİóç.\nÃé áõôü ôï ëüãï äåí ìğïñïıí íá ãßíïõí äåêôİò ïğïéåóäŞğïôå ôñïğïğï?";
     MESSAGE[ korean ] = "¾²±â¡¡¸¶Å©¡¡¶Ç´Â¡¡¼±ÅÃÀº¡¡º¸È£µÈ¡¡À§Ä¡¿¡¡¡ÀÖ½À´Ï´Ù.\n¼öÁ¤Àº Çã¿ëµÇÁö¡¡¾Ê½À´Ï´Ù.";
     MESSAGE[ turkish ] = "Salt okunur bir içerik değiştirilemez.\nYapılan değişiklikler nu nedenle kabul edilmeyecek.";
     MESSAGE[ language_user1 ] = " ";
