@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:37:52 $
+ *  last change: $Author: rt $ $Date: 2001-05-12 07:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,7 +631,7 @@ TabPage TP_TOX_SELECT
     StringList [ korean ] =
     {
             < "¸ñÂ÷" ;  TO_CONTENT      ;> ;
-        < "Ç¥Á¦¾î¡¡»öÀÎ" ;  TO_INDEX        ;> ;
+        < "Å°¿öµå¡¡»öÀÎ" ;  TO_INDEX        ;> ;
         < "»ğÈ­ »öÀÎ" ; TO_ILLUSTRATION ;> ;
         < "Ç¥ »öÀÎ" ;   TO_TABLE        ;> ;
         < "»ç¿ëÀÚ Á¤ÀÇ" ;   TO_USER         ;> ;
@@ -690,12 +690,12 @@ TabPage TP_TOX_SELECT
     };
     StringList [ finnish ] =
     {
-            < "Sisällysluettelo" ;  TO_AUTHORITIES  ;> ;
-        < "Aakkostettu hakemisto" ; TO_AUTHORITIES  ;> ;
-        < "Kuvitushakemisto" ;  TO_AUTHORITIES  ;> ;
-        < "Taulukkohakemisto" ; TO_AUTHORITIES  ;> ;
-        < "Käyttäjän määrittämä" ;  TO_AUTHORITIES  ;> ;
-        < "Objektiluettelo" ;   TO_AUTHORITIES  ;> ;
+            < "Sisällysluettelo" ;  TO_CONTENT      ;> ;
+        < "Aakkostettu hakemisto" ;     TO_INDEX        ;> ;
+        < "Kuvitushakemisto" ; TO_ILLUSTRATION ;> ;
+        < "Taulukkohakemisto" ;     TO_TABLE        ;> ;
+        < "Käyttäjän määrittämä" ;  TO_USER         ;> ;
+        < "Objektiluettelo" ;   TO_OBJECT       ;> ;
         < "Bibliografia" ;  TO_AUTHORITIES  ;> ;
     };
     };
@@ -908,7 +908,7 @@ TabPage TP_TOX_SELECT
     };
     StringList [ finnish ] =
     {
-            < "Koko asiakirja" ;                AREA_CHAPTER        ;> ;
+            < "Koko asiakirja" ;    AREA_DOCUMENT       ;> ;
         < "Luku" ;              AREA_CHAPTER        ;> ;
     };
     };
@@ -1444,7 +1444,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Streœæ za pomoc¹ s lub ss";
         Text[ portuguese_brazilian ] = "Combine identical entries with ~pp.";
         Text[ japanese ] = "‘±‚«Íß°¼Ş‚ğ ~p ‚Ü‚½‚Í pp ‚Å•\\¦";
-        Text[ korean ] = "~p ¶Ç´Âpp µ¿ÀÏÇ×¸ñÀ» ÇÏ³ª·Î ¹­À½";
+        Text[ korean ] = "~f ¶Ç´Â ff µ¿ÀÏÇ×¸ñÀ» ÇÏ³ª·Î ¹­À½";
         Text[ chinese_simplified ] = "ºÏ²¢´ø f »ò ff µÄÌõÄ¿(~P)";
         Text[ chinese_traditional ] = "¦X¨Ö¥Î f ©Î ff(~P)";
         Text[ arabic ] = "ÊáÎíÕ ÈÇÓÊÎÏÇã p.  Ãæ  pp";
@@ -1526,7 +1526,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Zaczynaj wpisy autom. od wielkiej litery";
         Text[ portuguese_brazilian ] = "Capitalize entries";
         Text[ japanese ] = "Œê“ª‚ğ©“®“I‚É‘å•¶š‚É‚·‚é";
-        Text[ korean ] = "ÀÔ·Â»çÇ×¡¡ÀÚµ¿À¸·Î¡¡´ë¹®ÀÚ";
+        Text[ korean ] = "ÀÔ·Â¡¡ÀÚµ¿À¸·Î¡¡´ë¹®ÀÚ";
         Text[ chinese_simplified ] = "×Ô¶¯×ª»»³É´óĞ´ÌõÄ¿";
         Text[ chinese_traditional ] = "Âà°ÊÂà´«¦¨¤j¼g¦r¥À";
         Text[ arabic ] = "ÈÏÁ ÇáÅÏÎÇáÇÊ ÈÃÍÑİ ßÈíÑÉ ÊáŞÇÆíÇğ";
@@ -1554,7 +1554,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Klucz ja~ko wpis w³asny";
         Text[ portuguese_brazilian ] = "Keys as separate entries";
         Text[ japanese ] = "•ª—ŞÀ²ÄÙ‚ğ€–Ú•\\¦";
-        Text[ korean ] = "Å°´Â¡¡°íÀ¯ÀÔ·ÂÀ¸·Î";
+        Text[ korean ] = "Å°¸¦ °íÀ¯ÀÔ·ÂÀ¸·Î";
         Text[ chinese_simplified ] = "¼üÂë×÷Îªµ¥¶ÀµÄÌõÄ¿";
         Text[ chinese_traditional ] = "Áä½X·í§@¤@­Ó¦Û¤vªº±ø¥Ø";
         Text[ arabic ] = "ÇáãİÊÇÍ ßÅÏÎÇá ãÓÊŞá";
@@ -2066,10 +2066,10 @@ TabPage TP_TOX_SELECT
         };
         ItemList [ finnish ] =
         {
-            < "%PRODUCTNAME Math";  128;> ;
-            < "%PRODUCTNAME Chart";     128;> ;
-            < "%PRODUCTNAME! Calc";     128;> ;
-            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress";     128;> ;
+            < "%PRODUCTNAME Math" ;                 1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME! Calc" ;                8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Muut OLE-objekti";   128;> ;
         };
     };
@@ -2217,7 +2217,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Plik zaznaczaj¹cy dla zestawu hase³ (*.sdi) ";
         Text[ portuguese_brazilian ] = "Mark up file for index";
         Text[ japanese ] = "õˆø—p‚Ì‘I‘ğÌ§²Ù (*.sdi)";
-        Text[ korean ] = "Ç¥Á¦¾î¡¡»öÀÎÀ» À§ÇÑ ¸¶Å· ÆÄÀÏ (*.sdi)";
+        Text[ korean ] = "Å°¿öµå »öÀÎÀ» À§ÇÑ ¸¶Ä¿ ÆÄÀÏ (*.sdi)";
         Text[ chinese_simplified ] = "ÓÃÓÚË÷ÒıÄ¿Â¼µÄ±ê¼ÇÎÄ¼ş(*.sdi)";
         Text[ chinese_traditional ] = "¥Î©ó¯Á¤Ş¥Ø¿ıªº¼Ğ°OÀÉ®×(*.sdi)";
         Text[ arabic ] = "ãáİ ÇáÊÍÏíÏ ááİåÑÓ ÇáÃÈÌÏí (*.sdi)";
