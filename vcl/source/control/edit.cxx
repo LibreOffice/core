@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-08 08:01:32 $
+ *  last change: $Author: pl $ $Date: 2002-10-16 16:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,7 +971,7 @@ void Edit::ImplAlign()
         long nMinXOffset = nOutWidth - nTextWidth - 1 - ImplGetExtraOffset();
         if( Application::GetSettings().GetLayoutRTL() )
         {
-            if( mnXOffset != nMinXOffset && ( nTextWidth < nOutWidth ) )
+            if( nTextWidth < nOutWidth )
                 mnXOffset = nMinXOffset;
         }
         else
@@ -1015,15 +1015,42 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos )
     }
 
     GetCaretPositions( aText, pDX, 0, aText.Len() );
-    long nX = rWindowPos.X() - mnXOffset -ImplGetExtraOffset();
+    long nX = rWindowPos.X() - mnXOffset - ImplGetExtraOffset();
     for( int i = 0; i < aText.Len(); i++ )
     {
         if( (pDX[2*i] >= nX && pDX[2*i+1] <= nX) ||
             (pDX[2*i+1] >= nX && pDX[2*i] <= nX))
         {
             nIndex = i;
+            if( pDX[2*i] < pDX[2*i+1] )
+            {
+                if( nX > (pDX[2*i]+pDX[2*i+1])/2 )
+                    nIndex++;
+            }
+            else
+            {
+                if( nX < (pDX[2*i]+pDX[2*i+1])/2 )
+                    nIndex++;
+            }
             break;
         }
+    }
+    if( nIndex == STRING_LEN )
+    {
+        nIndex = 0;
+        long nDiff = Abs( pDX[0]-nX );
+        for( int i = 1; i < aText.Len(); i++ )
+        {
+            long nNewDiff = Abs( pDX[2*i]-nX );
+
+            if( nNewDiff < nDiff )
+            {
+                nIndex = i;
+                nDiff = nNewDiff;
+            }
+        }
+        if( nIndex == aText.Len()-1 && Abs( pDX[2*nIndex+1] - nX ) < nDiff )
+            nIndex = STRING_LEN;
     }
 
     if( pDXBuffer )
