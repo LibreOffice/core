@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
+ *  last change: $Author: aw $ $Date: 2001-05-02 11:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1359,19 +1359,26 @@ void XMLShapeExport::ImpExportPageShape(
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
-    OUString aStr;
-
-    // a presentation page shape, normally used on notes pages only. If
-    // it is used not as presentation shape, it may have been created with
-    // copy-paste exchange between draw and impress (this IS possible...)
-    if(eShapeType == XmlShapeTypePresPageShape)
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(xPropSet.is())
     {
-        rExport.AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_class,
-            OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_page)));
-    }
+        OUString aStr;
 
-    // write Page shape
-    SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_page_thumbnail, sal_True, sal_True);
+        // #86163# Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+        // a presentation page shape, normally used on notes pages only. If
+        // it is used not as presentation shape, it may have been created with
+        // copy-paste exchange between draw and impress (this IS possible...)
+        if(eShapeType == XmlShapeTypePresPageShape)
+        {
+            rExport.AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_class,
+                OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_presentation_page)));
+        }
+
+        // write Page shape
+        SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, sXML_page_thumbnail, sal_True, sal_True);
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
