@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 13:26:18 $
+ *  last change: $Author: dr $ $Date: 2002-07-22 12:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,6 +440,14 @@ SvLBoxEntry* SvTreeListBox::InsertEntry( const XubString& aText,SvLBoxEntry* pPa
     pEntry->SetUserData( pUser );
     InitEntry( pEntry, aText, rDefColBmp, rDefExpBmp );
     pEntry->EnableChildsOnDemand( bChildsOnDemand );
+
+    // Add the HC versions of the default images
+    SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
+    if( pBmpItem )
+    {
+        pBmpItem->SetBitmap1( pEntry, pImp->GetDefaultEntryColBmp( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
+        pBmpItem->SetBitmap2( pEntry, pImp->GetDefaultEntryExpBmp( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
+    }
 
     if( !pParent )
         SvLBox::Insert( pEntry, nPos );
