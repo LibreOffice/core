@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impbmp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:42:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
