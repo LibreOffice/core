@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-27 07:25:06 $
+ *  last change: $Author: dvo $ $Date: 2001-04-27 10:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,11 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_FONTEMPHASIS_HPP_
 #include <com/sun/star/text/FontEmphasis.hpp>
+#endif
+#if SUPD > 630
+#ifndef _COM_SUN_STAR_TEXT_PARAGRAPHVERTALIGN_HPP_
+#include <com/sun/star/text/ParagraphVertAlign.hpp>
+#endif
 #endif
 
 #ifndef _XMLOFF_XMLTYPES_HXX
@@ -283,6 +288,23 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_FontRelief_Enum[] =
     { 0, 0 }
 };
 
+SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
+{
+#if SUPD > 630
+    { sXML_top,         ParagraphVertAlign::TOP     },
+    { sXML_middle,      ParagraphVertAlign::CENTER  },
+    { sXML_bottom,      ParagraphVertAlign::BOTTOM  },
+    { sXML_baseline,    ParagraphVertAlign::BASELINE    },
+    { sXML_auto,        ParagraphVertAlign::AUTOMATIC   },
+#else
+    { sXML_top,         2   },
+    { sXML_middle,      3   },
+    { sXML_bottom,      4   },
+    { sXML_baseline,    1   },
+    { sXML_auto,        0   },
+#endif
+    { 0, 0 }
+};
 
 // ---------------------------------------------------------------------------
 
@@ -1390,6 +1412,8 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLNamedBoolPropertyHdl(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_fixed ) ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_line_height ) ) );
+    case XML_TYPE_TEXT_VERTICAL_ALIGN:
+        pHdl = new XMLConstantsPropertyHandler( pXML_VerticalAlign_Enum, 0 );
     }
 
     return pHdl;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-25 15:00:08 $
+ *  last change: $Author: dvo $ $Date: 2001-04-27 10:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,9 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_ED( "ParaIsHangingPunctuation", STYLE, punctuation_wrap, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 ),
     M_ED( "ParaIsForbiddenRules", STYLE, line_break, XML_TYPE_TEXT_LINE_BREAK, 0 ),
     M_E( "TabStopDistance", STYLE, tab_stop_distance, XML_TYPE_MEASURE, 0 ),
+
+    // RES_PARATR_VERTALIGN
+    M_E( "ParaVertAlignment", STYLE, vertical_align,    XML_TYPE_TEXT_VERTICAL_ALIGN, 0 ),
     { 0, 0, 0, 0 }
 };
 
@@ -645,6 +648,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     M_E( "",            DRAW,   visible_area_height,    XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY,  CTF_OLE_VIS_AREA_HEIGHT ),
     M_E( "",            DRAW,   draw_aspect,            XML_TYPE_NUMBER16|MID_FLAG_NO_PROPERTY, CTF_OLE_DRAW_ASPECT ),
     M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+
     { 0, 0, 0, 0 }
 };
 
