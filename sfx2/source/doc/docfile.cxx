@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-29 14:59:17 $
+ *  last change: $Author: mav $ $Date: 2002-05-29 16:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1815,6 +1815,28 @@ void SfxMedium::UseInteractionHandler( BOOL bUse )
 void SfxMedium::SetInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
     pImp->xInteraction = xHandler;
+}
+
+//------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
+SfxMedium::GetInteractionHandler()
+{
+    if ( pImp->bUseInteractionHandler )
+    {
+        if( pImp->xInteraction.is() )
+            return pImp->xInteraction;
+        else
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+            if( xFactory.is() == sal_True )
+            {
+                return ::com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >( xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), ::com::sun::star::uno::UNO_QUERY );
+            }
+        }
+    }
+
+    return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
 }
 
 //------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 13:50:40 $
+ *  last change: $Author: mav $ $Date: 2002-05-29 16:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,10 @@
 #ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+
 #include <tools/cachestr.hxx>
 #include <osl/mutex.hxx>
 
@@ -215,6 +219,7 @@ using namespace ::rtl;
 #include "scriptcont.hxx"
 #include "dlgcont.hxx"
 #include "objshimp.hxx"
+#include "fltoptint.hxx"
 
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
@@ -1578,5 +1583,56 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
     return pReturn ;
 }
 } // extern "C"
+
+//=========================================================================
+
+void SAL_CALL FilterOptionsContinuation::setFilterOptions(
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    rProperties = rProps;
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
+    FilterOptionsContinuation::getFilterOptions()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    return rProperties;
+}
+
+//=========================================================================
+
+RequestFilterOptions::RequestFilterOptions( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > rModel,
+                              ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > rProperties )
+{
+    ::rtl::OUString temp;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > temp2;
+    ::com::sun::star::document::FilterOptionsRequest aOptionsRequest( temp,
+                                                                         temp2,
+                                                                      rModel,
+                                                                      rProperties );
+
+       m_aRequest <<= aOptionsRequest;
+
+       m_pAbort  = new ContinuationAbort;
+       m_pOptions = new FilterOptionsContinuation;
+
+       m_lContinuations.realloc( 2 );
+       m_lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pAbort  );
+       m_lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >( m_pOptions );
+}
+
+::com::sun::star::uno::Any SAL_CALL RequestFilterOptions::getRequest()
+        throw( ::com::sun::star::uno::RuntimeException )
+{
+    return m_aRequest;
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >
+    SAL_CALL RequestFilterOptions::getContinuations()
+        throw( ::com::sun::star::uno::RuntimeException )
+{
+    return m_lContinuations;
+}
 
 
