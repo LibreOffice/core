@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:37:35 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #endif
 #ifndef _VCL_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _VCL_SYSTEM_HXX
-#include <vcl/system.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
