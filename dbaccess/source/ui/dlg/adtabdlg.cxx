@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-03 12:28:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ DBG_NAME(OAddTableDlg)
 OAddTableDlg::OAddTableDlg( Window* pParent,OJoinTableView* _pTableView)
              :ModelessDialog( pParent, ModuleRes(DLG_JOIN_TABADD) )
              ,aFTTable( this, ResId( FT_TABLE ) )
-             ,aTableList( this, ResId( LB_TABLE ),sal_False,sal_False )
+             ,aTableList( this,NULL, ResId( LB_TABLE ),sal_False,sal_False )
              ,aAddButton( this, ResId( PB_ADDTABLE ) )
              ,aCloseButton( this, ResId( PB_CLOSE ) )
              ,aHelpButton( this, ResId( PB_HELP ) )
@@ -189,26 +189,34 @@ void OAddTableDlg::AddTable()
         }
         aTableName = aTableList.GetEntryText(pEntry);
 
-        Reference<XDatabaseMetaData> xMeta = m_pTableView->getDesignView()->getController()->getConnection()->getMetaData();
-        // den Datenbank-Namen besorgen
-        if (  !aCatalog.getLength()
-            && aSchema.getLength()
-            && xMeta->supportsCatalogsInDataManipulation()
-            && !xMeta->supportsSchemasInDataManipulation() )
-        {
-            aCatalog = aSchema;
-            aSchema = ::rtl::OUString();
-        }
-
-
         ::rtl::OUString aComposedName;
-        ::dbtools::composeTableName(xMeta,
-                                    aCatalog,
-                                    aSchema,
-                                    aTableName,
-                                    aComposedName,
-                                    sal_False,
-                                    ::dbtools::eInDataManipulation);
+        try
+        {
+            Reference<XDatabaseMetaData> xMeta = m_pTableView->getDesignView()->getController()->getConnection()->getMetaData();
+            // den Datenbank-Namen besorgen
+            if (  !aCatalog.getLength()
+                && aSchema.getLength()
+                && xMeta->supportsCatalogsInDataManipulation()
+                && !xMeta->supportsSchemasInDataManipulation() )
+            {
+                aCatalog = aSchema;
+                aSchema = ::rtl::OUString();
+            }
+
+
+
+            ::dbtools::composeTableName(xMeta,
+                                        aCatalog,
+                                        aSchema,
+                                        aTableName,
+                                        aComposedName,
+                                        sal_False,
+                                        ::dbtools::eInDataManipulation);
+        }
+        catch(const Exception&)
+        {
+            OSL_ENSURE(0,"Exception catched!");
+        }
         // aOrigTableName is used because AddTabWin would like to have this
         // und das Ganze dem Container uebergeben
         m_pTableView->AddTabWin( aComposedName,aTableName, TRUE );
@@ -276,7 +284,7 @@ void OAddTableDlg::UpdateTableList(BOOL bViewsAllowed)
     if (xTables.is())
         sTables = xTables->getElementNames();
 
-    xViewSupp = Reference< XViewsSupplier >(xTableSupp, UNO_QUERY);
+    xViewSupp.set(xTableSupp,UNO_QUERY);
     if (xViewSupp.is())
     {
         xViews = xViewSupp->getViews();
