@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:22:57 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ String RID_SVXSTR_ARCHIVE_TITLE
     Text [ english_us ] = "Select Archives" ;
     Text[ portuguese ] = "Select Archives";
     Text[ russian ] = "Βϋαξπ ΰπυθβξβ";
-    Text[ greek ] = "Select Archives";
+    Text[ greek ] = "Επιλογή αρχείων προς φύλαξη";
     Text[ dutch ] = "Archieven selecteren";
     Text[ french ] = "Sιlection des archives";
     Text[ spanish ] = "Seleccionar archivos";
@@ -367,7 +367,7 @@ String RID_SVXSTR_ARCHIVE_HEADLINE
     Text [ english_us ] = "Archives" ;
     Text[ portuguese ] = "Archives";
     Text[ russian ] = "ΐπυθβϋ";
-    Text[ greek ] = "Archives";
+    Text[ greek ] = "Αρχεία προς φύλαξη";
     Text[ dutch ] = "Archieven";
     Text[ french ] = "Archives";
     Text[ spanish ] = "Archivos";
@@ -423,6 +423,7 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text[ hindi ] = "%1 ΰ¤«ΰ¤Ύΰ¤‡ΰ¤² ΰ¤ªΰ¤Ήΰ¤Ώΰ¤²ΰ¥‡ ΰ¤Έΰ¥‡ ΰ¤Ήΰ¥€ ΰ¤…ΰ¤Έΰ¥ΰ¤¤ΰ¤Ώΰ¤¤ΰ¥ΰ¤µ ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤Ήΰ¥ ΰ¥¤";
     Text[ slovak ] = "SΓΊbor %1 uΕΎ existuje.";
 };
+
 
 
 
