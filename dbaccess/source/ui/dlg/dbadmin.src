@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 16:00:26 $
+ *  last change: $Author: fs $ $Date: 2001-03-06 12:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,7 @@ TabPage PAGE_GENERAL
 
     FixedText FT_DATASOURCENAME
     {
-        Pos = MAP_APPFONT ( 6 , 7 ) ;
+        Pos = MAP_APPFONT ( 7 , 7 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "~Name:";
         Text [ english ] = "~Name:";
@@ -477,7 +477,7 @@ TabPage PAGE_GENERAL
     FixedText FT_CONNECTURL
     {
         HelpId = HID_DSADMIN_URL_GENERAL;
-        Pos = MAP_APPFONT ( 7 , 53 ) ;
+        Pos = MAP_APPFONT ( 7 , 54 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "D~atenquelle URL:" ;
         Text [ english ] = "~Data source URL:" ;
@@ -502,7 +502,7 @@ TabPage PAGE_GENERAL
     };
     Edit ET_CONNECTURL
     {
-        Pos = MAP_APPFONT ( 90 , 52 ) ;
+        Pos = MAP_APPFONT ( 90 , 50 ) ;
         Size = MAP_APPFONT ( 147 , 12 ) ;
         TabStop = TRUE ;
         Border = TRUE ;
@@ -510,7 +510,7 @@ TabPage PAGE_GENERAL
     PushButton PB_BROWSECONNECTION
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 241 , 51 ) ;
+        Pos = MAP_APPFONT ( 241 , 49 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
         HelpId = HID_DSADMIN_BROWSECONN;
         Text = "..." ;
@@ -1991,6 +1991,9 @@ ErrorBox ERR_CANTADMINQUERIES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2001/02/05 16:00:26  fs
+ *  some minor layout changes
+ *
  *  Revision 1.27  2001/02/05 15:42:13  fs
  *  enlargen the tab pages -> some redesigns
  *
