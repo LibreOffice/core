@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:02:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,11 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
@@ -122,7 +122,7 @@ class VCLXWindow :  public ::com::sun::star::awt::XWindow,
                     public ::com::sun::star::awt::XVclWindowPeer,
                     public ::com::sun::star::awt::XLayoutConstrains,
                     public ::com::sun::star::awt::XView,
-                    public ::drafts::com::sun::star::accessibility::XAccessible,
+                    public ::com::sun::star::accessibility::XAccessible,
                     public ::com::sun::star::lang::XEventListener,
                     public VCLXDevice
 {
@@ -140,7 +140,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer>  mxPointer;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> mxViewGraphics;
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > mxAccessibleContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > mxAccessibleContext;
 
     ULONG                           nDummy1;
     ULONG                           nDummy2;
@@ -158,7 +158,7 @@ protected:
     DECL_LINK(      WindowEventListener, VclSimpleEvent* );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                     CreateAccessibleContext();
 
     void            SetSynthesizingVCLEvent( sal_Bool b )   { mbSynthesizingVCLEvent = b; }
@@ -254,8 +254,8 @@ public:
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setZoom( float fZoomX, float fZoomY ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::drafts::com::sun::star::accessibility::XAccessible
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
+    // ::com::sun::star::accessibility::XAccessible
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif // _TOOLKIT_AWT_VCLXWINDOW_HXX_
