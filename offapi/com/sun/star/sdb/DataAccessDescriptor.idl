@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataAccessDescriptor.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:54:37 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@ module com {  module sun {  module star {  module sdb {
     <p>Every component providing or requiring a <type>DataAccessDescriptor</type> for some functionality
     is urged to specify which properties are mandatory, and which ones optional. Additionally,
     it's free to specify any additional requirements about the relations of properties.</p>
+
+    @since #107627#
 */
 service DataAccessDescriptor
 {
