@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:21:07 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
@@ -678,7 +681,7 @@ FmXFormShell::~FmXFormShell()
 }
 
 //------------------------------------------------------------------
-::svxform::DocumentType FmXFormShell::getDocumentType()
+::svxform::DocumentType FmXFormShell::getDocumentType() const
 {
     if ( m_eDocumentType != eUnknownDocumentType )
         return m_eDocumentType;
@@ -700,6 +703,15 @@ FmXFormShell::~FmXFormShell()
     }
 
     return m_eDocumentType;
+}
+
+//------------------------------------------------------------------
+bool FmXFormShell::IsReadonlyDoc() const
+{
+    FmFormModel* pModel = m_pShell->GetFormModel();
+    if ( pModel && pModel->GetObjectShell() )
+        return pModel->GetObjectShell()->IsReadOnly() || pModel->GetObjectShell()->IsReadOnlyUI();
+    return true;
 }
 
 //------------------------------------------------------------------
@@ -1973,6 +1985,11 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
             break;
         }
     }
+    // and tell this to the page
+    // #i39134# / 2004-12-16 / frank.schoenheit@sun.com
+    FmFormPage* pPage = m_pShell->GetCurPage();
+    if ( pPage && m_xCurrentForm.is() )
+        pPage->GetImpl()->setCurForm( m_xCurrentForm );
 
     // ensure some slots are updated
     InvalidateSlot( SID_FM_CTL_PROPERTIES, sal_False );
