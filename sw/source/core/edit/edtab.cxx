@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:24:05 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,10 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
         if( pChkNxtPrv )
         {
             const SwTableNode* pChkNd = rNds[ pTblNd->GetIndex() - 1 ]->FindTableNode();
-            if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) )
+            if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
+                // --> FME 2004-09-17 #117418# Consider table in table case
+                pChkNd->EndOfSectionIndex() == pTblNd->GetIndex() - 1 )
+                // <--
                 *pChkNxtPrv = TRUE, bRet = TRUE;        // mit Prev ist moeglich
             else
             {
@@ -543,12 +546,20 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
         }
         else
         {
-            if( bWithPrev )
-                pTblNd = rNds[ pTblNd->GetIndex() - 1 ]->FindTableNode();
-            else
-                pTblNd = rNds[ pTblNd->EndOfSectionIndex() + 1 ]->GetTableNode();
+            const SwTableNode* pTmpTblNd = 0;
 
-            bRet = pTblNd && !pTblNd->GetTable().ISA( SwDDETable );
+            if( bWithPrev )
+            {
+                pTmpTblNd = rNds[ pTblNd->GetIndex() - 1 ]->FindTableNode();
+                // --> FME 2004-09-17 #117418# Consider table in table case
+                if ( pTmpTblNd && pTmpTblNd->EndOfSectionIndex() != pTblNd->GetIndex() - 1 )
+                    pTmpTblNd = 0;
+                // <--
+            }
+            else
+                pTmpTblNd = rNds[ pTblNd->EndOfSectionIndex() + 1 ]->GetTableNode();
+
+            bRet = pTmpTblNd && !pTmpTblNd->GetTable().ISA( SwDDETable );
         }
     }
     return bRet;
