@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-17 10:47:09 $
+ *  last change: $Author: dr $ $Date: 2002-04-17 11:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1210,7 +1210,7 @@ void ExcelToSc8::ExcRelToScRel( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, con
             rSRD.nRelRow = ( INT16 ) nRow;
         else
             //                                                          abs Row
-            rSRD.nRow = nRow;
+            rSRD.nRow = (INT16) Min( nRow, (UINT16)MAXROW );
 
         // T A B
         // #67965# abs needed if rel in shared formula for ScCompiler UpdateNameReference
