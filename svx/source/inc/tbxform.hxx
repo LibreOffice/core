@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:16:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,23 +82,6 @@
 #endif
 
 //========================================================================
-/* //CHINA001
-class FmInputRecordNoDialog : public ModalDialog
-{
-public:
-    FixedText       m_aLabel;
-    NumericField    m_aRecordNo;
-    OKButton        m_aOk;
-    CancelButton    m_aCancel;
-
-public:
-    FmInputRecordNoDialog(Window * pParent);
-
-    void SetValue( long dNew ) { m_aRecordNo.SetValue(dNew); }
-    long GetValue() const { return m_aRecordNo.GetValue(); }
-};
-*/ //CHINA001
-//========================================================================
 class SvxFmAbsRecWin : public NumericField
 {
     SfxToolBoxControl*  m_pController;
@@ -119,17 +102,12 @@ protected:
 class SvxFmConfigWin : public SfxPopupWindow
 {
 private:
-//  SfxToolBoxManager aTbx;
-//  Link aSelectLink;
-
     DECL_LINK( TbxSelectHdl, ToolBox* );
 
 public:
     SvxFmConfigWin( USHORT nId, ResId aRIdWin, ResId aRIdTbx );
     ~SvxFmConfigWin();
 
-//  void            StartSelection()
-//                      { aTbx.GetToolBox().StartSelection(); }
     void            Update();
     virtual void    PopupModeEnd();
 };
@@ -209,24 +187,6 @@ public:
     virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
 };
-
-/*
-//========================================================================
-class SvxFmTbxCtlFilterText : public SfxToolBoxControl
-{
-    FixedText* pFixedText;
-    XubString aText;
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    SvxFmTbxCtlFilterText( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
-    ~SvxFmTbxCtlFilterText();
-
-    virtual Window* CreateItemWindow( Window* pParent );
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
-                                  const SfxPoolItem* pState );
-};
-*/
 
 //========================================================================
 class SvxFmTbxNextRec : public SfxToolBoxControl
