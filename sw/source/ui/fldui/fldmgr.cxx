@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:58:41 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
 #endif
 
 #ifndef _VIEW_HXX
@@ -1862,7 +1865,7 @@ void SwFieldType::_GetFldName()
     for( USHORT nIdx = 0; nIdx < coFldCnt; ++nIdx )
     {
         String* pTmp = new SW_RESSTR( coFldNms[ nIdx ] );
-        pTmp->EraseAllChars('~');
+        pTmp->Assign( MnemonicGenerator::EraseAllMnemonicChars( *pTmp ) );
         SwFieldType::pFldNames->Insert(pTmp, nIdx );
     }
 }
