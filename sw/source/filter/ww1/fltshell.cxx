@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:07:48 $
+ *  last change: $Author: cmc $ $Date: 2002-07-10 16:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,14 +697,22 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                     }
                 }
             }
-
+#if 0
+            /*
+            #96598#
+            An attribute should be just that, not something that adds nodes
+            into the document!. So users of this attribute must add the actual
+            TOC section beforehand, and use this filter attribute only for
+            setting the surrounding attributes. (Note: There is only one user
+            of this flt anchor, and that is ww8)
+            */
             // now insert the TOX
             const SwTOXBaseSection* pSect
                 = pDoc->InsertTableOf(  *pPoint,
                                         *pTOXAttr->GetBase(),
                                         FALSE  );
+#endif
             delete pTOXAttr->GetBase();
-
 
             // set (aboved saved and removed) the break item at the node following the TOX
             if( aBkSet.Count() )
