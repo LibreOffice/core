@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:13:59 $
+ *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
                        sal_Bool _bCaseSensitive)
            :OResultSetBase(m_aMutex)
            ,OPropertySetHelper(OResultSetBase::rBHelper)
-           ,m_aColumns(*this, m_aMutex, _bCaseSensitive, ::std::vector< ::rtl::OUString>(), NULL)
+           ,m_aColumns(*this, m_aMutex, _bCaseSensitive, ::std::vector< ::rtl::OUString>(), NULL,NULL)
            ,m_xAggregateAsResultSet(_xResultSet)
            ,m_bIsBookmarkable(sal_False)
 {

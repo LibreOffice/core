@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:09:11 $
+ *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,7 +452,9 @@ DBG_NAME(OColumns);
 //--------------------------------------------------------------------------
 OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    ::osl::Mutex& _rMutex,
-                   sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector, IColumnFactory* _pColFactory,
+                   sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
+                   IColumnFactory* _pColFactory,
+                   ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
                    sal_Bool _bAddColumn,sal_Bool _bDropColumn)
                    : connectivity::sdbcx::OCollection(_rParent,_bCaseSensitive,_rMutex,_rVector)
     ,m_pTable(NULL)
@@ -461,14 +463,16 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
     ,m_bDropColumn(_bDropColumn)
     ,m_xDrvColumns(NULL)
     ,m_pColFactoryImpl(_pColFactory)
+    ,m_pRefreshColumns(_pRefresh)
 {
-    //  m_pColMap = new OColumnMap(17, ::utl::UStringMixHash(_bCaseSensitive), ::utl::UStringMixEqual(_bCaseSensitive));
     DBG_CTOR(OColumns, NULL);
 }
 // -------------------------------------------------------------------------
 OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
-        sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector, IColumnFactory* _pColFactory,
+        sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
+        IColumnFactory* _pColFactory,
+        ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
         sal_Bool _bAddColumn,sal_Bool _bDropColumn)
        : connectivity::sdbcx::OCollection(_rParent,_bCaseSensitive,_rMutex,_rVector)
     ,m_pTable(NULL)
@@ -477,6 +481,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
     ,m_bDropColumn(_bDropColumn)
     ,m_xDrvColumns(_rxDrvColumns)
     ,m_pColFactoryImpl(_pColFactory)
+    ,m_pRefreshColumns(_pRefresh)
 {
     DBG_CTOR(OColumns, NULL);
 }
@@ -679,6 +684,8 @@ void OColumns::storeSettings(const OConfigurationNode& _rLocation)
 // -------------------------------------------------------------------------
 void OColumns::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
 {
+    if (m_pRefreshColumns)
+        m_pRefreshColumns->refreshColumns();
 }
 
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preparedstatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-06 08:59:51 $
+ *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ DBG_NAME(OPreparedStatement);
 OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
                                       const Reference< XInterface > & _xStatement)
                    :OStatementBase(_xConn, _xStatement)
-                   ,m_aColumns(*this, m_aMutex, _xConn->getMetaData()->supportsMixedCaseQuotedIdentifiers(),::std::vector< ::rtl::OUString>(), NULL)
+                   ,m_aColumns(*this, m_aMutex, _xConn->getMetaData()->supportsMixedCaseQuotedIdentifiers(),::std::vector< ::rtl::OUString>(), NULL,NULL)
 {
     DBG_CTOR(OPreparedStatement, NULL);
     m_xAggregateAsParameters = Reference< XParameters > (m_xAggregateAsSet, UNO_QUERY);

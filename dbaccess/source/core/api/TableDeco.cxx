@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:09:46 $
+ *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ ODBTableDecorator::ODBTableDecorator(const OConfigurationNode& _rTableConfig,
         ,m_nPrivileges(0)
         ,m_xTable(_rxTable)
         ,m_xMetaData(_rxMetaData)
+        ,m_pColumns(NULL)
 {
     DBG_CTOR(ODBTableDecorator, NULL);
     osl_incrementInterlockedCount( &m_refCount );
@@ -175,13 +176,17 @@ ODBTableDecorator::ODBTableDecorator(   const Reference< XDatabaseMetaData >& _r
         ,m_nPrivileges(-1)
         ,m_xMetaData(_rxMetaData)
         ,m_xTable(_rxNewTable)
+        ,m_pColumns(NULL)
 {
+    DBG_CTOR(ODBTableDecorator, NULL);
     construct();
 }
 // -------------------------------------------------------------------------
 ODBTableDecorator::~ODBTableDecorator()
 {
     DBG_DTOR(ODBTableDecorator, NULL);
+    if(m_pColumns)
+        delete m_pColumns;
 }
 
 //--------------------------------------------------------------------------
@@ -336,6 +341,8 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
                 _rValue = xProp->getPropertyValue(PROPERTY_TYPE);
             }
             break;
+        default:
+            OSL_ENSURE(0,"Invalid Handle for table");
     }
 }
 // -------------------------------------------------------------------------
@@ -384,7 +391,15 @@ Any SAL_CALL ODBTableDecorator::queryInterface( const Type & rType ) throw(Runti
 {
     Any aRet;
     if(m_xTable.is())
+    {
         aRet = m_xTable->queryInterface(rType);
+        if(aRet.hasValue())
+        {   // now we know that our table supports this type so we return ourself
+            aRet = OTableDescriptor_BASE::queryInterface(rType);
+            if(!aRet.hasValue())
+                aRet = ODataSettings::queryInterface(rType);
+        }
+    }
     if(!aRet.hasValue())
         aRet = OConfigurationFlushable::queryInterface( rType);
 
@@ -404,6 +419,9 @@ void ODBTableDecorator::flush_NoBroadcast_NoCommit()
     if(m_aConfigurationNode.isValid())
     {
         storeTo(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
+        if(!m_pColumns)
+            getColumns();
+
         OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
         if(pColumns)
         {
@@ -464,30 +482,31 @@ Reference< XIndexAccess> ODBTableDecorator::getKeys() throw (RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XNameAccess> ODBTableDecorator::getColumns() throw (RuntimeException)
 {
-    ::std::vector< ::rtl::OUString> aVector;
-
-    Reference<XNameAccess> xNames;
-    if(m_xTable.is())
+    if(!m_pColumns)
     {
-        xNames = m_xTable->getColumns();
-        if(xNames.is())
+        ::std::vector< ::rtl::OUString> aVector;
+
+        Reference<XNameAccess> xNames;
+        if(m_xTable.is())
         {
-            Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
-            const ::rtl::OUString* pBegin   = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            for(;pBegin != pEnd;++pBegin)
-                aVector.push_back(*pBegin);
+            xNames = m_xTable->getColumns();
+            if(xNames.is())
+            {
+                Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
+                const ::rtl::OUString* pBegin   = aNames.getConstArray();
+                const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+                for(;pBegin != pEnd;++pBegin)
+                    aVector.push_back(*pBegin);
+            }
         }
+        OColumns* pCol = new OColumns(*this,m_aMutex,xNames,m_xMetaData->storesMixedCaseQuotedIdentifiers(),aVector,
+                                    this,this,
+                                    m_xMetaData->supportsAlterTableWithAddColumn(),
+                                    m_xMetaData->supportsAlterTableWithDropColumn());
+        //  pCol->setParent(this);
+        m_pColumns  = pCol;
     }
-    OColumns* pCol = new OColumns(*this,m_aMutex,xNames,m_xMetaData->storesMixedCaseQuotedIdentifiers(),aVector,this,
-                                m_xMetaData->supportsAlterTableWithAddColumn(),
-                                m_xMetaData->supportsAlterTableWithDropColumn());
-    //  pCol->setParent(this);
 
-    if(m_pColumns)
-        delete m_pColumns;
-
-    m_pColumns  = pCol;
     return m_pColumns;
 }
 // -----------------------------------------------------------------------------
@@ -584,6 +603,25 @@ Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) t
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODBTableDecorator::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+void ODBTableDecorator::refreshColumns()
+{
+    ::std::vector< ::rtl::OUString> aVector;
+
+    if(m_xTable.is())
+    {
+        Reference<XNameAccess> xNames = m_xTable->getColumns();
+        if(xNames.is())
+        {
+            Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
+            const ::rtl::OUString* pBegin   = aNames.getConstArray();
+            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+            for(;pBegin != pEnd;++pBegin)
+                aVector.push_back(*pBegin);
+        }
+    }
+    m_pColumns->reFill(aVector);
 }
 // -----------------------------------------------------------------------------
 OColumn* ODBTableDecorator::createColumn(const ::rtl::OUString& _rName) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-06 09:00:47 $
+ *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ void OQueryDescriptor::registerProperties()
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor()
     :ODataSettings(m_aBHelper)
-    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this)
+    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this)
 {
     registerProperties();
 }
@@ -148,7 +148,7 @@ OQueryDescriptor::OQueryDescriptor()
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XPropertySet >& _rxCommandDefinition)
     :ODataSettings(m_aBHelper)
-    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this)
+    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this)
 {
     registerProperties();
 
@@ -173,7 +173,7 @@ OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XProp
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor& _rSource)
     :ODataSettings(_rSource, m_aBHelper)
-    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this)
+    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this)
 {
     registerProperties();
 
@@ -365,7 +365,10 @@ void OQueryDescriptor::initializeFrom(const OConfigurationNode& _rConfigLocation
 
     readColumnSettings(_rConfigLocation);
 }
-
+// -----------------------------------------------------------------------------
+void OQueryDescriptor::refreshColumns()
+{
+}
 //------------------------------------------------------------------------------
 OColumn* OQueryDescriptor::createColumn(const ::rtl::OUString& _rName) const
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:09:12 $
+ *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #endif
 #ifndef _DBA_CONFIGNODE_HXX_
 #include "confignode.hxx"
+#endif
+#ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
+#include <connectivity/sdbcx/IRefreshable.hxx>
 #endif
 
 namespace dbaccess
@@ -307,11 +310,12 @@ namespace dbaccess
         OConfigurationNode          m_aConfigurationNode;
         // comes from the driver can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xDrvColumns;
-        IColumnFactory*             m_pColFactoryImpl;
+        IColumnFactory*                             m_pColFactoryImpl;
+        ::connectivity::sdbcx::IRefreshableColumns* m_pRefreshColumns;
 
-        sal_Bool                    m_bInitialized  : 1;
-        sal_Bool                    m_bAddColumn    : 1;
-        sal_Bool                    m_bDropColumn   : 1;
+        sal_Bool                                    m_bInitialized  : 1;
+        sal_Bool                                    m_bAddColumn    : 1;
+        sal_Bool                                    m_bDropColumn   : 1;
 
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
@@ -344,6 +348,7 @@ namespace dbaccess
                 sal_Bool _bCaseSensitive,
                 const ::std::vector< ::rtl::OUString>& _rVector,
                 IColumnFactory* _pColFactory,
+                ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
                 sal_Bool _bAddColumn = sal_False,
                 sal_Bool _bDropColumn = sal_False);
 
@@ -353,7 +358,8 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
             sal_Bool _bCaseSensitive,
             const ::std::vector< ::rtl::OUString> &_rVector,
-                IColumnFactory* _pColFactory,
+            IColumnFactory* _pColFactory,
+            ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
             sal_Bool _bAddColumn = sal_False,
             sal_Bool _bDropColumn = sal_False);
         ~OColumns();

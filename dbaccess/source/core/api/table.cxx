@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:09:11 $
+ *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,15 +558,21 @@ void ODBTable::refreshColumns()
 
 
     }
-    OColumns* pCol = new OColumns(*this, m_aMutex, xNames, isCaseSensitive(), aVector, this,
-                                m_xMetaData->supportsAlterTableWithAddColumn(),
-                                m_xMetaData->supportsAlterTableWithDropColumn());
-    pCol->setParent(this);
+    if(!m_pColumns)
+    {
+        OColumns* pCol = new OColumns(*this, m_aMutex, xNames, isCaseSensitive(), aVector, this,this,
+                                    m_xMetaData->supportsAlterTableWithAddColumn(),
+                                    m_xMetaData->supportsAlterTableWithDropColumn());
+        pCol->setParent(this);
 
-    if(m_pColumns)
-        delete m_pColumns;
+        if(m_pColumns)
+            delete m_pColumns;
 
-    m_pColumns  = pCol;
+        m_pColumns  = pCol;
+    }
+    else
+        m_pColumns->reFill(aVector);
+
 }
 // -------------------------------------------------------------------------
 void ODBTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
@@ -622,9 +628,10 @@ void ODBTable::refreshKeys()
             OSL_TRACE("ODBTable::refreshKeys: caught an exception while refreshing the foreign keys\n");
         }
     }
-    if(m_pKeys)
-        delete m_pKeys;
-    m_pKeys     = new OKeys(this,m_aMutex,aVector,xKeys);
+    if(!m_pKeys)
+        m_pKeys = new OKeys(this,m_aMutex,aVector,xKeys);
+    else
+        m_pKeys->reFill(aVector);
 }
 // -------------------------------------------------------------------------
 void ODBTable::refreshIndexes()
@@ -655,9 +662,10 @@ void ODBTable::refreshIndexes()
             }
         }
 
-        if(m_pIndexes)
-            delete m_pIndexes;
-        m_pIndexes  = new OIndexes(this,m_aMutex,aVector,xNames);
+        if(!m_pIndexes)
+            m_pIndexes  = new OIndexes(this,m_aMutex,aVector,xNames);
+        else
+            m_pIndexes->reFill(aVector);
     }
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:09:53 $
+ *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
-#include <cppuhelper/compbase4.hxx>
+#ifndef _CPPUHELPER_COMPBASE9_HXX_
+#include <cppuhelper/compbase9.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
@@ -110,22 +110,24 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
+#ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
+#include <connectivity/sdbcx/IRefreshable.hxx>
+#endif
 #ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
 #include "configurationflushable.hxx"
 #endif
 
 namespace dbaccess
 {
-    typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbcx::XColumnsSupplier,
+    typedef ::cppu::WeakComponentImplHelper9<   ::com::sun::star::sdbcx::XColumnsSupplier,
                                                 ::com::sun::star::sdbcx::XKeysSupplier,
                                                 ::com::sun::star::container::XNamed,
-                                                ::com::sun::star::lang::XServiceInfo> OTableDescriptor_BASE;
-
-    typedef ::cppu::ImplHelper5<                ::com::sun::star::sdbcx::XDataDescriptorFactory,
+                                                ::com::sun::star::lang::XServiceInfo,
+                                                ::com::sun::star::sdbcx::XDataDescriptorFactory,
                                                 ::com::sun::star::sdbcx::XIndexesSupplier,
                                                 ::com::sun::star::sdbcx::XRename,
                                                 ::com::sun::star::sdbcx::XAlterTable,
-                                                ::com::sun::star::lang::XUnoTunnel> OTable_BASE;
+                                                ::com::sun::star::lang::XUnoTunnel> OTableDescriptor_BASE;
     //==========================================================================
     //= OTables
     //==========================================================================
@@ -135,9 +137,9 @@ namespace dbaccess
     class ODBTableDecorator :public comphelper::OBaseMutex
                             ,public ODataSettings //ODataSettings_Base
                             ,public OConfigurationFlushable
-                            ,public OTable_BASE
                             ,public OTableDescriptor_BASE
                             ,public IColumnFactory
+                            ,public ::connectivity::sdbcx::IRefreshableColumns
                             ,public ODBTableDecorator_PROP
     {
         void fillPrivileges() const;
@@ -152,6 +154,7 @@ namespace dbaccess
         // IColumnFactory
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+        virtual void refreshColumns();
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();

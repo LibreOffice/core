@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:09:11 $
+ *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ class OQueryDescriptor
         ,public OCommandBase
         ,public ::comphelper::OPropertyArrayUsageHelper< OQueryDescriptor >
         ,public IColumnFactory
+        ,public ::connectivity::sdbcx::IRefreshableColumns
 {
 protected:
     OColumns        m_aColumns;             // our column descriptions
@@ -221,6 +222,8 @@ protected:
     {
         return NULL;
     }
+    virtual void refreshColumns();
+
     virtual void readColumnSettings(const OConfigurationNode& _rConfigLocation);
 
 protected:
