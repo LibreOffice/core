@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 17:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/wghtitem.hxx>
-#include <vos/xception.hxx>
 
 #include "dpoutput.hxx"
 #include "document.hxx"
@@ -453,7 +452,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     uno::Reference<beans::XPropertySet> xSrcProp( xSource, uno::UNO_QUERY );
     if ( xSrcProp.is() )
     {
-        TRY
+        try
         {
             uno::Any aAny = xSrcProp->getPropertyValue(
                     rtl::OUString::createFromAscii(DP_PROP_DATADESCR) );
@@ -461,10 +460,9 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
             aAny >>= aUStr;
             aDataDescription = String( aUStr );
         }
-        CATCH_ALL()
+        catch(uno::Exception&)
         {
         }
-        END_CATCH
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 17:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@
 #include <unotools/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <svtools/zforlist.hxx>     // IsNumberFormat
-#include <vos/xception.hxx>
 
 using namespace com::sun::star;
 
@@ -379,15 +378,14 @@ void ScDPObject::CreateObjects()
         uno::Reference<util::XRefreshable> xRef( xSource, uno::UNO_QUERY );
         if (xRef.is())
         {
-            TRY
+            try
             {
                 xRef->refresh();
             }
-            CATCH_ALL()
+            catch(uno::Exception&)
             {
                 DBG_ERROR("exception in refresh");
             }
-            END_CATCH
         }
 
         if (pSaveData)
@@ -536,14 +534,13 @@ String ScDPObject::GetDimName( long nDim, BOOL& rIsDataLayout )
                 //! error checking -- is "IsDataLayoutDimension" property required??
 
                 rtl::OUString aName;
-                TRY
+                try
                 {
                     aName = xDimName->getName();
                 }
-                CATCH_ALL()
+                catch(uno::Exception&)
                 {
                 }
-                END_CATCH
                 if ( bData )
                     rIsDataLayout = TRUE;
                 else
@@ -728,15 +725,14 @@ USHORT lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& xDimProp ) 
             if ( xLevProp.is() )
             {
                 uno::Any aSubAny;
-                TRY
+                try
                 {
                     aSubAny = xLevProp->getPropertyValue(
                             rtl::OUString::createFromAscii(DP_PROP_SUBTOTALS) );
                 }
-                CATCH_ALL()
+                catch(uno::Exception&)
                 {
                 }
-                END_CATCH
                 uno::Sequence<sheet::GeneralFunction> aSeq;
                 if ( aSubAny >>= aSeq )
                 {
@@ -814,15 +810,14 @@ USHORT lcl_FillOldFields( PivotField* pFields,
             BOOL bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
                                     rtl::OUString::createFromAscii(DP_PROP_ISDATALAYOUT) );
             uno::Any aOrigAny;
-            TRY
+            try
             {
                 aOrigAny = xDimProp->getPropertyValue(
                                 rtl::OUString::createFromAscii(DP_PROP_ORIGINAL) );
             }
-            CATCH_ALL()
+            catch(uno::Exception&)
             {
             }
-            END_CATCH
 
             long nDupSource = -1;
             uno::Reference<uno::XInterface> xIntOrig = ScUnoHelpFunctions::AnyToInterface( aOrigAny );
@@ -1135,7 +1130,7 @@ BOOL ScDPObject::FillOldParam(ScPivotParam& rParam, BOOL bForFile) const
     uno::Reference<beans::XPropertySet> xProp( xSource, uno::UNO_QUERY );
     if (xProp.is())
     {
-        TRY
+        try
         {
             rParam.bMakeTotalCol = ScUnoHelpFunctions::GetBoolProperty( xProp,
                         rtl::OUString::createFromAscii(DP_PROP_COLUMNGRAND), TRUE );
@@ -1148,11 +1143,10 @@ BOOL ScDPObject::FillOldParam(ScPivotParam& rParam, BOOL bForFile) const
             rParam.bDetectCategories = ScUnoHelpFunctions::GetBoolProperty( xProp,
                         rtl::OUString::createFromAscii(DP_PROP_REPEATIFEMPTY) );
         }
-        CATCH_ALL()
+        catch(uno::Exception&)
         {
             // no error
         }
-        END_CATCH
     }
     return TRUE;
 }
@@ -1217,7 +1211,7 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam, BOOL* pShowAll, USHORT nSho
                             rtl::OUString::createFromAscii(DP_PROP_ISDATALAYOUT) );
             //! error checking -- is "IsDataLayoutDimension" property required??
 
-            TRY
+            try
             {
                 aFieldName = String( xDimName->getName() );
 
@@ -1227,10 +1221,9 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam, BOOL* pShowAll, USHORT nSho
                 if ( (aOrigAny >>= xIntOrig) && xIntOrig.is() )
                     bDuplicated = TRUE;
             }
-            CATCH_ALL()
+            catch(uno::Exception&)
             {
             }
-            END_CATCH
 
             if ( aFieldName.Len() && !bData && !bDuplicated )
             {
@@ -1274,14 +1267,13 @@ String lcl_GetDimName( const uno::Reference<sheet::XDimensionsSupplier>& xSource
             uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
             if (xDimName.is())
             {
-                TRY
+                try
                 {
                     aName = xDimName->getName();
                 }
-                CATCH_ALL()
+                catch(uno::Exception&)
                 {
                 }
-                END_CATCH
             }
         }
     }
@@ -1509,7 +1501,7 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
                         uno::Reference<lang::XSingleServiceFactory> xFac( xIntFac, uno::UNO_QUERY );
                         if ( xFac.is() && xInfo.is() && xInfo->getImplementationName() == aImplName )
                         {
-                            TRY
+                            try
                             {
                                 uno::Reference<uno::XInterface> xInterface = xFac->createInstance();
                                 uno::Reference<lang::XInitialization> xInit( xInterface, uno::UNO_QUERY );
@@ -1526,10 +1518,9 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
                                 }
                                 xRet = uno::Reference<sheet::XDimensionsSupplier>( xInterface, uno::UNO_QUERY );
                             }
-                            CATCH_ALL()
+                            catch(uno::Exception&)
                             {
                             }
-                            END_CATCH
                         }
                     }
                 }

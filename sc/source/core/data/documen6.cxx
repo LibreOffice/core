@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen6.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 17:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,8 @@
 #include <svtools/zforlist.hxx>
 #include <sdb/sdbcol.hxx>
 #include <sdb/variant.hxx>
-#include <vos/xception.hxx>
+
+#include <com/sun/star/uno/Exception.hpp>
 
 #include "document.hxx"
 #include "cell.hxx"
@@ -96,7 +97,7 @@ void ScDocument::PutVariable( USHORT nCol, USHORT nRow, USHORT nTab,
             bEmptyFlag = TRUE;
         else
         {
-            TRY
+            try
             {
                 switch ( (SdbDatabaseType)nType )
                 {
@@ -144,11 +145,10 @@ void ScDocument::PutVariable( USHORT nCol, USHORT nRow, USHORT nTab,
                         aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("[unknown type]"));
                 }
             }
-            CATCH_ALL()
+            catch(com::sun::star::uno::Exception&)
             {
                 bError = TRUE;
             }
-            END_CATCH
         }
 
         ScBaseCell* pCell;

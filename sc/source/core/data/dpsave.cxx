@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 17:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <vos/xception.hxx>
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -782,7 +781,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         //  source options are not available for external sources
         //! use XPropertySetInfo to test for availability?
 
-        TRY
+        try
         {
             if ( nIgnoreEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
@@ -791,15 +790,14 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                 lcl_SetBoolProperty( xSourceProp,
                     rtl::OUString::createFromAscii(DP_PROP_REPEATIFEMPTY), (BOOL)nRepeatEmptyMode );
         }
-        CATCH_ALL()
+        catch(uno::Exception&)
         {
             // no error
         }
-        END_CATCH
     }
 
     // exceptions in the other calls are errors
-    TRY
+    try
     {
         //  reset all orientations
         //! "forgetSettings" or similar at source ?????
@@ -880,11 +878,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                     rtl::OUString::createFromAscii(DP_PROP_ROWGRAND), (BOOL)nRowGrandMode );
         }
     }
-    CATCH_ALL()
+    catch(uno::Exception&)
     {
         DBG_ERROR("exception in WriteToSource");
     }
-    END_CATCH
 }
 
 void ScDPSaveData::Store( SvStream& rStream ) const
