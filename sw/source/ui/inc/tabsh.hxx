@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,21 @@
 #ifndef _SWTABSH_HXX
 #define _SWTABSH_HXX
 
+#ifndef _SWBASESH_HXX
 #include "basesh.hxx"
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
+class SfxItemSet;
+class SwWrtShell;
+
+SW_DLLPUBLIC void ItemSetToTableParam( const SfxItemSet& rSet, SwWrtShell &rSh );
+
+extern const USHORT __FAR_DATA aUITableAttrRange[];
+SW_DLLPUBLIC const USHORT* SwuiGetUITableAttrRange();
 
 class SwTableShell: public SwBaseShell
 {
