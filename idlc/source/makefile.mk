@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:47:55 $
+#   last change: $Author: obo $ $Date: 2004-06-03 15:10:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,7 @@ CXXFILES=   \
             astdump.cxx \
             astinterface.cxx \
             aststruct.cxx \
+            aststructinstance.cxx \
             astoperation.cxx \
             astconstant.cxx \
             astenum.cxx \
@@ -119,6 +120,7 @@ OBJFILES=   \
             $(OBJ)$/astdump.obj	\
             $(OBJ)$/astinterface.obj	\
             $(OBJ)$/aststruct.obj	\
+            $(OBJ)$/aststructinstance.obj \
             $(OBJ)$/astoperation.obj	\
             $(OBJ)$/astconstant.obj	\
             $(OBJ)$/astenum.obj	\
