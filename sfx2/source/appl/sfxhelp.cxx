@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-11 15:48:35 $
+ *  last change: $Author: pb $ $Date: 2000-12-12 13:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,11 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
     // build up the help URL
     String aHelpURL(String::CreateFromAscii("vnd.sun.star.help://") );
     aHelpURL += aHelpModuleName;
+#if SUPD == 614
+    if ( 1 )
+#else
     if ( !nHelpId || bNewWin )
+#endif
         aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
     else
     {
