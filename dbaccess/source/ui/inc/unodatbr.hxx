@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-22 10:43:48 $
+ *  last change: $Author: oj $ $Date: 2001-06-25 12:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ namespace dbaui
         sal_Bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor);
 
         sal_Bool implSelect(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
-            const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing);
+            const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection=NULL);
 
         /** retrieves the tree entry for the object described by <arg>_rDescriptor</arg>
             @param _rDescriptor

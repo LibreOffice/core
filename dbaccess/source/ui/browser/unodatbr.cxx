@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-22 10:45:35 $
+ *  last change: $Author: oj $ $Date: 2001-06-25 12:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2126,7 +2126,8 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::svx::ODataAccessDescriptor& _r
 
 //------------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
-                                      const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing)
+                                      const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing,
+                                      const Reference<XConnection>& _rxConnection)
 {
     if (_rDataSourceName.getLength() && _rCommand.getLength() && (-1 != _nCommandType))
     {
@@ -2148,6 +2149,9 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
                     {
                         // the values allowing the RowSet to re-execute
                         xProp->setPropertyValue(PROPERTY_DATASOURCENAME, makeAny(_rDataSourceName));
+                        if(_rxConnection.is())
+                            xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(_rxConnection));
+
                             // set this _before_ setting the connection, else the rowset would rebuild it ...
                         xProp->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(_nCommandType));
                         xProp->setPropertyValue(PROPERTY_COMMAND, makeAny(_rCommand));
@@ -2922,7 +2926,7 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
         }
     }
 
-    if (implSelect(sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEsacpeProcessing))
+    if (implSelect(sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEsacpeProcessing,xConnection))
     {
         try
         {
@@ -2930,8 +2934,7 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
             xProp->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,makeAny(aCatalogName));
             xProp->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,makeAny(aSchemaName));
             xProp->setPropertyValue(PROPERTY_UPDATE_TABLENAME,makeAny(aTableName));
-            if(xConnection.is())
-                xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(xConnection));
+
         }
         catch(const Exception&)
         {
