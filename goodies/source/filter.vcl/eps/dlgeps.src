@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-02 23:15:06 $
+ *  last change: $Author: rt $ $Date: 2001-07-03 21:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ ModalDialog DLG_EXPORT_EPS
     Text[ portuguese_brazilian ] = "EPS Export Optionen";
     Text[ japanese ] = "EPS ´¸½Îß°ÄµÌß¼®İ";
     Text[ chinese_simplified ] = "EPS Êä³öÑ¡Ïî";
-    Text[ chinese_traditional ] = "EPS ¿é¥X¿ï¶µ";
+    Text[ chinese_traditional ] = "EPS ¶×¥X¿ï¶µ";
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 197 , 6 ) ;
@@ -156,7 +156,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "~Voorbeeldvenster (TIFF)";
         Text[ chinese_simplified ] = "Í¼ÏñÔ¤ÀÀ(TIFF)(~P)";
         Text[ greek ] = "Ğñïåğéóêüğçóç åéêüíáò (TIFF)";
-        Text[ korean ] = "±×¸² ¹Ì¸®º¸±â (TIFF)(~P)";
+        Text[ korean ] = "±×¸² ¹Ì¸®º¸±â (TIFF)";
         Text[ chinese_traditional ] = "¹Ï¤ù¹wÄı(TIFF)(~P)";
         Text[ turkish ] = "Resim önizleme (TIFF)";
         Text[ finnish ] = "Kuvan ~esikatselu (TIFF)";
@@ -304,7 +304,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "Kleuropmaak";
         Text[ chinese_simplified ] = "ÑÕÉ«¸ñÊ½";
         Text[ greek ] = "ÌïñöŞ ÷ñşìáôïò";
-        Text[ korean ] = "»ö ¼­½Ä";
+        Text[ korean ] = "»ö Æ÷¸Ë";
         Text[ turkish ] = "Renk formatı";
         Text[ catalan ] = "Color format";
         Text[ finnish ] = "Värimuoto";
@@ -364,7 +364,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ dutch ] = "~Grijswaarden";
         Text[ chinese_simplified ] = "»Ò¶È(~G)";
         Text[ greek ] = "ÄéáâÜèìéóç ôïõ ãêñé";
-        Text[ korean ] = "È¸»öµµ(~G)";
+        Text[ korean ] = "È¸»öµµ";
         Text[ turkish ] = "Gri tonları";
         Text[ finnish ] = "~Harmaasävy";
         Text[ catalan ] = "~Escala de grises";
@@ -479,7 +479,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ polish ] = "Ustawienia tekstu";
         Text[ portuguese_brazilian ] = "TextMode";
         Text[ japanese ] = "•¶šİ’è";
-        Text[ korean ] = "TextMode";
+        Text[ korean ] = "ÅØ½ºÆ® ¼³Á¤";
         Text[ chinese_simplified ] = "Éè¶¨ÎÄ×Ö";
         Text[ chinese_traditional ] = "³]©w¤å¦r";
         Text[ turkish ] = "TextMode";
@@ -576,8 +576,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ korean ] =
     {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "±Û¸®ÇÁ ¾Æ¿ô¶óÀÎ Ç×»ó ³»º¸³»±â" ; > ;
+        < "±Û¸®ÇÁ ¾Æ¿ô ¶óÀÎ Àı´ë ³»º¸³»Áö ¾Ê±â" ; > ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -587,7 +587,7 @@ ModalDialog DLG_EXPORT_EPS
     StringList [ chinese_traditional ] =
     {
             < "Á`¬O¶×¥X¦r«¬½ü¹ø" ; > ;
-        < "¥Ã¤£¿é¥X¦r«¬½ü¹ø" ; > ;
+        < "¥Ã¤£¶×¥X¦r«¬½ü¹ø" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -626,7 +626,7 @@ ModalDialog DLG_EXPORT_EPS
     Text[ russian ] = "Ïàğàìåòğû ıêñïîğòà EPS";
     Text[ polish ] = "Opcje eksportowe EPS";
     Text[ japanese ] = "EPS ´¸½Îß°ÄµÌß¼®İ";
-    Text[ chinese_traditional ] = "EPS ¿é¥X¿ï¶µ";
+    Text[ chinese_traditional ] = "EPS ¶×¥X¿ï¶µ";
     Text[ arabic ] = "EPS ÎíÇÑÇÊ ÊÕÏíÑ";
     Text[ dutch ] = "EPS export opties";
     Text[ chinese_simplified ] = "EPS Êä³öÑ¡Ïî";
@@ -636,6 +636,7 @@ ModalDialog DLG_EXPORT_EPS
     Text[ finnish ] = "EPS-vientiasetukset";
     Text[ catalan ] = "Opciones Exportación EPS";
 };
+
 
 
 
