@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-03 11:47:16 $
+ *  last change: $Author: jp $ $Date: 2002-01-25 16:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1049,6 +1049,12 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_WPEQN, "\\wpeqn" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_WPJST, "\\wpjst" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_WPSP, "\\wpsp" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_YXE, "\\yxe" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_FRMTXLRTB, "\\frmtxlrtb" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_FRMTXTBRL, "\\frmtxtbrl" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_FRMTXBTLR, "\\frmtxbtlr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_FRMTXLRTBV, "\\frmtxlrtbv" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_FRMTXTBRLV, "\\frmtxtbrlv" );
+
 
 // MS-2000 Tokens
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ULTHD, "\\ulthd" );
@@ -1146,11 +1152,14 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_SOUTLVL, "\\soutlvl" );
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.5 2001-05-03 11:47:16 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.6 2002-01-25 16:21:07 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/05/03 11:47:16  jp
+      new: token for fontalignment/scriptspace/forbiddenrule/hangingpuctuation
+
       Revision 1.4  2001/02/16 09:27:42  jp
       new token: horzvert
 

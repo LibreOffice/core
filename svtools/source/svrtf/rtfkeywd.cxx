@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-28 20:06:50 $
+ *  last change: $Author: jp $ $Date: 2002-01-25 16:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,6 +1059,11 @@ static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
 {sRTF_WPJST,            RTF_WPJST},
 {sRTF_WPSP,         RTF_WPSP},
 {sRTF_YXE,          RTF_YXE},
+{sRTF_FRMTXLRTB,    RTF_FRMTXLRTB},
+{sRTF_FRMTXTBRL,    RTF_FRMTXTBRL},
+{sRTF_FRMTXBTLR,    RTF_FRMTXBTLR},
+{sRTF_FRMTXLRTBV,   RTF_FRMTXLRTBV},
+{sRTF_FRMTXTBRLV,   RTF_FRMTXTBRLV},
 
 // MS-2000 Tokens
 {sRTF_ULTHD,         RTF_ULTHD},

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftoken.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-03 11:47:16 $
+ *  last change: $Author: jp $ $Date: 2002-01-25 16:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -890,6 +890,11 @@ enum RTF_TOKEN_IDS {
     RTF_POSYB,
     RTF_POSYC,
     RTF_ABSLOCK,
+    RTF_FRMTXLRTB,
+    RTF_FRMTXTBRL,
+    RTF_FRMTXBTLR,
+    RTF_FRMTXLRTBV,
+    RTF_FRMTXTBRLV,
 
     // Swg-Frame-Tokens
     RTF_FLYPRINT = (RTF_APOCTL|RTF_SWGDEFS),
@@ -1251,11 +1256,14 @@ enum RTF_TOKEN_IDS {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtftoken.h,v 1.5 2001-05-03 11:47:16 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtftoken.h,v 1.6 2002-01-25 16:21:07 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/05/03 11:47:16  jp
+      new: token for fontalignment/scriptspace/forbiddenrule/hangingpuctuation
+
       Revision 1.4  2001/02/16 09:27:42  jp
       new token: horzvert
 

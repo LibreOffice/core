@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkey2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-03 11:47:16 $
+ *  last change: $Author: jp $ $Date: 2002-01-25 16:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,6 +1038,11 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_WPEQN, "\\wpeqn" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_WPJST, "\\wpjst" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_WPSP, "\\wpsp" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_YXE, "\\yxe" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_FRMTXLRTB, "\\frmtxlrtb" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_FRMTXTBRL, "\\frmtxtbrl" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_FRMTXBTLR, "\\frmtxbtlr" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_FRMTXLRTBV, "\\frmtxlrtbv" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_FRMTXTBRLV, "\\frmtxtbrlv" );
 
 // MS-2000 Tokens
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ULTHD, "\\ulthd" );
