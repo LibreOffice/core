@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetaccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:35 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ class BasicPropertySet
 {
 protected:
 // Constructors & Destructors
-    ~BasicPropertySet() {}
+    virtual ~BasicPropertySet() {}
 
 public:
 // getting Property Metadata
