@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:24:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,8 @@ class GtkXLib : public SalXLib
     std::list<GSource *> m_aSources;
     GSource             *m_pTimeout;
     GSource             *m_pUserEvent;
+    oslMutex             m_aDispatchMutex;
+    oslCondition         m_aDispatchCondition;
 
     static gboolean      timeoutFn(gpointer data);
     static gboolean      userEventFn(gpointer data);
@@ -431,6 +433,8 @@ GtkXLib::GtkXLib()
     m_pTimeout = NULL;
     m_nTimeoutMS = 0;
     m_pUserEvent = NULL;
+    m_aDispatchCondition = osl_createCondition();
+    m_aDispatchMutex = osl_createMutex();
 }
 
 GtkXLib::~GtkXLib()
@@ -439,6 +443,11 @@ GtkXLib::~GtkXLib()
     fprintf( stderr, "GtkXLib::~GtkXLib()\n" );
 #endif
     StopTimer();
+     // sanity check: at this point nobody should be yielding, but wake them
+     // up anyway before the condition they're waiting on gets destroyed.
+    osl_setCondition( m_aDispatchCondition );
+    osl_destroyCondition( m_aDispatchCondition );
+    osl_destroyMutex( m_aDispatchMutex );
 }
 
 void GtkXLib::Init()
@@ -669,10 +678,38 @@ void GtkXLib::Wakeup()
 
 void GtkXLib::Yield( BOOL bWait )
 {
-    // release YieldMutex (and re-acquire at method end)
-    YieldMutexReleaser aReleaser;
+    /* #i33212# only enter g_main_context_iteration in one thread at any one
+     * time, else one of them potentially will never end as long as there is
+     * another thread in in there. Having only one yieldin thread actually dispatch
+     * fits the vcl event model (see e.g. the generic plugin).
+     */
 
-    g_main_context_iteration( NULL, bWait );
+    bool bDispatchThread = false;
+    if( osl_tryToAcquireMutex( m_aDispatchMutex ) )
+    {
+        // we are the dispatch thread
+        osl_resetCondition( m_aDispatchCondition );
+        bDispatchThread = true;
+    }
+    else if( ! bWait )
+        return; // someone else is waiting already, return
+
+    {
+        // release YieldMutex (and re-acquire at block end)
+        YieldMutexReleaser aReleaser;
+
+        if( bDispatchThread )
+            g_main_context_iteration( NULL, bWait );
+        else
+            osl_waitCondition( m_aDispatchCondition, NULL );
+    }
+
+    if( bDispatchThread )
+    {
+        osl_releaseMutex( m_aDispatchMutex );
+        osl_setCondition( m_aDispatchCondition ); // trigger non dispatch thread yields
+        osl_resetCondition( m_aDispatchCondition );
+    }
 }
 
 extern "C" {
