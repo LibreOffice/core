@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:52:17 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 15:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ TabDialog RID_SVXDLG_CUSTOMIZE
             PageItem
             {
                 Identifier = RID_SVXPAGE_KEYBOARD ;
-                Text [ de ] = "Keyboard" ;
+                Text [ de ] = "Tastatur" ;
                 Text [ en-US ] = "Keyboard" ;
                 PageResID = 301 ;
             };
@@ -98,7 +98,7 @@ TabDialog RID_SVXDLG_CUSTOMIZE
             PageItem
             {
                 Identifier = RID_SVXPAGE_EVENTS ;
-                Text [ de ] = "Events" ;
+                Text [ de ] = "Ereignisse" ;
                 Text [ en-US ] = "Events" ;
                 PageResID = 303 ;
             };
