@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:15:00 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,8 @@
     Text[ arabic ] = "»ÿ«ﬁ«  ⁄‰Ê‰…";                    \
     Text[ greek ] = "≈ÙÈÍ›ÙÂÚ";                         \
     Text[ korean ] = "∂Û∫ß";    \
-    Text[ turkish ] = "Etiket";
+    Text[ turkish ] = "Etiket"; \
+    Text[ catalan ] = "Etiquetas";
 
  #define BUSINESS_CARD_STRING \
                 Text = "Visitenkarten" ;                            \
@@ -153,6 +154,7 @@ TabDialog DLG_LAB
                 Text[ arabic ] = "‘Œ’Ì";
                 Text[ turkish ] = "÷zel";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Privado";
             };
             PageItem
             {
@@ -179,6 +181,7 @@ TabDialog DLG_LAB
                 Text[ arabic ] = "⁄„·";
                 Text[ turkish ] = "›˛";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Trabajo";
             };
             PageItem
             {
@@ -205,6 +208,7 @@ TabDialog DLG_LAB
                 Text[ korean ] = "º≠Ωƒ";
                 Text[ turkish ] = "Format";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Formato";
             };
             PageItem
             {
@@ -231,6 +235,7 @@ TabDialog DLG_LAB
                 Text[ korean ] = "ø…º«";
                 Text[ language_user1 ] = " ";
                 Text[ turkish ] = "SeÁenekler";
+                Text[ catalan ] = "Opciones";
             };
         };
     };
@@ -265,6 +270,7 @@ TabDialog DLG_LAB
         Text[ arabic ] = "«·Ê«”ÿ…";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Ka˝t";
+        Text[ catalan ] = "Tipo";
     };
 };
  // TP_LAB_LAB ---------------------------------------------------------------
@@ -302,6 +308,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "∂Û∫ß";
         Text[ turkish ] = "Etiket metni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Te~xto";
     };
     CheckBox BOX_ADDR
     {
@@ -331,6 +338,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "¡÷º“";
         Text[ turkish ] = "Adres";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~DirecciÛn";
     };
     MultiLineEdit EDT_WRITING
     {
@@ -370,6 +378,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫";
         Text[ turkish ] = "Veritaban˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Base de datos";
     };
     ListBox LB_DATABASE
     {
@@ -404,6 +413,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "«•";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Tablo";
+        Text[ catalan ] = "Tabla";
     };
     ListBox LB_TABLE
     {
@@ -447,6 +457,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ « µÂ";
         Text[ turkish ] = "Veritaban˝ alan˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Campo base de datos";
     };
     ListBox LB_DBFIELD
     {
@@ -484,6 +495,7 @@ TabPage TP_LAB_LAB
         Text[ greek ] = "≈È„Ò·ˆﬁ";
         Text[ korean ] = "∂Û∫ß";
         Text[ turkish ] = "Etiket metni";
+        Text[ catalan ] = "Etiqueta";
     };
     RadioButton BTN_CONT
     {
@@ -514,6 +526,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "∞Ëº”(~C)";
         Text[ turkish ] = "Sonsuz form";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cont~inuo";
     };
     RadioButton BTN_SHEET
     {
@@ -542,6 +555,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "Ω√∆Æ(~S)";
         Text[ turkish ] = "Fˆy";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Hoja";
     };
     FixedText TXT_MAKE
     {
@@ -571,6 +585,7 @@ TabPage TP_LAB_LAB
         Text[ greek ] = "~Ã‹ÒÍ·";
         Text[ korean ] = "ªÛ«•";
         Text[ turkish ] = "Markas˝";
+        Text[ catalan ] = "~Marca";
     };
     ListBox BOX_MAKE
     {
@@ -608,6 +623,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "¿Ø«¸(~T)";
         Text[ turkish ] = "Tipi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tipo";
     };
     ListBox BOX_TYPE
     {
@@ -652,6 +668,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "º≠Ωƒ";
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Formato";
     };
 };
 #define WIDTH  100
@@ -692,6 +709,7 @@ FloatingWindow DLG_SYNC_BTN
         Text[ korean ] = "∂Û∫ß µø±‚»≠";
         Text[ turkish ] = "Etiket iÁeriini Áoalt";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Sincronizar etiquetas";
     };
 };
  // String *******************************************************************
@@ -720,6 +738,7 @@ String STR_DOC_TITLE
     Text[ korean ] = "∂Û∫ß";
     Text[ turkish ] = "Etiket";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Etiquetas";
 };
 String STR_CUSTOM
 {
@@ -745,6 +764,7 @@ String STR_CUSTOM
     Text[ chinese_traditional ] = "[®œ•Œ™Ã]";
     Text[ arabic ] = "[„” Œœ„]";
     Text[ turkish ] = "[Kullan˝c˝ tan˝ml˝]";
+    Text[ catalan ] = "[Usuario]";
 };
 /********************************************************************/
 TabPage TP_VISITING_CARDS
@@ -785,6 +805,7 @@ TabPage TP_VISITING_CARDS
         Text[ arabic ] = "‰ÿ«ﬁ «·‰’ «· ·ﬁ«∆Ì";
         Text[ turkish ] = "Otomatik metin - alan˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡rea AutoT~exto";
     };
     ListBox LB_AUTO_TEXT_GROUP
     {
@@ -819,6 +840,7 @@ TabPage TP_VISITING_CARDS
         Text[ arabic ] = "«·„Õ ÊÌ« ";
         Text[ turkish ] = "›Áerik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Contenido";
     };
     Window WIN_EXAMPLE
     {
@@ -849,6 +871,7 @@ TabPage TP_VISITING_CARDS
         Text[ chinese_traditional ] = "πwƒ˝";
         Text[ arabic ] = "«·„⁄«Ì‰…";
         Text[ turkish ] = "÷nizleme";
+        Text[ catalan ] = "PrevisualizaciÛn";
     };
     String ST_VISCARD_GROUP
     {
@@ -885,6 +908,7 @@ TabPage TP_PRIVATE_DATA
         Text[ arabic ] = "»Ì«‰«  ‘Œ’Ì…";
         Text[ turkish ] = "÷zel bilgiler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Datos privados";
     };
     FixedText FT_NAME
     {
@@ -911,6 +935,7 @@ TabPage TP_PRIVATE_DATA
         Text[ arabic ] = "«·«”„/«”„ «·⁄«∆·…/«·«Œ ’«—";
         Text[ turkish ] = "Ad/Soyad/Ba˛harfler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No~mbre/Apellidos/Iniciales";
     };
     Edit ED_FIRSTNAME
     {
@@ -954,6 +979,7 @@ TabPage TP_PRIVATE_DATA
         Text[ chinese_traditional ] = "¶W¶r/©m§Û/¡Yºg 2(~N)";
         Text[ arabic ] = "«·«”„/«”„ «·⁄«∆·…/«·«Œ ’«— 2";
         Text[ turkish ] = "Ad/Soyad/Ba˛harfler 2";
+        Text[ catalan ] = "Nombre/Apellidos/Iniciales 2";
     };
     Edit ED_FIRSTNAME_2
     {
@@ -998,6 +1024,7 @@ TabPage TP_PRIVATE_DATA
         Text[ arabic ] = "«·‘«—⁄";
         Text[ turkish ] = "Sokak";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Calle";
     };
     Edit ED_STREET
     {
@@ -1030,6 +1057,7 @@ TabPage TP_PRIVATE_DATA
         Text[ arabic ] = "«·—„“ «·»—ÌœÌ/«·„œÌ‰…";
         Text[ turkish ] = "Posta kodu/ﬁehir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "CP/Ciuda~d";
     };
     Edit ED_ZIP
     {
@@ -1068,6 +1096,7 @@ TabPage TP_PRIVATE_DATA
         Text[ arabic ] = "«·œÊ·…/«·Ê·«Ì…";
         Text[ turkish ] = "‹lke/›l";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~PaÌs/Provincia";
     };
     Edit ED_COUNTRY
     {
@@ -1106,6 +1135,7 @@ TabPage TP_PRIVATE_DATA
         Text[ arabic ] = "«··ﬁ» «·„Â‰Ì/«·ÊŸÌ›…";
         Text[ turkish ] = "Unvan/Meslek";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "TÌtulo/Pro~fesiÛn";
     };
     Edit ED_TITLE
     {
@@ -1126,7 +1156,7 @@ TabPage TP_PRIVATE_DATA
         Text = "Telefon/Mobil" ;
         Text [ English ] = "Phone/Mobile" ;
         Text[ english_us ] = "Phone/Mobile";
-        Text[ portuguese ] = "Phone/Mobile";
+        Text[ portuguese ] = "Telefone/TelemÛvel";
         Text[ russian ] = "“ÂÎÂÙÓÌ/ÏÓ·ËÎ¸Ì˚È";
         Text[ greek ] = "‘ÁÎ›ˆ˘ÌÔ/ ÈÌÁÙ¸";
         Text[ dutch ] = "Telefoon/mobile";
@@ -1143,6 +1173,7 @@ TabPage TP_PRIVATE_DATA
         Text[ chinese_traditional ] = "πq∏‹/≤æ∞ πq∏‹";
         Text[ turkish ] = "Phone/Mobile";
         Text[ arabic ] = "«·Â« ›/«·„Õ„Ê·";
+        Text[ catalan ] = "TelÈfono/MÛvil";
     };
     Edit ED_PHONE
     {
@@ -1181,6 +1212,7 @@ TabPage TP_PRIVATE_DATA
         Text[ arabic ] = "«·›«ﬂ”";
         Text[ turkish ] = "Faks";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fa~x";
     };
     Edit ED_FAX
     {
@@ -1213,6 +1245,7 @@ TabPage TP_PRIVATE_DATA
         Text[ arabic ] = "„Êﬁ⁄ «·≈‰ —‰  / «·»—Ìœ «·≈·ﬂ —Ê‰Ì";
         Text[ turkish ] = "Web sayfas˝ / E-posta";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "P·gina principal / e-mail";
     };
     Edit ED_WWW
     {
@@ -1257,6 +1290,7 @@ TabPage TP_BUSINESS_DATA
         Text[ arabic ] = "»Ì«‰«  «·⁄„·";
         Text[ turkish ] = "›˛ Bilgileri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Datos del trabajo";
     };
     FixedText FT_COMP
     {
@@ -1283,6 +1317,7 @@ TabPage TP_BUSINESS_DATA
         Text[ arabic ] = "«·‘—ﬂ…";
         Text[ turkish ] = "~ﬁirket ad˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "E~mpresa";
     };
     Edit ED_COMP
     {
@@ -1315,6 +1350,7 @@ TabPage TP_BUSINESS_DATA
         Text[ arabic ] = "«·‘—ﬂ… «·”ÿ— «·À«‰Ì";
         Text[ turkish ] = "ﬁirket ad˝ ( 2'nci sat˝r)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Empresa ~2da lÌnea";
     };
     Edit ED_COMP_EXT
     {
@@ -1347,6 +1383,7 @@ TabPage TP_BUSINESS_DATA
         Text[ arabic ] = "«·‘⁄«—";
         Text[ turkish ] = "Slogan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Esl~ogan";
     };
     Edit ED_SLOGAN
     {
@@ -1379,6 +1416,7 @@ TabPage TP_BUSINESS_DATA
         Text[ arabic ] = "«·‘«—⁄";
         Text[ turkish ] = "Sokak";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Calle";
     };
     Edit ED_STREET
     {
@@ -1411,6 +1449,7 @@ TabPage TP_BUSINESS_DATA
         Text[ arabic ] = "«·—„“ «·»—ÌœÌ/«·„œÌ‰…";
         Text[ turkish ] = "Posta kodu/ﬁehir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "CP/Ciu~dad";
     };
     Edit ED_ZIP
     {
@@ -1449,6 +1488,7 @@ TabPage TP_BUSINESS_DATA
         Text[ arabic ] = "«·œÊ·…/«·Ê·«Ì…";
         Text[ turkish ] = "‹lke/›l";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "PaÌs/Pro~vincia";
     };
     Edit ED_COUNTRY
     {
@@ -1487,6 +1527,7 @@ TabPage TP_BUSINESS_DATA
         Text[ arabic ] = "«·„‰’» «·ÊŸÌ›Ì";
         Text[ turkish ] = "Pozisyon";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~PosiciÛn";
     };
     Edit ED_POSITION
     {
@@ -1501,7 +1542,7 @@ TabPage TP_BUSINESS_DATA
         Text = "Telefon/Mobil" ;
         Text [ English ] = "Phone/Mobile" ;
         Text[ english_us ] = "Phone/Mobile";
-        Text[ portuguese ] = "Phone/Mobile";
+        Text[ portuguese ] = "Telefone/TelemÛvel";
         Text[ russian ] = "“ÂÎÂÙÓÌ/ÏÓ·ËÎ¸Ì˚È";
         Text[ greek ] = "‘ÁÎ›ˆ˘ÌÔ/ ÈÌÁÙ¸";
         Text[ dutch ] = "Telefoon/mobile";
@@ -1518,6 +1559,7 @@ TabPage TP_BUSINESS_DATA
         Text[ chinese_traditional ] = "πq∏‹/≤æ∞ πq∏‹";
         Text[ turkish ] = "Phone/Mobile";
         Text[ arabic ] = "«·Â« ›/«·„Õ„Ê·";
+        Text[ catalan ] = "TelÈfono/MÛvil";
     };
     Edit ED_PHONE
     {
@@ -1555,6 +1597,7 @@ TabPage TP_BUSINESS_DATA
         Text[ chinese_traditional ] = "∂«Øu";
         Text[ turkish ] = "Fax";
         Text[ arabic ] = "«·›«ﬂ”";
+        Text[ catalan ] = "Fax";
     };
     Edit ED_FAX
     {
@@ -1587,6 +1630,7 @@ TabPage TP_BUSINESS_DATA
         Text[ arabic ] = "„Êﬁ⁄ «·≈‰ —‰  / «·»—Ìœ «·≈·ﬂ —Ê‰Ì";
         Text[ turkish ] = "Web sayfas˝  / E-posta";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "P·gina principal / ~e-mail";
     };
     Edit ED_WWW
     {
