@@ -85,6 +85,8 @@ class OfficeZip {
     private final static String STYLEXML = "styles.xml";
     private final static String METAXML = "meta.xml";
 
+     private final static String SETTINGSXML = "settings.xml";
+
     private final static int BUFFERSIZE = 1024;
 
     private List entryList = null;
@@ -92,7 +94,9 @@ class OfficeZip {
     private int contentIndex = -1;
 
     private int styleIndex = -1;
-      private int metaIndex = -1;
+    private int metaIndex = -1;
+
+    private int settingsIndex = -1;
 
     /** Default constructor. */
     OfficeZip() {
@@ -149,6 +153,8 @@ class OfficeZip {
                 styleIndex = i;
             }else if (isSameName(name, METAXML)) {
                 metaIndex = i;
+            }else if (isSameName(name, SETTINGSXML)) {
+                settingsIndex = i;
             }
 
         }
@@ -191,6 +197,17 @@ class OfficeZip {
      */
     byte[] getMetaXMLBytes() {
         return getEntryBytes(metaIndex);
+    }
+
+      /**
+     *  This method returns the SETTINGSXML file in a
+     *  <code>byte</code> array.  It returns null if there is
+     *  no SETTINGSXML in this zip file.
+     *
+     *  @return  SETTINGSXML in a <code>byte</code> array.
+     */
+    byte[] getSettingsXMLBytes() {
+        return getEntryBytes(settingsIndex);
     }
 
 
@@ -255,6 +272,19 @@ class OfficeZip {
     void setMetaXMLBytes(byte bytes[]) {
 
         metaIndex = setEntryBytes(metaIndex, bytes, METAXML);
+    }
+
+
+      /**
+     *  Set or replace the <code>byte</code> array for the
+     *  SETTINGSXML file.
+     *
+     *  @param  bytes  <code>byte</code> array for the
+     *                 SETTINGSXML file.
+     */
+    void setSettingsXMLBytes(byte bytes[]) {
+
+        settingsIndex = setEntryBytes(settingsIndex, bytes, SETTINGSXML);
     }
 
 
