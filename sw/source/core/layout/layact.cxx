@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:06:30 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@
 #include "fmtornt.hxx"
 #include "sectfrm.hxx"
 #include "lineinfo.hxx"
-#include "scrrect.hxx"
 #ifndef _ACMPLWRD_HXX
 #include <acmplwrd.hxx>
 #endif
@@ -2090,17 +2089,24 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
     //Jetzt noch die Lowers versorgen
     if ( IsAgain() )
         return FALSE;
-    SwLayoutFrm *pLow = (SwLayoutFrm*)pTab->Lower();
-    while ( pLow )
-    {
-        bChanged |= FormatLayout( (SwLayoutFrm*)pLow, bAddRect );
-        if ( IsAgain() )
-            return FALSE;
-        pLow = (SwLayoutFrm*)pLow->GetNext();
-    }
 
+    // OD 20.10.2003 #112464# - for savety reasons:
+    // check page number before formatting lowers.
     if ( pOldPage->GetPhyPageNum() > (pTab->FindPageFrm()->GetPhyPageNum() + 1) )
         SetNextCycle( TRUE );
+
+    // OD 20.10.2003 #112464# - format lowers, only if table frame is valid
+    if ( pTab->IsValid() )
+    {
+        SwLayoutFrm *pLow = (SwLayoutFrm*)pTab->Lower();
+        while ( pLow )
+        {
+            bChanged |= FormatLayout( (SwLayoutFrm*)pLow, bAddRect );
+            if ( IsAgain() )
+                return FALSE;
+            pLow = (SwLayoutFrm*)pLow->GetNext();
+        }
+    }
 
     return bChanged;
 }
