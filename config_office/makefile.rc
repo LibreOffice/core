@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: svesik $ $Date: 2001-01-24 16:40:58 $
+#   last change: $Author: svesik $ $Date: 2001-01-24 16:42:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ all_subdirs : $(RC_SUBDIRS)
 RC_SUBDIRS =  \
 	DocumentProperties \
 	UnoControls \
+	XmlSearch \
 	automation \
 	basctl \
 	basic \
@@ -191,6 +192,18 @@ bootstrap .PHONY :
 configure .PHONY SETDIR=config_office :
 	@configure
 
+install: instsetoo
+	cd $?; dmake subdmake=true  product="full"
+
+# experimental composite targets:
+
+udk_modules :	xml2cmp sal vos store registry unoidl udkapi codemaker \
+		sandbox ridljar jurt cppu cppuhelper javaunohelper \
+		jut rdbmaker io bridges cpputools io stoc remotebridges
+
+non_vcl :	udk_modules ucbhelper offuh unoil unoidl sax officecfg UnoControls \
+		rsc sot eventattacher idl transex3 inet
+
 # 
 # single directory targets for
 # dependency handling between directories
@@ -223,6 +236,7 @@ goodies : so3
 i18n : bridges stoc svtools unotools
 idl : tools
 inet : ldapber tools
+instsetoo : non_vcl chaos configmgr dbaccess desktop extensions extras forms framework i18n scaddins scp wizards readlicense xmlhelp
 io : rdbmaker
 javaunohelper : cppuhelper jurt
 jurt : codemaker ridljar sandbox
