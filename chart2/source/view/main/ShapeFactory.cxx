@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 12:04:01 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 16:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1508,7 +1508,8 @@ uno::Reference< drawing::XShape >
                       const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize
-                    , sal_Int32 nStandardSymbol )
+                    , sal_Int32 nStandardSymbol
+                    , sal_Int32 nFillColor )
 {
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1529,6 +1530,10 @@ uno::Reference< drawing::XShape >
             //Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON )
                 , uno::makeAny( aPoints ) );
+
+            //FillColor
+            xProp->setPropertyValue( C2U( UNO_NAME_FILLCOLOR )
+                , uno::makeAny( nFillColor ) );
         }
         catch( uno::Exception& e )
         {
@@ -1542,7 +1547,8 @@ uno::Reference< drawing::XShape >
         ShapeFactory::createSymbol3D( const uno::Reference< drawing::XShapes >& xTarget
                     , const drawing::Position3D& rPosition
                     , const drawing::Direction3D& rSize
-                    , sal_Int32 nStandardSymbol )
+                    , sal_Int32 nStandardSymbol
+                    , sal_Int32 nFillColor )
 {
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1569,6 +1575,10 @@ uno::Reference< drawing::XShape >
             //Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
                 , uno::makeAny( createPolyPolygon_Symbol( rPosition, rSize, nStandardSymbol ) ) );
+
+            //FillColor
+            xProp->setPropertyValue( C2U( UNO_NAME_FILLCOLOR )
+                , uno::makeAny( nFillColor ) );
         }
         catch( uno::Exception& e )
         {
