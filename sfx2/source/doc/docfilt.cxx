@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfilt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:00:09 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ const SfxFilter* SfxFilter::GetDefaultFilterFromFactory( const String& rFact )
 const SfxFilter* SfxFilter::GetFilterByName( const String& rName )
 {
     SfxFilterMatcher aMatch;
-    return aMatch.GetFilter4FilterName( rName );
+    return aMatch.GetFilter4FilterName( rName, 0, 0 );
 }
 
 String SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
@@ -349,9 +349,12 @@ String SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
     else
     {
         sal_Int32 nClipId = ((SotStorage&)rStg).GetFormat();
-        const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( nClipId );
         if ( nClipId )
-            return pFilter->GetTypeName();
+        {
+            const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( nClipId );
+            if ( pFilter )
+                return pFilter->GetTypeName();
+        }
     }
 
     return pType ? String::CreateFromAscii(pType) : String();
