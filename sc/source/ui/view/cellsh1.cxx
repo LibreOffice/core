@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:51:27 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 18:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,8 +1080,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( nFormat )
                 {
-                    BOOL bCells = ( ScTransferObj::GetOwnClipboard() != NULL );
-                    BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard() != NULL );
+                    Window* pWin = GetViewData()->GetActiveWin();
+                    BOOL bCells = ( ScTransferObj::GetOwnClipboard( pWin ) != NULL );
+                    BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
                     BOOL bOle = ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE );
 
                     if ( bCells && bOle )
@@ -1108,9 +1109,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 BOOL bAsLink    = FALSE;
                 InsCellCmd eMoveMode = INS_NONE;
 
+                Window* pWin = GetViewData()->GetActiveWin();
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 BOOL bOtherDoc = !pDoc->IsClipboardSource();
-                ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard();
+                ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
                 if ( pOwnClip )
                 {
                     if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
@@ -1153,7 +1155,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             // directions if source and destination ranges intersect
                             if ( !bOtherDoc )
                             {
-                                ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard();
                                 if ( pOwnClip && pOwnClip->GetDocument()->IsCutMode() )
                                 {
                                     ScViewData* pViewData = GetViewData();
@@ -1235,6 +1236,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             // Unterscheidung, ob eigene oder fremde Daten,
             // dadurch FID_INS_CELL_CONTENTS ueberfluessig
             {
+                Window* pWin = GetViewData()->GetActiveWin();
+
                 //  Clipboard-ID als Parameter angegeben? Basic "PasteSpecial(Format)"
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
@@ -1250,7 +1253,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     rReq.SetReturnValue(SfxInt16Item(nSlot, bRet)); // 1 = Erfolg, 0 = Fehler
                     rReq.Done();
                 }
-                else if ( ScTransferObj::GetOwnClipboard() )    // own cell data
+                else if ( ScTransferObj::GetOwnClipboard( pWin ) )  // own cell data
                 {
                     rReq.SetSlot( FID_INS_CELL_CONTENTS );
                     ExecuteSlot( rReq, GetInterface() );
@@ -1258,7 +1261,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else                                    // Zeichenobjekte oder fremde Daten
                 {
-                    BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard() != NULL );
+                    BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
 
                     SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                     GetPossibleClipboardFormats( aFormats );
@@ -1279,7 +1282,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
 
                         TransferableDataHelper aDataHelper(
-                            TransferableDataHelper::CreateFromSystemClipboard( GetViewData()->GetActiveWin() ) );
+                            TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
                         ULONG nFormat = pDlg->Execute( pTabViewShell->GetDialogParent(), aDataHelper.GetTransferable() );
                         if (nFormat > 0)
                         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:01:18 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 18:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ ScDrawTransferObj::~ScDrawTransferObj()
 }
 
 // static
-ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard()
+ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( Window* )
 {
     ScDrawTransferObj* pObj = SC_MOD()->GetClipData().pDrawClipboard;
     return pObj;

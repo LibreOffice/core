@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:51:27 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 18:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,9 +385,10 @@ void ScViewFunc::PasteDraw()
     ScViewData* pViewData = GetViewData();
     USHORT nPosX = pViewData->GetCurX();
     USHORT nPosY = pViewData->GetCurY();
-    Point aPos = GetActiveWin()->PixelToLogic( pViewData->GetScrPos( nPosX, nPosY,
-                                                pViewData->GetActivePart() ) );
-    ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard();
+    Window* pWin = GetActiveWin();
+    Point aPos = pWin->PixelToLogic( pViewData->GetScrPos( nPosX, nPosY,
+                                     pViewData->GetActivePart() ) );
+    ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
     if (pDrawClip)
         PasteDraw( aPos, pDrawClip->GetModel() );
 }
@@ -396,8 +397,9 @@ void ScViewFunc::PasteFromSystem()
 {
     UpdateInputLine();
 
-    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard();
-    ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard();
+    Window* pWin = GetActiveWin();
+    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
+    ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
 
     if (pOwnClip)
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument() );
@@ -471,12 +473,13 @@ BOOL ScViewFunc::PasteFromSystem( ULONG nFormatId, BOOL bApi )
     UpdateInputLine();
 
     BOOL bRet = TRUE;
-    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard();
+    Window* pWin = GetActiveWin();
+    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
     if ( nFormatId == 0 && pOwnClip )
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument() );
     else
     {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWin() ) );
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
         if ( !aDataHelper.GetTransferable().is() )
             return FALSE;
 

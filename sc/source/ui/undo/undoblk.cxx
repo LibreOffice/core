@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-27 08:47:33 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 18:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,9 +909,10 @@ void __EXPORT ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
 
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard();
+        ScTabViewShell* pViewSh = ((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pViewSh->GetActiveWin() );
         if (pOwnClip)
-            ((ScTabViewTarget&)rTarget).GetViewShell()->PasteFromClip( nFlags, pOwnClip->GetDocument() );
+            pViewSh->PasteFromClip( nFlags, pOwnClip->GetDocument() );
     }
 }
 

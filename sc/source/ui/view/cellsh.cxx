@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:51:27 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 18:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,10 +334,10 @@ void lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper
 
 void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 {
-    BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard() != NULL );
+    Window* pWin = GetViewData()->GetActiveWin();
+    BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
 
-    TransferableDataHelper aDataHelper(
-        TransferableDataHelper::CreateFromSystemClipboard( GetViewData()->GetActiveWin() ) );
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
     lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_DRAWING );
     lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_SVXB );
@@ -367,12 +367,13 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
 // FID_PASTE_CONTENTS
 // SID_CLIPBOARD_FORMAT_ITEMS
 
-    if ( ScTransferObj::GetOwnClipboard() || ScDrawTransferObj::GetOwnClipboard() )
+    Window* pWin = GetViewData()->GetActiveWin();
+    if ( ScTransferObj::GetOwnClipboard( pWin ) || ScDrawTransferObj::GetOwnClipboard( pWin ) )
         bDisable = FALSE;
     else
     {
         TransferableDataHelper aDataHelper(
-            TransferableDataHelper::CreateFromSystemClipboard( GetViewData()->GetActiveWin() ) );
+            TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
         if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) ||
              aDataHelper.HasFormat( SOT_FORMAT_GDIMETAFILE ) ||

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-10 07:53:34 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 18:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ public:
     SdrView*            GetDragSourceView()             { return pDragSourceView; }
     USHORT              GetDragSourceFlags() const      { return nDragSourceFlags; }
 
-    static ScDrawTransferObj* GetOwnClipboard();
+    static ScDrawTransferObj* GetOwnClipboard( Window* pUIWin );
 };
 
 #endif

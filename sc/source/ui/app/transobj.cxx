@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-12 08:51:24 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 18:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,18 +227,18 @@ ScTransferObj::~ScTransferObj()
 }
 
 // static
-ScTransferObj* ScTransferObj::GetOwnClipboard( BOOL bForUI )
+ScTransferObj* ScTransferObj::GetOwnClipboard( Window* pUIWin )
 {
     ScTransferObj* pObj = SC_MOD()->GetClipData().pCellClipboard;
-    if ( pObj && bForUI )
+    if ( pObj && pUIWin )
     {
         //  check formats to see if pObj is really in the system clipboard
 
-        //  bForUI is FALSE when called from core (IsClipboardSource),
+        //  pUIWin is NULL when called from core (IsClipboardSource),
         //  in that case don't access the system clipboard, because the call
         //  may be from other clipboard operations (like flushing, #86059#)
 
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pUIWin ) );
         if ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_DIF ) )
         {
 //          DBG_ERROR("ScTransferObj wasn't released");
