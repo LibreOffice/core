@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 18:58:24 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,7 @@ String STR_PRINT_NEWSIZE
     Text[ polish ] = "Zmieni³eœ rozmiar strony. \nCzy zmiany maj¹ zostaæ zapisane \nw aktywnym dokumencie?";
     Text[ japanese ] = "Íß°¼Ş »²½Ş‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚³‚ê‚½İ’è‚ğŒ»İ‚ÌÄŞ·­ÒİÄ‚É\n“K—p‚µ‚Ü‚·‚©?";
     Text[ chinese_traditional ] = "±z¤w¸g§ó§ï­¶­±¤j¤p¡C\n±zªº¤å¥ó­n±Ä¥Î³o­Ó³]©w¡H";
-    Text[ greek ] = "ÁëëÜîáôå ôï ìİãåèïò ôçò óåëßäáò.\nÈİëåôå íá åöáñìïóôåß áõôŞ ç áëëáãŞ\nóôï İããñáöï;";
+    Text[ greek ] = "ÁëëÜîáôå ôï ìİãåèïò ôçò óåëßäáò.\nÍá åöáñìïóôåß áõôŞ ç áëëáãŞ óôï İããñáöï;";
     Text[ korean ] = "ÆäÀÌÁö Å©±â°¡ º¯°æµÇ¾ú½À´Ï´Ù.\nº¯°æµÈ ¼³Á¤À» ¹®¼­¿¡ Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
     Text[ arabic ] = "áŞÏ ŞãÊ ÈÊÛííÑ ÍÌã ÇáÕİÍÉ.\nåá ÊÑíÏ ÊØÈíŞ ÇáÅÚÏÇÏÇÊ ÇáÌÏíÏÉ Úáì ÇáãÓÊäÏ¿";
     Text[ turkish ] = "Sayfa boyutunu değiştirdiniz.\nDeğiştirilen ayarlar\nbelgede kullanılsın mı?";
@@ -797,7 +797,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text [ dutch ] = "~Opslaan en toevoegen" ;
         Text [ portuguese_brazilian ] = "~Speichern und anhängen" ;
         Text [ portuguese ] = "~Guardar e anexar" ;
-        Text[ chinese_simplified ] = "´æÅÌºÍ¼Ó¸½¼ş(~S)";
+        Text[ chinese_simplified ] = "´æÅÌºÍ¼Ó¸½ÎÄ¼ş(~S)";
         Text[ russian ] = "Ñîõğàíèòü è âëîæèòü";
         Text[ polish ] = "~Zapisz i za³¹cz";
         Text[ japanese ] = "•Û‘¶‚µ‚Ä“Y•t(~S)";
@@ -977,7 +977,7 @@ ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
     Message [ french ] = "Pour envoyer un message via Internet \nle programme nécessite une adresse e-mail et un serveur SMTP.\nVeuillez indiquer ces paramètres sous \n\"Outils\\Options\\Général...\\Identité\\E-mail\" et \"Outils\\Options\\Internet\\Mail/News\\Envoi de messages\" \n avant de refaire une tentative d'envoi de message." ;
     Message [ dutch ] = "Om een bericht via Internet te versturen,\nwordt uw e-mail adres en een SMTP server benodigd.\nVermeld deze onder \n\"Extra\\Opties\\Algemeen...\\Gebruikersgegevens\\E-mail\" en\n\"Extra\\Opties\\Internet\\Mail/Nieuws\\Berichten versturen\",\nvoordat u opnieuw een bericht stuurt." ;
     Message [ portuguese ] = "Para o envio de uma mensagem via Internet são necessários\\ o seu endereço electrónico e um servidor SMTP. Digite o seu endereço em\n\"Ferramentas\\\\Opções\\\\Geral...\\\\Dados do utilizador\\\\e-mail\" e\n\"Ferramentas\\\\Opções\\\\Internet\\\\Correio/Notícias\"\nantes de reenviar a mensagem." ;
-    Message[ chinese_simplified ] = "½èÖú¹ú¼Ê»¥ÁªÍø¼Ä·¢µç×ÓÓÊ¼şÊ±\nĞèÒªÄúµÄµç×ÓÓÊ¼şµØÖ·ºÍÒ»¸öSMTP·şÎñÆ÷¡£\nÇëÔÚ¼Ä·¢µç×ÓÓÊ¼şÖ®Ç°°´»÷²Ëµ¥ÃüÁî\n¡°¹¤¾ß\\Ñ¡Ïî...\\³£¹æ\\ÓÃ»§×ÊÁÏ\\µç×ÓÓÊ¼ş¡±\nºÍ¡°¹¤¾ß\\Ñ¡Ïî\\¹ú¼Ê»¥ÁªÍø\\µç×ÓÓÊ¼ş/ĞÂÎÅ\\¼Ä·¢µç×ÓÓÊ¼ş¡±£¬ÌîÈëÓĞ¹ØÉè¶¨Êı¾İ¡£";
+    Message[ chinese_simplified ] = "½èÖú¹ú¼Ê»¥ÁªÍø¼Ä·¢µç×ÓÓÊ¼şÊ±\nĞèÒªÄúµÄµç×ÓÓÊ¼şµØÖ·ºÍÒ»¸öSMTP·şÎñÆ÷¡£\nÇëÔÚ¼Ä·¢µç×ÓÓÊ¼şÖ®Ç°°´»÷²Ëµ¥\n¡°¹¤¾ß\\Ñ¡Ïî...\\³£¹æ\\ÓÃ»§×ÊÁÏ\\µç×ÓÓÊ¼ş¡±\nºÍ¡°¹¤¾ß\\Ñ¡Ïî\\¹ú¼Ê»¥ÁªÍø\\µç×ÓÓÊ¼ş/ĞÂÎÅ\\¼Ä·¢µç×ÓÓÊ¼ş¡±£¬ÌîÈëÓĞ¹ØÉè¶¨Êı¾İ¡£";
     Message[ russian ] = "×òîáû îòïğàâèòü ñîîáùåíèå ïî Èíòåğíåòó,\níåîáõîäèì Âàø àäğåñ ıëåêòğîííîé ïî÷òû è ñåğâåğ SMTP äëÿ äîñòàâêè ïî÷òû.\nÂâåäèòå, ïîæàëóéñòà, ıòè óñòàíîâêè â\n\"Ñåğâèñ\\Ïàğàìåòğû\\Îáùèå...\\Äàííûå ïîëüçîâàòåëÿ\\İë. ïî÷òà\" è â\n\"Ñåğâèñ\\Ïàğàìåòğû\\Èíòåğíåò\\Ïî÷òà/Íîâîñòè\\Äîñòàâêà íîâîñòåé\",\nïğåæäå ÷åì Âû îïÿòü îòïğàâèòå ñîîáùåíèå.";
     Message[ polish ] = "Aby wys³aæ wiadomoœæ via Internet,\nwymagany jest twój adres e-mail i serwer SMTP.\nProszê wprowadŸ te ustawienia w \n\"Narzêdzia\\\\Opcje\\\\Ogólne...\\\\Dane u¿ytkownika\\\\e-mail\" i\n\"Narzêdzia\\\\Opcje\\\\Internet\\\\Poczta/Wiadomoœci\\\\Wysy³anie wiadomoœci\",\nzanim ponownie wyœlesz wiadomoœæ.";
     Message[ japanese ] = "²İÀ°È¯Ä‚ÅÒ¯¾°¼Ş‚ğ‘—M‚·‚é‚É‚Í\nE-mail±ÄŞÚ½‚ÆSMTP »°ÊŞ°‚ª•K—v‚Å‚·B\nÒ¯¾°¼Ş‚ğÄ‘—M‚·‚é‘O‚É\n‚±‚Ìİ’è‚ğ\n[Â°Ù\\µÌß¼®İ\\‘S”Ê...\\Õ°»Ş°ÃŞ°À \\E-mail]‚¨‚æ‚Ñ\n[Â°Ù\\µÌß¼®İ\\²İÀ°È¯Ä\\Ò°Ù/Æ­°½\\Ò¯¾°¼Ş‘—M]‚É“o˜^‚µ‚Ä‰º‚³‚¢B";
@@ -1004,7 +1004,7 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message [ dutch ] = "Voor de door u verlangde activiteit is een postvak UIT nodig.\nMaak een postvak UIT voordat u deze opdracht opnieuw selecteert." ;
     Message [ portuguese ] = "É necessária uma caixa de envio para executar esta acção.\nCrie primeiro uma caixa de envio e tente novamente." ;
     Message[ chinese_simplified ] = "Ö´ĞĞÕâ¸ö²Ù×÷µÄÇ°ÌáÊÇÄúÒÑ¾­½¨Á¢ÁËÒ»¸ö·¢¼şÏä¡£\nÇëÄúÔÚ½¨Á¢Ò»¸ö·¢¼şÏäÖ®ºóÔÙÖØĞÂÖ´ĞĞÕâ¸öÃüÁî¡£";
-    Message[ russian ] = "Äëÿ âûáğàííîãî Âàìè äåéñòâèÿ íåîáõîäèìà ïàïêà \"Îòïğàâëåííûå\".\nÏğåæäå ÷åì Âû ïîâòîğèòå ıòó îïåğàöèş, ñîçäàéòå, ïîæàëóéñòà, ïàïêó \"Îòïğàâëåííûå\".";
+    Message[ russian ] = "Äëÿ âûáğàííîãî âàìè äåéñòâèÿ íåîáõîäèìà ïàïêà \"Îòïğàâëåííûå\".\nÏğåæäå ÷åì âû ïîâòîğèòå ıòó îïåğàöèş, ñîçäàéòå, ïîæàëóéñòà, ïàïêó \"Îòïğàâëåííûå\".";
     Message[ polish ] = "Dla wybranej przez ciebie akcji potrzebna jest skrzynka nadawcza.\nProszê utwórz skrzynkê nadawcz¹, zanim wykonasz ponownie tê akcjê.";
     Message[ japanese ] = "‘I‘ğ‚³‚ê‚½±¸¼®İ‚ğÀs‚·‚é‚Ì‚É‘—MÄÚ²‚ª•K—v‚Å‚·B\n‚±‚Ì±¸¼®İ‚ğÄÀs‚·‚é‘O‚ÉA‘—MÄÚ²‚ğŠi”[‚µ‚Ä‰º‚³‚¢B";
     Message[ chinese_traditional ] = "°õ¦æ³o­Ó¾Ş§@­n¨D±z°t¸m¤@­Ó±H¥ó§X¡C\n½Ğ±z«Ø¥ß¤@­Ó±H¥ó§X¡AµM¦Z¦b­«·s°õ¦æ³o­Ó©R¥O¡C";
