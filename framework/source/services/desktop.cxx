@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: as $ $Date: 2002-08-12 11:46:56 $
+ *  last change: $Author: as $ $Date: 2002-08-26 13:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,10 +922,6 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
     if( xDispatcher.is() == sal_True )
     {
-
-/* Enable UI Interaction used inside dispatch...() and allow macro execution by using the configured security rules
-   (configured by user)
-
         // We should set us as interaction handler for possible exceptions during load proccess ...
         // But we shouldn't do that - if anyone already is set!
         // Our interaction handler is called back in method "handle()". We set right condition there
@@ -943,7 +939,6 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
         if( !aAnalyzer.existArgument( E_UPDATEDOCMODE ) )
             aAnalyzer.setArgument( E_UPDATEDOCMODE, css::document::UpdateDocMode::NO_UPDATE );
-*/
 
         // Reset loader state to default, because we must yield for a valid result! See next WHILE condition.
         // And we must do it before we call dispatch!
@@ -1008,10 +1003,9 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
         css::uno::Reference< css::frame::XFrame > xLoadTarget           = m_xLastFrame;
                                                   m_xLastFrame          = css::uno::Reference< css::frame::XFrame >(); // Don't hold last frame for ever - or he can't die!
-/* see comments before about interaction!
+
         css::uno::Any                             aRequest              = m_aInteractionRequest;
                                                   m_aInteractionRequest = css::uno::Any();
-*/
         aReadLock.unlock();
         /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 
@@ -1026,7 +1020,6 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
                                         }
                                     }
                                     break;
-/* see comments before about interaction!
             case E_INTERACTION  :   {
                                         // Interaction indicates throwed exception during load proccess.
                                         // Forward io exceptions to user ...
@@ -1043,7 +1036,6 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
                                         // tell user failed state of load operation!
                                     }
                                     break;
-*/
         }
     }
     // Return result of this operation.
