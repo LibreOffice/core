@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.188 $
+ *  $Revision: 1.189 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:55:19 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,13 +144,6 @@
 #include <i18n_status.hxx>
 #endif
 
-#ifndef _RTL_BOOTSTRAP_HXX
-#include <rtl/bootstrap.hxx>
-#endif
-#ifndef _OSL_PROCESS_H
-#include <osl/process.h>
-#endif
-
 #include <algorithm>
 
 using namespace vcl_sal;
@@ -214,62 +207,6 @@ static void doReparentPresentationDialogues( SalDisplay* pDisplay )
         XSetInputFocus( pDisplay->GetDisplay(), hPresFocusWindow, PointerRoot, CurrentTime );
     XSync( pDisplay->GetDisplay(), False );
     pDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
-}
-
-static char* getFrameResName()
-{
-    /*  according to ICCCM:
-     *  first search command line for -name parameter
-     *  then try REOURCE_NAME environment variable
-     *  then use argv[0] stripped by directories
-     */
-    static char pResName[256] = "";
-    if( !*pResName )
-    {
-        int nArgs = osl_getCommandArgCount();
-        for( int n = 0; n < nArgs-1; n++ )
-        {
-            ::rtl::OUString aArg;
-            if( ! osl_getCommandArg( n, &aArg.pData ) &&
-                aArg.equalsIgnoreAsciiCaseAscii( "-name" ) &&
-                ! osl_getCommandArg( n+1, &aArg.pData ) )
-            {
-                strncpy( pResName, ::rtl::OUStringToOString( aArg, osl_getThreadTextEncoding() ).getStr(), sizeof(pResName)-1 );
-                break;
-            }
-        }
-        if( !*pResName )
-        {
-            const char* pEnv = getenv( "RESOURCE_NAME" );
-            if( pEnv && *pEnv )
-                snprintf( pResName, sizeof(pResName), "%s", pEnv );
-        }
-        if( !*pResName )
-            snprintf( pResName, sizeof(pResName), "%s", "VCLSalFrame" );
-    }
-    return pResName;
-}
-
-static char* getFrameClassName()
-{
-    static char pClassName[256] = "";
-    if( !*pClassName )
-    {
-        ::rtl::OUString aIni, aProduct;
-        osl_getExecutableFile( &aIni.pData );
-        aIni = aIni.copy( 0, aIni.lastIndexOf( SAL_PATHDELIMITER )+1 );
-        aIni += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "bootstrap" ) ) );
-        ::rtl::Bootstrap aBootstrap( aIni );
-        aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ProductKey" ) ), aProduct );
-
-        if( aProduct.getLength() )
-        {
-            snprintf( pClassName, sizeof(pClassName), "%s", ::rtl::OUStringToOString( aProduct, osl_getThreadTextEncoding() ).getStr() );
-        }
-        else
-            snprintf( pClassName, sizeof(pClassName), "%s", "VCLSalFrame" );
-    }
-    return pClassName;
 }
 
 // -=-= SalFrame / X11SalFrame =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -570,8 +507,8 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         XSetWMProtocols( GetXDisplay(), GetShellWindow(), a, n );
 
         XClassHint* pClass = XAllocClassHint();
-        pClass->res_name  = getFrameResName();
-        pClass->res_class = getFrameClassName();
+        pClass->res_name  = const_cast<char*>(SalData::getFrameResName());
+        pClass->res_class = const_cast<char*>(SalData::getFrameClassName());
         XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
         XFree( pClass );
 
@@ -691,10 +628,8 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     nHeight_                    = 0;
     nStyle_                     = 0;
     bAlwaysOnTop_               = FALSE;
-    // #58928# fake to be mapped on startup, because the sclient may be
-    // resized before mapping and the
-    // SetPosSize / call(salevent_resize) / GetClientSize
-    // stuff will not work in that (unmapped) case
+    // set bViewable_ to TRUE: hack GetClientSize to report something
+    // different to 0/0 before first map
     bViewable_                  = TRUE;
     bMapped_                    = FALSE;
     bDefaultPosition_           = TRUE;
