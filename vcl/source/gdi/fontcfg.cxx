@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-06 11:36:30 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include <osl/time.h>
 #endif
 
+#include <string.h>
 #include <list>
 #include <algorithm>
 

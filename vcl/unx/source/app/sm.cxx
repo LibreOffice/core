@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-22 10:42:27 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+#include <string.h>
 #include <unistd.h>
 #include <sys/poll.h>
 #include <stdio.h>

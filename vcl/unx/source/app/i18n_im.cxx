@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cp $ $Date: 2002-01-10 13:06:51 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <stdio.h>
+#include <string.h>
 #ifdef LINUX
 #define __USE_XOPEN
 #endif

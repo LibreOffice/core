@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cp $ $Date: 2001-12-04 14:57:34 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #define __synchronous_extinput__ 1
 
 #include <stdio.h>
+#include <string.h>
 #ifdef SOLARIS
 #include <alloca.h>
 #endif
