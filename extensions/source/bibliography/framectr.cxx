@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
+ *  last change: $Author: cd $ $Date: 2002-04-22 07:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,8 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
         if (    aCommand.EqualsAscii("Undo") || aCommand.EqualsAscii("Cut") ||
                 aCommand.EqualsAscii("Copy") || aCommand.EqualsAscii("Paste") ||
                 aCommand.EqualsAscii("SelectAll") || aCommand.Copy(0,4).EqualsAscii("Bib/")||
-                aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:5503")))
+                aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:5503")) ||
+                aCommand.EqualsAscii("Close"))
 
             return (frame::XDispatch*) this;
     }
@@ -463,7 +464,8 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
         {
             RemoveFilter();
         }
-        else if(aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:5503")))
+        else if(aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:5503")) ||
+                aCommand.EqualsAscii("Close"))
         {
             Application::PostUserEvent( STATIC_LINK( this, BibFrameController_Impl,
                                         DisposeHdl ), 0 );
