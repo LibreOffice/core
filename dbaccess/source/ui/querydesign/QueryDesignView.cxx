@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:58:01 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 11:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,18 @@ namespace
                                     const ::connectivity::OSQLParseNode* pParseRoot );
 
     //------------------------------------------------------------------------------
+    ::rtl::OUString quoteTableAlias(sal_Bool _bQuote, const ::rtl::OUString& _sAliasName, const ::rtl::OUString& _sQuote)
+    {
+        ::rtl::OUString sRet;
+        if ( _bQuote && _sAliasName.getLength() )
+        {
+            sRet = ::dbtools::quoteName(_sQuote,_sAliasName);
+            const static ::rtl::OUString sTableSeparater('.');
+            sRet += sTableSeparater;
+        }
+        return sRet;
+    }
+    //------------------------------------------------------------------------------
     SqlParseError FillOuterJoins(OQueryDesignView* _pView,
                                 const ::connectivity::OSQLParseNode* pTableRefList)
     {
@@ -345,7 +357,6 @@ namespace
         }
         if ( !bErg )
             bErg = static_cast<OQueryTableView*>(_pView->getTableView())->FindTableFromField(aColumnName, _rDragInfo, nCntAccount);
-
         if ( !bErg )
         {
             eErrorCode = eColumnNotFound;
@@ -381,12 +392,10 @@ namespace
                 {
                     if(aCondition.getLength())
                         aCondition += C_AND;
-                    aCondition += ::dbtools::quoteName(aQuote, pData->GetAliasName(JTCS_FROM));
-                    aCondition += ::rtl::OUString('.');
+                    aCondition += quoteTableAlias(sal_True,pData->GetAliasName(JTCS_FROM),aQuote);
                     aCondition += ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_FROM) );
                     aCondition += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "));
-                    aCondition += ::dbtools::quoteName(aQuote, pData->GetAliasName(JTCS_TO));
-                    aCondition += ::rtl::OUString('.');
+                    aCondition += quoteTableAlias(sal_True,pData->GetAliasName(JTCS_TO),aQuote);
                     aCondition += ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_TO) );
                 }
             }
@@ -697,32 +706,41 @@ namespace
             Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
 
+            const static ::rtl::OUString sFieldSeparator(RTL_CONSTASCII_USTRINGPARAM(", "));
+
             aIter = _rFieldList.begin();
             for(;aIter != _rFieldList.end();++aIter)
             {
                 OTableFieldDescRef pEntryField = *aIter;
                 ::rtl::OUString rFieldName = pEntryField->GetField();
-                if (rFieldName.getLength() && pEntryField->IsVisible())
+                if ( rFieldName.getLength() && pEntryField->IsVisible() )
                 {
                     aTmpStr = ::rtl::OUString();
                     ::rtl::OUString rAlias = pEntryField->GetAlias();
                     ::rtl::OUString rFieldAlias = pEntryField->GetFieldAlias();
-                    if((bAlias || bAsterix) && rAlias.getLength())
-                    {
-                        aTmpStr += ::dbtools::quoteName(aQuote,rAlias);
-                        aTmpStr += ::rtl::OUString('.');
-                    }
-                    // we have to look if we have alias.* here
-                    String sTemp = rFieldName;
-                    if(sTemp.GetTokenCount('.') == 2)
-                        rFieldName = sTemp.GetToken(1,'.');
 
-                    if(pEntryField->GetTable().getLength() && rFieldName.toChar() != '*')
-                        aTmpStr += ::dbtools::quoteName(aQuote, rFieldName).getStr();
+                    aTmpStr += quoteTableAlias((bAlias || bAsterix),rAlias,aQuote);
+
+                    // if we have a none numeric field, the table alias could be in the name
+                    // otherwise we are not allowed to do this (e.g. 0.1 * PRICE )
+                    if  ( !pEntryField->isNumeric() )
+                    {
+                        // we have to look if we have alias.* here
+                        String sTemp = rFieldName;
+                        if(sTemp.GetTokenCount('.') == 2)
+                            rFieldName = sTemp.GetToken(1,'.');
+                        if ( rFieldName.toChar() != '*' )
+                        {
+                            OSL_ENSURE(pEntryField->GetTable().getLength(),"No table field name!");
+                            aTmpStr += ::dbtools::quoteName(aQuote, rFieldName);
+                        }
+                        else
+                            aTmpStr += rFieldName;
+                    }
                     else
                         aTmpStr += rFieldName;
 
-                    if(pEntryField->GetFunctionType() == FKT_AGGREGATE)
+                    if  ( pEntryField->isAggreateFunction() )
                     {
                         DBG_ASSERT(pEntryField->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
                         ::rtl::OUString aTmpStr2(pEntryField->GetFunction());
@@ -732,16 +750,16 @@ namespace
                         aTmpStr = aTmpStr2;
                     }
 
-                    if( rFieldAlias.getLength()                         &&
+                    if (rFieldAlias.getLength()                         &&
                         (rFieldName.toChar() != '*'                     ||
-                        pEntryField->GetFunctionType() == FKT_AGGREGATE ||
-                        pEntryField->GetFunctionType() == FKT_OTHER))
+                        pEntryField->isNumericOrAggreateFunction()      ||
+                        pEntryField->isOtherFunction()))
                     {
                         aTmpStr += ::rtl::OUString::createFromAscii(" AS ");
                         aTmpStr += ::dbtools::quoteName(aQuote, rFieldAlias);
                     }
                     aFieldListStr += aTmpStr;
-                    aFieldListStr += ::rtl::OUString::createFromAscii(", ");
+                    aFieldListStr += sFieldSeparator;
                 }
             }
             if(aFieldListStr.getLength())
@@ -792,9 +810,10 @@ namespace
                     if (!aFieldName.getLength())
                         continue;
                     aCriteria = pEntryField->GetCriteria( i );
-                    if (aCriteria.getLength())
+                    if ( aCriteria.getLength() )
                     {
-                        if (aFieldName.toChar() == '*' && pEntryField->GetFunctionType() == FKT_NONE)               // * darf keine Filter besitzen
+                        // * is not allowed to contain any filter, only when used in combination an aggregate function
+                        if ( aFieldName.toChar() == '*' && pEntryField->isNoneFunction() )
                         {
                             // only show the messagebox the first time
                             if (!bCritsOnAsterikWarning)
@@ -805,28 +824,23 @@ namespace
                         aWork = ::rtl::OUString();
 
 
-                        if (bMulti)
-                        {
-                            if(pEntryField->GetFunctionType() == FKT_OTHER || (aFieldName.toChar() == '*'))
-                                aWork += aFieldName;
-                            else
-                                aWork += ::dbtools::quoteName(aQuote, pEntryField->GetAlias());
-                            aWork += ::rtl::OUString('.');
-                        }
-                        if(pEntryField->GetFunctionType() == FKT_OTHER || (aFieldName.toChar() == '*'))
+                        aWork += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
+
+                        if ( (pEntryField->GetFunctionType() & (FKT_OTHER|FKT_NUMERIC)) || (aFieldName.toChar() == '*') )
                             aWork += aFieldName;
                         else
-                            aWork += ::dbtools::quoteName(aQuote, aFieldName).getStr();
+                            aWork += ::dbtools::quoteName(aQuote, aFieldName);
 
-                        if(pEntryField->GetFunctionType() == FKT_AGGREGATE || pEntryField->IsGroupBy())
+                        if ( pEntryField->isAggreateFunction() || pEntryField->IsGroupBy() )
                         {
                             if (!aHavingStr.getLength())            // noch keine Kriterien
                                 aHavingStr += ::rtl::OUString('(');         // Klammern
                             else
                                 aHavingStr += C_AND;
 
-                            if(pEntryField->GetFunctionType() == FKT_AGGREGATE)
+                            if ( pEntryField->isAggreateFunction() )
                             {
+                                OSL_ENSURE(pEntryField->GetFunction().getLength(),"No function name for aggregate given!");
                                 aHavingStr += pEntryField->GetFunction();
                                 aHavingStr += ::rtl::OUString('(');         // Klammern
                                 aHavingStr += aWork;
@@ -841,7 +855,7 @@ namespace
                             ::connectivity::OSQLParseNode* pParseNode = _pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn);
                             if (pParseNode)
                             {
-                                if (bMulti && !(pEntryField->GetFunctionType() == FKT_OTHER || (aFieldName.toChar() == '*')))
+                                if (bMulti && !(pEntryField->isOtherFunction() || (aFieldName.toChar() == '*')))
                                     pParseNode->replaceNodeValue(pEntryField->GetAlias(),aFieldName);
                                 ::rtl::OUString sHavingStr = aHavingStr;
                                 OSL_ENSURE(pParseNode->count() == 3,"Count must be three here!");
@@ -850,7 +864,7 @@ namespace
                                                                 xMetaData,
                                                                 &rContext,
                                                                 sal_False,
-                                                                pEntryField->GetFunctionType() != FKT_OTHER);
+                                                                !pEntryField->isOtherFunction());
                                 aHavingStr = sHavingStr;
                                 delete pParseNode;
                             }
@@ -859,7 +873,7 @@ namespace
                         }
                         else
                         {
-                            if (!aWhereStr.getLength())         // noch keine Kriterien
+                            if ( !aWhereStr.getLength() )           // noch keine Kriterien
                                 aWhereStr += ::rtl::OUString('(');          // Klammern
                             else
                                 aWhereStr += C_AND;
@@ -872,14 +886,14 @@ namespace
                             ::connectivity::OSQLParseNode* pParseNode = _pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn);
                             if (pParseNode)
                             {
-                                if (bMulti && !(pEntryField->GetFunctionType() == FKT_OTHER || (aFieldName.toChar() == '*')))
+                                if (bMulti && !(pEntryField->isOtherFunction() || (aFieldName.toChar() == '*')))
                                     pParseNode->replaceNodeValue(pEntryField->GetAlias(),aFieldName);
                                 ::rtl::OUString aWhere = aWhereStr;
                                 pParseNode->parseNodeToStr( aWhere,
                                                             xMetaData,
                                                             &rContext,
                                                             sal_False,
-                                                            pEntryField->GetFunctionType() != FKT_OTHER);
+                                                            !pEntryField->isOtherFunction() );
                                 aWhereStr = aWhere;
                                 delete pParseNode;
                             }
@@ -891,7 +905,7 @@ namespace
                         }
                     }
                     // nur einmal für jedes Feld
-                    else if(!i && pEntryField->GetFunctionType() == FKT_CONDITION)
+                    else if ( !i && pEntryField->isCondition() )
                     {
                         if (!aWhereStr.getLength())         // noch keine Kriterien
                             aWhereStr += ::rtl::OUString('(');          // Klammern
@@ -944,7 +958,7 @@ namespace
         SqlParseError eErrorCode = eOk;
 
         ::rtl::OUString aColumnName;
-        String aWorkStr;
+        ::rtl::OUString aWorkStr;
         try
         {
             Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
@@ -971,53 +985,47 @@ namespace
                         bCritsOnAsterikWarning = sal_True;
                         continue;
                     }
-                    if(pEntryField->GetFunctionType() == FKT_NONE)
+
+                    if ( pEntryField->GetFieldAlias().getLength() )
                     {
-                        if (bMulti && pEntryField->GetAlias().getLength())
-                        {
-                            aWorkStr += ::dbtools::quoteName(aQuote, pEntryField->GetAlias()).getStr();
-                            aWorkStr += String('.');
-                        }
-                        aWorkStr += ::dbtools::quoteName(aQuote, aColumnName).getStr();
+                        aWorkStr += ::dbtools::quoteName(aQuote, pEntryField->GetFieldAlias());
                     }
-                    else if(pEntryField->GetFieldAlias().getLength())
-                    {
-                        aWorkStr += ::dbtools::quoteName(aQuote, pEntryField->GetFieldAlias()).getStr();
-                    }
-                    else if(pEntryField->GetFunctionType() == FKT_AGGREGATE)
+                    else if ( pEntryField->isNumericOrAggreateFunction() )
                     {
                         DBG_ASSERT(pEntryField->GetFunction().getLength(),"Functionname darf hier nicht leer sein! ;-(");
-                        aWorkStr += pEntryField->GetFunction().getStr();
-                        aWorkStr +=  String('(');
-                        if (bMulti && pEntryField->GetAlias().getLength())
-                        {
-                            aWorkStr += ::dbtools::quoteName(aQuote, pEntryField->GetAlias()).getStr();
-                            aWorkStr += String('.');
-                        }
-                        aWorkStr += ::dbtools::quoteName(aQuote, aColumnName).getStr();
-                        aWorkStr +=  String(')');
+                        aWorkStr += pEntryField->GetFunction();
+                        aWorkStr +=  ::rtl::OUString('(');
+                        aWorkStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
+                        // only quote column name when we don't have a numeric
+                        if ( pEntryField->isNumeric() )
+                            aWorkStr += aColumnName;
+                        else
+                            aWorkStr += ::dbtools::quoteName(aQuote, aColumnName);
+
+                        aWorkStr +=  ::rtl::OUString(')');
                     }
                     else
                     {
-                        if (bMulti && pEntryField->GetAlias().getLength())
-                        {
-                            aWorkStr += ::dbtools::quoteName(aQuote, pEntryField->GetAlias()).getStr();
-                            aWorkStr += String('.');
-                        }
-                        aWorkStr += ::dbtools::quoteName(aQuote, aColumnName).getStr();
+                        aWorkStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
+                        aWorkStr += ::dbtools::quoteName(aQuote, aColumnName);
                     }
-                    aWorkStr += String(' ');
+                    aWorkStr += ::rtl::OUString(' ');
                     aWorkStr += String::CreateFromAscii( ";ASC;DESC" ).GetToken( eOrder );
-                    aWorkStr += String(',');
+                    aWorkStr += ::rtl::OUString(',');
                 }
             }
 
-            aWorkStr.EraseTrailingChars( ',' );
+            {
+                String sTemp(aWorkStr);
+                sTemp.EraseTrailingChars( ',' );
+                aWorkStr = sTemp;
+            }
 
-            if ( aWorkStr.Len() )
+            if ( aWorkStr.getLength() )
             {
                 sal_Int32 nMaxOrder = xMetaData->getMaxColumnsInOrderBy();
-                if ( nMaxOrder && nMaxOrder < aWorkStr.GetTokenCount(',') )
+                String sToken(aWorkStr);
+                if ( nMaxOrder && nMaxOrder < sToken.GetTokenCount(',') )
                     eErrorCode = eStatementTooLong;
                 else
                 {
@@ -1199,20 +1207,20 @@ namespace
             for(;aIter != _rFieldList.end();++aIter)
             {
                 OTableFieldDescRef  pEntryField = *aIter;
-                if(pEntryField->IsGroupBy())
+                if ( pEntryField->IsGroupBy() )
                 {
                     DBG_ASSERT(pEntryField->GetField().getLength(),"Kein FieldName vorhanden!;-(");
-                    if (bMulti)
-                    {
-                        aGroupByStr += ::dbtools::quoteName(aQuote, pEntryField->GetAlias());
-                        aGroupByStr += ::rtl::OUString('.');
-                    }
+                    aGroupByStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
 
-                    aGroupByStr += ::dbtools::quoteName(aQuote, pEntryField->GetField());
+                    // only quote the field name when it isn't calculated
+                    if ( pEntryField->isNoneFunction() )
+                        aGroupByStr += ::dbtools::quoteName(aQuote, pEntryField->GetField());
+                    else
+                        aGroupByStr += pEntryField->GetField();
                     aGroupByStr += ::rtl::OUString(',');
                 }
             }
-            if(aGroupByStr.getLength())
+            if ( aGroupByStr.getLength() )
             {
                 aGroupByStr = aGroupByStr.replaceAt(aGroupByStr.getLength()-1,1, ::rtl::OUString(' ') );
                 ::rtl::OUString aGroupByStr2 = ::rtl::OUString::createFromAscii(" GROUP BY ");
@@ -1589,26 +1597,27 @@ namespace
                 // don't display the column name
                 aCondition = aCondition.copy(aColumnName.getLength());
                 aCondition = aCondition.trim();
-                if(aCondition.indexOf('=',0) == 1) // ignore the equal sign
+                if ( aCondition.indexOf('=',0) == 0 ) // ignore the equal sign
                     aCondition = aCondition.copy(1);
 
 
-                if(SQL_ISRULE(pFunction, general_set_fct ))
+                if ( SQL_ISRULE(pFunction, general_set_fct ) )
                 {
-                    if( eOk == ( eErrorCode = FillDragInfo(_pView,pFunction->getChild(pFunction->count()-2),aDragLeft)) )
+                    sal_Int32 nFunctionType = FKT_AGGREGATE;
+                    OSQLParseNode* pParamNode = pFunction->getChild(pFunction->count()-2);
+                    if( eOk != ( eErrorCode = FillDragInfo(_pView,pParamNode,aDragLeft))
+                        && SQL_ISRULE(pParamNode,num_value_exp) )
                     {
-                        OSL_ENSURE(pFunction->count() > 3,"Invalid format for general_set_fct!");
                         ::rtl::OUString sParameterValue;
-                        pFunction->getChild(pFunction->count()-2)->parseNodeToPredicateStr(sParameterValue,
-                                                    xMetaData,
-                                                    pController->getNumberFormatter(),
-                                                    _pView->getLocale(),
-                                                    static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
+                        pParamNode->parseNodeToStr( sParameterValue,
+                                                    xConnection->getMetaData(),
                                                     &pController->getParser()->getContext());
+                        nFunctionType |= FKT_NUMERIC;
                         aDragLeft->SetField(sParameterValue);
+                        eErrorCode = eOk;
                     }
-                    aDragLeft->SetFunctionType(FKT_AGGREGATE);
-                    if(bHaving)
+                    aDragLeft->SetFunctionType(nFunctionType);
+                    if ( bHaving )
                         aDragLeft->SetGroupBy(sal_True);
                     sal_Int32 nIndex = 0;
                     aDragLeft->SetFunction(aColumnName.getToken(0,'(',nIndex));
@@ -1619,14 +1628,13 @@ namespace
                     aDragLeft->SetField(aColumnName);
                     if(bHaving)
                         aDragLeft->SetGroupBy(sal_True);
-                    aDragLeft->SetFunctionType(FKT_OTHER);
+                    aDragLeft->SetFunctionType(FKT_OTHER|FKT_NUMERIC);
                 }
                 _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel);
             }
         }
         else // kann sich nur um einen Expr. Ausdruck handeln
         {
-            OTableFieldDescRef aDragLeft = new OTableFieldDesc();
             ::rtl::OUString aName,aCondition;
 
             ::connectivity::OSQLParseNode *pLhs = pCondition->getChild(0);
@@ -1636,15 +1644,16 @@ namespace
             if(xConnection.is())
             {
                 Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-                for(sal_uInt16 i=0;i< pLhs->count();i++)
-                    pCondition->getChild(i)->parseNodeToStr(aName,
+                sal_uInt16 i;
+                for(i=0;i< pLhs->count();i++)
+                    pLhs->getChild(i)->parseNodeToStr(aName,
                                                 xMetaData,
                                                 &pController->getParser()->getContext(),
                                                 sal_True);
                 // Kriterium
                 aCondition = pCondition->getChild(1)->getTokenValue();
                 for(i=0;i< pRhs->count();i++)
-                    pCondition->getChild(i)->parseNodeToPredicateStr(aCondition,
+                    pRhs->getChild(i)->parseNodeToPredicateStr(aCondition,
                                                                 xMetaData,
                                                                 pController->getNumberFormatter(),
                                                                 _pView->getLocale(),
@@ -1652,8 +1661,9 @@ namespace
                                                                 &pController->getParser()->getContext());
             }
 
+            OTableFieldDescRef aDragLeft = new OTableFieldDesc();
             aDragLeft->SetField(aName);
-            aDragLeft->SetFunctionType(FKT_OTHER);
+            aDragLeft->SetFunctionType(FKT_OTHER|FKT_NUMERIC);
             // und anh"angen
             _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel);
         }
@@ -1777,6 +1787,17 @@ namespace
         return sal_True;
     }
     //------------------------------------------------------------------------------
+    void insertUnUsedFields(OQueryDesignView* _pView,OSelectionBrowseBox* _pSelectionBrw)
+    {
+        // now we have to insert the fields which aren't in the statement
+        OQueryController* pController = static_cast<OQueryController*>(_pView->getController());
+        OTableFields& rUnUsedFields = pController->getUnUsedFields();
+        for(OTableFields::iterator aIter = rUnUsedFields.begin();aIter != rUnUsedFields.end();++aIter)
+            if(_pSelectionBrw->InsertField(*aIter,BROWSER_INVALIDID,sal_False,sal_False).isValid())
+                (*aIter) = NULL;
+        OTableFields().swap( rUnUsedFields );
+    }
+    //------------------------------------------------------------------------------
     SqlParseError InitFromParseNodeImpl(OQueryDesignView* _pView,OSelectionBrowseBox* _pSelectionBrw)
     {
         SqlParseError eErrorCode = eOk;
@@ -1878,14 +1899,7 @@ namespace
                                             if ( eOk == (eErrorCode = GetHavingCriteria(_pView,_pSelectionBrw,pParseTree,nLevel)) )
                                             {
                                                 if ( eOk == (eErrorCode = GetOrderCriteria(_pView,_pSelectionBrw,pParseTree)) )
-                                                {
-                                                    // now we have to insert the fields which aren't in the statement
-                                                    OTableFields& rUnUsedFields = pController->getUnUsedFields();
-                                                    for(OTableFields::iterator aIter = rUnUsedFields.begin();aIter != rUnUsedFields.end();++aIter)
-                                                        if(_pSelectionBrw->InsertField(*aIter,BROWSER_INVALIDID,sal_False,sal_False).isValid())
-                                                            (*aIter) = NULL;
-                                                    OTableFields().swap( rUnUsedFields );
-                                                }
+                                                    insertUnUsedFields(_pView,_pSelectionBrw);
                                             }
                                         }
                                     }
@@ -1903,6 +1917,11 @@ namespace
             }
             else
                 eErrorCode = eNoSelectStatement;
+        }
+        else
+        {
+            // now we have to insert the fields which aren't in the statement
+            insertUnUsedFields(_pView,_pSelectionBrw);
         }
 
         // Durch das Neuerzeugen wurden wieder Undo-Actions in den Manager gestellt
@@ -1993,16 +2012,17 @@ namespace
                                                         sal_True,
                                                         sal_True); // quote is to true because we need quoted elements inside the function
 
+                            sal_Int32 nFunctionType = FKT_NONE;
                             ::connectivity::OSQLParseNode * pParamRef = pColumnRef->getChild(pColumnRef->count()-2);
-                            if (SQL_ISRULE(pColumnRef,general_set_fct)
-                                && SQL_ISRULE(pParamRef = pColumnRef->getChild(pColumnRef->count()-2),column_ref))
+                            if (    SQL_ISRULE(pColumnRef,general_set_fct)
+                                &&  SQL_ISRULE(pParamRef,column_ref) )
                             {
                                 // Parameter auf Columnref pr"ufen
                                 InsertColumnRef(_pView,pParamRef,aColumnName,aColumnAlias,aTableRange,aInfo,pTabList);
                             }
-                            else
+                            else if ( SQL_ISRULE(pColumnRef,general_set_fct) )
                             {
-                                if(pParamRef && pParamRef->getTokenValue().toChar() == '*')
+                                if ( pParamRef && pParamRef->getTokenValue().toChar() == '*' )
                                 {
                                     OJoinTableView::OTableWindowMap::iterator aIter = pTabList->begin();
                                     for(;aIter != pTabList->end();++aIter)
@@ -2018,22 +2038,60 @@ namespace
                                 }
                                 else
                                 {
+                                    ::rtl::OUString sFieldName = aColumns;
+                                    if ( pParamRef )
+                                    {   // we got an aggregate function but without column name inside
+                                        // so we set the whole argument of the function as field name
+                                        nFunctionType |= FKT_NUMERIC;
+                                        sFieldName = ::rtl::OUString();
+                                        pParamRef->parseNodeToStr(  sFieldName,
+                                                            xMetaData,
+                                                            &pController->getParser()->getContext(),
+                                                            sal_True,
+                                                            sal_True); // quote is to true because we need quoted elements inside the function
+                                    }
                                     aInfo->SetDataType(DataType::DOUBLE);
                                     aInfo->SetFieldType(TAB_NORMAL_FIELD);
-                                    aInfo->SetField(aColumns);
+                                    aInfo->SetField(sFieldName);
                                 }
                                 aInfo->SetTabWindow(NULL);
                                 aInfo->SetFieldAlias(aColumnAlias);
                             }
-
-                            if(SQL_ISRULE(pColumnRef,general_set_fct))
+                            else
                             {
-                                aInfo->SetFunctionType(FKT_AGGREGATE);
+                                // get the type out of the funtion name
+                                nFunctionType |= FKT_NUMERIC;
+                                sal_Int32 nDataType = DataType::DOUBLE;
+                                ::rtl::OUString sFieldName = aColumns;
+                                OSQLParseNode* pFunctionName = pColumnRef->getChild(0);
+                                if ( !SQL_ISPUNCTUATION(pFunctionName,"{") )
+                                {
+                                    if ( SQL_ISRULE(pColumnRef,char_value_fct) )
+                                        pFunctionName = pFunctionName->getChild(0);
+
+                                    ::rtl::OUString sFunctionName = pFunctionName->getTokenValue();
+                                    if ( !sFunctionName.getLength() )
+                                        sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_MS_1252);
+
+                                    nDataType = OSQLParser::getFunctionReturnType(
+                                                        sFunctionName
+                                                        ,&pController->getParser()->getContext());
+                                }
+                                aInfo->SetDataType(nDataType);
+                                aInfo->SetFieldType(TAB_NORMAL_FIELD);
+                                aInfo->SetField(sFieldName);
+                                aInfo->SetTabWindow(NULL);
+                                aInfo->SetFieldAlias(aColumnAlias);
+                            }
+
+                            if ( SQL_ISRULE(pColumnRef,general_set_fct) )
+                            {
+                                aInfo->SetFunctionType(nFunctionType|FKT_AGGREGATE);
                                 String aCol(aColumns);
                                 aInfo->SetFunction(aCol.GetToken(0,'(').EraseTrailingChars(' '));
                             }
                             else
-                                aInfo->SetFunctionType(FKT_OTHER);
+                                aInfo->SetFunctionType(nFunctionType|FKT_OTHER);
 
                             eErrorCode = _pView->InsertField(aInfo, sal_True, bFirstField);
                             bFirstField = sal_False;
@@ -2052,7 +2110,7 @@ namespace
                             aInfo->SetTabWindow(NULL);
                             aInfo->SetField(aColumns);
                             aInfo->SetFieldAlias(aColumnAlias);
-                            aInfo->SetFunctionType(FKT_OTHER);
+                            aInfo->SetFunctionType(FKT_NUMERIC | FKT_OTHER);
 
                             eErrorCode = _pView->InsertField(aInfo, sal_True, bFirstField);
                             bFirstField = sal_False;
@@ -2106,7 +2164,7 @@ namespace
                         for(;aIter != aList.end();++aIter)
                         {
                             OTableFieldDescRef pEntry = *aIter;
-                            if(pEntry.isValid() && pEntry->GetFieldAlias() == aColumnName.getStr())
+                            if(pEntry.isValid() && pEntry->GetFieldAlias() == aColumnName)
                                 pEntry->SetOrderDir( eOrderDir );
                         }
                     }
@@ -2530,7 +2588,13 @@ long OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
     switch (rNEvt.GetType())
     {
         case EVENT_GETFOCUS:
-            if( m_pSelectionBox && m_pSelectionBox->HasChildPathFocus() )
+#ifdef _DEBUG
+            {
+                Window* pFocus = Application::GetFocusWindow();
+            }
+#endif
+
+            if ( m_pSelectionBox && m_pSelectionBox->HasChildPathFocus() )
                 m_eChildFocus = SELECTION;
             else
                 m_eChildFocus = TABLEVIEW;
@@ -2564,17 +2628,20 @@ sal_Bool OQueryDesignView::checkStatement()
     for(;aIter != rFieldList.end();++aIter)
     {
         OTableFieldDescRef pEntryField = *aIter;
-        if(pEntryField->GetField().getLength() && pEntryField->IsVisible())
-            nFieldcount++;
-        else if(pEntryField->GetField().getLength()         &&
+        if ( pEntryField->GetField().getLength() && pEntryField->IsVisible() )
+            ++nFieldcount;
+        else if (pEntryField->GetField().getLength()            &&
                 !pEntryField->HasCriteria()                 &&
-                pEntryField->GetFunctionType() == FKT_NONE  &&
+                pEntryField->isNoneFunction()               &&
                 pEntryField->GetOrderDir() == ORDER_NONE    &&
-                !pEntryField->GetFunction().getLength())
+                !pEntryField->GetFunction().getLength() )
             rUnUsedFields.push_back(pEntryField);
     }
-    if(!nFieldcount)    // keine Felder sichtbar also zur"uck
+    if ( !nFieldcount ) // keine Felder sichtbar also zur"uck
+    {
+        rUnUsedFields = rFieldList;
         return ::rtl::OUString();
+    }
 
     OQueryTableView::OTableWindowMap* pTabList   = m_pTableView->GetTabWinMap();
     sal_uInt32 nTabcount        = pTabList->size();
@@ -2732,20 +2799,22 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
 
     String sTest(_sCriteria);
     // special handling for functions
-    if(pEntry->GetFunctionType() == FKT_OTHER || pEntry->GetFunctionType() == FKT_AGGREGATE)
+    if ( pEntry->GetFunctionType() & (FKT_OTHER | FKT_AGGREGATE | FKT_NUMERIC) )
     {
         // we have a function here so we have to distinguish the type of return value
         String sFunction;
-        if(pEntry->GetFunctionType() == FKT_AGGREGATE)
+        if ( pEntry->isNumericOrAggreateFunction() )
             sFunction = pEntry->GetFunction();
         else
             sFunction = pEntry->GetField();
 
         if(sFunction.GetTokenCount('(') > 1)
             sFunction = sFunction.GetToken(0,'('); // this should be the name of the function
-        OSL_ENSURE(sFunction.Len(),"Function name is empty!");
+
 
         sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sFunction,&pParser->getContext());
+        if ( nType == DataType::OTHER )
+            nType = DataType::DOUBLE;
 
         parse::OParseColumn* pColumn = new parse::OParseColumn( pEntry->GetField(),
                                                                 ::rtl::OUString(),
@@ -2822,3 +2891,4 @@ sal_Bool OQueryDesignView::HasTable() const
     return !m_pTableView->GetTabWinMap()->empty();
 }
 // -----------------------------------------------------------------------------
+
