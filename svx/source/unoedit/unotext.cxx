@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:40:58 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) thr
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoTextRangeBase );
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SfxItemPropertyMap* _pMap ) throw()
-: aPropSet(_pMap), pEditSource(NULL)
+: pEditSource(NULL) , aPropSet(_pMap)
 {
 }
 
@@ -1051,10 +1051,6 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
 
     uno::Sequence< beans::PropertyState > aRet( nCount );
     beans::PropertyState* pState = aRet.getArray();
-
-
-
-    const sal_Bool bPara = nPara != -1;
 
     SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
