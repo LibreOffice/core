@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 09:39:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@ DECLARE_DYNARRAY(StringArray,String *);
 
 // #117718# define internal types to distinguish between
 // module types, form, class & normal
-//
-enum ModuleType { Unknown = 0, Normal, Class, Form };
+// #i37965# DR 2004-12-03: add "Document", used in Excel for macros attached to sheet
+enum ModuleType { Unknown = 0, Normal, Class, Form, Document };
 
 // #117718# define map to hold types of module
 //
