@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:08:12 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,8 @@
 #ifndef CONFIG_HXX
 #include <config.hxx>
 #endif
+
+#include <smdll.hxx>
 
 using namespace ::vos;
 using namespace ::rtl;
@@ -320,7 +322,6 @@ uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::R
                                     static_cast< XMultiPropertySet* > ( this ),
                                     //static_cast< XPropertyState* > ( this ),
                                     // my own interfaces
-                                    static_cast< XUnoTunnel* > ( this ),
                                     static_cast< XServiceInfo*  > ( this ),
                                     static_cast< XRenderable*  > ( this ) );
     if (!aRet.hasValue())
@@ -351,10 +352,9 @@ uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeExce
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
     sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 5);
+    aTypes.realloc(nLen + 4);
     uno::Type* pTypes = aTypes.getArray();
     pTypes[nLen++] = ::getCppuType((Reference<XServiceInfo>*)0);
-    pTypes[nLen++] = ::getCppuType((Reference<XUnoTunnel>*)0);
     pTypes[nLen++] = ::getCppuType((Reference<XPropertySet>*)0);
     pTypes[nLen++] = ::getCppuType((Reference<XMultiPropertySet>*)0);
     pTypes[nLen++] = ::getCppuType((Reference<XRenderable>*)0);
@@ -392,7 +392,8 @@ sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
     {
             return (sal_Int64)this;
     }
-    return 0;
+
+    return SfxBaseModel::getSomething( rId );
 }
 /*-- 07.01.00 16:32:59---------------------------------------------------
 
@@ -417,8 +418,15 @@ sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
 
 OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 {
-    return C2U("SmModel");
+    return getImplementationName_Static();
 }
+
+
+::rtl::OUString SmModel::getImplementationName_Static()
+{
+    return rtl::OUString::createFromAscii("com.sun.star.comp.math.FormulaDocument");
+}
+
 /*-- 07.02.00 13:24:09---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -430,6 +438,11 @@ sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::Runt
 
   -----------------------------------------------------------------------*/
 uno::Sequence< OUString > SmModel::getSupportedServiceNames(void) throw( uno::RuntimeException )
+{
+    return getSupportedServiceNames_Static();
+}
+
+uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1019,5 +1032,14 @@ void SAL_CALL SmModel::render(
             }
         }
     }
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SmModel_createInstance(
+                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SmDLL::Init();
+    SfxObjectShell* pShell = new SmDocShell( SFX_CREATE_MODE_STANDARD );
+    return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
