@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwBitArray.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:11:27 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 13:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,17 +64,17 @@
 
 using namespace std;
 
-SwBitArray::SwBitArray(uint _nSize)
+SwBitArray::SwBitArray(sal_uInt32 _nSize)
 {
     nSize = _nSize;
-    mArray = new uint[(nSize - 1)/ mGroupSize + 1];
+    mArray = new sal_uInt32[(nSize - 1)/ mGroupSize + 1];
     Reset();
 }
 
 SwBitArray::SwBitArray(const SwBitArray & rArray)
     : nSize(rArray.nSize)
 {
-    mArray = new uint[calcSize()];
+    mArray = new sal_uInt32[calcSize()];
     memcpy(mArray, rArray.mArray, calcSize());
 }
 
@@ -83,14 +83,14 @@ SwBitArray::~SwBitArray()
     delete [] mArray;
 }
 
-BOOL SwBitArray::IsValid(uint n) const
+BOOL SwBitArray::IsValid(sal_uInt32 n) const
 {
     return n < nSize;
 }
 
-void SwBitArray::Set(uint n, BOOL nValue)
+void SwBitArray::Set(sal_uInt32 n, BOOL nValue)
 {
-    uint * pGroup = NULL;
+    sal_uInt32 * pGroup = NULL;
 
     if (IsValid(n))
     {
@@ -108,10 +108,10 @@ void SwBitArray::Reset()
     memset(mArray, 0, mGroupSize * (nSize / mGroupSize + 1));
 }
 
-BOOL SwBitArray::Get(uint n) const
+BOOL SwBitArray::Get(sal_uInt32 n) const
 {
     BOOL bResult = FALSE;
-    uint * pGroup = NULL;
+    sal_uInt32 * pGroup = NULL;
 
     if (IsValid(n))
     {
@@ -189,7 +189,7 @@ ostream & operator << (ostream & o, const SwBitArray & rBitArray)
 
     sprintf(buffer, "%p", &rBitArray);
     o << "[ " << buffer << " ";
-    for (uint n = 0; n < rBitArray.Size(); n++)
+    for (sal_uInt32 n = 0; n < rBitArray.Size(); n++)
     {
         if (rBitArray.Get(n))
             o << "1";
