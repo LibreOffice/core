@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckGlobalEventBroadcaster_writer1.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2004-03-08 16:25:20 $
+ *  last change:$Date: 2004-11-17 13:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 package complex.framework;
 
+import com.sun.star.awt.XWindow;
 import com.sun.star.document.XEventBroadcaster;
 import com.sun.star.document.XEventListener;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -69,6 +70,9 @@ import com.sun.star.uno.UnoRuntime;
 import complex.framework.DocHelper.WriterHelper;
 import complexlib.ComplexTestCase;
 import java.util.ArrayList;
+import com.sun.star.task.XJobExecutor;
+import com.sun.star.util.URL;
+import util.UITools;
 
 /**
  * This testcase checks the GlobalEventBroadcaster
@@ -195,7 +199,29 @@ public class CheckGlobalEventBroadcaster_writer1 extends ComplexTestCase {
 
         assure("Wrong events fired when closing Window-New Window",
                proveExpectation(expected));
+
         log.println("... done");
+
+    log.println("Opening document with label wizard");
+    xTextDoc = wHelper.openFromDialog("private:factory/swriter?slot=21051", "", false);
+        shortWait();
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, wHelper.getToolkit ().getActiveTopWindow ());
+        UITools ut = new UITools(m_xMSF,xWindow);
+        notifyEvents.clear();
+        log.println("pressing button 'New Document'");
+        try{
+            ut.clickButton ("New Document");
+        } catch (Exception e) {
+            log.println("Couldn't press Button");
+        }
+        log.println("... done");
+        shortWait();
+        shortWait();
+    shortWait();
+        expected = new String[] { "OnViewClosed", "OnNew", "OnFocus", "OnModifyChanged" };
+
+        assure("Wrong events fired when starting labels wizard",
+               proveExpectation(expected));
 
         log.println("-- Done Writer --");
     }
@@ -212,7 +238,7 @@ public class CheckGlobalEventBroadcaster_writer1 extends ComplexTestCase {
     */
     private void shortWait() {
         try {
-            Thread.sleep(500);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             log.println("While waiting :" + e);
         }
