@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:58:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,10 @@
 #include "xmlgrhlp.hxx"
 #endif
 
+#ifndef _XMLOFF_ATTRLIST_HXX
+#include "xmloff/attrlist.hxx"
+#endif
+
 #include "xmlxtimp.hxx"
 
 using namespace com::sun::star;
@@ -183,18 +187,12 @@ using namespace ::rtl;
 using namespace ::xmloff::token;
 using namespace cppu;
 
+sal_Char __READONLY_DATA sXML_np__office[] = "__office";
 sal_Char __READONLY_DATA sXML_np__office_ooo[] = "___office";
-sal_Char __READONLY_DATA sXML_np__style_ooo[] = "___style";
-sal_Char __READONLY_DATA sXML_np__text_ooo[] = "___text";
-sal_Char __READONLY_DATA sXML_np__table_ooo[] = "___table";
+sal_Char __READONLY_DATA sXML_np__draw[] = "__draw";
 sal_Char __READONLY_DATA sXML_np__draw_ooo[] = "___draw";
-sal_Char __READONLY_DATA sXML_np__dr3d_ooo[] = "___dr3d";
-sal_Char __READONLY_DATA sXML_np__meta_ooo[] = "___meta";
-sal_Char __READONLY_DATA sXML_np__number_ooo[] = "___number";
-sal_Char __READONLY_DATA sXML_np__chart_ooo[] = "___chart";
-sal_Char __READONLY_DATA sXML_np__script_ooo[] = "___script";
-sal_Char __READONLY_DATA sXML_np__config_ooo[] = "___config";
-sal_Char __READONLY_DATA sXML_np__form_ooo[] = "___form";
+sal_Char __READONLY_DATA sXML_np__ooo[] = "__ooo";
+sal_Char __READONLY_DATA sXML_np__xlink[] = "__xlink";
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -205,7 +203,8 @@ enum SvxXMLTableImportContextEnum { stice_unknown, stice_color, stice_marker, st
 class SvxXMLTableImportContext : public SvXMLImportContext
 {
 public:
-    SvxXMLTableImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const Reference< XNameContainer >& xTable );
+    SvxXMLTableImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const Reference< XNameContainer >& xTable,
+        sal_Bool bOOoFormat );
     virtual ~SvxXMLTableImportContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
@@ -223,12 +222,14 @@ protected:
 private:
     Reference< XNameContainer > mxTable;
     SvxXMLTableImportContextEnum meContext;
+    sal_Bool mbOOoFormat;
 };
 
 ///////////////////////////////////////////////////////////////////////
 
-SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const Reference< XNameContainer >& xTable )
-: SvXMLImportContext( rImport, nPrfx, rLName ), meContext( eContext ), mxTable( xTable )
+SvxXMLTableImportContext::SvxXMLTableImportContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName, const Reference< XAttributeList >& xAttrList, SvxXMLTableImportContextEnum eContext, const Reference< XNameContainer >& xTable, sal_Bool bOOoFormat )
+: SvXMLImportContext( rImport, nPrfx, rLName ), meContext( eContext ), mxTable( xTable ),
+    mbOOoFormat( bOOoFormat )
 {
 }
 
@@ -236,10 +237,54 @@ SvxXMLTableImportContext::~SvxXMLTableImportContext()
 {
 }
 
-SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& rAttrList )
 {
     if( XML_NAMESPACE_DRAW == nPrefix )
     {
+        Reference< XAttributeList > xAttrList( rAttrList );
+        if( mbOOoFormat &&
+             (stice_dash == meContext || stice_hatch == meContext ||
+             stice_bitmap == meContext) )
+        {
+            SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
+            xAttrList = pAttrList;
+            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+            for( sal_Int16 i=0; i < nAttrCount; i++ )
+            {
+                const OUString& rAttrName = xAttrList->getNameByIndex( i );
+                OUString aLocalName;
+                sal_uInt16 nPrefix =
+                    GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                                &aLocalName );
+                if( XML_NAMESPACE_XLINK == nPrefix &&
+                    stice_bitmap == meContext &&
+                    IsXMLToken( aLocalName, XML_HREF ) )
+                {
+                    const OUString rValue = xAttrList->getValueByIndex( i );
+                    if( rValue.getLength() && '#' == rValue[0] )
+                        pAttrList->SetValueByIndex( i, rValue.copy( 1 ) );
+                }
+                else if( XML_NAMESPACE_DRAW == nPrefix &&
+                          ( ( stice_dash == meContext &&
+                              (IsXMLToken( aLocalName, XML_DOTS1_LENGTH ) ||
+                               IsXMLToken( aLocalName, XML_DOTS2_LENGTH ) ||
+                               IsXMLToken( aLocalName, XML_DISTANCE )) ) ||
+                            ( stice_hatch == meContext &&
+                              IsXMLToken( aLocalName, XML_HATCH_DISTANCE ) ) ) )
+                {
+                    const OUString rValue = xAttrList->getValueByIndex( i );
+                    sal_Int32 nPos = rValue.getLength();
+                    while( nPos && rValue[nPos-1] <= ' ' )
+                        --nPos;
+                    if( nPos > 2 &&
+                        ('c'==rValue[nPos-2] || 'C'==rValue[nPos-2]) &&
+                        ('h'==rValue[nPos-1] || 'H'==rValue[nPos-1]) )
+                    {
+                        pAttrList->SetValueByIndex( i, rValue.copy( 0, nPos-2 ) );
+                    }
+                }
+            }
+        }
         try
         {
             Any aAny;
@@ -355,7 +400,12 @@ SvxXMLXTableImport::SvxXMLXTableImport(
 {
     SetGraphicResolver( xGrfResolver );
 
-    // OOo namespaces
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__ooo ) ), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office ) ), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__draw ) ), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xlink ) ), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+
+    // OOo namespaces for reading OOo 1.1 files
     GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office_ooo ) ),
                         GetXMLToken(XML_N_OFFICE_OOO),
                         XML_NAMESPACE_OFFICE );
@@ -388,26 +438,20 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const Reference< XNameC
                 break;
             }
 
-            uno::Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ), uno::UNO_QUERY );
-            if( !xParser.is() )
-            {
-                DBG_ERROR( "com.sun.star.xml.sax.Parser service missing" );
-                break;
-            }
-
+            uno::Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ), uno::UNO_QUERY_THROW );
             uno::Reference < io::XStream > xIStm;
             uno::Reference< io::XActiveDataSource > xSource;
 
-            uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
 
             xml::sax::InputSource aParserInput;
             aParserInput.sSystemId = aMedium.GetName();
 
-            if( xStorage.is() )
+            if( aMedium.IsStorage() )
             {
-                const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
+                uno::Reference < embed::XStorage > xStorage( aMedium.GetStorage(), uno::UNO_QUERY_THROW );
 
-                xIStm = xStorage->openStreamElement( aContentStmName, embed::ElementModes::READ );
+                const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
+                xIStm.set( xStorage->openStreamElement( aContentStmName, embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
                 if( !xIStm.is() )
                 {
                     DBG_ERROR( "could not open Content stream" );
@@ -421,14 +465,13 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const Reference< XNameC
             else
             {
                 aParserInput.aInputStream = aMedium.GetInputStream();
-                Reference< io::XSeekable > xSeek( aParserInput.aInputStream, UNO_QUERY );
-                if ( xSeek.is() )
-                    xSeek->seek( 0 );
+                Reference< io::XSeekable > xSeek( aParserInput.aInputStream, uno::UNO_QUERY_THROW );
+                xSeek->seek( 0 );
             }
 
             if( xSource.is() )
             {
-                Reference< io::XActiveDataControl > xSourceControl( xSource, UNO_QUERY );
+                Reference< io::XActiveDataControl > xSourceControl( xSource, UNO_QUERY_THROW );
                 xSourceControl->start();
             }
 
@@ -444,8 +487,9 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const Reference< XNameC
         if( pGraphicHelper )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
+        DBG_ERROR("svx::SvxXMLXTableImport::load(), exception caught!");
         bRet = sal_False;
     }
 
@@ -454,39 +498,41 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const Reference< XNameC
 
 SvXMLImportContext *SvxXMLXTableImport::CreateContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
-    if( XML_NAMESPACE_OFFICE == nPrefix )
+    if( XML_NAMESPACE_OOO == nPrefix ||
+        XML_NAMESPACE_OFFICE == nPrefix )
     {
+        sal_Bool bOOoFormat = (XML_NAMESPACE_OFFICE == nPrefix);
         Type aType = mrTable->getElementType();
 
         if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "color-table" ) ) )
         {
             if( aType == ::getCppuType((const sal_Int32*)0) )
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_color, mrTable );
+                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_color, mrTable, bOOoFormat );
         }
         else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "marker-table" ) ) )
         {
             if( aType == ::getCppuType((const drawing::PolyPolygonBezierCoords*)0) )
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_marker, mrTable );
+                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_marker, mrTable, bOOoFormat );
         }
         else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "dash-table" ) ) )
         {
             if( aType == ::getCppuType((const drawing::LineDash*)0) )
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_dash, mrTable );
+                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_dash, mrTable, bOOoFormat );
         }
         else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hatch-table" ) ) )
         {
             if( aType == ::getCppuType((const drawing::Hatch*)0) )
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_hatch, mrTable );
+                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_hatch, mrTable, bOOoFormat );
         }
         else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gradient-table" ) ) )
         {
             if( aType == ::getCppuType((const awt::Gradient*)0))
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_gradient, mrTable );
+                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_gradient, mrTable, bOOoFormat );
         }
         else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bitmap-table" ) ) )
         {
             if( aType == ::getCppuType((const OUString*)0))
-                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_bitmap, mrTable );
+                return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_bitmap, mrTable, bOOoFormat );
         }
     }
 
