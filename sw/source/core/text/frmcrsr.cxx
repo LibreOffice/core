@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 16:39:04 $
+ *  last change: $Author: fme $ $Date: 2001-11-14 11:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,10 +128,10 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
     if( !bNoScroll || pFrm->GetFollow() )
     {
         pFrmAtPos = pFrm->GetFrmAtPos( rPos );
-        if( rPos.nContent.GetIndex() < pFrmAtPos->GetOfst() &&
+        if( nOffset < pFrmAtPos->GetOfst() &&
             !pFrmAtPos->IsFollow() )
         {
-            xub_StrLen nNew = rPos.nContent.GetIndex();
+            xub_StrLen nNew = nOffset;
             if( nNew < MIN_OFFSET_STEP )
                 nNew = 0;
             else
@@ -148,7 +148,8 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
 
     if( nOffset && bRightMargin )
     {
-        while( pFrmAtPos && pFrmAtPos->GetOfst() == nOffset )
+        while( pFrmAtPos && pFrmAtPos->GetOfst() == nOffset &&
+               pFrmAtPos->IsFollow() )
         {
             pFrmAtPos->GetFormatted();
             pFrmAtPos = pFrmAtPos->FindMaster();
@@ -258,12 +259,27 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                                      bNoScroll );
     pFrm->GetFormatted();
     const SwFrm* pTmpFrm = (SwFrm*)pFrm->GetUpper();
+
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN ( pFrm )
+    SwTwips nUpperMaxY = (pTmpFrm->*fnRect->fnGetLimit)();
+    const SwTwips nLimit = (pFrm->*fnRect->fnGetLimit)();
+
+    SwTwips nMaxY = bVert ?
+                    Max( nLimit, nUpperMaxY ) :
+                    Min( nLimit, nUpperMaxY );
+#else
     SwTwips nUpperMaxY = pTmpFrm->Frm().Top() + pTmpFrm->Prt().Bottom();
     SwTwips nMaxY = Min( pFrm->Frm().Top() + pFrm->Prt().Bottom(), nUpperMaxY );
+#endif
 
     sal_Bool bRet = sal_False;
 
+#ifdef VERTICAL_LAYOUT
+    if ( pFrm->IsEmpty() || ! (pFrm->Prt().*fnRect->fnGetHeight)() )
+#else
     if ( pFrm->IsEmpty() || !pFrm->Prt().Height() )
+#endif
     {
         Point aPnt1 = pFrm->Frm().Pos() + pFrm->Prt().Pos();
         SwTxtNode* pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
@@ -324,7 +340,14 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 
 #ifdef VERTICAL_LAYOUT
         if ( pFrm->IsVertical() )
+        {
+            // nMaxY and nUpperMaxY have to be adjusted for the swapped frame
+            const long nTmp = pFrm->Frm().Top() + pFrm->Frm().Left() +
+                              pFrm->Frm().Width();
+            nMaxY = nTmp - nMaxY;
+            nUpperMaxY = nTmp - nUpperMaxY;
             pFrm->SwapWidthAndHeight();
+        }
 #endif
 
         do
