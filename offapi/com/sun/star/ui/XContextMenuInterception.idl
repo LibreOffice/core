@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContextMenuInterception.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-29 07:32:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,11 @@
 module com {  module sun {  module star {  module ui {
 
 
-interface XContextMenuInterceptor;
+ published interface XContextMenuInterceptor;
 /** This interface enables an object to get interceptors registered that
  change context menue or prevent them from beeing executed.
  */
-interface XContextMenuInterception : ::com::sun::star::uno::XInterface
+published interface XContextMenuInterception : ::com::sun::star::uno::XInterface
 {
     /** registers an <type>XContextMenuInterceptor</type>, which will become
         the first interceptor in the chain of registered interceptors.
