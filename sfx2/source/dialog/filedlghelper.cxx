@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-15 14:23:30 $
+ *  last change: $Author: dv $ $Date: 2001-06-18 10:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,8 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
 private:
     void                    addFilters( sal_uInt32 nFlags,
                                         const SfxObjectFactory& rFactory );
+    void                    addFilter( const String& rFilterName,
+                                       const String& rExtension );
     void                    addGraphicFilter();
     void                    enablePasswordBox();
     void                    updateVersions();
@@ -235,11 +237,10 @@ public:
     virtual void SAL_CALL       disposing( const EventObject& Source ) throw ( RuntimeException );
 
     // Own methods
-                            FileDialogHelper_Impl( const short nDialogType, sal_uInt32 nFlags );
-                           ~FileDialogHelper_Impl();
+                                FileDialogHelper_Impl( const short nDialogType, sal_uInt32 nFlags );
+                               ~FileDialogHelper_Impl();
 
-    ErrCode                 execute( const String&   rPath,
-                                     SvStringsDtor*& rpURLList,
+    ErrCode                 execute( SvStringsDtor*& rpURLList,
                                      SfxItemSet *&   rpSet,
                                      String&         rFilter );
     ErrCode                 execute();
@@ -608,8 +609,7 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
 }
 
 // ------------------------------------------------------------------------
-ErrCode FileDialogHelper_Impl::execute( const String&   rPath,
-                                        SvStringsDtor*& rpURLList,
+ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                         SfxItemSet *&   rpSet,
                                         String&         rFilter )
 {
@@ -625,9 +625,7 @@ ErrCode FileDialogHelper_Impl::execute( const String&   rPath,
         return ERRCODE_ABORT;
 
     // set the path
-    if ( rPath.Len() )
-        mxFileDlg->setDisplayDirectory( rPath );
-    else if ( maPath.getLength() )
+    if ( maPath.getLength() )
         mxFileDlg->setDisplayDirectory( maPath );
 
     if ( maCurFilter.getLength() )
@@ -877,6 +875,18 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
 }
 
 // ------------------------------------------------------------------------
+void FileDialogHelper_Impl::addFilter( const String& rFilterName,
+                                       const String& rExtension )
+{
+    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+
+    if ( ! xFltMgr.is() )
+        return;
+
+    xFltMgr->appendFilter( rFilterName, rExtension );
+}
+
+// ------------------------------------------------------------------------
 void FileDialogHelper_Impl::addGraphicFilter()
 {
     Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
@@ -1072,7 +1082,9 @@ ErrCode FileDialogHelper::Execute( const String&   rPath,
                                    SfxItemSet *&   rpSet,
                                    String&         rFilter )
 {
-    return mpImp->execute( rPath, rpURLList, rpSet, rFilter );
+    SetDisplayDirectory( rPath );
+
+    return mpImp->execute( rpURLList, rpSet, rFilter );
 }
 
 // ------------------------------------------------------------------------
@@ -1086,10 +1098,9 @@ ErrCode FileDialogHelper::Execute( SfxItemSet *&   rpSet,
                                    String&         rFilter)
 {
     ErrCode nRet;
-    String  aPath;
     SvStringsDtor* pURLList;
 
-    nRet = mpImp->execute( aPath, pURLList, rpSet, rFilter );
+    nRet = mpImp->execute( pURLList, rpSet, rFilter );
 
     delete pURLList;
 
@@ -1132,7 +1143,17 @@ String FileDialogHelper::GetCurrentFilter() const
 // ------------------------------------------------------------------------
 void FileDialogHelper::SetDisplayDirectory( const String& rPath )
 {
-    mpImp->setPath( rPath );
+    INetURLObject aURL( rPath, INET_PROT_FILE );
+
+    if ( INET_PROT_NOT_VALID != aURL.GetProtocol() )
+        mpImp->setPath( aURL.GetMainURL() );
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper::AddFilter( const String& rFilterName,
+                                  const String& rExtension )
+{
+    mpImp->addFilter( rFilterName, rExtension );
 }
 
 // ------------------------------------------------------------------------
@@ -1178,8 +1199,15 @@ ErrCode FileOpenDialog_Impl( sal_uInt32 nFlags,
                              SfxItemSet *& rpSet,
                              String aPath )
 {
+    ErrCode nRet;
     FileDialogHelper aDialog( nFlags, rFact );
-    return aDialog.Execute( aPath, rpURLList, rpSet, rFilter );
+    aDialog.SetDisplayDirectory( aPath );
+
+    nRet = aDialog.Execute( aPath, rpURLList, rpSet, rFilter );
+
+    aPath = aDialog.GetDisplayDirectory();
+
+    return nRet;
 }
 
 
