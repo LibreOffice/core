@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-14 16:28:22 $
+ *  last change: $Author: ssa $ $Date: 2002-08-15 08:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4691,7 +4691,7 @@ void Window::Command( const CommandEvent& rCEvt )
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
-    ImplCallEventListeners( VCLEVENT_WINDOW_RESIZE, (void*)&rCEvt );
+    ImplCallEventListeners( VCLEVENT_WINDOW_COMMAND, (void*)&rCEvt );
 
     NotifyEvent aNEvt( EVENT_COMMAND, this, &rCEvt );
     if ( !Notify( aNEvt ) )
