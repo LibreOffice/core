@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-02 17:28:23 $
+ *  last change: $Author: jp $ $Date: 2000-11-09 18:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,19 +436,19 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_NOLINEBREAK
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_NOHYPHEN
     { SID_ATTR_BRUSH_CHAR, SFX_ITEM_POOLABLE },         // RES_CHRATR_BACKGROUND
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CJK_FONT
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CJK_FONTSIZE
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CJK_LANGUAGE
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CJK_POSTURE
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CJK_WEIGHT
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CTL_FONT
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CTL_FONTSIZE
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CTL_LANGUAGE
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CTL_POSTURE
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CTL_WEIGHT
+    { SID_ATTR_CHAR_CJK_FONT, SFX_ITEM_POOLABLE },      // RES_CHRATR_CJK_FONT
+    { SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEM_POOLABLE },// RES_CHRATR_CJK_FONTSIZE
+    { SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEM_POOLABLE },  // RES_CHRATR_CJK_LANGUAGE
+    { SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEM_POOLABLE },   // RES_CHRATR_CJK_POSTURE
+    { SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEM_POOLABLE },    // RES_CHRATR_CJK_WEIGHT
+    { SID_ATTR_CHAR_CTL_FONT, SFX_ITEM_POOLABLE },      // RES_CHRATR_CTL_FONT
+    { SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEM_POOLABLE },// RES_CHRATR_CTL_FONTSIZE
+    { SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEM_POOLABLE },  // RES_CHRATR_CTL_LANGUAGE
+    { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEM_POOLABLE },   // RES_CHRATR_CTL_POSTURE
+    { SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEM_POOLABLE },    // RES_CHRATR_CTL_WEIGHT
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_WRITING_DIRECTION
     { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },  // RES_CHRATR_EMPHASIS_MARK
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_TWO_LINES
+    { SID_ATTR_CHAR_TWO_LINES, SFX_ITEM_POOLABLE },     // RES_CHRATR_TWO_LINES
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY4
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY5
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
@@ -458,11 +458,11 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, 0 },                                           // RES_TXTATR_REFMARK
     { 0, 0 },                                           // RES_TXTATR_TOXMARK
     { 0, 0 },                                           // RES_TXTATR_CHARFMT
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_TWO_LINES,
-    { 0, 0 },                                           // RES_TXTATR_CJK_RUBY,
-    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER,
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY5,
+    { SID_ATTR_CHAR_CJK_RUBY, 0 },                      // RES_TXTATR_CJK_RUBY,
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_UNKNOWN_CONTAINER,
     { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY6,
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TXTATR_DUMMY7,
 
     { 0, 0 },                                           // RES_TXTATR_FIELD
     { 0, 0 },                                           // RES_TXTATR_FLYCNT
