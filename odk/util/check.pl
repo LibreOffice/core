@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 17:22:54 $
+#   last change: $Author: vg $ $Date: 2005-03-07 17:31:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -184,6 +184,14 @@ if (-d "$StartDir") {
         print "\nERROR: \"$StartDir/configure.pl\" is missing\n";
         $return++;
     }
+    if (! -e "$StartDir/config.guess") {
+        print "\nERROR: \"$StartDir/config.guess\" is missing\n";
+        $return++;
+    }
+    if (! -e "$StartDir/config.sub") {
+        print "\nERROR: \"$StartDir/config.sub\" is missing\n";
+        $return++;
+       }
     if (! -e "$StartDir/setsdkenv_unix") {
         print "\nERROR: \"$StartDir/setsdkenv_unix\" is missing\n";
         $return++;
