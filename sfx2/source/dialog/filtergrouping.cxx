@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-11 16:10:39 $
+ *  last change: $Author: fs $ $Date: 2001-10-24 15:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,6 +613,19 @@ namespace sfx2
     };
 
     //--------------------------------------------------------------------
+    struct CopyNonEmptyFilter : public ::std::unary_function< FilterDescriptor, void >
+    {
+        FilterGroup& rTarget;
+        CopyNonEmptyFilter( FilterGroup& _rTarget ) :rTarget( _rTarget ) { }
+
+        void operator() ( const FilterDescriptor& _rFilter )
+        {
+            if ( _rFilter.Second.getLength() )
+                rTarget.push_back( _rFilter );
+        }
+    };
+
+    //--------------------------------------------------------------------
     void lcl_GroupAndClassify( SfxFilterMatcherIter& _rFilterMatcher, GroupedFilterList& _rAllFilters )
     {
         _rAllFilters.clear();
@@ -729,6 +742,18 @@ namespace sfx2
             aLocalFinalPositions.end(),
             CopyGroupEntryContent()
         );
+
+        // and remove local groups which do not apply - e.g. have no entries due to the limited content of the
+        // current SfxFilterMatcherIter
+
+        FilterGroup& rGlobalFilters = _rAllFilters.front();
+        FilterGroup aNonEmptyGlobalsFilters;
+        ::std::for_each(
+            rGlobalFilters.begin(),
+            rGlobalFilters.end(),
+            CopyNonEmptyFilter( aNonEmptyGlobalsFilters )
+        );
+        rGlobalFilters.swap( aNonEmptyGlobalsFilters );
     }
 
     //--------------------------------------------------------------------
@@ -840,13 +865,16 @@ namespace sfx2
                 if ( m_xFilterGroupManager.is() )
                 {   // the file dialog implementation supports visual grouping of filters
                     // create a representation of the group which is understandable by the XFilterGroupManager
-                    Sequence< StringPair > aFilters( _rGroup.size() );
-                    ::std::copy(
-                        _rGroup.begin(),
-                        _rGroup.end(),
-                        aFilters.getArray()
-                    );
-                    m_xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
+                    if ( _rGroup.size() )
+                    {
+                        Sequence< StringPair > aFilters( _rGroup.size() );
+                        ::std::copy(
+                            _rGroup.begin(),
+                            _rGroup.end(),
+                            aFilters.getArray()
+                        );
+                        m_xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
+                    }
                 }
                 else
                 {
@@ -945,6 +973,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/10/11 16:10:39  hr
+ *  #92924#: lcl_GroupAndClassify(): clear FilterGroupList
+ *
  *  Revision 1.4  2001/10/11 11:29:46  vg
  *  #65293# corrected for solaris' compiler
  *
