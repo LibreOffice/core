@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusldlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,14 +126,15 @@ FuSlideShowDlg::FuSlideShowDlg( SdViewShell* pViewSh, SdWindow*  pWin,
     }
     List* pCustomShowList = pDoc->GetCustomShowList(); // No Create
 
-    /// NEU
     BOOL bStartWithActualPage = SD_MOD()->GetSdOptions( pDoc->GetDocumentType() )->IsStartWithActualPage();
+/* #109180# change in behaviour, even when always start with current page is enabled, range settings are
+            still used
     if( bStartWithActualPage )
     {
         aFirstPage = pViewSh->GetActualPage()->GetName();
         pCustomShowList = NULL;
     }
-
+*/
     if( !aFirstPage.Len() && pPage )
         aFirstPage = pPage->GetName();
 
