@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:23:12 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,7 +760,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                 SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
                 const SwNumRule* pRule = pTxtNd->GetNumRule();
                 // hier wird Multiselektion nicht beruecksichtigt
-                if( pRule && pTxtNd->GetNum() && ! rPam.HasMark())
+                if( pRule && pTxtNd->GetNum())
                 {
                     if( FN_UNO_NUM_LEVEL == pMap->nWID)
                     {
