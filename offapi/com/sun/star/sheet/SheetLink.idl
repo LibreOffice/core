@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetLink.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ module com {  module sun {  module star {  module sheet {
     object in the document's <type>SheetLinks</type> collection and links
     the sheet to the specified external sheet.</p>
  */
-service SheetLink
+published service SheetLink
 {
     //-------------------------------------------------------------------------
 
@@ -109,7 +109,7 @@ service SheetLink
 
     //-------------------------------------------------------------------------
 
-//! service PropertySet
+//!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
