@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:26:00 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,14 @@ Menu MN_READONLY_POPUP
             HelpID =  SID_WIN_FULLSCREEN;
             Text [ de ] = "Vollbildschirm-Modus verlassen" ;
             Text [ en-US ] = "Leave Full-Screen Mode" ;
+        };
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = MN_READONLY_COPY ;
+            HelpID = SID_COPY;
+            Text = "~Kopieren" ;
+            Text [ english_us ] = "~Copy" ;
         };
     };
 };
