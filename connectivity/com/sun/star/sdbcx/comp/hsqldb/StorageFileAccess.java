@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageFileAccess.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:48:29 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
     public void createParentDirs(java.lang.String filename) {
     }
 
-    public boolean isStreamElement(java.lang.String elementName) throws java.util.NoSuchElementException, java.io.IOException {
+    public boolean isStreamElement(java.lang.String elementName)  {
         return isStreamElement(key,elementName);
     }
 
@@ -135,7 +135,7 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
         return new FileSync((NativeOutputStreamHelper)os);
     }
 
-    static native boolean isStreamElement(java.lang.String key,java.lang.String elementName) throws java.util.NoSuchElementException, java.io.IOException;
+    static native boolean isStreamElement(java.lang.String key,java.lang.String elementName);
     static native void removeElement(java.lang.String key,java.lang.String filename) throws java.util.NoSuchElementException, java.io.IOException;
     static native void renameElement(java.lang.String key,java.lang.String oldName, java.lang.String newName) throws java.util.NoSuchElementException, java.io.IOException;
 }
