@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:53:04 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@
 #include <basic/sbstar.hxx>
 
 #include <sfx2/sfxdlg.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objface.hxx>
 
 #include <svx/hyprlink.hxx>
 #include <svtools/ehdl.hxx>
