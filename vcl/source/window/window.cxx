@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obr $ $Date: 2001-07-13 07:09:54 $
+ *  last change: $Author: ssa $ $Date: 2001-07-20 12:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6838,11 +6838,6 @@ Reference< XDragSource > Window::GetDragSource()
 void Window::GetDragSourceDropTarget(Reference< XDragSource >& xDragSource, Reference< XDropTarget > &xDropTarget )
 // only for RVP transmission
 {
-#ifdef WNT
-    // as long as d&d does not work on win32
-        xDragSource = Reference< XDragSource > ();
-        xDropTarget = Reference< XDropTarget > ();
-#else
     if( mpFrameData )
     {
         xDragSource = mpFrameData->mxDragSource;
@@ -6853,7 +6848,6 @@ void Window::GetDragSourceDropTarget(Reference< XDragSource >& xDragSource, Refe
         xDragSource = Reference< XDragSource > ();
         xDropTarget = Reference< XDropTarget > ();
     }
-#endif
 }
 
 // -----------------------------------------------------------------------
