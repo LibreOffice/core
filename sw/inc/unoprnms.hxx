@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2000-11-17 16:24:09 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 20:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CREATE_FROM_STAR_DRAW            
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CREATE_FROM_OTHER_EMBEDDED_OBJECTS ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_INDEX_AUTO_MARK_FILE_U_R_L           ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_COMMA_SEPARATED                   ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_RELATIVE_TABSTOPS                 ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_CHANGES                       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_RECORD_CHANGES                     ;
 extern const SwPropNameLen __FAR_DATA UNO_LINK_DISPLAY_NAME                       ;

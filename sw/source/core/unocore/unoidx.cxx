@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 20:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,7 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 pTOXBase->SetFromChapter(lcl_AnyToBool(aValue));
             break;
             case WID_CREATE_FROM_LABELS                :
-                nCreate = lcl_AnyToBool(aValue) ? nCreate | TOX_SEQUENCE : nCreate & ~TOX_SEQUENCE;
+                pTOXBase->SetFromObjectNames(! lcl_AnyToBool(aValue));
             break;
             case WID_PROTECTED                         :
                 pTOXBase->SetProtected(lcl_AnyToBool(aValue));
@@ -514,6 +514,7 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                     nTOIOptions | TOI_INITIAL_CAPS : nTOIOptions & ~TOI_INITIAL_CAPS;
             break;
             case WID_IS_COMMA_SEPARATED :
+                bForm = sal_True;
                 aForm.SetCommaSeparated(lcl_AnyToBool(aValue));
             break;
             case WID_LABEL_CATEGORY                    :
@@ -583,6 +584,10 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 //Header steht an Pos 0
                 aForm.SetTemplate( 0, SwXStyleFamilies::GetUIName(
                     lcl_AnyToString(aValue), SFX_STYLE_FAMILY_PARA));
+            break;
+            case WID_IS_RELATIVE_TABSTOPS:
+                bForm = sal_True;
+                aForm.SetRelTabPos(lcl_AnyToBool(aValue));
             break;
             case WID_PARA_SEP              :
                 bForm = sal_True;
@@ -726,7 +731,7 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 bRet = pTOXBase->IsFromChapter();
             break;
             case WID_CREATE_FROM_LABELS                :
-                bRet = 0 != (nCreate & TOX_SEQUENCE);
+                bRet = ! pTOXBase->IsFromObjectNames();
             break;
             case WID_PROTECTED                         :
                 bRet = pTOXBase->IsProtected();
@@ -866,6 +871,9 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                                                             SFX_STYLE_FAMILY_PARA));
                 bBOOL = sal_False;
             }
+            break;
+            case WID_IS_RELATIVE_TABSTOPS:
+                bRet = rForm.IsRelTabPos();
             break;
             case WID_INDEX_MARKS:
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 14:00:32 $
+ *  last change: $Author: dvo $ $Date: 2000-11-20 20:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH_COMPLEX),       RES_CHRATR_CTL_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },     \
     { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE_COMPLEX),          RES_CHRATR_CTL_POSTURE   ,  &::getCppuType((FontSlant*)0),          PropertyAttribute::MAYBEVOID, MID_POSTURE},             \
     { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE_COMPLEX),           RES_CHRATR_CTL_LANGUAGE ,   &::getCppuType((Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
+
 /* -----------------24.06.98 18:12-------------------
  *
  * --------------------------------------------------*/
@@ -1402,6 +1403,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
 #else
                     { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARKS),      WID_INDEX_MARKS, &::getCppuType((Sequence< Reference< XDocumentIndexMark > >*)0),           PropertyAttribute::READONLY ,0       },
 #endif
+                    { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXIndexMap_Impl;
@@ -1439,6 +1441,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { MAP_CHAR_LEN("ParaStyleLevel8"),  WID_PARA_LEV8,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel9"),  WID_PARA_LEV9,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel10"),     WID_PARA_LEV10,     &::getCppuType((const OUString*)0)  , 0,     0},
+                    { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXContentMap_Impl;
@@ -1482,6 +1485,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
 #else
                     { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARKS),  WID_INDEX_MARKS, &::getCppuType((Sequence< Reference< XDocumentIndexMark> >*)0),            PropertyAttribute::READONLY ,0       },
 #endif
+                    { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXUserMap_Impl;
@@ -1506,6 +1510,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT ), RES_BACKGROUND,         &::getBooleanCppuType(),            PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
                     { MAP_CHAR_LEN("ParaStyleHeading"),     WID_PARA_HEAD,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel1"),  WID_PARA_LEV1,  &::getCppuType((const OUString*)0)  , 0,     0},
+                    { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXTablesMap_Impl;
@@ -1533,6 +1538,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT ), RES_BACKGROUND,         &::getBooleanCppuType(),            PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
                     { MAP_CHAR_LEN("ParaStyleHeading"),     WID_PARA_HEAD,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel1"),  WID_PARA_LEV1,  &::getCppuType((const OUString*)0)  , 0,     0},
+                    { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXObjectsMap_Impl;
@@ -1558,6 +1564,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT ), RES_BACKGROUND,         &::getBooleanCppuType(),            PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
                     { MAP_CHAR_LEN("ParaStyleHeading"),     WID_PARA_HEAD,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel1"),  WID_PARA_LEV1,  &::getCppuType((const OUString*)0)  , 0,     0},
+                    { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXIllustrationsMap_Impl;
