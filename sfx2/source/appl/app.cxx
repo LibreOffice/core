@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 13:12:54 $
+ *  last change: $Author: mba $ $Date: 2002-07-09 14:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1092,7 +1092,7 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         // Jetzt ist der ViewFrame gesetzt, das TopWindow kann abgefragt werden
         SfxWorkWindow* pWork = pViewFrame ? pViewFrame->GetFrame()->GetWorkWindow_Impl() : NULL;
         Window* pWin = pWork ? pWork->GetTopWindow() : NULL;
-        Application::SetDefDialogParent( pWin );
+        //Application::SetDefDialogParent( pWin );
 
         const SfxObjectShell* pSh = pViewFrame ? pViewFrame->GetObjectShell() : 0;
         if ( !pSh )
