@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-13 09:22:40 $
+ *  last change: $Author: ab $ $Date: 2000-10-19 08:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,11 @@ UCBStream::~UCBStream()
         else if( xOS.is() )
             xOS->closeOutput();
         else if( xS.is() )
-            xS->closeStream();
+        {
+            Reference< XInputStream > xIS = xS->getInputStream();
+            if( xIS.is() )
+                xIS->closeInput();
+        }
     }
     catch( Exception & )
     {
@@ -562,6 +566,7 @@ ULONG   UCBStream::GetData( void* pData, ULONG nSize )
 {
     try
     {
+        Reference< XInputStream > xISFromS;
         if( xIS.is() )
         {
             Sequence<sal_Int8> aData;
@@ -569,10 +574,10 @@ ULONG   UCBStream::GetData( void* pData, ULONG nSize )
             rtl_copyMemory( pData, aData.getConstArray(), nSize );
             return nSize;
         }
-        else if( xS.is() )
+        else if( xS.is() && (xISFromS = xS->getInputStream()).is() )
         {
             Sequence<sal_Int8> aData;
-            nSize = xS->readBytes( aData, nSize );
+            nSize = xISFromS->readBytes( aData, nSize );
             rtl_copyMemory( pData, aData.getConstArray(), nSize );
             return nSize;
         }
@@ -590,16 +595,17 @@ ULONG   UCBStream::PutData( const void* pData, ULONG nSize )
 {
     try
     {
+        Reference< XOutputStream > xOSFromS;
         if( xOS.is() )
         {
             Sequence<sal_Int8> aData( (const sal_Int8 *)pData, nSize );
             xOS->writeBytes( aData );
             return nSize;
         }
-        else if( xS.is() )
+        else if( xS.is() && (xOSFromS = xS->getOutputStream()).is() )
         {
             Sequence<sal_Int8> aData( (const sal_Int8 *)pData, nSize );
-            xS->writeBytes( aData );
+            xOSFromS->writeBytes( aData );
             return nSize;
         }
         else
@@ -638,10 +644,11 @@ void    UCBStream::FlushData()
 {
     try
     {
+        Reference< XOutputStream > xOSFromS;
         if( xOS.is() )
             xOS->flush();
-        else if( xS.is() )
-            xS->flush();
+        else if( xS.is() && (xOSFromS = xS->getOutputStream()).is() )
+            xOSFromS->flush();
         else
             SetError( ERRCODE_IO_GENERAL );
     }
