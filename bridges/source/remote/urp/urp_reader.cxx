@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:42:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 static MyCounter thisCounter( "DEBUG : ReaderThread" );
 #endif
 
@@ -247,7 +247,7 @@ OReaderThread::OReaderThread( remote_Connection *pConnection,
 {
     m_pEnvRemote->acquireWeak( m_pEnvRemote );
     m_pConnection->acquire( m_pConnection );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     thisCounter.acquire();
 #endif
 }
@@ -256,7 +256,7 @@ OReaderThread::OReaderThread( remote_Connection *pConnection,
 OReaderThread::~OReaderThread( )
 {
     m_pEnvRemote->releaseWeak( m_pEnvRemote );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     thisCounter.release();
 #endif
 }
