@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-07 14:15:42 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 11:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,28 @@ private:
 };
 
 //========================================================================
+//= OAdoDetailsPage
+//========================================================================
+class OAdoDetailsPage : public OCommonBehaviourTabPage
+{
+public:
+    static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
+    virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+
+    /// get the SfxPoolItem ids used by this tab page
+    static sal_Int32* getDetailIds();
+
+private:
+    FixedText           m_aAdoUrlLabel;
+    OConnectionURLEdit  m_aAdoUrl;
+
+    OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+    ~OAdoDetailsPage();
+
+    virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
+};
+
+//========================================================================
 //= OOdbcDetailsPage
 //========================================================================
 class OOdbcDetailsPage : public OCommonBehaviourTabPage
@@ -465,6 +487,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2000/12/07 14:15:42  oj
+ *  #81131# check installed adabas dbs
+ *
  *  Revision 1.15  2000/11/30 08:32:30  fs
  *  #80003# changed some sal_uInt16 to sal_Int32 (need some -1's)
  *

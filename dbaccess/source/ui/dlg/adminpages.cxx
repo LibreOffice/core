@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 09:43:26 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 11:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1074,6 +1074,87 @@ sal_Bool OJdbcDetailsPage::FillItemSet( SfxItemSet& _rSet )
 }
 
 //========================================================================
+//= OAdoDetailsPage
+//========================================================================
+OAdoDetailsPage::OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+    :OCommonBehaviourTabPage(pParent, PAGE_ADO, _rCoreAttrs, CBTP_USE_UIDPWD)
+
+    ,m_aAdoUrlLabel     (this, ResId(FT_CONNECTURL))
+    ,m_aAdoUrl          (this, ResId(ET_CONNECTURL))
+{
+    m_aAdoUrl.SetModifyHdl(getControlModifiedLink());
+
+    m_pUserName->SetZOrder(&m_aAdoUrl, WINDOW_ZORDER_BEHIND);
+    m_pPasswordRequired->SetZOrder(m_pUserName, WINDOW_ZORDER_BEHIND);
+
+    FreeResource();
+}
+
+// -----------------------------------------------------------------------
+OAdoDetailsPage::~OAdoDetailsPage()
+{
+}
+
+// -----------------------------------------------------------------------
+sal_Int32* OAdoDetailsPage::getDetailIds()
+{
+    static sal_Int32* pRelevantIds = NULL;
+    if (!pRelevantIds)
+    {
+        static sal_Int32 nRelevantIds[] =
+        {
+            0
+        };
+        pRelevantIds = nRelevantIds;
+    }
+    return pRelevantIds;
+}
+
+// -----------------------------------------------------------------------
+SfxTabPage* OAdoDetailsPage::Create( Window* pParent,   const SfxItemSet& _rAttrSet )
+{
+    return ( new OAdoDetailsPage( pParent, _rAttrSet ) );
+}
+
+// -----------------------------------------------------------------------
+void OAdoDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+{
+    OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+
+    // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+    sal_Bool bValid, bReadonly;
+    getFlags(_rSet, bValid, bReadonly);
+
+    SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+
+    String sURL;
+    if (bValid)
+        sURL = pUrlItem->GetValue();
+    m_aAdoUrl.SetText(sURL);
+
+    m_aAdoUrl.ClearModifyFlag();
+
+    if (_bSaveValue)
+    {
+        m_aAdoUrl.SaveValue();
+    }
+
+    if (bReadonly)
+    {
+        m_aAdoUrlLabel.Disable();
+        m_aAdoUrl.Disable();
+    }
+}
+
+// -----------------------------------------------------------------------
+sal_Bool OAdoDetailsPage::FillItemSet( SfxItemSet& _rSet )
+{
+    sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+    FILL_STRING_ITEM(m_aAdoUrl, _rSet, DSID_CONNECTURL, bChangedSomething);
+    return bChangedSomething;
+}
+
+//========================================================================
 //= OOdbcDetailsPage
 //========================================================================
 OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
@@ -1830,6 +1911,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/01/04 09:43:26  fs
+ *  #81615# auto completion for the extension checkbox is case sensitive
+ *
  *  Revision 1.23  2000/12/11 16:33:15  fs
  *  reversed the semantics of the SuppressVersionColumns checkbox
  *
