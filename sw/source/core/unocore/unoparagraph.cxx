@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-04-03 07:28:56 $
+ *  last change: $Author: os $ $Date: 2001-04-05 13:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@ Sequence< Any > SwXParagraph::getPropertyValues(
                     if(!bDone)
                         pValues[nProp] = aPropSet.getPropertyValue(*pMap, rAttrSet);
                 }
+                ++pMap;
             }
             else
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-04-03 14:14:46 $
+ *  last change: $Author: os $ $Date: 2001-04-05 13:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,7 @@ Sequence< Any > SwXTextPortion::getPropertyValues(
                         if(!bDone)
                             pValues[nProp] = aPropSet.getPropertyValue(*pMap, aSet);
                 }
+                pMap++;
             }
             else
             {
