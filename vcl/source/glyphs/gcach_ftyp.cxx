@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.54 $
- *  last change: $Author: hdu $ $Date: 2001-07-18 17:25:49 $
+ *  $Revision: 1.55 $
+ *  last change: $Author: hdu $ $Date: 2001-08-02 17:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,9 +522,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     // TODO: query GASP table for load flags
     mnLoadFlags = FT_LOAD_DEFAULT;
 
-    if( rFSD.mnOrientation != 0 )       // no embedded bitmap for rotated text
-        mnLoadFlags |= FT_LOAD_NO_BITMAP;
-    if( nSin != 0 && nCos != 0 )        // hinting for 0/90/180/270 degrees only
+    if( (nSin != 0) && (nCos != 0) )        // hinting for 0/90/180/270 degrees only
         mnLoadFlags |= FT_LOAD_NO_HINTING;
     mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
@@ -600,7 +598,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
 // -----------------------------------------------------------------------
 
-static int SetVerticalFlags( sal_Unicode nChar )
+int SetVerticalFlags( sal_Unicode nChar )
 {
     if ( (nChar >= 0x1100 && nChar <= 0x11f9)   // Hangul Jamo
     ||  (nChar >= 0x3000 && nChar <= 0xfaff) )  // other CJK
@@ -759,8 +757,6 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     int nGlyphFlags;
     SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
     FT_Int nLoadFlags = mnLoadFlags;
-    if( nGlyphFlags != 0 )
-        nLoadFlags |= FT_LOAD_NO_BITMAP;
 #if (FTVERSION >= 202)
     if( nCos==0 || nSin==0 )
         nLoadFlags &= ~FT_LOAD_NO_HINTING;
@@ -790,7 +786,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
     if( aGlyphFT->format != ft_glyph_format_bitmap )
     {
-        if( (nCos!=0x10000) || (nGlyphFlags!=0) )
+        if( (nCos!=0) && (nSin!=0) )
             SetTransform( nSin, nCos, GetFontSelData().mnHeight,
                 nGlyphFlags, aGlyphFT );
 
@@ -805,6 +801,9 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     // autohinting in FT<=2.0.2 miscalculates the offsets below by +-1
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
+
+    if( GetFontSelData().mbVertical && nGlyphFlags!=0 )
+        rRawBitmap.mnYOffset += GetFontSelData().mnHeight;
 
     const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
@@ -823,6 +822,23 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     memcpy( rRawBitmap.mpBits, rBitmapFT.buffer, nNeededSize );
 
     FT_Done_Glyph( aGlyphFT );
+
+    int nAngle = GetFontSelData().mnOrientation;
+    switch( nGlyphFlags )
+    {
+        case +1: nAngle += 900; break;
+        case +2: nAngle -= 900; break;
+    }
+    switch( nAngle )
+    {
+        case  -900:
+        case  +900:
+        case +1800:
+        case +2700:
+            rRawBitmap.Rotate( nAngle );
+            break;
+    }
+
     return true;
 }
 
@@ -833,8 +849,6 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     int nGlyphFlags;
     SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
     FT_Int nLoadFlags = mnLoadFlags;
-    if( nGlyphFlags != 0 )
-        nLoadFlags |= FT_LOAD_NO_BITMAP;
 #if (FTVERSION < 205) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
     nLoadFlags |= FT_LOAD_NO_HINTING;
@@ -851,7 +865,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 
     if( aGlyphFT->format == ft_glyph_format_outline )
     {
-        if( (nCos!=0x10000) || (nGlyphFlags!=0) )
+        if( (nCos!=0) && (nSin!=0) )
             SetTransform( nSin, nCos, GetFontSelData().mnHeight,
                 nGlyphFlags, aGlyphFT );
 
@@ -869,6 +883,9 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(aGlyphFT);
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
+
+    if( GetFontSelData().mbVertical && nGlyphFlags!=0 )
+        rRawBitmap.mnYOffset += GetFontSelData().mnHeight;
 
     const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
@@ -913,6 +930,23 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     }
 
     FT_Done_Glyph( aGlyphFT );
+
+    int nAngle = GetFontSelData().mnOrientation;
+    switch( nGlyphFlags )
+    {
+        case +1: nAngle += 900; break;
+        case +2: nAngle -= 900; break;
+    }
+    switch( nAngle )
+    {
+        case  -900:
+        case  +900:
+        case +1800:
+        case +2700:
+            rRawBitmap.Rotate( nAngle );
+            break;
+    }
+
     return true;
 }
 

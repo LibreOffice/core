@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hdu $ $Date: 2001-02-22 17:03:45 $
+#   last change: $Author: hdu $ $Date: 2001-08-02 17:16:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,6 @@ PRJ=..$/..
 
 PRJNAME=vcl
 TARGET=glyphs
-ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -76,6 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(USE_BUILTIN_RASTERIZER)" != ""
 SLOFILES=\
         $(SLO)$/glyphcache.obj		\
+        $(SLO)$/gcach_rbmp.obj		\
         $(SLO)$/gcach_vdev.obj		\
         $(SLO)$/gcach_ftyp.obj
 
