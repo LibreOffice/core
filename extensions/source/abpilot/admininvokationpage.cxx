@@ -2,9 +2,9 @@
  *
  *  $RCSfile: admininvokationpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:46 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,11 +142,9 @@ namespace abp
     //---------------------------------------------------------------------
     IMPL_LINK( AdminDialogInvokationPage, OnInvokeAdminDialog, void*, NOTINTERESTEDIN )
     {
-        OAdminDialogInvokation aInvokation( getORB(), getSettings().sDataSourceName, getDialog() );
+        OAdminDialogInvokation aInvokation( getORB(), getDialog()->getDataSource().getDataSource(), getDialog() );
         if ( aInvokation.invokeAdministration( AST_LDAP == getSettings().eType ) )
         {
-            // the user may have change the name of the data source
-            getSettings().sDataSourceName = getDialog()->getDataSource().getName();
             // try to connect to this data source
             implTryConnect();
         }
