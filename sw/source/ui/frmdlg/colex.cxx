@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:29:42 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,8 @@ void SwColExample::DrawPage( const Point& rOrg,
             nAutoColWidth = nColumnWidthSum / nColumnCount;
         }
 
-        for(USHORT i = 0; i < nColumnCount; i++)
+        USHORT i;
+        for( i = 0; i < nColumnCount; i++)
         {
             if(!bAutoWidth)
                 nAutoColWidth = pColMgr->GetColWidth( i );
