@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-11 12:54:30 $
+ *  last change: $Author: cl $ $Date: 2002-12-11 16:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2798,6 +2798,11 @@ void SdrModel::disposeOutliner( SdrOutliner* pOutliner )
     }
 }
 
+SvxNumType SdrModel::GetPageNumType() const
+{
+    return SVX_ARABIC;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrHint,SfxHint);
@@ -2831,3 +2836,4 @@ SdrHint::SdrHint(const SdrObject& rNewObj, const Rectangle& rRect)
     bNeedRepaint = TRUE;
     eHint = HINT_OBJCHG;
 }
+
