@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:23 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 15:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,16 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) 
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_TYPE));
+    sal_Int32 nType = 0;
+    try
+    {
+        nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_TYPE));
+    }
+    catch(SQLException& ) // in this case we have an odbc 2.0 driver
+    {
+        nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_CONCISE_TYPE ));
+    }
+    return nType;
 }
 // -------------------------------------------------------------------------
 
