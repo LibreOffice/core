@@ -3,9 +3,9 @@
  *
  *  $RCSfile: RelationControl.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:11:40 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,7 @@
 #ifndef DBACCESS_SOURCE_UI_INC_RELATIONCONTROL_HRC
 #define DBACCESS_SOURCE_UI_INC_RELATIONCONTROL_HRC
 
-#define LB_LEFT_TABLE       100
-#define LB_RIGHT_TABLE      101
 
-#define FL_INVOLVED_FIELDS  100
-#define FL_INVOLVED_TABLES  101
 
 #endif // DBACCESS_SOURCE_UI_INC_RELATIONCONTROL_HRC
+
