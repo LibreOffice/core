@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:24:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,7 @@ namespace pcr
 
         void        connectRowset();
         void        cleanupRowsetConnection();
-        sal_Bool    haveRowsetConnection( ) const { return m_xRowsetConnection.is(); }
+        sal_Bool    haveRowsetConnection( ) const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     ensureRowsetConnection();
