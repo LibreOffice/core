@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:16:20 $
+ *  last change: $Author: er $ $Date: 2001-07-25 18:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2062,6 +2062,35 @@ String STR_PACKNGO_NEWMEDIUM
     Text[ turkish ] = "Bir sonraki veri taþýyýcýsýný takýp Tamam düðmesine týklayýnýz.";
     Text[ catalan ] = "Inserte el siguiente medio y pulse el botón Aceptar.";
     Text[ finnish ] = "Lisää seuraava tietoväline ja valitse OK.";
+};
+
+String STR_OBJECT
+{
+    Text = "Objekt" ;
+    Text [ ENGLISH ] = "Object" ;
+    Text [ portuguese ] = "Objecto" ;
+    Text [ english_us ] = "Object" ;
+    Text [ portuguese_brazilian ] = "Objekt" ;
+    Text [ swedish ] = "Objekt" ;
+    Text [ danish ] = "Objekt" ;
+    Text [ italian ] = "Oggetto" ;
+    Text [ spanish ] = "Objeto" ;
+    Text [ french ] = "Objet" ;
+    Text [ dutch ] = "Object" ;
+    Text[ chinese_simplified ] = "¶ÔÏó";
+    Text[ russian ] = "Îáúåêò";
+    Text[ polish ] = "Obiekt";
+    Text[ japanese ] = "µÌÞ¼Þª¸Ä";
+    Text[ chinese_traditional ] = "ª«¥ó";
+    Text[ arabic ] = "ÇáßÇÆä";
+    Text[ dutch ] = "Object";
+    Text[ chinese_simplified ] = "¶ÔÏó";
+    Text[ greek ] = "Áíôéêåßìåíï";
+    Text[ korean ] = "°³Ã¼";
+    Text[ turkish ] = "Nesne";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto";
+    Text[ finnish ] = "Objekti";
 };
 
 // ******************************************************************* EOF

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-10 16:17:13 $
+ *  last change: $Author: er $ $Date: 2001-07-25 18:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,8 @@
 #define TEMPLATE_LONG_NAMES_ARY             (RID_SFX_DOC_START+ 81)
 #define TEMPLATE_SHORT_NAMES_ARY            (RID_SFX_DOC_START+ 82)
 #define RID_CNT_STR_WAITING                 (RID_SFX_DOC_START+ 83)
+
+#define STR_OBJECT                          (RID_SFX_DOC_START+ 84)
 
 #define DLOAD_URL 1
 #define DLOAD_STATUS 2
