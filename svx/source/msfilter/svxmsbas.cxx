@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-02 12:10:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -184,7 +186,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 const String sBasicModule(sByteBasic,
                     RTL_TEXTENCODING_ASCII_US);
                 for(ULONG j=0;j<aDecompressed.GetSize();j++)
-                    {
+                {
                     String sModule(sBasicModule);
                     if (j>0)
                     {
@@ -192,20 +194,23 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         sModule += String::CreateFromInt32(j+1);
                     }
 
-                    if( bStripped )
+                    if (bStripped)
                     {
-                        xub_StrLen nBegin, nEnd;
-                        static const sal_Char sAttribute[] = "Attribute";
-
                         String *pStr = aDecompressed.Get(j);
-                        while( STRING_NOTFOUND != (nBegin =
-                                pStr->SearchAscii(sAttribute)))
+                        bool bMac = true;
+                        xub_StrLen nBegin = pStr->Search('\x0D');
+                        if ((STRING_NOTFOUND != nBegin) && (pStr->Len() > 1) && (pStr->GetChar(nBegin+1) == '\x0A'))
+                            bMac = false;
+
+                        const char cLineEnd = bMac ? '\x0D' : '\x0A';
+                        const String sAttribute(String::CreateFromAscii(
+                            bAsComment ? "Rem Attribute" : "Attribute"));
+                        while (STRING_NOTFOUND != (nBegin = pStr->Search(sAttribute)))
                         {
-                            nEnd = pStr->Search('\x0D',nBegin);
-                            nBegin = pStr->SearchBackward('\x0D',nBegin);
-                            if( STRING_NOTFOUND == nBegin )
-                                nBegin=0;
-                            pStr->Erase(nBegin,nEnd-nBegin+1);
+                            if ((nBegin) && pStr->GetChar(nBegin-1) != cLineEnd)
+                                continue;
+                            xub_StrLen nEnd = pStr->Search(cLineEnd ,nBegin);
+                            pStr->Erase(nBegin, (nEnd-nBegin)+1);
                         }
                     }
 
@@ -235,7 +240,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         else
                             xLib->insertByName( aModName, aSourceAny );
 
-                        bRet = TRUE;
+                        bRet = true;
                     }
                 }
             }
@@ -298,3 +303,4 @@ char __READONLY_DATA sSO_VBAStgName[] = "_MS_VBA_Macros";
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(sSO_VBAStgName));
 }
 
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
