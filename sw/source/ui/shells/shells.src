@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:41:50 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ String STR_GRFILTER_OPENERROR
     Text [ English ] = "Can't open graphic file" ;
     Text [ norwegian ] = "Can't open graphic file" ;
     Text [ italian ] = "Impossibile aprire il file grafico" ;
-    Text [ portuguese_brazilian ] = "NÆo consigo abrir arquivo gr fico" ;
+    Text [ portuguese_brazilian ] = "N?o consigo abrir arquivo gr?fico" ;
     Text [ portuguese ] = "Impossível abrir ficheiro gráfico." ;
     Text [ finnish ] = "Grafiikkatiedostoa ei voi avata" ;
     Text [ danish ] = "Det er ikke muligt at åbne grafikfilen" ;
@@ -128,7 +128,7 @@ String STR_GRFILTER_IOERROR
     Text [ English ] = "Can't read graphic file" ;
     Text [ norwegian ] = "Can't read graphic file" ;
     Text [ italian ] = "Impossibile leggere il file grafico" ;
-    Text [ portuguese_brazilian ] = "NÆo consigo ler arquivo gr fico" ;
+    Text [ portuguese_brazilian ] = "N?o consigo ler arquivo gr?fico" ;
     Text [ portuguese ] = "Impossível ler o ficheiro gráfico." ;
     Text [ finnish ] = "Grafiikkatiedostoa ei voi lukea" ;
     Text [ danish ] = "Det er ikke muligt at læse grafikfilen" ;
@@ -157,7 +157,7 @@ String STR_GRFILTER_FORMATERROR
     Text [ English ] = "Unknown graphic format" ;
     Text [ norwegian ] = "Unknown graphic format" ;
     Text [ italian ] = "Formato grafico sconosciuto" ;
-    Text [ portuguese_brazilian ] = "Formato gr fico desconhecido" ;
+    Text [ portuguese_brazilian ] = "Formato gr?fico desconhecido" ;
     Text [ portuguese ] = "Formato de gráfico desconhecido." ;
     Text [ finnish ] = "Tuntematon grafiikkamuoto" ;
     Text [ danish ] = "Ukendt grafikformat" ;
@@ -186,7 +186,7 @@ String STR_GRFILTER_VERSIONERROR
     Text [ English ] = "Version of graphic file not supported" ;
     Text [ norwegian ] = "Version of graphic file not supported" ;
     Text [ italian ] = "Versione del file grafico non supportata" ;
-    Text [ portuguese_brazilian ] = "VersÆo de arquivo gr fico nÆo suportada" ;
+    Text [ portuguese_brazilian ] = "Vers?o de arquivo gr?fico n?o suportada" ;
     Text [ portuguese ] = "Versão do ficheiro gráfico não suportada." ;
     Text [ finnish ] = "Tätä grafiikkatiedoston versiota ei tueta" ;
     Text [ danish ] = "Grafikfilens version bliver ikke understøttet" ;
@@ -215,7 +215,7 @@ String STR_GRFILTER_FILTERERROR
     Text [ English ] = "Graphic filter not found" ;
     Text [ norwegian ] = "Graphic filter not found" ;
     Text [ italian ] = "Filtro grafico non trovato" ;
-    Text [ portuguese_brazilian ] = "Filtro gr fico nÆo encontrado" ;
+    Text [ portuguese_brazilian ] = "Filtro gr?fico n?o encontrado" ;
     Text [ portuguese ] = "Filtro de gráficos não encontrado." ;
     Text [ finnish ] = "Grafiikkasuodatinta ei löytynyt" ;
     Text [ danish ] = "Grafikfilter blev ikke fundet" ;
@@ -244,7 +244,7 @@ String STR_GRFILTER_TOOBIG
     Text [ English ] = "Not enough memory to insert graphic" ;
     Text [ norwegian ] = "Not enough memory to insert graphic" ;
     Text [ italian ] = "Memoria insufficiente per inserirei l'immagine" ;
-    Text [ portuguese_brazilian ] = "Mem¢ria insuficiente para inserir o gr fico" ;
+    Text [ portuguese_brazilian ] = "Mem?ria insuficiente para inserir o gr?fico" ;
     Text [ portuguese ] = "Memória insuficiente para inserir gráfico." ;
     Text [ finnish ] = "Muisti ei riitä grafiikan lisäämiseen." ;
     Text [ danish ] = "Ikke nok hukommelse til at indsætte grafiken" ;
@@ -273,7 +273,7 @@ String STR_INSERT_GRAPHIC
     Text [ English ] = "Insert graphic" ;
     Text [ norwegian ] = "Insert graphic" ;
     Text [ italian ] = "Inserisci immagine" ;
-    Text [ portuguese_brazilian ] = "Inserir gr fico" ;
+    Text [ portuguese_brazilian ] = "Inserir gr?fico" ;
     Text [ portuguese ] = "Inserir imagem" ;
     Text [ finnish ] = "Lisää grafiikkaa" ;
     Text [ danish ] = "Indsæt grafik" ;
@@ -330,7 +330,7 @@ String STR_NOTIZ_INSERT
     TEXT [ English ] = "Insert Note" ;
     TEXT [ norwegian ] = "Sett inn Merknad" ;
     TEXT [ italian ] = "Inserisci nota" ;
-    TEXT [ portuguese_brazilian ] = "Inserir Observação" ;
+    TEXT [ portuguese_brazilian ] = "Inserir Observa??o" ;
     TEXT [ portuguese ] = "Inserir anotação" ;
     TEXT [ finnish ] = "Lisää huomautus" ;
     TEXT [ danish ] = "Indsæt note" ;
@@ -386,7 +386,7 @@ String STR_REDLINE_INSERTED
     TEXT = "Einfügung" ;
     TEXT [ English ] = "Inserted" ;
     Text [ english_us ] = "Insertion" ;
-    Text [ portuguese_brazilian ] = "Einfügung" ;
+    Text [ portuguese_brazilian ] = "Einf?ung" ;
     Text [ swedish ] = "Infogning" ;
     Text [ danish ] = "Indsættelse" ;
     Text [ italian ] = "Inserimento" ;
@@ -413,8 +413,8 @@ String STR_REDLINE_DELETED
 {
     TEXT = "Löschung" ;
     TEXT [ English ] = "Deleted" ;
-    Text [ english_us ] = "Deletions" ;
-    Text [ portuguese_brazilian ] = "Löschung" ;
+    Text [ english_us ] = "Deletion" ;
+    Text [ portuguese_brazilian ] = "L?chung" ;
     Text [ swedish ] = "Radering" ;
     Text [ danish ] = "Sletning" ;
     Text [ italian ] = "Elimina" ;
@@ -498,7 +498,7 @@ String STR_REDLINE_TABLECHG
     Text = "Tabellenänderung" ;
     Text [ english ] = "Changed table" ;
     Text [ english_us ] = "Table Changes" ;
-    Text [ portuguese_brazilian ] = "Tabellenänderung" ;
+    Text [ portuguese_brazilian ] = "Tabellen?nderung" ;
     Text [ swedish ] = "Tabelländring" ;
     Text [ danish ] = "Ændret tabel" ;
     Text [ italian ] = "Modifica tabella" ;
@@ -702,7 +702,7 @@ QueryBox DLG_IMPORT_DBNAME
     Message [ french ] = "Le nom de la base de données doit-il être utilisé comme nom de base de données par défaut ?" ;
     Message [ swedish ] = "Ska databasnamnet övertas som standarddatabas för dokumentet?" ;
     Message [ danish ] = "Skal databasenavnet overtages som standarddatabase for dokumentet?" ;
-    Message [ portuguese_brazilian ] = "Soll der Datenbankname als Standarddatenbank für das Dokument übernommen werden?" ;
+    Message [ portuguese_brazilian ] = "Soll der Datenbankname als Standarddatenbank f? das Dokument ?ernommen werden?" ;
     Message [ portuguese ] = "Deseja adoptar o nome da base de dados como base de dados padrão para o documento?" ;
     Message[ chinese_simplified ] = "ÒªÈÃÎÄ¼þÌ×ÓÃÄ¬ÈÏµÄÊý¾Ý¿âÃû³Æ£¿";
     Message[ russian ] = "Èñïîëüçîâàòü èìÿ áàçû äàííûõ â êà÷åñòâå ñòàíäàðòíîé áàçû äàííûõ äëÿ ýòîãî äîêóìåíòà?";
@@ -725,7 +725,7 @@ String STR_PAGE
     TEXT [ English ] = "Page " ;
     TEXT [ norwegian ] = "Side " ;
     TEXT [ italian ] = "Pagina " ;
-    TEXT [ portuguese_brazilian ] = "Página " ;
+    TEXT [ portuguese_brazilian ] = "P?gina " ;
     TEXT [ portuguese ] = "Página " ;
     TEXT [ finnish ] = "Sivu" ;
     TEXT [ danish ] = "Side " ;
@@ -1078,7 +1078,7 @@ String RID_GRAFIK_TOOLBOX
     Text [ English ] = "Graphic objectbar" ;
     Text [ norwegian ] = "Graphic" ;
     Text [ italian ] = "Barra degli oggetti grafici" ;
-    Text [ portuguese_brazilian ] = "Gr fico" ;
+    Text [ portuguese_brazilian ] = "Gr?fico" ;
     Text [ portuguese ] = "Barra de gráficos" ;
     Text [ finnish ] = "Grafiikkaobjektipalkki" ;
     Text [ danish ] = "Grafikobjektlinje" ;
@@ -2445,7 +2445,7 @@ String STR_SWBG_FOOTER
     Text = "Fußzeile" ;
     Text [ ENGLISH ] = "Footer" ;
     Text [ english_us ] = "Footer" ;
-    Text [ portuguese_brazilian ] = "Fußzeile" ;
+    Text [ portuguese_brazilian ] = "Fu?zeile" ;
     Text [ swedish ] = "Sidfot" ;
     Text [ danish ] = "Sidefod" ;
     Text [ italian ] = "Piè di pagina" ;
