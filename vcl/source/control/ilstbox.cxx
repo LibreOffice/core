@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-24 11:51:07 $
+ *  last change: $Author: mt $ $Date: 2001-10-24 14:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,6 +811,15 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
             if ( rMEvt.GetPosPixel().Y() < 0 )
             {
                 DeselectAll();
+                mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
+                if ( mbStackMode ) // #87072#, #92323#
+                {
+                    mbTravelSelect = TRUE;
+                    mnSelectModifier = rMEvt.GetModifier();
+                    ImplCallSelect();
+                    mbTravelSelect = FALSE;
+                }
+
             }
         }
     }
@@ -908,6 +917,7 @@ void ImplListBoxWindow::SelectEntry( USHORT nPos, BOOL bSelect )
             mpEntryList->SelectEntry( nPos, FALSE );
             ImplPaint( nPos, TRUE );
         }
+        mbSelectionChanged = TRUE;
     }
 }
 
