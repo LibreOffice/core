@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-15 12:01:42 $
+ *  last change: $Author: pl $ $Date: 2001-09-06 12:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,10 +355,15 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                 else
                     rJobSetup.mpData->mnRefCount--;
             }
+
+            rtl_TextEncoding aStreamEncoding = RTL_TEXTENCODING_UTF8;
+            if( nSystem == JOBSET_FILE364_SYSTEM )
+                aStreamEncoding = rIStream.GetStreamCharSet();
+
             rJobSetup.mpData = new ImplJobSetup;
             ImplJobSetup* pJobData = rJobSetup.mpData;
-            pJobData->maPrinterName = UniString( pData->cPrinterName, RTL_TEXTENCODING_UTF8 );
-            pJobData->maDriver      = UniString( pData->cDriverName, RTL_TEXTENCODING_UTF8 );
+            pJobData->maPrinterName = UniString( pData->cPrinterName, aStreamEncoding );
+            pJobData->maDriver      = UniString( pData->cDriverName, aStreamEncoding );
 
             // Sind es unsere neuen JobSetup-Daten?
             if ( nSystem == JOBSET_FILE364_SYSTEM ||
