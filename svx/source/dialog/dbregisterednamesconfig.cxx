@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbregisterednamesconfig.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:37:53 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
+#include <com/sun/star/uno/XNamingService.hpp>
+#endif
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
 #endif
@@ -98,6 +104,7 @@ namespace svx
 
     using namespace ::utl;
     using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::container;
 
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getDbRegisteredNamesNodeName()
@@ -169,6 +176,8 @@ namespace svx
         SFX_ITEMSET_GET( _rSourceItems, pDriverSettings, DatabaseMapItem, SID_SB_DB_REGISTER, sal_True );
         if (pDriverSettings)
         {
+            Reference< XNameAccess > xDatabaseContext = Reference< XNameAccess >(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseContext"))), UNO_QUERY);
+            Reference< XNamingService> xNamingService(xDatabaseContext,UNO_QUERY);
             ::rtl::OUString sName, sLocation;
             OConfigurationNode aThisDriverSettings;
 
@@ -184,28 +193,29 @@ namespace svx
 
                 // the sub-node for this driver
                 if (aDbRegisteredNamesRoot.hasByName(sName))
+                {
                     aThisDriverSettings = aDbRegisteredNamesRoot.openNode(sName);
+                    // set the values
+                    aThisDriverSettings.setNodeValue(getDbNameNodeName(), makeAny(sName));
+                    aThisDriverSettings.setNodeValue(getDbLocationNodeName(), makeAny(aLoop->second));
+                    bNeedCommit = sal_True;
+                }
                 else
-                    aThisDriverSettings = aDbRegisteredNamesRoot.createNode(sName);
-
-                // set the values
-                aThisDriverSettings.setNodeValue(getDbNameNodeName(), makeAny(sName));
-                aThisDriverSettings.setNodeValue(getDbLocationNodeName(), makeAny(aLoop->second));
+                    xNamingService->registerObject(sName,Reference< ::com::sun::star::uno::XInterface >(xDatabaseContext->getByName(aLoop->second),UNO_QUERY));
             }
-            bNeedCommit = sal_True;
+            if (bNeedCommit)
+                aDbRegisteredNamesRoot.commit();
 
             // delete unused entry
-            Sequence< ::rtl::OUString > aDriverKeys = aDbRegisteredNamesRoot.getNodeNames();
+            Sequence< ::rtl::OUString > aDriverKeys = xDatabaseContext->getElementNames();
             const ::rtl::OUString* pDriverKeys = aDriverKeys.getConstArray();
             const ::rtl::OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
             for (;pDriverKeys != pDriverKeysEnd; ++pDriverKeys)
             {
                 if ( rNewSettings.find(*pDriverKeys) == rNewSettings.end() )
-                    aDbRegisteredNamesRoot.removeNode(*pDriverKeys);
+                    xNamingService->revokeObject(*pDriverKeys);
             }
         }
-        if (bNeedCommit)
-            aDbRegisteredNamesRoot.commit();
     }
 
 //........................................................................
