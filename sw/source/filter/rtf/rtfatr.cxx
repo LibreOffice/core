@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:49:59 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2121,8 +2121,8 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         else
         {
             const SwFmtFrmSize& rLSz = pLine->GetFrmFmt()->GetFrmSize();
-            if( ATT_VAR_SIZE != rLSz.GetSizeType() && rLSz.GetHeight() )
-                nHeight = ATT_MIN_SIZE == rLSz.GetSizeType()
+            if( ATT_VAR_SIZE != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
+                nHeight = ATT_MIN_SIZE == rLSz.GetHeightSizeType()
                                                 ? rLSz.GetHeight()
                                                 : -rLSz.GetHeight();
         }
@@ -3300,7 +3300,7 @@ static Writer& OutRTF_SwFrmSize( Writer& rWrt, const SfxPoolItem& rHt )
         if( rSz.GetHeight() )
         {
             long nH = rSz.GetHeight();
-            if( ATT_FIX_SIZE == rSz.GetSizeType() )
+            if( ATT_FIX_SIZE == rSz.GetHeightSizeType() )
                 nH = -nH;
             rWrt.Strm() << sRTF_ABSH;
             rWrt.OutLong( nH );
@@ -3414,7 +3414,7 @@ static Writer& OutRTF_SwFmtULSpace( Writer& rWrt, const SfxPoolItem& rHt )
                     else
                     {
                         const SwFmtFrmSize& rSz = pHdr->GetHeaderFmt()->GetFrmSize();
-                        if( ATT_VAR_SIZE != rSz.GetSizeType() )
+                        if( ATT_VAR_SIZE != rSz.GetHeightSizeType() )
                             nValue += rSz.GetHeight();
                         else
                             nValue += 274;      // defaulten fuer 12pt Schrift
@@ -3452,7 +3452,7 @@ static Writer& OutRTF_SwFmtULSpace( Writer& rWrt, const SfxPoolItem& rHt )
                     else
                     {
                         const SwFmtFrmSize& rSz = pFtr->GetFooterFmt()->GetFrmSize();
-                        if( ATT_VAR_SIZE != rSz.GetSizeType() )
+                        if( ATT_VAR_SIZE != rSz.GetHeightSizeType() )
                             nValue += rSz.GetHeight();
                         else
                             nValue += 274;      // defaulten fuer 12pt Schrift
@@ -3518,7 +3518,7 @@ Writer& OutRTF_SwFmtHeader( Writer& rWrt, const SfxPoolItem& rHt )
             rWrt.OutLong( rUL.GetLower() ) << pHdNm << "xl";
             rWrt.OutLong( rLR.GetLeft() ) << pHdNm << "xr";
             rWrt.OutLong( rLR.GetRight() )  << pHdNm << "yh";
-            rWrt.OutLong( ATT_FIX_SIZE  == rSz.GetSizeType()
+            rWrt.OutLong( ATT_FIX_SIZE  == rSz.GetHeightSizeType()
                             ? -rSz.GetHeight()
                             : rSz.GetHeight() ) << '}';
         }
@@ -3598,7 +3598,7 @@ Writer& OutRTF_SwFmtFooter( Writer& rWrt, const SfxPoolItem& rHt )
             rWrt.OutLong( rUL.GetUpper() ) << pFtNm << "xl";
             rWrt.OutLong( rLR.GetLeft() ) << pFtNm << "xr";
             rWrt.OutLong( rLR.GetRight() )  << pFtNm << "yh";
-            rWrt.OutLong( ATT_FIX_SIZE  == rSz.GetSizeType()
+            rWrt.OutLong( ATT_FIX_SIZE  == rSz.GetHeightSizeType()
                             ? -rSz.GetHeight()
                             : rSz.GetHeight() )  << '}';
         }
