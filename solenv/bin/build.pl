@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.96 $
+#   $Revision: 1.97 $
 #
-#   last change: $Author: vg $ $Date: 2004-02-02 17:50:50 $
+#   last change: $Author: obo $ $Date: 2004-02-26 10:10:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@
     if (defined $ENV{CWS_WORK_STAMP}) {
         require lib; import lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
         require Cws; import Cws;
-        require Logging; import Logging;
+        require Logging; import Logging if (!defined $ENV{NO_LOGGING});
         require CvsModule; import CvsModule;
         require GenInfoParser; import GenInfoParser;
         require IO::Handle; import IO::Handle;
@@ -85,7 +85,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.96 $ ';
+    $id_str = ' $Revision: 1.97 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -103,7 +103,7 @@
         } else {
             print_error("Can't determine VCSID. Please use setsolar.", 5);
         };
-        $log = Logging->new();
+        $log = Logging->new() if (!defined $ENV{NO_LOGGING});
     };
     $modules_number = 0;
     $perl = "";
@@ -790,7 +790,7 @@ sub GetDirectoryList {
 };
 
 sub finish_logging {
-    return if (!defined $ENV{CWS_WORK_STAMP} || $show);
+    return if (!defined $ENV{CWS_WORK_STAMP} || $show || defined $ENV{NO_LOGGING});
     my $message = shift;
     $message = 'SUCCESS.'  if (!$message);
     $message .= " Built $modules_number modules.";
@@ -834,7 +834,7 @@ sub usage {
 };
 
 sub init_logging {
-    return if (!defined $ENV{CWS_WORK_STAMP} || $show);
+    return if (!defined $ENV{CWS_WORK_STAMP} || $show || defined $ENV{NO_LOGGING});
     my $parameter_list;
     foreach (@ARGV) {$parameter_list .= "$_\;"};
     $parameter_list = $` if ($parameter_list =~ /;$/o);
