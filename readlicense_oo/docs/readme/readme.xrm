@@ -14,8 +14,8 @@
 		<Paragraph id="A4">
 			<Text id="a" xml:lang="en-US" url="ahead">For latest updates to this readme file, see </Text>
 		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/welcome/readme.html</Text>
-		<Text id="empty" xml:lang="en-US"/><Text id="empty" xml:lang="cs"/><Text id="empty" xml:lang="sk"/><Text id="a" xml:lang="en-US">Dear User</Text>
-		<Text id="empty" xml:lang="en-US"/><Text id="a" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
+		<Text id="empty" xml:lang="en-US"/><Text id="empty" xml:lang="cs"/><Text id="empty" xml:lang="sk"/><Text id="c" xml:lang="en-US">Dear User</Text>
+		<Text id="empty" xml:lang="en-US"/><Text id="d" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
 		</Paragraph>
 		<Paragraph id="A7">
 			<Text id="a" xml:lang="en-US" url="ahead">The OpenOffice.org community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the OpenOffice.org site with helpful user information at </Text>
