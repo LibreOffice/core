@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-08 15:55:33 $
+ *  last change: $Author: nn $ $Date: 2001-02-13 11:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <svtools/transfer.hxx>
 #endif
 
-#ifndef _EMBOBJ_HXX
-#include <so3/embobj.hxx>
+#ifndef _IPOBJ_HXX
+#include <so3/ipobj.hxx>
 #endif
 
 #ifndef SC_SCGLOB_HXX
@@ -93,7 +93,8 @@ private:
     BOOL                            bGrIsBit;
     BOOL                            bOleObj;
 
-    void        InitDocShell();
+    void                InitDocShell();
+    SvInPlaceObjectRef  GetSingleObject();
 
 public:
             ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
