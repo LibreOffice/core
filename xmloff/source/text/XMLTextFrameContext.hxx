@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-28 13:18:56 $
+ *  last change: $Author: dvo $ $Date: 2001-07-25 13:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,10 @@ class XMLTextFrameContext : public SvXMLImportContext
         ::com::sun::star::beans::XPropertySet > xPropSet;
     ::com::sun::star::uno::Reference <
         ::com::sun::star::io::XOutputStream > xBase64Stream;
+
+    /// old list item and block (#89891#)
+    SvXMLImportContextRef xListBlock;
+    SvXMLImportContextRef xListItem;
 
     const ::rtl::OUString sWidth;
     const ::rtl::OUString sRelativeWidth;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-07-25 13:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,9 +139,19 @@
 #include "XMLImageMapContext.hxx"
 #endif
 
-#ifndef _XMLTEXTLISTBLOCKCONTEXT_HXX
+#ifndef _XMLTEXTFRAMECONTEXT_HXX
 #include "XMLTextFrameContext.hxx"
 #endif
+
+#ifndef _XMLOFF_XMLTEXTLISTBLOCKCONTEXT_HXX
+#include "XMLTextListBlockContext.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLTEXTLISTITEMCONTEXT_HXX
+#include "XMLTextListItemContext.hxx"
+#endif
+
+
 
 
 using namespace ::rtl;
@@ -628,6 +638,13 @@ void XMLTextFrameContext::Create( sal_Bool bHRefOrBase64 )
         Reference < XText > xTxt = xTxtFrame->getText();
         xOldTextCursor = xTxtImport->GetCursor();
         xTxtImport->SetCursor( xTxt->createTextCursor() );
+
+        // remember old list item and block (#89892#) and reset them
+        // for the text frame
+        xListBlock = xTxtImport->GetListBlock();
+        xListItem = xTxtImport->GetListItem();
+        xTxtImport->SetListBlock( NULL );
+        xTxtImport->SetListItem( NULL );
     }
 
 }
@@ -910,6 +927,16 @@ void XMLTextFrameContext::EndElement()
         GetImport().GetTextImport()->DeleteParagraph();
         GetImport().GetTextImport()->SetCursor( xOldTextCursor );
     }
+
+    // reinstall old list item (if necessary) #89892#
+    if ( xListBlock.Is() )
+    {
+        GetImport().GetTextImport()->SetListBlock(
+            (XMLTextListBlockContext*)&xListBlock );
+        GetImport().GetTextImport()->SetListItem(
+            (XMLTextListItemContext*)&xListItem );
+    }
+
     if (( nType == XML_TEXT_FRAME_APPLET || nType == XML_TEXT_FRAME_PLUGIN ) && xPropSet.is())
         GetImport().GetTextImport()->endAppletOrPlugin( xPropSet, aParamMap);
 }
