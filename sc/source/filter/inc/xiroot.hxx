@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:44:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class XclImpObjectManager;
 class XclImpCondFormatManager;
 class XclImpAutoFilterBuffer;
 class XclImpWebQueryBuffer;
+class XclImpPivotTableManager;
 
 /** Stores global buffers and data needed for Excel import filter. */
 struct XclImpRootData : public XclRootData
@@ -103,6 +104,7 @@ struct XclImpRootData : public XclRootData
     typedef ::std::auto_ptr< XclImpObjectManager >      XclImpObjectManagerPtr;
     typedef ::std::auto_ptr< XclImpCondFormatManager >  XclImpCondFormatManagerPtr;
     typedef ::std::auto_ptr< XclImpWebQueryBuffer >     XclImpWebQueryBufferPtr;
+    typedef ::std::auto_ptr< XclImpPivotTableManager >  XclImpPivotTableManagerPtr;
 
     XclImpSstPtr                mpSst;              /// The shared string table.
 
@@ -121,6 +123,7 @@ struct XclImpRootData : public XclRootData
     XclImpObjectManagerPtr      mpObjManager;       /// All drawing objects.
     XclImpCondFormatManagerPtr  mpCondFmtManager;   /// Conditional formattings.
     XclImpWebQueryBufferPtr     mpWebQBuffer;       /// All web queries.
+    XclImpPivotTableManagerPtr  mpPTManager;        /// All pivot tables and pivot caches.
 
     explicit                    XclImpRootData(
                                     XclBiff eBiff,
@@ -181,6 +184,8 @@ public:
     XclImpAutoFilterBuffer&     GetFilterManager() const;
     /** Returns the web query buffer. */
     XclImpWebQueryBuffer&       GetWebQueryBuffer() const;
+    /** Returns the pivot table manager. */
+    XclImpPivotTableManager&    GetPivotTableManager() const;
 
     /** Returns the formula converter. */
     ExcelToSc&                  GetFmlaConverter() const;
