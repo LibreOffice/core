@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-10-02 12:54:53 $
+ *  last change: $Author: fme $ $Date: 2002-11-15 15:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,14 +1312,29 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
     Size aActualSize( pActual->Prt().SSize() );
     if ( aActualSize.Height() > pActual->GetUpper()->Prt().Height() )
         aActualSize.Height() = pActual->GetUpper()->Prt().Height();
+
+    SWRECTFN( pActual )
     if ( !pActual->GetPrev() &&
-        ((pActual->Frm().Top() + pActual->Prt().Top()) > rPoint.Y()) )
-        aPoint = pActual->Frm().Pos() + pActual->Prt().Pos();
-    else if ( !pActual->GetNext() &&
-            ((pActual->Frm().Top() + pActual->Prt().Bottom()) < rPoint.Y()) )
-    {   aPoint.Y() = pActual->Frm().Top() + pActual->Prt().Bottom();
-        aPoint.X() = pActual->Frm().Left() + pActual->Prt().Right();
+         (*fnRect->fnYDiff)( (pActual->*fnRect->fnGetPrtTop)(),
+                              bVert ? rPoint.X() : rPoint.Y() ) > 0 )
+    {
+        aPoint.Y() = pActual->Frm().Top() + pActual->Prt().Top();
+        aPoint.X() = pActual->Frm().Left() +
+                        ( pActual->IsRightToLeft() || bVert ?
+                          pActual->Prt().Right() :
+                          pActual->Prt().Left() );
     }
+    else if ( !pActual->GetNext() &&
+              (*fnRect->fnYDiff)( (pActual->*fnRect->fnGetPrtBottom)(),
+                                   bVert ? rPoint.X() : rPoint.Y() ) < 0 )
+    {
+        aPoint.Y() = pActual->Frm().Top() + pActual->Prt().Bottom();
+        aPoint.X() = pActual->Frm().Left() +
+                        ( pActual->IsRightToLeft() || bVert ?
+                          pActual->Prt().Left() :
+                          pActual->Prt().Right() );
+    }
+
     //Und den Point in die PrtArea bringen
     if ( bCalc )
         pActual->Calc();
