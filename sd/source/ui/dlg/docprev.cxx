@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:02:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #include "drawview.hxx"
 #endif
 #include "sdpage.hxx"
+
+#include <memory>
+
 
 using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::animations::XAnimationNode;
@@ -243,12 +246,14 @@ void SdDocPreviewWin::startPreview()
 
             if( pPage )
             {
-                mpSlideShow = new sd::Slideshow( 0, 0, pDoc );
+                std::auto_ptr<sd::Slideshow> pSlideShow(
+                    new sd::Slideshow( 0, 0, pDoc ) );
 
                 Reference< XDrawPage > xDrawPage( pPage->getUnoPage(), UNO_QUERY );
                 Reference< XAnimationNode > xAnimationNode;
 
-                mpSlideShow->startPreview( xDrawPage, xAnimationNode, this );
+                if (pSlideShow->startPreview( xDrawPage, xAnimationNode, this ))
+                    mpSlideShow = pSlideShow.release();
             }
         }
     }
