@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,8 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
     sal_Int32 nModels = rModels.getLength();
     if (nModels != rControls.getLength())
     {
-        Sequence< Reference< XControl > > aSeq = Sequence< Reference< XControl > >(nModels);
-        const Reference< XControlModel > * pModels = rModels.getConstArray();
+        Sequence< Reference< XControl > > aSeq( nModels );
+        const Reference< XControlModel >* pModels = rModels.getConstArray();
         Reference< XControl >  xCurrentControl;
 
         sal_Int32 nRealControls = 0;
@@ -126,20 +126,8 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
         rControls = aSeq;
     }
 #ifdef DBG_UTIL
-    {
-        sal_Int32 nControls = rControls.getLength();
-        sal_Int32 nModels = rModels.getLength();
-        DBG_ASSERT( nControls == nModels, "StdTabController:ImplCreateComponentSequence: inconsistence!" );
-        if ( nControls == nModels )
-        {
-            for ( sal_Int32 i = 0; i < nControls; ++i )
-            {
-                Reference< XControl > xControl = rControls[ i ];
-                DBG_ASSERT( xControl.is() && ( xControl->getModel().get() == rModels[i].get() ),
-                    "StdTabController:ImplCreateComponentSequence: inconsistence (elements)!" );
-            }
-        }
-    }
+    DBG_ASSERT( rControls.getLength() <= rModels.getLength(), "StdTabController:ImplCreateComponentSequence: inconsistence!" );
+        // there may be less controls than models, but never more controls than models
 #endif
 
 
@@ -176,7 +164,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
                 Reference< XPropertySet >  xPSet( xCtrl->getModel(), UNO_QUERY );
                 Reference< XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
                 if( xInfo->hasPropertyByName( aTabStopName ) )
-                    pTabs[n] = xPSet->getPropertyValue( aTabStopName );
+                    *pTabs++ = xPSet->getPropertyValue( aTabStopName );
             }
         }
         else
@@ -366,7 +354,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
     Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);
 
     // Flache Liste besorgen...
-    Sequence< Reference< XControlModel > > aSeq = mxModel->getControlModels();
+    Sequence< Reference< XControlModel > > aModels = mxModel->getControlModels();
     Sequence< Reference< XWindow > > aCompSeq;
     Sequence< Any> aTabSeq;
 
@@ -377,7 +365,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 
     // #58317# Es sind ggf. noch nicht alle Controls fuer die Models im Container,
     // dann kommt spaeter nochmal ein activateTabOrder...
-    if( !ImplCreateComponentSequence( aControls, aSeq, aCompSeq, &aTabSeq, sal_True ) )
+    if( !ImplCreateComponentSequence( aControls, aModels, aCompSeq, &aTabSeq, sal_True ) )
         return;
 
     Reference< XVclContainerPeer >  xVclContainerPeer( xC->getPeer(), UNO_QUERY );
