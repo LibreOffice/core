@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:52:02 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 12:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,9 +1278,6 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         if((nFlags & UPDATE_FAMILY) == UPDATE_FAMILY)
         {
-            if(ISA(SfxTemplateDialog_Impl))
-                ((DockingWindow* )GetWindow())->SetText(
-                    pItem->GetText()); // Titel setzen
             CheckItem(nActFamily, TRUE);    // Button in Toolbox checken
             aFilterLb.SetUpdateMode(FALSE);
             aFilterLb.Clear();
