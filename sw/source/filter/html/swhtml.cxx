@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:42:42 $
+ *  last change: $Author: hr $ $Date: 2000-11-15 16:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@
 #endif
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SFX_INIMGR_HXX
-#include <sfx2/inimgr.hxx>
 #endif
 #ifndef _FSETOBJSH_HXX //autogen
 #include <sfx2/fsetobsh.hxx>
@@ -5243,6 +5240,9 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/13 10:42:42  jp
+      must changes: use Search from SvtPathOptions
+
       Revision 1.2  2000/10/31 09:07:20  mib
       #79777#: Oboslete assert removed
 
