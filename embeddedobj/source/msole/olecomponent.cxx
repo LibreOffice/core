@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-17 16:19:24 $
+ *  last change: $Author: mav $ $Date: 2003-11-24 09:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
+#include <com/sun/star/io/XTruncate.hpp>
 #endif
 
 
@@ -403,7 +407,14 @@ CComPtr< IStorage > OleComponent::CreateIStorageOnXInputStream_Impl( const uno::
     if ( ::osl::FileBase::getSystemPathFromFileURL( m_aTempURL, aTempFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happend
 
-    HRESULT hr = StgCreateDocfile( aTempFilePath, STGM_READWRITE | STGM_DELETEONRELEASE, 0, &m_pIStorage );
+    // TODO: remove temporary file when not needed any more
+    HRESULT hr = StgOpenStorage( aTempFilePath,
+                                 NULL,
+                                 STGM_READWRITE | STGM_TRANSACTED, // | STGM_DELETEONRELEASE,
+                                 NULL,
+                                 0,
+                                 &m_pIStorage );
+
     if ( FAILED( hr ) || !m_pIStorage )
         throw io::IOException(); // TODO: transport error code?
 
@@ -579,7 +590,11 @@ void OleComponent::LoadEmbeddedObject( const uno::Reference< io::XInputStream >&
 
     HRESULT hr = OleLoad( m_pIStorage, IID_IUnknown, NULL, (void**)&m_pObj );
     if ( FAILED( hr ) || !m_pObj )
+    {
+        // STATSTG aStat;
+        // m_pIStorage->Stat( &aStat, STATFLAG_NONAME );
         throw uno::RuntimeException();
+    }
 
     if ( !InitializeObject_Impl( NULL ) )
         throw uno::RuntimeException(); // TODO
@@ -801,8 +816,16 @@ void OleComponent::StoreObjectToStream( uno::Reference< io::XOutputStream > xOut
     if ( FAILED( hr ) )
         throw io::IOException(); // TODO
 
-    pPersistStorage->SaveCompleted(NULL);
-    m_pIStorage->Commit( STGC_DEFAULT );
+    hr = pPersistStorage->SaveCompleted(NULL);
+    if ( FAILED( hr ) )
+        throw io::IOException(); // TODO
+
+    hr = m_pIStorage->Commit( STGC_DEFAULT );
+    if ( FAILED( hr ) )
+        throw io::IOException(); // TODO
+
+    // STATSTG aStat;
+    // m_pIStorage->Stat( &aStat, STATFLAG_NONAME );
 
     // now all the changes should be in temporary location
 
@@ -823,6 +846,12 @@ void OleComponent::StoreObjectToStream( uno::Reference< io::XOutputStream > xOut
     if ( xTempInStream.is() )
     {
         // write all the contents to XOutStream
+        uno::Reference< io::XTruncate > xTrunc( xOutStream, uno::UNO_QUERY );
+        if ( !xTrunc.is() )
+            throw uno::RuntimeException(); //TODO:
+
+        xTrunc->truncate();
+
         copyInputToOutput_Impl( xTempInStream, xOutStream );
     }
     else
