@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 12:52:33 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,8 +1329,10 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
             case POR_TOX:
             case POR_REF :
                 if ( !GetOpt().IsPagePreview() &&
-                            !GetOpt().IsReadonly() &&\
-                            SwViewOption::IsFieldShadings() )
+                     !GetOpt().IsReadonly() &&
+                     SwViewOption::IsFieldShadings() &&
+                     (POR_NUMBER != nWhich ||
+                      pFrm->GetTxtNode()->HasMarkedLabel())) // #i27615#
                     bDraw = sal_True;
             break;
             case POR_TAB:       if ( GetOpt().IsTab() )     bDraw = sal_True; break;
