@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:29:36 $
+#   last change: $Author: dbo $ $Date: 2001-03-30 11:03:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,7 @@ APP1OBJS=   $(OBJ)$/excomp.obj
 APP1STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) 	\
-        $(VOSLIB) 	\
+        $(SALHELPERLIB) 	\
         $(SALLIB)
 
 # ---- objects ----
@@ -114,7 +114,7 @@ SHL1TARGET=	$(TARGET1)
 SHL1STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
-        $(VOSLIB)		\
+        $(SALHELPERLIB)		\
         $(SALLIB)	
 
 SHL1DEPN=
@@ -133,7 +133,7 @@ SHL2TARGET=	$(TARGET2)
 SHL2STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
-        $(VOSLIB)		\
+        $(SALHELPERLIB)		\
         $(SALLIB)
 
 SHL2DEPN=

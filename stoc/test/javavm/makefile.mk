@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:29:36 $
+#   last change: $Author: dbo $ $Date: 2001-03-30 11:03:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,7 @@ APP6OBJS  = 	$(OBJ)$/testjavavm.obj
 APP6STDLIBS= \
         $(CPPULIB) 		\
         $(CPPUHELPERLIB) 	\
-        $(VOSLIB) 	\
+        $(SALHELPERLIB) 	\
         $(SALLIB)	\
         $(UNOLIB)
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:17:52 $
+#   last change: $Author: dbo $ $Date: 2001-03-30 11:03:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,7 @@ APP1OBJS=   $(OBJ)$/testloader.obj
 APP1STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) 	\
-        $(VOSLIB) 	\
+        $(SALHELPERLIB) 	\
         $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
@@ -110,7 +110,7 @@ APP2OBJS=   $(OBJ)$/testregistry.obj
 APP2STDLIBS= \
         $(CPPULIB)	\
         $(CPPUHELPERLIB) 	\
-        $(VOSLIB) 	\
+        $(SALHELPERLIB) 	\
         $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
@@ -125,7 +125,7 @@ APP3OBJS  =	$(OBJ)$/testsmgr.obj
 APP3STDLIBS= \
         $(CPPULIB)	\
         $(CPPUHELPERLIB) 	\
-        $(VOSLIB) 	\
+        $(SALHELPERLIB) 	\
         $(SALLIB) 	
 
 .IF "$(GUI)"=="UNX"
@@ -166,7 +166,7 @@ APP6OBJS  = 	$(OBJ)$/testintrosp.obj
 APP6STDLIBS= \
         $(CPPULIB) 		\
         $(CPPUHELPERLIB) 	\
-        $(VOSLIB) 	\
+        $(SALHELPERLIB) 	\
         $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
@@ -224,7 +224,7 @@ TESTCONV:=com.sun.star.script.XTypeConverter
 TESTPROXYFAC:=com.sun.star.reflection.XProxyFactory
 
 $(BIN)$/stoctest.rdb: $(ALLIDLFILES)
-    +unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
+    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     +regmerge $@ / $(SOLARBINDIR)$/udkapi.rdb
     touch $@

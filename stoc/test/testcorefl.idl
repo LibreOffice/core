@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcorefl.idl,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: dbo $ $Date: 2001-03-30 11:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ module ModuleA
         StructC aStructC;
     };
 
-    [ uik(e227a3A1-33d6-12d1-aabe02a0-249d5590), ident("InterfaceB", 1.0) ]
     interface XInterface1 : com::sun::star::uno::XInterface
     {
     };
@@ -122,7 +121,6 @@ module ModuleC
     const string            aConstString    = "test";
 
 
-    [ uik(e227a3A0-33d6-11d1-aabe02a0-249d5590), ident("InterfaceA", 1.0) ]
     interface XInterfaceA : com::sun::star::uno::XInterface
     {
         void methodA();
@@ -130,7 +128,6 @@ module ModuleC
         sequence<ModuleA::StructB> methodC([in] ModuleA::StructC aStructC, [inout] ModuleA::StructA aStructA);
     };
 
-    [ uik(e227a3A1-33d6-11d1-aabe02a0-12345678), ident("InterfaceB", 1.0) ]
     interface XInterfaceB : XInterfaceA
     {
         [attribute] string aString;
