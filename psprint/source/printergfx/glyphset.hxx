@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-01 16:23:29 $
+ *  last change: $Author: pl $ $Date: 2002-02-19 16:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,65 +88,83 @@ class PrintFontManager;
 
 class GlyphSet
 {
-    private:
+private:
 
-        sal_Int32           mnFontID;
-        sal_Bool            mbVertical;
-        rtl::OString        maBaseName;
-        fonttype::type      meBaseType;
-        rtl_TextEncoding    mnBaseEncoding;
+    sal_Int32           mnFontID;
+    sal_Bool            mbVertical;
+    rtl::OString        maBaseName;
+    fonttype::type      meBaseType;
+    rtl_TextEncoding    mnBaseEncoding;
 
-        typedef std::hash_map< sal_Unicode, sal_uInt8 > glyph_mapping_t;
-        typedef std::list< glyph_mapping_t > glyphlist_t;
+    typedef std::hash_map< sal_Unicode, sal_uInt8 > char_map_t;
+    typedef std::list< char_map_t > char_list_t;
+    typedef std::hash_map< sal_uInt32, sal_uInt8 > glyph_map_t;
+    typedef std::list< glyph_map_t > glyph_list_t;
 
-        glyphlist_t     maGlyphList;
+    char_list_t     maCharList;
+    glyph_list_t    maGlyphList;
 
-        rtl::OString    GetGlyphSetName (sal_Int32 nGlyphSetID);
-        sal_Int32       GetGlyphSetEncoding (sal_Int32 nGlyphSetID);
-        rtl::OString    GetGlyphSetEncodingName (sal_Int32 nGlyphSetID);
+    rtl::OString    GetGlyphSetName (sal_Int32 nGlyphSetID);
+    rtl::OString    GetCharSetName (sal_Int32 nGlyphSetID);
+    sal_Int32       GetGlyphSetEncoding (sal_Int32 nGlyphSetID);
+    rtl::OString    GetGlyphSetEncodingName (sal_Int32 nGlyphSetID);
 
-        rtl::OString    GetReencodedFontName (sal_Int32 nGlyphSetID);
-        void            PSDefineReencodedFont (osl::File* pOutFile,
-                                sal_Int32 nGlyphSetID);
+    rtl::OString    GetReencodedFontName (sal_Int32 nGlyphSetID);
+    void            PSDefineReencodedFont (osl::File* pOutFile,
+                                           sal_Int32 nGlyphSetID);
 
-        sal_Bool        GetGlyphID (sal_Unicode nChar,
+    sal_Bool        GetCharID (sal_Unicode nChar,
                                 sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-        sal_Bool        LookupGlyphID (sal_Unicode nChar,
+    sal_Bool        LookupCharID (sal_Unicode nChar,
+                                   sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
+    sal_Bool        AddCharID (sal_Unicode nChar,
+                                sal_uChar* nOutGlyphID,
+                                sal_Int32* nOutGlyphSetID);
+    sal_Bool        GetGlyphID (sal_uInt32 nGlyph, sal_Unicode nUnicode,
                                 sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-        sal_Bool        AddGlyphID (sal_Unicode nChar,
-                                sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
-        sal_uChar       GetAnsiMapping (sal_Unicode nUnicodeChar);
-        sal_uChar       GetSymbolMapping (sal_Unicode nUnicodeChar);
+    sal_Bool        LookupGlyphID (sal_uInt32 nGlyph,
+                                   sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID);
+    sal_Bool        AddGlyphID (sal_uInt32 nGlyph, sal_Unicode nUnicode,
+                                sal_uChar* nOutGlyphID,
+                                sal_Int32* nOutGlyphSetID);
+    sal_uChar       GetAnsiMapping (sal_Unicode nUnicodeChar);
+    sal_uChar       GetSymbolMapping (sal_Unicode nUnicodeChar);
 
-        void            ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
-                                const sal_Unicode* pStr, sal_Int16 nLen);
-        void            ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
-                                const sal_Unicode* pStr, sal_Int16 nLen,
-                                const sal_Int32* pDeltaArray);
+    void            ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
+                                  const sal_Unicode* pStr, sal_Int16 nLen);
+    void            ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
+                                  const sal_Unicode* pStr, sal_Int16 nLen,
+                                  const sal_Int32* pDeltaArray);
 
-    public:
+public:
 
-                        GlyphSet ();
-                        GlyphSet (sal_Int32 nFontID, sal_Bool bVertical);
-                        ~GlyphSet ();
+    GlyphSet ();
+    GlyphSet (sal_Int32 nFontID, sal_Bool bVertical);
+    ~GlyphSet ();
 
-        sal_Int32       GetFontID ();
-        fonttype::type  GetFontType ();
-        static rtl::OString
-                        GetReencodedFontName (rtl_TextEncoding nEnc,
-                                const rtl::OString &rFontName);
-        static rtl::OString
-                        GetGlyphSetEncodingName (rtl_TextEncoding nEnc,
-                                const rtl::OString &rFontName);
-        sal_Bool        IsVertical ();
+    sal_Int32       GetFontID ();
+    fonttype::type  GetFontType ();
+    static rtl::OString
+    GetReencodedFontName (rtl_TextEncoding nEnc,
+                          const rtl::OString &rFontName);
+    static rtl::OString
+    GetGlyphSetEncodingName (rtl_TextEncoding nEnc,
+                             const rtl::OString &rFontName);
+    sal_Bool        IsVertical ();
 
-        sal_Bool        SetFont (sal_Int32 nFontID, sal_Bool bVertical);
+    sal_Bool        SetFont (sal_Int32 nFontID, sal_Bool bVertical);
 
-        void            DrawText (PrinterGfx &rGfx, const Point& rPoint,
-                                const sal_Unicode* pStr, sal_Int16 nLen,
-                                const sal_Int32* pDeltaArray = NULL);
-        sal_Bool        PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx);
-        sal_Bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42 );
+    void            DrawText (PrinterGfx &rGfx, const Point& rPoint,
+                              const sal_Unicode* pStr, sal_Int16 nLen,
+                              const sal_Int32* pDeltaArray = NULL);
+    void            DrawGlyphs (PrinterGfx& rGfx,
+                                const Point& rPoint,
+                                const sal_uInt32* pGlyphIds,
+                                const sal_Unicode* pUnicodes,
+                                sal_Int16 nLen,
+                                const sal_Int32* pDeltaArray );
+    sal_Bool        PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx);
+    sal_Bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42 );
 };
 
 

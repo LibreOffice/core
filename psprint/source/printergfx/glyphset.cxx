@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cp $ $Date: 2002-01-24 16:50:30 $
+ *  last change: $Author: pl $ $Date: 2002-02-19 16:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,18 +152,67 @@ GlyphSet::SetFont (sal_Int32 nFontID, sal_Bool bVertical)
 }
 
 sal_Bool
-GlyphSet::GetGlyphID (sal_Unicode nChar,
-                      sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID)
+GlyphSet::GetCharID (
+                     sal_Unicode nChar,
+                     sal_uChar* nOutGlyphID,
+                     sal_Int32* nOutGlyphSetID
+                     )
 {
-    return    LookupGlyphID (nChar, nOutGlyphID, nOutGlyphSetID)
-           || AddGlyphID    (nChar, nOutGlyphID, nOutGlyphSetID);
+    return    LookupCharID (nChar, nOutGlyphID, nOutGlyphSetID)
+           || AddCharID    (nChar, nOutGlyphID, nOutGlyphSetID);
 }
 
 sal_Bool
-GlyphSet::LookupGlyphID (sal_Unicode nChar,
-                         sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID)
+GlyphSet::GetGlyphID (
+                      sal_uInt32 nGlyph,
+                      sal_Unicode nUnicode,
+                      sal_uChar* nOutGlyphID,
+                      sal_Int32* nOutGlyphSetID
+                     )
 {
-    glyphlist_t::iterator aGlyphSet;
+    return    LookupGlyphID (nGlyph, nOutGlyphID, nOutGlyphSetID)
+           || AddGlyphID    (nGlyph, nUnicode, nOutGlyphID, nOutGlyphSetID);
+}
+
+sal_Bool
+GlyphSet::LookupCharID (
+                        sal_Unicode nChar,
+                        sal_uChar* nOutGlyphID,
+                        sal_Int32* nOutGlyphSetID
+                        )
+{
+    char_list_t::iterator aGlyphSet;
+    sal_Int32             nGlyphSetID;
+
+    // loop thru all the font subsets
+    for (aGlyphSet  = maCharList.begin(), nGlyphSetID = 1;
+         aGlyphSet != maCharList.end();
+         ++aGlyphSet, nGlyphSetID++)
+    {
+        // check every subset if it contains the queried unicode char
+        char_map_t::const_iterator aGlyph = (*aGlyphSet).find (nChar);
+        if (aGlyph != (*aGlyphSet).end())
+        {
+            // success: found the unicode char, return the glyphid and the glyphsetid
+            *nOutGlyphSetID = nGlyphSetID;
+            *nOutGlyphID    = (*aGlyph).second;
+            return sal_True;
+        }
+    }
+
+    *nOutGlyphSetID = -1;
+    *nOutGlyphID    =  0;
+    return sal_False;
+}
+
+sal_Bool
+GlyphSet::LookupGlyphID (
+                        sal_uInt32 nGlyph,
+                        sal_uChar* nOutGlyphID,
+                        sal_Int32* nOutGlyphSetID
+                        )
+{
+    glyph_list_t::iterator aGlyphSet;
     sal_Int32             nGlyphSetID;
 
     // loop thru all the font subsets
@@ -172,10 +221,10 @@ GlyphSet::LookupGlyphID (sal_Unicode nChar,
          ++aGlyphSet, nGlyphSetID++)
     {
         // check every subset if it contains the queried unicode char
-        glyph_mapping_t::const_iterator aGlyph = (*aGlyphSet).find (nChar);
+        glyph_map_t::const_iterator aGlyph = (*aGlyphSet).find (nGlyph);
         if (aGlyph != (*aGlyphSet).end())
         {
-            // success: found the unicode char, return the glyphid and the glyphsetid
+            // success: found the glyph id, return the mapped glyphid and the glyphsetid
             *nOutGlyphSetID = nGlyphSetID;
             *nOutGlyphID    = (*aGlyph).second;
             return sal_True;
@@ -220,8 +269,11 @@ GlyphSet::GetSymbolMapping (sal_Unicode nUnicodeChar)
 }
 
 sal_Bool
-GlyphSet::AddGlyphID (sal_Unicode nChar,
-                      sal_uChar* nOutGlyphID, sal_Int32* nOutGlyphSetID)
+GlyphSet::AddCharID (
+                     sal_Unicode nChar,
+                     sal_uChar* nOutGlyphID,
+                     sal_Int32* nOutGlyphSetID
+                     )
 {
     sal_uChar nMappedChar;
 
@@ -233,25 +285,25 @@ GlyphSet::AddGlyphID (sal_Unicode nChar,
 
     // create an empty glyphmap that is reserved for iso1252 encoded glyphs
     // (or -- unencoded -- symbol glyphs) and a second map that takes any other
-    if (maGlyphList.empty())
+    if (maCharList.empty())
     {
-        glyph_mapping_t aMap, aMapp;
+        char_map_t aMap, aMapp;
 
-        maGlyphList.push_back (aMap);
-        maGlyphList.push_back (aMapp);
+        maCharList.push_back (aMap);
+        maCharList.push_back (aMapp);
     }
     // if the last map is full, create a new one
-    if ((!nMappedChar) && (maGlyphList.back().size() == 255))
+    if ((!nMappedChar) && (maCharList.back().size() == 255))
     {
-        glyph_mapping_t aMap;
-        maGlyphList.push_back (aMap);
+        char_map_t aMap;
+        maCharList.push_back (aMap);
     }
 
     // insert a new glyph in the font subset
     if (nMappedChar)
     {
         // always put iso1252 chars into the first map, map them on itself
-        glyph_mapping_t& aGlyphSet = maGlyphList.front();
+        char_map_t& aGlyphSet = maCharList.front();
         aGlyphSet [nChar] = nMappedChar;
         *nOutGlyphSetID   = 1;
         *nOutGlyphID      = nMappedChar;
@@ -259,16 +311,88 @@ GlyphSet::AddGlyphID (sal_Unicode nChar,
     else
     {
         // other chars are just appended to the list
-        glyph_mapping_t& aGlyphSet = maGlyphList.back();
+        char_map_t& aGlyphSet = maCharList.back();
 
         int nSize         = aGlyphSet.size();
 
         aGlyphSet [nChar] = nSize;
-        *nOutGlyphSetID   = maGlyphList.size();
+        *nOutGlyphSetID   = maCharList.size();
         *nOutGlyphID      = aGlyphSet [nChar];
     }
 
     return sal_True;
+}
+
+sal_Bool
+GlyphSet::AddGlyphID (
+                     sal_uInt32 nGlyph,
+                     sal_Unicode nUnicode,
+                     sal_uChar* nOutGlyphID,
+                     sal_Int32* nOutGlyphSetID
+                     )
+{
+    sal_uChar nMappedChar;
+
+    // XXX important: avoid to reencode type1 symbol fonts
+    if (mnBaseEncoding == RTL_TEXTENCODING_SYMBOL)
+        nMappedChar = GetSymbolMapping (nUnicode);
+    else
+        nMappedChar = GetAnsiMapping (nUnicode);
+
+    // create an empty glyphmap that is reserved for iso1252 encoded glyphs
+    // (or -- unencoded -- symbol glyphs) and a second map that takes any other
+    if (maGlyphList.empty())
+    {
+        glyph_map_t aMap, aMapp;
+
+        maGlyphList.push_back (aMap);
+        maGlyphList.push_back (aMapp);
+    }
+    // if the last map is full, create a new one
+    if ((!nMappedChar) && (maCharList.back().size() == 255))
+    {
+        glyph_map_t aMap;
+        maGlyphList.push_back (aMap);
+    }
+
+    // insert a new glyph in the font subset
+    if (nMappedChar)
+    {
+        // always put iso1252 chars into the first map, map them on itself
+        glyph_map_t& aGlyphSet = maGlyphList.front();
+        aGlyphSet [nGlyph] = nMappedChar;
+        *nOutGlyphSetID    = 1;
+        *nOutGlyphID       = nMappedChar;
+    }
+    else
+    {
+        // other chars are just appended to the list
+        glyph_map_t& aGlyphSet = maGlyphList.back();
+
+        int nSize         = aGlyphSet.size();
+
+        aGlyphSet [nGlyph] = nSize;
+        *nOutGlyphSetID   = maGlyphList.size();
+        *nOutGlyphID      = aGlyphSet [nGlyph];
+    }
+
+    return sal_True;
+}
+
+rtl::OString
+GlyphSet::GetCharSetName (sal_Int32 nGlyphSetID)
+{
+    if (meBaseType == fonttype::TrueType)
+    {
+        return maBaseName
+              + (mbVertical ? rtl::OString ("VSet") : rtl::OString ("HSet") )
+              + rtl::OString::valueOf (nGlyphSetID);
+    }
+    else
+    /* (meBaseType == fonttype::Type1 || meBaseType == fonttype::Builtin) */
+    {
+        return maBaseName;
+    }
 }
 
 rtl::OString
@@ -277,7 +401,7 @@ GlyphSet::GetGlyphSetName (sal_Int32 nGlyphSetID)
     if (meBaseType == fonttype::TrueType)
     {
         return maBaseName
-              + (mbVertical ? rtl::OString ("VSet") : rtl::OString ("HSet") )
+              + (mbVertical ? rtl::OString ("VGSet") : rtl::OString ("HGSet") )
               + rtl::OString::valueOf (nGlyphSetID);
     }
     else
@@ -383,58 +507,13 @@ GlyphSet::GetReencodedFontName (sal_Int32 nGlyphSetID)
     return GetReencodedFontName (GetGlyphSetEncoding(nGlyphSetID), maBaseName);
 }
 
-void
-GlyphSet::DrawText (PrinterGfx &rGfx, const Point& rPoint,
-                    const sal_Unicode* pStr, sal_Int16 nLen, const sal_Int32* pDeltaArray)
-{
-    // dispatch to the impl method
-    if (pDeltaArray == NULL)
-        ImplDrawText (rGfx, rPoint, pStr, nLen);
-    else
-        ImplDrawText (rGfx, rPoint, pStr, nLen, pDeltaArray);
-}
-
-void
-GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
-                        const sal_Unicode* pStr, sal_Int16 nLen)
-{
-    int nChar;
-
-    sal_uChar *pGlyphID    = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
-    sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
-
-    // convert unicode to glyph id and glyphset (font subset)
-    for (nChar = 0; nChar < nLen; nChar++)
-        GetGlyphID (pStr[nChar], pGlyphID + nChar, pGlyphSetID + nChar);
-
-    rGfx.PSMoveTo (rPoint);
-
-    // loop over the string to draw subsequent pieces of chars with the same
-    // postscript font
-    for (nChar = 0; nChar < nLen; /* atend */)
-    {
-        sal_Int32 nGlyphSetID = pGlyphSetID [nChar];
-        sal_Int32 nGlyphs     = 1;
-        for (int nNextChar = nChar + 1; nNextChar < nLen; nNextChar++)
-        {
-            if (pGlyphSetID[nNextChar] == nGlyphSetID)
-                nGlyphs++;
-            else
-                break;
-        }
-
-        // show the text using the PrinterGfx text api
-        rtl::OString aGlyphSetName(GetGlyphSetName(nGlyphSetID));
-        rGfx.PSSetFont (aGlyphSetName, GetGlyphSetEncoding(nGlyphSetID));
-        rGfx.PSShowText (pGlyphID + nChar, nGlyphs, nGlyphs);
-
-        nChar += nGlyphs;
-    }
-}
-
-void
-GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
-                        const sal_Unicode* pStr, sal_Int16 nLen, const sal_Int32* pDeltaArray)
+void GlyphSet::DrawGlyphs(
+                          PrinterGfx& rGfx,
+                          const Point& rPoint,
+                          const sal_uInt32* pGlyphIds,
+                          const sal_Unicode* pUnicodes,
+                          sal_Int16 nLen,
+                          const sal_Int32* pDeltaArray )
 {
     sal_uChar *pGlyphID    = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
     sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
@@ -443,7 +522,7 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
     // convert unicode to font glyph id and font subset
     for (int nChar = 0; nChar < nLen; nChar++)
     {
-        GetGlyphID (pStr[nChar], pGlyphID + nChar, pGlyphSetID + nChar);
+        GetGlyphID (pGlyphIds[nChar], pUnicodes[nChar], pGlyphID + nChar, pGlyphSetID + nChar);
         aGlyphSet.insert (pGlyphSetID[nChar]);
     }
 
@@ -498,6 +577,121 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
     }
 }
 
+void
+GlyphSet::DrawText (PrinterGfx &rGfx, const Point& rPoint,
+                    const sal_Unicode* pStr, sal_Int16 nLen, const sal_Int32* pDeltaArray)
+{
+    // dispatch to the impl method
+    if (pDeltaArray == NULL)
+        ImplDrawText (rGfx, rPoint, pStr, nLen);
+    else
+        ImplDrawText (rGfx, rPoint, pStr, nLen, pDeltaArray);
+}
+
+void
+GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
+                        const sal_Unicode* pStr, sal_Int16 nLen)
+{
+    int nChar;
+
+    sal_uChar *pGlyphID    = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
+    sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
+
+    // convert unicode to glyph id and char set (font subset)
+    for (nChar = 0; nChar < nLen; nChar++)
+        GetCharID (pStr[nChar], pGlyphID + nChar, pGlyphSetID + nChar);
+
+    rGfx.PSMoveTo (rPoint);
+
+    // loop over the string to draw subsequent pieces of chars with the same
+    // postscript font
+    for (nChar = 0; nChar < nLen; /* atend */)
+    {
+        sal_Int32 nGlyphSetID = pGlyphSetID [nChar];
+        sal_Int32 nGlyphs     = 1;
+        for (int nNextChar = nChar + 1; nNextChar < nLen; nNextChar++)
+        {
+            if (pGlyphSetID[nNextChar] == nGlyphSetID)
+                nGlyphs++;
+            else
+                break;
+        }
+
+        // show the text using the PrinterGfx text api
+        rtl::OString aGlyphSetName(GetCharSetName(nGlyphSetID));
+        rGfx.PSSetFont (aGlyphSetName, GetGlyphSetEncoding(nGlyphSetID));
+        rGfx.PSShowText (pGlyphID + nChar, nGlyphs, nGlyphs);
+
+        nChar += nGlyphs;
+    }
+}
+
+void
+GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
+                        const sal_Unicode* pStr, sal_Int16 nLen, const sal_Int32* pDeltaArray)
+{
+    sal_uChar *pGlyphID    = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
+    sal_Int32 *pGlyphSetID = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
+    std::set< sal_Int32 > aGlyphSet;
+
+    // convert unicode to font glyph id and font subset
+    for (int nChar = 0; nChar < nLen; nChar++)
+    {
+        GetCharID (pStr[nChar], pGlyphID + nChar, pGlyphSetID + nChar);
+        aGlyphSet.insert (pGlyphSetID[nChar]);
+    }
+
+    // loop over all glyph sets to detect substrings that can be xshown together
+    // without changing the postscript font
+    sal_Int32 *pDeltaSubset = (sal_Int32*)alloca (nLen * sizeof(sal_Int32));
+    sal_uChar *pGlyphSubset = (sal_uChar*)alloca (nLen * sizeof(sal_uChar));
+
+    std::set< sal_Int32 >::iterator aSet;
+    for (aSet = aGlyphSet.begin(); aSet != aGlyphSet.end(); ++aSet)
+    {
+        Point     aPoint  = rPoint;
+        sal_Int32 nOffset = 0;
+        sal_Int32 nGlyphs = 0;
+        sal_Int32 nChar;
+
+        // get offset to first glyph
+        for (nChar = 0; (nChar < nLen) && (pGlyphSetID[nChar] != *aSet); nChar++)
+        {
+            nOffset = pDeltaArray [nChar];
+        }
+
+        // loop over all chars to extract those that share the current glyph set
+        for (nChar = 0; nChar < nLen; nChar++)
+        {
+            if (pGlyphSetID[nChar] == *aSet)
+            {
+                pGlyphSubset [nGlyphs] = pGlyphID [nChar];
+                // the offset to the next glyph is determined by the glyph in
+                // front of the next glyph with the same glyphset id
+                // most often, this will be the current glyph
+                while ((nChar + 1) < nLen)
+                {
+                    if (pGlyphSetID[nChar + 1] == *aSet)
+                        break;
+                    else
+                        nChar += 1;
+                }
+                pDeltaSubset [nGlyphs] = pDeltaArray[nChar] - nOffset;
+
+                nGlyphs += 1;
+            }
+        }
+
+        // show the text using the PrinterGfx text api
+        aPoint.Move (nOffset, 0);
+
+        rtl::OString aGlyphSetName(GetCharSetName(*aSet));
+        rGfx.PSSetFont  (aGlyphSetName, GetGlyphSetEncoding(*aSet));
+        rGfx.PSMoveTo   (aPoint);
+        rGfx.PSShowText (pGlyphSubset, nGlyphs, nGlyphs, nGlyphs > 1 ? pDeltaSubset : NULL);
+    }
+}
+
 sal_Bool
 GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 {
@@ -511,8 +705,8 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 
     // loop thru all the font subsets
     sal_Int32               nGlyphSetID = 0;
-    glyphlist_t::iterator   aGlyphSet;
-    for (aGlyphSet = maGlyphList.begin(); aGlyphSet != maGlyphList.end(); aGlyphSet++)
+    char_list_t::iterator   aGlyphSet;
+    for (aGlyphSet = maCharList.begin(); aGlyphSet != maCharList.end(); aGlyphSet++)
     {
         ++nGlyphSetID;
 
@@ -543,7 +737,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
         typedef ps_mapping_t::value_type ps_value_t;
         ps_mapping_t aSortedGlyphSet;
 
-        glyph_mapping_t::const_iterator aUnsortedGlyph;
+        char_map_t::const_iterator aUnsortedGlyph;
         for (aUnsortedGlyph  = (*aGlyphSet).begin();
              aUnsortedGlyph != (*aGlyphSet).end();
              ++aUnsortedGlyph)
@@ -616,8 +810,41 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42 )
     sal_uInt16 pTTGlyphMapping[256];
 
     // loop thru all the font subsets
+    sal_Int32 nCharSetID;
+    char_list_t::iterator aCharSet;
+    for (aCharSet = maCharList.begin(), nCharSetID = 1;
+         aCharSet != maCharList.end();
+         ++aCharSet, nCharSetID++)
+    {
+        if ((*aCharSet).size() == 0)
+            continue;
+
+        // loop thru all the chars in the subset
+        char_map_t::const_iterator aChar;
+        sal_Int32 n = 0;
+        for (aChar = (*aCharSet).begin(); aChar != (*aCharSet).end(); aChar++)
+        {
+            pUChars [n]   = (*aChar).first;
+            pEncoding [n] = (*aChar).second;
+            n++;
+        }
+        // create a mapping from the unicode chars to the char encoding in
+        // source TrueType font
+        MapString (pTTFont, pUChars, (*aCharSet).size(), pTTGlyphMapping, mbVertical);
+
+        // create the current subset
+        if( bAsType42 )
+            CreateT42FromTTGlyphs (pTTFont, pTmpFile, GetCharSetName(nCharSetID),
+                                   pTTGlyphMapping, pEncoding, (*aCharSet).size() );
+        else
+            CreateT3FromTTGlyphs  (pTTFont, pTmpFile, GetCharSetName(nCharSetID),
+                                   pTTGlyphMapping, pEncoding, (*aCharSet).size(),
+                                   0 /* 0 = horizontal, 1 = vertical */ );
+    }
+
+    // loop thru all the font glyph subsets
     sal_Int32 nGlyphSetID;
-    glyphlist_t::iterator aGlyphSet;
+    glyph_list_t::iterator aGlyphSet;
     for (aGlyphSet = maGlyphList.begin(), nGlyphSetID = 1;
          aGlyphSet != maGlyphList.end();
          ++aGlyphSet, nGlyphSetID++)
@@ -626,17 +853,14 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42 )
             continue;
 
         // loop thru all the glyphs in the subset
-        glyph_mapping_t::const_iterator aGlyph;
+        glyph_map_t::const_iterator aGlyph;
         sal_Int32 n = 0;
         for (aGlyph = (*aGlyphSet).begin(); aGlyph != (*aGlyphSet).end(); aGlyph++)
         {
-            pUChars [n]   = (*aGlyph).first;
-            pEncoding [n] = (*aGlyph).second;
+            pTTGlyphMapping [n] = (*aGlyph).first;
+            pEncoding       [n] = (*aGlyph).second;
             n++;
         }
-        // create a mapping from the unicode chars to the glyph encoding in
-        // source TrueType font
-        MapString (pTTFont, pUChars, (*aGlyphSet).size(), pTTGlyphMapping, mbVertical);
 
         // create the current subset
         if( bAsType42 )

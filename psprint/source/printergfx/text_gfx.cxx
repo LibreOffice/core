@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.15 $
+  *  $Revision: 1.16 $
   *
-  *  last change: $Author: hdu $ $Date: 2001-12-21 16:27:15 $
+  *  last change: $Author: pl $ $Date: 2002-02-19 16:28:53 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -221,6 +221,69 @@ PrinterGfx::SetFallbackFont ( sal_Int32 nFontID )
 {
     mnFallbackID = nFontID;
     return 0;
+}
+
+void PrinterGfx::DrawGlyphs(
+                            const Point& rPoint,
+                            sal_uInt32* pGlyphIds,
+                            sal_Unicode* pUnicodes,
+                            sal_Int16 nLen,
+                            sal_Int32* pDeltaArray
+                            )
+{
+    if( nLen <= 0 )
+        return;
+
+    if ( !mrFontMgr.isFontDownloadingAllowed( mnFontID ) )
+    {
+        LicenceWarning(rPoint, pUnicodes, nLen, pDeltaArray);
+        return;
+    }
+
+    if( mrFontMgr.getFontType( mnFontID ) != fonttype::TrueType )
+    {
+        DrawText( rPoint, pUnicodes, nLen, pDeltaArray );
+        return;
+    }
+    // move and rotate the user coordinate system
+    // avoid the gsave/grestore for the simple cases since it allows
+    // reuse of the current font if it hasn't changed
+    sal_Int32 nCurrentTextAngle = mnTextAngle;
+    Point aPoint( rPoint );
+
+    if (nCurrentTextAngle != 0)
+    {
+        PSGSave ();
+        PSTranslate (rPoint);
+        PSRotate (nCurrentTextAngle);
+        mnTextAngle = 0;
+        aPoint = Point( 0, 0 );
+    }
+
+    // draw the string
+    // search for a glyph set matching the set font
+    std::list< GlyphSet >::iterator aIter;
+    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
+        if ( ((*aIter).GetFontID()  == mnFontID)
+             && ((*aIter).IsVertical() == mbTextVertical))
+        {
+            (*aIter).DrawGlyphs (*this, aPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray);
+            break;
+        }
+
+    // not found ? create a new one
+    if (aIter == maPS3Font.end())
+    {
+        maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
+        maPS3Font.back().DrawGlyphs (*this, aPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray);
+    }
+
+    // restore the user coordinate system
+    if (nCurrentTextAngle != 0)
+    {
+        PSGRestore ();
+        mnTextAngle = nCurrentTextAngle;
+    }
 }
 
 void

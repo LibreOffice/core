@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-06 16:06:03 $
+ *  last change: $Author: pl $ $Date: 2002-02-19 16:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,6 +435,13 @@ public:
     sal_uInt32      GetGlyphOutline (sal_Unicode c,
                                      sal_uInt16 **ppPolySizes, Point **ppPoints,
                                      sal_uInt8 **ppFlags);
+
+    // for CTL
+    void            DrawGlyphs( const Point& rPoint,
+                                sal_uInt32* pGlyphIds,
+                                sal_Unicode* pUnicodes,
+                                sal_Int16 nLen,
+                                sal_Int32* pDeltaArray );
 };
 
 } /* namespace psp */
