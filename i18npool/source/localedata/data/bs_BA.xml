@@ -32,88 +32,88 @@
 </Markers>
 <TimeAM>AM</TimeAM>
 <TimePM>PM</TimePM>
-<MeasurementSystem>US</MeasurementSystem>
+<MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
 <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$KM-141A]">
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
-<FormatCode>D.M.YY</FormatCode>
+<FormatCode>D.M.YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
-<FormatCode>NN DD.MMM YY</FormatCode>
+<FormatElement msgid="DateFormatskey2" default="true" type="long" usage="DATE" formatindex="19">
+<FormatCode>NNNN DD. MMMM YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
-<FormatCode>MM.YY</FormatCode>
+<FormatElement msgid="DateFormatskey3" default="true" type="medium" usage="DATE" formatindex="20">
+<FormatCode>D.M.YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
-<FormatCode>MMM DD</FormatCode>
-<DefaultName></DefaultName>
-</FormatElement>
-<FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
-<FormatCode>MMMM</FormatCode>
-<DefaultName></DefaultName>
-</FormatElement>
-<FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="37">
-<FormatCode>QQ YY</FormatCode>
-<DefaultName></DefaultName>
-</FormatElement>
-<FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
+<FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="21">
 <FormatCode>DD.MM.YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
-<FormatCode>DD.MM.YY</FormatCode>
+<FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="22">
+<FormatCode>D. MMM YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-<FormatCode>NNNNMMMM DD, YYYY</FormatCode>
+<FormatElement msgid="DateFormatskey6" default="false" type="long" usage="DATE" formatindex="23">
+<FormatCode>D. MMM YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-<FormatCode>MMM D, YY</FormatCode>
-<DefaultName></DefaultName>
-</FormatElement>
-<FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-<FormatCode>MMM D, YYYY</FormatCode>
-<DefaultName></DefaultName>
-</FormatElement>
-<FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-<FormatCode>MMMM D, YYYY</FormatCode>
-<DefaultName></DefaultName>
-</FormatElement>
-<FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-<FormatCode>NN, MMM D, YY</FormatCode>
-<DefaultName></DefaultName>
-</FormatElement>
-<FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-<FormatCode>NN, MMMM D, YYYY</FormatCode>
-<DefaultName></DefaultName>
-</FormatElement>
-<FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-<FormatCode>NNNNMMMM D, YYYY</FormatCode>
-<DefaultName></DefaultName>
-</FormatElement>
-<FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
-<FormatCode>D. MMM. YYYY</FormatCode>
-<DefaultName></DefaultName>
-</FormatElement>
-<FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
+<FormatElement msgid="DateFormatskey7" default="false" type="long" usage="DATE" formatindex="25">
 <FormatCode>D. MMMM YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
+<FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="27">
+<FormatCode>NN, D. MMM YY</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey9" default="false" type="long" usage="DATE" formatindex="28">
+<FormatCode>NN, DD. MMM YY</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="29">
+<FormatCode>NN, D. MMMM YYYY</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="30">
+<FormatCode>NNNND. MMMM YYYY</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey12" default="false" type="short" usage="DATE" formatindex="34">
+<FormatCode>MM YY</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey13" default="false" type="short" usage="DATE" formatindex="35">
+<FormatCode>MMM DD</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey14" default="false" type="short" usage="DATE" formatindex="36">
+<FormatCode>MMMM</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="37">
+<FormatCode>QQ YY</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="24">
+<FormatCode>D. MMM. YYYY</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey18" default="false" type="long" usage="DATE" formatindex="26">
+<FormatCode>D. MMMM YYYY</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="DateFormatskey19" default="false" type="short" usage="DATE" formatindex="31">
 <FormatCode>MM-DD</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="32">
+<FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="32">
 <FormatCode>YY-MM-DD</FormatCode>
-<DefaultName>ISO 8601</DefaultName>
+<DefaultName>ISO 8601 (EN 28601)</DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="33">
+<FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="33">
 <FormatCode>YYYY-MM-DD</FormatCode>
-<DefaultName>ISO 8601</DefaultName>
+<DefaultName>ISO 8601 (EN 28601)</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
 <FormatCode>WW</FormatCode>
@@ -232,9 +232,10 @@
 </SearchOptions>
 </LC_SEARCH>
 <LC_INDEX>
-<IndexKey unoid="alphanumeric" default="true" phonetic="false">A-Z</IndexKey>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">A-C Č Ć D Đ E-P R S Š T-Z Ž</IndexKey>
 <UnicodeScript>0</UnicodeScript>
 <UnicodeScript>1</UnicodeScript>
+<UnicodeScript>2</UnicodeScript>
 <FollowPageWord>p.</FollowPageWord>
 <FollowPageWord>pp.</FollowPageWord>
 </LC_INDEX>
@@ -371,18 +372,18 @@
 </LC_TRANSLITERATION>
 <LC_MISC>
 <ReservedWords>
-<trueWord>true</trueWord>
-<falseWord>false</falseWord>
-<quarter1Word>1st quarter</quarter1Word>
-<quarter2Word>2nd quarter</quarter2Word>
-<quarter3Word>3rd quarter</quarter3Word>
-<quarter4Word>4th quarter</quarter4Word>
-<aboveWord>above</aboveWord>
-<belowWord>below</belowWord>
-<quarter1Abbreviation>Q1</quarter1Abbreviation>
-<quarter2Abbreviation>Q2</quarter2Abbreviation>
-<quarter3Abbreviation>Q3</quarter3Abbreviation>
-<quarter4Abbreviation>Q4</quarter4Abbreviation>
+<trueWord>tacno</trueWord>
+<falseWord>netacno</falseWord>
+<quarter1Word>Prvi kvartal</quarter1Word>
+<quarter2Word>Drugi kvartal</quarter2Word>
+<quarter3Word>Treći kvartal</quarter3Word>
+<quarter4Word>Četvrti kvartal</quarter4Word>
+<aboveWord>iznad</aboveWord>
+<belowWord>ispod</belowWord>
+<quarter1Abbreviation>K1</quarter1Abbreviation>
+<quarter2Abbreviation>K2</quarter2Abbreviation>
+<quarter3Abbreviation>K3</quarter3Abbreviation>
+<quarter4Abbreviation>K4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel>
