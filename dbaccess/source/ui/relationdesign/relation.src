@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:20:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "संपादन";
             Text[ slovak ] = "Upraviť";
+            Text[ hungarian ] = "Szerkesztés";
+            Text[ slovenian ] = "Uredi";
         };
         ToolBoxItem
         {
@@ -167,6 +169,8 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ hebrew ] = "‮שמירה‬";
             Text[ hindi ] = "संचित करो";
             Text[ slovak ] = "Uložiť";
+            Text[ hungarian ] = "Mentés";
+            Text[ slovenian ] = "Shrani";
         };
         ToolBoxItem
         {
@@ -200,6 +204,8 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ hebrew ] = "‮הדפסה‬";
             Text[ hindi ] = "छपाई";
             Text[ slovak ] = "Tlač";
+            Text[ hungarian ] = "Nyomtatás";
+            Text[ slovenian ] = "Natisni";
         };
         ToolBoxItem
         {
@@ -276,6 +282,8 @@ String STR_QUERY_REL_EDIT_RELATION
     Text[ hebrew ] = "Diese Relation existiert bereits. Möchten Sie sie bearbeiten?";
     Text[ hindi ] = "इस सम्बन्ध पहिले से ही अस्तित्व में है । आप इसको संपादन करना चाहते है?";
     Text[ slovak ] = "Táto relácia už existuje. Chcete ju upraviť?";
+    Text[ hungarian ] = "Ez a reláció már létezik. Át akarja szerkeszteni?";
+    Text[ slovenian ] = "Ta relacija že obstaja. Ali jo želite urediti?";
 };
 String STR_RELATIONDESIGN
 {
@@ -306,6 +314,8 @@ String STR_RELATIONDESIGN
     Text[ hebrew ] = "Relationenentwurf";
     Text[ hindi ] = "संबन्ध डिसैन";
     Text[ slovak ] = "Návrh relácie";
+    Text[ hungarian ] = "Relációk tervezése";
+    Text[ slovenian ] = "Oblikovanje relacij";
 };
 String STR_RELATIONDESIGN_NOT_AVAILABLE
 {
@@ -319,7 +329,7 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ french ] = "La base de donn�es ne supporte pas les relations !";
     Text[ spanish ] = "La base de datos no admite ninguna relaci�n.";
     Text[ italian ] = "Il database non supporta alcuna relazione.";
-    Text[ danish ] = "Databasen underst�tter ingen relationer!";
+    Text[ danish ] = "Databasen underst�tter ikke relationer!";
     Text[ swedish ] = "Databasen underst�der inte n�gra relationer.";
     Text[ polish ] = "Baza danych nie obs�uguje relacji.";
     Text[ portuguese_brazilian ] = "O banco de dados n�o tem suporte para rela��es.";
@@ -336,6 +346,8 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ hebrew ] = "Die Datenbank unterstützt keine Relationen";
     Text[ hindi ] = "लेखासंचय सम्बन्धों को समर्थन नहीं करता है ।";
     Text[ slovak ] = "Databáza nepodporuje relácie.";
+    Text[ hungarian ] = "Az adatbázis nem támogat relációkat.";
+    Text[ slovenian ] = "Zbirka podatkov ne podpira relacij.";
 };
 QueryBox RELATION_DESIGN_SAVEMODIFIED
 {
@@ -368,6 +380,8 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message[ hebrew ] = "Der Relationeneentwurf wurde geändert.\nSollen die Änderungen gespeichert werden?";
     Message[ hindi ] = "रिलेशन डिसैन में परिवर्तन किया है ।\nआप परिवर्तनों को संचित करना चाहते है ?";
     Message[ slovak ] = "Návrh relácie bol zmenený.\nChcete uložiť zmeny?";
+    Message[ hungarian ] = "A reláció-elrendezés megváltozott.\nKívánja menteni a változásokat?";
+    Message[ slovenian ] = "Oblikovanje relacij je bilo spremenjeno.\nAli želite shraniti spremembe?";
 };
 
 Menu RID_RELATION_DESIGN_MAIN_MENU
@@ -469,6 +483,8 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                         Text[ hebrew ] = "‮ביטול פעולה‬";
                         Text[ hindi ] = "अनावृत्ति";
                         Text[ slovak ] = "Späť";
+                        Text[ hungarian ] = "Visszavonás";
+                        Text[ slovenian ] = "Razveljavi";
                     };
                 MenuItem
                 {
@@ -503,6 +519,8 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                         Text[ hebrew ] = "‮שחזור פעולה‬";
                         Text[ hindi ] = "फिर से करो";
                         Text[ slovak ] = "Znovu";
+                        Text[ hungarian ] = "Újra";
+                        Text[ slovenian ] = "Uveljavi";
                     };
                 MenuItem
                 {
@@ -526,6 +544,8 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "~संपादन";
             Text[ slovak ] = "~Upraviť";
+            Text[ hungarian ] = "~Szerkesztés";
+            Text[ slovenian ] = "~Uredi";
         };
 
     MenuItem
@@ -576,6 +596,8 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ hebrew ] = "~Einfügen";
             Text[ hindi ] = "~Insert";
             Text[ slovak ] = "Vlož~iť";
+            Text[ hungarian ] = "~Beszúrás";
+            Text[ slovenian ] = "~Vstavi";
         };
 
     MenuItem
@@ -627,6 +649,8 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ hebrew ] = "‮כלים‬";
             Text[ hindi ] = "~औज़ार";
             Text[ slovak ] = "Nás~troje";
+            Text[ hungarian ] = "~Eszközök";
+            Text[ slovenian ] = "O~rodja";
         };
         GLOBLMN_WINMN
         {
@@ -666,7 +690,10 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ hebrew ] = "Wenn Sie diese Tabelle löschen werden alle zugehörigen Relationen ebenfalls gelöscht. Fortfahren?";
     Text[ hindi ] = "इस सारणी को मिटाने के समय इसके सब सम्बन्ध भी मिट जाएगा । जारी रखना है?";
     Text[ slovak ] = "Zmazaním tejto tabuľky zmažete tiež všetky zodpovedajúce relácie.Pokračovať?";
+    Text[ hungarian ] = "E tábla törlésével az összes kapcsolódó reláció is törlődni fog. Folytatja?";
+    Text[ slovenian ] = "Če izbrišete to tabelo, bodo izbrisane tudi pripadajoče relacije. Ali želite nadaljevati?";
 };
+
 
 
 
