@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-23 18:20:49 $
+ *  last change: $Author: nn $ $Date: 2001-08-16 16:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@ class ScStyleObj;
 class ScStyleNameConversion
 {
 public:
-    static const String& DisplayToProgrammaticName( const String& rDispName, UINT16 nType );
-    static const String& ProgrammaticToDisplayName( const String& rProgName, UINT16 nType );
+    static String DisplayToProgrammaticName( const String& rDispName, UINT16 nType );
+    static String ProgrammaticToDisplayName( const String& rProgName, UINT16 nType );
 };
 
 

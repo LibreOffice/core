@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-23 18:22:49 $
+ *  last change: $Author: nn $ $Date: 2001-08-16 16:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,9 +477,31 @@ const ScDisplayNameMap* lcl_GetStyleNameMap( UINT16 nType )
     return NULL;
 }
 
-// static
-const String& ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName, UINT16 nType )
+//  programmatic name suffix for display names that match other programmatic names
+//  is " (user)" including a space
+
+#define SC_SUFFIX_USER      " (user)"
+#define SC_SUFFIX_USER_LEN  7
+
+BOOL lcl_EndsWithUser( const String& rString )
 {
+    const sal_Unicode *pChar = rString.GetBuffer();
+    xub_StrLen nLen = rString.Len();
+    return nLen >= SC_SUFFIX_USER_LEN &&
+           pChar[nLen-7] == ' ' &&
+           pChar[nLen-6] == '(' &&
+           pChar[nLen-5] == 'u' &&
+           pChar[nLen-4] == 's' &&
+           pChar[nLen-3] == 'e' &&
+           pChar[nLen-2] == 'r' &&
+           pChar[nLen-1] == ')';
+}
+
+// static
+String ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName, UINT16 nType )
+{
+    BOOL bDisplayIsProgrammatic = FALSE;
+
     const ScDisplayNameMap* pNames = lcl_GetStyleNameMap( nType );
     if (pNames)
     {
@@ -487,15 +509,34 @@ const String& ScStyleNameConversion::DisplayToProgrammaticName( const String& rD
         {
             if (pNames->aDispName == rDispName)
                 return pNames->aProgName;
+            else if (pNames->aProgName == rDispName)
+                bDisplayIsProgrammatic = TRUE;          // display name matches any programmatic name
         }
         while( (++pNames)->aDispName.Len() );
     }
+
+    if ( bDisplayIsProgrammatic || lcl_EndsWithUser( rDispName ) )
+    {
+        //  add the (user) suffix if the display name matches any style's programmatic name
+        //  or if it already contains the suffix
+
+        String aRet = rDispName;
+        aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SC_SUFFIX_USER ) );
+        return aRet;
+    }
+
     return rDispName;
 }
 
 // static
-const String& ScStyleNameConversion::ProgrammaticToDisplayName( const String& rProgName, UINT16 nType )
+String ScStyleNameConversion::ProgrammaticToDisplayName( const String& rProgName, UINT16 nType )
 {
+    if ( lcl_EndsWithUser( rProgName ) )
+    {
+        //  remove the (user) suffix, don't compare to map entries
+        return rProgName.Copy( 0, rProgName.Len() - SC_SUFFIX_USER_LEN );
+    }
+
     const ScDisplayNameMap* pNames = lcl_GetStyleNameMap( nType );
     if (pNames)
     {
