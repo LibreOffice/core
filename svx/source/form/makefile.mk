@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2001-09-18 15:30:29 $
+#   last change: $Author: fs $ $Date: 2002-05-08 07:38:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,8 @@ SLOFILES = \
     $(SLO)$/fmundo.obj  	\
     $(SLO)$/fmprop.obj      \
     $(SLO)$/fmmodel.obj		\
+    $(SLO)$/navigatortree.obj      \
+    $(SLO)$/navigatortreemodel.obj      \
     $(SLO)$/fmexpl.obj      \
     $(SLO)$/fmctrler.obj    \
     $(SLO)$/fmpgeimp.obj	\
