@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-24 18:23:40 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
 #ifndef _ZIP_PACKAGE_ENTRY_HXX
 #include <ZipPackageEntry.hxx>
 #endif
@@ -76,13 +73,19 @@
 #ifndef _ENCRYPTION_DATA_HXX_
 #include <EncryptionData.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE5_HXX
+#include <cppuhelper/implbase5.hxx>
+#endif
+
 
 class ZipPackage;
 struct ZipEntry;
 class ZipPackageStream : public ZipPackageEntry,
-                         public ::cppu::OWeakObject,
-                         public ::com::sun::star::io::XActiveDataSink
+                         public cppu::OWeakObject,
+                         public ::com::sun::star::io::XActiveDataSink,
+                         public ::com::sun::star::lang::XTypeProvider
 {
+    static cppu::class_data5 s_cd;
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     ZipPackage          &rZipPackage;
@@ -135,13 +138,32 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream( )
         throw(::com::sun::star::uno::RuntimeException);
 
+    // XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
+        throw (::com::sun::star::uno::RuntimeException)
+    {
+        return cppu::WeakImplHelper_getTypes( ( cppu::class_data *)&s_cd );
+    }
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  )
+        throw (::com::sun::star::uno::RuntimeException)
+    {
+        return cppu::ImplHelper_getImplementationId ( ( cppu::class_data * ) &s_cd );
+    }
+
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  )
-        throw();
-    virtual void SAL_CALL release(  )
-        throw();
+        throw(::com::sun::star::uno::RuntimeException)
+    {
+        return cppu::WeakImplHelper_query ( rType, (cppu::class_data *) &s_cd, this, (cppu::OWeakObject *)this );
+    }
+    virtual void SAL_CALL acquire() throw ()
+    {
+        OWeakObject::acquire();
+    }
+    virtual void SAL_CALL release() throw ()
+    {
+        OWeakObject::release();
+    }
 
     // XActiveDataSink
     virtual void SAL_CALL setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
@@ -151,7 +173,9 @@ public:
 
     // XUnoTunnel
     static ::com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )
-        throw(::com::sun::star::uno::RuntimeException);
+    {
+        return cppu::ImplHelper_getImplementationId ( ( cppu::class_data * ) &s_cd );
+    }
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw(::com::sun::star::uno::RuntimeException);
 
@@ -161,4 +185,5 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 };
+
 #endif
