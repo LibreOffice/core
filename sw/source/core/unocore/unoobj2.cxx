@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:12:51 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                 const SwFlyFrm *pFly;
                 SwFrmFmt* pFmt;
 
-                if( pO->IsWriterFlyFrame()
+                if( pO->ISA(SwVirtFlyDrawObj)
                     ? ( (pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm())
                                 ->IsFlyAtCntFrm() &&
                         (bSort ? pFly->IsAutoPos() : !pFly->IsAutoPos() ) &&
