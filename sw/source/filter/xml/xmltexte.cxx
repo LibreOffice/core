@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-10 10:21:45 $
+ *  last change: $Author: mib $ $Date: 2001-05-10 13:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         aAny >>= sStyle;
     }
 
-    const XMLPropertyState *aStates[6] = { 0, 0, 0, 0, 0, 0 };
+    const XMLPropertyState *aStates[7] = { 0, 0, 0, 0, 0, 0, 0 };
     switch( nType )
     {
     case SV_EMBEDDED_FRAME:
