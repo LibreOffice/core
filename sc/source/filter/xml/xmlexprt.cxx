@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-22 17:10:39 $
+ *  last change: $Author: sab $ $Date: 2001-01-25 14:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2147,7 +2147,9 @@ void ScXMLExport::WriteAnnotation(const ScMyCell& rMyCell)
                 rtl::OUString sOUText = xSimpleText->getString();
                 if (sOUText.getLength())
                 {
-                    AddAttribute(XML_NAMESPACE_OFFICE, sXML_author, xSheetAnnotation->getAuthor());
+                    rtl::OUString sAuthor(xSheetAnnotation->getAuthor());
+                    if (sAuthor.getLength())
+                        AddAttribute(XML_NAMESPACE_OFFICE, sXML_author, sAuthor);
                     String aDate(xSheetAnnotation->getDate());
                     if (pDoc)
                     {
