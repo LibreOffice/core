@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-02 14:44:00 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,8 @@
 #include <stdio.h>
 
 #include <tools/rc.h>
-#include <tools/vclrsc.hxx>
+
+#include <vclrsc.hxx>
 
 // Programmabhaengige Includes.
 #ifndef _RSCTREE_HXX
@@ -334,9 +335,9 @@ void RscTypCont::Init()
     nMoveableId     = pHS->Insert( "WB_MOVEABLE" );
     aWinBits.SetConstant( nMoveableId, WB_MOVEABLE );
     nMinimizeId     = pHS->Insert( "WB_MINABLE" );
-    aWinBits.SetConstant( nMinimizeId, WB_MINABLE );
+    aWinBits.SetConstant( nMinimizeId, 0 /*WB_MINABLE*/ );
     nMaximizeId     = pHS->Insert( "WB_MAXABLE" );
-    aWinBits.SetConstant( nMaximizeId, WB_MAXABLE );
+    aWinBits.SetConstant( nMaximizeId, 0 /*WB_MAXABLE*/ );
     nCloseableId    = pHS->Insert( "WB_CLOSEABLE" );
     aWinBits.SetConstant( nCloseableId, WB_CLOSEABLE );
     nAppId          = pHS->Insert( "WB_APP" );
@@ -346,7 +347,7 @@ void RscTypCont::Init()
     nGroupId        = pHS->Insert( "WB_GROUP" );
     aWinBits.SetConstant( nGroupId, WB_GROUP );
     nSysmodalId     = pHS->Insert( "WB_SYSMODAL" );
-    aWinBits.SetConstant( nSysmodalId, WB_SYSMODAL );
+    aWinBits.SetConstant( nSysmodalId, 0 /*WB_SYSMODAL*/ );
 }
 {
     nLeftId         = pHS->Insert( "WB_LEFT" );
@@ -366,7 +367,7 @@ void RscTypCont::Init()
     nRepeatId           = pHS->Insert( "WB_REPEAT" );
     aWinBits.SetConstant( nRepeatId, WB_REPEAT );
     nSVLookId           = pHS->Insert( "WB_SVLOOK" );
-    aWinBits.SetConstant( nSVLookId, WB_SVLOOK );
+    aWinBits.SetConstant( nSVLookId, WB_3DLOOK );
     nDropDownId         = pHS->Insert( "WB_DROPDOWN" );
     aWinBits.SetConstant( nDropDownId, WB_DROPDOWN );
     nPassWordId         = pHS->Insert( "WB_PASSWORD" );
@@ -392,15 +393,15 @@ void RscTypCont::Init()
     nZoomableId         = pHS->Insert( "WB_ZOOMABLE" );
     aWinBits.SetConstant( nZoomableId, WB_ROLLABLE );
     nHideWhenDeactivateId = pHS->Insert( "WB_HIDEWHENDEACTIVATE" );
-    aWinBits.SetConstant( nHideWhenDeactivateId, WB_HIDEWHENDEACTIVATE );
+    aWinBits.SetConstant( nHideWhenDeactivateId, 0 /*WB_HIDEWHENDEACTIVATE*/ );
     nAutoHScrollId      = pHS->Insert( "WB_AUTOHSCROLL" );
     aWinBits.SetConstant( nAutoHScrollId, WB_AUTOHSCROLL );
     nDDExtraWidthId     = pHS->Insert( "WB_DDEXTRAWIDTH" );
-    aWinBits.SetConstant( nDDExtraWidthId, WB_DDEXTRAWIDTH );
+    aWinBits.SetConstant( nDDExtraWidthId, 0 /*WB_DDEXTRAWIDTH*/ );
     nWordBreakId        = pHS->Insert( "WB_WORDBREAK" );
     aWinBits.SetConstant( nWordBreakId, WB_WORDBREAK );
     nLeftLabelId        = pHS->Insert( "WB_LEFTLABEL" );
-    aWinBits.SetConstant( nLeftLabelId, WB_LEFTLABEL );
+    aWinBits.SetConstant( nLeftLabelId, 0 /*WB_LEFTLABEL*/ );
     nHasLinesId         = pHS->Insert( "WB_HASLINES" );
     aWinBits.SetConstant( nHasLinesId, WB_HASLINES );
     nHasButtonsId       = pHS->Insert( "WB_HASBUTTONS" );
@@ -412,7 +413,7 @@ void RscTypCont::Init()
     nSmallStyleId       = pHS->Insert( "WB_SMALLSTYLE" );
     aWinBits.SetConstant( nSmallStyleId, WB_SMALLSTYLE );
     nEnableResizingId   = pHS->Insert( "WB_ENABLERESIZING" );
-    aWinBits.SetConstant( nEnableResizingId, WB_ENABLERESIZING );
+    aWinBits.SetConstant( nEnableResizingId, 0 /*WB_ENABLERESIZING*/ );
     nDockableId         = pHS->Insert( "WB_DOCKABLE" );
     aWinBits.SetConstant( nDockableId, WB_DOCKABLE );
     nScaleId            = pHS->Insert( "WB_SCALE" );
