@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-24 10:43:15 $
+ *  last change: $Author: mh $ $Date: 2001-10-02 11:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ void SourceTreeLocalizer::WorkOnFile(
                 sCommand += " -l ";
                 sCommand += sLanguageRestriction;
             }
-            if ( rIso == "iso" ) {
+            if ( rIso.Equals("iso")) {
                 sCommand += " -ISO99 ";
                 sCommand += sIsoCode99;
             }
@@ -336,7 +336,7 @@ BOOL SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
     sFileName.ToLowerAscii();
 
     ByteString sNegative( NegativeList[ nIndex ] );
-    while( sNegative != "NULL" && bReturn ) {
+    while( sNegative.Equals( "NULL" ) && bReturn ) {
         sNegative.SearchAndReplaceAll( "\\", sDelimiter );
         sNegative.SearchAndReplaceAll( "/", sDelimiter );
         sNegative.ToLowerAscii();
@@ -365,7 +365,7 @@ BOOL SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
     sFileName.ToLowerAscii();
 
     ByteString sNegative( PositiveList[ nIndex ] );
-    while( sNegative != "NULL" && !bReturn ) {
+    while( sNegative.Equals( "NULL" ) && !bReturn ) {
         sNegative.SearchAndReplaceAll( "\\", sDelimiter );
         sNegative.SearchAndReplaceAll( "/", sDelimiter );
         sNegative.ToLowerAscii();
@@ -402,9 +402,9 @@ void SourceTreeLocalizer::WorkOnFileType(
 
         BOOL bAllowed = TRUE;
 
-        if ( rCollectMode == "negative" )
+        if ( rCollectMode.Equals( "negative" ))
             bAllowed = CheckNegativeList( sFile );
-        else if ( rCollectMode == "positive" )
+        else if ( rCollectMode.Equals( "positive" ))
             bAllowed = CheckPositiveList( sFile );
 
         if ( bAllowed )
@@ -423,7 +423,7 @@ void SourceTreeLocalizer::WorkOnDirectory( const ByteString &rDirectory )
     ByteString sCollectMode( ExeTable[ nIndex ][ 3 ] );
     ByteString sIso( ExeTable[ nIndex ][ 4 ] );
 
-    while( sExtension != "NULL" ) {
+    while( sExtension.Equals( "NULL" )) {
         WorkOnFileType(
             rDirectory,
             sExtension,
@@ -504,11 +504,11 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
     ByteString sExtension( aEntry.GetExtension(), RTL_TEXTENCODING_ASCII_US );
     ByteString sCandidate( ExeTable[ nIndex ][ 0 ] );
 
-    while( sCandidate != "NULL" && sCandidate != sExtension )
+    while( sCandidate.Equals ("NULL") && sCandidate != sExtension )
         sCandidate = ExeTable[ ++nIndex ][ 0 ];
 
     ByteString sIso( ExeTable[ nIndex ][ 4 ] );
-    if ( sCandidate != "NULL" && aEntry.Exists()) {
+    if ( sCandidate.Equals( "NULL" ) && aEntry.Exists()) {
         DirEntry aOut( Export::GetTempFile());
         ByteString sOutput( aOut.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
@@ -521,7 +521,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
         sCommand += sOutput;
         sCommand += " ";
         sCommand += ByteString( ExeTable[ nIndex ][ 2 ] );
-        if ( sIso == "iso" ) {
+        if ( sIso.Equals( "iso" )) {
             sCommand += " -ISO99 ";
             sCommand += sIsoCode99;
         }
@@ -766,23 +766,23 @@ int _cdecl main( int argc, char *argv[] )
     ByteString sFileName;
 
     for( int i = 1; i < argc; i++ ) {
-        if ( ByteString( argv[ i ]).ToUpperAscii() == "-E" ) {
+        if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-E" )) {
             nState = STATE_EXPORT;
             if ( bMerge )
                 return Error();
             bExport = TRUE;
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-M" ) {
+        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-M" )) {
             nState = STATE_MERGE;
             if ( bExport )
                 return Error();
             bMerge = TRUE;
         }
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-I" )
+        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-I" ) )
             nState = STATE_ISOCODE;
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-L" )
+        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-L" ) )
             nState = STATE_LANGUAGES;
-        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-F" )
+        else if ( ByteString( argv[ i ]).ToUpperAscii().Equals( "-F" ) )
             nState = STATE_FILENAME;
         else {
             switch ( nState ) {
