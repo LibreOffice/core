@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-29 13:35:44 $
+ *  last change: $Author: er $ $Date: 2002-07-17 17:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ class ScPaintLockData;
 class ScJobSetup;
 class ScChangeAction;
 class VirtualDevice;
+class ScImportOptions;
 
 //==================================================================
 
@@ -257,8 +258,7 @@ public:
 
     ScDrawLayer*    MakeDrawLayer();
 
-    void            AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode cStrDelim,
-                               CharSet eCharSet);
+    void            AsciiSave( SvStream& rStream, const ScImportOptions& rOpt );
 
     void            GetSbxState( SfxItemSet &rSet );
     void            GetDrawObjState( SfxItemSet &rSet );
