@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
+ *  last change: $Author: cmc $ $Date: 2002-03-05 14:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,12 +233,6 @@ public:
     void SetNewEnd( WW8_FC nEnd )
     {   ((INT32*)pFkp)[nIMax] = nEnd; }
 
-    void SetMark()
-    {
-        nMark = nIMax ? pOfs[(nIMax-1) * nItemSize] : 0;
-    }
-    void AppendMark(WW8_FC nEndFc);
-
 #ifdef __WW8_NEEDS_COPY
     WW8_FC GetStartFc() const;
     WW8_FC GetEndFc() const;
@@ -246,6 +240,8 @@ public:
     WW8_FC GetStartFc() const { return ((INT32*)pFkp)[0]; };
     WW8_FC GetEndFc() const { return ((INT32*)pFkp)[nIMax]; };
 #endif // defined __WW8_NEEDS_COPY
+
+    BYTE *CopyLastSprms(BYTE &rLen,BOOL bVer8);
 };
 
 
@@ -787,22 +783,14 @@ WW8_WrPlcPn::~WW8_WrPlcPn()
     aFkps.DeleteAndDestroy( 0, aFkps.Count() );
 }
 
-void WW8_WrPlcPn::SetMark()
+BYTE *WW8_WrPlcPn::CopyLastSprms(BYTE &rLen)
 {
-    nMark = aFkps.Count()-1;
-    WW8_FkpPtr pF = aFkps.GetObject(nMark);
-    pF->SetMark();
+    BYTE *pRet=0;
+    WW8_FkpPtr pF = aFkps.GetObject(aFkps.Count()-1);
+    return pF->CopyLastSprms(rLen,rWrt.bWrtWW8);
 }
 
-void WW8_WrPlcPn::AppendMark(WW8_FC nEndFc)
-{
-    WW8_FkpPtr pF = aFkps.GetObject(nMark);
-    pF->AppendMark(nEndFc);
-    nMark = 0;
-}
-
-void WW8_WrPlcPn::AppendFkpEntry( WW8_FC nEndFc, short nVarLen,
-                                    const BYTE* pSprms )
+void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const BYTE* pSprms)
 {
     WW8_FkpPtr pF = aFkps.GetObject( aFkps.Count() - 1 );
 
@@ -954,6 +942,32 @@ BYTE WW8_WrFkp::SearchSameSprm( USHORT nVarLen, const BYTE* pSprms )
     return 0;           // nicht gefunden
 }
 
+BYTE *WW8_WrFkp::CopyLastSprms(BYTE &rLen,BOOL bVer8)
+{
+    rLen=0;
+    BYTE *pStart=0,*pRet=0;
+
+    if (!bCombined)
+        pStart = pOfs;
+    else
+        pStart = pFkp + ( nIMax + 1 ) * 4;
+
+    BYTE nStart = *(pStart + (nIMax-1) * nItemSize);
+
+    const BYTE* p = pFkp + ( (USHORT)nStart << 1 );
+
+    if (!*p && bVer8)
+        p++;
+
+    if (*p)
+    {
+        rLen = *p++;
+        pRet = new BYTE[rLen];
+        memcpy(pRet,p,rLen);
+    }
+    return pRet;
+}
+
 BOOL WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
 {
     ASSERT( !nVarLen || pSprms, "Item-Pointer fehlt" );
@@ -1020,15 +1034,6 @@ BOOL WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
     }
     nIMax++;
     return TRUE;
-}
-
-void WW8_WrFkp::AppendMark(WW8_FC nEndFc)
-{
-    ASSERT( nMark && ePlc == PAP, "No pap mark set" );
-    ((INT32*)pFkp)[nIMax + 1] = nEndFc;     // FC eintragen
-    pOfs[nIMax * nItemSize] = nMark;
-    nMark=0;
-    nIMax++;
 }
 
 BOOL WW8_WrFkp::Combine()
@@ -2031,7 +2036,8 @@ void SwWW8Writer::StoreDoc1()
     SwWW8Writer::FillUntil( Strm(), pFib->fcMin );
 
     WriteMainText();                    // HauptText
-    pPapPlc->SetMark();
+    BYTE nSprmsLen;
+    BYTE *pLastSprms = pPapPlc->CopyLastSprms(nSprmsLen);
 
     bNeedsFinalPara |= pFtn->WriteTxt( *this );         // Footnote-Text
     bNeedsFinalPara |= pSepx->WriteKFTxt( *this );          // K/F-Text
@@ -2048,8 +2054,9 @@ void SwWW8Writer::StoreDoc1()
     if (bNeedsFinalPara)
     {
         WriteCR();
-        pPapPlc->AppendMark(Strm().Tell());
+         pPapPlc->AppendFkpEntry(Strm().Tell(), nSprmsLen, pLastSprms);
     }
+    delete[] pLastSprms;
 
     pSepx->Finish( Fc2Cp( Strm().Tell() ));// Text + Ftn + HdFt als Section-Ende
     pMagicTable->Finish( Fc2Cp( Strm().Tell() ),0);

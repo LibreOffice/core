@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
+ *  last change: $Author: cmc $ $Date: 2002-03-05 14:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,8 +678,7 @@ public:
     void AppendFkpEntry(WW8_FC nEndFc,short nVarLen = 0,const BYTE* pSprms = 0);
     void WriteFkps();
     void WritePlc();
-    void SetMark();
-    void AppendMark(WW8_FC nEndFc);
+    BYTE *CopyLastSprms(BYTE &rLen);
 };
 
 // class WW8_WrPlc1 ist erstmal nur fuer Felder
