@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-03-14 11:13:36 $
+dnl * Date: $Date: 2005-03-15 09:11:24 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.107 $ )
+AC_REVISION( $Revision: 1.108 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1771,7 +1771,7 @@ if test "$SOLAR_JAVA" != ""; then
         JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
       fi
    else
-      AC_MSG_ERROR([JAVA not found. You need at least jdk-1.3, Kaffee 1.01, or gcj])
+      AC_MSG_ERROR([JAVA not found. You need at least jdk-1.3, Kaffee 1.01, or gcj-4])
    fi
 else
    dnl Java disabled
@@ -1851,6 +1851,15 @@ if test "$SOLAR_JAVA" != ""; then
       fi
     fi
 fi
+
+if test "$JDK" == "gcj"; then 
+   save_CFLAGS=$CFLAGS
+   CFLAGS="$CFLAGS -I$JAVA_HOME/include"
+   AC_CHECK_HEADER(jni.h, [],
+                    [AC_MSG_ERROR([jni.h could not be found. Mismatch between gcc and libgcj or libgcj-devel missing?])], [])
+   CFLAGS=$save_CFLAGS
+fi
+
 AC_SUBST(JAVA_HOME)
 AC_SUBST(JDK)
 AC_SUBST(JAVAINTERPRETER)
@@ -3435,8 +3444,9 @@ cat > conftest.xml << EOF
 	</target>
     </project>
 EOF
-
+  oldJAVA_HOME=$JAVA_HOME
   if test "$JDK" = "gcj"; then
+    JAVA_HOME=; export JAVA_HOME
     ant_cmd="$ANT -Dbuild.compiler=gcj -buildfile conftest.xml 1>&2"
   else
     ant_cmd="$ANT -buildfile conftest.xml 1>&2"
@@ -3457,7 +3467,7 @@ EOF
     ANT_HOME=""
     echo "Ant does not work - Some Java projects will not build!" >>warn
   fi
-
+  JAVA_HOME=$oldJAVA_HOME
   rm -f conftest* core core.* *.core
 fi
 if test -z "$ANT_HOME"; then
