@@ -18,7 +18,7 @@ public class StorageNativeOutputStream {
     // preload shared libraries whichs import lips are linked to jpipe
     if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
     {
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "msvcr70");
+            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "msvcr71");
             NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "uwinapi");
             NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "sal3");
             NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "dbtools680mi");
