@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_res.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 18:30:34 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:13:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,16 +66,10 @@ $(RCTARGET): $(RCFILES) 		\
              $(RCDEPN)
     @echo ------------------------------
     @echo Making: $@
-#	RCLANGFLAGS fuer setup/loader
-.IF "$(NO_REC_RES)"!=""
-    @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
-.ENDIF
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
     $(RC) $(INCLUDE) -I$(SOLARRESDIR) -I$(ATL_INCLUDE) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .ELSE
     $(RC) $(INCLUDE) -I$(SOLARRESDIR) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .ENDIF
-.IF "$(NO_REC_RES)"!=""
-    @+echo > $(RES)$/$(@:f)
 .ENDIF
-.ENDIF
+
