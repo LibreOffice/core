@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:01:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
+#endif
+#ifndef DBACORE_SDBCORETOOLS_HXX
+#include "sdbcoretools.hxx"
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -315,7 +318,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     ,m_pTables(NULL)
     ,m_bOwnConnection(sal_False)
 {
-    m_nResultSetType = ResultSetType::SCROLL_INSENSITIVE;
+    m_nResultSetType = ResultSetType::SCROLL_SENSITIVE;
     m_nResultSetConcurrency = ResultSetConcurrency::UPDATABLE;
     m_pMySelf = this;
     m_aActiveConnection <<= m_xActiveConnection;
@@ -1582,6 +1585,56 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
     execute_NoApprove_NoNewConn(aGuard);
 
 }
+//------------------------------------------------------------------------------
+void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxStatement, sal_Int32 _nDesiredResultSetType, sal_Int32 _nDesiredResultSetConcurrency )
+{
+    OSL_ENSURE( _rxStatement.is(), "ORowSet::setStatementResultSetType: invalid statement - this will crash!" );
+
+    sal_Int32 nResultSetType( _nDesiredResultSetType );
+    sal_Int32 nResultSetConcurrency( _nDesiredResultSetConcurrency );
+
+    // there *might* be a data source setting which tells use to be more defensive with those settings
+    // #i15113# / 2005-02-10 / frank.schoenheit@sun.com
+    sal_Bool bRespectDriverRST = sal_False;
+    Any aSetting;
+    if ( getDataSourceSetting( ::dbaccess::getDataSource( m_xActiveConnection ), "RespectDriverResultSetType", aSetting ) )
+    {
+        OSL_VERIFY( aSetting >>= bRespectDriverRST );
+    }
+
+    if ( bRespectDriverRST )
+    {
+        // try type/concurrency settings with decreasing usefullness, and rely on what the connection claims
+        // to support
+        Reference< XDatabaseMetaData > xMeta( m_xActiveConnection->getMetaData() );
+
+        sal_Int32 nCharacteristics[5][2] =
+        {   { ResultSetType::SCROLL_SENSITIVE, ResultSetConcurrency::UPDATABLE },
+            { ResultSetType::SCROLL_INSENSITIVE, ResultSetConcurrency::UPDATABLE },
+            { ResultSetType::SCROLL_SENSITIVE, ResultSetConcurrency::READ_ONLY },
+            { ResultSetType::SCROLL_INSENSITIVE, ResultSetConcurrency::READ_ONLY },
+            { ResultSetType::FORWARD_ONLY, ResultSetConcurrency::READ_ONLY }
+        };
+        for ( sal_Int32 i=0; i<5; ++i )
+        {
+            nResultSetType = nCharacteristics[i][0];
+            nResultSetConcurrency = nCharacteristics[i][1];
+
+            // don't try type/concurrency pairs which are more featured than what our caller requested
+            if ( nResultSetType > _nDesiredResultSetType )
+                continue;
+            if ( nResultSetConcurrency > _nDesiredResultSetConcurrency )
+                continue;
+
+            if ( xMeta.is() && xMeta->supportsResultSetConcurrency( nResultSetType, nResultSetConcurrency ) )
+                break;
+        }
+    }
+
+    _rxStatement->setPropertyValue( PROPERTY_RESULTSETTYPE, makeAny( nResultSetType ) );
+    _rxStatement->setPropertyValue( PROPERTY_RESULTSETCONCURRENCY, makeAny( nResultSetConcurrency ) );
+}
+
 // -----------------------------------------------------------------------------
 // XRowSet
 void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotification)
@@ -1614,17 +1667,16 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
             {
                 Reference<XPropertySet> xProp(m_xStatement,UNO_QUERY);
 
+                // set the result set type and concurrency
                 try
                 {
-                    xProp->setPropertyValue(PROPERTY_USEBOOKMARKS,makeAny(sal_True));
-                    xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(ResultSetType::SCROLL_SENSITIVE));
-                    xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(ResultSetConcurrency::UPDATABLE));
-
+                    xProp->setPropertyValue( PROPERTY_USEBOOKMARKS, makeAny( sal_True ) );
+                    setStatementResultSetType( xProp, m_nResultSetType, m_nResultSetConcurrency );
                 }
                 catch(Exception&)
                 {
                     // this exception doesn't matter here because when we catch an exception
-                    // than the driver doesn't support this feature
+                    // then the driver doesn't support this feature
                 }
                 //  xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(m_nResultSetType));
                 //  xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(m_nResultSetConcurrency));
