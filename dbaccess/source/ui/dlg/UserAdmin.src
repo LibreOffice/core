@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:21:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ czech ] = "Výběr uživatele";
         Text[ hebrew ] = "Benutzerauswahl";
         Text[ hindi ] = "उपभोक्ता चुनाव";
+        Text[ slovak ] = "Voľba užívateľa";
     };
 
     FixedText FT_USER
@@ -141,6 +142,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ czech ] = "Uživatel:";
         Text[ hebrew ] = "B~enutzer:";
         Text[ hindi ] = "~उपभोक्ता:";
+        Text[ slovak ] = "Užívat~eľ:";
     };
 
     ListBox LB_USER
@@ -189,6 +191,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ czech ] = "Přidat uživatele...";
         Text[ hebrew ] = "Benutzer ~hinzufügen...";
         Text[ hindi ] = "~उपभोक्ता जोड़ो...";
+        Text[ slovak ] = "Prid~ať užívateľa...";
     };
 
     PushButton PB_CHANGEPWD
@@ -224,6 +227,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ czech ] = "Změnit heslo...";
         Text[ hebrew ] = "~Passwort ändern...";
         Text[ hindi ] = "~कूटशब्द बदलो...";
+        Text[ slovak ] = "Zmeniť he~slo...";
     };
 
     PushButton PB_DELETEUSER
@@ -259,6 +263,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ czech ] = "Smazat uživatele...";
         Text[ hebrew ] = "Benut~zer löschen...";
         Text[ hindi ] = "~उपभोक्ता को मिटाओ...";
+        Text[ slovak ] = "~Zmazať užívateľa...";
     };
 
     FixedLine FL_TABLE_GRANTS
@@ -291,6 +296,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ czech ] = "Přístupová práva pro vybraného uživatele";
         Text[ hebrew ] = "Zugriffsrechte für ausgewählten Benutzer";
         Text[ hindi ] = "चुने हुए उपभोक्ता केलिए प्रवेश अधिकार";
+        Text[ slovak ] = "Prístupové práva pre vybraného užívateľa";
     };
 
     Control CTRL_TABLE_GRANTS
@@ -332,6 +338,7 @@ QueryBox QUERY_USERADMIN_DELETE_USER
     Message[ czech ] = "Opravdu chcete smazat tohoto uživatele?";
     Message[ hebrew ] = "Soll der Benutzer wirklich gelöscht werden?";
     Message[ hindi ] = "आप सचमुच में उपभोक्ता को मिटाना चाहते है ?";
+    Message[ slovak ] = "Určite chcete zmazať užívateľa?";
 };
 
 #define EDIT_SIZE_X     50
@@ -380,6 +387,7 @@ ModalDialog DLG_PASSWORD
         Text[ czech ] = "Uživatel \"$Name: not supported by cvs2svn $\"";
         Text[ hebrew ] = "Benutzer \"$name$:  $\"";
         Text[ hindi ] = "उपभोक्ता \"$Name: not supported by cvs2svn $\"";
+        Text[ slovak ] = "Užívateľ \"$Name: not supported by cvs2svn $\"";
     };
 
     FixedText FT_OLDPASSWORD
@@ -412,6 +420,7 @@ ModalDialog DLG_PASSWORD
         Text[ czech ] = "Staré heslo";
         Text[ hebrew ] = "Altes K~ennwort";
         Text[ hindi ] = "पुराना कू~टशब्द";
+        Text[ slovak ] = "St~aré heslo";
     };
     Edit ED_OLDPASSWORD
     {
@@ -451,6 +460,7 @@ ModalDialog DLG_PASSWORD
         Text[ czech ] = "Heslo";
         Text[ hebrew ] = "‮סיסמה‬";
         Text[ hindi ] = "~कूटशब्द";
+        Text[ slovak ] = "~Heslo";
     };
     Edit ED_PASSWORD
     {
@@ -489,6 +499,7 @@ ModalDialog DLG_PASSWORD
         Text[ czech ] = "Potvrdit heslo";
         Text[ hebrew ] = "Kennwort ~bestätigen";
         Text[ hindi ] = "~कूटशब्द दृढ़ करो";
+        Text[ slovak ] = "~Potvrdiť heslo";
     };
     Edit ED_PASSWORD_REPEAT
     {
@@ -538,6 +549,7 @@ ModalDialog DLG_PASSWORD
     Text[ czech ] = "Změnit heslo";
     Text[ hebrew ] = "Kennwort ändern";
     Text[ hindi ] = "कूटशब्द बदलो";
+    Text[ slovak ] = "Zmeniť heslo";
 };
 
 String STR_ERROR_PASSWORDS_NOT_IDENTICAL
@@ -568,7 +580,10 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ czech ] = "Hesla nejsou stejná. Zadejte, prosím, heslo znovu.";
     Text[ hebrew ] = "Die beiden Kennwörter stimmen nicht überein, bitte noch einmal eingeben";
     Text[ hindi ] = "कूटशब्द समान नहीं है । कृपया फ़िर से कूटशब्द को प्रविष्ट कीजिए ।";
+    Text[ slovak ] = "Heslá sa nezhodujú. Zadajte, prosím, heslo znovu.";
 };
+
+
 
 
 
