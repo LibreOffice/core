@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:51:43 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ czech ] = "Stránky";
         Text[ hebrew ] = "‮עמודים‬";
         Text[ hindi ] = "पृष्ठें";
+        Text[ slovak ] = "Stránky";
     };
     RadioButton RB_ALL
     {
@@ -131,6 +132,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ czech ] = "Vše";
         Text[ hebrew ] = "‮הכל‬";
         Text[ hindi ] = "~सब";
+        Text[ slovak ] = "~Všetko";
     };
     RadioButton RB_RANGE
     {
@@ -162,6 +164,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ czech ] = "Rozsah";
         Text[ hebrew ] = "‮טווח‬";
         Text[ hindi ] = "~फ़ैलाव";
+        Text[ slovak ] = "~Rozsah";
     };
     RadioButton RB_SELECTION
     {
@@ -193,6 +196,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮בחירה‬";
         Text[ hindi ] = "~चुनाव";
+        Text[ slovak ] = "~Výber";
     };
     Edit ED_PAGES
     {
@@ -230,6 +234,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ czech ] = "Komprese";
         Text[ hebrew ] = "‮דחיסה‬";
         Text[ hindi ] = "दबाव";
+        Text[ slovak ] = "Kompresia";
     };
     RadioButton RB_SCREEN
     {
@@ -261,6 +266,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ czech ] = "Optimalizováno pro obrazovku (nejmenší velikost souboru)";
         Text[ hebrew ] = "Optimiert für ~Bildschirm (kleinste Dateigröße)";
         Text[ hindi ] = "S~creen optimized (smallest file size)";
+        Text[ slovak ] = "Optimalizované pre o~brazovku (najmenšia veľkosť)";
     };
     RadioButton RB_PRINT
     {
@@ -292,6 +298,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ czech ] = "Optimalizováno pro tisk";
         Text[ hebrew ] = "Optimiert für ~Druck";
         Text[ hindi ] = "~Print optimized";
+        Text[ slovak ] = "O~ptimalizovaná tlač";
     };
     RadioButton RB_PRESS
     {
@@ -323,6 +330,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ czech ] = "Optimalizováno pro sazbu";
         Text[ hebrew ] = "Optimiert für Druck~vorstufe";
         Text[ hindi ] = "Pr~ess optimized";
+        Text[ slovak ] = "Optimalizovaná kompr~esia";
     };
     OKButton BT_OK
     {
@@ -356,6 +364,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         Text[ czech ] = "Export";
         Text[ hebrew ] = "E~xport";
         Text[ hindi ] = "E~xport";
+        Text[ slovak ] = "E~xport";
     };
     CancelButton BT_CANCEL
     {
@@ -395,7 +404,10 @@ ModalDialog RID_PDF_EXPORT_DLG
     Text[ czech ] = "Volby PDF";
     Text[ hebrew ] = "PDF Options";
     Text[ hindi ] = "PDF Options";
+    Text[ slovak ] = "PDF voľby";
 };
+
+
 
 
 
