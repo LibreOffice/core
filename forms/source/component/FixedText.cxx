@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FixedText.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:31 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,13 +154,9 @@ void OFixedTextModel::fillProperties(
         Sequence< starbeans::Property >& _rProps,
         Sequence< starbeans::Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(3)
+    BEGIN_DESCRIBE_PROPERTIES( 0, OControlModel )
         RemoveProperty(_rAggregateProps, PROPERTY_TABSTOP);
-
-        DECL_PROP1(NAME,    rtl::OUString,  BOUND);
-        DECL_PROP2(CLASSID, sal_Int16,  READONLY, TRANSIENT);
-        DECL_PROP1(TAG,     rtl::OUString,  BOUND);
-    FRM_END_PROP_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
