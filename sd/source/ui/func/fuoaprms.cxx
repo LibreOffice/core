@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoaprms.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:14:49 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,7 +789,7 @@ FuObjectAnimationParameters::FuObjectAnimationParameters (
                 pAction->SetPathObj(pInfo->pPathObj, pInfo->pPathObj);
                 pAction->SetClickAction(pInfo->eClickAction, pInfo->eClickAction);
                 pAction->SetBookmark(pInfo->aBookmark, pInfo->aBookmark);
-                pAction->SetInvisibleInPres(pInfo->bInvisibleInPresentation, TRUE);
+//              pAction->SetInvisibleInPres(pInfo->bInvisibleInPresentation, TRUE);
                 pAction->SetVerb(pInfo->nVerb, pInfo->nVerb);
                 pAction->SetSecondEffect(pInfo->eSecondEffect, pInfo->eSecondEffect);
                 pAction->SetSecondSpeed(pInfo->eSecondSpeed, pInfo->eSecondSpeed);
@@ -797,7 +797,7 @@ FuObjectAnimationParameters::FuObjectAnimationParameters (
                 pAction->SetSecondPlayFull(pInfo->bSecondPlayFull, pInfo->bSecondPlayFull);
                 pUndoGroup->AddAction(pAction);
 
-                pInfo->bInvisibleInPresentation = TRUE;
+//              pInfo->bInvisibleInPresentation = TRUE;
             }
             else
             {
@@ -818,8 +818,8 @@ FuObjectAnimationParameters::FuObjectAnimationParameters (
                 pAction->SetPathObj(pInfo->pPathObj, pPath);
                 pAction->SetClickAction(pInfo->eClickAction, eClickAction);
                 pAction->SetBookmark(pInfo->aBookmark, aBookmark);
-                pAction->SetInvisibleInPres(pInfo->bInvisibleInPresentation,
-                                            pInfo->bInvisibleInPresentation);
+//              pAction->SetInvisibleInPres(pInfo->bInvisibleInPresentation,
+//                                          pInfo->bInvisibleInPresentation);
                 pAction->SetVerb(pInfo->nVerb, (USHORT)pInfo->aBookmark.ToInt32() );
                 pAction->SetSecondEffect(pInfo->eSecondEffect, eSecondEffect);
                 pAction->SetSecondSpeed(pInfo->eSecondSpeed, eSecondSpeed);
