@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:06 $
+ *  last change: $Author: fs $ $Date: 2000-10-26 09:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,9 +206,6 @@ IMPLEMENT_CONSTASCII_USTRING(FRM_NUMBER_FORMATTER, "com.sun.star.util.NumberForm
 IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_ROWSET, "com.sun.star.sdb.RowSet");
 IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_CONNECTION, "com.sun.star.sdb.Connection");
 IMPLEMENT_CONSTASCII_USTRING(SRV_SDBC_STATEMENT, "com.sun.star.sdbc.Statement");
-IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_DATABASE_ENVIRONMENT, "com.sun.star.sdb.DatabaseEnvironment");
-IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_DATABASE_ACCESS_CONNECTION, "com.sun.star.sdb.DatabaseAccessConnection");
-IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_DATABASE_ACCESS_CONTEXT, "com.sun.star.sdb.DatabaseAccessContext");
 
 IMPLEMENT_CONSTASCII_USTRING(SRV_AWT_POINTER, "com.sun.star.awt.Pointer");
 
