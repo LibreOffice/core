@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:06:51 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,14 +112,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
-#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #endif
@@ -164,7 +156,6 @@ namespace framework
 class BackingComp : public  css::lang::XTypeProvider
                   , public  css::lang::XServiceInfo
                   , public  css::lang::XInitialization
-                  , public  css::task::XStatusIndicatorSupplier
                   , public  css::frame::XController  // => XComponent
                   , public  css::awt::XKeyListener // => XEventListener
                   // attention! Must be the first base class to guarentee right initialize lock ...
@@ -221,9 +212,6 @@ class BackingComp : public  css::lang::XTypeProvider
         // XInitialization
         virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& lArgs ) throw(css::uno::Exception, css::uno::RuntimeException);
 
-        // XStatusIndicatorSupplier
-        virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL getStatusIndicator() throw(css::uno::RuntimeException);
-
         // XController
         virtual void                                      SAL_CALL attachFrame    ( const css::uno::Reference< css::frame::XFrame >& xFrame   ) throw(css::uno::RuntimeException);
         virtual sal_Bool                                  SAL_CALL attachModel    ( const css::uno::Reference< css::frame::XModel >& xModel   ) throw(css::uno::RuntimeException);
@@ -257,7 +245,6 @@ class BackingComp : public  css::lang::XTypeProvider
 
     private:
 
-        void impl_resizeStatusBar();
         DECL_LINK( impl_asyncCallback, void* );
 };
 
