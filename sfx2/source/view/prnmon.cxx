@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:03:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,12 +257,6 @@ SfxPrintProgress_Impl::SfxPrintProgress_Impl( SfxViewShell* pTheViewShell,
 
 SfxPrintProgress_Impl::~SfxPrintProgress_Impl()
 {
-    EndListening( *pViewShell->GetObjectShell() );
-    if ( pMonitor )
-    {
-        pMonitor->Hide(); // sieht optisch besser aus, wenn alles auf einmal verschwindet
-        delete pMonitor;
-    }
 }
 
 //------------------------------------------------------------------------
@@ -360,11 +354,13 @@ SfxPrintProgress::~SfxPrintProgress()
         pImp->pViewShell->SetPrinter( pImp->pOldPrinter, SFX_PRINTER_PRINTER );
     else
         // ggf. vorherigen Print-To-File-Status zuruecksetzen
-        pImp->pViewShell->GetPrinter()->EnablePrintFile(
-                pImp->bOldEnablePrintFile );
+        pImp->pViewShell->GetPrinter()->EnablePrintFile( pImp->bOldEnablePrintFile );
 
     // EndPrint-Notification an Frame
     //pImp->pViewShell->GetViewFrame()->GetFrame()->Lock_Impl(FALSE);
+    pImp->EndListening( *(pImp->pViewShell->GetObjectShell()) );
+
+    // the following call might destroy the view or even the document
     pImp->pViewShell->CheckOwnerShip_Impl();
     delete pImp;
 }
@@ -454,9 +450,12 @@ IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, pvoid )
         // ggf. vorherigen Print-To-File-Status zuruecksetzen
         pViewShell->GetPrinter()->EnablePrintFile( pImp->bOldEnablePrintFile );
 
-    // printing in thread will kill force us to kill this instance, so get necessary data before
-    BOOL bRestoreFlag = pImp->bRestoreFlag;
-    BOOL bOldFlag = pImp->bOldFlag;
+    // it is possible that after printing the document or view is deleted (because the VieShell got the ownership)
+    // so first clean up
+    if ( pImp->bRestoreFlag && pViewShell->GetObjectShell()->IsEnableSetModified() != pImp->bOldFlag )
+        pViewShell->GetObjectShell()->EnableSetModified( TRUE );
+
+    pViewShell->GetObjectShell()->Broadcast( SfxPrintingHint( com::sun::star::view::PrintableState_JOB_COMPLETED, NULL, NULL ) );
     if ( pImp->bDeleteOnEndPrint )
     {
         DELETEZ(pImp->pMonitor);
@@ -468,10 +467,6 @@ IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, pvoid )
         pImp->bRunning = FALSE;
     }
 
-    if ( bRestoreFlag && pViewShell->GetObjectShell()->IsEnableSetModified() != bOldFlag )
-        pViewShell->GetObjectShell()->EnableSetModified( TRUE );
-
-    pViewShell->GetObjectShell()->Broadcast( SfxPrintingHint( com::sun::star::view::PrintableState_JOB_COMPLETED, NULL, NULL ) );
     return 0;
 }
 
