@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 10:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,12 +252,12 @@
 #endif
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::frame;
 
 IMPLEMENT_CONSTASCII_USTRING(DATA_MODE,"DataMode");
 IMPLEMENT_CONSTASCII_USTRING(FILTER_MODE,"FilterMode");
-
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
 
 //==============================================================================
 //------------------------------------------------------------------------------
@@ -1787,11 +1787,14 @@ Reference< ::com::sun::star::sdbc::XConnection> findConnection(const Reference< 
 
 DBG_NAME(FmXDispatchInterceptorImpl);
 //------------------------------------------------------------------------
-FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(const Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _rToIntercept, FmDispatchInterceptor* _pMaster, sal_Int16 _nId)
-    : FmXDispatchInterceptorImpl_BASE(_pMaster && _pMaster->getInterceptorMutex() ? *_pMaster->getInterceptorMutex() : m_aFallback)
+FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(
+            const Reference< XDispatchProviderInterception>& _rToIntercept, FmDispatchInterceptor* _pMaster,
+            sal_Int16 _nId, Sequence< ::rtl::OUString > _rInterceptedSchemes)
+    :FmXDispatchInterceptorImpl_BASE(_pMaster && _pMaster->getInterceptorMutex() ? *_pMaster->getInterceptorMutex() : m_aFallback)
     ,m_xIntercepted(_rToIntercept)
     ,m_pMaster(_pMaster)
     ,m_nId(_nId)
+    ,m_aInterceptedURLSchemes(_rInterceptedSchemes)
 {
     DBG_CTOR(FmXDispatchInterceptorImpl,NULL);
 
@@ -1818,27 +1821,6 @@ FmXDispatchInterceptorImpl::~FmXDispatchInterceptorImpl()
     DBG_DTOR(FmXDispatchInterceptorImpl,NULL);
 }
 
-//------------------------------------------------------------------------
-//Any SAL_CALL FmXDispatchInterceptorImpl::queryInterface( const Type& type) throw ( RuntimeException )
-//{
-//  Any aOut = ::cppu::queryInterface(type,static_cast< ::com::sun::star::frame::XDispatchProviderInterceptor*>(this),
-//      static_cast< ::com::sun::star::frame::XDispatchProvider*>(this),
-//      static_cast< ::com::sun::star::lang::XEventListener*>(this));
-//  if(aOut.hasValue())
-//      return aOut;
-//  return OComponentHelper::queryInterface(type);
-//}
-//------------------------------------------------------------------------------
-//Sequence< Type > SAL_CALL FmXDispatchInterceptorImpl::getTypes(  ) throw(RuntimeException)
-//{
-//  Sequence< Type > aTypes(OComponentHelper::getTypes());
-//  aTypes.realloc(2);
-//  Type* pTypes = aTypes.getArray();
-//
-//  pTypes[aTypes.getLength()-2] = ::getCppuType((const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor>*)0);
-//  pTypes[aTypes.getLength()-1] = ::getCppuType((const Reference< ::com::sun::star::lang::XEventListener>*)0);
-//  return aTypes;
-//}
 //------------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL FmXDispatchInterceptorImpl::getImplementationId() throw(RuntimeException)
 {
@@ -1904,31 +1886,22 @@ void SAL_CALL FmXDispatchInterceptorImpl::setMasterDispatchProvider(const Refere
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXDispatchInterceptorImpl::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
+Sequence< ::rtl::OUString > SAL_CALL FmXDispatchInterceptorImpl::getInterceptedURLs(  ) throw(RuntimeException)
+{
+    return m_aInterceptedURLSchemes;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXDispatchInterceptorImpl::disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException )
 {
     if (Source.Source == m_xIntercepted)
-    {
         ImplDetach();
-    }
 }
 
 //------------------------------------------------------------------------------
 void FmXDispatchInterceptorImpl::ImplDetach()
 {
     ::osl::MutexGuard aGuard(getAccessSafety());
-
-/*! PB: das macht der Frame lieber selber
-    // remove ourself from the interceptor chain
-    Reference< ::com::sun::star::frame::XDispatchProviderInterceptor> xSlave(m_xSlaveDispatcher, UNO_QUERY);
-    if (xSlave.is())
-        xSlave->setMasterDispatchProvider(m_xMasterDispatcher);
-
-    Reference< ::com::sun::star::frame::XDispatchProviderInterceptor> xMaster(m_xMasterDispatcher, UNO_QUERY);
-    if (xMaster.is())
-        xMaster->setSlaveDispatchProvider(m_xSlaveDispatcher);
-
-    m_xSlaveDispatcher = m_xMasterDispatcher = NULL;
-*/
 
     // deregister ourself from the interception component
     if (m_xIntercepted.is())

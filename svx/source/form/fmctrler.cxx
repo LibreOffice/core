@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 10:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3232,7 +3232,8 @@ Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >  FmXFormContr
     }
 #endif
 
-    FmXDispatchInterceptorImpl* pInterceptor = new FmXDispatchInterceptorImpl(_xInterception, this, 0);
+    ::rtl::OUString sInterceptorScheme(RTL_CONSTASCII_USTRINGPARAM("*"));
+    FmXDispatchInterceptorImpl* pInterceptor = new FmXDispatchInterceptorImpl(_xInterception, this, 0, Sequence< ::rtl::OUString >(&sInterceptorScheme, 1));
     pInterceptor->acquire();
     m_aControlDispatchInterceptors.insert(m_aControlDispatchInterceptors.end(), pInterceptor);
 

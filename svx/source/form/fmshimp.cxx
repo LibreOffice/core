@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 10:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,38 +275,6 @@
 #include <cppuhelper/servicefactory.hxx>
 #endif
 
-#if SUPD < 583
-
-#ifndef _USR_SMARTCONV_HXX_
-#include <usr/smartconv.hxx>
-#endif
-
-#include <smart/com/sun/star/frame/xframe.hxx>
-#include <smart/com/sun/star/awt/XControlContainer.hxx>
-#include <usr/xiface.hxx>
-
-// this method is teporary ... as long as we use some implementations in foreign projects
-// which do not work with UNO3
-template <class SMARTTYPE, class UNO3TYPE>
-void convertIFace(SMARTTYPE* _pIn, ::com::sun::star::uno::Reference<UNO3TYPE>& _rxOut)
-{
-    ::comphelper::InterfaceRef xUno3IFace;
-    ::usr::convertUsr2UnoInterface(xUno3IFace, static_cast<XInterface*>(_pIn));
-    _rxOut = ::com::sun::star::uno::Reference<UNO3TYPE>::query(xUno3IFace);
-}
-
-// this method is teporary ... as long as we use some implementations in foreign projects
-// which do not work with UNO3
-template <class SMARTREF>
-void convertIFace(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxIn, SMARTREF& _rxOut)
-{
-    XInterfaceRef xUsr3IFace;
-    ::usr::convertUno2UsrInterface(xUsr3IFace, _rxIn);
-    _rxOut = SMARTREF(xUsr3IFace, USR_QUERY);
-}
-
-#endif
-
 extern sal_Int16 ControllerSlotMap[];
 
 extern sal_Int16 AutoSlotMap[];
@@ -433,6 +401,8 @@ sal_Int16 nObjectTypes[] =
     OBJ_FM_FORMATTEDFIELD
 };
 
+using namespace ::com::sun::star::uno;
+
 //------------------------------------------------------------------------------
 sal_Bool FmXBoundFormFieldIterator::ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rContainer) const
 {
@@ -471,10 +441,6 @@ sal_Bool FmXBoundFormFieldIterator::ShouldHandleElement(const ::com::sun::star::
 
 DECL_CURSOR_ACTION_THREAD(FmMoveToLastThread);
 IMPL_CURSOR_ACTION_THREAD(FmMoveToLastThread, SVX_RES(RID_STR_MOVING_CURSOR), last());
-
-//------------------------------------------------------------------------------
-
-
 
 //------------------------------------------------------------------------------
 sal_Bool hasObject(SdrObjListIter& rIter, SdrObject* pObj)
@@ -671,7 +637,10 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
 
     // dispatch interception for the frame
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception> xSupplier(xUnoFrame, ::com::sun::star::uno::UNO_QUERY);
-    m_pMainFrameInterceptor = new FmXDispatchInterceptorImpl(xSupplier, this, 0);
+
+    ::rtl::OUString sInterceptorScheme(FMURL_FORMSLOTS_PREFIX);
+    sInterceptorScheme += ::rtl::OUString::createFromAscii("*");
+    m_pMainFrameInterceptor = new FmXDispatchInterceptorImpl(xSupplier, this, 0, Sequence< ::rtl::OUString >(&sInterceptorScheme, 1));
     m_pMainFrameInterceptor->acquire();
 
     m_xAttachedFrame = xUnoFrame;
@@ -855,11 +824,10 @@ void SAL_CALL FmXFormShell::modified(const ::com::sun::star::lang::EventObject& 
             sAccessPath = sMark.getStr();
 
             // check if it comes from our external form grid view
-            UniString fComponentName = FMURL_COMPONENT_FORMGRIDVIEW;
-            sExternalCheck = fComponentName;
-//          sExternalCheck = (UniString)FMURL_COMPONENT_FORMGRIDVIEW;
+            String sComponentName = FMURL_COMPONENT_FORMGRIDVIEW;
+            sExternalCheck = sComponentName;
             INetURLObject aExternalCheck(sExternalCheck);
-            if (UniString(aExternalCheck.GetURLPath()) == sAccessPath)
+            if (String(aExternalCheck.GetURLPath()) == sAccessPath)
             {   // it comes from the external dispatcher
                 // -> correct the access path
                 DBG_ASSERT(m_xExternalDisplayedForm.is() && m_xExternalViewController.is(),
@@ -4298,7 +4266,9 @@ void FmXFormShell::CreateExternalView()
     if (!m_pExternalViewInterceptor)
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception> xSupplier(xExternalViewFrame, ::com::sun::star::uno::UNO_QUERY);
-        m_pExternalViewInterceptor = new FmXDispatchInterceptorImpl(xSupplier, this, 1);
+        ::rtl::OUString sInterceptorScheme(FMURL_FORMSLOTS_PREFIX);
+        sInterceptorScheme += ::rtl::OUString::createFromAscii("*");
+        m_pExternalViewInterceptor = new FmXDispatchInterceptorImpl(xSupplier, this, 1, Sequence< ::rtl::OUString >(&sInterceptorScheme, 1));
         m_pExternalViewInterceptor->acquire();
     }
 

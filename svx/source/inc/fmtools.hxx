@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:17:38 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 09:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XINTERCEPTORINFO_HPP_
+#include <com/sun/star/frame/XInterceptorInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -231,6 +234,9 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _CPPUHELPER_COMPONENT_HXX_
 #include <cppuhelper/component.hxx>
@@ -548,11 +554,12 @@ public:
 //------------------------------------------------------------------------
 //- FmXDispatchInterceptorImpl
 //------------------------------------------------------------------------
-typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::frame::XDispatchProviderInterceptor,
-                                            ::com::sun::star::lang::XEventListener > FmXDispatchInterceptorImpl_BASE;
+typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::frame::XDispatchProviderInterceptor
+                                        ,   ::com::sun::star::lang::XEventListener
+                                        ,   ::com::sun::star::frame::XInterceptorInfo
+                                        >   FmXDispatchInterceptorImpl_BASE;
 
 class FmXDispatchInterceptorImpl : public FmXDispatchInterceptorImpl_BASE
-
 {
     ::osl::Mutex                    m_aFallback;
     ::form::OImplementationIdsRef   m_aHoldImplIdHelper;
@@ -565,8 +572,12 @@ class FmXDispatchInterceptorImpl : public FmXDispatchInterceptorImpl_BASE
     // chaining
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xSlaveDispatcher;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider>           m_xMasterDispatcher;
+
     // our id
     sal_Int16                       m_nId;
+
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                    m_aInterceptedURLSchemes;
 
     virtual ~FmXDispatchInterceptorImpl();
 
@@ -574,7 +585,12 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception> getIntercepted() const { return m_xIntercepted; }
 
 public:
-    FmXDispatchInterceptorImpl(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _rToIntercept, FmDispatchInterceptor* _pMaster, sal_Int16 _nId);
+    FmXDispatchInterceptorImpl(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _rToIntercept,
+        FmDispatchInterceptor* _pMaster,
+        sal_Int16 _nId,
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > _rInterceptedSchemes /// if not empty, this will be used for getInterceptedURLs
+    );
 
     // StarOne
     DECLARE_UNO3_DEFAULTS(FmXDispatchInterceptorImpl, FmXDispatchInterceptorImpl_BASE);
@@ -592,6 +608,9 @@ public:
     virtual void SAL_CALL setSlaveDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewDispatchProvider ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setMasterDispatchProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xNewSupplier ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::frame::XInterceptorInfo
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getInterceptedURLs(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
