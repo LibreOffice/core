@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:31:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #include "childwin.hxx"
 #include "mnumgr.hxx"
 #include "docfac.hxx"
-#include "accmgr.hxx"
 #include "objface.hxx"
 #include "viewfrm.hxx"
 
