@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addrdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:37:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,21 @@
  *
  ************************************************************************/
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
-#pragma hdrstop
+#include "addrdlg.hxx"
 
 //CHINA001 #ifndef _SVX_OPTGENRL_HXX //autogen
 //CHINA001 #include <svx/optgenrl.hxx>
 //CHINA001 #endif
+#ifndef _SVX_DIALOG_HXX
 #include <svx/svxdlg.hxx>
+#endif
+#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
-#include "addrdlg.hxx"
-
+#endif
 
 /****************************************************************************
 Ctor
