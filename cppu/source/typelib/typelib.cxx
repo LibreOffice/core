@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:17:29 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,6 +787,10 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pTmp->pInterface = 0;
             pTmp->pBaseRef = 0;
             pTmp->nIndex = 0;
+            pTmp->nGetExceptions = 0;
+            pTmp->ppGetExceptions = 0;
+            pTmp->nSetExceptions = 0;
+            pTmp->ppSetExceptions = 0;
         }
         break;
 
@@ -1197,6 +1201,28 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
 }
 
 //------------------------------------------------------------------------
+
+namespace {
+
+typelib_TypeDescriptionReference ** copyExceptions(
+    sal_Int32 count, rtl_uString ** typeNames)
+{
+    OSL_ASSERT(count >= 0);
+    if (count == 0) {
+        return 0;
+    }
+    typelib_TypeDescriptionReference ** p
+        = new typelib_TypeDescriptionReference *[count];
+    for (sal_Int32 i = 0; i < count; ++i) {
+        p[i] = 0;
+        typelib_typedescriptionreference_new(
+            p + i, typelib_TypeClass_EXCEPTION, typeNames[i]);
+    }
+    return p;
+}
+
+}
+
 extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
     typelib_InterfaceMethodTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
@@ -1245,7 +1271,6 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
     (*ppRet)->bOneWay = bOneWay;
     typelib_typedescriptionreference_new( &(*ppRet)->pReturnTypeRef, eReturnTypeClass, pReturnTypeName );
     (*ppRet)->nParams = nParams;
-    (*ppRet)->nExceptions = nExceptions;
     if( nParams )
     {
         (*ppRet)->pParams = new typelib_MethodParameter[ nParams ];
@@ -1263,17 +1288,8 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
             (*ppRet)->pParams[ i ].bOut = pParams[i].bOut;
         }
     }
-    if( nExceptions )
-    {
-        (*ppRet)->ppExceptions  = new typelib_TypeDescriptionReference *[ nExceptions ];
-
-        for( sal_Int32 i = 0; i < nExceptions; i++ )
-        {
-            (*ppRet)->ppExceptions[i] = 0;
-            typelib_typedescriptionreference_new(
-                (*ppRet)->ppExceptions + i, typelib_TypeClass_EXCEPTION, ppExceptionNames[i] );
-        }
-    }
+    (*ppRet)->nExceptions = nExceptions;
+    (*ppRet)->ppExceptions = copyExceptions(nExceptions, ppExceptionNames);
     (*ppRet)->pInterface = pInterface;
     (*ppRet)->pBaseRef = 0;
     OSL_ASSERT(
@@ -1294,6 +1310,23 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     typelib_TypeClass eAttributeTypeClass,
     rtl_uString * pAttributeTypeName,
     sal_Bool bReadOnly )
+    SAL_THROW_EXTERN_C()
+{
+    typelib_typedescription_newExtendedInterfaceAttribute(
+        ppRet, nAbsolutePosition, pTypeName, eAttributeTypeClass,
+        pAttributeTypeName, bReadOnly, false, 0, 0, 0, 0);
+}
+
+//------------------------------------------------------------------------
+extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
+    typelib_InterfaceAttributeTypeDescription ** ppRet,
+    sal_Int32 nAbsolutePosition,
+    rtl_uString * pTypeName,
+    typelib_TypeClass eAttributeTypeClass,
+    rtl_uString * pAttributeTypeName,
+    sal_Bool bReadOnly, sal_Bool bBound,
+    sal_Int32 nGetExceptions, rtl_uString ** ppGetExceptionNames,
+    sal_Int32 nSetExceptions, rtl_uString ** ppSetExceptionNames )
     SAL_THROW_EXTERN_C()
 {
     if (*ppRet != 0) {
@@ -1337,6 +1370,13 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceAttribute(
         && nAbsolutePosition < pInterface->nAllMembers);
     (*ppRet)->nIndex = nAbsolutePosition
         - (pInterface->nAllMembers - pInterface->nMembers);
+    (*ppRet)->bBound = bBound;
+    (*ppRet)->nGetExceptions = nGetExceptions;
+    (*ppRet)->ppGetExceptions = copyExceptions(
+        nGetExceptions, ppGetExceptionNames);
+    (*ppRet)->nSetExceptions = nSetExceptions;
+    (*ppRet)->ppSetExceptions = copyExceptions(
+        nSetExceptions, ppSetExceptionNames);
     if( !reallyWeak( typelib_TypeClass_INTERFACE_ATTRIBUTE ) )
         pTmp->pWeakRef = (typelib_TypeDescriptionReference *)pTmp;
 }
@@ -1350,6 +1390,20 @@ extern "C" void SAL_CALL typelib_typedescription_acquire(
 }
 
 //------------------------------------------------------------------------
+
+namespace {
+
+void deleteExceptions(
+    sal_Int32 count, typelib_TypeDescriptionReference ** exceptions)
+{
+    for (sal_Int32 i = 0; i < count; ++i) {
+        typelib_typedescriptionreference_release(exceptions[i]);
+    }
+    delete[] exceptions;
+}
+
+}
+
 // frees anything except typelib_TypeDescription base!
 static inline void typelib_typedescription_destructExtendedMembers(
     typelib_TypeDescription * pTD )
@@ -1437,18 +1491,13 @@ static inline void typelib_typedescription_destructExtendedMembers(
         typelib_InterfaceMethodTypeDescription * pIMTD = (typelib_InterfaceMethodTypeDescription*)pTD;
         if( pIMTD->pReturnTypeRef )
             typelib_typedescriptionreference_release( pIMTD->pReturnTypeRef );
-        sal_Int32 i;
-        for( i = 0; i < pIMTD->nParams; i++ )
+        for( sal_Int32 i = 0; i < pIMTD->nParams; i++ )
         {
             rtl_uString_release( pIMTD->pParams[ i ].pName );
             typelib_typedescriptionreference_release( pIMTD->pParams[ i ].pTypeRef );
         }
         delete [] pIMTD->pParams;
-        for( i = 0; i < pIMTD->nExceptions; i++ )
-        {
-            typelib_typedescriptionreference_release( pIMTD->ppExceptions[ i ] );
-        }
-        delete [] pIMTD->ppExceptions;
+        deleteExceptions(pIMTD->nExceptions, pIMTD->ppExceptions);
         rtl_uString_release( pIMTD->aBase.pMemberName );
         typelib_typedescription_release(&pIMTD->pInterface->aBase);
         if (pIMTD->pBaseRef != 0) {
@@ -1459,6 +1508,8 @@ static inline void typelib_typedescription_destructExtendedMembers(
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
     {
         typelib_InterfaceAttributeTypeDescription * pIATD = (typelib_InterfaceAttributeTypeDescription*)pTD;
+        deleteExceptions(pIATD->nGetExceptions, pIATD->ppGetExceptions);
+        deleteExceptions(pIATD->nSetExceptions, pIATD->ppSetExceptions);
         if( pIATD->pAttributeTypeRef )
             typelib_typedescriptionreference_release( pIATD->pAttributeTypeRef );
         if( pIATD->aBase.pMemberName )
@@ -1863,6 +1914,17 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
 
 namespace {
 
+typelib_TypeDescriptionReference ** copyExceptions(
+    sal_Int32 count, typelib_TypeDescriptionReference ** source)
+{
+    typelib_TypeDescriptionReference ** p
+        = new typelib_TypeDescriptionReference *[count];
+    for (sal_Int32 i = 0; i < count; ++i) {
+        typelib_typedescriptionreference_acquire(p[i] = source[i]);
+    }
+    return p;
+}
+
 bool createDerivedInterfaceMemberDescription(
     typelib_TypeDescription ** result, rtl::OUString const & name,
     typelib_TypeDescriptionReference * baseRef,
@@ -1890,7 +1952,7 @@ bool createDerivedInterfaceMemberDescription(
                 newMethod->nParams = baseMethod->nParams;
                 newMethod->pParams = new typelib_MethodParameter[
                     newMethod->nParams];
-                {for (sal_Int32 i = 0; i < newMethod->nParams; ++i) {
+                for (sal_Int32 i = 0; i < newMethod->nParams; ++i) {
                     rtl_uString_acquire(
                         newMethod->pParams[i].pName
                         = baseMethod->pParams[i].pName);
@@ -1899,16 +1961,10 @@ bool createDerivedInterfaceMemberDescription(
                         = baseMethod->pParams[i].pTypeRef);
                     newMethod->pParams[i].bIn = baseMethod->pParams[i].bIn;
                     newMethod->pParams[i].bOut = baseMethod->pParams[i].bOut;
-                }}
+                }
                 newMethod->nExceptions = baseMethod->nExceptions;
-                newMethod->ppExceptions
-                    = new typelib_TypeDescriptionReference *[
-                        newMethod->nExceptions];
-                {for (sal_Int32 i = 0; i < newMethod->nExceptions; ++i) {
-                    typelib_typedescriptionreference_acquire(
-                        newMethod->ppExceptions[i]
-                        = baseMethod->ppExceptions[i]);
-                }}
+                newMethod->ppExceptions = copyExceptions(
+                    baseMethod->nExceptions, baseMethod->ppExceptions);
                 newMethod->bOneWay = baseMethod->bOneWay;
                 newMethod->pInterface
                     = reinterpret_cast< typelib_InterfaceTypeDescription * >(
@@ -1941,6 +1997,15 @@ bool createDerivedInterfaceMemberDescription(
                         interface);
                 newAttribute->pBaseRef = baseRef;
                 newAttribute->nIndex = index;
+                newAttribute->bBound = baseAttribute->bBound;
+                newAttribute->nGetExceptions = baseAttribute->nGetExceptions;
+                newAttribute->ppGetExceptions = copyExceptions(
+                    baseAttribute->nGetExceptions,
+                    baseAttribute->ppGetExceptions);
+                newAttribute->nSetExceptions = baseAttribute->nSetExceptions;
+                newAttribute->ppSetExceptions = copyExceptions(
+                    baseAttribute->nSetExceptions,
+                    baseAttribute->ppSetExceptions);
                 return true;
             }
         }
