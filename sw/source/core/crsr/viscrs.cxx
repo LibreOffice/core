@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:33:10 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>   // SwTxtFrm
+#endif
+#ifndef _CELLFRM_HXX //autogen
+#include <cellfrm.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
@@ -1089,9 +1092,15 @@ void SwShellTableCrsr::FillRects()
         SwFrm* pFrm = pCNd->GetFrm( &GetSttPos() );
         while( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
+
         ASSERT( pFrm, "Node nicht in einer Tabelle" );
-        if( pFrm && aReg.GetOrigin().IsOver( pFrm->Frm() ) )
-            aReg -= pFrm->Frm();
+
+        while ( pFrm )
+        {
+            if( pFrm && aReg.GetOrigin().IsOver( pFrm->Frm() ) )
+                aReg -= pFrm->Frm();
+            pFrm = ((SwCellFrm*)pFrm)->GetFollowCell();
+        }
     }
     aReg.Invert();
     Insert( &aReg, 0 );
