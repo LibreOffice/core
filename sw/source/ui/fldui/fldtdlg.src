@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:10:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ TabDialog DLG_FLD_INSERT
         Text[ chinese_traditional ] = "´¡¤J(~I)";
         Text[ arabic ] = "ÅÏÑÇÌ";
         Text[ greek ] = "~ÅéóáãùãŞ";
-        Text[ korean ] = "»ğÀÔ";
+        Text[ korean ] = "»ğÀÔ(~I)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
     };
@@ -280,7 +280,7 @@ TabDialog DLG_FLD_INSERT
         Text[ chinese_traditional ] = "Ãö³¬(~C)";
         Text[ arabic ] = "ÅÛáÇŞ";
         Text[ greek ] = "Êëåßóéìï";
-        Text[ korean ] = "´İ±â";
+        Text[ korean ] = "´İ±â(~C)";
         Text[ turkish ] = "~Çıkış";
         Text[ language_user1 ] = " ";
     };
