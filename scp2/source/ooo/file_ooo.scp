@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: kz $ $Date: 2004-02-25 17:26:52 $
+*  last change: $Author: rt $ $Date: 2004-03-04 14:05:10 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -648,7 +648,22 @@ End
 File gid_File_Java_Ini_Delete_Only
     TXT_FILE_BODY;
     Dir = gid_Dir_User_Config;
+  #ifdef WNT
     Name = "java.ini";
+  #else
+    Name = "javarc";
+  #endif
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_Share_Java_Ini_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+  #ifdef WNT
+    Name = "java.ini";
+  #else
+    Name = "javarc";
+  #endif
     Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
 End
 
@@ -1392,7 +1407,7 @@ End
 File gid_File_Scripts_Javascript
     Dir = gid_Dir_Share_Scripts;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "ScriptsJavascript.zip";
+    Name = "ScriptsJavaScript.zip";
 End
 
 // new user interface configuration files
@@ -1719,13 +1734,6 @@ File gid_File_User_Config_All_Scs_Delete_Only
     TXT_FILE_BODY;
     Dir = gid_Dir_User_Config;
     Name = "*.*";
-    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
-End
-
-File gid_File_User_Config_Javarc_Delete_Only
-    TXT_FILE_BODY;
-    Dir = gid_Dir_User_Config;
-    Name = "javarc";
     Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
 End
 
