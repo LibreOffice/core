@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3dsceneproperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:50:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,9 @@ namespace sdr
             {
                 pSub->GetObj(a)->SetMergedItem(rItem);
             }
+
+            // #i43809# call parent. This will set items on local object, too.
+            E3dProperties::SetMergedItem(rItem);
         }
 
         void E3dSceneProperties::ClearMergedItem(const sal_uInt16 nWhich)
@@ -226,6 +229,9 @@ namespace sdr
             {
                 pSub->GetObj(a)->ClearMergedItem(nWhich);
             }
+
+            // #i43809# call parent. This will clear items on local object, too.
+            E3dProperties::ClearMergedItem(nWhich);
         }
 
         void E3dSceneProperties::PostItemChange(const sal_uInt16 nWhich)
