@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:26:51 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 
 SbiImage::SbiImage()
 {
-    rTypes     = new SbxArray;
     pStringOff = NULL;
     pStrings   = NULL;
     pCode      = NULL;
@@ -419,9 +418,19 @@ void SbiImage::AddCode( char* p, USHORT s )
 
 void SbiImage::AddType(SbxObject* pObject) // User-Type mit aufnehmen
 {
+    if( !rTypes.Is() )
+        rTypes = new SbxArray;
     SbxObject *pCopyObject = new SbxObject(*pObject);
     rTypes->Insert (pCopyObject,rTypes->Count());
 }
+
+void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
+{
+    if( !rEnums.Is() )
+        rEnums = new SbxArray;
+    rEnums->Insert( pObject, rEnums->Count() );
+}
+
 
 /**************************************************************************
 *
@@ -444,6 +453,6 @@ String SbiImage::GetString( short nId ) const
 
 const SbxObject* SbiImage::FindType (String aTypeName) const
 {
-        return (SbxObject *)rTypes->Find(aTypeName,SbxCLASS_OBJECT);
+    return rTypes.Is() ? (SbxObject*)rTypes->Find(aTypeName,SbxCLASS_OBJECT) : NULL;
 }
 
