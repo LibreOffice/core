@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:28:43 $
+ *  last change: $Author: os $ $Date: 2001-10-01 11:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,11 @@ TabPage RID_SVXPAGE_INET_PROXY
              < "Ninguna" ; > ;
         < "Automática" ; > ;
     };
+    };
+    String ST_PROXY_FROM_BROWSER
+    {
+        Text = "Browsereinstellungen verwenden";
+        Text[English] = "Use browser settings";
     };
     FixedText FT_HTTP_PROXY
     {
@@ -638,71 +643,6 @@ TabPage RID_SVXPAGE_INET_PROXY
         LiteralMask = "   .   .   .   " ;
         EditMask = "nnnLnnnLnnnLnnn" ;
         StrictFormat = TRUE ;
-    };
-    FixedLine GB_SERVER
-    {
-        Hide = TRUE;
-        Pos = MAP_APPFONT ( 6 , 134 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Mail-Server" ;
-        Text [ English ] = "Mail server" ;
-        Text [ english_us ] = "Mail server" ;
-        Text[ language_user1 ] = " ";
-        Text[ portuguese ] = "Servidor de correio";
-        Text[ russian ] = "Ñåğâåğ ïî÷òû";
-        Text[ greek ] = "ÄéáêïìéóôŞò áëëçëïãñáößáò";
-        Text[ dutch ] = "Mail server";
-        Text[ french ] = "Serveur de courrier";
-        Text[ spanish ] = "Servidor de correo";
-        Text[ italian ] = "Mail server";
-        Text[ danish ] = "Mail server";
-        Text[ swedish ] = "E-postserver";
-        Text[ polish ] = "Serwer pocztowy";
-        Text[ portuguese_brazilian ] = "Mail server";
-        Text[ japanese ] = "Ò°Ù»°ÊŞ°";
-        Text[ korean ] = "¸ŞÀÏ-¼­¹ö";
-        Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş·şÎñÆ÷";
-        Text[ chinese_traditional ] = "¹q¤l¶l¥ó¦øªA¾¹";
-        Text[ turkish ] = "Mail server";
-        Text[ arabic ] = "ãÒæÏ ÇáÈÑíÏ";
-        Text[ catalan ] = "Servidor de correo";
-        Text[ finnish ] = "Postipalvelin";
-    };
-    FixedText FT_SEND
-    {
-        Hide = TRUE;
-        Pos = MAP_APPFONT ( 12 , 147 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text = "~Nachrichtenversand" ;
-        Text [ English ] = "Message ~dispatch " ;
-        Text [ english_us ] = "Outgoing messages" ;
-        Text [ italian ] = "~Invio messaggi" ;
-        Text [ spanish ] = "Correo s~aliente" ;
-        Text [ french ] = "Courrier ~sortant" ;
-        Text [ dutch ] = "~Berichten versturen" ;
-        Text [ swedish ] = "Meddela~ndesändning" ;
-        Text [ danish ] = "Udgående meddelelser" ;
-        Text [ portuguese ] = "~Envio de correio" ;
-        Text [ portuguese_brazilian ] = "~Nachrichtenversand" ;
-        Text[ chinese_simplified ] = "¼Ä·¢µç×ÓÓÊ¼ş";
-        Text[ russian ] = "Îòïğàâêà ñîîáùåíèé";
-        Text[ polish ] = "Poczta wychodz¹ca";
-        Text[ japanese ] = "‘—MÒ°Ù(~O)";
-        Text[ chinese_traditional ] = "µo°e¹q¤l¶l¥ó";
-        Text[ arabic ] = "ÅÑÓÇá ÇáÈÑíÏ";
-        Text[ greek ] = "ÁğïóôïëŞ ìç~íıìáôïò";
-        Text[ korean ] = "¸Ş½ÃÁö º¸³»±â";
-        Text[ turkish ] = "Giden posta sunucusu";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Correo s~aliente";
-        Text[ finnish ] = "Lähtevät viestit";
-    };
-    Edit ED_SEND
-    {
-        Hide = TRUE;
-        Pos = MAP_APPFONT ( 90 , 145) ;
-        Size = MAP_APPFONT ( 96 , 12 ) ;
-        Border = TRUE ;
     };
     String ST_MSG_255_0
     {
