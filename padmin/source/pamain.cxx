@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-22 13:09:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ void MyApp::Main()
     aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
     sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xFactory, aArgs );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if ( !bSuccess )
         fprintf( stderr, "Error creating UCB\n" );
 #endif
