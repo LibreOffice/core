@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:21:24 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 08:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,24 @@ namespace dbaui
                     const Reference< XNumberFormatter >& _rxFormatter,
                     const Reference< XMultiServiceFactory >& _rxORB)
         :ODataAccessObjectTransferable( _rDatasource, _nCommandType, _rCommand, _rxConnection )
+        ,m_pHtml(NULL)
+        ,m_pRtf(NULL)
+    {
+        m_pHtml = new OHTMLImportExport(getDescriptor(), _rxORB, _rxFormatter);
+        m_xHtml = m_pHtml;
+
+        m_pRtf = new ORTFImportExport(getDescriptor(), _rxORB, _rxFormatter);
+        m_xRtf = m_pRtf;
+    }
+
+    // -----------------------------------------------------------------------------
+    ODataClipboard::ODataClipboard(
+                    const ::rtl::OUString&  _rDatasource,
+                    const sal_Int32         _nCommandType,
+                    const ::rtl::OUString&  _rCommand,
+                    const Reference< XNumberFormatter >& _rxFormatter,
+                    const Reference< XMultiServiceFactory >& _rxORB)
+        :ODataAccessObjectTransferable( _rDatasource, _nCommandType, _rCommand)
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:21:51 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 08:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,14 @@ namespace dbaui
             const sal_Int32         _nCommandType,
             const ::rtl::OUString&  _rCommand,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+        );
+
+        ODataClipboard(
+            const ::rtl::OUString&  _rDatasource,
+            const sal_Int32         _nCommandType,
+            const ::rtl::OUString&  _rCommand,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
         );
