@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-21 15:17:01 $
+ *  last change: $Author: fs $ $Date: 2002-01-21 15:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,6 +713,21 @@ void FileDialogHelper_Impl::updateVersions()
     }
 }
 
+// -----------------------------------------------------------------------
+class OReleaseSolarMutex
+{
+private:
+    const sal_Int32 m_nAquireCount;
+public:
+    OReleaseSolarMutex( )
+        :m_nAquireCount( Application::ReleaseSolarMutex() )
+    {
+    }
+    ~OReleaseSolarMutex( )
+    {
+        Application::AcquireSolarMutex( m_nAquireCount );
+    }
+};
 
 // -----------------------------------------------------------------------
 IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
@@ -782,10 +797,13 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
     try
     {
+        OReleaseSolarMutex aReleaseForCallback;
         // clear the preview window
         xFilePicker->setImage( FilePreviewImageFormats::BITMAP, aAny );
     }
-    catch( IllegalArgumentException ){}
+    catch( IllegalArgumentException )
+    {
+    }
 
     return 0;
 }
