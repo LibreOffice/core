@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 11:31:37 $
+ *  last change: $Author: nf $ $Date: 2000-12-04 13:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,12 +278,12 @@ String STR_PRIVATETEXT
 String STR_PRIVATEGRAPHIC
 {
     Text = "Grafik [%PRODUCTNAME Writer]" ;
-    Text [ ENGLISH ] = "Graphic [StarOffice Writer]" ;
-    Text [ norwegian ] = "Graphic [StarOffice Writer]" ;
+    Text [ ENGLISH ] = "Graphic [%PRODUCTNAME Writer]" ;
+    Text [ norwegian ] = "Graphic [%PRODUCTNAME Writer]" ;
     Text [ italian ] = "Immagine [%PRODUCTNAME Writer]" ;
     Text [ portuguese_brazilian ] = "Gráfico [%PRODUCTNAME Writer]" ;
     Text [ portuguese ] = "Imagem [%PRODUCTNAME Writer]" ;
-    Text [ finnish ] = "Kuva [StarOffice Writer]" ;
+    Text [ finnish ] = "Kuva [%PRODUCTNAME Writer]" ;
     Text [ danish ] = "Grafik [%PRODUCTNAME Writer]" ;
     Text [ french ] = "Image [%PRODUCTNAME Writer]" ;
     Text [ swedish ] = "Grafik [%PRODUCTNAME Writer]" ;
@@ -303,7 +303,7 @@ String STR_PRIVATEGRAPHIC
 String STR_PRIVATEOLE
 {
     Text = "Objekt [%PRODUCTNAME Writer]" ;
-    Text [ ENGLISH ] = "Object [StarOffice Writer]" ;
+    Text [ ENGLISH ] = "Object [%PRODUCTNAME Writer]" ;
     Text [ english_us ] = "Object [%PRODUCTNAME Writer]" ;
     Text [ italian ] = "Oggetto [%PRODUCTNAME Writer]" ;
     Text [ spanish ] = "Objeto [%PRODUCTNAME Writer]" ;
