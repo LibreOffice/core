@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoltext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:08:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #pragma hdrstop
 
 #include "fuoltext.hxx"
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _OUTLINER_HXX
 #include <svx/outliner.hxx>
