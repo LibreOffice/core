@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-05 12:04:31 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 11:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3342,8 +3342,11 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
     else
     {
         pSizeBox->SetText( String() );
-        pSizeBox->Disable( );
-        pSizeLabel->Disable( );
+        if ( eState <= SFX_ITEM_READONLY )
+        {
+            pSizeBox->Disable( );
+            pSizeLabel->Disable( );
+        }
     }
 
     nWhich = GetWhich( bWest ? SID_ATTR_CHAR_LANGUAGE : SID_ATTR_CHAR_CJK_LANGUAGE );
