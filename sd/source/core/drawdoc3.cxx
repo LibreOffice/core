@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 09:12:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
                 // Impress
                 xBookmarkDocShRef = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD, TRUE);
 
-            if ( bOK = xBookmarkDocShRef->DoLoad(xStorage) )
+            if ( bOK = xBookmarkDocShRef->DoLoad(&rMedium) )
                 pBookmarkDoc = xBookmarkDocShRef->GetDoc();
         }
         else
