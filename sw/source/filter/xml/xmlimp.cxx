@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-10 14:06:14 $
+ *  last change: $Author: mtg $ $Date: 2001-05-11 12:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,99 +836,38 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     }
 }
 
-void SwXMLImport::SetConfigurationSettings(const uno::Sequence < PropertyValue > & aConfigProps)
+void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aConfigProps)
 {
-    Reference < XPropertySet > xPropSet = Reference < XPropertySet >(GetModel(), UNO_QUERY);
-    if (!IsInsertMode() && !IsStylesOnlyMode() && !IsBlockMode() && !IsOrganizerMode() && xPropSet.is() )
+    Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
+    if( !xFac.is() )
+        return;
+
+    Reference< XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), UNO_QUERY );
+    if( !xProps.is() )
+        return;
+
+    Reference< XPropertySetInfo > xInfo( xProps->getPropertySetInfo() );
+    if( !xInfo.is() )
+        return;
+
+    sal_Int32 nCount = aConfigProps.getLength();
+    const PropertyValue* pValues = aConfigProps.getConstArray();
+
+    while( nCount-- )
     {
-        sal_Int32 nCount = aConfigProps.getLength();
-        const PropertyValue *pValue = aConfigProps.getConstArray();
-
-        for (sal_Int32 i = 0; i < nCount; i++)
+        try
         {
-            if (pValue->Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "PrinterSetup" ) ) )
-                continue;
-            else if (pValue->Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "ForbiddenCharacters" ) ) )
+            if( xInfo->hasPropertyByName( pValues->Name ) )
             {
-                Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-                Reference < XText > xText = xTextDoc->getText();
-                Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-                ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-                if( !xTextTunnel.is() )
-                    continue;
-
-                SwXText *pText = (SwXText *)xTextTunnel->getSomething(
-                                                    SwXText::getUnoTunnelId() );
-                ASSERT( pText, "SwXText missing" );
-                if( !pText )
-                    continue;
-
-                SwDoc *pDoc = pText->GetDoc();
-                Reference < XIndexAccess > xIndex;
-                pValue->Value >>= xIndex;
-                sal_Int32 nCount = xIndex->getCount();
-                Any aAny;
-                Sequence < PropertyValue > aProps;
-                for (sal_Int32 i = 0; i < nCount; i++)
-                {
-                    aAny = xIndex->getByIndex( i );
-                    sal_Int32 nIndex;
-                    if ((aAny >>= aProps) && ((nIndex = aProps.getLength()) == SW_FORBIDDEN_CHARACTER_MAX ) )
-                    {
-                        PropertyValue *pForChar = aProps.getArray();
-                        ForbiddenCharacters aForbid;
-                        Locale aLocale;
-                        OUString sLanguage  ( RTL_CONSTASCII_USTRINGPARAM ( "Language" ) );
-                        OUString sCountry   ( RTL_CONSTASCII_USTRINGPARAM ( "Country" ) );
-                        OUString sVariant   ( RTL_CONSTASCII_USTRINGPARAM ( "Variant" ) );
-                        OUString sBeginLine ( RTL_CONSTASCII_USTRINGPARAM ( "BeginLine" ) );
-                        OUString sEndLine   ( RTL_CONSTASCII_USTRINGPARAM ( "EndLine" ) );
-                        sal_Bool bHaveLanguage = sal_False, bHaveCountry = sal_False, bHaveVariant = sal_False,
-                                 bHaveBegin = sal_False, bHaveEnd = sal_False;
-
-                        for ( sal_Int32 j = 0 ; j < nIndex ; j++ )
-                        {
-                            if (pForChar->Name.equals (sLanguage ) )
-                            {
-                                pForChar->Value >>= aLocale.Language;
-                                bHaveLanguage = sal_True;
-                            }
-                            else if (pForChar->Name.equals (sCountry ) )
-                            {
-                                pForChar->Value >>= aLocale.Country;
-                                bHaveCountry = sal_True;
-                            }
-                            else if (pForChar->Name.equals (sVariant ) )
-                            {
-                                pForChar->Value >>= aLocale.Variant;
-                                bHaveVariant = sal_True;
-                            }
-                            else if (pForChar->Name.equals (sBeginLine ) )
-                            {
-                                pForChar->Value >>= aForbid.beginLine;
-                                bHaveBegin = sal_True;
-                            }
-                            else if (pForChar->Name.equals (sEndLine ) )
-                            {
-                                pForChar->Value >>= aForbid.endLine;
-                                bHaveEnd = sal_True;
-                            }
-                            pForChar++;
-                        }
-
-                        if ( bHaveLanguage && bHaveCountry && bHaveVariant && bHaveBegin && bHaveEnd )
-                        {
-                            LanguageType eLang = SvxLocaleToLanguage ( aLocale );
-                            if (eLang != LANGUAGE_NONE )
-                                pDoc->SetForbiddenCharacters ( eLang, aForbid );
-                        }
-                    }
-                }
+                xProps->setPropertyValue( pValues->Name, pValues->Value );
             }
-            else
-                xPropSet->setPropertyValue ( pValue->Name, pValue->Value);
-            pValue++;
         }
+        catch( Exception& e )
+        {
+            DBG_ERROR( "SwXMLImport::SetConfigurationSettings: Exception!" );
+        }
+
+        pValues++;
     }
 }
 
