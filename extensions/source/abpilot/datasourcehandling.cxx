@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourcehandling.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 08:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,12 @@ namespace abp
     ODataSource ODataSourceContext::createNewMORK( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:mozilla" );
+    }
+
+    //---------------------------------------------------------------------
+    ODataSource ODataSourceContext::createNewEvolution( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    {
+        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution" );
     }
 
     //---------------------------------------------------------------------
