@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 07:25:19 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 08:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,7 @@ void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( Runtime
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
     if (!IsLocked())
     {
         Reference< XPropertySet >  xSet(evt.Source, UNO_QUERY);
@@ -623,6 +624,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::vetoableChange(const PropertyChangeEvent& aEvent) throw( PropertyVetoException, RuntimeException )
 {
+    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
     if (aEvent.PropertyName == FM_PROP_DATASOURCE)
     {
         // if the database form belongs to a connection
@@ -639,6 +641,7 @@ void SAL_CALL FmXUndoEnvironment::vetoableChange(const PropertyChangeEvent& aEve
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
     // neues Object zum lauschen
     Reference< XInterface >  xIface;
     evt.Element >>= xIface;
@@ -654,6 +657,7 @@ void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) thr
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
     Reference< XInterface >  xIface;
     evt.ReplacedElement >>= xIface;
     OSL_ENSURE(xIface.is(), "FmXUndoEnvironment::elementReplaced: invalid container notification!");
@@ -671,6 +675,7 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thr
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
     Reference< XInterface >  xIface;
     evt.Element >>= xIface;
     OSL_ENSURE(xIface.is(), "FmXUndoEnvironment::elementRemoved: invalid container notification!");
