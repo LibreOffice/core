@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-28 14:51:49 $
+ *  last change: $Author: dv $ $Date: 2001-06-29 12:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,13 +161,13 @@ sal_Bool UCBContentHelper::Transfer_Impl( const String& rSource, const String& r
 
     try
     {
-        Content aDestPath( aDestObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
         OUString aTransferName = OUString::createFromAscii( "transfer" );
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
             aDestPath.executeCommand( aTransferName, makeAny(
-                ::com::sun::star::ucb::TransferInfo( bMoveData, aSourceObj.GetMainURL(), aName, nNameClash ) ) );
+                ::com::sun::star::ucb::TransferInfo( bMoveData, aSourceObj.GetMainURL( INetURLObject::NO_DECODE ), aName, nNameClash ) ) );
         }
         else
         {
@@ -200,7 +200,7 @@ sal_Bool UCBContentHelper::IsDocument( const String& rContent )
 
     try
     {
-        Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         bRet = aCnt.isDocument();
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -232,7 +232,7 @@ sal_Bool UCBContentHelper::IsFolder( const String& rContent )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         bRet = aCnt.isFolder();
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -264,7 +264,7 @@ sal_Bool UCBContentHelper::GetTitle( const String& rContent, String& rTitle )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         OUString aTemp;
         if ( aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTemp )
         {
@@ -293,7 +293,7 @@ sal_Bool UCBContentHelper::Kill( const String& rContent )
 
     try
     {
-        Content aCnt( aDeleteObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -319,7 +319,7 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aFolderObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();
@@ -552,13 +552,12 @@ sal_Bool UCBContentHelper::MakeFolder( const String& rFolder )
 {
     INetURLObject aURL( rFolder );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-    String aNewFolderURL = aURL.GetMainURL();
     String aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     aURL.removeSegment();
 
     try
     {
-        Content aCnt( aURL.GetMainURL(), Reference< XCommandEnvironment > () );
+        Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), Reference< XCommandEnvironment > () );
         Reference< XContentCreator > xCreator = Reference< XContentCreator >( aCnt.get(), UNO_QUERY );
         if ( !xCreator.is() )
             return sal_False;
@@ -641,7 +640,7 @@ ULONG UCBContentHelper::GetSize( const String& rContent )
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
-        Content aCnt( aObj.GetMainURL(), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= nTemp;
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -668,11 +667,11 @@ sal_Bool UCBContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
     try
     {
         Reference< ::com::sun::star::ucb::XCommandEnvironment > aCmdEnv;
-        Content aYoung( aYoungObj.GetMainURL(), aCmdEnv );
+        Content aYoung( aYoungObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
         ::com::sun::star::util::DateTime aTempYoungDate;
         aYoung.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aTempYoungDate;
         CONVERT_DATETIME( aTempYoungDate, aYoungDate );
-        Content aOlder( aOlderObj.GetMainURL(), aCmdEnv );
+        Content aOlder( aOlderObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
         ::com::sun::star::util::DateTime aTempOlderDate;
         aOlder.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aTempOlderDate;
         CONVERT_DATETIME( aTempOlderDate, aOlderDate );
@@ -710,7 +709,7 @@ sal_Bool UCBContentHelper::Find( const String& rFolder, const String& rName, Str
         if ( bWild && WildCard( rName ).Matches( aFile ) || aFile == rName )
         {
             // names match
-            rFile = aFileObject.GetMainURL();
+            rFile = aFileObject.GetMainURL( INetURLObject::NO_DECODE );
             bRet = sal_True;
             break;
         }
@@ -733,7 +732,7 @@ sal_Bool UCBContentHelper::Exists( const String& rURL )
     String aFile;
 
     // try to find the object
-    return Find( aObj.GetMainURL(), aFileName, aFile );
+    return Find( aObj.GetMainURL( INetURLObject::NO_DECODE ), aFileName, aFile );
 }
 
 // -----------------------------------------------------------------------
