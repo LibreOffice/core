@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 09:54:18 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 08:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,12 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
             aReturn.bEnabled = m_bEditable && m_aUndoManager.GetRedoActionCount() != 0;
             break;
         case SID_INDEXDESIGN:
-            aReturn.bEnabled = (m_bNew && m_bModified) || Reference< XIndexesSupplier >(m_xTable, UNO_QUERY).is();
+            aReturn.bEnabled =
+                (   (   (m_bNew || m_bModified)
+                    ||  Reference< XIndexesSupplier >(m_xTable, UNO_QUERY).is()
+                    )
+                &&  m_xConnection.is()
+                );
                 // for a new table, assume that we can edit indexes
             break;
     }
@@ -768,8 +773,8 @@ void SAL_CALL OTableController::disposing( const EventObject& Source ) throw(Run
         {
             m_bNew      = sal_True;
             setModified(sal_True);
-            InvalidateAll();
         }
+        InvalidateAll();
     }
     else if(Reference<XPropertySet>(Source.Source,UNO_QUERY) == m_xTable)
     {   // some deleted our table so we have a new one
