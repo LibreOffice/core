@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:50:19 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
         XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)GetScImport().GetShapeImport().get();
         pTableShapeImport->SetAnnotation(this);
         pShapeContext = GetScImport().GetShapeImport()->CreateGroupChildContext(
-            GetScImport(), nPrfx, rLName, xAttrList, xShapes);
+            GetScImport(), nPrfx, rLName, xAttrList, xShapes, sal_True);
     }
 
     pCellContext = pTempCellContext;
