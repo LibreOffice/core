@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 12:53:19 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,6 +468,7 @@ void SdDrawViewShell::Construct(SdDrawDocShell* pDocSh)
     aPageBtn.SetClickHdl(LINK(this, SdDrawViewShell, TabModeBtnHdl));
     aPageBtn.SetQuickHelpText( String( SdResId( STR_PAGEMODE ) ) );
     aPageBtn.SetHelpId( HID_SD_BTN_PAGE );
+    aPageBtn.SetAccessibleName (String(SdResId(STR_PAGEMODE)));
     aPageBtn.Show();
 
     aMasterPageBtn.SetImage( Image( Bitmap( SdResId( BMP_TAB_MASTERPAGE ) ), IMAGE_STDBTN_COLOR ) );
@@ -475,6 +476,7 @@ void SdDrawViewShell::Construct(SdDrawDocShell* pDocSh)
     aMasterPageBtn.SetClickHdl(LINK(this, SdDrawViewShell, TabModeBtnHdl));
     aMasterPageBtn.SetQuickHelpText( String( SdResId( STR_MASTERPAGEMODE ) ) );
     aMasterPageBtn.SetHelpId( HID_SD_BTN_MASTERPAGE );
+    aMasterPageBtn.SetAccessibleName (String(SdResId(STR_MASTERPAGEMODE)));
     aMasterPageBtn.Show();
 
     aLayerBtn.SetImage( Image( Bitmap( SdResId( BMP_TAB_LAYERMODE ) ), IMAGE_STDBTN_COLOR ) );
@@ -482,6 +484,7 @@ void SdDrawViewShell::Construct(SdDrawDocShell* pDocSh)
     aLayerBtn.SetClickHdl(LINK(this, SdDrawViewShell, TabModeBtnHdl));
     aLayerBtn.SetQuickHelpText( String( SdResId( STR_LAYERMODE ) ) );
     aLayerBtn.SetHelpId( HID_SD_BTN_LAYER );
+    aLayerBtn.SetAccessibleName (String(SdResId(STR_LAYERMODE)));
     aLayerBtn.Show();
 
     // Damit der richtige EditMode von der FrameView komplett eingestellt
@@ -589,6 +592,7 @@ void SdDrawViewShell::Construct(SdDrawDocShell* pDocSh)
 
     uno::Reference< awt::XWindow > aTmpRef;
     GetViewFrame()->GetFrame()->GetFrameInterface()->setComponent( aTmpRef, pController );
+
 }
 
 /*************************************************************************
