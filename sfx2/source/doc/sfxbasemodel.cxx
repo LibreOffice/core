@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:58:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,9 +314,6 @@ struct IMPL_SfxBaseModel_DataContainer
     SEQUENCE< PROPERTYVALUE>                        m_seqArguments          ;
     SEQUENCE< REFERENCE< XCONTROLLER > >            m_seqControllers        ;
     REFERENCE< XINDEXACCESS >                       m_contViewData          ;
-       LoadEnvironment_Impl*                            m_pLoader               ;
-    sal_Bool                                        m_bLoadDone             ;
-    sal_Bool                                        m_bLoadState            ;
     sal_Bool                                        m_bClosed               ;
     sal_Bool                                        m_bClosing              ;
     REFERENCE< com::sun::star::view::XPrintJob>     m_xPrintJob             ;
@@ -330,9 +327,6 @@ struct IMPL_SfxBaseModel_DataContainer
             ,   m_sURL                  ( String()      )
             ,   m_nControllerLockCount  ( 0             )
             ,   m_aInterfaceContainer   ( aMutex        )
-            ,   m_pLoader               ( NULL          )
-            ,   m_bLoadDone             ( sal_False     )
-            ,   m_bLoadState            ( sal_False     )
             ,   m_bClosed               ( sal_False     )
             ,   m_bClosing              ( sal_False     )
     {
@@ -1970,59 +1964,33 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
         if( pFilterNameItem )
             aFilterName = pFilterNameItem->GetValue();
 
-        if( !aFilterName.getLength() )
+        if( !m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) )
             throw ILLEGALARGUMENTIOEXCEPTION();
 
         pParams->Put( SfxBoolItem( SID_VIEW, sal_False ) );
         pParams->Put( SfxObjectShellItem( SID_OBJECTSHELL, m_pData->m_pObjectShell ) );
 
            // create LoadEnvironment and set link for callback when it is finished
-           m_pData->m_pLoader = LoadEnvironment_Impl::Create( *pParams, TRUE );
-           m_pData->m_pLoader->AddRef();
-           m_pData->m_pLoader->SetDoneLink( LINK( this, SfxBaseModel, LoadDone_Impl ) );
+        sal_Bool bLoadSucceeded = sal_False;
+           LoadEnvironment_Impl* pLoader = LoadEnvironment_Impl::Create( *pParams, TRUE );
+           pLoader->AddRef();
 
-        m_pData->m_bLoadDone = sal_False;
-        m_pData->m_pLoader->Start();
+        pLoader->Start();
 
-           // wait for callback
-           while( m_pData->m_bLoadDone == sal_False )
+           // wait until loading is done
+        while( pLoader->GetState() != LoadEnvironment_Impl::DONE  )
                Application::Yield();
 
-        m_pData->m_pLoader->ReleaseRef();
-        m_pData->m_pLoader = NULL;
+        sal_uInt32 nLoaderError = pLoader->GetError();
+
+        // the document can be closed in case loading failed
+        pLoader->ReleaseRef();
+        pLoader = NULL;
         DELETEZ( pParams );
 
-        sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetError() ?
-                                m_pData->m_pObjectShell->GetError() : ERRCODE_IO_CANTREAD;
-        m_pData->m_pObjectShell->ResetError();
-/*
-        // remove lock without closing (it is set in the LoadEnvironment, because the document
-        // is loaded in a hidden mode)
-        m_pData->m_pObjectShell->RemoveOwnerLock();
-*/
-        if ( !m_pData->m_bLoadState )
-        {
-            throw SfxIOException_Impl( nErrCode );
-        }
+        if ( nLoaderError )
+            throw SfxIOException_Impl( nLoaderError ? nLoaderError : ERRCODE_IO_CANTREAD );
     }
-}
-
-IMPL_LINK( SfxBaseModel, LoadDone_Impl, void*, pVoid )
-{
-    DBG_ASSERT( m_pData->m_pLoader, "No Loader created, but LoadDone ?!" );
-
-    if ( m_pData->m_pLoader->GetError() )
-    {
-        m_pData->m_bLoadDone  = sal_True ;
-        m_pData->m_bLoadState = sal_False;
-    }
-    else
-    {
-        m_pData->m_bLoadDone  = sal_True;
-        m_pData->m_bLoadState = sal_True;
-    }
-
-    return NULL;
 }
 
 //________________________________________________________________________________________________________
