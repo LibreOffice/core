@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-28 20:15:03 $
+ *  last change: $Author: os $ $Date: 2002-01-07 16:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,28 @@ SwTOXMark* lcl_GetMark(SwTOXType* pType, const SwTOXMark* pOwnMark)
     }
     return 0;
 }
+//-----------------------------------------------------------------------------
+void lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
+{
+    sal_uInt16 nUserCount = pDoc->GetTOXTypeCount( TOX_USER );
+    const SwTOXType* pNewType = 0;
+    for(sal_uInt16 nUser = 0; nUser < nUserCount; nUser++)
+    {
+        const SwTOXType* pType = pDoc->GetTOXType( TOX_USER, nUser );
+        if(pType->GetTypeName().Equals((String)rNewName))
+        {
+            pNewType = pType;
+            break;
+        }
+    }
+    if(!pNewType)
+    {
+        SwTOXType aNewType(TOX_USER, rNewName);
+        pNewType = pDoc->InsertTOXType( aNewType );
+    }
+    //has to be non-const-casted
+    ((SwTOXType*)pNewType)->Add(&rTOXBase);
+}
 
 /******************************************************************
  * SwXDocumentIndex
@@ -216,10 +238,14 @@ SwTOXMark* lcl_GetMark(SwTOXType* pType, const SwTOXMark* pOwnMark)
 class SwDocIdxProperties_Impl
 {
     SwTOXBase*      pTOXBase;
+    OUString        sUserTOXTypeName;
 public:
     SwTOXBase&      GetTOXBase() {return *pTOXBase;}
     SwDocIdxProperties_Impl(const SwTOXType* pType);
     ~SwDocIdxProperties_Impl(){delete pTOXBase;}
+
+    const OUString& GetTypeName()const {return sUserTOXTypeName;}
+    void            SetTypeName(const OUString& rSet) {sUserTOXTypeName = rSet;}
 };
 /* -----------------20.06.98 11:41-------------------
  *
@@ -229,6 +255,7 @@ SwDocIdxProperties_Impl::SwDocIdxProperties_Impl(const SwTOXType* pType)
     SwForm aForm(pType->GetType());
     pTOXBase = new SwTOXBase(pType, aForm,
                                 TOX_MARK, pType->GetTypeName());
+    sUserTOXTypeName = pType->GetTypeName();
 }
 /* -----------------------------10.03.00 18:02--------------------------------
 
@@ -451,6 +478,23 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 OUString sNewName;
                 aValue >>= sNewName;
                 pTOXBase->SetTOXName(sNewName);
+            }
+            break;
+            case WID_USER_IDX_NAME:
+            {
+                OUString sNewName;
+                aValue >>= sNewName;
+                DBG_ASSERT(TOX_USER == eTxBaseType, "tox type name can only be changed for user indexes")
+                if(GetFmt())
+                {
+                    OUString sTmp = pTOXBase->GetTOXType()->GetTypeName();
+                    if(sTmp != sNewName)
+                    {
+                        lcl_ReAssignTOXType(GetFmt()->GetDoc(), *pTOXBase, sNewName);
+                    }
+                }
+                else
+                    pProps->SetTypeName(sNewName);
             }
             break;
             case WID_IDX_LOCALE:
@@ -735,6 +779,17 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             case WID_IDX_NAME:
                 bBOOL = sal_False;
                 aRet <<= OUString(pTOXBase->GetTOXName());
+            break;
+            case WID_USER_IDX_NAME:
+            {
+                bBOOL = sal_False;
+                OUString sTmp;
+                if(!IsDescriptor())
+                    sTmp = pTOXBase->GetTOXType()->GetTypeName();
+                else
+                    sTmp = pProps->GetTypeName();
+                aRet <<= sTmp;
+            }
             break;
             case WID_IDX_LOCALE:
                 bBOOL = sal_False;
@@ -1039,9 +1094,6 @@ void SwXDocumentIndex::attachToRange(const Reference< text::XTextRange > & xText
         SwUnoInternalPaM aPam(*pDoc);
         //das muss jetzt sal_True liefern
         SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
-        //TODO: Unterscheidung innerhalb von Benutzerverzeichnissen einbauen
-//      const SwTOXType* pType = pDoc->GetTOXType(pProps->eToxType, 0);
-//      DBG_ASSERT(pType, "Wieso gibt es diesen Typ nicht?" )
 
             const SwTOXBase* pOld = pDoc->GetCurTOX( *aPam.Start() );
             if(!pOld)
@@ -1051,6 +1103,11 @@ void SwXDocumentIndex::attachToRange(const Reference< text::XTextRange > & xText
                     pDoc->DeleteAndJoin(aPam);
 
                 SwTOXBase& rTOXBase = pProps->GetTOXBase();
+                const SwTOXType* pTOXType = rTOXBase.GetTOXType();
+                if(TOX_USER == pTOXType->GetType() && !pProps->GetTypeName().equals(pTOXType->GetTypeName()))
+                {
+                    lcl_ReAssignTOXType(pDoc, rTOXBase, pProps->GetTypeName());
+                }
                 //TODO: apply Section attributes (columns and background)
                 const SwTOXBaseSection* pTOX = pDoc->InsertTableOf(
                                     *aPam.GetPoint(), rTOXBase, 0, sal_False );
