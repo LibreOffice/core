@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: pluby $ $Date: 2001-06-11 20:19:08 $
+#   last change: $Author: vg $ $Date: 2001-06-15 16:15:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -257,6 +257,10 @@ SHL1STDLIBS += gdi32.lib		\
                shell32.lib		\
                advapi32.lib 	\
                imm32.lib
+
+.IF "$(remote)" != ""
+SHL1STDLIBS+=	freetype.lib
+.ENDIF
 
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
 LINKFLAGSSHL += /ENTRY:LibMain@12
