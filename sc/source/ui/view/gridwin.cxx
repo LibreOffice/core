@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-28 11:38:17 $
+ *  last change: $Author: nn $ $Date: 2000-12-19 17:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3503,6 +3503,8 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
     }
     while ( !bFound );
 
+    ScHideTextCursor aHideCursor( pViewData, eWhich );  // before GetEditArea (MapMode is changed)
+
     const ScPatternAttr* pPattern = pDoc->GetPattern( nPosX, nPosY, nTab );
     // bForceToTop = FALSE, use the cell's real position
     Rectangle aEditRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, FALSE );
@@ -3625,9 +3627,7 @@ BOOL ScGridWindow::GetEditUrlOrError( BOOL bSpellErr, const Point& rPos,
 
         SetMapMode(aOld);
 
-        //  bei SetOutputArea oben geht der Text-Cursor kaputt...
-        if ( pViewData->HasEditView(eWhich) && HasFocus() )
-            pViewData->GetEditView(eWhich)->ShowCursor( FALSE, TRUE );
+        //  text cursor is restored in ScHideTextCursor dtor
 
         return bRet;
     }
