@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlelement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 13:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ namespace xmloff
         switch (_eType)
         {
             case TEXT: return "text";
-            case TEXT_AREA: return "text-area";
+            case TEXT_AREA: return "textarea";
             case PASSWORD: return "password";
             case FILE: return "file";
             case FORMATTED_TEXT: return "formatted-text";
@@ -104,6 +104,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/01/03 16:25:34  fs
+ *  file format change (extra wrapper element for controls, similar to columns)
+ *
  *  Revision 1.1  2000/12/06 17:29:46  fs
  *  initial checkin - implementations for formlayer import/export - still under construction
  *
