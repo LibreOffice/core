@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-16 17:16:00 $
+ *  last change: $Author: jp $ $Date: 2001-03-19 21:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,8 +934,6 @@ friend class WW8FormulaControl;
 
 // anderes
     String GetFieldResult( WW8FieldDesc* pF );
-    void QuoteChar( String& rStr, const sal_Unicode _c, BOOL bAllowCr );
-    void QuoteString( String& rStr, const String& rOrg );
     void MakeTagString( String& rStr, const String& rOrg );
     void UpdateFields();
 //  void ConvertFName( String& rName );
@@ -1151,11 +1149,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.17 2001-03-16 17:16:00 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.18 2001-03-19 21:29:17 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.17  2001/03/16 17:16:00  jp
+      new: im-/export emboss / engrave attribute
+
       Revision 1.16  2001/03/13 16:21:22  cmc
       ##503##, #84126#. Incorrect endnote setting, and duplicate code
 
