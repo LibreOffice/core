@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:02:13 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,19 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
 // -----------------------------------------------------------------------------
 OKeySet::~OKeySet()
 {
-    ::comphelper::disposeComponent(m_xStatement);
+    try
+    {
+        ::comphelper::disposeComponent(m_xStatement);
+    }
+    catch(Exception&)
+    {
+        m_xStatement = NULL;
+    }
+    catch(...)
+    {
+        OSL_ENSURE(0,"Unknown Exception occured");
+    }
+    m_xComposer = NULL;
     delete m_pKeyColumnNames;
     delete m_pColumnNames;
 }
@@ -152,7 +164,8 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
 {
     OCacheSet::construct(_xDriverSet);
 
-    bool bCase = m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false;
+    Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+    bool bCase = (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers()) ? true : false;
     m_pKeyColumnNames = new OColumnNamePos(bCase);
     m_pColumnNames = new OColumnNamePos(bCase);
 
@@ -184,7 +197,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
 
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-    ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
 
     ::rtl::OUString aFilter;
     ::rtl::OUString sCatalog,sSchema,sTable;
@@ -273,7 +286,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     aSql += ::rtl::OUString::createFromAscii(" WHERE ");
 
     // list all cloumns that should be set
-    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
     static ::rtl::OUString aOr      = ::rtl::OUString::createFromAscii(" OR ");
     static ::rtl::OUString aEqual   = ::rtl::OUString::createFromAscii(" = ?");
@@ -355,7 +368,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     aSql += ::rtl::OUString::createFromAscii(" SET ");
     // list all cloumns that should be set
     static ::rtl::OUString aPara    = ::rtl::OUString::createFromAscii(" = ?,");
-    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
 
     // use keys and indexes for excat postioning
@@ -514,7 +527,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     // set values and column names
     ::rtl::OUString aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
     static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
-    ::rtl::OUString aQuote = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote = getIdentifierQuoteString();
     static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
 
     OColumnNamePos::const_iterator aIter = m_pColumnNames->begin();
@@ -590,7 +603,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     if ( !bAutoValuesFetched )
     {
         // first check if all key column values were set
-        ::rtl::OUString sQuote = m_xConnection->getMetaData()->getIdentifierQuoteString();
+        ::rtl::OUString sQuote = getIdentifierQuoteString();
         ::rtl::OUString sMaxStmt;
         ::std::vector< ::rtl::OUString >::iterator aAutoIter = m_aAutoColumns.begin();
         for (;aAutoIter !=  m_aAutoColumns.end(); ++aAutoIter)
@@ -663,7 +676,7 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     aSql += ::rtl::OUString::createFromAscii(" WHERE ");
 
     // list all cloumns that should be set
-    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString();
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
     static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
 
     // use keys and indexes for excat postioning
@@ -1258,7 +1271,7 @@ void OKeySet::setExternParameters(const connectivity::ORowVector< ORowSetValue >
     ::rtl::OUString aComposedName;
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
 
-    if(xMetaData->supportsTableCorrelationNames())
+    if( xMetaData.is() && xMetaData->supportsTableCorrelationNames() )
     {
         ::dbtools::composeTableName(xMetaData,_sCatalog,_sSchema,_sTable,aComposedName,sal_False,::dbtools::eInDataManipulation);
         // first we have to check if the composed tablename is in the select clause or if an alias is used
