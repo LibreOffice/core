@@ -2,14 +2,12 @@ dnl /******************************************************************
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Rev.: 0.1
 dnl * Date: May 2000
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
 dnl *       In this stage configure just checks the pre-requisites
-dnl *       necessary to build OpenOffice on a Sun Solaris or Linux
-dnl *       platform.
+dnl *       necessary to build OpenOffice.
 dnl *
 dnl *
 dnl ******************************************************************/
@@ -24,6 +22,13 @@ AC_ARG_WITH(gcc-home,
                           location of the entire distribution.
                           
                           Usage: --with-gcc-home=<absolute path to gcc home>
+],,)
+AC_ARG_WITH(stlport4-home,
+[  --with-stlport4-home    The location that STLport4 is installed in. The STL
+                          header files are assumed to be in stlport4-home/stlport
+                          and the STLport4 library in stlport4-home/lib.
+
+                          Usage: --with-stlport4-home=<absolute path to stlport4 home>
 ],,)
 AC_ARG_WITH(jdk-home,
 [  --with-jdk-home         if you have installed JDK 1.2.2, on your system,
@@ -42,12 +47,12 @@ AC_ARG_WITH(perl-home,
                           Usage: --with-perl-home=<absolute path to Perl 5 home>
 ],,)
 AC_ARG_WITH(cl-home,
-[  --with-cl-home          for Windows NT users, please supply the MS-DOS format path (no spaces)
+[  --with-cl-home          for Windows NT users, please supply the path
                           for the Microsoft C/C++ compiler. 
                           Note that this is not the location of the compiler binary but the
                           location of the entire distribution.
  
-                          Usage: --with-cl-home=<absolute MS-DOS path to Microsoft C/C++ compiler home>
+                          Usage: --with-cl-home=<absolute path to Microsoft C/C++ compiler home>
 ],,)
 AC_ARG_WITH(local-solenv,
 [  --with-local-solenv     if you have solenv in a location other than OpenOffice/solenv,
@@ -73,7 +78,25 @@ AC_ARG_ENABLE(macos9,
                           
                           Usage: --enable-macos9
 ],,)
+AC_ARG_ENABLE(xprint,
+[  --enable-xprint         Use this option if you want to build OpenOffice with
+                          Xprint printing functionality.                          
 
+                          Usage: --enable-xprint
+],,)
+AC_ARG_WITH(lang,
+[  --with-lang             Use this option to build OpenOffice with additional language
+                          support. US English is always included by default. Separate 
+                          multiple languages with commas.                          
+
+                          Usage: --with-lang=SPAN,SWED,TURK
+],,)
+AC_ARG_WITH(asm-home,
+[  --with-asm-home         For Windows users, please supply the path for the
+                          ml.exe assembler.
+
+                          Usage: --with-asm-home=<path to ml.exe directory>
+],,)
 dnl ===================================================================
 dnl Message.
 dnl ===================================================================
@@ -115,6 +138,9 @@ dnl ===================================================================
 dnl checking the os
 AC_MSG_CHECKING([the operating system])
 _os=`uname`
+if test `echo $_os | $AWK -F_ '{ print $1 }'` = "CYGWIN"; then
+   _os="WINNT"
+fi
 if test "$_os" = "SunOS" -o "$_os" = "Linux" -o "$_os" = "WINNT" -o "$_os" = "Darwin" -o "$_os" = "FreeBSD" -o "$_os" = "OSF1" -o "$_os" = "NetBSD" -o "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
    AC_MSG_RESULT([checked ($_os)])
 else
@@ -136,7 +162,7 @@ if test "$_os" = "SunOS"
 then
    AC_MSG_CHECKING([the processor type])
    _processor=`uname -p`
-   if test "$_processor" = "sparc"
+   if test "$_processor" = "sparc" -o "$_processor" = "i386"
    then
       AC_MSG_RESULT([ok ($_processor)])
    else
@@ -189,20 +215,20 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" ; then
       fi
       _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'` 
       if test "$_gcc_major" != "2"; then
-         AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler])
-         AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler]) >> warn
+         AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler])
+         AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler]) >> warn
          COMPATH="NO_GCC"
       else
          _gcc_middle=`$GCC --version | $AWK -F. '{ if ($2 != 95) print "false"; else print "true" }'` 
          if test "$_gcc_middle" = "false"; then
-            AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler])
-            AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler]) >> warn
+            AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler])
+            AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler]) >> warn
             COMPATH="NO_GCC"
          else
-            _gcc_minor=`$GCC --version | $AWK -F. '{ if ($3 != 2) print "false"; else print "true" }'` 
+            _gcc_minor=`$GCC --version | $AWK -F. '{ if ($3 < 2) print "false"; else print "true" }'` 
             if test "$_gcc_minor" = "false"; then
-               AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler])
-               AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2 of the gcc compiler]) >> warn
+               AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler])
+               AC_MSG_WARN([found version "$_gcc_version", use version 2.95.2+ of the gcc compiler]) >> warn
                COMPATH="NO_GCC"
             else
                dnl compiler will do
@@ -220,7 +246,7 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" ; then
                         _multiple=`echo $_gxx_include_path | $AWK '{ if ($2) print "true"; else print "false" }'`
                         if test "$_multiple" = "false"; then
                            AC_MSG_RESULT([checked])
-                        else
+                        else/
                            AC_MSG_WARN([found multiple g++-3 directories, please rename so you have one distinct])
                            AC_MSG_WARN([found multiple g++-3 directories, please rename so you have one distinct]) >> warn
                         fi
@@ -283,16 +309,19 @@ if test "$_os" = "SunOS"; then
       AC_MSG_CHECKING([the SUN Workshop C compiler version])
       dnl cc -V outputs to standard error!!!!
       _workshop_version=`$CC -V 2>&1 | $AWK '/^cc/ { print $7 }'`
+      if test "$_workshop_version" = "C"; then
+         _workshop_version=`$CC -V 2>&1 | $AWK '/^cc/ { print $8 }'`
+      fi   
       _workshop_major=`echo $_workshop_version | $AWK -F. '{ print $1 }'` 
       if test "$_workshop_major" != "5"; then
-         AC_MSG_WARN([found version "$_workshop_version", use version 5.0 of the Sun Workshop C compiler])
-         AC_MSG_WARN([found version "$_workshop_version", use version 5.0 of the Sun Workshop C compiler]) >> warn
+         AC_MSG_WARN([found version "$_workshop_version", use version 5.0 or 5.2 of the Sun Workshop C compiler])
+         AC_MSG_WARN([found version "$_workshop_version", use version 5.0 or 5.2 of the Sun Workshop C compiler]) >> warn
          COMPATH="NO_COMPATH"
       else
-         _workshop_minor=`echo $_workshop_version | $AWK -F. '{ if ($2 != 0) print "false"; else print "true" }'` 
+         _workshop_minor=`echo $_workshop_version | $AWK -F. '{ if ($2 == 0) print "true"; else if ($2 == 2) print "true"; else print "false" }'` 
          if test "$_workshop_minor" = "false"; then
-            AC_MSG_WARN([found version "$_workshop_version", use version 5.0 of the Sun Workshop C compiler])
-            AC_MSG_WARN([found version "$_workshop_version", use version 5.0 of the Sun Workshop C compiler]) >> warn
+            AC_MSG_WARN([found version "$_workshop_version", use version 5.0 or 5.2 of the Sun Workshop C compiler])
+            AC_MSG_WARN([found version "$_workshop_version", use version 5.0 or 5.2 of the Sun Workshop C compiler]) >> warn
             COMPATH="NO_COMPATH"
          else
             dnl compiler will do
@@ -358,20 +387,20 @@ if test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
       fi
    fi
 fi
+
+dnl Check if there is a Microsoft C/C++ compiler.
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
-   dnl Check if there is a Microsoft C/C++ compiler.
-   if test -x "$with_cl_home/bin/cl"; then
+   if test -x $with_cl_home/bin/cl; then
       COMPATH=$with_cl_home
-      AC_MSG_RESULT([checked])
+      AC_MSG_RESULT([found.])
    else
       COMPATH="NO_CL"
-      AC_MSG_WARN([could not find Microsoft C/C++ Compiler])
-      AC_MSG_WARN([could not find Microsoft C/C++ Compiler]) >> warn
+      AC_MSG_RESULT([not found.])
    fi
 fi     
 
-dnl Check if stdc headers are availlable excluding windows.
+dnl Check if stdc headers are available excluding windows.
 if test "$_os" != "WINNT"; then
    AC_HEADER_STDC
 fi
@@ -543,6 +572,42 @@ if test "$_os" = "SunOS"; then
          fi
       fi
    fi
+fi
+
+dnl ===================================================================
+dnl Checks for STLPORT4
+dnl ===================================================================
+AC_MSG_CHECKING([for STLport4 headers])
+if test -d "$with_stlport4_home"; then
+	STLPORT4=$with_stlport4_home
+        if test "$_os" != "WINNT"; then
+           AC_TRY_CPP($STLPORT4/stlport/hash_map, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([STLport4 headers not found.]))
+        else
+           dnl AC_TRY_CPP doesn't work on Windows because C++ preprocessor is not found by autoconf.
+           if test -f "$STLPORT4/stlport/hash_map"; then
+              AC_MSG_RESULT([checked.])
+           else
+              AC_MSG_ERROR([STLport4 headers not found.])
+           fi
+        fi
+        if test "$_os" != "WINNT"; then
+		AC_MSG_CHECKING([for STLport4 libraries])
+		if test "$_os" = "SunOS"; then
+			if test -f "$STLPORT4/lib/libstlport_sunpro.so"; then
+				AC_MSG_RESULT([Checked])
+			else
+				AC_MSG_ERROR([STLport4 libraries not found])
+			fi
+		else
+			if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
+				AC_MSG_RESULT([Checked])
+			else
+				AC_MSG_ERROR([STLport4 libraries not found])
+			fi
+		fi
+	fi
+else
+	AC_MSG_ERROR([No STLPORT4 directory found. You must use the --with-stlport4-home option.])
 fi
 dnl ===================================================================
 dnl Checks for JDK.
@@ -752,6 +817,18 @@ dnl ***************************************
 AC_PATH_PROG(CYGWIN, bash)
 CYGWIN=`dirname $CYGWIN`
 
+dnl ***************************************
+dnl testing ml.exe assembler path
+dnl ***************************************
+if test ! -x "$with_asm_home/ml.exe"; then
+   AC_PATH_PROG(ML_EXE, ml.exe)
+   if test -z "$ML_EXE"; then
+      with_asm_home="NO_ASM_HOME"
+   else
+      with_asm_home="ASM_IN_PATH"
+   fi
+fi
+ 
 dnl ===================================================================
 dnl Setting up the environment.
 dnl ===================================================================
@@ -801,7 +878,16 @@ fi
 if test -z "$CYGWIN"; then
    CYGWIN="NO_CYGWIN"
 fi
-
+if test -z "$enable_xprint"; then
+   enable_xprint="NO_XPRINT"
+else
+   enable_xprint="TRUE"
+fi
+if test -z "$with_lang"; then
+   with_lang=,ENUS,
+else
+   with_lang=","$with_lang",ENUS,"
+fi
 # Substituting blank spaces in windows pathnames with '#'
 if test "$_os" = "WINNT"; then
 #   COMPATH=`echo $COMPATH | $SED "s/ /#/g"`
@@ -827,12 +913,16 @@ echo "\$_LOCAL_SOLENV="$_LOCAL_SOLENV
 echo "\$_LOCAL_SOLVER="$_LOCAL_SOLVER
 echo "\$upd="$upd
 echo "\$CYGWIN="$CYGWIN
+echo "\$STLPORT4="$STLPORT4
+echo "\$enable_xprint="$enable_xprint
+echo "\$with_lang="$with_lang
+echo "\$with_asm_home="$with_asm_home
 echo
 fi
 
 # Executing the set_soenv script to setup the environment variables.
 if test -z "$enable_check_only"; then
-   './set_soenv' $COMPATH $_gcc_include_path $_gxx_include_path $JAVA_HOME $TCSH $PERL $x_libraries $x_includes $_LOCAL_SOLENV $_LOCAL_SOLVER $upd $CYGWIN
+   './set_soenv' $COMPATH $_gcc_include_path $_gxx_include_path $JAVA_HOME $TCSH $PERL $x_libraries $x_includes $_LOCAL_SOLENV $_LOCAL_SOLVER $upd $CYGWIN $STLPORT4 $enable_xprint $with_lang $with_asm_home
 else
    echo
    echo Test Complete
