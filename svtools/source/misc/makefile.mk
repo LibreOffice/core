@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: fs $ $Date: 2001-12-20 13:19:25 $
+#   last change: $Author: thb $ $Date: 2002-08-22 09:28:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,7 +137,8 @@ LIB3OBJFILES=\
     $(SLO)$/transfer.obj	\
     $(SLO)$/transfer2.obj	\
     $(SLO)$/cliplistener.obj \
-    $(SLO)$/stringtransfer.obj
+    $(SLO)$/stringtransfer.obj \
+    $(SLO)$/graphictools.obj
 
 EXCEPTIONSFILES=\
     $(SLO)$/productregistration.obj	\

@@ -328,6 +328,8 @@ hedabu: ..\inc\unoevent.hxx %_DEST%\inc%_EXT%\svtools\unoevent.hxx
 
 hedabu: ..\inc\stringtransfer.hxx %_DEST%\inc%_EXT%\svtools\stringtransfer.hxx
 
+hedabu: ..\inc\graphictools.hxx %_DEST%\inc%_EXT%\svtools\graphictools.hxx
+
 hedabu: ..\inc\ivctrl.hxx %_DEST%\inc%_EXT%\svtools\ivctrl.hxx
 hedabu: ..\inc\fileview.hxx %_DEST%\inc%_EXT%\svtools\fileview.hxx
 hedabu: ..\inc\templdlg.hxx %_DEST%\inc%_EXT%\svtools\templdlg.hxx
