@@ -95,6 +95,7 @@
     <type> com.sun.star.ucb.NameClashException                 </type>
     <type> com.sun.star.ucb.OpenCommandArgument2               </type>
     <type> com.sun.star.ucb.OpenMode                           </type>
+    <type> com.sun.star.ucb.PostCommandArgument2               </type>
     <type> com.sun.star.ucb.RememberAuthentication             </type>
     <type> com.sun.star.ucb.ResultSetException                 </type>
     <type> com.sun.star.ucb.TransferInfo                       </type>

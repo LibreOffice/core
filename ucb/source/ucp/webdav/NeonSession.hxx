@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,16 +93,33 @@ class NeonSession : public DAVSession
         sal_Int32               mProxyPort;
         HttpSession *           mHttpSession;
         DAVAuthListener *       mListener;
-        com::sun::star::uno::Reference<
-         com::sun::star::ucb::XCommandEnvironment > mEnv;
         DAVSessionFactory *     m_pSessionFactory;
         // Note: Uncomment the following if locking support is required
         // NeonLockSession *    mNeonLockSession;
 
-        static sal_Bool         sSockInited;
+        static sal_Bool           sSockInited;
+        static http_request_hooks mRequestHooks;
 
+        // @@@ THIS DOES NOT WORK ANY LONGER IF NEON WILL GET ABLE TO
+        // PROCESS MULTIPLE REQUESTS AT A TIME!!!
+        com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment > mEnv;
+
+        // @@@ THIS DOES NOT WORK ANY LONGER IF NEON WILL GET ABLE TO
+        // PROCESS MULTIPLE REQUESTS AT A TIME!!!
+        // Username/password entered during last request. Cleared, if
+        // request was processed successfully. Kept as long as request
+        // returns with an error.
         rtl::OUString mPrevUserName;
         rtl::OUString mPrevPassWord;
+
+        // @@@ THIS DOES NOT WORK ANY LONGER IF NEON WILL GET ABLE TO
+        // PROCESS MULTIPLE REQUESTS AT A TIME!!!
+        // The contwnt type / referer to add to the current request heder.
+        // Will be reset after request was processed.
+        rtl::OUString mCurrentReferer;
+
+        rtl::OUString mContentType;
 
     public:
         NeonSession( DAVSessionFactory* pSessionFactory,
@@ -166,6 +183,27 @@ class NeonSession : public DAVSession
                          com::sun::star::io::XInputStream > &   inInputStream,
                         const com::sun::star::uno::Reference<
                          com::sun::star::ucb::XCommandEnvironment >& inEnv )
+            throw ( DAVException );
+
+        virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+                        POST( const rtl::OUString & inPath,
+                           const rtl::OUString & rContentType,
+                           const rtl::OUString & rReferer,
+                           const com::sun::star::uno::Reference<
+                            com::sun::star::io::XInputStream > & inInputStream,
+                        const com::sun::star::uno::Reference<
+                            com::sun::star::ucb::XCommandEnvironment >& inEnv )
+            throw ( DAVException );
+
+        virtual void POST( const rtl::OUString & inPath,
+                           const rtl::OUString & rContentType,
+                           const rtl::OUString & rReferer,
+                           const com::sun::star::uno::Reference<
+                            com::sun::star::io::XInputStream > & inInputStream,
+                           com::sun::star::uno::Reference<
+                            com::sun::star::io::XOutputStream > & oOutputStream,
+                           const com::sun::star::uno::Reference<
+                            com::sun::star::ucb::XCommandEnvironment >& inEnv )
             throw ( DAVException );
 
         virtual void MKCOL( const ::rtl::OUString & inPath,
@@ -255,10 +293,12 @@ class NeonSession : public DAVSession
                                                  off_t progress,
                                                  off_t total );
 
-        // static
         static void NeonSession::StatusNotify( void * userdata,
                                                http_conn_status status,
                                                const char *info );
+
+        // pre-send-request callback
+        static void PreSendRequest( void * priv, sbuffer req );
 };
 
 }; // namespace_ucp

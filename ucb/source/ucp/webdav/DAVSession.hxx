@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
+ *  last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,27 @@ public:
         const com::sun::star::uno::Reference<
              com::sun::star::ucb::XCommandEnvironment >& inEnv )
         throw( DAVException ) = 0;
+
+    virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+                    POST( const rtl::OUString & inPath,
+                          const rtl::OUString & rContentType,
+                          const rtl::OUString & rReferer,
+                          const com::sun::star::uno::Reference<
+                           com::sun::star::io::XInputStream > & inInputStream,
+                       const com::sun::star::uno::Reference<
+                           com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        throw ( DAVException ) = 0;
+
+    virtual void POST( const rtl::OUString & inPath,
+                       const rtl::OUString & rContentType,
+                       const rtl::OUString & rReferer,
+                       const com::sun::star::uno::Reference<
+                        com::sun::star::io::XInputStream > & inInputStream,
+                       com::sun::star::uno::Reference<
+                        com::sun::star::io::XOutputStream > & oOutputStream,
+                       const com::sun::star::uno::Reference<
+                        com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        throw ( DAVException ) = 0;
 
     virtual void    MKCOL( const ::rtl::OUString & inPath,
                            const com::sun::star::uno::Reference<

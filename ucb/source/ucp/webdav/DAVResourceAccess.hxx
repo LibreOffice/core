@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,26 @@ public:
               const com::sun::star::uno::Reference<
                   com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( DAVException );
+
+    com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+    POST(     const rtl::OUString & rContentType,
+                const rtl::OUString & rReferer,
+              const com::sun::star::uno::Reference<
+                com::sun::star::io::XInputStream > & rInputStream,
+              const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        throw ( DAVException );
+
+    void
+    POST(     const rtl::OUString & rContentType,
+              const rtl::OUString & rReferer,
+              const com::sun::star::uno::Reference<
+                com::sun::star::io::XInputStream > & rInputStream,
+              com::sun::star::uno::Reference<
+                com::sun::star::io::XOutputStream > & rOutputStream,
+              const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        throw ( DAVException );
 
     void
     MKCOL(    const com::sun::star::uno::Reference<

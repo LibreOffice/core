@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,6 +373,65 @@ void DAVResourceAccess::PUT( const uno::Reference< io::XInputStream > & rStream,
         try
         {
             m_xSession->PUT( m_aPath, rStream, xEnv );
+        }
+        catch ( DAVException & e )
+        {
+            bRetry = handleException( e );
+            if ( !bRetry )
+                throw;
+        }
+    }
+    while ( bRetry );
+}
+
+//=========================================================================
+uno::Reference< io::XInputStream > DAVResourceAccess::POST(
+                const rtl::OUString & rContentType,
+                    const rtl::OUString & rReferer,
+                const uno::Reference< io::XInputStream > & rInputStream,
+                const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+    throw ( DAVException )
+{
+    uno::Reference< io::XInputStream > xStream;
+    sal_Bool bRetry;
+    do
+    {
+        bRetry = sal_False;
+        try
+        {
+            xStream = m_xSession->POST(
+                m_aPath, rContentType, rReferer, rInputStream, xEnv );
+        }
+        catch ( DAVException & e )
+        {
+            bRetry = handleException( e );
+            if ( !bRetry )
+                throw;
+        }
+    }
+    while ( bRetry );
+
+    return xStream;
+}
+
+//=========================================================================
+
+void DAVResourceAccess::POST(
+                const rtl::OUString & rContentType,
+                const rtl::OUString & rReferer,
+                const uno::Reference< io::XInputStream > & rInputStream,
+                uno::Reference< io::XOutputStream > & rOutputStream,
+                const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+    throw ( DAVException )
+{
+    sal_Bool bRetry;
+    do
+    {
+        bRetry = sal_False;
+        try
+        {
+            m_xSession->POST( m_aPath, rContentType, rReferer,
+                              rInputStream, rOutputStream, xEnv );
         }
         catch ( DAVException & e )
         {

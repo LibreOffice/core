@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_POSTCOMMANDARGUMENT2_HPP_
+#include <com/sun/star/ucb/PostCommandArgument2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -671,6 +674,78 @@ uno::Any SAL_CALL Content::execute(
         }
 
         transfer( transferArgs, Environment );
+    }
+    else if ( aCommand.Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "post" ) ) )
+      {
+        //////////////////////////////////////////////////////////////////
+        // post
+          //////////////////////////////////////////////////////////////////
+
+        star::ucb::PostCommandArgument2 aArg;
+        if ( !( aCommand.Argument >>= aArg ) )
+        {
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny( lang::IllegalArgumentException(
+                                    rtl::OUString::createFromAscii(
+                                        "Wrong argument type!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                Environment );
+            // Unreachable
+        }
+
+        uno::Reference< io::XActiveDataSink > xSink(
+                                        aArg.Sink, uno::UNO_QUERY );
+        if ( xSink.is() )
+        {
+            try
+            {
+                uno::Reference< io::XInputStream > xResult
+                    = m_aResAccess.POST( aArg.MediaType,
+                                         aArg.Referer,
+                                         aArg.Source,
+                                         Environment );
+                xSink->setInputStream( xResult );
+            }
+            catch ( DAVException const & e )
+            {
+                cancelCommandExecution( e, Environment, sal_True );
+                // Unreachable
+            }
+        }
+        else
+        {
+            uno::Reference< io::XOutputStream > xResult(
+                                            aArg.Sink, uno::UNO_QUERY );
+            if ( xResult.is() )
+            {
+                try
+                {
+                    m_aResAccess.POST( aArg.MediaType,
+                                       aArg.Referer,
+                                       aArg.Source,
+                                       xResult,
+                                       Environment );
+                }
+                catch ( DAVException const & e )
+                {
+                    cancelCommandExecution( e, Environment, sal_True );
+                    // Unreachable
+                }
+            }
+            else
+            {
+                ucbhelper::cancelCommandExecution(
+                    uno::makeAny(
+                        star::ucb::UnsupportedDataSinkException(
+                            rtl::OUString(),
+                            static_cast< cppu::OWeakObject * >( this ),
+                            aArg.Sink ) ),
+                    Environment );
+                // Unreachable
+            }
+        }
     }
       else
     {
