@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
+ *  last change: $Author: sab $ $Date: 2000-10-10 10:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1489,9 +1489,9 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell)
         aCell.bIsMatrixCovered = sal_False;
         aCell.bIsMatrixBase = sal_False;
         aCell.aShapes.clear();
-        aCell.aShapes.push_back(aCurrentShape);
         if (bHasShape)
         {
+            aCell.aShapes.push_back(aCurrentShape);
             while (bHasShapes &&
                 aCurrentShape.aAddress.Col() == nCellCol &&
                 aCurrentShape.aAddress.Row() == nCellRow &&
