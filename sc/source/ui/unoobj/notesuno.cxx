@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notesuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,13 +199,15 @@ uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursorByRa
 rtl::OUString SAL_CALL ScAnnotationObj::getString() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScPostIt aNote;
+    String aText;
     if ( pDocShell )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
+            ScPostIt aNote(pDoc);
         pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
+            aText =  aNote.GetText();
     }
-    return aNote.GetText();
+    return aText;
 }
 
 void SAL_CALL ScAnnotationObj::setString( const rtl::OUString& aText ) throw(uno::RuntimeException)
@@ -272,37 +274,43 @@ table::CellAddress SAL_CALL ScAnnotationObj::getPosition() throw(uno::RuntimeExc
 rtl::OUString SAL_CALL ScAnnotationObj::getAuthor() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScPostIt aNote;
+        String aAuthor;
     if ( pDocShell )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
+            ScPostIt aNote(pDoc);
         pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
+                aAuthor = aNote.GetAuthor();
     }
-    return aNote.GetAuthor();
+    return aAuthor;
 }
 
 rtl::OUString SAL_CALL ScAnnotationObj::getDate() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScPostIt aNote;
+        String aDate;
     if ( pDocShell )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
+            ScPostIt aNote(pDoc);
         pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
+                aDate = aNote.GetDate();
     }
-    return aNote.GetDate();
+    return aDate;
 }
 
 sal_Bool SAL_CALL ScAnnotationObj::getIsVisible() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScPostIt aNote;
+    BOOL bShown = FALSE;
     if ( pDocShell )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
+            ScPostIt aNote(pDoc);
         pDoc->GetNote( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), aNote );
+                bShown = aNote.IsShown();
     }
-    return aNote.IsShown();
+    return bShown;
 }
 
 void SAL_CALL ScAnnotationObj::setIsVisible( sal_Bool bIsVisible ) throw(uno::RuntimeException)
@@ -319,7 +327,7 @@ void SAL_CALL ScAnnotationObj::setIsVisible( sal_Bool bIsVisible ) throw(uno::Ru
         SCCOL nCol = aCellPos.Col();
         SCROW nRow = aCellPos.Row();
         SCTAB nTab = aCellPos.Tab();
-        ScPostIt aNote;
+        ScPostIt aNote(pDoc);
         if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) )
         {
             BOOL bHad = pDoc->HasNoteObject( nCol, nRow, nTab );
