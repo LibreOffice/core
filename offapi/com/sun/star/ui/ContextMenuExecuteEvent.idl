@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContextMenuExecuteEvent.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-15 10:56:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module ui {
 
 /** contains all information about the requested context menu.
  */
-struct  ContextMenuExecuteEvent
+published struct  ContextMenuExecuteEvent
 {
     /** contains the window where the context menu has been requested
      */
