@@ -2,8 +2,8 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
-#   last change: $Author: pjunck $ $Date: 2004-11-02 16:49:59 $
+#   $Revision: 1.3 $
+#   last change: $Author: rt $ $Date: 2004-11-04 08:40:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,8 @@ NO_DEFAULT_STL=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  libs.mk
 CDEFS+= -DYY_NEVER_INTERACTIVE=1
+
+UWINAPILIB=$(0)
 
 # --- Files --------------------------------------------------------
 
