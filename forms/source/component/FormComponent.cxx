@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: vg $ $Date: 2001-04-04 12:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@
 #ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
 #endif
+
+#include <comphelper/basicio.hxx>
 
 //... namespace frm .......................................................
 namespace frm
@@ -460,7 +462,7 @@ Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeE
 void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XObjectInputStream >& _rxInStream)
 {
     ::rtl::OUString sHelpText;
-    _rxInStream >> sHelpText;
+    ::comphelper::operator>>( _rxInStream, sHelpText);
     try
     {
         if (m_xAggregateSet.is())
@@ -485,7 +487,7 @@ void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XO
     {
         OSL_ENSURE(sal_False, "OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
     }
-    _rxOutStream << sHelpText;
+    ::comphelper::operator<<( _rxOutStream, sHelpText);
 }
 
 //------------------------------------------------------------------
@@ -657,9 +659,9 @@ void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>&
     _rxOutStream->writeShort(0x0003);
 
     // 3. Schreiben der allgemeinen Properties
-    _rxOutStream << m_aName;
+    ::comphelper::operator<<( _rxOutStream, m_aName);
     _rxOutStream->writeShort(m_nTabIndex);
-    _rxOutStream << m_aTag; // 3. Version
+    ::comphelper::operator<<( _rxOutStream, m_aTag); // 3. version
 
     // !!! IMPORTANT NOTE !!!
     // don't write any new members here : this wouldn't be compatible with older versions, as OControlModel
@@ -694,11 +696,11 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
     UINT16 nVersion = InStream->readShort();
 
     // 3. Lesen der allgemeinen Properties
-    InStream >> m_aName;
+    ::comphelper::operator>>( InStream, m_aName);
     m_nTabIndex  = InStream->readShort();
 
     if (nVersion > 0x0002)
-        InStream >> m_aTag;
+        ::comphelper::operator>>( InStream, m_aTag);
 
     // we had a version where we wrote the help text
     if (nVersion == 0x0004)
@@ -921,7 +923,7 @@ void SAL_CALL OBoundControlModel::write( const Reference<stario::XObjectOutputSt
     _rxOutStream->writeShort(0x0002);
 
     // Controlsource
-    _rxOutStream << m_aControlSource;
+    ::comphelper::operator<<( _rxOutStream, m_aControlSource);
 
     // !!! IMPORTANT NOTE !!!
     // don't write any new members here : this wouldn't be compatible with older versions, as OBoundControlModel
@@ -1007,7 +1009,7 @@ void SAL_CALL OBoundControlModel::read( const Reference< stario::XObjectInputStr
 
     osl::MutexGuard aGuard(m_aMutex);
     UINT16 nVersion = _rxInStream->readShort();
-    _rxInStream >> m_aControlSource;
+    ::comphelper::operator>>( _rxInStream, m_aControlSource);
 }
 
 //------------------------------------------------------------------------------
