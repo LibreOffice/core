@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-28 16:50:03 $
+ *  last change: $Author: pl $ $Date: 2000-11-28 17:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,18 +927,17 @@ void SalFrameData::SetSize( const Size &rSize )
     values.height   = rSize.Height();
     if (values.width > 0 && values.height > 0)
     {
-        Arg args[10];
-           int n = 0;
-        XtSetArg(args[n], XtNheight, rSize.Height());   n++;
-        XtSetArg(args[n], XtNwidth,  rSize.Width());    n++;
+        XtResizeWidget( hShell_, rSize.Width(), rSize.Height(), 0 );
         if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
         {
+            Arg args[10];
+            int n = 0;
             XtSetArg( args[n], XtNminWidth, rSize.Width() );    n++;
             XtSetArg( args[n], XtNminHeight, rSize.Height() );  n++;
             XtSetArg( args[n], XtNmaxWidth, rSize.Width() );    n++;
             XtSetArg( args[n], XtNmaxHeight, rSize.Height() );  n++;
+            XtSetValues( hShell_, args, n );
         }
-        XtSetValues( hShell_, args, n );
 
         if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
             MarkWindowAsGoodPositioned( XtWindow( hShell_ ) );
@@ -982,20 +981,17 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
                                 & aChild );
      }
 
-    Arg args[10];
-       int n = 0;
-    XtSetArg(args[n], XtNheight, values.height);    n++;
-    XtSetArg(args[n], XtNwidth,  values.width);     n++;
-    XtSetArg(args[n], XtNx,      values.x);         n++;
-    XtSetArg(args[n], XtNy,      values.y);         n++;
+    XtConfigureWidget( hShell_, values.x, values.y, values.width, values.height, 0 );
     if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
     {
+        Arg args[10];
+        int n = 0;
         XtSetArg( args[n], XtNminWidth, values.width );     n++;
         XtSetArg( args[n], XtNminHeight, values.height );   n++;
         XtSetArg( args[n], XtNmaxWidth, values.width );     n++;
         XtSetArg( args[n], XtNmaxHeight, values.height );   n++;
+        XtSetValues( hShell_, args, n );
     }
-    XtSetValues( hShell_, args, n );
 
     if ( aPosSize_ != rPosSize )
     {
