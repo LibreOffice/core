@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 07:53:41 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ TabPage RID_TP_GENERAL
         Text[ polish ] = "Sprawozdanie z obrady";
         Text[ portuguese_brazilian ] = "Conference proceedings";
         Text[ japanese ] = "‰ï•ñ";
-        Text[ korean ] = "ÇĞÈ¸º¸°í¼­";
+        Text[ korean ] = "È¸ÀÇ·Ï";
         Text[ chinese_simplified ] = "»áÒé±¨¸æ";
         Text[ chinese_traditional ] = "·|Ä³³ø§i";
         Text[ arabic ] = "ÈÑæÊæßæá ÇÌÊãÇÚ";
@@ -486,7 +486,7 @@ TabPage RID_TP_GENERAL
         Text[ polish ] = "Dokumentacja techn.";
         Text[ portuguese_brazilian ] = "Manual";
         Text[ japanese ] = "ÏÆ­±Ù";
-        Text[ korean ] = "±â¼ú¹®¼­";
+        Text[ korean ] = "±â¼ú ¹®¼­";
         Text[ chinese_simplified ] = "¼¼ÊõÎÄÏ×";
         Text[ chinese_traditional ] = "§Ş³N»¡©ú®Ñ";
         Text[ arabic ] = "Ïáíá ÇÓÊÎÏÇã";
@@ -514,7 +514,7 @@ TabPage RID_TP_GENERAL
         Text[ japanese ] = "‘²‹Æ˜_•¶";
         Text[ korean ] = "´ëÇĞÁ¹¾÷³í¹®";
         Text[ chinese_simplified ] = "´óÑ§±ÏÒµÂÛÎÄ";
-        Text[ chinese_traditional ] = "²¦·~½×¤å";
+        Text[ chinese_traditional ] = "²z¤u¬ì¤j¾Ç²¦·~½×¤å";
         Text[ arabic ] = "ÑÓÇáÉ ãÇÌÓÊíÑ";
         Text[ turkish ] = "Tez";
         Text[ language_user1 ] = " ";
@@ -538,7 +538,7 @@ TabPage RID_TP_GENERAL
         Text[ polish ] = "Ró¿ne";
         Text[ portuguese_brazilian ] = "Miscellaneous";
         Text[ japanese ] = "”õl";
-        Text[ korean ] = "±âÅ¸";
+        Text[ korean ] = "¿©·¯ °¡Áö";
         Text[ chinese_simplified ] = "ÆäËü";
         Text[ chinese_traditional ] = "Âø¶µ";
         Text[ arabic ] = "ãäæÚÇÊ";
@@ -618,7 +618,7 @@ TabPage RID_TP_GENERAL
         Text[ japanese ] = "Œ¤‹†•ñ";
         Text[ korean ] = "¿¬±¸º¸°í¼­";
         Text[ chinese_simplified ] = "¿ÆÑĞ±¨¸æ";
-        Text[ chinese_traditional ] = "¬ã¨s³ø§i";
+        Text[ chinese_traditional ] = "¬ì¬ã³ø§i";
         Text[ arabic ] = "ÊŞÑíÑ Úä ÚãáíÉ ÇáÈÍË";
         Text[ turkish ] = "Araştırma raporu";
         Text[ language_user1 ] = " ";
@@ -642,7 +642,7 @@ TabPage RID_TP_GENERAL
         Text[ polish ] = "Nieopublikowane";
         Text[ portuguese_brazilian ] = "Unpublished";
         Text[ japanese ] = "–¢”­•\\";
-        Text[ korean ] = "°øÇ¥µÇÁö¡¡¾ÊÀº";
+        Text[ korean ] = "ºñ°ø°³";
         Text[ chinese_simplified ] = "ÉĞÎ´·¢±íµÄ";
         Text[ chinese_traditional ] = "©|¥¼µoªí";
         Text[ arabic ] = "áã íõäÔÑ ÈÚÏ";
@@ -1666,4 +1666,5 @@ String ST_CUSTOM5
     Text[ catalan ] = "Campo de usuario ~5";
     Text[ finnish ] = "Käyttäjän määrittämä kenttä ~5";
 };
+
 
