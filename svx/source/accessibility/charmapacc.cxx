@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmapacc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-20 11:49:08 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 07:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,6 +863,65 @@ uno::Reference< accessibility::XAccessible > SAL_CALL SvxShowCharSetItemAcc::get
 {
     return uno::Reference< accessibility::XAccessible >();
 }
+// -----------------------------------------------------------------------------
+sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getForeground(  ) throw (RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+
+    sal_Int32 nColor = 0;
+    if ( mpParent )
+    {
+        if ( mpParent->IsControlForeground() )
+            nColor = mpParent->GetControlForeground().GetColor();
+        else
+        {
+            Font aFont;
+            if ( mpParent->IsControlFont() )
+                aFont = mpParent->GetControlFont();
+            else
+                aFont = mpParent->GetFont();
+            nColor = aFont.GetColor().GetColor();
+        }
+    }
+
+    return nColor;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getBackground(  ) throw (RuntimeException)
+{
+    OExternalLockGuard aGuard( this  );
+    sal_Int32 nColor = 0;
+    if ( mpParent )
+    {
+        if ( mpParent->IsControlBackground() )
+            nColor = mpParent->GetControlBackground().GetColor();
+        else
+            nColor = mpParent->GetBackground().GetColor().GetColor();
+    }
+
+    return nColor;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 SAL_CALL SvxShowCharSetAcc::getForeground(  ) throw (RuntimeException)
+{
+    OExternalLockGuard aGuard( this );
+
+    sal_Int32 nColor = 0;
+    if ( m_pParent )
+        nColor = m_pParent->getForeground();
+    return nColor;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 SAL_CALL SvxShowCharSetAcc::getBackground(  ) throw (RuntimeException)
+{
+    OExternalLockGuard aGuard( this  );
+    sal_Int32 nColor = 0;
+    if ( m_pParent )
+        nColor = m_pParent->getBackground();
+    return nColor;
+}
+// -----------------------------------------------------------------------------
+
 // -----------------------------------------------------------------------------
 } // namespace svx
 // -----------------------------------------------------------------------------
