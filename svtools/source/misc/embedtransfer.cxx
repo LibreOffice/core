@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedtransfer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:00:57 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -225,7 +228,18 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
 
     //TODO/LATER: status needs to become sal_Int64
     rDesc.mnOle2Misc = xObj->getStatus( rDesc.mnViewAspect );
-    awt::Size aSz = xObj->getVisualAreaSize( rDesc.mnViewAspect );
+
+    awt::Size aSz;
+    try
+    {
+        aSz = xObj->getVisualAreaSize( rDesc.mnViewAspect );
+    }
+    catch( embed::NoVisualAreaSizeException& )
+    {
+        OSL_ENSURE( sal_False, "Can not get visual area size!\n" );
+        aSz.Width = 5000;
+        aSz.Height = 5000;
+    }
 
     // TODO/LEAN: getMapUnit can switch object to running state
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rDesc.mnViewAspect ) );
