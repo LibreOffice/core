@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 14:00:41 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ ModalDialog DLG_COLOR
         Text [ english_us ] = "~Cyan" ;
         Text [ portuguese_brazilian ] = "~Ciano" ;
         Text [ swedish ] = "~Cyan" ;
-        Text [ danish ] = "Cyan" ;
+        Text [ danish ] = "~Turkis" ;
         Text [ italian ] = "Ciano" ;
         Text [ spanish ] = "Cian" ;
         Text [ french ] = "~Cyan" ;
@@ -145,6 +145,8 @@ ModalDialog DLG_COLOR
         Text[ hebrew ] = "‮צבע קיין (כחול עמוק)‬";
         Text[ hindi ] = "~सियान";
         Text[ slovak ] = "~Azúrová";
+        Text[ hungarian ] = "~Ciánkék";
+        Text[ slovenian ] = "~Cijan";
     };
     FixedText FT_MAGENTA
     {
@@ -155,7 +157,7 @@ ModalDialog DLG_COLOR
         Text [ english_us ] = "~Magenta" ;
         Text [ portuguese_brazilian ] = "~Magenta" ;
         Text [ swedish ] = "~Magenta" ;
-        Text [ danish ] = "Magenta" ;
+        Text [ danish ] = "~Magentar�d" ;
         Text [ italian ] = "~Magenta" ;
         Text [ spanish ] = "~Magenta" ;
         Text [ french ] = "~Magenta" ;
@@ -180,6 +182,8 @@ ModalDialog DLG_COLOR
         Text[ hebrew ] = "‮צבע מג'נטה‬";
         Text[ hindi ] = "~मेज़न्टा";
         Text[ slovak ] = "~Purpurová";
+        Text[ hungarian ] = "~Lila";
+        Text[ slovenian ] = "Ma~genta";
     };
     FixedText FT_YELLOW
     {
@@ -190,7 +194,7 @@ ModalDialog DLG_COLOR
         Text [ english_us ] = "~Yellow" ;
         Text [ portuguese_brazilian ] = "~Amarelo" ;
         Text [ swedish ] = "~Yellow" ;
-        Text [ danish ] = "Gul" ;
+        Text [ danish ] = "~Gul" ;
         Text [ italian ] = "~Giallo" ;
         Text [ spanish ] = "Amarillo" ;
         Text [ french ] = "~Jaune" ;
@@ -215,6 +219,8 @@ ModalDialog DLG_COLOR
         Text[ hebrew ] = "‮צהוב‬";
         Text[ hindi ] = "~पीला";
         Text[ slovak ] = "Ž~ltá";
+        Text[ hungarian ] = "Sá~rga";
+        Text[ slovenian ] = "R~umena";
     };
     FixedText FT_KEY
     {
@@ -225,7 +231,7 @@ ModalDialog DLG_COLOR
         Text [ english_us ] = "~Key" ;
         Text [ portuguese_brazilian ] = "~Preto" ;
         Text [ swedish ] = "~Nyckel" ;
-        Text [ danish ] = "N�gle" ;
+        Text [ danish ] = "~Sort" ;
         Text [ italian ] = "Chiave" ;
         Text [ spanish ] = "~Llave" ;
         Text [ french ] = "~Kh�l" ;
@@ -250,6 +256,8 @@ ModalDialog DLG_COLOR
         Text[ hebrew ] = "‮מפתח‬";
         Text[ hindi ] = "~चाभी";
         Text[ slovak ] = "~Kľúč";
+        Text[ hungarian ] = "~Fekete";
+        Text[ slovenian ] = "~Črna";
     };
     MetricField NUM_CYAN
     {
@@ -312,7 +320,7 @@ ModalDialog DLG_COLOR
         Text [ english_us ] = "~Red" ;
         Text [ portuguese_brazilian ] = "~Vermelho" ;
         Text [ swedish ] = "~R�tt" ;
-        Text [ danish ] = "R�d" ;
+        Text [ danish ] = "~R�d" ;
         Text [ italian ] = "~Rosso" ;
         Text [ spanish ] = "~Rojo" ;
         Text [ french ] = "~Rouge" ;
@@ -337,6 +345,8 @@ ModalDialog DLG_COLOR
         Text[ hebrew ] = "‮אדום‬";
         Text[ hindi ] = "~लाल";
         Text[ slovak ] = "Če~rvená";
+        Text[ hungarian ] = "~Vörös";
+        Text[ slovenian ] = "~Rdeča";
     };
     FixedText FT_GREEN
     {
@@ -347,7 +357,7 @@ ModalDialog DLG_COLOR
         Text [ english_us ] = "~Green" ;
         Text [ portuguese_brazilian ] = "Ver~de" ;
         Text [ swedish ] = "~Gr�nt" ;
-        Text [ danish ] = "Gr�n" ;
+        Text [ danish ] = "~Gr�n" ;
         Text [ italian ] = "~Verde" ;
         Text [ spanish ] = "~Verde" ;
         Text [ french ] = "~Vert" ;
@@ -372,6 +382,8 @@ ModalDialog DLG_COLOR
         Text[ hebrew ] = "‮ירוק‬";
         Text[ hindi ] = "~हरा";
         Text[ slovak ] = "Zele~ná";
+        Text[ hungarian ] = "~Zöld";
+        Text[ slovenian ] = "~Zelena";
     };
     FixedText FT_BLUE
     {
@@ -382,7 +394,7 @@ ModalDialog DLG_COLOR
         Text [ english_us ] = "~Blue" ;
         Text [ portuguese_brazilian ] = "A~zul" ;
         Text [ swedish ] = "~Bl�tt" ;
-        Text [ danish ] = "Bl�" ;
+        Text [ danish ] = "~Bl�" ;
         Text [ italian ] = "~Blu" ;
         Text [ spanish ] = "~Azul" ;
         Text [ french ] = "~Bleu" ;
@@ -407,6 +419,8 @@ ModalDialog DLG_COLOR
         Text[ hebrew ] = "‮כחול‬";
         Text[ hindi ] = "~नीला";
         Text[ slovak ] = "Mo~drá";
+        Text[ hungarian ] = "~Kék";
+        Text[ slovenian ] = "~Modra";
     };
     NumericField NUM_RED
     {
@@ -450,7 +464,7 @@ ModalDialog DLG_COLOR
         Text [ english_us ] = "H~ue" ;
         Text [ portuguese_brazilian ] = "Ma~tiz" ;
         Text [ swedish ] = "~F�rg" ;
-        Text [ danish ] = "Farve" ;
+        Text [ danish ] = "Tone" ;
         Text [ italian ] = "Colore" ;
         Text [ spanish ] = "~Tinte" ;
         Text [ french ] = "~Teinte" ;
@@ -475,6 +489,8 @@ ModalDialog DLG_COLOR
         Text[ hebrew ] = "‮גוון‬";
         Text[ hindi ] = "ह~यू";
         Text[ slovak ] = "Od~tieň";
+        Text[ hungarian ] = "Árny~alat";
+        Text[ slovenian ] = "~Odtenek";
     };
     NumericField NUM_HUE
     {
@@ -496,7 +512,7 @@ ModalDialog DLG_COLOR
         Text [ english_us ] = "~Saturation" ;
         Text [ portuguese_brazilian ] = "~Satura��o" ;
         Text [ swedish ] = "M�~ttnad" ;
-        Text [ danish ] = "M�tning" ;
+        Text [ danish ] = "~M�tning" ;
         Text [ italian ] = "~Saturazione" ;
         Text [ spanish ] = "~Saturaci�n" ;
         Text [ french ] = "S~aturation" ;
@@ -521,6 +537,8 @@ ModalDialog DLG_COLOR
         Text[ hebrew ] = "‮רווית הצבע‬";
         Text[ hindi ] = "प~रिपूर्णता";
         Text[ slovak ] = "~Sýtosť";
+        Text[ hungarian ] = "T~elítettség";
+        Text[ slovenian ] = "~Nasičenost";
     };
     NumericField NUM_SATURATION
     {
@@ -567,6 +585,8 @@ ModalDialog DLG_COLOR
         Text[ hebrew ] = "‮בהירות‬";
         Text[ hindi ] = "Bright~ness";
         Text[ slovak ] = "~Jas";
+        Text[ hungarian ] = "Fé~nyerő";
+        Text[ slovenian ] = "~Svetlost";
     };
     NumericField NUM_LUMINANCE
     {
@@ -626,7 +646,10 @@ ModalDialog DLG_COLOR
     Text[ hebrew ] = "‮צבע‬";
     Text[ hindi ] = "रंग";
     Text[ slovak ] = "Farba";
+    Text[ hungarian ] = "Szín";
+    Text[ slovenian ] = "Barva";
 };
+
 
 
 
