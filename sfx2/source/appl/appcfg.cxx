@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-29 08:50:42 $
+ *  last change: $Author: pb $ $Date: 2001-07-06 05:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,15 +691,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aHelpOptions.SetHelpAgentAutoStartMode( ((const SfxBoolItem *)pItem)->GetValue() );
-    }
-
-    // AutoHelpAgent-Reset
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_AUTOHELPAGENT_RESET ), TRUE, &pItem) )
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        BOOL bReset = ( (const SfxBoolItem*)pItem )->GetValue();
-        if ( bReset )
-            aHelpOptions.resetAgentIgnoreURLCounter();
     }
 
     // help agent timeout
