@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-14 10:33:38 $
+ *  last change: $Author: od $ $Date: 2002-12-02 07:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,100 @@ public:
                             sal_uInt16& rVirtPageNo, sal_uInt16 nAccSelPage );
     sal_Bool IsPreViewDocPos( Point& rDocPt, sal_uInt16 nRowCol, sal_uInt16 nSttPage,
                             const Size& rMaxSize );
+    /** init page preview layout - new method, replacing <CalcPreViewPage>
+
+        OD 27.11.2002 #103492#
+        initialize the page preview settings for a given layout.
+        side effects:
+        (1) data struture for current preview settings are initialized and set.
+        (2) if parameter <_bCalcScale> is true, mapping mode with calculated
+        scaling is set at the output device and the zoom at the view options is
+        set with the calculated scaling.
+
+        @author OD
+
+        @param _nCols
+        input parameter - initial number of page columns in the preview.
+
+        @param _nRows
+        input parameter - initial number of page rows in the preview.
+
+        @param _orPreviewDocSize
+        output parameter - size of the document in the proposed preview layout
+        included the spacing between the pages.
+
+        @param _bCalcScale
+        input parameter - control, if method should calculate the needed
+        scaling for the proposed preview layout for the given window size
+        and sets the scaling at the output device and the view options.
+
+        @param _pPxWinSize
+        input parameter - window size in which the preview will be displayed and
+        for which the scaling will be calculated.
+
+        @return boolean, indicating, if preview layout is successful initialized.
+    */
+    bool InitPreviewLayout( const sal_uInt16 _nCols,
+                            const sal_uInt16 _nRows,
+                            Size&            _orPreviewDocSize,
+                            const bool       _bCalcScale,
+                            const Size*      _pPxWinSize = NULL
+                          );
+
+    /** prepare paint of page preview
+
+        OD 28.11.2002 #103492#
+        With the valid preview layout settings - calculated and set by method
+        <InitPreviewLayout> - the paint of a specific part of the virtual
+        preview document is prepared. The corresponding part is given by either
+        a start page (parameter <_nProposedStartPageNum>) or a absolute position
+        (parameter <_aProposedStartPoint>).
+        The accessibility preview will also be updated via a corresponding
+        method call.
+
+        @author OD
+
+        @param _nProposedStartPageNum [0..<number of document pages>]
+        input parameter - proposed number of page, which should be painted in
+        the left-top-corner in the current output device.
+
+        @param _nProposedStartPos [(0,0)..<PreviewDocumentSize>]
+        input parameter - proposed absolute position in the virtual preview
+        document, which should be painted in the left-top-corner in the current
+        output device.
+
+        @param _onStartPageNum
+        output parameter - physical number of page, which will be painted in the
+        left-top-corner in the current output device.
+
+        @param _onStartPageVirtNum
+        output parameter - virtual number of page, which will be painted in the
+        left-top-corner in the current output device.
+
+        @param _oaStartPos
+        output parameter - absolute position of the virtual preview document,
+        which will be painted in the left-top-corner in the current output device.
+
+        @return boolean, indicating, if prepare of preview paint was successful.
+    */
+    bool PreparePreviewPaint( const sal_uInt16 _nProposedStartPageNum,
+                              const Point      _aProposedStartPos,
+                              sal_uInt16&      _onStartPageNum,
+                              sal_uInt16&      _onStartPageVirtNum,
+                              Point&           _oaStartPos
+                            );
+
+    /** paint prepared preview
+
+        OD 28.11.2002 #103492#
+
+        @author OD
+
+        @return boolean, indicating, if paint of preview was performed
+    */
+    bool PaintPreview( const sal_uInt16 _nSelectedPageNum,
+                       const Rectangle  _aOutRect
+                     );
 
     // Prospekt-Format drucken
     void PrintProspect( SwPrtOptions&, SfxProgress& );
