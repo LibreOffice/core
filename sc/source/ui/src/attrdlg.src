@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:39:54 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ english_us ] = "Font Effects";
                 Text[ portuguese ] = "Efeitos do tipo de letra";
                 Text[ russian ] = "έττεκς ψπθτςΰ";
-                Text[ greek ] = "Εφέ γραφής";
+                Text[ greek ] = "Εφέ γραμματοσειράς";
                 Text[ dutch ] = "Schrifteffect";
                 Text[ french ] = "Effets de caractθres";
                 Text[ spanish ] = "Efecto de fuente";
@@ -450,7 +450,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ russian ] = "Ηΰωθςΰ ÿχεικθ δειρςβσες ςξλόκξ οξρλε ηΰωθςϋ ςεκσωεγξ λθρςΰ.\n\nΔλÿ ηΰωθςϋ λθρςΰ βϋαεπθςε β μενώ 'Ρεπβθρ' κξμΰνδσ 'Ηΰωθςΰ δξκσμενςΰ', ΰ ηΰςεμ κξμΰνδσ 'Òΰαλθφΰ'.";
         Text[ polish ] = "Ochrona komσrek aktywna bκdzie dopiero po zabezpieczeniu aktualnego arkusza.\n\nNaleΏy wybraζ w tym celu z menu 'Narzκdzia' polecenie 'Chroρ dokument', a nastκpnie polecenie 'Arkusz'.";
         Text[ japanese ] = "ΎΩ‚Μ•Ϋμ‚Ν»έ‚Μ•\\‚ª•Ϋμ‚³‚κ‚Δ‚Ά‚ι‚Μ‚έ—Lψ‚Ε‚·B\n\n•\\‚π•Ϋμ‚·‚ι‚Ι‚ΝAÒΖ­°‚ΕΒ°Ω¨Δή·­ÒέΔ‚Μ•Ϋμ¨•\\‚π‘I‘π‚µ‚ά‚·B";
-        Text[ chinese_traditional ] = "¥u¦³¦b±zΏE¬΅«OΕ@¤u§@ªν«α΅Aΐx¦s®ζ¤~·|¨ό¨μ«OΕ@΅C\n\n½Π±z«φ¤@¤U³o­Σ¥\\―ΰªνªΊ©R¥O΅G\"«OΕ@¤ε¥σ\"΅A\"¤u§@ªν\"΅C";
+        Text[ chinese_traditional ] = "¥u¦³¦b±z±Ò°Κ«OΕ@¤u§@ªν«α΅Aΐx¦s®ζ¤~·|¨ό¨μ«OΕ@΅C\n\n½Π±z«φ¤@¤U³o­Σ¥\\―ΰªνªΊ©R¥O΅G\"«OΕ@¤ε¥σ\"΅A\"¤u§@ªν\"΅C";
         Text[ arabic ] = "αΗ ΚΥΘΝ ΝγΗνΙ ΗαΞαΗνΗ έΪψΗαΙ΅ ΕαΗ ΪδΟγΗ νίζδ ΗαΜΟζα ΗαΝΗαν γΝγν.\n\nαΚδένΠ Παί ΗαΡΜΗΑ ΗΞΚνΗΡ ΗαΓγΡ 'ΝγΗνΙ ΗαγΣΚδΟ' γδ ΗαήΗΖγΙ 'ΓΟζΗΚ'΅ Λγ ΗαΓγΡ 'ΜΟζα'.";
         Text[ greek ] = "Η προστασία κελιών ισχύει μόνο εφόσον τεθεί ο τρέχων πίνακας υπό προστασία.\n\nΓια να επιτευχθεί αυτό επιλέξτε στο μενού 'Εργαλεία' την εντολή 'Προστασία εγγράφου' και στη συνέχεια 'Πίνακας'.";
         Text[ korean ] = "ΌΏ ΊΈΘ£΄Β ΗφΐηΐΗ ½ΓΖ®°΅ ΊΈΘ£µΗΎϊΐ»¶§ΈΈ ΐ―ΘΏΗΥ΄Ο΄Ω.  \n\n'µµ±Έ'Έή΄ΊΏ΅Ό­ 'Ή®Ό­ΊΈΘ£'Έ¦ Ό±ΕΓΗΡ ΄Ωΐ½, '½ΓΖ®'Έ¦ ΑφΑ¤ΗΟ½Κ½ΓΏΐ.";
