@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-19 08:53:58 $
+ *  last change: $Author: gt $ $Date: 2002-03-19 14:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,10 +725,10 @@ void SvxRectCtlAccessibleContext::setDescription( const OUString& rDescr )
 {
     Any                     aPreVal, aPostVal;
     {
+        ::osl::MutexGuard   aGuard( m_aMutex );
+
         aPreVal <<= msDescription;
         aPostVal <<= rDescr;
-
-        ::osl::MutexGuard   aGuard( m_aMutex );
 
         msDescription = rDescr;
     }

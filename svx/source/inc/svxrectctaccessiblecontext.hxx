@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-19 08:54:40 $
+ *  last change: $Author: gt $ $Date: 2002-03-19 14:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ typedef ::cppu::WeakAggComponentImplHelper6<
             ::com::sun::star::lang::XServiceInfo >
             SvxRectCtlAccessibleContext_Base;
 
-class SvxRectCtlAccessibleContext : public SvxRectCtlAccessibleContext_Base, public ::comphelper::OBaseMutex
+class SvxRectCtlAccessibleContext : public ::comphelper::OBaseMutex, public SvxRectCtlAccessibleContext_Base
 {
 public:
     //=====  internal  ========================================================
