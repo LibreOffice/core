@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-05 16:33:03 $
+ *  last change: $Author: sab $ $Date: 2002-02-19 08:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,14 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     void    AddState(sal_Int16 aState)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    void    RemoveState(sal_Int16 aState)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    void    Compare(const AccessibleStateSetHelper& rComparativeValue,
+                        AccessibleStateSetHelper& rOldStates,
+                        AccessibleStateSetHelper& rNewStates)
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XTypeProvider  ===================================================
