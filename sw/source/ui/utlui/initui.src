@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 15:44:02 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "­¶";
         TEXT[ arabic ] = "ÇáÕİÍÉ";
         TEXT[ greek ] = "Óåëßäá";
-        TEXT[ korean ] = "ÆäÀÌÁö";
+        TEXT[ korean ] = "ÂÊ";
         TEXT[ turkish ] = "Sayfa";
         TEXT[ language_user1 ] = " ";
     };
@@ -115,7 +115,7 @@ Resource RID_SW_SHELLRES
         Text[ chinese_traditional ] = "¦æ";
         Text[ arabic ] = "ÇáÓØÑ";
         Text[ greek ] = "ÃñáììŞ";
-        Text[ korean ] = "¼±";
+        Text[ korean ] = "Çà";
         Text[ turkish ] = "Satır";
         Text[ language_user1 ] = " ";
     };
@@ -193,7 +193,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "** °£¤_¹s **";
         TEXT[ arabic ] = "** ŞÓãÉ Úáì ÕİÑ **";
         TEXT[ greek ] = "** Äéáßñåóç ìå ôï 0  **";
-        TEXT[ korean ] = "** 0À¸·Î ³ª´¸ **";
+        TEXT[ korean ] = "** 0À¸·Î ³ª´©±â **";
         TEXT[ turkish ] = "** Sıfır ile bölme **";
         TEXT[ language_user1 ] = " ";
     };
@@ -219,7 +219,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "** ¿ù»~ªº¬A¸¹ **";
         TEXT[ arabic ] = "** ÇÓÊÎÏÇã ÇáÃŞæÇÓ ÈÔßá ÎÇØÆ **";
         TEXT[ greek ] = "** ËÜèïò ÷ñŞóç ğáñåíèİóåùí **";
-        TEXT[ korean ] = "**Àß¸øµÈ °ıÈ£ÀÇ »ç¿ë **";
+        TEXT[ korean ] = "**Àß¸øµÈ °ıÈ£ **";
         TEXT[ turkish ] = "** Hatalı ayraç kullanımı **";
         TEXT[ language_user1 ] = " ";
     };
@@ -246,7 +246,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "** ®Ú¨ç¼Æ·¸­È **";
         TEXT[ arabic ] = "** İÇÆÖ İí ÇáÏÇáÉ ÇáÊÑÈíÚíÉ **";
         TEXT[ greek ] = "** Õğåñ÷åßëéóç óôç ëåéôïõñãßá ôåôñáãşíïõ **";
-        TEXT[ korean ] = "**Á¦°ö ÇÔ¼ö ¿À¹öÇÃ·Î¿ì **";
+        TEXT[ korean ] = "**Á¦°ö ÇÔ¼ö ¿À¹öÇÃ·Î **";
         TEXT[ turkish ] = "** Kare fonksiyonu taşması **";
         TEXT[ language_user1 ] = " ";
     };
@@ -269,10 +269,10 @@ Resource RID_SW_SHELLRES
         TEXT[ russian ] = "** Ïåğåìåííàÿ íå íàéäåíà **";
         TEXT[ polish ] = "** Zmiennej nie znaleziono **";
         TEXT[ japanese ] = "**•Ï”‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ**";
-        TEXT[ chinese_traditional ] = "** ¨S¦³§ä¨ìÅÜ¼Æ **";
+        TEXT[ chinese_traditional ] = "** ¨S¦³§ä¨ìÅÜ¶q **";
         TEXT[ arabic ] = "** ÊÚĞÑ ÇáÚËæÑ Úáì ÇáãÊÛíÑÉ **";
         TEXT[ greek ] = "** Äåí âñİèçêå ç ìåôáâëçôŞ **";
-        TEXT[ korean ] = "**º¯¼ö°¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù. **";
+        TEXT[ korean ] = "**º¯¼ö¸¦¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù. **";
         TEXT[ turkish ] = "** Değişken bulunamadı **";
         TEXT[ language_user1 ] = " ";
     };
@@ -300,7 +300,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "** ·¸­È **";
         TEXT[ arabic ] = "** İÇÆÖ **";
         TEXT[ greek ] = "** Õğåñ÷åßëéóç **";
-        TEXT[ korean ] = "** ¿À¹ö ÇÃ·Î¿ì **";
+        TEXT[ korean ] = "** ¿À¹ö ÇÃ·Î **";
         TEXT[ turkish ] = "** Taşma **";
     };
     String STR_CALC_WRONGTIME
@@ -325,7 +325,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "** ¿ù»~®É¶¡®æ¦¡ **";
         TEXT[ arabic ] = "** ÊäÓíŞ æŞÊ ÎÇØÆ **";
         TEXT[ greek ] = "** ËÜèïò ìïñöŞ ÷ñüíïõ  **";
-        TEXT[ korean ] = "**Àß¸øµÈ ½Ã°£ ¼­½Ä **";
+        TEXT[ korean ] = "**Àß¸øµÈ ½Ã°£ Æ÷¸Ë **";
         TEXT[ turkish ] = "** Yanlış zaman formatı **";
         TEXT[ language_user1 ] = " ";
     };
@@ -377,7 +377,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "** ¿ù»~ªºªí¹F¦¡ **";
         TEXT[ arabic ] = "** ÊÚÈíÑ ÎÇØÆ **";
         TEXT[ greek ] = "** Åóöáëìİíç İêöñáóç **";
-        TEXT[ korean ] = "**½ÄÀÌ Àß¸øµÇ¾ú½À´Ï´Ù **";
+        TEXT[ korean ] = "**Æ²¸°¡¡Ç¥Çö½Ä **";
         TEXT[ turkish ] = "** Yanlış ifade **";
         TEXT[ language_user1 ] = " ";
     };
@@ -525,7 +525,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı";
         TEXT[ arabic ] = "İåÑÓ ÃÈÌÏí";
         TEXT[ greek ] = "ÅõñåôŞñéï ëİîåùí";
-        TEXT[ korean ] = "¾ËÆÄºª¼øÀÇ »öÀÎ";
+        TEXT[ korean ] = "Ç¥Á¦¾î¡¡»öÀÎ";
         TEXT[ turkish ] = "Alfabetik dizin";
         TEXT[ language_user1 ] = " ";
     };
@@ -546,10 +546,10 @@ Resource RID_SW_SHELLRES
         TEXT [ spanish ] = "Índice del usuario" ;
         TEXT [ english_us ] = "User-Defined" ;
         TEXT[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨";
-        TEXT[ russian ] = "Çàäàíî ïîëüçîâàòåëåì";
+        TEXT[ russian ] = "Îïğåäåëÿåìûé ïîëüçîâàòåëåì";
         TEXT[ polish ] = "Zdefiniowany przez u¿ytkownika";
         TEXT[ japanese ] = "Õ°»Ş°’è‹`";
-        TEXT[ chinese_traditional ] = "¦Û­q";
+        TEXT[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q";
         TEXT[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã";
         TEXT[ greek ] = "Ïñéóìİíï áğü ÷ñŞóôç";
         TEXT[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ";
@@ -580,7 +580,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "¤º®e¥Ø¿ı";
         TEXT[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ";
         TEXT[ greek ] = "ÊáôÜëïãïò ğåñéå÷ïìİíùí";
-        TEXT[ korean ] = "³»¿ë Ç¥";
+        TEXT[ korean ] = "¸ñÂ÷";
         TEXT[ turkish ] = "İçindekiler dizini";
     };
 
@@ -912,10 +912,10 @@ Resource RID_SW_SHELLRES
         TEXT[ russian ] = "Ñîçäàíèå";
         TEXT[ polish ] = "Utworzenie";
         TEXT[ japanese ] = "ì¬";
-        TEXT[ chinese_traditional ] = "¥Í¦¨";
+        TEXT[ chinese_traditional ] = "²£¥Í";
         TEXT[ arabic ] = "ÅäÔÇÁ";
         TEXT[ greek ] = "Äçìéïõñãßá";
-        TEXT[ korean ] = "¸¸µé¾îÁ³½À´Ï´Ù.";
+        TEXT[ korean ] = "ÀÛ¼º.";
         TEXT[ turkish ] = "Oluşturma";
         TEXT[ language_user1 ] = " ";
     };
@@ -942,7 +942,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_traditional ] = "ÅÜ§ó";
         TEXT[ arabic ] = "ÊÚÏíá";
         TEXT[ greek ] = "ÁëëáãŞ";
-        TEXT[ korean ] = "¼öÁ¤µÊ";
+        TEXT[ korean ] = "¼öÁ¤";
         TEXT[ turkish ] = "Değiştirme";
         TEXT[ language_user1 ] = " ";
     };
@@ -1027,16 +1027,70 @@ Resource RID_SW_SHELLRES
     {
         Text = "Konvert $(ARG1)" ;
         Text [ ENGLISH ] = "Convert $(ARG1)" ;
+        Text[ english_us ] = "Convert $(ARG1)";
+        Text[ portuguese ] = "Convert $(ARG1)";
+        Text[ russian ] = "Ïğåîáğàçîâàíèå $(ARG1)";
+        Text[ greek ] = "ÌåôáôñïğŞ ôïõ $(ARG1)";
+        Text[ dutch ] = "Convert $(ARG1)";
+        Text[ french ] = "Convert $(ARG1)";
+        Text[ spanish ] = "Convert $(ARG1)";
+        Text[ italian ] = "Convert $(ARG1)";
+        Text[ danish ] = "Convert $(ARG1)";
+        Text[ swedish ] = "Convert $(ARG1)";
+        Text[ polish ] = "Convert $(ARG1)";
+        Text[ portuguese_brazilian ] = "Convert $(ARG1)";
+        Text[ japanese ] = "Convert $(ARG1)";
+        Text[ korean ] = "Convert $(ARG1)";
+        Text[ chinese_simplified ] = "Convert $(ARG1)";
+        Text[ chinese_traditional ] = "Âà´« $(ARG1)";
+        Text[ turkish ] = "Convert $(ARG1)";
+        Text[ arabic ] = "Convert $(ARG1)";
     };
     String STR_PAGEDESC_FIRSTNAME
     {
         Text = "Erste Konvert $(ARG1)" ;
         Text [ ENGLISH ] = "First convert $(ARG1)" ;
+        Text[ english_us ] = "First convert $(ARG1)";
+        Text[ portuguese ] = "First convert $(ARG1)";
+        Text[ russian ] = "Ïåğâîå ïğåîáğàçîâàíèå $(ARG1)";
+        Text[ greek ] = "Ğñşôç ìåôáôñïğŞ $(ARG1)";
+        Text[ dutch ] = "First convert $(ARG1)";
+        Text[ french ] = "First convert $(ARG1)";
+        Text[ spanish ] = "First convert $(ARG1)";
+        Text[ italian ] = "First convert $(ARG1)";
+        Text[ danish ] = "First convert $(ARG1)";
+        Text[ swedish ] = "First convert $(ARG1)";
+        Text[ polish ] = "First convert $(ARG1)";
+        Text[ portuguese_brazilian ] = "First convert $(ARG1)";
+        Text[ japanese ] = "First convert $(ARG1)";
+        Text[ korean ] = "First convert $(ARG1)";
+        Text[ chinese_simplified ] = "First convert $(ARG1)";
+        Text[ chinese_traditional ] = "²Ä¤@­ÓÂà´« $(ARG1)";
+        Text[ turkish ] = "First convert $(ARG1)";
+        Text[ arabic ] = "First convert $(ARG1)";
     };
     String STR_PAGEDESC_FOLLOWNAME
     {
         Text = "Konvert Folge $(ARG1)" ;
         Text [ ENGLISH ] = "Convert follow $(ARG1)" ;
+        Text[ english_us ] = "Convert follow $(ARG1)";
+        Text[ portuguese ] = "Convert follow $(ARG1)";
+        Text[ russian ] = "Ïîñëåäîâàòåëüíîñòü ïğåîáğàçîâàíèÿ $(ARG1)";
+        Text[ greek ] = "ÌåôáôñïğŞ óõíİ÷åéá $(ARG1)";
+        Text[ dutch ] = "Convert follow $(ARG1)";
+        Text[ french ] = "Convert follow $(ARG1)";
+        Text[ spanish ] = "Convert follow $(ARG1)";
+        Text[ italian ] = "Convert follow $(ARG1)";
+        Text[ danish ] = "Convert follow $(ARG1)";
+        Text[ swedish ] = "Convert follow $(ARG1)";
+        Text[ polish ] = "Convert follow $(ARG1)";
+        Text[ portuguese_brazilian ] = "Convert follow $(ARG1)";
+        Text[ japanese ] = "Convert follow $(ARG1)";
+        Text[ korean ] = "Convert follow $(ARG1)";
+        Text[ chinese_simplified ] = "Convert follow $(ARG1)";
+        Text[ chinese_traditional ] = "Âà´«²Õ $(ARG1)";
+        Text[ turkish ] = "Convert follow $(ARG1)";
+        Text[ arabic ] = "Convert follow $(ARG1)";
     };
 };
 
@@ -1059,7 +1113,7 @@ String STR_AUTH_TYPE_ARTICLE
     Text[ japanese ] = "G‹L–";
     Text[ korean ] = "ÀâÁö ±â»ç";
     Text[ chinese_simplified ] = "ÔÓÖ¾ÎÄÕÂ";
-    Text[ chinese_traditional ] = "Âø§Ó¤å³¹";
+    Text[ chinese_traditional ] = "Âø»x¤å³¹";
     Text[ arabic ] = "ãŞÇáÉ İí ãÌáÉ";
     Text[ turkish ] = "Dergi makalesi";
     Text[ language_user1 ] = " ";
@@ -1179,7 +1233,7 @@ String STR_AUTH_TYPE_INCOLLECTION
     Text[ japanese ] = "À²ÄÙ•t‚«‚Ì´–{";
     Text[ korean ] = "Ã¥ ¹ßÃé (Á¦¸ñ Æ÷ÇÔ)";
     Text[ chinese_simplified ] = "×¢Ã÷±êÌâµÄÊé¼®ÕªÂ¼ÎÄ";
-    Text[ chinese_traditional ] = "ª`©ú¼ĞÃDªº®ÑÄy¤Ş¥Î¤å";
+    Text[ chinese_traditional ] = "µù©ú¼ĞÃDªº®ÑÄy¤Ş¥Î¤å";
     Text[ arabic ] = "ãŞÊÈÓÇÊ ãä ßÊÇÈ ĞÇÊ ÚäæÇä";
     Text[ turkish ] = "Başlıklı kitap bölümü";
     Text[ language_user1 ] = " ";
@@ -1227,7 +1281,7 @@ String STR_AUTH_TYPE_JOURNAL
     Text[ japanese ] = "G";
     Text[ korean ] = "ÀâÁö";
     Text[ chinese_simplified ] = "ÔÓÖ¾";
-    Text[ chinese_traditional ] = "Âø§Ó";
+    Text[ chinese_traditional ] = "Âø»x";
     Text[ arabic ] = "ÇáãÌáÉ";
     Text[ turkish ] = "Dergi";
     Text[ language_user1 ] = " ";
@@ -1297,7 +1351,7 @@ String STR_AUTH_TYPE_MISC
     Text[ polish ] = "Ró¿ne";
     Text[ portuguese_brazilian ] = "Miscellaneous";
     Text[ japanese ] = "”õl";
-    Text[ korean ] = "¿©·¯°¡Áö";
+    Text[ korean ] = "±âÅ¸";
     Text[ chinese_simplified ] = "ÆäËü";
     Text[ chinese_traditional ] = "¨ä¥L";
     Text[ arabic ] = "ãäæÚÇÊ";
@@ -1393,7 +1447,7 @@ String STR_AUTH_TYPE_UNPUBLISHED
     Text[ polish ] = "Nieopublikowany";
     Text[ portuguese_brazilian ] = "Unpublished";
     Text[ japanese ] = "–¢”­•\\";
-    Text[ korean ] = "ÃâÆÇµÇÁö ¾ÊÀº";
+    Text[ korean ] = "°øÇ¥µÇÁö ¾ÊÀº";
     Text[ chinese_simplified ] = "Î´·¢±íµÄ";
     Text[ chinese_traditional ] = "©|¥¼µoªí";
     Text[ arabic ] = "áã íõäÔÑ ÈÚÏ";
@@ -1465,7 +1519,7 @@ String STR_AUTH_TYPE_CUSTOM1
     Text[ polish ] = "U¿ytkownik1";
     Text[ portuguese_brazilian ] = "Custom1";
     Text[ japanese ] = "Õ°»Ş°À²Ìß 1";
-    Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ1";
+    Text[ korean ] = "»ç¿ëÀÚ Å¸ÀÔ1";
     Text[ chinese_simplified ] = "ÓÃ»§1";
     Text[ chinese_traditional ] = "¦Û­qÃş«¬ 1";
     Text[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã1";
@@ -1489,7 +1543,7 @@ String STR_AUTH_TYPE_CUSTOM2
     Text[ polish ] = "U¿ytkownik2";
     Text[ portuguese_brazilian ] = "Custom2";
     Text[ japanese ] = "Õ°»Ş°À²Ìß2";
-    Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ2";
+    Text[ korean ] = "»ç¿ëÀÚ Å¸ÀÔ2";
     Text[ chinese_simplified ] = "ÓÃ»§2";
     Text[ chinese_traditional ] = "¦Û­qÃş«¬ 2";
     Text[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã2";
@@ -1513,7 +1567,7 @@ String STR_AUTH_TYPE_CUSTOM3
     Text[ polish ] = "U¿ytkownik3";
     Text[ portuguese_brazilian ] = "Custom3";
     Text[ japanese ] = "Õ°»Ş°À²Ìß3";
-    Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ3";
+    Text[ korean ] = "»ç¿ëÀÚ Å¸ÀÔ3";
     Text[ chinese_simplified ] = "ÓÃ»§3";
     Text[ chinese_traditional ] = "¦Û­qÃş«¬ 3";
     Text[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã3";
@@ -1537,7 +1591,7 @@ String STR_AUTH_TYPE_CUSTOM4
     Text[ polish ] = "U¿ytkownik4";
     Text[ portuguese_brazilian ] = "Custom4";
     Text[ japanese ] = "Õ°»Ş°À²Ìß4";
-    Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ4";
+    Text[ korean ] = "»ç¿ëÀÚ Å¸ÀÔ4";
     Text[ chinese_simplified ] = "ÓÃ»§4";
     Text[ chinese_traditional ] = "¦Û­qÃş«¬ 4";
     Text[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã4";
@@ -1561,7 +1615,7 @@ String STR_AUTH_TYPE_CUSTOM5
     Text[ polish ] = "U¿ytkownik5";
     Text[ portuguese_brazilian ] = "Custom5";
     Text[ japanese ] = "Õ°»Ş°À²Ìß5";
-    Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ5";
+    Text[ korean ] = "»ç¿ëÀÚ Å¸ÀÔ5";
     Text[ chinese_simplified ] = "ÓÃ»§5";
     Text[ chinese_traditional ] = "¦Û­qÃş«¬ 5";
     Text[ arabic ] = "ãõÚÑøóİ ãä ŞÈá ÇáãÓÊÎÏã5";
@@ -1609,7 +1663,7 @@ String STR_AUTH_FIELD_AUTHORITY_TYPE
     Text[ polish ] = "Typ";
     Text[ portuguese_brazilian ] = "Type";
     Text[ japanese ] = "À²Ìß";
-    Text[ korean ] = "ÇüÅÂ";
+    Text[ korean ] = "À¯Çü";
     Text[ chinese_simplified ] = "ÀàĞÍ";
     Text[ chinese_traditional ] = "Ãş«¬";
     Text[ arabic ] = "ÇáäæÚ";
@@ -1659,7 +1713,7 @@ String STR_AUTH_FIELD_ANNOTE
     Text[ japanese ] = "’ß";
     Text[ korean ] = "ÁÖ";
     Text[ chinese_simplified ] = "ËµÃ÷(~M)";
-    Text[ chinese_traditional ] = "µû»y(~M)";
+    Text[ chinese_traditional ] = "³Æµù(~M)";
     Text[ arabic ] = "ãáÇÍÙÉ";
     Text[ turkish ] = "~Not";
     Text[ language_user1 ] = " ";
@@ -1827,7 +1881,7 @@ String STR_AUTH_FIELD_INSTITUTION
     Text[ japanese ] = "‹@ŠÖ";
     Text[ korean ] = "±³À°±â°ü";
     Text[ chinese_simplified ] = "»ú¹¹";
-    Text[ chinese_traditional ] = "µ²ÌÛ";
+    Text[ chinese_traditional ] = "¾÷ºc";
     Text[ arabic ] = "ÇáåíÆÉ";
     Text[ turkish ] = "K~urum";
     Text[ language_user1 ] = " ";
@@ -1851,7 +1905,7 @@ String STR_AUTH_FIELD_JOURNAL
     Text[ japanese ] = "G";
     Text[ korean ] = "ÀâÁö";
     Text[ chinese_simplified ] = "ÔÓÖ¾";
-    Text[ chinese_traditional ] = "Âø§Ó";
+    Text[ chinese_traditional ] = "Âø»x";
     Text[ arabic ] = "ÇáãÌáÉ";
     Text[ turkish ] = "De~rgi";
     Text[ language_user1 ] = " ";
@@ -1899,7 +1953,7 @@ String STR_AUTH_FIELD_NOTE
     Text[ japanese ] = "ºÒİÄ";
     Text[ korean ] = "¸Ş¸ğ";
     Text[ chinese_simplified ] = "±¸×¢(~E)";
-    Text[ chinese_traditional ] = "³Æª`(~E)";
+    Text[ chinese_traditional ] = "³Æµù(~E)";
     Text[ arabic ] = "ãáÇÍÙÉ";
     Text[ turkish ] = "~Not";
     Text[ language_user1 ] = " ";
@@ -1947,7 +2001,7 @@ String STR_AUTH_FIELD_ORGANIZATIONS
     Text[ japanese ] = "‘gD’c‘Ì";
     Text[ korean ] = "±â±¸";
     Text[ chinese_simplified ] = "×éÖ¯";
-    Text[ chinese_traditional ] = "ÉóÌÛ";
+    Text[ chinese_traditional ] = "¾÷ºc";
     Text[ arabic ] = "ãäÙãÉ";
     Text[ turkish ] = "~Organizasyon";
     Text[ language_user1 ] = " ";
@@ -1969,9 +2023,9 @@ String STR_AUTH_FIELD_PAGES
     Text[ polish ] = "Strony";
     Text[ portuguese_brazilian ] = "Pages";
     Text[ japanese ] = "Íß°¼Ş";
-    Text[ korean ] = "ÆäÀÌÁö";
+    Text[ korean ] = "ÂÊ";
     Text[ chinese_simplified ] = "Ò³";
-    Text[ chinese_traditional ] = "­¶­±";
+    Text[ chinese_traditional ] = "­¶";
     Text[ arabic ] = "ÕİÍÇÊ";
     Text[ turkish ] = "Sayfa";
     Text[ language_user1 ] = " ";
@@ -2185,7 +2239,7 @@ String STR_AUTH_FIELD_CUSTOM1
     Text[ polish ] = "Pole u¿ytkownika~1";
     Text[ portuguese_brazilian ] = "Custom1";
     Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ1";
-    Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ1";
+    Text[ korean ] = "»ç¿ëÀÚ ÇÊµå1";
     Text[ chinese_simplified ] = "ÓÃ»§À¸1";
     Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 1";
     Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã 1";
@@ -2209,7 +2263,7 @@ String STR_AUTH_FIELD_CUSTOM2
     Text[ polish ] = "Pole u¿ytkownika~2";
     Text[ portuguese_brazilian ] = "Custom2";
     Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ2";
-    Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ2";
+    Text[ korean ] = "»ç¿ëÀÚ ÇÊµå2";
     Text[ chinese_simplified ] = "ÓÃ»§À¸2";
     Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 2";
     Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã2";
@@ -2233,7 +2287,7 @@ String STR_AUTH_FIELD_CUSTOM3
     Text[ polish ] = "Pole u¿ytkownika~3";
     Text[ portuguese_brazilian ] = "Custom3";
     Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ3";
-    Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ3";
+    Text[ korean ] = "»ç¿ëÀÚ ÇÊµå3";
     Text[ chinese_simplified ] = "ÓÃ»§À¸3";
     Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 3";
     Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã3";
@@ -2257,7 +2311,7 @@ String STR_AUTH_FIELD_CUSTOM4
     Text[ polish ] = "Pole u¿ytkownika~4";
     Text[ portuguese_brazilian ] = "Custom4";
     Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ4";
-    Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ4";
+    Text[ korean ] = "»ç¿ëÀÚ ÇÊµå4";
     Text[ chinese_simplified ] = "ÓÃ»§À¸4";
     Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 4";
     Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã4";
@@ -2281,7 +2335,7 @@ String STR_AUTH_FIELD_CUSTOM5
     Text[ polish ] = "Pole u¿ytkownika~5";
     Text[ portuguese_brazilian ] = "Custom5";
     Text[ japanese ] = "Õ°»Ş°Ì¨°ÙÄŞ5";
-    Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ5";
+    Text[ korean ] = "»ç¿ëÀÚ ÇÊµå5";
     Text[ chinese_simplified ] = "ÓÃ»§À¸5";
     Text[ chinese_traditional ] = "¦Û­qÄæ¦ì 5";
     Text[ arabic ] = "ÍŞá ÇáãÓÊÎÏã5";
