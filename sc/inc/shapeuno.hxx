@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-27 18:21:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_SHAPEUNO_HXX
 #define SC_SHAPEUNO_HXX
+
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
