@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:52:51 $
+ *  last change: $Author: fs $ $Date: 2001-07-30 08:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,10 +1271,6 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
 
     EnableInplaceEditing( sal_True );
     SetSelectionMode(MULTIPLE_SELECTION);
-
-#ifndef TF_SVDATA
-    EnableDrop();
-#endif // TF_SVDATA
 
     SetDragDropMode(0xFFFF);
 
