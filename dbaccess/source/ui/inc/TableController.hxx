@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:36:53 $
+ *  last change: $Author: oj $ $Date: 2001-02-20 11:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ namespace dbaui
 
         void loadData();
         void fillTypeInfo();        // fills a vector with type info
-        void checkColumns() throw(::com::sun::star::sdbc::SQLException);;       // check if we have double column names
+        void checkColumns() throw(::com::sun::star::sdbc::SQLException);        // check if we have double column names
         String createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxTables,const String& _rDefault);
         void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup,sal_Bool _bKeyColumns=sal_False);
         void appendKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup);
