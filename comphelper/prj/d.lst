@@ -8,6 +8,7 @@
 
 mkdir: %_DEST%\inc%_EXT%\comphelper
 ..\inc\comphelper\*.hxx %_DEST%\inc%_EXT%\comphelper\*.hxx
+..\inc\comphelper\extract.hxx %_DEST%\inc%_EXT%\cppuhelper\extract.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
