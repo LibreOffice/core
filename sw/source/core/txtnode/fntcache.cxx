@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:44:17 $
+ *  last change: $Author: fme $ $Date: 2001-04-18 12:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,8 +964,25 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                         if ( bColSave )
                             rInf.GetOut().SetLineColor( *pWaveCol );
 
-                        long nX = rInf.GetPos().X() + pKernArray[ USHORT(rInf.GetLen()-1) ];
-                        Point aEnd( nX, rInf.GetPos().Y() );
+                        Point aEnd;
+                        long nKernVal = pKernArray[ USHORT( rInf.GetLen() - 1 ) ];
+
+                        switch ( GetFont()->GetOrientation() )
+                        {
+                        case 0 :
+                            aEnd.X() = rInf.GetPos().X() + nKernVal;
+                            aEnd.Y() = rInf.GetPos().Y();
+                            break;
+                        case 900 :
+                            aEnd.X() = rInf.GetPos().X();
+                            aEnd.Y() = rInf.GetPos().Y() - nKernVal;
+                            break;
+                        case 2700 :
+                            aEnd.X() = rInf.GetPos().X();
+                            aEnd.Y() = rInf.GetPos().Y() + nKernVal;
+                            break;
+                        }
+
                         rInf.GetOut().DrawWaveLine( rInf.GetPos(), aEnd, nWave );
 
                         if ( bColSave )
@@ -1004,22 +1021,47 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                             do
                             {
                                 nStart -= rInf.GetIdx();
-                                Point aStart = nStart ?
-                                    Point( rInf.GetPos().X() + pKernArray[ USHORT(nStart-1) ],
-                                           rInf.GetPos().Y() ) : rInf.GetPos();
-                                nStart += nWrLen;
-                                long nX = rInf.GetPos().X() + pKernArray[ USHORT(nStart-1) ];
-                                if( nStart < nCnt
-                                    && CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx() + nStart ) )
+                                Point aStart( rInf.GetPos() );
+                                Point aEnd;
+                                short nBlank = 0;
+                                const xub_StrLen nEnd = nStart + nWrLen;
+
+                                if( nEnd < nCnt
+                                    && CH_BLANK == rInf.GetText().GetChar( rInf.GetIdx() + nEnd ) )
                                 {
-                                    if( nStart + 1 == nCnt )
-                                        nX -= rInf.GetSpace();
+                                    if( nEnd + 1 == nCnt )
+                                        nBlank -= rInf.GetSpace();
                                     else
-                                        nX -= nHalfSpace;
+                                        nBlank -= nHalfSpace;
                                 }
-                                Point aEnd( nX, rInf.GetPos().Y() );
+
+                                // determine start, end and length of wave line
+                                long nKernStart = nStart ?
+                                                  pKernArray[ USHORT( nStart - 1 ) ] :
+                                                  0;
+                                long nKernEnd = pKernArray[ USHORT( nEnd - 1 ) ];
+
+                                switch ( GetFont()->GetOrientation() )
+                                {
+                                case 0 :
+                                    aStart.X() += nKernStart;
+                                    aEnd.X() = nBlank + rInf.GetPos().X() + nKernEnd;
+                                    aEnd.Y() = rInf.GetPos().Y();
+                                    break;
+                                case 900 :
+                                    aStart.Y() -= nKernStart;
+                                    aEnd.X() = rInf.GetPos().X();
+                                    aEnd.Y() = nBlank + rInf.GetPos().Y() - nKernEnd;
+                                    break;
+                                case 2700 :
+                                    aStart.Y() += nKernStart;
+                                    aEnd.X() = rInf.GetPos().X();
+                                    aEnd.Y() = nBlank + rInf.GetPos().Y() + nKernEnd;
+                                    break;
+                                }
+
                                 rInf.GetOut().DrawWaveLine( aStart, aEnd, nWave );
-                                nStart += rInf.GetIdx();
+                                nStart = nEnd + rInf.GetIdx();
                                 nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
                             }
                             while( nWrLen && rInf.GetWrong()->Check( nStart, nWrLen ) );
