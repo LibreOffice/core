@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-19 11:13:31 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,9 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = "설정";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Configuraci�n";
+        Text[ catalan ] = "Configuraci�";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "ตั้งค่า";
     };
     FixedText FT_PROXYMODE
     {
@@ -139,7 +140,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ english_us ] = "Proxy s~erver" ;
         Text [ portuguese_brazilian ] = "Proxy S~erver" ;
         Text [ swedish ] = "Pro~xyserver" ;
-        Text [ danish ] = "Proxy server" ;
+        Text [ danish ] = "Pro~xy-server" ;
         Text [ italian ] = "S~erver Proxy" ;
         Text [ spanish ] = "Servidor Pro~xy" ;
         Text [ french ] = "Serveur Pro~xy" ;
@@ -155,8 +156,9 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = "프록시 서버";
         Text[ turkish ] = "Proxy sunucusu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Servidor Pro~xy";
+        Text[ catalan ] = "S~ervidor intermediari";
         Text[ finnish ] = "~V�lityspalvelin";
+        Text[ thai ] = "เซิร์ฟเ~วอร์ Proxy ";
     };
     ListBox LB_PROXYMODE
     {
@@ -227,7 +229,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ danish ] =
     {
              < "Ingen" ; > ;
-        < "Automatisk" ; > ;
+        < "Manuel" ; > ;
     };
     StringList [ swedish ] =
     {
@@ -276,8 +278,13 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     StringList [ catalan ] =
     {
-             < "Ninguna" ; > ;
-        < "Autom�tica" ; > ;
+             < "Cap" ; > ;
+        < "Autom�tica" ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "ไม่มี" ; > ;
+        < "กำหนดเอง" ; > ;
     };
     };
     String ST_PROXY_FROM_BROWSER
@@ -293,7 +300,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ spanish ] = "Utilizar configuraci�n del navegador";
         Text[ finnish ] = "Use browser settings";
         Text[ italian ] = "Usa le impostazioni browser";
-        Text[ danish ] = "Use browser settings";
+        Text[ danish ] = "Brug browserindstillinger";
         Text[ swedish ] = "Anv�nd webbl�sarinst�llningar";
         Text[ polish ] = "Use browser settings";
         Text[ portuguese_brazilian ] = "Use browser settings";
@@ -303,7 +310,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ chinese_traditional ] = "使用瀏覽器的設定";
         Text[ turkish ] = "Use browser settings";
         Text[ arabic ] = "Use browser settings";
-        Text[ catalan ] = "Use browser settings";
+        Text[ catalan ] = "Utilitza els par�metres del navegador";
     };
     FixedText FT_HTTP_PROXY
     {
@@ -316,8 +323,8 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ spanish ] = "Proxy Http" ;
         Text [ french ] = "Proxy Http" ;
         Text [ dutch ] = "Http Pro~xy" ;
-        Text [ swedish ] = "Http-prox~y" ;
-        Text [ danish ] = "Http proxy" ;
+        Text [ swedish ] = "Http-pro~xy" ;
+        Text [ danish ] = "Http-pro~xy" ;
         Text [ portuguese_brazilian ] = "Http Pro~xy" ;
         Text [ portuguese ] = "Pro~xy Http" ;
         Text[ chinese_simplified ] = "H~ttp 代理";
@@ -330,7 +337,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = "Http 프록시";
         Text[ turkish ] = "~Http Proxy";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Http Proxy";
+        Text[ catalan ] = "Servidor intermediari HT~TP";
         Text[ finnish ] = "~Http-v�lityspalvelin";
     };
     Edit ED_HTTP_PROXY
@@ -364,8 +371,9 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = "포트(~P)";
         Text[ turkish ] = "~Port";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Puerto";
+        Text[ catalan ] = "~Port";
         Text[ finnish ] = "~Portti";
+        Text[ thai ] = "~พอร์ต";
     };
     Edit ED_HTTP_PORT
     {
@@ -385,7 +393,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "Proxy ~Ftp" ;
         Text [ dutch ] = "~Ftp Proxy" ;
         Text [ swedish ] = "~Ftp-proxy" ;
-        Text [ danish ] = "Ftp proxy" ;
+        Text [ danish ] = "~Ftp-proxy" ;
         Text [ portuguese_brazilian ] = "~Ftp Proxy" ;
         Text [ portuguese ] = "~Ftp Proxy" ;
         Text[ chinese_simplified ] = "~FTP 代理";
@@ -398,7 +406,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = "Ftp 프록시";
         Text[ turkish ] = "~Ftp Proxy";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ftp Proxy";
+        Text[ catalan ] = "Servidor intermediari ~FTP";
         Text[ finnish ] = "~FTP-v�lityspalvelin";
     };
     Edit ED_FTP_PROXY
@@ -432,8 +440,9 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = "포트(~O)";
         Text[ turkish ] = "Port";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "P~uerto";
+        Text[ catalan ] = "P~ort";
         Text[ finnish ] = "~Portti";
+        Text[ thai ] = "พ~อร์ต";
     };
     Edit ED_FTP_PORT
     {
@@ -453,7 +462,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "Proxy Soc~ks" ;
         Text [ dutch ] = "Socks Prox~y" ;
         Text [ swedish ] = "~Socks-proxy" ;
-        Text [ danish ] = "Socks proxy" ;
+        Text [ danish ] = "~Socks-proxy" ;
         Text [ portuguese_brazilian ] = "Socks Prox~y" ;
         Text [ portuguese ] = "Socks Prox~y" ;
         Text[ chinese_simplified ] = "~Socks 代理";
@@ -466,7 +475,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = "Socks 프록시";
         Text[ turkish ] = "Socks Proxy";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Socks Prox~y";
+        Text[ catalan ] = "Servidor intermediari ~SOCKS";
         Text[ finnish ] = "~Socks-v�lityspalvelin";
     };
     Edit ED_SOCKS_PROXY
@@ -500,8 +509,9 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = "포트(~R)";
         Text[ turkish ] = "Port";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Pu~erto";
+        Text[ catalan ] = "Po~rt";
         Text[ finnish ] = "~Portti";
+        Text[ thai ] = "พอ~ร์ต";
     };
     Edit ED_SOCKS_PORT
     {
@@ -534,8 +544,9 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = "프록시 없음(~N):";
         Text[ turkish ] = "Proxy yok:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Sin Proxy para";
+        Text[ catalan ] = "~Sense a:";
         Text[ finnish ] = "~Ei v�lityst� kohteelle:";
+        Text[ thai ] = "ไ~ม่มี proxy สำหรับ:";
     };
     Edit ED_NOPROXYFOR
     {
@@ -570,6 +581,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Separador ;";
         Text[ finnish ] = "Erotin ;";
+        Text[ thai ] = "ตัวแยก ;";
     };
     FixedLine GB_DNS
     {
@@ -583,7 +595,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "Serveur DNS" ;
         Text [ dutch ] = "DNS server" ;
         Text [ swedish ] = "DNS-server" ;
-        Text [ danish ] = "DNS server" ;
+        Text [ danish ] = "DNS-server" ;
         Text [ portuguese_brazilian ] = "DNS Server" ;
         Text [ portuguese ] = "Servidor DNS" ;
         Text[ chinese_simplified ] = "DNS 服务器";
@@ -598,6 +610,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Servidor DNS";
         Text[ finnish ] = "DNS-palvelin";
+        Text[ thai ] = "DNS เซิร์ฟเวอร์";
     };
     RadioButton RB_DNS_AUTO
     {
@@ -611,7 +624,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "Automatique" ;
         Text [ dutch ] = "~Automatisch" ;
         Text [ swedish ] = "~Automatiskt" ;
-        Text [ danish ] = "Automatisk" ;
+        Text [ danish ] = "~Automatisk" ;
         Text [ portuguese_brazilian ] = "~Auto" ;
         Text [ portuguese ] = "~Autom�tico" ;
         Text[ chinese_simplified ] = "自动(~A)";
@@ -624,8 +637,9 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = "자동(~A)";
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Autom�tico";
+        Text[ catalan ] = "~Autom�tic";
         Text[ finnish ] = "~Automaattinen";
+        Text[ thai ] = "~อัตโนมัติ";
     };
     RadioButton RB_DNS_MANUAL
     {
@@ -639,7 +653,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "~Manuel" ;
         Text [ dutch ] = "~Handmatig" ;
         Text [ swedish ] = "~Manuellt" ;
-        Text [ danish ] = "Manuel" ;
+        Text [ danish ] = "~Manuelt" ;
         Text [ portuguese_brazilian ] = "~Manuell" ;
         Text [ portuguese ] = "~Manual" ;
         Text[ chinese_simplified ] = "手动(~M)";
@@ -654,6 +668,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Manual";
         Text[ finnish ] = "~Manuaalinen";
+        Text[ thai ] = "~กำหนดเอง";
     };
     PatternField ED_DNS
     {
@@ -671,7 +686,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ english_us ] = "is not a valid entry for this field. Please specify a value between 0 and 255." ;
         Text [ portuguese_brazilian ] = "ist kein g?tiger Eintrag f? dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
         Text [ swedish ] = "�r ingen giltig inmatning f�r det h�r f�ltet. Ange ett v�rde mellan 0 och 255." ;
-        Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en v�rdi mellem 0 og 255." ;
+        Text [ danish ] = " er ikke et gyldigt element til dette felt. Angiv en v�rdi mellem 0 og 255." ;
         Text [ italian ] = "non � un valore valido per questo campo. Digitate un valore compreso tra 0 e 255." ;
         Text [ spanish ] = "no es una entrada v�lida para este campo. Por favor escriba un valor entre 0 y 255." ;
         Text [ french ] = " ne r�pond pas aux crit�res fix�s pour ce champ. Vous devez saisir une valeur comprise entre 0 et 255." ;
@@ -687,8 +702,9 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = " 이 필드에 유효하지 않은 항목입니다. 0과 255 사이의 값을 지정하십시오.";
         Text[ turkish ] = "bu alan i�in ge�erli bir de�er de�il. 0 ile 255 aras�nda bir de�er girin.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "no es una entrada v�lida para este campo. Por favor escriba un valor entre 0 y 255.";
+        Text[ catalan ] = "no �s una entrada v�lida per aquest camp. Escribiu un valor entre 0 i 255.";
         Text[ finnish ] = "ei ole kelvollinen merkint� t�ss� kent�ss�. M��rit� arvo 0 - 255.";
+        Text[ thai ] = "ไม่ใช่รายการที่ถูกต้องสำหรับเขตข้อมูลนี้ กรุณาระบุค่าระหว่าง 0 ถึง 255";
     };
     String ST_MSG_255_1
     {
@@ -697,7 +713,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ english_us ] = "is not a valid entry for this field. Please specify a value between 1 and 255." ;
         Text [ portuguese_brazilian ] = "ist kein g?tiger Eintrag f? dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
         Text [ swedish ] = "�r ingen giltig inmatning f�r det h�r f�ltet. Ange ett v�rde mellan 1 och 255." ;
-        Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en v�rdi mellem 1 og 255." ;
+        Text [ danish ] = " er ikke et gyldigt element til dette felt. Angiv en v�rdi mellem 1 og 255." ;
         Text [ italian ] = "non � un valore valido per questo campo. Digitate un valore compreso tra 1 e 255." ;
         Text [ spanish ] = "no es una entrada v�lida para este campo. Por favor escriba un valor entre 1 y 255." ;
         Text [ french ] = " ne r�pond pas aux crit�res fix�s pour ce champ. Vous devez saisir une valeur comprise entre 1 et 255." ;
@@ -713,8 +729,9 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ korean ] = " 이 필드에 유효하지 않은 항목입니다. 1과 255 사이의 값을 지정하십시오.";
         Text[ turkish ] = "bu alan i�in ge�erli bir de�er de�il. 1 ile 255 aras�nda bir de�er girin";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "no es una entrada v�lida para este campo. Por favor escriba un valor entre 1 y 255.";
+        Text[ catalan ] = "no �s una entrada v�lida per aquest camp. Escribiu un valor entre 0 i 255.";
         Text[ finnish ] = "ei ole kelvollinen merkint� t�ss� kent�ss�. M��rit� arvo 1 - 255.";
+        Text[ thai ] = "ไม่ใช่รายการที่ถูกต้องสำหรับเขตข้อมูลนี้ กรุณาระบุค่าระหว่าง 1 ถึง 255";
     };
 };
 /************************************************************************/
@@ -776,8 +793,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "찾을 범위";
         Text[ turkish ] = "�urada ara:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Buscar en";
+        Text[ catalan ] = "Cerca a";
         Text[ finnish ] = "Etsi kohteesta";
+        Text[ thai ] = "ค้นหาใน";
     };
     ListBox LB_SEARCH
     {
@@ -814,8 +832,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "이름(~N)";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nombre";
+        Text[ catalan ] = "~Nom";
         Text[ finnish ] = "~Nimi";
+        Text[ thai ] = "~ชื่อ";
     };
     Edit ED_SEARCH_NAME
     {
@@ -848,8 +867,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "유형";
         Text[ turkish ] = "T�r";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo";
+        Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi";
+        Text[ thai ] = "ชนิด";
     };
     RadioButton RB_AND
     {
@@ -877,8 +897,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "그리고";
         Text[ turkish ] = "Ve";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Y";
+        Text[ catalan ] = "I";
         Text[ finnish ] = "Ja";
+        Text[ thai ] = "และ";
     };
     RadioButton RB_OR
     {
@@ -907,6 +928,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~O";
         Text[ finnish ] = "~Tai";
+        Text[ thai ] = "~หรือ";
     };
     RadioButton RB_EXACT
     {
@@ -933,8 +955,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "정확히(~X)";
         Text[ turkish ] = "Ayn�s�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "E~xacto";
+        Text[ catalan ] = "E~xacte";
         Text[ finnish ] = "~Tarkka";
+        Text[ thai ] = "แ~น่นอน";
     };
     FixedText FT_URL
     {
@@ -961,8 +984,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "접두어(~P)";
         Text[ turkish ] = "�nek";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Prefijo";
+        Text[ catalan ] = "~Prefix";
         Text[ finnish ] = "~Etuliite";
+        Text[ thai ] = "~นำหน้า";
     };
     Edit ED_URL
     {
@@ -995,8 +1019,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "접두어(~F)";
         Text[ turkish ] = "Sonek";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "S~ufijo";
+        Text[ catalan ] = "Su~fix";
         Text[ finnish ] = "~J�lkiliite";
+        Text[ thai ] = "ต่อ~ท้าย";
     };
     Edit ED_POSTFIX
     {
@@ -1031,6 +1056,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separador";
         Text[ finnish ] = "~Erotin";
+        Text[ thai ] = "~ตัวแยก";
     };
     Edit ED_SEPARATOR
     {
@@ -1063,8 +1089,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "글씨체(~C)";
         Text[ turkish ] = "~B�Y�K/k���k harf duyarl�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Es~tilo";
+        Text[ catalan ] = "Es~til";
         Text[ finnish ] = "~Kirjainkoon vastaavuus";
+        Text[ thai ] = "จับคู่~ตัวพิมพ์";
     };
     ListBox ED_CASE
     {
@@ -1200,15 +1227,21 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     StringList [ catalan ] =
     {
-            < "Ninguno" ; > ;
-        < "May�sculas" ; > ;
-        < "Min�sculas" ; > ;
+            < "Cap" ; > ;
+        < "Superior" ; > ;
+        < "Inferior" ; > ;
     };
     StringList [ finnish ] =
     {
             < "Ei mit��n" ; > ;
         < "Ylempi" ; > ;
         < "Alempi" ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "ไม่มี" ; > ;
+        < "ด้านบน" ; > ;
+        < "ด้านล่าง" ; > ;
     };
     };
      // nicht �bersetzen !
@@ -1236,8 +1269,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ chinese_traditional ] = "新增(~E)";
         Text[ arabic ] = "����";
         Text[ turkish ] = "Yeni";
-        Text[ catalan ] = "Nuevo";
+        Text[ catalan ] = "N~ou";
         Text[ finnish ] = "Uu~si";
+        Text[ thai ] = "ให~ม่";
     };
     PushButton PB_ADD
     {
@@ -1264,8 +1298,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "추가(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~A�adir";
+        Text[ catalan ] = "~Afegeix";
         Text[ finnish ] = "~Lis��";
+        Text[ thai ] = "เ~พิ่ม";
     };
     PushButton PB_CHANGE
     {
@@ -1292,8 +1327,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "수정(~M)";
         Text[ turkish ] = "De�i�tir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Modificar";
+        Text[ catalan ] = "~Modifica";
         Text[ finnish ] = "~Muokkaa";
+        Text[ thai ] = "~ดัดแปลงแก้ไข";
     };
     PushButton PB_DELETE
     {
@@ -1320,8 +1356,9 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ korean ] = "삭제(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
+        Text[ thai ] = "~ลบ";
     };
     String MSG_MODIFY
     {
@@ -1335,7 +1372,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ french ] = "Souhaitez-vous appliquer la modification actuelle ?";
         Text[ spanish ] = "�Desea aplicar la modificaci�n actual?";
         Text[ italian ] = "Volete applicare le modifiche?";
-        Text[ danish ] = "Do you want to accept the current modification?";
+        Text[ danish ] = "Skal den aktuelle �ndring anvendes?";
         Text[ swedish ] = "Vill du �verta den aktuella �ndringen?";
         Text[ polish ] = "Przej�� aktualn� zmian�?";
         Text[ portuguese_brazilian ] = "Do you want to accept the current modification?";
@@ -1345,13 +1382,15 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ chinese_traditional ] = "您要採用目前的變更？";
         Text[ turkish ] = "Do you want to accept the current modification?";
         Text[ arabic ] = "Do you want to accept the current modification?";
-        Text[ catalan ] = "Do you want to accept the current modification?";
+        Text[ catalan ] = "Voleu acceptar les modificacions actuals?";
         Text[ finnish ] = "Haluatko hyv�ksy� muokkauksen?";
+        Text[ thai ] = "คุณต้องการยอมรับการดัดแปลงแก้ไขปัจจุบันหรือไม่?";
     };
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "B�squeda";
+    Text[ catalan ] = "Cerca";
     Text[ finnish ] = "Etsi";
+    Text[ thai ] = "ค้นหา";
 };
 
 
@@ -1417,11 +1456,12 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "%PRODUCTNAME Basic 程式檔";
         Text[ arabic ] = "%PRODUCTNAME Basic �� �����";
         Text[ greek ] = "%PRODUCTNAME Basic Script";
-        Text[ korean ] = "%PRODUCTNAME Basic-스크립트";
+        Text[ korean ] = "%PRODUCTNAME Basic 스크립트";
         Text[ turkish ] = "%PRODUCTNAME Basic Script";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Script %PRODUCTNAME Basic";
         Text[ finnish ] = "%PRODUCTNAME Basic -komentosarja";
+        Text[ thai ] = "เบสิคสคริปต์ %PRODUCTNAME ";
     };
     FixedText FT_EXEC_MACRO
     {
@@ -1438,7 +1478,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ spanish ] = "Ejecutar macro";
         Text[ finnish ] = "~Run macro";
         Text[ italian ] = "~Esegui macro";
-        Text[ danish ] = "~Run macro";
+        Text[ danish ] = "Udf�r ~makro";
         Text[ swedish ] = "K�r ~makro";
         Text[ polish ] = "~Run macro";
         Text[ portuguese_brazilian ] = "~Run macro";
@@ -1448,7 +1488,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "執行巨集";
         Text[ turkish ] = "~Run macro";
         Text[ arabic ] = "~Run macro";
-        Text[ catalan ] = "~Run macro";
+        Text[ catalan ] = "~Executa les macros";
     };
     ListBox LB_EXEC_MACRO
     {
@@ -1531,7 +1571,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         StringList [ danish ] =
         {
              < "Aldrig" ; > ;
-            < "Gem�� Pfadliste" ; > ;
+            < "I henhold til stiliste" ; > ;
             < "Altid" ; > ;
         };
         StringList [ swedish ] =
@@ -1554,25 +1594,25 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         };
         StringList [ japanese ] =
         {
-             < "実行しない" ; > ;
+             < "しない" ; > ;
             < "パスのリストどおりに" ; > ;
             < "常に実行する" ; > ;
         };
         StringList [ korean ] =
         {
-             < "절대 없음" ; > ;
+             < "절대 안함" ; > ;
             < "경로 목록에 의거" ; > ;
             < "항상" ; > ;
         };
         StringList [ chinese_simplified ] =
         {
-             < "从不" ; > ;
+             < "永远不" ; > ;
             < "依照路径列单" ; > ;
             < "自动" ; > ;
         };
         StringList [ chinese_traditional ] =
         {
-             < "從不" ; > ;
+             < "永遠不" ; > ;
             < "依照路經清單" ; > ;
             < "自動" ; > ;
         };
@@ -1590,8 +1630,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         };
         StringList [ catalan ] =
         {
-             < "Nie" ; > ;
-            < "Gem�� Pfadliste" ; > ;
+             < "Mai" ; > ;
+            < "Segons la llista de camins" ; > ;
             < "Sempre" ; > ;
         };
     };
@@ -1610,7 +1650,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ spanish ] = "C~onfirmar en caso de otros documentos fuente";
         Text[ finnish ] = "C~onfirm in case of other document sources";
         Text[ italian ] = "~Chiedi conferma nel caso di sorgente dati diversa";
-        Text[ danish ] = "C~onfirm in case of other document sources";
+        Text[ danish ] = "~Foresp�rg ved andre dokumentkilder";
         Text[ swedish ] = "Fr�~ga vid andra dokumentk�llor";
         Text[ polish ] = "C~onfirm in case of other document sources";
         Text[ portuguese_brazilian ] = "C~onfirm in case of other document sources";
@@ -1620,7 +1660,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "如果是其它文件來源就需要確認";
         Text[ turkish ] = "C~onfirm in case of other document sources";
         Text[ arabic ] = "C~onfirm in case of other document sources";
-        Text[ catalan ] = "C~onfirm in case of other document sources";
+        Text[ catalan ] = "C~onfirmar-ho en el cas d'altres documents";
     };
     CheckBox CB_WARNING
     {
@@ -1637,7 +1677,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ spanish ] = "Advertir siempre antes de la ejecuci�n";
         Text[ finnish ] = "Show ~warning before running macro";
         Text[ italian ] = "~Avvisa sempre prima dell'esecuzione";
-        Text[ danish ] = "Show ~warning before running macro";
+        Text[ danish ] = "~Advar altid f�r udf�relse";
         Text[ swedish ] = "Visa ~varning innan makro k�rs";
         Text[ polish ] = "Show ~warning before running macro";
         Text[ portuguese_brazilian ] = "Show ~warning before running macro";
@@ -1647,7 +1687,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "在執行之前自動警告";
         Text[ turkish ] = "Show ~warning before running macro";
         Text[ arabic ] = "Show ~warning before running macro";
-        Text[ catalan ] = "Show ~warning before running macro";
+        Text[ catalan ] = "Mostra una ~advert�ncia abans d'executar la macro";
     };
     FixedText FT_PATH_LIST
     {
@@ -1664,7 +1704,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ spanish ] = "~Lista de rutas";
         Text[ finnish ] = "~Path list";
         Text[ italian ] = "~Elenco percorsi";
-        Text[ danish ] = "~Path list";
+        Text[ danish ] = "Sti~liste";
         Text[ swedish ] = "S�~kv�gslista";
         Text[ polish ] = "~Path list";
         Text[ portuguese_brazilian ] = "~Path list";
@@ -1674,7 +1714,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "路經清單";
         Text[ turkish ] = "~Path list";
         Text[ arabic ] = "~Path list";
-        Text[ catalan ] = "~Path list";
+        Text[ catalan ] = "~Llista de camins";
     };
     ListBox LB_SCRIPT_EXEC
     {
@@ -1711,8 +1751,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ korean ] = "삭제(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
+        Text[ thai ] = "~ลบ";
     };
     PushButton PB_SCRIPT_DEFAULT
     {
@@ -1739,8 +1780,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ korean ] = "기본(~E)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Predeterminado";
+        Text[ catalan ] = "P~er defecte";
         Text[ finnish ] = "~Oletusarvo";
+        Text[ thai ] = "ค่าเ~ริ่มต้น";
     };
     FixedText FT_NEW_PATH
     {
@@ -1757,7 +1799,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ spanish ] = "~Nueva ruta";
         Text[ finnish ] = "New pa~th";
         Text[ italian ] = "~Nuovo percorso";
-        Text[ danish ] = "New pa~th";
+        Text[ danish ] = "N~y sti";
         Text[ swedish ] = "N~y s�kv�g";
         Text[ polish ] = "New pa~th";
         Text[ portuguese_brazilian ] = "New pa~th";
@@ -1767,7 +1809,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ chinese_traditional ] = "新的路經";
         Text[ turkish ] = "New pa~th";
         Text[ arabic ] = "New pa~th";
-        Text[ catalan ] = "New pa~th";
+        Text[ catalan ] = "Ca~m� nou";
     };
     Edit ED_SCRIPT_EXEC
     {
@@ -1800,8 +1842,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ korean ] = "추가(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~A�adir";
+        Text[ catalan ] = "~Afegeix";
         Text[ finnish ] = "~Lis��";
+        Text[ thai ] = "เ~พิ่ม";
     };
     FixedLine FL_HYPERLINKS
     {
@@ -1809,6 +1852,26 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 248, 8 ) ;
         Text = "Hyperlinks" ;
         Text[ english_us ] = "Hyperlinks";
+        Text[ portuguese ] = "Hiperliga��es";
+        Text[ russian ] = "�����������";
+        Text[ greek ] = "����-���������";
+        Text[ dutch ] = "Hyperlinks";
+        Text[ french ] = "Hyperliens";
+        Text[ spanish ] = "Hiperenlaces";
+        Text[ finnish ] = "Hyperlinkit";
+        Text[ italian ] = "Hyperlink";
+        Text[ danish ] = "Hyperlinks";
+        Text[ swedish ] = "Hyperl�nkar";
+        Text[ polish ] = "Hiper��cza";
+        Text[ portuguese_brazilian ] = "Hyperlinks";
+        Text[ japanese ] = "ハイパーリンク";
+        Text[ korean ] = "하이퍼링크";
+        Text[ chinese_simplified ] = "超链接";
+        Text[ chinese_traditional ] = "超連結";
+        Text[ turkish ] = "Hyperlink";
+        Text[ arabic ] = "�������� ������";
+        Text[ catalan ] = "Hiperenlla�os";
+        Text[ thai ] = "เชื่อมโยงหลายมิติ";
     };
     FixedText FT_HYPERLINKS
     {
@@ -1816,6 +1879,26 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "H~yperlinks �ffnen" ;
         Text [ english_us ] = "Open h~yperlinks" ;
+        Text[ portuguese ] = "Open h~yperlinks";
+        Text[ russian ] = "Open h~yperlinks";
+        Text[ greek ] = "Open h~yperlinks";
+        Text[ dutch ] = "Open h~yperlinks";
+        Text[ french ] = "Ouvrir les hyperliens";
+        Text[ spanish ] = "~Abrir hiperenlaces";
+        Text[ finnish ] = "Open h~yperlinks";
+        Text[ italian ] = "H~yperlink aperti";
+        Text[ danish ] = "Open h~yperlinks";
+        Text[ swedish ] = "�ppna h~yperl�nkar";
+        Text[ polish ] = "Open h~yperlinks";
+        Text[ portuguese_brazilian ] = "Open h~yperlinks";
+        Text[ japanese ] = "ハイパーリンクを開く";
+        Text[ korean ] = "하이퍼링크 열기";
+        Text[ chinese_simplified ] = "打开超链接";
+        Text[ chinese_traditional ] = "開啓超連結";
+        Text[ turkish ] = "Open h~yperlinks";
+        Text[ arabic ] = "Open h~yperlinks";
+        Text[ catalan ] = "Open h~yperlinks";
+        Text[ thai ] = "Open h~yperlinks";
     };
     ListBox LB_HYPERLINKS
     {
@@ -1835,6 +1918,132 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
             < "With security check" ; > ;
             < "Always" ; > ;
         };
+    StringList [ language_user1 ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "Immer" ; > ;
+    };
+    StringList [ portuguese ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "Sempre" ; > ;
+    };
+    StringList [ russian ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "������" ; > ;
+    };
+    StringList [ greek ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "�����" ; > ;
+    };
+    StringList [ dutch ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "Altijd" ; > ;
+    };
+    StringList [ french ] =
+    {
+         < "Jamais" ; > ;
+        < "Avec contr�le de s�curit�" ; > ;
+        < "Toujours" ; > ;
+    };
+    StringList [ spanish ] =
+    {
+         < "Nunca" ; > ;
+        < "Con control de seguridad" ; > ;
+        < "Siempre" ; > ;
+    };
+    StringList [ finnish ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "Aina" ; > ;
+    };
+    StringList [ italian ] =
+    {
+         < "Mai" ; > ;
+        < "Con controllo di sicurezza" ; > ;
+        < "Sempre" ; > ;
+    };
+    StringList [ danish ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "Altid" ; > ;
+    };
+    StringList [ swedish ] =
+    {
+         < "Aldrig" ; > ;
+        < "Med s�kerhetskontroll" ; > ;
+        < "Alltid" ; > ;
+    };
+    StringList [ polish ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "Zawsze" ; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "Immer" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+         < "しない" ; > ;
+        < "セキュリティをチェックする" ; > ;
+        < "常に" ; > ;
+    };
+    StringList [ korean ] =
+    {
+         < "절대 안함" ; > ;
+        < "보안 점검" ; > ;
+        < "항상" ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+         < "永远不" ; > ;
+        < "使用安全检查" ; > ;
+        < "自动" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+         < "永遠不" ; > ;
+        < "使用安全檢查" ; > ;
+        < "自動" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "Daima" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "������" ; > ;
+    };
+    StringList [ catalan ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�berpr�fung" ; > ;
+        < "Sempre" ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "Niemals" ; > ;
+        < "Mit Sicherheits�erpr" ; > ;
+        < "สม่ำเสมอ" ; > ;
+    };
     };
     FixedLine FL_JAVA
     {
@@ -1862,6 +2071,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Java";
         Text[ arabic ] = "����";
         Text[ catalan ] = "Java";
+        Text[ thai ] = "จาวา";
     };
     CheckBox CB_J_ENABLE
     {
@@ -1875,7 +2085,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ french ] = "Valider" ;
         Text [ dutch ] = "~vrijgeven" ;
         Text [ swedish ] = "~frige" ;
-        Text [ danish ] = "aktiver" ;
+        Text [ danish ] = "akti~ver" ;
         Text [ portuguese_brazilian ] = "~Java freischalten" ;
         Text [ portuguese ] = "~Activar" ;
         Text[ chinese_simplified ] = "开放(~E)";
@@ -1889,7 +2099,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Etkinle�tir";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Ota k�ytt��n";
-        Text[ catalan ] = "~Enable";
+        Text[ catalan ] = "~Activa";
+        Text[ thai ] = "เ~ปิดทาง";
     };
     CheckBox CB_J_SECURITY
     {
@@ -1901,7 +2112,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ italian ] = "Controlli di s~icurezza";
         Text[ portuguese_brazilian ] = "S~icherheits�berpr�fungen";
         Text[ portuguese ] = "~Controlos de seguran�a";
-        Text[ danish ] = "Sikkerhedskontroller";
+        Text[ danish ] = "Sikkerheds~kontroller";
         Text[ french ] = "Contr�les de s�curit�";
         Text[ swedish ] = "S~�kerhetskontroller";
         Text[ dutch ] = "V~eiligheidscontroles";
@@ -1917,7 +2128,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "G�venlik kontrolleri";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Ota suojaustar~kistukset k�ytt��n";
-        Text[ catalan ] = "Enable ~security checks";
+        Text[ catalan ] = "Activa les comprovacions de ~seguretat";
+        Text[ thai ] = "อนุญาตให้ตรวจสอบความ~ปลอดภัย";
     };
     FixedText FT_NETACCESS
     {
@@ -1931,7 +2143,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ french ] = "Acc�s r�seau" ;
         Text [ dutch ] = "~Nettoegang" ;
         Text [ swedish ] = "~N�t�tkomst" ;
-        Text [ danish ] = "Netadgang" ;
+        Text [ danish ] = "Net~adgang" ;
         Text [ portuguese_brazilian ] = "~Netzzugriff" ;
         Text [ portuguese ] = "~Acesso � rede" ;
         Text[ chinese_simplified ] = "读取网络(~A)";
@@ -1945,7 +2157,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "A� eri�imi";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Verkko~k�ytt�";
-        Text[ catalan ] = "Net ~access";
+        Text[ catalan ] = "~Acc�s a la xarxa";
+        Text[ thai ] = "เ~ข้าถึงเน็ต";
     };
     ListBox LB_NETACCESS
     {
@@ -1987,7 +2200,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         {
             < "Uindskr�nket" ; > ;
             < "Ingen" ; > ;
-            < "Host computer" ; > ;
+            < "Lommeregner" ; > ;
         };
         stringlist [ italian ] =
         {
@@ -2087,10 +2300,16 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         };
         StringList [ catalan ] =
         {
-             < "Uneingeschr�nkt" ; > ;
-            < "Keinen" ; > ;
-            < "Rechner" ; > ;
+             < "Sense restricci�" ; > ;
+            < "Cap" ; > ;
+            < "Ordinador" ; > ;
         };
+    StringList [ thai ] =
+    {
+         < "ไม่จำกัด" ; > ;
+        < "ไม่มี" ; > ;
+        < "เจ้าของ" ; > ;
+    };
     };
     FixedText FT_CLASSPATH
     {
@@ -2104,7 +2323,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ french ] = "ClassPath" ;
         Text [ dutch ] = "~ClassPath" ;
         Text [ swedish ] = "~ClassPath" ;
-        Text [ danish ] = "ClassPath" ;
+        Text [ danish ] = "~ClassPath" ;
         Text [ portuguese_brazilian ] = "~ClassPath" ;
         Text [ portuguese ] = "~ClassPath" ;
         Text[ chinese_simplified ] = "~ClassPath";
@@ -2118,7 +2337,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "~ClassPath";
         Text[ language_user1 ] = "EM18.7.01 (laut AS) Java Variable: This must left the same as German";
         Text[ finnish ] = "~Luokan polku";
-        Text[ catalan ] = "~Class path";
+        Text[ catalan ] = "~ClassPath";
+        Text[ thai ] = "เส้นทาง~คลาส";
     };
     Edit ED_CLASSPATH
     {
@@ -2132,6 +2352,26 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Durchsuchen...";
         Text [ english_us ] = "~Browse..." ;
+        Text[ portuguese ] = "~Browse...";
+        Text[ russian ] = "~Browse...";
+        Text[ greek ] = "~Browse...";
+        Text[ dutch ] = "~Browse...";
+        Text[ french ] = "Parcourir...";
+        Text[ spanish ] = "E~xaminar...";
+        Text[ finnish ] = "~Browse...";
+        Text[ italian ] = "~Sfoglia...";
+        Text[ danish ] = "~Browse...";
+        Text[ swedish ] = "~Genoms�k...";
+        Text[ polish ] = "~Browse...";
+        Text[ portuguese_brazilian ] = "~Browse...";
+        Text[ japanese ] = "検索(~B)...";
+        Text[ korean ] = "검색(~B)...";
+        Text[ chinese_simplified ] = "浏览(~B)...";
+        Text[ chinese_traditional ] = "瀏覽(~B)...";
+        Text[ turkish ] = "~Browse...";
+        Text[ arabic ] = "~Browse...";
+        Text[ catalan ] = "~Browse...";
+        Text[ thai ] = "~Browse...";
     };
     FixedLine FL_SEPARATOR
     {
@@ -2148,7 +2388,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ english_us ] = "E~nable" ;
         Text [ portuguese_brazilian ] = "Ausf?ren" ;
         Text [ swedish ] = "Frige" ;
-        Text [ danish ] = "PlugIns" ;
+        Text [ danish ] = "Aktive~r" ;
         Text [ italian ] = "Abilita" ;
         Text [ spanish ] = "Validar" ;
         Text [ french ] = "Valider" ;
@@ -2164,8 +2404,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ korean ] = "사용 가능";
         Text[ turkish ] = "Plug-In";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Plug-ins";
+        Text[ catalan ] = "Connectors";
         Text[ finnish ] = "O~ta k�ytt��n";
+        Text[ thai ] = "เ~ปิดทาง";
     };
     CheckBox CB_EXECUTE_PLUGINS
     {
@@ -2176,7 +2417,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ english_us ] = "Plug-ins" ;
         Text [ portuguese_brazilian ] = "~Plugins" ;
         Text [ swedish ] = "~Plug-ins" ;
-        Text [ danish ] = "aktiver" ;
+        Text [ danish ] = "Pl~ugIns" ;
         Text [ italian ] = "~Plug in" ;
         Text [ spanish ] = "Plug-ins" ;
         Text [ french ] = "Plug-ins" ;
@@ -2192,8 +2433,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ korean ] = "플러그인";
         Text[ turkish ] = "Etkinle�tir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Va~lidar";
+        Text[ catalan ] = "H~abilita";
         Text[ finnish ] = "Lis�osat";
+        Text[ thai ] = "ปลั๊กอิน";
     };
     CheckBox CB_EXECUTE_APPLETS
     {
@@ -2210,7 +2452,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ spanish ] = "Applets";
         Text[ finnish ] = "Sovelmat";
         Text[ italian ] = "~Applet";
-        Text[ danish ] = "Applets";
+        Text[ danish ] = "A~pplets";
         Text[ swedish ] = "~Appletprogram";
         Text[ polish ] = "Aplety";
         Text[ portuguese_brazilian ] = "Applets";
@@ -2221,7 +2463,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ turkish ] = "Applet'ler";
         Text[ arabic ] = "������� �����";
         Text[ catalan ] = "Applets";
+        Text[ thai ] = "แอปเพล็ต";
     };
+    Text[ thai ] = "บทคำสั่ง";
 };
 
 ErrorBox RID_SVXERR_OPT_PROXYPORTS
@@ -2248,8 +2492,9 @@ ErrorBox RID_SVXERR_OPT_PROXYPORTS
     Message[ korean ] = "값이 유효하지 않음!\n\n포트 번호의 최대값은 65535임.";
     Message[ turkish ] = "Ge�ersiz de�er!\n\nPort numaras� i�in en y�ksek de�er 65535.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "�Valor no v�lido!\n\nEl valor m�ximo de un n�mero de puerto es 65535.";
+    Message[ catalan ] = "Valor no v�lid!\n\nEl valor m�xim d'un n�mero de port �s 65535.";
     Message[ finnish ] = "Virheellinen arvo!\n\nPorttinumeron suurin mahdollinen arvo on 65535.";
+    Message[ thai ] = "ค่าไม่ถูกต้อง!\n\nค่าที่มากที่สุดสำหรับหมายเลขพอร์ตคือ 65535";
 };
 
 // RID_SVXDLG_OPT_JAVASCRIPT_DISABLE -----------------------------------------
@@ -2280,7 +2525,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ russian ] = "����������, ������, ��� �������� Java,\n�� ��������� � JavaScript.\n\n��������� Java �������� �� ���?";
         Text[ dutch ] = "Wij wijzen u erop dat u met Java\nook Javascript uitschakelt.\n\nWilt u Java toch uitschakelen?";
         Text[ danish ] = "Bem�rk venligst, at du deaktiverer\nJavaScript sammenmed Java.\n\nVil du deaktivere Java alligevel?";
-        Text[ swedish ] = "T�nk p� att du �ven st�nger av\nJavascript tillsammans med Java.\n\nVill du �nd� st�nga av Java?";
+        Text[ swedish ] = "T�nk p� att om du st�nger av Java\nst�ngs �ven Javascript av.\n\nVill du �nd� st�nga av Java?";
         Text[ polish ] = "Nale�y uwzgl�dni�, �e po wy��czeniu Javy \nywy��czony zostanie r�wnie� JavaScript. \n\nCzy mimo to wy��czy� Jav�?";
         Text[ portuguese_brazilian ] = "Please note that with Java\nyou disable Javascript as well.\n\nDo you want to disable Java anyway?";
         Text[ japanese ] = "Java だけでなく\nJavaScript も作動しなくなることに注意してください。\n\nJava をオフに切り替えますか。";
@@ -2291,8 +2536,9 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ korean ] = "Java와 더불어 \nJavaScript도 사용할 수 없게 된다는 사실에 유의하십시오. \n\n그래도 Java를 사용 해제하겠습니까?";
         Text[ turkish ] = "Java ile birlikte Javascript'in de\nkapat�laca��n� dikkate al�n.\n\nYine de Java'y� kapatmak istiyor musunuz?";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tenga en cuenta que junto con Java\ntambi�n desactivar� Javascript.\n\n�Desea a�n desactivar Java?";
+        Text[ catalan ] = "S'ha de tenir en compte que amb el Java\ntamb� �s desactivar� Javascript.\n\nEncara voleu desactivar el Java?";
         Text[ finnish ] = "Jos poistat Java-tuen k�yt�st�,\nmy�s Javascript poistetaan k�yt�st�.\n\nHaluatko poistaa Java-tuen?";
+        Text[ thai ] = "กรุณาหมายเหตุว่ากับจาวา\nคุณปิดทางจาวาสคริปต์ด้วย\n\nคุณยังต้องการปิดทางจาวาอยู่หรือไม่?";
     };
     CheckBox CB_JSCPT_DISABLE
     {
@@ -2320,8 +2566,9 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ korean ] = "이 경고를 다시 표시 안함(~D)";
         Text[ turkish ] = "Bu uyar�y� art�k g�r�nt�leme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~No mostrar m�s esta advertencia.";
+        Text[ catalan ] = "~No tornis a mostrar l'advertiment";
         Text[ finnish ] = "~�l� n�yt� varoitusta uudelleen";
+        Text[ thai ] = "~อย่าแสดงคำเตือนอีก";
     };
     OKButton BTN_JSCPT_YES
     {
