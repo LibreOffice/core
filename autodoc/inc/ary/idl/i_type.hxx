@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_type.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:08:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,8 @@ class Type : public n22::RepositoryEntity
                             Ce_id &             o_nRelatedCe,
                             int &               o_nSequenceCount,
                             const Gate &        i_rGate ) const;
+    Type_id             TemplateParameterType() const;
+
   private:
     virtual void        inq_Get_Text(
                             StringVector &      o_module,
@@ -129,6 +131,7 @@ class Type : public n22::RepositoryEntity
                             Ce_id &             o_nRelatedCe,
                             int &               o_nSequemceCount,
                             const Gate &        i_rGate ) const = 0;
+    virtual Type_id     inq_TemplateParameterType() const;
 };
 
 inline void
@@ -139,6 +142,12 @@ Type::Get_Text( StringVector &      o_module,
                 const Gate &        i_rGate ) const
 {
     inq_Get_Text(o_module,o_name,o_nRelatedCe,o_nSequenceCount,i_rGate);
+}
+
+inline Type_id
+Type::TemplateParameterType() const
+{
+    return inq_TemplateParameterType();
 }
 
 
