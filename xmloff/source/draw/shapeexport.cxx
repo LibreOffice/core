@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-08 14:33:34 $
+ *  last change: $Author: cl $ $Date: 2001-03-16 10:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,19 +311,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             {
                 GetExport().GetTextParagraphExport()->collectTextAutoStyles( xText );
             }
-        }
-    }
-
-    // -------------------
-    // check for chart ole
-    // -------------------
-    if( aShapeInfo.meShapeType == XmlShapeTypeDrawChartShape || aShapeInfo.meShapeType == XmlShapeTypePresChartShape )
-    {
-        uno::Reference< chart::XChartDocument > xChartDoc;
-        xPropSet->getPropertyValue(msModel) >>= xChartDoc;
-        if( xChartDoc.is() )
-        {
-            GetExport().GetChartExport()->collectAutoStyles( xChartDoc );
         }
     }
 
