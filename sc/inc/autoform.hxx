@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-29 14:36:18 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@ JP 20.07.95:
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
+#ifndef _SVX_BOLNITEM_HXX
+#include <svx/bolnitem.hxx>
+#endif
 
 #ifndef SC_COLLECT_HXX
 #include "collect.hxx"
@@ -168,6 +171,8 @@ private:
     SvxShadowedItem             aShadowed;
     SvxColorItem                aColor;
     SvxBoxItem                  aBox;
+    SvxLineItem                 aTLBR;
+    SvxLineItem                 aBLTR;
     SvxBrushItem                aBackground;
 
     // Writer specific
@@ -176,7 +181,7 @@ private:
     // Calc specific
     SvxHorJustifyItem           aHorJustify;
     SvxVerJustifyItem           aVerJustify;
-    SvxOrientationItem          aOrientation;
+    SfxBoolItem                 aStacked;
     SvxMarginItem               aMargin;
     SfxBoolItem                 aLinebreak;
     // from SO5, 504k on, rotated text
@@ -211,10 +216,12 @@ public:
     const SvxColorItem&         GetColor() const        { return aColor; }
     const SvxHorJustifyItem&    GetHorJustify() const   { return aHorJustify; }
     const SvxVerJustifyItem&    GetVerJustify() const   { return aVerJustify; }
-    const SvxOrientationItem&   GetOrientation() const  { return aOrientation; }
+    const SfxBoolItem&          GetStacked() const      { return aStacked; }
     const SfxBoolItem&          GetLinebreak() const    { return aLinebreak; }
     const SvxMarginItem&        GetMargin() const       { return aMargin; }
     const SvxBoxItem&           GetBox() const          { return aBox; }
+    const SvxLineItem&          GetTLBR() const         { return aTLBR; }
+    const SvxLineItem&          GetBLTR() const         { return aBLTR; }
     const SvxBrushItem&         GetBackground() const   { return aBackground; }
     const SvxAdjustItem&        GetAdjust() const       { return aAdjust; }
     const SfxInt32Item&         GetRotateAngle() const  { return aRotateAngle; }
@@ -240,10 +247,12 @@ public:
     void    SetColor( const SvxColorItem& rColor )                  { aColor = rColor; }
     void    SetHorJustify( const SvxHorJustifyItem& rHorJustify )   { aHorJustify = rHorJustify; }
     void    SetVerJustify( const SvxVerJustifyItem& rVerJustify )   { aVerJustify = rVerJustify; }
-    void    SetOrientation( const SvxOrientationItem& rOrient )     { aOrientation = rOrient; }
+    void    SetStacked( const SfxBoolItem& rStacked )               { aStacked.SetValue( rStacked.GetValue() ); }
     void    SetLinebreak( const SfxBoolItem& rLinebreak )           { aLinebreak.SetValue( rLinebreak.GetValue() ); }
     void    SetMargin( const SvxMarginItem& rMargin )               { aMargin = rMargin; }
     void    SetBox( const SvxBoxItem& rBox )                        { aBox = rBox; }
+    void    SetTLBR( const SvxLineItem& rTLBR )                     { aTLBR = rTLBR; }
+    void    SetBLTR( const SvxLineItem& rBLTR )                     { aBLTR = rBLTR; }
     void    SetBackground( const SvxBrushItem& rBackground )        { aBackground = rBackground; }
     void    SetAdjust( const SvxAdjustItem& rAdjust );
     void    SetRotateAngle( const SfxInt32Item& rRotateAngle )      { aRotateAngle.SetValue( rRotateAngle.GetValue() ); }
