@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2001-08-02 11:03:24 $
+#   last change: $Author: hr $ $Date: 2001-08-02 13:17:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.12 $ ';
+$id_str = ' $Revision: 1.13 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -592,8 +592,7 @@ sub get_latest_patchlevel {
 sub push_default_actions {
     # any default action (that is an action which must be done even without
     # a corresponding d.lst entry) should be pushed here on the
-    # @action_data list. Currently we have just to create the default solver
-    # directories
+    # @action_data list.
     my $subdir;
     my @subdirs = (
                     'bin/app',
@@ -610,6 +609,10 @@ sub push_default_actions {
     foreach $subdir (@subdirs) {
         push(@action_data, ['mkdir', "%_DEST%/$subdir"]);
     }
+
+    # deliver build.lst to $dest/inc/$module
+    push(@action_data, ['mkdir', "%_DEST%/inc/$module"]); # might be necessary
+    push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
 }
 
 sub walk_hedabu_list {
@@ -687,7 +690,7 @@ sub push_on_ziplist
     # strip $dest from path since we don't want to record it in zip file
     $file =~ s#^$dest/##o;
     if ( $opt_minor ){
-        # strip extension from path if delivering in minor
+        # strip minor from path
         my $ext = "%_EXT%";
         $ext = expand_macros($ext);
         $file =~ s#^$ext##o;
