@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-04 09:37:31 $
+ *  last change: $Author: thb $ $Date: 2002-11-04 13:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,8 +369,21 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
     if( eFillStyle != XFILL_NONE &&
         (pMtf=mrXOut.GetOutDev()->GetConnectMetaFile()) )
     {
+        XPolyPolygon aGeometry;
+        mrObj.TakeXorPoly(aGeometry, TRUE);
+
+        // #104686# Prune non-closed polygons from geometry
         XPolyPolygon aPolyPoly;
-        mrObj.TakeXorPoly(aPolyPoly, TRUE);
+        int i;
+        for( i=0; i<aGeometry.Count(); ++i )
+        {
+            const XPolygon& rPoly = aGeometry.GetObject(i);
+            if( rPoly[0] == rPoly[ rPoly.GetSize()-1 ] )
+            {
+                // polygon is closed - use for fillings
+                aPolyPoly.Insert( rPoly );
+            }
+        }
 
         // #103692# Offset original geometry for shadows
         if( bIsShadow && (nDX || nDY) )
