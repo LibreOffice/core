@@ -226,15 +226,25 @@ public class AccessibilityWorkBench
         // Menu bar.
         maMenuBar = new MenuBar ();
         setMenuBar (maMenuBar);
+
+        // File menu.
+        Menu aFileMenu = new Menu ("File");
+        maMenuBar.add (aFileMenu);
+        MenuItem aItem;
+        aItem = new MenuItem ("Quit");
+        aFileMenu.add (aItem);
+        aItem.addActionListener (this);
+
+        // Options menu.
         Menu aOptionsMenu = new Menu ("Options");
         maMenuBar.add (aOptionsMenu);
-        CheckboxMenuItem aItem;
-        aItem = new CheckboxMenuItem ("Show Descriptions", maCanvas.getShowDescriptions());
-        aOptionsMenu.add (aItem);
-        aItem.addActionListener (this);
-        aItem = new CheckboxMenuItem ("Show Names", maCanvas.getShowNames());
-        aOptionsMenu.add (aItem);
-        aItem.addActionListener (this);
+        CheckboxMenuItem aCBItem;
+        aCBItem = new CheckboxMenuItem ("Show Descriptions", maCanvas.getShowDescriptions());
+        aOptionsMenu.add (aCBItem);
+        aCBItem.addActionListener (this);
+        aCBItem = new CheckboxMenuItem ("Show Names", maCanvas.getShowNames());
+        aOptionsMenu.add (aCBItem);
+        aCBItem.addActionListener (this);
 
         maMainPanel.setLayout (aLayout);
         getContentPane().add ("Center", maMainPanel);
@@ -437,6 +447,11 @@ public class AccessibilityWorkBench
         {
             Canvas.bPaintText = ! Canvas.bPaintText;
             maCanvas.repaint ();
+        }
+        else if (e.getActionCommand().equals ("Quit"))
+        {
+            System.out.println ("exiting");
+            System.exit (0);
         }
         else if (e.getActionCommand().equals ("Show Descriptions"))
         {
