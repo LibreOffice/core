@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:46:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,16 @@
  *
  *
  ************************************************************************/
+
 #ifndef SC_XLESCHER_HXX
 #define SC_XLESCHER_HXX
 
-#ifndef SC_ADDRESS_HXX
-#include "address.hxx"
-#endif
-
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
 #ifndef _VCL_MAPUNIT_HXX
 #include <vcl/mapunit.hxx>
+#endif
+
+#ifndef SC_XLADDRESS_HXX
+#include "xladdress.hxx"
 #endif
 
 // Constants and Enumerations =================================================
@@ -230,15 +228,12 @@ class XclExpStream;
 /** Represents the position (anchor) of an Escher object in a Calc document. */
 struct XclEscherAnchor
 {
-    sal_uInt16          mnLCol;     /// Left column index.
-    sal_uInt16          mnLX;       /// X offset in left column (1/1024 of column width).
-    sal_uInt16          mnTRow;     /// Top row index.
-    sal_uInt16          mnTY;       /// Y offset in top row (1/256 of row height).
-    sal_uInt16          mnRCol;     /// Right column index.
-    sal_uInt16          mnRX;       /// X offset in right column (1/1024 of column width).
-    sal_uInt16          mnBRow;     /// Bottom row index.
-    sal_uInt16          mnBY;       /// Y offset in bottom row (1/256 of row height).
+    XclRange            maXclRange; /// Cell range address.
     SCTAB               mnScTab;    /// Calc sheet index.
+    sal_uInt16          mnLX;       /// X offset in left column (1/1024 of column width).
+    sal_uInt16          mnTY;       /// Y offset in top row (1/256 of row height).
+    sal_uInt16          mnRX;       /// X offset in right column (1/1024 of column width).
+    sal_uInt16          mnBY;       /// Y offset in bottom row (1/256 of row height).
 
     explicit            XclEscherAnchor( SCTAB nScTab );
 
