@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 09:03:20 $
+#   last change: $Author: tv $ $Date: 2001-06-05 16:02:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ TARGET=templateswizarddesktop
 
 ZIP1TARGET      = $(TEMPLATE_WIZARD_DESKTOP_TARGET)
 
-ZIP1LIST        = $(LANGDIR)$/* -x $(LANGDIR)$/bugreport.sdw $(LANGDIR)$/logSpell.vor
+ZIP1LIST        = $(LANGDIR)$/*
 
 
 
