@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:58:06 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 21:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,7 @@ ModalDialog DLG_COMMENTS
         Text [ English ] = "Saved by " ;
         Text [ english_us ] = "Saved by " ;
         Text [ portuguese_brazilian ] = "gespeichert von " ;
-        Text [ swedish ] = "sparat av " ;
+        Text [ swedish ] = "sparad av " ;
         Text [ danish ] = "gemt af " ;
         Text [ italian ] = "salvato da " ;
         Text [ spanish ] = "guardado por  " ;
@@ -615,6 +615,7 @@ String DLG_COMMENTS
     Text[ catalan ] = "Comentario sobre la versión";
     Text[ finnish ] = "Versiohuomautus";
 };
+
 
 
 
