@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:33:35 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ String STR_PRIVATEGRAPHIC
     Text[ chinese_simplified ] = "Õº–Œ [%PRODUCTNAME Writer]";
     Text[ russian ] = "–ËÒÛÌÓÍ [%PRODUCTNAME Writer]";
     Text[ polish ] = "Grafika [%PRODUCTNAME Writer]";
-    Text[ japanese ] = "∏ﬁ◊Ã®Ø∏ [%PRODUCTNAME Writer]";
+    Text[ japanese ] = "ê} [%PRODUCTNAME Writer]";
     Text[ greek ] = "√Ò·ˆÈÍ¸ [%PRODUCTNAME Writer]";
     Text[ korean ] = "±◊∑°«» [%PRODUCTNAME Writer]";
     Text[ chinese_traditional ] = "πœßŒ [%PRODUCTNAME Writer]";
