@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter2.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-21 14:58:04 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,25 +294,25 @@ void Tag::writeRect( SvStream& rOut, const Rectangle& rRect )
 {
     BitStream aBits;
 
-    sal_Int16 minX, minY, maxX, maxY;
+    sal_Int32 minX, minY, maxX, maxY;
 
     if( rRect.nLeft < rRect.nRight )
     {
-        minX = _Int16(rRect.nLeft); maxX = _Int16(rRect.nRight);
+        minX = rRect.nLeft; maxX = rRect.nRight;
     }
     else
     {
-        maxX = _Int16(rRect.nLeft); minX = _Int16(rRect.nRight);
+        maxX = rRect.nLeft; minX = rRect.nRight;
     }
 
 
     if( rRect.nTop < rRect.nBottom )
     {
-        minY = _Int16(rRect.nTop); maxY = _Int16(rRect.nBottom);
+        minY = rRect.nTop; maxY = rRect.nBottom;
     }
     else
     {
-        maxY = _Int16(rRect.nTop); minY = _Int16(rRect.nBottom);
+        maxY = rRect.nTop; minY = rRect.nBottom;
     }
 
     // AS: Figure out the maximum nubmer of bits required to represent any of the
