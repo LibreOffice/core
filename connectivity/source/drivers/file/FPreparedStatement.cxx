@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 11:51:16 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(m_xMetaData.is())
+    if(!m_xMetaData.is())
         m_xMetaData = new OResultSetMetaData(m_aSQLIterator.getSelectColumns(),m_aSQLIterator.getTables().begin()->first,m_pTable);
     return m_xMetaData;
 }
