@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-29 12:45:30 $
+#   last change: $Author: kz $ $Date: 2005-03-03 20:00:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,28 +118,9 @@ APP1TARGET=spadmin.bin
 APP1DEPN+=$(SHL1TARGETN)
 
 APP1OBJS=\
-    $(OBJ)/pamain.obj \
-    $(OBJ)/icon_resource_ooo.obj
+    $(OBJ)/pamain.obj
 
 APP1STDLIBS=	\
-    -l$(SHL1TARGET)		\
-    $(VCLLIB)			\
-    $(TOOLSLIB)			\
-    $(UCBHELPERLIB)		\
-    $(COMPHELPERLIB)	\
-    $(CPPUHELPERLIB)	\
-    $(CPPULIB)			\
-    $(SALLIB)			\
-    -lXext -lX11
-
-APP2TARGET=so$/spadmin.bin
-APP2DEPN+=$(SHL1TARGETN) $(APP1TARGETN)
-
-APP2OBJS=\
-    $(OBJ)/pamain.obj \
-    $(OBJ)/icon_resource_sun.obj
-
-APP2STDLIBS=	\
     -l$(SHL1TARGET)		\
     $(VCLLIB)			\
     $(TOOLSLIB)			\
@@ -158,5 +139,3 @@ all: $(BIN)$/so ALLTAR
 
 .INCLUDE :  target.mk
 
-$(BIN)$/so: makefile.mk
-    @+-mkdir $(BIN)$/so >& $(NULLDEV)
