@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTypeConverter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:25 $
+ *  last change:$Date: 2003-02-04 11:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@ package ifc.script;
 import com.sun.star.container.XSet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XTypeConverter;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import lib.MultiMethodTest;
@@ -108,9 +110,17 @@ public class _XTypeConverter extends MultiMethodTest {
         try {
             Type destType = new Type(XSet.class) ;
 
-            Object res = oObj.convertTo(value, destType) ;
+            Object o = oObj.convertTo(value, destType);
 
-            tRes.tested("convertTo()", res instanceof XSet) ;
+            boolean result;
+            if (o instanceof Any) {
+                result = ((Any)o).getType().equals(destType);
+            }
+            else {
+                result = (o instanceof XSet);
+            }
+
+            tRes.tested("convertTo()", result) ;
         } catch (com.sun.star.script.CannotConvertException e) {
             log.println("Exception while converting value.") ;
             e.printStackTrace(log) ;
