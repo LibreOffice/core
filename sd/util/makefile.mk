@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-26 18:04:16 $
+#   last change: $Author: rt $ $Date: 2004-07-13 15:04:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,14 @@ GEN_HID_OTHER=TRUE
 RESLIB1NAME=sd
 RESLIB1IMAGES=$(PRJ)$/res/imagelst $(PRJ)$/res 
 RESLIB1SRSFILES=\
-     $(SRS)$/app.srs $(SRS)$/dlg.srs $(SRS)$/core.srs $(SRS)$/html.srs $(SRS)$/sdslots.srs \
-     $(SRS)$/accessibility.srs $(SOLARCOMMONRESDIR)$/sfx.srs
+    $(SRS)$/app.srs				\
+    $(SRS)$/dlg.srs				\
+    $(SRS)$/core.srs			\
+    $(SRS)$/html.srs			\
+    $(SRS)$/sdslots.srs			\
+    $(SRS)$/accessibility.srs		\
+    $(SRS)$/notes.srs			\
+    $(SOLARCOMMONRESDIR)$/sfx.srs
 
 # --- StarDraw DLL
 
@@ -164,7 +170,16 @@ LIB3FILES=      \
             $(SLB)$/html.lib		\
             $(SLB)$/filter.lib		\
             $(SLB)$/unoidl.lib		\
-            $(SLB)$/accessibility.lib
+            $(SLB)$/accessibility.lib	\
+            $(SLB)$/toolpanel.lib		\
+            $(SLB)$/tpcontrols.lib		\
+            $(SLB)$/slsshell.lib		\
+            $(SLB)$/slsmodel.lib		\
+            $(SLB)$/slsview.lib			\
+            $(SLB)$/slscontroller.lib	\
+            $(SLB)$/slscache.lib		\
+            $(SLB)$/notes.lib		
+
 
 SHL2TARGET= sdd$(UPD)$(DLLPOSTFIX)
 SHL2IMPLIB= sddimp
