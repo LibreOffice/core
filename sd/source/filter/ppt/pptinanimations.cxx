@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptinanimations.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:46:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2322,10 +2322,17 @@ void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const R
                 Any aPath;
                 if ( importAttributeValue( pChildAtom, aPath ) )
                 {
-                    xMotion->setPath( aPath );
-                    dump( " path=\"" );
-                    dump( aPath );
-                    dump( "\"" );
+                    rtl::OUString aStr;
+                    if ( aPath >>= aStr )
+                    {
+                        aStr = aStr.replace( 'E', ' ' );
+                        aStr = aStr.trim();
+                        aPath <<= aStr;
+                        xMotion->setPath( aPath );
+                        dump( " path=\"" );
+                        dump( aPath );
+                        dump( "\"" );
+                    }
                 }
             }
             break;
