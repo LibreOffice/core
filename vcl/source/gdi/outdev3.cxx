@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-23 18:30:53 $
+ *  last change: $Author: hdu $ $Date: 2002-10-29 13:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1530,32 +1530,6 @@ ImplDevFontListData* ImplDevFontList::ImplFindFontFromToken( const String& rStr 
         }
     }
     return NULL;
-#if 0
-    const char* pTempStr = pStr;
-    while ( *pTempStr )
-    {
-        if ( *pTempStr == ';' )
-        {
-            String aName( pStr, pTempStr-pStr, RTL_TEXTENCODING_ASCII_US );
-            if ( aName.Len() )
-            {
-                ImplDevFontListData* pData = ImplFind( aName );
-                if ( pData )
-                    return pData;
-            }
-
-            pStr = pTempStr+1;
-        }
-
-        pTempStr++;
-    }
-
-    String aName( pStr, pTempStr-pStr, RTL_TEXTENCODING_ASCII_US );
-    if ( aName.Len() )
-        return ImplFind( aName );
-    else
-        return NULL;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1670,19 +1644,20 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         nOrientation %= 3600;
     }
 
-    // Groesse anpassen
+    // correct size
     if ( nHeight < 0 )
         nHeight = -nHeight;
     if ( nWidth < 0 )
         nWidth = -nWidth;
 
-    // Eintrag suchen
+    // find entry
     ImplFontEntry* pPrevEntry = NULL;
     ImplFontEntry* pEntry = mpFirstEntry;
     while ( pEntry )
     {
         ImplFontSelectData* pFontSelData = &(pEntry->maFontSelData);
-        if ( (nHeight       == pFontSelData->mnHeight)    &&
+        if ( !(pEntry->mnSetFontFlags & SAL_SETFONT_BADFONT)    // avoid known bad fonts
+        &&   (nHeight       == pFontSelData->mnHeight)    &&
              (eWeight       == pFontSelData->meWeight)    &&
              (eItalic       == pFontSelData->meItalic)    &&
              (aName         == pFontSelData->maName)      &&
@@ -1695,10 +1670,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
              (bVertical     == pFontSelData->mbVertical)  &&
              (nOrientation  == pFontSelData->mnOrientation) )
         {
-            if ( !pEntry->mnRefCount )
+            if ( !pEntry->mnRefCount++ )
                 mnRef0Count--;
-
-            pEntry->mnRefCount++;
 
             // Entry nach vorne bringen
             if ( pPrevEntry )
@@ -1738,7 +1711,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         ImplGetEnglishSearchFontName( aSearchName );
         ImplFontSubstitute( aSearchName, nSubstFlags1, nSubstFlags2 );
         pFoundData = pFontList->ImplFind( aSearchName );
-        if ( pFoundData )
+        if( pFoundData )
         {
             aName = aToken;
             break;
@@ -1766,7 +1739,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                 nIndex = STRING_NOTFOUND;
             ImplFontSubstitute( aSearchName, nSubstFlags1, nSubstFlags2 );
             pFoundData = pFontList->ImplFind( aSearchName );
-            if ( pFoundData )
+            if( pFoundData )
                 break;
         }
         while ( nIndex != STRING_NOTFOUND );
@@ -2011,7 +1984,6 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
                                   pData->maSearchName.EqualsAscii( "zapfdingbats" ) )
                             nTestMatch += 10000000*5;
                         else if ( pData->mnTypeFaces & IMPL_DEVFONT_SYMBOL )
-
                             nTestMatch += 10000000*4;
                         else
                         {
@@ -2498,6 +2470,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     pEntry->mnOwnOrientation        = 0;
     pEntry->mnOrientation           = 0;
     pEntry->mbInit                  = FALSE;
+    pEntry->mnSetFontFlags          = 0;
     pEntry->mnRefCount              = 1;
     mpFirstEntry                    = pEntry;
 
@@ -2519,6 +2492,18 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     pFontSelData->mbVertical        = bVertical;
 
     return pEntry;
+}
+
+// -----------------------------------------------------------------------
+
+ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
+    const Font& rOrigFont, const Size& rSize, sal_Unicode cMissingChar )
+{
+    Font aFallbackFont = rOrigFont;
+    // TODO: use cMissingChar for fallback font name
+    aFallbackFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Arial Unicode MS;Andale Sans UI" ) ) );
+    ImplFontEntry* pFallbackFont = Get( pFontList, aFallbackFont, rSize );
+    return pFallbackFont;
 }
 
 // -----------------------------------------------------------------------
@@ -2689,7 +2674,7 @@ void OutputDevice::ImplInitFont()
         if( !mpPDFWriter || !mpPDFWriter->isBuiltinFont( mpFontEntry->maFontSelData.mpFontData ) )
         {
             // Select Font
-            mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData) );
+            mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData), 0 );
         }
         mbInitFont = FALSE;
     }
@@ -3170,7 +3155,6 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
                 nX -= nWidth;
                 nY -= nHeight;
             }
-
             else /* ( nOrientation == 2700 ) */
             {
                 long nTemp = nX;
@@ -3178,9 +3162,7 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
                 nY = nTemp;
                 nTemp = nWidth;
                 nWidth = nHeight;
-
                 nHeight = nTemp;
-
                 nX -= nWidth;
             }
 
@@ -3252,14 +3234,10 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
 
 Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
 {
-//###    if ( !nLen )
-//###        return Rectangle();
-
     Point aPoint = rSalLayout.GetDrawPosition();
     long nX = aPoint.X();
     long nY = aPoint.Y();
 
-    long nBaseX = nX, nBaseY = nY;
     long nWidth = rSalLayout.GetTextWidth();
     long nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
 
@@ -3267,6 +3245,7 @@ Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
 
     if ( mpFontEntry->mnOrientation )
     {
+        long nBaseX = nX, nBaseY = nY;
         if ( !(mpFontEntry->mnOrientation % 900) )
         {
             long nX2 = nX+nWidth;
@@ -3282,7 +3261,6 @@ Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
             Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
             Polygon   aPoly( aRect );
             aPoly.Rotate( Point( nBaseX, nBaseY ), mpFontEntry->mnOrientation );
-
             return aPoly.GetBoundRect();
         }
     }
@@ -5633,9 +5611,6 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     if( mpFontEntry->mpConversion )
         ImplRecodeString( mpFontEntry->mpConversion, aStr, 0, aStr.Len() );
 
-    // set layout options
-    ImplLayoutArgs aLayoutArgs( aStr.GetBuffer(), aStr.Len(), nMinIndex, nEndIndex );
-
     int nLayoutFlags = 0;
     if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL )
         nLayoutFlags |= SAL_LAYOUT_BIDI_RTL;
@@ -5693,7 +5668,8 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     if( bRightAlign )
         nLayoutFlags |= SAL_LAYOUT_RIGHT_ALIGN;
 
-    aLayoutArgs.SetFlags( nLayoutFlags );
+    // set layout options
+    ImplLayoutArgs aLayoutArgs( aStr.GetBuffer(), aStr.Len(), nMinIndex, nEndIndex, nLayoutFlags );
 
     int nOrientation = mpFontEntry ? mpFontEntry->mnOrientation : 0;
     aLayoutArgs.SetOrientation( nOrientation );
@@ -5722,8 +5698,35 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     if( mpPDFWriter )
         pSalLayout = mpPDFWriter->createSalLayout( &mpFontEntry->maFontSelData, aLayoutArgs );
 
-    if( ! pSalLayout )
-        pSalLayout = mpGraphics->LayoutText( aLayoutArgs );
+    if( !pSalLayout )
+        pSalLayout = mpGraphics->LayoutText( aLayoutArgs, 0 );
+
+    // TODO: multi-level font fallback
+    if( aLayoutArgs.SetFallbackArgs() && mpFontEntry )
+    {
+        bool bRTL;
+        int nCharPos;
+        aLayoutArgs.GetNextPos( &nCharPos, &bRTL );
+        sal_Unicode cMissing = aLayoutArgs.mpStr[ nCharPos ];
+        aLayoutArgs.ResetPos();
+        Size aSize( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight );
+        ImplFontEntry* pFallbackFont = mpFontCache->GetFallback( mpFontList, maFont, aSize, cMissing );
+
+        if( pFallbackFont && (pFallbackFont != mpFontEntry) )
+        {
+            OutputDevice& rOut = const_cast<OutputDevice&>(*this);
+            // use fallback font for text layout
+            mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(pFallbackFont->maFontSelData), 1 );
+            SalLayout* pFallback = mpGraphics->LayoutText( aLayoutArgs, 1 );
+            if( pFallback )
+            {
+                MultiSalLayout* pMulti = new MultiSalLayout( aLayoutArgs, *pSalLayout );
+                pMulti->ApplyFallback( *pFallback );
+                pSalLayout = pMulti;
+            }
+            mpFontCache->Release( pFallbackFont );
+        }
+    }
 
     // adjust to right alignment if necessary
     if( pSalLayout )
