@@ -148,20 +148,8 @@ public class ScriptSelector {
                         checkEnabled(props, "Deletable", deleteButton);
                         checkEnabled(props, "Editable", editButton);
 
-                        try {
-                            if (props != null) {
-                                String str = AnyConverter.toString(
-                                    props.getPropertyValue("URI"));
-                                if (str.indexOf("language=Basic") != -1) {
-                                    editButton.setEnabled(true);
-                                }
-                            }
-                        }
-                        catch (Exception ignore) {
-                            editButton.setEnabled(false);
-                        }
-
-                        if (xbn.getType() == BrowseNodeTypes.SCRIPT)
+                        if (xbn != null &&
+                            xbn.getType() == BrowseNodeTypes.SCRIPT)
                         {
                             runButton.setEnabled(true);
                         }
@@ -199,18 +187,13 @@ public class ScriptSelector {
                     else if (event.getSource() == editButton) {
                         String uri = selectorPanel.textField.getText();
 
-                        if (uri.indexOf("language=Basic") != -1) {
-                            showBasicEditor(ctxt);
-                        }
-                        else {
-                            DefaultMutableTreeNode node =
-                              (DefaultMutableTreeNode)
-                              selectorPanel.tree.getLastSelectedPathComponent();
+                        DefaultMutableTreeNode node =
+                          (DefaultMutableTreeNode)
+                          selectorPanel.tree.getLastSelectedPathComponent();
 
-                            if (node == null) return;
+                        if (node == null) return;
 
-                            showEditor(ctxt, node);
-                        }
+                        showEditor(ctxt, node);
                     }
                     else if (event.getSource() == assignButton) {
                     }
@@ -259,7 +242,7 @@ public class ScriptSelector {
         Object[] args = new Object[] { ctxt };
         try {
             inv.invoke("Editable", args,
-                new short[0][0], new Object[0][0]);
+                new short[1][0], new Object[1][0]);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -395,6 +378,11 @@ class ScriptSelectorPanel extends JPanel {
                 XBrowseNode xbn = getSelection();
                 XPropertySet props = (XPropertySet)UnoRuntime.queryInterface(
                     XPropertySet.class, xbn);
+
+                if (xbn == null) {
+                    textField.setText("");
+                    return;
+                }
 
                 String str = xbn.getName();
                 if (xbn.getType() == BrowseNodeTypes.SCRIPT && props != null)
