@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-06 08:32:56 $
+ *  last change: $Author: cl $ $Date: 2002-04-26 11:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,10 @@ SdrView::SdrView(SdrModel* pModel1, OutputDevice* pOut):
     bNoExtendedCommandDispatcher(FALSE)
 {
     bTextEditOnObjectsWithoutTextIfTextTool=FALSE;
+
+    StartListening( maAccessibilityOptions );
+
+    onAccessibilityOptionsChanged();
 }
 
 SdrView::SdrView(SdrModel* pModel1, ExtOutputDevice* pXOut):
@@ -158,6 +162,10 @@ SdrView::SdrView(SdrModel* pModel1, ExtOutputDevice* pXOut):
     bNoExtendedCommandDispatcher(FALSE)
 {
     bTextEditOnObjectsWithoutTextIfTextTool=FALSE;
+
+    StartListening( maAccessibilityOptions );
+
+    onAccessibilityOptionsChanged();
 }
 
 SdrView::SdrView(SdrModel* pModel1):
@@ -167,6 +175,15 @@ SdrView::SdrView(SdrModel* pModel1):
     bNoExtendedCommandDispatcher(FALSE)
 {
     bTextEditOnObjectsWithoutTextIfTextTool=FALSE;
+
+    StartListening( maAccessibilityOptions );
+
+    onAccessibilityOptionsChanged();
+}
+
+SdrView::~SdrView()
+{
+    EndListening( maAccessibilityOptions );
 }
 
 BOOL SdrView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
@@ -1385,4 +1402,24 @@ SvStream& operator>>(SvStream& rIn, SdrView& rView)
     return rIn;
 }
 
+
+void SdrView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+{
+    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_ACCESSIBILITY_CHANGED )
+    {
+        onAccessibilityOptionsChanged();
+    }
+
+    SdrCreateView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType );
+}
+
+SvtAccessibilityOptions& SdrView::getAccessibilityOptions()
+{
+    return maAccessibilityOptions;
+}
+
+/** method is called whenever the global SvtAccessibilityOptions is changed */
+void SdrView::onAccessibilityOptionsChanged()
+{
+}
 
