@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:12:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,14 @@
 #ifndef _PRESENTATION_HXX
 #include "pres.hxx"
 #endif
+
+#include <sot/storage.hxx>
+#include <tools/shl.hxx>
+
 #ifndef INCLUDED_SDDLLAPI_H
 #include "sddllapi.h"
 #endif
 
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
 #ifndef _SFXLSTNER_HXX
 #include <svtools/lstner.hxx>
 #endif
