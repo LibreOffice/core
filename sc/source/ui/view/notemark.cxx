@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notemark.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-10 10:30:45 $
+ *  last change: $Author: nn $ $Date: 2002-04-25 15:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <sfx2/printer.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/itempool.hxx>
+#include <vcl/svapp.hxx>
 
 #include "notemark.hxx"
 #include "document.hxx"
@@ -166,12 +167,20 @@ void lcl_DrawWin( SdrObject* pObject, Window* pWindow, const MapMode& rMap )
     MapMode aOld = pWindow->GetMapMode();
     pWindow->SetMapMode( rMap );
 
+    ULONG nOldDrawMode = pWindow->GetDrawMode();
+    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        pWindow->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
+                            DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+    }
+
     ExtOutputDevice* pXOut = new ExtOutputDevice( pWindow );
     pXOut->SetOutDev( pWindow );
     SdrPaintInfoRec aInfoRec;
     pObject->Paint( *pXOut, aInfoRec );
     delete pXOut;
 
+    pWindow->SetDrawMode( nOldDrawMode );
     pWindow->SetMapMode( aOld );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: nn $ $Date: 2002-04-25 15:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,13 @@ void ScGridWindow::OutlinerViewPaint( const Rectangle& rRect )
 
                 if ( aEditRect.IsOver( rRect ) )
                 {
+                    ULONG nOldDrawMode = GetDrawMode();
+                    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+                    {
+                        SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
+                                            DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+                    }
+
                     Rectangle aEffRect = rRect.GetIntersection( aEditRect );
                     if (bFrame)
                     {
@@ -412,6 +419,8 @@ void ScGridWindow::OutlinerViewPaint( const Rectangle& rRect )
                         DrawRect( aEffRect );
                         pOlView->Paint( aEffRect );
                     }
+
+                    SetDrawMode( nOldDrawMode );
                 }
             }
         }
