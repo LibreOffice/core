@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: dvo $ $Date: 2000-12-08 13:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,9 +456,9 @@ String SwDDEField::Expand() const
 
     aStr.EraseAllChars( '\r' );
     while( (nPos = aStr.Search( '\t' )) != STRING_NOTFOUND )
-        aStr.SetChar( ' ', nPos );
+        aStr.SetChar( nPos, ' ' );
     while( (nPos = aStr.Search( '\n' )) != STRING_NOTFOUND )
-        aStr.SetChar( '|', nPos );
+        aStr.SetChar( nPos, '|' );
     if( aStr.Len() && ( aStr.GetChar( aStr.Len()-1 ) == '|') )
         aStr.Erase( aStr.Len()-1, 1 );
     return aStr;
