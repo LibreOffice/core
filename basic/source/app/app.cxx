@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gh $ $Date: 2001-07-06 13:52:07 $
+ *  last change: $Author: gh $ $Date: 2001-07-09 12:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,12 @@ Reference< XContentProviderManager > InitializeUCB( void )
 //                                      Reference< XSimpleRegistry >() );
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                                         OUString::createFromAscii(SVLIBRARY( "i18n" )),
+                                        Reference< XSimpleRegistry >() );
+
+        // Reading of files in specific encodings like UTF-8 using
+        // createUnoService( "com.sun.star.io.TextInputStream" ) and such
+        xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "tinstrm" )),
                                         Reference< XSimpleRegistry >() );
 
         //////////////////////////////////////////////////////////////////////
