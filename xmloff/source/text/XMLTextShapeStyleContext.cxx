@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:43 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ public:
     XMLTextShapePropertySetContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< XAttributeList >& xAttrList,
+                 sal_uInt32 nFamily,
         ::std::vector< XMLPropertyState > &rProps,
         const UniReference < SvXMLImportPropertyMapper > &rMap );
 
@@ -127,10 +128,11 @@ XMLTextShapePropertySetContext_Impl::XMLTextShapePropertySetContext_Impl(
                  SvXMLImport& rImport, sal_uInt16 nPrfx,
                  const OUString& rLName,
                  const Reference< XAttributeList > & xAttrList,
+                 sal_uInt32 nFamily,
                  ::std::vector< XMLPropertyState > &rProps,
                  const UniReference < SvXMLImportPropertyMapper > &rMap ) :
-    XMLShapePropertySetContext( rImport, nPrfx, rLName, xAttrList, rProps,
-                                rMap )
+    XMLShapePropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily,
+                                rProps, rMap )
 {
 }
 
@@ -227,20 +229,29 @@ SvXMLImportContext *XMLTextShapeStyleContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_PROPERTIES ) )
+    if( XML_NAMESPACE_STYLE == nPrefix )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
-            GetStyles()->GetImportPropertyMapper( GetFamily() );
-        if( xImpPrMap.is() )
+        sal_uInt32 nFamily = 0;
+        if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_TEXT;
+        else if( IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_PARAGRAPH;
+        else if( IsXMLToken( rLocalName, XML_GRAPHIC_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_GRAPHIC;
+        if( nFamily )
         {
-            pContext = new XMLTextShapePropertySetContext_Impl(
-                    GetImport(), nPrefix, rLocalName, xAttrList,
-                    GetProperties(), xImpPrMap );
+            UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+                GetStyles()->GetImportPropertyMapper( GetFamily() );
+            if( xImpPrMap.is() )
+            {
+                pContext = new XMLTextShapePropertySetContext_Impl(
+                        GetImport(), nPrefix, rLocalName, xAttrList, nFamily,
+                        GetProperties(), xImpPrMap );
+            }
         }
     }
     else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-              IsXMLToken( rLocalName, XML_EVENTS ) )
+              IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
         // create and remember events import context
         // (for delayed processing of events)
