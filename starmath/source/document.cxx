@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:42:35 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -295,12 +298,16 @@ void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
 
 void SmDocShell::LoadSymbols()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::LoadSymbols" );
+
     GetSymSetManager().Load();
 }
 
 
 SmSymSetManager & SmDocShell::GetSymSetManager()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetSymSetManager" );
+
     if (!pSymSetMgr)
     {
         pSymSetMgr = new SmSymSetManager;
@@ -312,6 +319,8 @@ SmSymSetManager & SmDocShell::GetSymSetManager()
 
 const String &SmDocShell::GetTitle() const
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetTitle" );
+
     return ((SmDocShell *) this)->GetDocInfo().GetTitle();
 }
 
@@ -319,6 +328,8 @@ const String &SmDocShell::GetTitle() const
 
 const String &SmDocShell::GetComment() const
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetComment" );
+
     return ((SmDocShell *) this)->GetDocInfo().GetComment();
 }
 
@@ -326,6 +337,8 @@ const String &SmDocShell::GetComment() const
 
 void SmDocShell::SetText(const String& rBuffer)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetText" );
+
     if (rBuffer != aText)
     {
         BOOL bIsEnabled = IsEnableSetModified();
@@ -365,6 +378,8 @@ void SmDocShell::SetText(const String& rBuffer)
 
 void SmDocShell::SetFormat(SmFormat& rFormat)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetFormat" );
+
     aFormat = rFormat;
     SetFormulaArranged(FALSE);
     SmViewShell *pViewSh = SmGetActiveView();
@@ -375,6 +390,8 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
 
 String SmDocShell::GetAccessibleText()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetAccessibleText" );
+
     if (!IsFormulaArranged())
         ArrangeFormula();
     if (0 == aAccText.Len())
@@ -388,6 +405,8 @@ String SmDocShell::GetAccessibleText()
 
 void SmDocShell::Parse()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Parse" );
+
     if (pTree)
         delete pTree;
     pTree = aInterpreter.Parse(aText);
@@ -398,6 +417,8 @@ void SmDocShell::Parse()
 
 void SmDocShell::ArrangeFormula()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ArrangeFormula" );
+
     //! Nur für die Dauer der Existenz dieses Objekts sind am Drucker die
     //! richtigen Einstellungen garantiert.
     SmPrinterAccess  aPrtAcc(*this);
@@ -447,6 +468,8 @@ void SmDocShell::ArrangeFormula()
 
 EditEngine& SmDocShell::GetEditEngine()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetEditEngine" );
+
     if (!pEditEngine)
     {
         //!
@@ -542,6 +565,8 @@ EditEngine& SmDocShell::GetEditEngine()
 
 SfxItemPool& SmDocShell::GetEditEngineItemPool()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetEditEngineItemPool" );
+
     if (!pEditEngineItemPool)
         GetEditEngine();
     DBG_ASSERT( pEditEngineItemPool, "EditEngineItemPool missing" );
@@ -551,6 +576,8 @@ SfxItemPool& SmDocShell::GetEditEngineItemPool()
 
 void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Draw" );
+
     if (!pTree)
         Parse();
     DBG_ASSERT(pTree, "Sm : NULL pointer");
@@ -602,6 +629,8 @@ void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
 
 Size SmDocShell::GetSize()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetSize" );
+
     Size aRet;
 
     if (!pTree)
@@ -696,6 +725,8 @@ SmPrinterAccess::~SmPrinterAccess()
 
 Printer* SmDocShell::GetPrt()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetPrt" );
+
     if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
     {
         //Normalerweise wird der Printer vom Server besorgt. Wenn dieser aber
@@ -730,6 +761,8 @@ Printer* SmDocShell::GetPrt()
 
 OutputDevice* SmDocShell::GetRefDev()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetRefDev" );
+
     if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
     {
         OutputDevice* pOutDev = GetDocumentRefDev();
@@ -743,6 +776,8 @@ OutputDevice* SmDocShell::GetRefDev()
 
 void SmDocShell::SetPrinter( SfxPrinter *pNew )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetPrinter" );
+
     delete pPrinter;
     pPrinter = pNew;    //Eigentumsuebergang!
     pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
@@ -753,6 +788,8 @@ void SmDocShell::SetPrinter( SfxPrinter *pNew )
 
 void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::OnDocumentPrinterChanged" );
+
     pTmpPrinter = pPrt;
     SetFormulaArranged(FALSE);
     SM_MOD1()->GetRectCache()->Reset();
@@ -765,6 +802,8 @@ void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
 
 void SmDocShell::Repaint()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Resize" );
+
     Size aVisSize = GetSize();
 
     BOOL bIsEnabled = IsEnableSetModified();
@@ -794,6 +833,8 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
     nModifyCount        ( 0 ),
     bIsFormulaArranged  ( FALSE )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SmDocShell" );
+
     SetPool(&SFX_APP()->GetPool());
 
     SmModule *pp = SM_MOD1();
@@ -811,6 +852,8 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
 
 SmDocShell::~SmDocShell()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::~SmDocShell" );
+
     SmModule *pp = SM_MOD1();
 
     EndListening(aFormat);
@@ -825,6 +868,8 @@ SmDocShell::~SmDocShell()
 
 BOOL SmDocShell::SetData( const String& rData )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetData" );
+
     SetText( rData );
     return TRUE;
 }
@@ -835,6 +880,8 @@ void SmDocShell::ConvertText( String &rText, SmConvert eConv )
     // Example: "2 over sin x" acts very different in 4.0 and 5.0,
     // and from 5.2 to 6.0 many symbol names were renamed.
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ConvertText" );
+
     if (pTree)
         delete pTree;
 
@@ -858,6 +905,8 @@ void SmDocShell::ConvertText( String &rText, SmConvert eConv )
 
 BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ConvertFrom" );
+
     BOOL     bSuccess = FALSE;
     const String& rFltName = rMedium.GetFilter()->GetFilterName();
 
@@ -908,6 +957,8 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
 
 BOOL SmDocShell::InsertFrom(SfxMedium &rMedium)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::InsertFrom" );
+
     BOOL        bSuccess = FALSE;
     SvStream   *pStream = rMedium.GetInStream();
     String      aTemp = aText;
@@ -956,6 +1007,8 @@ BOOL SmDocShell::InsertFrom(SfxMedium &rMedium)
 
 BOOL SmDocShell::InitNew( const uno::Reference < embed::XStorage >& xStorage )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::InitNew" );
+
     BOOL bRet = FALSE;
     if ( SfxObjectShell::InitNew( xStorage ) )
     {
@@ -968,6 +1021,8 @@ BOOL SmDocShell::InitNew( const uno::Reference < embed::XStorage >& xStorage )
 
 BOOL SmDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Load" );
+
     BOOL bRet = FALSE;
     if( SfxObjectShell::Load( xStorage ))
     {
@@ -996,6 +1051,8 @@ BOOL SmDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::star:
 
 BOOL SmDocShell::Insert( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Insert" );
+
     String aTemp = aText;
     BOOL bRet = FALSE, bChkOldVersion = TRUE;
 
@@ -1043,6 +1100,8 @@ BOOL SmDocShell::Insert( const ::com::sun::star::uno::Reference< ::com::sun::sta
 
 void SmDocShell::ImplSave( SvStorageStreamRef xStrm )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ImplSave" );
+
     String aTmp( aText );
     if (SOFFICE_FILEFORMAT_50 >= xStrm->GetVersion())
         ConvertText( aTmp, CONVERT_60_TO_50 );
@@ -1060,6 +1119,8 @@ void SmDocShell::ImplSave( SvStorageStreamRef xStrm )
 
 BOOL SmDocShell::Save()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Save" );
+
     //! apply latest changes if necessary
     UpdateText();
 
@@ -1084,6 +1145,8 @@ BOOL SmDocShell::Save()
 
 void SmDocShell::UpdateText()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::UpdateText" );
+
     if (pEditEngine && pEditEngine->IsModified())
     {
         String aEngTxt( pEditEngine->GetText( LINEEND_LF ) );
@@ -1095,6 +1158,8 @@ void SmDocShell::UpdateText()
 
 BOOL SmDocShell::SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveAs" );
+
     BOOL bRet = FALSE;
 
     //! apply latest changes if necessary
@@ -1118,6 +1183,8 @@ BOOL SmDocShell::SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::sta
 
 BOOL SmDocShell::ConvertTo( SfxMedium &rMedium )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ConvertTo" );
+
     BOOL bRet = FALSE;
     const SfxFilter* pFlt = rMedium.GetFilter();
     if( pFlt )
@@ -1150,6 +1217,8 @@ BOOL SmDocShell::ConvertTo( SfxMedium &rMedium )
 
 BOOL SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveCompleted" );
+
     if( SfxObjectShell::SaveCompleted( xStorage ))
         return TRUE;
 
@@ -1160,6 +1229,8 @@ BOOL SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::s
 
 BOOL SmDocShell::ImportSM20File(SvStream *pStream)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ImportSM20File" );
+
     void ReadSM20SymSet(SvStream*, SmSymSet*);
 
     char         cTag;
@@ -1228,6 +1299,8 @@ BOOL SmDocShell::ImportSM20File(SvStream *pStream)
 
 void SmDocShell::Execute(SfxRequest& rReq)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Execute" );
+
     SfxBindings *pBindings  = NULL;
     SmViewShell *pViewSh    = SmGetActiveView();
     if (pViewSh)
@@ -1503,6 +1576,8 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
 void SmDocShell::GetState(SfxItemSet &rSet)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetState" );
+
     SfxWhichIter aIter(rSet);
 
     for (USHORT nWh = aIter.FirstWhich();  0 != nWh;  nWh = aIter.NextWhich())
@@ -1612,6 +1687,8 @@ void SmDocShell::GetState(SfxItemSet &rSet)
 
 SfxUndoManager *SmDocShell::GetUndoManager()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetUndoManager" );
+
     if (!pEditEngine)
         GetEditEngine();
     return &pEditEngine->GetUndoManager();
@@ -1621,6 +1698,8 @@ SfxUndoManager *SmDocShell::GetUndoManager()
 
 void SmDocShell::SaveSymbols()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveSymbols" );
+
     GetSymSetManager().Save();
 }
 
@@ -1628,6 +1707,8 @@ void SmDocShell::SaveSymbols()
 
 void SmDocShell::RestartFocusTimer()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::RestartFocusTimer" );
+
     SmCmdBoxWrapper *pWrapper = NULL;
     SmViewShell *pView = SmGetActiveView();
     if (pView)
@@ -1644,6 +1725,8 @@ void SmDocShell::Draw(OutputDevice *pDevice,
                       const JobSetup &,
                       USHORT nAspect)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Draw" );
+
     pDevice->IntersectClipRegion(GetVisArea());
     Point atmppoint;
     Draw(*pDevice, atmppoint);
@@ -1656,6 +1739,8 @@ SfxItemPool& SmDocShell::GetPool()
 
 void SmDocShell::SetVisArea(const Rectangle & rVisArea)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetVisArea" );
+
     Rectangle aNewRect(rVisArea);
 
     aNewRect.SetPos(Point());
@@ -1693,6 +1778,8 @@ BOOL SmDocShell::Try3x (SvStorage *pStor,
                         StreamMode eMode)
 
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Try3x" );
+
     BOOL bRet = FALSE;
 
     SvStorageStreamRef aTempStream = pStor->OpenSotStream(
@@ -1794,6 +1881,8 @@ BOOL SmDocShell::Try3x (SvStorage *pStor,
 BOOL SmDocShell::Try2x (SvStorage *pStor,
                         StreamMode eMode)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Try2x" );
+
     SvStorageStreamRef aTempStream = pStor->OpenSotStream(C2S("\1Ole10Native"), eMode);
     aTempStream->SetVersion (pStor->GetVersion ());
     GetPool().SetFileFormatVersion(USHORT(pStor->GetVersion ()));
@@ -1872,6 +1961,8 @@ BOOL SmDocShell::Try2x (SvStorage *pStor,
 
 void SmDocShell::UIActivate (BOOL bActivate)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::UIActivate" );
+
     if (bActivate)
     {
         SfxObjectShell::UIActivate (bActivate);
@@ -1906,6 +1997,8 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
                            String* pShortTypeName,
                            sal_Int32 nFileFormat ) const
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::FillClass" );
+
     if (nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
@@ -1930,6 +2023,8 @@ ULONG SmDocShell::GetMiscStatus() const
 
 void SmDocShell::SetModified(BOOL bModified)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetModified" );
+
     if( IsEnableSetModified() )
         SfxObjectShell::SetModified( bModified );
     Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
@@ -1937,6 +2032,8 @@ void SmDocShell::SetModified(BOOL bModified)
 
 BOOL SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::WriteAsMathType3" );
+
     MathType aEquation( aText, pTree );
 
     BOOL bRet = 0 != aEquation.ConvertFromStarMath( rMedium );
