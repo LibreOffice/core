@@ -28,7 +28,7 @@ $main::cppVersion = "3.0.1";
 if ( $main::operatingSystem eq "SunOS" )
 {
     $main::cppName = "CC";
-    $main::cppVersion = "";
+    $main::cppVersion = "5.2";
 }
 
 $main::OO_SDK_CPP_HOME_SUGGESTION = searchprog($main::cppName);
@@ -44,7 +44,7 @@ $main::return = 0;
 
 # prepare SDK path
 while ( (! -d "$main::OO_SDK_HOME" ) ||
-     ((-d "$main::OO_SDK_HOME") && (! -d "$main::OO_SDK_HOME/idl")) )
+        ((-d "$main::OO_SDK_HOME") && (! -d "$main::OO_SDK_HOME/idl")) )
 {
     print "Enter the Office Software Development Kit directory [$main::OO_SDK_HOME_SUGGESTION]: ";
     $main::OO_SDK_HOME = <STDIN>;
@@ -99,8 +99,8 @@ while ( (! -d "$main::OFFICE_HOME" ) ||
 
 # prepare GNU make path
 while ( (!$main::correctVersion) &&
-         ((! -d "$main::OO_SDK_MAKE_HOME" ) ||
-          ((-d "$main::OO_SDK_MAKE_HOME") && (! -e "$main::OO_SDK_MAKE_HOME/make"))) )
+        ((! -d "$main::OO_SDK_MAKE_HOME" ) ||
+         ((-d "$main::OO_SDK_MAKE_HOME") && (! -e "$main::OO_SDK_MAKE_HOME/make"))) )
 {
     print "Enter GNU make ($main::makeVersion or higher) tools directory [$main::OO_SDK_MAKE_HOME_SUGGESTION]: ";
     $main::OO_SDK_MAKE_HOME = <STDIN>;
@@ -117,7 +117,7 @@ while ( (!$main::correctVersion) &&
     } else
     {
         #check version
-        my $testVersion = `$main::OO_SDK_MAKE_HOME/make --version 2> /dev/null | egrep "GNU Make version" | head -1 | sed -e 's#.*GNU Make version ##' | sed -e 's#,.*##'`;
+        my $testVersion = `$OO_SDK_MAKE_HOME/make --version`;
         if ( $testVersion eq "")
         {
             print "The 'make' command found at $main::OO_SDK_MAKE_HOME/make is not GNU Make\n";
@@ -125,9 +125,14 @@ while ( (!$main::correctVersion) &&
             print "GNU make version $main::makeVersion can be obtained at ftp://ftp.gnu.org/gnu/make/\n";
         } else
         {
+            if ($testVersion =~ m#((\d+\.)+\d+)# )
+            {
+                $testVersion = $1;
+            }
             $main::correctVersion = testVersion($main::makeVersion, $testVersion, "$main::OO_SDK_MAKE_HOME/make");
             if ( !$main::correctVersion )
             {
+                print "The 'make' command found at '$main::OO_SDK_MAKE_HOME' has a wrong version\n";
                 $main::OO_SDK_MAKE_HOME = "";
             }
         }
@@ -137,8 +142,8 @@ while ( (!$main::correctVersion) &&
 # prepare C++ compiler path
 $main::correctVersion = 0;
 while ( (!$main::correctVersion) &&
-         ((! -d "$main::OO_SDK_CPP_HOME" ) ||
-          ((-d "$main::OO_SDK_CPP_HOME") && (! -e "$main::OO_SDK_CPP_HOME/$main::cpp"))) )
+        ((! -d "$main::OO_SDK_CPP_HOME" ) ||
+         ((-d "$main::OO_SDK_CPP_HOME") && (! -e "$main::OO_SDK_CPP_HOME/$main::cpp"))) )
 {
     print "C++ Compiler where a language binding exist:\n";
     print "Solaris, Sun WorkShop 6 update 1 C++ 5.2 2000/09/11 or higher\n";
@@ -167,7 +172,7 @@ while ( (!$main::correctVersion) &&
             #check version
             if ( $main::cppName eq "gcc" )
             {
-                my $testVersion = `$OO_SDK_CPP_HOME/$main::cppName --version`;
+                my $testVersion = `$OO_SDK_CPP_HOME/$main::cppName -dumpversion`;
                 if ( $testVersion eq "")
                 {
                     print "The '$main::cppName' command found at $main::OO_SDK_CPP_HOME/$main::cppName is not a ";
@@ -176,14 +181,10 @@ while ( (!$main::correctVersion) &&
                     print "ftp://ftp.gnu.org/gnu/gcc/\n";
                 } else
                 {
-                    # special handling for newer gcc compilers (--version has different output)
-                    if ($testVersion =~ m#(([^\d.]+)([\d\.]+)(.*))# )
-                    {
-                        $testVersion = $3;
-                    }
                     $main::correctVersion = testVersion($main::cppVersion, $testVersion, "$main::OO_SDK_CPP_HOME/$main::cppName");
                     if ( !$main::correctVersion )
                     {
+                        print "The '$main::cppName' command found at '$main::OO_SDK_CPP_HOME' has a wrong version\n";
                         if ( skipChoice("C++ compiler") == 1 )
                         {
                             $main::correctVersion = 1;
@@ -195,7 +196,31 @@ while ( (!$main::correctVersion) &&
             } else
             {
                 # for Solaris we have to check the version too
-                $main::correctVersion = 1;
+                open(FILE, "$OO_SDK_CPP_HOME/$main::cppName -V 2>&1 |");
+                my @lines = <FILE>;
+                my $testVersion = $lines[0];
+                if ( $testVersion eq "")
+                {
+                    print "The '$main::cppName' command found at $main::OO_SDK_CPP_HOME/$main::cppName is not a ";
+                    print "Solaris C++ compiler.\nSet the environment variable OO_SDK_CPP_HOME to your Solaris C++ compiler directory.\n";
+                } else
+                {
+                    if ($testVersion =~ m#((\d+\.)+\d+)# )
+                    {
+                        $testVersion = $1;
+                    }
+                    $main::correctVersion = testVersion($main::cppVersion, $testVersion, "$main::OO_SDK_CPP_HOME/$main::cppName");
+                    if ( !$main::correctVersion )
+                    {
+                        print "The '$main::cppName' command found at '$main::OO_SDK_CPP_HOME' has a wrong version\n";
+                        if ( skipChoice("C++ compiler") == 1 )
+                        {
+                            $main::correctVersion = 1;
+                        }
+
+                        $main::OO_SDK_CPP_HOME = "";
+                    }
+                }
             }
         }
     } else
@@ -270,6 +295,8 @@ close FILEIN;
 close FILEOUT;
 chmod 0755, "$main::currentWorkingDir/setsdkenv_unix";
 
+print "\nFor using your prepared environment, please run the \"setsdkenv_unix\" script file!\n\n";
+
 exit $return;
 
 sub skipChoice
@@ -320,11 +347,15 @@ sub testVersion
     my $tmpMustBeVersion = shift;
     my $tmpTestVersion = shift;
     my $toolName = shift;
-    my @mustBeVersion = split(/\.*_*/,$tmpMustBeVersion);
-    my @testVersion = split(/\.*_*/,$tmpTestVersion);
+    my @mustBeVersion = split(/\.|_/,$tmpMustBeVersion);
+    my @testVersion = split(/\.|_/,$tmpTestVersion);
     my $length = $#mustBeVersion;
 
-    for ($i=0; $i < $length; $i++ )
+    if ($#testVersion < $#mustBeVersion) {
+        $length = $#testVersion;
+    }
+
+    for ($i=0; $i <= $length; $i++ )
     {
         if ( @testVersion->[$i] < @mustBeVersion->[$i] )
         {
