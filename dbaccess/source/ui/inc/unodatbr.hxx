@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:03:40 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 14:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,8 +205,12 @@ namespace dbaui
                 String& _rTableName, Image& _rTableImage);
 
         /** unloads the form, empties the grid model
+            @param _bDisposeConnection
+                <TRUE/> if the connection should be disposed
+            @param _bFlushData
+                <TRUE/> if the currently displayed object (if any) should be flushed
         */
-        void unloadForm(sal_Bool _bDisposeConnection = sal_True);
+        void unloadForm(sal_Bool _bDisposeConnection = sal_True, sal_Bool _bFlushData = sal_True);
 
         /** close the connection (and collapse the list entries) of the given list entries
         */
