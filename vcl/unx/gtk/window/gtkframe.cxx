@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:35:05 $
+ *  last change: $Author: obo $ $Date: 2004-09-10 12:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1754,18 +1754,6 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget* pWidget, GdkEventConfigure* pE
 
     // in child case the coordinates are not root coordinates,
     // need to transform
-
-    /* #i31785# sadly one cannot really trust the x,y members of the event;
-     * they are e.g. not set correctly on maximize/demaximize; this rather
-     * sounds like a bug in gtk we have to workaround.
-     */
-    XLIB_Window aChild;
-    XTranslateCoordinates( pThis->getDisplay()->GetDisplay(),
-                           GDK_WINDOW_XWINDOW(GTK_WIDGET(pThis->m_pWindow)->window),
-                           pThis->getDisplay()->GetRootWindow(),
-                           0, 0,
-                           &x, &y,
-                           &aChild );
 
     /* #i31785# sadly one cannot really trust the x,y members of the event;
      * they are e.g. not set correctly on maximize/demaximize; this rather
