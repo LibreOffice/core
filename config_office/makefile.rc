@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:24:55 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:31:24 $
 #
 #   Bugs:  'update' tag will not change you from one release to another.
 #          See webpages to checkout OpenOffice.org from you office directory.
@@ -205,14 +205,18 @@ bootstrap .PHONY :
 distclean .PHONY: clean
 	-rm config_office/config.cache
 	-rm config_office/config.log
+.IF "$(BUILD_DMAKE)"!="NO"
 	-$(GNUMAKE) -C dmake distclean
+.ENDIF
 
 
 clean .PHONY:
 	-rm -rf */$(INPATH)
 	-rm -rf solver/*/$(INPATH)
+.IF "$(BUILD_DMAKE)"!="NO"
 	-echo cleaning up dmake...
 	-$(GNUMAKE) -C dmake clean
+.ENDIF
 
 # 
 # configure target
