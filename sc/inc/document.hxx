@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:15:30 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,8 @@ class ScImpExpLogMsg;
 struct ScSortParam;
 class ScRefreshTimerControl;
 class ScUnoListenerCalls;
+struct RowInfo;
+struct ScTableInfo;
 struct ScTabOpParam;
 
 namespace com { namespace sun { namespace star {
@@ -213,93 +215,6 @@ enum ScDocumentMode
     };
 
 
-
-// -----------------------------------------------------------------------
-//
-//          structs fuer FillInfo
-//
-
-enum ScShadowPart
-{
-    SC_SHADOW_HSTART,
-    SC_SHADOW_VSTART,
-    SC_SHADOW_HORIZ,
-    SC_SHADOW_VERT,
-    SC_SHADOW_CORNER
-};
-
-#define SC_ROTDIR_NONE          0
-#define SC_ROTDIR_STANDARD      1
-#define SC_ROTDIR_LEFT          2
-#define SC_ROTDIR_RIGHT         3
-#define SC_ROTDIR_CENTER        4
-
-#define SC_CLIPMARK_NONE        0
-#define SC_CLIPMARK_LEFT        1
-#define SC_CLIPMARK_RIGHT       2
-
-struct CellInfo
-    {
-        ScBaseCell*                 pCell;
-
-        const ScPatternAttr*        pPatternAttr;
-        const SfxItemSet*           pConditionSet;
-
-        const SvxBrushItem*         pBackground;
-
-        const SvxBoxItem*           pLinesAttr;             // Original-Item (intern)
-
-        const SvxBorderLine*        pThisBottom;            // einzelne inkl. zusammengefasst
-        const SvxBorderLine*        pNextTop;               // (intern)
-        const SvxBorderLine*        pThisRight;
-        const SvxBorderLine*        pNextLeft;
-
-        const SvxBorderLine*        pRightLine;             // dickere zum Zeichnen
-        const SvxBorderLine*        pBottomLine;
-
-        const SvxShadowItem*        pShadowAttr;            // Original-Item (intern)
-
-        ScShadowPart                eHShadowPart;           // Schatten effektiv zum Zeichnen
-        ScShadowPart                eVShadowPart;
-        const SvxShadowItem*        pHShadowOrigin;
-        const SvxShadowItem*        pVShadowOrigin;
-
-        USHORT                      nWidth;
-
-        BOOL                        bMarked;
-        BYTE                        nClipMark;
-        BOOL                        bEmptyCellText;
-
-        BOOL                        bMerged;
-        BOOL                        bHOverlapped;
-        BOOL                        bVOverlapped;
-        BOOL                        bAutoFilter;
-        BOOL                        bPushButton;
-        BYTE                        nRotateDir;
-
-        BOOL                        bPrinted;               // bei Bedarf (Pagebreak-Modus)
-
-        BOOL                        bHideGrid;              // output-intern
-        BOOL                        bEditEngine;            // output-intern
-    };
-
-#define SC_ROTMAX_NONE  SCCOL_MAX
-
-struct RowInfo
-    {
-        CellInfo*       pCellInfo;
-
-        USHORT          nHeight;
-        SCROW           nRowNo;
-        SCCOL           nRotMaxCol;         // SC_ROTMAX_NONE, wenn nichts
-
-        BOOL            bEmptyBack;
-        BOOL            bEmptyText;
-        BOOL            bAutoFilter;
-        BOOL            bPushButton;
-        BOOL            bChanged;           // TRUE, wenn nicht getestet
-    };
-
 struct ScDocStat
 {
     String  aDocName;
@@ -319,8 +234,6 @@ struct ScCopyBlockFromClipParams
     BOOL        bAsLink;
     BOOL        bSkipAttrForEmpty;
 };
-
-#define ROWINFO_MAX 1024
 
 
 // for loading of binary file format symbol string cells which need font conversion
@@ -1380,7 +1293,7 @@ public:
     friend SvStream& operator>>( SvStream& rStream, ScDocument& rDocument );
     friend SvStream& operator<<( SvStream& rStream, const ScDocument& rDocument );
 
-    SCSIZE          FillInfo( RowInfo* pRowInfo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
+    void            FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                         SCTAB nTab, double nScaleX, double nScaleY,
                         BOOL bPageMode, BOOL bFormulaMode,
                         const ScMarkData* pMarkData = NULL );
