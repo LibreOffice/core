@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:40:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,12 @@ Point SwFEShell::GetCntntPos( const Point& rPoint, BOOL bNext ) const
 {
     SET_CURR_SHELL( (ViewShell*)this );
     return GetLayout()->GetNextPrevCntntPos( rPoint, bNext );
+}
+
+Point SwFEShell::GetContentFromPos( const Point &rPoint, int offset ) const {
+
+    SET_CURR_SHELL((ViewShell*)this);
+    return GetLayout()->GetContentFromPos(rPoint,offset);
 }
 
 
