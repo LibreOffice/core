@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:07:25 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,22 +531,31 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
 
+        case FID_NORMALVIEWMODE:
         case FID_PAGEBREAKMODE:
             {
-                BOOL bSet = !GetViewData()->IsPagebreakMode();
+                BOOL bWantPageBreak = nSlot == FID_PAGEBREAKMODE;
+
+                // check whether there is an explicit argument, use it
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->
-                        GetItemState(FID_PAGEBREAKMODE, TRUE, &pItem) == SFX_ITEM_SET )
-                    bSet = ((const SfxBoolItem*)pItem)->GetValue();
-                SetPagebreakMode( bSet );
-                UpdatePageBreakData();
-                SetCurSubShell( GetCurObjectSelectionType(), TRUE );
-                PaintGrid();
-                PaintTop();
-                PaintLeft();
-                rBindings.Invalidate( FID_PAGEBREAKMODE );
-                rReq.AppendItem( SfxBoolItem( nSlot, bSet ) );
-                rReq.Done();
+                if ( pReqArgs && pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET )
+                {
+                    BOOL bItemValue = ((const SfxBoolItem*)pItem)->GetValue();
+                    bWantPageBreak = (nSlot == FID_PAGEBREAKMODE) == bItemValue;
+                }
+
+                if( GetViewData()->IsPagebreakMode() != bWantPageBreak )
+                {
+                    SetPagebreakMode( bWantPageBreak );
+                    UpdatePageBreakData();
+                    SetCurSubShell( GetCurObjectSelectionType(), TRUE );
+                    PaintGrid();
+                    PaintTop();
+                    PaintLeft();
+                    rBindings.Invalidate( nSlot );
+                    rReq.AppendItem( SfxBoolItem( nSlot, TRUE ) );
+                    rReq.Done();
+                }
             }
             break;
 
