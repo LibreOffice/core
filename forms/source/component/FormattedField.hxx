@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-31 14:03:04 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,152 +76,164 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
-
+#ifndef FORMS_ERRORBROADCASTER_HXX
+#include "errorbroadcaster.hxx"
+#endif
 
 //.........................................................................
 namespace frm
 {
 
-//==================================================================
-//= OFormattedModel
-//==================================================================
-class OFormattedModel
-                :public OEditBaseModel
-                ,public OPropertyChangeListener
-                ,public ::comphelper::OAggregationArrayUsageHelper< OFormattedModel >
-{
-    OPropertyChangeMultiplexer*         m_pPropertyMultiplexer;
+    //==================================================================
+    //= OFormattedModel
+    //==================================================================
 
-    // das Original, falls ich die Format-Properties meines aggregierten Models gefaket, d.h. von dem Feld, an das
-    // ich gebunden bin, weitergereicht habe (nur gueltig wenn loaded)
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>   m_xOriginalFormatter;
-    ::com::sun::star::util::Date        m_aNullDate;
-    ::com::sun::star::uno::Any          m_aSaveValue;
+    class OFormattedModel
+                    :public OEditBaseModel
+                    ,public OErrorBroadcaster
+                    ,public OPropertyChangeListener
+                    ,public ::comphelper::OAggregationArrayUsageHelper< OFormattedModel >
+    {
+        OPropertyChangeMultiplexer*         m_pPropertyMultiplexer;
 
-    sal_Int16                           m_nKeyType;
-    sal_Bool                            m_bOriginalNumeric      : 1,
-                                        m_bNumeric              : 1,    // analog fuer TreatAsNumeric-Property
-                                        m_bAggregateListening   : 1;
+        // das Original, falls ich die Format-Properties meines aggregierten Models gefaket, d.h. von dem Feld, an das
+        // ich gebunden bin, weitergereicht habe (nur gueltig wenn loaded)
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>   m_xOriginalFormatter;
+        ::com::sun::star::util::Date        m_aNullDate;
+        ::com::sun::star::uno::Any          m_aSaveValue;
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>    s_xDefaultFormatter;
-    static sal_Int32                        nValueHandle;
-        // falls ich wirklich mal einen selber benutzen muss, wird der zwischen allen Instanzen geteilt
+        sal_Int32                           m_nFieldType;
+        sal_Int16                           m_nKeyType;
+        sal_Bool                            m_bOriginalNumeric      : 1,
+                                            m_bNumeric              : 1,    // analog fuer TreatAsNumeric-Property
+                                            m_bAggregateListening   : 1;
 
-protected:
-    virtual void _onValueChanged();
+        static ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >   s_xDefaultFormatter;
+        static sal_Int32                        nValueHandle;
+            // falls ich wirklich mal einen selber benutzen muss, wird der zwischen allen Instanzen geteilt
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcDefaultFormatsSupplier() const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcFormFormatsSupplier() const;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcFormatsSupplier() const;
-    sal_Int32 calcFormatKey() const;
-    void getFormatDescription(::rtl::OUString& sFormat, LanguageType& eLanguage);
+    protected:
+        virtual void _onValueChanged();
 
-    OFormattedModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-    ~OFormattedModel();
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcDefaultFormatsSupplier() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcFormFormatsSupplier() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcFormatsSupplier() const;
+        sal_Int32 calcFormatKey() const;
+        void getFormatDescription(::rtl::OUString& sFormat, LanguageType& eLanguage);
 
-    friend InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-    friend class OFormattedFieldWrapper;
+        OFormattedModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+        ~OFormattedModel();
 
-    /// starts multiplexing the aggregate's property changes
-    void startAggregateListening();
-    /// stops multiplexing the aggregate's property changes
-    void stopAggregateListening();
-    /// release the aggregate listener
-    void releaseAggregateListener();
+        friend InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+        friend class OFormattedFieldWrapper;
 
-protected:
+        /// starts multiplexing the aggregate's property changes
+        void startAggregateListening();
+        /// stops multiplexing the aggregate's property changes
+        void stopAggregateListening();
+        /// release the aggregate listener
+        void releaseAggregateListener();
 
-// OComponentHelper
-    virtual void SAL_CALL disposing();
+    protected:
+    // XInterface
+        DECLARE_UNO3_AGG_DEFAULTS( OFormattedModel, OEditBaseModel );
 
-// XServiceInfo
-    IMPLEMENTATION_NAME(OFormattedModel);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
+    // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
-// XBoundComponent
-    virtual sal_Bool _commit();
+    // XAggregation
+        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-// XPersistObject
-    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream);
-    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference<stario::XObjectInputStream>& _rxInStream);
-    virtual ::rtl::OUString SAL_CALL getServiceName();
+    // OComponentHelper
+        virtual void SAL_CALL disposing();
 
-// XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+    // XServiceInfo
+        IMPLEMENTATION_NAME(OFormattedModel);
+        virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
-    virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
-                                          sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-                                        throw(::com::sun::star::lang::IllegalArgumentException);
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue);
+    // XBoundComponent
+        virtual sal_Bool _commit();
 
-// XLoadListener
-    virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& rEvent);
-    virtual void _loaded(const ::com::sun::star::lang::EventObject& rEvent);
-    virtual void _unloaded();
+    // XPersistObject
+        virtual void SAL_CALL write(const ::com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream);
+        virtual void SAL_CALL read(const ::com::sun::star::uno::Reference<stario::XObjectInputStream>& _rxInStream);
+        virtual ::rtl::OUString SAL_CALL getServiceName();
 
-// XReset
-    virtual void _reset( void );
+    // XPropertySet
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-// XPropertyState
-    void setPropertyToDefaultByHandle(sal_Int32 nHandle);
-    ::com::sun::star::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const;
+        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
+                                              sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+                                            throw(::com::sun::star::lang::IllegalArgumentException);
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue);
 
-    void SAL_CALL setPropertyToDefault(const ::rtl::OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    // XLoadListener
+        virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& rEvent);
+        virtual void _loaded(const ::com::sun::star::lang::EventObject& rEvent);
+        virtual void _unloaded();
 
-    // OAggregationArrayUsageHelper
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
-    IMPLEMENT_INFO_SERVICE()
+    // XReset
+        virtual void _reset( void );
 
-// XPropertyChangeListener
-    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
+    // XPropertyState
+        void setPropertyToDefaultByHandle(sal_Int32 nHandle);
+        ::com::sun::star::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const;
 
-protected:
-    virtual sal_Int16 getPersistenceFlags() const;
-        // as we have an own version handling for persistence
-};
+        void SAL_CALL setPropertyToDefault(const ::rtl::OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
-//==================================================================
-//= OFormattedControl
-//==================================================================
-typedef ::cppu::ImplHelper1< ::com::sun::star::awt::XKeyListener> OFormattedControl_BASE;
-class OFormattedControl :    public OBoundControl
-                            ,public OFormattedControl_BASE
-{
-    sal_uInt32              m_nKeyEvent;
+        // OAggregationArrayUsageHelper
+        virtual void fillProperties(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
+            ) const;
+        IMPLEMENT_INFO_SERVICE()
 
-public:
-    OFormattedControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
-    virtual ~OFormattedControl();
+    // XPropertyChangeListener
+        virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
-    DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
+    protected:
+        virtual sal_Int16 getPersistenceFlags() const;
+            // as we have an own version handling for persistence
+    };
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
+    //==================================================================
+    //= OFormattedControl
+    //==================================================================
+    typedef ::cppu::ImplHelper1< ::com::sun::star::awt::XKeyListener> OFormattedControl_BASE;
+    class OFormattedControl :    public OBoundControl
+                                ,public OFormattedControl_BASE
+    {
+        sal_uInt32              m_nKeyEvent;
 
-// ::com::sun::star::lang::XServiceInfo
-    IMPLEMENTATION_NAME(OFormattedControl);
-    virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
+    public:
+        OFormattedControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+        virtual ~OFormattedControl();
 
-// ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
+        DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl);
+        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::awt::XKeyListener
-    virtual void SAL_CALL keyPressed(const ::com::sun::star::awt::KeyEvent& e);
-    virtual void SAL_CALL keyReleased(const ::com::sun::star::awt::KeyEvent& e);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
-// ::com::sun::star::awt::XControl
-    virtual void SAL_CALL setDesignMode(sal_Bool bOn);
+    // ::com::sun::star::lang::XServiceInfo
+        IMPLEMENTATION_NAME(OFormattedControl);
+        virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-private:
-    DECL_LINK( OnKeyPressed, void* );
-};
+    // ::com::sun::star::lang::XEventListener
+        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
+    // ::com::sun::star::awt::XKeyListener
+        virtual void SAL_CALL keyPressed(const ::com::sun::star::awt::KeyEvent& e);
+        virtual void SAL_CALL keyReleased(const ::com::sun::star::awt::KeyEvent& e);
+
+    // ::com::sun::star::awt::XControl
+        virtual void SAL_CALL setDesignMode(sal_Bool bOn);
+
+    private:
+        DECL_LINK( OnKeyPressed, void* );
+    };
 
 //.........................................................................
 }

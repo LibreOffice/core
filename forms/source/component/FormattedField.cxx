@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-10 07:44:37 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 #endif
 #ifndef _FRM_PROPERTY_HXX_
 #include "property.hxx"
+#endif
+#ifndef _FRM_RESOURCE_HXX_
+#include "frm_resource.hxx"
+#endif
+#ifndef _FRM_RESOURCE_HRC_
+#include "frm_resource.hrc"
 #endif
 
 #ifndef _COMPHELPER_SEQUENCE_HXX_
@@ -148,6 +154,10 @@
 #include <vos/mutex.hxx>
 #endif
     // needed as long as we use the SolarMutex
+#ifndef _COMPHELPER_STREAMSECTION_HXX_
+#include <comphelper/streamsection.hxx>
+#endif
+
 using namespace dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -160,88 +170,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-
-
-//namespace stario       = ::com::sun::star::io;
-
-/** implements handling for compatibly reading/writing data from/into an input/output stream.
-    data written in a block secured by this class should be readable by older versions which
-    use the same mechanism.
-*/
-/*************************************************************************/
-
-class OMarkableStreamBlock
-{
-    Reference< XMarkableStream >           m_xMarkStream;
-    Reference< XDataInputStream >          m_xInStream;
-    Reference< XDataOutputStream >         m_xOutStream;
-
-    sal_Int32   m_nBlockStart;
-    sal_Int32   m_nBlockLen;
-
-public:
-    /** starts reading of a "skippable" block of data within the given input stream<BR>
-        The object given by _rxInput must support the XMarkableStream interface.
-    */
-    OMarkableStreamBlock(const Reference< XDataInputStream >& _rxInput);
-    /** starts writing of a "skippable" block of data into the given output stream
-        The object given by _rxOutput must support the XMarkableStream interface.
-    */
-    OMarkableStreamBlock(const Reference< XDataOutputStream >& _rxOutput);
-
-    ~OMarkableStreamBlock();
-};
-
-//-------------------------------------------------------------------------
-OMarkableStreamBlock::OMarkableStreamBlock(const Reference< XDataInputStream >& _rxInput)
-    :m_xInStream(_rxInput)
-    ,m_xMarkStream(_rxInput, UNO_QUERY)
-    ,m_nBlockStart(-1)
-    ,m_nBlockLen(-1)
-{
-    DBG_ASSERT(m_xInStream.is() && m_xMarkStream.is(), "OMarkableStreamBlock::OMarkableStreamBlock : invaid argument !");
-    if (m_xInStream.is() && m_xMarkStream.is())
-    {
-        m_nBlockLen = _rxInput->readLong();
-        m_nBlockStart = m_xMarkStream->createMark();
-    }
-}
-
-//-------------------------------------------------------------------------
-OMarkableStreamBlock::OMarkableStreamBlock(const Reference< XDataOutputStream >& _rxOutput)
-    :m_xOutStream(_rxOutput)
-    ,m_xMarkStream(_rxOutput, UNO_QUERY)
-    ,m_nBlockStart(-1)
-    ,m_nBlockLen(-1)
-{
-    DBG_ASSERT(m_xOutStream.is() && m_xMarkStream.is(), "OMarkableStreamBlock::OMarkableStreamBlock : invaid argument !");
-    if (m_xOutStream.is() && m_xMarkStream.is())
-    {
-        m_nBlockStart = m_xMarkStream->createMark();
-        // a placeholder where we will write the overall length (within the destructor)
-        m_nBlockLen = 0;
-        m_xOutStream->writeLong(m_nBlockLen);
-    }
-}
-
-//-------------------------------------------------------------------------
-OMarkableStreamBlock::~OMarkableStreamBlock()
-{
-    if (m_xInStream.is() &&  m_xMarkStream.is())
-    {   // we're working on an input stream
-        m_xMarkStream->jumpToMark(m_nBlockStart);
-        m_xInStream->skipBytes(m_nBlockLen);
-        m_xMarkStream->deleteMark(m_nBlockStart);
-    }
-    else if (m_xOutStream.is() && m_xMarkStream.is())
-    {
-        m_nBlockLen = m_xMarkStream->offsetToMark(m_nBlockStart) - sizeof(m_nBlockLen);
-        m_xMarkStream->jumpToMark(m_nBlockStart);
-        m_xOutStream->writeLong(m_nBlockLen);
-        m_xMarkStream->jumpToFurthest();
-        m_xMarkStream->deleteMark(m_nBlockStart);
-    }
-}
 
 //.........................................................................
 namespace frm
@@ -294,10 +222,10 @@ InterfaceRef SAL_CALL OFormattedControl_CreateInstance(const Reference<XMultiSer
 //------------------------------------------------------------------
 Sequence<Type> OFormattedControl::_getTypes()
 {
-        static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-        aTypes = concatSequences(OFormattedControl_BASE::getTypes(), OBoundControl::_getTypes());
-    return aTypes;
+    return ::comphelper::concatSequences(
+        OFormattedControl_BASE::getTypes(),
+        OBoundControl::_getTypes()
+    );
 }
 
 //------------------------------------------------------------------
@@ -452,6 +380,7 @@ InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const Reference<XMultiServi
 OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFactory)
             :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD, sal_False )
                                     // use the old control name for compytibility reasons
+            ,OErrorBroadcaster( rBHelper )
             ,OPropertyChangeListener(m_aMutex)
             ,m_bOriginalNumeric(sal_False)
             ,m_bNumeric(sal_False)
@@ -460,6 +389,7 @@ OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFacto
             ,m_aNullDate(DBTypeConversion::getStandardDate())
             ,m_bAggregateListening(sal_False)
             ,m_pPropertyMultiplexer(NULL)
+            ,m_nFieldType( DataType::OTHER )
 {
     DBG_CTOR(OFormattedModel, NULL);
     m_nClassId = FormComponentType::TEXTFIELD;
@@ -534,6 +464,7 @@ void OFormattedModel::releaseAggregateListener()
 void SAL_CALL OFormattedModel::disposing()
 {
     stopAggregateListening();
+    OErrorBroadcaster::disposing();
     OEditBaseModel::disposing();
 }
 
@@ -548,6 +479,24 @@ StringSequence OFormattedModel::getSupportedServiceNames() throw()
     pArray[aSupported.getLength()-2] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseFormattedField");
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_FORMATTEDFIELD;
     return aSupported;
+}
+
+// XAggregation
+//------------------------------------------------------------------------------
+Any SAL_CALL OFormattedModel::queryAggregation(const Type& _rType) throw(RuntimeException)
+{
+    Any aReturn = OEditBaseModel::queryAggregation( _rType );
+    return aReturn.hasValue() ? aReturn : OErrorBroadcaster::queryInterface( _rType );
+}
+
+// XTypeProvider
+//------------------------------------------------------------------------------
+Sequence< Type > OFormattedModel::_getTypes()
+{
+    return ::comphelper::concatSequences(
+        OEditBaseModel::_getTypes(),
+        OErrorBroadcaster::getTypes()
+    );
 }
 
 // XPersistObject
@@ -819,6 +768,14 @@ void OFormattedModel::_loaded(const EventObject& rEvent)
 
     m_xOriginalFormatter = NULL;
 
+    // get some properties of the field
+    m_nFieldType = DataType::OTHER;
+    if ( m_xField.is() )
+    {
+        m_xField->getPropertyValue( PROPERTY_FIELDTYPE ) >>= m_nFieldType;
+    }
+
+
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::_loaded : have no aggregate !");
     if (m_xAggregateSet.is())
     {   // all the following doesn't make any sense if we have no aggregate ...
@@ -928,6 +885,7 @@ void OFormattedModel::_unloaded()
         m_xOriginalFormatter = NULL;
     }
 
+    m_nFieldType = DataType::OTHER;
     m_nKeyType   = NumberFormat::UNDEFINED;
     m_aNullDate  = DBTypeConversion::getStandardDate();
 }
@@ -1009,7 +967,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
     // and to be a little bit more compatible we make the following section skippable
     {
         Reference< XDataOutputStream > xOut(_rxOutStream, UNO_QUERY);
-        OMarkableStreamBlock aDownCompat(xOut);
+        OStreamSection aDownCompat(xOut);
 
         // a sub version within the skippable block
         _rxOutStream->writeShort(0x0000);
@@ -1022,7 +980,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
         }
 
         {
-            OMarkableStreamBlock aDownCompat2(xOut);
+            OStreamSection aDownCompat2(xOut);
             switch (aEffectiveValue.getValueType().getTypeClass())
             {
                 case TypeClass_STRING:
@@ -1091,14 +1049,14 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
             if (nVersion == 0x0003)
             {   // since version 3 there is a "skippable" block at this position
                 Reference< XDataInputStream > xIn(_rxInStream, UNO_QUERY);
-                OMarkableStreamBlock aDownCompat(xIn);
+                OStreamSection aDownCompat(xIn);
 
                 sal_Int16 nSubVersion = _rxInStream->readShort();
 
                 // version 0 and higher : the "effective value" property
                                 Any aEffectiveValue;
                 {
-                    OMarkableStreamBlock aDownCompat2(xIn);
+                    OStreamSection aDownCompat2(xIn);
                     switch (_rxInStream->readShort())
                     {
                         case 0: // String
@@ -1154,10 +1112,28 @@ sal_Int16 OFormattedModel::getPersistenceFlags() const
     return (OEditBaseModel::getPersistenceFlags() & ~PF_HANDLE_COMMON_PROPS);
     // a) we do our own call to writeCommonEditProperties
 }
+
+//------------------------------------------------------------------------------
+namespace
+{
+    static void lcl_replaceAscii( ::rtl::OUString& _rText, const sal_Char* _pAscii, const ::rtl::OUString& _rReplace )
+    {
+        ::rtl::OUString sFind = ::rtl::OUString::createFromAscii( _pAscii );
+        sal_Int32 nPos = _rText.indexOf( sFind );
+        if ( 0 <= nPos )
+        {
+            ::rtl::OUString sNew = _rText.copy( 0, nPos );
+            sNew += _rReplace;
+            sNew += _rText.copy( nPos + sFind.getLength() );
+            _rText = sNew;
+        }
+    }
+}
+
 //------------------------------------------------------------------------------
 sal_Bool OFormattedModel::_commit()
 {
-        Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( OFormattedModel::nValueHandle );
+    Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( OFormattedModel::nValueHandle );
     if (!compare(aNewValue, m_aSaveValue))
     {
         // Leerstring + EmptyIsNull = void
@@ -1175,6 +1151,49 @@ sal_Bool OFormattedModel::_commit()
             {
                 if (aNewValue.getValueType().getTypeClass() == TypeClass_DOUBLE)
                 {
+/*                  // some plausibility checks
+                    // 74241 - 28.08.2001 - frank.schoenheit@sun.com
+                    double nValue = getDouble( aNewValue );
+                    double nLimitMin = 0;
+                    double nLimitMax = 0;
+                    sal_Bool bLargeInt = sal_False;
+                    switch ( m_nFieldType )
+                    {
+                    case DataType::TINYINT:
+                        nLimitMin = -128; nLimitMax = 127;
+                        break;  // no specification if TINYINT is signed, thus this odd numbers ....
+
+                    case DataType::SMALLINT:
+                        nLimitMin = -32768; nLimitMax = 32767;
+                        break;
+
+                    case DataType::INTEGER:
+                        nLimitMin = ((double)-2147483647) - 1; nLimitMax = 2147483647;
+                        bLargeInt = sal_True;
+                        break;
+                    }
+                    if ( nLimitMin && nLimitMax )
+                    {
+                        if ( ( nValue < nLimitMin ) || ( nValue > nLimitMax ) )
+                        {
+                            ::rtl::OUString sMessage = FRM_RES_STRING( RID_STR_INVALID_FIELD_VALUE );
+                            lcl_replaceAscii( sMessage, "$min$", bLargeInt ? ::rtl::OUString::createFromAscii( "-2147483648" ) : ::rtl::OUString::valueOf( (sal_Int32)nLimitMin ) );
+                            lcl_replaceAscii( sMessage, "$max$", ::rtl::OUString::valueOf( (sal_Int32)nLimitMax ) );
+
+                            SQLException aError;
+                            aError.Message = sMessage;
+
+                            onError( aError, FRM_RES_STRING( RID_STR_COULD_NOT_COMMIT ) );
+                            return sal_False;
+                        }
+                    }
+                    // Do not do this checks. This would make sense if a min and max for the control are defined,
+                    // but not with such implicit restrictions as got from the field type. This is way too dependent
+                    // on the type of database we're working with (e.g., for a TINYINT, it is not defined if this is
+                    // signed or unsigned. There may be databases which treat it as signed, and databases which don't.
+                    // And we have no chance to know this, but we would need to to use the correct limits ....
+*/
+
                     DBTypeConversion::setValue(m_xColumnUpdate, m_aNullDate, getDouble(aNewValue), m_nKeyType);
                 }
                 else
