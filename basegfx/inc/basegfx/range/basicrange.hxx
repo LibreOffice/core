@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicrange.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:08 $
+ *  last change: $Author: thb $ $Date: 2004-03-15 14:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ namespace basegfx
 
         bool overlaps(const BasicRange& rRange) const
         {
-            return !((rRange.mnMinimum < mnMinimum) || (rRange.mnMaximum > mnMaximum));
+            return !((rRange.mnMaximum < mnMinimum) || (rRange.mnMinimum > mnMaximum));
         }
 
         bool operator==( const BasicRange& rRange ) const
