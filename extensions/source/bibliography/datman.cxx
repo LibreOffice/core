@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
+ *  last change: $Author: os $ $Date: 2000-12-15 11:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,6 +448,8 @@ class MappingDialog_Impl : public ModalDialog
     ListBox*        aListBoxes[COLUMN_COUNT];
     String          sNone;
 
+    sal_Bool        bModified;
+
     BibDataManager* pDatMan;
 
     DECL_LINK(OkHdl, OKButton*);
@@ -456,6 +458,8 @@ class MappingDialog_Impl : public ModalDialog
 public:
     MappingDialog_Impl(Window* pParent, BibDataManager* pDatMan);
     ~MappingDialog_Impl();
+
+    void    SetModified() {bModified = TRUE;}
 
 };
 /* -----------------11.11.99 16:42-------------------
@@ -543,7 +547,8 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
     aCustom4LB(this,            ResId( LB_CUSTOM4       )),
     aCustom5FT(this,            ResId( FT_CUSTOM5       )),
     aCustom5LB(this,            ResId( LB_CUSTOM5       )),
-    sNone(ResId(ST_NONE))
+    sNone(ResId(ST_NONE)),
+    bModified(sal_False)
 {
     FreeResource();
 
@@ -642,6 +647,7 @@ IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, ListBox*, pListBox)
                 aListBoxes[i]->SelectEntryPos(0);
         }
     }
+    SetModified();
     return 0;
 }
 /* -----------------12.11.99 14:50-------------------
@@ -649,29 +655,32 @@ IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, ListBox*, pListBox)
  --------------------------------------------------*/
 IMPL_LINK(MappingDialog_Impl, OkHdl, OKButton*, EMPTYARG)
 {
-    Mapping aNew;
-    aNew.sTableName = String(pDatMan->getActiveDataTable());
-    aNew.sURL = String(pDatMan->getActiveDataSource());
-
-    sal_uInt16 nWriteIndex = 0;
-    BibConfig* pConfig = BibModul::GetConfig();
-    for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
+    if(bModified)
     {
-        String sSel = aListBoxes[nEntry]->GetSelectEntry();
-        if(sSel != sNone)
+        Mapping aNew;
+        aNew.sTableName = String(pDatMan->getActiveDataTable());
+        aNew.sURL = String(pDatMan->getActiveDataSource());
+
+        sal_uInt16 nWriteIndex = 0;
+        BibConfig* pConfig = BibModul::GetConfig();
+        for(sal_uInt16 nEntry = 0; nEntry < COLUMN_COUNT; nEntry++)
         {
-            aNew.aColumnPairs[nWriteIndex].sRealColumnName = sSel;
-            aNew.aColumnPairs[nWriteIndex].sLogicalColumnName = pConfig->GetDefColumnName(nEntry);
-            nWriteIndex++;
+            String sSel = aListBoxes[nEntry]->GetSelectEntry();
+            if(sSel != sNone)
+            {
+                aNew.aColumnPairs[nWriteIndex].sRealColumnName = sSel;
+                aNew.aColumnPairs[nWriteIndex].sLogicalColumnName = pConfig->GetDefColumnName(nEntry);
+                nWriteIndex++;
+            }
         }
+        BibDBDescriptor aDesc;
+        aDesc.sDataSource = pDatMan->getActiveDataSource();
+        aDesc.sTableOrQuery = pDatMan->getActiveDataTable();
+        aDesc.nCommandType = CommandType::TABLE;
+        pDatMan->ResetIdentifierMapping();
+        pConfig->SetMapping(aDesc, &aNew);
     }
-    BibDBDescriptor aDesc;
-    aDesc.sDataSource = pDatMan->getActiveDataSource();
-    aDesc.sTableOrQuery = pDatMan->getActiveDataTable();
-    aDesc.nCommandType = CommandType::TABLE;
-    pDatMan->ResetIdentifierMapping();
-    pConfig->SetMapping(aDesc, &aNew);
-    EndDialog(RET_OK);
+    EndDialog(bModified ? RET_OK : RET_CANCEL);
     return 0;
 }
 /* -----------------18.11.99 10:23-------------------

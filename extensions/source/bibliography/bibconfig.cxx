@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
+ *  last change: $Author: os $ $Date: 2000-12-15 11:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ BibConfig::BibConfig() :
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
                 pAssignmentPropertyNames[nFieldIdx++] += C2U("/FieldName");
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
-                pAssignmentPropertyNames[nFieldIdx++]   += C2U("/DatabaseFieldName");
+                pAssignmentPropertyNames[nFieldIdx++]   += C2U("/DatasourceFieldName");
             }
             Sequence<Any> aAssignmentValues = GetProperties(aAssignmentPropertyNames);
             const Any* pAssignmentValues = aAssignmentValues.getConstArray();
@@ -321,10 +321,11 @@ void    BibConfig::Commit()
         sPrefix += C2U("Fields");
         sal_Int32 nFieldAssignment = 0;
         OUString sFieldName = C2U("/FieldName");
-        OUString sDatabaseFieldName = C2U("/DatabaseFieldName");
+        OUString sDatabaseFieldName = C2U("/DatasourceFieldName");
         ClearNodeSet( sPrefix );
 
-        while(pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName.getLength())
+        while(nFieldAssignment < COLUMN_COUNT &&
+            pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName.getLength())
         {
             OUString sSubPrefix(sPrefix);
             sSubPrefix += C2U("/_");
