@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:36:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE8_HXX_
-#include <cppuhelper/compbase8.hxx>
+#ifndef _CPPUHELPER_COMPBASE9_HXX_
+#include <cppuhelper/compbase9.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
@@ -105,7 +105,7 @@
 #include "datasettings.hxx"
 #endif
 #ifndef _DBA_COREAPI_COLUMN_HXX_
-#include <column.hxx>
+#include "column.hxx"
 #endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
@@ -113,22 +113,20 @@
 #ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #endif
-#ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
-#include "configurationflushable.hxx"
-#endif
 #ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
 #include <comphelper/IdPropArrayHelper.hxx>
 #endif
 
 namespace dbaccess
 {
-    typedef ::cppu::WeakComponentImplHelper8<   ::com::sun::star::sdbcx::XColumnsSupplier,
+    typedef ::cppu::WeakComponentImplHelper9<   ::com::sun::star::sdbcx::XColumnsSupplier,
                                                 ::com::sun::star::sdbcx::XKeysSupplier,
                                                 ::com::sun::star::container::XNamed,
                                                 ::com::sun::star::lang::XServiceInfo,
                                                 ::com::sun::star::sdbcx::XDataDescriptorFactory,
                                                 ::com::sun::star::sdbcx::XIndexesSupplier,
                                                 ::com::sun::star::sdbcx::XRename,
+                                                ::com::sun::star::lang::XUnoTunnel,
                                                 ::com::sun::star::sdbcx::XAlterTable> OTableDescriptor_BASE;
     //==========================================================================
     //= OTables
@@ -139,14 +137,15 @@ namespace dbaccess
     class ODBTableDecorator :public comphelper::OBaseMutex
                             ,public OTableDescriptor_BASE
                             ,public ODataSettings //ODataSettings_Base
-                            ,protected OConfigurationFlushable
                             ,public IColumnFactory
                             ,public ::connectivity::sdbcx::IRefreshableColumns
                             ,public ODBTableDecorator_PROP
     {
         void fillPrivileges() const;
     protected:
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xColumnMediator;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >       m_xTable;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xColumnDefinitions;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormats;
     // <properties>
@@ -158,12 +157,11 @@ namespace dbaccess
         // IColumnFactory
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+        virtual void columnDropped(const ::rtl::OUString& _sName);
         virtual void refreshColumns();
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 _nId) const;
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-        // OConfigurationFlushable
-        virtual void flush_NoBroadcast_NoCommit();
 
         // OPropertySetHelper
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
@@ -177,25 +175,23 @@ namespace dbaccess
                                 sal_Int32 nHandle,
                                 const ::com::sun::star::uno::Any& rValue
                                                  )
-                                                 throw (::com::sun::star::uno::Exception);
+
+                                         throw (::com::sun::star::uno::Exception);
+
+        virtual ~ODBTableDecorator();
     public:
         /** constructs a wrapper supporting the com.sun.star.sdb.Table service.<BR>
             @param          _rxConn         the connection the table belongs to
             @param          _rxTable        the table from the driver can be null
         */
         ODBTableDecorator(
-            const ::utl::OConfigurationNode& _rTableConfig,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxNumberFormats
+             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxNumberFormats
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumnDefinitions
         )   throw(::com::sun::star::sdbc::SQLException);
 
-        ODBTableDecorator(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxNewTable,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxNumberFormats
-        )   throw(::com::sun::star::sdbc::SQLException);
-        virtual ~ODBTableDecorator();
+
 
         void setTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable);
         // ODescriptor
@@ -241,13 +237,6 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getIndexes(  ) throw (::com::sun::star::uno::RuntimeException);
         // XDataDescriptorFactory
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    public:
-        // replaces OConfigurationFlushable::setConfigurationNode
-        void setContext(
-            const ::utl::OConfigurationTreeRoot& _rNode,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxNumberFormats
-        );
     };
 }
 #endif // _DBA_CORE_TABLEDECORATOR_HXX_
