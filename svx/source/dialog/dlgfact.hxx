@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:51:54 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,18 @@ class AbstractTitleDialog_Impl : public AbstractTitleDialog
 
 };
 //for TitleDialog end
+
+//for SvxScriptSelectorDialog begin
+class SvxScriptSelectorDialog;
+class AbstractScriptSelectorDialog_Impl : public AbstractScriptSelectorDialog
+{
+    DECL_ABSTDLG_BASE(
+        AbstractScriptSelectorDialog_Impl, SvxScriptSelectorDialog);
+
+    virtual String GetScriptURL();
+
+    virtual void SetRunLabel();
+};
 
 //for GalleryIdDialog begin
 class GalleryIdDialog;
@@ -674,6 +686,11 @@ public:
 
     virtual GetTabPageRanges            GetTabPageRangesFunc( USHORT nId );
     virtual DialogGetRanges         GetDialogGetRangesFunc( USHORT nId ); //add for SvxPostItDialog
+    virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( Window* pParent, const String& rLanguage, const ResId& rResId );
+
+    virtual AbstractScriptSelectorDialog*
+        CreateScriptSelectorDialog(
+            Window* pParent, BOOL bShowSlots = FALSE );
 };
 
 #endif
