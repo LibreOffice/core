@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:07:56 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ Resource RID_ERRCTX
         Text[ chinese_simplified ] = "$(ERR)å‘ç”Ÿåœ¨è£…å…¥æ ·å¼$(ARG1)æ—¶";
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå øàáëîíà $(ARG1)";
         Text[ polish ] = "$(ERR) przy ³adowaniu szablonu $(ARG1)";
-        Text[ japanese ] = "$(ERR)ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„$(ARG1)ã®èª­ã¿è¾¼ã¿ã®éš›";
+        Text[ japanese ] = "ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„ $(ARG1) ã‚’èª­ã¿è¾¼ã‚€éš›ã® $(ERR)";
         Text[ chinese_traditional ] = "è¼‰å…¥æ¨£å¼ $(ARG1) æ™‚ç™¼ç”Ÿ $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáŞÇáÈ $(ARG1)";
         Text[ dutch ] = "$(ERR) bij laden van sjabloon $(ARG1)";
@@ -327,7 +327,7 @@ Resource RID_ERRCTX
         Text[ chinese_simplified ] = "è£…å…¥æ–‡æ¡£ $(ARG1) æ—¶å‘ç”Ÿ $(ERR)";
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå äîêóìåíòà $(ARG1)";
         Text[ polish ] = "$(ERR) przy ³adowaniu dokumentu $(ARG1)";
-        Text[ japanese ] = "$(ERR)ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„$(ARG1)ã®èª­ã¿è¾¼ã¿ã®éš›";
+        Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ $(ARG1) ã‚’èª­ã¿è¾¼ã‚€éš›ã® $(ERR)";
         Text[ chinese_traditional ] = "è¼‰å…¥æ–‡ä»¶ $(ARG1) æ™‚ç™¼ç”Ÿ $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáãÓÊäÏ $(ARG1)";
         Text[ dutch ] = "$(ERR) bij openen van document $(ARG1)";
@@ -438,7 +438,7 @@ Resource RID_ERRCTX
         Text[ chinese_simplified ] = "è£…å…¥æ–‡æ¡£ $(ARG1) BASIC æ—¶å‘ç”Ÿ $(ERR)";
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå BASIC äîêóìåíòà $(ARG1)";
         Text[ polish ] = "$(ERR) przy ³adowaniu dokumentu BASIC $(ARG1)";
-        Text[ japanese ] = "$(ERR)ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„$(ARG1)ã®BASICã®èª­ã¿è¾¼ã¿ã®éš›";
+        Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ $(ARG1) ã® BASIC ã‚’èª­ã¿è¾¼ã‚€éš›ã® $(ERR)";
         Text[ chinese_traditional ] = "è¼‰å…¥æ–‡ä»¶ $(ARG1)  BASIC æ™‚ç™¼ç”Ÿ $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá BASIC ÇáãÓÊäÏ $(ARG1)";
         Text[ dutch ] = "$(ERR) bij laden van BASIC van document $(ARG1)";
@@ -3016,6 +3016,7 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
+
 
 
 
