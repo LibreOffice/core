@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-08 13:30:20 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 15:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,12 +377,12 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineColorItem(String(), RGB_Color(COL_BLACK)));
     pISet->Put(XLineWidthItem(150));
 
-    XPolygon aTriangle(3);
-    aTriangle[0].X()=10; aTriangle[0].Y()= 0;
-    aTriangle[1].X()= 0; aTriangle[1].Y()=30;
-    aTriangle[2].X()=20; aTriangle[2].Y()=30;
-
-    pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),aTriangle));
+    XPolygon aArrow(4);                          //      []
+    aArrow[0]=Point(100,0);                        // 0,4__[]__2,4
+    aArrow[1]=Point(200,400);                      //    \    /
+    aArrow[2]=Point(0,400);                        //     \  /
+    aArrow[3]=Point(100,0);                        //      \/1,0
+    pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
 
     pISet->Put(XLineStartWidthItem(700));
     pISet->Put(XLineEndWidthItem(300));         // wollte Kohse das wirklich?
@@ -600,14 +600,9 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SvxFontHeightItem(423));         // 12 pt
 
-    XPolygon aXP(4);                            //      []
-    aXP[0]=Point(100,0);                        // 0,4__[]__2,4
-    aXP[1]=Point(200,400);                      //    \    /
-    aXP[2]=Point(0,400);                        //     \  /
-    aXP[3]=Point(100,0);                        //      \/1,0
-    pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),aXP));
+    pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
     pISet->Put(XLineStartWidthItem(200));
-    pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),aXP));
+    pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),aArrow));
     pISet->Put(XLineEndWidthItem(200));
     pISet->Put(XLineStyleItem(XLINE_SOLID));
 
