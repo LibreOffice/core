@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 08:58:54 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 08:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,9 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 {
     if ( !pSlot )
         pSlot = SFX_SLOTPOOL().GetSlot( nSlotId );
+
+    if ( !pSlot)
+        return;
 
     if ( nSlotId == SID_OPENURL )
         nSlotId = SID_OPENDOC;
