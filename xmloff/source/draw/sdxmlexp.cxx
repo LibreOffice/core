@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-27 16:09:08 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 16:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,8 +482,8 @@ DECLARE_LIST(ImpXMLAutoLayoutInfoList, ImpXMLAutoLayoutInfo*);
 
 //////////////////////////////////////////////////////////////////////////////
 
-SdXMLExport::SdXMLExport( sal_Bool bIsDraw)
-:   SvXMLExport( MAP_CM, bIsDraw ? sXML_drawing : sXML_presentation ),
+SdXMLExport::SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags )
+:   SvXMLExport( MAP_CM, bIsDraw ? sXML_drawing : sXML_presentation, nExportFlags ),
     mpPageMasterInfoList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpPageMaterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList(1, 4, 4)),
@@ -1837,18 +1837,24 @@ void SdXMLExport::_ExportAutoStyles()
 {
     GetPropertySetMapper()->SetAutoStyles( sal_True );
 
-    // #80012# PageMaster export moved from _ExportStyles
-    // prepare page-master infos
-    ImpPrepPageMasterInfos();
+    if( getExportFlags() & EXPORT_STYLES )
+    {
+        // #80012# PageMaster export moved from _ExportStyles
+        // prepare page-master infos
+        ImpPrepPageMasterInfos();
 
-    // write page-master infos
-    ImpWritePageMasterInfos();
+        // write page-master infos
+        ImpWritePageMasterInfos();
 
-    // prepare draw:style-name for master page export
-    ImpPrepMasterPageInfos();
+        // prepare draw:style-name for master page export
+        ImpPrepMasterPageInfos();
+    }
 
-    // prepare draw:style-name for page export
-    ImpPrepDrawPageInfos();
+    if( getExportFlags() & EXPORT_CONTENT )
+    {
+        // prepare draw:style-name for page export
+        ImpPrepDrawPageInfos();
+    }
 
     // export draw-page styles
     GetAutoStylePool()->exportXML(
@@ -1857,107 +1863,113 @@ void SdXMLExport::_ExportAutoStyles()
         GetMM100UnitConverter(),
         GetNamespaceMap());
 
-    // create auto style infos for objects on master pages
-    for(sal_Int32 nMPageId(0L); nMPageId < mnDocMasterPageCount; nMPageId++)
+    if( getExportFlags() & EXPORT_STYLES )
     {
-        uno::Any aAny(mxDocMasterPages->getByIndex(nMPageId));
-        uno::Reference< drawing::XDrawPage > xMasterPage;
-
-        if((aAny >>= xMasterPage) && xMasterPage.is() )
+        // create auto style infos for objects on master pages
+        for(sal_Int32 nMPageId(0L); nMPageId < mnDocMasterPageCount; nMPageId++)
         {
-            // collect layer information
-            GetFormExport()->examineForms( xMasterPage );
+            uno::Any aAny(mxDocMasterPages->getByIndex(nMPageId));
+            uno::Reference< drawing::XDrawPage > xMasterPage;
 
-            // get MasterPage Name
-            OUString aMasterPageNamePrefix;
-            uno::Reference < container::XNamed > xNamed(xMasterPage, uno::UNO_QUERY);
-            if(xNamed.is())
+            if((aAny >>= xMasterPage) && xMasterPage.is() )
             {
-                aMasterPageNamePrefix = xNamed->getName();
-            }
-            if(aMasterPageNamePrefix.getLength())
-            {
-                aMasterPageNamePrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
-            }
-            GetShapeExport()->setPresentationStylePrefix( aMasterPageNamePrefix );
+                // collect layer information
+                GetFormExport()->examineForms( xMasterPage );
 
-            uno::Reference< drawing::XShapes > xShapes(xMasterPage, uno::UNO_QUERY);
-            if(xShapes.is() && xShapes->getCount())
-                GetShapeExport()->collectShapesAutoStyles( xShapes );
-
-            if(IsImpress())
-            {
-                uno::Reference< presentation::XPresentationPage > xPresPage(xMasterPage, uno::UNO_QUERY);
-                if(xPresPage.is())
+                // get MasterPage Name
+                OUString aMasterPageNamePrefix;
+                uno::Reference < container::XNamed > xNamed(xMasterPage, uno::UNO_QUERY);
+                if(xNamed.is())
                 {
-                    uno::Reference< drawing::XDrawPage > xNotesPage(xPresPage->getNotesPage());
-                    if(xNotesPage.is())
-                    {
-                        // collect layer information
-                        GetFormExport()->examineForms( xNotesPage );
+                    aMasterPageNamePrefix = xNamed->getName();
+                }
+                if(aMasterPageNamePrefix.getLength())
+                {
+                    aMasterPageNamePrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+                }
+                GetShapeExport()->setPresentationStylePrefix( aMasterPageNamePrefix );
 
-                        uno::Reference< drawing::XShapes > xShapes(xNotesPage, uno::UNO_QUERY);
-                        if(xShapes.is() && xShapes->getCount())
-                            GetShapeExport()->collectShapesAutoStyles( xShapes );
+                uno::Reference< drawing::XShapes > xShapes(xMasterPage, uno::UNO_QUERY);
+                if(xShapes.is() && xShapes->getCount())
+                    GetShapeExport()->collectShapesAutoStyles( xShapes );
+
+                if(IsImpress())
+                {
+                    uno::Reference< presentation::XPresentationPage > xPresPage(xMasterPage, uno::UNO_QUERY);
+                    if(xPresPage.is())
+                    {
+                        uno::Reference< drawing::XDrawPage > xNotesPage(xPresPage->getNotesPage());
+                        if(xNotesPage.is())
+                        {
+                            // collect layer information
+                            GetFormExport()->examineForms( xNotesPage );
+
+                            uno::Reference< drawing::XShapes > xShapes(xNotesPage, uno::UNO_QUERY);
+                            if(xShapes.is() && xShapes->getCount())
+                                GetShapeExport()->collectShapesAutoStyles( xShapes );
+                        }
                     }
                 }
             }
         }
     }
 
-    // create auto style infos for objects on pages
-    for(sal_Int32 nPageInd(0); nPageInd < mnDocDrawPageCount; nPageInd++)
+    if( getExportFlags() & EXPORT_CONTENT )
     {
-        uno::Any aAny(mxDocDrawPages->getByIndex(nPageInd));
-        uno::Reference<drawing::XDrawPage> xDrawPage;
-
-        if((aAny >>= xDrawPage) && xDrawPage.is() )
+        // create auto style infos for objects on pages
+        for(sal_Int32 nPageInd(0); nPageInd < mnDocDrawPageCount; nPageInd++)
         {
-            // collect layer information
-            GetFormExport()->examineForms( xDrawPage );
+            uno::Any aAny(mxDocDrawPages->getByIndex(nPageInd));
+            uno::Reference<drawing::XDrawPage> xDrawPage;
 
-            // get MasterPage Name
-            OUString aMasterPageNamePrefix;
-            uno::Reference < drawing::XMasterPageTarget > xMasterPageInt(xDrawPage, uno::UNO_QUERY);
-            if(xMasterPageInt.is())
+            if((aAny >>= xDrawPage) && xDrawPage.is() )
             {
-                uno::Reference<drawing::XDrawPage> xUsedMasterPage(xMasterPageInt->getMasterPage());
-                if(xUsedMasterPage.is())
+                // collect layer information
+                GetFormExport()->examineForms( xDrawPage );
+
+                // get MasterPage Name
+                OUString aMasterPageNamePrefix;
+                uno::Reference < drawing::XMasterPageTarget > xMasterPageInt(xDrawPage, uno::UNO_QUERY);
+                if(xMasterPageInt.is())
                 {
-                    uno::Reference < container::XNamed > xMasterNamed(xUsedMasterPage, uno::UNO_QUERY);
-                    if(xMasterNamed.is())
+                    uno::Reference<drawing::XDrawPage> xUsedMasterPage(xMasterPageInt->getMasterPage());
+                    if(xUsedMasterPage.is())
                     {
-                        aMasterPageNamePrefix = xMasterNamed->getName();
+                        uno::Reference < container::XNamed > xMasterNamed(xUsedMasterPage, uno::UNO_QUERY);
+                        if(xMasterNamed.is())
+                        {
+                            aMasterPageNamePrefix = xMasterNamed->getName();
+                        }
                     }
                 }
-            }
-            if(aMasterPageNamePrefix.getLength())
-            {
-                aMasterPageNamePrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
-            }
-
-            GetShapeExport()->setPresentationStylePrefix( aMasterPageNamePrefix );
-
-            // prepare object infos
-            uno::Reference< drawing::XShapes > xShapes(xDrawPage, uno::UNO_QUERY);
-            if(xShapes.is() && xShapes->getCount())
-                GetShapeExport()->collectShapesAutoStyles( xShapes );
-
-            // prepare presentation notes page object infos (ONLY if presentation)
-            if(IsImpress())
-            {
-                uno::Reference< presentation::XPresentationPage > xPresPage(xDrawPage, uno::UNO_QUERY);
-                if(xPresPage.is())
+                if(aMasterPageNamePrefix.getLength())
                 {
-                    uno::Reference< drawing::XDrawPage > xNotesPage(xPresPage->getNotesPage());
-                    if(xNotesPage.is())
-                    {
-                        // collect layer information
-                        GetFormExport()->examineForms( xNotesPage );
+                    aMasterPageNamePrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+                }
 
-                        uno::Reference< drawing::XShapes > xShapes(xNotesPage, uno::UNO_QUERY);
-                        if(xShapes.is() && xShapes->getCount())
-                            GetShapeExport()->collectShapesAutoStyles( xShapes );
+                GetShapeExport()->setPresentationStylePrefix( aMasterPageNamePrefix );
+
+                // prepare object infos
+                uno::Reference< drawing::XShapes > xShapes(xDrawPage, uno::UNO_QUERY);
+                if(xShapes.is() && xShapes->getCount())
+                    GetShapeExport()->collectShapesAutoStyles( xShapes );
+
+                // prepare presentation notes page object infos (ONLY if presentation)
+                if(IsImpress())
+                {
+                    uno::Reference< presentation::XPresentationPage > xPresPage(xDrawPage, uno::UNO_QUERY);
+                    if(xPresPage.is())
+                    {
+                        uno::Reference< drawing::XDrawPage > xNotesPage(xPresPage->getNotesPage());
+                        if(xNotesPage.is())
+                        {
+                            // collect layer information
+                            GetFormExport()->examineForms( xNotesPage );
+
+                            uno::Reference< drawing::XShapes > xShapes(xNotesPage, uno::UNO_QUERY);
+                            if(xShapes.is() && xShapes->getCount())
+                                GetShapeExport()->collectShapesAutoStyles( xShapes );
+                        }
                     }
                 }
             }
@@ -2101,4 +2113,76 @@ OUString SAL_CALL SdDrawXMLExport_getImplementationName() throw()
 uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SdXMLExport( sal_True );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Style_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Impress.Styles" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdImpressXMLExport_Style_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Impress.Styles" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Style_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Style_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Draw.Styles" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdDrawXMLExport_Style_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Draw.Styles" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Style_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Content_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Impress.Content" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdImpressXMLExport_Content_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Impress.Content" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_False, EXPORT_SETTINGS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Content_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Draw.Content" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdDrawXMLExport_Content_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLExport.Draw.Content" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLExport( sal_True, EXPORT_SETTINGS|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS );
 }

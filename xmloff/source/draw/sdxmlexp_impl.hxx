@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 16:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ class SdXMLExport : public SvXMLExport
     void exportPresentationSettings();
 
 public:
-    SdXMLExport( sal_Bool bIsDraw );
+    SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags = EXPORT_ALL );
     virtual ~SdXMLExport();
 
     void SetProgress(sal_Int32 nProg);

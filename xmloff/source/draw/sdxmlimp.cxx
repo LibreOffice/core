@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 16:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,44 +280,65 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
     {
         case XML_TOK_DOC_VIEWSETTINGS:
         {
-            // draw:view-settings inside office:document
-            pContext = GetSdImport().CreateViewSettingsContext(rLocalName, xAttrList);
+            if( GetImport().getImportFlags() & IMPORT_SETTINGS )
+            {
+                // draw:view-settings inside office:document
+                pContext = GetSdImport().CreateViewSettingsContext(rLocalName, xAttrList);
+            }
             break;
         }
         case XML_TOK_DOC_STYLES:
         {
-            // office:styles inside office:document
-            pContext = GetSdImport().CreateStylesContext(rLocalName, xAttrList);
-            break;
+            if( GetImport().getImportFlags() & IMPORT_STYLES )
+            {
+                // office:styles inside office:document
+                pContext = GetSdImport().CreateStylesContext(rLocalName, xAttrList);
+                break;
+            }
         }
         case XML_TOK_DOC_AUTOSTYLES:
         {
-            // office:automatic-styles inside office:document
-            pContext = GetSdImport().CreateAutoStylesContext(rLocalName, xAttrList);
+            if( GetImport().getImportFlags() & IMPORT_AUTOSTYLES )
+            {
+                // office:automatic-styles inside office:document
+                pContext = GetSdImport().CreateAutoStylesContext(rLocalName, xAttrList);
+            }
             break;
         }
         case XML_TOK_DOC_MASTERSTYLES:
         {
-            // office:master-styles inside office:document
-            pContext = GetSdImport().CreateMasterStylesContext(rLocalName, xAttrList);
+            if( GetImport().getImportFlags() & IMPORT_MASTERSTYLES )
+            {
+                // office:master-styles inside office:document
+                pContext = GetSdImport().CreateMasterStylesContext(rLocalName, xAttrList);
+            }
             break;
         }
         case XML_TOK_DOC_META:
         {
-            // office:meta inside office:document
-            pContext = GetSdImport().CreateMetaContext(rLocalName, xAttrList);
+            if( GetImport().getImportFlags() & IMPORT_META )
+            {
+                // office:meta inside office:document
+                pContext = GetSdImport().CreateMetaContext(rLocalName, xAttrList);
+            }
             break;
         }
         case XML_TOK_DOC_SCRIPT:
         {
-            // office:script inside office:document
-            pContext = GetSdImport().CreateScriptContext( rLocalName );
+            if( GetImport().getImportFlags() & IMPORT_SCRIPTS )
+            {
+                // office:script inside office:document
+                pContext = GetSdImport().CreateScriptContext( rLocalName );
+            }
             break;
         }
         case XML_TOK_DOC_BODY:
         {
-            // office:body inside office:document
-            pContext = GetSdImport().CreateBodyContext(rLocalName, xAttrList);
+            if( GetImport().getImportFlags() & IMPORT_CONTENT )
+            {
+                // office:body inside office:document
+                pContext = GetSdImport().CreateBodyContext(rLocalName, xAttrList);
+            }
             break;
         }
     }
@@ -367,8 +388,81 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_createInstance(const 
 
 //////////////////////////////////////////////////////////////////////////////
 
-SdXMLImport::SdXMLImport( sal_Bool bIsDraw )
-:   mpMasterStylesContext(0L),
+uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Style_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Impress.Styles" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdImpressXMLImport_Style_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Impress.Styles" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Style_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES );
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Style_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Draw.Styles" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdDrawXMLImport_Style_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Draw.Styles" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Style_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Content_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Impress.Content" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdImpressXMLImport_Content_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Impress.Content" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS );
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Content_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Draw.Content" ) );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL SdDrawXMLImport_Content_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Draw.Content" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+SdXMLImport::SdXMLImport( sal_Bool bIsDraw, sal_uInt16 nImportFlags )
+:   SvXMLImport( nImportFlags ),
+    mpMasterStylesContext(0L),
     mpDocElemTokenMap(0L),
     mpBodyElemTokenMap(0L),
     mpStylesElemTokenMap(0L),

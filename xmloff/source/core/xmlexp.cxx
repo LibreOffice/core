@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-28 11:32:54 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 16:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ void SvXMLExport::_InitCtor()
     sEmbeddedObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
 }
 
-SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const sal_Char * pClass ) :
+SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const sal_Char * pClass, sal_uInt16 nExportFlags ) :
     pImpl( 0 ), mpClass( pClass ),
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
     sWS( OUString::createFromAscii( sXML_WS ) ),
@@ -225,7 +225,8 @@ SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const sal_Char * pClass ) :
     pNumExport(0L),
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
-    bSaveLinkedSections(sal_True)
+    bSaveLinkedSections(sal_True),
+    mnExportFlags( nExportFlags )
 {
     _InitCtor();
 }
@@ -499,8 +500,6 @@ void SvXMLExport::ImplExportStyles( sal_Bool bUsed )
 {
     CheckAttrList();
 
-    _ExportFontDecls();
-
 //  AddAttributeASCII( XML_NAMESPACE_NONE, sXML_id, sXML_styles_id );
     {
         // <style:styles>
@@ -509,7 +508,10 @@ void SvXMLExport::ImplExportStyles( sal_Bool bUsed )
 
         _ExportStyles( sal_False );
     }
+}
 
+void SvXMLExport::ImplExportAutoStyles( sal_Bool bUsed )
+{
 //  AddAttributeASCII( XML_NAMESPACE_NONE, sXML_id, sXML_auto_styles_id );
     {
         // <style:automatic-styles>
@@ -531,7 +533,10 @@ void SvXMLExport::ImplExportStyles( sal_Bool bUsed )
 #endif
         _ExportAutoStyles();
     }
+}
 
+void SvXMLExport::ImplExportMasterStyles( sal_Bool bUsed )
+{
     {
         // <style:master-styles>
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_master_styles,
@@ -607,19 +612,36 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
                                 sal_True, sal_True );
 
         // meta information
-        ImplExportMeta();
+        if( mnExportFlags & EXPORT_META )
+            ImplExportMeta();
 
         // view settings
-        _ExportViewSettings();
+        if( mnExportFlags & EXPORT_SETTINGS )
+            _ExportViewSettings();
 
         // scripts
-        _ExportScripts();
+        if( mnExportFlags & EXPORT_SCRIPTS )
+            _ExportScripts();
+
+        // font declerations
+        if( mnExportFlags & EXPORT_FONTDECLS )
+            _ExportFontDecls();
 
         // styles
-        ImplExportStyles( sal_False );
+        if( mnExportFlags & EXPORT_STYLES )
+            ImplExportStyles( sal_False );
+
+        // autostyles
+        if( mnExportFlags & EXPORT_AUTOSTYLES )
+            ImplExportAutoStyles( sal_False );
+
+        // masterstyles
+        if( mnExportFlags & EXPORT_MASTERSTYLES )
+            ImplExportMasterStyles( sal_False );
 
         // contnt
-        ImplExportContent();
+        if( mnExportFlags & EXPORT_CONTENT )
+            ImplExportContent();
     }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-08 14:28:14 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 16:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,14 +218,15 @@ void SvXMLImport::_InitCtor()
         pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier);
 }
 
-SvXMLImport::SvXMLImport() throw () :
+SvXMLImport::SvXMLImport( sal_uInt16 nImportFlags ) throw () :
     pImpl( 0 ),
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     pContexts( new SvXMLImportContexts_Impl ),
     pNumImport( NULL ),
     pProgressBarHelper( NULL ),
-    pEventImportHelper( NULL )
+    pEventImportHelper( NULL ),
+    mnImportFlags( nImportFlags )
 {
     _InitCtor();
 }

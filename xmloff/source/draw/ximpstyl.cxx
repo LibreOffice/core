@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-11 13:21:57 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 16:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1130,15 +1130,18 @@ void SdXMLStylesContext::EndElement()
                 XMLShapeStyleContext* pDocStyle = (XMLShapeStyleContext*)pStyle;
 //              pDocStyle->Filter();
 
-                pStyle = GetSdImport().GetShapeImport()->GetStylesContext()->FindStyleChildContext(
-                    pStyle->GetFamily(), pStyle->GetParent());
-
-                if(pStyle && pStyle->ISA(XMLShapeStyleContext))
+                SvXMLStylesContext* pStylesContext = GetSdImport().GetShapeImport()->GetStylesContext();
+                if( pStylesContext )
                 {
-                    XMLShapeStyleContext* pParentStyle = (XMLShapeStyleContext*)pStyle;
-                    if(pParentStyle->GetStyle().is())
+                    pStyle = pStylesContext->FindStyleChildContext(pStyle->GetFamily(), pStyle->GetParent());
+
+                    if(pStyle && pStyle->ISA(XMLShapeStyleContext))
                     {
-                        pDocStyle->SetStyle(pParentStyle->GetStyle());
+                        XMLShapeStyleContext* pParentStyle = (XMLShapeStyleContext*)pStyle;
+                        if(pParentStyle->GetStyle().is())
+                        {
+                            pDocStyle->SetStyle(pParentStyle->GetStyle());
+                        }
                     }
                 }
             }

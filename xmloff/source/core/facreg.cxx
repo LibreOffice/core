@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 17:47:49 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 16:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,20 +80,60 @@ extern uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_getSupportedService
 extern OUString SAL_CALL SdImpressXMLImport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// impress import.styles
+extern uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Style_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SdImpressXMLImport_Style_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Style_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// impress import.content
+extern uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Content_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SdImpressXMLImport_Content_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
 // impress export
 extern uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SdImpressXMLExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// impress export.styles
+extern uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Style_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SdImpressXMLExport_Style_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Style_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// impress export.content
+extern uno::Sequence< OUString > SAL_CALL SdImpressXMLExport_Content_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SdImpressXMLExport_Content_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
 // draw import
 extern uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SdDrawXMLImport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// draw import.styles
+extern uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Style_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SdDrawXMLImport_Style_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Style_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// draw import.content
+extern uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Content_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SdDrawXMLImport_Content_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
 // draw export
 extern uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SdDrawXMLExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// draw export
+extern uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Style_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SdDrawXMLExport_Style_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Style_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+// draw export
+extern uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Content_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SdDrawXMLExport_Content_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLExport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
 // chart import
 extern uno::Sequence< OUString > SAL_CALL SchXMLImport_getSupportedServiceNames() throw();
@@ -159,9 +199,25 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             writeInfo( pKey, SdImpressXMLImport_getImplementationName(), SdImpressXMLImport_getSupportedServiceNames() );
             writeInfo( pKey, SdImpressXMLExport_getImplementationName(), SdImpressXMLExport_getSupportedServiceNames() );
 
+            // impress.styles
+            writeInfo( pKey, SdImpressXMLImport_Style_getImplementationName(), SdImpressXMLImport_Style_getSupportedServiceNames() );
+            writeInfo( pKey, SdImpressXMLExport_Style_getImplementationName(), SdImpressXMLExport_Style_getSupportedServiceNames() );
+
+            // impress.content
+            writeInfo( pKey, SdImpressXMLImport_Content_getImplementationName(), SdImpressXMLImport_Content_getSupportedServiceNames() );
+            writeInfo( pKey, SdImpressXMLExport_Content_getImplementationName(), SdImpressXMLExport_Content_getSupportedServiceNames() );
+
             // draw
             writeInfo( pKey, SdDrawXMLImport_getImplementationName(), SdDrawXMLImport_getSupportedServiceNames() );
             writeInfo( pKey, SdDrawXMLExport_getImplementationName(), SdDrawXMLExport_getSupportedServiceNames() );
+
+            // draw.styles
+            writeInfo( pKey, SdDrawXMLImport_Style_getImplementationName(), SdDrawXMLImport_Style_getSupportedServiceNames() );
+            writeInfo( pKey, SdDrawXMLExport_Style_getImplementationName(), SdDrawXMLExport_Style_getSupportedServiceNames() );
+
+            // draw.content
+            writeInfo( pKey, SdDrawXMLImport_Content_getImplementationName(), SdDrawXMLImport_Content_getSupportedServiceNames() );
+            writeInfo( pKey, SdDrawXMLExport_Content_getImplementationName(), SdDrawXMLExport_Content_getSupportedServiceNames() );
 
             // chart
             writeInfo( pKey, SchXMLImport_getImplementationName(), SchXMLImport_getSupportedServiceNames() );
@@ -169,6 +225,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
 
             // meta
             writeInfo( pKey, XMLMetaImportComponent_getImplementationName(), XMLMetaImportComponent_getSupportedServiceNames() );
+            writeInfo( pKey, XMLMetaExportComponent_getImplementationName(), XMLMetaExportComponent_getSupportedServiceNames() );
             writeInfo( pKey, XMLMetaExportComponent_getImplementationName(), XMLMetaExportComponent_getSupportedServiceNames() );
 
             // writer auto text events
@@ -200,6 +257,20 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SdImpressXMLImport_createInstance,
                 SdImpressXMLImport_getSupportedServiceNames() );
         }
+        if( SdImpressXMLImport_Style_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SdImpressXMLImport_Style_getImplementationName(),
+                SdImpressXMLImport_Style_createInstance,
+                SdImpressXMLImport_Style_getSupportedServiceNames() );
+        }
+        if( SdImpressXMLImport_Content_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SdImpressXMLImport_Content_getImplementationName(),
+                SdImpressXMLImport_Content_createInstance,
+                SdImpressXMLImport_Content_getSupportedServiceNames() );
+        }
         else if( SdDrawXMLImport_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
             xFactory = ::cppu::createSingleFactory( xMSF,
@@ -207,12 +278,40 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SdDrawXMLImport_createInstance,
                 SdDrawXMLImport_getSupportedServiceNames() );
         }
-        if( SdImpressXMLExport_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        else if( SdDrawXMLImport_Style_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SdDrawXMLImport_Style_getImplementationName(),
+                SdDrawXMLImport_Style_createInstance,
+                SdDrawXMLImport_Style_getSupportedServiceNames() );
+        }
+        else if( SdDrawXMLImport_Content_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SdDrawXMLImport_Content_getImplementationName(),
+                SdDrawXMLImport_Content_createInstance,
+                SdDrawXMLImport_Content_getSupportedServiceNames() );
+        }
+        else if( SdImpressXMLExport_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
             xFactory = ::cppu::createSingleFactory( xMSF,
                 SdImpressXMLExport_getImplementationName(),
                 SdImpressXMLExport_createInstance,
                 SdImpressXMLExport_getSupportedServiceNames() );
+        }
+        else if( SdImpressXMLExport_Style_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SdImpressXMLExport_Style_getImplementationName(),
+                SdImpressXMLExport_Style_createInstance,
+                SdImpressXMLExport_Style_getSupportedServiceNames() );
+        }
+        else if( SdImpressXMLExport_Content_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SdImpressXMLExport_Content_getImplementationName(),
+                SdImpressXMLExport_Content_createInstance,
+                SdImpressXMLExport_Content_getSupportedServiceNames() );
         }
         else if( SdDrawXMLExport_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
@@ -220,6 +319,20 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SdDrawXMLExport_getImplementationName(),
                 SdDrawXMLExport_createInstance,
                 SdDrawXMLExport_getSupportedServiceNames() );
+        }
+        else if( SdDrawXMLExport_Style_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SdDrawXMLExport_Style_getImplementationName(),
+                SdDrawXMLExport_Style_createInstance,
+                SdDrawXMLExport_Style_getSupportedServiceNames() );
+        }
+        else if( SdDrawXMLExport_Content_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SdDrawXMLExport_Content_getImplementationName(),
+                SdDrawXMLExport_Content_createInstance,
+                SdDrawXMLExport_Content_getSupportedServiceNames() );
         }
         else if( SchXMLImport_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
+ *  last change: $Author: cl $ $Date: 2001-03-01 16:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ protected:
         com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
 public:
-    SdXMLImport( sal_Bool bIsDraw );
+    SdXMLImport( sal_Bool bIsDraw, sal_uInt16 nImportFlags = IMPORT_ALL );
     ~SdXMLImport();
 
     // XImporter
