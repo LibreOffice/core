@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppuoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2002-11-21 10:48:18 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #include <stdio.h>
 #include <string.h>
-
 #include "cppuoptions.hxx"
 #include "osl/thread.h"
 #include "osl/process.h"
@@ -92,7 +91,7 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     }
 
     char    *s=NULL;
-    for (i; i < ac; i++)
+    for( ; i < ac; i++)
     {
         if (av[i][0] == '-')
         {
