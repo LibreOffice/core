@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 20:04:30 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
 #ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
 #endif
@@ -171,6 +174,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
+namespace css = ::com::sun::star;
 
 #ifndef GCC
 #pragma hdrstop
@@ -2273,11 +2277,14 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
                 }
 
                 SfxViewFrame* pCurrent = SfxViewFrame::Current();
-                if ( GetFrame()->GetFrameInterface()->isActive() || !bPreview && ( !pCurrent || bGrabFocus ) )
+                css::uno::Reference< css::frame::XFrame > xFrame = GetFrame()->GetFrameInterface();
+                if ( xFrame->isActive() || !bPreview && ( !pCurrent || bGrabFocus ) )
                 {
                     pSfxApp->SetViewFrame( this );
-                    GetBindings().SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
-                    if ( bGrabFocus )
+                    GetBindings().SetActiveFrame( css::uno::Reference< css::frame::XFrame >() );
+                    css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
+                    Window* pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
+                    if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
                     {
                         SfxInPlaceClient *pCli = GetViewShell()->GetUIActiveClient();
                         if ( ( !pCli || !pCli->IsObjectUIActive() ) &&
