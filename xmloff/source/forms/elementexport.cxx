@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:56:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ namespace xmloff
             if (xSI.is() && xSI->supportsService(SERVICE_FORMATTEDFIELD))
                 sToWriteServiceName = SERVICE_FORMATTEDFIELD;
         }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
         OSL_ENSURE(xSI.is() && xSI->supportsService(sToWriteServiceName),
             "OElementExport::exportServiceNameAttribute: wrong service name translation!");
@@ -391,7 +391,7 @@ namespace xmloff
                 OAttributeMetaData::getCommonControlAttributeName(CCA_NAME),
                 PROPERTY_NAME
                 );
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_NAME;
         #endif
@@ -401,7 +401,7 @@ namespace xmloff
         if (m_nIncludeCommon & CCA_SERVICE_NAME)
         {
             exportServiceNameAttribute();
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_SERVICE_NAME;
         #endif
@@ -415,7 +415,7 @@ namespace xmloff
                 OAttributeMetaData::getCommonControlAttributeNamespace(CCA_CONTROL_ID),
                 OAttributeMetaData::getCommonControlAttributeName(CCA_CONTROL_ID),
                 m_sControlId);
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_CONTROL_ID;
         #endif
@@ -605,7 +605,7 @@ namespace xmloff
                         OAttributeMetaData::getCommonControlAttributeName(nStringPropertyAttributeIds[i]),
                         aStringPropertyNames[i]
                         );
-                #ifdef DBG_UTIL
+                #if OSL_DEBUG_LEVEL > 0
                     //  reset the bit for later checking
                     m_nIncludeCommon = m_nIncludeCommon & ~nStringPropertyAttributeIds[i];
                 #endif
@@ -627,7 +627,7 @@ namespace xmloff
             {   // attribute defaults
                 BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE | BOOLATTR_INVERSE_SEMANTICS, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_VOID
             };
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             sal_Int32 nIdCount = sizeof(nBooleanPropertyAttributeIds) / sizeof(nBooleanPropertyAttributeIds[0]);
             sal_Int32 nNameCount = sizeof(pBooleanPropertyNames) / sizeof(pBooleanPropertyNames[0]);
             sal_Int32 nFlagsCount = sizeof(nBooleanPropertyAttrFlags) / sizeof(nBooleanPropertyAttrFlags[0]);
@@ -642,7 +642,7 @@ namespace xmloff
                         OAttributeMetaData::getCommonControlAttributeName(nBooleanPropertyAttributeIds[i]),
                         *(pBooleanPropertyNames[i]),
                         nBooleanPropertyAttrFlags[i]);
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
                     //  reset the bit for later checking
                     m_nIncludeCommon = m_nIncludeCommon & ~nBooleanPropertyAttributeIds[i];
         #endif
@@ -670,7 +670,7 @@ namespace xmloff
             if ( m_nIncludeCommon & CCA_MAX_LENGTH )
                 exportedProperty(PROPERTY_MAXTEXTLENGTH);
 
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             sal_Int32 nIdCount = sizeof(nIntegerPropertyAttributeIds) / sizeof(nIntegerPropertyAttributeIds[0]);
             sal_Int32 nNameCount = sizeof(pIntegerPropertyNames) / sizeof(pIntegerPropertyNames[0]);
             sal_Int32 nDefaultCount = sizeof(nIntegerPropertyAttrDefaults) / sizeof(nIntegerPropertyAttrDefaults[0]);
@@ -685,7 +685,7 @@ namespace xmloff
                         OAttributeMetaData::getCommonControlAttributeName(nIntegerPropertyAttributeIds[i]),
                         *(pIntegerPropertyNames[i]),
                         nIntegerPropertyAttrDefaults[i]);
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
                     //  reset the bit for later checking
                     m_nIncludeCommon = m_nIncludeCommon & ~nIntegerPropertyAttributeIds[i];
         #endif
@@ -705,7 +705,7 @@ namespace xmloff
                     PROPERTY_BUTTONTYPE,
                     OEnumMapper::getEnumMap(OEnumMapper::epButtonType),
                     FormButtonType_PUSH);
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeCommon = m_nIncludeCommon & ~CCA_BUTTON_TYPE;
         #endif
@@ -719,7 +719,7 @@ namespace xmloff
                     OEnumMapper::getEnumMap( OEnumMapper::epOrientation ),
                     ScrollBarOrientation::HORIZONTAL
                 );
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeCommon = m_nIncludeCommon & ~CCA_ORIENTATION;
         #endif
@@ -734,7 +734,7 @@ namespace xmloff
                     OEnumMapper::getEnumMap( OEnumMapper::epVisualEffect ),
                     VisualEffect::LOOK3D
                 );
-            #ifdef DBG_UTIL
+            #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeCommon = m_nIncludeCommon & ~CCA_VISUAL_EFFECT;
             #endif
@@ -748,7 +748,7 @@ namespace xmloff
         if (m_nIncludeCommon & CCA_TARGET_FRAME)
         {
             exportTargetFrameAttribute();
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_TARGET_FRAME;
         #endif
@@ -777,7 +777,7 @@ namespace xmloff
             exportedProperty( PROPERTY_MAXTEXTLENGTH );
             exportedProperty( PROPERTY_PERSISTENCE_MAXTEXTLENGTH );
 
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_MAX_LENGTH;
         #endif
@@ -786,7 +786,7 @@ namespace xmloff
         if (m_nIncludeCommon & CCA_TARGET_LOCATION)
         {
             exportTargetLocationAttribute();
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_TARGET_LOCATION;
         #endif
@@ -796,7 +796,7 @@ namespace xmloff
         if (m_nIncludeCommon & CCA_IMAGE_DATA)
         {
             exportImageDataAttribute();
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_IMAGE_DATA;
         #endif
@@ -813,7 +813,7 @@ namespace xmloff
                     OAttributeMetaData::getCommonControlAttributeName(CCA_FOR),
                     m_sReferringControls);
             }
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_FOR;
         #endif
@@ -858,7 +858,7 @@ namespace xmloff
             OSL_ENSURE((NULL == pCurrentValuePropertyName ) == (0 == (CCA_CURRENT_VALUE & m_nIncludeCommon)),
                 "OControlExport::exportCommonControlAttributes: no property found for the current-value attribute!");
 
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~(CCA_CURRENT_VALUE | CCA_VALUE);
         #endif
@@ -1030,7 +1030,7 @@ namespace xmloff
                 &PROPERTY_TOGGLE, &PROPERTY_FOCUS_ON_CLICK
             };
             sal_Int32 nIdCount = sizeof(nBooleanPropertyAttributeIds) / sizeof(nBooleanPropertyAttributeIds[0]);
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             sal_Int32 nNameCount = sizeof(pBooleanPropertyNames) / sizeof(pBooleanPropertyNames[0]);
             OSL_ENSURE((nIdCount == nNameCount),
                 "OControlExport::exportSpecialAttributes: somebody tampered with the maps (1)!");
@@ -1047,7 +1047,7 @@ namespace xmloff
                         *(*pPropertyName),
                         ( *pAttributeId == SCA_FOCUS_ON_CLICK ) ? BOOLATTR_DEFAULT_TRUE : BOOLATTR_DEFAULT_FALSE
                     );
-            #ifdef DBG_UTIL
+            #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~*pAttributeId;
             #endif
@@ -1072,7 +1072,7 @@ namespace xmloff
             };
 
             sal_Int32 nIdCount = sizeof( nIntegerPropertyAttributeIds ) / sizeof( nIntegerPropertyAttributeIds[0] );
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             sal_Int32 nNameCount = sizeof( pIntegerPropertyNames ) / sizeof( pIntegerPropertyNames[0] );
             OSL_ENSURE( ( nIdCount == nNameCount ),
                 "OControlExport::exportSpecialAttributes: somebody tampered with the maps (2)!" );
@@ -1089,7 +1089,7 @@ namespace xmloff
                         *( pIntegerPropertyNames[i] ),
                         nIntegerPropertyAttrDefaults[i]
                     );
-            #ifdef DBG_UTIL
+            #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~nIntegerPropertyAttributeIds[i];
             #endif
@@ -1113,7 +1113,7 @@ namespace xmloff
                         1
                     );
 
-            #ifdef DBG_UTIL
+            #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_STEP_SIZE;
             #endif
@@ -1132,7 +1132,7 @@ namespace xmloff
                     PROPERTY_DEFAULT_STATE,
                     OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
                     STATE_NOCHECK);
-            #ifdef DBG_UTIL
+            #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_STATE;
             #endif
@@ -1146,7 +1146,7 @@ namespace xmloff
                     PROPERTY_STATE,
                     OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
                     STATE_NOCHECK);
-            #ifdef DBG_UTIL
+            #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_CURRENT_STATE;
             #endif
@@ -1196,7 +1196,7 @@ namespace xmloff
                         sCharacter);
                 }
                 exportedProperty(PROPERTY_ECHO_CHAR);
-            #ifdef DBG_UTIL
+            #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_ECHO_CHAR;
             #endif
@@ -1235,7 +1235,7 @@ namespace xmloff
                     nMaxValueNamespaceKey,
                     pMaxValueAttributeName,
                     pMaxValuePropertyName);
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeSpecial = m_nIncludeSpecial & ~(SCA_MIN_VALUE | SCA_MAX_VALUE);
         #endif
@@ -1246,7 +1246,7 @@ namespace xmloff
         {
             exportImagePositionAttributes();
 
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
             m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_IMAGE_POSITION;
         #endif
@@ -2119,7 +2119,7 @@ namespace xmloff
                 PROPERTY_NAME, /*PROPERTY_TARGETURL,*/ PROPERTY_COMMAND, PROPERTY_FILTER, PROPERTY_ORDER
             };
             sal_Int32 nIdCount = sizeof(eStringPropertyIds) / sizeof(eStringPropertyIds[0]);
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             sal_Int32 nNameCount = sizeof(aStringPropertyNames) / sizeof(aStringPropertyNames[0]);
             OSL_ENSURE((nIdCount == nNameCount),
                 "OFormExport::exportAttributes: somebody tampered with the maps (1)!");
@@ -2163,7 +2163,7 @@ namespace xmloff
                 BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE
             };
             sal_Int32 nIdCount = sizeof(eBooleanPropertyIds) / sizeof(eBooleanPropertyIds[0]);
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             sal_Int32 nNameCount = sizeof(pBooleanPropertyNames) / sizeof(pBooleanPropertyNames[0]);
             sal_Int32 nFlagsCount = sizeof(nBooleanPropertyAttrFlags) / sizeof(nBooleanPropertyAttrFlags[0]);
             OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nFlagsCount),
@@ -2202,7 +2202,7 @@ namespace xmloff
                 sal_False, sal_False, sal_False, sal_False, sal_True
             };
             sal_Int32 nIdCount = sizeof(eEnumPropertyIds) / sizeof(eEnumPropertyIds[0]);
-        #ifdef DBG_UTIL
+        #if OSL_DEBUG_LEVEL > 0
             sal_Int32 nNameCount = sizeof(pEnumPropertyNames) / sizeof(pEnumPropertyNames[0]);
             sal_Int32 nDefaultCount = sizeof(nEnumPropertyAttrDefaults) / sizeof(nEnumPropertyAttrDefaults[0]);
             sal_Int32 nDefaultFlagCount = sizeof(nEnumPropertyAttrDefaultFlags) / sizeof(nEnumPropertyAttrDefaultFlags[0]);
