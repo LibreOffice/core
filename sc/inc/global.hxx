@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:54:12 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1189,7 +1189,11 @@ public:
                 ScFuncDesc();
                 ~ScFuncDesc();
 
+    /** Returns a semicolon separated list of all parameter names. */
+    String  GetParamList        () const;
+    /** Returns the full function siganture: "FUNCTIONNAME( parameter list )". */
     String  GetSignature        () const;
+    /** Returns the function siganture with parameters from the passed string array. */
     String  GetFormulaString    ( String** aArgArr ) const;
 
     USHORT      nFIndex;        // eindeutiger Funktionsindex
