@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:50:31 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ TabDialog DLG_ATTR
         Text [ italian ] = "Carattere" ;
         Text [ portuguese_brazilian ] = "Caractere" ;
         Text [ portuguese ] = "Tipo de letra" ;
-        Text [ finnish ] = "Schrift" ;
+        Text [ finnish ] = "Fontti" ;
         Text [ danish ] = "Skrifttype" ;
         Text [ french ] = "Police" ;
         Text [ swedish ] = "Teckensnitt" ;
@@ -174,7 +174,7 @@ TabDialog DLG_ATTR
         Text [ italian ] = "Formato" ;
         Text [ portuguese_brazilian ] = "Número" ;
         Text [ portuguese ] = "Formato" ;
-        Text [ finnish ] = "Format" ;
+        Text [ finnish ] = "Muotoile" ;
         Text [ danish ] = "Format" ;
         Text [ french ] = "Format" ;
         Text [ swedish ] = "Format" ;
@@ -200,7 +200,7 @@ TabDialog DLG_ATTR
         Text [ italian ] = "Allineamento" ;
         Text [ portuguese_brazilian ] = "Alinhar" ;
         Text [ portuguese ] = "Alinhamento" ;
-        Text [ finnish ] = "Ausrichtung" ;
+        Text [ finnish ] = "Tasaus" ;
         Text [ danish ] = "Justering" ;
         Text [ french ] = "Alignement" ;
         Text [ swedish ] = "Justering" ;
