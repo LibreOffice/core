@@ -16951,3 +16951,5 @@ _real@8@3ffd820c49ba5e354000
 ?release@SvxUnoTextCursor@@WDE@AAXXZ
 ?release@SvxUnoTextCursor@@WEA@AAXXZ
 ?setString@SvxUnoTextCursor@@WCM@AAXABVOUString@rtl@@@Z
+??0?$Sequence@V?$Reference@VXControlModel@awt@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+??0BaseReference@uno@star@sun@com@@IAE@PAVXInterface@1234@W4__UnoReference_NoAcquire@1234@@Z
