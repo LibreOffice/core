@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-20 12:29:28 $
+ *  last change: $Author: mba $ $Date: 2001-12-21 13:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYACCESS_HPP_
 #include <com/sun/star/script/XLibraryAccess.hpp>
+#endif
+
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
 #endif
 
 #include <com/sun/star/uno/Reference.h>
@@ -1164,11 +1168,14 @@ ErrCode SfxObjectShell::CallBasic( const String& rMacro,
     const String& rBasic, SbxObject* pVCtrl, SbxArray* pArgs,
     SbxValue* pRet )
 {
-    AdjustMacroMode( String() );
-    if ( pImp->nMacroMode == eNEVER_EXECUTE )
-        return ERRCODE_IO_ACCESSDENIED;
-
     SfxApplication* pApp = SFX_APP();
+    if( pApp->GetName() != rBasic )
+    {
+        AdjustMacroMode( String() );
+        if ( pImp->nMacroMode == eNEVER_EXECUTE )
+            return ERRCODE_IO_ACCESSDENIED;
+    }
+
     pApp->EnterBasicCall();
     BasicManager *pMgr = GetBasicManager();
     if( pApp->GetName() == rBasic )
@@ -1538,7 +1545,7 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
         sal_Bool bSecure = pImp->nMacroMode == eALWAYS_EXECUTE || IsSecure();
         if ( bSecure && bWarn || !bSecure && bConfirm )
         {
-            QueryBox aBox( NULL, SfxResId( DLG_MACROQUERY ) );
+            QueryBox aBox( GetDialogParent(), SfxResId( DLG_MACROQUERY ) );
             aBox.SetButtonText( aBox.GetButtonId(0), String( SfxResId(BTN_OK) ) );
             aBox.SetButtonText( aBox.GetButtonId(1), String( SfxResId(BTN_CANCEL) ) );
             String aText = aBox.GetMessText();
@@ -1559,4 +1566,42 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
 
         pImp->nMacroMode = bSecure ? 4 : eNEVER_EXECUTE;
     }
+}
+
+Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
+{
+    Window* pWindow = NULL;
+
+    // test current view, if it contains this document
+    SfxViewFrame* pView = SfxViewFrame::Current();
+    if ( !pView || pView->GetObjectShell() != this )
+        // get the first visible(!) view
+        pView = SfxViewFrame::GetFirst( this );
+
+    if ( pView )
+        // found ViewFrame, get the frames container window
+        pWindow = VCLUnoHelper::GetWindow( pView->GetFrame()->GetFrameInterface()->getContainerWindow() );
+
+    if ( !pLoadingMedium )
+        // if there is no loading medium, take the medium of this document
+        pLoadingMedium = pMedium;
+
+    if ( !pWindow && pLoadingMedium )
+    {
+        // is this document is loading currently?
+        SfxFrame* pFrame = pLoadingMedium->GetLoadTargetFrame();
+        if ( pFrame )
+            // get the frame it is loaded into
+            pWindow = VCLUnoHelper::GetWindow( pFrame->GetFrameInterface()->getContainerWindow() );
+
+        if ( pWindow )
+        {
+            // this frame may be invisible, show it if it is allowed
+            SFX_ITEMSET_ARG( pLoadingMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
+            if ( !pHiddenItem || !pHiddenItem->GetValue() )
+                pWindow->Show();
+        }
+    }
+
+    return pWindow;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-12 15:29:08 $
+ *  last change: $Author: mba $ $Date: 2001-12-21 13:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,12 +308,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
             if ( aScript.getLength() )
             {
                 aGuard.clear();
-                ErrCode nErr;
-                // never ask for macros from application basic
-                if ( !aScript.compareToAscii( "macro:///", 9 ) || Warn_Impl( aScript ) )
-                    nErr = SfxMacroLoader::loadMacro( aScript, mpObjShell );
-                else
-                    nErr = 0;
+                SfxMacroLoader::loadMacro( aScript, mpObjShell );
             }
         }
         else

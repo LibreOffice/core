@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:24:43 $
+ *  last change: $Author: mba $ $Date: 2001-12-21 13:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 #include "genlink.hxx"
 #include <viewfrm.hxx>
 #include <appdata.hxx>
+#include "objshimp.hxx"
 
 static const sal_uInt16 nCompatVersion = 2;
 static const sal_uInt16 nVersion = 3;
@@ -655,7 +656,7 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
                 // Sofern nicht die Applikation heruntergefahren wird, mu\s
                 // der Slot asynchron gel"oscht werden, falls er in seinem
                 // eigenen Execute abgeschossen wird!
-                if ( !SFX_APP()->IsDowning() )
+                if ( !SFX_APP()->Get_Impl()->bInQuit )
                     pImp->nEventId = Application::PostUserEvent( LINK(this, SfxMacroConfig, EventHdl_Impl), pInfo );
                 else
                     EventHdl_Impl( pInfo );
@@ -756,6 +757,13 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
                 pMgr = pAppMgr;
             else if ( pMgr == pAppMgr )
                 pMgr = NULL;
+
+            if ( pSh && pMgr && pMgr != pAppMgr )
+            {
+                pSh->AdjustMacroMode( String() );
+                if ( pSh->Get_Impl()->nMacroMode == eNEVER_EXECUTE )
+                    return FALSE;
+            }
 
             if ( pSh && pMgr && pMgr == pAppMgr )
             {

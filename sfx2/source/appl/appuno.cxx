@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: as $ $Date: 2001-12-12 13:26:30 $
+ *  last change: $Author: mba $ $Date: 2001-12-21 13:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@ using namespace ::rtl;
 #include "shutdownicon.hxx"
 #include "scriptcont.hxx"
 #include "dlgcont.hxx"
+#include "objshimp.hxx"
 
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
@@ -731,7 +732,25 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    ErrCode nErr = loadMacro( aURL.Complete );
+    sal_uInt32 nPropertyCount = lArgs.getLength();
+    ::rtl::OUString aReferer;
+    for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
+    {
+        if( lArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Referer")) )
+        {
+            lArgs[nProperty].Value >>= aReferer;
+            break;
+        }
+    }
+
+    // call from UI?
+    ErrCode nErr = ERRCODE_NONE;
+    if ( aReferer.compareToAscii("private:select", 12) == 0 )
+        nErr = loadMacro( aURL.Complete, SfxObjectShell::Current() );
+    else
+        nErr = loadMacro( aURL.Complete );
+
+    nErr = loadMacro( aURL.Complete );
     if( xListener.is() )
     {
         // always call dispatchFinished(), because we didn't load a document but
@@ -739,7 +758,7 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
         ::com::sun::star::frame::DispatchResultEvent aEvent;
 
         aEvent.Source = static_cast< ::cppu::OWeakObject* >(this);
-        if( nErr==ERRCODE_NONE)
+        if( nErr == ERRCODE_NONE )
             aEvent.State = ::com::sun::star::frame::DispatchResultState::SUCCESS;
         else
             aEvent.State = ::com::sun::star::frame::DispatchResultState::FAILURE;
@@ -754,7 +773,23 @@ void SAL_CALL SfxMacroLoader::dispatch( const ::com::sun::star::util::URL&      
               throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    ErrCode nErr = loadMacro( aURL.Complete );
+
+    sal_uInt32 nPropertyCount = lArgs.getLength();
+    ::rtl::OUString aReferer;
+    for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
+    {
+        if( lArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Referer")) )
+        {
+            lArgs[nProperty].Value >>= aReferer;
+            break;
+        }
+    }
+
+    // call from UI?
+    if ( aReferer.compareToAscii("private:select", 12) == 0 )
+        loadMacro( aURL.Complete, SfxObjectShell::Current() );
+    else
+        loadMacro( aURL.Complete );
 }
 
 // -----------------------------------------------------------------------
@@ -790,13 +825,15 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
     throw ( ::com::sun::star::uno::RuntimeException )
 {
     SfxApplication* pApp = SFX_APP();
-
     pApp->EnterBasicCall();
+    SfxObjectShell* pCurrent = pSh;
+    if ( !pCurrent )
+        // all not full qualified names use the BASIC of the given or current document
+        pCurrent = SfxObjectShell::Current();
 
-    // macro:-::com::sun::star::util::URL analysiern
-    // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
-    // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
-    // 'macro://obj.method(args)' => Object via App-BASIC-Mgr
+    // 'macro:///lib.mod.proc(args)' => macro of App-BASIC
+    // 'macro://[docname|.]/lib.mod.proc(args)' => macro of current or qualified document
+    // 'macro://obj.method(args)' => direct API call, execute it via App-BASIC
     String aMacro( rURL );
     sal_uInt16 nHashPos = aMacro.Search( '/', 8 );
     sal_uInt16 nArgsPos = aMacro.Search( '(' );
@@ -804,49 +841,70 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
     BasicManager *pBasMgr = 0;
     ErrCode nErr = ERRCODE_NONE;
 
-    // wird Macro angesprochen (also KEIN Object)?
+    // should a macro function be executed ( no direct API call)?
     if ( STRING_NOTFOUND != nHashPos && nHashPos < nArgsPos )
     {
-        // BasManager ermitteln
+        // find BasicManager
+        SfxObjectShell* pDoc = NULL;
         String aBasMgrName( INetURLObject::decode(aMacro.Copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
         if ( !aBasMgrName.Len() )
             pBasMgr = pAppMgr;
         else if ( aBasMgrName.EqualsAscii(".") )
-            pBasMgr = SfxObjectShell::Current()->GetBasicManager();
+        {
+            // current/actual document
+            pDoc = pCurrent;
+            pBasMgr = pDoc->GetBasicManager();
+        }
         else
+        {
+            // full qualified name, find document by name
             for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
                     pObjSh && !pBasMgr;
                     pObjSh = SfxObjectShell::GetNext(*pObjSh) )
                 if ( aBasMgrName == pObjSh->GetTitle(SFX_TITLE_APINAME) )
-                    pBasMgr = pObjSh->GetBasicManager();
+                {
+                    pDoc = pObjSh;
+                    pBasMgr = pDoc->GetBasicManager();
+                }
+        }
+
         if ( pBasMgr )
         {
-            // Funktion suchen
+            if ( pSh && pDoc )
+            {
+                // security check for macros from document basic if an SFX context (pSh) is given
+                pDoc->AdjustMacroMode( String() );
+                if ( pDoc->Get_Impl()->nMacroMode == eNEVER_EXECUTE )
+                    // check forbids execution
+                    return ERRCODE_IO_ACCESSDENIED;;
+            }
+
+            // find BASIC method
             String aQualifiedMethod( INetURLObject::decode(aMacro.Copy( nHashPos+1 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
             String aArgs;
             if ( STRING_NOTFOUND != nArgsPos )
             {
+                // remove arguments from macro name
                 aArgs = aQualifiedMethod.Copy( nArgsPos - nHashPos - 1 );
                 aQualifiedMethod.Erase( nArgsPos - nHashPos - 1 );
             }
 
             SbxMethod *pMethod = SfxQueryMacro( pBasMgr, aQualifiedMethod );
-
-            // falls gefunden Funktion ueber ihren Parent ausfuehren
             if ( pMethod )
             {
+                // arguments must be quoted
                 String aQuotedArgs;
                 if ( aArgs.Len()<2 || aArgs.GetBuffer()[1] == '\"')
+                    // no args or already quoted args
                     aQuotedArgs = aArgs;
                 else
                 {
-                    // Klammern entfernen
+                    // quote parameters
                     aArgs.Erase(0,1);
                     aArgs.Erase( aArgs.Len()-1,1);
 
                     aQuotedArgs = '(';
 
-                    // Alle Parameter mit T"uddelchen
                     sal_uInt16 nCount = aArgs.GetTokenCount(',');
                     for ( sal_uInt16 n=0; n<nCount; n++ )
                     {
@@ -864,10 +922,13 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
                 SbxVariable *pCompVar = NULL;
                 if ( pSh )
                 {
+                    // mark document: it executes a macro, so it's in a modal mode
                     pSh->SetMacroMode_Impl( TRUE );
                     if ( pBasMgr == pAppMgr )
                     {
-                        pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
+                        // document is executed via AppBASIC, adjust "ThisComponent" variable
+                        StarBASIC* pBas = pAppMgr->GetLib(0);
+                        pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
                         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                                 xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
                         ::com::sun::star::uno::Any aAny;
@@ -881,21 +942,27 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
                         {
                             SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny );
                             xUnoObj->SetFlag( SBX_DONTSTORE );
-                            pAppMgr->GetLib(0)->Insert( xUnoObj );
-                            pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
+                            pBas->Insert( xUnoObj );
+                            pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
                         }
                     }
                 }
 
+                // add quoted arguments and do the call
                 String aCall( '[' );
                 aCall += pMethod->GetName();
                 aCall += aQuotedArgs;
                 aCall += ']';
+
+                // execute function using its Sbx parent,
                 pMethod->GetParent()->Execute( aCall );
                 nErr = SbxBase::GetError();
                 if ( pCompVar )
+                    // reset "ThisComponent" to prior value
                     pCompVar->PutObject( xOldVar );
+
                 if ( pSh )
+                    // remove flag for modal mode
                     pSh->SetMacroMode_Impl( FALSE );
             }
             else
@@ -906,7 +973,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
     }
     else
     {
-        // (optional Objekt-qualifizierte) Basic-Funktion ausfuehren
+        // direct API call on a specified object
         String aCall( '[' );
         aCall += INetURLObject::decode(aMacro.Copy(6), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET);
         aCall += ']';
@@ -916,7 +983,6 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
 
     pApp->LeaveBasicCall();
     SbxBase::ResetError();
-
     return nErr;
 }
 
