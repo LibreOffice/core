@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:40:40 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1239,7 +1239,7 @@ TabPage TP_FRM_STD
         Text [ danish ] = "~Bevar st�rrelsesforhold" ;
         Text [ portuguese_brazilian ] = "~Manter propor��es" ;
         Text [ portuguese ] = "Pr~oporcional" ;
-        Text[ chinese_simplified ] = "保持比例(~K)";
+        Text[ chinese_simplified ] = "保持比例";
         Text[ russian ] = "���������������";
         Text[ polish ] = "Za~chowaj proporcje";
         Text[ japanese ] = "比率を保つ(~K)";
@@ -1269,7 +1269,7 @@ TabPage TP_FRM_STD
         Text[ swedish ] = "Au~tomatisk storlek";
         Text[ japanese ] = "サイズ自動調整";
         Text[ korean ] = "크기 자동 조절";
-        Text[ chinese_simplified ] = "自动调整大小(~A)";
+        Text[ chinese_simplified ] = "自动调整高度";
         Text[ chinese_traditional ] = "自動調整大小";
         Text[ portuguese ] = "Alt~ura autom�tica";
         Text[ russian ] = "����������";
@@ -1902,6 +1902,7 @@ TabPage TP_FRM_STD
         TabStop = TRUE ;
         Text = "Textfluss folgen" ;
         Text [ english_us ] = "Follow text flow" ;
+        Text[ chinese_simplified ] = "跟随文字流";
     };
     FixedLine FL_POSITION
     {
@@ -3453,8 +3454,8 @@ TabPage TP_FRM_ADD
     StringList [ chinese_simplified ] =
     {
          < "从左向右(横写)" ; 0; > ;
-        < "从右向左(横写)" ; 1; > ;
-        < "从右向左(竖写)" ; 2; > ;
+        < "从右向左(水平)" ; 1; > ;
+        < "从右向左(垂直)" ; 2; > ;
         < "沿用现有的文字方向的设定" ; 4; > ;
     };
     StringList [ chinese_traditional ] =
