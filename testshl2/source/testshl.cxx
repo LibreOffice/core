@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 14:42:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 08:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,13 @@ using namespace std;
 
 // Prototype for signal handling
 void setSignalFilename(GetOpt & opt);
+
+CmdLineBits st_nBits;
+
+void initTPrint(GetOpt & _aOptions)
+{
+    st_nBits = FileHelper::createFlags(_aOptions);
+}
 
 void my_sleep(int sec)
 {
@@ -278,6 +285,8 @@ int _cdecl main( int argc, char* argv[] )
     ProcessHandler aCurrentProcess;
 
     GetOpt opt( argv, optionSet );
+    initTPrint(opt);
+
     if ( opt.hasOpt("-pid") )
     {
         aCurrentProcess.setName(opt.getOpt("-pid").getStr());
@@ -285,7 +294,7 @@ int _cdecl main( int argc, char* argv[] )
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.14 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.15 $\n");
     }
 
     if ( opt.hasOpt("-endless"))                 // this exists only for self test issues
