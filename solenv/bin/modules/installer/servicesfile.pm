@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-22 10:22:17 $
+#   last change: $Author: kz $ $Date: 2004-07-02 15:27:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -489,10 +489,12 @@ sub add_path_to_pathvariable
         my $onefile = ${$filesarrayref}[$i];
         my $sourcepath = $onefile->{'sourcepath'};
 
-        if ( $sourcepath =~ /\Q$searchstring\E/ )
+        installer::pathanalyzer::get_path_from_fullqualifiedname(\$sourcepath);
+        installer::remover::remove_ending_pathseparator(\$sourcepath);
+
+        if ( $sourcepath =~ /\Q$searchstring\E\s*$/ )
         {
             $path = $sourcepath;
-            installer::pathanalyzer::get_path_from_fullqualifiedname(\$path);
             last;
         }
     }
