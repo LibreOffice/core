@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 13:30:44 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 06:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _DBAU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
+#endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
@@ -481,6 +484,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     }
 
     sal_Bool bAlter = sal_False;
+    sal_Bool bError = sal_False;
     SQLExceptionInfo aInfo;
     try
     {
@@ -514,10 +518,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             Reference<XKeysSupplier> xKeySup(xTable,UNO_QUERY);
             appendKey(xKeySup);
         }
-//              else
-//              {
-//                  xTables->getByName(m_sName) >>= xTable;
-//              }
         // now set the properties
         if(bNew)
         {
@@ -547,31 +547,37 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             xFlush->flush();
         reSyncRows();
     }
-    catch(SQLContext& e)
+    catch(const SQLContext& e)
     {
         aInfo = SQLExceptionInfo(e);
     }
-    catch(SQLWarning& e)
+    catch(const SQLWarning& e)
     {
         aInfo = SQLExceptionInfo(e);
     }
-    catch(SQLException& e)
+    catch(const SQLException& e)
     {
         aInfo = SQLExceptionInfo(e);
+    }
+    catch(const ElementExistException& )
+    {
+        String sText( String(ModuleRes(STR_OBJECT_ALREADY_EXISTS)) );
+        sText.SearchAndReplaceAscii( "#" , m_sName);
+        OSQLMessageBox aDlg(getView(), String(ModuleRes(STR_OBJECT_ALREADY_EXSISTS)), sText, WB_OK, OSQLMessageBox::Error);
+
+        aDlg.Execute();
+        bError = sal_True;
     }
     catch(Exception&)
     {
-        m_sName = ::rtl::OUString();
-        stopTableListening();
-        m_xTable = NULL;
+        bError = sal_True;
         OSL_ENSURE(sal_False, "OTableController::doSaveDoc: table could not be inserted (caught a generic exception)!");
-        return sal_False;
     }
 
     showError(aInfo);
-    if(aInfo.isValid())
+    if (aInfo.isValid() || bError)
     {
-        if(!bAlter)
+        if(!bAlter || bNew)
         {
             m_sName = ::rtl::OUString();
             stopTableListening();
@@ -579,7 +585,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         }
         //  reload(); // a error occured so we have to reload
     }
-    return !aInfo.isValid();
+    return ! (aInfo.isValid() || bError);
 }
 
 // -----------------------------------------------------------------------------
@@ -1233,7 +1239,8 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
                     m_vRowList.insert(m_vRowList.begin(),pNewRow);
 
                     static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->Invalidate();
-                    static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->DisplayData(0);
+                    //  static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->DisplayData(0);
+                    static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->RowInserted(0);
                 }
             }
             else if (nReturn == RET_CANCEL)
