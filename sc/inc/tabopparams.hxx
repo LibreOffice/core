@@ -2,7 +2,7 @@
  *
  *  $RCSfile: tabopparams.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  last change: $ $
  *
@@ -95,7 +95,7 @@ struct ScInterpreterTableOpParams
             , aOld2(                 r.aOld2 )
             , aNew2(                 r.aNew2 )
             , aFormulaPos(           r.aFormulaPos )
-            , aNotifiedFormulaCells( r.aNotifiedFormulaCells )
+            //! never copied!   , aNotifiedFormulaCells( r.aNotifiedFormulaCells )
             , aNotifiedFormulaPos(   r.aNotifiedFormulaPos )
             , bValid(                r.bValid )
             , bRefresh(              r.bRefresh )
@@ -110,7 +110,9 @@ struct ScInterpreterTableOpParams
         aOld2                 = r.aOld2;
         aNew2                 = r.aNew2;
         aFormulaPos           = r.aFormulaPos;
-        aNotifiedFormulaCells = r.aNotifiedFormulaCells;
+        //! never copied!   aNotifiedFormulaCells = r.aNotifiedFormulaCells;
+        //! instead, empty anything eventually present
+        ::std::vector< ScFormulaCell* >().swap( aNotifiedFormulaCells );
         aNotifiedFormulaPos   = r.aNotifiedFormulaPos;
         bValid                = r.bValid;
         bRefresh              = r.bRefresh;
