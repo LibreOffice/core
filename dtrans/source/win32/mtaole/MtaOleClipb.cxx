@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 14:14:28 $
+ *  last change: $Author: tra $ $Date: 2001-03-22 14:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,6 @@
 #include <osl/diagnose.h>
 #endif
 
-#include <systools/win32/user9x.h>
-
 #include "..\..\inc\MtaOleClipb.hxx"
 
 #ifndef _OSL_CONDITN_HXX_
@@ -90,8 +88,11 @@ using osl::Condition;
 //  defines
 //----------------------------------------------------------------
 
-#define HIDDEN_CB_WNDCLS_NAME "MtaOleReqWnd_920896680C9449"
-#define CLIPSERVICE_DLL_NAME "sysdtrans.dll"
+namespace
+{
+    char CLIPSRV_DLL_NAME[] = "sysdtrans.dll";
+    char g_szWndClsName[]   = "MtaOleReqWnd###";
+}
 
 //--------------------------------------------------------
 // messages constants
@@ -103,10 +104,10 @@ const sal_uInt32 MSG_REGCLIPVIEWER              = WM_USER + 0x0003;
 const sal_uInt32 MSG_FLUSHCLIPBOARD             = WM_USER + 0x0004;
 const sal_uInt32 MSG_SHUTDOWN                   = WM_USER + 0x0006;
 
-const sal_uInt32 MAX_WAITTIME                   = 60000;
-const sal_uInt32 MAX_OPCOMPLET_WAITTIME         = 30;
-const sal_uInt32 MAX_WAIT_SHUTDOWN              = 30000;
-const sal_uInt32 MAX_CLIPEVENT_PROCESSING_TIME  = 5000;
+const sal_uInt32 MAX_WAITTIME                   = 10000; // msec
+const sal_uInt32 MAX_OPCOMPLET_WAITTIME         = 10;     // sec
+const sal_uInt32 MAX_WAIT_SHUTDOWN              = 10000; // msec
+const sal_uInt32 MAX_CLIPEVENT_PROCESSING_TIME  = 5000;  // msec
 
 const sal_Bool MANUAL_RESET                     = sal_True;
 const sal_Bool AUTO_RESET                       = sal_False;
@@ -190,6 +191,7 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
     m_uOleThreadId( 0 ),
     m_hEvtThrdReady( NULL ),
     m_hwndMtaOleReqWnd( NULL ),
+    m_MtaOleReqWndClassAtom( 0 ),
     m_hwndNextClipViewer( NULL ),
     m_pfncClipViewerCallback( NULL )
 {
@@ -232,6 +234,9 @@ CMtaOleClipboard::~CMtaOleClipboard( )
 
     if ( NULL != m_hEvtThrdReady )
         CloseHandle( m_hEvtThrdReady );
+
+    if ( m_MtaOleReqWndClassAtom )
+        UnregisterClassA( g_szWndClsName, NULL );
 
     OSL_ENSURE( ( NULL == m_pfncClipViewerCallback ) &&
                 !IsWindow( m_hwndNextClipViewer ), \
@@ -599,7 +604,7 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
         break;
 
     case MSG_REGCLIPVIEWER:
-        pImpl->onRegisterClipViewer( reinterpret_cast<LPFNC_CLIPVIEWER_CALLBACK_t>(wParam) );
+        pImpl->onRegisterClipViewer( reinterpret_cast<CMtaOleClipboard::LPFNC_CLIPVIEWER_CALLBACK_t>(wParam) );
         aMsgCtx->aCondition->set( );
         break;
 
@@ -616,12 +621,23 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
         DestroyWindow( pImpl->m_hwndMtaOleReqWnd );
         break;
 
+    // under windows 95/98 the creation of the
+    // hidden target request window fails if
+    // we don't handle this message ourself
+    // because the DefWindowProc returns 0 as
+    // a result of handling WM_NCCREATE what
+    // leads to a failure of CreateWindow[Ex]!!!
+    case WM_NCCREATE:
+        lResult = TRUE;
+        break;
+
     case WM_DESTROY:
         PostQuitMessage( 0 );
         break;
 
     default:
-        return DefWindowProc( hWnd, uMsg, wParam, lParam );
+        lResult = DefWindowProc( hWnd, uMsg, wParam, lParam );
+        break;
     }
 
     return lResult;
@@ -634,23 +650,30 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
 void CMtaOleClipboard::createMtaOleReqWnd( )
 {
     WNDCLASSEXA  wcex;
-    //sal_Unicode szWndClsName[] = HIDDEN_CB_WNDCLS_NAME;
-    char szWndClsName[] = HIDDEN_CB_WNDCLS_NAME;
 
-    HINSTANCE hInst = GetModuleHandleA( CLIPSERVICE_DLL_NAME );
+    HINSTANCE hInst = GetModuleHandleA( CLIPSRV_DLL_NAME );
     OSL_ENSURE( NULL != hInst, "The name of the clipboard service dll must have changed" );
 
     ZeroMemory( &wcex, sizeof( WNDCLASSEXA ) );
 
-    wcex.cbSize        = sizeof( WNDCLASSEXA );
-    wcex.lpfnWndProc   = static_cast< WNDPROC >( CMtaOleClipboard::mtaOleReqWndProc );
-    wcex.hInstance     = hInst;
-    wcex.lpszClassName = szWndClsName;
+    wcex.cbSize         = sizeof(WNDCLASSEXA);
+    wcex.style          = 0;
+    wcex.lpfnWndProc    = static_cast< WNDPROC >( CMtaOleClipboard::mtaOleReqWndProc );
+    wcex.cbClsExtra     = 0;
+    wcex.cbWndExtra     = 0;
+    wcex.hInstance      = hInst;
+    wcex.hIcon          = NULL;
+    wcex.hCursor        = NULL;
+    wcex.hbrBackground  = NULL;
+    wcex.lpszMenuName   = NULL;
+    wcex.lpszClassName  = g_szWndClsName;
+    wcex.hIconSm        = NULL;
 
-    ATOM atom = RegisterClassExA( &wcex );
-    if ( 0 != atom )
-        m_hwndMtaOleReqWnd = CreateWindowExA(
-            0, szWndClsName,"", 0, 0, 0, 0, 0, NULL, NULL, hInst, NULL );
+    m_MtaOleReqWndClassAtom = RegisterClassExA( &wcex );
+
+    if ( 0 != m_MtaOleReqWndClassAtom )
+        m_hwndMtaOleReqWnd = CreateWindowA(
+            g_szWndClsName, NULL, 0, 0, 0, 0, 0, NULL, NULL, hInst, NULL );
 }
 
 //--------------------------------------------------------------------
@@ -673,8 +696,8 @@ unsigned int CMtaOleClipboard::run( )
 
         // pumping messages
         MSG msg;
-        while( GetMessage( &msg, NULL, 0, 0 ) )
-            DispatchMessage( &msg );
+        while( GetMessageA( &msg, NULL, 0, 0 ) )
+            DispatchMessageA( &msg );
 
         nRet = 0;
     }

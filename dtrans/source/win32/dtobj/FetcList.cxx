@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 13:39:33 $
+ *  last change: $Author: tra $ $Date: 2001-03-22 14:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,8 @@ using namespace std;
 //
 //------------------------------------------------------------------------
 
-LCID       CFormatRegistrar::m_TxtLocale           = 0;
-sal_uInt32 CFormatRegistrar::m_TxtCodePage         = GetACP( );
+LCID       CFormatRegistrar::m_TxtLocale   = 0;
+sal_uInt32 CFormatRegistrar::m_TxtCodePage = GetACP( );
 
 //------------------------------------------------------------------------
 //
@@ -510,6 +510,7 @@ sal_Bool SAL_CALL CFormatRegistrar::isLocaleAnsiCodePage( LCID lcid, sal_uInt32 
 
 BOOL CALLBACK CFormatRegistrar::EnumLocalesProc( LPSTR lpLocaleStr )
 {
+    // the lpLocaleStr parametere is hexadecimal
     LCID lcid = strtol( lpLocaleStr, NULL, 16 );
 
     if ( isLocaleAnsiCodePage( lcid, CFormatRegistrar::m_TxtCodePage ) ||

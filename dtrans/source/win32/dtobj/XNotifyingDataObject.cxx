@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNotifyingDataObject.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-16 16:31:54 $
+ *  last change: $Author: tra $ $Date: 2001-03-22 14:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,6 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-
-/*
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARDEX_HPP_
-#include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
-#endif
-*/
 
 #ifndef _XNOTIFYINGDATAOBJECT_HXX_
 #include "XNotifyingDataObject.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 13:39:33 $
+ *  last change: $Author: tra $ $Date: 2001-03-22 14:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,15 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
     // spec. an do throw an UnsupportedFlavorException
     // so we must check the any
     if ( !aAny.hasValue( ) )
+    {
+        OSL_ENSURE( sal_False, "XTransferable should throw an exception if ask for an unsupported flavor" );
+        throw UnsupportedFlavorException( );
+    }
+
+    // unfortunately not all transferables fulfill the
+    // spec. an do throw an UnsupportedFlavorException
+    // so we must check the any
+    if ( !aAny.hasValue( ) )
         throw UnsupportedFlavorException( );
 
     Sequence< sal_Int8 > clipDataStream;
@@ -351,17 +360,8 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
     // transfer data
     if ( CF_METAFILEPICT == fetc.cfFormat )
     {
-/*!!! KA => TRA: doesn't work !!!
-        HMETAFILEPICT hMfPict = OOMFPictToWinMFPict( clipDataStream );
-        renderDataAndSetupStgMedium(
-            reinterpret_cast< sal_Int8* >( &hMfPict ),
-            fetc,
-            0,
-            sizeof( HMETAFILEPICT ),
-            stgmedium );
-*/
-        stgmedium.tymed = TYMED_MFPICT;
-        stgmedium.hMetaFilePict = OOMFPictToWinMFPict( clipDataStream );
+        stgmedium.tymed          = TYMED_MFPICT;
+        stgmedium.hMetaFilePict  = OOMFPictToWinMFPict( clipDataStream );
         stgmedium.pUnkForRelease = NULL;
     }
     else
@@ -422,6 +422,16 @@ void SAL_CALL CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATET
     OSL_ASSERT( CF_UNICODETEXT == fetc.cfFormat );
 
     Any aAny = m_XTransferable->getTransferData( m_FormatRegistrar.getRegisteredTextFlavor( ) );
+
+    // unfortunately not all transferables fulfill the
+    // spec. an do throw an UnsupportedFlavorException
+    // so we must check the any
+    if ( !aAny.hasValue( ) )
+    {
+        OSL_ENSURE( sal_False, "XTransferable should throw an exception if ask for an unsupported flavor" );
+        throw UnsupportedFlavorException( );
+    }
+
     Sequence< sal_Int8 > aText;
     aAny >>= aText;
 
@@ -448,6 +458,16 @@ void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& 
         m_DataFormatTranslator.getFormatEtcForClipformat( CF_UNICODETEXT ) );
 
     Any aAny = m_XTransferable->getTransferData( aFlavor );
+
+    // unfortunately not all transferables fulfill the
+    // spec. an do throw an UnsupportedFlavorException
+    // so we must check the any
+    if ( !aAny.hasValue( ) )
+    {
+        OSL_ENSURE( sal_False, "XTransferable should throw an exception if ask for an unsupported flavor" );
+        throw UnsupportedFlavorException( );
+    }
+
     OUString aUnicodeText;
     aAny >>= aUnicodeText;
 
@@ -477,6 +497,15 @@ void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& 
     aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
 
     Any aAny = m_XTransferable->getTransferData( aFlavor );
+
+    // unfortunately not all transferables fulfill the
+    // spec. an do throw an UnsupportedFlavorException
+    // so we must check the any
+    if ( !aAny.hasValue( ) )
+    {
+        OSL_ENSURE( sal_False, "XTransferable should throw an exception if ask for an unsupported flavor" );
+        throw UnsupportedFlavorException( );
+    }
 
     Sequence< sal_Int8 > aTextHtmlSequence;
     aAny >>= aTextHtmlSequence;
@@ -631,9 +660,7 @@ void CXTDataObject::validateFormatEtc( LPFORMATETC lpFormatEtc ) const
     if ( lpFormatEtc->lindex != -1 )
         throw CInvalidFormatEtcException( DV_E_LINDEX );
 
-    if ( !(lpFormatEtc->dwAspect & DVASPECT_CONTENT) /*&&
-         !(lpFormatEtc->dwAspect & DVASPECT_COPY) &&
-         !(lpFormatEtc->dwAspect & DVASPECT_LINK)*/ &&
+    if ( !(lpFormatEtc->dwAspect & DVASPECT_CONTENT) &&
          !(lpFormatEtc->dwAspect & DVASPECT_SHORTNAME) )
         throw CInvalidFormatEtcException( DV_E_DVASPECT );
 

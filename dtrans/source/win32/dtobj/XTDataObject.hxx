@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 09:26:01 $
+ *  last change: $Author: tra $ $Date: 2001-03-22 14:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,8 @@ public:
     operator IDataObject*( );
 
 private:
-    void validateFormatEtc( LPFORMATETC lpFormatEtc ) const;
     com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const;
+
     void SAL_CALL renderDataAndSetupStgMedium( const sal_Int8* lpStorage,
                                                const FORMATETC& fetc,
                                                sal_uInt32 nInitStgSize,
@@ -152,14 +152,15 @@ private:
     void SAL_CALL renderAnyDataAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
 
     HRESULT SAL_CALL renderSynthesizedFormatAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
-    void SAL_CALL renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
-    void SAL_CALL renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
-    void SAL_CALL renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    void    SAL_CALL renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    void    SAL_CALL renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    void    SAL_CALL renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
 
     void SAL_CALL setupStgMedium( const FORMATETC& fetc,
                                   CStgTransferHelper& stgTransHlp,
                                   STGMEDIUM& stgmedium );
 
+    void validateFormatEtc( LPFORMATETC lpFormatEtc ) const;
     void SAL_CALL invalidateStgMedium( STGMEDIUM& stgmedium ) const;
 
     HRESULT SAL_CALL translateStgExceptionCode( HRESULT hr ) const;

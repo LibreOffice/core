@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 09:10:02 $
+ *  last change: $Author: tra $ $Date: 2001-03-22 14:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,8 +254,7 @@ void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( )
 
 void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
 {
-    OSL_ENSURE( (NULL != m_pCurrentClipContent),
-                "Clipboard was not flushed before shutdown!" );
+    OSL_ENSURE( !m_pCurrentClipContent, "Clipboard was not flushed before shutdown!" );
 }
 
 //------------------------------------------------------------------------

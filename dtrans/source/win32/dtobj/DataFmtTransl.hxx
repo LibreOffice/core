@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 13:39:33 $
+ *  last change: $Author: tra $ $Date: 2001-03-22 14:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@ public:
     com::sun::star::datatransfer::DataFlavor getDataFlavorFromFormatEtc(
         const FORMATETC& aFormatEtc, LCID lcid = GetThreadLocale( ) ) const;
 
-    CFormatEtc SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf ) const;
-    CFormatEtc SAL_CALL getFormatEtcForClipformatName( const rtl::OUString& aClipFmtName ) const;
+    CFormatEtc    SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf ) const;
+    CFormatEtc    SAL_CALL getFormatEtcForClipformatName( const rtl::OUString& aClipFmtName ) const;
     rtl::OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat ) const;
 
     sal_Bool SAL_CALL isHTMLFormat( CLIPFORMAT cf ) const;

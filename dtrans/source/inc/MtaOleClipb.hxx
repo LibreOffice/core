@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-16 16:33:30 $
+ *  last change: $Author: tra $ $Date: 2001-03-22 14:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,19 @@
 #include <sal/types.h>
 #endif
 
-//#include <windows.h>
 #include <objidl.h>
+
+/*
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+
+#ifdef __cplusplus
+}
+#endif
+*/
 
 //--------------------------------------------------------
 // the Mta-Ole clipboard class is for internal use only!
@@ -134,6 +145,7 @@ private:
     unsigned                    m_uOleThreadId;
     HANDLE                      m_hEvtThrdReady;
     HWND                        m_hwndMtaOleReqWnd;
+    ATOM                        m_MtaOleReqWndClassAtom;
     HWND                        m_hwndNextClipViewer;
     LPFNC_CLIPVIEWER_CALLBACK_t m_pfncClipViewerCallback;
     sal_Bool                    m_bInRegisterClipViewer;
@@ -144,6 +156,8 @@ private:
 private:
     CMtaOleClipboard( const CMtaOleClipboard& );
     CMtaOleClipboard& operator=( const CMtaOleClipboard& );
+
+    friend LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 };
 
 #endif

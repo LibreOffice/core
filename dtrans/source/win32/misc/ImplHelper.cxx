@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 13:03:00 $
+ *  last change: $Author: tra $ $Date: 2001-03-22 14:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,25 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
 {
     OSL_ASSERT( IsValidLocale( lcid, LCID_SUPPORTED ) );
 
+    // we set an default value
+    OUString winCP;
+
+    // set an default value
+    sal_Unicode wcstr[10];
+
+    if ( LOCALE_IDEFAULTCODEPAGE == lctype )
+    {
+        _itow( GetOEMCP( ), wcstr, 10 );
+        winCP = OUString( wcstr, wcslen( wcstr ) );
+    }
+    else if ( LOCALE_IDEFAULTANSICODEPAGE == lctype )
+    {
+        _itow( GetACP( ), wcstr, 10 );
+        winCP = OUString( wcstr, wcslen( wcstr ) );
+    }
+    else
+        OSL_ASSERT( sal_False );
+
     // we use the GetLocaleInfoA because don't want to provide
     // a unicode wrapper function for Win9x in sal/systools
     char buff[6];
@@ -150,9 +169,6 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
         lcid, lctype | LOCALE_USE_CP_ACP, buff, sizeof( buff ) );
 
     OSL_ASSERT( nResult );
-
-    // we set an default value
-    OUString winCP = OUString::createFromAscii( "1252" );
 
     if ( nResult )
     {

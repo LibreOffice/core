@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 13:39:33 $
+ *  last change: $Author: tra $ $Date: 2001-03-22 14:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,12 @@
 #include "DTransHelper.hxx"
 #endif
 
-#ifndef _RTL_TENCINFO_H
-#include <rtl/tencinfo.h>
+#ifndef _IMPLHELPER_HXX_
+#include "..\misc\ImplHelper.hxx"
+#endif
+
+#ifndef _TXTCNVTHLP_HXX_
+#include "TxtCnvtHlp.hxx"
 #endif
 
 #ifndef _MIMEATTRIB_HXX_
@@ -148,7 +152,9 @@ CDOTransferable::CDOTransferable(
     const Reference< XMultiServiceFactory >& ServiceManager, IDataObjectPtr rDataObject ) :
     m_rDataObject( rDataObject ),
     m_SrvMgr( ServiceManager ),
-    m_DataFormatTranslator( m_SrvMgr )
+    m_DataFormatTranslator( m_SrvMgr ),
+    m_bUnicodeRegistered( sal_False ),
+    m_TxtFormatOnClipboard( CF_INVALID )
 {
 }
 
@@ -167,14 +173,31 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
     // convert dataflavor to formatetc
     //------------------------------------------------
 
-    CFormatEtc fetc = dataFlavorToFormatEtc( aFlavor );
+    CFormatEtc fetc = m_DataFormatTranslator.getFormatEtcFromDataFlavor( aFlavor );
     OSL_ASSERT( CF_INVALID != fetc.getClipformat() );
 
     //------------------------------------------------
     //  get the data from clipboard in a byte stream
     //------------------------------------------------
 
-    ByteSequence_t clipDataStream = getClipboardData( fetc );
+    ByteSequence_t clipDataStream;
+
+    try
+    {
+        clipDataStream = getClipboardData( fetc );
+    }
+    catch( UnsupportedFlavorException& )
+    {
+        if ( m_DataFormatTranslator.isUnicodeTextFormat( fetc.getClipformat( ) ) &&
+             m_bUnicodeRegistered )
+        {
+             OUString aUnicodeText = synthesizeUnicodeText( );
+             Any aAny = makeAny( aUnicodeText );
+             return aAny;
+        }
+        else
+            throw; // pass through exception
+    }
 
     //------------------------------------------------
     // return the data as any
@@ -217,6 +240,10 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
 // only once; if the client of this Transferable will hold a reference
 // to it und the underlying clipboard content changes, the client does
 // possible operate on a invalid list
+// if there is only text on the clipboard we will also offer unicode text
+// an synthesize this format on the fly if requested, to accomplish this
+// we save the first offered text format which we will later use for the
+// conversion
 //------------------------------------------------------------------------
 
 void SAL_CALL CDOTransferable::initFlavorList( )
@@ -237,7 +264,28 @@ void SAL_CALL CDOTransferable::initFlavorList( )
                 continue;
 
             DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
-            addSupportedFlavor( aFlavor );
+
+            // if text or oemtext is offered we also pretend to have unicode text
+            if ( m_DataFormatTranslator.isOemOrAnsiTextFormat( fetc.cfFormat ) &&
+                 !m_bUnicodeRegistered )
+            {
+                addSupportedFlavor( aFlavor );
+
+                m_TxtFormatOnClipboard = fetc.cfFormat;
+                m_bUnicodeRegistered   = sal_True;
+
+                // register unicode text as accompany format
+                aFlavor = formatEtcToDataFlavor(
+                    m_DataFormatTranslator.getFormatEtcForClipformat( CF_UNICODETEXT ) );
+                addSupportedFlavor( aFlavor );
+            }
+            else if ( (CF_UNICODETEXT == fetc.cfFormat) && !m_bUnicodeRegistered )
+            {
+                addSupportedFlavor( aFlavor );
+                m_bUnicodeRegistered = sal_True;
+            }
+            else
+                addSupportedFlavor( aFlavor );
 
             // see MSDN IEnumFORMATETC
             CoTaskMemFree( fetc.ptd );
@@ -266,45 +314,49 @@ void SAL_CALL CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
 // helper function
 //------------------------------------------------------------------------
 
-inline
-CFormatEtc SAL_CALL CDOTransferable::dataFlavorToFormatEtc( const DataFlavor& aFlavor ) const
-{
-    return m_DataFormatTranslator.getFormatEtcFromDataFlavor( aFlavor );
-}
-
-//------------------------------------------------------------------------
-// helper function
-//------------------------------------------------------------------------
-
 //inline
 DataFlavor SAL_CALL CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFormatEtc )
 {
     DataFlavor aFlavor;
+    LCID lcid = 0;
+
+    // for non-unicode text format we must provid a locale to get
+    // the character-set of the text, if there is no locale on the
+    // clipboard we assume the text is in a charset appropriate for
+    // the current thread locale
+    if ( (CF_TEXT == aFormatEtc.cfFormat) || (CF_OEMTEXT == aFormatEtc.cfFormat) )
+        lcid = getLocaleFromClipboard( );
+
+    return m_DataFormatTranslator.getDataFlavorFromFormatEtc( aFormatEtc, lcid );
+}
+
+//------------------------------------------------------------------------
+// returns the current locale on clipboard; if there is no locale on
+// clipboard the function returns the current thread locale
+//------------------------------------------------------------------------
+
+LCID SAL_CALL CDOTransferable::getLocaleFromClipboard( )
+{
     LCID lcid = GetThreadLocale( );
 
     try
     {
-        // for non-unicode text format we must provid a locale to get
-        // the character-set of the text, if there is no locale on the
-        // clipboard we assume the text is in a charset appropriate for
-        // the current thread locale
-        if ( (CF_TEXT == aFormatEtc.cfFormat) || (CF_OEMTEXT == aFormatEtc.cfFormat) )
-        {
-            CFormatEtc fetc = m_DataFormatTranslator.getFormatEtcForClipformat( CF_LOCALE );
-            ByteSequence_t aLCIDSeq = getClipboardData( fetc );
-            lcid = *(reinterpret_cast<LCID*>( aLCIDSeq.getArray( ) ) );
-        }
-    }
-    catch( UnsupportedFlavorException& )
-    {
-        // no locale on clipboard, we take the default
+        CFormatEtc fetc = m_DataFormatTranslator.getFormatEtcForClipformat( CF_LOCALE );
+        ByteSequence_t aLCIDSeq = getClipboardData( fetc );
+        lcid = *(reinterpret_cast<LCID*>( aLCIDSeq.getArray( ) ) );
+
+        // because of a Win95/98 Bug; there the high word
+        // of a locale has the same value as the
+        // low word e.g. 0x07040704 that's not right
+        // correct is 0x00000704
+        lcid &= 0x0000FFFF;
     }
     catch(...)
     {
-        OSL_ENSURE( sal_False, "Unexpected" );
+        // we take the default locale
     }
 
-    return m_DataFormatTranslator.getDataFlavorFromFormatEtc( aFormatEtc, lcid );
+    return lcid;
 }
 
 //------------------------------------------------------------------------
@@ -313,7 +365,7 @@ DataFlavor SAL_CALL CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFo
 // allocated etc.
 //------------------------------------------------------------------------
 
-CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& aFormatEtc )
+CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFormatEtc& aFormatEtc )
 {
     STGMEDIUM stgmedium;
     HRESULT hr = m_rDataObject->GetData( aFormatEtc, &stgmedium );
@@ -354,6 +406,52 @@ CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( CFormatEtc& a
     }
 
     return byteStream;
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+OUString SAL_CALL CDOTransferable::synthesizeUnicodeText( )
+{
+    ByteSequence_t aTextSequence;
+    CFormatEtc     fetc;
+    LCID           lcid = getLocaleFromClipboard( );
+    sal_uInt32     cpForTxtCnvt;
+
+    if ( CF_TEXT == m_TxtFormatOnClipboard )
+    {
+        fetc = m_DataFormatTranslator.getFormatEtcForClipformat( CF_TEXT );
+        aTextSequence = getClipboardData( fetc );
+
+        // determine the codepage used for text conversion
+        cpForTxtCnvt = getWinCPFromLocaleId( lcid, LOCALE_IDEFAULTANSICODEPAGE ).toInt32( );
+    }
+    else if ( CF_OEMTEXT == m_TxtFormatOnClipboard )
+    {
+        fetc = m_DataFormatTranslator.getFormatEtcForClipformat( CF_OEMTEXT );
+        aTextSequence = getClipboardData( fetc );
+
+        // determine the codepage used for text conversion
+        cpForTxtCnvt = getWinCPFromLocaleId( lcid, LOCALE_IDEFAULTCODEPAGE ).toInt32( );
+    }
+    else
+        OSL_ASSERT( sal_False );
+
+    CStgTransferHelper stgTransferHelper;
+
+    // convert the text
+    sal_Int32 lStr = MultiByteToWideCharEx(
+                        cpForTxtCnvt,
+                        reinterpret_cast< char* >( aTextSequence.getArray( ) ),
+                        -1, // \0 terminated string
+                        stgTransferHelper,
+                        sal_True );
+
+    CRawHGlobalPtr  ptrHGlob( stgTransferHelper );
+    sal_Unicode*    pWChar = reinterpret_cast< sal_Unicode* >( ptrHGlob.GetMemPtr( ) );
+
+    return OUString( pWChar, (lStr - 1) );
 }
 
 //------------------------------------------------------------------------

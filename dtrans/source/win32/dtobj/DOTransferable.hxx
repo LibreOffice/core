@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 15:45:14 $
+ *  last change: $Author: tra $ $Date: 2001-03-22 14:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,15 +127,18 @@ private:
 
     void SAL_CALL initFlavorList( );
 
-    void                                     SAL_CALL addSupportedFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
-    CFormatEtc                               SAL_CALL dataFlavorToFormatEtc( const com::sun::star::datatransfer::DataFlavor& aFlavor ) const;
+    void SAL_CALL addSupportedFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
     com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc );
 
     ByteSequence_t SAL_CALL getClipboardData( CFormatEtc& aFormatEtc );
-    void           SAL_CALL clipDataToByteStream( STGMEDIUM stgmedium, ByteSequence_t& aByteSequence );
+    rtl::OUString  SAL_CALL synthesizeUnicodeText( );
+
+    void SAL_CALL clipDataToByteStream( STGMEDIUM stgmedium, ByteSequence_t& aByteSequence );
 
     ::com::sun::star::uno::Any SAL_CALL byteStreamToAny( ByteSequence_t& aByteStream, const com::sun::star::uno::Type& aRequestedDataType );
     rtl::OUString              SAL_CALL byteStreamToOUString( ByteSequence_t& aByteStream );
+
+    LCID SAL_CALL getLocaleFromClipboard( );
 
     sal_Bool SAL_CALL compareDataFlavors( const com::sun::star::datatransfer::DataFlavor& lhs,
                                           const com::sun::star::datatransfer::DataFlavor& rhs );
@@ -153,6 +156,8 @@ private:
     CDataFormatTranslator                                                                   m_DataFormatTranslator;
     com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentTypeFactory > m_rXMimeCntFactory;
     ::osl::Mutex                                                                            m_aMutex;
+    sal_Bool                                                                                m_bUnicodeRegistered;
+    CLIPFORMAT                                                                              m_TxtFormatOnClipboard;
 
 // non supported operations
 private:
