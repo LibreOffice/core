@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:51:31 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,11 +248,12 @@ public:
 DBG_NAME(FmXPageViewWinRec);
 //------------------------------------------------------------------------
 FmXPageViewWinRec::FmXPageViewWinRec(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
-                                     const SdrPageViewWinRec* pWinRec,
-                                   FmXFormView* _pViewImpl)
-                 :m_pViewImpl(_pViewImpl)
-                 ,m_pWindow( (Window*)pWinRec->GetOutputDevice() )
-                 ,m_xORB(_xORB)
+    //const SdrPageViewWinRec* pWinRec,
+    const SdrPageViewWindow& rWindow,
+    FmXFormView* _pViewImpl)
+:   m_pViewImpl(_pViewImpl)
+    ,m_pWindow( (Window*)(&rWindow.GetOutputDevice()) )
+    ,m_xORB(_xORB)
 {
     DBG_CTOR(FmXPageViewWinRec,NULL);
 
@@ -272,7 +273,7 @@ FmXPageViewWinRec::FmXPageViewWinRec(const ::com::sun::star::uno::Reference< ::c
         for (sal_uInt32 i = 0; i < nLength; i++)
         {
             xForms->getByIndex(i) >>= xForm;
-            setController(xForm, pWinRec->GetControlContainerRef() );
+            setController(xForm, rWindow.GetControlContainerRef() );
         }
     }
 }
@@ -632,7 +633,8 @@ FmWinRecList::iterator FmXFormView::findWindow( const ::com::sun::star::uno::Ref
 }
 
 //------------------------------------------------------------------------------
-void FmXFormView::addWindow(const SdrPageViewWinRec* pRec)
+//void FmXFormView::addWindow(const SdrPageViewWinRec* pRec)
+void FmXFormView::addWindow(const SdrPageViewWindow& rWindow)
 {
     // Wird gerufen, wenn
     // - in den aktiven Modus geschaltet wird
@@ -643,12 +645,12 @@ void FmXFormView::addWindow(const SdrPageViewWinRec* pRec)
     // Wenn es noch keinen Control-Container gibt oder am Control-Container
     // noch keine Peer Erzeugt wurde, dann ist es noch zu frueh, um die
     // Tab-Order einzustellen ...
-    if( pRec->GetOutputDevice()->GetOutDevType() == OUTDEV_WINDOW  )
+    if( rWindow.GetOutputDevice().GetOutDevType() == OUTDEV_WINDOW  )
     {
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & rCC = pRec->GetControlContainerRef();
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & rCC = rWindow.GetControlContainerRef();
         if ( rCC.is() && findWindow( rCC ) == m_aWinList.end())
         {
-            FmXPageViewWinRec *pFmRec = new FmXPageViewWinRec(m_xORB,pRec, this);
+            FmXPageViewWinRec *pFmRec = new FmXPageViewWinRec(m_xORB, rWindow, this);
             pFmRec->acquire();
 
             m_aWinList.push_back(pFmRec);
@@ -1025,12 +1027,16 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
             SdrPageView* pPageView = m_pView->GetPageViewPvNum(0);
             if( pPageView && !_pOutDev )
             {
-                const SdrPageViewWinList& rWinList = pPageView->GetWinList();
-                for( sal_uInt16 i = 0; i < rWinList.GetCount(); i++ )
+                // const SdrPageViewWinList& rWinList = pPageView->GetWinList();
+                // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
+
+                for( sal_uInt32 i = 0L; i < pPageView->WindowCount(); i++ )
                 {
-                    if( rWinList[i].GetOutputDevice()->GetOutDevType() == OUTDEV_WINDOW)
+                    const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(i);
+
+                    if( rPageViewWindow.GetOutputDevice().GetOutDevType() == OUTDEV_WINDOW)
                     {
-                        _pOutDev = rWinList[i].GetOutputDevice();
+                        _pOutDev = &rPageViewWindow.GetOutputDevice();
                         break;
                     }
                 }
