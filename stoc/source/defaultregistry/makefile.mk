@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:20:56 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:08:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,19 +62,18 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET=		defreg
-USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
+TARGET = nestedreg.uno
 ENABLE_EXCEPTIONS=TRUE
+NO_BSYMBOLIC = TRUE
 BOOTSTRAP_SERVICE=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = defreg
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
-#COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 .INCLUDE :  ..$/cppumaker.mk
 
@@ -88,7 +87,7 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)				\
         $(SALLIB)
 
-SHL1VERSIONMAP=	$(TARGET).map
+SHL1VERSIONMAP = defreg.map
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
