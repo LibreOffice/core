@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_dep.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:47:01 $
+#   last change: $Author: kz $ $Date: 2005-01-14 11:34:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,7 +68,7 @@ ALLDEP .PHONY:
     @+-$(RM) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV)
 .ENDIF
     @+-$(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
-    @+-$(RM) $(MISC)$/$(TARGET).dprr >& $(NULLDEV)
+    @+-$(RM) $(MISC)$/$(PWD:f).*.dprr >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpc >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpz >& $(NULLDEV)
