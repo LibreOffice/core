@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.12 $
+#  $Revision: 1.13 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:57:10 $
+#  last change: $Author: kz $ $Date: 2003-08-27 16:46:58 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -74,9 +74,13 @@ include $(SETTINGS)/stdtarget.mk
 
 $(OFFICE_CLASSES_DIR)/Notes.jar : 
 	@echo --------------------------------------------------------------------------------
-	@echo You need the "$(QM)Notes.jar$(QM)" from Notes/Domino for this example.
-	@echo You can download it from "$(QM)http://www.servlets.com/cos/index.html$(QM)"
-	@echo and then please copy it into your "$(QM)$(OFFICE_CLASSES_DIR)$(QM)" directory.
+	@echo This example uses external APIs from Lotus Notes/Domino. You can download a 
+	@echo trial version from "$(QM)http://www.lotus.com/downloads$(QM)". After installing
+	@echo please do the following:
+	@echo  1. Add the install path to the PATH or LD_LIBRARY_PATH of this shell.
+	@echo  2. Copy the "$(QM)Notes.jar$(QM)" into your "$(QM)$(OFFICE_CLASSES_DIR)$(QM)" 
+	@echo     directory or adapt the SDK_CLASSPATH variable in this makefile to use the
+	@echo     right "$(QM)Notes.jar$(QM)" of your installation.
 	@echo --------------------------------------------------------------------------------
 
 
