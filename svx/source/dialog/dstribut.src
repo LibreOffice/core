@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:14:55 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text = "~Keine" ;
         Text [ ENGLISH ] = "~None" ;
         Text [ ENGLISH_US ] = "~None" ;
-        Text[ portuguese ] = "Nenhuma";
+        Text[ portuguese ] = "~Nenhuma";
         Text[ russian ] = "¡ÂÁ";
         Text[ greek ] = " ·Ì›Ì·";
         Text[ dutch ] = "Geen";
@@ -118,7 +118,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ spanish ] = "Ninguno";
         Text[ italian ] = "Senza";
         Text[ danish ] = "Ingen";
-        Text[ swedish ] = "Ingen";
+        Text[ swedish ] = "~Ingen";
         Text[ polish ] = "Brak";
         Text[ portuguese_brazilian ] = "None";
         Text[ japanese ] = "Ç»Çµ";
@@ -138,15 +138,15 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text = "~Links" ;
         Text [ ENGLISH ] = "~Left" ;
         Text [ ENGLISH_US ] = "~Left" ;
-        Text[ portuguese ] = "Esquerda";
+        Text[ portuguese ] = "E~squerda";
         Text[ russian ] = "—ÎÂ‚‡";
         Text[ greek ] = "¡ÒÈÛÙÂÒ‹";
         Text[ dutch ] = "Links";
         Text[ french ] = "¿ gauche";
         Text[ spanish ] = "Izquierda";
-        Text[ italian ] = "Sinistra";
+        Text[ italian ] = "A sinistra";
         Text[ danish ] = "Venstre";
-        Text[ swedish ] = "V‰nster";
+        Text[ swedish ] = "~V‰nster";
         Text[ polish ] = "Z lewej";
         Text[ portuguese_brazilian ] = "Left";
         Text[ japanese ] = "ç∂";
@@ -166,15 +166,15 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text = "~Mitte" ;
         Text [ ENGLISH ] = "~Center" ;
         Text [ ENGLISH_US ] = "~Center" ;
-        Text[ portuguese ] = "Centro";
+        Text[ portuguese ] = "~Centro";
         Text[ russian ] = "¬ ˆÂÌÚÂ";
         Text[ greek ] = " ›ÌÙÒÔ";
         Text[ dutch ] = "Minnden";
         Text[ french ] = "Au milieu";
         Text[ spanish ] = "Centro";
-        Text[ italian ] = "Centro";
+        Text[ italian ] = "Al centro";
         Text[ danish ] = "Midte";
-        Text[ swedish ] = "Mitten";
+        Text[ swedish ] = "~Mitten";
         Text[ polish ] = "Poúrodku";
         Text[ portuguese_brazilian ] = "Center";
         Text[ japanese ] = "íÜâõ";
@@ -194,7 +194,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text = "~Abstand" ;
         Text [ ENGLISH ] = "~Spacing" ;
         Text [ ENGLISH_US ] = "~Spacing" ;
-        Text[ portuguese ] = "Dist‚ncia";
+        Text[ portuguese ] = "~Dist‚ncia";
         Text[ russian ] = "»ÌÚÂ‚‡Î";
         Text[ greek ] = "¡¸ÛÙ·ÛÁ";
         Text[ dutch ] = "Afstand";
@@ -202,7 +202,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ spanish ] = "Espacio";
         Text[ italian ] = "Distanza";
         Text[ danish ] = "Afstand";
-        Text[ swedish ] = "AvstÂnd";
+        Text[ swedish ] = "~AvstÂnd";
         Text[ polish ] = "OdstÍp";
         Text[ portuguese_brazilian ] = "Distance";
         Text[ japanese ] = "ä‘äu";
@@ -222,15 +222,15 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text = "~Rechts" ;
         Text [ ENGLISH ] = "~Right" ;
         Text [ ENGLISH_US ] = "~Right" ;
-        Text[ portuguese ] = "Direita";
+        Text[ portuguese ] = "Di~reita";
         Text[ russian ] = "—Ô‡‚‡";
         Text[ greek ] = "ƒÂÓÈ‹";
         Text[ dutch ] = "Rechts";
         Text[ french ] = "¿ droite";
         Text[ spanish ] = "Derecha";
-        Text[ italian ] = "Destra";
+        Text[ italian ] = "A destra";
         Text[ danish ] = "H¯jre";
-        Text[ swedish ] = "Hˆger";
+        Text[ swedish ] = "Hˆge~r";
         Text[ polish ] = "Z prawej";
         Text[ portuguese_brazilian ] = "Right";
         Text[ japanese ] = "âE";
@@ -318,7 +318,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text = "K~eine" ;
         Text [ ENGLISH ] = "N~one" ;
         Text [ ENGLISH_US ] = "N~one" ;
-        Text[ portuguese ] = "Nenhuma";
+        Text[ portuguese ] = "~Nenhuma";
         Text[ russian ] = "¡ÂÁ";
         Text[ greek ] = " ·Ì›Ì·";
         Text[ dutch ] = "Geen";
@@ -326,7 +326,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ spanish ] = "Ninguno";
         Text[ italian ] = "Senza";
         Text[ danish ] = "Ingen";
-        Text[ swedish ] = "Ingen";
+        Text[ swedish ] = "Ing~en";
         Text[ polish ] = "Brak";
         Text[ portuguese_brazilian ] = "None";
         Text[ japanese ] = "Ç»Çµ";
@@ -346,20 +346,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text = "~Oben" ;
         Text [ ENGLISH ] = "~Top" ;
         Text [ ENGLISH_US ] = "~Top" ;
-        Text[ portuguese ] = "Em cima";
+        Text[ portuguese ] = "~Topo";
         Text[ russian ] = "—‚ÂıÛ";
         Text[ greek ] = "–‹Ì˘";
         Text[ dutch ] = "Boven";
         Text[ french ] = "En haut";
         Text[ spanish ] = "Arriba";
-        Text[ italian ] = "Sopra";
+        Text[ italian ] = "In alto";
         Text[ danish ] = "Oppe";
-        Text[ swedish ] = "Uppe";
+        Text[ swedish ] = "~Uppe";
         Text[ polish ] = "U gÛry";
         Text[ portuguese_brazilian ] = "Top";
         Text[ japanese ] = "è„";
         Text[ korean ] = "¿ß";
-        Text[ chinese_simplified ] = "œÚ…œ";
+        Text[ chinese_simplified ] = "…œ";
         Text[ chinese_traditional ] = "¶V§W";
         Text[ arabic ] = "√⁄·Ï";
         Text[ turkish ] = "‹st";
@@ -374,15 +374,15 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text = "M~itte" ;
         Text [ ENGLISH ] = "C~enter" ;
         Text [ ENGLISH_US ] = "C~enter" ;
-        Text[ portuguese ] = "Centro";
+        Text[ portuguese ] = "~Centro";
         Text[ russian ] = "¬ ˆÂÌÚÂ";
         Text[ greek ] = " ›ÌÙÒÔ";
         Text[ dutch ] = "Midden";
         Text[ french ] = "Au milieu";
         Text[ spanish ] = "Centro";
-        Text[ italian ] = "Centro";
+        Text[ italian ] = "Al centro";
         Text[ danish ] = "Midte";
-        Text[ swedish ] = "Mitten";
+        Text[ swedish ] = "M~itten";
         Text[ polish ] = "Poúrodku";
         Text[ portuguese_brazilian ] = "Center";
         Text[ japanese ] = "íÜâõ";
@@ -402,7 +402,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text = "A~bstand" ;
         Text [ ENGLISH ] = "S~pacing" ;
         Text [ ENGLISH_US ] = "S~pacing" ;
-        Text[ portuguese ] = "Dist‚ncia";
+        Text[ portuguese ] = "~Dist‚ncia";
         Text[ russian ] = "»ÌÚÂ‚‡Î";
         Text[ greek ] = "¡¸ÛÙ·ÛÁ";
         Text[ dutch ] = "Afstand";
@@ -410,7 +410,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ spanish ] = "Espacio";
         Text[ italian ] = "Distanza";
         Text[ danish ] = "Afstand";
-        Text[ swedish ] = "AvstÂnd";
+        Text[ swedish ] = "Av~stÂnd";
         Text[ polish ] = "OdstÍp";
         Text[ portuguese_brazilian ] = "Distance";
         Text[ japanese ] = "ä‘äu";
@@ -430,20 +430,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text = "~Unten" ;
         Text [ ENGLISH ] = "~Bottom" ;
         Text [ ENGLISH_US ] = "~Bottom" ;
-        Text[ portuguese ] = "Em baixo";
+        Text[ portuguese ] = "B~ase";
         Text[ russian ] = "—ÌËÁÛ";
         Text[ greek ] = " ‹Ù˘";
         Text[ dutch ] = "Beneden";
         Text[ french ] = "En bas";
         Text[ spanish ] = "Abajo";
-        Text[ italian ] = "Sotto";
+        Text[ italian ] = "In basso";
         Text[ danish ] = "Nede";
-        Text[ swedish ] = "Nere";
+        Text[ swedish ] = "~Nere";
         Text[ polish ] = "Na dole";
         Text[ portuguese_brazilian ] = "Bottom";
         Text[ japanese ] = "â∫";
         Text[ korean ] = "æ∆∑°";
-        Text[ chinese_simplified ] = "œÚœ¬";
+        Text[ chinese_simplified ] = "œ¬";
         Text[ chinese_traditional ] = "¶V§U";
         Text[ arabic ] = "√”›·";
         Text[ turkish ] = "Alt";
@@ -513,6 +513,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 };
 
 // ********************************************************************** EOF
+
 
 
 
