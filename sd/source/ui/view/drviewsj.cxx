@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:18:23 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "DrawViewShell.hxx"
 
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
@@ -120,17 +122,23 @@
 
 #include "app.hrc"
 
-#include "sdoutl.hxx"
+#include "Outliner.hxx"
 #include "sdpage.hxx"
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
+#endif
+#ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
-#include "drviewsh.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "optsitem.hxx"
 
 
+namespace sd {
 
 /*************************************************************************
 |*
@@ -138,7 +146,7 @@
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
+void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 {
     // Status der Menueintraege, bzw. Buttons
     // Einfachselektion
@@ -273,7 +281,7 @@ void SdDrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             else
             {
                 BOOL bDisable = TRUE;
-                SfxItemSet aAttrSet( pDoc->GetPool() );
+                SfxItemSet aAttrSet( GetDoc()->GetPool() );
                 pView->GetAttributes( aAttrSet );
 
                 if( aAttrSet.GetItemState( SDRATTR_EDGELINE1DELTA ) >= SFX_ITEM_AVAILABLE &&
@@ -601,57 +609,5 @@ void SdDrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
 }
 
-/*************************************************************************
-|*
-|* Notify
-|*
-\************************************************************************/
 
-void SdDrawViewShell::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
-                                 const SfxHint& rHint, const TypeId& rHintType)
-{
-    BOOL bOK = FALSE;
-
-    // Zuerst die Basisklasse
-    SdViewShell::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
-
-    SfxSimpleHint* pSimple = PTR_CAST(SfxSimpleHint, &rHint);
-    ULONG nId = pSimple == NULL ? 0 : pSimple->GetId();
-
-    if (nId == SFX_HINT_MODECHANGED)
-    {
-        if (pDocSh->IsReadOnly() && pFuActual && !pFuActual->ISA(FuSelection))
-        {
-            // Aktuelle Funktion beenden und Selektion aktivieren
-            SfxRequest aReq(SID_OBJECT_SELECT, 0, pDoc->GetItemPool());
-            FuPermanent(aReq);
-            bOK = TRUE;
-        }
-
-        if (pDocSh->IsReadOnly() != bReadOnly )
-        {
-            bReadOnly = pDocSh->IsReadOnly();
-
-            SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadOnly );
-            GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE,
-                      SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
-        }
-    }
-
-    if( rHint.IsA(TYPE(SfxEventHint)) )
-    {
-        if( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_OPENDOC )
-        {
-            if( pDoc && pDoc->IsStartWithPresentation() )
-            {
-                if( GetViewFrame() )
-                {
-                    pDoc->SetStartWithPresentation( false );
-                    GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON );
-                }
-            }
-        }
-    }
-}
-
-
+} // end of namespace sd
