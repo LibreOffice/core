@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:39:42 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
 
 #include "insdlg.hxx"
@@ -375,9 +378,28 @@ short SvInsertOleDlg::Execute()
             if ( aFileName.Len() )
             {
                 // create MediaDescriptor for file to create object from
-                uno::Sequence < beans::PropertyValue > aMedium(1);
+                uno::Sequence < beans::PropertyValue > aMedium( 2 );
                 aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
                 aMedium[0].Value <<= ::rtl::OUString( aFileName );
+
+                uno::Reference< task::XInteractionHandler > xInteraction;
+                uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+                if ( xFactory.is() )
+                    xInteraction = uno::Reference< task::XInteractionHandler >(
+                        xFactory->createInstance(
+                            DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ),
+                        uno::UNO_QUERY_THROW );
+
+                if ( xInteraction.is() )
+                {
+                       aMedium[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
+                       aMedium[1].Value <<= xInteraction;
+                }
+                else
+                {
+                    OSL_ASSERT( "Can not get InteractionHandler!\n" );
+                    aMedium.realloc( 1 );
+                }
 
                 // create object from media descriptor
                 if ( bLink )
