@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextGraphicObject.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:27 $
+ *  last change: $Author: os $ $Date: 2000-12-14 10:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef __com_sun_star_drawing_PointSequenceSequence_idl__
 #include <com/sun/star/drawing/PointSequenceSequence.idl>
+#endif
+#ifndef __com_sun_star_drawing_ColorMode_idl__
+#include <com/sun/star/drawing/ColorMode.idl>
 #endif
 
 //=============================================================================
@@ -500,6 +503,48 @@ service TextGraphicObject
      */
     [property] com::sun::star::awt::Size ActualSize;
     //-------------------------------------------------------------------------
+    /** changes the display of the luminance.
+         It contains percentage values between -100 and +100.
+     */
+    [property] short GraphicLuminance;
+    //-------------------------------------------------------------------------
+    /** changes the display of contrast.
+         It contains percentage values between -100 and +100.
+     */
+    [property] short GraphicContrast;
+    //-------------------------------------------------------------------------
+    /** changes the display of the red color channel.
+         It contains percentage values between -100 and +100.
+     */
+    [property] short GraphicRed;
+    //-------------------------------------------------------------------------
+    /** changes the display of the green color channel.
+         It contains percentage values between -100 and +100.
+     */
+    [property] short GraphicGreen;
+    //-------------------------------------------------------------------------
+    /** changes the display of the blue color channel.
+         It contains percentage values between -100 and +100.
+     */
+    [property] short GraphicBlue;
+    //-------------------------------------------------------------------------
+    /** determins the gamma value of the graphic.
+     */
+    [property] double GraphicGamma;
+    //-------------------------------------------------------------------------
+    /** determins if the graphic is display in inverted colors.
+         It contains percentage values between -100 and +100.
+     */
+    [property] boolean GraphicIsInverted;
+    //-------------------------------------------------------------------------
+    /** .
+         It contains percentage values between -100 and +100.
+     */
+    [property] short GraphicTransparency;
+    //-------------------------------------------------------------------------
+    /** contains the ColorMode as <type scope="com::sun::star::drawing">ColorMode</type>.
+     */
+    [property] com::sun::star::drawing::ColorMode  GraphicColorMode;
 
 };
 
