@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-06 07:41:01 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,32 +65,11 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class NumToText_CJK : public transliteration_Numeric {
-public:
-    NumToText_CJK();
-
-    virtual rtl::OUString SAL_CALL transliterate( const ::rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset ) throw(com::sun::star::uno::RuntimeException);
-
-protected:
-    const sal_Unicode *multiplierChar;
-    const sal_Unicode *numberChar;
-    sal_Int16 numberFlag;
-    sal_Int16 bulletCount;
-    sal_Bool recycleBullet;
-    sal_Int16 number;
-    sal_Int16 exponentCount;
-    sal_Int16 *multiplierExponent;
-
-private:
-    sal_Bool SAL_CALL numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
-        sal_Unicode *dst, sal_Int32& count, sal_Unicode multiChar, com::sun::star::uno::Sequence< sal_Int32 >& offset, sal_Int32 startPos);
-};
-
 #define TRANSLITERATION_NUMTOTEXT_CJK( name ) \
-class NumToText##name : public NumToText_CJK \
+class NumToText##name : public transliteration_Numeric \
 { \
 public: \
-    NumToText##name (); \
+        NumToText##name (); \
 };
 
 #ifdef TRANSLITERATION_ALL
@@ -109,10 +88,6 @@ TRANSLITERATION_NUMTOTEXT_CJK ( InformalHangul_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( FormalLower_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( FormalUpper_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( FormalHangul_ko )
-TRANSLITERATION_NUMTOTEXT_CJK ( HangulJamo_ko )
-TRANSLITERATION_NUMTOTEXT_CJK ( HangulSyllable_ko )
-TRANSLITERATION_NUMTOTEXT_CJK ( HangulCircledJamo_ko )
-TRANSLITERATION_NUMTOTEXT_CJK ( HangulCircledSyllable_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( KanjiLongModern_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( KanjiLongTraditional_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( KanjiShortModern_ja_JP )
@@ -124,6 +99,10 @@ TRANSLITERATION_NUMTOTEXT_CJK ( IROHAHalfWidth_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( CircledNumber )
 TRANSLITERATION_NUMTOTEXT_CJK ( TianGan_zh )
 TRANSLITERATION_NUMTOTEXT_CJK ( DiZi_zh )
+TRANSLITERATION_NUMTOTEXT_CJK ( HangulJamo_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( HangulSyllable_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( HangulCircledJamo_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( HangulCircledSyllable_ko )
 #endif
 #undef TRANSLITERATION_NUMTOTEXT
 
