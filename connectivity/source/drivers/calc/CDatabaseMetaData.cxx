@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:21:07 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,15 +443,13 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getCrossReference(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return ::rtl::OUString::createFromAscii("sdbc:calc:");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:calc:")) + m_pConnection->getURL();
 }
 
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     return STRING_MAXLEN;
 }
 
@@ -459,29 +457,21 @@ sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQ
 
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     return STRING_MAXLEN;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     return STRING_MAXLEN;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     return 1;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     return 256;
 }
 
