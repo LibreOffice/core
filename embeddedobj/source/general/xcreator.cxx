@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcreator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-08 15:18:25 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                                         GetClassNameFromServName( aDocServiceName ),
                                                         xStorage,
                                                         sEntName,
-                                                        embed::EntryInitModes::ENTRY_TRUNCATE_INIT,
+                                                        embed::EntryInitModes::TRUNCATE_INIT,
                                                         uno::Sequence< beans::PropertyValue >(),
                                                         lObjArgs );
     }
@@ -177,7 +177,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
         uno::Reference< embed::XEmbedObjectCreator > xOleEmbCreator(
                             m_xFactory->createInstance(
-                                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OleEmbeddedObjectFactory" ) ),
+                                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) ),
                             uno::UNO_QUERY );
         if ( !xOleEmbCreator.is() )
             throw uno::RuntimeException(); // TODO:
@@ -192,7 +192,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const ::rtl::OUString& sEntName,
-                                                                    sal_Bool bIsReadonly,
+                                                                    const uno::Sequence< beans::PropertyValue >& aMedDescr,
                                                                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
             container::NoSuchElementException,
@@ -223,7 +223,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     {
         // the object must be based on storage
         uno::Reference< embed::XStorage > xSubStorage =
-                xStorage->openStorageElement( sEntName, embed::ElementModes::ELEMENT_READ );
+                xStorage->openStorageElement( sEntName, embed::ElementModes::READ );
 
         uno::Reference< beans::XPropertySet > xPropSet( xSubStorage, uno::UNO_QUERY );
         if ( !xPropSet.is() )
@@ -268,16 +268,12 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         if ( !xOOoEmbFact.is() )
             throw uno::RuntimeException(); // TODO:
 
-        uno::Sequence< beans::PropertyValue > aTempMediaDescr( 1 );
-        aTempMediaDescr[0].Name = ::rtl::OUString::createFromAscii( "ReadOnly" );
-        aTempMediaDescr[0].Value <<= bIsReadonly;
-
         xResult = xOOoEmbFact->createInstanceUserInit( GetClassIDFromServName( aDocServiceName ),
                                                         GetClassNameFromServName( aDocServiceName ),
                                                         xStorage,
                                                         sEntName,
-                                                        embed::EntryInitModes::ENTRY_DEFAULT_INIT,
-                                                        aTempMediaDescr,
+                                                        embed::EntryInitModes::DEFAULT_INIT,
+                                                        aMedDescr,
                                                         lObjArgs );
     }
     else
@@ -289,7 +285,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         // after it is loaded it can detect that it is a link
 
         uno::Reference< io::XStream > xSubStream =
-                xStorage->openStreamElement( sEntName, embed::ElementModes::ELEMENT_READ );
+                xStorage->openStreamElement( sEntName, embed::ElementModes::READ );
 
         uno::Reference< beans::XPropertySet > xPropSet( xSubStream, uno::UNO_QUERY );
         if ( !xPropSet.is() )
@@ -317,12 +313,12 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         {
             uno::Reference< embed::XEmbedObjectCreator > xOleEmbCreator(
                                 m_xFactory->createInstance(
-                                        ::rtl::OUString::createFromAscii( "com.sun.star.embed.OleEmbeddedObjectFactory" ) ),
+                                        ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) ),
                                 uno::UNO_QUERY );
             if ( !xOleEmbCreator.is() )
                 throw uno::RuntimeException(); // TODO:
 
-            xResult = xOleEmbCreator->createInstanceInitFromEntry( xStorage, sEntName, bIsReadonly, lObjArgs );
+            xResult = xOleEmbCreator->createInstanceInitFromEntry( xStorage, sEntName, aMedDescr, lObjArgs );
         }
         else
         {
@@ -409,7 +405,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                                          GetClassNameFromServName( aDocServiceName ),
                                                          xStorage,
                                                          sEntName,
-                                                         embed::EntryInitModes::ENTRY_MEDIA_DESCRIPTOR_INIT,
+                                                         embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT,
                                                          aTempMedDescr,
                                                          lObjArgs );
     }
@@ -426,7 +422,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
         uno::Reference< embed::XEmbedObjectCreator > xOleEmbCreator(
                             m_xFactory->createInstance(
-                                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OleEmbeddedObjectFactory" ) ),
+                                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) ),
                             uno::UNO_QUERY );
         if ( !xOleEmbCreator.is() )
             throw uno::RuntimeException(); // TODO:
@@ -435,6 +431,78 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     }
 
     return xResult;
+}
+
+//-------------------------------------------------------------------------
+uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceUserInit(
+        const uno::Sequence< sal_Int8 >& aClassID,
+        const ::rtl::OUString& sClassName,
+        const uno::Reference< embed::XStorage >& xStorage,
+        const ::rtl::OUString& sEntName,
+        sal_Int32 nEntryConnectionMode,
+        const uno::Sequence< beans::PropertyValue >& aArgs,
+        const uno::Sequence< beans::PropertyValue >& aObjectArgs )
+    throw ( lang::IllegalArgumentException,
+            io::IOException,
+            uno::Exception,
+            uno::RuntimeException)
+{
+    uno::Reference< uno::XInterface > xResult;
+
+    if ( !xStorage.is() )
+        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
+                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            3 );
+
+    if ( !sEntName.getLength() )
+        throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Empty element name is provided!\n" ),
+                                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
+                                            4 );
+
+    ::rtl::OUString aDocServiceName = GetDocumentServiceNameFromClassID( aClassID );
+
+    if ( aDocServiceName.getLength() )
+    {
+        uno::Reference< embed::XEmbedObjectFactory > xOOoEmbFact(
+                            m_xFactory->createInstance(
+                                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OOoEmbeddedObjectFactory" ) ),
+                            uno::UNO_QUERY );
+        if ( !xOOoEmbFact.is() )
+            throw uno::RuntimeException(); // TODO:
+
+        xResult = xOOoEmbFact->createInstanceUserInit( aClassID,
+                                                        sClassName,
+                                                        xStorage,
+                                                        sEntName,
+                                                        nEntryConnectionMode,
+                                                        aArgs,
+                                                        aObjectArgs );
+    }
+    else
+    {
+        // can be an OLE object
+        // TODO: but in future it can be a different type of an object
+        //       the information about implementation and factory to create it
+        //       will be retrieved from configuration
+
+        uno::Reference< embed::XEmbedObjectFactory > xOleEmbFactory(
+                            m_xFactory->createInstance(
+                                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) ),
+                            uno::UNO_QUERY );
+        if ( !xOleEmbFactory.is() )
+            throw uno::RuntimeException(); // TODO:
+
+        xResult = xOleEmbFactory->createInstanceUserInit( aClassID,
+                                                        sClassName,
+                                                        xStorage,
+                                                        sEntName,
+                                                        nEntryConnectionMode,
+                                                        aArgs,
+                                                        aObjectArgs );
+    }
+
+    return xResult;
+
 }
 
 //-------------------------------------------------------------------------
@@ -536,7 +604,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
         uno::Reference< embed::XLinkCreator > xLinkCreator(
                             m_xFactory->createInstance(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.embed.OleEmbeddedObjectFactory" ) ),
+                                ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLEEmbeddedObjectFactory" ) ),
                             uno::UNO_QUERY );
         if ( !xLinkCreator.is() )
             throw uno::RuntimeException(); // TODO:
