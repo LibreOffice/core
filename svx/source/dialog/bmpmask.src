@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-29 20:36:52 $
+ *  last change: $Author: kz $ $Date: 2001-10-30 21:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ DockingWindow RID_SVXDLG_BMPMASK
                 Text[ chinese_simplified ] = "ε–θ‰²ε™¨";
                 Text[ russian ] = "Οθοεςκΰ";
                 Text[ polish ] = "Pipeta";
-                Text[ japanese ] = "οΎ‹οΎοΎοΎο½―οΎ„";
+                Text[ japanese ] = "ο½½οΎοΎο½²οΎ„";
                 Text[ chinese_traditional ] = "ε–θ‰²";
                 Text[ arabic ] = "ήΨψΗΡΙ";
                 Text[ greek ] = "Σταγονόμετρο";
@@ -444,7 +444,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     Text[ chinese_simplified ] = "ε–θ‰²ε™¨";
     Text[ russian ] = "Οθοεςκΰ";
     Text[ polish ] = "Pipeta";
-    Text[ japanese ] = "οΎ‹οΎοΎοΎο½―οΎ„";
+    Text[ japanese ] = "ο½½οΎοΎο½²οΎ„";
     Text[ chinese_traditional ] = "ε–θ‰²";
     Text[ arabic ] = "ήΨψΗΡΙ";
     Text[ greek ] = "Σταγονόμετρο";
@@ -482,6 +482,7 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
 };
 
  // ********************************************************************** EOF
+
 
 
 
