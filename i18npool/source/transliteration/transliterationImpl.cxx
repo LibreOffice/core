@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-20 18:08:03 $
+ *  last change: $Author: khong $ $Date: 2002-09-05 17:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,28 +318,33 @@ OUString SAL_CALL
 TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
             Sequence< sal_Int32 >& offset ) throw(RuntimeException)
 {
-    if (numCascade == 1)
-    return bodyCascade[0]->transliterate(inStr, startPos, nCount, offset);
+    OUString tmpStr = inStr.copy(startPos, nCount);
 
-    OUString tmpStr(inStr.getStr()+startPos, nCount);
+    if (numCascade == 1) {
+    tmpStr = bodyCascade[0]->transliterate(tmpStr, 0, nCount, offset);
+    nCount = tmpStr.getLength();
+    for (sal_Int32 j = 0; j < nCount; j++)
+        offset[j] += startPos;
+    } else {
     offset.realloc(nCount);
     for (sal_Int32 j = 0; j < nCount; j++)
-    offset[j] = startPos + j;
+        offset[j] = startPos + j;
 
     sal_Int16 from = 0, to = 1, tmp;
     Sequence<sal_Int32> off[2];
 
     off[to] = offset;
     for (sal_Int32 i = 0; i < numCascade; i++) {
-    tmpStr = bodyCascade[i]->transliterate(tmpStr, 0, nCount, off[from]);
+        tmpStr = bodyCascade[i]->transliterate(tmpStr, 0, nCount, off[from]);
 
-    nCount = tmpStr.getLength();
+        nCount = tmpStr.getLength();
 
-    tmp = from; from = to; to = tmp;
-    for (sal_Int32 j = 0; j < nCount; j++)
+        tmp = from; from = to; to = tmp;
+        for (sal_Int32 j = 0; j < nCount; j++)
         off[to][j] = off[from][off[to][j]];
     }
     offset = off[to];
+    }
     return tmpStr;
 }
 
@@ -349,28 +354,33 @@ OUString SAL_CALL
 TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset ) throw(RuntimeException)
 {
-    if (numCascade == 1)
-    return bodyCascade[0]->folding(inStr, startPos, nCount, offset);
+    OUString tmpStr = inStr.copy(startPos, nCount);
 
-    OUString tmpStr(inStr.getStr()+startPos, nCount);
+    if (numCascade == 1) {
+    tmpStr = bodyCascade[0]->folding(tmpStr, 0, nCount, offset);
+    nCount = tmpStr.getLength();
+    for (sal_Int32 j = 0; j < nCount; j++)
+        offset[j] += startPos;
+    } else {
     offset.realloc(nCount);
     for (sal_Int32 j = 0; j < nCount; j++)
-    offset[j] = startPos + j;
+        offset[j] = startPos + j;
 
     sal_Int16 from = 0, to = 1, tmp;
     Sequence<sal_Int32> off[2];
 
     off[to] = offset;
     for (sal_Int32 i = 0; i < numCascade; i++) {
-    tmpStr = bodyCascade[i]->folding(tmpStr, 0, nCount, off[from]);
+        tmpStr = bodyCascade[i]->folding(tmpStr, 0, nCount, off[from]);
 
-    nCount = tmpStr.getLength();
+        nCount = tmpStr.getLength();
 
-    tmp = from; from = to; to = tmp;
-    for (sal_Int32 j = 0; j < nCount; j++)
+        tmp = from; from = to; to = tmp;
+        for (sal_Int32 j = 0; j < nCount; j++)
         off[to][j] = off[from][off[to][j]];
     }
     offset = off[to];
+    }
     return tmpStr;
 }
 
