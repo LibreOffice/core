@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_javafilter.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 10:13:00 $
+ *  last change: $Author: svesik $ $Date: 2004-04-20 12:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@ STD_JAR_FILE( gid_File_Jar_Docbook, docbook )
 STD_JAR_FILE( gid_File_Jar_Htmlsoff, htmlsoff )
 STD_JAR_FILE( gid_File_Jar_Pexcel, pexcel )
 STD_JAR_FILE( gid_File_Jar_Pocketword, pocketword )
-STD_JAR_FILE( gid_File_Jar_Xflatxml, XFlatXml )
+UNO_JAR_FILE( gid_File_Jar_Xflatxml, XFlatXml )
 STD_JAR_FILE( gid_File_Jar_Xmerge, xmerge )
-STD_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
+UNO_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
 
 #endif
