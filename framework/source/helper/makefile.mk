@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:29:24 $
+#   last change: $Author: as $ $Date: 2000-09-26 13:01:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,8 @@ BOOTSTRAP_SERVICE=	FALSE
 
 SLOFILES=			$(SLO)$/otasksaccess.obj	 					\
                     $(SLO)$/otasksenumeration.obj					\
+                    $(SLO)$/ocomponentaccess.obj 					\
+                    $(SLO)$/ocomponentenumeration.obj				\
                     $(SLO)$/odispatchprovider.obj					\
                     $(SLO)$/odesktopdispatcher.obj					\
                     $(SLO)$/oframes.obj								\

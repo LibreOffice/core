@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oframes.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:24 $
+ *  last change: $Author: as $ $Date: 2000-09-26 13:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,27 +147,12 @@ OFrames::~OFrames()
 //*****************************************************************************************************************
 //  XInterface
 //*****************************************************************************************************************
-
 DEFINE_XINTERFACE_3     (   OFrames                         ,
                             OWeakObject                     ,
                             DIRECT_INTERFACE(XFrames        ),
                             DIRECT_INTERFACE(XIndexAccess   ),
                             DIRECT_INTERFACE(XElementAccess )
                         )
-
-// Attention: If you have enabled any testmode different from TEST_NOTHING => you have declared XDebugging-interface automaticly!
-// Bhere is no macro to define and implement the right methods. You are the only one, who know - how you will use this mechanism.
-// It exist a macro to switch on or off your implementation only.
-// ENABLE_SERVICEDEBUG must be defined, to activate your code!
-
-//#ifdef ENABLE_SERVICEDEBUG
-
-    // Debug mechanism for services is not used in this implementation.
-    // This define will expand to nothing if SERVICEDEBUG_ENABLED unknown!
-    // But if you will implement your own code - activate this define before ... and deactivate follow line.
-//  DEFINE_EMPTY_XSPECIALDEBUGINTERFACE( OFrames )
-
-//#endif // #ifdef ENABLE_SERVICEDEBUG
 
 //*****************************************************************************************************************
 //  XFrames
@@ -242,105 +227,91 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
     Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() == sal_True )
     {
-        // This class is a helper for services, which must implement XFrames.
-        // His parent and childs are MY parent and childs to.
-        // All searchflags are supported by this implementation!
-        // If some flags should not be supported - don't call me with this flags!!!
-
-        //_____________________________________________________________________________________________________________
-        // Search with AUTO-flag is not supported yet!
-        // We think about right implementation.
-        LOG_ASSERT( !(nSearchFlags & FrameSearchFlag::AUTO), "OFrames::queryFrames()\nSearch with AUTO-flag is not supported yet!\nWe think about right implementation.\n" )
-
-        //_____________________________________________________________________________________________________________
-        // Search for ALL and GLOBAL is superflous!
-        // We support all necessary flags, from which these two flags are derived.
-        //      ALL     = PARENT + SELF  + CHILDREN + SIBLINGS
-        //      GLOBAL  = ALL    + TASKS
-//      LOG_ASSERT( !(nSearchFlags & FrameSearchFlag::ALL       ), "OFrames::queryFrames()\nSearch for ALL is superflous!\nWe support all necessary flags, from which these flag is derived.\n"     )
-//      LOG_ASSERT( !(nSearchFlags & FrameSearchFlag::GLOBAL    ), "OFrames::queryFrames()\nSearch for GLOBAL is superflous!\nWe support all necessary flags, from which these flag is derived.\n"  )
-
-        //_____________________________________________________________________________________________________________
-        // I have only one parent - the parent of the owner of this instance!
-        // Ask him for all frames with these flags and collect it in a list for return.
-        if  (
-                ( nSearchFlags & FrameSearchFlag::PARENT    )   ||
-                ( nSearchFlags & FrameSearchFlag::SIBLINGS  )
-            )
+        // Work only, if search was not started here ...!
+        if( m_bRecursiveSearchProtection == PROTECTION_OFF )
         {
-            // Don't search in THIS instance again, if search for parents and his childs was started here!
-            if ( m_bRecursiveSearchProtection == PROTECTION_ON )
+            // This class is a helper for services, which must implement XFrames.
+            // His parent and childs are MY parent and childs to.
+            // All searchflags are supported by this implementation!
+            // If some flags should not be supported - don't call me with this flags!!!
+
+            //_____________________________________________________________________________________________________________
+            // Search with AUTO-flag is not supported yet!
+            // We think about right implementation.
+            LOG_ASSERT( !(nSearchFlags & FrameSearchFlag::AUTO), "OFrames::queryFrames()\nSearch with AUTO-flag is not supported yet!\nWe think about right implementation.\n" )
+            // If searched for tasks ...
+            // Its not supported yet.
+            LOG_ASSERT( !(nSearchFlags & FrameSearchFlag::AUTO), "OFrames::queryFrames()\nSearch for tasks not supported yet!\n" )
+
+            //_____________________________________________________________________________________________________________
+            // Search for ALL and GLOBAL is superflous!
+            // We support all necessary flags, from which these two flags are derived.
+            //      ALL     = PARENT + SELF  + CHILDREN + SIBLINGS
+            //      GLOBAL  = ALL    + TASKS
+
+            //_____________________________________________________________________________________________________________
+            // Add parent to list ... if any exist!
+            if( nSearchFlags & FrameSearchFlag::PARENT )
+            {
+                Reference< XFrame > xParent( xOwner->getCreator(), UNO_QUERY );
+                if( xParent.is() == sal_True )
+                {
+                    Sequence< Reference< XFrame > > seqParent( 1 );
+                    seqParent[0] = xParent;
+                    impl_appendSequence( seqFrames, seqParent );
+                }
+            }
+
+            //_____________________________________________________________________________________________________________
+            // Add owner to list if SELF is searched.
+            if( nSearchFlags & FrameSearchFlag::SELF )
+            {
+                Sequence< Reference< XFrame > > seqSelf( 1 );
+                seqSelf[0] = xOwner;
+                impl_appendSequence( seqFrames, seqSelf );
+            }
+
+            //_____________________________________________________________________________________________________________
+            // Add SIBLINGS to list.
+            if( nSearchFlags & FrameSearchFlag::SIBLINGS )
             {
                 // Else; start a new search.
                 // Protect this instance against recursive calls from parents.
                 m_bRecursiveSearchProtection = PROTECTION_ON;
                 // Ask parent of my owner for frames and append results to return list.
-                Reference< XFrames > xParent( xOwner->getCreator(), UNO_QUERY );
+                Reference< XFramesSupplier > xParent( xOwner->getCreator(), UNO_QUERY );
                 // If a parent exist ...
                 if ( xParent.is() == sal_True )
                 {
                     // ... ask him for right frames.
-                    impl_appendSequence( seqFrames, xParent->queryFrames( nSearchFlags ) );
+                    impl_appendSequence( seqFrames, xParent->getFrames()->queryFrames( nSearchFlags ) );
                 }
-                // Other way; if no parent exist - do nothing. The owner can only be the Desktop himself!
-                // But safe impossible cases!
-                // If the owner not the Desktop - we have an break in ouer frame-hierarchy. Every frame (not the desktop) must have a parent!
-                #if ( TESTMODE==TEST_ERRORS || TESTMODE==FULL )
-                Reference< XDesktop > xDesktopInterface( xOwner, UNO_QUERY );
-                LOG_ASSERT( !(xParent.is()==sal_False && xDesktopInterface.is()==sal_False), "OFrames::queryFrames()\nBreak in frame hierarchy detected!There is no parent at my owner and its not the Desktop.\n" )
-                #endif // #if ( TESTMODE==TEST_ERRORS || TESTMODE==FULL )
                 // We have all searched informations.
                 // Reset protection-mode.
                 m_bRecursiveSearchProtection = PROTECTION_OFF;
             }
-        }
 
-        // Don't search at childs for parents and siblings!
-        // Why not?
-        //      PARENT   = my owner             = SELF
-        //      SIBLINGS = childs of my owner   = CHILDREN
-        nSearchFlags = nSearchFlags & UNMASK_PARENT     ;
-        nSearchFlags = nSearchFlags & UNMASK_SIBLINGS   ;
-
-        //_____________________________________________________________________________________________________________
-        // If i'am searched himself - add my owner parent to result list.
-        if ( nSearchFlags & FrameSearchFlag::SELF )
-        {
-            // Build new sequence with THIS as the only one item.
-            Reference< XFrame >             xSelf( (OWeakObject*)this, UNO_QUERY );
-            Sequence< Reference< XFrame > > seqSelf( 1 );
-            seqSelf.getArray()[0] = xSelf;
-            // Append these new sequence to result list.
-            impl_appendSequence( seqFrames, seqSelf );
-        }
-
-        //_____________________________________________________________________________________________________________
-        // If searched for children, step over all elements in container and collect the informations.
-        if ( nSearchFlags & FrameSearchFlag::CHILDREN )
-        {
-            // Don't search for parents, siblings and self at childrens!
-            // These things are supported by this instance himself.
-            sal_Int32 nChildSearchFlags = FrameSearchFlag::SELF | FrameSearchFlag::CHILDREN;
-            // Step over all items of container and ask childrens for frames.
-            // But first lock the container! see class FrameContainer for further informations.
-            m_pFrameContainer->lock();
-            sal_uInt32 nCount = m_pFrameContainer->getCount();
-            for ( sal_uInt32 nIndex=1; nIndex<=nCount; ++nIndex )
+            //_____________________________________________________________________________________________________________
+            // If searched for children, step over all elements in container and collect the informations.
+            if ( nSearchFlags & FrameSearchFlag::CHILDREN )
             {
-                // We don't must control this conversion.
-                // We have done this at append()!
-                Reference< XFrames > xItem( (*m_pFrameContainer)[nIndex], UNO_QUERY );
-                impl_appendSequence( seqFrames, xItem->queryFrames( nChildSearchFlags ) );
+                // Don't search for parents, siblings and self at childrens!
+                // These things are supported by this instance himself.
+                sal_Int32 nChildSearchFlags = FrameSearchFlag::SELF | FrameSearchFlag::CHILDREN;
+                // Step over all items of container and ask childrens for frames.
+                // But first lock the container! see class FrameContainer for further informations.
+                m_pFrameContainer->lock();
+                sal_uInt32 nCount = m_pFrameContainer->getCount();
+                for ( sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex )
+                {
+                    // We don't must control this conversion.
+                    // We have done this at append()!
+                    Reference< XFramesSupplier > xItem( (*m_pFrameContainer)[nIndex], UNO_QUERY );
+                    impl_appendSequence( seqFrames, xItem->getFrames()->queryFrames( nChildSearchFlags ) );
+                }
+                // Don't forget to unlock the container.
+                m_pFrameContainer->unlock();
             }
-            // Don't forget to unlock the container.
-            m_pFrameContainer->unlock();
-        }
-
-        //_____________________________________________________________________________________________________________
-        // If searched for tasks ...
-        if ( nSearchFlags & FrameSearchFlag::TASKS )
-        {
-            LOG_ASSERT( sal_False, "OFrames::queryFrames()\nSearch for tasks not supported yet!\n" )
         }
     }
     // Else; Do nothing! Ouer owner is dead.
