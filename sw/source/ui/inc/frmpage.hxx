@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:00:28 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
 #endif
+#ifndef _SVXSWFRAMEPOSSTRINGS_HXX
+#include <svx/swframeposstrings.hxx>
+#endif
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -84,8 +87,8 @@
 #ifndef _BMPWIN_HXX
 #include <bmpwin.hxx>
 #endif
-#ifndef _FRMEX_HXX
-#include <frmex.hxx>
+#ifndef _SVXSWFRAMEEXAMPLE_HXX
+#include <svx/swframeexample.hxx>
 #endif
 #ifndef _PRCNTFLD_HXX
 #include <prcntfld.hxx>
@@ -120,7 +123,6 @@ class SwFrmPage: public SfxTabPage
     CheckBox        aFixedRatioCB;
     PushButton      aRealSizeBT;
     FixedLine       aSizeFL;
-    BOOL            bWidthLastChanged;
 
     // Anker
     FixedLine       aTypeFL;
@@ -152,7 +154,10 @@ class SwFrmPage: public SfxTabPage
     BOOL            bAtVertPosModified;
 
     // Example
-    SwFrmPagePreview    aExampleWN;
+    SvxSwFrameExample   aExampleWN;
+
+    //'string provider'
+    SvxSwFramePosString aFramePosString;
 
     BOOL            bFormat;
     BOOL            bNew;
@@ -179,6 +184,9 @@ class SwFrmPage: public SfxTabPage
     USHORT          nOldV;
     USHORT          nOldVRel;
 
+    FrmMap* pVMap;
+    FrmMap* pHMap;
+
     virtual void    ActivatePage(const SfxItemSet& rSet);
     virtual int     DeactivatePage(SfxItemSet *pSet);
 
@@ -191,12 +199,10 @@ class SwFrmPage: public SfxTabPage
                             USHORT nV,  USHORT nVRel,
                             long   nX,  long   nY);
 
-    DECL_LINK( EditModifyHdl, Edit * );
     DECL_LINK( RealSizeHdl, Button * );
     DECL_LINK( RelSizeClickHdl, CheckBox * );
     DECL_LINK( MirrorHdl, CheckBox * );
 
-    DECL_LINK( ManualHdl, Button * );
 
     DECL_LINK( AutoWidthClickHdl, void* );
     DECL_LINK( AutoHeightClickHdl, void* );
@@ -221,9 +227,9 @@ class SwFrmPage: public SfxTabPage
                                ListBox& _rLB,
                                FixedText& _rFT );
     USHORT          GetMapPos( const FrmMap *pMap, ListBox &rAlignLB );
-    USHORT          GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
-    USHORT          GetRelation(FrmMap *pMap, ListBox &rRelationLB);
-    USHORT          GetAnchor();
+    short           GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
+    short           GetRelation(FrmMap *pMap, ListBox &rRelationLB);
+    short           GetAnchor();
 
     void            EnableGraficMode( void );   // hides auto check boxes and re-org controls for "Real Size" button
 
