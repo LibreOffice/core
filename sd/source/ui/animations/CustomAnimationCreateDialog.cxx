@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:53:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,12 @@
 #endif
 #ifndef _SD_CUSTOMANIMATIONPANE_HXX
 #include "CustomAnimationPane.hxx"
+#endif
+#ifndef _SD_OPTSITEM_HXX
+#include "optsitem.hxx"
+#endif
+#ifndef _SDDLL_HXX
+#include "sddll.hxx"
 #endif
 
 using namespace ::com::sun::star;
@@ -308,7 +314,6 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
 
     fillDurationComboBox( mpCBSpeed );
     mpCBSpeed->SelectEntryPos( 2 );
-    mpCBXPReview->Check( TRUE );
 
     mpLBEffects->SetSelectHdl( LINK( this, CustomAnimationCreateTabPage, implSelectHdl ) );
     mpLBEffects->SetDoubleClickHdl( LINK( this, CustomAnimationCreateTabPage, implDoubleClickHdl ) );
@@ -463,8 +468,7 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
 :   TabDialog( pParent, SdResId( DLG_CUSTOMANIMATION_CREATE ) ),
     mpPane( pPane ),
     mrTargets( rTargets ),
-    mfDuration( 2.0f ),
-    mbIsPreview( true )
+    mfDuration( 2.0f )
 {
     mpTabControl = new TabControl( this, SdResId( 1 ) );
     mpOKButton = new OKButton(this, SdResId( 1 ) ) ;
@@ -472,6 +476,9 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
     mpHelpButton = new HelpButton(this, SdResId( 1 ) );
 
     FreeResource();
+
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    mbIsPreview = pOptions->IsPreviewNewEffects();
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
     mpTabPages[ENTRANCE] = new CustomAnimationCreateTabPage( mpTabControl, this, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ), rPresets.getEntrancePresets(), bHasText );
@@ -483,6 +490,9 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
     mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ), rPresets.getMotionPathsPresets(), bHasText );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_MOTIONPATH, mpTabPages[MOTIONPATH] );
 
+    getCurrentPage()->setDuration( mfDuration );
+    getCurrentPage()->setIsPreview( mbIsPreview );
+
     mpTabControl->SetActivatePageHdl( LINK( this, CustomAnimationCreateDialog, implActivatePagekHdl ) );
     mpTabControl->SetDeactivatePageHdl( LINK( this, CustomAnimationCreateDialog, implDeactivatePagekHdl ) );
 
@@ -490,6 +500,9 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
 
 CustomAnimationCreateDialog::~CustomAnimationCreateDialog()
 {
+    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    pOptions->SetPreviewNewEffects( getCurrentPage()->getIsPreview() );
+
     delete mpTabPages[ENTRANCE];
     delete mpTabPages[EMPHASIS];
     delete mpTabPages[EXIT];
