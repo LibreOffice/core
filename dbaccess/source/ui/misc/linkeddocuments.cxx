@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:54 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,6 +531,33 @@ namespace dbaui
             Reference< XJobExecutor > xReportWizard(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.report.CallReportWizard")),aDesc.createAnySequence()),UNO_QUERY);
             if ( xReportWizard.is() )
                 xReportWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
+
+        }
+        catch(const Exception&)
+        {
+            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newReport: caught an exception while loading the object!");
+        }
+        return sal_True;
+    }
+    //------------------------------------------------------------------
+    sal_Bool OLinkedDocumentsAccess::newQueryWithPilot(const String& _rDataSourceName, const sal_Int32 _nCommandType,
+        const String& _rObjectName, const Reference< XConnection >& _rxConnection)
+    {
+        try
+        {
+            ::svx::ODataAccessDescriptor aDesc;
+            if ( _rDataSourceName.Len() )
+                aDesc[::svx::daDataSource] <<= ::rtl::OUString(_rDataSourceName);
+            if ( _nCommandType != -1 )
+                aDesc[::svx::daCommandType] <<= _nCommandType;
+            if ( _rObjectName.Len() )
+                aDesc[::svx::daCommand] <<= ::rtl::OUString(_rObjectName);
+            if ( _rxConnection.is() )
+                aDesc[::svx::daConnection] <<= _rxConnection;
+
+            Reference< XJobExecutor > xQueryWizard(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.query.CallQueryWizard")),aDesc.createAnySequence()),UNO_QUERY);
+            if ( xQueryWizard.is() )
+                xQueryWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
 
         }
         catch(const Exception&)
