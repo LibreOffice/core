@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:13 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,10 @@
     Text[ korean ] = "레이블";   \
     Text[ turkish ] = "Etiket"; \
     Text[ catalan ] = "Etiquetes";  \
-    Text[ thai ] = "ป้ายชื่อ";
+    Text[ thai ] = "ป้ายชื่อ";  \
+    Text[ czech ] = "Štítky"; \
+    Text[ hebrew ] = "‮מדבקות‬";  \
+    Text[ hindi ] = "लेबिलें";
 
 #define BUSINESS_CARD_STRING \
     Text = "Visitenkarten" ;                            \
@@ -105,16 +108,19 @@
     Text[ danish ] = "Visitkort";                       \
     Text[ swedish ] = "Visitkort";                      \
     Text[ polish ] = "Wizyt�wki";                       \
-    Text[ portuguese_brazilian ] = "Visiting cards";    \
+    Text[ portuguese_brazilian ] = "Cart�es de Visita";    \
     Text[ japanese ] = "名刺";                          \
     Text[ korean ] = "명함";                  \
     Text[ chinese_simplified ] = "名片";                \
     Text[ chinese_traditional ] = "名片";               \
     Text[ arabic ] = "������ �������";  \
     Text[ finnish ] = "K�yntikortit";   \
-    Text[ turkish ] = "Business cards"; \
+    Text[ turkish ] = "Meslek Kartlar�";    \
     Text[ catalan ] = "Targetes de visita"; \
-    Text[ thai ] = "นามบัตร";
+    Text[ thai ] = "นามบัตร"; \
+    Text[ czech ] = "Vizitky";  \
+    Text[ hebrew ] = "‮כרטיסי ביקור‬";   \
+    Text[ hindi ] = "व्यवहार कार्डस";
 
  // DLG_LAB ------------------------------------------------------------------
 TabDialog DLG_LAB
@@ -151,7 +157,7 @@ TabDialog DLG_LAB
                 Text[ danish ] = "Privat";
                 Text[ swedish ] = "Privat";
                 Text[ polish ] = "Prywatne";
-                Text[ portuguese_brazilian ] = "Private";
+                Text[ portuguese_brazilian ] = "Pessoal";
                 Text[ japanese ] = "私用";
                 Text[ korean ] = "개인";
                 Text[ chinese_simplified ] = "私人";
@@ -162,6 +168,9 @@ TabDialog DLG_LAB
                 Text[ catalan ] = "Privat";
                 Text[ finnish ] = "Henkil�kohtainen";
                 Text[ thai ] = "ส่วนตัว";
+                Text[ czech ] = "Soukromé";
+                Text[ hebrew ] = "‮אישי‬";
+                Text[ hindi ] = "वैयक्तिक";
             };
             PageItem
             {
@@ -180,17 +189,20 @@ TabDialog DLG_LAB
                 Text[ danish ] = "Arbejdsrelateret";
                 Text[ swedish ] = "Aff�rsm�ssig";
                 Text[ polish ] = "Biznes";
-                Text[ portuguese_brazilian ] = "Business";
+                Text[ portuguese_brazilian ] = "Comercial";
                 Text[ japanese ] = "社用";
                 Text[ korean ] = "업무";
                 Text[ chinese_simplified ] = "商务";
                 Text[ chinese_traditional ] = "商務";
                 Text[ arabic ] = "���";
-                Text[ turkish ] = "��";
+                Text[ turkish ] = "Meslek";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Negocis";
                 Text[ finnish ] = "Liiketoiminta";
                 Text[ thai ] = "ธุรกิจ";
+                Text[ czech ] = "Pracovní";
+                Text[ hebrew ] = "‮עיסקי‬";
+                Text[ hindi ] = "व्यवहार";
             };
             PageItem
             {
@@ -205,7 +217,7 @@ TabDialog DLG_LAB
                 Text [ dutch ] = "Grootte" ;
                 Text [ swedish ] = "Format" ;
                 Text [ danish ] = "Format" ;
-                Text [ portuguese_brazilian ] = "Format" ;
+                Text [ portuguese_brazilian ] = "Formato" ;
                 Text [ portuguese ] = "Formato" ;
                 Text[ chinese_simplified ] = "格式";
                 Text[ russian ] = "������";
@@ -220,6 +232,9 @@ TabDialog DLG_LAB
                 Text[ catalan ] = "Formata";
                 Text[ finnish ] = "Muotoilu";
                 Text[ thai ] = "รูปแบบ";
+                Text[ czech ] = "Formát";
+                Text[ hebrew ] = "‮עיצוב‬";
+                Text[ hindi ] = "रचना";
             };
             PageItem
             {
@@ -228,7 +243,7 @@ TabDialog DLG_LAB
                 Text [ ENGLISH ] = "Options" ;
                 PageResID = TP_LAB_PRT ;
                 Text [ english_us ] = "Options" ;
-                Text [ portuguese_brazilian ] = "Drucker" ;
+                Text [ portuguese_brazilian ] = "Op��es" ;
                 Text [ swedish ] = "Till�gg" ;
                 Text [ danish ] = "Flere" ;
                 Text [ italian ] = "Extra" ;
@@ -238,7 +253,7 @@ TabDialog DLG_LAB
                 Text [ portuguese ] = "Op��es" ;
                 Text[ chinese_simplified ] = "其他";
                 Text[ russian ] = "���������";
-                Text[ polish ] = "Dodatki";
+                Text[ polish ] = "Opcje";
                 Text[ japanese ] = "オプション";
                 Text[ chinese_traditional ] = "其他";
                 Text[ arabic ] = "������";
@@ -249,6 +264,9 @@ TabDialog DLG_LAB
                 Text[ catalan ] = "Opcions";
                 Text[ finnish ] = "Asetukset";
                 Text[ thai ] = "ตัวเลือก";
+                Text[ czech ] = "Volby";
+                Text[ hebrew ] = "‮אפשרויות‬";
+                Text[ hindi ] = "विकल्प";
             };
         };
     };
@@ -274,8 +292,8 @@ TabDialog DLG_LAB
         Text[ italian ] = "Impostazioni";
         Text[ danish ] = "Medium";
         Text[ swedish ] = "Medium";
-        Text[ polish ] = "No�nik danych";
-        Text[ portuguese_brazilian ] = "Media";
+        Text[ polish ] = "No�nik";
+        Text[ portuguese_brazilian ] = "M�dia";
         Text[ japanese ] = "用紙";
         Text[ korean ] = "매체";
         Text[ chinese_simplified ] = "纸张";
@@ -286,6 +304,9 @@ TabDialog DLG_LAB
         Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Normaali";
         Text[ thai ] = "ปานกลาง";
+        Text[ czech ] = "Střední";
+        Text[ hebrew ] = "‮מדיה‬";
+        Text[ hindi ] = "मीडियम";
     };
 };
  // TP_LAB_LAB ---------------------------------------------------------------
@@ -304,7 +325,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Writing" ;
         Text [ norwegian ] = "Writing" ;
         Text [ italian ] = "~Testo etichetta" ;
-        Text [ portuguese_brazilian ] = "Gravar" ;
+        Text [ portuguese_brazilian ] = "Texto da etiqueta" ;
         Text [ portuguese ] = "~Inscri��o" ;
         Text [ finnish ] = "Tarran teksti" ;
         Text [ danish ] = "Etikettekst" ;
@@ -315,7 +336,7 @@ TabPage TP_LAB_LAB
         Text [ english_us ] = "Label text" ;
         Text[ chinese_simplified ] = "标签";
         Text[ russian ] = "����� ��������";
-        Text[ polish ] = "Napis";
+        Text[ polish ] = "Tekst etykiety";
         Text[ japanese ] = "宛先";
         Text[ chinese_traditional ] = "標籤";
         Text[ arabic ] = "�� �������";
@@ -325,6 +346,9 @@ TabPage TP_LAB_LAB
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Text de l'etiqueta";
         Text[ thai ] = "ป้ายชื่อข้อความ";
+        Text[ czech ] = "Text štítku";
+        Text[ hebrew ] = "‮תוכן‬";
+        Text[ hindi ] = "लेबिल टेक्स्ट्";
     };
     CheckBox BOX_ADDR
     {
@@ -335,7 +359,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Address" ;
         Text [ norwegian ] = "Adresse" ;
         Text [ italian ] = "Indirizzo" ;
-        Text [ portuguese_brazilian ] = "Endere?o" ;
+        Text [ portuguese_brazilian ] = "Endere�o" ;
         Text [ portuguese ] = "Endere�o" ;
         Text [ finnish ] = "Osoite" ;
         Text [ danish ] = "Adresse" ;
@@ -356,6 +380,9 @@ TabPage TP_LAB_LAB
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Direcci�";
         Text[ thai ] = "ที่อยู่";
+        Text[ czech ] = "Adresa";
+        Text[ hebrew ] = "‮כתובת‬";
+        Text[ hindi ] = "पता";
     };
     MultiLineEdit EDT_WRITING
     {
@@ -397,6 +424,9 @@ TabPage TP_LAB_LAB
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Base de dades";
         Text[ thai ] = "ฐานข้อมูล";
+        Text[ czech ] = "Databáze";
+        Text[ hebrew ] = "‮מסד נתונים‬";
+        Text[ hindi ] = "लेखासंचय";
     };
     ListBox LB_DATABASE
     {
@@ -434,6 +464,9 @@ TabPage TP_LAB_LAB
         Text[ catalan ] = "Taula";
         Text[ finnish ] = "Taulukko";
         Text[ thai ] = "ตาราง";
+        Text[ czech ] = "Tabulka";
+        Text[ hebrew ] = "‮טבלה‬";
+        Text[ hindi ] = "सारणी";
     };
     ListBox LB_TABLE
     {
@@ -458,7 +491,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Database field" ;
         Text [ norwegian ] = "Database field" ;
         Text [ italian ] = "Campo database" ;
-        Text [ portuguese_brazilian ] = "Campo base de dados" ;
+        Text [ portuguese_brazilian ] = "Database field" ;
         Text [ portuguese ] = "Campo base de dados" ;
         Text [ finnish ] = "Tietokannan kentt�" ;
         Text [ danish ] = "Databasefelt" ;
@@ -479,6 +512,9 @@ TabPage TP_LAB_LAB
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Camp de la base de dades";
         Text[ thai ] = "เขตข้อมูลของฐานข้อมูล";
+        Text[ czech ] = "Pole databáze";
+        Text[ hebrew ] = "‮שדה מסד נתונים‬";
+        Text[ hindi ] = "लेखासंचय क्षेत्र";
     };
     ListBox LB_DBFIELD
     {
@@ -497,7 +533,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Writing" ;
         Text [ norwegian ] = "Writing" ;
         Text [ italian ] = "Testo etichetta" ;
-        Text [ portuguese_brazilian ] = "Gravar" ;
+        Text [ portuguese_brazilian ] = "Inscri��o" ;
         Text [ portuguese ] = "Inscri��o" ;
         Text [ finnish ] = "Liiteteksti" ;
         Text [ danish ] = "Etikettekst" ;
@@ -515,9 +551,12 @@ TabPage TP_LAB_LAB
         Text[ arabic ] = "�� �������";
         Text[ greek ] = "��������";
         Text[ korean ] = "레이블 텍스트";
-        Text[ turkish ] = "Etiket metni";
+        Text[ turkish ] = "Kitabe";
         Text[ catalan ] = "Etiqueta";
         Text[ thai ] = "จารึก";
+        Text[ czech ] = "Přípis";
+        Text[ hebrew ] = "‮כיתוב‬";
+        Text[ hindi ] = "नक्श";
     };
     RadioButton BTN_CONT
     {
@@ -529,7 +568,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Continuous" ;
         Text [ norwegian ] = "Continuous" ;
         Text [ italian ] = "~Continuo" ;
-        Text [ portuguese_brazilian ] = "~Cont?nuo" ;
+        Text [ portuguese_brazilian ] = "~Cont�nuo" ;
         Text [ portuguese ] = "~Cont�nuo" ;
         Text [ finnish ] = "~Jatkuva" ;
         Text [ danish ] = "Endel�s" ;
@@ -540,16 +579,19 @@ TabPage TP_LAB_LAB
         Text [ english_us ] = "~Continuous" ;
         Text[ chinese_simplified ] = "连续(~C)";
         Text[ russian ] = "����������";
-        Text[ polish ] = "Bez ko�ca";
+        Text[ polish ] = "~Ci�g�y";
         Text[ japanese ] = "連続(~C)";
         Text[ chinese_traditional ] = "不間斷(~C)";
         Text[ arabic ] = "��� ��� �����";
         Text[ greek ] = "�������";
         Text[ korean ] = "계속(~C)";
-        Text[ turkish ] = "Sonsuz form";
+        Text[ turkish ] = "S�rekli form";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Continu";
         Text[ thai ] = "~ต่อเนื่อง";
+        Text[ czech ] = "Spojitý";
+        Text[ hebrew ] = "‮רציף‬";
+        Text[ hindi ] = "~निरन्तर";
     };
     RadioButton BTN_SHEET
     {
@@ -559,7 +601,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Sheet" ;
         Text [ norwegian ] = "Sheet" ;
         Text [ italian ] = "Foglio" ;
-        Text [ portuguese_brazilian ] = "Folha" ;
+        Text [ portuguese_brazilian ] = "~Folha" ;
         Text [ portuguese ] = "~Folha" ;
         Text [ finnish ] = "Taulukko" ;
         Text [ danish ] = "Ark" ;
@@ -570,7 +612,7 @@ TabPage TP_LAB_LAB
         Text [ english_us ] = "~Sheet" ;
         Text[ chinese_simplified ] = "纸张(~S)";
         Text[ russian ] = "����";
-        Text[ polish ] = "Arkusz";
+        Text[ polish ] = "~Arkusz";
         Text[ japanese ] = "シート(~S)";
         Text[ chinese_traditional ] = "紙張(~S)";
         Text[ arabic ] = "��� ���";
@@ -580,6 +622,9 @@ TabPage TP_LAB_LAB
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Full";
         Text[ thai ] = "แ~ผ่นงาน";
+        Text[ czech ] = "Tabulka";
+        Text[ hebrew ] = "‮דפים‬";
+        Text[ hindi ] = "~शीट्";
     };
     FixedText TXT_MAKE
     {
@@ -589,7 +634,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Make" ;
         Text [ norwegian ] = "Make" ;
         Text [ italian ] = "Marca" ;
-        Text [ portuguese_brazilian ] = "Fazer" ;
+        Text [ portuguese_brazilian ] = "Fabricante" ;
         Text [ portuguese ] = "Marca" ;
         Text [ finnish ] = "Tuotemerkki" ;
         Text [ danish ] = "M�rke" ;
@@ -601,7 +646,7 @@ TabPage TP_LAB_LAB
         Left = TRUE ;
         Text[ chinese_simplified ] = "商标";
         Text[ russian ] = "�����";
-        Text[ polish ] = "Marka";
+        Text[ polish ] = "Ma~rka";
         Text[ japanese ] = "製造元";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "商標";
@@ -611,6 +656,9 @@ TabPage TP_LAB_LAB
         Text[ turkish ] = "Markas�";
         Text[ catalan ] = "Marca";
         Text[ thai ] = "ยี่ห้อ";
+        Text[ czech ] = "Značka";
+        Text[ hebrew ] = "‮יצרן‬";
+        Text[ hindi ] = "व्यापारिक चिन्ह";
     };
     ListBox BOX_MAKE
     {
@@ -629,7 +677,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Type" ;
         Text [ norwegian ] = "Type" ;
         Text [ italian ] = "Tipo" ;
-        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "Tipo" ;
         Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Type" ;
@@ -640,7 +688,7 @@ TabPage TP_LAB_LAB
         Text [ english_us ] = "~Type" ;
         Text[ chinese_simplified ] = "类型(~T)";
         Text[ russian ] = "���";
-        Text[ polish ] = "Typ";
+        Text[ polish ] = "~Typ";
         Text[ japanese ] = "種類(~T)";
         Text[ chinese_traditional ] = "類型(~T)";
         Text[ arabic ] = "�����";
@@ -650,6 +698,9 @@ TabPage TP_LAB_LAB
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tipus";
         Text[ thai ] = "~ชนิด";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "‮סוג‬";
+        Text[ hindi ] = "~वर्ग";
     };
     ListBox BOX_TYPE
     {
@@ -695,6 +746,9 @@ TabPage TP_LAB_LAB
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Format";
         Text[ thai ] = "รูปแบบ";
+        Text[ czech ] = "Formát";
+        Text[ hebrew ] = "‮עיצוב‬";
+        Text[ hindi ] = "रचना";
     };
 };
 #define WIDTH  100
@@ -717,7 +771,7 @@ FloatingWindow DLG_SYNC_BTN
         Text = "Etiketten synchronisieren" ;
         Text [ ENGLISH ] = "Synchronize labels" ;
         Text [ english_us ] = "Synchronize Labels" ;
-        Text [ portuguese_brazilian ] = "Etiketten synchronisieren" ;
+        Text [ portuguese_brazilian ] = "Sincronizar Etiquetas" ;
         Text [ swedish ] = "Synkronisera etiketter" ;
         Text [ danish ] = "Synkroniser etiketter" ;
         Text [ italian ] = "Sincronizza etichette" ;
@@ -727,7 +781,7 @@ FloatingWindow DLG_SYNC_BTN
         Text [ portuguese ] = "Sincronizar etiquetas" ;
         Text[ chinese_simplified ] = "标签同步化";
         Text[ russian ] = "���������������� �������";
-        Text[ polish ] = "Synchronizacja etykiet";
+        Text[ polish ] = "Synchronizuj etykiety";
         Text[ japanese ] = "ラベル書きを同期させる";
         Text[ chinese_traditional ] = "貼標同步化";
         Text[ arabic ] = "����� ������ �������";
@@ -738,6 +792,9 @@ FloatingWindow DLG_SYNC_BTN
         Text[ catalan ] = "Sincronitza les etiquetes";
         Text[ finnish ] = "Synkronoi osoitetarrat";
         Text[ thai ] = "ป้ายชื่อที่ตรงกัน";
+        Text[ czech ] = "Synchronizovat popisky";
+        Text[ hebrew ] = "Etiketten synchronisieren";
+        Text[ hindi ] = "लेबिलों का समीकरण";
     };
 };
  // String *******************************************************************
@@ -768,6 +825,9 @@ String STR_DOC_TITLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Etiquetes";
     Text[ thai ] = "ป้ายชื่อ";
+    Text[ czech ] = "Popisky";
+    Text[ hebrew ] = "‮מדבקות‬";
+    Text[ hindi ] = "लेबिलें";
 };
 String STR_CUSTOM
 {
@@ -785,15 +845,18 @@ String STR_CUSTOM
     Text[ danish ] = "[Bruger]";
     Text[ swedish ] = "[Anv�ndare]";
     Text[ polish ] = "[U�ytkownik]";
-    Text[ portuguese_brazilian ] = "[Pessoal]";
+    Text[ portuguese_brazilian ] = "[Usu�rio]";
     Text[ japanese ] = "[ユーザー]";
     Text[ korean ] = "[사용자]";
     Text[ chinese_simplified ] = "[使用者]";
     Text[ chinese_traditional ] = "[使用者]";
-    Text[ turkish ] = "[Kullan�c� tan�ml�]";
+    Text[ turkish ] = "\n[Kullan�c�]";
     Text[ arabic ] = "[������]";
     Text[ catalan ] = "[Usuari-definit]";
     Text[ thai ] = "[ระบุผู้ใช้]";
+    Text[ czech ] = "[Uživatelský]";
+    Text[ hebrew ] = "[Benutzer]";
+    Text[ hindi ] = "[उपभोक्ता]";
 };
 /********************************************************************/
 TabPage TP_VISITING_CARDS
@@ -825,8 +888,8 @@ TabPage TP_VISITING_CARDS
         Text[ italian ] = "Testo automatico - Sezione";
         Text[ danish ] = "AutoTekst - omr�de";
         Text[ swedish ] = "AutoText - omr�de";
-        Text[ polish ] = "Obszar Autotekstu";
-        Text[ portuguese_brazilian ] = "AutoText group";
+        Text[ polish ] = "Autotekst - Sekcja";
+        Text[ portuguese_brazilian ] = "AutoTexto - Se��o";
         Text[ japanese ] = "入力支援グループ";
         Text[ korean ] = "자동 텍스트 구역";
         Text[ chinese_simplified ] = "自动图文集分类";
@@ -837,6 +900,9 @@ TabPage TP_VISITING_CARDS
         Text[ catalan ] = "�rea AutoT~ext";
         Text[ finnish ] = "Automaattinen teksti - osa";
         Text[ thai ] = "ข้อความอัตโนมัติ - ส่วน";
+        Text[ czech ] = "Automatický text - sekce";
+        Text[ hebrew ] = "‮סוג טקסט מקובץ‬";
+        Text[ hindi ] = "स्वचालित ढंग से टेक्स्ट् - विभाग";
     };
     ListBox LB_AUTO_TEXT_GROUP
     {
@@ -863,7 +929,7 @@ TabPage TP_VISITING_CARDS
         Text[ danish ] = "Indhold";
         Text[ swedish ] = "Inneh�ll";
         Text[ polish ] = "Zawarto��";
-        Text[ portuguese_brazilian ] = "Content";
+        Text[ portuguese_brazilian ] = "Conte�do";
         Text[ japanese ] = "内容";
         Text[ korean ] = "내용";
         Text[ chinese_simplified ] = "内容";
@@ -874,6 +940,9 @@ TabPage TP_VISITING_CARDS
         Text[ catalan ] = "Contingut";
         Text[ finnish ] = "Sis�lt�";
         Text[ thai ] = "เนื้อหา";
+        Text[ czech ] = "Obsah";
+        Text[ hebrew ] = "‮תוכן‬";
+        Text[ hindi ] = "विषय";
     };
     Window WIN_EXAMPLE
     {
@@ -907,17 +976,20 @@ TabPage TP_PRIVATE_DATA
         Text[ danish ] = "Private data";
         Text[ swedish ] = "Privata data";
         Text[ polish ] = "Dane prywatne";
-        Text[ portuguese_brazilian ] = "Private data";
+        Text[ portuguese_brazilian ] = "Dados pessoais";
         Text[ japanese ] = "個人データ";
         Text[ korean ] = "개인 정보";
         Text[ chinese_simplified ] = "私人资料";
         Text[ chinese_traditional ] = "私人資料";
         Text[ arabic ] = "������ �����";
-        Text[ turkish ] = "�zel bilgiler";
+        Text[ turkish ] = "�zel data";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dades privades";
         Text[ finnish ] = "Omat tiedot";
         Text[ thai ] = "ข้อมูลส่วนตัว";
+        Text[ czech ] = "Soukromá data";
+        Text[ hebrew ] = "‮פרטים אישיים‬";
+        Text[ hindi ] = "वैयक्तिक ड़ॉटा";
     };
     FixedText FT_NAME
     {
@@ -935,8 +1007,8 @@ TabPage TP_PRIVATE_DATA
         Text[ italian ] = "Nome/Cognome/Iniziali";
         Text[ danish ] = "For-/Efternavn/Initialer";
         Text[ swedish ] = "~F�r-/efternamn/initialer";
-        Text[ polish ] = "Imi�/Nazwisko/Inicja�y";
-        Text[ portuguese_brazilian ] = "First/Last ~name";
+        Text[ polish ] = "Imi�/n~azwisko/inicja�y";
+        Text[ portuguese_brazilian ] = "~Nome / Sobrenome / Iniciais";
         Text[ japanese ] = "名/姓/イニシャル(~N)";
         Text[ korean ] = "성/이름/이니셜(~N)";
         Text[ chinese_simplified ] = "名字/姓氏/缩写(~N)";
@@ -947,6 +1019,9 @@ TabPage TP_PRIVATE_DATA
         Text[ catalan ] = "~Nom/Cog~noms/Inicials";
         Text[ finnish ] = "Etu-/suku~nimi/nimikirjaimet";
         Text[ thai ] = "~ชื่อ/นามสกุล/ชื่อย่อ";
+        Text[ czech ] = "Jméno/Příjmení/Iniciály";
+        Text[ hebrew ] = "‮שם פרטי/משפחה/ראשי תיבות‬";
+        Text[ hindi ] = "पहिला/अंतिम ~नाम/इनिश्यल";
     };
     Edit ED_FIRSTNAME
     {
@@ -982,8 +1057,8 @@ TabPage TP_PRIVATE_DATA
         Text[ italian ] = "Nome/Cognome/Iniziali 2";
         Text[ danish ] = "For-/Efternavn/Initialer 2";
         Text[ swedish ] = "F�r-/efter~namn/initialer 2";
-        Text[ polish ] = "Imi�/Nazwisko/Inicja�y";
-        Text[ portuguese_brazilian ] = "First/Last ~name 2";
+        Text[ polish ] = "~Imi�/nazwisko/inicja�y";
+        Text[ portuguese_brazilian ] = "Primeiro n~ome / Sobrenome / Iniciais 2";
         Text[ japanese ] = "姓/名/イニシャル 2 (~N)";
         Text[ korean ] = "성/이름/이니셜 2(~N)";
         Text[ chinese_simplified ] = "名字/姓氏/缩写 2(~N)";
@@ -993,6 +1068,9 @@ TabPage TP_PRIVATE_DATA
         Text[ catalan ] = "~Nom / Cog~noms / Inicials 2";
         Text[ finnish ] = "Etu-/suku~nimi/nimikirjaimet 2";
         Text[ thai ] = "~ชื่อ/นามสกุล/ชื่อย่อ 2";
+        Text[ czech ] = "Jméno / Příjmení / Iniciály 2";
+        Text[ hebrew ] = "‮שם פרטי/משפחה/ראשי תיבות 2‬";
+        Text[ hindi ] = "पहिला/अंतिम ~नाम/इनिश्यल 2";
     };
     Edit ED_FIRSTNAME_2
     {
@@ -1028,8 +1106,8 @@ TabPage TP_PRIVATE_DATA
         Text[ italian ] = "Via";
         Text[ danish ] = "Gade";
         Text[ swedish ] = "Gatuadres~s";
-        Text[ polish ] = "Ulica";
-        Text[ portuguese_brazilian ] = "Street";
+        Text[ polish ] = "~Ulica";
+        Text[ portuguese_brazilian ] = "~Endere�o";
         Text[ japanese ] = "市町村名番地(~T)";
         Text[ korean ] = "주소(~T)";
         Text[ chinese_simplified ] = "街道(~T)";
@@ -1040,6 +1118,9 @@ TabPage TP_PRIVATE_DATA
         Text[ catalan ] = "C~arrer";
         Text[ finnish ] = "Ka~tuosoite";
         Text[ thai ] = "ถ~นน";
+        Text[ czech ] = "Ulice";
+        Text[ hebrew ] = "‮רחוב‬";
+        Text[ hindi ] = "स~ड़क";
     };
     Edit ED_STREET
     {
@@ -1063,8 +1144,8 @@ TabPage TP_PRIVATE_DATA
         Text[ italian ] = "C.A.P./Localit�";
         Text[ danish ] = "Postnr./By";
         Text[ swedish ] = "~Postnr/Ort";
-        Text[ polish ] = "Kod pocztowy/Miejscowo��";
-        Text[ portuguese_brazilian ] = "Zip/City";
+        Text[ polish ] = "K~od pocztowy/Miejscowo��";
+        Text[ portuguese_brazilian ] = "CEP / Ci~dade";
         Text[ japanese ] = "郵便番号/都道府県名(~Y)";
         Text[ korean ] = "우편번호/구/군/시(~Y)";
         Text[ chinese_simplified ] = "邮编/城市(~Y)";
@@ -1075,6 +1156,9 @@ TabPage TP_PRIVATE_DATA
         Text[ catalan ] = "Codi postal/Ciuta~t";
         Text[ finnish ] = "Postinumero/Posti~toimipaikka";
         Text[ thai ] = "รหัสไปรษณีย์/เมือ~ง";
+        Text[ czech ] = "PSČ/Obec";
+        Text[ hebrew ] = "PLZ/Or~t";
+        Text[ hindi ] = "Zip/नग~र";
     };
     Edit ED_ZIP
     {
@@ -1104,8 +1188,8 @@ TabPage TP_PRIVATE_DATA
         Text[ italian ] = "Provincia/Paese";
         Text[ danish ] = "Land";
         Text[ swedish ] = "~Land/Delstat";
-        Text[ polish ] = "Kraj/Wojew�dztwo";
-        Text[ portuguese_brazilian ] = "Country/State";
+        Text[ polish ] = "~Kraj/wojew�dztwo";
+        Text[ portuguese_brazilian ] = "~Pa�s / Estado";
         Text[ japanese ] = "国名/都道府県名(~U)";
         Text[ korean ] = "국가/주(~U)";
         Text[ chinese_simplified ] = "国家/省市(~U)";
@@ -1116,6 +1200,9 @@ TabPage TP_PRIVATE_DATA
         Text[ catalan ] = "~Pa�s/Provincia";
         Text[ finnish ] = "Maa/osaval~tio";
         Text[ thai ] = "ประเ~ทศ/รัฐ";
+        Text[ czech ] = "Země/Stát";
+        Text[ hebrew ] = "‮מחוז/מדינה‬";
+        Text[ hindi ] = "दे~श/राज्य";
     };
     Edit ED_COUNTRY
     {
@@ -1145,8 +1232,8 @@ TabPage TP_PRIVATE_DATA
         Text[ italian ] = "Titolo/Professione";
         Text[ danish ] = "Titel/Stilling";
         Text[ swedish ] = "~Titel/Yrke";
-        Text[ polish ] = "Tytu�/Zaw�d";
-        Text[ portuguese_brazilian ] = "Title/Profession";
+        Text[ polish ] = "Tytu�/~Zaw�d";
+        Text[ portuguese_brazilian ] = "T�tulo / ~Profiss�o";
         Text[ japanese ] = "肩書き/職業(~P)";
         Text[ korean ] = "직위/직업(~P)";
         Text[ chinese_simplified ] = "头衔/职业(~P)";
@@ -1157,6 +1244,9 @@ TabPage TP_PRIVATE_DATA
         Text[ catalan ] = "T�tol/Pro~fessi�";
         Text[ finnish ] = "Teht�v�/~ammatti";
         Text[ thai ] = "ตำแหน่ง/~อาชีพ";
+        Text[ czech ] = "Titul/Profese";
+        Text[ hebrew ] = "‮תואר/מקצוע‬";
+        Text[ hindi ] = "शीर्षक/~पदवी";
     };
     Edit ED_TITLE
     {
@@ -1187,16 +1277,19 @@ TabPage TP_PRIVATE_DATA
         Text[ danish ] = "Telefon/Mobil";
         Text[ swedish ] = "Telefon/Mobil";
         Text[ polish ] = "Telefon/Kom�rka";
-        Text[ portuguese_brazilian ] = "Phone/Mobile";
+        Text[ portuguese_brazilian ] = "Telefone / Celular";
         Text[ japanese ] = "自宅電話/携帯電話";
         Text[ korean ] = "전화/휴대폰";
         Text[ chinese_simplified ] = "电话/手机";
         Text[ chinese_traditional ] = "電話/移動電話";
-        Text[ turkish ] = "Phone/Mobile";
+        Text[ turkish ] = "Telefon/Cep telefonu";
         Text[ arabic ] = "������/�������";
         Text[ catalan ] = "Tel�fono/M�bil";
         Text[ finnish ] = "Puhelin/Matkapuhelin";
         Text[ thai ] = "โทรศัพท์/มือถือ";
+        Text[ czech ] = "Tel./Mobilní tel.";
+        Text[ hebrew ] = "‮טלפון/טלפון נייד‬";
+        Text[ hindi ] = "फोन/मोबैल";
     };
     Edit ED_PHONE
     {
@@ -1226,8 +1319,8 @@ TabPage TP_PRIVATE_DATA
         Text[ italian ] = "Fa~x";
         Text[ danish ] = "Fax";
         Text[ swedish ] = "Fa~x";
-        Text[ polish ] = "Faks";
-        Text[ portuguese_brazilian ] = "Fax";
+        Text[ polish ] = "~Faks";
+        Text[ portuguese_brazilian ] = "Fa~x";
         Text[ japanese ] = "Fa~x";
         Text[ korean ] = "팩스(~X)";
         Text[ chinese_simplified ] = "传真(~X)";
@@ -1238,6 +1331,9 @@ TabPage TP_PRIVATE_DATA
         Text[ catalan ] = "Fa~x";
         Text[ finnish ] = "Fak~si";
         Text[ thai ] = "โทร~สาร";
+        Text[ czech ] = "Fax";
+        Text[ hebrew ] = "‮פקס‬";
+        Text[ hindi ] = "फॉ~क्स";
     };
     Edit ED_FAX
     {
@@ -1256,13 +1352,13 @@ TabPage TP_PRIVATE_DATA
         Text[ russian ] = "�������� / ��. �����";
         Text[ greek ] = "������ ������ / E-Mail";
         Text[ dutch ] = "Homepage / e-mail";
-        Text[ french ] = "Homepage / E-mail";
+        Text[ french ] = "Page Web / E-mail";
         Text[ spanish ] = "P�gina principal / Correo-e";
         Text[ italian ] = "Homepage/eMail";
         Text[ danish ] = "Hjemmeside/E-mail";
         Text[ swedish ] = "Hemsida / e-post";
-        Text[ polish ] = "Strona macierzysta/e-mail";
-        Text[ portuguese_brazilian ] = "Homepage / eMail";
+        Text[ polish ] = "Strona g��wna/e-mail";
+        Text[ portuguese_brazilian ] = "Homepage / e-mail";
         Text[ japanese ] = "ホームページ/E-mail";
         Text[ korean ] = "홈페이지/전자메일";
         Text[ chinese_simplified ] = "主页/电子邮件";
@@ -1273,6 +1369,9 @@ TabPage TP_PRIVATE_DATA
         Text[ catalan ] = "P�gina principal / e-mail";
         Text[ finnish ] = "Kotisivu/s�hk�posti";
         Text[ thai ] = "โฮมเพจ / อีเมล์";
+        Text[ czech ] = "Domovská stránka/e-mail";
+        Text[ hebrew ] = "‮דף בית/דואר אלקטרוני‬";
+        Text[ hindi ] = "मुख्य पृष्ठ / इ-मेइल";
     };
     Edit ED_WWW
     {
@@ -1309,17 +1408,20 @@ TabPage TP_BUSINESS_DATA
         Text[ danish ] = "Arbejdsrelaterede data";
         Text[ swedish ] = "Aff�rsdata";
         Text[ polish ] = "Dane s�u�bowe";
-        Text[ portuguese_brazilian ] = "Business data";
+        Text[ portuguese_brazilian ] = "Dados comerciais";
         Text[ japanese ] = "社用データ";
         Text[ korean ] = "업무 데이터";
         Text[ chinese_simplified ] = "商务资料";
         Text[ chinese_traditional ] = "商務資料";
         Text[ arabic ] = "������ �����";
-        Text[ turkish ] = "�� Bilgileri";
+        Text[ turkish ] = "�� verisi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dades professionals";
         Text[ finnish ] = "Liiketiedot";
         Text[ thai ] = "ข้อมูลทางธุรกิจ";
+        Text[ czech ] = "Obchodní informace";
+        Text[ hebrew ] = "‮פרטים עיסקיים‬";
+        Text[ hindi ] = "व्यवहार ड़ॉटा";
     };
     FixedText FT_COMP
     {
@@ -1338,7 +1440,7 @@ TabPage TP_BUSINESS_DATA
         Text[ danish ] = "Firma";
         Text[ swedish ] = "~F�retag";
         Text[ polish ] = "Firma";
-        Text[ portuguese_brazilian ] = "Company";
+        Text[ portuguese_brazilian ] = "Empresa";
         Text[ japanese ] = "会社名";
         Text[ korean ] = "회사";
         Text[ chinese_simplified ] = "公司";
@@ -1349,6 +1451,9 @@ TabPage TP_BUSINESS_DATA
         Text[ catalan ] = "Empresa";
         Text[ finnish ] = "Yritys";
         Text[ thai ] = "บริษัท";
+        Text[ czech ] = "Společnost";
+        Text[ hebrew ] = "‮חברה‬";
+        Text[ hindi ] = "संस्था";
     };
     Edit ED_COMP
     {
@@ -1372,8 +1477,8 @@ TabPage TP_BUSINESS_DATA
         Text[ italian ] = "Azienda (2� riga)";
         Text[ danish ] = "Firma 2. linje";
         Text[ swedish ] = "F�retag rad ~2";
-        Text[ polish ] = "Firma 2 wiersz";
-        Text[ portuguese_brazilian ] = "Company 2nd line";
+        Text[ polish ] = "Firma 2. wiersz";
+        Text[ portuguese_brazilian ] = "Empresa (cont.)";
         Text[ japanese ] = "会社名 2行目";
         Text[ korean ] = "회사 줄2";
         Text[ chinese_simplified ] = "公司(第二行)";
@@ -1384,6 +1489,9 @@ TabPage TP_BUSINESS_DATA
         Text[ catalan ] = "Empresa ~2a l�nia";
         Text[ finnish ] = "Yritys2";
         Text[ thai ] = "บริษัทบรรทัดที่สอง";
+        Text[ czech ] = "Společnost (druhý řádek)";
+        Text[ hebrew ] = "‮חברה, שורה שניה‬";
+        Text[ hindi ] = "संस्था 2nd रेखा";
     };
     Edit ED_COMP_EXT
     {
@@ -1419,6 +1527,9 @@ TabPage TP_BUSINESS_DATA
         Text[ catalan ] = "Esl~ogan";
         Text[ finnish ] = "Iskulause";
         Text[ thai ] = "สโลแกน";
+        Text[ czech ] = "Motto";
+        Text[ hebrew ] = "‮משפט מפתח‬";
+        Text[ hindi ] = "स्लोगन";
     };
     Edit ED_SLOGAN
     {
@@ -1443,7 +1554,7 @@ TabPage TP_BUSINESS_DATA
         Text[ danish ] = "Gade";
         Text[ swedish ] = "Bes�ksadre~ss";
         Text[ polish ] = "Ulica";
-        Text[ portuguese_brazilian ] = "Street";
+        Text[ portuguese_brazilian ] = "Rua";
         Text[ japanese ] = "市町村名番地";
         Text[ korean ] = "주소";
         Text[ chinese_simplified ] = "街道";
@@ -1454,6 +1565,9 @@ TabPage TP_BUSINESS_DATA
         Text[ catalan ] = "Carrer";
         Text[ finnish ] = "Katuosoite";
         Text[ thai ] = "ถนน";
+        Text[ czech ] = "Ulice";
+        Text[ hebrew ] = "‮רחוב‬";
+        Text[ hindi ] = "सड़क";
     };
     Edit ED_STREET
     {
@@ -1478,7 +1592,7 @@ TabPage TP_BUSINESS_DATA
         Text[ danish ] = "Postnr./By";
         Text[ swedish ] = "Postnr/Or~t";
         Text[ polish ] = "Kod pocztowy/Miejscowo��";
-        Text[ portuguese_brazilian ] = "ZIP/City";
+        Text[ portuguese_brazilian ] = "CEP / Cidade";
         Text[ japanese ] = "郵便番号/都道府県名";
         Text[ korean ] = "우편번호/구/군/시";
         Text[ chinese_simplified ] = "邮编/城市";
@@ -1489,6 +1603,9 @@ TabPage TP_BUSINESS_DATA
         Text[ catalan ] = "Codi postal/Ciutat";
         Text[ finnish ] = "Postinumero/postitoimipaikka";
         Text[ thai ] = "รหัสไปรษณีย์/เมือง";
+        Text[ czech ] = "PSČ/Obec";
+        Text[ hebrew ] = "‮מיקוד/עיר‬";
+        Text[ hindi ] = "ZIP/नगर";
     };
     Edit ED_ZIP
     {
@@ -1519,7 +1636,7 @@ TabPage TP_BUSINESS_DATA
         Text[ danish ] = "Land";
         Text[ swedish ] = "~Land/Delstat";
         Text[ polish ] = "Kraj/Wojew�dztwo";
-        Text[ portuguese_brazilian ] = "Country/State";
+        Text[ portuguese_brazilian ] = "Pa�s / Estado";
         Text[ japanese ] = "国名/州名";
         Text[ korean ] = "국가/주";
         Text[ chinese_simplified ] = "国家/省市";
@@ -1530,6 +1647,9 @@ TabPage TP_BUSINESS_DATA
         Text[ catalan ] = "Pa�s/Pro~vincia";
         Text[ finnish ] = "Maa/osavaltio";
         Text[ thai ] = "ประเทศ/รัฐ";
+        Text[ czech ] = "Země/Stát";
+        Text[ hebrew ] = "‮מחוז/מדינה‬";
+        Text[ hindi ] = "देश/राज्य";
     };
     Edit ED_COUNTRY
     {
@@ -1560,7 +1680,7 @@ TabPage TP_BUSINESS_DATA
         Text[ danish ] = "Stilling";
         Text[ swedish ] = "~Befattning";
         Text[ polish ] = "Pozycja";
-        Text[ portuguese_brazilian ] = "Position";
+        Text[ portuguese_brazilian ] = "Cargo";
         Text[ japanese ] = "部署";
         Text[ korean ] = "부서";
         Text[ chinese_simplified ] = "位置";
@@ -1571,6 +1691,9 @@ TabPage TP_BUSINESS_DATA
         Text[ catalan ] = "~Posici�";
         Text[ finnish ] = "Sijainti";
         Text[ thai ] = "ตำแหน่ง";
+        Text[ czech ] = "Pozice";
+        Text[ hebrew ] = "‮תפקיד‬";
+        Text[ hindi ] = "स्थान";
     };
     Edit ED_POSITION
     {
@@ -1595,16 +1718,19 @@ TabPage TP_BUSINESS_DATA
         Text[ danish ] = "Telefon/Mobil";
         Text[ swedish ] = "Telefon/Mobil";
         Text[ polish ] = "Telefon/Kom�rka";
-        Text[ portuguese_brazilian ] = "Phone/Mobile";
+        Text[ portuguese_brazilian ] = "Telefone / Celular";
         Text[ japanese ] = "会社電話/携帯電話";
         Text[ korean ] = "전화/휴대폰";
         Text[ chinese_simplified ] = "电话/手机";
         Text[ chinese_traditional ] = "電話/移動電話";
-        Text[ turkish ] = "Phone/Mobile";
+        Text[ turkish ] = "Telefon/Cep telefonu";
         Text[ arabic ] = "������/�������";
         Text[ catalan ] = "Tel�fono/M�bil";
         Text[ finnish ] = "Puhelin/Matkapuhelin";
         Text[ thai ] = "โทรศัพท์/มือถือ";
+        Text[ czech ] = "Tel./Mobilní tel.";
+        Text[ hebrew ] = "‮טלפון/טלפון נייד‬";
+        Text[ hindi ] = "दूरभाष/मोबैल";
     };
     Edit ED_PHONE
     {
@@ -1645,6 +1771,9 @@ TabPage TP_BUSINESS_DATA
         Text[ catalan ] = "Fax";
         Text[ finnish ] = "Faksi";
         Text[ thai ] = "โทรสาร";
+        Text[ czech ] = "Fax";
+        Text[ hebrew ] = "‮פקס‬";
+        Text[ hindi ] = "फॉक्स";
     };
     Edit ED_FAX
     {
@@ -1663,13 +1792,13 @@ TabPage TP_BUSINESS_DATA
         Text[ russian ] = "C�����~�� /��. �����";
         Text[ greek ] = "������ ������ / E-Mail";
         Text[ dutch ] = "Ho~mepage / e-mail";
-        Text[ french ] = "~Homepage / E-mail";
+        Text[ french ] = "Page Web / E-mail";
         Text[ spanish ] = "P�gina principal / ~Correo-e";
         Text[ italian ] = "Ho~mepage/eMail";
         Text[ danish ] = "Hjemmeside/E-mail";
         Text[ swedish ] = "He~msida / e-post";
-        Text[ polish ] = "Strona macierzysta/e-mail";
-        Text[ portuguese_brazilian ] = "Homepage / eMail";
+        Text[ polish ] = "Strona ~g��wna/e-mail";
+        Text[ portuguese_brazilian ] = "Ho~mepage / e-mail";
         Text[ japanese ] = "ホームページ/E-~mail";
         Text[ korean ] = "홈페이지/전자메일(~M)";
         Text[ chinese_simplified ] = "主页/电子邮件(~M)";
@@ -1680,6 +1809,9 @@ TabPage TP_BUSINESS_DATA
         Text[ catalan ] = "P�gina principal / ~e-mail";
         Text[ finnish ] = "Ko~tisivu/s�hk�posti";
         Text[ thai ] = "โฮมเ~พจ / อีเมล์";
+        Text[ czech ] = "Domovská stránka/e-mail";
+        Text[ hebrew ] = "‮דף בית/דואר אלקטרוני‬";
+        Text[ hindi ] = "~मुख्य पृष्ठ / इ-मेइल";
     };
     Edit ED_WWW
     {
@@ -1694,6 +1826,19 @@ TabPage TP_BUSINESS_DATA
         Border = TRUE ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
