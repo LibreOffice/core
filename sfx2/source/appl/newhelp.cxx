@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: pb $ $Date: 2002-01-10 13:56:28 $
+ *  last change: $Author: pb $ $Date: 2002-05-14 13:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "msgpool.hxx"
 #include "app.hxx"
 #include "sfxtypes.hxx"
+#include "panelist.hxx"
 
 #include "app.hrc"
 #include "newhelp.hrc"
@@ -245,6 +246,34 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 
 #define GET_SLOT_NAME( nId ) \
     SFX_SLOTPOOL().GetSlotName_Impl( nId )
+
+//.........................................................................
+namespace sfx2
+{
+//.........................................................................
+
+    void HandleTaskPaneList( Window* pWindow, BOOL bAddToList )
+    {
+        Window* pParent = pWindow->GetParent();
+        DBG_ASSERT( pParent, "HandleTaskPaneList(): every window here should have a parent" );
+
+        SystemWindow* pSysWin = pParent->GetSystemWindow();
+        if( pSysWin )
+        {
+            TaskPaneList* pTaskPaneList = pSysWin->GetTaskPaneList();
+            if( pTaskPaneList )
+            {
+                if( bAddToList )
+                    pTaskPaneList->AddWindow( pWindow );
+                else
+                    pTaskPaneList->RemoveWindow( pWindow );
+            }
+        }
+    }
+//.........................................................................
+// namespace sfx2
+}
+//.........................................................................
 
 // struct IndexEntry_Impl ------------------------------------------------
 
@@ -441,11 +470,20 @@ String ContentListBox_Impl::GetSelectEntry() const
     return aRet;
 }
 
+// class HelpTabPage_Impl ------------------------------------------------
+
+HelpTabPage_Impl::HelpTabPage_Impl( Window* pParent, const ResId& rResId ) :
+
+    TabPage( pParent, rResId )
+
+{
+}
+
 // class ContentTabPage_Impl ---------------------------------------------
 
 ContentTabPage_Impl::ContentTabPage_Impl( Window* pParent ) :
 
-    TabPage( pParent, SfxResId( TP_HELP_CONTENT ) ),
+    HelpTabPage_Impl( pParent, SfxResId( TP_HELP_CONTENT ) ),
 
     aContentBox( this, ResId( LB_CONTENTS ) )
 
@@ -470,6 +508,13 @@ void ContentTabPage_Impl::Resize()
 void ContentTabPage_Impl::ActivatePage()
 {
     SetFocusOnBox();
+}
+
+// -----------------------------------------------------------------------
+
+Control* ContentTabPage_Impl::GetLastFocusControl()
+{
+    return &aContentBox;
 }
 
 // class IndexBox_Impl ---------------------------------------------------
@@ -541,7 +586,7 @@ void IndexBox_Impl::SelectExecutableEntry()
 
 IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
 
-    TabPage( pParent, SfxResId( TP_HELP_INDEX ) ),
+    HelpTabPage_Impl( pParent, SfxResId( TP_HELP_INDEX ) ),
 
     aExpressionFT   ( this, ResId( FT_EXPRESSION ) ),
     aIndexCB        ( this, ResId( CB_INDEX ) ),
@@ -807,6 +852,13 @@ void IndexTabPage_Impl::ActivatePage()
 
 // -----------------------------------------------------------------------
 
+Control* IndexTabPage_Impl::GetLastFocusControl()
+{
+    return &aOpenBtn;
+}
+
+// -----------------------------------------------------------------------
+
 void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
     aIndexCB.SetDoubleClickHdl( rLink );
@@ -919,7 +971,7 @@ long SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
 
 SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent ) :
 
-    TabPage( pParent, SfxResId( TP_HELP_SEARCH ) ),
+    HelpTabPage_Impl( pParent, SfxResId( TP_HELP_SEARCH ) ),
 
     aSearchFT   ( this, ResId( FT_SEARCH ) ),
     aSearchED   ( this, ResId( ED_SEARCH ) ),
@@ -1148,6 +1200,13 @@ void SearchTabPage_Impl::ActivatePage()
 
 // -----------------------------------------------------------------------
 
+Control* SearchTabPage_Impl::GetLastFocusControl()
+{
+    return &aOpenBtn;
+}
+
+// -----------------------------------------------------------------------
+
 void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
     aResultsLB.SetDoubleClickHdl( rLink );
@@ -1327,7 +1386,7 @@ long BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
 
 BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent ) :
 
-    TabPage( pParent, SfxResId( TP_HELP_BOOKMARKS ) ),
+    HelpTabPage_Impl( pParent, SfxResId( TP_HELP_BOOKMARKS ) ),
 
     aBookmarksFT    ( this, ResId( FT_BOOKMARKS ) ),
     aBookmarksBox   ( this, ResId( LB_BOOKMARKS ) ),
@@ -1403,6 +1462,13 @@ void BookmarksTabPage_Impl::ActivatePage()
 
 // -----------------------------------------------------------------------
 
+Control* BookmarksTabPage_Impl::GetLastFocusControl()
+{
+    return &aBookmarksPB;
+}
+
+// -----------------------------------------------------------------------
+
 void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
     aBookmarksBox.SetDoubleClickHdl( rLink );
@@ -1449,6 +1515,8 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent )
 {
     FreeResource();
 
+    sfx2::AddToTaskPaneList( this );
+
     aTabCtrl.SetActivatePageHdl( LINK( this, SfxHelpIndexWindow_Impl, ActivatePageHdl ) );
     aTabCtrl.Show();
 
@@ -1474,6 +1542,8 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent )
 
 SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 {
+    sfx2::RemoveFromTaskPaneList( this );
+
     DELETEZ( pCPage );
     DELETEZ( pIPage );
     DELETEZ( pSPage );
@@ -1537,12 +1607,12 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
+HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage( USHORT& rCurId )
 {
-    const USHORT nId = pTabCtrl->GetCurPageId();
-    TabPage* pPage = NULL;
+    rCurId = aTabCtrl.GetCurPageId();
+    HelpTabPage_Impl* pPage = NULL;
 
-    switch ( nId )
+    switch ( rCurId )
     {
         case HELP_INDEX_PAGE_CONTENTS:
         {
@@ -1577,8 +1647,17 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
         }
     }
 
-    pTabCtrl->SetTabPage( nId, pPage );
+    DBG_ASSERT( pPage, "SfxHelpIndexWindow_Impl::GetCurrentPage(): no current page" );
+    return pPage;
+}
 
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
+{
+    USHORT nId = 0;
+    TabPage* pPage = GetCurrentPage( nId );
+    pTabCtrl->SetTabPage( nId, pPage );
     return 0;
 }
 
@@ -1650,6 +1729,51 @@ void SfxHelpIndexWindow_Impl::Resize()
     aSize.Width() -= aPnt.X();
     aSize.Height() -= aPnt.Y();
     aTabCtrl.SetSizePixel( aSize );
+}
+
+// -----------------------------------------------------------------------
+
+long SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
+{
+    long nDone = 0;
+    USHORT nType = rNEvt.GetType();
+    if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
+    {
+         const KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+
+        if ( rKeyCode.GetCode() == KEY_TAB )
+        {
+            // don't exit index pane with <TAB>
+            USHORT nPageId = 0;
+            HelpTabPage_Impl* pCurPage = GetCurrentPage( nPageId );
+            Control* pControl = pCurPage->GetLastFocusControl();
+            BOOL bShift = rKeyCode.IsShift();
+            BOOL bCtrl = rKeyCode.IsMod1();
+            if ( !bCtrl && bShift && aActiveLB.HasChildPathFocus() )
+            {
+                pControl->GrabFocus();
+                nDone = 1;
+            }
+            else if ( !bCtrl && !bShift && pControl->HasChildPathFocus() )
+            {
+                aActiveLB.GrabFocus();
+                nDone = 1;
+            }
+            else if ( bCtrl )
+            {
+                // <CTRL><TAB> moves through the pages
+                if ( nPageId < HELP_INDEX_PAGE_LAST )
+                    nPageId++;
+                else
+                    nPageId = HELP_INDEX_PAGE_FIRST;
+                aTabCtrl.SetCurPageId( (USHORT)nPageId );
+                ActivatePageHdl( &aTabCtrl );
+                nDone = 1;
+            }
+         }
+    }
+
+    return nDone ? nDone : Window::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
@@ -1823,6 +1947,8 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aIndexOffImage  ( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) )
 
 {
+    sfx2::AddToTaskPaneList( &aToolBox );
+
     xFrame = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), UNO_QUERY );
     xFrame->initialize( VCLUnoHelper::GetInterface ( pTextWin ) );
@@ -1877,6 +2003,8 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
 SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 {
+    sfx2::RemoveFromTaskPaneList( &aToolBox );
+
     bIsInClose = sal_True;
     xFrame->dispose();
 }
@@ -2212,6 +2340,13 @@ void SfxHelpWindow_Impl::Split()
 
 // -----------------------------------------------------------------------
 
+void SfxHelpWindow_Impl::GetFocus()
+{
+    pTextWin->GrabFocus();
+}
+
+// -----------------------------------------------------------------------
+
 void SfxHelpWindow_Impl::MakeLayout()
 {
     if ( nHeight > 0 && xWindow.is() )
@@ -2385,7 +2520,10 @@ void SfxHelpWindow_Impl::ShowStartPage()
 IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 {
     if ( pToolBox )
+    {
+        bDisableGrabFocus = pToolBox->HasChildPathFocus();
         DoAction( pToolBox->GetCurItemId() );
+    }
 
     return 1;
 }
@@ -2471,7 +2609,13 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
         SetFactory( aObj.GetHost() );
     if ( IsWait() )
         LeaveWait();
-    pIndexWin->GrabFocusBack();
+    if ( !bDisableGrabFocus )
+        pIndexWin->GrabFocusBack();
+    else
+    {
+        pTextWin->GetToolBox().GrabFocus();
+        bDisableGrabFocus = sal_False;
+    }
     if ( pListener->IsSuccessful() )
     {
         // set some view settings: "prevent help tips" and "helpid == 68245"
@@ -2514,18 +2658,19 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
 
     SplitWindow( pParent, WB_3DLOOK | WB_NOSPLITDRAW ),
 
-    pIndexWin       ( NULL ),
-    pTextWin        ( NULL ),
-    pHelpInterceptor( new HelpInterceptor_Impl() ),
-    pHelpListener   ( new HelpListener_Impl( pHelpInterceptor ) ),
-    nExpandWidth    ( 0 ),
-    nCollapseWidth  ( 0 ),
-    nHeight         ( 0 ),
-    nIndexSize      ( 40 ),
-    nTextSize       ( 60 ),
-    bIndex          ( sal_True ),
-    aWinPos         ( 0, 0 ),
-    sTitle          ( pParent->GetText() )
+    pIndexWin           ( NULL ),
+    pTextWin            ( NULL ),
+    pHelpInterceptor    ( new HelpInterceptor_Impl() ),
+    pHelpListener       ( new HelpListener_Impl( pHelpInterceptor ) ),
+    nExpandWidth        ( 0 ),
+    nCollapseWidth      ( 0 ),
+    nHeight             ( 0 ),
+    nIndexSize          ( 40 ),
+    nTextSize           ( 60 ),
+    bIndex              ( sal_True ),
+    bDisableGrabFocus   ( sal_False ),
+    aWinPos             ( 0, 0 ),
+    sTitle              ( pParent->GetText() )
 
 {
     SetHelpId( HID_HELP_WINDOW );

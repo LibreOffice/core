@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-16 14:06:24 $
+ *  last change: $Author: pb $ $Date: 2002-05-14 13:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,12 @@
 #define STR_BOOKMARK_RENAME                     15
 
 // Index Window: Id's of the tabpages
-#define HELP_INDEX_PAGE_CONTENTS                1
+#define HELP_INDEX_PAGE_FIRST                   1
+#define HELP_INDEX_PAGE_CONTENTS                HELP_INDEX_PAGE_FIRST
 #define HELP_INDEX_PAGE_INDEX                   2
 #define HELP_INDEX_PAGE_SEARCH                  3
 #define HELP_INDEX_PAGE_BOOKMARKS               4
+#define HELP_INDEX_PAGE_LAST                    HELP_INDEX_PAGE_BOOKMARKS
 
 // context menu ids
 #define MID_OPEN                                1

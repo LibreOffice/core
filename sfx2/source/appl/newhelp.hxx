@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-17 11:45:11 $
+ *  last change: $Author: pb $ $Date: 2002-05-14 13:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,19 @@ public:
     String          GetSelectEntry() const;
 };
 
+// class HelpTabPage_Impl ------------------------------------------------
+
+class HelpTabPage_Impl : public TabPage
+{
+public:
+    HelpTabPage_Impl( Window* pParent, const ResId& rResId );
+
+    virtual Control*    GetLastFocusControl() = 0;
+};
+
 // class ContentTabPage_Impl ---------------------------------------------
 
-class ContentTabPage_Impl : public TabPage
+class ContentTabPage_Impl : public HelpTabPage_Impl
 {
 private:
     ContentListBox_Impl aContentBox;
@@ -148,8 +158,9 @@ private:
 public:
     ContentTabPage_Impl( Window* pParent );
 
-    virtual void    Resize();
-    virtual void    ActivatePage();
+    virtual void        Resize();
+    virtual void        ActivatePage();
+    virtual Control*    GetLastFocusControl();
 
     inline void     SetOpenHdl( const Link& rLink ) { aContentBox.SetOpenHdl( rLink ); }
     inline String   GetSelectEntry() const { return aContentBox.GetSelectEntry(); }
@@ -169,7 +180,7 @@ public:
     void                SelectExecutableEntry();
 };
 
-class IndexTabPage_Impl : public TabPage
+class IndexTabPage_Impl : public HelpTabPage_Impl
 {
 private:
     FixedText           aExpressionFT;
@@ -198,6 +209,7 @@ public:
 
     virtual void        Resize();
     virtual void        ActivatePage();
+    virtual Control*    GetLastFocusControl();
 
     void                SetDoubleClickHdl( const Link& rLink );
     void                SetFactory( const String& rFactory );
@@ -237,7 +249,7 @@ public:
     virtual long    Notify( NotifyEvent& rNEvt );
 };
 
-class SearchTabPage_Impl : public TabPage
+class SearchTabPage_Impl : public HelpTabPage_Impl
 {
 private:
     FixedText               aSearchFT;
@@ -263,6 +275,7 @@ public:
 
     virtual void        Resize();
     virtual void        ActivatePage();
+    virtual Control*    GetLastFocusControl();
 
     void                SetDoubleClickHdl( const Link& rLink );
     inline void         SetFactory( const String& rFactory ) { aFactory = rFactory; }
@@ -289,7 +302,7 @@ public:
     virtual long        Notify( NotifyEvent& rNEvt );
 };
 
-class BookmarksTabPage_Impl : public TabPage
+class BookmarksTabPage_Impl : public HelpTabPage_Impl
 {
 private:
     FixedText           aBookmarksFT;
@@ -305,6 +318,7 @@ public:
 
     virtual void        Resize();
     virtual void        ActivatePage();
+    virtual Control*    GetLastFocusControl();
 
     void                SetDoubleClickHdl( const Link& rLink );
     String              GetSelectEntry() const;
@@ -339,6 +353,7 @@ private:
 
     void                Initialize();
     void                SetActiveFactory();
+    HelpTabPage_Impl*   GetCurrentPage( USHORT& rCurId );
 
     DECL_LINK(          ActivatePageHdl, TabControl* );
     DECL_LINK(          SelectHdl, ListBox* );
@@ -350,6 +365,7 @@ public:
     ~SfxHelpIndexWindow_Impl();
 
     virtual void        Resize();
+    virtual long        PreNotify( NotifyEvent& rNEvt );
 
     void                SetDoubleClickHdl( const Link& rLink );
     inline void         SetSelectFactoryHdl( const Link& rLink ) { aSelectFactoryLink = rLink; }
@@ -449,12 +465,14 @@ friend class SfxHelpIndexWindow_Impl;
     long                nIndexSize;
     long                nTextSize;
     sal_Bool            bIndex;
+    sal_Bool            bDisableGrabFocus;
     Point               aWinPos;
     String              sTitle;
     String              sKeyword;
 
     virtual void        Resize();
     virtual void        Split();
+    virtual void        GetFocus();
 
     void                MakeLayout();
     void                InitSizes();
