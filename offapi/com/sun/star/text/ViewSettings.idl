@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewSettings.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 10:51:54 $
+ *  last change: $Author: tl $ $Date: 2002-08-19 12:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
-
+#ifndef __com_sun_star_view_DocumentZoomType_idl__
+#include <com/sun/star/view/DocumentZoomType.idl>
+#endif
 
 //=============================================================================
 
@@ -96,7 +98,7 @@ service ViewSettings
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowDrawings
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowFieldCommandsShowDrawings
     /** If this property is <TRUE/>, shapes are visible.
      */
     [property] boolean ShowDrawings;
@@ -254,6 +256,27 @@ service ViewSettings
      of the view and the vertical scrollbar is on the left.
      */
     [property] boolean IsVertRulerRightAligned;
+
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/> the document will be displayed as if it
+        were a HTML document.
+     */
+    [property] boolean ShowOnlineLayout;
+
+    //-------------------------------------------------------------------------
+    /** This property defines the zoom type for the document.
+
+        @see com::sun::star::view::DocumentZoomType
+     */
+    [property] short ZoomType;
+
+    //-------------------------------------------------------------------------
+    /** Defines the zoom value to use.
+        Valid only if the ZoomType is set to
+        <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>.
+     */
+    [property] short ZoomValue;
+
 };
 
 //=============================================================================
@@ -263,6 +286,9 @@ service ViewSettings
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/03/07 10:51:54  os
+    #96678# enable right alignment of the vertical ruler
+
     Revision 1.4  2000/12/14 12:53:44  mi
     <true></true> -> <TRUE/> and same with FALSE
 
