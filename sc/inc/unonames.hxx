@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:52:30 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,7 @@
 #define SC_UNONAME_USEFLTCRT        "UseFilterCriteriaSource"
 #define SC_UNONAME_ENABSORT         "EnableSort"
 #define SC_UNONAME_FROMSELECT       "FromSelection"
+#define SC_UNONAME_CONRES           "ConnectionResource"
 
 //  text fields
 #define SC_UNONAME_ANCTYPE          "AnchorType"
