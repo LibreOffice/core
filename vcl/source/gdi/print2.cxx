@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-20 16:52:07 $
+ *  last change: $Author: ka $ $Date: 2001-05-07 10:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _SV_PRINT_H
 #include <print.h>
 #endif
+#ifndef _SV_SALBTYPE_HXX
+#include <salbtype.hxx>
+#endif
 #ifndef _SV_PRINT_HXX
 #include <print.hxx>
 #endif
@@ -88,17 +91,7 @@
 // - Defines -
 // -----------
 
-#define MAX_BANDWIDTH 1000000
-
-// -----------
-// - statics -
-// -----------
-
-static USHORT aSpecialPrintActions[] =
-{
-    META_TRANSPARENT_ACTION,
-    META_FLOATTRANSPARENT_ACTION
-};
+#define MAX_BAND_WIDTH 1000000
 
 // -----------------
 // - ImplCheckRect -
@@ -361,23 +354,32 @@ void ImplCheckRect::ImplCreate( MetaAction* pAct, OutputDevice* pOut, BOOL bSpec
 // - Printer -
 // -----------
 
-void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf, ULONG nFlags )
+void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
+                                   long nMaxBmpDPIX, long nMaxBmpDPIY )
 {
-    const ULONG nSpecialCount = sizeof( aSpecialPrintActions ) / sizeof( aSpecialPrintActions[ 0 ] );
-    MetaAction* pAct;
-    ULONG       i, j;
-    BOOL        bSpecial = FALSE;
+    const PrinterOptions&   rPrinterOptions = GetPrinterOptions();
+    MetaAction*             pAct;
+    ULONG                   i;
+    BOOL                    bTransparent = FALSE;
 
     rOutMtf.Clear();
 
-    // look, if we've got special actions
-    for( pAct = ( (GDIMetaFile&) rInMtf ).FirstAction(); pAct && !bSpecial; pAct = ( (GDIMetaFile&) rInMtf ).NextAction() )
-        for( i = 0; i < nSpecialCount; i++ )
-            if( pAct->GetType() == aSpecialPrintActions[ i ] )
-                bSpecial = TRUE;
+    if( !rPrinterOptions.IsReduceTransparency() ||
+        ( PRINTER_TRANSPARENCY_AUTO == rPrinterOptions.GetReducedTransparencyMode() ) )
+    {
+        // watch for transparent drawing actions
+        for( pAct = ( (GDIMetaFile&) rInMtf ).FirstAction(); pAct && !bTransparent; pAct = ( (GDIMetaFile&) rInMtf ).NextAction() )
+        {
+            if( ( META_TRANSPARENT_ACTION == pAct->GetType() ) ||
+                ( META_FLOATTRANSPARENT_ACTION == pAct->GetType() ) )
+            {
+                bTransparent = TRUE;
+            }
+        }
+    }
 
     // separate actions which are special actions or which are affected by special actions
-    if( bSpecial )
+    if( bTransparent )
     {
         Rectangle       aBoundPixel;
         const ULONG     nCount = rInMtf.GetActionCount();
@@ -399,15 +401,15 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
         for( i = 0, pO = pRects, pAct = ( (GDIMetaFile&) rInMtf ).FirstAction(); pAct;
              pAct = ( (GDIMetaFile&) rInMtf ).NextAction(), i++, pO++ )
         {
-            for( j = 0, bSpecial = FALSE; j < nSpecialCount && !bSpecial; j++ )
-                if( pAct->GetType() == aSpecialPrintActions[ j ] )
-                    bSpecial = TRUE;
+            // is it a special action
+            bTransparent = ( ( META_TRANSPARENT_ACTION == pAct->GetType() ) ||
+                             ( META_FLOATTRANSPARENT_ACTION == pAct->GetType() ) );
 
             // execute action to get correct MapMode's etc.
             pAct->Execute( &aPaintVDev );
 
             // create (bounding) rect object
-            pO->ImplCreate( pAct, &aPaintVDev, bSpecial );
+            pO->ImplCreate( pAct, &aPaintVDev, bTransparent );
 
             // add object to one of the lists
             if( pO->mbSpecialOutput )
@@ -458,90 +460,331 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
         for( pO = pOListFirst; pO; pO = pO->mpNext )
             aBoundPixel.Union( *pO->mpRect );
 
-        const Size aSzPix( aBoundPixel.GetSize() );
+        const Size      aSzPix( aBoundPixel.GetSize() );
+        const Size      aOutSzPix( GetOutputSizePixel() );
+        const double    fBmpArea = (double) aSzPix.Width() * aSzPix.Height();
+        const double    fOutArea = (double) aOutSzPix.Width() * aOutSzPix.Height();
 
-        // create new bitmap action first
-        if( aSzPix.Width() && aSzPix.Height() )
+        // check if output doesn't exceed given size
+        if( rPrinterOptions.IsReduceTransparency() &&
+            ( PRINTER_TRANSPARENCY_AUTO == rPrinterOptions.GetReducedTransparencyMode() ) &&
+            ( fBmpArea > ( 0.25 * fOutArea ) ) )
         {
-            Point           aDstPtPix( aBoundPixel.TopLeft() );
-            Size            aDstSzPix( aSzPix.Width(), Max( MAX_BANDWIDTH / aSzPix.Width(), 2L ) );
-            const long      nLastY = aDstPtPix.Y() + aSzPix.Height() - 1L;
-            VirtualDevice   aMapVDev;
-
-            rOutMtf.AddAction( new MetaPushAction( PUSH_MAPMODE ) );
-            rOutMtf.AddAction( new MetaMapModeAction() );
-
-            aPaintVDev.mbOutput = TRUE;
-            aMapVDev.mbOutput = FALSE;
-
-            while( aDstPtPix.Y() <= nLastY )
+            rOutMtf = rInMtf;
+        }
+        else
+        {
+            // create new bitmap action first
+            if( aSzPix.Width() && aSzPix.Height() )
             {
-                if( ( aDstPtPix.Y() + aDstSzPix.Height() - 1L ) > nLastY )
-                    aDstSzPix.Height() = nLastY - aDstPtPix.Y() + 1L;
+                Point           aDstPtPix( aBoundPixel.TopLeft() );
+                Size            aDstSzPix( aSzPix.Width(), Max( MAX_BAND_WIDTH / aSzPix.Width(), 2L ) );
+                const long      nLastY = aDstPtPix.Y() + aSzPix.Height() - 1L;
+                VirtualDevice   aMapVDev;
 
-                if( aPaintVDev.SetOutputSizePixel( aDstSzPix ) )
+                rOutMtf.AddAction( new MetaPushAction( PUSH_MAPMODE ) );
+                rOutMtf.AddAction( new MetaMapModeAction() );
+
+                aPaintVDev.mbOutput = TRUE;
+                aPaintVDev.SetDrawMode( GetDrawMode() );
+
+                aMapVDev.mbOutput = FALSE;
+
+                while( aDstPtPix.Y() <= nLastY )
                 {
-                    aPaintVDev.Push();
-                    aMapVDev.Push();
+                    if( ( aDstPtPix.Y() + aDstSzPix.Height() - 1L ) > nLastY )
+                        aDstSzPix.Height() = nLastY - aDstPtPix.Y() + 1L;
 
-                    aMapVDev.mnDPIX = aPaintVDev.mnDPIX = mnDPIX;
-                    aMapVDev.mnDPIY = aPaintVDev.mnDPIY = mnDPIY;
-
-                    for( i = 0, pO = pRects; i < nCount; i++, pO++ )
+                    if( aPaintVDev.SetOutputSizePixel( aDstSzPix ) )
                     {
-                        MetaAction*     pAction = pO->mpAct;
-                        const USHORT    nType = pAction->GetType();
+                        aPaintVDev.Push();
+                        aMapVDev.Push();
 
-                        if( META_MAPMODE_ACTION == nType )
+                        aMapVDev.mnDPIX = aPaintVDev.mnDPIX = mnDPIX;
+                        aMapVDev.mnDPIY = aPaintVDev.mnDPIY = mnDPIY;
+
+                        for( i = 0, pO = pRects; i < nCount; i++, pO++ )
                         {
-                            pAction->Execute( &aMapVDev );
+                            MetaAction*     pAction = pO->mpAct;
+                            const USHORT    nType = pAction->GetType();
 
-                            MapMode     aMtfMap( aMapVDev.GetMapMode() );
-                            const Point aNewOrg( aMapVDev.PixelToLogic( aDstPtPix ) );
+                            if( META_MAPMODE_ACTION == nType )
+                            {
+                                pAction->Execute( &aMapVDev );
 
-                            aMtfMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
-                            aPaintVDev.SetMapMode( aMtfMap );
+                                MapMode     aMtfMap( aMapVDev.GetMapMode() );
+                                const Point aNewOrg( aMapVDev.PixelToLogic( aDstPtPix ) );
+
+                                aMtfMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
+                                aPaintVDev.SetMapMode( aMtfMap );
+                            }
+                            else if( ( META_PUSH_ACTION == nType ) || ( META_POP_ACTION ) == nType )
+                            {
+                                pAction->Execute( &aMapVDev );
+                                pAction->Execute( &aPaintVDev );
+                            }
+                            else
+                                pAction->Execute( &aPaintVDev );
+
+                            if( !( i % 4 ) )
+                                Application::Reschedule();
                         }
-                        else if( ( META_PUSH_ACTION == nType ) || ( META_POP_ACTION ) == nType )
+
+                        const BOOL bOldMap = mbMap;
+                        mbMap = aPaintVDev.mbMap = FALSE;
+
+                        Bitmap aBandBmp( aPaintVDev.GetBitmap( Point(), aDstSzPix ) );
+
+                        // scale down bitmap, if requested
+                        if( rPrinterOptions.IsReduceBitmaps() && rPrinterOptions.IsReducedBitmapIncludesTransparency() )
                         {
-                            pAction->Execute( &aMapVDev );
-                            pAction->Execute( &aPaintVDev );
+                            aBandBmp = GetPreparedBitmap( aDstPtPix, aDstSzPix,
+                                                          Point(), aBandBmp.GetSizePixel(),
+                                                          aBandBmp, nMaxBmpDPIX, nMaxBmpDPIY );
                         }
-                        else
-                            pAction->Execute( &aPaintVDev );
 
-                        if( !( i % 4 ) )
-                            Application::Reschedule();
+                        rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN" ) );
+                        rOutMtf.AddAction( new MetaBmpScaleAction( aDstPtPix, aDstSzPix, aBandBmp ) );
+                        rOutMtf.AddAction( new MetaCommentAction( "PRNSPOOL_TRANSPARENTBITMAP_END" ) );
+
+                        aPaintVDev.mbMap = TRUE;
+                        mbMap = bOldMap;
+                        aMapVDev.Pop();
+                        aPaintVDev.Pop();
                     }
 
-                    aPaintVDev.mbMap = FALSE;
-                    Bitmap aBandBmp( aPaintVDev.GetBitmap( Point(), aDstSzPix ) );
-#ifdef DEBUG
-                    aBandBmp.Invert();
-#endif
-                    rOutMtf.AddAction( new MetaBmpScaleAction( aDstPtPix, aDstSzPix, aBandBmp ) );
-                    aPaintVDev.mbMap = TRUE;
-
-                    aMapVDev.Pop();
-                    aPaintVDev.Pop();
+                    // overlapping bands to avoid missing lines (e.g. PostScript)
+                    aDstPtPix.Y() += aDstSzPix.Height();
                 }
 
-                // overlapping bands to avoid missing lines (e.g. PostScript)
-                aDstPtPix.Y() += aDstSzPix.Height();
+                rOutMtf.AddAction( new MetaPopAction() );
             }
 
-            rOutMtf.AddAction( new MetaPopAction() );
+            // add normal actions
+            for( i = 0, pO = pRects; i < nCount; i++, pO++ )
+                if( !pO->mbSpecialOutput )
+                    rOutMtf.AddAction( ( pO->mpAct->Duplicate(), pO->mpAct ) );
+
+            rOutMtf.SetPrefMapMode( rInMtf.GetPrefMapMode() );
+            rOutMtf.SetPrefSize( rInMtf.GetPrefSize() );
         }
 
-        // add normal actions
-        for( i = 0, pO = pRects; i < nCount; i++, pO++ )
-            if( !pO->mbSpecialOutput )
-                rOutMtf.AddAction( ( pO->mpAct->Duplicate(), pO->mpAct ) );
-
-        rOutMtf.SetPrefMapMode( rInMtf.GetPrefMapMode() );
-        rOutMtf.SetPrefSize( rInMtf.GetPrefSize() );
         delete[] pRects;
     }
     else
         rOutMtf = rInMtf;
+}
+
+// -----------------------------------------------------------------------------
+
+Bitmap Printer::GetPreparedBitmap( const Point& rDstPt, const Size& rDstSz,
+                                   const Point& rSrcPt, const Size& rSrcSz,
+                                   const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY )
+{
+    Bitmap aBmp( rBmp );
+
+    if( !aBmp.IsEmpty() )
+    {
+        const Rectangle aBmpRect( Point(), aBmp.GetSizePixel() );
+        Rectangle       aSrcRect( rSrcPt, rSrcSz );
+
+        // do cropping if neccessary
+        if( aSrcRect.Intersection( aBmpRect ) != aBmpRect )
+        {
+            if( !aSrcRect.IsEmpty() )
+                aBmp.Crop( aSrcRect );
+            else
+                aBmp.SetEmpty();
+        }
+
+        if( !aBmp.IsEmpty() )
+        {
+            // do downsampling if neccessary
+            const Size      aDstSizeTwip( PixelToLogic( LogicToPixel( rDstSz ), MAP_TWIP ) );
+            const Size      aBmpSize( aBmp.GetSizePixel() );
+            const double    fBmpPixelX = aBmpSize.Width();
+            const double    fBmpPixelY = aBmpSize.Height();
+            const double    fMaxPixelX = aDstSizeTwip.Width() * nMaxBmpDPIX / 1440.0;
+            const double    fMaxPixelY = aDstSizeTwip.Height() * nMaxBmpDPIY / 1440.0;
+
+            // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
+            if( ( ( fBmpPixelX > ( fMaxPixelX + 4 ) ) ||
+                  ( fBmpPixelY > ( fMaxPixelY + 4 ) ) ) &&
+                ( fBmpPixelY > 0.0 ) && ( fMaxPixelY > 0.0 ) )
+            {
+                // do scaling
+                Size            aNewBmpSize;
+                const double    fBmpWH = fBmpPixelX / fBmpPixelY;
+                const double    fMaxWH = fMaxPixelX / fMaxPixelY;
+
+                if( fBmpWH < fMaxWH )
+                {
+                    aNewBmpSize.Width() = FRound( fMaxPixelY * fBmpWH );
+                    aNewBmpSize.Height() = FRound( fMaxPixelY );
+                }
+                else if( fBmpWH > 0.0 )
+                {
+                    aNewBmpSize.Width() = FRound( fMaxPixelX );
+                    aNewBmpSize.Height() = FRound( fMaxPixelX / fBmpWH);
+                }
+
+                if( aNewBmpSize.Width() && aNewBmpSize.Height() )
+                    aBmp.Scale( aNewBmpSize );
+                else
+                    aBmp.SetEmpty();
+            }
+        }
+    }
+
+    return aBmp;
+}
+
+// -----------------------------------------------------------------------------
+
+BitmapEx Printer::GetPreparedBitmapEx( const Point& rDstPt, const Size& rDstSz,
+                                       const Point& rSrcPt, const Size& rSrcSz,
+                                       const BitmapEx& rBmpEx, long nMaxBmpDPIX, long nMaxBmpDPIY )
+{
+    BitmapEx aBmpEx( rBmpEx );
+
+    if( !aBmpEx.IsEmpty() )
+    {
+        const Rectangle aBmpRect( Point(), aBmpEx.GetSizePixel() );
+        Rectangle       aSrcRect( rSrcPt, rSrcSz );
+
+        // do cropping if neccessary
+        if( aSrcRect.Intersection( aBmpRect ) != aBmpRect )
+        {
+            if( !aSrcRect.IsEmpty() )
+                aBmpEx.Crop( aSrcRect );
+            else
+                aBmpEx.SetEmpty();
+        }
+
+        if( !aBmpEx.IsEmpty() )
+        {
+            // do downsampling if neccessary
+            const Size      aDstSizeTwip( PixelToLogic( LogicToPixel( rDstSz ), MAP_TWIP ) );
+            const Size      aBmpSize( aBmpEx.GetSizePixel() );
+            const double    fBmpPixelX = aBmpSize.Width();
+            const double    fBmpPixelY = aBmpSize.Height();
+            const double    fMaxPixelX = aDstSizeTwip.Width() * nMaxBmpDPIX / 1440.0;
+            const double    fMaxPixelY = aDstSizeTwip.Height() * nMaxBmpDPIY / 1440.0;
+
+            // check, if the bitmap DPI exceeds the maximum DPI (allow 4 pixel rounding tolerance)
+            if( ( ( fBmpPixelX > ( fMaxPixelX + 4 ) ) ||
+                  ( fBmpPixelY > ( fMaxPixelY + 4 ) ) ) &&
+                ( fBmpPixelY > 0.0 ) && ( fMaxPixelY > 0.0 ) )
+            {
+                // do scaling
+                Size            aNewBmpSize;
+                const double    fBmpWH = fBmpPixelX / fBmpPixelY;
+                const double    fMaxWH = fMaxPixelX / fMaxPixelY;
+
+                if( fBmpWH < fMaxWH )
+                {
+                    aNewBmpSize.Width() = FRound( fMaxPixelY * fBmpWH );
+                    aNewBmpSize.Height() = FRound( fMaxPixelY );
+                }
+                else if( fBmpWH > 0.0 )
+                {
+                    aNewBmpSize.Width() = FRound( fMaxPixelX );
+                    aNewBmpSize.Height() = FRound( fMaxPixelX / fBmpWH);
+                }
+
+                if( aNewBmpSize.Width() && aNewBmpSize.Height() )
+                    aBmpEx.Scale( aNewBmpSize );
+                else
+                    aBmpEx.SetEmpty();
+            }
+        }
+    }
+
+    return aBmpEx;
+}
+
+// -----------------------------------------------------------------------------
+
+void Printer::DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const Gradient& rGradient )
+{
+    const PrinterOptions& rPrinterOptions = GetPrinterOptions();
+
+    if( rPrinterOptions.IsReduceGradients() )
+    {
+        if( PRINTER_GRADIENT_STRIPES == rPrinterOptions.GetReducedGradientMode() )
+        {
+            if( !rGradient.GetSteps() || ( rGradient.GetSteps() > rPrinterOptions.GetReducedGradientStepCount() ) )
+            {
+                Gradient aNewGradient( rGradient );
+
+                aNewGradient.SetSteps( rPrinterOptions.GetReducedGradientStepCount() );
+                pOut->DrawGradient( rRect, aNewGradient );
+            }
+            else
+                pOut->DrawGradient( rRect, rGradient );
+        }
+        else
+        {
+            const Color&    rStartColor = rGradient.GetStartColor();
+            const Color&    rEndColor = rGradient.GetEndColor();
+            const long      nR = ( ( (long) rStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100L +
+                                   ( (long) rEndColor.GetRed() * rGradient.GetEndIntensity() ) / 100L ) >> 1;
+            const long      nG = ( ( (long) rStartColor.GetGreen() * rGradient.GetStartIntensity() ) / 100L +
+                                   ( (long) rEndColor.GetGreen() * rGradient.GetEndIntensity() ) / 100L ) >> 1;
+            const long      nB = ( ( (long) rStartColor.GetBlue() * rGradient.GetStartIntensity() ) / 100L +
+                                   ( (long) rEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100L ) >> 1;
+            const Color     aColor( (BYTE) nR, (BYTE) nG, (BYTE) nB );
+
+            pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            pOut->SetLineColor( aColor );
+            pOut->SetFillColor( aColor );
+            pOut->DrawRect( rRect );
+            pOut->Pop();
+        }
+    }
+    else
+        pOut->DrawGradient( rRect, rGradient );
+}
+
+// -----------------------------------------------------------------------------
+
+void Printer::DrawGradientEx( OutputDevice* pOut, const PolyPolygon& rPolyPoly, const Gradient& rGradient )
+{
+    const PrinterOptions& rPrinterOptions = GetPrinterOptions();
+
+    if( rPrinterOptions.IsReduceGradients() )
+    {
+        if( PRINTER_GRADIENT_STRIPES == rPrinterOptions.GetReducedGradientMode() )
+        {
+            if( !rGradient.GetSteps() || ( rGradient.GetSteps() > rPrinterOptions.GetReducedGradientStepCount() ) )
+            {
+                Gradient aNewGradient( rGradient );
+
+                aNewGradient.SetSteps( rPrinterOptions.GetReducedGradientStepCount() );
+                pOut->DrawGradient( rPolyPoly, aNewGradient );
+            }
+            else
+                pOut->DrawGradient( rPolyPoly, rGradient );
+        }
+        else
+        {
+            const Color&    rStartColor = rGradient.GetStartColor();
+            const Color&    rEndColor = rGradient.GetEndColor();
+            const long      nR = ( ( (long) rStartColor.GetRed() * rGradient.GetStartIntensity() ) / 100L +
+                                   ( (long) rEndColor.GetRed() * rGradient.GetEndIntensity() ) / 100L ) >> 1;
+            const long      nG = ( ( (long) rStartColor.GetGreen() * rGradient.GetStartIntensity() ) / 100L +
+                                   ( (long) rEndColor.GetGreen() * rGradient.GetEndIntensity() ) / 100L ) >> 1;
+            const long      nB = ( ( (long) rStartColor.GetBlue() * rGradient.GetStartIntensity() ) / 100L +
+                                   ( (long) rEndColor.GetBlue() * rGradient.GetEndIntensity() ) / 100L ) >> 1;
+            const Color     aColor( (BYTE) nR, (BYTE) nG, (BYTE) nB );
+
+            pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            pOut->SetLineColor( aColor );
+            pOut->SetFillColor( aColor );
+            pOut->DrawPolyPolygon( rPolyPoly );
+            pOut->Pop();
+        }
+    }
+    else
+        pOut->DrawGradient( rPolyPoly, rGradient );
 }

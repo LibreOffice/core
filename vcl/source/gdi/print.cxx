@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-26 19:41:50 $
+ *  last change: $Author: ka $ $Date: 2001-05-07 10:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,15 +243,15 @@ void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
 // ------------------
 
 PrinterOptions::PrinterOptions() :
-    mbReduceTransparency( TRUE ),
+    mbReduceTransparency( FALSE ),
     meReducedTransparencyMode( PRINTER_TRANSPARENCY_AUTO ),
-    mbReduceGradients( TRUE ),
+    mbReduceGradients( FALSE ),
     meReducedGradientsMode( PRINTER_GRADIENT_STRIPES ),
     mnReducedGradientStepCount( 64 ),
-    mbReduceBitmaps( TRUE ),
-    meReducedBitmapMode( PRINTER_BITMAP_OPTIMAL ),
+    mbReduceBitmaps( FALSE ),
+    meReducedBitmapMode( PRINTER_BITMAP_NORMAL ),
     mnReducedBitmapResolution( 200 ),
-    mbReducedBitmapsIncludeTransparency( FALSE ),
+    mbReducedBitmapsIncludeTransparency( TRUE ),
     mbConvertToGreyscales( FALSE )
 {
 }
@@ -2008,7 +2008,6 @@ BOOL Printer::EndPage()
             mpQMtf->WindStart();
             GDIMetaFile* pPage = mpQMtf;
             mpQMtf = NULL;
-            mpQPrinter->SetPrinterOptions( *mpPrinterOptions );
             mpQPrinter->AddQueuePage( pPage, mnCurPage, mbNewJobSetup );
         }
 

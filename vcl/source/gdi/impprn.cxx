@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impprn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-20 16:52:07 $
+ *  last change: $Author: ka $ $Date: 2001-05-07 10:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,13 @@
 #include <impprn.hxx>
 #endif
 
+// -----------
+// - Defines -
+// -----------
+
+#define OPTIMAL_BMP_RESOLUTION  300
+#define NORMAL_BMP_RESOLUTION   200
+
 // =======================================================================
 
 struct QueuePage
@@ -141,8 +148,10 @@ void ImplQPrinter::Destroy()
 
 // -----------------------------------------------------------------------
 
-void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf )
+void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxBmpDPIY )
 {
+    const PrinterOptions& rPrinterOptions = GetPrinterOptions();
+
     for( MetaAction* pAct = rMtf.FirstAction(); pAct && !mbAborted; pAct = rMtf.NextAction() )
     {
         const ULONG     nType = pAct->GetType();
@@ -161,10 +170,8 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf )
                 // skip actions until a XGRAD_SEQ_END comment is found
                 if( pAct && ( pAct->GetType() == META_GRADIENTEX_ACTION ) )
                 {
-                    MetaGradientExAction* pGradientEx = (MetaGradientExAction*) pAct;
-
-                    // execute GradientEx action
-                    DrawGradient( pGradientEx->GetPolyPolygon(), pGradientEx->GetGradient() );
+                    MetaGradientExAction* pGradientExAction = (MetaGradientExAction*) pAct;
+                    DrawGradientEx( this, pGradientExAction->GetPolyPolygon(), pGradientExAction->GetGradient() );
 
                     // seek to end of this comment
                     do
@@ -178,6 +185,82 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf )
                     bExecuted = sal_True;
                 }
             }
+            else if( pComment->GetComment().CompareIgnoreCaseToAscii( "PRNSPOOL_TRANSPARENTBITMAP_BEGIN" ) == COMPARE_EQUAL )
+            {
+                pAct = rMtf.NextAction();
+
+                if( pAct && ( pAct->GetType() == META_BMPSCALE_ACTION ) )
+                {
+                    MetaBmpScaleAction* pBmpScaleAction = (MetaBmpScaleAction*) pAct;
+
+                    // execute action here to avoid DPI processing of bitmap;
+                    pAct->Execute( this );
+
+                    // seek to end of this comment
+                    do
+                    {
+                        pAct = rMtf.NextAction();
+                    }
+                    while( pAct &&
+                           ( ( pAct->GetType() != META_COMMENT_ACTION ) ||
+                             ( ( (MetaCommentAction*) pAct )->GetComment().CompareIgnoreCaseToAscii( "PRNSPOOL_TRANSPARENTBITMAP_END" ) != COMPARE_EQUAL ) ) );
+
+                    bExecuted = sal_True;
+                }
+            }
+        }
+        else if( nType == META_GRADIENT_ACTION )
+        {
+            MetaGradientAction* pGradientAction = (MetaGradientAction*) pAct;
+            DrawGradientEx( this, pGradientAction->GetRect(), pGradientAction->GetGradient() );
+        }
+        else if( nType == META_BMPSCALE_ACTION )
+        {
+            MetaBmpScaleAction* pBmpScaleAction = (MetaBmpScaleAction*) pAct;
+            const Bitmap&       rBmp = pBmpScaleAction->GetBitmap();
+
+            DrawBitmap( pBmpScaleAction->GetPoint(), pBmpScaleAction->GetSize(),
+                        GetPreparedBitmap( pBmpScaleAction->GetPoint(), pBmpScaleAction->GetSize(),
+                                           Point(), rBmp.GetSizePixel(),
+                                           rBmp, nMaxBmpDPIX, nMaxBmpDPIY ) );
+
+            bExecuted = sal_True;
+        }
+        else if( nType == META_BMPSCALEPART_ACTION )
+        {
+            MetaBmpScalePartAction* pBmpScalePartAction = (MetaBmpScalePartAction*) pAct;
+            const Bitmap&           rBmp = pBmpScalePartAction->GetBitmap();
+
+            DrawBitmap( pBmpScalePartAction->GetDestPoint(), pBmpScalePartAction->GetDestSize(),
+                        GetPreparedBitmap( pBmpScalePartAction->GetDestPoint(), pBmpScalePartAction->GetDestSize(),
+                                           pBmpScalePartAction->GetSrcPoint(), pBmpScalePartAction->GetSrcSize(),
+                                           rBmp, nMaxBmpDPIX, nMaxBmpDPIY ) );
+
+            bExecuted = sal_True;
+        }
+        else if( nType == META_BMPEXSCALE_ACTION )
+        {
+            MetaBmpExScaleAction*   pBmpExScaleAction = (MetaBmpExScaleAction*) pAct;
+            const BitmapEx&         rBmpEx = pBmpExScaleAction->GetBitmapEx();
+
+            DrawBitmapEx( pBmpExScaleAction->GetPoint(), pBmpExScaleAction->GetSize(),
+                          GetPreparedBitmapEx( pBmpExScaleAction->GetPoint(), pBmpExScaleAction->GetSize(),
+                                               Point(), rBmpEx.GetSizePixel(),
+                                               rBmpEx, nMaxBmpDPIX, nMaxBmpDPIY ) );
+
+            bExecuted = sal_True;
+        }
+        else if( nType == META_BMPEXSCALEPART_ACTION )
+        {
+            MetaBmpExScalePartAction*   pBmpExScalePartAction = (MetaBmpExScalePartAction*) pAct;
+            const BitmapEx&             rBmpEx = pBmpExScalePartAction->GetBitmapEx();
+
+            DrawBitmapEx( pBmpExScalePartAction->GetDestPoint(), pBmpExScalePartAction->GetDestSize(),
+                          GetPreparedBitmapEx( pBmpExScalePartAction->GetDestPoint(), pBmpExScalePartAction->GetDestSize(),
+                                               pBmpExScalePartAction->GetSrcPoint(), pBmpExScalePartAction->GetSrcSize(),
+                                               rBmpEx, nMaxBmpDPIX, nMaxBmpDPIY ) );
+
+            bExecuted = sal_True;
         }
         else if( nType == META_TRANSPARENT_ACTION )
         {
@@ -211,7 +294,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf )
 
                 Push();
                 SetMapMode( aDrawMap );
-                ImplPrintMtf( rMtf );
+                ImplPrintMtf( rMtf, nMaxBmpDPIX, nMaxBmpDPIY );
                 Pop();
             }
 
@@ -230,11 +313,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf )
 IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
 {
     // Ist Drucken abgebrochen wurden?
-    if ( !IsPrinting() )
-        return 0;
-
-    // Nur drucken, wenn genuegend Seiten im Cache stehen
-    if ( mpParent->IsJobActive() && (mpQueue->Count() < (ULONG)mpParent->GetPageQueueSize()) )
+    if( !IsPrinting() || ( mpParent->IsJobActive() && ( mpQueue->Count() < (ULONG)mpParent->GetPageQueueSize() ) ) )
         return 0;
 
     // Druck-Job zuende?
@@ -249,13 +328,50 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
     }
     else
     {
-        USHORT          nCopyCount = 1;
-        GDIMetaFile     aMtf;
+        GDIMetaFile             aMtf;
+        const PrinterOptions&   rPrinterOptions = GetPrinterOptions();
+        const ULONG             nOldDrawMode = GetDrawMode();
+        long                    nMaxBmpDPIX = mnDPIX;
+        long                    nMaxBmpDPIY = mnDPIY;
+        USHORT                  nCopyCount = 1;
+
+        if( rPrinterOptions.IsReduceBitmaps() )
+        {
+            // calculate maximum resolution for bitmap graphics
+            if( PRINTER_BITMAP_OPTIMAL == rPrinterOptions.GetReducedBitmapMode() )
+            {
+                nMaxBmpDPIX = Min( (long) OPTIMAL_BMP_RESOLUTION, nMaxBmpDPIX );
+                nMaxBmpDPIY = Min( (long) OPTIMAL_BMP_RESOLUTION, nMaxBmpDPIY );
+            }
+            else if( PRINTER_BITMAP_NORMAL == rPrinterOptions.GetReducedBitmapMode() )
+            {
+                nMaxBmpDPIX = Min( (long) NORMAL_BMP_RESOLUTION, nMaxBmpDPIX );
+                nMaxBmpDPIY = Min( (long) NORMAL_BMP_RESOLUTION, nMaxBmpDPIY );
+            }
+            else
+            {
+                nMaxBmpDPIX = Min( (long) rPrinterOptions.GetReducedBitmapResolution(), nMaxBmpDPIX );
+                nMaxBmpDPIY = Min( (long) rPrinterOptions.GetReducedBitmapResolution(), nMaxBmpDPIY );
+            }
+        }
+
+        // convert to greysacles
+        if( rPrinterOptions.IsConvertToGreyscales() )
+        {
+            SetDrawMode( GetDrawMode() | ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
+                                           DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
+        }
+
+        // disable transparency output
+        if( rPrinterOptions.IsReduceTransparency() && ( PRINTER_TRANSPARENCY_NONE == rPrinterOptions.GetReducedTransparencyMode() ) )
+        {
+            SetDrawMode( GetDrawMode() | DRAWMODE_NOTRANSPARENCY );
+        }
 
         mbDestroyAllowed = FALSE;
-        GetPreparedMetaFile( *pActPage->mpMtf, aMtf );
+        GetPreparedMetaFile( *pActPage->mpMtf, aMtf, nMaxBmpDPIX, nMaxBmpDPIY );
 
-        if ( mbUserCopy && !mbCollateCopy )
+        if( mbUserCopy && !mbCollateCopy )
             nCopyCount = mnCopyCount;
 
         for ( USHORT i = 0; i < nCopyCount; i++ )
@@ -274,13 +390,15 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
             if ( mbAborted )
                 break;
 
-            ImplPrintMtf( aMtf );
+            ImplPrintMtf( aMtf, nMaxBmpDPIX, nMaxBmpDPIY );
 
             if( !mbAborted )
                 EndPage();
             else
                 break;
         }
+
+        SetDrawMode( nOldDrawMode );
 
         delete pActPage;
         mbDestroyAllowed = TRUE;

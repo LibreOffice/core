@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: ka $ $Date: 2001-05-07 10:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
     DBG_TRACE( "OutputDevice::DrawTransparent()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if( !mbFillColor || ( 0 == nTransparencePercent ) )
+    if( !mbFillColor || ( 0 == nTransparencePercent ) || ( mnDrawMode & ( DRAWMODE_NOTRANSPARENCY ) ) )
         DrawPolyPolygon( rPolyPoly );
     else if( 100 == nTransparencePercent )
     {
@@ -477,7 +477,8 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaFloatTransparentAction( rMtf, rPos, rSize, rTransparenceGradient ) );
 
-    if( rTransparenceGradient.GetStartColor() == aBlack && rTransparenceGradient.GetEndColor() == aBlack )
+    if( ( rTransparenceGradient.GetStartColor() == aBlack && rTransparenceGradient.GetEndColor() == aBlack ) ||
+        ( mnDrawMode & ( DRAWMODE_NOTRANSPARENCY ) ) )
     {
         ( (GDIMetaFile&) rMtf ).WindStart();
         ( (GDIMetaFile&) rMtf ).Play( this, rPos, rSize );
