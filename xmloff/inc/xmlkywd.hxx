@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 09:36:27 $
+ *  last change: $Author: cl $ $Date: 2000-10-10 10:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,8 +475,8 @@ XML_CONSTASCII_ACTION( sXML_gamma , "gamma" );
 XML_CONSTASCII_ACTION( sXML_gap_width, "gap-width" );
 XML_CONSTASCII_ACTION( sXML_generator, "generator" );
 XML_CONSTASCII_ACTION( sXML_gradient , "gradient" );
-XML_CONSTASCII_ACTION( sXML_gradient_angel, "gradient-angel" );
-XML_CONSTASCII_ACTION( sXML_gradient_border, "gradient-border" );
+XML_CONSTASCII_ACTION( sXML_gradient_angle, "angle" );
+XML_CONSTASCII_ACTION( sXML_gradient_border, "border" );
 XML_CONSTASCII_ACTION( sXML_gradient_step_count , "gradient-step-count" );
 XML_CONSTASCII_ACTION( sXML_gradient_style, "gradient-style" );
 XML_CONSTASCII_ACTION( sXML_gradientstyle_axial, "axial" );
@@ -496,7 +496,7 @@ XML_CONSTASCII_ACTION( sXML_grouping, "grouping" );
 XML_CONSTASCII_ACTION( sXML_h, "h" );
 XML_CONSTASCII_ACTION( sXML_has_persistent_data, "has-persistent-data");
 XML_CONSTASCII_ACTION( sXML_hatch , "hatch" );
-XML_CONSTASCII_ACTION( sXML_hatch_distance, "hatch-distance" );
+XML_CONSTASCII_ACTION( sXML_hatch_distance, "distance" );
 XML_CONSTASCII_ACTION( sXML_hatch_style, "style" );
 XML_CONSTASCII_ACTION( sXML_hatchstyle_double, "double" );
 XML_CONSTASCII_ACTION( sXML_hatchstyle_single, "single" );
@@ -708,6 +708,7 @@ XML_CONSTASCII_ACTION( sXML_page_number, "page-number" );
 XML_CONSTASCII_ACTION( sXML_page_orientation, "page-orientation" );
 XML_CONSTASCII_ACTION( sXML_page_start_margin, "page-start-margin" );
 XML_CONSTASCII_ACTION( sXML_page_style_name, "page-style-name" );
+XML_CONSTASCII_ACTION( sXML_page_thumbnail, "page-thumbnail" );
 XML_CONSTASCII_ACTION( sXML_page_variable_get, "page-variable-get" );
 XML_CONSTASCII_ACTION( sXML_page_variable_set, "page-variable-set" );
 XML_CONSTASCII_ACTION( sXML_page_width, "page-width" );
