@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-03-14 11:06:40 $
+#   last change: $Author: toconnor $ $Date: 2003-05-16 13:50:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,15 +81,15 @@
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
-    <pathelement location="${solar.jar}/unoil.jar"/>
-    <!-- <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>-->
     <pathelement location="${solar.jar}/jurt.jar"/>
+    <pathelement location="${solar.jar}/unoil.jar"/>
     <pathelement location="${solar.jar}/jut.jar"/>
     <pathelement location="${solar.jar}/juh.jar"/>
     <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/sandbox.jar"/>
     <pathelement path="${install.dir}/bsh-1.2b7.jar"/>
+    <pathelement location="${install.dir}/js.jar"/>
   </path>
 
   <path id="idesupport.class.path">
@@ -169,8 +169,10 @@
          basedir="${scriptingclasses}">
         <exclude name="${netbeans.dir}/**/.*/*"/>
         <exclude name="**/beanshell/*"/>
+        <exclude name="**/rhino/*"/>
         <exclude name="**/security/*"/>
         <exclude name="BeanShellRuntimeComponentRegistration.class"/>
+        <exclude name="RhinoRuntimeComponentRegistration.class"/>
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="RegistrationClassName" value="ScriptRuntimeComponentRegistration"/>
@@ -186,6 +188,18 @@
         </manifest>
         <include name="BeanShellRuntimeComponentRegistration.class"/>
         <include name="**/ScriptRuntimeForBeanShell**.class"/>
+        <include name="**/ScriptContext.class"/>
+    </jar>
+
+    <jar jarfile="${jardir}/ScriptRuntimeForRhino.jar"
+         basedir="${scriptingclasses}">
+        <manifest>
+            <attribute name="Built-By" value="Sun Microsystems"/>
+            <attribute name="RegistrationClassName"
+                       value="RhinoRuntimeComponentRegistration"/>
+        </manifest>
+        <include name="RhinoRuntimeComponentRegistration.class"/>
+        <include name="**/ScriptRuntimeForRhino**.class"/>
         <include name="**/ScriptContext.class"/>
     </jar>
 
@@ -281,5 +295,5 @@
   </target>
 
   <!-- ========================= All In One Build ======================= -->
-  <target name="all" depends="clean,idesupport.jar,localoffice.jar,netbeans.jar,jar"/>
+  <target name="all" depends="clean,netbeans.jar,jar"/>
 </project>
