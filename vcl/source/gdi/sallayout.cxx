@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-21 10:35:15 $
+ *  last change: $Author: hdu $ $Date: 2002-08-23 15:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,16 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
     }
 
     return aPos;
+}
+
+// -----------------------------------------------------------------------
+
+// TODO: make abstract virtual when all children have it implemented
+void SalLayout::GetCursorPositions( long* pCursorXArray ) const
+{
+    // TODO: the implementation below is still a dummy implementation => FIXME
+    long nWidth = FillDXArray( pCursorXArray );
+    pCursorXArray[ mnEndCharIndex - mnFirstCharIndex ] = nWidth;
 }
 
 // -----------------------------------------------------------------------
@@ -613,6 +623,42 @@ void GenericSalLayout::Justify( long nNewWidth )
     // the rightmost glyph keeps it's original advance width
     for( pG = mpGlyphItems; pG < pGRight; ++pG )
         pG[0].mnNewWidth = pG[1].maLinearPos.X() - pG[0].maLinearPos.X();
+}
+
+// -----------------------------------------------------------------------
+
+void GenericSalLayout::GetCursorPositions( long* pCursorXArray ) const
+{
+    // TODO: adjust the cursor positions to right for RTL glyphs
+    int n;
+    for( n = 0; n <= mnEndCharIndex - mnFirstCharIndex; ++n )
+        pCursorXArray[ n ] = -1;
+
+    const GlyphItem* pG = mpGlyphItems;
+    for( int i = mnGlyphCount; --i >= 0; ++pG )
+    {
+        n = pG->mnCharIndex;
+        if( n > mnEndCharIndex )
+            continue;
+        n -= mnFirstCharIndex;
+        if( n < 0 )
+            continue;
+
+        long nXPos = pG->maLinearPos.X();
+        pCursorXArray[ n ] = nXPos;
+    }
+
+    long nOldXPos = 0;
+    for( n = 0; n <= mnEndCharIndex - mnFirstCharIndex; ++n )
+    {
+        if( pCursorXArray[ n ] >= 0 )
+            nOldXPos = pCursorXArray[ n ];
+        else
+            pCursorXArray[ n ] = nOldXPos;
+    }
+
+    // TODO: special handling for last character
+    // if( pCursorXArray[ n ] < 0 )
 }
 
 // -----------------------------------------------------------------------
