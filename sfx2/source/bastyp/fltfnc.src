@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:30:25 $
+ *  last change: $Author: kz $ $Date: 2001-07-19 20:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ String STR_FILTER_CHANNELON_OFFLINE
     Text [ french ] = "Cet abonnement ne peut être lu que hors connexion.\n\n%PRODUCTNAME est cependant en ligne. Souhaitez-vous déconnecter  %PRODUCTNAME maintenant?" ;
     Text [ dutch ] = "Dit abonnement moet in offline modus worden gelezen.\n\n%PRODUCTNAME bevindt zich echter in de online-modus. Wilt u omschakelen naar offline-modus?" ;
     Text [ portuguese ] = "Esta subscrição foi definida para ser lida em offline.\n\nDe momento o %PRODUCTNAME encontra-se no modo online. Deseja passar ao modo offline? " ;
-    Text[ chinese_simplified ] = "°´ÕÕÉè¶¨ÓÃ»§Ê¹ÓÃÍÑ»úÔÄ¶ÁÄ£Ê½¡£\n\n%PRODUCTNAME ÏÖÔÚ´¦ÓÚÁª»ú×´Ì¬¡£ÄúÒªÈÃ %PRODUCTNAME ×ªµ½ÍÑ»úÄ£Ê½£¿";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÍÑ»ú·½Ê½ÔÄ¶Á¶©ÔÄµÄÄÚÈİ¡£\n\n%PRODUCTNAME ÏÖÔÚ´¦ÓÚÁª»ú×´Ì¬¡£ÄúÒªÈÃ %PRODUCTNAME ×ªµ½ÍÑ»úÄ£Ê½£¿";
     Text[ russian ] = "İòà ïîäïèñêà äîëæíà ÷èòàòüñÿ, ñîãëàñíî óñòàíîâêå, â ğåæèìå Offline.\n\n%PRODUCTNAME íàõîäèòñÿ â ğåæèìå Online. Âû õîòèòå ïåğåêëş÷èòü ñåé÷àñ %PRODUCTNAME â ğåæèì Offline?";
     Text[ polish ] = "Wed³ug ustawieñ ta subskrypcja ma zostaæ odczytana w trybie offline.\n\n %PRODUCTNAME znajduje siê w trybie online. Czy prze³¹czyæ na tryb offline?";
     Text[ japanese ] = "‚±‚Ìw“Ç‚ÍµÌ×²İ Ó°ÄŞ‚Å‚Ìİ’è‚É]‚Á‚Ä“Ç‚İæ‚ç‚ê‚Ü‚·B\n\n%PRODUCTNAME‚Í Œ»İµİ×²İ Ó°ÄŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·B%PRODUCTNAME‚ğ¡ µÌ×²İ Ó°ÄŞ‚ÉØ‚èŠ·‚¦‚Ü‚·‚©?";
@@ -194,6 +194,7 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ catalan ] = "El filtro seleccionado $(FILTER) no está incluido en su edición.\nEn nuestra página de Internet encontrará las informaciones para poder pedirlos.";
     Text[ finnish ] = "Valittu suodatin $(FILTER) ei sisälly laitokseen.\nTilausohjeet ovat kotisivullamme.";
 };
+
 
 
 
