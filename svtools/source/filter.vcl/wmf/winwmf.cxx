@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-10 16:06:16 $
+ *  last change: $Author: sj $ $Date: 2001-01-15 18:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,8 +709,13 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
         case W_META_SETSTRETCHBLTMODE:
         case W_META_SETTEXTCHAREXTRA:
         case W_META_SETTEXTJUSTIFICATION:
-        case W_META_EXCLUDECLIPRECT:
-        case W_META_FLOODFILL:
+        break;
+        case W_META_EXCLUDECLIPRECT :
+        {
+            pOut->ExcludeClipRect( ReadRectangle() );
+        }
+        break;
+        case W_META_FLOODFILL :
         break;
         case W_META_PATBLT:
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-12 12:44:22 $
+ *  last change: $Author: sj $ $Date: 2001-01-15 18:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,25 @@ struct LOGFONTW
 
 // -----------------------------------------------------------------------------
 
+class WinMtfRegion : public Region
+{
+        sal_Bool    bNeedsUpdate;
+
+    public :
+
+                    WinMtfRegion() : bNeedsUpdate( sal_False ) {};
+
+        void        IntersectClipRect( const Rectangle& rRect );
+        void        ExcludeClipRect( const Rectangle& rRect );
+        void        MoveClipRegion( const Size& rSize );
+
+        sal_Bool    NeedsUpdate( sal_Bool bNewStatus = sal_False )
+                        { sal_Bool bRetValue = bNeedsUpdate;
+                            bNeedsUpdate = bNewStatus;
+                                return bRetValue; };
+        const Region& GetRegion() const { return (Region&)*this; };
+};
+
 class WinMtfPathObj : public PolyPolygon
 {
         sal_Bool    bClosed;
@@ -397,6 +416,7 @@ struct SaveStruct
     UINT32              nActTextAlign;
     sal_Bool            bRecordPath;
     WinMtfPathObj       aPathObj;
+    WinMtfRegion        aRegionObj;
 };
 
 DECLARE_STACK( SaveStack, SaveStruct* );
@@ -485,6 +505,8 @@ class WinMtfOutput
     protected:
 
         WinMtfPathObj       aPathObj;
+        WinMtfRegion        aRegionObj;
+
         GDIObj**            mpGDIObj;
         UINT32              mnEntrys;
         UINT32              mnActTextAlign;         // Aktuelle Textausrichtung (im MS-Windows-Format)
@@ -569,8 +591,10 @@ class WinMtfOutput
         virtual void        DrawPolyBezier( Polygon& rPolygin, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False ){};
         virtual void        DrawText( Point& rPosition, String& rString, INT32* pDXArry = NULL, sal_Bool bRecordPath = sal_False );
         virtual void        ResolveBitmapActions( List& rSaveList ){};
-        virtual void        IntersectClipRect( const Rectangle& rRectangle ){};
-        virtual void        MoveClipRegion( const Size& rSize ){};
+
+        void                IntersectClipRect( const Rectangle& rRect );
+        void                ExcludeClipRect( const Rectangle& rRect );
+        void                MoveClipRegion( const Size& rSize );
 
                             WinMtfOutput();
         virtual             ~WinMtfOutput();
@@ -624,9 +648,8 @@ class WinMtfMetaOutput : public WinMtfOutput
         virtual void        DrawPolyBezier( Polygon& rPolygin, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False );
         virtual void        DrawText( Point& rPosition, String& rString, INT32* pDXArry = NULL, sal_Bool bRecordPath = sal_False );
         virtual void        ResolveBitmapActions( List& rSaveList );
-        virtual void        IntersectClipRect( const Rectangle& rRectangle );
-        virtual void        MoveClipRegion( const Size& rSize );
 
+        void                UpdateClipRegion( const Region& rRegion );
 
                             WinMtfMetaOutput( GDIMetaFile& rGDIMetaFile );
         virtual             ~WinMtfMetaOutput();
