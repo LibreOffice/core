@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-22 15:23:42 $
+ *  last change: $Author: cl $ $Date: 2001-05-30 08:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,9 +1011,22 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 {
     SfxItemSet aSet( pModel->GetItemPool(), (USHORT)nWID, (USHORT)nWID );
 
+    if( SetFillAttribute( nWID, rName, aSet, pModel ) )
+    {
+        pObj->SetItemSetAndBroadcast(aSet);
+        return sal_True;
+    }
+    else
+    {
+        return sal_False;
+    }
+}
+
+sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUString& rName, SfxItemSet& rSet, SdrModel* pModel )
+{
     // check if an item with the given name and which id is inside the models
     // pool or the stylesheet pool, if found its puttet in the itemse
-    if( !SetFillAttribute( nWID, rName, aSet ) )
+    if( !SetFillAttribute( nWID, rName, rSet ) )
     {
         // we did not find such item in one of the pools, so we check
         // the property lists that are loaded for the model for items
@@ -1035,7 +1048,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             aBmpItem.SetWhich( XATTR_FILLBITMAP );
             aBmpItem.SetName( rName );
             aBmpItem.SetValue( pEntry->GetXBitmap() );
-            aSet.Put( aBmpItem );
+            rSet.Put( aBmpItem );
             break;
         }
         case XATTR_FILLGRADIENT:
@@ -1050,7 +1063,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             aGrdItem.SetWhich( XATTR_FILLGRADIENT );
             aGrdItem.SetName( rName );
             aGrdItem.SetValue( pEntry->GetGradient() );
-            aSet.Put( aGrdItem );
+            rSet.Put( aGrdItem );
             break;
         }
         case XATTR_FILLHATCH:
@@ -1065,7 +1078,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             aHatchItem.SetWhich( XATTR_FILLHATCH );
             aHatchItem.SetName( rName );
             aHatchItem.SetValue( pEntry->GetHatch() );
-            aSet.Put( aHatchItem );
+            rSet.Put( aHatchItem );
             break;
         }
         case XATTR_LINEEND:
@@ -1083,7 +1096,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
                 aLEItem.SetWhich( XATTR_LINEEND );
                 aLEItem.SetName( rName );
                 aLEItem.SetValue( pEntry->GetLineEnd() );
-                aSet.Put( aLEItem );
+                rSet.Put( aLEItem );
             }
             else
             {
@@ -1091,7 +1104,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
                 aLSItem.SetWhich( XATTR_LINESTART );
                 aLSItem.SetName( rName );
                 aLSItem.SetValue( pEntry->GetLineEnd() );
-                aSet.Put( aLSItem );
+                rSet.Put( aLSItem );
             }
 
             break;
@@ -1108,15 +1121,13 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
             aDashItem.SetWhich( XATTR_LINEDASH );
             aDashItem.SetName( rName );
             aDashItem.SetValue( pEntry->GetDash() );
-            aSet.Put( aDashItem );
+            rSet.Put( aDashItem );
             break;
         }
         default:
             return sal_False;
         }
     }
-
-    pObj->SetItemSetAndBroadcast(aSet);
 
     return sal_True;
 }
