@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-17 15:04:25 $
+ *  last change: $Author: cmc $ $Date: 2001-10-25 14:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,15 +335,15 @@ enum ePLCFT{ CHP=0, PAP, SEP, /*HED, FNR, ENR,*/ PLCF_END };
 */
 class WW8PLCFx              // virtueller Iterator fuer Piece Table Exceptions
 {
-    BYTE nVersion;              // Versionsnummer des FIB
-    BOOL bIsSprm;               // PLCF von Sprms oder von anderem ( Footnote, ... )
+    BYTE nVersion;          // Versionsnummer des FIB
+    BOOL bIsSprm;           // PLCF von Sprms oder von anderem ( Footnote, ... )
     WW8_FC nStartFc;
+    BOOL bDirty;
 
 public:
     WW8PLCFx( BYTE nFibVersion, BOOL bSprm )
-        { bIsSprm = bSprm; nVersion = nFibVersion; }
+        { bIsSprm = bSprm; nVersion = nFibVersion; bDirty = FALSE;}
 
-//  virtual ~WW8PLCFx() {}
     BOOL IsSprm() { return bIsSprm; }
     virtual ULONG GetIdx() const = 0;
     virtual void SetIdx( ULONG nIdx ) = 0;
@@ -360,6 +360,8 @@ public:
     BYTE GetVersion() const { return nVersion; }
     void    SetStartFc( WW8_FC nFc ) { nStartFc = nFc; }
     WW8_FC  GetStartFc(      ) const { return nStartFc; }
+    void SetDirty(BOOL bIn) {bDirty=bIn;}
+    BOOL GetDirty() {return bDirty;}
 };
 
 enum eCutT { CUT_NONE = 0, CUT_START, CUT_END, CUT_BOTH };
@@ -516,8 +518,6 @@ class WW8PLCFx_Cp_FKP : public WW8PLCFx_Fc_FKP
     WW8_CP nAttrStart, nAttrEnd;
     BOOL bLineEnd : 1;
     BOOL bComplex : 1;
-
-    void SearchParaEnd( long nOldEndCp );
 
 public:
     WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt, const WW8ScannerBase&

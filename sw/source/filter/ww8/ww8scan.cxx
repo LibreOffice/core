@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-17 15:04:24 $
+ *  last change: $Author: cmc $ $Date: 2001-10-25 14:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,15 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-
-
-//#define KHZ_TEST0
-
-
-
-
 
 
 #include <stdlib.h>
@@ -449,10 +440,6 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
 {
     WW8_CP nCpStart, nCpEnd;
     void* pData;
-/*
-    if( nStartPos == LONG_MAX )
-        return LONG_MAX;
-*/
     if ( !pPcdI->Get( nCpStart, nCpEnd, pData ) )
     {
          ASSERT( !this, "AktPieceStartFc2Cp() - Fehler" );
@@ -1235,10 +1222,11 @@ Err:
 //-----------------------------------------
 
 
-// WW8ReadPString liest einen Pascal-String ein und gibt ihn zurueck. Der Pascal-
-// String hat am Ende ein \0, der aber im Laengenbyte nicht mitgezaehlt wird.
-// Der Speicher fuer den Pascalstring wird alloziert.
-String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc, BOOL bAtEndSeekRel1 )
+// WW8ReadPString liest einen Pascal-String ein und gibt ihn zurueck. Der
+// Pascal- String hat am Ende ein \0, der aber im Laengenbyte nicht
+// mitgezaehlt wird.  Der Speicher fuer den Pascalstring wird alloziert.
+String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc,
+    BOOL bAtEndSeekRel1 )
 {
     UINT8 b;
     rStrm >> b;
@@ -1291,9 +1279,7 @@ String WW8Read_xstz( SvStream& rStrm, USHORT nChars, BOOL bAtEndSeekRel1 )
 
 
 USHORT WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
-                                      WW8_CP nAktStartCp, long nTotalLen,
-                                      rtl_TextEncoding eEnc ) const
-                                      // , unsigned -c-h-a-r-** ppStr ) const
+    WW8_CP nAktStartCp, long nTotalLen, rtl_TextEncoding eEnc ) const
 {
     // Klartext einlesen, der sich ueber mehrere Pieces erstrecken kann
     rStr.Erase();
@@ -1303,10 +1289,11 @@ USHORT WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
     WW8_CP nNextPieceCp  = nBehindTextCp; // Initialisierung wichtig fuer Ver6
     do {
         BOOL bIsUnicode, bPosOk;
-        WW8_FC fcAct = WW8Cp2Fc( nAktStartCp, &bIsUnicode,
-                                 &nNextPieceCp, &bPosOk);
+        WW8_FC fcAct = WW8Cp2Fc(nAktStartCp,&bIsUnicode,&nNextPieceCp,&bPosOk);
 
-        if( !bPosOk ) break;  // vermutlich uebers Dateiende hinaus gezielt, macht nix!
+        // vermutlich uebers Dateiende hinaus gezielt, macht nix!
+        if( !bPosOk )
+            break;
 
         rStrm.Seek( fcAct );
 
@@ -1325,7 +1312,8 @@ USHORT WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
             rStr.Append( WW8Read_xstz( rStrm, (USHORT)nLen, FALSE ) );
         else
         {
-            ByteString aByteStr;    // Alloc methode automatically sets Zero at the end
+            // Alloc methode automatically sets Zero at the end
+            ByteString aByteStr;
             sal_Char*  pByteData = aByteStr.AllocBuffer( nLen );
 
             sal_Size nWasRead = rStrm.Read( pByteData, nLen );
@@ -1397,7 +1385,7 @@ BOOL WW8PLCFspecial::SeekPos( long nPos )
 
     long nI   = nIdx ? nIdx : 1;
     long nEnd = nIMax;
-#ifndef KHZ_TEST0
+
     for(int n = (1==nIdx ? 1 : 2); n; --n )
     {
         for( ; nI <=nEnd; ++nI)
@@ -1411,21 +1399,14 @@ BOOL WW8PLCFspecial::SeekPos( long nPos )
         nI   = 1;
         nEnd = nIdx-1;
     }
-#else
-    for( nI=1; nI<=nIMax; nI++){        // Suchen mit um 1 erhoehtem Index
-        if( nP < pPLCF_PosArray[nI] ){          // Position gefunden
-            nIdx = nI - 1;              // nI - 1 ist der richtige Index
-            return TRUE;                // ... und fertig
-        }
-    }
-#endif
-    nIdx = nIMax;                       // Nicht gefunden, groesser als alle Eintraege
+    nIdx = nIMax;               // Nicht gefunden, groesser als alle Eintraege
     return FALSE;
 }
 
-// WW8PLCFspecial::SeekPosExact() wie SeekPos(), aber es wird sichergestellt, dass kein
-// Attribut angeschnitten wird, d.h. das naechste gelieferte Attribut beginnt
-// auf oder hinter nPos. Wird benutzt fuer Felder + Bookmarks.
+// WW8PLCFspecial::SeekPosExact() wie SeekPos(), aber es wird sichergestellt,
+// dass kein Attribut angeschnitten wird, d.h. das naechste gelieferte
+// Attribut beginnt auf oder hinter nPos. Wird benutzt fuer Felder +
+// Bookmarks.
 BOOL WW8PLCFspecial::SeekPosExact( long nPos )
 {
     long nP = nPos;
@@ -1433,7 +1414,7 @@ BOOL WW8PLCFspecial::SeekPosExact( long nPos )
     if( nP < pPLCF_PosArray[0] )
     {
         nIdx = 0;
-        return FALSE;                   // Nicht gefunden: nPos unterhalb kleinstem Eintrag
+        return FALSE;       // Nicht gefunden: nPos unterhalb kleinstem Eintrag
     }
     // Search from beginning?
     if( nP <=pPLCF_PosArray[nIdx] )
@@ -1441,7 +1422,7 @@ BOOL WW8PLCFspecial::SeekPosExact( long nPos )
 
     long nI   = nIdx ? nIdx-1 : 0;
     long nEnd = nIMax;
-#ifndef KHZ_TEST0
+
     for(int n = (0==nIdx ? 1 : 2); n; --n )
     {
         for( ; nI < nEnd; ++nI)
@@ -1455,15 +1436,7 @@ BOOL WW8PLCFspecial::SeekPosExact( long nPos )
         nI   = 0;
         nEnd = nIdx;
     }
-#else
-    for( nI=0; nI<nIMax; nI++){         // Suchen
-        if( nP <= pPLCF_PosArray[nI] ){         // Position gefunden
-            nIdx = nI;                  // nI ist der richtige Index
-            return TRUE;                // ... und fertig
-        }
-    }
-#endif
-    nIdx = nIMax;                       // Nicht gefunden, groesser als alle Eintraege
+    nIdx = nIMax;               // Nicht gefunden, groesser als alle Eintraege
     return FALSE;
 }
 
@@ -1495,9 +1468,8 @@ BOOL WW8PLCFspecial::GetData( long nIdx, long& rPos, void*& rpValue )
 
 // Ctor fuer *andere* als Fkps
 // Bei nStartPos < 0 wird das erste Element des PLCFs genommen
-WW8PLCF::WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF,
-          long nStruct, long nStartPos )
-:nIdx( 0 ), nStru( nStruct )
+WW8PLCF::WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF, long nStruct,
+    long nStartPos ) :nIdx( 0 ), nStru( nStruct )
 {
     ASSERT( nPLCF, "WW8PLCF: nPLCF ist Null!" );
 
@@ -1510,13 +1482,12 @@ WW8PLCF::WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF,
 }
 
 // Ctor *nur* fuer Fkps
-// Die letzten 2 Parameter sind fuer PLCF.Chpx und PLCF.Papx noetig.
-// ist ncpN != 0, dann wird ein unvollstaendiger PLCF vervollstaendigt.
-// Das ist bei WW6 bei Resourcenmangel und bei WordPad (W95) immer noetig.
-// Bei nStartPos < 0 wird das erste Element des PLCFs genommen
-WW8PLCF::WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF,
-          long nStruct, long nStartPos, long nPN, long ncpN )
-:nIdx( 0 ), nStru( nStruct )
+// Die letzten 2 Parameter sind fuer PLCF.Chpx und PLCF.Papx noetig.  ist ncpN
+// != 0, dann wird ein unvollstaendiger PLCF vervollstaendigt.  Das ist bei
+// WW6 bei Resourcenmangel und bei WordPad (W95) immer noetig.  Bei nStartPos
+// < 0 wird das erste Element des PLCFs genommen
+WW8PLCF::WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF, long nStruct,
+    long nStartPos, long nPN, long ncpN ) :nIdx( 0 ), nStru( nStruct )
 {
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 
@@ -1527,18 +1498,12 @@ WW8PLCF::WW8PLCF( SvStream* pSt, long nFilePos, long nPLCF,
 
     if( nStartPos >= 0 )
         SeekPos( nStartPos );
-
-// Damit man sich den Inhalt im Debugger ansehen kann
-#ifdef DEBUG
-    INT32  (*p1)[200] = (INT32  (*)[200])pPLCF_PosArray;
-    USHORT (*p2)[200] = (USHORT (*)[200])pPLCF_Contents;
-    p2 = p2;
-#endif
 }
 
 void WW8PLCF::ReadPLCF( SvStream* pSt, long nFilePos, long nPLCF )
 {
-    pPLCF_PosArray = new INT32[ ( nPLCF + 3 ) / 4 ];    // Pointer auf Pos-Array
+    // Pointer auf Pos-Array
+    pPLCF_PosArray = new INT32[ ( nPLCF + 3 ) / 4 ];
 
     long nOldPos = pSt->Tell();
 
@@ -1550,13 +1515,13 @@ void WW8PLCF::ReadPLCF( SvStream* pSt, long nFilePos, long nPLCF )
     }
     nIdx = 0;
 #endif // __BIGENDIAN
-    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];     // Pointer auf Inhalts-Array
+    // Pointer auf Inhalts-Array
+    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
 
     pSt->Seek( nOldPos );
 }
 
-void WW8PLCF::GeneratePLCF( SvStream* pSt, long nPN,
-                       long ncpN )
+void WW8PLCF::GeneratePLCF( SvStream* pSt, long nPN, long ncpN )
 {
     ASSERT( nIMax < (long)ncpN, "Pcl.Fkp: Warum ist PLCF zu gross ?" );
     nIMax = ncpN;
@@ -1580,17 +1545,12 @@ void WW8PLCF::GeneratePLCF( SvStream* pSt, long nPN,
     *pSt >> nFc;
     pPLCF_PosArray[nIMax] = nFc;        // Ende des letzten Fkp
 
-    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1]; // Pointer auf Inhalts-Array
+    // Pointer auf Inhalts-Array
+    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
     USHORT* p = (USHORT*)pPLCF_Contents;
 
     for( i = 0; i < ncpN; i++ )         // Baue PNs
         p[i] = nPN + i;
-
-#ifdef DEBUG    // Damit man sich den Inhalt im Debugger ansehen kann
-    INT32  (*p1)[200] = (INT32  (*)[200])pPLCF_PosArray;
-    USHORT (*p2)[200] = (USHORT (*)[200])pPLCF_Contents;
-    p2 = p2;
-#endif
 }
 
 BOOL WW8PLCF::SeekPos( long nPos )
@@ -1600,15 +1560,17 @@ BOOL WW8PLCF::SeekPos( long nPos )
     if( nP < pPLCF_PosArray[0] )
     {
         nIdx = 0;
-        return FALSE;                   // Nicht gefunden: nPos unterhalb kleinstem Eintrag
+        // Nicht gefunden: nPos unterhalb kleinstem Eintrag
+        return FALSE;
     }
+
     // Search from beginning?
     if( (1 > nIdx) || (nP < pPLCF_PosArray[ nIdx-1 ]) )
         nIdx = 1;
 
     long nI   = nIdx ? nIdx : 1;
     long nEnd = nIMax;
-#ifndef KHZ_TEST0
+
     for(int n = (1==nIdx ? 1 : 2); n; --n )
     {
         for( ; nI <=nEnd; ++nI)             // Suchen mit um 1 erhoehtem Index
@@ -1622,17 +1584,10 @@ BOOL WW8PLCF::SeekPos( long nPos )
         nI   = 1;
         nEnd = nIdx-1;
     }
-#else
-    for( nI=1; nI<=nIMax; nI++){
-        if( nP < pPLCF_PosArray[nI] ){
-            nIdx = nI - 1;              // nI - 1 ist der richtige Index
-            return TRUE;                // ... und fertig
-        }
-    }
-#endif
-    nIdx = nIMax;                       // Nicht gefunden, groesser als alle Eintraege
+
+    nIdx = nIMax;               // Nicht gefunden, groesser als alle Eintraege
     return FALSE;
-}//4,11,0,11,4,0,0,0,0,0,11,11,11,11,
+}
 
 BOOL WW8PLCF::Get( long& rStart, long& rEnd, void*& rpValue )
 {
@@ -1676,42 +1631,11 @@ WW8PLCFpcd::WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct )
     }
 #endif // __BIGENDIAN
 
-    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1]; // Pointer auf Inhalts-Array
+    // Pointer auf Inhalts-Array
+    pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
 
-#if 0
-    //aFC_sort appears to be redundant
-    for( INT32 nI = 0; nI < nIMax; nI++ )
-    {
-#if 1
-        //If we use this at all it should be this way
-        BOOL bDummy;
-        ULONG nKey = WW8PLCFx_PCD::TransformPieceAddress(
-            ((WW8_PCD1&)pPLCF_Contents[nI * nStru]).fc, bDummy );
-
-#else
-        ULONG nKey = (ULONG)(0x8FFFFFFF & ((WW8_PCD1&)pPLCF_Contents[nI * nStru]).fc);
-#endif
-        aFC_sort.Insert( nKey, nI );
-    }
-#endif
     pSt->Seek( nOldPos );
 }
-
-#if 0
-ULONG WW8PLCFpcd::FindIdx( WW8_FC nFC ) const
-{
-    ULONG nFound;
-    if( !aFC_sort.SearchKey( nFC, &nFound ) )
-    {
-        if( !nFound )
-            nFound = ULONG_MAX;
-        else
-            --nFound;  // we were behind the list because nFc is greater max. list entry
-    }
-    return ULONG_MAX == nFound ? ULONG_MAX : aFC_sort.GetObject( nFound );
-}
-#endif
-
 
 // Bei nStartPos < 0 wird das erste Element des PLCFs genommen
 WW8PLCFpcd_Iter::WW8PLCFpcd_Iter( WW8PLCFpcd& rPLCFpcd, long nStartPos /* = -1 */ )
@@ -1728,7 +1652,7 @@ BOOL WW8PLCFpcd_Iter::SeekPos( long nPos )
     if( nP < rPLCF.pPLCF_PosArray[0] )
     {
         nIdx = 0;
-        return FALSE;                   // Nicht gefunden: nPos unterhalb kleinstem Eintrag
+        return FALSE;       // Nicht gefunden: nPos unterhalb kleinstem Eintrag
     }
     // Search from beginning?
     if( (1 > nIdx) || (nP < rPLCF.pPLCF_PosArray[ nIdx-1 ]) )
@@ -1736,7 +1660,7 @@ BOOL WW8PLCFpcd_Iter::SeekPos( long nPos )
 
     long nI   = nIdx ? nIdx : 1;
     long nEnd = rPLCF.nIMax;
-#ifndef KHZ_TEST0
+
     for(int n = (1==nIdx ? 1 : 2); n; --n )
     {
         for( ; nI <=nEnd; ++nI)
@@ -1750,41 +1674,9 @@ BOOL WW8PLCFpcd_Iter::SeekPos( long nPos )
         nI   = 1;
         nEnd = nIdx-1;
     }
-#else
-    for( nI=1; nI<=rPLCF.nIMax; nI++){  // Suchen mit um 1 erhoehtem Index
-        if( nP < rPLCF.pPLCF_PosArray[nI] ){// Position gefunden
-            nIdx = nI - 1;              // nI - 1 ist der richtige Index
-            return TRUE;                // ... und fertig
-        }
-    }
-#endif
-    nIdx = rPLCF.nIMax;                 // Nicht gefunden, groesser als alle Eintraege
+    nIdx = rPLCF.nIMax;         // Nicht gefunden, groesser als alle Eintraege
     return FALSE;
-}//0,0,...0,1,0,0,1,0,0,1,1,...1,2,1,1,2,1,1,2,2,...2,4,2,2,3,2,2,3,3,...3,5,7,8,d,10,11,
-
-/*
-BOOL WW8PLCFpcd_Iter::SeekMaxMainFC( WW8Fib& rWwF, long& rMaxPosData )
-{
-    long nCpStart, nCpEnd;
-    void* pData;
-    nIdx = rPLCF.nIMax-1;
-    if( !Get( nCpStart, nCpEnd, pData ) )
-    {
-        ASSERT( !this, "SeekMaxMainFC findet Eintrag zu nIdx nicht" );
-        return FALSE;
-    }
-    BOOL bIsUnicode;
-    WW8_FC nActPosData = WW8PLCFx_PCD::TransformPieceAddress(
-                                        SVBT32ToLong( ( (WW8_PCD*)pData )->fc ),
-                                        &bIsUnicode );
-
-//  rMaxPosData = nActPosData + ((rWwF.ccpText - nCpStart) * (bIsUnicode ? 2 : 1));
-
-    rMaxPosData = nActPosData + rWwF.ccpText - nCpStart;
-
-    return (0 < rMaxPosData);
 }
-*/
 
 BOOL WW8PLCFpcd_Iter::Get( long& rStart, long& rEnd, void*& rpValue )
 {
@@ -1796,10 +1688,6 @@ BOOL WW8PLCFpcd_Iter::Get( long& rStart, long& rEnd, void*& rpValue )
     rStart = rPLCF.pPLCF_PosArray[nIdx];
     rEnd = rPLCF.pPLCF_PosArray[nIdx + 1];
     rpValue = (void*)&rPLCF.pPLCF_Contents[nIdx * rPLCF.nStru];
-#ifdef DEBUG
-    WW8_PCD1* p = (WW8_PCD1*)rpValue;
-    p = p;
-#endif
     return TRUE;
 }
 
@@ -1911,7 +1799,7 @@ BOOL WW8PLCFx_Fc_FKP::WW8Fkp::SeekPos( WW8_FC nFc )
     if( nFc < ((WW8_FC*)pFkp)[0] )
     {
         nIdx = 0;
-        return FALSE;                   // Nicht gefunden: nPos unterhalb kleinstem Eintrag
+        return FALSE;       // Nicht gefunden: nPos unterhalb kleinstem Eintrag
     }
     // Search from beginning?
     if( (1 > nIdx) || (nFc < ((WW8_FC*)pFkp)[ nIdx-1 ]) )
@@ -1919,7 +1807,7 @@ BOOL WW8PLCFx_Fc_FKP::WW8Fkp::SeekPos( WW8_FC nFc )
 
     long nI   = nIdx ? nIdx : 1;
     long nEnd = nIMax;
-#ifndef KHZ_TEST0
+
     for(int n = (1==nIdx ? 1 : 2); n; --n )
     {
         for( ; nI <=nEnd; ++nI)
@@ -1933,17 +1821,9 @@ BOOL WW8PLCFx_Fc_FKP::WW8Fkp::SeekPos( WW8_FC nFc )
         nI   = 1;
         nEnd = nIdx-1;
     }
-#else
-    for( nI=1; nI<=nIMax; nI++){        // Suchen mit um 1 erhoehtem Index
-        if( nFc < ((WW8_FC*)pFkp)[nI] ){    // Position gefunden
-            nIdx = nI - 1;              // nI - 1 ist der richtige Index
-            return TRUE;                // ... und fertig
-        }
-    }
-#endif
-    nIdx = nIMax;                       // Nicht gefunden, groesser als alle Eintraege
+    nIdx = nIMax;               // Nicht gefunden, groesser als alle Eintraege
     return FALSE;
-}//32,0,1,32,0,0,1,1,2,2,3,4,5,
+}
 
 BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::Get( WW8_FC& rStart, WW8_FC& rEnd, short& rLen )
 {
@@ -2173,9 +2053,6 @@ void WW8PLCFx_Fc_FKP::SetIdx( ULONG nIdx )
 
 BOOL WW8PLCFx_Fc_FKP::SeekPos( WW8_FC nFcPos )
 {
-    //hack, In case of emergency enable nHack
-    //USHORT nHack = pPLCF->GetIdx();
-
     // StartPos for next Where()
     SetStartFc( nFcPos );
 
@@ -2192,20 +2069,13 @@ BOOL WW8PLCFx_Fc_FKP::SeekPos( WW8_FC nFcPos )
         if( nPo != pFkp->GetFilePos() )
             DELETEZ( pFkp );
         else
-        {
             pFkp->SeekPos( nFcPos );
-            //hack
-            //pPLCF->SetIdx(nHack);
-        }
     }
     return bRet;
 }
 
 WW8_FC WW8PLCFx_Fc_FKP::Where()
 {
-//  if( bDontModify )
-//      return pFkp ? pFkp->Where() : 0;
-
     if( !pFkp )
     {
         if( !NewFkp() )
@@ -2226,17 +2096,16 @@ BYTE* WW8PLCFx_Fc_FKP::GetSprms( WW8_FC& rStart, WW8_FC& rEnd, long& rLen )
     rLen = 0;                               // Default
     rStart = rEnd = LONG_MAX;
 
-    if( !pFkp ){                            // Fkp nicht da ?
+    if( !pFkp )     // Fkp not there ?
+    {
         if( !NewFkp() )
             return 0;
     }
 
     short nLen = 0;
     BYTE* pPos = pFkp->Get( rStart, rEnd, nLen );
-    if( rStart == LONG_MAX )
-    {               // nicht gefunden
+    if( rStart == LONG_MAX )    //Not found
         return 0;
-    }
     rLen = nLen;
     return pPos;
 }
@@ -2245,17 +2114,16 @@ BYTE* WW8PLCFx_Fc_FKP::GetSprms( WW8_FC& rStart, WW8_FC& rEnd, long& rLen )
 
 WW8PLCFx& WW8PLCFx_Fc_FKP::operator ++( int )
 {
-    if( !pFkp ){
-//      ASSERT( FALSE, "pFkp fehlt");
-//      return *this;
+    if( !pFkp )
+    {
         if( !NewFkp() )
             return *this;
     }
 
     (*pFkp)++;
-    if( pFkp->Where() == LONG_MAX ){
+    if( pFkp->Where() == LONG_MAX )
         NewFkp();
-    }
+
     return *this;
 }
 
@@ -2271,7 +2139,6 @@ void WW8PLCFx_Fc_FKP::GetPCDSprms( WW8PLCFxDesc& rDesc )
     rDesc.nSprmsLen = 0;
     if( pPCDAttrs )
     {
-#if 1
         if( !pFkp )
         {
             DBG_WARNING(
@@ -2279,59 +2146,7 @@ void WW8PLCFx_Fc_FKP::GetPCDSprms( WW8PLCFxDesc& rDesc )
             if( !NewFkp() )
                 return;
         }
-
         pPCDAttrs->GetSprms( &rDesc );
-#else
-        if( !pFkp )
-        {
-            DBG_WARNING( "+Problem: GetPCDSprms: NewFkp noetig ( kein const moeglich )" );
-            if( !NewFkp() )
-                return;
-        }
-
-
-        long nFcPos, nEnd;              // FCs
-        short nLen;
-        pFkp->Get( nFcPos, nEnd, nLen );
-
-        WW8PLCFpcd_Iter* pIter = pPCDAttrs->GetIter();
-
-    /**************************************/
-        ULONG nSaveIdx = pIter->GetIdx();
-        for( int nLoop = 0; 2 > nLoop; ++nLoop )
-        {
-            long nCpStart, nCpEnd;
-            void* pData;
-
-            if( pIter->Get( nCpStart, nCpEnd, pData ) )
-            {
-                BOOL bIsUnicode = FALSE;
-                INT32 nFcStart  = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
-                if( 7 < GetVersion() )
-                    nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart, bIsUnicode );
-
-                INT32 nLen = (nCpEnd - nCpStart) * (bIsUnicode ? 2 : 1);
-
-                if( nFcPos >= nFcStart && nFcPos < nFcStart + nLen )
-                {
-                    // gefunden
-                    pPCDAttrs->GetSprms( &rDesc );
-                    break;
-                }
-            }
-            if( !nLoop )
-            {
-                ULONG nFoundIdx = pIter->FindIdx( nFcPos );
-                if( nFoundIdx > pIter->GetIMax())
-                {
-                    break;
-                }
-                pIter->SetIdx( nFoundIdx );
-            }
-        }
-        pIter->SetIdx( nSaveIdx );
-    /**************************************/
-#endif
     }
 }
 
@@ -2430,11 +2245,6 @@ void WW8PLCFx_Cp_FKP::SetPCDIdx( ULONG nIdx )
 
 BOOL WW8PLCFx_Cp_FKP::SeekPos( WW8_CP nCpPos )
 {
-/*
-    WW8_FC nTargetFc = WW8Cp2Fc( nCpPos, nFcMin );
-    return (LONG_MAX != nTargetFc)
-        && WW8PLCFx_Fc_FKP::SeekPos( nTargetFc );
-*/
     if( pPcd )  // Complex
     {
         if( !pPcd->SeekPos( nCpPos ) )  // Piece setzen
@@ -2451,8 +2261,6 @@ BOOL WW8PLCFx_Cp_FKP::SeekPos( WW8_CP nCpPos )
 WW8_CP WW8PLCFx_Cp_FKP::Where()
 {
     WW8_FC nFc = WW8PLCFx_Fc_FKP::Where();
-/*  if( LONG_MAX == nFc )
-        return LONG_MAX;*/
     if( pPcd )
         return pPcd->AktPieceStartFc2Cp( nFc ); // Piece ermitteln
     return rSBase.WW8Fc2Cp( nFc/*,TRUE*/ );     // KEINE Piece-Table !!!
@@ -2460,19 +2268,36 @@ WW8_CP WW8PLCFx_Cp_FKP::Where()
 
 void WW8PLCFx_Cp_FKP::GetSprms( WW8PLCFxDesc* p )
 {
-    //HACK TIME
     WW8_CP nOrigCp = p->nStartPos;
 
-    p->pMemPos = WW8PLCFx_Fc_FKP::GetSprms( p->nStartPos, p->nEndPos, p->nSprmsLen );
+    if (!GetDirty())        //Normal case
+    {
+        p->pMemPos = WW8PLCFx_Fc_FKP::GetSprms( p->nStartPos, p->nEndPos,
+            p->nSprmsLen );
+    }
+    else
+    {
+        /*
+        #93702#
+        For the odd case where we have a location in a fastsaved file which
+        does not have an entry in the FKP, perhaps its para end is in the next
+        piece, or perhaps the cp just doesn't exist at all in this document.
+        AdvSprm doesn't know so it sets the PLCF as dirty and we figure out
+        in this method what the situation is
 
-#ifdef DEBUG
-    if( ePLCF == PAP ) // um hier einen Brechpunkt zu setzen
-        ePLCF = PAP;
-#endif
+        It doesn't exist then the piece iterator will not be able to find it.
+        Otherwise our cool fastsave algorithm can be brought to bear on the
+        problem.
+        */
+        ULONG nOldPos = pPieceIter->GetIdx();
+        BOOL bOk = pPieceIter->SeekPos( nOrigCp );
+        pPieceIter->SetIdx( nOldPos );
+        if (!bOk)
+            return;
+    }
 
     if( pPcd )  // Piece-Table vorhanden !!!
     {
-
         // Init ( noch kein ++ gerufen )
         if( (nAttrStart >  nAttrEnd) || (nAttrStart == -1) )
         {
@@ -2620,83 +2445,11 @@ void WW8PLCFx_Cp_FKP::GetSprms( WW8PLCFxDesc* p )
     }
 }
 
-
-// WW8PLCF_Cp_Fkp::SearchParaEnd kann einfacher durchgefuehrt werden, wenn das
-// Flag "Zeilenende im Piece" in der Piecetable ausgewertet wird.
-void WW8PLCFx_Cp_FKP::SearchParaEnd( long nOldEndCp )
-{
-    if( !bComplex )
-    {
-        ASSERT( !this, "SearchParaEnd fuer Non-Complex File gerufen" );
-        return;
-    }
-    if( ePLCF != PAP )
-    {
-        ASSERT( !this, "SearchParaEnd fuer Non-PAP gerufen" );
-        return;
-    }
-    long nFkpLen;                           // Fkp-Eintrag
-    long nPcdStart, nPcdEnd;                // Piece-Grenzen
-
-    WW8PLCFx_Fc_FKP::GetSprms( nAttrStart, nAttrEnd, nFkpLen ); // Fkp-Eintrag holen
-/*  if( (LONG_MAX == nAttrStart) || (LONG_MAX == nAttrEnd) )
-    {
-        return;
-    }*/
-    eCutT eC = pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
-    if( eC == CUT_NONE )            // neuer Eintrag ganz im akt. Piece
-    {
-        ASSERT( !this, "Nanu?" );
-        return;                             // und fertig
-    }
-    WW8PLCFpcd_Iter* pIter = pPcd->GetPLCFIter();
-    void* pData;
-    do{
-        (*pPcd)++;                                      //  naechstes Piece
-
-
-        if( GetPCDIdx() >= GetPCDIMax() )
-        {
-            nAttrStart = nAttrEnd = LONG_MAX;   // kein Piece mehr vorhanden
-            return;
-        }
-
-
-        if( !pIter->Get( nPcdStart, nPcdEnd, pData ) ){ // Piece-Grenzen holen
-#ifdef DEBUG
-            WW8_PCD1* p = (WW8_PCD1*)pData;
-            p = p;
-#endif
-            nAttrStart = nAttrEnd = LONG_MAX;   // kein Piece mehr vorhanden
-            return;
-        }
-#ifdef DEBUG
-        WW8_PCD1* p = (WW8_PCD1*)pData;
-        p = p;
-#endif
-
-    }while( SVBT8ToByte( ( (WW8_PCD*)pData )->aBits1 ) & 0x1 );
-                                                // bis NL in Piece
-
-    long nPos = rSBase.WW8Cp2Fc( nPcdStart);
-    if( !WW8PLCFx_Fc_FKP::SeekPos( nPos ) )
-    {
-//      ASSERT( !this, " Can't seek to Piece Start" );
-//      nAttrStart = nAttrEnd = LONG_MAX;   // kein Piece mehr vorhanden
-        return;
-    }
-    WW8PLCFx_Fc_FKP::GetSprms( nAttrStart, nAttrEnd, nFkpLen ); // Fkp-Eintrag holen
-    eC = pPcd->AktPieceFc2Cp(  nAttrStart, nAttrEnd, &rSBase ); // wird in CPs gebraucht
-
-    nAttrStart = nOldEndCp;     // Aufziehen ueber ganzen Absatz, unabhaengig
-                                // davon, wieviel Pieces das sind
-}
-
 WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
 {
     WW8PLCFx_Fc_FKP::operator ++( 0 );
-    if(    !bComplex
-        || !pPcd )                              // !pPcd: Notbremse
+    // !pPcd: Notbremse
+    if ( !bComplex || !pPcd )
         return *this;
 
     if( GetPCDIdx() >= GetPCDIMax() )           // End of PLCF
@@ -2705,65 +2458,26 @@ WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
         return *this;
     }
 
-// ohoho
     long nFkpLen;                               // Fkp-Eintrag
     long nOldEndCp = nAttrEnd;
 
-    WW8PLCFx_Fc_FKP::GetSprms( nAttrStart, nAttrEnd, nFkpLen ); // Fkp-Eintrag holen
-#if 1
-    pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
-    bLineEnd = (ePLCF == PAP);
-#else
-    long nPcdStart, nPcdEnd, nPcdLen;           // Piece-Grenzen
-    eCutT eC = pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
-    bLineEnd = !( eC & CUT_END ) && ePLCF == PAP;
-    if( !( eC & CUT_START ) ){                  // neuer Eintrag faengt im
-                                                // akt. Piece an
-#   ifdef DEBUG
-        if( ePLCF == PAP )
-            ePLCF = PAP;                    // um hier einen Brechpunkt zu setzen
-        if( ePLCF == CHP )
-            ePLCF = CHP;                    // um hier einen Brechpunkt zu setzen
-#   endif
-        return *this;               // und fertig
-    }
-                                    // naechster Eintrag im naechsten Piece
-    if( ePLCF == PAP )
-    {
-        SearchParaEnd( nOldEndCp );
-        bLineEnd = TRUE;
-        return *this;
-    }
-
-    //  naechstes Piece
-    bLineEnd = FALSE;
-    (*pPcd)++;
-    pPcd->GetNoSprms( nPcdStart, nPcdEnd, nPcdLen );
-    // Piece-Grenzen holen
-    if( !WW8PLCFx_Fc_FKP::SeekPos( rSBase.WW8Cp2Fc( nPcdStart ) ) )
-    {
-        ASSERT( nPcdStart == LONG_MAX, "Chp-SeekPos ging schief" );
-        nAttrStart = nAttrEnd = LONG_MAX;
-        goto Ret;
-    }
     // Fkp-Eintrag holen
     WW8PLCFx_Fc_FKP::GetSprms( nAttrStart, nAttrEnd, nFkpLen );
-    eC  = pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
-Ret:
-#endif
+
+    pPcd->AktPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
+    bLineEnd = (ePLCF == PAP);
     return *this;
 }
 
 //-----------------------------------------
 //-----------------------------------------
 
-WW8PLCFx_SEPX::WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTblSt, WW8Fib& rFib, WW8_CP nStartCp )
-: pStrm( pSt ), WW8PLCFx( rFib.nVersion, TRUE ), nArrMax( 256 ), nSprmSiz( 0 )
+WW8PLCFx_SEPX::WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTblSt, WW8Fib& rFib,
+    WW8_CP nStartCp ) : pStrm( pSt ), WW8PLCFx( rFib.nVersion, TRUE ),
+    nArrMax( 256 ), nSprmSiz( 0 )
 {
     pPLCF =   rFib.lcbPlcfsed
-            ? new WW8PLCF( pTblSt, rFib.fcPlcfsed,
-                            rFib.lcbPlcfsed,
-                            12, nStartCp )
+            ? new WW8PLCF(pTblSt, rFib.fcPlcfsed, rFib.lcbPlcfsed, 12, nStartCp)
             : 0;
 
     pSprms = new BYTE[nArrMax];     // maximale Laenge
@@ -3725,9 +3439,7 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
     for( i=0; i < nPLCF; i++)
     {
         register WW8PLCFxDesc* p = &aD[i];
-#ifdef CRUEL_CUT
-        p->nCpOfs = ( p == pChp || p == pPap || p == pBkm ) ? nCpO : 0;
-#else
+
         /*
         ##516##,##517##
         For subdocuments we modify the cp of properties to be relative to
@@ -3737,7 +3449,7 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
         */
         p->nCpOfs = ( p == pChp || p == pPap || p == pBkm || p == pPcd ||
             p == pPcdA ) ? nCpO : 0;
-#endif
+
         p->nCp2OrIdx = 0;
         p->bFirstSprm = FALSE;
         p->pIdStk = 0;
@@ -3795,9 +3507,6 @@ WW8PLCFMan::~WW8PLCFMan()
 // 2. CP, wo ist naechste Attr.-Aenderung
 short WW8PLCFMan::WhereIdx( BOOL* pbStart, long* pPos )
 {
-#ifdef USE_6AM_CHECKIN
-    BOOL bIgnore;
-#endif
     long next = LONG_MAX;   // SuchReihenfolge:
     short nextIdx = -1;     // erst Enden finden ( CHP, PAP, ( SEP ) ),
     BOOL bStart = TRUE;     // dann Anfaenge finden ( ( SEP ), PAP, CHP )
@@ -3837,13 +3546,13 @@ short WW8PLCFMan::WhereIdx( BOOL* pbStart, long* pPos )
     return nextIdx;
 }
 
-WW8_CP WW8PLCFMan::Where()      // gibt die CP-Pos der naechsten Attribut-Aenderung zurueck
+// gibt die CP-Pos der naechsten Attribut-Aenderung zurueck
+WW8_CP WW8PLCFMan::Where()
 {
     long l;
     WhereIdx( 0, &l );
     return l;
 }
-
 
 void WW8PLCFMan::SeekPos( long nNewCp )
 {
@@ -4032,11 +3741,18 @@ void WW8PLCFMan::AdvSprm( short nIdx, BOOL bStart )
                 p->pMemPos = 0;
                 p->nStartPos = p->nOrigEndPos+p->nCpOfs;
 
-                //On failed seek we have run out of sprms
+                //#93702# On failed seek we have run out of sprms, probably.
+                //But if its a fastsaved file (has pPcd) then we may be just
+                //in a sprm free gap between pieces that have them, so set
+                //dirty flag in sprm finder to consider than.
                 if (!(*p->pPLCFx).SeekPos(p->nStartPos))
+                {
                     p->nEndPos = LONG_MAX;
-                else
+                    p->pPLCFx->SetDirty(TRUE);
+                }
+                if (!p->pPLCFx->GetDirty() || pPcd)
                     GetNewSprms( *p );
+                p->pPLCFx->SetDirty(FALSE);
             }
             else
             {
