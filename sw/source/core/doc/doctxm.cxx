@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 16:36:17 $
+ *  last change: $Author: jp $ $Date: 2001-05-14 13:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1137,7 +1137,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
 void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
-    sal_Unicode nDeli, nLastDeli = 0;
+    String sDeli, sLastDeli;
     USHORT  i = 0;
     while( i < aSortArr.Count() )
     {
@@ -1149,19 +1149,19 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
         if( nLevel == FORM_ALPHA_DELIMITTER )
             continue;
 
-        nDeli = rIntl.GetIndexChar( aSortArr[i]->GetTxt() );
+        sDeli = rIntl.GetIndexChar( aSortArr[i]->GetTxt() );
 
         // Delimitter schon vorhanden ??
-        if( nDeli && nLastDeli != nDeli )
+        if( sDeli.Len() && sLastDeli != sDeli )
         {
             // alle kleiner Blank wollen wir nicht haben -> sind Sonderzeichen
-            if( ' ' <= nDeli )
+            if( ' ' <= sDeli.GetChar( 0 ) )
             {
-                SwTOXCustom* pCst = new SwTOXCustom(nDeli, FORM_ALPHA_DELIMITTER,
+                SwTOXCustom* pCst = new SwTOXCustom( sDeli, FORM_ALPHA_DELIMITTER,
                                                 rIntl );
-                aSortArr.Insert(pCst, i++);
+                aSortArr.Insert( pCst, i++ );
             }
-            nLastDeli = nDeli;
+            sLastDeli = sDeli;
         }
 
         // Skippen bis gleibhes oder kleineres Level erreicht ist
@@ -2073,11 +2073,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                 if(GetOptions() & TOI_FF)
                 {
                     if ( nCount >= 1 )
-                    {
-                        USHORT eText = nCount > 1 ? FOLLOWTEXT_PAGES
-                                                     : FOLLOWTEXT_PAGE;
-                        aNumStr += rIntl.GetFollowingText( eText );
-                    }
+                        aNumStr += rIntl.GetFollowingText( nCount > 1 );
                 }
                 else
                 {
@@ -2115,11 +2111,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         if(GetOptions() & TOI_FF)
         {
             if( nCount >= 1 )
-            {
-                USHORT eText = nCount > 1 ? FOLLOWTEXT_PAGES
-                                                    : FOLLOWTEXT_PAGE;
-                aNumStr += rIntl.GetFollowingText( eText );
-            }
+                aNumStr += rIntl.GetFollowingText( nCount > 1 );
         }
         else
         {

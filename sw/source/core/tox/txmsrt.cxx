@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 16:36:38 $
+ *  last change: $Author: jp $ $Date: 2001-05-14 13:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
+
 #ifndef _TXTFLD_HXX
 #include <txtfld.hxx>
 #endif
@@ -143,6 +144,9 @@
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
 #endif
+#ifndef _TOXHLP_HXX
+#include <toxhlp.hxx>
+#endif
 
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
@@ -175,12 +179,13 @@ SwTOXInternational::SwTOXInternational( const SwTOXInternational& rIntl )
 void SwTOXInternational::Init()
 {
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( eLang ));
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
+
     bNewCollator = eLang != GetAppLanguage();
     if( bNewCollator )
     {
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
 
         pCollator = new CollatorWrapper( xMSF );
         pIgnCsCollator = new CollatorWrapper( xMSF );
@@ -194,8 +199,9 @@ void SwTOXInternational::Init()
         pIgnCsCollator = &::GetAppCollator();
     }
 
-    pIntl = new International( eLang );
+    pIndexWrapper = new IndexEntrySupplierWrapper( aLcl, xMSF );
     pCharClass = new CharClass( aLcl );
+
 }
 
 SwTOXInternational::~SwTOXInternational()
@@ -206,7 +212,7 @@ SwTOXInternational::~SwTOXInternational()
         delete pIgnCsCollator;
     }
     delete pCharClass;
-    delete pIntl;
+    delete pIndexWrapper;
 }
 
 String SwTOXInternational::ToUpper( const String& rStr, xub_StrLen nPos ) const
@@ -225,14 +231,14 @@ sal_Int32 SwTOXInternational::Compare( const String& rTxt1, const String& rTxt2,
     return pCmp->compareString( rTxt1, rTxt2 );
 }
 
-sal_Unicode SwTOXInternational::GetIndexChar( const String& rTxt ) const
+String SwTOXInternational::GetIndexChar( const String& rTxt ) const
 {
-    return pIntl->GetIndexChar( rTxt );
+    return pIndexWrapper->GetIndexChar( rTxt );
 }
 
-String SwTOXInternational::GetFollowingText( USHORT nType ) const
+String SwTOXInternational::GetFollowingText( BOOL bMorePages ) const
 {
-    return pIntl->GetFollowingText( (FollowingText)nType );
+    return pIndexWrapper->GetFollowingText( bMorePages );
 }
 
 /*--------------------------------------------------------------------

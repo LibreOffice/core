@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 16:25:40 $
+ *  last change: $Author: jp $ $Date: 2001-05-14 13:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,20 +64,17 @@
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
-#ifndef _INTN_HXX
-#include <tools/intn.hxx>
-#endif
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
 
-class International;
 class CharClass;
 class SwCntntNode;
 class SwTxtNode;
 class SwTxtTOXMark;
 class SwIndex;
 class SwFmtFld;
+class IndexEntrySupplierWrapper;
 
 enum TOXSortType
 {
@@ -105,7 +102,7 @@ SV_DECL_VARARR( SwTOXSources, SwTOXSource, 0, 10 )
 
 class SwTOXInternational
 {
-    International* pIntl;
+    IndexEntrySupplierWrapper* pIndexWrapper;
     CollatorWrapper *pCollator, *pIgnCsCollator;
     CharClass* pCharClass;
     LanguageType eLang;
@@ -131,8 +128,8 @@ public:
         return -1 == Compare( rTxt1, rTxt2, bIgnoreCase );
     }
 
-    sal_Unicode GetIndexChar( const String& rTxt ) const;
-    String GetFollowingText( USHORT nType ) const;
+    String GetIndexChar( const String& rTxt ) const;
+    String GetFollowingText( BOOL bMorePages ) const;
 
     String ToUpper( const String& rStr, xub_StrLen nPos ) const;
     inline BOOL IsNumeric( const String& rStr ) const;
@@ -207,7 +204,8 @@ private:
 
 struct SwTOXCustom : public SwTOXSortTabBase
 {
-    SwTOXCustom(const String& rKey, USHORT nLevel, const SwTOXInternational& rIntl );
+    SwTOXCustom( const String& rKey, USHORT nLevel,
+                    const SwTOXInternational& rIntl );
 
     virtual USHORT GetLevel() const;
     virtual BOOL   operator==( const SwTOXSortTabBase& );
