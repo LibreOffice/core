@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:45:30 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 13:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,7 @@ public:
     void setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode);
 protected:
     // IWarningsContainer
+    virtual void appendWarning(const ::com::sun::star::sdbc::SQLException& _rWarning);
     virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning);
     virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext);
 

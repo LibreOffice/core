@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:28:16 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 13:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
                          const Reference< XConnection >& _rxMaster, const Reference< XMultiServiceFactory >& _rxORB)
             :OConnectionRerouter(_rxMaster)
             ,OSubComponent(m_aMutex, static_cast< OWeakObject* >(&_rDB))
-            ,m_aQueries(*this, m_aMutex, static_cast< XNameContainer* >(&_rDB.m_aCommandDefinitions), _rDB.m_aCommandDefinitions.getConfigLocation().cloneAsRoot(), _rxORB)
+            ,m_aQueries(*this, m_aMutex, static_cast< XNameContainer* >(&_rDB.m_aCommandDefinitions), _rDB.m_aCommandDefinitions.getConfigLocation().cloneAsRoot(), _rxORB, this)
                 // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
                 // container would do it's own refcounting, it would have to aquire m_pMutex
                 // same for tables
@@ -466,6 +466,12 @@ OConnection::~OConnection()
 
 
 // IWarningsContainer
+//------------------------------------------------------------------------------
+void OConnection::appendWarning(const SQLException& _rWarning)
+{
+    implConcatWarnings(m_aAdditionalWarnings, makeAny(_rWarning));
+}
+
 //------------------------------------------------------------------------------
 void OConnection::appendWarning(const SQLContext& _rContext)
 {
