@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:08:26 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <vcl/wrkwin.hxx>
 #endif
 #ifndef _LINKMGR_HXX //autogen
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 
 #include <svx/htmlcfg.hxx>
@@ -730,9 +730,9 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         rHTMLWrt.Strm() << sOut.GetBuffer();
 
         const String& aFName = rSection.GetLinkFileName();
-        String aURL( aFName.GetToken(0,so3::cTokenSeperator) );
-        String aFilter( aFName.GetToken(1,so3::cTokenSeperator) );
-        String aSection( aFName.GetToken(2,so3::cTokenSeperator) );
+        String aURL( aFName.GetToken(0,sfx2::cTokenSeperator) );
+        String aFilter( aFName.GetToken(1,sfx2::cTokenSeperator) );
+        String aSection( aFName.GetToken(2,sfx2::cTokenSeperator) );
 
         String aEncURL( INetURLObject::AbsToRel(aURL,
                                           INetURLObject::WAS_ENCODED,
