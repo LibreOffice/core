@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:23 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 15:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,9 +635,9 @@ BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, const String& rProperty ) c
         }
         rVal <<= aRet;
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_LOCALE     .pName, 0, UNO_NAME_LOCALE .nNameLen))
-        rVal <<= OUString(GetSortAlgorithm());
     else if(rProperty.EqualsAscii(UNO_NAME_SORT_ALGORITHM     .pName, 0, UNO_NAME_SORT_ALGORITHM .nNameLen))
+        rVal <<= OUString(GetSortAlgorithm());
+    else if(rProperty.EqualsAscii(UNO_NAME_LOCALE     .pName, 0, UNO_NAME_LOCALE .nNameLen))
         rVal <<= SvxCreateLocale(GetLanguage());
     else
         return FALSE;
@@ -703,14 +703,14 @@ BOOL    SwAuthorityFieldType::PutValue( const Any& rVal, const String& rProperty
             }
         }
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_LOCALE     .pName, 0, UNO_NAME_LOCALE .nNameLen))
+    else if(rProperty.EqualsAscii(UNO_NAME_SORT_ALGORITHM     .pName, 0, UNO_NAME_SORT_ALGORITHM .nNameLen))
     {
         OUString sAlgorithm;
         bRet = rVal >>= sAlgorithm;
         if(bRet)
             SetSortAlgorithm(sAlgorithm);
     }
-    else if(rProperty.EqualsAscii(UNO_NAME_SORT_ALGORITHM     .pName, 0, UNO_NAME_SORT_ALGORITHM .nNameLen))
+    else if(rProperty.EqualsAscii(UNO_NAME_LOCALE     .pName, 0, UNO_NAME_LOCALE .nNameLen))
     {
         Locale aLocale;
         bRet = rVal >>= aLocale;
