@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2002-06-26 14:37:20 $
+ *  last change: $Author: aw $ $Date: 2002-06-28 13:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2330,9 +2330,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'l' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         nPointCount++;
@@ -2345,9 +2346,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'v' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         nPointCount++;
                     }
@@ -2357,9 +2359,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 's' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
@@ -2372,9 +2375,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'c' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
@@ -2391,9 +2395,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'q' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
@@ -2410,9 +2415,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 't' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
 
@@ -2427,9 +2433,11 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'a' :
                 {
                     DBG_ERROR("XMLIMP: non-interpreted tags in svg:d element (elliptical arc)!");
+                    nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
@@ -2510,9 +2518,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                     nInnerIndex = 0L;
 
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
                         sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
 
@@ -2540,9 +2549,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'L' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
                         sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
 
@@ -2570,9 +2580,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'H' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
                         sal_Int32 nY(mnLastY);
 
@@ -2596,9 +2607,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'V' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         sal_Int32 nX(mnLastX);
                         sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
 
@@ -2622,9 +2634,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'S' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         sal_Int32 nX1;
                         sal_Int32 nY1;
                         sal_Int32 nX2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
@@ -2684,9 +2697,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'C' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         sal_Int32 nX1(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
                         sal_Int32 nY1(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
                         sal_Int32 nX2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
@@ -2732,9 +2746,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'Q' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         sal_Int32 nXX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
                         sal_Int32 nYY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
                         sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
@@ -2782,9 +2797,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'T' :
                 {
                     nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         sal_Int32 nXX;
                         sal_Int32 nYY;
                         sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
@@ -2847,9 +2863,11 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'a' :
                 {
                     DBG_ERROR("XMLIMP: non-interpreted tags in svg:d element (elliptical arc)!");
+                    nPos++;
+                    Imp_SkipSpaces(aStr, nPos, nLen);
+
                     while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
-                        Imp_SkipSpaces(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
                         Imp_SkipDoubleAndSpacesAndCommas(aStr, nPos, nLen);
