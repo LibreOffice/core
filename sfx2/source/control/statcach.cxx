@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-28 16:33:38 $
+ *  last change: $Author: mba $ $Date: 2002-04-11 08:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                     }
                     else
                     {
+                        rDispat._FindServer( nId, aSlotServ, sal_False );
                         pDispatch = new BindDispatch_Impl( xDisp, aURL, this );
                         pDispatch->acquire();
 
@@ -366,7 +367,6 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 else
                 {
                     rDispat._FindServer( nId, aSlotServ, sal_False );
-                    const SfxSlot* pSlot = aSlotServ.GetSlot();
                     pDispatch = new BindDispatch_Impl( xDisp, aURL, this );
                     pDispatch->acquire();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
+ *  last change: $Author: mba $ $Date: 2002-04-11 08:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,10 +725,6 @@ sal_uInt32 SfxFactoryFilterContainer::GetFilter4Content(
 {
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pTargetItem, SfxStringItem,
                      SID_TARGETNAME, sal_False);
-    SFX_ITEMSET_ARG( rMedium.GetItemSet(), pDontItem, SfxBoolItem,
-                     SID_FILTER_DONTDETECTONCONTENT, sal_False);
-    if( pDontItem && pDontItem->GetValue() )
-        return 0;
 
     if ( *ppFilter && ( (*ppFilter)->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
         return 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-09 08:18:03 $
+ *  last change: $Author: mba $ $Date: 2002-04-11 08:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,533 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 
     if ( nSlotId == SID_OPENURL )
         nSlotId = SID_OPENDOC;
+    if ( nSlotId == SID_SAVEASURL )
+        nSlotId = SID_SAVEASDOC;
+
+    sal_Int32 nCount = rArgs.getLength();
+    const ::com::sun::star::beans::PropertyValue* pPropsVal = rArgs.getConstArray();
+    if ( pSlot->GetType()->Type() != TYPE(SfxVoidItem) )
+    {
+        // slot is a property
+        SfxPoolItem* pItem = pSlot->GetType()->CreateItem();
+        pItem->SetWhich( nSlotId );
+        const SfxType* pType = pSlot->GetType();
+        USHORT nSubCount = pType->nAttribs;
+        if ( nSubCount == 0 )
+        {
+            // simple property
+            DBG_ASSERT( nCount==1, "Wrong number of parameters!" );
+            const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[0];
+            String aName = rProp.Name;
+            if ( aName.CompareToAscii( pSlot->pUnoName ) == COMPARE_EQUAL )
+            {
+                if( pItem->PutValue( rProp.Value ) )
+                    rSet.Put( *pItem );
+                else
+                    DBG_ERROR("Property not convertable!");
+            }
+            else
+                DBG_ERROR("Property name does not match!");
+        }
+        else
+        {
+            // complex property; collect sub items and reconstruct complex item
+            for ( sal_uInt16 n=0; n<nCount; n++ )
+            {
+                const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
+                const char* pName = ByteString( rProp.Name.getStr(), RTL_TEXTENCODING_UTF8 ).GetBuffer();
+                for ( USHORT nSub=0; nSub<nSubCount; nSub++ )
+                {
+                    // search sub item by name
+                    if ( !strcmp( pType->aAttrib[nSub].pName, pName ) )
+                        pItem->PutValue( rProp.Value, (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID );
+                }
+
+                rSet.Put( *pItem );
+            }
+        }
+
+        delete pItem;
+    }
+    else
+    {
+        // slot is a method
+        for ( sal_uInt16 nArgs=0; nArgs<pSlot->nArgDefCount; nArgs++ )
+        {
+            const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArgs );
+            SfxPoolItem* pItem = rArg.CreateItem();
+            pItem->SetWhich( rArg.nSlotId );
+            const SfxType* pType = rArg.pType;
+            USHORT nSubCount = pType->nAttribs;
+            if ( nSubCount == 0 )
+            {
+                for ( sal_uInt16 n=0; n<nCount; n++ )
+                {
+                    const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
+                    String aName = rProp.Name;
+                    if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
+                    {
+                        if( pItem->PutValue( rProp.Value ) )
+                            rSet.Put( *pItem );
+                        else
+                            DBG_ERROR("Property not convertable!");
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                // complex argument; collect sub items and reconstruct complex item
+                for ( sal_uInt16 n=0; n<nCount; n++ )
+                {
+                    const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
+                    const char* pName = ByteString( rProp.Name.getStr(), RTL_TEXTENCODING_UTF8 ).GetBuffer();
+                    for ( USHORT nSub=0; nSub<nSubCount; nSub++ )
+                    {
+                        // search sub item by name
+                        if ( !strcmp( pType->aAttrib[nSub].pName, pName ) )
+                            pItem->PutValue( rProp.Value, (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID );
+                    }
+                }
+
+                rSet.Put( *pItem );
+            }
+
+            delete pItem;
+        }
+
+        // special additional parameters for some slots
+        if ( nSlotId == SID_NEWWINDOW )
+        {
+            for ( sal_uInt16 n=0; n<nCount; n++ )
+            {
+                const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
+                String aName = rProp.Name;
+                if ( aName == sFrame )
+                    rSet.Put( SfxUnoAnyItem( SID_FILLFRAME, rProp.Value ) );
+                else if ( aName == sHidden && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                    rSet.Put( SfxBoolItem( SID_HIDDEN, *((sal_Bool*)rProp.Value.getValue()) ) );
+            }
+        }
+        else if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
+        {
+            for ( sal_uInt16 n=0; n<nCount; n++ )
+            {
+                const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
+                String aName = rProp.Name;
+                if ( aName == sModel )
+                    rSet.Put( SfxUnoAnyItem( SID_DOCUMENT, rProp.Value ) );
+                else if ( aName == sStatusInd )
+                    rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
+                else if ( aName == sViewData )
+                    rSet.Put( SfxUnoAnyItem( SID_VIEW_DATA, rProp.Value ) );
+                else if ( aName == sFilterData )
+                    rSet.Put( SfxUnoAnyItem( SID_FILTER_DATA, rProp.Value ) );
+                else if ( aName == sInputStream && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
+                    rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
+                else if ( aName == sPostData && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
+                    rSet.Put( SfxUnoAnyItem( SID_POSTDATA, rProp.Value ) );
+                else if ( aName == sAsTemplate && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                    rSet.Put( SfxBoolItem( SID_TEMPLATE, *((sal_Bool*)rProp.Value.getValue()) ) );
+                else if ( aName == sOpenNewView && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                    rSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, *((sal_Bool*)rProp.Value.getValue()) ) );
+                else if ( aName == sViewId && rProp.Value.getValueType() == ::getCppuType((const sal_Int16*)0) )
+                    rSet.Put( SfxUInt16Item( SID_VIEW_ID, *((sal_Int16*)rProp.Value.getValue()) ) );
+                else if ( aName == sPluginMode && rProp.Value.getValueType() == ::getCppuType((const sal_Int16*)0) )
+                    rSet.Put( SfxUInt16Item( SID_PLUGIN_MODE, *((sal_Int16*)rProp.Value.getValue()) ) );
+                else if ( aName == sReadOnly && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                    rSet.Put( SfxBoolItem( SID_DOC_READONLY, *((sal_Bool*)rProp.Value.getValue()) ) );
+                else if ( aName == sSelectionOnly && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                    rSet.Put( SfxBoolItem( SID_SELECTION, *((sal_Bool*)rProp.Value.getValue()) ) );
+                else if ( aName == sHidden && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                    rSet.Put( SfxBoolItem( SID_HIDDEN, *((sal_Bool*)rProp.Value.getValue()) ) );
+                else if ( aName == sSilent && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                    rSet.Put( SfxBoolItem( SID_SILENT, *((sal_Bool*)rProp.Value.getValue()) ) );
+                else if ( aName == sPreview && rProp.Value.getValueType() == ::getBooleanCppuType() )
+                    rSet.Put( SfxBoolItem( SID_PREVIEW, *((sal_Bool*)rProp.Value.getValue()) ) );
+                else if ( aName == sURL && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                    rSet.Put( SfxStringItem( SID_OPENURL, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+                else if ( aName == sOrigURL && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                    rSet.Put( SfxStringItem( SID_ORIGURL, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+                else if ( aName == sSalvageURL && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                    rSet.Put( SfxStringItem( SID_DOC_SALVAGE, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+                else if ( aName == sFrameName && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                    rSet.Put( SfxStringItem( SID_TARGETNAME, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+                else if ( aName == sContentType && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                    rSet.Put( SfxStringItem( SID_CONTENTTYPE, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+                else if ( aName == sTemplateName && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                    rSet.Put( SfxStringItem( SID_TEMPLATE_NAME, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+                else if ( aName == sTemplateRegionName && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                    rSet.Put( SfxStringItem( SID_TEMPLATE_REGIONNAME, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+                else if ( aName == sJumpMark && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                    rSet.Put( SfxStringItem( SID_JUMPMARK, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+                else if ( aName == sCharacterSet && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                    rSet.Put( SfxStringItem( SID_CHARSET, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+                else if ( aName == sPosSize && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                {
+                    String aPar = *((::rtl::OUString*)rProp.Value.getValue());
+                    Size aSize;
+                    Point aPos;
+                    DBG_ASSERT( sal_False, "TransformParameters()\nProperty \"PosSize\" isn't supported yet!\n" );
+                }
+            }
+        }
+    }
+}
+
+void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, const SfxSlot* pSlot )
+{
+    if ( !pSlot )
+        pSlot = SFX_SLOTPOOL().GetSlot( nSlotId );
+
+    if ( !pSlot)
+        return;
+
+    if ( nSlotId == SID_OPENURL )
+        nSlotId = SID_OPENDOC;
+    if ( nSlotId == SID_SAVEASURL )
+        nSlotId = SID_SAVEASDOC;
+
+    // find number of properties
+    sal_Int32 nProps=0;
+
+#ifdef DEBUG
+    sal_Int32 nItems=0;
+#endif
+
+    const SfxType *pType = pSlot->GetType();
+    if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
+    {
+        // slot is a property
+//        USHORT nWhich = rPool.GetWhich(nSlotId);
+        if ( rSet.GetItemState( nSlotId ) == SFX_ITEM_SET ) //???
+        {
+            USHORT nSubCount = pType->nAttribs;
+            if ( nSubCount )
+                // it's a complex property, we want it split into simple types
+                nProps = nSubCount;
+            else
+                nProps++;
+        }
+
+#ifdef DEBUG
+        nItems++;
+#endif
+    }
+    else
+    {
+        // slot is a method
+        USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
+        for ( USHORT nArg=0; nArg<nFormalArgs; ++nArg )
+        {
+            // check every formal argument of the method
+            const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
+//            USHORT nWhich = rPool.GetWhich( pArg->nSlotId );
+            if ( rSet.GetItemState( rArg.nSlotId ) == SFX_ITEM_SET ) //???
+            {
+                USHORT nSubCount = rArg.pType->nAttribs;
+                if ( nSubCount )
+                    // argument has a complex type, we want it split into simple types
+                    nProps += nSubCount;
+                else
+                    nProps++;
+#ifdef DEBUG
+                nItems++;
+#endif
+            }
+        }
+
+        if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
+        {
+            sal_Int32 nAdditional=0;
+            if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_OPENURL ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_ORIGURL ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_DOC_SALVAGE ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_INPUTSTREAM ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_TEMPLATE ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_OPEN_NEW_VIEW ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_VIEW_ID ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_VIEW_DATA ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_FILTER_DATA ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_PLUGIN_MODE ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_DOC_READONLY ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_SELECTION ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_CONTENTTYPE ) == SFX_ITEM_SET )
+                nAdditional++;
+    //        if ( rSet.GetItemState( SID_VIEW_POS_SIZE ) == SFX_ITEM_SET )
+    //            nAdditional++;
+            if ( rSet.GetItemState( SID_POSTDATA ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_CHARSET ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_TARGETNAME ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_TEMPLATE_NAME ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_TEMPLATE_REGIONNAME ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_HIDDEN ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_PREVIEW ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_SILENT ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_JUMPMARK ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_DOCUMENT ) == SFX_ITEM_SET )
+                nAdditional++;
+
+            nProps += nAdditional;
+#ifdef DEBUG
+            nItems += nAdditional;
+#endif
+        }
+    }
+
+#ifdef DEBUG
+    DBG_ASSERT( rSet.Count() == nItems, "Unknown item detected!" );
+    const USHORT *pRanges = rSet.GetRanges();
+    while ( *pRanges )
+    {
+        for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
+        {
+            const SfxPoolItem* pIt = rSet.GetItem( nWhich );
+            pIt = 0;
+        }
+    }
+#endif
+
+    // convert every item into a property
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> aSequ( nProps );
+    ::com::sun::star::beans::PropertyValue *pValue = aSequ.getArray();
+    nProps = 0;
+    if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
+    {
+        // slot is a property
+//        USHORT nWhich = rPool.GetWhich(nSlotId);
+        SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nSlotId, sal_False );
+        if ( pItem ) //???
+        {
+            USHORT nSubCount = pType->nAttribs;
+            if ( !nSubCount )
+            {
+                //rPool.FillVariable( *pItem, *pVar, eUserMetric );
+                pValue[nProps].Name = String( String::CreateFromAscii( pSlot->pUnoName ) ) ;
+                if ( pItem && !pItem->QueryValue( pValue[nProps].Value ) )
+                    DBG_ERROR("Item not convertable!");
+            }
+            else
+            {
+                // complex type, add a property value for every member of the struct
+                for ( USHORT n=1; n<=nSubCount; ++n )
+                {
+                    //rPool.FillVariable( *pItem, *pVar, eUserMetric );
+                    DBG_ASSERT( pType->aAttrib[n-1].nAID <= 255, "Member ID out of range" );
+                    pValue[nProps].Name = String( String::CreateFromAscii( pType->aAttrib[n-1].pName ) ) ;
+                    if ( pItem && !pItem->QueryValue( pValue[nProps++].Value, (BYTE) (sal_Int8) pType->aAttrib[n-1].nAID ) )
+                        DBG_ERROR("Item not convertable!");
+                }
+            }
+        }
+    }
+    else
+    {
+        // slot is a method
+        USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
+        for ( USHORT nArg=0; nArg<nFormalArgs; ++nArg )
+        {
+            const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
+//            USHORT nWhich = rPool.GetWhich( nArg.nSlotId );
+            SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, rArg.nSlotId, sal_False );
+            if ( pItem ) //???
+            {
+                USHORT nSubCount = rArg.pType->nAttribs;
+                if ( !nSubCount )
+                {
+                    //rPool.FillVariable( *pItem, *pVar, eUserMetric );
+                    pValue[nProps].Name = String( String::CreateFromAscii( rArg.pName ) ) ;
+                    if ( pItem && !pItem->QueryValue( pValue[nProps++].Value ) )
+                        DBG_ERROR("Item not convertable!");
+                }
+                else
+                {
+                    // complex type, add a property value for every member of the struct
+                    for ( USHORT n = 1; n <= nSubCount; ++n )
+                    {
+                        //rPool.FillVariable( rItem, *pVar, eUserMetric );
+                        DBG_ASSERT( rArg.pType->aAttrib[n-1].nAID <= 255, "Member ID out of range" );
+                        pValue[nProps].Name = String( String::CreateFromAscii( rArg.pType->aAttrib[n-1].pName ) ) ;
+                        if ( pItem && !pItem->QueryValue( pValue[nProps++].Value, (BYTE) (sal_Int8) rArg.pType->aAttrib[n-1].nAID ) )
+                            DBG_ERROR("Item not convertable!");
+                    }
+                }
+            }
+        }
+
+        if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
+        {
+            const SfxPoolItem *pItem=0;
+            if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sStatusInd;
+                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_VIEW_DATA, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sViewData;
+                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_FILTER_DATA, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sFilterData;
+                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_DOCUMENT, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sModel;
+                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_INPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sInputStream;
+                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_POSTDATA, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sPostData;
+                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_TEMPLATE, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sAsTemplate;
+                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_OPEN_NEW_VIEW, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sOpenNewView;
+                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_VIEW_ID, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sViewId;
+                pValue[nProps++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_PLUGIN_MODE, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sPluginMode;
+                pValue[nProps++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_DOC_READONLY, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sReadOnly;
+                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_SELECTION, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sSelectionOnly;
+                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_HIDDEN, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sHidden;
+                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_SILENT, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sSilent;
+                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_PREVIEW, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sPreview;
+                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sFrameName;
+                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_ORIGURL, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sOrigURL;
+                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_DOC_SALVAGE, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sSalvageURL;
+                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_CONTENTTYPE, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sContentType;
+                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+            }
+            if ( rSet.GetItemState( SID_TEMPLATE_NAME, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sTemplateName;
+                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+            }
+            if ( rSet.GetItemState( SID_TEMPLATE_REGIONNAME, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sTemplateRegionName;
+                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+            }
+            if ( rSet.GetItemState( SID_JUMPMARK, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sJumpMark;
+                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+            }
+            if ( rSet.GetItemState( SID_OPENURL, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sURL;
+                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+            }
+
+            SFX_ITEMSET_ARG( &rSet, pRectItem, SfxRectangleItem, SID_VIEW_POS_SIZE, sal_False );
+            if ( pRectItem )
+            {
+    //            pValue[nProps].Name = sPosSize;
+    //            Rectangle aRect = pRectItem->GetValue();
+                DBG_ERROR("PosSizeItem not supported yet!");
+            }
+
+            if ( rSet.GetItemState( SID_CHARSET, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nProps].Name = sCharacterSet;
+                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+            }
+        }
+    }
+
+    rArgs = aSequ;
+}
+/*
+void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
+{
+    if ( !pSlot )
+        pSlot = SFX_SLOTPOOL().GetSlot( nSlotId );
+
+    if ( !pSlot )
+        return;
+
+    if ( nSlotId == SID_OPENURL )
+        nSlotId = SID_OPENDOC;
+    if ( nSlotId == SID_SAVEASURL )
+        nSlotId = SID_SAVEASDOC;
 
     sal_Int32 nCount = rArgs.getLength();
     const ::com::sun::star::beans::PropertyValue* pPropsVal = rArgs.getConstArray();
@@ -265,12 +792,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 
         if ( pSlot->GetType()->Type() != TYPE(SfxVoidItem) )
         {
-            if ( aName.CompareToAscii( pSlot->pName+1 ) == COMPARE_EQUAL )
+            if ( aName.CompareToAscii( pSlot->pUnoName ) == COMPARE_EQUAL )
             {
                 SfxPoolItem* pItem = pSlot->GetType()->CreateItem();
                 pItem->SetWhich( nSlotId );
                 if ( pItem->PutValue( rProp.Value ) )
                     rSet.Put( *pItem );
+                else
+                    DBG_ERROR("Property not convertable!");
                 delete pItem;
                 break;
             }
@@ -286,6 +815,8 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 pItem->SetWhich( pArg->nSlotId );
                 if ( pItem->PutValue( rProp.Value ) )
                     rSet.Put( *pItem );
+                else
+                    DBG_ERROR("Property not convertable!");
                 delete pItem;
                 break;
             }
@@ -298,7 +829,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             else if ( aName == sHidden && rProp.Value.getValueType() == ::getBooleanCppuType() )
                 rSet.Put( SfxBoolItem( SID_HIDDEN, *((sal_Bool*)rProp.Value.getValue()) ) );
         }
-        else if ( nArgs >= pSlot->nArgDefCount && nSlotId == SID_OPENDOC )
+        else if ( nArgs >= pSlot->nArgDefCount && ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO ) )
         {
             if ( aName == sModel )
                 rSet.Put( SfxUnoAnyItem( SID_DOCUMENT, rProp.Value ) );
@@ -400,17 +931,25 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 
     if ( nSlotId == SID_OPENURL )
         nSlotId = SID_OPENDOC;
+    if ( nSlotId == SID_SAVEASURL )
+        nSlotId = SID_SAVEASDOC;
 
-    sal_uInt16 nArgs;
     sal_uInt16 nItems=0;
-    for ( nArgs=0; nArgs<pSlot->nArgDefCount; nArgs++ )
+    if ( pSlot->GetType()->Type() != TYPE(SfxVoidItem) )
     {
-        const SfxFormalArgument* pArg = pSlot->pFirstArgDef + nArgs;
-        if ( rSet.GetItemState( pArg->nSlotId ) == SFX_ITEM_SET )
-            nItems++;
+        nItems = 1;
+    }
+    else
+    {
+        for ( sal_uInt16 nArgs=0; nArgs<pSlot->nArgDefCount; nArgs++ )
+        {
+            const SfxFormalArgument* pArg = pSlot->pFirstArgDef + nArgs;
+            if ( rSet.GetItemState( pArg->nSlotId ) == SFX_ITEM_SET )
+                nItems++;
+        }
     }
 
-    if ( nSlotId == SID_OPENDOC )
+    if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
     {
         if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL ) == SFX_ITEM_SET )
             nItems++;
@@ -466,18 +1005,45 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> aSequ( nItems );
     ::com::sun::star::beans::PropertyValue *pValue = aSequ.getArray();
-    for ( nArgs=0, nItems=0; nArgs<pSlot->nArgDefCount; nArgs++ )
+    if ( pSlot->GetType()->Type() != TYPE(SfxVoidItem) )
     {
-        const SfxFormalArgument* pArg = pSlot->pFirstArgDef + nArgs;
-        SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, pArg->nSlotId, sal_False );
+        SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nSlotId, sal_False );
         if ( pItem )
         {
-            pValue[nItems].Name = String( String::CreateFromAscii( pArg->pName ) ) ;
-            pItem->QueryValue( pValue[nItems++].Value );
+            pValue[nItems].Name = String( String::CreateFromAscii( pSlot->pUnoName ) ) ;
+            if ( !pItem->QueryValue( pValue[nItems].Value ) )
+                DBG_ERROR("Item not convertable!");
+        }
+    }
+    else
+    {
+        for ( sal_uInt16 nArgs=0, nItems=0; nArgs<pSlot->nArgDefCount; nArgs++ )
+        {
+            const SfxFormalArgument* pArg = pSlot->pFirstArgDef + nArgs;
+            SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, pArg->nSlotId, sal_False );
+            if ( pItem )
+            {
+                pValue[nItems].Name = String( String::CreateFromAscii( pArg->pName ) ) ;
+                if ( !pItem->QueryValue( pValue[nItems++].Value ) )
+                    DBG_ERROR("Item not convertable!");
+            }
         }
     }
 
-    if ( nSlotId == SID_OPENDOC )
+#ifdef DEBUG
+    DBG_ASSERT( rSet.Count() == nItems, "Unknown item detected!" );
+    const USHORT *pRanges = rSet.GetRanges();
+    while ( *pRanges )
+    {
+        for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
+        {
+            const SfxPoolItem* pIt = rSet.GetItem( nWhich );
+            pIt = 0;
+        }
+    }
+#endif
+
+    if ( nSlotId == SID_OPENDOC || nSlotId == SID_EXPORTDOC || nSlotId == SID_SAVEASDOC || nSlotId == SID_SAVETO )
     {
         const SfxPoolItem *pItem=0;
         if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -613,7 +1179,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 
     rArgs = aSequ;
 }
-
+*/
 SV_IMPL_PTRARR( SfxComponentKeyArr_Impl, SfxComponentKeyPtr_Impl );
 
 

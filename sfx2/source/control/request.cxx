@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: mba $ $Date: 2002-04-05 11:32:19 $ $Revision: 1.3 $
+// $Author: mba $ $Date: 2002-04-11 08:05:49 $ $Revision: 1.4 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -73,7 +73,7 @@ struct SfxRequest_Impl: public SfxListener
 
     void                SetPool( SfxItemPool *pNewPool );
     virtual void        Notify( SfxBroadcaster &rBC, const SfxHint &rHint );
-    SfxMacroStatement*  CreateStatement_Impl( const SfxSlot& rSlot, uno::Sequence < beans::PropertyValue > rArgs );
+    SfxMacroStatement*  CreateStatement( uno::Sequence < beans::PropertyValue > rArgs );
 };
 
 
@@ -109,7 +109,7 @@ SfxRequest::~SfxRequest()
 
     // nicht mit Done() marktierte Requests mit 'rem' rausschreiben
     if ( pImp->pMacro && !pImp->bDone && !pImp->bIgnored )
-//        pImp->pMacro->Record( pImp->CreateStatement_Impl( *pImp->pSlot, FALSE ) );
+//        pImp->pMacro->Record( pImp->CreateStatement( *pImp->pSlot ) );
         Done();
 
     // Objekt abr"aumen
@@ -280,9 +280,8 @@ const SfxItemSet* SfxRequest::GetInternalArgs_Impl() const
 //--------------------------------------------------------------------
 
 
-SfxMacroStatement* SfxRequest_Impl::CreateStatement_Impl
+SfxMacroStatement* SfxRequest_Impl::CreateStatement
 (
-    const SfxSlot& rSlot,   // auszugef"uhrter <SfxSlot>
     uno::Sequence < beans::PropertyValue > rArgs    // aktuelle Parameter
 )
 
@@ -297,11 +296,11 @@ SfxMacroStatement* SfxRequest_Impl::CreateStatement_Impl
 
 {
     if ( bUseTarget )
-        return new SfxMacroStatement( aTarget, rSlot, bDone, rArgs );
+        return new SfxMacroStatement( aTarget, *pSlot, bDone, rArgs );
     else
         return new SfxMacroStatement( *pShell, aTarget,
             SFX_MACRO_RECORDINGABSOLUTE == pMacro->GetMode(),
-            rSlot, bDone, rArgs );
+            *pSlot, bDone, rArgs );
 }
 
 //--------------------------------------------------------------------
@@ -618,9 +617,10 @@ void SfxRequest::Done_Impl
     }
 
     // record-f"ahig?
-    DBG_ASSERT( pImp->pSlot->pName, "recording not exported slot" );
-    if ( !pImp->pSlot->pName ) // Hosentr"ger und G"urtel
-        return;
+    // neues Recorden verwendet UnoName!
+//    DBG_ASSERT( pImp->pSlot->pName, "recording not exported slot" );
+//    if ( !pImp->pSlot->pName ) // Hosentr"ger und G"urtel
+//        return;
 
     // "ofters ben"otigte Werte
     SfxItemPool &rPool = pImp->pShell->GetPool();
@@ -632,117 +632,23 @@ void SfxRequest::Done_Impl
         // des Property als SfxPoolItem besorgen
         const SfxPoolItem *pItem;
         USHORT nWhich = rPool.GetWhich(pImp->pSlot->GetSlotId());
-        SfxItemState eState = pSet
-                ? pSet->GetItemState( nWhich, FALSE, &pItem )
-                : SFX_ITEM_UNKNOWN;
-
+        SfxItemState eState = pSet ? pSet->GetItemState( nWhich, FALSE, &pItem ) : SFX_ITEM_UNKNOWN;
         DBG_ASSERT( eState == SFX_ITEM_SET, "recording property not available" );
         if ( eState == SFX_ITEM_SET )
         {
-            // Anzahl der Struct-Member ermitteln
-            const SfxType *pType = pImp->pSlot->GetType();
-            USHORT nSubCount = pType->nAttribs;
-            if ( !nSubCount )
-            {
-                //rPool.FillVariable( *pItem, *pVar, eUserMetric );
-                uno::Sequence < beans::PropertyValue > aSeq(1);
-                aSeq[0].Name = String( String::CreateFromAscii( pImp->pSlot->pName ) ) ;
-                pItem->QueryValue( aSeq[0].Value );
-                pImp->pMacro->Record( pImp->CreateStatement_Impl( *pImp->pSlot, aSeq ) );
-            }
-            else
-            {
-                // strukturiertes Item
-                for ( USHORT n = 1; n <= nSubCount; ++n )
-                {
-                    // jedes einzelne Member darstellen
-                    //pVar->SetUserData( long(pType->aAttrib[n-1].nAID) << 20 );
-                    //rPool.FillVariable( *pItem, *pVar, eUserMetric );
-
-                    uno::Sequence < beans::PropertyValue > aSeq(1);
-                    aSeq[0].Name = String( String::CreateFromAscii( pType->aAttrib[n-1].pName ) ) ;
-                    pItem->QueryValue( aSeq[0].Value, (BYTE) (sal_Int8) pType->aAttrib[n-1].nAID );
-                    DBG_ASSERT( pType->aAttrib[n-1].nAID <= 255, "Member ID out of range" );
-
-                    // ein Statement je Member wird recorded
-                    HACK(einfach im Slot den Namen umzusetzen ist unsauber)
-                    ByteString aMethodName( ((SfxSlot*)pImp->pSlot)->pName );
-                    aMethodName += pType->aAttrib[n-1].pName;
-                    const char *pOldName = ((SfxSlot*)pImp->pSlot)->pName;
-                    ((SfxSlot*)pImp->pSlot)->pName = aMethodName.GetBuffer();
-                    pImp->pMacro->Record( new SfxMacroStatement( *pImp->pShell, pImp->aTarget, TRUE, *pImp->pSlot, TRUE, aSeq ) );
-                    ((SfxSlot*)pImp->pSlot)->pName = pOldName;
-                }
-            }
+            uno::Sequence < beans::PropertyValue > aSeq;
+            TransformItems( pImp->pSlot->GetSlotId(), *pSet, aSeq, pImp->pSlot );
+            pImp->pMacro->Record( pImp->CreateStatement( aSeq ) );
         }
     }
 
     // alles in ein einziges Statement aufzeichnen?
     else if ( pImp->pSlot->IsMode(SFX_SLOT_RECORDPERSET) )
     {
-        // die aktuellen Parameter werden als SbxVariable aufbereitet
-        USHORT nFormalArgs = pImp->pSlot->GetFormalArgumentCount();
-        USHORT nBasicArg = 0;
-        USHORT nArg, nArgs = 0;
-        for ( nArg = 0; nArg < nFormalArgs; ++nArg )
-        {
-            // den einzelnen formalen Parameter besorgen
-            const SfxFormalArgument &rArg = pImp->pSlot->GetFormalArgument( nArg );
-            USHORT nSubCount = rArg.pType->nAttribs;
-            if ( nSubCount )
-                nArgs += nSubCount;
-            else
-                nArgs++;
-        }
-
-        uno::Sequence < beans::PropertyValue > aSeq(nArgs);
-        nArgs = 0;
-        for ( nArg = 0; nArg < nFormalArgs; ++nArg )
-        {
-            // den einzelnen formalen Parameter besorgen
-            const SfxFormalArgument &rArg = pImp->pSlot->GetFormalArgument( nArg );
-
-            // den aktuellen Parameter als SfxPoolItem besorgen
-            const SfxPoolItem *pItem;
-            USHORT nWhich = rPool.GetWhich(rArg.nSlotId);
-            SfxItemState eState = pSet ? pSet->GetItemState( nWhich, FALSE, &pItem ) : SFX_ITEM_UNKNOWN;
-
-            // aktueller Parameter nicht angegeben => den Default nehmen
-            SfxPoolItem *pDefItem = 0;
-            if ( eState != SFX_ITEM_SET )
-                HACK(evtl. besser leer lassen)
-                pItem = pDefItem = rArg.CreateItem();
-
-            // den aktuellen Parameter aufzeichnen
-            USHORT nSubCount = rArg.pType->nAttribs;
-            if ( !nSubCount )
-            {
-                // einfaches Item
-                //rPool.FillVariable( *pItem, *pVar, eUserMetric );
-                aSeq[nArgs].Name = String( String::CreateFromAscii( rArg.pName ) ) ;
-                pItem->QueryValue( aSeq[nArgs++].Value );
-            }
-            else
-            {
-                // strukturiertes Item aufsplitten
-                for ( USHORT n = 1; n <= nSubCount; ++n )
-                {
-                    // jedes Member ergibt einen eigenen Parameter
-                    //pVar->SetUserData( long(rArg.pType->aAttrib[n-1].nAID) << 20 );
-                    //rPool.FillVariable( rItem, *pVar, eUserMetric );
-                    aSeq[nArgs].Name = String( String::CreateFromAscii( rArg.pType->aAttrib[n-1].pName ) ) ;
-                    pItem->QueryValue( aSeq[nArgs++].Value, (BYTE) (sal_Int8) rArg.pType->aAttrib[n-1].nAID );
-                    DBG_ASSERT( rArg.pType->aAttrib[n-1].nAID <= 255, "Member ID out of range" );
-                }
-            }
-
-            // ggf. Default abr"aumen
-            if ( pDefItem )
-                delete pDefItem;
-        }
-
-        // ein Statement mit genau dem ausgef"uhrten Slot wird recorded
-        pImp->pMacro->Record( pImp->CreateStatement_Impl( *pImp->pSlot, aSeq ) );
+        uno::Sequence < beans::PropertyValue > aSeq;
+        if ( pSet )
+            TransformItems( pImp->pSlot->GetSlotId(), *pSet, aSeq, pImp->pSlot );
+        pImp->pMacro->Record( pImp->CreateStatement( aSeq ) );
     }
 
     // jedes Item als einzelnes Statement recorden
@@ -775,7 +681,7 @@ void SfxRequest::Done_Impl
         else
         {
             HACK(hierueber nochmal nachdenken)
-            pImp->pMacro->Record( pImp->CreateStatement_Impl( *pImp->pSlot, uno::Sequence < beans::PropertyValue >() ) );
+            pImp->pMacro->Record( pImp->CreateStatement( uno::Sequence < beans::PropertyValue >() ) );
         }
     }
 
@@ -899,6 +805,9 @@ void SfxRequest::SetTarget( const String &rTarget )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2002/04/05 11:32:19  mba
+    #98405#: support macro recording
+
     Revision 1.79  2000/04/28 07:35:53  as
     unicode changes
 

@@ -2702,7 +2702,7 @@ SfxBoolItem DeleteRecord SID_FM_RECORD_DELETE
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem DesignMode SID_FM_DESIGN_MODE
+SfxBoolItem SwitchControlDesignMode SID_FM_DESIGN_MODE
 
 [
     /* flags: */

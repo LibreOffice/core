@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: as $ $Date: 2002-04-04 09:14:07 $
+ *  last change: $Author: mba $ $Date: 2002-04-11 08:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1762,6 +1762,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         pSet->ClearItem( SID_OPTIONS );
         pSet->ClearItem( SID_FILE_FILTEROPTIONS );
         pSet->ClearItem( SID_VERSION );
+        pSet->ClearItem( SID_USE_FILTEROPTIONS );
 
         SFX_ITEMSET_GET( (*aParams), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
         if ( pFilterItem )
