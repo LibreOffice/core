@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-25 18:27:07 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 13:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
                                      const SfxItemSet* pFlySet )
 {
     SwFrmFmt* pFmt = 0;
-    if( nIniFlags & WW8FL_NO_OLE )
+    if( !(nIniFlags & WW8FL_NO_OLE ))
     {
         Graphic aGraph;
         SdrObject* pRet = ImportOleBase( aGraph, TRUE, pGrf, pFlySet );
@@ -674,11 +674,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.6 2001-04-25 18:27:07 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.7 2001-04-27 13:22:26 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/04/25 18:27:07  jp
+      Bug #83181#: don't insert in GroupObjects SW-OLE-Objects
+
       Revision 1.5  2001/04/11 15:08:01  jp
       Bug #85614#: SdrOleObject - set InPlaceObject pointer to zero if the object is insert as SW-OleObject
 
