@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcharset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-15 13:30:12 $
+ *  last change: $Author: oj $ $Date: 2002-03-04 11:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ namespace dbtools
         :m_nLivingIterators(0)
     #endif
     {
-        m_aEncodings.resize(11);
+        m_aEncodings.resize(12);
         m_aEncodings[ 0] = RTL_TEXTENCODING_MS_1252;        // ANSI
         m_aEncodings[ 1] = RTL_TEXTENCODING_APPLE_ROMAN;    // MAC
         m_aEncodings[ 2] = RTL_TEXTENCODING_IBM_437;        // IBMPC_437
@@ -106,8 +106,9 @@ namespace dbtools
         m_aEncodings[ 8] = RTL_TEXTENCODING_IBM_866;        // IBMPC_866 (cyrillic)
         m_aEncodings[ 9] = RTL_TEXTENCODING_DONTKNOW;       // SYSTEM
         m_aEncodings[10] = RTL_TEXTENCODING_UTF8;           // UTF-8
+        m_aEncodings[11] = RTL_TEXTENCODING_BIG5_HKSCS;     // Big5-HKSCS
 
-        m_aNames.resize(11);
+        m_aNames.resize(12);
         m_aNames[ 0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ANSI"));
         m_aNames[ 1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MAC"));
         m_aNames[ 2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_437"));
@@ -119,12 +120,13 @@ namespace dbtools
         m_aNames[ 8] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_866"));
         m_aNames[ 9] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYSTEM"));
         m_aNames[10] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UTF-8"));
+        m_aNames[10] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Big5-HKSCS"));
 
         OSL_ENSURE(m_aEncodings.size() == m_aNames.size(),
             "OCharsetMap::OCharsetMap: inconsistentce(1)!");
 
         // the IANA representations of the character sets which we know
-        m_aIanaNames.resize(11);
+        m_aIanaNames.resize(12);
         m_aIanaNames[ 0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("windows-1252"));
         m_aIanaNames[ 1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("macintosh"));
         m_aIanaNames[ 2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM437"));
@@ -136,6 +138,7 @@ namespace dbtools
         m_aIanaNames[ 8] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM866"));
         m_aIanaNames[ 9] = ::rtl::OUString();
         m_aIanaNames[10] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UTF-8"));
+        m_aIanaNames[11] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Big5-HKSCS"));
 
         OSL_ENSURE(m_aNames.size() == m_aIanaNames.size(),
             "OCharsetMap::OCharsetMap: inconsistentce(2)!");
@@ -288,6 +291,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/10/15 13:30:12  fs
+ *  #93204# new supported charset IBM866 (cyrillic)
+ *
  *  Revision 1.5  2001/05/18 08:51:34  oj
  *  #86528# size changes
  *
