@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 14:58:24 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,17 +228,21 @@ static rtl_Locale * _parse_locale( const char * locale )
 
             /* convert language code to unicode */
             rtl_string2UString( &pLanguage, locale, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
+            OSL_ASSERT(pLanguage != NULL);
 
             /* convert country code to unicode */
             if( len >= 5 && '_' == locale[2] )
             {
                 rtl_string2UString( &pCountry, locale + 3, 2, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
+                OSL_ASSERT(pCountry != NULL);
                 offset = 5;
             }
 
             /* convert variant code to unicode - do not rely on "." as delimiter */
-            if( len > offset )
+            if( len > offset ) {
                 rtl_string2UString( &pVariant, locale + offset, len - offset, RTL_TEXTENCODING_ASCII_US, OSTRING_TO_OUSTRING_CVTFLAGS );
+                OSL_ASSERT(pVariant != NULL);
+            }
 
             return rtl_locale_register( pLanguage->buffer, pCountry ? pCountry->buffer : c_locale + 1, pVariant ? pVariant->buffer : c_locale + 1 );
         }
