@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:20:44 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 06:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,21 +62,6 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #define _DBASHARED_APITOOLS_HXX_
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
-#include <com/sun/star/sdbc/SQLException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
 #ifndef _CPPUHELPER_COMPONENT_HXX_
 #include <cppuhelper/component.hxx>
 #endif
@@ -101,65 +86,6 @@ DECLARE_STL_VECTOR(::com::sun::star::uno::WeakReferenceHelper, OWeakRefArray);
 //==================================================================================
 //= various helper functions
 //==================================================================================
-//----------------------------------------------------------------------------------
-template <class TYPE>
-inline void disposeComponent(const ::com::sun::star::uno::Reference< TYPE >& _rxObject)
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp(_rxObject, UNO_QUERY);
-    if (xComp.is())
-        xComp->dispose();
-}
-
-//----------------------------------------------------------------------------------
-/** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
-*/
-void composeTableName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
-                        const ::rtl::OUString& _rCatalog,
-                        const ::rtl::OUString& _rSchema,
-                        const ::rtl::OUString& _rName,
-                        ::rtl::OUString& _rComposedName,
-                        sal_Bool _bQuote);
-
-//----------------------------------------------------------------------------------
-/** throw a generic SQLException, i.e. one with an SQLState of S1000, an ErrorCode of 0 and no NextException
-*/
-inline void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
-    throw (::com::sun::star::sdbc::SQLException)
-{
-    throw ::com::sun::star::sdbc::SQLException(_rMsg, _rxSource, ::rtl::OUString::createFromAscii("S1000"), 0, ::com::sun::star::uno::Any());
-}
-
-//----------------------------------------------------------------------------------
-template <class TYPE>
-sal_Bool getImplementation(TYPE*& _pObject, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace)
-{
-    _pObject = NULL;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(_rxIFace, UNO_QUERY);
-    if (xTunnel.is())
-        _pObject = reinterpret_cast< TYPE* >(xTunnel->getSomething(TYPE::getUnoTunnelImplementationId()));
-
-    return (_pObject != NULL);
-}
-
-//==================================================================================
-//= OSubComponent - a class which olds a Mutex and a OBroadcastHelper;
-//=                 needed because when deriving from OPropertySetHelper,
-//=                 the OBroadcastHelper has to be initialized before
-//=                 the OPropertySetHelper
-//==================================================================================
-class OMutexAndBroadcastHelper
-{
-protected:
-    ::osl::Mutex                m_aMutex;
-    ::cppu::OBroadcastHelper    m_aBHelper;
-
-public:
-    OMutexAndBroadcastHelper() : m_aBHelper( m_aMutex ) { }
-
-    ::osl::Mutex&               GetMutex() { return m_aMutex; }
-    ::cppu::OBroadcastHelper&   GetBroadcastHelper() { return m_aBHelper; }
-
-};
 
 //==================================================================================
 //= OSubComponent - a component which holds a hard ref to it's parent
@@ -190,17 +116,6 @@ public:
 protected:
     virtual void SAL_CALL disposing();
 };
-
-//==================================================================================
-//= StandardExceptions
-//==================================================================================
-class FunctionSequenceException : public ::com::sun::star::sdbc::SQLException
-{
-public:
-    FunctionSequenceException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
-        const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any());
-};
-
 
 //************************************************************
 //  OIdPropertyArrayUsageHelper
