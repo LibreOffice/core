@@ -2,9 +2,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:32:05 $
+#   last change: $Author: rt $ $Date: 2004-07-06 15:00:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -174,18 +174,18 @@ sub get_feature_directory
 
     my $directory;
 
-    my $parentid = "";
+    # my $parentid = "";
 
-    if ( $onefeature->{'ParentID'} ) { $parentid = $onefeature->{'ParentID'}; }
+    # if ( $onefeature->{'ParentID'} ) { $parentid = $onefeature->{'ParentID'}; }
 
-    if (( $parentid eq "" ) || ( $parentid eq "gid_Module_Root" ))  # This is the root module and the modules directly below the root
-    {
+    # if (( $parentid eq "" ) || ( $parentid eq "gid_Module_Root" ))    # This is the root module and the modules directly below the root
+    # {
         $directory = "INSTALLLOCATION";
-    }
-    else
-    {
-        $directory = "";
-    }
+    # }
+    # else
+    # {
+    #   $directory = "";
+    # }
 
     return $directory
 }
