@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-18 08:27:58 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ french ] = "Effets de caract�res";
                 Text[ spanish ] = "Efectos de fuente";
                 Text[ italian ] = "Effetto carattere";
-                Text[ danish ] = "Character Extension";
+                Text[ danish ] = "Skrifteffekt";
                 Text[ swedish ] = "Teckeneffekt";
                 Text[ polish ] = "Efekt czcionki";
                 Text[ portuguese_brazilian ] = "Character Extension";
@@ -224,7 +224,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "Tipograf�a asi�tica";
                 Text[ italian ] = "Tipografia asiatica";
-                Text[ danish ] = "Asian typography";
+                Text[ danish ] = "Asiatisk typografi";
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
@@ -325,7 +325,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ korean ] = "셀 보호";
                 Text[ turkish ] = "H�cre korumas�";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Protecci� de cel�les";
+                Text[ catalan ] = "Protecci� de cel.les";
                 Text[ thai ] = "ป้องกันเซลล์";
             };
         };
@@ -340,7 +340,7 @@ TabDialog RID_SCDLG_ATTR
     Text[ korean ] = "셀 속성";
     Text[ turkish ] = "H�cre �znitelikleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Atributs de la cel�la";
+    Text[ catalan ] = "Atributs de la cel.la";
     Text[ thai ] = "คุณลักษณะเซลล์";
 };
 
@@ -478,7 +478,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "셀 보호는 현재의 시트가 보호되었을 때만 유효합니다.  \n\n'도구' 메뉴에서 '문서 보호'를 선택한 다음, '시트'를 지정하십시오.";
         Text[ turkish ] = "H�cre korumas�, yaln�zca aktif tablo da korunmu�sa etkindir.\n\nBunun i�in 'Ara�lar' m�n�s�nden �nce 'belgeyi koru' sonra 'Tablo' komutunu se�in.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "La protecci� de cel�les nom�s �s efectiva despr�s d'haver protegit el full actual. \n\nSeleccioneu 'Protegeix el document' del men� 'Eines' i especifiqueu 'Full'.";
+        Text[ catalan ] = "La protecci� de cel.les nom�s �s efectiva despr�s d'haver protegit el full actual. \n\nSeleccioneu 'Protegeix el document' del men� 'Eines' i especifiqueu 'Full'.";
         Text[ thai ] = "การป้องกันเซลล์มีผลอย่างเดียวหลังจากป้องกันแผ่นงานปัจจุบัน \n\nเลือก 'ป้องกันเอกสาร' จากเมนู 'เครื่องมือ' และระบุแผ่นงาน";
     };
     FixedLine FL_PROTECTION
@@ -570,7 +570,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "선택된 셀은 인쇄에서 제외될 것입니다.";
         Text[ turkish ] = "Y�r�rl�kteki se�imin h�creleri yazd�rmaya dahil olmayacak.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "En imprimir, les cel�les seleccionades s'ometran.";
+        Text[ catalan ] = "En imprimir, les cel.les seleccionades s'ometran.";
         Text[ thai ] = "เซลล์เลือกที่จะถูกเว้นขณะพิมพ์";
     };
     FixedLine FL_PRINT
