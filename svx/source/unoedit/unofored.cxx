@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 09:07:18 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,25 +374,44 @@ Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) c
     // don't rotate for vertical text.
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     ::std::swap( aSize.Width(), aSize.Height() );
+    bool bIsVertical( rEditEngine.IsVertical() == TRUE );
 
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= rEditEngine.GetTextLen(nPara) )
     {
-        // #109151# Don't use paper height, but line height instead
-        Rectangle aLast(0,0,0,rEditEngine.GetLineHeight(nPara,0));
+        Rectangle aLast;
 
         if( nIndex )
+        {
+            // use last character, if possible
             aLast = rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex-1) );
 
-        aLast.Move( aLast.Right() - aLast.Left(), 0 );
-        aLast.SetSize( Size(1, aLast.GetHeight()) );
-        return SvxEditSourceHelper::EEToUserSpace( aLast, aSize, rEditEngine.IsVertical() == TRUE );
+            // move at end of this last character, make one pixel wide
+            aLast.Move( aLast.Right() - aLast.Left(), 0 );
+            aLast.SetSize( Size(1, aLast.GetHeight()) );
+
+            // take care for CTL
+            aLast = SvxEditSourceHelper::EEToUserSpace( aLast, aSize, bIsVertical );
+        }
+        else
+        {
+            // #109864# Bounds must lie within the paragraph
+            aLast = GetParaBounds( nPara );
+
+            // #109151# Don't use paragraph height, but line height
+            // instead. aLast is already CTL-correct
+            if( bIsVertical)
+                aLast.SetSize( Size( rEditEngine.GetLineHeight(nPara,0), 1 ) );
+            else
+                aLast.SetSize( Size( 1, rEditEngine.GetLineHeight(nPara,0) ) );
+        }
+
+        return aLast;
     }
     else
     {
         return SvxEditSourceHelper::EEToUserSpace( rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex) ),
-                                                   aSize,
-                                                   rEditEngine.IsVertical() == TRUE );
+                                                   aSize, bIsVertical );
     }
 }
 
