@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:25:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,9 +607,9 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& rEv
                     SdrGrafObj* pGrafObj = NULL;
                     BOOL        bInsertNewObject = TRUE;
 
-                    if( pView->HasMarkedObj() )
+                    if( pView->AreObjectsMarked() )
                     {
-                        const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
                         if( rMarkList.GetMarkCount() == 1 )
                         {
