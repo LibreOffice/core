@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-13 10:50:57 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,12 @@
 #include <sfx2/request.hxx>
 #endif
 
+// -> #111827#
+#include <SwRewriter.hxx>
+#include <comcore.hrc>
+#include <undobj.hxx>
+// <- #111827#
+
 #include <svx/acorrcfg.hxx>
 
 #define COMMON_INI_LIST \
@@ -367,7 +373,22 @@ void SwWrtShell::Insert( const String &rStr )
             // nur hier klammern, da das normale Insert schon an der
             // Editshell geklammert ist
         StartAllAction();
-        StartUndo(UNDO_INSERT);
+
+        // #111827#
+        SwRewriter aRewriter;
+
+        aRewriter.AddRule(UNDO_ARG1, GetCrsrDescr());
+        aRewriter.AddRule(UNDO_ARG2, String(SW_RES(STR_YIELDS)));
+        {
+            String aTmpStr;
+            aTmpStr += String(SW_RES(STR_START_QUOTE));
+            aTmpStr += rStr;
+            aTmpStr += String(SW_RES(STR_END_QUOTE));
+
+            aRewriter.AddRule(UNDO_ARG3, rStr);
+        }
+
+        StartUndo(UNDO_REPLACE, &aRewriter);
         bStarted = TRUE;
         DelRight();
     }
@@ -390,7 +411,7 @@ JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
     if( bStarted )
     {
         EndAllAction();
-        EndUndo(UNDO_INSERT);
+        EndUndo(UNDO_REPLACE);
     }
 //    delete pChgFlg;
 }
@@ -1437,7 +1458,7 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
         ResetAttr();
         SetAttr(aCoreSet);
     }
-    pColl->SetAttr( rStyleSet );
+    pDoc->ChgFmt(*pColl, rStyleSet );
     EndAction();
 }
 
