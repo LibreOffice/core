@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 18:13:00 $
+ *  last change: $Author: fs $ $Date: 2002-04-09 07:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1187,11 +1187,15 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
 
                 if (!bConverted)
                 {
+                    ::rtl::OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "Unable to convert the given value for the property " ) );
+                    sMessage += GetPropertyName((sal_uInt16)nPropId);
+                    sMessage += ::rtl::OUString::createFromAscii( "\n(expected " );
+                    sMessage += pDestType->getTypeName();
+                    sMessage += ::rtl::OUString::createFromAscii( ", found " );
+                    sMessage += rValue.getValueType().getTypeName();
+                    sMessage += ::rtl::OUString::createFromAscii( ")" );
                     throw ::com::sun::star::lang::IllegalArgumentException(
-                                ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
-                            +=  GetPropertyName((sal_uInt16)nPropId),
-                        static_cast< ::com::sun::star::beans::XPropertySet* >(this),
-                        1);
+                                sMessage, static_cast< ::com::sun::star::beans::XPropertySet* >(this), 1);
                 }
             }
         }
