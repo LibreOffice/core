@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:34:34 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3036,7 +3036,7 @@ String STR_ObjNamePluralUno
     Text[ swedish ] = "Kontrollfält";
     Text[ polish ] = "Pola kontrolne";
     Text[ portuguese_brazilian ] = "Uno-Control Objekte";
-    Text[ japanese ] = "ºİÄÛ°Ù Ì¨°ÙÄŞ";
+    Text[ japanese ] = "ºİÄÛ°Ù";
     Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶Î";
     Text[ chinese_traditional ] = "±±¨î¶µ";
     Text[ arabic ] = "ÚäÇÕÑ ÊÍßã";
@@ -5424,7 +5424,7 @@ String STR_EditMergeSubstractPoly
     Text[ swedish ] = "Dra ifrån %O";
     Text[ polish ] = "Odejmij %O";
     Text[ portuguese_brazilian ] = "Substract %O";
-    Text[ japanese ] = "%O‚ğ1‚Â‚É‚µ‚½‚à‚Ì‚©‚ç‚Ü‚½ŠO‚·";
+    Text[ japanese ] = "%O ‚ğ1‚Â‚É‚µ‚Äˆø‚­";
     Text[ korean ] = "%O °¨»ê";
     Text[ chinese_simplified ] = "·ÖÀë %O";
     Text[ chinese_traditional ] = "´î¥h %O";
@@ -6511,7 +6511,7 @@ String STR_ViewMarked
     Text[ chinese_simplified ] = "ÒÑ¾­Ñ¡È¡ %O";
     Text[ russian ] = "Âûäåëåí %O";
     Text[ polish ] = "Zaznaczono %O";
-    Text[ japanese ] = "%O‚ğ‘I‘ğ‚µ‚Ü‚·";
+    Text[ japanese ] = "%O ‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚·";
     Text[ chinese_traditional ] = "¤w¸g¿ï¾Ü %O";
     Text[ arabic ] = "%O ãÍÏÏ";
     Text[ dutch ] = "%O gemarkeerd";
@@ -16547,7 +16547,7 @@ String SIP_EE_PARA_HYPHENATE
     Text[ portuguese ] = "Divisão silábica";
     Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ";
     Text[ dutch ] = "Woordafbreking";
-    Text[ french ] = "Coupure de mots";
+    Text[ french ] = "Coupure des mots";
     Text[ spanish ] = "Separación silábica";
     Text[ italian ] = "Sillabazione";
     Text[ danish ] = "Orddeling";
