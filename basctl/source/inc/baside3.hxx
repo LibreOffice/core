@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:50:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 18:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ public:
     virtual void        PrintData( Printer* pPrinter );
     virtual void        Deactivating();
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 #endif  // _BASIDE3_HXX
