@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:01:57 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _GRFATR_HXX
 
 #ifndef _HINTIDS_HXX
-#include <hintids.hxx>      // fuer die WhichIds
+#include <hintids.hxx>      // fuer die WhichIds @@@ must be included first @@@
 #endif
 
 #ifndef _SV_GEN_HXX
@@ -78,6 +78,9 @@
 #include <svx/grfcrop.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _SWATRSET_HXX
 #include <swatrset.hxx>     // fuer inlines
 #endif
@@ -99,7 +102,7 @@ RES_GRFMIRROR_BEGIN,
 RES_GRFMIRROR_END
 };
 
-class SwMirrorGrf : public SfxEnumItem
+class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem
 {
     BOOL bGrfToggle; // auf geraden Seiten Grafiken spiegeln
 
