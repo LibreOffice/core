@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:49:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1869,8 +1869,11 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
     const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
     bool            bRet( false );
 
+    // #i42643# Casting to Int64, to avoid integer overflow for
+    // huge-DPI output devices
     if( GetGraphic().GetType() == GRAPHIC_BITMAP &&
-        rSizePixel.Width() * rSizePixel.Height() < nTileCacheSize1D*nTileCacheSize1D )
+        static_cast<sal_Int64>(rSizePixel.Width()) * rSizePixel.Height() <
+        static_cast<sal_Int64>(nTileCacheSize1D)*nTileCacheSize1D )
     {
         // First combine very small bitmaps into a larger tile
         // ===================================================
@@ -1879,7 +1882,8 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
         const int       nNumTilesInCacheX( (nTileCacheSize1D + rSizePixel.Width()-1) / rSizePixel.Width() );
         const int       nNumTilesInCacheY( (nTileCacheSize1D + rSizePixel.Height()-1) / rSizePixel.Height() );
 
-        aVDev.SetOutputSizePixel( Size( nNumTilesInCacheX*rSizePixel.Width(), nNumTilesInCacheY*rSizePixel.Height() ) );
+        aVDev.SetOutputSizePixel( Size( nNumTilesInCacheX*rSizePixel.Width(),
+                                        nNumTilesInCacheY*rSizePixel.Height() ) );
         aVDev.SetMapMode( aMapMode );
 
         // draw bitmap content
