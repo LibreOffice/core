@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_AccessibleFixedText.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:21:17 $ 
+'*  last change:$Date: 2003-06-11 16:32:18 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -74,7 +74,7 @@ option explicit
 ' REQUIRED VARIABLES for interface/service tests:
 Global accText As String
 Global accButton As Object
-
+Global readOnly as Boolean
 
 Sub CreateObj()
 
@@ -108,6 +108,7 @@ On Error Goto ErrHndl
         accButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Close")
         Out.Log("Implementation name: "+oObj.getImplementationName())
         accText = oObj.getText()
+        readOnly = true
     else
         Out.Log("QueryDispatch FAILED. Cannot open Hyperlink dialog...")
     End If
