@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-30 14:11:59 $
+ *  last change: $Author: ka $ $Date: 2002-08-13 11:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ Rectangle SdDrawDocShell::GetVisArea(USHORT nAspect) const
 {
     Rectangle aVisArea;
 
-    if (nAspect == ASPECT_THUMBNAIL)
+    if( ( ASPECT_THUMBNAIL == nAspect ) || ( ASPECT_DOCPRINT == nAspect ) )
     {
         // Groesse der ersten Seite herausgeben
         MapMode aSrcMapMode(MAP_PIXEL);
