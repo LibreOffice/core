@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2000-10-17 17:12:59 $
+ *  last change: $Author: hdu $ $Date: 2000-10-19 09:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,14 @@
 #endif
 #pragma hdrstop
 
+#include <rtl/textenc.h>
+#include <ucsubset.hxx>
+
 #include "dialogs.hrc"
 #include "charmap.hrc"
 
 #include "charmap.hxx"
 #include "dialmgr.hxx"
-
-#include <rtl/textenc.h>
 
 // class SvxShowCharSet --------------------------------------------------
 
@@ -95,10 +96,10 @@ SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
 
     Control( pParent, rResId ),
     aVscrollSB( this, WB_VERT),
-    selectedIndex( FirstInMap())
+    nSelectedIndex( FirstInMap())
 {
-    origSize = GetOutputSizePixel();
-    origPos = GetPosPixel();
+    aOrigSize = GetOutputSizePixel();
+    aOrigPos = GetPosPixel();
 
     SetStyle( GetStyle() | WB_CLIPCHILDREN);
     aVscrollSB.SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
@@ -114,7 +115,7 @@ SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
 void SvxShowCharSet::GetFocus()
 {
     Control::GetFocus();
-    SelectIndex( selectedIndex, TRUE );
+    SelectIndex( nSelectedIndex, TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -122,7 +123,7 @@ void SvxShowCharSet::GetFocus()
 void SvxShowCharSet::LoseFocus()
 {
     Control::LoseFocus();
-    SelectIndex( selectedIndex, TRUE );
+    SelectIndex( nSelectedIndex, TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -219,7 +220,10 @@ void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 // we let them mature here though because it is currently the only use
 
 #define FIRST_UNICODE   sal_Unicode(0x0020)     // ASCII space code
-#define LAST_UNICODE    sal_Unicode(0xFFFF)     // end of UCS-16
+#define LAST_UNICODE    sal_Unicode(0xFFFF)     // end of UCS2
+#define FIRST_SURROGATE sal_Unicode(0xD800)
+#define LAST_SURROGATE  sal_Unicode(0xDFFF)
+#define COUNT_SURROGATE (LAST_SURROGATE - FIRST_SURROGATE + 1);
 
 inline int SvxShowCharSet::FirstInMap( void) const
 {
@@ -230,31 +234,44 @@ inline int SvxShowCharSet::LastInMap( void) const
 {
     if( GetFont().GetCharSet() == RTL_TEXTENCODING_SYMBOL)
         return (0x0FF - 0x020);
-    return (LAST_UNICODE - FIRST_UNICODE);
-}
-
-inline int SvxShowCharSet::FirstInView( void) const
-{
-    int idx = FirstInMap();
-    if( aVscrollSB.IsVisible())
-        idx += aVscrollSB.GetThumbPos() * COLUMN_COUNT;
-    return idx;
-}
-
-inline int SvxShowCharSet::LastInView( void) const
-{
-    int idx = FirstInView();
-    idx += ROW_COUNT * COLUMN_COUNT - 1;
-    return Min( idx, LastInMap());
+    return (LAST_UNICODE - FIRST_UNICODE) - COUNT_SURROGATE;
 }
 
 inline int SvxShowCharSet::UnicodeToMapIndex( sal_Unicode c) const
 {
     //TODO: should depend on font and encoding, change when Font can provide info
-    int mapIndex = c - FIRST_UNICODE;
-    if( mapIndex < FirstInMap() || mapIndex > LastInMap())
-        mapIndex = FirstInMap();
-    return mapIndex;
+    int nMapIndex = c - FIRST_UNICODE;
+    if( c > LAST_SURROGATE)         // skip surrogate unicode subset
+        nMapIndex -= COUNT_SURROGATE;
+    if( nMapIndex < FirstInMap() || nMapIndex > LastInMap())
+        nMapIndex = FirstInMap();
+    return nMapIndex;
+}
+
+inline sal_Unicode SvxShowCharSet::MapIndexToUnicode( int index) const
+{
+    //TODO: should depend on font and encoding, change when Font can provide info
+    sal_Unicode c = FIRST_UNICODE + index;
+    if( c >= FIRST_SURROGATE)       // skip surrogate unicode subset
+        c += COUNT_SURROGATE;
+    return c;
+}
+
+// -----------------------------------------------------------------------
+
+inline int SvxShowCharSet::FirstInView( void) const
+{
+    int nIndex = FirstInMap();
+    if( aVscrollSB.IsVisible())
+        nIndex += aVscrollSB.GetThumbPos() * COLUMN_COUNT;
+    return nIndex;
+}
+
+inline int SvxShowCharSet::LastInView( void) const
+{
+    int nIndex = FirstInView();
+    nIndex += ROW_COUNT * COLUMN_COUNT - 1;
+    return Min( nIndex, LastInMap());
 }
 
 inline Point SvxShowCharSet::MapIndexToPixel( int index) const
@@ -269,12 +286,6 @@ inline int SvxShowCharSet::PixelToMapIndex( const Point point) const
 {
     int base = FirstInView();
     return (base + (point.X()/nX) + (point.Y()/nY) * COLUMN_COUNT);
-}
-
-inline sal_Unicode SvxShowCharSet::MapIndexToUnicode( int index) const
-{
-    //TODO: should depend on font and encoding, change when Font can provide info
-    return (FIRST_UNICODE + index);
 }
 
 // -----------------------------------------------------------------------
@@ -298,7 +309,7 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
         return;
     }
 
-    int tmpSelected = selectedIndex;
+    int tmpSelected = nSelectedIndex;
 
     switch ( aCode.GetCode() )
     {
@@ -331,9 +342,10 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
             break;
         default:
             Control::KeyInput( rKEvt );
+            tmpSelected = FirstInMap() - 1; // mark as invalid
     }
 
-    if ( tmpSelected >= FirstInMap() &&tmpSelected <= LastInMap() ) {
+    if ( tmpSelected >= FirstInMap() && tmpSelected <= LastInMap() ) {
         SelectIndex( tmpSelected, TRUE);
         aPreSelectHdl.Call( this );
     }
@@ -369,7 +381,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
         int x = pix.X();
         int y = pix.Y();
 
-        if ( i == selectedIndex && HasFocus() )
+        if ( i == nSelectedIndex && HasFocus() )
         {
             const StyleSettings& rStyleSettings =
                 Application::GetSettings().GetStyleSettings();
@@ -389,15 +401,9 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
             SetFillColor( aFillCol );
         }
 
-        String aCharStr;
-        if ( i > 0 )
-            aCharStr = String( MapIndexToUnicode( i) );
-        else
-            aCharStr.Erase();
-
+        String aCharStr( MapIndexToUnicode( i ) );
         x += ( nX - GetTextWidth(aCharStr) ) / 2;
         y += ( nY - GetTextHeight() ) / 2;
-
         DrawText( Point( x, y ), aCharStr );
     }
 }
@@ -432,16 +438,16 @@ void SvxShowCharSet::InitSettings( BOOL bForeground, BOOL bBackground )
 
 sal_Unicode SvxShowCharSet::GetSelectCharacter() const
 {
-    return MapIndexToUnicode( selectedIndex);
+    return MapIndexToUnicode( nSelectedIndex);
 }
 
 // -----------------------------------------------------------------------
 
 void SvxShowCharSet::SetFont( const Font& rFont )
 {
-    sal_Unicode selectedChar = MapIndexToUnicode( selectedIndex);
-    if( selectedIndex < FirstInView() || selectedIndex > LastInView())
-        selectedChar = MapIndexToUnicode( FirstInView());
+    sal_Unicode cSelectedChar = MapIndexToUnicode( nSelectedIndex);
+    if( nSelectedIndex < FirstInView() || nSelectedIndex > LastInView())
+        cSelectedChar = MapIndexToUnicode( FirstInView());
 
     Font aFont = rFont;
 
@@ -451,54 +457,55 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     Control::SetFont( aFont );
 
     // hide scrollbar when there is nothing to scroll
-    BOOL needVscroll = (LastInMap()-FirstInMap()+1 > ROW_COUNT*COLUMN_COUNT);
+    BOOL bNeedVscroll = (LastInMap()-FirstInMap()+1 > ROW_COUNT*COLUMN_COUNT);
 
-    nX = (origSize.Width() - (needVscroll ? SBWIDTH : 0)) / COLUMN_COUNT;
-    nY = origSize.Height() / ROW_COUNT;
+    nX = (aOrigSize.Width() - (bNeedVscroll ? SBWIDTH : 0)) / COLUMN_COUNT;
+    nY = aOrigSize.Height() / ROW_COUNT;
 
-    if( needVscroll) {
+    if( bNeedVscroll)
+    {
         aVscrollSB.SetPosSizePixel( nX * COLUMN_COUNT, 0, SBWIDTH, nY * ROW_COUNT);
-        int nVisible = ROW_COUNT;
-        int lastRow  = (LastInMap() - FirstInMap() + COLUMN_COUNT) / COLUMN_COUNT;
         aVscrollSB.SetRangeMin( 0);
-        aVscrollSB.SetRangeMax( lastRow);
-        aVscrollSB.SetVisibleSize( nVisible);
+        int nLastRow = (LastInMap() - FirstInMap() + COLUMN_COUNT) / COLUMN_COUNT;
+        aVscrollSB.SetRangeMax( nLastRow);
+        aVscrollSB.SetPageSize( ROW_COUNT-1);
+        aVscrollSB.SetVisibleSize( ROW_COUNT);
     }
 
-    // rearrange CharSet element in accordance with nX- and nY-multiples
-    Size newSize( nX * COLUMN_COUNT + (needVscroll ? SBWIDTH : 0), nY * ROW_COUNT);
-    Point newPos = origPos + Point( (origSize.Width() - newSize.Width()) / 2, 0);
-    SetPosPixel( newPos);
-    SetOutputSizePixel( newSize);
+    // rearrange CharSet element in sync with nX- and nY-multiples
+    Size aNewSize( nX * COLUMN_COUNT + (bNeedVscroll ? SBWIDTH : 0), nY * ROW_COUNT);
+    Point aNewPos = aOrigPos + Point( (aOrigSize.Width() - aNewSize.Width()) / 2, 0);
+    SetPosPixel( aNewPos);
+    SetOutputSizePixel( aNewSize);
 
-    int mapIndex = UnicodeToMapIndex( selectedChar);
-    SelectIndex( mapIndex);
-    aVscrollSB.Show( needVscroll);
+    int nMapIndex = UnicodeToMapIndex( cSelectedChar);
+    SelectIndex( nMapIndex);
+    aVscrollSB.Show( bNeedVscroll);
 
     Invalidate();
 }
 
 // -----------------------------------------------------------------------
 
-void SvxShowCharSet::SelectIndex( int idxNew, BOOL bFocus )
+void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
 {
-    if ( (selectedIndex == idxNew) && !bFocus )
+    if ( (nSelectedIndex == nNewIndex) && !bFocus )
         return;
 
-    if( idxNew<FirstInView()) {
+    if( nNewIndex < FirstInView()) {
         // need to scroll up to see selected item
-        int newPos = aVscrollSB.GetThumbPos();
-        newPos -= (FirstInView() - idxNew + COLUMN_COUNT-1) / COLUMN_COUNT;
-        aVscrollSB.SetThumbPos( newPos);
-        selectedIndex = idxNew;
+        int nNewPos = aVscrollSB.GetThumbPos();
+        nNewPos -= (FirstInView() - nNewIndex + COLUMN_COUNT-1) / COLUMN_COUNT;
+        aVscrollSB.SetThumbPos( nNewPos);
+        nSelectedIndex = nNewIndex;
         Invalidate();
     }
-    else if( idxNew>LastInView()) {
+    else if( nNewIndex > LastInView()) {
         // need to scroll down to see selected item
-        int newPos = aVscrollSB.GetThumbPos();
-        newPos += (idxNew - LastInView() + COLUMN_COUNT) / COLUMN_COUNT;
-        aVscrollSB.SetThumbPos( newPos);
-        selectedIndex = idxNew;
+        int nNewPos = aVscrollSB.GetThumbPos();
+        nNewPos += (nNewIndex - LastInView() + COLUMN_COUNT) / COLUMN_COUNT;
+        aVscrollSB.SetThumbPos( nNewPos);
+        nSelectedIndex = nNewIndex;
         Invalidate();
     } else {
         // remove highlighted view
@@ -507,16 +514,16 @@ void SvxShowCharSet::SelectIndex( int idxNew, BOOL bFocus )
         SetLineColor();
         SetFillColor( GetBackground().GetColor() );
 
-        Point pixOld = MapIndexToPixel( selectedIndex);
-        pixOld.Move( +1, +1);
-        DrawRect( Rectangle( pixOld, Size( nX-1, nY-1)));
+        Point aOldPixel = MapIndexToPixel( nSelectedIndex);
+        aOldPixel.Move( +1, +1);
+        DrawRect( Rectangle( aOldPixel, Size( nX-1, nY-1)));
         SetLineColor( aLineCol );
         SetFillColor( aFillCol );
 
-        int idxOld = selectedIndex;
-        selectedIndex = idxNew;
-        DrawChars_Impl( idxOld, idxOld );
-        DrawChars_Impl( idxNew, idxNew );
+        int nOldIndex = nSelectedIndex;
+        nSelectedIndex = nNewIndex;
+        DrawChars_Impl( nOldIndex, nOldIndex );
+        DrawChars_Impl( nNewIndex, nNewIndex );
     }
 
     aHighHdl.Call( this );
@@ -526,14 +533,20 @@ void SvxShowCharSet::SelectIndex( int idxNew, BOOL bFocus )
 
 void SvxShowCharSet::SelectCharacter( sal_Unicode cNew, BOOL bFocus )
 {
-    SelectIndex( UnicodeToMapIndex( cNew), bFocus);
+    int nMapIndex = UnicodeToMapIndex( cNew);
+    SelectIndex( nMapIndex, bFocus);
+    if( !bFocus) {
+        // move selected item to top row if unfocused
+        aVscrollSB.SetThumbPos( (nMapIndex - FirstInMap()) / COLUMN_COUNT);
+        Invalidate();
+    }
 }
 
 // -----------------------------------------------------------------------
 
 IMPL_LINK_INLINE_START( SvxShowCharSet, VscrollHdl, ScrollBar *, EMPTYARG )
 {
-    if( selectedIndex < FirstInView() || selectedIndex > LastInView())
+    if( nSelectedIndex < FirstInView() || nSelectedIndex > LastInView())
         SelectIndex( FirstInView());
 
     Invalidate();
@@ -549,12 +562,11 @@ SvxShowCharSet::~SvxShowCharSet()
 
 // class SvxShowText -----------------------------------------------------
 
-SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL bCenter) :
+SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL _bCenter) :
 
-    Control( pParent, rResId )
-
+    Control( pParent, rResId ),
+    bCenter( _bCenter)
 {
-    SvxShowText::bCenter = bCenter;
 }
 
 // -----------------------------------------------------------------------
@@ -618,7 +630,8 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne ) :
     aOKBtn          ( this, ResId( BTN_CHAR_OK ) ),
     aCancelBtn      ( this, ResId( BTN_CHAR_CANCEL ) ),
     aHelpBtn        ( this, ResId( BTN_CHAR_HELP ) ),
-    aDeleteBtn      ( this, ResId( BTN_DELETE ) )
+    aDeleteBtn      ( this, ResId( BTN_DELETE ) ),
+    pSubsetMap( 0)
 
 {
     FreeResource();
@@ -641,25 +654,25 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne ) :
         aDeleteBtn.Hide();
     }
 
+    String aDefStr( aFont.GetName() );
+    String aLastName;
     xub_StrLen i;
     xub_StrLen nCount = GetDevFontCount();
-    String aDefStr( aFont.GetName() );
-
     for ( i = 0; i < nCount; i++ )
     {
         String aFontName( GetDevFont( i ).GetName() );
-
-        if ( aFontLB.GetEntryPos( aFontName ) == LISTBOX_ENTRY_NOTFOUND )
+        if ( aFontName != aLastName )
         {
+            aLastName = aFontName;
             USHORT nPos = aFontLB.InsertEntry( aFontName );
             aFontLB.SetEntryData( nPos, (void*)(ULONG)i );
         }
     }
-    FASTBOOL bFound = FALSE;
-    // the font may not be in the list ->
+    // the font may not be in the list =>
     // try to find a font name token in list and select found font,
     // else select topmost entry
-    if ( aFontLB.GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND )
+    FASTBOOL bFound = (aFontLB.GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
+    if( !bFound )
     {
         for ( i = 0; i < aDefStr.GetTokenCount(); ++i )
         {
@@ -673,8 +686,6 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne ) :
             }
         }
     }
-    else
-        bFound = TRUE;
 
     if ( bFound )
         aFontLB.SelectEntry( aDefStr );
@@ -739,7 +750,7 @@ IMPL_LINK( SvxCharacterMap, OKHdl, OKButton *, EMPTYARG )
     if ( !aStr.Len() )
     {
         if ( aShowSet.GetSelectCharacter() > 0 )
-            aStr = String( aShowSet.GetSelectCharacter() );
+            aStr = aShowSet.GetSelectCharacter();
         aShowText.SetText( aStr );
     }
     EndDialog( TRUE );
@@ -761,14 +772,18 @@ IMPL_LINK( SvxCharacterMap, FontSelectHdl, ListBox *, EMPTYARG )
 
     // setup unicode subset listbar with font specific subsets,
     // hide unicode subset listbar for symbol fonts
+    // TODO: get info from the Font once it provides it
+    if( pSubsetMap)
+        delete pSubsetMap;
+    pSubsetMap = new SubsetMap;
+
     BOOL bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
     if( bNeedSubset) {
         // update subset listbox for new font's unicode subsets
-        const SubsetMap dummyMap;   // TODO: font should provide SubsetMap
         aSubsetLB.Clear();
         const Subset* s = 0;
         // TODO: is it worth to improve stupid linear search?
-        for( int i = 0; (s = dummyMap.GetSubsetByIndex( i)) != 0; ++i) {
+        for( int i = 0; (s = pSubsetMap->GetSubsetByIndex( i)) != 0; ++i) {
             USHORT nPos = aSubsetLB.InsertEntry( s->GetName());
             aSubsetLB.SetEntryData( nPos, (void*)s );
             // subset must live at least as long as the selected font !!!
@@ -789,9 +804,9 @@ IMPL_LINK( SvxCharacterMap, FontSelectHdl, ListBox *, EMPTYARG )
 IMPL_LINK( SvxCharacterMap, SubsetSelectHdl, ListBox *, EMPTYARG )
 {
     USHORT nPos = aSubsetLB.GetSelectEntryPos();
-    const Subset* s = reinterpret_cast<const Subset*> (aSubsetLB.GetEntryData(nPos));
-    if( s) {
-        sal_Unicode c = s->GetRangeMin();
+    const Subset* subset = reinterpret_cast<const Subset*> (aSubsetLB.GetEntryData(nPos));
+    if( subset) {
+        sal_Unicode c = subset->GetRangeMin();
         aShowSet.SelectCharacter( c);
     }
     return 0;
@@ -835,9 +850,8 @@ IMPL_LINK( SvxCharacterMap, CharHighlightHdl, Control *, EMPTYARG )
     sal_Unicode c = aShowSet.GetSelectCharacter();
     sal_Bool bSelect = ( c > 0 );
     if ( bSelect ) {
-        aTemp = String( c );
-        const SubsetMap dummyMap;   // TODO: font should provide SubsetMap
-        const Subset* subset = dummyMap.GetSubsetByUnicode( c);
+        aTemp = c;
+        const Subset* subset = pSubsetMap->GetSubsetByUnicode( c);
         if( subset)
             aSubsetLB.SelectEntry( subset->GetName());
     }
@@ -877,25 +891,26 @@ SvxCharacterMap::~SvxCharacterMap()
 
 // class SubsetMap -------------------------------------------------------
 // TODO: should be moved into Font Attributes stuff
-// we let the it mature here though because it is currently the only use
+// we let it mature here though because it is currently the only use
 
-const const Subset** SubsetMap::allSubsets = 0;
-int SubsetMap::numAllSubsets = 0;
-
-SubsetMap::SubsetMap( /*TODO*/void)
+SubsetMap::SubsetMap( /* TODO */ ) :
+    Resource( ResId( SVX_RES(RID_SUBSETMAP)))
 {
-    if( allSubsets == 0)
-        InitStatics();
+    InitList();
+    FreeResource();
 }
 
-SubsetMap::~SubsetMap( void)
+SubsetMap::~SubsetMap()
 {
+    for( int i = nSubsets; --i >= 0;)
+        delete aSubsets[ i];
+    delete[] aSubsets;
 }
 
 const Subset* SubsetMap::GetSubsetByIndex( int index) const
 {
-    if( (index >= 0) && (index < numAllSubsets))
-        return allSubsets[ index];
+    if( (index >= 0) && (index < nSubsets))
+        return aSubsets[ index];
     return 0;
 }
 
@@ -909,122 +924,121 @@ const Subset* SubsetMap::GetSubsetByUnicode( sal_Unicode c) const
 }
 
 inline Subset::Subset( sal_Unicode _min, sal_Unicode _max, int resId)
-:   rangeMin(_min), rangeMax(_max), rangeName( ResId(SVX_RES(resId)))
+:   rangeMin(_min), rangeMax(_max), rangeName( ResId(resId))
 {}
 
-void SubsetMap::InitStatics( void)
+void SubsetMap::InitList( void)
 {
-    DBG_ASSERT( allSubsets == 0, "Unicode Subset Information double init");
-
-    allSubsets = new const Subset*[ SVXCOUNT_CHARRANGE];
+    aSubsets = new const Subset*[ RID_SUBSET_COUNT];
     int i = 0;
     // TODO: eventually merge or split unicode subranges
     //       a "native writer" should decide for his subsets
-    allSubsets[ i++] = new Subset( 0x0041, 0x007A, RID_SVXSTR_BASIC_LATIN);
-    allSubsets[ i++] = new Subset( 0x00C0, 0x00FF, RID_SVXSTR_LATIN_1);
-    allSubsets[ i++] = new Subset( 0x0100, 0x017F, RID_SVXSTR_LATIN_EXTENDED_A);
-    allSubsets[ i++] = new Subset( 0x0180, 0x024F, RID_SVXSTR_LATIN_EXTENDED_B);
-    allSubsets[ i++] = new Subset( 0x0250, 0x02AF, RID_SVXSTR_IPA_EXTENSIONS);
-    allSubsets[ i++] = new Subset( 0x02B0, 0x02FF, RID_SVXSTR_SPACING_MODIFIERS);
-    allSubsets[ i++] = new Subset( 0x0300, 0x036F, RID_SVXSTR_COMB_DIACRITICAL);
-    allSubsets[ i++] = new Subset( 0x0370, 0x03FF, RID_SVXSTR_BASIC_GREEK);
-//  allSubsets[ i++] = new Subset( 0x03D0, 0x03F3, RID_SVXSTR_GREEK_SYMS_COPTIC);
-    allSubsets[ i++] = new Subset( 0x0400, 0x04FF, RID_SVXSTR_CYRILLIC);
-    allSubsets[ i++] = new Subset( 0x0530, 0x058F, RID_SVXSTR_ARMENIAN);
-    allSubsets[ i++] = new Subset( 0x0590, 0x05FF, RID_SVXSTR_BASIC_HEBREW);
-//  allSubsets[ i++] = new Subset( 0x0591, 0x05C4, RID_SVXSTR_HEBREW_EXTENDED);
-    allSubsets[ i++] = new Subset( 0x0600, 0x06FF, RID_SVXSTR_BASIC_ARABIC);
-//  allSubsets[ i++] = new Subset( 0x0660, 0x06FF, RID_SVXSTR_ARABIC_EXTENDED);
-    allSubsets[ i++] = new Subset( 0x0700, 0x074F, RID_SVXSTR_SYRIAC);
-    allSubsets[ i++] = new Subset( 0x0780, 0x07BF, RID_SVXSTR_THAANA);
+    aSubsets[ i++] = new Subset( 0x0041, 0x007A, RID_SUBSETSTR_BASIC_LATIN);
+    aSubsets[ i++] = new Subset( 0x00C0, 0x00FF, RID_SUBSETSTR_LATIN_1);
+    aSubsets[ i++] = new Subset( 0x0100, 0x017F, RID_SUBSETSTR_LATIN_EXTENDED_A);
+    aSubsets[ i++] = new Subset( 0x0180, 0x024F, RID_SUBSETSTR_LATIN_EXTENDED_B);
+    aSubsets[ i++] = new Subset( 0x0250, 0x02AF, RID_SUBSETSTR_IPA_EXTENSIONS);
+    aSubsets[ i++] = new Subset( 0x02B0, 0x02FF, RID_SUBSETSTR_SPACING_MODIFIERS);
+    aSubsets[ i++] = new Subset( 0x0300, 0x036F, RID_SUBSETSTR_COMB_DIACRITICAL);
+    aSubsets[ i++] = new Subset( 0x0370, 0x03FF, RID_SUBSETSTR_BASIC_GREEK);
+//  aSubsets[ i++] = new Subset( 0x03D0, 0x03F3, RID_SUBSETSTR_GREEK_SYMS_COPTIC);
+    aSubsets[ i++] = new Subset( 0x0400, 0x04FF, RID_SUBSETSTR_CYRILLIC);
+    aSubsets[ i++] = new Subset( 0x0530, 0x058F, RID_SUBSETSTR_ARMENIAN);
+    aSubsets[ i++] = new Subset( 0x0590, 0x05FF, RID_SUBSETSTR_BASIC_HEBREW);
+//  aSubsets[ i++] = new Subset( 0x0591, 0x05C4, RID_SUBSETSTR_HEBREW_EXTENDED);
+    aSubsets[ i++] = new Subset( 0x0600, 0x06FF, RID_SUBSETSTR_BASIC_ARABIC);
+//  aSubsets[ i++] = new Subset( 0x0660, 0x06FF, RID_SUBSETSTR_ARABIC_EXTENDED);
+    aSubsets[ i++] = new Subset( 0x0700, 0x074F, RID_SUBSETSTR_SYRIAC);
+    aSubsets[ i++] = new Subset( 0x0780, 0x07BF, RID_SUBSETSTR_THAANA);
 
-    allSubsets[ i++] = new Subset( 0x0900, 0x097F, RID_SVXSTR_DEVANAGARI);
-    allSubsets[ i++] = new Subset( 0x0980, 0x09FF, RID_SVXSTR_BENGALI);
-    allSubsets[ i++] = new Subset( 0x0A00, 0x0A7F, RID_SVXSTR_GURMUKHI);
-    allSubsets[ i++] = new Subset( 0x0A80, 0x0AFF, RID_SVXSTR_GUJARATI);
-    allSubsets[ i++] = new Subset( 0x0B00, 0x0B7F, RID_SVXSTR_ORIYA);
-    allSubsets[ i++] = new Subset( 0x0B80, 0x0BFF, RID_SVXSTR_TAMIL);
-    allSubsets[ i++] = new Subset( 0x0C00, 0x0C7F, RID_SVXSTR_TELUGU);
-    allSubsets[ i++] = new Subset( 0x0C80, 0x0CFF, RID_SVXSTR_KANNADA);
-    allSubsets[ i++] = new Subset( 0x0D00, 0x0D7F, RID_SVXSTR_MALAYALAM);
-    allSubsets[ i++] = new Subset( 0x0D80, 0x0DFF, RID_SVXSTR_SINHALA);
-    allSubsets[ i++] = new Subset( 0x0E00, 0x0E7F, RID_SVXSTR_THAI);
-    allSubsets[ i++] = new Subset( 0x0E80, 0x0EFF, RID_SVXSTR_LAO);
-    allSubsets[ i++] = new Subset( 0x0F00, 0x0FBF, RID_SVXSTR_TIBETAN);
-    allSubsets[ i++] = new Subset( 0x1000, 0x109F, RID_SVXSTR_MYANMAR);
-    allSubsets[ i++] = new Subset( 0x10A0, 0x10FF, RID_SVXSTR_BASIC_GEORGIAN);
-//  allSubsets[ i++] = new Subset( 0x10A0, 0x10C5, RID_SVXSTR_GEORGIAN_EXTENDED);
+    aSubsets[ i++] = new Subset( 0x0900, 0x097F, RID_SUBSETSTR_DEVANAGARI);
+    aSubsets[ i++] = new Subset( 0x0980, 0x09FF, RID_SUBSETSTR_BENGALI);
+    aSubsets[ i++] = new Subset( 0x0A00, 0x0A7F, RID_SUBSETSTR_GURMUKHI);
+    aSubsets[ i++] = new Subset( 0x0A80, 0x0AFF, RID_SUBSETSTR_GUJARATI);
+    aSubsets[ i++] = new Subset( 0x0B00, 0x0B7F, RID_SUBSETSTR_ORIYA);
+    aSubsets[ i++] = new Subset( 0x0B80, 0x0BFF, RID_SUBSETSTR_TAMIL);
+    aSubsets[ i++] = new Subset( 0x0C00, 0x0C7F, RID_SUBSETSTR_TELUGU);
+    aSubsets[ i++] = new Subset( 0x0C80, 0x0CFF, RID_SUBSETSTR_KANNADA);
+    aSubsets[ i++] = new Subset( 0x0D00, 0x0D7F, RID_SUBSETSTR_MALAYALAM);
+    aSubsets[ i++] = new Subset( 0x0D80, 0x0DFF, RID_SUBSETSTR_SINHALA);
+    aSubsets[ i++] = new Subset( 0x0E00, 0x0E7F, RID_SUBSETSTR_THAI);
+    aSubsets[ i++] = new Subset( 0x0E80, 0x0EFF, RID_SUBSETSTR_LAO);
+    aSubsets[ i++] = new Subset( 0x0F00, 0x0FBF, RID_SUBSETSTR_TIBETAN);
+    aSubsets[ i++] = new Subset( 0x1000, 0x109F, RID_SUBSETSTR_MYANMAR);
+    aSubsets[ i++] = new Subset( 0x10A0, 0x10FF, RID_SUBSETSTR_BASIC_GEORGIAN);
+//  aSubsets[ i++] = new Subset( 0x10A0, 0x10C5, RID_SUBSETSTR_GEORGIAN_EXTENDED);
 
-    allSubsets[ i++] = new Subset( 0x1100, 0x11FF, RID_SVXSTR_HANGUL_JAMO);
-    allSubsets[ i++] = new Subset( 0x1200, 0x137F, RID_SVXSTR_ETHIOPIC);
-    allSubsets[ i++] = new Subset( 0x13A0, 0x13FF, RID_SVXSTR_CHEROKEE);
-    allSubsets[ i++] = new Subset( 0x1400, 0x167F, RID_SVXSTR_CANADIAN_ABORIGINAL);
-    allSubsets[ i++] = new Subset( 0x1680, 0x169F, RID_SVXSTR_OGHAM);
-    allSubsets[ i++] = new Subset( 0x16A0, 0x16F0, RID_SVXSTR_RUNIC);
+    aSubsets[ i++] = new Subset( 0x1100, 0x11FF, RID_SUBSETSTR_HANGUL_JAMO);
+    aSubsets[ i++] = new Subset( 0x1200, 0x137F, RID_SUBSETSTR_ETHIOPIC);
+    aSubsets[ i++] = new Subset( 0x13A0, 0x13FF, RID_SUBSETSTR_CHEROKEE);
+    aSubsets[ i++] = new Subset( 0x1400, 0x167F, RID_SUBSETSTR_CANADIAN_ABORIGINAL);
+    aSubsets[ i++] = new Subset( 0x1680, 0x169F, RID_SUBSETSTR_OGHAM);
+    aSubsets[ i++] = new Subset( 0x16A0, 0x16F0, RID_SUBSETSTR_RUNIC);
 
-    allSubsets[ i++] = new Subset( 0x1780, 0x17FF, RID_SVXSTR_KHMER);
-    allSubsets[ i++] = new Subset( 0x1800, 0x18AF, RID_SVXSTR_MONGOLIAN);
-    allSubsets[ i++] = new Subset( 0x1E00, 0x1EFF, RID_SVXSTR_LATIN_EXTENDED_ADDS);
-    allSubsets[ i++] = new Subset( 0x1F00, 0x1FFF, RID_SVXSTR_GREEK_EXTENDED);
+    aSubsets[ i++] = new Subset( 0x1780, 0x17FF, RID_SUBSETSTR_KHMER);
+    aSubsets[ i++] = new Subset( 0x1800, 0x18AF, RID_SUBSETSTR_MONGOLIAN);
+    aSubsets[ i++] = new Subset( 0x1E00, 0x1EFF, RID_SUBSETSTR_LATIN_EXTENDED_ADDS);
+    aSubsets[ i++] = new Subset( 0x1F00, 0x1FFF, RID_SUBSETSTR_GREEK_EXTENDED);
 
-    allSubsets[ i++] = new Subset( 0x2000, 0x206F, RID_SVXSTR_GENERAL_PUNCTUATION);
-    allSubsets[ i++] = new Subset( 0x2070, 0x209F, RID_SVXSTR_SUB_SUPER_SCRIPTS);
-    allSubsets[ i++] = new Subset( 0x20A0, 0x20CF, RID_SVXSTR_CURRENCY_SYMBOLS);
-    allSubsets[ i++] = new Subset( 0x20D0, 0x20FF, RID_SVXSTR_COMB_DIACRITIC_SYMS);
-    allSubsets[ i++] = new Subset( 0x2100, 0x214F, RID_SVXSTR_LETTERLIKE_SYMBOLS);
-    allSubsets[ i++] = new Subset( 0x2150, 0x218F, RID_SVXSTR_NUMBER_FORMS);
-    allSubsets[ i++] = new Subset( 0x2190, 0x21FF, RID_SVXSTR_ARROWS);
-    allSubsets[ i++] = new Subset( 0x2200, 0x22FF, RID_SVXSTR_MATH_OPERATORS);
-    allSubsets[ i++] = new Subset( 0x2300, 0x23FF, RID_SVXSTR_MISC_TECHNICAL);
-    allSubsets[ i++] = new Subset( 0x2400, 0x243F, RID_SVXSTR_CONTROL_PICTURES);
-    allSubsets[ i++] = new Subset( 0x2440, 0x245F, RID_SVXSTR_OPTICAL_CHAR_REC);
-    allSubsets[ i++] = new Subset( 0x2460, 0x24FF, RID_SVXSTR_ENCLOSED_ALPHANUM);
-    allSubsets[ i++] = new Subset( 0x2500, 0x257F, RID_SVXSTR_BOX_DRAWING);
-    allSubsets[ i++] = new Subset( 0x2580, 0x259F, RID_SVXSTR_BLOCK_ELEMENTS);
-    allSubsets[ i++] = new Subset( 0x25A0, 0x25FF, RID_SVXSTR_GEOMETRIC_SHAPES);
-    allSubsets[ i++] = new Subset( 0x2600, 0x26FF, RID_SVXSTR_MISC_DINGBATS);
-    allSubsets[ i++] = new Subset( 0x2700, 0x27BF, RID_SVXSTR_DINGBATS);
+    aSubsets[ i++] = new Subset( 0x2000, 0x206F, RID_SUBSETSTR_GENERAL_PUNCTUATION);
+    aSubsets[ i++] = new Subset( 0x2070, 0x209F, RID_SUBSETSTR_SUB_SUPER_SCRIPTS);
+    aSubsets[ i++] = new Subset( 0x20A0, 0x20CF, RID_SUBSETSTR_CURRENCY_SYMBOLS);
+    aSubsets[ i++] = new Subset( 0x20D0, 0x20FF, RID_SUBSETSTR_COMB_DIACRITIC_SYMS);
+    aSubsets[ i++] = new Subset( 0x2100, 0x214F, RID_SUBSETSTR_LETTERLIKE_SYMBOLS);
+    aSubsets[ i++] = new Subset( 0x2150, 0x218F, RID_SUBSETSTR_NUMBER_FORMS);
+    aSubsets[ i++] = new Subset( 0x2190, 0x21FF, RID_SUBSETSTR_ARROWS);
+    aSubsets[ i++] = new Subset( 0x2200, 0x22FF, RID_SUBSETSTR_MATH_OPERATORS);
+    aSubsets[ i++] = new Subset( 0x2300, 0x23FF, RID_SUBSETSTR_MISC_TECHNICAL);
+    aSubsets[ i++] = new Subset( 0x2400, 0x243F, RID_SUBSETSTR_CONTROL_PICTURES);
+    aSubsets[ i++] = new Subset( 0x2440, 0x245F, RID_SUBSETSTR_OPTICAL_CHAR_REC);
+    aSubsets[ i++] = new Subset( 0x2460, 0x24FF, RID_SUBSETSTR_ENCLOSED_ALPHANUM);
+    aSubsets[ i++] = new Subset( 0x2500, 0x257F, RID_SUBSETSTR_BOX_DRAWING);
+    aSubsets[ i++] = new Subset( 0x2580, 0x259F, RID_SUBSETSTR_BLOCK_ELEMENTS);
+    aSubsets[ i++] = new Subset( 0x25A0, 0x25FF, RID_SUBSETSTR_GEOMETRIC_SHAPES);
+    aSubsets[ i++] = new Subset( 0x2600, 0x26FF, RID_SUBSETSTR_MISC_DINGBATS);
+    aSubsets[ i++] = new Subset( 0x2700, 0x27BF, RID_SUBSETSTR_DINGBATS);
 
-    allSubsets[ i++] = new Subset( 0x3000, 0x303F, RID_SVXSTR_CJK_SYMS_PUNCTUATION);
-    allSubsets[ i++] = new Subset( 0x3040, 0x309F, RID_SVXSTR_HIRAGANA);
-    allSubsets[ i++] = new Subset( 0x30A0, 0x30FF, RID_SVXSTR_KATAKANA);
-    allSubsets[ i++] = new Subset( 0x3100, 0x312F, RID_SVXSTR_BOPOMOFO);
-    allSubsets[ i++] = new Subset( 0x3130, 0x318F, RID_SVXSTR_HANGUL_COMPAT_JAMO);
-    allSubsets[ i++] = new Subset( 0x3190, 0x31FF, RID_SVXSTR_CJK_MISC);
-    allSubsets[ i++] = new Subset( 0x3200, 0x32FF, RID_SVXSTR_ENCLOSED_CJK_LETTERS);
-    allSubsets[ i++] = new Subset( 0x3300, 0x33FF, RID_SVXSTR_CJK_COMPATIBILITY);
+    aSubsets[ i++] = new Subset( 0x3000, 0x303F, RID_SUBSETSTR_CJK_SYMS_PUNCTUATION);
+    aSubsets[ i++] = new Subset( 0x3040, 0x309F, RID_SUBSETSTR_HIRAGANA);
+    aSubsets[ i++] = new Subset( 0x30A0, 0x30FF, RID_SUBSETSTR_KATAKANA);
+    aSubsets[ i++] = new Subset( 0x3100, 0x312F, RID_SUBSETSTR_BOPOMOFO);
+    aSubsets[ i++] = new Subset( 0x3130, 0x318F, RID_SUBSETSTR_HANGUL_COMPAT_JAMO);
+    aSubsets[ i++] = new Subset( 0x3190, 0x31FF, RID_SUBSETSTR_CJK_MISC);
+    aSubsets[ i++] = new Subset( 0x3200, 0x32FF, RID_SUBSETSTR_ENCLOSED_CJK_LETTERS);
+    aSubsets[ i++] = new Subset( 0x3300, 0x33FF, RID_SUBSETSTR_CJK_COMPATIBILITY);
 
-    allSubsets[ i++] = new Subset( 0x3400, 0x4DFF, RID_SVXSTR_CJK_UNIFIED_IDGRAPH_EXT_A);
-    allSubsets[ i++] = new Subset( 0x4E00, 0x9FA5, RID_SVXSTR_CJK_UNIFIED_IDGRAPH);
-    allSubsets[ i++] = new Subset( 0xA000, 0xA4CF, RID_SVXSTR_YI);
-    allSubsets[ i++] = new Subset( 0xAC00, 0xB097, RID_SVXSTR_HANGUL_GA);
-    allSubsets[ i++] = new Subset( 0xB098, 0xB2E3, RID_SVXSTR_HANGUL_NA);
-    allSubsets[ i++] = new Subset( 0xB2E4, 0xB77B, RID_SVXSTR_HANGUL_DA);
-    allSubsets[ i++] = new Subset( 0xB77C, 0xB9C7, RID_SVXSTR_HANGUL_RA);
-    allSubsets[ i++] = new Subset( 0xB9C8, 0xBC13, RID_SVXSTR_HANGUL_MA);
-    allSubsets[ i++] = new Subset( 0xBC14, 0xC0AB, RID_SVXSTR_HANGUL_BA);
-    allSubsets[ i++] = new Subset( 0xC0AC, 0xC543, RID_SVXSTR_HANGUL_SA);
-    allSubsets[ i++] = new Subset( 0xC544, 0xC78F, RID_SVXSTR_HANGUL_AH);
-    allSubsets[ i++] = new Subset( 0xC790, 0xCC27, RID_SVXSTR_HANGUL_JA);
-    allSubsets[ i++] = new Subset( 0xCC28, 0xCE73, RID_SVXSTR_HANGUL_CHA);
-    allSubsets[ i++] = new Subset( 0xCE74, 0xD0BF, RID_SVXSTR_HANGUL_KA);
-    allSubsets[ i++] = new Subset( 0xD0C0, 0xD30B, RID_SVXSTR_HANGUL_TA);
-    allSubsets[ i++] = new Subset( 0xD30C, 0xD557, RID_SVXSTR_HANGUL_PA);
-    allSubsets[ i++] = new Subset( 0xD558, 0xD7A3, RID_SVXSTR_HANGUL_HA);
-//  allSubsets[ i++] = new Subset( 0xAC00, 0xD7A3, RID_SVXSTR_HANGUL);
+    aSubsets[ i++] = new Subset( 0x3400, 0x4DFF, RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH);
+    aSubsets[ i++] = new Subset( 0x4E00, 0x9FA5, RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH);
+    aSubsets[ i++] = new Subset( 0xA000, 0xA4CF, RID_SUBSETSTR_YI);
+    aSubsets[ i++] = new Subset( 0xAC00, 0xB097, RID_SUBSETSTR_HANGUL_GA);
+    aSubsets[ i++] = new Subset( 0xB098, 0xB2E3, RID_SUBSETSTR_HANGUL_NA);
+    aSubsets[ i++] = new Subset( 0xB2E4, 0xB77B, RID_SUBSETSTR_HANGUL_DA);
+    aSubsets[ i++] = new Subset( 0xB77C, 0xB9C7, RID_SUBSETSTR_HANGUL_RA);
+    aSubsets[ i++] = new Subset( 0xB9C8, 0xBC13, RID_SUBSETSTR_HANGUL_MA);
+    aSubsets[ i++] = new Subset( 0xBC14, 0xC0AB, RID_SUBSETSTR_HANGUL_BA);
+    aSubsets[ i++] = new Subset( 0xC0AC, 0xC543, RID_SUBSETSTR_HANGUL_SA);
+    aSubsets[ i++] = new Subset( 0xC544, 0xC78F, RID_SUBSETSTR_HANGUL_AH);
+    aSubsets[ i++] = new Subset( 0xC790, 0xCC27, RID_SUBSETSTR_HANGUL_JA);
+    aSubsets[ i++] = new Subset( 0xCC28, 0xCE73, RID_SUBSETSTR_HANGUL_CHA);
+    aSubsets[ i++] = new Subset( 0xCE74, 0xD0BF, RID_SUBSETSTR_HANGUL_KA);
+    aSubsets[ i++] = new Subset( 0xD0C0, 0xD30B, RID_SUBSETSTR_HANGUL_TA);
+    aSubsets[ i++] = new Subset( 0xD30C, 0xD557, RID_SUBSETSTR_HANGUL_PA);
+    aSubsets[ i++] = new Subset( 0xD558, 0xD7A3, RID_SUBSETSTR_HANGUL_HA);
+//  aSubsets[ i++] = new Subset( 0xAC00, 0xD7A3, RID_SUBSETSTR_HANGUL);
 
-    allSubsets[ i++] = new Subset( 0xE000, 0xF8FF, RID_SVXSTR_PRIVATE_USE_AREA);
-    allSubsets[ i++] = new Subset( 0xF900, 0xFAFF, RID_SVXSTR_CJK_COMPAT_IDGRAPHS);
-    allSubsets[ i++] = new Subset( 0xFB00, 0xFB4F, RID_SVXSTR_ALPHA_PRESENTATION);
-    allSubsets[ i++] = new Subset( 0xFB50, 0xFDFF, RID_SVXSTR_ARABIC_PRESENT_A);
-    allSubsets[ i++] = new Subset( 0xFE20, 0xFE2F, RID_SVXSTR_COMBINING_HALF_MARKS);
-    allSubsets[ i++] = new Subset( 0xFE30, 0xFE4F, RID_SVXSTR_CJK_COMPAT_FORMS);
-    allSubsets[ i++] = new Subset( 0xFE50, 0xFE6F, RID_SVXSTR_SMALL_FORM_VARIANTS);
-    allSubsets[ i++] = new Subset( 0xFE70, 0xFEFF, RID_SVXSTR_ARABIC_PRESENT_B);
-    allSubsets[ i++] = new Subset( 0xFF00, 0xFFEF, RID_SVXSTR_HALFW_FULLW_FORMS);
-    allSubsets[ i++] = new Subset( 0xFFF0, 0xFFFF, RID_SVXSTR_SPECIALS);
+//  aSubsets[ i++] = new Subset( 0xD800, 0xDFFF, RID_SUBSETSTR_SURROGATE);
+    aSubsets[ i++] = new Subset( 0xE000, 0xF8FF, RID_SUBSETSTR_PRIVATE_USE_AREA);
+    aSubsets[ i++] = new Subset( 0xF900, 0xFAFF, RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS);
+    aSubsets[ i++] = new Subset( 0xFB00, 0xFB4F, RID_SUBSETSTR_ALPHA_PRESENTATION);
+    aSubsets[ i++] = new Subset( 0xFB50, 0xFDFF, RID_SUBSETSTR_ARABIC_PRESENT_A);
+    aSubsets[ i++] = new Subset( 0xFE20, 0xFE2F, RID_SUBSETSTR_COMBINING_HALF_MARKS);
+    aSubsets[ i++] = new Subset( 0xFE30, 0xFE4F, RID_SUBSETSTR_CJK_COMPAT_FORMS);
+    aSubsets[ i++] = new Subset( 0xFE50, 0xFE6F, RID_SUBSETSTR_SMALL_FORM_VARIANTS);
+    aSubsets[ i++] = new Subset( 0xFE70, 0xFEFF, RID_SUBSETSTR_ARABIC_PRESENT_B);
+    aSubsets[ i++] = new Subset( 0xFF00, 0xFFEF, RID_SUBSETSTR_HALFW_FULLW_FORMS);
+    aSubsets[ i++] = new Subset( 0xFFF0, 0xFFFF, RID_SUBSETSTR_SPECIALS);
 
-    numAllSubsets = i;
-    DBG_ASSERT( (numAllSubsets < SVXCOUNT_CHARRANGE), "SVXCOUNT_CHARRANGE too small");
-    DBG_ASSERT( (2*numAllSubsets > SVXCOUNT_CHARRANGE), "SVXCOUNT_CHARRANGE way to big");
+    nSubsets = i;
+    DBG_ASSERT( (nSubsets < RID_SUBSET_COUNT), "RID_SUBSET_COUNT too small");
+    DBG_ASSERT( (2*nSubsets > RID_SUBSET_COUNT), "RID_SUBSET_COUNT way to big");
 }

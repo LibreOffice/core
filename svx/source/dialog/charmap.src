@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2000-10-17 17:13:41 $
+ *  last change: $Author: hdu $ $Date: 2000-10-19 09:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "svxids.hrc"
 #include "dialogs.hrc"
 #include "charmap.hrc"
+#include "ucsubset.hrc"
 #include "helpid.hrc"
 
  // RID_SVXDLG_CHARMAP ----------------------------------------------------
@@ -131,22 +132,22 @@ ModalDialog RID_SVXDLG_CHARMAP
     ListBox LB_FONT
     {
         Pos = MAP_APPFONT ( 36 , 6 ) ;
-        Size = MAP_APPFONT ( 110 , 68 ) ;
+        Size = MAP_APPFONT ( 100 , 68 ) ;
         Sort = TRUE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_SUBSET
     {
-        Pos = MAP_APPFONT ( 150 , 8 ) ;
+        Pos = MAP_APPFONT ( 145 , 8 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "~Bereich" ;
         Text [ ENGLISH ] = "~Subset" ;
     };
     ListBox LB_SUBSET
     {
-        Pos = MAP_APPFONT ( 180 , 6 ) ;
-        Size = MAP_APPFONT ( 104 , 68 ) ;
+        Pos = MAP_APPFONT ( 175 , 6 ) ;
+        Size = MAP_APPFONT ( 100 , 68 ) ;
         Sort = FALSE ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -252,485 +253,488 @@ ModalDialog RID_SVXDLG_CHARMAP
  * (see the Unicode Standard & TrueType::OS2.ulUnicodeRange description)
  */
 
-String RID_SVXSTR_BASIC_LATIN
+Resource RID_SUBSETMAP
+{
+String RID_SUBSETSTR_BASIC_LATIN
 {
     Text = "Basis Latein" ;
     Text [ ENGLISH ] = "Basic Latin" ;
 };
-String RID_SVXSTR_LATIN_1
+String RID_SUBSETSTR_LATIN_1
 {
     Text = "Latein-1" ;
     Text [ ENGLISH ] = "Latin-1" ;
 };
-String RID_SVXSTR_LATIN_EXTENDED_A
+String RID_SUBSETSTR_LATIN_EXTENDED_A
 {
     Text = "Latein Erweitert-A" ;
     Text [ ENGLISH ] = "Latin Extended-A" ;
 };
-String RID_SVXSTR_LATIN_EXTENDED_B
+String RID_SUBSETSTR_LATIN_EXTENDED_B
 {
     Text = "Latein Erweitert-B" ;
     Text [ ENGLISH ] = "Latin Extended-B" ;
 };
-String RID_SVXSTR_IPA_EXTENSIONS
+String RID_SUBSETSTR_IPA_EXTENSIONS
 {
     Text = "Lautschrift Erweiterungen" ;
     Text [ ENGLISH ] = "IPA Extensions" ;
 };
-String RID_SVXSTR_SPACING_MODIFIERS
+String RID_SUBSETSTR_SPACING_MODIFIERS
 {
     Text = "Spacing Modifier Zeichen" ;
     Text [ ENGLISH ] = "Spacing Modifier Letters" ;
 };
-String RID_SVXSTR_COMB_DIACRITICAL
+String RID_SUBSETSTR_COMB_DIACRITICAL
 {
     Text = "Kombinierende diakritische Zeichen" ;
     Text [ ENGLISH ] = "Combining Diacritical Marks" ;
 };
-String RID_SVXSTR_BASIC_GREEK
+String RID_SUBSETSTR_BASIC_GREEK
 {
     Text = "Basis Griechisch" ;
     Text [ ENGLISH ] = "Basic Greek" ;
 };
-String RID_SVXSTR_GREEK_SYMS_COPTIC
+String RID_SUBSETSTR_GREEK_SYMS_COPTIC
 {
     Text = "Griechische Symbole und Koptisch" ;
     Text [ ENGLISH ] = "Greek Symbols And Coptic" ;
 };
-String RID_SVXSTR_CYRILLIC
+String RID_SUBSETSTR_CYRILLIC
 {
     Text = "Kyrillisch" ;
     Text [ ENGLISH ] = "Cyrillic" ;
 };
-String RID_SVXSTR_ARMENIAN
+String RID_SUBSETSTR_ARMENIAN
 {
     Text = "Armenisch" ;
     Text [ ENGLISH ] = "Armenian" ;
 };
-String RID_SVXSTR_HEBREW_EXTENDED
+String RID_SUBSETSTR_HEBREW_EXTENDED
 {
     Text = "Basis Hebräisch" ;
     Text [ ENGLISH ] = "Basic Hebrew" ;
 };
-String RID_SVXSTR_BASIC_HEBREW
+String RID_SUBSETSTR_BASIC_HEBREW
 {
     Text = "Erweitertes Hebräisch" ;
     Text [ ENGLISH ] = "Hebrew Extended" ;
 };
-String RID_SVXSTR_BASIC_ARABIC
+String RID_SUBSETSTR_BASIC_ARABIC
 {
     Text = "Basis Arabisch" ;
     Text [ ENGLISH ] = "Basic Arabic" ;
 };
-String RID_SVXSTR_ARABIC_EXTENDED
+String RID_SUBSETSTR_ARABIC_EXTENDED
 {
     Text = "Erweitertes Arabisch" ;
     Text [ ENGLISH ] = "Arabic Extended" ;
 };
-String RID_SVXSTR_DEVANAGARI
+String RID_SUBSETSTR_DEVANAGARI
 {
     Text = "Devanagari" ;
     Text [ ENGLISH ] = "Devanagari" ;
 };
-String RID_SVXSTR_BENGALI
+String RID_SUBSETSTR_BENGALI
 {
     Text = "Bengalisch" ;
     Text [ ENGLISH ] = "Bengali" ;
 };
-String RID_SVXSTR_GURMUKHI
+String RID_SUBSETSTR_GURMUKHI
 {
     Text = "Gurmukhi" ;
     Text [ ENGLISH ] = "Gurmukhi" ;
 };
-String RID_SVXSTR_GUJARATI
+String RID_SUBSETSTR_GUJARATI
 {
     Text = "Gujarati" ;
     Text [ ENGLISH ] = "Gujarati" ;
 };
-String RID_SVXSTR_ORIYA
+String RID_SUBSETSTR_ORIYA
 {
     Text = "Oriya" ;
     Text [ ENGLISH ] = "Oriya" ;
 };
-String RID_SVXSTR_TAMIL
+String RID_SUBSETSTR_TAMIL
 {
     Text = "Tamil" ;
     Text [ ENGLISH ] = "Tamil" ;
 };
-String RID_SVXSTR_TELUGU
+String RID_SUBSETSTR_TELUGU
 {
     Text = "Telugu" ;
     Text [ ENGLISH ] = "Telugu" ;
 };
-String RID_SVXSTR_KANNADA
+String RID_SUBSETSTR_KANNADA
 {
     Text = "Kannada" ;
     Text [ ENGLISH ] = "Kannada" ;
 };
-String RID_SVXSTR_MALAYALAM
+String RID_SUBSETSTR_MALAYALAM
 {
     Text = "Malayisch" ;
     Text [ ENGLISH ] = "Malayalam" ;
 };
-String RID_SVXSTR_THAI
+String RID_SUBSETSTR_THAI
 {
     Text = "Thailändisch" ;
     Text [ ENGLISH ] = "Thai" ;
 };
-String RID_SVXSTR_LAO
+String RID_SUBSETSTR_LAO
 {
     Text = "Laotisch" ;
     Text [ ENGLISH ] = "Lao" ;
 };
-String RID_SVXSTR_BASIC_GEORGIAN
+String RID_SUBSETSTR_BASIC_GEORGIAN
 {
     Text = "Basis Georgisch" ;
     Text [ ENGLISH ] = "Basic Georgian" ;
 };
-String RID_SVXSTR_GEORGIAN_EXTENDED
+String RID_SUBSETSTR_GEORGIAN_EXTENDED
 {
     Text = "Erweitertes Georgisch" ;
     Text [ ENGLISH ] = "Georgian Extended" ;
 };
-String RID_SVXSTR_HANGUL_JAMO
+String RID_SUBSETSTR_HANGUL_JAMO
 {
     Text = "Hangul Jamo" ;
     Text [ ENGLISH ] = "Hangul Jamo" ;
 };
-String RID_SVXSTR_LATIN_EXTENDED_ADDS
+String RID_SUBSETSTR_LATIN_EXTENDED_ADDS
 {
     Text = "Latein Erweiterte Zufügungen" ;
     Text [ ENGLISH ] = "Latin Extended Additional" ;
 };
-String RID_SVXSTR_GREEK_EXTENDED
+String RID_SUBSETSTR_GREEK_EXTENDED
 {
     Text = "Erweitertes Griechisch" ;
     Text [ ENGLISH ] = "Greek Extended" ;
 };
-String RID_SVXSTR_GENERAL_PUNCTUATION
+String RID_SUBSETSTR_GENERAL_PUNCTUATION
 {
     Text = "Allgemeine Punktuation" ;
     Text [ ENGLISH ] = "General Punctuation" ;
 };
-String RID_SVXSTR_SUB_SUPER_SCRIPTS
+String RID_SUBSETSTR_SUB_SUPER_SCRIPTS
 {
     Text = "Hoch- und Tiefstellungen" ;
     Text [ ENGLISH ] = "Superscripts And Subscripts" ;
 };
-String RID_SVXSTR_CURRENCY_SYMBOLS
+String RID_SUBSETSTR_CURRENCY_SYMBOLS
 {
     Text = "Währungssymbole" ;
     Text [ ENGLISH ] = "Currency Symbols" ;
 };
-String RID_SVXSTR_COMB_DIACRITIC_SYMS
+String RID_SUBSETSTR_COMB_DIACRITIC_SYMS
 {
     Text = "Kombinierende diakritische Symbole" ;
     Text [ ENGLISH ] = "Combining Diacritical Marks For Symbols" ;
 };
-String RID_SVXSTR_LETTERLIKE_SYMBOLS
+String RID_SUBSETSTR_LETTERLIKE_SYMBOLS
 {
-    Text = "Buchstabenähnliche Symbole" ;
+    Text = "Buchstabensymbole" ;
     Text [ ENGLISH ] = "Letterlike Symbols" ;
 };
-String RID_SVXSTR_NUMBER_FORMS
+String RID_SUBSETSTR_NUMBER_FORMS
 {
     Text = "Zahlensymbole" ;
     Text [ ENGLISH ] = "Number Forms" ;
 };
-String RID_SVXSTR_ARROWS
+String RID_SUBSETSTR_ARROWS
 {
     Text = "Pfeilsymbole" ;
     Text [ ENGLISH ] = "Arrows" ;
 };
-String RID_SVXSTR_MATH_OPERATORS
+String RID_SUBSETSTR_MATH_OPERATORS
 {
     Text = "Mathematische Operatoren" ;
     Text [ ENGLISH ] = "Mathematical Operators" ;
 };
-String RID_SVXSTR_MISC_TECHNICAL
+String RID_SUBSETSTR_MISC_TECHNICAL
 {
     Text = "Verschiedene Technische Zeichen" ;
     Text [ ENGLISH ] = "Miscellaneous Technical" ;
 };
-String RID_SVXSTR_CONTROL_PICTURES
+String RID_SUBSETSTR_CONTROL_PICTURES
 {
     Text = "Tastatursymbole" ;
     Text [ ENGLISH ] = "Control Pictures" ;
 };
-String RID_SVXSTR_OPTICAL_CHAR_REC
+String RID_SUBSETSTR_OPTICAL_CHAR_REC
 {
     Text = "Maschinenlesbare Zeichen" ;
     Text [ ENGLISH ] = "Optical Character Recognition" ;
 };
-String RID_SVXSTR_ENCLOSED_ALPHANUM
+String RID_SUBSETSTR_ENCLOSED_ALPHANUM
 {
     Text = "Eingekreiste Zeichen" ;
     Text [ ENGLISH ] = "Enclosed Alphanumerics" ;
 };
-String RID_SVXSTR_BOX_DRAWING
+String RID_SUBSETSTR_BOX_DRAWING
 {
     Text = "Rahmungssymbole" ;
     Text [ ENGLISH ] = "Box Drawing" ;
 };
-String RID_SVXSTR_BLOCK_ELEMENTS
+String RID_SUBSETSTR_BLOCK_ELEMENTS
 {
     Text = "Blocksymbole" ;
     Text [ ENGLISH ] = "Block Elements" ;
 };
-String RID_SVXSTR_GEOMETRIC_SHAPES
+String RID_SUBSETSTR_GEOMETRIC_SHAPES
 {
     Text = "Geometrische Symbole" ;
     Text [ ENGLISH ] = "Geometric Shapes" ;
 };
-String RID_SVXSTR_MISC_DINGBATS
+String RID_SUBSETSTR_MISC_DINGBATS
 {
     Text = "Verschiedene Symbole" ;
     Text [ ENGLISH ] = "Miscellaneous Symbols" ;
 };
-String RID_SVXSTR_DINGBATS
+String RID_SUBSETSTR_DINGBATS
 {
     Text = "Dingbats" ;
     Text [ ENGLISH ] = "Dingbats" ;
 };
-String RID_SVXSTR_CJK_SYMS_PUNCTUATION
+String RID_SUBSETSTR_CJK_SYMS_PUNCTUATION
 {
     Text = "CJK Symbole und Punktuation" ;
     Text [ ENGLISH ] = "CJK Symbols And Punctuation" ;
 };
-String RID_SVXSTR_HIRAGANA
+String RID_SUBSETSTR_HIRAGANA
 {
     Text = "Hiragana" ;
     Text [ ENGLISH ] = "Hiragana" ;
 };
-String RID_SVXSTR_KATAKANA
+String RID_SUBSETSTR_KATAKANA
 {
     Text = "Katakana" ;
     Text [ ENGLISH ] = "Katakana" ;
 };
-String RID_SVXSTR_BOPOMOFO
+String RID_SUBSETSTR_BOPOMOFO
 {
     Text = "Bopomofo" ;
     Text [ ENGLISH ] = "Bopomofo" ;
 };
-String RID_SVXSTR_HANGUL_COMPAT_JAMO
+String RID_SUBSETSTR_HANGUL_COMPAT_JAMO
 {
     Text = "Hangul kompatibles Jamo" ;
     Text [ ENGLISH ] = "Hangul Compatibility Jamo" ;
 };
-String RID_SVXSTR_CJK_MISC
+String RID_SUBSETSTR_CJK_MISC
 {
     Text = "Verschiedene CJK Zeichen" ;
     Text [ ENGLISH ] = "CJK Miscellaneous" ;
 };
-String RID_SVXSTR_ENCLOSED_CJK_LETTERS
+String RID_SUBSETSTR_ENCLOSED_CJK_LETTERS
 {
     Text = "Eingekreiste CJK Zeichen und Monate" ;
     Text [ ENGLISH ] = "Enclosed CJK Letters And Months" ;
 };
-String RID_SVXSTR_CJK_COMPATIBILITY
+String RID_SUBSETSTR_CJK_COMPATIBILITY
 {
     Text = "CJK Kompatibilität" ;
     Text [ ENGLISH ] = "CJK Compatibility" ;
 };
-String RID_SVXSTR_HANGUL
+String RID_SUBSETSTR_HANGUL
 {
     Text = "Hangul" ;
     Text [ ENGLISH ] = "Hangul" ;
 };
-String RID_SVXSTR_CJK_UNIFIED_IDGRAPH
+String RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH
 {
     Text = "Vereinheitlichte CJK-Ideogramme" ;
     Text [ ENGLISH ] = "CJK Unified Ideographs" ;
 };
-String RID_SVXSTR_CJK_UNIFIED_IDGRAPH_EXT_A
+String RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH
 {
     Text = "Vereinheitlichte CJK-Ideogramm Erweiterung-A" ;
     Text [ ENGLISH ] = "CJK Unified Ideographs Extension-A" ;
 };
-String RID_SVXSTR_PRIVATE_USE_AREA
+String RID_SUBSETSTR_PRIVATE_USE_AREA
 {
     Text = "Zeichensatzspezifische Symbole" ;
     Text [ ENGLISH ] = "Private Use Area" ;
 };
-String RID_SVXSTR_CJK_COMPAT_IDGRAPHS
+String RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS
 {
     Text = "CJK Kompatible Ideogramme" ;
     Text [ ENGLISH ] = "CJK Compatibility Ideographs" ;
 };
-String RID_SVXSTR_ALPHA_PRESENTATION
+String RID_SUBSETSTR_ALPHA_PRESENTATION
 {
     Text = "Alphabetische Präsentations Formen" ;
     Text [ ENGLISH ] = "Alphabetic Presentation Forms" ;
 };
-String RID_SVXSTR_ARABIC_PRESENT_A
+String RID_SUBSETSTR_ARABIC_PRESENT_A
 {
     Text = "Arabische Präsentations Formen-A" ;
     Text [ ENGLISH ] = "Arabic Presentation Forms-A" ;
 };
-String RID_SVXSTR_COMBINING_HALF_MARKS
+String RID_SUBSETSTR_COMBINING_HALF_MARKS
 {
     Text = "Kombinierende Halbmarken" ;
     Text [ ENGLISH ] = "Combining Half Marks" ;
 };
-String RID_SVXSTR_CJK_COMPAT_FORMS
+String RID_SUBSETSTR_CJK_COMPAT_FORMS
 {
     Text = "CJK Kompatibilitäts-Formen" ;
     Text [ ENGLISH ] = "CJK Compatibility Forms" ;
 };
-String RID_SVXSTR_SMALL_FORM_VARIANTS
+String RID_SUBSETSTR_SMALL_FORM_VARIANTS
 {
     Text = "Kleine Form Varianten" ;
     Text [ ENGLISH ] = "Small Form Variants" ;
 };
-String RID_SVXSTR_ARABIC_PRESENT_B
+String RID_SUBSETSTR_ARABIC_PRESENT_B
 {
     Text = "Arabische Präsentationsformen-B" ;
     Text [ ENGLISH ] = "Arabic Presentation Forms-B" ;
 };
-String RID_SVXSTR_HALFW_FULLW_FORMS
+String RID_SUBSETSTR_HALFW_FULLW_FORMS
 {
     Text = "Halbbreite und breite Formen" ;
     Text [ ENGLISH ] = "Halfwidth And Fullwidth Forms" ;
 };
-String RID_SVXSTR_SPECIALS
+String RID_SUBSETSTR_SPECIALS
 {
     Text = "Spezielle Symbole" ;
     Text [ ENGLISH ] = "Specials" ;
 };
-String RID_SVXSTR_HANGUL_GA
+String RID_SUBSETSTR_HANGUL_GA
 {
     Text = "Hangul Ga" ;
     Text [ ENGLISH ] = "Hangul Ga";
 };
-String RID_SVXSTR_HANGUL_NA
+String RID_SUBSETSTR_HANGUL_NA
 {
     Text = "Hangul Na" ;
     Text [ ENGLISH ] = "Hangul Na" ;
 };
-String RID_SVXSTR_HANGUL_DA
+String RID_SUBSETSTR_HANGUL_DA
 {
     Text = "Hangul Da" ;
     Text [ ENGLISH ] = "Hangul Da" ;
 };
-String RID_SVXSTR_HANGUL_RA
+String RID_SUBSETSTR_HANGUL_RA
 {
     Text = "Hangul Ra" ;
     Text [ ENGLISH ] = "Hangul Ra" ;
 };
-String RID_SVXSTR_HANGUL_MA
+String RID_SUBSETSTR_HANGUL_MA
 {
     Text = "Hangul Ma" ;
     Text [ ENGLISH ] = "Hangul Ma" ;
 };
-String RID_SVXSTR_HANGUL_BA
+String RID_SUBSETSTR_HANGUL_BA
 {
     Text = "Hangul Ba" ;
     Text [ ENGLISH ] = "Hangul Ba" ;
 };
-String RID_SVXSTR_HANGUL_SA
+String RID_SUBSETSTR_HANGUL_SA
 {
     Text = "Hangul Sa" ;
     Text [ ENGLISH ] = "Hangul Sa" ;
 };
-String RID_SVXSTR_HANGUL_AH
+String RID_SUBSETSTR_HANGUL_AH
 {
     Text = "Hangul Ah" ;
     Text [ ENGLISH ] = "Hangul Ah" ;
 };
-String RID_SVXSTR_HANGUL_JA
+String RID_SUBSETSTR_HANGUL_JA
 {
     Text = "Hangul Ja" ;
     Text [ ENGLISH ] = "Hangul Ja" ;
 };
-String RID_SVXSTR_HANGUL_CHA
+String RID_SUBSETSTR_HANGUL_CHA
 {
     Text = "Hangul Cha" ;
     Text [ ENGLISH ] = "Hangul Cha" ;
 };
-String RID_SVXSTR_HANGUL_KA
+String RID_SUBSETSTR_HANGUL_KA
 {
     Text = "Hangul Ka" ;
     Text [ ENGLISH ] = "Hangul Ka" ;
 };
-String RID_SVXSTR_HANGUL_TA
+String RID_SUBSETSTR_HANGUL_TA
 {
     Text = "Hangul Ta" ;
     Text [ ENGLISH ] = "Hangul Ta" ;
 };
-String RID_SVXSTR_HANGUL_PA
+String RID_SUBSETSTR_HANGUL_PA
 {
     Text = "Hangul Pa" ;
     Text [ ENGLISH ] = "Hangul Pa" ;
 };
-String RID_SVXSTR_HANGUL_HA
+String RID_SUBSETSTR_HANGUL_HA
 {
     Text = "Hangul Ha" ;
     Text [ ENGLISH ] = "Hangul Ha" ;
 };
-String RID_SVXSTR_YI
+String RID_SUBSETSTR_YI
 {
     Text = "Yi" ;
     Text [ ENGLISH ] = "Yi" ;
 };
-String RID_SVXSTR_SINHALA
+String RID_SUBSETSTR_SINHALA
 {
     Text = "Sinhala" ;
     Text [ ENGLISH ] = "Sinhala" ;
 };
-String RID_SVXSTR_TIBETAN
+String RID_SUBSETSTR_TIBETAN
 {
     Text = "Tibetisch" ;
     Text [ ENGLISH ] = "Tibetan" ;
 };
-String RID_SVXSTR_MYANMAR
+String RID_SUBSETSTR_MYANMAR
 {
     Text = "Myanmar" ;
     Text [ ENGLISH ] = "Myanmar" ;
 };
-String RID_SVXSTR_KHMER
+String RID_SUBSETSTR_KHMER
 {
     Text = "Khmer" ;
     Text [ ENGLISH ] = "Khmer" ;
 };
-String RID_SVXSTR_OGHAM
+String RID_SUBSETSTR_OGHAM
 {
     Text = "Ogham" ;
     Text [ ENGLISH ] = "Ogham" ;
 };
-String RID_SVXSTR_RUNIC
+String RID_SUBSETSTR_RUNIC
 {
     Text = "Runen" ;
     Text [ ENGLISH ] = "Runic" ;
 };
-String RID_SVXSTR_SYRIAC
+String RID_SUBSETSTR_SYRIAC
 {
     Text = "Syrisch" ;
     Text [ ENGLISH ] = "Syriac" ;
 };
-String RID_SVXSTR_THAANA
+String RID_SUBSETSTR_THAANA
 {
     Text = "Thaana" ;
     Text [ ENGLISH ] = "Thaana" ;
 };
-String RID_SVXSTR_ETHIOPIC
+String RID_SUBSETSTR_ETHIOPIC
 {
     Text = "Äthiopisch" ;
     Text [ ENGLISH ] = "Ethiopic" ;
 };
-String RID_SVXSTR_CHEROKEE
+String RID_SUBSETSTR_CHEROKEE
 {
     Text = "Cherokee" ;
     Text [ ENGLISH ] = "Cherokee" ;
 };
-String RID_SVXSTR_CANADIAN_ABORIGINAL
+String RID_SUBSETSTR_CANADIAN_ABORIGINAL
 {
     Text = "Kanadische Aborigin Silben" ;
     Text [ ENGLISH ] = "Canadian Aboriginal Syllables" ;
 };
-String RID_SVXSTR_MONGOLIAN
+String RID_SUBSETSTR_MONGOLIAN
 {
     Text = "Mongolisch" ;
     Text [ ENGLISH ] = "Mongolian" ;
+};
 };
 
 // ********************************************************************** EOF
