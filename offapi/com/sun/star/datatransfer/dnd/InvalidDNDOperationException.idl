@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvalidDNDOperationException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:46 $
+ *  last change: $Author: arellano $ $Date: 2001-07-27 20:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@ module com { module sun { module star { module datatransfer { module dnd {
     package.
 
     <p>It is usually thrown to indicate that the target in question is unable
-    to undertake the requested operation that the present time, since the
-    undrelying DnD system is not in the appropriate state.</p>
+    to undertake the requested operation at the present time, since the
+    underlying DnD system is not in the appropriate state.</p>
 */
 
 exception InvalidDNDOperationException: com::sun::star::uno::RuntimeException
