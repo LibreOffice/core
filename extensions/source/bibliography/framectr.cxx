@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:30:32 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,7 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
                                                       );
 
                 // create the dialog object
-                const ::rtl::OUString sDialogServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.uno.sdb.FilterDialog" );
+                const ::rtl::OUString sDialogServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.sdb.FilterDialog" );
                 uno::Reference< uno::XInterface > xDialog = xORB->createInstanceWithArguments(
                     sDialogServiceName,
                     aDialogCreationArgs
