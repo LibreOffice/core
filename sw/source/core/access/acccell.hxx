@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,14 +69,14 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleValue.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEVALUE_HPP_
+#include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #endif
 
 class SwCellFrm;
 
 class SwAccessibleCell : public SwAccessibleContext,
-                  ::drafts::com::sun::star::accessibility::XAccessibleValue
+                  ::com::sun::star::accessibility::XAccessibleValue
 
 {
     sal_Bool    bIsSelected;    // protected by base class mutex
