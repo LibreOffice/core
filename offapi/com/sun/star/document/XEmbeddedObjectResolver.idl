@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEmbeddedObjectResolver.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com {  module sun {  module star {  module document {
 
 /** this interface converts embedded object URLs from one URL space to another.
  */
-interface XEmbeddedObjectResolver: com::sun::star::uno::XInterface
+published interface XEmbeddedObjectResolver: com::sun::star::uno::XInterface
 {
     /** converts the given URL from the source URL namespace to the destination
         URL space of this instance.
