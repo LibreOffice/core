@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: mt $ $Date: 2000-10-11 15:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,16 +1035,18 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
     USHORT nParagraphs = GetContents().Count();
     rOStream << nParagraphs;
 
+    char cFeatureConverted = ByteString( CH_FEATURE, eEncoding ).GetChar(0);
+
     // Die einzelnen Absaetze...
     for ( USHORT nPara = 0; nPara < nParagraphs; nPara++ )
     {
         ContentInfo* pC = GetContents().GetObject( nPara );
 
         // Text...
-        String aText( pC->GetText() );
+        ByteString aText( pC->GetText(), eEncoding );
         // Convert CH_FEATURE to CH_FEATURE_OLD
-        aText.SearchAndReplaceAll( CH_FEATURE, CH_FEATURE_OLD );
-        rOStream.WriteByteString( ByteString( aText, eEncoding ) );
+        aText.SearchAndReplaceAll( cFeatureConverted, CH_FEATURE_OLD );
+        rOStream.WriteByteString( aText );
 
         // StyleName und Family...
         rOStream.WriteByteString( ByteString( pC->GetStyle(), eEncoding ) );
@@ -1121,7 +1123,9 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
         ContentInfo* pC = CreateAndInsertContent();
 
         // Der Text...
-        rIStream.ReadByteString( pC->GetText(), eSrcEncoding );
+        ByteString aByteString;
+        rIStream.ReadByteString( aByteString );
+        pC->GetText() = String( aByteString, eSrcEncoding );
 
         // StyleName und Family...
         rIStream.ReadByteString( pC->GetStyle(), eSrcEncoding );
@@ -1151,15 +1155,22 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
             rIStream >> nEnd;
             if ( pItem )
             {
-                XEditAttribute* pAttr = new XEditAttribute( *pItem, nStart, nEnd );
-                pC->GetAttribs().Insert( pAttr, pC->GetAttribs().Count() );
-
-                if ( ( nWhich >= EE_FEATURE_START ) && ( nWhich <= EE_FEATURE_END ) )
+                if ( pItem->Which() == EE_FEATURE_NOTCONV )
                 {
-                    // Convert CH_FEATURE to CH_FEATURE_OLD
-                    DBG_ASSERT( pC->GetText().GetChar( nStart ) == CH_FEATURE_OLD, "CreateData: CH_FEATURE expected!" );
-                    if ( pC->GetText().GetChar( nStart ) == CH_FEATURE_OLD )
-                        pC->GetText().SetChar( nStart, CH_FEATURE );
+                    pC->GetText().SetChar( nStart, ByteString::ConvertToUnicode( aByteString.GetChar( nStart ), ((SvxCharSetColorItem*)pItem)->GetCharSet() ) );
+                }
+                else
+                {
+                    XEditAttribute* pAttr = new XEditAttribute( *pItem, nStart, nEnd );
+                    pC->GetAttribs().Insert( pAttr, pC->GetAttribs().Count() );
+
+                    if ( ( nWhich >= EE_FEATURE_START ) && ( nWhich <= EE_FEATURE_END ) )
+                    {
+                        // Convert CH_FEATURE to CH_FEATURE_OLD
+                        DBG_ASSERT( (BYTE) aByteString.GetChar( nStart ) == CH_FEATURE_OLD, "CreateData: CH_FEATURE expected!" );
+                        if ( (BYTE) aByteString.GetChar( nStart ) == CH_FEATURE_OLD )
+                            pC->GetText().SetChar( nStart, CH_FEATURE );
+                    }
                 }
             }
         }
