@@ -18,12 +18,6 @@ APP1OBJS+= $(STDOBJVCL)
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" != "WNT" || "$(GUI)$(COM)"=="WNTBLC"
-USE_APP1DEF=$(APP1DEF)
-.ELSE
-USE_APP1DEF=
-.ENDIF
-
 .IF "$(GUI)" == "UNX"
 APP1DEPN+:=$(APP1DEPNU)
 USE_APP1DEF=
@@ -98,18 +92,14 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP1OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP1OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP1LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(STDLIB) $(STDLIB1) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP1OBJS) `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP1STDLIBS) $(APP1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF                  # "$(GUI)"=="MAC"
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP1LINKRES)" != ""
@@ -182,32 +172,6 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP1STACKN) $(STDOBJ) $(APP1OBJS), $@, $(MISC)\$(APP1TARGET).map, $(APP1LIBS) $(APP1STDLIBS) $(STDLIB) $(STDLIB1), $(APP1DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ELSE
-    @+echo ------------------------
-    @+echo No valid Environment!!!
-    @+echo ------------------------
-    force_dmake_to_error
-.ENDIF			# "$(COM)"=="BLC"
-.IF "$(TARGETTYPE)" == "GUI"
-.IF "$(APP1RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) $@
-.ELSE
-    $(RCSETVERSION)
-.ENDIF
-.IF "$(MAPSYM)" != ""
-    mapfix $(MISC)\$(@B).map
-    $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP1TARGET).map
-    @$(COPY) $(APP1TARGET).sym $(BIN)\$(APP1TARGET).sym
-    @$(RM) $(APP1TARGET).sym
-.ENDIF			# "$(MAPSYM)" != ""
-.ENDIF			# "$(TARGETTYPE)" == "GUI"
-.ENDIF			# "$(GUI)" == "WIN"
-
 .ENDIF			# "$(APP1TARGETN)"!=""
 
 
@@ -230,12 +194,6 @@ APP2STACKN=
 .IF "$(TARGETTYPE)" == "GUI"
 APP2OBJS+= $(STDOBJVCL)
 .ENDIF
-.ENDIF
-
-.IF "$(GUI)" != "WNT" || "$(GUI)$(COM)"=="WNTBLC"
-USE_APP2DEF=$(APP2DEF)
-.ELSE
-USE_APP2DEF=
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -312,18 +270,14 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP2OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP2OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP2LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(STDLIB) $(STDLIB2) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP2OBJS) `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP2STDLIBS) $(APP2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF                  # "$(GUI)"=="MAC"
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP2LINKRES)" != ""
@@ -396,32 +350,6 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP2STACKN) $(STDOBJ) $(APP2OBJS), $@, $(MISC)\$(APP2TARGET).map, $(APP2LIBS) $(APP2STDLIBS) $(STDLIB) $(STDLIB2), $(APP2DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ELSE
-    @+echo ------------------------
-    @+echo No valid Environment!!!
-    @+echo ------------------------
-    force_dmake_to_error
-.ENDIF			# "$(COM)"=="BLC"
-.IF "$(TARGETTYPE)" == "GUI"
-.IF "$(APP2RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) $@
-.ELSE
-    $(RCSETVERSION)
-.ENDIF
-.IF "$(MAPSYM)" != ""
-    mapfix $(MISC)\$(@B).map
-    $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP2TARGET).map
-    @$(COPY) $(APP2TARGET).sym $(BIN)\$(APP2TARGET).sym
-    @$(RM) $(APP2TARGET).sym
-.ENDIF			# "$(MAPSYM)" != ""
-.ENDIF			# "$(TARGETTYPE)" == "GUI"
-.ENDIF			# "$(GUI)" == "WIN"
-
 .ENDIF			# "$(APP2TARGETN)"!=""
 
 
@@ -444,12 +372,6 @@ APP3STACKN=
 .IF "$(TARGETTYPE)" == "GUI"
 APP3OBJS+= $(STDOBJVCL)
 .ENDIF
-.ENDIF
-
-.IF "$(GUI)" != "WNT" || "$(GUI)$(COM)"=="WNTBLC"
-USE_APP3DEF=$(APP3DEF)
-.ELSE
-USE_APP3DEF=
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -526,18 +448,14 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP3OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP3OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP3LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(STDLIB) $(STDLIB3) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP3OBJS) `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP3STDLIBS) $(APP3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF                  # "$(GUI)"=="MAC"
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP3LINKRES)" != ""
@@ -610,32 +528,6 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP3STACKN) $(STDOBJ) $(APP3OBJS), $@, $(MISC)\$(APP3TARGET).map, $(APP3LIBS) $(APP3STDLIBS) $(STDLIB) $(STDLIB3), $(APP3DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ELSE
-    @+echo ------------------------
-    @+echo No valid Environment!!!
-    @+echo ------------------------
-    force_dmake_to_error
-.ENDIF			# "$(COM)"=="BLC"
-.IF "$(TARGETTYPE)" == "GUI"
-.IF "$(APP3RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) $@
-.ELSE
-    $(RCSETVERSION)
-.ENDIF
-.IF "$(MAPSYM)" != ""
-    mapfix $(MISC)\$(@B).map
-    $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP3TARGET).map
-    @$(COPY) $(APP3TARGET).sym $(BIN)\$(APP3TARGET).sym
-    @$(RM) $(APP3TARGET).sym
-.ENDIF			# "$(MAPSYM)" != ""
-.ENDIF			# "$(TARGETTYPE)" == "GUI"
-.ENDIF			# "$(GUI)" == "WIN"
-
 .ENDIF			# "$(APP3TARGETN)"!=""
 
 
@@ -658,12 +550,6 @@ APP4STACKN=
 .IF "$(TARGETTYPE)" == "GUI"
 APP4OBJS+= $(STDOBJVCL)
 .ENDIF
-.ENDIF
-
-.IF "$(GUI)" != "WNT" || "$(GUI)$(COM)"=="WNTBLC"
-USE_APP4DEF=$(APP4DEF)
-.ELSE
-USE_APP4DEF=
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -740,18 +626,14 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP4OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP4OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP4LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(STDLIB) $(STDLIB4) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP4OBJS) `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP4STDLIBS) $(APP4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF                  # "$(GUI)"=="MAC"
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP4LINKRES)" != ""
@@ -824,32 +706,6 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP4STACKN) $(STDOBJ) $(APP4OBJS), $@, $(MISC)\$(APP4TARGET).map, $(APP4LIBS) $(APP4STDLIBS) $(STDLIB) $(STDLIB4), $(APP4DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ELSE
-    @+echo ------------------------
-    @+echo No valid Environment!!!
-    @+echo ------------------------
-    force_dmake_to_error
-.ENDIF			# "$(COM)"=="BLC"
-.IF "$(TARGETTYPE)" == "GUI"
-.IF "$(APP4RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) $@
-.ELSE
-    $(RCSETVERSION)
-.ENDIF
-.IF "$(MAPSYM)" != ""
-    mapfix $(MISC)\$(@B).map
-    $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP4TARGET).map
-    @$(COPY) $(APP4TARGET).sym $(BIN)\$(APP4TARGET).sym
-    @$(RM) $(APP4TARGET).sym
-.ENDIF			# "$(MAPSYM)" != ""
-.ENDIF			# "$(TARGETTYPE)" == "GUI"
-.ENDIF			# "$(GUI)" == "WIN"
-
 .ENDIF			# "$(APP4TARGETN)"!=""
 
 
@@ -872,12 +728,6 @@ APP5STACKN=
 .IF "$(TARGETTYPE)" == "GUI"
 APP5OBJS+= $(STDOBJVCL)
 .ENDIF
-.ENDIF
-
-.IF "$(GUI)" != "WNT" || "$(GUI)$(COM)"=="WNTBLC"
-USE_APP5DEF=$(APP5DEF)
-.ELSE
-USE_APP5DEF=
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -954,18 +804,14 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP5OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP5OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP5LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(STDLIB) $(STDLIB5) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP5OBJS) `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP5STDLIBS) $(APP5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF                  # "$(GUI)"=="MAC"
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP5LINKRES)" != ""
@@ -1038,32 +884,6 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP5STACKN) $(STDOBJ) $(APP5OBJS), $@, $(MISC)\$(APP5TARGET).map, $(APP5LIBS) $(APP5STDLIBS) $(STDLIB) $(STDLIB5), $(APP5DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ELSE
-    @+echo ------------------------
-    @+echo No valid Environment!!!
-    @+echo ------------------------
-    force_dmake_to_error
-.ENDIF			# "$(COM)"=="BLC"
-.IF "$(TARGETTYPE)" == "GUI"
-.IF "$(APP5RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) $@
-.ELSE
-    $(RCSETVERSION)
-.ENDIF
-.IF "$(MAPSYM)" != ""
-    mapfix $(MISC)\$(@B).map
-    $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP5TARGET).map
-    @$(COPY) $(APP5TARGET).sym $(BIN)\$(APP5TARGET).sym
-    @$(RM) $(APP5TARGET).sym
-.ENDIF			# "$(MAPSYM)" != ""
-.ENDIF			# "$(TARGETTYPE)" == "GUI"
-.ENDIF			# "$(GUI)" == "WIN"
-
 .ENDIF			# "$(APP5TARGETN)"!=""
 
 
@@ -1086,12 +906,6 @@ APP6STACKN=
 .IF "$(TARGETTYPE)" == "GUI"
 APP6OBJS+= $(STDOBJVCL)
 .ENDIF
-.ENDIF
-
-.IF "$(GUI)" != "WNT" || "$(GUI)$(COM)"=="WNTBLC"
-USE_APP6DEF=$(APP6DEF)
-.ELSE
-USE_APP6DEF=
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -1168,18 +982,14 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP6OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP6OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP6LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(STDLIB) $(STDLIB6) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP6OBJS) `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP6STDLIBS) $(APP6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF                  # "$(GUI)"=="MAC"
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP6LINKRES)" != ""
@@ -1252,32 +1062,6 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP6STACKN) $(STDOBJ) $(APP6OBJS), $@, $(MISC)\$(APP6TARGET).map, $(APP6LIBS) $(APP6STDLIBS) $(STDLIB) $(STDLIB6), $(APP6DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ELSE
-    @+echo ------------------------
-    @+echo No valid Environment!!!
-    @+echo ------------------------
-    force_dmake_to_error
-.ENDIF			# "$(COM)"=="BLC"
-.IF "$(TARGETTYPE)" == "GUI"
-.IF "$(APP6RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) $@
-.ELSE
-    $(RCSETVERSION)
-.ENDIF
-.IF "$(MAPSYM)" != ""
-    mapfix $(MISC)\$(@B).map
-    $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP6TARGET).map
-    @$(COPY) $(APP6TARGET).sym $(BIN)\$(APP6TARGET).sym
-    @$(RM) $(APP6TARGET).sym
-.ENDIF			# "$(MAPSYM)" != ""
-.ENDIF			# "$(TARGETTYPE)" == "GUI"
-.ENDIF			# "$(GUI)" == "WIN"
-
 .ENDIF			# "$(APP6TARGETN)"!=""
 
 
@@ -1300,12 +1084,6 @@ APP7STACKN=
 .IF "$(TARGETTYPE)" == "GUI"
 APP7OBJS+= $(STDOBJVCL)
 .ENDIF
-.ENDIF
-
-.IF "$(GUI)" != "WNT" || "$(GUI)$(COM)"=="WNTBLC"
-USE_APP7DEF=$(APP7DEF)
-.ELSE
-USE_APP7DEF=
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -1382,18 +1160,14 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP7OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP7OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP7LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(STDLIB) $(STDLIB7) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP7OBJS) `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP7STDLIBS) $(APP7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF                  # "$(GUI)"=="MAC"
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP7LINKRES)" != ""
@@ -1466,32 +1240,6 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP7STACKN) $(STDOBJ) $(APP7OBJS), $@, $(MISC)\$(APP7TARGET).map, $(APP7LIBS) $(APP7STDLIBS) $(STDLIB) $(STDLIB7), $(APP7DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ELSE
-    @+echo ------------------------
-    @+echo No valid Environment!!!
-    @+echo ------------------------
-    force_dmake_to_error
-.ENDIF			# "$(COM)"=="BLC"
-.IF "$(TARGETTYPE)" == "GUI"
-.IF "$(APP7RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) $@
-.ELSE
-    $(RCSETVERSION)
-.ENDIF
-.IF "$(MAPSYM)" != ""
-    mapfix $(MISC)\$(@B).map
-    $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP7TARGET).map
-    @$(COPY) $(APP7TARGET).sym $(BIN)\$(APP7TARGET).sym
-    @$(RM) $(APP7TARGET).sym
-.ENDIF			# "$(MAPSYM)" != ""
-.ENDIF			# "$(TARGETTYPE)" == "GUI"
-.ENDIF			# "$(GUI)" == "WIN"
-
 .ENDIF			# "$(APP7TARGETN)"!=""
 
 
@@ -1514,12 +1262,6 @@ APP8STACKN=
 .IF "$(TARGETTYPE)" == "GUI"
 APP8OBJS+= $(STDOBJVCL)
 .ENDIF
-.ENDIF
-
-.IF "$(GUI)" != "WNT" || "$(GUI)$(COM)"=="WNTBLC"
-USE_APP8DEF=$(APP8DEF)
-.ELSE
-USE_APP8DEF=
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -1596,18 +1338,14 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP8OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP8OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP8LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(STDLIB) $(STDLIB8) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP8OBJS) `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP8STDLIBS) $(APP8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF                  # "$(GUI)"=="MAC"
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP8LINKRES)" != ""
@@ -1680,32 +1418,6 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP8STACKN) $(STDOBJ) $(APP8OBJS), $@, $(MISC)\$(APP8TARGET).map, $(APP8LIBS) $(APP8STDLIBS) $(STDLIB) $(STDLIB8), $(APP8DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ELSE
-    @+echo ------------------------
-    @+echo No valid Environment!!!
-    @+echo ------------------------
-    force_dmake_to_error
-.ENDIF			# "$(COM)"=="BLC"
-.IF "$(TARGETTYPE)" == "GUI"
-.IF "$(APP8RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) $@
-.ELSE
-    $(RCSETVERSION)
-.ENDIF
-.IF "$(MAPSYM)" != ""
-    mapfix $(MISC)\$(@B).map
-    $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP8TARGET).map
-    @$(COPY) $(APP8TARGET).sym $(BIN)\$(APP8TARGET).sym
-    @$(RM) $(APP8TARGET).sym
-.ENDIF			# "$(MAPSYM)" != ""
-.ENDIF			# "$(TARGETTYPE)" == "GUI"
-.ENDIF			# "$(GUI)" == "WIN"
-
 .ENDIF			# "$(APP8TARGETN)"!=""
 
 
@@ -1728,12 +1440,6 @@ APP9STACKN=
 .IF "$(TARGETTYPE)" == "GUI"
 APP9OBJS+= $(STDOBJVCL)
 .ENDIF
-.ENDIF
-
-.IF "$(GUI)" != "WNT" || "$(GUI)$(COM)"=="WNTBLC"
-USE_APP9DEF=$(APP9DEF)
-.ELSE
-USE_APP9DEF=
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -1810,18 +1516,14 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP9OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP9OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP9LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(STDLIB) $(STDLIB9) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP9OBJS) `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP9STDLIBS) $(APP9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF                  # "$(GUI)"=="MAC"
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP9LINKRES)" != ""
@@ -1894,32 +1596,6 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 
 .ENDIF			# "$(GUI)" == "WNT"
 
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP9STACKN) $(STDOBJ) $(APP9OBJS), $@, $(MISC)\$(APP9TARGET).map, $(APP9LIBS) $(APP9STDLIBS) $(STDLIB) $(STDLIB9), $(APP9DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ELSE
-    @+echo ------------------------
-    @+echo No valid Environment!!!
-    @+echo ------------------------
-    force_dmake_to_error
-.ENDIF			# "$(COM)"=="BLC"
-.IF "$(TARGETTYPE)" == "GUI"
-.IF "$(APP9RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) $@
-.ELSE
-    $(RCSETVERSION)
-.ENDIF
-.IF "$(MAPSYM)" != ""
-    mapfix $(MISC)\$(@B).map
-    $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP9TARGET).map
-    @$(COPY) $(APP9TARGET).sym $(BIN)\$(APP9TARGET).sym
-    @$(RM) $(APP9TARGET).sym
-.ENDIF			# "$(MAPSYM)" != ""
-.ENDIF			# "$(TARGETTYPE)" == "GUI"
-.ENDIF			# "$(GUI)" == "WIN"
-
 .ENDIF			# "$(APP9TARGETN)"!=""
 
 
@@ -1942,12 +1618,6 @@ APP10STACKN=
 .IF "$(TARGETTYPE)" == "GUI"
 APP10OBJS+= $(STDOBJVCL)
 .ENDIF
-.ENDIF
-
-.IF "$(GUI)" != "WNT" || "$(GUI)$(COM)"=="WNTBLC"
-USE_APP10DEF=$(APP10DEF)
-.ELSE
-USE_APP10DEF=
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -2024,18 +1694,14 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP10OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
+    $(APP10OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP10LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP_LINKTYPE) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP_LINKTYPE) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(STDLIB) $(STDLIB10) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
-.IF "$(GUI)"=="MAC"
-    @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP10OBJS) `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP10STDLIBS) $(APP10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
-.ENDIF                  # "$(GUI)"=="MAC"
 .IF "$(GUI)" == "WNT"
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .IF "$(APP10LINKRES)" != ""
@@ -2107,32 +1773,6 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF			# "$(TARGET)" == "setup"
 
 .ENDIF			# "$(GUI)" == "WNT"
-
-.IF "$(GUI)"=="WIN"
-.IF "$(COM)"=="BLC"
-    $(LINK) @$(mktmp$ $(LINKFLAGS) $(LINKFLAGSAPP) $(APP10STACKN) $(STDOBJ) $(APP10OBJS), $@, $(MISC)\$(APP10TARGET).map, $(APP10LIBS) $(APP10STDLIBS) $(STDLIB) $(STDLIB10), $(APP10DEF)) >&  $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(TYPE) $(TMP)$/$(PRJNAME)$(USER).tmp
-    @+$(RM) $(TMP)$/$(PRJNAME)$(USER).tmp
-.ELSE
-    @+echo ------------------------
-    @+echo No valid Environment!!!
-    @+echo ------------------------
-    force_dmake_to_error
-.ENDIF			# "$(COM)"=="BLC"
-.IF "$(TARGETTYPE)" == "GUI"
-.IF "$(APP10RES)" != ""
-    $(RCLINK) $(RCLINKFLAGS) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) $@
-.ELSE
-    $(RCSETVERSION)
-.ENDIF
-.IF "$(MAPSYM)" != ""
-    mapfix $(MISC)\$(@B).map
-    $(MAPSYM) $(MAPSYMFLAGS) $(MISC)\$(APP10TARGET).map
-    @$(COPY) $(APP10TARGET).sym $(BIN)\$(APP10TARGET).sym
-    @$(RM) $(APP10TARGET).sym
-.ENDIF			# "$(MAPSYM)" != ""
-.ENDIF			# "$(TARGETTYPE)" == "GUI"
-.ENDIF			# "$(GUI)" == "WIN"
 
 .ENDIF			# "$(APP10TARGETN)"!=""
 
