@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-12 18:09:46 $
+ *  last change: $Author: hro $ $Date: 2000-12-20 11:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3452,7 +3452,7 @@ sal_Bool SAL_CALL shell::checkMountPoint( const rtl::OUString&  aUnqPath,
         rtl::OUString aDir   = m_vecMountPoint[j].m_aDirectory;
         sal_Int32 nL = aAlias.getLength();
 
-        if( aUnqPath.compareTo( aAlias,nL ) == 0 )
+        if( aUnqPath.compareTo( aAlias,nL ) == 0 && ( aUnqPath.getLength() == nL || aUnqPath[nL] == '/' ) )
         {
             aRedirectedPath = aDir;
             aRedirectedPath += aUnqPath.copy( nL );
@@ -3496,14 +3496,21 @@ sal_Bool SAL_CALL shell::uncheckMountPoint( const rtl::OUString&  aUnqPath,
         if ( !aRealUnqPath.pData->length )
             error = osl_getRealPath( aUnqPath.pData, &aRealUnqPath.pData );
 
-        if ( osl_File_E_None == error && aRealUnqPath.compareTo(  m_vecMountPoint[j].m_aDirectory,nL ) == 0 )
+        rtl::OUString dir = m_vecMountPoint[j].m_aDirectory;
+
+        if ( osl_File_E_None == error && aRealUnqPath.compareTo( dir,nL ) == 0 &&
+             ( aRealUnqPath.getLength() == nL || aRealUnqPath[nL] == '/' ) )
         {
             aRedirectedPath = m_vecMountPoint[j].m_aMountPoint;
             aRedirectedPath += aUnqPath.copy( nL );
             return true;
         }
 #else
-        if( aUnqPath.compareTo( m_vecMountPoint[j].m_aDirectory,nL ) == 0 )
+        rtl::OUString dir = m_vecMountPoint[j].m_aDirectory;
+
+        if( aUnqPath.compareTo( dir,nL ) == 0  &&
+            ( aUnqPath.getLength() == nL || aUnqPath[nL] == '/' )
+        )
         {
             aRedirectedPath = m_vecMountPoint[j].m_aMountPoint;
             aRedirectedPath += aUnqPath.copy( nL );
