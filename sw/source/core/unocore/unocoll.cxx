@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:52:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1517,7 +1517,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     if(IsValid())
     {
-        if(nIndex <= 0 && GetDoc()->GetBookmarkCnt(sal_True) > nIndex)
+        if(0 <= nIndex && GetDoc()->GetBookmarkCnt(sal_True) > nIndex)
         {
             SwBookmark& rBkm = GetDoc()->GetBookmark((sal_uInt16) nIndex, sal_True);
             uno::Reference< XTextContent >  xRef = GetObject(rBkm, GetDoc());
