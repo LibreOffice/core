@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:34:22 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1285,7 +1285,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         BOOL bLoadInternal = FALSE;
 
                         // security reservation: => we have to check the referer before executing
-                        if ( SFX_APP()->IsSecureURL( String(), &aReferer ) )
+                        if (SFX_APP()->IsSecureURL(rtl::OUString(), &aReferer))
                         {
                             ::rtl::OUString aURLString( aURL.Complete );
 
@@ -1342,7 +1342,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
     }
 
-    if ( !SFX_APP()->IsSecureURL( aFileName, &aReferer ) )
+    if ( !SFX_APP()->IsSecureURL( INetURLObject(aFileName), &aReferer ) )
     {
         SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aFileName );
         ErrorHandler::HandleError( ERRCODE_IO_ACCESSDENIED );
