@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:24:51 $
+ *  last change: $Author: ka $ $Date: 2001-03-09 17:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,45 +558,217 @@ IMPL_LINK( GalleryProgress, Update, GraphicFilter*, pFilter )
     return 0L;
 }
 
-// -----------------
-// - SgaDataObject -
-// -----------------
+// -----------------------
+// - GalleryTransferable -
+// -----------------------
 
-SgaDataObject::SgaDataObject( GalleryTheme* pTheme, ULONG nActualObjPos ) :
-            mpTheme ( pTheme ),
-            mnObjPos( nActualObjPos )
+GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos ) :
+    mpTheme( pTheme ),
+    meObjectKind( mpTheme->GetObjectKind( nObjectPos ) ),
+    mnObjectPos( nObjectPos ),
+    mpModel( NULL ),
+    mpGraphicObject( NULL ),
+    mpImageMap( NULL ),
+    mpURL( NULL )
 {
-    mpTheme->SetDragging( TRUE );
-    mpTheme->SetDragPos( mnObjPos );
+    switch( meObjectKind )
+    {
+        case( SGA_OBJ_ANIM ):
+        case( SGA_OBJ_BMP ):
+        case( SGA_OBJ_INET ):
+        {
+            Graphic aGraphic;
+
+            if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
+                mpGraphicObject = new GraphicObject( aGraphic );
+
+            mpURL = new INetURLObject;
+
+            if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
+                delete mpURL, mpURL = NULL;
+        }
+        break;
+
+        case( SGA_OBJ_SOUND ):
+        {
+            mpURL = new INetURLObject;
+
+            if( !mpTheme->GetURL( mnObjectPos, *mpURL ) )
+                delete mpURL, mpURL = NULL;
+        }
+
+        case( SGA_OBJ_SVDRAW ):
+        {
+            mpModel = new FmFormModel;
+
+            if( !mpTheme->GetModel( mnObjectPos, *mpModel ) )
+                delete mpModel, mpModel = NULL;
+        }
+        break;
+
+        default:
+            DBG_ERROR( "GalleryTransferable::GalleryTransferable: invalid object type" );
+        break;
+    }
 }
 
 // ------------------------------------------------------------------------
 
-SgaDataObject::~SgaDataObject()
+GalleryTransferable::~GalleryTransferable()
 {
-    mpTheme->SetDragging( FALSE );
-    mpTheme->SetDragPos( 0 );
-    maTypeList.Clear();
 }
 
 // ------------------------------------------------------------------------
 
-BOOL SgaDataObject::GetData( SvData* pData )
+void GalleryTransferable::AddSupportedFormats()
 {
-    BOOL bRet = FALSE;
+    if( mpModel )
+    {
+        Graphic     aGraphic;
+        ImageMap    aImageMap;
 
-    if( GetTypeList().Get( *pData ) && mpTheme )
-        bRet = mpTheme->GetDataXChgData( pData, pData->GetFormat(), mnObjPos );
+        mpModel->GetItemPool().FreezeIdRanges();
+
+        if( CreateIMapGraphic( *mpModel, aGraphic, aImageMap ) )
+        {
+            delete mpGraphicObject, mpGraphicObject = new GraphicObject( aGraphic );
+            delete mpImageMap, mpImageMap = new ImageMap( aImageMap );
+
+            AddFormat( SOT_FORMATSTR_ID_SVXB );
+            AddFormat( SOT_FORMATSTR_ID_SVIM );
+
+            if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
+            {
+                AddFormat( FORMAT_GDIMETAFILE );
+                AddFormat( FORMAT_BITMAP );
+            }
+            else
+            {
+                AddFormat( FORMAT_BITMAP );
+                AddFormat( FORMAT_GDIMETAFILE );
+            }
+        }
+        else
+        {
+            AddFormat( SOT_FORMATSTR_ID_DRAWING );
+            AddFormat( SOT_FORMATSTR_ID_SVXB );
+            AddFormat( FORMAT_GDIMETAFILE );
+            AddFormat( FORMAT_BITMAP );
+        }
+    }
+    else
+    {
+        if( mpURL )
+            AddFormat( FORMAT_FILE );
+
+        if( mpGraphicObject )
+        {
+            AddFormat( SOT_FORMATSTR_ID_SVXB );
+
+            if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
+            {
+                AddFormat( FORMAT_GDIMETAFILE );
+                AddFormat( FORMAT_BITMAP );
+            }
+            else
+            {
+                AddFormat( FORMAT_BITMAP );
+                AddFormat( FORMAT_GDIMETAFILE );
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool GalleryTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+{
+    sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
+    sal_Bool    bRet = sal_False;
+
+    if( ( SOT_FORMATSTR_ID_DRAWING == nFormat ) && mpModel )
+    {
+        bRet = SetObject( mpModel, 0, rFlavor );
+    }
+    else if( ( SOT_FORMATSTR_ID_SVIM == nFormat ) && mpImageMap )
+    {
+        bRet = SetImageMap( *mpImageMap, rFlavor );
+    }
+    else if( ( FORMAT_FILE == nFormat ) && mpURL )
+    {
+        bRet = SetString( mpURL->GetMainURL(), rFlavor );
+    }
+    else if( ( SOT_FORMATSTR_ID_SVXB == nFormat ) && mpGraphicObject )
+    {
+        bRet = SetGraphic( mpGraphicObject->GetGraphic(), rFlavor );
+    }
+    else if( ( FORMAT_GDIMETAFILE == nFormat ) && mpGraphicObject )
+    {
+        bRet = SetGDIMetaFile( mpGraphicObject->GetGraphic().GetGDIMetaFile(), rFlavor );
+    }
+    else if( ( FORMAT_BITMAP == nFormat ) && mpGraphicObject )
+    {
+        bRet = SetBitmap( mpGraphicObject->GetGraphic().GetBitmap(), rFlavor );
+    }
 
     return bRet;
 }
 
 // ------------------------------------------------------------------------
 
-const SvDataTypeList& SgaDataObject::GetTypeList() const
+sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject,
+                                           sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    if( !maTypeList.Count() )
-        ( (SgaDataObject*) this )->maTypeList = mpTheme->GetDataXChgTypeList( maTypeList, mnObjPos );
+    sal_Bool bRet = sal_False;
 
-    return maTypeList;
+    if( pUserObject )
+    {
+        FmFormModel* pModel = (FmFormModel*) pUserObject;
+
+        pModel->BurnInStyleSheetAttributes();
+        pModel->SetStreamingSdrModel( TRUE );
+        pModel->RemoveNotPersistentObjects( TRUE );
+        rxOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
+        rxOStm->SetBufferSize( 16348 );
+        pModel->PreSave();
+        pModel->GetItemPool().SetFileFormatVersion( (USHORT) rxOStm->GetVersion() );
+        pModel->GetItemPool().Store( *rxOStm );
+        *rxOStm << *pModel;
+        pModel->PostSave();
+        rxOStm->Commit();
+        pModel->SetStreamingSdrModel( FALSE );
+
+        bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+    }
+
+    return bRet;
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
+{
+    mpTheme->SetDragging( FALSE );
+    mpTheme->SetDragPos( 0 );
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryTransferable::ObjectReleased()
+{
+    delete mpModel, mpModel = NULL;
+    delete mpGraphicObject, mpGraphicObject = NULL;
+    delete mpImageMap, mpImageMap = NULL;
+    delete mpURL, mpURL = NULL;
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryTransferable::StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
+                                     sal_Int32 nDragPointer, sal_Int32 nDragImage )
+{
+    mpTheme->SetDragging( sal_True );
+    mpTheme->SetDragPos( mnObjectPos );
+
+    TransferableHelper::StartDrag( pWindow, nDragSourceActions, nDragPointer, nDragImage );
 }

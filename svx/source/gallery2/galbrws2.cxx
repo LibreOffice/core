@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-22 11:42:31 $
+ *  last change: $Author: ka $ $Date: 2001-03-09 17:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <svtools/stritem.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/eitem.hxx>
+#include <svtools/transfer.hxx>
 #include <sfx2/exchobj.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -87,17 +88,21 @@
 // - GalleryValueSet -
 // -------------------
 
-class GalleryValueSet : public ValueSet
+class GalleryValueSet : public ValueSet, public DropTargetHelper
 {
 private:
 
     GalleryTheme*       mpTheme;
 
+    // ValueSet
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
     virtual void        Command( const CommandEvent& rCEvt );
-    virtual BOOL        QueryDrop( DropEvent& rEvt );
-    virtual BOOL        Drop( const DropEvent& rEvt );
+
+    // DropTargetHelper
+    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
 public:
 
@@ -109,9 +114,9 @@ public:
 
 GalleryValueSet::GalleryValueSet( GalleryBrowser2* pParent, GalleryTheme* pTheme, WinBits nWinStyle ) :
         ValueSet( pParent, nWinStyle ),
+        DropTargetHelper( this ),
         mpTheme ( pTheme )
 {
-    EnableDrop( TRUE );
     EnableFullItemMode( FALSE );
 }
 
@@ -201,27 +206,32 @@ void GalleryValueSet::MouseButtonDown( const MouseEvent& rMEvt )
 
 // ------------------------------------------------------------------------
 
+void GalleryValueSet::MouseButtonUp( const MouseEvent& rMEvt )
+{
+    ValueSet::MouseButtonUp( rMEvt );
+    GetParent()->MouseButtonUp( rMEvt );
+}
+
+// ------------------------------------------------------------------------
+
 void GalleryValueSet::Command( const CommandEvent& rCEvt )
 {
-    Region aRegion;
-
     ValueSet::Command( rCEvt );
-    StartDrag( rCEvt, aRegion );
     GetParent()->Command( rCEvt );
 }
 
 // ------------------------------------------------------------------------
 
-BOOL GalleryValueSet::QueryDrop( DropEvent& rDEvt )
+sal_Int8 GalleryValueSet::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    return( GetParent()->QueryDrop( rDEvt ) );
+    return( ( (GalleryBrowser2*) GetParent() )->AcceptDrop( *this, rEvt ) );
 }
 
 // ------------------------------------------------------------------------
 
-BOOL GalleryValueSet::Drop( const DropEvent& rDEvt )
+sal_Int8 GalleryValueSet::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    return( GetParent()->Drop( rDEvt ) );
+    return( ( (GalleryBrowser2*) GetParent() )->ExecuteDrop( *this, rEvt ) );
 }
 
 // --------------------------
@@ -401,6 +411,9 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     maInfoBar.SetControlForeground( COL_WHITE );
     maInfoBar.SetControlBackground( COL_GRAY );
     maInfoBar.Show();
+
+    maDragTimer.SetTimeout( 100 );
+    maDragTimer.SetTimeoutHdl( LINK( this, GalleryBrowser2, StartDragHdl ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -463,6 +476,16 @@ void GalleryBrowser2::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.GetClicks() > 1 )
         ShowPreview( !mbIsPreview );
+    else if( rMEvt.IsLeft() )
+        maDragTimer.Start();
+}
+
+// ------------------------------------------------------------------------
+
+void GalleryBrowser2::MouseButtonUp( const MouseEvent& rMEvt )
+{
+    maDragTimer.Stop();
+    Window::MouseButtonUp( rMEvt );
 }
 
 // -----------------------------------------------------------------------------
@@ -473,16 +496,7 @@ void GalleryBrowser2::Command( const CommandEvent& rCEvt )
 
     if( nId && mpCurTheme && ( nId <= mpCurTheme->GetObjectCount() ) )
     {
-        if( rCEvt.GetCommand() == COMMAND_STARTDRAG )
-        {
-            SgaDataObjectRef    xDataObject( new SgaDataObject( mpCurTheme, nId - 1 ) );
-            Region              aRegion( mpValueSet->GetItemRect( nId ) );
-            const DropAction    eAction = xDataObject->ExecuteDrag( NULL,
-                                                POINTER_MOVEDATA, POINTER_COPYDATA, POINTER_LINKDATA,
-                                                DRAG_COPYABLE | DRAG_LINKABLE /*| DRAG_MOVEABLE*/,
-                                                &aRegion );
-        }
-        else if( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && rCEvt.IsMouseEvent() && mpCurTheme )
+        if( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && rCEvt.IsMouseEvent() && mpCurTheme )
         {
             if( !mbIsPreview )
                 mpValueSet->SelectItem( nId );
@@ -499,60 +513,48 @@ void GalleryBrowser2::Command( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryBrowser2::QueryDrop( DropEvent& rDEvt )
+sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt )
 {
-    BOOL bRet = FALSE;
+    sal_Int8 nRet = DND_ACTION_NONE;
 
     if( mpCurTheme && !mpCurTheme->IsReadOnly() && !mpCurTheme ->IsImported() )
     {
-        bRet = mpCurTheme->IsDragging();
-
-        if( !bRet )
+        if( !mpCurTheme->IsDragging() )
         {
-            USHORT i = 0, nCount = DragServer::GetItemCount();
-
-            while( !bRet && ( i < nCount ) )
+            if( rTarget.IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING ) ||
+                rTarget.IsDropFormatSupported( FORMAT_FILE ) ||
+                rTarget.IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB ) ||
+                rTarget.IsDropFormatSupported( FORMAT_GDIMETAFILE ) ||
+                rTarget.IsDropFormatSupported( FORMAT_BITMAP ) )
             {
-                bRet = DragServer::HasFormat( i, FORMAT_BITMAP ) ||
-                       DragServer::HasFormat( i, FORMAT_GDIMETAFILE ) ||
-                       DragServer::HasFormat( i, FORMAT_FILE ) ||
-                       DragServer::HasFormat( i, SOT_FORMATSTR_ID_SVXB ) ||
-                       DragServer::HasFormat( i, SOT_FORMATSTR_ID_DRAWING ) ||
-                       INetBookmark::DragServerHasFormat( i );
-
-                i++;
+                nRet = DND_ACTION_COPY;
             }
-
-            if( rDEvt.IsDefaultAction() )
-                rDEvt.SetAction( DROP_COPY );
         }
-        else if( rDEvt.IsDefaultAction() )
-            rDEvt = DropEvent( rDEvt.GetPosPixel(), rDEvt.GetData(), DROP_MOVE, DROP_MOVE, rDEvt.GetWindowType(), rDEvt.IsDefaultAction() );
+        else
+            nRet = DND_ACTION_MOVE;
     }
 
-    return bRet;
+    return nRet;
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryBrowser2::Drop( const DropEvent& rDEvt )
+sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt )
 {
-    BOOL bRet = FALSE;
+    sal_Int8 nRet = DND_ACTION_NONE;
 
     if( mpCurTheme )
     {
-        const USHORT    nItemId = mbIsPreview ? mpValueSet->GetSelectItemId() : mpValueSet->GetItemId( rDEvt.GetPosPixel() );
+        const USHORT    nItemId = mbIsPreview ? mpValueSet->GetSelectItemId() : mpValueSet->GetItemId( rEvt.maPosPixel );
         const ULONG     nInsertPos = ( nItemId ? ( nItemId - 1 ) : LIST_APPEND );
 
         if( mpCurTheme->IsDragging() )
             mpCurTheme->ChangeObjectPos( mpCurTheme->GetDragPos(), nInsertPos );
         else
-            mpCurTheme->InsertDataXChgData( SvDataObject::PasteDragServer( rDEvt ) );
-
-        bRet = FALSE;
+            nRet = mpCurTheme->InsertTransferable( rEvt.maDropEvent.Transferable );
     }
 
-    return bRet;
+    return nRet;
 }
 
 // -----------------------------------------------------------------------------
@@ -881,5 +883,19 @@ IMPL_LINK( GalleryBrowser2, SelectObjectHdl, void*, p )
 
 IMPL_LINK( GalleryBrowser2, DoubleClickObjectHdl, void*, p )
 {
+    return 0L;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( GalleryBrowser2, StartDragHdl, Timer*, pTimer )
+{
+    pTimer->Stop();
+
+    const USHORT nId = mbIsPreview ? mpValueSet->GetSelectItemId() : mpValueSet->GetItemId( GetPointerPosPixel() );
+
+    if( nId && mpCurTheme && ( nId <= mpCurTheme->GetObjectCount() ) )
+        mpCurTheme->StartDrag( this, nId - 1 );
+
     return 0L;
 }

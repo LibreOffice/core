@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:24:51 $
+ *  last change: $Author: ka $ $Date: 2001-03-09 17:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,7 +907,7 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
             aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
             pFormModel->SetStreamingSdrModel( TRUE );
             pFormModel->PreSave();
-            pFormModel->GetItemPool().SetFileFormatVersion( aMemStm.GetVersion() );
+            pFormModel->GetItemPool().SetFileFormatVersion( (USHORT) aMemStm.GetVersion() );
             pFormModel->GetItemPool().Store( aMemStm );
             aMemStm << *pFormModel;
             pFormModel->PostSave();
@@ -981,174 +981,14 @@ BOOL GalleryTheme::InsertURL( const INetURLObject& rURL, ULONG nInsertPos )
 
 // -----------------------------------------------------------------------------
 
-SvDataTypeList GalleryTheme::GetDataXChgTypeList( const SvDataTypeList& rTypeList, ULONG nPos )
+BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable )
 {
-    SvDataTypeList          aTypeList( rTypeList );
-    const GalleryObject*    pObj = ImplGetGalleryObject( nPos );
+    TransferableDataHelper  aDataHelper( rxTransferable );
+    BOOL                    bRet = FALSE;
 
-    if( pObj )
-    {
-        if( pObj->eObjKind == SGA_OBJ_SVDRAW )
-        {
-            FmFormModel aModel;
-            Graphic     aGraphic;
-            ImageMap    aIMap;
-
-            aModel.GetItemPool().FreezeIdRanges();
-
-            if( GetModel( nPos, aModel ) && CreateIMapGraphic( aModel, aGraphic, aIMap ) )
-            {
-                aTypeList.Insert( SvDataType( SOT_FORMATSTR_ID_SVXB, MEDIUM_STREAM | MEDIUM_MEMORY ), LIST_APPEND );
-                aTypeList.Insert( SvDataType( SOT_FORMATSTR_ID_SVIM, MEDIUM_STREAM | MEDIUM_MEMORY ), LIST_APPEND );
-            }
-            else
-                aTypeList.Insert( SvDataType( SOT_FORMATSTR_ID_DRAWING ), LIST_APPEND );
-        }
-        else
-        {
-            aTypeList.Insert( SvDataType( FORMAT_FILE, MEDIUM_MEMORY ), LIST_APPEND );
-
-            if( ( pObj->eObjKind == SGA_OBJ_BMP ) || ( pObj->eObjKind == SGA_OBJ_ANIM ) )
-            {
-                aTypeList.Insert( SvDataType( SOT_FORMATSTR_ID_SVXB, MEDIUM_STREAM | MEDIUM_MEMORY ), LIST_APPEND );
-                aTypeList.Insert( SvDataType( FORMAT_GDIMETAFILE, MEDIUM_MEMORY ), LIST_APPEND );
-                aTypeList.Insert( SvDataType( FORMAT_BITMAP, MEDIUM_MEMORY ), LIST_APPEND );
-            }
-        }
-    }
-
-    return aTypeList;
-}
-
-// -----------------------------------------------------------------------------
-
-BOOL GalleryTheme::GetDataXChgData( SvData* pData, ULONG nFormat, ULONG nPos )
-{
-    BOOL bRet = FALSE;
-
-    if( pData )
-    {
-        if( nFormat == SOT_FORMATSTR_ID_SVXB )
-        {
-            Graphic aGraphic;
-            bRet = GetGraphic( nPos, aGraphic );
-
-            if( bRet )
-                pData->SetData( (SvDataCopyStream*) &aGraphic );
-        }
-        else if( nFormat == SOT_FORMATSTR_ID_SVIM )
-        {
-            FmFormModel aModel;
-            Graphic     aGraphic;
-            ImageMap    aIMap;
-
-            aModel.GetItemPool().FreezeIdRanges();
-            bRet = ( GetModel( nPos, aModel ) && CreateIMapGraphic( aModel, aGraphic, aIMap ) );
-
-            if( bRet )
-                pData->SetData( (SvDataCopyStream*) &aIMap );
-        }
-        else if( nFormat == SOT_FORMATSTR_ID_DRAWING )
-        {
-            SvStorageRef xStor( GetSvDrawStorage() );
-
-            if( xStor.Is() )
-            {
-                const String        aStmName( GetSvDrawStreamNameFromURL( GetObjectURL( nPos ) ) );
-                SvStorageStreamRef  xIStm( xStor->OpenStream( aStmName, STREAM_READ ) );
-
-                if( xIStm.Is() && !xIStm->GetError() )
-                {
-                    xIStm->SetBufferSize( 16384 );
-
-                    if( RLECodec::IsRLECoded( *xIStm ) )
-                    {
-                        SvMemoryStream  aMemStm;
-                        RLECodec        aCodec( *xIStm );
-                        ULONG           nSize;
-
-                        nSize = aCodec.Read( aMemStm );
-                        pData->SetData( (void*) aMemStm.GetData(), nSize, TRANSFER_COPY );
-                        bRet = TRUE;
-                    }
-                    else
-                    {
-                        const ULONG nSize = xIStm->Seek( STREAM_SEEK_TO_END );
-                        void*       pBuffer = SvMemAlloc( nSize );
-
-                        if ( pBuffer && nSize )
-                        {
-                            xIStm->Seek( STREAM_SEEK_TO_BEGIN );
-                            xIStm->Read( pBuffer, nSize );
-                            pData->SetData( pBuffer, nSize, TRANSFER_COPY );
-                            bRet = TRUE;
-                        }
-
-                        if ( pBuffer )
-                            SvMemFree( pBuffer );
-                    }
-
-                    xIStm->SetBufferSize( 0L );
-                }
-            }
-        }
-        else
-        {
-            switch( nFormat )
-            {
-                case( FORMAT_FILE ):
-                {
-                    pData->SetData( GetObjectURL( nPos ).GetMainURL() );
-                    bRet = TRUE;
-                }
-                break;
-
-
-                case( FORMAT_BITMAP ):
-                {
-                    Graphic aGraphic;
-
-                    bRet = GetGraphic( nPos, aGraphic );
-
-                    if( bRet )
-                    {
-                        Bitmap aBmp( aGraphic.GetBitmap() );
-                        pData->SetData( &aBmp );
-                    }
-                }
-                break;
-
-
-                case( FORMAT_GDIMETAFILE ):
-                {
-                    Graphic aGraphic;
-
-                    bRet = GetGraphic( nPos, aGraphic );
-
-                    if( bRet )
-                    {
-                        GDIMetaFile aMtf( aGraphic.GetGDIMetaFile() );
-                        pData->SetData( &aMtf );
-                    }
-                }
-                break;
-
-                default:
-                break;
-            }
-        }
-    }
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-BOOL GalleryTheme::InsertDataXChgData( SvDataObjectRef& rxData, ULONG nInsertPos )
-{
+/*
     const SvDataTypeList&   rTypeList = rxData->GetTypeList();
     Graphic*                pGraphic = NULL;
-    BOOL                    bRet = FALSE;
 
     for( ULONG n = 0, nCount = rTypeList.Count(); ( n < nCount ) && !bRet ; n++ )
     {
@@ -1210,11 +1050,7 @@ BOOL GalleryTheme::InsertDataXChgData( SvDataObjectRef& rxData, ULONG nInsertPos
                                 {
                                     while( xResultSet->next() )
                                     {
-#if SUPD>611
                                         aURL.SetSmartURL( xContentAccess->queryContentIdentifierString() );
-#else
-                                        aURL.SetSmartURL( xContentAccess->queryContentIdentfierString() );
-#endif
                                         bRet = bRet || InsertURL( aURL, nInsertPos );
                                     }
                                 }
@@ -1320,8 +1156,17 @@ BOOL GalleryTheme::InsertDataXChgData( SvDataObjectRef& rxData, ULONG nInsertPos
 
         delete pGraphic;
     }
-
+*/
     return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+void GalleryTheme::StartDrag( Window* pWindow, ULONG nPos )
+{
+    GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos );
+
+    pTransferable->StartDrag( pWindow, DND_ACTION_COPY | DND_ACTION_LINK );
 }
 
 // -----------------------------------------------------------------------------
