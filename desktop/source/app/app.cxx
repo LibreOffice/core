@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: lo $ $Date: 2002-09-30 15:58:41 $
+ *  last change: $Author: lo $ $Date: 2002-10-02 12:32:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1483,12 +1483,13 @@ void Desktop::Main()
     if( !bTerminate )
     {
         Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+        // register sevices before we do anything else
+        registerServices( xSMgr );
 
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
         SvtPathOptions* pPathOptions = new SvtPathOptions;
         SvtLanguageOptions* pLanguageOptions = new SvtLanguageOptions(sal_True);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
-        registerServices( xSMgr );
 
         OUString        aDescription;
         Sequence< Any > aSeq( 1 );
