@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 16:03:39 $
+ *  last change: $Author: fs $ $Date: 2001-07-30 11:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,15 @@ struct OPageSettings;
 */
 class ODbAdminDialog : public SfxTabDialog
 {
+public:
+    /** modes the dialog can be operated in
+    */
+    enum OperationMode
+    {
+        omFull,
+        omSingleEdit
+    };
+
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                             m_xORB;                 /// service factory
@@ -143,10 +152,13 @@ private:
     MapInt2String           m_aIndirectPropTranslator;  /// translating property id's into names (indirect properties of a data source)
 
     sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
+    sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
 
     sal_Int32               m_nCurrentDeletedDataSource;
     sal_Int16               m_nPostApplyPage;           // the page to be activated after an async apply operation
     const OPageSettings*    m_pPostApplyPageSettings;   // the page data to pass to this page
+
+    OperationMode           m_eMode;        // the mode we're working in
 
 private:
     ODatasourceSelector     m_aSelector;
@@ -167,7 +179,26 @@ public:
         This method is used by the UNO wrapper for the dialog to set the initial selection.<br/>
         If no data source with the given name exists, nothing is changed at all.
     */
-    void selectDataSource(const ::rtl::OUString& _rName);
+    void    selectDataSource(const ::rtl::OUString& _rName);
+
+    /** inserts a new data source with the given name.
+        <p>The name must not already exist in the list of available, non-deleted data sources.</p>
+        @return
+            <FALSE/> if the data source could not be inserted. Possible Reasons for this include:
+            <ul><li>the currently selected data source could not be deselected (because it's data as entered by
+                    the user is inconsistent)</li>
+                <li>the name given is invalid</li>
+            </ul>
+    */
+    sal_Bool insertDataSource(const ::rtl::OUString& _rName);
+
+    /// retrieves the current operation mode
+    OperationMode   getMode() const { return m_eMode; }
+
+    /** sets a new operation mode
+        <p><em>Must</em> not be called if the dialog is beeind executed.</p>
+    */
+    void            setMode(const OperationMode _eMode);
 
     /** create and return an item set for use with the dialog.
         @param      _pTypeCollection        pointer to an <type>ODatasourceMap</type>. May be NULL, in this case
@@ -213,6 +244,7 @@ public:
     void addDetailPage(USHORT _nPageId,USHORT _nTextId,CreateTabPage pCreateFunc);
     // removes all detail pages
     void removeDetailPages();
+
 protected:
     virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
     virtual short Ok();
@@ -289,6 +321,20 @@ protected:
     /// prepares switching to another data source
     sal_Bool            prepareSwitchDatasource();
 
+    /** checks if the name given can be used as name for a new data source
+        <p>The method does not check if the name is empty for performance reasons: If so, <TRUE/> is returned,
+        though the name is not valid at all.</p>
+    */
+    sal_Bool            isValidNewName(const ::rtl::OUString& _rName) const;
+
+    /** inserts a new data source and selects it
+        <p>no checks are made if the name is valid, or the currently selected data source can be left. This has
+        to be done by the caller.</p>
+        @return
+            <FALSE/> in case no new com.sun.star.sdb.DataSource could be created
+    */
+    sal_Bool            implInsertNew_noCheck(const ::rtl::OUString& _rName);
+
 private:
     DECL_LINK(OnDatasourceSelected, ListBox*);
     DECL_LINK(OnTypeSelected, OGeneralPage*);
@@ -299,6 +345,7 @@ private:
     DECL_LINK(OnRestoreDatasource, Window*);
     DECL_LINK(OnApplyChanges, PushButton*);
     DECL_LINK(OnAsyncApplyChanges, void*);
+    DECL_LINK(OnAsyncSelectDetailsPage, void*);
 
     String getConnectionURL() const;
 };
@@ -312,6 +359,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/06/25 16:03:39  fs
+ *  #88004# outsourced ODataSourceMap and ODataSourceSelector
+ *
  *  Revision 1.19  2001/06/20 07:04:10  oj
  *  #88434# new method to get the driver
  *

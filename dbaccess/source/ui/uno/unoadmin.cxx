@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 12:35:37 $
+ *  last change: $Author: fs $ $Date: 2001-07-30 11:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,8 +219,48 @@ Dialog* ODatabaseAdministrationDialog::createDialog(Window* _pParent)
 
     ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
     ODbAdminDialog* pDialog = new ODbAdminDialog(_pParent, m_pDatasourceItems, m_xORB);
-    pDialog->selectDataSource(m_sInitialSelection);
+
+    // the mode which the dialog should operate in
+    implSetOperationMode(pDialog);
+
+    // the initial selection
+    if (m_sInitialSelection.getLength())
+        pDialog->selectDataSource(m_sInitialSelection);
+
     return pDialog;
+}
+
+//------------------------------------------------------------------------------
+void ODatabaseAdministrationDialog::implSetOperationMode(ODbAdminDialog* _pDialog)
+{
+    // .........................................................................
+    // some checks
+    DBG_ASSERT(_pDialog, "ODatabaseAdministrationDialog::implSetOperationMode: invalid dialog!");
+    if (!_pDialog)
+        return;
+
+    DBG_ASSERT(!_pDialog->IsInExecute(), "ODatabaseAdministrationDialog::implSetOperationMode: not to be called if the dialog is beeing executed!");
+    if (_pDialog->IsInExecute())
+        return;
+
+    // .........................................................................
+    // translate the string into an OperationMode
+    ODbAdminDialog::OperationMode eMode = ODbAdminDialog::omFull;
+    if (0 == m_sOperationMode.compareToAscii("SingleEdit"))
+        eMode = ODbAdminDialog::omSingleEdit;
+#ifdef DBG_UTIL
+    else if ((0 != m_sOperationMode.compareToAscii("AdministrateAll")) && (0 != m_sOperationMode.getLength()))
+        DBG_ERROR("ODatabaseAdministrationDialog::implSetOperationMode: unsupported (unknown) mode!");
+#endif
+
+    // .........................................................................
+    // forward the mode to the dialog
+    if (_pDialog->getMode() == eMode)
+        // nothing to to
+        return;
+
+    // and now really set the mode
+    _pDialog->setMode(eMode);
 }
 
 //------------------------------------------------------------------------------
@@ -229,11 +269,18 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
     PropertyValue aProperty;
     if (_rValue >>= aProperty)
     {
-        if (aProperty.Name.equalsAsciiL("InitialSelection", sizeof("InitialSelection") - 1))
+        if (0 == aProperty.Name.compareToAscii("InitialSelection"))
         {
             aProperty.Value >>= m_sInitialSelection;
             if (m_pDialog)
                 static_cast<ODbAdminDialog*>(m_pDialog)->selectDataSource(m_sInitialSelection);
+            return;
+        }
+        if (0 == aProperty.Name.compareToAscii("Mode"))
+        {
+            aProperty.Value >>= m_sOperationMode;
+            if (m_pDialog)
+                implSetOperationMode(static_cast<ODbAdminDialog*>(m_pDialog));
             return;
         }
     }
@@ -247,6 +294,9 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/06/18 12:35:37  fs
+ *  #88389# OGenericUnoDialog moved to svtools
+ *
  *  Revision 1.8  2001/05/17 09:16:26  fs
  *  #86511# hold the type collection as pointer, not as object - allows construction in createDialog, where it can be guarded by the solar mutex
  *

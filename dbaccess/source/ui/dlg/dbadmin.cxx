@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-25 14:05:44 $
+ *  last change: $Author: fs $ $Date: 2001-07-30 11:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_ADMINISTRATION), _pItems)
     ,m_aSelector(this, ResId(WND_DATASOURCESELECTOR))
     ,m_bResetting(sal_False)
+    ,m_bApplied(sal_False)
     ,m_aDatasources(_rxORB)
     ,m_xORB(_rxORB)
     ,m_nPostApplyPage(0)
@@ -369,6 +370,11 @@ Reference<XConnection> ODbAdminDialog::createConnection()
 //-------------------------------------------------------------------------
 short ODbAdminDialog::Execute()
 {
+    // in "single edit" mode ...
+    if (omSingleEdit == getMode())
+        // ... we initially show the detail page for convenience
+        PostUserEvent( LINK( this, ODbAdminDialog, OnAsyncSelectDetailsPage ) );
+
     short nResult = SfxTabDialog::Execute();
 
     // within it's dtor, the SfxTabDialog saves (amongst others) the currently selected tab page and
@@ -380,7 +386,67 @@ short ODbAdminDialog::Execute()
     // clear the temporary SfxItemSets we created
     m_aDatasources.clear();
 
-    return nResult;
+    return m_bApplied ? RET_OK : nResult;
+        // the result as returned by SfxTabDialog::Execute may not be correct
+        // in case the user applied some changes, and after this, simply prssed OK, the base class method will return
+        // RET_CANCEL ('cause it thinks nothing changed), but in real it is an RET_OK
+}
+
+//-------------------------------------------------------------------------
+void ODbAdminDialog::setMode(const OperationMode _eMode)
+{
+    DBG_ASSERT(!IsInExecute(), "ODbAdminDialog::setMode: not to be called while beeing executed!");
+
+    if (_eMode == m_eMode)
+        // nothing to do
+        return;
+
+    m_eMode = _eMode;
+
+    // if we're in a "edit the current data source only" mode, we disable the selection listbox and the new
+    // button only
+    // TODO: it would be nicer to remove all other data sources from the list and disable the "new" button,
+    // the approach with disabling the selector has been choosen due to time pressure ....
+    m_aSelector.Enable( omFull == m_eMode );
+}
+
+//-------------------------------------------------------------------------
+sal_Bool ODbAdminDialog::insertDataSource(const ::rtl::OUString& _rName)
+{
+    if (!prepareSwitchDatasource())
+        return sal_False;
+
+    if (!_rName.getLength())
+        return sal_False;
+
+    if (!isValidNewName(_rName))
+        return sal_False;
+
+    return implInsertNew_noCheck(_rName);
+}
+
+//-------------------------------------------------------------------------
+IMPL_LINK( ODbAdminDialog, OnAsyncSelectDetailsPage, void*, NOTINTERESTEDIN )
+{
+    sal_uInt16 nDetailPageId = 0;
+    switch (getDatasourceType(*GetInputSetImpl()))
+    {
+        case DST_DBASE      : nDetailPageId = PAGE_GENERAL; break;  // There are settings to be done on the general page (URL)
+        case DST_JDBC       : nDetailPageId = PAGE_JDBC; break;
+        case DST_ADO        : nDetailPageId = PAGE_ADO; break;
+        case DST_TEXT       : nDetailPageId = PAGE_TEXT; break;
+        case DST_ODBC       : nDetailPageId = PAGE_ODBC; break;
+        case DST_ADABAS     : nDetailPageId = PAGE_ADABAS; break;
+        case DST_ADDRESSBOOK: nDetailPageId = PAGE_LDAP; /* juest a guess */ break;
+    }
+    if (nDetailPageId)
+    {
+        ShowPage(nDetailPageId);
+        if (GetTabPage(nDetailPageId))
+            GetTabPage(nDetailPageId)->GrabFocus();
+    }
+
+    return 0L;
 }
 
 //-------------------------------------------------------------------------
@@ -765,7 +831,7 @@ IMPL_LINK(ODbAdminDialog, OnNameModified, OGeneralPage*, _pTabPage)
 
         // the user is not allowed to leave the current data source (or to commit the dialog) as long
         // as the name is invalid
-        m_aSelector.Enable(bValid && m_aDatasources.isValid());
+        m_aSelector.Enable( bValid && m_aDatasources.isValid() && ( omFull == m_eMode ) );
         GetOKButton().Enable(bValid);
         GetApplyButton()->Enable(bValid);
 
@@ -940,6 +1006,8 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
 
     // reset the pages
 
+    sal_uInt16 nOldSelectedPage = GetCurPageId();
+
     // prevent flicker
     SetUpdateMode(sal_False);
 
@@ -958,6 +1026,16 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     RemoveTabPage(PAGE_TABLESUBSCRIPTION);
     RemoveTabPage(PAGE_QUERYADMINISTRATION);
     RemoveTabPage(PAGE_DOCUMENTLINKS);
+
+    // remove all items which relate to indirect properties from the input set
+    // (without this, the following may happen: select an arbitrary data source where some indirect properties
+    // are set. Select another data source of the same type, where the indirect props are not set (yet). Then,
+    // the indirect property values of the first ds are shown in the second ds ...)
+    for (   ConstMapInt2StringIterator aIndirect = m_aIndirectPropTranslator.begin();
+            aIndirect != m_aIndirectPropTranslator.end();
+            ++aIndirect
+        )
+        GetInputSetImpl()->ClearItem( (sal_uInt16)aIndirect->first );
 
     // extract all relevant data from the property set of the data source
     translateProperties(_rxDatasource, *GetInputSetImpl());
@@ -978,7 +1056,7 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
     // and again, add the non-details tab pages
-    if (!_bDeleted)
+    if ( !_bDeleted && ( omSingleEdit != getMode() ) )
     {
         OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
         AddTabPage(PAGE_TABLESUBSCRIPTION, String(ResId(STR_PAGETITLE_TABLESUBSCRIPTION)), OTableSubscriptionPage::Create, NULL);
@@ -987,15 +1065,26 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     }
 
     m_bResetting = sal_True;
-    ShowPage(PAGE_GENERAL);
-    SetUpdateMode(sal_True);
 
+    // unfortunately, I have no chance if a page with ID nOldSelectedPage still exists
+    // So we first select the general page (which is always available) and the the old page (which may not be there)
+
+    ShowPage( PAGE_GENERAL );
     // propagate the new data to the general tab page the general tab page
     SfxTabPage* pGeneralPage = GetTabPage(PAGE_GENERAL);
     if (pGeneralPage)
         pGeneralPage->Reset(*GetInputSetImpl());
     // if this is NULL, the page has not been created yet, which means we're called before the
     // dialog was displayed (probably from inside the ctor)
+
+    ShowPage( nOldSelectedPage );
+    // same for the previously selected page, if it is still there
+    SfxTabPage* pOldPage = GetTabPage( nOldSelectedPage );
+    if (pOldPage)
+        pOldPage->Reset(*GetInputSetImpl());
+
+    SetUpdateMode(sal_True);
+
     m_bResetting = sal_False;
 }
 
@@ -1434,6 +1523,22 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
 }
 
 //-------------------------------------------------------------------------
+sal_Bool ODbAdminDialog::isValidNewName(const ::rtl::OUString& _rName) const
+{
+    DBG_ASSERT(_rName.getLength(), "ODbAdminDialog::isValidNewName: is not to be called with an empty name!");
+        // checks for emptiness disabled for performance reasons
+
+    // check if "all but the current" datasources aleady contain the to-be-checked name
+    if (m_aValidDatasources.end() != m_aValidDatasources.find(_rName))
+        return sal_False;
+    // check if the currently selected data source allows the new name
+    if (m_sCurrentDatasource.equals(_rName))
+        return sal_False;
+
+    return sal_True;
+}
+
+//-------------------------------------------------------------------------
 ::rtl::OUString ODbAdminDialog::getUniqueName() const
 {
     ::rtl::OUString sBase = String(ModuleRes(STR_DATASOURCE_DEFAULTNAME)).GetBuffer();
@@ -1443,11 +1548,7 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
         ::rtl::OUString sCheck(sBase);
         sCheck += ::rtl::OUString::valueOf(i);
 
-        // check if "all but the current" datasources aleady contain the to-be-checked name
-        if (m_aValidDatasources.end() != m_aValidDatasources.find(sCheck))
-            continue;
-        // check if the currently selected data source allows the new name
-        if (m_sCurrentDatasource.equals(sCheck))
+        if (!isValidNewName(sCheck))
             continue;
 
         // have a valid new name
@@ -1502,6 +1603,38 @@ sal_Bool ODbAdminDialog::prepareSwitchDatasource()
 }
 
 //-------------------------------------------------------------------------
+sal_Bool ODbAdminDialog::implInsertNew_noCheck(const ::rtl::OUString& _rName)
+{
+    // create a new datasource (not belonging to a context, yet)
+    Reference< XPropertySet > xFloatingDatasource = m_aDatasources.createNew(_rName, GetInputSetImpl()->GetPool(), GetInputSetImpl()->GetRanges());
+    if (!xFloatingDatasource.is())
+    {
+        ShowServiceNotAvailableError(this, String(SERVICE_SDB_DATASOURCE), sal_True);
+        return sal_False;
+    }
+
+    GetInputSetImpl()->ClearItem();
+
+    // insert a new entry for the new DS
+    m_aSelector.insertNew(_rName);
+    // update our "all-but the selected ds" structure
+    m_aValidDatasources.insert(_rName);
+
+    // and select this new entry
+    m_aSelector.select(_rName);
+    implSelectDatasource(_rName);
+
+    // enable the apply button
+    GetApplyButton()->Enable(sal_True);
+
+    SfxTabPage* pGeneralPage = GetTabPage(PAGE_GENERAL);
+    if (pGeneralPage)
+        pGeneralPage->GrabFocus();
+
+    return sal_True;
+}
+
+//-------------------------------------------------------------------------
 IMPL_LINK(ODbAdminDialog, OnNewDatasource, Window*, _pWindow)
 {
     if (!prepareSwitchDatasource())
@@ -1511,33 +1644,7 @@ IMPL_LINK(ODbAdminDialog, OnNewDatasource, Window*, _pWindow)
     if (0 == sNewName.getLength())
         return 1L;  // no free names
 
-    // create a new datasource (not belonging to a context, yet)
-    Reference< XPropertySet > xFloatingDatasource = m_aDatasources.createNew(sNewName, GetInputSetImpl()->GetPool(), GetInputSetImpl()->GetRanges());
-    if (!xFloatingDatasource.is())
-    {
-        ShowServiceNotAvailableError(this, String(SERVICE_SDB_DATASOURCE), sal_True);
-        return 1L;
-    }
-
-    GetInputSetImpl()->ClearItem();
-
-    // insert a new entry for the new DS
-    m_aSelector.insertNew(sNewName);
-    // update our "all-but the selected ds" structure
-    m_aValidDatasources.insert(sNewName);
-
-    // and select this new entry
-    m_aSelector.select(sNewName);
-    implSelectDatasource(sNewName);
-
-    // enable the apply button
-    GetApplyButton()->Enable(sal_True);
-
-    SfxTabPage* pGeneralPage = GetTabPage(PAGE_GENERAL);
-    if (pGeneralPage)
-        pGeneralPage->GrabFocus();
-
-    return 0L;
+    return implInsertNew_noCheck(sNewName) ? 0L : 1L;
 }
 
 //-------------------------------------------------------------------------
@@ -1829,6 +1936,8 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges(const sal_Bool _bAc
         // This way, next time they're asked what has changed since now and here, they really
         // can compare with the status they have _now_ (not the one they had before this apply call).
 
+    m_bApplied = sal_True;
+
     return eResult;
 }
 
@@ -1900,6 +2009,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.66  2001/07/25 14:05:44  oj
+ *  #90201# check ldap name
+ *
  *  Revision 1.65  2001/07/17 07:30:50  oj
  *  #89533# GetMainURL changed
  *
