@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-22 13:16:58 $
+ *  last change: $Author: fs $ $Date: 2002-01-21 09:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2339,8 +2339,21 @@ IMPL_LINK(FmXFormShell, OnExecuteNavSlot, FmFormNavigationDispatcher*, pDispatch
         break;
 
         case SID_FM_RECORD_NEW:
-            DO_SAFE( xUpdateCursor->moveToInsertRow(); );
-            break;
+        {
+            Reference< XResultSet >  xCursor( xUpdateCursor, UNO_QUERY );
+            DBG_ASSERT( xCursor.is(), "FmXFormShell:OnExecuteNavSlot: invalid cursor (no XResultSet)!" );
+            if ( xCursor.is() )
+            {
+                // move to the last row before moving to the insert row
+                // 21.01.2002 - 96480 - fs@openoffice.org
+                DO_SAFE( xCursor->last(); );
+                DO_SAFE( xUpdateCursor->moveToInsertRow(); );
+
+                // TODO: here, the same comments as in FmFormShell::Execute( SID_FM_RECORD_NEW ) apply
+                // think about this DO_SAFE
+            }
+        }
+        break;
     }
 
     if (xCursor == getActiveForm())
@@ -2353,7 +2366,7 @@ IMPL_LINK(FmXFormShell, OnExecuteNavSlot, FmFormNavigationDispatcher*, pDispatch
 //------------------------------------------------------------------------------
 void FmXFormShell::setActiveController(const Reference< XFormController>& xController)
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    DBG_ASSERT(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (m_bChangingDesignMode)
         return;
     DBG_ASSERT(!m_pShell->IsDesignMode(), "nur im alive mode verwenden");
