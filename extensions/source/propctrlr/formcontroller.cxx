@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 14:44:49 $
+ *  last change: $Author: fs $ $Date: 2001-01-12 17:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,9 +593,9 @@ namespace pcr
                 {
                     String sBooleanValues(ModuleRes(RID_STR_BOOL));
                     if (sBooleanValues.GetToken(0) == String(_rString))
-                        aReturn <<= (sal_Bool)sal_True;
-                    else
                         aReturn <<= (sal_Bool)sal_False;
+                    else
+                        aReturn <<= (sal_Bool)sal_True;
                 }
                 break;
 
@@ -2498,6 +2498,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/01/12 14:44:49  fs
+ *  don't hold the form info service statically - caused problems 'cause it was the last ModuleResourceClient and destroyed upon unloaded the library
+ *
  *  Revision 1.1  2001/01/12 11:28:05  fs
  *  initial checkin - outsourced the form property browser
  *
