@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-09-13 09:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,30 +61,58 @@
 
 #include "broadcaster.hxx"
 
+#ifndef CONFIGMGR_API_NOTIFIERIMPL_HXX_
 #include "notifierimpl.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNOTIFIER_HXX_
 #include "confignotifier.hxx"
+#endif
 
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #include "nodechange.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGEINFO_HXX_
 #include "nodechangeinfo.hxx"
+#endif
+#ifndef CONFIGMGR_API_TRANSLATECHANGES_HXX_
 #include "translatechanges.hxx"
+#endif
 
+#ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "apifactory.hxx"
+#endif
+#ifndef CONFIGMGR_API_TREEACCESS_HXX_
 #include "apitreeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_API_TREEIMPLOBJECTS_HXX_
 #include "apitreeimplobj.hxx"
+#endif
 
+#ifndef _VOS_REFERNCE_HXX_
 #include <vos/refernce.hxx>
+#endif
 
+#ifndef INCLUDED_MAP
 #include <map>
+#define INCLUDED_MAP
+#endif
+#ifndef INCLUDED_SET
 #include <set>
+#define INCLUDED_SET
+#endif
+#ifndef INCLUDED_FUNCTIONAL
 #include <functional>
+#define INCLUDED_FUNCTIONAL
+#endif
 
 namespace configmgr
 {
     namespace configapi
     {
 // ---------------------------------------------------------------------------------------------------
-#define xxx /*nothing*/
         using configuration::Tree;
         using configuration::NodeID;
 
@@ -115,7 +143,36 @@ namespace configmgr
 
             std::less<T*> ptr_less;
         };
-        typedef std::map< NotifierHolder, ApiTreeImpl const*, LessORefBodyPtr<NotifierImpl> > NotifierSet;
+    // -----------------------------------------------------------------------------------------------
+        class ApiTreeRef
+        {
+            ApiTreeImpl const*  m_pApiTree;
+            UnoInterfaceRef     m_xKeepAlive;
+        public:
+            explicit ApiTreeRef(ApiTreeImpl const* _pApiTree = NULL)
+            : m_pApiTree(_pApiTree)
+            , m_xKeepAlive()
+            {
+                if (m_pApiTree) m_xKeepAlive = m_pApiTree->getUnoInstance();
+            }
+
+            bool is() const
+            {
+                OSL_ASSERT(!m_pApiTree == !m_xKeepAlive.is());
+                return m_pApiTree != NULL;
+            }
+
+            ApiTreeImpl const* get()        const { return m_pApiTree; }
+            ApiTreeImpl const* operator->() const { return m_pApiTree; }
+
+            friend bool operator==(ApiTreeRef const& lhs,ApiTreeRef const& rhs)
+            { return lhs.m_pApiTree == rhs.m_pApiTree; }
+
+            friend bool operator!=(ApiTreeRef const& lhs,ApiTreeRef const& rhs)
+            { return lhs.m_pApiTree != rhs.m_pApiTree; }
+        };
+    // -----------------------------------------------------------------------------------------------
+        typedef std::map< NotifierHolder, ApiTreeRef, LessORefBodyPtr<NotifierImpl> > NotifierSet;
         typedef NotifierSet::value_type NotifierData;
     // -----------------------------------------------------------------------------------------------
 
@@ -140,10 +197,10 @@ namespace configmgr
 
         void notifyRootListeners(NodeChangesInformation const& aChanges);
 
-        static vos::ORef<Impl> create(NotifierHolder const& rNotifierImpl, ApiTreeImpl const* pTreeImpl, NodeChange const& aChange, bool bLocal);
-        static vos::ORef<Impl> create(NotifierHolder const& rNotifierImpl, ApiTreeImpl const* pTreeImpl, NodeChanges const& aChange, bool bLocal);
-        static vos::ORef<Impl> create(NotifierHolder const& rNotifierImpl, ApiTreeImpl const* pTreeImpl, NodeChangeInformation const& aChange, bool bLocal);
-        static vos::ORef<Impl> create(NotifierHolder const& rNotifierImpl, ApiTreeImpl const* pTreeImpl, NodeChangesInformation const& aChange, bool bLocal);
+        static vos::ORef<Impl> create(NotifierHolder const& rNotifierImpl, ApiTreeRef const& pTreeImpl, NodeChange const& aChange, bool bLocal);
+        static vos::ORef<Impl> create(NotifierHolder const& rNotifierImpl, ApiTreeRef const& pTreeImpl, NodeChanges const& aChange, bool bLocal);
+        static vos::ORef<Impl> create(NotifierHolder const& rNotifierImpl, ApiTreeRef const& pTreeImpl, NodeChangeInformation const& aChange, bool bLocal);
+        static vos::ORef<Impl> create(NotifierHolder const& rNotifierImpl, ApiTreeRef const& pTreeImpl, NodeChangesInformation const& aChange, bool bLocal);
 
     private:
         virtual void doQueryConstraints(NodeChangesInformation const& aChanges) = 0;
@@ -304,9 +361,9 @@ namespace configmgr
     // -----------------------------------------------------------------------------------------------
 
         inline NodeID makeRootID( Tree const& aTree ) { return NodeID( aTree, aTree.getRootNode() ); }
-        inline NodeID makeRootID( ApiTreeImpl const* pTreeImpl ) { return makeRootID( pTreeImpl->getTree() ); }
+        inline NodeID makeRootID( ApiTreeRef const& pTreeImpl ) { return makeRootID( pTreeImpl->getTree() ); }
     // -----------------------------------------------------------------------------------------------
-        NotifierData findNotifier(NodeChangeLocation const& aChange, ApiTreeImpl const* pTreeImpl)
+        NotifierData findNotifier(NodeChangeLocation const& aChange, ApiTreeRef const& pTreeImpl)
         {
             OSL_ENSURE(aChange.isValidLocation(),"Invalid change location - cannot find notifier");
 
@@ -314,24 +371,25 @@ namespace configmgr
             if (aAffectedNode.isEmpty())
                 return NotifierData();
 
-            if (ApiTreeImpl const* pAffectedImpl = Factory::findDescendantTreeImpl(aAffectedNode, pTreeImpl))
+            ApiTreeRef aAffectedImpl( Factory::findDescendantTreeImpl(aAffectedNode, pTreeImpl.get()) );
+            if (aAffectedImpl.is())
             {
-                NotifierHolder aAffectedNotifier = BroadcasterHelper::getImpl(pAffectedImpl->getNotifier());
+                NotifierHolder aAffectedNotifier = BroadcasterHelper::getImpl(aAffectedImpl->getNotifier());
 
-                return  NotifierData(aAffectedNotifier, pAffectedImpl);
+                return  NotifierData(aAffectedNotifier, aAffectedImpl);
             }
             else
                 return NotifierData();
         }
     // -----------------------------------------------------------------------------------------------
         inline
-        NotifierData findNotifier(NodeChangeInformation const& aChange, ApiTreeImpl const* pTreeImpl)
+        NotifierData findNotifier(NodeChangeInformation const& aChange, ApiTreeRef const& pTreeImpl)
         {
             return findNotifier(aChange.location,pTreeImpl);
         }
     // -----------------------------------------------------------------------------------------------
 
-        void findNotifiers(NotifierSet& aNotifiers, NodeChangesInformation const& aChanges, ApiTreeImpl const* pTreeImpl )
+        void findNotifiers(NotifierSet& aNotifiers, NodeChangesInformation const& aChanges, ApiTreeRef const& pTreeImpl )
         {
             for (NodeChangesInformation::Iterator it = aChanges.begin(); it != aChanges.end(); ++it)
             {
@@ -804,7 +862,7 @@ namespace configmgr
         bool MultiTreeBroadcaster_Impl::selectChanges(NodeChangesInformation& rSelected, NodeChangesInformation const& aOriginal, NotifierData const& aSelector)
         {
             OSL_ASSERT(aSelector.first.isValid());
-            OSL_ASSERT(aSelector.second != 0);
+            OSL_ASSERT(aSelector.second.is());
 
             OSL_ASSERT(rSelected.empty()); // nothing in there yet
 
@@ -870,9 +928,9 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------------------------------
 
-    BroadcasterImplRef Broadcaster::Impl::create(NotifierHolder const& rNotifierImpl, ApiTreeImpl const* pTreeImpl, NodeChange const& aChange, bool bLocal)
+    BroadcasterImplRef Broadcaster::Impl::create(NotifierHolder const& rNotifierImpl, ApiTreeRef const& pTreeImpl, NodeChange const& aChange, bool bLocal)
     {
-        OSL_ASSERT(pTreeImpl);
+        OSL_ASSERT(pTreeImpl.is());
 
         BroadcasterImplRef pRet;
 
@@ -886,7 +944,7 @@ namespace configmgr
             else
             {
                 NotifierData aAffectedNotifier( findNotifier(aLocation, pTreeImpl) );
-                if (aAffectedNotifier.second) // only if we found a notifier we are able to create a broadcaster (DG)
+                if (aAffectedNotifier.second.is()) // only if we found a notifier we are able to create a broadcaster (DG)
                     pRet = SingleChangeBroadcaster_Impl::create( aAffectedNotifier, aLocation);
             }
         }
@@ -903,7 +961,7 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------------------------------
 
-    BroadcasterImplRef Broadcaster::Impl::create(NotifierHolder const& rNotifierImpl, ApiTreeImpl const* pTreeImpl, NodeChanges const& aChanges, bool bLocal)
+    BroadcasterImplRef Broadcaster::Impl::create(NotifierHolder const& rNotifierImpl, ApiTreeRef const& pTreeImpl, NodeChanges const& aChanges, bool bLocal)
     {
         NotifierData aRootData(rNotifierImpl, pTreeImpl);
 
@@ -925,9 +983,9 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------------------------------
 
-    BroadcasterImplRef Broadcaster::Impl::create(NotifierHolder const& rNotifierImpl, ApiTreeImpl const* pTreeImpl, NodeChangeInformation const& aChange, bool bLocal)
+    BroadcasterImplRef Broadcaster::Impl::create(NotifierHolder const& rNotifierImpl, ApiTreeRef const& pTreeImpl, NodeChangeInformation const& aChange, bool bLocal)
     {
-        OSL_ASSERT(pTreeImpl);
+        OSL_ASSERT(pTreeImpl.is());
 
         BroadcasterImplRef pRet;
 
@@ -940,7 +998,7 @@ namespace configmgr
             else
             {
                 NotifierData aAffectedNotifier( findNotifier(aChange.location, pTreeImpl) );
-                if (aAffectedNotifier.second) // only if we found a notifier we are able to create a broadcaster (DG)
+                if (aAffectedNotifier.second.is()) // only if we found a notifier we are able to create a broadcaster (DG)
                     pRet = SingleChangeBroadcaster_Impl::create( aAffectedNotifier, aChange.location);
             }
         }
@@ -957,7 +1015,7 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------------------------------
 
-    BroadcasterImplRef Broadcaster::Impl::create(NotifierHolder const& rNotifierImpl, ApiTreeImpl const* pTreeImpl, NodeChangesInformation const& aChanges, bool bLocal)
+    BroadcasterImplRef Broadcaster::Impl::create(NotifierHolder const& rNotifierImpl, ApiTreeRef const& pTreeImpl, NodeChangesInformation const& aChanges, bool bLocal)
     {
         BroadcasterImplRef pRet;
 
@@ -1072,7 +1130,8 @@ namespace configmgr
     {
         if (aChanges.empty()) return;
 
-        if (ApiTreeImpl const* pRootTree = m_aNotifierData.second->getRootTreeImpl())
+        ApiTreeRef pRootTree( m_aNotifierData.second->getRootTreeImpl() );
+        if (pRootTree.is())
         {
             osl::ClearableMutexGuard aGuardRoot( pRootTree->getApiLock() );
 
@@ -1116,25 +1175,25 @@ namespace configmgr
 // class Broadcaster
 // ---------------------------------------------------------------------------------------------------
 Broadcaster::Broadcaster(Notifier const& aNotifier, NodeChange const& aChange, bool bLocal)
-: m_pImpl( Impl::create(aNotifier.m_aImpl,aNotifier.m_pTree,aChange,bLocal) )
+: m_pImpl( Impl::create(aNotifier.m_aImpl,ApiTreeRef(aNotifier.m_pTree),aChange,bLocal) )
 {
     OSL_ASSERT(m_pImpl.isValid());
 }
 // ---------------------------------------------------------------------------------------------------
 Broadcaster::Broadcaster(Notifier const& aNotifier, NodeChanges const& aChanges, bool bLocal)
-: m_pImpl( Impl::create(aNotifier.m_aImpl,aNotifier.m_pTree,aChanges,bLocal) )
+: m_pImpl( Impl::create(aNotifier.m_aImpl,ApiTreeRef(aNotifier.m_pTree),aChanges,bLocal) )
 {
     OSL_ASSERT(m_pImpl.isValid());
 }
 // ---------------------------------------------------------------------------------------------------
 Broadcaster::Broadcaster(Notifier const& aNotifier, NodeChangeInformation const& aChange, bool bLocal)
-: m_pImpl( Impl::create(aNotifier.m_aImpl,aNotifier.m_pTree,aChange,bLocal) )
+: m_pImpl( Impl::create(aNotifier.m_aImpl,ApiTreeRef(aNotifier.m_pTree),aChange,bLocal) )
 {
     OSL_ASSERT(m_pImpl.isValid());
 }
 // ---------------------------------------------------------------------------------------------------
 Broadcaster::Broadcaster(Notifier const& aNotifier, NodeChangesInformation const& aChanges, bool bLocal)
-: m_pImpl( Impl::create(aNotifier.m_aImpl,aNotifier.m_pTree,aChanges,bLocal) )
+: m_pImpl( Impl::create(aNotifier.m_aImpl,ApiTreeRef(aNotifier.m_pTree),aChanges,bLocal) )
 {
     OSL_ASSERT(m_pImpl.isValid());
 }
