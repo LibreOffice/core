@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:59:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,6 +582,8 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ hindi ] = "कूटशब्द समान नहीं है । कृपया फ़िर से कूटशब्द को प्रविष्ट कीजिए ।";
     Text[ slovak ] = "Heslá sa nezhodujú. Zadajte, prosím, heslo znovu.";
 };
+
+
 
 
 
