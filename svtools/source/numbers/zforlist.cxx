@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2001-01-30 19:45:22 $
+ *  last change: $Author: er $ $Date: 2001-02-02 19:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,7 +655,7 @@ BOOL SvNumberFormatter::Load( SvStream& rStream )
         LanguageType eLang = aList[j];
         ChangeIntl( eLang );
         ULONG CLOffset = ImpGetCLOffset( eLang );
-        ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode );
+        ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode, TRUE );
     }
     ChangeIntl( eOldLanguage );
 
@@ -1397,7 +1397,7 @@ ULONG SvNumberFormatter::TestNewString(const String& sFormatString,
 
 SvNumberformat* SvNumberFormatter::ImpInsertFormat(
             const ::com::sun::star::i18n::NumberFormatCode& rCode,
-            ULONG nPos )
+            ULONG nPos, BOOL bAfterLoadingSO5 )
 {
     String aCodeStr( rCode.Code );
     if ( rCode.Index < NF_INDEX_TABLE_ENTRIES &&
@@ -1445,11 +1445,16 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
         if ( nKey != NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
 #ifndef PRODUCT
-             ByteString aMsg( "ImpInsertFormat: dup format code, index " );
-            aMsg += ByteString::CreateFromInt32( rCode.Index );
-            aMsg += '\n';
-            aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
-            DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
+            if ( !bAfterLoadingSO5 )
+            {   // If bAfterLoadingSO5 there will definitely be some dupes,
+                // don't cry. But we need this test for verification of locale
+                // data if not loading old SO5 documents.
+                 ByteString aMsg( "ImpInsertFormat: dup format code, index " );
+                aMsg += ByteString::CreateFromInt32( rCode.Index );
+                aMsg += '\n';
+                aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
+                DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
+            }
 #endif
             delete pFormat;
             return NULL;
@@ -1490,9 +1495,9 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
 
 SvNumberformat* SvNumberFormatter::ImpInsertNewStandardFormat(
             const ::com::sun::star::i18n::NumberFormatCode& rCode,
-            ULONG nPos, USHORT nVersion )
+            ULONG nPos, USHORT nVersion, BOOL bAfterLoadingSO5 )
 {
-    SvNumberformat* pNewFormat = ImpInsertFormat( rCode, nPos );
+    SvNumberformat* pNewFormat = ImpInsertFormat( rCode, nPos, bAfterLoadingSO5 );
     if (pNewFormat)
         pNewFormat->SetNewStandardDefined( nVersion );
         // so that it gets saved, displayed properly, and converted by old versions
@@ -2078,7 +2083,7 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
     // Now all additional format codes provided by I18N, but only if not
     // loading from old SO5 file format, then they are appended last.
     if ( !bLoadingSO5 )
-        ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode );
+        ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode, FALSE );
 
     if (bOldConvertMode)
         pFormatScanner->SetConvertMode(TRUE);
@@ -2086,7 +2091,7 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
 
 
 void SvNumberFormatter::ImpGenerateAdditionalFormats( ULONG CLOffset,
-            NumberFormatCodeWrapper& rNumberFormatCode )
+            NumberFormatCodeWrapper& rNumberFormatCode, BOOL bAfterLoadingSO5 )
 {
     using namespace ::com::sun::star;
 
@@ -2119,7 +2124,8 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( ULONG CLOffset,
             // above so ImpInsertFormat can distinguish it.
             aFormatSeq[j].Index += nCodes + NF_INDEX_TABLE_ENTRIES;
             if ( ImpInsertNewStandardFormat( aFormatSeq[j], nPos+1,
-                    SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS ) )
+                    SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
+                    bAfterLoadingSO5 ) )
                 nPos++;
         }
     }
@@ -2136,7 +2142,8 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( ULONG CLOffset,
         }
         if ( aFormatSeq[j].Index >= NF_INDEX_TABLE_ENTRIES )
             if ( ImpInsertNewStandardFormat( aFormatSeq[j], nPos+1,
-                    SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS ) )
+                    SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
+                    bAfterLoadingSO5 ) )
                 nPos++;
     }
 
