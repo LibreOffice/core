@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:00:36 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,30 @@ public:
     const SwIndex&     GetCntntAnchorIndex() const;
 
     // -------------------------------------------------------------------------
+
+    /** get data collection of anchored objects, handled by with contact
+
+        OD 2004-08-23 #110810#
+
+        @author
+    */
+    virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const = 0;
+
+    /** get minimum order number of anchored objects handled by with contact
+
+        OD 2004-08-24 #110810#
+
+        @author
+    */
+    sal_uInt32 GetMinOrdNum() const;
+
+    /** get maximum order number of anchored objects handled by with contact
+
+        OD 2004-08-24 #110810#
+
+        @author
+    */
+    sal_uInt32 GetMaxOrdNum() const;
 };
 
 //KontactObjekt fuer die Verbindung zwischen Rahmen bzw. deren Formaten
@@ -260,6 +284,15 @@ class SwFlyDrawContact : public SwContact
 private:
     // OD 2004-04-01 #i26791#
     SwFlyDrawObj* mpMasterObj;
+
+    /** method to determine new order number for new instance of <SwVirtFlyDrawObj>
+
+        OD 2004-08-16 #i27030#
+        Used in method <CreateNewRef(..)>.
+
+        @author OD
+    */
+    sal_uInt32 _GetOrdNumForNewRef( const SwFlyFrm* pFlyFrm );
 
 public:
     TYPEINFO();
@@ -288,6 +321,14 @@ public:
     // Writer fly frame are also made visible/invisible.
     virtual void MoveObjToVisibleLayer( SdrObject* _pDrawObj );
     virtual void MoveObjToInvisibleLayer( SdrObject* _pDrawObj );
+
+    /** get data collection of anchored objects handled by with contact
+
+        OD 2004-08-23 #110810#
+
+        @author
+    */
+    virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const;
 };
 
 
@@ -526,6 +567,14 @@ class SwDrawContact : public SwContact
 
         // OD 20.06.2003 #108784#
         void NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect );
+
+        /** get data collection of anchored objects, handled by with contact
+
+            OD 2004-08-23 #110810#
+
+            @author
+        */
+        virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const;
 };
 
 #endif
