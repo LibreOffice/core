@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-06 19:41:19 $
+ *  last change: $Author: hr $ $Date: 2002-02-08 13:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,11 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-#ifndef __SGI_STL_LIST
+
+#include <algorithm>
+#include <vector>
 #include <list>
-#endif
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
 
 #include "xmlexppr.hxx"
 
@@ -235,7 +234,7 @@ public:
     }
 
     // for sort
-    sal_Bool operator< ( const FilterPropertyInfo_Impl& rArg )
+    sal_Bool operator< ( const FilterPropertyInfo_Impl& rArg ) const
     {
         return (GetApiName() < rArg.GetApiName());
     }
