@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swffilter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-21 14:58:02 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,8 +298,9 @@ TYPE findPropertyValue(const Sequence< PropertyValue >& aPropertySequence, const
 sal_Bool SAL_CALL FlashExportFilter::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
-    Sequence< PropertyValue > aFilterData;
+    mxStatusIndicator = findPropertyValue<Reference<XStatusIndicator> >(aDescriptor, "StatusIndicator", mxStatusIndicator);
 
+    Sequence< PropertyValue > aFilterData;
     aFilterData = findPropertyValue<Sequence< PropertyValue > >(aDescriptor, "FilterData", aFilterData);
 
     if (findPropertyValue<sal_Bool>(aFilterData, "ExportMultipleFiles", false ))
@@ -400,11 +401,13 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
                                          findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
 
     const sal_Int32 nPageCount = xDrawPages->getCount();
-    mxStatusIndicator->start(OUString( RTL_CONSTASCII_USTRINGPARAM( "Saving :" )), nPageCount);
+    if ( mxStatusIndicator.is() )
+        mxStatusIndicator->start(OUString( RTL_CONSTASCII_USTRINGPARAM( "Saving :" )), nPageCount);
 
     for(sal_Int32 nPage = 0; nPage < nPageCount; nPage++)
     {
-        mxStatusIndicator->setValue( nPage );
+        if ( mxStatusIndicator.is() )
+            mxStatusIndicator->setValue( nPage );
         xDrawPages->getByIndex(nPage) >>= xDrawPage;
 
         // AS: If we're only exporting the current page, then skip the rest.
@@ -506,23 +509,6 @@ void SAL_CALL FlashExportFilter::setSourceDocument( const ::com::sun::star::uno:
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     mxDoc = xDoc;
-
-    // create the status indicator
-    Reference< XModel > xModel( mxDoc, UNO_QUERY );
-    if( xModel.is() )
-    {
-        Reference< com::sun::star::frame::XController >xController(xModel->getCurrentController());
-        if(xController.is())
-        {
-            Reference < com::sun::star::frame::XFrame >xFrame(xController->getFrame());
-            if(xFrame.is())
-            {
-                Reference<com::sun::star::task::XStatusIndicatorFactory> xFactory(xFrame,UNO_QUERY);
-                if (xFactory.is())
-                    mxStatusIndicator = xFactory->createStatusIndicator();
-            }
-        }
-    }
 }
 
 // -----------------------------------------------------------------------------
