@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-16 17:49:23 $
+ *  last change: $Author: kr $ $Date: 2001-02-19 10:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ import java.lang.reflect.InvocationTargetException;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 17:49:23 $
+ * @version     $Revision: 1.4 $ $ $Date: 2001-02-19 10:07:03 $
  * @author      Markus Meyer
  * @author      Kay Ramme
  * @since       UDK1.0
@@ -101,7 +101,7 @@ public class Type {
     static private Method __getZClass;
 
     static {
-        System.err.println("##### com.sun.star.uno.Type.<sinit>");
+        if(DEBUG) System.err.println("##### com.sun.star.uno.Type.<sinit>");
 
         Throwable throwable = null;
 
