@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-10 20:51:40 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 14:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,9 @@ public:
     virtual void SAL_CALL   setActionLocks( sal_Int16 nLock )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL resetActionLocks() throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL   lockControllers();
+    virtual void SAL_CALL   unlockControllers();
 
                                 // XCalculatable
     virtual void SAL_CALL   calculate() throw(::com::sun::star::uno::RuntimeException);

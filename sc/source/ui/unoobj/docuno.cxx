@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-05-15 18:14:10 $
+ *  last change: $Author: sab $ $Date: 2001-07-23 14:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,14 +493,14 @@ void SAL_CALL ScModelObj::addActionLock() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     if (pDocShell)
-        pDocShell->LockPaint();
+        pDocShell->LockDocument();
 }
 
 void SAL_CALL ScModelObj::removeActionLock() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     if (pDocShell)
-        pDocShell->UnlockPaint();
+        pDocShell->UnlockDocument();
 }
 
 void SAL_CALL ScModelObj::setActionLocks( sal_Int16 nLock ) throw(uno::RuntimeException)
@@ -520,6 +520,25 @@ sal_Int16 SAL_CALL ScModelObj::resetActionLocks() throw(uno::RuntimeException)
         pDocShell->SetLockCount(0);
     }
     return nRet;
+}
+
+void SAL_CALL ScModelObj::lockControllers()
+{
+    ScUnoGuard aGuard;
+    SfxBaseModel::lockControllers();
+    if (pDocShell)
+        pDocShell->LockPaint();
+}
+
+void SAL_CALL ScModelObj::unlockControllers()
+{
+    ScUnoGuard aGuard;
+    if (hasControllersLocked())
+    {
+        SfxBaseModel::unlockControllers();
+        if (pDocShell)
+            pDocShell->UnlockPaint();
+    }
 }
 
 // XCalculate
