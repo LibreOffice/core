@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-11 14:54:29 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,9 +325,9 @@ BOOL SwWW8ImplReader::MakeUniqueGraphName( String& rName,
     if( !bNew )
         return FALSE;
     nImportedGraphicsCount++;
-    rName = WW8_ASCII2STR( "G" );
+    rName = 'G';
     rName += String::CreateFromInt32( nImportedGraphicsCount );
-    rName += WW8_ASCII2STR( ": " );
+    rName.APPEND_CONST_ASC( ": " );
     rName += rFixedPart;
     return TRUE;
 }
@@ -2264,7 +2264,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             nDrawObjOfs = pDrawPg->GetObjCount();
         }
         nDrawXOfs = nDrawYOfs = 0;
-        pDrawFmt = rDoc.MakeDrawFrmFmt( WW8_ASCII2STR( "DrawObject" ),
+        pDrawFmt = rDoc.MakeDrawFrmFmt(CREATE_CONST_ASC("DrawObject"),
             rDoc.GetDfltFrmFmt() );
         ReadGrafLayer1( pPF, nGrafAnchorCp );
         pStrm->Seek( nOldPos );

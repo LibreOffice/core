@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,8 +567,7 @@ void WW8_SwAttrIter::OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart)
 {
     if( bStart )
     {
-        String aStr(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(
-            " EQ \\* jc")));
+        String aStr(CREATE_CONST_ASC(" EQ \\* jc"));
         sal_Int32 nJC=0;
         sal_Char cDirective=0;
         switch(rRuby.GetAdjustment())
@@ -637,20 +636,17 @@ void WW8_SwAttrIter::OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart)
         }
         long nHeight = (pHeightItem->GetHeight() + 5)/10;
 
-        aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM(
-            " \\* \"Font:"));
+        aStr.APPEND_CONST_ASC(" \\* \"Font:");
         aStr.Append(pItem->GetFamilyName());
-        aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM(
-            "\" \\* hps"));
+        aStr.APPEND_CONST_ASC("\" \\* hps");
         aStr += String::CreateFromInt32(nHeight);
-        aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM(
-            " \\o"));
+        aStr.APPEND_CONST_ASC(" \\o");
         if (cDirective)
         {
-            aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\\a"));
+            aStr.APPEND_CONST_ASC("\\a");
             aStr.Append(cDirective);
         }
-        aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM("(\\s\\up "));
+        aStr.APPEND_CONST_ASC("(\\s\\up ");
 
 
         if( pBreakIt->xBreak.is() )
@@ -667,7 +663,7 @@ void WW8_SwAttrIter::OutSwFmtRuby( const SwFmtRuby& rRuby, BOOL bStart)
         aStr += String::CreateFromInt32(nHeight);
         aStr += '(';
         aStr += rRuby.GetText();
-        aStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM("),"));
+        aStr.APPEND_CONST_ASC("),");
         rWrt.OutField( 0, 49, aStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
     }
     else
@@ -687,17 +683,14 @@ void WW8_SwAttrIter::OutSwFmtINetFmt( const SwFmtINetFmt& rINet, BOOL bStart )
 
         sURL = INetURLObject::AbsToRel( sURL, INetURLObject::WAS_ENCODED,
                                         INetURLObject::DECODE_UNAMBIGUOUS);
-        sURL.Insert( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "HYPERLINK \"" )), 0 );
+        sURL.Insert(CREATE_CONST_ASC("HYPERLINK \""), 0);
         sURL += '\"';
 
         if( sMark.Len() )
-            (( sURL.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " \\l \"" )))
-                    += sMark ) += '\"';
+            (( sURL.APPEND_CONST_ASC(" \\l \"") ) += sMark) += '\"';
 
         if( rINet.GetTargetFrame().Len() )
-            ( sURL.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " \\n " )))
-                    += rINet.GetTargetFrame();
+            (sURL.APPEND_CONST_ASC(" \\n ")) += rINet.GetTargetFrame();
 
         rWrt.OutField( 0, 88, sURL,
                     WRITEFIELD_START | WRITEFIELD_CMD_START );
@@ -894,7 +887,7 @@ void WW8_SwAttrIter::OutSwTOXMark( const SwTOXMark& rAttr, BOOL bStart )
         break;
 
     case TOX_USER:
-        ( sTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\" \\f \"" )))
+        ( sTxt.APPEND_CONST_ASC( "\" \\f \"" ))
                 += (sal_Char)( 'A' + rWrt.GetId( *rAttr.GetTOXType() ));
         // kein break;
     case TOX_CONTENT:
@@ -904,7 +897,7 @@ void WW8_SwAttrIter::OutSwTOXMark( const SwTOXMark& rAttr, BOOL bStart )
             if( nLvl > nWW8MaxListLevel )
                 nLvl = nWW8MaxListLevel;
 
-            ((sTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\" \\l " )))
+            ((sTxt.APPEND_CONST_ASC( "\" \\l " ))
                 += String::CreateFromInt32( nLvl )) += ' ';
         }
         break;

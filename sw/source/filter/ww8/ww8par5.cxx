@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-18 14:33:09 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,10 +457,11 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*, BOOL bStartAttr)
         //              say we will convert bookmarks to SetExpFields! And
         //              this the exception!
 
-        String sHex( String::CreateFromAscii( "\\x" ));
-        BOOL bSetAsHex,
-             bAllowCr = SwFltGetFlag( nFieldFlags,
-                                        SwFltControlStack::ALLOW_FLD_CR );
+        String sHex(CREATE_CONST_ASC( "\\x" ));
+        BOOL bSetAsHex;
+        BOOL bAllowCr = SwFltGetFlag( nFieldFlags,
+            SwFltControlStack::ALLOW_FLD_CR );
+
         sal_Unicode cChar;
 
         for( xub_StrLen nI = 0;
@@ -854,29 +855,26 @@ long SwWW8ImplReader::Read_Field( WW8PLCFManResult* pRes, BOOL )
 
         switch ( eRes )
         {
-        case FLD_OK:
-                    return aF.nLen;                     // alles OK
-
-        case FLD_TEXT:
-                    return aF.nLen - aF.nLRes - 2;      // so viele ueberlesen,
-                            // das Resultfeld wird wie Haupttext eingelesen
-                            //JP 15.07.99: attributes can start at char 0x14
-                            // so skip one char more back == "-2"
-
-        case FLD_TAGTXT:
-                    if(  ( nFieldTagBad[nI] & nMask ) ) // Flag: Tag bad
-                        return Read_F_Tag( &aF );       // Taggen
-                    return aF.nLen - aF.nLRes - 2;  // oder Text-Resultat
-
-        case FLD_TAGIGN:
-                    if(  ( nFieldTagBad[nI] & nMask ) ) // Flag: Tag bad
-                        return Read_F_Tag( &aF );       // Taggen
-                    return aF.nLen;                 // oder ignorieren
-
-        case FLD_READ_FSPA:
+            case FLD_OK:
+                return aF.nLen;                     // alles OK
+            case FLD_TEXT:
+                // so viele ueberlesen, das Resultfeld wird wie Haupttext
+                // eingelesen
+                // JP 15.07.99: attributes can start at char 0x14 so skip one
+                // char more back == "-2"
+                return aF.nLen - aF.nLRes - 2;
+            case FLD_TAGTXT:
+                if(  ( nFieldTagBad[nI] & nMask ) ) // Flag: Tag bad
+                    return Read_F_Tag( &aF );       // Taggen
+                return aF.nLen - aF.nLRes - 2;  // oder Text-Resultat
+            case FLD_TAGIGN:
+                if(  ( nFieldTagBad[nI] & nMask ) ) // Flag: Tag bad
+                    return Read_F_Tag( &aF );       // Taggen
+                return aF.nLen;                 // oder ignorieren
+            case FLD_READ_FSPA:
                 return aF.nLen - aF.nLRes - 2; // auf Char 1 positionieren
-
-        default:    return aF.nLen;                     // ignorieren
+            default:
+                return aF.nLen;                     // ignorieren
         }
     }
 }
@@ -890,7 +888,7 @@ long SwWW8ImplReader::Read_Field( WW8PLCFManResult* pRes, BOOL )
 // Wenn keins dieser Sonderzeichen enthalten ist, wird 0 zurueckgeliefert.
 void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
 {
-    String sHex( String::CreateFromAscii( "\\x" ));
+    String sHex( CREATE_CONST_ASC( "\\x" ));
     BOOL bAllowCr = SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_IN_TEXT )
                 || SwFltGetFlag( nFieldFlags, SwFltControlStack::ALLOW_FLD_CR );
     sal_Unicode cChar;
@@ -902,34 +900,42 @@ void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
         BOOL bSetAsHex = FALSE;
         switch( cChar = rStr.GetChar( nI ) )
         {
-        case 132:                       // Typographische Anfuehrungszeichen
-        case 148:                       // gegen normale tauschen
-        case 147: rStr.SetChar( nI, '"' ); break;
-        case 19:  rStr.SetChar( nI, '{' ); break;   // 19..21 zu {|}
-        case 20:  rStr.SetChar( nI, '|' ); break;
-        case 21:  rStr.SetChar( nI, '}' ); break;
-        case '\\':                      // \{|} per \ Taggen
-        case '{':
-        case '|':
-        case '}': rStr.Insert( nI, '\\' ); ++nI; break;
-
-        case 0x0b:
-        case 0x0c:
-        case 0x0d:
-            if( bAllowCr )
-                rStr.SetChar( nI, '\n' );
-            else
+            case 132:                       // Typographische Anfuehrungszeichen
+            case 148:                       // gegen normale tauschen
+            case 147:
+                rStr.SetChar( nI, '"' );
+                break;
+            case 19:
+                rStr.SetChar( nI, '{' );
+                break;  // 19..21 zu {|}
+            case 20:
+                rStr.SetChar( nI, '|' );
+                break;
+            case 21:
+                rStr.SetChar( nI, '}' );
+                break;
+            case '\\':                      // \{|} per \ Taggen
+            case '{':
+            case '|':
+            case '}':
+                rStr.Insert( nI, '\\' );
+                ++nI;
+                break;
+            case 0x0b:
+            case 0x0c:
+            case 0x0d:
+                if( bAllowCr )
+                    rStr.SetChar( nI, '\n' );
+                else
+                    bSetAsHex = TRUE;
+                break;
+            case 0xFE:
+            case 0xFF:
                 bSetAsHex = TRUE;
-            break;
-
-        case 0xFE:
-        case 0xFF:
-            bSetAsHex = TRUE;
-            break;
-
-        default:
-            bSetAsHex = 0x20 > cChar;
-            break;
+                break;
+            default:
+                bSetAsHex = 0x20 > cChar;
+                break;
         }
 
         if( bSetAsHex )
@@ -950,7 +956,7 @@ void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
 
 void SwWW8ImplReader::InsertTagField( const USHORT nId, const String& rTagText )
 {
-    String aName( WW8_ASCII2STR( "WwFieldTag" ) );
+    String aName( CREATE_CONST_ASC( "WwFieldTag" ) );
     if( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_DO_ID ) ) // Nummer?
         aName += String::CreateFromInt32( nId );                    // ausgeben ?
 
@@ -1117,7 +1123,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
 eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, String& rStr )
 {
     if( !pNumFldType ){     // 1. Mal
-        SwSetExpFieldType aT( &rDoc, WW8_ASCII2STR("AutoNr"), GSE_SEQ );
+        SwSetExpFieldType aT( &rDoc, CREATE_CONST_ASC("AutoNr"), GSE_SEQ );
         pNumFldType = rDoc.InsertFldType( aT );
     }
     SwSetExpField aFld( (SwSetExpFieldType*)pNumFldType, aEmptyStr,
@@ -1935,7 +1941,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
         aPara += so3::cTokenSeperator;
         aPara += aBook;
     }
-    String aStr(WW8_ASCII2STR( "WW" ));
+    String aStr(CREATE_CONST_ASC( "WW" ));
 #if 0
     SwSection* pSection = new SwSection( FILE_LINK_SECTION,
                                     rDoc.GetUniqueSectionName( &aStr ) );
@@ -2357,7 +2363,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     USHORT nCreateOf = (eTox == TOX_CONTENT) ? TOX_OUTLINELEVEL : TOX_MARK;
 
     USHORT nIndexCols = 0;
-    const SwSection *pTest = rDoc.GetCurrSection(*pPaM->GetPoint());
+    SwSection *pTest = rDoc.GetCurrSection(*pPaM->GetPoint());
     if (pTest)  //section is open, set to its no of section cols
     {
         const SwSectionFmt *pFmt = pTest->GetFmt();
@@ -2366,7 +2372,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     }
     else if (pPageDesc)  //set to current number of page cols
         nIndexCols = pPageDesc->GetMaster().GetCol().GetNumCols();
-
 
     const SwTOXType* pType = rDoc.GetTOXType( eTox, 0 );
     SwForm aOrigForm(eTox);
@@ -2825,7 +2830,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
                 break;
 
             case 'n':
-                sTarget = WW8_ASCII2STR( "_blank" );
+                sTarget.ASSIGN_CONST_ASC( "_blank" );
                 break;
 
             case 'l':
@@ -2896,8 +2901,6 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
         else
         {
             SwFmtINetFmt aURL( sURL, sTarget );
-//          aURL.SetVisitedFmt( "??" );
-//          aURL.SetINetFmt( "??" );
             pRefFldStck->NewAttr( *pPaM->GetPoint(), aURL );
 
             // das Ende als "relative" Pos auf den Stack setzen
@@ -3044,15 +3047,14 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
 
     WW8_CP nStartCp = pSBase->WW8Fc2Cp( nOldPos );
     String sFieldName;
-    USHORT nFieldLen;
-    nFieldLen = pSBase->WW8ReadString( *pStrm, sFieldName, nStartCp, nChunk,
-        eStructCharSet );
+    USHORT nFieldLen = pSBase->WW8ReadString( *pStrm, sFieldName, nStartCp,
+        nChunk, eStructCharSet );
     nStartCp+=nFieldLen;
 
     xub_StrLen nC = 0;
     //If the first chunk did not start with a field start then
     //reset the stream position and give up
-    if( !nFieldLen || (0x13 != sFieldName.GetChar( nC ))) // Field Start // Mark
+    if( !nFieldLen || (0x13 != sFieldName.GetChar( nC ))) // Field Start Mark
     {
         // If Field End Mark found
         if( nFieldLen && (0x15 == sFieldName.GetChar( nC )))
@@ -3114,18 +3116,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE*, short nLen )
     USHORT nI = n / 32;                     // # des UINT32
     ULONG nMask = 1 << ( n % 32 );  // Maske fuer Bits
 
-    if(    ( nFieldTagBad[    nI ] & nMask )
-        || ( nFieldTagAlways[ nI ] & nMask ) )
+    if ( (nFieldTagBad[nI] & nMask) || (nFieldTagAlways[nI] & nMask) )
     {
-        String aTag( WW8_ASCII2STR( "{INVISIBLE " ) );
+        String aTag(CREATE_CONST_ASC("{INVISIBLE "));
 
         if( nLen < 0 )
-            aTag.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "END}" ) );
+            aTag.APPEND_CONST_ASC("END}");
         else
-            aTag.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "START}" ) );
+            aTag.APPEND_CONST_ASC("START}");
 
         InsertTagField( n, aTag );
     }
 }
-
-

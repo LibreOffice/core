@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 11:21:11 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,12 +304,8 @@ public:
 #define ANZ_DEFAULT_STYLES 16
 
 // die Namen der StorageStreams
-#define sMainStream         String::CreateFromAscii( \
-                                RTL_CONSTASCII_STRINGPARAM( "WordDocument" ))
-#define sDataStream         String::CreateFromAscii( \
-                                RTL_CONSTASCII_STRINGPARAM( "Data" ))
-#define sTableStream        String::CreateFromAscii( \
-                                RTL_CONSTASCII_STRINGPARAM( "1Table" ))
+#define sMainStream CREATE_CONST_ASC("WordDocument")
+#define sCompObj CREATE_CONST_ASC("\1CompObj")
 
 
 SV_IMPL_VARARR( WW8Bytes, BYTE )
@@ -441,7 +437,7 @@ sal_Unicode WW8DopTypography::aJapanNotEndLevel1[51] =
 };
 
 int lcl_CmpBeginEndChars( const rtl::OUString& rSWStr,
-                          const sal_Unicode* pMSStr, int nMSStrByteLen )
+    const sal_Unicode* pMSStr, int nMSStrByteLen )
 {
     nMSStrByteLen /= sizeof( sal_Unicode );
     if( nMSStrByteLen > rSWStr.getLength() )
@@ -1408,8 +1404,7 @@ USHORT SwWW8Writer::AddRedlineAuthor( USHORT nId )
     if( !pRedlAuthors )
     {
         pRedlAuthors = new WW8_WrtRedlineAuthor;
-        pRedlAuthors->AddName( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "Unknown" )));
+        pRedlAuthors->AddName(CREATE_CONST_ASC("Unknown"));
     }
     return pRedlAuthors->AddName( SW_MOD()->GetRedlineAuthor( nId ) );
 }
@@ -1721,7 +1716,6 @@ WW8SaveData::~WW8SaveData()
     rWrt.bInWriteTOX = bOldInWriteTOX;
     rWrt.pFlyFmt = pOldFlyFmt;
     rWrt.pAktPageDesc = pOldPageDesc;
-//  rWrt.pAttrSet = pOldAttrSet;
     ASSERT( !rWrt.pO->Count(), " pO ist am Ende von WW8SaveData nicht leer" );
     if( pOOld )
     {
@@ -2033,8 +2027,10 @@ ULONG SwWW8Writer::StoreDoc()
     if( bWrtWW8 )
     {
         pFib->fWhichTblStm = 1;
-        xTableStrm = pStg->OpenStream( sTableStream, STREAM_STD_WRITE );
-        xDataStrm = pStg->OpenStream( sDataStream, STREAM_STD_WRITE );
+        xTableStrm = pStg->OpenStream(String::CreateFromAscii(SL::p1Table),
+            STREAM_STD_WRITE );
+        xDataStrm = pStg->OpenStream(String::CreateFromAscii(SL::pData),
+            STREAM_STD_WRITE );
 
         xDataStrm->SetBufferSize( 32768 );  // fuer Grafiken
         xTableStrm->SetBufferSize( 16384 ); // fuer die Font-/Style-Table, usw.
@@ -2194,7 +2190,7 @@ ULONG SwWW8Writer::StoreDoc()
         {
             xDataStrm.Clear();
             pDataStrm = 0;
-            pStg->Remove( sDataStream );
+            pStg->Remove(String::CreateFromAscii(SL::pData));
         }
     }
 
@@ -2260,8 +2256,7 @@ void SwWW8Writer::PrepareStorage()
     SvGlobalName aGName( nId1, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00,
                          0x00, 0x00, 0x00, 0x46 );
     pStg->SetClass( aGName, 0, String::CreateFromAscii( pName ));
-    SvStorageStreamRef xStor( pStg->OpenStream( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "\1CompObj" ))));
+    SvStorageStreamRef xStor( pStg->OpenStream(sCompObj) );
     xStor->Write( pData, nLen );
                 // noch mal ueberplaetten, um auch Clipboardformat zu setzen
     pDoc->GetInfo()->SavePropertySet( pStg );   // DocInfo

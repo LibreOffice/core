@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-11 15:14:59 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,18 +1125,21 @@ void SwWW8ImplReader::Read_HdFtText( long nStartCp, long nLen, SwPageDesc* pPD,
     SwFrmFmt* pFmt = ( bUseLeft ) ? &pPD->GetLeft() : &pPD->GetMaster();
     SwFrmFmt* pHdFtFmt;
 
-    if( bFooter ){
+    if( bFooter )
+    {
         bIsFooter = TRUE;
         pFmt->SetAttr( SwFmtFooter( TRUE ) );
         pHdFtFmt = (SwFrmFmt*)pFmt->GetFooter().GetFooterFmt();
-    }else{
+    }else
+    {
         bIsHeader = TRUE;
         pFmt->SetAttr( SwFmtHeader( TRUE ) );
         pHdFtFmt = (SwFrmFmt*)pFmt->GetHeader().GetHeaderFmt();
     }
 
     const SwNodeIndex* pSttIdx = pHdFtFmt->GetCntnt().GetCntntIdx();
-    if( !pSttIdx ) return;
+    if (!pSttIdx)
+        return;
 
     SwPosition aTmpPos( *pPaM->GetPoint() );    // merke alte Cursorposition
 
@@ -1520,21 +1523,31 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
 // eigentlich besser inline, aber das kann der BLC nicht
 static UCHAR ConvOs2( UCHAR ch, CharSet eDst )
 {
-    switch( ch ){
-    case 132:
-    case 148: return ( eDst == CHARSET_IBMPC_865 ) ? '"' : 175;
-                            // typographische "(links) gegen aehnliche
-                            // im OS/2-Charset
-    case 147: return ( eDst == CHARSET_IBMPC_865 ) ? '"' : 174;
-    case 173:               // kurze, mittellange und lange Striche gegen Minus
-    case 150:
-    case 151: return  '-';
-    case 130: return ',';
-    case 145:
-    case 146: return '\'';  // typographische ' gegen normale
-    case 139: return '<';
-    case 155: return '>';
-    case 152: return '~';
+    switch( ch )
+    {
+        case 132:
+        case 148:
+            return ( eDst == CHARSET_IBMPC_865 ) ? '"' : 175;
+                                // typographische "(links) gegen aehnliche
+                                // im OS/2-Charset
+        case 147:
+            return ( eDst == CHARSET_IBMPC_865 ) ? '"' : 174;
+        case 173:
+            // kurze, mittellange und lange Striche gegen Minus
+        case 150:
+        case 151:
+            return  '-';
+        case 130:
+            return ',';
+        case 145:
+        case 146:
+            return '\'';    // typographische ' gegen normale
+        case 139:
+            return '<';
+        case 155:
+            return '>';
+        case 152:
+            return '~';
     }                       // ansonsten macht noch TM AErger.
 
     return 0;               // kenn ick nich
@@ -1668,132 +1681,133 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
     BOOL bRet = FALSE;
     switch( nWCharVal )
     {
-    case 0xe:
-        /*
-        #i2451#, similarly to i1909 column breaks appear to be ignored if they
-        are inside tables. Appears impossible to create one from scratch with
-        winword.
-        */
-        if (!bTable)
-        {
-            SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
-            if ( pNd )
+        case 0xe:
+            /*
+            #i2451#, similarly to i1909 column breaks appear to be ignored if
+            they are inside tables. Appears impossible to create one from
+            scratch with winword.
+            */
+            if (!bTable)
             {
-                const SfxItemSet* pSet = pNd->GetpSwAttrSet();
-                if ( pSet &&
-                    (SFX_ITEM_ON == pSet->GetItemState(RES_PAGEDESC, FALSE)) )
+                SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
+                if ( pNd )
                 {
-                    rDoc.AppendTxtNode( *pPaM->GetPoint() );
+                    const SfxItemSet* pSet = pNd->GetpSwAttrSet();
+                    if (pSet &&
+                        (SFX_ITEM_ON == pSet->GetItemState(RES_PAGEDESC,FALSE)))
+                    {
+                        rDoc.AppendTxtNode( *pPaM->GetPoint() );
+                    }
+                    else
+                    {
+                        const SwPosition* pPos  = pPaM->GetPoint();
+                        const SwTxtNode* pSttNd =
+                            rDoc.GetNodes()[ pPos->nNode ]->GetTxtNode();
+                        USHORT nCntPos = pPos->nContent.GetIndex();
+                        if( nCntPos && pSttNd->GetTxt().Len() )
+                            rDoc.SplitNode( *pPos );
+                    }
                 }
-                else
-                {
-                    const SwPosition* pPos  = pPaM->GetPoint();
-                    const SwTxtNode* pSttNd =
-                        rDoc.GetNodes()[ pPos->nNode ]->GetTxtNode();
-                    USHORT nCntPos = pPos->nContent.GetIndex();
-                    if( nCntPos && pSttNd->GetTxt().Len() )
-                        rDoc.SplitNode( *pPos );
-                }
+                // column break
+                rDoc.Insert( *pPaM, SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE) );
             }
-            // column break
-            rDoc.Insert( *pPaM, SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE ) );
-        }
-        break;
-    case 0x7:   TabCellEnd();       // table cell end (Flags abfragen!)
-                if( bWasTabRowEnd )
-                    pSBase->SetNoAttrScan( 0 );
-                break;
-
-    case 0xf:   if( !bSpec )        // "Satellit"
-                    cInsert = '\xa4';
-                break;
-
-    case 0x14:  if( !bSpec )        // "Para-Ende"-Zeichen
-                    cInsert = '\xb5';
-                break;
-
-    case 0x15:  if( !bSpec )        // Juristenparagraph
-                    cInsert = '\xa7';
-                break;
-
-    case 0x9:   cInsert = '\x9';    // Tab
-                break;
-
-    case 0xb:   cInsert = '\xa';    // Hard NewLine
-                break;
-
-    case 0xc:
-                //#i1909# section/page breaks should not occur in tables, word
-                //itself ignores them in this case.
-                if (!bTable)
-                {
-                    bPgSecBreak = TRUE;
-                    // new behavior: insert additional node only WHEN the
-                    // Pagebreak ( #74468# )   is in a NODE that is NOT EMPTY
-                    if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
-                        bRet = TRUE;
-                    pCtrlStck->KillUnlockedAttrs( *pPaM->GetPoint() );
-                }
-                break;
-
-    case 0x1e:
-                rDoc.Insert( *pPaM, CHAR_HARDHYPHEN);   // Non-breaking hyphen
-                break;
-    case 0x1f:
-                rDoc.Insert( *pPaM, CHAR_SOFTHYPHEN);   // Non-required hyphens
-                break;
-    case 0xa0:
-                rDoc.Insert( *pPaM, CHAR_HARDBLANK);    // Non-breaking spaces
-                break;
-
-    case 0x1:
-                /*
-                Current thinking is that if bObj is set then we have a
-                straightforward "traditional" ole object, otherwise we have a
-                graphic preview of an associated ole2 object (or a simple
-                graphic of course)
-                */
-                if( bObj )
-                    pFmtOfJustInsertedGraphicOrOLE = ImportOle();
-                else
-                    pFmtOfJustInsertedGraphicOrOLE = ImportGraf();
-                // reset the flags.
-                bObj = bEmbeddObj = FALSE;
-                nObjLocFc = 0;
-                //##515## set nLastFlyNode so we can determine if a section
-                //has ended with this paragraph unclosed
+            break;
+        case 0x7:
+            TabCellEnd();       // table cell end (Flags abfragen!)
+            if( bWasTabRowEnd )
+                pSBase->SetNoAttrScan( 0 );
+            break;
+        case 0xf:
+            if( !bSpec )        // "Satellit"
+                cInsert = '\xa4';
+            break;
+        case 0x14:
+            if( !bSpec )        // "Para-Ende"-Zeichen
+                cInsert = '\xb5';
+            break;
+        case 0x15:
+            if( !bSpec )        // Juristenparagraph
+                cInsert = '\xa7';
+            break;
+        case 0x9:
+            cInsert = '\x9';    // Tab
+            break;
+        case 0xb:
+            cInsert = '\xa';    // Hard NewLine
+            break;
+        case 0xc:
+            //#i1909# section/page breaks should not occur in tables, word
+            //itself ignores them in this case.
+            if (!bTable)
+            {
+                bPgSecBreak = TRUE;
+                // new behavior: insert additional node only WHEN the
+                // Pagebreak ( #74468# )   is in a NODE that is NOT EMPTY
+                if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
+                    bRet = TRUE;
+                pCtrlStck->KillUnlockedAttrs( *pPaM->GetPoint() );
+            }
+            break;
+        case 0x1e:
+            rDoc.Insert( *pPaM, CHAR_HARDHYPHEN);   // Non-breaking hyphen
+            break;
+        case 0x1f:
+            rDoc.Insert( *pPaM, CHAR_SOFTHYPHEN);   // Non-required hyphens
+            break;
+        case 0xa0:
+            rDoc.Insert( *pPaM, CHAR_HARDBLANK);    // Non-breaking spaces
+            break;
+        case 0x1:
+            /*
+            Current thinking is that if bObj is set then we have a
+            straightforward "traditional" ole object, otherwise we have a
+            graphic preview of an associated ole2 object (or a simple
+            graphic of course)
+            */
+            if( bObj )
+                pFmtOfJustInsertedGraphicOrOLE = ImportOle();
+            else
+                pFmtOfJustInsertedGraphicOrOLE = ImportGraf();
+            // reset the flags.
+            bObj = bEmbeddObj = FALSE;
+            nObjLocFc = 0;
+            //##515## set nLastFlyNode so we can determine if a section
+            //has ended with this paragraph unclosed
+            nLastFlyNode = (*pPaM->GetPoint()).nNode.GetIndex();
+            break;
+        case 0x8:
+            if( !bObj )
+            {
+                Read_GrafLayer( nPosCp );
+                //##515##. Set nLastFlyNode so we can determine if a
+                //section has ended with this paragraph unclosed
                 nLastFlyNode = (*pPaM->GetPoint()).nNode.GetIndex();
-                break;
-    case 0x8:
-                if( !bObj )
-                {
-                    Read_GrafLayer( nPosCp );
-                    //##515##. Set nLastFlyNode so we can determine if a
-                    //section has ended with this paragraph unclosed
-                    nLastFlyNode = (*pPaM->GetPoint()).nNode.GetIndex();
-                }
-                break;
-
-    case 0xd:   bRet = TRUE;    break;              // line end
-
-    case 0x5:                           // Annotation reference
-    case 0x13:
-    case 0x2:   break;                  // Auto-Fussnoten-Nummer
-
+            }
+            break;
+        case 0xd:
+            bRet = TRUE;
+            break;              // line end
+        case 0x5:                           // Annotation reference
+        case 0x13:
+        case 0x2:
+            break;                  // Auto-Fussnoten-Nummer
 #ifdef DEBUG
-    default:
-        {
-            String sUnknown( '<' );
-            sUnknown += String::CreateFromInt32( nWCharVal );
-            sUnknown += '>';
-            rDoc.Insert( *pPaM, sUnknown );
-        }
+        default:
+            {
+                String sUnknown( '<' );
+                sUnknown += String::CreateFromInt32( nWCharVal );
+                sUnknown += '>';
+                rDoc.Insert( *pPaM, sUnknown );
+            }
 #endif
-               break;
+            break;
     }
+
     if( '\x0' != cInsert )
-        rDoc.Insert( *pPaM, ByteString::ConvertToUnicode(
-                                        cInsert, RTL_TEXTENCODING_MS_1252 ) );
+    {
+        rDoc.Insert( *pPaM, ByteString::ConvertToUnicode(cInsert,
+            RTL_TEXTENCODING_MS_1252 ) );
+    }
     return bRet;
 }
 
@@ -2276,6 +2290,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 break;
 
         case 8:
+                {
             if( !pStg )
             {
                 ASSERT( pStg, "Version 8 muss immer einen Storage haben!" );
@@ -2283,15 +2298,14 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 break;
             }
 
-            xTableStream = pStg->OpenStream(
-                String( (1 == pWwFib->fWhichTblStm) ? "1Table" : "0Table",
-                RTL_TEXTENCODING_MS_1252 ), STREAM_STD_READ );
+            xTableStream = pStg->OpenStream( String::CreateFromAscii(
+                pWwFib->fWhichTblStm ? SL::p1Table : SL::p0Table),
+                STREAM_STD_READ );
 
             pTableStream = &xTableStream;
             pTableStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-            xDataStream = pStg->OpenStream(
-                String( "Data", RTL_TEXTENCODING_MS_1252 ),
+            xDataStream = pStg->OpenStream(String::CreateFromAscii(SL::pData),
                 STREAM_STD_READ | STREAM_NOCREATE );
 
             if( xDataStream.Is() && SVSTREAM_OK == xDataStream->GetError() )
@@ -2310,6 +2324,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 //without a dffmanager. cmc
                 pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(), pPaM);
             }
+                }
             break;
         default:
             // Programm-Fehler!
@@ -2664,14 +2679,13 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                     eMode |= REDLINE_SHOW_DELETE;
                 if(pStg && !pGloss) /*meaningless for a glossary, cmc*/
                 {
-                    const OfaFilterOptions* pVBAFlags = OFF_APP()->GetFilterOptions();
+                    const OfaFilterOptions* pVBAFlags =
+                        OFF_APP()->GetFilterOptions();
                     SvxImportMSVBasic aVBasic(*rDoc.GetDocShell(),*pStg,
                                     pVBAFlags->IsLoadWordBasicCode(),
                                     pVBAFlags->IsLoadWordBasicStorage() );
-                    String s1( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "Macros" )));
-                    String s2( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "VBA" )));
+                    String s1(CREATE_CONST_ASC("Macros"));
+                    String s2(CREATE_CONST_ASC("VBA"));
                     int nRet = aVBasic.Import( s1, s2 );
                     if( 2 & nRet )
                         rDoc.SetContainsMSVBasic( TRUE );
@@ -2709,9 +2723,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 
     // set NoBallanced flag on last inserted section
     if( pNewSection )
-    {
         pNewSection->GetFmt()->SetAttr( SwFmtNoBalancedColumns( TRUE ) );
-    }
 
     aRelNumRule.SetNumRelSpaces( rDoc );
     if( !bNew && !nErrRet && aSttNdIdx.GetIndex() )
@@ -3041,8 +3053,10 @@ BOOL SwMSDffManager::GetOLEStorageName( long nOLEId, String& rStorageName,
 
     if( bRet )
     {
-        ( rStorageName = '_' ) += String::CreateFromInt32( nPictureId );
-        rSrcStorage = rReader.pStg->OpenStorage( WW8_ASCII2STR( "ObjectPool" ) );
+        rStorageName = '_';
+        rStorageName += String::CreateFromInt32( nPictureId );
+        rSrcStorage = rReader.pStg->OpenStorage(String::CreateFromAscii(
+            SL::pObjectPool));
         SwDocShell *pDocShell = rReader.rDoc.GetDocShell();
         if (pDocShell == 0)
             bRet=FALSE;

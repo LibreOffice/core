@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 11:21:11 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,7 @@ USHORT SwWW8Writer::DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,
     //completely new list based on this one and export that instead,
     //which duplicates words behaviour in this respect.
     USHORT nNumId = USHRT_MAX;
-    String sPrefix  = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM
-        ("WW8TempExport" ));
+    String sPrefix(CREATE_CONST_ASC("WW8TempExport"));
     sPrefix += String::CreateFromInt32( nUniqueList++ );
     SwNumRule* pMyNumRule = new SwNumRule(pDoc->GetUniqueNumRuleName(&sPrefix));
     pUsedNumTbl->Insert( pMyNumRule, pUsedNumTbl->Count() );

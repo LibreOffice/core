@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ static BOOL SwWw8ReadScaling( long& rX, long& rY, SvStorageRef& rSrc1 )
     //      0x2c, 0x30 Skalierung x,y in Promille
     //      0x34, 0x38, 0x3c, 0x40 Crop Left, Top, Right, Bot in tw
 
-    SvStorageStreamRef xSrc3 = rSrc1->OpenStream( WW8_ASCII2STR( "\3PIC" ),
+    SvStorageStreamRef xSrc3 = rSrc1->OpenStream( CREATE_CONST_ASC( "\3PIC" ),
         STREAM_STD_READ | STREAM_NOCREATE);
     SvStorageStream* pS = xSrc3;
     pS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -216,7 +216,7 @@ static BOOL SwWw8ReadScaling( long& rX, long& rY, SvStorageRef& rSrc1 )
 static BOOL SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     SvStorageRef& rSrc1)
 {
-    SvStorageStreamRef xSrc2 = rSrc1->OpenStream( WW8_ASCII2STR("\3META"),
+    SvStorageStreamRef xSrc2 = rSrc1->OpenStream( CREATE_CONST_ASC("\3META"),
         STREAM_STD_READ | STREAM_NOCREATE);
     SvStorageStream* pSt = xSrc2;
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -271,7 +271,7 @@ static BOOL SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 static BOOL SwWw6ReadMacPICTStream( Graphic& rGraph, SvStorageRef& rSrc1 )
 {
         // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
-    SvStorageStreamRef xSrc4 = rSrc1->OpenStream( WW8_ASCII2STR( "\3PICT" ));
+    SvStorageStreamRef xSrc4 = rSrc1->OpenStream( CREATE_CONST_ASC( "\3PICT" ));
     SvStorageStream* pStp = xSrc4;
     pStp->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     BYTE aTestA[10];        // Ist der 01Ole-Stream ueberhaupt vorhanden
@@ -426,7 +426,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph, BOOL bTstOCX,
         // ergibt Name "_4711"
         aSrcStgName += String::CreateFromInt32( nObjLocFc );
 
-        SvStorageRef xSrc0 = pStg->OpenStorage( WW8_ASCII2STR( "ObjectPool" ) );
+        SvStorageRef xSrc0 = pStg->OpenStorage(String::CreateFromAscii(
+            SL::pObjectPool));
 
         if( pGrf )
         {

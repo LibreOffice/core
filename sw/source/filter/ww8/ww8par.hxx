@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 17:45:03 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,6 @@
 #ifndef _MSOCXIMEX_HXX
 #include <svx/msocximex.hxx>
 #endif
-
-#define WW8_ASCII2STR(s) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(s))
 
 class SvStringsDtor;
 class SwDoc;
@@ -411,7 +409,7 @@ enum SwWw8ControlType
 class WW8FormulaControl : public OCX_Control
 {
 public:
-    WW8FormulaControl(const UniString& sN,SwWW8ImplReader &rR)
+    WW8FormulaControl(const String& sN,SwWW8ImplReader &rR)
         : OCX_Control(sN), rRdr(rR) {}
     void WW8FormulaControl::SetOthersFromDoc(com::sun::star::awt::Size &rSz,
         com::sun::star::uno::Reference <
@@ -428,11 +426,11 @@ public:
     UINT16  hpsCheckBox;
     UINT16 nChecked;
 
-    UniString sTitle;
-    UniString sDefault;
-    UniString sFormatting;
-    UniString sHelp;
-    UniString sToolTip;
+    String sTitle;
+    String sDefault;
+    String sFormatting;
+    String sHelp;
+    String sToolTip;
 
     void FormulaRead(SwWw8ControlType nWhich,SvStream *pD);
 private:
@@ -450,9 +448,7 @@ private:
     WW8FormulaCheckBox(const WW8FormulaCheckBox&);
     WW8FormulaCheckBox& operator=(const WW8FormulaCheckBox&);
 public:
-    WW8FormulaCheckBox(SwWW8ImplReader &rR)
-        : WW8FormulaControl( WW8_ASCII2STR( "CheckBox" ), rR)
-        {}
+    WW8FormulaCheckBox(SwWW8ImplReader &rR);
     BOOL Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
@@ -467,9 +463,7 @@ private:
     WW8FormulaEditBox(const WW8FormulaEditBox&);
     WW8FormulaEditBox& operator=(const WW8FormulaEditBox&);
 public:
-    WW8FormulaEditBox(SwWW8ImplReader &rR)
-        : WW8FormulaControl( WW8_ASCII2STR( "TextField" ) ,rR)
-        {}
+    WW8FormulaEditBox(SwWW8ImplReader &rR);
     BOOL Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <

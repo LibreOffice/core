@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 17:50:03 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,7 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     if( pStyles->pStyRule )         // Bullet-Style bereits vorhanden
         return pStyles->pStyRule;
 
-    const String aBaseName(WW8_ASCII2STR( "WW8StyleNum" ));
+    const String aBaseName(CREATE_CONST_ASC( "WW8StyleNum" ));
     const String aName( rDoc.GetUniqueNumRuleName( &aBaseName, FALSE ) );
 
     USHORT nRul = rDoc.MakeNumRule( aName );
@@ -644,7 +644,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( USHORT, const BYTE* pData, short nLen ) 
                                         // dann jetzt ausschalten #56163
         pAktColl->SetAttr( SwNumRuleItem() );
 
-        String aName(WW8_ASCII2STR( "Outline" ));
+        String aName(CREATE_CONST_ASC( "Outline" ));
         SwNumRule aNR( rDoc.GetUniqueNumRuleName(&aName), OUTLINE_RULE );
         aNR = *rDoc.GetOutlineNumRule();
 
@@ -3031,25 +3031,35 @@ SwTxtFmtColl* WW8RStyle::MakeNewFmtColl( WW8_STD* pStd, const String& rName )
     String aName( rName );
     SwTxtFmtColl* pColl = 0;
 
-    if( pStd->sti != STI_USER           // eingebauter Style, den wir nicht kennen
-        || SearchFmtColl( aName ) ){    // oder Namen gibts schon ?
-
+    // eingebauter Style, den wir nicht kennen
+    // oder Namen gibts schon ?
+    if( pStd->sti != STI_USER || SearchFmtColl( aName ) )
+    {
         if( !aName.EqualsIgnoreCaseAscii( "WW-", 0, 3 ) )   // noch kein "WW-"
-            aName.Insert( WW8_ASCII2STR( "WW-" ), 0 );  // dann AEnder ihn
+            aName.InsertAscii("WW-" , 0);   // dann AEnder ihn
 
-        if( SearchFmtColl( aName ) )                    // Namen gibt's immer noch ?
-            for( USHORT n = 1; n < 1000; n++ ){     // dann bastel neuen
+        // Namen gibt's immer noch ?
+        if( SearchFmtColl( aName ) )
+        {
+            for( USHORT n = 1; n < 1000; n++ )
+            {
+                // dann bastel neuen
                 String aName1( aName );
                 aName += String::CreateFromInt32( n );
-                if( ( pColl = SearchFmtColl( aName1 ) ) == 0 ){
+                if( ( pColl = SearchFmtColl( aName1 ) ) == 0 )
+                {
                     aName = aName1;
-                    break;                          // unbenutzten Namen gefunden
+                    // unbenutzten Namen gefunden
+                    break;
                 }
             }
+        }
     }
     if( !pColl )   // unbenutzter Collection-Name gefunden, erzeuge neue Coll
+    {
         pColl = pIo->rDoc.MakeTxtFmtColl( aName,
             ( SwTxtFmtColl*)pIo->rDoc.GetDfltTxtFmtColl() ); // const Wegcasten
+    }
 
     return pColl;
 }

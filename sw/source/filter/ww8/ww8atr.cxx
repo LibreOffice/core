@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-21 16:46:24 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,11 +320,6 @@
 #include <wrtww8.hxx>
 #endif
 
-
-#define APP_ASC(s)          AppendAscii( RTL_CONSTASCII_STRINGPARAM( s ))
-#define ASIGN_ASC(s)        AssignAscii( RTL_CONSTASCII_STRINGPARAM( s ))
-#define CREA_ASC(s)         String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( s ))
-
 /*
  * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
  * Hint-Ids dazugekommen sind, wird hier definiert, die Groesse der Tabelle
@@ -355,20 +350,6 @@
 #endif
 
 #endif
-
-
-
-extern void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
-                              ULONG& rFmt, ULONG nFFVersion );
-
-
-//#define WW8_OUT( rWrt, a ) ((SwWW8Writer&)rWrt).pO->Insert( (BYTE*)&a,\
-//                   sizeof( a ), ((SwWW8Writer&)rWrt).pO->Count() )
-
-#define WW8_OUT( rWrt, a ) \
-    ((SwWW8Writer&)rWrt).OutSprmBytes( (BYTE*)&a, sizeof( a ) )
-
-
 
 //------------------------------------------------------------
 //  Forward-Declarationen
@@ -424,8 +405,8 @@ BOOL SwWW8Writer::CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich)
  *      - gebe die Attribute aus; ohne Parents!
  */
 
-void SwWW8Writer::Out_SfxItemSet( const SfxItemSet& rSet,
-                                  BOOL bPapFmt, BOOL bChpFmt, USHORT nScript )
+void SwWW8Writer::Out_SfxItemSet( const SfxItemSet& rSet, BOOL bPapFmt,
+    BOOL bChpFmt, USHORT nScript )
 {
     if( rSet.Count() )
     {
@@ -634,7 +615,8 @@ void SwWW8Writer::Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
         }
         break;
 
-    case RES_CHRFMT:    break;
+    case RES_CHRFMT:
+        break;
     case RES_FLYFRMFMT:
         if( bFlyFmt )
         {
@@ -665,8 +647,9 @@ void SwWW8Writer::Out_SwFmt( const SwFmt& rFmt, BOOL bPapFmt, BOOL bChpFmt,
             bCallOutSet = FALSE;
         }
         break;
-    default:            ASSERT( !this, "Was wird hier ausgegeben ??? " );
-                        break;
+    default:
+        ASSERT( !this, "Was wird hier ausgegeben ??? " );
+        break;
     }
 
     if( bCallOutSet )
@@ -709,16 +692,25 @@ String SwWW8Writer::GetBookmarkName( USHORT nTyp, const String* pNm,
     String sRet;
     switch( nTyp )
     {
-    case REF_SETREFATTR:    (sRet.APP_ASC( "Ref_" )) += *pNm; break;
-    case REF_SEQUENCEFLD:   break;      // ???
-    case REF_BOOKMARK:      sRet = *pNm;    break;
-    case REF_OUTLINE:       break;      // ???
-    case REF_FOOTNOTE:      (sRet.APP_ASC( "_RefF" ))
-                                += String::CreateFromInt32( nSeqNo );
-                            break;
-    case REF_ENDNOTE:       (sRet.APP_ASC( "_RefE" ))
-                                += String::CreateFromInt32( nSeqNo );
-                            break;
+        case REF_SETREFATTR:
+            sRet.APPEND_CONST_ASC( "Ref_" );
+            sRet += *pNm;
+            break;
+        case REF_SEQUENCEFLD:
+            break;      // ???
+        case REF_BOOKMARK:
+            sRet = *pNm;
+            break;
+        case REF_OUTLINE:
+            break;      // ???
+        case REF_FOOTNOTE:
+            sRet.APPEND_CONST_ASC( "_RefF" );
+            sRet += String::CreateFromInt32( nSeqNo );
+            break;
+        case REF_ENDNOTE:
+            sRet.APPEND_CONST_ASC( "_RefE" );
+            sRet += String::CreateFromInt32( nSeqNo );
+            break;
     }
     return sRet;
 }
@@ -1343,15 +1335,19 @@ void SwWW8Writer::OutField( const SwField* pFld, BYTE nFldType,
 
 void SwWW8Writer::StartCommentOutput(const String& rName)
 {
-    String aStr( CREA_ASC( " ANGEBEN [" )); ( aStr += rName ).APP_ASC( "] " );
-    OutField( 0, 35, aStr, WRITEFIELD_START | WRITEFIELD_CMD_START );
+    String sStr( CREATE_CONST_ASC( " ANGEBEN [" ));
+    sStr += rName;
+    sStr.APPEND_CONST_ASC( "] " );
+    OutField( 0, 35, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START );
 }
 
 void SwWW8Writer::EndCommentOutput(const String& rName)
 {
-    String aStr( CREA_ASC( " [" )); ( aStr += rName ).APP_ASC(  "] " );
-    OutField( 0, 35, aStr, WRITEFIELD_CMD_END | WRITEFIELD_END |
-                            WRITEFIELD_CLOSE );
+    String sStr( CREATE_CONST_ASC( " [" ));
+    sStr += rName;
+    sStr.APPEND_CONST_ASC(  "] " );
+    OutField( 0, 35, sStr, WRITEFIELD_CMD_END | WRITEFIELD_END |
+        WRITEFIELD_CLOSE );
 }
 
 
@@ -1418,21 +1414,20 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
         static sal_Char __READONLY_DATA sIndex[] = " INDEX ";
         static sal_Char __READONLY_DATA sEntryEnd[] = "\" ";
 
-
         BYTE nCode = 13;
-        String aStr;
+        String sStr;
         switch( pTOX->GetType() )
         {
         case TOX_INDEX:
             {
                 nCode = 8;
-                aStr.AssignAscii( sIndex );
+                sStr.AssignAscii( sIndex );
 
                 if( pTOX->GetTOXForm().IsCommaSeparated() )
-                    aStr.APP_ASC( "\\r " );
+                    sStr.APPEND_CONST_ASC( "\\r " );
 
                 if( TOI_ALPHA_DELIMITTER & pTOX->GetOptions() )
-                    aStr.APP_ASC( "\\h \"A\" " );
+                    sStr.APPEND_CONST_ASC( "\\h \"A\" " );
 
                 {
                     String aFillTxt;
@@ -1448,29 +1443,36 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                         else
                             aFillTxt.Erase();
                     }
-                    (aStr.APP_ASC( "\\e \"" )) += aFillTxt;
-                    aStr.AppendAscii( sEntryEnd );
+                    sStr.APPEND_CONST_ASC( "\\e \"" );
+                    sStr += aFillTxt;
+                    sStr.AppendAscii( sEntryEnd );
                 }
             }
             break;
 
-//      case TOX_AUTHORITIES:   nCode = 73; aStr = ???; break;
+//      case TOX_AUTHORITIES:   nCode = 73; sStr = ???; break;
 
         case TOX_ILLUSTRATIONS:
         case TOX_OBJECTS:
         case TOX_TABLES:
             if( !pTOX->IsFromObjectNames() )
             {
-                aStr.AssignAscii( sContent );
+                sStr.AssignAscii( sContent );
 
-                (( aStr.APP_ASC( "\\c \"" )) += pTOX->GetSequenceName()
-                                ).AppendAscii( sEntryEnd );
+                sStr.APPEND_CONST_ASC( "\\c \"" );
+                sStr += pTOX->GetSequenceName();
+                sStr.AppendAscii(sEntryEnd);
+
                 String aTxt;
                 int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(), 1, aTxt );
                 if( 1 == nRet )
-                    aStr.APP_ASC( "\\n " );
+                    sStr.APPEND_CONST_ASC( "\\n " );
                 else if( 3 == nRet || 4 == nRet )
-                    (( aStr.APP_ASC( "\\p \"" )) += aTxt ).AppendAscii(sEntryEnd);
+                {
+                    sStr.APPEND_CONST_ASC( "\\p \"" );
+                    sStr += aTxt;
+                    sStr.AppendAscii(sEntryEnd);
+                }
             }
             break;
 
@@ -1478,7 +1480,7 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
 //      case TOX_CONTENT:
         default:
             {
-                aStr.AssignAscii( sContent );
+                sStr.AssignAscii( sContent );
 
                 String sTOption;
                 USHORT n, nTOXLvl = pTOX->GetLevel();
@@ -1487,12 +1489,14 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
 
                 if( TOX_MARK & pTOX->GetCreateType() )
                 {
-                    aStr.APP_ASC( "\\f " );
+                    sStr.APPEND_CONST_ASC( "\\f " );
 
                     if( TOX_USER == pTOX->GetType() )
-                        (( aStr += '\"' ) +=
-                                (sal_Char)( 'A' + GetId( *pTOX->GetTOXType() ))
-                                    ).AppendAscii( sEntryEnd );
+                    {
+                         sStr += '\"';
+                         sStr += (sal_Char)('A' + GetId( *pTOX->GetTOXType()));
+                         sStr.AppendAscii( sEntryEnd );
+                    }
                 }
 
                 if( TOX_OUTLINELEVEL & pTOX->GetCreateType() )
@@ -1519,9 +1523,10 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                         if( nTmpLvl > nWW8MaxListLevel )
                             nTmpLvl = nWW8MaxListLevel;
 
-                        ((aStr.APP_ASC( "\\o \"1-" )) +=
-                            String::CreateFromInt32( nTmpLvl ))
-                                    .AppendAscii(sEntryEnd);
+                        sStr.APPEND_CONST_ASC( "\\o \"1-" );
+                        sStr += String::CreateFromInt32( nTmpLvl );
+                        sStr.AppendAscii(sEntryEnd);
+
                     }
 
                     if( nLvl != nMinLvl )
@@ -1598,27 +1603,35 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                     {
                         if( nWW8MaxListLevel < nNoPgEnd )
                             nNoPgEnd = nWW8MaxListLevel;
-                        aStr.APP_ASC( "\\n " );
-                        (aStr += String::CreateFromInt32( nNoPgStt )) += '-';
-                        (aStr += String::CreateFromInt32( nNoPgEnd  )) += ' ';
+                        sStr.APPEND_CONST_ASC( "\\n " );
+                        sStr += String::CreateFromInt32( nNoPgStt );
+                        sStr += '-';
+                        sStr += String::CreateFromInt32( nNoPgEnd  );
+                        sStr += ' ';
                     }
                     if( bOnlyText )
-                        ((aStr.APP_ASC( "\\p \"" )) += aFillTxt )
-                                .AppendAscii(sEntryEnd);
+                    {
+                        sStr.APPEND_CONST_ASC( "\\p \"" );
+                        sStr += aFillTxt;
+                        sStr.AppendAscii(sEntryEnd);
+                    }
                 }
 
                 if( sTOption.Len() )
-                    (( aStr.APP_ASC( "\\t \"" )) += sTOption )
-                        .AppendAscii(sEntryEnd);
+                {
+                    sStr.APPEND_CONST_ASC( "\\t \"" );
+                    sStr += sTOption;
+                    sStr.AppendAscii(sEntryEnd);
+                }
             }
             break;
         }
 
-        if( aStr.Len() )
+        if( sStr.Len() )
         {
             bInWriteTOX = TRUE;
-            OutField( 0, nCode, aStr, WRITEFIELD_START |
-                                WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
+            OutField( 0, nCode, sStr, WRITEFIELD_START | WRITEFIELD_CMD_START |
+                WRITEFIELD_CMD_END );
         }
     }
     bStartTOX = FALSE;
@@ -1659,27 +1672,27 @@ BOOL SwWW8Writer::GetNumberFmt( const SwField& rFld, String& rStr )
 //          aKeyMap[ NF_KEY_E,
 //          aKeyMap[ NF_KEY_AMPM,
 //          aKeyMap[ NF_KEY_AP,
-            rKeyMap[ NF_KEY_MI      ].ASIGN_ASC( "m" );
-            rKeyMap[ NF_KEY_MMI     ].ASIGN_ASC( "mm" );
-            rKeyMap[ NF_KEY_M       ].ASIGN_ASC( "M" );
-            rKeyMap[ NF_KEY_MM      ].ASIGN_ASC( "MM" );
-            rKeyMap[ NF_KEY_MMM     ].ASIGN_ASC( "MMM" );
-            rKeyMap[ NF_KEY_MMMM    ].ASIGN_ASC( "MMMM" );
-            rKeyMap[ NF_KEY_MMMMM   ].ASIGN_ASC( "MMMMM" );
-            rKeyMap[ NF_KEY_H       ].ASIGN_ASC( "H" );
-            rKeyMap[ NF_KEY_HH      ].ASIGN_ASC( "HH" );
-            rKeyMap[ NF_KEY_S       ].ASIGN_ASC( "s" );
-            rKeyMap[ NF_KEY_SS      ].ASIGN_ASC( "ss" );
+            rKeyMap[ NF_KEY_MI      ].ASSIGN_CONST_ASC( "m" );
+            rKeyMap[ NF_KEY_MMI     ].ASSIGN_CONST_ASC( "mm" );
+            rKeyMap[ NF_KEY_M       ].ASSIGN_CONST_ASC( "M" );
+            rKeyMap[ NF_KEY_MM      ].ASSIGN_CONST_ASC( "MM" );
+            rKeyMap[ NF_KEY_MMM     ].ASSIGN_CONST_ASC( "MMM" );
+            rKeyMap[ NF_KEY_MMMM    ].ASSIGN_CONST_ASC( "MMMM" );
+            rKeyMap[ NF_KEY_MMMMM   ].ASSIGN_CONST_ASC( "MMMMM" );
+            rKeyMap[ NF_KEY_H       ].ASSIGN_CONST_ASC( "H" );
+            rKeyMap[ NF_KEY_HH      ].ASSIGN_CONST_ASC( "HH" );
+            rKeyMap[ NF_KEY_S       ].ASSIGN_CONST_ASC( "s" );
+            rKeyMap[ NF_KEY_SS      ].ASSIGN_CONST_ASC( "ss" );
 //          aKeyMap[ NF_KEY_Q,
 //          aKeyMap[ NF_KEY_QQ,
-            rKeyMap[ NF_KEY_D       ].ASIGN_ASC( "t" );
-            rKeyMap[ NF_KEY_DD      ].ASIGN_ASC( "tt" );
-            rKeyMap[ NF_KEY_DDD     ].ASIGN_ASC( "ttt" );
-            rKeyMap[ NF_KEY_DDDD    ].ASIGN_ASC( "tttt" );
-            rKeyMap[ NF_KEY_YY      ].ASIGN_ASC( "jj" );
-            rKeyMap[ NF_KEY_YYYY    ].ASIGN_ASC( "jjjj" );
-            rKeyMap[ NF_KEY_NN      ].ASIGN_ASC( "ttt" );
-            rKeyMap[ NF_KEY_NNNN    ].ASIGN_ASC( "tttt" );
+            rKeyMap[ NF_KEY_D       ].ASSIGN_CONST_ASC( "t" );
+            rKeyMap[ NF_KEY_DD      ].ASSIGN_CONST_ASC( "tt" );
+            rKeyMap[ NF_KEY_DDD     ].ASSIGN_CONST_ASC( "ttt" );
+            rKeyMap[ NF_KEY_DDDD    ].ASSIGN_CONST_ASC( "tttt" );
+            rKeyMap[ NF_KEY_YY      ].ASSIGN_CONST_ASC( "jj" );
+            rKeyMap[ NF_KEY_YYYY    ].ASSIGN_CONST_ASC( "jjjj" );
+            rKeyMap[ NF_KEY_NN      ].ASSIGN_CONST_ASC( "ttt" );
+            rKeyMap[ NF_KEY_NNNN    ].ASSIGN_CONST_ASC( "tttt" );
 //          aKeyMap[ NF_KEY_CCC,
 //          aKeyMap[ NF_KEY_GENERAL,
 //          aKeyMap[ NF_KEY_NNN,
@@ -1688,20 +1701,22 @@ BOOL SwWW8Writer::GetNumberFmt( const SwField& rFld, String& rStr )
 //          aKeyMap[ NF_KEY_TRUE,
 //          aKeyMap[ NF_KEY_FALSE,
 //          aKeyMap[ NF_KEY_BOOLEAN,
-            rKeyMap[ NF_KEY_AAA     ].ASIGN_ASC( "aaa" );
-            rKeyMap[ NF_KEY_AAAA    ].ASIGN_ASC( "aaaa" );
-            rKeyMap[ NF_KEY_EC      ].ASIGN_ASC( "e" );
-            rKeyMap[ NF_KEY_EEC     ].ASIGN_ASC( "ee" );
-            rKeyMap[ NF_KEY_G       ].ASIGN_ASC( "g" );
-            rKeyMap[ NF_KEY_GG      ].ASIGN_ASC( "gg" );
-            rKeyMap[ NF_KEY_GGG     ].ASIGN_ASC( "ggg" );
+            rKeyMap[ NF_KEY_AAA     ].ASSIGN_CONST_ASC( "aaa" );
+            rKeyMap[ NF_KEY_AAAA    ].ASSIGN_CONST_ASC( "aaaa" );
+            rKeyMap[ NF_KEY_EC      ].ASSIGN_CONST_ASC( "e" );
+            rKeyMap[ NF_KEY_EEC     ].ASSIGN_CONST_ASC( "ee" );
+            rKeyMap[ NF_KEY_G       ].ASSIGN_CONST_ASC( "g" );
+            rKeyMap[ NF_KEY_GG      ].ASSIGN_CONST_ASC( "gg" );
+            rKeyMap[ NF_KEY_GGG     ].ASSIGN_CONST_ASC( "ggg" );
         }
 
         String sFmt( pNumFmt->GetMappedFormatstring(*(NfKeywordTable*)pKeyMap,
             aLocDat, TRUE) );
         if( sFmt.Len() )
         {
-            (( rStr.APP_ASC( "\\@\"" )) += sFmt ).APP_ASC( "\" " );
+            rStr.APPEND_CONST_ASC( "\\@\"" );
+            rStr += sFmt;
+            rStr.APPEND_CONST_ASC( "\" " );
             bHasFmt = TRUE;
         }
     }
@@ -1712,13 +1727,25 @@ void WW8_GetNumberPara( String& rStr, const SwField& rFld )
 {
     switch( rFld.GetFormat() )
     {
-    case SVX_NUM_CHARS_UPPER_LETTER:
-    case SVX_NUM_CHARS_UPPER_LETTER_N: rStr.APP_ASC( "\\*ALPHABETISCH "); break;
-    case SVX_NUM_CHARS_LOWER_LETTER:
-    case SVX_NUM_CHARS_LOWER_LETTER_N: rStr.APP_ASC("\\*alphabetisch "); break;
-    case SVX_NUM_ROMAN_UPPER:        rStr.APP_ASC("\\*R\xd6MISCH "); break;
-    case SVX_NUM_ROMAN_LOWER:        rStr.APP_ASC("\\*r\xf6misch "); break;
-    case SVX_NUM_ARABIC:             rStr.APP_ASC("\\*Arabisch "); break;
+        case SVX_NUM_CHARS_UPPER_LETTER:
+        case SVX_NUM_CHARS_UPPER_LETTER_N:
+            rStr.APPEND_CONST_ASC( "\\*ALPHABETISCH ");
+            break;
+        case SVX_NUM_CHARS_LOWER_LETTER:
+        case SVX_NUM_CHARS_LOWER_LETTER_N:
+            rStr.APPEND_CONST_ASC("\\*alphabetisch ");
+            break;
+        case SVX_NUM_ROMAN_UPPER:
+            rStr.APPEND_CONST_ASC("\\*R\xd6MISCH ");
+            break;
+        case SVX_NUM_ROMAN_LOWER:
+            rStr.APPEND_CONST_ASC("\\*r\xf6misch ");
+            break;
+        default:
+            ASSERT(0,"Unknown numbering type exported as default\n");
+        case SVX_NUM_ARABIC:
+            rStr.APPEND_CONST_ASC("\\*Arabisch ");
+            break;
     }
 }
 
@@ -1748,7 +1775,7 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
     const SwFmtFld& rFld = (SwFmtFld&)rHt;
     const SwField* pFld = rFld.GetFld();
-    String aStr;        // fuer optionale Parameter
+    String sStr;        // fuer optionale Parameter
     BOOL bWriteExpand = FALSE;
     USHORT nSubType = pFld->GetSubType();
     BYTE nFldTyp = 0;
@@ -1761,43 +1788,45 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
     case RES_SETEXPFLD:
         if( GSE_SEQ == nSubType )
         {
-            (( aStr.ASIGN_ASC( " SEQ \"" )) += pFld->GetTyp()->GetName() )
-                    .APP_ASC( "\" " );
-            ::WW8_GetNumberPara( aStr, *pFld );
-            rWW8Wrt.OutField( pFld, 12, aStr );
+            sStr.ASSIGN_CONST_ASC( " SEQ \"" );
+            sStr += pFld->GetTyp()->GetName();
+            sStr.APPEND_CONST_ASC( "\" " );
+
+            ::WW8_GetNumberPara( sStr, *pFld );
+            rWW8Wrt.OutField( pFld, 12, sStr );
         }
         else
             bWriteExpand = TRUE;
         break;
 
     case RES_PAGENUMBERFLD:
-        aStr.ASIGN_ASC( " SEITE " );
-        ::WW8_GetNumberPara( aStr, *pFld );
-        rWW8Wrt.OutField( pFld, 33, aStr );
+        sStr.ASSIGN_CONST_ASC( " SEITE " );
+        ::WW8_GetNumberPara( sStr, *pFld );
+        rWW8Wrt.OutField( pFld, 33, sStr );
         break;
 
     case RES_FILENAMEFLD:
-        rWW8Wrt.OutField( pFld, 29, CREA_ASC( "DATEINAME" ));
+        rWW8Wrt.OutField( pFld, 29, CREATE_CONST_ASC( "DATEINAME" ));
         break;
 
     case RES_DBNAMEFLD:
     {
-        aStr.ASIGN_ASC( "DATENBANK " );         // ok ??
+        sStr.ASSIGN_CONST_ASC( "DATENBANK " );          // ok ??
         SwDBData aData = rWrt.pDoc->GetDBData();
-        aStr += (String)aData.sDataSource;
-        aStr += DB_DELIM;
-        aStr += (String)aData.sCommand;
-        rWW8Wrt.OutField( pFld, 78, aStr );
+        sStr += String(aData.sDataSource);
+        sStr += DB_DELIM;
+        sStr += String(aData.sCommand);
+        rWW8Wrt.OutField( pFld, 78, sStr );
     }
     break;
 
     case RES_AUTHORFLD:
         rWW8Wrt.OutField( pFld, (AF_SHORTCUT & nSubType ? 61 : 60),
-                            CREA_ASC( "AUTOR" ));
+            CREATE_CONST_ASC( "AUTOR" ));
         break;
 
     case RES_TEMPLNAMEFLD:
-        rWW8Wrt.OutField( pFld, 30, CREA_ASC("DOKVORLAGE" ));
+        rWW8Wrt.OutField( pFld, 30, CREATE_CONST_ASC("DOKVORLAGE" ));
         break;
 
     case RES_DOCINFOFLD:    // Last printed, last edited,...
@@ -1832,7 +1861,7 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             case DI_CREATE:
                 if( DI_SUB_AUTHOR == (nSubType & ~DI_SUB_AUTHOR ))
                     nFldTyp = 17;
-                else if( rWW8Wrt.GetNumberFmt( *pFld, aStr ))
+                else if( rWW8Wrt.GetNumberFmt( *pFld, sStr ))
                     nFldTyp = 21;
                 break;
 
@@ -1843,20 +1872,20 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
 
             case DI_PRINT:
                 if( DI_SUB_AUTHOR != (nSubType & ~DI_SUB_AUTHOR ) &&
-                    rWW8Wrt.GetNumberFmt( *pFld, aStr ))
+                    rWW8Wrt.GetNumberFmt( *pFld, sStr ))
                     nFldTyp = 23;
                 break;
             case DI_EDIT:
                 if( DI_SUB_AUTHOR != (nSubType & ~DI_SUB_AUTHOR ) &&
-                    rWW8Wrt.GetNumberFmt( *pFld, aStr ))
+                    rWW8Wrt.GetNumberFmt( *pFld, sStr ))
                     nFldTyp = 22;
                 break;
             }
 
             if( nFldTyp )
             {
-                aStr.InsertAscii( aFldArr[ nFldTyp - 15 ], 0 );
-                rWW8Wrt.OutField( pFld, nFldTyp, aStr );
+                sStr.InsertAscii( aFldArr[ nFldTyp - 15 ], 0 );
+                rWW8Wrt.OutField( pFld, nFldTyp, sStr );
             }
             else
                 bWriteExpand = TRUE;
@@ -1864,24 +1893,22 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         break;
 
     case RES_DATETIMEFLD:
-        if( FIXEDFLD & nSubType || !rWW8Wrt.GetNumberFmt( *pFld, aStr ) )
+        if( FIXEDFLD & nSubType || !rWW8Wrt.GetNumberFmt( *pFld, sStr ) )
             bWriteExpand = TRUE;
         else
         {
-            const sal_Char* pAddStr;
             BYTE nTyp;
             if( DATEFLD & nSubType )
             {
-                pAddStr = " AKTUALDAT ";
+                sStr.InsertAscii(" AKTUALDAT ",0);
                 nTyp = 31;
             }
             else
             {
-                pAddStr = " ZEIT ";
+                sStr.InsertAscii(" ZEIT ",0);
                 nTyp = 32;
             }
-            aStr.InsertAscii( pAddStr, 0 );
-            rWW8Wrt.OutField( pFld, nTyp, aStr );
+            rWW8Wrt.OutField( pFld, nTyp, sStr );
         }
         break;
 
@@ -1889,15 +1916,24 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         {
             switch( nSubType )
             {
-            case DS_PAGE:   aStr.ASIGN_ASC(" ANZSEITEN ");      nFldTyp = 26; break;
-            case DS_WORD:   aStr.ASIGN_ASC(" ANZW\xd6RTER ");   nFldTyp = 27; break;
-            case DS_CHAR:   aStr.ASIGN_ASC(" ANZZEICHEN ");     nFldTyp = 28; break;
+                case DS_PAGE:
+                    sStr.ASSIGN_CONST_ASC(" ANZSEITEN ");
+                    nFldTyp = 26;
+                    break;
+                case DS_WORD:
+                    sStr.ASSIGN_CONST_ASC(" ANZW\xd6RTER ");
+                    nFldTyp = 27;
+                    break;
+                case DS_CHAR:
+                    sStr.ASSIGN_CONST_ASC(" ANZZEICHEN ");
+                    nFldTyp = 28;
+                    break;
             }
 
             if( nFldTyp )
             {
-                ::WW8_GetNumberPara( aStr, *pFld );
-                rWW8Wrt.OutField( pFld, nFldTyp, aStr );
+                ::WW8_GetNumberPara( sStr, *pFld );
+                rWW8Wrt.OutField( pFld, nFldTyp, sStr );
             }
             else
                 bWriteExpand = TRUE;
@@ -1910,24 +1946,22 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             case EU_FIRSTNAME:
             case EU_NAME:
                 nFldTyp = 60;
-                aStr.ASIGN_ASC("BENUTZERNAME");
+                sStr.ASSIGN_CONST_ASC("BENUTZERNAME");
                 break;
-
             case EU_SHORTCUT:
                 nFldTyp = 61;
-                aStr.ASIGN_ASC("BENUTZERINITIALEN");
+                sStr.ASSIGN_CONST_ASC("BENUTZERINITIALEN");
                 break;
-
             case EU_STREET:
             case EU_COUNTRY:
             case EU_ZIP:
             case EU_CITY:
                 nFldTyp = 62;
-                aStr.ASIGN_ASC("BENUTZERADR");
+                sStr.ASSIGN_CONST_ASC("BENUTZERADR");
                 break;
             }
             if( nFldTyp )
-                rWW8Wrt.OutField( pFld, nFldTyp, aStr );
+                rWW8Wrt.OutField( pFld, nFldTyp, sStr );
             else
                 bWriteExpand = TRUE;
         }
@@ -1942,73 +1976,75 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         break;
 
     case RES_INPUTFLD:
-        ((aStr.ASIGN_ASC("EINGEBEN \"" )) += pFld->GetPar2() )+= '\"';
-        rWW8Wrt.OutField( pFld, 39, aStr );
+        sStr.ASSIGN_CONST_ASC("EINGEBEN \"" );
+        sStr += pFld->GetPar2();
+        sStr += '\"';
+        rWW8Wrt.OutField( pFld, 39, sStr );
         break;
 
     case RES_GETREFFLD:
         {
-            aStr.ASIGN_ASC(" REF ");
+            sStr.ASSIGN_CONST_ASC(" REF ");
             const SwGetRefField& rRFld = *(SwGetRefField*)pFld;
             switch( nSubType )
             {
-            case REF_SETREFATTR:
-            case REF_BOOKMARK:
-                aStr += rWW8Wrt.GetBookmarkName( nSubType,
-                                                &rRFld.GetSetRefName(), 0 );
-                nFldTyp = 3;
-                break;
-
-            case REF_FOOTNOTE:
-            case REF_ENDNOTE:
-                aStr += rWW8Wrt.GetBookmarkName( nSubType, 0,
-                                                rRFld.GetSeqNo() );
-                nFldTyp = REF_ENDNOTE == nSubType ? 72 : 5;
-                switch( pFld->GetFormat() )
-                {
-                case REF_PAGE_PGDESC:
-                case REF_PAGE:
-                case REF_UPDOWN:
+                case REF_SETREFATTR:
+                case REF_BOOKMARK:
+                    sStr += rWW8Wrt.GetBookmarkName( nSubType,
+                        &rRFld.GetSetRefName(), 0 );
+                    nFldTyp = 3;
                     break;
-                default:
-                    aStr.InsertAscii( "FUSSENDNOTE", 1 );
-                    break;
-                }
-                break;
 
-//          case REF_SEQUENCEFLD:   // ???
-//          case REF_OUTLINE:       // 10
-            // page reference - 37
-            // DDE reference  - 45
-            // DDE automatic reference - 46
+                case REF_FOOTNOTE:
+                case REF_ENDNOTE:
+                    sStr += rWW8Wrt.GetBookmarkName( nSubType, 0,
+                        rRFld.GetSeqNo() );
+                    nFldTyp = REF_ENDNOTE == nSubType ? 72 : 5;
+                    switch( pFld->GetFormat() )
+                    {
+                        case REF_PAGE_PGDESC:
+                        case REF_PAGE:
+                        case REF_UPDOWN:
+                            break;
+                        default:
+                            sStr.InsertAscii( "FUSSENDNOTE", 1 );
+                            break;
+                    }
+                    break;
+
+    //          case REF_SEQUENCEFLD:   // ???
+    //          case REF_OUTLINE:       // 10
+                // page reference - 37
+                // DDE reference  - 45
+                // DDE automatic reference - 46
             }
 
             if( nFldTyp )
             {
                 switch( pFld->GetFormat() )
                 {
-                case REF_PAGE_PGDESC:
-                case REF_PAGE:
-                    aStr.InsertAscii( "SEITEN", 1 );
-                    nFldTyp = 37;
-                    break;
+                    case REF_PAGE_PGDESC:
+                    case REF_PAGE:
+                        sStr.InsertAscii( "SEITEN", 1 );
+                        nFldTyp = 37;
+                        break;
 
-                case REF_UPDOWN:
-                    aStr.APP_ASC( " \\p" );
-                    nFldTyp = 3;
-                    break;
+                    case REF_UPDOWN:
+                        sStr.APPEND_CONST_ASC( " \\p" );
+                        nFldTyp = 3;
+                        break;
 
-                case REF_CHAPTER:
-                case REF_ONLYNUMBER:
-                case REF_ONLYCAPTION:
-                case REF_ONLYSEQNO:
-                    break;
-                // default:
-                // case REF_CONTENT:
+                    case REF_CHAPTER:
+                    case REF_ONLYNUMBER:
+                    case REF_ONLYCAPTION:
+                    case REF_ONLYSEQNO:
+                        break;
+                    // default:
+                    // case REF_CONTENT:
                 }
 
-                aStr.APP_ASC( " \\h " );        // insert hyperlink
-                rWW8Wrt.OutField( pFld, nFldTyp, aStr );
+                sStr.APPEND_CONST_ASC( " \\h " );       // insert hyperlink
+                rWW8Wrt.OutField( pFld, nFldTyp, sStr );
 
             }
             else
@@ -2047,16 +2083,18 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         down == a fifth the font size
         */
         xub_StrLen nAbove = (pFld->GetPar1().Len()+1)/2;
-        aStr.ASIGN_ASC("EQ \\o (\\s\\up ") +=
-            UniString::CreateFromInt32(nHeight/2);
-        aStr.Append('(');
-        aStr += String(pFld->GetPar1(),0,nAbove);
-        aStr.APP_ASC("), \\s\\do ") +=
-            UniString::CreateFromInt32(nHeight/5);
-        aStr.Append('(');
-        aStr += String(pFld->GetPar1(),nAbove,pFld->GetPar1().Len()-nAbove);
-        aStr.APP_ASC("))");
-        rWW8Wrt.OutField( pFld, 49, aStr);
+        sStr.ASSIGN_CONST_ASC("EQ \\o (\\s\\up ");
+        sStr += String::CreateFromInt32(nHeight/2);
+
+        sStr.Append('(');
+        sStr += String(pFld->GetPar1(),0,nAbove);
+        sStr.APPEND_CONST_ASC("), \\s\\do ");
+        sStr += String::CreateFromInt32(nHeight/5);
+
+        sStr.Append('(');
+        sStr += String(pFld->GetPar1(),nAbove,pFld->GetPar1().Len()-nAbove);
+        sStr.APPEND_CONST_ASC("))");
+        rWW8Wrt.OutField( pFld, 49, sStr);
         }
         break;
     default:
@@ -2616,7 +2654,6 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
 //JP 21.06.99: column breaks does never change to pagebreaks
 //      case SVX_BREAK_COLUMN_BEFORE:
 //      case SVX_BREAK_COLUMN_BOTH:
-
         case SVX_BREAK_NONE:
         case SVX_BREAK_PAGE_BEFORE:
         case SVX_BREAK_PAGE_BOTH:

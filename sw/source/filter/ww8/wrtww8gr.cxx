@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 17:50:03 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,6 @@
 #include <ww8par.hxx>
 #endif
 
-#define WW8_ASCII2STR(s) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(s))
-
 // Damit KA debuggen kann, ohne sich den ganzen Writer zu holen, ist
 // temporaer dieses Debug gesetzt. Ist ausserdem noch das passende IniFlag
 // gesetzt, dann werden in d:\ Hilfsdateien erzeugt.
@@ -289,9 +287,9 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
         SwOLENode *pOLENd = rNode.GetOLENode();
 
         SvStorageRef xObjStg = rWW8Wrt.GetStorage().OpenStorage(
-                        String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "ObjectPool" )),
-                                STREAM_READWRITE| STREAM_SHARE_DENYALL );
+            String::CreateFromAscii(SL::pObjectPool), STREAM_READWRITE |
+            STREAM_SHARE_DENYALL );
+
         if( xObjStg.Is()  )
         {
             SvInPlaceObjectRef xObj(pOLENd->GetOLEObj().GetOleRef());
@@ -328,9 +326,9 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
 
                     // write as embedded field - the other things will be done
                     // in the escher export
-                    String sServer( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( " EINBETTEN " )));
-                    ( sServer += xOleStg->GetUserName() ) += ' ';
+                    String sServer(CREATE_CONST_ASC(" EINBETTEN "));
+                    sServer += xOleStg->GetUserName();
+                    sServer += ' ';
 
                     rWW8Wrt.OutField( 0, 58, sServer, WRITEFIELD_START |
                         WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
@@ -722,7 +720,7 @@ void SwWW8WrGrf::Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
         if(  bSchreibsRaus )
         {
             long nSchreibsRausZ = rStrm.Tell();
-            SvFileStream aS( WW8_ASCII2STR( "e:\\ww-exp.wmf" ), STREAM_WRITE );
+            SvFileStream aS(CREATE_CONST_ASC("e:\\ww-exp.wmf"), STREAM_WRITE);
             rStrm.Seek( nSchreibsRausA );
             UINT16 nRead1;
             BYTE* pBuf = new BYTE[ 8192 ];
@@ -739,7 +737,7 @@ void SwWW8WrGrf::Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
         }
         if(  bSchreibsRein )
         {
-            SvFileStream aS( WW8_ASCII2STR( "e:\\ww-imp.wmf" ), STREAM_READ );
+            SvFileStream aS(CREATE_CONST_ASC("e:\\ww-imp.wmf"), STREAM_READ );
             aS.Seek( STREAM_SEEK_TO_END );
             ULONG nRead = aS.Tell();
             aS.Seek( 0 );
@@ -803,12 +801,14 @@ void SwWW8WrGrf::Write1Grf( SvStream& rStrm, const SwNoTxtNode* pNd,
 
         if( rWrt.GetIniFlags() & WWFL_KA_DEBUG )
         {
-            SvFileStream aS( WW8_ASCII2STR( "d:\\xxx.svm" ), STREAM_WRITE | STREAM_TRUNC );
+            SvFileStream aS(CREATE_CONST_ASC("d:\\xxx.svm"), STREAM_WRITE |
+                STREAM_TRUNC );
 
             aS << aMtf;
             aS.Close();
 
-            aS.Open( WW8_ASCII2STR( "d:\\xxx.wmf" ), STREAM_WRITE | STREAM_TRUNC  );
+            aS.Open( CREATE_CONST_ASC( "d:\\xxx.wmf" ), STREAM_WRITE |
+                STREAM_TRUNC );
             WriteWindowMetafile( aS, aMtf );
         }
 

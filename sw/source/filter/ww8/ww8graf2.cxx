@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-17 14:11:17 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ static void WriteWmfPreHd( long nWidth, long nHeight, SvStream& rOStream )
 BOOL SwWW8ImplReader::GetPictGrafFromStream( Graphic& rGraphic,
                                          SvStream& rSrc, ULONG nLen )
 {
-    String sExt(WW8_ASCII2STR(".pct"));
+    String sExt(CREATE_CONST_ASC(".pct"));
     utl::TempFile aTempFile( aEmptyStr, &sExt );
     aTempFile.EnableKillingFile();
 

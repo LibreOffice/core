@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 11:21:11 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,18 +127,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEBINDER_HPP_
-//#include <com/sun/star/drawing/XShapeBinder.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPEGROUPER_HPP_
-//#include <com/sun/star/drawing/XShapeGrouper.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_DRAWING_XSHAPECOMBINER_HPP_
-//#include <com/sun/star/drawing/XShapeCombiner.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
@@ -148,12 +139,6 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_LOADER_XIMPLEMENTATIONLOADER_HPP_
-//#include <com/sun/star/loader/XImplementationLoader.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_LOADER_CANNOTACTIVATEFACTORYEXCEPTION_HPP_
-//#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
@@ -205,12 +190,6 @@
 #include <vcl/outdev.hxx>
 #endif
 
-/*
-#ifndef _TOOLKIT_UNOIFACE_HXX
-#include <toolkit/unoiface.hxx>
-#endif
-*/
-
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
@@ -257,8 +236,11 @@
 #include <svx/msocximex.hxx>
 #endif
 
-using namespace ::com::sun::star;
+using namespace com::sun::star;
 
+#ifndef C2U
+#define C2U(s) rtl::OUString::createFromAscii(s)
+#endif
 
 //-----------------------------------------
 //            UNO-Controls
@@ -295,22 +277,22 @@ void SwWW8ImplReader::BuildInputField(sal_uInt16 nType)
     if(!rServiceFactory.is())
         return;
 
-    String sType;
+    rtl::OUString sType;
     switch( (SwWw8ControlType)nType )
     {
         case WW8_CT_CHECKBOX:
-            sType.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "CheckBox" ));
+            sType = C2U("CheckBox");
             break;
     //  case WW8_CT_EDIT:
         default:
             // see change in ../html/htmlform.cxx as of 1999/11/25 11:20:16
             // made by O.Specht
-            sType.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "TextField" ));
+            sType = C2U("TextField");
             break;
     }
 
-    String sServiceName( WW8_ASCII2STR( "com.sun.star.form.component." ));
-    sServiceName.Append( sType );
+    rtl::OUString sServiceName(C2U("com.sun.star.form.component."));
+    sServiceName += sType;
     uno::Reference< uno::XInterface >  xCreate =
         rServiceFactory->createInstance( sServiceName );
     if( !xCreate.is() )
@@ -320,35 +302,32 @@ void SwWW8ImplReader::BuildInputField(sal_uInt16 nType)
     if( !xFComp.is() )
         return;
 
-    com::sun::star::awt::Size aSz;
-    String sName;
+    awt::Size aSz;
+    rtl::OUString sName;
     sal_uInt16 nControl;
     switch( (SwWw8ControlType)nType )
     {
         case WW8_CT_CHECKBOX:
             aSz.Width = WW8_DFLT_CHECKBOX_WIDTH;
             aSz.Height = WW8_DFLT_CHECKBOX_HEIGHT;
-            sName.AssignAscii( sWW8_checkbox );
+            sName = C2U(sWW8_checkbox);
             nControl = pFormImpl->GetCheckboxNum();
             break;
 //      case WW8_CT_EDIT:
         default:
             aSz.Width = WW8_DFLT_EDIT_WIDTH; // etwas 20 Zeichen
             aSz.Height = WW8_DFLT_EDIT_HEIGHT;
-            sName.AssignAscii( sWW8_edit );
+            sName = C2U(sWW8_edit);
             nControl = pFormImpl->GetEditNum();
             break;
     }
 
-    uno::Reference< beans::XPropertySet >  xPropSet( xCreate, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropSet( xCreate, uno::UNO_QUERY );
 
-    String sTmp( nControl );
-    UniString sWTmp( sTmp );
-    sName += sWTmp;
+    sName += rtl::OUString::valueOf(nControl);
     uno::Any aTmp;
-    rtl::OUString uTmp(sName);
-    aTmp <<= uTmp;
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "Name" ), aTmp );
+    aTmp <<= sName;
+    xPropSet->setPropertyValue(C2U("Name"), aTmp );
 
     pFormImpl->InsertControl(xFComp, aSz, 0,FALSE);
 }
@@ -872,12 +851,9 @@ sal_Bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     return sal_True;
 }
 
-void WW8ListManager::AdjustLVL( sal_uInt8       nLevel,
-                                SwNumRule& rNumRule,
-                                WW8aISet&  rListItemSet,
-                                WW8aCFmt&  rCharFmt,
-                                sal_Bool&      bNewCharFmtCreated,
-                                String     sPrefix )
+void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
+    WW8aISet& rListItemSet, WW8aCFmt& rCharFmt, sal_Bool& bNewCharFmtCreated,
+    String sPrefix )
 {
     bNewCharFmtCreated = sal_False;
     SfxItemSet* pThisLevelItemSet;
@@ -931,8 +907,8 @@ void WW8ListManager::AdjustLVL( sal_uInt8       nLevel,
             String aName( sPrefix.Len() ? sPrefix : rNumRule.GetName() );
             (aName += 'z') += String::CreateFromInt32( nLevel );
 
-            pFmt = rDoc.MakeCharFmt( aName,
-                            (SwCharFmt*)rDoc.GetDfltCharFmt() ); // const Wegcasten
+            // const Wegcasten
+            pFmt = rDoc.MakeCharFmt(aName, (SwCharFmt*)rDoc.GetDfltCharFmt());
             bNewCharFmtCreated = sal_True;
             // Attribute reinsetzen
             pFmt->SetAttr( *pThisLevelItemSet );
@@ -990,7 +966,7 @@ sal_Bool WW8ListManager::LFOequaltoLST(WW8LFOInfo& rLFOInfo)
         const SwNumRule& rLSTRule = *pLSTInfo->pNumRule;
         const SwNumRule& rLFORule = *rLFOInfo.pNumRule;
         bRes = sal_True;
-        for(sal_uInt16 nLevel = 0; bRes && (nLevel < rLFOInfo.nLfoLvl); ++nLevel)
+        for(sal_uInt16 nLevel = 0; bRes && (nLevel < rLFOInfo.nLfoLvl);++nLevel)
         {
             const SwNumFmt& rLSTNumFmt = rLSTRule.Get( nLevel );
             const SwNumFmt& rLFONumFmt = rLFORule.Get( nLevel );
@@ -1003,7 +979,7 @@ sal_Bool WW8ListManager::LFOequaltoLST(WW8LFOInfo& rLFOInfo)
                 // falls identische Einstellungen, kurz den LFO-Style umhaengen,
                 // damit '( rLSTNumFmt == rLFONumFmt )' funktioniert
                 if( pLSTCharFmt->GetAttrSet() == pLFOCharFmt->GetAttrSet() )
-                    ((SwNumFmt&)rLFONumFmt).SetCharFmt( (SwCharFmt*)pLSTCharFmt );
+                    ((SwNumFmt&)rLFONumFmt).SetCharFmt((SwCharFmt*)pLSTCharFmt);
                 else
                 {
                     bRes = sal_False;
@@ -1025,8 +1001,8 @@ sal_Bool WW8ListManager::LFOequaltoLST(WW8LFOInfo& rLFOInfo)
 
 SwNumRule* WW8ListManager::CreateNextRule(BOOL bSimple)
 {
-    String sPrefix;     // wird erstmal zur Bildung des Style Namens genommen
-    sPrefix  = WW8_ASCII2STR( "WW8Num" );
+    // wird erstmal zur Bildung des Style Namens genommen
+    String sPrefix(CREATE_CONST_ASC("WW8Num"));
     sPrefix += String::CreateFromInt32( nUniqueList++ );
     sal_uInt16 nRul =
         rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName( &sPrefix ));
@@ -1236,8 +1212,9 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             // stehen hierfuer ueberhaupt LFOLVL an ?
             if( pLFOInfo->bOverride )
             {
-                WW8LSTInfo* pParentListInfo = GetLSTByListId( pLFOInfo->nIdLst );
-                if( !pParentListInfo ) break;
+                WW8LSTInfo* pParentListInfo = GetLSTByListId(pLFOInfo->nIdLst);
+                if (!pParentListInfo)
+                    break;
                 //
                 // 2.2.1 eine neue NumRule fuer diese Liste anlegen
                 //
@@ -1246,7 +1223,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     break;
                 // Nauemsprefix aufbauen: fuer NumRule-Name (eventuell)
                 // und (falls vorhanden) fuer Style-Name (dann auf jeden Fall)
-                String sPrefix(RTL_CONSTASCII_STRINGPARAM( "WW8NumSt" ));
+                String sPrefix(CREATE_CONST_ASC( "WW8NumSt" ));
                 sPrefix += String::CreateFromInt32( nLfo + 1 );
                 // jetzt dem pNumRule seinen RICHTIGEN Wert zuweisen !!!
                 // (bis dahin war hier die Parent NumRule vermerkt )
@@ -1397,27 +1374,24 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     rSt.Seek( nOriginalPos );
 }
 
-
 WW8ListManager::~WW8ListManager()
 {
-/*
-    benannte Liste bleiben im Doc drin !!!
-
-    unbenannte Listen werden bei Nicht-Verwendung geloescht
-
-    pLSTInfos und pLFOInfos werden auf jeden Fall destruiert
-*/
+    /*
+    named lists remain in doc!!!
+    unnamed lists are deleted when unused
+    pLSTInfos and pLFOInfos are in any case destructed
+    */
     sal_uInt16 nInfo;
     if( pLSTInfos )
     {
         for(nInfo = pLSTInfos->Count(); nInfo; )
         {
             WW8LSTInfo& rActInfo = *pLSTInfos->GetObject( --nInfo );
-            if(     rActInfo.pNumRule
-                    && !rActInfo.bUsedInDoc
-                    &&  rActInfo.pNumRule->IsAutoRule()
-                )
+            if (rActInfo.pNumRule && !rActInfo.bUsedInDoc
+                    && rActInfo.pNumRule->IsAutoRule())
+            {
                 rDoc.DelNumRule( rActInfo.pNumRule->GetName() );
+            }
         }
         delete pLSTInfos;
     }
@@ -1426,18 +1400,15 @@ WW8ListManager::~WW8ListManager()
         for(nInfo = pLFOInfos->Count(); nInfo; )
         {
             WW8LFOInfo& rActInfo = *pLFOInfos->GetObject( --nInfo );
-            if(     rActInfo.bOverride
-                    &&  rActInfo.pNumRule
-                    && !rActInfo.bUsedInDoc
-                    &&  rActInfo.pNumRule->IsAutoRule()
-                )
+            if (rActInfo.bOverride &&  rActInfo.pNumRule
+                && !rActInfo.bUsedInDoc && rActInfo.pNumRule->IsAutoRule())
+            {
                 rDoc.DelNumRule( rActInfo.pNumRule->GetName() );
+            }
         }
         delete pLFOInfos;
     }
 }
-
-
 
 SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     sal_uInt8 nLevel) const
@@ -1477,20 +1448,22 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
             pParentListInfo->bUsedInDoc = sal_True;
         pLFOInfo->bLSTbUIDSet = sal_True;
     }
-                                    return pLFOInfo->pNumRule;
+
+    return pLFOInfo->pNumRule;
 }
 
 
 
 sal_Bool WW8ListManager::IsSimpleList(sal_uInt16 nLFOPosition) const
 {
-    if( nLFOInfos <= nLFOPosition ) return sal_False;
+    if (nLFOInfos <= nLFOPosition)
+        return sal_False;
 
     WW8LFOInfo* pLFOInfo = pLFOInfos->GetObject( nLFOPosition );
 
-    if( !pLFOInfo )                 return sal_False;
-
-                                    return pLFOInfo->bSimpleList;
+    if( !pLFOInfo )
+        return sal_False;
+    return pLFOInfo->bSimpleList;
 }
 
 
@@ -1630,7 +1603,9 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
             }
             if( (USHRT_MAX > nLFO) && (nWW8MaxListLevel > nLevel))
             {
-                SwNumRule* pNmRule = pLstManager->GetNumRuleForActivation(nLFO,nLevel);
+                SwNumRule* pNmRule =
+                    pLstManager->GetNumRuleForActivation(nLFO,nLevel);
+
                 if( pNmRule )
                 {
                     pNmRule = SyncStyleIndentWithList(rStyleInf,pNmRule,nLevel);
@@ -1980,12 +1955,17 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
                                : WW8Read_xstz(   *pDataStream, 0,    TRUE );
 }
 
+WW8FormulaCheckBox::WW8FormulaCheckBox(SwWW8ImplReader &rR)
+    : WW8FormulaControl( CREATE_CONST_ASC( "CheckBox" ), rR)
+{
+}
+
 BOOL WW8FormulaCheckBox::Import(const uno::Reference <
     lang::XMultiServiceFactory> &rServiceFactory,
     uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
 {
-    String sServiceName = WW8_ASCII2STR( "com.sun.star.form.component.CheckBox" );
-    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance( sServiceName );
+    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(
+        C2U("com.sun.star.form.component.CheckBox"));
     if( !xCreate.is() )
         return FALSE;
 
@@ -2000,28 +1980,25 @@ BOOL WW8FormulaCheckBox::Import(const uno::Reference <
 
     uno::Any aTmp;
     if (sTitle.Len())
-    {
-        //UniString sTmp(pName,RTL_TEXTENCODING_ASCII_US);
         aTmp <<= rtl::OUString(sTitle);
-    }
     else
         aTmp <<= rtl::OUString(sName);
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "Name" ), aTmp );
+    xPropSet->setPropertyValue(C2U("Name"), aTmp );
 
     aTmp <<= (sal_Int16)nChecked;
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "DefaultState" ), aTmp);
+    xPropSet->setPropertyValue(C2U("DefaultState"), aTmp);
 
     if( sToolTip.Len() )
     {
-        aTmp <<= rtl::OUString( sToolTip );
-        xPropSet->setPropertyValue( WW8_ASCII2STR( "HelpText" ), aTmp );
+        aTmp <<= rtl::OUString(sToolTip);
+        xPropSet->setPropertyValue(C2U("HelpText"), aTmp );
     }
 
     return TRUE;
 
 }
 
-void WW8FormulaControl::SetOthersFromDoc(com::sun::star::awt::Size &rSz,
+void WW8FormulaControl::SetOthersFromDoc(awt::Size &rSz,
     uno::Reference< beans::XPropertySet >& rPropSet)
 {
     const struct CtrlFontMapEntry
@@ -2073,29 +2050,29 @@ void WW8FormulaControl::SetOthersFromDoc(com::sun::star::awt::Size &rSz,
         case RES_CHRATR_FONT:
             {
                 const SvxFontItem *pFontItem = (SvxFontItem *)pItem;
-                String pNm;
-                if( xPropSetInfo->hasPropertyByName( pNm = WW8_ASCII2STR( "FontStyleName" ) ) )
+                rtl::OUString sNm;
+                if (xPropSetInfo->hasPropertyByName(sNm = C2U("FontStyleName")))
                 {
-                    aTmp <<= rtl::OUString( pFontItem->GetStyleName() );
-                    rPropSet->setPropertyValue( pNm, aTmp );
+                    aTmp <<= rtl::OUString(pFontItem->GetStyleName());
+                    rPropSet->setPropertyValue( sNm, aTmp );
                 }
-                if( xPropSetInfo->hasPropertyByName( pNm = WW8_ASCII2STR( "FontFamily" ) ) )
+                if (xPropSetInfo->hasPropertyByName(sNm = C2U("FontFamily")))
                 {
                     aTmp <<= (sal_Int16)pFontItem->GetFamily();
-                    rPropSet->setPropertyValue( pNm, aTmp );
+                    rPropSet->setPropertyValue( sNm, aTmp );
                 }
-                if( xPropSetInfo->hasPropertyByName( pNm = WW8_ASCII2STR( "FontCharset" ) ) )
+                if( xPropSetInfo->hasPropertyByName(sNm = C2U("FontCharset")))
                 {
                     aTmp <<= (sal_Int16)pFontItem->GetCharSet();
-                    rPropSet->setPropertyValue( pNm, aTmp );
+                    rPropSet->setPropertyValue( sNm, aTmp );
                 }
-                if( xPropSetInfo->hasPropertyByName( pNm = WW8_ASCII2STR( "FontPitch" ) ) )
+                if( xPropSetInfo->hasPropertyByName(sNm = C2U("FontPitch")))
                 {
                     aTmp <<= (sal_Int16)pFontItem->GetPitch();
-                    rPropSet->setPropertyValue( pNm, aTmp );
+                    rPropSet->setPropertyValue( sNm, aTmp );
                 }
 
-                aTmp <<= rtl::OUString( pFontItem->GetFamilyName());
+                aTmp <<= rtl::OUString(pFontItem->GetFamilyName());
                 aFont.SetName( pFontItem->GetFamilyName() );
                 aFont.SetStyleName( pFontItem->GetStyleName() );
                 aFont.SetFamily( pFontItem->GetFamily() );
@@ -2103,47 +2080,43 @@ void WW8FormulaControl::SetOthersFromDoc(com::sun::star::awt::Size &rSz,
                 aFont.SetPitch( pFontItem->GetPitch() );
             }
             break;
-
         case RES_CHRATR_FONTSIZE:
             {
                 Size aSize( aFont.GetSize().Width(),
                             ((SvxFontHeightItem*)pItem)->GetHeight() );
                 aTmp <<= ((float)aSize.Height()) / 20. ;
 
-                aFont.SetSize( OutputDevice::LogicToLogic( aSize,
-                                            MAP_TWIP, MAP_100TH_MM ) );
+                aFont.SetSize( OutputDevice::LogicToLogic( aSize, MAP_TWIP,
+                    MAP_100TH_MM ) );
             }
             break;
-
         case RES_CHRATR_WEIGHT:
-                aTmp <<= (float)VCLUnoHelper::ConvertFontWeight(
-                                        ((SvxWeightItem*)pItem)->GetWeight() );
+            aTmp <<= (float)VCLUnoHelper::ConvertFontWeight(
+                ((SvxWeightItem*)pItem)->GetWeight() );
             aFont.SetWeight( ((SvxWeightItem*)pItem)->GetWeight() );
             break;
-
         case RES_CHRATR_UNDERLINE:
-                aTmp <<= (sal_Int16)( ((SvxUnderlineItem*)pItem)->GetUnderline() );
+            aTmp <<= (sal_Int16)( ((SvxUnderlineItem*)pItem)->GetUnderline() );
             aFont.SetUnderline( ((SvxUnderlineItem*)pItem)->GetUnderline() );
             break;
-
         case RES_CHRATR_CROSSEDOUT:
             aTmp <<= (sal_Int16)( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
             aFont.SetStrikeout( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
             break;
-
         case RES_CHRATR_POSTURE:
             aTmp <<= (sal_Int16)( ((SvxPostureItem*)pItem)->GetPosture() );
             aFont.SetItalic( ((SvxPostureItem*)pItem)->GetPosture() );
             break;
-
         default:
             bSet = FALSE;
             break;
         }
 
-        if( bSet && xPropSetInfo->hasPropertyByName(
-                        WW8_ASCII2STR( pMap->pPropNm ) ) )
-            rPropSet->setPropertyValue( WW8_ASCII2STR( pMap->pPropNm ), aTmp );
+        rtl::OUString sNm;
+        if( bSet && xPropSetInfo->hasPropertyByName( sNm = C2U(pMap->pPropNm)) )
+        {
+            rPropSet->setPropertyValue(sNm, aTmp);
+        }
     }
     // now calculate the size of the control
     String sExpText;
@@ -2158,13 +2131,18 @@ void WW8FormulaControl::SetOthersFromDoc(com::sun::star::awt::Size &rSz,
     pOut->Pop();
 }
 
+WW8FormulaEditBox::WW8FormulaEditBox(SwWW8ImplReader &rR)
+    : WW8FormulaControl( CREATE_CONST_ASC( "TextField" ) ,rR)
+{
+}
 
 BOOL WW8FormulaEditBox::Import(const uno::Reference<
     lang::XMultiServiceFactory >& rServiceFactory,
     uno::Reference< form::XFormComponent >& rFComp, awt::Size &rSz)
 {
-    rtl::OUString sServiceName = WW8_ASCII2STR( "com.sun.star.form.component.TextField" );
-    uno::Reference< uno::XInterface >  xCreate = rServiceFactory->createInstance( sServiceName );
+    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(
+        C2U("com.sun.star.form.component.TextField"));
+
     if( !xCreate.is() )
         return FALSE;
 
@@ -2176,42 +2154,39 @@ BOOL WW8FormulaEditBox::Import(const uno::Reference<
 
     uno::Any aTmp;
     if( sTitle.Len() )
-    {
-        //UniString sTmp(pName,RTL_TEXTENCODING_ASCII_US);
-        aTmp <<= rtl::OUString( sTitle );
-    }
+        aTmp <<= rtl::OUString(sTitle);
     else
-        aTmp <<= rtl::OUString( sName );
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "Name" ), aTmp );
+        aTmp <<= rtl::OUString(sName);
+    xPropSet->setPropertyValue(C2U("Name"), aTmp);
 
     BOOL bTemp = FALSE;
     aTmp.setValue(&bTemp, ::getBooleanCppuType());
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "MultiLine" ), aTmp);
+    xPropSet->setPropertyValue(C2U("MultiLine"), aTmp);
 
     aTmp <<= (sal_Int16)0;  //No Border
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "Border" ), aTmp);
+    xPropSet->setPropertyValue(C2U("Border"), aTmp);
 
     if( sDefault.Len() )
     {
-        aTmp <<= rtl::OUString( sDefault );
-        xPropSet->setPropertyValue( WW8_ASCII2STR( "DefaultText" ), aTmp);
+        aTmp <<= rtl::OUString(sDefault);
+        xPropSet->setPropertyValue(C2U("DefaultText"), aTmp);
     }
 
     rSz.Width = 300;
     rSz.Height = 200;
 
     aTmp <<= (sal_Int32)(0x00C0C0C0);
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "BackgroundColor" ), aTmp);
+    xPropSet->setPropertyValue(C2U("BackgroundColor"), aTmp);
 
     SetOthersFromDoc(rSz,xPropSet);
 
     aTmp <<= (sal_Int16)nSize;
-    xPropSet->setPropertyValue( WW8_ASCII2STR( "MaxTextLen" ), aTmp);
+    xPropSet->setPropertyValue(C2U("MaxTextLen"), aTmp);
 
     if( sToolTip.Len() )
     {
-        aTmp <<= rtl::OUString( sToolTip );
-        xPropSet->setPropertyValue( WW8_ASCII2STR( "HelpText" ), aTmp );
+        aTmp <<= rtl::OUString(sToolTip);
+        xPropSet->setPropertyValue(C2U("HelpText"), aTmp );
     }
 
     return TRUE;
@@ -2226,19 +2201,18 @@ BOOL SwMSConvertControls::InsertControl(
 {
     uno::Reference< drawing::XShape >  xShape;
 
-    const uno::Reference< container::XIndexContainer > & rFormComps =
-        GetFormComps();
+    const uno::Reference< container::XIndexContainer > &rComps = GetFormComps();
     uno::Any aTmp( &rFComp, ::getCppuType((const uno::Reference<
         form::XFormComponent >*)0) );
-    rFormComps->insertByIndex( rFormComps->getCount(), aTmp );
+    rComps->insertByIndex( rComps->getCount(), aTmp );
 
-    const uno::Reference< lang::XMultiServiceFactory > & rServiceFactory =
+    const uno::Reference< lang::XMultiServiceFactory > &rServiceFactory =
         GetServiceFactory();
     if( !rServiceFactory.is() )
         return FALSE;
 
-    uno::Reference< uno::XInterface >  xCreate = rServiceFactory
-        ->createInstance(WW8_ASCII2STR("com.sun.star.drawing.ControlShape"));
+    uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance(
+        C2U("com.sun.star.drawing.ControlShape"));
     if( !xCreate.is() )
         return FALSE;
 
@@ -2259,11 +2233,11 @@ BOOL SwMSConvertControls::InsertControl(
         nTemp= text::TextContentAnchorType_AS_CHARACTER;
 
     aTmp <<= nTemp;
-    xShapePropSet->setPropertyValue( WW8_ASCII2STR("AnchorType"), aTmp );
+    xShapePropSet->setPropertyValue(C2U("AnchorType"), aTmp );
 
     nTemp= text::VertOrientation::TOP;
     aTmp <<= nTemp;
-    xShapePropSet->setPropertyValue( WW8_ASCII2STR("VertOrient"), aTmp );
+    xShapePropSet->setPropertyValue(C2U("VertOrient"), aTmp );
 
     uno::Reference< text::XText >  xDummyTxtRef;
     uno::Reference< text::XTextRange >  xTxtRg =
@@ -2271,7 +2245,7 @@ BOOL SwMSConvertControls::InsertControl(
 
     aTmp.setValue(&xTxtRg,::getCppuType((
         uno::Reference< text::XTextRange >*)0));
-    xShapePropSet->setPropertyValue( WW8_ASCII2STR("TextRange"), aTmp );
+    xShapePropSet->setPropertyValue(C2U("TextRange"), aTmp );
 
     GetShapes()->add( xShape );
 

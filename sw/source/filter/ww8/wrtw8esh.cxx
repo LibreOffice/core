@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:08:09 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,11 +230,8 @@
 
 using namespace ::com::sun::star;
 
-#define sEscherStream       String::CreateFromAscii( \
-                                RTL_CONSTASCII_STRINGPARAM( "tempEsher" ))
-#define sEscherPictStream   String::CreateFromAscii( \
-                                RTL_CONSTASCII_STRINGPARAM( "EsherPicts" ))
-
+#define sEscherStream CREATE_CONST_ASC("tempEsher")
+#define sEscherPictStream   CREATE_CONST_ASC("EsherPicts")
 
 WW8_WrPlcDrawObj::WW8_WrPlcDrawObj( BYTE nTyp )
     : nTTyp( nTyp ), aParentPos( 0, 16 )
@@ -696,7 +693,7 @@ void WW8_SdrAttrIter::NextPara( USHORT nPar )
     if( pBreakIt->xBreak.is() )
         nScript = pBreakIt->xBreak->getScriptType( pEditObj->GetText(nPara), 0);
     else
-        nScript = com::sun::star::i18n::ScriptType::LATIN;
+        nScript = i18n::ScriptType::LATIN;
 
     pEditObj->GetCharAttribs( nPara, aTxtAtrArr );
     nAktSwPos = SearchNext( 1 );
@@ -1337,10 +1334,8 @@ void SwEscherEx::FinishEscher()
      work from then on. Tricky to track down, some sort of late binding
      trickery in MS where solely for first time initialization the existence
      of an ObjectPool dir is necessary for triggering some magic. cmc*/
-    rWrt.GetStorage().OpenStorage(
-        String::CreateFromAscii(
-        RTL_CONSTASCII_STRINGPARAM("ObjectPool")),
-        STREAM_READWRITE|STREAM_SHARE_DENYALL);
+    rWrt.GetStorage().OpenStorage(String::CreateFromAscii(SL::pObjectPool),
+        STREAM_READWRITE | STREAM_SHARE_DENYALL);
 }
 
 extern "C"
@@ -2443,10 +2438,8 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
     aSize.Height = TWIPS_TO_MM(aTempSize.B());
 
     //Open the ObjectPool
-    SvStorageRef xObjPool = rWW8Wrt.GetStorage().OpenStorage(
-                    String::CreateFromAscii(
-                    RTL_CONSTASCII_STRINGPARAM("ObjectPool")),
-                    STREAM_READWRITE|STREAM_SHARE_DENYALL);
+    SvStorageRef xObjPool = rWW8Wrt.GetStorage().OpenStorage(CREATE_CONST_ASC(
+        SL::pObjectPool), STREAM_READWRITE|STREAM_SHARE_DENYALL);
     //Create a destination storage for the microsoft control
     String sStorageName('_');
     sStorageName += String::CreateFromInt32((UINT32)pObj);
@@ -2472,7 +2465,7 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
     Set_UInt32(pData,(UINT32)pObj);
 
     sName.InsertAscii(" CONTROL Forms.",0);
-    sName.AppendAscii(".1 \\s ");
+    sName.APPEND_CONST_ASC(".1 \\s ");
 
     rWW8Wrt.OutField(0,87,sName,
         WRITEFIELD_START|WRITEFIELD_CMD_START|WRITEFIELD_CMD_END);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:00:35 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,11 @@
 #include <ww8struc.hxx>         // FIB, STSHI, STD...
 #endif
 
+#define APPEND_CONST_ASC(s) AppendAscii(RTL_CONSTASCII_STRINGPARAM(s))
+#define ASSIGN_CONST_ASC(s) AssignAscii(RTL_CONSTASCII_STRINGPARAM(s))
+#define CREATE_CONST_ASC(s) String::CreateFromAscii( \
+    RTL_CONSTASCII_STRINGPARAM(s))
+
 class  UShortStk;
 class  WW8Fib;
 class  WW8ScannerBase;
@@ -90,6 +95,15 @@ class  WW8PLCFspecial;
 struct WW8PLCFxDesc;
 class  WW8PLCFx_PCD;
 class  SvUShortsSort;
+
+//Commonly used string literals for stream and storage names in word docs
+struct SL
+{
+    static const char* pObjectPool;
+    static const char* p1Table;
+    static const char* p0Table;
+    static const char* pData;
+};
 
 String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc,
     BOOL bAtEndSeekRel1 = TRUE );
@@ -1449,6 +1463,8 @@ public:
     UINT16  wvkSaved : 3;       //      document view kind: 0 Normal view, 1 Outline view, 2 Page View
     UINT16  wScaleSaved : 9;    //
     UINT16  zkSaved : 2;
+    UINT16  fRotateFontW6 : 1;
+    UINT16  iGutterPos : 1 ;
 
     // hier sollte bei nFib < 103   Schluss sein, sonst ist Datei fehlerhaft!
 

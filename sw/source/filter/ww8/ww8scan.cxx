@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 17:41:38 $
+ *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,11 @@
 #ifndef _WW8SCAN_HXX
 #include <ww8scan.hxx>
 #endif
+
+const char* SL::pObjectPool = "ObjectPool";
+const char* SL::p1Table = "1Table";
+const char* SL::p0Table = "0Table";
+const char* SL::pData = "Data";
 
 WW8SprmIter::WW8SprmIter(const BYTE* pSprms_, long nLen_, BYTE nVersion_ )
     :  pSprms( pSprms_), nRemLen( nLen_), nVersion( nVersion_),
@@ -5247,10 +5252,11 @@ WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
         lKeyProtDoc = Get_Long( pData );
 
         a16Bit = Get_UShort( pData );
-        wvkSaved    =   a16Bit &  0x0007        ;
-        wScaleSaved = ( a16Bit &  0x0ff8 ) >> 3 ;
-        zkSaved     = ( a16Bit &  0x3000 ) >> 12;
-
+        wvkSaved    =   a16Bit & 0x0007        ;
+        wScaleSaved = ( a16Bit & 0x0ff8 ) >> 3 ;
+        zkSaved     = ( a16Bit & 0x3000 ) >> 12;
+        fRotateFontW6 = ( a16Bit & 0x4000 ) >> 14;
+        iGutterPos = ( a16Bit &  0x8000 ) >> 15;
         /*
             bei nFib >= 103 gehts weiter:
         */
@@ -6089,7 +6095,7 @@ static SprmInfo aWwSprmTab[] = {
     0xD227, 0, L_VAR, // "sprmSPropRMark" sep.fPropRMark, sep.ibstPropRMark, sep.dttmPropRMark ;complex (see below);variable length always recorded as 7 bytes;
 //0x3228, 0, L_FIX, // "sprmSFBiDi" ;;;
 //0x3229, 0, L_FIX, // "sprmSFFacingCol" ;;;
-//0x322A, 0, L_FIX, // "sprmSFRTLGutter" ;;;
+    0x322A, 1, L_FIX, // "sprmSFRTLGutter", set to one if gutter is on right
     0x702B, 4, L_FIX, // "sprmSBrcTop" sep.brcTop;BRC;long;
     0x702C, 4, L_FIX, // "sprmSBrcLeft" sep.brcLeft;BRC;long;
     0x702D, 4, L_FIX, // "sprmSBrcBottom" sep.brcBottom;BRC;long;
