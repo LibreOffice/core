@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGrid.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
     @see com::sun::star::form::control::GridControl
     @deprecated
  */
-interface XGrid: com::sun::star::uno::XInterface
+published interface XGrid: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
