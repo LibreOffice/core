@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>HTML</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">HTML-Document</value>
+            <value>HTML-Document</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
