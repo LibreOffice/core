@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSystemChildFactory.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-22 16:03:10 $
+ *  last change: $Author: as $ $Date: 2002-05-27 10:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,18 +82,16 @@ interface XSystemChildFactory : com::sun::star::uno::XInterface
         a sytem-specific handle to a window
 
         <p>You must check the machine ID and the process ID.<BR>
-        WIN32: HWND.<BR>
-        WIN16: HWND.<BR>
-
-        JAVA: global reference to a java.awt.Component
-        object provided from the JNI-API.<BR>
-
-        OS2: HWND.<BR>
-        MAC: Not supported<BR>
+        WIN32: HWND<BR>
+        WIN16: HWND<BR>
+        JAVA : HWND (provided from the JNI-API)<BR>
+        OS2  : HWND<BR>
+        MAC  : Not supported<BR>
 
         @param ProcessId
-        the process identifier. Use the sal_getGlobalProcessId
-        function of the RTL library.
+        obsolete
+        User of this api call must know if the system window handle can be shared between
+        both processes - means of the use the same display for output.
 
         @param SystemType
         one constant out of the constant group
