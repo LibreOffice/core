@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:10:57 $
+ *  last change: $Author: dvo $ $Date: 2001-03-23 16:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,7 @@ private:
     // property names
     const ::rtl::OUString sPropertyContent;
     const ::rtl::OUString sPropertyIsFixed;
-    const ::rtl::OUString sPropertyAuthorFullname;
+    const ::rtl::OUString sPropertyFullName;
     const ::rtl::OUString sPropertyFieldSubType;
     const ::rtl::OUString sPropertyHint;
     const ::rtl::OUString sPropertyPlaceholder;
@@ -500,6 +500,8 @@ private:
     const ::rtl::OUString sPropertyDate;
     const ::rtl::OUString sPropertyMeasureKind;
     const ::rtl::OUString sPropertyInstanceName;
+    const ::rtl::OUString sPropertyIsHidden;
+    const ::rtl::OUString sPropertyIsConditionTrue;
 
     const ::rtl::OUString sEmpty;
 

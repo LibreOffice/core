@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.25 2001-02-26 14:53:39 cl Exp $
+	$Id: text.mod,v 1.26 2001-03-23 16:30:15 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -514,13 +514,16 @@
 <!ATTLIST text:conditional-text text:condition %formula; #REQUIRED>
 <!ATTLIST text:conditional-text text:string-value-if-false %string; #REQUIRED>
 <!ATTLIST text:conditional-text text:string-value-if-true %string; #REQUIRED>
+<!ATTLIST text:conditional-text text:current-value %boolean; "false">
 
 <!ELEMENT text:hidden-text (#PCDATA)>
 <!ATTLIST text:hidden-text text:condition %formula; #REQUIRED>
 <!ATTLIST text:hidden-text text:string-value %string; #REQUIRED>
+<!ATTLIST text:hidden-text text:is-hidden %boolean; "false">
 
 <!ELEMENT text:hidden-paragraph EMPTY>
 <!ATTLIST text:hidden-paragraph text:condition %formula; #REQUIRED>
+<!ATTLIST text:hidden-paragraph text:is-hidden %boolean; "false">
 
 <!ELEMENT text:chapter (#PCDATA)>
 <!ATTLIST text:chapter text:display (name|number|number-and-name|
@@ -730,6 +733,8 @@
 <!ATTLIST text:section text:protected %boolean; "false">
 <!ATTLIST text:section text:display (true|none|condition) "true">
 <!ATTLIST text:section text:condition %formula; #IMPLIED>
+<!ATTLIST text:section text:protect %boolean; "false">
+<!ATTLIST text:section text:protection-key CDATA #IMPLIED>
 
 <!ELEMENT text:section-source EMPTY>
 <!ATTLIST text:section-source xlink:href %string; #IMPLIED>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-22 13:06:55 $
+ *  last change: $Author: dvo $ $Date: 2001-03-23 16:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
           RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.FieldMaster.")),
       sPropertyContent(RTL_CONSTASCII_USTRINGPARAM("Content")),
       sPropertyIsFixed(RTL_CONSTASCII_USTRINGPARAM("IsFixed")),
-      sPropertyAuthorFullname(RTL_CONSTASCII_USTRINGPARAM("FullName")),
+      sPropertyFullName(RTL_CONSTASCII_USTRINGPARAM("FullName")),
       sPropertyFieldSubType(RTL_CONSTASCII_USTRINGPARAM("UserDataType")),
       sPropertyHint(RTL_CONSTASCII_USTRINGPARAM("Hint")),
       sPropertyPlaceholder(RTL_CONSTASCII_USTRINGPARAM("PlaceHolder")),
@@ -459,6 +459,8 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
       sPropertyDate(RTL_CONSTASCII_USTRINGPARAM("Date")),
       sPropertyMeasureKind(RTL_CONSTASCII_USTRINGPARAM("Kind")),
       sPropertyInstanceName(RTL_CONSTASCII_USTRINGPARAM("InstanceName")),
+      sPropertyIsHidden(RTL_CONSTASCII_USTRINGPARAM("IsHidden")),
+      sPropertyIsConditionTrue(RTL_CONSTASCII_USTRINGPARAM("IsConditionTrue")),
       pCombinedCharactersPropertyState(pCombinedCharState)
 {
     SetExportOnlyUsedFieldDeclarations();
@@ -1466,6 +1468,9 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyTrueContent, rPropSet));
         ProcessString(sXML_string_value_if_false,
                       GetStringProperty(sPropertyFalseContent, rPropSet));
+        ProcessBoolean(sXML_current_value,
+                       GetBoolProperty(sPropertyIsConditionTrue, rPropSet),
+                       sal_False);
         ExportElement(sXML_conditional_text, sPresentation);
         break;
 
@@ -1474,12 +1479,18 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyCondition, rPropSet));
         ProcessString(sXML_string_value,
                       GetStringProperty(sPropertyContent, rPropSet));
+        ProcessBoolean(sXML_is_hidden,
+                       GetBoolProperty(sPropertyIsHidden, rPropSet),
+                       sal_False);
         ExportElement(sXML_hidden_text, sPresentation);
         break;
 
     case FIELD_ID_HIDDEN_PARAGRAPH:
         ProcessString(sXML_condition,
                       GetStringProperty(sPropertyCondition, rPropSet));
+        ProcessBoolean(sXML_is_hidden,
+                       GetBoolProperty(sPropertyIsHidden, rPropSet),
+                       sal_False);
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for hidden paragraph field");
         ExportElement(sXML_hidden_paragraph);
@@ -2589,7 +2600,7 @@ const sal_Char* XMLTextFieldExport::MapAuthorFieldName(
     const Reference<XPropertySet> & xPropSet)
 {
     // Initalen oder voller Name?
-    return GetBoolProperty(sPropertyAuthorFullname, xPropSet)
+    return GetBoolProperty(sPropertyFullName, xPropSet)
         ? sXML_author_name : sXML_author_initials;
 }
 

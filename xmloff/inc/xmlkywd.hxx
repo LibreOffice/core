@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-23 13:37:23 $
+ *  last change: $Author: dvo $ $Date: 2001-03-23 16:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,6 +475,7 @@ XML_CONSTASCII_ACTION( sXML_currency, "currency");
 XML_CONSTASCII_ACTION( sXML_currency_style, "currency-style" );
 XML_CONSTASCII_ACTION( sXML_currency_symbol, "currency-symbol" );
 XML_CONSTASCII_ACTION( sXML_current, "current" );
+XML_CONSTASCII_ACTION( sXML_current_value, "current-value" );
 XML_CONSTASCII_ACTION( sXML_cursor_position, "cursor-position" );
 XML_CONSTASCII_ACTION( sXML_cursor_position_x, "cursor-position-x" );
 XML_CONSTASCII_ACTION( sXML_cursor_position_y, "cursor-position-y" );
@@ -917,6 +918,7 @@ XML_CONSTASCII_ACTION( sXML_into_english_number, "into-english-number" );
 XML_CONSTASCII_ACTION( sXML_inverse, "inverse" );
 XML_CONSTASCII_ACTION( sXML_is_active, "is-active");
 XML_CONSTASCII_ACTION( sXML_is_data_layout_field, "is-data-layout-field");
+XML_CONSTASCII_ACTION( sXML_is_hidden, "is-hidden" );
 XML_CONSTASCII_ACTION( sXML_is_selection, "is-selection");
 XML_CONSTASCII_ACTION( sXML_isbn, "isbn" );
 XML_CONSTASCII_ACTION( sXML_italic, "italic" );

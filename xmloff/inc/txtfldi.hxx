@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:10:54 $
+ *  last change: $Author: dvo $ $Date: 2001-03-23 16:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,8 @@ enum XMLTextFieldAttrTokens
     XML_TOK_TEXTFIELD_STRING_VALUE_IF_TRUE,
     XML_TOK_TEXTFIELD_STRING_VALUE_IF_FALSE,
     XML_TOK_TEXTFIELD_REVISION,
+    XML_TOK_TEXTFIELD_IS_HIDDEN,
+    XML_TOK_TEXTFIELD_CURRENT_VALUE,
 
     XML_TOK_TEXTFIELD_REFERENCE_FORMAT,
     XML_TOK_TEXTFIELD_REF_NAME,
@@ -185,6 +187,7 @@ enum XMLTextFieldAttrTokens
 class XMLTextFieldImportContext : public SvXMLImportContext
 {
     const ::rtl::OUString sServicePrefix;
+    const ::rtl::OUString sIsFixed;
 
     // data members
     ::rtl::OUStringBuffer sContentBuffer;   /// collect character data
@@ -254,6 +257,12 @@ protected:
     sal_Bool CreateField(::com::sun::star::uno::Reference<
                          ::com::sun::star::beans::XPropertySet> & xField,
                          const ::rtl::OUString& sServiceName);
+
+    /// force an update of the field's value
+    /// call update on optional XUptadeable interface; (disable Fixed property)
+    void ForceUpdate(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & rPropertySet);
 };
 
 
@@ -783,8 +792,10 @@ protected:
 class XMLHiddenParagraphImportContext : public XMLTextFieldImportContext
 {
     const ::rtl::OUString sPropertyCondition;
+    const ::rtl::OUString sPropertyIsHidden;
 
     ::rtl::OUString sCondition;
+    sal_Bool bIsHidden;
 
 public:
 
@@ -815,6 +826,7 @@ class XMLConditionalTextImportContext : public XMLTextFieldImportContext
     const ::rtl::OUString sPropertyCondition;
     const ::rtl::OUString sPropertyTrueContent;
     const ::rtl::OUString sPropertyFalseContent;
+    const ::rtl::OUString sPropertyIsConditionTrue;
 
     ::rtl::OUString sCondition;
     ::rtl::OUString sTrueContent;
@@ -823,6 +835,7 @@ class XMLConditionalTextImportContext : public XMLTextFieldImportContext
     sal_Bool bConditionOK;
     sal_Bool bTrueOK;
     sal_Bool bFalseOK;
+    sal_Bool bCurrentValue;
 
 public:
 
@@ -852,12 +865,14 @@ class XMLHiddenTextImportContext : public XMLTextFieldImportContext
 {
     const ::rtl::OUString sPropertyCondition;
     const ::rtl::OUString sPropertyContent;
+    const ::rtl::OUString sPropertyIsHidden;
 
     ::rtl::OUString sCondition;
     ::rtl::OUString sString;
 
     sal_Bool bConditionOK;
     sal_Bool bStringOK;
+    sal_Bool bIsHidden;
 
 public:
 

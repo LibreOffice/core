@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
+ *  last change: $Author: dvo $ $Date: 2001-03-23 16:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,10 @@
 #include <com/sun/star/text/BibliographyDataField.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XUPDATABLE_HPP_
+#include <com/sun/star/util/XUpdatable.hpp>
+#endif
+
 #ifndef _RTL_USTRING
 #include <rtl/ustring>
 #endif
@@ -337,6 +341,8 @@ const sal_Char sAPI_representation[]    = "Representation";
 const sal_Char sAPI_date[]              = "Date";
 const sal_Char sAPI_url_content[]       = "URLContent";
 const sal_Char sAPI_script_type[]       = "ScriptType";
+const sal_Char sAPI_is_hidden[]         = "IsHidden";
+const sal_Char sAPI_is_condition_true[] = "IsConditionTrue";
 
 const sal_Char sAPI_true[] = "TRUE";
 
@@ -398,6 +404,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_annotation, XML_TOK_TEXTFIELD_ANNOTATION },
     { XML_NAMESPACE_SCRIPT, sXML_language, XML_TOK_TEXTFIELD_LANGUAGE },
     { XML_NAMESPACE_TEXT, sXML_kind, XML_TOK_TEXTFIELD_MEASURE_KIND },
+    { XML_NAMESPACE_TEXT, sXML_is_hidden, XML_TOK_TEXTFIELD_IS_HIDDEN },
+    { XML_NAMESPACE_TEXT, sXML_current_value,
+                XML_TOK_TEXTFIELD_CURRENT_VALUE },
 
     XML_TOKEN_MAP_END
 };
@@ -422,6 +431,7 @@ XMLTextFieldImportContext::XMLTextFieldImportContext(
       sContentBuffer(),
       rTextImportHelper(rHlp),
       bValid(sal_False),
+      sIsFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed)),
       sServicePrefix(RTL_CONSTASCII_USTRINGPARAM(
           sAPI_textfield_prefix))
 {
@@ -796,6 +806,22 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
 }
 
 
+void XMLTextFieldImportContext::ForceUpdate(
+    const Reference<XPropertySet> & rPropertySet)
+{
+    // force update
+    Reference<XUpdatable> xUpdate(rPropertySet, UNO_QUERY);
+    if (xUpdate.is())
+    {
+        xUpdate->update();
+    }
+    else
+    {
+        DBG_ERROR("Expected XUpdatable support!");
+    }
+}
+
+
 
 //
 // XMLSenderFieldImportContext
@@ -896,20 +922,31 @@ void XMLSenderFieldImportContext::ProcessAttribute(
 }
 
 void XMLSenderFieldImportContext::PrepareField(
-    const Reference<XPropertySet> & xPropSet)
+    const Reference<XPropertySet> & rPropSet)
 {
     // set members
     Any aAny;
     aAny <<= nSubType;
-    xPropSet->setPropertyValue(sPropertyFieldSubType, aAny);
+    rPropSet->setPropertyValue(sPropertyFieldSubType, aAny);
 
+    // set fixed
     aAny.setValue( &bFixed, ::getBooleanCppuType() );
-    xPropSet->setPropertyValue(sPropertyFixed, aAny);
+    rPropSet->setPropertyValue(sPropertyFixed, aAny);
 
+    // set content if fixed
     if (bFixed)
     {
-        aAny <<= GetContent();
-        xPropSet->setPropertyValue(sPropertyContent, aAny);
+        // in organizer or styles-only mode: force update
+        if (GetImport().GetTextImport()->IsOrganizerMode() ||
+            GetImport().GetTextImport()->IsStylesOnlyMode()   )
+        {
+            ForceUpdate(rPropSet);
+        }
+        else
+        {
+            aAny <<= GetContent();
+            rPropSet->setPropertyValue(sPropertyContent, aAny);
+        }
     }
 }
 
@@ -947,20 +984,30 @@ void XMLAuthorFieldImportContext::StartElement(
 }
 
 void XMLAuthorFieldImportContext::PrepareField(
-    const Reference<XPropertySet> & xPropSet)
+    const Reference<XPropertySet> & rPropSet)
 {
     // set members
     Any aAny;
     aAny.setValue( &bAuthorFullName, ::getBooleanCppuType() );
-    xPropSet->setPropertyValue(sPropertyAuthorFullName, aAny);
+    rPropSet->setPropertyValue(sPropertyAuthorFullName, aAny);
 
     aAny.setValue( &bFixed, ::getBooleanCppuType() );
-    xPropSet->setPropertyValue(sPropertyFixed, aAny);
+    rPropSet->setPropertyValue(sPropertyFixed, aAny);
 
+    // set content if fixed
     if (bFixed)
     {
-        aAny <<= GetContent();
-        xPropSet->setPropertyValue(sPropertyContent, aAny);
+        // organizer or styles-only mode: force update
+        if (GetImport().GetTextImport()->IsOrganizerMode() ||
+            GetImport().GetTextImport()->IsStylesOnlyMode()   )
+        {
+            ForceUpdate(rPropSet);
+        }
+        else
+        {
+            aAny <<= GetContent();
+            rPropSet->setPropertyValue(sPropertyContent, aAny);
+        }
     }
 }
 
@@ -1313,48 +1360,62 @@ void XMLTimeFieldImportContext::ProcessAttribute(
 }
 
 void XMLTimeFieldImportContext::PrepareField(
-    const Reference<XPropertySet> & xPropertySet)
+    const Reference<XPropertySet> & rPropertySet)
 {
     Any aAny;
 
     // all properties are optional (except IsDate)
     Reference<XPropertySetInfo> xPropertySetInfo(
-        xPropertySet->getPropertySetInfo());
+        rPropertySet->getPropertySetInfo());
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
     {
         aAny.setValue( &bFixed, ::getBooleanCppuType() );
-        xPropertySet->setPropertyValue(sPropertyFixed, aAny);
+        rPropertySet->setPropertyValue(sPropertyFixed, aAny);
     }
 
     aAny.setValue( &bIsDate, ::getBooleanCppuType() );
-    xPropertySet->setPropertyValue(sPropertyIsDate, aAny);
+    rPropertySet->setPropertyValue(sPropertyIsDate, aAny);
 
     if (xPropertySetInfo->hasPropertyByName(sPropertyAdjust))
     {
         aAny <<= nAdjust;
-        xPropertySet->setPropertyValue(sPropertyAdjust, aAny);
+        rPropertySet->setPropertyValue(sPropertyAdjust, aAny);
     }
 
-    if (bFixed && bTimeOK &&
-        xPropertySetInfo->hasPropertyByName(sPropertyDateTimeValue))
+    // set value
+    if (bFixed)
     {
-        aAny <<= aDateTimeValue;
-        xPropertySet->setPropertyValue(sPropertyDateTimeValue, aAny);
-    }
-
-    if (bFixed && bTimeOK &&
-        xPropertySetInfo->hasPropertyByName(sPropertyDateTime))
-    {
-        aAny <<= aDateTimeValue;
-        xPropertySet->setPropertyValue(sPropertyDateTime, aAny);
+        // organizer or styles-only mode: force update
+        if (GetImport().GetTextImport()->IsOrganizerMode() ||
+            GetImport().GetTextImport()->IsStylesOnlyMode()   )
+        {
+            ForceUpdate(rPropertySet);
+        }
+        else
+        {
+            // normal mode: set value (if present)
+            if (bTimeOK)
+            {
+               if (xPropertySetInfo->hasPropertyByName(sPropertyDateTimeValue))
+               {
+                   aAny <<= aDateTimeValue;
+                   rPropertySet->setPropertyValue(sPropertyDateTimeValue,aAny);
+               }
+               else if (xPropertySetInfo->hasPropertyByName(sPropertyDateTime))
+               {
+                   aAny <<= aDateTimeValue;
+                   rPropertySet->setPropertyValue(sPropertyDateTime, aAny);
+               }
+            }
+        }
     }
 
     if (bFormatOK &&
         xPropertySetInfo->hasPropertyByName(sPropertyNumberFormat))
     {
         aAny <<= nFormatKey;
-        xPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
+        rPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
     }
 }
 
@@ -1722,26 +1783,40 @@ void XMLSimpleDocInfoImportContext::ProcessAttribute(
 }
 
 void XMLSimpleDocInfoImportContext::PrepareField(
-    const Reference<XPropertySet> & xPropertySet)
+    const Reference<XPropertySet> & rPropertySet)
 {
     Any aAny;
     aAny.setValue(&bFixed, ::getBooleanCppuType() );
-    xPropertySet->setPropertyValue(sPropertyFixed, aAny);
+    rPropertySet->setPropertyValue(sPropertyFixed, aAny);
 
-    // set Content (if not fixed) AND CurrentPresentation
-    aAny <<= GetContent();
-
-    if (bFixed && bHasAuthor)
+    // set Content and CurrentPresentation (if fixed)
+    if (bFixed)
     {
-        xPropertySet->setPropertyValue(sPropertyAuthor, aAny);
-    }
+        // in organizer-mode or styles-only-mode, only force update
+        if (GetImport().GetTextImport()->IsOrganizerMode() ||
+            GetImport().GetTextImport()->IsStylesOnlyMode()   )
+        {
+            ForceUpdate(rPropertySet);
+        }
+        else
+        {
+            // set content (author, if that's the name) and current
+            // presentation
+            aAny <<= GetContent();
 
-    if (bFixed && bHasContent)
-    {
-        xPropertySet->setPropertyValue(sPropertyContent, aAny);
-    }
+            if (bFixed && bHasAuthor)
+            {
+                rPropertySet->setPropertyValue(sPropertyAuthor, aAny);
+            }
 
-    xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
+            if (bFixed && bHasContent)
+            {
+                rPropertySet->setPropertyValue(sPropertyContent, aAny);
+            }
+
+            rPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
+        }
+    }
 }
 
 const sal_Char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
@@ -1840,20 +1915,28 @@ XMLRevisionDocInfoImportContext::XMLRevisionDocInfoImportContext(
 }
 
 void XMLRevisionDocInfoImportContext::PrepareField(
-    const Reference<XPropertySet> & xPropertySet)
+    const Reference<XPropertySet> & rPropertySet)
 {
-    XMLSimpleDocInfoImportContext::PrepareField(xPropertySet);
+    XMLSimpleDocInfoImportContext::PrepareField(rPropertySet);
 
-    // set revision number if fixed
+    // set revision number
+    // if fixed, if not in organizer-mode, if not in styles-only-mode
     if (bFixed)
     {
-        sal_Int32 nTmp;
-
-        if (SvXMLUnitConverter::convertNumber(nTmp, GetContent()))
+        if ( GetImport().GetTextImport()->IsOrganizerMode() ||
+             GetImport().GetTextImport()->IsStylesOnlyMode()   )
         {
-            Any aAny;
-            aAny <<= nTmp;
-            xPropertySet->setPropertyValue(sPropertyRevision, aAny);
+            ForceUpdate(rPropertySet);
+        }
+        else
+        {
+            sal_Int32 nTmp;
+            if (SvXMLUnitConverter::convertNumber(nTmp, GetContent()))
+            {
+                Any aAny;
+                aAny <<= nTmp;
+                rPropertySet->setPropertyValue(sPropertyRevision, aAny);
+            }
         }
     }
 }
@@ -2030,7 +2113,9 @@ XMLHiddenParagraphImportContext::XMLHiddenParagraphImportContext(
         XMLTextFieldImportContext(rImport, rHlp, sAPI_hidden_paragraph,
                                   nPrfx, sLocalName),
         sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_condition)),
-        sCondition()
+        sPropertyIsHidden(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_hidden)),
+        sCondition(),
+        bIsHidden(sal_False)
 {
 }
 
@@ -2043,6 +2128,14 @@ void XMLHiddenParagraphImportContext::ProcessAttribute(
         sCondition = sAttrValue;
         bValid = sal_True;
     }
+    else if (XML_TOK_TEXTFIELD_IS_HIDDEN == nAttrToken)
+    {
+        sal_Bool bTmp;
+        if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
+        {
+            bIsHidden = bTmp;
+        }
+    }
 }
 
 void XMLHiddenParagraphImportContext::PrepareField(
@@ -2051,6 +2144,9 @@ void XMLHiddenParagraphImportContext::PrepareField(
     Any aAny;
     aAny <<= sCondition;
     xPropertySet->setPropertyValue(sPropertyCondition, aAny);
+
+    aAny.setValue( &bIsHidden, ::getBooleanCppuType() );
+    xPropertySet->setPropertyValue(sPropertyIsHidden, aAny);
 }
 
 
@@ -2069,12 +2165,14 @@ XMLConditionalTextImportContext::XMLConditionalTextImportContext(
         sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_condition)),
         sPropertyTrueContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_true_content)),
         sPropertyFalseContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_false_content)),
+        sPropertyIsConditionTrue(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_condition_true)),
         sCondition(),
         sTrueContent(),
         sFalseContent(),
         bConditionOK(sal_False),
         bTrueOK(sal_False),
-        bFalseOK(sal_False)
+        bFalseOK(sal_False),
+        bCurrentValue(sal_False)
 {
 }
 
@@ -2096,6 +2194,15 @@ void XMLConditionalTextImportContext::ProcessAttribute(
             sTrueContent = sAttrValue;
             bTrueOK = sal_True;
             break;
+        case XML_TOK_TEXTFIELD_CURRENT_VALUE:
+        {
+            sal_Bool bTmp;
+            if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
+            {
+                bCurrentValue = bTmp;
+            }
+            break;
+        }
     }
 
     bValid = bConditionOK && bFalseOK && bTrueOK;
@@ -2114,6 +2221,9 @@ void XMLConditionalTextImportContext::PrepareField(
 
     aAny <<= sTrueContent;
     xPropertySet->setPropertyValue(sPropertyTrueContent, aAny);
+
+    aAny.setValue( &bCurrentValue, ::getBooleanCppuType() );
+    xPropertySet->setPropertyValue(sPropertyIsConditionTrue, aAny);
 }
 
 
@@ -2131,10 +2241,12 @@ XMLHiddenTextImportContext::XMLHiddenTextImportContext(
                                   nPrfx, sLocalName),
         sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_condition)),
         sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
+        sPropertyIsHidden(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_hidden)),
         sCondition(),
         sString(),
         bConditionOK(sal_False),
-        bStringOK(sal_False)
+        bStringOK(sal_False),
+        bIsHidden(sal_False)
 {
 }
 
@@ -2152,6 +2264,15 @@ void XMLHiddenTextImportContext::ProcessAttribute(
             sString = sAttrValue;
             bStringOK = sal_True;
             break;
+        case XML_TOK_TEXTFIELD_IS_HIDDEN:
+        {
+            sal_Bool bTmp;
+            if (SvXMLUnitConverter::convertBool(bTmp, sAttrValue))
+            {
+                bIsHidden = bTmp;
+            }
+            break;
+        }
     }
 
     bValid = bConditionOK && bStringOK;
@@ -2167,6 +2288,9 @@ void XMLHiddenTextImportContext::PrepareField(
 
     aAny <<= sString;
     xPropertySet->setPropertyValue(sPropertyContent, aAny);
+
+    aAny.setValue( &bIsHidden, ::getBooleanCppuType() );
+    xPropertySet->setPropertyValue(sPropertyIsHidden, aAny);
 }
 
 
