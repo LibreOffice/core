@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:46:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 //#include "file/FEmptyCollection.hxx"
 //#endif
 
+using namespace connectivity;
 using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -100,9 +101,9 @@ using namespace ::com::sun::star::container;
 namespace starutil      = ::com::sun::star::util;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
 {
-    return Reference< XNamed >();
+    return sdbcx::ObjectType();
 }
 // -------------------------------------------------------------------------
 void OTables::impl_refresh(  ) throw(RuntimeException)
