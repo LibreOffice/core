@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 12:44:54 $
+ *  last change: $Author: dv $ $Date: 2001-07-02 11:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _WLDCRD_HXX //autogen
 #include <tools/wldcrd.hxx>
 #endif
+
+#include <tools/urlobj.hxx>
+
 #ifndef _SV_CONFIG_HXX //autogen
 #include <vcl/config.hxx>
 #endif
@@ -184,7 +187,6 @@ using namespace ::rtl;
 #include "msgpool.hxx"
 #include "request.hxx"
 #include "module.hxx"
-#include "downloadcontroller.hxx"
 #include "ucbhelp.hxx"
 #include "fcontnr.hxx"
 #include "frmload.hxx"
@@ -650,73 +652,6 @@ void SfxJavaLoader::LoadFinished( sal_Bool bOK )
 #endif
 #endif // (mba)
 
-SFX_IMPL_XINTERFACE_1( DownloaderLoader, OWeakObject, ::com::sun::star::frame::XFrameLoader )
-SFX_IMPL_XTYPEPROVIDER_1( DownloaderLoader, ::com::sun::star::frame::XFrameLoader )
-SFX_IMPL_XSERVICEINFO( DownloaderLoader, FRAMELOADER_SERVICENAME, "com.sun.star.comp.sfx2.DownloaderLoader" )
-SFX_IMPL_SINGLEFACTORY( DownloaderLoader )
-
-// -----------------------------------------------------------------------
-void SAL_CALL DownloaderLoader::load (   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > &                    rFrame      ,
-                                const ::rtl::OUString& rURL,
-                                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    rArgs       ,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLoadEventListener > &        rListener   ) throw ( ::com::sun::star::uno::RuntimeException )
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >   aRef    =   rFrame->getContainerWindow () ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() ) ;
-
-    DownloadController* pController = new DownloadController(xMgr) ;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >       xController     = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >  ( pController ) ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >          xControl        ( xMgr->createInstance (DEFINE_CONST_UNICODE("com.sun.star.awt.XProgressMonitor")    ), ::com::sun::star::uno::UNO_QUERY ) ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >           xWindow         ( xControl                                                       , ::com::sun::star::uno::UNO_QUERY ) ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >       xPeer           ( aRef                                                           , ::com::sun::star::uno::UNO_QUERY ) ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton >           xButton         ( xControl                                                       , ::com::sun::star::uno::UNO_QUERY ) ;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >   xActionListener ( xController                                                    , ::com::sun::star::uno::UNO_QUERY ) ;
-
-    DBG_ASSERT ( xControl.is()       , "DownloaderLoader::load(..)\nXProgressMonitor has no valid interface ::com::sun::star::awt::XControl!\n"                ) ;
-    DBG_ASSERT ( xWindow.is()        , "DownloaderLoader::load(..)\nXProgressMonitor has no valid interface ::com::sun::star::awt::XWindow!\n"                 ) ;
-    DBG_ASSERT ( xPeer.is()          , "DownloaderLoader::load(..)\nXFrame->getContainerWindow() has no valid interface ::com::sun::star::awt::XWindowPeer!\n" ) ;
-    DBG_ASSERT ( xButton.is()        , "DownloaderLoader::load(..)\nXProgressMonitor has no valid interface ::com::sun::star::awt::XButton!\n"                 ) ;
-    DBG_ASSERT ( xActionListener.is(), "DownloaderLoader::load(..)\nDownloadController has no valid interface ::com::sun::star::awt::XActionListener!\n"       ) ;
-
-    // dont't forget to create peer BEFORE call "setComponent" at FRAME !!!
-    // (else frame calls this method without valid toolkit and parent!!! => CRASH )
-    xControl->createPeer        ( xPeer->getToolkit(), xPeer    ) ;
-
-    // try to start download
-    String aTempURL = rURL ;
-    sal_Bool bOK = pController->StartDownload ( aTempURL ) ;
-    if ( bOK)
-    {
-        rFrame->setComponent        ( xWindow, xController                  );
-        xController->attachFrame    ( rFrame                                );
-        xButton->addActionListener  ( xActionListener                       );
-        xButton->setActionCommand   ( DEFINE_CONST_UNICODE("BreakDownload") );
-
-        if ( rListener.is() )
-            rListener->loadFinished (this) ;
-    }
-    else if (rListener.is() )
-        // no download - no download monitor !
-        rListener->loadCancelled( this ) ;
-}
-
-// -----------------------------------------------------------------------
-DownloaderLoader::DownloaderLoader( com::sun::star::uno::Reference < class com::sun::star::lang::XMultiServiceFactory > const &)
-{
-}
-
-// -----------------------------------------------------------------------
-DownloaderLoader::~DownloaderLoader()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void SAL_CALL DownloaderLoader::cancel(void) throw ( ::com::sun::star::uno::RuntimeException )
-{
-}
-
 SFX_IMPL_XINTERFACE_1( SfxMacroLoader, OWeakObject, ::com::sun::star::frame::XFrameLoader )
 SFX_IMPL_XTYPEPROVIDER_1( SfxMacroLoader, ::com::sun::star::frame::XFrameLoader )
 SFX_IMPL_XSERVICEINFO( SfxMacroLoader, FRAMELOADER_SERVICENAME, "com.sun.star.comp.sfx2.SfxMacroLoader" )
@@ -754,7 +689,6 @@ SfxMacroLoader::~SfxMacroLoader()
 void SAL_CALL SfxMacroLoader::cancel(void) throw ( ::com::sun::star::uno::RuntimeException )
 {
 }
-
 
 // -----------------------------------------------------------------------
 ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL )
@@ -927,14 +861,6 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.StandaloneDocumentInfo") );
 
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += DownloaderLoader::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoader") );
-
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxFrameLoader_Impl::impl_getStaticImplementationName();
 
     aTempStr = aImpl;
@@ -1027,7 +953,6 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         //  !!! ATTENTION !!!
         //      Write no ";" at end of line and dont forget "else" ! (see macro)
         //=============================================================================
-        IF_NAME_CREATECOMPONENTFACTORY( DownloaderLoader )
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxMacroLoader )
         IF_NAME_CREATECOMPONENTFACTORY( SfxStandaloneDocumentInfoObject )
