@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-06 06:37:01 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 09:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     {
         // if there is a medium and if this medium has a load environment,
         // we get an active data source from the medium.
+        pMedium->GetInStream()->Seek( 0 );
         xSource = pMedium->GetDataSource();
         ASSERT( xSource.is(), "XMLReader:: got no data source from medium" );
     }
@@ -270,6 +271,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/06 06:37:01  mib
+      Added missing include XActiveDataControl
+
       Revision 1.1.1.1  2000/09/18 17:14:59  hr
       initial import
 

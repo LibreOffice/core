@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:15:00 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 09:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _XMLTBLI_HXX
 #define _XMLTBLI_HXX
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include <xmloff/xmlictxt.hxx>
+#ifndef _XMLOFF_XMLTEXTTABLECONTEXT_HXX
+#include <xmloff/XMLTextTableContext.hxx>
 #endif
 
 #if !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_BOOLS_DECL)
@@ -82,6 +82,10 @@ class SwTableLineFmt;
 class SwXMLTableCell_Impl;
 class SwXMLTableRows_Impl;
 
+namespace com { namespace sun { namespace star {
+    namespace text { class XTextContent; }
+    namespace text { class XTextCursor; }
+} } }
 
 #ifdef XML_CORE_API
 enum SwXMLStyleSubFamily
@@ -94,7 +98,7 @@ enum SwXMLStyleSubFamily
 #endif
 
 
-class SwXMLTableContext : public SvXMLImportContext
+class SwXMLTableContext : public XMLTextTableContext
 {
     ::rtl::OUString     aStyleName;
 
@@ -104,6 +108,8 @@ class SwXMLTableContext : public SvXMLImportContext
 #ifndef XML_CORE_API
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextCursor > xOldCursor;
+    ::com::sun::star::uno::Reference <
+        ::com::sun::star::text::XTextContent > xTextContent;
 #endif
     SwXMLTableRows_Impl *pRows;
 
@@ -151,6 +157,8 @@ class SwXMLTableContext : public SvXMLImportContext
 
 public:
 
+    TYPEINFO();
+
     SwXMLTableContext( SwXMLImport& rImport, sal_uInt16 nPrfx,
                    const ::rtl::OUString& rLName,
                 const ::com::sun::star::uno::Reference<
@@ -190,6 +198,9 @@ public:
     const SwStartNode *InsertTableSection( const SwStartNode *pPrevSttNd=0 );
 
     virtual void EndElement();
+
+    virtual ::com::sun::star::uno::Reference <
+            ::com::sun::star::text::XTextContent > GetXTextContent() const;
 };
 
 inline SwXMLTableContext *SwXMLTableContext::GetParentTable() const

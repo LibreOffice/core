@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-28 12:45:50 $
+ *  last change: $Author: mib $ $Date: 2000-10-26 09:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -809,11 +809,13 @@ SwXMLTableCell_Impl *SwXMLTableContext::GetCell( sal_uInt32 nRow,
     return (*pRows)[nRow]->GetCell( nCol );
 }
 
+TYPEINIT1( SwXMLTableContext, XMLTextTableContext );
+
 SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    XMLTextTableContext( rImport, nPrfx, rLName ),
     pRows( new SwXMLTableRows_Impl ),
     pTableNode( 0 ),
     pBox1( 0 ),
@@ -888,8 +890,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     {
         xTable->initialize( 1, 1 );
 
-        Reference< XTextContent > xTxtCnt( xTable, UNO_QUERY );
-        GetImport().GetTextImport()->InsertTextContent( xTxtCnt );
+        xTextContent = Reference< XTextContent >( xTable, UNO_QUERY );
+        GetImport().GetTextImport()->InsertTextContent( xTextContent );
 
         Reference<XUnoTunnel> xTableTunnel( xTable, UNO_QUERY);
         if( xTableTunnel.is() )
@@ -927,7 +929,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         SwXMLTableContext *pTable ) :
-    SvXMLImportContext( rImport, nPrfx, rLName ),
+    XMLTextTableContext( rImport, nPrfx, rLName ),
     xParentTable( pTable ),
     pRows( new SwXMLTableRows_Impl ),
     pTableNode( pTable->pTableNode ),
@@ -2042,6 +2044,11 @@ void SwXMLTableContext::EndElement()
         MakeTable();
         GetImport().GetTextImport()->SetCursor( xOldCursor );
     }
+}
+
+Reference < XTextContent > SwXMLTableContext::GetXTextContent() const
+{
+    return xTextContent;
 }
 
 class SwXMLTextImportHelper : public XMLTextImportHelper
