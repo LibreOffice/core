@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:45:09 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,8 +824,6 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                                                 (short)pPaperSizes[i].x,
                                                 (short)pPaperSizes[i].y ) )
                         {
-                            pDevMode->dmFields |= DM_ORIENTATION;
-                            pDevMode->dmOrientation = DMORIENT_PORTRAIT;
                             nPaper = pPapers[i];
                             break;
                         }
@@ -843,9 +841,6 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                                                     (short)pPaperSizes[i].y,
                                                     (short)pPaperSizes[i].x ) )
                             {
-
-                                pDevMode->dmFields |= DM_ORIENTATION;
-                                pDevMode->dmOrientation = DMORIENT_LANDSCAPE;
                                 nPaper = pPapers[i];
                                 break;
                             }
