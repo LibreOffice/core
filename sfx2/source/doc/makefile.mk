@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 14:58:09 $
+#   last change: $Author: vg $ $Date: 2005-02-21 17:03:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,12 +101,11 @@ SLOFILES =	\
         $(SLO)$/sfxbasemodel.obj \
         $(SLO)$/commitlistener.obj \
         $(SLO)$/stormodifylistener.obj \
-        $(SLO)$/xmlversion.obj \
         $(SLO)$/guisaveas.obj\
         $(SLO)$/objembed.obj\
         $(SLO)$/graphhelp.obj \
         $(SLO)$/QuerySaveDocument.obj \
-        $(SLO)$/secmacrowarnings.obj 
+        $(SLO)$/secmacrowarnings.obj
 
 # exception should already be switched on
 # EXCEPTIONSFILES=$(SLO)$/objuno.obj \
