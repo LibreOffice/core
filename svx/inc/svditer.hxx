@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svditer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:18:08 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,10 @@ class SdrObjListIter
 
 public:
     SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
-    SdrObjListIter(const SdrObject& rGroup, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
+
+    /* SJ: the following function can now be used with every
+       SdrObject and is no longer limited to group objects */
+    SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
 
     void Reset() { mnIndex = (mbReverse ? maObjList.Count() : 0L); }
     BOOL IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.Count())); }
