@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapaction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #endif
 
 #include <cppcanvas/canvas.hxx>
-#include "action.hxx"
+#include <action.hxx>
 
 class Point;
 class Size;
@@ -119,7 +119,7 @@ namespace cppcanvas
                           const OutDevState& );
             virtual ~BitmapAction();
 
-            virtual bool render() const;
+            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
 
         private:
             // default: disabled copy/assignment
