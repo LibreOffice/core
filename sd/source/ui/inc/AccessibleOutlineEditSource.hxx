@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-31 08:42:29 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDITSOURCE_HXX
-#define _SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDITSOURCE_HXX
+#ifndef SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDITSOURCE_HXX
+#define SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDITSOURCE_HXX
 
 #include <memory>
 
@@ -92,9 +92,9 @@
 #include <svx/unoviwou.hxx>
 #endif
 
+class OutlinerView;
 class SdrOutliner;
 class SdrView;
-class OutlinerView;
 class Window;
 
 namespace accessibility
@@ -112,7 +112,11 @@ namespace accessibility
     {
     public:
         /// Create an SvxEditSource interface for the given Outliner
-        AccessibleOutlineEditSource( SdrOutliner& rOutliner, SdrView& rView, OutlinerView& rOutlView, const Window& rViewWindow );
+        AccessibleOutlineEditSource(
+            SdrOutliner& rOutliner,
+            SdrView& rView,
+            OutlinerView& rOutlView,
+            const ::Window& rViewWindow );
         virtual ~AccessibleOutlineEditSource();
 
         /// This method is disabled and always returns NULL
@@ -141,9 +145,9 @@ namespace accessibility
         DECL_LINK( NotifyHdl, EENotify* );
 
         SdrView&                        mrView;
-        const Window&                   mrWindow;
+        const ::Window& mrWindow;
         SdrOutliner*                    mpOutliner;
-        OutlinerView*                   mpOutlinerView;
+        OutlinerView* mpOutlinerView;
 
         SvxOutlinerForwarder            mTextForwarder;
         SvxDrawOutlinerViewForwarder    mViewForwarder;
