@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:09:07 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,8 @@ SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // Alle Opcodes mit einem Operanden
     MEMBER(SbiRuntime::StepCLOSE),      // (+Kanal/0)
     MEMBER(SbiRuntime::StepPRCHAR),     // (+char)
     // Verwaltung
-    MEMBER(SbiRuntime::StepCLASS),      // Klassennamen testen (+StringId)
+    MEMBER(SbiRuntime::StepSETCLASS),   // Set + Klassennamen testen (+StringId)
+    MEMBER(SbiRuntime::StepTESTCLASS),  // Check TOS class (+StringId)
     MEMBER(SbiRuntime::StepLIB),        // Lib fuer Declare-Call (+StringId)
     MEMBER(SbiRuntime::StepBASED),      // TOS wird um BASE erhoeht, BASE davor gepusht
     MEMBER(SbiRuntime::StepARGTYP),     // Letzten Parameter in Argv konvertieren (+Typ)
