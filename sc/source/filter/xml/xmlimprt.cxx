@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-22 13:38:41 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 
 #include "xmlimprt.hxx"
 #include "document.hxx"
+#include "docuno.hxx"
 #include "xmlbodyi.hxx"
 #include "xmlstyli.hxx"
 
@@ -172,8 +173,91 @@ static __FAR_DATA SvXMLTokenMapEntry aTableTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_table_header_rows,      XML_TOK_TABLE_HEADER_ROWS   },
     { XML_NAMESPACE_TABLE, sXML_table_rows,             XML_TOK_TABLE_ROWS          },
     { XML_NAMESPACE_TABLE, sXML_table_row,              XML_TOK_TABLE_ROW           },
+    { XML_NAMESPACE_TABLE, sXML_scenario,               XML_TOK_TABLE_SCENARIO      },
     XML_TOKEN_MAP_END
 };
+
+static __FAR_DATA SvXMLTokenMapEntry aTableAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_name,                       XML_TOK_TABLE_NAME              },
+    { XML_NAMESPACE_TABLE, sXML_style_name,                 XML_TOK_TABLE_STYLE_NAME        },
+    { XML_NAMESPACE_TABLE, sXML_use_cell_protection,        XML_TOK_TABLE_PROTECTION        },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aTableScenarioAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_display_border,     XML_TOK_TABLE_SCENARIO_ATTR_DISPLAY_BORDER  },
+    { XML_NAMESPACE_TABLE, sXML_border_color,       XML_TOK_TABLE_SCENARIO_ATTR_BORDER_COLOR    },
+    { XML_NAMESPACE_TABLE, sXML_copy_back,          XML_TOK_TABLE_SCENARIO_ATTR_COPY_BACK       },
+    { XML_NAMESPACE_TABLE, sXML_copy_styles,        XML_TOK_TABLE_SCENARIO_ATTR_COPY_STYLES     },
+    { XML_NAMESPACE_TABLE, sXML_copy_formulas,      XML_TOK_TABLE_SCENARIO_ATTR_COPY_FORMULAS   },
+    { XML_NAMESPACE_TABLE, sXML_is_active,          XML_TOK_TABLE_SCENARIO_ATTR_IS_ACTIVE       },
+    { XML_NAMESPACE_TABLE, sXML_scenario_ranges,    XML_TOK_TABLE_SCENARIO_ATTR_SCENARIO_RANGES },
+    { XML_NAMESPACE_TABLE, sXML_comment,            XML_TOK_TABLE_SCENARIO_ATTR_COMMENT         },
+    XML_TOKEN_MAP_END
+};
+
+
+static __FAR_DATA SvXMLTokenMapEntry aTableColAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_style_name,                 XML_TOK_TABLE_COL_ATTR_STYLE_NAME       },
+    { XML_NAMESPACE_TABLE, sXML_number_columns_repeated,    XML_TOK_TABLE_COL_ATTR_REPEATED         },
+    { XML_NAMESPACE_TABLE, sXML_visibility,                 XML_TOK_TABLE_COL_ATTR_VISIBILITY       },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aTableRowTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_table_cell,         XML_TOK_TABLE_ROW_CELL              },
+    { XML_NAMESPACE_TABLE, sXML_covered_table_cell, XML_TOK_TABLE_ROW_COVERED_CELL      },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aTableRowAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_style_name,                 XML_TOK_TABLE_ROW_ATTR_STYLE_NAME           },
+    { XML_NAMESPACE_TABLE, sXML_visibility,                 XML_TOK_TABLE_ROW_ATTR_VISIBILITY           },
+    { XML_NAMESPACE_TABLE, sXML_number_rows_repeated,       XML_TOK_TABLE_ROW_ATTR_REPEATED             },
+//  { XML_NAMESPACE_TABLE, sXML_use_optimal_height,         XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT   },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aTableRowCellTokenMap[] =
+{
+    { XML_NAMESPACE_TEXT,   sXML_p,             XML_TOK_TABLE_ROW_CELL_P            },
+    { XML_NAMESPACE_TABLE,  sXML_sub_table,     XML_TOK_TABLE_ROW_CELL_SUBTABLE     },
+    { XML_NAMESPACE_OFFICE, sXML_annotation,    XML_TOK_TABLE_ROW_CELL_ANNOTATION   },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aTableRowCellAttrTokenMap[] =
+{
+    { XML_NAMESPACE_TABLE, sXML_style_name,                     XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME          },
+    { XML_NAMESPACE_TABLE, sXML_number_rows_spanned,            XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS        },
+    { XML_NAMESPACE_TABLE, sXML_number_columns_spanned,         XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS        },
+    { XML_NAMESPACE_TABLE, sXML_number_matrix_columns_spanned,  XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS },
+    { XML_NAMESPACE_TABLE, sXML_number_matrix_rows_spanned,     XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS },
+    { XML_NAMESPACE_TABLE, sXML_number_columns_repeated,        XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED            },
+    { XML_NAMESPACE_TABLE, sXML_value_type,                     XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE          },
+    { XML_NAMESPACE_TABLE, sXML_value,                          XML_TOK_TABLE_ROW_CELL_ATTR_VALUE               },
+    { XML_NAMESPACE_TABLE, sXML_date_value,                     XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE          },
+    { XML_NAMESPACE_TABLE, sXML_time_value,                     XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE          },
+    { XML_NAMESPACE_TABLE, sXML_string_value,                   XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE        },
+    { XML_NAMESPACE_TABLE, sXML_boolean_value,                  XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE       },
+    { XML_NAMESPACE_TABLE, sXML_formula,                        XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA             },
+    { XML_NAMESPACE_TABLE, sXML_currency,                       XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY            },
+    XML_TOKEN_MAP_END
+};
+
+static __FAR_DATA SvXMLTokenMapEntry aTableAnnotationAttrTokenMap[] =
+{
+    { XML_NAMESPACE_OFFICE, sXML_author,        XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR        },
+    { XML_NAMESPACE_OFFICE, sXML_create_date,   XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE   },
+    { XML_NAMESPACE_OFFICE, sXML_display,       XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY       },
+    XML_TOKEN_MAP_END
+};
+
 
 static __FAR_DATA SvXMLTokenMapEntry aNamedExpressionsTokenMap[] =
 {
@@ -448,72 +532,6 @@ static __FAR_DATA SvXMLTokenMapEntry aDataPilotMemberAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aTableRowTokenMap[] =
-{
-    { XML_NAMESPACE_TABLE, sXML_table_cell,         XML_TOK_TABLE_ROW_CELL              },
-    { XML_NAMESPACE_TABLE, sXML_covered_table_cell, XML_TOK_TABLE_ROW_COVERED_CELL      },
-    XML_TOKEN_MAP_END
-};
-
-static __FAR_DATA SvXMLTokenMapEntry aTableRowCellTokenMap[] =
-{
-    { XML_NAMESPACE_TEXT,   sXML_p,             XML_TOK_TABLE_ROW_CELL_P            },
-    { XML_NAMESPACE_TABLE,  sXML_sub_table,     XML_TOK_TABLE_ROW_CELL_SUBTABLE     },
-    { XML_NAMESPACE_OFFICE, sXML_annotation,    XML_TOK_TABLE_ROW_CELL_ANNOTATION   },
-    XML_TOKEN_MAP_END
-};
-
-static __FAR_DATA SvXMLTokenMapEntry aTableAttrTokenMap[] =
-{
-    { XML_NAMESPACE_TABLE, sXML_name,                       XML_TOK_TABLE_NAME              },
-    { XML_NAMESPACE_TABLE, sXML_style_name,                 XML_TOK_TABLE_STYLE_NAME        },
-    { XML_NAMESPACE_TABLE, sXML_use_cell_protection,        XML_TOK_TABLE_PROTECTION        },
-    XML_TOKEN_MAP_END
-};
-
-static __FAR_DATA SvXMLTokenMapEntry aTableColAttrTokenMap[] =
-{
-    { XML_NAMESPACE_TABLE, sXML_style_name,                 XML_TOK_TABLE_COL_ATTR_STYLE_NAME       },
-    { XML_NAMESPACE_TABLE, sXML_number_columns_repeated,    XML_TOK_TABLE_COL_ATTR_REPEATED         },
-    { XML_NAMESPACE_TABLE, sXML_visibility,                 XML_TOK_TABLE_COL_ATTR_VISIBILITY       },
-    XML_TOKEN_MAP_END
-};
-
-static __FAR_DATA SvXMLTokenMapEntry aTableRowAttrTokenMap[] =
-{
-    { XML_NAMESPACE_TABLE, sXML_style_name,                 XML_TOK_TABLE_ROW_ATTR_STYLE_NAME           },
-    { XML_NAMESPACE_TABLE, sXML_visibility,                 XML_TOK_TABLE_ROW_ATTR_VISIBILITY           },
-    { XML_NAMESPACE_TABLE, sXML_number_rows_repeated,       XML_TOK_TABLE_ROW_ATTR_REPEATED             },
-//  { XML_NAMESPACE_TABLE, sXML_use_optimal_height,         XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT   },
-    XML_TOKEN_MAP_END
-};
-
-static __FAR_DATA SvXMLTokenMapEntry aTableRowCellAttrTokenMap[] =
-{
-    { XML_NAMESPACE_TABLE, sXML_style_name,                     XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME          },
-    { XML_NAMESPACE_TABLE, sXML_number_rows_spanned,            XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS        },
-    { XML_NAMESPACE_TABLE, sXML_number_columns_spanned,         XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS        },
-    { XML_NAMESPACE_TABLE, sXML_number_matrix_columns_spanned,  XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS },
-    { XML_NAMESPACE_TABLE, sXML_number_matrix_rows_spanned,     XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS },
-    { XML_NAMESPACE_TABLE, sXML_number_columns_repeated,        XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED            },
-    { XML_NAMESPACE_TABLE, sXML_value_type,                     XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE          },
-    { XML_NAMESPACE_TABLE, sXML_value,                          XML_TOK_TABLE_ROW_CELL_ATTR_VALUE               },
-    { XML_NAMESPACE_TABLE, sXML_date_value,                     XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE          },
-    { XML_NAMESPACE_TABLE, sXML_time_value,                     XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE          },
-    { XML_NAMESPACE_TABLE, sXML_string_value,                   XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE        },
-    { XML_NAMESPACE_TABLE, sXML_boolean_value,                  XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE       },
-    { XML_NAMESPACE_TABLE, sXML_formula,                        XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA             },
-    { XML_NAMESPACE_TABLE, sXML_currency,                       XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY            },
-    XML_TOKEN_MAP_END
-};
-
-static __FAR_DATA SvXMLTokenMapEntry aTableAnnotationAttrTokenMap[] =
-{
-    { XML_NAMESPACE_OFFICE, sXML_author,        XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR        },
-    { XML_NAMESPACE_OFFICE, sXML_create_date,   XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE   },
-    { XML_NAMESPACE_OFFICE, sXML_display,       XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY       },
-    XML_TOKEN_MAP_END
-};
 
 class ScXMLDocContext_Impl : public SvXMLImportContext
 {
@@ -624,6 +642,62 @@ const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
     if( !pTableElemTokenMap )
         pTableElemTokenMap = new SvXMLTokenMap( aTableTokenMap );
     return *pTableElemTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetTableAttrTokenMap()
+{
+    if( !pTableAttrTokenMap )
+        pTableAttrTokenMap = new SvXMLTokenMap( aTableAttrTokenMap );
+    return *pTableAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetTableScenarioAttrTokenMap()
+{
+    if( !pTableScenarioAttrTokenMap )
+        pTableScenarioAttrTokenMap = new SvXMLTokenMap( aTableScenarioAttrTokenMap );
+    return *pTableScenarioAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetTableColAttrTokenMap()
+{
+    if( !pTableColAttrTokenMap )
+        pTableColAttrTokenMap = new SvXMLTokenMap( aTableColAttrTokenMap );
+    return *pTableColAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetTableRowElemTokenMap()
+{
+    if( !pTableRowElemTokenMap )
+        pTableRowElemTokenMap = new SvXMLTokenMap( aTableRowTokenMap );
+    return *pTableRowElemTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetTableRowAttrTokenMap()
+{
+    if( !pTableRowAttrTokenMap )
+        pTableRowAttrTokenMap = new SvXMLTokenMap( aTableRowAttrTokenMap );
+    return *pTableRowAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetTableRowCellElemTokenMap()
+{
+    if( !pTableRowCellElemTokenMap )
+        pTableRowCellElemTokenMap = new SvXMLTokenMap( aTableRowCellTokenMap );
+    return *pTableRowCellElemTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
+{
+    if( !pTableRowCellAttrTokenMap )
+        pTableRowCellAttrTokenMap = new SvXMLTokenMap( aTableRowCellAttrTokenMap );
+    return *pTableRowCellAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetTableAnnotationAttrTokenMap()
+{
+    if( !pTableAnnotationAttrTokenMap )
+        pTableAnnotationAttrTokenMap = new SvXMLTokenMap( aTableAnnotationAttrTokenMap );
+    return *pTableAnnotationAttrTokenMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetNamedExpressionsElemTokenMap()
@@ -871,55 +945,6 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotMemberAttrTokenMap()
     return *pDataPilotMemberAttrTokenMap;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetTableRowElemTokenMap()
-{
-    if( !pTableRowElemTokenMap )
-        pTableRowElemTokenMap = new SvXMLTokenMap( aTableRowTokenMap );
-    return *pTableRowElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableRowCellElemTokenMap()
-{
-    if( !pTableRowCellElemTokenMap )
-        pTableRowCellElemTokenMap = new SvXMLTokenMap( aTableRowCellTokenMap );
-    return *pTableRowCellElemTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableAttrTokenMap()
-{
-    if( !pTableAttrTokenMap )
-        pTableAttrTokenMap = new SvXMLTokenMap( aTableAttrTokenMap );
-    return *pTableAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableColAttrTokenMap()
-{
-    if( !pTableColAttrTokenMap )
-        pTableColAttrTokenMap = new SvXMLTokenMap( aTableColAttrTokenMap );
-    return *pTableColAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableRowAttrTokenMap()
-{
-    if( !pTableRowAttrTokenMap )
-        pTableRowAttrTokenMap = new SvXMLTokenMap( aTableRowAttrTokenMap );
-    return *pTableRowAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
-{
-    if( !pTableRowCellAttrTokenMap )
-        pTableRowCellAttrTokenMap = new SvXMLTokenMap( aTableRowCellAttrTokenMap );
-    return *pTableRowCellAttrTokenMap;
-}
-
-const SvXMLTokenMap& ScXMLImport::GetTableAnnotationAttrTokenMap()
-{
-    if( !pTableAnnotationAttrTokenMap )
-        pTableAnnotationAttrTokenMap = new SvXMLTokenMap( aTableAnnotationAttrTokenMap );
-    return *pTableAnnotationAttrTokenMap;
-}
-
 SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
                                            const OUString& rLocalName,
                                            const uno::Reference<xml::sax::XAttributeList>& xAttrList )
@@ -948,6 +973,14 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     pStyleElemTokenMap( 0 ),
     pBodyElemTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
+    pTableAttrTokenMap( 0 ),
+    pTableScenarioAttrTokenMap( 0 ),
+    pTableColAttrTokenMap( 0 ),
+    pTableRowElemTokenMap( 0 ),
+    pTableRowAttrTokenMap( 0 ),
+    pTableRowCellElemTokenMap( 0 ),
+    pTableRowCellAttrTokenMap( 0 ),
+    pTableAnnotationAttrTokenMap( 0 ),
     pNamedExpressionsElemTokenMap( 0 ),
     pNamedRangeAttrTokenMap( 0 ),
     pNamedExpressionAttrTokenMap( 0 ),
@@ -983,13 +1016,6 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     pDataPilotSubTotalAttrTokenMap( 0 ),
     pDataPilotMembersElemTokenMap( 0 ),
     pDataPilotMemberAttrTokenMap( 0 ),
-    pTableRowElemTokenMap( 0 ),
-    pTableRowCellElemTokenMap( 0 ),
-    pTableAttrTokenMap( 0 ),
-    pTableColAttrTokenMap( 0 ),
-    pTableRowAttrTokenMap( 0 ),
-    pTableRowCellAttrTokenMap( 0 ),
-    pTableAnnotationAttrTokenMap( 0 ),
     aTables(*this),
     aMyNamedExpressions(),
 //  pScAutoStylePool(new SvXMLAutoStylePoolP),
@@ -1071,6 +1097,14 @@ ScXMLImport::~ScXMLImport()
     delete pStyleElemTokenMap;
     delete pBodyElemTokenMap;
     delete pTableElemTokenMap;
+    delete pTableAttrTokenMap;
+    delete pTableScenarioAttrTokenMap;
+    delete pTableColAttrTokenMap;
+    delete pTableRowElemTokenMap;
+    delete pTableRowAttrTokenMap;
+    delete pTableRowCellElemTokenMap;
+    delete pTableRowCellAttrTokenMap;
+    delete pTableAnnotationAttrTokenMap;
     delete pNamedExpressionsElemTokenMap;
     delete pNamedRangeAttrTokenMap;
     delete pNamedExpressionAttrTokenMap;
@@ -1106,13 +1140,6 @@ ScXMLImport::~ScXMLImport()
     delete pDataPilotSubTotalAttrTokenMap;
     delete pDataPilotMembersElemTokenMap;
     delete pDataPilotMemberAttrTokenMap;
-    delete pTableRowElemTokenMap;
-    delete pTableRowCellElemTokenMap;
-    delete pTableAttrTokenMap;
-    delete pTableColAttrTokenMap;
-    delete pTableRowAttrTokenMap;
-    delete pTableRowCellAttrTokenMap;
-    delete pTableAnnotationAttrTokenMap;
 
     if (pScPropHdlFactory)
     {
@@ -1196,3 +1223,52 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
 
     return pContext;
 }
+
+void ScXMLImport::GetRangeFromString( const rtl::OUString& rRangeStr, ScRange& rRange )
+{
+    ScModelObj* pDocObj = ScModelObj::getImplementation( GetModel() );
+    if( pDocObj )
+    {
+        ScDocument* pDoc = pDocObj->GetDocument();
+        if( pDoc )
+        {
+            ScAddress aStartCellAddress;
+            ScAddress aEndCellAddress;
+            sal_Int16 i( 0 );
+            while ((rRangeStr[i] != ':') && (i < rRangeStr.getLength()))
+                i++;
+            rtl::OUString sStartCellAddress( rRangeStr.copy(0, i) );
+            rtl::OUString sEndCellAddress( rRangeStr.copy(i + 1) );
+            aStartCellAddress.Parse(sStartCellAddress, pDoc);
+            aEndCellAddress.Parse(sEndCellAddress, pDoc);
+            rRange = ScRange(aStartCellAddress, aEndCellAddress);
+        }
+    }
+}
+
+void ScXMLImport::GetRangeListFromString( const rtl::OUString& rRangeListStr, ScRangeList& rRangeList )
+{
+    rtl::OUStringBuffer aBuffer;
+    sal_Int32           nIndex( 0 );
+    sal_Bool            bQuote( sal_False );
+    sal_Bool            bGetRange( sal_False );
+    while( nIndex < rRangeListStr.getLength() )
+    {
+        sal_Unicode nCode( rRangeListStr[nIndex] );
+        if( (nCode != ' ') || bQuote )
+        {
+            aBuffer.append( nCode );
+            bQuote = (bQuote != (nCode == '\''));
+        }
+        else bGetRange = (nCode == ' ');
+        if( bGetRange || (nIndex == rRangeListStr.getLength() - 1) )
+        {
+            ScRange* pRange = new ScRange;
+            GetRangeFromString( aBuffer.makeStringAndClear(), *pRange );
+            rRangeList.Insert( pRange, LIST_APPEND );
+            bGetRange = sal_False;
+        }
+        nIndex++;
+    }
+}
+

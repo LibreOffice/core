@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-22 13:38:41 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@
 #include "xmlstyle.hxx"
 #endif
 
+class ScRangeList;
+
 #ifdef _USE_NAMESPACE
 using namespace rtl;
 #endif
@@ -137,7 +139,80 @@ enum ScXMLTableTokens
     XML_TOK_TABLE_COL,
     XML_TOK_TABLE_HEADER_ROWS,
     XML_TOK_TABLE_ROWS,
-    XML_TOK_TABLE_ROW
+    XML_TOK_TABLE_ROW,
+    XML_TOK_TABLE_SCENARIO
+};
+
+enum ScXMLTableAttrTokens
+{
+    XML_TOK_TABLE_NAME,
+    XML_TOK_TABLE_STYLE_NAME,
+    XML_TOK_TABLE_PROTECTION
+};
+
+enum ScXMLTableScenarioAttrTokens
+{
+    XML_TOK_TABLE_SCENARIO_ATTR_DISPLAY_BORDER,
+    XML_TOK_TABLE_SCENARIO_ATTR_BORDER_COLOR,
+    XML_TOK_TABLE_SCENARIO_ATTR_COPY_BACK,
+    XML_TOK_TABLE_SCENARIO_ATTR_COPY_STYLES,
+    XML_TOK_TABLE_SCENARIO_ATTR_COPY_FORMULAS,
+    XML_TOK_TABLE_SCENARIO_ATTR_IS_ACTIVE,
+    XML_TOK_TABLE_SCENARIO_ATTR_SCENARIO_RANGES,
+    XML_TOK_TABLE_SCENARIO_ATTR_COMMENT
+};
+
+enum ScXMLTableColAttrTokens
+{
+    XML_TOK_TABLE_COL_ATTR_STYLE_NAME,
+    XML_TOK_TABLE_COL_ATTR_REPEATED,
+    XML_TOK_TABLE_COL_ATTR_VISIBILITY
+};
+
+enum ScXMLTableRowTokens
+{
+    XML_TOK_TABLE_ROW_CELL,
+    XML_TOK_TABLE_ROW_COVERED_CELL
+};
+
+enum ScXMLTableRowAttrTokens
+{
+    XML_TOK_TABLE_ROW_ATTR_STYLE_NAME,
+    XML_TOK_TABLE_ROW_ATTR_VISIBILITY,
+    XML_TOK_TABLE_ROW_ATTR_REPEATED
+//  XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT
+};
+
+enum ScXMLTableRowCellTokens
+{
+    XML_TOK_TABLE_ROW_CELL_P,
+    XML_TOK_TABLE_ROW_CELL_SUBTABLE,
+    XML_TOK_TABLE_ROW_CELL_ANNOTATION
+};
+
+enum ScXMLTableRowCellAttrTokens
+{
+    XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME,
+    XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS,
+    XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS,
+    XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS,
+    XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS,
+    XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED,
+    XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE,
+    XML_TOK_TABLE_ROW_CELL_ATTR_VALUE,
+    XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE,
+    XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE,
+    XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE,
+    XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE,
+    XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA,
+    XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY
+};
+
+enum ScXMLAnnotationAttrTokens
+{
+    XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR,
+    XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE,
+    XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY
 };
 
 enum ScXMLNamedExpressionsTokens
@@ -378,66 +453,6 @@ enum ScXMLDataPilotMemberAttrTokens
     XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_DETAILS
 };
 
-enum ScXMLTableRowTokens
-{
-    XML_TOK_TABLE_ROW_CELL,
-    XML_TOK_TABLE_ROW_COVERED_CELL
-};
-
-enum ScXMLTableRowCellTokens
-{
-    XML_TOK_TABLE_ROW_CELL_P,
-    XML_TOK_TABLE_ROW_CELL_SUBTABLE,
-    XML_TOK_TABLE_ROW_CELL_ANNOTATION
-};
-
-enum ScXMLTableAttrTokens
-{
-    XML_TOK_TABLE_NAME,
-    XML_TOK_TABLE_STYLE_NAME,
-    XML_TOK_TABLE_PROTECTION
-};
-
-enum ScXMLTableColAttrTokens
-{
-    XML_TOK_TABLE_COL_ATTR_STYLE_NAME,
-    XML_TOK_TABLE_COL_ATTR_REPEATED,
-    XML_TOK_TABLE_COL_ATTR_VISIBILITY
-};
-
-enum ScXMLTableRowAttrTokens
-{
-    XML_TOK_TABLE_ROW_ATTR_STYLE_NAME,
-    XML_TOK_TABLE_ROW_ATTR_VISIBILITY,
-    XML_TOK_TABLE_ROW_ATTR_REPEATED
-//  XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT
-};
-
-enum ScXMLTableRowCellAttrTokens
-{
-    XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME,
-    XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS,
-    XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS,
-    XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS,
-    XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS,
-    XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED,
-    XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE,
-    XML_TOK_TABLE_ROW_CELL_ATTR_VALUE,
-    XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE,
-    XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE,
-    XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE,
-    XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE,
-    XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA,
-    XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY
-};
-
-enum ScXMLAnnotationAttrTokens
-{
-    XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR,
-    XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE,
-    XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY
-};
-
 class SvI18NMap;
 class SvXMLTokenMap;
 //class SvXMLImportItemMapper;
@@ -486,6 +501,14 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pStyleElemTokenMap;
     SvXMLTokenMap           *pBodyElemTokenMap;
     SvXMLTokenMap           *pTableElemTokenMap;
+    SvXMLTokenMap           *pTableScenarioAttrTokenMap;
+    SvXMLTokenMap           *pTableAttrTokenMap;
+    SvXMLTokenMap           *pTableColAttrTokenMap;
+    SvXMLTokenMap           *pTableRowElemTokenMap;
+    SvXMLTokenMap           *pTableRowAttrTokenMap;
+    SvXMLTokenMap           *pTableRowCellElemTokenMap;
+    SvXMLTokenMap           *pTableRowCellAttrTokenMap;
+    SvXMLTokenMap           *pTableAnnotationAttrTokenMap;
     SvXMLTokenMap           *pNamedExpressionsElemTokenMap;
     SvXMLTokenMap           *pNamedRangeAttrTokenMap;
     SvXMLTokenMap           *pNamedExpressionAttrTokenMap;
@@ -521,13 +544,6 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pDataPilotSubTotalAttrTokenMap;
     SvXMLTokenMap           *pDataPilotMembersElemTokenMap;
     SvXMLTokenMap           *pDataPilotMemberAttrTokenMap;
-    SvXMLTokenMap           *pTableRowElemTokenMap;
-    SvXMLTokenMap           *pTableRowCellElemTokenMap;
-    SvXMLTokenMap           *pTableAttrTokenMap;
-    SvXMLTokenMap           *pTableColAttrTokenMap;
-    SvXMLTokenMap           *pTableRowAttrTokenMap;
-    SvXMLTokenMap           *pTableRowCellAttrTokenMap;
-    SvXMLTokenMap           *pTableAnnotationAttrTokenMap;
 
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Bool                bLoadDoc : 1;   // Load doc or styles only
@@ -599,6 +615,14 @@ public:
     const SvXMLTokenMap& GetStyleElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();
+    const SvXMLTokenMap& GetTableAttrTokenMap();
+    const SvXMLTokenMap& GetTableScenarioAttrTokenMap();
+    const SvXMLTokenMap& GetTableColAttrTokenMap();
+    const SvXMLTokenMap& GetTableRowElemTokenMap();
+    const SvXMLTokenMap& GetTableRowAttrTokenMap();
+    const SvXMLTokenMap& GetTableRowCellElemTokenMap();
+    const SvXMLTokenMap& GetTableRowCellAttrTokenMap();
+    const SvXMLTokenMap& GetTableAnnotationAttrTokenMap();
     const SvXMLTokenMap& GetNamedExpressionsElemTokenMap();
     const SvXMLTokenMap& GetNamedRangeAttrTokenMap();
     const SvXMLTokenMap& GetNamedExpressionAttrTokenMap();
@@ -634,13 +658,6 @@ public:
     const SvXMLTokenMap& GetDataPilotSubTotalAttrTokenMap();
     const SvXMLTokenMap& GetDataPilotMembersElemTokenMap();
     const SvXMLTokenMap& GetDataPilotMemberAttrTokenMap();
-    const SvXMLTokenMap& GetTableRowElemTokenMap();
-    const SvXMLTokenMap& GetTableRowCellElemTokenMap();
-    const SvXMLTokenMap& GetTableAttrTokenMap();
-    const SvXMLTokenMap& GetTableColAttrTokenMap();
-    const SvXMLTokenMap& GetTableRowAttrTokenMap();
-    const SvXMLTokenMap& GetTableRowCellAttrTokenMap();
-    const SvXMLTokenMap& GetTableAnnotationAttrTokenMap();
 //  const SvXMLTokenMap& GetTextPElemTokenMap();
 //  const SvXMLTokenMap& GetTextPAttrTokenMap();
 //  const SvXMLTokenMap& GetStyleStylesElemTokenMap();
@@ -649,6 +666,9 @@ public:
 
     void    AddNamedExpression(const ScMyNamedExpression* pMyNamedExpression) { aMyNamedExpressions.insert(aMyNamedExpressions.end(), pMyNamedExpression); }
     ScMyNamedExpressions* GetNamedExpressions() { return &aMyNamedExpressions; }
+
+    void    GetRangeFromString( const rtl::OUString& rRangeStr, ScRange& rRange );
+    void    GetRangeListFromString( const rtl::OUString& rRangeListStr, ScRangeList& rRangeList );
 };
 
 #endif

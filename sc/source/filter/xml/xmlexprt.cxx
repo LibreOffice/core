@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-05 08:52:54 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1575,22 +1575,10 @@ ScDocument* ScXMLExport::GetDocument()
         {
             ScModelObj* pDocObj = ScModelObj::getImplementation( xSpreadDoc );
             if ( pDocObj )
-            {
-                ScDocument* pDoc = pDocObj->GetDocument();
-                if (pDoc)
-                {
-                    return pDoc;
-                }
-                else
-                    return NULL;
-            }
-            return NULL;
-
+                pDoc = pDocObj->GetDocument();
         }
-        return NULL;
     }
-    else
-        return pDoc;
+    return pDoc;
 }
 
 ScXMLExport::ScXMLExport( const uno::Reference <frame::XModel>& xTempModel, const NAMESPACE_RTL(OUString)& rFileName,
@@ -3192,6 +3180,28 @@ void ScXMLExport::GetStringFromRange(const ScRange& aRange, rtl::OUString& rStri
     rString = sOUStartAddress;
 }
 
+void ScXMLExport::GetStringFromRangeList(const ScRangeList* pRangeList, rtl::OUString& rString) const
+{
+    rtl::OUStringBuffer aBuffer;
+    if (pRangeList)
+    {
+        sal_Int32 nCount(pRangeList->Count());
+        for (sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
+        {
+            const ScRange* pRange = pRangeList->GetObject(nIndex);
+            if (pRange)
+            {
+                rtl::OUString sRangeStr;
+                GetStringFromRange(*pRange, sRangeStr);
+                if (aBuffer.getLength())
+                    aBuffer.append(sal_Unicode(' '));
+                aBuffer.append(sRangeStr);
+            }
+        }
+    }
+    rString = aBuffer.makeStringAndClear();
+}
+
 void ScXMLExport::GetStringFromRange(const table::CellRangeAddress& aRange, rtl::OUString& rString) const
 {
     ScAddress aStartAddress(aRange.StartColumn, aRange.StartRow, aRange.Sheet);
@@ -3229,6 +3239,33 @@ void ScXMLExport::GetStringOfFunction(const sal_Int32 nFunction, rtl::OUString& 
 
 void ScXMLExport::WriteScenario()
 {
+    if (pDoc->IsScenario(nCurrentTable))
+    {
+        String      sComment;
+        Color       aColor;
+        sal_uInt16  nFlags;
+        pDoc->GetScenarioData(nCurrentTable, sComment, aColor, nFlags);
+        if (!(nFlags & SC_SCENARIO_SHOWFRAME))
+            AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display_border, sXML_false);
+        rtl::OUStringBuffer aBuffer;
+        SvXMLUnitConverter::convertColor(aBuffer, aColor);
+        AddAttribute(XML_NAMESPACE_TABLE, sXML_border_color, aBuffer.makeStringAndClear());
+        if (!(nFlags & SC_SCENARIO_TWOWAY))
+            AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_copy_back, sXML_false);
+        if (!(nFlags & SC_SCENARIO_ATTRIB))
+            AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_copy_styles, sXML_false);
+        if (nFlags & SC_SCENARIO_VALUE)
+            AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_copy_formulas, sXML_false);
+        SvXMLUnitConverter::convertBool(aBuffer, pDoc->IsActiveScenario(nCurrentTable));
+        AddAttribute(XML_NAMESPACE_TABLE, sXML_is_active, aBuffer.makeStringAndClear());
+        const ScRangeList* pRangeList = pDoc->GetScenarioRanges(nCurrentTable);
+        rtl::OUString sRangeListStr;
+        GetStringFromRangeList(pRangeList, sRangeListStr);
+        AddAttribute(XML_NAMESPACE_TABLE, sXML_scenario_ranges, sRangeListStr);
+        if (sComment.Len())
+            AddAttribute(XML_NAMESPACE_TABLE, sXML_comment, rtl::OUString(sComment));
+        SvXMLElementExport aElem(*this, XML_NAMESPACE_TABLE, sXML_scenario, sal_True, sal_True);
+    }
 }
 
 void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc)

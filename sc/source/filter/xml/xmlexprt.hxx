@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-05 08:52:54 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ class OUStringsSort_Impl;
 class SvXMLNumFmtExport;
 class ScDocument;
 class ScRange;
+class ScRangeList;
 class ScHorizontalCellIterator;
 struct ScQueryEntry;
 struct ScQueryParam;
@@ -427,6 +428,7 @@ class ScXMLExport : public SvXMLExport
                                 const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);
     sal_Bool IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell2);
     void GetStringFromRange(const ScRange& aRange, rtl::OUString& rString) const;
+    void GetStringFromRangeList(const ScRangeList* pRangeList, rtl::OUString& rString) const;
     void GetStringFromRange(const com::sun::star::table::CellRangeAddress& aRange, rtl::OUString& rString) const;
     void GetStringOfFunction(const sal_Int32 nFunction, rtl::OUString& rString) const;
     void WriteScenario();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include "xmlimprt.hxx"
 #include "xmlrowi.hxx"
 #include "xmlcoli.hxx"
+#include "xmlsceni.hxx"
 #include "document.hxx"
 
 #include <xmloff/xmltkmap.hxx>
@@ -172,6 +173,9 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
                                                       rLName, xAttrList//,
                                                       //this
                                                       );
+        break;
+    case XML_TOK_TABLE_SCENARIO:
+        pContext = new ScXMLTableScenarioContext( GetScImport(), nPrefix, rLName, xAttrList);
         break;
     }
 
