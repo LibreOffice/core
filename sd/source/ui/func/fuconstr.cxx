@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:01:10 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,14 +368,57 @@ void FuConstruct::Deactivate()
 
 void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
 {
-    SdPage* pPage = (SdPage*) pView->GetPageViewPvNum(0)->GetPage();
+    sal_Bool bUseFillStyle, bUseNoFillStyle;
+    bUseFillStyle = bUseNoFillStyle = sal_False;
 
+    if (nSlotId == SID_DRAW_RECT         || // Rechteck
+        nSlotId == SID_DRAW_RECT_ROUND   || // Rechteck, rund
+        nSlotId == SID_DRAW_SQUARE       || // Quadrat
+        nSlotId == SID_DRAW_SQUARE_ROUND || // Quadrat, rund
+        nSlotId == SID_DRAW_ELLIPSE      || // Ellipse
+        nSlotId == SID_DRAW_PIE          || // Ellipsensegment
+        nSlotId == SID_DRAW_ELLIPSECUT   || // Ellipsenabschnitt
+        nSlotId == SID_DRAW_CIRCLE       || // Kreis
+        nSlotId == SID_DRAW_CIRCLEPIE    || // Kreissegment
+        nSlotId == SID_DRAW_CIRCLECUT    || // Ellipsenabschnitt
+        nSlotId == SID_DRAW_POLYGON      || // Polygon
+        nSlotId == SID_DRAW_XPOLYGON     || // 45ø-Polygon
+        nSlotId == SID_DRAW_FREELINE     || // Freihandlinie
+        nSlotId == SID_DRAW_BEZIER_FILL)    // Bezier
+    {
+        bUseFillStyle = sal_True;
+    }
+    else if
+       (nSlotId == SID_DRAW_RECT_NOFILL         || // Rechteck
+        nSlotId == SID_DRAW_RECT_ROUND_NOFILL   || // Rechteck, rund
+        nSlotId == SID_DRAW_SQUARE_NOFILL       || // Quadrat
+        nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL || // Quadrat, rund
+        nSlotId == SID_DRAW_ELLIPSE_NOFILL      || // Ellipse
+        nSlotId == SID_DRAW_PIE_NOFILL          || // Ellipsensegment
+        nSlotId == SID_DRAW_ELLIPSECUT_NOFILL   || // Ellipsenabschnitt
+        nSlotId == SID_DRAW_CIRCLE_NOFILL       || // Kreis
+        nSlotId == SID_DRAW_CIRCLEPIE_NOFILL    || // Kreissegment
+        nSlotId == SID_DRAW_CIRCLECUT_NOFILL    || // Ellipsenabschnitt
+        nSlotId == SID_DRAW_POLYGON_NOFILL      || // Polygon
+        nSlotId == SID_DRAW_XPOLYGON_NOFILL     || // 45ø-Polygon
+        nSlotId == SID_DRAW_FREELINE_NOFILL     || // Freihandlinie
+        nSlotId == SID_DRAW_BEZIER_NOFILL)         // Bezier
+    {
+        bUseNoFillStyle = sal_True;
+    }
+    SetStyleSheet( rAttr, pObj, bUseFillStyle, bUseNoFillStyle );
+}
+
+void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
+        const sal_Bool bForceFillStyle, const sal_Bool bForceNoFillStyle )
+{
+    SdPage* pPage = (SdPage*)pView->GetPageViewPvNum(0)->GetPage();
     if ( pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD &&
          pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
     {
-        /******************************************************************
-        * Objekt wurde auf Hintergrund erzeugt
-        ******************************************************************/
+        /**********************************************
+        * Objects was created on the slide master page
+        ***********************************************/
         String aName( pPage->GetLayoutName() );
         String aSep = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ) );
         USHORT n = aName.Search(aSep);
@@ -386,110 +429,45 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
                                                 GetStyleSheetPool()->
                                                 Find(aName, SD_LT_FAMILY);
         DBG_ASSERT(pSheet, "Objektvorlage nicht gefunden");
-
         if (pSheet)
         {
-            // Vorlage fuer Hintergrundobjekte zuweisen
+            // applying style sheet for background objects
             pObj->SetStyleSheet(pSheet, FALSE);
-
             SfxItemSet& rSet = pSheet->GetItemSet();
-            const XFillStyleItem& rFillStyle = (const XFillStyleItem&)
-                                               rSet.Get(XATTR_FILLSTYLE);
-
-            if (nSlotId == SID_DRAW_RECT         || // Rechteck
-                nSlotId == SID_DRAW_RECT_ROUND   || // Rechteck, rund
-                nSlotId == SID_DRAW_SQUARE       || // Quadrat
-                nSlotId == SID_DRAW_SQUARE_ROUND || // Quadrat, rund
-                nSlotId == SID_DRAW_ELLIPSE      || // Ellipse
-                nSlotId == SID_DRAW_PIE          || // Ellipsensegment
-                nSlotId == SID_DRAW_ELLIPSECUT   || // Ellipsenabschnitt
-                nSlotId == SID_DRAW_CIRCLE       || // Kreis
-                nSlotId == SID_DRAW_CIRCLEPIE    || // Kreissegment
-                nSlotId == SID_DRAW_CIRCLECUT    || // Ellipsenabschnitt
-                nSlotId == SID_DRAW_POLYGON      || // Polygon
-                nSlotId == SID_DRAW_XPOLYGON     || // 45ø-Polygon
-                nSlotId == SID_DRAW_FREELINE     || // Freihandlinie
-                nSlotId == SID_DRAW_BEZIER_FILL)    // Bezier
+            const XFillStyleItem& rFillStyle = (const XFillStyleItem&)rSet.Get(XATTR_FILLSTYLE);
+            if ( bForceFillStyle )
             {
-                /**********************************************************
-                * Gefuellte Objekte
-                **********************************************************/
                 if (rFillStyle.GetValue() == XFILL_NONE)
-                {
-                    // Vorlage hat keine Fuellung, daher hart attributieren:
-                    // Fuellung setzen
                     rAttr.Put(XFillStyleItem(XFILL_SOLID));
-                }
             }
-            else if (nSlotId == SID_DRAW_RECT_NOFILL         || // Rechteck
-                     nSlotId == SID_DRAW_RECT_ROUND_NOFILL   || // Rechteck, rund
-                     nSlotId == SID_DRAW_SQUARE_NOFILL       || // Quadrat
-                     nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL || // Quadrat, rund
-                     nSlotId == SID_DRAW_ELLIPSE_NOFILL      || // Ellipse
-                     nSlotId == SID_DRAW_PIE_NOFILL          || // Ellipsensegment
-                     nSlotId == SID_DRAW_ELLIPSECUT_NOFILL   || // Ellipsenabschnitt
-                     nSlotId == SID_DRAW_CIRCLE_NOFILL       || // Kreis
-                     nSlotId == SID_DRAW_CIRCLEPIE_NOFILL    || // Kreissegment
-                     nSlotId == SID_DRAW_CIRCLECUT_NOFILL    || // Ellipsenabschnitt
-                     nSlotId == SID_DRAW_POLYGON_NOFILL      || // Polygon
-                     nSlotId == SID_DRAW_XPOLYGON_NOFILL     || // 45ø-Polygon
-                     nSlotId == SID_DRAW_FREELINE_NOFILL     || // Freihandlinie
-                     nSlotId == SID_DRAW_BEZIER_NOFILL)         // Bezier
+            else if ( bForceNoFillStyle )
             {
-                /**********************************************************
-                * Ungefuellte Objekte
-                **********************************************************/
                 if (rFillStyle.GetValue() != XFILL_NONE)
-                {
-                    // Vorlage hat eine Fuellung, daher hart attributieren:
-                    // Keine Fuellung setzen
                     rAttr.Put(XFillStyleItem(XFILL_NONE));
-                }
             }
         }
     }
     else
     {
-        /******************************************************************
-        * Objekt wurde auf Seite  erzeugt
-        ******************************************************************/
-        if (nSlotId == SID_DRAW_RECT_NOFILL         || // Rechteck
-            nSlotId == SID_DRAW_RECT_ROUND_NOFILL   || // Rechteck, rund
-            nSlotId == SID_DRAW_SQUARE_NOFILL       || // Quadrat
-            nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL || // Quadrat, rund
-            nSlotId == SID_DRAW_ELLIPSE_NOFILL      || // Ellipse
-            nSlotId == SID_DRAW_PIE_NOFILL          || // Ellipsensegment
-            nSlotId == SID_DRAW_ELLIPSECUT_NOFILL   || // Ellipsenabschnitt
-            nSlotId == SID_DRAW_CIRCLE_NOFILL       || // Kreis
-            nSlotId == SID_DRAW_CIRCLEPIE_NOFILL    || // Kreissegment
-            nSlotId == SID_DRAW_CIRCLECUT_NOFILL    || // Ellipsenabschnitt
-            nSlotId == SID_DRAW_POLYGON_NOFILL      || // Polygon
-            nSlotId == SID_DRAW_XPOLYGON_NOFILL     || // 45ø-Polygon
-            nSlotId == SID_DRAW_FREELINE_NOFILL     || // Freihandlinie
-            nSlotId == SID_DRAW_BEZIER_NOFILL)         // Bezier
+        /***********************************
+        * object was created on normal page
+        ************************************/
+        if ( bForceNoFillStyle )
         {
-            /**************************************************************
-            * Ungefuellte Objekte:
-            * Vorlage fuer ungefuellte Objekte zuweisen
-            **************************************************************/
             String aName(SdResId(STR_POOLSHEET_OBJWITHOUTFILL));
             SfxStyleSheet* pSheet = (SfxStyleSheet*)pPage->GetModel()->
                                          GetStyleSheetPool()->
                                          Find(aName, SFX_STYLE_FAMILY_PARA);
             DBG_ASSERT(pSheet, "Objektvorlage nicht gefunden");
-
             if (pSheet)
             {
                 pObj->SetStyleSheet(pSheet, FALSE);
-
-                // Default-Attr. und Fuellung aus Vorlage zuweisen
                 SfxItemSet aAttr(*pView->GetDefaultAttr().Clone());
                 aAttr.Put(pSheet->GetItemSet().Get(XATTR_FILLSTYLE));
                 pObj->SetMergedItemSet(aAttr);
             }
             else
             {
-                // Default-Attr. und "Leere-Fuellung" zuweisen
                 SfxItemSet aAttr(*pView->GetDefaultAttr().Clone());
                 rAttr.Put(XFillStyleItem(XFILL_NONE));
                 pObj->SetMergedItemSet(aAttr);
