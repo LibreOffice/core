@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 15:37:03 $
+ *  last change: $Author: cp $ $Date: 2001-02-23 18:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <process.h>    // for _beginthreadex
 #include <ole2.h>   // for _beginthreadex
 #include <tools/postwin.h>
+#endif
+
+#ifdef UNX
+#include <svunx.h>
 #endif
 
 #ifndef _SV_SALDATA_HXX
