@@ -8,4 +8,4 @@ j2	sj2\stardiv\controller					nmake	-	all	j2_contr j2_starappl NULL
 j2	sj2\stardiv\app							nmake	-	all	j2_starapp j2_contr NULL
 j2	sj2\source\jscpp						nmake	-	all	j2_jscpp j2_starapp NULL
 j2	sj2\source\java							nmake	-	all	j2_java j2_starapp NULL
-j2	sj2\util								nmake	-	all	j2_util j2_java NULL
+j2	sj2\util								nmake	-	all	j2_util j2_java j2_jscpp NULL
