@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:38:24 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@
 #ifndef CONNECTIVITY_SRESULTSET_HXX
 #include "MResultSet.hxx"
 #endif
+#include "MDatabaseMetaData.hxx"
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
@@ -127,6 +128,7 @@
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
 
+static ::osl::Mutex m_ThreadMutex;
 
 using namespace ::comphelper;
 using namespace connectivity::mozab;
@@ -176,6 +178,8 @@ void OStatement_BASE2::disposing()
     if (m_pConnection)
         m_pConnection->release();
     m_pConnection = NULL;
+
+    m_aSQLIterator.dispose();
 
     dispose_ChildImpl();
     OStatement_Base::disposing();
@@ -241,8 +245,52 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
         xCloseable->close();
     m_xResultSet = Reference< XResultSet>();
 }
+
+void OStatement_Base::createTable( )
+    throw ( SQLException, RuntimeException )
+{
+    if(m_pParseTree)
+    {
+        ::vos::ORef<connectivity::OSQLColumns> xCreateColumn;
+        if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_CREATE_TABLE)
+        {
+            const OSQLTables& xTabs = m_aSQLIterator.getTables();
+            OSL_ENSURE( !xTabs.empty(), "Need a Table");
+            ::rtl::OUString ouTableName=xTabs.begin()->first;
+            xCreateColumn     = m_aSQLIterator.getCreateColumns();
+            OSL_ENSURE(xCreateColumn.isValid(), "Need the Columns!!");
+
+            const OColumnAlias & xColumnAlias = m_pConnection->getColumnAlias();
+            //OSL_ENSURE( !xColumnAlias.empty(), "Need Column Alias");
+            const ::std::map< ::rtl::OUString, ::rtl::OUString> & xAliasMap = xColumnAlias.getAliasMap();
+            //OSL_ENSURE( !xAliasMap.empty(), "Need Column Alias Map");
+
+            OSQLColumns::const_iterator aIter = xCreateColumn->begin();
+            const ::rtl::OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
+            ::rtl::OUString sName;
+            for (sal_Int32 i = 1; aIter != xCreateColumn->end();++aIter, i++)
+            {
+                (*aIter)->getPropertyValue(sProprtyName) >>= sName;
+                if (xAliasMap.find(sName) == xAliasMap.end())
+                {
+                    ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Driver does not support column name:"))
+                                                        + sName ,NULL);
+                }
+            }
+            MDatabaseMetaDataHelper     _aDbHelper;
+            if (!_aDbHelper.NewAddressBook(m_pConnection,ouTableName))
+            {
+                ::dbtools::throwGenericSQLException(_aDbHelper.getErrorString() ,NULL);
+            }
+            m_aSQLIterator = connectivity::OSQLParseTreeIterator(m_pConnection->createCatalog()->getTables(), m_pConnection->getMetaData(), NULL);
+        }
+
+    }
+    else
+        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Problem parsing SQL!")),NULL);
+}
 // -------------------------------------------------------------------------
-void OStatement_Base::parseSql( const ::rtl::OUString& sql )
+sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted)
     throw ( SQLException, RuntimeException )
 {
     ::rtl::OUString aErr;
@@ -264,9 +312,7 @@ void OStatement_Base::parseSql( const ::rtl::OUString& sql )
         m_aSQLIterator.traverseAll();
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
         if(xTabs.empty())
-            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Driver requires a single table to be specified in query"),NULL);
-
-        // at this moment we support only one table per select statement
+            ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Driver requires a single table to be specified in query")),NULL);
 #if OSL_DEBUG_LEVEL > 0
         OSQLTables::const_iterator citer;
         for( citer = xTabs.begin(); citer != xTabs.end(); ++citer ) {
@@ -274,22 +320,43 @@ void OStatement_Base::parseSql( const ::rtl::OUString& sql )
         }
 #endif
 
-        OSL_ENSURE( xTabs.begin() != xTabs.end(), "Need a Table");
+        Reference<XIndexAccess> xNames;
+        switch(m_aSQLIterator.getStatementType())
+        {
+        case SQL_STATEMENT_SELECT:
 
-        m_pTable = static_cast< OTable* > (xTabs.begin()->second.get());
-        m_xColNames     = m_pTable->getColumns();
-        Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
-        // set the binding of the resultrow
-        m_aRow          = new OValueVector(xNames->getCount());
-        (*m_aRow)[0].setBound(sal_True);
-        ::std::for_each(m_aRow->begin()+1,m_aRow->end(),TSetBound(sal_False));
-        // create the column mapping
-        createColumnMapping();
+            // at this moment we support only one table per select statement
 
-        analyseSQL();
+            OSL_ENSURE( xTabs.begin() != xTabs.end(), "Need a Table");
+
+            m_pTable = static_cast< OTable* > (xTabs.begin()->second.get());
+            m_xColNames     = m_pTable->getColumns();
+            xNames = Reference<XIndexAccess>(m_xColNames,UNO_QUERY);
+            // set the binding of the resultrow
+            m_aRow          = new OValueVector(xNames->getCount());
+            (*m_aRow)[0].setBound(sal_True);
+            ::std::for_each(m_aRow->begin()+1,m_aRow->end(),TSetBound(sal_False));
+            // create the column mapping
+            createColumnMapping();
+
+            analyseSQL();
+            break;
+        case SQL_STATEMENT_CREATE_TABLE:
+            createTable();
+            return sal_False;
+            break;
+        default:
+            ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Problem parsing SQL!")),NULL);
+        }
+    }
+    else if(!bAdjusted) //Our sql parser does not support a statement like "create table foo"
+                        // So we append ("E-mail" varchar) to the last of it to make it work
+    {
+        return parseSql(sql + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("(""E-mail"" caracter)")),sal_True);
     }
     else
-        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Problem parsing SQL!"),NULL);
+        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Problem parsing SQL!")),NULL);
+    return sal_True;
 
 }
 // -------------------------------------------------------------------------
@@ -325,12 +392,14 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
 
 Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_ThreadMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     OSL_TRACE("Statement::executeQuery( %s )", OUtoCStr( sql ) );
 
-    parseSql( sql );
+    if (!parseSql( sql )) //parseSql return false means this sql is a create table statement
+        return NULL;
+
     OResultSet* pResult = createResultSet();
     Reference< XResultSet > xRS = pResult;
     initializeResultSet( pResult );
