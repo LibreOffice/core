@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-08 18:09:12 $
+ *  last change: $Author: tl $ $Date: 2001-03-08 09:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,14 +146,14 @@ void SmGetLeftSelectionPart(const ESelection aSel,
 
 ////////////////////////////////////////
 
-SmEditWindow::SmEditWindow(Window* pParent) :
-    Window(pParent),
-    pEditView( 0 ),
-    pEditEngineItemPool( 0 ),
-    pEditEngine( 0 ),
-    pHScrollBar( 0 ),
-    pVScrollBar( 0 ),
-    pScrollBox( 0 )
+SmEditWindow::SmEditWindow( Window* pParent ) :
+    Window              (pParent),
+    pEditEngine         (0),
+    pEditEngineItemPool (0),
+    pEditView           (0),
+    pHScrollBar         (0),
+    pVScrollBar         (0),
+    pScrollBox          (0)
 {
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
     EnableDrop();
@@ -167,37 +167,57 @@ SmEditWindow::SmEditWindow(Window* pParent) :
 
     aCursorMoveTimer.SetTimeoutHdl(LINK(this, SmEditWindow, CursorMoveTimerHdl));
     aCursorMoveTimer.SetTimeout(500);
+
+    SmViewShell *pViewSh = SmGetActiveView();
+    DBG_ASSERT( pViewSh, "view shell missing" );
+    SmDocShell * pDocSh = NULL;
+    if (pViewSh)
+        pDocSh = pViewSh->GetDoc();
+    DBG_ASSERT( pDocSh, "doc shell missing" );
+    if (pDocSh)
+    {
+        SetEditEngine( &pDocSh->GetEditEngine(),
+                       &pDocSh->GetEditEngineItemPool() );
+    }
 }
 
 SmEditWindow::~SmEditWindow()
 {
     aCursorMoveTimer.Stop();
     aModifyTimer.Stop();
-    if ( pEditEngine )
-    {
-        pEditEngine->RemoveView(pEditView);
-        delete pEditView;
-        delete pEditEngine;
-        delete pEditEngineItemPool;
 
-        delete pHScrollBar;
-        delete pVScrollBar;
-        delete pScrollBox;
-    }
+    if (pEditEngine)
+        pEditEngine->SetStatusEventHdl( Link() );
+    if (pEditEngine && pEditView)
+        pEditEngine->RemoveView( pEditView );
+    delete pEditView;
+    delete pHScrollBar;
+    delete pVScrollBar;
+    delete pScrollBox;
+}
+
+
+void SmEditWindow::SetEditEngine( EditEngine *pEng, SfxItemPool *pPool )
+{
+    DBG_ASSERT( pEng, "NULL pointer" );
+    DBG_ASSERT( pPool, "NULL pointer" );
+    pEditEngine         = pEng;
+    pEditEngineItemPool = pPool;
 }
 
 
 void SmEditWindow::ImplSetFont()
 {
+/*
     SetPointFont( GetSettings().GetStyleSettings().GetAppFont() );
-    if ( pEditEngine )
+
+    if (pEditEngine && pEditEngineItemPool)
     {
         Font aFont = GetFont();
         pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
 
         long nFntHeight = aFont.GetSize().Height();
 
-        DBG_ASSERT( pEditEngineItemPool, "NULL pointer");
         pEditEngineItemPool->SetPoolDefaultItem(
                 SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                     aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
@@ -208,18 +228,43 @@ void SmEditWindow::ImplSetFont()
                 SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
         pEditEngineItemPool->SetPoolDefaultItem(
                 SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
-//      pEditEngineItemPool->SetPoolDefaultItem(
-//              SvxWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT ) );
 
         // forces new settings to be used
         pEditEngine->Clear();   //#77957 incorrect font size
     }
+*/
 }
 
 void SmEditWindow::DataChanged( const DataChangedEvent& )
 {
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
-    ImplSetFont();
+
+
+//  ImplSetFont();
+    SetPointFont( GetSettings().GetStyleSettings().GetAppFont() );
+
+    if (pEditEngine && pEditEngineItemPool)
+    {
+        Font aFont = GetFont();
+        pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
+
+        long nFntHeight = aFont.GetSize().Height();
+
+        pEditEngineItemPool->SetPoolDefaultItem(
+                SvxFontItem( aFont.GetFamily(), aFont.GetName(),
+                    aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
+                    EE_CHAR_FONTINFO ) );
+        pEditEngineItemPool->SetPoolDefaultItem(
+                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT ) );
+        pEditEngineItemPool->SetPoolDefaultItem(
+                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+        pEditEngineItemPool->SetPoolDefaultItem(
+                SvxFontHeightItem( nFntHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
+
+        // forces new settings to be used
+        pEditEngine->Clear();   //#77957 incorrect font size
+    }
+
     AdjustScrollBars();
     Resize();
 }
@@ -269,8 +314,8 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, pTimer)
 
 void SmEditWindow::Resize()
 {
-    if (!pEditEngine)
-        CreateEditEngine();
+    if (!pEditView)
+        CreateEditView();
 
     if (pEditView)
     {
@@ -397,31 +442,36 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 
 void SmEditWindow::Paint(const Rectangle& rRect)
 {
-    if (!pEditEngine)
-        CreateEditEngine();
+    if (!pEditView)
+        CreateEditView();
 
     pEditView->Paint(rRect);
 }
 
-void SmEditWindow::CreateEditEngine()
+void SmEditWindow::CreateEditView()
 {
-    if (! pEditEngine)
+    DBG_ASSERT( pEditEngine, "EditEngine missing" );
+    if (!pEditView && pEditEngine)
     {
-        pEditEngineItemPool = EditEngine::CreatePool();
-        pEditEngine = new EditEngine( pEditEngineItemPool );
-        pEditView = new EditView(pEditEngine, this);
-        pEditEngine->SetUpdateMode(FALSE);
-        pEditEngine->InsertView(pEditView);
+        //pEditEngineItemPool = EditEngine::CreatePool();
+        //pEditEngine = new EditEngine( pEditEngineItemPool );
+        pEditView = new EditView( pEditEngine, this );
+//      pEditEngine->SetUpdateMode( FALSE );
+        pEditEngine->InsertView( pEditView );
 
-        pEditEngine->SetControlWord((pEditEngine->GetControlWord() | EE_CNTRL_AUTOINDENTING) &
-                                    (~EE_CNTRL_UNDOATTRIBS) & (~EE_CNTRL_PASTESPECIAL));
+#ifdef NEVER
+        pEditEngine->SetControlWord(
+                (pEditEngine->GetControlWord() | EE_CNTRL_AUTOINDENTING) &
+                (~EE_CNTRL_UNDOATTRIBS) &
+                (~EE_CNTRL_PASTESPECIAL) );
 
-        pEditEngine->SetWordDelimiters( C2S(" .=+-*/(){}[];\"" ));
-        pEditEngine->SetRefMapMode(MAP_PIXEL);
+        pEditEngine->SetWordDelimiters( C2S(" .=+-*/(){}[];\"" ) );
+        pEditEngine->SetRefMapMode( MAP_PIXEL );
+#endif
 
-        ImplSetFont();
+//      ImplSetFont();
 
-        pEditEngine->SetPaperSize( Size( 800, 0 ) );
+//      pEditEngine->SetPaperSize( Size( 800, 0 ) );
 
         pVScrollBar = new ScrollBar(this, WinBits(WB_VSCROLL));
         pHScrollBar = new ScrollBar(this, WinBits(WB_HSCROLL));
@@ -434,19 +484,20 @@ void SmEditWindow::CreateEditEngine()
         ESelection eSelection;
 
         pEditView->SetSelection(eSelection);
-        pEditEngine->SetUpdateMode(TRUE);
+//      pEditEngine->SetUpdateMode( TRUE );
         Update();
         pEditView->ShowCursor(TRUE, TRUE);
 
-        pEditEngine->SetStatusEventHdl(LINK(this, SmEditWindow, EditStatusHdl));
+        pEditEngine->SetStatusEventHdl( LINK(this, SmEditWindow, EditStatusHdl) );
         SetPointer(pEditView->GetPointer());
 
-        pEditEngine->EraseVirtualDevice();
-        pEditEngine->ClearModifyFlag();
+//      pEditEngine->EraseVirtualDevice();
+//      pEditEngine->ClearModifyFlag();
 
         SetScrollBarRanges();
     }
 }
+
 
 IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, pStat )
 {
@@ -475,7 +526,7 @@ Rectangle SmEditWindow::AdjustScrollBars()
     Point aPoint;
     Rectangle aRect( aPoint, aOut );
 
-    if ( pEditEngine )
+    if (pVScrollBar && pHScrollBar && pScrollBox)
     {
         const long nTmp = GetSettings().GetStyleSettings().GetScrollBarSize();
         Point aPt( aRect.TopRight() ); aPt.X() -= nTmp -1L;
@@ -497,7 +548,7 @@ Rectangle SmEditWindow::AdjustScrollBars()
 void SmEditWindow::SetScrollBarRanges()
 {
     // Extra-Methode, nicht InitScrollBars, da auch fuer EditEngine-Events.
-    if (pEditEngine )
+    if (pVScrollBar && pHScrollBar && pEditEngine && pEditView)
     {
         long nTmp = pEditEngine->GetTextHeight();
         pVScrollBar->SetRange(Range(0, nTmp));
@@ -511,7 +562,7 @@ void SmEditWindow::SetScrollBarRanges()
 
 void SmEditWindow::InitScrollBars()
 {
-    if (pEditEngine )
+    if (pVScrollBar && pHScrollBar && pScrollBox)
     {
         const Size aOut( pEditView->GetOutputArea().GetSize() );
         pVScrollBar->SetVisibleSize(aOut.Height());
@@ -530,22 +581,25 @@ void SmEditWindow::InitScrollBars()
     }
 }
 
+
 XubString SmEditWindow::GetText()
 {
-    if (!pEditEngine)
-        CreateEditEngine();
-
-    String aText (pEditEngine->GetText( LINEEND_LF ));
+    String aText;
+    DBG_ASSERT( pEditEngine, "EditEngine missing" );
+    if (pEditEngine)
+        aText = pEditEngine->GetText( LINEEND_LF );
     return aText;
 }
 
+
 void SmEditWindow::SetText(const XubString& rText)
 {
-    if (!pEditEngine)
-        CreateEditEngine();
-
-    if (!pEditEngine->IsModified())
+    DBG_ASSERT( pEditEngine, "EditEngine missing" );
+    if (pEditEngine  &&  !pEditEngine->IsModified())
     {
+        if (!pEditView)
+            CreateEditView();
+
         ESelection eSelection = pEditView->GetSelection();
 
         pEditEngine->SetText(rText);
@@ -560,23 +614,57 @@ void SmEditWindow::SetText(const XubString& rText)
     }
 }
 
+
+void SmEditWindow::GetFocus()
+{
+    Window::GetFocus();
+
+    if (pEditView)
+        pEditView->SetSelection( aActiveSelection );
+    if (pEditEngine)
+        pEditEngine->SetStatusEventHdl( LINK(this, SmEditWindow, EditStatusHdl) );
+}
+
+
+void SmEditWindow::LoseFocus()
+{
+    if (pEditView)
+        aActiveSelection = pEditView->GetSelection();
+    if (pEditEngine)
+        pEditEngine->SetStatusEventHdl( Link() );
+
+    Window::LoseFocus();
+}
+
+
 BOOL SmEditWindow::IsAllSelected() const
 {
-    ESelection eSelection = pEditView->GetSelection();
+    DBG_ASSERT( pEditView, "NULL pointer" );
+    ESelection eSelection;
+    if (pEditView)
+        eSelection = pEditView->GetSelection();
 
-    if (!(pEditEngine->GetParagraphCount() - 1))
+    DBG_ASSERT( pEditEngine, "NULL pointer" );
+    INT32 nParaCnt = pEditEngine->GetParagraphCount();
+    if (!(nParaCnt - 1))
     {
-        String Text (pEditEngine->GetText( LINEEND_LF ));
+        String Text( pEditEngine->GetText( LINEEND_LF ) );
         return !eSelection.nStartPos && (eSelection.nEndPos == Text.Len () - 1);
     }
     else
-        return !eSelection.nStartPara && (eSelection.nEndPara == (pEditEngine->GetParagraphCount() - 1));
+    {
+        return !eSelection.nStartPara && (eSelection.nEndPara == nParaCnt - 1);
+    }
 }
 
 void SmEditWindow::SelectAll()
 {
-    // 0xFFFF as last two parameters refers to the end of the text
-    pEditView->SetSelection( ESelection( 0, 0, 0xFFFF, 0xFFFF ) );
+    DBG_ASSERT( pEditView, "NULL pointer" );
+    if (pEditView)
+    {
+        // 0xFFFF as last two parameters refers to the end of the text
+        pEditView->SetSelection( ESelection( 0, 0, 0xFFFF, 0xFFFF ) );
+    }
 }
 
 void SmEditWindow::InsertCommand(USHORT Command)
@@ -587,6 +675,7 @@ void SmEditWindow::InsertCommand(USHORT Command)
     aSelection.nEndPos  = aSelection.nStartPos;
     aSelection.nEndPara = aSelection.nStartPara;
 
+    DBG_ASSERT( pEditView, "NULL pointer" );
     String  aText = String(SmResId(Command));
     pEditView->InsertText(aText);
 
@@ -616,15 +705,17 @@ void SmEditWindow::MarkError(const Point &rPos)
 
 void SmEditWindow::SelNextMark()
 {
+    DBG_ASSERT( pEditView, "NULL pointer" );
     ESelection eSelection = pEditView->GetSelection();
     USHORT     Pos        = eSelection.nEndPos;
     String     aMark (C2S("<?>"));
     String     aText;
+    DBG_ASSERT( pEditEngine, "NULL pointer" );
     USHORT     nCounts    = pEditEngine->GetParagraphCount();
 
     while (eSelection.nEndPara < nCounts)
     {
-        aText = pEditEngine->GetText(eSelection.nEndPara);
+        aText = pEditEngine->GetText( eSelection.nEndPara );
         Pos   = aText.Search(aMark, Pos);
 
         if (Pos != STRING_NOTFOUND)
@@ -640,10 +731,12 @@ void SmEditWindow::SelNextMark()
 
 void SmEditWindow::SelPrevMark()
 {
+    DBG_ASSERT( pEditView, "NULL pointer" );
     ESelection eSelection = pEditView->GetSelection();
     USHORT     Pos        = STRING_NOTFOUND;
     xub_StrLen Max        = eSelection.nStartPos;
-    String     Text (pEditEngine->GetText(eSelection.nStartPara));
+    DBG_ASSERT( pEditEngine, "NULL pointer" );
+    String     Text( pEditEngine->GetText( eSelection.nStartPara ) );
     String     aMark (C2S("<?>"));
     USHORT     nCounts    = pEditEngine->GetParagraphCount();
 
@@ -660,7 +753,7 @@ void SmEditWindow::SelPrevMark()
         if (Pos == STRING_NOTFOUND)
         {
             eSelection.nStartPara--;
-            Text = pEditEngine->GetText(eSelection.nStartPara);
+            Text = pEditEngine->GetText( eSelection.nStartPara );
             Max = Text.Len();
         }
     }
@@ -681,37 +774,38 @@ BOOL SmEditWindow::HasMark(const String& rText) const
 
 void SmEditWindow::MouseMove(const MouseEvent &rEvt)
 {
-    if (pEditView) pEditView->MouseMove(rEvt);
+    if (pEditView)
+        pEditView->MouseMove(rEvt);
 }
 
 BOOL SmEditWindow::Drop(const DropEvent& rEvt)
 {
-    return pEditView
-              ? (pEditView->Drop(rEvt))
-              : FALSE;
+    return pEditView ? pEditView->Drop( rEvt ) : FALSE;
 }
 
 BOOL SmEditWindow::QueryDrop(DropEvent& rEvt)
 {
-    return pEditView
-              ? pEditView->QueryDrop(rEvt)
-              : FALSE;
+    return pEditView ? pEditView->QueryDrop( rEvt ) : FALSE;
 }
 
 ESelection SmEditWindow::GetSelection() const
 {
-    DBG_ASSERT(pEditView, "Sm : NULL pointer");
-    return pEditView->GetSelection();
+    DBG_ASSERT( pEditView, "NULL pointer" );
+    ESelection eSel;
+    if (pEditView)
+        eSel = pEditView->GetSelection();
+    return eSel;
 }
 
 void SmEditWindow::SetSelection(const ESelection &rSel)
 {
-    DBG_ASSERT(pEditView, "Sm : NULL pointer");
+    DBG_ASSERT( pEditView, "NULL pointer" );
     pEditView->SetSelection(rSel);
 }
 
 BOOL SmEditWindow::IsEmpty() const
 {
+    DBG_ASSERT( pEditEngine, "NULL pointer" );
     return pEditEngine->GetTextLen() == 0;
 }
 
@@ -747,7 +841,7 @@ void SmEditWindow::InsertText(const String& Text)
 
 void SmEditWindow::Flush()
 {
-    if ( pEditEngine && pEditEngine->IsModified() )
+    if (pEditEngine  &&  pEditEngine->IsModified())
     {
         pEditEngine->ClearModifyFlag();
         SmViewShell *pViewSh = SmGetActiveView();

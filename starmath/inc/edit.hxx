@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: tl $ $Date: 2001-03-08 09:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,17 +90,17 @@ class Menu;
 
 class SmEditWindow: public Window
 {
-    EditView     *pEditView;
-#if SUPD >= 602
-    SfxItemPool  *pEditEngineItemPool;
-#endif
-    EditEngine   *pEditEngine;
-    ScrollBar    *pHScrollBar,
-                 *pVScrollBar;
-    ScrollBarBox *pScrollBox;
-    Timer         aModifyTimer,
-                  aCursorMoveTimer;
-    ESelection    aOldSelection;
+    EditEngine     *pEditEngine;
+    SfxItemPool    *pEditEngineItemPool;
+    EditView       *pEditView;
+    ScrollBar      *pHScrollBar,
+                   *pVScrollBar;
+    ScrollBarBox   *pScrollBox;
+    Timer           aModifyTimer,
+                    aCursorMoveTimer;
+    ESelection      aOldSelection;
+    ESelection      aActiveSelection;   // to be restored/saved on
+                                        // activation/deactivation of the window
 
     virtual void KeyInput(const KeyEvent& rKEvt);
     virtual void Command(const CommandEvent& rCEvt);
@@ -121,40 +121,46 @@ class SmEditWindow: public Window
     DECL_LINK(EditStatusHdl ,EditStatus *);
     DECL_LINK(ScrollHdl, ScrollBar *);
 
-    void CreateEditEngine();
+    void        CreateEditView();
 
-    Rectangle AdjustScrollBars();
-    void SetScrollBarRanges();
-    void InitScrollBars();
-    void ImplSetFont();
+    Rectangle   AdjustScrollBars();
+    void        SetScrollBarRanges();
+    void        InitScrollBars();
+    void        ImplSetFont();
+
+    void        SetEditEngine( EditEngine *pEng, SfxItemPool *pPool );
 
 public:
-    SmEditWindow(Window *pParent);
+    SmEditWindow( Window *pParent );
     ~SmEditWindow();
 
+    // Window
     virtual void        SetText(const XubString &rText);
     virtual XubString   GetText();
+    virtual void        GetFocus();
+    virtual void        LoseFocus();
 
-    ESelection  GetSelection() const;
-    void        SetSelection(const ESelection &rSel);
+    ESelection          GetSelection() const;
+    void                SetSelection(const ESelection &rSel);
 
-    BOOL IsEmpty() const;
-    BOOL IsSelected() const;
-    BOOL IsAllSelected() const;
-    void Cut();
-    void Copy();
-    void Paste();
-    void Delete();
-    void SelectAll();
-    void InsertText(const String &rText);
-    void InsertCommand(USHORT nCommand);
-    void MarkError(const Point &rPos);
-    void SelNextMark();
-    void SelPrevMark();
-    BOOL HasMark(const String &rText) const;
+    BOOL                IsEmpty() const;
+    BOOL                IsSelected() const;
+    BOOL                IsAllSelected() const;
+    void                Cut();
+    void                Copy();
+    void                Paste();
+    void                Delete();
+    void                SelectAll();
+    void                InsertText(const String &rText);
+    void                InsertCommand(USHORT nCommand);
+    void                MarkError(const Point &rPos);
+    void                SelNextMark();
+    void                SelPrevMark();
+    BOOL                HasMark(const String &rText) const;
 
-    void Flush();
+    void                Flush();
 };
+
 
 #endif
 
