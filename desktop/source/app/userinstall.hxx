@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:26:23 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 16:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
