@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtextcontroldialogs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:47:48 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 14:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,18 +71,23 @@
 #endif
 
 #ifndef _SVX_CHARDLG_HXX
-#include "chardlg.hxx"
+//#include "chardlg.hxx"
 #endif
 #ifndef _SVX_PARAGRPH_HXX
-#include "paragrph.hxx"
+//#include "paragrph.hxx"
 #endif
 #ifndef _EEITEM_HXX
 #include "eeitem.hxx"
 #endif
 #define ITEMID_TABSTOP      EE_PARA_TABS
 #ifndef _SVX_TABSTPGE_HXX
-#include "tabstpge.hxx"
+//#include "tabstpge.hxx"
 #endif
+
+#include "flagsdef.hxx"
+#include <svtools/intitem.hxx>
+
+#include <com/sun/star/uno/Sequence.hxx>
 
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
@@ -103,9 +108,9 @@ namespace svx
     {
         FreeResource();
 
-        AddTabPage( 1, SvxCharNamePage::Create, NULL );
-        AddTabPage( 2, SvxCharEffectsPage::Create, NULL );
-        AddTabPage( 3, SvxCharPositionPage::Create, NULL );
+        AddTabPage( RID_SVXPAGE_CHAR_NAME, NULL );
+        AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, NULL );
+        AddTabPage( RID_SVXPAGE_CHAR_POSITION, NULL );
     }
 
     //--------------------------------------------------------------------
@@ -116,18 +121,23 @@ namespace svx
     //--------------------------------------------------------------------
     void TextControlCharAttribDialog::PageCreated( USHORT _nId, SfxTabPage& _rPage )
     {
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+
         switch( _nId )
         {
-            case 1:
-                static_cast< SvxCharNamePage& >( _rPage ).SetFontList( m_aFontList );
+            case RID_SVXPAGE_CHAR_NAME:
+                aSet.Put (m_aFontList);
+                _rPage.PageCreated(aSet);
                 break;
 
-            case 2:
-                static_cast< SvxCharEffectsPage& > ( _rPage ).DisableControls( DISABLE_CASEMAP );
+            case RID_SVXPAGE_CHAR_EFFECTS:
+                aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
+                _rPage.PageCreated(aSet);
                 break;
 
-            case 3:
-                static_cast< SvxCharPositionPage& >( _rPage ).SetPreviewBackgroundToCharacter();
+            case RID_SVXPAGE_CHAR_POSITION:
+                aSet.Put( SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER) );
+                _rPage.PageCreated(aSet);
                 break;
         }
     }
@@ -141,16 +151,14 @@ namespace svx
     {
         FreeResource();
 
-        AddTabPage( 1, SvxStdParagraphTabPage::Create, SvxStdParagraphTabPage::GetRanges );
-        AddTabPage( 2, SvxParaAlignTabPage::Create, SvxParaAlignTabPage::GetRanges );
+        AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );
+        AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
 
         SvtCJKOptions aCJKOptions;
         if( aCJKOptions.IsAsianTypographyEnabled() )
-            AddTabPage( 3,  SvxAsianTabPage::Create, SvxAsianTabPage::GetRanges );
-        else
-            RemoveTabPage( 3 );
+            AddTabPage( RID_SVXPAGE_PARA_ASIAN );
 
-        AddTabPage( 4, SvxTabulatorTabPage::Create,   SvxTabulatorTabPage::GetRanges );
+        AddTabPage( RID_SVXPAGE_TABULATOR );
     }
 
     //--------------------------------------------------------------------
