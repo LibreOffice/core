@@ -59,17 +59,24 @@ Dim sDBField as String
 Dim i as Integer
 Dim oDBAccess as Object
 Dim oAddressDialog as Object
+Dim oAddressPilot as Object
 Dim oFields as Object
 Dim oDocSettings as Object
 
-	bDBFields = DialogModel.Optmerge.State  &apos;db oder PLatzhalter
+	bDBFields = DialogModel.Optmerge.State              &apos;database or placeholder
 
 	If bDBFields Then
 		oDBAccess = GetRegistryKeyContent(&quot;org.openoffice.Office.DataAccess/AddressBook/&quot;)
 		sAddressbook = oDBAccess.DataSourceName
-		If sAddressbook = &quot;&quot; Then
-			oAddressDialog = CreateUnoService(&quot;com.sun.star.ui.AddressBookSourceDialog&quot;)
-			oAddressDialog.Execute
+		
+		If sAddressbook = &quot;&quot; Then                       &apos;If there is no field mapping
+			If Not odBAccess.AutoPilotCompleted Then                 &apos;If the Mapping Pilot never ran
+				oAddressPilot = createUnoService(&quot;com.sun.star.ui.dialogs.AddressBookSourcePilot&quot;)
+				oAddressPilot.execute
+			Else
+				oAddressDialog = CreateUnoService(&quot;com.sun.star.ui.AddressBookSourceDialog&quot;)
+				oAddressDialog.execute
+			End If
 			oDBAccess = GetRegistryKeyContent(&quot;org.openoffice.Office.DataAccess/AddressBook/&quot;)
 			sAddressbook = oDBAccess.DataSourceName
 			If sAddressbook = &quot;&quot; Then
@@ -116,6 +123,8 @@ Dim oDocSettings as Object
 			sDBField = GetFieldname(oFields, sFoundContent)
 			If sDBField &lt;&gt; &quot;&quot; Then
 				InsertDBField(sAddressbook, Table, sDBField)
+			Else
+				InsertPlaceholder(sFoundContent)
 			End If
 		Else
 			InsertPlaceholder(sFoundContent)
@@ -161,7 +170,9 @@ End Sub
 
 Sub InsertPlaceholder(sColName as String)
 Dim oFieldMaster as Object
+Dim bCorrectField as Boolean
 	If sColname &lt;&gt; &quot;&quot; Then
+		bCorrectField = True
 		oFieldMaster = oDocument.createInstance(&quot;com.sun.star.text.TextField.JumpEdit&quot;)
 		Select Case sColName
 			Case &quot;Company&quot;
@@ -227,10 +238,12 @@ Dim oFieldMaster as Object
 			Case &quot;InviteParticipant&quot;
 				oFieldMaster.PlaceHolder = getResText(1350+31)
 			Case Else
-				oFieldMaster.PlaceHolder = sColName
+				bCorrectField = False
 		End Select
-		oFieldMaster.Hint = getResText(1350)
-		oBookText.InsertTextContent(oBookMarkCursor, oFieldMaster, True)
+		If bCorrectField Then
+			oFieldMaster.Hint = getResText(1350)
+			oBookText.InsertTextContent(oBookMarkCursor, oFieldMaster, True)
+		End If
 	End If
 End Sub
 </script:module>
