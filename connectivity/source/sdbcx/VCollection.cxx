@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 08:32:16 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 06:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,19 +218,19 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
                 pDescriptor->setNew(sal_False);
         }
 
-        sName = xNewName->getName();
-        if(m_aNameMap.find(sName) != m_aNameMap.end())
+        if(xNewName.is())
         {
-            OSL_ENSURE(0,"The descriptor was changed and is already in the list");
-            throw ElementExistException(sName,*this);
+            sName = xNewName->getName();
+            if(m_aNameMap.find(sName) == m_aNameMap.end()) // this may happen when the drived class included it itself
+                m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(sName,WeakReference< XNamed >(xNewName))));
+            // notify our container listeners
+            ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(sName), makeAny(xNewName), Any());
+            OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
+            while (aListenerLoop.hasMoreElements())
+                static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
         }
-
-        m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(sName,WeakReference< XNamed >(xNewName))));
-        // notify our container listeners
-        ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(sName), makeAny(xNewName), Any());
-        OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
-        while (aListenerLoop.hasMoreElements())
-            static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
+        else
+            throw SQLException();
     }
 }
 // -------------------------------------------------------------------------
