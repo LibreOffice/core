@@ -1,6 +1,75 @@
+News file for the dmake version that is hosted on the OpenOffice.org
+cvs. #i<number># denote issues tracked by the OpenOffice.org issue tracking
+system, see <http://qa.openoffice.org/issue_handling/project_issues.html>.
 
-dmake NEWS
+Version 4.3
+===========
+
+2004/10/07 Volker Quetschke (vq@openoffice.org)
+#i34746# Fix timestamp of phony targets with prerequisites.
+
+2004/07/11 Volker Quetschke (vq@openoffice.org)
+#i31255# Add verbose recipe echoing option (-vr).
+
+2004/07/06 Volker Quetschke (vq@openoffice.org)
+#i30779# Fix to allow dmake to echo recipe lines when inference is used
+to create files that are to be read by .INCLUDE.
+
+2004/04/01 Michael Meeks (mmeeks@openoffice.org)
+#i27319#, #i27981# Don't handle environment variables that begin with a
+'!', they are used by Cygwin internally and confuse dmake.
+
+2004/01/09 Dan Williams (fa@openoffice.org)
+#i17992# Allows the nesting of expressions and a much more complex syntax
+for dmake. It is now possible to nest expressions with () and any
+combination of || and &&.
+Example:
+.IF (("$(OS)"=="MACOSX"&&"$(COM)"=="GCC")||"$(OS)"=="LINUX") && "$(GUIBASE)"=="unx"
+...
+.ENDIF
+
+2003/10/19 Ken Foskey (waratah@openoffice.org)
+#i20504# Correct processing of .LIBRARY targets.
+
+2003/10/08 Chris Halls (haggai@openoffice.org)
+#i7800# Fix tempnam security problem.
+
+2003/03/08 Volker Quetschke (vq@openoffice.org)
+#i10910# Use the build-in tempnam function for MS VC6.
+
+2003/03/05 Volker Quetschke (vq@openoffice.org)
+#i11861# Switch to newer autotools autoconf 2.5x and automake 1.5 and
+add MinGW and MSVC to the configure buildable targets.
+
+2002/10/11 Ken Foskey (waratah@openoffice.org)
+Fix the "lost a child" problem. (Part II)
+
+2002/10/04 Ken Foskey (waratah@openoffice.org)
+Reworke the configure process.
+
+2002/04/10 Hans-Joachim Lankenau (hjs@openoffice.org)
+Don't search INCLUDEDIRS if the filename to be included starts at fs-root.
+
+2001/05/29 Patrick Luby (pluby@openoffice.org)
+Added forceful exit to avoid infinite loop that sometimes occurs when
+there is a fatal error. Lost a child problem. (Part I)
 
 Version 4.2
+===========
+(Note, the dmake -V output was not changed and still said
+"Version 4.10, PL 0". This propably should have been 4.1)
 
-* give dmake automake/autoconf -> configure
+2001/04/20 Martin Hollmichel (mh@openoffice.org)
+First autoconfiscation of dmake.
+
+2001/02/13 Hans-Joachim Lankenau (hjs@openoffice.org)
+Fix for leaving tmpfiles when building group targets.
+
+2000/09/22 Jens-Heiner Rechtien (hr@openoffice.org)
+Initial import of dmake into OpenOffice.org cvs
+
+before 2000/09/22 ?
+Add smaller/greater arithmetic for .IF conditions.
+
+1999/03/18 Hans-Joachim Lankenau (hjs@openoffice.org)
+Implement boolean expression "or".
