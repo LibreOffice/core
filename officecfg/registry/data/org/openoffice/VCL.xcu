@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:38:48 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,25 +409,25 @@
     </node>
     <node oor:name="he" oor:op="replace">
      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
+        <value>lucidagrande;nachlieli;tahoma;lucidasans;supplement;Andale Sans UI;arialunicodems;lucidasansunicode;interfaceuser;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
      </prop>
       <prop oor:name="SANS_UNICODE" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif</value>
+        <value>lucidagrande;lucidasans;arialunicodems;lucidasansunicode;tahoma;clearlyu;lucida;sansserif</value>
       </prop>
      <prop oor:name="CTL_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>lucidagrande;nachlieli;tahoma;lucidasans;arialunicodems</value>
      </prop>
      <prop oor:name="CTL_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>lucidagrande;nachlieli;tahoma;lucidasans;arialunicodems</value>
      </prop>
      <prop oor:name="CTL_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>lucidagrande;nachlieli;tahoma;lucidasans;arialunicodems</value>
      </prop>
      <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>lucidagrande;nachlieli;tahoma;lucidasans;arialunicodems</value>
      </prop>
      <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>Tahoma;Raanana;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>lucidagrande;nachlieli;tahoma;lucidasans;arialunicodems</value>
      </prop>
     </node>
     <node oor:name="th" oor:op="replace">
@@ -452,25 +452,25 @@
     </node>
     <node oor:name="ja-jp" oor:op="replace">
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;Kochi Gochi;Gothic;MS Mincho;HG Mincho J;HG Mincho L;HG Mincho;Mincho;MS PMincho;HG Mincho Light J;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;kochigothic;Gothic;MS Mincho;HG Mincho J;HG Mincho L;HG Mincho;Mincho;MS PMincho;HG Mincho Light J;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;Kochi Gochi;Gothic;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;kochigothic;gothic;msgothic;hggothic;HG Gothic B;HG Gothic;Gothic;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Andale Sans UI;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;Kochi Gochi;Gothic;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Andale Sans UI;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;kochigothic;gothic;msgothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>HG Mincho Light J;MS P 明朝;TLP明朝;LX明朝;東風明朝;Kochi Mincho;Mincho;Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+        <value>HG Mincho Light J;MS P 明朝;TLP明朝;LX明朝;東風明朝;kochimincho;mincho;Serif</value>
       </prop>
        <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;Kochi Gochi;Gothic;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;kochigothic;gothic;cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
        </prop>
        <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;Kochi Gochi;Gothic;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>HG Mincho Light J;MS P ゴシック;TLPゴシック;LXゴシック;東風ゴシック;kochigothic;gothic;cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
        </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>Andale Sans UI;HG Mincho Light J;MS UI Gothic;TLPゴシック;LXゴシック;東風ゴシック;Kochi Gochi;Gothic;gnu-unifont</value>
+        <value>Andale Sans UI;HG Mincho Light J;MS UI Gothic;TLPゴシック;LXゴシック;東風ゴシック;kochigothic;gothic;gnu-unifont</value>
       </prop>
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
         <value>HG Mincho Light J;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
@@ -641,7 +641,7 @@
         <value>썬굴림;SunGulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;SunGulim;Gulim;Roundgothic;Arial Unicode MS;Lucida Sans Unicode;Andale Sans UI;gnu-unifont;Tahoma</value>
+        <value>썬굴림;sungulim;gulim;roundgothic;arialunicodems;lucidasansunicode;andalesansui;gnu-unifont</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
         <value>썬굴림;SunGulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
@@ -974,7 +974,7 @@
       </node>
       <node oor:name="batang" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬바탕;sunbatang;썬굴림;sungulim;hymyeongjolightk;myeongjo;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬바탕;sunbatang;baekmukbatang;썬굴림;sungulim;hymyeongjolightk;myeongjo;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -997,7 +997,7 @@
       </node>
       <node oor:name="sunbatang" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬바탕;batang;myeongjo;sunbatang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;썬굴림;sungulim;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬바탕;batang;baekmukbatang;myeongjo;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;썬굴림;sungulim;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>바탕;Batang</value>
@@ -1020,7 +1020,7 @@
       </node>
       <node oor:name="batangche" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬바탕;sunbatang;썬굴림;sungulim;myeongjo;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;hymyeongjolightk;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬바탕;sunbatang;baekmukbatang;썬굴림;sungulim;myeongjo;batang;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;hymyeongjolightk;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -1825,7 +1825,7 @@
       </node>
       <node oor:name="dotum" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬돋움;sundotum;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬돋움;sundotum;baekmukdotum;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -1848,7 +1848,7 @@
       </node>
       <node oor:name="sundotum" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬돋움;dotum;dotumche;gulim;gulimche;roundgothic;kodig;썬굴림;sungulim;hygothicmedium;hygraphicmedium;hymyeongjolightk;haansoftdotum;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬돋움;baekmukdotum;dotum;dotumche;gulim;gulimche;roundgothic;kodig;썬굴림;sungulim;hygothicmedium;hygraphicmedium;hymyeongjolightk;haansoftdotum;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>돋움;Dotum</value>
@@ -1871,7 +1871,7 @@
       </node>
       <node oor:name="dotumche" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬돋움;sundotum;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬돋움;sundotum;baekmukdotum;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -1894,7 +1894,7 @@
       </node>
       <node oor:name="hygothic" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬돋움;sundotum;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬돋움;sundotum;baekmukdotum;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -1917,7 +1917,7 @@
       </node>
       <node oor:name="haansoftdotum" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬돋움;sundotum;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬돋움;sundotum;baekmukdotum;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -2469,7 +2469,7 @@
       </node>
       <node oor:name="gulim" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬굴림;sungulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬굴림;sungulim;baekmukgulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -2492,7 +2492,7 @@
       </node>
       <node oor:name="gulimche" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬굴림;sungulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬굴림;sungulim;baekmukgulim;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -2515,7 +2515,7 @@
       </node>
       <node oor:name="newgulim" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬굴림;sungulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬굴림;sungulim;gulimche;baekmukgulim;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -2538,7 +2538,7 @@
       </node>
       <node oor:name="gungsuh" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬궁서;sungungseo;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬궁서;sungungseo;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -2561,7 +2561,7 @@
       </node>
       <node oor:name="gungsuhche" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬궁서;sungungseo;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬궁서;sungungseo;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -2584,7 +2584,7 @@
       </node>
       <node oor:name="hygungso" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬궁서;sungungseo;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬궁서;sungungseo;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -2607,7 +2607,7 @@
       </node>
       <node oor:name="hyhaeseo" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬궁서;sungungseo;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬궁서;sungungseo;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -2975,7 +2975,7 @@
       </node>
       <node oor:name="hymyeongjolightk" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo;썬굴림;sungulim;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo;썬굴림;sungulim;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -2998,7 +2998,7 @@
       </node>
       <node oor:name="hymyeongjoextra" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬바탕;sunbatang;hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo;썬굴림;sungulim;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬바탕;sunbatang;baekmukbatang;hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo;썬굴림;sungulim;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3021,7 +3021,7 @@
       </node>
       <node oor:name="haansoftbatang" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬바탕;sunbatang;hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo;썬굴림;sungulim;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬바탕;sunbatang;baekmukbatang;hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo;썬굴림;sungulim;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3044,7 +3044,7 @@
       </node>
       <node oor:name="hysinmyeongjo" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬바탕;sunbatang;hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo;썬굴림;sungulim;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬바탕;sunbatang;baekmukbatang;hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo;썬굴림;sungulim;gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3067,7 +3067,7 @@
       </node>
       <node oor:name="sungulim" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬굴림;baekmukgulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>굴림;Gulim</value>
@@ -3090,7 +3090,7 @@
       </node>
       <node oor:name="sungungseo" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬궁서;gungsuh;gungsuhche;hygungsobold;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬궁서;gungsuh;gungsuhche;hygungsobold;썬바탕;썬굴림;sungulim;baekmukgulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>궁서;gungsuh</value>
@@ -3113,7 +3113,7 @@
       </node>
       <node oor:name="sunheadline" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬헤드라인;hyheadlinemedium;yetr;hygothicextra;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬헤드라인;hyheadlinemedium;baekmukheadline;yetr;hygothicextra;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>hy헤드라인m;hyheadlinemedium</value>
@@ -3136,7 +3136,7 @@
       </node>
       <node oor:name="hyheadline" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬헤드라인;sunheadline;hyheadlinemedium;yetr;hygothicextra;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬헤드라인;sunheadline;baekmukheadline;hyheadlinemedium;yetr;hygothicextra;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3159,7 +3159,7 @@
       </node>
       <node oor:name="yetr" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬헤드라인;sunheadline;hyheadlinemedium;yetr;hygothicextra;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬헤드라인;sunheadline;hyheadlinemedium;baekmukheadline;yetr;hygothicextra;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3182,7 +3182,7 @@
       </node>
       <node oor:name="hygothicextra" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬헤드라인;sunheadline;hyheadlinemedium;yetr;hygothicextra;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬헤드라인;sunheadline;hyheadlinemedium;baekmukheadline;yetr;hygothicextra;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3205,7 +3205,7 @@
       </node>
       <node oor:name="sunmokpan" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬목판;hy목판l;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬목판;hy목판l;썬바탕;썬굴림;sungulim;baekmukgulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>hy목판l</value>
@@ -3228,7 +3228,7 @@
       </node>
       <node oor:name="mdsol" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬목판;sunmokpan;썬목판;hy목판l;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬목판;sunmokpan;썬목판;hy목판l;썬바탕;썬굴림;sungulim;baekmukgulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>hy목판l</value>
@@ -3251,7 +3251,7 @@
       </node>
       <node oor:name="hy목판l" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬목판;sunmokpan;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬목판;sunmokpan;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;baekmukbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -3274,7 +3274,7 @@
       </node>
       <node oor:name="sunyeopseo" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>hy엽서l;hypostlight</value>
@@ -3297,7 +3297,7 @@
       </node>
       <node oor:name="hypost" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3320,7 +3320,7 @@
       </node>
       <node oor:name="mdgaesung" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3343,7 +3343,7 @@
       </node>
       <node oor:name="mdart" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3366,7 +3366,7 @@
       </node>
       <node oor:name="mdeasop" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3389,7 +3389,7 @@
       </node>
       <node oor:name="mdalong" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3412,7 +3412,7 @@
       </node>
       <node oor:name="magicr" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>sunyeopseo;썬엽서;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3435,7 +3435,7 @@
       </node>
       <node oor:name="hy엽서m" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬엽서;sunyeopseo;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬엽서;sunyeopseo;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3458,7 +3458,7 @@
       </node>
       <node oor:name="hy센스l" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬엽서;sunyeopseo;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬엽서;sunyeopseo;hypostlight;magicr;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3481,7 +3481,7 @@
       </node>
       <node oor:name="suncrystal" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬크리스탈;hy크리스탈m;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬크리스탈;hy크리스탈m;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>hy크리스탈m</value>
@@ -3504,7 +3504,7 @@
       </node>
       <node oor:name="hy크리스탈m" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬크리스탈;suncrystal;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬크리스탈;suncrystal;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -3527,7 +3527,7 @@
       </node>
       <node oor:name="sunsaemmul" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬샘물;hyshortsamulmedium;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬샘물;hyshortsamulmedium;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>hy얕은샘물m;hyshortsamulmedium</value>
@@ -3550,7 +3550,7 @@
       </node>
       <node oor:name="hyshortsamul" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>sunsaemmul;썬샘물;hyshortsamulmedium;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>sunsaemmul;썬샘물;hyshortsamulmedium;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3573,7 +3573,7 @@
       </node>
       <node oor:name="sunbaeksong" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬백송;hy백송b;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬백송;hy백송b;썬바탕;썬굴림;sungulim;baekmukgulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>hy백송b</value>
@@ -3596,7 +3596,7 @@
       </node>
       <node oor:name="hy백송b" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬백송;sunbaeksong;썬바탕;썬굴림;sungulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬백송;sunbaeksong;썬바탕;썬굴림;sungulim;baekmukgulim;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;hymyeongjolightk;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -3780,7 +3780,7 @@
       </node>
       <node oor:name="kodig" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>gulim;gulimche;썬돋움;sundotum;baekmukgulim;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -4378,7 +4378,7 @@
       </node>
       <node oor:name="ming" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -4401,7 +4401,7 @@
       </node>
       <node oor:name="mingli" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -4424,7 +4424,7 @@
       </node>
       <node oor:name="mingliu" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -4769,7 +4769,7 @@
       </node>
       <node oor:name="msunglighttc" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -4792,7 +4792,7 @@
       </node>
       <node oor:name="fzmingti" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -4838,7 +4838,7 @@
       </node>
       <node oor:name="myeongjo" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>썬굴림;sungulim;baekmukgulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -5298,7 +5298,7 @@
       </node>
       <node oor:name="pmingliu" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
@@ -5505,7 +5505,7 @@
       </node>
       <node oor:name="roundgothic" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>gulim;gulimche;썬돋움;sundotum;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>gulim;gulimche;썬돋움;sundotum;baekmukdotum;dotum;dotumche;roundgothic;kodig;andalesansui;썬굴림;sungulim;hymyeongjolightk;myeongjo;썬바탕;sunbatang;batang;batangche;gungsuh;gungsuhche;myeomjo;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value/>
