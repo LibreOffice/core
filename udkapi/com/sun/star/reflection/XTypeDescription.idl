@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeDescription.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 16:14:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,29 +76,35 @@
 
 //=============================================================================
 
-/** Reflects an IDL type.
+/** Reflects a UNOIDL entity.
 
-    @see XCompoundTypeDescription
-    @see XUnionTypeDescription
-    @see XArrayTypeDescription
+    @see XPublished
     @see XIndirectTypeDescription
     @see XEnumTypeDescription
+    @see XStructTypeDescription
+    @see XCompoundTypeDescription
     @see XInterfaceTypeDescription2
-    @see XInterfaceMemberTypeDescription
+    @see XInterfaceAttributeTypeDescription2
+    @see XInterfaceMethodTypeDescription
+    @see XConstantTypeDescription
+    @see XConstantsTypeDescription
+    @see XServiceTypeDescription2
+    @see XPropertyTypeDescription2
+    @see XSingletonTypeDescription2
 */
 published interface XTypeDescription : com::sun::star::uno::XInterface
 {
-    /** Returns the type class of the reflected type.
+    /** Returns the type class of the reflected UNOIDL entity.
 
         @return
-                typeclass of type
+                type class of the entity
     */
     com::sun::star::uno::TypeClass getTypeClass();
 
-    /** Returns the fully qualified name of the type.
+    /** Returns the fully qualified name of the UNOIDL entity.
 
         @return
-                fully qualified type name of the type
+                fully qualified name of the entity
     */
     string getName();
 };
