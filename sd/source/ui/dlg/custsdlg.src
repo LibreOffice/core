@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-03 22:52:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,10 +282,10 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ russian ] = "Θροξλόηξβΰςό οπξθηβξλόνσώ δεμξνρςπΰφθώ";
         Text[ polish ] = "Zastosuj indywidualny pokaz slajdσw";
         Text[ japanese ] = "–Ϊ“I•Κ½Χ²ΔήΌ®°‚Μg—p(~U)";
-        Text[ chinese_traditional ] = "¨Ο¥Ξ­Σ¤HªΊΒ²³ψ(~U)";
+        Text[ chinese_traditional ] = "±Δ¥Ξ¨Ο¥ΞªΜªΊ©ρ¬MΒ²³ψ§λΌv¤ω(~U)";
         Text[ arabic ] = "ΗΣΚΞΟΗγ ΪΡΦ ΚήΟνγν γΞΥΥ";
         Text[ greek ] = "Χρήση προσαρμοσμέν~ης παρουσίασης οθόνης";
-        Text[ korean ] = "°³ΐΞΐϋ ½½¶σΐΜµε Όξ ΐΜΏλ";
+        Text[ korean ] = "°³ΐΞΐϋ ½½¶σΐΜµε Όξ ΐΜΏλ(~U)";
         Text[ turkish ] = "Φzel ekran sunusunu kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Utilizar presentaciσn personalizada";
@@ -304,7 +304,7 @@ ModalDialog DLG_CUSTOMSHOW
     Text[ russian ] = "Οπξθηβξλόνΰÿ δεμξνρςπΰφθÿ";
     Text[ polish ] = "Indywidualne pokazy slajdσw";
     Text[ japanese ] = "–Ϊ“I•Κ½Χ²ΔήΌ®°";
-    Text[ chinese_traditional ] = "­Σ¤HΒ²³ψ";
+    Text[ chinese_traditional ] = "¨Ο¥ΞªΜªΊ©ρ¬MΒ²³ψ§λΌv¤ω";
     Text[ arabic ] = "ΪΡζΦ ΚήΟνγνΙ γΞΥΥΙ";
     Text[ greek ] = "Προσαρμοσμένη παρουσίαση οθόνης";
     Text[ korean ] = "°³ΐΞΐϋ ½½¶σΐΜµε Όξ";
@@ -477,7 +477,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text[ russian ] = "Ξοπεδελθςό οπξθηβξλόνσώ δεμξνρςπΰφθώ";
     Text[ polish ] = "Okrel indywidualne pokazy slajdσw";
     Text[ japanese ] = "–Ϊ“I•Κ½Χ²ΔήΌ®°‚Μ’θ‹`•t‚―";
-    Text[ chinese_traditional ] = "©wΈq­Σ¤HΒ²³ψ";
+    Text[ chinese_traditional ] = "³]©w¨Ο¥ΞªΜªΊ©ρ¬MΒ²³ψ§λΌv¤ω";
     Text[ arabic ] = "ΚΪΡνέ ΗαΪΡΦ ΗαΚήΟνγν ΗαγΞΥΥ";
     Text[ greek ] = "Ορισμός προσαρμοσμένης παρουσίασης οθόνης";
     Text[ korean ] = "°³ΐΞΐϋ ½½¶σΐΜµε Όξ Α¤ΐΗ";
@@ -486,6 +486,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text[ catalan ] = "Definir presentaciσn personalizada";
     Text[ finnish ] = "Mδδritδ mukautettu diaesitys";
 };
+
 
 
 
