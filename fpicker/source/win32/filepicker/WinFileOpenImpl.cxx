@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-16 14:03:12 $
+ *  last change: $Author: tra $ $Date: 2001-11-28 13:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,11 +326,22 @@ void SAL_CALL CWinFileOpenImpl::appendFilter( const OUString& aTitle, const OUSt
     throw(IllegalArgumentException, RuntimeException)
 {
     sal_Bool bRet = m_filterContainer->addFilter( aTitle, aFilter );
+
     if ( !bRet )
         throw IllegalArgumentException(
             OUString::createFromAscii("filter already exists"),
             static_cast< XFilePicker* >( m_FilePicker ),
             1 );
+
+    // #95345# see MSDN OPENFILENAME
+    // If nFilterIndex is zero and lpstrCustomFilter is NULL,
+    // the system uses the first filter in the lpstrFilter buffer.
+    // to reflect this we must set the filter index so that calls
+    // to getSelectedFilterIndex without explicitly calling
+    // setFilterIndex before does not return 0 which leads to a
+    // false state
+    if ( 0 == getSelectedFilterIndex() )
+        CFileOpenDialog::setFilterIndex( 1 );
 }
 
 //-----------------------------------------------------------------------------------------
