@@ -17,6 +17,17 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/writer		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter		\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver	\
+    $(DESTDIRBASICEXAMPLES)		 	\
+    $(DESTDIRBASICEXAMPLES)$/drawing 	\
+    $(DESTDIRBASICEXAMPLES)$/forms_and_controls	 	\
+    $(DESTDIRBASICEXAMPLES)$/sheet	 			\
+    $(DESTDIRBASICEXAMPLES)$/stock_quotes_updater	 	\
+    $(DESTDIRBASICEXAMPLES)$/text	 			\
+    $(DESTDIRBASICEXAMPLES)$/text$/creating_an_index 	\
+    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically 	\
     {$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLDIRLIST))}
 
 EXAMPLESLIST= \
@@ -26,14 +37,15 @@ EXAMPLESLIST= \
     $(DESTDIREXAMPLES)$/officeclient$/makefile.mk      		\
     $(DESTDIREXAMPLES)$/officeclient$/Makefile         		\
     $(DESTDIREXAMPLES)$/officeclient$/exports.dxp      		\
-    $(DESTDIRJAVAEXAMPLES)$/readme.txt		   		\
     $(DESTDIRJAVAEXAMPLES)$/draw$/SDraw.java	   		\
     $(DESTDIRJAVAEXAMPLES)$/draw$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/draw$/Makefile	  	 		\
+    $(DESTDIRJAVAEXAMPLES)$/draw$/README	  	 		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/SCalc.java		   	\
     $(DESTDIRJAVAEXAMPLES)$/calc$/EuroAdaption.java			\
     $(DESTDIRJAVAEXAMPLES)$/calc$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/Makefile	  	 		\
+    $(DESTDIRJAVAEXAMPLES)$/calc$/README	  	 		\
     $(DESTDIRJAVAEXAMPLES)$/writer$/SWriter.java	   		\
     $(DESTDIRJAVAEXAMPLES)$/writer$/StyleInitialization.java 	\
     $(DESTDIRJAVAEXAMPLES)$/writer$/TextDocumentStructure.java 	\
@@ -43,6 +55,7 @@ EXAMPLESLIST= \
     $(DESTDIRJAVAEXAMPLES)$/writer$/StyleCreation.java  		\
     $(DESTDIRJAVAEXAMPLES)$/writer$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/writer$/Makefile			\
+    $(DESTDIRJAVAEXAMPLES)$/writer$/README				\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.html		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.java		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/Makefile			\
@@ -57,7 +70,34 @@ EXAMPLESLIST= \
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/README		\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SCalcDemo.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SDrawDemo.java	\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SWriterDemo.java
+    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SWriterDemo.java	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/DocumentConverter.java	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/Makefile			\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/makefile.mk			\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/README			\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/DocumentLoader.java	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/Makefile		\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/makefile.mk		\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/DocumentSaver.java	\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/Makefile			\
+    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/makefile.mk		\
+    $(DESTDIRBASICEXAMPLES)$/index.html				\
+    $(DESTDIRBASICEXAMPLES)$/drawing$/dirtree.txt			\
+    $(DESTDIRBASICEXAMPLES)$/drawing$/importexportofasciifiles.sxd 	\
+    $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/beef.wmf	 	\
+    $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/burger.wmf	 	\
+    $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/burger_factory.sxw	\
+    $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/chicken.wmf 	\
+    $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/fish.wmf	 	\
+    $(DESTDIRBASICEXAMPLES)$/forms_and_controls$/vegetable.wmf	\
+    $(DESTDIRBASICEXAMPLES)$/sheet$/adapting_to_euroland.sxc 	\
+    $(DESTDIRBASICEXAMPLES)$/stock_quotes_updater$/stock.sxc 	\
+    $(DESTDIRBASICEXAMPLES)$/text$/creating_an_index$/index.sxw 	\
+    $(DESTDIRBASICEXAMPLES)$/text$/creating_an_index$/indexlist.txt	\
+    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/changing_appearance.sxw 		\
+    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/inserting_bookmarks.sxw 		\
+    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/replacing_text.sxw 		\
+    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/using_regular_expressions.sxw
 
 
 IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
@@ -81,6 +121,10 @@ $(DESTDIREXAMPLES)$/% : $(PRJ)$/examples$/cpp$/% $(DIRLIST) $(BIN)$/$(UDKNAME).z
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRJAVAEXAMPLES)$/% : $(PRJ)$/examples$/java$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRBASICEXAMPLES)$/% : $(PRJ)$/examples$/basic$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
