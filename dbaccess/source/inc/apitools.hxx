@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 06:41:30 $
+ *  last change: $Author: fs $ $Date: 2000-10-25 12:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,6 @@
 //= various typedefs
 //==================================================================================
 DECLARE_STL_VECTOR(::com::sun::star::uno::WeakReferenceHelper, OWeakRefArray);
-
-//==================================================================================
-//= various helper functions
-//==================================================================================
 
 //==================================================================================
 //= OSubComponent - a component which holds a hard ref to it's parent
@@ -213,6 +209,16 @@ template <class TYPE>
         return ::rtl::OUString::createFromAscii(implasciiname); \
     }   \
 
+#define IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
+    ::rtl::OUString SAL_CALL classname::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)   \
+    {   \
+        return getImplementationName_Static();  \
+    }   \
+    ::rtl::OUString SAL_CALL classname::getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException)    \
+    {   \
+        return ::rtl::OUString::createFromAscii(implasciiname); \
+    }   \
+
 #define IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     sal_Bool SAL_CALL classname::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
     {   \
@@ -227,6 +233,18 @@ template <class TYPE>
 
 #define IMPLEMENT_SERVICE_INFO_GETSUPPORTED1(classname, serviceasciiname)   \
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
+    {   \
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);   \
+        aSupported[0] = ::rtl::OUString::createFromAscii(serviceasciiname); \
+        return aSupported;  \
+    }   \
+
+#define IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(classname, serviceasciiname)    \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)  \
+    {   \
+        return getSupportedServiceNames_Static();   \
+    }   \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException)   \
     {   \
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);   \
         aSupported[0] = ::rtl::OUString::createFromAscii(serviceasciiname); \
@@ -252,6 +270,13 @@ template <class TYPE>
         return aSupported;  \
     }   \
 
+#define IMPLEMENT_SERVICE_INFO_CREATE_STATIC(classname) \
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   \
+        SAL_CALL classname::Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)  \
+    {   \
+        return static_cast< XServiceInfo* >(new classname(_rxORB)); \
+    }   \
+
 //----------------------------------------------------------------------------------
 // declare service info methods - no getImplementationName, so the class is abstract
 #define DECLARE_SERVICE_INFO_ABSTRACT() \
@@ -265,11 +290,25 @@ template <class TYPE>
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException); \
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException) \
 
+#define DECLARE_SERVICE_INFO_STATIC()   \
+    DECLARE_SERVICE_INFO(); \
+    static ::rtl::OUString SAL_CALL getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);   \
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);  \
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >    \
+        SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)    \
+
 //----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO1(classname, implasciiname, serviceasciiname) \
     IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1(classname, serviceasciiname)   \
+
+//----------------------------------------------------------------------------------
+#define IMPLEMENT_SERVICE_INFO1_STATIC(classname, implasciiname, serviceasciiname)  \
+    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(classname, implasciiname)    \
+    IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
+    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(classname, serviceasciiname)    \
+    IMPLEMENT_SERVICE_INFO_CREATE_STATIC(classname) \
 
 //----------------------------------------------------------------------------------
 #define IMPLEMENT_SERVICE_INFO2(classname, implasciiname, serviceasciiname1, serviceasciiname2) \
