@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:20:13 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ QueryBox DLG_PRT_FIELDNAME
     MESSAGE[ chinese_traditional ] = "Δζ¦μ¦WΊΩΏο¶µΑΩ³B©σ¨Ο¥Ξª¬ΊA΅C\n±z­n³s¦PΔζ¦μ¦WΊΩ¤@°_¦C¦L³o­ΣΐΙ®Χ΅S";
     MESSAGE[ arabic ] = "ΗαΞνΗΡ \"ΕΩεΗΡ ΗΣγ ΗαΝήα\" δΤΨ.\nεα ΚΡνΟ ΨΘΗΪΙ ΗαγΣΚδΟ ΘΓΣγΗΑ ΗαΝήζαΏ";
     MESSAGE[ greek ] = "Η επιλογή όνομα πεδίου είναι ενεργοποιημένη.\nΘέλετε να εκτυπωθεί το έγγραφο μαζί με τα ονόματα των πεδίων;";
-    MESSAGE[ korean ] = "ΏΙΌΗ΅΅ΗΚµεΐΜΈ§ ΊΈΐΜ±β°΅ Θ°ΌΊΘ­µΗΎξ ΐΦ½ΐ΄Ο΄Ω.\nΗΚµε ΐΜΈ§°ϊ ΗΤ²² Ή®Ό­Έ¦ ΐΞΌβΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    MESSAGE[ korean ] = "ΏΙΌΗ΅΅ΗΚµε ΐΜΈ§ ΊΈΐΜ±β°΅ Θ°ΌΊΘ­µΗΎξ ΐΦ½ΐ΄Ο΄Ω.\nΗΚµε ΐΜΈ§°ϊ ΗΤ²² Ή®Ό­Έ¦ ΐΞΌβΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     MESSAGE[ turkish ] = "\"Alan adύnύ gφrόntόle\" seηeneπi etkin.\nBelgeyi alan adlarύyla yazdύrmak istiyor musunuz?";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "La opciσn nombre de campo estα activada. \nΏDesea imprimir el archivo con nombres de campo?";
@@ -281,7 +281,7 @@ QueryBox MSG_SEARCH_END
     Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤wΈg·j΄M¦ά¤ε¥σªΊµ²§τ¦μΈm΅C­nΔ~Δς·j΄M¦ά¤ε¥σªΊ°_©l¦μΈm΅H";
     Message[ arabic ] = "ήΗγ %PRODUCTNAME Writer ΘΗαΘΝΛ ΝΚμ δεΗνΙ ΗαγΣΚδΟ. εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ ΪδΟ ΘΟΗνΙ ΗαγΣΚδΟΏ";
     Message[ greek ] = "Το %PRODUCTNAME Writer ολοκλήρωσε την αναζήτηση ως το τέλος του εγγράφου. Θέλετε να συνεχιστεί η αναζήτηση από την αρχή του εγγράφου;";
-    Message[ korean ] = "%PRODUCTNAME Writer°΅ Ή®Ό­ΐΗ ³΅±ξΑφ °Λ»φΗί½ΐ΄Ο΄Ω. Ή®Ό­ΐΗ ½ΓΐΫΊΞΊΠΏ΅Ό­ΊΞΕΝ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Message[ korean ] = "%PRODUCTNAME Writer°΅ Ή®Ό­ΐΗ ³΅±ξΑφ °Λ»φΗί½ΐ΄Ο΄Ω. Ή®Ό­ΐΗ ½ΓΐΫΊΞΊΠΏ΅Ό­ °Λ»φΐ» °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "%PRODUCTNAME Writer belgenin sonuna kadar aramayύ tamamladύ. Belgenin baώύndan aramaya devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "%PRODUCTNAME Writer ha buscado hasta el final del documento. ΏDesea continuar la bϊsqueda desde el principio?";
@@ -310,7 +310,7 @@ QueryBox MSG_SEARCH_START
     Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤wΈg·j΄M¦ά¤ε¥σ°_©l¦μΈm΅C­nΔ~Δς·j΄M¦ά¤ε¥σªΊµ²§τ¦μΈm΅S";
     Message[ arabic ] = "ήΗγ %PRODUCTNAME Writer ΘΗαΘΝΛ ΝΚμ ΘΟΗνΙ ΗαγΣΚδΟ. εα ΚΡνΟ γΚΗΘΪΙ ΗαΘΝΛ ΪδΟ δεΗνΙ ΗαγΣΚδΟΏ";
     Message[ greek ] = "Το %PRODUCTNAME Writer ολοκλήρωσε την αναζήτηση ως την αρχή του εγγράφου. Θέλετε να συνεχιστεί η αναζήτηση από το τέλος του εγγράφου;";
-    Message[ korean ] = "%PRODUCTNAME Writer°΅ Ή®Ό­ΐΗ ½ΓΐΫΊΞΊΠ±ξΑφ °Λ»φΗί½ΐ΄Ο΄Ω. Ή®Ό­ΐΗ ³΅ΊΞΊΠΏ΅Ό­ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Message[ korean ] = "%PRODUCTNAME Writer°΅ Ή®Ό­ΐΗ ½ΓΐΫΊΞΊΠ±ξΑφ °Λ»φΗί½ΐ΄Ο΄Ω. Ή®Ό­ΐΗ ³΅ΊΞΊΠΏ΅Ό­ °Λ»φΐ» °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "%PRODUCTNAME Writer belgenin baώύna kadar aramayύ tamamladύ. Belgenin sonundan aramaya devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "%PRODUCTNAME Writer ha buscado hasta el principio del documento. ΏDesea continuar desde el final?";
@@ -335,7 +335,7 @@ InfoBox MSG_NO_MERGE_ENTRY
     Message[ chinese_traditional ] = "µLªk¦X¨Φ¤ε¥σ΅C";
     Message[ arabic ] = ".αγ νγίδ ΟγΜ ΓνΙ γΣΚδΟΗΚ";
     Message[ greek ] = "Η συγχώνευση δεν ήταν δυνατή.";
-    Message[ korean ] = "Ί΄ΗΥΐ» ΗΟΑφΈψΗί½ΐ΄Ο΄Ω.";
+    Message[ korean ] = "Ί΄ΗΥΐ» ΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
     Message[ turkish ] = "Belgeler birleώtirilemedi.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "No se pudieron fusionar los documentos.";
@@ -519,7 +519,7 @@ InfoBox MSG_INDEX_OVERFLOW
     Message[ chinese_traditional ] = "§δ¨μ΅C";
     Message[ arabic ] = ".ζΜφΟ ";
     Message[ greek ] = "βρέθηκε.";
-    Message[ korean ] = " Γ£ΎÒΐ½.";
+    Message[ korean ] = "Γ£ΎÒ½ΐ΄Ο΄Ω.";
     Message[ turkish ] = "bulundu.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "encontrado.";
@@ -968,10 +968,10 @@ String STR_SAVEAS_SRC
     Text[ russian ] = "έκροξπς θρυξδνξγξ ςεκρςΰ...";
     Text[ polish ] = "Eksportuj tekst rσd³owy...";
     Text[ japanese ] = "Ώ°½Γ·½Δ‚π΄Έ½Ξί°Δ‚·‚ι(~E)...";
-    Text[ chinese_traditional ] = "Ώι¥X­μ©lΐΙ(~E)...";
+    Text[ chinese_traditional ] = "¶Χ¥X­μ©lΐΙ(~E)...";
     Text[ arabic ] = "ΚΥΟνΡ δΥ ΗαγΥΟΡ...";
     Text[ greek ] = "Εξαγωγή κειμένου προέλευσης...";
-    Text[ korean ] = "ΌÒ½ΊΕΨ½ΊΖ®΅΅³»ΊΈ³»±β(~E)...";
+    Text[ korean ] = "ΌÒ½ΊΕΨ½ΊΖ® ³»ΊΈ³»±β...";
     Text[ turkish ] = "Kaynak kodu dύώa aktar...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Exportar texto fuente...";
@@ -1230,6 +1230,7 @@ Menu MN_SRCVIEW_POPUPMENU
         };
     };
 };
+
 
 
 
