@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 17:48:01 $
+ *  last change: $Author: jbu $ $Date: 2001-10-11 15:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,6 +685,10 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
             delete mpInfoPrinter, mpInfoPrinter = NULL;
             ImplInitDisplay( NULL );
             return;
+        }
+        else
+        {
+            ImplGetServerGraphics();
         }
     }
 #endif

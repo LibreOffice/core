@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cp $ $Date: 2001-10-10 11:19:31 $
+ *  last change: $Author: jbu $ $Date: 2001-10-11 15:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,8 @@ void OutputDevice::ImplUpdateFontData( BOOL bNewFontLists )
 #ifndef REMOTE_APPSERVER
             // we need a graphics
             if ( ImplGetGraphics() )
+#else
+            if ( ImplGetServerGraphics() )
 #endif
             {
                 mpFontList->Clear();
