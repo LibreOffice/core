@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-06 10:37:16 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,14 +78,8 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_TABINDEX,               "TabIndex");
     PCR_CONSTASCII_STRING( PROPERTY_TAG,                    "Tag");
     PCR_CONSTASCII_STRING( PROPERTY_NAME,                   "Name");
-    PCR_CONSTASCII_STRING( PROPERTY_ROWCOUNT,               "RowCount");
-    PCR_CONSTASCII_STRING( PROPERTY_ROWCOUNTFINAL,          "IsRowCountFinal");
-    PCR_CONSTASCII_STRING( PROPERTY_FETCHSIZE,              "FetchSize");
     PCR_CONSTASCII_STRING( PROPERTY_VALUE,                  "Value");
     PCR_CONSTASCII_STRING( PROPERTY_TEXT,                   "Text");
-    PCR_CONSTASCII_STRING( PROPERTY_CANINSERT,              "CanInsert");
-    PCR_CONSTASCII_STRING( PROPERTY_CANUPDATE,              "CanUpdate");
-    PCR_CONSTASCII_STRING( PROPERTY_CANDELETE,              "CanDelete");
     PCR_CONSTASCII_STRING( PROPERTY_NAVIGATION,             "NavigationBarMode");
     PCR_CONSTASCII_STRING( PROPERTY_CYCLE,                  "Cycle");
     PCR_CONSTASCII_STRING( PROPERTY_CONTROLSOURCE,          "DataField");
@@ -93,23 +87,13 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_READONLY,               "ReadOnly");
     PCR_CONSTASCII_STRING( PROPERTY_ISREADONLY,             "IsReadOnly");
     PCR_CONSTASCII_STRING( PROPERTY_FILTER_CRITERIA,        "Filter");
-    PCR_CONSTASCII_STRING( PROPERTY_ISREQUIRED,             "IsRequired");
-    PCR_CONSTASCII_STRING( PROPERTY_AUTOINCREMENT,          "IsAutoIncrement");
-    PCR_CONSTASCII_STRING( PROPERTY_CACHESIZE,              "CacheSize");
-    PCR_CONSTASCII_STRING( PROPERTY_DATAENTRY,              "DataEntry");
-    PCR_CONSTASCII_STRING( PROPERTY_LASTDIRTY,              "LastUpdated");
-    PCR_CONSTASCII_STRING( PROPERTY_STATEMENT,              "Statement");
     PCR_CONSTASCII_STRING( PROPERTY_WIDTH,                  "Width");
-    PCR_CONSTASCII_STRING( PROPERTY_SEARCHABLE,             "IsSearchable");
     PCR_CONSTASCII_STRING( PROPERTY_MULTILINE,              "MultiLine");
     PCR_CONSTASCII_STRING( PROPERTY_TARGET_URL,             "TargetURL");
     PCR_CONSTASCII_STRING( PROPERTY_TARGET_FRAME,           "TargetFrame");
     PCR_CONSTASCII_STRING( PROPERTY_MAXTEXTLEN,             "MaxTextLen");
     PCR_CONSTASCII_STRING( PROPERTY_EDITMASK,               "EditMask");
     PCR_CONSTASCII_STRING( PROPERTY_SPIN,                   "Spin");
-    PCR_CONSTASCII_STRING( PROPERTY_DATE,                   "Date");
-    PCR_CONSTASCII_STRING( PROPERTY_TIME,                   "Time");
-    PCR_CONSTASCII_STRING( PROPERTY_STATE,                  "State");
     PCR_CONSTASCII_STRING( PROPERTY_TRISTATE,               "TriState");
     PCR_CONSTASCII_STRING( PROPERTY_HIDDEN_VALUE,           "HiddenValue");
     PCR_CONSTASCII_STRING( PROPERTY_BUTTONTYPE,             "ButtonType");
@@ -126,8 +110,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_EMPTY_IS_NULL,          "ConvertEmptyToNull");
     PCR_CONSTASCII_STRING( PROPERTY_LISTSOURCETYPE,         "ListSourceType");
     PCR_CONSTASCII_STRING( PROPERTY_LISTSOURCE,             "ListSource");
-    PCR_CONSTASCII_STRING( PROPERTY_SELECT_SEQ,             "SelectedItems");
-    PCR_CONSTASCII_STRING( PROPERTY_VALUE_SEQ,              "ValueItemList");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_SELECT_SEQ,     "DefaultSelection");
     PCR_CONSTASCII_STRING( PROPERTY_MULTISELECTION,         "MultiSelection");
     PCR_CONSTASCII_STRING( PROPERTY_ALIGN,                  "Align");
@@ -135,10 +117,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_TIME,           "DefaultTime");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULT_VALUE,          "DefaultValue");
     PCR_CONSTASCII_STRING( PROPERTY_DECIMAL_ACCURACY,       "DecimalAccuracy");
-    PCR_CONSTASCII_STRING( PROPERTY_CURSORSOURCE,           "DataSelection");
-    PCR_CONSTASCII_STRING( PROPERTY_CURSORSOURCETYPE,       "DataSelectionType");
-    PCR_CONSTASCII_STRING( PROPERTY_FIELDTYPE,              "Type");
-    PCR_CONSTASCII_STRING( PROPERTY_DECIMALS,               "Decimals");
     PCR_CONSTASCII_STRING( PROPERTY_REFVALUE,               "RefValue");
     PCR_CONSTASCII_STRING( PROPERTY_VALUEMIN,               "ValueMin");
     PCR_CONSTASCII_STRING( PROPERTY_VALUEMAX,               "ValueMax");
@@ -147,8 +125,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_ALLOWEDITS,             "AllowUpdates");
     PCR_CONSTASCII_STRING( PROPERTY_ALLOWDELETIONS,         "AllowDeletes");
     PCR_CONSTASCII_STRING( PROPERTY_MASTERFIELDS,           "MasterFields");
-    PCR_CONSTASCII_STRING( PROPERTY_ISPASSTHROUGH,          "IsPassThrough");
-    PCR_CONSTASCII_STRING( PROPERTY_QUERY,                  "Query");
     PCR_CONSTASCII_STRING( PROPERTY_LITERALMASK,            "LiteralMask");
     PCR_CONSTASCII_STRING( PROPERTY_VALUESTEP,              "ValueStep");
     PCR_CONSTASCII_STRING( PROPERTY_SHOWTHOUSANDSEP,        "ShowThousandsSeparator");
@@ -162,7 +138,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_TIMEMAX,                "TimeMax");
     PCR_CONSTASCII_STRING( PROPERTY_LINECOUNT,              "LineCount");
     PCR_CONSTASCII_STRING( PROPERTY_BOUNDCOLUMN,            "BoundColumn");
-    PCR_CONSTASCII_STRING( PROPERTY_FONT,                   "FontDescriptor");
     PCR_CONSTASCII_STRING( PROPERTY_BACKGROUNDCOLOR,        "BackgroundColor");
     PCR_CONSTASCII_STRING( PROPERTY_FILLCOLOR,              "FillColor");
     PCR_CONSTASCII_STRING( PROPERTY_TEXTCOLOR,              "TextColor");
@@ -193,50 +168,19 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_TEXTLINECOLOR,          "TextLineColor");
     PCR_CONSTASCII_STRING( PROPERTY_HELPURL,                "HelpURL");
     PCR_CONSTASCII_STRING( PROPERTY_RECORDMARKER,           "HasRecordMarker");
-    PCR_CONSTASCII_STRING( PROPERTY_BOUNDFIELD,             "BoundField");
-    PCR_CONSTASCII_STRING( PROPERTY_TREATASNUMERIC,         "TreatAsNumber");
-    PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_VALUE,        "EffectiveValue");
     PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_DEFAULT,      "EffectiveDefault");
     PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_MIN,          "EffectiveMin");
     PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_MAX,          "EffectiveMax");
-    PCR_CONSTASCII_STRING( PROPERTY_HIDDEN,                 "Hidden");
     PCR_CONSTASCII_STRING( PROPERTY_FILTERPROPOSAL,         "UseFilterValueProposal");
-    PCR_CONSTASCII_STRING( PROPERTY_FIELDSOURCE,            "FieldSource");
-    PCR_CONSTASCII_STRING( PROPERTY_TABLENAME,              "TableName");
-    PCR_CONSTASCII_STRING( PROPERTY_FILTERSUPPLIER,         "FilterSupplier");
-    PCR_CONSTASCII_STRING( PROPERTY_CURRENTFILTER,          "CurrentFilter");
-    PCR_CONSTASCII_STRING( PROPERTY_SELECTED_FIELDS,        "SelectedFields");
-    PCR_CONSTASCII_STRING( PROPERTY_SELECTED_TABLES,        "SelectedTables");
-    PCR_CONSTASCII_STRING( PROPERTY_THREADSAFE,             "ThreadSafe");
-    PCR_CONSTASCII_STRING( PROPERTY_ISFILTERAPPLIED,        "IsFilterApplied");
     PCR_CONSTASCII_STRING( PROPERTY_CURRSYM_POSITION,       "PrependCurrencySymbol");
-    PCR_CONSTASCII_STRING( PROPERTY_SOURCE,                 "Source");
-    PCR_CONSTASCII_STRING( PROPERTY_CURSORCOLOR,            "CursorColor");
-    PCR_CONSTASCII_STRING( PROPERTY_ALWAYSSHOWCURSOR,       "AlwaysShowCursor");
-    PCR_CONSTASCII_STRING( PROPERTY_DISPLAYSYNCHRON,        "DisplayIsSynchron");
-    PCR_CONSTASCII_STRING( PROPERTY_ISMODIFIED,             "IsModified");
-    PCR_CONSTASCII_STRING( PROPERTY_ISNEW,                  "IsNew");
-    PCR_CONSTASCII_STRING( PROPERTY_PRIVILEGES,             "Privileges");
     PCR_CONSTASCII_STRING( PROPERTY_COMMAND,                "Command");
     PCR_CONSTASCII_STRING( PROPERTY_COMMANDTYPE,            "CommandType");
-    PCR_CONSTASCII_STRING( PROPERTY_RESULTSET_CONCURRENCY,  "ResultSetConcurrency");
     PCR_CONSTASCII_STRING( PROPERTY_INSERTONLY,             "IgnoreResult");
-    PCR_CONSTASCII_STRING( PROPERTY_RESULTSET_TYPE,         "ResultSetType");
     PCR_CONSTASCII_STRING( PROPERTY_ESCAPE_PROCESSING,      "EscapeProcessing");
-    PCR_CONSTASCII_STRING( PROPERTY_APPLYFILTER,            "ApplyFilter");
-    PCR_CONSTASCII_STRING( PROPERTY_ISNULLABLE,             "IsNullable");
-    PCR_CONSTASCII_STRING( PROPERTY_ACTIVECOMMAND,          "ActiveCommand");
-    PCR_CONSTASCII_STRING( PROPERTY_ISCURRENCY,             "IsCurrency");
-    PCR_CONSTASCII_STRING( PROPERTY_NUMBER_FORMATS_SUPPLIER,"NumberFormatsSupplier");
-    PCR_CONSTASCII_STRING( PROPERTY_URL,                    "URL");
     PCR_CONSTASCII_STRING( PROPERTY_TITLE,                  "Title");
-    PCR_CONSTASCII_STRING( PROPERTY_ACTIVE_CONNECTION,      "ActiveConnection");
-    PCR_CONSTASCII_STRING( PROPERTY_SCALE,                  "Scale");
     PCR_CONSTASCII_STRING( PROPERTY_SORT,                   "Order");
     PCR_CONSTASCII_STRING( PROPERTY_DATASOURCE,             "DataSourceName");
     PCR_CONSTASCII_STRING( PROPERTY_DETAILFIELDS,           "DetailFields");
-    PCR_CONSTASCII_STRING( PROPERTY_REALNAME,               "RealName");
-    PCR_CONSTASCII_STRING( PROPERTY_CONTROLSOURCEPROPERTY,  "DataFieldProperty");
     PCR_CONSTASCII_STRING( PROPERTY_DEFAULTBUTTON,          "DefaultButton");
     PCR_CONSTASCII_STRING( PROPERTY_LISTINDEX,              "ListIndex");
     PCR_CONSTASCII_STRING( PROPERTY_HEIGHT,                 "Height");
@@ -271,6 +215,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/06/06 10:37:16  fs
+ *  #86837# +PROPERTY_IMAGEALIGN
+ *
  *  Revision 1.9  2001/06/06 08:14:59  fs
  *  #86096# +FontRelief/FontEmphasisMark/TextLineColor
  *
