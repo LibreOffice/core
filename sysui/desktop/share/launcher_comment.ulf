@@ -80,7 +80,7 @@ pt-BR = "Apresentação %PRODUCTNAME"
 th = "%PRODUCTNAME Präsentation"
 hi-IN = "%PRODUCTNAME Präsentation"
 sk = "Prezentácia %PRODUCTNAME"
-pt = "%PRODUCTNAME Pr�sentation"
+pt = "%PRODUCTNAME Präsentation"
 
 [draw]
 en = "%PRODUCTNAME Drawing"
@@ -166,6 +166,7 @@ th = "%PRODUCTNAME Formel"
 hi-IN = "%PRODUCTNAME Formel"
 sk = "Vzorec %PRODUCTNAME"
 pt = "%PRODUCTNAME Formel"
+
 
 
 
