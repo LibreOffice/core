@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:32:50 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,8 +241,8 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text[ polish ] = "BuŸka";
     Text[ portuguese_brazilian ] = "Forms";
     Text[ japanese ] = "´Ó°Ã¨ºÝ";
-    Text[ chinese_simplified ] = "¸÷Ê½Í¼°¸";
-    Text[ chinese_traditional ] = "¦U¦¡¹Ï®×";
+    Text[ chinese_simplified ] = "Çé¾wÍ¼°¸";
+    Text[ chinese_traditional ] = "±¡ºü¹Ï®×";
     Text[ arabic ] = "ÃÔßÇá";
     Text[ greek ] = "Emoticons";
     Text[ korean ] = "Çü»ó";
