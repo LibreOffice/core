@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParameterTypeInfo.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-08 15:38:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,17 +60,44 @@
  ************************************************************************/
 package com.sun.star.lib.uno.typeinfo;
 
+import com.sun.star.uno.Type;
 
 public class ParameterTypeInfo extends TypeInfo
 {
     protected int       m_index;
     protected String    m_methodName;
+    private final Type m_unoType; // @since UDK 3.2
 
-    public ParameterTypeInfo(String name, String methodName, int index, int flags)
+    /**
+       Create a parameter type info with a UNO type that cannot unambiguously be
+       represented as a Java&nbsp;1.2 type.
+
+       @param name the name of this parameter; must not be <code>null</code>
+
+       @param methodName the name of the method; must not be <code>null</code>
+
+       @param index the index among the parameters
+
+       @param flags any flags (<code>IN</code>, <code>OUT</code>,
+       <code>UNSIGNED</code>, <code>ANY</code>, <code>INTERFACE</code>)
+
+       @param unoType the exact UNO type; or <code>null</code> if the UNO type
+       is already unambiguously represented by the Java&nbsp;1.2 type
+
+       @since UDK 3.2
+     */
+    public ParameterTypeInfo(
+        String name, String methodName, int index, int flags, Type unoType)
     {
         super(name, flags);
         m_index = index;
         m_methodName = methodName;
+        m_unoType = unoType;
+    }
+
+    public ParameterTypeInfo(String name, String methodName, int index, int flags)
+    {
+        this(name, methodName, index, flags, null);
     }
 
     public String getMethodName()
@@ -97,6 +124,24 @@ public class ParameterTypeInfo extends TypeInfo
     public boolean isINOUT()
     {
         return (m_flags & (TypeInfo.IN | TypeInfo.OUT)) == (TypeInfo.IN | TypeInfo.OUT);
+    }
+
+    /**
+       Get the exact UNO type of this parameter type info, in case it cannot
+       unambiguously be represented as a Java&nbsp;1.2 type.
+
+       <p>If this is an out or in&ndash;out parameter, the UNO type must be a
+       sequence type, taking into account that such a parameter is represented
+       in Java as a parameter of array type.</p>
+
+       @return the exact UNO type of this parameter type info, or
+       <code>null</code> if the UNO type is already unambiguously represented by
+       the Java&nbsp;1.2 type
+
+       @since UDK 3.2
+     */
+    public final Type getUnoType() {
+        return m_unoType;
     }
 }
 
