@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 09:53:50 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 11:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,35 +272,22 @@ void DropListBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 
 sal_Int8 DropListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
 
-/*  [Beschreibung ]
-
-    Droppen eigentlich immer dann erlaubt, wenn von den selektieren
-    Objekten ine Stylesheet erstellt werden kann und der Dragvorgang
-    von der Selektion aus gestartet wurde.
-    Hier vereinfachend: Es liegen Daten im Clipboardformat der
-    Applikation vor. Cave mehrere Writer gleichzeitig!
+/*  [Description: ]
+    Drop is enabled as long as it is allowed to create a new style by example, i.e. to
+    create a style out of the current selection.
 */
 
 {
     if ( IsDropFormatSupported( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
     {
-        SvLBoxEntry* pEntry = GetEntry( rEvt.maPosPixel, TRUE );
-        if ( pPreDropEntry && ( pEntry != pPreDropEntry || rEvt.mbLeaving ) )
-        {
-            ShowTargetEmphasis( pPreDropEntry, FALSE );
-            pPreDropEntry = 0;
-        }
-        if ( pEntry && pEntry != pPreDropEntry && !rEvt.mbLeaving )
-        {
-            ShowTargetEmphasis( pEntry, TRUE );
-            pPreDropEntry = pEntry;
-        }
-        if ( !pEntry && pDialog->bNewByExampleDisabled || pEntry && pDialog->bUpdateByExampleDisabled )
+        // special case: page styles are allowed to create new styles by example
+        // but not allowed to be created by drag and drop
+        if( pDialog->nActFamily == SfxCommonTemplateDialog_Impl::SfxFamilyIdToNId( SFX_STYLE_FAMILY_PAGE ) ||
+                pDialog->bNewByExampleDisabled )
             return DND_ACTION_NONE;
         else
             return DND_ACTION_COPY;
     }
-
     return SvTreeListBox::AcceptDrop( rEvt );
 }
 
@@ -328,12 +315,7 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
             {
                 if ( pDocShell->GetFactory() == aDesc.maClassName )
                 {
-                    SvLBoxEntry* pEntry = GetEntry( rEvt.maPosPixel, TRUE );
-
-                    if ( pEntry && pEntry != pPreDropEntry )
-                        ShowTargetEmphasis( pEntry, FALSE );
-
-                    PostUserEvent( LINK( this, DropListBox_Impl, OnAsyncExecuteDrop ), pEntry );
+                    PostUserEvent( LINK( this, DropListBox_Impl, OnAsyncExecuteDrop ), 0 );
 
                     bFormatFound = sal_True;
                     nRet =  rEvt.mnAction;
@@ -350,16 +332,9 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 }
 
 
-IMPL_LINK( DropListBox_Impl, OnAsyncExecuteDrop, SvLBoxEntry*, pEntry )
+IMPL_LINK( DropListBox_Impl, OnAsyncExecuteDrop, SvLBoxEntry*, EMPTYARG )
 {
-    if ( pEntry )
-    {
-        pDialog->SelectStyle( GetEntryText( pEntry )  );
-        pDialog->ActionSelect( SID_STYLE_UPDATE_BY_EXAMPLE );
-    }
-    else
-        pDialog->ActionSelect( SID_STYLE_NEW_BY_EXAMPLE );
-
+    pDialog->ActionSelect( SID_STYLE_NEW_BY_EXAMPLE );
     return 0;
 }
 
@@ -1154,8 +1129,6 @@ String SfxCommonTemplateDialog_Impl::GetSelectedEntry() const
     if ( pTreeBox )
     {
         SvLBoxEntry* pEntry = pTreeBox->FirstSelected();
-        if( !pEntry )
-            pEntry = aFmtLb.GetPreDropEntry();
         if ( pEntry )
             aRet = pTreeBox->GetEntryText( pEntry );
     }
@@ -2280,7 +2253,7 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
 
     m_pFloat            ( pWindow ),
     m_bZoomIn           ( FALSE ),
-    m_aActionTbL        ( pWindow ),
+    m_aActionTbL        ( pWindow, this ),
     m_aActionTbR        ( pWindow, ResId( TB_ACTION ) )
 
 {
@@ -2857,4 +2830,48 @@ void SfxTemplateDialog::StateChanged( StateChangedType nStateChange )
     SfxDockingWindow::StateChanged( nStateChange );
 }
 
+/*-- 10.12.2003 11:44:35---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+DropToolBox_Impl::DropToolBox_Impl(Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog) :
+    ToolBox(pParent),
+    DropTargetHelper(this),
+    rParent(*pTemplateDialog)
+{
+}
+/*-- 10.12.2003 11:44:35---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+DropToolBox_Impl::~DropToolBox_Impl()
+{
+}
+/*-- 10.12.2003 11:44:35---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int8    DropToolBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    sal_Int8 nReturn = DND_ACTION_NONE;
+    USHORT nItemId = GetItemId( rEvt.maPosPixel );
+    if(USHRT_MAX != nItemId && !IsItemChecked( nItemId ))
+    {
+        SetCurItemId(nItemId);
+        GetSelectHdl().Call(this);
+    }
+    // special case: page styles are allowed to create new styles by example
+    // but not allowed to be created by drag and drop
+    if ( nItemId != SfxCommonTemplateDialog_Impl::SfxFamilyIdToNId( SFX_STYLE_FAMILY_PAGE )&&
+        IsDropFormatSupported( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) &&
+        !rParent.bNewByExampleDisabled )
+    {
+        nReturn = DND_ACTION_COPY;
+    }
+    return nReturn;
+}
+/*-- 10.12.2003 11:44:35---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int8    DropToolBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+     return rParent.aFmtLb.ExecuteDrop(rEvt);
+}
 
