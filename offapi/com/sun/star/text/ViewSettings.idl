@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewSettings.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:44 $
+ *  last change: $Author: os $ $Date: 2002-03-07 10:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,11 @@ service ViewSettings
     /** If this property is <TRUE/>, handles of drawing objects are visible.
      */
     [property] boolean SolidMarkHandles;
-
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/>, the vertical ruler is aligned to the right side
+     of the view and the vertical scrollbar is on the left.
+     */
+    [property] boolean IsVertRulerRightAligned;
 };
 
 //=============================================================================
@@ -259,6 +263,9 @@ service ViewSettings
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:44  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:44:27  mi
     moved from api
 
