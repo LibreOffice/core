@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:34:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1688,6 +1688,26 @@ void SwCntntFrm::MakeAll()
         }
 
     } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
+
+
+    // NEW: Looping Louie (Light). Should not be applied in balanced sections.
+    // Should only be applied if there is no better solution!
+    LOOPING_LOUIE_LIGHT( bMovedFwd && bMovedBwd && !IsInBalancedSection() &&
+                            (
+
+                                // --> FME 2005-01-26 #118572#
+                                ( bFtn && !FindFtnFrm()->GetRef()->IsInSct() ) ||
+                                // <--
+
+                                // --> FME 2005-01-27 #i33887#
+                                ( IsInSct() && bKeep )
+                                // <--
+
+                                // ... add your conditions here ...
+
+                            ),
+                         static_cast<SwTxtFrm&>(*this) );
+
 
     if ( pSaveFtn )
         delete pSaveFtn;
