@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:28:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,9 @@
 
 #define STYLE_PRE               101
 
-EditHTMLParser::EditHTMLParser( SvStream& rIn, SvKeyValueIterator* pHTTPHeaderAttrs, int bReadNewDoc )
+EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs, int bReadNewDoc )
     : SfxHTMLParser( rIn, bReadNewDoc )
+    , aBaseURL( rBaseURL )
 {
     pImpEditEngine = 0;
     pCurAnchor = 0;
@@ -815,12 +816,11 @@ void EditHTMLParser::AnchorStart()
 
         if ( aRef.Len() )
         {
-            // BaseURL muss gesetzt sein!
             String aURL = aRef;
             if ( aURL.Len() && ( aURL.GetChar( 0 ) != '#' ) )
             {
                 INetURLObject aTargetURL;
-                INetURLObject aRootURL( INetURLObject::GetBaseURL() );
+                INetURLObject aRootURL( aBaseURL );
                 aRootURL.GetNewAbsURL( aRef, &aTargetURL );
                 aURL = aTargetURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
             }
