@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:00:01 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ ModalDialog DLG_SNAPLINE
         Text [ finnish ] = "Sijainti" ;
         Text [ danish ] = "Placering" ;
         Text [ french ] = "Position" ;
-        Text [ swedish ] = "Placering" ;
+        Text [ swedish ] = "Position" ;
         Text [ dutch ] = "Positie" ;
         Text [ spanish ] = "Posición" ;
         Text [ english_us ] = "Position" ;
@@ -353,5 +353,6 @@ ModalDialog DLG_SNAPLINE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nuevo objeto de captura";
 };
+
 
 
