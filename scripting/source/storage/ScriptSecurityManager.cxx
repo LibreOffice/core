@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-04 17:39:39 $
+ *  last change: $Author: dfoster $ $Date: 2003-03-04 18:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,10 +380,14 @@ sal_Bool ScriptSecurityManager::checkPermission( const OUString & scriptStorageU
             }
             else
             {
+                OSL_TRACE( "permission refused - 1" );
                 Any aPermission;
                 security::RuntimePermission permission;
+                OSL_TRACE( "permission refused - 2" );
                 permission.Name = OUString::createFromAscii( "execute" ).concat( scriptStorageURL );
+                OSL_TRACE( "permission refused - 3" );
                 aPermission <<= permission;
+                OSL_TRACE( "permission refused - 4" );
                 throw security::AccessControlException(
                     OUString::createFromAscii( "ScriptSecurityManager::checkPermission: no execute permission for URL" ).concat( scriptStorageURL ),
                     Reference< XInterface > (), aPermission );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-04 12:33:33 $
+ *  last change: $Author: dfoster $ $Date: 2003-03-04 18:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,12 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
             }
 
         }
+        catch ( css::security::AccessControlException  & e )
+        {
+            // no execute permission
+            OSL_TRACE( "ScriptNameResolverImpl::resolve : AccessControlException " );
+            continue;
+        }
         catch ( beans::UnknownPropertyException & e )
         {
             OUString temp = OUSTR(
@@ -286,11 +292,6 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
                 "ScriptNameResolverImpl::resolve : PropertyVetoException " );
             throw RuntimeException( temp.concat( e.Message ),
                 Reference< XInterface > () );
-        }
-        catch ( css::security::AccessControlException  & e )
-        {
-            // no execute permission
-            OSL_TRACE( "ScriptNameResolverImpl::resolve : AccessControlException " );
         }
         catch ( lang::IllegalArgumentException  & e )
         {
@@ -365,7 +366,7 @@ Reference< storage::XScriptInfo >
 ScriptNameResolverImpl::resolveURIFromStorageID
 ( sal_Int32 sid, const ::rtl::OUString & docURI,
   const ::rtl::OUString& scriptURI )
-SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
+SAL_THROW ( ( lang::IllegalArgumentException, css::security::AccessControlException, RuntimeException ) )
 {
     Reference< storage::XScriptInfo > resolvedScriptInfo;
     scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
@@ -466,27 +467,12 @@ const ::rtl::OUString & docURI ) SAL_THROW ( ( RuntimeException, css::security::
                 scripting_constants::ScriptingConstantsPool::instance();
         // if we dealing with a document storage (ie. not user or share
         // we need to check the permission
-        try
+        if( ( sid != scriptingConstantsPool.USER_STORAGE_ID ) &&
+            ( sid != scriptingConstantsPool.SHARED_STORAGE_ID ) &&
+            ( xScriptSecurity->checkPermission( docURI,
+                OUString::createFromAscii( "execute" ) ) == true ) )
         {
-            if( ( sid != scriptingConstantsPool.USER_STORAGE_ID ) &&
-                ( sid != scriptingConstantsPool.SHARED_STORAGE_ID ) &&
-                ( xScriptSecurity->checkPermission( docURI,
-                    OUString::createFromAscii( "execute" ) ) == false ) )
-            {
-                OSL_TRACE( "ScriptNameResolverImpl::getStorageInstance: no permission for ID=%d", sid );
-                return xScriptInfoAccess;
-            }
-        }
-        catch ( lang::IllegalArgumentException & e )
-        {
-            OUString temp = OUSTR( "ScriptNameResolverImpl::getStorageInstance: " );
-            throw lang::IllegalArgumentException( temp.concat( e.Message ),
-                Reference< XInterface >(), e.ArgumentPosition );
-        }
-        catch ( css::security::AccessControlException & e )
-        {
-            OUString temp = OUSTR( "ScriptNameResolverImpl::getStorageInstance: " );
-            throw css::security::AccessControlException( temp.concat( e.Message ), Reference< XInterface >(), e.LackingPermission );
+            OSL_TRACE( "ScriptNameResolverImpl::getStorageInstance: got execute permission for ID=%d", sid );
         }
         Reference< storage::XScriptStorageManager > xScriptStorageManager( xInterface, UNO_QUERY_THROW );
         validateXRef( xScriptStorageManager,
@@ -497,6 +483,17 @@ const ::rtl::OUString & docURI ) SAL_THROW ( ( RuntimeException, css::security::
                       "ScriptNameResolverImpl::getStorageInstance: cannot get Script Storage service" );
         xScriptInfoAccess = Reference<
             storage::XScriptInfoAccess > ( xScriptStorage, UNO_QUERY_THROW );
+    }
+    catch ( lang::IllegalArgumentException & e )
+    {
+        OUString temp = OUSTR( "ScriptNameResolverImpl::getStorageInstance: " );
+        throw lang::IllegalArgumentException( temp.concat( e.Message ),
+            Reference< XInterface >(), e.ArgumentPosition );
+    }
+    catch ( css::security::AccessControlException & e )
+    {
+        OUString temp = OUSTR( "ScriptNameResolverImpl::getStorageInstance: AccessControlException " );
+        throw css::security::AccessControlException( temp.concat( e.Message ), Reference< XInterface >(), e.LackingPermission );
     }
     catch ( RuntimeException & re )
     {

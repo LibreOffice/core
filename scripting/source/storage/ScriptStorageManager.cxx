@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.23 $
+*  $Revision: 1.24 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-03-04 12:33:32 $
+*  last change: $Author: dfoster $ $Date: 2003-03-04 18:34:54 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -138,7 +138,7 @@ ScriptStorageManager::ScriptStorageManager( const Reference<
     }
     catch ( Exception & e )
     {
-        throw RuntimeException( OUSTR( "ScriptStorageManager::ScriptStorageManager: " ) + e.Message, Reference< XInterface >() );
+        throw RuntimeException( OUSTR( "ScriptStorageManager::ScriptStorageManager: " ).concat( e.Message ), Reference< XInterface >() );
     }
     OSL_ASSERT( m_count == 2 );
 }
@@ -426,22 +426,22 @@ throw ( RuntimeException, lang::IllegalArgumentException, css::security::AccessC
     {
         result = m_securityMgr.checkPermission( scriptStorageURI, permissionRequest );
     }
-    catch ( RuntimeException & e )
+    catch ( css::security::AccessControlException & e )
     {
-        throw RuntimeException(
-            OUSTR( "ScriptStorageManager::checkPermission: " ).concat(
-                e.Message ), Reference< XInterface >() );
+        throw css::security::AccessControlException(
+            OUSTR( "ScriptStorageManager::checkPermission: AccessControlException: " ).concat(
+                e.Message ), Reference< XInterface >(), e.LackingPermission );
     }
     catch ( lang::IllegalArgumentException & e )
     {
-        throw RuntimeException(
-            OUSTR( "ScriptStorageManager::checkPermission: " ).concat(
-                e.Message ), Reference< XInterface >() );
+        throw lang::IllegalArgumentException(
+            OUSTR( "ScriptStorageManager::checkPermission: IllegalArgumentException: " ).concat(
+                e.Message ), Reference< XInterface >(), e.ArgumentPosition );
     }
-    catch ( css::security::AccessControlException & e )
+    catch ( RuntimeException & e )
     {
         throw RuntimeException(
-            OUSTR( "ScriptStorageManager::checkPermission: " ).concat(
+            OUSTR( "ScriptStorageManager::checkPermission: RuntimeException: " ).concat(
                 e.Message ), Reference< XInterface >() );
     }
     return result;
