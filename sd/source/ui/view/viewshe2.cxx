@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 15:13:11 $
+ *  last change: $Author: cl $ $Date: 2001-05-03 10:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,11 +1379,6 @@ static rtl::OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
     }
 
     return aLines.makeStringAndClear();
-}
-
-
-static rtl::OUString createVisibleLayerString( const SetOfByte& rVisibleLayer )
-{
 }
 
 #define NUM_VIEW_SETTINGS 47
