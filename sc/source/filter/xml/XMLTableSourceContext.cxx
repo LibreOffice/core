@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableSourceContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-20 08:12:17 $
+ *  last change: $Author: sab $ $Date: 2001-06-25 12:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
         if(nPrefix == XML_NAMESPACE_XLINK)
         {
             if (aLocalName.compareToAscii(sXML_href) == 0)
-                sLink = sValue;
+                sLink = GetScImport().GetAbsoluteReference(sValue);
         }
         else if (nPrefix == XML_NAMESPACE_TABLE)
         {

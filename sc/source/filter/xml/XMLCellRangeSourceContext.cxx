@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCellRangeSourceContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:57:41 $
+ *  last change: $Author: sab $ $Date: 2001-06-25 12:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
                 rCellRangeSource.sFilterOptions = sValue;
             break;
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_HREF:
-                rCellRangeSource.sURL = sValue;
+                rCellRangeSource.sURL = GetScImport().GetAbsoluteReference(sValue);
             break;
             case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_COLUMN:
             {
