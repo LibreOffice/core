@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sigstruct.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:56 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #include <com/sun/star/util/DateTime.hpp>
 #endif
 
+#include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
+
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
@@ -76,11 +78,13 @@
 /*
  * signature status
  */
+/*
 #define STATUS_INIT         0
 #define STATUS_CREATION_SUCCEED     1
 #define STATUS_CREATION_FAIL        2
 #define STATUS_VERIFY_SUCCEED       3
 #define STATUS_VERIFY_FAIL      4
+*/
 
 /*
  * type of reference
@@ -107,7 +111,10 @@ typedef ::std::vector< SignatureReferenceInformation > SignatureReferenceInforma
 struct SignatureInformation
 {
     sal_Int32                       nSecurityId;
-    sal_Int32           nStatus;
+
+    //sal_Int32         nStatus;
+    ::com::sun::star::xml::crypto::SecurityOperationStatus nStatus;
+
     SignatureReferenceInformations  vSignatureReferenceInfors;
     rtl::OUString                   ouX509IssuerName;
     rtl::OUString                   ouX509SerialNumber;
@@ -124,7 +131,7 @@ struct SignatureInformation
     SignatureInformation( sal_Int32 nId )
     {
         nSecurityId = nId;
-        nStatus = STATUS_INIT;
+        nStatus = ::com::sun::star::xml::crypto::SecurityOperationStatus_STATUS_UNKNOWN;
     }
 };
 
