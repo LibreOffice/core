@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:14:06 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,15 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     // get argument (recorded macro)
                     SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FID_CHG_RECORD, sal_False );
                     BOOL bDo = TRUE;
+
+                    // xmlsec05:
+                    // getting real parent window when called from Security-Options TP
+                    Window* pParent;
+                    const SfxPoolItem* pParentItem;
+                    if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
+                        pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                    else
+                        pParent = NULL;
 
                     // desired state
                     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
