@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-04 10:38:29 $
+ *  last change: $Author: pb $ $Date: 2001-12-04 14:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2353,15 +2353,12 @@ ULONG SvtFileView_Impl::GetEntryPos( const OUString& rURL )
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32 &nIndex,
-                                            const OUString& rTitle,
-                                            sal_Bool bWrapAround )
+sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& rTitle, sal_Bool bWrapAround )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
     sal_uInt32 nEnd = maContent.size();
     sal_uInt32 nStart = nIndex;
-
     while ( nIndex < nEnd )
     {
         SortingData_Impl* pData = maContent[ nIndex ];
@@ -2373,7 +2370,7 @@ sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32 &nIndex,
     if ( bWrapAround )
     {
         nIndex = 0;
-        while ( nIndex <= nStart )
+        while ( nIndex < nEnd && nIndex <= nStart )
         {
             SortingData_Impl* pData = maContent[ nIndex ];
             if ( rTitle.compareTo( pData->GetLowerTitle(), rTitle.getLength() ) == 0 )
