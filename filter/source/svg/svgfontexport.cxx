@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfontexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2003-12-15 13:57:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 
 #include "svgfontexport.hxx"
 
-static const sal_uInt32 nFontEM = 1024;
+static const sal_uInt32 nFontEM = 2048;
 
 // -----------------
 // - SVGFontExport -
@@ -141,10 +141,11 @@ void SVGFontExport::implCollectGlyphs()
 
                 if( aText.getLength() )
                 {
-                    const sal_Unicode* pStr = aText.getStr();
+                    const String&       rFontName = aVDev.GetFont().GetName();
+                    const sal_Unicode*  pStr = aText.getStr();
 
                     for( sal_uInt32 i = 0, nLen = aText.getLength(); i < nLen; ++i )
-                        maGlyphs[ aVDev.GetFont().GetName() ].insert( pStr[ i ] );
+                        maGlyphs[ rFontName ].insert( pStr[ i ] );
                 }
             }
 
@@ -159,6 +160,7 @@ void SVGFontExport::implCollectGlyphs()
 
 void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std::set< sal_Unicode >& rGlyphs )
 {
+#ifdef _SVG_EMBED_FONTS
     ::std::set< sal_Unicode >::const_iterator   aIter( rGlyphs.begin() );
     const ::rtl::OUString                       aEmbeddedFontStr( B2UCONST( "EmbeddedFont_" ) );
 
@@ -179,7 +181,7 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
         {
             SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "font", TRUE, TRUE );
             Point               aPos;
-            Size                aSize( nFontEM >> 1, nFontEM );
+            Size                aSize( nFontEM, nFontEM );
             PolyPolygon         aMissingGlyphPolyPoly( Rectangle( aPos, aSize ) );
 
             aMissingGlyphPolyPoly.Move( 0, -nFontEM );
@@ -214,14 +216,16 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
             }
         }
     }
+#endif
 }
 
 // -----------------------------------------------------------------------------
 
 void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& rGlyphs )
 {
-    PolyPolygon     aPolyPoly;
-    ::rtl::OUString aStr( rGlyphs[ 0 ] );
+    PolyPolygon         aPolyPoly;
+    ::rtl::OUString     aStr( rGlyphs );
+    const sal_Unicode   nSpace = ' ';
 
     if( rOut.GetTextOutline( aPolyPoly, aStr ) )
     {
@@ -231,6 +235,10 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& r
             aBoundRect = Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( aStr ), 0 ) );
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "unicode", aStr );
+
+        if( rGlyphs[ 0 ] == nSpace )
+            aBoundRect = Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( sal_Unicode( 'x' ) ), 0 ) );
+
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", SVGActionWriter::GetValueString( aBoundRect.GetWidth() ) );
 
         {
@@ -267,8 +275,10 @@ void SVGFontExport::EmbedFonts()
 {
     ::rtl::OUString aRet( String( rFontName ).GetToken( 0, ';' ) );
 
+#ifdef _SVG_EMBED_FONTS
     if( mnCurFontId )
         aRet += B2UCONST( " embedded" );
+#endif
 
     return aRet;
 }
