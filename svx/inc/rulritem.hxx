@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rulritem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:04:30 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,24 +180,42 @@ public:
 
 struct SvxColumnDescription
 {
-    USHORT nStart;                     /* Spaltenbeginn */
-    USHORT nEnd;                       /* Spaltenende */
+    long nStart;                    /* Spaltenbeginn */
+    long nEnd;                      /* Spaltenende */
     BOOL   bVisible;                   /* Sichtbarkeit */
+
+    long nEndMin;         //min. possible position of end
+    long nEndMax;         //max. possible position of end
+
     SvxColumnDescription():
-        nStart(0), nEnd(0), bVisible(TRUE) {}
+        nStart(0), nEnd(0), nEndMin(0), nEndMax(0), bVisible(TRUE) {}
+
     SvxColumnDescription(const SvxColumnDescription &rCopy) :
-        nStart(rCopy.nStart), nEnd(rCopy.nEnd), bVisible(rCopy.bVisible) {}
-    SvxColumnDescription(USHORT start, USHORT end, BOOL bVis = TRUE):
-        nStart(start), nEnd(end), bVisible(bVis) {}
+        nStart(rCopy.nStart), nEnd(rCopy.nEnd),
+        nEndMin(rCopy.nEndMin), nEndMax(rCopy.nEndMax),
+        bVisible(rCopy.bVisible) {}
+
+    SvxColumnDescription(long start, long end, BOOL bVis = TRUE):
+        nStart(start), nEnd(end),
+        nEndMin(0), nEndMax(0), bVisible(bVis) {}
+
+    SvxColumnDescription(long start, long end,
+                        long endMin, long endMax, BOOL bVis = TRUE):
+        nStart(start), nEnd(end),
+        nEndMin(endMin), nEndMax(endMax),
+        bVisible(bVis) {}
+
     int operator==(const SvxColumnDescription &rCmp) const {
         return nStart == rCmp.nStart &&
             bVisible == rCmp.bVisible &&
-            nEnd == rCmp.nEnd;
+            nEnd == rCmp.nEnd &&
+            nEndMin == rCmp.nEndMin &&
+                nEndMax == rCmp.nEndMax;
     }
     int operator!=(const SvxColumnDescription &rCmp) const {
         return !operator==(rCmp);
     }
-    USHORT GetWidth() const { return nEnd - nStart; }
+    long GetWidth() const { return nEnd - nStart; }
 };
 
 // class SvxColumnItem ---------------------------------------------------
