@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconnct.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 
 #pragma hdrstop
 
+#include "fuconnct.hxx"
+
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
@@ -70,13 +72,15 @@
 #include <vcl/msgbox.hxx>
 #endif
 
-#include "fuconnct.hxx"
-#include "sdview.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "drawdoc.hxx"
 
-
-
+namespace sd {
 
 TYPEINIT1( FuConnectionDlg, FuPoor );
 
@@ -86,9 +90,13 @@ TYPEINIT1( FuConnectionDlg, FuPoor );
 |*
 \************************************************************************/
 
-FuConnectionDlg::FuConnectionDlg(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                    SdDrawDocument* pDoc, SfxRequest& rReq)
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuConnectionDlg::FuConnectionDlg (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     SfxItemSet aNewAttr( pDoc->GetPool() );
     pView->GetAttributes( aNewAttr );
@@ -121,4 +129,4 @@ FuConnectionDlg::FuConnectionDlg(SdViewShell* pViewSh, SdWindow* pWin, SdView* p
     pView->SetAttributes( *pArgs );
 }
 
-
+} // end of namespace sd
