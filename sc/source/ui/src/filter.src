@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 20:05:18 $
+ *  last change: $Author: obo $ $Date: 2001-06-05 22:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1435,18 +1435,18 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Filter criteria" ;
         Text[ english_us ] = "Filter criteria";
         Text[ portuguese ] = "Filter criteria";
-        Text[ russian ] = "Filter criteria";
+        Text[ russian ] = "Êğèòåğèè ôèëüòğà";
         Text[ greek ] = "Filter criteria";
         Text[ dutch ] = "Filter criteria";
-        Text[ french ] = "Filter criteria";
+        Text[ french ] = "Critères de filtre";
         Text[ spanish ] = "Criterios de filtro";
         Text[ finnish ] = "Filter criteria";
-        Text[ italian ] = "Filter criteria";
+        Text[ italian ] = "Criteri filtro";
         Text[ danish ] = "Filter criteria";
         Text[ swedish ] = "Filterkriterier";
         Text[ polish ] = "Kryteria filtrowania";
         Text[ portuguese_brazilian ] = "Filter criteria";
-        Text[ japanese ] = "Filter criteria";
+        Text[ japanese ] = "Ì¨ÙÀğŒ";
         Text[ korean ] = "Filter criteria";
         Text[ chinese_simplified ] = "É¸Ñ¡Ìõ¼ş";
         Text[ chinese_traditional ] = "¿z¿ï±ø¥ó";
@@ -3402,18 +3402,18 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "Filter criteria" ;
         Text[ english_us ] = "Filter criteria";
         Text[ portuguese ] = "Filter criteria";
-        Text[ russian ] = "Filter criteria";
+        Text[ russian ] = "Êğèòåğèè ôèëüòğà";
         Text[ greek ] = "Filter criteria";
         Text[ dutch ] = "Filter criteria";
-        Text[ french ] = "Filter criteria";
+        Text[ french ] = "Critères de filtre";
         Text[ spanish ] = "Criterios de filtro";
         Text[ finnish ] = "Filter criteria";
-        Text[ italian ] = "Filter criteria";
+        Text[ italian ] = "Criteri filtro";
         Text[ danish ] = "Filter criteria";
         Text[ swedish ] = "Filterkriterier";
         Text[ polish ] = "Kryteria filtrowania";
         Text[ portuguese_brazilian ] = "Filter criteria";
-        Text[ japanese ] = "Filter criteria";
+        Text[ japanese ] = "Ì¨ÙÀğŒ";
         Text[ korean ] = "Filter criteria";
         Text[ chinese_simplified ] = "É¸Ñ¡Ìõ¼ş";
         Text[ chinese_traditional ] = "¿z¿ï±ø¥ó";
