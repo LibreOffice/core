@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusearch.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,34 +59,44 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUSEARCH_HXX
-#define _SD_FUSEARCH_HXX
+#ifndef SD_FU_SEARCH_HXX
+#define SD_FU_SEARCH_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class SdOutliner;
 class SvxSearchItem;
 
-class FuSearch : public FuPoor
-{
- protected:
-    SdOutliner*     pSdOutliner;
-    BOOL            bOwnOutliner;
+namespace sd {
 
- public:
+class Outliner;
+
+class FuSearch
+    : public FuPoor
+{
+public:
     TYPEINFO();
 
-    FuSearch( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-              SdDrawDocument* pDoc, SfxRequest& rReq );
-    ~FuSearch();
+    FuSearch (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuSearch (void);
 
     void SearchAndReplace( const SvxSearchItem* pSearchItem );
 
-    SdOutliner* GetOutliner() const { return pSdOutliner; }
+    ::sd::Outliner* GetOutliner() const { return pSdOutliner; }
+
+protected:
+    ::sd::Outliner* pSdOutliner;
+    BOOL bOwnOutliner;
 };
 
-#endif // _SD_FUSEARCH_HXX
+} // end of namespace sd
+
+#endif
 
 
