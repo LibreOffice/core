@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:57:17 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "²Δ¤@­ΣΌvΉ³";
         QuickHelpText[ arabic ] = "ΗαΥζΡΙ ΗαΓζαμ";
         QuickHelpText[ greek ] = "Πρώτη εικόνα";
-        QuickHelpText[ korean ] = "First Image";
+        QuickHelpText[ korean ] = "ΓΉ΅΅ΐΜΉΜΑφ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Erstes Bild";
     };
@@ -156,7 +156,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "¤Ο¦V";
         QuickHelpText[ arabic ] = "Εαμ ΗαΞαέ";
         QuickHelpText[ greek ] = "Πίσω";
-        QuickHelpText[ korean ] = "Backwards";
+        QuickHelpText[ korean ] = "µΪ·Ξ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Rόckwδrts";
     };
@@ -186,7 +186,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "ΌΘ°±";
         QuickHelpText[ arabic ] = "ΕνήΗέ";
         QuickHelpText[ greek ] = "Διακοπή";
-        QuickHelpText[ korean ] = "Stop";
+        QuickHelpText[ korean ] = "Α¤Αφ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Stopp";
     };
@@ -215,7 +215,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "©ρ¬M";
         QuickHelpText[ arabic ] = "ΚΤΫνα";
         QuickHelpText[ greek ] = "Αναπαραγωγή";
-        QuickHelpText[ korean ] = "Play";
+        QuickHelpText[ korean ] = "ΐη»ύ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abspielen";
     };
@@ -244,7 +244,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "³Μ«α¤@­ΣΌvΉ³";
         QuickHelpText[ arabic ] = "ΗαΥζΡΙ ΗαΓΞνΡΙ";
         QuickHelpText[ greek ] = "Τελευταία εικόνα";
-        QuickHelpText[ korean ] = "Last Image";
+        QuickHelpText[ korean ] = "Έ¶ΑφΈ·΅΅ΐΜΉΜΑφ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Letztes Bild";
     };
@@ -283,7 +283,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "ΌvΉ³ΈΉ½X";
         QuickHelpText[ arabic ] = "Ρήγ ΗαΥζΡΙ";
         QuickHelpText[ greek ] = "Αριθμός εικόνας";
-        QuickHelpText[ korean ] = "Image Number";
+        QuickHelpText[ korean ] = "ΐΜΉΜΑφ΅΅ΉψΘ£!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Bildnummer";
     };
@@ -325,7 +325,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "Εγ¥ά«ωΔς®Ι¶΅";
         QuickHelpText[ arabic ] = "ΗαγΟΙ";
         QuickHelpText[ greek ] = "Διάρκεια";
-        QuickHelpText[ korean ] = "Duration";
+        QuickHelpText[ korean ] = "µπ½ΊΗΓ·ΉΐΜΌÒΏδ½Γ°£!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Anzeigedauer";
     };
@@ -707,7 +707,7 @@ DockingWindow FLT_WIN_ANIMATION
         < "ΗαΓήΥμ" ; > ;
     };
         QuickHelpText[ greek ] = "Πλήθος επαναλήψεων";
-        QuickHelpText[ korean ] = "Loop Count";
+        QuickHelpText[ korean ] = "΄Ω΅΅µΉΈ°΅΅Θ½Όφ!";
     StringList [ greek ] =
     {
             < "1" ; > ;
@@ -831,7 +831,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "¨Ο¥Ξª«¥σ";
         QuickHelpText[ arabic ] = "ΚΨΘνή ΗαίΗΖδ";
         QuickHelpText[ greek ] = "Εφαρμογή αντικειμένου";
-        QuickHelpText[ korean ] = "Apply Object";
+        QuickHelpText[ korean ] = "°³ΓΌ΅΅ΐϋΏλ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Objekt όbernehmen";
     };
@@ -867,7 +867,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "³ζΏW¨Ο¥Ξª«¥σ";
         QuickHelpText[ arabic ] = "ΚΨΘνή ΗαίΗΖδΗΚ ία Ϊαμ ΝΟε";
         QuickHelpText[ greek ] = "Εφαρμογή αντικειμένων μεμονωμένα";
-        QuickHelpText[ korean ] = "Apply Objects Individually";
+        QuickHelpText[ korean ] = "°³ΓΌΈ¦΅΅°³Ί°ΐϋΐΈ·Ξ΅΅ΐϋΏλ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Objekte einzeln όbernehmen";
     };
@@ -903,7 +903,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "§R°£·ν«eªΊΌvΉ³";
         QuickHelpText[ arabic ] = "ΝΠέ ΗαΥζΡΙ ΗαΝΗανΙ";
         QuickHelpText[ greek ] = "Διαγραφή τρέχων εικόνας";
-        QuickHelpText[ korean ] = "Delete Current Image";
+        QuickHelpText[ korean ] = "Ηφΐη΅΅ΐΜΉΜΑφ΅΅»θΑ¦!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aktuelles Bild lφschen";
     };
@@ -939,7 +939,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "§R°£©Ò¦³ªΊΌvΉ³";
         QuickHelpText[ arabic ] = "ΝΠέ ία ΗαΥζΡ";
         QuickHelpText[ greek ] = "Διαγραφή όλων των εικόνων";
-        QuickHelpText[ korean ] = "Delete All Images";
+        QuickHelpText[ korean ] = "Έπµη΅΅ΐΜΉΜΑφ΅΅»θΑ¦!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Alle Bilder lφschen";
     };
