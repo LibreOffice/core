@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_keysym.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-17 11:11:20 $
+ *  last change: $Author: vg $ $Date: 2001-05-18 15:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ KeysymToUnicode (KeySym nKeySym)
     if (n_byte2 != 0)
         return 0;
 
-    keymap_t* p_map = NULL;
+    keymap_t const* p_map = NULL;
     if (n_byte3 < INITIAL_KEYMAPS)
         p_map = p_keymap[n_byte3];
     else
