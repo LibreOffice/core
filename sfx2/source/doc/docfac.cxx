@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:26:41 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,11 +177,8 @@ struct SfxObjectFactory_Impl
 
 //========================================================================
 
-SfxFilterContainer* SfxObjectFactory::GetFilterContainer(
-    sal_Bool bForceLoad ) const
+SfxFilterContainer* SfxObjectFactory::GetFilterContainer( sal_Bool bForceLoad ) const
 {
-    if( bForceLoad )
-        ((SfxObjectFactory *)this)->DoInitFactory();
     return pImpl->pFilterContainer;
 }
 
@@ -190,30 +187,6 @@ void SfxObjectFactory::RegisterInitFactory(SfxVoidFunc pFunc)
     pImpl->pInitFactory = pFunc;
     DoInitFactory();
 }
-/*
-void SfxObjectFactory::RegisterFilter
-(
-    const String&       rName,          // Klartext-Name f"ur Anzeige im Dialog
-    const String&       rWildcard,      // Default-Wildcards
-    SfxFilterFlags      eType,          // SFX_FILTER_...
-    sal_uInt32               lFormat,        // Clipboard-Format
-    const String&       rMacType,       // 4-Byte-Type f"ur Apple Macintosh
-    const String&       rTypeName,      // String-Type f"ur OS/2
-    sal_uInt16              nIconId,        // Resource-Id f"ur Icon
-    const String&       rMimeType,
-    const String&       rUserData       // zum Wiedererkennen oder (frei verwendbar)
-)
-{
-    DBG_CHKTHIS(SfxObjectFactory, 0);
-    sal_uInt16 nDemo = SFX_APP()->GetDemoKind();
-
-    SfxFilter* pFilter = new SfxFilter(
-        rName, rWildcard, eType, lFormat, rMacType,
-        rTypeName, nIconId, rMimeType, pImpl->pFilterContainer, rUserData );
-    pImpl->pFilterContainer->AddFilter(
-        pFilter, pImpl->pFilterContainer->GetFilterCount() );
-}
-*/
 
 //--------------------------------------------------------------------
 
@@ -222,8 +195,6 @@ void SfxObjectFactory::DoInitFactory()
     if(!pImpl->bInitFactoryCalled)
     {
         pImpl->bInitFactoryCalled = sal_True;
-        // FilterContainer Landen
-        GetFilterCount( );
         (*pImpl->pInitFactory)();
         String aShortName( String::CreateFromAscii( pShortName ) );
         aShortName.ToLowerAscii();
@@ -244,14 +215,7 @@ void SfxObjectFactory::DoInitFactory()
     }
 }
 
-IMPL_LINK_INLINE( SfxObjectFactory, InitFactoryHdl, void*, EMPTYARG,
-{
-    SFX_APP()->Get_Impl()->aPendingInitFactories.Remove( this );
-    DoInitFactory();
-    return 0;
-}
-)
-
+/*
 sal_uInt16 SfxObjectFactory::GetFilterCount() const
 {
     ((SfxObjectFactory *)this)->DoInitFactory();
@@ -265,7 +229,7 @@ const SfxFilter* SfxObjectFactory::GetFilter(sal_uInt16 i) const
     ((SfxObjectFactory *)this)->DoInitFactory();
     return pImpl->pFilterContainer->GetFilter( i );
 }
-
+*/
 //--------------------------------------------------------------------
 
 SfxObjectShell *SfxObjectFactory::CreateObject(SfxObjectCreateMode eMode) const
@@ -320,8 +284,6 @@ SfxObjectFactory::SfxObjectFactory
 
     SfxApplication* pApp = SFX_APP();
     RegisterObjectFactory_Impl(*this);
-    pApp->InsertLateInitHdl( LINK( this, SfxObjectFactory, InitFactoryHdl ) );
-    pApp->Get_Impl()->aPendingInitFactories.Insert( this );
 }
 
 //--------------------------------------------------------------------
@@ -574,19 +536,23 @@ const SfxObjectFactory* SfxObjectFactory::GetFactory( const String& rFactoryURL 
     return pFactory;
 }
 */
+
 const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
 {
-    USHORT nFilterCount = pImpl->pFilterContainer->GetFilterCount();
-    USHORT nVersion = 0;
-    const SfxFilter *pFilter = NULL;
-    for( int n=0; n<nFilterCount; n++)
+    USHORT nVersion=0;
+    SfxFilterMatcher aMatcher ( String::CreateFromAscii( pShortName ) );
+    SfxFilterMatcherIter aIter( &aMatcher );
+    const SfxFilter *pFilter = 0;
+    const SfxFilter *pTemp = aIter.First();
+    while ( pTemp )
     {
-        const SfxFilter *pTemp = pImpl->pFilterContainer->GetFilter(n);
-        if( pTemp && pTemp->IsOwnFormat() && pTemp->IsOwnTemplateFormat() && ( pTemp->GetVersion() > nVersion ) )
+        if( pTemp->IsOwnFormat() && pTemp->IsOwnTemplateFormat() && ( pTemp->GetVersion() > nVersion ) )
         {
             pFilter = pTemp;
             nVersion = (USHORT) pTemp->GetVersion();
         }
+
+        pTemp = aIter.Next();
     }
 
     return pFilter;
@@ -632,38 +598,6 @@ void SfxObjectFactory::RegisterObjectFactory_Impl( SfxObjectFactory &rFac )
     GetObjFacArray_Impl().Insert( pFac, GetObjFacArray_Impl().Count() );
 }
 
-//--------------------------------------------------------------------
-/*
-USHORT SfxObjectFactory::GetObjectFactoryCount_Impl()
-{
-    return GetObjFacArray_Impl().Count();
-}
-
-//--------------------------------------------------------------------
-
-const SfxObjectFactory &SfxObjectFactory::GetObjectFactory_Impl(USHORT i)
-{
-    return *GetObjFacArray_Impl()[i];
-}
-
-const SfxObjectFactory& SfxObjectFactory::GetDefaultFactory()
-{
-    const SfxObjectFactory &rFactory = GetObjectFactory_Impl(0);
-    return rFactory;
-}
-
-sal_Bool SfxObjectFactory::HasObjectFactories()
-{
-    return ( GetObjFacArray_Impl().Count() != 0 );
-}
-
-SfxObjectFactoryArr_Impl&   SfxObjectFactory::GetObjFacArray_Impl()
-{
-    if ( !pObjFac )
-        pObjFac = new SfxObjectFactoryArr_Impl;
-    return *pObjFac;
-}
-*/
 String SfxObjectFactory::GetModuleName() const
 {
     SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
