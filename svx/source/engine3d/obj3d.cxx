@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-30 13:52:30 $
+ *  last change: $Author: mh $ $Date: 2001-07-31 11:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@
 #endif
 
 #ifndef _SVX_XGRSCIT_HXX
-#include "svx/xgrscit.hxx"
+#include "xgrscit.hxx"
 #endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
