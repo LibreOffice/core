@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-07 12:41:46 $
+ *  last change: $Author: aw $ $Date: 2002-01-11 11:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,19 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
                     {
                         // Nicht letzter Absatz
                         bDisableDown = FALSE;
+                    }
+
+                    // #96250# and #78665#
+                    // disable when first para and 2nd is not a title
+                    pPara = (Paragraph*) pList->First();
+                    if(!bDisableDown
+                        && pPara
+                        && 0 == pOutl->GetAbsPos(pPara)
+                        && pOutl->GetParagraphCount() > 1
+                        && 0 != pOutl->GetDepth(1))
+                    {
+                        // Needs to be disabled
+                        bDisableDown = TRUE;
                     }
 
                     delete pList;
