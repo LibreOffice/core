@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kso $ $Date: 2002-06-27 12:58:38 $
+#   last change: $Author: hr $ $Date: 2003-08-07 14:54:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 UCBHELPER_TARGET=ucbhelper
 
 # the major
-UCBHELPER_MAJOR=2
+UCBHELPER_MAJOR=3
 # the minor
 UCBHELPER_MINOR=0
 # the micro
