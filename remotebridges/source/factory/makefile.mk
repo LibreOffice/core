@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-13 16:06:20 $
+#   last change: $Author: hjs $ $Date: 2001-01-16 11:48:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,7 @@ COMP1TYPELIST=$(TARGET)
 COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 # ------------------------------------------------------------------
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
@@ -83,6 +81,13 @@ SLOFILES= \
     $(SLO)$/bridgefactory.obj\
     $(SLO)$/bridgeimpl.obj 
 
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/staticmbfactory.obj
+.ENDIF
+
 SHL1TARGET= $(TARGET)
 
 SHL1STDLIBS= \
@@ -92,7 +97,7 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB) \
         $(RMCXTLIB)
 
-SHL1DEPN=
+#SHL1DEPN=
 SHL1IMPLIB=		i$(TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
@@ -103,3 +108,4 @@ DEF1EXPORTFILE=	exports.dxp
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
