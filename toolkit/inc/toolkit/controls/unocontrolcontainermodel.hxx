@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainermodel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: mt $ $Date: 2001-01-24 15:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,10 @@ protected:
     ::cppu::IPropertyArrayHelper&                                                   SAL_CALL getInfoHelper();
 
 public:
-             UnoControlContainerModel();
+                        UnoControlContainerModel();
+                        UnoControlContainerModel( const UnoControlContainerModel& rModel ) : UnoControlModel( rModel ) {;}
+
+    UnoControlModel*    Clone() const { return new UnoControlContainerModel( *this ); }
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);

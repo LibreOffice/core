@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 16:50:47 $
+ *  last change: $Author: mt $ $Date: 2001-01-24 14:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,6 +733,26 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
                 else
                     aDescr.WindowAttributes |= ::com::sun::star::awt::VclWindowPeerAttribute::NOBORDER;
             }
+        }
+
+        // Moveable
+        aPropName = GetPropertyName( BASEPROPERTY_MOVEABLE );
+        if ( xInfo->hasPropertyByName( aPropName ) )
+        {
+            aVal = xPSet->getPropertyValue( aPropName );
+            sal_Bool b;
+            if ( ( aVal >>= b ) && b)
+                aDescr.WindowAttributes |= ::com::sun::star::awt::WindowAttribute::MOVEABLE;
+        }
+
+        // Closeable
+        aPropName = GetPropertyName( BASEPROPERTY_CLOSEABLE );
+        if ( xInfo->hasPropertyByName( aPropName ) )
+        {
+            aVal = xPSet->getPropertyValue( aPropName );
+            sal_Bool b;
+            if ( ( aVal >>= b ) && b)
+                aDescr.WindowAttributes |= ::com::sun::star::awt::WindowAttribute::CLOSEABLE;
         }
 
         // Dropdown

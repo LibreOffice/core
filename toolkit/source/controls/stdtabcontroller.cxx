@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 11:07:20 $
+ *  last change: $Author: mt $ $Date: 2001-01-24 14:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ StdTabController::~StdTabController()
     DBG_ASSERT( rxCtrlModel.is(), "ImplFindControl - welches ?!" );
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > * pCtrls = rCtrls.getConstArray();
-    sal_uInt32 nCtrls = rCtrls.getLength();
+    sal_Int32 nCtrls = rCtrls.getLength();
     for ( sal_uInt32 n = 0; n < nCtrls; n++ )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xModel(pCtrls[n].is() ? pCtrls[n]->getModel() : ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > ());
@@ -151,7 +151,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence( ::com::sun::star::uno::S
     sal_Bool bOK = sal_True;
 
     // nur die wirklich geforderten Controls
-    sal_uInt32 nModels = rModels.getLength();
+    sal_Int32 nModels = rModels.getLength();
     if (nModels != rControls.getLength())
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > aSeq = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >(nModels);
@@ -159,8 +159,8 @@ sal_Bool StdTabController::ImplCreateComponentSequence( ::com::sun::star::uno::S
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >  xCurrentModel;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xCurrentControl;
 
-        sal_uInt32 nRealControls = 0;
-        for (sal_uInt32 n = 0; n < nModels; ++n)
+        sal_Int32 nRealControls = 0;
+        for (sal_Int32 n = 0; n < nModels; ++n)
         {
             xCurrentModel = pModels[n];
             xCurrentControl = ImplFindControl(rControls, xCurrentModel);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: mt $ $Date: 2001-01-24 15:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
 
 #ifndef _CPPUHELPER_WEAKAGG_HXX_
 #include <cppuhelper/weakagg.hxx>
@@ -111,6 +114,7 @@ class UnoControlModel : public ::com::sun::star::awt::XControlModel,
                         public ::com::sun::star::lang::XServiceInfo,
                         public ::com::sun::star::lang::XTypeProvider,
                         public ::com::sun::star::lang::XUnoTunnel,
+                        public ::com::sun::star::util::XCloneable,
                         public MutexAndBroadcastHelper,
                         public ::cppu::OPropertySetHelper,
                         public ::cppu::OWeakAggObject
@@ -129,7 +133,10 @@ protected:
 
 public:
                 UnoControlModel();
+                UnoControlModel( const UnoControlModel& rModel );
                 ~UnoControlModel();
+
+    virtual UnoControlModel*    Clone() const = 0;
 
     // ::com::sun::star::uno::XAggregation
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return OWeakAggObject::queryInterface(rType); }
@@ -142,6 +149,9 @@ public:
     static const ::com::sun::star::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
     static UnoControlModel*                                     GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
     sal_Int64                                                   SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::util::XCloneable
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XTypeProvider
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);

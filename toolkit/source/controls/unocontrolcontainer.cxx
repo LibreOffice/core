@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 11:07:20 $
+ *  last change: $Author: mt $ $Date: 2001-01-24 14:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ DECLARE_LIST( UnoControlHolderList, UnoControlHolder* );
 //  ----------------------------------------------------
 //  class UnoControlContainer
 //  ----------------------------------------------------
-UnoControlContainer::UnoControlContainer(): maCListeners( *this )
+UnoControlContainer::UnoControlContainer() : maCListeners( *this )
 {
     mpControls = new UnoControlHolderList;
 }
@@ -143,7 +143,7 @@ void UnoControlContainer::ImplActivateTabControllers()
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XUnoControlContainer*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XControlContainer*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::container::XContainer*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControl::queryAggregation( rType ));
+    return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
@@ -151,7 +151,7 @@ IMPL_XTYPEPROVIDER_START( UnoControlContainer )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView>* ) NULL ),
-    UnoControl::getTypes()
+    UnoControlBase::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 // ::com::sun::star::lang::XComponent
@@ -183,7 +183,7 @@ void UnoControlContainer::dispose(  ) throw(::com::sun::star::uno::RuntimeExcept
         pCtrls[n]->dispose();
     }
 
-    UnoControl::dispose();
+    UnoControlBase::dispose();
 }
 
 void UnoControlContainer::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException)
@@ -383,7 +383,7 @@ void UnoControlContainer::createPeer( const ::com::sun::star::uno::Reference< ::
     {
         sal_Bool bVis = maComponentInfos.bVisible;
         if( bVis )
-         UnoControl::setVisible( sal_False );
+            UnoControl::setVisible( sal_False );
         // eigenes Peer erzeugen
         UnoControl::createPeer( rxToolkit, rParent );
 
@@ -399,7 +399,7 @@ void UnoControlContainer::createPeer( const ::com::sun::star::uno::Reference< ::
         ImplActivateTabControllers();
 
         if( bVis )
-         UnoControl::setVisible( sal_True );
+            UnoControl::setVisible( sal_True );
     }
 }
 

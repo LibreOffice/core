@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pluby $ $Date: 2000-10-08 02:48:40 $
+#   last change: $Author: mt $ $Date: 2001-01-24 14:56:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
+            $(SLO)$/geometrycontrolmodel.obj        \
             $(SLO)$/stdtabcontroller.obj 			\
             $(SLO)$/stdtabcontrollermodel.obj 		\
             $(SLO)$/unocontrol.obj 					\

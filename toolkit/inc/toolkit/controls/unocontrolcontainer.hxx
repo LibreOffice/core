@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: mt $ $Date: 2001-01-24 15:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #endif
 
 #include <toolkit/controls/unocontrol.hxx>
+#include <toolkit/controls/unocontrolbase.hxx>
 
 class UnoControlHolderList;
 
@@ -85,7 +86,7 @@ class UnoControlHolderList;
 class UnoControlContainer : public ::com::sun::star::awt::XUnoControlContainer,
                             public ::com::sun::star::awt::XControlContainer,
                             public ::com::sun::star::container::XContainer,
-                            public UnoControl
+                            public UnoControlBase
 {
 private:
     UnoControlHolderList*                   mpControls;

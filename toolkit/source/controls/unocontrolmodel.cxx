@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 08:54:17 $
+ *  last change: $Author: mt $ $Date: 2001-01-24 14:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #endif
 
-
 #ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
 #include <com/sun/star/io/XMarkableStream.hpp>
 #endif
@@ -119,6 +118,8 @@
 #include <vcl/svapp.hxx>
 #include <tools/intn.hxx>
 
+using namespace ::com::sun::star;
+
 struct ImplPropertyInfo
 {
 private:
@@ -126,6 +127,11 @@ private:
     ::com::sun::star::uno::Any  aValue;
 
 public:
+    ImplPropertyInfo( const ImplPropertyInfo& rProp ) : aValue( rProp.aValue )
+    {
+        nId = rProp.nId;
+    }
+
     ImplPropertyInfo( sal_uInt16 nT )
     {
         nId = nT;
@@ -202,11 +208,30 @@ UnoControlModel::UnoControlModel()
     mpData = new ImplPropertyTable;
 }
 
+UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
+    : OPropertySetHelper( BrdcstHelper ), maDisposeListeners( *this )
+{
+    mpData = new ImplPropertyTable;
+
+    for ( sal_uInt32 n = rModel.mpData->Count(); n; )
+    {
+        ImplPropertyInfo* pProp = rModel.mpData->GetObject( --n );
+        ImplPropertyInfo* pNew = new ImplPropertyInfo( *pProp );
+        mpData->Insert( pNew->GetId(), pNew );
+    }
+}
+
 UnoControlModel::~UnoControlModel()
 {
-    for ( sal_uInt32 n = mpData->Count(); n--; )
-        delete mpData->GetObject( n );
+    for ( sal_uInt32 n = mpData->Count(); n; )
+        delete mpData->GetObject( --n );
     delete mpData;
+}
+
+UnoControlModel* UnoControlModel::Clone() const
+{
+    DBG_ERROR( "UnoControlModel::Clone() ?!" );
+    return NULL;
 }
 
 ::com::sun::star::uno::Sequence<sal_Int32> UnoControlModel::ImplGetPropertyIds() const
@@ -292,6 +317,9 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_VALUESTEP_DOUBLE: aDefault <<= (double ) 1;       break;
             case BASEPROPERTY_DEFAULTCONTROL:   aDefault <<= ((UnoControlModel*)this)->getServiceName();    break;
 
+            case BASEPROPERTY_MOVEABLE:
+            case BASEPROPERTY_CLOSEABLE:
+            case BASEPROPERTY_SIZEABLE:
             case BASEPROPERTY_HSCROLL:
             case BASEPROPERTY_DEFAULTBUTTON:
             case BASEPROPERTY_MULTILINE:
@@ -314,6 +342,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_EDITMASK:
             case BASEPROPERTY_LITERALMASK:
             case BASEPROPERTY_LABEL:
+            case BASEPROPERTY_TITLE:
             case BASEPROPERTY_TEXT:             aDefault <<= ::rtl::OUString(); break;
 
             case BASEPROPERTY_STRINGITEMLIST:
@@ -367,6 +396,7 @@ void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
                                         SAL_STATIC_CAST( ::com::sun::star::io::XPersistObject*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XComponent*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XServiceInfo*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::util::XCloneable*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::beans::XPropertyState*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::beans::XMultiPropertySet*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::beans::XFastPropertySet*, this ),
@@ -385,11 +415,20 @@ IMPL_XTYPEPROVIDER_START( UnoControlModel )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>* ) NULL )
 IMPL_XTYPEPROVIDER_END
+
+
+uno::Reference< util::XCloneable > UnoControlModel::createClone() throw(::com::sun::star::uno::RuntimeException)
+{
+    UnoControlModel* pClone = Clone();
+    uno::Reference< util::XCloneable > xClone( (::cppu::OWeakObject*) pClone, uno::UNO_QUERY );
+    return xClone;
+}
 
 // ::com::sun::star::lang::XComponent
 void UnoControlModel::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
