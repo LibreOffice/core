@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.47 $
+*  $Revision: 1.48 $
 *
-*  last change: $Author: obo $ $Date: 2004-11-17 13:00:31 $
+*  last change: $Author: obo $ $Date: 2004-11-17 15:08:04 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1192,12 +1192,48 @@ File gid_File_Oo_Office_Ui_Dbucommands_Xcu
     Name = "/registry/data/org/openoffice/Office/UI/DbuCommands.xcu";
 End
 
+File gid_File_Oo_Office_Ui_Basewindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/BaseWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Basewindowstate_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/BaseWindowState.xcu";
+End
+
 File gid_File_Oo_Office_Ui_Dbtablewindowstate_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/DbTableWindowState.xcs";
 End
+
+File gid_File_Oo_Office_Ui_Dbtablewindowstate_xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/DbTableWindowState.xcu";
+End
+
+File gid_File_Oo_Office_Ui_Dbbrowserwindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/DbBrowserWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Dbbrowserwindowstate_xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+    Name = "/registry/data/org/openoffice/Office/UI/DbBrowserWindowState.xcu";
+End
+
 
 File gid_File_Oo_Office_Ui_Dbquerywindowstate_Xcs
     TXT_FILE_BODY;
@@ -1206,34 +1242,27 @@ File gid_File_Oo_Office_Ui_Dbquerywindowstate_Xcs
     Name = "/registry/schema/org/openoffice/Office/UI/DbQueryWindowState.xcs";
 End
 
-File gid_File_Oo_Office_Ui_Dbrelationwindowstate_Xcs
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
-    Name = "/registry/schema/org/openoffice/Office/UI/DbRelationWindowState.xcs";
-End
-/*
-File gid_File_Oo_Office_Ui_Dbtablewindowstate_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
-    Name = "/registry/data/org/openoffice/Office/UI/DbTableWindowState.xcu";
-End
-
-File gid_File_Oo_Office_Ui_Dbquerywindowstate_Xcu
+File gid_File_Oo_Office_Ui_Dbquerywindowstate_xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbQueryWindowState.xcu";
 End
 
-File gid_File_Oo_Office_Ui_Dbrelationwindowstate_Xcu
+File gid_File_Oo_Office_Ui_Dbrelationwindowstate_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/DbRelationWindowState.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Dbrelationwindowstate_xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbRelationWindowState.xcu";
 End
-*/
+
 File gid_File_Oo_Office_Draw_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED);
