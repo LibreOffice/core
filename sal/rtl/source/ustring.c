@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-11-21 10:09:42 $
+ *  last change: $Author: th $ $Date: 2000-11-28 13:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,16 +651,23 @@ sal_Int32 SAL_CALL rtl_ustr_trim( sal_Unicode * str )
  */
 sal_Int32 SAL_CALL rtl_ustr_valueOfBoolean( sal_Unicode * str, sal_Bool b )
 {
-    if (b)
+    if ( b )
     {
-        sal_Unicode *tmpStr = L"True";
-        rtl_copyMemory(str, tmpStr, 5 * sizeof(sal_Unicode));
-        return 4;
-    } else
+        sal_Char TrueStr[] = "True";
+        sal_Int32 len = 4;
+        sal_Int32 i;
+        for ( i = 0; i < len+1; i++ )
+            *(str+i) = TrueStr[i];
+        return len;
+    }
+    else
     {
-        sal_Unicode *tmpStr = L"False";
-        rtl_copyMemory(str, tmpStr, 6 * sizeof(sal_Unicode));
-        return 5;
+        sal_Char FalseStr[] = "False";
+        sal_Int32 len = 5;
+        sal_Int32 i;
+        for ( i = 0; i < len+1; i++ )
+            *(str+i) = FalseStr[i];
+        return len;
     }
 }
 
@@ -670,7 +677,7 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfBoolean( sal_Unicode * str, sal_Bool b )
 sal_Int32 SAL_CALL rtl_ustr_valueOfChar( sal_Unicode * str, sal_Unicode ch )
 {
     str[0] = ch;
-    str[1] = L'\0';
+    str[1] = 0;
     return 1;
 }
 
@@ -756,7 +763,7 @@ sal_Int32 SAL_CALL numberToStringImpl(sal_Unicode * str, double d, sal_Int16 sig
      * (similar to Double.toString() in Java) */
     sal_Unicode buf[ RTL_USTR_MAX_VALUEOFDOUBLE ];
     sal_Unicode* charPos = buf;
-    sal_Int16 i, len, dig, dotPos, tmpDot;
+    sal_Int16 i, len, dig, dotPos;
     sal_Int16 lastNonZeroPos;
     sal_Int16 nExpDigits;
     sal_Bool bExp, bDotSet;
