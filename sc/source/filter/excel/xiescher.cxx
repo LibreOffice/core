@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:07:44 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include "xiescher.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
+#include <com/sun/star/awt/VisualEffect.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #endif
@@ -575,7 +578,8 @@ XclImpEscherTbxCtrl::XclImpEscherTbxCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 n
     mnScrollMax( 100 ),
     mnScrollStep( 1 ),
     mnScrollPage( 10 ),
-    mb3DStyle( true ),
+    mbFlatButton( false ),
+    mbFlatBorder( false ),
     mbScrollHor( false )
 {
 }
@@ -587,7 +591,7 @@ void XclImpEscherTbxCtrl::ReadCbls( XclImpStream& rStrm )
     rStrm.Ignore( 8 );
     rStrm >> nStyle;
     mnState &= EXC_OBJ_CBLS_STATEMASK;
-    mb3DStyle = ::get_flag( nStyle, EXC_OBJ_CBLS_3D );
+    mbFlatButton = ::get_flag( nStyle, EXC_OBJ_CBLS_FLAT );
 }
 
 void XclImpEscherTbxCtrl::ReadCblsFmla( XclImpStream& rStrm )
@@ -615,7 +619,7 @@ void XclImpEscherTbxCtrl::ReadLbsData( XclImpStream& rStrm )
     rStrm.Ignore( 2 );  // linked edit field
 
     mnSelType = nStyle & EXC_OBJ_LBS_SELMASK;
-    mb3DStyle = ::get_flag( nStyle, EXC_OBJ_LBS_3D );
+    mbFlatBorder = ::get_flag( nStyle, EXC_OBJ_LBS_FLAT );
 
     switch( mnCtrlType )
     {
@@ -642,7 +646,15 @@ void XclImpEscherTbxCtrl::ReadSbs( XclImpStream& rStrm )
     rStrm >> nStyle;
 
     mbScrollHor = ::get_flag( nOrient, EXC_OBJ_SBS_HORIZONTAL );
-    mb3DStyle = ::get_flag( nStyle, EXC_OBJ_SBS_3D );
+    mbFlatButton = ::get_flag( nStyle, EXC_OBJ_SBS_FLAT );
+}
+
+void XclImpEscherTbxCtrl::ReadGboData( XclImpStream& rStrm )
+{
+    sal_uInt16 nStyle;
+    rStrm.Ignore( 4 );
+    rStrm >> nStyle;
+    mbFlatBorder = ::get_flag( nStyle, EXC_OBJ_GBO_FLAT );
 }
 
 OUString XclImpEscherTbxCtrl::GetServiceName() const
@@ -669,6 +681,7 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
 {
     ::setPropBool( rxPropSet, CREATE_OUSTRING( "Printable" ), GetPrintable() );
 
+    namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
 
     // control name -----------------------------------------------------------
@@ -739,6 +752,9 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
             if( bCheckBox )
                 ::setPropBool( rxPropSet, CREATE_OUSTRING( "TriState" ), nApiState == 2 );
             ::setPropValue( rxPropSet, CREATE_OUSTRING( "DefaultState" ), nApiState );
+
+            sal_Int16 nApiBorder = mbFlatButton ? AwtVisualEffect::FLAT : AwtVisualEffect::LOOK3D;
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "VisualEffect" ), nApiBorder );
         }
         break;
 
@@ -747,7 +763,8 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
         case EXC_OBJ_CMO_LISTBOX:
         case EXC_OBJ_CMO_COMBOBOX:
         {
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), static_cast< sal_Int16 >( mb3DStyle ? 2 : 1 ) );
+            sal_Int16 nApiBorder = mbFlatBorder ? AwtVisualEffect::FLAT : AwtVisualEffect::LOOK3D;
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), nApiBorder );
 
             Sequence< sal_Int16 > aSelection;
 
@@ -801,7 +818,8 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
 
         case EXC_OBJ_CMO_SPIN:
         {
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), static_cast< sal_Int16 >( 0 ) );
+            // Calc's "Border" property is not the 3D/flat style effect in Excel (#i34712#)
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
             ::setPropValue( rxPropSet, CREATE_OUSTRING( "SpinValueMin" ), static_cast< sal_Int32 >( mnScrollMin ) );
             ::setPropValue( rxPropSet, CREATE_OUSTRING( "SpinValueMax" ), static_cast< sal_Int32 >( mnScrollMax ) );
             ::setPropValue( rxPropSet, CREATE_OUSTRING( "SpinIncrement" ), static_cast< sal_Int32 >( mnScrollStep ) );
@@ -818,7 +836,8 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
             sal_Int32 nApiOrient = mbScrollHor ? AwtScrollOrient::HORIZONTAL : AwtScrollOrient::VERTICAL;
             sal_Int32 nVisSize = std::min< sal_Int32 >( mnScrollPage, 1 );
 
-            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), static_cast< sal_Int16 >( 0 ) );
+            // Calc's "Border" property is not the 3D/flat style effect in Excel (#i34712#)
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "Border" ), AwtVisualEffect::NONE );
             ::setPropValue( rxPropSet, CREATE_OUSTRING( "ScrollValueMin" ), static_cast< sal_Int32 >( mnScrollMin ) );
             ::setPropValue( rxPropSet, CREATE_OUSTRING( "ScrollValueMax" ), static_cast< sal_Int32 >( mnScrollMax ) );
             ::setPropValue( rxPropSet, CREATE_OUSTRING( "LineIncrement" ), static_cast< sal_Int32 >( mnScrollStep ) );
@@ -838,7 +857,7 @@ void XclImpEscherTbxCtrl::Apply( ScfProgressBar& rProgress )
     {
         if( GetObjectManager().CreateSdrObj( *this ) )
         {
-            // form controls: set bound rect explicitely
+            // form controls: set bound rect explicitly
             mxSdrObj->NbcSetSnapRect( maAnchorRect );
             // #i30543# insert into control layer
             mxSdrObj->NbcSetLayer( SC_LAYER_CONTROLS );
@@ -1012,7 +1031,7 @@ void XclImpEscherOle::Apply( ScfProgressBar& rProgress )
         }
         else if( mxSdrObj->ISA( SdrUnoObj ) )
         {
-            // form controls: set bound rect explicitely
+            // form controls: set bound rect explicitly
             mxSdrObj->NbcSetSnapRect( maAnchorRect );
             // #i30543# insert into control layer
             mxSdrObj->NbcSetLayer( SC_LAYER_CONTROLS );
@@ -1360,9 +1379,8 @@ bool XclImpDffManager::CreateSdrOleObj( XclImpEscherOle& rOleObj )
         Graphic aGraph;
         if( GetBLIP( rOleObj.GetBlipId(), aGraph ) )
         {
-            SotStorageRef xSrc( GetRootStorage() );
-
             ErrCode nError = ERRCODE_NONE;
+            SotStorageRef xSrc = GetRootStorage();
             if( SdrOle2Obj* pOleSdrObj = CreateSdrOLEFromStorage(
                     rStorageName, xSrc, pDocShell->GetStorage(), aGraph, rAnchor, NULL, nError, mnOleImpFlags ) )
             {
@@ -1685,7 +1703,8 @@ void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
             case EXC_ID_OBJ_FTSBSFMLA:
             case EXC_ID_OBJ_FTLBSDATA:
             case EXC_ID_OBJ_FTCBLSFMLA:
-            case EXC_ID_OBJ_FTSBS:      ReadObjTbxSubRec( rStrm, nSubRecId );       break;
+            case EXC_ID_OBJ_FTSBS:
+            case EXC_ID_OBJ_FTGBODATA:  ReadObjTbxSubRec( rStrm, nSubRecId );       break;
         }
 
         rStrm.PopPosition();
@@ -1924,6 +1943,7 @@ void XclImpObjectManager::ReadObjTbxSubRec( XclImpStream& rStrm, sal_uInt16 nSub
             case EXC_ID_OBJ_FTSBSFMLA:  // equal to ftCblsFmla
             case EXC_ID_OBJ_FTCBLSFMLA: pCtrlObj->ReadCblsFmla( rStrm );    break;
             case EXC_ID_OBJ_FTSBS:      pCtrlObj->ReadSbs( rStrm );         break;
+            case EXC_ID_OBJ_FTGBODATA:  pCtrlObj->ReadGboData( rStrm );     break;
 
             default:    DBG_ERRORFILE( "XclImpObjectManager::ReadObjTbxSubRec - unknown subrecord" );
         }
