@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:01:07 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,8 @@ public:
     INLINE const SvxFrameDirectionItem  &GetFrmDir( BOOL = TRUE ) const;
     INLINE const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( BOOL = TRUE ) const;
+    // OD 18.09.2003 #i18732#
+    inline const SwFmtFollowTextFlow    &GetFollowTextFlow(BOOL = TRUE) const;
 
     // Grafik-Attribute - impl. steht im grfatr.hxx
     INLINE const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
