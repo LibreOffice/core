@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue_Test.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-19 16:09:53 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 12:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ public class JobQueue_Test {
             return "blabla";
         }
 
-        public Object syncCall(Object param) throws Exception{
+        public Object syncCall(Object param) throws Throwable {
             Object object =  doSomething(param);
 
             // send a request to ourself
@@ -229,7 +229,7 @@ public class JobQueue_Test {
         }
     }
 
-    static void sendSyncJobs(int jobs, JobQueue jobQueue, MyReceiver myReceiver, ThreadID threadID, MyInterface myImpl, Thread thread, Object context, boolean wait) throws Exception {
+    static void sendSyncJobs(int jobs, JobQueue jobQueue, MyReceiver myReceiver, ThreadID threadID, MyInterface myImpl, Thread thread, Object context, boolean wait) throws Throwable {
         // sending synchronous calls
         System.err.println("\tsending " + jobs + " synchrones calls...");
 
@@ -273,7 +273,7 @@ public class JobQueue_Test {
         }
     }
 
-    static public boolean test_without_thread() throws Exception { // this is like sending jobs from remote
+    static public boolean test_without_thread() throws Throwable { // this is like sending jobs from remote
         boolean passed[] = new boolean[]{true};
 
         System.err.println("doing test_without_thread ...");
@@ -306,7 +306,7 @@ public class JobQueue_Test {
         return passed[0];
     }
 
-    static public boolean test_with_thread() throws Exception {
+    static public boolean test_with_thread() throws Throwable {
         boolean passed[] = new boolean[]{true};
 
         System.err.println("doing test_with_thread ...");
@@ -343,7 +343,7 @@ public class JobQueue_Test {
 
 
 
-    static public boolean test_disposing() throws Exception {
+    static public boolean test_disposing() throws Throwable {
         boolean passed[] = new boolean[]{true};
 
         System.err.println("doing test_disposing ...");
@@ -391,7 +391,7 @@ public class JobQueue_Test {
     }
 
 
-    static public boolean test(Vector notpassed) throws Exception {
+    static public boolean test(Vector notpassed) throws Throwable {
         boolean passed = true;
 
         passed = passed && test_without_thread();
@@ -409,7 +409,7 @@ public class JobQueue_Test {
         return passed;
     }
 
-    static public void main(String args[]) throws Exception {
+    static public void main(String args[]) throws Throwable {
         if(args.length == 0)
             test(null);
 

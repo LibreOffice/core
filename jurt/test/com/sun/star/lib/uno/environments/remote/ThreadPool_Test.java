@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadPool_Test.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-17 10:13:07 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 12:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ public class ThreadPool_Test {
 
 //                  _myImpl.finish();
             }
-            catch(Exception exception) {
+            catch(Throwable exception) {
                 System.err.println("WorkerThread - exception:" + exception);
                 exception.printStackTrace();
             }
