@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageSelector.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:30:58 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,13 @@ public:
     */
     model::PageDescriptor* GetMostRecentlySelectedPage (void) const;
 
+    /** Return the anchor for a range selection.  This usually is the first
+        selected page after all pages have been deselected.
+        @return
+            The returned anchor may be NULL.
+    */
+    model::PageDescriptor* GetSelectionAnchor (void) const;
+
 
     typedef ::std::set<int> PageSelection;
 
@@ -195,6 +202,8 @@ private:
     int mnBroadcastDisableLevel;
     bool mbSelectionChangeBroadcastPending;
     model::PageDescriptor* mpMostRecentlySelectedPage;
+    /// Anchor for a range selection.
+    model::PageDescriptor* mpSelectionAnchor;
 
     void CountSelectedPages (void);
 };
