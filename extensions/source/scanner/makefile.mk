@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 19:34:33 $
+#   last change: $Author: rt $ $Date: 2004-05-21 13:56:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,7 @@ SRC1FILES=\
     grid.src
 
 RESLIB1NAME=san
+RESLIB1IMAGES=$(PRJ)$/source/scanner
 RESLIB1SRSFILES= $(SRS)$/scn.srs
 RESLIB1DEPN= sanedlg.src sanedlg.hrc grid.src grid.hrc
 .ENDIF
