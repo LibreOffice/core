@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:55:13 $
+ *  last change: $Author: hr $ $Date: 2003-06-16 11:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,12 +203,14 @@ public:
     inline VclListenerLock( VCLXWindow* _pLockWindow )
         :m_pLockWindow( _pLockWindow )
     {
-        DBG_ASSERT( m_pLockWindow, "VclListenerLock::VclListenerLock: invalid window!" );
-        m_pLockWindow->suspendVclEventListening( );
+//        DBG_ASSERT( m_pLockWindow, "VclListenerLock::VclListenerLock: invalid window!" );
+        if ( m_pLockWindow )
+            m_pLockWindow->suspendVclEventListening( );
     }
     inline ~VclListenerLock( )
     {
-        m_pLockWindow->resumeVclEventListening( );
+        if ( m_pLockWindow )
+            m_pLockWindow->resumeVclEventListening( );
     }
 
 private:
