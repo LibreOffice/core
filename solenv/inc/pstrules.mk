@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-18 13:46:39 $
+#   last change: $Author: hjs $ $Date: 2002-10-18 09:36:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -233,17 +233,6 @@ $(PAR)$/%.par :
     @+$(RM) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 
 .ENDIF			# "$(PARFILES)"!=""
-
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#+++++++++++	cppumaker rules		++++++++++++++++++++++++++++++++++++++++
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-$(UNOUCROUT)$/%.hpp : $(UNOUCRDEP)
-    +$(CPPUMAKER) $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) -T{$(subst,$/,. $(subst,$(UNOUCROUT)$/, $(@:db)))}  $(UNOUCRRDB)
-
-$(UNOUCROUT)$/%.hdl : $(UNOUCRDEP)
-    +$(CPPUMAKER) $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) -T{$(subst,$/,. $(subst,$(UNOUCROUT)$/, $(@:db)))}  $(UNOUCRRDB)
-
 
 .IF "$(TESTDIR)"!=""
 
