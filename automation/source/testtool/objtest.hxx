@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:49:38 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,6 @@
 #include <tools/fsys.hxx>
 #endif
 
-//#include <sbmeth.hxx>
-
 
 #include <testapp.hxx>
 #include <testtool.hxx>
@@ -75,11 +73,8 @@
 #ifndef _BASICRT_HXX
 #include <basic/basicrt.hxx>
 #endif
-#ifndef _BASIC_TESTTOOL_HXX_
-//#include <basic/testtool.hxx>
-#endif
 #ifndef _SMARTID_HXX_
-#include "smartid.hxx"
+#include <vcl/smartid.hxx>
 #endif
 
 
