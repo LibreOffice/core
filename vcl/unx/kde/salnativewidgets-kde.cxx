@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:37:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,12 +108,12 @@
 #include <salframe.h>
 #endif
 
-#ifndef _SV_KDEINT_HXX
-#include <kdeint.hxx>
-#endif
-
 #ifndef _SV_SETTINGS_HXX
 #include <settings.hxx>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _VCL_KDEDATA_HXX
@@ -404,12 +404,12 @@ WidgetPainter::~WidgetPainter( void )
     delete m_pLineEdit, m_pLineEdit = NULL;
     delete m_pSpinWidget, m_pSpinWidget = NULL;
     delete m_pSpinEdit, m_pSpinEdit = NULL;
-    delete m_pTabLeft, m_pTabLeft = NULL;
-    delete m_pTabMiddle, m_pTabMiddle = NULL;
-    delete m_pTabRight, m_pTabRight = NULL;
     delete m_pTabAlone, m_pTabAlone = NULL;
     delete m_pTabBarParent, m_pTabBarParent = NULL;
-    delete m_pTabBar, m_pTabBar = NULL;
+    m_pTabBar = NULL;    // Deleted in m_pTabBarParent's destructor
+    m_pTabLeft = NULL;
+    m_pTabMiddle = NULL;
+    m_pTabRight = NULL;
     delete m_pTabWidget, m_pTabWidget = NULL;
     delete m_pListView, m_pListView = NULL;
     delete m_pScrollBar, m_pScrollBar = NULL;
@@ -1428,9 +1428,28 @@ static void modifyFont( Font &rFont, const QFont &rQFont )
 {
     QFontInfo qFontInfo( rQFont );
 
-    rFont.SetName( String( qFontInfo.family().utf8(), RTL_TEXTENCODING_UTF8 ) );
+    // Prepend the KDE font, do not override
+    OUString aQFontName = String( rQFont.family().utf8(), RTL_TEXTENCODING_UTF8 );
+    OUString aFontName = rFont.GetName();
 
-    rFont.SetHeight( qFontInfo.pointSize() );
+    if ( aQFontName.getLength() > 0 &&
+         aFontName.compareTo( aQFontName, aQFontName.getLength() ) != 0 )
+    {
+        OUStringBuffer aBuffer( 1024 );
+        aBuffer.append( aQFontName );
+        aBuffer.appendAscii( ";", 1 );
+        aBuffer.append( aFontName );
+
+        rFont.SetName( aBuffer.makeStringAndClear() );
+    }
+
+    // QFontInfo should give the right point size, but sometimes it does not,
+    // it seems.
+    int nPointSize = qFontInfo.pointSize();
+    if ( nPointSize <= 0 )
+        nPointSize = rQFont.pointSize();
+    if ( nPointSize > 0 )
+        rFont.SetHeight( nPointSize );
 
     rFont.SetItalic( qFontInfo.italic()? ITALIC_NORMAL: ITALIC_NONE );
 

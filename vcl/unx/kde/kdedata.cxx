@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:37:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,9 @@ void KDEXLib::Init()
 
     KCmdLineArgs::init( nFakeArgc, pFakeArgv, kAboutData );
 
+    KApplication::disableAutoDcopRegistration();
     new KApplication();
+
     Display* pDisp = QPaintDevice::x11AppDisplay();
     XVisualInfo aVI;
     Colormap    aColMap;
