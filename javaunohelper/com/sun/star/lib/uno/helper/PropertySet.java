@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2002-08-08 12:14:46 $
+ *  last change: $Author: jl $ $Date: 2002-10-21 11:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,16 +587,16 @@ XMultiPropertySet
         }
     }
 
-    /** Converts a value in a way so that its appropriate for storing as a property value, that is
+    /** Converts a value in a way so that it is appropriate for storing as a property value, that is
      *  {@link #setPropertyValueNoBroadcast setPropertyValueNoBroadcast} can process the value without any further
      *  conversion. This implementation presumes that
      *  the values are stored in member variables of the furthest inheriting class. For example,
      *  class A inherits this class then members of class A
      *  can hold property values. If there is a class B which inherits A then only members of B can hold
      *  property values. The variables must be public. A property must have been registered (e.g. by
-     *  {@link #registerProperty(Property, Object)} in order for this method to work. The identifyer Object argument
+     *  {@link #registerProperty(Property, Object)} in order for this method to work. The identifyer argument (type Object)
      *  used in the registerProperty methods must
-     *  be a java.lang.String that is the name of the member variable that holds the property value.
+     *  be a java.lang.String, which is, the name of the member variable that holds the property value.
      *  If one opts to store values differently then one may override
      *  this method, as well as {@link #setPropertyValueNoBroadcast setPropertyValueNoBroadcast} and
      *  {@link #getPropertyValue(Property) getPropertyValue(Property)}.
@@ -659,7 +659,7 @@ XMultiPropertySet
      *  to the caller.
      */
     protected boolean convertPropertyValue(Property property, Object[] newVal, Object[]curVal,  Object setVal)
-    throws com.sun.star.lang.IllegalArgumentException, WrappedTargetException
+        throws com.sun.star.lang.IllegalArgumentException, WrappedTargetException, UnknownPropertyException
     {
         boolean ret= true;
         try
@@ -731,6 +731,8 @@ XMultiPropertySet
                     newVal[0]= convObj;
                 }
             }
+            else
+                throw new UnknownPropertyException("Property " + property.Name + " is unknown");
         }
         catch (java.lang.NoSuchFieldException e)
         {
