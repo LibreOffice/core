@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-11 12:52:37 $
+ *  last change: $Author: ka $ $Date: 2001-05-14 11:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,8 @@ private:
     Timer*                  mpSwapOutTimer;
     GrfSimpleCacheObj*      mpSimpleCache;
     ULONG                   mnAnimationLoopCount;
+    void*                   mpDummy1;
+    void*                   mpDummy2;
     BOOL                    mbAutoSwapped   : 1;
     BOOL                    mbTransparent   : 1;
     BOOL                    mbAnimated      : 1;
