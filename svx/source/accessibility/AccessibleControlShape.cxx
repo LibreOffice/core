@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-02 07:40:18 $
+ *  last change: $Author: fs $ $Date: 2002-05-02 07:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ AccessibleControlShape::~AccessibleControlShape (void)
         m_xControlContextProxy->setDelegator( NULL );
     m_xControlContextProxy.clear();
         // this should remove the _one_and_only_ "real" reference (means not delegated to
-    // ourself) to this proxy, and thus delete it
+        // ourself) to this proxy, and thus delete it
 }
 
 //=============================================================================
@@ -437,11 +437,19 @@ void SAL_CALL AccessibleControlShape::disposing (void)
     // forward the disposel to our inner context
     if ( mbDisposeNativeContext )
     {
+        // don't listen for disposals anymore
+        if ( mxNativeContextComponent.is() )
+            mxNativeContextComponent->removeEventListener( static_cast< AccessibleControlShape_Base* >( this ) );
+
         Reference< XComponent > xInnerComponent;
         if ( ::comphelper::query_aggregation( m_xControlContextProxy, xInnerComponent ) )
             xInnerComponent->dispose();
+        // do _not_ clear m_xControlContextProxy! This has to be done in the dtor for correct ref-count handling
+
+        // no need to dispose the proxy/inner context anymore
         mbDisposeNativeContext = sal_False;
     }
+    mxNativeContextComponent.clear();
 
     // let the base do it's stuff
     AccessibleShape::disposing();
