@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 12:04:24 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 13:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ namespace xmloff
             epFontEmphasis,
             epFontRelief,
             epListLinkageType,
+            epOrientation,
 
             KNOWN_ENUM_PROPERTIES
         };
@@ -108,45 +109,4 @@ namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMENUMS_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7.24.2  2003/11/24 15:14:27  obo
- *  undo last change
- *
- *  Revision 1.7  2003/10/21 08:39:48  obo
- *  INTEGRATION: CWS formcelllinkage (1.6.190); FILE MERGED
- *  2003/10/01 09:55:22 fs 1.6.190.1: #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.6.190.1  2003/10/01 09:55:22  fs
- *  #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.6.186.1  2003/09/25 14:28:40  fs
- *  #18994# merging the changes from cws_srx645_fs002 branch
- *
- *  Revision 1.6.182.1  2003/09/18 14:00:38  fs
- *  #18995# changes for binding list boxes to cells, while exchanging selection indexes instead of strings
- *
- *  Revision 1.6  2001/06/07 12:25:52  fs
- *  #86096# enums for FontEmphasis and FontRelief
- *
- *  Revision 1.5  2000/12/19 12:13:57  fs
- *  some changes ... now the exported styles are XSL conform
- *
- *  Revision 1.4  2000/12/19 08:42:19  fs
- *  removed the epFontWidth
- *
- *  Revision 1.3  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.2  2000/12/06 17:28:05  fs
- *  changes for the formlayer import - still under construction
- *
- *  Revision 1.1  2000/11/17 19:02:06  fs
- *  initial checkin - export and/or import the applications form layer
- *
- *
- *  Revision 1.0 15.11.00 11:49:51  fs
- ************************************************************************/
 
