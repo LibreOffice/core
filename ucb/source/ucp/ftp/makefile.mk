@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 18:36:22 $
+#   last change: $Author: rt $ $Date: 2004-09-20 14:32:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,9 @@ UCPFTP_MAJOR=1
 
 .INCLUDE: settings.mk
 
-#CFLAGS +=-fno-inline
+.IF "$(SYSTEM_CURL)" == "YES"
+CFLAGS+=-DCURL_NO_OLDIES
+.ENDIF
 
 # --- General -----------------------------------------------------
 
