@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-28 15:57:14 $
+ *  last change: $Author: iha $ $Date: 2003-10-31 12:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,20 +446,31 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
     }
     try
     {
+        ::rtl::OUString aObjectCID(rObjectCID);
+
         //-------------------------------------------------------------
         //get type of selected object
-        ObjectType eObjectType = ObjectIdentifier::getObjectType( rObjectCID );
+        ObjectType eObjectType = ObjectIdentifier::getObjectType( aObjectCID );
         if( OBJECTTYPE_UNKNOWN==eObjectType )
         {
             //DBG_ERROR("unknown ObjectType");
             return;
         }
-        rtl::OUString aParticleID = ObjectIdentifier::getParticleID( rObjectCID );
+        // some legend entries are handled as if they were data series
+        if( OBJECTTYPE_LEGEND_ENTRY==eObjectType )
+        {
+            //@todo differentiate between entries that represent series and those that represent something else (e.g. colors)
+            aObjectCID  = ObjectIdentifier::createClassifiedIdentifier(
+                          OBJECTTYPE_DATA_SERIES, ObjectIdentifier::getParticleID(aObjectCID) );
+            eObjectType = OBJECTTYPE_DATA_SERIES;
+        }
+
+        rtl::OUString aParticleID = ObjectIdentifier::getParticleID( aObjectCID );
         bool bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
         //-------------------------------------------------------------
         //convert properties to ItemSet
         ::std::auto_ptr< ::comphelper::ItemConverter > apItemConverter(
-            createItemConverter( rObjectCID, m_aModel->getModel(),
+            createItemConverter( aObjectCID, m_aModel->getModel(),
                                  m_pDrawModelWrapper->getSdrModel(),
                                  m_pNumberFormatterWrapper,
                                  m_pChartView ));
