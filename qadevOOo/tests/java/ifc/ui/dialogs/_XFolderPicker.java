@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFolderPicker.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:43 $
+ *  last change:$Date: 2003-05-27 12:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.ui.dialogs;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ui.dialogs.XFolderPicker;
 import lib.MultiMethodTest;
 
@@ -85,7 +86,7 @@ public class _XFolderPicker extends MultiMethodTest {
     */
     public void _setDisplayDirectory() {
         boolean result = true ;
-        dir = util.utils.getOfficeTemp(tParam.getMSF()) ;
+        dir = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
 
         log.println("Trying to set dir '" + dir + "'") ;
         try {
