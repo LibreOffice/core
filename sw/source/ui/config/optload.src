@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 05:34:42 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ chinese_traditional ] = "ζ°ΈδΈζ›΄ζ–°(~N)";
         Text[ arabic ] = "ΘΚΗΚΗπ";
         Text[ greek ] = "Ποτέ";
-        Text[ korean ] = "μ „ν€(~N)";
+        Text[ korean ] = "μ•ν•¨(~N)";
         Text[ turkish ] = "Hiηbir zaman";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Ei koskaan";
@@ -411,7 +411,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ polish ] = "Ustawienia";
         Text[ portuguese_brazilian ] = "Settings";
         Text[ japanese ] = "θ¨­ε®";
-        Text[ korean ] = "μ„Έν…";
+        Text[ korean ] = "μ„¤μ •";
         Text[ chinese_simplified ] = "θ®Ύε®";
         Text[ chinese_traditional ] = "θ¨­ε®";
         Text[ turkish ] = "Settings";
@@ -551,7 +551,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ chinese_traditional ] = "ε·²ι–‹ε•“ζ–‡δ»¶η„ζ‰€ζ‰ζ®µθ½ι–“ι”εθ΅¨ζ Όι–“ι”η›Έε ";
         Text[ arabic ] = "ΕΦΗέΙ γΣΗέΙ ΗαΚΘΗΪΟ Εαμ ία έήΡΗΚ ζΜΟΗζα ΗαγΣΚδΟ ΗαΝΗαν";
         Text[ greek ] = "Άθροισμα όλων των ~αποστάσεων των παραγράφων και των πινάκων στο τρέχον έγγραφο";
-        Text[ korean ] = "ν„μ¬ λ¬Έμ„μ— μλ” λª¨λ“  λ‹¨λ½μ κ°„κ²©κ³Ό ν…μ΄λΈ” κ°„κ²© ν•©μ‚°";
+        Text[ korean ] = "ν„μ¬ λ¬Έμ„μ— μλ” λª¨λ“  λ‹¨λ½μ κ°„κ²©κ³Ό ν‘ κ°„κ²© ν•©μ‚°";
         Text[ turkish ] = "Aηύk belgedeki tόm paragraf ve tablo aralύklarύnύ topla";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Lisδδ vδlit nykyisen asiakirjan kappaleiden ja taulukoiden vδliin";
@@ -576,7 +576,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ polish ] = "Dodaj odstκpy od a~kapitσw i tabel na poczΉtku stron";
         Text[ portuguese_brazilian ] = "Add distances at the beginning of pages";
         Text[ japanese ] = "οΎοΎο½°ο½ΌοΎγ®ε§‹γ‚γ«ζ®µθ½ι–“ι”γ¨θ΅¨ι–“ι”γ‚’δ»γ‘γ‚‹";
-        Text[ korean ] = "μª½ μ‹μ‘λ¶€λ¶„μ λ‹¨λ½ κ°„κ²©κ³Ό ν‘ κ°„κ²© ν•©μ‚°";
+        Text[ korean ] = "νμ΄μ§€ μ‹μ‘λ¶€λ¶„μ λ‹¨λ½ κ°„κ²©κ³Ό ν‘ κ°„κ²© ν•©μ‚°";
         Text[ chinese_simplified ] = "ε¨ι΅µι¦–δ½η½®ε ε…¥ζ®µθ½ε’θ΅¨ζ Όη„ι—΄ι”";
         Text[ chinese_traditional ] = "ε¨ι ι¦–δ½η½®ε ε…¥ζ®µθ½θ‡θ΅¨ζ ΌδΉ‹ι–“η„ι–“ι”";
         Text[ arabic ] = "ΕΦΗέΙ ΗαέήΡΙ ζΚΘΗΪΟ ΗαΜΟΗζα Εαμ ΘΟΗνΙ ΗαΥέΝΗΚ";
@@ -663,7 +663,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ chinese_traditional ] = "%PRODUCTNAME Writer θ΅¨ζ Ό";
         Text[ arabic ] = "ΜΟζα %PRODUCTNAME Writer";
         Text[ greek ] = "Πίνακας του %PRODUCTNAME Writer";
-        Text[ korean ] = "%PRODUCTNAME Writer μ‹νΈ";
+        Text[ korean ] = "%PRODUCTNAME Writer μ¤ν”„λ λ“μ‹νΈ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "%PRODUCTNAME Writer Tablosu";
         Text[ finnish ] = "%PRODUCTNAME Writer -taulukko";
@@ -811,7 +811,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ chinese_traditional ] = "η·¨θ™(~N)";
         Text[ arabic ] = "ΗαΚΡήνγ";
         Text[ greek ] = "Αρίθμηση";
-        Text[ korean ] = "λ²νΈλ§¤κΈ°κΈ°(~N)";
+        Text[ korean ] = "λ²νΈ λ§¤κΈ°κΈ°(~N)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Numaralama";
         Text[ catalan ] = "Nu~meraciσn";
@@ -1050,7 +1050,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ chinese_traditional ] = "ε†ι”η¬¦";
         Text[ arabic ] = "έΗΥα";
         Text[ greek ] = "Διαχωρισ~τικό";
-        Text[ korean ] = "κµ¬λ¶„μ";
+        Text[ korean ] = "κµ¬λ¶„ κΈ°νΈ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Ayύrma iώrt.";
         Text[ finnish ] = "~Erotin";
@@ -1470,7 +1470,7 @@ StringArray STR_ARR_METRIC
         < "m" ; FUNIT_M ; > ;
         < "km" ; FUNIT_KM ; > ;
         < "inch" ; FUNIT_INCH ; > ;
-        < "ν”ΌνΈ" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
         < "mile" ; FUNIT_MILE ; > ;
         < "ν‘μ¤€ κ·κ²© ν™μ" ; FUNIT_PICA ; > ;
         < "μ " ; FUNIT_POINT ; > ;
@@ -1512,6 +1512,7 @@ ItemList [ catalan ] =
         < "Point" ; FUNIT_POINT ; > ;
     };
     };
+
 
 
 
