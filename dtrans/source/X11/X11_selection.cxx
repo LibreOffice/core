@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-08 14:06:06 $
+ *  last change: $Author: pl $ $Date: 2001-02-09 16:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <X11_selection.hxx>
 #include <X11_clipboard.hxx>
 #include <X11_transferable.hxx>
+#include <X11_dndcontext.hxx>
 
 // pointer bitmaps
 #include <copydata_curs.h>
@@ -229,10 +230,8 @@ SelectionManager::IncrementalTransfer::IncrementalTransfer(
 // ------------------------------------------------------------------------
 
 SelectionManager::SelectionManager() :
-        ::cppu::WeakComponentImplHelper6<
-                XDropTargetDropContext,
+        ::cppu::WeakComponentImplHelper4<
                 XDragSource,
-                XDragSourceContext,
                 XInitialization,
                 XEventHandler,
                 XServiceInfo > (m_aMutex),
@@ -241,6 +240,7 @@ SelectionManager::SelectionManager() :
     m_aDropWindow( None ),
     m_aDropProxy( None ),
     m_aThread( NULL ),
+    m_aDragExecuteThread( NULL ),
     m_nCurrentProtocolVersion( nXdndProtocolRevision ),
     m_nNoPosX( 0 ),
     m_nNoPosY( 0 ),
@@ -444,6 +444,14 @@ SelectionManager::~SelectionManager()
     {
         osl_terminateThread( m_aThread );
         osl_joinWithThread( m_aThread );
+        osl_freeThreadHandle( m_aThread );
+    }
+
+    if( m_aDragExecuteThread )
+    {
+        osl_terminateThread( m_aDragExecuteThread );
+        osl_joinWithThread( m_aDragExecuteThread );
+        // thread handle is freed in dragDoDispatch()
     }
 
      MutexGuard aGuard(m_aMutex);
@@ -1033,7 +1041,7 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
     {
         DragSourceDropEvent dsde;
         dsde.Source                 = static_cast< OWeakObject* >(this);
-        dsde.DragSourceContext      = static_cast< XDragSourceContext* >(this);
+        dsde.DragSourceContext      = new DragSourceContext( m_aDropWindow, rRequest.time, *this );
         dsde.DragSource             = static_cast< XDragSource* >(this);
         if( aNotify.xselection.property != None )
         {
@@ -1263,6 +1271,8 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             )
         {
             m_nDropTime = m_nCurrentProtocolVersion > 0 ? rMessage.data.l[3] : CurrentTime;
+            if( ! m_bDropEnterSent )
+                m_nDropTimestamp = m_nDropTime;
 
             Window aChild;
             XTranslateCoordinates( m_pDisplay,
@@ -1276,9 +1286,9 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 #ifdef DEBUG
             fprintf( stderr, "received XdndPosition on 0x%x (%d, %d)\n", aTarget, m_nLastX, m_nLastY );
 #endif
-            DropTargetDragEvent aEvent;
+            DropTargetDragEnterEvent aEvent;
             aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
-            aEvent.Context = static_cast< XDropTargetDragContext* >(this);
+            aEvent.Context = new DropTargetDragContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
             aEvent.Location.X = m_nLastX;
             aEvent.Location.Y = m_nLastY;
             if( m_nCurrentProtocolVersion < 2 )
@@ -1296,16 +1306,14 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
                 aEvent.DropAction = DNDConstants::ACTION_NONE;
 
             m_nLastDropAction   = aEvent.DropAction;
-            m_bLazyListener     = true;
             if( ! m_bDropEnterSent )
             {
                 m_bDropEnterSent = true;
+                aEvent.SupportedDataFlavors = m_xDropTransferable->getTransferDataFlavors();
                 it->second->dragEnter( aEvent );
             }
             else
                 it->second->dragOver( aEvent );
-            if( m_bLazyListener )
-                accept( aEvent.DropAction );
         }
         else if(
             rMessage.message_type == m_nXdndLeave  &&
@@ -1315,9 +1323,8 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 #ifdef DEBUG
             fprintf( stderr, "received XdndLeave on 0x%x\n", aTarget );
 #endif
-            DropTargetDropEvent aEvent;
+            DropTargetEvent aEvent;
             aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
-            aEvent.Context = static_cast< XDropTargetDropContext* >(this);
             it->second->dragExit( aEvent );
             m_aDropEnterEvent.data.l[0] = None;
             if( m_aCurrentDropWindow == aTarget )
@@ -1336,7 +1343,7 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 #endif
             DropTargetDropEvent aEvent;
             aEvent.Source = static_cast< XDropTarget* >(it->second.m_pTarget);
-            aEvent.Context = static_cast< XDropTargetDropContext* >(this);
+            aEvent.Context = new DropTargetDropContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
             aEvent.Location.X = m_nLastX;
             aEvent.Location.Y = m_nLastY;
             aEvent.DropAction = m_nLastDropAction;
@@ -1351,52 +1358,57 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 }
 
 /*
- *  XDropTargetDropContext
+ *  methods for XDropTargetDropContext
  */
 
-void SelectionManager::dropComplete( sal_Bool bSuccess )
+void SelectionManager::dropComplete( sal_Bool bSuccess, Window aDropWindow, Time aTimestamp )
 {
     MutexGuard aGuard(m_aMutex);
 
-    if( m_xDragSourceListener.is() )
+    if( aDropWindow == m_aCurrentDropWindow )
     {
-        DragSourceDropEvent dsde;
-        dsde.Source             = static_cast< OWeakObject* >(this);
-        dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
-        dsde.DragSource         = static_cast< XDragSource* >(this);
-        dsde.DropAction         = m_nUserDragAction;
-        dsde.DropSuccess        = bSuccess;
-        m_xDragSourceListener->dragDropEnd( dsde );
-        m_xDragSourceListener.clear();
-    }
-    else if( m_aDropEnterEvent.data.l[0] && m_aCurrentDropWindow )
-    {
-        XEvent aEvent;
-        aEvent.xclient.type         = ClientMessage;
-        aEvent.xclient.display      = m_pDisplay;
-        aEvent.xclient.window       = m_aDropEnterEvent.data.l[0];
-        aEvent.xclient.message_type = m_nXdndFinished;
-        aEvent.xclient.format       = 32;
-        aEvent.xclient.data.l[0]    = m_aCurrentDropWindow;
-        aEvent.xclient.data.l[1]    = 0;
+        if( m_xDragSourceListener.is() )
+        {
+            DragSourceDropEvent dsde;
+            dsde.Source             = static_cast< OWeakObject* >(this);
+            dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
+            dsde.DragSource         = static_cast< XDragSource* >(this);
+            dsde.DropAction         = m_nUserDragAction;
+            dsde.DropSuccess        = bSuccess;
+            m_xDragSourceListener->dragDropEnd( dsde );
+            m_xDragSourceListener.clear();
+        }
+        else if( m_aDropEnterEvent.data.l[0] && m_aCurrentDropWindow )
+        {
+            XEvent aEvent;
+            aEvent.xclient.type         = ClientMessage;
+            aEvent.xclient.display      = m_pDisplay;
+            aEvent.xclient.window       = m_aDropEnterEvent.data.l[0];
+            aEvent.xclient.message_type = m_nXdndFinished;
+            aEvent.xclient.format       = 32;
+            aEvent.xclient.data.l[0]    = m_aCurrentDropWindow;
+            aEvent.xclient.data.l[1]    = 0;
 
 #ifdef DEBUG
-        fprintf( stderr, "Sending XdndFinished to 0x%x\n",
-                 m_aDropEnterEvent.data.l[0]
-                 );
+            fprintf( stderr, "Sending XdndFinished to 0x%x\n",
+                     m_aDropEnterEvent.data.l[0]
+                     );
 #endif
 
-        XSendEvent( m_pDisplay, m_aDropEnterEvent.data.l[0],
-                    False, NoEventMask, & aEvent );
+            XSendEvent( m_pDisplay, m_aDropEnterEvent.data.l[0],
+                        False, NoEventMask, & aEvent );
 
-        m_aDropEnterEvent.data.l[0] = None;
-        m_aCurrentDropWindow        = None;
+            m_aDropEnterEvent.data.l[0] = None;
+            m_aCurrentDropWindow        = None;
             m_nCurrentProtocolVersion   = nXdndProtocolRevision;
+        }
     }
+    else
+        OSL_ASSERT( "dropComplete from invalid DropTargetDropContext" );
 }
 
 /*
- *  XDropTargetDragContext
+ *  methods for XDropTargetDragContext
  */
 
 // ------------------------------------------------------------------------
@@ -1405,12 +1417,11 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
 {
     MutexGuard aGuard(m_aMutex);
 
-    m_bLazyListener = false;
     if( m_xDragSourceListener.is() )
     {
         DragSourceDragEvent dsde;
         dsde.Source             = static_cast< OWeakObject* >(this);
-        dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+        dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
         dsde.DragSource         = static_cast< XDragSource* >(this);
         dsde.DropAction         = m_nSourceActions;
         dsde.UserAction         = m_nUserDragAction;
@@ -1469,14 +1480,12 @@ bool SelectionManager::updateDragAction( int modifierState )
 
         DragSourceDragEvent dsde;
         dsde.Source             = static_cast< OWeakObject* >(this);
-        dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+        dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
         dsde.DragSource         = static_cast< XDragSource* >(this);
         dsde.DropAction         = m_nUserDragAction;
         dsde.UserAction         = m_nUserDragAction;
-        m_bLazyCursor       = true;
+        setCursor( getDefaultCursor( m_nUserDragAction ), m_aDropWindow, m_nDragTimestamp );
         m_xDragSourceListener->dropActionChanged( dsde );
-        if( m_bLazyCursor )
-            setCursor( getDefaultCursor( dsde.UserAction ) );
     }
     return bRet;
 }
@@ -1494,22 +1503,12 @@ void SelectionManager::sendDropPosition( bool bForce, Time eventTime )
         XTranslateCoordinates( m_pDisplay, it->second.m_aRootWindow, m_aDropWindow, m_nLastDragX, m_nLastDragY, &x, &y, &aChild );
         DropTargetDragEvent dtde;
         dtde.Source         = static_cast< OWeakObject* >(it->second.m_pTarget );
-        dtde.Context        = static_cast< XDropTargetDropContext* >(this);
+        dtde.Context        = new DropTargetDragContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
         dtde.Location.X     = x;
         dtde.Location.Y     = y;
         dtde.DropAction     = m_nUserDragAction;
         dtde.SourceActions  = m_nSourceActions;
         it->second->dragOver( dtde );
-        if( m_xDragSourceListener.is() )
-        {
-            DragSourceDragEvent dsde;
-            dsde.Source             = static_cast< OWeakObject* >(this);
-            dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
-            dsde.DragSource         = static_cast< XDragSource* >(this);
-            dsde.DropAction         = m_nUserDragAction;
-            dsde.UserAction         = m_nUserDragAction;
-            m_xDragSourceListener->dragOver( dsde );
-        }
     }
     else if( bForce ||
 
@@ -1591,7 +1590,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         {
             DragSourceDragEvent dsde;
             dsde.Source                 = static_cast< OWeakObject* >(this);
-            dsde.DragSourceContext      = static_cast< XDragSourceContext* >( this );
+            dsde.DragSourceContext      = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
             dsde.DragSource             = static_cast< XDragSource* >( this );
             dsde.DropAction = DNDConstants::ACTION_NONE;
             dsde.UserAction = m_nUserDragAction;
@@ -1621,17 +1620,14 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
             else
                 m_nNoPosX = m_nNoPosY = m_nNoPosWidth = m_nNoPosHeight = 0;
 
-            m_bLazyCursor = true;
             m_xDragSourceListener->dragOver( dsde );
-            if( m_bLazyCursor )
-                setCursor( getDefaultCursor( dsde.DropAction ) );
         }
         else if( rMessage.xclient.message_type == m_nXdndFinished && m_aDropWindow == rMessage.xclient.data.l[0] )
         {
             // notify the listener
             DragSourceDropEvent dsde;
             dsde.Source             = static_cast< OWeakObject* >(this);
-            dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+            dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = m_nUserDragAction;
             dsde.DropSuccess        = m_bDropSuccess;
@@ -1647,6 +1643,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         int root_x  = rMessage.type == MotionNotify ? rMessage.xmotion.x_root : rMessage.xcrossing.x_root;
         int root_y  = rMessage.type == MotionNotify ? rMessage.xmotion.y_root : rMessage.xcrossing.y_root;
         Window root = rMessage.type == MotionNotify ? rMessage.xmotion.root : rMessage.xcrossing.root;
+        m_nDragTimestamp = rMessage.type == MotionNotify ? rMessage.xmotion.time : rMessage.xcrossing.time;
 
         if( rMessage.type == MotionNotify )
             bForce = updateDragAction( rMessage.xmotion.state );
@@ -1657,7 +1654,8 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
     }
     else if( rMessage.type == KeyPress || rMessage.type == KeyRelease )
     {
-        if( XKeycodeToKeysym( m_pDisplay, rMessage.xkey.keycode, 0 ) == XK_Escape )
+        KeySym aKey = XKeycodeToKeysym( m_pDisplay, rMessage.xkey.keycode, 0 );
+        if( aKey == XK_Escape )
         {
             // abort drag
             if( it != m_aDropTargets.end() )
@@ -1683,7 +1681,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
             // notify the listener
             DragSourceDropEvent dsde;
             dsde.Source             = static_cast< OWeakObject* >(this);
-            dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+            dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
             dsde.DropSuccess        = sal_False;
@@ -1692,7 +1690,26 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         }
         else
         {
-            if( updateDragAction( rMessage.xkey.state ) )
+            /*
+             *  man page says: state is state immediate PRIOR to the
+             *  event. It would seem that this is a somewhat arguable
+             *  design decision.
+             */
+            int nState = rMessage.xkey.state;
+            int nNewState = 0;
+            switch( aKey )
+            {
+                case XK_Shift_R:
+                case XK_Shift_L: nNewState = ShiftMask;break;
+                case XK_Control_R:
+                case XK_Control_L: nNewState = ControlMask;break;
+                    // just interested in shift and ctrl for dnd
+            }
+            if( rMessage.type == KeyPress )
+                nState |= nNewState;
+            else
+                nState &= ~nNewState;
+            if( updateDragAction( nState ) )
                 sendDropPosition( true, rMessage.xkey.time );
         }
     }
@@ -1710,7 +1727,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
                 XTranslateCoordinates( m_pDisplay, rMessage.xbutton.root, m_aDropWindow, rMessage.xbutton.x_root, rMessage.xbutton.y_root, &x, &y, &aChild );
                 DropTargetDropEvent dtde;
                 dtde.Source         = static_cast< OWeakObject* >(it->second.m_pTarget );
-                dtde.Context        = static_cast< XDropTargetDropContext* >(this);
+                dtde.Context        = new DropTargetDropContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
                 dtde.Location.X     = x;
                 dtde.Location.Y     = y;
                 dtde.DropAction     = m_nUserDragAction;
@@ -1787,7 +1804,7 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
             // cancel drag
             DragSourceDropEvent dsde;
             dsde.Source             = static_cast< OWeakObject* >(this);
-            dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+            dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
             dsde.DropSuccess        = sal_False;
@@ -1799,56 +1816,35 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::accept( sal_Int8 dragOperation )
+void SelectionManager::accept( sal_Int8 dragOperation, Window aDropWindow, Time aTimestamp )
 {
-    Atom nAction = None;
-    switch( dragOperation )
+    if( aDropWindow == m_aCurrentDropWindow )
     {
-        case DNDConstants::ACTION_LINK:
-            nAction = m_nXdndActionLink;
+        Atom nAction = None;
+        switch( dragOperation )
+        {
+            case DNDConstants::ACTION_LINK:
+                nAction = m_nXdndActionLink;
+                break;
+            case DNDConstants::ACTION_MOVE:
+                nAction = m_nXdndActionMove;
             break;
-        case DNDConstants::ACTION_MOVE:
-            nAction = m_nXdndActionMove;
-            break;
-        case DNDConstants::ACTION_COPY:
-            nAction = m_nXdndActionCopy;
-            break;
+            case DNDConstants::ACTION_COPY:
+                nAction = m_nXdndActionCopy;
+                break;
+        }
+        sendDragStatus( nAction );
     }
-    sendDragStatus( nAction );
 }
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::reject()
+void SelectionManager::reject( Window aDropWindow, Time aTimestamp )
 {
-    sendDragStatus( None );
-}
-
-// ------------------------------------------------------------------------
-
-Sequence< DataFlavor > SelectionManager::getCurrentDataFlavors()
-{
-    Sequence< DataFlavor > aFlavors;
-
-    if( m_xDragSourceListener.is() )
-        aFlavors = m_xDragSourceTransferable->getTransferDataFlavors();
-    else if( m_aDropEnterEvent.data.l[0] != None )
-        getPasteDataTypes( m_nXdndSelection, aFlavors );
-    return aFlavors;
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool SelectionManager::isDataFlavorSupported( const DataFlavor& flavor )
-{
-    sal_Bool bIsSupported = sal_False;
-
-    if( m_xDragSourceListener.is() )
-        bIsSupported = m_xDragSourceTransferable->isDataFlavorSupported( flavor );
-    else
-        bIsSupported = m_aDropEnterEvent.data.l[0] != None ?
-            m_xDropTransferable->isDataFlavorSupported( flavor ) : sal_False;
-    return bIsSupported;
+    if( aDropWindow == m_aCurrentDropWindow )
+    {
+        sendDragStatus( None );
+    }
 }
 
 /*
@@ -1987,7 +1983,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
 
     DragSourceDragEvent dsde;
     dsde.Source             = static_cast< OWeakObject* >(this);
-    dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+    dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
     dsde.DragSource         = static_cast< XDragSource* >(this);
     dsde.DropAction         = nNewProtocolVersion >= 0 ? DNDConstants::ACTION_MOVE : DNDConstants::ACTION_COPY;
     dsde.UserAction         = nNewProtocolVersion >= 0 ? m_nUserDragAction : DNDConstants::ACTION_COPY;
@@ -2036,12 +2032,13 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
             if( it != m_aDropTargets.end() )
             {
                 XTranslateCoordinates( m_pDisplay, aRoot, m_aDropWindow, nX, nY, &nWinX, &nWinY, &aChild );
-                DropTargetDragEvent dtde;
-                dtde.Source     = static_cast< OWeakObject* >( it->second.m_pTarget );
-                dtde.Context        = static_cast< XDropTargetDragContext* >(this);
-                dtde.Location.X     = nWinX;
-                dtde.Location.Y     = nWinY;
-                dtde.DropAction     = m_nUserDragAction;
+                DropTargetDragEnterEvent dtde;
+                dtde.Source                 = static_cast< OWeakObject* >( it->second.m_pTarget );
+                dtde.Context                = new DropTargetDragContext( m_aCurrentDropWindow, m_nDropTimestamp, *this );
+                dtde.Location.X             = nWinX;
+                dtde.Location.Y             = nWinY;
+                dtde.DropAction             = m_nUserDragAction;
+                dtde.SupportedDataFlavors   = m_xDragSourceTransferable->getTransferDataFlavors();
                 it->second.m_pTarget->dragEnter( dtde );
             }
             else
@@ -2068,14 +2065,14 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
         }
         m_nNoPosX = m_nNoPosY = m_nNoPosWidth = m_nNoPosHeight = 0;
     }
-    else if( m_aDropProxy != None && m_nCurrentProtocolVersion < 0 )
+    else if( m_aDropProxy != None )
         // drag over for XdndAware windows comes when receiving XdndStatus
         m_xDragSourceListener->dragOver( dsde );
 }
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::executeDrag(
+void SelectionManager::startDrag(
     const DragGestureEvent& trigger,
     sal_Int8 sourceActions,
     sal_Int32 cursor,
@@ -2084,6 +2081,20 @@ void SelectionManager::executeDrag(
     const Reference< XDragSourceListener >& listener
     )
 {
+    DragSourceDropEvent aDragFailedEvent;
+    aDragFailedEvent.Source             = static_cast< OWeakObject* >(this);
+    aDragFailedEvent.DragSource         = static_cast< XDragSource* >(this);
+    aDragFailedEvent.DragSourceContext  = new DragSourceContext( None, CurrentTime, *this );
+    aDragFailedEvent.DropAction         = DNDConstants::ACTION_NONE;
+    aDragFailedEvent.DropSuccess        = sal_False;
+
+    if( m_xDragSourceListener.is() || m_aDragExecuteThread )
+    {
+        if( listener.is() )
+            listener->dragDropEnd( aDragFailedEvent );
+        return;
+    }
+
     // first get the current pointer position and the window that
     // the pointer is located in. since said window should be one
     // of our DropTargets at the time of executeDrag we can use
@@ -2114,12 +2125,11 @@ void SelectionManager::executeDrag(
         fprintf( stderr, "found drop target window 0x%x\n", aSource );
 #endif
         if( it == m_aDropTargets.end() )
-            throw
-                InvalidDNDOperationException(
-                    OUString::createFromAscii( "executeDrag without any DropTarget on the same root window" ),
-                    static_cast< OWeakObject* >(this)
-                    );
-
+        {
+            if( listener.is() )
+                listener->dragDropEnd( aDragFailedEvent );
+            return;
+        }
 #ifdef DEBUG
         fprintf( stderr, "try to grab pointer ... " );
 #endif
@@ -2149,14 +2159,7 @@ void SelectionManager::executeDrag(
             if( nKeyboardGrabSuccess == GrabSuccess )
                 XUngrabKeyboard( m_pDisplay, CurrentTime );
             if( listener.is() )
-            {
-                DragSourceDropEvent dsde;
-                dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
-                dsde.DragSource         = static_cast< XDragSource* >(this);
-                dsde.DropAction         = DNDConstants::ACTION_NONE;
-                dsde.DropSuccess        = sal_False;
-                listener->dragDropEnd( dsde );
-            }
+                listener->dragDropEnd( aDragFailedEvent );
             return;
         }
 
@@ -2195,29 +2198,47 @@ void SelectionManager::executeDrag(
         }
 
         updateDragWindow( root_x, root_y, aRoot );
-        setCursor( cursor ? cursor : m_aMoveCursor );
+        setCursor( cursor ? cursor : m_aMoveCursor, m_aDropWindow, m_nDropTimestamp );
         updateDragAction( mask );
     }
+
+    m_aDragExecuteThread = osl_createThread( runDragExecute, this );
+}
+
+void SelectionManager::runDragExecute( void* pThis )
+{
+    SelectionManager* This = (SelectionManager*)pThis;
+    This->dragDoDispatch();
+}
+
+void SelectionManager::dragDoDispatch()
+{
 
     // do drag
     // m_xDragSourceListener will be cleared on finished drop
 #ifdef DEBUG
     fprintf( stderr, "begin executeDrag dispatching\n" );
 #endif
-    while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(NULL)-m_nDropTimeout < 5 ) )
+    osl_yieldThread();
+    while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(NULL)-m_nDropTimeout < 5 ) && osl_scheduleThread( m_aDragExecuteThread ) )
+    {
+        osl_yieldThread();
         dispatchEvent( 200 );
+    }
 #ifdef DEBUG
     fprintf( stderr, "end executeDrag dispatching\n" );
 #endif
-
     {
+        osl_freeThreadHandle( m_aDragExecuteThread );
+        m_aDragExecuteThread = None;
+
         MutexGuard aGuard(m_aMutex);
 
         if( m_xDragSourceListener.is() )
         {
             DragSourceDropEvent dsde;
             dsde.Source             = static_cast< OWeakObject* >(this);
-            dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+            dsde.DragSourceContext  = new DragSourceContext( m_aDropWindow, m_nDragTimestamp, *this );
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
             dsde.DropSuccess        = sal_False;
@@ -2259,16 +2280,22 @@ sal_Int32 SelectionManager::getCurrentCursor()
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::setCursor( sal_Int32 cursor )
+void SelectionManager::setCursor( sal_Int32 cursor, Window aDropWindow, Time aTimestamp )
 {
-    m_bLazyCursor = false;
-    if( m_xDragSourceListener.is() && ! m_bDropSent )
-        XChangeActivePointerGrab( m_pDisplay, DRAG_EVENT_MASK, cursor, CurrentTime );
+    if( aDropWindow == m_aDropWindow && cursor != m_aCurrentCursor )
+    {
+        if( m_xDragSourceListener.is() && ! m_bDropSent )
+        {
+            m_aCurrentCursor = cursor;
+            XChangeActivePointerGrab( m_pDisplay, DRAG_EVENT_MASK, cursor, CurrentTime );
+            XFlush( m_pDisplay );
+        }
+    }
 }
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::setImage( sal_Int32 image )
+void SelectionManager::setImage( sal_Int32 image, Window aDropWindow, Time aTimestamp )
 {
 }
 

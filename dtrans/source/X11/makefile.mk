@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mh $ $Date: 2001-01-31 15:37:23 $
+#   last change: $Author: pl $ $Date: 2001-02-09 16:37:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ LIBTARGET=NO
 # ------------------------------------------------------------------
 
 SLOFILES=\
+    $(SLO)$/X11_dndcontext.obj		\
     $(SLO)$/X11_transferable.obj	\
     $(SLO)$/X11_clipboard.obj		\
     $(SLO)$/X11_selection.obj		\

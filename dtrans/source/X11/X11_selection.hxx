@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-07 14:35:23 $
+ *  last change: $Author: pl $ $Date: 2001-02-09 16:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <cppuhelper/compbase3.hxx>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE6_HXX_
-#include <cppuhelper/compbase6.hxx>
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
@@ -78,16 +78,8 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETDROPCONTEXT_HPP_
-#include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
-#endif
-
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCE_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCECONTEXT_HPP_
-#include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XDISPLAYCONNECTION_HPP_
@@ -156,7 +148,7 @@ namespace x11 {
         virtual ~DropTarget();
 
         // convenience functions that loop over listeners
-        void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde );
+        void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtde );
         void dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte );
         void dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde );
         void dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde );
@@ -181,10 +173,8 @@ namespace x11 {
     };
 
     class SelectionManager :
-        public ::cppu::WeakComponentImplHelper6<
-            ::com::sun::star::datatransfer::dnd::XDropTargetDropContext,
+        public ::cppu::WeakComponentImplHelper4<
             ::com::sun::star::datatransfer::dnd::XDragSource,
-            ::com::sun::star::datatransfer::dnd::XDragSourceContext,
             ::com::sun::star::lang::XInitialization,
             ::com::sun::star::awt::XEventHandler,
             ::com::sun::star::lang::XServiceInfo
@@ -266,6 +256,7 @@ namespace x11 {
         // internal data
         Display*                    m_pDisplay;
         oslThread                   m_aThread;
+        oslThread                   m_aDragExecuteThread;
         Window                      m_aWindow;
         Reference< ::com::sun::star::awt::XDisplayConnection >
                                     m_xDisplayConnection;
@@ -291,7 +282,7 @@ namespace x11 {
         Reference< ::com::sun::star::datatransfer::XTransferable >
                                     m_xDropTransferable;
         int                         m_nLastX, m_nLastY;
-        bool                        m_bLazyListener;
+        Time                        m_nDropTimestamp;
 
         // drag only
 
@@ -318,6 +309,7 @@ namespace x11 {
         bool                        m_bDropSent;
         time_t                      m_nDropTimeout;
         bool                        m_bWaitingForPrimaryConversion;
+        Time                        m_nDragTimestamp;
 
         // drag cursors
         Cursor                      m_aMoveCursor;
@@ -325,8 +317,6 @@ namespace x11 {
         Cursor                      m_aLinkCursor;
         Cursor                      m_aNoneCursor;
         Cursor                      m_aCurrentCursor;
-
-        bool                        m_bLazyCursor;
 
 
         // drag and drop
@@ -410,6 +400,9 @@ namespace x11 {
         // thread dispatch loop
         static void run( void* );
         void dispatchEvent( int millisec );
+        // drag thread dispatch
+        static void runDragExecute( void* );
+        void dragDoDispatch();
         void handleXEvent( XEvent& rEvent );
     public:
         static SelectionManager& get();
@@ -438,15 +431,16 @@ namespace x11 {
         void registerDropTarget( Window aWindow, DropTarget* pTarget );
         void deregisterDropTarget( Window aWindow );
 
-        // XDropTargetDragContext
-        virtual void        SAL_CALL accept( sal_Int8 dragOperation );
-        virtual void        SAL_CALL reject();
-        virtual Sequence< ::com::sun::star::datatransfer::DataFlavor >
-                            SAL_CALL getCurrentDataFlavors();
-        virtual sal_Bool    SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& df );
+        // for XDropTarget{Drag|Drop}Context
+        void accept( sal_Int8 dragOperation, Window aDropWindow, Time aTimestamp );
+        void reject( Window aDropWindow, Time aTimestamp );
+        void dropComplete( sal_Bool success, Window aDropWindow, Time aTimestamp );
 
-        // XDropTargetDropContext
-        virtual void        SAL_CALL dropComplete( sal_Bool success );
+        // for XDragSourceContext
+        sal_Int32 getCurrentCursor();
+        void setCursor( sal_Int32 cursor, Window aDropWindow, Time aTimestamp );
+        void setImage( sal_Int32 image, Window aDropWindow, Time aTimestamp );
+        void transferablesFlavorsChanged();
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName();
@@ -463,18 +457,12 @@ namespace x11 {
         // XDragSource
         virtual sal_Bool    SAL_CALL isDragImageSupported();
         virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction );
-        virtual void        SAL_CALL executeDrag(
+        virtual void        SAL_CALL startDrag(
             const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
             const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
             const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
             );
-
-        // XDragSourceContext
-        virtual sal_Int32   SAL_CALL getCurrentCursor();
-        virtual void        SAL_CALL setCursor( sal_Int32 cursor );
-        virtual void        SAL_CALL setImage( sal_Int32 image );
-        virtual void        SAL_CALL transferablesFlavorsChanged();
 
         // SelectionAdaptor for XdndSelection Drag (we are drag source)
         virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable();

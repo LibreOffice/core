@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_droptarget.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-06 16:07:37 $
+ *  last change: $Author: pl $ $Date: 2001-02-09 16:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ void DropTarget::drop( const DropTargetDropEvent& dtde )
 
 // --------------------------------------------------------------------------
 
-void DropTarget::dragEnter( const DropTargetDragEvent& dtde )
+void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
