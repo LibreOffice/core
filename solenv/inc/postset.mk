@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: nf $ $Date: 2001-06-21 14:00:51 $
+#   last change: $Author: nf $ $Date: 2001-07-12 10:41:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -245,7 +245,7 @@ RCLANGFLAGS_30+= -d GREEK
 .IF "$(RES_TURK)"!="" || "$(give_me_all_languages)"!=""
 alllangext+=90
 turk$(LANG_GUI)*=$(default$(LANG_GUI))
-cmd_greek:=turk 30 -lgTURKISH $(IBM_PC_852) $(greek$(LANG_GUI))
+cmd_turk:=turk 90 -lgTURKISH $(IBM_PC_857) $(turk$(LANG_GUI))
 lang_90=turk
 longlang_90=turkish
 langext_90=90
