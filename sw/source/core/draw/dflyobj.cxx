@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:51:45 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "hintids.hxx"
@@ -109,9 +108,11 @@
 #include "grfatr.hxx"
 #include "pagefrm.hxx"
 
-#ifndef _SDR_PROPERTIES_EMPTYPROPERTIES_HXX
-#include <svx/sdr/properties/emptyproperties.hxx>
+// --> OD 2004-11-22 #117958#
+#ifndef _SDR_PROPERTIES_DEFAULTPROPERTIES_HXX
+#include <svx/sdr/properties/defaultproperties.hxx>
 #endif
+// <--
 
 static FASTBOOL bInResize = FALSE;
 
@@ -131,7 +132,9 @@ TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 
 sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::EmptyProperties(*this);
+    // --> OD 2004-11-22 #117958# - create default properties
+    return new sdr::properties::DefaultProperties(*this);
+    // <--
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
