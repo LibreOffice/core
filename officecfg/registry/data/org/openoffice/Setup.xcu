@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:17:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,7 @@
     <node oor:name="Migration">
         <prop oor:name="SupportedVersions" >
             <value oor:separator=",">
-            StarOffice 7, OpenOffice 1.1
+                        StarOffice 7, OpenOffice.org 1.1.1, OpenOffice.org 1.1.2, OpenOffice.org 1.1.3, OpenOffice.org 1.1.4
             </value>
         </prop>
 
@@ -515,23 +515,29 @@
                     <value>.*/database/biblio/biblio\.dbf</value>
                 </prop>
                 <prop oor:name="ExcludedFiles">
-                    <value/>
                 </prop>
                 <prop oor:name="IncludedNodes">
+                    <value>
+                        org.openoffice.Office.DataAccess
+                    </value>
                 </prop>
                 <prop oor:name="ExcludedNodes">
-                </prop>
-            </node>
-            <node oor:name="UCB" oor:op="replace">
-                <prop oor:name="IncludedNodes">
-                    <value>org.openoffice.Inet/Settings
+                    <value>
+                        org.openoffice.Office.DataAccess/Bibliography
+                        org.openoffice.Office.DataAccess/ConnectionPool
+                        org.openoffice.Office.DataAccess/DataSources
+                        org.openoffice.Office.DataAccess/DriverManager
                     </value>
                 </prop>
             </node>
-            <node oor:name="VCL" oor:op="replace">
+            <node oor:name="Deployment" oor:op="replace">
+                <prop oor:name="MigrationService">
+                    <value>com.sun.star.comp.deployment.migration.Migration_2_0</value>
+                </prop>
+            </node>
+            <node oor:name="Inet" oor:op="replace">
                 <prop oor:name="IncludedNodes">
-                    <value>org.openoffice.Office.Common/I18N/CTL/UIMirroring
-                           org.openoffice.Office.Common/I18NInputMethod/ShowStatusWindow
+                    <value>org.openoffice.Inet
                     </value>
                 </prop>
             </node>
@@ -551,6 +557,125 @@
             <node oor:name="UserProfile" oor:op="replace">
                 <prop oor:name="IncludedNodes">
                     <value>org.openoffice.UserProfile</value>
+                </prop>
+            </node>
+            <node oor:name="Common" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>
+                        org.openoffice.Office.Common/Accessibility
+                        org.openoffice.Office.Common/Accessibility/AutoDetectSystemHC
+                        org.openoffice.Office.Common/AddXMLToStrorage
+                        org.openoffice.Office.Common/AsianLayout
+                        org.openoffice.Office.Common/AutoCorrect
+                        org.openoffice.Office.Common/Cache
+                        org.openoffice.Office.Common/ExternalMailer/Program
+                        org.openoffice.Office.Common/Filter
+                        org.openoffice.Office.Common/Font
+                        org.openoffice.Office.Common/Gallery
+                        org.openoffice.Office.Common/Help
+                        org.openoffice.Office.Common/History
+                        org.openoffice.Office.Common/I18N
+                        org.openoffice.Office.Common/InternalMSExport
+                        org.openoffice.Office.Common/Load
+                        org.openoffice.Office.Common/Misc/Form/ControlPilotsEnabled
+                        org.openoffice.Office.Common/Misc/PluginsEnabled
+                        org.openoffice.Office.Common/Misc/SymbolSet
+                        org.openoffice.Office.Common/Misc/UseSystemFileDialog
+                        org.openoffice.Office.Common/Misc/UseSystemFileDialog
+                        org.openoffice.Office.Common/OfficeObjects
+                        org.openoffice.Office.Common/Passwords
+                        org.openoffice.Office.Common/Print/PrintingModifiesDocument
+                        org.openoffice.Office.Common/Print/Warning
+                        org.openoffice.Office.Common/PrintVectorize
+                        org.openoffice.Office.Common/Save
+                        org.openoffice.Office.Common/SearchOptions
+                        org.openoffice.Office.Common/SearchOptionsJapanese
+                        org.openoffice.Office.Common/Undo
+                        org.openoffice.Office.Common/View/Dialog/Dialog/MiddleMouseButton
+                        org.openoffice.Office.Common/View/Dialog/MousePositioning
+                        org.openoffice.Office.Common/View/Localization
+                        org.openoffice.Office.Common/View/Menu
+                        org.openoffice.Office.Common/_3D_Engine
+                    </value>
+                </prop>
+                 <prop oor:name="ExcludedNodes">
+                    <value>
+                        org.openoffice.Office.Common/Filter/PDF
+                        org.openoffice.Office.Common/_3D_Engine/OpenGL
+                    </value>
+                </prop>
+            </node>
+             <node oor:name="Calc" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>org.openoffice.Office.Calc</value>
+                </prop>
+            </node>
+            <node oor:name="Chart" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>org.openoffice.Office.Chart/DefaultColor</value>
+                </prop>
+            </node>
+            <node oor:name="Draw" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>org.openoffice.Office.Draw</value>
+                </prop>
+            </node>
+             <node oor:name="Impress" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>org.openoffice.Office.Impress</value>
+                </prop>
+            </node>
+            <node oor:name="Labels" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>org.openoffice.Office.Labels</value>
+                </prop>
+            </node>
+            <node oor:name="Linguistic" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>org.openoffice.Office.Linguistic</value>
+                </prop>
+                 <prop oor:name="ExcludedNodes">
+                    <value>
+                        org.openoffice.Office.Linguistic/ServiceManagerManager
+                    </value>
+                </prop>
+            </node>
+            <node oor:name="Math" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>org.openoffice.Office.Math</value>
+                </prop>
+            </node>
+            <node oor:name="Security" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>org.openoffice.Office.Security</value>
+                </prop>
+            </node>
+            <node oor:name="Setup" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>org.openoffice.Office.Setup/L10N</value>
+                </prop>
+            </node>
+            <node oor:name="UI" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>org.openoffice.Office.UI/ColorScheme</value>
+                </prop>
+            </node>
+            <node oor:name="Views" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>org.openoffice.Office.Views</value>
+                </prop>
+            </node>
+            <node oor:name="Writer" oor:op="replace">
+                <prop oor:name="IncludedNodes">
+                    <value>
+                        org.openoffice.Office.Writer
+                        org.openoffice.Office.WriterWeb
+                    </value>
+                </prop>
+                <prop oor:name="ExcludedNodes">
+                    <value>
+                        org.openoffice.Office.Writer/Wizard
+                    </value>
                 </prop>
             </node>
         </node>
