@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:33:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,8 @@ public:
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
     virtual ~SdXMLDocContext_Impl();
 
+    TYPEINFO();
+
     virtual SvXMLImportContext *CreateChildContext(USHORT nPrefix,
         const OUString& rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
@@ -322,6 +324,8 @@ SdXMLDocContext_Impl::SdXMLDocContext_Impl(
 SdXMLDocContext_Impl::~SdXMLDocContext_Impl()
 {
 }
+
+TYPEINIT1( SdXMLDocContext_Impl, SvXMLImportContext );
 
 //////////////////////////////////////////////////////////////////////////////
 
