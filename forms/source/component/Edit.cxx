@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:08:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ Any SAL_CALL OEditControl::queryAggregation(const Type& _rType) throw (RuntimeEx
 DBG_NAME(OEditControl);
 //------------------------------------------------------------------------------
 OEditControl::OEditControl(const Reference<XMultiServiceFactory>& _rxFactory)
-               :OBoundControl(_rxFactory, VCL_CONTROL_EDIT)
+               :OBoundControl( _rxFactory, FRM_SUN_CONTROL_RICHTEXTCONTROL )
                ,m_aChangeListeners(m_aMutex)
                ,m_nKeyEvent( 0 )
 {
@@ -367,7 +367,7 @@ Sequence<Type> OEditModel::_getTypes()
 DBG_NAME(OEditModel);
 //------------------------------------------------------------------
 OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
-             :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_RICHTEXTCONTROL, sal_True, sal_True )
+             :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, sal_True, sal_True )
     ,m_bMaxTextLenModified(sal_False)
     ,m_nKeyType(NumberFormat::UNDEFINED)
     ,m_aNullDate(DBTypeConversion::getStandardDate())
