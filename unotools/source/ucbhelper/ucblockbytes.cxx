@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-16 14:46:26 $
+ *  last change: $Author: mba $ $Date: 2001-07-18 09:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,7 +828,7 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
 }
 
 UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xContent, const Sequence < PropertyValue >& rProps,
-        Reference < XInputStream > xPostData, Reference < XInteractionHandler > xInteractionHandler, UcbLockBytesHandler* pHandler )
+        Reference < XInputStream > xPostData, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
 {
     if( !xContent.is() )
         return NULL;;
