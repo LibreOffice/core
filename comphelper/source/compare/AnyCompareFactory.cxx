@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AnyCompareFactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2002-01-11 17:48:39 $
+ *  last change: $Author: mav $ $Date: 2002-01-14 09:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -180,16 +183,26 @@ Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( con
     // for now only OUString properties compare is implemented
     // so no check for the property name is done
 
-    return m_rAnyCompare;
+    if( aPropertyName.equals( OUString::createFromAscii( "Title" ) ) )
+        return m_rAnyCompare;
+
+    return Reference< XAnyCompare >();
 }
 
 void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     if( aArguments.getLength() )
     {
-        aArguments[0] >>= m_Locale;
-        m_rAnyCompare = new AnyCompare( m_rFactory, m_Locale );
+        if( aArguments[0] >>= m_Locale )
+        {
+            m_rAnyCompare = new AnyCompare( m_rFactory, m_Locale );
+            return;
+        }
     }
+
+    throw IllegalArgumentException( OUString::createFromAscii( "The Any object does not contain Locale!\n" ),
+                                    Reference< XInterface >(),
+                                    1 );
 }
 
 OUString SAL_CALL AnyCompareFactory::getImplementationName(  ) throw( RuntimeException )
