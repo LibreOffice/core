@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-06 11:39:35 $
+ *  last change: $Author: cp $ $Date: 2000-12-10 20:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,7 +584,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { "gbk", aUnixCharsetGBKTab },
         { "big5", aUnixCharsetBIG5Tab },
         { "iso10646", aUnixCharsetISO10646Tab },
-        { "unicode", aUnixCharsetUNICODETab },
+/*      { "unicode", aUnixCharsetUNICODETab }, */ /* fonts contain only default chars */
         { "sunolcursor", aUnixCharsetSymbolTab },
         { "sunolglyph", aUnixCharsetSymbolTab },
         { "iso10646", aUnixCharsetUNICODETab },
