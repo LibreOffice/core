@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestRemote.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:16 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,14 +63,12 @@ package test.java_uno.anytest;
 
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
-import com.sun.star.lang.XComponent;
 import com.sun.star.uno.UnoRuntime;
+import test.java_uno.TestBed;
 
 public final class TestRemote {
     public static void main(String[] args) throws Exception {
-        TestBed t = new TestBed();
-        t.setProvider(new Provider(t));
-        t.execute(Client.class, 0);
+        new TestBed().execute(new Provider(), false, Client.class, 0);
     }
 
     public static final class Client extends TestBed.Client {
@@ -81,27 +79,17 @@ public final class TestRemote {
         protected boolean run(XBridge bridge) throws Throwable {
             XTransport transport = (XTransport) UnoRuntime.queryInterface(
                 XTransport.class, bridge.getInstance("Transport"));
-            boolean success = TestAny.test(transport, true);
-            ((XComponent) UnoRuntime.queryInterface(XComponent.class, bridge)).
-                dispose();
-            return success;
+            return TestAny.test(transport, true);
         }
     }
 
     private static final class Provider implements XInstanceProvider {
-        public Provider(TestBed testBed) {
-            this.testBed = testBed;
-        }
-
         public Object getInstance(String instanceName) {
-            testBed.serverDone(true);
             return new XTransport() {
                     public Object mapAny(Object any) {
                         return any;
                     }
                 };
         }
-
-        private final TestBed testBed;
     }
 }
