@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:12:17 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1238,7 +1238,7 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
         const SwPageDesc* pPd = rSepInfo.pPageDesc;
 
         if( rSepInfo.pSectionFmt && !pPd )
-            pPd = &rWrt.pDoc->GetPageDesc(0);
+            pPd = &const_cast<const SwDoc *>(rWrt.pDoc)->GetPageDesc(0);
 
         rWrt.pAktPageDesc = pPd;
         pA->nSepxFcPos = 0xffffffff;                // Default: none
