@@ -251,6 +251,11 @@
                     <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
+
+            <menu:menuseparator/>
+            <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
+            <menu:menuseparator/>
+
             <menu:menuitem menu:id=".uno:OpenXMLFilterSettings" menu:helpid="10958" menu:label="" />
             <menu:menuitem menu:id=".uno:ConfigureDialog" menu:helpid="5904" menu:label="" />
             <menu:menuitem menu:id=".uno:OptionsTreeDialog" menu:helpid="31630" menu:label="" />
