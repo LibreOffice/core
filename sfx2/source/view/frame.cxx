@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-12 17:15:11 $
+ *  last change: $Author: mba $ $Date: 2000-10-12 17:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1967,6 +1967,11 @@ SfxWorkWindow* SfxFrame::GetWorkWindow_Impl() const
         return pParentFrame->GetWorkWindow_Impl();
     else
         return NULL;
+}
+
+void SfxFrame::SetWorkWindow_Impl( SfxWorkWindow* pWorkwin )
+{
+    pImp->pWorkWin = pWorkwin;
 }
 
 void SfxFrame::CreateWorkWindow_Impl()
