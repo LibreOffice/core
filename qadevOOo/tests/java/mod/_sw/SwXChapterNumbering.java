@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXChapterNumbering.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 20:04:45 $
+ *  last change:$Date: 2004-08-11 15:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package mod._sw;
 
+import com.sun.star.beans.PropertyValue;
 import java.io.PrintWriter;
 
 import lib.StatusException;
@@ -133,7 +134,21 @@ public class SwXChapterNumbering extends TestCase {
             UnoRuntime.queryInterface(XChapterNumberingSupplier.class,xTextDoc);
         oObj = oCNSupp.getChapterNumberingRules();
 
+        PropertyValue[] instance1 = null;
+        try {
+            instance1 = (PropertyValue[]) oCNSupp.getChapterNumberingRules().getByIndex(1);
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        } catch (com.sun.star.lang.WrappedTargetException e) {
+            e.printStackTrace();
+        }
+
+        //instance1[0].Value = new Short((short)5);
+
         TestEnvironment tEnv = new TestEnvironment( oObj );
+
+        tEnv.addObjRelation("INSTANCE1", instance1);
+
         return tEnv;
 
     } // finish method getTestEnvironment
