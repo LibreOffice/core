@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:36:19 $
+#   last change: $Author: vg $ $Date: 2003-04-02 11:56:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@ PRJ=..
 PRJNAME=tools
 TARGET=bootstrp
 TARGETTYPE=CUI
-NO_DEFAULT_STL=TRUE
+#NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -108,14 +108,14 @@ APP1TARGET=     i_server
 APP1STACK=      16000
 APP1OBJS=   $(OBJ)$/iserver.obj
 APP1LIBS=       $(LB)$/bootstrp.lib
-APP1STDLIBS= $(SALLIB) $(TOOLSLIB)
+APP1STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
 
 
 APP6TARGET= sspretty
 APP6OBJS=	$(OBJ)$/sspretty.obj
 APP6LIBS=	$(LB)$/bootstrp.lib
 APP6STDLIBS=$(STATIC_LIBS) 
-APP6STDLIBS= $(SALLIB) $(TOOLSLIB)
+APP6STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
 
 APP7TARGET= rscdep
 APP7OBJS=	$(OBJ)$/rscdep.obj
