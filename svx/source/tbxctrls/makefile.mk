@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: os $ $Date: 2001-05-02 12:17:05 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:39:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,20 +72,12 @@ AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(GUI)" != "MAC"
 CFLAGS+=-DDG_DLL
-.ELSE
-CFLAGS+=-D DG_DLL
-.ENDIF
 
 # --- Files --------------------------------------------------------
-
-.IF "$(header)" == ""
 
 IMGLST_SRS=$(SRS)$/tbxctrls.srs
 BMP_IN=$(PRJ)$/win/res
@@ -104,15 +96,14 @@ SLOFILES=	\
         $(SLO)$/tbxdrctl.obj    \
         $(SLO)$/verttexttbxctrl.obj
 
-SRCFILES = \
+SRS1NAME=$(TARGET)
+SRC1FILES = \
         colrctrl.src			\
         lboxctrl.src			\
         linectrl.src			\
         tbcontrl.src			\
         tbxdraw.src				\
         grafctrl.src
-
-.ENDIF
 
 # --- Targets -------------------------------------------------------
 
