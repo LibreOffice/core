@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ namespace configmgr
             NodeChange validateRemoveElement (ElementRef const& aElement);
         private:
             void                implValidateSet();
-            Path::Component     implValidateElement(ElementRef const& aElement);
+            Path::Component     implValidateElement(ElementRef const& aElement, bool bReqRemovable);
             void                implValidateTree(ElementTree const& aElementTree);
         };
 //-----------------------------------------------------------------------------
@@ -271,12 +271,12 @@ namespace configmgr
         private:
             typedef Tree ElementNodeRef;
             void implValidateSet();
-            Path::Component     implValidateElement(ElementRef const& aElement);
+            Path::Component     implValidateElement(ElementRef const& aElement, bool bReqRemovable);
             UnoAny implValidateValue(ElementNodeRef const& aElementTree, UnoAny const& aValue);
             UnoAny implValidateValue(UnoAny const& aValue);
 
-            ElementTreeHolder makeValueElement(Name const& aName, ElementNodeRef const& aElementTree, UnoAny const& aValue);
-            ElementTreeHolder makeValueElement(Name const& aName, UnoAny const& aValue);
+            ElementTreeHolder makeValueElement(Name const& aName, ElementNodeRef const& aElementTree, UnoAny const& aValue, bool bInserting);
+            ElementTreeHolder makeValueElement(Name const& aName, UnoAny const& aValue, bool bInserting);
             ElementNodeRef extractElementNode(ElementRef const& aElement);
         };
 //-----------------------------------------------------------------------------
