@@ -2,9 +2,9 @@
  *
  *  $RCSfile: make.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:02:12 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,7 +584,7 @@ CELLPTR setdirroot;
        * is newer then set the time stamps so that the archived member is
        * replaced. */
       if( cp->ce_attr & A_LIBRARY )
-     if( tcp->ce_time < cp->ce_time ) {
+     if( tcp->ce_time <= cp->ce_time ) {
         time_t mtime = Do_stat( name, tcp->ce_lib, NIL(char *), FALSE );
         if( mtime < tcp->ce_time ) tcp->ce_time = cp->ce_time+1L;
      }
