@@ -3,6 +3,7 @@
  * is referenced throughout the entire document
  *
  * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (c) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,58 +29,53 @@
 #include "FilterInternal.hxx"
 #include "SectionStyle.hxx"
 #include "DocumentElement.hxx"
+#include <math.h>
 
-using namespace ::rtl;
-using rtl::OUString;
+#ifdef _MSC_VER
+double rint(double x);
+#endif /* _WIN32 */
 
 const float fDefaultSideMargin = 1.0f; // inches
 const float fDefaultPageWidth = 8.5f; // inches (OOo required default: we will handle this later)
 const float fDefaultPageHeight = 11.0f; // inches
 
-SectionStyle::SectionStyle(const int iNumColumns, const char *psName) : Style(psName),
-    miNumColumns(iNumColumns)
+SectionStyle::SectionStyle(const WPXPropertyList &xPropList,
+                           const WPXPropertyListVector &xColumns,
+                           const char *psName) :
+        Style(psName),
+        mPropList(xPropList),
+        mColumns(xColumns)
 {
-
-    WRITER_DEBUG_MSG(("WriterWordPerfect: Created a new set of section props with this no. of columns: %i and this name: %s\n",
-           (int)miNumColumns, (const char *)getName()));
 }
 
-void SectionStyle::write(Reference < XDocumentHandler > &xHandler) const
+void SectionStyle::write(DocumentHandler &xHandler) const
 {
     TagOpenElement styleOpen("style:style");
     styleOpen.addAttribute("style:name", getName());
     styleOpen.addAttribute("style:family", "section");
     styleOpen.write(xHandler);
 
-    // style properties
-    TagOpenElement stylePropertiesOpen("style:properties");
-    stylePropertiesOpen.addAttribute("text:dont-balance-text-columns", "false");
-    stylePropertiesOpen.write(xHandler);
+    // if the number of columns is <= 1, we will never come here. This is only an additional check
+    if (mColumns.count() > 1)
+    {
+        // style properties
+                xHandler.startElement("style:properties", mPropList);
 
-    // column properties
-    TagOpenElement columnsOpen("style:columns");
-    UTF8String sColumnCount;
-    sColumnCount.sprintf("%i", miNumColumns);
-    columnsOpen.addAttribute("fo:column-count", sColumnCount.getUTF8());
-    columnsOpen.addAttribute("fo:column-gap", "0inch");
-    columnsOpen.write(xHandler);
+        // column properties
+                WPXPropertyList columnProps;
+                columnProps.insert("fo:column-count", (int)mColumns.count());
+                xHandler.startElement("style:columns", columnProps);
 
-    if (miNumColumns > 1) {
-        for (int i=0; i<miNumColumns; i++) {
-            // theoretically, we would put column widths in here, but that's currently unsupported..
-            // so we just allocate a size of "1" for each
-            TagOpenElement columnOpen("style:column");
-            columnOpen.addAttribute("style:rel-width", "1");
-            columnOpen.addAttribute("fo:margin-left", "0inch");
-            columnOpen.addAttribute("fo:margin-right", "0inch");
-            columnOpen.write(xHandler);
-
-            TagCloseElement columnClose("style:column");
-            columnClose.write(xHandler);
+                WPXPropertyListVector::Iter i(mColumns);
+                for (i.rewind(); i.next();)
+        {
+                        xHandler.startElement("style:column", i());
+                        xHandler.endElement("style:column");
         }
+
+                xHandler.endElement("style:columns");
+                xHandler.endElement("style:properties");
     }
 
-    xHandler->endElement(OUString::createFromAscii("style:columns"));
-    xHandler->endElement(OUString::createFromAscii("style:properties"));
-    xHandler->endElement(OUString::createFromAscii("style:style"));
+    xHandler.endElement("style:style");
 }

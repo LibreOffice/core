@@ -27,20 +27,20 @@
 #ifndef _SECTIONSTYLE_H
 #define _SECTIONSTYLE_H
 #include <libwpd/libwpd.h>
+#include <libwpd/WPXPropertyListVector.h>
 
 #include "Style.hxx"
 #include "WriterProperties.hxx"
 
-using com::sun::star::uno::Reference;
-using com::sun::star::xml::sax::XDocumentHandler;
 
 class SectionStyle : public Style
 {
 public:
-    SectionStyle(const int iNumColumns, const char *psName);
-    virtual void write(Reference < XDocumentHandler > &xHandler) const;
+    SectionStyle(const WPXPropertyList &xPropList, const WPXPropertyListVector &xColumns, const char *psName);
+    virtual void write(DocumentHandler &xHandler) const;
 
 private:
-    int miNumColumns;
+        WPXPropertyList mPropList;
+    WPXPropertyListVector mColumns;
 };
 #endif
