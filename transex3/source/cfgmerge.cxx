@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-11 13:49:22 $
+ *  last change: $Author: nf $ $Date: 2001-06-19 10:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,7 +708,9 @@ CfgMerge::CfgMerge(
 /*****************************************************************************/
                 : CfgOutputParser( rOutputFile ),
                 pMergeDataFile( NULL ),
-                pResData( NULL )
+                pResData( NULL ),
+                bGerman( FALSE ),
+                bEnglish( FALSE )
 {
     if ( rMergeSource.Len())
         pMergeDataFile = new MergeDataFile(
@@ -750,6 +752,11 @@ void CfgMerge::WorkOnText(
             pResData->sResTyp = pStackData->sResTyp;
         }
 
+        if ( nLangIndex == GERMAN_INDEX )
+            bGerman = TRUE;
+        if (( nLangIndex == ENGLISH_INDEX ) || ( nLangIndex == ENGLISH_US_INDEX ))
+            bEnglish = TRUE;
+
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
         if ( pEntrys ) {
             ByteString sContent;
@@ -779,7 +786,7 @@ void CfgMerge::Output( const ByteString& rOutput )
 void CfgMerge::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
-    if ( pMergeDataFile && pResData && bLocalize ) {
+    if ( pMergeDataFile && pResData && bLocalize && bGerman && bEnglish ) {
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
         if ( pEntrys ) {
             for ( ULONG nIndex = 0; nIndex < LANGUAGES; nIndex++ ) {
@@ -827,4 +834,6 @@ void CfgMerge::WorkOnRessourceEnd()
     }
     delete pResData;
     pResData = NULL;
+    bGerman = FALSE;
+    bEnglish = FALSE;
 }
