@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:28:33 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,17 +67,8 @@ ModalDialog DLG_COLOR
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 165 + DIFF ) ;
     Moveable = TRUE ;
-    Text = "Farbe" ;
-    Text [ ENGLISH ] = "Color" ;
-    Text [ english_us ] = "Color" ;
-    Text [ portuguese_brazilian ] = "Cor" ;
-    Text [ swedish ] = "Färg" ;
-    Text [ danish ] = "Farve" ;
-    Text [ italian ] = "Colore" ;
-    Text [ spanish ] = "Color" ;
-    Text [ french ] = "Couleur" ;
-    Text [ dutch ] = "Kleur" ;
-    Text [ portuguese ] = "Cor" ;
+    Text [ de ] = "Farbe" ;
+    Text [ en-US ] = "Color" ;
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 205 , 6 ) ;
@@ -115,149 +106,33 @@ ModalDialog DLG_COLOR
     {
         Pos = MAP_APPFONT ( 6 , 110 + DIFF ) ;
         Size = MAP_APPFONT ( 34 , 10 ) ;
-        Text = "~Cyan" ;
-        Text [ ENGLISH ] = "~Cyan" ;
-        Text [ english_us ] = "~Cyan" ;
-        Text [ portuguese_brazilian ] = "~Ciano" ;
-        Text [ swedish ] = "~Cyan" ;
-        Text [ danish ] = "~Turkis" ;
-        Text [ italian ] = "Ciano" ;
-        Text [ spanish ] = "Cian" ;
-        Text [ french ] = "~Cyan" ;
-        Text [ dutch ] = "~Cyaan" ;
-        Text [ portuguese ] = "~Ciano" ;
-        Text[ chinese_simplified ] = "è“ç»¿è‰²(~C)";
-        Text[ russian ] = "Ãîëóáîé";
-        Text[ polish ] = "~Seledynowy";
-        Text[ japanese ] = "ã‚·ã‚¢ãƒ³(~C)";
-        Text[ chinese_traditional ] = "è—ç¶ è‰²(~C)";
-        Text[ arabic ] = "ÃÒÑŞ ÓãÇæí";
-        Text[ dutch ] = "~Cyaan";
-        Text[ chinese_simplified ] = "è“ç»¿è‰²(~C)";
-        Text[ greek ] = "Êõáíü";
-        Text[ korean ] = "ì²­ë¡ìƒ‰(~C)";
-        Text[ turkish ] = "~Camgöbeği";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cian";
-        Text[ finnish ] = "S~yaani";
-        Text[ thai ] = "~à¸Ÿà¹‰à¸²";
-        Text[ czech ] = "AzurovÃ¡";
-        Text[ hebrew ] = "â€®×¦×‘×¢ ×§×™×™×Ÿ (×›×—×•×œ ×¢××•×§)â€¬";
-        Text[ hindi ] = "~à¤¸à¤¿à¤¯à¤¾à¤¨";
-        Text[ slovak ] = "~AzÃºrovÃ¡";
-        Text[ hungarian ] = "~CiÃ¡nkÃ©k";
-        Text[ slovenian ] = "~Cijan";
+        Text [ de ] = "~Cyan" ;
+        Text [ en-US ] = "~Cyan" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_MAGENTA
     {
         Pos = MAP_APPFONT ( 6 , 123 + DIFF ) ;
         Size = MAP_APPFONT ( 34 , 10 ) ;
-        Text = "~Magenta" ;
-        Text [ ENGLISH ] = "~Magenta" ;
-        Text [ english_us ] = "~Magenta" ;
-        Text [ portuguese_brazilian ] = "~Magenta" ;
-        Text [ swedish ] = "~Magenta" ;
-        Text [ danish ] = "~Magentarød" ;
-        Text [ italian ] = "~Magenta" ;
-        Text [ spanish ] = "~Magenta" ;
-        Text [ french ] = "~Magenta" ;
-        Text [ dutch ] = "Vio~let" ;
-        Text [ portuguese ] = "~Magenta" ;
-        Text[ chinese_simplified ] = "ç´«çº¢è‰²(~M)";
-        Text[ russian ] = "Ïóğïóğíûé";
-        Text[ polish ] = "~Purpurowy";
-        Text[ japanese ] = "ãƒã‚¼ãƒ³ã‚¿(~M)";
-        Text[ chinese_traditional ] = "ç´«ç´…è‰²(~M)";
-        Text[ arabic ] = "ÃÑÌæÇäí";
-        Text[ dutch ] = "Vio~let";
-        Text[ chinese_simplified ] = "ç´«çº¢è‰²(~M)";
-        Text[ greek ] = "Ìáôæİíôá";
-        Text[ korean ] = "ì„ í™ìƒ‰(~M)";
-        Text[ turkish ] = "M~or";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Magenta";
-        Text[ finnish ] = "~Magenta";
-        Text[ thai ] = "~à¸¡à¹ˆà¸§à¸‡";
-        Text[ czech ] = "PurpurovÃ¡";
-        Text[ hebrew ] = "â€®×¦×‘×¢ ××’'× ×˜×”â€¬";
-        Text[ hindi ] = "~à¤®à¥‡à¤œà¤¼à¤¨à¥à¤Ÿà¤¾";
-        Text[ slovak ] = "~PurpurovÃ¡";
-        Text[ hungarian ] = "~Lila";
-        Text[ slovenian ] = "Ma~genta";
+        Text [ de ] = "~Magenta" ;
+        Text [ en-US ] = "~Magenta" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_YELLOW
     {
         Pos = MAP_APPFONT ( 6 , 136 + DIFF ) ;
         Size = MAP_APPFONT ( 34 , 10 ) ;
-        Text = "~Yellow" ;
-        Text [ ENGLISH ] = "~Yellow" ;
-        Text [ english_us ] = "~Yellow" ;
-        Text [ portuguese_brazilian ] = "~Amarelo" ;
-        Text [ swedish ] = "~Yellow" ;
-        Text [ danish ] = "~Gul" ;
-        Text [ italian ] = "~Giallo" ;
-        Text [ spanish ] = "Amarillo" ;
-        Text [ french ] = "~Jaune" ;
-        Text [ dutch ] = "~Geel" ;
-        Text [ portuguese ] = "~Amarelo" ;
-        Text[ chinese_simplified ] = "é»„è‰²(~Y)";
-        Text[ russian ] = "Æåëòûé";
-        Text[ polish ] = "¯ó³~ty";
-        Text[ japanese ] = "é»„(~Y)";
-        Text[ chinese_traditional ] = "é»ƒè‰²(~Y)";
-        Text[ arabic ] = "ÃÕİÑ";
-        Text[ dutch ] = "~Geel";
-        Text[ chinese_simplified ] = "é»„è‰²(~Y)";
-        Text[ greek ] = "Êßôñéíï";
-        Text[ korean ] = "í™©ìƒ‰(~Y)";
-        Text[ turkish ] = "~Sarı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Groc";
-        Text[ finnish ] = "K~eltainen";
-        Text[ thai ] = "à¹€~à¸«à¸¥à¸·à¸­à¸‡";
-        Text[ czech ] = "Å½lutÃ¡";
-        Text[ hebrew ] = "â€®×¦×”×•×‘â€¬";
-        Text[ hindi ] = "~à¤ªà¥€à¤²à¤¾";
-        Text[ slovak ] = "Å½~ltÃ¡";
-        Text[ hungarian ] = "SÃ¡~rga";
-        Text[ slovenian ] = "R~umena";
+        Text [ de ] = "~Yellow" ;
+        Text [ en-US ] = "~Yellow" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_KEY
     {
         Pos = MAP_APPFONT ( 6 , 149 + DIFF ) ;
         Size = MAP_APPFONT ( 34 , 10 ) ;
-        Text = "~Key" ;
-        Text [ ENGLISH ] = "~Key" ;
-        Text [ english_us ] = "~Key" ;
-        Text [ portuguese_brazilian ] = "~Preto" ;
-        Text [ swedish ] = "~Nyckel" ;
-        Text [ danish ] = "~Sort" ;
-        Text [ italian ] = "Chiave" ;
-        Text [ spanish ] = "~Llave" ;
-        Text [ french ] = "~Khôl" ;
-        Text [ dutch ] = "~Key" ;
-        Text [ portuguese ] = "~Chave" ;
-        Text[ chinese_simplified ] = "é”®ç (~K)";
-        Text[ russian ] = "Êëş÷";
-        Text[ polish ] = "~Klucz";
-        Text[ japanese ] = "é»’(~K)";
-        Text[ chinese_traditional ] = "éµç¢¼(~K)";
-        Text[ arabic ] = "ãİÊÇÍ";
-        Text[ dutch ] = "~Key";
-        Text[ chinese_simplified ] = "é”®ç (~K)";
-        Text[ greek ] = "~Êëåéäß";
-        Text[ korean ] = "í‚¤(~K)";
-        Text[ turkish ] = "~Anahtar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Clau";
-        Text[ finnish ] = "~Musta";
-        Text[ thai ] = "~à¸à¸¸à¸à¹à¸ˆ";
-        Text[ czech ] = "KlÃ­Ä";
-        Text[ hebrew ] = "â€®××¤×ª×—â€¬";
-        Text[ hindi ] = "~à¤šà¤¾à¤­à¥€";
-        Text[ slovak ] = "~KÄ¾ÃºÄ";
-        Text[ hungarian ] = "~Fekete";
-        Text[ slovenian ] = "~ÄŒrna";
+        Text [ de ] = "~Key" ;
+        Text [ en-US ] = "~Key" ;
+        Text [ x-comment ] = " ";
     };
     MetricField NUM_CYAN
     {
@@ -315,112 +190,25 @@ ModalDialog DLG_COLOR
     {
         Pos = MAP_APPFONT ( 72 , 123 + DIFF ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
-        Text = "~Rot" ;
-        Text [ ENGLISH ] = "~Red" ;
-        Text [ english_us ] = "~Red" ;
-        Text [ portuguese_brazilian ] = "~Vermelho" ;
-        Text [ swedish ] = "~Rött" ;
-        Text [ danish ] = "~Rød" ;
-        Text [ italian ] = "~Rosso" ;
-        Text [ spanish ] = "~Rojo" ;
-        Text [ french ] = "~Rouge" ;
-        Text [ dutch ] = "~Rood" ;
-        Text [ portuguese ] = "~Vermelho" ;
-        Text[ chinese_simplified ] = "çº¢è‰²(~R)";
-        Text[ russian ] = "Êğàñíûé";
-        Text[ polish ] = "~Czerwony";
-        Text[ japanese ] = "èµ¤(~R)";
-        Text[ chinese_traditional ] = "ç´…è‰²(~R)";
-        Text[ arabic ] = "ÃÍãÑ";
-        Text[ dutch ] = "~Rood";
-        Text[ chinese_simplified ] = "çº¢è‰²(~R)";
-        Text[ greek ] = "Êüêêéíï";
-        Text[ korean ] = "ì ìƒ‰(~R)";
-        Text[ turkish ] = "~Kırmızı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Vermell";
-        Text[ finnish ] = "~Punainen";
-        Text[ thai ] = "à¹~à¸”à¸‡";
-        Text[ czech ] = "ÄŒervenÃ¡";
-        Text[ hebrew ] = "â€®××“×•×â€¬";
-        Text[ hindi ] = "~à¤²à¤¾à¤²";
-        Text[ slovak ] = "ÄŒe~rvenÃ¡";
-        Text[ hungarian ] = "~VÃ¶rÃ¶s";
-        Text[ slovenian ] = "~RdeÄa";
+        Text [ de ] = "~Rot" ;
+        Text [ en-US ] = "~Red" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_GREEN
     {
         Pos = MAP_APPFONT ( 72 , 136 + DIFF ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
-        Text = "~Grün" ;
-        Text [ ENGLISH ] = "~Green" ;
-        Text [ english_us ] = "~Green" ;
-        Text [ portuguese_brazilian ] = "Ver~de" ;
-        Text [ swedish ] = "~Grönt" ;
-        Text [ danish ] = "~Grøn" ;
-        Text [ italian ] = "~Verde" ;
-        Text [ spanish ] = "~Verde" ;
-        Text [ french ] = "~Vert" ;
-        Text [ dutch ] = "~Groen" ;
-        Text [ portuguese ] = "~Verde" ;
-        Text[ chinese_simplified ] = "ç»¿è‰²(~G)";
-        Text[ russian ] = "Çåëåíûé";
-        Text[ polish ] = "~Zielony";
-        Text[ japanese ] = "ç·‘(~G)";
-        Text[ chinese_traditional ] = "ç¶ è‰²(~G)";
-        Text[ arabic ] = "ÃÎÖÑ";
-        Text[ dutch ] = "~Groen";
-        Text[ chinese_simplified ] = "ç»¿è‰²(~G)";
-        Text[ greek ] = "ĞñÜóéíï";
-        Text[ korean ] = "ë…¹ìƒ‰(~G)";
-        Text[ turkish ] = "~Yeşil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Verd";
-        Text[ finnish ] = "~Vihreä";
-        Text[ thai ] = "à¹€~à¸‚à¸µà¸¢à¸§";
-        Text[ czech ] = "ZelenÃ¡";
-        Text[ hebrew ] = "â€®×™×¨×•×§â€¬";
-        Text[ hindi ] = "~à¤¹à¤°à¤¾";
-        Text[ slovak ] = "Zele~nÃ¡";
-        Text[ hungarian ] = "~ZÃ¶ld";
-        Text[ slovenian ] = "~Zelena";
+        Text [ de ] = "~Grün" ;
+        Text [ en-US ] = "~Green" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_BLUE
     {
         Pos = MAP_APPFONT ( 72 , 149 + DIFF ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
-        Text = "~Blau" ;
-        Text [ ENGLISH ] = "~Blue" ;
-        Text [ english_us ] = "~Blue" ;
-        Text [ portuguese_brazilian ] = "A~zul" ;
-        Text [ swedish ] = "~Blått" ;
-        Text [ danish ] = "~Blå" ;
-        Text [ italian ] = "~Blu" ;
-        Text [ spanish ] = "~Azul" ;
-        Text [ french ] = "~Bleu" ;
-        Text [ dutch ] = "~Blauw" ;
-        Text [ portuguese ] = "~Azul" ;
-        Text[ chinese_simplified ] = "è“è‰²(~B)";
-        Text[ russian ] = "Ñèíèé";
-        Text[ polish ] = "~Niebieski";
-        Text[ japanese ] = "é’(~B)";
-        Text[ chinese_traditional ] = "è—è‰²(~B)";
-        Text[ arabic ] = "ÃÒÑŞ";
-        Text[ dutch ] = "~Blauw";
-        Text[ chinese_simplified ] = "è“è‰²(~B)";
-        Text[ greek ] = "Ìğëå";
-        Text[ korean ] = "ì²­ìƒ‰(~B)";
-        Text[ turkish ] = "~Mavi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Blau";
-        Text[ finnish ] = "~Sininen";
-        Text[ thai ] = "~à¸™à¹‰à¸³à¹€à¸‡à¸´à¸™";
-        Text[ czech ] = "ModrÃ¡";
-        Text[ hebrew ] = "â€®×›×—×•×œâ€¬";
-        Text[ hindi ] = "~à¤¨à¥€à¤²à¤¾";
-        Text[ slovak ] = "Mo~drÃ¡";
-        Text[ hungarian ] = "~KÃ©k";
-        Text[ slovenian ] = "~Modra";
+        Text [ de ] = "~Blau" ;
+        Text [ en-US ] = "~Blue" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NUM_RED
     {
@@ -459,38 +247,9 @@ ModalDialog DLG_COLOR
     {
         Pos = MAP_APPFONT ( 135 , 123 + DIFF ) ;
         Size = MAP_APPFONT ( 34 , 10 ) ;
-        Text = "~Farbe" ;
-        Text [ ENGLISH ] = "H~ue" ;
-        Text [ english_us ] = "H~ue" ;
-        Text [ portuguese_brazilian ] = "Ma~tiz" ;
-        Text [ swedish ] = "~Färg" ;
-        Text [ danish ] = "Tone" ;
-        Text [ italian ] = "Colore" ;
-        Text [ spanish ] = "~Tinte" ;
-        Text [ french ] = "~Teinte" ;
-        Text [ dutch ] = "~Kleur" ;
-        Text [ portuguese ] = "~Cor" ;
-        Text[ chinese_simplified ] = "é¢œè‰²(~U)";
-        Text[ russian ] = "Îòòåíîê";
-        Text[ polish ] = "~Odcieñ";
-        Text[ japanese ] = "è‰²åˆã„(~U)";
-        Text[ chinese_traditional ] = "é¡è‰²(~U)";
-        Text[ arabic ] = "Çááæä";
-        Text[ dutch ] = "~Kleur";
-        Text[ chinese_simplified ] = "é¢œè‰²(~U)";
-        Text[ greek ] = "×ñşìá";
-        Text[ korean ] = "ìƒ‰(~U)";
-        Text[ turkish ] = "~Renk";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~To de color";
-        Text[ finnish ] = "S~ävy";
-        Text[ thai ] = "~à¸ªà¸µ";
-        Text[ czech ] = "TÃ³n";
-        Text[ hebrew ] = "â€®×’×•×•×Ÿâ€¬";
-        Text[ hindi ] = "à¤¹~à¤¯à¥‚";
-        Text[ slovak ] = "Od~tieÅˆ";
-        Text[ hungarian ] = "Ãrny~alat";
-        Text[ slovenian ] = "~Odtenek";
+        Text [ de ] = "~Farbe" ;
+        Text [ en-US ] = "H~ue" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NUM_HUE
     {
@@ -507,38 +266,9 @@ ModalDialog DLG_COLOR
     {
         Pos = MAP_APPFONT ( 135 , 136 + DIFF ) ;
         Size = MAP_APPFONT ( 34 , 10 ) ;
-        Text = "~Sättigung" ;
-        Text [ ENGLISH ] = "~Saturation" ;
-        Text [ english_us ] = "~Saturation" ;
-        Text [ portuguese_brazilian ] = "~Saturação" ;
-        Text [ swedish ] = "Mä~ttnad" ;
-        Text [ danish ] = "~Mætning" ;
-        Text [ italian ] = "~Saturazione" ;
-        Text [ spanish ] = "~Saturación" ;
-        Text [ french ] = "S~aturation" ;
-        Text [ dutch ] = "~Verzadiging" ;
-        Text [ portuguese ] = "~Saturação" ;
-        Text[ chinese_simplified ] = "é¥±å’Œåº¦(~S)";
-        Text[ russian ] = "~Íàñûùåíèå";
-        Text[ polish ] = "N~asycenie";
-        Text[ japanese ] = "å½©åº¦(~S)";
-        Text[ chinese_traditional ] = "é£½å’Œåº¦(~S)";
-        Text[ arabic ] = "ÇáÅÔÈÇÚ";
-        Text[ dutch ] = "~Verzadiging";
-        Text[ chinese_simplified ] = "é¥±å’Œåº¦(~S)";
-        Text[ greek ] = "Êïñå~óìüò";
-        Text[ korean ] = "ì±„ë„(~S)";
-        Text[ turkish ] = "~Doygunluk";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Saturació";
-        Text[ finnish ] = "K~ylläisyys";
-        Text[ thai ] = "~à¸­à¸´à¹ˆà¸¡à¸•à¸±à¸§";
-        Text[ czech ] = "NasycenÃ­";
-        Text[ hebrew ] = "â€®×¨×•×•×™×ª ×”×¦×‘×¢â€¬";
-        Text[ hindi ] = "à¤ª~à¤°à¤¿à¤ªà¥‚à¤°à¥à¤£à¤¤à¤¾";
-        Text[ slovak ] = "~SÃ½tosÅ¥";
-        Text[ hungarian ] = "T~elÃ­tettsÃ©g";
-        Text[ slovenian ] = "~NasiÄenost";
+        Text [ de ] = "~Sättigung" ;
+        Text [ en-US ] = "~Saturation" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NUM_SATURATION
     {
@@ -555,38 +285,9 @@ ModalDialog DLG_COLOR
     {
         Pos = MAP_APPFONT ( 135 , 149 + DIFF ) ;
         Size = MAP_APPFONT ( 34 , 10 ) ;
-        Text = "He~lligkeit" ;
-        Text [ ENGLISH ] = "~Luminance" ;
-        Text [ english_us ] = "Bright~ness" ;
-        Text [ portuguese_brazilian ] = "~Brilho" ;
-        Text [ swedish ] = "~Ljusstyrka" ;
-        Text [ danish ] = "Lysstyrke" ;
-        Text [ italian ] = "~Luminosità" ;
-        Text [ spanish ] = "~Brillo" ;
-        Text [ french ] = "~Luminosité" ;
-        Text [ dutch ] = "Hel~derheid" ;
-        Text [ portuguese ] = "~Brilho" ;
-        Text[ chinese_simplified ] = "äº®åº¦(~N)";
-        Text[ russian ] = "ßğêîñòü";
-        Text[ polish ] = "~Jasnoœæ";
-        Text[ japanese ] = "æ˜åº¦(~N)";
-        Text[ chinese_traditional ] = "äº®åº¦(~N)";
-        Text[ arabic ] = "ÇáÅÖÇÁÉ";
-        Text[ dutch ] = "Hel~derheid";
-        Text[ chinese_simplified ] = "äº®åº¦(~N)";
-        Text[ greek ] = "Öùôåéíüôçôá";
-        Text[ korean ] = "ë°ê¸°(~N)";
-        Text[ turkish ] = "Par~laklık";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Brillantor";
-        Text[ finnish ] = "Kirk~kaus";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸ªà¸§à¹ˆà¸²à¸‡";
-        Text[ czech ] = "Jas";
-        Text[ hebrew ] = "â€®×‘×”×™×¨×•×ªâ€¬";
-        Text[ hindi ] = "Bright~ness";
-        Text[ slovak ] = "~Jas";
-        Text[ hungarian ] = "FÃ©~nyerÅ‘";
-        Text[ slovenian ] = "~Svetlost";
+        Text [ de ] = "He~lligkeit" ;
+        Text [ en-US ] = "Bright~ness" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NUM_LUMINANCE
     {
@@ -627,27 +328,7 @@ ModalDialog DLG_COLOR
         Size = MAP_APPFONT ( 26 , 51 + DIFF ) ;
         TabStop = TRUE ;
     };
-    Text[ chinese_simplified ] = "é¢œè‰²";
-    Text[ russian ] = "Öâåò";
-    Text[ polish ] = "Kolor";
-    Text[ japanese ] = "è‰²";
-    Text[ chinese_traditional ] = "é¡è‰²";
-    Text[ arabic ] = "Çááæä";
-    Text[ dutch ] = "Kleur";
-    Text[ chinese_simplified ] = "é¢œè‰²";
-    Text[ greek ] = "×ñşìá";
-    Text[ korean ] = "ìƒ‰ìƒ";
-    Text[ turkish ] = "Renk";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Color";
-    Text[ finnish ] = "Väri";
-    Text[ thai ] = "à¸ªà¸µ";
-    Text[ czech ] = "Barva";
-    Text[ hebrew ] = "â€®×¦×‘×¢â€¬";
-    Text[ hindi ] = "à¤°à¤‚à¤—";
-    Text[ slovak ] = "Farba";
-    Text[ hungarian ] = "SzÃ­n";
-    Text[ slovenian ] = "Barva";
+    Text [ x-comment ] = " ";
 };
 
 
