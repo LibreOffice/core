@@ -40,8 +40,8 @@ Sub ProgressBarDemo()
 	
 	REM progress bar settings
 	Const ProgressValueMin = 0
-	Const ProgressValueMax = 40
-	Const ProgressStep = 4		
+	Const ProgressValueMax = 50
+	Const ProgressStep = 1
 
 	REM set minimum and maximum progress value
 	oProgressBarModel = oDialog.Model.ProgressBar1
@@ -61,7 +61,7 @@ Sub ProgressBarDemo()
 	REM increase progress value every second
 	For ProgressValue = ProgressValueMin To ProgressValueMax Step ProgressStep
    	    oProgressBarModel.ProgressValue = ProgressValue
-		Wait 1000	
+		Wait 40
 	Next ProgressValue
 
 	REM hide progress bar
