@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,8 +520,15 @@ ImageList RID_TOOLBAR_IMGLIST_HC
     MASKCOLOR
     BIB_IMAGES
 };
-
-
-
-
-
+ImageList RID_TOOLBAR_BIGIMGLIST
+{
+    ImageBitmap = Bitmap { File = "lc_bibdb.bmp" ; };
+    MASKCOLOR
+    BIB_IMAGES
+};
+ImageList RID_TOOLBAR_BIGIMGLIST_HC
+{
+    ImageBitmap = Bitmap { File = "lch_bibdb.bmp" ; };
+    MASKCOLOR
+    BIB_IMAGES
+};
