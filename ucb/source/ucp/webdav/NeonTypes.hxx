@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonTypes.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:29 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,4 +88,4 @@ typedef struct hip_xml_elm          NeonPropFindXmlElem;
 typedef ne_xml_elmid                NeonPropFindXmlId;
 typedef ne_prop_result_set          NeonPropFindResultSet;
 
-#endif _NEONTYPES_HXX_
+#endif // _NEONTYPES_HXX_
