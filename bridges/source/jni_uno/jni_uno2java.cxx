@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-04 14:56:29 $
+ *  last change: $Author: dbo $ $Date: 2002-11-05 11:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ inline void jni_unoInterfaceProxy::acquire() const SAL_THROW( () )
             jni_unoInterfaceProxy_free, m_oid.pData,
             (typelib_InterfaceTypeDescription *)m_type_info->m_td.get() );
 #ifdef DEBUG
-        OSL_ASSERT( this == that );
+        OSL_ASSERT( this == (void const * const)that );
 #endif
     }
 }
