@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-14 17:41:12 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,7 @@ String SCSTR_CHARTSHELL
     Text[ swedish ] = "Chart-objekt";
     Text[ polish ] = "Obiekty wykresu";
     Text[ portuguese_brazilian ] = "Chart-objects";
-    Text[ japanese ] = "γ‚°γƒ©γƒ•γ®γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ";
+    Text[ japanese ] = "γ‚°γƒ©γƒ•γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ";
     Text[ korean ] = "μ°¨νΈ-κ°μ²΄";
     Text[ chinese_simplified ] = "ε›Ύθ΅¨ε―Ήθ±΅";
     Text[ chinese_traditional ] = "ε–θ΅¨η‰©δ»¶";
@@ -1207,7 +1207,7 @@ String SCSTR_NONAME
     Text[ chinese_simplified ] = "ζªε‘½ε";
     Text[ russian ] = "αεη θμενθ";
     Text[ polish ] = "bez nazwy";
-    Text[ japanese ] = "η„΅ε";
+    Text[ japanese ] = "η„΅ι΅";
     Text[ chinese_traditional ] = "ζªε‘½ε";
     Text[ arabic ] = "ΘΟζδ ΪδζΗδ";
     Text[ greek ] = "Δίχως όνομα";
@@ -2380,7 +2380,7 @@ String SCSTR_UNKNOWN
     Text[ chinese_simplified ] = "ζªε‘½ε";
     Text[ russian ] = "Νεθηβερςνϋι";
     Text[ polish ] = "Nieznany";
-    Text[ japanese ] = "η„΅ε";
+    Text[ japanese ] = "δΈζ";
     Text[ chinese_traditional ] = "ζªε‘½ε";
     Text[ arabic ] = "ΫνΡ γΪΡζέ";
     Text[ greek ] = "Άγνωστο";
@@ -2464,7 +2464,7 @@ String SCSTR_CFG_APP
     Text[ chinese_simplified ] = "η³»η»ι€‰ι΅Ή";
     Text[ russian ] = "Οΰπΰμεςπϋ ρθρςεμϋ";
     Text[ polish ] = "Opcje systemu";
-    Text[ japanese ] = "γ‚·γ‚Ήγƒ†γƒ  γ‚ªγƒ—γ‚·γƒ§γƒ³";
+    Text[ japanese ] = "γ‚·γ‚Ήγƒ†γƒ γ‚ªγƒ—γ‚·γƒ§γƒ³";
     Text[ chinese_traditional ] = "η³»ηµ±ιΈι …";
     Text[ arabic ] = "ΞνΗΡΗΚ ΗαδΩΗγ";
     Text[ greek ] = "Επιλογές συστήματος";
@@ -2491,7 +2491,7 @@ String SCSTR_CFG_DOC
     Text[ chinese_simplified ] = "ζ–‡ζ΅£ι€‰ι΅Ή";
     Text[ russian ] = "Οΰπΰμεςπϋ δξκσμενςΰ";
     Text[ polish ] = "Opcje dokumentu";
-    Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ γ‚ªγƒ—γ‚·γƒ§γƒ³";
+    Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ‚ªγƒ—γ‚·γƒ§γƒ³";
     Text[ chinese_traditional ] = "ζ–‡δ»¶ιΈι …";
     Text[ arabic ] = "ΞνΗΡΗΚ ΗαγΣΚδΟ";
     Text[ greek ] = "Επιλογές εγγράφου";
@@ -3034,6 +3034,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ catalan ] = "Filtre d'imatge";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
+
 
 
 
