@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:03:14 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,13 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
+#ifndef SC_RANGELST_HXX
+#include "rangelst.hxx"
+#endif
 
+#ifndef SC_XLCONTENT_HXX
+#include "xlcontent.hxx"
+#endif
 #ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
 #endif
@@ -82,6 +88,7 @@ globals for the document).
 - Background bitmap
 - Hyperlinks
 - Label ranges
+- Conditional formatting
 - Data validation
 - Web queries
 ============================================================================ */
@@ -92,10 +99,6 @@ globals for the document).
     @descr  This class loads the SST and provides access to the strings. */
 class XclImpSst : protected XclImpRoot
 {
-private:
-    ScfDelList< XclImpString >  maStringList;       /// List with formatted and unformatted strings.
-    XclImpString                maErrorString;      /// Placeholder for strings not found in the list.
-
 public:
     explicit                    XclImpSst( const XclImpRoot& rRoot );
 
@@ -109,6 +112,10 @@ public:
     /** Creates a new text cell or edit cell for a Calc document.
         @param nXFIndex  Index to XF for first text portion (checks escapement). */
     ScBaseCell*                 CreateCell( sal_uInt32 nSstIndex, sal_uInt32 nXFIndex = 0 ) const;
+
+private:
+    ScfDelList< XclImpString >  maStringList;       /// List with formatted and unformatted strings.
+    XclImpString                maErrorString;      /// Placeholder for strings not found in the list.
 };
 
 inline const XclImpString*      XclImpSst::GetString( sal_uInt32 nSstIndex ) const
@@ -138,29 +145,6 @@ public:
     /** Reads a HLINK record and inserts it into the document.
         @descr  Import stream must be located at start of a HLINK record. */
     static void                 ReadHlink( XclImpStream& rStrm );
-
-private:
-    /** Reads character array and stores it into rString.
-        @param nChars  Number of following characters (not byte count!).
-        @param b16Bit  true = 16-bit characters, false = 8-bit characters. */
-    static void                 AppendString32( String& rString, XclImpStream& rStrm, sal_uInt32 nChars, bool b16Bit );
-    /** Reads 32-bit string length and the character array and stores it into rString.
-        @param b16Bit  true = 16-bit characters, false = 8-bit characters. */
-    static void                 AppendString32( String& rString, XclImpStream& rStrm, bool b16Bit );
-
-    /** Reads 32-bit string length and ignores following character array.
-        @param b16Bit  true = 16-bit characters, false = 8-bit characters. */
-    static void                 IgnoreString32( XclImpStream& rStrm, bool b16Bit );
-
-    /** Converts a path to an absolute path.
-        @param rPath  The source path. The resulting path is returned here.
-        @param nLevel  Number of parent directories to add in front of the path. */
-    static void                 GetAbsPath( String& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShell );
-
-    /** Inserts the URL into a text cell. Does not modify value or formula cells. */
-    static void                 InsertUrl(
-                                    const XclImpRoot& rRoot, const String& rURL,
-                                    sal_uInt16 nCol, sal_uInt16 nRow );
 };
 
 
@@ -176,6 +160,58 @@ public:
 };
 
 
+// Conditional formatting =====================================================
+
+class ScConditionalFormat;
+
+/** Represents a conditional format with condition formulas, and formatting attributes. */
+class XclImpCondFormat : protected XclImpRoot
+{
+public:
+    explicit                    XclImpCondFormat( const XclImpRoot& rRoot, sal_uInt32 nFormatIndex );
+    virtual                     ~XclImpCondFormat();
+
+    /** Reads a CONDFMT record and initializes this conditional format. */
+    void                        ReadCondfmt( XclImpStream& rStrm );
+    /** Reads a CF record and adds a new condition and the formatting attributes. */
+    void                        ReadCF( XclImpStream& rStrm );
+
+    /** Inserts this conditional format into the document. */
+    void                        Apply();
+
+private:
+    typedef ::std::auto_ptr< ScConditionalFormat > ScConditionalFormatPtr;
+
+    ScRangeList                 maRanges;       /// Destination cell ranges.
+    ScConditionalFormatPtr      mpScCondFormat; /// Calc conditional format.
+    sal_uInt32                  mnFormatIndex;  /// Index of this conditional format in list.
+    sal_uInt16                  mnCondCount;    /// Number of conditions to be inserted.
+    sal_uInt16                  mnCondIndex;    /// Condition index to be inserted next.
+};
+
+
+// ----------------------------------------------------------------------------
+
+/** Imports and collects all conditional formatting of a sheet. */
+class XclImpCondFormatManager : protected XclImpRoot
+{
+public:
+    explicit                    XclImpCondFormatManager( const XclImpRoot& rRoot );
+
+    /** Reads a CONDFMT record and starts a new conditional format to be filled from CF records. */
+    void                        ReadCondfmt( XclImpStream& rStrm );
+    /** Reads a CF record and inserts the formatting data to the current conditional format. */
+    void                        ReadCF( XclImpStream& rStrm );
+
+    /** Inserts the conditional formattings into the document. */
+    void                        Apply();
+
+private:
+    typedef ScfDelList< XclImpCondFormat > XclImpCondFormatList;
+    XclImpCondFormatList        maCondFmtList;  /// List with all conditional formattings.
+};
+
+
 // Data Validation ============================================================
 
 /** Provides importing validation data and inserting it into a document. */
@@ -185,7 +221,7 @@ public:
     /** Reads a DVAL record and sets marks the dropdown arrow control to be ignored. */
     static void                 ReadDval( XclImpStream& rStrm );
     /** Reads a DV record and inserts validation data into the document. */
-    static void                 ReadDv( XclImpStream& rStrm );
+    static void                 ReadDV( XclImpStream& rStrm );
 };
 
 
@@ -194,6 +230,21 @@ public:
 /** Stores the data of one web query. */
 class XclImpWebQuery : ScfNoCopy
 {
+public:
+                                XclImpWebQuery( const ScRange& rDestRange );
+
+    /** Reads a PARAMQRY record and sets data to the web query. */
+    void                        ReadParamqry( XclImpStream& rStrm );
+    /** Reads a SXSTRING record and sets URL. */
+    void                        ReadSxstring( XclImpStream& rStrm );
+    /** Reads a WEBQRYSETTINGS record and sets refresh rate. */
+    void                        ReadWqsettings( XclImpStream& rStrm );
+    /** Reads a WEBQRYTABLES record and sets source range list. */
+    void                        ReadWqtables( XclImpStream& rStrm );
+
+    /** Inserts the web query into the document. */
+    void                        Apply( ScDocument& rDoc, const String& rFilterName );
+
 private:
     /** Specifies the type of the web query (which ranges are imported). */
     enum XclImpWebQueryMode
@@ -209,21 +260,6 @@ private:
     ScRange                     maDestRange;    /// Destination range.
     XclImpWebQueryMode          meMode;         /// Current mode of the web query.
     sal_uInt16                  mnRefresh;      /// Refresh time in minutes.
-
-public:
-                                XclImpWebQuery( const ScRange& rDestRange );
-
-    /** Reads a PARAMQRY record and sets data to the web query. */
-    void                        ReadParamqry( XclImpStream& rStrm );
-    /** Reads a SXSTRING record and sets URL. */
-    void                        ReadSxstring( XclImpStream& rStrm );
-    /** Reads a WEBQRYSETTINGS record and sets refresh rate. */
-    void                        ReadWqsettings( XclImpStream& rStrm );
-    /** Reads a WEBQRYTABLES record and sets source range list. */
-    void                        ReadWqtables( XclImpStream& rStrm );
-
-    /** Inserts the web query into the document. */
-    void                        Apply( ScDocument& rDoc, const String& rFilterName );
 };
 
 
@@ -231,9 +267,6 @@ public:
 
 class XclImpWebQueryBuffer : protected XclImpRoot
 {
-private:
-    ScfDelList< XclImpWebQuery > maWQList;      /// List of the web query objects.
-
 public:
     inline                      XclImpWebQueryBuffer( const XclImpRoot& rRoot ) :
                                     XclImpRoot( rRoot ) {}
@@ -251,6 +284,9 @@ public:
 
     /** Inserts all web queries into the document. */
     void                        Apply();
+
+private:
+    ScfDelList< XclImpWebQuery > maWQList;      /// List of the web query objects.
 };
 
 
