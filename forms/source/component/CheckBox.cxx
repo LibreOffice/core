@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 18:24:00 $
+ *  last change: $Author: hr $ $Date: 2001-10-25 17:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,12 +339,12 @@ void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& 
         case 0x0001 : _rxInStream >> m_sReferenceValue; m_nDefaultChecked = _rxInStream->readShort(); break;
         case 0x0002 :
             _rxInStream >> m_sReferenceValue;
-            _rxInStream >> (sal_Int16)m_nDefaultChecked;
+            _rxInStream >> m_nDefaultChecked;
             readHelpTextCompatibly(_rxInStream);
             break;
         case 0x0003 :
             _rxInStream >> m_sReferenceValue;
-            _rxInStream >> (sal_Int16)m_nDefaultChecked;
+            _rxInStream >> m_nDefaultChecked;
             readHelpTextCompatibly(_rxInStream);
             readCommonProperties(_rxInStream);
             break;
