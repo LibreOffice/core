@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.18 $
+#*  $Revision: 1.19 $
 #*
-#*  last change: $Author: vg $ $Date: 2003-04-15 14:27:38 $
+#*  last change: $Author: hr $ $Date: 2003-04-28 15:24:42 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -152,6 +152,8 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_ja_JP.cxx  \
     $(MISC)$/localedata_kn_IN.cxx  \
     $(MISC)$/localedata_ko_KR.cxx  \
+    $(MISC)$/localedata_lt_LT.cxx  \
+    $(MISC)$/localedata_lv_LV.cxx  \
     $(MISC)$/localedata_mr_IN.cxx  \
     $(MISC)$/localedata_nb_NO.cxx  \
     $(MISC)$/localedata_nl_BE.cxx  \
@@ -170,6 +172,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_te_IN.cxx  \
     $(MISC)$/localedata_th_TH.cxx  \
     $(MISC)$/localedata_tr_TR.cxx  \
+    $(MISC)$/localedata_uk_UA.cxx  \
     $(MISC)$/localedata_zh_CN.cxx  \
     $(MISC)$/localedata_zh_HK.cxx  \
     $(MISC)$/localedata_zh_MO.cxx  \
@@ -266,6 +269,8 @@ SHL3OBJS=	\
     $(SLO)$/localedata_is_IS.obj	\
     $(SLO)$/localedata_it_CH.obj	\
     $(SLO)$/localedata_it_IT.obj	\
+    $(SLO)$/localedata_lt_LT.obj	\
+    $(SLO)$/localedata_lv_LV.obj	\
     $(SLO)$/localedata_nb_NO.obj	\
     $(SLO)$/localedata_nl_BE.obj	\
     $(SLO)$/localedata_nl_NL.obj	\
@@ -278,7 +283,8 @@ SHL3OBJS=	\
     $(SLO)$/localedata_sl_SI.obj	\
     $(SLO)$/localedata_sv_FI.obj	\
     $(SLO)$/localedata_sv_SE.obj	\
-    $(SLO)$/localedata_tr_TR.obj
+    $(SLO)$/localedata_tr_TR.obj	\
+    $(SLO)$/localedata_uk_UA.obj
 
 LIB3TARGET=	$(SLB)$/$(SHL3TARGET).lib
 LIB3OBJFILES=$(SHL3OBJS)
