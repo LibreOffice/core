@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:36:17 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,8 @@
 //JP 24.05.00: for the new UniCode Version:
 #define CH_TXTATR_BREAKWORD     ((sal_Unicode)0x01)
 #define CH_TXTATR_INWORD        ((sal_Unicode)0x02)
-
+#define CH_TXTATR_TAB           ((sal_Unicode)'\t')
+#define CH_TXTATR_NEWLINE       ((sal_Unicode)'\n')
 
 /*
  * Hier kommen erst mal die enums fuer die Hints
