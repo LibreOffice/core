@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:54:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1771,7 +1771,8 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         ImplHdlAndIndex* pHdlAndIndex = new ImplHdlAndIndex[aList.Count()];
 
         // #105678# build sorted handle list
-        for(sal_uInt32 a(0); a < aList.Count(); a++)
+        sal_uInt32 a;
+        for( a = 0; a < aList.Count(); a++)
         {
             pHdlAndIndex[a].mpHdl = (SdrHdl*)aList.GetObject(a);
             pHdlAndIndex[a].mnIndex = a;
