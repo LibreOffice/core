@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: oj $ $Date: 2001-02-05 09:53:51 $
+#   last change: $Author: oj $ $Date: 2001-02-14 14:42:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,6 +130,7 @@ RESLIB1SRSFILES=$(RES1FILELIST)
 
 LIB2TARGET=$(SLB)$/$(TARGET2).lib
 LIB2FILES=\
+        $(SLB)$/tabledesign.lib	\
         $(SLB)$/querydesign.lib	\
         $(SLB)$/uimisc.lib		\
         $(SLB)$/uidlg.lib		\
@@ -186,6 +187,7 @@ RES2FILELIST=\
     $(SRS)$/browser.srs			\
     $(SRS)$/uiuno.srs			\
     $(SRS)$/querydesign.srs		\
+    $(SRS)$/tabledesign.srs		\
     $(SRS)$/uimisc.srs
 
 RESLIB2NAME=$(TARGET2)
