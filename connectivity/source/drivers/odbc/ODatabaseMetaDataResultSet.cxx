@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:34:50 $
+ *  last change: $Author: rt $ $Date: 2000-11-28 10:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,38 +671,38 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  ) throw(SQLException, Run
     return Any();
 }
 //------------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaDataResultSet::getResultSetConcurrency() const
+sal_Int32 ODatabaseMetaDataResultSet::getResultSetConcurrency() const throw(SQLException, RuntimeException)
 {
     return ResultSetConcurrency::READ_ONLY;
 }
 //------------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaDataResultSet::getResultSetType() const
+sal_Int32 ODatabaseMetaDataResultSet::getResultSetType() const throw(SQLException, RuntimeException)
 {
     return ResultSetType::FORWARD_ONLY;
 }
 //------------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaDataResultSet::getFetchDirection() const
+sal_Int32 ODatabaseMetaDataResultSet::getFetchDirection() const throw(SQLException, RuntimeException)
 {
     return FetchDirection::FORWARD;
 }
 //------------------------------------------------------------------------------
-sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
+sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const throw(SQLException, RuntimeException)
 {
     sal_Int32 nValue=1;
     return nValue;
 }
 //------------------------------------------------------------------------------
-::rtl::OUString ODatabaseMetaDataResultSet::getCursorName() const
+::rtl::OUString ODatabaseMetaDataResultSet::getCursorName() const throw(SQLException, RuntimeException)
 {
     return ::rtl::OUString();
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseMetaDataResultSet::setFetchDirection(sal_Int32 _par0)
+void ODatabaseMetaDataResultSet::setFetchDirection(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
 }
 //------------------------------------------------------------------------------
-void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
+void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
 }
 // -------------------------------------------------------------------------
