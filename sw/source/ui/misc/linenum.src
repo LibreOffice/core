@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:13:04 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,14 @@ TabPage TP_LINENUMBERING
         Text [ french ] = "Activer la ~numérotation" ;
         Text [ dutch ] = "~Nummering inschakelen" ;
         Text [ portuguese ] = "Activar ~numeração" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾±àºÅ";
+        Text[ chinese_simplified ] = "ÏÔÊ¾±àºÅ(~S)";
         Text[ russian ] = "Âêëş÷èòü íóìåğàöèş";
         Text[ polish ] = "W³¹cz numeracjê";
         Text[ japanese ] = "”Ô†•t‚¯‚ğµİ‚É‚·‚é(~S)";
-        Text[ chinese_traditional ] = "Åã¥Ü½s¸¹";
+        Text[ chinese_traditional ] = "Åã¥Ü½s¸¹(~S)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÑŞíã";
         Text[ greek ] = "Åíåñãïğïßçóç áñßèìçóçò";
-        Text[ korean ] = "¹øÈ£¸Å±â±â¡¡Àû¿ë";
+        Text[ korean ] = "¹øÈ£¸Å±â±â¡¡Àû¿ë(~S)";
         Text[ turkish ] = "~Numaralamayı etkinleştir";
         Text[ language_user1 ] = " ";
     };
@@ -123,14 +123,14 @@ TabPage TP_LINENUMBERING
         Text [ french ] = "Style de ~caractères" ;
         Text [ dutch ] = "~Tekenopmaakprofiel" ;
         Text [ portuguese ] = "~Estilos de caracteres" ;
-        Text[ chinese_simplified ] = "×Ö·ûÑùÊ½";
+        Text[ chinese_simplified ] = "×Ö·ûÑùÊ½(~C)";
         Text[ russian ] = "Ñòèëü çíàêîâ";
         Text[ polish ] = "Styl znaku";
-        Text[ japanese ] = "•¶š½À²Ù";
-        Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡";
+        Text[ japanese ] = "•¶š½À²Ù(~C)";
+        Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡(~C)";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ À¯Çü";
+        Text[ korean ] = "¹®ÀÚ À¯Çü(~C)";
         Text[ turkish ] = "~Karakter biçimi";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     };
@@ -693,7 +693,7 @@ TabPage TP_LINENUMBERING
         Text[ polish ] = "Ponowne uruchomienie na pocz¹tku strony";
         Text[ portuguese_brazilian ] = "~Restart each new page";
         Text[ japanese ] = "Íß°¼Ş‚²‚Æ‚É‚P‚©‚ç(~R)";
-        Text[ korean ] = "»õ ÂÊ Ã³À½ºÎºĞ¿¡¼­ ´Ù½Ã½ÃÀÛ";
+        Text[ korean ] = "»õ ÂÊ Ã³À½ºÎºĞ¿¡¼­ ´Ù½Ã½ÃÀÛ(~R)";
         Text[ chinese_simplified ] = "ÔÚÒ³Ê×ÖØĞÂ¿ªÊ¼(~R)";
         Text[ chinese_traditional ] = "±q­¶­º­«·s¶}©l(~R)";
         Text[ turkish ] = "~Restart each new page";
