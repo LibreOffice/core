@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-07 09:14:26 $
+ *  last change: $Author: dl $ $Date: 2001-03-06 07:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,56 +336,19 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
             case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             {
-                BOOL bLeftToRight = FALSE;
-                BOOL bTopToBottom = FALSE;
+                BOOL bLeftToRight = TRUE;
 
                 SdrOutliner* pOutl = pView->GetTextEditOutliner();
                 if( pOutl )
                 {
                     if( pOutl->IsVertical() )
-                        bTopToBottom = TRUE;
-                    else
-                        bLeftToRight = TRUE;
+                        bLeftToRight = FALSE;
                 }
                 else
-                {
-                    const SdrMarkList& rMark = pView->GetMarkList();
-                    USHORT nCount = (USHORT) Min( rMark.GetMarkCount(), (ULONG) 10 );
-                    OutlinerParaObject* pOPO = 0;
-                    for( USHORT i = 0; i < nCount; i++ )
-                    {
-                        pOPO = rMark.GetMark( i )->GetObj()->GetOutlinerParaObject();
-                        if( !pOPO )
-                        {
-                            bLeftToRight = FALSE;
-                            bTopToBottom = FALSE;
-                             break;
-                        }
-                        else if ( pOPO->IsVertical() )
-                        {
-                            if( bLeftToRight )
-                            {
-                                bLeftToRight = FALSE;
-                                break;
-                            }
-                            else
-                                bTopToBottom = TRUE;
-                        }
-                        else
-                        {
-                            if( bTopToBottom )
-                            {
-                                bTopToBottom = FALSE;
-                                break;
-                            }
-                            else
-                                bLeftToRight = TRUE;
-                        }
-                    }
-                }
+                    bLeftToRight = ( (const SfxBoolItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT ) ).GetValue();
 
                 rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
-                rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, bTopToBottom ) );
+                rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
             }
             break;
 

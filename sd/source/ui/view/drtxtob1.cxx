@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-05 12:27:11 $
+ *  last change: $Author: dl $ $Date: 2001-03-06 07:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,8 +357,9 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                 }
             }
 
-            SfxItemSet aAttr( pView->GetDoc()->GetPool(), SID_TEXTDIRECTION_LEFT_TO_RIGHT, SID_TEXTDIRECTION_TOP_TO_BOTTOM, 0 );
-            aAttr.Put( SfxBoolItem( nSlot, TRUE ) );
+            SfxItemSet aAttr( pView->GetDoc()->GetPool(), SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, 0 );
+            aAttr.Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, BOOL( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ) ) );
+
             rReq.Done( aAttr );
             pView->SetAttributes( aAttr );
 
