@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astexpression.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:19:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 
 #define MAXINT32        2147483647
 #define MININT32        (-2147483647 - 1)
-#define MAXUINT32       4294967295
+#define MAXUINT32       4294967295U
 
 using namespace ::rtl;
 
@@ -1453,7 +1453,7 @@ AstExprValue* AstExpression::eval_un_op(EvalKind ek)
 
 AstExprValue* AstExpression::eval_symbol(EvalKind ek)
 {
-    AstScope        *pScope;
+    AstScope        *pScope = 0;
     AstDeclaration  *pDecl;
     AstConstant     *pConst;
 
