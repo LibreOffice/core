@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 11:54:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,9 +608,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                 xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( xContentStream, xFactory );
                 xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY );
                 if ( ! xContentSeek.is() )
-                    throw com::sun::star::uno::Exception (
-                            OUString( RTL_CONSTASCII_USTRINGPARAM (
-                                    "The package component _requires_ an XSeekable interface!" ) ),
+                    throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "The package component _requires_ an XSeekable interface!" ) ),
                             static_cast < ::cppu::OWeakObject * > ( this ) );
 
                 if ( !xContentSeek->getLength() )
