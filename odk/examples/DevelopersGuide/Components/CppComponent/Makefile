@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:21:19 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:12:53 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,91 +48,118 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=CppComponent
-COMPONENT_IMPL_NAME=$(COMPONENT_NAME).uno.$(SHAREDLIB_EXT) 
-OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
-OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
-OUT_COMP_SLO=$(OUT_SLO)/$(COMPONENT_NAME)
-COMPONENT_XML=$(COMPONENT_NAME).uno.xml
-COMPONENT_RDB_NAME = $(COMPONENT_NAME).uno.rdb
-COMPONENT_RDB = $(OUT_COMP_GEN)/$(COMPONENT_RDB_NAME)
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).uno.zip
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
+SAMPLE_NAME=CppComponentSample
+SAMPLE_INC_OUT=$(OUT_INC)/$(SAMPLE_NAME)
+SAMPLE_GEN_OUT=$(OUT_MISC)/$(SAMPLE_NAME)
+SAMPLE_SLO_OUT=$(OUT_SLO)/$(SAMPLE_NAME)
+SAMPLE_OBJ_OUT=$(OUT_OBJ)/$(SAMPLE_NAME)
 
+COMP_NAME=CppComponent
+COMP_IMPL_NAME=$(COMP_NAME).uno.$(SHAREDLIB_EXT) 
 
-REGISTERFLAG = $(OUT_MISC)/devguide_$(COMPONENT_NAME)_register_component.flag
-COMPONENT_TYPEFLAG = $(OUT_MISC)/devguide_$(COMPONENT_NAME)_types.flag
+APP1_NAME= TestCppComponent
+APP1_BINARY= $(OUT_BIN)/$(APP1_NAME)$(EXE_EXT)
+
+COMP_XML=$(COMP_NAME).uno.xml
+COMP_RDB_NAME = $(COMP_NAME).uno.rdb
+COMP_RDB = $(SAMPLE_GEN_OUT)/$(COMP_RDB_NAME)
+COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOPKG_EXT)
+COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOPKG_EXT)")
+COMP_UNOPKG_MANIFEST = $(SAMPLE_GEN_OUT)/$(COMP_NAME)/META-INF/manifest.xml
+
+COMP_REGISTERFLAG = $(SAMPLE_GEN_OUT)/devguide_$(COMP_NAME)_register_component.flag
+COMP_TYPEFLAG = $(SAMPLE_GEN_OUT)/devguide_$(COMP_NAME)_types.flag
 
 IDLFILES = some.idl
 
 CXXFILES = service1_impl.cxx \
 	service2_impl.cxx
 
-SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
+SLOFILES = $(patsubst %.cxx,$(SAMPLE_SLO_OUT)/%.$(OBJ_EXT),$(CXXFILES))
 
-GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
+GENURDFILES = $(patsubst %.idl,$(SAMPLE_GEN_OUT)/%.urd,$(IDLFILES))
 
-TYPES = $(shell $(XML2CMP) -types stdout $(COMPONENT_XML))
+TYPES = $(shell $(XML2CMP) -types stdout $(COMP_XML))
+
+# some more types necessary for the demo application
+TYPES += \
+	com.sun.star.lang.XComponent \
+	com.sun.star.bridge.XUnoUrlResolver \
+	com.sun.star.frame.XComponentLoader \
+	com.sun.star.container.XHierarchicalNameAccess \
+	com.sun.star.uno.DeploymentException \
+	com.sun.star.registry.XSimpleRegistry
+
+
 TYPESLIST = $(foreach t,$(TYPES),-T$(t))
-GENHPPFILES = $(foreach t,$(TYPES),$(OUT_COMP_INC)/$(subst .,/,$(t)).hpp)
+GENHPPFILES = $(foreach t,$(TYPES),$(SAMPLE_INC_OUT)/$(subst .,/,$(t)).hpp)
 
 # Targets
 .PHONY: ALL
 ALL : \
-	CppComponentExample
+	$(SAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_GEN)/%.urd : %.idl
+$(SAMPLE_GEN_OUT)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
+	$(IDLC) -I. -I$(IDL_DIR) -O$(SAMPLE_GEN_OUT) $<
 
-$(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
+$(SAMPLE_GEN_OUT)/%.rdb : $(GENURDFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
 	$(REGMERGE) $@ /UCR $(GENURDFILES)
 
-$(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(COMPONENT_XML)
+$(COMP_TYPEFLAG) : $(COMP_RDB) $(COMP_XML)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB) $(DKREGISTRYNAME)
+	$(CPPUMAKER) -Gc -BUCR -O$(SAMPLE_INC_OUT) $(TYPESLIST) $(COMP_RDB) $(OFFICE_TYPE_LIBRARY)
 	echo flagged > $@
 
-$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
+$(SAMPLE_SLO_OUT)/%.$(OBJ_EXT) : %.cxx $(COMP_TYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
-
-$(OUT_COMP_GEN)/%.def : exports.dxp
-ifeq "$(OS)" "WIN"
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo EXPORTS > $@
-	$(CAT) exports.dxp >> $@
-endif
+	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(SAMPLE_INC_OUT) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
 ifeq "$(OS)" "WIN"
-$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN)/%.def
+$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) \
-	/DEF:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),def,$(@F)) $(SLOFILES) \
+	-$(MKDIR) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
+	$(LINK) $(COMP_LINK_FLAGS) /OUT:$@ \
+	/MAP:$(SAMPLE_GEN_OUT)/$(subst $(SHAREDLIB_EXT),map,$(@F)) $(SLOFILES) \
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
 else
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(LINK) $(LIBRARY_LINK_FLAGS) $(LINK_LIBS) -o $@ $^\
+	-$(MKDIR) $(subst /,$(PS),$(@D)) && $(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^\
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
 endif	
 
-$(COMPONENT_PACKAGE) : $(SHAREDLIB_OUT)/$(COMPONENT_IMPL_NAME) $(COMPONENT_RDB)
+# rule for component package manifest
+$(SAMPLE_GEN_OUT)/%/manifest.xml :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))	 
-	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))
-	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_JAR) cvfM ../../bin/$(@F) $(basename $(@F)).rdb $(PACKAGE_LIB_DIR)/$(<F)
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-typelibrary;type=RDB$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(SAMPLE_GEN_OUT)/,,$(@D))).uno.rdb$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=native;platform=$(UNOPKG_PLATFORM)$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(SAMPLE_GEN_OUT)/,,$(UNOPKG_PLATFORM)/$(@D))).uno.$(SHAREDLIB_EXT)$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
-$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
-ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
+$(COMP_PACKAGE) : $(SHAREDLIB_OUT)/$(COMP_IMPL_NAME) $(COMP_RDB) $(COMP_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
-	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
+	-$(MKDIR) $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(UNOPKG_PLATFORM))	 
+	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(UNOPKG_PLATFORM))
+	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(basename $(@F)).rdb $(UNOPKG_PLATFORM)/$(<F)
+	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+
+
+$(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(DEPLOYTOOL) $(COMP_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -142,20 +169,54 @@ else
 	@echo --------------------------------------------------------------------------------
 endif
 
-CppComponentExample : $(REGISTERFLAG) 
+$(SAMPLE_OBJ_OUT)/$(APP1_NAME).$(OBJ_EXT) : $(APP1_NAME).cxx $(COMP_TYPEFLAG)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(SAMPLE_INC_OUT) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
+
+$(OUT_BIN)/_$(APP1_NAME)$(EXE_EXT) : $(SAMPLE_OBJ_OUT)/$(APP1_NAME).$(OBJ_EXT)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	-$(MKDIR) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
+ifeq "$(OS)" "WIN"
+	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(SAMPLE_GEN_OUT)/$(basename $(@F)).map \
+	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB)
+else
+	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $< \
+	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
+endif
+
+$(OUT_BIN)/$(APP1_NAME)$(EXE_EXT) : $(OUT_BIN)/_$(APP1_NAME)$(EXE_EXT)
+	$(COPY) $(subst /,$(PS),$(BIN_DIR)/unoapploader$(EXE_EXT)) $(subst /,$(PS),$@)
+# touch the target to renew the date for correct dependencies.
+# Note: no touch under windows! The unoapploader.exe is copied always.
+ifneq "$(OS)" "WIN"
+	touch $@
+endif
+
+$(SAMPLE_NAME) : $(COMP_REGISTERFLAG) $(APP1_BINARY)
 	@echo --------------------------------------------------------------------------------
+	@echo Please use the following command to execute the example!
+	@echo -
+	@echo make $(APP1_NAME).run
+	@echo --------
 	@echo The simple C++ component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
-	@echo description. You can also load the "$(QM)SimpleComponent.sxw$(QM)" document containing
+	@echo description. You can also load the "$(QM)SimpleComponent.odt$(QM)" document containing
 	@echo a StarBasic macro which uses this component.
+	@echo -
+	@echo make SimpleComponent.odt.load
 	@echo --------------------------------------------------------------------------------
+
+%.run: $(OUT_BIN)/%$(EXE_EXT)
+	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@)
+
+SimpleComponent.odt.load : $(COMP_REGISTERFLAG)
+	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_INC_OUT))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_SLO_OUT))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_OBJ_OUT))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/$(COMP_NAME)*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/*$(APP1_NAME)*))
