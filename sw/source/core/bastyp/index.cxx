@@ -2,9 +2,9 @@
  *
  *  $RCSfile: index.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:32:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,92 +666,6 @@ SwIndex& SwIndex::operator=( xub_StrLen nWert )
 
 #endif
 
-
-
-void SwIndexReg::MoveIdx( const SwIndex& rOldPos, const SwIndex& rNewPos )
-{
-    ASSERT( rOldPos.pArray == rNewPos.pArray,
-            "stehen in unterschiedlichen Arrays" );
-
-    SwIndex* pStt = (SwIndex*)&rOldPos, *pEnd = pStt;
-    SwIndex* pInsPos = (SwIndex*)&rNewPos;
-    xub_StrLen nOldIndex = rOldPos.nIndex,
-            nNewIndex = rNewPos.nIndex;
-
-    if( nOldIndex == nNewIndex )
-        return;
-
-    while( pInsPos->pPrev && pInsPos->pPrev->nIndex == nNewIndex )
-        pInsPos = pInsPos->pPrev;
-
-    if( nNewIndex > nOldIndex )
-        --nNewIndex;
-
-    while( pStt->pPrev && pStt->pPrev->nIndex == nOldIndex )
-    {
-        pStt = pStt->pPrev;
-        pStt->nIndex = nNewIndex;
-    }
-    while( pEnd->pNext && pEnd->pNext->nIndex == nOldIndex )
-    {
-        pEnd = pEnd->pNext;
-        pEnd->nIndex = nNewIndex;
-    }
-
-    {
-        SwIndex* pTmp;
-
-        for( pTmp = pStt; pTmp != pEnd; pTmp = pTmp->pNext )
-            pTmp->nIndex = nNewIndex;
-        pTmp->nIndex = nNewIndex;
-    }
-
-    // Ausketten
-    if( !pStt->pPrev )
-    {
-        pFirst = pEnd->pNext;
-        pEnd->pNext->pPrev = 0;
-    }
-    else
-        pStt->pPrev->pNext = pEnd->pNext;
-
-    if( !pEnd->pNext )
-    {
-        pLast = pStt->pPrev;
-        pStt->pPrev->pNext = 0;
-    }
-    else
-        pEnd->pNext->pPrev = pStt->pPrev;
-
-    // wieder einketten
-    pStt->pPrev = pInsPos->pPrev;
-    pEnd->pNext = pInsPos;
-
-    if( pInsPos->pPrev )
-        pInsPos->pPrev->pNext = pStt;
-    pInsPos->pPrev = pEnd;
-
-    if( pInsPos == pFirst )
-        pFirst = pStt;
-
-    if( nNewIndex < nOldIndex )     // es wurde nach vorne verschoben
-    {
-        while( pInsPos && pInsPos->nIndex <= nOldIndex )
-        {
-            ++pInsPos->nIndex;
-            pInsPos = pInsPos->pNext;
-        }
-    }
-    else                            // es wurde nach hinten verschoben
-    {
-        while( pStt->pPrev && pStt->pPrev->nIndex > nOldIndex )
-        {
-            pStt = pStt->pPrev;
-            --pStt->nIndex;
-        }
-    }
-}
-
 void SwIndexReg::MoveTo( SwIndexReg& rArr )
 {
     if( this != &rArr && pFirst )
@@ -766,7 +680,3 @@ void SwIndexReg::MoveTo( SwIndexReg& rArr )
         pFirst = 0, pLast = 0, pMiddle = 0;
     }
 }
-
-
-
-
