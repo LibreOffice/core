@@ -19,6 +19,7 @@ DIRLIST = \
 
 EXAMPLESLIST= \
     $(DESTDIREXAMPLES)$/officeclient$/officeclient.cxx 		\
+    $(DESTDIREXAMPLES)$/officeclient$/officeclientsample.xml	\
     $(DESTDIREXAMPLES)$/officeclient$/README           		\
     $(DESTDIREXAMPLES)$/officeclient$/makefile.mk      		\
     $(DESTDIREXAMPLES)$/officeclient$/Makefile         		\
