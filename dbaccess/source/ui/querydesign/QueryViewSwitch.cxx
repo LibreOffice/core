@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:56:28 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,8 @@ void OQueryViewSwitch::switchView()
 {
     sal_Bool bGraphicalDesign = static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode();
 
+    if ( !bGraphicalDesign ) // we have to hide the add table dialog
+        m_pDesignView->getAddTableDialog()->Hide();
     m_pTextView->Show   ( !bGraphicalDesign );
     m_pDesignView->Show ( bGraphicalDesign );
 

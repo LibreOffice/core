@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-19 14:04:20 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,10 +206,10 @@ namespace
                         const ::connectivity::OSQLParseNode* pTableRefList)
     {
         sal_uInt32 ncount = pTableRefList->count();
-        sal_Bool bError = ncount != 0;
 
-        if ( !bError )
+        if ( ncount > 1 )
         {
+            sal_Bool bError = sal_False;
             for (sal_uInt32 i=0; !bError && i < ncount; i++)
             {
                 const ::connectivity::OSQLParseNode* pParseNode = pTableRefList->getChild(i);
@@ -225,9 +225,9 @@ namespace
                 if ( pJoinNode && !InsertJoin(_pView,pJoinNode))
                     bError = sal_True;
             }
+            if ( bError )
+                ErrorBox( _pView, ModuleRes( ERR_QRY_ILLEGAL_JOIN ) ).Execute();
         }
-        if ( bError )
-            ErrorBox( _pView, ModuleRes( ERR_QRY_ILLEGAL_JOIN ) ).Execute();
     }
     //------------------------------------------------------------------------------
     ::rtl::OUString QuoteField( const OQueryDesignView* _pView,const ::rtl::OUString& rValue, sal_Int32 aType )
