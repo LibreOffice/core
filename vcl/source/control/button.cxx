@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:15:55 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1197,6 +1197,13 @@ void PushButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
+long PushButton::PreNotify( NotifyEvent& rNEvt )
+{
+    return Button::PreNotify( rNEvt );
+}
+
+// -----------------------------------------------------------------------
+
 void PushButton::Toggle()
 {
     ImplCallEventListeners( VCLEVENT_PUSHBUTTON_TOGGLE );
@@ -2363,6 +2370,13 @@ void RadioButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
+long RadioButton::PreNotify( NotifyEvent& rNEvt )
+{
+    return Button::PreNotify( rNEvt );
+}
+
+// -----------------------------------------------------------------------
+
 void RadioButton::Toggle()
 {
     ImplCallEventListeners( VCLEVENT_RADIOBUTTON_TOGGLE );
@@ -3142,6 +3156,13 @@ void CheckBox::DataChanged( const DataChangedEvent& rDCEvt )
         ImplInitSettings( TRUE, TRUE, TRUE );
         Invalidate();
     }
+}
+
+// -----------------------------------------------------------------------
+
+long CheckBox::PreNotify( NotifyEvent& rNEvt )
+{
+    return Button::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
