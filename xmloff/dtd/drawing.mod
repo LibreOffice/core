@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.18 2000-12-08 16:02:21 mib Exp $
+	$Id: drawing.mod,v 1.19 2000-12-11 12:05:26 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -352,6 +352,7 @@
 <!ATTLIST draw:text-box text:anchor-type %anchorType; #IMPLIED>
 <!ATTLIST draw:text-box text:anchor-page-number %positiveInteger; #IMPLIED>
 <!ATTLIST draw:text-box %draw-position;>
+<!ATTLIST draw:text-box %draw-end-position; >
 <!ATTLIST draw:text-box svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:text-box svg:height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:text-box fo:min-height %lengthOrPercentage; #IMPLIED>
@@ -371,6 +372,7 @@
 <!ATTLIST draw:image text:anchor-type %anchorType; #IMPLIED>
 <!ATTLIST draw:image text:anchor-page-number %positiveInteger; #IMPLIED>
 <!ATTLIST draw:image %draw-position;>
+<!ATTLIST draw:image %draw-end-position; >
 <!ATTLIST draw:image svg:width %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:image svg:height %lengthOrPercentage; #IMPLIED>
 <!ATTLIST draw:image %presentation-class; >
