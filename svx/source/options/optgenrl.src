@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:24:13 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ chinese_simplified ] = "ι‚®ηΌ–/εεΈ‚";
         Text[ chinese_traditional ] = "ιƒµιε€θ™/εεΈ‚";
         Text[ arabic ] = "ΗαΡγÒ ΗαΘΡνΟν/ΗαγΟνδΙ";
-        Text[ greek ] = "Τ.Κ./Πόλη";
+        Text[ greek ] = "~Τ.Κ./Πόλη";
         Text[ korean ] = "μ°νΈλ²νΈ/λ„μ‹";
         Text[ turkish ] = "Posta kodu/ώehir";
         Text[ language_user1 ] = " ";
@@ -394,7 +394,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ chinese_simplified ] = "ε›½ε®¶/ε°εΊ";
         Text[ chinese_traditional ] = "ε‹ε®¶/ε°ε€";
         Text[ arabic ] = "ΗαΘαΟ";
-        Text[ greek ] = "Χώρα";
+        Text[ greek ] = "Χώρα/περιοχή";
         Text[ korean ] = "κµ­κ°€";
         Text[ turkish ] = "άlke/Bφlge";
         Text[ language_user1 ] = " ";
@@ -529,7 +529,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ japanese ] = "Fa~x/E-mail";
         Text[ chinese_traditional ] = "ε‚³η/ι›»ε­ιƒµδ»¶(~X)";
         Text[ arabic ] = "έΗίΣ/ΘΡνΟ ΕαίΚΡζδν";
-        Text[ greek ] = "Fax/E-mail";
+        Text[ greek ] = "Φαξ/E-mail";
         Text[ korean ] = "ν©μ¤/μ „μ λ©”μΌ(~X)";
         Text[ turkish ] = "Faks/e-posta";
         Text[ language_user1 ] = " ";
@@ -672,7 +672,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ chinese_simplified ] = "θ―·ζ³¨ζ„οΌθ΅—ι“οΌι‚®ηΌ–ε’εεΈ‚ζ―η”¨ζ¥η”ζζ³¨ε†ε―†η η„ζ•°ζ®γ€‚ε¨ζ­£εΌζ³¨ε†ε‰ζ‚¨δΈθƒ½ε†ζ›΄ζ”ΉθΏ™δΊ›δ½Ώη”¨θ€…θµ„ζ–™γ€‚ζ‚¨η°ε¨θ¦ζ›΄ζ”ΉθΏ™δΊ›δ½Ώη”¨θ€…θµ„ζ–™ε—οΌ";
         Text[ chinese_traditional ] = "θ«‹θ¨»ζ„ζ‚¨θΌΈε…¥η„θ΅—ι“εεεΈ‚η­‰θ³‡ζ–™ζ―η”¨δΎ†η”Άη”θ¨»ε†ιµηΆΌγ€‚ζ­£εΌθ¨»ε†ζ™‚ζ‚¨δΈθƒ½δΏ®ζ”Ήι€™δΊ›δ½Ώη”¨θ€…θ³‡ζ–™γ€‚ζ‚¨ηΎε¨θ¦δΏ®ζ”Ήι€™δΊ›δ½Ώη”¨θ€…θ³‡ζ–™οΌ";
         Text[ arabic ] = "ΗαΡΜΗΑ γαΗΝΩΙ Γδ ΗαΘνΗδΗΚ ΗαΞΗΥΙ ΘΗαΤΗΡΪ ζΗαΡγÒ ΗαΘΡνΟν ζΗαγΟνδΙ ΚΟΞα Φγδ ΗαΘνΗδΗΚ ΗααΗÒγΙ αΕδΤΗΑ γέΚΗΝ ΗαΚΣΜνα. αΗ νγίδί ΚΫννΡ ΘνΗδΗΚ Ηαγ";
-        Text[ greek ] = "Παρακαλώ προσέξτε ότι η οδός, ο Τ.Κ. και η πόλη χρησιμοποιούνται για τον δημιουργία του κλειδιού δήλωσης. Έως την δήλωση δεν θα μπορέσετε να ? ";
+        Text[ greek ] = "Σημειώστε ότι η οδός, ο ταχυδρομικός κώδικας και η πόλη χρησιμοποιούνται για τη δημιουργία του κλειδιού δήλωσης. Δεν θα μπορέσετε να αλλάξετε τα δεδομένα χρήστη ξανά μέχρι να ολοκληρωθεί η δήλωση. Θέλετε να τροποποιήσετε τα δεδομένα χρήστη τώρα;";
         Text[ korean ] = "μ£Όμ†λ‚ μ°νΈλ²νΈ λ“±μ€ λ“±λ΅ ν‚¤ μƒμ„±μ— μ΄μ©λλ‹¤λ” μ‚¬μ‹¤μ„ λª…μ‹¬ν•μ‹­μ‹μ¤. λ“±λ΅μ΄ μ™„λ£λ  λ•κΉμ§€λ” μ΄ μ‚¬μ©μ λ°μ΄ν„°λ¥Ό λ” μ΄μƒ λ°”κΏ€ μ μ—†μµλ‹λ‹¤. μ§€κΈμ΄λΌλ„ μ΄ μ‚¬μ©μ λ°μ΄ν„°λ¥Ό μμ •ν•μ‹κ² μµλ‹κΉ?";
         Text[ turkish ] = "Sokak, postakodu ve ώehir verilerinin kayύt anahtarύ oluώturumunda kullanύlacaπύnύ unutmayύn. Kayύt iώlemleri tamamlananύncaya kadar kullanύcύ bilgilerinizi deπiώtiremezsiniz. ήimdi kullanύcύ bilgilerinizi deπiώtirmek ister misiniz? ";
         Text[ language_user1 ] = " ";
@@ -792,7 +792,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "Milνmetro" ; FUNIT_MM ; > ;
         < "Centνmetro" ; FUNIT_CM ; > ;
         < "Metro" ; FUNIT_M ; > ;
-        < "Quilometro" ; FUNIT_KM ; > ;
+        < "Quilτmetro" ; FUNIT_KM ; > ;
         < "Polegada" ; FUNIT_INCH ; > ;
         < "Pι" ; FUNIT_FOOT ; > ;
         < "Milhas" ; FUNIT_MILE ; > ;
@@ -1090,6 +1090,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
 
  // ********************************************************************** EOF
+
 
 
 
