@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: os $ $Date: 2001-07-10 06:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@ private:
     String          sIllustration;
     String          sTable;
     String          sText;
+    String          sDrawing;
 
     String          sBegin;
     String          sEnd;

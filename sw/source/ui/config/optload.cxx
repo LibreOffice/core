@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
+ *  last change: $Author: os $ $Date: 2001-07-10 06:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,6 +499,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     GetDocPoolNm( RES_POOLCOLL_LABEL_ABB, sIllustration );
     GetDocPoolNm( RES_POOLCOLL_LABEL_TABLE, sTable );
     GetDocPoolNm( RES_POOLCOLL_LABEL_FRAME, sText );
+    GetDocPoolNm( RES_POOLCOLL_LABEL_DRAWING, sDrawing );
 
     USHORT i, nCount;
     SwWrtShell *pSh = ::GetActiveWrtShell();
@@ -711,6 +712,7 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
             aCategoryBox.InsertEntry(SwBoxEntry(sIllustration, 0));
             aCategoryBox.InsertEntry(SwBoxEntry(sTable, 1));
             aCategoryBox.InsertEntry(SwBoxEntry(sText, 2));
+            aCategoryBox.InsertEntry(SwBoxEntry(sDrawing, 3));
         }
 
         aCategoryBox.SetText(pOpt->GetCategory());
