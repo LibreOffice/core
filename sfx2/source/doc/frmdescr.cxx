@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdescr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:13 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,8 +523,16 @@ BOOL SfxFrameDescriptor::Store( SvStream& rStream ) const
     if ( bReadOnly )
         nFlags1 |= 0x04;
 
-    rStream.WriteByteString( INetURLObject::AbsToRel( aURL.GetMainURL(
+    if ( aURL.GetMainURL(INetURLObject::DECODE_TO_IURI).Len() )
+    {
+        rStream.WriteByteString( INetURLObject::AbsToRel( aURL.GetMainURL(
                     INetURLObject::DECODE_TO_IURI ) ), RTL_TEXTENCODING_UTF8 );
+    }
+    else
+    {
+        rStream.WriteByteString( String(), RTL_TEXTENCODING_UTF8 );
+    }
+
     rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
     rStream << aMargin
             << nWidth
