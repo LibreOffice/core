@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _FillProperties.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:22 $
+ *  last change:$Date: 2003-02-05 10:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,8 @@ package ifc.drawing;
 
 import com.sun.star.awt.XBitmap;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Testing <code>com.sun.star.drawing.FillProperties</code>
@@ -196,10 +197,12 @@ public class _FillProperties extends MultiPropertyTest {
         try {
             oObj.setPropertyValue("FillBitmapURL",
                 util.utils.getFullTestURL("crazy-blue.jpg"));
-            the_bitmap = (XBitmap) oObj.getPropertyValue("FillBitmap");
+            the_bitmap = (XBitmap) AnyConverter.toObject(
+                new Type(XBitmap.class),oObj.getPropertyValue("FillBitmap"));
             oObj.setPropertyValue("FillBitmapURL",
                 util.utils.getFullTestURL("space-metal.jpg"));
-            the_secondBitmap = (XBitmap) oObj.getPropertyValue("FillBitmap");
+            the_secondBitmap = (XBitmap) AnyConverter.toObject(
+                new Type(XBitmap.class),oObj.getPropertyValue("FillBitmap"));
             testProperty("FillBitmap", BitmapTester) ;
         } catch (com.sun.star.beans.PropertyVetoException e) {
             log.println("Couldn't change Bitmap");
