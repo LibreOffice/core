@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:43:28 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,11 +235,7 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
 // XDrop
 void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-
-    ObjectIter aIter = m_aElements[_nPos];
-    if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
-        aIter->second = createObject(_sElementName);
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
     sal_Bool bIsNew = sal_False;
     if(xTunnel.is())
     {
