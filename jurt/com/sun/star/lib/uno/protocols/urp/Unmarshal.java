@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:53 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 11:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,10 +191,11 @@ class Unmarshal implements IUnmarshal {
         Throwable throwable = (Throwable)constructor.newInstance(new Object[]{message});
 
         if(java.lang.Exception.class.isAssignableFrom(zClass))
-            readStruct(zClass, throwable, java.lang.Exception.class);
+            readStruct(zClass, throwable);
 
         else if(java.lang.RuntimeException.class.isAssignableFrom(zClass))
-            readStruct(zClass, throwable, java.lang.RuntimeException.class);
+            readStruct(zClass, throwable);
+
         else
             throw new Exception("urp.Unmarshal.readThrowable - unsupported throwable:" + zClass);
 
@@ -384,13 +385,8 @@ class Unmarshal implements IUnmarshal {
         return new String(bytes, "UTF8");
     }
 
-    void readStruct(Class zClass, Object object, Class untilClass) throws Exception {
-        // read inherited members first
-        Class superClass = zClass.getSuperclass();
-        if(superClass != null && superClass != untilClass)
-            readStruct(superClass, object, untilClass);
-
-        Field fields[] = Protocol.__getDeclaredFields(zClass);
+    void readStruct(Class zClass, Object object) throws Exception {
+        Field fields[] = zClass.getFields();
 
         for(int i = 0; i < fields.length; ++ i) {
             if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
@@ -429,11 +425,10 @@ class Unmarshal implements IUnmarshal {
     Object readStruct(Class zClass) throws Exception {
         Object object = zClass.newInstance();
 
-        readStruct(zClass, object, Object.class);
+        readStruct(zClass, object);
 
         return object;
     }
-
 
     ThreadID readThreadID() throws Exception {
         Marshal.M_ThreadId m_threadId = (Marshal.M_ThreadId)readObject(Marshal.M_ThreadId.class);

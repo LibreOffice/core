@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:53 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 11:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@ class Marshal implements IMarshal {
     static public final boolean DEBUG = false;
 
     static class M_ThreadId {
-        byte  full[];
-        short cache;
+        public byte  full[];
+        public short cache;
 
         M_ThreadId() {}
 
@@ -112,8 +112,8 @@ class Marshal implements IMarshal {
     }
 
     static class M_InterfaceReference {
-        String full;
-        short cache;
+        public String full;
+        public short cache;
 
         M_InterfaceReference() {}
 
@@ -219,10 +219,10 @@ class Marshal implements IMarshal {
         writeString((message == null) ? "" : message);
 
         if(java.lang.Exception.class.isAssignableFrom(zClass))
-            writeStruct(zClass, throwable, java.lang.Exception.class);
+            writeStruct(zClass, throwable);
 
         else if(java.lang.RuntimeException.class.isAssignableFrom(zClass))
-            writeStruct(zClass, throwable, java.lang.RuntimeException.class);
+            writeStruct(zClass, throwable);
 
         else
             throw new Exception("urp.Marshal.writeThrowable - unsupported throwable:" + zClass);
@@ -387,16 +387,10 @@ class Marshal implements IMarshal {
         _dataOutput.write(bytes);
     }
 
-    void writeStruct(Class zClass, Object object, Class untilClass) throws Exception {
+    void writeStruct(Class zClass, Object object) throws Exception {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeStruct:" + zClass + " " + object);
 
-        // write inherited members first
-        Class superClass = zClass.getSuperclass();
-        if(superClass != null && superClass != untilClass)
-            writeStruct(superClass, object, untilClass);
-
-        Field fields[] = Protocol.__getDeclaredFields(zClass);
-
+        Field fields[] = zClass.getFields();
         for(int i = 0; i < fields.length; ++ i) {
             if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
                 MemberTypeInfo memberTypeInfo = Protocol.__findMemberTypeInfo(zClass, fields[i].getName());
@@ -429,10 +423,6 @@ class Marshal implements IMarshal {
                 writeObject(zInterface, fields[i].get(object));
             }
         }
-    }
-
-    void writeStruct(Class zClass, Object object) throws Exception {
-        writeStruct(zClass, object, Object.class);
     }
 
     void writeThreadID(ThreadID threadID) throws Exception {
