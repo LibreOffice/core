@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:59:28 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 15:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,10 @@ namespace dbaui
         virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt );
+
+        // SbaGridListener overridables
+        virtual void RowChanged();
+        virtual void ColumnChanged();
 
         String getURL() const;
 
