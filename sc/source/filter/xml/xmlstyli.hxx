@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-28 17:01:01 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 10:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,21 +177,17 @@ class XMLTableStylesContext : public SvXMLStylesContext
     ::com::sun::star::uno::Reference <
                     ::com::sun::star::container::XNameContainer > xCellStyles;
     ::com::sun::star::uno::Reference <
-                    ::com::sun::star::container::XNameContainer > xPageStyles;
-    ::com::sun::star::uno::Reference <
                     ::com::sun::star::container::XNameContainer > xColumnStyles;
     ::com::sun::star::uno::Reference <
                     ::com::sun::star::container::XNameContainer > xRowStyles;
     ::com::sun::star::uno::Reference <
                     ::com::sun::star::container::XNameContainer > xTableStyles;
     const ::rtl::OUString sCellStyleServiceName;
-    const ::rtl::OUString sPageStyleServiceName;
     const ::rtl::OUString sColumnStyleServiceName;
     const ::rtl::OUString sRowStyleServiceName;
     const ::rtl::OUString sTableStyleServiceName;
 
     UniReference < SvXMLImportPropertyMapper > xCellImpPropMapper;
-    UniReference < SvXMLImportPropertyMapper > xPageImpPropMapper;
     UniReference < SvXMLImportPropertyMapper > xColumnImpPropMapper;
     UniReference < SvXMLImportPropertyMapper > xRowImpPropMapper;
     UniReference < SvXMLImportPropertyMapper > xTableImpPropMapper;

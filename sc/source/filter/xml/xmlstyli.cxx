@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-11 14:30:02 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 10:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,7 +604,6 @@ SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
         switch( nFamily )
         {
         case XML_STYLE_FAMILY_TABLE_CELL:
-        case XML_STYLE_FAMILY_TABLE_PAGE_STYLES:
         case XML_STYLE_FAMILY_TABLE_COLUMN:
         case XML_STYLE_FAMILY_TABLE_ROW:
         case XML_STYLE_FAMILY_TABLE_TABLE:
@@ -623,7 +622,6 @@ XMLTableStylesContext::XMLTableStylesContext( SvXMLImport& rImport,
         const Reference< XAttributeList > & xAttrList ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
     sCellStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.CellStyle" ) )),
-    sPageStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.style.PageStyle" ) )),
     sColumnStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))),
     sRowStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ))),
     sTableStyleServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )))
@@ -662,17 +660,6 @@ UniReference < SvXMLImportPropertyMapper >
                 xMapper = xCellImpPropMapper;
             }
             break;
-            case XML_STYLE_FAMILY_TABLE_PAGE_STYLES:
-            {
-                if( !xPageImpPropMapper.is() )
-                {
-                    XMLPageStylesPropertySetMapper *pPropMapper = GetScImport().GetPageStylesPropertySetMapper();
-                    ((XMLTableStylesContext *)this)->xPageImpPropMapper =
-                        new ScXMLImportPropertyMapper( pPropMapper );
-                }
-                xMapper = xPageImpPropMapper;
-            }
-             break;
             case XML_STYLE_FAMILY_TABLE_COLUMN:
             {
                 if( !xColumnImpPropMapper.is() )
@@ -739,15 +726,6 @@ Reference < XNameContainer >
                         OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) ));
             }
             break;
-            case XML_STYLE_FAMILY_TABLE_PAGE_STYLES:
-            {
-                if( xPageStyles.is() )
-                    xStyles = xPageStyles;
-                else
-                    sName =
-                        OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PageStyles" ) ));
-            }
-            break;
             case XML_STYLE_FAMILY_TABLE_COLUMN:
             {
                 if( xColumnStyles.is() )
@@ -785,9 +763,6 @@ Reference < XNameContainer >
                 case XML_STYLE_FAMILY_TABLE_CELL:
                     ((XMLTableStylesContext *)this)->xCellStyles = xStyles;
                     break;
-                case XML_STYLE_FAMILY_TABLE_PAGE_STYLES:
-                    ((XMLTableStylesContext *)this)->xPageStyles = xStyles;
-                    break;
                 case XML_STYLE_FAMILY_TABLE_COLUMN:
                     ((XMLTableStylesContext *)this)->xColumnStyles = xStyles;
                 case XML_STYLE_FAMILY_TABLE_ROW:
@@ -807,9 +782,6 @@ OUString XMLTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
     {
         switch( nFamily )
         {
-        case XML_STYLE_FAMILY_TABLE_PAGE_STYLES:
-            sServiceName = sPageStyleServiceName;
-            break;
         case XML_STYLE_FAMILY_TABLE_COLUMN:
             sServiceName = sColumnStyleServiceName;
             break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 12:18:17 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 10:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1601,7 +1601,6 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
 //  pScAutoStylePool(new SvXMLAutoStylePoolP),
     pScPropHdlFactory(0L),
     pCellStylesPropertySetMapper(0L),
-    pPageStylesPropertySetMapper(0L),
     pColumnStylesPropertySetMapper(0L),
     pRowStylesPropertySetMapper(0L),
     pTableStylesPropertySetMapper(0L),
@@ -1654,12 +1653,6 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
             // set lock to avoid deletion
             pCellStylesPropertySetMapper->acquire();
         }
-        pPageStylesPropertySetMapper = new XMLPageStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScPageStylesProperties, aFactoryRef);
-        if(pPageStylesPropertySetMapper)
-        {
-            // set lock to avoid deletion
-            pPageStylesPropertySetMapper->acquire();
-        }
         pColumnStylesPropertySetMapper = new XMLColumnStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScColumnStylesProperties, aFactoryRef);
         if(pColumnStylesPropertySetMapper)
         {
@@ -1681,8 +1674,6 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
     }
     GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)),
         pCellStylesPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX)));
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_PAGE_STYLES, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_PAGE_STYLES_NAME)),
-        pPageStylesPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_PAGE_STYLES_PREFIX)));
     GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME)),
         pColumnStylesPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX)));
     GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)),
@@ -1710,11 +1701,6 @@ ScXMLExport::~ScXMLExport()
     {
         pCellStylesPropertySetMapper->release();
         pCellStylesPropertySetMapper = 0L;
-    }
-    if (pPageStylesPropertySetMapper)
-    {
-        pPageStylesPropertySetMapper->release();
-        pPageStylesPropertySetMapper = 0L;
     }
     if (pColumnStylesPropertySetMapper)
     {
@@ -2279,11 +2265,6 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
     ScXMLStyleExport aStylesExp(*this, rtl::OUString(), GetAutoStylePool().get());
     aStylesExp.exportStyleFamily(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellStyles")),
         XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, aCellStylesExpPropMapper, FALSE, XML_STYLE_FAMILY_TABLE_CELL);
-
-    const UniReference< XMLPropertySetMapper > aPageStylesMapperRef = pPageStylesPropertySetMapper;
-    ScXMLExportPropertyMapper* aPageStylesExpPropMapper = new ScXMLExportPropertyMapper(aPageStylesMapperRef);
-    aStylesExp.exportStyleFamily(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyles")),
-        XML_STYLE_FAMILY_TABLE_PAGE_STYLES_NAME, aPageStylesExpPropMapper, FALSE, XML_STYLE_FAMILY_TABLE_PAGE_STYLES);
 }
 
 void ScXMLExport::_ExportAutoStyles()

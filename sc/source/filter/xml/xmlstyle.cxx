@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-10 06:27:17 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 10:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,12 +184,6 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "CharUnderline", XML_NAMESPACE_STYLE, sXML_text_underline, XML_TYPE_TEXT_UNDERLINE, 0 },
     { "CharWeight", XML_NAMESPACE_FO, sXML_font_weight, XML_TYPE_TEXT_WEIGHT, 0 },
     { "CharWordMode", XML_NAMESPACE_STYLE, sXML_score_spaces, XML_TYPE_NBOOL, 0 },
-    { 0L }
-};
-
-const XMLPropertyMapEntry aXMLScPageStylesProperties[] =
-{
-    { "BackgroundColor", XML_NAMESPACE_FO, sXML_background_color, XML_SC_TYPE_CELLBACKCOLOR|MID_FLAG_MULTI_PROPERTY, CTF_BACKGROUNDCOLOR },
     { 0L }
 };
 
@@ -728,22 +722,6 @@ XMLCellStylesPropertySetMapper::XMLCellStylesPropertySetMapper(const XMLProperty
 }
 
 XMLCellStylesPropertySetMapper::~XMLCellStylesPropertySetMapper()
-{
-}
-
-void XMLPageStylesPropertySetMapper::ContextFilter(
-    ::std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
-{
-}
-
-XMLPageStylesPropertySetMapper::XMLPageStylesPropertySetMapper(const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory) :
-    XMLPropertySetMapper( pEntries, rFactory )
-{
-}
-
-XMLPageStylesPropertySetMapper::~XMLPageStylesPropertySetMapper()
 {
 }
 

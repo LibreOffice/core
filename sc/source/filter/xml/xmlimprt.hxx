@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-11 15:44:49 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 10:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,7 +565,6 @@ class ScXMLImport: public SvXMLImport
 //  SvXMLAutoStylePoolP     *pScAutoStylePool;
     XMLScPropHdlFactory     *pScPropHdlFactory;
     XMLCellStylesPropertySetMapper      *pCellStylesPropertySetMapper;
-    XMLPageStylesPropertySetMapper      *pPageStylesPropertySetMapper;
     XMLColumnStylesPropertySetMapper    *pColumnStylesPropertySetMapper;
     XMLRowStylesPropertySetMapper       *pRowStylesPropertySetMapper;
     XMLTableStylesPropertySetMapper     *pTableStylesPropertySetMapper;
@@ -689,7 +688,6 @@ public:
 //                                SfxItemSet& rItemSet );
 
     XMLCellStylesPropertySetMapper* GetCellStylesPropertySetMapper() const { return pCellStylesPropertySetMapper; }
-    XMLPageStylesPropertySetMapper* GetPageStylesPropertySetMapper() const { return pPageStylesPropertySetMapper; }
     XMLColumnStylesPropertySetMapper* GetColumnStylesPropertySetMapper() const { return pColumnStylesPropertySetMapper; }
     XMLRowStylesPropertySetMapper* GetRowStylesPropertySetMapper() const { return pRowStylesPropertySetMapper; }
     XMLTableStylesPropertySetMapper* GetTableStylesPropertySetMapper() const { return pTableStylesPropertySetMapper; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-29 12:57:20 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 10:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ using namespace rtl;
 #endif
 
 extern const XMLPropertyMapEntry aXMLScCellStylesProperties[];
-extern const XMLPropertyMapEntry aXMLScPageStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScColumnStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScRowStylesProperties[];
 extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
@@ -134,9 +133,6 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 #define CTF_NUMBERFORMAT                        20
 #define CTF_MAP                                 21
 #define CTF_PARAINDENT                          22
-
-//PageStyles
-#define CTF_BACKGROUNDCOLOR                     50
 
 //ColumnStyles
 #define XML_SC_TYPE_BREAKBEFORE                     (XML_SC_TYPES_START + 50)
@@ -225,21 +221,6 @@ public:
     XMLCellStylesPropertySetMapper(const XMLPropertyMapEntry* pEntries,
             const UniReference< XMLPropertyHandlerFactory >& rFactory);
     virtual ~XMLCellStylesPropertySetMapper();
-};
-
-class XMLPageStylesPropertySetMapper : public XMLPropertySetMapper
-{
-protected:
-    /** Application-specific filter. By default do nothing. */
-    virtual void ContextFilter(
-            ::std::vector< XMLPropertyState >& rProperties,
-            ::com::sun::star::uno::Reference<
-                        ::com::sun::star::beans::XPropertySet > rPropSet ) const;
-public:
-
-    XMLPageStylesPropertySetMapper(const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory);
-    virtual ~XMLPageStylesPropertySetMapper();
 };
 
 class XMLColumnStylesPropertySetMapper : public XMLPropertySetMapper

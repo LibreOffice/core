@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-12 08:18:09 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 10:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1132,7 +1132,6 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
 //  pScAutoStylePool(new SvXMLAutoStylePoolP),
     pScPropHdlFactory(0L),
     pCellStylesPropertySetMapper(0L),
-    pPageStylesPropertySetMapper(0L),
     pColumnStylesPropertySetMapper(0L),
     pRowStylesPropertySetMapper(0L),
     pTableStylesPropertySetMapper(0L),
@@ -1166,12 +1165,6 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
         {
             // set lock to avoid deletion
             pCellStylesPropertySetMapper->acquire();
-        }
-        pPageStylesPropertySetMapper = new XMLPageStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScPageStylesProperties, aFactoryRef);
-        if(pPageStylesPropertySetMapper)
-        {
-            // set lock to avoid deletion
-            pPageStylesPropertySetMapper->acquire();
         }
         pColumnStylesPropertySetMapper = new XMLColumnStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScColumnStylesProperties, aFactoryRef);
         if(pColumnStylesPropertySetMapper)
@@ -1268,11 +1261,6 @@ ScXMLImport::~ScXMLImport()
     {
         pCellStylesPropertySetMapper->release();
         pCellStylesPropertySetMapper = 0L;
-    }
-    if (pPageStylesPropertySetMapper)
-    {
-        pPageStylesPropertySetMapper->release();
-        pPageStylesPropertySetMapper = 0L;
     }
     if (pColumnStylesPropertySetMapper)
     {

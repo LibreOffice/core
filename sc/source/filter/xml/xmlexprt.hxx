@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 12:18:17 $
+ *  last change: $Author: sab $ $Date: 2000-10-17 10:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,6 @@ class ScXMLExport : public SvXMLExport
 //  SvXMLAutoStylePoolP         *pScAutoStylePool;
     XMLScPropHdlFactory         *pScPropHdlFactory;
     XMLCellStylesPropertySetMapper      *pCellStylesPropertySetMapper;
-    XMLPageStylesPropertySetMapper      *pPageStylesPropertySetMapper;
     XMLColumnStylesPropertySetMapper    *pColumnStylesPropertySetMapper;
     XMLRowStylesPropertySetMapper       *pRowStylesPropertySetMapper;
     XMLTableStylesPropertySetMapper     *pTableStylesPropertySetMapper;
