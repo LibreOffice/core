@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-20 14:33:17 $
+ *  last change: $Author: pb $ $Date: 2001-08-22 10:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,6 +535,27 @@ BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
 {
     String aHelpModuleName( GetHelpModuleName_Impl( nHelpId ) );
     String aHelpURL = CreateHelpURL( nHelpId, aHelpModuleName );
+    if ( pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+    {
+        // no help found -> try with parent help id.
+        Window* pParent = pWindow->GetParent();
+        while ( pParent )
+        {
+            nHelpId = pParent->GetHelpId();
+            aHelpURL = CreateHelpURL( nHelpId, aHelpModuleName );
+
+            if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+                break;
+            else
+            {
+                pParent = pParent->GetParent();
+                if ( !pParent )
+                    // create help url of start page ( helpid == 0 -> start page)
+                    aHelpURL = CreateHelpURL( 0, aHelpModuleName );
+            }
+        }
+    }
+
     return Start( aHelpURL, pWindow );
 }
 
@@ -544,7 +565,7 @@ XubString SfxHelp::GetHelpText( ULONG nHelpId, const Window* pWindow )
     String aHelpText = pImp->GetHelpText( nHelpId, aModuleName );
     ULONG nNewHelpId = 0;
 
-    if ( aHelpText.Len() == 0 && pWindow )
+    if ( pWindow && aHelpText.Len() == 0 )
     {
         // no help text found -> try with parent help id.
         Window* pParent = pWindow->GetParent();
