@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionPageSetup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:12:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,14 @@ namespace dbaui
     // -----------------------------------------------------------------------
     void OConnectionTabPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
+        m_eType = m_pAdminDialog->getDatasourceType(_rSet);
+        // special handling for oracle, this can only happen
+        // if the user enters the same url as used for Oracle and we are on the JDBC path
+        if ( DST_ORACLE_JDBC == m_eType )
+            m_eType = DST_JDBC;
+
         OConnectionHelper::implInitControls(_rSet, _bSaveValue);
+
         if ( m_eType >= DST_USERDEFINE1 )
         {
             String sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
