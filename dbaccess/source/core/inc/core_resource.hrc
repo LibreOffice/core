@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_resource.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:10:42 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,9 @@
 #define RID_STR_COLUMN_ALTER_BY_INDEX           ( RID_CORE_STRINGS_START + 29 )
 #define RID_STR_NO_ALTER_COLUMN_DEF             ( RID_CORE_STRINGS_START + 30 )
 #define RID_STR_COLUMN_UNKNOWN_PROP             ( RID_CORE_STRINGS_START + 31 )
-
-
+#define RID_STR_FORM                            ( RID_CORE_STRINGS_START + 32 )
+#define RID_STR_REPORT                          ( RID_CORE_STRINGS_START + 33 )
+#define RID_STR_DATASOURCE_NOT_STORED           ( RID_CORE_STRINGS_START + 34 )
 
 #endif // _DBA_CORE_RESOURCE_HRC_
 
