@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:52:33 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ class FontCache
     void clearCache();
 
     void copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFontManager::PrintFont* pTo ) const;
+    bool equalsPrintFont( const PrintFontManager::PrintFont* pLeft, PrintFontManager::PrintFont* pRight ) const;
     PrintFontManager::PrintFont* clonePrintFont( const PrintFontManager::PrintFont* pFont ) const;
 
     void createCacheDir( int nDirID );
