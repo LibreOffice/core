@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-15 10:02:46 $
+ *  last change: $Author: aw $ $Date: 2001-08-15 15:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2438,7 +2438,11 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
         pScene->GetLightGroup().SetDirection( aLightKey );
         nAmbient = ( nAmbient - 4 ) << 3;
         Color aAmbientCol( (UINT8)nAmbient, (UINT8)nAmbient, (UINT8)nAmbient );
-        pScene->GetLightGroup().SetIntensity( aAmbientCol, Base3DMaterialAmbient );
+
+        // #91047# do NOT set aAmbientCol at activated light source, but only
+        // as global ambient light (see below)
+        // pScene->GetLightGroup().SetIntensity( aAmbientCol, Base3DMaterialAmbient );
+
         pScene->GetLightGroup().SetGlobalAmbientLight( aAmbientCol );
         if ( nSpecular )
         {   // 80% statt 100% (?)
