@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyids.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:05:39 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 08:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaCon
 #define PROPERTY_ID_IM001                           48
 
 #define PROPERTY_ID_AUTOINCREMENTCREATION           49
+
+#define PROPERTY_ID_PRIVILEGES                      50
 
 #endif // _CONNECTIVITY_PROPERTYIDS_HXX_
 
