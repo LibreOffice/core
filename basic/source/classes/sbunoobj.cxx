@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-25 15:36:32 $
+ *  last change: $Author: ab $ $Date: 2001-06-26 11:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,17 +534,25 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                 {
                     // Wenn alle Elemente des Arrays vom gleichen Typ sind, wird
                     // der genommen, sonst wird das ganze als Any-Sequence betrachtet
-                    sal_Bool bInit = sal_False;
+                    sal_Bool bNeedsInit = sal_True;
 
                     short nIdx = nLower;
                     for( UINT32 i = 0 ; i < nSize ; i++,nIdx++ )
                     {
                         SbxVariableRef xVar = pArray->Get( &nIdx );
                         Type aType = getUnoTypeForSbxValue( (SbxVariable*)xVar );
-                        if( !bInit )
+                        if( bNeedsInit )
                         {
+                            if( aType.getTypeClass() == TypeClass_VOID )
+                            {
+                                // #88522
+                                // if only first element is void: different types  -> []any
+                                // if all elements are void: []void is not allowed -> []any
+                                aElementType = getCppuType( (Any*)0 );
+                                break;
+                            }
                             aElementType = aType;
-                            bInit = sal_True;
+                            bNeedsInit = sal_False;
                         }
                         else if( aElementType != aType )
                         {
