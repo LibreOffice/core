@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-08 16:54:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key);
 sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData);
 
 /** Get the current thread local text encoding. */
-rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding();
+rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void);
 
 /** Set the thread local text encoding.
     @return the old text encoding.
