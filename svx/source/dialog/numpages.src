@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:54:01 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ TabPage RID_SVXPAGE_PICK_BULLET
         Text [ portuguese ] = "Selecção" ;
         Text[ chinese_simplified ] = "Ñ¡Ôñ";
         Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Wybór";
+        Text[ polish ] = "Selekcja";
         Text[ japanese ] = "‘I‘ğ";
         Text[ chinese_traditional ] = "¿ï¾Ü";
         Text[ arabic ] = "ÊÍÏíÏ";
@@ -137,7 +137,7 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
         Text [ portuguese ] = "Selecção" ;
         Text[ chinese_simplified ] = "Ñ¡Ôñ";
         Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Wybór";
+        Text[ polish ] = "Selekcja";
         Text[ japanese ] = "‘I‘ğ";
         Text[ chinese_traditional ] = "¿ï¾Ü";
         Text[ arabic ] = "ÊÍÏíÏ";
@@ -183,7 +183,7 @@ TabPage RID_SVXPAGE_PICK_NUM
         Text [ portuguese ] = "Selecção" ;
         Text[ chinese_simplified ] = "Ñ¡Ôñ";
         Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Wybór";
+        Text[ polish ] = "Selekcja";
         Text[ japanese ] = "‘I‘ğ";
         Text[ chinese_traditional ] = "¿ï¾Ü";
         Text[ arabic ] = "ÊÍÏíÏ";
@@ -229,7 +229,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text [ dutch ] = "Selectie" ;
         Text[ chinese_simplified ] = "Ñ¡Ôñ";
         Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Wybór";
+        Text[ polish ] = "Selekcja";
         Text[ japanese ] = "‘I‘ğ";
         Text[ chinese_traditional ] = "¿ï¾Ü";
         Text[ arabic ] = "ÊÍÏíÏ";
@@ -339,7 +339,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ russian ] = "Óğîâåíü";
         Text[ polish ] = "Poziom";
         Text[ japanese ] = "ÚÍŞÙ";
-        Text[ chinese_traditional ] = "¤À¼h";
+        Text[ chinese_traditional ] = "¯Å";
         Text[ arabic ] = "ÇáãÓÊæì";
         Text[ greek ] = "Åğßğåäï";
         Text[ korean ] = "·¹º§";
@@ -1180,7 +1180,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     StringList [ polish ] =
     {
             < "Z lewej strony" ; > ;
-        < "Wy?rodkuj" ; > ;
+        < "Wyœrodkuj" ; > ;
         < "Z prawej strony" ; > ;
     };
     StringList [ japanese ] =
@@ -1699,13 +1699,13 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     StringList [ polish ] =
     {
             < "Linia odniesienia w górze" ; > ;
-        < "Wy?rodkowana linia odniesienia" ; > ;
+        < "Wyœrodkowana linia odniesienia" ; > ;
         < "Linia odniesienia w dole" ; > ;
         < "Znak w górze" ; > ;
-        < "Wy?rodkuj znaki" ; > ;
+        < "Wyœrodkuj znaki" ; > ;
         < "Znak w dole" ; > ;
         < "Wiersz w górze" ; > ;
-        < "Wy?rodkuj wiersz" ; > ;
+        < "Wyœrodkuj wiersz" ; > ;
         < "Wiersz w dole" ; > ;
     };
     StringList [ japanese ] =
@@ -1822,7 +1822,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese ] = "Níveis todos" ;
         Text[ chinese_simplified ] = "ËùÓĞ·Ö²ã";
         Text[ russian ] = "Âñå óğîâíè";
-        Text[ polish ] = "Wszyst. poziomy";
+        Text[ polish ] = "Wszystkie poziomy";
         Text[ japanese ] = "‚·‚×‚Ä‚ÌÚÍŞÙ";
         Text[ chinese_traditional ] = "©Ò¦³ªº¯Å";
         Text[ arabic ] = "ßá ÇáãÓÊæíÇÊ";
@@ -1925,7 +1925,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ russian ] = "Óğîâåíü";
         Text[ polish ] = "Poziom";
         Text[ japanese ] = "ÚÍŞÙ";
-        Text[ chinese_traditional ] = "¤À¼h";
+        Text[ chinese_traditional ] = "¯Å";
         Text[ arabic ] = "ÇáãÓÊæì";
         Text[ greek ] = "Åğßğåäï";
         Text[ korean ] = "¼öÁØ";
@@ -2064,7 +2064,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ portuguese ] = "Distância do ~texto" ;
         Text[ chinese_simplified ] = "ÖÁÕıÎÄµÄ¾àÀë";
         Text[ russian ] = "Ğàññòîÿíèå îò òåêñòà";
-        Text[ polish ] = "Odstêp do tekstu";
+        Text[ polish ] = "Odstêp od tekstu";
         Text[ japanese ] = "Ã·½Ä‚Ü‚Å‚ÌŠÔŠu";
         Text[ chinese_traditional ] = "¦Ü¤º¤åªº¶ZÖÃ";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáäÕ";
@@ -2261,7 +2261,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     StringList [ polish ] =
     {
             < "Z lewej strony" ; > ;
-        < "Wy?rodkuj" ; > ;
+        < "Wyœrodkuj" ; > ;
         < "Do prawej" ; > ;
     };
     StringList [ japanese ] =
@@ -2330,7 +2330,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ portuguese ] = "~Padrão" ;
         Text[ chinese_simplified ] = "±ê×¼";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domy?lnie";
+        Text[ polish ] = "Domyœlnie";
         Text[ japanese ] = "•W€";
         Text[ chinese_traditional ] = "¼Ğ·Ç";
         Text[ arabic ] = "ŞíÇÓí";
