@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-08 13:27:16 $
+ *  last change: $Author: fs $ $Date: 2001-05-15 11:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,8 @@ namespace dbaccess
         ::rtl::OUString     m_sPassword;        // the user's password
 
     public:
+        OAuthenticationContinuation(sal_Bool _bReadOnlyDS = sal_False);
+
         virtual sal_Bool SAL_CALL canSetRealm(  ) throw(RuntimeException);
         virtual void SAL_CALL setRealm( const ::rtl::OUString& Realm ) throw(RuntimeException);
         virtual sal_Bool SAL_CALL canSetUserName(  ) throw(RuntimeException);
@@ -192,6 +194,13 @@ namespace dbaccess
         ::rtl::OUString getPassword() const         { return m_sPassword; }
         sal_Bool        getRememberPassword() const { return m_bRemberPassword; }
     };
+
+    //--------------------------------------------------------------------------
+    OAuthenticationContinuation::OAuthenticationContinuation(sal_Bool _bReadOnlyDS)
+        :m_bDatasourceReadonly(_bReadOnlyDS)
+        ,m_bRemberPassword(sal_True)    // TODO: a meaningfull default
+    {
+    }
 
     //--------------------------------------------------------------------------
     sal_Bool SAL_CALL OAuthenticationContinuation::canSetRealm(  ) throw(RuntimeException)
@@ -502,12 +511,7 @@ void ODatabaseSource::disposing()
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::OUString& _rUid, const ::rtl::OUString& _rPwd)
 {
     Reference< XConnection > xReturn;
-    Reference< XDriverManager > xManager(m_xServiceFactory->createInstance(
-#if SUPD < 631
-        SERVICE_SDBC_DRIVERMANAGER)
-#else
-        ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool") )
-#endif
+    Reference< XDriverManager > xManager(m_xServiceFactory->createInstance(SERVICE_SDBC_CONNECTIONPOOL)
         , UNO_QUERY);
 
     ::rtl::OUString sUser(_rUid);
@@ -521,7 +525,6 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
             sPwd = m_aPassword;
     }
 
-    // SERVICE_SDBC_DRIVERMANAGER
     if (xManager.is())
     {
         sal_Int32 nAdditionalArgs(0);
@@ -776,7 +779,8 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         // build an interaction request
         // two continuations (Ok and Cancel)
         OInteractionAbort* pAbort = new OInteractionAbort;
-        OAuthenticationContinuation* pAuthenticate = new OAuthenticationContinuation;
+        OAuthenticationContinuation* pAuthenticate = new OAuthenticationContinuation(m_bReadOnly);
+
         // the request
         AuthenticationRequest aRequest;
         aRequest.ServerName = m_sName;
