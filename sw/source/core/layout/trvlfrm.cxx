@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:16:02 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1815,94 +1815,102 @@ void SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
                                             &aPtPt, 0, FALSE )->GetUpper(),
                       *pEnd   = rTblCrsr.GetCntntNode(FALSE)->GetFrm(
                                             &aMkPt, 0, FALSE )->GetUpper();
-    SwSelUnions aUnions;
-    ::MakeSelUnions( aUnions, pStart, pEnd );
 
-    SwSelBoxes aNew;
-
-    const FASTBOOL bReadOnlyAvailable = rTblCrsr.IsReadOnlyAvailable();
-
-    for ( USHORT i = 0; i < aUnions.Count(); ++i )
+    /* #109590# Only change table boxes if the frames are
+        valid. Needed because otherwise the table cursor after moving
+        table cells by dnd resulted in an empty tables cursor.  */
+    if (pStart->IsValid() && pEnd->IsValid())
     {
-        SwSelUnion *pUnion = aUnions[i];
-        const SwTabFrm *pTable = pUnion->GetTable();
+        SwSelUnions aUnions;
+        ::MakeSelUnions( aUnions, pStart, pEnd );
 
-        SwLayoutFrm *pRow = (SwLayoutFrm*)pTable->Lower();
-        if ( pRow && pTable->IsFollow() &&
-             pTable->GetTable()->IsHeadlineRepeat() )
-            pRow = (SwLayoutFrm*)pRow->GetNext();
-        while ( pRow )
+        SwSelBoxes aNew;
+
+        const FASTBOOL bReadOnlyAvailable = rTblCrsr.IsReadOnlyAvailable();
+
+        for ( USHORT i = 0; i < aUnions.Count(); ++i )
         {
-            if ( pRow->Frm().IsOver( pUnion->GetUnion() ) )
-            {
-                const SwLayoutFrm *pCell = pRow->FirstCell();
+            SwSelUnion *pUnion = aUnions[i];
+            const SwTabFrm *pTable = pUnion->GetTable();
 
-                while ( pCell && pRow->IsAnLower( pCell ) )
+            SwLayoutFrm *pRow = (SwLayoutFrm*)pTable->Lower();
+            if ( pRow && pTable->IsFollow() &&
+                 pTable->GetTable()->IsHeadlineRepeat() )
+                pRow = (SwLayoutFrm*)pRow->GetNext();
+            while ( pRow )
+            {
+                if ( pRow->Frm().IsOver( pUnion->GetUnion() ) )
                 {
-                    ASSERT( pCell->IsCellFrm(), "Frame ohne Celle" );
-                    if( IsFrmInTblSel( pUnion->GetUnion(), pCell ) &&
-                        (bReadOnlyAvailable ||
-                         !pCell->GetFmt()->GetProtect().IsCntntProtected()) )
+                    const SwLayoutFrm *pCell = pRow->FirstCell();
+
+                    while ( pCell && pRow->IsAnLower( pCell ) )
                     {
-                        SwTableBox* pInsBox = (SwTableBox*)((SwCellFrm*)pCell)->GetTabBox();
-                        aNew.Insert( pInsBox );
-                    }
-                    if ( pCell->GetNext() )
-                    {
-                        pCell = (const SwLayoutFrm*)pCell->GetNext();
-                        if ( pCell->Lower()->IsRowFrm() )
-                            pCell = pCell->FirstCell();
-                    }
-                    else
-                    {
-                        const SwLayoutFrm* pLastCell = pCell;
-                        do
+                        ASSERT( pCell->IsCellFrm(), "Frame ohne Celle" );
+                        if( IsFrmInTblSel( pUnion->GetUnion(), pCell ) &&
+                            (bReadOnlyAvailable ||
+                             !pCell->GetFmt()->GetProtect().IsCntntProtected()))
                         {
-                            pCell = pCell->GetNextLayoutLeaf();
-                        } while ( pCell && pLastCell->IsAnLower( pCell ) );
-                        // Fuer (spaltige) Bereiche...
-                        if( pCell && pCell->IsInTab() )
+                            SwTableBox* pInsBox = (SwTableBox*)
+                                ((SwCellFrm*)pCell)->GetTabBox();
+                            aNew.Insert( pInsBox );
+                        }
+                        if ( pCell->GetNext() )
                         {
-                            while( !pCell->IsCellFrm() )
+                            pCell = (const SwLayoutFrm*)pCell->GetNext();
+                            if ( pCell->Lower()->IsRowFrm() )
+                                pCell = pCell->FirstCell();
+                        }
+                        else
+                        {
+                            const SwLayoutFrm* pLastCell = pCell;
+                            do
                             {
-                                pCell = pCell->GetUpper();
-                                ASSERT( pCell, "Where's my cell?" );
+                                pCell = pCell->GetNextLayoutLeaf();
+                            } while ( pCell && pLastCell->IsAnLower( pCell ) );
+                            // Fuer (spaltige) Bereiche...
+                            if( pCell && pCell->IsInTab() )
+                            {
+                                while( !pCell->IsCellFrm() )
+                                {
+                                    pCell = pCell->GetUpper();
+                                    ASSERT( pCell, "Where's my cell?" );
+                                }
                             }
                         }
                     }
                 }
+                pRow = (SwLayoutFrm*)pRow->GetNext();
             }
-            pRow = (SwLayoutFrm*)pRow->GetNext();
         }
-    }
 
-    SwSelBoxes& rOld = (SwSelBoxes&)rTblCrsr.GetBoxes();
-    USHORT nOld = 0, nNew = 0;
-    while ( nOld < rOld.Count() && nNew < aNew.Count() )
-    {
-        const SwTableBox* pPOld = *( rOld.GetData() + nOld );
-        const SwTableBox* pPNew = *( aNew.GetData() + nNew );
-        if( pPOld == pPNew )
+        SwSelBoxes& rOld = (SwSelBoxes&)rTblCrsr.GetBoxes();
+        USHORT nOld = 0, nNew = 0;
+        while ( nOld < rOld.Count() && nNew < aNew.Count() )
         {
-            // diese Box bleibt erhalten
-            ++nOld;
-            aNew.Remove( nNew );
+            const SwTableBox* pPOld = *( rOld.GetData() + nOld );
+            const SwTableBox* pPNew = *( aNew.GetData() + nNew );
+            if( pPOld == pPNew )
+            {
+                // diese Box bleibt erhalten
+                ++nOld;
+                aNew.Remove( nNew );
+            }
+            else if( pPOld->GetSttIdx() < pPNew->GetSttIdx() )
+                rTblCrsr.DeleteBox( nOld );
+            else
+            {
+                rTblCrsr.InsertBox( *pPNew );
+                ++nOld;
+                ++nNew;
+            }
         }
-        else if( pPOld->GetSttIdx() < pPNew->GetSttIdx() )
+
+        while( nOld < rOld.Count() )
             rTblCrsr.DeleteBox( nOld );
-        else
-        {
-            rTblCrsr.InsertBox( *pPNew );
-            ++nOld;
-            ++nNew;
-        }
+
+        for( ; nNew < aNew.Count(); ++nNew )
+            rTblCrsr.InsertBox( **( aNew.GetData() + nNew ) );
     }
-
-    while( nOld < rOld.Count() )
-        rTblCrsr.DeleteBox( nOld );
-
-    for( ; nNew < aNew.Count(); ++nNew )
-        rTblCrsr.InsertBox( **( aNew.GetData() + nNew ) );
 }
 
 
