@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 12:42:03 $
+ *  last change: $Author: sab $ $Date: 2002-08-02 11:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,7 +776,8 @@ Rectangle ScAccessibleSpreadsheet::GetBoundingBox() const
     {
         Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
-            aRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());
+            //#101986#; extends to the same window, because the parent is the document and it has the same window
+            aRect = pWindow->GetWindowExtentsRelative(pWindow);
     }
     return aRect;
 }
