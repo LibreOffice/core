@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:06:01 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@
 #define RID_STR_DATEMIN                     ( RID_FORMBROWSER_START +  62 )
 #define RID_STR_DATEMAX                     ( RID_FORMBROWSER_START +  63 )
 #define RID_STR_DATEFORMAT                  ( RID_FORMBROWSER_START +  64 )
-    // FREE
+#define RID_STR_SELECTEDITEMS               ( RID_FORMBROWSER_START +  65 )
 #define RID_STR_TIMEMIN                     ( RID_FORMBROWSER_START +  66 )
 #define RID_STR_TIMEMAX                     ( RID_FORMBROWSER_START +  67 )
 #define RID_STR_TIMEFORMAT                  ( RID_FORMBROWSER_START +  68 )
@@ -294,71 +294,3 @@
 
 
 #endif // _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.15.172.1  2003/10/01 09:17:55  fs
- *  #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.15.162.4  2003/09/18 10:13:06  fs
- *  #18997# small adjustments for the list box cell bindings
- *
- *  Revision 1.15.162.3  2003/09/17 15:02:57  fs
- *  #18997# added support so that list and combo boxes are also allowed to transfer their selection index, instead of their selection text
- *
- *  Revision 1.15.162.2  2003/09/11 15:12:24  fs
- *  #19371# user interface for binding list/combo controls to spreadsheet cell ranges
- *
- *  Revision 1.15.162.1  2003/09/03 13:32:30  fs
- *  #i18996# UI for binding form controls to calc cells
- *
- *  Revision 1.15  2001/11/08 17:39:12  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.14  2001/11/08 11:43:54  fs
- *  #94300# removed ShowCentury property
- *
- *  Revision 1.13  2001/10/30 15:18:13  fs
- *  +RID_STR_UNABLETOCONNECT
- *
- *  Revision 1.12  2001/10/19 12:58:51  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.11  2001/09/28 14:54:09  tbe
- *  #92258# click handler for Basic Scrollbar
- *
- *  Revision 1.10  2001/06/06 10:36:52  fs
- *  #86837# +RID_STR_ENUM_SIDE_ALIGN
- *
- *  Revision 1.9  2001/05/02 12:42:58  tbe
- *  added scrollbar properties
- *
- *  Revision 1.8  2001/04/26 09:16:25  tbe
- *  added progressbar properties
- *
- *  Revision 1.7  2001/03/21 15:38:39  fs
- *  #82696# new font dialog
- *
- *  Revision 1.6  2001/03/07 14:36:55  tbe
- *  added step property
- *
- *  Revision 1.5  2001/03/02 16:29:01  tbe
- *  added title property
- *
- *  Revision 1.4  2001/02/22 09:32:27  tbe
- *  added properties for dialog controls
- *
- *  Revision 1.3  2001/02/05 09:33:12  fs
- *  #83424# +RID_STR_ENUM_SUBMIT_TARGET
- *
- *  Revision 1.2  2001/01/17 08:43:29  fs
- *  #82726# tightened the string res ids
- *
- *  Revision 1.1  2001/01/12 11:35:45  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 09.01.01 16:03:30  fs
- ************************************************************************/
-
