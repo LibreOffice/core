@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2002-05-13 17:21:05 $
+#   last change: $Author: er $ $Date: 2002-06-03 16:54:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,8 +141,13 @@ OUT2BIN= \
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
-TG_DELIVER : $/$(MISC)$/build$/so_predeliver
+TG_DELIVER : $(PACKAGE_DIR)$/so_predeliver
         $(DELIVER)
+
+$(PACKAGE_DIR)$/so_add_binary :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
+    cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)icu-2.0-binary_patch.tar.gz | tar $(TAR_EXCLUDE_SWITCH) -xvf - 
+    
+$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary
 
 .IF "$(BUILD_SOSL)"!=""
 ALLTAR : TG_DELIVER
