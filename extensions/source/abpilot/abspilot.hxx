@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:44 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,13 @@
 #ifndef EXTENSIONS_ABSPILOT_HXX
 #define EXTENSIONS_ABSPILOT_HXX
 
+#include "abpenvironment.hxx"
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _SVTOOLS_WIZARDMACHINE_HXX_
-#include <svtools/wizardmachine.hxx>
+#ifndef SVTOOLS_INC_ROADMAPWIZARD_HXX
+#include <svtools/roadmapwizard.hxx>
 #endif
 #ifndef EXTENSIONS_ABP_ADDRESSSETTINGS_HXX
 #include "addresssettings.hxx"
@@ -86,7 +88,11 @@ namespace abp
     //=====================================================================
     //= OAddessBookSourcePilot
     //=====================================================================
+#if defined( ABP_USE_ROADMAP )
+    typedef ::svt::RoadmapWizard OAddessBookSourcePilot_Base;
+#else
     typedef ::svt::OWizardMachine OAddessBookSourcePilot_Base;
+#endif
     class OAddessBookSourcePilot : public OAddessBookSourcePilot_Base
     {
     protected:
@@ -115,13 +121,24 @@ namespace abp
 
         void                    travelNext( ) { OAddessBookSourcePilot_Base::travelNext(); }
 
+        /// to be called when the selected type changed
+        void                    typeSelectionChanged( AddressSourceType _eType );
+
     protected:
         // OWizardMachine overridables
-        virtual ::svt::OWizardPage* createPage(sal_uInt16 _nState);
-        virtual void                enterState(sal_uInt16 _nState);
-        virtual sal_Bool            leaveState(sal_uInt16 _nState);
-        virtual sal_uInt16          determineNextState(sal_uInt16 _nCurrentState);
-        virtual sal_Bool            onFinish(sal_Int32 _nResult);
+        virtual ::svt::OWizardPage* createPage( WizardState _nState );
+        virtual void                enterState( WizardState _nState );
+#if defined( ABP_USE_ROADMAP )
+        virtual sal_Bool            prepareLeaveCurrentState( CommitPageReason _eReason );
+#else
+        virtual WizardState         determineNextState( WizardState _nCurrentState );
+#endif  // !defined( ABP_USE_ROADMAP )
+        virtual sal_Bool            onFinish( sal_Int32 _nResult );
+
+#if defined( ABP_USE_ROADMAP )
+        // RoadmapWizard
+        virtual String  getStateDisplayName( WizardState _nState );
+#endif
 
         virtual BOOL    Close();
 
@@ -139,22 +156,32 @@ namespace abp
         /// guesses a default for the table name, if no valid table is selected
         void implDefaultTableName();
 
+        inline sal_Bool needAdminInvokationPage( AddressSourceType _eType ) const
+        {
+            return  (   ( AST_LDAP == _eType )
+                    ||  ( AST_OTHER == _eType )
+                    );
+        }
         /// check if with the current settings, we would need to invoke he administration dialog for more details about the data source
         inline sal_Bool needAdminInvokationPage() const
         {
-            return  (   (AST_LDAP == m_aSettings.eType)
-                    ||  (AST_OTHER == m_aSettings.eType)
-                    );
+            return  needAdminInvokationPage( m_aSettings.eType );
         }
 
+        inline sal_Bool needManualFieldMapping( AddressSourceType _eType ) const
+        {
+            return ( AST_OTHER == _eType );
+        }
         /// checks if we need a manual (user-guided) field mapping
         inline sal_Bool needManualFieldMapping() const
         {
-            return ( AST_OTHER == m_aSettings.eType );
+            return needManualFieldMapping( m_aSettings.eType );
         }
 
         void implCleanup();
         void implCommitAll();
+
+        void implUpdateTypeDependentStates( AddressSourceType _eType );
     };
 
 //.........................................................................
