@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:13:45 $
+ *  last change: $Author: hr $ $Date: 2000-10-27 09:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,9 @@
 #include <cppuhelper/extract.hxx>
 #endif
 
+#define IFACECAST(c)        ((const com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&)c)
+    // SUN C52 has some ambiguities without this cast ....
+
 #include <math.h>
 
 // An irgendeiner Stelle dieser include-Orgie hier gehen die defines fuer WB_LEFT und WB_RIGHT verloren, und ich habe einfach
@@ -245,7 +248,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const ::com::sun::star::u
     }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  xCur;
     if (m_rParent.getDataSource())
-        xCur = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (*m_rParent.getDataSource(), ::com::sun::star::uno::UNO_QUERY);
+        xCur = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (IFACECAST(*m_rParent.getDataSource()), ::com::sun::star::uno::UNO_QUERY);
         // TODO : the cursor wrapper should use an ::com::sun::star::sdbc::XRowSet interface, too
 
     pCellControl->Init(&m_rParent.GetDataWindow(), xCur );
@@ -2131,7 +2134,7 @@ sal_Bool DbFilterField::Commit()
             {
                 XubString aPreparedText;
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > xDataSourceRowSet(
-                    *m_rColumn.GetParent().getDataSource(), ::com::sun::star::uno::UNO_QUERY);
+                    IFACECAST(*m_rColumn.GetParent().getDataSource()), ::com::sun::star::uno::UNO_QUERY);
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  xConnection(
                     ::dbtools::getConnection(xDataSourceRowSet));
                 pParseNode->ParseNodeToPredicateStr(aPreparedText,
