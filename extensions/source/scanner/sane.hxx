@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sane.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 12:15:09 $
+ *  last change: $Author: hr $ $Date: 2001-11-02 10:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@ public:
 
     // XInterface
     virtual ANY SAL_CALL                queryInterface( const Type & rType ) throw( RuntimeException );
-    virtual void SAL_CALL               acquire() throw( RuntimeException ) { OWeakObject::acquire(); }
-    virtual void SAL_CALL               release() throw( RuntimeException ) { OWeakObject::release(); }
+    virtual void SAL_CALL               acquire() throw() { OWeakObject::acquire(); }
+    virtual void SAL_CALL               release() throw() { OWeakObject::release(); }
 
     virtual AWT::Size SAL_CALL          getSize() throw();
     virtual SEQ( sal_Int8 ) SAL_CALL    getDIB() throw();
