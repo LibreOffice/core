@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 10:49:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1287,7 +1287,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
         for(n=0;n<nFamilyCount;n++)
             if(ppItem[StyleNrToInfoOffset(n)])break;
         if ( n == nFamilyCount )
-            // passiert gelegentlich bei Beichten, Formularen etc.; weiﬂ der Teufel warum
+            // passiert gelegentlich bei Beichten, Formularen etc.; weiss der Teufel warum
             return;
         ppItem+=StyleNrToInfoOffset(n);
         nAppFilter = (*ppItem)->GetValue();
@@ -1648,7 +1648,7 @@ void SfxCommonTemplateDialog_Impl::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId&
             }
         // noetig, wenn zwichen Dokumenten umgeschaltet wird,
         // aber in beiden Dokumenten die gleiche Vorlage gilt.
-        // Nicht sofort Update_Impl rufen, fÅr den Fall da\s eines
+        // Nicht sofort Update_Impl rufen, fuer den Fall da\s eines
         // der Dokumente ein internes InPlaceObjekt ist!
           case SFX_HINT_DOCCHANGED:
             bUpdate = TRUE;
