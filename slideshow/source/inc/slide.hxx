@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slide.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2004-12-02 12:45:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@ namespace presentation
                    const ::com::sun::star::uno::Reference<
                        ::com::sun::star::animations::XAnimationNode >&  xRootNode,
                    sal_Int32                                            nSlideIndex,
-                   sal_Int16                                            nMouseCursorID,
                    EventQueue&                                          rEventQueue,
                    ActivitiesQueue&                                     rActivitiesQueue,
                    EventMultiplexer&                                    rEventMultiplexer,
@@ -293,9 +292,6 @@ namespace presentation
             Slide(const Slide&);
             Slide& operator=( const Slide& );
 
-            /// Set the default mouse cursor
-            void setMouseCursor( sal_Int16 nCursorID );
-
             void enablePaintOverlay();
             void disablePaintOverlay();
 
@@ -377,8 +373,6 @@ namespace presentation
 
             /// Timeout for automatic next slide display
             double                                              mnNextSlideTimeout;
-
-            sal_Int16                                           mnDefaultCursor;
 
             SlideAnimationState                                 meAnimationState;
 
