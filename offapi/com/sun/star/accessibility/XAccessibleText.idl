@@ -1,0 +1,537 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XAccessibleText.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:36:13 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_XAccessibleText_idl__
+#define __com_sun_star_accessibility_XAccessibleText_idl__
+
+#ifndef __com_sun_star_accessibility_AccessibleTextType_idl__
+#include <com/sun/star/accessibility/AccessibleTextType.idl>
+#endif
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_awt_Point_idl__
+#include <com/sun/star/awt/Point.idl>
+#endif
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+module com { module sun { module star { module accessibility {
+
+/** Implement this interface to give read-only access to a text.
+
+    <p>The <type>XAccessibleText</type> interface should be implemented by
+    all UNO components that present textual information on the display like
+    buttons, text entry fields, or text portions of the document window.
+    The interface provides access to the text's content, attributes, and
+    spatial location.  However, text can not be modified with this
+    interface.  That is the task of the <type>XAccessibleEditableText</type>
+    interface.</p>
+
+    <p>The text length, i.e. the number of characters in the text, is
+    returned by <member>XAccessibleText::getCharacterCount</member>.
+    All methods that operate on particular characters (e.g.
+    <member>XAccessibleText::getCharacterAt</member>) use character
+    indices from 0 to length-1. All methods that operate on character
+    positions (e.g. <member>XAccessibleText::getTextRange</member>)
+    use indices from 0 to length.</p>
+
+    <p>Please note that accessible text does not necessarily support
+    selection.  In this case it should behave as if there where no
+    selection.  An empty selection is used for example to express the
+    current cursor position.</p>
+*/
+interface XAccessibleText : ::com::sun::star::uno::XInterface
+{
+    /** Return the position of the caret.
+
+        <p>Returns the offset of the caret.  The caret is often called text
+        cursor.  The caret is actually the position between two characters.
+        Its position/offset is that of the character to the right of it.</p>
+
+        @return
+            The returned offset is relative to the text represented by this
+            object.
+    */
+    long getCaretPosition ();
+
+    /** Set the position of the caret.
+
+        <p>The caret is often called text cursor.  The caret is actually the
+        position between two characters.  Its position/offset is that of the
+        character to the right of it.</p>
+
+        <p>Setting the caret position may or may not alter the current
+        selection.  A change of the selection is notified to the
+        accessibility event listeners with an
+        <const>AccessibleEventId::ACCESSIBLE_SELECTION_EVENT</const>.</p>
+
+        <p>When the new caret position differs from the old one (which, of
+        course, is the standard case) this is notified to the accessibility
+        event listeners with an
+        <const>AccessibleEventId::ACCESSIBLE_CARET_EVENT</const>.</p>
+
+        @param nIndex
+            The new index of the caret.  This caret is actually placed to
+            the left side of the character with that index.  An index of 0
+            places the caret so that the next insertion goes before the
+            first character.  An index of <member>getCharacterCount</member>
+            leads to insertion after the last character.
+
+        @return
+            Returns <TRUE/> if the caret has been moved and <FALSE/>
+            otherwise.  A <TRUE/> value does not necessarily mean that the
+            caret has been positioned exactly at the required position.
+            If that position lies inside a read-only area the caret is
+            positioned before or behind it.  Listen to the caret event to
+            determine the new position.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the index is not valid.
+    */
+    boolean setCaretPosition ([in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Return the character at the specified position.
+
+        <p>Returns the character at the given index.</p>
+
+        @param nIndex
+            The index of the character to return.
+            The valid range is 0..length-1.
+
+        @return
+            the character at the index nIndex.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the index is invalid
+    */
+    char getCharacter ([in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Get the attribute set for the specified position.
+
+        <p>Returns a set of attributes that are associated for the character
+        at the given index.  To prevent the method from returning possibly
+        large sets of attributes that the caller is not interested in the
+        caller has to provide a list of attributes that he wants to be
+        returned.</p>
+
+        @param nIndex
+            The index of the character for which to return its attributes.
+            The valid range is 0..length-1.
+
+        @param aRequestedAttributes
+            This string sequence defines the set of attributes that the
+            caller is interested in.  When there are attributes defined that
+            are not listed in the sequence then they are not returned.  When
+            there are requested attributes that are not defined for the
+            character then they are also ignored.
+
+        @return
+            Returns the requested attributes of the specified character.
+            Each attribute is represented by a <type
+            scope="::com::sun::star::beans::">PropertyValue</type> object.
+            The returned list of attribute descriptions contains all
+            attributes that are both members of the sequence of requested
+            attributes and defined for the character.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the index is invalid
+    */
+    sequence<::com::sun::star::beans::PropertyValue>
+        getCharacterAttributes (
+            [in] long nIndex,
+            [in] sequence<string> aRequestedAttributes)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+
+    /** Return the bounding box of the specified position.
+
+        <p>Returns the bounding box of the indexed character.</p>
+
+        <p>The virtual character after the last character of the represented
+        text, i.e. the one at position length is a special case. It
+        represents the current input position and will therefore typically
+        be queried by AT more often than other positions.  Because it does
+        not represent an existing character its bounding box is defined in
+        relation to preceding characters.  It should be rougly equivalent to
+        the bounding box of some character when inserted at the end of the
+        text.  Its height typically being the maximal height of all the
+        characters in the text or the height of the preceding character, its
+        width being at least one pixel so that the bounding box is not
+        degenerate.<br>
+        Note that the index 'length' is not always valid.  Whether it is
+        or not is implementation dependent.  It typically is when text is
+        editable or otherwise when on the screen the caret can be placed
+        behind the text.  You can be sure that the index is valid after you
+        have received a <const scope="AccessibleEventId">CARET</const> event
+        for this index.</p>
+        @param nIndex
+            Index of the character for which to return its bounding box.
+            The valid range is 0..length.
+
+        @return
+            The bounding box of the referenced character.  The bounding box
+            of the virtual character at position length has to have
+            non-empty dimensions.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the index is invalid
+    */
+    ::com::sun::star::awt::Rectangle getCharacterBounds ([in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+
+    /** Return the number of characters in the represented text.
+
+        <p>Returns the number of characters in the text represented by this
+        object or, in other words, the text length.</p>
+
+        @return
+            Returns the number of characters of this object's text.  A zero
+            value indicates an empty text.
+    */
+    long getCharacterCount ();
+
+
+    /** Return the text position for the specified screen position.
+
+        <p>Given a point in local coordinates, i.e. relative to the
+        coordinate system of the object, return the zero-based index of
+        the character under that point.  The same functionality could be
+        achieved by using the bounding boxes for each character as returned
+        by <member>XAccessibleText::getCharacterBounds</member>. The method
+        <member>XAccessibleText::getIndexAtPoint</member>, however, can be
+        implemented in a more efficient way.</p>
+
+        @param aPoint
+            The position for which to look up the index of the character
+            that is rendered on to the display at that point.
+
+        @return
+            Index of the character under the given point or -1 if the point
+            is invalid or there is no character under the point.
+    */
+    long getIndexAtPoint ([in] ::com::sun::star::awt::Point aPoint);
+
+    /** Return the selected text.
+
+        <p>Returns the portion of the text that is selected.</p>
+
+        @return
+            The returned text is the selected portion of the object's text.
+            If no text is selected when this method is called or when
+            selection is not supported an empty string is returned.
+    */
+    string getSelectedText ();
+
+    /** Return the position of the start of the selection.
+
+        <p>Returns the index of the start of the selected text.</p>
+
+        @return
+            If there is no selection or selection is not supported the
+            position of selection start and end will be the same undefined
+            value.
+    */
+    long getSelectionStart ();
+
+    /** Return the position of the end of the selection.
+
+        <p>Returns the index of the end of the selected text.</p>
+
+        @return
+            If there is no selection or selection is not supported the
+            position of selection start and end will be the same undefined
+            value.
+    */
+    long getSelectionEnd ();
+
+    /** Set a new selection.
+
+        <p>Sets the selected text portion according to the given indices.
+        The old selection is replaced by the new selection.</p>
+
+        <p>The selection encompasses the same string of text that
+        <member>XAccessibleText::getTextRange</member> would have
+        selected. See there for details.</p>
+
+        <p>Setting the selection may or may not change the caret position.
+        Typically the caret is moved to the position after the second
+        argument.  When the caret is moved this is notified to the
+        accessibility event listeners with an
+        <const>AccessibleEventId::ACCESSIBLE_CARET_EVENT</const>.</p>
+
+        @param nStartIndex
+            The first character of the new selection.
+            The valid range is 0..length.
+
+        @parm nEndIndex
+            The position after the last character of the new selection.
+            The valid range is 0..length.
+
+        @return
+            Returns <TRUE/> if the selection has been set successfully and
+            <FALSE/> otherwise or when selection is not supported.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the indices are invalid
+    */
+    boolean setSelection ([in] long nStartIndex, [in] long nEndIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Return the whole text.
+
+        <p>Returns the complete text.  This is equivalent to a call to
+        <member>XAccessibleText::getTextRange</member> with the arguments
+        zero and <code>getCharacterCount()-1</code>.</p>
+
+        @return
+            Returns a string that contains the complete text.
+    */
+    string getText ();
+
+    /** Return the specified text range.
+
+        <p>Returns the substring between the two given indices.</p>
+
+        <p>The substring starts with the character at nStartIndex
+        (inclusive) and up to the character at nEndIndex (exclusive),
+        if nStartIndex is less or equal nEndIndex.  If nEndIndex is
+        lower than nStartIndex, the result is the same as a call with
+        the two arguments being exchanged.  </p>
+
+        <p>The whole text can be requested by passing the indices zero and
+        <code>getCharacterCount()</code>.  If both indices have the same
+        value, an empty string is returned.</p>
+
+        @param nStartIndex
+            Index of the first character to include in the returned string.
+            The valid range is 0..length.
+
+        @param nEndIndex
+            Index of the last character to exclude in the returned string.
+            The valid range is 0..length.
+
+        @return
+            Returns the substring starting with the character at nStartIndex
+            (inclusive) and up to the character at nEndIndex (exclusive), if
+            nStartIndex is less or equal nEndIndex.
+            If nEndIndex is lower than nStartIndex, the result is the same
+            that a call with the two arguments being exchanges.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the indices are invalid
+    */
+    string getTextRange ([in] long nStartIndex, [in] long nEndIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Get a text portion around the given position.
+
+        <p>Returns the substring of the specified text type that
+        contains the character at the given index, if any.  For
+        example, given the text type word, the word which contains the
+        character at position nIndex is returned, or an empty string
+        if no word is found at the that position.</p>
+
+        @param nIndex
+            Index of the character whose containing text portion is to be
+            returned.
+            The valid range is 0..length.
+
+        @param aTextType
+            The type of the text portion to return.  See
+            <type>AccessibleTextType</type> for the complete list.
+
+        @return
+            Returns the requested text portion or an empty string if the text
+            type is invalid, or if no text portion of the given is found at
+            the given position.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the index is invalid
+        @throws ::com::sun::star::lang::InvalidArgumentException
+            if the given text type is not valid.
+    */
+    string getTextAtIndex ([in] long nIndex, [in] short aTextType)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException,
+            ::com::sun::star::lang::IllegalArgumentException);
+
+    /** Get a text portion before the given position.
+
+        <p>Returns the substring of the specified text type that is
+        located before the given character and does not include
+        it. The result of this method should be same as a result for
+        <member>XAccessibleText::getTextAtIndex</member> with a
+        suitably decreased index value.</p>
+
+        <p>For example, if text type is word, then the complete word
+        that is closest to and located before nIndex is returned.</p>
+
+        <p>If the index is valid, but no suitable word (or other text
+        type) is found, an empty string is returned.</p>
+
+        @param nIndex
+            Index of the character for which to return the text part before
+            it.  The index character will not be part of the returned
+            string.
+            The valid range is 0..length.
+
+        @param aTextType
+            The type of the text portion to return.  See
+            <type>AccessibleTextType</type> for the complete list.
+
+        @return
+            Returns the requested text portion or an empty string if the
+            text type is invalid or no appropriate text portion is found.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the index is invalid.
+        @throws ::com::sun::star::lang::InvalidArgumentException
+            if the given text type is not valid.
+    */
+    string  getTextBeforeIndex  ([in] long nIndex, [in] short aTextType)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException,
+            ::com::sun::star::lang::IllegalArgumentException);
+
+    /** Get a text portion behind the given position.
+
+        <p>Returns the substring of the specified text type that is
+        located after the given character and does not include
+        it. The result of this method should be same as a result for
+        <member>XAccessibleText::getTextAtIndex</member> with a
+        suitably increased index value.</p>
+
+        <p>For example, if text type is word, then the complete word
+        that is closest to and located behind nIndex is returned.</p>
+
+        <p>If the index is valid, but no suitable word (or other text
+        type) is found, an empty string is returned.</p>
+
+        @param nIndex
+            Index of the character for which to return the text part after
+            it.  The index character will be part of the returned string.
+            The valid range is 0..length.
+
+        @param aTextType
+            The type of the text portion to return.  See
+            <type>AccessibleTextType</type> for the complete list.
+
+        @return
+            Returns the requested text portion or an empty string if the
+            text type is invalid or no appropriate text portion is found.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the index is invalid
+        @throws ::com::sun::star::lang::InvalidArgumentException
+            if the given text type is not valid.
+    */
+    string  getTextBehindIndex  ([in] long nIndex, [in] short aTextType)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException,
+            ::com::sun::star::lang::IllegalArgumentException);
+
+    /** Copy the specified text into the clipboard.
+
+        <p>Copy the specified text into the clipboard.  The text that is
+        copied is the same text that would have been selected by the
+        <member>XAccessibleText::getTextRange</member> method. </p>
+
+        <p>The other clipboard related methods
+        <member>XAccessibleEditableText::cutText</member> and
+        <member>XAccessibleEditableText::deleteText</member> can be found in
+        the <type>XAccessibleEditableText</type> because of their
+        destructive nature.</p>
+
+        @param nStartIndex
+            Start index of the text to copied into the clipboard.
+            The valid range is 0..length.
+
+        @param nEndIndex
+            End index of the text to copied into the clipboard.
+            The valid range is 0..length.
+
+        @return
+            Returns <true/> if the specified text has been copied
+            successfully into the clipboard.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the indices are invalid
+    */
+    boolean copyText ([in] long nStartIndex, [in] long nEndIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+};
+
+}; }; }; };
+
+#endif
