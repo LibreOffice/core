@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 13:31:12 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@ using namespace ::com::sun::star;
 
 uno::Sequence< rtl::OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw()
 {
-    // dont register for generic services!
     uno::Sequence< rtl::OUString > aSeq( 1 );
     aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ));
     return aSeq;
