@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2000-11-04 21:46:24 $
+ *  last change: $Author: er $ $Date: 2000-11-18 18:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
 #ifndef _TOOLS_INTN_HXX
-#include <tools/intn.hxx>       // enum MeasurementSystem
+#include <tools/intn.hxx>       // enum MeasurementSystem, enum DateFormat
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -98,6 +98,8 @@ class LocaleDataWrapper
     String                      aReservedWord[::com::sun::star::i18n::reservedWords::COUNT];
     String                      aCurrSymbol;
     String                      aCurrBankSymbol;
+    int                         nDateFormat;
+    int                         nLongDateFormat;
     USHORT                      nCurrPositiveFormat;
     USHORT                      nCurrNegativeFormat;
     USHORT                      nCurrDigits;
@@ -105,7 +107,6 @@ class LocaleDataWrapper
     BOOL                        bReservedWordValid;
 
     // dummies, to be implemented or provided by XML locale data
-    String                      aLongDateDayOfWeekSep;
     sal_Unicode                 cCurrZeroChar;
 
 
@@ -129,6 +130,9 @@ class LocaleDataWrapper
                                     xub_StrLen nStart, xub_StrLen& nSign,
                                     xub_StrLen& nPar, xub_StrLen& nNum,
                                     xub_StrLen& nBlank, xub_StrLen& nSym );
+
+            void                getDateFormatsImpl();
+            DateFormat          scanDateFormat( const String& rCode );
 
 public:
                                 LocaleDataWrapper(
@@ -196,6 +200,14 @@ public:
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_AM ); }
     inline  const String&       getTimePM() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_PM ); }
+    inline  const String&       getLongDateDayOfWeekSep() const
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_DAY_OF_WEEK_SEPARATOR ); }
+    inline  const String&       getLongDateDaySep() const
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_DAY_SEPARATOR ); }
+    inline  const String&       getLongDateMonthSep() const
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_MONTH_SEPARATOR ); }
+    inline  const String&       getLongDateYearSep() const
+                                    { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_YEAR_SEPARATOR ); }
 
             const String&       getCurrSymbol() const;
             const String&       getCurrBankSymbol() const;
@@ -203,9 +215,10 @@ public:
             USHORT              getCurrNegativeFormat() const;
             USHORT              getCurrDigits() const;
 
+            DateFormat          getDateFormat() const;
+            DateFormat          getLongDateFormat() const;
+
     // dummy returns
-    inline  const String&       getLongDateDayOfWeekSep() const
-                                    { return aLongDateDayOfWeekSep; }
     inline  sal_Unicode         getCurrZeroChar() const
                                     { return cCurrZeroChar; }
 
@@ -216,6 +229,8 @@ public:
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::TRUE_WORD ); }
     inline  const String&       getFalseWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::FALSE_WORD ); }
+    inline  const String&       getQuarterWord() const
+                                    { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::QUARTER_WORD ); }
 
 #ifndef PRODUCT
             ByteString&         AppendLocaleInfo( ByteString& rDebugMsg ) const;
