@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.57 2002-11-01 10:22:59 dvo Exp $
+	$Id: style.mod,v 1.58 2003-05-27 16:06:15 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -316,6 +316,7 @@
 <!ATTLIST style:properties fo:padding-right %nonNegativeLength; #IMPLIED>
 <!ATTLIST style:properties style:shadow CDATA #IMPLIED>
 <!ATTLIST style:properties fo:keep-with-next %boolean; #IMPLIED>
+<!ATTLIST style:properties style:join-border %boolean; #IMPLIED>
 
 <!ATTLIST style:properties text:number-lines %boolean; "false">
 <!ATTLIST style:properties text:line-number %nonNegativeInteger; #IMPLIED>
