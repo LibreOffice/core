@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:18:25 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,19 +218,7 @@
 //========================================================================
 // bitmaps
 
-#define BMP_CHECKBUTTON_UNCHECKED       RID_BITMAP_START +  2
-#define BMP_CHECKBUTTON_CHECKED         RID_BITMAP_START +  3
-#define BMP_CHECKBUTTON_HICHECKED       RID_BITMAP_START +  4
-#define BMP_CHECKBUTTON_HIUNCHECKED     RID_BITMAP_START +  5
-#define BMP_CHECKBUTTON_TRISTATE        RID_BITMAP_START +  6
-#define BMP_CHECKBUTTON_HITRISTATE      RID_BITMAP_START +  7
-
-#define BMP_CHECKBUTTON_UNCHECKED_SCH   RID_BITMAP_START + 10
-#define BMP_CHECKBUTTON_CHECKED_SCH     RID_BITMAP_START + 11
-#define BMP_CHECKBUTTON_HICHECKED_SCH   RID_BITMAP_START + 12
-#define BMP_CHECKBUTTON_HIUNCHECKED_SCH RID_BITMAP_START + 13
-#define BMP_CHECKBUTTON_TRISTATE_SCH    RID_BITMAP_START + 14
-#define BMP_CHECKBUTTON_HITRISTATE_SCH  RID_BITMAP_START + 15
+// start with   RID_BITMAP_START
 
 //========================================================================
 // images
