@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-29 14:32:40 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 09:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,6 +470,10 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
             DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
             if(pData)
             {
+                Reference< XContainer > xContainer(pData->xObject, UNO_QUERY);
+                if (xContainer.is())
+                    xContainer->removeContainerListener(this);
+
                 Reference<XConnection> xCon(pData->xObject,UNO_QUERY);
                 if(xCon.is())
                 {
@@ -3489,9 +3493,6 @@ void SbaTableQueryBrowser::implDropTable( SvLBoxEntry* _pApplyTo )
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 {
-    // disable inplace editing because this timer could bring this frame back to front
-    m_pTreeView->getListBox()->CancelPendingEdit();
-
     Point aPosition;
     SvLBoxEntry* pEntry = NULL;
     SvLBoxEntry* pOldSelection = NULL;
