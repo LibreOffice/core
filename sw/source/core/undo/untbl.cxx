@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:40:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2290,10 +2290,17 @@ void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
     if( pTxtNd->GetpSwpHints() )
         pTxtNd->ClearSwpHintsArr( FALSE );
 
-    SwIndex aIdx( pTxtNd, 0 );
-    pTxtNd->Erase( aIdx );
-    if( aStr.Len() )
-        pTxtNd->Insert( aStr, aIdx, INS_NOHINTEXPAND );
+    // ChgTextToNum(..) only acts when the strings are different. We
+    // need to do the same here.
+    if( pTxtNd->GetTxt() != aStr )
+    {
+        rDoc.DeleteRedline( *( pBox->GetSttNd() ), sal_False );
+
+        SwIndex aIdx( pTxtNd, 0 );
+        pTxtNd->Erase( aIdx );
+        if( aStr.Len() )
+            pTxtNd->Insert( aStr, aIdx, INS_NOHINTEXPAND );
+    }
 
     if( pHistory )
     {
@@ -2307,6 +2314,42 @@ void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
     pPam->GetPoint()->nNode = nNode + 1;
     pPam->GetPoint()->nContent.Assign( pTxtNd, 0 );
 }
+
+/** switch the RedlineMode on the given document, using
+ * SetRedlineMode_intern. This class set the mode in the constructor,
+ * and changes it back in the destructor, i.e. it uses the
+ * initialization-is-resource-acquisition idiom.
+ */
+class RedlineModeInternGuard
+{
+    SwDoc& mrDoc;
+    SwRedlineMode meOldRedlineMode;
+
+public:
+    RedlineModeInternGuard(
+        SwDoc& rDoc,                      /// change mode of this document
+        SwRedlineMode eNewRedlineMode,    /// new redline mode
+        SwRedlineMode eRedlineModeMask  = /// change only bits set in this mask
+            static_cast<SwRedlineMode> ( REDLINE_ON | REDLINE_IGNORE ) );
+    ~RedlineModeInternGuard();
+};
+
+RedlineModeInternGuard::RedlineModeInternGuard(
+    SwDoc& rDoc,
+    SwRedlineMode eNewRedlineMode,
+    SwRedlineMode eRedlineModeMask )
+    : mrDoc( rDoc ),
+      meOldRedlineMode( rDoc.GetRedlineMode() )
+{
+    mrDoc.SetRedlineMode_intern( ( meOldRedlineMode & ~eRedlineModeMask ) |
+                                 ( eNewRedlineMode & eRedlineModeMask ) );
+}
+
+RedlineModeInternGuard::~RedlineModeInternGuard()
+{
+    mrDoc.SetRedlineMode_intern( meOldRedlineMode );
+}
+
 
 
 void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
@@ -2353,6 +2396,10 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
             pBoxFmt->ResetAttr( RES_BOXATR_VALUE );
         pBoxFmt->UnlockModify();
 
+        // dvo: When redlining is (was) enabled, setting the attribute
+        // will also change the cell content. To allow this, the
+        // REDLINE_IGNORE flag must be removed during Redo. #108450#
+        RedlineModeInternGuard aGuard( rDoc, REDLINE_NONE, REDLINE_IGNORE );
         pBoxFmt->SetAttr( aBoxSet );
     }
     else if( NUMBERFORMAT_TEXT != nFmtIdx )
@@ -2370,6 +2417,10 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
         pBoxFmt->ResetAttr( RES_BOXATR_FORMULA );
         pBoxFmt->UnlockModify();
 
+        // dvo: When redlining is (was) enabled, setting the attribute
+        // will also change the cell content. To allow this, the
+        // REDLINE_IGNORE flag must be removed during Redo. #108450#
+        RedlineModeInternGuard aGuard( rDoc, REDLINE_NONE, REDLINE_IGNORE );
         pBoxFmt->SetAttr( aBoxSet );
     }
     else
