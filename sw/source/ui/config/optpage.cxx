@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 12:28:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2269,7 +2269,7 @@ SwTestTabPage::SwTestTabPage( Window* pParent,
     lcl_SetPosSize(aTest9CBox  ,    Point(116, 53), Size(74 , 10));
     lcl_SetPosSize(aTest10CBox  ,   Point(116, 66), Size(74 , 10));
 
-    aTestFL.SetText( String(ByteString("Einstellungen nur für Testzwecke" ), RTL_TEXTENCODING_MS_1252));
+    aTestFL.SetText( String(ByteString("Einstellungen nur f\xFCr Testzwecke" ), RTL_TEXTENCODING_MS_1252));
     aTest1CBox .SetText( C2S("unused"));
     aTest2CBox .SetText( C2S("dynamic"));
     aTest3CBox .SetText( C2S("No calm"               ));
