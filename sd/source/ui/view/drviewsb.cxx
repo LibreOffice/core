@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:26:54 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,7 +619,7 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                 OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
 
                 SdrRectObj* pRectObj = new SdrRectObj( OBJ_TEXT );
-                pRectObj->SetItem(SdrTextAutoGrowWidthItem(TRUE));
+                pRectObj->SetMergedItem(SdrTextAutoGrowWidthItem(TRUE));
 
                 pOutl->UpdateFields();
                 pOutl->SetUpdateMode( TRUE );
