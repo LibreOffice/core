@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:39:05 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,11 +211,13 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, pListBox )
     String sFirstWinName,sSecondWinName;
     USHORT nResId = 0;
     USHORT nPos = aLB_JoinType.GetSelectEntryPos();
+    sal_Bool bAddHint = sal_True;
     switch ( nPos )
     {
         default:
         case 0:
             nResId = STR_QUERY_INNER_JOIN;
+            bAddHint = sal_False;
             break;
         case 1:
             nResId = STR_QUERY_LEFTRIGHT_JOIN;
@@ -231,13 +233,19 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, pListBox )
             break;
     }
 
-    String sStr = String(ModuleRes(nResId));
+    String sHelpText = String( ModuleRes( nResId ) );
     if( sFirstWinName.Len() )
     {
-        sStr.SearchAndReplace(String(RTL_CONSTASCII_STRINGPARAM("%1")),sFirstWinName);
-        sStr.SearchAndReplace(String(RTL_CONSTASCII_STRINGPARAM("%2")),sSecondWinName);
+        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_STRINGPARAM( "%1" ) ), sFirstWinName );
+        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_STRINGPARAM( "%2" ) ), sSecondWinName );
     }
-    aML_HelpText.SetText(sStr);
+    if ( bAddHint )
+    {
+        sHelpText += String( RTL_CONSTASCII_STRINGPARAM( "\n" ) );
+        sHelpText += String( ModuleRes( STR_JOIN_TYPE_HINT ) );
+    }
+
+    aML_HelpText.SetText( sHelpText );
     return 1;
 }
 // -----------------------------------------------------------------------------
