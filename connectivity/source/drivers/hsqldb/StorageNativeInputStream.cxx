@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageNativeInputStream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:52:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,11 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
 JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream_skip
   (JNIEnv * env, jobject obj_this,jstring key, jstring name, jlong n)
 {
+    if ( n < 0 )
+        ThrowException( env,
+                        "java/io/IOException",
+                        "n < 0");
+
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     OSL_ENSURE(pHelper.get(),"No stream helper!");
     if ( pHelper.get() )
@@ -190,36 +195,34 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputSt
         {
             try
             {
-                sal_Int32 avail = xIn->available();
+                sal_Int64 nBytesSkipped = 0;
                 sal_Int64 tmpLongVal = n;
                 sal_Int32 tmpIntVal;
-                do {
-                    if (tmpLongVal >= ::std::numeric_limits<sal_Int64>::max() )
-                        tmpIntVal = ::std::numeric_limits<sal_Int32>::max();
-                    else // Casting is safe here.
-                        tmpIntVal = static_cast<sal_Int32>(tmpLongVal);
 
-                    tmpLongVal -= tmpIntVal;
+                try
+                {
+                    do {
+                        if (tmpLongVal >= ::std::numeric_limits<sal_Int64>::max() )
+                            tmpIntVal = ::std::numeric_limits<sal_Int32>::max();
+                        else // Casting is safe here.
+                            tmpIntVal = static_cast<sal_Int32>(tmpLongVal);
 
-                    xIn->skipBytes(tmpIntVal);
-                } while (tmpLongVal > 0);
+                        tmpLongVal -= tmpIntVal;
 
-                if ( avail != 0 && avail < n) {
-                    return(avail);
-                } else {
-                    return(n);
+                        xIn->skipBytes(tmpIntVal);
+
+                    } while (tmpLongVal > 0);
                 }
+                catch(Exception& e )
+                {
+                }
+
+                return n - tmpLongVal;
             }
             catch(Exception& e)
             {
                 OSL_ENSURE(0,"Exception catched! : skip();");
-                if (JNI_FALSE != env->ExceptionCheck())
-                    env->ExceptionClear();
-                ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-                OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
-                ThrowException( env,
-                                "java/io/IOException",
-                                cstr.getStr());
+                StorageContainer::throwJavaException(e,env);
             }
         }
     }
@@ -253,13 +256,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
         catch(Exception& e)
         {
             OSL_ENSURE(0,"Exception catched! : available();");
-            if (JNI_FALSE != env->ExceptionCheck())
-                env->ExceptionClear();
-            ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
-            OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
-            ThrowException( env,
-                            "java/io/IOException",
-                            cstr.getStr());
+            StorageContainer::throwJavaException(e,env);
         }
     }
     else
@@ -289,13 +286,14 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStr
         jsize nLen = env->GetArrayLength(buffer);
         Sequence< ::sal_Int8 > aData(nLen);
 
-        sal_Int32 av = xIn->available();
-        if ( av > 0 )
+        try
         {
-            if (nLen > av)
-                nBytesRead = xIn->readBytes(aData, av);
-            else
-                nBytesRead = xIn->readBytes(aData,nLen);
+            nBytesRead = xIn->readBytes(aData,nLen);
+        }
+        catch(Exception& e)
+        {
+            OSL_ENSURE(0,"Exception catched! : skip();");
+            StorageContainer::throwJavaException(e,env);
         }
 
         // Casting bytesRead to an int is okay, since the user can
