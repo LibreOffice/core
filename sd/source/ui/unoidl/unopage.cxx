@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-05 13:57:57 $
+ *  last change: $Author: cl $ $Date: 2002-02-08 16:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,6 +624,11 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             break;
         }
 
+
+        case WID_PAGE_LDBITMAP:
+        case WID_PAGE_LDNAME:
+        case WID_PAGE_NUMBER:
+            throw beans::PropertyVetoException();
 
         default:
             throw beans::UnknownPropertyException();
