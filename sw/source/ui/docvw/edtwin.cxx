@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:56:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2772,7 +2772,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         bFrmDrag = FALSE;
                         if ( !bIsDocReadOnly && rSh.IsInsideSelectedObj(aDocPos) &&
                              0 == rSh.IsSelObjProtected( (FlyProtectType)(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) ) )
-                        switch ( rSh.GetSelectionType() )
+
+/* SJ: 01.03.2005: this is no good, on the one hand GetSelectionType is used as flag field (take a look into the GetSelectionType method)
+   on the other hand the return value is used in a switch without proper masking (very nice), this must lead to trouble
+*/
+                        switch ( rSh.GetSelectionType() &~ ( SwWrtShell::SEL_FONTWORK | SwWrtShell::SEL_EXTRUDED_CUSTOMSHAPE ) )
                         {
                             case SwWrtShell::SEL_GRF:
                                 RstMBDownFlags();
