@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XLayerManager.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:11 $
+ *  last change:$Date: 2003-09-08 10:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,15 @@
 
 package ifc.drawing;
 
+import lib.MultiMethodTest;
+import util.ValueComparer;
+import util.XInstCreator;
+
 import com.sun.star.drawing.XLayer;
 import com.sun.star.drawing.XLayerManager;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.uno.XInterface;
-import lib.MultiMethodTest;
-import util.ValueComparer;
-import util.XInstCreator;
 
 /**
 * Testing <code>com.sun.star.drawing.XLayerManager</code>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XMasterPageTarget.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:10 $
+ *  last change:$Date: 2003-09-08 10:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.drawing;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XMasterPageTarget;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.drawing.XMasterPageTarget</code>
