@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultprovider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
+#endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
@@ -127,6 +130,12 @@ namespace configmgr
                                                             sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  ) = 0;
     };
 
+    //==========================================================================
+    /// a refcounted <type>IDefaultProvider</type>.
+    class SAL_NO_VTABLE IConfigDefaultProvider  : public Refcounted
+                                                , public IDefaultProvider
+    {
+    };
     //==========================================================================
     //= IDefaultableTreeManager
     //==========================================================================

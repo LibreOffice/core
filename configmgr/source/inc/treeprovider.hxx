@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:51:04 $
+ *  last change: $Author: jb $ $Date: 2002-10-10 09:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,11 +257,17 @@ namespace configmgr
     };
 
     //==========================================================================
+    /// a refcounted TemplateManager
+    struct SAL_NO_VTABLE IConfigTemplateManager
+    : public Refcounted
+    , public ITemplateManager
+    {};
+
+    //==========================================================================
     /// a complete combined TreeManager
     struct SAL_NO_VTABLE IConfigTreeManager
-    : public Refcounted
+    : public IConfigTemplateManager
     , public ITreeManager
-    , public ITemplateManager
     {};
 
 
