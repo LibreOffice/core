@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:07:16 $
+ *  last change: $Author: os $ $Date: 2001-02-02 11:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,6 +791,9 @@ SwValueField::SwValueField( const SwValueField& rFld )
 {
 }
 
+SwValueField::~SwValueField()
+{
+}
 /*--------------------------------------------------------------------
     Beschreibung:   neuen Typ setzen
                     (wird fuer das Kopieren zwischen Dokumenten benutzt)

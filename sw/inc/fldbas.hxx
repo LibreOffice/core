@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:05:09 $
+ *  last change: $Author: os $ $Date: 2001-02-02 11:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,6 +456,8 @@ protected:
     SwValueField( const SwValueField& rFld );
 
 public:
+    virtual                 ~SwValueField();
+
     virtual SwFieldType*    ChgTyp( SwFieldType* );
     virtual void            SetLanguage(USHORT nLng);
 //  os: wozu war das denn da?
