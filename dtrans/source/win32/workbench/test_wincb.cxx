@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_wincb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-26 11:20:56 $
+ *  last change: $Author: tra $ $Date: 2001-09-28 12:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,14 +141,14 @@ using namespace ::com::sun::star::lang;
 #define TEST_CLIPBOARD
 #define  WRITE_CB
 
-const char RDB_SYSPATH[] = "d:\\projects\\src633\\dtrans\\wntmsci7\\bin\\applicat.rdb";
+const char RDB_SYSPATH[] = "d:\\projects\\src638\\dtrans\\wntmsci7\\bin\\applicat.rdb";
 const OUString WINCLIPBOARD_SERVICE_NAME = OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" );
 
 const bool EVT_MANUAL_RESET     = true;
 const bool EVT_AUTO_RESET       = false;
 const bool EVT_INIT_NONSIGNALED = false;
 const bool EVT_INIT_SIGNALED    = true;
-const sal_Int32 MAX_LOOP        = 1000;
+const sal_Int32 MAX_LOOP        = 1;//000;
 
 char EVT_NONAME[] = "";
 
@@ -186,7 +186,9 @@ public:
     virtual void SAL_CALL changedContents( const ClipboardEvent& event )
         throw( RuntimeException )
     {
-        OSL_ENSURE( sal_False, "clipboard content changed" );
+        //OSL_ENSURE( sal_False, "clipboard content changed" );
+        g_xTransferable = event.Contents;
+        SetEvent( g_hEvtThreadWakeup );
     }
 };
 
@@ -332,7 +334,9 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
 
     SetupCOMApartment( *apm );
 
-    for ( sal_Int32 i = 0; i < MAX_LOOP; i++ )
+    sal_Int32 n = MAX_LOOP;
+
+    for ( sal_Int32 i = 0; i < n; i++ )
     {
         WaitForSingleObject( g_hEvtThreadWakeup, INFINITE );
 
@@ -362,13 +366,33 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
             OSL_ENSURE( sal_False, "exception caught" );
         }
 
-        SetEvent( g_HandleArray[0] );
+        if ( i < ( n - 1 ) )
+            SetEvent( g_HandleArray[0] );
     }
 
     if ( (STA == *apm) || (MTA == *apm) )
         CoUninitialize( );
 
     return 0;
+}
+
+//----------------------------------------------------------------
+//
+//----------------------------------------------------------------
+
+void GetFileName( )
+{
+    OPENFILENAME ofn;
+    TCHAR aFileNameBuffer[MAX_PATH];
+
+    ZeroMemory( &ofn, sizeof( ofn ) );
+
+    ofn.lStructSize = sizeof( ofn );
+    ofn.lpstrFile   = aFileNameBuffer;
+    ofn.nMaxFile    = MAX_PATH;
+    ofn.Flags       = OFN_EXPLORER;
+
+    GetOpenFileName( &ofn );
 }
 
 //----------------------------------------------------------------
@@ -436,8 +460,11 @@ int SAL_CALL main( int nArgc, char* Argv[] )
         switch( dwResult )
         {
         case WAIT_OBJECT_0:
+            GetFileName( );
+            /*
             g_xTransferable = g_xClipboard->getContents( );
             SetEvent( g_hEvtThreadWakeup );
+            */
             break;
 
         case WAIT_OBJECT_0 + 1:
