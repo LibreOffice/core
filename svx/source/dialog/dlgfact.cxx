@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:51:41 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,8 @@
 #include "page.hxx" //add for SvxPageDescPage
 #include "postdlg.hxx" //add for SvxPostItDialog
 #include "grfpage.hxx" //add for SvxGrfCropPage
+#include "scriptdlg.hxx" // for ScriptOrgDialog
+#include "selector.hxx" // for SvxScriptSelectorDialog
 
 using namespace svx;
 // AbstractTabDialog implementations just forwards everything to the dialog
@@ -139,6 +141,7 @@ IMPL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSearchProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTakeProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTitleDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractScriptSelectorDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGalleryIdDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractURLDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxHlinkDlgMarkWnd_Impl);
@@ -1037,6 +1040,64 @@ AbstractTakeProgress * AbstractDialogFactory_Impl::CreateTakeProgressDialog( Win
 
     if ( pDlg )
         return new AbstractTakeProgress_Impl( pDlg );
+    return 0;
+}
+
+AbstractScriptSelectorDialog*
+AbstractDialogFactory_Impl::CreateScriptSelectorDialog(
+    Window* pParent, BOOL bShowSlots )
+{
+    SvxScriptSelectorDialog* pDlg = NULL;
+
+    pDlg = new SvxScriptSelectorDialog( pParent, bShowSlots );
+
+    if (pDlg)
+    {
+        return new AbstractScriptSelectorDialog_Impl( pDlg );
+    }
+    return 0;
+}
+
+String AbstractScriptSelectorDialog_Impl::GetScriptURL()
+{
+    if (pDlg)
+        return pDlg->GetScriptURL();
+    return String();
+}
+
+void AbstractScriptSelectorDialog_Impl::SetRunLabel()
+{
+    if (pDlg)
+        pDlg->SetRunLabel();
+    return;
+}
+
+VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window* pParent,  //add for SvxScriptOrgDialog
+                                            const String& rLanguage,
+                                            const ResId& rResId )
+{
+    OSL_TRACE("in ADF_Impl::CreateSvxScriptOrgDialog");
+    Dialog* pDlg=NULL;
+    rtl::OUString aResName;
+    ResMgr* pBasResMgr = NULL;
+    switch ( rResId.GetId() )
+    {
+        case RID_DLG_SCRIPTORGANIZER :
+            OSL_TRACE("creating dialog");
+            aResName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "basctl" ));
+            aResName += rtl::OUString::valueOf( sal_Int32( SUPD ));
+
+            pBasResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
+
+            pDlg = new SvxScriptOrgDialog( pParent, pBasResMgr, rLanguage);
+            break;
+        default:
+            OSL_TRACE("not creating dialog");
+            break;
+    }
+
+    if ( pDlg )
+        return new VclAbstractDialog_Impl( pDlg );
     return 0;
 }
 
