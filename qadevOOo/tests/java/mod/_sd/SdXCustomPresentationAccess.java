@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdXCustomPresentationAccess.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 19:39:56 $
+ *  last change:$Date: 2004-11-02 12:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,10 @@ public class SdXCustomPresentationAccess extends TestCase {
         // adding an instance for insertByName ('XNameContainer')
         tEnv.addObjRelation("SecondInstance", oSecondInstance);
 
-        int THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+        int THRCNT = 1;
+        if ((String)Param.get("THRCNT") != null) {
+            THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+        }
 
         // INDEX : _XNameContainer
         log.println( "adding XNameContainerINDEX as mod relation to environment" );
