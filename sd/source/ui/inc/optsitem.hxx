@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-26 11:21:26 $
+ *  last change: $Author: aw $ $Date: 2001-09-28 12:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,8 @@ class SdOptionsMisc : public SdOptionsGeneric
 {
 private:
 
+    ULONG   nPreviewQuality;                // !!!Misc/Preview (double=>integer)!!!
+
     BOOL    bStartWithTemplate      : 1;    // Misc/NewDoc/AutoPilot
     BOOL    bMarkedHitMovesAlways   : 1;    // Misc/ObjectMoveable
     BOOL    bMoveOnlyDragging       : 1;    // Currently, not in use !!!
@@ -314,10 +316,11 @@ private:
     BOOL    bDoubleClickTextEdit    : 1;    // Misc/DclickTextedit
     BOOL    bClickChangeRotation    : 1;    // Misc/RotateClick
     BOOL    bStartWithActualPage    : 1;    // Misc/Start/CurrentPage
-    ULONG   nPreviewQuality;                // !!!Misc/Preview (double=>integer)!!!
     BOOL    bSolidDragging          : 1;    // Misc/CreateWithAttributes
     BOOL    bSolidMarkHdl           : 1;    // /Misc/SimpleHandles
     BOOL    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
+    // #90356#
+    BOOL    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
 
 protected:
 
@@ -349,6 +352,8 @@ public:
     BOOL    IsSolidDragging() const { Init(); return (BOOL) bSolidDragging; }
     BOOL    IsSolidMarkHdl() const { Init(); return (BOOL) bSolidMarkHdl; }
     BOOL    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs != 0; };
+    // #90356#
+    BOOL    IsShowUndoDeleteWarning() const { Init(); return (BOOL) bShowUndoDeleteWarning; }
 
     void    SetStartWithTemplate( BOOL bOn = TRUE ) { if( bStartWithTemplate != bOn ) { OptionsChanged(); bStartWithTemplate = bOn; } }
     void    SetMarkedHitMovesAlways( BOOL bOn = TRUE ) { if( bMarkedHitMovesAlways != bOn ) { OptionsChanged(); bMarkedHitMovesAlways = bOn; } }
@@ -366,6 +371,8 @@ public:
     void    SetPreviewQuality( ULONG nQual ) { if( nPreviewQuality != nQual ) { OptionsChanged(); nPreviewQuality = nQual; } }
     void    SetSolidDragging( BOOL bOn = TRUE ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
     void    SetSolidMarkHdl( BOOL bOn = TRUE ) { if( bSolidMarkHdl != bOn ) { OptionsChanged(); bSolidMarkHdl = bOn; } }
+    // #90356#
+    void    SetShowUndoDeleteWarning( BOOL bOn = TRUE ) { if( bShowUndoDeleteWarning != bOn ) { OptionsChanged(); bShowUndoDeleteWarning = bOn; } }
 };
 
 // -----------------------------------------------------------------------------

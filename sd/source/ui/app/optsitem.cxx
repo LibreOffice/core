@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-07 13:09:53 $
+ *  last change: $Author: aw $ $Date: 2001-09-28 12:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,8 @@ void SdOptionsMisc::SetDefaults()
     SetPreviewQuality( DRAWMODE_DEFAULT );
     SetSolidDragging( FALSE );
     SetSolidMarkHdl( TRUE );
+    // #90356#
+    SetShowUndoDeleteWarning( TRUE );
 }
 
 // -----------------------------------------------------------------------------
@@ -577,7 +579,10 @@ BOOL SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsSummationOfParagraphs() == rOpt.IsSummationOfParagraphs() &&
             GetPreviewQuality() == rOpt.GetPreviewQuality() &&
             IsSolidDragging() == rOpt.IsSolidDragging() &&
-            IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() );
+            IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() &&
+            // #90356#
+            IsShowUndoDeleteWarning() == rOpt.IsShowUndoDeleteWarning()
+        );
 }
 
 // -----------------------------------------------------------------------------
@@ -602,10 +607,13 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         // just for impress
         "NewDoc/AutoPilot",
         "Start/CurrentPage",
-        "Compatibility/AddBetween"
+        "Compatibility/AddBetween",
+        // #90356#
+        "ShowUndoDeleteWarning"
     };
 
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 15 : 12 );
+    // #90356# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 15 : 12 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 16 : 12 );
     ppNames = aPropNames;
 }
 
@@ -635,6 +643,9 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
             SetStartWithActualPage( *(sal_Bool*) pValues[ 13 ].getValue() );
         if( pValues[14].hasValue() )
             SetSummationOfParagraphs( *(sal_Bool*) pValues[ 14 ].getValue() );
+        // #90356#
+        if( pValues[15].hasValue() )
+            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 15 ].getValue() );
     }
 
     return TRUE;
@@ -663,6 +674,8 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
         pValues[ 12 ] <<= IsStartWithTemplate();
         pValues[ 13 ] <<= IsStartWithActualPage();
         pValues[ 14 ] <<= IsSummationOfParagraphs();
+        // #90356#
+        pValues[ 15 ] <<= IsShowUndoDeleteWarning();
     }
 
     return TRUE;
@@ -689,6 +702,8 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts, FrameView
     SetStartWithTemplate( pOpts->IsStartWithTemplate() );
     SetStartWithActualPage( pOpts->IsStartWithActualPage() );
     SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
+    // #90356#
+    SetShowUndoDeleteWarning( pOpts->IsShowUndoDeleteWarning() );
 
     if( pView )
     {
@@ -760,6 +775,8 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetPreviewQuality( GetPreviewQuality() );
     pOpts->SetSolidDragging( IsSolidDragging() );
     pOpts->SetSolidMarkHdl( IsSolidMarkHdl() );
+    // #90356#
+    pOpts->SetShowUndoDeleteWarning( IsShowUndoDeleteWarning() );
 }
 
 /*************************************************************************
