@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2002-07-02 09:32:03 $
+ *  last change: $Author: od $ $Date: 2002-11-11 09:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,22 @@ public:
     // InnerHeight returns the height of the content and may be bigger or
     // less than the PrtArea-Height of the layoutframe himself
     SwTwips InnerHeight() const;
+
+    /** method to check relative position of layout frame to
+        a given layout frame.
+
+        OD 08.11.2002 - refactoring of pseudo-local method <lcl_Apres(..)> in
+        <txtftn.cxx> for #104840#.
+
+        @param _aCheckRefLayFrm
+        constant reference of an instance of class <SwLayoutFrm> which
+        is used as the reference for the relative position check.
+
+        @author OD
+
+        @return true, if <this> is positioned before the layout frame <p>
+    */
+    bool IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const;
 };
 
 //Um doppelte Implementierung zu sparen wird hier ein bischen gecasted
