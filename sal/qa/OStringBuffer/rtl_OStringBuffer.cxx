@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OStringBuffer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 14:46:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 10:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -14821,8 +14821,11 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
             OString                expVal( kTestStr116 );
+#ifdef UNX
+            sal_Int64              input = 9223372036854775807LL;
+#else
             sal_Int64              input = 9223372036854775807;
-
+#endif
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
@@ -14902,8 +14905,11 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
             OString                expVal( kTestStr118 );
+#ifdef UNX
+            sal_Int64              input = 9223372036854775807LL;
+#else
             sal_Int64              input = 9223372036854775807;
-
+#endif
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
@@ -14982,8 +14988,11 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
             OString                expVal( kTestStr118 );
+#ifdef UNX
+            sal_Int64              input = 9223372036854775807LL;
+#else
             sal_Int64              input = 9223372036854775807;
-
+#endif
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
@@ -15062,8 +15071,11 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
             OString                expVal( kTestStr118 );
+#ifdef UNX
+            sal_Int64              input = 9223372036854775807LL;
+#else
             sal_Int64              input = 9223372036854775807;
-
+#endif
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
@@ -15142,8 +15154,11 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
             OString                expVal( kTestStr120 );
+#ifdef UNX
+            sal_Int64              input = 9223372036854775807LL;
+#else
             sal_Int64              input = 9223372036854775807;
-
+#endif
             aStrBuf.append( input );
 
             CPPUNIT_ASSERT_MESSAGE
