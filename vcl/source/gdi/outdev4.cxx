@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-04 17:05:42 $
+ *  last change: $Author: ka $ $Date: 2002-03-21 15:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1221,7 +1221,7 @@ void OutputDevice::ImplDrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHa
 {
     Rectangle   aRect( rPolyPoly.GetBoundRect() );
     const long  nLogPixelWidth = ImplDevicePixelToLogicWidth( 1 );
-    const long  nWidth = ImplDevicePixelToLogicWidth( Max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), 5L ) );
+    const long  nWidth = ImplDevicePixelToLogicWidth( Max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), 3L ) );
     Point*      pPtBuffer = new Point[ HATCH_MAXPOINTS ];
     Point       aPt1, aPt2, aEndPt1;
     Size        aInc;
