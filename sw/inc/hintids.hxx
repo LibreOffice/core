@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:31:18 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,8 @@ RES_FRMATR_BEGIN = RES_PARATR_END,
 // --> collapsing borders FME 2005-05-27 #i29550#
     RES_COLLAPSING_BORDERS,                         // 111
 // <-- collapsing
-    RES_FRMATR_DUMMY2,                              // 112
+    // OD 2004-05-04 #i28701# - use dummy1 for new item
+    RES_WRAP_INFLUENCE_ON_OBJPOS,                   // 112
     RES_FRMATR_DUMMY3,                              // 113
     RES_FRMATR_DUMMY4,                              // 114
     RES_FRMATR_DUMMY5,                              // 115
