@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:25:27 $
+#   last change: $Author: rt $ $Date: 2004-03-30 16:52:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,36 +57,22 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
-PRJ=..$/..
 
-PRJNAME=codemaker
-TARGET=$(PRJNAME)
+PRJ := ..$/..
+PRJNAME := codemaker
+TARGET := codemaker
 
+ENABLE_EXCEPTIONS := TRUE
 
-ENABLE_EXCEPTIONS=TRUE
+.INCLUDE: settings.mk
 
-# --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
-.INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
+OBJFILES = \
+    $(OBJ)$/dependency.obj \
+    $(OBJ)$/exceptiontree.obj \
+    $(OBJ)$/global.obj \
+    $(OBJ)$/options.obj \
+    $(OBJ)$/typemanager.obj \
+    $(OBJ)$/unotypesort.obj
 
-# ------------------------------------------------------------------
-
-CXXFILES= \
-           global.cxx	\
-           options.cxx	\
-           typemanager.cxx	\
-           dependency.cxx
-
-OBJFILES= \
-            $(OBJ)$/global.obj		\
-            $(OBJ)$/options.obj		\
-            $(OBJ)$/typemanager.obj	\
-            $(OBJ)$/dependency.obj
-
-# ------------------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+.INCLUDE: target.mk
