@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:42 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,13 +557,8 @@ BOOL SdNavigatorWin::InsertFile(const String& rFileName)
         if (aFileName != aDropFileName)
         {
             SfxMedium aMed(aFileName, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE);
-            nErr = SFX_APP()->GetFilterMatcher().GuessFilter(aMed, &pFilter);
-
-            if (pFilter->GetFilterContainer() !=
-                SdDrawDocShell::Factory().GetFilterContainer())
-            {
-                pFilter = NULL;
-            }
+            SfxFilterMatcher aMatch( String::CreateFromAscii("simpress") );
+            nErr = aMatch.GuessFilter(aMed, &pFilter);
         }
 
         if ((pFilter && !nErr) || aFileName == aDropFileName)
