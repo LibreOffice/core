@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-28 17:01:16 $
+ *  last change: $Author: os $ $Date: 2002-03-07 10:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,6 +425,13 @@ TabPage TP_CONTENT_OPT
         Text[ turkish ] = "Dikey cetvel";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Regla v~ertical";
+    };
+    CheckBox CB_VRULER_RIGHT
+    {
+        Pos = MAP_APPFONT ( 142 , 66 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Text = "Rechts ausgerichtet" ;
+        Text [ ENGLISH ] = "Right aligned" ;
     };
     ListBox LB_VMETRIC
     {
