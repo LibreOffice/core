@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:13:08 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 #ifndef _ZIP_PACKAGE_STREAM_HXX
 #include <ZipPackageStream.hxx>
 #endif
-#include <hash_map>
 
 namespace com { namespace sun { namespace star { namespace packages {
 class ContentInfo : public cppu::OWeakObject
