@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:03:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
     Text[ chinese_traditional ] = "°Ï°ì(~S)";   \
     Text[ arabic ] = "ÇáäØÇŞ";  \
     Text[ greek ] = "Å~íüôçôá"; \
-    Text[ korean ] = "±¸¿ª";    \
+    Text[ korean ] = "±¸¿ª(~S)";    \
     Text[ turkish ] = "Bölüm";
 
 #define CB_HIDE_TEXT \
@@ -112,7 +112,7 @@
     Text[ chinese_traditional ] = "Áô¤J(~H)";   \
     Text[ arabic ] = "ãÎİí";    \
     Text[ greek ] = "Á~ğüêñõøç";    \
-    Text[ korean ] = "¼û±â±â";  \
+    Text[ korean ] = "¼û±â±â(~H)";  \
     Text[ turkish ] = "Gizle";
 
 #define CB_CONDITION_TEXT  \
@@ -134,7 +134,7 @@
     Text[ chinese_traditional ] = "¦³±ø¥ó(~W)"; \
     Text[ arabic ] = "ÈÔÑØ";    \
     Text[ greek ] = "Ìå óõíèŞê~ç";  \
-    Text[ korean ] = "Á¶°Ç°ú ÇÔ²²"; \
+    Text[ korean ] = "Á¶°Ç°ú ÇÔ²²(~W)"; \
     Text[ turkish ] = "Koşul";
 
 #define CB_FILE_TEXT \
@@ -156,7 +156,7 @@
     Text[ chinese_traditional ] = "±¶®|(~L)";   \
     Text[ arabic ] = "ÇÑÊÈÇØ";  \
     Text[ greek ] = "~Óıíäåóç"; \
-    Text[ korean ] = "¿¬°á";    \
+    Text[ korean ] = "¿¬°á(~L)";    \
     Text[ turkish ] = "Bağlantı";
 
 #define CB_DDE_TEXT \
@@ -171,14 +171,14 @@
     Text [ danish ] = "DDE" ; \
     Text [ portuguese_brazilian ] = "~DDE" ; \
     Text [ portuguese ] = "~DDE" ; \
-    Text[ chinese_simplified ] = "DDE(~E)"; \
+    Text[ chinese_simplified ] = "DD~E";    \
     Text[ russian ] = "~DDE";   \
     Text[ polish ] = "DDE"; \
-    Text[ japanese ] = "DDE(~E)";   \
+    Text[ japanese ] = "DD~E";  \
     Text[ chinese_traditional ] = "DD~E";   \
     Text[ arabic ] = "DDE~";    \
     Text[ greek ] = "~DDE"; \
-    Text[ korean ] = "DDE"; \
+    Text[ korean ] = "DD~E";    \
     Text[ turkish ] = "DDE";
 
 #define FT_DDE_TEXT \
@@ -197,7 +197,7 @@
     Text[ russian ] = "Êîìàíäà DDE~";   \
     Text[ polish ] = "Polecenie DDE";   \
     Text[ japanese ] = "DDEw¦(~C)";   \
-    Text[ chinese_traditional ] = "~DDE - «ü¥O";    \
+    Text[ chinese_traditional ] = "DDE - «ü¥O(~C)"; \
     Text[ arabic ] = "ÃãÑ DDE"; \
     Text[ greek ] = "~ÅíôïëŞ DDE";  \
     Text[ korean ] = "DDE~£­¸í·É";  \
@@ -222,7 +222,7 @@
     Text[ chinese_traditional ] = "ÀÉ®×¦WºÙ(~F)";   \
     Text[ arabic ] = "ÇÓã Çáãáİ";   \
     Text[ greek ] = "¼íï~ìá áñ÷åßïõ";   \
-    Text[ korean ] = "ÆÄÀÏ ÀÌ¸§";   \
+    Text[ korean ] = "ÆÄÀÏ ÀÌ¸§(~F)";   \
     Text[ turkish ] = "D~osya adı";
 
 #define PB_FILE_TEXT \
@@ -356,14 +356,14 @@ ModalDialog MD_EDIT_REGION
         Text [ dutch ] = "~Opheffen" ;
         Text [ spanish ] = "An~ular" ;
         Text [ english_us ] = "~Undo" ;
-        Text[ chinese_simplified ] = "ÒÆ³ı(~R)";
+        Text[ chinese_simplified ] = "ÒÆ³ı(~U)";
         Text[ russian ] = "Óáğàòü";
         Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "‰ğœ(~R)";
-        Text[ chinese_traditional ] = "²¾°£(~R)";
+        Text[ japanese ] = "‰ğœ(~U)";
+        Text[ chinese_traditional ] = "²¾°£(~U)";
         Text[ arabic ] = "ÅÒÇáÉ";
         Text[ greek ] = "ÊáôÜñãçóç";
-        Text[ korean ] = "½ÇÇàÃë¼Ò";
+        Text[ korean ] = "½ÇÇàÃë¼Ò(~U)";
         Text[ turkish ] = "Kaldır";
     };
     HelpButton PB_HELP
@@ -396,7 +396,7 @@ ModalDialog MD_EDIT_REGION
         Text[ chinese_traditional ] = "¦WºÙ(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§";
+        Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "~Ad";
     };
     Edit ED_RANAME
@@ -1246,8 +1246,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ portuguese_brazilian ] = "Collect at end of text";
         Text[ japanese ] = "•¶‘––‚É‘}“ü(~T)";
         Text[ korean ] = "ÅØ½ºÆ® ³¡¿¡ ¼öÁı(~T)";
-        Text[ chinese_simplified ] = "¼¯ÖĞÔÚÎÄ±¾Î²¶Ë";
-        Text[ chinese_traditional ] = "©w¦ì¦b¤º¤å¥½ºİ";
+        Text[ chinese_simplified ] = "¼¯ÖĞÔÚÎÄ±¾Î²¶Ë(~T)";
+        Text[ chinese_traditional ] = "©w¦ì¦b¤º¤å¥½ºİ(~T)";
         Text[ arabic ] = "ÊÌãíÚ ÚäÏ äåÇíÉ ÇáäÕ";
 
         Text[ turkish ] = "Metin sonunda topla";
@@ -1273,8 +1273,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ portuguese_brazilian ] = "own number sequence";
         Text[ japanese ] = "”Ô†‚ğV‚µ‚­n‚ß‚é(~R)";
         Text[ korean ] = "¹øÈ£¸Å±â±â ´Ù½Ã ½ÃÀÛ(~R)";
-        Text[ chinese_simplified ] = "ÖØĞÂ¿ªÊ¼±àºÅ";
-        Text[ chinese_traditional ] = "­«·s½s¸¹";
+        Text[ chinese_simplified ] = "ÖØĞÂ¿ªÊ¼±àºÅ(~R)";
+        Text[ chinese_traditional ] = "­«·s½s¸¹(~R)";
         Text[ arabic ] = "ÅÚÇÏÉ ÈÏÁ ÇáÊÑŞíã";
         Text[ turkish ] = "Num. yeniden başlat";
     };
@@ -1337,8 +1337,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ portuguese_brazilian ] = "Own format";
         Text[ japanese ] = "”CˆÓ‚Ì‘®(~F)";
         Text[ korean ] = "°íÀ¯ ¼­½Ä(~F)";
-        Text[ chinese_simplified ] = "×Ô¶¨µÄ¸ñÊ½";
-        Text[ chinese_traditional ] = "¦Û­q®æ¦¡";
+        Text[ chinese_simplified ] = "×Ô¶¨µÄ¸ñÊ½(~F)";
+        Text[ chinese_traditional ] = "¦Û­q®æ¦¡(~F)";
         Text[ arabic ] = "ÊäÓíŞ ÎÇÕ";
         Text[ turkish ] = "Özgün format";
     };
@@ -1475,7 +1475,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ japanese ] = "”ÍˆÍ––‚É‘}“ü(~O)";
         Text[ korean ] = "±¸¿ª  ³¡¿¡ ¼öÁı(~O)";
         Text[ chinese_simplified ] = "¼¯ÖĞÔÚÇøÓòÎ²¶Ë(~O)";
-        Text[ chinese_traditional ] = "¦b°Ï°ì§Àºİ¦¬¶°";
+        Text[ chinese_traditional ] = "¦b°Ï°ì§Àºİ¦¬¶°(~O)";
         Text[ arabic ] = "ÊÌãíÚ ÚäÏ äåÇíÉ ÇáäØÇŞ";
         Text[ turkish ] = "Bölüm sonunda topla";
     };
@@ -1500,8 +1500,8 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ portuguese_brazilian ] = "own number sequence";
         Text[ japanese ] = "”Ô†‚ğV‚µ‚­n‚ß‚é(~R)";
         Text[ korean ] = "¹øÈ£¸Å±â±â ´Ù½Ã ½ÃÀÛ(~R)";
-        Text[ chinese_simplified ] = "ÖØĞÂ¿ªÊ¼±àºÅ";
-        Text[ chinese_traditional ] = "­«·s½s¸¹";
+        Text[ chinese_simplified ] = "ÖØĞÂ¿ªÊ¼±àºÅ(~R)";
+        Text[ chinese_traditional ] = "­«·s½s¸¹(~R)";
         Text[ arabic ] = "ÅÚÇÏÉ ÈÏÁ ÇáÊÑŞíã";
         Text[ turkish ] = "Num. yeniden başlat";
     };
