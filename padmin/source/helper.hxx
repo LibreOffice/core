@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ BOOL AreYouSure( Window*, int nRid = -1 );
 
 ResId PaResId( ULONG nId );
 
-void FindFiles( const String& rDirectory, ::std::list< String >& rResult, const String& rSuffixes );
+void FindFiles( const String& rDirectory, ::std::list< String >& rResult, const String& rSuffixes, bool bRecursive = false );
 
 Config& getPadminRC();
 void freePadminRC();
