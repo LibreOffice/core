@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:32:37 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 #include <memory>
 #include <vector>
 #include <rtl/memory.h>
-#include <rtl/uri.hxx>
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -898,12 +897,6 @@ Sequence<Any> FTPContent::setPropertyValues(
                 ret[i] <<= IllegalArgumentException();
                 continue;
             }
-
-            Title =
-                rtl::Uri::encode(Title,
-                                 rtl_UriCharClassPchar,
-                                 rtl_UriEncodeIgnoreEscapes,
-                                 RTL_TEXTENCODING_UTF8);
 
             if(m_bInserted) {
                 m_aFTPURL.child(Title);
