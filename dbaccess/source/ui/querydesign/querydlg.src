@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:19:56 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@ ModalDialog DLG_QRY_JOIN
             Text[ hebrew ] = "beteiligte Tabellen";
             Text[ hindi ] = "Tables involved";
             Text[ slovak ] = "Zahrnuté tabuľky";
+            Text[ hungarian ] = "Érintett táblák";
+            Text[ slovenian ] = "Vključene so tabele";
         };
 
         ListBox LB_LEFT_TABLE
@@ -169,6 +171,8 @@ ModalDialog DLG_QRY_JOIN
             Text[ hebrew ] = "beteiligte Felder";
             Text[ hindi ] = "Fields involved";
             Text[ slovak ] = "Zahrnuté polia";
+            Text[ hungarian ] = "Érintett mezők";
+            Text[ slovenian ] = "Vključena so polja";
         };
     };
 
@@ -206,6 +210,8 @@ ModalDialog DLG_QRY_JOIN
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
 
     FixedText FT_LISTBOXTITLE
@@ -219,12 +225,12 @@ ModalDialog DLG_QRY_JOIN
         Text[ portuguese ] = "T~ipo";
         Text[ russian ] = "���";
         Text[ greek ] = "�����";
-        Text[ dutch ] = "T~ype";
+        Text[ dutch ] = "~Type";
         Text[ french ] = "Type";
         Text[ spanish ] = "~Tipo";
         Text[ finnish ] = "~Tyyppi";
         Text[ italian ] = "~Tipo";
-        Text[ danish ] = "Type";
+        Text[ danish ] = "~Type";
         Text[ swedish ] = "~Typ";
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "~Tipo";
@@ -240,6 +246,8 @@ ModalDialog DLG_QRY_JOIN
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~Type";
         Text[ slovak ] = "~Typ";
+        Text[ hungarian ] = "~Típus";
+        Text[ slovenian ] = "~Vrsta";
     };
 
     ListBox LB_JOINTYPE
@@ -297,7 +305,7 @@ ModalDialog DLG_QRY_JOIN
          < "Inner join" ; Default; > ;
         < "Left join" ; Default; > ;
         < "Right join" ; Default; > ;
-        < "Vollst�ndiger"  ; Default; > ;
+        < "Full (outer) join"  ; Default; > ;
     };
     StringList [ dutch ] =
     {
@@ -446,6 +454,20 @@ ModalDialog DLG_QRY_JOIN
         < "Pravé spojenie" ; Default; > ;
         < "Plné spojenie"  ; Default; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Belső összekapcsolás" ; Default; > ;
+        < "Bal oldali összekapcsolás" ; Default; > ;
+        < "Jobb oldali összekapcsolás" ; Default; > ;
+        < "Teljes (külső) összekapcsolás"  ; Default; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Notranji spoj" ; Default; > ;
+        < "Levi spoj" ; Default; > ;
+        < "Desni spoj" ; Default; > ;
+        < "Polni (zunanji) spoj"  ; Default; > ;
+    };
     };
 
     FixedText ML_HELPTEXT
@@ -484,7 +506,7 @@ ModalDialog DLG_QRY_JOIN
     Text[ french ] = "Propri�t�s de la jointure";
     Text[ spanish ] = "Propiedades de la uni�n";
     Text[ italian ] = "Propriet� relazioni";
-    Text[ danish ] = "Forbindelsesegenskaber";
+    Text[ danish ] = "Egenskaber for Join";
     Text[ swedish ] = "Egenskaper f�r sammanslagning (join)";
     Text[ polish ] = "W�a�ciwo�ci z��czenia";
     Text[ portuguese_brazilian ] = "Propriedades relacionais";
@@ -505,6 +527,8 @@ ModalDialog DLG_QRY_JOIN
     Text[ hebrew ] = "Verbundeigenschaften";
     Text[ hindi ] = "जोड़ विशेषतायें";
     Text[ slovak ] = "Vlastnosti spojenia";
+    Text[ hungarian ] = "Összekapcsolás tulajdonságai";
+    Text[ slovenian ] = "Lastnosti spoja";
 };
 
 String STR_QUERY_INNER_JOIN
@@ -539,6 +563,8 @@ String STR_QUERY_INNER_JOIN
     Text[ hebrew ] = "Beinhaltet nur die Datensätze, bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
     Text[ hindi ] = "दोनों सारणियों का सम्बन्धित क्षेत्रों का विषय समान रहनेवाला अभिलेखों को सम्मिलित है ।";
     Text[ slovak ] = "Zahŕňa len záznamy ktorých obsah v daných poliach je rovnaký pre obe tabuľky.";
+    Text[ hungarian ] = "Csak azokat a rekordokat tartalmazza, amelyeknél mindkét tábla kapcsolódó mezőinek tartalma megegyezik.";
+    Text[ slovenian ] = "Vključuje samo zapise, v katerih je vsebina povezanih polj obeh tabel enaka.";
 };
 
 String STR_QUERY_LEFTRIGHT_JOIN
@@ -552,7 +578,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ french ] = "Contient TOUS les enregistrements de '%1', et uniquement les enregistrements de '%2' pour lesquels les contenus des champs li�s des deux tables sont identiques.";
     Text[ spanish ] = "Contiene TODOS los registros de la tabla '%1' y s�lo los registros de la tabla '%2' para los que los contenidos de los campos vinculados de las dos tablas son iguales.";
     Text[ italian ] = "Contiene TUTTI i record di dati da '%1' e soltanto i record di dati da '%2' in cui i campi collegati di entrambe le caselle sono uguali.";
-    Text[ danish ] = "Indeholder ALLE dataposter fra '%1' og kun de dataposter fra '%2', hvor indholdet i de k�dede felter i de to tabeller er ens.";
+    Text[ danish ] = "Indeholder ALLE dataposter fra '%1' og kun de dataposter fra '%2', hvor indholdet i de relaterede felter i de to tabeller er ens.";
     Text[ swedish ] = "Inneh�ller ALLA dataposter fr�n '%1' och bara de dataposter fr�n '%2' d�r inneh�llet i de l�nkade f�lten �r lika i b�da tabellerna.";
     Text[ polish ] = "Zawiera WSZYSTKIE rekordy z tabeli %1 i podzbi�r rekord�w z tabeli %2 o r�wnych warto�ciach w powi�zanych polach.";
     Text[ portuguese_brazilian ] = "Cont�m TODOS os registros da tabela \"%1\" mas somente os registros da tabela \"%2\", cujos conte�dos dos campos relacionados sejam id�nticos. ";
@@ -573,6 +599,8 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ hebrew ] = "Beinhaltet ALLE Datensätze aus '%1' und nur die Datensätze aus '%2', bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
     Text[ hindi ] = "सारणी '%1' का सभी अभिलेखों को , लेकिन सारणी '%2' का केवल उन अभिलेखों को जिनका सम्बन्धित क्षेत्रों का विषय समान है ।";
     Text[ slovak ] = "Zahŕňa všetky záznamy z tabuľky '%1' ale z tabuľky '%2' len tie záznamy, kde sú zhodné záznamy v daných poliach.";
+    Text[ hungarian ] = "A(z) '%1' tábla összes rekordját tartalmazza, de a(z) '%2' táblából csak azokat, amelyekben a kapcsolódó mezők értékei egyeznek.";
+    Text[ slovenian ] = "Vsebuje VSE zapise iz tabele '%1' in samo tiste zapise iz tabele '%2', v katerih se vrednosti povezanih polj ujemajo.";
 };
 
 String STR_QUERY_FULL_JOIN
@@ -607,7 +635,10 @@ String STR_QUERY_FULL_JOIN
     Text[ hebrew ] = "Beinhaltet ALLE Datensätze aus '%1' und aus '%2'.";
     Text[ hindi ] = "'%1' और '%2' के सब अभिलेख सम्मिलित है";
     Text[ slovak ] = "Zahŕňa všetky záznamy z tabuľky'%1' a '%2'.";
+    Text[ hungarian ] = "'%1' és '%2' összes rekordját tartalmazza.";
+    Text[ slovenian ] = "Vsebuje VSE zapise iz '%1' in '%2'.";
 };
+
 
 
 
