@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_lib.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:44:53 $
+#   last change: $Author: hr $ $Date: 2003-07-16 18:20:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,9 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+.ENDIF
+.IF "$(OS)" == "MACOSX"
+     @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .ENDIF
     @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
     @source $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
