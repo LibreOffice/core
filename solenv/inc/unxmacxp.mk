@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-14 04:16:22 $
+#   last change: $Author: pluby $ $Date: 2001-02-17 09:21:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,13 +83,6 @@ CDEFS+=-Dcomponent_getImplementationEnvironment=lib$(SYMBOLPREFIX)component_getI
   -Duno_ext_getMapping=lib$(SYMBOLPREFIX)uno_ext_getMapping
 .ENDIF
 
-# Temporary settings to enable VCL test code. These should be deleted once
-# VCL development is complete.
-.IF "$(dbgutil)"==""
-dbgutil=true
-product=
-.ENDIF
-
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
 JAVAFLAGSDEBUG=-g
@@ -118,8 +111,13 @@ CFLAGSSLOCUIMT=-fPIC
 CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
+.IF "$(ENABLE_EXCEPTIONS)"==""
 CFLAGSOPT=-O2
 CFLAGSNOOPT=-O
+.ELSE
+CFLAGSOPT=
+CFLAGSNOOPT=
+.ENDIF
 CFLAGSOUTOBJ=-o
 
 SOLARVERSHLLIBS=$(shell -$(FIND) $(SOLARVERSION)$/$(INPATH)$/lib -name $(DLLPRE)\*$(DLLPOST))
