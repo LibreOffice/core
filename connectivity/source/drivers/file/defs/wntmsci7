@@ -2644,3 +2644,11 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?isCaseSensitiveParentFolder@?%O:\SRX641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx341324549@@YAEABVString@@0@Z
 ??_C@_0DB@DOCK@o?3?2SRX641?2wntmsci7?2inc?2comphelpe@
 ??_C@_0DG@EAGO@o?3?2SRX641?2wntmsci7?2inc?2comphelpe@
+?parseParamterElem@OPreparedStatement@file@connectivity@@MAEXABVString@@PAVOSQLParseNode@3@@Z
+?GetAssignValues@OStatement_Base@file@connectivity@@IAEXXZ
+?ParseAssignValues@OStatement_Base@file@connectivity@@IAEXABV?$vector@VString@@V?$allocator@VString@@@_STL@@@_STL@@PAVOSQLParseNode@3@G@Z
+?SetAssignValue@OStatement_Base@file@connectivity@@IAEXABVString@@0EK@Z
+?parseParamterElem@OStatement_Base@file@connectivity@@MAEXABVString@@PAVOSQLParseNode@3@@Z
+?acquire@OStatement@file@connectivity@@WBKA@AAXXZ
+?queryInterface@OStatement@file@connectivity@@WBKA@AA?AVAny@uno@star@sun@com@@ABVType@5678@@Z
+?release@OStatement@file@connectivity@@WBKA@AAXXZ
