@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 14:01:05 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,10 @@ namespace svt
         sal_Bool            m_bComplete;
 
     public:
+        RoadmapImpl() :
+            m_bInteractive( sal_True ),
+            m_bComplete( sal_True ) {}
+
         Size aHyperLabelPixelSize;
         HyperLabel* InCompleteHyperLabel;
 
