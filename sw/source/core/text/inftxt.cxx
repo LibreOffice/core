@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: os $ $Date: 2002-04-12 10:32:16 $
+ *  last change: $Author: ama $ $Date: 2002-04-24 08:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,6 +681,8 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf )
       pBrushItem( rInf.GetBrushItem() )
 { }
 
+extern Color aGlobalRetoucheColor;
+
 /*************************************************************************
  *                     SwTxtPaintInfo::_DrawText()
  *************************************************************************/
@@ -781,7 +783,9 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
             else
                 pCol = NULL;
         }
-        aDrawInf.SetDarkBack( pCol &&
+        if( !pCol )
+            pCol = &aGlobalRetoucheColor;
+        aDrawInf.SetDarkBack(
             DARK_COLOR > pCol->GetRed() + pCol->GetGreen() + pCol->GetBlue() );
     }
 
