@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.28 2001-01-18 14:40:19 cl Exp $
+	$Id: drawing.mod,v 1.29 2001-01-30 08:01:45 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -329,6 +329,7 @@
 <!ATTLIST style:properties draw:red %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:green %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:blue %percentage; #IMPLIED>
+<!ATTLIST style:properties draw:color-inversion %boolean; #IMPLIED>
 
 <!-- shadow attributes -->
 <!ATTLIST style:properties draw:shadow (visible|hidden) #IMPLIED>
