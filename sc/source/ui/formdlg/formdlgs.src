@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:28:02 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1077,4 +1077,5 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ catalan ] = "AutoPiloto de funciones  - ";
     };
 };
+
 
