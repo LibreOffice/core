@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:11:32 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
