@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:51:48 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 20:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames(  )
 
             pStrings[nSurrogate+nEndCount] = pStartItem->GetName();
 
-            DBG_ASSERT( pStrings[nSurrogate].getLength(), "XLineStartItem in pool should have a name !");
+            DBG_ASSERT( pStrings[nSurrogate+nEndCount].getLength(), "XLineStartItem in pool should have a name !");
         }
     }
 
