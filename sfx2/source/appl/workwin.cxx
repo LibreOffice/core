@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:47:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-29 12:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,8 +596,8 @@ void SfxWorkWindow::DeleteControllers_Impl()
     for ( n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
         SfxSplitWindow *p = pSplit[n];
-        if (p->GetWindowCount())
-            p->Lock();
+           if (p->GetWindowCount())
+        p->Lock();
     }
 
     // Child-Windows l"oschen
@@ -605,30 +605,30 @@ void SfxWorkWindow::DeleteControllers_Impl()
     for ( n=0; n<nCount; n++ )
     {
         SfxChildWin_Impl* pCW = (*pChildWins)[n];
-        SfxChildWindow *pChild = pCW->pWin;
-        if (pChild)
-        {
+           SfxChildWindow *pChild = pCW->pWin;
+    if (pChild)
+    {
 /*
             BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
-            pCW->aInfo = pChild->GetInfo();
-            if ( bTask )
-                pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
-            SaveStatus_Impl(pChild, pCW->aInfo);
+        pCW->aInfo = pChild->GetInfo();
+        if ( bTask )
+        pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
+        SaveStatus_Impl(pChild, pCW->aInfo);
 */
-            pChild->Hide();
+        pChild->Hide();
 
-            // Wenn das ChildWindow ein direktes Childfenster ist und nicht
-            // in einem SplitWindow liegt, am WorkWindow abmelden.
-            // Nach TH ist eine Abmeldung am Splitwindow nicht erforderlich,
-            // wenn dieses auch gleich mit zerst"ort wird (s.u.).
-            if (pCW->pCli)
-                ReleaseChild_Impl(*pChild->GetWindow());
-            pCW->pWin = 0;
-            pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( pChild->GetWindow() );
-            pChild->Destroy();
+        // Wenn das ChildWindow ein direktes Childfenster ist und nicht
+        // in einem SplitWindow liegt, am WorkWindow abmelden.
+        // Nach TH ist eine Abmeldung am Splitwindow nicht erforderlich,
+        // wenn dieses auch gleich mit zerst"ort wird (s.u.).
+        if (pCW->pCli)
+            ReleaseChild_Impl(*pChild->GetWindow());
+        pCW->pWin = 0;
+        pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( pChild->GetWindow() );
+        pChild->Destroy();
         }
-        delete pCW->pControl;
-        delete pCW;
+    delete pCW->pControl;
+    delete pCW;
     }
 
     pChildWins->Remove((USHORT)0, nCount);
@@ -640,9 +640,9 @@ void SfxWorkWindow::DeleteControllers_Impl()
     if ( xPropSet.is() )
     {
         try
-        {
-            Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-            aValue >>= xLayoutManager;
+           {
+        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        aValue >>= xLayoutManager;
         }
         catch ( Exception& )
         {
@@ -653,9 +653,8 @@ void SfxWorkWindow::DeleteControllers_Impl()
     if ( xLayoutManager.is() )
     {
         rtl::OUString aStatusBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
-        xLayoutManager->destroyElement( aStatusBarResStr );
-        ResetStatusBar_Impl();
-    }
+    xLayoutManager->destroyElement( aStatusBarResStr );
+    ResetStatusBar_Impl();
 
     // ObjectBars l"oschen( zuletzt, damit pChilds nicht tote Pointer enh"alt )
     rtl::OUString aTbxType( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
@@ -666,10 +665,11 @@ void SfxWorkWindow::DeleteControllers_Impl()
         if ( nId )
         {
             rtl::OUString aTbxId( aTbxType );
-            aTbxId += GetResourceURLFromResId( aObjBarList[i].nId );
-            xLayoutManager->destroyElement( aTbxId );
-            aObjBarList[i].nId = 0;
+        aTbxId += GetResourceURLFromResId( aObjBarList[i].nId );
+        xLayoutManager->destroyElement( aTbxId );
+        aObjBarList[i].nId = 0;
         }
+    }
     }
 
     // ObjectBars werden alle auf einmal released, da sie einen
