@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseRange.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:20:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@
 
     @see com::sun::star::sheet::DatabaseRanges
  */
-service DatabaseRange
+published service DatabaseRange
 {
     // DocMerge: empty anyway
     interface com::sun::star::sheet::XDatabaseRange;
