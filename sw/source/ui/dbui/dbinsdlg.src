@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:42:01 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ japanese ] = "•\\Œ©o‚µ‚Ì‘}“ü(~O)";
         Text[ korean ] = "È°¼º(~O)";
         Text[ chinese_simplified ] = "²åÈë±í¸ñ´ó±êÌâ";
-        Text[ chinese_traditional ] = "±Ò°Ê(~O)";
+        Text[ chinese_traditional ] = "´¡¤Jªí®æ¤j¼ĞÃD";
         Text[ turkish ] = "Çalıştır";
         Text[ arabic ] = "ÊÔÛíá";
         Text[ catalan ] = "~Activar";
@@ -584,7 +584,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ japanese ] = "—ñ–¼‚Ì“K—p(~N)";
         Text[ korean ] = "¿­ ÀÌ¸§(~N)";
         Text[ chinese_simplified ] = "Ì×ÓÃÀ¸Ãû(~N)";
-        Text[ chinese_traditional ] = "Äæ¦W(~N)";
+        Text[ chinese_traditional ] = "±Ä¥ÎÄæ¦W(~N)";
         Text[ turkish ] = "~Sütun adı";
         Text[ arabic ] = "ÃÓãÇÁ ÇáÃÚãÏÉ";
         Text[ catalan ] = "~Nombres de columnas";
@@ -612,7 +612,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ japanese ] = "s‚Ì‚İì¬";
         Text[ korean ] = "ºñ¾îÀÖÀ½(~E)";
         Text[ chinese_simplified ] = "Ö»ĞÂÔöĞĞ(~E)";
-        Text[ chinese_traditional ] = "ªÅ¯Ê(~E)";
+        Text[ chinese_traditional ] = "¶È¶È·s¼W¦æ(~E)";
         Text[ turkish ] = "boş";
         Text[ arabic ] = "İÇÑÛ";
         Text[ catalan ] = "~vacío";
@@ -686,7 +686,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ italian ] = "<senza>" ;
         Text [ spanish ] = "<ninguno>" ;
         Text [ french ] = "<aucun(e)>" ;
-        Text [ swedish ] = "<inga>" ;
+        Text [ swedish ] = "<ingen>" ;
         Text [ danish ] = "<ingen>" ;
         Text [ portuguese ] = "<nenhum>" ;
         Text [ portuguese_brazilian ] = "<keine>" ;
@@ -727,4 +727,5 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ catalan ] = "Insertar columnas de la base de datos";
     Text[ finnish ] = "Lisää tietokantasarakkeet";
 };
+
 
