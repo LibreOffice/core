@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:02:05 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1311,87 +1311,6 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, BOOL bIsTable )
     }
 }
 
-void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
-{
-    if (DoesUndo())
-    {
-        SfxItemSet aSet(rSet);
-
-        aSet.Differentiate(rFmt.GetAttrSet());
-
-        SfxItemSet aOldSet(rFmt.GetAttrSet());
-        aOldSet.Put(aSet);
-
-        SfxItemIter aIter(aSet);
-
-        const SfxPoolItem * pItem = aIter.FirstItem();
-        while (pItem != NULL)
-        {
-            aOldSet.InvalidateItem(pItem->Which());
-
-            pItem = aIter.NextItem();
-        }
-
-        SwUndo * pUndo = new SwUndoFmtAttr(aOldSet, rFmt);
-
-        AppendUndo(pUndo);
-    }
-
-    rFmt.SetAttr(rSet);
-
-}
-
-void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName,
-                      BOOL bBroadcast)
-{
-    SfxStyleFamily eFamily = SFX_STYLE_FAMILY_ALL;
-
-    if (DoesUndo())
-    {
-        SwUndo * pUndo = NULL;
-
-        switch (rFmt.Which())
-        {
-        case RES_CHRFMT:
-            pUndo = new SwUndoRenameCharFmt(rFmt.GetName(), sNewName, this);
-            eFamily = SFX_STYLE_FAMILY_PARA;
-            break;
-        case RES_TXTFMTCOLL:
-            pUndo = new SwUndoRenameFmtColl(rFmt.GetName(), sNewName, this);
-            eFamily = SFX_STYLE_FAMILY_CHAR;
-            break;
-        case RES_FRMFMT:
-            pUndo = new SwUndoRenameFrmFmt(rFmt.GetName(), sNewName, this);
-            eFamily = SFX_STYLE_FAMILY_FRAME;
-            break;
-
-        default:
-            break;
-        }
-
-        if (pUndo)
-            AppendUndo(pUndo);
-    }
-
-    rFmt.SetName(sNewName);
-
-    if (bBroadcast)
-        BroadcastStyleOperation(sNewName, eFamily, SFX_STYLESHEET_MODIFIED);
-}
-
-void SwDoc::ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem)
-{
-    if (DoesUndo())
-    {
-        SwUndo * pUndo = new SwUndoFmtAttr(rFmt.GetAttr(rItem.Which()), rFmt);
-
-        AppendUndo(pUndo);
-    }
-
-    rFmt.SetAttr(rItem);
-
-}
-
 void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 {
     if (DoesUndo())
@@ -1487,7 +1406,7 @@ void SwDoc::SetOldNumbering(sal_Bool _bOldNumbering)
     {
         bOldNumbering = _bOldNumbering;
 
-        SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
+        const SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
         for( USHORT n = 0; n < rNmTbl.Count(); ++n )
             rNmTbl[n]->SetInvalidRule(TRUE);
 
