@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:16:13 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ namespace x11 {
         // the rectangle the pointer must leave until a new XdndPosition should
         // be sent. empty unless the drop target told to fill
         int                         m_nNoPosX, m_nNoPosY, m_nNoPosWidth, m_nNoPosHeight;
-        int                         m_nDragButton;
+        unsigned int                m_nDragButton;
         sal_Int8                    m_nUserDragAction;
         sal_Int8                    m_nTargetAcceptAction;
         sal_Int8                    m_nSourceActions;
@@ -444,12 +444,12 @@ namespace x11 {
         PixmapHolder* getPixmapHolder( Atom selection );
 
         // handle various events
-        void handleSelectionRequest( XSelectionRequestEvent& rRequest );
-        void handleSendPropertyNotify( XPropertyEvent& rNotify );
-        void handleReceivePropertyNotify( XPropertyEvent& rNotify );
-        void handleSelectionNotify( XSelectionEvent& rNotify );
-        void handleDragEvent( XEvent& rMessage );
-        void handleDropEvent( XClientMessageEvent& rMessage );
+        bool handleSelectionRequest( XSelectionRequestEvent& rRequest );
+        bool handleSendPropertyNotify( XPropertyEvent& rNotify );
+        bool handleReceivePropertyNotify( XPropertyEvent& rNotify );
+        bool handleSelectionNotify( XSelectionEvent& rNotify );
+        bool handleDragEvent( XEvent& rMessage );
+        bool handleDropEvent( XClientMessageEvent& rMessage );
 
         // dnd helpers
         void sendDragStatus( Atom nDropAction );
@@ -475,7 +475,7 @@ namespace x11 {
         // drag thread dispatch
         static void runDragExecute( void* );
         void dragDoDispatch();
-        void handleXEvent( XEvent& rEvent );
+        bool handleXEvent( XEvent& rEvent );
 
         // compound text conversion
         ::rtl::OString convertToCompound( const ::rtl::OUString& rText );
