@@ -1535,3 +1535,11 @@ _TI3?AVNotConnectedException@io@star@sun@com@@
 ?find@?$hashtable@U?$pair@$$CBJPAVStgPage@@@_STL@@JU?$hash@J@2@U?$_Select1st@U?$pair@$$CBJPAVStgPage@@@_STL@@@2@U?$equal_to@J@2@V?$allocator@U?$pair@$$CBJPAVStgPage@@@_STL@@@2@@_STL@@QAE?AU?$_Ht_iterator@U?$pair@$$CBJPAVStgPage@@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBJPAVStgPage@@@_STL@@@2@JU?$hash@J@2@U?$_Select1st@U?$pair@$$CBJPAVStgPage@@@_STL@@@2@U?$equal_to@J@2@V?$allocator@U?$pair@$$CBJPAVStgPage@@@_STL@@@2@@2@ABJ@Z
 ?iterator_category@_STL@@YA?AUrandom_access_iterator_tag@1@PBI@Z
 ?resize@?$hashtable@U?$pair@$$CBJPAVStgPage@@@_STL@@JU?$hash@J@2@U?$_Select1st@U?$pair@$$CBJPAVStgPage@@@_STL@@@2@U?$equal_to@J@2@V?$allocator@U?$pair@$$CBJPAVStgPage@@@_STL@@@2@@_STL@@QAEXI@Z
+?DbgError@@YAXPBD0G@Z
+?DbgGetData@@YAPAUDbgData@@XZ
+?DbgIsAssert@@YAKXZ
+?DbgIsErrorOut@@YAKXZ
+?DbgIsWarningOut@@YAKXZ
+?DbgWarning@@YAXPBD0G@Z
+??_C@_0BP@EGLBGAIM@?$CD?$CD?$CD?5illegal?5index?5of?5sequence?$CB?$AA@
+??_C@_0DF@HCMHNEML@o?3?2SRX644?2wntmsci8?2inc?2com?1sun?1s@
