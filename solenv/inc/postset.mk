@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-30 12:06:04 $
+#   last change: $Author: hjs $ $Date: 2001-08-30 17:24:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -297,6 +297,18 @@ RCLANGFLAGS_37+= -d CATALAN
 iso_37=ca
 .ENDIF 
 
+.IF "$(RES_FINN)"!="" || "$(give_me_all_languages)"!=""
+alllangext+=35
+finn$(LANG_GUI)*=$(default$(LANG_GUI))
+lang_35=finn
+longlang_35=finnish
+langext_35=35
+rsclang_35=-lgFINNiSH $(IBM_PC_437)
+rescharset_35=$(finn$(LANG_GUI))
+RCLANGFLAGS_35+= -d FINNISH
+iso_35=fi
+.ENDIF          # "$(RES_FINN)"!="" || "$(give_me_all_languages)"!=""
+
 .ENDIF			#  "$(UPDATER)"!="" || "$(give_me_all_languages)"!=""
 
 .IF "$(L10N_framework)"!=""
@@ -310,18 +322,5 @@ rsclang_99=-lgEXTERN $(UTF8)
 rescharset_99=$(extern$(LANG_GUI))
 RCLANGFLAGS_99+= -d EXTERN
 iso_99=$(L10N_framework)
-
-.IF "$(RES_FINN)"!=""
-alllangext+=35
-finn$(LANG_GUI)*=$(default$(LANG_GUI))
-lang_35=finn
-longlang_35=finnish
-langext_35=35
-rsclang_35=-lgFINNiSH $(IBM_PC_437)
-rescharset_35=$(finn$(LANG_GUI))
-RCLANGFLAGS_35+= -d FINNISH
-iso_35=fi
-.ENDIF
-
 .ENDIF 
 
