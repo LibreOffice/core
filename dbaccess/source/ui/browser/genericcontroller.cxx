@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 08:51:23 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 17:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@
 #endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -171,14 +177,14 @@ sal_Bool OGenericUnoController::Construct(Window* pParent)
     AddSupportedFeatures();
 
     // create the database context
-    DBG_ASSERT(m_xMultiServiceFacatory.is(), "SbaTableQueryBrowser::Construct need a service factory!");
+    DBG_ASSERT(m_xMultiServiceFacatory.is(), "OGenericUnoController::Construct need a service factory!");
     try
     {
         m_xDatabaseContext = Reference< XNameAccess >(m_xMultiServiceFacatory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaTableQueryBrowser::Construct: could not create (or start listening at) the database context!");
+        DBG_ERROR("OGenericUnoController::Construct: could not create (or start listening at) the database context!");
     }
 
     if (!m_xDatabaseContext.is())
@@ -241,6 +247,44 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         }
     }
 }
+
+//------------------------------------------------------------------------------
+Any SAL_CALL OGenericUnoController::queryInterface(const Type& _rType) throw (RuntimeException)
+{
+    Any aReturn = OGenericUnoController_BASE::queryInterface(_rType);
+    if (!aReturn.hasValue())
+        aReturn = OGenericUnoController_BASE2::queryInterface(_rType);
+    return aReturn;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::acquire(  ) throw ()
+{
+    OGenericUnoController_BASE::acquire();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::release(  ) throw ()
+{
+    OGenericUnoController_BASE::release();
+}
+
+//------------------------------------------------------------------------------
+Sequence< Type > SAL_CALL OGenericUnoController::getTypes(  ) throw (RuntimeException)
+{
+    return ::comphelper::concatSequences(
+        OGenericUnoController_BASE::getTypes(),
+        OGenericUnoController_BASE2::getTypes()
+    );
+}
+
+//------------------------------------------------------------------------------
+Sequence< sal_Int8 > SAL_CALL OGenericUnoController::getImplementationId(  ) throw (RuntimeException)
+{
+    static ::cppu::OImplementationId aId;
+    return aId.getImplementationId();
+}
+
 // -------------------------------------------------------------------------
 void OGenericUnoController::disposing(const EventObject& Source) throw( RuntimeException )
 {
@@ -300,8 +344,8 @@ sal_Bool OGenericUnoController::ImplInvalidateTBItem(sal_uInt16 nId, const Featu
 // -----------------------------------------------------------------------
 void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rFeature, const Reference< ::com::sun::star::frame::XStatusListener > & xListener, sal_Bool _bIgnoreCache)
 {
-    sal_Int32 nFeat = m_aSupportedFeatures[_rFeature];
-    FeatureState aFeatState( GetState(nFeat));
+    sal_uInt16 nFeat = (sal_uInt16)m_aSupportedFeatures[_rFeature];
+    FeatureState aFeatState(GetState(nFeat));
 
     FeatureState& rCachedState = m_aStateCache[nFeat];  // creates if neccessary
 
@@ -432,7 +476,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
                 }
             }
             if(!bFound)
-                ImplInvalidateTBItem(aNextFeature.nId, GetState(aNextFeature.nId));
+                ImplInvalidateTBItem((sal_uInt16)aNextFeature.nId, GetState((sal_uInt16)aNextFeature.nId));
         }
 
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
@@ -592,7 +636,7 @@ void OGenericUnoController::dispatch(const ::com::sun::star::util::URL& aURL, co
 {
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(aURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
-        Execute(aIter->second);
+        Execute((sal_uInt16)aIter->second);
 }
 
 // -----------------------------------------------------------------------
@@ -641,7 +685,7 @@ void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::st
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
     {   // clear the cache for that feature
-        StateCacheIterator aCachePos = m_aStateCache.find(aIter->second);
+        StateCacheIterator aCachePos = m_aStateCache.find((sal_uInt16)aIter->second);
         if (aCachePos != m_aStateCache.end())
             m_aStateCache.erase(aCachePos);
     }
@@ -669,7 +713,7 @@ void OGenericUnoController::disposing()
 
         DispatchTarget& rCurrent = *iterCurrent;
         EventObject aDisposeEvent;
-        aDisposeEvent.Source = (XComponent*)(OGenericUnoController_BASE2*)this;
+        aDisposeEvent.Source = static_cast<XWeak*>(this);
 
 #ifdef DBG_UTIL
         sal_Int32 nSize = m_arrStatusListener.size();
@@ -709,25 +753,6 @@ void OGenericUnoController::frameAction(const ::com::sun::star::frame::FrameActi
 {
     if ((::com::sun::star::frame::XFrame*)aEvent.Frame.get() == (::com::sun::star::frame::XFrame*)m_xCurrentFrame.get())
         m_bFrameUiActive = (aEvent.Action == FrameAction_FRAME_UI_ACTIVATED);
-}
-// -----------------------------------------------------------------------------
-Any SAL_CALL OGenericUnoController::queryInterface(const Type& _rType) throw (RuntimeException)
-{
-    Any aRet = OGenericUnoController_BASE::queryInterface(_rType);
-    if(aRet.hasValue())
-        return aRet;
-    aRet = OGenericUnoController_BASE2::queryInterface(_rType);
-    return aRet;
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OGenericUnoController::acquire(  ) throw()
-{
-    OGenericUnoController_BASE::acquire();
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OGenericUnoController::release(  ) throw()
-{
-    OGenericUnoController_BASE::release();
 }
 //------------------------------------------------------------------------------
 void OGenericUnoController::EmptyWindow()
@@ -845,7 +870,7 @@ void OGenericUnoController::startConnectionListening(const Reference< XConnectio
     // we have to remove ourself before dispoing the connection
     Reference< XComponent >  xComponent(_rxConnection, UNO_QUERY);
     if (xComponent.is())
-        xComponent->addEventListener(static_cast<XPropertyChangeListener*>(this));
+        xComponent->addEventListener(static_cast<XFrameActionListener*>(this));
 }
 
 // -----------------------------------------------------------------------------
@@ -854,7 +879,7 @@ void OGenericUnoController::stopConnectionListening(const Reference< XConnection
     // we have to remove ourself before dispoing the connection
     Reference< XComponent >  xComponent(_rxConnection, UNO_QUERY);
     if (xComponent.is())
-        xComponent->removeEventListener(static_cast<XPropertyChangeListener*>(this));
+        xComponent->removeEventListener(static_cast<XFrameActionListener*>(this));
 }
 
 // -----------------------------------------------------------------------------
