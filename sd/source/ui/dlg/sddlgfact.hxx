@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddlgfact.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:45:15 $
+ *  last change: $Author: hr $ $Date: 2004-05-13 16:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ namespace sd {
     class CopyDlg;
     class BreakDlg;
     class OutlineBulletDlg;
+        class HeaderFooterDialog;
 }
 // add for BreakDlg
 class Dialog;
@@ -260,6 +261,15 @@ class AbstractSdPublishingDlg_Impl :public AbstractSdPublishingDlg
     virtual void GetParameterSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rParams );
 };
 
+// add for HeaderFooterDialog
+class AbstractHeaderFooterDialog_Impl :public AbstractHeaderFooterDialog
+{
+  DECL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl,::sd::HeaderFooterDialog);
+  virtual void ApplyToAll( TabPage* pPage );
+  virtual void Apply( TabPage* pPage );
+  virtual void Cancel( TabPage* pPage );
+};
+
 //------------------------------------------------------------------------
 //AbstractDialogFactory_Impl implementations
 class SdAbstractDialogFactory_Impl : public SdAbstractDialogFactory
@@ -341,6 +351,15 @@ public:
                                                 ::sd::DrawDocShell* pDocShell ); //add for SdVectorizeDlg
     virtual AbstractSdPublishingDlg*    CreateSdPublishingDlg( const ResId& rResId,
                                                 ::Window* pWindow, DocumentType eDocType); //add for SdPublishingDlg
+
+      virtual VclAbstractDialog*          CreateMasterLayoutDialog( ::Window* pParent,
+                                                                  SdDrawDocument* pDoc,
+                                                                  SdPage* ); // add for MasterLayoutDialog
+
+    virtual AbstractHeaderFooterDialog* CreateHeaderFooterDialog( ViewShell* pViewShell,
+                                                                  ::Window* pParent,
+                                                                  SdDrawDocument* pDoc,
+                                                                  SdPage* pCurrentPage ); // add for HeaderFooterDialog
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( USHORT nId );

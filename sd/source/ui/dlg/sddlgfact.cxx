@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddlgfact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:45:04 $
+ *  last change: $Author: hr $ $Date: 2004-05-13 16:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,10 @@
 #include "prntopts.hrc"
 #include "pubdlg.hxx" //add for SdPublishingDlg
 #include "pubdlg.hrc"
+#include "masterlayoutdlg.hxx"
+#include "masterlayoutdlg.hrc"
+#include "headerfooterdlg.hxx"
+#include "headerfooterdlg.hrc"
 
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl); // add for BreakDlg
 IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl); // add for CopyDlg
@@ -132,6 +136,7 @@ IMPL_ABSTDLG_BASE(AbstractSdPresLayoutDlg_Impl); //add for SdPresLayoutDlg
 IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl); //add for SdActionDlg
 IMPL_ABSTDLG_BASE(AbstractSdVectorizeDlg_Impl); //add for SdVectorizeDlg
 IMPL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl); //add for SdPublishingDlg
+IMPL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl); // add for HeaderFooterDialog
 
 //AbstractCopyDlg_Impl begin
 void AbstractCopyDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
@@ -354,6 +359,23 @@ void AbstractSdPublishingDlg_Impl::GetParameterSequence( ::com::sun::star::uno::
     pDlg->GetParameterSequence( rParams );
 }
 //AbstractSdPublishingDlg_Impl end
+
+//AbstractHeaderFooterDialog_Impl
+void AbstractHeaderFooterDialog_Impl::ApplyToAll( TabPage* pPage )
+{
+  pDlg->ApplyToAll( pPage );
+}
+
+void AbstractHeaderFooterDialog_Impl::Apply( TabPage* pPage )
+{
+  pDlg->Apply( pPage );
+}
+
+void AbstractHeaderFooterDialog_Impl::Cancel( TabPage* pPage )
+{
+  pDlg->Cancel( pPage );
+}
+//AbstractHeaderFooterDialog_Impl
 
 //-------------- SdAbstractDialogFactory implementation--------------
 
@@ -860,3 +882,17 @@ GetTabPageRanges SdAbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId 
 
     return 0;
 }
+
+VclAbstractDialog* SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog( ::Window* pParent,
+    SdDrawDocument* pDoc, SdPage* pCurrentPage )
+{
+  return new VclAbstractDialog_Impl( new ::sd::MasterLayoutDialog( pParent, pDoc, pCurrentPage ));
+}
+
+AbstractHeaderFooterDialog* SdAbstractDialogFactory_Impl::CreateHeaderFooterDialog( ViewShell* pViewShell,
+  ::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage )
+{
+    return new AbstractHeaderFooterDialog_Impl( new ::sd::HeaderFooterDialog( (::sd::ViewShell*)pViewShell, pParent, pDoc, pCurrentPage ));
+}
+
+

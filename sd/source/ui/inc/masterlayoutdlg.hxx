@@ -2,9 +2,9 @@
  *
  *  $RCSfile: masterlayoutdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:52:50 $
+ *  last change: $Author: hr $ $Date: 2004-05-13 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ public:
     MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
     ~MasterLayoutDialog();
 
-    static void execute( Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
+    virtual short Execute();
 };
 
 }

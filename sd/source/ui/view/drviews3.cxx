@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:54:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-13 16:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
+#include "sdabstdlg.hxx" //CHINA001
 
 namespace sd {
 
@@ -381,7 +382,12 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_INSERT_PAGE_NUMBER:
         case SID_INSERT_DATE_TIME:
         {
-            sd::HeaderFooterDialog::execute( this, pWindow, GetDoc(), pActualPage );
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+            AbstractHeaderFooterDialog* pDlg = pFact->CreateHeaderFooterDialog( (::ViewShell*)this, pWindow, GetDoc(), pActualPage );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            pDlg->Execute();
+            delete pDlg;
 
             pWindow->Invalidate();
             UpdatePreview( pActualPage );
@@ -404,7 +410,12 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 pPage = GetDoc()->GetMasterSdPage(0,PK_STANDARD);
             }
 
-            sd::MasterLayoutDialog::execute( pWindow, GetDoc(), pPage );
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+            VclAbstractDialog* pDlg = pFact->CreateMasterLayoutDialog( pWindow, GetDoc(), pPage );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            pDlg->Execute();
+            delete pDlg;
             Invalidate();
             rReq.Done ();
             break;
@@ -422,7 +433,13 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 pPage = GetDoc()->GetMasterSdPage(0,PK_NOTES);
             }
 
-            sd::MasterLayoutDialog::execute( pWindow, GetDoc(), pPage );
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+            VclAbstractDialog* pDlg = pFact->CreateMasterLayoutDialog( pWindow, GetDoc(), pPage );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            pDlg->Execute();
+            delete pDlg;
+
             Invalidate();
             rReq.Done ();
             break;
@@ -430,7 +447,13 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
         case SID_MASTER_LAYOUTS_HANDOUTS:
         {
-            sd::MasterLayoutDialog::execute( pWindow, GetDoc(), GetDoc()->GetMasterSdPage(0,PK_HANDOUT) );
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+            VclAbstractDialog* pDlg = pFact->CreateMasterLayoutDialog( pWindow, GetDoc(), GetDoc()->GetMasterSdPage(0,PK_HANDOUT) );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            pDlg->Execute();
+            delete pDlg;
+
             Invalidate();
             rReq.Done ();
             break;
