@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-01 13:36:30 $
+ *  last change: $Author: pl $ $Date: 2001-02-05 16:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@
 #include <sysdata.hxx>
 #endif
 
+#ifndef _SV_TIMER_HXX
+#include <timer.hxx>
+#endif
+
 #include <salunx.h>
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -158,6 +162,7 @@ class SalFrameData
             int             nVisibility_;
 
             int             nScreenSaversTimeout_;
+            Timer           maResizeTimer;
 
             SystemChildData maSystemChildData;
 
@@ -192,6 +197,8 @@ class SalFrameData
 
     inline                  SalFrameData( SalFrame *pFrame );
     inline                  ~SalFrameData();
+
+            DECL_LINK( HandleResizeTimer, void* );
 public:
             long            Dispatch( XEvent *pEvent );
             void            Init( USHORT nSalFrameStyle, SystemParentData* pParentData = NULL );

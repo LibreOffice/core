@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mav $ $Date: 2001-01-16 13:25:19 $
+ *  last change: $Author: pl $ $Date: 2001-02-05 16:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,6 +563,9 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     nScreenSaversTimeout_       = 0;
 
     mpInputContext              = NULL;
+
+    maResizeTimer.SetTimeoutHdl( LINK( this, SalFrameData, HandleResizeTimer ) );
+    maResizeTimer.SetTimeout( 50 );
 }
 
 SalFrame::SalFrame() : maFrameData( this ) {}
@@ -2374,9 +2377,17 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
 
         if( pEvent->window != XtWindow( hComposite_ ) )
             XtResizeWidget(hComposite_, nWidth_, nHeight_, 0);
-        Call( SALEVENT_RESIZE, NULL );
+
+        maResizeTimer.Start();
+//      Call( SALEVENT_RESIZE, NULL );
     }
     return 1;
+}
+
+IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
+{
+    Call( SALEVENT_RESIZE, NULL );
+    return 0;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
