@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-11 09:35:28 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include "dbase/DIndexPage.hxx"
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
-#include "FValue.hxx"
+#include "connectivity/FValue.hxx"
 #endif
 #ifndef _REF_HXX
 #include <tools/ref.hxx>

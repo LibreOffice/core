@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-17 12:34:06 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <tools/stream.hxx>
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
-#include "FValue.hxx"
+#include "connectivity/FValue.hxx"
 #endif
 
 namespace connectivity

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 09:37:14 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,10 +555,18 @@ float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException,
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
-    columnIndex = mapColumn(columnIndex);
     float nVal(0);
-    OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,&nVal,sizeof nVal);
+    columnIndex = mapColumn(columnIndex);
+    if(m_bFetchData)
+    {
+        if(columnIndex > m_nLastColumnPos)
+            fillRow(columnIndex);
+
+        nVal = m_aRow[columnIndex];
+
+    }
+    else
+        OTools::getValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_FLOAT,m_bWasNull,**this,&nVal,sizeof nVal);
     return nVal;
 }
 // -------------------------------------------------------------------------

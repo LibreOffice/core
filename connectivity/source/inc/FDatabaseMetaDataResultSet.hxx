@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:15:43 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #include <comphelper/propertycontainer.hxx>
 #endif
 #ifndef _CONNECTIVITY_VALUE_HXX_
-#include "FValue.hxx"
+#include "connectivity/FValue.hxx"
 #endif
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SResultSet.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 14:12:06 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@
 #include "connectivity/CommonTools.hxx"
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
-#include "FValue.hxx"
+#include "connectivity/FValue.hxx"
 #endif
 
 namespace connectivity

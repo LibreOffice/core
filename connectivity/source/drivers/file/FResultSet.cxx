@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-04 14:27:53 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 13:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,11 +281,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
         if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
-#if SUPD > 630
                 columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
-#else
-                columnName.equalsIgnoreCase(xMeta->getColumnName(i)))
-#endif
             break;
     return i;
 }
