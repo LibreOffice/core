@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2002-03-07 13:07:09 $
+ *  last change: $Author: jbu $ $Date: 2002-05-22 12:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,14 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                         throw IllegalArgument( av[i] );
                     }
                     break;
+                }
+                case 'e':
+                {
+                    if( av[i][2] == 'n' && av[i][3] == 'v' && av[i][4] == ':' )
+                    {
+                        // bootstrap variable, ignore it
+                        break;
+                    }
                 }
                 default:
                 {
