@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcharset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 09:47:39 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 06:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace dbtools
     //=========================================================================
     //-------------------------------------------------------------------------
     OCharsetMap::OCharsetMap()
-    #ifdef DBG_UTIL
+    #ifdef _DEBUG
         :m_nLivingIterators(0)
     #endif
     {
@@ -205,7 +205,7 @@ namespace dbtools
         ,m_nPosition(_nInitialPos)
     {
         OSL_ENSURE(m_pContainer, "OCharsetMap::CharsetIterator::CharsetIterator : invalid container!");
-    #ifdef DBG_UTIL
+    #ifdef _DEBUG
         ++const_cast<OCharsetMap*>(m_pContainer)->m_nLivingIterators;
     #endif
     }
@@ -215,7 +215,7 @@ namespace dbtools
         :m_pContainer(_rSource.m_pContainer)
         ,m_nPosition(_rSource.m_nPosition)
     {
-    #ifdef DBG_UTIL
+    #ifdef _DEBUG
         ++const_cast<OCharsetMap*>(m_pContainer)->m_nLivingIterators;
     #endif
     }
@@ -223,7 +223,7 @@ namespace dbtools
     //-------------------------------------------------------------------------
     OCharsetMap::CharsetIterator::~CharsetIterator()
     {
-    #ifdef DBG_UTIL
+    #ifdef _DEBUG
         --const_cast<OCharsetMap*>(m_pContainer)->m_nLivingIterators;
     #endif
     }
@@ -277,6 +277,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/13 09:47:39  fs
+ *  #83632# merge IBMPC, IBMPC(850), DOS
+ *
  *  Revision 1.1  2000/11/29 22:21:42  fs
  *  initial checkin - helper class for translating charset representations
  *

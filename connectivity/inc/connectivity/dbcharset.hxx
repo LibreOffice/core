@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcharset.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-29 22:21:00 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 06:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ namespace dbtools
             // logical names
 
 
-    #ifdef DBG_UTIL
+    #ifdef _DEBUG
         sal_Int32       m_nLivingIterators;         /// just for debugging reasons, counts the living iterators
     #endif
 
@@ -217,6 +217,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/29 22:21:00  fs
+ *  initial checkin - helper class for translating charset representations
+ *
  *
  *  Revision 1.0 29.11.00 18:29:26  fs
  ************************************************************************/
