@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.197 $
+ *  $Revision: 1.198 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:56:49 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1553,9 +1553,20 @@ PointerStyle Window::ImplGetMousePointer() const
 
 void Window::ImplResetReallyVisible()
 {
+    BOOL bBecameReallyInvisible = mbReallyVisible;
+
     mbDevOutput     = FALSE;
     mbReallyVisible = FALSE;
     mbReallyShown   = FALSE;
+
+    // the SHOW/HIDE events serve as indicators to send child creation/destroy events to the access bridge.
+    // For this, the data member of the event must not be NULL.
+    // Previously, we did this in Window::Show, but there some events got lost in certain situations.
+    // #104887# - 2004-08-10 - fs@openoffice.org
+    if( bBecameReallyInvisible && ImplIsAccessibleCandidate() )
+        ImplCallEventListeners( VCLEVENT_WINDOW_HIDE, this );
+        // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_HIDE. Normally, we should
+        // introduce another event which explicitly triggers the Accessibility implementations.
 
     Window* pWindow = mpFirstOverlap;
     while ( pWindow )
@@ -1578,9 +1589,21 @@ void Window::ImplResetReallyVisible()
 
 void Window::ImplSetReallyVisible()
 {
+    BOOL bBecameReallyVisible = !mbReallyVisible;
+
     mbDevOutput     = TRUE;
     mbReallyVisible = TRUE;
     mbReallyShown   = TRUE;
+
+    // the SHOW/HIDE events serve as indicators to send child creation/destroy events to the access bridge.
+    // For this, the data member of the event must not be NULL.
+    // Previously, we did this in Window::Show, but there some events got lost in certain situations. Now
+    // we're doing it when the visibility really changes
+    // #104887# - 2004-08-10 - fs@openoffice.org
+    if( bBecameReallyVisible && ImplIsAccessibleCandidate() )
+        ImplCallEventListeners( VCLEVENT_WINDOW_SHOW, this );
+        // TODO. It's kind of a hack that we're re-using the VCLEVENT_WINDOW_SHOW. Normally, we should
+        // introduce another event which explicitly triggers the Accessibility implementations.
 
     Window* pWindow = mpFirstOverlap;
     while ( pWindow )
@@ -6055,7 +6078,7 @@ void Window::SetParent( Window* pNewParent )
 void Window::Show( BOOL bVisible, USHORT nFlags )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-    BOOL bNativeFrameRegistered = FALSE;
+    BOOL bRealVisibilityChanged = FALSE;
 
     if ( mbVisible == bVisible )
         return;
@@ -6100,6 +6123,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
                 aInvRegion = maWinClipRegion;
             }
 
+            bRealVisibilityChanged = mbReallyVisible;
             ImplResetReallyVisible();
             ImplSetClipFlag();
 
@@ -6167,8 +6191,11 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             // Hintergrund sichern
             if ( mpOverlapData && mpOverlapData->mbSaveBack )
                 ImplSaveOverlapBackground();
-            // Dafuer sorgen, das Clip-Rechtecke neu berechnet werden
+            // adjust mbReallyVisible
+            bRealVisibilityChanged = !mbReallyVisible;
             ImplSetReallyVisible();
+
+            // Dafuer sorgen, das Clip-Rechtecke neu berechnet werden
             ImplSetClipFlag();
 
             if ( !mbFrame )
@@ -6220,24 +6247,12 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
         ImplInvalidateAllOverlapBackgrounds();
 
     // the SHOW/HIDE events also serve as indicators to send child creation/destroy events to the access bridge
-    // to avoid creation event to be send twice a NULL handle is passed if this (frame)window was already registered
-    // a NULL handle is also passed if:
-    // the window is hidden
-    // the window is not really visible (ie, all parents must be visible)
-    void *pData = this;
-    if( mbVisible )
-    {
-        // show
-        if( bNativeFrameRegistered || !ImplIsAccessibleCandidate() || !mbReallyVisible )
-            pData = NULL;
-    }
-    else
-    {
-        // hide
-        if( !ImplIsAccessibleCandidate() )
-            pData = NULL;
-    }
-    ImplCallEventListeners( mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE, pData );
+    // However, the access bridge only uses this event if the data member is not NULL (it's kind of a hack that
+    // we re-use the SHOW/HIDE events this way, with this particular semantics).
+    // Since #104887#, the notifications for the access bridge are done in Impl(Set|Reset)ReallyVisible. Here, we
+    // now only notify with a NULL data pointer, for all other clients except the access bridge.
+    if ( !bRealVisibilityChanged )
+        ImplCallEventListeners( mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE, NULL );
 
     // #107575#, if a floating windows is shown that grabs the focus, we have to notify the toolkit about it
     // ImplGrabFocus() is not called in this case
