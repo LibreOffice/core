@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-24 15:14:56 $
+ *  last change: $Author: sab $ $Date: 2001-01-25 14:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1259,7 +1259,7 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
 
 ScXMLImport::ScXMLImport() :
     pDoc( NULL ),
-    bLoadDoc( sal_False ),
+    bLoadDoc( sal_True ),
     nStyleFamilyMask( 0 ),
 //  rDoc( rD ),
 //  pI18NMap( new SvI18NMap ),
