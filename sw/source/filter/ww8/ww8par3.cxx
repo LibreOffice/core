@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1620,7 +1620,8 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
                     rStyleInf.pOutlineNumrule =
                         pCollA[rStyleInf.nBase].pOutlineNumrule;
                     const SfxPoolItem* pItem;
-                    if (SFX_ITEM_SET == pCollA[rStyleInf.nBase].pFmt->
+                    if (pCollA[rStyleInf.nBase].pFmt &&
+                    SFX_ITEM_SET == pCollA[rStyleInf.nBase].pFmt->
                         GetItemState(RES_PARATR_NUMRULE,FALSE,&pItem))
                     {
                         const SwNumRuleItem *pRule=(const SwNumRuleItem *)pItem;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,6 @@ private:
 protected:
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry* pEntry);
-
 public:
     SwWW8FltControlStack(SwDoc* pDo, ULONG nFieldFl, SwWW8ImplReader& rReader_ )
         : SwFltControlStack( pDo, nFieldFl ), rReader( rReader_ ),
@@ -317,8 +316,26 @@ public:
             nToggleAttrFlags &= ~(1 << nId);
     }
     USHORT GetToggleAttrFlags() const { return nToggleAttrFlags; }
+
+    const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, USHORT nWhich);
+    const SfxPoolItem* GetStackAttr(const SwPosition& rPos, USHORT nWhich);
+    void Delete(const SwPaM &rPam);
 };
 
+//The only thing this is for is RES_FLTR_ANCHOR, anything else is an error.
+//For graphics whose anchoring position would otherwise be automatically moved
+//along by the insertion of text.
+class SwWW8FltAnchorStack : public SwFltControlStack
+{
+public:
+    SwWW8FltAnchorStack(SwDoc* pDo, ULONG nFieldFl)
+        : SwFltControlStack( pDo, nFieldFl ) {}
+    void AddAnchor(const SwPosition& rPos,SwFrmFmt *pFmt);
+    void Flush();
+};
+
+//For fields whose handling cannot be fully resolved until we hit the end of
+//the document.
 class SwWW8FltRefStack : public SwFltEndStack
 {
 public:
@@ -380,6 +397,7 @@ class WW8ReaderSave
 {
     SwPosition aTmpPos;
     SwWW8FltControlStack* pOldStck;
+    SwWW8FltAnchorStack* pOldAnchorStck;
     WW8PLCFxSaveAll aPLCFxSave;
     WW8PLCFMan* pOldPlcxMan;
 
@@ -567,6 +585,11 @@ friend class WW8FormulaControl;
     text/textboxes/tables etc...
     */
     SwWW8FltRefStack *pRefStck;
+
+    /*
+     * For graphics anchors
+     */
+    SwWW8FltAnchorStack* pAnchorStck;
 
     SwMSConvertControls *pFormImpl; // Control-Implementierung
 
@@ -760,6 +783,9 @@ friend class WW8FormulaControl;
 
 //---------------------------------------------
 
+    void AppendTxtNode(SwPosition& rPos);
+    void GetNoninlineNodeAttribs(const SwTxtNode *pNode,
+        ::std::vector<const xub_StrLen*> &rPositions);
     void SetLastPgDeskIdx();
 
     SwPageDesc* CreatePageDesc( SwPageDesc* pFirstPageDesc,
@@ -792,6 +818,7 @@ friend class WW8FormulaControl;
     void DeleteStk(SwFltControlStack* prStck);
     void DeleteCtrlStk()    { DeleteStk( pCtrlStck  ); pCtrlStck   = 0; }
     void DeleteRefStk()     { DeleteStk( pRefStck ); pRefStck = 0; }
+    void DeleteAnchorStk()  { DeleteStk( pAnchorStck ); pAnchorStck = 0; }
 
     BOOL ReadChar( long nPosCp, long nCpOfs );
     BOOL ReadPlainChars( long& rPos, long nEnd, long nCpOfs );
@@ -886,6 +913,7 @@ friend class WW8FormulaControl;
         const Graphic* pGraph, const String& rFileName, const String& rGrName,
         const SfxItemSet& rGrfSet );
 
+    SwFrmFmt *AutoAnchors(SwFrmFmt *pFmt);
     SwFrmFmt* ImportGraf1( WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos );
     SwFrmFmt* ImportGraf(  SdrTextObj* pTextObj = 0, SwFrmFmt* pFlyFmt = 0,
         BOOL bSetToBackground = FALSE );

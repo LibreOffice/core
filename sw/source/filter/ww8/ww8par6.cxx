@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-15 12:42:55 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,15 @@ BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
 ColorData SwWW8ImplReader::GetCol( BYTE nIco )
 {
     return eSwWW8ColA[nIco];
+}
+
+inline short MSRoundTweak(short x)
+{
+    if (x < 0)
+        ++x;
+    else if (x > 0)
+        --x;
+    return x;
 }
 
 /***************************************************************************
@@ -686,9 +695,9 @@ void SwWW8ImplReader::SetPage1( SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
     static USHORT __READONLY_DATA nLef[] = { MM_250, 1800 };
     static USHORT __READONLY_DATA nRig[] = { MM_250, 1800 };
 
-    short nWWLe = ReadULSprm( pSep, pIds[3], nLef[nLIdx] );
-    short nWWRi = ReadULSprm( pSep, pIds[4], nRig[nLIdx] );
-    short nWWGu = ReadULSprm( pSep, pIds[5], 0 );
+    short nWWLe = MSRoundTweak(ReadULSprm( pSep, pIds[3], nLef[nLIdx]));
+    short nWWRi = MSRoundTweak(ReadULSprm( pSep, pIds[4], nRig[nLIdx]));
+    short nWWGu = MSRoundTweak(ReadULSprm( pSep, pIds[5], 0));
 
     /*
     0x322A is set if the gutter is on the right, the gutter is otherwise
@@ -2842,11 +2851,8 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo,
         pSFlyPara->pFlyFmt = rDoc.MakeFlySection( pSFlyPara->eAnchor,
             pPaM->GetPoint(), &aFlySet );
 
-        if( FLY_IN_CNTNT != pSFlyPara->eAnchor )
-        {
-            pCtrlStck->NewAttr( *pPaM->GetPoint(),
-                SwFltAnchor( pSFlyPara->pFlyFmt ) );
-        }
+        if (FLY_IN_CNTNT != pSFlyPara->eAnchor)
+            pAnchorStck->AddAnchor(*pPaM->GetPoint(),pSFlyPara->pFlyFmt);
 
         // merke Pos im Haupttext
         pSFlyPara->pMainTextPos = new SwPosition( *pPaM->GetPoint() );

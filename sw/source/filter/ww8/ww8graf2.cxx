@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,7 +1025,8 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
             pRet = ImportGraf1( aPic, pDataStream, nPicLocFc );
     }
     pDataStream->Seek( nOldPos );
-    return pRet;
+
+    return AutoAnchors(pRet);
 }
 
 #ifdef __WW8_NEEDS_COPY

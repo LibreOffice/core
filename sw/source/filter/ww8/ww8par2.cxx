@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-19 09:45:59 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,8 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
     // Is there some frame data here
     BOOL bNowApo = rbNowStyleApo || pSprm29 || pSprm37 || pTabPos;
 
-    BOOL bTestAllowed = (!bTableRowEnd) && (!(bInTable && pTableDesc && pTableDesc->GetAktCol()));
+    BOOL bTestAllowed = (!bTxbxFlySection) && (!bTableRowEnd) &&
+        (!(bInTable && pTableDesc && pTableDesc->GetAktCol()));
 
     rbStartApo = bNowApo && !bApo && bTestAllowed;  // normal APO-start
     rbStopApo  = bApo && !bNowApo && bTestAllowed;  // normal APO-end
@@ -1760,7 +1761,7 @@ void WW8TabDesc::CreateSwTable()
 
     // set font size to 1 point to minimize y-growth of Hd/Ft
     if( bInsNode )
-        pIo->rDoc.AppendTxtNode( *pPoint );
+        pIo->AppendTxtNode( *pPoint );
 
     pTmpPos = new SwPosition( *pIo->pPaM->GetPoint() );
 
@@ -2125,7 +2126,7 @@ void WW8TabDesc::FinishSwTable()
 
                         SwNodeIndex aSttNdIdx(*(*pActMGroup)[n]->GetSttNd(),1);
 
-                        pIo->rDoc.AppendTxtNode( *aPam.GetPoint() );
+                        pIo->AppendTxtNode( *aPam.GetPoint() );
                         SwNodeRange aRg( aSttNdIdx, aPam.GetPoint()->nNode );
                         rInsPosNd++;
 

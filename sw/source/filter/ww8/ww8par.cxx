@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,13 @@
 #include <fltini.hxx>
 #endif
 
+#ifndef __SGI_STL_ALGORITHM
+#include <algorithm>
+#endif
+#ifndef __SGI_STL_FUNCTIONAL
+#include <functional>
+#endif
+
 #ifndef _WW8PAR2_HXX
 #include "ww8par2.hxx"          // class WW8RStyle, class WW8AnchorPara
 #endif
@@ -434,6 +441,92 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         default:
             SwFltControlStack::SetAttrInDoc(rTmpPos, pEntry);
             break;
+    }
+}
+
+const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
+    USHORT nWhich)
+{
+    const SfxPoolItem *pItem = GetStackAttr(rPos, nWhich);
+    if (!pItem)
+    {
+        const SwCntntNode *pNd = pDoc->GetNodes()[ rPos.nNode ]->GetCntntNode();
+        if (!pNd)
+            pItem = &pDoc->GetAttrPool().GetDefaultItem(nWhich);
+        else
+            pItem = &pNd->GetAttr(nWhich);
+    }
+    return pItem;
+}
+
+const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
+    USHORT nWhich)
+{
+    SwNodeIndex aNode( rPos.nNode, -1 );
+    USHORT nIdx = rPos.nContent.GetIndex();
+
+    USHORT nSize = Count();
+    while (nSize)
+    {
+        const SwFltStackEntry* pEntry = (*this)[ --nSize ];
+        if (pEntry->pAttr->Which() == nWhich)
+        {
+            if ( (pEntry->bLocked) || (
+                (pEntry->nMkNode <= aNode) && (pEntry->nPtNode >= aNode) &&
+                (pEntry->nMkCntnt <= nIdx) && (pEntry->nPtCntnt >= nIdx) ) )
+            {
+                return (const SfxPoolItem*)pEntry->pAttr;
+            }
+        }
+    }
+    return 0;
+}
+
+void SwWW8FltControlStack::Delete(const SwPaM &rPam)
+{
+    const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
+
+    if( !rPam.HasMark() || *pStt >= *pEnd )
+        return;
+
+    SwNodeIndex aStartNode( pStt->nNode, -1 );
+    USHORT nStartIdx = pStt->nContent.GetIndex();
+    SwNodeIndex aEndNode( pEnd->nNode, -1 );
+    USHORT nEndIdx = pEnd->nContent.GetIndex();
+
+
+    for (USHORT nSize = Count(); nSize > 0;)
+    {
+        SwFltStackEntry* pEntry = (*this)[--nSize];
+
+        //to be adjusted
+        if (pEntry->nMkNode > aStartNode ||
+            (pEntry->nMkNode == aStartNode && pEntry->nMkCntnt >= nStartIdx) )
+        {
+            //after start, before end, delete
+            if (!pEntry->bLocked && (
+                    pEntry->nPtNode < aEndNode ||
+                    (pEntry->nPtNode == aEndNode && pEntry->nPtCntnt < nEndIdx))
+                    )
+            {
+                DeleteAndDestroy(nSize);
+            }
+            else
+            {
+                //move everything backwards
+                pEntry->nMkNode = aStartNode;
+                pEntry->nMkCntnt = nStartIdx;
+                pEntry->nPtNode -= (aEndNode.GetIndex()-aStartNode.GetIndex());
+                if (!pEntry->bLocked)
+                    pEntry->nPtCntnt -= nEndIdx - nStartIdx;
+            }
+        }
+        else if ((!pEntry->bLocked) && ((pEntry->nPtNode > aStartNode) || (
+            pEntry->nPtNode == aStartNode && pEntry->nPtCntnt > nStartIdx)))
+        {
+            pEntry->nPtNode -= (aEndNode.GetIndex()-aStartNode.GetIndex());
+            pEntry->nPtCntnt -= nEndIdx - nStartIdx;
+        }
     }
 }
 
@@ -785,6 +878,9 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags,
         *pRdr);
 
+    pOldAnchorStck = pRdr->pAnchorStck;
+    pRdr->pAnchorStck = new SwWW8FltAnchorStack(&pRdr->rDoc, pRdr->nFieldFlags);
+
     // rette die Attributverwaltung: dies ist noetig, da der neu anzulegende
     // PLCFx Manager natuerlich auf die gleichen FKPs zugreift, wie der alte
     // und deren Start-End-Positionen veraendert...
@@ -824,6 +920,9 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     // entstehen koennen, die aus dem Fly rausragen
     pRdr->DeleteCtrlStk();
     pRdr->pCtrlStck = pOldStck;
+
+    pRdr->DeleteAnchorStk();
+    pRdr->pAnchorStck = pOldAnchorStck;
 
     *pRdr->pPaM->GetPoint() = aTmpPos;
 
@@ -1211,12 +1310,84 @@ void SwWW8ImplReader::SetLastPgDeskIdx()
     }
 }
 
-
-SwPageDesc* SwWW8ImplReader::CreatePageDesc( SwPageDesc* pFirstPageDesc,
-                                             SwPaM** ppPaMWanted )
+class AttribHere : public std::unary_function<const xub_StrLen*, bool>
 {
-    ASSERT( pFirstPageDesc || ppPaMWanted, "!pFirstPageDesc but NO ppPaMWanted" );
+private:
+    xub_StrLen nPosition;
+public:
+    AttribHere(xub_StrLen nPos) : nPosition(nPos) {}
+    bool operator()(const xub_StrLen *pPosition) const
+    {
+        return (0 != (*pPosition == nPosition));
+    }
+};
 
+void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
+{
+    //If a paragraph ends in tabs and that paragraph has a tab at or beyond
+    //the right of the page then word has a bug where further use of tab will
+    //not wrap the paragraph around to the next page. We will, so we will
+    //remove these tabs ourselves.
+
+    //To be fair this is only a partial solution for the most common case of
+    //ending in redundant tabs. It is possible to have text after these flawed
+    //tabs which in word will not line wrap to the next page, and this
+    //solution will not fix that.
+    SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
+    const String &rStr = pTxt->GetTxt();
+    xub_StrLen nLen=rStr.Len();
+    //If we happen to end on a tab, something a well formed sentence shouldn't
+    //do :-), then go into strip mode.
+    if (nLen && rStr.GetChar(nLen-1) == '\x9')
+    {
+        std::vector<const xub_StrLen*> aLocs;
+        GetNoninlineNodeAttribs(pTxt,aLocs);
+        while (nLen)
+        {
+            if (rStr.GetChar(nLen-1) != '\x9')
+                break;
+            else
+            {
+                std::vector<const xub_StrLen*>::iterator aIter =
+                    std::find_if(aLocs.begin(),aLocs.end(),AttribHere(nLen-1));
+                if (aIter != aLocs.end())
+                    break;
+                else
+                    --nLen;
+            }
+        }
+        //We have some candidate tabs whose removal would not affect the
+        //document logically. Let us see if this is one of the buggy
+        //paragraphs that word would place all in one line, if so remove them
+        //to match word's layout.
+        if (xub_StrLen nDiff = rStr.Len() - nLen)
+        {
+            const SvxTabStopItem* pTabStop =
+                (const SvxTabStopItem*)GetFmtAttr(RES_PARATR_TABSTOP);
+            for (USHORT nI = pTabStop ? pTabStop->Count() : 0; nI--;)
+            {
+                if ((*pTabStop)[nI].GetTabPos() >= nPgWidth-nPgRight-nPgLeft)
+                {
+                    pPaM->SetMark();
+                    pPaM->GetMark()->nContent-=nDiff;
+                    pCtrlStck->Delete(*pPaM);
+                    rDoc.Delete(*pPaM);     //this frobs the mark
+                    pPaM->DeleteMark();
+                    break;
+                }
+            }
+        }
+    }
+
+    rDoc.AppendTxtNode(rPos);
+    //We can flush all anchored graphics at the end of a paragraph.
+    pAnchorStck->Flush();
+}
+
+SwPageDesc* SwWW8ImplReader::CreatePageDesc(SwPageDesc* pFirstPageDesc,
+    SwPaM** ppPaMWanted)
+{
+    ASSERT(pFirstPageDesc || ppPaMWanted, "!pFirstPageDesc but NO ppPaMWanted");
 
     BOOL bFollow = ( pFirstPageDesc != 0 );
     SwPageDesc* pNewPD;
@@ -1228,26 +1399,29 @@ SwPageDesc* SwWW8ImplReader::CreatePageDesc( SwPageDesc* pFirstPageDesc,
 
     // compose name of PageDescriptor
     USHORT nPageDescCount = rDoc.GetPageDescCnt();
-    nPos = rDoc.MakePageDesc( ViewShell::GetShellRes()->GetPageDescName(
-                                        nPageDescCount, FALSE, bFollow ),
-                        bFollow // && (pFirstPageDesc != &rDoc._GetPageDesc( 0 ))
-                        ? pFirstPageDesc
-                        : 0 );
+    nPos = rDoc.MakePageDesc(
+        ViewShell::GetShellRes()->GetPageDescName(nPageDescCount,FALSE,bFollow),
+        bFollow ? pFirstPageDesc : 0 );
+
     pNewPD = &rDoc._GetPageDesc( nPos );
 
-    if ( bFollow ){             // Dieser ist der folgende von pPageDesc
+    if (bFollow)
+    {
+        // Dieser ist der folgende von pPageDesc
         pFirstPageDesc->SetFollow( pNewPD );
         pNewPD->SetFollow( pNewPD );
     }
     else
-    {                       // setze PgDesc-Attr ins Doc
+    {
+        // setze PgDesc-Attr ins Doc
         if( bApo || bTxbxFlySection )
-        {               // PageDesc *muss* ausserhalb des Apo stehen
+        {
+            // PageDesc *muss* ausserhalb des Apo stehen
             if( pSFlyPara && pSFlyPara->pMainTextPos )
             {
                 SwPaM aMyPaM( *pSFlyPara->GetMainTextPos() );
                 if( 1 < nPageDescCount )
-                    rDoc.AppendTxtNode( *aMyPaM.GetPoint() );
+                    AppendTxtNode( *aMyPaM.GetPoint() );
                 SwFmtCol* pCol;
                 RemoveCols(  *pNewPD, pCol );
                 rDoc.Insert( aMyPaM, SwFmtPageDesc( pNewPD ) );
@@ -1265,7 +1439,7 @@ SwPageDesc* SwWW8ImplReader::CreatePageDesc( SwPageDesc* pFirstPageDesc,
         else
         {
             if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
-                rDoc.AppendTxtNode( *pPaM->GetPoint() );
+                AppendTxtNode( *pPaM->GetPoint() );
             SwFmtCol* pCol;
             RemoveCols(  *pNewPD, pCol );
             if( ppPaMWanted )
@@ -1628,7 +1802,7 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
                     if (pSet &&
                         (SFX_ITEM_ON == pSet->GetItemState(RES_PAGEDESC,FALSE)))
                     {
-                        rDoc.AppendTxtNode( *pPaM->GetPoint() );
+                        AppendTxtNode( *pPaM->GetPoint() );
                     }
                     else
                     {
@@ -1986,7 +2160,7 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
 
         if( bStartLine ) // Zeilenende
         {
-            rDoc.AppendTxtNode( *pPaM->GetPoint() );
+            AppendTxtNode( *pPaM->GetPoint() );
 
             if( ( nCrCount++ & 0x40 ) == 0          // alle 64 CRs aufrufen
                 && nType == MAN_MAINTEXT ){         // nicht fuer Header u. ae.
@@ -2029,7 +2203,7 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
                 if ( (nLastFlyNode == rPt.nNode.GetIndex())
                     || (0 < rPt.nContent.GetIndex()) )
                 {
-                    rDoc.AppendTxtNode( rPt );
+                    AppendTxtNode( rPt );
                 }
 
                 rDoc.Insert( *pPaM, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ) );
@@ -2060,6 +2234,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     nWantedVersion = nVersionPara;
     pCtrlStck   = 0;
     pRefStck = 0;
+    pAnchorStck = 0;
     pFonts          = 0;
     pSBase          = 0;
     pPlcxMan        = 0;
@@ -2153,6 +2328,8 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
         variables intstead.
     */
     pRefStck = new SwWW8FltRefStack(&rDoc, nFieldFlags);
+
+    pAnchorStck = new SwWW8FltAnchorStack(&rDoc, nFieldFlags);
 
     nPageDescOffset = rDoc.GetPageDescCnt();
 
@@ -2642,6 +2819,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
         DELETEZ( pWwFib );
     DeleteCtrlStk();
     DELETEZ(pFontSrcCharSets);
+    DeleteAnchorStk();
     DeleteRefStk();
 
     // set NoBallanced flag on last inserted section

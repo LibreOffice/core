@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-19 09:45:59 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,9 @@
 #ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
 #endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
@@ -324,8 +327,8 @@ BOOL SwWW8ImplReader::MakeUniqueGraphName( String& rName,
 
 // ReadGrafStart liest die ObjektDaten ein und erzeugt falls noetig einen Anker
 
-BOOL SwWW8ImplReader::ReadGrafStart( void* pData, short nDataSiz, WW8_DPHEAD* pHd,
-                             WW8_DO* pDo )
+BOOL SwWW8ImplReader::ReadGrafStart( void* pData, short nDataSiz,
+    WW8_DPHEAD* pHd, WW8_DO* pDo )
 {
     if( (INT16)SVBT16ToShort( pHd->cb )
         < (short)sizeof( WW8_DPHEAD ) + nDataSiz ){
@@ -335,7 +338,7 @@ BOOL SwWW8ImplReader::ReadGrafStart( void* pData, short nDataSiz, WW8_DPHEAD* pH
     }
     pStrm->Read( pData, nDataSiz );
 
-    RndStdIds eAnchor = ( SVBT8ToByte( pDo->by ) < 2 ) ? FLY_PAGE : FLY_AT_CNTNT;
+    RndStdIds eAnchor = (SVBT8ToByte( pDo->by ) < 2) ? FLY_PAGE : FLY_AT_CNTNT;
     if( (bIsHeader || bIsFooter) && (FLY_AT_CNTNT != eAnchor) )
     {
         eAnchor = FLY_AT_CNTNT;
@@ -343,8 +346,7 @@ BOOL SwWW8ImplReader::ReadGrafStart( void* pData, short nDataSiz, WW8_DPHEAD* pH
     }
 
     pDrawFmt->SetAttr( SwFmtAnchor(eAnchor) );
-    pCtrlStck->NewAttr( *pPaM->GetPoint(), SwFltAnchor( pDrawFmt ) );
-    pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_ANCHOR );
+    pAnchorStck->AddAnchor(*pPaM->GetPoint(), pDrawFmt);
 
     nDrawXOfs2 = nDrawXOfs;
     nDrawYOfs2 = nDrawYOfs;
@@ -505,25 +507,6 @@ void SwWW8ImplReader::InsertObj( SdrObject* pObj, short nWwHeight )
 
         pDrawPg->InsertObject( pObj, nDrawObjOfs + nPos );
         pDrawHeight->Insert( nWwHeight, nPos ); // Pflege WW-Height-Array mit
-
-            // Wenn es sich um seitengebundene Anker handelt, muss man noch
-            // ein Problem umpopeln: Da ich die Seitennummer nicht weiss,
-            // stecke ich den PaM stattdessen in den Anker. MA setzt das
-            // bei der Formatierung dann um. Bis die Formatierung beim Anker
-            // ist, liegen alle seitengebundenen Grafiken auf der 1. Seite,
-            // dann verschwinden sie.
-            // Abhilfe: AnkerPos initial weit auuserhalb des sichtbaren Bereiches
-            // stellen, nach der Formatierung korrigiert MA sie.
-            // schneller waere: ImpSetAnchor() statt NbcSetAnchor, allerdings
-            // muesste dann die Relative Pos aller Objekte um die Ankerpos
-            // korrigiert werden.
-
-/*
-        SwFmtAnchor aAnchor( FLY_AT_CNTNT );
-        aAnchor.SetAnchor( pPaM->GetPoint() );
-//      aFlySet.Put( aAnchor );
-        pDrawFmt->SetAttr( aAnchor );
-*/
 
         pObj->NbcSetAnchorPos( Point( USHRT_MAX, USHRT_MAX ) );
         pContact->ConnectToLayout( &pDrawFmt->GetAnchor() );
@@ -2489,7 +2472,21 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             }
         }
     }
-    return pRetFrmFmt;
+
+    return AutoAnchors(pRetFrmFmt);
+}
+
+SwFrmFmt *SwWW8ImplReader::AutoAnchors(SwFrmFmt *pFmt)
+{
+    /*
+     * anchored to character at the current position will move along the
+     * aragraph as text is added because we are at the insertion point.
+     *
+     * Leave to later and set the correct location then.
+     */
+    if ((pFmt) && (pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT))
+        pAnchorStck->AddAnchor(*pPaM->GetPoint(), pFmt);
+    return pFmt;
 }
 
 void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
@@ -2692,12 +2689,6 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             if( !rpOurNewObject->IsInserted() )
                 pDrawPg->InsertObject( rpOurNewObject );
         }
-
-        // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden,
-        // wird in fltshell.cxx beim Setzen des FltAnchor-Attributes
-        // pFlyFrm->MakeFrms() gerufen
-        if( FLY_IN_CNTNT != eAnchor )
-            pCtrlStck->NewAttr( *pPaM->GetPoint(), SwFltAnchor( pRetFrmFmt ) );
 
         // Box-0 erhaelt den Text fuer die ganze Kette!
         if( !pRecord->aTextId.nSequence )
@@ -2917,4 +2908,53 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
     }
 }
 
+void SwWW8ImplReader::GetNoninlineNodeAttribs(const SwTxtNode *pNode,
+    std::vector<const xub_StrLen*> &rPositions)
+{
+    USHORT nSize = pAnchorStck->Count();
+    while (nSize)
+    {
+        const SwFltStackEntry* pEntry = (*pAnchorStck)[--nSize];
+        if (pEntry->nMkNode == pNode->GetIndex()-1)
+        {
+            if (pEntry->pAttr->Which() == RES_FLTR_ANCHOR)
+            {
+                const SwFrmFmt* pFmt=((SwFltAnchor*)pEntry->pAttr)->GetFrmFmt();
+                RndStdIds eAnchor = pFmt->GetAnchor().GetAnchorId();
+                if (eAnchor == FLY_AT_CNTNT || eAnchor == FLY_AUTO_CNTNT)
+                    rPositions.push_back(&pEntry->nMkCntnt);
+            }
+            else
+                rPositions.push_back(&pEntry->nMkCntnt);
+        }
+    }
 
+    nSize = pRefStck->Count();
+    while (nSize)
+    {
+        const SwFltStackEntry* pEntry = (*pRefStck)[--nSize];
+        if (pEntry->nMkNode == pNode->GetIndex()-1)
+            rPositions.push_back(&pEntry->nMkCntnt);
+    }
+
+}
+
+void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrmFmt *pFmt)
+{
+    ASSERT(pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT,
+        "Don't use fltanchors with inline frames, slap!");
+    NewAttr(rPos, SwFltAnchor(pFmt));
+}
+
+void SwWW8FltAnchorStack::Flush()
+{
+    USHORT nCnt = Count();
+    for (USHORT i=0; i < nCnt; i++)
+    {
+        SwFltStackEntry *pEntry = (*this)[i];
+        SwPosition aDummy(pEntry->nMkNode);
+        SetAttrInDoc(aDummy,pEntry);
+        DeleteAndDestroy(i);
+        i--; nCnt--;
+    }
+}
