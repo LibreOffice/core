@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-26 12:55:12 $
+ *  last change: $Author: dvo $ $Date: 2002-06-19 13:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -173,6 +176,7 @@ struct SwTextSectionProperties_Impl
     SwFmtEndAtTxtEnd* pEndItem;
     SvXMLAttrContainerItem *pXMLAttr;
     SwFmtNoBalancedColumns *pNoBalanceItem;
+    SvxFrameDirectionItem *pFrameDirItem;
     sal_Bool    bDDE;
     sal_Bool    bHidden;
     sal_Bool    bCondHidden;
@@ -190,6 +194,7 @@ struct SwTextSectionProperties_Impl
         pEndItem(0),
         pXMLAttr(0),
         pNoBalanceItem(0),
+        pFrameDirItem(0),
         bUpdateType(sal_True){}
 
     ~SwTextSectionProperties_Impl()
@@ -200,6 +205,7 @@ struct SwTextSectionProperties_Impl
         delete pEndItem;
         delete pXMLAttr;
         delete pNoBalanceItem;
+        delete pFrameDirItem;
     }
 };
 /* -----------------------------11.07.00 12:10--------------------------------
@@ -393,7 +399,7 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
         SfxItemSet aSet(pDoc->GetAttrPool(),
                     RES_COL, RES_COL,
                     RES_BACKGROUND, RES_BACKGROUND,
-                    RES_FTN_AT_TXTEND, RES_COLUMNBALANCE,
+                    RES_FTN_AT_TXTEND, RES_FRAMEDIR,
                     RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER,
                     0);
             if(pProps->pBrushItem)
@@ -408,6 +414,8 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
                 aSet.Put(*pProps->pXMLAttr);
             if(pProps->pNoBalanceItem)
                 aSet.Put(*pProps->pNoBalanceItem);
+            if(pProps->pFrameDirItem)
+                aSet.Put(*pProps->pFrameDirItem);
 
         // section password
         if (pProps->aPassword.getLength() > 0)
@@ -755,6 +763,12 @@ void SwXTextSection::setPropertyValues(
                                     pProps->pNoBalanceItem= new SwFmtNoBalancedColumns( RES_COLUMNBALANCE );
                                 pPutItem = pProps->pNoBalanceItem;
                             }
+                            else if(RES_FRAMEDIR == pMap->nWID)
+                            {
+                                if(!pProps->pFrameDirItem)
+                                    pProps->pFrameDirItem = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
+                                pPutItem = pProps->pFrameDirItem;
+                            }
                             if(pPutItem)
                                 pPutItem->PutValue(pValues[nProperty], pMap->nMemberId);
                         }
@@ -1030,6 +1044,12 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                                 if(!pProps->pNoBalanceItem)
                                     pProps->pNoBalanceItem= new SwFmtNoBalancedColumns;
                                 pQueryItem = pProps->pNoBalanceItem;
+                            }
+                            else if(RES_FRAMEDIR == pMap->nWID)
+                            {
+                                if(!pProps->pFrameDirItem)
+                                    pProps->pFrameDirItem = new SvxFrameDirectionItem;
+                                pQueryItem = pProps->pFrameDirItem;
                             }
                             if(pQueryItem)
                                 pQueryItem->QueryValue(pRet[nProperty], pMap->nMemberId);
