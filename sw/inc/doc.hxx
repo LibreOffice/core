@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:27:32 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,6 +1493,15 @@ public:
                      sal_Bool bSetAbsLSpace = sal_True,
                      sal_Bool bCalledFromShell = sal_False );
         // ab hier neu starten lassen oder den Start wieder aufheben
+
+    /**
+       Replace numbering rules in a PaM by another numbering rule.
+
+       \param rPaM         PaM to replace the numbering rules in
+       \param rNumRule     numbering rule to replace the present numbering rules
+     */
+    void ReplaceNumRule(const SwPaM & rPaM, const SwNumRule & rNumRule);
+
     void SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag = sal_True );
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt = USHRT_MAX );
 
@@ -1522,10 +1531,20 @@ public:
                         sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
 
     // #i23731#
+    /**
+       Searches for a text node with a numbering rule.
+
+       \param rPos         position to start search
+       \param bForward     - TRUE:  search forward
+                           - FALSE: search backward
+       \param bNum         - TRUE:  search for non-outline numbering rule
+                           - FALSE: search for outline numbering rule
+       \param nNonEmptyAllowed   number of non-empty paragraphs allowed between
+                                 rPos and found paragraph
+     */
     const SwNumRule * SearchNumRule(SwPosition & rPos,
                                     BOOL bForward,
                                     BOOL bNum,
-                                    BOOL bOutline,
                                     int nNonEmptyAllowed);
 
         // Absaetze ohne Numerierung, aber mit Einzuegen
