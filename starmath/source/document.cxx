@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:42:11 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,9 @@
 #include <mathml.hxx>
 #endif
 
+#include <smdll.hxx>
+
+#include <sfx2/fcontnr.hxx>
 
 
 using namespace ::com::sun::star;
@@ -279,30 +282,90 @@ SFX_IMPL_INTERFACE(SmDocShell, SfxObjectShell, SmResId(0))
 {
     SFX_POPUPMENU_REGISTRATION(SmResId(RID_VIEWMENU));
     SFX_POPUPMENU_REGISTRATION(SmResId(RID_COMMANDMENU));
-//    SFX_OBJECTBAR_REGISTRATION(
-//        SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
-//        SmResId(RID_DEFAULTTOOLBOX));
 }
 
-#if 0
-SFX_IMPL_OBJECTFACTORY(SmDocShell, SFXOBJECTSHELL_STD_NORMAL, smath, SvGlobalName(SO3_SM_CLASSID_50) )
+SFX_IMPL_OBJECTFACTORY(SmDocShell, SFXOBJECTSHELL_STD_NORMAL, smath, SvGlobalName(SO3_SM_CLASSID) )
+/*
+SotFactory * SmDocShell::ClassFactory()
 {
-   SFX_SIMPLE_FILTER_REGISTRATION( C2S("StarMath 5.0"), C2S("*.smf"),
-                           SFX_FILTER_OWN | SFX_FILTER_IMPORT | SFX_FILTER_EXPORT,
-                           SOT_FORMATSTR_ID_STARMATH_50,
-                           C2S("SVsm0.smf"), C2S("OS2"), 0, C2S("0"), String());
+    SotFactory **ppFactory = GetFactoryAdress();
+    if( !*ppFactory )
+    {
+        *ppFactory = new SfxObjectFactory( SvGlobalName(SO3_SM_CLASSID),
+            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "SmDocShell" ) ),
+                                SmDocShell::CreateInstance );
+        (*ppFactory)->PutSuperClass( SfxInPlaceObject::ClassFactory() );
+    }
+    return *ppFactory;
+}
+void * __EXPORT SmDocShell::CreateInstance( SotObject ** ppObj )
+{
+    SmDocShell * p = new SmDocShell();
+    SfxInPlaceObject* pSfxInPlaceObject = p;
+    SotObject* pBasicObj = pSfxInPlaceObject;
+    if( ppObj )
+        *ppObj = pBasicObj;
+    return p;
+}
+const SotFactory * __EXPORT SmDocShell::GetSvFactory() const
+{
+    return ClassFactory();
+}
+void * __EXPORT SmDocShell::Cast( const SotFactory * pFact )
+{
+    void * pRet = NULL;
+    if( !pFact || pFact == ClassFactory() )
+        pRet = this;
+    if( !pRet )
+        pRet = SfxInPlaceObject::Cast( pFact );
+    return pRet;
+}
 
-//JP 13.06.00: das fehlt vwohl noch, oder??
-//  SfxObjectFactory& rFactory = (SfxObjectFactory&)Factory();
-//  SfxFactoryFilterContainer *pFltContainer = rFactory.GetFilterContainer( FALSE );
-//  rFactory.GetFilterContainer()->SetDetectFilter( &SmDLL::DetectFilter );
+        SfxObjectFactory* SmDocShell::pObjectFactory = 0;
+
+        SfxObjectShell* __EXPORT SmDocShell::CreateObject(SfxObjectCreateMode eMode)
+        {
+            SfxObjectShell* pDoc = new SmDocShell(eMode);
+            return pDoc;
+        }
+        SfxObjectFactory& __EXPORT SmDocShell::GetFactory() const
+        {
+            return Factory();
+        }
+        void __EXPORT SmDocShell::RegisterFactory( USHORT nPrio )
+        {
+            Factory().Construct(
+                nPrio,
+                &SmDocShell::CreateObject, SFXOBJECTSHELL_STD_NORMAL | SFXOBJECTSHELL_HASMENU,
+                "smath" );
+            Factory().RegisterInitFactory( &InitFactory );
+            Factory().Register();
+        }
+        BOOL SmDocShell::DoInitNew( SvStorage *pStor )
+        { return SfxObjectShell::DoInitNew(pStor); }
+
+        BOOL SmDocShell::DoClose()
+        { return SfxInPlaceObject::DoClose(); }
+
+        BOOL SmDocShell::Close()
+        {   SvObjectRef aRef(this);
+            SfxInPlaceObject::Close();
+            return SfxObjectShell::Close(); }
+
+        void SmDocShell::ModifyChanged()
+        { SfxObjectShell::ModifyChanged(); }
+
+        void __EXPORT SmDocShell::InitFactory()
+*/
+{
+    SfxObjectFactory& rFactory = (SfxObjectFactory&)Factory();
+    SfxFilterContainer *pFltContainer = rFactory.GetFilterContainer( FALSE );
+    //rFactory.GetFilterContainer()->SetDetectFilter( &SmDLL::DetectFilter );
 
    // FG: Sonst gibts keine Hilfe im Math  #38447#
    Factory().RegisterHelpFile (C2S("smath.svh"));
+   Factory().SetDocumentServiceName( String::CreateFromAscii("com.sun.star.formula.FormulaProperties") );
 }
-#else
-SFX_IMPL_OBJECTFACTORY_DLL(SmDocShell, smath, SvGlobalName(SO3_SM_CLASSID), Sm);
-#endif
 
 void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
                     const SfxHint& rHint, const TypeId&)
@@ -1395,7 +1458,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
     case SID_INSERT_FORMULA:
         {
             SfxMedium *pMedium = SFX_APP()->
-                    InsertDocumentDialog( 0, SmDocShell::Factory() );
+                    InsertDocumentDialog( 0, GetFactory().GetFactoryName() );
 
             if (pMedium != NULL)
             {
