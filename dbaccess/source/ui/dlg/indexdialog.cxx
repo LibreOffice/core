@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:23:02 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 05:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,7 @@ namespace dbaui
         // save the changes made 'til here
         // Upon leaving the edit mode, the control will be re-initialized with the
         // settings from the current entry
-        implSaveModified();
+        implSaveModified(sal_False);
 
         m_aIndexes.EditEntry(pSelected);
         updateToolbox();
@@ -566,25 +566,30 @@ namespace dbaui
     {
         // the currently selected entry
         const SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
-        DBG_ASSERT(pSelected, "DbaIndexDialog::OnCloseDialog: invalid call!");
         DBG_ASSERT(pSelected == m_pPreviousSelection, "DbaIndexDialog::OnCloseDialog: inconsistence!");
 
-        // the descriptor
-        OIndexCollection::const_iterator aSelected = static_cast<OIndexCollection::const_iterator>(pSelected->GetUserData());
-        if (aSelected->isModified() || aSelected->isNew())
+        sal_Int32 nResponse = RET_NO;
+        if (pSelected)
         {
-            QueryBox aQuestion(this, ModuleRes(QUERY_SAVE_CURRENT_INDEX));
-            switch (aQuestion.Execute())
+            // the descriptor
+            OIndexCollection::const_iterator aSelected = static_cast<OIndexCollection::const_iterator>(pSelected->GetUserData());
+            if (aSelected->isModified() || aSelected->isNew())
             {
-                case RET_YES:
-                    if (!implCommitPreviouslySelected())
-                        return 1;
-                    break;
-                case RET_NO:
-                    break;
-                default:
-                    return 1L;
+                QueryBox aQuestion(this, ModuleRes(QUERY_SAVE_CURRENT_INDEX));
+                nResponse = aQuestion.Execute();
             }
+        }
+
+        switch (nResponse)
+        {
+            case RET_YES:
+                if (!implCommitPreviouslySelected())
+                    return 1L;
+                break;
+            case RET_NO:
+                break;
+            default:
+                return 1L;
         }
 
         EndDialog(RET_OK);
@@ -618,7 +623,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    sal_Bool DbaIndexDialog::implSaveModified()
+    sal_Bool DbaIndexDialog::implSaveModified(sal_Bool _bPlausibility)
     {
         if (m_pPreviousSelection)
         {
@@ -640,13 +645,45 @@ namespace dbaui
             if (m_pFields->GetSavedValue() != aPreviouslySelected->aFields)
                 aPreviouslySelected->setModified(sal_True);
 
-            // check for correctness
-            if (0 == aPreviouslySelected->aFields.size())
+            // plausibility checks
+            if (_bPlausibility && !implCheckPlausibility(aPreviouslySelected))
+                return sal_False;
+        }
+
+        return sal_True;
+    }
+
+    //------------------------------------------------------------------
+    sal_Bool DbaIndexDialog::implCheckPlausibility(const ConstIndexesIterator& _rPos)
+    {
+        // need at least one field
+        if (0 == _rPos->aFields.size())
+        {
+            ErrorBox aError(this, ModuleRes(ERR_NEED_INDEX_FIELDS));
+            aError.Execute();
+            m_pFields->GrabFocus();
+            return sal_False;
+        }
+
+        // no double fields
+        DECLARE_STL_STDKEY_SET( String, StringBag );
+        StringBag aExistentFields;
+        for (   ConstIndexFieldsIterator aFieldCheck = _rPos->aFields.begin();
+                aFieldCheck != _rPos->aFields.end();
+                ++aFieldCheck
+            )
+        {
+            if (aExistentFields.end() != aExistentFields.find(aFieldCheck->sFieldName))
             {
-                ErrorBox aError(this, ModuleRes(ERR_NEED_INDEX_FIELDS));
+                // a column is specified twice ... won't work anyway, so prevent this here and now
+                String sMessage(ModuleRes(STR_INDEXDESIGN_DOUBLE_COLUMN_NAME));
+                sMessage.SearchAndReplaceAscii("$name$", aFieldCheck->sFieldName);
+                ErrorBox aError(this, WB_OK, sMessage);
                 aError.Execute();
+                m_pFields->GrabFocus();
                 return sal_False;
             }
+            aExistentFields.insert(aFieldCheck->sFieldName);
         }
 
         return sal_True;
@@ -757,6 +794,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/16 16:23:02  fs
+ *  initial checkin - index design dialog and friends
+ *
  *
  *  Revision 1.0 07.03.01 12:16:06  fs
  ************************************************************************/
