@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:36:53 $
+#   last change: $Author: vg $ $Date: 2003-04-02 13:05:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ PRJNAME=tools
 TARGET=addexes2
 TARGETTYPE=CUI
 TARGETTHREAD=MT
-NO_DEFAULT_STL=TRUE
+#NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -76,7 +76,7 @@ NO_DEFAULT_STL=TRUE
 
 APP3TARGET=	mkunroll
 APP3OBJS=   $(OBJ)$/mkfilt.obj
-APP3STDLIBS=$(TOOLSLIB) 
+APP3STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB) 
 .IF "$(OS)"=="LINUX"
 APP3STDLIBS+=-lpthread
 .ENDIF
