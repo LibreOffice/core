@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VclContainerEvent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:45 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,24 +76,18 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::VclContainerEvent
-/** specifies a container-level event.
+/** specifies a container event.
 
+    <p>These events are provided <strong>only</strong> for notification
+    purposes.</p>
 
-
-    <p>These events are provided <strong>only</strong>
-    for notification purposes.
-
-    </p>@see VclContainerListener
+    @see XVclContainerListener
  */
 struct VclContainerEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: field com::sun::star::awt::VclContainerEvent::Child
-    /** @returns
-                whether the event is fired due to a child component
-                that was added or removed.
+    /** returns the child component that was added or removed.
      */
     com::sun::star::uno::XInterface Child;
 
