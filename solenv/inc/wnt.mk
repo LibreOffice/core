@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-07 14:17:33 $
+#   last change: $Author: avy $ $Date: 2001-08-07 15:04:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -269,6 +269,12 @@ CC+= /NMttNoLines
 #.IF"$(bndchk)"==""
 .IF "$(COMEX)"=="3" || "$(COMEX)"=="7" 
 CFLAGS+=-Zm200
+.ENDIF
+#.ENDIF
+
+#.IF"$(bndchk)"==""
+.IF "$(COMEX)"=="8"
+CFLAGS+=-Zm500
 .ENDIF
 #.ENDIF
 
