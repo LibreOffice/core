@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:17:20 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,23 +90,27 @@ module com {  module sun {  module star {  module sheet {
 /** The accessible view of a spreadsheet document
 
      @since #107627#
-
- */
+*/
 service AccessibleSpreadsheet
 {
     /** This interface gives access to any object in the currently visible table
         on the desktop.
 
     <ul>
-        <li>The parent returned by <type>getAccessibleParent</type>
+        <li>The parent returned by <method scope="::com::sun::star::accessibility"
+            >XAccessibleContext::getAccessibleParent</method>
             is the accessible spreadsheet document view.</li>
-        <li>The children returned by <type>getAccessibleChild</type> all
+        <li>The children returned by <method scope="::com::sun::star::accessibility"
+            >XAccessibleContext::getAccessibleChild</method> all
             support the interface XAccessible. Calling
-            <type>getAccessibleContext</type> for these children returns
-            an object that supports the following service.</li>
+            <method scope="::com::sun::star::accessibility"
+            >XAccessible::getAccessibleContext</method> for these children
+            returns an object that supports the following service.</li>
         <ul>
-            <li><type>com.sun.star.table.AccessibleCell</type>:
-                A child where calling <type>getAccessibleChild</type>
+            <li><type scope="::com::sun::star::sheet">AccessibleCell</type>:
+                A child where calling
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleChild</method>
                 an object that supports this service is returned for
                 every cell in this table.</li>
         </ul>
@@ -120,25 +124,41 @@ service AccessibleSpreadsheet
         </ul>
         <li>The description is ???.</li>
         <li>The name is the given table name.</li>
-        <li>The role is <type>TABLE</type></li>
+        <li>The role is <const scope="::com::sun::star::accessibility"
+            >AccessibleRole::TABLE</const></li>
         <li>There are relations between the table and the shapes with an anchor
             on this table (not with an anchor on a cell in this table).</li>
         <li>The following states are supported:
             <ul>
-                <li><type>DEFUNC</type> is always false if the table is not
-                    deleted and the document is open, otherwise it is true.</li>
-                <li><type>EDITABLE</type> is false if the table is protected,
-                    otherwise it is true.</li>
-                <li><type>ENABLED</type> is always true.</li>
-                <li><type>MULTISELECTABLE</type> is always true.</li>
-                <li><type>OPAQUE</type> is always true.</li>
-                <li><type>RESIZEABLE</type>is always false.</li>
-                <li><type>SELECTABLE</type> is always true.</li>
-                <li><type>SELECTED</type> is true if the complete table (all
-                    cells) is selected.</li>
-                <li><type>SHOWING</type>Is true if the Bounding Box lies in
-                    the Bounding Box of the parent. Otherwise it is false.</li>
-                <li><type>VISIBLE</type>Is always true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::DEFUNC</const> is always false if the
+                    table is not deleted and the document is open, otherwise it
+                    is true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::EDITABLE</const> is false if the
+                    table is protected, otherwise it is true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::ENABLED</const> is always true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::MULTI_SELECTABLE</const> is always
+                    true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::OPAQUE</const> is always true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::RESIZEABLE</const>is always
+                    false.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SELECTABLE</const> is always
+                    true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SELECTED</const> is true if the
+                    complete table (all cells) is selected.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SHOWING</const>Is true if the
+                    Bounding Box lies in the Bounding Box of the parent.
+                    Otherwise it is false.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::VISIBLE</const>Is always true.</li>
             </ul>
         </li>
     </ul>
