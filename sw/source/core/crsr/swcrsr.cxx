@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:28:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1730,28 +1730,8 @@ FASTBOOL SwCursor::LeftRightMargin( BOOL bLeft, BOOL bAPI )
     if ( pFrm )
         SetCrsrBidiLevel( pFrm->IsRightToLeft() ? 1 : 0 );
 
-    // #i27615# Manage cursor in front of label.
-    if (pFrm)
-    {
-        if (bLeft)
-        {
-            FASTBOOL bWasAtLeftMargin = IsAtLeftRightMargin(TRUE, bAPI);
-            bRet = pFrm->LeftMargin( this );
-
-            const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
-            if (! bAPI && bWasAtLeftMargin && pTxtNd && pTxtNd->IsNumbered() )
-                SetInFrontOfLabel(TRUE);
-        }
-        else
-        {
-            bRet = pFrm->RightMargin( this, bAPI );
-
-            if (! bAPI )
-                SetInFrontOfLabel(FALSE);
-        }
-    }
-
-    return bRet;
+    return pFrm && (bLeft ? pFrm->LeftMargin( this ) :
+                            pFrm->RightMargin( this, bAPI ) );
 }
 
 FASTBOOL SwCursor::IsAtLeftRightMargin( BOOL bLeft, BOOL bAPI ) const
