@@ -73,10 +73,6 @@ interface StarImpress : Module
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-
-    SID_ATTR_AUTO_COLOR_INVALID
-    [
-    ]
 }
 
 shell SdModule
