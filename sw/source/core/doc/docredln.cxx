@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:51:17 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,21 +130,38 @@
 
 #else
 
+#define _ERROR_PREFIX "redline table corrupted: "
+
     // helper function for lcl_CheckRedline
-    // make sure that pPos->nContent points into pPos->nNode
-    // (or into the 'special' no-content-node-IndexReg)
+    // 1. make sure that pPos->nContent points into pPos->nNode
+    //    (or into the 'special' no-content-node-IndexReg)
+    // 2. check that position is valid and doesn't point behind text
     void lcl_CheckPosition( const SwPosition* pPos )
     {
         SwPosition aComparePos( *pPos );
         aComparePos.nContent.Assign(
             aComparePos.nNode.GetNode().GetCntntNode(), 0 );
-        ASSERT( pPos->nContent.GetIdxReg() == aComparePos.nContent.GetIdxReg(),
-                "redline table corrupted: illegal position" );
+        DBG_ASSERT( pPos->nContent.GetIdxReg() ==
+                    aComparePos.nContent.GetIdxReg(),
+                    _ERROR_PREFIX "illegal position" );
+
+        SwTxtNode* pTxtNode = pPos->nNode.GetNode().GetTxtNode();
+        if( pTxtNode == NULL )
+        {
+            DBG_ASSERT( pPos->nContent == 0,
+                        _ERROR_PREFIX "non-text-node with content" );
+        }
+        else
+        {
+            DBG_ASSERT( pPos->nContent >= 0  &&
+                        pPos->nContent <= pTxtNode->Len(),
+                        _ERROR_PREFIX "index behind text" );
+        }
     }
 
     void lcl_CheckPam( const SwPaM* pPam )
     {
-        ASSERT( pPam != NULL, "illegal argument" );
+        DBG_ASSERT( pPam != NULL, _ERROR_PREFIX "illegal argument" );
         lcl_CheckPosition( pPam->GetPoint() );
         lcl_CheckPosition( pPam->GetMark() );
     }
@@ -162,9 +179,9 @@
         for( USHORT j = 0; j < rTbl.Count(); ++j )
         {
             // check for empty redlines
-            ASSERT( ( *(rTbl[j]->GetPoint()) != *(rTbl[j]->GetMark()) ) ||
-                    ( rTbl[j]->GetContentIdx() != NULL ),
-                    "redline table corrupted: empty redline" );
+            DBG_ASSERT( ( *(rTbl[j]->GetPoint()) != *(rTbl[j]->GetMark()) ) ||
+                        ( rTbl[j]->GetContentIdx() != NULL ),
+                        _ERROR_PREFIX "empty redline" );
          }
 
         // verify proper redline sorting
@@ -174,12 +191,12 @@
             const SwRedline* pCurrent = rTbl[ n ];
 
             // check redline sorting
-            ASSERT( *pPrev->Start() <= *pCurrent->Start(),
-                    "redline table corrupted: not sorted correctly" );
+            DBG_ASSERT( *pPrev->Start() <= *pCurrent->Start(),
+                        _ERROR_PREFIX "not sorted correctly" );
 
             // check for overlapping redlines
-            ASSERT( *pPrev->End() <= *pCurrent->Start(),
-                    "redline table corrupted: overlapping redlines" );
+            DBG_ASSERT( *pPrev->End() <= *pCurrent->Start(),
+                        _ERROR_PREFIX "overlapping redlines" );
         }
     }
 
