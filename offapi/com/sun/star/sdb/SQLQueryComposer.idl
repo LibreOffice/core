@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLQueryComposer.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #endif
 
  module com {  module sun {  module star {  module sdbcx {
-interface XTablesSupplier;
-interface XColumnsSupplier;
+ published interface XTablesSupplier;
+ published interface XColumnsSupplier;
 };};};};
 
  module com {  module sun {  module star {  module sdb {
@@ -83,7 +83,7 @@ interface XColumnsSupplier;
     criteria.
     </p>
  */
-service SQLQueryComposer
+published service SQLQueryComposer
 {
 
     // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::SQLQueryComposer: interface com::sun::star::sdbcx::com::sun::star::sdb::XSQLQueryComposer
