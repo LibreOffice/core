@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-08 17:45:03 $
+ *  last change: $Author: nn $ $Date: 2001-01-16 13:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2758,6 +2758,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
 
             ScMarkData aMarkData;
             aMarkData.MarkFromRangeList( aNewRanges, FALSE );
+            aMarkData.MarkToMulti();        // needed for IsAllMarked
 
             ULONG nCount = aNewRanges.Count();
             for (USHORT nR=0; nR<nCount; nR++)
@@ -2813,6 +2814,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
 
             ScMarkData aMarkData;
             aMarkData.MarkFromRangeList( aNewRanges, FALSE );
+            aMarkData.MarkToMulti();        // needed for IsAllMarked
 
             USHORT nTab = lcl_FirstTab(aNewRanges);                 //! alle Tabellen
 
@@ -3329,12 +3331,32 @@ BOOL lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
                             const ScRangeList& rRanges, ScDocShell* pDocSh,
                             const String& rName, ScRange& rFound )
 {
+    //  exact range in list?
+
     ULONG nIndex = 0;
     if ( lcl_FindRangeByName( rRanges, pDocSh, rName, nIndex ) )
     {
         rFound = *rRanges.GetObject(nIndex);
         return TRUE;
     }
+
+    //  range contained in selection? (sheet must be specified)
+
+    ScRange aCellRange;
+    USHORT nParse = aCellRange.ParseAny( rName, pDocSh->GetDocument() );
+    if ( ( nParse & ( SCA_VALID | SCA_TAB_3D ) ) == ( SCA_VALID | SCA_TAB_3D ) )
+    {
+        ScMarkData aMarkData;
+        aMarkData.MarkFromRangeList( rRanges, FALSE );
+        aMarkData.MarkToMulti();        // needed for IsAllMarked
+        if ( aMarkData.IsAllMarked( aCellRange ) )
+        {
+            rFound = aCellRange;
+            return TRUE;
+        }
+    }
+
+    //  named entry in this object?
 
     if ( rNamedEntries.Count() )
     {
@@ -3346,6 +3368,7 @@ BOOL lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
                 const ScRange& rComp = rNamedEntries[n]->GetRange();
                 ScMarkData aMarkData;
                 aMarkData.MarkFromRangeList( rRanges, FALSE );
+                aMarkData.MarkToMulti();        // needed for IsAllMarked
                 if ( aMarkData.IsAllMarked( rComp ) )
                 {
                     rFound = rComp;
