@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aspects.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:21:51 $
+ *  last change: $Author: rt $ $Date: 2004-01-06 08:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,6 @@ constants Aspects
     /** Print preview representation.
      */
     const hyper MSASPECT_DOCPRINT = 8;
-
-    /** Represents easy to clip parts of an object.
-     */
-    const hyper MSASPECT_OPAQUE = 16;
-
-    /** Represents transparent parts of the object.
-     */
-    const hyper MSASPECT_TRANSPARENT = 32;
 
 };
 
