@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:14:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,7 @@ namespace xmloff
     //= OFormLayerXMLImport_Impl
     //=====================================================================
     class OFormLayerXMLImport_Impl
-                :public OAttributeMetaData
-                ,public IControlIdMap
+                :public IControlIdMap
                 ,public IFormsImportContext
                 ,public ODefaultEventAttacherManager
     {
@@ -250,65 +249,4 @@ namespace xmloff
 //.........................................................................
 
 #endif // _XMLOFF_FORMS_LAYERIMPORT_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.12.66.1  2004/06/08 14:49:18  mib
- *  - #i20153#: form controls
- *
- *  Revision 1.12  2003/12/01 12:04:46  rt
- *  INTEGRATION: CWS geordi2q09 (1.11.24); FILE MERGED
- *  2003/11/24 15:19:46 obo 1.11.24.2: undo last change
- *  2003/11/21 17:04:39 obo 1.11.24.1: #111934# join CWS comboboxlink
- *
- *  Revision 1.11.24.2  2003/11/24 15:19:46  obo
- *  undo last change
- *
- *  Revision 1.11  2003/10/21 08:40:18  obo
- *  INTEGRATION: CWS formcelllinkage (1.10.160); FILE MERGED
- *  2003/10/01 09:55:23 fs 1.10.160.1: #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.10.160.1  2003/10/01 09:55:23  fs
- *  #i18994# merging the changes from the CWS fs002
- *
- *  Revision 1.10.156.1  2003/09/25 14:28:41  fs
- *  #18994# merging the changes from cws_srx645_fs002 branch
- *
- *  Revision 1.10.152.1  2003/09/17 12:26:56  fs
- *  #18999# #19367# persistence for cell value and cell range bindings
- *
- *  Revision 1.10  2002/10/25 13:17:04  fs
- *  #104402# importing grid column styles now
- *
- *  Revision 1.9  2001/05/28 14:59:18  fs
- *  #86712# added control number style related functionality
- *
- *  Revision 1.8  2001/03/20 13:39:58  fs
- *  #83970# +createOfficeFormsContext
- *
- *  Revision 1.7  2001/02/01 09:46:47  fs
- *  no own style handling anymore - the shape exporter is responsible for our styles now
- *
- *  Revision 1.6  2001/01/24 09:34:40  fs
- *  +enter-/leaveEventContext
- *
- *  Revision 1.5  2001/01/02 15:58:22  fs
- *  event ex- & import
- *
- *  Revision 1.4  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.3  2000/12/13 10:40:15  fs
- *  new import related implementations - at this version, we should be able to import everything we export (which is all except events and styles)
- *
- *  Revision 1.2  2000/12/12 12:01:05  fs
- *  new implementations for the import - still under construction
- *
- *  Revision 1.1  2000/12/06 17:31:42  fs
- *  initial checkin - implementations for formlayer import/export - still under construction
- *
- *
- *  Revision 1.0 04.12.00 15:48:40  fs
- ************************************************************************/
 
