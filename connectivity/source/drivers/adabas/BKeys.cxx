@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:06 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 10:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,12 @@ Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
                     sName += aDot;
                 sName += xRow->getString(3);
                 sal_Int32 nUpdateRule = xRow->getInt(10);
+                if(xRow->wasNull())
+                    nUpdateRule = KeyRule::NO_ACTION;
+
                 sal_Int32 nDeleteRule = xRow->getInt(11);
+                if(xRow->wasNull())
+                    nDeleteRule = KeyRule::NO_ACTION;
                 if(xRow->getString(12) == _rName)
                 {
                     OAdabasKey* pRet = new OAdabasKey(m_pTable,_rName,sName,KeyType::FOREIGN,nUpdateRule,nDeleteRule);
