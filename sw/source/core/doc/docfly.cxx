@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:32:15 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,8 +873,22 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 SetAttr( aNewAnch, *pContact->GetFmt() );
                 if ( _bPosCorr )
                 {
-                    static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ))
+                    // --> OD 2004-08-24 #i33313# - consider not connected
+                    // 'virtual' drawing objects
+                    if ( pObj->ISA(SwDrawVirtObj) &&
+                         !static_cast<SwDrawVirtObj*>(pObj)->IsConnected() )
+                    {
+                        SwRect aNewObjRect( aObjRect );
+                        static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj())
+                                        ->AdjustPositioningAttr( pNewAnchorFrm,
+                                                                 &aNewObjRect );
+
+                    }
+                    else
+                    {
+                        static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ))
                                     ->AdjustPositioningAttr( pNewAnchorFrm );
+                    }
                 }
             }
 
