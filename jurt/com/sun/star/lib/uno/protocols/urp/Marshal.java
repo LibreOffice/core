@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 16:53:16 $
+ *  last change: $Author: kr $ $Date: 2000-12-13 16:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,12 @@ class Marshal implements IMarshal {
     void writeSequence(Class zClass, Object object) throws Exception {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeSequence:" + zClass + " " + object);
 
-        int size = Array.getLength(object);
+        int size = 0;
+        if(object == null)
+            System.err.println("WARNING! writing null sequence as empty sequence");
+        else
+            size = Array.getLength(object);
+
         writeCompressedInt(size);
 
         zClass = zClass.getComponentType();
