@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-08 17:06:37 $
+#   last change: $Author: hjs $ $Date: 2001-06-20 18:34:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,6 @@ TARGET=so_berkeleydb
 
 TARFILE_NAME=db-3.2.9
 
-#neither use nor creation of patchfile supported yet.
 PATCH_FILE_NAME=db-3.2.9.patch
 
 .IF "$(GUI)"=="UNX"
