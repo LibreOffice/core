@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportSharedData.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:29:35 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 10:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,6 @@ class ScMySharedData
     ScMyShapesContainer*        pShapesContainer;
     sal_Int32                   nTableCount;
 public:
-    sal_Int32                   nProgressReference;
-    sal_Int32                   nProgressValue;
-    sal_Int32                   nProgressObjects;
-    sal_Int32                   nOldProgressValue;
-
     ScMySharedData(const sal_Int32 nTableCount);
     ~ScMySharedData();
 

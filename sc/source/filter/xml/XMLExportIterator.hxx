@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 08:35:44 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 10:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,7 @@ struct ScMyCell
     sal_Bool                    bIsEditCell : 1;
     sal_Bool                    bKnowWhetherIsEditCell : 1;
     sal_Bool                    bHasStringValue : 1;
+    sal_Bool                    bHasXText : 1;
 
     sal_Bool                    bIsMatrixBase : 1;
     sal_Bool                    bIsMatrixCovered : 1;

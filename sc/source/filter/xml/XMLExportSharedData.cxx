@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportSharedData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:29:35 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 10:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,6 @@ ScMySharedData::ScMySharedData(const sal_Int32 nTempTableCount) :
     pTableShapes(NULL),
     pDrawPages(NULL),
     pShapesContainer(NULL),
-    nProgressReference(0),
-    nProgressValue(0),
-    nProgressObjects(0),
-    nOldProgressValue(0),
     nTableCount(nTempTableCount)
 {
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 09:45:04 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 10:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,10 +551,6 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
     }
     if (!pSharedData)
         CreateSharedData(nTableCount);
-    pSharedData->nProgressObjects = nCellCount + nShapesCount + nTableCount;
-    pSharedData->nProgressReference = 2 * pSharedData->nProgressObjects;
-    pSharedData->nProgressValue = pSharedData->nProgressReference / 10;
-    pSharedData->nProgressReference += pSharedData->nProgressValue;
 }
 
 void ScXMLExport::CollectShapesAutoStyles(uno::Reference<sheet::XSpreadsheet>& xTable, const sal_Int32 nTable)
@@ -627,6 +623,7 @@ void ScXMLExport::CollectShapesAutoStyles(uno::Reference<sheet::XSpreadsheet>& x
                                         }
                                         else
                                             pSharedData->AddTableShape(nTable, nShape);
+                                        GetProgressBarHelper()->Increment();
                                     }
                                 }
                             }
@@ -646,8 +643,6 @@ void ScXMLExport::_ExportMeta()
     sal_Int32 nShapesCount(0);
     GetAutoStylePool()->ClearEntries();
     CollectSharedData(nTableCount, nShapesCount, nCellCount);
-    GetProgressBarHelper()->SetReference(pSharedData->nProgressReference);
-    GetProgressBarHelper()->SetValue(pSharedData->nProgressValue);
     rtl::OUStringBuffer sBuffer;
     if (nTableCount)
     {
@@ -664,7 +659,14 @@ void ScXMLExport::_ExportMeta()
         GetMM100UnitConverter().convertNumber(sBuffer, nShapesCount);
         AddAttribute(XML_NAMESPACE_META, sXML_object_count, sBuffer.makeStringAndClear());
     }
-    SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, sXML_document_statistic, sal_True, sal_True);
+    {
+        SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, sXML_document_statistic, sal_True, sal_True);
+    }
+    sal_Int32 nRef(nCellCount + (2 * nTableCount) + (2 * nShapesCount));
+    sal_Int32 nValue = 5;
+    nRef += nValue;
+    GetProgressBarHelper()->SetReference(nRef);
+    GetProgressBarHelper()->SetValue(nValue);
 }
 
 void ScXMLExport::_ExportFontDecls()
@@ -1321,7 +1323,6 @@ void ScXMLExport::_ExportContent()
         CollectSharedData(nTableCount, nShapesCount, nCellCount);
         DBG_ERROR("no shared data setted");
     }
-    pSharedData->nOldProgressValue = pSharedData->nProgressValue;
     ScXMLExportDatabaseRanges aExportDatabaseRanges(*this);
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
     if ( xSpreadDoc.is() )
@@ -1471,8 +1472,7 @@ void ScXMLExport::_ExportContent()
                         nEqualCells = 0;
                     }
                 }
-                if (pSharedData->nProgressValue < pSharedData->nOldProgressValue + pSharedData->nProgressObjects)
-                    GetProgressBarHelper()->SetValue(++pSharedData->nProgressValue);
+                GetProgressBarHelper()->Increment();
             }
         }
         WriteNamedExpressions(xSpreadDoc);
@@ -1482,7 +1482,7 @@ void ScXMLExport::_ExportContent()
         WriteConsolidation();
         ScXMLExportDDELinks aExportDDELinks(*this);
         aExportDDELinks.WriteDDELinks(xSpreadDoc);
-        GetProgressBarHelper()->SetValue(pSharedData->nProgressReference);
+        GetProgressBarHelper()->SetValue(GetProgressBarHelper()->GetReference());
     }
 }
 
@@ -1553,7 +1553,6 @@ void ScXMLExport::_ExportAutoStyles()
                     CollectSharedData(nTableCount, nShapesCount, nCellCount);
                     //DBG_ERROR("no shared data setted");
                 }
-                pSharedData->nOldProgressValue = pSharedData->nProgressValue;
                 rtl::OUString SC_SCOLUMNPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX));
                 rtl::OUString SC_SROWPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
                 rtl::OUString SC_SCELLPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
@@ -1589,6 +1588,7 @@ void ScXMLExport::_ExportAutoStyles()
                             if (xFormatRangesIndex.is())
                             {
                                 sal_Int32 nFormatRangesCount = xFormatRangesIndex->getCount();
+                                GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nFormatRangesCount);
                                 for (sal_Int32 nFormatRange = 0; nFormatRange < nFormatRangesCount; nFormatRange++)
                                 {
                                     uno::Any aFormatRange = xFormatRangesIndex->getByIndex(nFormatRange);
@@ -1649,8 +1649,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                         }
                                                     }
                                                 }
-                                                if (pSharedData->nProgressValue < pSharedData->nOldProgressValue + pSharedData->nProgressObjects)
-                                                    GetProgressBarHelper()->SetValue(++pSharedData->nProgressValue);
+                                                GetProgressBarHelper()->Increment();
                                             }
                                         }
                                     }
@@ -1782,13 +1781,23 @@ void ScXMLExport::_ExportAutoStyles()
                         if (xCellRangesQuery.is())
                         {
                             uno::Reference<sheet::XSheetCellRanges> xSheetCellRanges = xCellRangesQuery->queryContentCells(sheet::CellFlags::STRING);
-                            uno::Reference<container::XIndexAccess> xIndexAccess(xSheetCellRanges, uno::UNO_QUERY);
-                            if (xSheetCellRanges.is() && xIndexAccess.is())
+                            if (xSheetCellRanges.is())
                             {
                                 uno::Reference<container::XEnumerationAccess> xCellsAccess = xSheetCellRanges->getCells();
                                 if (xCellsAccess.is())
                                 {
                                     uno::Reference<container::XEnumeration> xCells = xCellsAccess->createEnumeration();
+                                    if (xCells.is())
+                                    {
+                                        sal_Int32 nCount(0);
+                                        while(xCells->hasMoreElements())
+                                        {
+                                            xCells->nextElement();
+                                            nCount++;
+                                        }
+                                        GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nCount);
+                                    }
+                                    xCells = xCellsAccess->createEnumeration();
                                     if (xCells.is())
                                     {
                                         while (xCells->hasMoreElements())
@@ -1802,17 +1811,16 @@ void ScXMLExport::_ExportAutoStyles()
                                                     uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
                                                     if (xText.is())
                                                         GetTextParagraphExport()->collectTextAutoStyles(xText, sal_False, sal_False);
-                                                    GetProgressBarHelper()->SetValue(++pSharedData->nProgressValue);
                                                 }
                                             }
+                                            GetProgressBarHelper()->Increment();
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    if (pSharedData->nProgressValue < pSharedData->nOldProgressValue + pSharedData->nProgressObjects)
-                        GetProgressBarHelper()->SetValue(++pSharedData->nProgressValue);
+                    GetProgressBarHelper()->Increment();
                 }
                 pChangeTrackingExportHelper->CollectAutoStyles();
 
@@ -1828,11 +1836,6 @@ void ScXMLExport::_ExportAutoStyles()
                 GetTextParagraphExport()->exportTextAutoStyles();
 
                 GetShapeExport()->exportAutoStyles();
-
-                //GetFormExport()->exportAutoStyles();
-
-                pSharedData->nProgressValue = pSharedData->nOldProgressValue + pSharedData->nProgressObjects;
-                GetProgressBarHelper()->SetValue(pSharedData->nProgressValue);
             }
             if (getExportFlags() & EXPORT_ALL)
                 GetChartExport()->exportAutoStyles();
@@ -2000,8 +2003,11 @@ sal_Bool ScXMLExport::GetCellText (ScMyCell& rMyCell) const
         return sal_True;
     else
     {
-        if (!rMyCell.xText.is())
+        if (!rMyCell.bHasXText)
+        {
             rMyCell.xText = uno::Reference <text::XText>(rMyCell.xCell, uno::UNO_QUERY);
+            rMyCell.bHasXText = sal_True;
+        }
         if (rMyCell.xText.is())
         {
             rMyCell.sStringValue = rMyCell.xText->getString();
@@ -2140,8 +2146,11 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
     {
         if ((aCell.nType == table::CellContentType_TEXT) && IsEditCell(aCell))
         {
-            if (!aCell.xText.is())
+            if (!aCell.bHasXText)
+            {
                 aCell.xText = uno::Reference<text::XText>(aCell.xCell, uno::UNO_QUERY);
+                aCell.bHasXText = sal_True;
+            }
             if ( aCell.xText.is())
                 GetTextParagraphExport()->exportText(aCell.xText, sal_False, sal_False);
         }
@@ -2155,8 +2164,7 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
     }
     WriteShapes(aCell);
     if (!bIsEmpty)
-        if (pSharedData->nProgressValue < pSharedData->nOldProgressValue + pSharedData->nProgressObjects)
-            GetProgressBarHelper()->SetValue(++pSharedData->nProgressValue);
+        GetProgressBarHelper()->Increment();
 }
 
 void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, awt::Point* pPoint)
@@ -2198,6 +2206,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
     }
     if (!bMemChart)
         GetShapeExport()->exportShape(xShape, SEF_DEFAULT, pPoint);
+    GetProgressBarHelper()->Increment();
 }
 
 void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
@@ -2402,6 +2411,7 @@ void ScXMLExport::SetRepeatAttribute (const sal_Int32 nEqualCellCount)
         sal_Int32 nTemp = nEqualCellCount + 1;
         OUString sOUEqualCellCount = OUString::valueOf(nTemp);
         AddAttribute(XML_NAMESPACE_TABLE, sXML_number_columns_repeated, sOUEqualCellCount);
+        GetProgressBarHelper()->Increment(nEqualCellCount - 1);
     }
 }
 
