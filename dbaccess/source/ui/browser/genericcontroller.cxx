@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:43:04 $
+ *  last change: $Author: oj $ $Date: 2001-01-15 09:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,6 @@
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -864,12 +861,19 @@ Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rs
     catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
     catch(Exception&) { DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
 
-    if (aInfo.isValid())
+    showError(aInfo);
+
+    return xConnection;
+}
+// -----------------------------------------------------------------------------
+void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
+{
+    if (_rInfo.isValid())
     {
         try
         {
             Sequence< Any > aArgs(1);
-            aArgs[0] <<= PropertyValue(PROPERTY_SQLEXCEPTION, 0, aInfo.get(), PropertyState_DIRECT_VALUE);
+            aArgs[0] <<= PropertyValue(PROPERTY_SQLEXCEPTION, 0, _rInfo.get(), PropertyState_DIRECT_VALUE);
             Reference< XExecutableDialog > xErrorDialog(
                 m_xMultiServiceFacatory->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog"), aArgs), UNO_QUERY);
             if (xErrorDialog.is())
@@ -879,12 +883,8 @@ Reference<XConnection> OGenericUnoController::connect(const ::rtl::OUString& _rs
         {
             DBG_ERROR("SbaTableQueryBrowser::OnExpandEntry: could not display the error message!");
         }
-        return 0L;
-            // 0 indicates that an error occured
     }
-
-
-    return xConnection;
 }
+
 
 
