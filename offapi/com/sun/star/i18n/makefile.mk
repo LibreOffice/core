@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2002-10-08 14:17:38 $
+#   last change: $Author: obo $ $Date: 2002-10-08 16:47:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ IDLFILES=\
     CharacterIteratorMode.idl \
     CharType.idl \
     Collator.idl \
+    CollatorOptions.idl \
     Currency.idl \
     DirectionProperty.idl \
     ForbiddenCharacters.idl \
