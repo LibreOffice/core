@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: rt $ $Date: 2002-11-19 11:20:26 $
+#   last change: $Author: rt $ $Date: 2002-11-27 13:38:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.37 $ ';
+$id_str = ' $Revision: 1.38 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -791,6 +791,9 @@ sub push_default_actions
     # deliver build.lst to $dest/inc/$module
     push(@action_data, ['mkdir', "%_DEST%/inc/$module"]); # might be necessary
     push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
+    # and to $common_dest/inc/$module
+    push(@action_data, ['mkdir', "%COMMON_DEST%/inc/$module"]); # might be necessary
+    push(@action_data, ['copy', "build.lst %COMMON_DEST%/inc%_EXT%/$module/build.lst"]);
 
     # need to copy libstaticmxp.dylib for Mac OS X
     if ( $^O eq 'darwin' )
