@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-10 11:54:20 $
+#   last change: $Author: hjs $ $Date: 2002-04-18 11:12:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,18 +101,22 @@ sub WinFormat {
   $variable =~ s/:/;/g;
   $variable =~ s/([;]|\A)(\w);/$1$2:/g; # get back the drives
   # Search for posix path ;entry; and replace with cygpath -w entry
-  while ( $variable =~ /(?:[;]|\A)((?:\/[\w\.~]+)+(?:[;]|\Z))/ ) { # Normal paths
+#  while ( $variable =~ /(?:[;]|\A)((?:\/[\w\.~]+)+(?:[;]|\Z))/ ) { # Normal paths
+  while ( $variable =~ /(?:[;]|\A)((?:\/[\w\.\-~]+)+(?:[;]|\Z))/ ) { # Normal paths
+    if ( defined $debug ) { print(STDERR "WinFormat:\nnormal path:\n$variable\n");};
     $d1 = $1 ;
     chomp( $d2 = qx{cygpath -w "$d1"} ) ;
     $variable =~ s/$d1/$d2/ ;
   }
-  while ( $variable =~ /(?:-\w)((?:\/[\w\.~]+)+(?:\s|\Z))/ ) { # Include paths
+  while ( $variable =~ /(?:-\w)((?:\/[\w\.\-~]+)+(?:\s|\Z))/ ) { # Include paths
+    if ( defined $debug ) { print(STDERR "WinFormat:\ninclude path:\n$variable\n");};
     $d1 = $1 ;
     chomp( $d2 = qx{cygpath -w "$d1"} ) ;
     $variable =~ s/$d1/$d2/ ;
   }
   $variable =~ s/\//\\/g; # Remaining \ come from e.g.: ../foo/baa
 
+  if ( defined $debug ) { print(STDERR "WinFormat:\nresult:\n$variable\n");};
   return $variable;
 }
 
