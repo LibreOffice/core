@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Views.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2002-07-18 09:47:20 $
+ *  last change: $Author: as $ $Date: 2002-08-07 06:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,14 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Views" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+  <!-- Responsible: AS-->
+  <info>
+    <desc xml:lang="en-US">Contains persistent informations about opened dialogs, windows, tab pages ... of the office.</desc>
+  </info>
   <templates>
-      <!-- Responsible: AS-->
+      <info>
+        <desc xml:lang="en-US">Neccessary templates.</desc>
+      </info>
     <group oor:name="DialogType">
       <info>
           <desc xml:lang="en-US">Contains all persistent data of a general office dialog.</desc>
@@ -135,9 +141,28 @@
     </group>
   </templates>
   <component>
-    <set oor:name="Dialogs" oor:node-type="DialogType"/>
-    <set oor:name="TabDialogs" oor:node-type="TabDialogType"/>
-    <set oor:name="TabPages" oor:node-type="TabPageType"/>
-    <set oor:name="Windows" oor:node-type="WindowType"/>
+      <info>
+        <desc xml:lang="en-US">Used instances.</desc>
+      </info>
+    <set oor:name="Dialogs" oor:node-type="DialogType">
+        <info>
+          <desc xml:lang="en-US">list with all persistent dialog states</desc>
+        </info>
+    </set>
+    <set oor:name="TabDialogs" oor:node-type="TabDialogType">
+        <info>
+          <desc xml:lang="en-US">list with all persistent tab dialog states</desc>
+        </info>
+    </set>
+    <set oor:name="TabPages" oor:node-type="TabPageType">
+        <info>
+          <desc xml:lang="en-US">list with all persistent tab page states</desc>
+        </info>
+    </set>
+    <set oor:name="Windows" oor:node-type="WindowType">
+        <info>
+          <desc xml:lang="en-US">list with all persistent window states</desc>
+        </info>
+    </set>
   </component>
 </oor:component-schema>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2002-07-18 09:47:16 $
+ *  last change: $Author: as $ $Date: 2002-08-07 06:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,14 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="TypeDetection" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+<!-- Responsible: AS-->
+  <info>
+    <desc xml:lang="en-US">Contains all well known content types, filters, deep detection services, frame loader and content handler of the office.</desc>
+  </info>
   <templates>
-    <!-- Responsible: AS-->
+      <info>
+        <desc xml:lang="en-US">Neccessary templates.</desc>
+      </info>
     <group oor:name="Type">
       <info>
           <desc xml:lang="en-US">A list of types, which represent all well known content formats of the office.</desc>
@@ -137,12 +143,38 @@
     </group>
   </templates>
   <component>
-    <set oor:name="Types" oor:node-type="Type"/>
-    <set oor:name="Filters" oor:node-type="Filter"/>
-    <set oor:name="DetectServices" oor:node-type="DetectService"/>
-    <set oor:name="ContentHandlers" oor:node-type="ContentHandler"/>
-    <set oor:name="FrameLoaders" oor:node-type="FrameLoader"/>
+      <info>
+        <desc xml:lang="en-US">Used instances.</desc>
+      </info>
+    <set oor:name="Types" oor:node-type="Type">
+        <info>
+          <desc xml:lang="en-US">list of all registered content types</desc>
+        </info>
+    </set>
+    <set oor:name="Filters" oor:node-type="Filter">
+        <info>
+          <desc xml:lang="en-US">list of all registered office filters</desc>
+        </info>
+    </set>
+    <set oor:name="DetectServices" oor:node-type="DetectService">
+        <info>
+          <desc xml:lang="en-US">list of all registered deep detection services</desc>
+        </info>
+    </set>
+    <set oor:name="ContentHandlers" oor:node-type="ContentHandler">
+        <info>
+          <desc xml:lang="en-US">list of all registered content handler services</desc>
+        </info>
+    </set>
+    <set oor:name="FrameLoaders" oor:node-type="FrameLoader">
+        <info>
+          <desc xml:lang="en-US">list of all registered frame loader services</desc>
+        </info>
+    </set>
     <group oor:name="Defaults">
+    <info>
+      <desc xml:lang="en-US">some default objects used as fallbakc, if no specialized (e.g. FrameLoader) was registered</desc>
+    </info>
       <prop oor:name="FrameLoader" oor:type="xs:string">
         <info>
           <desc xml:lang="en-US">The default frame loader, which can use filters in a generic way (by using her interfaces).</desc>

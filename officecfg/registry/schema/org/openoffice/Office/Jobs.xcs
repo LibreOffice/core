@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Jobs.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 09:15:38 $
+ *  last change: $Author: as $ $Date: 2002-08-07 06:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,18 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Jobs" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+  <!-- Responsible: AS-->
+  <info>
+    <desc xml:lang="en-US">Contains informations about registered jobs, bound on events.</desc>
+  </info>
   <templates>
-      <!-- Responsible: AS-->
+      <info>
+        <desc xml:lang="en-US">Neccessary templates.</desc>
+      </info>
     <group oor:name="Job">
+        <info>
+          <desc xml:lang="en-US">describe an UNO service, which is registered for a special event</desc>
+        </info>
       <prop oor:name="AdminTime" oor:type="xs:string">
         <info>
           <desc xml:lang="en-US">time stamp of admin layer; if it newer then UserTime ... job will be reactivated!</desc>
@@ -92,6 +101,9 @@
       </group>
     </group>
     <group oor:name="Event">
+        <info>
+          <desc xml:lang="en-US">describes the event, for which am uno service can be registered as job</desc>
+        </info>
       <prop oor:name="Joblist" oor:type="oor:string-list">
         <info>
           <desc xml:lang="en-US">jobs can be registered for events</desc>
@@ -100,7 +112,18 @@
     </group>
   </templates>
   <component>
-    <set oor:name="Jobs" oor:node-type="Job"/>
-    <set oor:name="Events" oor:node-type="Event"/>
+      <info>
+        <desc xml:lang="en-US">Used instances.</desc>
+      </info>
+    <set oor:name="Jobs" oor:node-type="Job">
+        <info>
+          <desc xml:lang="en-US">list of all registered jobs</desc>
+        </info>
+    </set>
+    <set oor:name="Events" oor:node-type="Event">
+        <info>
+          <desc xml:lang="en-US">list of all possible events</desc>
+        </info>
+    </set>
   </component>
 </oor:component-schema>
