@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.179 $
+ *  $Revision: 1.180 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:29:52 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2244,8 +2244,9 @@ static USHORT sal_GetCode( int state )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-ULONG X11SalFrame::GetCurrentModButtons()
+SalFrame::SalPointerState X11SalFrame::GetPointerState()
 {
+    SalPointerState aState;
     XLIB_Window aRoot, aChild;
     int rx, ry, wx, wy;
     unsigned int nMask = 0;
@@ -2257,7 +2258,10 @@ ULONG X11SalFrame::GetCurrentModButtons()
                    &wx, &wy,
                    &nMask
                    );
-    return sal_GetCode( nMask );
+
+    aState.maPos = Point(wx, wy);
+    aState.mnState = sal_GetCode( nMask );
+    return aState;
 }
 
 long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
