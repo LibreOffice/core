@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:52:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,6 +751,11 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::drafts::com::sun::star:
 
                        bResult = sal_True;
                 }
+
+                uno::Reference< frame::XFramesSupplier > xSupp(
+                    m_xFrame->getCreator(), uno::UNO_QUERY );
+                if ( xSupp.is() )
+                    xSupp->setActiveFrame( m_xFrame );
             }
             catch( uno::Exception& )
             {
@@ -793,6 +798,11 @@ sal_Bool DocumentHolder::HideUI( const uno::Reference< ::drafts::com::sun::star:
         if ( xOwnLM.is() )
         {
             try {
+                uno::Reference< frame::XFramesSupplier > xSupp(
+                    m_xFrame->getCreator(), uno::UNO_QUERY );
+                if ( xSupp.is() )
+                    xSupp->setActiveFrame( 0 );
+
                 uno::Reference< drafts::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
                                                                                                 uno::UNO_QUERY_THROW );
                 xMerge->removeMergedMenuBar();
