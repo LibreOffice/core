@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: mtg $ $Date: 2001-03-02 11:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,6 +379,7 @@ XMLTextColumnsContext::~XMLTextColumnsContext()
 
     delete pColumns;
     delete pColumnAttrTokenMap;
+    delete pColumnSepAttrTokenMap;
 }
 
 SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
