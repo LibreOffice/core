@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swlinguconfig.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:34:08 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,16 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 // predeclarations
 class SvtLinguConfig;
 struct SvtLinguOptions;
 
 // #107253#
-class SwLinguConfig
+class SW_DLLPUBLIC SwLinguConfig
 {
 public:
     SwLinguConfig();
