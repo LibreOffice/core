@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 07:43:25 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,70 +83,179 @@
 #ifndef _COM_SUN_STAR_LANG_SYSTEMDEPENDENT_HPP_
 #include <com/sun/star/lang/SystemDependent.hpp>
 #endif
-#include "com/sun/star/awt/FocusEvent.hpp"
-#include "com/sun/star/awt/KeyEvent.hpp"
-#include "com/sun/star/awt/KeyModifier.hpp"
-#include "com/sun/star/lang/EventObject.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
+#ifndef _COM_SUN_STAR_AWT_FOCUSEVENT_HPP_
+#include <com/sun/star/awt/FocusEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_KEYEVENT_HPP_
+#include <com/sun/star/awt/KeyEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
+#include <com/sun/star/awt/KeyModifier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_EVENTOBJECT_HPP_
+#include <com/sun/star/lang/EventObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
+#include <com/sun/star/uno/XInterface.hpp>
+#endif
 
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _OSL_CONDITN_HXX_
 #include <osl/conditn.hxx>
+#endif
+#ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
+#endif
+#ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
+#endif
+#ifndef _RTL_PROCESS_H_
 #include <rtl/process.h>
+#endif
 
+#ifndef _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 #include <toolkit/awt/vclxwindows.hxx>
+#endif
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
 #include <toolkit/awt/vclxregion.hxx>
 #include <toolkit/awt/vclxtoolkit.hxx>
+#ifndef _TOOLKIT_AWT_VCLXTOPWINDOW_HXX_
 #include <toolkit/awt/vclxtopwindow.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_UNOWRAPPER_HXX_
 #include <toolkit/helper/unowrapper.hxx>
+#endif
 #include <toolkit/helper/servicenames.hxx>
 
+#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
+#endif
 
+#ifndef _VCL_UNOHELP_HXX
 #include <vcl/unohelp.hxx>
+#endif
+#ifndef _SV_BTNDLG_HXX
 #include <vcl/btndlg.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
+#endif
+#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
+#endif
+#ifndef _SV_CTRL_HXX
 #include <vcl/ctrl.hxx>
+#endif
+#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
+#endif
+#ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>
+#endif
+#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
+#endif
+#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
+#endif
+#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
+#endif
+#ifndef _SV_FLOATWIN_HXX
 #include <vcl/floatwin.hxx>
+#endif
+#ifndef _SV_GROUP_HXX
 #include <vcl/group.hxx>
+#endif
+#ifndef _SV_IMGCTRL_HXX
 #include <vcl/imgctrl.hxx>
+#endif
+#ifndef _LONGCURR_HXX
 #include <vcl/longcurr.hxx>
+#endif
+#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
+#endif
+#ifndef _SV_MENUBTN_HXX
 #include <vcl/menubtn.hxx>
+#endif
+#ifndef _SV_MOREBTN_HXX
 #include <vcl/morebtn.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
+#endif
+#ifndef _SV_SPIN_HXX
 #include <vcl/spin.hxx>
+#endif
+#ifndef _SV_SPLIT_HXX
 #include <vcl/split.hxx>
+#endif
+#ifndef _SV_SPLITWIN_HXX
 #include <vcl/splitwin.hxx>
+#endif
+#ifndef _SV_STATUS_HXX
 #include <vcl/status.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_SYSCHILD_HXX
 #include <vcl/syschild.hxx>
+#endif
+#ifndef _SV_TABCTRL_HXX
 #include <vcl/tabctrl.hxx>
+#endif
+#ifndef _SV_TABDLG_HXX
 #include <vcl/tabdlg.hxx>
+#endif
+#ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
+#endif
+#ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
+#endif
+#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
+#endif
+#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
+#endif
+#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
+#endif
 
+#ifndef TOOLKIT_AWT_VCLXSPINBUTTON_HXX
+#include "toolkit/awt/vclxspinbutton.hxx"
+#endif
 
+#ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
+#endif
 
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -901,7 +1010,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_SPINBUTTON:
                 pNewWindow = new SpinButton( pParent, nWinBits );
-                *ppNewComp = new VCLXButton;
+                *ppNewComp = new ::toolkit::VCLXSpinButton;
             break;
             case WINDOW_SPINFIELD:
                 pNewWindow = new SpinField( pParent, nWinBits );
