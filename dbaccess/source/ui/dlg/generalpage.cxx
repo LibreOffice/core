@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-31 16:01:33 $
+ *  last change: $Author: fs $ $Date: 2001-08-01 08:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,20 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
+    String OGeneralPage::getConnectionURL( ) const
+    {
+        return m_aConnection.GetText();
+    }
+
+    //-------------------------------------------------------------------------
+    void OGeneralPage::changeConnectionURL( const String& _rNewDSN )
+    {
+        DBG_ASSERT( m_pCollection && ( m_eCurrentSelection == m_pCollection->getType( _rNewDSN ) ),
+            "OGeneralPage::changeConnectionURL: invalid new DSN!" );
+        m_aConnection.SetText( _rNewDSN );
+    }
+
+    //-------------------------------------------------------------------------
     void OGeneralPage::initializeTypeList()
     {
         m_aDatasourceType.Clear();
@@ -378,12 +392,8 @@ namespace dbaui
         m_aBrowseConnection.Enable(isBrowseable(_eType));
         checkCreateDatabase(_eType);
 
-        // update the selection history
-        m_aSelectionHistory[m_eCurrentSelection] = m_aConnection.GetText();
-
         // the the new URL text as indicated by the selection history
-        m_eCurrentSelection = _eType;
-        m_aConnection.SetText(m_aSelectionHistory[m_eCurrentSelection]);
+        implSetCurrentType( _eType );
 
         if (_eType == m_eNotSupportedKnownType)
             switchMessage(smUnsupportedType);
@@ -454,15 +464,19 @@ namespace dbaui
             }
         }
 
+        DATASOURCE_TYPE eOldSelection = m_eCurrentSelection;
+        m_eNotSupportedKnownType = DST_UNKNOWN;
+        implSetCurrentType( DST_UNKNOWN );
+
         // compare the DSN prefix with the registered ones
         String sDisplayName;
-        DATASOURCE_TYPE eOldSelection = m_eCurrentSelection;
-        m_eCurrentSelection = m_eNotSupportedKnownType = DST_UNKNOWN;
+
         if (m_pCollection && bValid)
         {
-            m_eCurrentSelection = m_pCollection->getType(sConnectURL);
+            implSetCurrentType( m_pCollection->getType(sConnectURL) );
             sDisplayName = m_pCollection->getTypeDisplayName(m_eCurrentSelection);
         }
+
         m_aBrowseConnection.Enable(bValid && isBrowseable(m_eCurrentSelection));
         checkCreateDatabase(m_eCurrentSelection);
 
@@ -487,19 +501,20 @@ namespace dbaui
         if (_bSaveValue)
             m_aDatasourceType.SaveValue();
 
+        m_aConnection.SetText(sConnectURL);
+
         // notify our listener that our type selection has changed (if so)
         if (eOldSelection != m_eCurrentSelection)
             onTypeSelected(m_eCurrentSelection);
 
         // are we allowed to change the data source type?
         sal_Bool bSingleTypeEdit = ODbAdminDialog::omSingleEditFixedType == m_pAdminDialog->getMode();
-        // is the current data source type LDAP?
-        sal_Bool bEditingLDAP = (DST_ADDRESSBOOK == m_eCurrentSelection) && (ABT_LDAP == AddressBookTypes::getAddressType(sConnectURL));
+        // is the current data source type "AddressBook"?
+        sal_Bool bEditingAddressBook = (DST_ADDRESSBOOK == m_eCurrentSelection);
 
         // don't allow sub-type changes in case of LDAP
-        m_aBrowseConnection.Enable( !( bSingleTypeEdit && bEditingLDAP) );
+        m_aBrowseConnection.Enable( !( bSingleTypeEdit && bEditingAddressBook ) );
 
-        m_aConnection.SetText(sConnectURL);
         if (_bSaveValue)
         {
             m_aConnection.SaveValue();
@@ -522,9 +537,20 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
+    void OGeneralPage::implSetCurrentType( const DATASOURCE_TYPE _eType )
+    {
+        if ( _eType == m_eCurrentSelection )
+            return;
+
+        m_aSelectionHistory[ m_eCurrentSelection ] = m_aConnection.GetText();
+        m_eCurrentSelection = _eType;
+        m_aConnection.SetText( m_aSelectionHistory[ m_eCurrentSelection ] );
+    }
+
+    //-------------------------------------------------------------------------
     void OGeneralPage::Reset(const SfxItemSet& _rCoreAttrs)
     {
-        m_eCurrentSelection = DST_UNKNOWN;
+        implSetCurrentType( DST_UNKNOWN );
             // this ensures that our type selection link will be called, even if the new is is the same as the
             // current one
         OGenericAdministrationPage::Reset(_rCoreAttrs);
@@ -1111,10 +1137,9 @@ namespace dbaui
                     if(nOldPos != nNewPos)
                     {
                         m_aConnection.SetText(sAddressBookTypes[nNewPos]);
-                        if(nNewPos == 2)
-                            m_pAdminDialog->addDetailPage(PAGE_LDAP,STR_PAGETITLE_LDAP,OLDAPDetailsPage::Create);
-                        else
-                            m_pAdminDialog->removeDetailPages();
+                        // as the (sub-)type changed, call the handler
+                        if (m_aTypeSelectHandler.IsSet())
+                            m_aTypeSelectHandler.Call(this);
 
                         callModifiedHdl();
                     }
@@ -1238,6 +1263,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/07/31 16:01:33  fs
+ *  #88530# changes to operate the dialog in a mode where no type change is possible
+ *
  *  Revision 1.16  2001/07/23 13:13:38  oj
  *  #90074# check if calc doc exists
  *

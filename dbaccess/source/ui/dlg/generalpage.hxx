@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-31 16:01:33 $
+ *  last change: $Author: fs $ $Date: 2001-08-01 08:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,13 @@ namespace dbaui
         void enableConnectionURL() { m_aConnection.SetReadOnly(sal_False); }
         void disableConnectionURL() { m_aConnection.SetReadOnly(); }
 
+        /** changes the connection URL.
+            <p>The new URL must be of the type which is currently selected, only the parts which do not
+            affect the type may be changed (compared to the previous URL).</p>
+        */
+        void    changeConnectionURL( const String& _rNewDSN );
+        String  getConnectionURL( ) const;
+
     protected:
         // SfxTabPage overridables
         virtual BOOL FillItemSet(SfxItemSet& _rCoreAttrs);
@@ -163,6 +170,8 @@ namespace dbaui
         void onTypeSelected(const DATASOURCE_TYPE _eType);
         void initializeHistory();
         void initializeTypeList();
+
+        void implSetCurrentType( const DATASOURCE_TYPE _eType );
 
         void switchMessage(const SPECIAL_MESSAGE _eType);
         void previousMessage();
@@ -192,6 +201,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/07/31 16:01:33  fs
+ *  #88530# changes to operate the dialog in a mode where no type change is possible
+ *
  *  Revision 1.3  2001/07/23 13:13:38  oj
  *  #90074# check if calc doc exists
  *
