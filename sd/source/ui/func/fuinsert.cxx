@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-20 13:00:53 $
+ *  last change: $Author: ka $ $Date: 2001-04-25 08:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
     {
         sal_Int8 nAction = DND_ACTION_COPY;
 
-        pView->InsertData( aDataHelper.GetTransferable(),
+        pView->InsertData( aDataHelper,
                            pWindow->PixelToLogic( Rectangle( Point(), pWindow->GetOutputSizePixel() ).Center() ),
                            nAction, FALSE, nFormatId );
     }
