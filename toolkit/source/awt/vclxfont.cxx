@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxfont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 13:41:47 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
         Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
 
-        nRet = pOutDev->GetTextWidth( c );
+        nRet = pOutDev->GetTextWidth( String(c) );
 
         pOutDev->SetFont( aOldFont );
     }
@@ -180,7 +180,8 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
         aSeq = ::com::sun::star::uno::Sequence<sal_Int16>( nCount );
         for ( USHORT n = 0; n < nCount; n++ )
         {
-            aSeq.getArray()[n] = pOutDev->GetTextWidth( nFirst+n );
+            aSeq.getArray()[n] = pOutDev->GetTextWidth(
+                String(static_cast< sal_Unicode >(nFirst+n)) );
         }
 
         pOutDev->SetFont( aOldFont );
