@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:26:07 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,11 +499,19 @@ namespace dbaui
 
             BOOL bInstallationFound = FALSE;
             rtl_uString* pDbVar = NULL;
-            if ( (osl_getEnvironment(sDBWORK.pData,&pDbVar) == osl_Process_E_None && pDbVar)
-                && ((pDbVar = NULL) == NULL && osl_getEnvironment(sDBROOT.pData,&pDbVar) == osl_Process_E_None && pDbVar)
-                && ((pDbVar = NULL) == NULL && osl_getEnvironment(sDBCONFIG.pData,&pDbVar) == osl_Process_E_None && pDbVar)
-                )
-                bInstallationFound = TRUE;
+            if ( osl_getEnvironment(sDBWORK.pData,&pDbVar) == osl_Process_E_None && pDbVar )
+            {
+                rtl_uString_release(pDbVar);
+                if ((pDbVar = NULL) == NULL && osl_getEnvironment(sDBROOT.pData,&pDbVar) == osl_Process_E_None && pDbVar)
+                {
+                    rtl_uString_release(pDbVar);
+                    if ((pDbVar = NULL) == NULL && osl_getEnvironment(sDBCONFIG.pData,&pDbVar) == osl_Process_E_None && pDbVar)
+                    {
+                        rtl_uString_release(pDbVar);
+                        bInstallationFound = TRUE;
+                    }
+                }
+            }
 
             m_aCreateDatabase.Enable( bInstallationFound );
         }
@@ -1444,6 +1452,19 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35.6.1  2003/06/24 10:02:45  oj
+ *  #110001# release rtl_uString after osl_getEnv call
+ *
+ *  Revision 1.35  2003/06/04 12:26:07  vg
+ *  INTEGRATION: CWS adabas (1.33.18); FILE MERGED
+ *  2003/04/25 11:54:33 oj 1.33.18.7: #108708# remove convert button again
+ *  2003/04/24 15:13:03 oj 1.33.18.6: #108708# hide convert button if no dbversion
+ *  2003/04/24 14:08:42 oj 1.33.18.5: #108708# hide convert button if type is not adabas
+ *  2003/04/24 14:04:06 oj 1.33.18.4: #108708# disable convert button if dbroot isnot set
+ *  2003/04/24 06:27:28 oj 1.33.18.3: #108708# not beore exist was missing
+ *  2003/04/22 12:06:52 oj 1.33.18.2: #108708# add header
+ *  2003/04/22 11:33:45 oj 1.33.18.1: #108708# impl new adabas version
+ *
  *  Revision 1.34  2003/06/02 07:49:16  vg
  *  INTEGRATION: CWS evoab (1.31.2.3.12); FILE MERGED
  *  2003/05/26 16:48:16 fs 1.31.2.3.12.2: RESYNC: (1.31.2.3-1.33); FILE MERGED
