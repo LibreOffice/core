@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-10 13:27:30 $
+#   last change: $Author: rt $ $Date: 2004-09-20 11:52:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -354,6 +354,9 @@ SHL3STDLIBS=\
 
 # gtk plugin
 .IF "$(ENABLE_GTK)" != ""
+PKGCONFIG_MODULES=gtk+-2.0 gthread-2.0
+.INCLUDE: pkg_config.mk
+
 LIB4TARGET=$(SLB)$/igtk_plug_
 LIB4FILES=\
             $(SLB)$/gtkapp.lib\
@@ -363,7 +366,14 @@ SHL4TARGET=vclplug_gtk$(UPD)$(DLLPOSTFIX)
 SHL4IMPLIB=igtk_plug_
 SHL4LIBS=$(LIB4TARGET)
 # libs for gtk plugin
-SHL4STDLIBS=`pkg-config --libs gtk+-2.0 gthread-2.0`
+SHL4STDLIBS+=$(PKGCONFIG_LIBS:s/ -lpangoxft-1.0//)
+# hack for faked SO environment
+.IF "$(PKGCONFIG_ROOT)"!=""
+SHL4SONAME+=-z nodefs
+SHL4NOCHECK=TRUE
+.ENDIF          # "$(PKGCONFIG_ROOT)"!=""
+
+
 SHL4STDLIBS+=-l$(SHL2TARGET)
 SHL4STDLIBS+=$(SHL3STDLIBS) -lX11 -ldl
 .ENDIF # "$(ENABLE_GTK)" != ""
