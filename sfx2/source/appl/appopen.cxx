@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-14 18:55:09 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 14:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,12 +856,17 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     {
         Window* pTopWin = GetTopWindow();
         SvtDocumentTemplateDialog* pDocTemplDlg = new SvtDocumentTemplateDialog( pTopWin );
+        int nRet = pDocTemplDlg->Execute();
         sal_Bool bNewWin = sal_False;
-        if ( pDocTemplDlg->Execute() == RET_OK && pTopWin != GetTopWindow() )
+        if ( nRet == RET_OK )
         {
-            // the dialogue opens a document -> a new TopWindow appears
-            pTopWin = GetTopWindow();
-            bNewWin = sal_True;
+            rReq.Done();
+            if ( pTopWin != GetTopWindow() )
+            {
+                // the dialogue opens a document -> a new TopWindow appears
+                pTopWin = GetTopWindow();
+                bNewWin = sal_True;
+            }
         }
 
         delete pDocTemplDlg;
