@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-13 07:19:46 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 11:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,28 @@ void DeInitSalData()
 
 // -----------------------------------------------------------------------
 
+#ifdef QUARTZ
+extern "C" {
+#include <crt_externs.h>
+}
+#endif
+
 void InitSalMain()
 {
+    // [ed] 5/14/02 We need to use _NSGetEnviron() here and can't use the straight
+    // environ.  This is due to two-level-namespaces not enjoying having funky
+    // global hack symbols lying around.
+#ifdef QUARTZ
+    char **environ;
+    char *stackNULL=NULL;
+    if(_NSGetEnviron())
+        environ=*_NSGetEnviron();
+    else
+        environ=&stackNULL;
+#else
     extern char **environ;
+#endif
+
     char **pEnviron;
 
     // Get full executable path. We cna't use __progname as that only holds
