@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-01-19 11:56:37 $
+ *  last change: $Author: os $ $Date: 2001-01-22 09:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ SwRevisionConfig::~SwRevisionConfig()
 /*-- 10.10.00 16:22:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwRevisionConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
+void SwRevisionConfig::Notify( const Sequence<OUString>& aPropertyNames)
 {
     Load();
 }
@@ -455,68 +455,68 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
             "Table/Border",                                 // 2
             "Table/Split",                                  // 3 from here not in writer/web
             "Caption/Automatic",                            // 4
-            "Caption/StarWriterObject/Table/Enable",        // 5
-            "Caption/StarWriterObject/Table/Settings/Category",     // 6
-            "Caption/StarWriterObject/Table/Settings/Numbering",    // 7
-            "Caption/StarWriterObject/Table/Settings/CaptionText",  // 8
-            "Caption/StarWriterObject/Table/Settings/Delimiter",    // 9
-            "Caption/StarWriterObject/Table/Settings/Level",        //10
-            "Caption/StarWriterObject/Table/Settings/Position",     //11
-            "Caption/StarWriterObject/Frame/Enable",                //12
-            "Caption/StarWriterObject/Frame/Settings/Category",     //13
-            "Caption/StarWriterObject/Frame/Settings/Numbering",    //14
-            "Caption/StarWriterObject/Frame/Settings/CaptionText",  //15
-            "Caption/StarWriterObject/Frame/Settings/Delimiter",    //16
-            "Caption/StarWriterObject/Frame/Settings/Level",        //17
-            "Caption/StarWriterObject/Frame/Settings/Position",     //18
-            "Caption/StarWriterObject/Graphic/Enable",              //19
-            "Caption/StarWriterObject/Graphic/Settings/Category",   //20
-            "Caption/StarWriterObject/Graphic/Settings/Numbering",  //21
-            "Caption/StarWriterObject/Graphic/Settings/CaptionText",//22
-            "Caption/StarWriterObject/Graphic/Settings/Delimiter",  //23
-            "Caption/StarWriterObject/Graphic/Settings/Level",      //24
-            "Caption/StarOfficeObject/Calc/Enable",                 //25
-            "Caption/StarOfficeObject/Calc/Settings/Category",      //26
-            "Caption/StarOfficeObject/Calc/Settings/Numbering",     //27
-            "Caption/StarOfficeObject/Calc/Settings/CaptionText",   //28
-            "Caption/StarOfficeObject/Calc/Settings/Delimiter",     //29
-            "Caption/StarOfficeObject/Calc/Settings/Level",         //30
-            "Caption/StarOfficeObject/Calc/Settings/Position",      //31
-            "Caption/StarOfficeObject/Impress/Enable",              //32
-            "Caption/StarOfficeObject/Impress/Settings/Category",   //33
-            "Caption/StarOfficeObject/Impress/Settings/Numbering",  //34
-            "Caption/StarOfficeObject/Impress/Settings/CaptionText",//35
-            "Caption/StarOfficeObject/Impress/Settings/Delimiter",  //36
-            "Caption/StarOfficeObject/Impress/Settings/Level",      //37
-            "Caption/StarOfficeObject/Impress/Settings/Position",   //38
-            "Caption/StarOfficeObject/Chart/Enable",                //39
-            "Caption/StarOfficeObject/Chart/Settings/Category",     //40
-            "Caption/StarOfficeObject/Chart/Settings/Numbering",    //41
-            "Caption/StarOfficeObject/Chart/Settings/CaptionText",  //42
-            "Caption/StarOfficeObject/Chart/Settings/Delimiter",    //43
-            "Caption/StarOfficeObject/Chart/Settings/Level",        //44
-            "Caption/StarOfficeObject/Chart/Settings/Position",     //45
-            "Caption/StarOfficeObject/Formula/Enable",              //46
-            "Caption/StarOfficeObject/Formula/Settings/Category",   //47
-            "Caption/StarOfficeObject/Formula/Settings/Numbering",  //48
-            "Caption/StarOfficeObject/Formula/Settings/CaptionText",//49
-            "Caption/StarOfficeObject/Formula/Settings/Delimiter",  //50
-            "Caption/StarOfficeObject/Formula/Settings/Level",      //51
-            "Caption/StarOfficeObject/Formula/Settings/Position",   //52
-            "Caption/StarOfficeObject/Draw/Enable",                 //53
-            "Caption/StarOfficeObject/Draw/Settings/Category",      //54
-            "Caption/StarOfficeObject/Draw/Settings/Numbering",     //55
-            "Caption/StarOfficeObject/Draw/Settings/CaptionText",   //56
-            "Caption/StarOfficeObject/Draw/Settings/Delimiter",     //57
-            "Caption/StarOfficeObject/Draw/Settings/Level",         //58
-            "Caption/StarOfficeObject/Draw/Settings/Position",      //59
-            "Caption/StarOfficeObject/OLEMisc/Enable",              //60
-            "Caption/StarOfficeObject/OLEMisc/Settings/Category",   //61
-            "Caption/StarOfficeObject/OLEMisc/Settings/Numbering",  //62
-            "Caption/StarOfficeObject/OLEMisc/Settings/CaptionText",//63
-            "Caption/StarOfficeObject/OLEMisc/Settings/Delimiter",  //64
-            "Caption/StarOfficeObject/OLEMisc/Settings/Level",      //65
-            "Caption/StarOfficeObject/OLEMisc/Settings/Position"    //66
+            "Caption/WriterObject/Table/Enable",        // 5
+            "Caption/WriterObject/Table/Settings/Category",     // 6
+            "Caption/WriterObject/Table/Settings/Numbering",    // 7
+            "Caption/WriterObject/Table/Settings/CaptionText",  // 8
+            "Caption/WriterObject/Table/Settings/Delimiter",    // 9
+            "Caption/WriterObject/Table/Settings/Level",        //10
+            "Caption/WriterObject/Table/Settings/Position",     //11
+            "Caption/WriterObject/Frame/Enable",                //12
+            "Caption/WriterObject/Frame/Settings/Category",     //13
+            "Caption/WriterObject/Frame/Settings/Numbering",    //14
+            "Caption/WriterObject/Frame/Settings/CaptionText",  //15
+            "Caption/WriterObject/Frame/Settings/Delimiter",    //16
+            "Caption/WriterObject/Frame/Settings/Level",        //17
+            "Caption/WriterObject/Frame/Settings/Position",     //18
+            "Caption/WriterObject/Graphic/Enable",              //19
+            "Caption/WriterObject/Graphic/Settings/Category",   //20
+            "Caption/WriterObject/Graphic/Settings/Numbering",  //21
+            "Caption/WriterObject/Graphic/Settings/CaptionText",//22
+            "Caption/WriterObject/Graphic/Settings/Delimiter",  //23
+            "Caption/WriterObject/Graphic/Settings/Level",      //24
+            "Caption/OfficeObject/Calc/Enable",                 //25
+            "Caption/OfficeObject/Calc/Settings/Category",      //26
+            "Caption/OfficeObject/Calc/Settings/Numbering",     //27
+            "Caption/OfficeObject/Calc/Settings/CaptionText",   //28
+            "Caption/OfficeObject/Calc/Settings/Delimiter",     //29
+            "Caption/OfficeObject/Calc/Settings/Level",         //30
+            "Caption/OfficeObject/Calc/Settings/Position",      //31
+            "Caption/OfficeObject/Impress/Enable",              //32
+            "Caption/OfficeObject/Impress/Settings/Category",   //33
+            "Caption/OfficeObject/Impress/Settings/Numbering",  //34
+            "Caption/OfficeObject/Impress/Settings/CaptionText",//35
+            "Caption/OfficeObject/Impress/Settings/Delimiter",  //36
+            "Caption/OfficeObject/Impress/Settings/Level",      //37
+            "Caption/OfficeObject/Impress/Settings/Position",   //38
+            "Caption/OfficeObject/Chart/Enable",                //39
+            "Caption/OfficeObject/Chart/Settings/Category",     //40
+            "Caption/OfficeObject/Chart/Settings/Numbering",    //41
+            "Caption/OfficeObject/Chart/Settings/CaptionText",  //42
+            "Caption/OfficeObject/Chart/Settings/Delimiter",    //43
+            "Caption/OfficeObject/Chart/Settings/Level",        //44
+            "Caption/OfficeObject/Chart/Settings/Position",     //45
+            "Caption/OfficeObject/Formula/Enable",              //46
+            "Caption/OfficeObject/Formula/Settings/Category",   //47
+            "Caption/OfficeObject/Formula/Settings/Numbering",  //48
+            "Caption/OfficeObject/Formula/Settings/CaptionText",//49
+            "Caption/OfficeObject/Formula/Settings/Delimiter",  //50
+            "Caption/OfficeObject/Formula/Settings/Level",      //51
+            "Caption/OfficeObject/Formula/Settings/Position",   //52
+            "Caption/OfficeObject/Draw/Enable",                 //53
+            "Caption/OfficeObject/Draw/Settings/Category",      //54
+            "Caption/OfficeObject/Draw/Settings/Numbering",     //55
+            "Caption/OfficeObject/Draw/Settings/CaptionText",   //56
+            "Caption/OfficeObject/Draw/Settings/Delimiter",     //57
+            "Caption/OfficeObject/Draw/Settings/Level",         //58
+            "Caption/OfficeObject/Draw/Settings/Position",      //59
+            "Caption/OfficeObject/OLEMisc/Enable",              //60
+            "Caption/OfficeObject/OLEMisc/Settings/Category",   //61
+            "Caption/OfficeObject/OLEMisc/Settings/Numbering",  //62
+            "Caption/OfficeObject/OLEMisc/Settings/CaptionText",//63
+            "Caption/OfficeObject/OLEMisc/Settings/Delimiter",  //64
+            "Caption/OfficeObject/OLEMisc/Settings/Level",      //65
+            "Caption/OfficeObject/OLEMisc/Settings/Position"    //66
         };
         const int nCount = 67;
         const int nWebCount = 3;
@@ -568,7 +568,7 @@ SwInsertConfig::~SwInsertConfig()
 /*-- 10.10.00 16:22:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwInsertConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
+void SwInsertConfig::Notify( const Sequence<OUString>& aPropertyNames)
 {
     Load();
 }
@@ -648,7 +648,7 @@ void SwInsertConfig::Commit()
             break;//"Table/Split",
             case  4: pValues[nProp].setValue(&bInsWithCaption, rType);break;//"Caption/Automatic",
 
-            case  5: case  6: case  7: case  8: case  9: case 10: case 11: //"Caption/StarWriterObject/Table/Position",
+            case  5: case  6: case  7: case  8: case  9: case 10: case 11: //"Caption/WriterObject/Table/Position",
                     if(pWriterTableOpt)
                         lcl_WriteOpt(*pWriterTableOpt, pValues, nProp, nProp - 5);
             break;
@@ -925,7 +925,7 @@ SwTableConfig::~SwTableConfig()
 /*-- 10.10.00 16:22:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwTableConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames)
+void SwTableConfig::Notify( const Sequence<OUString>& aPropertyNames)
 {
     Load();
 }
