@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:59:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,10 +109,6 @@
 #ifndef _SVX_BACKGRND_HXX //autogen
 #include <svx/backgrnd.hxx>
 #endif
-#ifndef _OFF_OFAIDS_HRC
-#include <offmgr/ofaids.hrc>
-#endif
-
 #ifndef _OPTPAGE_HXX //autogen
 #include <optpage.hxx>
 #endif
