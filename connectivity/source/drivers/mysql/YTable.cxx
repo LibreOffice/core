@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,8 +409,6 @@ void OMySQLTable::executeStatement(const ::rtl::OUString& _rStatement )
     ::rtl::OUString sSQL = _rStatement;
     if(sSQL.lastIndexOf(',') == (sSQL.getLength()-1))
         sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-    else
-        sSQL += ::rtl::OUString::createFromAscii(")");
 
     Reference< XStatement > xStmt = getConnection()->createStatement(  );
     if ( xStmt.is() )
