@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-16 13:20:54 $
+ *  last change: $Author: dv $ $Date: 2001-05-22 14:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,6 +647,8 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
         if ( !bHasAll )
             xFltMgr->appendFilter( aAllFilterName, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     }
+
+    pDef = aIter.First();
 
     for ( const SfxFilter* pFilter = pDef; pFilter; pFilter = aIter.Next() )
     {
