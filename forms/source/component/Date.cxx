@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:50:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ Sequence<Type> ODateModel::_getTypes()
 DBG_NAME( ODateModel )
 //------------------------------------------------------------------
 ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
-            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_CONTROL_DATEFIELD, sal_False, sal_True )
+            :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_SUN_CONTROL_DATEFIELD, sal_False, sal_True )
                         // use the old control name for compytibility reasons
             ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
 {
