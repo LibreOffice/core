@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-14 08:55:38 $
+ *  last change: $Author: obr $ $Date: 2001-06-07 13:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,13 +230,6 @@ namespace osl {
 
             return aSections;
         }
-
-        static rtl::OUString getName(const rtl::OUString& rPath, const rtl::OUString& rName)
-        {
-            rtl::OUString aProfileName;
-            return osl_getProfileName( rPath.pData, rName.pData, &aProfileName.pData ) ? aProfileName : rtl::OUString();
-        }
-
     };
 }
 
