@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-12 12:25:35 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 07:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,8 +945,6 @@ void ScChangeTrackingExportHelper::WriteChangeViewSettings()
             }
         }
     }
-    else
-        DBG_ERROR("can not write change view settings");
 }
 
 void ScChangeTrackingExportHelper::CollectAndWriteChanges()
@@ -958,7 +956,6 @@ void ScChangeTrackingExportHelper::CollectAndWriteChanges()
         {
             SvXMLElementExport aCangeListElem(rExport, XML_NAMESPACE_TABLE, sXML_tracked_changes, sal_True, sal_True);
             {
-                WriteChangeViewSettings();
                 ScChangeAction* pAction = pChangeTrack->GetFirst();
                 WorkWithChangeAction(pAction);
                 ScChangeAction* pLastAction = pChangeTrack->GetLast();

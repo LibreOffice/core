@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:37:12 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 07:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@
 #ifndef _SC_XMLTRACKEDCHANGESCONTEXT_HXX
 #include "XMLTrackedChangesContext.hxx"
 #endif
-#ifndef _SC_XMLCHANGETRACKINGIMPORTHELPER_HXX
-#include "XMLChangeTrackingImportHelper.hxx"
-#endif
 
 #include <xmloff/xmltkmap.hxx>
 
@@ -118,8 +115,6 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
 
 ScXMLBodyContext::~ScXMLBodyContext()
 {
-    if (pChangeTrackingImportHelper)
-        delete pChangeTrackingImportHelper;
 }
 
 SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
@@ -148,7 +143,7 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
 //      break;
     case XML_TOK_BODY_TRACKED_CHANGES :
     {
-        pChangeTrackingImportHelper = new ScXMLChangeTrackingImportHelper();
+        pChangeTrackingImportHelper = GetScImport().GetChangeTrackingImportHelper();
         if (pChangeTrackingImportHelper)
             pContext = new ScXMLTrackedChangesContext( GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-12 12:25:35 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 07:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,6 @@
 #ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
 #endif
-#ifndef _SC_XMLCHANGEVIEWSETTINGSCONTEXT_HXX
-#include "XMLChangeViewSettingsContext.hxx"
-#endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
@@ -163,10 +160,6 @@ SvXMLImportContext *ScXMLTrackedChangesContext::CreateChildContext( USHORT nPref
         else if (rLocalName.compareToAscii(sXML_rejection) == 0)
         {
             pContext = new ScXMLRejectionContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
-        }
-        else if (rLocalName.compareToAscii(sXML_change_view_settings) == 0)
-        {
-            pContext = new ScXMLChangeViewSettingsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-09 18:28:24 $
+ *  last change: $Author: sab $ $Date: 2001-02-14 07:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,11 +129,11 @@ class ScChangeTrackingExportHelper
     void CollectCellAutoStyles(const ScBaseCell* pBaseCell);
     void CollectActionAutoStyles(ScChangeAction* pAction);
     void WorkWithChangeAction(ScChangeAction* pAction);
-    void WriteChangeViewSettings();
 public:
     ScChangeTrackingExportHelper(ScXMLExport& rExport);
     ~ScChangeTrackingExportHelper();
 
+    void WriteChangeViewSettings();
     void CollectAutoStyles();
     void CollectAndWriteChanges();
 };
