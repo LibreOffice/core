@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-04 13:32:48 $
+#   last change: $Author: jsc $ $Date: 2001-05-17 14:58:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,6 @@ SHL1LIBS= $(LIB1TARGET)
 SHL1DEPN= $(LIB1TARGET)
 SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 DEF1NAME= $(SHL1TARGET)
-#DEF1EXPORTFILE=	exports.dxp
 DEF1DES	= RegistryRuntime
 
 # --- Targets ------------------------------------------------------
