@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:20:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ OutputDevice::OutputDevice() :
     mbOutput            = TRUE;
     mbDevOutput         = FALSE;
     mbOutputClipped     = FALSE;
-    maTextColor         = maFont.GetColor();
+    maTextColor         = Color( COL_BLACK );
     meTextAlign         = maFont.GetAlign();
     meRasterOp          = ROP_OVERPAINT;
     mnAntialiasing      = 0;
