@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:36:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:32:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,24 +674,28 @@ void SwDoc::GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
 |*
 *************************************************************************/
 
-BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
-                        BOOL bSameOnly, BOOL bPosCorr )
+sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
+                           RndStdIds _eAnchorType,
+                           const sal_Bool _bSameOnly,
+                           const sal_Bool _bPosCorr )
 {
     ASSERT( GetRootFrm(), "Ohne Layout geht gar nichts" );
 
-    if( !rMrkList.GetMarkCount() ||
-        rMrkList.GetMark( 0 )->GetObj()->GetUpGroup() )
-        return FALSE;           // Kein Ankerwechsel innerhalb von Gruppen
+    if ( !_rMrkList.GetMarkCount() ||
+         _rMrkList.GetMark( 0 )->GetObj()->GetUpGroup() )
+    {
+        return false;
+    }
 
     StartUndo( UNDO_INSATTR );
 
     BOOL bUnmark = FALSE;
-    for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
+    for ( USHORT i = 0; i < _rMrkList.GetMarkCount(); ++i )
     {
-        SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
+        SdrObject* pObj = _rMrkList.GetMark( i )->GetObj();
         if ( !pObj->ISA(SwVirtFlyDrawObj) )
         {
-            SwDrawContact* pContact = (SwDrawContact*)GetUserCall(pObj);
+            SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
 
             // OD 27.06.2003 #108784# - consider, that drawing object has
             // no user call. E.g.: a 'virtual' drawing object is disconnected by
@@ -708,67 +712,54 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                 continue;
             }
 
-            // OD 17.06.2003 #108784# - determine correct 'old' anchor frame,
-            // considering 'virtual' drawing objects.
-            const SwFrm* pOldAnch = 0L;
-            if ( pObj->ISA(SwDrawVirtObj) )
-            {
-                pOldAnch = static_cast<SwDrawVirtObj*>(pObj)->GetAnchorFrm();
-            }
-            else
-            {
-                pOldAnch = pContact->GetAnchor();
-            }
-            const SwFrm *pNewAnch = pOldAnch;
+            // OD 2004-03-29 #i26791#
+            const SwFrm* pOldAnchorFrm = pContact->GetAnchorFrm( pObj );
+            const SwFrm* pNewAnchorFrm = pOldAnchorFrm;
 
-            BOOL bChanges = TRUE;
             xub_StrLen nIndx = STRING_NOTFOUND;
-            SwTxtNode *pTxtNode(0);
-            int nOld = pContact->GetFmt()->GetAnchor().GetAnchorId();
-            if( !bSameOnly && FLY_IN_CNTNT == nOld )
+            SwTxtNode* pTxtNode(0);
+            RndStdIds eOldAnchorType = pContact->GetAnchorId();
+            if ( !_bSameOnly && eOldAnchorType == FLY_IN_CNTNT )
             {
-                const SwPosition *pPos =
-                    pContact->GetFmt()->GetAnchor().GetCntntAnchor();
-                pTxtNode = pPos->nNode.GetNode().GetTxtNode();
+                const SwPosition& pPos = pContact->GetCntntAnchor();
+                pTxtNode = pPos.nNode.GetNode().GetTxtNode();
                 ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
-                nIndx = pPos->nContent.GetIndex();
-                if( !pOldAnch )
-                {
-                    pContact->ConnectToLayout();
-                    pOldAnch = pContact->GetAnchor();
-                }
-                pOldAnch->Calc();
-                pObj->ImpSetAnchorPos( pOldAnch->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
+                nIndx = pPos.nContent.GetIndex();
             }
 
-            if ( bSameOnly )
-                eAnchorId = nOld;
+            if ( _bSameOnly )
+                _eAnchorType = eOldAnchorType;
 
-            bChanges = FLY_IN_CNTNT != eAnchorId;
-            SwFmtAnchor  aNewAnch( (RndStdIds)eAnchorId );
-            const Point aPt( pObj->GetAnchorPos() + pObj->GetRelativePos() );
+            const bool bChanges = FLY_IN_CNTNT != _eAnchorType;
+            SwFmtAnchor aNewAnch( _eAnchorType );
+            Rectangle aObjRect( pContact->GetAnchoredObj( pObj )->GetObjRect().SVRect() );
+            const Point aPt( aObjRect.TopLeft() );
 
-            switch ( eAnchorId )
+            switch ( _eAnchorType )
             {
             case FLY_AT_CNTNT:
             case FLY_AUTO_CNTNT:
                 {
-                    const Point aNewPoint = pOldAnch &&
-                                             ( pOldAnch->IsVertical() ||
-                                               pOldAnch->IsRightToLeft() ) ?
-                                             pObj->GetCurrentBoundRect().TopRight() :
-                                             aPt;
+                    const Point aNewPoint = pOldAnchorFrm &&
+                                            ( pOldAnchorFrm->IsVertical() ||
+                                              pOldAnchorFrm->IsRightToLeft() )
+                                            ? aObjRect.TopRight()
+                                            : aPt;
 
                     // OD 18.06.2003 #108784# - allow drawing objects in header/footer
-                    pNewAnch = ::FindAnchor( pOldAnch, aNewPoint, false );
-                    if( pNewAnch->IsTxtFrm() && ((SwTxtFrm*)pNewAnch)->IsFollow() )
-                        pNewAnch = ((SwTxtFrm*)pNewAnch)->FindMaster();
-                    if( pNewAnch->IsProtected() )
-                        pNewAnch = 0;
+                    pNewAnchorFrm = ::FindAnchor( pOldAnchorFrm, aNewPoint, false );
+                    if ( pNewAnchorFrm->IsTxtFrm() && ((SwTxtFrm*)pNewAnchorFrm)->IsFollow() )
+                    {
+                        pNewAnchorFrm = ((SwTxtFrm*)pNewAnchorFrm)->FindMaster();
+                    }
+                    if ( pNewAnchorFrm->IsProtected() )
+                    {
+                        pNewAnchorFrm = 0;
+                    }
                     else
                     {
-                        SwPosition aPos( *((SwCntntFrm*)pNewAnch)->GetNode() );
-                        aNewAnch.SetType( (RndStdIds)eAnchorId );
+                        SwPosition aPos( *((SwCntntFrm*)pNewAnchorFrm)->GetNode() );
+                        aNewAnch.SetType( _eAnchorType );
                         aNewAnch.SetAnchor( &aPos );
                     }
                 }
@@ -791,10 +782,10 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                                         GetCntntNode()->GetFrm( &aPt, 0, FALSE );
                     }
                     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aPt );
-                    pNewAnch = pTmp->FindFlyFrm();
-                    if( pNewAnch && !pNewAnch->IsProtected() )
+                    pNewAnchorFrm = pTmp->FindFlyFrm();
+                    if( pNewAnchorFrm && !pNewAnchorFrm->IsProtected() )
                     {
-                        const SwFrmFmt *pTmpFmt = ((SwFlyFrm*)pNewAnch)->GetFmt();
+                        const SwFrmFmt *pTmpFmt = ((SwFlyFrm*)pNewAnchorFrm)->GetFmt();
                         const SwFmtCntnt& rCntnt = pTmpFmt->GetCntnt();
                         SwPosition aPos( *rCntnt.GetCntntIdx() );
                         aNewAnch.SetAnchor( &aPos );
@@ -806,53 +797,32 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                 }
             case FLY_PAGE:
                 {
-                    pNewAnch = GetRootFrm()->Lower();
-                    while ( pNewAnch && !pNewAnch->Frm().IsInside( aPt ) )
-                        pNewAnch = pNewAnch->GetNext();
-                    if ( !pNewAnch )
+                    pNewAnchorFrm = GetRootFrm()->Lower();
+                    while ( pNewAnchorFrm && !pNewAnchorFrm->Frm().IsInside( aPt ) )
+                        pNewAnchorFrm = pNewAnchorFrm->GetNext();
+                    if ( !pNewAnchorFrm )
                         continue;
 
-                    aNewAnch.SetPageNum( ((SwPageFrm*)pNewAnch)->GetPhyPageNum());
+                    aNewAnch.SetPageNum( ((SwPageFrm*)pNewAnchorFrm)->GetPhyPageNum());
                 }
                 break;
             case FLY_IN_CNTNT:
-                if( bSameOnly ) // Positions/Groessenaenderung
+                if( _bSameOnly )    // Positions/Groessenaenderung
                 {
-                    SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
-                    const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
-                    SwTwips nRelPos = pObj->GetRelativePos().Y();
-                    const SwFrm *pTmp = pContact->GetAnchor();
-                    if( pTmp && pTmp->IsVertical() )
+                    if( !pOldAnchorFrm )
                     {
-                        nRelPos = pObj->GetRelativePos().X();
-                        if( !pTmp->IsReverse() )
-                            nRelPos = -nRelPos -pObj->GetSnapRect().GetWidth();
+                        pContact->ConnectToLayout();
+                        pOldAnchorFrm = pContact->GetAnchorFrm();
                     }
-                    if ( rVert.GetPos() != nRelPos ||
-                            VERT_NONE != rVert.GetVertOrient() )
-                    {
-                        SwFmtVertOrient aVert( rVert );
-                        aVert.SetVertOrient( VERT_NONE );
-                        aVert.SetPos( nRelPos );
-                        SetAttr( aVert, *pFmt );
-                    }
-                    else
-                    {
-                        if( !pOldAnch )
-                        {
-                            pContact->ConnectToLayout();
-                            pOldAnch = pContact->GetAnchor();
-                        }
-                        ((SwTxtFrm*)pOldAnch)->Prepare();
-                    }
+                    ((SwTxtFrm*)pOldAnchorFrm)->Prepare();
                 }
                 else            // Ankerwechsel
                 {
                     // OD 18.06.2003 #108784# - allow drawing objects in header/footer
-                    pNewAnch = ::FindAnchor( pOldAnch, aPt, false );
-                    if( pNewAnch->IsProtected() )
+                    pNewAnchorFrm = ::FindAnchor( pOldAnchorFrm, aPt, false );
+                    if( pNewAnchorFrm->IsProtected() )
                     {
-                        pNewAnch = 0;
+                        pNewAnchorFrm = 0;
                         break;
                     }
 
@@ -860,8 +830,8 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                     Point aPoint( aPt );
                     aPoint.X() -= 1;    // nicht im DrawObj landen!!
                     aNewAnch.SetType( FLY_IN_CNTNT );
-                    SwPosition aPos( *((SwCntntFrm*)pNewAnch)->GetNode() );
-                    if ( pNewAnch->Frm().IsInside( aPoint ) )
+                    SwPosition aPos( *((SwCntntFrm*)pNewAnchorFrm)->GetNode() );
+                    if ( pNewAnchorFrm->Frm().IsInside( aPoint ) )
                     {
                     // es muss ein TextNode gefunden werden, denn nur dort
                     // ist ein inhaltsgebundenes DrawObjekt zu verankern
@@ -871,14 +841,17 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                     else
                     {
                         SwCntntNode &rCNd = (SwCntntNode&)
-                            *((SwCntntFrm*)pNewAnch)->GetNode();
-                        if ( pNewAnch->Frm().Bottom() < aPt.Y() )
+                            *((SwCntntFrm*)pNewAnchorFrm)->GetNode();
+                        if ( pNewAnchorFrm->Frm().Bottom() < aPt.Y() )
                             rCNd.MakeStartIndex( &aPos.nContent );
                         else
                             rCNd.MakeEndIndex( &aPos.nContent );
                     }
                     aNewAnch.SetAnchor( &aPos );
                     SetAttr( aNewAnch, *pContact->GetFmt() );
+                    // OD 2004-04-13 #i26791# - adjust vertical positioning to
+                    // 'center to baseline'
+                    SetAttr( SwFmtVertOrient( 0, VERT_CENTER, FRAME ), *pContact->GetFmt() );
                     SwTxtNode *pNd = aPos.nNode.GetNode().GetTxtNode();
                     ASSERT( pNd, "Crsr steht nicht auf TxtNode." );
 
@@ -890,67 +863,28 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                 ASSERT( !this, "unexpected AnchorId." );
             }
 
-            if( bChanges && pNewAnch )
+            if ( (FLY_IN_CNTNT != _eAnchorType) &&
+                 pNewAnchorFrm &&
+                 ( !_bSameOnly || pNewAnchorFrm != pOldAnchorFrm ) )
             {
-                // OD 20.06.2003 #108784# - consider that a 'virtual' drawing
-                // object is disconnected from layout, e.g. caused by an anchor
-                // type change.
-                if ( pObj->ISA(SwDrawVirtObj) )
-                {
-                    SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
-                    if ( !pDrawVirtObj->IsConnected() )
-                    {
-                        // 'virtual' drawing object disconnected from layout.
-                        // Thus, change to 'master' drawing object
-                        pObj = &(pDrawVirtObj->ReferencedObj());
-                    }
-                }
-#ifndef PRODUCT
-                // SetAttr() removes the ParaPortion of pNewAnch, which is required by
-                // GetFrmAnchorPos. Therefore aTmpPoint has to be calculated before
-                // the call of SetAttr().
-                // OD 20.06.2003 #108784# - refine for assertion:
-                // consider anchor change from page to something in header/footer
-                Point aProposedAnchorPos;
-                if ( nOld == FLY_PAGE &&
-                     pContact->GetAnchor()->FindFooterOrHeader() )
-                {
-                    aProposedAnchorPos = pContact->GetAnchor()->GetFrmAnchorPos( ::HasWrap( pObj ) );
-                }
-                else
-                {
-                    // SetAttr() removes the ParaPortion of pNewAnch, which is required by
-                    // GetFrmAnchorPos. Therefore aTmpPoint has to be calculated before
-                    // the call of SetAttr().
-                    aProposedAnchorPos = pNewAnch->GetFrmAnchorPos( ::HasWrap( pObj ) );
-                }
-#endif
+                // OD 2004-04-06 #i26791# - Direct object positioning no longer
+                // needed. Apply of attributes (method call <SetAttr(..)>) takes
+                // care of the invalidation of the object position.
                 SetAttr( aNewAnch, *pContact->GetFmt() );
-                if( bPosCorr )
+                if ( _bPosCorr )
                 {
-                    const Point aTmpRel( aPt - pObj->GetAnchorPos() );
-
-                    // #102344# Use SetRelativePos here so that eventually
-                    // connectors cobnnected to this object get the necessary refresh.
-                    pObj->SetRelativePos( aTmpRel );
+                    static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ))
+                                    ->AdjustPositioningAttr( pNewAnchorFrm );
                 }
-
-#ifndef PRODUCT
-        {
-                    const Point aIstA( pObj->GetAnchorPos() );
-                    ASSERT( pOldAnch == pNewAnch || aIstA == aProposedAnchorPos,
-                "SwDoc::ChgAnchor(..): Wrong Anchor-Pos." );
-        }
-#endif
             }
 
-            if ( pNewAnch && STRING_NOTFOUND != nIndx )
+            if ( pNewAnchorFrm && STRING_NOTFOUND != nIndx )
             {
                 //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
                 //werden. Leider reisst dies neben den Frms auch noch das Format mit
                 //in sein Grab. Um dass zu unterbinden loesen wir vorher die
                 //Verbindung zwischen Attribut und Format.
-                SwTxtAttr *pHnt = pTxtNode->GetTxtAttr( nIndx, RES_TXTATR_FLYCNT );
+                SwTxtAttr* pHnt = pTxtNode->GetTxtAttr( nIndx, RES_TXTATR_FLYCNT );
                 ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).SetFlyFmt();
 
                 //Die Verbindung ist geloest, jetzt muss noch das Attribut vernichtet
