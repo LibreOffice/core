@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-20 13:50:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,7 @@ void TransferDataContainer::CopyImageMap( const ImageMap& rImgMap )
 {
     SvMemoryStream aMemStm( 8192, 8192 );
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-    aMemStm << rImgMap;
+    rImgMap.Write( aMemStm, String() );
     CopyAnyData( SOT_FORMATSTR_ID_SVIM, (sal_Char*)aMemStm.GetData(),
                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
 }
