@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hr $ $Date: 2002-07-18 16:47:26 $
+#   last change: $Author: hr $ $Date: 2002-08-16 11:35:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.30 $ ';
+$id_str = ' $Revision: 1.31 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -634,6 +634,7 @@ sub copy_if_newer
                     {
                         system("create-bundle", $to) if ( $to =~ /\.dylib/ );
                         system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
+                        system("ranlib", "$to" ) if ( $to =~ /\.a/ );
                     }
                     push_on_ziplist($to) if $opt_zip;
                     return 1;
