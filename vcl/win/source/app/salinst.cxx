@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:22:07 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,14 +925,6 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 }
 
 // -----------------------------------------------------------------------
-// #108919#: ignore timer messages when called during time-out handler
-BOOL ImplVerifyTimerMessage( const MSG& rMsg )
-{
-    if( rMsg.message == WM_TIMER )
-        return !GetSalData()->mbInTimerProc;
-    else
-        return TRUE;    // arbitrary messages
-}
 
 bool WinSalInstance::AnyInput( USHORT nType )
 {
@@ -940,13 +932,10 @@ bool WinSalInstance::AnyInput( USHORT nType )
 
     if ( (nType & (INPUT_ANY)) == (INPUT_ANY) )
     {
-        // #108919#: If called from the time-out handler, timer messages are ignored (see ImplVerifyTimerMessage)
-        // Thus we have to check for user input messages first to be able to detect them between the timer messages.
-        // Otherwise we might not detect user input and the system will become unresponsive.
-        if( AnyInput( INPUT_MOUSE ) || AnyInput( INPUT_KEYBOARD ) || AnyInput( INPUT_PAINT ) )
-            return true;
+        // revert bugfix for #108919# which never reported timeouts when called from the timer handler
+        // which made the application completely unresponsive during background formatting
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
-            return ImplVerifyTimerMessage( aMsg );
+            return true;
     }
     else
     {
@@ -986,17 +975,15 @@ bool WinSalInstance::AnyInput( USHORT nType )
             // Test for timer input
             if ( ImplPeekMessage( &aMsg, 0, WM_TIMER, WM_TIMER,
                                   PM_NOREMOVE | PM_NOYIELD ) )
-                return ImplVerifyTimerMessage( aMsg );
+                return true;
 
         }
 
         if ( nType & INPUT_OTHER )
         {
             // Test for any input
-            // to have timer messages handled correctly, just check for INPUT_ANY, see above (#108919#)
-            return AnyInput( INPUT_ANY );
-            //if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
-            //    return ImplVerifyTimerMessage( aMsg );
+            if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_NOREMOVE | PM_NOYIELD ) )
+                return true;
         }
     }
 
