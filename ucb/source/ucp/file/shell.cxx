@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-15 17:16:01 $
+ *  last change: $Author: abi $ $Date: 2001-11-16 10:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,8 +268,9 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       IsFolder( rtl::OUString::createFromAscii( "IsFolder" ) ),
       DateModified( rtl::OUString::createFromAscii( "DateModified" ) ),
       Size( rtl::OUString::createFromAscii( "Size" ) ),
-//        FolderCount( rtl::OUString::createFromAscii( "FolderCount" ) ),
-//        DocumentCount( rtl::OUString::createFromAscii( "DocumentCount" ) ),
+      IsVolume( rtl::OUString::createFromAscii( "IsVolume" ) ),
+      IsRemoveable( rtl::OUString::createFromAscii( "IsRemoveable" ) ),
+      IsRemote( rtl::OUString::createFromAscii( "IsRemote" ) ),
       ContentType( rtl::OUString::createFromAscii( "ContentType" ) ),
       IsReadOnly( rtl::OUString::createFromAscii( "IsReadOnly" ) ),
       FolderContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ) ),
@@ -309,6 +310,41 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              | beans::PropertyAttribute::BOUND
                                              | beans::PropertyAttribute::READONLY ) );
 
+    // Removable
+    m_aDefaultProperties.insert( MyProperty( true,
+                                             IsVolume,
+                                             -1 ,
+                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             uno::Any(),
+                                             beans::PropertyState_DEFAULT_VALUE,
+                                             beans::PropertyAttribute::MAYBEVOID
+                                             | beans::PropertyAttribute::BOUND
+                                             | beans::PropertyAttribute::READONLY ) );
+
+
+    // Removable
+    m_aDefaultProperties.insert( MyProperty( true,
+                                             IsRemoveable,
+                                             -1 ,
+                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             uno::Any(),
+                                             beans::PropertyState_DEFAULT_VALUE,
+                                             beans::PropertyAttribute::MAYBEVOID
+                                             | beans::PropertyAttribute::BOUND
+                                             | beans::PropertyAttribute::READONLY ) );
+
+    // Remote
+    m_aDefaultProperties.insert( MyProperty( true,
+                                             IsRemote,
+                                             -1 ,
+                                             getCppuType( static_cast< sal_Bool* >( 0 ) ),
+                                             uno::Any(),
+                                             beans::PropertyState_DEFAULT_VALUE,
+                                             beans::PropertyAttribute::MAYBEVOID
+                                             | beans::PropertyAttribute::BOUND
+                                             | beans::PropertyAttribute::READONLY ) );
+
+
 
     // ContentType
     uno::Any aAny;
@@ -334,29 +370,6 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND ) );
 
-
-//      // DocumentCount
-//      m_aDefaultProperties.insert( MyProperty( true,
-//                                               DocumentCount,
-//                                               -1,
-//                                               getCppuType( static_cast< sal_Int32* >( 0 ) ),
-//                                               uno::Any(),
-//                                               beans::PropertyState_DEFAULT_VALUE,
-//                                               beans::PropertyAttribute::MAYBEVOID
-//                                               | beans::PropertyAttribute::BOUND
-//                                               | beans::PropertyAttribute::READONLY ) );
-
-//      // FolderCount
-//      m_aDefaultProperties.insert( MyProperty( true,
-//                                               FolderCount,
-//                                               -1,
-//                                               getCppuType( static_cast< sal_Int32* >( 0 ) ),
-//                                               uno::Any(),
-//                                               beans::PropertyState_DEFAULT_VALUE,
-//                                               beans::PropertyAttribute::MAYBEVOID
-//                                               | beans::PropertyAttribute::BOUND
-//                                               | beans::PropertyAttribute::READONLY ) );
-
     // Size
     m_aDefaultProperties.insert( MyProperty( true,
                                              Size,
@@ -367,6 +380,7 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND ) );
 
+    // IsReadOnly
     m_aDefaultProperties.insert( MyProperty( true,
                                              IsReadOnly,
                                              -1 ,
@@ -1991,30 +2005,15 @@ sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
 
 void SAL_CALL shell::getMaskFromProperties( sal_Int32& n_Mask, const uno::Sequence< beans::Property >& seq )
 {
-    n_Mask = FileStatusMask_FileURL | FileStatusMask_LinkTargetURL | FileStatusMask_Type;
-
-    rtl::OUString PropertyName;
-    for( sal_Int32 i = 0; i < seq.getLength(); ++i )
-    {
-//          PropertyName = seq[i].Name;
-
-//          if( PropertyName == Title )
-            n_Mask |= FileStatusMask_FileName;
-//          else if( PropertyName == IsDocument || PropertyName == IsFolder )
-            n_Mask |= FileStatusMask_Type;
-//          else if( PropertyName == DateCreated )
-//          n_Mask |= FileStatusMask_CreationTime;
-//          else if( PropertyName == DateModified )
-            n_Mask |= FileStatusMask_ModifyTime;
-//          else if( PropertyName == Size )
-            n_Mask |= FileStatusMask_FileSize;
-//          else if( PropertyName == IsReadOnly )
-            n_Mask |= FileStatusMask_Attributes;
-//      else if( PropertyName == FolderCount )
-//          ;
-//      else if( PropertyName == DocumentCount )
-//          ;
-    }
+    // always try to get all properties
+    n_Mask = FileStatusMask_FileURL;
+    n_Mask |= FileStatusMask_LinkTargetURL;
+    n_Mask |= FileStatusMask_Type;
+    n_Mask |= FileStatusMask_FileName;
+    n_Mask |= FileStatusMask_Type;
+    n_Mask |= FileStatusMask_ModifyTime;
+    n_Mask |= FileStatusMask_FileSize;
+    n_Mask |= FileStatusMask_Attributes;
 }
 
 
@@ -2125,11 +2124,10 @@ shell::commit( const shell::ContentMap::iterator& it,
     }
 
 
-    // This mask is always set
+    sal_Bool isDirectory,isFile,isVolume,isRemoveable,isRemote;
+
     if( aFileStatus.isValid( FileStatusMask_Type ) )
     {
-        sal_Bool isDirectory,isFile;
-
         if( osl::FileStatus::Link == aFileStatus.getFileType() &&
             aFileStatus.isValid( FileStatusMask_LinkTargetURL ) )
         {
@@ -2139,6 +2137,7 @@ shell::commit( const shell::ContentMap::iterator& it,
                 osl::FileBase::E_None == aDirItem.getFileStatus( aFileStatus2 )    &&
                 aFileStatus2.isValid( FileStatusMask_Type ) )
             {
+                isVolume = osl::FileStatus::Volume == aFileStatus2.getFileType();
                 isDirectory =
                     osl::FileStatus::Volume == aFileStatus2.getFileType() ||
                     osl::FileStatus::Directory == aFileStatus2.getFileType();
@@ -2148,6 +2147,7 @@ shell::commit( const shell::ContentMap::iterator& it,
             else
             { // extremly ugly, but otherwise default construction of aDirItem and aFileStatus2
                 // before the preciding if
+                isVolume = osl::FileStatus::Volume == aFileStatus.getFileType();
                 isDirectory =
                     osl::FileStatus::Volume == aFileStatus.getFileType() ||
                     osl::FileStatus::Directory == aFileStatus.getFileType();
@@ -2157,6 +2157,7 @@ shell::commit( const shell::ContentMap::iterator& it,
         }
         else
         {
+            isVolume = osl::FileStatus::Volume == aFileStatus.getFileType();
             isDirectory =
                 osl::FileStatus::Volume == aFileStatus.getFileType() ||
                 osl::FileStatus::Directory == aFileStatus.getFileType();
@@ -2164,54 +2165,87 @@ shell::commit( const shell::ContentMap::iterator& it,
                 osl::FileStatus::Regular == aFileStatus.getFileType();
         }
 
+        aAny <<= isVolume;
+        it1 = properties.find( MyProperty( IsVolume ) );
+        if( it1 != properties.end() ) it1->setValue( aAny );
+
         aAny <<= isDirectory;
         it1 = properties.find( MyProperty( IsFolder ) );
-        if( it1 != properties.end() )
-        {
-            it1->setValue( aAny );
-        }
+        if( it1 != properties.end() ) it1->setValue( aAny );
 
         aAny <<= isFile;
         it1 = properties.find( MyProperty( IsDocument ) );
-        if( it1 != properties.end() )
+        if( it1 != properties.end() ) it1->setValue( aAny );
+
+        osl::VolumeInfo aVolumeInfo( VolumeInfoMask_Attributes );
+        if( isVolume &&
+            osl::FileBase::E_None == osl::Directory::getVolumeInfo( it->first,aVolumeInfo ) &&
+            aVolumeInfo.isValid( VolumeInfoMask_Attributes ) )
         {
-            it1->setValue( aAny );
+            // Retrieve the flags;
+            isRemote = aVolumeInfo.getRemoteFlag();
+            sal_Bool isRemoveable = aVolumeInfo.getRemoveableFlag();
+            aAny <<= isRemote;
+            it1 = properties.find( MyProperty( IsRemote ) );
+            if( it1 != properties.end() ) it1->setValue( aAny );
+            aAny <<= isRemoveable;
+            it1 = properties.find( MyProperty( IsRemoveable ) );
+            if( it1 != properties.end() ) it1->setValue( aAny );
+        }
+        else
+        {
+            sal_Bool dummy = false;
+            aAny <<= dummy;
+            it1 = properties.find( MyProperty( IsRemote ) );
+            if( it1 != properties.end() ) it1->setValue( aAny );
+            it1 = properties.find( MyProperty( IsRemoveable ) );
+            if( it1 != properties.end() ) it1->setValue( aAny );
         }
     }
     else
     {
+        it1 = properties.find( MyProperty( IsVolume ) );
+        if( it1 != properties.end() ) it1->setValue( emptyAny );
+
         it1 = properties.find( MyProperty( IsFolder ) );
-        if( it1 != properties.end() )
-        {
-            it1->setValue( emptyAny );
-        }
+        if( it1 != properties.end() ) it1->setValue( emptyAny );
 
         it1 = properties.find( MyProperty( IsDocument ) );
-        if( it1 != properties.end() )
-        {
-            it1->setValue( emptyAny );
-        }
+        if( it1 != properties.end() ) it1->setValue( emptyAny );
+
+        it1 = properties.find( MyProperty( IsRemote ) );
+        if( it1 != properties.end() ) it1->setValue( emptyAny );
+
+        it1 = properties.find( MyProperty( IsRemoveable ) );
+        if( it1 != properties.end() ) it1->setValue( emptyAny );
     }
 
 
     if( m_bFaked && it->first.compareToAscii( "file:///" ) == 0 )
     {
-        sal_Bool dummy = true;
+        isFile = false;
+        isVolume = isDirectory = true;
+        isRemoveable = isRemote = false;
 
-        aAny <<= dummy;
+        aAny <<= isDirectory;
         it1 = properties.find( MyProperty( IsFolder ) );
-        if( it1 != properties.end() )
-        {
-            it1->setValue( aAny );
-        }
+        if( it1 != properties.end() ) it1->setValue( aAny );
 
-        dummy = false;
-        aAny <<= dummy;
+        aAny <<= isVolume;
+        it1 = properties.find( MyProperty( IsVolume ) );
+        if( it1 != properties.end() ) it1->setValue( aAny );
+
+        aAny <<= isFile;
         it1 = properties.find( MyProperty( IsDocument ) );
-        if( it1 != properties.end() )
-        {
-            it1->setValue( aAny );
-        }
+        if( it1 != properties.end() ) it1->setValue( aAny );
+
+        aAny <<= isRemoveable;
+        it1 = properties.find( MyProperty( IsRemoveable ) );
+        if( it1 != properties.end() ) it1->setValue( aAny );
+
+        aAny <<= isRemote;
+        it1 = properties.find( MyProperty( IsRemote ) );
+        if( it1 != properties.end() ) it1->setValue( aAny );
     }
 
 
@@ -2221,6 +2255,12 @@ shell::commit( const shell::ContentMap::iterator& it,
         if( aFileStatus.isValid( FileStatusMask_FileSize ) )
         {
             aAny <<= sal_Int64( aFileStatus.getFileSize() );
+            it1->setValue( aAny );
+        }
+        else if( isVolume || isDirectory )
+        {
+            sal_Int64 dirSize = 0;
+            aAny <<= dirSize;
             it1->setValue( aAny );
         }
         else
