@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-27 07:33:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-29 21:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ XMLSectionExport::XMLSectionExport(
             RTL_CONSTASCII_USTRINGPARAM("MainEntryCharacterStyleName")),
         sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM("ParaStyleHeading")),
         sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel")),
-        sSection(RTL_CONSTASCII_USTRINGPARAM(sXML_section)),
+        sSection(GetXMLToken(XML_SECTION)),
         sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
         sUseAlphabeticalSeparators(
             RTL_CONSTASCII_USTRINGPARAM("UseAlphabeticalSeparators")),
@@ -258,15 +258,15 @@ XMLSectionExport::XMLSectionExport(
         sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex")),
         sContentSection(RTL_CONSTASCII_USTRINGPARAM("ContentSection")),
         sHeaderSection(RTL_CONSTASCII_USTRINGPARAM("HeaderSection")),
-        sTableOfContent(RTL_CONSTASCII_USTRINGPARAM(sXML_table_of_content)),
-        sIllustrationIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_illustration_index)),
-        sAlphabeticalIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_alphabetical_index)),
-        sTableIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_table_index)),
-        sObjectIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_object_index)),
-        sBibliography(RTL_CONSTASCII_USTRINGPARAM(sXML_bibliography)),
-        sUserIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_user_index)),
-        sIndexBody(RTL_CONSTASCII_USTRINGPARAM(sXML_index_body)),
-        sIndexTitle(RTL_CONSTASCII_USTRINGPARAM(sXML_index_title)),
+        sTableOfContent(GetXMLToken(XML_TABLE_OF_CONTENT)),
+        sIllustrationIndex(GetXMLToken(XML_ILLUSTRATION_INDEX)),
+        sAlphabeticalIndex(GetXMLToken(XML_ALPHABETICAL_INDEX)),
+        sTableIndex(GetXMLToken(XML_TABLE_INDEX)),
+        sObjectIndex(GetXMLToken(XML_OBJECT_INDEX)),
+        sBibliography(GetXMLToken(XML_BIBLIOGRAPHY)),
+        sUserIndex(GetXMLToken(XML_USER_INDEX)),
+        sIndexBody(GetXMLToken(XML_INDEX_BODY)),
+        sIndexTitle(GetXMLToken(XML_INDEX_TITLE)),
         sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection")),
         sIsGlobalDocumentSection(RTL_CONSTASCII_USTRINGPARAM("IsGlobalDocumentSection")),
         sProtectionKey(RTL_CONSTASCII_USTRINGPARAM("ProtectionKey")),
@@ -291,7 +291,7 @@ void XMLSectionExport::ExportSectionStart(
     else
     {
         // always export section style
-        GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_style_name,
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                  GetParaExport().Find(
                                      XML_STYLE_FAMILY_TEXT_SECTION,
                                      xPropertySet, sEmpty ));
@@ -382,7 +382,7 @@ void XMLSectionExport::ExportSectionEnd(
     // no end section for styles
     if (!bAutoStyles)
     {
-        sal_Char* pElementName = NULL;
+        enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
 
         // export index or regular section end
         Reference<XDocumentIndex> xIndex;
@@ -402,31 +402,31 @@ void XMLSectionExport::ExportSectionEnd(
                 switch (MapSectionType(xIndex->getServiceName()))
                 {
                     case TEXT_SECTION_TYPE_TOC:
-                        pElementName = sXML_table_of_content;
+                        eElement = XML_TABLE_OF_CONTENT;
                         break;
 
                     case TEXT_SECTION_TYPE_ILLUSTRATION:
-                        pElementName = sXML_illustration_index;
+                        eElement = XML_ILLUSTRATION_INDEX;
                         break;
 
                     case TEXT_SECTION_TYPE_ALPHABETICAL:
-                        pElementName = sXML_alphabetical_index;
+                        eElement = XML_ALPHABETICAL_INDEX;
                         break;
 
                     case TEXT_SECTION_TYPE_TABLE:
-                        pElementName = sXML_table_index;
+                        eElement = XML_TABLE_INDEX;
                         break;
 
                     case TEXT_SECTION_TYPE_OBJECT:
-                        pElementName = sXML_object_index;
+                        eElement = XML_OBJECT_INDEX;
                         break;
 
                     case TEXT_SECTION_TYPE_USER:
-                        pElementName = sXML_user_index;
+                        eElement = XML_USER_INDEX;
                         break;
 
                     case TEXT_SECTION_TYPE_BIBLIOGRAPHY:
-                        pElementName = sXML_bibliography;
+                        eElement = XML_BIBLIOGRAPHY;
                         break;
 
                     default:
@@ -437,15 +437,15 @@ void XMLSectionExport::ExportSectionEnd(
             }
             else
             {
-                pElementName = sXML_index_title;
+                eElement = XML_INDEX_TITLE;
             }
         }
         else
         {
-            pElementName = sXML_section;
+            eElement = XML_SECTION;
         }
 
-        if (NULL != pElementName)
+        if (XML_TOKEN_INVALID != eElement)
         {
             // any old attributes?
             GetExport().CheckAttrList();
@@ -455,7 +455,7 @@ void XMLSectionExport::ExportSectionEnd(
             GetExport().GetDocHandler()->endElement(
                 GetExport().GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_TEXT,
-                    OUString::createFromAscii(pElementName)));
+                    GetXMLToken(eElement)));
             GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
         }
         else
@@ -514,7 +514,7 @@ void XMLSectionExport::ExportIndexHeaderStart(
 {
     // export name, dammit!
     Reference<XNamed> xName(rSection, UNO_QUERY);
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_name, xName->getName());
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xName->getName());
 
     // format already handled -> export only start element
     GetExport().GetDocHandler()->ignorableWhitespace(GetExport().sWS);
@@ -561,8 +561,7 @@ void XMLSectionExport::ExportRegularSectionStart(
     // style name already handled in ExportSectionStart(...)
 
     Reference<XNamed> xName(rSection, UNO_QUERY);
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_name,
-                             xName->getName());
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME, xName->getName());
 
     // get XPropertySet for other values
     Reference<XPropertySet> xPropSet(rSection, UNO_QUERY);
@@ -572,30 +571,27 @@ void XMLSectionExport::ExportRegularSectionStart(
     aAny = xPropSet->getPropertyValue(sCondition);
     OUString sCond;
     aAny >>= sCond;
-    sal_Char* pDisplay;
+    enum XMLTokenEnum eDisplay = XML_TOKEN_INVALID;
     if (sCond.getLength() > 0)
     {
-        GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_condition,
-                                 sCond);
-        pDisplay = sXML_condition;
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_CONDITION, sCond);
+        eDisplay = XML_CONDITION;
     }
     else
     {
-        pDisplay = sXML_none;
+        eDisplay = XML_NONE;
     }
     aAny = xPropSet->getPropertyValue(sIsVisible);
     if (! *(sal_Bool*)aAny.getValue())
     {
-        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT, sXML_display,
-                                      pDisplay);
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_DISPLAY, eDisplay);
     }
 
     // protect + protection key
     aAny = xPropSet->getPropertyValue(sIsProtected);
     if (*(sal_Bool*)aAny.getValue())
     {
-        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT, sXML_protected,
-                                      sXML_true);
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTED, XML_TRUE);
     }
     Sequence<sal_Int8> aPassword;
     xPropSet->getPropertyValue(sProtectionKey) >>= aPassword;
@@ -603,7 +599,7 @@ void XMLSectionExport::ExportRegularSectionStart(
     {
         OUStringBuffer aBuffer;
         SvXMLUnitConverter::encodeBase64(aBuffer, aPassword);
-        GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_protection_key,
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTION_KEY,
                                  aBuffer.makeStringAndClear());
     }
 
@@ -632,24 +628,24 @@ void XMLSectionExport::ExportRegularSectionStart(
     {
         if (aFileLink.FileURL.getLength() > 0)
         {
-            GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href,
+            GetExport().AddAttribute(XML_NAMESPACE_XLINK, XML_HREF,
                                      GetExport().GetRelativeReference( aFileLink.FileURL) );
         }
 
         if (aFileLink.FilterName.getLength() > 0)
         {
-            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_filter_name,
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_FILTER_NAME,
                                      aFileLink.FilterName);
         }
 
         if (sRegionName.getLength() > 0)
         {
-            GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_section_name,
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_SECTION_NAME,
                                      sRegionName);
         }
 
         SvXMLElementExport aElem(GetExport(),
-                                 XML_NAMESPACE_TEXT, sXML_section_source,
+                                 XML_NAMESPACE_TEXT, XML_SECTION_SOURCE,
                                  sal_True, sal_True);
     }
     else
@@ -675,22 +671,22 @@ void XMLSectionExport::ExportRegularSectionStart(
                  (sItem.getLength() > 0 )   )
             {
                 GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
-                                         sXML_dde_application, sApplication);
-                GetExport().AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_topic,
+                                         XML_DDE_APPLICATION, sApplication);
+                GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_DDE_TOPIC,
                                          sTopic);
-                GetExport().AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_item,
+                GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_DDE_ITEM,
                                          sItem);
 
                 aAny = xPropSet->getPropertyValue(sIsAutomaticUpdate);
                 if (*(sal_Bool*)aAny.getValue())
                 {
-                    GetExport().AddAttributeASCII(XML_NAMESPACE_OFFICE,
-                                            sXML_automatic_update, sXML_true);
+                    GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
+                                             XML_AUTOMATIC_UPDATE, XML_TRUE);
                 }
 
                 SvXMLElementExport aElem(GetExport(),
                                          XML_NAMESPACE_OFFICE,
-                                         sXML_dde_source, sal_True, sal_True);
+                                         XML_DDE_SOURCE, sal_True, sal_True);
             }
             // else: no DDE data source
         }
@@ -725,24 +721,23 @@ void XMLSectionExport::ExportTableOfContentStart(
                                               (sal_Int32)nLevel);
 
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                     sXML_outline_level,
+                                     XML_OUTLINE_LEVEL,
                                      sBuffer.makeStringAndClear());
         }
         else
         {
             // outline-level: none
-            GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                          sXML_outline_level,
-                                          sXML_none);
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                                     XML_OUTLINE_LEVEL, XML_NONE);
         }
 
         // use index marks
         ExportBoolean(rPropertySet, sCreateFromMarks,
-                      sXML_use_index_marks, sal_True);
+                      XML_USE_INDEX_MARKS, sal_True);
 
         // use level styles
         ExportBoolean(rPropertySet, sCreateFromLevelParagraphStyles,
-                      sXML_use_index_source_styles, sal_False);
+                      XML_USE_INDEX_SOURCE_STYLES, sal_False);
 
         ExportBaseIndexSource(TEXT_SECTION_TYPE_TOC, rPropertySet);
     }
@@ -759,15 +754,15 @@ void XMLSectionExport::ExportObjectIndexStart(
     // scope for index source element
     {
         ExportBoolean(rPropertySet, sCreateFromOtherEmbeddedObjects,
-                      sXML_use_other_objects, sal_False);
+                      XML_USE_OTHER_OBJECTS, sal_False);
         ExportBoolean(rPropertySet, sCreateFromStarCalc,
-                      sXML_use_spreadsheet_objects, sal_False);
+                      XML_USE_SPREADSHEET_OBJECTS, sal_False);
         ExportBoolean(rPropertySet, sCreateFromStarChart,
-                      sXML_use_chart_objects, sal_False);
+                      XML_USE_CHART_OBJECTS, sal_False);
         ExportBoolean(rPropertySet, sCreateFromStarDraw,
-                      sXML_use_draw_objects,sal_False);
+                      XML_USE_DRAW_OBJECTS, sal_False);
         ExportBoolean(rPropertySet, sCreateFromStarMath,
-                      sXML_use_math_objects, sal_False);
+                      XML_USE_MATH_OBJECTS, sal_False);
 
         ExportBaseIndexSource(TEXT_SECTION_TYPE_OBJECT, rPropertySet);
     }
@@ -826,26 +821,26 @@ void XMLSectionExport::ExportAlphabeticalIndexStart(
         if (sStyleName.getLength())
         {
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                     sXML_main_entry_style_name,
+                                     XML_MAIN_ENTRY_STYLE_NAME,
                                      sStyleName);
         }
 
         // other (boolean) attributes
-        ExportBoolean(rPropertySet, sIsCaseSensitive, sXML_ignore_case,
+        ExportBoolean(rPropertySet, sIsCaseSensitive, XML_IGNORE_CASE,
                       sal_False, sal_True);
         ExportBoolean(rPropertySet, sUseAlphabeticalSeparators,
-                      sXML_alphabetical_separators, sal_False);
-        ExportBoolean(rPropertySet, sUseCombinedEntries, sXML_combine_entries,
+                      XML_ALPHABETICAL_SEPARATORS, sal_False);
+        ExportBoolean(rPropertySet, sUseCombinedEntries, XML_COMBINE_ENTRIES,
                       sal_True);
-        ExportBoolean(rPropertySet, sUseDash, sXML_combine_entries_with_dash,
+        ExportBoolean(rPropertySet, sUseDash, XML_COMBINE_ENTRIES_WITH_DASH,
                       sal_False);
-        ExportBoolean(rPropertySet, sUseKeyAsEntry, sXML_use_keys_as_entries,
+        ExportBoolean(rPropertySet, sUseKeyAsEntry, XML_USE_KEYS_AS_ENTRIES,
                       sal_False);
-        ExportBoolean(rPropertySet, sUsePP, sXML_combine_entries_with_pp,
+        ExportBoolean(rPropertySet, sUsePP, XML_COMBINE_ENTRIES_WITH_PP,
                       sal_True);
-        ExportBoolean(rPropertySet, sUseUpperCase, sXML_capitalize_entries,
+        ExportBoolean(rPropertySet, sUseUpperCase, XML_CAPITALIZE_ENTRIES,
                       sal_False);
-        ExportBoolean(rPropertySet, sIsCommaSeparated, sXML_comma_separated,
+        ExportBoolean(rPropertySet, sIsCommaSeparated, XML_COMMA_SEPARATED,
                       sal_False);
 
         // sort algorithm
@@ -883,19 +878,19 @@ void XMLSectionExport::ExportUserIndexStart(
     {
         // bool attributes
         ExportBoolean(rPropertySet, sCreateFromEmbeddedObjects,
-                      sXML_use_objects, sal_False);
+                      XML_USE_OBJECTS, sal_False);
         ExportBoolean(rPropertySet, sCreateFromGraphicObjects,
-                      sXML_use_graphics, sal_False);
+                      XML_USE_GRAPHICS, sal_False);
         ExportBoolean(rPropertySet, sCreateFromMarks,
-                      sXML_use_index_marks, sal_False);
+                      XML_USE_INDEX_MARKS, sal_False);
         ExportBoolean(rPropertySet, sCreateFromTables,
-                      sXML_use_tables, sal_False);
+                      XML_USE_TABLES, sal_False);
         ExportBoolean(rPropertySet, sCreateFromTextFrames,
-                      sXML_use_floating_frames, sal_False);
+                      XML_USE_FLOATING_FRAMES, sal_False);
         ExportBoolean(rPropertySet, sUseLevelFromSource,
-                      sXML_copy_outline_levels, sal_False);
+                      XML_COPY_OUTLINE_LEVELS, sal_False);
         ExportBoolean(rPropertySet, sCreateFromLevelParagraphStyles,
-                      sXML_use_index_source_styles, sal_False);
+                      XML_USE_INDEX_SOURCE_STYLES, sal_False);
 
         ExportBaseIndexSource(TEXT_SECTION_TYPE_USER, rPropertySet);
     }
@@ -928,8 +923,7 @@ void XMLSectionExport::ExportBaseIndexStart(
     Any aAny = rPropertySet->getPropertyValue(sIsProtected);
     if (*(sal_Bool*)aAny.getValue())
     {
-        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT, sXML_protected,
-                                      sXML_true);
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTED, XML_TRUE);
     }
 
     // index  Element start
@@ -969,18 +963,17 @@ void XMLSectionExport::ExportBaseIndexSource(
         aAny = rPropertySet->getPropertyValue(sCreateFromChapter);
         if (*(sal_Bool*)aAny.getValue())
         {
-            GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                          sXML_index_scope,
-                                          sXML_chapter);
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                                     XML_INDEX_SCOPE, XML_CHAPTER);
         }
 
         // tab-stops relative to margin?
         aAny = rPropertySet->getPropertyValue(sIsRelativeTabstops);
         if (! *(sal_Bool*)aAny.getValue())
         {
-            GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                          sXML_relative_tab_stop_position,
-                                          sXML_false);
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                                     XML_RELATIVE_TAB_STOP_POSITION,
+                                     XML_FALSE);
         }
     }
 
@@ -998,13 +991,13 @@ void XMLSectionExport::ExportBaseIndexSource(
         OUString sStyleName;
         aAny >>= sStyleName;
         GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                 sXML_style_name,
+                                 XML_STYLE_NAME,
                                  sStyleName);
 
         // title template
         SvXMLElementExport aHeaderTemplate(GetExport(),
                                            XML_NAMESPACE_TEXT,
-                                           sXML_index_title_template,
+                                           XML_INDEX_TITLE_TEMPLATE,
                                            sal_True, sal_False);
 
         // title as element content
@@ -1076,9 +1069,8 @@ void XMLSectionExport::ExportTableAndIllustrationIndexSourceAttributes(
     Any aAny = rPropertySet->getPropertyValue(sCreateFromLabels);
     if (! *(sal_Bool*)aAny.getValue())
     {
-        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                      sXML_use_caption,
-                                      sXML_false);
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                                 XML_USE_CAPTION, XML_FALSE);
     }
 
     // sequence name
@@ -1086,16 +1078,16 @@ void XMLSectionExport::ExportTableAndIllustrationIndexSourceAttributes(
     OUString sSequenceName;
     aAny >>= sSequenceName;
     GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                             sXML_caption_sequence_name,
+                             XML_CAPTION_SEQUENCE_NAME,
                              sSequenceName);
 
     // caption format
     aAny = rPropertySet->getPropertyValue(sLabelDisplayType);
     sal_Int16 nType;
     aAny >>= nType;
-    GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                  sXML_caption_sequence_format,
-                                  XMLTextFieldExport::MapReferenceType(nType));
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                             XML_CAPTION_SEQUENCE_FORMAT,
+                             XMLTextFieldExport::MapReferenceType(nType));
 }
 
 
@@ -1224,7 +1216,7 @@ void XMLSectionExport::ExportIndexTemplate(
             OUString sParaStyleName;
             aAny >>= sParaStyleName;
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                     sXML_style_name,
+                                     XML_STYLE_NAME,
                                      sParaStyleName);
         }
 
@@ -1496,8 +1488,9 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 case TOK_TTYPE_HYPERLINK_START:
                 case TOK_TTYPE_HYPERLINK_END:
                 case TOK_TTYPE_BIBLIOGRAPHY:
+                case TOK_TTYPE_CHAPTER_INFO:
                     GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                             sXML_style_name, sCharStyle);
+                                             XML_STYLE_NAME, sCharStyle);
                     break;
                 default:
                     ; // nothing: no character style
@@ -1509,9 +1502,8 @@ void XMLSectionExport::ExportIndexTemplateElement(
         if (TOK_TTYPE_TAB_STOP == nTokenType)
         {
             // tab type
-            GetExport().AddAttributeASCII(XML_NAMESPACE_STYLE,
-                                          sXML_type,
-                                       bRightAligned ? sXML_right : sXML_left);
+            GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_TYPE,
+                                     bRightAligned ? XML_RIGHT : XML_LEFT);
 
             if (bTabPositionOK && (! bRightAligned))
             {
@@ -1520,7 +1512,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 GetExport().GetMM100UnitConverter().convertMeasure(sBuf,
                                                                  nTabPosition);
                 GetExport().AddAttribute(XML_NAMESPACE_STYLE,
-                                         sXML_position,
+                                         XML_POSITION,
                                          sBuf.makeStringAndClear());
             }
 
@@ -1528,7 +1520,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
             if (bFillCharOK && (sFillChar.getLength() > 0))
             {
                 GetExport().AddAttribute(XML_NAMESPACE_STYLE,
-                                         sXML_leader_char, sFillChar);
+                                         XML_LEADER_CHAR, sFillChar);
             }
         }
 
@@ -1541,7 +1533,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
                                                  aBibliographyDataFieldMap ) )
             {
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                         sXML_bibliography_data_field,
+                                         XML_BIBLIOGRAPHY_DATA_FIELD,
                                          sBuf.makeStringAndClear());
             }
         }
@@ -1550,8 +1542,8 @@ void XMLSectionExport::ExportIndexTemplateElement(
         if (TOK_TTYPE_CHAPTER_INFO == nTokenType)
         {
             DBG_ASSERT(bChapterFormatOK, "need chapter info");
-            GetExport().AddAttributeASCII(
-                XML_NAMESPACE_TEXT, sXML_display,
+            GetExport().AddAttribute(
+                XML_NAMESPACE_TEXT, XML_DISPLAY,
                 XMLTextFieldExport::MapChapterDisplayFormat(nChapterFormat));
         }
 
@@ -1587,13 +1579,13 @@ void XMLSectionExport::ExportLevelParagraphStyles(
             sal_Int32 nLevelPlusOne = nLevel + 1;
             SvXMLUnitConverter::convertNumber(sBuf, nLevelPlusOne);
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                     sXML_outline_level,
+                                     XML_OUTLINE_LEVEL,
                                      sBuf.makeStringAndClear());
 
             // source styles element
             SvXMLElementExport aParaStyles(GetExport(),
                                            XML_NAMESPACE_TEXT,
-                                           sXML_index_source_styles,
+                                           XML_INDEX_SOURCE_STYLES,
                                            sal_True, sal_True);
 
             // iterate over styles in this level
@@ -1601,13 +1593,13 @@ void XMLSectionExport::ExportLevelParagraphStyles(
             {
                 // stylename attribute
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                         sXML_style_name,
+                                         XML_STYLE_NAME,
                                          aStyleNames[nName]);
 
                 // element
                 SvXMLElementExport aParaStyle(GetExport(),
                                               XML_NAMESPACE_TEXT,
-                                              sXML_index_source_style,
+                                              XML_INDEX_SOURCE_STYLE,
                                               sal_True, sal_False);
             }
         }
@@ -1617,11 +1609,11 @@ void XMLSectionExport::ExportLevelParagraphStyles(
 void XMLSectionExport::ExportBoolean(
     const Reference<XPropertySet> & rPropSet,
     const OUString& sPropertyName,
-    const sal_Char* pAttributeName,
+    enum XMLTokenEnum eAttributeName,
     sal_Bool bDefault,
     sal_Bool bInvert)
 {
-    DBG_ASSERT(NULL != pAttributeName, "Need attribute name");
+    DBG_ASSERT(eAttributeName != XML_TOKEN_INVALID, "Need attribute name");
 
     Any aAny = rPropSet->getPropertyValue(sPropertyName);
     sal_Bool bTmp = *(sal_Bool*)aAny.getValue();
@@ -1632,9 +1624,9 @@ void XMLSectionExport::ExportBoolean(
     if ((!(bTmp ^ bInvert)) != (!bDefault))
     {
         // export non-default value (since default is omitted)
-        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                      pAttributeName,
-                                      bDefault ? sXML_false : sXML_true);
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                                 eAttributeName,
+                                 bDefault ? XML_FALSE : XML_TRUE);
     }
 }
 
@@ -1684,24 +1676,24 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
 
             aAny = xPropSet->getPropertyValue(sBracketBefore);
             aAny >>= sTmp;
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_prefix, sTmp);
+            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_PREFIX, sTmp);
 
             aAny = xPropSet->getPropertyValue(sBracketAfter);
             aAny >>= sTmp;
-            rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_suffix, sTmp);
+            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_SUFFIX, sTmp);
 
             aAny = xPropSet->getPropertyValue(sIsNumberEntries);
             if (*(sal_Bool*)aAny.getValue())
             {
-                rExport.AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                          sXML_numbered_entries, sXML_true);
+                rExport.AddAttribute(XML_NAMESPACE_TEXT,
+                                     XML_NUMBERED_ENTRIES, XML_TRUE);
             }
 
             aAny = xPropSet->getPropertyValue(sIsSortByPosition);
             if (! *(sal_Bool*)aAny.getValue())
             {
-                rExport.AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                          sXML_sort_by_position, sXML_false);
+                rExport.AddAttribute(XML_NAMESPACE_TEXT,
+                                     XML_SORT_BY_POSITION, XML_FALSE);
             }
 
             // sort algorithm
@@ -1725,7 +1717,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
 
             // configuration element
             SvXMLElementExport aElement(rExport, XML_NAMESPACE_TEXT,
-                                        sXML_bibliography_configuration,
+                                        XML_BIBLIOGRAPHY_CONFIGURATION,
                                         sal_True, sal_True);
 
             // sort keys
@@ -1751,7 +1743,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                         if (SvXMLUnitConverter::convertEnum( sBuf, nKey,
                                                  aBibliographyDataFieldMap ) )
                         {
-                            rExport.AddAttribute(XML_NAMESPACE_TEXT, sXML_key,
+                            rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_KEY,
                                                  sBuf.makeStringAndClear());
                         }
                     }
@@ -1759,14 +1751,14 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                                             sizeof(sAPI_IsSortAscending)-1))
                     {
                         sal_Bool bTmp = *(sal_Bool*)rValue.Value.getValue();
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                                  sXML_sort_ascending,
-                                                bTmp ? sXML_true : sXML_false);
+                        rExport.AddAttribute(XML_NAMESPACE_TEXT,
+                                             XML_SORT_ASCENDING,
+                                             bTmp ? XML_TRUE : XML_FALSE);
                     }
                 }
 
                 SvXMLElementExport aKeyElem(rExport,
-                                            XML_NAMESPACE_TEXT, sXML_sort_key,
+                                            XML_NAMESPACE_TEXT, XML_SORT_KEY,
                                             sal_True, sal_True);
             }
         }
