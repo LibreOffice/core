@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-22 16:13:53 $
+ *  last change: $Author: af $ $Date: 2002-04-29 14:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ void AccessibleDrawDocumentView::Init (void)
     mpChildrenManager = new ChildrenManager(this, xShapeList, maShapeTreeInfo, *this);
     if (mpChildrenManager != NULL)
     {
-        mpChildrenManager->AddAccessibleShape (CreateDrawPageShape());
+        mpChildrenManager->AddAccessibleShape (std::auto_ptr<AccessibleShape>(CreateDrawPageShape()));
         mpChildrenManager->Update ();
     }
 }
@@ -348,7 +348,7 @@ void SAL_CALL
                 mpChildrenManager->SetShapeList (
                     uno::Reference<drawing::XShapes> (
                         xView->getCurrentPage(), uno::UNO_QUERY));
-            mpChildrenManager->AddAccessibleShape (CreateDrawPageShape ());
+            mpChildrenManager->AddAccessibleShape (std::auto_ptr<AccessibleShape>(CreateDrawPageShape()));
             mpChildrenManager->Update (false);
             OSL_TRACE ("done handling frame event for AccessibleDrawDocumentView");
         }
@@ -381,7 +381,7 @@ void SAL_CALL
             uno::Reference<drawing::XShapes> xShapeList (
                 xView->getCurrentPage(), uno::UNO_QUERY);
             mpChildrenManager->SetShapeList (xShapeList);
-            mpChildrenManager->AddAccessibleShape (CreateDrawPageShape ());
+            mpChildrenManager->AddAccessibleShape (std::auto_ptr<AccessibleShape>(CreateDrawPageShape ()));
             mpChildrenManager->Update (false);
         }
         else
