@@ -90,6 +90,7 @@
 #define READMEFILENAME(name,lang)             STRING(CONCAT2(name,lang))
 #define HELPFILENAME(name,endung)             STRING(CONCAT3(name,.,endung))
 #define EXTRAFILENAME(name,lang)              STRING(CONCAT3(name,lang,.zip))
+#define CONFIGLANGFILENAME(name,lang,ext)     STRING(CONCAT4(name,lang,.,ext))
 
 
 #define FILE_BODY \
@@ -749,6 +750,40 @@
     Key (ar)       = STRING(ar);    \
     Key (he)       = STRING(he);    \
     Key (99)       = STRING(ISO_CODE)
+
+#define FILE_ALL_LANG_LETTER(name, ext) \
+    Name (01)       = CONFIGLANGFILENAME(name,en-US,ext); \
+    Name (03)       = CONFIGLANGFILENAME(name,pt,ext);    \
+    Name (07)       = CONFIGLANGFILENAME(name,ru,ext);    \
+    Name (30)       = CONFIGLANGFILENAME(name,el,ext);    \
+    Name (31)       = CONFIGLANGFILENAME(name,nl,ext);    \
+    Name (33)       = CONFIGLANGFILENAME(name,fr,ext);    \
+    Name (34)       = CONFIGLANGFILENAME(name,es,ext);    \
+    Name (35)       = CONFIGLANGFILENAME(name,fi,ext);    \
+    Name (36)       = CONFIGLANGFILENAME(name,hu,ext);    \
+    Name (37)       = CONFIGLANGFILENAME(name,ca,ext);    \
+    Name (50)       = CONFIGLANGFILENAME(name,sl,ext);    \
+    Name (39)       = CONFIGLANGFILENAME(name,it,ext);    \
+    Name (42)       = CONFIGLANGFILENAME(name,cs,ext);    \
+    Name (43)       = CONFIGLANGFILENAME(name,sk,ext);    \
+    Name (44)       = CONFIGLANGFILENAME(name,en-GB,ext); \
+    Name (45)       = CONFIGLANGFILENAME(name,da,ext);    \
+    Name (46)       = CONFIGLANGFILENAME(name,sv,ext);    \
+    Name (47)       = CONFIGLANGFILENAME(name,no,ext);    \
+    Name (48)       = CONFIGLANGFILENAME(name,pl,ext);    \
+    Name (49)       = CONFIGLANGFILENAME(name,de,ext);    \
+    Name (55)       = CONFIGLANGFILENAME(name,pt-BR,ext); \
+    Name (66)       = CONFIGLANGFILENAME(name,th,ext);    \
+    Name (77)       = CONFIGLANGFILENAME(name,et,ext);    \
+    Name (81)       = CONFIGLANGFILENAME(name,ja,ext);    \
+    Name (82)       = CONFIGLANGFILENAME(name,ko,ext);    \
+    Name (86)       = CONFIGLANGFILENAME(name,zh-CN,ext); \
+    Name (88)       = CONFIGLANGFILENAME(name,zh-TW,ext); \
+    Name (90)       = CONFIGLANGFILENAME(name,tr,ext);    \
+    Name (91)       = CONFIGLANGFILENAME(name,hi-IN,ext); \
+    Name (96)       = CONFIGLANGFILENAME(name,ar,ext);    \
+    Name (97)       = CONFIGLANGFILENAME(name,he,ext);    \
+    Name (99)       = CONFIGLANGFILENAME(name,ISO_CODE,ext)
 
 #endif // MACROS_INC
 
