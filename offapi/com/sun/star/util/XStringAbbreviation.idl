@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStringAbbreviation.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #endif
 
 module com { module sun { module star { module util {
-    interface XStringWidth;
+     published interface XStringWidth;
 }; }; }; };
 
 module com { module sun { module star { module util {
@@ -83,7 +83,7 @@ module com { module sun { module star { module util {
 
     @see XStringWidth
  */
-interface XStringAbbreviation: com::sun::star::uno::XInterface
+published interface XStringAbbreviation: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** Abbreviate a string, so that the resulting abbreviated string is not
