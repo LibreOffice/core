@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:42:39 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ public:
 
     const SwNumFmt* GetNumFmt( USHORT i ) const;
     const SwNumFmt& Get( USHORT i ) const;
+
     void Set( USHORT i, const SwNumFmt* );
     void Set( USHORT i, const SwNumFmt& );
     String MakeNumString( const SwNodeNum&, BOOL bInclStrings = TRUE,
@@ -300,6 +301,7 @@ public:
     }
 
 };
+
 
 
 #endif  // _NUMRULE_HXX
