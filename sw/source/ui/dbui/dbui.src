@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:39:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ ModalDialog DLG_DBSELECTION
     Text[ turkish ] = "Veritabaný seçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccionar base de datos";
+    Text[ finnish ] = "Tietokantavalinta";
 };
  // DLG_PRINTMONITOR ------------------------------------------------------
 ModelessDialog DLG_PRINTMONITOR
@@ -179,6 +180,7 @@ ModelessDialog DLG_PRINTMONITOR
         Text[ turkish ] = "Çýktý türü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "se está imprimiendo en";
+        Text[ finnish ] = "tulostuu tulostimessa";
     };
     FixedText FT_SENDING
     {
@@ -214,6 +216,7 @@ ModelessDialog DLG_PRINTMONITOR
         TEXT[ turkish ] = "Alýcý";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "se envía a";
+        TEXT[ finnish ] = "lähetetään kohteelle";
     };
     FixedText FT_PRINTER
     {
@@ -278,6 +281,7 @@ ModelessDialog DLG_PRINTMONITOR
         Text[ turkish ] = "Gönderme ekraný";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Enviar-Monitor";
+        Text[ finnish ] = "Lähetysvalvonta";
     };
     Text [ portuguese ] = "Monitor de impressão" ;
     Text [ english_us ] = "Print monitor" ;
@@ -299,6 +303,7 @@ ModelessDialog DLG_PRINTMONITOR
     Text[ korean ] = "ÀúÀå ¸ð´ÏÅÍ";
     Text[ turkish ] = "Yazdýrma ekraný";
     Text[ catalan ] = "Monitor de impresión";
+    Text[ finnish ] = "Tulostuksenvalvonta";
 };
 
 String STR_DB_EMAIL
@@ -325,4 +330,5 @@ String STR_DB_EMAIL
     Text[ turkish ] = "E-posta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "E-mail";
+    Text[ finnish ] = "Sähköposti";
 };
