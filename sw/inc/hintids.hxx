@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-21 18:12:10 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 10:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ RES_FRMATR_BEGIN = RES_PARATR_END,
     RES_EDIT_IN_READONLY,                           // 99
     RES_LAYOUT_SPLIT,                               // 100
     RES_CHAIN,                                      // 101
-    RES_FRMATR_DUMMY2,                              // 102
+    RES_TEXTGRID,                                   // 102
     RES_LINENUMBER  ,                               // 103
     RES_FTN_AT_TXTEND,                              // 104
     RES_END_AT_TXTEND,                              // 105

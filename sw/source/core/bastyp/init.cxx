@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-21 18:11:40 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 10:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,9 @@
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
 #endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
 #endif
@@ -572,7 +575,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_LAYOUT_SPLIT
     { 0, 0 },                                           // RES_CHAIN
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY2
+    { 0, SFX_ITEM_POOLABLE },                           // RES_TEXTGRID
     { 0, SFX_ITEM_POOLABLE },                           // RES_LINENUMBER
     { 0, SFX_ITEM_POOLABLE },                           // RES_FTN_AT_TXTEND
     { 0, SFX_ITEM_POOLABLE },                           // RES_END_AT_TXTEND
@@ -830,7 +833,7 @@ void _InitCore()
     aAttrTab[ RES_EDIT_IN_READONLY - POOLATTR_BEGIN ] = new SwFmtEditInReadonly;
     aAttrTab[ RES_LAYOUT_SPLIT - POOLATTR_BEGIN ] = new SwFmtLayoutSplit;
     aAttrTab[ RES_CHAIN - POOLATTR_BEGIN ] = new SwFmtChain;
-    aAttrTab[ RES_FRMATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY2 );
+    aAttrTab[ RES_TEXTGRID - POOLATTR_BEGIN ] = new SwTextGridItem;
     aAttrTab[ RES_LINENUMBER - POOLATTR_BEGIN ] = new SwFmtLineNumber;
     aAttrTab[ RES_FTN_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtFtnAtTxtEnd;
     aAttrTab[ RES_END_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtEndAtTxtEnd;

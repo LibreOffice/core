@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-01-23 13:20:40 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 10:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,9 @@
 #ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
 #endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -284,7 +287,6 @@
 #ifndef _UNOMID_H
 #include <unomid.h>
 #endif
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -2333,7 +2335,67 @@ BOOL SwFmtLineNumber::PutValue( const uno::Any& rVal, BYTE nMemberId )
     return bRet;
 }
 
+/*************************************************************************
+ *    class SwTextGridItem
+ *************************************************************************/
 
+SwTextGridItem::SwTextGridItem()
+    : aColor( COL_LIGHTGRAY ), nLines( 0 ), nBaseHeight( 240 ),
+      nRubyHeight( 120 ), eGridType( GRID_NONE ), bRubyTextBelow( 0 ),
+      bPrintGrid( 1 ), bDisplayGrid( 1 )
+{
+}
+
+SwTextGridItem::~SwTextGridItem()
+{
+}
+
+int SwTextGridItem::operator==( const SfxPoolItem& rAttr ) const
+{
+    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    return eGridType == ((SwTextGridItem&)rAttr).GetGridType() &&
+           nLines == ((SwTextGridItem&)rAttr).GetLines() &&
+           nBaseHeight == ((SwTextGridItem&)rAttr).GetBaseHeight() &&
+           nRubyHeight == ((SwTextGridItem&)rAttr).GetRubyHeight() &&
+           bRubyTextBelow == ((SwTextGridItem&)rAttr).GetRubyTextBelow() &&
+           bDisplayGrid == ((SwTextGridItem&)rAttr).GetDisplayGrid() &&
+           bPrintGrid == ((SwTextGridItem&)rAttr).GetPrintGrid() &&
+           aColor == ((SwTextGridItem&)rAttr).GetColor();
+}
+
+SfxPoolItem* SwTextGridItem::Clone( SfxItemPool* pPool ) const
+{
+    return new SwTextGridItem( *this );
+}
+
+SwTextGridItem& SwTextGridItem::operator=( const SwTextGridItem& rCpy )
+{
+    aColor = rCpy.GetColor();
+    nLines = rCpy.GetLines();
+    nBaseHeight = rCpy.GetBaseHeight();
+    nRubyHeight = rCpy.GetRubyHeight();
+    eGridType = rCpy.GetGridType();
+    bRubyTextBelow = rCpy.GetRubyTextBelow();
+    bPrintGrid = rCpy.GetPrintGrid();
+    bDisplayGrid = rCpy.GetDisplayGrid();
+
+    return *this;
+}
+
+BOOL SwTextGridItem::QueryValue( com::sun::star::uno::Any& rVal,
+                                 BYTE nMemberId ) const
+{
+    BOOL bRet = TRUE;
+    return bRet;
+}
+
+BOOL SwTextGridItem::PutValue( const com::sun::star::uno::Any& rVal,
+                               BYTE nMemberId )
+{
+    nMemberId &= ~CONVERT_TWIPS;
+    sal_Bool bRet = sal_True;
+    return bRet;
+}
 
 //  class SwFrmFmt
 //  Implementierung teilweise inline im hxx
@@ -2803,6 +2865,4 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
 
     return 0;
 }
-
-
 

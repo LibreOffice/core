@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-05-21 13:22:57 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 10:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,5 +150,15 @@
 #define MID_RUBY_ADJUST         1
 #define MID_RUBY_CHARSTYLE      2
 #define MID_RUBY_ABOVE          3
+
+//SwTextGridItem
+#define MID_GRID_COLOR          0
+#define MID_GRID_LINES          1
+#define MID_GRID_BASEHEIGHT     2
+#define MID_GRID_RUBYHEIGHT     3
+#define MID_GRID_TYPE           4
+#define MID_GRID_RUBY_BELOW     5
+#define MID_GRID_PRINT          6
+#define MID_GRID_DISPLAY        7
 
 #endif

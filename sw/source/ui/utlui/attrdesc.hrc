@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 10:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,11 +136,14 @@
 #define STR_DRAWMODE                    (RC_ATTR_BEGIN + 69)
 #define STR_DRAWMODE_STD                (RC_ATTR_BEGIN + 70)
 #define STR_DRAWMODE_GREY               (RC_ATTR_BEGIN + 71)
-#define STR_DRAWMODE_BLACKWHITE         (RC_ATTR_BEGIN + 72)
-#define STR_DRAWMODE_WATERMARK          (RC_ATTR_BEGIN + 73)
+#define STR_DRAWMODE_BLACKWHITE                         (RC_ATTR_BEGIN + 72)
+#define STR_DRAWMODE_WATERMARK                          (RC_ATTR_BEGIN + 73)
 #define STR_ROTATION                    (RC_ATTR_BEGIN + 74)
+#define STR_GRID_NONE                                   (RC_ATTR_BEGIN + 75)
+#define STR_GRID_LINES_ONLY                             (RC_ATTR_BEGIN + 76)
+#define STR_GRID_LINES_CHARS                            (RC_ATTR_BEGIN + 77)
 
-#define ATTR_ACT_END                    STR_DRAWMODE_WATERMARK
+#define ATTR_ACT_END                                    STR_GRID_LINES_CHARS
 
 #if ATTR_ACT_END > RC_ATTR_END
 #error Resource-Id Ueberlauf in #file, #line

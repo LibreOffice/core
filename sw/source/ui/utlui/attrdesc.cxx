@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-06 12:21:03 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 10:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #endif
 #ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
 #endif
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
@@ -1015,6 +1018,46 @@ SfxItemPresentation SwFmtLineNumber::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
+SfxItemPresentation SwTextGridItem::GetPresentation
+(
+    SfxItemPresentation ePres,
+    SfxMapUnit          eCoreUnit,
+    SfxMapUnit          ePresUnit,
+    String&             rText,
+    const IntlWrapper*  pIntl
+)   const
+{
+    switch ( ePres )
+    {
+        case SFX_ITEM_PRESENTATION_NONE:
+            rText.Erase();
+            return SFX_ITEM_PRESENTATION_NONE;
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+        {
+            USHORT nId = 0;
+
+            switch ( GetGridType() )
+            {
+            case GRID_NONE :
+                nId = STR_GRID_NONE;
+                break;
+            case GRID_LINES_ONLY :
+                nId = STR_GRID_LINES_ONLY;
+                break;
+            case GRID_LINES_CHARS :
+                nId = STR_GRID_LINES_CHARS;
+                break;
+            }
+            if ( nId )
+                rText += SW_RESSTR( nId );
+            return ePres;
+        }
+    }
+
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
 // ---------------------- Grafik-Attribute --------------------------
 
 SfxItemPresentation SwMirrorGrf::GetPresentation(
@@ -1260,6 +1303,9 @@ SfxItemPresentation SwDrawModeGrf::GetPresentation(
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/07/06 12:21:03  jp
+      remove GetAppInternational
+
       Revision 1.5  2001/05/13 03:33:17  er
       replaced International with IntlWrapper
 

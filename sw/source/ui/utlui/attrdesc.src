@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:18:48 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 10:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2116,5 +2116,21 @@ String STR_ROTATION
     Text[ finnish ] = "Kierto";
 };
 
+String STR_GRID_NONE
+{
+    Text = "Kein Gitter";
+    Text[ english ] = "No grid";
+};
 
+String STR_GRID_LINES_ONLY
+{
+    Text = "Zeilengitter";
+    Text[ english ] = "Line grid";
+};
+
+String STR_GRID_LINES_CHARS
+{
+    Text = "Zeilen- und Zeichengitter";
+    Text[ english ] = "Line and character grid";
+};
 

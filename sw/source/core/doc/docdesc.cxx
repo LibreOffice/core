@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-21 17:56:59 $
+ *  last change: $Author: fme $ $Date: 2002-01-31 10:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,8 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
                                         RES_BACKGROUND, RES_SHADOW,
                                         RES_COL, RES_COL,
                                         RES_FRAMEDIR, RES_FRAMEDIR,
-                                           RES_UNKNOWNATR_CONTAINER,
+                                        RES_TEXTGRID, RES_TEXTGRID,
+                                        RES_UNKNOWNATR_CONTAINER,
                                                 RES_UNKNOWNATR_CONTAINER,
                                         0 };
     const SfxPoolItem* pItem;
