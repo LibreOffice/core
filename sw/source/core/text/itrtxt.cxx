@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:56:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
 #include "txtfrm.hxx"
 #include "porfly.hxx"
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 # include "txtfrm.hxx"      // GetFrmID,
 #endif
 
