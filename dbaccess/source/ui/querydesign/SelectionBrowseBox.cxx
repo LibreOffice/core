@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-07 12:44:13 $
+ *  last change: $Author: rt $ $Date: 2001-02-08 15:33:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,8 @@ void OSelectionBrowseBox::InitController(DbCellControllerRef& rController, long 
                 m_pVisibleCell->GetBox().Disable();
                 m_pVisibleCell->GetBox().EnableInput(sal_False);
                 String aMessage(ModuleRes(STR_QRY_ORDERBY_UNRELATED));
-                InfoBox(getDesignView(), aMessage).Execute();
+                OQueryDesignView* paDView = getDesignView();
+                InfoBox(paDView, aMessage).Execute();
             }
         }   break;
         case BROW_ORDER_ROW:
