@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:55:53 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,15 +1490,56 @@ BOOL SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, BOOL bPrev)
     }
     if (pBtmMarkHit==NULL) { pBtmMarkHit=pTopMarkHit; nBtmMarkHit=nTopMarkHit; }
     SdrObject* pBtmObjHit=pBtmMarkHit->GetObj();
-
     ULONG nObjAnz=pObjList->GetObjCount();
-    ULONG nSearchBeg=bPrev ? pBtmObjHit->GetOrdNum()+1 : pTopObjHit->GetOrdNum();
+
+    // #110988#
+    //ULONG nSearchBeg=bPrev ? pBtmObjHit->GetOrdNum()+1 : pTopObjHit->GetOrdNum();
+    sal_uInt32 nSearchBeg;
+    E3dScene* pScene;
+    SdrObject* pObjHit = (bPrev) ? pBtmObjHit : pTopObjHit;
+    sal_Bool bRemap = pObjHit->ISA(E3dCompoundObject)
+        ? ((E3dCompoundObject*)pObjHit)->IsAOrdNumRemapCandidate(pScene)
+        : sal_False;
+
+    if(bPrev)
+    {
+        sal_uInt32 nOrdNumBtm(pBtmObjHit->GetOrdNum());
+
+        if(bRemap)
+        {
+            nOrdNumBtm = pScene->RemapOrdNum(nOrdNumBtm);
+        }
+
+        nSearchBeg = nOrdNumBtm + 1;
+    }
+    else
+    {
+        sal_uInt32 nOrdNumTop(pTopObjHit->GetOrdNum());
+
+        if(bRemap)
+        {
+            nOrdNumTop = pScene->RemapOrdNum(nOrdNumTop);
+        }
+
+        nSearchBeg = nOrdNumTop;
+    }
+
     ULONG no=nSearchBeg;
     SdrObject* pFndObj=NULL;
     SdrObject* pAktObj=NULL;
     while (pFndObj==NULL && ((!bPrev && no>0) || (bPrev && no<nObjAnz))) {
         if (!bPrev) no--;
-        SdrObject* pObj=pObjList->GetObj(no);
+        SdrObject* pObj;
+
+        if(bRemap)
+        {
+            pObj = pObjList->GetObj(pScene->RemapOrdNum(no));
+        }
+        else
+        {
+            pObj = pObjList->GetObj(no);
+        }
+
         if (ImpIsObjHit(aPt,USHORT(nTol),pObj,pPV,SDRSEARCH_TESTMARKABLE)) {
             if (aMark.FindObject(pObj)==CONTAINER_ENTRY_NOTFOUND) {
                 pFndObj=pObj;
@@ -1670,12 +1711,28 @@ SdrObject* SdrMarkView::ImpCheckObjHit(const Point& rPnt, USHORT nTol, SdrObjLis
     BOOL bBack=(nOptions & SDRSEARCH_BACKWARD)!=0;
     SdrObject* pRet=NULL;
     rpRootObj=NULL;
-    if (pOL!=NULL) {
+    if (pOL!=NULL)
+    {
+        // #110988#
+        sal_Bool bRemap(pOL->GetOwnerObj() && pOL->GetOwnerObj()->ISA(E3dScene));
+        E3dScene* pRemapScene = (bRemap ? (E3dScene*)pOL->GetOwnerObj() : 0L);
+
         ULONG nObjAnz=pOL->GetObjCount();
         ULONG nObjNum=bBack ? 0 : nObjAnz;
         while (pRet==NULL && (bBack ? nObjNum<nObjAnz : nObjNum>0)) {
             if (!bBack) nObjNum--;
-            SdrObject* pObj=pOL->GetObj(nObjNum);
+            SdrObject* pObj;
+
+            // #110988#
+            if(bRemap)
+            {
+                pObj = pOL->GetObj(pRemapScene->RemapOrdNum(nObjNum));
+            }
+            else
+            {
+                pObj = pOL->GetObj(nObjNum);
+            }
+
             pRet=ImpCheckObjHit(rPnt,nTol,pObj,pPV,nOptions,pMVisLay);
             if (pRet!=NULL) rpRootObj=pObj;
             if (bBack) nObjNum++;
