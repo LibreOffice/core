@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:50:52 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,11 @@ SFX_IMPL_TOOLBOX_CONTROL(SwTbxAnchor, SfxUInt16Item);
  *  Beschreibung:
  ******************************************************************************/
 
-SwTbxAnchor::SwTbxAnchor(USHORT nId, ToolBox& rTbx, SfxBindings& rBind) :
-    SfxToolBoxControl(nId, rTbx, rBind),
+SwTbxAnchor::SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    SfxToolBoxControl( nSlotId, nId, rTbx ),
     nActAnchorId(0)
 {
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 
 /******************************************************************************
@@ -142,12 +143,33 @@ void  SwTbxAnchor::StateChanged( USHORT nSID, SfxItemState eState, const SfxPool
  *  Beschreibung:
  ******************************************************************************/
 
+SfxPopupWindow* SwTbxAnchor::CreatePopupWindow()
+{
+    SwTbxAnchor::Click();
+    return 0;
+}
+
+/******************************************************************************
+ *  Beschreibung:
+ ******************************************************************************/
+
 void  SwTbxAnchor::Click()
 {
     PopupMenu aPopMenu(SW_RES(MN_ANCHOR_POPUP));
 
-    SfxDispatcher* pDispatch = GetBindings().GetDispatcher();
-    SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
+    SfxViewFrame*   pViewFrame( 0 );
+    SfxDispatcher*  pDispatch( 0 );
+    SfxViewShell*   pCurSh( SfxViewShell::Current() );
+
+    if ( pCurSh )
+    {
+        pViewFrame = pCurSh->GetViewFrame();
+        if ( pViewFrame )
+            pDispatch = pViewFrame->GetDispatcher();
+    }
+
+//    SfxDispatcher* pDispatch = GetBindings().GetDispatcher();
+//    SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
     SwView* pActiveView = 0;
     if(pViewFrame)
     {
@@ -171,7 +193,7 @@ void  SwTbxAnchor::Click()
     SwWrtShell* pWrtShell = pActiveView->GetWrtShellPtr();
     aPopMenu.EnableItem( FN_TOOL_ANKER_FRAME, 0 != pWrtShell->IsFlyInFly() );
 
-    Rectangle aRect(GetToolBox().GetItemRect(FN_TOOL_ANKER));
+    Rectangle aRect(GetToolBox().GetItemRect(GetId()));
     USHORT nHtmlMode = ::GetHtmlMode((SwDocShell*)SfxObjectShell::Current());
     BOOL bHtmlModeNoAnchor = ( nHtmlMode & HTMLMODE_ON) && 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS);
 
@@ -188,6 +210,3 @@ void  SwTbxAnchor::Click()
     if (nSlotId)
         pDispatch->Execute(nSlotId, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
 }
-
-
-
