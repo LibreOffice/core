@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.91 $
- *  last change: $Author: vg $ $Date: 2003-05-28 12:31:48 $
+ *  $Revision: 1.92 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 
 // TODO: move file mapping stuff to OSL
 #if defined(UNX)
+    #ifdef LINUX
+        #include <dlfcn.h>
+    #endif
     #include <unistd.h>
     #include <fcntl.h>
     #include <sys/stat.h>
@@ -333,6 +336,28 @@ FreetypeManager::FreetypeManager()
 {
     FT_Error rcFT = FT_Init_FreeType( &aLibFT );
 
+    #ifdef LINUX
+    // XXX hack to enable usage of system freetype library.
+    // freetype prior to 2.0.9 does not have FT_Library_Version
+     void (*pft_library_version)(FT_Library library,
+            FT_Int *amajor, FT_Int *aminor, FT_Int *apatch);
+    pft_library_version = (void (*)(FT_Library library,
+            FT_Int *amajor, FT_Int *aminor, FT_Int *apatch)) dlsym (RTLD_DEFAULT, "FT_Library_Version");
+
+    if (pft_library_version != NULL)
+    {
+        // XXX disable embedded bitmaps for Freetype-2.1.3 unless explicitly requested
+        // below because it crashes StarOffice
+        FT_Int n_major = 0;
+        FT_Int n_minor = 0;
+        FT_Int n_patch = 0;
+
+        pft_library_version( aLibFT, &n_major, &n_minor, &n_patch );
+        if ((n_major == 2) && (n_minor == 1) && (n_patch == 3))
+            nPrioEmbedded = 0;
+    }
+    #endif
+
     // TODO: remove when the priorities are selected by UI
     char* pEnv;
     pEnv = ::getenv( "SAL_EMBEDDED_BITMAP_PRIORITY" );
@@ -509,6 +534,11 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 {
     if( !pFI->MapFile() )
         return;
+
+#ifdef HDU_DEBUG
+    printf( "FTSF::FTSF(\"%s\", h=%d, w=%d)\n",
+        pFI->GetFontFileName()->getStr(), rFSD.mnHeight, rFSD.mnWidth );
+#endif
 
     FT_Error rc = FT_New_Memory_Face( aLibFT, (FT_Byte*)pFI->GetBuffer(),
         pFI->GetFileSize(), mpFontInfo->GetFaceNum(), &maFaceFT );
