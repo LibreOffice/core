@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscpar.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,31 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/parser/rscpar.cxx,v 1.1.1.1 2000-09-18 16:42:55 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.19  2000/09/17 12:51:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.18  2000/07/26 17:13:21  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.17  2000/07/12 11:35:51  th
-    Unicode
-
-    Revision 1.16  1999/09/07 13:30:04  mm
-    UniCode
-
-    Revision 1.15  1997/08/27 18:17:18  MM
-    neue Headerstruktur
-
-**************************************************************************/
 /****************** I N C L U D E S **************************************/
 #pragma hdrstop
 

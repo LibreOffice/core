@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsckey.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:54 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,38 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/inc/rsckey.hxx,v 1.1.1.1 2000-09-18 16:42:54 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/09/17 12:51:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.5  2000/07/26 17:13:17  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.4  1997/08/27 18:18:06  MM
-    neue Headerstruktur
-
-
-      Rev 1.3   27 Aug 1997 18:18:06   MM
-   neue Headerstruktur
-
-      Rev 1.2   21 Nov 1995 19:49:18   TLX
-   Neuer Link
-
-      Rev 1.1   16 Feb 1995 19:50:50   MM
-   char * -> const char *
-
-      Rev 1.0   10 Aug 1992 07:14:30   MM
-   Initial revision.
-**************************************************************************/
-
 #ifndef _RSCKEY_HXX
 #define _RSCKEY_HXX
 

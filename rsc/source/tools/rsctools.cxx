@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-02 00:51:02 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,50 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/tools/rsctools.cxx,v 1.4 2001-05-02 00:51:02 svesik Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3.10.1  2001/04/09 13:40:02  svesik
-    Treat FreeBSD just like MacOSX.
-
-    Contributed by: Tim Tretyak <timothy@umc.com.ua>
-
-    Revision 1.3  2000/12/18 23:24:36  svesik
-    Add support for FreeBSD.
-
-    Contributed by: Tim Tretyak <timothy@umc.com.ua>
-
-    Revision 1.2  2000/09/27 11:26:12  mm
-    Mac fix corrected
-
-    Revision 1.1.1.1  2000/09/18 16:42:56  hr
-    initial import
-
-    Revision 1.32  2000/09/17 12:51:12  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.31  2000/09/07 04:30:57  patrick.luby
-    Replaced tempnam() with tmpnam() as tempnam() keeps returning the same file name on Mac OS X.
-
-    Revision 1.30  2000/07/26 17:13:24  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.29  2000/07/11 17:17:46  th
-    Unicode
-
-    Revision 1.28  1999/12/08 15:33:51  mh
-    tmp file not in actual directory
-
-    Revision 1.27  1999/09/21 17:08:45  mm
-    Bigendian correct
-
-**************************************************************************/
 /****************** I N C L U D E S **************************************/
 
 // C and C++ Includes.

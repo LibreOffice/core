@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsckey.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,47 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/parser/rsckey.cxx,v 1.1.1.1 2000-09-18 16:42:55 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.13  2000/09/17 12:51:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.12  2000/07/26 17:13:21  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.11  1999/10/25 11:48:18  mh
-    changes for VC6
-
-    Revision 1.10  1997/08/27 18:17:12  MM
-    neue Headerstruktur
-
-
-      Rev 1.9   27 Aug 1997 18:17:12   MM
-   neue Headerstruktur
-
-      Rev 1.8   03 Jan 1997 17:07:16   MH
-   Calling Convention
-
-      Rev 1.7   12 Jan 1996 17:23:40   TRI
-   WNTWTC Anpassung
-
-      Rev 1.6   21 Nov 1995 19:49:48   TLX
-   Neuer Link
-
-      Rev 1.5   27 Jul 1995 16:57:36   MM
-   LongEnumRange
-
-      Rev 1.4   16 Feb 1995 19:51:06   MM
-   char * -> const char *
-
-**************************************************************************/
 /****************** I N C L U D E S **************************************/
 #pragma hdrstop
 

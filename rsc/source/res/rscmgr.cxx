@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:56 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,31 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/res/rscmgr.cxx,v 1.1.1.1 2000-09-18 16:42:56 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.21  2000/09/17 12:51:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.20  2000/07/26 17:13:22  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.19  2000/07/12 11:38:32  th
-    Unicode
-
-    Revision 1.18  1999/09/20 17:26:04  pl
-    PutAt with short
-
-    Revision 1.17  1999/09/08 09:24:59  mm
-    BigEndian/LittleEndian komplett durchgezogen
-
-**************************************************************************/
 /****************** I N C L U D E S **************************************/
 
 // C and C++ Includes.
@@ -320,6 +295,32 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
     ERRTYPE         aError;
     ObjNode *       pObjNode = NULL;
 
+    /*
+     *  #90692# madness lies beyond...
+     *  instead of fixing src files, fix rsc syntax
+     */
+    bool bMadness = false;
+    LanguageType aOldDefLanguage = LANGUAGE_DONTKNOW;
+    if( pTC && rInst.IsInst() )
+    {
+        /*
+         *  if language is different than german and rInst
+         *  is of type Accelerator then tweak the default
+         *  to english_us instead of the default
+         */
+        if( rInst.pClass->GetId() == pTC->nAcceleratorType &&
+            pTC->GetLanguage() != LANGUAGE_GERMAN
+            )
+        {
+            bMadness = true;
+            aOldDefLanguage = pTC->ChangeDefLanguage( LANGUAGE_ENGLISH_US );
+#ifdef DEBUG
+            fprintf( stderr, "entering madness, changing def language from %d to %d\n", aOldDefLanguage, LANGUAGE_ENGLISH_US );
+#endif
+        }
+    }
+
+
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
 
     if( pClassData->aRefId.IsId() )
@@ -396,6 +397,14 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
             rMem.PutAt( nOldSize +6, (USHORT)(nLocalSize - nOldSize) );
         };
     };
+
+    if( bMadness && pTC )
+    {
+#ifdef DEBUG
+        fprintf( stderr, "leaving madness\n" );
+#endif
+        pTC->ChangeDefLanguage( aOldDefLanguage );
+    }
 
     return( aError );
 }

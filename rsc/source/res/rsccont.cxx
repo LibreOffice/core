@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsccont.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:56 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,34 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/res/rsccont.cxx,v 1.1.1.1 2000-09-18 16:42:56 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.20  2000/09/17 12:51:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.19  2000/07/26 17:13:22  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.18  2000/07/12 11:38:19  th
-    Unicode
-
-    Revision 1.17  1999/11/24 17:54:47  th
-    remove dependencies to vcl
-
-    Revision 1.16  1999/09/08 09:24:59  mm
-    BigEndian/LittleEndian komplett durchgezogen
-
-    Revision 1.15  1998/02/19 17:50:42  HJS
-    includes
-
-**************************************************************************/
 /****************** I N C L U D E S **************************************/
 
 // C and C++ Includes.

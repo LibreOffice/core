@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscflag.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:54 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/inc/rscflag.hxx,v 1.1.1.1 2000-09-18 16:42:54 hr Exp $
-
-**************************************************************************/
-
 #ifndef _RSCFLAG_HXX
 #define _RSCFLAG_HXX
 

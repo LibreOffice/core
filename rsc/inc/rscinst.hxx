@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinst.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:54 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,32 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/inc/rscinst.hxx,v 1.1.1.1 2000-09-18 16:42:54 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.14  2000/09/17 12:51:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.13  2000/07/26 17:13:17  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.12  2000/07/11 17:00:28  th
-    Unicode
-
-    Revision 1.11  1999/09/07 13:30:02  mm
-    UniCode
-
-    Revision 1.10  1997/08/27 18:18:06  MM
-    neue Headerstruktur
-
-**************************************************************************/
-
 #ifndef _RSCINST_HXX
 #define _RSCINST_HXX
 

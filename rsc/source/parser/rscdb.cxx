@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/parser/rscdb.cxx,v 1.1.1.1 2000-09-18 16:42:55 hr Exp $
-
-*************************************************************************/
 /****************** I N C L U D E S **************************************/
 
 #pragma hdrstop
@@ -134,7 +127,8 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
       aLangString( pHS->Insert( "Lang_Chars" ), RSC_NOTYPE, &aString,
                     &aLangType, &nLangTypeId, &nDfltLangTypeId ),
       aLangShort( pHS->Insert( "Lang_short" ), RSC_NOTYPE, &aShort,
-                    &aLangType, &nLangTypeId, &nDfltLangTypeId )
+                  &aLangType, &nLangTypeId, &nDfltLangTypeId ),
+      nAcceleratorType( 0 )
 {
     nUniqueId = 256;
     nPMId = RSC_VERSIONCONTROL +1; //mindestens einen groesser

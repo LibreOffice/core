@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscyacc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/parser/rscyacc.cxx,v 1.1.1.1 2000-09-18 16:42:55 hr Exp $
-
-*************************************************************************/
 #pragma hdrstop
 
 #include <stdio.h>

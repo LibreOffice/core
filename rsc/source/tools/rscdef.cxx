@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdef.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:56 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,28 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/tools/rscdef.cxx,v 1.1.1.1 2000-09-18 16:42:56 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.13  2000/09/17 12:51:12  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.12  2000/07/26 17:13:24  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.11  2000/07/11 17:17:36  th
-    Unicode
-
-    Revision 1.10  1997/08/27 18:17:52  MM
-    neue Headerstruktur
-
-**************************************************************************/
 /****************** I N C L U D E S **************************************/
 
 // Programmuebergreifende Includes.

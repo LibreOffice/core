@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-19 12:37:36 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,8 @@ public:
     RscLangArray        aLangString;
     RscLangArray        aLangShort;
 
+    HASHID              nAcceleratorType;
+
     RscError*           pEH;        // Fehlerhandler
     RscNameTable        aNmTb;      // Tabelle fuer Namen
     RscFileTab          aFileTab;   // Tabelle der Dateinamen
@@ -367,12 +369,23 @@ public:
                     { return (nFlags & NOSYSRESTEST_FLAG) ? FALSE : TRUE; }
     BOOL            IsSrsDefault() const
                     { return (nFlags & SRSDEFAULT_FLAG) ? TRUE : FALSE; }
+    LanguageType    GetLanguage() const
+    { return (LanguageType)nLangTypeId; }
+    LanguageType    GetDefLanguage() const
+    { return (LanguageType)nDfltLangTypeId; }
     LanguageType    ChangeLanguage( LanguageType eLang )
                     {
                         LanguageType nOldLang = (LanguageType)nLangTypeId;
                         nLangTypeId = eLang;
                         return nOldLang;
                     }
+    LanguageType    ChangeDefLanguage( LanguageType eLang )
+                    {
+                        LanguageType nOldLang = (LanguageType)nDfltLangTypeId;
+                        nDfltLangTypeId = eLang;
+                        return nOldLang;
+                    }
+
     RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
     CharSet         GetSourceCharSet() const { return nSourceCharSet; }
     void            SetSearchPath( const ByteString & rStr) { aSearchPath = rStr; }

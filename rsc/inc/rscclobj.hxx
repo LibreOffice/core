@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscclobj.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:54 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,47 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/inc/rscclobj.hxx,v 1.1.1.1 2000-09-18 16:42:54 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/09/17 12:51:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.5  2000/07/26 17:13:17  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.4  1997/08/27 18:18:12  MM
-    neue Headerstruktur
-
-
-      Rev 1.3   27 Aug 1997 18:18:12   MM
-   neue Headerstruktur
-
-      Rev 1.2   21 Nov 1995 19:49:10   TLX
-   Neuer Link
-
-      Rev 1.1   12 Jan 1994 15:18:10   mm
-   Alignementprobleme und Warnings fuer DEC-Alpha beseitigt
-
-      Rev 1.0   10 Aug 1992 07:14:38   MM
-   Initial revision.
-
-      Rev 1.2   23 Mar 1992 15:23:42   MM
-
-      Rev 1.1   10 Dec 1991 11:49:10   MM
-   ObjNode::DelObjNode
-
-      Rev 1.0   26 Nov 1991 08:57:04   MM
-   Initial revision.
-
-**************************************************************************/
-
 #ifndef _RSCCLOBJ_HXX
 #define _RSCCLOBJ_HXX
 

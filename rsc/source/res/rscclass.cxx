@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscclass.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,34 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/res/rscclass.cxx,v 1.1.1.1 2000-09-18 16:42:55 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.39  2000/09/17 12:51:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.38  2000/07/26 17:13:22  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.37  2000/07/12 11:38:05  th
-    Unicode
-
-    Revision 1.36  1999/11/24 17:54:35  th
-    remove dependencies to vcl
-
-    Revision 1.35  1999/09/08 09:24:59  mm
-    BigEndian/LittleEndian komplett durchgezogen
-
-    Revision 1.34  1999/09/07 13:30:05  mm
-    UniCode
-
-**************************************************************************/
 /****************** I N C L U D E S **************************************/
 
 // C and C++ Includes.

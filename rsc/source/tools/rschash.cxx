@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rschash.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:56 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,66 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/tools/rschash.cxx,v 1.1.1.1 2000-09-18 16:42:56 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2000/09/17 12:51:12  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.6  2000/07/26 17:13:24  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.5  1997/08/27 18:17:52  MM
-    neue Headerstruktur
-
-
-      Rev 1.4   27 Aug 1997 18:17:52   MM
-   neue Headerstruktur
-
-      Rev 1.3   21 Nov 1995 19:50:48   TLX
-   Neuer Link
-
-      Rev 1.2   25 Aug 1993 15:31:02   mm
-   Fehler und Warnings beseitigt
-
-      Rev 1.1   03 Jun 1993 15:45:48   mm
-   Fehler in Test_HashId verbessert
-
-      Rev 1.0   10 Aug 1992 07:18:56   MM
-   Initial revision.
-
-      Rev 1.6   23 Mar 1992 15:25:54   MM
-
-      Rev 1.5   26 Nov 1991 08:42:22   MM
-   Methode Test mit char* und void* Argument
-
-      Rev 1.4   11 Sep 1991 12:40:52   MM
-
-      Rev 1.3   31 Jul 1991 15:37:10   MM
-
-      Rev 1.2   24 Jul 1991 10:10:52   MM
-   Ausgabe auskommentiert
-
-      Rev 1.1   18 Jul 1991 12:55:24   MM
-   Fehler mit (BOOL) beseitigt
-
-      Rev 1.0   14 Jun 1991 16:20:56   MM
-   Initial revision.
-
-      Rev 1.2   22 Mar 1991 11:41:44   MM
-
-      Rev 1.1   25 Feb 1991 13:47:12   MM
-
-      Rev 1.0   08 Feb 1991 13:12:06   MM
-   Initial revision.
-
-**************************************************************************/
 /****************** I N C L U D E S **************************************/
 // C and C++ Includes.
 #include <stdlib.h>

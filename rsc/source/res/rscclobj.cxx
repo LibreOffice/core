@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscclobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,47 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/res/rscclobj.cxx,v 1.1.1.1 2000-09-18 16:42:55 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.9  2000/09/17 12:51:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.8  2000/07/26 17:13:22  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.7  1998/01/08 13:20:44  MM
-    includes angepasst
-
-
-      Rev 1.6   08 Jan 1998 13:20:44   MM
-   includes angepasst
-
-      Rev 1.5   12 Sep 1996 12:44:06   MM
-   Eigene Ressourcen definieren
-
-      Rev 1.4   21 Nov 1995 19:50:20   TLX
-   Neuer Link
-
-      Rev 1.3   03 Mar 1994 12:03:28   mm
-   C40 Warnings beseitigt
-
-      Rev 1.2   12 Jan 1994 15:20:18   mm
-   Alignementprobleme und Warnings fuer DEC-Alpha beseitigt
-
-      Rev 1.1   25 Aug 1993 15:29:00   mm
-   Fehler und Warnings beseitigt
-
-      Rev 1.0   10 Aug 1992 07:20:50   MM
-   Initial revision.
-
-**************************************************************************/
 /****************** I N C L U D E S **************************************/
 
 // C and C++ Includes.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscstr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:56 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,31 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/res/rscstr.cxx,v 1.1.1.1 2000-09-18 16:42:56 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.22  2000/09/17 12:51:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.21  2000/07/26 17:13:23  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.20  2000/07/12 11:38:42  th
-    Unicode
-
-    Revision 1.19  1999/10/12 08:45:03  mm
-    gpf corrected
-
-    Revision 1.18  1999/10/11 17:21:53  mm
-    no LString
-
-**************************************************************************/
 /****************** I N C L U D E S **************************************/
 
 // C and C++ Includes.

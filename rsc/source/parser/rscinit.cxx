@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-19 12:37:37 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,6 +697,7 @@ void RscTypCont::Init()
     /********** A C C E L E R A T O R ************************************/
     pClassAccel = InitClassAccel( pClassMgr, pClassAccelItem );
     pRoot->Insert( pClassAccel );
+    nAcceleratorType = pClassAccel->GetId();
 
     /********** A C C E L I T E M  ***************************************/
     // pClassAccel ist erst hier definiert

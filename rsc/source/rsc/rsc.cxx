@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-20 15:40:28 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/rsc/rsc.cxx,v 1.4 2001-06-20 15:40:28 nf Exp $
-
-**************************************************************************/
 /****************************************************************/
 /*                  Include File                                */
 /****************************************************************/

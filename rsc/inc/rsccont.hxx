@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsccont.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:54 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,57 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/inc/rsccont.hxx,v 1.1.1.1 2000-09-18 16:42:54 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.11  2000/09/17 12:51:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.10  2000/07/26 17:13:17  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.9  1997/08/27 18:18:04  MM
-    neue Headerstruktur
-
-
-      Rev 1.8   27 Aug 1997 18:18:04   MM
-   neue Headerstruktur
-
-      Rev 1.7   12 Sep 1996 12:45:38   MM
-   Eigene Ressourcen definieren
-
-      Rev 1.6   21 Nov 1995 19:49:16   TLX
-   Neuer Link
-
-      Rev 1.5   25 Aug 1993 15:33:58   mm
-   Fehler und Warnings beseitigt
-
-      Rev 1.4   04 Feb 1993 17:38:58   mm
-   GetClassType Fehler verbessert und keine Inline -ctor.
-
-      Rev 1.3   03 Feb 1993 15:03:12   mm
-   GetClassType() implementiert
-
-      Rev 1.2   05 Jan 1993 10:50:30   mm
-   Neues Default verhalten
-
-      Rev 1.1   23 Dec 1992 14:02:24   mm
-   Sprachaenderung
-
-      Rev 1.0   10 Aug 1992 07:14:38   MM
-   Initial revision.
-
-      Rev 1.13   29 Jul 1992 15:45:18   MM
-   Aenderungen wg. MSC7.0
-
-**************************************************************************/
-
 #ifndef _RSCCONT_HXX
 #define _RSCCONT_HXX
 

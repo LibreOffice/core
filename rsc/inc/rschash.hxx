@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rschash.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:54 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,54 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/inc/rschash.hxx,v 1.1.1.1 2000-09-18 16:42:54 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/09/17 12:51:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.5  2000/07/26 17:13:17  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.4  1997/08/27 18:18:10  MM
-    neue Headerstruktur
-
-
-      Rev 1.3   27 Aug 1997 18:18:10   MM
-   neue Headerstruktur
-
-      Rev 1.2   21 Nov 1995 19:49:20   TLX
-   Neuer Link
-
-      Rev 1.1   04 May 1995 10:17:20   mk
-   ^Z am Ende
-
-      Rev 1.0   10 Aug 1992 07:14:22   MM
-   Initial revision.
-
-      Rev 1.4   23 Mar 1992 15:23:50   MM
-
-      Rev 1.3   26 Nov 1991 08:56:06   MM
-
-      Rev 1.2   11 Sep 1991 12:20:10   MM
-
-      Rev 1.1   18 Jul 1991 12:53:26   MM
-   Unix Anpassung
-
-      Rev 1.0   17 Jun 1991 14:54:46   MM
-   Initial revision.
-
-      Rev 1.0   08 Feb 1991 13:42:52   MM
-   Initial revision.
-
-**************************************************************************/
-
 #ifndef _RSCHASH_HXX
 #define _RSCHASH_HXX
 

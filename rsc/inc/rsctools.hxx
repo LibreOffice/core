@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctools.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,31 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/inc/rsctools.hxx,v 1.1.1.1 2000-09-18 16:42:55 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.16  2000/09/17 12:51:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.15  2000/07/26 17:13:17  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.14  2000/07/11 16:59:41  th
-    Unicode
-
-    Revision 1.13  1999/09/20 17:25:29  pl
-    PutAt mit short
-
-    Revision 1.12  1999/09/08 11:47:39  mm
-    BigEndian/LittleEndian corrected
-
-**************************************************************************/
 struct RSHEADER_TYPE;
 class  RscPtrPtr;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscchar.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:56 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 11:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,57 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/rsc/source/tools/rscchar.cxx,v 1.1.1.1 2000-09-18 16:42:56 hr Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.14  2000/09/17 12:51:12  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.13  2000/07/26 17:13:23  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.12  1999/09/20 16:12:22  mm
-    \X is possible in the character converter
-
-    Revision 1.11  1999/09/09 13:10:53  mm
-    UTF8 corrected
-
-    Revision 1.10  1999/09/07 13:30:06  mm
-    UniCode
-
-    Revision 1.9  1998/01/08 13:20:56  MM
-    includes angepasst
-
-
-      Rev 1.8   08 Jan 1998 13:20:56   MM
-   includes angepasst
-
-      Rev 1.7   07 Aug 1997 15:47:20   TJ
-   include
-
-      Rev 1.6   21 Nov 1995 19:50:52   TLX
-   Neuer Link
-
-      Rev 1.5   25 Aug 1993 15:31:38   mm
-   Zeichensaetze aus den tools
-
-      Rev 1.4   06 Aug 1993 13:14:56   TH
-   Equal-Tablle zwischen 200-209 jetzt richtig
-
-      Rev 1.3   19 Jul 1993 19:21:42   mm
-   \ verbessert
-
-      Rev 1.2   19 Jul 1993 16:29:46   mm
-
-      Rev 1.1   20 Aug 1992 18:18:20   mm
-
-**************************************************************************/
 /****************** I N C L U D E S **************************************/
 #include <stdio.h>
 #include <string.h>
