@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-28 15:20:36 $
+ *  last change: $Author: fs $ $Date: 2001-10-10 16:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,10 +442,10 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
 //------------------------------------------------------------------------------
 DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
           :Control(pParent, nStyle)
-          ,m_aRecordText(this)
-          ,m_aAbsolute(this)
-          ,m_aRecordOf(this)
-          ,m_aRecordCount(this, WinBits(WB_CENTER))
+          ,m_aRecordText(this, WB_VCENTER)
+          ,m_aAbsolute(this, WB_VCENTER)
+          ,m_aRecordOf(this, WB_VCENTER)
+          ,m_aRecordCount(this, WB_CENTER | WB_VCENTER)
           ,m_aFirstBtn(this, WB_RECTSTYLE|WB_NOPOINTERFOCUS)
           ,m_aPrevBtn(this, WB_REPEAT|WB_RECTSTYLE|WB_NOPOINTERFOCUS)
           ,m_aNextBtn(this, WB_REPEAT|WB_RECTSTYLE|WB_NOPOINTERFOCUS)
