@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistentwindowstate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-03 14:04:39 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -277,7 +277,7 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject& aEv
 {
     ::rtl::OUString sModuleName;
 
-    css::uno::Reference< dcss::frame::XModuleManager > xModuleManager(
+    css::uno::Reference< css::frame::XModuleManager > xModuleManager(
         xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
         css::uno::UNO_QUERY_THROW);
 
