@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: thb $ $Date: 2001-12-06 14:18:05 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:13:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,11 +66,6 @@ PRJNAME=goodies
 TARGET=iras
 DEPTARGET=viras
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=eeng_pch
-PROJECTPCHSOURCE=eeng_pch
-
-
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -87,7 +82,7 @@ SLOFILES =	$(SLO)$/iras.obj
 
 SHL1TARGET= 	ira$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	iras
-SHL1STDLIBS=	$(TOOLSLIB) $(SVLIB) $(CPPULIB)
+SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB)
 SHL1DEPN=		$(LB)$/iras.lib
 SHL1LIBS=		$(SLB)$/iras.lib
 
@@ -95,21 +90,11 @@ SHL1LIBS=		$(SLB)$/iras.lib
 SHL1OBJS=		$(SLO)$/iras.obj
 .ENDIF
 
+SHL1VERSIONMAP=exports.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1BASE=0x1c000000
+
+DEF1NAME=$(SHL1TARGET)
+
+# ==========================================================================
 
 .INCLUDE :	target.mk
-
-# THB: exports list goodies checked for 6.0 Final 6.12.2001
-.IF "$(GUI)"=="WNT"
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk
-    @echo -------------------------------------------
-        @echo DEF-File erstellen
-        @echo LIBRARY	  $(DLLNAME)				   >$@
-        @echo DESCRIPTION 'Svx RTF DLL'                >>$@
-        @echo DATA				  READ WRITE NONSHARED >>$@
-        @echo EXPORTS								   >>$@
-        @echo	 GraphicImport						  >>$@
-
-.ENDIF
