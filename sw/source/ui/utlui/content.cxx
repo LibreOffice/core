@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 15:36:12 $
+ *  last change: $Author: dvo $ $Date: 2002-07-25 17:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1607,22 +1607,29 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
         {
             sal_uInt16 nPos = ((SwOutlineContent*)pCnt)->GetPos();
             DBG_ASSERT(nPos < pWrtShell->GetOutlineCnt(),
-            "outlinecnt veraendert")
-            const SwNumRule* pOutlRule = pWrtShell->GetOutlineNumRule();
-            const SwNodeNum* pNum = pWrtShell->GetOutlineNum(nPos);
-            if( pNum && pOutlRule && MAXLEVEL >= pNum->GetLevel())
-                for(sal_Int8 nLevel = 0; nLevel <= pNum->GetLevel(); nLevel++)
-                {
-                    sal_uInt16 nVal = pNum->GetLevelVal()[nLevel];
-                    nVal ++;
-                    nVal -= pOutlRule->Get(nLevel).GetStart();
-                    sEntry += String::CreateFromInt32( nVal );
-                    sEntry += '.';
-                }
-            sEntry += pWrtShell->GetOutlineText(nPos, sal_False);
-            sOutlineText = pWrtShell->GetOutlineText(nPos, sal_True);
-            bIsOutlineMoveable = ((SwOutlineContent*)pCnt)->IsMoveable();
-            bOutline = sal_True;
+                       "outlinecnt veraendert");
+
+            // #100738# make sure outline may actually be copied
+            if( pWrtShell->IsOutlineCopyable( nPos ) )
+            {
+                const SwNumRule* pOutlRule = pWrtShell->GetOutlineNumRule();
+                const SwNodeNum* pNum = pWrtShell->GetOutlineNum(nPos);
+                if( pNum && pOutlRule && MAXLEVEL >= pNum->GetLevel())
+                    for( sal_Int8 nLevel = 0;
+                         nLevel <= pNum->GetLevel();
+                         nLevel++ )
+                    {
+                        sal_uInt16 nVal = pNum->GetLevelVal()[nLevel];
+                        nVal ++;
+                        nVal -= pOutlRule->Get(nLevel).GetStart();
+                        sEntry += String::CreateFromInt32( nVal );
+                        sEntry += '.';
+                    }
+                sEntry += pWrtShell->GetOutlineText(nPos, sal_False);
+                sOutlineText = pWrtShell->GetOutlineText(nPos, sal_True);
+                bIsOutlineMoveable = ((SwOutlineContent*)pCnt)->IsMoveable();
+                bOutline = sal_True;
+            }
         }
         break;
         case CONTENT_TYPE_POSTIT:

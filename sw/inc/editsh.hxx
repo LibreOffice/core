@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-25 14:28:04 $
+ *  last change: $Author: dvo $ $Date: 2002-07-25 17:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,8 +792,10 @@ public:
     // die Nummer
     const SwNodeNum* GetOutlineNum( USHORT nIdx ) const;
 
-    // darf verschoben werden?
+    // may an outline be moved or copied?
+    // Check whether it's in text body, not in table, and not read-only (move)
     BOOL IsOutlineMovable( USHORT nIdx ) const;
+    BOOL IsOutlineCopyable( USHORT nIdx ) const;
 
     USHORT GetLineCount( BOOL bActPos = TRUE );
 

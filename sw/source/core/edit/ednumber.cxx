@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 09:04:17 $
+ *  last change: $Author: dvo $ $Date: 2002-07-25 17:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,12 +497,30 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
     return bRet;
 }
 
+/** Test whether outline may be moved (bCopy == false)
+ *                           or copied (bCopy == true)
+ * Verify these conditions:
+ * 1) outline must be within main body (and not in redline)
+ * 2) outline must not be within table
+ * 3) if bCopy is set, outline must not be write protected
+ */
+BOOL lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, USHORT nIdx, bool bCopy )
+{
+    const SwNodes& rNds = pDoc->GetNodes();
+    const SwNode* pNd = rNds.GetOutLineNds()[ nIdx ];
+    return pNd->GetIndex() >= rNds.GetEndOfExtras().GetIndex() &&   // 1) body
+            !pNd->FindTableNode() &&                                // 2) table
+            ( bCopy || !pNd->IsProtect() );                         // 3) write
+}
+
 BOOL SwEditShell::IsOutlineMovable( USHORT nIdx ) const
 {
-    const SwNodes& rNds = GetDoc()->GetNodes();
-    const SwNode* pNd = rNds.GetOutLineNds()[ nIdx ];
-    return pNd->GetIndex() >= rNds.GetEndOfExtras().GetIndex() &&
-            !pNd->FindTableNode() && !pNd->IsProtect();
+    return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, false );
+}
+
+BOOL SwEditShell::IsOutlineCopyable( USHORT nIdx ) const
+{
+    return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, true );
 }
 
 
