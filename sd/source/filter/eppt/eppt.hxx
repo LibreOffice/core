@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:21:32 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,7 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
 #endif
