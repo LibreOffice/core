@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-14 14:14:43 $
+ *  last change: $Author: hdu $ $Date: 2001-02-15 15:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1273,6 +1273,12 @@ final void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         const char *pFontPath = getenv( "SAL_FONTPATH" );
         if( pFontPath )
             AddFontPath( ByteString( pFontPath ) );
+
+#ifndef USE_BUILTIN_RASTERIZER
+        pFontPath = getenv( "SAL_FONTPATH_PRIVATE" );
+        if( pFontPath )
+            AddFontPath( ByteString( pFontPath ) );
+#endif // USE_BUILTIN_RASTERIZER
 
         // - - - - - - - - - - Keyboardmapping - - - - - - - - - - -
 
