@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:08:26 $
+ *  last change: $Author: kz $ $Date: 2002-02-06 21:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,7 +982,7 @@ TabPage PAGE_DBASE
         Text [ SPANISH ] = "Mostrar registros inacti~vos" ;
         Text [ FINNISH ] = "Näytä ~käyttämättömät tietueet" ;
         Text [ FRENCH ] = "Afficher les enregistrements ~désactivés" ;
-        Text [ ITALIAN ] = "~Mostra record inattivi" ;
+        Text [ ITALIAN ] = "~Mostra record non attivi" ;
         Text [ DUTCH ] = "I~nactieve records weergeven" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Mostrar registros apagados" ;
         Text [ SWEDISH ] = "Visa i~naktiva dataposter" ;
@@ -2301,7 +2301,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ french ] = "Dans la liste ci-dessus, marquez d'une croix les tables à rendre visibles pour les applications.";
         Text[ spanish ] = "Active en la lista superior las tablas que deben estar visibles para las aplicaciones.";
         Text[ finnish ] = "Merkitse yllä olevaan luetteloon ne taulukot, joiden haluat näkyvän sovelluksissa.";
-        Text[ italian ] = "Nell'elenco precedente, selezionate le tabelle che dovranno essere visualizzate nell'applicazione.";
+        Text[ italian ] = "Selezionate le tabelle da visualizzare nell'applicazione.";
         Text[ danish ] = "In the list above, please check the tables which should be visible for the applications.";
         Text[ swedish ] = "Kryssa för de tabeller, som ska vara synliga för programmen, i listan ovan.";
         Text[ polish ] = "Na powy¿szej liœcie nale¿y zaznaczyæ krzy¿ykiem tabele, które maj¹ byæ widoczne w aplikacjach.";
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.88  2002/02/05 21:08:26  kz
+ *  Merge SRC641: 02/05/02 - 22:07:58
+ *
  *  Revision 1.87  2002/02/04 10:33:48  kz
  *  Merge SRC641: 04.02.02 - 11:33:12
  *
