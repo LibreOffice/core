@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 16:10:02 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 14:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
+#ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
+#include <connectivity/sqliterator.hxx>
+#endif
 
 namespace rtl
 {
@@ -114,10 +117,6 @@ namespace com
             }
         }
     }
-}
-namespace connectivity
-{
-    enum OSQLPredicateType;
 }
 //==================================================================
 // DlgFilterCrit
