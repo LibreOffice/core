@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-16 12:31:14 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 11:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #include <tools/ref.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
+#include <unotools/streamwrap.hxx>
+#include <tools/stream.hxx>
 using namespace ::ucb;
 
 
@@ -81,7 +83,7 @@ using namespace ::ucb;
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-//#include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -534,18 +536,20 @@ Reference< XOutputStream > OFileAccess::openFileWrite( const OUString& FileURL )
 Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
-/*
+    SvMemoryStream aStream(0,0);
+    ::utl::OInputStreamWrapper* pInput = new ::utl::OInputStreamWrapper( aStream );
+    Reference< XInputStream > xInput( pInput );
     InsertCommandArgument aInsertArg;
-    aInsertArg.Data = Reference< XInputStream >();
+    aInsertArg.Data = xInput;
     aInsertArg.ReplaceExisting = sal_True;
-*/
+
     INetURLObject aFileObj( FileURL, INET_PROT_FILE );
     Content aCnt( aFileObj.GetMainURL(), mxEnvironment );
     Any aCmdArg;
-/*
+
     aCmdArg <<= aInsertArg;
     aCnt.executeCommand( OUString::createFromAscii( "insert" ), aCmdArg );
-*/
+
     Reference< XActiveDataStreamer > xSink = (XActiveDataStreamer*)new OActiveDataStreamer();
     Reference< XInterface > xSinkIface = Reference< XInterface >::query( xSink );
 
