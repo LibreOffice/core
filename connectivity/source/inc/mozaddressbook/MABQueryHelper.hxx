@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABQueryHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-09 12:37:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 09:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,10 @@ namespace connectivity
 {
     namespace mozaddressbook
     {
-        class OMozabQueryHelperResultEntry {
+        class OMozabQueryHelperResultEntry
+        {
         private:
-            ::osl::Mutex        m_aMutex;
+            mutable ::osl::Mutex        m_aMutex;
 
             struct ltstr
             {
@@ -96,11 +97,12 @@ namespace connectivity
             rtl::OUString getValue( const rtl::OUString &key ) const;
         };
 
-        class OMozabQueryHelper : public nsIAbDirectoryQueryResultListener {
+        class OMozabQueryHelper : public nsIAbDirectoryQueryResultListener
+        {
         private:
             typedef std::vector< OMozabQueryHelperResultEntry* > resultsArray;
 
-            ::osl::Mutex        m_aMutex;
+            mutable ::osl::Mutex        m_aMutex;
             ::osl::Condition    m_aCondition;
             resultsArray        m_aResults;
             sal_Int32           m_nIndex;
