@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APIDescGetter.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2004-05-03 08:47:32 $
+ *  last change:$Date: 2004-11-02 11:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ import share.DescGetter;
  *
  */
 public class APIDescGetter extends DescGetter {
+    private static String fullJob = null;
+
+
     /*
      * gets the needed information about a StarOffice component
      * @param descPath Path to the ComponentDescription
@@ -161,7 +164,7 @@ public class APIDescGetter extends DescGetter {
     protected DescEntry getDescriptionForSingleJob(String job, String descPath,
                                                    boolean debug) {
         boolean isSingleInterface = job.indexOf("::") > 0;
-        String fullJob = job;
+        fullJob = job;
 
         if (isSingleInterface) {
             job = job.substring(0, job.indexOf("::"));
@@ -210,9 +213,9 @@ public class APIDescGetter extends DescGetter {
             }
         }
 
-        if (isSingleInterface && !foundInterface) {
-            entry.hasErrorMsg = true;
-            entry.ErrorMsg = "Couldn't find a description for " + fullJob;
+        if (isSingleInterface && !foundInterface || entry == null) {
+            return setErrorDescription(entry,
+                "couldn't find a description for test '" + fullJob+ "'");
         }
 
         return entry;
@@ -387,8 +390,11 @@ public class APIDescGetter extends DescGetter {
 
     protected static DescEntry setErrorDescription(DescEntry entry,
                                                    String ErrorMsg) {
+        if (entry == null)
+            entry = new DescEntry();
         entry.hasErrorMsg = true;
-        entry.ErrorMsg = ErrorMsg;
+        entry.ErrorMsg = "Error while getting description for test '" +
+            fullJob + "' as an API test: " + ErrorMsg;
 
         return entry;
     }
@@ -434,7 +440,7 @@ public class APIDescGetter extends DescGetter {
 
         if (url == null) {
             return setErrorDescription(theEntry,
-                                       "Couldn't find module " + module);
+                                       "couldn't find module '" + module + "'");
         }
 
         try {
@@ -493,8 +499,8 @@ public class APIDescGetter extends DescGetter {
 
         if (csvFile == null) {
             return setErrorDescription(theEntry,
-                                       "Couldn't find component " +
-                                       theEntry.entryName);
+                                       "couldn't find component '" +
+                                       theEntry.entryName + "'");
         }
 
         DescEntry[] subEntries = getSubEntries(csvFile, theEntry, debug);
@@ -542,7 +548,7 @@ public class APIDescGetter extends DescGetter {
 
         if (!modPath.exists()) {
             return setErrorDescription(aEntry,
-                                       "Couldn't find module " + module);
+                                       "couldn't find module '" + module + "'");
         }
 
         String[] files = modPath.list();
@@ -558,7 +564,7 @@ public class APIDescGetter extends DescGetter {
 
         if (found.equals("none")) {
             return setErrorDescription(aEntry,
-                                       "Couldn't find component " + entry);
+                                       "couldn't find component '" + entry + "'");
         }
 
         String aUrl = descPath + fs + module + fs + found;
@@ -568,7 +574,7 @@ public class APIDescGetter extends DescGetter {
         try {
             csvFile = new BufferedReader(new FileReader(aUrl));
         } catch (java.io.FileNotFoundException fnfe) {
-            return setErrorDescription(aEntry, "Couldn't find file " + aUrl);
+            return setErrorDescription(aEntry, "couldn't find file '" + aUrl + "'");
         }
 
         DescEntry[] subEntries = getSubEntries(csvFile, aEntry, debug);
@@ -635,12 +641,14 @@ public class APIDescGetter extends DescGetter {
         for (int i=0;i<modules.length;i++) {
             if (! isUnusedModule(modules[i])) {
                 File moduleDir = new File(descPath+System.getProperty("file.separator")+modules[i]);
-                String[] components = moduleDir.list();
-                for (int j=0;j<components.length;j++) {
-                    if (components[j].endsWith(".csv")) {
-                        String toAdd = getComponentForString(components[j], modules[i]);
-                        toAdd = "-o "+modules[i]+"."+toAdd;
-                        componentList.add(toAdd);
+                if (moduleDir.exists()) {
+                    String[] components = moduleDir.list();
+                    for (int j=0;j<components.length;j++) {
+                        if (components[j].endsWith(".csv")) {
+                            String toAdd = getComponentForString(components[j], modules[i]);
+                            toAdd = "-o "+modules[i]+"."+toAdd;
+                            componentList.add(toAdd);
+                        }
                     }
                 }
             }
