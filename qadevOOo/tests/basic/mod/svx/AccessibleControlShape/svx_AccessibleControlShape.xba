@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: svx_AccessibleControlShape.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:22 $ 
+'*  last change:$Date: 2003-05-27 12:18:17 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -98,9 +98,9 @@ On Error Goto ErrHndl
     oDP.add(oShape)
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot,111,"PushButton")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.SHAPE,"PushButton")
     Out.Log("ImplementationName: "+oObj.getImplementationName())
-    if hasUNOInterfaces(oObj,"drafts.com.sun.star.accessibility.XAccessibleText") then
+    if hasUNOInterfaces(oObj,"com.sun.star.accessibility.XAccessibleText") then
         accText = oObj.getText()
     End If
     hasChangeableAttrs = true
@@ -111,7 +111,7 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    oDoc.dispose()
+    utils.closeObject(oDoc)
 End Sub
 
 Sub fireEvent()
