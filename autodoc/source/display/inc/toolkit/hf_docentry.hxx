@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hf_docentry.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,11 @@ class HF_DocEntryList : public HtmlMaker
 
     Xml::Element &      Produce_Term(
                             const char *        i_sTerm = 0 );
+    Xml::Element &      Produce_NormalTerm(     /// Font will not be bold.
+                            const char *        i_sTerm = 0 );
     Xml::Element &      Produce_Definition();
 };
 
 
 
 #endif
-
-

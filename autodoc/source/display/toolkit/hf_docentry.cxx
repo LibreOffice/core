@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hf_docentry.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,10 +90,20 @@ HF_DocEntryList::Produce_Term(const char * i_sTerm )
 }
 
 Xml::Element &
+HF_DocEntryList::Produce_NormalTerm(const char * i_sTerm)
+{
+    Xml::Element &
+        ret = CurOut()
+           >> *new Html::DefListTerm;
+    if ( NOT csv::no_str(i_sTerm))
+        ret
+            << i_sTerm;
+    return ret;
+}
+
+Xml::Element &
 HF_DocEntryList::Produce_Definition()
 {
     return CurOut()
            >> *new Html::DefListDefinition;
 }
-
-
