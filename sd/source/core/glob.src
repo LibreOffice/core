@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,7 +762,7 @@ String STR_PRESOBJ_GRAPHIC
     Text [ spanish ] = "Pulse dos veces para añadir una imagen" ;
     Text [ french ] = "Ajouter une image par double-clic" ;
     Text [ swedish ] = "Lägg till grafik genom att dubbelklicka" ;
-    Text [ danish ] = "Tilføj billede ved at dobbeltklikke" ;
+    Text [ danish ] = "Tilføj grafik ved at dobbeltklikke" ;
     Text [ portuguese_brazilian ] = "Graphik durch Doppelklicken hinzufügen" ;
     Text [ portuguese ] = "Inserir gráfico com duplo clique" ;
     Text[ chinese_simplified ] = "Ë«»÷Êó±ê²åÈëÍ¼ÐÎ";
@@ -1907,7 +1907,7 @@ String STR_GRAFOBJECTBARSHELL
     Text[ swedish ] = "Grafikläge";
     Text[ russian ] = "Ðåæèì ðèñóíêà";
     Text[ italian ] = "Modo immagine";
-    Text[ danish ] = "Billedmodus";
+    Text[ danish ] = "Grafikmodus";
     Text[ polish ] = "Tryb grafiki";
     Text[ portuguese_brazilian ] = "Graphics mode";
     Text[ japanese ] = "¸Þ×Ì¨¯¸Ó°ÄÞ";
