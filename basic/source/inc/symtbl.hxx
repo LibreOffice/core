@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 09:56:50 $
+ *  last change: $Author: ab $ $Date: 2002-08-12 11:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,8 +221,9 @@ class SbiProcDef : public SbiSymDef {   // Prozedur-Definition (aus Basic):
     USHORT nLine1, nLine2;          // Zeilenbereich
     BOOL   bCdecl  : 1;             // TRUE: CDECL angegeben
     BOOL   bPublic : 1;             // TRUE: proc ist PUBLIC
+    BOOL   mbProcDecl : 1;          // TRUE: instanciated by SbiParser::ProcDecl
 public:
-    SbiProcDef( SbiParser*, const String& );        // Name
+    SbiProcDef( SbiParser*, const String&, BOOL bProcDecl=false );
     virtual ~SbiProcDef();
     virtual SbiProcDef* GetProcDef();
     virtual void SetType( SbxDataType );
@@ -235,6 +236,7 @@ public:
     BOOL IsPublic() const           { return bPublic;  }
     void SetCdecl( BOOL b = TRUE)   { bCdecl = b;      }
     BOOL IsCdecl() const            { return bCdecl;   }
+    BOOL IsUsedForProcDecl() const  { return mbProcDecl; }
     void SetLine1( USHORT n )       { nLine1 = n;      }
     USHORT GetLine1() const         { return nLine1;   }
     void SetLine2( USHORT n )       { nLine2 = n;      }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
+ *  last change: $Author: ab $ $Date: 2002-08-12 11:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,10 +428,12 @@ SbiSymScope SbiSymDef::GetScope() const
 // 2) pPool: saemtliche lokale Variable
 // 3) aLabels: Labels
 
-SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName )
-         : SbiSymDef( rName ),
-           aParams( pParser->aGblStrings, SbPARAM ), // wird gedumpt
-           aLabels( pParser->aLclStrings, SbLOCAL )  // wird nicht gedumpt
+SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
+                        BOOL bProcDecl )
+         : SbiSymDef( rName )
+         , aParams( pParser->aGblStrings, SbPARAM )  // wird gedumpt
+         , aLabels( pParser->aLclStrings, SbLOCAL )  // wird nicht gedumpt
+         , mbProcDecl( bProcDecl )
 {
     aParams.SetParent( &pParser->aPublics );
     pPool = new SbiSymPool( pParser->aGblStrings, SbLOCAL ); // Locals
