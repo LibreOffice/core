@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:48:32 $
+ *  last change: $Author: os $ $Date: 2002-11-21 13:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,36 @@ Menu RID_MAIN_MENU
             };
             MenuItem
             {
-                ITEM_FILE_CLOSEDOC
+                Identifier = SID_CLOSEWIN ;
+                Command = ".uno:CloseWin" ;
+                HelpID = SID_CLOSEDOC ;
+                Text = "S~chlieﬂen" ;
+                Text [ English ] = "~Close" ;
+                Text [ norwegian ] = "~Lukk" ;
+                Text [ italian ] = "~Chiudi" ;
+                Text [ portuguese_brazilian ] = "~Fechar" ;
+                Text [ portuguese ] = "~Fechar" ;
+                Text [ finnish ] = "~Sulje" ;
+                Text [ danish ] = "L~uk" ;
+                Text [ french ] = "~Fermer" ;
+                Text [ swedish ] = "S~t‰ng" ;
+                Text [ dutch ] = "~Sluiten" ;
+                Text [ spanish ] = "~Cerrar" ;
+                Text [ english_us ] = "~Close" ;
+                Text[ chinese_simplified ] = "ÂÖ≥Èó≠(~C)";
+                Text[ russian ] = "~«‡Í˚Ú¸";
+                Text[ polish ] = "Zamknij";
+                Text[ japanese ] = "Èñâ„Åò„Çã(~C)";
+                Text[ chinese_traditional ] = "ÈóúÈñâ(~C)";
+                Text[ arabic ] = "≈€·«ﬁ";
+                Text[ dutch ] = "~Sluiten";
+                Text[ chinese_simplified ] = "ÂÖ≥Èó≠(~C)";
+                Text[ greek ] = " ÎÂﬂ~ÛÈÏÔ";
+                Text[ korean ] = "Ï¢ÖÎ£å(~C)";
+                Text[ turkish ] = "Kapa~t";
+                Text[ language_user1 ] = " ";
+                Text[ catalan ] = "~Tanca";
+                Text[ thai ] = "~‡∏õ‡∏¥‡∏î";
             };
             MenuItem
             {
