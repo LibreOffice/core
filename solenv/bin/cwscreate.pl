@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2004-12-10 17:02:49 $
+#   last change: $Author: hr $ $Date: 2004-12-13 17:26:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.12 $ ';
+my $id_str = ' $Revision: 1.13 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -117,7 +117,8 @@ $b_server_unx    = '/so/env/b_server/config' if ! defined $b_server_unx || ! -d 
 
 #### globals #####
 
-my $force_checkout = '';
+my $opt_force_checkout = '';
+my $opt_skip_checkout = 0;
 my $opt_dir   = '';     # optional directory argument;
 my $opt_platformlist;     # optional platform argument;
 my @opt_platforms   = ();     # optional platform argument;
@@ -128,7 +129,7 @@ if ( !defined($umask) ) {
     $umask = 22;
 }
 my $vcsid = $ENV{VCSID};    # user for logging
-$vcsid = "unkown" if ( !$vcsid );
+$vcsid = "unknown" if ( !$vcsid );
 
 # modules to be obligatory copied to each cws
 my %obligatory_modules = ();
@@ -159,7 +160,8 @@ sub parse_options
     # returns freshly allocated Cws reference
     my $help;
     my $success;
-    $success = GetOptions('d=s' => \$opt_dir, 'p=s' => \$opt_platformlist, 'h' => \$help, '-a' => \$force_checkout);
+    $success = GetOptions('d=s' => \$opt_dir, 'p=s' => \$opt_platformlist,
+              'h' => \$help, 'a' => \$opt_force_checkout, 'f' => \$opt_skip_checkout );
     if ( $help || !$success || $#ARGV > 2 ) {
         usage();
         exit(1);
@@ -387,11 +389,12 @@ sub check_cvs_update {
 sub update_workspace {
     my $cws = shift;
 
+    $opt_skip_checkout && return 1;
     defined $ENV{CWS_NO_UPDATE} && return 1;
 
     my $stand_dir = $ENV{SRC_ROOT};
     if (!opendir(SOURCES, $stand_dir)) {
-        print_error ("Environment variable SRC_ROOT points to not accesible diretory: $!", 1)
+        print_error ("Environment variable SRC_ROOT points to not accessible diretory: $!", 1)
     }
     my @dir_content = readdir(SOURCES);
     close SOURCES;
@@ -417,7 +420,7 @@ sub update_workspace {
         $cvs_module->module($module);
         print "\tUpdating '$module' ...\n";
         my $result = $cvs_module->update($stand_dir, $master_tag);
-        $cvs_module->handle_update_infomation($result);
+        $cvs_module->handle_update_information($result);
         $updated_modules{$module}++;
     };
     print $_ foreach (@warnings);
@@ -601,7 +604,7 @@ sub copy_workspace
             }
         }
     }
-    # if we get here no critical error happend
+    # if we get here no critical error happened
 #    return 0; # ause - disable all further steps
     return $success;
 }
@@ -632,7 +635,7 @@ sub copyprj_module {
     $ENVHASH{'i_server'} = '';
     $ENVHASH{'current_dir'} = cwd();
     $ENVHASH{'remote'} = '';
-    $ENVHASH{'force_checkout'} = 1 if ($force_checkout);
+    $ENVHASH{'opt_force_checkout'} = 1 if ($opt_force_checkout);
 
     $projects_to_copy{$module_name}++;
 
@@ -719,12 +722,15 @@ sub print_warning
 
 sub usage
 {
-    print STDERR "Usage: cwscreate [-a] [-d dir] [-p <p1,...>] <mws_name> <milestone> <cws_name>\n";
+    my $m = defined($log) ? "-a" : "-f";
+
+    print STDERR "Usage: cwscreate [$m] [-d dir] [-p <p1,...>] <mws_name> <milestone> <cws_name>\n";
     print STDERR "Creates a new child workspace <cws_name> for\n";
     print STDERR "milestone <milestone> of master workspace <mws_name>.\n";
     print STDERR "Options:\n";
     print STDERR "    -h        help\n";
-    print STDERR "    -a        use cvs checkout instead of copying\n";
+    print STDERR "    -a        use cvs checkout instead of copying\n" if defined($log);
     print STDERR "    -d dir    create workspace in directory dir\n";
     print STDERR "    -p p1,p2,p3    only create workspace for specified platforms\n";
+    print STDERR "    -f        don't perform checkout after creation\n" if !defined($log);
 }
