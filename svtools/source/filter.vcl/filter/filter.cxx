@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:26:21 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/salctype.hxx>
+#include <vcl/pngread.hxx>
+#include <vcl/pngwrite.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
@@ -79,7 +81,6 @@
 #include "fltcall.hxx"
 #include "wmf.hxx"
 #include "gifread.hxx"
-#include "pngread.hxx"
 #include "jpeg.hxx"
 #include "xbmread.hxx"
 #include "xpmread.hxx"
@@ -147,6 +148,8 @@
 #endif
 
 #include "SvFilterOptionsDialog.hxx"
+
+#define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
 #if defined WIN || (defined OS2 && !defined ICC)
 
@@ -1479,10 +1482,39 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         {
             if ( rGraphic.GetContext() == (GraphicReader*) 1 )
                 rGraphic.SetContext( NULL );
-            if ( !ImportPNG( rIStream, rGraphic, NULL ) )
-                nStatus = GRFILTER_FILTERERROR;
-            else
-                eLinkType = GFX_LINK_TYPE_NATIVE_PNG;
+
+            vcl::PNGReader aPNGReader( rIStream );
+            const std::vector< vcl::PNGReader::ChunkData >& rChunkData = aPNGReader.GetChunks();
+            std::vector< vcl::PNGReader::ChunkData >::const_iterator aIter( rChunkData.begin() );
+            std::vector< vcl::PNGReader::ChunkData >::const_iterator aEnd ( rChunkData.end() );
+            while( aIter != aEnd )
+            {
+                // Microsoft Office is storing Animated GIFs in following chunk
+                if ( aIter->nType == PMGCHUNG_msOG )
+                {
+                    sal_uInt32 nChunkSize = aIter->aData.size();
+                    if ( nChunkSize > 11 )
+                    {
+                        const std::vector< sal_uInt8 >& rData = aIter->aData;
+                        SvMemoryStream aIStrm( (void*)&rData[ 11 ], nChunkSize - 11, STREAM_READ );
+                        ImportGIF( aIStrm, rGraphic, NULL );
+                        eLinkType = GFX_LINK_TYPE_NATIVE_PNG;
+                        break;
+                    }
+                }
+                aIter++;
+            }
+            if ( eLinkType == GFX_LINK_TYPE_NONE )
+            {
+                BitmapEx aBmpEx( aPNGReader.Read() );
+                if ( aBmpEx.IsEmpty() )
+                    nStatus = GRFILTER_FILTERERROR;
+                else
+                {
+                    rGraphic = aBmpEx;
+                    eLinkType = GFX_LINK_TYPE_NATIVE_PNG;
+                }
+            }
         }
         else if( aFilterName.EqualsIgnoreCaseAscii( IMP_JPEG ) )
         {
@@ -1845,6 +1877,8 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             aGraphic=Graphic(aVirDev.GetBitmap(Point(0,0),aSizePixel));
         }
     }
+    if( rOStm.GetError() )
+        nStatus = GRFILTER_IOERROR;
     if( GRFILTER_OK == nStatus )
     {
         if ( pConfig->IsExportInternalFilter( nFormat ) )
@@ -1854,21 +1888,19 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                 nPercent = 60;
                 aUpdatePercentHdlLink.Call( this );
 
-                if( !rOStm.GetError() )
+                Bitmap aBmp( aGraphic.GetBitmap() );
+                sal_Int32 nColorRes = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Colors" ) ), 0 );
+                if ( nColorRes && ( nColorRes <= (USHORT)BMP_CONVERSION_24BIT) )
                 {
-                    Bitmap aBmp( aGraphic.GetBitmap() );
-                    sal_Int32 nColorRes = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Colors" ) ), 0 );
-                    if ( nColorRes && ( nColorRes <= (USHORT)BMP_CONVERSION_24BIT) )
-                    {
-                        if( !aBmp.Convert( (BmpConversion) nColorRes ) )
-                            aBmp = aGraphic.GetBitmap();
-                    }
-                    ResMgr*     pResMgr = CREATERESMGR( svt );
-                    sal_Bool    bRleCoding = aConfigItem.ReadBool( String( ResId( KEY_RLE_CODING, pResMgr ) ), sal_True );
-                    // Wollen wir RLE-Kodiert speichern?
-                    aBmp.Write( rOStm, bRleCoding );
-                    delete pResMgr;
+                    if( !aBmp.Convert( (BmpConversion) nColorRes ) )
+                        aBmp = aGraphic.GetBitmap();
                 }
+                ResMgr*     pResMgr = CREATERESMGR( svt );
+                sal_Bool    bRleCoding = aConfigItem.ReadBool( String( ResId( KEY_RLE_CODING, pResMgr ) ), sal_True );
+                // Wollen wir RLE-Kodiert speichern?
+                aBmp.Write( rOStm, bRleCoding );
+                delete pResMgr;
+
                 nPercent = 90;
                 aUpdatePercentHdlLink.Call( this );
 
@@ -1877,149 +1909,186 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             }
             else if( aFilterName.EqualsIgnoreCaseAscii( EXP_SVMETAFILE ) )
             {
-                if( !rOStm.GetError() )
+                sal_Int32 nVersion = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ), 0 ) ;
+                if ( nVersion )
+                    rOStm.SetVersion( nVersion );
+                GDIMetaFile aMTF;
+
+                if ( eType != GRAPHIC_BITMAP )
+                    aMTF = aGraphic.GetGDIMetaFile();
+                else
                 {
-                    sal_Int32 nVersion = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ), 0 ) ;
-                    if ( nVersion )
-                        rOStm.SetVersion( nVersion );
-                    GDIMetaFile aMTF;
+                    VirtualDevice aVirDev;
 
-                    if ( eType != GRAPHIC_BITMAP )
-                        aMTF = aGraphic.GetGDIMetaFile();
-                    else
-                    {
-                        VirtualDevice aVirDev;
-
-                        aMTF.Record( &aVirDev );
-                        aGraphic.Draw( &aVirDev, Point(), aGraphic.GetPrefSize() );
-                        aMTF.Stop();
-                        aMTF.SetPrefSize( aGraphic.GetPrefSize() );
-                        aMTF.SetPrefMapMode( aGraphic.GetPrefMapMode() );
-                    }
-                    nPercent = 60;
-                    aUpdatePercentHdlLink.Call( this );
-                    rOStm << aMTF;
-                    nPercent = 90;
-                    aUpdatePercentHdlLink.Call( this );
+                    aMTF.Record( &aVirDev );
+                    aGraphic.Draw( &aVirDev, Point(), aGraphic.GetPrefSize() );
+                    aMTF.Stop();
+                    aMTF.SetPrefSize( aGraphic.GetPrefSize() );
+                    aMTF.SetPrefMapMode( aGraphic.GetPrefMapMode() );
                 }
+                nPercent = 60;
+                aUpdatePercentHdlLink.Call( this );
+                rOStm << aMTF;
+                nPercent = 90;
+                aUpdatePercentHdlLink.Call( this );
+
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
             else if ( aFilterName.EqualsIgnoreCaseAscii( EXP_WMF ) )
             {
-                if( !rOStm.GetError() )
+                if( eType == GRAPHIC_GDIMETAFILE )
                 {
-                    if( eType == GRAPHIC_GDIMETAFILE )
-                    {
-                        if ( !ConvertGDIMetaFileToWMF( aGraphic.GetGDIMetaFile(), rOStm, &ImpFilterCallback, &aCallbackData ) )
-                            nStatus = GRFILTER_FORMATERROR;
-                    }
-                    else
-                    {
-                        Bitmap          aBmp( aGraphic.GetBitmap() );
-                        GDIMetaFile     aMTF;
-                        VirtualDevice   aVirDev;
-
-                        aMTF.Record( &aVirDev );
-                        aVirDev.DrawBitmap( Point(), aBmp );
-                        aMTF.Stop();
-                        aMTF.SetPrefSize( aBmp.GetSizePixel() );
-
-                        if( !ConvertGDIMetaFileToWMF( aMTF, rOStm, &ImpFilterCallback, &aCallbackData) )
-                            nStatus = GRFILTER_FORMATERROR;
-                    }
+                    if ( !ConvertGDIMetaFileToWMF( aGraphic.GetGDIMetaFile(), rOStm, &ImpFilterCallback, &aCallbackData ) )
+                        nStatus = GRFILTER_FORMATERROR;
                 }
+                else
+                {
+                    Bitmap          aBmp( aGraphic.GetBitmap() );
+                    GDIMetaFile     aMTF;
+                    VirtualDevice   aVirDev;
 
+                    aMTF.Record( &aVirDev );
+                    aVirDev.DrawBitmap( Point(), aBmp );
+                    aMTF.Stop();
+                    aMTF.SetPrefSize( aBmp.GetSizePixel() );
+
+                    if( !ConvertGDIMetaFileToWMF( aMTF, rOStm, &ImpFilterCallback, &aCallbackData) )
+                        nStatus = GRFILTER_FORMATERROR;
+                }
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
             else if ( aFilterName.EqualsIgnoreCaseAscii( EXP_EMF ) )
             {
-                if( !rOStm.GetError() )
+                if( eType == GRAPHIC_GDIMETAFILE )
                 {
-                    if( eType == GRAPHIC_GDIMETAFILE )
-                    {
-                        if ( !ConvertGDIMetaFileToEMF( aGraphic.GetGDIMetaFile(), rOStm, &ImpFilterCallback, &aCallbackData ) )
-                            nStatus = GRFILTER_FORMATERROR;
-                    }
-                    else
-                    {
-                        Bitmap          aBmp( aGraphic.GetBitmap() );
-                        GDIMetaFile     aMTF;
-                        VirtualDevice   aVirDev;
-
-                        aMTF.Record( &aVirDev );
-                        aVirDev.DrawBitmap( Point(), aBmp );
-                        aMTF.Stop();
-                        aMTF.SetPrefSize( aBmp.GetSizePixel() );
-
-                        if( !ConvertGDIMetaFileToEMF( aMTF, rOStm, &ImpFilterCallback, &aCallbackData) )
-                            nStatus = GRFILTER_FORMATERROR;
-                    }
+                    if ( !ConvertGDIMetaFileToEMF( aGraphic.GetGDIMetaFile(), rOStm, &ImpFilterCallback, &aCallbackData ) )
+                        nStatus = GRFILTER_FORMATERROR;
                 }
+                else
+                {
+                    Bitmap          aBmp( aGraphic.GetBitmap() );
+                    GDIMetaFile     aMTF;
+                    VirtualDevice   aVirDev;
 
+                    aMTF.Record( &aVirDev );
+                    aVirDev.DrawBitmap( Point(), aBmp );
+                    aMTF.Stop();
+                    aMTF.SetPrefSize( aBmp.GetSizePixel() );
+
+                    if( !ConvertGDIMetaFileToEMF( aMTF, rOStm, &ImpFilterCallback, &aCallbackData) )
+                        nStatus = GRFILTER_FORMATERROR;
+                }
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
             else if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
             {
-                if( !rOStm.GetError() )
+                if( !ExportJPEG( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, pFilterData ) )
+                    nStatus = GRFILTER_FORMATERROR;
+
+                if( rOStm.GetError() )
+                    nStatus = GRFILTER_IOERROR;
+            }
+            else if ( aFilterName.EqualsIgnoreCaseAscii( EXP_PNG ) )
+            {
+                vcl::PNGWriter aPNGWriter( aGraphic.GetBitmapEx(), pFilterData );
+                if ( pFilterData )
                 {
-                    if( !ExportJPEG( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, pFilterData ) )
-                        nStatus = GRFILTER_FORMATERROR;
+                    sal_Int32 k, j, i = 0;
+                    for ( i = 0; i < pFilterData->getLength(); i++ )
+                    {
+                        if ( (*pFilterData)[ i ].Name.equalsAscii( "AdditionalChunks" ) )
+                        {
+                            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aAdditionalChunkSequence;
+                            if ( (*pFilterData)[ i ].Value >>= aAdditionalChunkSequence )
+                            {
+                                for ( j = 0; j < aAdditionalChunkSequence.getLength(); j++ )
+                                {
+                                    if ( aAdditionalChunkSequence[ j ].Name.getLength() == 4 )
+                                    {
+                                        sal_uInt32 nChunkType;
+                                        for ( k = 0; k < 4; k++ )
+                                        {
+                                            nChunkType <<= 8;
+                                            nChunkType |= (sal_uInt8)aAdditionalChunkSequence[ j ].Name[ k ];
+                                        }
+                                        com::sun::star::uno::Sequence< sal_Int8 > aByteSeq;
+                                        if ( aAdditionalChunkSequence[ j ].Value >>= aByteSeq )
+                                        {
+                                            std::vector< vcl::PNGWriter::ChunkData >& rChunkData = aPNGWriter.GetChunks();
+                                            if ( rChunkData.size() )
+                                            {
+                                                sal_uInt32 nChunkLen = aByteSeq.getLength();
+
+                                                vcl::PNGWriter::ChunkData aChunkData;
+                                                aChunkData.nType = nChunkType;
+                                                if ( nChunkLen )
+                                                {
+                                                    aChunkData.aData.resize( nChunkLen );
+                                                    rtl_copyMemory( &aChunkData.aData[ 0 ], aByteSeq.getConstArray(), nChunkLen );
+                                                }
+                                                std::vector< vcl::PNGWriter::ChunkData >::iterator aIter = rChunkData.end() - 1;
+                                                rChunkData.insert( aIter, aChunkData );
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
+                aPNGWriter.Write( rOStm );
 
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
             else if( aFilterName.EqualsIgnoreCaseAscii( EXP_SVG ) )
             {
-                if( !rOStm.GetError() )
+                try
                 {
-                    try
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+
+                    if( xMgr.is() )
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+                        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
+                            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
 
-                        if( xMgr.is() )
+                        ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
+                            ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
+
+                        if( xSaxWriter.is() && xSVGWriter.is() )
                         {
-                            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
+                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource > xActiveDataSource(
+                                xSaxWriter, ::com::sun::star::uno::UNO_QUERY );
 
-                            ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
-                                ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
-
-                            if( xSaxWriter.is() && xSVGWriter.is() )
+                            if( xActiveDataSource.is() )
                             {
-                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource > xActiveDataSource(
-                                    xSaxWriter, ::com::sun::star::uno::UNO_QUERY );
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xStmIf(
+                                    static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
 
-                                if( xActiveDataSource.is() )
-                                {
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xStmIf(
-                                        static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
+                                SvMemoryStream aMemStm( 65535, 65535 );
 
-                                    SvMemoryStream aMemStm( 65535, 65535 );
+                                aMemStm.SetCompressMode( COMPRESSMODE_FULL );
+                                ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
 
-                                    aMemStm.SetCompressMode( COMPRESSMODE_FULL );
-                                    ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
+                                nPercent = 60;
+                                aUpdatePercentHdlLink.Call( this );
 
-                                    nPercent = 60;
-                                    aUpdatePercentHdlLink.Call( this );
-
-                                    xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(
-                                        xStmIf, ::com::sun::star::uno::UNO_QUERY ) );
-                                    ::com::sun::star::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
-                                    xSVGWriter->write( xSaxWriter, aMtfSeq );
-                                    nPercent = 90;
-                                    aUpdatePercentHdlLink.Call( this );
-                                }
+                                xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(
+                                    xStmIf, ::com::sun::star::uno::UNO_QUERY ) );
+                                ::com::sun::star::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
+                                xSVGWriter->write( xSaxWriter, aMtfSeq );
+                                nPercent = 90;
+                                aUpdatePercentHdlLink.Call( this );
                             }
                         }
                     }
-                    catch( ::com::sun::star::uno::Exception& )
-                    {
-                        nStatus = GRFILTER_IOERROR;
-                    }
+                }
+                catch( ::com::sun::star::uno::Exception& )
+                {
+                    nStatus = GRFILTER_IOERROR;
                 }
             }
             else
@@ -2037,13 +2106,8 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                 // Dialog in DLL ausfuehren
                 if( pFunc )
                 {
-                    if( !rOStm.GetError() )
-                    {
-                        if ( !(*pFunc)( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, &aConfigItem, sal_False ) )
-                            nStatus = GRFILTER_FORMATERROR;
-                    }
-                    else
-                        nStatus = GRFILTER_IOERROR;
+                    if ( !(*pFunc)( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, &aConfigItem, sal_False ) )
+                        nStatus = GRFILTER_FORMATERROR;
                 }
                 else
                     nStatus = GRFILTER_FILTERERROR;
