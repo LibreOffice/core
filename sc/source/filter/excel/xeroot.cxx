@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:14:52 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,15 +73,14 @@
 #include <svtools/saveopt.hxx>
 #endif
 
-#ifndef SC_ADDINCOL_HXX
-#include "addincol.hxx"
-#endif
-
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
 #ifndef SC_XEHELPER_HXX
 #include "xehelper.hxx"
+#endif
+#ifndef SC_XEFORMULA_HXX
+#include "xeformula.hxx"
 #endif
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
@@ -123,6 +122,7 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     mrExpData.mxXFBfr.reset( new XclExpXFBuffer( GetRoot() ) );
     mrExpData.mxTabInfo.reset( new XclExpTabInfo( GetRoot() ) );
     mrExpData.mxLinkMgr.reset( new XclExpLinkManager( GetRoot() ) );
+    mrExpData.mxFmlaComp.reset( new XclExpFormulaCompiler( GetRoot() ) );
 
     // initialization of objects needing complete root data
     mrExpData.mxProgress->Initialize();
@@ -171,19 +171,16 @@ XclExpLinkManager& XclExpRoot::GetLinkManager() const
     return *mrExpData.mxLinkMgr;
 }
 
+XclExpFormulaCompiler& XclExpRoot::GetFormulaCompiler() const
+{
+    return *mrExpData.mxFmlaComp;
+}
+
 XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
 {
     if( !mrExpData.mxPTableMgr.get() )
         mrExpData.mxPTableMgr.reset( new XclExpPivotTableManager( GetRoot() ) );
     return *mrExpData.mxPTableMgr;
-}
-
-String XclExpRoot::GetXclAddInName( const String& rScName ) const
-{
-    String aXclName;
-    if( ScGlobal::GetAddInCollection()->GetExcelName( rScName, GetUILanguage(), aXclName ) )
-        return aXclName;
-    return rScName;
 }
 
 bool XclExpRoot::CheckCellAddress( const ScAddress& rPos ) const
