@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:38:35 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1345,8 +1345,8 @@ BOOL SwDoc::DeleteRedline( const SwPaM& rRange, BOOL bSaveInUndo,
 BOOL SwDoc::DeleteRedline( const SwStartNode& rNode, BOOL bSaveInUndo,
                             USHORT nDelType )
 {
-    return DeleteRedline( SwPaM( *rNode.EndOfSectionNode(), rNode ),
-                            bSaveInUndo, nDelType );
+    SwPaM aTemp(*rNode.EndOfSectionNode(), rNode);
+    return DeleteRedline(aTemp, bSaveInUndo, nDelType);
 }
 
 void SwDoc::DeleteRedline( USHORT nPos )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 12:58:35 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2059,7 +2059,8 @@ SetRedlineMode( eOld );
 
     if( !pOwnRedl && !IsIgnoreRedline() && GetRedlineTbl().Count() )
     {
-        SplitRedline( SwPaM( aIdx ));
+        SwPaM aTemp(aIdx);
+        SplitRedline(aTemp);
     }
 
     ULONG nRedlSttNd(0), nRedlEndNd(0);
