@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:04:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,15 +98,14 @@
 #ifndef SC_XEHELPER_HXX
 #include "xehelper.hxx"
 #endif
-#ifndef SC_XEFORMULA_HXX
-#include "xeformula.hxx"
-#endif
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
 #endif
 #ifndef SC_XEESCHER_HXX
 #include "xeescher.hxx"
 #endif
+
+namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
 // ============================================================================
 // Helper records for cell records
@@ -204,7 +203,7 @@ XclExpArrayBuffer::XclExpArrayBuffer( const XclExpRoot& rRoot ) :
 XclExpArrayRef XclExpArrayBuffer::CreateArray( const ScTokenArray& rScTokArr, const ScRange& rScRange )
 {
     const ScAddress& rScPos = rScRange.aStart;
-    XclExpTokenArrayRef xTokArr = GetFormulaCompiler().CreateMatrixFormula( rScTokArr, rScPos );
+    XclExpTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_MATRIX, rScTokArr, &rScPos );
 
     DBG_ASSERT( maRecMap.find( rScPos ) == maRecMap.end(), "XclExpArrayBuffer::CreateArray - array exists already" );
     XclExpArrayRef& rxRec = maRecMap[ rScPos ];
@@ -279,7 +278,7 @@ XclExpShrfmlaRef XclExpShrfmlaBuffer::CreateOrExtendShrfmla(
         if( aIt == maRecMap.end() )
         {
             // create a new record
-            XclExpTokenArrayRef xTokArr = GetFormulaCompiler().CreateSharedFormula( *pShrdScTokArr, rScPos );
+            XclExpTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_SHARED, *pShrdScTokArr, &rScPos );
             xRec.reset( new XclExpShrfmla( xTokArr, rScPos ) );
             maRecMap[ pShrdScTokArr ] = xRec;
         }
@@ -616,7 +615,7 @@ void XclExpSingleCellBase::ConvertXFIndexes( const XclExpRoot& rRoot )
 void XclExpSingleCellBase::Save( XclExpStream& rStrm )
 {
     DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() >= xlBiff3 );
-    SetRecSize( GetRecSize() + mnContSize );
+    AddRecSize( mnContSize );
     XclExpCellBase::Save( rStrm );
 }
 
@@ -634,7 +633,7 @@ XclExpNumberCell::XclExpNumberCell(
         const XclExpRoot& rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, double fValue ) :
     XclExpSingleCellBase( rRoot, EXC_ID_NUMBER, 8, nXclCol, nXclRow,
-        pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nForcedXFId ),
+        pPattern, ApiScriptType::WEAK, nForcedXFId ),
     mfValue( fValue )
 {
 }
@@ -652,7 +651,7 @@ XclExpBooleanCell::XclExpBooleanCell(
         const XclExpRoot rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, bool bValue ) :
     XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, nXclCol, nXclRow,
-        pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nForcedXFId ),
+        pPattern, ApiScriptType::WEAK, nForcedXFId ),
     mbValue( bValue )
 {
 }
@@ -670,7 +669,7 @@ XclExpErrorCell::XclExpErrorCell(
         const XclExpRoot rRoot, sal_uInt16 nXclCol, sal_uInt16 nXclRow,
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt8 nErrCode ) :
     XclExpSingleCellBase( rRoot, EXC_ID_BOOLERR, 2, nXclCol, nXclRow,
-        pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nForcedXFId ),
+        pPattern, ApiScriptType::WEAK, nForcedXFId ),
     mnErrCode( nErrCode )
 {
 }
@@ -723,8 +722,7 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
     if( GetXFId() == EXC_XFID_NOTFOUND )
     {
         bool bForceLineBreak = mxText->IsWrapped();
-        SetXFId( rRoot.GetXFBuffer().InsertWithFont(
-            pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nXclFont, bForceLineBreak ) );
+        SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
     }
 
     // initialize the record contents
@@ -817,8 +815,7 @@ XclExpFormulaCell::XclExpFormulaCell( const XclExpRoot& rRoot,
                 (rFormatter.GetType( nScNumFmt ) == NUMBERFORMAT_LOGICAL) )
             nAltScNumFmt = rNumFmtBfr.GetStandardFormat();
 
-        SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt(
-            pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nAltScNumFmt ) );
+        SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt( pPattern, ApiScriptType::WEAK, nAltScNumFmt ) );
     }
 
     // *** Convert the formula token array *** --------------------------------
@@ -865,7 +862,7 @@ XclExpFormulaCell::XclExpFormulaCell( const XclExpRoot& rRoot,
 
     // no shared formula found - create a simple cell formula
     if( !mxAddRec )
-        mxTokArr = rRoot.GetFormulaCompiler().CreateCellFormula( rScTokArr, aScPos );
+        mxTokArr = rRoot.GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CELL, rScTokArr, &aScPos );
 }
 
 void XclExpFormulaCell::Save( XclExpStream& rStrm )
@@ -1123,7 +1120,7 @@ XclExpBlankCell::XclExpBlankCell( const XclExpRoot& rRoot,
     XclExpMultiCellBase( EXC_ID_BLANK, EXC_ID_MULBLANK, 0, nXclCol, nXclRow )
 {
     DBG_ASSERT( nXclCol <= nLastXclCol, "XclExpBlankCell::XclExpBlankCell - invalid column range" );
-    AppendXFId( rRoot, pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nForcedXFId, nLastXclCol - nXclCol + 1 );
+    AppendXFId( rRoot, pPattern, ApiScriptType::WEAK, nForcedXFId, nLastXclCol - nXclCol + 1 );
 }
 
 bool XclExpBlankCell::TryMerge( const XclExpCellBase& rCell )
@@ -1157,7 +1154,7 @@ XclExpRkCell::XclExpRkCell(
         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_Int32 nRkValue ) :
     XclExpMultiCellBase( EXC_ID_RK, EXC_ID_MULRK, 4, nXclCol, nXclRow )
 {
-    AppendXFId( rRoot, pPattern, ::com::sun::star::i18n::ScriptType::WEAK, nForcedXFId );
+    AppendXFId( rRoot, pPattern, ApiScriptType::WEAK, nForcedXFId );
     maRkValues.push_back( nRkValue );
 }
 
@@ -1370,8 +1367,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
 
     // column default format
     maXFId.mnXFId = GetXFBuffer().Insert(
-        rDoc.GetMostUsedPattern( nScCol, 0, nLastScRow, nScTab ),
-        ::com::sun::star::i18n::ScriptType::WEAK );
+        rDoc.GetMostUsedPattern( nScCol, 0, nLastScRow, nScTab ), ApiScriptType::WEAK );
 
     // column width
     USHORT nScWidth = rDoc.GetColWidth( nScCol, nScTab );
@@ -1439,8 +1435,7 @@ void XclExpColinfoBuffer::Initialize( SCROW nLastScRow )
 {
 
     for( sal_uInt16 nScCol = 0, nLastScCol = GetMaxPos().Col(); nScCol <= nLastScCol; ++nScCol )
-        maColInfos.AppendRecord( XclExpColinfoRef(
-            new XclExpColinfo( GetRoot(), nScCol, nLastScRow, maOutlineBfr ) ) );
+        maColInfos.AppendNewRecord( new XclExpColinfo( GetRoot(), nScCol, nLastScRow, maOutlineBfr ) );
 }
 
 void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
@@ -1985,8 +1980,8 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt16 nXclRow, bool bRowAlwaysE
         // fill up missing ROW records
         // do not use sal_uInt16 for nFirstFreeXclRow, would cause loop in full sheets
         for( size_t nFirstFreeXclRow = maRowList.Size(); nFirstFreeXclRow <= nXclRow; ++nFirstFreeXclRow )
-            maRowList.AppendRecord( XclExpRowRef( new XclExpRow(
-                GetRoot(), static_cast< sal_uInt16 >( nFirstFreeXclRow ), maOutlineBfr, bRowAlwaysEmpty ) ) );
+            maRowList.AppendNewRecord( new XclExpRow(
+                GetRoot(), static_cast< sal_uInt16 >( nFirstFreeXclRow ), maOutlineBfr, bRowAlwaysEmpty ) );
 
         mpLastUsedRow = maRowList.GetRecord( nXclRow ).get();
         mnLastUsedXclRow = nXclRow;
@@ -2173,8 +2168,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         // notes
         const ScPostIt* pScNote = pScCell ? pScCell->GetNotePtr() : 0;
         if( pScNote || aAddNoteText.Len() )
-            mxNoteList->AppendRecord( XclExpNoteList::RecordRefType(
-                new XclExpNote( GetRoot(), aScPos, pScNote, aAddNoteText ) ) );
+            mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, aAddNoteText ) );
 
         // other sheet contents
         if( pPattern )
