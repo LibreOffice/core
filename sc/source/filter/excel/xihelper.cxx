@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:19:43 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ XclImpString::XclImpString( XclImpStream& rStrm, XclStrFlags nFlags )
     rStrm.ReadUniStringExtHeader( b16Bit, bRich, bFarEast, nRunCount, nExtInf, nFlagField );
 
     // --- character array ---
-    rStrm.AppendRawUniString( maString, nChars, b16Bit );
+    maString = rStrm.ReadRawUniString( nChars, b16Bit );
 
     // --- formatting ---
     ReadFormats( rStrm, nRunCount );
@@ -785,8 +785,7 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
             rStrm >> mfValue;
         break;
         case EXC_CACHEDVAL_STRING:
-            mpStr.reset( new String );
-            rStrm.AppendUniString( *mpStr );
+            mpStr.reset( new String( rStrm.ReadUniString() ) );
         break;
         case EXC_CACHEDVAL_BOOL:
         case EXC_CACHEDVAL_ERROR:
