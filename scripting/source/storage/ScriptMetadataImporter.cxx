@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-24 10:37:52 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-30 16:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ using namespace ::com::sun::star::uno;
 
 namespace scripting_impl
 {
-
 //*************************************************************************
 ScriptMetadataImporter::ScriptMetadataImporter(
     const Reference< XComponentContext > & xContext )
@@ -252,6 +251,7 @@ void ScriptMetadataImporter::startElement(
     switch( m_state )
     {
         case SCRIPT:
+            m_ScriptData =  ScriptData();
             m_ScriptData.parcelURI = ms_parcelURI;
             m_ScriptData.language = xAttribs->getValueByName(
                 ::rtl::OUString::createFromAscii( "language" ));
@@ -410,9 +410,16 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
                 ms_localeDisName, ms_localeDesc );
             break;
         case FILESET:
+            OSL_TRACE("adding fileset %s to filesets map",
+                   ::rtl::OUStringToOString( ms_filesetname,
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             m_ScriptData.filesets[ ms_filesetname ] = ::std::make_pair(
                 mv_filesetprops, mm_files );
+            mm_files.clear();
         case FILES:
+            OSL_TRACE("adding files %s to files map",
+                   ::rtl::OUStringToOString( ms_filename,
+                   RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             mm_files[ ms_filename ] = mv_fileprops;
             mv_fileprops.clear();
             break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-24 10:37:51 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-30 16:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,67 @@ Reference< beans::XPropertySet > SAL_CALL ScriptInfo::getLanguageProperties(  )
 
     return xPropSet;
 }
+//*************************************************************************
+css::uno::Sequence< ::rtl::OUString > ScriptInfo::getFileSetNames()
+throw ( css::uno::RuntimeException )
+{
+    OSL_TRACE("ScriptInfo::getFileSetNames");
+    Sequence< OUString > results;
+    filesets_map::iterator fsm_it = m_scriptData.filesets.begin();
+    filesets_map::iterator fsm_itend = m_scriptData.filesets.end();
+    if( fsm_it == fsm_itend )
+    {
+        OSL_TRACE( "ScriptInfo::getFileSetNames: no filesets" );
+        return results;
+    }
+    results.realloc( m_scriptData.filesets.size() );
+    for ( sal_Int32 count = 0; fsm_it != fsm_itend; ++fsm_it )
+    {
+        OUString fileSetName = fsm_it->first;
+        OSL_TRACE( "ScriptInfo::getFileSetNames: adding name %s",
+            ::rtl::OUStringToOString( fileSetName,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        results[ count++ ] = fileSetName;
+    }
+    return results;
+}
+//*************************************************************************
+css::uno::Sequence< ::rtl::OUString >
+ScriptInfo::getFilesInFileSet( const ::rtl::OUString & fileSetName )
+throw ( css::uno::RuntimeException )
+{
+    Sequence< OUString > results;
+    filesets_map::iterator fsm_it = m_scriptData.filesets.find( fileSetName );
+    filesets_map::iterator fsm_itend = m_scriptData.filesets.end();
+    if( fsm_it == fsm_itend )
+    {
+        OSL_TRACE( "ScriptInfo::getFilesInFileSet: no fileset named %s",
+            ::rtl::OUStringToOString( fileSetName,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        return results;
+    }
 
+    strpairvec_map files = fsm_it->second.second;
+    strpairvec_map::iterator spvm_it = files.begin();
+    strpairvec_map::iterator spvm_itend = files.end();
+    if( spvm_it != spvm_itend )
+    {
+        OSL_TRACE( "ScriptInfo::getFilesInFileSet: no files in fileset %s",
+            ::rtl::OUStringToOString( fileSetName,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        return results;
+    }
+    results.realloc( files.size() );
+    for( sal_Int32 count = 0; spvm_it != spvm_itend ; ++spvm_it )
+    {
+        OUString fileName = fsm_it->first;
+        OSL_TRACE( "ScriptInfo::getFilesInFileSet: adding file %s",
+            ::rtl::OUStringToOString( fileName,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        results[ count++ ] = fileSetName;
+    }
+    return results;
+}
 //*************************************************************************
 OUString SAL_CALL ScriptInfo::getImplementationName(  )
 throw( RuntimeException )

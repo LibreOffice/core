@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:38 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-30 16:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _SCRIPTING_STORAGE_SCRIPTDATA_HXX_
 
 #include <vector>
-#include <map>
+#include <hash_map>
 
 #include <cppu/macros.hxx>
 #include <rtl/ustring.hxx>
@@ -75,12 +75,11 @@ namespace scripting_impl
 
 typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > str_pair;
 typedef ::std::vector< str_pair > props_vec;
-typedef ::std::map< ::rtl::OUString, props_vec,
+typedef ::std::hash_map< ::rtl::OUString, props_vec, ::rtl::OUStringHash,
     ::std::equal_to< ::rtl::OUString > > strpairvec_map;
-typedef ::std::map< ::rtl::OUString, ::std::pair< ::rtl::OUString,
-    ::rtl::OUString > > strpair_map;
-typedef ::std::map< ::rtl::OUString, ::std::pair< props_vec, strpairvec_map >,
-    ::std::equal_to< ::rtl::OUString > > filesets_map;
+typedef ::std::hash_map< ::rtl::OUString, ::std::pair< ::rtl::OUString,
+    ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > strpair_map;
+typedef ::std::hash_map< ::rtl::OUString, ::std::pair< props_vec, strpairvec_map >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > filesets_map;
 
 struct ScriptData
 {
