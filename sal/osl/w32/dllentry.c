@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:10 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,24 @@ extern oslMutex         g_CurrentDirectoryMutex;
 extern void SAL_CALL ___rtl_memory_init (void);
 extern void SAL_CALL ___rtl_memory_fini (void);
 
+/*
+This is needed because DllMain is called after static constructors. A DLL's
+startup and shutdown sequence looks like this:
+
+_pRawDllMain()
+_CRT_INIT()
+DllMain()
+....
+DllMain()
+_CRT_INIT()
+_pRawDllMain()
+
+*/
+
+
+static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved );
+extern BOOL (WINAPI *_pRawDllMain)(HANDLE, DWORD, LPVOID) = _RawDllMain;
+
 //------------------------------------------------------------------------------
 // defines
 //------------------------------------------------------------------------------
@@ -161,7 +179,7 @@ static void InitDCOM( )
 // DllMain
 //------------------------------------------------------------------------------
 
-sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
+static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
     switch (fdwReason)
     {
@@ -254,7 +272,15 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
             /* finalize memory management */
             ___rtl_memory_fini();
             break;
+    }
 
+    return TRUE;
+}
+
+BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
+{
+    switch (fdwReason)
+    {
         case DLL_THREAD_ATTACH:
             break;
 
@@ -263,6 +289,6 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
             break;
     }
 
-    return ( sal_True );
+    return TRUE;
 }
 
