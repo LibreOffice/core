@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 09:59:22 $
+ *  last change: $Author: cd $ $Date: 2001-07-06 16:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ USHORT SfxApplication::ParseCommandLine_Impl()
 }
 
 //---------------------------------------------------------------------------
-void SfxApplication::StartUpScreen( const char* pLabelPrefix )
+void SfxApplication::InitLabelResMgr( const char* pLabelPrefix )
 {
     // Label-DLL mit diversen Resourcen fuer OEM-Ver. etc. (Intro, Titel, About)
     pAppData_Impl->bBean = FALSE;
@@ -366,47 +366,6 @@ void SfxApplication::StartUpScreen( const char* pLabelPrefix )
         if ( !pAppData_Impl->pLabelResMgr )
             // dann den ResMgr vom Executable verwenden
             pAppData_Impl->pLabelResMgr = new ResMgr;
-
-        // Intro nur anzeigen, wenn normaler Start (kein Print/Server etc.)
-        if ( !pAppData_Impl->bInvisible && !pAppData_Impl->bMinimized &&
-             pAppData_Impl->nAppEvent != DISPATCH_PRINT && pAppData_Impl->nAppEvent != DISPATCH_SERVER )
-        {
-            // und es nicht ausgeschaltet ist
-#if SUPD<613//MUSTINI
-            String aIntroIni = pAppIniMgr->Get(SFX_KEY_SHOW_INTRO);
-            ULONG nDisplayTime = ULONG(aIntroIni.ToInt32());
-
-            if ( 2 == nDisplayTime || aIntroIni.Len() < 1 )
-            {
-                // 2 oder 'kein Ini-Eintrag' bedeutet
-                // Einstellungen aus dem System holen
-                AllSettings aSettings = Application::GetSettings();
-                Application::MergeSystemSettings( aSettings );
-                nDisplayTime = aSettings.GetStyleSettings().GetLogoDisplayTime();
-            }
-
-            if ( nDisplayTime != LOGO_DISPLAYTIME_NOLOGO )
-            {
-                USHORT nResId = RID_DEFAULTINTRO;
-                if ( Application::IsRemoteServer() )
-                    nResId = RID_DEFAULTINTRO_PORTAL;
-                // die ggf. im System eingestellte Zeit wird hier nicht ber"ucksichtigt
-                pImp->pIntro = new IntroWindow_Impl(
-                    Bitmap( ResId( nResId, pAppData_Impl->pLabelResMgr ) ) );
-            }
-#else
-            sal_Bool bIntro = SvtStartOptions().IsIntroEnabled();
-            if( bIntro == sal_True )
-            {
-                USHORT nResId = RID_DEFAULTINTRO;
-                if ( Application::IsRemoteServer() )
-                    nResId = RID_DEFAULTINTRO_PORTAL;
-                // die ggf. im System eingestellte Zeit wird hier nicht ber"ucksichtigt
-                pImp->pIntro = new IntroWindow_Impl(
-                    Bitmap( ResId( nResId, pAppData_Impl->pLabelResMgr ) ) );
-            }
-#endif
-        }
     }
     else
     {
