@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:26:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,299 +69,57 @@
 
 String STR_SVT_FILEVIEW_COLUMN_TITLE
 {
-    Text = "Titel";
-    Text[English] = "Title";
-    Text[ english_us ] = "Title";
-    Text[ portuguese ] = "Título";
-    Text[ russian ] = "Çàãîëîâîê";
-    Text[ greek ] = "Ôßôëïò";
-    Text[ dutch ] = "Titel";
-    Text[ french ] = "Titre";
-    Text[ spanish ] = "Título";
-    Text[ italian ] = "Titolo";
-    Text[ danish ] = "Titel";
-    Text[ swedish ] = "Namn";
-    Text[ polish ] = "Tytu³";
-    Text[ portuguese_brazilian ] = "Título";
-    Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«";
-    Text[ korean ] = "ì œëª©";
-    Text[ chinese_simplified ] = "æ ‡é¢˜";
-    Text[ chinese_traditional ] = "æ¨™é¡Œ";
-    Text[ turkish ] = "Başlık";
-    Text[ arabic ] = "ÇáÚäæÇä";
-    Text[ finnish ] = "Otsikko";
-    Text[ catalan ] = "Títol";
-    Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡";
-    Text[ czech ] = "NÃ¡zev";
-    Text[ hebrew ] = "â€®×›×•×ª×¨×ªâ€¬";
-    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•";
-    Text[ slovak ] = "Nadpis";
-    Text[ hungarian ] = "CÃ­m";
-    Text[ slovenian ] = "Naslov";
+    Text [ de ] = "Titel";
+    Text [ en-US ] = "Title";
 };
 
 String STR_SVT_FILEVIEW_COLUMN_SIZE
 {
-    Text = "Größe";
-    Text[English] = "Size";
-    Text[ english_us ] = "Size";
-    Text[ portuguese ] = "Tamanho";
-    Text[ russian ] = "Ğàçìåğ";
-    Text[ greek ] = "Ìİãåèïò";
-    Text[ dutch ] = "Grootte";
-    Text[ french ] = "Taille";
-    Text[ spanish ] = "Tamaño";
-    Text[ italian ] = "Dimensioni";
-    Text[ danish ] = "Størrelse";
-    Text[ swedish ] = "Storlek";
-    Text[ polish ] = "Rozmiar";
-    Text[ portuguese_brazilian ] = "Tamanho";
-    Text[ japanese ] = "ã‚µã‚¤ã‚º";
-    Text[ korean ] = "í¬ê¸°";
-    Text[ chinese_simplified ] = "å¤§å°";
-    Text[ chinese_traditional ] = "å¤§å°";
-    Text[ turkish ] = "Boyut";
-    Text[ arabic ] = "ÇáÍÌã";
-    Text[ finnish ] = "Koko";
-    Text[ catalan ] = "Mida";
-    Text[ thai ] = "à¸‚à¸™à¸²à¸”";
-    Text[ czech ] = "Velikost";
-    Text[ hebrew ] = "â€®×’×•×“×œâ€¬";
-    Text[ hindi ] = "à¤ªà¤°à¤¿à¤®à¤¾à¤£";
-    Text[ slovak ] = "VeÄ¾kosÅ¥";
-    Text[ hungarian ] = "MÃ©ret";
-    Text[ slovenian ] = "Velikost";
+    Text [ de ] = "Größe";
+    Text [ en-US ] = "Size";
 };
 
 String STR_SVT_FILEVIEW_COLUMN_DATE
 {
-    Text = "Änderungsdatum";
-    Text[English] = "Modified Date";
-    Text[ english_us ] = "Date modified";
-    Text[ portuguese ] = "Modificado em";
-    Text[ russian ] = "Äàòà èçìåíåíèÿ";
-    Text[ greek ] = "Çìåñïìçíßá ôñïğïğïßçóçò";
-    Text[ dutch ] = "Gewijzigd op";
-    Text[ french ] = "Date de modification";
-    Text[ spanish ] = "Fecha de modificación";
-    Text[ italian ] = "Data di modifica";
-    Text[ danish ] = "Ændringsdato";
-    Text[ swedish ] = "Ändringsdatum";
-    Text[ polish ] = "Data modyfikacji";
-    Text[ portuguese_brazilian ] = "Data de modificação";
-    Text[ japanese ] = "å¤‰æ›´æ—¥æ™‚";
-    Text[ korean ] = "ë³€ê²½ ë‚ ì§œ";
-    Text[ chinese_simplified ] = "ä¿®æ”¹çš„æ—¶é—´";
-    Text[ chinese_traditional ] = "ä¿®æ”¹çš„æ—¥æœŸ";
-    Text[ turkish ] = "Tarihi Düzenle";
-    Text[ arabic ] = "ÊÇÑíÎ ÇáÊÚÏíá";
-    Text[ finnish ] = "Muokkauspäivämäärä";
-    Text[ catalan ] = "Data modificada";
-    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "Datum zmÄ›ny";
-    Text[ hebrew ] = "â€®×ª××¨×™×š ×©×™× ×•×™ ××—×¨×•×Ÿâ€¬";
-    Text[ hindi ] = "à¤¦à¤¿à¤¨à¤¾à¤‚à¤• à¤¸à¥à¤§à¤¾à¤° à¤•à¤¿à¤¯à¤¾";
-    Text[ slovak ] = "DÃ¡tum zmeny";
-    Text[ hungarian ] = "MÃ³dosÃ­tÃ¡s dÃ¡tuma";
-    Text[ slovenian ] = "Spremenjeno dne";
+    Text [ de ] = "Änderungsdatum";
+    Text [ en-US ] = "Date modified";
 };
 
 String STR_SVT_FILEVIEW_COLUMN_TYPE
 {
-    Text = "Typ";
-    Text[English] = "Type";
-    Text[ english_us ] = "Type";
-    Text[ portuguese ] = "Tipo";
-    Text[ russian ] = "Òèï";
-    Text[ greek ] = "Ôığïò";
-    Text[ dutch ] = "Type";
-    Text[ french ] = "Type";
-    Text[ spanish ] = "Tipo";
-    Text[ finnish ] = "Tyyppi";
-    Text[ italian ] = "Tipo";
-    Text[ danish ] = "Type";
-    Text[ swedish ] = "Typ";
-    Text[ polish ] = "Typ";
-    Text[ portuguese_brazilian ] = "Tipo";
-    Text[ japanese ] = "ç¨®é¡";
-    Text[ korean ] = "ìœ í˜•";
-    Text[ chinese_simplified ] = "ç±»å‹";
-    Text[ chinese_traditional ] = "é¡å‹";
-    Text[ turkish ] = "Tür";
-    Text[ arabic ] = "ÇáäæÚ";
-    Text[ catalan ] = "Tipus";
-    Text[ thai ] = "à¸Šà¸™à¸´à¸”";
-    Text[ czech ] = "Typ";
-    Text[ hebrew ] = "â€®×¡×•×’â€¬";
-    Text[ hindi ] = "à¤µà¤°à¥à¤—";
-    Text[ slovak ] = "Typ";
-    Text[ hungarian ] = "TÃ­pus";
-    Text[ slovenian ] = "Vrsta";
+    Text [ de ] = "Typ";
+    Text [ en-US ] = "Type";
 };
 
 String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
 {
-    Text = "Der Ordner %1 konnte nicht angelegt werden.";
-    Text[ english_us ] = "Could not create the folder %1.";
-    Text[ portuguese ] = "Foi impossível criar a pasta %1.";
-    Text[ russian ] = "Íåâîçìîæíî ñîçäàòü ïàïêó %1.";
-    Text[ greek ] = "Äåí Şôáí äõíáôŞ ç äçìéïõñãßá ôïõ öáêİëïõ %1.";
-    Text[ dutch ] = "Map %1 kan niet worden aangemaakt.";
-    Text[ french ] = "Impossible de créer le dossier %1 !";
-    Text[ spanish ] = "No se pudo crear la carpeta %1.";
-    Text[ finnish ] = "Kansion %1 luominen ei onnistunut.";
-    Text[ italian ] = "Impossibile creare la cartella %1.";
-    Text[ danish ] = "Mappen %1 kunne ikke oprettes.";
-    Text[ swedish ] = "Det gick inte att skapa mappen %1.";
-    Text[ polish ] = "Nie mo¿na utworzyæ folderu %1.";
-    Text[ portuguese_brazilian ] = "Não foi possível criar a pasta %1.";
-    Text[ japanese ] = "ãƒ•ã‚©ãƒ«ãƒ€ %1 ã¯æ ¼ç´ã•ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ korean ] = "í´ë” %1ì„(ë¥¼) ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•åˆ›å»ºæ–‡ä»¶å¤¹ %1 ã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•æ–°å¢è³‡æ–™å¤¾ %1 ã€‚";
-    Text[ turkish ] = "Klasör yaratılamadı %1.";
-    Text[ arabic ] = "Could not create the folder %1.";
-    Text[ catalan ] = "No s'ha pogut crear la carpeta %1.";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¹‚à¸Ÿà¸¥à¹€à¸”à¸­à¸£à¹Œ %1 à¹„à¸”à¹‰";
-    Text[ czech ] = "Nelze vytvoÅ™it sloÅ¾ku %1.";
-    Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×™×¦×•×¨ ×ª×™×§×™×” %1.â€¬";
-    Text[ hindi ] = "%1 à¤•à¥‹à¤·à¥à¤  à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "NedÃ¡ sa vytvoriÅ¥ adresÃ¡r %1.";
-    Text[ hungarian ] = "A %1 mappa lÃ©trehozÃ¡sa nem sikerÃ¼lt";
-    Text[ slovenian ] = "Mape %1 ni bilo mogoÄe ustvariti.";
+    Text [ de ] = "Der Ordner %1 konnte nicht angelegt werden.";
+    Text [ en-US ] = "Could not create the folder %1.";
 };
 
 String STR_SVT_BYTES
 {
-    Text = "Bytes" ;
-    Text [ ENGLISH ] = "Bytes" ;
-    Text [ english_us ] = "Bytes" ;
-    Text [ portuguese_brazilian ] = "Bytes" ;
-    Text [ swedish ] = "Byte" ;
-    Text [ danish ] = "Bytes" ;
-    Text [ italian ] = "Byte" ;
-    Text [ spanish ] = "Bytes" ;
-    Text [ french ] = "Octets" ;
-    Text [ dutch ] = "Bytes" ;
-    Text [ portuguese ] = "Bytes" ;
-    Text[ chinese_simplified ] = "å­—èŠ‚";
-    Text[ russian ] = "áàéò";
-    Text[ polish ] = "B";
-    Text[ japanese ] = "ãƒã‚¤ãƒˆ";
-    Text[ chinese_traditional ] = "bytes";
-    Text[ arabic ] = "ÈÇíÊ";
-    Text[ greek ] = "Byte";
-    Text[ korean ] = "ë°”ì´íŠ¸";
-    Text[ turkish ] = "Bayt";
-    Text[ finnish ] = "Tavuja";
-    Text[ catalan ] = "Bytes";
-    Text[ thai ] = "à¹„à¸šà¸•à¹Œ";
-    Text[ czech ] = "BajtÅ¯";
-    Text[ hebrew ] = "â€®×‘×ª×™×â€¬";
-    Text[ hindi ] = "à¤¬à¤‡à¤Ÿà¥à¤¸";
-    Text[ slovak ] = "Bajtov";
-    Text[ hungarian ] = "Byte";
-    Text[ slovenian ] = "Bajtov";
+    Text [ de ] = "Bytes" ;
+    Text [ en-US ] = "Bytes" ;
 };
 
 String STR_SVT_KB
 {
-    Text = "KB" ;
-    Text [ ENGLISH ] = "KB" ;
-    Text [ portuguese ] = "KB" ;
-    Text [ english_us ] = "KB" ;
-    Text [ portuguese_brazilian ] = "KB" ;
-    Text [ swedish ] = "kB" ;
-    Text [ danish ] = "KB" ;
-    Text [ italian ] = "KB" ;
-    Text [ spanish ] = "KB" ;
-    Text [ french ] = "Ko" ;
-    Text [ dutch ] = "KB" ;
-    Text[ chinese_simplified ] = "åƒå­—èŠ‚";
-    Text[ russian ] = "Êá";
-    Text[ polish ] = "KB";
-    Text[ japanese ] = "ã‚­ãƒ­ãƒã‚¤ãƒˆ";
-    Text[ chinese_traditional ] = "KB";
-    Text[ arabic ] = "ßíáæÈÇíÊ";
-    Text[ greek ] = "KB";
-    Text[ korean ] = "KB";
-    Text[ turkish ] = "KB";
-    Text[ finnish ] = "Kt";
-    Text[ catalan ] = "kB";
-    Text[ thai ] = "KB";
-    Text[ czech ] = "KB";
-    Text[ hebrew ] = "KB";
-    Text[ hindi ] = "KB";
-    Text[ slovak ] = "kB";
-    Text[ hungarian ] = "KB";
-    Text[ slovenian ] = "KB";
+    Text [ de ] = "KB" ;
+    Text [ en-US ] = "KB" ;
 };
 
 String STR_SVT_MB
 {
-    Text = "MB" ;
-    Text [ ENGLISH ] = "MB" ;
-    Text [ portuguese ] = "MB" ;
-    Text [ english_us ] = "MB" ;
-    Text [ portuguese_brazilian ] = "MB" ;
-    Text [ swedish ] = "Mb" ;
-    Text [ danish ] = "MB" ;
-    Text [ italian ] = "MB" ;
-    Text [ spanish ] = "MB" ;
-    Text [ french ] = "Mo" ;
-    Text [ dutch ] = "MB" ;
-    Text[ chinese_simplified ] = "å…†å­—èŠ‚";
-    Text[ russian ] = "Ìá";
-    Text[ polish ] = "MB";
-    Text[ japanese ] = "MB";
-    Text[ chinese_traditional ] = "MB";
-    Text[ arabic ] = "ãíÛÇÈÇíÊ";
-    Text[ greek ] = "MB";
-    Text[ korean ] = "MB";
-    Text[ turkish ] = "MB";
-    Text[ finnish ] = "Mt";
-    Text[ catalan ] = "MB";
-    Text[ thai ] = "MB";
-    Text[ czech ] = "MB";
-    Text[ hebrew ] = "MB";
-    Text[ hindi ] = "MB";
-    Text[ slovak ] = "MB";
-    Text[ hungarian ] = "MB";
-    Text[ slovenian ] = "MB";
+    Text [ de ] = "MB" ;
+    Text [ en-US ] = "MB" ;
 };
 
 
 String STR_SVT_GB
 {
-    Text = "GB" ;
-    Text [ ENGLISH ] = "GB" ;
-    Text [ portuguese ] = "GB" ;
-    Text [ english_us ] = "GB" ;
-    Text [ portuguese_brazilian ] = "GB" ;
-    Text [ swedish ] = "Gb" ;
-    Text [ danish ] = "GB" ;
-    Text [ italian ] = "GB" ;
-    Text [ spanish ] = "GB" ;
-    Text [ french ] = "Go" ;
-    Text [ dutch ] = "GB" ;
-    Text[ chinese_simplified ] = "åƒå…†";
-    Text[ russian ] = "Ãá";
-    Text[ polish ] = "GB";
-    Text[ japanese ] = "GB";
-    Text[ chinese_traditional ] = "GB";
-    Text[ arabic ] = "ÌíÌÇÈÇíÊ";
-    Text[ greek ] = "GB";
-    Text[ korean ] = "GB";
-    Text[ turkish ] = "GB";
-    Text[ finnish ] = "Gt";
-    Text[ catalan ] = "GB";
-    Text[ thai ] = "GB";
-    Text[ czech ] = "GB";
-    Text[ hebrew ] = "GB";
-    Text[ hindi ] = "GB";
-    Text[ slovak ] = "GB";
-    Text[ hungarian ] = "GB";
-    Text[ slovenian ] = "GB";
+    Text [ de ] = "GB" ;
+    Text [ en-US ] = "GB" ;
 };
 
 // Images ---------------------------------------------------------------------
@@ -382,69 +140,15 @@ Menu RID_FILEVIEW_CONTEXTMENU
         {
             Identifier = MID_FILEVIEW_DELETE ;
             HelpId = HID_FILEVIEW_MENU_DELETE ;
-            Text = "~Löschen" ;
-            Text[ English ] = "Delete" ;
-            Text[ english_us ] = "~Delete";
-            Text[ portuguese ] = "~Eliminar";
-            Text[ russian ] = "Óäàëèòü";
-            Text[ greek ] = "~ÄéáãñáöŞ";
-            Text[ dutch ] = "~Wissen";
-            Text[ french ] = "~Supprimer";
-            Text[ spanish ] = "~Borrar";
-            Text[ finnish ] = "~Poista";
-            Text[ italian ] = "~Elimina";
-            Text[ danish ] = "~Slet";
-            Text[ swedish ] = "~Radera";
-            Text[ polish ] = "~Usuñ";
-            Text[ portuguese_brazilian ] = "~Excluir";
-            Text[ japanese ] = "å‰Šé™¤(~D)";
-            Text[ korean ] = "ì‚­ì œ(~D)";
-            Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-            Text[ chinese_traditional ] = "åˆªé™¤(~D)";
-            Text[ turkish ] = "Sil";
-            Text[ arabic ] = "Delete";
-            Text[ catalan ] = "Suprimeix";
-            Text[ thai ] = "~à¸¥à¸š";
-            Text[ czech ] = "Smazat";
-            Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-            Text[ hindi ] = "~Delete";
-            Text[ slovak ] = "Vym~azaÅ¥";
-            Text[ hungarian ] = "~TÃ¶rlÃ©s";
-            Text[ slovenian ] = "~IzbriÅ¡i";
+            Text [ de ] = "~Löschen" ;
+            Text [ en-US ] = "~Delete";
         };
         MenuItem
         {
             Identifier = MID_FILEVIEW_RENAME ;
             HelpId = HID_FILEVIEW_MENU_RENAME ;
-            Text = "~Umbenennen" ;
-            Text[ English ] = "Rename" ;
-            Text[ english_us ] = "~Rename";
-            Text[ portuguese ] = "~Mudar nome";
-            Text[ russian ] = "Ïåğåèìåíîâàòü";
-            Text[ greek ] = "~Ìåôïíïìáóßá";
-            Text[ dutch ] = "~Naam wijzigen";
-            Text[ french ] = "~Renommer";
-            Text[ spanish ] = "~Cambiar nombre";
-            Text[ finnish ] = "~Nimeä uudelleen";
-            Text[ italian ] = "~Rinomina";
-            Text[ danish ] = "~Omdøb";
-            Text[ swedish ] = "~Byt namn";
-            Text[ polish ] = "~Zmieñ nazwê";
-            Text[ portuguese_brazilian ] = "~Renomear";
-            Text[ japanese ] = "åå‰ã®å¤‰æ›´(~R)";
-            Text[ korean ] = "ì´ë¦„ ë°”ê¾¸ê¸°(~R)";
-            Text[ chinese_simplified ] = "é‡å‘½å(~R)";
-            Text[ chinese_traditional ] = "é‡æ–°å‘½å(~R)";
-            Text[ turkish ] = "Yeniden adlandır";
-            Text[ arabic ] = "Rename";
-            Text[ catalan ] = "Reanomena";
-            Text[ thai ] = "à¹€~à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­";
-            Text[ czech ] = "PÅ™ejmenovat";
-            Text[ hebrew ] = "â€®×©×™× ×•×™ ×©×â€¬";
-            Text[ hindi ] = "~Rename";
-            Text[ slovak ] = "P~remenovaÅ¥";
-            Text[ hungarian ] = "Ã~tnevezÃ©s";
-            Text[ slovenian ] = "P~reimenuj";
+            Text [ de ] = "~Umbenennen" ;
+            Text [ en-US ] = "~Rename";
         };
     };
 };
@@ -455,67 +159,16 @@ ModalDialog DLG_SVT_QUERYDELETE
     OutputSize = TRUE ;
     Moveable = TRUE ;
     Size = MAP_APPFONT ( 221 , 67 ) ;
-    Text = "Löschbestätigung" ;
-    Text [ English ] = "Confirm delete" ;
-    Text [ english_us ] = "Confirm Delete" ;
-    Text [ italian ] = "Conferma 'Elimina'" ;
-    Text [ spanish ] = "Confirmar \"borrado\"" ;
-    Text [ french ] = "Confirmation de suppression" ;
-    Text [ dutch ] = "Wisopdracht bevestigen" ;
-    Text [ swedish ] = "Bekräfta radering" ;
-    Text [ danish ] = "Bekræft sletning" ;
-    Text [ portuguese_brazilian ] = "Confirmar Exclusão" ;
-    Text [ portuguese ] = "Confirmar Eliminar" ;
-    Text [ chinese_simplified ] = "ç¡®è®¤åˆ é™¤";
-    Text [ russian ] = "Ïîäòâåğäèòü óäàëåíèå";
-    Text [ polish ] = "PotwierdŸ usuniêcie";
-    Text [ japanese ] = "å‰Šé™¤ã®ç¢ºèª";
-    Text [ chinese_traditional ] = "ç¢ºèªåˆªé™¤";
-    Text [ arabic ] = "ÊÃßíÏ ÇáÍĞİ";
-    Text[ dutch ] = "Wisopdracht bevestigen";
-    Text[ chinese_simplified ] = "ç¡®è®¤åˆ é™¤";
-    Text[ greek ] = "Åğéâåâáßùóç äéáãñáöŞò";
-    Text[ korean ] = "ì‚­ì œ í™•ì¸";
-    Text[ turkish ] = "Silme İşlemini Onayla";
-    Text[ finnish ] = "Vahvista poisto";
-    Text[ catalan ] = "Confirma la supressió";
-    Text[ thai ] = "à¸¢à¸·à¸™à¸¢à¸±à¸™à¸à¸²à¸£à¸¥à¸š";
+    Text [ de ] = "Löschbestätigung" ;
+    Text [ en-US ] = "Confirm Delete" ;
 
     FixedText TXT_ENTRY
     {
         NoLabel = TRUE;
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ dutch ] = "Item:" ;
-        Text [ english_us ] = "Entry:" ;
-        Text = "Eintrag:" ;
-        Text [ swedish ] = "Post:" ;
-        Text [ danish ] = "Element:" ;
-        Text [ italian ] = "Registrazione:" ;
-        Text [ spanish ] = "Entrada:" ;
-        Text [ french ] = "Entrée :" ;
-        Text [ portuguese_brazilian ] = "Entrada:" ;
-        Text [ portuguese ] = "Entrada:" ;
-        Text [ chinese_simplified ] = "æ¡ç›®ï¼š";
-        Text [ russian ] = "İëåìåíò:";
-        Text [ polish ] = "Wpis:";
-        Text [ japanese ] = "é …ç›®:";
-        Text [ chinese_traditional ] = "é …ç›®ï¼š";
-        Text [ arabic ] = ":ÅÏÎÇá";
-        Text[ dutch ] = "Item:";
-        Text[ chinese_simplified ] = "æ¡ç›®ï¼š";
-        Text[ greek ] = "Êáôá÷şñéóç:";
-        Text[ korean ] = "í•­ëª©:";
-        Text[ turkish ] = "Girdi:";
-        Text[ finnish ] = "Merkintä:";
-        Text[ catalan ] = "Entrada:";
-        Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£:";
-        Text[ czech ] = "PoloÅ¾ka:";
-        Text[ hebrew ] = "â€®×©×•×¨×”:â€¬";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿:";
-        Text[ slovak ] = "PoloÅ¾ka:";
-        Text[ hungarian ] = "BejegyzÃ©s:";
-        Text[ slovenian ] = "Vnos:";
+        Text [ en-US ] = "Entry:" ;
+        Text [ de ] = "Eintrag:" ;
     };
 
     FixedText TXT_ENTRYNAME
@@ -531,36 +184,8 @@ ModalDialog DLG_SVT_QUERYDELETE
         WordBreak = TRUE;
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 209 , 22 ) ;
-        Text = "Sind Sie sicher, dass Sie die selektierten Daten löschen wollen?" ;
-        Text [ english_us ] = "Are you sure you want to delete the selected data?" ;
-        Text [ swedish ] = "Är du säker på att du vill radera de markerade data?" ;
-        Text [ danish ] = "Er du sikker på, at du vil slette de markerede data?" ;
-        Text [ italian ] = "Volete davvero cancellare i dati selezionati?" ;
-        Text [ spanish ] = "¿Desea realmente borrar los datos seleccionados?" ;
-        Text [ french ] = "Êtes vous sûr de vouloir supprimer les données sélectionnées ?" ;
-        Text [ dutch ] = "Wilt u de geselecteerde gegevens werkelijk wissen?" ;
-        Text [ portuguese_brazilian ] = "Deseja realmente excluir os dados selecionados?" ;
-        Text [ portuguese ] = "Deseja realmente eliminar os dados seleccionados?" ;
-        Text [ chinese_simplified ] = "çœŸè¦åˆ é™¤é€‰ä¸­çš„æ•°æ®ï¼Ÿ";
-        Text [ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü âûáğàííûå äàííûå?";
-        Text [ polish ] = "Czy na pewno chcesz usun¹æ zaznaczone dane?";
-        Text [ japanese ] = "é¸æŠã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’æœ¬å½“ã«å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
-        Text [ chinese_traditional ] = "çœŸè¦åˆªé™¤é¸å–çš„è³‡æ–™ï¼Ÿ";
-        Text [ arabic ] = "åá ÊÑíÏ ÈÇáÊÃßíÏ ÍĞİ ÇáÈíÇäÇÊ ÇáãÍÏÏÉ¿";
-        Text[ dutch ] = "Wilt u de geselecteerde gegevens werkelijk wissen?";
-        Text[ chinese_simplified ] = "çœŸè¦åˆ é™¤é€‰ä¸­çš„æ•°æ®ï¼Ÿ";
-        Text[ greek ] = "Åßóôå âİâáéïé üôé èİëåôå íá äéáãñÜøåôå ôá åğéëåãìİíá äåäïìİíá;";
-        Text[ korean ] = "ì„ íƒí•œ ë°ì´í„°ë¥¼ ì •ë§ë¡œ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-        Text[ turkish ] = "Seçili veriyi silmek istediğinizden eminmisiniz ?";
-        Text[ finnish ] = "Haluatko varmasti poistaa valitut tiedot?";
-        Text[ catalan ] = "Voleu realment suprimir les dades seleccionades?";
-        Text[ thai ] = "à¸„à¸¸à¸“à¹à¸™à¹ˆà¹ƒà¸ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆà¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸?";
-        Text[ czech ] = "Opravdu si pÅ™ejete smazat vybranÃ¡ data?";
-        Text[ hebrew ] = "â€®×”×× ××›×Ÿ ×œ××—×•×§ ××ª ×”× ×ª×•× ×™× ×”× ×‘×—×¨×™×?â€¬";
-        Text[ hindi ] = "à¤†à¤ª à¤šà¥à¤¨à¥‡ à¤¹à¥à¤ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤•à¥‹ à¤¸à¤šà¤®à¥à¤š à¤®à¥‡à¤‚ à¤®à¤¿à¤Ÿà¤¾à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-        Text[ slovak ] = "Naozaj chcete vymazaÅ¥ vybranÃ© dÃ¡ta?";
-        Text[ hungarian ] = "Biztosan tÃ¶rli a kijelÃ¶lt adatokat?";
-        Text[ slovenian ] = "Ali ste prepriÄani, da Å¾elite izbrisati izbrane podatke?";
+        Text [ de ] = "Sind Sie sicher, dass Sie die selektierten Daten löschen wollen?" ;
+        Text [ en-US ] = "Are you sure you want to delete the selected data?" ;
     };
 
     PushButton BTN_YES
@@ -569,35 +194,8 @@ ModalDialog DLG_SVT_QUERYDELETE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text = "~Löschen" ;
-        Text [ English ] = "~Delete" ;
-        Text [ english_us ] = "~Delete" ;
-        Text[ portuguese ] = "E~liminar";
-        Text[ greek ] = "~ÄéáãñáöŞ";
-        Text[ dutch ] = "~Wissen";
-        Text[ french ] = "Supprimer";
-        Text[ spanish ] = "~Borrar";
-        Text[ swedish ] = "~Radera";
-        Text[ russian ] = "Óäàëèòü";
-        Text[ italian ] = "E~limina";
-        Text[ danish ] = "~Slet";
-        Text[ polish ] = "~Usuñ";
-        Text[ portuguese_brazilian ] = "Exc~luir";
-        Text[ japanese ] = "å‰Šé™¤(~D)";
-        Text[ korean ] = "ì‚­ì œ(~D)";
-        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ turkish ] = "~Sil";
-        Text[ finnish ] = "~Poista";
-        Text[ catalan ] = "~Suprimeix";
-        Text[ thai ] = "~à¸¥à¸š";
-        Text[ czech ] = "Smazat";
-        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "Vy~mazaÅ¥";
-        Text[ hungarian ] = "~TÃ¶rlÃ©s";
-        Text[ slovenian ] = "~IzbriÅ¡i";
+        Text [ de ] = "~Löschen" ;
+        Text [ en-US ] = "~Delete" ;
     };
 
     PushButton BTN_ALL
@@ -606,35 +204,8 @@ ModalDialog DLG_SVT_QUERYDELETE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Disable = TRUE ;
-        Text = "~Alle löschen" ;
-        Text [ English ] = "Delete ~all" ;
-        Text [ english_us ] = "Delete ~All" ;
-        Text[ portuguese ] = "Eliminar ~tudo";
-        Text[ greek ] = "ÄéáãñáöŞ ü~ëùí";
-        Text[ dutch ] = "~Alle wissen";
-        Text[ french ] = "Tout supprimer";
-        Text[ spanish ] = "~Borrar todo";
-        Text[ swedish ] = "Radera ~alla";
-        Text[ russian ] = "Óäàëèòü âñå";
-        Text[ italian ] = "~Elimina tutti";
-        Text[ danish ] = "Slet ~alle";
-        Text[ polish ] = "Usuñ ~wszystko";
-        Text[ portuguese_brazilian ] = "Excluir ~Tudo";
-        Text[ japanese ] = "ã™ã¹ã¦å‰Šé™¤(~A)";
-        Text[ korean ] = "ëª¨ë‘ ì‚­ì œ(~A)";
-        Text[ chinese_simplified ] = "åˆ é™¤å…¨éƒ¨(~A)";
-        Text[ chinese_traditional ] = "å…¨éƒ¨åˆªé™¤(~A)";
-        Text[ arabic ] = "ÍĞİ Çáßá";
-        Text[ turkish ] = "~Hepsini Sil";
-        Text[ finnish ] = "~Poista kaikki";
-        Text[ catalan ] = "~Suprimeix-ho tot";
-        Text[ thai ] = "à¸¥à¸š~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-        Text[ czech ] = "Smazat vÅ¡e";
-        Text[ hebrew ] = "â€®××—×™×§×ª ×”×›×œâ€¬";
-        Text[ hindi ] = "~à¤¸à¤¬ à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "Vymaz~aÅ¥ vÅ¡etko";
-        Text[ hungarian ] = "Ã–sszes ~tÃ¶rlÃ©se";
-        Text[ slovenian ] = "IzbriÅ¡i ~vse";
+        Text [ de ] = "~Alle löschen" ;
+        Text [ en-US ] = "Delete ~All" ;
     };
 
     PushButton BTN_NO
@@ -642,35 +213,8 @@ ModalDialog DLG_SVT_QUERYDELETE
         Pos = MAP_APPFONT ( 112 , 47 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "~Nicht löschen" ;
-        Text [ English ] = "Do~nt delete" ;
-        Text [ english_us ] = "Do ~Not Delete" ;
-        Text[ portuguese ] = "~Não eliminar";
-        Text[ greek ] = "~Íá ìç ãßíåé äéáãñáöŞ";
-        Text[ dutch ] = "~Niet wissen";
-        Text[ french ] = "~Ne pas supprimer";
-        Text[ spanish ] = "~No borrar";
-        Text[ swedish ] = "Radera i~nte";
-        Text[ russian ] = "Íå óäàëÿòü";
-        Text[ italian ] = "~Non eliminare";
-        Text[ danish ] = "Slet ~ikke";
-        Text[ polish ] = "~Nie usuwaj";
-        Text[ portuguese_brazilian ] = "~Não Excluir";
-        Text[ japanese ] = "å‰Šé™¤ã—ãªã„(~N)";
-        Text[ korean ] = "ì‚­ì œ ì•ˆí•¨(~N)";
-        Text[ chinese_simplified ] = "ä¸åˆ é™¤(~N)";
-        Text[ chinese_traditional ] = "ä¸è¦åˆªé™¤(~N)";
-        Text[ arabic ] = "ÚÏã ÇáÍĞİ";
-        Text[ turkish ] = "~Silinemez yap";
-        Text[ finnish ] = "~Älä poista";
-        Text[ catalan ] = "~No ho suprimeixis";
-        Text[ thai ] = "~à¸«à¹‰à¸²à¸¡à¸¥à¸š";
-        Text[ czech ] = "Nemazat";
-        Text[ hebrew ] = "â€®×œ× ×œ××—×•×§â€¬";
-        Text[ hindi ] = "à¤®à¤¤ à¤®à¤¿~à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "~NemazaÅ¥";
-        Text[ hungarian ] = "T~Ã¶rlÃ©s visszavonÃ¡sa";
-        Text[ slovenian ] = "~Ne izbriÅ¡i";
+        Text [ de ] = "~Nicht löschen" ;
+        Text [ en-US ] = "Do ~Not Delete" ;
     };
 
     CancelButton BTN_CANCEL
@@ -679,12 +223,6 @@ ModalDialog DLG_SVT_QUERYDELETE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ czech ] = "Potvrdit smazÃ¡nÃ­";
-    Text[ hebrew ] = "â€®××™×©×•×¨ ××—×™×§×”â€¬";
-    Text[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾à¤¨à¤¾ à¤¦à¥ƒà¤¢à¤¼ à¤•à¤°à¥‹";
-    Text[ slovak ] = "PotvrdiÅ¥ vymazanie";
-    Text[ hungarian ] = "TÃ¶rlÃ©s megerÅ‘sÃ­tÃ©se";
-    Text[ slovenian ] = "Potrditev brisanja";
 };
 
 
