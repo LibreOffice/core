@@ -1,0 +1,396 @@
+/*===========================================================================
+#*
+#*    Ersterstellung  PB  11.02.98
+#*    Letzte Aenderung  $Author: fs $ $Date: 2000-10-09 06:50:28 $
+#*    $Revision: 1.1 $
+#*
+#*    Copyright (c) 1996 - 2000, Star Division GmbH, Hamburg, Germany
+#*
+#==========================================================================*/
+
+//#ifndef _CNTIDS_HRC
+//#include <cntids.hrc>
+//#endif
+//#ifndef _CNTRIDS_HRC
+//#include <cntrids.hrc>
+//#endif
+
+#ifndef _SVTOOLS_HRC
+#include "svtools.hrc"
+#endif
+
+#ifndef _SVTOOLS_LOGINDLG_HRC_
+#include "logindlg.hrc"
+#endif
+
+ModalDialog DLG_LOGIN
+{
+//  HelpId = HID_DLG_LOGIN ;
+    Border = TRUE ;
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 265 , 158 ) ;
+    Text = "Benutzername und Passwort erforderlich" ;
+    Text [ English ] = "User Name and Password required" ;
+    FixedText INFO_LOGIN_ERROR
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 185 , 18 ) ;
+        WordBreak = TRUE ;
+    };
+    GroupBox GB_LOGIN_ERROR
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 197 , 35 ) ;
+        Text = "Meldung vom Server" ;
+        Text [ English ] = "Report from server" ;
+        Text [ english_us ] = "Message from server" ;
+        Text [ portuguese_brazilian ] = "Meldung vom Server" ;
+        Text [ swedish ] = "Meddelande från servern" ;
+        Text [ danish ] = "Melding fra serveren" ;
+        Text [ italian ] = "Segnalazione dal server" ;
+        Text [ spanish ] = "Mensaje del servidor" ;
+        Text [ french ] = "Message en provenance du serveur" ;
+        Text [ dutch ] = "Melding van de server" ;
+        Text [ portuguese ] = "Mensagem do servidor" ;
+        Text[ chinese_simplified ] = "·şÎñÆ÷±¨¸æ";
+        Text[ russian ] = "Ñîîáùåíèå ñ ñåğâåğà";
+        Text[ polish ] = "Wiadomoœæ z serwera";
+        Text[ japanese ] = "»°ÊŞ°‚©‚ç‚ÌÒ¯¾°¼Ş";
+        Text[ chinese_traditional ] = "¦øªA¾¹³ø§i";
+        Text[ greek ] = "ÌŞíõìá ôïõ äéáêïìéóôŞ";
+        Text[ korean ] = "¼­¹ö·ÎºÎÅÍÀÇ ¸Ş½ÃÁö";
+        Text[ arabic ] = "ÑÓÇáÉ ãä ÇáãÒæøÏ";
+        Text[ turkish ] = "Sunucudan ileti";
+    };
+    FixedText INFO_LOGIN_REQUEST
+    {
+        Pos = MAP_APPFONT ( 12 , 55 ) ;
+        Size = MAP_APPFONT ( 185 , 18 ) ;
+        WordBreak = TRUE ;
+        Text = "Bitte geben Sie hier Benutzernamen und Passwort für %1 ein." ;
+        Text [ English ] = "Please enter user name and password here for %1." ;
+        Text [ portuguese ] = "Especifique o nome do utilizador e a senha para %1." ;
+        Text [ english_us ] = "Please enter user name and password for %1 here." ;
+        Text [ portuguese_brazilian ] = "Bitte geben Sie hier Benutzernamen und Passwort für %1 ein." ;
+        Text [ swedish ] = "Var vänlig och mata in användarnamn och lösenord här för %1." ;
+        Text [ danish ] = "Indtast her venligst brugernavnet og adgangkoden for %1." ;
+        Text [ italian ] = "Digitate qui il nome dell'utente e la password per %1." ;
+        Text [ spanish ] = "Especifique su nombre de usuario y su contraseña para %1." ;
+        Text [ french ] = "Veuilez saisir votre nom d'utilisateur et votre mot de passe pour %1." ;
+        Text [ dutch ] = "Vermeld hier de gebruiker en het wachtwoord voor %1." ;
+        Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎª %1 ÊäÈëÊ¹ÓÃÃûºÍ¿ÚÁî¡£";
+        Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ ïîëüçîâàòåëÿ è ïàğîëü äëÿ %1.";
+        Text[ polish ] = "Wpisz nazwisko u¿ytkownika i has³o dla %1";
+        Text[ japanese ] = "‚±‚±‚É%1‚ÌÕ°»Ş°–¼‚ÆÊß½Ü°ÄŞ‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢B";
+        Text[ chinese_traditional ] = "½Ğ¬° %1 ¿é¤J¨Ï¥Î¦W©M±K½X¡C";
+        Text[ greek ] = "Ğáñáêáëş åéóÜãåôå åäş ôï üíïìá ÷ñŞóôç êáé ôïí êùäéêü ğñüóâáóçò ãéá %1.";
+        Text[ korean ] = "¿©±â¿¡ »ç¿ëÀÚ ÀÌ¸§°ú %1ÀÇ ÆĞ½º¿öµå¸¦ ÀÔ·ÂÇÏ½Ê½Ã¿À.";
+        Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ áÜ %1 åäÇ.";
+        Text[ turkish ] = "%1 için buraya kullanıcı adı ve şifre girin.";
+    };
+    FixedText FT_LOGIN_PATH
+    {
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "~Pfad" ;
+        Text [ English ] = "~Path" ;
+        Text [ english_us ] = "Pat~h" ;
+        Text [ portuguese_brazilian ] = "~Pfad" ;
+        Text [ swedish ] = "~Sökväg" ;
+        Text [ danish ] = "Sti" ;
+        Text [ italian ] = "~Percorso" ;
+        Text [ spanish ] = "~Ruta" ;
+        Text [ french ] = "~Chemin" ;
+        Text [ dutch ] = "~Pad" ;
+        Text [ portuguese ] = "~Atalho" ;
+        Text[ chinese_simplified ] = "Â·¾¶(~H)";
+        Text[ russian ] = "Ïóòü";
+        Text[ polish ] = "Œcie¿ka";
+        Text[ japanese ] = "Êß½(~H)";
+        Text[ chinese_traditional ] = "¸ô®|(~H)";
+        Text[ greek ] = "ÄéáäñïìŞ";
+        Text[ korean ] = "°æ·Î(~H)";
+        Text[ arabic ] = "ÇáãÓÇÑ";
+        Text[ turkish ] = "Veri yolu";
+    };
+    Edit ED_LOGIN_PATH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 76 ) ;
+        Size = MAP_APPFONT ( 114 , 12 ) ;
+    };
+    FixedText INFO_LOGIN_PATH
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 77 ) ;
+        Size = MAP_APPFONT ( 131 , 10 ) ;
+    };
+    PushButton BTN_LOGIN_PATH
+    {
+        Pos = MAP_APPFONT ( 183 , 75 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text = "~..." ;
+    };
+    FixedText FT_LOGIN_USERNAME
+    {
+        Pos = MAP_APPFONT ( 12 , 92 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "~Benutzername" ;
+        Text [ English ] = "~Username" ;
+        Text [ english_us ] = "~User name" ;
+        Text [ portuguese_brazilian ] = "~Benutzername" ;
+        Text [ swedish ] = "~Användarnamn" ;
+        Text [ danish ] = "Brugernavn" ;
+        Text [ italian ] = "Nome utente" ;
+        Text [ spanish ] = "~Nombre de usuario" ;
+        Text [ french ] = "~Nom d'utilisateur" ;
+        Text [ dutch ] = "Naam ~gebruiker" ;
+        Text [ portuguese ] = "~Nome do utilizador" ;
+        Text[ chinese_simplified ] = "Ê¹ÓÃÃû(~U)";
+        Text[ russian ] = "Ïîëüçîâàòåëü";
+        Text[ polish ] = "Nazwisko u¿ytkownika";
+        Text[ japanese ] = "Õ°»Ş°–¼(~U)";
+        Text[ chinese_traditional ] = "¨Ï¥Î¦W(~U)";
+        Text[ greek ] = "¼íïìá ÷ñŞóôç";
+        Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§(~U)";
+        Text[ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
+        Text[ turkish ] = "Kullanıcı adı";
+    };
+    Edit ED_LOGIN_USERNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 91 ) ;
+        Size = MAP_APPFONT ( 131 , 12 ) ;
+    };
+    FixedText INFO_LOGIN_USERNAME
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 92 ) ;
+        Size = MAP_APPFONT ( 131 , 10 ) ;
+    };
+    FixedText FT_LOGIN_PASSWORD
+    {
+        Pos = MAP_APPFONT ( 12 , 107 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "P~asswort" ;
+        Text [ English ] = "P~assword" ;
+        Text [ english_us ] = "Pass~word" ;
+        Text [ portuguese_brazilian ] = "P~asswort" ;
+        Text [ swedish ] = "~Lösenord" ;
+        Text [ danish ] = "Adgangskode" ;
+        Text [ italian ] = "P~assword" ;
+        Text [ spanish ] = "~Contraseña" ;
+        Text [ french ] = "~Mot de passe" ;
+        Text [ dutch ] = "W~achtwoord" ;
+        Text [ portuguese ] = "~Senha" ;
+        Text[ chinese_simplified ] = "¿ÚÁî(~W)";
+        Text[ russian ] = "Ïàğîëü";
+        Text[ polish ] = "Has³o";
+        Text[ japanese ] = "Êß½Ü°ÄŞ(~W)";
+        Text[ chinese_traditional ] = "±K½X(~W)";
+        Text[ greek ] = "Êùäéêüò ğñüóâáóçò";
+        Text[ korean ] = "ÆĞ½º¿öµå(~W)";
+        Text[ arabic ] = "ßáãÉ ÇáÓÑ";
+        Text[ turkish ] = "Şifre";
+    };
+    Edit ED_LOGIN_PASSWORD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 106 ) ;
+        Size = MAP_APPFONT ( 131 , 12 ) ;
+        PassWord = TRUE ;
+    };
+    FixedText FT_LOGIN_ACCOUNT
+    {
+        Pos = MAP_APPFONT ( 12 , 122 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "A~ccount" ;
+        Text [ English ] = "A~ccount" ;
+        Text[ english_us ] = "A~ccount";
+        Text[ portuguese ] = "~Conta";
+        Text[ russian ] = "Ó÷åòíàÿ çàïèñü";
+        Text[ dutch ] = "A~ccount";
+        Text[ french ] = "C~ompte";
+        Text[ spanish ] = "~Cuenta";
+        Text[ italian ] = "A~ccount";
+        Text[ danish ] = "Konto";
+        Text[ swedish ] = "~Konto";
+        Text[ polish ] = "Konto";
+        Text[ portuguese_brazilian ] = "A~ccount";
+        Text[ japanese ] = "±¶³İÄ(~C)";
+        Text[ chinese_simplified ] = "ÕÊºÅ(~C)";
+        Text[ chinese_traditional ] = "±b¸¹(~C)";
+        Text[ greek ] = "Ëïãáñéáóìüò";
+        Text[ korean ] = "°èÁ¤(~C)";
+        Text[ arabic ] = "ÇÔÊÑÇß";
+        Text[ turkish ] = "Hesap";
+    };
+    Edit ED_LOGIN_ACCOUNT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 121 ) ;
+        Size = MAP_APPFONT ( 131 , 12 ) ;
+        PassWord = TRUE ;
+    };
+    CheckBox CB_LOGIN_SAVEPASSWORD
+    {
+        Pos = MAP_APPFONT ( 12 , 136 ) ;
+        Size = MAP_APPFONT ( 185 , 10 ) ;
+        Text = "Passwort ~speichern" ;
+        Text [ English ] = "~Save password" ;
+        Text [ english_us ] = "~Save password" ;
+        Text [ italian ] = "Salva pa~ssword" ;
+        Text [ spanish ] = "Guardar ~contraseña" ;
+        Text [ french ] = "~Enregistrer le mot de passe" ;
+        Text [ dutch ] = "Wachtwoord ~opslaan" ;
+        Text [ swedish ] = "Spara lösen~ord" ;
+        Text [ danish ] = "Gem adgangskode" ;
+        Text [ portuguese ] = "Guardar ~senha" ;
+        Text [ portuguese_brazilian ] = "Passwort ~speichern" ;
+        Text[ chinese_simplified ] = "´æÅÌ¿ÚÁî(~S)";
+        Text[ russian ] = "Ñîõğàíèòü ïàğîëü";
+        Text[ polish ] = "Zapisz has³o";
+        Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì•Û‘¶(~S)";
+        Text[ chinese_traditional ] = "«O¦s±K½X(~S)";
+        Text[ greek ] = "ÁğïèŞêåõóç êùäéêïı ğñüóâáóçò";
+        Text[ korean ] = "ÆĞ½º¿öµå ÀúÀå(~S)";
+        Text[ arabic ] = "ÍİÙ ßáãÉ ÇáÓÑ";
+        Text[ turkish ] = "Şifreyi kaydet";
+    };
+    GroupBox GB_LOGIN_LOGIN
+    {
+        Pos = MAP_APPFONT ( 7 , 44 ) ;
+        Size = MAP_APPFONT ( 197 , 108 ) ;
+        Text = "Anmelden" ;
+        Text [ English ] = "Connect" ;
+        Text [ english_us ] = "Login" ;
+        Text [ portuguese_brazilian ] = "Anmelden" ;
+        Text [ swedish ] = "Logga in" ;
+        Text [ danish ] = "Login" ;
+        Text [ italian ] = "Login" ;
+        Text [ spanish ] = "Registrar" ;
+        Text [ french ] = "Login" ;
+        Text [ dutch ] = "Aanmelden" ;
+        Text [ portuguese ] = "Registar" ;
+        Text[ chinese_simplified ] = "Ç©µ½";
+        Text[ russian ] = "Âõîä â ñèñòåìó";
+        Text[ polish ] = "Zarejestruj";
+        Text[ japanese ] = "Û¸Ş²İ";
+        Text[ chinese_traditional ] = "µn¤J";
+        Text[ greek ] = "Óıíäåóç";
+        Text[ korean ] = "·Î±×ÀÎ";
+        Text[ arabic ] = "ÊÓÌíá";
+        Text[ turkish ] = "Oturum aç";
+    };
+    OKButton BTN_LOGIN_OK
+    {
+        Pos = MAP_APPFONT ( 209 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_LOGIN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 209 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_LOGIN_HELP
+    {
+        Pos = MAP_APPFONT ( 209 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String STR_LOGIN_AT
+    {
+        Text = "auf " ;
+        Text [ English ] = "at " ;
+        Text [ portuguese ] = "em " ;
+        Text [ english_us ] = "on " ;
+        Text [ portuguese_brazilian ] = "auf " ;
+        Text [ swedish ] = "på  " ;
+        Text [ danish ] = "på " ;
+        Text [ italian ] = "su  " ;
+        Text [ spanish ] = "en  " ;
+        Text [ french ] = "sur " ;
+        Text [ dutch ] = "op  " ;
+        Text[ chinese_simplified ] = "ÔÚ ";
+        Text[ russian ] = "íà ";
+        Text[ polish ] = "na  ";
+        Text[ japanese ] = "Û¸Ş²İæ ";
+        Text[ chinese_traditional ] = "¦b ";
+        Text[ greek ] = "óôï ";
+        Text[ korean ] = "¿¡ ";
+        Text[ arabic ] = "Úáì ";
+        Text[ turkish ] = "yeri ";
+    };
+    Text [ english_us ] = "User name and password are required" ;
+    Text [ portuguese_brazilian ] = "Benutzername und Passwort erforderlich" ;
+    Text [ swedish ] = "Användarnamn och lösenord nödvändigt" ;
+    Text [ danish ] = "Brugernavn og adgangskode kræves" ;
+    Text [ italian ] = "Nome utente e password sono necessari" ;
+    Text [ spanish ] = "Se requieren el nombre de usuario y la contraseña" ;
+    Text [ french ] = "Nom d'utilisateur et mot de passe requis" ;
+    Text [ dutch ] = "Naam gebruiker en wachtwoord vereist" ;
+    Text [ portuguese ] = "Necessários nome de utilizador e senha" ;
+    Text[ chinese_simplified ] = "ÒªÇóÊäÈëÊ¹ÓÃÕßºÍ¿ÚÁî";
+    Text[ russian ] = "Íåîáõîäèìû èìÿ ïîëüçîâàòåëÿ è ïàğîëü";
+    Text[ polish ] = "Wymagane nazwisko u¿ytkownika i has³o";
+    Text[ japanese ] = "Õ°»Ş°–¼‚ÆÊß½Ü°ÄŞ‚ª•K—v";
+    Text[ chinese_traditional ] = "½Ğ½T©w¨Ï¥Î¦W©M±K½X";
+    Text[ greek ] = "Áğáéôåßôáé üíïìá ÷ñŞóôç êáé êùäéêüò ğñüóâáóçò";
+    Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§°ú ÆĞ½º¿öµå°¡ ÇÊ¿äÇÕ´Ï´Ù.";
+    Text[ arabic ] = "ãØáæÈ ÅÏÎÇá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ";
+    Text[ turkish ] = "Kullanıcı adı ve şifre gerekli";
+};
+
+/*----------------------------------------------------------------------------
+  $Log: not supported by cvs2svn $
+  Revision 1.16  2000/05/03 19:05:26  kz
+  Merge SRC569: 05/03/00 - 21:05:03
+
+  Revision 1.15  2000/04/17 19:34:42  rt
+  Merge SRC569: 17.04.00 - 21:34:35
+
+  Revision 1.14  2000/04/10 19:13:53  kz
+  Merge SRC569: 10.04.00 - 21:13:47
+
+  Revision 1.13  2000/04/04 20:11:11  obo
+  Merge SRC569: 04.04.00 - 22:11:03
+
+  Revision 1.12  2000/03/30 19:13:27  sub
+  Merge SRC569: 30.03.00 - 21:13:23
+
+  Revision 1.11  2000/03/29 19:10:46  rt
+  Merge SRC569: 29.03.00 - 21:10:28
+
+  Revision 1.10  2000/03/15 09:31:25  kz
+  Merge SRC569: 15.03.00 - 10:31:14
+
+  Revision 1.9  2000/02/11 20:06:36  kz
+  Merge SRC567: 02/11/00 - 21:06:25 (NoBranch)
+
+  Revision 1.8  2000/02/03 15:46:24  kz
+  Merge SRC566: 03.02.00 - 16:46:18 (NoBranch)
+
+  Revision 1.7  2000/01/05 20:04:38  kz
+  Merge SRC562: 05.01.00 - 21:04:34 (NoBranch)
+
+  Revision 1.6  1999/12/17 14:24:49  mh
+  Merge SRC561: 17.12.99 - 15:24:41 (NoBranch)
+
+  Revision 1.5  1999/12/17 11:36:48  sub
+  Merge SRC561: 17.12.99 - 12:36:42 (NoBranch)
+
+  Revision 1.4  1999/12/02 23:03:22  hjs
+  Merge SRC560: 12/03/99 - 00:03:17 (NoBranch)
+
+  Revision 1.3  1999/11/24 20:15:29  kz
+  Merge SRC558: 24.11.99 - 21:15:23 (NoBranch)
+
+  Revision 1.2  1999/11/19 10:57:47  rt
+  Merge SRC557: 19.11.99 - 11:57:36 (NoBranch)
+
+  Revision 1.1  1999/11/15 13:18:32  sb
+  Universal Content Broker user interface.
+
+----------------------------------------------------------------------------*/
