@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-18 12:41:56 $
+ *  last change: $Author: ama $ $Date: 2001-05-02 14:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,10 +279,11 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
         if( nTmp < 0 )
         {
             sal_Bool bInvalidPos = sal_False;
-            const SwFrm* pTmp = GetUpper();
+            const SwLayoutFrm* pTmp = GetUpper();
             while( !bInvalidPos && pTmp )
             {
-                bInvalidPos = !pTmp->GetValidPosFlag();
+                bInvalidPos = !pTmp->GetValidPosFlag() ||
+                               !pTmp->Lower()->GetValidPosFlag();
                 if( pTmp == pCont )
                     break;
                 pTmp = pTmp->GetUpper();
@@ -1392,7 +1393,7 @@ sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
         SetLen( 0 );
         if( bFull  )
             // dritter Versuch, es langt: jetzt wird gestaucht:
-            Width( rInf.Width() - rInf.X() );
+            Width( USHORT(rInf.Width() - rInf.X()) );
 
         // 8317: keine mehrzeiligen Felder bei QuoVadis und ErgoSum
         if( rInf.GetRest() )
