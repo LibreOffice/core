@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 16:01:13 $
+ *  last change: $Author: sab $ $Date: 2001-08-31 10:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2181,7 +2181,7 @@ void ScAcceptChgDlg::SetMyStaticData()
         }
     }
 
-    aRangeList.Parse(aRange);
+    aRangeList.Parse(aRange, pDoc);
     aPrivChangeViewSet.SetTheRangeList(aRangeList);
 }
 
