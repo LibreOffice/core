@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javainfotest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:41:31 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ using jvmaccess::JavaInfo;
 
 #define OUSTR( x )  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
+#define JAVA_VERSION "1.4.1_01"
+
 bool test_constructor1();
 bool test_constructor2();
 bool test_createAllInfo();
@@ -92,13 +94,13 @@ int main( int argc, char * argv[], char * envp[])
     const int arSize= 20;
     bool arRet[arSize];
     int i =0;
-//  arRet[i++]= test_createAllInfo();
-//     arRet[i++]= test_constructor1();
-//     arRet[i++]= test_constructor2();
+    arRet[i++]= test_createAllInfo();
+    arRet[i++]= test_constructor1();
+    arRet[i++]= test_constructor2();
 
-//    arRet[i++]= test_compareVersions();
-//  arRet[i++]= test_createBestInfo(false);
-    //  arRet[i++]= test_isEqual();
+    arRet[i++]= test_compareVersions();
+    arRet[i++]= test_createBestInfo();
+    arRet[i++]= test_isEqual();
     arRet[i++]= test_getJarFilePath();
     bool error= true;
     for(int j= 0; j < i; j++)
@@ -114,7 +116,7 @@ bool test_constructor1()
     printf("\ntest JavaInfo::JavaInfo(const OUString& usJavaHome\n" \
            "!Check output for correctness\n\n");
     try{
-    JavaInfo info(OUSTR("file:///d:/java/j2sdk1.4.0"));
+    JavaInfo info(OUSTR("file:///d:/java/j2sdk1.4.1_01"));
 //    JavaInfo info(OUSTR("file:///local/jl/java/j2sdk1.4.0"));
 //    JavaInfo info(OUSTR("file:///usr/local2/jl/java/j2sdk1.4.0"));
 
@@ -134,9 +136,9 @@ bool test_constructor2()
     bool arRet[20];
     int i= 0;
 
-//    JavaInfo a(OUSTR("file:///d:/java/j2sdk1.4.0"));
+    JavaInfo a(OUSTR("file:///d:/java/j2sdk1.4.1_01"));
 //    -----------------------------------------------------
-    JavaInfo a(OUSTR("file:///usr/local2/jl/java/j2sdk1.4.0"));
+//    JavaInfo a(OUSTR("file:///usr/local2/jl/java/j2sdk1.4.0"));
 //------------------------------------------------------------
 //    JavaInfo a(OUSTR("file:///local/jl/java/j2sdk1.4.0"));
     try{
@@ -156,14 +158,14 @@ bool test_constructor2()
     }
 
     try{
-        JavaInfo info(OUString(OUSTR("1.4.0")), JavaInfo::EqualVersion);
+        JavaInfo info(OUString(OUSTR(JAVA_VERSION)), JavaInfo::EqualVersion);
         arRet[i++]= info.compareVersions(a) == 0;
     }
     catch( ...) {
         arRet[i++]= false;
     }
     try{
-        JavaInfo info(OUString(OUSTR("1.4.0")), 0);
+        JavaInfo info(OUString(OUSTR(JAVA_VERSION)), 0);
         arRet[i++]= info.compareVersions(a) == 0;
     }
     catch( ...) {
@@ -171,28 +173,28 @@ bool test_constructor2()
     }
 
     try{
-        JavaInfo info(OUString(OUSTR("1.4.0")), JavaInfo::EqualVersion | JavaInfo::GreaterVersion);
+        JavaInfo info(OUString(OUSTR(JAVA_VERSION)), JavaInfo::EqualVersion | JavaInfo::GreaterVersion);
         arRet[i++]= info.compareVersions(a) >= 0;
     }
     catch( ...) {
         arRet[i++]= false;
     }
     try{
-        JavaInfo info(OUString(OUSTR("1.4.0")), JavaInfo::EqualVersion | JavaInfo::SmallerVersion);
+        JavaInfo info(OUString(OUSTR(JAVA_VERSION)), JavaInfo::EqualVersion | JavaInfo::SmallerVersion);
         arRet[i++]= info.compareVersions(a) <= 0;
     }
     catch( ...) {
         arRet[i++]= false;
     }
     try{
-        JavaInfo info(OUString(OUSTR("1.4.0")),  JavaInfo::SmallerVersion);
+        JavaInfo info(OUString(OUSTR(JAVA_VERSION)),  JavaInfo::SmallerVersion);
         arRet[i++]= info.compareVersions(a) < 0;
     }
     catch( ...) {
         arRet[i++]= false;
     }
     try{
-        JavaInfo info(OUString(OUSTR("1.4.0")), JavaInfo::GreaterVersion);
+        JavaInfo info(OUString(OUSTR(JAVA_VERSION)), JavaInfo::GreaterVersion);
         arRet[i++]= info.compareVersions(a) > 0;
     }
     catch( ...) {
@@ -200,7 +202,7 @@ bool test_constructor2()
     }
 
     try{
-        JavaInfo info(OUString(OUSTR("1.4.0")), JavaInfo::EqualVersion | JavaInfo::SmallerVersion
+        JavaInfo info(OUString(OUSTR(JAVA_VERSION)), JavaInfo::EqualVersion | JavaInfo::SmallerVersion
              | JavaInfo::Accessibility);
         arRet[i++]= info.compareVersions(a) <= 0 && info.supportsAccessibility();
     }
@@ -208,7 +210,7 @@ bool test_constructor2()
         arRet[i++]= false;
     }
     try{
-        JavaInfo info(OUString(OUSTR("1.4.0")), JavaInfo::GreaterVersion | JavaInfo::Accessibility);
+        JavaInfo info(OUString(OUSTR(JAVA_VERSION)), JavaInfo::GreaterVersion | JavaInfo::Accessibility);
         arRet[i++]= info.compareVersions(a) > 0 && info.supportsAccessibility();
     }
     catch( ...) {
@@ -244,19 +246,20 @@ bool test_compareVersions()
     printf("\ntest JavaInfo::compareVersions \n" \
            "! Check output for correctness\n\n");
 
-//     JavaInfo a(OUSTR("file:///d:/java/jdk1.3.1"));
-//     JavaInfo b(OUSTR("file:///d:/java/jdk1.3.1_03"));
-//     JavaInfo c(OUSTR("file:///d:/java/jdk1.3.1_04"));
-//     JavaInfo d(OUSTR("file:///d:/java/j2sdk1.4.0"));
+
+    JavaInfo a(OUSTR("file:///C:/Program%20Files/JavaSoft/JRE/1.3.1"));
+    JavaInfo b(OUSTR("file:///C:/Program%20Files/JavaSoft/JRE/1.3.1_04"));
+    JavaInfo c(OUSTR("file:///C:/Program%20Files/Java/j2re1.4.0_03"));
+    JavaInfo d(OUSTR("file:///C:/Program%20Files/Java/j2re1.4.2_04"));
 //     JavaInfo e(OUSTR("file:///d:/java/j2sdk1.4.0_01"));
 //     JavaInfo f(OUSTR("file:///d:/java/j2sdk1.4.0_02"));
 //     JavaInfo g(OUSTR("file:///d:/java/j2sdk1.4.1"));
 //     JavaInfo h(OUSTR("file:///d:/java/j2sdk1.4.1_01"));
 
-    JavaInfo a(OUSTR("file:///usr/local2/jl/java/j2re1_3_1_02"));
-    JavaInfo b(OUSTR("file:///usr/local2/jl/java/j2sdk1.4.0"));
-    JavaInfo c(OUSTR("file:///usr/local2/jl/java/j2sdk1.4.1"));
-    JavaInfo d(OUSTR("file:///usr/local2/jl/java/j2re1.4.1_01"));
+//     JavaInfo a(OUSTR("file:///usr/local2/jl/java/j2re1_3_1_02"));
+//     JavaInfo b(OUSTR("file:///usr/local2/jl/java/j2sdk1.4.0"));
+//     JavaInfo c(OUSTR("file:///usr/local2/jl/java/j2sdk1.4.1"));
+//     JavaInfo d(OUSTR("file:///usr/local2/jl/java/j2re1.4.1_01"));
 
 //     JavaInfo a(OUSTR("file:///local/jl/java/jre1.3.1"));
 //     JavaInfo b(OUSTR("file:///local/jl/java/jdk1.3.1_04"));
@@ -268,7 +271,7 @@ bool test_compareVersions()
     if( (a.compareVersions(a) == 0
          && a.compareVersions(b) < 0
          && a.compareVersions(c) < 0
-         && a.compareVersions(d) < 0
+//         && a.compareVersions(d) < 0
 //         && a.compareVersions(e) < 0
 //         && a.compareVersions(h) < 0
             )
@@ -336,17 +339,17 @@ bool test_createBestInfo()
 bool test_isEqual()
 {
     printf("\ntest JavaInfo::isEqual\n");
-//     JavaInfo a(OUSTR("file:///d:/java/j2sdk1.4.0")); // accessible
-//     JavaInfo b(OUSTR("file:///d:/java/j2sdk1.4.0"));
+    JavaInfo a(OUSTR(JAVA_VERSION)); // accessible
+    JavaInfo b(OUSTR(JAVA_VERSION));
 
-//     JavaInfo c(OUSTR("file:///c:/local/r/j2sdk1.4.0"));// not Accessible
-//     JavaInfo d(OUSTR("file:///d:/java/copy_j2sdk1.4.0"));
+    JavaInfo c(OUSTR("file:///c:/local/r/j2sdk1.4.0"));// not Accessible
+    JavaInfo d(OUSTR("file:///d:/java/copy_j2sdk1.4.0"));
 //-------------------------------------------------------------------
-    JavaInfo a(OUSTR("file:///usr/local2/jl/java/j2re1_3_1_02"));
-    JavaInfo b(OUSTR("file:///usr/local2/jl/java/j2re1_3_1_02"));
+//     JavaInfo a(OUSTR("file:///usr/local2/jl/java/j2re1_3_1_02"));
+//     JavaInfo b(OUSTR("file:///usr/local2/jl/java/j2re1_3_1_02"));
 
-    JavaInfo c(OUSTR("file:///usr/local2/jl/java/j2sdk1.4.1"));
-    JavaInfo d(OUSTR("file:///usr/local2/jl/java/copyj2sdk1.4.1"));
+//     JavaInfo c(OUSTR("file:///usr/local2/jl/java/j2sdk1.4.1"));
+//     JavaInfo d(OUSTR("file:///usr/local2/jl/java/copyj2sdk1.4.1"));
 
 //     JavaInfo a(OUSTR("file:///local/jl/java/jre1.3.1"));
 //     JavaInfo b(OUSTR("file:///local/jl/java/jre1.3.1"));
