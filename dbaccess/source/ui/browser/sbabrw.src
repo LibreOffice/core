@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 14:49:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 07:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,20 +137,20 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ portuguese ] = "Guardar registo de dados activo"; \
     Text[ russian ] = "Ñîõğàíèòü òåêóùóş çàïèñü";   \
     Text[ dutch ] = "Actuele record opslaan";   \
-    Text[ french ] = "enregistrer l'enregistrement actif";  \
+    Text[ french ] = "Enregistrer l'enregistrement actif";  \
     Text[ spanish ] = "guardar registro actual";    \
     Text[ italian ] = "Salva record di dati attuale";   \
     Text[ danish ] = "Gem aktuel datapost"; \
     Text[ swedish ] = "Spara den aktuella dataposten";  \
     Text[ polish ] = "Zapisz bie¿¹cy rekord";   \
     Text[ portuguese_brazilian ] = "aktuellen Datensatz speichern"; \
-    Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚Ì•Û‘¶"; \
+    Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚ğ•Û‘¶"; \
     Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄÊı¾İÌõÄ¿";  \
     Text[ chinese_traditional ] = "«O¦s·í«eªº¸ê®Æ¶µ¥Ø"; \
     Text[ arabic ] = "ÍİÙ ÇáÓÌá ÇáÍÇáí";    \
     Text[ dutch ] = "Actuele record opslaan";   \
     Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄÊı¾İÌõÄ¿";  \
-    Text[ greek ] = "ÁğïèŞêåõóç ôñİ÷ïõóáò åããñáöŞò äåäïìİíùí";  \
+    Text[ greek ] = "ÁğïèŞêåõóç ôñİ÷ïõóáò åããñáöŞò";    \
     Text[ korean ] = "ÇöÀç ·¹ÄÚµå ÀúÀå";    \
     Text[ turkish ] = "Güncel veri kümesini kaydet";    \
     Text[ language_user1 ] = " ";
@@ -162,8 +162,8 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Hide = FALSE ;  \
     Text[ english_us ] = "Undo: Data Input";    \
     Text[ portuguese ] = "Anular: entrada de dados";    \
-    Text[ russian ] = "Îòìåíèòü : ââîä äàííûõ"; \
-    Text[ dutch ] = "Ongedaan maken: Gegevensinvoer";   \
+    Text[ russian ] = "Îòìåíèòü: ââîä äàííûõ";  \
+    Text[ dutch ] = "Ongedaan maken: gegevensinvoer";   \
     Text[ french ] = "Annuler : saisie des données";    \
     Text[ spanish ] = "Deshacer: Entrada";  \
     Text[ italian ] = "Annulla: Immissione dati";   \
@@ -171,11 +171,11 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ swedish ] = "Ångra : inmatning av data";  \
     Text[ polish ] = "Cofnij : Wprowadzanie danych";    \
     Text[ portuguese_brazilian ] = "Rückgängig : Dateneingabe"; \
-    Text[ japanese ] = "Œ³‚É–ß‚·:ÃŞ°À“ü—Í"; \
+    Text[ japanese ] = "Œ³‚É–ß‚·: ÃŞ°À‚Ì“ü—Í";  \
     Text[ chinese_simplified ] = "³·ÏûÃüÁî£ºÊäÈëÊı¾İ";  \
     Text[ chinese_traditional ] = "ºM®ø©R¥O¡G¿é¤J¸ê®Æ"; \
     Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÇáÈíÇäÇÊ";   \
-    Text[ dutch ] = "Ongedaan maken: Gegevensinvoer";   \
+    Text[ dutch ] = "Ongedaan maken: gegevensinvoer";   \
     Text[ chinese_simplified ] = "³·ÏûÃüÁî£ºÊäÈëÊı¾İ";  \
     Text[ greek ] = "Áíáßñåóç: ÅéóáãùãŞ äåäïìİíùí"; \
     Text[ korean ] = "½ÇÇàÃë¼Ò: ÀÔ·Â";  \
@@ -356,7 +356,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ italian ] = "Dati in campi"; \
     Text[ danish ] = "Data i felter"; \
     Text[ swedish ] = "Data i fält"; \
-    Text[ polish ] = "Dane w polach"; \
+    Text[ polish ] = "Dane do pól"; \
     Text[ portuguese_brazilian ] = "Daten in Felder"; \
     Text[ japanese ] = "ÃŞ°À‚ğÌ¨°ÙÄŞ‚É‘}“ü"; \
     Text[ chinese_simplified ] = "²åÈëÊı¾İ"; \
@@ -376,19 +376,19 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text [ ENGLISH ] = "Daten in Text ..."; \
     Text[ english_us ] = "Data to Text..."; \
     Text[ portuguese ] = "Dados em texto..."; \
-    Text[ russian ] = "Äàííûå â òåêñò"; \
+    Text[ russian ] = "Äàííûå â òåêñò..."; \
     Text[ dutch ] = "Gegevens in tekst ..."; \
     Text[ french ] = "Données dans le texte ..."; \
     Text[ spanish ] = "Datos en texto ..."; \
     Text[ italian ] = "Dati nel testo ..."; \
     Text[ danish ] = "Data i tekst ..."; \
     Text[ swedish ] = "Data i text ..."; \
-    Text[ polish ] = "Dane do tekstu..."; \
+    Text[ polish ] = "Dane do tekstu ..."; \
     Text[ portuguese_brazilian ] = "Daten in Text"; \
     Text[ japanese ] = "ÃŞ°À‚ğÃ·½Ä‚É‘}“ü..."; \
     Text[ chinese_simplified ] = "Êı¾İ×ª»»³ÉÎÄ×Ö..."; \
     Text[ chinese_traditional ] = "¸ê®ÆÂà´«¦¨¤å¦r...";  \
-    Text[ arabic ] = "ÈíÇäÇÊ Åáì äÕ";   \
+    Text[ arabic ] = "ÈíÇäÇÊ Åáì äÕ...";    \
     Text[ dutch ] = "Gegevens in tekst ...";    \
     Text[ chinese_simplified ] = "Êı¾İ×ª»»³ÉÎÄ×Ö...";   \
     Text[ greek ] = "Äåäïìİíá óå êåßìåíï ...";  \
@@ -403,16 +403,16 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text [ ENGLISH ] = "Serienbrief ..."; \
     Text[ english_us ] = "Form Letter..."; \
     Text[ portuguese ] = "Carta em série..."; \
-    Text[ russian ] = "Ñëèÿíèå"; \
+    Text[ russian ] = "Ñëèÿíèå..."; \
     Text[ dutch ] = "Standaardbrief ..."; \
     Text[ french ] = "Mailing ..."; \
     Text[ spanish ] = "Carta en serie ..."; \
     Text[ italian ] = "Stampa in serie..."; \
     Text[ danish ] = "Brevfletning ..."; \
     Text[ swedish ] = "Kopplad utskrift ..."; \
-    Text[ polish ] = "Korespondencja seryjna"; \
+    Text[ polish ] = "Korespondencja seryjna ..."; \
     Text[ portuguese_brazilian ] = "Serienbrief"; \
-    Text[ japanese ] = "·‚µ‚İˆóü"; \
+    Text[ japanese ] = "·‚µ‚İˆóü..."; \
     Text[ chinese_simplified ] = "ÓÊ¼şºÏ²¢..."; \
     Text[ chinese_traditional ] = "¦X¨Ö¦C¦L...";    \
     Text[ arabic ] = "ÎØÇÈ ãÓáÓá ...";  \
@@ -454,7 +454,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text = "Übergeordnete Ebene";\
     Text [ english_us] = "Parent Level";    \
     Text[ portuguese ] = "Nível superior";  \
-    Text[ greek ] = "áíşôåñï ğåäßï";    \
+    Text[ greek ] = "Áíşôåñï ğåäßï";    \
     Text[ dutch ] = "Hoger niveau"; \
     Text[ french ] = "Niveau supérieur";    \
     Text[ spanish ] = "Nivel superior"; \
@@ -464,7 +464,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ danish ] = "Overordnet niveau";\
     Text[ polish ] = "Poziom nadrzêdny";\
     Text[ portuguese_brazilian ] = "previous level";\
-    Text[ japanese ] = "ˆê‚Âã‚ÌÚÍŞÙ";\
+    Text[ japanese ] = "‚P‚Âã‚ÌÚÍŞÙ";\
     Text[ korean ] = "»óÀ§ ·¹º§";\
     Text[ chinese_simplified ] = "ÉÏÒ»²ã";\
     Text[ chinese_traditional ] = "¤W¤@¼h";\
@@ -555,7 +555,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text [ ENGLISH ] = "Anzahl Datensätze" ; \
     Text[ english_us ] = "Records Count"; \
     Text[ portuguese ] = "Contar registos"; \
-    Text[ russian ] = "Êîëè÷åñòâî çàïèñåé"; \
+    Text[ russian ] = "×èñëî çàïèñåé"; \
     Text[ dutch ] = "Aantal records"; \
     Text[ french ] = "Nombre d'enregistrements "; \
     Text[ spanish ] = "Cantidad de registros"; \
@@ -847,16 +847,16 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Message [ English ] = "The current row has been modified.\nDo you want to save your changes?" ;
     Message [ english_us ] = "The current record has been changed.\nDo you want to save the changes?" ;
     Message[ portuguese ] = "O registo de dados activo foi modificado.\nGuardar as modificações?";
-    Message[ russian ] = "Òåêóùàÿ çàïèñü äàííûõ áûëà èçìåíåíà. Ñîõğàíèòü ıòè èçìåíåíèÿ?";
+    Message[ russian ] = "Òåêóùàÿ çàïèñü äàííûõ áûëà èçìåíåíà.\n Ñîõğàíèòü ıòè èçìåíåíèÿ?";
     Message[ dutch ] = "De actuele record werd gewijzigd.\nWilt u de wijzigingen opslaan?";
-    Message[ french ] = "L'enregistrement actif a été modifié. Souhaitez-vous enregistrer les modifications ?";
+    Message[ french ] = "L'enregistrement actif a été modifié.\nVoulez-vous enregistrer les modifications ?";
     Message[ spanish ] = "El registro actual ha sido modificado.\n¿Desea guardar las modificaciones?";
     Message[ italian ] = "Il record di dati attuale è stato modificato.\nVolete salvare le modifiche?";
     Message[ danish ] = "Den aktuelle datapost er blevet ændret.\nSkal ændringerne gemmes?";
     Message[ swedish ] = "Den aktuella dataposten har ändrats.\nSka ändringarna sparas?";
     Message[ polish ] = "Aktualny rekord zosta³ zmodyfikowany.\nCzy zapisaæ zmodyfikowane dane?";
     Message[ portuguese_brazilian ] = "Soll der geänderter Datensatz gespeichert werden?";
-    Message[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
+    Message[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚Í•ÏX‚³‚ê‚Ü‚µ‚½B•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ chinese_simplified ] = "Êı¾İÌõÄ¿ÒÑ¾­±»¸ü¸Ä¡£\nÄúÒª´æÅÌ¸ü¸ÄºóµÄÊı¾İ¼ÇÂ¼Âğ£¿";
     Message[ chinese_traditional ] = "·í«eªº¸ê®Æ¤w¸gÅÜ§ó¡C­nÀx¦sÅÜ§óªº¸ê®Æ¶µ¥Ø¡H";
     Message[ arabic ] = "Êã ÊÛííÑ ÇáÓÌá ÇáÍÇáí.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊı¿";
@@ -877,7 +877,7 @@ QueryBox QUERY_BRW_DELETE_ROWS
     Message [ portuguese ] = "Deseja eliminar os dados seleccionados?" ;
     Message [ english_us ] = "Do you want to delete the selected data?" ;
     Message [ portuguese_brazilian ] = "Sollen die selektierten Daten gelöscht werden?" ;
-    Message [ swedish ] = "Skall markerade data raderas?" ;
+    Message [ swedish ] = "Skall de markerade data raderas?" ;
     Message [ danish ] = "Skal de udvalgte data slettes?" ;
     Message [ italian ] = "Eliminare i dati selezionati?" ;
     Message [ spanish ] = "¿Desea eliminar los datos seleccionados?" ;
@@ -930,7 +930,7 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ portuguese ] = "Erro ao definir critérios de ordem";
     Text[ russian ] = "Îøèáêà ïğè óñòàíîâëåíèè óñëîâèé ñîğòèğîâêè";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôïí ïñéóìü ôùí êñéôçñßùí ôáîéíüìçóçò";
-    Text[ dutch ] = "fout bij vastleggen van sorteercriteria";
+    Text[ dutch ] = "Fout bij instellen van sorteercriteria";
     Text[ french ] = "Erreur de définition des critères de tri";
     Text[ spanish ] = "Error al definir los criterios de ordenación";
     Text[ italian ] = "Errore nell'impostare i criteri";
@@ -941,7 +941,7 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ japanese ] = "•À‚×‘Ö‚¦ğŒ‚Ìİ’è‚Ì´×°";
     Text[ korean ] = "Á¤·Ä±âÁØ ¼³Á¤¿¡ ¿À·ù";
     Text[ chinese_simplified ] = "ÔÚÉè¶¨ÅÅĞòÌõ¼şÊ±·¢Éú´íÎó";
-    Text[ chinese_traditional ] = "¦b³]©w½s±Æ©w¸q®Éµo¥Í¿ù»~";
+    Text[ chinese_traditional ] = "³]©w½s±Æ±ø¥ó®Éµo¥Í¤@­Ó¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáİÑÒ";
     Text[ turkish ] = "Sıralama ölçütlerinin ayarlanmasında hata";
 };
@@ -953,10 +953,10 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ portuguese ] = "Erro ao definir critérios dos filtros";
     Text[ russian ] = "Îøèáêà ïğè óñòàíîâëåíèè óñëîâèé ôèëüòğà";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôïí ïñéóìü ôùí êñéôçñßùí ößëôñïõ";
-    Text[ dutch ] = "fout bij vastleggen van filtercriteria";
+    Text[ dutch ] = "Fout bij instellen van filtercriteria";
     Text[ french ] = "Erreur de définition des critères de filtre";
     Text[ spanish ] = "Error al definir los criterios de filtro";
-    Text[ italian ] = "Errore nell'impostare i criteri";
+    Text[ italian ] = "Errore nell'impostare i criteri del filtro";
     Text[ danish ] = "Fejl ved definition af filterkriterierne";
     Text[ swedish ] = "Fel vid definition av filterkriterier";
     Text[ polish ] = "B³¹d podczas osadzania kryteriów filtra";
@@ -964,7 +964,7 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ japanese ] = "Ì¨ÙÀğŒ‚Ìİ’è‚Ì´×°";
     Text[ korean ] = "ÇÊÅÍ±âÁØ ¼³Á¤¿¡ ¿À·ù";
     Text[ chinese_simplified ] = "ÔÚÉè¶¨É¸Ñ¡Ìõ¼şÊ±·¢Éú´íÎó";
-    Text[ chinese_traditional ] = "¦b³]©w¿z¿ï©w¸qªºµo¥Í¿ù»~";
+    Text[ chinese_traditional ] = "³]©w¿z¿ï±ø¥ó®Éµo¥Í¤@­Ó¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáÊÕİíÉ";
     Text[ turkish ] = "Filtre ölçütlerinin ayarlanmasında hata";
 };
@@ -974,18 +974,18 @@ String RID_STR_CONNECTION_LOST
     Text = "Vebindung verloren";
     Text [ english ] = "connection lost";
     Text [ english_us ] = "Connection lost";
-    Text[ portuguese ] = "Ligação perdida";
-    Text[ russian ] = "Ïîäêëş÷åíèå óòåğÿíî";
-    Text[ greek ] = "Óıíäåóç ÷Üèçêå";
+    Text[ portuguese ] = "Ligação interrompida";
+    Text[ russian ] = "Ïîòåğÿ ñâÿçè";
+    Text[ greek ] = "×Üèçêå ç óıíäåóç";
     Text[ dutch ] = "Verbinding verbroken";
-    Text[ french ] = "La connexion a éte perdue";
+    Text[ french ] = "Connexion perdue";
     Text[ spanish ] = "Se perdió la conexión";
     Text[ italian ] = "Il collegamento è stato interrotto";
     Text[ danish ] = "Tabt forbindelse";
     Text[ swedish ] = "Bruten förbindelse";
     Text[ polish ] = "Brak po³¹czenia";
     Text[ portuguese_brazilian ] = "connection lost";
-    Text[ japanese ] = "Ú‘±‚Ì’†’f";
+    Text[ japanese ] = "Ú‘±‚ÍØ’f‚³‚ê‚Ü‚µ‚½";
     Text[ korean ] = "¿¬°áÀ» ÀÒÀ½";
     Text[ chinese_simplified ] = "Ê§È¥Á¬½Ó";
     Text[ chinese_traditional ] = "³s½u¤w¸g¤¤Â_";
