@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 09:12:49 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:12:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,10 +116,6 @@ SVSDI2DEPEND= \
     TaskPaneViewShell.sdi \
     sdslots.hrc \
     $(PRJ)$/inc$/app.hrc
-
-SRS1NAME=$(TARGET)
-SRC1FILES= \
-    sdslots.src
 
 # --- Targets -------------------------------------------------------
 
