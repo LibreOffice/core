@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:26:08 $
+ *  last change: $Author: bc $ $Date: 2001-07-12 12:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,14 @@ Text[ english_us ] = "C~ontinue>>";
     Text[ arabic ] = "~ÇáÊÇáí>>";
     Text[ finnish ] = "&Jatka >>";
     Text[ catalan ] = "~Siguiente>>";
+};
+
+
+String STEP_ZERO + 8
+{
+Text = "~Schließen";
+Text[English] = "C~lose";
+Text[ english_us ] = "C~lose";
 };
 
 String STEP_CONVERTER
@@ -921,9 +929,9 @@ Text[ english_us ] = "Conversion of the currency units in the cell templates..."
 
 String MESSAGES
 {
-Text = "    Fertig!";
-Text[English] = "    Ready!";
-Text[ english_us ] = "finished!";
+Text = "~Fertig";
+Text[English] = "~finished";
+Text[ english_us ] = "~finished";
     Text[ portuguese ] = "....Pronto!";
     Text[ russian ] = "Ãîòîâî!";
     Text[ greek ] = "Ïëïêëçñşèçêå!";
@@ -942,6 +950,7 @@ Text[ english_us ] = "finished!";
     Text[ arabic ] = "...Êã!";
     Text[ turkish ] = "Bitti!";
     Text[ finnish ] = "valmis";
+    Text[ language_user1 ] = "Statt in einer Msgbox taucht dieser String jetzt im Label eines Buttons auf";
     Text[ catalan ] = "Terminado!";
 };
 

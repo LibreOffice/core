@@ -188,6 +188,9 @@ Sub StartConversion()
 		Case 2
 			InitializeThirdStep()
 			ConvertDocuments()
+		Case 3
+			CloseDialog()
+
 	End Select
 End Sub
 

@@ -39,7 +39,6 @@ Public sStsRELRANGES as String
 Public sStsRELSHEETRANGES as String
 Public sStsREPROTECT as String
 
-Public sMsgREADY as String
 Public sMsgSELDIR as String
 Public sMsgSELFILE as String
 Public sMsgTARGETDIR as String
@@ -139,7 +138,7 @@ Public bDocHasProtectedSheets as Boolean
 Public sGOON as String
 Public sHELP as String
 Public sCANCEL as String
-
+Public sClose as String
 
 Sub InitializeResources()
 	With DialogModel
@@ -147,6 +146,7 @@ Sub InitializeResources()
 		sGoOn = GetResText(1003)
 		sHelp = GetResText(1001)
 		sCANCEL = GetResText(1000)
+		sClose = GetResText(1008)
 		.cmdCancel.Label =  sCANCEL
 		.cmdHelp.Label =  sHELP
 		.cmdBack.Label =  GetResText(1002)
@@ -198,7 +198,7 @@ Sub InitializeResources()
 		sStsRELSHEETRANGES = GetResText(1302)
 		sStsRELRANGES = GetResText(1303)
 		sStsREPROTECT = GetResText(1304)
-		sMsgREADY = GetResText(1400)
+		sREADY = GetResText(1400)
 		sMsgSELDIR = GetResText(1401)
 		sMsgSELFILE = GetResText(1402)
 		sMsgTARGETDIR = GetResText(1403)

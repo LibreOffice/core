@@ -72,9 +72,11 @@ Dim FilesList()
 			End If
 		Next DocIndex
 		DialogModel.cmdGoOn.Enabled = True
-		If GoOn Then
-			Msgbox (sMsgREADY,64, sMsgDLGTITLE)
-		End	If
+		DialogModel.cmdGoOn.Label = sReady
+		DialogModel.cmdCancel.Label = sClose
+&apos;		If GoOn Then
+&apos;			Msgbox (sMsgREADY,64, sMsgDLGTITLE)
+&apos;		End	If
 	End If
 End Sub
 
@@ -117,7 +119,7 @@ End Function
 
 Sub ChangeToNextProgressStep()
 	DialogModel.lblCurProgress.FontWeight = com.sun.star.awt.FontWeight.NORMAL
-	DialogConvert.GetControl(&quot;lblCurProgress&quot;).Visible = False
+&apos;	DialogConvert.GetControl(&quot;lblCurProgress&quot;).Visible = False
 	DialogConvert.GetControl(&quot;lblCurProgress&quot;).Visible = True
 End Sub
 
@@ -204,16 +206,15 @@ Dim bMakeVisible as Boolean
 Dim LocStep as Integer
 	&apos; If the Sub is call by the &apos;cmdBack&apos; Button then set the &apos;bMakeVisible&apos; variable accordingly
 	bMakeVisible = IsMissing(aEvent)
-	&apos; Todo: Wieso können die nicht unsichtbar gemacht werden?
- 	DialogConvert.GetControl(&quot;lblCurrencies&quot;).Visible = Not bMakeVisible
- 	DialogConvert.GetControl(&quot;lstCurrencies&quot;).Visible = Not bMakeVisible
-	DialogConvert.GetControl(&quot;cmdBack&quot;).Visible = bMakeVisible
- 	DialogConvert.GetControl(&quot;cmdGoOn&quot;).Visible = bMakeVisible
 	If bMakeVisible Then
 		DialogModel.Step =  3
 	Else
 		DialogModel.Step = 2
 	End If
+ 	DialogConvert.GetControl(&quot;lblCurrencies&quot;).Visible = Not bMakeVisible
+ 	DialogConvert.GetControl(&quot;lstCurrencies&quot;).Visible = Not bMakeVisible
+	DialogConvert.GetControl(&quot;cmdBack&quot;).Visible = bMakeVisible
+ 	DialogConvert.GetControl(&quot;cmdGoOn&quot;).Visible = bMakeVisible
 	DialogModel.imgPreview.ImageUrl = BitmapDir &amp; &quot;euro_&quot; &amp; DialogModel.Step &amp; &quot;.bmp&quot;	 	
 End Sub
 
