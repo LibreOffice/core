@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-03 11:58:04 $
+ *  last change: $Author: nn $ $Date: 2002-05-08 14:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@
 #include "tpprint.hxx"
 #include "opredlin.hxx"
 #include "transobj.hxx"
+#include "detfunc.hxx"
 
 #define ScModule
 #include "scslots.hxx"
@@ -236,6 +237,38 @@ void ScModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if ( nHintId == SFX_HINT_COLORS_CHANGED || nHintId == SFX_HINT_ACCESSIBILITY_CHANGED )
         {
+            //  Test if detective objects have to be updated with new colors
+            //  (if the detective colors haven't been used yet, there's nothing to update)
+            if ( ScDetectiveFunc::IsColorsInitialized() )
+            {
+                const svx::ColorConfig& rColors = GetColorConfig();
+                BOOL bArrows =
+                    ( ScDetectiveFunc::GetArrowColor() != (ColorData)rColors.GetColorValue(svx::CALCDETECTIVE).nColor ||
+                      ScDetectiveFunc::GetErrorColor() != (ColorData)rColors.GetColorValue(svx::CALCDETECTIVEERROR).nColor );
+                BOOL bComments =
+                    ( ScDetectiveFunc::GetCommentColor() != (ColorData)rColors.GetColorValue(svx::CALCNOTESBACKGROUND).nColor );
+                if ( bArrows || bComments )
+                {
+                    ScDetectiveFunc::InitializeColors();        // get the new colors
+
+                    //  update detective objects in all open documents
+                    SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
+                    while ( pObjSh )
+                    {
+                        if ( pObjSh->Type() == TYPE(ScDocShell) )
+                        {
+                            ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
+                            ScDetectiveFunc aFunc( pDocSh->GetDocument(), 0 );
+                            if ( bArrows )
+                                aFunc.UpdateAllArrowColors();
+                            if ( bComments )
+                                aFunc.UpdateAllComments();
+                        }
+                        pObjSh = SfxObjectShell::GetNext( *pObjSh );
+                    }
+                }
+            }
+
             //  force all views to repaint, using the new options
 
             SfxViewShell* pViewShell = SfxViewShell::GetFirst();
