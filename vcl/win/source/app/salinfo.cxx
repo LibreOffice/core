@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:27:12 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,111 @@
 
 #if 1
 
-/* !!! UNICODE !!! */
-/* !!! This code should be change from ByteString to
-   !!! UniString, currently we doesn't support this !!! */
+#define VCL_NEED_BASETSD
+#include <tools/presys.h>
+#include <windows.h>
+#include <tools/postsys.h>
 
 #include <tools/string.hxx>
 #include <salsys.hxx>
+#include <salframe.h>
+#include <salinst.h>
+#include <tools/debug.hxx>
+#include <svdata.hxx>
+#include <window.hxx>
 
-String GetSalSummarySystemInfos( ULONG nFlags )
+class WinSalSystem : public SalSystem
+{
+public:
+    WinSalSystem() {}
+    virtual ~WinSalSystem();
+
+    virtual String GetSalSummarySystemInfos( ULONG nFlags );
+    virtual bool GetSalSystemDisplayInfo( System::DisplayInfo& rInfo );
+    virtual int ShowNativeMessageBox( const String& rTitle,
+                                      const String& rMessage,
+                                      int nButtonCombination,
+                                      int nDefaultButton);
+};
+
+SalSystem* WinSalInstance::CreateSalSystem()
+{
+    return new WinSalSystem();
+}
+
+WinSalSystem::~WinSalSystem()
+{
+}
+
+String WinSalSystem::GetSalSummarySystemInfos( ULONG nFlags )
 {
     return XubString();
 }
+// -----------------------------------------------------------------------
+
+bool WinSalSystem::GetSalSystemDisplayInfo( System::DisplayInfo& rInfo )
+{
+    RECT aRect;
+    ImplSalGetWorkArea( NULL, &aRect, NULL );
+
+    HDC hDC;
+    if( hDC = GetDC( NULL ) )
+    {
+        rInfo.nWidth    = aRect.right - aRect.left;
+        rInfo.nHeight   = aRect.bottom - aRect.top;
+        rInfo.nDepth    = GetDeviceCaps( hDC, BITSPIXEL );
+        ReleaseDC( NULL, hDC );
+        return true;
+    }
+    else
+        return false;
+}
+
+// -----------------------------------------------------------------------
+/* We have to map the button identifier to the identifier used by the Win32
+   Platform SDK to specify the default button for the MessageBox API.
+   The first dimension is the button combination, the second dimension
+   is the button identifier.
+*/
+static int DEFAULT_BTN_MAPPING_TABLE[][8] =
+{
+    //  Undefined        OK             CANCEL         ABORT          RETRY          IGNORE         YES             NO
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }, //OK
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }, //OK_CANCEL
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON3, MB_DEFBUTTON1, MB_DEFBUTTON1 }, //ABORT_RETRY_IGNO
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON3, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2 }, //YES_NO_CANCEL
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2 }, //YES_NO
+    { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }  //RETRY_CANCEL
+};
+
+int WinSalSystem::ShowNativeMessageBox(const String& rTitle, const String& rMessage, int nButtonCombination, int nDefaultButton)
+{
+    DBG_ASSERT( nButtonCombination >= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK &&
+                nButtonCombination <= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL &&
+                nDefaultButton >= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK &&
+                nDefaultButton <= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO, "Invalid arguments!" );
+
+    int nFlags = MB_TASKMODAL | MB_SETFOREGROUND | MB_ICONWARNING | nButtonCombination;
+
+    if (nButtonCombination >= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK &&
+        nButtonCombination <= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL &&
+        nDefaultButton >= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK &&
+        nDefaultButton <= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO)
+        nFlags |= DEFAULT_BTN_MAPPING_TABLE[nButtonCombination][nDefaultButton];
+
+    //#107209 hide the splash screen if active
+    ImplSVData* pSVData = ImplGetSVData();
+    if (pSVData->mpIntroWindow)
+        pSVData->mpIntroWindow->Hide();
+
+    return MessageBoxW(
+        0,
+        rMessage.GetBuffer(),
+        rTitle.GetBuffer(),
+        nFlags);
+}
+
+// -----------------------------------------------------------------------
 
 #else
 
