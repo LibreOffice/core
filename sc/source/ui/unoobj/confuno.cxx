@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 20:21:32 $
+ *  last change: $Author: sab $ $Date: 2001-09-04 13:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ using namespace com::sun::star;
 
 #define SCCOMPSCPREADSHEETSETTINGS_SERVICE      "com.sun.star.comp.SpreadsheetSettings"
 #define SCDOCUMENTSETTINGS_SERVICE              "com.sun.star.document.Settings"
+#define SCSAVEVERSION                           "AlwaysSaveVersionOnClosing"
 
 
 const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
@@ -125,6 +126,7 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_APPLYDOCINF),  0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),    0,  &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY},
         {MAP_CHAR_LEN(SC_UNO_CHARCOMP),     0,  &getCppuType((sal_Int16*)0),        0},
+        {MAP_CHAR_LEN(SCSAVEVERSION),       0,  &getBooleanCppuType(),              0},
         {0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -267,6 +269,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                     pDocShell->SetDocumentModified();
                 }
             }
+            else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
+                pDocShell->GetDocInfo().SetSaveVersionOnClose( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -366,6 +370,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_CHARCOMP ) == 0 )
                 aRet <<= static_cast<sal_Int16> ( pDoc->GetAsianCompression() );
+            else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
+                ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsSaveVersionOnClose() );
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
