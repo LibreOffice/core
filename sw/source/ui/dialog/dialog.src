@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 20:57:29 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 15:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@ CheckBox CB_USE_PASSWD
     Text [ dutch ] = "~Wachtwoord" ;
     Text [ spanish ] = "~Contraseña" ;
     Text [ english_us ] = "~Password" ;
-    Text[ chinese_simplified ] = "ÃÜÂë(~P)";
+    Text[ chinese_simplified ] = "å¯†ç (~P)";
     Text[ russian ] = "Ïàğîëü";
     Text[ polish ] = "Has³o";
-    Text[ japanese ] = "Êß½Ü°ÄŞ(~P)";
-    Text[ chinese_traditional ] = "±K½X(~P)";
+    Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾(~P)";
+    Text[ chinese_traditional ] = "å¯†ç¢¼(~P)";
     Text[ arabic ] = "ßáãÉ ÇáÓÑ";
     Text[ greek ] = "Êùäéêüò ğñüóâáóçò";
-    Text[ korean ] = "ÆĞ½º¿öµå(~P)";
+    Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ(~P)";
     Text[ turkish ] = "Şifre";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Contraseña";
@@ -101,16 +101,16 @@ CheckBox CB_READ_ONLY
     Text [ french ] = "En ~lecture seule" ;
     Text [ swedish ] = "Sk~rivskyddad" ;
     Text [ dutch ] = "~Alleen lezen" ;
-    Text [ spanish ] = "~Solo lectura" ;
+    Text [ spanish ] = "~Sólo lectura" ;
     Text [ english_us ] = "~Read-only" ;
-    Text[ chinese_simplified ] = "Ö»¶Á(~R)";
+    Text[ chinese_simplified ] = "åªè¯»(~R)";
     Text[ russian ] = "Òîëüêî äëÿ ÷òåíèÿ";
     Text[ polish ] = "Tylko do odczytu";
-    Text[ japanese ] = "“Ç‚İæ‚èê—p(~R)";
-    Text[ chinese_traditional ] = "°ßÅª(~R)";
+    Text[ japanese ] = "èª­ã¿å–ã‚Šå°‚ç”¨(~R)";
+    Text[ chinese_traditional ] = "å”¯è®€(~R)";
     Text[ arabic ] = "ááŞÑÇÁÉ İŞØ";
     Text[ greek ] = "Ìüíï ãéá áíÜãíùóç";
-    Text[ korean ] = "ÀĞ±â Àü¿ë(~R)";
+    Text[ korean ] = "ì½ê¸° ì „ìš©(~R)";
     Text[ turkish ] = "~Salt okunur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Solo lectura";
@@ -131,14 +131,14 @@ String STR_LINKEDIT_TEXT
     Text [ dutch ] = "Koppelingen bewerken" ;
     Text [ spanish ] = "Modificar vínculos" ;
     Text [ english_us ] = "Edit links" ;
-    Text[ chinese_simplified ] = "±à¼­Á´½Ó";
+    Text[ chinese_simplified ] = "ç¼–è¾‘é“¾æ¥";
     Text[ russian ] = "Ïğàâêà ññûëîê";
     Text[ polish ] = "Edytuj ³¹cza";
-    Text[ japanese ] = "Øİ¸‚Ì•ÒW";
-    Text[ chinese_traditional ] = "½s¿è±¶®|";
+    Text[ japanese ] = "ï¾˜ï¾ï½¸ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯æ·å¾‘";
     Text[ arabic ] = "ÊÍÑíÑ ÇáÇÑÊÈÇØÇÊ";
     Text[ greek ] = "Åğåîåñãáóßá óõíäİóåùí";
-    Text[ korean ] = "¿¬°á ÆíÁı";
+    Text[ korean ] = "ì—°ê²° í¸ì§‘";
     Text[ turkish ] = "Bağlantıları düzenle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar vínculos";
@@ -159,15 +159,15 @@ String STR_PATH_NOT_FOUND1
     Text [ dutch ] = "Map '" ;
     Text [ spanish ] = "El directorio '" ;
     Text [ english_us ] = "The directory '" ;
-    Text[ chinese_simplified ] = "Õâ¸öÄ¿Â¼ '";
+    Text[ chinese_simplified ] = "è¿™ä¸ªç›®å½• '";
     Text[ russian ] = "Äèğåêòîğèÿ '";
     Text[ polish ] = "Katalog";
-    Text[ japanese ] = "ÃŞ¨Ú¸ÄØu";
+    Text[ japanese ] = "ï¾ƒï¾ï½¨ï¾šï½¸ï¾„ï¾˜ã€Œ";
     Text[ language_user1 ] = " ";
-    Text[ chinese_traditional ] = "³o­Ó¥Ø¿ı '";
+    Text[ chinese_traditional ] = "é€™å€‹ç›®éŒ„ '";
     Text[ arabic ] = "ÇáÏáíá '";
     Text[ greek ] = "Ï êáôÜëïãïò '";
-    Text[ korean ] = "µğ·ºÅä¸®'";
+    Text[ korean ] = "ë””ë ‰í† ë¦¬'";
     Text[ turkish ] = "Dizin '";
     Text[ catalan ] = "El directorio '";
 };
@@ -188,14 +188,14 @@ String STR_PATH_NOT_FOUND2
     Text [ dutch ] = "' bestaat niet." ;
     Text [ spanish ] = "' no existe." ;
     Text [ english_us ] = "' does not exist." ;
-    Text[ chinese_simplified ] = "' ²»´æÔÚ¡£";
+    Text[ chinese_simplified ] = "' ä¸å­˜åœ¨ã€‚";
     Text[ russian ] = "' íå ñóùåñòâóåò.";
     Text[ polish ] = "nie istnieje.";
-    Text[ japanese ] = "v‚Í‘¶İ‚µ‚Ä‚¢‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "' ¤£¦s¦b¡C";
+    Text[ japanese ] = "ã€ã¯å­˜åœ¨ã—ã¦ã„ã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "' ä¸å­˜åœ¨ã€‚";
     Text[ arabic ] = "' ÛíÑ ãæÌæÏ.";
     Text[ greek ] = "' äåí õğÜñ÷åé.";
-    Text[ korean ] = "' ÀÌ/°¡ Á¸ÀçÇÏÁö ¾ÊÀ½";
+    Text[ korean ] = "' ì´/ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŒ";
     Text[ turkish ] = "' mevcut değil.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "' no existe.";
@@ -204,5 +204,6 @@ String STR_FLT_SGV
 {
     Text = "SGV - StarDraw 2.0,SGV" ;
 };
+
 
 
