@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NameClash.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-01-30 09:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,23 +77,22 @@ constants NameClash
     const long ERROR = 0;
 
     //-------------------------------------------------------------------------
-    /** Means to overwrite the object in the target folder with the object to transfer.
+    /** Means to overwrite the object in the target folder with the object to
+        transfer.
     */
     const long OVERWRITE = 1;
 
     //-------------------------------------------------------------------------
     /** Means to rename the object to transfer to solve the clash.
+
+        <p>The implementation needs to supply and set a suitable new name.
     */
     const long RENAME = 2;
 
     //-------------------------------------------------------------------------
-    /** Means the object is not transferred, but kept in the target folder.
+    /** Deprecated. Do not use!
 
-        <p>For instance this is useful when transferring a folder to another
-        folder which already contains a folder with the same name as the
-        folder to transfer.  The user may decide to keep any clashing (sub)
-        contents of the clashing folders instead of overwriting them with
-        the ones of the source folder using this flag.
+        @deprecated
     */
     const long KEEP = 3;
 
