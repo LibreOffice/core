@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_typetext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:34:53 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <ary/idl/i_ce.hxx>
 #include <ary/idl/i_module.hxx>
 #include <ary/idl/ik_ce.hxx>
+#include <adc_msg.hxx>
 #include "hi_linkhelper.hxx"
 
 
@@ -171,7 +172,9 @@ HF_IdlTypeText::Produce_byData( const String & i_sFullName ) const
     {
         // SYNTAX_ERR, but rather logical error: Missing module.
         CurOut() << i_sFullName;
-        errorOut_UnresolvedLink(i_sFullName);
+        // KORR
+        // How to put a message about this?
+        // errorOut_UnresolvedLink(i_sFullName);
         return;
     }
 
@@ -182,7 +185,9 @@ HF_IdlTypeText::Produce_byData( const String & i_sFullName ) const
         if (sTypeEnd == 0)
         {   // SYNTAX_ERR
             CurOut() << i_sFullName;
-            errorOut_UnresolvedLink(i_sFullName);
+            // KORR
+            // How to put a message about this?
+            // errorOut_UnresolvedLink(i_sFullName);
             return;
         }
 
@@ -209,7 +214,9 @@ HF_IdlTypeText::Produce_byData( const String & i_sFullName ) const
             return;
         }
         CurOut() << i_sFullName;
-        errorOut_UnresolvedLink(i_sFullName);
+        // KORR
+        // How to put a message about this?
+        // errorOut_UnresolvedLink(i_sFullName);
         return;
     }
 
@@ -233,7 +240,6 @@ HF_IdlTypeText::Produce_LinkInDocu( const String &      i_scope,
         CurOut() << i_scope << "::" << i_name;
         if (NOT i_member.empty())
             CurOut() << "::" << i_member;
-        errorOut_UnresolvedLink(i_scope,i_name,i_member);
         return;
     }
 
@@ -247,7 +253,6 @@ HF_IdlTypeText::Produce_LinkInDocu( const String &      i_scope,
         CurOut() << i_scope << "::" << i_name;
         if (NOT i_member.empty())
             CurOut() << "::" << i_member;
-        errorOut_UnresolvedLink(i_scope,i_name,i_member);
         return;
     }
     produce_FromStd(aModule_, i_name, i_member, 0, exists_yes);
@@ -625,11 +630,25 @@ HF_IdlTypeText::finish_Sequence( int i_count ) const
 void
 HF_IdlTypeText::errorOut_UnresolvedLink( const char *        i_name ) const
 {
-    Cerr() << "\nWarning: Unresolved Link \""
-           << i_name
-           << "\" in "
-           << Env().CurPageCe_AsText()
-           << Endl();
+    StreamLock slFile(1000);
+
+    // KORR
+    // Handle links in cited documentation from other entities.
+    slFile() << Env().CurPageCe_AsText();
+    slFile().pop_back(5);
+    slFile() << ".idl";
+
+    // KORR
+    // Retrieve, correct line number.
+    TheMessages().Out_UnresolvedLink( i_name,
+                                      slFile().c_str(),
+                                      0 );
+
+//    Cerr() << "\nWarning: Unresolved Link \""
+//           << i_name
+//           << "\" in "
+//           << Env().CurPageCe_AsText()
+//           << Endl();
 }
 
 void
