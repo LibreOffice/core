@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-21 10:36:24 $
+ *  last change: $Author: hdu $ $Date: 2002-08-23 15:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5396,6 +5396,33 @@ long OutputDevice::GetTextArray( const String& rOrigStr, long* pDXAry,
 
 // -----------------------------------------------------------------------
 
+void OutputDevice::GetCursorPositions( const XubString& rOrigStr, long* pCursorXArray,
+    xub_StrLen nIndex, xub_StrLen nLen, BOOL bCellBreaking ) const
+{
+    DBG_TRACE( "OutputDevice::GetCursorPositions()" );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    if( nIndex >= rOrigStr.Len() )
+        return;
+    if( (ULONG)nIndex+nLen >= rOrigStr.Len() )
+        nLen = rOrigStr.Len() - nIndex;
+
+    // layout complex text
+    SalLayout* pSalLayout = ImplLayout( rOrigStr, nIndex, nLen, Point(0,0) );
+    if( pSalLayout )
+    {
+        pSalLayout->GetCursorPositions( pCursorXArray );
+        pSalLayout->Release();
+    }
+
+    if( bCellBreaking )
+    {
+        ; // TODO
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
                                     const String& rOrigStr,
                                     xub_StrLen nIndex, xub_StrLen nLen )
@@ -5484,6 +5511,8 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         nLayoutFlags |= SAL_LAYOUT_KERNING_ASIAN;
     if( maFont.IsVertical() )
         nLayoutFlags |= SAL_LAYOUT_VERTICAL;
+    if( mnLayoutMode & TEXT_LAYOUT_SUBSTITUTE_DIGITS )
+        nLayoutFlags |= SAL_LAYOUT_SUBSTITUTE_DIGITS;
 
     if( mnLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES )
         nLayoutFlags |= SAL_LAYOUT_ENABLE_LIGATURES;
@@ -5549,18 +5578,33 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     if( ! pSalLayout )
         pSalLayout = mpGraphics->LayoutText( aLayoutArgs );
 
-    // adjust draw position for Left To Right
-    if( pSalLayout && ((nLayoutFlags & SAL_LAYOUT_BIDI_RTL) != 0) )
+    if( pSalLayout )
     {
-        Point aRTLOffset;
-        if( nPixelWidth )
-            aRTLOffset = Point( -nPixelWidth, 0 );
-        else if( pDXArray )
-            aRTLOffset = Point( -pDXArray[ nLength-1 ], 0 );
-        else
-            aRTLOffset = pSalLayout->GetCharPosition( nEndIndex, true );
-        Point aRTLPosition = pSalLayout->GetDrawPosition( aRTLOffset );
-        pSalLayout->SetDrawPosition( aRTLPosition );
+        // adjust assumption that draw position is left of text
+        // for 1. RTL text, 2. DRAWPOS_REVERSED, 3. RTL window style
+        bool bRightDrawPos = ((nLayoutFlags & SAL_LAYOUT_BIDI_RTL) != 0);
+
+        if( mnLayoutMode & TEXT_LAYOUT_DRAWPOS_REVERSED )
+            bRightDrawPos = !bRightDrawPos;
+
+        static const char* pEnv = getenv("SAL_RTL_MIRRORTEXT" );
+        bool bRTLWindow = (pEnv && GetSettings().GetStyleSettings().GetLayoutRTL());
+        bRightDrawPos ^= bRTLWindow;
+
+        if( bRightDrawPos )
+        {
+            Point aRTLOffset;
+            if( nPixelWidth )
+                aRTLOffset = Point( -nPixelWidth, 0 );
+            else if( pDXArray )
+                aRTLOffset = Point( -pDXArray[ nLength-1 ], 0 );
+            else
+                aRTLOffset = pSalLayout->GetCharPosition( nEndIndex, !bRTLWindow );
+            if( bRTLWindow )
+                aRTLOffset = Point(0,0) - aRTLOffset;
+            Point aRTLPosition = pSalLayout->GetDrawPosition( aRTLOffset );
+            pSalLayout->SetDrawPosition( aRTLPosition );
+        }
     }
 
     return pSalLayout;
