@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:01:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,6 +670,8 @@ private:
     sal_Bool                    m_bForwardValueChanges      : 1;    // do we currently handle changes in the bound database field?
     sal_Bool                    m_bTransferingValue         : 1;    // true if we're currently transfering our value to an external binding
     sal_Bool                    m_bIsCurrentValueValid      : 1;    // flag specifying whether our current value is valid, relative to our external validator
+    sal_Bool                    m_bBindingControlsRO        : 1;    // is our ReadOnly property currently controlled by our external binding?
+    sal_Bool                    m_bBindingControlsEnable    : 1;    // is our Enabled property currently controlled by our external binding?
 
     ValueChangeInstigator       m_eControlValueChangeInstigator;
 
@@ -821,7 +823,7 @@ protected:
         @see initValueProperty
     */
     virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( );
+                            translateExternalValueToControlValue( ) const;
 
     /** commits the current control value to our external value binding
 
@@ -831,7 +833,7 @@ protected:
         @see initValueProperty
     */
     virtual ::com::sun::star::uno::Any
-                            translateControlValueToExternalValue( );
+                            translateControlValueToExternalValue( ) const;
 
     /** commits the current control value to the database column we're bound to
         @precond
@@ -934,7 +936,7 @@ protected:
     /** retrieves the current value of the control, in a shape which can be used with our
         external validator.
 
-        The default implementation will simply call getControlValue.
+        The default implementation simply calls <member>>translateControlValueToExternalValue</member>.
 
         @precond
             Our own mutex is locked.
