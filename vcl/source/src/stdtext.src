@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-06 10:09:23 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ String SV_ACCESSERROR_MISSING_BRIDGE_MSG
     Text[ polish ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ portuguese_brazilian ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
     Text[ japanese ] = "お使いのシステムに Java Access Bridge は見つかりませんでした。Java Access Bridge をインストールしてください。アクセシビリティの支援なしで %PRODUCTNAME %PRODUCTVERSION を起動させるには、［無視する］ボタンをクリックします。または［キャンセル］ボタンをクリックします。";
-    Text[ korean ] = "시스템에서 Java Access Bridge를 찾을 수 없습니다. Java Access Bridge를 설치해주십시오. 액세스빌리티 기능 지원이 없는 %PRODUCTNAME %PRODUCTVERSION을 시작하시려면 \"무시\" 버튼 또는 \"취소\" 버튼을 클릭해주십시오.";
+    Text[ korean ] = "시스템에서 Java Access Bridge를 찾을 수 없었습니다. Java Access Bridge를 설치해주십시오. 액세스빌리티 기능 지원이 없는 %PRODUCTNAME %PRODUCTVERSION을 시작하시려면 무시 버튼 또는 취소 버튼을 클릭해주십시오.";
     Text[ chinese_simplified ] = "在系统内没有找到“Java Access Bridge”。请安装一个“Java Access Bridge”。点击“忽略”，省去辅助功能支持，而直接开始安装 %PRODUCTNAME %PRODUCTVERSION 。或者点击“取消”，中断安装过程。";
     Text[ chinese_traditional ] = "在系統内沒有找到[Java Access Bridge]。請安裝一個[Java Access Bridge]。按一下「忽略」，省去協助工具支援，而直接啓動安裝 %PRODUCTNAME %PRODUCTVERSION 。或者按下「取消」，中斷安裝過程。";
     Text[ turkish ] = "No Java Access Bridge was found on your system. Please install a Java Access Bridge. Click \"Ignore\" to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click \"Cancel\".";
