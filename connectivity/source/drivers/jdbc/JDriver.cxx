@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-27 09:25:22 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 13:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,11 @@ using namespace ::com::sun::star::lang;
 java_sql_Driver::java_sql_Driver(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : java_lang_Object(_rxFactory)
 {
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
-    // this object is not the right one
-    if(t.pEnv)
-        t.pEnv->DeleteGlobalRef( object );
-    object = 0;
+//  SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+//  // this object is not the right one
+//  if(t.pEnv)
+//      t.pEnv->DeleteGlobalRef( object );
+//  object = 0;
 }
 // --------------------------------------------------------------------------------
 jclass java_sql_Driver::theClass = 0;
@@ -245,7 +245,10 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) thro
     // I feel responsible for all jdbc url's
     if(!url.compareTo(::rtl::OUString::createFromAscii("jdbc:"),5))
     {
-        return sal_True;
+        SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+        if(!object)
+            object = java_sql_DriverManager::getDriver(url);
+        return object != NULL;
     }
     return sal_False;
 }

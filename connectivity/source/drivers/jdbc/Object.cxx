@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:44:26 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 13:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,18 +285,18 @@ jclass java_lang_Object::getMyClass()
 java_lang_Object::java_lang_Object(const Reference<XMultiServiceFactory >& _rxFactory)
             : object( 0 ),m_xFactory(_rxFactory)
 {
-    SDBThreadAttach t(m_xFactory);
-    if( !t.pEnv )
-        return;
-
-    // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
-    char * cSignature = "()V";
-    jclass tempClass;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );
-    tempClass = (jclass)t.pEnv->NewObjectA( getMyClass(), mID, NULL );
-    saveRef( t.pEnv, tempClass );
-    t.pEnv->DeleteLocalRef( tempClass );
+//  SDBThreadAttach t(m_xFactory);
+//  if( !t.pEnv )
+//      return;
+//
+//  // Java-Call fuer den Konstruktor absetzen
+//  // temporaere Variable initialisieren
+//  char * cSignature = "()V";
+//  jclass tempClass;
+//  jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );
+//  tempClass = (jclass)t.pEnv->NewObjectA( getMyClass(), mID, NULL );
+//  saveRef( t.pEnv, tempClass );
+//  t.pEnv->DeleteLocalRef( tempClass );
 }
 
 // der protected-Konstruktor fuer abgeleitete Klassen
