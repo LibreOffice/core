@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:28:07 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,7 @@ void __EXPORT ScInputWindow::Select()
                     {
                         String aFormula = '=';
                         ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-                        ScFuncDesc* pDesc = NULL;
+                        const ScFuncDesc* pDesc = NULL;
                         if (!bSubTotal)
                             pDesc = pFuncMgr->Get( SC_OPCODE_SUM );
                         else
