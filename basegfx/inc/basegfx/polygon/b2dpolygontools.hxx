@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:37:18 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,34 @@ namespace basegfx
             vertices).
          */
         bool isRectangle( const B2DPolygon& rPoly );
+
+        // test if polygon contains neutral points. A neutral point is one whos orientation is neutral
+        // e.g. positioned on the edge of it's predecessor and successor
+        bool hasNeutralPoints(const B2DPolygon& rCandidate);
+
+        // remove neutral points. A neutral point is one whos orientation is neutral
+        // e.g. positioned on the edge of it's predecessor and successor
+        B2DPolygon removeNeutralPoints(const B2DPolygon& rCandidate);
+
+        // tests if polygon is convex
+        bool isConvex(const ::basegfx::B2DPolygon& rCandidate);
+
+        // calculates the orientation at edge nIndex
+        B2VectorOrientation getOrientationForIndex(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
+
+        // calculates if given point is on given line, taking care of the numerical epsilon
+        bool isPointOnLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidate, bool bWithPoints = false);
+
+        // test if candidate is inside triangle
+        bool isPointInTriangle(const B2DPoint& rA, const B2DPoint& rB, const B2DPoint& rC, const B2DPoint& rCandidate, bool bWithBorder = false);
+
+        // test if candidateA and candidateB are on the same side of the given line
+        bool arePointsOnSameSideOfLine(const B2DPoint& rStart, const B2DPoint& rEnd, const B2DPoint& rCandidateA, const B2DPoint& rCandidateB, bool bWithLine = false);
+
+        // add triangles for given rCandidate to rTarget. For each triangle, 3 points will be added to rCandidate.
+        // All triangles will go from the start point of rCandidate to two consecutive points, building (rCandidate.count() - 2)
+        // triangles.
+        void addTriangleFan(const B2DPolygon& rCandidate, B2DPolygon& rTarget);
 
     } // end of namespace tools
 } // end of namespace basegfx
