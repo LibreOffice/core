@@ -2,9 +2,9 @@
  *
  *  $RCSfile: so_instance.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 10:08:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,11 +455,13 @@ int SoPluginInstance::LoadDocument(NSP_HWND hParent)
             m_xFrame->getName(), 0, setPropValues );
   */
 
-         Sequence< ::com::sun::star::beans::PropertyValue > setPropValues2(2);
+         Sequence< ::com::sun::star::beans::PropertyValue > setPropValues2(3);
         setPropValues2[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ViewOnly") );
         setPropValues2[0].Value <<= sal_True;
         setPropValues2[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
         setPropValues2[1].Value <<= sal_True;
+        setPropValues2[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("AsTemplate") );
+        setPropValues2[2].Value <<= sal_False;
         m_xComponent = xLoader->loadComponentFromURL(
             m_sURL,
             m_xFrame->getName(), 0, setPropValues2 );
