@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:48:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,10 @@
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
+#include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
@@ -227,6 +231,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/transfer.hxx>
 #include <rtl/logfile.hxx>
+#include <framework/configimporter.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
@@ -300,6 +305,7 @@
 #include "openflag.hxx"
 #include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
+#include "msgpool.hxx"
 
 using namespace com::sun::star;
 
@@ -3503,6 +3509,61 @@ rtl::OUString SfxBaseModel::getRuntimeUID() const
     return m_pData->m_sRuntimeUID;
 }
 
+static void GetCommandFromSequence( rtl::OUString& rCommand, sal_Int32& nIndex, const uno::Sequence< beans::PropertyValue >& rSeqPropValue )
+{
+    rtl::OUString aCommand;
+    nIndex = -1;
+
+    for ( sal_Int32 i = 0; i < rSeqPropValue.getLength(); i++ )
+    {
+        if ( rSeqPropValue[i].Name.equalsAsciiL( "Command", 7 ))
+        {
+            rSeqPropValue[i].Value >>= rCommand;
+            nIndex = i;
+            return;
+        }
+    }
+}
+
+static void ConvertSlotsToCommands( SfxObjectShell* pDoc, REFERENCE< XINDEXCONTAINER >& rToolbarDefinition )
+{
+    if ( pDoc )
+    {
+        Any           aAny;
+        SfxModule*    pModule( pDoc->GetFactory().GetModule() );
+        rtl::OUString aSlotCmd( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+        rtl::OUString aUnoCmd( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
+        uno::Sequence< beans::PropertyValue > aSeqPropValue;
+
+        for ( sal_Int32 i = 0; i < rToolbarDefinition->getCount(); i++ )
+        {
+            sal_Int32 nIndex( -1 );
+            rtl::OUString aCommand;
+
+            if ( rToolbarDefinition->getByIndex( i ) >>= aSeqPropValue )
+            {
+                GetCommandFromSequence( aCommand, nIndex, aSeqPropValue );
+                if ( nIndex >= 0 && ( aCommand.indexOf( aSlotCmd ) == 0 ))
+                {
+                    rtl::OUString aSlot( aCommand.copy( 5 ));
+
+                    // We have to replace the old "slot-Command" with our new ".uno:-Command"
+                    const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( USHORT( aSlot.toInt32() ));
+                    if ( pSlot )
+                    {
+                        rtl::OUStringBuffer aStrBuf( aUnoCmd );
+                        aStrBuf.appendAscii( pSlot->GetUnoName() );
+
+                        aCommand = aStrBuf.makeStringAndClear();
+                        aSeqPropValue[nIndex].Value <<= aCommand;
+                        rToolbarDefinition->replaceByIndex( i, Any( aSeqPropValue ));
+                    }
+                }
+            }
+        }
+    }
+}
+
 REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationManager()
         throw ( RUNTIMEEXCEPTION )
 {
@@ -3544,10 +3605,71 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
                 }
                 else
                     xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READ );
+
             }
 
             // initialize ui configuration manager with document substorage
             xUIConfigStorage->setStorage( xConfigStorage );
+
+            if ( m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            {
+                // Import old UI configuration from OOo 1.x
+                REFERENCE< XSTORAGE > xOOo1ConfigStorage;
+                rtl::OUString         aOOo1UIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations" ));
+
+                // Try to open with READ
+                xOOo1ConfigStorage = getDocumentSubStorage( aOOo1UIConfigFolderName, embed::ElementModes::READ );
+                if ( xOOo1ConfigStorage.is() )
+                {
+                    uno::Reference< lang::XMultiServiceFactory > xServiceMgr( ::comphelper::getProcessServiceFactory() );
+                    uno::Sequence< uno::Reference< container::XIndexContainer > > rToolbars;
+
+                    sal_Bool bImported = UIConfigurationImporterOOo1x::ImportCustomToolbars(
+                                            xNewUIConfMan, rToolbars, xServiceMgr, xOOo1ConfigStorage );
+                    if ( bImported )
+                    {
+                        SfxObjectShell* pObjShell = SfxBaseModel::GetObjectShell();
+
+                        char aNum[]   = "private:resource/toolbar/custom_OOo1x_0";
+                        char aTitle[] = "Toolbar 0";
+                        sal_Int32 nNumIndex = strlen( aNum )-1;
+                        sal_Int32 nTitleIndex = strlen( aTitle )-1;
+                        for ( sal_Int32 i = 0; i < rToolbars.getLength(); i++ )
+                        {
+                            aNum[nNumIndex]++;
+                            aTitle[nTitleIndex]++;
+
+                            rtl::OUString aCustomTbxName( RTL_CONSTASCII_USTRINGPARAM( aNum ));
+                            rtl::OUString aCustomTbxTitle( RTL_CONSTASCII_USTRINGPARAM( aTitle ));
+
+                            REFERENCE< XINDEXCONTAINER > xToolbar = rToolbars[i];
+                            ConvertSlotsToCommands( pObjShell, xToolbar );
+                            if ( !xNewUIConfMan->hasSettings( aCustomTbxName ))
+                            {
+                                // Set UIName for the toolbar with container property
+                                uno::Reference< beans::XPropertySet > xPropSet( xToolbar, UNO_QUERY );
+                                if ( xPropSet.is() )
+                                {
+                                    try
+                                    {
+                                        rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( "UIName" ));
+                                        Any           aAny( aCustomTbxTitle );
+                                        xPropSet->setPropertyValue( aPropName, aAny );
+                                    }
+                                    catch ( beans::UnknownPropertyException& )
+                                    {
+                                    }
+                                }
+
+                                uno::Reference< container::XIndexAccess > xToolbarData( xToolbar, uno::UNO_QUERY );
+                                xNewUIConfMan->insertSettings( aCustomTbxName, xToolbarData );
+                                uno::Reference< ui::XUIConfigurationPersistence > xPersist( xNewUIConfMan, uno::UNO_QUERY );
+                                xPersist->store();
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         m_pData->m_xUIConfigurationManager = xNewUIConfMan;
