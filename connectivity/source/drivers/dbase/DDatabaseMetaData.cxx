@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:34:43 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 13:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 
-#ifndef _CONNECTIVITY_DBASE_ODATABASEMETADATA_HXX_
+#ifndef _CONNECTIVITY_DBASE_ODbaseDatabaseMetaData_HXX_
 #include "dbase/DDatabaseMetaData.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
@@ -463,4 +463,40 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getCrossReference(
 
     return ::rtl::OUString::createFromAscii("sdbc:dbase:");
 }
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    return STRING_MAXLEN;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    return 254;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    return 10;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    return 1;
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    return 128;
+}
+
 
