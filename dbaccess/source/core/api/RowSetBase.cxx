@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-08 15:02:00 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 10:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,9 @@ Reference< XNamed > OEmptyCollection::createObject(const ::rtl::OUString& _rName
 // = ORowSetBase
 // =========================================================================
 // -------------------------------------------------------------------------
-ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex& _rMutex)
+ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex* _pMutex)
             : OPropertyContainer(_rBHelper)
-            , m_rMutex(_rMutex)
+            , m_pMutex(_pMutex)
             , m_rBHelper(_rBHelper)
             , m_pCache(NULL)
             , m_pColumns(NULL)
@@ -222,7 +222,7 @@ void SAL_CALL ORowSetBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) c
 // OComponentHelper
 void SAL_CALL ORowSetBase::disposing(void)
 {
-    MutexGuard aGuard(m_rMutex);
+    MutexGuard aGuard(*m_pMutex);
 
     if(m_pColumns)
     {
@@ -250,7 +250,7 @@ void SAL_CALL ORowSetBase::disposing(void)
 // XRow
 sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     return ((m_nLastColumnIndex != -1) && m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
@@ -258,7 +258,7 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     OSL_ENSURE(!(m_bBeforeFirst || m_bAfterLast),"Illegal call here!");
 
@@ -342,7 +342,7 @@ Sequence< sal_Int8 > SAL_CALL ORowSetBase::getBytes( sal_Int32 columnIndex ) thr
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
@@ -372,7 +372,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getCharact
 // -------------------------------------------------------------------------
 Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     return Any();
@@ -380,7 +380,7 @@ Any SAL_CALL ORowSetBase::getObject( sal_Int32 columnIndex, const Reference< XNa
 // -------------------------------------------------------------------------
 Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     return Reference< XRef >();
@@ -388,7 +388,7 @@ Reference< XRef > SAL_CALL ORowSetBase::getRef( sal_Int32 columnIndex ) throw(SQ
 // -------------------------------------------------------------------------
 Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     return Reference< XBlob >();
@@ -396,7 +396,7 @@ Reference< XBlob > SAL_CALL ORowSetBase::getBlob( sal_Int32 columnIndex ) throw(
 // -------------------------------------------------------------------------
 Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     return Reference< XClob >();
@@ -404,7 +404,7 @@ Reference< XClob > SAL_CALL ORowSetBase::getClob( sal_Int32 columnIndex ) throw(
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     return Reference< XArray >();
@@ -414,7 +414,7 @@ Reference< XArray > SAL_CALL ORowSetBase::getArray( sal_Int32 columnIndex ) thro
 Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
 
     if(!m_pCache || m_bBeforeFirst || m_bAfterLast)
     {
@@ -429,7 +429,7 @@ Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     OSL_ENSURE(bookmark.hasValue(),"ORowSetBase::moveToBookmark bookmark has no value!");
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
 
     if(!bookmark.hasValue() || m_nResultSetType == ResultSetType::FORWARD_ONLY)
     {
@@ -472,7 +472,7 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
 
     checkPositioningAllowed();
 
@@ -501,21 +501,21 @@ sal_Bool SAL_CALL ORowSetBase::moveRelativeToBookmark( const Any& bookmark, sal_
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetBase::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     return m_pCache->compareBookmarks(first,second);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     return m_pCache->hasOrderedBookmarks();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetBase::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
     return m_pCache->hashBookmark(bookmark);
 }
@@ -566,7 +566,7 @@ Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  ) throw(RuntimeExcep
 // XResultSet
 sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     sal_Bool bRet;
@@ -601,7 +601,7 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     return m_bBeforeFirst;
@@ -610,7 +610,7 @@ sal_Bool SAL_CALL ORowSetBase::isBeforeFirst(  ) throw(SQLException, RuntimeExce
 sal_Bool SAL_CALL ORowSetBase::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     return m_bAfterLast;
@@ -619,7 +619,7 @@ sal_Bool SAL_CALL ORowSetBase::isAfterLast(  ) throw(SQLException, RuntimeExcept
 sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     sal_Bool bIsFirst = !(m_bBeforeFirst || m_bAfterLast);
@@ -635,7 +635,7 @@ sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     sal_Bool bIsLast = !(m_bBeforeFirst || m_bAfterLast);
@@ -650,7 +650,7 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException)
 void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
 
     checkPositioningAllowed();
 
@@ -682,7 +682,7 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     if(notifyAllListenersCursorBeforeMove())
@@ -713,7 +713,7 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     sal_Bool bRet;
@@ -746,7 +746,7 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     sal_Bool bRet;
@@ -782,7 +782,7 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetBase::getRow(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     sal_Int32  nPos = 0;
@@ -815,7 +815,7 @@ sal_Int32 SAL_CALL ORowSetBase::getRow(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     sal_Bool bRet = !(m_bAfterLast && row > 1); // m_bAfterLast && row > 1 we are already behind the last row
@@ -848,7 +848,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
 
     if(!rows)
         return sal_True; // in this case do nothing
@@ -886,7 +886,7 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
 sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
 
     checkPositioningAllowed();
 
@@ -967,7 +967,7 @@ Reference< XInterface >  ORowSetBase::getStatement(void) throw( SQLException, Ru
 void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
 
     if(!(m_bBeforeFirst || m_bAfterLast))
@@ -979,7 +979,7 @@ void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     return m_pCache->rowUpdated();
@@ -987,7 +987,7 @@ sal_Bool SAL_CALL ORowSetBase::rowUpdated(  ) throw(SQLException, RuntimeExcepti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::rowInserted(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     return m_pCache->rowInserted();
@@ -995,7 +995,7 @@ sal_Bool SAL_CALL ORowSetBase::rowInserted(  ) throw(SQLException, RuntimeExcept
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetBase::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
     return m_pCache->rowDeleted();
@@ -1009,7 +1009,7 @@ Any SAL_CALL ORowSetBase::getWarnings(  ) throw(SQLException, RuntimeException)
     if(!m_pCache)
         return Any();
 
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
 
     return m_pCache->getWarnings();
 }
@@ -1018,7 +1018,7 @@ void SAL_CALL ORowSetBase::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 {
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
-    ::osl::MutexGuard aGuard( m_rMutex );
+    ::osl::MutexGuard aGuard( *m_pMutex );
     if(m_pCache)
         m_pCache->clearWarnings();
 }

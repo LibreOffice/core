@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 08:45:02 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 10:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ namespace dbaccess
     {
     protected:
         typedef ::std::vector<ORowSetDataColumn*>   TDataColumns;
-        ::osl::Mutex&                           m_rMutex;
+        ::osl::Mutex*                           m_pMutex;           // this the mutex form the rowset itself
         ::osl::Mutex                            m_aRowCountMutex, // mutex for rowcount changes
                                                 // we need a extra mutex for columns to prevend deadlock when setting new values
                                                 // for a row
@@ -183,7 +183,7 @@ namespace dbaccess
         sal_Bool                                m_bAfterLast    : 1;
 
     protected:
-        ORowSetBase(::cppu::OBroadcastHelper    &_rBHelper,::osl::Mutex& _rMutex);
+        ORowSetBase(::cppu::OBroadcastHelper    &_rBHelper,::osl::Mutex* _pMutex);
 
         // fire a notification for all that are listening on column::VALUE property
         void firePropertyChange(const ORowSetMatrix::iterator& _rOldRow);

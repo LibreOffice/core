@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 10:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ namespace dbaccess
         virtual void checkInsert() {}
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
     public:
-        ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex);
+        ORowSetClone(ORowSet& rParent,::osl::Mutex* _pMutex);
         virtual ~ORowSetClone();
 
     // com::sun::star::lang::XTypeProvider
@@ -464,6 +464,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.28  2001/11/01 15:27:20  hr
+    #92924#: gcc-3.0.1 needs lvalue, exception specifications
+
     Revision 1.27  2001/08/24 06:25:57  oj
     #90015# code corrcetions for some speedup's
 
