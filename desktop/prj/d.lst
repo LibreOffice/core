@@ -18,7 +18,7 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\bin\soffice_oo %_DEST%\bin%_EXT%\soffice_oo.bin
 ..\%__SRC%\bin\soffice_so %_DEST%\bin%_EXT%\soffice_so.bin
 
-..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.exe
+..\%__SRC%\bin\officeloader.exe %_DEST%\bin%_EXT%\soffice.exe
 ..\%__SRC%\bin\scalc.exe %_DEST%\bin%_EXT%\scalc.exe
 ..\%__SRC%\bin\sdraw.exe %_DEST%\bin%_EXT%\sdraw.exe
 ..\%__SRC%\bin\simpress.exe %_DEST%\bin%_EXT%\simpress.exe
