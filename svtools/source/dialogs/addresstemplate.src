@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 12:31:43 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 07:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,23 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6 , 2 ) ;
         Size = MAP_APPFONT ( 248 , 48 ) ;
+        Text[ portuguese ] = "Address Book Source";
+        Text[ russian ] = "Address Book Source";
+        Text[ greek ] = "–ÒÔ›ÎÂıÛÁ ·ÙÊ›ÌÙ·Ú ‰ÈÂıË˝ÌÛÂ˘Ì";
+        Text[ dutch ] = "Address Book Source";
+        Text[ french ] = "Address Book Source";
+        Text[ spanish ] = "Fuente de libreta de direcciones";
+        Text[ italian ] = "Sorgente rubrica";
+        Text[ danish ] = "Address Book Source";
+        Text[ swedish ] = "Adressbokk‰lla";
+        Text[ polish ] = "èrÛd≥o ksiπøki adresowej";
+        Text[ portuguese_brazilian ] = "Address Book Source";
+        Text[ japanese ] = "Address Book Source";
+        Text[ korean ] = "Address Book Source";
+        Text[ chinese_simplified ] = "Address Book Source";
+        Text[ chinese_traditional ] = "Address Book Source";
+        Text[ turkish ] = "Address Book Source";
+        Text[ arabic ] = "„’œ— œ› — «·⁄‰«ÊÌ‰";
     };
     FixedText FT_DATASOURCE
     {
@@ -98,6 +115,23 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Size = MAP_APPFONT ( 90 , 10 ) ;
 
         Group = TRUE;
+        Text[ portuguese ] = "Datasource";
+        Text[ russian ] = "Datasource";
+        Text[ greek ] = "–ÒÔ›ÎÂıÛÁ ‰Â‰ÔÏ›Ì˘Ì";
+        Text[ dutch ] = "Datasource";
+        Text[ french ] = "Datasource";
+        Text[ spanish ] = "Fuente de datos";
+        Text[ italian ] = "Sorgente dati";
+        Text[ danish ] = "Datasource";
+        Text[ swedish ] = "Datak‰lla";
+        Text[ polish ] = "èrÛd≥o danych";
+        Text[ portuguese_brazilian ] = "Datasource";
+        Text[ japanese ] = "Datasource";
+        Text[ korean ] = "Datasource";
+        Text[ chinese_simplified ] = "Datasource";
+        Text[ chinese_traditional ] = "Datasource";
+        Text[ turkish ] = "Datasource";
+        Text[ arabic ] = "„’œ— «·»Ì«‰« ";
     };
     ComboBox CB_DATASOURCE
     {
@@ -117,6 +151,23 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Pos = MAP_APPFONT ( 198, 13 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE;
+        Text[ portuguese ] = "~Administrate ...";
+        Text[ russian ] = "~Administrate ...";
+        Text[ greek ] = "ƒÈ~·˜ÂﬂÒÈÛÁ ...";
+        Text[ dutch ] = "~Administrate ...";
+        Text[ french ] = "~Administrate ...";
+        Text[ spanish ] = "~Administrar ...";
+        Text[ italian ] = "~Amministrare ...";
+        Text[ danish ] = "~Administrate ...";
+        Text[ swedish ] = "~Administrera ...";
+        Text[ polish ] = "Zarzπdzaj ...";
+        Text[ portuguese_brazilian ] = "~Administrate ...";
+        Text[ japanese ] = "~Administrate ...";
+        Text[ korean ] = "~Administrate ...";
+        Text[ chinese_simplified ] = "~Administrate ...";
+        Text[ chinese_traditional ] = "~Administrate ...";
+        Text[ turkish ] = "~Administrate ...";
+        Text[ arabic ] = "≈œ«—…...";
     };
     FixedText FT_TABLE
     {
@@ -128,6 +179,23 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Size = MAP_APPFONT ( 90 , 10 ) ;
 
         Group = TRUE;
+        Text[ portuguese ] = "Table";
+        Text[ russian ] = "Table";
+        Text[ greek ] = "–ﬂÌ·Í·Ú";
+        Text[ dutch ] = "Table";
+        Text[ french ] = "Table";
+        Text[ spanish ] = "Tabla";
+        Text[ italian ] = "Tabella";
+        Text[ danish ] = "Table";
+        Text[ swedish ] = "Tabell";
+        Text[ polish ] = "Tabela";
+        Text[ portuguese_brazilian ] = "Table";
+        Text[ japanese ] = "Table";
+        Text[ korean ] = "Table";
+        Text[ chinese_simplified ] = "Table";
+        Text[ chinese_traditional ] = "Table";
+        Text[ turkish ] = "Table";
+        Text[ arabic ] = "«·ÃœÊ·";
     };
     ComboBox CB_TABLE
     {
@@ -146,6 +214,23 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6, 52 ) ;
         Size = MAP_APPFONT ( 248 , 10 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+        Text[ portuguese ] = "Field assignment";
+        Text[ russian ] = "Field assignment";
+        Text[ greek ] = "Field assignment";
+        Text[ dutch ] = "Field assignment";
+        Text[ french ] = "Field assignment";
+        Text[ spanish ] = "AsignaciÛn de campo";
+        Text[ italian ] = "Assegnazione campo";
+        Text[ danish ] = "Field assignment";
+        Text[ swedish ] = "F‰lttilldelning";
+        Text[ polish ] = "Przyporzπdkowanie pÛl";
+        Text[ portuguese_brazilian ] = "Field assignment";
+        Text[ japanese ] = "Field assignment";
+        Text[ korean ] = "Field assignment";
+        Text[ chinese_simplified ] = "Field assignment";
+        Text[ chinese_traditional ] = "Field assignment";
+        Text[ turkish ] = "Field assignment";
+        Text[ arabic ] = " ⁄ÌÌ‰ «·Õﬁ·";
     };
 
 #define DECLARE_FIELD( row, column )    \
@@ -165,6 +250,23 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             DropDown = TRUE;    \
             TabStop = TRUE; \
         }   \
+    Text[ portuguese ] = "Templates: Address Book assignment";
+    Text[ russian ] = "Templates: Address Book assignment";
+    Text[ greek ] = "Templates: Address Book assignment";
+    Text[ dutch ] = "Templates: Address Book assignment";
+    Text[ french ] = "Templates: Address Book assignment";
+    Text[ spanish ] = "Plantillas: AsignaciÛn de libreta de direcciones";
+    Text[ italian ] = "Modelli: assegnazione rubrica";
+    Text[ danish ] = "Templates: Address Book assignment";
+    Text[ swedish ] = "Mallar: adressbokstilldelning";
+    Text[ polish ] = "Szablony: Przyporzπdkowanie ksiπøki adresowej";
+    Text[ portuguese_brazilian ] = "Templates: Address Book assignment";
+    Text[ japanese ] = "Templates: Address Book assignment";
+    Text[ korean ] = "Templates: Address Book assignment";
+    Text[ chinese_simplified ] = "Templates: Address Book assignment";
+    Text[ chinese_traditional ] = "Templates: Address Book assignment";
+    Text[ turkish ] = "Templates: Address Book assignment";
+    Text[ arabic ] = "ﬁÊ«·»:  ⁄ÌÌ‰ œ› — «·⁄‰«ÊÌ‰";
 
 #if FIELD_PAIRS_VISIBLE > 0
     DECLARE_FIELD( 0, 0 );
@@ -246,186 +348,714 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Firma";
         Text [ english ] = "Company";
         Text [ english_us ] = "Company";
-    };
+        Text[ portuguese ] = "Company";
+    Text[ russian ] = "Company";
+    Text[ greek ] = "≈Ù·ÈÒﬂ·";
+    Text[ dutch ] = "Company";
+    Text[ french ] = "Company";
+    Text[ spanish ] = "Empresa";
+    Text[ italian ] = "Azienda";
+    Text[ danish ] = "Company";
+    Text[ swedish ] = "Fˆretag";
+    Text[ polish ] = "Firma";
+    Text[ portuguese_brazilian ] = "Company";
+    Text[ japanese ] = "Company";
+    Text[ korean ] = "Company";
+    Text[ chinese_simplified ] = "Company";
+    Text[ chinese_traditional ] = "Company";
+    Text[ turkish ] = "Company";
+    Text[ arabic ] = "«·‘—ﬂ…";
+};
     String STR_FIELD_DEPARTMENT
     {
         Text = "Abteilung";
         Text [ english ] = "Department";
         Text [ english_us ] = "Department";
-    };
+        Text[ portuguese ] = "Department";
+    Text[ russian ] = "Department";
+    Text[ greek ] = "‘ÏﬁÏ·";
+    Text[ dutch ] = "Department";
+    Text[ french ] = "Department";
+    Text[ spanish ] = "Departamento";
+    Text[ italian ] = "Department";
+    Text[ danish ] = "Department";
+    Text[ swedish ] = "Avdelning";
+    Text[ polish ] = "Dzia≥";
+    Text[ portuguese_brazilian ] = "Department";
+    Text[ japanese ] = "Department";
+    Text[ korean ] = "Department";
+    Text[ chinese_simplified ] = "Department";
+    Text[ chinese_traditional ] = "Department";
+    Text[ turkish ] = "Department";
+    Text[ arabic ] = "«·ﬁ”„";
+};
     String STR_FIELD_FIRSTNAME
     {
         Text = "Vorname";
         Text [ english ] = "First name";
         Text [ english_us ] = "First name";
-    };
+        Text[ portuguese ] = "First name";
+    Text[ russian ] = "First name";
+    Text[ greek ] = "ºÌÔÏ·";
+    Text[ dutch ] = "First name";
+    Text[ french ] = "First name";
+    Text[ spanish ] = "Nombre";
+    Text[ italian ] = "First name";
+    Text[ danish ] = "First name";
+    Text[ swedish ] = "Fˆrnamn";
+    Text[ polish ] = "ImiÍ";
+    Text[ portuguese_brazilian ] = "First name";
+    Text[ japanese ] = "First name";
+    Text[ korean ] = "First name";
+    Text[ chinese_simplified ] = "First name";
+    Text[ chinese_traditional ] = "First name";
+    Text[ turkish ] = "First name";
+    Text[ arabic ] = "«·«”„";
+};
     String STR_FIELD_LASTNAME
     {
         Text = "Name";
         Text [ english ] = "Last name";
         Text [ english_us ] = "Last name";
-    };
+        Text[ portuguese ] = "Last name";
+    Text[ russian ] = "Last name";
+    Text[ greek ] = "≈˛ÌıÏÔ";
+    Text[ dutch ] = "Last name";
+    Text[ french ] = "Last name";
+    Text[ spanish ] = "Nombre";
+    Text[ italian ] = "Last name";
+    Text[ danish ] = "Last name";
+    Text[ swedish ] = "Efternamn";
+    Text[ polish ] = "Nazwisko";
+    Text[ portuguese_brazilian ] = "Last name";
+    Text[ japanese ] = "Last name";
+    Text[ korean ] = "Last name";
+    Text[ chinese_simplified ] = "Last name";
+    Text[ chinese_traditional ] = "Last name";
+    Text[ turkish ] = "Last name";
+    Text[ arabic ] = "«”„ «·⁄«∆·…";
+};
     String STR_FIELD_STREET
     {
         Text = "Straﬂe";
         Text [ english ] = "Street";
         Text [ english_us ] = "Street";
-    };
+        Text[ portuguese ] = "Street";
+    Text[ russian ] = "Street";
+    Text[ greek ] = "œ‰¸Ú";
+    Text[ dutch ] = "Street";
+    Text[ french ] = "Street";
+    Text[ spanish ] = "Calle";
+    Text[ italian ] = "Street";
+    Text[ danish ] = "Street";
+    Text[ swedish ] = "Gatuadress";
+    Text[ polish ] = "Ulica";
+    Text[ portuguese_brazilian ] = "Street";
+    Text[ japanese ] = "Street";
+    Text[ korean ] = "Street";
+    Text[ chinese_simplified ] = "Street";
+    Text[ chinese_traditional ] = "Street";
+    Text[ turkish ] = "Street";
+    Text[ arabic ] = "«·‘«—⁄";
+};
     String STR_FIELD_COUNTRY
     {
         Text = "Land";
         Text [ english ] = "Country";
         Text [ english_us ] = "Country";
-    };
+        Text[ portuguese ] = "Country";
+    Text[ russian ] = "Country";
+    Text[ greek ] = "◊˛Ò·";
+    Text[ dutch ] = "Country";
+    Text[ french ] = "Country";
+    Text[ spanish ] = "PaÌs";
+    Text[ italian ] = "Country";
+    Text[ danish ] = "Country";
+    Text[ swedish ] = "Land";
+    Text[ polish ] = "Kraj";
+    Text[ portuguese_brazilian ] = "Country";
+    Text[ japanese ] = "Country";
+    Text[ korean ] = "Country";
+    Text[ chinese_simplified ] = "Country";
+    Text[ chinese_traditional ] = "Country";
+    Text[ turkish ] = "Country";
+    Text[ arabic ] = "«·»·œ";
+};
     String STR_FIELD_ZIPCODE
     {
         Text = "PLZ";
         Text [ english ] = "ZIP code";
         Text [ english_us ] = "ZIP code";
-    };
+        Text[ portuguese ] = "ZIP code";
+    Text[ russian ] = "ZIP code";
+    Text[ greek ] = "‘. .";
+    Text[ dutch ] = "ZIP code";
+    Text[ french ] = "ZIP code";
+    Text[ spanish ] = "CP";
+    Text[ italian ] = "ZIP code";
+    Text[ danish ] = "ZIP code";
+    Text[ swedish ] = "Postnr";
+    Text[ polish ] = "Kod pocztowy";
+    Text[ portuguese_brazilian ] = "ZIP code";
+    Text[ japanese ] = "ZIP code";
+    Text[ korean ] = "ZIP code";
+    Text[ chinese_simplified ] = "ZIP code";
+    Text[ chinese_traditional ] = "ZIP code";
+    Text[ turkish ] = "ZIP code";
+    Text[ arabic ] = "«·—„“ «·»—ÌœÌ";
+};
     String STR_FIELD_CITY
     {
         Text = "Ort";
         Text [ english ] = "City";
         Text [ english_us ] = "City";
-    };
+        Text[ portuguese ] = "City";
+    Text[ russian ] = "City";
+    Text[ greek ] = "–¸ÎÁ";
+    Text[ dutch ] = "City";
+    Text[ french ] = "City";
+    Text[ spanish ] = "Ciudad";
+    Text[ italian ] = "City";
+    Text[ danish ] = "City";
+    Text[ swedish ] = "Ort";
+    Text[ polish ] = "MiejscowoúÊ";
+    Text[ portuguese_brazilian ] = "City";
+    Text[ japanese ] = "City";
+    Text[ korean ] = "City";
+    Text[ chinese_simplified ] = "City";
+    Text[ chinese_traditional ] = "City";
+    Text[ turkish ] = "City";
+    Text[ arabic ] = "«·„œÌ‰…";
+};
     String STR_FIELD_TITLE
     {
         Text = "Titel";
         Text [ english ] = "Title";
         Text [ english_us ] = "Title";
-    };
+        Text[ portuguese ] = "Title";
+    Text[ russian ] = "Title";
+    Text[ greek ] = "‘ﬂÙÎÔÚ";
+    Text[ dutch ] = "Title";
+    Text[ french ] = "Title";
+    Text[ spanish ] = "TÌtulo";
+    Text[ italian ] = "Title";
+    Text[ danish ] = "Title";
+    Text[ swedish ] = "Titel";
+    Text[ polish ] = "Tytu≥";
+    Text[ portuguese_brazilian ] = "Title";
+    Text[ japanese ] = "Title";
+    Text[ korean ] = "Title";
+    Text[ chinese_simplified ] = "Title";
+    Text[ chinese_traditional ] = "Title";
+    Text[ turkish ] = "Title";
+    Text[ arabic ] = "«··ﬁ» «·„Â‰Ì";
+};
     String STR_FIELD_POSITION
     {
         Text = "Position";
         Text [ english ] = "Position";
         Text [ english_us ] = "Position";
-    };
+        Text[ portuguese ] = "Position";
+    Text[ russian ] = "Position";
+    Text[ greek ] = "»›ÛÁ";
+    Text[ dutch ] = "Position";
+    Text[ french ] = "Position";
+    Text[ spanish ] = "PosiciÛn";
+    Text[ italian ] = "Position";
+    Text[ danish ] = "Position";
+    Text[ swedish ] = "Befattning";
+    Text[ polish ] = "Stanowisko";
+    Text[ portuguese_brazilian ] = "Position";
+    Text[ japanese ] = "Position";
+    Text[ korean ] = "Position";
+    Text[ chinese_simplified ] = "Position";
+    Text[ chinese_traditional ] = "Position";
+    Text[ turkish ] = "Position";
+    Text[ arabic ] = "«·ÊŸÌ›…";
+};
     String STR_FIELD_ADDRFORM
     {
         Text = "Anrede";
         Text [ english ] = "Addr. form";
         Text [ english_us ] = "Addr. form";
-    };
+        Text[ portuguese ] = "Addr. form";
+    Text[ russian ] = "Addr. form";
+    Text[ greek ] = "–ÒÔÛˆ˛ÌÁÛÁ";
+    Text[ dutch ] = "Addr. form";
+    Text[ french ] = "Addr. form";
+    Text[ spanish ] = "Tratamiento";
+    Text[ italian ] = "Addr. form";
+    Text[ danish ] = "Addr. form";
+    Text[ swedish ] = "Tilltal";
+    Text[ polish ] = "Zwrot grzeczn.";
+    Text[ portuguese_brazilian ] = "Addr. form";
+    Text[ japanese ] = "Addr. form";
+    Text[ korean ] = "Addr. form";
+    Text[ chinese_simplified ] = "Addr. form";
+    Text[ chinese_traditional ] = "Addr. form";
+    Text[ turkish ] = "Addr. form";
+    Text[ arabic ] = "·ﬁ» «·„Œ«ÿ»…";
+};
     String STR_FIELD_INITIALS
     {
         Text = "K¸rzel";
         Text [ english ] = "Initials";
         Text [ english_us ] = "Initials";
-    };
+        Text[ portuguese ] = "Initials";
+    Text[ russian ] = "Initials";
+    Text[ greek ] = "¡Ò˜ÈÍ‹";
+    Text[ dutch ] = "Initials";
+    Text[ french ] = "Initials";
+    Text[ spanish ] = "Iniciales";
+    Text[ italian ] = "Initials";
+    Text[ danish ] = "Initials";
+    Text[ swedish ] = "Initialer";
+    Text[ polish ] = "Inicja≥y";
+    Text[ portuguese_brazilian ] = "Initials";
+    Text[ japanese ] = "Initials";
+    Text[ korean ] = "Initials";
+    Text[ chinese_simplified ] = "Initials";
+    Text[ chinese_traditional ] = "Initials";
+    Text[ turkish ] = "Initials";
+    Text[ arabic ] = "«·«Œ ’«—";
+};
     String STR_FIELD_SALUTATION
     {
         Text = "Anrede";
         Text [ english ] = "Salutation";
         Text [ english_us ] = "Salutation";
-    };
+        Text[ portuguese ] = "Salutation";
+    Text[ russian ] = "Salutation";
+    Text[ greek ] = "–ÒÔÛˆ˛ÌÁÛÁ";
+    Text[ dutch ] = "Salutation";
+    Text[ french ] = "Salutation";
+    Text[ spanish ] = "Tratamiento";
+    Text[ italian ] = "Salutation";
+    Text[ danish ] = "Salutation";
+    Text[ swedish ] = "H‰lsningsfras";
+    Text[ polish ] = "Zwrot grzeczn.";
+    Text[ portuguese_brazilian ] = "Salutation";
+    Text[ japanese ] = "Salutation";
+    Text[ korean ] = "Salutation";
+    Text[ chinese_simplified ] = "Salutation";
+    Text[ chinese_traditional ] = "Salutation";
+    Text[ turkish ] = "Salutation";
+    Text[ arabic ] = "«· ÕÌ…";
+};
     String STR_FIELD_HOMETEL
     {
         Text = "Telefon priv.";
         Text [ english ] = "Telephon Home";
         Text [ english_us ] = "Telephon Home";
-    };
+        Text[ portuguese ] = "Telephon Home";
+    Text[ russian ] = "Telephon Home";
+    Text[ greek ] = "‘ÁÎ›ˆ˘ÌÔ (œÈÍﬂ·)";
+    Text[ dutch ] = "Telephon Home";
+    Text[ french ] = "Telephon Home";
+    Text[ spanish ] = "TelÈfono privado";
+    Text[ italian ] = "Telephon Home";
+    Text[ danish ] = "Telephon Home";
+    Text[ swedish ] = "Telefon priv.";
+    Text[ polish ] = "Telefon (pryw.)";
+    Text[ portuguese_brazilian ] = "Telephon Home";
+    Text[ japanese ] = "Telephon Home";
+    Text[ korean ] = "Telephon Home";
+    Text[ chinese_simplified ] = "Telephon Home";
+    Text[ chinese_traditional ] = "Telephon Home";
+    Text[ turkish ] = "Telephon Home";
+    Text[ arabic ] = "«·Â« › („‰“·)";
+};
     String STR_FIELD_WORKTEL
     {
         Text = "Telefon gesch.";
         Text [ english ] = "Telephon Work";
         Text [ english_us ] = "Telephon Work";
-    };
+        Text[ portuguese ] = "Telephon Work";
+    Text[ russian ] = "Telephon Work";
+    Text[ greek ] = "‘ÁÎ›ˆ˘ÌÔ (≈Ò„·Ûﬂ·)";
+    Text[ dutch ] = "Telephon Work";
+    Text[ french ] = "Telephon Work";
+    Text[ spanish ] = "TelÈfono trabajo";
+    Text[ italian ] = "Telephon Work";
+    Text[ danish ] = "Telephon Work";
+    Text[ swedish ] = "Telefon arb.";
+    Text[ polish ] = "Telefon (s≥uøb.)";
+    Text[ portuguese_brazilian ] = "Telephon Work";
+    Text[ japanese ] = "Telephon Work";
+    Text[ korean ] = "Telephon Work";
+    Text[ chinese_simplified ] = "Telephon Work";
+    Text[ chinese_traditional ] = "Telephon Work";
+    Text[ turkish ] = "Telephon Work";
+    Text[ arabic ] = "«·Â« › (⁄„·)";
+};
     String STR_FIELD_FAX
     {
         Text = "FAX";
         Text [ english ] = "FAX";
         Text [ english_us ] = "FAX";
-    };
+        Text[ portuguese ] = "FAX";
+    Text[ russian ] = "FAX";
+    Text[ greek ] = "FAX";
+    Text[ dutch ] = "FAX";
+    Text[ french ] = "FAX";
+    Text[ spanish ] = "FAX";
+    Text[ italian ] = "FAX";
+    Text[ danish ] = "FAX";
+    Text[ swedish ] = "FAX";
+    Text[ polish ] = "FAKS";
+    Text[ portuguese_brazilian ] = "FAX";
+    Text[ japanese ] = "FAX";
+    Text[ korean ] = "FAX";
+    Text[ chinese_simplified ] = "FAX";
+    Text[ chinese_traditional ] = "FAX";
+    Text[ turkish ] = "FAX";
+    Text[ arabic ] = "«·›«ﬂ”";
+};
     String STR_FIELD_EMAIL
     {
         Text = "E-Mail";
         Text [ english ] = "E-Mail";
         Text [ english_us ] = "E-Mail";
-    };
+        Text[ portuguese ] = "E-Mail";
+    Text[ russian ] = "E-Mail";
+    Text[ greek ] = "E-Mail";
+    Text[ dutch ] = "E-Mail";
+    Text[ french ] = "E-Mail";
+    Text[ spanish ] = "E-mail";
+    Text[ italian ] = "E-Mail";
+    Text[ danish ] = "E-Mail";
+    Text[ swedish ] = "E-post";
+    Text[ polish ] = "e-mail";
+    Text[ portuguese_brazilian ] = "E-Mail";
+    Text[ japanese ] = "E-Mail";
+    Text[ korean ] = "E-Mail";
+    Text[ chinese_simplified ] = "E-Mail";
+    Text[ chinese_traditional ] = "E-Mail";
+    Text[ turkish ] = "E-Mail";
+    Text[ arabic ] = "«·»—Ìœ «·≈·ﬂ —Ê‰Ì";
+};
     String STR_FIELD_URL
     {
         Text = "URL";
         Text [ english ] = "URL";
         Text [ english_us ] = "URL";
-    };
+        Text[ portuguese ] = "URL";
+    Text[ russian ] = "URL";
+    Text[ greek ] = "URL";
+    Text[ dutch ] = "URL";
+    Text[ french ] = "URL";
+    Text[ spanish ] = "URL";
+    Text[ italian ] = "URL";
+    Text[ danish ] = "URL";
+    Text[ swedish ] = "URL";
+    Text[ polish ] = "URL";
+    Text[ portuguese_brazilian ] = "URL";
+    Text[ japanese ] = "URL";
+    Text[ korean ] = "URL";
+    Text[ chinese_simplified ] = "URL";
+    Text[ chinese_traditional ] = "URL";
+    Text[ turkish ] = "URL";
+    Text[ arabic ] = "URL";
+};
     String STR_FIELD_NOTE
     {
         Text = "Notiz";
         Text [ english ] = "Note";
         Text [ english_us ] = "Note";
-    };
+        Text[ portuguese ] = "Note";
+    Text[ russian ] = "Note";
+    Text[ greek ] = "”ÁÏÂﬂ˘ÛÁ";
+    Text[ dutch ] = "Note";
+    Text[ french ] = "Note";
+    Text[ spanish ] = "Nota";
+    Text[ italian ] = "Note";
+    Text[ danish ] = "Note";
+    Text[ swedish ] = "Anteckning";
+    Text[ polish ] = "Notatka";
+    Text[ portuguese_brazilian ] = "Note";
+    Text[ japanese ] = "Note";
+    Text[ korean ] = "Note";
+    Text[ chinese_simplified ] = "Note";
+    Text[ chinese_traditional ] = "Note";
+    Text[ turkish ] = "Note";
+    Text[ arabic ] = "„·«ÕŸ…";
+};
     String STR_FIELD_USER1
     {
         Text = "Benutzer 1";
         Text [ english ] = "User 1";
         Text [ english_us ] = "User 1";
-    };
+        Text[ portuguese ] = "User 1";
+    Text[ russian ] = "User 1";
+    Text[ greek ] = "◊ÒﬁÛÙÁÚ 1";
+    Text[ dutch ] = "User 1";
+    Text[ french ] = "User 1";
+    Text[ spanish ] = "Usuario 1";
+    Text[ italian ] = "User 1";
+    Text[ danish ] = "User 1";
+    Text[ swedish ] = "Anv‰ndare 1";
+    Text[ polish ] = "Uøytkownik 1";
+    Text[ portuguese_brazilian ] = "User 1";
+    Text[ japanese ] = "User 1";
+    Text[ korean ] = "User 1";
+    Text[ chinese_simplified ] = "User 1";
+    Text[ chinese_traditional ] = "User 1";
+    Text[ turkish ] = "User 1";
+    Text[ arabic ] = "„” Œœ„  1";
+};
     String STR_FIELD_USER2
     {
         Text = "Benutzer 2";
         Text [ english ] = "User 2";
         Text [ english_us ] = "User 2";
-    };
+        Text[ portuguese ] = "User 2";
+    Text[ russian ] = "User 2";
+    Text[ greek ] = "◊ÒﬁÛÙÁÚ 2";
+    Text[ dutch ] = "User 2";
+    Text[ french ] = "User 2";
+    Text[ spanish ] = "Usuario 2";
+    Text[ italian ] = "User 2";
+    Text[ danish ] = "User 2";
+    Text[ swedish ] = "Anv‰ndare 2";
+    Text[ polish ] = "Uøytkownik 2";
+    Text[ portuguese_brazilian ] = "User 2";
+    Text[ japanese ] = "User 2";
+    Text[ korean ] = "User 2";
+    Text[ chinese_simplified ] = "User 2";
+    Text[ chinese_traditional ] = "User 2";
+    Text[ turkish ] = "User 2";
+    Text[ arabic ] = "„” Œœ„  2";
+};
     String STR_FIELD_USER3
     {
         Text = "Benutzer 3";
         Text [ english ] = "User 3";
         Text [ english_us ] = "User 3";
-    };
+        Text[ portuguese ] = "User 3";
+    Text[ russian ] = "User 3";
+    Text[ greek ] = "◊ÒﬁÛÙÁÚ 3";
+    Text[ dutch ] = "User 3";
+    Text[ french ] = "User 3";
+    Text[ spanish ] = "Usuario 3";
+    Text[ italian ] = "User 3";
+    Text[ danish ] = "User 3";
+    Text[ swedish ] = "Anv‰ndare 3";
+    Text[ polish ] = "Uøytkownik 3";
+    Text[ portuguese_brazilian ] = "User 3";
+    Text[ japanese ] = "User 3";
+    Text[ korean ] = "User 3";
+    Text[ chinese_simplified ] = "User 3";
+    Text[ chinese_traditional ] = "User 3";
+    Text[ turkish ] = "User 3";
+    Text[ arabic ] = "„” Œœ„ 3";
+};
     String STR_FIELD_USER4
     {
         Text = "Benutzer 4";
         Text [ english ] = "User 4";
         Text [ english_us ] = "User 4";
-    };
+        Text[ portuguese ] = "User 4";
+    Text[ russian ] = "User 4";
+    Text[ greek ] = "◊ÒﬁÛÙÁÚ 4";
+    Text[ dutch ] = "User 4";
+    Text[ french ] = "User 4";
+    Text[ spanish ] = "Usuario 4";
+    Text[ italian ] = "User 4";
+    Text[ danish ] = "User 4";
+    Text[ swedish ] = "Anv‰ndare 4";
+    Text[ polish ] = "Uøytkownik 4";
+    Text[ portuguese_brazilian ] = "User 4";
+    Text[ japanese ] = "User 4";
+    Text[ korean ] = "User 4";
+    Text[ chinese_simplified ] = "User 4";
+    Text[ chinese_traditional ] = "User 4";
+    Text[ turkish ] = "User 4";
+    Text[ arabic ] = "„” Œœ„ 4";
+};
 
     String STR_FIELD_ID
     {
         Text = "ID";
         Text [ english ] = "ID";
         Text [ english_us ] = "ID";
-    };
+        Text[ portuguese ] = "ID";
+    Text[ russian ] = "ID";
+    Text[ greek ] = "‘·ıÙ¸ÙÁÙ· (ID)";
+    Text[ dutch ] = "ID";
+    Text[ french ] = "ID";
+    Text[ spanish ] = "ID";
+    Text[ italian ] = "ID";
+    Text[ danish ] = "ID";
+    Text[ swedish ] = "ID";
+    Text[ polish ] = "ID (identyfikator)";
+    Text[ portuguese_brazilian ] = "ID";
+    Text[ japanese ] = "ID";
+    Text[ korean ] = "ID";
+    Text[ chinese_simplified ] = "ID";
+    Text[ chinese_traditional ] = "ID";
+    Text[ turkish ] = "ID";
+    Text[ arabic ] = "«· ⁄—Ì›";
+};
     String STR_FIELD_STATE
     {
         Text = "Bund.land";
         Text [ english ] = "State";
         Text [ english_us ] = "State";
-    };
+        Text[ language_user1 ] = "der punkt in \"German (49) Bund.land \" ist wahrscheinlich ein \"es\" in punktgrˆsse -100 (j.)";
+    Text[ portuguese ] = "State";
+    Text[ russian ] = "State";
+    Text[ greek ] = "ÕÔÏ¸Ú";
+    Text[ dutch ] = "State";
+    Text[ french ] = "State";
+    Text[ spanish ] = "Provincia";
+    Text[ italian ] = "State";
+    Text[ danish ] = "State";
+    Text[ swedish ] = "Delstat";
+    Text[ polish ] = "WojewÛdztwo";
+    Text[ portuguese_brazilian ] = "State";
+    Text[ japanese ] = "State";
+    Text[ korean ] = "State";
+    Text[ chinese_simplified ] = "State";
+    Text[ chinese_traditional ] = "State";
+    Text[ turkish ] = "State";
+    Text[ arabic ] = "«·Ê·«Ì…";
+};
     String STR_FIELD_OFFICETEL
     {
         Text = "Telefon B¸ro";
         Text [ english ] = "Telephon Office";
         Text [ english_us ] = "Telephon Office";
-    };
+        Text[ portuguese ] = "Telephon Office";
+    Text[ russian ] = "Telephon Office";
+    Text[ greek ] = "‘ÁÎ›ˆ˘ÌÔ (√Ò·ˆÂﬂÔ)";
+    Text[ dutch ] = "Telephon Office";
+    Text[ french ] = "Telephon Office";
+    Text[ spanish ] = "TelÈfono trabajo";
+    Text[ italian ] = "Telephon Office";
+    Text[ danish ] = "Telephon Office";
+    Text[ swedish ] = "Telefon kontor";
+    Text[ polish ] = "Telefon (s≥uøb.)";
+    Text[ portuguese_brazilian ] = "Telephon Office";
+    Text[ japanese ] = "Telephon Office";
+    Text[ korean ] = "Telephon Office";
+    Text[ chinese_simplified ] = "Telephon Office";
+    Text[ chinese_traditional ] = "Telephon Office";
+    Text[ turkish ] = "Telephon Office";
+    Text[ arabic ] = "«·Â« › (⁄„·)";
+};
     String STR_FIELD_PAGER
     {
         Text = "Telefon Funk";
         Text [ english ] = "Pager";
         Text [ english_us ] = "Pager";
-    };
+        Text[ portuguese ] = "Pager";
+    Text[ russian ] = "Pager";
+    Text[ greek ] = "Pager";
+    Text[ dutch ] = "Pager";
+    Text[ french ] = "Pager";
+    Text[ spanish ] = "Buscapersonas";
+    Text[ italian ] = "Pager";
+    Text[ danish ] = "Pager";
+    Text[ swedish ] = "Personsˆkare";
+    Text[ polish ] = "Telefon (komÛrkowy)";
+    Text[ portuguese_brazilian ] = "Pager";
+    Text[ japanese ] = "Pager";
+    Text[ korean ] = "Pager";
+    Text[ chinese_simplified ] = "Pager";
+    Text[ chinese_traditional ] = "Pager";
+    Text[ turkish ] = "Pager";
+    Text[ arabic ] = "Pager";
+};
     String STR_FIELD_MOBILE
     {
         Text = "Handy";
         Text [ english ] = "Mobile";
         Text [ english_us ] = "Mobile";
-    };
+        Text[ portuguese ] = "Mobile";
+    Text[ russian ] = "Mobile";
+    Text[ greek ] = " ÈÌÁÙ¸";
+    Text[ dutch ] = "Mobile";
+    Text[ french ] = "Mobile";
+    Text[ spanish ] = "MÛvil";
+    Text[ italian ] = "Mobile";
+    Text[ danish ] = "Mobile";
+    Text[ swedish ] = "Mobil";
+    Text[ polish ] = "Telefon komÛrkowy";
+    Text[ portuguese_brazilian ] = "Mobile";
+    Text[ japanese ] = "Mobile";
+    Text[ korean ] = "Mobile";
+    Text[ chinese_simplified ] = "Mobile";
+    Text[ chinese_traditional ] = "Mobile";
+    Text[ turkish ] = "Mobile";
+    Text[ arabic ] = "«·„Õ„Ê·";
+};
     String STR_FIELD_TELOTHER
     {
         Text = "Telefon andere";
         Text [ english ] = "Telephon other";
         Text [ english_us ] = "Telephon other";
-    };
+        Text[ portuguese ] = "Telephon other";
+    Text[ russian ] = "Telephon other";
+    Text[ greek ] = "‘ÁÎ›ˆ˘ÌÔ (ƒÈ‹ˆÔÒ·)";
+    Text[ dutch ] = "Telephon other";
+    Text[ french ] = "Telephon other";
+    Text[ spanish ] = "TelÈfono, otros";
+    Text[ italian ] = "Telephon other";
+    Text[ danish ] = "Telephon other";
+    Text[ swedish ] = "Telefon annan";
+    Text[ polish ] = "Telefon (inny)";
+    Text[ portuguese_brazilian ] = "Telephon other";
+    Text[ japanese ] = "Telephon other";
+    Text[ korean ] = "Telephon other";
+    Text[ chinese_simplified ] = "Telephon other";
+    Text[ chinese_traditional ] = "Telephon other";
+    Text[ turkish ] = "Telephon other";
+    Text[ arabic ] = "«·Â« › (¬Œ—)";
+};
     String STR_FIELD_CALENDAR
     {
         Text = "Kalender";
         Text [ english ] = "Calendar";
         Text [ english_us ] = "Calendar";
-    };
+        Text[ portuguese ] = "Calendar";
+    Text[ russian ] = "Calendar";
+    Text[ greek ] = "«ÏÂÒÔÎ¸„ÈÔ";
+    Text[ dutch ] = "Calendar";
+    Text[ french ] = "Calendar";
+    Text[ spanish ] = "Agenda";
+    Text[ italian ] = "Calendar";
+    Text[ danish ] = "Calendar";
+    Text[ swedish ] = "Kalender";
+    Text[ polish ] = "Kalendarz";
+    Text[ portuguese_brazilian ] = "Calendar";
+    Text[ japanese ] = "Calendar";
+    Text[ korean ] = "Calendar";
+    Text[ chinese_simplified ] = "Calendar";
+    Text[ chinese_traditional ] = "Calendar";
+    Text[ turkish ] = "Calendar";
+    Text[ arabic ] = "«· ﬁÊÌ„";
+};
     String STR_FIELD_INVITE
     {
         Text = "Einladen";
         Text [ english ] = "Invite";
         Text [ english_us ] = "Invite";
-    };
+        Text[ portuguese ] = "Invite";
+    Text[ russian ] = "Invite";
+    Text[ greek ] = "–Ò¸ÛÍÎÁÛÁ";
+    Text[ dutch ] = "Invite";
+    Text[ french ] = "Invite";
+    Text[ spanish ] = "Invitar";
+    Text[ italian ] = "Invite";
+    Text[ danish ] = "Invite";
+    Text[ swedish ] = "Bjud in";
+    Text[ polish ] = "ZaprosiÊ";
+    Text[ portuguese_brazilian ] = "Invite";
+    Text[ japanese ] = "Invite";
+    Text[ korean ] = "Invite";
+    Text[ chinese_simplified ] = "Invite";
+    Text[ chinese_traditional ] = "Invite";
+    Text[ turkish ] = "Invite";
+    Text[ arabic ] = "œ⁄Ê…";
+};
 };
