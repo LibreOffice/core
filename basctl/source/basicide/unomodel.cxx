@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 12:56:52 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,7 @@ OUString SIDEModel::getImplementationName(void) throw( uno::RuntimeException )
 
 sal_Bool SIDEModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    // The BasicIDE isnt a real OfficeDocument! It should have its own service.
-    // Currently I`ve recycle the implementation name as service name ...
-    return rServiceName.equalsAscii("com.sun.star.comp.basic.BasicIDE");
+    return rServiceName == ::rtl::OUString::createFromAscii("com.sun.star.script.BasicIDE");
 }
 uno::Sequence< OUString > SIDEModel::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
@@ -151,7 +149,7 @@ uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static(void)
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii("com.sun.star.comp.basic.BasicIDE");
+    pArray[0] = ::rtl::OUString::createFromAscii("com.sun.star.script.BasicIDE");
     return aRet;
 }
 
