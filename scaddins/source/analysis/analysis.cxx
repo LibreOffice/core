@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-04-27 08:46:43 $
+ *  last change: $Author: gt $ $Date: 2001-05-02 11:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,24 +813,23 @@ sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( constREFXPS& xOpt, sal_Int32 nDate
     sal_uInt16  nDay, nMonth, nYear;
     DaysToDate( nDate, nDay, nMonth, nYear );
 
-    nYear += nMonths / 12;
+    sal_Int32   nNewMonth = nMonth + nMonths;
 
-    sal_uInt16  nNewMonth;
-
-    if( nMonths > 0 && nMonth == 12 )
+    if( nNewMonth > 12 )
     {
-        nYear++;
-        nNewMonth = 1;
+        nYear += sal_uInt16( nNewMonth / 12 );
+        nNewMonth %= 12;
     }
-    else if( nMonths < 0 && nMonth == 1 )
+    else if( nNewMonth < 1 )
     {
+        nNewMonth = -nNewMonth;
+        nYear += sal_uInt16( nNewMonth / 12 );
         nYear--;
-        nNewMonth = 12;
+        nNewMonth %= 12;
+        nNewMonth = 12 - nNewMonth;
     }
-    else
-        nNewMonth = nMonth + nMonths % 12;
 
-    return DateToDays( DaysInMonth( nNewMonth, nYear ), nNewMonth, nYear ) - nNullDate;
+    return DateToDays( DaysInMonth( sal_uInt16( nNewMonth ), nYear ), sal_uInt16( nNewMonth ), nYear ) - nNullDate;
 }
 
 
