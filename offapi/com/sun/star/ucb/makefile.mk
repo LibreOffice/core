@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: sb $ $Date: 2000-12-04 17:14:47 $
+#   last change: $Author: kso $ $Date: 2000-12-20 13:25:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,6 +121,10 @@ IDLFILES=\
     FolderListCommand.idl\
     FolderListEntry.idl\
     HandleCookiesRequest.idl\
+    HierarchyContentProvider.idl\
+    HierarchyFolderContent.idl\
+    HierarchyLinkContent.idl\
+    HierarchyRootFolderContent.idl\
     IllegalIdentifierException.idl\
     InsertCommandArgument.idl\
     InteractiveBadTransferURLException.idl\
