@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-25 11:37:37 $
+#   last change: $Author: kz $ $Date: 2004-01-28 12:47:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,8 @@ SLOFILES=	\
             $(SLO)$/accessibleeventnotifier.obj	 \
             $(SLO)$/accessiblewrapper.obj	\
             $(SLO)$/proxyaggregation.obj    \
-            $(SLO)$/condition.obj
+            $(SLO)$/condition.obj \
+            $(SLO)$/sequenceashashmap.obj
 
 
 # --- Targets ----------------------------------
