@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mfe $ $Date: 2001-03-09 10:07:04 $
+ *  last change: $Author: pluby $ $Date: 2001-03-10 23:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
     sal_Char        *pszModulePath=0;
 
     OSL_ASSERT(pszModuleName);
+
+    if ( ! pszModuleName || *pszModuleName == '\0' )
+        return NULL;
 
     /*
      * Try to construct the absolute path to the module name by searching
