@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestBed.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:57:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,11 @@ import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.comp.helper.Bootstrap;
+import com.sun.star.connection.Acceptor;
+import com.sun.star.connection.Connector;
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import java.io.BufferedReader;
@@ -148,20 +149,15 @@ public final class TestBed {
         protected abstract boolean run(XBridge bridge) throws Throwable;
 
         protected final XBridge getBridge() throws com.sun.star.uno.Exception {
-            XMultiComponentFactory factory = context.getServiceManager();
-            XConnector connector = (XConnector) UnoRuntime.queryInterface(
-                XConnector.class,
-                factory.createInstanceWithContext(
-                    "com.sun.star.connection.Connector", context));
-            XBridgeFactory bridgeFactory
-                = (XBridgeFactory) UnoRuntime.queryInterface(
-                    XBridgeFactory.class,
-                    factory.createInstanceWithContext(
-                        "com.sun.star.bridge.BridgeFactory", context));
+            XConnector connector = Connector.create(context);
+            XBridgeFactory factory = (XBridgeFactory) UnoRuntime.queryInterface(
+                XBridgeFactory.class,
+                context.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.bridge.BridgeFactory", context));
             System.out.println("Client: Connecting...");
             XConnection connection = connector.connect(connectionDescription);
             System.out.println("Client: ...connected...");
-            XBridge bridge = bridgeFactory.createBridge(
+            XBridge bridge = factory.createBridge(
                 "", protocolDescription, connection, null);
             System.out.println("Client: ...bridged.");
             return bridge;
@@ -194,16 +190,12 @@ public final class TestBed {
             try {
                 XComponentContext context
                     = Bootstrap.createInitialComponentContext(null);
-                XMultiComponentFactory factory = context.getServiceManager();
-                XBridgeFactory bridgeFactory
+                XAcceptor acceptor = Acceptor.create(context);
+                XBridgeFactory factory
                     = (XBridgeFactory) UnoRuntime.queryInterface(
                         XBridgeFactory.class,
-                        factory.createInstanceWithContext(
+                        context.getServiceManager().createInstanceWithContext(
                             "com.sun.star.bridge.BridgeFactory", context));
-                XAcceptor acceptor = (XAcceptor) UnoRuntime.queryInterface(
-                    XAcceptor.class,
-                    factory.createInstanceWithContext(
-                        "com.sun.star.connection.Acceptor", context));
                 System.out.println("Server: Accepting...");
                 synchronized (this) {
                     state = ACCEPTING;
@@ -213,7 +205,7 @@ public final class TestBed {
                     XConnection connection = acceptor.accept(
                         connectionDescription);
                     System.out.println("Server: ...connected...");
-                    XBridge bridge = bridgeFactory.createBridge(
+                    XBridge bridge = factory.createBridge(
                         "", protocolDescription, connection, provider);
                     System.out.println("Server: ...bridged.");
                 }
