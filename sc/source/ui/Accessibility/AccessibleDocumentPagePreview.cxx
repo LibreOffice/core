@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-23 09:29:32 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 09:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,6 +1490,9 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
     if (mpNotesChilds)
         DELETEZ(mpNotesChilds);
 
+    if (mpShapeChilds)
+        DELETEZ(mpShapeChilds);
+
     ScAccessibleDocumentBase::disposing();
 }
 
@@ -1877,7 +1880,7 @@ ScNotesChilds* ScAccessibleDocumentPagePreview::GetNotesChilds()
 
 ScShapeChilds* ScAccessibleDocumentPagePreview::GetShapeChilds()
 {
-    if (!mpShapeChilds)
+    if (!mpShapeChilds && mpViewShell)
     {
         mpShapeChilds = new ScShapeChilds(mpViewShell, this);
         mpShapeChilds->Init();
