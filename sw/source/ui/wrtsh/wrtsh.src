@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:54:51 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 11:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ String STR_DELBOOKMARK
     TEXT[ dutch ] = "Tekstmarkering verwijderen";
     TEXT[ chinese_simplified ] = "ΙΎ³ύΚιΗ©";
     TEXT[ greek ] = "Διαγραφή σημαδιού κειμένου";
-    TEXT[ korean ] = "Γ¥ °¥ΗΗ »θΑ¦";
+    TEXT[ korean ] = "Γ¥°¥ΗΗ »θΑ¦";
     TEXT[ turkish ] = "Metin iώaretini sil";
     TEXT[ language_user1 ] = " ";
 };
@@ -449,7 +449,7 @@ String STR_INSBOOKMARK
     TEXT[ dutch ] = "Tekstmarkering invoegen";
     TEXT[ chinese_simplified ] = "²εΘλΚιΗ©";
     TEXT[ greek ] = "Εισαγωγή σημαδιού κειμένου";
-    TEXT[ korean ] = "Γ¥ °¥ΗΗ »πΐΤ";
+    TEXT[ korean ] = "Γ¥°¥ΗΗ »πΐΤ";
     TEXT[ turkish ] = "Metin iώareti ekle";
     TEXT[ language_user1 ] = " ";
 };
@@ -1195,7 +1195,7 @@ String STR_OUTLINE_UD
     TEXT[ dutch ] = "Overzicht verplaatsen";
     TEXT[ chinese_simplified ] = "ÒΖ¶―΄σΈΩ";
     TEXT[ greek ] = "Μετακίνηση διάρθρωσης";
-    TEXT[ korean ] = "°³Ώδ ΐΜµΏ";
+    TEXT[ korean ] = "ΎΖΏτ¶σΐΞ ΐΜµΏ";
     TEXT[ turkish ] = "Anahatύ taώύ";
     TEXT[ language_user1 ] = " ";
 };
@@ -1252,7 +1252,7 @@ String STR_NUMUPDOWN
     TEXT[ dutch ] = "Nummering indelen";
     TEXT[ chinese_simplified ] = "·ΦΌ¶±ΰΊΕ";
     TEXT[ greek ] = "Αρίθμηση με εσοχές";
-    TEXT[ korean ] = "ΉψΘ£ ΉΠ±β";
+    TEXT[ korean ] = "ΉψΘ£ ΐΜµΏ";
     TEXT[ turkish ] = "Numaralamayύ deπiώtir";
 };
 String STR_MOVENUM
@@ -1712,7 +1712,7 @@ String STR_DRAWUNGROUP
     Text [ english_us ] = "Ungroup drawing objects" ;
     Text [ italian ] = "Sciogli gruppo oggetti" ;
     Text [ spanish ] = "Resolver objeto de grupo" ;
-    Text [ french ] = "Dissocier objets de dessin" ;
+    Text [ french ] = "Dissocier les objets" ;
     Text [ dutch ] = "Groepsobject opheffen" ;
     Text [ swedish ] = "Upplφs gruppobjekt" ;
     Text [ danish ] = "Ophζv gruppeobjekter" ;
