@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xetable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:11:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <tools/mempool.hxx>
 #endif
 
+#ifndef SC_XLADDRESS_HXX
+#include "xladdress.hxx"
+#endif
 #ifndef SC_XERECORD_HXX
 #include "xerecord.hxx"
 #endif
@@ -139,12 +142,8 @@ protected:
     void                WriteRangeAddress( XclExpStream& rStrm ) const;
 
 protected:
-    sal_uInt16          mnFirstXclCol;  /// Column index of first cell of this range.
-    sal_uInt16          mnFirstXclRow;  /// Row index of first cell of this range.
-    sal_uInt16          mnLastXclCol;   /// Column index of last cell of this range.
-    sal_uInt16          mnLastXclRow;   /// Row index of last cell of this range.
-    sal_uInt16          mnBaseXclCol;   /// Column index of base cell (first FORMULA record).
-    sal_uInt16          mnBaseXclRow;   /// Row index of base cell (first FORMULA record).
+    XclRange            maXclRange;     /// Range described by this record.
+    XclAddress          maBaseXclPos;   /// Address of base cell (first FORMULA record).
 };
 
 typedef ScfRef< XclExpRangeFmlaBase > XclExpRangeFmlaRef;
@@ -333,10 +332,12 @@ private:
 class XclExpCellBase : public XclExpRecord
 {
 public:
+    /** Returns the (first) address of the cell(s). */
+    inline const XclAddress& GetXclPos() const { return maXclPos; }
     /** Returns the (first) Excel column index of the cell(s). */
-    inline sal_uInt16   GetXclCol() const { return mnXclCol; }
+    inline sal_uInt16   GetXclCol() const { return maXclPos.mnCol; }
     /** Returns the Excel row index of the cell. */
-    inline sal_uInt16   GetXclRow() const { return mnXclRow; }
+    inline sal_uInt16   GetXclRow() const { return maXclPos.mnRow; }
 
     /** Derived classes return the column index of the last contained cell. */
     virtual sal_uInt16  GetLastXclCol() const = 0;
@@ -359,17 +360,15 @@ public:
 
 protected:
     explicit            XclExpCellBase(
-                            sal_uInt16 nRecId, sal_uInt32 nContSize,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+                            sal_uInt16 nRecId, sal_uInt32 nContSize, const XclAddress& rXclPos );
 
     /** Sets this record to a new column position. */
-    inline void         SetXclCol( sal_uInt16 nXclCol ) { mnXclCol = nXclCol; }
+    inline void         SetXclCol( sal_uInt16 nXclCol ) { maXclPos.mnCol = nXclCol; }
     /** Sets this record to a new row position. */
-    inline void         SetXclRow( sal_uInt16 nXclRow ) { mnXclRow = nXclRow; }
+    inline void         SetXclRow( sal_uInt16 nXclRow ) { maXclPos.mnRow = nXclRow; }
 
 private:
-    sal_uInt16          mnXclCol;       /// Column index of this cell.
-    sal_uInt16          mnXclRow;       /// Row index of this cell.
+    XclAddress          maXclPos;       /// Address of the cell.
 };
 
 typedef ScfRef< XclExpCellBase > XclExpCellRef;
@@ -393,13 +392,11 @@ public:
 
 protected:
     explicit            XclExpSingleCellBase( sal_uInt16 nRecId, sal_uInt32 nContSize,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow, sal_uInt32 nXFId );
+                            const XclAddress& rXclPos, sal_uInt32 nXFId );
 
     explicit            XclExpSingleCellBase( const XclExpRoot& rRoot,
-                            sal_uInt16 nRecId, sal_uInt32 nContSize,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow,
-                            const ScPatternAttr* pPattern, sal_Int16 nScript,
-                            sal_uInt32 nForcedXFId );
+                            sal_uInt16 nRecId, sal_uInt32 nContSize, const XclAddress& rXclPos,
+                            const ScPatternAttr* pPattern, sal_Int16 nScript, sal_uInt32 nForcedXFId );
 
     inline void         SetContSize( sal_uInt32 nContSize ) { mnContSize = nContSize; }
     inline sal_uInt32   GetContSize() const { return mnContSize; }
@@ -426,8 +423,7 @@ class XclExpNumberCell : public XclExpSingleCellBase
     DECL_FIXEDMEMPOOL_NEWDEL( XclExpNumberCell )
 
 public:
-    explicit            XclExpNumberCell( const XclExpRoot& rRoot,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+    explicit            XclExpNumberCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             double fValue );
 
@@ -446,8 +442,7 @@ class XclExpBooleanCell : public XclExpSingleCellBase
     DECL_FIXEDMEMPOOL_NEWDEL( XclExpBooleanCell )
 
 public:
-    explicit            XclExpBooleanCell( const XclExpRoot rRoot,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+    explicit            XclExpBooleanCell( const XclExpRoot rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             bool bValue );
 
@@ -466,8 +461,7 @@ class XclExpErrorCell : public XclExpSingleCellBase
     DECL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell )
 
 public:
-    explicit            XclExpErrorCell( const XclExpRoot rRoot,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+    explicit            XclExpErrorCell( const XclExpRoot rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             sal_uInt8 nErrCode );
 
@@ -496,14 +490,12 @@ class XclExpLabelCell : public XclExpSingleCellBase
 
 public:
     /** Constructs the record from an unformatted Calc string cell. */
-    explicit            XclExpLabelCell( const XclExpRoot& rRoot,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+    explicit            XclExpLabelCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             const ScStringCell& rCell );
 
     /** Constructs the record from a formatted Calc edit cell. */
-    explicit            XclExpLabelCell( const XclExpRoot& rRoot,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+    explicit            XclExpLabelCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             const ScEditCell& rCell, XclExpHyperlinkHelper& rHlinkHelper );
 
@@ -532,8 +524,7 @@ class XclExpFormulaCell : public XclExpSingleCellBase
     DECL_FIXEDMEMPOOL_NEWDEL( XclExpFormulaCell )
 
 public:
-    explicit            XclExpFormulaCell( const XclExpRoot& rRoot,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+    explicit            XclExpFormulaCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             const ScFormulaCell& rScFmlaCell,
                             XclExpArrayBuffer& rArrayBfr,
@@ -583,9 +574,8 @@ public:
     virtual void        Save( XclExpStream& rStrm );
 
 protected:
-    explicit            XclExpMultiCellBase(
-                            sal_uInt16 nRecId, sal_uInt16 nMulRecId, sal_uInt32 nContSize,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+    explicit            XclExpMultiCellBase( sal_uInt16 nRecId, sal_uInt16 nMulRecId,
+                            sal_uInt32 nContSize, const XclAddress& rXclPos );
 
     /** Sets the size of the remaining contents of one cell (without the XF index). */
     inline void         SetContSize( sal_uInt32 nContSize ) { mnContSize = nContSize; }
@@ -632,11 +622,10 @@ class XclExpBlankCell : public XclExpMultiCellBase
     DECL_FIXEDMEMPOOL_NEWDEL( XclExpBlankCell )
 
 public:
-    explicit            XclExpBlankCell( sal_uInt16 nXclCol, sal_uInt16 nXclRow,
-                            const XclExpMultiXFId& rXFId );
+    explicit            XclExpBlankCell( const XclAddress& rXclPos, const XclExpMultiXFId& rXFId );
 
     explicit            XclExpBlankCell( const XclExpRoot& rRoot,
-                            sal_uInt16 nXclCol, sal_uInt16 nLastXclCol, sal_uInt16 nXclRow,
+                            const XclAddress& rXclPos, sal_uInt16 nLastXclCol,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId );
 
     /** Tries to merge the contents of the passed cell to own data. */
@@ -659,8 +648,7 @@ class XclExpRkCell : public XclExpMultiCellBase
     DECL_FIXEDMEMPOOL_NEWDEL( XclExpRkCell )
 
 public:
-    explicit            XclExpRkCell( const XclExpRoot& rRoot,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow,
+    explicit            XclExpRkCell( const XclExpRoot& rRoot, const XclAddress& rXclPos,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             sal_Int32 nRkValue );
 
