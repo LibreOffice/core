@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:10:53 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1695,7 +1695,7 @@ String RID_SUBSETSTR_ALPHA_PRESENTATION
         Text[ japanese ] = "±ÙÌ§ÍŞ¯Ä•\\¦Œ`";
         Text[ korean ] = "¾ËÆÄºª½Ä ÇÁ¸®Á¨Å×ÀÌ¼Ç Çü½Ä";
         Text[ chinese_simplified ] = "×ÖÄ¸µÄÑİÊ¾ĞÎÊ½";
-        Text[ chinese_traditional ] = "¦r¥Àºt¥Ü§Î";
+        Text[ chinese_traditional ] = "¦r¥Àºt¥Ü¹Ï¼Ë";
         Text[ turkish ] = "Alphabetic Presentation Forms";
         Text[ arabic ] = "äãÇĞÌ ÚÑæÖ ÊŞÏíãíÉ ÃÈÌÏíÉ";
     };
@@ -1718,7 +1718,7 @@ String RID_SUBSETSTR_ARABIC_PRESENT_A
         Text[ japanese ] = "±×ËŞ±•\\¦Œ` A";
         Text[ korean ] = "¾Æ¶ø¾î ÇÁ¸®Á¨Å×ÀÌ¼Ç À¯Çü-A";
         Text[ chinese_simplified ] = "°¢À­²®ÑİÊ¾ĞÎÊ½ A";
-        Text[ chinese_traditional ] = "ªü©Ô§Bºt¥Ü¹Ï§Î-A";
+        Text[ chinese_traditional ] = "ªü©Ô§Bºt¥Ü¹Ï¼Ë-A";
         Text[ turkish ] = "Arabic Presentation Forms-A";
         Text[ arabic ] = "äãÇĞÌ ÚÑæÖ ÊŞÏíãíÉ ÚÑÈíÉ-A";
     };
@@ -1764,7 +1764,7 @@ String RID_SUBSETSTR_CJK_COMPAT_FORMS
         Text[ japanese ] = "CJKŒİŠ·•¶š";
         Text[ korean ] = "CJK È£È¯ À¯Çü";
         Text[ chinese_simplified ] = "ÖĞÈÕº«¼æÈİĞÎÊ½";
-        Text[ chinese_traditional ] = "¤¤¤éÁú¬Û®e¹Ï§Î";
+        Text[ chinese_traditional ] = "¤¤¤éÁú¬Û®e¹Ï¼Ë";
         Text[ turkish ] = "CJK Compatibility Forms";
         Text[ arabic ] = "äãÇĞÌ ÊæÇİŞ ÇáÕíäíÉ æÇáíÇÈÇäíÉ æÇáßæÑíÉ";
     };
@@ -1810,7 +1810,7 @@ String RID_SUBSETSTR_ARABIC_PRESENT_B
         Text[ japanese ] = "±×ËŞ±•\\¦Œ` B";
         Text[ korean ] = "¾Æ¶ø¾î ÇÁ¸®Á¨Å×ÀÌ¼Ç À¯Çü-B";
         Text[ chinese_simplified ] = "°¢À­²®ÑİÊ¾ĞÎÊ½ B";
-        Text[ chinese_traditional ] = "ªü©Ô§Bºt¥Ü¹Ï§Î-B";
+        Text[ chinese_traditional ] = "ªü©Ô§Bºt¥Ü¹Ï¼Ë-B";
         Text[ turkish ] = "Arabic Presentation Forms-B";
         Text[ arabic ] = "äãÇĞÌ ÚÑæÖ ÊŞÏíãíÉ ÚÑÈíÉ-B";
     };
