@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:08:43 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,6 @@ void SwRTFParser::ReadTable( int nToken )
     USHORT nBoxCnt = aMergeBoxes.Count()-1;
     SwBoxFrmFmts aBoxFmts;
     SwTableBoxFmt* pBoxFmt = pDoc->MakeTableBoxFmt();
-    BOOL bHeadlineRepeat = FALSE;
     SvxFrameDirection eDir = FRMDIR_HORI_LEFT_TOP;
     bool bCantSplit = false;
 
@@ -483,7 +482,7 @@ void SwRTFParser::ReadTable( int nToken )
             break;
 
         case RTF_TRHDR:
-            bHeadlineRepeat = TRUE;
+            nRowsToRepeat++;
             break;
 
         case RTF_CLTXLRTB:
@@ -620,7 +619,6 @@ void SwRTFParser::ReadTable( int nToken )
                   HORI_LEFT_AND_WIDTH == eAdjust &&
                   nLSpace != pFmt->GetLRSpace().GetLeft()
                 ) ||
-                bHeadlineRepeat != pTableNode->GetTable().IsHeadlineRepeat() ||
                 pTableNode->GetTable().GetTabSortBoxes().Count() >= eMAXCELLS
               )
             )
@@ -647,7 +645,6 @@ void SwRTFParser::ReadTable( int nToken )
                 SvxLRSpaceItem aL; aL.SetLeft( nLSpace );
                 ((SfxItemSet&)pFmt->GetAttrSet()).Put( aL );
             }
-            pTableNode->GetTable().SetHeadlineRepeat( bHeadlineRepeat );
         }
 
         pLns = &pTableNode->GetTable().GetTabLines();
@@ -743,7 +740,10 @@ void SwRTFParser::ReadTable( int nToken )
         else
         {
             const SwTable *pTable =
-                pDoc->InsertTable( *pPam->GetPoint(), 1, 1, eAdjust );
+                pDoc->InsertTable(
+                    SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
+                    *pPam->GetPoint(), 1, 1, eAdjust );
+
             pTableNode = pTable ? pTable->GetTableNode() : 0;
             if (pTableNode)
             {
@@ -770,7 +770,6 @@ void SwRTFParser::ReadTable( int nToken )
                 SvxLRSpaceItem aL; aL.SetLeft( nLSpace );
                 ((SfxItemSet&)pFmt->GetAttrSet()).Put( aL );
             }
-            pTableNode->GetTable().SetHeadlineRepeat( bHeadlineRepeat );
 
             nAktBox = 0;
             pOldTblNd = pTableNode;
@@ -970,6 +969,9 @@ void SwRTFParser::NewTblLine()
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
     SwTableBox* pBox = rBoxes[ rBoxes.Count()-1 ];
 
+    if(nRowsToRepeat>1)
+        pTableNode->GetTable().SetRowsToRepeat( nRowsToRepeat - 1 );
+
     if( !bMakeCopy &&
         64000 < pTableNode->GetTable().GetTabSortBoxes().Count() )
     {
@@ -987,6 +989,8 @@ void SwRTFParser::NewTblLine()
         pTableNode = pDoc->GetNodes()[ nNd ]->FindTableNode();
         pOldTblNd = pTableNode;
 
+        nRowsToRepeat=0;
+        pTableNode->GetTable().SetRowsToRepeat(nRowsToRepeat);
         pLns = &pTableNode->GetTable().GetTabLines();
     }
     else
