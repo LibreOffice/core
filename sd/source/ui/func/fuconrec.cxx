@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 16:51:32 $
+ *  last change: $Author: aw $ $Date: 2002-02-18 15:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,11 +905,25 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
         0L, pDoc);
-    Point aStart = rRectangle.TopLeft();
-    Point aEnd = rRectangle.BottomRight();
 
     if(pObj)
     {
+        Rectangle aRect(rRectangle);
+
+        if(SID_DRAW_SQUARE == nID ||
+            SID_DRAW_SQUARE_NOFILL == nID ||
+            SID_DRAW_SQUARE_ROUND == nID ||
+            SID_DRAW_SQUARE_ROUND_NOFILL == nID ||
+            SID_DRAW_CIRCLE == nID ||
+            SID_DRAW_CIRCLE_NOFILL == nID)
+        {
+            // force quadratic
+            ImpForceQuadratic(aRect);
+        }
+
+        Point aStart = aRect.TopLeft();
+        Point aEnd = aRect.BottomRight();
+
         switch(nID)
         {
             case SID_DRAW_LINE:
@@ -927,17 +941,9 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                     XPolyPolygon aPoly;
                     aPoly.Insert(XPolygon(2));
 
-                    if(SID_DRAW_LINE == nID || SID_DRAW_XLINE == nID)
-                    {
-                        aPoly[0][0] = aStart;
-                        aPoly[0][1] = aEnd;
-                    }
-                    else
-                    {
-                        sal_Int32 nYMiddle((rRectangle.Top() + rRectangle.Bottom()) / 2);
-                        aPoly[0][0] = Point(aStart.X(), nYMiddle);
-                        aPoly[0][1] = Point(aEnd.X(), nYMiddle);
-                    }
+                    sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
+                    aPoly[0][0] = Point(aStart.X(), nYMiddle);
+                    aPoly[0][1] = Point(aEnd.X(), nYMiddle);
 
                     ((SdrPathObj*)pObj)->SetPathPoly(aPoly);
                 }
@@ -953,7 +959,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
             {
                 if(pObj->ISA(SdrMeasureObj))
                 {
-                    sal_Int32 nYMiddle((rRectangle.Top() + rRectangle.Bottom()) / 2);
+                    sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
                     ((SdrMeasureObj*)pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
                     ((SdrMeasureObj*)pObj)->SetPoint(Point(aEnd.X(), nYMiddle), 1);
                 }
@@ -1025,9 +1031,9 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
 
                     String aText(SdResId(STR_POOLSHEET_TEXT));
                     ((SdrCaptionObj*)pObj)->SetText(aText);
-                    ((SdrCaptionObj*)pObj)->SetLogicRect(rRectangle);
+                    ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
                     ((SdrCaptionObj*)pObj)->SetTailPos(
-                        rRectangle.TopLeft() - Point(rRectangle.GetWidth() / 2, rRectangle.GetHeight() / 2));
+                        aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
                 }
                 else
                 {
@@ -1038,7 +1044,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
             }
             default:
             {
-                pObj->SetLogicRect(rRectangle);
+                pObj->SetLogicRect(aRect);
 
                 break;
             }

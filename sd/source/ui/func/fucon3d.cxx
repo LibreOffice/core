@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 16:51:32 $
+ *  last change: $Author: aw $ $Date: 2002-02-18 15:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,7 @@ SdrObject* FuConst3dObj::CreateDefaultObject(const sal_uInt16 nID, const Rectang
     aVolume.Union(rObjVol.GetTransformVolume(rObjTrans));
     double fW(aVolume.GetWidth());
     double fH(aVolume.GetHeight());
-    Rectangle aRect(0, 0, (long)fW, (long)fH);
+    Rectangle a3DRect(0, 0, (long)fW, (long)fH);
     E3dScene* pScene = new E3dPolyScene(pView->Get3DDefaultAttributes());
 
     // pView->InitScene(pScene, fW, fH, aVolume.MaxVec().Z() + ((fW + fH) / 4.0));
@@ -538,7 +538,7 @@ SdrObject* FuConst3dObj::CreateDefaultObject(const sal_uInt16 nID, const Rectang
     pScene->SetCamera(aCam);
 
     pScene->Insert3DObj(p3DObj);
-    pScene->NbcSetSnapRect(aRect);
+    pScene->NbcSetSnapRect(a3DRect);
     // SetCurrentLibObj(pScene);
     pScene->SetModel(pDoc);
 
@@ -552,6 +552,37 @@ SdrObject* FuConst3dObj::CreateDefaultObject(const sal_uInt16 nID, const Rectang
     // make object interactive at once
     pScene->SetRectsDirty();
     pScene->InitTransformationSet();
+
+    // Take care of restrictions for the rectangle
+    Rectangle aRect(rRectangle);
+
+    switch(nID)
+    {
+        case SID_3D_CUBE:
+        case SID_3D_SPHERE:
+        case SID_3D_TORUS:
+        {
+            // force quadratic
+            ImpForceQuadratic(aRect);
+            break;
+        }
+
+        case SID_3D_SHELL:
+        case SID_3D_HALF_SPHERE:
+        {
+            // force horizontal layout
+            break;
+        }
+
+        case SID_3D_CYLINDER:
+        case SID_3D_CONE:
+        case SID_3D_PYRAMID:
+        {
+            // force vertical layout
+            break;
+        }
+    }
+
     pScene->SetLogicRect(rRectangle);
 
     return pScene;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 16:51:32 $
+ *  last change: $Author: aw $ $Date: 2002-02-18 15:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,20 @@ SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle
     {
         if(pObj->ISA(SdrCircObj))
         {
-            pObj->SetLogicRect(rRectangle);
+            Rectangle aRect(rRectangle);
+
+            if(SID_DRAW_ARC == nID ||
+                SID_DRAW_CIRCLEARC == nID ||
+                SID_DRAW_CIRCLEPIE == nID ||
+                SID_DRAW_CIRCLEPIE_NOFILL == nID ||
+                SID_DRAW_CIRCLECUT == nID ||
+                SID_DRAW_CIRCLECUT_NOFILL == nID)
+            {
+                // force quadratic
+                ImpForceQuadratic(aRect);
+            }
+
+            pObj->SetLogicRect(aRect);
 
             SfxItemSet aAttr(pDoc->GetPool());
             aAttr.Put(SdrCircStartAngleItem(9000));

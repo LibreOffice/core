@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-15 16:56:24 $
+ *  last change: $Author: aw $ $Date: 2002-02-18 15:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,3 +727,18 @@ SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
     return 0L;
 }
 
+void FuPoor::ImpForceQuadratic(Rectangle& rRect)
+{
+    if(rRect.GetWidth() > rRect.GetHeight())
+    {
+        rRect = Rectangle(
+            Point(rRect.Left() + ((rRect.GetWidth() - rRect.GetHeight()) / 2), rRect.Top()),
+            Size(rRect.GetHeight(), rRect.GetHeight()));
+    }
+    else
+    {
+        rRect = Rectangle(
+            Point(rRect.Left(), rRect.Top() + ((rRect.GetHeight() - rRect.GetWidth()) / 2)),
+            Size(rRect.GetWidth(), rRect.GetWidth()));
+    }
+}
