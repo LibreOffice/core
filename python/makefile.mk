@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:13:23 $
+#   last change: $Author: hr $ $Date: 2004-02-02 19:26:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -188,8 +188,11 @@ $(PYTHONCORESHL) : makefile.mk $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .IF "$(OS)" == "SOLARIS"
     ld -G -o $@ -u Py_Main -u Py_FrozenMain -u PyFPE_dummy $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -h libpython.so.$(PYMAJOR) -lm -ldl -lc -lpthread
 .ELSE
-.IF "$(OS)" == "FREEBSD"
+.IF "$(OS)" == "FREEBSD" 
     $(LINK) -shared -o $@ -Wl,-whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -Wl,-no-whole-archive -soname libpython.so.$(PYMAJOR)  -lm -lutil ${PTHREAD_LIBS}
+.ELSE
+.IF "$(OS)" == "NETBSD"
+    $(LINK) -shared -o $@ -Wl,-whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -Wl,-no-whole-archive -Wl,-soname=libpython.so.$(PYMAJOR)  -lm -lutil ${PTHREAD_LIBS}
 .ELSE
 .IF "$(OS)" == "IRIX"
     ld -shared -o $@ -all $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -notall -soname libpython.so.$(PYMAJOR)  -lm -ldl -lc -lpthread
@@ -201,6 +204,7 @@ $(PYTHONCORESHL) : makefile.mk $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     ld -shared -o $@ --whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a --no-whole-archive -soname libpython.so.$(PYMAJOR)  -lm -ldl -lutil -lc -lpthread
 .ENDIF # MACOSX
 .ENDIF # IRIX
+.ENDIF # NETBSD
 .ENDIF # FREEBSD
 .ENDIF # SOLARIS
 
