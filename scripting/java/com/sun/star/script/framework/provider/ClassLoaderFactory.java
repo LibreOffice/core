@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ClassLoaderFactory.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: rt $ $Date: 2004-01-05 12:53:52 $
+*  last change: $Author: svesik $ $Date: 2004-04-19 23:08:27 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -70,7 +70,7 @@ import com.sun.star.frame.XModel;
 import com.sun.star.uno.XComponentContext;
 
 import com.sun.star.script.framework.log.LogUtils;
-import com.sun.star.script.framework.browse.ScriptMetaData;
+import com.sun.star.script.framework.container.ScriptMetaData;
 
 /**
  *  Class Loader Factory
@@ -86,8 +86,12 @@ public class ClassLoaderFactory
         throws NoSuitableClassLoaderException, MalformedURLException
     {
         ClassLoader parent = scriptData.getClass().getClassLoader();
-        URL[] classPath = (URL[])scriptData.getClassPath().toArray( new URL[0] );
-
+        URL[] classPath = scriptData.getClassPath();
+        LogUtils.DEBUG("Classpath has length " + classPath.length );
+        for ( int i=0; i < classPath.length; i++ )
+        {
+            LogUtils.DEBUG("ClassPath " + i + "} is " + classPath[ i ].toString() );
+        }
         return getURLClassLoader( parent, classPath );
     }
     public static ClassLoader getURLClassLoader( ClassLoader parent, URL[] classpath)
