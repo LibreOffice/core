@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
     <p>The model supports the properties required for HTML, thus you can build up
     <type>HTMLForm</type>s with it</p>
  */
-service CheckBox
+published service CheckBox
 {
     service com::sun::star::awt::UnoControlCheckBoxModel;
 
