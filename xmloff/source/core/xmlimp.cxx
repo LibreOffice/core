@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-27 10:19:59 $
+ *  last change: $Author: sab $ $Date: 2001-05-17 14:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,10 @@
 
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include "ProgressBarHelper.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
@@ -322,6 +326,8 @@ SvXMLImport::~SvXMLImport() throw ()
         ((SvXMLStylesContext *)&xAutoStyles)->Clear();
     if( xMasterStyles.Is() )
         ((SvXMLStylesContext *)&xMasterStyles)->Clear();
+
+    xmloff::token::ResetTokens();
 }
 
 // XUnoTunnel & co

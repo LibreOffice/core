@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-16 15:21:01 $
+ *  last change: $Author: sab $ $Date: 2001-05-17 14:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,10 @@
 
 #ifndef _XMLOFF_SETTINGSEXPORTHELPER_HXX
 #include "SettingsExportHelper.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
@@ -448,6 +452,8 @@ SvXMLExport::~SvXMLExport()
         delete pProgressBarHelper;
         delete pNumExport;
     }
+
+    xmloff::token::ResetTokens();
 }
 
 ///////////////////////////////////////////////////////////////////////
