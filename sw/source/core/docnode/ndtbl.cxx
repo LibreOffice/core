@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:49:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,16 +359,6 @@ static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
     bool bResult = false;
 
     if (SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState(which))
-        bResult = true;
-
-    return bResult;
-}
-
-static bool lcl_IsItemSet(const SwFmt & rFmt, USHORT which)
-{
-    bool bResult = false;
-
-    if (SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState(which))
         bResult = true;
 
     return bResult;
@@ -2230,16 +2220,6 @@ void SwTableNode::SetNewTable( SwTable* pNewTable, BOOL bNewFrames )
     }
 }
 
-    // setze das TabelleAttribut Undo auf:
-void SwDoc::AppendUndoForAttrTable( const SwTable& rTbl )
-{
-    if( DoesUndo() )
-    {
-        ClearRedo();
-        AppendUndo( new SwUndoAttrTbl( *rTbl.GetTableNode() ));
-    }
-}
-
 void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
                         const SwCellFrm* pBoxFrm ) const
 {
@@ -3875,41 +3855,6 @@ void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
     }
 }
 
-BOOL SwDoc::CopyTblInTbl( const SwTable& rSrcTable, SwTable& rDestTable,
-                            const SwNodeIndex& rBoxIdx )
-{
-    SwUndoTblCpyTbl* pUndo = 0;
-    if( DoesUndo() )
-    {
-        ClearRedo();
-        pUndo = new SwUndoTblCpyTbl;
-    }
-
-    BOOL bRet;
-    if( rSrcTable.IsTblComplex() )
-        bRet = rDestTable.InsTable( rSrcTable, rBoxIdx, pUndo );
-    else
-    {
-        SwSelBoxes aBoxes;
-        SwTableBox* pBox = rDestTable.GetTblBox( rBoxIdx.GetIndex() );
-        aBoxes.Insert( pBox );
-
-        bRet = rDestTable.InsTable( rSrcTable, aBoxes, pUndo );
-    }
-
-    if( bRet )
-    {
-        if( pUndo )
-            AppendUndo( pUndo );
-        SetFieldsDirty( TRUE );
-    }
-    else if( pUndo )
-        delete pUndo;
-
-    return bRet;
-}
-
-
 // kopiert eine Tabelle aus dem selben oder einem anderen Doc in sich
 // selbst. Dabei wird eine neue Tabelle angelegt oder eine bestehende
 // mit dem Inhalt gefuellt; wobei entweder der Inhalt ab einer Box oder
@@ -4235,31 +4180,6 @@ BOOL SwDoc::HasTblAnyProtection( const SwPosition* pPos,
         }
     }
     return bHasProtection;
-}
-
-BOOL SwDoc::GCTableBorder( const SwPosition& rPos )
-{
-    SwNode* pNd = &rPos.nNode.GetNode();
-    SwTableNode* pTNd = pNd->FindTableNode();
-    if( !pTNd || pNd->IsTableNode() )
-        return FALSE;
-
-    if( pTNd->GetTable().ISA( SwDDETable ))
-        return FALSE;
-
-    SwTable& rTbl = pTNd->GetTable();
-    rTbl.SetHTMLTableLayout( 0 );   // MIB 9.7.97: HTML-Layout loeschen
-
-    if( DoesUndo() )
-    {
-        ClearRedo();
-        AppendUndo( new SwUndoAttrTbl( *pTNd ));
-    }
-
-    rTbl.GCBorderLines();
-    SetModified();
-
-    return TRUE;
 }
 
 lcl_DelRedlines::lcl_DelRedlines( const SwTableNode& rNd,
