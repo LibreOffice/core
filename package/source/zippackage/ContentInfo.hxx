@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-30 13:54:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #endif
 #include <hash_map>
 
+namespace com { namespace sun { namespace star { namespace packages {
 class ContentInfo : public cppu::OWeakObject
 {
 public:
@@ -103,4 +104,5 @@ public:
             pFolder->releaseUpwardRef();
     }
 };
+} } } };
 #endif
