@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: er $ $Date: 2001-05-17 00:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,12 @@ public:
 
 class ScQueryCellIterator           // alle nichtleeren Zellen in einem Bereich
 {                                   // durchgehen
+    enum StopOnMismatchBits
+    {
+        nStopOnMismatchEnabled = 0x01,
+        nStopOnMismatchOccured = 0x02
+    };
+
 private:
     ScQueryParam    aParam;
     ScDocument*     pDoc;
@@ -226,6 +232,7 @@ private:
     USHORT          nRow;
     USHORT          nColRow;
     USHORT          nAttrEndRow;
+    BYTE            nStopOnMismatch;
     BOOL            bAdvanceQuery;
 
     ScBaseCell*     GetThis();
@@ -245,6 +252,21 @@ public:
     void            SetAdvanceQueryParamEntryField( BOOL bVal )
                         { bAdvanceQuery = bVal; }
     void            AdvanceQueryParamEntryField();
+
+                    /** If set, iterator stops on first non-matching cell
+                        content. May be used in SC_LESS_EQUAL queries where a
+                        cell range is assumed to be sorted, stops on first
+                        value being greater than the queried value and
+                        GetFirst()/GetNext() return NULL. StoppedOnMismatch()
+                        returns TRUE then.
+                        However, the iterator's conditions are not set to end
+                        all queries, GetCol() and GetRow() return values for
+                        the non-matching cell, further GetNext() calls may be
+                        executed. */
+    void            SetStopOnMismatch( BOOL bVal )
+                        { nStopOnMismatch = (bVal ? nStopOnMismatchEnabled : 0); }
+    BOOL            StoppedOnMismatch() const
+                        { return (nStopOnMismatch & nStopOnMismatchOccured) != 0; }
 };
 
 class ScDocAttrIterator             // alle Attribut-Bereiche

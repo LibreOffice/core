@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-26 16:12:50 $
+ *  last change: $Author: er $ $Date: 2001-05-17 00:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,6 +804,7 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, USHORT nTable,
     pDoc( pDocument ),
     nTab( nTable),
     aParam (rParam),
+    nStopOnMismatch( 0 ),
     bAdvanceQuery( FALSE )
 {
     nCol = aParam.nCol1;
@@ -859,6 +860,11 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                 nRow = pCol->pItems[nColRow].nRow;
                 if ((pDoc->pTab[nTab])->ValidQuery(nRow, aParam))
                     return pCol->pItems[nColRow].pCell;     // gefunden
+                else if ( nStopOnMismatch )
+                {
+                    nStopOnMismatch |= nStopOnMismatchOccured;
+                    return NULL;
+                }
                 else
                     nRow++;
             }
@@ -883,6 +889,8 @@ ScBaseCell* ScQueryCellIterator::GetFirst()
 ScBaseCell* ScQueryCellIterator::GetNext()
 {
     ++nRow;
+    if ( nStopOnMismatch )
+        nStopOnMismatch = nStopOnMismatchEnabled;
     return GetThis();
 }
 
