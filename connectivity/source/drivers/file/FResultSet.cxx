@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-27 07:59:12 $
+ *  last change: $Author: oj $ $Date: 2000-12-13 15:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1622,6 +1622,8 @@ OFILESortIndex::OFILESortIndex(const OKeyType eKeyType2[],  // Genau 3 Eintraege
         nMaxCount = MAX_KEYSET_SIZE;
     }
 #endif
+    if (nMaxCount <= 0)
+        nMaxCount = USHORT(-1);
 
     ppKeyValueArray = new OFILEKeyValuePtr[nMaxCount];
 
