@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-27 11:24:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,8 @@
 #define RID_FIMP_STR_NOWRITEABLEFONTSDIR        16
 #define RID_FIMP_STR_NUMBEROFFONTSIMPORTED      17
 #define RID_FIMP_BOX_LINKONLY                    18
+#define RID_FIMP_BOX_SUBDIRS                     19
+#define RID_FIMP_FL_TARGETOPTS                   20
 
 #define RID_TXT_IMPORTTITLE                      1066
 #define RID_TXT_FONTS2IMPORT                    1067
