@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:52:55 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,16 +353,17 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
     // Was? Die Unterlaufsituation ist nicht in der Portion-Kette ?
     ASSERT( pPor, "SwTxtFormatter::UnderFlow: overflow but underflow" );
 
-    if( rInf.IsFtnInside() && pPor && !rInf.IsQuick() )
-    {
-        SwLinePortion *pTmp = pPor->GetPortion();
-        while( pTmp )
-        {
-            if( pTmp->IsFtnPortion() )
-                ((SwFtnPortion*)pTmp)->ClearFtn();
-            pTmp = pTmp->GetPortion();
-        }
-    }
+    // OD 2004-05-26 #i29529# - correction: no delete of footnotes
+//    if( rInf.IsFtnInside() && pPor && !rInf.IsQuick() )
+//    {
+//        SwLinePortion *pTmp = pPor->GetPortion();
+//        while( pTmp )
+//        {
+//            if( pTmp->IsFtnPortion() )
+//                ((SwFtnPortion*)pTmp)->ClearFtn();
+//            pTmp = pTmp->GetPortion();
+//        }
+//    }
 
     /*-----------------14.12.94 09:45-------------------
      * 9849: Schnellschuss
