@@ -78,15 +78,15 @@ $(COMPOENNT_ENV_FLAG) : $(COMPONENT_RDB) $(OUT_BIN)/remoteserver.rdb
 	@echo --------------------------------------------------------------------------------
 	@echo   Register necessary runtime components in remoteserver/remoteclientsample rdb
 	@echo --------------------------------------------------------------------------------
-	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c $(SHAREDLIB_PRE)connectr.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c $(SHAREDLIB_PRE)remotebridge.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c $(SHAREDLIB_PRE)brdgfctr.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c $(SHAREDLIB_PRE)uuresolver.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c $(SHAREDLIB_PRE)stm.$(SHAREDLIB_EXT)
-	regcomp -register -r $(COMPONENT_RDB) -c $(SHAREDLIB_PRE)connectr.$(SHAREDLIB_EXT)
-	regcomp -register -r $(COMPONENT_RDB) -c $(SHAREDLIB_PRE)remotebridge.$(SHAREDLIB_EXT)
-	regcomp -register -r $(COMPONENT_RDB) -c $(SHAREDLIB_PRE)brdgfctr.$(SHAREDLIB_EXT)
-	regcomp -register -r $(COMPONENT_RDB) -c $(SHAREDLIB_PRE)uuresolver.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c connector.uno.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c remotebridge.uno.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c bridgefac.uno.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c uuresolver.uno.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/remoteserver.rdb -c streams.uno.$(SHAREDLIB_EXT)
+	regcomp -register -r $(COMPONENT_RDB) -c connector.uno.$(SHAREDLIB_EXT)
+	regcomp -register -r $(COMPONENT_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
+	regcomp -register -r $(COMPONENT_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
+	regcomp -register -r $(COMPONENT_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
 	@echo bla > $@
 
 CppOfficeClientExample : $(COMPONENT_IMPL) $(COMPOENNT_ENV_FLAG)
