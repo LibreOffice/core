@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 13:38:53 $
+ *  last change: $Author: aw $ $Date: 2001-02-22 12:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,9 +576,9 @@ void SdXMLImExTransform2D::GetFullTransform(Matrix3D& rFullTrans)
             case IMP_SDXMLEXP_TRANSOBJ2D_TRANSLATE  :
                 rFullTrans.Translate(((ImpSdXMLExpTransObj2DTranslate*)pObj)->maTranslate); break;
             case IMP_SDXMLEXP_TRANSOBJ2D_SKEWX      :
-                rFullTrans.ShearX(((ImpSdXMLExpTransObj2DSkewX*)pObj)->mfSkewX); break;
+                rFullTrans.ShearX(tan(((ImpSdXMLExpTransObj2DSkewX*)pObj)->mfSkewX)); break;
             case IMP_SDXMLEXP_TRANSOBJ2D_SKEWY      :
-                rFullTrans.ShearY(((ImpSdXMLExpTransObj2DSkewY*)pObj)->mfSkewY); break;
+                rFullTrans.ShearY(tan(((ImpSdXMLExpTransObj2DSkewY*)pObj)->mfSkewY)); break;
             case IMP_SDXMLEXP_TRANSOBJ2D_MATRIX     :
             {
                 const Matrix3D& rMat3D = ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix;

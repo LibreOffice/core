@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
+ *  last change: $Author: aw $ $Date: 2001-02-22 12:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@ protected:
     rtl::OUString               maLayerName;
 
     SdXMLImExTransform2D        mnTransform;
+    com::sun::star::awt::Size   maSize;
+    com::sun::star::awt::Point  maPosition;
 
     void SetStyle();
     void SetLayer();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
+ *  last change: $Author: aw $ $Date: 2001-02-22 12:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,9 @@ SdXMLShapeContext::SdXMLShapeContext(
     mbIsUserTransformed(FALSE),
     mxAttrList(xAttrList),
     mnZOrder(-1),
-    mnShapeId(-1)
+    mnShapeId(-1),
+    maPosition(0, 0),
+    maSize(1, 1)
 {
 }
 
@@ -289,28 +291,55 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
 
 void SdXMLShapeContext::SetTransformation()
 {
-    if(mnTransform.NeedsAction())
+    if(mxShape.is())
     {
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
         if(xPropSet.is())
         {
-            Matrix3D aMat;
-            mnTransform.GetFullTransform(aMat);
+            Matrix3D aTransformation;
 
-            drawing::HomogenMatrix3 aMatrix;
-            aMatrix.Line1.Column1 = aMat[0].X();
-            aMatrix.Line1.Column2 = aMat[0].Y();
-            aMatrix.Line1.Column3 = aMat[0].W();
+            if(maSize.Width != 1 || maSize.Height != 1)
+            {
+                // set global size. This should always be used.
+                aTransformation.Scale(maSize.Width, maSize.Height);
+            }
 
-            aMatrix.Line2.Column1 = aMat[1].X();
-            aMatrix.Line2.Column2 = aMat[1].Y();
-            aMatrix.Line2.Column3 = aMat[1].W();
+            if(maPosition.X != 0 || maPosition.Y != 0)
+            {
+                // if global position is used, add it to transformation
+                aTransformation.Translate(maPosition.X, maPosition.Y);
+            }
 
-            aMatrix.Line3.Column1 = aMat[2].X();
-            aMatrix.Line3.Column2 = aMat[2].Y();
-            aMatrix.Line3.Column3 = aMat[2].W();
+            if(mnTransform.NeedsAction())
+            {
+                // transformation is used, apply to object.
+                // NOTICE: The transformation is applied AFTER evtl. used
+                // global positioning and scaling is used, so any shear or
+                // rotate used herein is applied around the (0,0) position
+                // of the PAGE object !!!
+                Matrix3D aMat;
+                mnTransform.GetFullTransform(aMat);
 
+                // now add to transformation
+                aTransformation *= aMat;
+            }
+
+            // now set transformation for this object
             uno::Any aAny;
+            drawing::HomogenMatrix3 aMatrix;
+
+            aMatrix.Line1.Column1 = aTransformation[0].X();
+            aMatrix.Line1.Column2 = aTransformation[0].Y();
+            aMatrix.Line1.Column3 = aTransformation[0].W();
+
+            aMatrix.Line2.Column1 = aTransformation[1].X();
+            aMatrix.Line2.Column2 = aTransformation[1].Y();
+            aMatrix.Line2.Column3 = aTransformation[1].W();
+
+            aMatrix.Line3.Column1 = aTransformation[2].X();
+            aMatrix.Line3.Column2 = aTransformation[2].Y();
+            aMatrix.Line3.Column3 = aTransformation[2].W();
+
             aAny <<= aMatrix;
 
             xPropSet->setPropertyValue(
@@ -452,6 +481,22 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
     }
     else if( XML_NAMESPACE_SVG == nPrefix )
     {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_x)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maPosition.X, rValue);
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_y)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maPosition.Y, rValue);
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_width)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maSize.Width, rValue);
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_height)) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(maSize.Height, rValue);
+        }
         if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_transform)) )
         {
             mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());

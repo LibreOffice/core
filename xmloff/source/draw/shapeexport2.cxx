@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 18:04:45 $
+ *  last change: $Author: aw $ $Date: 2001-02-22 12:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,28 +187,61 @@ void XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint(const Matrix3D& rMat
 void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(Vector2D& rTRScale, double fTRShear,
     double fTRRotate, Vector2D& rTRTranslate, const sal_Int32 nFeatures)
 {
-    SdXMLImExTransform2D aTransform;
+    // allways write Size (rTRScale) since this statement carries the union
+    // of the object
+    OUString aStr;
+    OUStringBuffer sStringBuffer;
+    Vector2D aTRScale = rTRScale;
 
+    // svg: width
     if(!(nFeatures & SEF_EXPORT_WIDTH))
-        rTRScale.X() = 0.0;
+        aTRScale.X() = 0.0;
+    rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.X()));
+    aStr = sStringBuffer.makeStringAndClear();
+    rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_width, aStr);
 
+    // svg: height
     if(!(nFeatures & SEF_EXPORT_HEIGHT))
-        rTRScale.Y() = 0.0;
+        aTRScale.Y() = 0.0;
+    rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(aTRScale.Y()));
+    aStr = sStringBuffer.makeStringAndClear();
+    rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_height, aStr);
 
-    if(!(nFeatures & SEF_EXPORT_X))
-        rTRTranslate.X() = 0.0;
+    // decide if transformation is neccessary
+    BOOL bTransformationIsNeccessary(fTRShear != 0.0 || fTRRotate != 0.0);
 
-    if(!(nFeatures & SEF_EXPORT_Y))
-        rTRTranslate.Y() = 0.0;
+    if(bTransformationIsNeccessary)
+    {
+        // write transformation, but WITHOUT scale which is exported as size above
+        SdXMLImExTransform2D aTransform;
 
-    aTransform.AddScale(rTRScale);
-    aTransform.AddSkewX(fTRShear);
-    aTransform.AddRotate(fTRRotate);
-    aTransform.AddTranslate(rTRTranslate);
+        aTransform.AddSkewX(fTRShear);
+        aTransform.AddRotate(fTRRotate);
+        aTransform.AddTranslate(rTRTranslate);
 
-    // does transformation need to be exported?
-    if(aTransform.NeedsAction())
-        rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_transform, aTransform.GetExportString(rExport.GetMM100UnitConverter()));
+        // does transformation need to be exported?
+        if(aTransform.NeedsAction())
+            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_transform, aTransform.GetExportString(rExport.GetMM100UnitConverter()));
+    }
+    else
+    {
+        // no shear, no rotate; just add object position to export and we are done
+        if(nFeatures & SEF_EXPORT_X)
+        {
+            // svg: x
+            rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.X()));
+            aStr = sStringBuffer.makeStringAndClear();
+            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_x, aStr);
+        }
+
+        if(nFeatures & SEF_EXPORT_Y)
+        {
+            // svg: y
+            rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, FRound(rTRTranslate.Y()));
+            aStr = sStringBuffer.makeStringAndClear();
+            rExport.AddAttribute(XML_NAMESPACE_SVG, sXML_y, aStr);
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
