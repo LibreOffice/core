@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-14 13:19:51 $
+ *  last change: $Author: dbo $ $Date: 2001-12-17 12:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,7 +605,8 @@ void ComponentContext::disposing()
 
     // first dispose all context objects
     t_map::const_iterator iPos( m_map.begin() );
-    for ( ; iPos != m_map.end(); ++iPos )
+    t_map::const_iterator iEnd( m_map.end() );
+    while (iPos != iEnd)
     {
         ContextEntry * pEntry = iPos->second;
 
@@ -646,6 +647,8 @@ void ComponentContext::disposing()
                 }
             }
         }
+
+        ++iPos;
     }
 
     // second dispose service manager
@@ -667,11 +670,12 @@ void ComponentContext::disposing()
     }
 
     // everything is disposed, hopefully nobody accesses the context anymore...
-    for ( iPos = m_map.begin(); iPos != m_map.end(); ++iPos )
+    iPos = m_map.begin();
+    while (iPos != iEnd)
     {
         delete iPos->second;
+        ++iPos;
     }
-
     m_map.clear();
 }
 //__________________________________________________________________________________________________
@@ -1007,7 +1011,8 @@ void ConfigurationComponentContext::disposing()
 
     // first dispose all context objects
     t_singletons::const_iterator iPos( m_singletons.begin() );
-    for ( ; iPos != m_singletons.end(); ++iPos )
+    t_singletons::const_iterator iEnd( m_singletons.end() );
+    while (iPos != iEnd)
     {
         // to be disposed separately
         if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_SINGLETON) ))
@@ -1022,11 +1027,11 @@ void ConfigurationComponentContext::disposing()
         {
             xAC = iPos->second;
         }
-
         else
         {
             __dispose( iPos->second );
         }
+        ++iPos;
     }
     m_singletons.clear();
 
