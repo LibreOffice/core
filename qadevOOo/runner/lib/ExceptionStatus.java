@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExceptionStatus.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:43 $
+ *  last change:$Date: 2003-11-18 16:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ class ExceptionStatus extends Status {
      * @return <tt>true</tt> if obj is an ExceptionStatus instance and has
      * a similar exception.
      */
-    public boolean equals(Object obj) {
+/*    public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof ExceptionStatus)) {
             return false;
         }
@@ -122,5 +122,5 @@ class ExceptionStatus extends Status {
 
         return (thisMess == otherMess)
                 || (thisMess != null && thisMess.equals(otherMess));
-    }
+    } */
 }
