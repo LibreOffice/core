@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drdefuno.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-05 11:30:27 $
+ *  last change: $Author: vg $ $Date: 2001-09-18 15:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ private:
 
 public:
                             ScDrawDefaultsObj(ScDocShell* pDocSh);
-    virtual                 ~ScDrawDefaultsObj();
+    virtual                 ~ScDrawDefaultsObj() throw ();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
