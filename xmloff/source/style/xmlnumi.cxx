@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-01 14:11:09 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 12:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,37 +1038,44 @@ void SvxXMLListStyleContext::FillUnoNumRule(
         const Reference< container::XIndexReplace > & rNumRule,
         const SvI18NMap *pI18NMap ) const
 {
-    if( pLevelStyles )
+    try
     {
-        sal_uInt16 nCount = pLevelStyles->Count();
-        sal_Int32 nLevels = rNumRule->getCount();
-        for( sal_uInt16 i=0; i < nCount; i++ )
+        if( pLevelStyles )
         {
-            SvxXMLListLevelStyleContext_Impl *pLevelStyle =
-                (*pLevelStyles)[i];
-            sal_Int32 nLevel = pLevelStyle->GetLevel();
-            if( nLevel >= 0 && nLevel < nLevels )
+            sal_uInt16 nCount = pLevelStyles->Count();
+            sal_Int32 nLevels = rNumRule->getCount();
+            for( sal_uInt16 i=0; i < nCount; i++ )
             {
-                Sequence<beans::PropertyValue> aProps =
-                    pLevelStyle->GetProperties( pI18NMap );
-                Any aAny;
-                aAny <<= aProps;
-                rNumRule->replaceByIndex( nLevel, aAny );
+                SvxXMLListLevelStyleContext_Impl *pLevelStyle =
+                    (*pLevelStyles)[i];
+                sal_Int32 nLevel = pLevelStyle->GetLevel();
+                if( nLevel >= 0 && nLevel < nLevels )
+                {
+                    Sequence<beans::PropertyValue> aProps =
+                        pLevelStyle->GetProperties( pI18NMap );
+                    Any aAny;
+                    aAny <<= aProps;
+                    rNumRule->replaceByIndex( nLevel, aAny );
+                }
             }
         }
-    }
 
-    Reference < XPropertySet > xPropSet( rNumRule, UNO_QUERY );
-    Reference< XPropertySetInfo > xPropSetInfo;
-    if (xPropSet.is())
-        xPropSetInfo = xPropSet->getPropertySetInfo();
-    if( xPropSetInfo.is() &&
-        xPropSetInfo->hasPropertyByName( sIsContinuousNumbering ) )
+        Reference < XPropertySet > xPropSet( rNumRule, UNO_QUERY );
+        Reference< XPropertySetInfo > xPropSetInfo;
+        if (xPropSet.is())
+            xPropSetInfo = xPropSet->getPropertySetInfo();
+        if( xPropSetInfo.is() &&
+            xPropSetInfo->hasPropertyByName( sIsContinuousNumbering ) )
+        {
+            Any aAny;
+            sal_Bool bTmp = bConsecutive;
+            aAny.setValue( &bTmp, ::getBooleanCppuType() );
+            xPropSet->setPropertyValue( sIsContinuousNumbering, aAny );
+        }
+    }
+    catch( Exception& )
     {
-        Any aAny;
-        sal_Bool bTmp = bConsecutive;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( sIsContinuousNumbering, aAny );
+        DBG_ERROR( "SvxXMLListStyleContext::FillUnoNumRule - Exception catched" );
     }
 }
 
