@@ -1,0 +1,34 @@
+### 110439 ###
+sd.SdUnoOutlineView::com::sun::star::frame::XController
+
+### 114134 ###
+sd.SdDrawPage::com::sun::star::drawing::XShapeGrouper
+sd.SdGenericDrawPage::com::sun::star::drawing::XShapeGrouper
+sd.SdMasterPage::com::sun::star::drawing::XShapeGrouper
+
+### 114164 ###
+sd.SdXShape::com::sun::star::beans::XPropertySet
+
+### i22883 ###
+sd.SdUnoPresView::com::sun::star::ui::XContextMenuInterception
+sd.SdUnoDrawView::com::sun::star::ui::XContextMenuInterception
+sd.SdUnoOutlineView::com::sun::star::ui::XContextMenuInterception
+
+### i22888 ###
+sd.SdUnoDrawView::com::sun::star::drawing::DrawingDocumentDrawView
+
+### i22890 ###
+sd.SdUnoOutlineView::com::sun::star::view::XSelectionSupplier
+sd.SdUnoPresView::com::sun::star::view::XSelectionSupplier
+sd.SdUnoDrawView::com::sun::star::view::XSelectionSupplier
+
+### i22891 ###
+sd.SdUnoPresView::com::sun::star::presentation::PreviewView
+
+### i22893 ###
+sd.SdXImpressDocument::com::sun::star::document::XDocumentInfoSupplier
+sd.SdXImpressDocument::com::sun::star::view::XPrintJobBroadcaster
+sd.SdXImpressDocument::com::sun::star::document::XViewDataSupplier
+
+### i22896 ###
+sd.SdXImpressDocument::com::sun::star::document::XEventBroadcaster
