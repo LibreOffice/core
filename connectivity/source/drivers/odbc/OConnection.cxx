@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 10:03:48 $
+ *  last change: $Author: oj $ $Date: 2001-04-03 10:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
             else
                 m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
             if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
-                m_nTextEncoding = getTextEncoding();
+                m_nTextEncoding = osl_getThreadTextEncoding();
 
         }
     }
