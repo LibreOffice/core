@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:52:03 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
 
 
         if( pFrmSize &&
-            ( pFrmSize->GetSizeType() != pTestFrmSize->GetSizeType() ||
+            ( pFrmSize->GetHeightSizeType() != pTestFrmSize->GetHeightSizeType() ||
               pFrmSize->GetHeight() != pTestFrmSize->GetHeight() ) )
             continue;
 
