@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-10-02 07:15:59 $
+ *  last change: $Author: fs $ $Date: 2001-10-02 14:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,7 +540,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Pos = MAP_APPFONT ( 192 , 116 ) ;
         Size = MAP_APPFONT ( 81 , 10 ) ;
         TabStop = TRUE ;
-        Text = "Halb-/normalbreite Formen" ;
+        Text = "Zeichenbreite berücksichtigen" ;
         Text [ English ] = "Match character width" ;
     };
     CheckBox CB_JAP_SOUNDS_LIKE
