@@ -1,0 +1,272 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ooo.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:24:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#ifndef _SVTOOLS_HRC
+#include <svtools/svtools.hrc>
+#endif
+
+#ifndef _SVTOOLS_IMAGEMGR_HRC
+#include <svtools/imagemgr.hrc>
+#endif
+
+#ifndef _SFX_HRC
+#include <sfx2/sfx.hrc>
+#endif
+
+#include "svxids.hrc"
+#include "intro.hrc"
+
+#ifdef BUILD_SPECIAL
+#define OOO_VENDOR "Sun Microsystems Inc."
+#define OOO_LICENSE "LGPL"
+#define OOO_INTRO "openintro_sun.bmp"
+#else
+//#define OOO_VENDOR "my company"
+#define OOO_LICENSE "LGPL"
+#define OOO_INTRO "openintro.bmp"
+#endif
+
+Bitmap RID_DEFAULT_ABOUT_BMP_LOGO
+{
+    File = "openabout.bmp" ;
+};
+
+Bitmap RID_DEFAULTINTRO
+{
+    File = OOO_INTRO ;
+};
+
+Bitmap RID_DEFAULTINTRO_PORTAL
+{
+    File = OOO_INTRO ;
+};
+
+String RID_APPTITLE
+{
+    Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION" ;
+};
+
+// der String wird fuer die Registrierung gebraucht: 01 Voll, 02 OEM, 03 Vobis
+String STR_VERSION_TYPE
+{
+    Text = "01";
+};
+
+// der String wird fuer die Registrierung gebraucht - hier steht die Version zweistellig!
+String STR_VERSION_ID
+{
+    Text = "50";
+};
+
+String RID_BUILDVERSION
+{
+    Text = UPDVER ;
+};
+
+ModalDialog RID_DEFAULTABOUT
+{
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 245 , 200 ) ;
+    Moveable = TRUE ;
+    SVLook = TRUE ;
+    TEXT_DEFAULTABOUT
+    OKButton ABOUT_BTN_OK
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 174 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    FixedText ABOUT_FTXT_VERSION
+    {
+        Pos = MAP_APPFONT ( 54 , 6 ) ;
+        Size = MAP_APPFONT ( 118 , 16 ) ;
+        WordBreak = TRUE ;
+        Text =  "$(VER)";
+       };
+    FixedText ABOUT_FTXT_COPYRIGHT
+    {
+        Pos = MAP_APPFONT ( 54 , 25 ) ;
+        Size = MAP_APPFONT ( 168 , 51 ) ;
+         Text =  "Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ english_us ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ portuguese ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ russian ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ greek ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ dutch ] ="Copyright 2002 OpenOffice.org Foundation. Alle rechten voorbehouden.";
+        Text[ french ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ spanish ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ italian ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ danish ] ="Copyright 2003 Sun Microsystems Inc.\nDette produkt er produceret af DA.OpenOffice.org baseret p� OpenOffice.org og licensen " OOO_LICENSE ".\nOpenOffice.org anerkender alle medlemmer af f�llesskabet, is�r dem der er n�vnt p� http://www.openoffice.org/welcome/credits.html.";
+        Text[ swedish ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ polish ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ portuguese_brazilian ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ japanese ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ korean ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ chinese_simplified ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ chinese_traditional ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ turkish ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ thai ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ czech ] ="Copyright 2003 Sun Microsystems Inc.\nTento produkt byl vytvořen uživatelem " OOO_VENDOR " z OpenOffice.org pod licencí " OOO_LICENSE ".\nOpenOffice.org děkuje všem členům komunity, zvláště pak těm, kteří jsou zmíněni na stránce http://www.openoffice.org/welcome/credits.html.";
+        Text[ hebrew ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ hindi ] ="Copyright 2003 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
+        Text[ slovak ] ="Copyright 2003 Sun Microsystems Inc.\nTento produkt bol vytvorený " OOO_VENDOR " založený na OpenOffice.org s použitím " OOO_LICENSE ".\nOpenOffice.org ďakuje všetkým členom komunity, zvlášť tým, ktorí sú uvedení na http://www.openoffice.org/welcome/credits.html.";
+        WordBreak = TRUE ;
+        Text[ hungarian ] = "Copyright 2003. Sun Microsystems Inc.\nEzen terméket a " OOO_VENDOR " készítette az OpenOffice.org alapján, az " OOO_LICENSE " felhasználásával.\nAz OpenOffice.org minden közösségi tag hozzájárulását nagyra értékeli, főként a http://www.openoffice.org/welcome/credits.html lapon szereplőkét.";
+        Text[ slovenian ] = "Copyright 2003 Sun Microsystems Inc.\nTa izdelek je nastal s pomočjo prispevkov skupnosti OpenOffice.org, katere ustanovitelj je podjetje Sun Microsystems Inc.\nOpenOffice.org se zahvaljuje vsem članom skupnosti, posebej pa tistim, ki so omenjeni na strani http://www.openoffice.org/welcome/credits.html.";
+    };
+    String ABOUT_STR_DEVELOPER
+    {
+        Text = "" ;
+    };
+    StringArray ABOUT_STR_DEVELOPER_ARY
+    {
+        OOO_CONTRIBUTOR_LIST
+    };
+    String ABOUT_STR_COPYRIGHT_ADABAS
+    {
+        Text =  "" ;
+    };
+    String ABOUT_STR_ACCEL
+    {
+        Text = "SDT" ;
+    };
+};
+
+// imagelist with images of the "New" menu and the file open dialog
+
+#define MASK_COL2   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; } ;
+#define X_IMAGE_LIST \
+    IdList = {                  \
+        IMG_IMPRESS ;           \
+        IMG_CALC ;              \
+        IMG_CALCTEMPLATE ;      \
+        IMG_CHART ;             \
+        IMG_IMPRESSTEMPLATE ;   \
+        IMG_HTML ;              \
+        IMG_MATH ;              \
+        IMG_WRITER ;            \
+        IMG_WRITERTEMPLATE ;    \
+        IMG_MACROLIB ;          \
+        IMG_GLOBAL_DOC ;        \
+        IMG_DRAW ;              \
+        IMG_DRAWTEMPLATE ;      \
+        IMG_NEWFROMTEMPLATE ;   \
+    };                          \
+    IdCount = {                 \
+        14;                     \
+    };
+
+ImageList RID_SVTOOLS_IMAGELIST_BIG
+{
+    ImageBitmap = Bitmap { File = "lo_files.bmp" ; };
+    MASK_COL2
+    X_IMAGE_LIST
+};
+
+ImageList RID_SVTOOLS_IMAGELIST_SMALL
+{
+    ImageBitmap = Bitmap { File = "so_files.bmp" ; };
+    MASK_COL2
+    X_IMAGE_LIST
+};
+
+ImageList RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST
+{
+    ImageBitmap = Bitmap { File = "loh_files.bmp" ; };
+    MASK_COL2
+    X_IMAGE_LIST
+};
+
+ImageList RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST
+{
+    ImageBitmap = Bitmap { File = "soh_files.bmp" ; };
+    MASK_COL2
+    X_IMAGE_LIST
+};
+
+ImageList RID_IMGLIST_TREEOPT
+{
+    ImageBitmap = Bitmap
+        {
+        File = "oo_treeopt.bmp" ;
+    };
+    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; } ;
+    IdList = {
+        SID_GENERAL_OPTIONS;
+        SID_LANGUAGE_OPTIONS;
+        SID_INET_DLG;
+        SID_SW_EDITOPTIONS;
+        SID_SW_ONLINEOPTIONS;
+        SID_SC_EDITOPTIONS;
+        SID_SD_EDITOPTIONS;
+        SID_SD_GRAPHIC_OPTIONS;
+        SID_SM_EDITOPTIONS;
+        SID_SCH_EDITOPTIONS;
+        SID_SB_STARBASEOPTIONS;
+        SID_FILTER_DLG;
+    };
+    IdCount = {
+        12;
+        };
+};
+
+
