@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sb $ $Date: 2001-07-26 09:26:01 $
+ *  last change: $Author: sb $ $Date: 2001-07-26 09:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3334,7 +3334,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                            || m_eScheme == INET_PROT_POP3 ?
                                PART_MESSAGE_ID_PATH :
                                PART_HTTP_PATH,
-                           getEscapePrefix(), eMechanism, eCharset, true),
+                           getEscapePrefix(), WAS_ENCODED, eCharset, true),
                 m_aAbsURIRef.Len());
     return true;
 }
