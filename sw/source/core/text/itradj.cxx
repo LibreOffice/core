@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-18 07:51:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 
 #include "frame.hxx"       // CalcFlyAdjust()
 #include "paratr.hxx"
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 # include "ndtxt.hxx"        // pSwpHints, Ausgabeoperator
 #endif
 
@@ -596,7 +596,7 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurr )
         default : return;
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 /*
     if( OPTDBG( *pInf ) )
     {
