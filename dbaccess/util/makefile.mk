@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: fs $ $Date: 2000-10-27 08:09:05 $
+#   last change: $Author: fs $ $Date: 2000-10-30 13:46:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -183,6 +183,7 @@ DEF2EXPORTFILE=$(TARGET2).dxp
 
 ALL: \
     $(LIB2TARGET)	\
+    $(SRS)$/hidother.hid	\
     ALLTAR
 
 # --- .res file ----------------------------------------------------------
@@ -199,4 +200,15 @@ RESLIB2SRSFILES=$(RES2FILELIST)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
+
+
+$(SRS)$/hidother.hid: hidother.src
+.IF "$(GUI)$(CPU)"=="WNTI"
+.IF "$(BUILD_SOSL)"==""
+    +-mhids hidother.src ..\$(INPATH)$/srs dbu hidother $(INCLUDE)
+.ENDIF
+.ELSE
+    @+echo nix
+.ENDIF
 
