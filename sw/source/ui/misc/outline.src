@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:59:47 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1075,7 +1075,7 @@ TabPage TP_OUTLINE_NUM
         Text[ japanese ] = "ζ®µθ½γ‚Ήγ‚Ώγ‚¤γƒ«οΌ~P)";
         Text[ chinese_traditional ] = "ζ®µθ½ζ¨£εΌ(~P)";
         Text[ arabic ] = "δγΨ ΗαέήΡΙ";
-        Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+        Text[ language_user1 ] = "; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ greek ] = "Πρότυπα παραγράφου";
         Text[ korean ] = "λ‹¨λ½ μ¤νƒ€μΌ(~P)";
         Text[ turkish ] = "~Paragraf ώablonu";
@@ -1165,7 +1165,7 @@ TabPage TP_OUTLINE_NUM
         Text[ greek ] = "Στυλ χαρακτήρων";
         Text[ korean ] = "λ¬Έμ μ¤νƒ€μΌ(~C)";
         Text[ turkish ] = "~Karakter ώablonu";
-        Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+        Text[ language_user1 ] = "; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "E~stil de carΰcter";
         Text[ finnish ] = "~Merkkityyli";
         Text[ thai ] = "ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°~ΰΈ•ΰΈ±ΰΈ§ΰΈ­ΰΈ±ΰΈΰΈ‚ΰΈ£ΰΈ°";
@@ -1333,7 +1333,7 @@ TabPage TP_OUTLINE_NUM
         Text[ japanese ] = "η•ªε·εΎ(~A)";
         Text[ chinese_traditional ] = "δΉ‹εΎ(~A)";
         Text[ arabic ] = "ΘΪΟε";
-        Text[ greek ] = "μετά από";
+        Text[ greek ] = "Μετά από";
         Text[ korean ] = "λ²νΈ λ’¤(~A)";
         Text[ turkish ] = "~Sonra";
         Text[ language_user1 ] = " ";
@@ -1476,6 +1476,7 @@ TabPage TP_OUTLINE_NUM
         TEXT[ slovak ] = "(niΔ)";
     };
 };
+
 
 
 
