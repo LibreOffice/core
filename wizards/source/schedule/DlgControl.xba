@@ -75,6 +75,7 @@ Dim ListIndex as Integer
 	End If
 End Sub
 
+
 Sub MouseLeavesImage
 	bSelectbyMouseMove = True
 End Sub

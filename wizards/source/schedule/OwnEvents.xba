@@ -31,17 +31,6 @@ Dim LocList() as String
 End Sub
 
 
-Function SetFocusToControl(oTextControl as Object)
-	If oTextControl.Text = &quot;&quot; Then
-		Beep
-		oTextControl.DefaultButton = True
-		SetFocusToControl = True
-	Else
-		SetFocusToControl = False	
-	End If
-End Function
-
-
 Function CalCreateDateFromInput() as Date
 &apos;	Generiert aus den Eingabedaten der Ereignisseite 
 &apos;	ein Datum im Dateserial Format, 
@@ -59,17 +48,23 @@ Dim EvYear as Integer
 End Function
 
 
+
 Function CalCreateDateStrOfInput() as String
 Dim DateStr as String
 Dim EvMonth as Integer
 Dim EvDay as Integer
+Dim CurMonthStr as String
 	EvDay = DlgCalModel.txtOwnEventDay.Value
 	If EvDay &lt; 10 Then
 		DateStr = &quot;0&quot; &amp; EvDay &amp; &quot;. &quot;
 	Else
 		DateStr = Cstr(EvDay) &amp; &quot;. &quot;
 	End If
-	DateStr = DateStr &amp; DlgCalModel.lstOwnEventMonth.StringItemList(CurOwnMonth-1)
+	CurMonthStr = DlgCalModel.lstOwnEventMonth.StringItemList(CurOwnMonth-1)
+	If Len(CurMonthStr) = 2 Then
+		CurMonthStr = CurMonthStr &amp; &quot; &quot;
+	End If
+	DateStr = DateStr &amp; CurMonthStr
 	
 	If DlgCalModel.chkEventOnce.State = 1 And DlgCalModel.txtOwnEventYear.Value &lt;&gt; 0 Then
 		DateStr = DateStr &amp; &quot;  &quot; + DlgCalModel.txtOwnEventYear.Value
@@ -173,10 +168,7 @@ Dim CurEvDay as Integer
 		End If
 	End If
 	
-	&apos;	Flag zum Speichern der neuen Daten.
-&apos;	If bInserted Then
-		bCalOwnDataChanged = True
-&apos;	End If
+	bCalOwnDataChanged = True
 	
 	Call CalClearInputMask()
 End Sub
@@ -208,6 +200,9 @@ Function CalGetMonthOfEvent(ByVal ListIndex as Integer) as Integer
 Dim MonthStr as String
 	MonthStr = DlgCalModel.lstOwnData.StringItemList(ListIndex)
 	MonthStr = Mid(MonthStr, 5, 3)
+	&apos; In chinese Short Monthnames may be only 2 characters long. 
+	&apos; In this case the third character is filled up with an empty space
+	MonthStr = RTrim(MonthStr)
 	CalGetMonthOfEvent = CalGetIntOfShortMonthName(MonthStr)
 End Function
 

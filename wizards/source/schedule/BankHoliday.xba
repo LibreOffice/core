@@ -123,11 +123,13 @@ Dim i as Integer
 	LastIndex = Ubound(DlgCalModel.lstOwnData.StringItemList())
 	For i = 0 To LastIndex
 		CurYear = CalGetYearOfEvent(i)
-		If (CurYear = iSelYear) Or (CurYear = 0) Then
-			CurMonth = CalGetMonthofEvent(i)
-			CurDay = CalGetDayofEvent(i)
-			CurEventName = CalGetNameOfEvent(i)
-			CalInsertBankholiday(DateSerial(CurYear, CurMonth, CurDay), CurEventName, cHolidayType_Own)
+		If DlgCalModel.lstOwnData.StringItemList(i) &lt;&gt; &quot;&quot; Then
+			If (CurYear = iSelYear) Or (CurYear = 0) Then
+				CurMonth = CalGetMonthofEvent(i)
+				CurDay = CalGetDayofEvent(i)
+				CurEventName = CalGetNameOfEvent(i)
+				CalInsertBankholiday(DateSerial(CurYear, CurMonth, CurDay), CurEventName, cHolidayType_Own)
+			End If
 		End If
 	Next
 End Sub

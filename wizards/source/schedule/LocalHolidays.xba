@@ -409,12 +409,12 @@ End Function
 
 Sub FindWholeYearHolidays_CN(YearInt as Integer)
 	CalculateChineseNewYear(YearInt)
-	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;元旦&quot;, cHolidayType_Full)		&apos; New Year
-	CalInsertBankholiday(DateSerial(YearInt, 5, 8), &quot;妇女节&quot;, cHolidayType_Half)		&apos; Women&apos;s Day
-	CalInsertBankholiday(DateSerial(YearInt, 4, 5), &quot;清明节&quot;, cHolidayType_Half)		&apos; Day of the deads
-	CalInsertBankholiday(DateSerial(YearInt, 5, 1), &quot;劳动节&quot;, cHolidayType_Full)		&apos; International Labour Day
-	CalInsertBankholiday(DateSerial(YearInt, 6, 1), &quot;儿童节&quot;, cHolidayType_Half)		&apos; Children&apos;s Day
-	CalInsertBankholiday(DateSerial(YearInt, 8, 1), &quot;建军节&quot;, cHolidayType_Half)		&apos; Foundation of military
+	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;元旦&quot;, cHolidayType_Full)				&apos; New Year
+	CalInsertBankholiday(DateSerial(YearInt, 5, 8), &quot;妇女节&quot;, cHolidayType_Half)			&apos; Women&apos;s Day
+	CalInsertBankholiday(DateSerial(YearInt, 4, 5), &quot;清明节&quot;, cHolidayType_Half)			&apos; Day of the deads
+	CalInsertBankholiday(DateSerial(YearInt, 5, 1), &quot;劳动节&quot;, cHolidayType_Full)			&apos; International Labour Day
+	CalInsertBankholiday(DateSerial(YearInt, 6, 1), &quot;儿童节&quot;, cHolidayType_Half)			&apos; Children&apos;s Day
+	CalInsertBankholiday(DateSerial(YearInt, 8, 1), &quot;建军节&quot;, cHolidayType_Half)			&apos; Foundation of military
 	CalInsertBankholiday(DateSerial(YearInt, 10, 1), &quot;国庆节&quot;, cHolidayType_Full)		&apos; National festival day
 End Sub
 
@@ -475,10 +475,19 @@ Dim lDate as Long
 			lDate = DateSerial(iSelYear,2, 5)
 		Case 2020
 			lDate = DateSerial(iSelYear, 1, 25)
+		Case Else
+			Exit Sub
 	End Select
-	CalInsertBankholiday(lDate-1, &quot;農曆除夕&quot;, cHolidayType_Full)
-	CalInsertBankholiday(lDate, &quot;道教節&quot;, cHolidayType_Full)
-	CalInsertBankholiday(lDate+1, &quot;春節&quot;, cHolidayType_Full)
+	Select Case  sCurLangLocale
+		Case &quot;zh&quot;
+			CalInsertBankholiday(lDate-1, &quot;春节&quot;, cHolidayType_Full)
+			CalInsertBankholiday(lDate, &quot;春节&quot;, cHolidayType_Full)
+			CalInsertBankholiday(lDate+1, &quot;春节&quot;, cHolidayType_Full)
+		Case Else
+			CalInsertBankholiday(lDate-1, &quot;農曆除夕&quot;, cHolidayType_Full)
+			CalInsertBankholiday(lDate, &quot;道教節&quot;, cHolidayType_Full)
+			CalInsertBankholiday(lDate+1, &quot;春節&quot;, cHolidayType_Full)
+	End Select
 End Sub
 
 
