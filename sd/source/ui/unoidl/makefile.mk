@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: cl $ $Date: 2002-01-24 15:04:02 $
+#   last change: $Author: cl $ $Date: 2002-01-30 11:38:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ NOOPTFILES= $(SLO)$/unowcntr.obj
 .ENDIF
 
 SLOFILES =      \
+        $(SLO)$/SdUnoPresView.obj\
         $(SLO)$/SdUnoSlideView.obj\
         $(SLO)$/SdUnoOutlineView.obj\
         $(SLO)$/SdUnoDrawView.obj \

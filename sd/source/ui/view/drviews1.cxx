@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-24 15:06:27 $
+ *  last change: $Author: cl $ $Date: 2002-01-30 11:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1117,6 +1117,8 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
 
             pDrView->HideAllPages();
             pDrView->ShowPage(pActualPage, Point(0, 0));
+            if( pController )
+                pController->fireSwitchCurrentPage( pActualPage );
 
             SdrPageView* pNewPageView = pDrView->GetPageViewPvNum(0);
 
@@ -1184,6 +1186,9 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
 
             USHORT nNum = pMaster->GetPageNum();
             pDrView->ShowMasterPagePgNum(nNum, Point(0, 0));
+
+            if( pController )
+                pController->fireSwitchCurrentPage( pMaster );
 
             SdrPageView* pNewPageView = pDrView->GetPageViewPvNum(0);
 

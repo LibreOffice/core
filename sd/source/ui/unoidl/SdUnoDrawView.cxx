@@ -1,3 +1,63 @@
+/*************************************************************************
+ *
+ *  $RCSfile: SdUnoDrawView.cxx,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: cl $ $Date: 2002-01-30 11:38:57 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 
 #include "SdUnoDrawView.hxx"
 
@@ -24,6 +84,7 @@
 #include "grviewsh.hxx"
 #include "presvish.hxx"
 #include "prvwshll.hxx"
+#include "sdpage.hxx"
 
 using namespace ::rtl;
 using namespace ::vos;
@@ -44,7 +105,8 @@ SdUnoDrawView::SdUnoDrawView(SdView* pSdView, SdDrawViewShell* pSdViewSh) throw(
     mpViewSh(pSdViewSh),
     mbDisposing(sal_False),
     mbOldMasterPageMode(sal_False),
-    mbOldLayerMode(sal_False)
+    mbOldLayerMode(sal_False),
+    mpCurrentPage(NULL)
 {
     if( pSdViewSh->ISA( SdGraphicViewShell ) )
     {
@@ -242,8 +304,6 @@ void SAL_CALL SdUnoDrawView::removeEventListener( const ::com::sun::star::uno::R
 //------ XServiceInfo --------------------------------------------------
 //----------------------------------------------------------------------
 
-sal_Char pImplSdUnoDrawViewService[sizeof("com.sun.star.drawing.DrawingDocumentDrawView")] = "com.sun.star.drawing.DrawingDocumentDrawView";
-
 OUString SAL_CALL SdUnoDrawView::getImplementationName(  ) throw(RuntimeException)
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdUnoDrawView" ) );
@@ -251,29 +311,66 @@ OUString SAL_CALL SdUnoDrawView::getImplementationName(  ) throw(RuntimeExceptio
 
 //----------------------------------------------------------------------
 
-static const char* pImplSdUnoDrawViewServices[6] =
-{
-    "com.sun.star.presentation.PresentationDocumentView",
-    "com.sun.star.drawing.DrawingDocumentDrawView",
-    "com.sun.star.presentation.SlideShowView",
-    "com.sun.star.presentation.DrawingDocumentPreviewView",
-    "com.sun.star.presentation.NotesDocumentPreviewView",
-    "com.sun.star.presentation.HandoutDocumentPreviewView"
-};
+static sal_Char pImplSdUnoDrawViewService[sizeof("com.sun.star.drawing.DrawingDocumentDrawView")] = "com.sun.star.drawing.DrawingDocumentDrawView";
+static sal_Char pImplSdUnoSlideViewService[sizeof("com.sun.star.presentation.PresentationView")] = "com.sun.star.presentation.PresentationView";
+static sal_Char pImplSdUnoPreviewViewService[sizeof("com.sun.star.presentation.PreviewView")] = "com.sun.star.presentation.PreviewView";
+static sal_Char pImplSdUnoNotesViewService[sizeof("com.sun.star.presentation.NotesView")] = "com.sun.star.presentation.NotesView";
+static sal_Char pImplSdUnoHandoutViewService[sizeof("com.sun.star.presentation.HandoutView")] = "com.sun.star.presentation.HandoutView";
 
 sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    const char* pService = pImplSdUnoDrawViewServices[meKind];
-    return ServiceName.equalsAscii( pService );
+    switch( meKind )
+    {
+    case slideshow:
+        return ServiceName.equalsAscii( pImplSdUnoSlideViewService );
+    case preview:
+        return ServiceName.equalsAscii( pImplSdUnoPreviewViewService );
+    case notes:
+        return ServiceName.equalsAscii( pImplSdUnoNotesViewService ) || ServiceName.equalsAscii( pImplSdUnoDrawViewService );
+    case handout:
+        return ServiceName.equalsAscii( pImplSdUnoHandoutViewService ) || ServiceName.equalsAscii( pImplSdUnoDrawViewService );
+//  case presentation:
+//  case drawing:
+    default:
+        return ServiceName.equalsAscii( pImplSdUnoDrawViewService );
+
+    }
 }
 
 //----------------------------------------------------------------------
 
 Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    const char* pService = pImplSdUnoDrawViewServices[meKind];
-    OUString aService( OUString::createFromAscii( pService ) );
-    Sequence< OUString > aSeq( &aService, 1 );
+    Sequence< OUString > aSeq( ((meKind != notes) && (meKind != handout)) ? 1 : 2 );
+    OUString* pServices = aSeq.getArray();
+
+    switch( meKind )
+    {
+    case slideshow:
+        pServices[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( pImplSdUnoSlideViewService ) );
+        break;
+
+    case preview:
+        pServices[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( pImplSdUnoPreviewViewService ) );
+        break;
+
+    case notes:
+        pServices[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( pImplSdUnoNotesViewService ) );
+        pServices[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( pImplSdUnoDrawViewService ) );
+        break;
+
+    case handout:
+        pServices[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( pImplSdUnoHandoutViewService ) );
+        pServices[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( pImplSdUnoDrawViewService ) );
+        break;
+
+//  case presentation:
+//  case drawing:
+    default:
+        pServices[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( pImplSdUnoDrawViewService ) );
+        break;
+
+    }
     return aSeq;
 }
 
@@ -441,7 +538,8 @@ void SdUnoDrawView::fireSelectionChangeListener() throw()
 // Id must be the index into the array
 enum properties
 {
-    PROPERTY_MASTERPAGEMODE = 0,
+    PROPERTY_CURRENTPAGE = 0,
+    PROPERTY_MASTERPAGEMODE,
     PROPERTY_LAYERMODE,
     PROPERTY_WORKAREA,
 
@@ -463,6 +561,7 @@ static beans::Property * getBasicProps()
 
             static beans::Property aBasicProps[PROPERTY_COUNT] =
             {
+                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("CurrentPage") ),        PROPERTY_CURRENTPAGE,   ::getCppuType((const Reference< drawing::XDrawPage > *)0), beans::PropertyAttribute::BOUND ),
                 beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsLayerMode") ),        PROPERTY_LAYERMODE,      ::getCppuBooleanType(),    beans::PropertyAttribute::BOUND ),
                 beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode") ),   PROPERTY_MASTERPAGEMODE,     ::getCppuBooleanType(),    beans::PropertyAttribute::BOUND ),
                 beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleArea") ),        PROPERTY_WORKAREA,          ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
@@ -512,6 +611,22 @@ sal_Bool SdUnoDrawView::convertFastPropertyValue
 {
     switch( nHandle )
     {
+        case PROPERTY_CURRENTPAGE:
+            {
+                Reference< drawing::XDrawPage > xOldPage( getCurrentPage() );
+                Reference< drawing::XDrawPage > xNewPage;
+                convertPropertyValue( xNewPage, rValue );
+                if( xOldPage != xNewPage )
+                {
+                    rConvertedValue <<= xNewPage;
+                    rOldValue <<= xOldPage;
+                    return sal_True;
+                }
+                else
+                {
+                    return sal_False;
+                }
+            }
         case PROPERTY_MASTERPAGEMODE:
             {
             sal_Bool bOldValue = getMasterPageMode();
@@ -560,6 +675,14 @@ void SdUnoDrawView::setFastPropertyValue_NoBroadcast
 {
     switch( nHandle )
     {
+        case PROPERTY_CURRENTPAGE:
+            {
+                Reference< drawing::XDrawPage > xPage;
+                rValue >>= xPage;
+                setCurrentPage( xPage );
+            }
+            break;
+
         case PROPERTY_MASTERPAGEMODE:
             {
                 sal_Bool bValue;
@@ -584,13 +707,18 @@ void SdUnoDrawView::getFastPropertyValue( Any & rRet, sal_Int32 nHandle ) const
 {
     switch( nHandle )
     {
+        case PROPERTY_CURRENTPAGE:
+            rRet <<= (const_cast<SdUnoDrawView*>(this))->getCurrentPage();
+            break;
+
         case PROPERTY_MASTERPAGEMODE:
             rRet <<= getMasterPageMode();
-        break;
+            break;
 
         case PROPERTY_LAYERMODE:
             rRet <<= getLayerMode();
-        break;
+            break;
+
         case PROPERTY_WORKAREA:
             rRet <<= awt::Rectangle( maLastVisArea.Left(), maLastVisArea.Top(), maLastVisArea.GetWidth(), maLastVisArea.GetHeight() );
             break;
@@ -630,6 +758,29 @@ void SdUnoDrawView::fireChangeLayerMode( sal_Bool bLayerMode ) throw()
         fire( &nHandles, &aNewValue, &aOldValue, 1, sal_False );
 
         mbOldLayerMode = bLayerMode;
+    }
+}
+
+//----------------------------------------------------------------------
+
+void SdUnoDrawView::fireSwitchCurrentPage( SdPage* pCurrentPage ) throw()
+{
+    if( pCurrentPage != mpCurrentPage )
+    {
+        sal_Int32 nHandles = PROPERTY_CURRENTPAGE;
+        Reference< drawing::XDrawPage > xNewPage( pCurrentPage->getUnoPage(), UNO_QUERY );
+        Any aNewValue( makeAny( xNewPage ) );
+
+        Any aOldValue;
+        if( mpCurrentPage )
+        {
+            Reference< drawing::XDrawPage > xOldPage( mpCurrentPage->getUnoPage(), UNO_QUERY );
+            aOldValue <<= xOldPage;
+        }
+
+        fire( &nHandles, &aNewValue, &aOldValue, 1, sal_False );
+
+        mpCurrentPage = pCurrentPage;
     }
 }
 
