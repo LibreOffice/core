@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndexColumn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 15:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,8 @@ namespace connectivity
         {
         protected:
             sal_Bool    m_IsAscending;
-            DECLARE_CTY_PROPERTY(OIndexColumn_PROP,OIndexColumn)
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
+            virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         public:
             OIndexColumn(   sal_Bool _bCase);
             OIndexColumn(   sal_Bool _IsAscending,

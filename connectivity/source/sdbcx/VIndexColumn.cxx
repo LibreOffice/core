@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndexColumn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:36:27 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 15:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,11 +131,26 @@ OIndexColumn::OIndexColumn( sal_Bool _IsAscending,
 {
     construct();
 }
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* OIndexColumn::createArrayHelper( sal_Int32 _nId) const
+{
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
+    describeProperties(aProps);
+    changePropertyAttributte(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& SAL_CALL OIndexColumn::getInfoHelper()
+{
+    return *OIndexColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
+}
 // -------------------------------------------------------------------------
 void OIndexColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
     registerProperty(PROPERTY_ISASCENDING,  PROPERTY_ID_ISASCENDING,    nAttrib,&m_IsAscending, ::getBooleanCppuType());
 }
+// -----------------------------------------------------------------------------
+
 
 

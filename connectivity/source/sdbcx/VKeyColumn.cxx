@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKeyColumn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-30 16:07:00 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 15:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,12 +138,27 @@ OKeyColumn::OKeyColumn( const ::rtl::OUString&  _ReferencedColumn,
 OKeyColumn::~OKeyColumn()
 {
 }
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* OKeyColumn::createArrayHelper( sal_Int32 _nId) const
+{
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
+    describeProperties(aProps);
+    changePropertyAttributte(aProps);
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& SAL_CALL OKeyColumn::getInfoHelper()
+{
+    return *OKeyColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
+}
 // -------------------------------------------------------------------------
 void OKeyColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
     registerProperty(PROPERTY_RELATEDCOLUMN,    PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
 }
+// -----------------------------------------------------------------------------
+
 
 
 
