@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:03:47 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2264,7 +2264,7 @@ Window* StatementCommand::GetNextRecoverWin()
     {
         // zuerst weitere Fenster auf dem Fenster suchen und schliessen
         pControl = GetNextOverlap( pBase );
-        if ( pControl && !IsFirstDocWin( pControl ) && !IsIMEWin( pControl ) )
+        if ( pControl && pControl->IsVisible() && !IsFirstDocWin( pControl ) && !IsIMEWin( pControl ) )
         {
 /*            Window *pDock = GetWinByRT( pControl, WINDOW_DOCKINGWINDOW, FALSE );
             if ( pDock )
@@ -2276,7 +2276,7 @@ Window* StatementCommand::GetNextRecoverWin()
         // dann das Fenster selbst Schliessen
            // erstes DocWin überspringen
         // Assumption that Doc Windows are Borderwindows and ButtonDialog and such are not
-        if ( !IsFirstDocWin( pBase ) && pBase->GetType() != WINDOW_BORDERWINDOW && !IsIMEWin( pBase ) )
+        if ( pBase->IsVisible() && !IsFirstDocWin( pBase ) && pBase->GetType() != WINDOW_BORDERWINDOW && !IsIMEWin( pBase ) )
             return pBase;
 
         pBase = Application::GetNextTopLevelWindow( pBase );
@@ -3198,7 +3198,7 @@ BOOL StatementCommand::Execute()
 #endif
                     // The Count is only larger than 2 is the path is a directory which is not empty
                     // the Count of 2 results from the "." and ".." directory
-                    if ( Dir( aDestPath, FSYS_KIND_FILE | FSYS_KIND_DIR ).Count() > 2 )
+                    if ( Dir( aDestPath, FSYS_KIND_FILE | FSYS_KIND_DIR | FSYS_KIND_DEV | FSYS_KIND_BLOCK ).Count() > 2 )
                         DirectLog( S_QAError, GEN_RES_STR1( S_DIRECTORY_NOT_EMPTY, aDestPath.GetFull() ) );
 
                     SotStorageRef xStorage = new SotStorage( aFileName, STREAM_STD_READ );
@@ -5310,16 +5310,16 @@ USHORT nValidTextItemCount = 0;\
                                                 pRet->GenReturn ( RET_Value, nUId, ULONG( pItem->GetButtonFlags() & ~SV_STATE_MASK ));
                                                 break;
                                             case M_Check :
-                                                pItem->SetStateChecked();
-                                                pTree->InvalidateEntry( pThisEntry );
+                                                pTree->SetCheckButtonState( pThisEntry, SV_BUTTON_CHECKED );
+                                                pTree->CheckButtonHdl();
                                                 break;
                                             case M_UnCheck :
-                                                pItem->SetStateUnchecked();
-                                                pTree->InvalidateEntry( pThisEntry );
+                                                pTree->SetCheckButtonState( pThisEntry, SV_BUTTON_UNCHECKED );
+                                                pTree->CheckButtonHdl();
                                                 break;
                                             case M_TriState :
-                                                pItem->SetStateTristate();
-                                                pTree->InvalidateEntry( pThisEntry );
+                                                pTree->SetCheckButtonState( pThisEntry, SV_BUTTON_TRISTATE );
+                                                pTree->CheckButtonHdl();
                                                 break;
                                             default:
                                                 ReportError( nUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
