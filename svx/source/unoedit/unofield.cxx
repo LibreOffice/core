@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-11 15:05:53 $
+ *  last change: $Author: thb $ $Date: 2001-09-20 07:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,29 +493,43 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 
     case ID_EXT_FILEFIELD:
     {
-        pData = new SvxExtFileField( mpImpl->msString1 );
-        ((SvxExtFileField*)pData)->SetFormat( setFileNameDisplayFormat((SvxFileFormat)mpImpl->mnInt16 ) );
+        // #92009# pass fixed attribute to constructor
+        pData = new SvxExtFileField( mpImpl->msString1,
+                                     mpImpl->mbBoolean1 ? SVXFILETYPE_FIX : SVXFILETYPE_VAR,
+                                     setFileNameDisplayFormat((SvxFileFormat)mpImpl->mnInt16 ) );
         break;
     }
 
     case ID_AUTHORFIELD:
     {
+        ::rtl::OUString aContent;
         String aFirstName;
         String aLastName;
         String aEmpty;
 
-        sal_Int32 nPos = mpImpl->msString1.lastIndexOf( sal_Char(' '), 0 );
+        // do we have CurrentPresentation given?
+        // mimic behaviour of writer, which means:
+        // prefer CurrentPresentation over Content
+        // if both are given.
+        if( mpImpl->msString1.getLength() )
+            aContent = mpImpl->msString1;
+        else
+            aContent = mpImpl->msString2;
+
+        sal_Int32 nPos = aContent.lastIndexOf( sal_Char(' '), 0 );
         if( nPos > 0 )
         {
-            aFirstName = mpImpl->msString1.copy( 0, nPos );
-            aLastName = mpImpl->msString1.copy( nPos + 1 );
+            aFirstName = aContent.copy( 0, nPos );
+            aLastName = aContent.copy( nPos + 1 );
         }
         else
         {
-            aLastName = mpImpl->msString1;
+            aLastName = aContent;
         }
 
-        pData = new SvxAuthorField( SvxAddressItem( aEmpty, aEmpty, aFirstName, aLastName ) );
+        // #92009# pass fixed attribute to constructor
+        pData = new SvxAuthorField( SvxAddressItem( aEmpty, aEmpty, aFirstName, aLastName ),
+                                    mpImpl->mbBoolean1 ? SVXAUTHORTYPE_FIX : SVXAUTHORTYPE_VAR );
 
         if( !mpImpl->mbBoolean2 )
         {
