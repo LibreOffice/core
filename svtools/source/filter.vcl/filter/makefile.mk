@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: sj $ $Date: 2002-04-11 13:07:00 $
+#   last change: $Author: vg $ $Date: 2002-09-12 16:41:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,20 +62,14 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=filter
 DEPTARGET=vfilter
 VERSION=$(UPD)
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-.IF "$(GUI)"=="WIN"
-LINKFLAGS=$(LINKFLAGS) /PACKC:32768
-.ENDIF
 
 # --- UNOTypes -----------------------------------------------------
 
@@ -83,18 +77,29 @@ UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)$/$(TARGET)
 INCPRE+=$(UNOUCROUT)
-UNOTYPES=\
-    com.sun.star.uno.TypeClass							\
-    com.sun.star.uno.XInterface							\
-    com.sun.star.uno.XWeak								\
-    com.sun.star.uno.XAggregation						\
-    com.sun.star.lang.XTypeProvider						\
-    com.sun.star.lang.XMultiServiceFactory				\
-    com.sun.star.io.XActiveDataSource					\
-    com.sun.star.io.XOutputStream						\
-    com.sun.star.svg.XSVGWriter							\
-    com.sun.star.xml.sax.XDocumentHandler				\
-    com.sun.star.ui.dialogs.XExecutableDialog
+UNOTYPES=	com.sun.star.beans.PropertyValue					\
+            com.sun.star.beans.XPropertyAccess					\
+            com.sun.star.beans.XPropertySetInfo					\
+            com.sun.star.container.XHierarchicalNameAccess		\
+            com.sun.star.container.XIndexAccess					\
+            com.sun.star.container.XNameAccess					\
+            com.sun.star.document.XViewDataSupplier				\
+            com.sun.star.document.XExporter						\
+            com.sun.star.frame.XModel							\
+            com.sun.star.io.XActiveDataSource					\
+            com.sun.star.io.XOutputStream						\
+            com.sun.star.lang.XInitialization					\
+            com.sun.star.lang.XMultiServiceFactory				\
+            com.sun.star.lang.XServiceInfo						\
+            com.sun.star.lang.XTypeProvider						\
+            com.sun.star.svg.XSVGWriter							\
+            com.sun.star.ui.dialogs.XExecutableDialog			\
+            com.sun.star.ui.dialogs.ExecutableDialogResults		\
+            com.sun.star.uno.XAggregation						\
+            com.sun.star.uno.XInterface							\
+            com.sun.star.uno.XWeak								\
+            com.sun.star.util.XChangesBatch						\
+            com.sun.star.xml.sax.XDocumentHandler
 
 
 
