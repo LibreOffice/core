@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-08 15:54:30 $
+#   last change: $Author: vg $ $Date: 2003-06-12 09:47:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -167,7 +167,7 @@ DEF1EXPORTFILE=export.exp
 
 .IF "$(TESTAPP)" == "salstattest"
 
-    CFLAGS+= /DUSE_SAL_STATIC
+    CFLAGS+= -DUSE_SAL_STATIC
 
     OBJFILES=	$(OBJ)$/salstattest.obj
 
@@ -379,7 +379,7 @@ APP4DEPN=	$(SLB)$/sal.lib
 # tgetpwnam
 #
 .IF "$(TESTAPP)" == "tgetpwnam"
-.IF "$(OS)"=="SCO" || "$(OS)"=="NETBSD"
+.IF "$(OS)"=="SCO" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
 
 CXXFILES=	tgetpwnam.cxx
 OBJFILES=	$(OBJ)$/tgetpwnam.obj
@@ -389,7 +389,7 @@ APP5OBJS=	$(OBJFILES)
 APP5STDLIBS=$(SALLIB)
 APP5DEPN=	$(SLB)$/sal.lib
 
-.ENDIF # (sco | netbsd)
+.ENDIF # (sco | netbsd | freebsd)
 .ENDIF # tgetpwname
 
 # --- Targets ------------------------------------------------------
