@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:53:52 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,6 +458,8 @@ ModalDialog DLG_UUI_LOGIN
     Text[ hindi ] = "उपभोक्ता का नाम और कूटशब्द चाहिए ";
     Text[ slovak ] = "Je vyžadované užívateľské meno a heslo";
 };
+
+
 
 
 
