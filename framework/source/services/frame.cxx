@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-10-12 10:49:55 $
+ *  last change: $Author: mba $ $Date: 2000-10-13 12:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1879,16 +1879,12 @@ void Frame::impl_setComponentWindow( const Reference< XWindow >& xWindow )
         m_xComponentWindow = xWindow;
         // Set correct size before showing the window.
         impl_resizeComponentWindow();
-        if ( m_xComponentWindow.is() == sal_True )
-        {
-            m_xComponentWindow->setVisible( sal_True );
-        }
+
         // Destroy old window.
         if ( xOld.is() == sal_True )
         {
             // All VclComponents are XComponents; so call dispose before discarding
             // a Reference< XVclComponent >, because this frame is the owner of the Component.
-            xOld->setVisible( sal_False );
             xOld->dispose();
         }
     }
