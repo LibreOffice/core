@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:46:08 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,6 @@
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
-#endif
-
-#if defined DEBUG_TIMING
-#include <stdio.h>
-#include <osl/time.h>
 #endif
 
 #include <string.h>
@@ -237,7 +232,7 @@ void DefaultFontConfigItem::Commit()
             continue;
 
         String aKeyName( aLanguage );
-        sal_Bool bAdded = AddNode( OUString(), aLanguage ); // defaults for a not yet configured language may be added
+        AddNode( OUString(), aLanguage ); // defaults for a not yet configured language may be added
         Sequence< PropertyValue > aValues( nKeys );
         PropertyValue* pValues = aValues.getArray();
         int nIndex = 0;
@@ -274,54 +269,15 @@ void DefaultFontConfigItem::Notify( const Sequence< OUString >& rPropertyNames )
 /*
  *  DefaultFontConfigItem::getValues
  */
-#ifdef DEBUG_TIMING
-static double fTimeCorrection = 0.0;
-#define START_TIMING() osl_getSystemTime( &aTmpTV1 );
-#define END_TIMING()\
-    osl_getSystemTime( &aTmpTV2 );\
-    fTmp = (double)aTmpTV2.Seconds + 1e-9*(double)aTmpTV2.Nanosec - (double)aTmpTV1.Seconds -1e-9*(double)aTmpTV1.Nanosec;\
-    if( fTmp > 0.0005 )\
-        fConfigTime += fTmp;\
-    else\
-        fprintf( stderr, "warning: timining inaccurate: %g\n", fTmp );
-
-#else
-#define START_TIMING()
-#define END_TIMING()
-#endif
-
 void DefaultFontConfigItem::getValues()
 {
     if( ! IsValidConfigMgr() )
         return;
 
-#ifdef DEBUG_TIMING
-    static bool bOnce = false;
-    TimeValue aStart;
-    TimeValue aStop;
-    TimeValue aTmpTV1, aTmpTV2;
-    double fConfigTime = 0.0;
-    double fTmp;
-    if( ! bOnce )
-    {
-        bOnce = true;
-        START_TIMING();
-        for( int i = 0; i < 100000; i++ )
-            osl_getSystemTime( &aStop );
-        END_TIMING();
-        fTimeCorrection = fTmp/100000.0;
-        fprintf( stderr, "osl_getSystemTime takes an average of %g seconds\n", fTimeCorrection );
-    }
-    osl_getSystemTime( &aStart );
-    fConfigTime = 0.0;
-#endif
-
     m_aDefaults.clear();
 
     int i, j;
-    START_TIMING();
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );
-    END_TIMING();
     for( j = 0; j < aNames.getLength(); j++ )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -330,9 +286,7 @@ void DefaultFontConfigItem::getValues()
                  );
 #endif
         String aKeyName( aNames.getConstArray()[j] );
-        START_TIMING();
         Sequence< OUString > aKeys( GetNodeNames( aKeyName ) );
-        END_TIMING();
         Sequence< OUString > aLocaleKeys( aKeys.getLength() );
         const OUString* pFrom = aKeys.getConstArray();
         OUString* pTo = aLocaleKeys.getArray();
@@ -343,9 +297,7 @@ void DefaultFontConfigItem::getValues()
             aName.Append( String( pFrom[m] ) );
             pTo[m] = aName;
         }
-        START_TIMING();
         Sequence< Any > aValues( GetProperties( aLocaleKeys ) );
-        END_TIMING();
         int nLanguageType = ConvertIsoStringToLanguage( aNames.getConstArray()[j], '-' );
         const Any* pValue = aValues.getConstArray();
         for( i = 0; i < aValues.getLength(); i++, pValue++ )
@@ -364,13 +316,6 @@ void DefaultFontConfigItem::getValues()
             }
         }
     }
-#ifdef DEBUG_TIMING
-    osl_getSystemTime( &aStop );
-    double fElapse = (double)aStop.Seconds + 1e-9*(double)aStop.Nanosec;
-    fElapse -= (double)aStart.Seconds + 1e-9*(double)aStart.Nanosec;
-    fprintf( stderr, "DefaultFontConfigItem::getValues needed %g seconds\n", fElapse );
-    fprintf( stderr, "time spent in configuration: %g seconds (%g%%)\n", fConfigTime, fConfigTime/fElapse*100.0 );
-#endif
 }
 
 /*
@@ -1068,26 +1013,12 @@ void FontSubstConfigItem::getValues()
     if( ! IsValidConfigMgr() )
         return;
 
-#ifdef DEBUG_TIMING
-    TimeValue aStart;
-    TimeValue aStop;
-    TimeValue aTmpTV1, aTmpTV2;
-    osl_getSystemTime( &aStart );
-
-    double fConfigTime = 0.0;
-    double fTmp;
-#endif
-
-    START_TIMING();
     Sequence< OUString > aLocales( GetNodeNames( OUString( ) ) );
-    END_TIMING();
     for( int j = 0; j < aLocales.getLength(); j++ )
     {
         String aKeyName( aLocales.getConstArray()[j] );
         int nLanguageType = ConvertIsoStringToLanguage( aLocales.getConstArray()[j], '-' );
-        START_TIMING();
         Sequence< OUString > aSubstFonts( GetNodeNames( aKeyName ) );
-        END_TIMING();
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "reading %d font substitutions for locale %s\n",
                  aSubstFonts.getLength(),
@@ -1113,9 +1044,7 @@ void FontSubstConfigItem::getValues()
             pKeys[4] = aFontKey.Copy().AppendAscii( "FontWidth" );
             pKeys[5] = aFontKey.Copy().AppendAscii( "FontWeight" );
             pKeys[6] = aFontKey.Copy().AppendAscii( "FontType" );
-            START_TIMING();
             Sequence< Any > aValues( GetProperties( aKeys ) );
-            END_TIMING();
             const Any* pValues = aValues.getConstArray();
             sal_Int32 nIndex = 0, width = -1, weight = -1, type = 0;
             const OUString* pLine;
@@ -1226,13 +1155,6 @@ void FontSubstConfigItem::getValues()
         }
         ::std::sort( m_aSubstitutions[nLanguageType].begin(), m_aSubstitutions[nLanguageType].end(), StrictStringSort() );
     }
-#ifdef DEBUG_TIMING
-    osl_getSystemTime( &aStop );
-    double fElapse = (double)aStop.Seconds + 1e-9*(double)aStop.Nanosec;
-    fElapse -= (double)aStart.Seconds + 1e-9*(double)aStart.Nanosec;
-    fprintf( stderr, "FontSubstConfigItem::getValues needed %g seconds\n", fElapse );
-    fprintf( stderr, "time spent in configuration: %g seconds (%g%%)\n", fConfigTime, fConfigTime/fElapse*100.0 );
-#endif
 }
 
 const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( const String& rFontName, int nLanguage ) const
