@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 13:10:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 #include "cc50_solaris_sparc.hxx"
 
