@@ -1,0 +1,156 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ToolbarController.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:20:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_ToolbarController_idl__
+#define __com_sun_star_frame_ToolbarController_idl__
+
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+
+#ifndef __com_sun_star_util_XUpdatable_idl__
+#include <com/sun/star/util/XUpdatable.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XStatusListener_idl__
+#include <com/sun/star/frame/XStatusListener.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XToolbarController_idl__
+#include <com/sun/star/frame/XToolbarController.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** is an abstract service for a component which offers a more complex user interface
+    to users within a toolbar.
+
+    <p>
+    A generic toolbar function is represented as a button which has a state
+    (enabled,disabled and selected, not selected). A toolbar controller can be added to a
+    toolbar and provide information or functions within a more sophisticated user interface.<br/>
+    A typical example for toolbar controller is the font chooser within the toolbar. It provides
+    all available fonts in a dropdown box and shows the current chosen font.
+    <p>
+
+    @see com::sun::star::frame::XDispatchProvider
+ */
+
+service ToolbarController
+{
+    //-------------------------------------------------------------------------
+    /** with this interface a component can receive events if a feature has changed.
+
+        <p>
+        The toolbar controller implementation should register itself as a listener
+        when its <member scope="com::sun::star::util">XUpdatable</member> interface
+        has been called.
+        </p>
+     */
+    interface com::sun::star::frame::XStatusListener;
+
+    /** used to initialize a component with required arguments.
+
+        <b>A toolbar controller needs at least three additional arguments provided as
+        <type scope="com::sun::star::beans">PropertyValue</type>:
+        <ul>
+            <li><b>Frame</b><br>a <type scope="com::sun::star::frame">XFrame</type>
+                   instance to which the toolbar controller belongs.</li>
+            <li><b>CommandURL</b><br>a string which specifies the command a toolbar controller
+                   is bound.</li>
+            <li><b>ServiceManager</b><br>a <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+                   instance which can be used to create additional UNO services.</li>
+        </ul>
+    */
+    interface com::sun::star::lang::XInitialization;
+
+    /** used to notify an implementation that it needs to add its listener or remove and add them
+        again.
+
+        <p>
+        A toolbar controller instance is ready for use after this call has been made the first time. The
+        toolbar implementation guarentees that the controller's item window has been added to the toolbar
+        and its reference is held by it.
+        </p>
+    */
+    interface com::sun::star::util::XUpdatable;
+
+    //-------------------------------------------------------------------------
+    /** used to notify changed features and requests for additional user interface items.
+
+        <p>
+        Mostly used by a toolbar implementation to forward information to and request
+        services from a toolbar controller component. This interface must be useable after
+        <member scope="com::sun::star::lang>XInitialitation::initialize</member> has been
+        called.  The behavior of the interface is undefined if the controller component hasn't been
+        initialized.
+        </p>
+     */
+    interface com::sun::star::frame::XToolbarController;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
