@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-19 08:39:54 $
+ *  last change: $Author: jp $ $Date: 2001-09-19 17:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,9 +552,15 @@ void ViewShell::MakeVisible( const SwRect &rRect )
         {
             if( pWin )
             {
-                StartAction();
-                ScrollMDI( this, rRect, USHRT_MAX, USHRT_MAX );
-                EndAction();
+                const SwFrm* pRoot = GetDoc()->GetRootFrm();
+                int nLoopCnt = 3;
+                long nOldH;
+                do{
+                    nOldH = pRoot->Frm().Height();
+                    StartAction();
+                    ScrollMDI( this, rRect, USHRT_MAX, USHRT_MAX );
+                    EndAction();
+                } while( nOldH != pRoot->Frm().Height() && nLoopCnt-- );
             }
 #ifndef PRODUCT
             else
