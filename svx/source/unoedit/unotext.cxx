@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 18:59:02 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 17:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1396,6 +1396,8 @@ void SAL_CALL SvxUnoText::insertTextContent( const uno::Reference< text::XTextRa
     SvxFieldItem aField( *pFieldData );
     pForwarder->QuickInsertField( aField, aSelection );
     GetEditSource()->UpdateData();
+
+    pField->SetAnchor( uno::Reference< text::XTextRange >::query( (cppu::OWeakObject*)this ) );
 
     aSelection.nEndPos += 1;
     aSelection.nStartPos = aSelection.nEndPos;
