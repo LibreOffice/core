@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaLoader.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-03 08:49:50 $
+ *  last change: $Author: dbo $ $Date: 2002-08-13 11:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ import com.sun.star.registry.InvalidValueException;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.registry.XSimpleRegistry;
 
+import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
@@ -105,7 +106,7 @@ import java.net.MalformedURLException;
  * service. Therefor the <code>JavaLoader</code> activates external UNO components which are implemented in Java.
  * The loader is used by the <code>ServiceManger</code>.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2002-07-03 08:49:50 $
+ * @version     $Revision: 1.7 $ $ $Date: 2002-08-13 11:40:32 $
  * @author      Markus Herzog
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
@@ -336,28 +337,55 @@ public class JavaLoader implements XImplementationLoader,
         Object[] params = { implementationName, multiServiceFactory, xKey };
 
         // try to get factory from implemetation class
+        // latest style: use the public static method __getComponentFactory
         // - new style: use the public static method __getServiceFactory
         // - old style: use the public static method getServiceFactory ( DEPRECATED )
+
+        Method compfac_method = null;
+        try
+        {
+             compfac_method = clazz.getMethod(
+                "__getComponentFactory", new Class [] { String.class } );
+        }
+        catch ( NoSuchMethodException noSuchMethodEx) {}
+        catch ( SecurityException secEx) {}
+
         Method method = null;
-        try {
-             method = clazz.getMethod("__getServiceFactory", paramTypes);
-        }
-        catch ( NoSuchMethodException noSuchMethodEx) {
-            method = null;
-        }
-        catch ( SecurityException secEx) {
-            method = null;
-        }
-
-        try {
-            if ( method == null ) {
-                method = clazz.getMethod("getServiceFactory", paramTypes);
+        if (null == compfac_method)
+        {
+            try {
+                method = clazz.getMethod("__getServiceFactory", paramTypes);
             }
+            catch ( NoSuchMethodException noSuchMethodEx) {
+                method = null;
+            }
+            catch ( SecurityException secEx) {
+                method = null;
+            }
+        }
 
-            Object oRet = method.invoke(clazz, params);
+        try {
+            if (null != compfac_method)
+            {
+                Object ret = compfac_method.invoke( clazz, new Object [] { implementationName } );
+                if (null == ret || !(ret instanceof XSingleComponentFactory))
+                {
+                    throw new CannotActivateFactoryException(
+                        "No factory object for " + implementationName );
+                }
+                return (XSingleComponentFactory)ret;
+            }
+            else
+            {
+                if ( method == null ) {
+                    method = clazz.getMethod("getServiceFactory", paramTypes);
+                }
 
-            if ( (oRet != null) && (oRet instanceof XSingleServiceFactory) ) {
-                returnObject = (XSingleServiceFactory) oRet;
+                Object oRet = method.invoke(clazz, params);
+
+                if ( (oRet != null) && (oRet instanceof XSingleServiceFactory) ) {
+                    returnObject = (XSingleServiceFactory) oRet;
+                }
             }
         }
         catch ( NoSuchMethodException noSuchMethodEx) {
@@ -485,7 +513,7 @@ public class JavaLoader implements XImplementationLoader,
  * the registration at a registry in a default manner. The class is used by the <code>JavaLoader</code> if the
  * a component does not comes with its own methods for creating a factory or for the registration.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2002-07-03 08:49:50 $
+ * @version     $Revision: 1.7 $ $ $Date: 2002-08-13 11:40:32 $
  * @author      Markus Herzog
  * @since       UDK1.0
  */

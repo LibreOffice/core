@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaLoaderFactory.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:51 $
+ *  last change: $Author: dbo $ $Date: 2002-08-13 11:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,8 @@ import com.sun.star.uno.Exception;
 public class JavaLoaderFactory implements XSingleServiceFactory, XServiceInfo {
 
     private static String[] supportedServices = {
-        "com.sun.star.loader.Java"
+        "com.sun.star.loader.Java",
+        "com.sun.star.loader.Java2"
     };
 
     private static final boolean DEBUG = false;
