@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-14 13:04:22 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _SDPAGE_HXX
 #define _SDPAGE_HXX
 
+#include <list>
+#include <functional>
+
 #include <com/sun/star/uno/XInterface.hpp>
 #ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
 #include <com/sun/star/presentation/FadeEffect.hpp>
@@ -90,6 +93,8 @@ class SdPageLink;
 class StarBASIC;
 class SfxItemSet;
 struct StyleRequestData;
+struct SdrPaintProcRec;
+class SdPage;
 
 enum PresObjKind
 {
@@ -106,7 +111,65 @@ enum PresObjKind
     PRESOBJ_BACKGROUND,
     PRESOBJ_PAGE,
     PRESOBJ_HANDOUT,
-    PRESOBJ_NOTES
+    PRESOBJ_NOTES,
+    PRESOBJ_HEADER,
+    PRESOBJ_FOOTER,
+    PRESOBJ_DATETIME,
+    PRESOBJ_SLIDENUMBER
+};
+
+namespace sd {
+
+    struct PresentationObjectDescriptor
+    {
+        SdrObject*  mpObject;
+        PresObjKind meKind;
+
+        PresentationObjectDescriptor( SdrObject* pObject, PresObjKind eKind ) : mpObject( pObject ), meKind( eKind ) {}
+
+        bool operator==( const PresentationObjectDescriptor& r )
+        {
+            return (mpObject == r.mpObject) && (meKind == r.meKind);
+        }
+    };
+
+    typedef std::list< PresentationObjectDescriptor > PresentationObjectList;
+
+    /** this unary_function can be used with stl algorithms to find presentation objects of the same kind */
+    struct isPresObjKind_func : public std::unary_function<PresentationObjectDescriptor, bool>
+    {
+        isPresObjKind_func( PresObjKind eKind ) : meKind( eKind ) {}
+        bool operator() (PresentationObjectDescriptor x) { return x.meKind == meKind; }
+        PresObjKind meKind;
+    };
+
+    /** this unary_function can be used with stl algorithms to remove presentation objects from its page */
+    struct removePresObj_func : public std::unary_function< PresentationObjectDescriptor, void >
+    {
+        removePresObj_func( SdPage* pPage ) : mpPage( pPage ) {}
+        void operator() (PresentationObjectDescriptor x);
+        SdPage* mpPage;
+    };
+
+    struct HeaderFooterSettings
+    {
+        bool mbHeaderVisible;
+        String maHeaderText;
+
+        bool mbFooterVisible;
+        String maFooterText;
+
+        bool mbSlideNumberVisible;
+
+        bool mbDateTimeVisible;
+        bool mbDateTimeIsFixed;
+        String maDateTimeText;
+        int meDateTimeFormat;
+
+        HeaderFooterSettings();
+
+        bool operator==( const HeaderFooterSettings& rSettings );
+    };
 };
 
 class SdPage : public FmFormPage, public SdrObjUserCall
@@ -116,7 +179,7 @@ friend class SdGenericDrawPage;
 protected:
     PageKind    ePageKind;                // Seitentyp
     AutoLayout  eAutoLayout;              // AutoLayout
-    List        aPresObjList;             // Praesentationsobjekte
+    sd::PresentationObjectList maPresObjList;             // Praesentationsobjekte
     BOOL        bOwnArrangement;          // Objekte werden intern angeordnet
 
     BOOL        bSelected;                // Selektionskennung
@@ -140,7 +203,7 @@ protected:
     SdPageLink* pPageLink;                // PageLink (nur bei gelinkten Seiten)
 
     BOOL        InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical,
-                              Rectangle rRect, BOOL bInit, List& rObjList);
+                              Rectangle rRect, BOOL bInit, sd::PresentationObjectList& rObjList);
 
     void        AdjustBackgroundSize();
     Rectangle   GetTitleRect() const;
@@ -152,6 +215,7 @@ protected:
 
     SfxItemSet* getOrCreateItems();
 
+    sd::HeaderFooterSettings    maHeaderFooterSettings;
 public:
     TYPEINFO();
 
@@ -169,15 +233,28 @@ public:
     virtual void    SetModel(SdrModel* pNewModel);
     virtual FASTBOOL IsReadOnly() const;
 
-    List*           GetPresObjList() { return &aPresObjList; }
+    sd::PresentationObjectList& GetPresObjList() { return maPresObjList; }
     SdrObject*      CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect, BOOL bInsert=FALSE);
-    SdrObject*      GetPresObj(PresObjKind eObjKind, USHORT nIndex = 1);
+    SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert);
+    SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1);
     PresObjKind     GetPresObjKind(SdrObject* pObj);
     String          GetPresObjText(PresObjKind eObjKind);
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind);
-    void            SetAutoLayout(AutoLayout eLayout, BOOL bInit=FALSE, BOOL bAPICall=FALSE);
+
+    /** returns true if the given SdrObject is inside the presentation object list */
+    bool            IsPresObj(const SdrObject* pObj);
+
+    /** removes the given SdrObject from the presentation object list */
+    void            RemovePresObj(const SdrObject* pObj);
+
+    /** inserts the given SdrObject into the presentation object list */
+    void            InsertPresObj(SdrObject* pObj, PresObjKind eKind );
+
+    sd::PresentationObjectList::iterator FindPresObj(const SdrObject* pObj);
+
+    void            SetAutoLayout(AutoLayout eLayout, BOOL bInit=FALSE, BOOL bCreate=FALSE);
     AutoLayout      GetAutoLayout() const { return eAutoLayout; }
-    void            CreateTitleAndLayout(BOOL bInit=FALSE, BOOL bAPICall=FALSE);
+    void            CreateTitleAndLayout(BOOL bInit=FALSE, BOOL bCreate=FALSE);
 
     virtual void       NbcInsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND,
                                        const SdrInsertReason* pReason=NULL);
@@ -272,10 +349,17 @@ public:
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
 
-#ifndef SVX_LIGHT
     sal_Bool setAlienAttributes( const com::sun::star::uno::Any& rAttributes );
     void getAlienAttributes( com::sun::star::uno::Any& rAttributes );
-#endif
+
+    sd::HeaderFooterSettings& getHeaderFooterSettings();
+
+    /** this method returns true if the object from the SdrPaintProcRec should
+        be visible on this page while rendering.
+        bEdit selects if visibility test is for an editing view or a final render,
+        like printing.
+    */
+    virtual bool checkVisibility( SdrPaintProcRec* pRecord, bool bEdit );
 };
 
 #endif     // _SDPAGE_HXX
