@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:44:33 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1382,7 +1382,11 @@ SwFlyList *SwTxtFly::InitFlyList()
                  nRight < (aBound.*fnRect->fnGetLeft)() ||
                  (*fnRect->fnYDiff)( (aRect.*fnRect->fnGetTop)(),
                                      (aBound.*fnRect->fnGetBottom)() ) > 0 ||
-                 nLeft > (aBound.*fnRect->fnGetRight)() )
+                 nLeft > (aBound.*fnRect->fnGetRight)() ||
+                 // --> FME 2004-07-14 #i20505# Do not consider oversized objects
+                 (aBound.*fnRect->fnGetHeight)() >
+                 2 * (pPage->Frm().*fnRect->fnGetHeight)() )
+                 // <--
             {
                 continue;
             }
