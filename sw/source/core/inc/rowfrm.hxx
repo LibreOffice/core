@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowfrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:46:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,11 @@ class SwRowFrm: public SwLayoutFrm
 
     const SwTableLine *pTabLine;
     SwRowFrm* pFollowRow;
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    USHORT mnTopMarginForLowers;
+    USHORT mnBottomMarginForLowers;
+    USHORT mnBottomLineSize;
+    // <-- collapsing
     bool bIsFollowFlowRow;
     bool bIsRepeatedHeadline;
 
@@ -111,13 +116,23 @@ public:
     SwRowFrm* GetFollowRow() const { return pFollowRow; }
     void SetFollowRow( SwRowFrm* pNew ) { pFollowRow = pNew; }
 
-    bool IsFollowFlowRow() const { return bIsFollowFlowRow; }
-    void SetFollowFlowRow( bool bNew ) { bIsFollowFlowRow = bNew; }
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    USHORT GetTopMarginForLowers() const { return mnTopMarginForLowers; }
+    void   SetTopMarginForLowers( USHORT nNew ) { mnTopMarginForLowers = nNew; }
+    USHORT GetBottomMarginForLowers() const { return mnBottomMarginForLowers; }
+    void   SetBottomMarginForLowers( USHORT nNew ) { mnBottomMarginForLowers = nNew; }
+    USHORT GetBottomLineSize() const { return mnBottomLineSize; }
+    void   SetBottomLineSize( USHORT nNew ) { mnBottomLineSize = nNew; }
+    // <-- collapsing
 
     bool IsRepeatedHeadline() const { return bIsRepeatedHeadline; }
     void SetRepeatedHeadline( bool bNew ) { bIsRepeatedHeadline = bNew; }
 
+    // --> split table rows
     bool IsRowSplitAllowed() const;
+    bool IsFollowFlowRow() const { return bIsFollowFlowRow; }
+    void SetFollowFlowRow( bool bNew ) { bIsFollowFlowRow = bNew; }
+    // <-- split table rows
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwRowFrm)
 };
