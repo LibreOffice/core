@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 12:00:37 $
+ *  last change: $Author: mtg $ $Date: 2001-09-24 13:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,13 @@ SvXMLNamespaceMap::SvXMLNamespaceMap( const SvXMLNamespaceMap& rMap )
 
 SvXMLNamespaceMap::~SvXMLNamespaceMap()
 {
+    QNameCache::iterator aIter = aQNameCache.begin(), aEnd = aQNameCache.end();
+    while ( aIter != aEnd )
+    {
+        const OUString *pString = (*aIter).first.second;
+        aIter++;
+        delete pString;
+    }
 }
 
 int SvXMLNamespaceMap::operator ==( const SvXMLNamespaceMap& rCmp ) const
@@ -139,8 +146,8 @@ sal_uInt16 SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rNa
     pEntry->sName   = rName;
     pEntry->nKey    = nKey;
     pEntry->sPrefix = rPrefix;
-    aNameHash[rPrefix] = pEntry;
-    aNameMap[nKey]     = pEntry;
+    aNameHash[ rPrefix ] = pEntry;
+    aNameMap [ nKey ]    = pEntry;
     return nKey;
 }
 
@@ -213,7 +220,6 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
                             const OUString& rLocalName ) const
 {
     // We always want to return at least the rLocalName...
-    OUStringBuffer sQName;
 
     switch ( nKey )
     {
@@ -227,30 +233,42 @@ OUString SvXMLNamespaceMap::GetQNameByKey( sal_uInt16 nKey,
         case XML_NAMESPACE_XMLNS:
         {
             // ...if it's in the xmlns namespace, make the prefix
+            // don't bother caching this, it rarely happens
+            OUStringBuffer sQName;
             sQName.append ( sXMLNS );
             sQName.append ( sal_Unicode(':') );
             sQName.append ( rLocalName );
+            return sQName.makeStringAndClear();;
         }
         break;
         default:
         {
-            NameSpaceMap::const_iterator aIter = aNameMap.find ( nKey );
-            if ( aIter != aNameMap.end() )
-            {
-                // ...if it's in our map, make the prefix
-                sQName.append ( (*aIter).second->sPrefix);
-                sQName.append ( sal_Unicode(':') );
-                sQName.append ( rLocalName );
-            }
+            QNameCache::const_iterator aQCacheIter = aQNameCache.find ( QNamePair ( nKey, &rLocalName ) );
+            if ( aQCacheIter != aQNameCache.end() )
+                return (*aQCacheIter).second;
             else
             {
-                // ... if it isn't, this is a Bad Thing, assert and return the local name
-                DBG_ASSERT( sal_False, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
-                return rLocalName;
+                NameSpaceMap::const_iterator aIter = aNameMap.find ( nKey );
+                if ( aIter != aNameMap.end() )
+                {
+                    OUStringBuffer sQName;
+                    // ...if it's in our map, make the prefix
+                    sQName.append ( (*aIter).second->sPrefix);
+                    sQName.append ( sal_Unicode(':') );
+                    sQName.append ( rLocalName );
+                    OUString *pString = new OUString ( rLocalName ), &rString = sQName.makeStringAndClear();
+                    const_cast < QNameCache * > (&aQNameCache)->operator[] ( QNamePair ( nKey, pString ) ) = rString;
+                    return rString;
+                }
+                else
+                {
+                    // ... if it isn't, this is a Bad Thing, assert and return the local name
+                    DBG_ASSERT( sal_False, "SvXMLNamespaceMap::GetQNameByKey: invalid namespace key" );
+                    return rLocalName;
+                }
             }
         }
     }
-    return sQName.makeStringAndClear();;
 }
 
 sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName(
@@ -270,21 +288,43 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
     sal_Int32 nColonPos = rAttrName.indexOf( sal_Unicode(':') );
     if( -1L != nColonPos )
     {
-        OUString aPrefix( rAttrName.copy( 0L, nColonPos ) );
-        if( pPrefix )
-            *pPrefix = aPrefix;
-        if( pLocalName )
-            *pLocalName = rAttrName.copy( nColonPos + 1L );
-
-        NameSpaceHash::const_iterator aIter = aNameHash.find( aPrefix );
-        if ( aIter != aNameHash.end() )
+        NameSpaceHash::const_iterator aIter = aNameCache.find ( rAttrName );
+        if ( aIter != aNameCache.end() )
         {
-            nKey = (*aIter).second->nKey;
+            const NameSpaceEntry &rEntry = (*aIter).second.getBody();
+            if ( pPrefix )
+                *pPrefix = rEntry.sPrefix;
+            if ( pLocalName )
+                *pLocalName = rEntry.sName;
             if ( pNamespace )
-                *pNamespace = (*aIter).second->sName;
+            {
+                NameSpaceMap::const_iterator aMapIter = aNameMap.find (nKey);
+                *pNamespace = aMapIter != aNameMap.end() ? (*aMapIter).second->sName : sEmpty;
+            }
+            nKey = rEntry.nKey;
         }
-        else if ( aPrefix == sXMLNS )
-            nKey = XML_NAMESPACE_XMLNS;
+        else
+        {
+            NameSpaceEntry *pEntry = new NameSpaceEntry;
+            pEntry->sPrefix = rAttrName.copy( 0L, nColonPos );
+            pEntry->sName = rAttrName.copy( nColonPos + 1L );
+
+            if( pPrefix )
+                *pPrefix = pEntry->sPrefix;
+            if( pLocalName )
+                *pLocalName = pEntry->sName;
+
+            NameSpaceHash::const_iterator aIter = aNameHash.find( pEntry->sPrefix );
+            if ( aIter != aNameHash.end() )
+            {
+                nKey = pEntry->nKey = (*aIter).second->nKey;
+                if ( pNamespace )
+                    *pNamespace = (*aIter).second->sName;
+            }
+            else if ( pEntry->sPrefix == sXMLNS )
+                nKey = pEntry->nKey = XML_NAMESPACE_XMLNS;
+            const_cast < NameSpaceHash* > ( &aNameCache )->operator[] ( rAttrName ) = pEntry;
+        }
     }
     else
     {
