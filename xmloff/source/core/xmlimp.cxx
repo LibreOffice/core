@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 07:58:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,6 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XBINARYSTREAMRESOLVER_HPP_
 #include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
-#include <com/sun/star/lang/XEventListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_XML_SAX_XLOCATOR_HPP_
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #endif
@@ -245,7 +242,10 @@ void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& rEve
     throw(uno::RuntimeException)
 {
     if (pImport)
+    {
         pImport->DisposingModel();
+        pImport = NULL;
+    }
 }
 
 //==============================================================================
@@ -367,10 +367,10 @@ void SvXMLImport::_InitCtor()
     if (xNumberFormatsSupplier.is())
         pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier, getServiceFactory());
 
-    if (xModel.is() && !pEventListener)
+    if (xModel.is() && !xEventListener.is())
     {
-        pEventListener = new SvXMLImportEventListener(this);
-        xModel->addEventListener(pEventListener);
+        xEventListener.set(new SvXMLImportEventListener(this));
+        xModel->addEventListener(xEventListener);
     }
 }
 
@@ -391,7 +391,6 @@ SvXMLImport::SvXMLImport(
     pNumImport( NULL ),
     pProgressBarHelper( NULL ),
     pEventImportHelper( NULL ),
-    pEventListener( NULL ),
     pXMLErrors( NULL ),
     pStyleMap(0),
     mnImportFlags( nImportFlags ),
@@ -420,7 +419,6 @@ SvXMLImport::SvXMLImport(
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventImportHelper( NULL ),
-    pEventListener( NULL ),
     pXMLErrors( NULL ),
     pStyleMap(0),
     mnImportFlags( IMPORT_ALL ),
@@ -451,7 +449,6 @@ SvXMLImport::SvXMLImport(
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL ),
     pEventImportHelper( NULL ),
-    pEventListener( NULL ),
     pXMLErrors( NULL ),
     pStyleMap(0),
     mnImportFlags( IMPORT_ALL ),
@@ -483,8 +480,8 @@ SvXMLImport::~SvXMLImport() throw ()
     if( pImpl )
         delete pImpl;
 
-    if (pEventListener && xModel.is())
-        xModel->removeEventListener(pEventListener);
+    if (xEventListener.is() && xModel.is())
+        xModel->removeEventListener(xEventListener);
 }
 
 // XUnoTunnel & co
@@ -836,10 +833,10 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     xModel = uno::Reference< frame::XModel >::query( xDoc );
     if( !xModel.is() )
         throw lang::IllegalArgumentException();
-    if (xModel.is() && !pEventListener)
+    if (xModel.is() && !xEventListener.is())
     {
-        pEventListener = new SvXMLImportEventListener(this);
-        xModel->addEventListener(pEventListener);
+        xEventListener.set(new SvXMLImportEventListener(this));
+        xModel->addEventListener(xEventListener);
     }
 
     DBG_ASSERT( !pNumImport, "number format import already exists." );
@@ -1658,8 +1655,8 @@ void SvXMLImport::DisposingModel()
     if( xMasterStyles.Is() )
         ((SvXMLStylesContext *)&xMasterStyles)->Clear();
 
-    xModel = 0;
-    pEventListener = NULL;
+    xModel.set(0);
+    xEventListener.set(NULL);
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SvXMLImport::getServiceFactory()
