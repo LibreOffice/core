@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:40:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,29 +76,8 @@ ModalDialog DLG_FILTER_SELECT
     SVLook      = TRUE ;
     Size        = MAP_APPFONT ( 250 , 200 ) ;
     Moveable    = TRUE ;
-    Text = "Filterauswahl" ;
-    Text [ English ] = "Select Filter" ;
-    Text [ norwegian ] = "Velg Filter" ;
-    Text [ italian ] = "Scelta filtro" ;
-    Text [ portuguese_brazilian ] = "Seleção do filtro" ;
-    Text [ portuguese ] = "Seleccionar filtro" ;
-    Text [ finnish ] = "Suodattimen valinta" ;
-    Text [ danish ] = "Filterudvalg" ;
-    Text [ french ] = "Sélection d'un filtre" ;
-    Text [ swedish ] = "Filterurval" ;
-    Text [ dutch ] = "Filter selecteren" ;
-    Text [ spanish ] = "Seleccionar filtro" ;
-    Text [ english_us ] = "Filter Selection" ;
-    Text[ chinese_simplified ] = "é€‰æ‹©ç­›é€‰";
-    Text[ russian ] = "Âûáîğ ôèëüòğà";
-    Text[ polish ] = "Wybór filtru";
-    Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿ã®é¸æŠ";
-    Text[ chinese_traditional ] = "é¸æ“‡ç¯©é¸";
-    Text[ arabic ] = "ÊÍÏíÏ ÇáİáÊÑ";
-    Text[ greek ] = "ÅğéëïãŞ ößëôñïõ";
-    Text[ korean ] = "í•„í„° ì„ íƒ";
-    Text[ turkish ] = "Süzgeç Seçimi";
-    Text[ catalan ] = "Seleccionar filtro";
+    Text [ de ] = "Filterauswahl" ;
+    Text [ en-US ] = "Filter Selection" ;
 
     FixedText FT_URL
     {
@@ -138,13 +117,6 @@ ModalDialog DLG_FILTER_SELECT
         Size    = MAP_APPFONT (  50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
-    Text[ czech ] = "VÃ½bÄ›r filtru";
-    Text[ hebrew ] = "â€®×‘×—×™×¨×ª ××¡× ×Ÿâ€¬";
-    Text[ hindi ] = "Filter Selection";
-    Text[ slovak ] = "VÃ½ber filtra";
-    Text[ hungarian ] = "SzÅ±rÅ‘ kivÃ¡lasztÃ¡sa";
-    Text[ slovenian ] = "Izberi filter";
 };
 
 
