@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 13:57:06 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,15 +702,18 @@ void SwAddressListDialog::DetectTablesAndQueries(
                 }
             }
         }
-        uno::Reference<beans::XPropertySet> xSourceProperties;
-        m_xDBContext->getByName(m_aDBData.sDataSource) >>= xSourceProperties;
-        pUserData->sURL = lcl_getFlatURL( xSourceProperties );
+        if ( m_aDBData.sCommand.getLength() )
+        {
+            uno::Reference<beans::XPropertySet> xSourceProperties;
+            m_xDBContext->getByName(m_aDBData.sDataSource) >>= xSourceProperties;
+            pUserData->sURL = lcl_getFlatURL( xSourceProperties );
 
-        m_aListLB.SetEntryText(m_aDBData.sCommand, pSelect, ITEMID_TABLE - 1);
-        pUserData->xColumnsSupplier = SwNewDBMgr::GetColumnSupplier(pUserData->xConnection,
-                                m_aDBData.sCommand,
-                                m_aDBData.nCommandType == CommandType::TABLE ?
-                                        SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY );
+            m_aListLB.SetEntryText(m_aDBData.sCommand, pSelect, ITEMID_TABLE - 1);
+            pUserData->xColumnsSupplier = SwNewDBMgr::GetColumnSupplier(pUserData->xConnection,
+                                    m_aDBData.sCommand,
+                                    m_aDBData.nCommandType == CommandType::TABLE ?
+                                            SW_DB_SELECT_TABLE : SW_DB_SELECT_QUERY );
+        }
         m_aOK.Enable(pSelect && m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1).Len());
         m_aFilterPB.Enable( pUserData->xConnection.is() );
         m_aTablePB.Enable( pUserData->nTableAndQueryCount > 1 );
