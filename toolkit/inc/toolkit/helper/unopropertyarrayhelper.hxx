@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopropertyarrayhelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,5 +91,5 @@ public:
 
 
 
-#endif _TOOLKIT_HELPER_UNOPROPERTYARRAYHELPER_HXX_
+#endif // _TOOLKIT_HELPER_UNOPROPERTYARRAYHELPER_HXX_
 
