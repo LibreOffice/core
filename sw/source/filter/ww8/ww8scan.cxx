@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-16 14:34:34 $
+ *  last change: $Author: cmc $ $Date: 2001-04-06 12:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4800,18 +4800,22 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
         if( bVer67 )
         {
             WW8_FFN_Ver6* pVer6 = (WW8_FFN_Ver6*)pA;
+            BYTE c2;
             for(USHORT i=0; i<nMax; ++i, ++p)
             {
                 p->cbFfnM1   = pVer6->cbFfnM1;
-                p->prg       = pVer6->prg;
-                p->fTrueType = pVer6->fTrueType;
-                p->ff        = pVer6->ff;
+                c2           = *(((BYTE*)pVer6) + 1);
+
+                p->prg       =  c2 & 0x02;
+                p->fTrueType = (c2 & 0x04) >> 2;
+                // ein Reserve-Bit ueberspringen
+                p->ff        = (c2 & 0x70) >> 4;
+
                 p->wWeight   = SVBT16ToShort( *(SVBT16*)&pVer6->wWeight );
                 p->chs       = pVer6->chs;
                 p->ibszAlt   = pVer6->ibszAlt;
                 p->sFontname = String( pVer6->szFfn, RTL_TEXTENCODING_MS_1252 );
-                pVer6 = (WW8_FFN_Ver6*)(  ((BYTE*)pVer6)
-                                        + pVer6->cbFfnM1 + 1 );
+                pVer6 = (WW8_FFN_Ver6*)( ((BYTE*)pVer6) + pVer6->cbFfnM1 + 1 );
             }
         }
         else
@@ -4842,7 +4846,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 p->sFontname = pVer8->szFfn;
 
                 // Zeiger auf Ursprungsarray einen Font nach hinten setzen
-                pVer8 = (WW8_FFN_Ver8*)( ( (BYTE*)pVer8 ) +  pVer8->cbFfnM1 + 1 );
+                pVer8 = (WW8_FFN_Ver8*)( ((BYTE*)pVer8) + pVer8->cbFfnM1 + 1 );
             }
         }
     }
@@ -6189,11 +6193,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.11 2001-03-16 14:34:34 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.12 2001-04-06 12:37:12 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/03/16 14:34:34  cmc
+      ##503##,##508##,##176##,##502##,##516##,##517##,#78761#,#78762#,#84406#,#83168#,#84126# New piecetable handling and new undocumented sprms, disable by defining CRUEL_CUT, fixes quite a bit I hope
+
       Revision 1.10  2001/02/19 13:01:19  cmc
       #84082# Extra unknown bit in language index in DopTypography
 
