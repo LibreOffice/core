@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-25 10:17:04 $
+ *  last change: $Author: nf $ $Date: 2001-05-16 13:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,13 +282,17 @@ BOOL LngParser::Merge(
                 sGroup.EraseLeadingChars( ' ' );
                 sGroup.EraseTrailingChars( ' ' );
                 bGroup = TRUE;
+                nPos ++;
             }
             else if ( sLine.GetTokenCount( '=' ) > 1 ) {
                 ByteString sLang = sLine.GetToken( 0, '=' );
                 sLang.EraseLeadingChars( ' ' );
                 sLang.EraseTrailingChars( ' ' );
-                if (( sLang.IsNumericAscii()) &&
-                    ( MergeDataFile::GetLangIndex( sLang.ToInt32()) < LANGUAGES ) &&
+
+                if ( !sLang.IsNumericAscii() || !LANGUAGE_ALLOWED( sLang.ToInt32())) {
+                    pLines->Remove( nPos );
+                }
+                else if (( MergeDataFile::GetLangIndex( sLang.ToInt32()) < LANGUAGES ) &&
                     ( pEntrys ))
                 {
                     // this is a valid text line
@@ -309,9 +313,13 @@ BOOL LngParser::Merge(
                         Text[ nIndex ] = sNewText;
                     }
                     nLastLangPos = nPos;
+                    nPos ++;
                 }
+                else
+                    nPos ++;
             }
-            nPos ++;
+            else
+                nPos++;
         }
         if ( nLastLangPos ) {
             for ( USHORT i = 0; i < LANGUAGES; i++ ) {
@@ -324,7 +332,7 @@ BOOL LngParser::Merge(
                         ByteString sLine;
                         if ( Export::LangId[ i ] < 10 )
                             sLine += "0";
-                        sLine += Export::LangId[ i ];
+                        sLine += ByteString::CreateFromInt32( Export::LangId[ i ] );
                         sLine += " = \"";
                         sLine += sNewText;
                         sLine += "\"";
