@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog3" dlg:left="161" dlg:top="81" dlg:width="176" dlg:height="119" dlg:page="1" dlg:help-url="HID:34532" dlg:closeable="true" dlg:moveable="true">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog3" dlg:left="161" dlg:top="81" dlg:width="176" dlg:height="119" dlg:page="3" dlg:help-url="HID:34532" dlg:closeable="true" dlg:moveable="true">
  <dlg:bulletinboard>
   <dlg:text dlg:id="lblStockNames" dlg:tab-index="0" dlg:left="6" dlg:top="6" dlg:width="98" dlg:height="8" dlg:value="lblStockNames"/>
   <dlg:menulist dlg:id="lstStockNames" dlg:tab-index="1" dlg:left="5" dlg:top="17" dlg:width="102" dlg:height="12" dlg:help-url="HID:34533" dlg:spin="true">
-   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:Depot.Depot.SelectStockname?language=Basic&amp;location=application" script:language="Script"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:Depot.Depot.SelectStockNameForRates?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:menulist>
   <dlg:textfield dlg:id="txtStockID" dlg:tab-index="2" dlg:left="120" dlg:top="17" dlg:width="50" dlg:height="12" dlg:help-url="HID:34534"/>
   <dlg:datefield dlg:id="txtStartDate" dlg:tab-index="3" dlg:left="63" dlg:top="37" dlg:width="50" dlg:height="12" dlg:page="3" dlg:help-url="HID:34543" dlg:spin="true">
