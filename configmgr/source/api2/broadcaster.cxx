@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:30 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1102,7 +1102,7 @@ namespace configmgr
 
             OSL_ENSURE(!pos->isEmptyChange(), "Empty Change Found for Notification");
             // it actually is expected that elements may not be found - thus ignoring result
-            configapi::resolveToUno(aInfo.change,rFactory);
+            configapi::resolveToUno(aInfo.change, aInfo.accessor, rFactory);
 
             aNewInfos.push_back( aInfo );
         }
@@ -1134,7 +1134,7 @@ namespace configmgr
                 continue;
             }
 
-            if( !configapi::resolveToUno(aInfo.change,rFactory) )
+            if( !configapi::resolveToUno(aInfo.change,aInfo.accessor,rFactory) )
             {
                 // it actually is expected that elements may not be found
                 // OSL_TRACE("Cannot find affected elements of Change");
