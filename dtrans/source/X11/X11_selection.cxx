@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-07 14:35:22 $
+ *  last change: $Author: pl $ $Date: 2001-02-07 17:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
                 // just interested in SelectionClear/Notify/Request and PropertyChange
                 XSelectInput( m_pDisplay, m_aWindow, PropertyChangeMask );
                 // create the transferable for Drag operations
-                m_xDropTransferable = new X11Transferable( *this, m_nXdndSelection );
+                m_xDropTransferable = new X11Transferable( *this, static_cast< OWeakObject* >(this), m_nXdndSelection );
                 registerHandler( m_nXdndSelection, *this );
 
                 m_aThread = osl_createThread( run, this );
@@ -440,13 +440,13 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
 
 SelectionManager::~SelectionManager()
 {
-     MutexGuard aGuard(m_aMutex);
-
     if( m_aThread )
     {
         osl_terminateThread( m_aThread );
         osl_joinWithThread( m_aThread );
     }
+
+     MutexGuard aGuard(m_aMutex);
 
 #ifdef DEBUG
     fprintf( stderr, "shutting down SelectionManager\n" );

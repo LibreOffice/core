@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_transferable.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:29 $
+ *  last change: $Author: pl $ $Date: 2001-02-07 17:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,15 @@ namespace x11 {
     {
         ::osl::Mutex m_aMutex;
 
-        SelectionManager&   m_rManager;
+        SelectionManager&               m_rManager;
+        Reference< XInterface >         m_xCreator;
         Atom                m_aSelection;
 
         virtual ~X11Transferable();
 
     public:
 
-        X11Transferable( SelectionManager& rManager, Atom selection = None );
+        X11Transferable( SelectionManager& rManager, const Reference< XInterface >& xCreator, Atom selection = None );
 
         /*
          * XTransferable

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:24 $
+ *  last change: $Author: pl $ $Date: 2001-02-07 17:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ Reference< XTransferable > SAL_CALL X11Clipboard::getContents()
     MutexGuard aGuard(m_aMutex);
 
     if( ! m_aContents.is() )
-        m_aContents = new X11Transferable( SelectionManager::get() );
+        m_aContents = new X11Transferable( SelectionManager::get(), static_cast< OWeakObject* >(this) );
     return m_aContents;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_transferable.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:28 $
+ *  last change: $Author: pl $ $Date: 2001-02-07 17:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,11 @@ using namespace x11;
 
 X11Transferable::X11Transferable(
     SelectionManager& rManager,
+    const Reference< XInterface >& xCreator,
     Atom selection
     ) :
         m_rManager( rManager ),
+        m_xCreator( xCreator ),
         m_aSelection( selection )
 {
 }
