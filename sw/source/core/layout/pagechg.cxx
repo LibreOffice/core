@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-01 13:19:54 $
+ *  last change: $Author: ama $ $Date: 2002-02-05 15:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #ifndef _FTNINFO_HXX //autogen
 #include <ftninfo.hxx>
 #endif
+#include <tgrditem.hxx>
 
 #include "viewimp.hxx"
 #include "pagefrm.hxx"
@@ -194,19 +195,17 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
     if( GetUpper()->IsPageFrm() && ((SwPageFrm*)GetUpper())->HasGrid() &&
         ( !Lower() || !Lower()->IsColumnFrm() ) )
     {
-        long nGrid, nRuby, nLines;
-        BOOL bLower, bCell;
-        if( ((SwPageFrm*)GetUpper())->GetGrid( nGrid, nRuby, nLines,
-            bLower, bCell ) && nGrid )
+        GETGRID( ((SwPageFrm*)GetUpper()) )
+        if( pGrid )
         {
             bNoGrid = FALSE;
-            long nSum = nGrid + nRuby;
+            long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
             SWRECTFN( this )
             long nSize = (Frm().*fnRect->fnGetWidth)();
             long nBorder = 0;
-            if( bCell )
+            if( GRID_LINES_CHARS == pGrid->GetGridType() )
             {
-                nBorder = nSize % nGrid;
+                nBorder = nSize % pGrid->GetBaseHeight();
                 nSize -= nBorder;
                 nBorder /= 2;
             }
@@ -214,8 +213,8 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
             (Prt().*fnRect->fnSetWidth)( nSize );
             nBorder = (Frm().*fnRect->fnGetHeight)();
             nSize = nBorder / nSum;
-            if( nSize > nLines )
-                nSize = nLines;
+            if( nSize > pGrid->GetLines() )
+                nSize = pGrid->GetLines();
             nSize *= nSum;
             nBorder -= nSize;
             nBorder /= 2;
@@ -232,36 +231,6 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
     }
     bValidSize = bValidPrtArea = TRUE;
 }
-
-
-#ifdef VERTICAL_LAYOUT
-BOOL SwPageFrm::GetGrid( long& rGrid, long& rRuby, long& rLines,
-                         BOOL& rbLower, BOOL& rbCell ) const
-{
-    const SwTxtFmtColl *pFmt;
-    if( !bHasGrid || !pDesc || 0 == ( pFmt = pDesc->GetRegisterFmtColl() ) )
-        return FALSE;
-    ViewShell *pSh = GetShell();
-    if( pSh )
-    {
-        SwFontAccess aFontAccess( pFmt, pSh );
-        SwFont aFnt( *aFontAccess.Get()->GetFont() );
-        long nGrid = ( aFnt.GetSize( SW_CJK ).Height() * 5 ) / 4;
-        if( nGrid )
-        {
-            rGrid = nGrid;
-            rRuby = nGrid/4;
-            const SvxFont &rFnt = aFnt.GetFnt( SW_LATIN );
-            rLines = rFnt.GetSize().Height() / 20;
-            rbLower = WEIGHT_NORMAL != rFnt.GetWeight();
-            rbCell = ITALIC_NONE == rFnt.GetItalic();
-            return nGrid && rLines;
-        }
-    }
-    return FALSE;
-}
-
-#endif
 
 /*************************************************************************
 |*
@@ -280,13 +249,15 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
 #ifdef VERTICAL_LAYOUT
     SetDerivedVert( FALSE );
     SetDerivedR2L( FALSE );
-    bHasGrid = bShowGrid = bPrintGrid = FALSE;
     if( pDesc )
     {
-        const SwTxtFmtColl *pFmt = pDesc->GetRegisterFmtColl();
-        if( pFmt )
-            bHasGrid = bShowGrid = bPrintGrid = TRUE;
+        bHasGrid = TRUE;
+        GETGRID( this )
+        if( !pGrid )
+            bHasGrid = FALSE;
     }
+    else
+        bHasGrid = FALSE;
 #endif
     SetMaxFtnHeight( pPgDsc->GetFtnInfo().GetHeight() ?
                      pPgDsc->GetFtnInfo().GetHeight() : LONG_MAX ),
@@ -337,7 +308,7 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
                                  //Old-Wert hereingereicht wird.
             pBodyFrm->ChgColumns( aOld, rCol );
 #ifdef VERTICAL_LAYOUT
-            bHasGrid = bShowGrid = bPrintGrid = FALSE;
+            bHasGrid = FALSE;
 #endif
         }
     }
@@ -650,12 +621,13 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                 pB->ChgColumns( rOldCol, rNewCol );
 #ifdef VERTICAL_LAYOUT
                 if( rNewCol.GetNumCols() > 1 )
-                    bHasGrid = bShowGrid = bPrintGrid = FALSE;
+                    bHasGrid = FALSE;
                 else if( pDesc )
                 {
-                    const SwTxtFmtColl *pFmt = pDesc->GetRegisterFmtColl();
-                    if( pFmt )
-                        bHasGrid = bShowGrid = bPrintGrid = TRUE;
+                    bHasGrid = TRUE;
+                    GETGRID( this )
+                    if( !pGrid )
+                        bHasGrid = FALSE;
                 }
 #endif
             }
@@ -707,12 +679,13 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             pB->ChgColumns( *(const SwFmtCol*)pOld, *(const SwFmtCol*)pNew );
 #ifdef VERTICAL_LAYOUT
             if( ((const SwFmtCol*)pNew)->GetNumCols() > 1 )
-                bHasGrid = bShowGrid = bPrintGrid = FALSE;
+                bHasGrid = FALSE;
             else if( pDesc )
             {
-                const SwTxtFmtColl *pFmt = pDesc->GetRegisterFmtColl();
-                if( pFmt )
-                    bHasGrid = bShowGrid = bPrintGrid = TRUE;
+                bHasGrid = TRUE;
+                GETGRID( this )
+                if( !pGrid )
+                    bHasGrid = FALSE;
             }
 
 #endif
@@ -1322,9 +1295,9 @@ void SwPageFrm::PrepareRegisterChg()
         const SwTxtFmtColl *pFmt = pDesc->GetRegisterFmtColl();
         BOOL bOld = bHasGrid;
         if( pFmt )
-            bHasGrid = bShowGrid = bPrintGrid = TRUE;
+            bHasGrid = TRUE;
         else
-            bHasGrid = bShowGrid = bPrintGrid = FALSE;
+            bHasGrid = FALSE;
         if( bOld || bHasGrid )
         {
             SwLayoutFrm* pBody = FindBodyCont();

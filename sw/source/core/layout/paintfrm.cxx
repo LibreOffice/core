@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-30 13:35:06 $
+ *  last change: $Author: ama $ $Date: 2002-02-05 15:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
 #endif
 
 
@@ -497,7 +500,7 @@ BOOL SwLineRect::MakeUnion( const SwRect &rRect )
             //Zusammenfassen wenn kein Luecke zwischen den Linien ist.
             const long nAdd = nPixelSzW + nHalfPixelSzW;
             if ( Right() + nAdd >= rRect.Left() &&
-                 Left()  + nAdd <= rRect.Right() )
+                 Left()  - nAdd <= rRect.Right() )
             {
                 Right( Max( Right(), rRect.Right() ) );
                 Left ( Min( Left(),  rRect.Left()  ) );
@@ -3004,15 +3007,12 @@ void SwPageFrm::PaintAllBorders( const SwRect &rRect ) const
 #ifdef VERTICAL_LAYOUT
 void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
 {
-    if( !bHasGrid )
+    if( !bHasGrid || pRetoucheFly || pRetoucheFly2 )
         return;
-    const SwPageDesc* pDesc = GetPageDesc();
-    if( OUTDEV_PRINTER != pOut->GetOutDevType() ? bShowGrid : bPrintGrid )
+    GETGRID( this )
+    if( pGrid && OUTDEV_PRINTER != pOut->GetOutDevType() ?
+        pGrid->GetDisplayGrid() : pGrid->GetPrintGrid() )
     {
-        long nGrid, nRuby, nLines;
-        BOOL bLower, bCell;
-        if( !GetGrid( nGrid, nRuby, nLines, bLower, bCell ) )
-            return;
         const SwLayoutFrm* pBody = FindBodyCont();
         if( pBody && pBody->Lower() && !pBody->Lower()->IsColumnFrm() )
         {
@@ -3023,11 +3023,13 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
             aInter.Intersection( rRect );
             if( aInter.HasArea() )
             {
-                BOOL bGrid = bLower;
+                BOOL bGrid = pGrid->GetRubyTextBelow();
+                BOOL bCell = GRID_LINES_CHARS == pGrid->GetGridType();
+                long nGrid = pGrid->GetBaseHeight();
+                long nRuby = pGrid->GetRubyHeight();
                 long nSum = nGrid + nRuby;
                 pOut->Push( PUSH_FILLCOLOR );
-                const Color aStandard( COL_CYAN );
-                pOut->SetFillColor( aStandard );
+                pOut->SetFillColor( pGrid->GetColor() );
 
                 SwTwips nRight = aInter.Left() + aInter.Width();
                 SwTwips nBottom = aInter.Top() + aInter.Height();
@@ -3104,7 +3106,6 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                 while( aVert.Top() <= nBottom )
                                 {
                                     pOut->DrawRect( aVert.SVRect() );
-                                    //pLines->AddLineRect( aVert, &aStandard, 0 );
                                     aVert.Pos().Y() += nGrid;
                                 }
                             }
@@ -3182,6 +3183,16 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
                                     if( bRight )
                                     {
                                         aVert.Pos().X() = nGridRight;
+                                    static BOOL bTest = TRUE;
+                                    if( bTest )
+                                    {
+                                        static Color *pMyCol = 0;
+                                        if( !pMyCol )
+                                            pMyCol = new Color( COL_YELLOW );
+                                        PaintBorderLine( rRect, aVert, this,pMyCol);
+                                        //pLines->AddLineRect( aVert, pMyCol, 0 );
+                                    }
+                                    else
                                         pOut->DrawRect( aVert.SVRect() );
                                     }
                                 }
