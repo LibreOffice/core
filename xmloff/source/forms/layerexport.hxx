@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 15:37:44 $
+ *  last change: $Author: fs $ $Date: 2002-09-25 12:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
 #include <com/sun/star/util/XNumberFormats.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLMODEL_HPP_
+#include <com/sun/star/awt/XControlModel.hpp>
+#endif
 #ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
@@ -79,6 +82,9 @@
 #endif
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
+#endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 
 class SvXMLExport;
@@ -91,6 +97,8 @@ namespace xmloff
 {
 //.........................................................................
 
+    typedef ::std::set< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, ::comphelper::OInterfaceCompare< ::com::sun::star::beans::XPropertySet > >
+            PropertySetBag;
     //=====================================================================
     //= OFormLayerXMLExport_Impl
     //=====================================================================
@@ -104,6 +112,9 @@ namespace xmloff
     protected:
         SvXMLExport&        m_rContext;
         SvXMLNumFmtExport*  m_pControlNumberStyles;
+
+        // ignore list for control models
+        PropertySetBag      m_aIgnoreList;
 
         // style handling
         ::vos::ORef< XMLPropertyHandlerFactory >    m_xPropertyHandlerFactory;
@@ -293,6 +304,15 @@ namespace xmloff
         /** returns the prefix to be used for control number styles
         */
         static const ::rtl::OUString& getControlNumberStyleNamePrefix();
+
+        /** exclude the given control (model) from export.
+
+            <p>If your document contains form controls which are not to be exported for whatever reason,
+            you need to announce the models of these controls (can be retrieved from XControlShape::getControl)
+            to the form layer exporter.<br/>
+            Of course you have to do this before calling <member>exportForms</member></p>
+        */
+        void excludeFromExport( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > _rxControl );
     };
 
 //.........................................................................
@@ -304,6 +324,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/05/29 15:37:44  fs
+ *  #86712# no explicit dtor anymore
+ *
  *  Revision 1.10  2001/05/28 14:59:18  fs
  *  #86712# added control number style related functionality
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
+ *  last change: $Author: fs $ $Date: 2002-09-25 12:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ namespace xmloff
 //.........................................................................
 
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
@@ -278,6 +278,10 @@ namespace xmloff
                     // without this, a lot of stuff in the export routines may fail
                     continue;
 
+                // if the element is part of a ignore list, we are not allowed to export it
+                if ( m_aIgnoreList.end() != m_aIgnoreList.find( xCurrentProps ) )
+                    continue;
+
                 if (xElementEventManager.is())
                     aElementEvents = xElementEventManager->getScriptEvents(i);
 
@@ -312,6 +316,7 @@ namespace xmloff
 
         m_aControlNumberFormats.clear();
 
+        m_aIgnoreList.clear();
     }
 
     //---------------------------------------------------------------------
@@ -656,6 +661,18 @@ namespace xmloff
         return m_pControlNumberStyles;
     }
 
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::excludeFromExport( const Reference< XControlModel > _rxControl )
+    {
+        Reference< XPropertySet > xProps( _rxControl, UNO_QUERY );
+        OSL_ENSURE( xProps.is(), "OFormLayerXMLExport_Impl::excludeFromExport: invalid control model!" );
+#ifdef _DEBUG
+        ::std::pair< PropertySetBag::iterator, bool > aPos =
+#endif
+        m_aIgnoreList.insert( xProps );
+        OSL_ENSURE( aPos.second, "OFormLayerXMLExport_Impl::excludeFromExport: element already exists in the ignore list!" );
+    }
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -663,51 +680,8 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
- *  Revision 1.15  2001/06/11 06:34:30  fs
- *  #87978# corrected popping states in examineForms
- *
- *  Revision 1.14  2001/05/28 15:04:18  fs
- *  #86712# no releaseContext anymore
- *
- *  Revision 1.13  2001/05/28 14:59:18  fs
- *  #86712# added control number style related functionality
- *
- *  Revision 1.12  2001/03/21 16:54:38  jl
- *  Replaced OSL_ENSHURE by OSL_ENSURE
- *
- *  Revision 1.11  2001/03/16 14:36:39  sab
- *  did the required change (move of extract.hxx form cppuhelper to comphelper)
- *
- *  Revision 1.10  2001/02/01 09:46:47  fs
- *  no own style handling anymore - the shape exporter is responsible for our styles now
- *
- *  Revision 1.9  2001/01/24 08:55:48  fs
- *  corrected assertions in getControlId
- *
- *  Revision 1.8  2001/01/02 15:58:21  fs
- *  event ex- & import
- *
- *  Revision 1.7  2000/12/18 15:14:35  fs
- *  some changes ... now exporting/importing styles
- *
- *  Revision 1.6  2000/12/13 12:29:30  kz
- *  DEBUG -> _DEBUG for OSL_ENSURE
- *
- *  Revision 1.5  2000/12/06 17:28:05  fs
- *  changes for the formlayer import - still under construction
- *
- *  Revision 1.4  2000/12/03 10:57:06  fs
- *  some changes to support more than one page to be examined/exported
- *
- *  Revision 1.3  2000/11/29 10:36:05  mh
- *  add: stdio.h for Solaris8
- *
- *  Revision 1.2  2000/11/19 15:41:32  fs
- *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
- *
- *  Revision 1.1  2000/11/17 19:02:29  fs
- *  initial checkin - export and/or import the applications form layer
- *
+ *  Revision 1.16  2001/10/19 18:43:58  dvo
+ *  #93467# eliminated (most) direct calls on XDocumentHandler
  *
  *  Revision 1.0 17.11.00 17:22:45  fs
  ************************************************************************/
