@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.175 $
+ *  $Revision: 1.176 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:58:47 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     if( mpParent )
         mpParent->maChildren.push_back( this );
 
-    Init( nSalFrameStyle );
+    Init( nSalFrameStyle, pSystemParent );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2187,7 +2187,12 @@ bool X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
     passOnSaveYourSelf();
 
     // now init with new parent again
-    Init( nStyle_ | SAL_FRAME_STYLE_CHILD, pNewParent );
+    if ( pNewParent && pNewParent->aWindow == 0 )
+        pNewParent = 0;
+    if ( pNewParent )
+        Init( nStyle_ | SAL_FRAME_STYLE_CHILD, pNewParent );
+    else
+        Init( nStyle_ & ~SAL_FRAME_STYLE_CHILD, pNewParent );
 
     // update graphics if necessary
     if( pGraphics_ )
