@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:46:49 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 15:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,11 +757,21 @@ sal_Int32 ZipFile::recover()
                                 ( aEntry.nMethod == DEFLATED && ( aEntry.nFlag & 8 ) ) ?
                                                         16 : 0;
 
+
+                            // This is a quick fix for OOo1.1RC
+                            // For OOo2.0 the whole package must be switched to unsigned values
+                            if ( aEntry.nCompressedSize < 0 ) aEntry.nCompressedSize = 0x7FFFFFFF;
+                            if ( aEntry.nSize < 0 ) aEntry.nSize = 0x7FFFFFFF;
+                            if ( aEntry.nNameLen < 0 ) aEntry.nNameLen = 0x7FFF;
+                            if ( aEntry.nExtraLen < 0 ) aEntry.nExtraLen = 0x7FFF;
+                            // End of quick fix
+
+
                             sal_Int32 nBlockLength = aEntry.nSize + aEntry.nNameLen + aEntry.nExtraLen + 30 + nDescrLength;
                             if ( aEntry.nNameLen <= ZIP_MAXNAMELEN && aEntry.nExtraLen < ZIP_MAXEXTRA
                                 && ( nGenPos + nPos + nBlockLength ) <= nLength )
                             {
-                                if( nPos + 30 + aEntry.nNameLen <= 32000 )
+                                if( nPos + 30 + aEntry.nNameLen <= nBufSize )
                                     aEntry.sName = OUString ( (sal_Char *) &pBuffer[nPos + 30],
                                                                   aEntry.nNameLen,
                                                                 RTL_TEXTENCODING_ASCII_US);
