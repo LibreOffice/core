@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:Connector" toolbar:helpid="helpid:27058" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorArrowStart" toolbar:helpid="helpid:27119" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorArrowEnd" toolbar:helpid="helpid:27120" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorArrows" toolbar:helpid="helpid:27121" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCircleStart" toolbar:helpid="helpid:27122" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCircleEnd" toolbar:helpid="helpid:27123" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCircles" toolbar:helpid="helpid:27124" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLines" toolbar:helpid="helpid:27139" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrowStart" toolbar:helpid="helpid:27140" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrowEnd" toolbar:helpid="helpid:27141" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesArrows" toolbar:helpid="helpid:27142" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircleStart" toolbar:helpid="helpid:27143" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircleEnd" toolbar:helpid="helpid:27144" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLinesCircles" toolbar:helpid="helpid:27145" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLine" toolbar:helpid="helpid:27125" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineArrowStart" toolbar:helpid="helpid:27126" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineArrowEnd" toolbar:helpid="helpid:27127" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineArrows" toolbar:helpid="helpid:27128" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineCircleStart" toolbar:helpid="helpid:27129" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineCircleEnd" toolbar:helpid="helpid:27130" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorLineCircles" toolbar:helpid="helpid:27131" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurve" toolbar:helpid="helpid:27132" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveArrowStart" toolbar:helpid="helpid:27133" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveArrowEnd" toolbar:helpid="helpid:27134" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveArrows" toolbar:helpid="helpid:27135" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveCircleStart" toolbar:helpid="helpid:27136" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveCircleEnd" toolbar:helpid="helpid:27137" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorCurveCircles" toolbar:helpid="helpid:27138" toolbar:text="" toolbar:style="radio" />
+</toolbar:toolbar>
