@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormControlTest.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:53:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ public class FormControlTest extends ComplexTestCase
 
         m_dataSource = (XDataSource)UnoRuntime.queryInterface( XDataSource.class,
             aDSContext.getByName( sDataSourceName ) );
-        m_dataSourceProps = dbfTools.queryXPropertySet( m_dataSource );
+        m_dataSourceProps = dbfTools.queryPropertySet( m_dataSource );
         return m_dataSource != null;
     }
 
@@ -827,7 +827,7 @@ public class FormControlTest extends ComplexTestCase
     /* ------------------------------------------------------------------ */
     private XPropertySet getRadioModel( String name, String refValue ) throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        return m_formLayer.getRadioModel( m_masterForm, name, refValue );
+        return m_formLayer.getRadioModelByRefValue( m_masterForm, name, refValue );
     }
 
     /* ------------------------------------------------------------------ */
