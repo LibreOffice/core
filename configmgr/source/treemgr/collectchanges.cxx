@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collectchanges.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:22:35 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ bool CollectChanges::implSetLocation(NodeChangeLocation& rLocation_, Change cons
     rLocation_.setBase( aBaseID );
 
     if (bSet_ && m_aAccessor.isEmpty()) // It is  a set change affecting the base ...
-        rLocation_.setTarget( aBaseID );
+        rLocation_.setAffected( aBaseID );
 
     Name aChangeName( aOriginal_.getNodeName(), Name::NoValidate() );
     rLocation_.setAccessor( m_aAccessor.child( aChangeName ) );
