@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: dl $ $Date: 2000-10-20 14:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,13 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
+#ifndef _EEITEMID_HXX
+#include <svx/eeitemid.hxx>
+#endif
+#ifndef _SVX_ADJITEM_HXX
+#include <svx/adjitem.hxx>
+#endif
+
 
 #include "viewshel.hxx"
 #include "sdresid.hxx"
@@ -563,14 +570,12 @@ void FuConstRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         * Legendenobjekt
         **********************************************************************/
         Size aSize(pObj->GetLogicRect().GetSize());
-        SdrTextMinFrameHeightItem aMinHeight(aSize.Height());
-        rAttr.Put(aMinHeight);
-        SdrTextMinFrameWidthItem aMinWidth(aSize.Width());
-        rAttr.Put(aMinWidth);
-        SdrTextAutoGrowHeightItem aAutoGrowHeight(TRUE);
-        rAttr.Put(aAutoGrowHeight);
-        SdrTextAutoGrowWidthItem aAutoGrowWidth(TRUE);
-        rAttr.Put(aAutoGrowWidth);
+        rAttr.Put( SdrTextMinFrameHeightItem( aSize.Height() ) );
+        rAttr.Put( SdrTextMinFrameWidthItem( aSize.Width() ) );
+        rAttr.Put( SdrTextAutoGrowHeightItem( TRUE ) );
+        rAttr.Put( SdrTextAutoGrowWidthItem( TRUE ) );
+        rAttr.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
+        rAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
     }
     else if (nSlotId == SID_DRAW_MEASURELINE)
     {
