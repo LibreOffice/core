@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:46:25 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,9 +1080,9 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
         case DRAWING_3D_LATHE:
             nResourceId = STR_ObjNameSingulLathe3d;
             break;
-        case DRAWING_3D_POLYGON:
-            nResourceId = STR_ObjNameSingulPoly3d;
-            break;
+//BFS01        case DRAWING_3D_POLYGON:
+//BFS01            nResourceId = STR_ObjNameSingulPoly3d;
+//BFS01            break;
         case DRAWING_3D_SCENE:
             nResourceId = STR_ObjNameSingulScene3d;
             break;
@@ -1221,7 +1221,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
         case DRAWING_3D_CUBE:
         case DRAWING_3D_EXTRUDE:
         case DRAWING_3D_LATHE:
-        case DRAWING_3D_POLYGON:
+//BFS01        case DRAWING_3D_POLYGON:
         case DRAWING_3D_SPHERE:
             aDG.Add3DProperties ();
             break;
