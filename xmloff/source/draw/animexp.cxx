@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:23:47 $
+ *  last change: $Author: cl $ $Date: 2000-12-21 18:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
     }
 }
 
-void XMLAnimationsExporter::export( SvXMLExport& rExport )
+void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
 {
     mpImpl->maEffects.sort();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 16:17:17 $
+ *  last change: $Author: cl $ $Date: 2000-12-21 18:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1772,7 +1772,7 @@ void SdXMLExport::_ExportContent()
                 // animations
                 UniReference< XMLAnimationsExporter > xAnimExport( GetShapeExport()->getAnimationsExporter() );
                 if( xAnimExport.is() )
-                    xAnimExport->export( *this );
+                    xAnimExport->exportAnimations( *this );
 
                 xAnimExport = NULL;
                 GetShapeExport()->setAnimationsExporter( xAnimExport );
