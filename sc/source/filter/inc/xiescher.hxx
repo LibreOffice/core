@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:59:23 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,8 +257,16 @@ public:
     /** Constructor takes ownership of the members of rSrcObj, which will be invalidated. */
     explicit                    XclImpEscherNote( XclImpEscherObj& rSrcObj );
 
-    /** Empty. Prevents insertion of a drawing object for a note (done via ScDetectiveFunc). */
     virtual void                Apply( ScfProgressBar& rProgress );
+
+    inline SCCOL                GetCol() const          { return mnCol; }
+    inline SCROW                GetRow() const          { return mnRow; }
+    inline void                 SetCol(SCCOL nCol) { mnCol = nCol; }
+    inline void                 SetRow(SCROW nRow) { mnRow = nRow; }
+
+private:
+    SCCOL                  mnCol;        /// Calc source column index of the cell note.
+    SCROW                  mnRow;        /// Row source column index of the cell note.
 };
 
 
