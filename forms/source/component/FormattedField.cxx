@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 12:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,11 +416,11 @@ IMPL_LINK(OFormattedControl, OnKeyPressed, void*, EMPTYARG)
 {
     m_nKeyEvent = 0;
 
-        Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
+    Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
     InterfaceRef  xParent = xFComp->getParent();
-        Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
+    Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
-                xSubmit->submit( Reference<XControl> (), MouseEvent() );
+        xSubmit->submit( Reference<XControl> (), MouseEvent() );
     return 0L;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-10 08:49:26 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 12:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,14 +142,13 @@ OControl::OControl(const Reference<com::sun::star::lang::XMultiServiceFactory>& 
     // das Aggregat selbst den Refcount erhoeht
     increment(m_refCount);
     {
-                m_xAggregate = Reference<XAggregation>(
-                        _rxFactory->createInstance(_sService), UNO_QUERY);
-                m_xControl = Reference<XControl>(m_xAggregate, UNO_QUERY);
+        m_xAggregate = Reference<XAggregation>(_rxFactory->createInstance(_sService), UNO_QUERY);
+        m_xControl = Reference<XControl>(m_xAggregate, UNO_QUERY);
     }
 
     if (m_xAggregate.is())
     {
-                m_xAggregate->setDelegator(static_cast<XWeak*>(this));
+        m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
 
     // Refcount wieder bei NULL

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 13:32:00 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 12:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1214,7 +1214,7 @@ OListBoxControl::OListBoxControl(const Reference<XMultiServiceFactory>& _rxFacto
             xListbox->addItemListener(this);
     }
     // Refcount bei 2 fuer angemeldete Listener
-    sal_Int32 n = decrement(m_refCount);
+    decrement(m_refCount);
 
     m_aChangeTimer.SetTimeout(500);
     m_aChangeTimer.SetTimeoutHdl(LINK(this,OListBoxControl,OnTimeout));
@@ -1248,10 +1248,10 @@ StringSequence SAL_CALL OListBoxControl::getSupportedServiceNames() throw(Runtim
 //------------------------------------------------------------------------------
 void SAL_CALL OListBoxControl::focusGained(const FocusEvent& _rEvent) throw(RuntimeException)
 {
-    ::osl::ClearableMutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard(m_aMutex);
     if (m_aChangeListeners.getLength()) // only if there are listeners
     {
-                Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
+        Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
         if (xSet.is())
         {
             // memorize the current selection for posting the change event
@@ -1274,17 +1274,17 @@ void SAL_CALL OListBoxControl::itemStateChanged(const ItemEvent& _rEvent) throw(
    ::osl::ClearableMutexGuard aGuard(m_aMutex);
    if (m_aChangeTimer.IsActive())
    {
-           Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
-       m_aCurrentSelection = xSet->getPropertyValue(PROPERTY_SELECT_SEQ);
+        Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
+        m_aCurrentSelection = xSet->getPropertyValue(PROPERTY_SELECT_SEQ);
 
-       m_aChangeTimer.Stop();
-       m_aChangeTimer.Start();
+        m_aChangeTimer.Stop();
+        m_aChangeTimer.Start();
    }
    else
    {
        if (m_aChangeListeners.getLength() && m_aCurrentSelection.hasValue())
        {
-                        Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
+            Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
             if (xSet.is())
             {
                 // Has the selection been changed?
@@ -1344,7 +1344,7 @@ void OListBoxControl::disposing()
     if (m_aChangeTimer.IsActive())
         m_aChangeTimer.Stop();
 
-        EventObject aEvt(static_cast< XWeak*>(this));
+    EventObject aEvt(static_cast< XWeak*>(this));
     m_aChangeListeners.disposeAndClear(aEvt);
 
     OBoundControl::disposing();
@@ -1353,7 +1353,7 @@ void OListBoxControl::disposing()
 //------------------------------------------------------------------------------
 IMPL_LINK(OListBoxControl, OnTimeout, void*, EMPTYTAG)
 {
-        EventObject aEvt(static_cast< XWeak*>(this));
+    EventObject aEvt(static_cast< XWeak*>(this));
     NOTIFY_LISTENERS(m_aChangeListeners, XChangeListener, changed, aEvt);
     return 1;
 }
