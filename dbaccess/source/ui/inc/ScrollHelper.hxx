@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScrollHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 09:28:33 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <tools/link.hxx>
 #endif
 #ifndef _SV_GEN_HXX
-#include <vcl/gen.hxx>
+#include <tools/gen.hxx>
 #endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
