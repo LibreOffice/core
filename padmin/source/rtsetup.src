@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 16:53:16 $
+ *  last change: $Author: obo $ $Date: 2001-12-19 17:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,8 +1301,8 @@ TabPage RID_RTS_OTHERPAGE
         Text[ greek ] = "Διόρθωση αριστερού περιθωρίου :";
         Text[ dutch ] = "~Linker marge corrigeren";
         Text[ french ] = "Marge gauche";
-        Text[ spanish ] = "~Correcciσn del margen izquierdo";
-        Text[ italian ] = "Correggi margine ~sinistro:";
+        Text[ spanish ] = "~Margen izquierdo";
+        Text[ italian ] = "Margine ~sinistro:";
         Text[ danish ] = "~Left margin adjustment :";
         Text[ swedish ] = "Vδnster margina~l";
         Text[ polish ] = "Wyrσwnanie lewego marginesu";
@@ -1338,8 +1338,8 @@ TabPage RID_RTS_OTHERPAGE
         Text[ greek ] = "Διόρθωση πάνω περιθωρί~ου :";
         Text[ dutch ] = "~Marge boven corrigeren";
         Text[ french ] = "Marge supιrieure";
-        Text[ spanish ] = "~Correcciσn del margen superior";
-        Text[ italian ] = "Correggi margine s~uperiore:";
+        Text[ spanish ] = "~Margen superior";
+        Text[ italian ] = "Margine s~uperiore:";
         Text[ danish ] = "~Top margin adjustment :";
         Text[ swedish ] = "~Φvre marginal";
         Text[ polish ] = "Wyrσwnanie gσrnego marginesu";
@@ -1375,8 +1375,8 @@ TabPage RID_RTS_OTHERPAGE
         Text[ greek ] = "Διόρθωση δεξιού πε~ριθωρίου :";
         Text[ dutch ] = "~Rechter marge corrigeren";
         Text[ french ] = "Marge droite";
-        Text[ spanish ] = "~Correcciσn del margen derecho";
-        Text[ italian ] = "Correzione margine ~destro:";
+        Text[ spanish ] = "~Margen derecho";
+        Text[ italian ] = "Margine ~destro:";
         Text[ danish ] = "~Right margin adjustment :";
         Text[ swedish ] = "Hφge~r marginal";
         Text[ polish ] = "Wyrσwnanie prawego marginesu";
@@ -1412,8 +1412,8 @@ TabPage RID_RTS_OTHERPAGE
         Text[ greek ] = "Διόρθωση κάτω περιθωρίο~υ :";
         Text[ dutch ] = "M~arge beneden corrigeren";
         Text[ french ] = "Marge infιrieure";
-        Text[ spanish ] = "~Correcciσn del margen inferior";
-        Text[ italian ] = "Correggi margine ~inferiore:";
+        Text[ spanish ] = "~Margen inferior";
+        Text[ italian ] = "Margine ~inferiore:";
         Text[ danish ] = "~Bottom margin adjustment :";
         Text[ swedish ] = "~Undre marginal";
         Text[ polish ] = "Wyrσwnanie dolnego marginesu";
@@ -1524,6 +1524,7 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ finnish ] = "~Kirjoita faksinumero.";
     Text[ catalan ] = "Indiqueu el nϊmero de fax";
 };
+
 
 
 
