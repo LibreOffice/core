@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-27 08:07:38 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 14:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,11 @@ namespace connectivity
 
     namespace
     {
+        sal_Bool isOdbcUrl(const ::rtl::OUString& _sUrl)
+        {
+            return _sUrl.copy(0,16).equalsAscii("sdbc:mysql:odbc:");
+        }
+        //--------------------------------------------------------------------
         ::rtl::OUString getDriverClass(const Sequence< PropertyValue >& info)
         {
             ::rtl::OUString sRet;
@@ -158,14 +163,17 @@ namespace connectivity
             return sRet;
         }
         //--------------------------------------------------------------------
-        ::rtl::OUString getCutUrl(const ::rtl::OUString& _sUrl)
+        ::rtl::OUString transformUrl(const ::rtl::OUString& _sUrl)
         {
-            return _sUrl.copy(11);
-        }
-        //--------------------------------------------------------------------
-        sal_Bool isOdbcUrl(const ::rtl::OUString& _sUrl)
-        {
-            return _sUrl.copy(0,16).equalsAscii("sdbc:mysql:odbc:");
+            ::rtl::OUString sNewUrl = _sUrl.copy(11);
+            if ( isOdbcUrl( _sUrl ) )
+                sNewUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:")) + sNewUrl;
+            else
+            {
+                sNewUrl = sNewUrl.copy(5);
+                sNewUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jdbc:mysql://")) + sNewUrl;
+            }
+            return sNewUrl;
         }
         //--------------------------------------------------------------------
         Reference< XDriver > lcl_loadDriver(const Reference< XMultiServiceFactory >& _rxFactory,const ::rtl::OUString& _sUrl)
@@ -216,15 +224,12 @@ namespace connectivity
     Reference< XDriver > ODriverDelegator::loadDriver( const ::rtl::OUString& url, const Sequence< PropertyValue >& info )
     {
         Reference< XDriver > xDriver;
-        ::rtl::OUString sCuttedUrl = getCutUrl(url);
+        ::rtl::OUString sCuttedUrl = transformUrl(url);
         sal_Bool bIsODBC = isOdbcUrl( url );
         if ( bIsODBC )
         {
             if ( !m_xODBCDriver.is() )
-            {
-                sCuttedUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:")) + sCuttedUrl;
                 m_xODBCDriver = lcl_loadDriver(m_xFactory,sCuttedUrl);
-            }
             xDriver = m_xODBCDriver;
         }
         else
@@ -234,9 +239,7 @@ namespace connectivity
                 throw SQLException();
             TJDBCDrivers::iterator aFind = m_aJdbcDrivers.find(sDriverClass);
             if ( aFind == m_aJdbcDrivers.end() )
-            {
                 aFind = m_aJdbcDrivers.insert(TJDBCDrivers::value_type(sDriverClass,lcl_loadDriver(m_xFactory,sCuttedUrl))).first;
-            }
             xDriver = aFind->second;
         }
 
@@ -253,11 +256,8 @@ namespace connectivity
             xDriver = loadDriver(url,info);
             if ( xDriver.is() )
             {
-                ::rtl::OUString sCuttedUrl = getCutUrl(url);
+                ::rtl::OUString sCuttedUrl = transformUrl(url);
                 sal_Bool bIsODBC = isOdbcUrl( url );
-                if ( bIsODBC )
-                    sCuttedUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:")) + sCuttedUrl;
-
                 Sequence< PropertyValue > aConvertedProperties = lcl_convertProperties(bIsODBC,info);
 
                 xConnection = xDriver->connect( sCuttedUrl, aConvertedProperties );
