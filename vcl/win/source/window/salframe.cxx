@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:02:52 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1620,6 +1620,10 @@ void WinSalFrame::SetParent( SalFrame* pNewParent )
 
 bool WinSalFrame::SetPluginParent( SystemParentData* pNewParent )
 {
+    if ( pNewParent->hWnd == 0 )
+    {
+        pNewParent->hWnd = GetDesktopWindow();
+    }
     ImplSetParentFrame( this, pNewParent->hWnd, TRUE );
     return true;
 }
@@ -5305,12 +5309,15 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         // to access lpCreateParams is the same structure
         CREATESTRUCTA* pStruct = (CREATESTRUCTA*)lParam;
         WinSalFrame* pFrame = (WinSalFrame*)pStruct->lpCreateParams;
-        SetWindowPtr( hWnd, pFrame );
-        // HWND schon hier setzen, da schon auf den Instanzdaten
-        // gearbeitet werden kann, wenn Messages waehrend
-        // CreateWindow() gesendet werden
-        pFrame->mhWnd = hWnd;
-        pFrame->maSysData.hWnd = hWnd;
+        if ( pFrame != 0 )
+        {
+            SetWindowPtr( hWnd, pFrame );
+            // HWND schon hier setzen, da schon auf den Instanzdaten
+            // gearbeitet werden kann, wenn Messages waehrend
+            // CreateWindow() gesendet werden
+            pFrame->mhWnd = hWnd;
+            pFrame->maSysData.hWnd = hWnd;
+        }
         return 0;
     }
 
