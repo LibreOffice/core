@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:45:47 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,6 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
 
     xub_StrLen nStart, nEnde, nTxtLen;
     const SwNode* pSttNd = &rNdIdx.GetNode();
-    xub_StrLen nSttCnt = rCntntIdx.GetIndex();
 
     BOOL bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
     BOOL bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
@@ -394,8 +393,7 @@ struct SwFindParaText : public SwFindParas
     BOOL bReplace;
 
     SwFindParaText( const SearchOptions& rOpt, int bRepl, SwCursor& rCrsr )
-        : rCursor( rCrsr ), bReplace( bRepl ),
-        rSearchOpt( rOpt ), aSTxt( rOpt )
+        : rSearchOpt( rOpt ), rCursor( rCrsr ), aSTxt( rOpt ), bReplace( bRepl )
     {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, FASTBOOL bInReadOnly );
     virtual int IsReplaceMode() const;
@@ -421,7 +419,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
         xub_StrLen nSttCnt = rSttCntIdx.GetIndex();
         // damit die Region auch verschoben wird, in den Shell-Cursr-Ring
         // mit aufnehmen !!
-        Ring *pPrev;
+        Ring *pPrev(0);
         if( bRegExp )
         {
             pPrev = pRegion->GetPrev();
