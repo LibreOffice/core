@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 14:00:38 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,19 @@ SdrObject* pSkipPaintObj = NULL;
 
 //==================================================================
 
-void ScOutputData::DrawingLayer( USHORT nLayer, USHORT nObjectFlags, long nLogStX, long nLogStY )
+// #109985#
+void ScOutputData::DrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode, long nLogStX, long nLogStY )
+//void ScOutputData::DrawingLayer( USHORT nLayer, USHORT nObjectFlags, long nLogStX, long nLogStY )
 {
-    if ( nObjectFlags == SC_OBJECTS_NONE || !pDoc->GetDrawLayer() )
+    // #109985#
+    const sal_uInt16 nPaintModeHideAll(SDRPAINTMODE_SC_HIDE_OLE|SDRPAINTMODE_SC_HIDE_CHART|SDRPAINTMODE_SC_HIDE_DRAW);
+
+    // #109985#
+    //if ( nObjectFlags == SC_OBJECTS_NONE || !pDoc->GetDrawLayer() )
+    if((nPaintModeHideAll == nPaintMode) || (!pDoc->GetDrawLayer()))
+    {
         return;
+    }
 
     MapMode aOldMode = pDev->GetMapMode();
 
@@ -144,20 +153,41 @@ void ScOutputData::DrawingLayer( USHORT nLayer, USHORT nObjectFlags, long nLogSt
 
         // Layer zeichnen
 
-    DrawSelectiveObjects( nLayer, aRect, nObjectFlags );
+    // #109985#
+    //DrawSelectiveObjects( nLayer, aRect, nObjectFlags );
+    DrawSelectiveObjects( nLayer, aRect, nPaintMode);
 
     if (!bMetaFile)
         pDev->SetMapMode( aOldMode );
 }
 
-void ScOutputData::DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect,
-                                            USHORT nObjectFlags, USHORT nDummyFlags )
+// #109985#
+void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle& rRect, const sal_uInt16 nPaintMode)
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return;
 
-    SdrOutliner& rOutl = pModel->GetDrawOutliner();
+    // #109985#
+    if(pViewShell)
+    {
+        SdrView* pDrawView = pViewShell->GetSdrView();
+
+        if(pDrawView)
+        {
+            SdrPageView* pPageView = pDrawView->GetPageViewPvNum(0);
+
+            if(pPageView)
+            {
+                pPageView->InitRedraw(nLayer, rRect, pDev, nPaintMode);
+            }
+        }
+    }
+
+    // #109985#
+    return;
+
+/*  SdrOutliner& rOutl = pModel->GetDrawOutliner();
     rOutl.EnableAutoColor( bUseStyleColor );
     rOutl.SetDefaultHorizontalTextDirection(
                 (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
@@ -357,11 +387,13 @@ void ScOutputData::DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect,
     pDev->SetDrawMode(nOldDrawMode);
 
     delete pXOut;
+    */
 }
 
 //  Teile nur fuer Bildschirm
 
-void ScOutputData::DrawingSingle( USHORT nLayer, USHORT nObjectFlags, USHORT nDummyFlags )
+// #109985#
+void ScOutputData::DrawingSingle(const sal_uInt16 nLayer, const sal_uInt16 nPaintMode)
 {
     Rectangle aDrawingRect;
     aDrawingRect.Left() = nScrX;
@@ -386,14 +418,14 @@ void ScOutputData::DrawingSingle( USHORT nLayer, USHORT nObjectFlags, USHORT nDu
         }
         else if (bHad)
         {
-            DrawSelectiveObjects( nLayer, pDev->PixelToLogic(aDrawingRect), nObjectFlags, nDummyFlags );
+            DrawSelectiveObjects( nLayer, pDev->PixelToLogic(aDrawingRect), nPaintMode);
             bHad = FALSE;
         }
         nPosY += pRowInfo[nArrY].nHeight;
     }
 
     if (bHad)
-        DrawSelectiveObjects( nLayer, pDev->PixelToLogic(aDrawingRect), nObjectFlags, nDummyFlags );
+        DrawSelectiveObjects( nLayer, pDev->PixelToLogic(aDrawingRect), nPaintMode);
 }
 
 
