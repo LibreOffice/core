@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbitmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:59:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XBITMAP_HPP__
-#include <drafts/com/sun/star/rendering/XBitmap.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XBITMAP_HPP__
+#include <com/sun/star/rendering/XBitmap.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
-#include <drafts/com/sun/star/rendering/XGraphicDevice.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
+#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #endif
 
 #include <cppcanvas/bitmap.hxx>
@@ -90,7 +90,7 @@ namespace cppcanvas
 
             ImplBitmap( const CanvasSharedPtr& rParentCanvas,
                         const ::com::sun::star::uno::Reference<
-                            ::drafts::com::sun::star::rendering::XBitmap >& rBitmap );
+                            ::com::sun::star::rendering::XBitmap >& rBitmap );
 
             virtual ~ImplBitmap();
 
@@ -102,14 +102,14 @@ namespace cppcanvas
 
             // Bitmap implementation
             virtual ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XBitmap >  getUNOBitmap() const;
+                ::com::sun::star::rendering::XBitmap >  getUNOBitmap() const;
 
         private:
             // default: disabled copy/assignment
             ImplBitmap(const ImplBitmap&);
             ImplBitmap& operator=( const ImplBitmap& );
 
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmap >  mxBitmap;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >  mxBitmap;
             BitmapCanvasSharedPtr                                                                   mpBitmapCanvas;
          };
     }
