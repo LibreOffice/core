@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:00:10 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef TOOLKIT_FORMATTED_CONTROL_HXX
 #include <toolkit/controls/formattedcontrol.hxx>
+#endif
+#ifndef TOOLKIT_ROADMAP_CONTROL_HXX
+#include <toolkit/controls/roadmapcontrol.hxx>
 #endif
 #ifndef TOOLKIT_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
 #include <toolkit/controls/tkscrollbar.hxx>
@@ -265,6 +268,8 @@ IMPL_CREATEINSTANCE( VCLXMenuBar )
 IMPL_CREATEINSTANCE( VCLXPointer )
 IMPL_CREATEINSTANCE( VCLXPopupMenu )
 IMPL_CREATEINSTANCE( VCLXPrinterServer )
+IMPL_CREATEINSTANCE( UnoRoadmapControl )
+IMPL_CREATEINSTANCE( UnoControlRoadmapModel )
 
 
 extern "C"
@@ -330,11 +335,14 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
         registerServices( xRegistryKey, "UnoControlProgressBarModel", szServiceName_UnoControlProgressBarModel, szServiceName2_UnoControlProgressBarModel );
         registerServices( xRegistryKey, "UnoScrollBarControl", szServiceName_UnoControlScrollBar, szServiceName2_UnoControlScrollBar );
         registerServices( xRegistryKey, "UnoControlScrollBarModel", szServiceName_UnoControlScrollBarModel, szServiceName2_UnoControlScrollBarModel );
-        registerServices( xRegistryKey, "UnoSpinButtonModel", szServiceName_UnoSpinButtonModel );
+            registerServices( xRegistryKey, "UnoSpinButtonModel", szServiceName_UnoSpinButtonModel );
         registerServices( xRegistryKey, "UnoSpinButtonControl", szServiceName_UnoSpinButtonControl );
-        registerServices( xRegistryKey, "UnoFixedLineControl", szServiceName_UnoControlFixedLine, szServiceName2_UnoControlFixedLine );
+            registerServices( xRegistryKey, "UnoFixedLineControl", szServiceName_UnoControlFixedLine, szServiceName2_UnoControlFixedLine );
         registerServices( xRegistryKey, "UnoControlFixedLineModel", szServiceName_UnoControlFixedLineModel, szServiceName2_UnoControlFixedLineModel );
         registerServices( xRegistryKey, "VCLXPrinterServer", szServiceName_PrinterServer, szServiceName2_PrinterServer );
+        registerServices( xRegistryKey, "UnoRoadmapControl", szServiceName_UnoControlRoadmap, szServiceName2_UnoControlRoadmap );
+        registerServices( xRegistryKey, "UnoControlRoadmapModel", szServiceName_UnoControlRoadmapModel, szServiceName2_UnoControlRoadmapModel );
+
         return sal_True;
     }
     return sal_False;
@@ -400,6 +408,8 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
         CHECKANDCREATEFACTORY( UnoFixedLineControl, szServiceName_UnoControlFixedLine, szServiceName2_UnoControlFixedLine )
         CHECKANDCREATEFACTORY( UnoControlFixedLineModel, szServiceName_UnoControlFixedLineModel, szServiceName2_UnoControlFixedLineModel )
         CHECKANDCREATEFACTORY( VCLXPrinterServer, szServiceName_PrinterServer, szServiceName2_PrinterServer )
+        CHECKANDCREATEFACTORY( UnoRoadmapControl, szServiceName_UnoControlRoadmap, szServiceName2_UnoControlRoadmap )
+        CHECKANDCREATEFACTORY( UnoControlRoadmapModel, szServiceName_UnoControlRoadmapModel, szServiceName2_UnoControlRoadmapModel )
         CHECKANDCREATEFACTORY( UnoSpinButtonModel, szServiceName_UnoSpinButtonModel, NULL )
         CHECKANDCREATEFACTORY( UnoSpinButtonControl, szServiceName_UnoSpinButtonControl, NULL )
     }
