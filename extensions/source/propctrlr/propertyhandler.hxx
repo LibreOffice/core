@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyhandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:11:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,15 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
+#include <com/sun/star/util/Time.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
 #endif
 
 #include <memory>
@@ -207,7 +216,7 @@ namespace pcr
 
             Whenever the value of an actuating property changes, all handlers which expressed
             their interest in this particular actuating properties are called with their
-            <member>updateDependentProperties</member> method.
+            <member>actuatingPropertyChanged</member> method.
         */
         virtual ::std::vector< ::rtl::OUString > SAL_CALL
             getActuatingProperties( ) const = 0;
@@ -222,7 +231,7 @@ namespace pcr
             This is called when the UI for a property has been newly inserted into the
             property browser, or when it has been rebuilt.
 
-            @see rebuildPropertyUI::rebuildPropertyUI
+            @see rebuildPropertyUI
         */
         virtual void SAL_CALL
             initializePropertyUI( PropertyId _nPropId, IPropertyBrowserUI* _pUpdater ) = 0;
@@ -267,9 +276,27 @@ namespace pcr
             executeButtonClick( PropertyId _nPropId, bool _bPrimary, const ::com::sun::star::uno::Any& _rData, IPropertyBrowserUI* _pUpdater ) = 0;
 
         /** updates the UI of dependent properties when the value of a certain actuating property changed
+            @param _nActuatingPropId
+                the id of the actuating property.
+            @param _rNewValue
+                the new value of the property
+            @param _rOldValue
+                the old value of the property
+            @param _pUpdater
+                a callback for updating the property browser UI
+            @param _bFirstTimeInit
+                If <TRUE/>, the method is called for the first-time update of the respective property, that
+                is, when the property browser is just initializing with the properties of the introspected
+                object.
+                If <FALSE/>, there was a real <member scope="com::sun::star::beans">XPropertyChangeListener::propertyChange</member>
+                event which triggered the call.
+
+                In some cases it may be necessary to differentiate between both situations. For instance,
+                if you want to set the value of another property when an actuating property's value changed,
+                you should definately not do this when <arg>_bFirstTimeInit</arg> is <TRUE/>.
         */
         virtual void SAL_CALL
-            updateDependentProperties( PropertyId _nActuatingPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, IPropertyBrowserUI* _pUpdater ) = 0;
+            actuatingPropertyChanged( PropertyId _nActuatingPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool _bFirstTimeInit ) = 0;
 
     public:
         virtual ~IPropertyHandler() { };
@@ -332,7 +359,7 @@ namespace pcr
         virtual void SAL_CALL initializePropertyUI( PropertyId _nPropId, IPropertyBrowserUI* _pUpdater );
         virtual bool SAL_CALL requestUserInputOnButtonClick( PropertyId _nPropId, bool _bPrimary, ::com::sun::star::uno::Any& _rData );
         virtual void SAL_CALL executeButtonClick( PropertyId _nPropId, bool _bPrimary, const ::com::sun::star::uno::Any& _rData, IPropertyBrowserUI* _pUpdater );
-        virtual void SAL_CALL updateDependentProperties( PropertyId _nActuatingPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, IPropertyBrowserUI* _pUpdater );
+        virtual void SAL_CALL actuatingPropertyChanged( PropertyId _nActuatingPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool _bFirstTimeInit );
         virtual void SAL_CALL startAllPropertyChangeListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener );
         virtual void SAL_CALL stopAllPropertyChangeListening( );
 
@@ -382,6 +409,30 @@ namespace pcr
                     sal_Int16 _nAttribs = 0
                 ) const;
 
+        /** adds a description for the given date property to the given property vector
+        */
+        inline void addDatePropertyDescription(
+                    ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
+                    const ::rtl::OUString& _rPropertyName,
+                    sal_Int16 _nAttribs = 0
+                ) const;
+
+        /** adds a description for the given time property to the given property vector
+        */
+        inline void addTimePropertyDescription(
+                    ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
+                    const ::rtl::OUString& _rPropertyName,
+                    sal_Int16 _nAttribs = 0
+                ) const;
+
+        /** adds a description for the given DateTime property to the given property vector
+        */
+        inline void addDateTimePropertyDescription(
+                    ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
+                    const ::rtl::OUString& _rPropertyName,
+                    sal_Int16 _nAttribs = 0
+                ) const;
+
         /// adds a Property, given by name only, to a given vector of Properties
         void implAddPropertyDescription(
                     ::std::vector< ::com::sun::star::beans::Property >& _rProperties,
@@ -404,33 +455,6 @@ namespace pcr
         */
         inline ::rtl::OUString
                     getPropertyNameFromId( PropertyId _nPropId ) const;
-
-        /** declares a given property to have a new type
-
-            There might be properties whose type changes during the life time of the
-            property handler. For example, imagine a handler which exposes "introspectee properties"
-            which internally are properties of another component only <em>referenced</em> by
-            the introspectee. If the reference changes, then then referenced component may change,
-            and thus the type of some properties.
-
-            (Note that if even the availability of such an indirect property changes, then
-            this is not reflected in changing our "supported properties" set, but in simply hiding
-            or showing the UI for the respective property.)
-
-            Note that changing the type of a property is the only allowed modification you
-            can do to your supported properties, after you have them described the first time
-            (i.e. after your <member>implDescribeSupportedProperties</member> has been called).
-            The reason is that this type is not evaluated externally to this handler,
-            only some methods of this base class use it (e.g. the string conversion routines),
-            and your derived class may use it.
-
-            @see <member>IPropertyBrowserUI::showPropertyUI</member>
-            @see <member>IPropertyBrowserUI::hidePropertyUI</member>
-        */
-        void        changeTypeOfSupportedProperty(
-                        const sal_Int32 _nPropId,
-                        const ::com::sun::star::uno::Type& _rNewType
-                    );
 
     protected:
         // IReference implementqation
@@ -462,6 +486,21 @@ namespace pcr
     inline void PropertyHandler::addDoublePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const ::rtl::OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< double* >( NULL ) ), _nAttribs );
+    }
+
+    inline void PropertyHandler::addDatePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const ::rtl::OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    {
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< com::sun::star::util::Date* >( NULL ) ), _nAttribs );
+    }
+
+    inline void PropertyHandler::addTimePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const ::rtl::OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    {
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< com::sun::star::util::Time* >( NULL ) ), _nAttribs );
+    }
+
+    inline void PropertyHandler::addDateTimePropertyDescription( ::std::vector< ::com::sun::star::beans::Property >& _rProperties, const ::rtl::OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    {
+        implAddPropertyDescription( _rProperties, _rPropertyName, ::getCppuType( static_cast< com::sun::star::util::DateTime* >( NULL ) ), _nAttribs );
     }
 
     inline ::rtl::OUString PropertyHandler::getPropertyNameFromId( PropertyId _nPropId ) const
