@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,11 @@
 #ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
 #include <tools/solmath.hxx>
 #endif
-#ifndef _TOOLS_INTN_HXX //autogen wg. International
-#include <tools/intn.hxx>
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
 #endif
 
 #ifndef _DOC_HXX
@@ -828,8 +831,7 @@ void SwValueField::ChangeFormat(ULONG n)
 ULONG SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, ULONG nFmt)
 {
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
-    const International& rInter = Application::GetAppInternational();
-    USHORT nLng = rInter.GetLanguage();
+    USHORT nLng = SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
 
     if (pEntry && nLng != pEntry->GetLanguage())
     {
@@ -956,12 +958,12 @@ void SwFormulaField::SetFormula(const String& rStr)
         // voll in die Hose. Ist aber nicht anders moeglich, da der Kalkulator
         // nur im Systemformat rechnen kann und es keine Konvertierungsroutine
         // gibt.
-        const International& rInter = Application::GetAppInternational();
+        const LocaleDataWrapper& rLclD = GetAppLocaleData();
         int nErrno;
         double fValue = SolarMath::StringToDouble( rStr.GetBuffer(),
-                                                rInter.GetNumThousandSep(),
-                                                rInter.GetNumDecimalSep(),
-                                                nErrno );
+                                        rLclD.getNumThousandSep().GetChar(0),
+                                        rLclD.getNumDecimalSep().GetChar(0),
+                                        nErrno );
         if( !nErrno )
             SwValueField::SetValue( fValue );
     }

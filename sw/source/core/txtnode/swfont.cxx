@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 11:16:38 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,16 @@
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
 #endif
+#ifndef _OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
@@ -135,12 +145,6 @@
 #endif
 #ifndef _SWATRSET_HXX //autogen
 #include <swatrset.hxx>
-#endif
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _OUTDEV_HXX //autogen
-#include <vcl/outdev.hxx>
 #endif
 
 
@@ -669,7 +673,7 @@ LanguageType GetSystemLang( )
 {
     // Hier wird bei LANGUAGE_SYSTEM die Sprache ermittelt.
     // 1.Versuch: Was sagt die Applikation?
-    LanguageType eTmp = GetpApp()->GetAppInternational().GetLanguage();
+    LanguageType eTmp = SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
     if ( ( eTmp == LANGUAGE_SYSTEM ) &&
         // Was sagt die Systemumgebung?
          ( (eTmp = ::GetSystemLanguage()) == LANGUAGE_SYSTEM ) )

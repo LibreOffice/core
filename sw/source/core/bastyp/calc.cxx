@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 12:08:22 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,20 +83,8 @@
 #include <tools/svwin.h>
 #endif
 
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 #ifndef _TOOLS_SOLMATH_HXX
 #include <tools/solmath.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX
-#include <vcl/system.hxx>
-#endif
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
 #endif
 #ifndef _SVX_ADRITEM_HXX //autogen
 #include <svx/adritem.hxx>
@@ -104,9 +92,19 @@
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
+
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
@@ -141,7 +139,6 @@
 #ifndef _DOCFLD_HXX
 #include <docfld.hxx>
 #endif
-
 
 // tippt sich schneller
 #define RESOURCE ViewShell::GetShellRes()
@@ -326,29 +323,22 @@ SwCalc::SwCalc( SwDoc& rD )
     eError( CALC_NOERR ),
     nListPor( 0 ),
     aErrExpr( aEmptyStr, SwSbxValue(), 0 ),
-    pInter( (International*)&Application::GetAppInternational() ),
+    pLclData( &GetAppLocaleData() ),
     pCharClass( &GetAppCharClass() )
 {
     aErrExpr.aStr.AssignAscii( "~C_ERR~" );
     memset( VarTable, 0, sizeof(VarTable) );
     LanguageType eLang = ((SvxLanguageItem&)rDoc.GetDefault(
                                         RES_CHRATR_LANGUAGE )).GetLanguage();
-    if( pInter->GetFormatLanguage() != eLang )
+    if( eLang != SvxLocaleToLanguage( pLclData->getLocale() ) )
     {
-        pInter = new International( eLang );
-        pCharClass = new CharClass( SvxCreateLocale( eLang ));
-
-#ifdef JP_DEBUG
-    printf( "Language: %d, AppLang: %d, AppFmtLang: %d, Decimal: %c, Thousand: %c\n",
-                pInter->GetLanguage(),
-                Application::GetAppInternational().GetLanguage(),
-                Application::GetAppInternational().GetFormatLanguage(),
-                pInter->GetNumDecimalSep(),
-                pInter->GetNumThousandSep() );
-#endif
+        ::com::sun::star::lang::Locale aLocale( SvxCreateLocale( eLang ));
+        pCharClass = new CharClass( aLocale );
+        pLclData = new LocaleDataWrapper(
+                        ::comphelper::getProcessServiceFactory(), aLocale );
     }
 
-    sCurrSym = pInter->GetCurrSymbol();
+    sCurrSym = pLclData->getCurrSymbol();
     sCurrSym.EraseLeadingChars().EraseTrailingChars();
     pCharClass->toLower( sCurrSym );
 
@@ -476,8 +466,8 @@ SwCalc::~SwCalc()
 {
     for( USHORT n = 0; n < TBLSZ; ++n )
         delete VarTable[n];
-    if( pInter != (International*)&Application::GetAppInternational() )
-        delete pInter;
+    if( pLclData != &GetAppLocaleData() )
+        delete pLclData;
     if( pCharClass != &GetAppCharClass() )
         delete pCharClass;
 }
@@ -554,116 +544,15 @@ String SwCalc::GetStrResult( double nValue, BOOL bRound )
             default             :   return RESOURCE->aCalc_Default;
         }
 
-    USHORT  nDec = pInter->GetNumDigits();
+    USHORT  nDec = 15; //pLclData->getNumDigits();
     String  aRetStr;
 
     SolarMath::DoubleToString( aRetStr, nValue,
                                 'A',                        /// 'F'  'E'  'G'  'A'
                                 nDec,                       /// Nachkommastellen
-                                pInter->GetNumDecimalSep(), /// Dezimalseparator
+                                pLclData->getNumDecimalSep().GetChar(0),    /// Dezimalseparator
                                 TRUE );
 
-#if 0
-    String  aLast;
-    int     nExp = 0,
-            nDigit,
-            nDecPos,
-            nDigits = nDec + 1;
-
-    if( !bRound )
-        nDigits = nDec = 14;
-
-    if( nValue < 0 )
-    {
-        nValue = -nValue;
-        aRetStr += '-';
-    }
-
-    if (nValue > 0 )
-    {
-        while( nValue < 1 )
-               nValue *= 10, --nExp;
-        while( nValue >= 10 )
-               nValue /= 10, ++nExp;
-    }
-    nDigits += nExp;
-    if( nDigits >= 0 &&
-        9 < int( nValue += nRoundVal[ nDigits > 15 ? 15 : nDigits ] ))
-    {
-        nValue = 1;
-        nExp++;
-        nDigits++;
-    }
-
-    if( nExp < 0 )
-    {
-        int nPos;
-        if( pInter->IsNumLeadingZero() )
-            aRetStr += '0';
-        aRetStr += pInter->GetNumDecimalSep();
-        nPos = -nExp - 1;
-        if( nDigits <= 0 )
-            nPos = nDec;
-        while( nPos-- )
-            aRetStr += '0';
-        nDecPos = 0;
-    }
-    else
-        nDecPos = nExp + 1;
-    if( nDigits > 0 )
-    {
-        short   nSep = nDecPos % 3;
-        BOOL    bFirst = TRUE;
-        if( !nSep )
-            nSep = 3;
-        for( USHORT x = 0 ; ; x++ )
-        {
-            if( x < 15 )
-            {
-                if( 1 == nDigits && x && 14 > x )
-                    nDigit = (int) floor( nValue + nKorrVal[ 15 - x ] );
-                else
-                    nDigit = (int) ( nValue + 1E-15 );
-
-                if( 9 < nDigit )
-                {
-                    ASSERT( !this, "Rundungsfehler" );
-                    nDigit = 9;
-                }
-                if( bFirst )
-                    aRetStr += (sal_Unicode) ( nDigit + '0' );
-                else
-                    aLast += (sal_Unicode) ( nDigit + '0' );
-                nValue = ( nValue - nDigit ) * 10;
-            }
-            else
-            {
-                if( bFirst )
-                    aRetStr += '0';
-                else
-                    aLast += '0';
-            }
-            if(!--nDigits)
-                break;
-
-            if( nDecPos )
-            {
-                if( !--nDecPos )
-                    bFirst = FALSE;
-                if( nDecPos && !--nSep && pInter->IsNumThousandSep() )
-                {
-                    nSep = 3;
-                    aRetStr += pInter->GetNumThousandSep();
-                }
-            }
-        }
-    }
-    if( 0L != aLast.ToInt32() )
-    {
-        aRetStr += pInter->GetNumDecimalSep();
-        aRetStr += aLast;
-    }
-#endif
     return aRetStr;
 }
 
@@ -679,8 +568,8 @@ enum TMStatus { TM_START, TM_THSEP, TM_MIN, TM_TMSEP, TM_SEC,
 
 BOOL SwCalc::ParseTime( USHORT *pHour, USHORT *pMin, USHORT *pSec )
 {
-    TimeFormat aTMFmt = pInter->GetTimeFormat();
-    sal_Unicode ch, cTMSep = pInter->GetTimeSep();
+//??    TimeFormat aTMFmt = pInter->GetTimeFormat();
+    sal_Unicode ch, cTMSep = pLclData->getTimeSep().GetChar(0);
 
     EatWhite( sCommand, nCommandPos );
     ch = NextCh( sCommand, nCommandPos );
@@ -697,8 +586,8 @@ BOOL SwCalc::ParseTime( USHORT *pHour, USHORT *pMin, USHORT *pSec )
                     xub_StrLen nStt = --nCommandPos;
                     BOOL bFnd = FALSE;
                     String aStr;
-                    const String& rPMStr = pInter->GetTimePM();
-                    const String& rAMStr = pInter->GetTimeAM();
+                    const String& rPMStr = pLclData->getTimePM();
+                    const String& rAMStr = pLclData->getTimeAM();
                     while( nCommandPos < sCommand.Len() )
                     {
                         EatWhite( sCommand, nCommandPos );
@@ -766,8 +655,8 @@ BOOL SwCalc::ParseTime( USHORT *pHour, USHORT *pMin, USHORT *pSec )
                         pCharClass->isDigit( sCommand, nCommandPos - 1 ) )
                     {
                         if( eState != TM_START ||
-                            aTMFmt == HOUR_12 && nVal <= 1 ||
-                            aTMFmt == HOUR_24 && nVal <= 2 )
+                            /*aTMFmt == HOUR_12 && nVal <= 1 ||
+                            aTMFmt == HOUR_24 &&*/ nVal <= 2 )
                         {
                             *pActVal = nVal * 10 + ( cNext - '0');
                             cNext = 0;
@@ -1044,8 +933,8 @@ void SwCalc::Pop( const VoidPtr pPtr )
 SwCalcOper SwCalc::GetToken()
 {
     sal_Unicode ch;
-    sal_Unicode cTSep = pInter->GetNumThousandSep(),
-                cDSep = pInter->GetNumDecimalSep();
+    sal_Unicode cTSep = pLclData->getNumThousandSep().GetChar(0),
+                cDSep = pLclData->getNumDecimalSep().GetChar(0);
 
     do {
         if( 0 == ( ch = NextCh( sCommand, nCommandPos ) ) )
@@ -1113,7 +1002,7 @@ SwCalcOper SwCalc::GetToken()
         case '.':   {
                         double nVal;
                         --nCommandPos;      //  auf das 1. Zeichen zurueck
-                        if( Str2Double( sCommand, nCommandPos, nVal, pInter ))
+                        if( Str2Double( sCommand, nCommandPos, nVal, pLclData ))
                         {
                             nNumberValue.PutDouble( nVal );
                             eCurrOper = CALC_NUMBER;
@@ -1655,26 +1544,22 @@ String SwCalc::GetDBName(const String& rName)
  *  Aenderung   :   JP 27.10.98
  ******************************************************************************/
 FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
-                            double& rVal, const International* pInter )
+                            double& rVal, const LocaleDataWrapper* pLclData )
 {
-    const International* pIntr = pInter;
-    if( !pIntr )
-    {
-        pIntr = &Application::GetAppInternational();
-        if( pIntr->GetFormatLanguage() != System::GetLanguage() )
-            pIntr = new International( System::GetLanguage() );
-    }
+    const LocaleDataWrapper* pLclD = pLclData;
+    if( !pLclD )
+        pLclD = &GetAppLocaleData();
 
     const xub_Unicode* pEnd;
     int nErrno;
     rVal = SolarMath::StringToDouble( rCommand.GetBuffer() + rCommandPos,
-                                        pIntr->GetNumThousandSep(),
-                                        pIntr->GetNumDecimalSep(),
+                                        pLclD->getNumThousandSep().GetChar(0),
+                                        pLclD->getNumDecimalSep().GetChar(0),
                                         nErrno, &pEnd );
     rCommandPos = pEnd - rCommand.GetBuffer();
 
-    if( !pInter && pIntr != &Application::GetAppInternational() )
-        delete (International*)pIntr;
+    if( !pLclData && pLclD != &GetAppLocaleData() )
+        delete (LocaleDataWrapper*)pLclD;
 
     return 0 == nErrno;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:36:18 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,12 @@
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 
@@ -735,7 +741,7 @@ void SwDocShell::SubInitNew()
     }
     else
     {   // guess DefaultLanguage to be used from other sources
-        nVal = Application::GetAppInternational().GetLanguage();
+        nVal = SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
         if( nVal == LANGUAGE_SYSTEM )
             nVal = ::GetSystemLanguage();
     }
@@ -772,6 +778,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/11/19 11:36:18  tl
+    lngprops.hxx include changed
+
     Revision 1.6  2000/10/31 20:32:32  jp
     change usage of filestream to medium
 

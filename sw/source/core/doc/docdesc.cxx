@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _GLOBNAME_HXX //autogen
 #include <tools/globname.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 #ifndef _FMTFSIZE_HXX //autogen
@@ -234,9 +237,8 @@ void lcl_DefaultPageFmt( SwFrmFmt &rFmt1, SwFrmFmt &rFmt2, SfxPrinter *pPrt,
         //Raender haben eine defaultmaessige Mindestgroesse.
         //wenn der Drucker einen groesseren Rand vorgibt, so
         //ist mir dass auch recht.
-        International aInternational;
         long nMinTopBottom, nMinLeftRight;
-        if ( MEASURE_METRIC == aInternational.GetMeasurementSystem() )
+        if ( MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum() )
             nMinTopBottom = nMinLeftRight = 1134;   //2 Zentimeter
         else
         {

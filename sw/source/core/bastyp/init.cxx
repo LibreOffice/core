@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 21:30:50 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,12 @@
 #ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
 #endif
+#ifndef _SVX_SCRIPSPACEITEM_HXX
+#include <svx/scriptspaceitem.hxx>
+#endif
+#ifndef _SVX_HNGPNCTITEM_HXX
+#include <svx/hngpnctitem.hxx>
+#endif
 #ifndef _SVX_CMAPITEM_HXX //autogen
 #include <svx/cmapitem.hxx>
 #endif
@@ -307,6 +313,15 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 extern void _FrmFinit();
@@ -482,7 +497,17 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { FN_FORMAT_DROPCAPS, 0 },                          // RES_PARATR_DROP
     { SID_ATTR_PARA_REGISTER, SFX_ITEM_POOLABLE },      // RES_PARATR_REGISTER
     { SID_ATTR_PARA_NUMRULE, 0 },                       // RES_PARATR_NUMRULE
+    { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },   // RES_PARATR_SCRIPTSPACE
+    { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },// RES_PARATR_HANGINGPUNCTUATION
+
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY1
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY2
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY3
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY4
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY5
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY6
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY7
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY8
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_FILL_ORDER
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRM_SIZE
@@ -550,6 +575,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
 USHORT* SwAttrPool::pVersionMap1 = 0;
 USHORT* SwAttrPool::pVersionMap2 = 0;
 USHORT* SwAttrPool::pVersionMap3 = 0;
+USHORT* SwAttrPool::pVersionMap4 = 0;
 SwIndexReg* SwIndexReg::pEmptyIndexArray = 0;
 
 const sal_Char* __FAR_DATA pMarkToTable     = "table";
@@ -566,6 +592,7 @@ SwAutoCompleteWord* SwDoc::pACmpltWords = 0;
 
 SwBreakIt* pBreakIt = 0;
 CharClass* pAppCharClass = 0;
+LocaleDataWrapper* pAppLocaleData = 0;
 
 /******************************************************************************
  *  void _InitCore()
@@ -727,8 +754,20 @@ void _InitCore()
     aAttrTab[ RES_PARATR_REGISTER - POOLATTR_BEGIN ] = new SwRegisterItem( FALSE );
     aAttrTab[ RES_PARATR_NUMRULE - POOLATTR_BEGIN ] = new SwNumRuleItem( aEmptyStr );
 
+    aAttrTab[ RES_PARATR_SCRIPTSPACE - POOLATTR_BEGIN ] =
+                                                    new SvxScriptSpaceItem;
+    aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] =
+                                                new SvxHangingPunctuationItem;
+
 // ParaAttr - Dummies
+    aAttrTab[ RES_PARATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY1 );
     aAttrTab[ RES_PARATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY2 );
+    aAttrTab[ RES_PARATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY3 );
+    aAttrTab[ RES_PARATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY4 );
+    aAttrTab[ RES_PARATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY5 );
+    aAttrTab[ RES_PARATR_DUMMY6 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY6 );
+    aAttrTab[ RES_PARATR_DUMMY7 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY7 );
+    aAttrTab[ RES_PARATR_DUMMY8 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY8 );
 // ParatAttr - Dummies
 
     aAttrTab[ RES_FILL_ORDER- POOLATTR_BEGIN ] = new SwFmtFillOrder;
@@ -838,8 +877,18 @@ void _InitCore()
     for ( i = 83; i <= 86; ++i )
         SwAttrPool::pVersionMap3[ i-1 ] = i + 35;
 
+    // 4. Version - neue Paragraph Attribute fuer die CJK-Version
+    SwAttrPool::pVersionMap4 = new USHORT[ 121 ];
+    for( i = 1; i <= 65; i++ )
+        SwAttrPool::pVersionMap4[ i-1 ] = i;
+    for ( i = 66; i <= 121; ++i )
+        SwAttrPool::pVersionMap4[ i-1 ] = i + 9;
+
     pBreakIt = new SwBreakIt();
-    pAppCharClass = new CharClass( SvxCreateLocale( LANGUAGE_SYSTEM ));
+    ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( LANGUAGE_SYSTEM ));
+    pAppCharClass = new CharClass( aLcl );
+    pAppLocaleData = new LocaleDataWrapper(
+                        ::comphelper::getProcessServiceFactory(), aLcl );
 
     _FrmInit();
     _TextInit();
@@ -909,6 +958,8 @@ void _FinitCore()
     delete SwIndexReg::pEmptyIndexArray;
     delete SwAttrPool::pVersionMap1;
     delete SwAttrPool::pVersionMap2;
+    delete SwAttrPool::pVersionMap3;
+    delete SwAttrPool::pVersionMap4;
 
     for ( USHORT i = 0; i < pGlobalOLEExcludeList->Count(); ++i )
         delete (SvGlobalName*)(*pGlobalOLEExcludeList)[i];
@@ -919,6 +970,10 @@ void _FinitCore()
 CharClass& GetAppCharClass()
 {
     return *pAppCharClass;
+}
+LocaleDataWrapper& GetAppLocaleData()
+{
+    return *pAppLocaleData;
 }
 
 

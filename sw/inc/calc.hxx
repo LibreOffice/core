@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:24 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #endif
 
 class CharClass;
-class International;
+class LocaleDataWrapper;
 class SwFieldType;
 class SwDoc;
 
@@ -210,7 +210,7 @@ class SwCalc
     xub_StrLen  nCommandPos;
 
     SwDoc&      rDoc;
-    International* pInter;
+    LocaleDataWrapper* pLclData;
     CharClass*  pCharClass;
 
     USHORT      nListPor;
@@ -255,7 +255,7 @@ public:
 
     static FASTBOOL     Str2Double( const String& rStr, xub_StrLen& rPos,
                                     double& rVal,
-                                    const International* pInter = 0 );
+                                    const LocaleDataWrapper* pData = 0 );
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 11:48:47 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ class SwPathFinder;
 class Graphic;
 class OutputDevice;
 class CharClass;
+class LocaleDataWrapper;
 
 typedef long SwTwips;
 #define INVALID_TWIPS   LONG_MAX
@@ -290,6 +291,6 @@ enum SetAttrMode
 
 // returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 CharClass& GetAppCharClass();
-
+LocaleDataWrapper& GetAppLocaleData();
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 11:20:51 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 #ifndef _SVX_PAPERINF_HXX //autogen
@@ -204,8 +207,7 @@ const USHORT PT_24  = 24 * 20;      // 22 pt
 inline USHORT GetMetricVal( int n )
 {
 #ifdef USE_MEASUREMENT
-    USHORT nVal = MEASURE_METRIC == Application::GetAppInternational().
-                                        GetMeasurementSystem()
+    USHORT nVal = MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum()
                     ? 567       // 1 cm
                     : 770;      // 1/2 Inch
 #else
@@ -259,11 +261,7 @@ long lcl_GetRightMargin( SwDoc& rDoc )
     if( !pPrt )
     {
         SvxPaper ePaper;
-// JP 26.05.99: so gibts einen GPF -> warum???
-//      if( MEASURE_METRIC == Application::GetAppInternational().
-//                                  GetMeasurementSystem() )
-        International aInter;
-        if( MEASURE_METRIC == aInter.GetMeasurementSystem() )
+        if( MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum() )
         {
             ePaper = SVX_PAPER_A4;
             nLeft = nRight = 1134;  //2 Zentimeter
@@ -1779,8 +1777,8 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
                 {
                     283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
                 };
-            const USHORT* pArr = MEASURE_METRIC == Application::
-                                GetAppInternational().GetMeasurementSystem()
+            const USHORT* pArr = MEASURE_METRIC ==
+                                GetAppLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -1813,8 +1811,8 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
                    2156, 2387
                 };
 
-            const USHORT* pArr = MEASURE_METRIC == Application::
-                                GetAppInternational().GetMeasurementSystem()
+            const USHORT* pArr = MEASURE_METRIC ==
+                                GetAppLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -1869,8 +1867,8 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
                 {
                     283, 567, 850, 1134, 1417, 1701, 1984, 2268, 2551, 2835
                 };
-            const USHORT* pArr = MEASURE_METRIC == Application::
-                                GetAppInternational().GetMeasurementSystem()
+            const USHORT* pArr = MEASURE_METRIC ==
+                                GetAppLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -1903,8 +1901,8 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
                 };
 
 #ifdef USE_MEASUREMENT
-            const USHORT* pArr0to2 = MEASURE_METRIC == Application::
-                            GetAppInternational().GetMeasurementSystem()
+            const USHORT* pArr0to2 = MEASURE_METRIC ==
+                            GetAppLocaleData().getMeasurementSystemEnum()
                                 ? aAbsSpace0to2
                                 : aAbsSpaceInch0to2;
 #else
@@ -1974,8 +1972,8 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
                 {
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
-            const USHORT* pArr = MEASURE_METRIC == Application::
-                                GetAppInternational().GetMeasurementSystem()
+            const USHORT* pArr = MEASURE_METRIC ==
+                                GetAppLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -2010,8 +2008,8 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
                 {
                     170, 340, 510, 680, 850, 1020, 1191, 1361, 1531, 1701
                 };
-            const USHORT* pArr = MEASURE_METRIC == Application::
-                                GetAppInternational().GetMeasurementSystem()
+            const USHORT* pArr = MEASURE_METRIC ==
+                                GetAppLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -2064,8 +2062,8 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
                 {
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
-            const USHORT* pArr = MEASURE_METRIC == Application::
-                                GetAppInternational().GetMeasurementSystem()
+            const USHORT* pArr = MEASURE_METRIC ==
+                                GetAppLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
@@ -2106,8 +2104,8 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
                 {
                     227, 454, 680, 907, 1134, 1361, 1587, 1814, 2041, 2268
                 };
-            const USHORT* pArr = MEASURE_METRIC == Application::
-                                GetAppInternational().GetMeasurementSystem()
+            const USHORT* pArr = MEASURE_METRIC ==
+                                GetAppLocaleData().getMeasurementSystemEnum()
                                     ? aAbsSpace
                                     : aAbsSpaceInch;
 #else
