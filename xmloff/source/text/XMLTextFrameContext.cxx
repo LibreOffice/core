@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 13:40:51 $
+ *  last change: $Author: mib $ $Date: 2001-03-23 16:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,8 +397,8 @@ XMLTextFrameContext::XMLTextFrameContext(
     sal_Int32   nZIndex = -1;
     sal_Int16   nPage = 0;
     sal_Int16   nRotation = 0;
-    sal_Int8    nRelWidth = 0;
-    sal_Int8    nRelHeight = 0;
+    sal_Int16   nRelWidth = 0;
+    sal_Int16   nRelHeight = 0;
     sal_Bool    bMayScript = sal_False;
 
     TextContentAnchorType   eAnchorType = eATyp;
@@ -472,7 +472,7 @@ XMLTextFrameContext::XMLTextFrameContext(
                 sal_Int32 nTmp;
                 GetImport().GetMM100UnitConverter().convertPercent( nTmp,
                                                                     rValue );
-                nRelWidth = (sal_Int8)nTmp;
+                nRelWidth = (sal_Int16)nTmp;
             }
             else
             {
@@ -490,7 +490,7 @@ XMLTextFrameContext::XMLTextFrameContext(
                 sal_Int32 nTmp;
                 if( GetImport().GetMM100UnitConverter().
                         convertPercent( nTmp, rValue ) )
-                    nRelWidth = (sal_Int8)nTmp;
+                    nRelWidth = (sal_Int16)nTmp;
             }
             break;
         case XML_TOK_TEXT_FRAME_HEIGHT:
@@ -500,7 +500,7 @@ XMLTextFrameContext::XMLTextFrameContext(
                 sal_Int32 nTmp;
                 GetImport().GetMM100UnitConverter().convertPercent( nTmp,
                                                                     rValue );
-                nRelHeight = (sal_Int8)nTmp;
+                nRelHeight = (sal_Int16)nTmp;
             }
             else
             {
@@ -524,7 +524,7 @@ XMLTextFrameContext::XMLTextFrameContext(
                 sal_Int32 nTmp;
                 if( GetImport().GetMM100UnitConverter().
                         convertPercent( nTmp, rValue ) )
-                    nRelHeight = (sal_Int8)nTmp;
+                    nRelHeight = (sal_Int16)nTmp;
             }
             break;
         case XML_TOK_TEXT_FRAME_MIN_HEIGHT:
@@ -533,7 +533,7 @@ XMLTextFrameContext::XMLTextFrameContext(
                 sal_Int32 nTmp;
                 GetImport().GetMM100UnitConverter().convertPercent( nTmp,
                                                                     rValue );
-                nRelHeight = (sal_Int8)nTmp;
+                nRelHeight = (sal_Int16)nTmp;
             }
             else
             {

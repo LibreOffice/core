@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 13:40:51 $
+ *  last change: $Author: mib $ $Date: 2001-03-23 16:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1701,7 +1701,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     }
     if( !bSyncWidth && xPropSetInfo->hasPropertyByName( sRelativeWidth ) )
     {
-        sal_Int8 nRelWidth =  0;
+        sal_Int16 nRelWidth =  0;
         aAny = rPropSet->getPropertyValue( sRelativeWidth );
         aAny >>= nRelWidth;
         DBG_ASSERT( nRelWidth >= 0 && nRelWidth <= 100,
@@ -1728,7 +1728,7 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         aAny = rPropSet->getPropertyValue( sIsSyncHeightToWidth );
         bSyncHeight = *(sal_Bool *)aAny.getValue();
     }
-    sal_Int8 nRelHeight =  0;
+    sal_Int16 nRelHeight =  0;
     if( !bSyncHeight && xPropSetInfo->hasPropertyByName( sRelativeHeight ) )
     {
         aAny = rPropSet->getPropertyValue( sRelativeHeight );

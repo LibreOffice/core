@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-19 11:25:11 $
+ *  last change: $Author: mib $ $Date: 2001-03-23 16:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,10 +787,10 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     if( pHeightMinAbsState )
     {
-        sal_Int8 nRel;
+        sal_Int16 nRel;
         if( (SizeType::MIN != nSizeType) ||
-            (pHeightMinRelState && (pHeightMinRelState->maValue >>= nRel) &&
-             nRel > 0) )
+            ( pHeightMinRelState &&
+              ( !(pHeightMinRelState->maValue >>= nRel) || nRel > 0 ) ) )
         {
             pHeightMinAbsState->mnIndex = -1;
         }

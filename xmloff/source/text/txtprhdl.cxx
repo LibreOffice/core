@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 20:32:24 $
+ *  last change: $Author: mib $ $Date: 2001-03-23 16:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,7 +1094,7 @@ sal_Bool XMLTextRelWidthHeightPropHdl_Impl::importXML(
     sal_Int32 nValue;
     bRet = rUnitConverter.convertPercent( nValue, rStrImpValue );
     if( bRet )
-        rValue <<= (sal_Int8)nValue;
+        rValue <<= (sal_Int16)nValue;
 
     return bRet;
 }
@@ -1105,9 +1105,8 @@ sal_Bool XMLTextRelWidthHeightPropHdl_Impl::exportXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Int8 nValue;
-    rValue >>= nValue;
-    if( nValue > 0 )
+    sal_Int16 nValue;
+    if( (rValue >>= nValue) && nValue > 0 )
     {
         OUStringBuffer aOut;
          rUnitConverter.convertPercent( aOut, nValue );
