@@ -1,0 +1,4 @@
+hwp	hwpfilter	:	offapi cppuhelper zlib NULL
+hwp	hwpfilter									usr1	-	all	hwp_mkout			NULL
+hwp	hwpfilter\prj								get		-	all	hwp_prj				NULL
+hwp	hwpfilter\source                   nmake - all hwp_source NULL
