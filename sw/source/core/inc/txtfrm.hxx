@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:06 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 10:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ class SwTxtFrm: public SwCntntFrm
     SwTwips mnFlyAnchorOfst;
     // The x position for wrap-through flys anchored at this paragraph.
     SwTwips mnFlyAnchorOfstNoWrap;
+    SwTwips mnFtnLine;
 
     xub_StrLen nOfst;           //nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
 
