@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:35:17 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,10 +978,11 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
     if ( m_pData->m_pObjectShell.Is() )
     {
         m_pData->m_sURL = rURL;
-        m_pData->m_seqArguments = rArgs;
+        m_pData->m_seqArguments.realloc( rArgs.getLength() );
+        sal_Int32 nNewLen = 0;
 
-        sal_Int32 nNewLength = rArgs.getLength();
         for ( sal_Int32 nInd = 0; nInd < rArgs.getLength(); nInd++ )
+        {
             if ( rArgs[nInd].Name.equalsAscii( "WinExtent" ) )
             {
                 // the document should be resized
@@ -998,6 +999,15 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
                     }
                 }
             }
+            else if ( !rArgs[nInd].Name.equalsAscii( "Stream" ) )
+            {
+                // TODO/MAV: remove the above condition when the stream parameter is supported
+                m_pData->m_seqArguments[nNewLen++] = rArgs[nInd];
+            }
+        }
+
+        m_pData->m_seqArguments.realloc( nNewLen );
+
 
         if( m_pData->m_pObjectShell->GetMedium() )
         {
@@ -1241,7 +1251,7 @@ REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getCurrentSelection() throw(::com
         if ( xDocView.is() )
         {
             ANY xSel = xDocView->getSelection();
-    // automatisch auskommentiert - Wird von UNO III nicht weiter unterstützt!
+    // automatisch auskommentiert - Wird von UNO III nicht weiter unterstuetzt!
     //      return xSel.getReflection() == XINTERFACE_getReflection()
     //      return xSel.getValueType() == ::getCppuType((const XINTERFACE*)0)
     //              ? *(REFERENCE< XINTERFACE > *) xSel.get() : REFERENCE< XINTERFACE > ();
@@ -2147,7 +2157,7 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                 pMedium->SetName( String(), sal_True );
                 pMedium->Init_Impl();
 
-                if( pMedium->GetFilter()->IsOwnFormat() )
+                if( m_pData->m_pObjectShell->IsOwnStorageFormat_Impl( *pMedium ) )
                 {
                     // untitled document must be based on temporary storage
                     SvStorageRef xTmpStor = new SvStorage( ( m_pData->m_pObjectShell->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60), String() );
