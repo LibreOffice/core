@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:54:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2838,7 +2838,7 @@ void SwWW8Writer::OutRedline( const SwRedlineData& rRedline )
             pO->Insert( 7, pO->Count() );       // len
             pO->Insert( 1, pO->Count() );
             InsUInt16( AddRedlineAuthor( rRedline.GetAuthor() ) );
-            InsUInt32( SwWW8Writer::GetDTTM( rRedline.GetTimeStamp() ));
+            InsUInt32( sw::ms::DateTime2DTTM( rRedline.GetTimeStamp() ));
         }
         break;
     default:
@@ -2867,7 +2867,7 @@ void SwWW8Writer::OutRedline( const SwRedlineData& rRedline )
             InsUInt16( pSprmIds[2] );
         else
             pO->Insert(msword_cast<sal_uInt8>(pSprmIds[2]), pO->Count());
-        InsUInt32( SwWW8Writer::GetDTTM( rRedline.GetTimeStamp() ));
+        InsUInt32( sw::ms::DateTime2DTTM( rRedline.GetTimeStamp() ));
     }
 }
 
