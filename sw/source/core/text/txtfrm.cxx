@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-25 14:05:44 $
+ *  last change: $Author: ama $ $Date: 2002-04-25 14:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2219,7 +2219,7 @@ void SwTxtFrm::ChgThisLines()
 
     if ( nNew != nThisLines )
     {
-        if ( GetAttrSet()->GetLineNumber().IsCount() )
+        if ( !IsInTab() && GetAttrSet()->GetLineNumber().IsCount() )
         {
             nAllLines -= nThisLines;
             nThisLines = nNew;
