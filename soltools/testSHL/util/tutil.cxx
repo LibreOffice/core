@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tutil.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2001-04-18 14:48:35 $
+ *  last change: $Author: pluby $ $Date: 2001-04-18 15:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ namespace tstutl {
 #define _getcwd getcwd
 #include <direct.h>                         // _getcwd
 #else
-#include <stdlib.h>                         // getcwd
+#include <unistd.h>                         // getcwd
 #endif
 
 // <function_cnvrtPth>
