@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddlgfact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:18:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 09:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl); // add for BreakDlg
 IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl); // add for CopyDlg
 IMPL_ABSTDLG_BASE(AbstractSdCustomShowDlg_Impl); // CHINA001 add for SdCustomShowDlg
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for SdCharDlg
+IMPL_ABSTDLG_BASE(SdPresLayoutTemplateDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractAssistentDlg_Impl); //add for AssistentDlg
 IMPL_ABSTDLG_BASE(AbstractSdModifyFieldDlg_Impl); //add for SdModifyFieldDlg
 IMPL_ABSTDLG_BASE(AbstractSdSnapLineDlg_Impl); //add for SdSnapLineDlg
@@ -189,6 +190,40 @@ String AbstractTabDialog_Impl::GetText() const
     return pDlg->GetText();
 }
 //add for AbstractTabDialog_Impl end
+
+// --------------------------------------------------------------------
+
+void SdPresLayoutTemplateDlg_Impl::SetCurPageId( USHORT nId )
+{
+    pDlg->SetCurPageId( nId );
+}
+
+const SfxItemSet* SdPresLayoutTemplateDlg_Impl::GetOutputItemSet() const
+{
+    return pDlg->GetOutputItemSet();
+}
+
+const USHORT* SdPresLayoutTemplateDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
+{
+    return pDlg->GetInputRanges( pItem );
+}
+
+void SdPresLayoutTemplateDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
+{
+     pDlg->SetInputSet( pInSet );
+}
+
+void SdPresLayoutTemplateDlg_Impl::SetText( const XubString& rStr )
+{
+    pDlg->SetText( rStr );
+}
+
+String SdPresLayoutTemplateDlg_Impl::GetText() const
+{
+    return pDlg->GetText();
+}
+
+// --------------------------------------------------------------------
 
 //AbstractAssistentDlg_Impl begin
 SfxObjectShellLock AbstractAssistentDlg_Impl::GetDocument()
@@ -722,21 +757,10 @@ SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdPresLayoutTemplate
                                                 SdResId DlgId, SfxStyleSheetBase& rStyleBase,
                                                 PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool ) //add for SdPresLayoutTemplateDlg
 {
-
-    SfxTabDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case TAB_PRES_LAYOUT_TEMPLATE :
-            pDlg = new SdPresLayoutTemplateDlg( pDocSh, pParent, DlgId, rStyleBase, ePO, pSSPool );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
-    return 0;
-
+    if ( rResId.GetId() == TAB_PRES_LAYOUT_TEMPLATE )
+        return new SdPresLayoutTemplateDlg_Impl( new SdPresLayoutTemplateDlg( pDocSh, pParent, DlgId, rStyleBase, ePO, pSSPool ) );
+    else
+        return 0;
 }
 // add for SdPresLayoutTemplateDlg end
 
