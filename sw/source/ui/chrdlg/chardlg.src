@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:06:31 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabDialog DLG_CHAR
                 Text[ greek ] = "Γραμματοσειρά";
                 Text[ korean ] = "±Ϋ²Γ";
                 Text[ turkish ] = "Yazύtipi";
+                Text[ catalan ] = "Fuente";
             };
             PageItem
             {
@@ -144,6 +145,7 @@ TabDialog DLG_CHAR
                 Text[ greek ] = "Εφέ χαρακτήρων";
                 Text[ korean ] = "±Ϋ²Γ ΘΏ°ϊ";
                 Text[ turkish ] = "Yazύtipi efektleri";
+                Text[ catalan ] = "Efectos de fuente";
             };
             PageItem
             {
@@ -169,6 +171,7 @@ TabDialog DLG_CHAR
                 Text[ chinese_traditional ] = "¦μΈm";
                 Text[ turkish ] = "Position";
                 Text[ arabic ] = "ΗαγζΦΪ";
+                Text[ catalan ] = "Posiciσn";
             };
             PageItem
             {
@@ -188,12 +191,13 @@ TabDialog DLG_CHAR
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
-                Text[ japanese ] = "a•¶Ϊ²±³Δ";
+                Text[ japanese ] = "“ϊ–{κΪ²±³Δ";
                 Text[ korean ] = "ΎΖ½ΓΎΖ ·ΉΐΜΎΖΏτ";
                 Text[ chinese_simplified ] = "ΦΠΘΥΊ«°ζΚ½";
                 Text[ chinese_traditional ] = "¤¤¤ιΑϊª©¦΅";
                 Text[ turkish ] = "Asian layout";
                 Text[ arabic ] = "ΚΞΨνΨ ΒΣνζν";
+                Text[ catalan ] = "Diseρo asiαtico";
             };
             PageItem
             {
@@ -220,6 +224,7 @@ TabDialog DLG_CHAR
                 Text[ greek ] = "Υπερ-σύνδεση";
                 Text[ korean ] = "ΗΟΐΜΖΫΈµΕ©";
                 Text[ turkish ] = "Hyperlink";
+                Text[ catalan ] = "Hiperenlace";
             };
             PageItem
             {
@@ -249,6 +254,7 @@ TabDialog DLG_CHAR
                 Text[ greek ] = "Φόντο";
                 Text[ korean ] = "Ήθ°ζ";
                 Text[ turkish ] = "Artalan";
+                Text[ catalan ] = "Fondo";
             };
         };
     };
@@ -264,6 +270,7 @@ TabDialog DLG_CHAR
     Text[ greek ] = "Χαρακτήρες";
     Text[ korean ] = "Ή®ΐΪ";
     Text[ turkish ] = "Karakter";
+    Text[ catalan ] = "Caracteres";
 };
 TabDialog DLG_DRAWCHAR
 {
@@ -317,6 +324,7 @@ TabDialog DLG_DRAWCHAR
                 Text[ greek ] = "Γραμματοσειρά";
                 Text[ korean ] = "±Ϋ²Γ";
                 Text[ turkish ] = "Yazύtipi";
+                Text[ catalan ] = "Fuente";
             };
         };
     };
@@ -331,6 +339,7 @@ TabDialog DLG_DRAWCHAR
     Text[ greek ] = "Γραμματοσειρά";
     Text[ korean ] = "±Ϋ²Γ";
     Text[ turkish ] = "Yazύtipi";
+    Text[ catalan ] = "Fuente";
 };
 TabPage TP_CHAR_URL
 {
@@ -364,6 +373,7 @@ TabPage TP_CHAR_URL
         Text[ greek ] = "Υπερ-σύνδεση";
         Text[ korean ] = "ΗΟΐΜΖΫΈµΕ©";
         Text[ turkish ] = "Hyperlink";
+        Text[ catalan ] = "Hiperenlace";
     };
     FixedText FT_URL
     {
@@ -391,6 +401,7 @@ TabPage TP_CHAR_URL
         Text[ greek ] = "URL";
         Text[ korean ] = "~URL";
         Text[ turkish ] = "U~RL";
+        Text[ catalan ] = "~URL";
     };
     Edit ED_URL
     {
@@ -426,6 +437,7 @@ TabPage TP_CHAR_URL
         Text[ greek ] = "~Επιλογή...";
         Text[ korean ] = "Ό±ΕΓΗΟ±β(~B)...";
         Text[ turkish ] = "A~raώtύr...";
+        Text[ catalan ] = "~Seleccionar...";
     };
     FixedText FT_TEXT
     {
@@ -451,6 +463,7 @@ TabPage TP_CHAR_URL
         Text[ chinese_traditional ] = "¤ε¦r(~X)";
         Text[ turkish ] = "B~ilgi";
         Text[ arabic ] = "δΥ";
+        Text[ catalan ] = "Texto";
     };
     Edit ED_TEXT
     {
@@ -486,6 +499,7 @@ TabPage TP_CHAR_URL
         Text[ greek ] = "Όνομα";
         Text[ korean ] = "ΐΜΈ§(~N)";
         Text[ turkish ] = "~Ad";
+        Text[ catalan ] = "~Nombre";
     };
     Edit ED_NAME
     {
@@ -521,6 +535,7 @@ TabPage TP_CHAR_URL
         Text[ greek ] = "Πλαίσιο";
         Text[ korean ] = "ΗΑ·ΉΐΣ";
         Text[ turkish ] = "~Frame";
+        Text[ catalan ] = "~Frame";
     };
     ComboBox LB_TARGET
     {
@@ -558,6 +573,7 @@ TabPage TP_CHAR_URL
         Text[ greek ] = "Γεγονότα...";
         Text[ korean ] = "ΐΜΊ¥Ζ®(~E)...";
         Text[ turkish ] = "Olaylar...";
+        Text[ catalan ] = "~Acontecimientos...";
     };
     GroupBox GB_STYLE
     {
@@ -585,6 +601,7 @@ TabPage TP_CHAR_URL
         Text[ greek ] = "Στυλ χαρακτήρων";
         Text[ korean ] = "Ή®ΐΪ ΐ―Ηό";
         Text[ turkish ] = "Karakter biηimi";
+        Text[ catalan ] = "Estilos de caracteres";
     };
     FixedText FT_VISITED
     {
@@ -612,6 +629,7 @@ TabPage TP_CHAR_URL
         Text[ greek ] = "Συνδέσεις που έχουν επισκεφθεί";
         Text[ korean ] = "ΉζΉ®ΗΡ ΈµΕ©(~V)";
         Text[ turkish ] = "~Kullanύlmύώ hyperlink";
+        Text[ catalan ] = "Vνnculos ~visitados";
     };
     ListBox LB_VISITED
     {
@@ -649,6 +667,7 @@ TabPage TP_CHAR_URL
         Text[ greek ] = "Συνδέσεις χωρίς επίσκεψη";
         Text[ korean ] = "ΉζΉ®ΗΟΑφ ΎΚΐΊ ΈµΕ©(~L)";
         Text[ turkish ] = "Kullanύl~mamύώ hyperlink";
+        Text[ catalan ] = "Vνnculos no v~isitados";
     };
     ListBox LB_NOT_VISITED
     {
