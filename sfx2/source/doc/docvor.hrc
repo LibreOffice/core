@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-13 09:37:59 $
+ *  last change: $Author: pb $ $Date: 2002-07-04 11:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,5 +90,14 @@
 #define FT_DEFAULT_TEMPLATE_LABEL 20
 #define FT_DEFAULT_TEMPLATE 21
 #define BTN_HELP 100
+
+#ifdef BTN_OK
+#undef BTN_OK
+#endif
 #define BTN_OK 100
+
+#ifdef BTN_CANCEL
+#undef BTN_CANCEL
+#endif
 #define BTN_CANCEL 101
+
