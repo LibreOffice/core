@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:58:21 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 08:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,25 +364,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     ::rtl::OUString OFormLayerXMLExport_Impl::getControlId(const Reference< XPropertySet >& _rxControl)
     {
+        OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLExport_Impl::getControlId: invalid current page!");
         OSL_ENSHURE(m_aCurrentPageIds->second.end() != m_aCurrentPageIds->second.find(_rxControl),
             "OFormLayerXMLExport_Impl::getControlId: can not find the control!");
-#ifdef _DEBUG
-        // check if the control belongs to the current page (m_aCurrentPageIds, m_aCurrentPageReferring)
-        Reference< XInterface > xCheck = _rxControl.get();
-        Reference< XDrawPage > xPageSearch;
-        while (!xPageSearch.is() && xCheck.is())
-        {
-            Reference< XChild > xCheckAsChild(xCheck, UNO_QUERY);
-            if (xCheckAsChild.is())
-                xCheck = xCheckAsChild->getParent();
-            else
-                xCheck.clear();
-            xPageSearch = Reference< XDrawPage >(xCheck, UNO_QUERY);
-        }
-        OSL_ENSURE(m_aCurrentPageIds->first == xPageSearch,
-
-            "OFormLayerXMLExport_Impl::getControlId: the control is invalid or not part of the page you sought before!");
-#endif
         return m_aCurrentPageIds->second[_rxControl];
     }
 
@@ -508,6 +492,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/01/02 15:58:21  fs
+ *  event ex- & import
+ *
  *  Revision 1.7  2000/12/18 15:14:35  fs
  *  some changes ... now exporting/importing styles
  *
