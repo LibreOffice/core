@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:13:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,7 @@ sal_Int32 ZipFile::readCEN()
     throw(IOException, ZipException, RuntimeException)
 {
     sal_Int32 nCenLen, nCenPos = -1, nCenOff, nEndPos, nLocPos;
-    sal_Int16 nCount, nTotal;
+    sal_uInt16 nCount, nTotal;
 
     try
     {
