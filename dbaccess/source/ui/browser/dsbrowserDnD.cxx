@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2002-04-16 17:01:04 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 10:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,6 +788,17 @@ namespace dbaui
                             }
                         }
                     }
+                    else
+                    {
+                        switch(nCommandType)
+                        {
+                            case CommandType::TABLE:
+                                break;
+                            case CommandType::QUERY:
+                                break;
+                        }
+                        showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
+                    }
                     if(bDispose)
                         ::comphelper::disposeComponent(xSrcConnection);
                 }
@@ -1290,6 +1301,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.39  2002/04/16 17:01:04  hr
+ *  #65293#: syntax
+ *
  *  Revision 1.38  2002/04/02 06:45:52  oj
  *  #98146# mapping of columns corrected
  *
