@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 16:09:12 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 #include <classes/fwkresid.hxx>
 #endif
 
-#include "resource.hrc"
+#include "classes/resource.hrc"
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -758,21 +758,18 @@ throw ( RuntimeException )
         {
             ResetableGuard aGuard( m_aLock );
 
+            sal_Bool bSetCheckmark      = sal_False;
             sal_Bool bCheckmark         = sal_False;
             sal_Bool bMenuItemEnabled   = m_pVCLMenu->IsItemEnabled( pStatusChangedMenu->nItemId );
 
             if ( Event.IsEnabled != bMenuItemEnabled )
-            m_pVCLMenu->EnableItem( pStatusChangedMenu->nItemId, Event.IsEnabled );
+                m_pVCLMenu->EnableItem( pStatusChangedMenu->nItemId, Event.IsEnabled );
 
-            try
-            {
-                bCheckmark = ::cppu::any2bool(Event.State);
-            }
-            catch(const ::com::sun::star::lang::IllegalArgumentException&)
-            {
-            }
+            if ( Event.State >>= bCheckmark )
+                 bSetCheckmark = sal_True;
 
-            m_pVCLMenu->CheckItem( pStatusChangedMenu->nItemId, bCheckmark );
+            if ( bSetCheckmark )
+                m_pVCLMenu->CheckItem( pStatusChangedMenu->nItemId, bCheckmark );
         }
 
         if ( Event.Requery )
