@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:01:26 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 15:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,10 +294,28 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
             double nLoc = nTimeInDays - (double)(nZone + nDST1) / 60.0 / 24.0;
             xC->setDateTime( nLoc );
             sal_Int16 nDST2 = xC->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
+            // If DSTs differ after calculation, we crossed boundaries. Do it
+            // again, this time using the DST corrected initial value for the
+            // real local time.
+            // See also localtime/gmtime conversion pitfalls at
+            // http://www.erack.de/download/timetest.c
             if ( nDST1 != nDST2 )
             {
                 nLoc = nTimeInDays - (double)(nZone + nDST2) / 60.0 / 24.0;
                 xC->setDateTime( nLoc );
+                // #i17222# If the DST onset rule says to switch from 00:00 to
+                // 01:00 and we tried to set onsetDay 00:00 with DST, the
+                // result was onsetDay-1 23:00 and no DST, which is not what we
+                // want. So once again without DST, resulting in onsetDay
+                // 01:00 and DST. Yes, this seems to be weird, but logically
+                // correct.
+                sal_Int16 nDST3 = xC->getValue(
+                        i18n::CalendarFieldIndex::DST_OFFSET );
+                if ( nDST2 != nDST3 && !nDST3 )
+                {
+                    nLoc = nTimeInDays - (double)(nZone + nDST3) / 60.0 / 24.0;
+                    xC->setDateTime( nLoc );
+                }
             }
         }
     }
