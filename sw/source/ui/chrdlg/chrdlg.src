@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:00:31 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,8 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE[ hindi ] = "वर्तमान पृष्ठ केलिए पृष्ठ संख्या को लागू नहीं कर सकते है ।  सम संख्या को बायाँ ओर के पृष्ठ में , विषम संख्या को दाहिनी ओर के पृष्ठ में उपयोग करता है ।";
     MESSAGE[ slovak ] = "Na aktuálnej strane nemožno použiť číslovanie strán. Párne čísla možno použiť len na ľavých stránkach, nepárne čísla na pravých stránkach.";
 };
+
+
 
 
 
