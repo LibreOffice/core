@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:56:59 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,13 +550,13 @@ static bool ImplIsActionHandlingTransparency( const MetaAction& rAct )
 }
 
 // predicate functor for checking whether given element is fully transparent
-class Impl_IsNotTransparent : public ::std::unary_function< ::std::pair< const MetaAction*, int >, bool >
+class Impl_IsTransparent : public ::std::unary_function< ::std::pair< const MetaAction*, int >, bool >
 {
 public:
-    Impl_IsNotTransparent( const OutputDevice& rOut ) : mrOut(rOut) {}
+    Impl_IsTransparent( const OutputDevice& rOut ) : mrOut(rOut) {}
     bool operator()( ::std::pair< const MetaAction*, int > rElem )
     {
-        return ImplIsNotTransparent( *rElem.first, mrOut );
+        return !ImplIsNotTransparent( *rElem.first, mrOut );
     }
 
 private:
@@ -571,6 +571,7 @@ struct ConnectedComponents
     ::std::list< Component >    aComponentList;
     Rectangle                   aBounds;
     bool                        bIsSpecial;
+    bool                        bIsFullyTransparent;
 };
 
 typedef ::std::list< ConnectedComponents > ConnectedComponentsList;
@@ -696,7 +697,15 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
             // actions get their own aCCList entry, which is necessary
             // when copying them to the output metafile (see stage 3
             // below).
-            if( !aBBCurrAct.IsEmpty() )
+
+            // #107169# Wholly transparent objects need
+            // not be considered for connected components,
+            // too. Just put each of them into a separate
+            // component.
+            aTotalComponents.bIsFullyTransparent = !ImplIsNotTransparent(*pCurrAct, aMapModeVDev);
+
+            if( !aBBCurrAct.IsEmpty() &&
+                !aTotalComponents.bIsFullyTransparent )
             {
                 ConnectedComponentsList::iterator       aCurrCC;
                 const ConnectedComponentsList::iterator aLastCC( aCCList.end() );
@@ -721,7 +730,13 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
                         // empty. This ensures that empty actions are not
                         // merged into one component, as a matter of fact,
                         // they have no position.
+
+                        // #107169# Wholly transparent objects need
+                        // not be considered for connected components,
+                        // too. Just put each of them into a separate
+                        // component.
                         if( !aCurrCC->aBounds.IsEmpty() &&
+                            !aCurrCC->bIsFullyTransparent &&
                             aCurrCC->aBounds.IsOver( aTotalBounds ) )
                         {
                             // union the intersecting aCCList element into aTotalComponents
@@ -807,29 +822,20 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
                     }
                     else
                     {
-                        // check if _every_ object between pCurrAct and
-                        // empty sheet of paper is fully transparent
-                        Impl_IsNotTransparent aSpecialPredicate( aMapModeVDev );
-                        if( ::std::find_if( aTotalComponents.aComponentList.begin(),
-                                            aTotalComponents.aComponentList.end(),
-                                            aSpecialPredicate ) == aTotalComponents.aComponentList.end() )
-                        {
-                            // predicate Impl_IsNotTransparent never
-                            // returned true, so every object is
-                            // transparent -> don't be special
-                            aTotalComponents.bIsSpecial = false;
-                        }
-                        else
-                        {
-                            // predicate Impl_IsNotTransparent returned
-                            // true at least once, so there's a visible
-                            // object between pCurrAct and the empty sheet
-                            // of paper -> be special, then
-                            aTotalComponents.bIsSpecial = true;
-                        }
+                        // #107169# Fixes abnove now ensure that _no_
+                        // object in the list is fully transparent. Thus,
+                        // if the component list is not empty above, we
+                        // must assume that we have to treat this
+                        // component special.
+
+                        // there are non-transparent objects between
+                        // pCurrAct and the empty sheet of paper -> be
+                        // special, then
+                        aTotalComponents.bIsSpecial = true;
                     }
                 }
             }
+
 
             //
             //  STAGE 1.3: Add newly generated CC list element
@@ -849,6 +855,9 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
             DBG_ASSERT( !aTotalComponents.aBounds.IsEmpty() ||
                         (aTotalComponents.aBounds.IsEmpty() && aTotalComponents.aComponentList.size() == 1),
                         "Printer::GetPreparedMetaFile non-output generating actions must be solitary");
+            DBG_ASSERT( !aTotalComponents.bIsFullyTransparent ||
+                        (aTotalComponents.bIsFullyTransparent && aTotalComponents.aComponentList.size() == 1),
+                        "Printer::GetPreparedMetaFile fully transparent actions must be solitary");
         }
 
         // well now, we've got the list of disjunct connected
@@ -1044,18 +1053,22 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
              pCurrAct;
              pCurrAct=const_cast<GDIMetaFile&>(rInMtf).NextAction(), ++nActionNum )
         {
+            const ConnectedComponents* pCurrAssociatedComponent = aCCList_MemberMap[nActionNum];
+
             // NOTE: This relies on the fact that map-mode or draw
             // mode changing actions are solitary aCCList elements and
             // have empty bounding boxes, see comment on stage 1.1
             // above
-            if( aCCList_MemberMap[nActionNum] &&
-                (aCCList_MemberMap[nActionNum]->aBounds.IsEmpty() ||
-                 !aCCList_MemberMap[nActionNum]->bIsSpecial) )
+            if( pCurrAssociatedComponent &&
+                (pCurrAssociatedComponent->aBounds.IsEmpty() ||
+                 !pCurrAssociatedComponent->bIsSpecial) )
             {
                 // #107169# Treat masked bitmaps special, if they are
-                // the first (or sole) action in their bounds list.
+                // the first (or sole) action in their bounds
+                // list. Note that we previously ensured that no
+                // fully-transparent objects are before us here.
                 if( ImplIsActionMaskedBitmap( *pCurrAct ) &&
-                    aCCList_MemberMap[nActionNum]->aComponentList.begin()->first == pCurrAct )
+                    pCurrAssociatedComponent->aComponentList.begin()->first == pCurrAct )
                 {
                     // convert to plain Bitmap, where masked-out parts are white
                     Bitmap aBmp( ImplConvertBmpEx2Bmp(*pCurrAct) );
