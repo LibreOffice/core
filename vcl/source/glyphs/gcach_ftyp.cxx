@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.38 $
- *  last change: $Author: jbu $ $Date: 2001-05-15 11:40:18 $
+ *  $Revision: 1.39 $
+ *  last change: $Author: hdu $ $Date: 2001-05-16 15:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,7 +822,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
             FT_Vector aKernVal;
             FT_Error rcFT = FT_Get_Kerning( maFaceFT, it->mnChar1, it->mnChar2,
                 ft_kerning_default, &aKernVal );
-            aKernPair.mnKern = aKernVal.x;
+            aKernPair.mnKern = aKernVal.x >> 6;
             if( (aKernPair.mnKern == 0) || (rcFT != FT_Err_Ok) )
 
                 continue;
