@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForJava.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-19 23:12:07 $
+*  last change: $Author: hr $ $Date: 2004-07-23 14:04:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -101,6 +101,11 @@ import drafts.com.sun.star.script.provider.XScriptProvider;
 import drafts.com.sun.star.script.provider.XScript;
 import drafts.com.sun.star.script.browse.XBrowseNode;
 import drafts.com.sun.star.script.browse.BrowseNodeTypes;
+import drafts.com.sun.star.script.provider.ScriptErrorRaisedException;
+import drafts.com.sun.star.script.provider.ScriptExceptionRaisedException;
+import drafts.com.sun.star.script.provider.ScriptFrameworkErrorException;
+import drafts.com.sun.star.script.provider.ScriptFrameworkErrorType;
+
 import com.sun.star.script.framework.container.ScriptMetaData;
 
 import com.sun.star.script.framework.provider.*;
@@ -130,20 +135,22 @@ public class ScriptProviderForJava
 
         public XScript getScript( /*IN*/String scriptURI )
             throws com.sun.star.uno.RuntimeException,
-                   com.sun.star.lang.IllegalArgumentException
+                   ScriptFrameworkErrorException
         {
-            ScriptMetaData scriptData = getScriptData( scriptURI );
+            ScriptMetaData scriptData = null;
+            scriptData = getScriptData( scriptURI );
             ScriptImpl script = null;
-            if ( scriptData == null )
+            try
             {
-                throw new com.sun.star.uno.RuntimeException(
-                "Cannot find script for URI: " + scriptURI );
+                script = new ScriptImpl( m_xContext, m_resolutionPolicy, scriptData, m_xModel );
+                return script;
             }
-            else
+            catch ( com.sun.star.uno.RuntimeException re )
             {
-                script = new ScriptImpl( m_xContext, m_resolutionPolicy, scriptData, m_xInvocationContext );
+                throw new ScriptFrameworkErrorException( "Failed to create script object: " + re.getMessage(),
+                    null, scriptData.getLanguageName(), language, ScriptFrameworkErrorType.UNKNOWN );
             }
-            return script;
+
         }
 
         public boolean hasScriptEditor()
@@ -229,14 +236,14 @@ class ScriptImpl implements XScript
 {
     private ScriptMetaData metaData;
     private XComponentContext m_xContext;
-    private Object m_oInvokeContext;
+    private XModel m_xModel;
     private XMultiComponentFactory m_xMultiComponentFactory;
     private Resolver m_resolutionPolicy;
-    ScriptImpl( XComponentContext ctx, Resolver resolver, ScriptMetaData metaData, Object oInvokeContext ) throws com.sun.star.uno.RuntimeException
+    ScriptImpl( XComponentContext ctx, Resolver resolver, ScriptMetaData metaData, XModel xModel ) throws com.sun.star.uno.RuntimeException
     {
         this.metaData = metaData;
         this.m_xContext = ctx;
-        this.m_oInvokeContext = oInvokeContext;
+        this.m_xModel = xModel;
         this.m_resolutionPolicy = resolver;
         try
         {
@@ -273,7 +280,7 @@ class ScriptImpl implements XScript
                                      /*OUT*/short[][]  aOutParamIndex,
                                      /*OUT*/Object[][]  aOutParam )
 
-        throws IllegalArgumentException, InvocationTargetException, CannotConvertException
+        throws  ScriptFrameworkErrorException, com.sun.star.reflection.InvocationTargetException
         {
             LogUtils.DEBUG( "** ScriptProviderForJava::invoke: Starting..." );
 
@@ -297,16 +304,27 @@ class ScriptImpl implements XScript
             }
             catch (MalformedURLException mfe )
             {
-                throw new InvocationTargetException(mfe.getMessage());
+                // Framework error
+                throw new ScriptFrameworkErrorException(
+                    mfe.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
             }
             catch (NoSuitableClassLoaderException ncl )
             {
-                throw new InvocationTargetException(ncl.getMessage());
+                // Framework error
+                throw new ScriptFrameworkErrorException(
+                    ncl.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
             }
             catch (ArrayStoreException e )
             {
-                LogUtils.DEBUG("Barfed " + e);
-                LogUtils.DEBUG( LogUtils.getTrace( e ) );
+                // Framework error
+                throw new ScriptFrameworkErrorException(
+                    e.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
             }
 
             ArrayList invocationArgList = new ArrayList();
@@ -315,7 +333,7 @@ class ScriptImpl implements XScript
             LogUtils.DEBUG( "Parameter Mapping..." );
 
             // Setup Context Object
-            XScriptContext xSc = ScriptContext.createContext(m_oInvokeContext,
+            XScriptContext xSc = ScriptContext.createContext(m_xModel,
                 m_xContext, m_xMultiComponentFactory);
             scriptDesc.addArgumentType( XScriptContext.class );
             invocationArgList.add( xSc );
@@ -356,16 +374,20 @@ class ScriptImpl implements XScript
                 }
                 catch( NoSuchMethodException e )
                 {
-                    String trace = LogUtils.getTrace( e );
-                    LogUtils.DEBUG( trace );
-                    throw new InvocationTargetException( trace );
+                    // Framework error
+                    throw new ScriptFrameworkErrorException(
+                        e.getMessage(), null,
+                        metaData.getLanguageName(), metaData.getLanguage(),
+                        ScriptFrameworkErrorType.UNKNOWN );
                 }
             }
             catch ( ClassNotFoundException e )
             {
-                String trace = LogUtils.getTrace( e );
-                LogUtils.DEBUG( trace );
-                throw new InvocationTargetException( trace );
+                // Framework error
+                throw new ScriptFrameworkErrorException(
+                    e.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
             }
 
             LogUtils.DEBUG( "Starting Invoke on Proxy ..." );
@@ -380,31 +402,46 @@ class ScriptImpl implements XScript
                 LogUtils.DEBUG("invoke took: " +
                     String.valueOf(end - start) + "milliseconds");
             }
-            catch ( IllegalArgumentException iae )
+            catch ( java.lang.IllegalArgumentException iae )
             {
-                String trace = LogUtils.getTrace( iae );
-                LogUtils.DEBUG( trace );
-                throw new IllegalArgumentException( trace );
-            }
-            catch ( InvocationTargetException ite )
-            {
-                String trace = LogUtils.getTrace( ite );
-                LogUtils.DEBUG( trace );
-                throw new InvocationTargetException( trace );
-            }
-            catch ( IllegalAccessException illae )
-            {
-                String trace = LogUtils.getTrace( illae );
-                LogUtils.DEBUG( trace );
-                throw new IllegalArgumentException( trace );
-            }
-            catch ( Exception e )
-            {
-                String trace = LogUtils.getTrace( e );
-                LogUtils.DEBUG( trace );
-                throw new InvocationTargetException( trace );
-            }
+                throw new ScriptFrameworkErrorException(
+                    iae.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
 
+            }
+            catch ( java.lang.IllegalAccessException ia )
+            {
+                throw new ScriptFrameworkErrorException(
+                    ia.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
+            }
+            catch ( java.lang.reflect.InvocationTargetException ite )
+            {
+                Throwable targetException = ite.getTargetException();
+                ScriptExceptionRaisedException se =
+                    new ScriptExceptionRaisedException(
+                        targetException.toString() );
+                se.lineNum = -1;
+                se.scriptName = metaData.getLanguageName();
+                se.language = "Java";
+                se.exceptionType = targetException.getClass().getName();
+                throw new com.sun.star.reflection.InvocationTargetException(
+                    "Scripting Framework error executing script ", null, se );
+            }
+            catch ( Exception unknown )
+            {
+                ScriptExceptionRaisedException se =
+                    new ScriptExceptionRaisedException(
+                        unknown.toString() );
+                se.lineNum = -1;
+                se.scriptName = metaData.getLanguageName();
+                se.language = "Java";
+                se.exceptionType = unknown.getClass().getName();
+                throw new com.sun.star.reflection.InvocationTargetException(
+                    "Scripting Framework error executing script ", null, se );
+            }
             if ( result == null )
             {
                 LogUtils.DEBUG( "Got Nothing Back" );
