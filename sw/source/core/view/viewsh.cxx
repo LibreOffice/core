@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:24:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2404,7 +2404,11 @@ String ViewShell::GetMarkListDescription() const
 sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const
 {
     ASSERT( GetLayout(), "GetPageNumAndSetOffsetForPDF assumes presence of layout" )
-    const SwPageFrm* pPage = GetLayout()->GetPageAtPos( rRect.Center() );
+    // --> FME 2005-01-07 #i40059# Position out of bounds:
+    SwRect aRect( rRect );
+    aRect.Pos().X() = Max( aRect.Left(), DOCUMENTBORDER );
+    // <--
+    const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aRect.Center() );
     ASSERT( pPage, "GetPageNumAndSetOffsetForPDF: No page found" )
 
     Point aOffset( pPage->Frm().Pos() );
