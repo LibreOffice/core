@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sw_SwXBodyText.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:03:22 $ 
+'*  last change:$Date: 2003-08-07 15:07:15 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -70,9 +70,10 @@
 
 ' REQUIRED VARIABLES for interface/service tests:
 
-' Requiered for  com.sun.star.text.XText
- Global oCollection As Object
- Global oInstance As Object
+'Required for com.sun.star.text.XText
+Global oCollection As Object
+Global oInstance As Object
+Global aAddons()
 
 
 Sub CreateObj()
