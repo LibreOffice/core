@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 08:24:40 $
+ *  last change: $Author: rt $ $Date: 2000-10-12 11:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
+#endif
+#ifndef _SV_GRAPH_HXX
+#include <vcl/graph.hxx>
 #endif
 #ifndef _SVX_GALBRWS_HXX_
 #include <svx/galbrws.hxx>
