@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmod_imexp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,8 @@
 namespace xmlscript
 {
 
-//==================================================================================================
+//==============================================================================
 // Script module import/export
-
 // HACK C++ struct to transport info. Later the container
 // itself should do the export/import and use exportet XML
 // functionality from xmlscript
@@ -91,15 +90,15 @@ struct ModuleDescriptor
 
 SAL_DLLEXPORT void
 SAL_CALL exportScriptModule(
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
     const ModuleDescriptor& rMod )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
-SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+SAL_DLLEXPORT ::com::sun::star::uno::Reference<
+    ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importScriptModule( ModuleDescriptor& rMod )
     SAL_THROW( (::com::sun::star::uno::Exception) );
-
-//==================================================================================================
 
 }
 
