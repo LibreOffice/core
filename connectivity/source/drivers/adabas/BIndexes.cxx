@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:41:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@
 
 
 using namespace ::comphelper;
-
+using namespace connectivity;
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -104,7 +104,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString aName,aQualifier;
     sal_Int32 nLen = _rName.indexOf('.');
@@ -120,7 +120,7 @@ Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getIndexInfo(Any(),
         m_pTable->getSchema(),m_pTable->getTableName(),sal_False,sal_False);
 
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet = NULL;
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -151,17 +151,12 @@ Reference< XPropertySet > OIndexes::createEmptyObject()
     return new OAdabasIndex(m_pTable);
 }
 // -------------------------------------------------------------------------
-Reference< XNamed > OIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType OIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    Reference< XNamed > xName;
+    sdbcx::ObjectType xName;
     if(!m_pTable->isNew())
     {
-        xName = Reference< XNamed >(_xDescriptor,UNO_QUERY);
-        OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-        xName = xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
-    }
-    else
-    {
+        xName = OCollection_TYPE::cloneObject(_xDescriptor);
     }
     return xName;
 }
