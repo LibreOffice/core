@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 13:26:20 $
+ *  last change: $Author: nn $ $Date: 2001-04-05 16:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,6 @@ class ScTpLayoutOptions : public SfxTabPage
     CheckBox        aMarkHdrCB;
 
     SvxStringArray  aUnitArr;
-    ScViewOptions*  pLocalOptions;
 
     DECL_LINK( CBHdl, CheckBox* );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 13:27:35 $
+ *  last change: $Author: nn $ $Date: 2001-04-05 16:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,8 +468,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
     aExpRefCB( this,        ResId( CB_EXPREF    )),
     aMarkHdrCB( this,       ResId( CB_MARKHDR   )),
     aUnitArr(               ResId(ST_UNIT           )),
-    pDoc(NULL),
-    pLocalOptions(0)
+    pDoc(NULL)
 {
     FreeResource();
     SetExchangeSupport();
@@ -506,7 +505,6 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
 
 ScTpLayoutOptions::~ScTpLayoutOptions()
 {
-    delete pLocalOptions;
 }
 /*-----------------11.01.97 10.53-------------------
 
@@ -694,9 +692,6 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
 
 void    ScTpLayoutOptions::ActivatePage( const SfxItemSet& rCoreSet)
 {
-    const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCVIEWOPTIONS, FALSE , &pItem))
-        *pLocalOptions = ((const ScTpViewItem*)pItem)->GetViewOptions();
 }
 /*-----------------11.01.97 12.46-------------------
 
