@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2000-11-29 14:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,20 +532,30 @@ RTLFUNC(GetSolarVersion)
 
 RTLFUNC(TwipsPerPixelX)
 {
+    INT32 nResult = 0;
     Size aSize( 100,0 );
     MapMode aMap( MAP_TWIP );
-    aSize = GetpApp()->GetAppWindow()->PixelToLogic( aSize, aMap );
-    aSize.Width() /= 100;
-    rPar.Get(0)->PutLong( aSize.Width() );
+    OutputDevice* pDevice = Application::GetDefaultDevice();
+    if( pDevice )
+    {
+        aSize = pDevice->PixelToLogic( aSize, aMap );
+        nResult = aSize.Width() / 100;
+    }
+    rPar.Get(0)->PutLong( nResult );
 }
 
 RTLFUNC(TwipsPerPixelY)
 {
+    INT32 nResult = 0;
     Size aSize( 0,100 );
     MapMode aMap( MAP_TWIP );
-    aSize = GetpApp()->GetAppWindow()->PixelToLogic( aSize, aMap );
-    aSize.Height() /= 100;
-    rPar.Get(0)->PutLong( aSize.Height() );
+    OutputDevice* pDevice = Application::GetDefaultDevice();
+    if( pDevice )
+    {
+        aSize = pDevice->PixelToLogic( aSize, aMap );
+        nResult = aSize.Height() / 100;
+    }
+    rPar.Get(0)->PutLong( nResult );
 }
 
 
@@ -1054,29 +1064,34 @@ RTLFUNC(Environ)
 
 static double GetDialogZoomFactor( BOOL bX, long nValue )
 {
-    Size aRefSize( nValue, nValue );
+    OutputDevice* pDevice = Application::GetDefaultDevice();
+    double nResult = 0;
+    if( pDevice )
+    {
+        Size aRefSize( nValue, nValue );
 #ifndef WIN
-    Fraction aFracX( 1, 26 );
+        Fraction aFracX( 1, 26 );
 #else
-    Fraction aFracX( 1, 23 );
+        Fraction aFracX( 1, 23 );
 #endif
-    Fraction aFracY( 1, 24 );
-    MapMode aMap( MAP_APPFONT, Point(), aFracX, aFracY );
-    Window* pWin = GetpApp()->GetAppWindow();
-    Size aScaledSize = pWin->LogicToPixel( aRefSize, aMap );
-    aRefSize = pWin->LogicToPixel( aRefSize, MapMode(MAP_TWIP) );
-    double nRef, nScaled, nResult;
-    if( bX )
-    {
-        nRef = aRefSize.Width();
-        nScaled = aScaledSize.Width();
+        Fraction aFracY( 1, 24 );
+        MapMode aMap( MAP_APPFONT, Point(), aFracX, aFracY );
+        Size aScaledSize = pDevice->LogicToPixel( aRefSize, aMap );
+        aRefSize = pDevice->LogicToPixel( aRefSize, MapMode(MAP_TWIP) );
+
+        double nRef, nScaled;
+        if( bX )
+        {
+            nRef = aRefSize.Width();
+            nScaled = aScaledSize.Width();
+        }
+        else
+        {
+            nRef = aRefSize.Height();
+            nScaled = aScaledSize.Height();
+        }
+        nResult = nScaled / nRef;
     }
-    else
-    {
-        nRef = aRefSize.Height();
-        nScaled = aScaledSize.Height();
-    }
-    nResult = nScaled / nRef;
     return nResult;
 }
 
