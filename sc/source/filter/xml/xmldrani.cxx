@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-09 09:44:27 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 13:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include "dbcolect.hxx"
 #include "datauno.hxx"
 
+#ifndef SC_SCATTR_HXX
+#include "attrib.hxx"
+#endif
 #ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
 #endif
@@ -360,6 +363,10 @@ void ScXMLDatabaseRangeContext::EndElement()
                 ScDBData* pDBData = (*pDBCollection)[nIndex];
                 pDBData->SetImportSelection(bIsSelection);
                 pDBData->SetAutoFilter(bAutoFilter);
+                if (bAutoFilter)
+                    pDoc->ApplyFlagsTab( aCellRangeAddress.StartColumn, aCellRangeAddress.StartRow,
+                                            aCellRangeAddress.EndColumn, aCellRangeAddress.StartRow,
+                                            aCellRangeAddress.Sheet, SC_MF_AUTO );
                 ScImportParam aImportParam;
                 ScImportDescriptor::FillImportParam(aImportParam, aImportDescriptor);
                 pDBData->SetImportParam(aImportParam);
