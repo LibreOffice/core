@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlScrollBarModel.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:54 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,15 @@ service UnoControlScrollBarModel
 
     //-------------------------------------------------------------------------
 
+    /** specifies the minimum scroll value of the control.
+
+        <p>If this optional property is not present, clients of the component should assume
+        a minimal scroll value of 0.</p>
+    */
+    [optional, property] long ScrollValueMin;
+
+    //-------------------------------------------------------------------------
+
     /** specifies the maximum scroll value of the control.
      */
     [property] long ScrollValueMax;
@@ -150,6 +159,30 @@ service UnoControlScrollBarModel
      */
     [property] long VisibleSize;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies the RGB color to be used for the control
+    */
+    [optional, property] long BackgroundColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the RGB color to be used when painting symbols which are
+        part of the control's appearance, such as the arrow buttons.
+    */
+    [optional, property] long SymbolColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the mouse repeat delay, in milliseconds.
+
+        <p>When the user presses a mouse in a control area where this triggers
+        an action (such as scrolling the scrollbar), then usual control implementations
+        allow to repeatedly trigger this action, without the need to release the
+        mouse button and to press it again. The delay between two such triggers
+        is specified with this property.</p>
+    */
+    [optional, property] long RepeatDelay;
 };
 
 //=============================================================================
