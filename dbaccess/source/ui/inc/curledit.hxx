@@ -2,9 +2,9 @@
  *
  *  $RCSfile: curledit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,11 @@ class OConnectionURLEdit : public Edit
     ODsnTypeCollection  m_aTypeCollection;
     FixedText*          m_pForcedPrefix;
     String              m_sSaveValueNoPrefix;
+    BOOL                m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
 
 public:
-    OConnectionURLEdit(Window* pParent, WinBits nStyle = WB_BORDER);
-    OConnectionURLEdit(Window* pParent, const ResId& rResId);
+    OConnectionURLEdit(Window* pParent, WinBits nStyle = WB_BORDER,BOOL _bShowPrefix = FALSE);
+    OConnectionURLEdit(Window* pParent, const ResId& rResId,BOOL _bShowPrefix = FALSE);
     ~OConnectionURLEdit();
 
 public:
@@ -101,6 +102,12 @@ public:
     virtual void    SetText(const String& _rStr, const Selection& _rNewSelection);
     virtual String  GetText() const;
 
+
+    /** Showsthe Prefix
+        @param  _bShowPrefix
+            If <TRUE/> than the prefix will be visible, otherwise not.
+    */
+    void ShowPrefix(BOOL _bShowPrefix);
     /// get the currently set text, excluding the prefix indicating the type
     virtual String  GetTextNoPrefix() const;
     /// set a new text, leave the current prefix unchanged
