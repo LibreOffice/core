@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-27 16:18:53 $
+ *  last change: $Author: cmc $ $Date: 2002-05-08 10:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,7 +617,7 @@ void SvxRTFParser::ReadFontTable()
         if( bCheckNewFont && 1 >= nOpenBrakets && sFntNm.Len() )  // one font is ready
         {
             // alle Daten vom Font vorhanden, also ab in die Tabelle
-            if( sAltNm.Len() && 6380 < GetVersionNo() )
+            if (sAltNm.Len())
                 (sFntNm += ';' ) += sAltNm;
 
             pFont->SetName( sFntNm );
