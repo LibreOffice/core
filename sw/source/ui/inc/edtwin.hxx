@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:28:39 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     Timer           aKeyInputFlushTimer;
 
     String          aInBuffer;
+    LanguageType    eBufferLanguage;
     Point           aStartPos;
     Point           aMovePos;
     Point           aRszMvHdlPt;
@@ -265,7 +266,7 @@ public:
     void            SetChainMode( BOOL bOn );
     BOOL            IsChainMode() const             { return bChainMode; }
 
-    void            FlushInBuffer( SwWrtShell *pSh );
+    void            FlushInBuffer();
 
     static  void    SetReplaceQuote(BOOL bOn = TRUE) { bReplaceQuote = bOn; }
     static  BOOL    IsReplaceQuote() { return bReplaceQuote; }
