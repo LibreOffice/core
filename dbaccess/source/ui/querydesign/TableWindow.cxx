@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:04:59 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 12:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,52 +266,71 @@ BOOL OTableWindow::FillListBox()
     }
 
     ::osl::MutexGuard aGuard( m_aMutex  );
-    // first we need the keys from the table
-    Reference<XKeysSupplier> xKeys(m_xTable,UNO_QUERY);
     Reference<XNameAccess> xPKeyColumns;
-    if(xKeys.is())
+    try
     {
-        Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
-        Reference<XColumnsSupplier> xColumnsSupplier;
-        // search the one and only primary key
-        for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
+        // first we need the keys from the table
+        Reference<XKeysSupplier> xKeys(m_xTable,UNO_QUERY);
+
+        if(xKeys.is())
         {
-            Reference<XPropertySet> xProp;
-            xKeyIndex->getByIndex(i) >>= xProp;
-            if ( xProp.is() )
+            Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
+            Reference<XColumnsSupplier> xColumnsSupplier;
+            // search the one and only primary key
+            if ( xKeyIndex.is() )
             {
-                sal_Int32 nKeyType = 0;
-                xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                if(KeyType::PRIMARY == nKeyType)
+                for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
                 {
-                    xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
-                    break;
+                    Reference<XPropertySet> xProp;
+                    xKeyIndex->getByIndex(i) >>= xProp;
+                    if ( xProp.is() )
+                    {
+                        sal_Int32 nKeyType = 0;
+                        xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                        if(KeyType::PRIMARY == nKeyType)
+                        {
+                            xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                            break;
+                        }
+                    }
                 }
+                if ( xColumnsSupplier.is() )
+                    xPKeyColumns = xColumnsSupplier->getColumns();
             }
         }
-        if ( xColumnsSupplier.is() )
-            xPKeyColumns = xColumnsSupplier->getColumns();
     }
-    if(m_xColumns.is())
+    catch(Exception&)
     {
-        Sequence< ::rtl::OUString> aColumns = m_xColumns->getElementNames();
-        const ::rtl::OUString* pBegin = aColumns.getConstArray();
-        const ::rtl::OUString* pEnd = pBegin + aColumns.getLength();
-
-        SvLBoxEntry* pEntry = NULL;
-        for (; pBegin != pEnd; ++pBegin)
+        OSL_ENSURE(0,"Exception occured!");
+    }
+    try
+    {
+        if(m_xColumns.is())
         {
-            bool bPrimaryKeyColumn;
-            // is this column in the primary key
-            if ( bPrimaryKeyColumn = (xPKeyColumns.is() && xPKeyColumns->hasByName(*pBegin)) )
-                pEntry = m_pListBox->InsertEntry(*pBegin, aPrimKeyImage, aPrimKeyImage);
-            else
-                pEntry = m_pListBox->InsertEntry(*pBegin);
+            Sequence< ::rtl::OUString> aColumns = m_xColumns->getElementNames();
+            const ::rtl::OUString* pBegin = aColumns.getConstArray();
+            const ::rtl::OUString* pEnd = pBegin + aColumns.getLength();
 
-            Reference<XPropertySet> xColumn;
-            m_xColumns->getByName(*pBegin) >>= xColumn;
-            pEntry->SetUserData( createUserData(xColumn,bPrimaryKeyColumn) );
+            SvLBoxEntry* pEntry = NULL;
+            for (; pBegin != pEnd; ++pBegin)
+            {
+                bool bPrimaryKeyColumn;
+                // is this column in the primary key
+                if ( bPrimaryKeyColumn = (xPKeyColumns.is() && xPKeyColumns->hasByName(*pBegin)) )
+                    pEntry = m_pListBox->InsertEntry(*pBegin, aPrimKeyImage, aPrimKeyImage);
+                else
+                    pEntry = m_pListBox->InsertEntry(*pBegin);
+
+                Reference<XPropertySet> xColumn;
+                m_xColumns->getByName(*pBegin) >>= xColumn;
+                if ( xColumn.is() )
+                    pEntry->SetUserData( createUserData(xColumn,bPrimaryKeyColumn) );
+            }
         }
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception occured!");
     }
 
     return TRUE;
