@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_UnoControlComboBoxModel.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:05:36 $ 
+'*  last change:$Date: 2003-03-18 13:57:04 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -72,7 +72,7 @@ option explicit
 
 ' REQUIRED VARIABLES for interface/service tests:
 Global oComponentInstance As Object
-
+Global oPersistInstance As Object
 
 Sub CreateObj()
 
@@ -83,6 +83,7 @@ Sub CreateObj()
 On Error Goto ErrHndl
     oObj = createUnoService("com.sun.star.awt.UnoControlComboBoxModel")
     oComponentInstance = createUnoService("com.sun.star.awt.UnoControlComboBoxModel")
+    oPersistInstance = createUnoService("com.sun.star.awt.UnoControlComboBoxModel")
 Exit Sub
 ErrHndl:
     Test.Exception()

@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_UnoControlGroupBoxModel.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:06:01 $ 
+'*  last change:$Date: 2003-03-18 13:59:57 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -73,7 +73,7 @@ option explicit
 
 ' REQUIRED VARIABLES for interface/service tests:
 Global oComponentInstance As Object
-
+Global oPersistInstance As Object
 
 Sub CreateObj()
 
@@ -84,6 +84,7 @@ Sub CreateObj()
 On Error Goto ErrHndl
     oObj = createUnoService("com.sun.star.awt.UnoControlGroupBoxModel")
     oComponentInstance = createUnoService("com.sun.star.awt.UnoControlGroupBoxModel")
+    oPersistInstance = createUnoService("com.sun.star.awt.UnoControlGroupBoxModel")
 Exit Sub
 ErrHndl:
     Test.Exception()
