@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ ModalDialog GRID_DIALOG
         Text[ swedish ] = "Linjärt stigande";
         Text[ polish ] = "Wzrastaj¹ce linearnie";
         Text[ portuguese_brazilian ] = "Linear ascending";
-        Text[ japanese ] = "‚Ü‚Á‚·‚®ã¸";
+        Text[ japanese ] = "‚Ü‚Á‚·‚®‚Éã¸";
         Text[ korean ] = "¿À¸§Â÷¼ø ¼±Çü";
         Text[ chinese_simplified ] = "ÏßĞÔÉÏÉı";
         Text[ chinese_traditional ] = "½u©Ê¤Wª@";
@@ -155,7 +155,7 @@ ModalDialog GRID_DIALOG
         Text[ swedish ] = "Linjärt fallande";
         Text[ polish ] = "Spadaj¹ce linearnie";
         Text[ portuguese_brazilian ] = "Linear descending";
-        Text[ japanese ] = "‚Ü‚Á‚·‚®‰º~";
+        Text[ japanese ] = "‚Ü‚Á‚·‚®‚É‰º~";
         Text[ korean ] = "³»¸²Â÷¼ø ¼±Çü";
         Text[ chinese_simplified ] = "ÏßĞÔÏÂ½µ";
         Text[ chinese_traditional ] = "½u©Ê¤U­°";
