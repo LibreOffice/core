@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 15:04:20 $
+#   last change: $Author: hr $ $Date: 2004-02-10 15:28:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -208,15 +208,9 @@ if (-d "$StartDir") {
     }
     print "\n";
 
-    #check java docu, it is only a first and simple check
+    # check cpp docu, it is only a first and simple check
     # improvement required
-if ($ENV["SOLAR_JAVA"] ne "") {
-    print "check java docu: ";
-    if (-d "$StartDir/docs/java/ref") {
-    if (! -e "$StartDir/docs/java/ref/index.html") {
-        print ":";
-        $return++;
-    }
+    print "check cpp docu: ";
     if (! -d "$StartDir/docs/cpp/ref/index-files") {
         print ":";
         $return++;
@@ -225,25 +219,36 @@ if ($ENV["SOLAR_JAVA"] ne "") {
         print ":";
         $return++;
     }
-
-    my @dir_list = ( "lib","lib/uno","lib/uno/helper","lib/uno/helper/class-use","uno",
-             "uno/class-use","comp","comp/helper","comp/helper/class-use","tools",
-             "tools/uno","tools/uno/class-use");
-
-    foreach $i (@dir_list)
-    {
-        if (! -d "$StartDir/docs/java/ref/com/sun/star/$i") {
-        $return++;
-        print "-";
-        } else {
-        print "+";
-        }
-    }
-    } else {
-    $return++;
-    }
     print "\n";
-}
+
+    #check java docu, it is only a first and simple check
+    # improvement required
+    my $solar_java = $ENV{"SOLAR_JAVA"};
+    if (defined($solar_java) && $solar_java ne "";) {
+        print "check java docu: ";
+        if (-d "$StartDir/docs/java/ref") {
+            if (! -e "$StartDir/docs/java/ref/index.html") {
+                print ":";
+                $return++;
+            }
+
+            my @dir_list = ( "lib","lib/uno","lib/uno/helper","lib/uno/helper/class-use","uno",
+                 "uno/class-use","comp","comp/helper","comp/helper/class-use","tools",
+                 "tools/uno","tools/uno/class-use");
+
+            foreach $i (@dir_list) {
+                if (! -d "$StartDir/docs/java/ref/com/sun/star/$i") {
+                    $return++;
+                    print "-";
+                } else {
+                    print "+";
+                }
+            }
+        } else {
+            $return++;
+        }
+        print "\n";
+    }
 
     #check examples, it is only a first and simple check
     # improvement required
