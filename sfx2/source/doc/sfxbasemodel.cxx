@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-11 11:40:42 $
+ *  last change: $Author: mba $ $Date: 2001-10-11 12:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1349,7 +1349,28 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DOCCHANGED )
             changing();
 
-#if SUPD>614
+        if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_TITLECHANGED )
+        {
+            ::rtl::OUString aTitle = m_pData->m_pObjectShell->GetTitle();
+            sal_Int32 nCount = m_pData->m_seqArguments.getLength();
+            for ( sal_Int32 nArg=0; nArg<nCount; nArg++ )
+            {
+                ::com::sun::star::beans::PropertyValue& rProp = m_pData->m_seqArguments[nArg];
+                if ( rProp.Name.equalsAscii("Title") )
+                {
+                    rProp.Value <<= aTitle;
+                    break;
+                }
+            }
+
+            if ( nArg == nCount )
+            {
+                m_pData->m_seqArguments.realloc( nCount+1 );
+                m_pData->m_seqArguments[nCount].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Title") );
+                m_pData->m_seqArguments[nCount].Value <<= aTitle;
+            }
+        }
+
         SfxEventHint* pNamedHint = PTR_CAST( SfxEventHint, &rHint );
         if ( pNamedHint )
         {
@@ -1357,7 +1378,6 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 m_pData->m_sURL = m_pData->m_pObjectShell->GetMedium()->GetName();
             postEvent_Impl( *pNamedHint );
         }
-#endif
     }
 }
 
