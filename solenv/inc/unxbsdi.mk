@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxbsdi.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:46:12 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:07:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,80 +60,135 @@
 #
 #*************************************************************************
 
-# mak file fuer unxbsdi
-
+# mk file for unxbsdi
 ASM=
 AFLAGS=
 
-cc=gcc -c
-CC=g++ -c
-CDEFS+=-D_PTHREADS -D_REENTRANT
-CDEFS+=-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
-CDEFS+=-DNO_INET_ON_DEMAND -DX86 -DNEW_SOLAR -DNCIfeature
-CFLAGS+=-c $(INCLUDE)
-CFLAGSCC=-pipe -mpentium
-CFLAGSEXCEPTIONS=-fexceptions
-CFLAGS_NO_EXCEPTIONS=-fno-exceptions
-CFLAGSCXX=-pipe -mpentium -fguiding-decls -frtti
+SOLAR_JAVA=TRUE
+JAVAFLAGSDEBUG=-g
 
-CFLAGSOBJGUIST=
-CFLAGSOBJCUIST=
-CFLAGSOBJGUIMT=
-CFLAGSOBJCUIMT=
-CFLAGSSLOGUIMT=	-fPIC
-CFLAGSSLOCUIMT=	-fPIC
-CFLAGSPROF=     -pg
-CFLAGSDEBUG=	-g
-CFLAGSDBGUTIL=
-# die zusaetzlichen Optimierungsschalter schalten alle Optimierungen ein, die zwischen -O und -O2 liegen und
-# per Schalter einschaltbar sind. Dennoch gibt es einen Unterschied: einige Files im Writer werden
-# misoptimiert wenn -O2 eingeschaltet ist und waehrend die untenstehenden Schalter funktionieren.
-CFLAGSOPT=-O -fcse-follow-jumps -fcse-skip-blocks -fexpensive-optimizations -fstrength-reduce -fforce-mem -fcaller-saves -fgcse -frerun-cse-after-loop -frerun-loop-opt -fschedule-insns2 -fregmove -foptimize-register-move
-#CFLAGSOPT=-O2
-CFLAGSNOOPT=-O
-CFLAGSOUTOBJ=-o
+# filter for supressing verbose messages from linker
+#not needed at the moment
+#LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
 
-STATIC=			-Bstatic
-DYNAMIC=		-Bdynamic
+# _PTHREADS is needed for the stl
+CDEFS+=-DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400
 
-THREADLIB=
-LINK= gcc
-LINKFLAGS=
-.IF "$(PRJNAME)"=="osl" ||  "$(PRJNAME)"=="rtl" 
-LINKFLAGSSHLGUI= -shared -nostdlib
-LINKFLAGSSHLCUI= -shared -nostdlib
+# this is a platform with JAVA support
+.IF "$(SOLAR_JAVA)"!=""
+JAVADEF=-DSOLAR_JAVA
+.IF "$(debug)"==""
+JAVA_RUNTIME=-ljava
 .ELSE
-LINKFLAGSSHLGUI= -shared -nostdlib /usr/lib/c++rt0.o
-LINKFLAGSSHLCUI= -shared -nostdlib /usr/lib/c++rt0.o
+JAVA_RUNTIME=-ljava_g
 .ENDIF
-LINKFLAGSAPPGUI= -L/nw386/dev/s/solenv/unxbsdi/lib -lpthread_init -lpthread
-LINKFLAGSAPPCUI= -L/nw386/dev/s/solenv/unxbsdi/lib -lpthread_init -lpthread
+.ENDIF 
+
+# name of C++ Compiler
+CXX*=g++
+# name of C Compiler
+CC*=gcc
+# flags for C and C++ Compiler
+CFLAGS+=-c $(INCLUDE)
+# flags for the C++ Compiler
+CFLAGSCC= -pipe 
+# Flags for enabling exception handling
+CFLAGSEXCEPTIONS=-fexceptions
+# Flags for disabling exception handling
+CFLAGS_NO_EXCEPTIONS=-fno-exceptions
+
+# -fpermissive should be removed as soon as possible
+CFLAGSCXX= -pipe -mpentiumpro -fno-for-scope -fpermissive -frtti
+
+# Compiler flags for compiling static object in single threaded environment with graphical user interface
+CFLAGSOBJGUIST=
+# Compiler flags for compiling static object in single threaded environment with character user interface
+CFLAGSOBJCUIST=
+# Compiler flags for compiling static object in multi threaded environment with graphical user interface
+CFLAGSOBJGUIMT=
+# Compiler flags for compiling static object in multi threaded environment with character user interface
+CFLAGSOBJCUIMT=
+# Compiler flags for compiling shared object in multi threaded environment with graphical user interface
+CFLAGSSLOGUIMT=-fpic
+# Compiler flags for compiling shared object in multi threaded environment with character user interface
+CFLAGSSLOCUIMT=-fpic
+# Compiler flags for profiling
+CFLAGSPROF=
+# Compiler flags for debugging
+CFLAGSDEBUG=-g
+CFLAGSDBGUTIL=
+# Compiler flags for enabling optimazations
+CFLAGSOPT=-O2
+# Compiler flags for disabling optimazations
+CFLAGSNOOPT=-O
+# Compiler flags for discibing the output path
+CFLAGSOUTOBJ=-o
+# Enable all warnings
+CFLAGSWALL=-Wall
+# Set default warn level
+CFLAGSDFLTWARN=
+
+# switches for dynamic and static linking
+STATIC		= -Wl,-Bstatic
+DYNAMIC		= -Wl,-Bdynamic
+
+# name of linker
+LINK*=gcc
+# default linker flags
+LINKFLAGS=
+
+# linker flags for linking applications
+LINKFLAGSAPPGUI= -Wl,-export-dynamic 
+LINKFLAGSAPPCUI= -Wl,-export-dynamic 
+
+# linker flags for linking shared libraries
+LINKFLAGSSHLGUI= -shared
+LINKFLAGSSHLCUI= -shared
+
 LINKFLAGSTACK=
 LINKFLAGSPROF=
-LINKFLAGSDEBUG=
+LINKFLAGSDEBUG=-g
 LINKFLAGSOPT=
 
-_SYSLIBS= -lpthread -lgcc -lc -lm 
-_X11LIBS= -L/usr/X11R6/lib -lXext -lX11
+.IF "$(NO_BSYMBOLIC)"==""
+.IF "$(PRJNAME)" != "envtest"
+LINKFLAGSSHLGUI+=-Wl,-Bsymbolic
+LINKFLAGSSHLCUI+=-Wl,-Bsymbolic
+.ENDIF
+.ENDIF				# "$(NO_BSYMBOLIC)"==""
 
-STDLIBCPP= -lstdc++
+LINKVERSIONMAPFLAG=-Wl,--version-script
 
+SONAME_SWITCH=-Wl,-h
+
+# Sequence of libs does matter !
+
+STDLIBCPP=-lstdc++
+
+# default objectfilenames to link
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIST=  ${_X11LIBS} ${_SYSLIBS}
-STDLIBCUIST=              ${_SYSLIBS}
-STDLIBGUIMT=  ${_X11LIBS} ${_SYSLIBS}
-STDLIBCUIMT=              ${_SYSLIBS}
-STDSHLGUIMT=
-STDSHLCUIMT=
+# libraries for linking applications
+STDLIBCUIST=-lm
+STDLIBGUIMT=-lX11 -lpthread -lm
+STDLIBCUIMT=-lpthread -lm
+STDLIBGUIST=-lX11 -lm
+# libraries for linking shared libraries
+STDSHLGUIMT=-lX11 -lXext -lpthread -lm
+STDSHLCUIMT=-lpthread -lm
 
-LIBMGR=			ar
-LIBFLAGS=		-r
-LIBEXT=			.a
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
+LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
 
+
+# name of library manager
+LIBMGR=ar
+LIBFLAGS=-r
+
+# tool for generating import libraries
 IMPLIB=
 IMPLIBFLAGS=
 
@@ -141,14 +196,13 @@ MAPSYM=
 MAPSYMFLAGS=
 
 RC=irc
-RCFLAGS=		-fo$@ $(RCFILES)
+RCFLAGS=-fo$@ $(RCFILES)
 RCLINK=
 RCLINKFLAGS=
 RCSETVERSION=
 
-DLLPOSTFIX=		bi
-DLLPRE=			lib
-DLLPOST=		.so.1.0
-
-LDUMP=
+# platform specific identifier for shared libs
+DLLPOSTFIX=bi
+DLLPRE=lib
+DLLPOST=.so
 
