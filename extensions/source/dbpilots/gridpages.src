@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:51:30 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 11:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     Text [ english_us ] = "Field Selection";
     Text [ portuguese ] = "Selecção de campo";
     Text [ russian ] = "Âûáîğ ïîëÿ";
-    Text [ dutch ] = "veld selecteren";
+    Text [ dutch ] = "Veldkeuze";
     Text [ french ] = "Sélection de champ";
     Text [ spanish ] = "Selección de campo";
     Text [ italian ] = "Selezione campo";
@@ -82,11 +82,11 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     Text [ polish ] = "Wybór pola";
     Text [ portuguese_brazilian ] = "Feldauswahl";
     Text [ japanese ] = "Ì¨°ÙÄŞ‚Ì‘I‘ğ";
-    Text [ chinese_simplified ] = "£ºÑ¡Ôñ×Ö¶Î";
-    Text [ chinese_traditional ] = "¡G¿ï¾ÜÄæ¦ì";
+    Text [ chinese_simplified ] = "Ñ¡Ôñ×Ö¶Î";
+    Text [ chinese_traditional ] = "¿ï¾ÜÄæ¦ì";
     Text [ arabic ] = "ÊÍÏíÏ ÇáÍŞá";
-    Text [ dutch ] = "veld selecteren";
-    Text [ chinese_simplified ] = "£ºÑ¡Ôñ×Ö¶Î";
+    Text [ dutch ] = "Veldkeuze";
+    Text [ chinese_simplified ] = "Ñ¡Ôñ×Ö¶Î";
     Text [ greek ] = "ÅğéëïãŞ ğåäßïõ";
     Text [ korean ] = "ÇÊµå ¼±ÅÃ";
     Text [ turkish ] = "Alan seçimi";
@@ -120,7 +120,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ arabic ] = "ÇáÍŞæá ÇáãÊæİÑÉ";
         Text [ dutch ] = "Bestaande velden";
         Text [ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(V)";
-        Text [ greek ] = "Äéáèİóéìá ğåäßá";
+        Text [ greek ] = "ÕğÜñ÷ïíôá ğåäßá";
         Text [ korean ] = "Á¸ÀçÇÏ´Â ÇÊµå";
         Text [ turkish ] = "Mevcut alanlar";
     };
@@ -175,12 +175,12 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text [ swedish ] = "Utvalda fält";
         Text [ polish ] = "Wybrane pola";
         Text [ portuguese_brazilian ] = "Ausgewählte Felder";
-        Text [ japanese ] = "‘I‘ğ‚³‚ê‚½Ì¨°ÙÄŞ";
-        Text [ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î(A)";
-        Text [ chinese_traditional ] = "¿ï¾ÜªºÄæ¦ì";
+        Text [ japanese ] = "‘I‘ğ‚µ‚½Ì¨°ÙÄŞ";
+        Text [ chinese_simplified ] = "ÒÑ¾­Ñ¡ÔñµÄ×Ö¶Î";
+        Text [ chinese_traditional ] = "¿ï¤¤ªºÄæ¦ì";
         Text [ arabic ] = "ÇáÍŞæá ÇáãõÍÏÏÉ";
         Text [ dutch ] = "Geselecteerde velden";
-        Text [ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î(A)";
+        Text [ chinese_simplified ] = "ÒÑ¾­Ñ¡ÔñµÄ×Ö¶Î";
         Text [ greek ] = "Åğéëåãìİíá ğåäßá";
         Text [ korean ] = "ÇÊµå ¼±ÅÃ";
         Text [ turkish ] = "Seçilmiş alanlar";
@@ -200,15 +200,15 @@ TabPage RID_PAGE_GW_FIELDSELECTION
 String RID_STR_DATEPOSTFIX
 {
     Text = " (Datum)";
-    Text [ english_us ] = "(Date)";
-    Text [ portuguese ] = "(Data)";
+    Text [ english_us ] = " (Date)";
+    Text [ portuguese ] = "(data)";
     Text [ russian ] = "(Äàòà)";
     Text [ dutch ] = "(Datum)";
-    Text [ french ] = "(Date)";
+    Text [ french ] = " (Date)";
     Text [ spanish ] = "(Fecha)";
     Text [ italian ] = "(Data)";
     Text [ danish ] = "(Dato)";
-    Text [ swedish ] = "(Datum)";
+    Text [ swedish ] = " (Datum)";
     Text [ polish ] = " (Data)";
     Text [ portuguese_brazilian ] = "(Datum)";
     Text [ japanese ] = "(“ú•t)";
@@ -217,7 +217,7 @@ String RID_STR_DATEPOSTFIX
     Text [ arabic ] = "(ÇáÊÇÑíÎ)";
     Text [ dutch ] = "(Datum)";
     Text [ chinese_simplified ] = "(ÈÕÆÚ)";
-    Text [ greek ] = "(Çìåñïìçíßá)";
+    Text [ greek ] = " (Çìåñïìçíßá)";
     Text [ korean ] = " (³¯Â¥)";
     Text [ turkish ] = "(Tarih)";
     Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks!";
@@ -228,7 +228,7 @@ String RID_STR_TIMEPOSTFIX
     Text = " (Zeit)";
     Text [ english_us ] = " (Time)";
     Text [ portuguese ] = " (hora)";
-    Text [ russian ] = " (Âğåìÿ)";
+    Text [ russian ] = "(Âğåìÿ)";
     Text [ dutch ] = " (Tijd)";
     Text [ french ] = " (Heure)";
     Text [ spanish ] = "(Hora)";
@@ -237,13 +237,13 @@ String RID_STR_TIMEPOSTFIX
     Text [ swedish ] = " (Tid)";
     Text [ polish ] = " (Godzina)";
     Text [ portuguese_brazilian ] = " (Zeit)";
-    Text [ japanese ] = " (ŠÔ)";
+    Text [ japanese ] = "()";
     Text [ chinese_simplified ] = " (Ê±¼ä)";
     Text [ chinese_traditional ] = " (®É¶¡)";
     Text [ arabic ] = " (ÇáæŞÊ)";
     Text [ dutch ] = " (Tijd)";
     Text [ chinese_simplified ] = " (Ê±¼ä)";
-    Text [ greek ] = "(¿ñá)";
+    Text [ greek ] = " (¿ñá)";
     Text [ korean ] = " (½Ã°£)";
     Text [ turkish ] = " (Saat)";
     Text [ language_user1 ] = "Please preserve the leading space in this text! Thanks!";
@@ -252,6 +252,9 @@ String RID_STR_TIMEPOSTFIX
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/09 20:51:30  kz
+ *  Merge SRC624: 09.03.01 - 21:51:26 (NoBranch)
+ *
  *  Revision 1.1  2001/03/05 14:52:18  fs
  *  initial checkin - grid auto pilot implementations
  *
