@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsubt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: nn $ $Date: 2000-10-04 09:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,12 +107,12 @@ public:
     BOOL            DoFillItemSet   ( USHORT        nGroupNo,
                                       SfxItemSet&   rArgSet  );
 protected:
-    ListBox         aLbGroup;
-    SvxCheckListBox aLbColumns;
-    ListBox         aLbFunctions;
     FixedText       aFtGroup;
+    ListBox         aLbGroup;
     FixedText       aFtColumns;
+    SvxCheckListBox aLbColumns;
     FixedText       aFtFunctions;
+    ListBox         aLbFunctions;
     const String    aStrNone;
     const String    aStrColumn;
 
