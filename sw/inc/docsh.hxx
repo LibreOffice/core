@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-09-10 14:38:36 $
+ *  last change: $Author: jp $ $Date: 2002-03-14 14:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 #endif
 
 class   SwDoc;
-class   Sw3Io;
 class   SfxDocumentInfoDialog;
 class   SfxStyleSheetBasePool;
 class   FontList;
@@ -101,7 +100,6 @@ class SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
                   public SfxListener
 {
     SwDoc*                  pDoc;           // Document
-    Sw3Io*                  pIo;            // Reader / Writer
     SfxStyleSheetBasePool*  pBasePool;      // Durchreiche fuer Formate
     FontList*               pFontList;      // aktuelle FontListe
 
@@ -131,7 +129,6 @@ class SwDocShell: public SfxObjectShell, public SfxInPlaceObject,
     virtual BOOL            Load(SvStorage* pStor);
     virtual BOOL            LoadFrom(SvStorage* pStor);
     virtual BOOL            ConvertFrom( SfxMedium &rMedium );
-    virtual void            HandsOff();
     virtual BOOL            SaveAs(SvStorage * pNewStor );
     virtual BOOL            ConvertTo(SfxMedium &rMedium );
     virtual BOOL            SaveCompleted(SvStorage * pNewStor );
@@ -253,10 +250,6 @@ public:
     // Fuer Einfuegen Dokument
     Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
                             SwCrsrShell* pCrsrSh = 0, SwPaM* pPaM = 0);
-
-    // Anforderung der pIo-Struktur fuer den Zugriff auf Substorages
-    // und Streams
-    Sw3Io* GetIoSystem() { return pIo; }
 
     virtual long DdeGetData( const String& rItem, const String& rMimeType,
                              ::com::sun::star::uno::Any & rValue );

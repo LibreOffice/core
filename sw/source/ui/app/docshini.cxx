@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-12 12:33:39 $
+ *  last change: $Author: jp $ $Date: 2002-03-14 14:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,12 +196,6 @@
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
-#ifndef _SW3IO_HXX
-#include <sw3io.hxx>        // I/O, Hausformat
-#endif
-#ifndef _SHELLIO_HXX
-#include <shellio.hxx>
-#endif
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
 #endif
@@ -275,7 +269,7 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
     sal_Bool bHTMLTemplSet = sal_False;
     if( bRet )
     {
-        AddLink();      // pDoc / pIo ggf. anlegen
+        AddLink();      // pDoc ggf. anlegen
 
         sal_Bool bWeb = ISA( SwWebDocShell );
         if ( bWeb )
@@ -418,7 +412,6 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
 
 SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
     pDoc(0),
-    pIo(0),
     pBasePool(0),
     pFontList(0),
     SfxObjectShell ( eMode ),
@@ -436,7 +429,6 @@ SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
 
 SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     pDoc(pD),
-    pIo(0),
     pBasePool(0),
     pFontList(0),
     SfxObjectShell ( eMode ),
@@ -455,7 +447,6 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
  SwDocShell::~SwDocShell()
 {
     RemoveLink();
-    delete pIo;
     delete pFontList;
 
     // wir als BroadCaster werden auch unser eigener Listener
@@ -486,6 +477,7 @@ void  SwDocShell::Init_Impl()
 
     // set map unit to twip
     SetMapUnit( MAP_TWIP );
+
 }
 /*--------------------------------------------------------------------
     Beschreibung: AddLink
@@ -506,11 +498,6 @@ void SwDocShell::AddLink()
     pDoc->SetDocShell( this );      // am Doc den DocShell-Pointer setzen
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
-
-    if( !pIo )
-        pIo = new Sw3Io( *pDoc );
-    else
-        pIo->SetDoc( *pDoc );
 
     SetPool(&pDoc->GetAttrPool());
 
@@ -611,18 +598,16 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
 //          break;
 
         case SFX_CREATE_MODE_ORGANIZER:
-            if( bXML )
             {
-                if( ReadXML )
+                Reader *pReader = bXML ? ReadXML : ReadSw3;
+                if( pReader )
                 {
-                    ReadXML->SetOrganizerMode( TRUE );
+                    pReader->SetOrganizerMode( TRUE );
                     SwReader aRdr( *pStor, aEmptyStr, pDoc );
-                    nErr = aRdr.Read( *ReadXML );
-                    ReadXML->SetOrganizerMode( FALSE );
+                    nErr = aRdr.Read( *pReader );
+                    pReader->SetOrganizerMode( FALSE );
                 }
             }
-            else
-                nErr = pIo->LoadStyles( pStor );
             break;
 
         case SFX_CREATE_MODE_INTERNAL:
@@ -780,22 +765,21 @@ sal_Bool  SwDocShell::LoadFrom(SvStorage* pStor)
         if( pStor->IsStream( aStreamName ) )
         {
             // Das Laden
-            SwWait aWait( *this, sal_True );
-            if( bXML )
+            Reader *pReader = bXML ? ReadXML : ReadSw3;
+            if( pReader )
             {
-                ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
-                pBasePool = new SwDocStyleSheetPool( *pDoc,
-                                SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
-                if( ReadXML )
+                SwWait aWait( *this, sal_True );
+                if( bXML )
                 {
-                    ReadXML->SetOrganizerMode( TRUE );
-                    SwReader aRdr( *pStor, aEmptyStr, pDoc );
-                    nErr = aRdr.Read( *ReadXML );
-                    ReadXML->SetOrganizerMode( FALSE );
+                    ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
+                    pBasePool = new SwDocStyleSheetPool( *pDoc,
+                                    SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
                 }
+                pReader->SetOrganizerMode( TRUE );
+                SwReader aRdr( *pStor, aEmptyStr, pDoc );
+                nErr = aRdr.Read( *pReader );
+                pReader->SetOrganizerMode( FALSE );
             }
-            else
-                nErr = pIo->LoadStyles( pStor );
         }
         else
         {

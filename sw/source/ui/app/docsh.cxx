@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-03-01 14:05:38 $
+ *  last change: $Author: jp $ $Date: 2002-03-14 14:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,10 +216,7 @@
 #include <usrpref.hxx>
 #endif
 #ifndef _SHELLIO_HXX
-#include <shellio.hxx>      // I/O
-#endif
-#ifndef _SW3IO_HXX
-#include <sw3io.hxx>        // I/O, Hausformat
+#include <shellio.hxx>
 #endif
 #ifndef _DOCSTYLE_HXX
 #include <docstyle.hxx>
@@ -247,6 +244,9 @@
 #endif
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
+#endif
+#ifndef _NDGRF_HXX
+#include <ndgrf.hxx>
 #endif
 #ifndef _ASCFLDLG_HXX
 #include <ascfldlg.hxx>
@@ -421,9 +421,6 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
             aStor->SetVersion( (long)pFlt->GetVersion() );
     }
-    // beim Sw3-Reader noch den pIo-Pointer setzen
-    if( pRead == ReadSw3 )
-        ((Sw3Reader*)pRead)->SetSw3Io( pIo );
 
     if( pFlt->GetDefaultTemplate().Len() )
         pRead->SetTemplateName( pFlt->GetDefaultTemplate() );
@@ -528,7 +525,7 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 BOOL SwDocShell::Save()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Save" );
-    sal_Bool bXML = pIo->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60;
+    sal_Bool bXML = GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60;
 
     SwWait aWait( *this, TRUE );
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
@@ -541,17 +538,17 @@ BOOL SwDocShell::Save()
             break;
 
         case SFX_CREATE_MODE_ORGANIZER:
-            if( bXML )
             {
                 WriterRef xWrt;
-                ::GetXMLWriter( aEmptyStr, xWrt );
+                if( bXML )
+                    ::GetXMLWriter( aEmptyStr, xWrt );
+                else
+                    ::GetSw3Writer( aEmptyStr, xWrt );
                 xWrt->SetOrganizerMode( TRUE );
-                SwWriter aWrt( *pIo->GetStorage(), *pDoc );
+                SwWriter aWrt( *GetStorage(), *pDoc );
                 nErr = aWrt.Write( xWrt );
                 xWrt->SetOrganizerMode( FALSE );
             }
-            else
-                nErr = pIo->SaveStyles();
             break;
 
         case SFX_CREATE_MODE_EMBEDDED:
@@ -565,7 +562,7 @@ BOOL SwDocShell::Save()
             {
                 if( pDoc->ContainsMSVBasic() )
                 {
-                    SvxImportMSVBasic aTmp( *this, *pIo->GetStorage() );
+                    SvxImportMSVBasic aTmp( *this, *GetStorage() );
                     aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
                     if( OFF_APP()->GetFilterOptions()->IsLoadWordBasicStorage() )
                         nVBWarning = SvxImportMSVBasic::
@@ -576,7 +573,7 @@ BOOL SwDocShell::Save()
                 if( !bXML &&
                     !ISA( SwGlobalDocShell ) && !ISA( SwWebDocShell ) &&
                     SFX_CREATE_MODE_EMBEDDED != GetCreateMode() )
-                    AddXMLAsZipToTheStorage( *pIo->GetStorage() );
+                    AddXMLAsZipToTheStorage( *GetStorage() );
 
                 // TabellenBox Edit beenden!
                 if( pWrtShell )
@@ -584,16 +581,11 @@ BOOL SwDocShell::Save()
 
                 WriterRef xWrt;
                 if( bXML )
-                {
                     ::GetXMLWriter( aEmptyStr, xWrt );
-                }
                 else
-                {
                     ::GetSw3Writer( aEmptyStr, xWrt );
-                    ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, FALSE );
-                }
 
-                SwWriter aWrt( *pIo->GetStorage(), *pDoc );
+                SwWriter aWrt( *GetStorage(), *pDoc );
                 nErr = aWrt.Write( xWrt );
             }
             break;
@@ -670,7 +662,7 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
 
         if( pDoc->ContainsMSVBasic() )
         {
-            SvxImportMSVBasic aTmp( *this, *pIo->GetStorage() );
+            SvxImportMSVBasic aTmp( *this, *GetStorage() );
             aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
                     if( OFF_APP()->GetFilterOptions()->IsLoadWordBasicStorage() )
                         nVBWarning = SvxImportMSVBasic::
@@ -698,14 +690,9 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
 
         WriterRef xWrt;
         if( bXML )
-        {
             ::GetXMLWriter( aEmptyStr, xWrt );
-        }
         else
-        {
             ::GetSw3Writer( aEmptyStr, xWrt );
-            ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, TRUE );
-        }
 
         SwWriter aWrt( *pStor, *pDoc );
         nErr = aWrt.Write( xWrt );
@@ -749,16 +736,12 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
 
     ULONG nVBWarning = 0;
-    if( pDoc->ContainsMSVBasic() )
+    if( pDoc->ContainsMSVBasic() && xWriter->IsStgWriter() )
     {
         BOOL bSave = pFlt->GetUserData().EqualsAscii( "CWW8" )
              && OFF_APP()->GetFilterOptions()->IsLoadWordBasicStorage();
 
-        SvStorage* pStg;
-        if( xWriter->IsStgWriter() )
-            pStg = rMedium.GetStorage();
-        else
-            pStg = pIo->GetStorage();
+        SvStorage* pStg = rMedium.GetStorage();
         SvxImportMSVBasic aTmp( *this, *pStg );
         nVBWarning = aTmp.SaveOrDelMSVBAStorage( bSave,
                                 String::CreateFromAscii("Macros") );
@@ -964,24 +947,13 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Haende weg
- --------------------------------------------------------------------*/
-
-
-void SwDocShell::HandsOff()
-{
-    pIo->HandsOff();
-    SfxInPlaceObject::HandsOff();
-}
-
-/*--------------------------------------------------------------------
     Beschreibung: ??? noch nicht zu aktivieren, muss TRUE liefern
  --------------------------------------------------------------------*/
-
 
 BOOL SwDocShell::SaveCompleted( SvStorage * pStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveCompleted" );
+    BOOL bClearNm = !pStor || !IsHandsOff();
     BOOL bRet = SfxInPlaceObject::SaveCompleted( pStor );
     if( bRet )
     {
@@ -991,7 +963,18 @@ BOOL SwDocShell::SaveCompleted( SvStorage * pStor )
         else
             pDoc->ResetModified();
 
-        bRet = pIo->SaveCompleted( pStor );
+
+        // Hier muss noch ueber die Grafiknodes iteriert werden, um
+        // ihnen zu sagen, wie ihr neuer Streamname lautet!
+        // Da Grafiken Flys sind, liegen die Nodes im Autotext-Bereich
+        SwNodes& rNds = pDoc->GetNodes();
+        ULONG nEnd = rNds.GetEndOfAutotext().GetIndex();
+        for( ULONG nIdx = rNds.GetEndOfInserts().GetIndex() + 1; nIdx < nEnd; ++nIdx)
+        {
+            SwGrfNode* pNd = rNds[ nIdx ]->GetGrfNode();
+            if( pNd )
+                pNd->SaveCompleted( bClearNm );
+        }
     }
 
     if( xOLEChildList.Is() )

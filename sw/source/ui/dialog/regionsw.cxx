@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-14 16:30:21 $
+ *  last change: $Author: jp $ $Date: 2002-03-14 14:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1537,13 +1537,7 @@ void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
         case SOT_FORMATSTR_ID_STARWRITER_30:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_50:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_40:
-            {
-                Sw3Reader* pRdr = (Sw3Reader*)ReadSw3;
-                Sw3Io* pOldIo = pRdr->GetSw3Io();
-                  pRdr->SetSw3Io( rSh.GetView().GetDocShell()->GetIoSystem() );
-                pRdr->GetSectionList( rMedium, (SvStrings&) aArr );
-                  pRdr->SetSw3Io( pOldIo );
-            }
+            ReadSw3->GetSectionList( rMedium, (SvStrings&) aArr );
             break;
         case SOT_FORMATSTR_ID_STARWRITER_60:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_60:

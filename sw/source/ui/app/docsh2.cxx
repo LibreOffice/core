@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-13 16:45:19 $
+ *  last change: $Author: jp $ $Date: 2002-03-14 14:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,9 +228,6 @@
 #endif
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _SW3IO_HXX
-#include <sw3io.hxx>
 #endif
 #ifndef _PVIEW_HXX
 #include <pview.hxx>
@@ -1617,17 +1614,13 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     }
 
     RemoveLink();
-    delete pIo;
-    pIo = 0;
     //jetzt muss auch das UNO-Model ueber das neue Doc informiert werden #51535#
     uno::Reference<text::XTextDocument> xDoc(GetBaseModel(), uno::UNO_QUERY);
     text::XTextDocument* pxDoc = xDoc.get();
     ((SwXTextDocument*)pxDoc)->InitNewDoc();
 
-
     AddLink();
     pSrcView->SetPool(&GetPool());
-
 
     String sBaseURL = INetURLObject::GetBaseURL();
     const String& rMedname = GetMedium()->GetName();

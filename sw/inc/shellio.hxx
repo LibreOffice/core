@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-14 16:29:17 $
+ *  last change: $Author: jp $ $Date: 2002-03-14 14:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,14 +356,9 @@ public:
 
 class Sw3Reader : public StgReader
 {
-    Sw3Io* pIO;
     virtual ULONG Read( SwDoc &,SwPaM &,const String &);
 public:
-    Sw3Reader() : pIO( 0 ) {}
-
-          Sw3Io* GetSw3Io()                 { return pIO; }
-    const Sw3Io* GetSw3Io() const           { return pIO; }
-          void   SetSw3Io( Sw3Io* pIo )     { pIO = pIo; }
+    Sw3Reader() {}
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
@@ -595,19 +590,10 @@ public:
 
 class Sw3Writer : public StgWriter
 {
-    Sw3Io* pIO;
-    BOOL bSaveAs : 1;
-
     virtual ULONG WriteStorage();
 
 public:
-    Sw3Writer() : pIO( 0 ), bSaveAs( FALSE ) {}
-
-          Sw3Io* GetSw3Io()                 { return pIO; }
-    const Sw3Io* GetSw3Io() const           { return pIO; }
-    void SetSw3Io( Sw3Io* pIo, BOOL bSvAs = FALSE )
-        { pIO = pIo; bSaveAs = bSvAs; }
-
+    Sw3Writer() {}
     virtual BOOL IsSw3Writer() const;
 };
 

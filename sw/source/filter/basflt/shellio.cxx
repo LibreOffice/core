@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-22 13:58:00 $
+ *  last change: $Author: jp $ $Date: 2002-03-14 14:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,11 +195,6 @@ ULONG SwReader::Read( const Reader& rOptions )
     ULONG nError = 0L;
 
     GetDoc();
-
-    // am Sw3-Reader noch den pIo-Pointer "loeschen"
-    if( po == ReadSw3 && pDoc->GetDocShell() &&
-        ((Sw3Reader*)po)->GetSw3Io() != pDoc->GetDocShell()->GetIoSystem() )
-            ((Sw3Reader*)po)->SetSw3Io( pDoc->GetDocShell()->GetIoSystem() );
 
     // waehrend des einlesens kein OLE-Modified rufen
     Link aOLELink( pDoc->GetOle2Link() );
@@ -473,9 +468,6 @@ ULONG SwReader::Read( const Reader& rOptions )
 
     if( pCrsr )                 // das Doc ist jetzt modifiziert
         pDoc->SetModified();
-
-    if( po == ReadSw3 )         // am Sw3-Reader noch den pIo-Pointer "loeschen"
-        ((Sw3Reader*)po)->SetSw3Io( 0 );
 
     po->SetReadUTF8( FALSE );
     po->SetBlockMode( FALSE );
