@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleauthenticationrequest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-07-13 12:49:57 $
+ *  last change: $Author: kso $ $Date: 2002-09-03 13:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,9 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
     setRequest( uno::makeAny( aRequest ) );
 
     // Fill continuations...
-    uno::Sequence< ucb::RememberAuthentication > aRememberModes( 1 );
+    uno::Sequence< ucb::RememberAuthentication > aRememberModes( 2 );
     aRememberModes[ 0 ] = ucb::RememberAuthentication_NO;
+    aRememberModes[ 1 ] = ucb::RememberAuthentication_SESSION;
 
     m_xAuthSupplier
         = new InteractionSupplyAuthentication(
@@ -110,9 +111,9 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                 sal_True,  // bCanSetPassword
                 aRequest.HasAccount, // bCanSetAccount
                 aRememberModes, // rRememberPasswordModes
-                ucb::RememberAuthentication_NO, // eDefaultRememberPasswordMode
+                ucb::RememberAuthentication_SESSION, // eDefaultRememberPasswordMode
                 aRememberModes, // rRememberAccountModes
-                ucb::RememberAuthentication_NO // eDefaultRememberAccountMode
+                ucb::RememberAuthentication_SESSION // eDefaultRememberAccountMode
             );
 
     uno::Sequence<
@@ -159,8 +160,9 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
     setRequest( uno::makeAny( aRequest ) );
 
     // Fill continuations...
-    uno::Sequence< ucb::RememberAuthentication > aRememberModes( 1 );
+    uno::Sequence< ucb::RememberAuthentication > aRememberModes( 2 );
     aRememberModes[ 0 ] = ucb::RememberAuthentication_NO;
+    aRememberModes[ 1 ] = ucb::RememberAuthentication_SESSION;
 
     m_xAuthSupplier
         = new InteractionSupplyAuthentication(
@@ -170,9 +172,9 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                 ePasswordType == ENTITY_MODIFY,  // bCanSetPassword
                 eAccountType == ENTITY_MODIFY, // bCanSetAccount
                 aRememberModes, // rRememberPasswordModes
-                ucb::RememberAuthentication_NO, // eDefaultRememberPasswordMode
+                ucb::RememberAuthentication_SESSION, // eDefaultRememberPasswordMode
                 aRememberModes, // rRememberAccountModes
-                ucb::RememberAuthentication_NO // eDefaultRememberAccountMode
+                ucb::RememberAuthentication_SESSION // eDefaultRememberAccountMode
             );
 
     uno::Sequence<
