@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-26 08:52:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SC_FIELDUNO_HXX
 #define SC_FIELDUNO_HXX
 
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"           // ScRange, ScAddress
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 #ifndef SC_MUTEXHLP_HXX
 #include "mutexhlp.hxx"
@@ -119,6 +119,7 @@ class SvxFieldItem;
 class ScCellFieldObj;
 class ScHeaderFieldObj;
 class ScHeaderFooterContentObj;
+class ScDocShell;
 
 
 //------------------------------------------------------------------
