@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProxyFactory.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-13 17:22:19 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 11:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package com.sun.star.lib.uno.bridges.java_remote;
 
+import com.sun.star.bridge.XBridge;
 import com.sun.star.uno.IQueryInterface;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
@@ -76,8 +77,9 @@ import java.lang.reflect.Proxy;
  * generic proxy class.</p>
  */
 final class ProxyFactory {
-    public ProxyFactory(RequestHandler requestHandler) {
+    public ProxyFactory(RequestHandler requestHandler, XBridge bridge) {
         this.requestHandler = requestHandler;
+        this.bridge = bridge;
     }
 
     public Object create(String oid, Type type) {
@@ -95,6 +97,16 @@ final class ProxyFactory {
         } else {
             return false;
         }
+    }
+
+    public static XBridge getBridge(Object obj) {
+        if (Proxy.isProxyClass(obj.getClass())) {
+            InvocationHandler h = Proxy.getInvocationHandler(obj);
+            if (h instanceof Handler) {
+                return ((Handler) h).getBridge();
+            }
+        }
+        return null;
     }
 
     static int getDebugCount() {
@@ -124,6 +136,10 @@ final class ProxyFactory {
 
         public boolean matches(ProxyFactory factory) {
             return ProxyFactory.this == factory;
+        }
+
+        public XBridge getBridge() {
+            return bridge;
         }
 
         public Object invoke(Object proxy, Method method, Object[] args)
@@ -191,4 +207,5 @@ final class ProxyFactory {
     private static int debugCount = 0;
 
     private final RequestHandler requestHandler;
+    private final XBridge bridge;
 }
