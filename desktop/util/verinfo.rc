@@ -2,9 +2,9 @@
 #
 #   $RCSfile: verinfo.rc,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-20 10:34:28 $
+#   last change: $Author: hr $ $Date: 2003-06-30 14:27:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,7 +61,7 @@
 #*************************************************************************/
 
 #define VERSION			7
-#define SUBVERSION		0
+//#define SUBVERSION		0
 //#define VERVARIANT		0
 // .0 + VER_CONCEPT
 // .100 + VER_ALPHA
@@ -115,8 +115,13 @@ RCD_LANGUAGE rcdata
 // -----------------------------------------------------------------------
 
 VS_VERSION_INFO versioninfo
+#ifndef SUBVERSION
+	fileversion    VERSION, 0, 0, VERVARIANT
+	productversion VERSION, 0, 0, VERVARIANT
+#else
 	fileversion    VERSION, VERVARIANT, VER_COUNT
 	productversion VERSION, VERVARIANT, VER_COUNT
+#endif
 	fileflagsmask 0x3F
 	fileflags
 #if defined(DEBUG)
