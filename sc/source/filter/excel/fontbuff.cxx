@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontbuff.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:55:35 $
+ *  last change: $Author: gt $ $Date: 2001-08-13 10:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,9 +509,17 @@ void FontBuffer::Fill( const UINT16 nIndex, SfxItemSet& rItemSet, const BOOL bOw
     {// italic
         SvxPostureItem aAttr( ITALIC_NORMAL );
         if( bOwn )
+        {
             rItemSet.Put( aAttr );
+            rItemSet.Put( aAttr, ATTR_CJK_FONT_POSTURE );
+            rItemSet.Put( aAttr, ATTR_CTL_FONT_POSTURE );
+        }
         else
+        {
             rItemSet.Put( aAttr, EE_CHAR_ITALIC );
+            rItemSet.Put( aAttr, EE_CHAR_ITALIC_CJK );
+            rItemSet.Put( aAttr, EE_CHAR_ITALIC_CTL );
+        }
     }
 
 
@@ -576,9 +584,19 @@ void FontBuffer::Fill( const UINT16 nIndex, SfxItemSet& rItemSet, const BOOL bOw
     if( bOwn )
     {
         rItemSet.Put( pFont->GetFontItem() );
+        rItemSet.Put( pFont->GetFontItem(), ATTR_CJK_FONT );
+        rItemSet.Put( pFont->GetFontItem(), ATTR_CTL_FONT );
+
         rItemSet.Put( pFont->GetHeightItem() );
+        rItemSet.Put( pFont->GetHeightItem(), ATTR_CJK_FONT_HEIGHT );
+        rItemSet.Put( pFont->GetHeightItem(), ATTR_CTL_FONT_HEIGHT );
+
         rItemSet.Put( *pExcRoot->pColor->GetColor( pFont->nColor ) );
+
         rItemSet.Put( aWeightItem );
+        rItemSet.Put( aWeightItem, ATTR_CJK_FONT_WEIGHT );
+        rItemSet.Put( aWeightItem, ATTR_CTL_FONT_WEIGHT );
+
         rItemSet.Put( aUndItem );
     }
     else
@@ -589,6 +607,8 @@ void FontBuffer::Fill( const UINT16 nIndex, SfxItemSet& rItemSet, const BOOL bOw
             aFontItem.GetCharSet() = ScFilterTools::GetSystemCharSet();
 
         rItemSet.Put( aFontItem, EE_CHAR_FONTINFO );
+        rItemSet.Put( aFontItem, EE_CHAR_FONTINFO_CJK );
+        rItemSet.Put( aFontItem, EE_CHAR_FONTINFO_CTL );
 
         SvxFontHeightItem&  rHeightItem = pFont->GetHeightItem();
         long nOldHeight = rHeightItem.GetHeight();
@@ -597,11 +617,17 @@ void FontBuffer::Fill( const UINT16 nIndex, SfxItemSet& rItemSet, const BOOL bOw
         rHeightItem.SetHeightValue( nNewHeight );
 
         rItemSet.Put( rHeightItem, EE_CHAR_FONTHEIGHT );
+        rItemSet.Put( rHeightItem, EE_CHAR_FONTHEIGHT_CJK );
+        rItemSet.Put( rHeightItem, EE_CHAR_FONTHEIGHT_CTL );
 
         rHeightItem.SetHeightValue( nOldHeight );
 
         rItemSet.Put( *pExcRoot->pColor->GetColor( pFont->nColor ), EE_CHAR_COLOR );
+
         rItemSet.Put( aWeightItem, EE_CHAR_WEIGHT );
+        rItemSet.Put( aWeightItem, EE_CHAR_WEIGHT_CJK );
+        rItemSet.Put( aWeightItem, EE_CHAR_WEIGHT_CTL );
+
         rItemSet.Put( aUndItem, EE_CHAR_UNDERLINE );
     }
 }
