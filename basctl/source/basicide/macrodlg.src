@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:43:39 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@ ModalDialog RID_MACROCHOOSER
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 287 , 165 ) ;
-    Text = "Makro" ;
-    Text [ ENGLISH ] = "Macro" ;
+    Text = "%PRODUCTNAME Basic Makros" ;
+    Text [ ENGLISH ] = "%PRODUCTNAME Basic Macros" ;
     Text [ norwegian ] = "Makro" ;
     Text [ italian ] = "Macro" ;
     Text [ portuguese_brazilian ] = "Macro" ;
@@ -81,7 +81,7 @@ ModalDialog RID_MACROCHOOSER
     Text [ swedish ] = "Makro" ;
     Text [ dutch ] = "Macro" ;
     Text [ spanish ] = "Macro" ;
-    Text [ english_us ] = "Macro" ;
+    Text [ english_us ] = "%PRODUCTNAME Basic Macros" ;
     Moveable = TRUE ;
      // Closeable = TRUE;
 
