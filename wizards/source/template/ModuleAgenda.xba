@@ -21,6 +21,7 @@ Sub Initialize()
 	DialogModel.Step = 1
 	LoadLanguageAgenda()
 	DialogModel.OptAgenda2.State = TRUE
+	GetOptionValues()
 	DialogExited = FALSE
 	TemplateDialog.Execute
 End Sub
@@ -181,12 +182,22 @@ Dim BtnFinishAgenda As Object
 End Sub
 
 
-Sub GetOptionValues(aEvent as Object)
+
+Sub GetOptionValues(Optional aEvent as Object)
 Dim CurTag as String
 Dim Taglist() as String
-	CurTag = aEvent.Source.Model.Tag
+	If Not IsMissing(aEvent) Then
+		CurTag = aEvent.Source.Model.Tag
+	Else
+		If DialogModel.OptAgenda1.State = TRUE Then
+			CurTag = DialogModel.OptAgenda1.Tag
+		Else
+			CurTag = DialogModel.OptAgenda2.Tag
+		End If		
+	End If
 	Taglist() = ArrayoutOfString(CurTag, &quot;;&quot;)
 	Bookmarkname = TagList(0)
 	sTrueContent = TagList(1)
 End Sub
+
 </script:module>
