@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.25 $
+#*  $Revision: 1.26 $
 #*
-#*  last change: $Author: rt $ $Date: 2004-11-10 09:22:44 $
+#*  last change: $Author: obo $ $Date: 2005-03-15 14:02:03 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -140,12 +140,14 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_et_EE.cxx  \
     $(MISC)$/localedata_eu.cxx     \
     $(MISC)$/localedata_fi_FI.cxx  \
+    $(MISC)$/localedata_fo_FO.cxx  \
     $(MISC)$/localedata_fr_BE.cxx  \
     $(MISC)$/localedata_fr_CA.cxx  \
     $(MISC)$/localedata_fr_CH.cxx  \
     $(MISC)$/localedata_fr_FR.cxx  \
     $(MISC)$/localedata_fr_LU.cxx  \
     $(MISC)$/localedata_fr_MC.cxx  \
+    $(MISC)$/localedata_ga_IE.cxx  \
     $(MISC)$/localedata_gl_ES.cxx  \
     $(MISC)$/localedata_gu_IN.cxx  \
     $(MISC)$/localedata_he_IL.cxx  \
@@ -178,6 +180,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_pt_PT.cxx  \
     $(MISC)$/localedata_ro_RO.cxx  \
     $(MISC)$/localedata_ru_RU.cxx  \
+    $(MISC)$/localedata_rw_RW.cxx  \
     $(MISC)$/localedata_sh_YU.cxx  \
     $(MISC)$/localedata_sk_SK.cxx  \
     $(MISC)$/localedata_sl_SI.cxx  \
@@ -283,12 +286,14 @@ SHL3OBJS=	\
     $(SLO)$/localedata_et_EE.obj	\
     $(SLO)$/localedata_eu.obj		\
     $(SLO)$/localedata_fi_FI.obj	\
+    $(SLO)$/localedata_fo_FO.obj	\
     $(SLO)$/localedata_fr_BE.obj	\
     $(SLO)$/localedata_fr_CA.obj	\
     $(SLO)$/localedata_fr_CH.obj	\
     $(SLO)$/localedata_fr_FR.obj	\
     $(SLO)$/localedata_fr_LU.obj	\
     $(SLO)$/localedata_fr_MC.obj	\
+    $(SLO)$/localedata_ga_IE.obj	\
     $(SLO)$/localedata_gl_ES.obj	\
     $(SLO)$/localedata_hr_HR.obj	\
     $(SLO)$/localedata_is_IS.obj	\
@@ -350,6 +355,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_mr_IN.obj \
     $(SLO)$/localedata_ms_MY.obj \
     $(SLO)$/localedata_pa_IN.obj \
+    $(SLO)$/localedata_rw_RW.obj \
     $(SLO)$/localedata_sw_TZ.obj \
     $(SLO)$/localedata_ta_IN.obj \
     $(SLO)$/localedata_te_IN.obj \
