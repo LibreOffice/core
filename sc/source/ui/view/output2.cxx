@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-18 19:44:26 $
+ *  last change: $Author: nn $ $Date: 2001-06-07 11:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,12 +506,19 @@ void ScDrawStringsVars::SetHashText()
 
 double ScOutputData::GetStretch()
 {
-    MapMode aOld = pRefDevice->GetMapMode();
-    Fraction aFract = aOld.GetScaleY();
-    aFract /= aOld.GetScaleX();
-    aFract *= aZoomY;
-    aFract /= aZoomX;
-    return (double) aFract;
+    // calculation in double is faster than Fraction multiplication
+    // and doesn't overflow
+
+    if ( pRefDevice == pFmtDevice )
+    {
+        MapMode aOld = pRefDevice->GetMapMode();
+        return ((double)aOld.GetScaleY()) / ((double)aOld.GetScaleX()) * ((double)aZoomY) / ((double)aZoomX);
+    }
+    else
+    {
+        // when formatting for printer, device map mode has already been taken care of
+        return ((double)aZoomY) / ((double)aZoomX);
+    }
 }
 
 //==================================================================
