@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-01 14:09:06 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 09:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { "Height",                 XML_NAMESPACE_FO,       sXML_page_height,               XML_TYPE_MEASURE,                                       0 },
     { "NumberingType",          XML_NAMESPACE_STYLE,    sXML_num_format,                XML_PM_TYPE_NUMFORMAT | MID_FLAG_MERGE_PROPERTY,        0 },
     { "NumberingType",          XML_NAMESPACE_STYLE,    sXML_num_letter_sync,           XML_PM_TYPE_NUMLETTERSYNC,                              0 },
-    { "PrinterPaperTray",       XML_NAMESPACE_STYLE,    sXML_paper_tray_number,         XML_PM_TYPE_PAPERTRAYNUMBER,                            0 },
+//  { "PrinterPaperTray",       XML_NAMESPACE_STYLE,    sXML_paper_tray_number,         XML_PM_TYPE_PAPERTRAYNUMBER,                            0 },
     { "IsLandscape",            XML_NAMESPACE_STYLE,    sXML_print_orientation,         XML_PM_TYPE_PRINTORIENTATION,                           0 },
     { "TopMargin",              XML_NAMESPACE_FO,       sXML_margin_top,                XML_TYPE_MEASURE,                                       0 },
     { "BottomMargin",           XML_NAMESPACE_FO,       sXML_margin_bottom,             XML_TYPE_MEASURE,                                       0 },
