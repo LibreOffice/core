@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:08:57 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,9 @@ namespace i18n {
 namespace uno {
     template < class > class Sequence;
 }
+namespace container {
+    class XNameContainer; // for getXForms()/isXForms()/initXForms() methods
+}
 }}};
 
 namespace utl {
@@ -360,7 +363,8 @@ class SwDoc
     ::com::sun::star::uno::Sequence <sal_Int8 > aRedlinePasswd;
     String      sTOIAutoMarkURL;        // ::com::sun::star::util::URL of table of index AutoMark file
     SvStringsDtor aPatternNms;          // Array fuer die Namen der Dokument-Vorlagen
-
+    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
+        xXForms;                        // container with XForms models
 
     // -------------------------------------------------------------------
     // die Pointer
@@ -2306,7 +2310,21 @@ public:
     void IndentNumRule(SwPosition & rPos, short nAmount);
     // <- #i23726#
 
+
     void RemoveLeadingChars(const SwPosition & rPos, sal_Unicode sChar);
+
+    // --> #i31958# access methods for XForms model(s)
+
+    /// access container for XForms model; will be NULL if !isXForms()
+    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
+        getXForms() const;
+
+    /// is this an XForms document?
+    bool isXForms() const;
+
+    /// initialize XForms models; turn this into an XForms document
+    void initXForms( bool bCreateDefaultModel );
+    // <-- #i31958# access methods for XForms model(s)
 };
 
 
