@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inimgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:00 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,10 @@
  *
  *
  ************************************************************************/
-#if !defined( UNX ) && !defined( MAC )
+#if !defined( UNX )
 #include <direct.h>
 #else
-#ifndef MAC
 #include <sys/stat.h>
-#else
-#include <stat.h>
-#endif
 #endif
 #include <stdlib.h>
 #include <stdio.h>
@@ -73,7 +69,6 @@
 
 #include "inimgr.hxx"
 #include "appdef.hxx"
-#include "fattr.hxx"
 
 /****************************************************************************/
 IniManager::IniManager( ByteString &rDir, ByteString &rLocalDir )
@@ -85,7 +80,7 @@ IniManager::IniManager( ByteString &rDir, ByteString &rLocalDir )
         sLocalPath = rLocalDir;
 
     sGlobalDir = rDir;
-#if !defined( UNX ) && !defined( MAC )
+#if !defined( UNX )
     mkdir(( char * ) sLocalPath.GetBuffer());
 #else
     mkdir( sLocalPath.GetBuffer() ,00777 );
@@ -99,7 +94,7 @@ IniManager::IniManager( ByteString &rDir )
 {
     sLocalPath = GetLocalIni();
     sGlobalDir = rDir;
-#if !defined( UNX ) && !defined( MAC )
+#if !defined( UNX )
     mkdir(( char * ) sLocalPath.GetBuffer());
 #else
     mkdir( sLocalPath.GetBuffer() ,00777 );
@@ -113,7 +108,7 @@ IniManager::IniManager()
 {
     sLocalPath = GetLocalIni();
 
-#if !defined( UNX ) && !defined( MAC )
+#if !defined( UNX )
     mkdir(( char * ) sLocalPath.GetBuffer());
 #else
     mkdir( sLocalPath.GetBuffer(), 00777 );
@@ -141,17 +136,9 @@ ByteString IniManager::ToLocal( ByteString &rPath )
     ByteString sIni( sGlobalDir );
     sIni.ToUpperAscii();
 
-#ifndef MAC
     sTmp.SearchAndReplace( sIni, sLocalPath );
-#else
-    sTmp.SearchAndReplace( sIni, GetIniRootOld() );
-#endif
 
     while ( sTmp.SearchAndReplace( "\\\\", "\\" ) != STRING_NOTFOUND );
-#ifdef MAC
-    while ( sTmp.SearchAndReplace( "\\", ":" ) != STRING_NOTFOUND );
-    while ( sTmp.SearchAndReplace( "::", ":" ) != STRING_NOTFOUND );
-#endif
 #else
     sTmp.SearchAndReplace( sGlobalDir, sLocalPath );
 
@@ -175,13 +162,8 @@ ByteString IniManager::GetLocalIni()
         ByteString sLocal( getenv( "HOME" ));
         sLocal += ByteString( "/localini" );
 #else
-#ifdef MAC
-        ByteString sLocal( getenv( "TEMP" ));
-        sLocal += ByteString( ":localini" );
-#else
         ByteString sLocal( getenv( "TMP" ));
         sLocal += ByteString( "\\localini" );
-#endif
 #endif
 
         sLocalPath = sLocal;
@@ -211,13 +193,8 @@ void IniManager::ForceUpdate()
     Dir aDir( aPath, FSYS_KIND_DIR | FSYS_KIND_FILE);
 
 #ifndef UNX
-#ifndef MAC
     sLocalPath.EraseTrailingChars( '\\' );
     sLocalPath += "\\";
-#else
-    sLocalPath.EraseTrailingChars( ':' );
-    sLocalPath += ":";
-#endif
 #else
     sLocalPath.EraseTrailingChars( '/' );
     sLocalPath += "/";
