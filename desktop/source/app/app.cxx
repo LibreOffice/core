@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-26 17:46:53 $
+ *  last change: $Author: mba $ $Date: 2001-11-27 18:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,7 +625,11 @@ void Desktop::DeInit()
 
 BOOL Desktop::QueryExit()
 {
-    return TRUE;
+    DBG_ERROR("QueryExit!");
+    Reference< ::com::sun::star::frame::XDesktop >
+            xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                UNO_QUERY );
+    return !xDesktop.is() || xDesktop->terminate();
 }
 
 void Desktop::StartSetup( const OUString& aParameters )
@@ -1791,6 +1795,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         {
             // get file name
             String aName( rAppEvent.GetParam(i) );
+            ::rtl::OUString aTarget( DEFINE_CONST_UNICODE("_default") );
 
             // is the parameter a printername ?
             if( aName.Len()>1 && *aName.GetBuffer()=='@' )
@@ -1815,10 +1820,11 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
                 // load document for printing without user interaction
                 aArgs[4].Value <<= sal_True;
+
+                // hidden documents should never be put into open tasks
+                aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("_blank") );
             }
 
-            // load the document ... if they are loadable!
-            // Otherwise try to dispatch it ...
             Reference < XPrintable > xDoc;
             if(
                 ( aName.CompareToAscii( ".uno"  , 4 ) == COMPARE_EQUAL )  ||
@@ -1826,8 +1832,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 ( aName.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )
               )
             {
-                // Attention: URL must be parsed full. Otherwise some detections on it will fail!
-                // It doesnt matter, if parser isn't available. Because; We try loading of URL then ...
                 URL             aURL ;
                 aURL.Complete = aName;
 
@@ -1855,7 +1859,10 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             }
             else
             {
-                xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs ), UNO_QUERY );
+                INetURLObject aObj( aName );
+                if ( aObj.GetProtocol() == INET_PROT_PRIVATE )
+                    aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("_blank") );
+                xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
                 if ( !xDoc.is() )
                 {
                     // error case
