@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:36:48 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12814,85 +12814,11 @@ Resource RID_GLOBSTR
         Text[ hungarian ] = "Ez a dokumentum makrófüggvény-hívásokat tartalmaz.\nFuttatni kívánja azokat?";
         Text[ slovenian ] = "Ta dokument vsebuje klice makro funkcij.\nAli jih želite zagnati?";
     };
-    /*
-    String STR_
+
+    String STR_UNDO_HANGULHANJA
     {
-        Text = "";
-        Text[ENGLISH] = "";
-        Text[ENGLISH_US] = "";
+        Text = "Hangul/Hanja Konvertierung";
+        Text[ english_us ] = "Hangul/Hanja Conversion";
     };
-*/
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
