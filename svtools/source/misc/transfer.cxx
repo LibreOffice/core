@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-06 18:36:00 $
+ *  last change: $Author: ka $ $Date: 2001-08-09 09:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,14 +257,20 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
 
         try
         {
+            DataFlavor aSubstFlavor;
+
             if( !mpFormats->size() )
                 AddSupportedFormats();
 
-            GetData( rFlavor );
-
-            // watch for special formats
-            if( !maAny.hasValue() )
+            // check alien formats first and try to get a substitution format
+            if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_WMF, aSubstFlavor ) &&
+                TransferableDataHelper::IsEqual( rFlavor, aSubstFlavor ) )
+            {
                 ImplGetSubstitutionData( rFlavor );
+            }
+
+            if( !maAny.hasValue() )
+                GetData( rFlavor );
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
@@ -418,6 +424,8 @@ void TransferableHelper::ImplGetSubstitutionData( const DataFlavor& rFlavor )
 
     if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_WMF, aSubstFlavor ) && TransferableDataHelper::IsEqual( rFlavor, aSubstFlavor ) )
     {
+        sal_Bool bDone = sal_False;
+
         // WMF => GDIMETAFILE
         if( SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aSubstFlavor ) )
         {
@@ -439,10 +447,16 @@ void TransferableHelper::ImplGetSubstitutionData( const DataFlavor& rFlavor )
                     SvMemoryStream  aDstStm( 65535, 65535 );
 
                     if( GraphicConverter::Export( aDstStm, aGraphic, CVT_WMF ) == ERRCODE_NONE )
+                    {
                         maAny <<= ( aSeq = Sequence< sal_Int8 >( (sal_Int8*) aDstStm.GetData(), aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
+                        bDone = sal_True;
+                    }
                 }
             }
         }
+
+        if( !bDone )
+            maAny = Any();
     }
 }
 
