@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 13:04:20 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,11 +121,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
 
 uno::Sequence< rtl::OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    // dont register for generic services!
     uno::Sequence< rtl::OUString > aSeq( 2 );
-
-    // TODO: Presentation module cant use DrawingDocumentFactory!?
-    //       It has to use own or a shared factory.
     aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory"));
     aSeq[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
 
