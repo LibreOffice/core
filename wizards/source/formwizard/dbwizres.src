@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 08:32:40 $
+ *  last change: $Author: kz $ $Date: 2002-09-17 13:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ String RID_DB_COMMON_START + 36
     Text[ russian ] = "Your entered file path is not valid!";
     Text[ greek ] = "Your entered file path is not valid!";
     Text[ dutch ] = "Your entered file path is not valid!";
-    Text[ french ] = "Le chemin saisi pour le fichier n'est pas valide !";
+    Text[ french ] = "Le chemin de fichier saisi n'est pas valide !";
     Text[ spanish ] = "La ruta del archivo no es válida.";
     Text[ finnish ] = "Your entered file path is not valid!";
     Text[ italian ] = "Il percorso del file non è valido.";
@@ -5320,7 +5320,7 @@ String RID_DB_REPORT_WIZARD_START + 66
     Text[ french ] = "Impossible de lire le contrôle suivant masqué dans le formulaire '<FORMNAME>' : '<CONTROLNAME>'.";
     Text[ spanish ] = "No se ha podido leer el control siguiente oculto en el formulario '<REPORTFORM>' : '<CONTROLNAME>'.";
     Text[ finnish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
-    Text[ italian ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
+    Text[ italian ] = "Impossibile leggere il controllo nascosto '<FORMNAME>': '<CONTROLNAME>'.";
     Text[ danish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ swedish ] = "Det gick inte att läsa följande dolda control i formuläret '<FORMNAME>': '<CONTROLNAME>'.";
     Text[ polish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
