@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-14 15:37:19 $
+ *  last change: $Author: cl $ $Date: 2002-11-15 13:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,62 +309,66 @@ IMPL_LINK( SdView, DropInsertFileHdl, Timer*, pTimer )
         }
 
         GraphicFilter*  pGraphicFilter = GetGrfFilter();
-        FilterProgress* pFilterProgress = new FilterProgress( pGraphicFilter, pViewSh->GetDocSh() );
         Graphic         aGraphic;
 
         aCurrentDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-        if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
+        if( !Sound::IsSoundFile( aCurrentDropFile ) )
         {
-            sal_Int8    nTempAction = ( aIter == aDropFileVector.begin() ) ? nAction : 0;
-            SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, aDropPos, NULL, NULL );
+            FilterProgress* pFilterProgress = new FilterProgress( pGraphicFilter, pViewSh->GetDocSh() );
 
-            if( pGrafObj )
-                pGrafObj->SetGraphicLink( aCurrentDropFile, String() );
-
-            // return action from first inserted graphic
-            if( aIter == aDropFileVector.begin() )
-                nAction = nTempAction;
-
-            bOK = TRUE;
-        }
-
-        delete pFilterProgress;
-
-        if( !bOK )
-        {
-            const SfxFilter*        pFoundFilter = NULL;
-            SfxMedium               aSfxMedium( aCurrentDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
-            ErrCode                 nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFoundFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
-
-            if( pFoundFilter && !nErr )
+            if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
             {
-                ::std::vector< String > aFilterVector;
-                const String            aFilterName( pFoundFilter->GetFilterName() );
-                const String            aLowerAsciiFileName( aCurrentDropFile.ToLowerAscii() );
+                sal_Int8    nTempAction = ( aIter == aDropFileVector.begin() ) ? nAction : 0;
+                SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, aDropPos, NULL, NULL );
 
-                FuInsertFile::GetSupportedFilterVector( aFilterVector );
+                if( pGrafObj )
+                    pGrafObj->SetGraphicLink( aCurrentDropFile, String() );
 
-                if( ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFoundFilter->GetMimeType() ) != aFilterVector.end() ) ||
-                    aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
-                    aFilterName.SearchAscii( "Rich" ) != STRING_NOTFOUND ||
-                    aFilterName.SearchAscii( "RTF" ) != STRING_NOTFOUND ||
-                    aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ||
-                    aLowerAsciiFileName.SearchAscii(".sdd") != STRING_NOTFOUND ||
-                    aLowerAsciiFileName.SearchAscii(".sda") != STRING_NOTFOUND ||
-                    aLowerAsciiFileName.SearchAscii(".sxd") != STRING_NOTFOUND ||
-                    aLowerAsciiFileName.SearchAscii(".sxi") != STRING_NOTFOUND ||
-                    aLowerAsciiFileName.SearchAscii(".std") != STRING_NOTFOUND ||
-                    aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
+                // return action from first inserted graphic
+                if( aIter == aDropFileVector.begin() )
+                    nAction = nTempAction;
+
+                bOK = TRUE;
+            }
+
+            delete pFilterProgress;
+
+            if( !bOK )
+            {
+                const SfxFilter*        pFoundFilter = NULL;
+                SfxMedium               aSfxMedium( aCurrentDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+                ErrCode                 nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFoundFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+
+                if( pFoundFilter && !nErr )
                 {
-                    SdWindow*       pWin = pViewSh->GetActiveWindow();
-                    SfxRequest      aReq(SID_INSERTFILE, 0, pDoc->GetItemPool());
-                    SfxStringItem   aItem1( ID_VAL_DUMMY0, aCurrentDropFile ), aItem2( ID_VAL_DUMMY1, pFoundFilter->GetFilterName() );
+                    ::std::vector< String > aFilterVector;
+                    const String            aFilterName( pFoundFilter->GetFilterName() );
+                    const String            aLowerAsciiFileName( aCurrentDropFile.ToLowerAscii() );
 
-                    aReq.AppendItem( aItem1 );
-                    aReq.AppendItem( aItem2 );
-                    delete( new FuInsertFile( pViewSh, pWin, this, pDoc, aReq ) );
-                    bOK = TRUE;
+                    FuInsertFile::GetSupportedFilterVector( aFilterVector );
+
+                    if( ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFoundFilter->GetMimeType() ) != aFilterVector.end() ) ||
+                        aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
+                        aFilterName.SearchAscii( "Rich" ) != STRING_NOTFOUND ||
+                        aFilterName.SearchAscii( "RTF" ) != STRING_NOTFOUND ||
+                        aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ||
+                        aLowerAsciiFileName.SearchAscii(".sdd") != STRING_NOTFOUND ||
+                        aLowerAsciiFileName.SearchAscii(".sda") != STRING_NOTFOUND ||
+                        aLowerAsciiFileName.SearchAscii(".sxd") != STRING_NOTFOUND ||
+                        aLowerAsciiFileName.SearchAscii(".sxi") != STRING_NOTFOUND ||
+                        aLowerAsciiFileName.SearchAscii(".std") != STRING_NOTFOUND ||
+                        aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
+                    {
+                        SdWindow*       pWin = pViewSh->GetActiveWindow();
+                        SfxRequest      aReq(SID_INSERTFILE, 0, pDoc->GetItemPool());
+                        SfxStringItem   aItem1( ID_VAL_DUMMY0, aCurrentDropFile ), aItem2( ID_VAL_DUMMY1, pFoundFilter->GetFilterName() );
+
+                        aReq.AppendItem( aItem1 );
+                        aReq.AppendItem( aItem2 );
+                        delete( new FuInsertFile( pViewSh, pWin, this, pDoc, aReq ) );
+                        bOK = TRUE;
+                    }
                 }
             }
         }
