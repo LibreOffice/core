@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 12:01:49 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "sfxtypes.hxx"
 #include "panelist.hxx"
 #include "imgmgr.hxx"
+#include "srchdlg.hxx"
 
 #include "app.hrc"
 #include "newhelp.hrc"
@@ -155,8 +156,17 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTCURSOR_HPP_
 #include <com/sun/star/text/XTextCursor.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
+#include <com/sun/star/text/XTextDocument.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTVIEWCURSOR_HPP_
+#include <com/sun/star/text/XTextViewCursor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTVIEWCURSORSUPPLIER_HPP_
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -2066,15 +2076,19 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     Window( pParent, WB_CLIPCHILDREN | WB_TABSTOP ),
 
-    aToolBox        ( this, 0 ),
-    pHelpWin        ( pParent ),
-    pTextWin        ( new TextWin_Impl( this ) ),
-    bIsDebug        ( sal_False ),
-    bIsInClose      ( sal_False ),
-    aIndexOnText    ( SfxResId( STR_HELP_BUTTON_INDEX_ON ) ),
-    aIndexOffText   ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ) ),
-    aIndexOnImage   ( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
-    aIndexOffImage  ( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) )
+    aToolBox            ( this, 0 ),
+    aIndexOnImage       ( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
+    aIndexOffImage      ( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) ),
+    aIndexOnText        ( SfxResId( STR_HELP_BUTTON_INDEX_ON ) ),
+    aIndexOffText       ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ) ),
+    pHelpWin            ( pParent ),
+    pTextWin            ( new TextWin_Impl( this ) ),
+    pSrchDlg            ( NULL ),
+    bIsDebug            ( sal_False ),
+    bIsIndexOn          ( sal_False ),
+    bIsInClose          ( sal_False ),
+    bIsFullWordSearch   ( sal_False )
+
 {
     sfx2::AddToTaskPaneList( &aToolBox );
 
@@ -2099,6 +2113,8 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aToolBox.SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
     aToolBox.InsertItem( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ) );
     aToolBox.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
+    aToolBox.InsertItem( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ) );
+    aToolBox.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
     InitToolBoxImages();
     aToolBox.Show();
 
@@ -2120,6 +2136,7 @@ SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
 
     bIsInClose = sal_True;
     SvtMiscOptions().RemoveListener( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
+    delete pSrchDlg;
 }
 
 // -----------------------------------------------------------------------
@@ -2128,35 +2145,12 @@ sal_Bool SfxHelpTextWindow_Impl::HasSelection() const
 {
     // is there any selection in the text and not only a cursor?
     sal_Bool bRet = sal_False;
-
-    try
+    Reference < XTextRange > xRange = getCursor();
+    if ( xRange.is() )
     {
-        Reference < XSelectionSupplier > xSelSup( xFrame->getController(), UNO_QUERY );
-        if ( xSelSup.is() )
-        {
-            // we have a selection, but perhaps it's only a cursor (a collapsed selection)
-            bRet = sal_True;
-            Any aAny = xSelSup->getSelection();
-            Reference < XIndexAccess > xSelection;
-            if ( aAny >>= xSelection )
-            {
-                if ( xSelection->getCount() == 1 )
-                {
-                    aAny = xSelection->getByIndex(0);
-                    Reference < XTextRange > xRange;
-                    if ( aAny >>= xRange )
-                    {
-                        Reference < XText > xText = xRange->getText();
-                        Reference < XTextCursor > xCursor = xText->createTextCursorByRange( xRange );
-                        bRet = !xCursor->isCollapsed();
-                    }
-                }
-            }
-        }
-    }
-    catch( Exception& )
-    {
-        DBG_ERROR( "SfxHelpTextWindow_Impl::HasSelection(): unexpected exception" );
+        Reference < XText > xText = xRange->getText();
+        Reference < XTextCursor > xCursor = xText->createTextCursorByRange( xRange );
+        bRet = !xCursor->isCollapsed();
     }
 
     return bRet;
@@ -2192,6 +2186,9 @@ void SfxHelpTextWindow_Impl::InitToolBoxImages()
     aToolBox.SetItemImage( TBI_BOOKMARKS, Image( SfxResId(
         bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_BOOKMARKS : IMG_HELP_TOOLBOX_L_BOOKMARKS
                : bHiContrast ? IMG_HELP_TOOLBOX_HC_BOOKMARKS : IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
+    aToolBox.SetItemImage( TBI_SEARCHDIALOG, Image( SfxResId(
+        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_SEARCHDIALOG : IMG_HELP_TOOLBOX_L_SEARCHDIALOG
+               : bHiContrast ? IMG_HELP_TOOLBOX_HC_SEARCHDIALOG : IMG_HELP_TOOLBOX_SEARCHDIALOG ) ) );
 
     Size aSize = aToolBox.CalcWindowSizePixel();
     aSize.Height() += TOOLBOX_OFFSET;
@@ -2210,6 +2207,59 @@ Reference< XBreakIterator > SfxHelpTextWindow_Impl::GetBreakIterator()
         xBreakIterator = vcl::unohelper::CreateBreakIterator();
     DBG_ASSERT( xBreakIterator.is(), "Could not create BreakIterator" );
     return xBreakIterator;
+}
+
+// -----------------------------------------------------------------------
+
+Reference< XTextRange > SfxHelpTextWindow_Impl::getCursor() const
+{
+    // return the current cursor
+    Reference< XTextRange > xCursor;
+
+    try
+    {
+        Reference < XSelectionSupplier > xSelSup( xFrame->getController(), UNO_QUERY );
+        if ( xSelSup.is() )
+        {
+            Any aAny = xSelSup->getSelection();
+            Reference < XIndexAccess > xSelection;
+            if ( aAny >>= xSelection )
+            {
+                if ( xSelection->getCount() == 1 )
+                {
+                    aAny = xSelection->getByIndex(0);
+                    aAny >>= xCursor;
+                }
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "SfxHelpTextWindow_Impl::getCursor(): unexpected exception" );
+    }
+
+    return xCursor;
+}
+
+// -----------------------------------------------------------------------
+
+bool SfxHelpTextWindow_Impl::isHandledKey( const KeyCode& _rKeyCode )
+{
+    bool bRet = false;
+    USHORT nCode = _rKeyCode.GetCode();
+
+    // the keys <CTRL><A> (select all), <CTRL><C> (copy), <CTRL><F> (find) and <CTRL><P> (print)
+    // were handled in help
+    if ( _rKeyCode.IsMod1() &&
+         ( KEY_A == nCode || KEY_C == nCode || KEY_F == nCode || KEY_P == nCode ) )
+    {
+        if ( KEY_F == nCode )
+            DoSearch();
+        else
+            bRet = true;
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
@@ -2270,6 +2320,106 @@ IMPL_LINK( SfxHelpTextWindow_Impl, NotifyHdl, SvtMiscOptions*, pOptions )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
+{
+    bool bWrapAround = ( NULL == pDlg );
+    if ( bWrapAround )
+        pDlg = pSrchDlg;
+    DBG_ASSERT( pDlg, "invalid search dialog" );
+    String sSearchText = pDlg->GetSearchText();
+    try
+    {
+        // select the words, which are equal to the search text of the search page
+        Reference < XController > xController = xFrame->getController();
+        if ( xController.is() )
+        {
+            // get document
+            Reference < XSearchable > xSearchable( xController->getModel(), UNO_QUERY );
+            if ( xSearchable.is() )
+            {
+                // create descriptor, set string and find all words
+                Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
+                Reference < XPropertySet > xPropSet( xSrchDesc, UNO_QUERY );
+                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchRegularExpression"),
+                                            makeAny( sal_Bool( sal_True ) ) );
+                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchWords"),
+                                            makeAny( sal_Bool( pDlg->IsOnlyWholeWords() != false ) ) );
+                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchCaseSensitive"),
+                                            makeAny( sal_Bool( pDlg->IsMarchCase() != false ) ) );
+                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("SearchBackwards"),
+                                            makeAny( sal_Bool( pDlg->IsSearchBackwards() != false ) ) );
+                String sSearchString = sfx2::PrepareSearchString( sSearchText, GetBreakIterator(), false );
+                xSrchDesc->setSearchString( sSearchString );
+                Reference< XInterface > xSelection;
+                Reference< XTextRange > xCursor = getCursor();
+
+                if ( xCursor.is() )
+                {
+                    if ( pDlg->IsSearchBackwards() )
+                        xCursor = xCursor->getStart();
+                    xSelection = xSearchable->findNext( xCursor, xSrchDesc );
+                }
+                else
+                    xSelection = xSearchable->findFirst( xSrchDesc );
+
+                // then select the found word
+                if ( xSelection.is() )
+                {
+                    Reference < XSelectionSupplier > xSelectionSup( xController, UNO_QUERY );
+                    if ( xSelectionSup.is() )
+                    {
+                        Any aAny;
+                        aAny <<= xSelection;
+                        xSelectionSup->select( aAny );
+                    }
+                }
+                else if ( pDlg->IsWrapAround() && !bWrapAround )
+                {
+                    Reference < text::XTextViewCursorSupplier > xCrsrSupp( xController, uno::UNO_QUERY );
+                    Reference < text::XTextViewCursor > xTVCrsr( xCrsrSupp->getViewCursor(), uno::UNO_QUERY );
+                    if ( xTVCrsr.is() )
+                    {
+                        Reference < text::XTextDocument > xDoc( xController->getModel(), uno::UNO_QUERY );
+                        Reference < text::XText > xText = xDoc->getText();
+                        if ( xText.is() )
+                        {
+                            if ( pDlg->IsSearchBackwards() )
+                                xTVCrsr->gotoRange( xText->getEnd(), sal_False );
+                            else
+                                xTVCrsr->gotoRange( xText->getStart(), sal_False );
+                            FindHdl( NULL );
+                        }
+                    }
+                }
+                else
+                {
+                    DBG_ASSERT( pSrchDlg, "no search dialog" );
+                    InfoBox aBox( pSrchDlg, SfxResId( RID_INFO_NOSEARCHTEXTFOUND ) );
+                    aBox.Execute();
+                    pSrchDlg->SetFocusOnEdit();
+                }
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
+    }
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, EMPTYARG )
+{
+    delete pSrchDlg;
+    pSrchDlg = NULL;
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 void SfxHelpTextWindow_Impl::Resize()
 {
     Size aWinSize = GetOutputSizePixel();
@@ -2281,22 +2431,6 @@ void SfxHelpTextWindow_Impl::Resize()
     aSize = aWinSize;
     aSize.Height() -= nToolBoxHeight;
     pTextWin->SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
-}
-
-// -----------------------------------------------------------------------
-
-bool isHandledKey( const KeyCode& _rKeyCode )
-{
-    bool bRet = false;
-    USHORT nCode = _rKeyCode.GetCode();
-
-    // the keys <CTRL><A> (select all), <CTRL><C> (copy) and <CTRL><P> (print)
-    // were handled in help
-    if ( _rKeyCode.IsMod1() &&
-         ( KEY_A == nCode || KEY_C == nCode || KEY_P == nCode ) )
-        bRet = true;
-
-    return bRet;
 }
 
 // -----------------------------------------------------------------------
@@ -2346,6 +2480,9 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.InsertItem( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ),
                 Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_BOOKMARKS : IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
             aMenu.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
+            aMenu.InsertItem( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ),
+                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_SEARCHDIALOG : IMG_HELP_TOOLBOX_SEARCHDIALOG ) ) );
+            aMenu.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_SELECTIONMODE, String( SfxResId( STR_HELP_MENU_TEXT_SELECTION_MODE ) ) );
             aMenu.SetHelpId( TBI_SELECTIONMODE, HID_HELP_TEXT_SELECTION_MODE );
@@ -2544,6 +2681,29 @@ void SfxHelpTextWindow_Impl::CloseFrame()
     }
 }
 
+// -----------------------------------------------------------------------
+
+void SfxHelpTextWindow_Impl::DoSearch()
+{
+    if ( !pSrchDlg )
+    {
+        // create the search dialog
+        pSrchDlg = new sfx2::SearchDialog( pTextWin, DEFINE_CONST_UNICODE("HelpSearchDialog") );
+        // set handler
+        pSrchDlg->SetFindHdl( LINK( this, SfxHelpTextWindow_Impl, FindHdl ) );
+        pSrchDlg->SetCloseHdl( LINK( this, SfxHelpTextWindow_Impl, CloseHdl ) );
+        // get selected text of the help page to set it as the search text
+        Reference< XTextRange > xCursor = getCursor();
+        if ( xCursor.is() )
+        {
+            String sText = xCursor->getString();
+            if ( sText.Len() > 0 )
+                pSrchDlg->SetSearchText( sText );
+        }
+        pSrchDlg->Show();
+    }
+}
+
 // class SfxHelpWindow_Impl ----------------------------------------------
 
 void SfxHelpWindow_Impl::Resize()
@@ -2589,8 +2749,6 @@ void SfxHelpWindow_Impl::Split()
     }
 
     InitSizes();
-
-//! pIndexWin->UpdateTabControl();
 }
 
 // -----------------------------------------------------------------------
@@ -2765,7 +2923,6 @@ void SfxHelpWindow_Impl::ShowStartPage()
         aArgs[0].Value <<= bReadOnly;
         if ( !IsWait() )
             EnterWait();
-//      ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
         xDisp->dispatch( aURL, aArgs );
     }
 }
@@ -2823,8 +2980,6 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
         {
             if ( !IsWait() )
                 EnterWait();
-
-//          ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
             xDisp->dispatch( aURL, Sequence < PropertyValue >() );
         }
     }
@@ -2993,6 +3148,7 @@ long SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     }
     return bHandled ? 1 : Window::PreNotify( rNEvt );
 }
+
 // -----------------------------------------------------------------------
 
 void SfxHelpWindow_Impl::setContainerWindow( Reference < ::com::sun::star::awt::XWindow > xWin )
@@ -3049,9 +3205,14 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
             break;
         }
 
+        case TBI_SEARCHDIALOG :
+        {
+            pTextWin->DoSearch();
+            break;
+        }
+
         case TBI_PRINT :
         case TBI_SOURCEVIEW :
-        case TBI_SEARCHDIALOG :
         case TBI_COPY :
         case TBI_SELECTIONMODE:
         {
