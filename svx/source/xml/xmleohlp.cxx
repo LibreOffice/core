@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: kz $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,16 +549,13 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     // make object known to the container
     // TODO/LATER: could be done a little bit more efficient!
     ::rtl::OUString aName( rObjName );
-    if( pClassId )
-    {
-        // If a class id is specifies, use it.
-        // TODO/LATER: it seems that passing a ClassID is strange
-        rContainer.CreateEmbeddedObject( pClassId->GetByteSequence(), aName );
-    }
-    else
-    {
-        rContainer.GetEmbeddedObject( aName );
-    }
+
+    // TODO/LATER: The provided pClassId is ignored for now.
+    //             The stream contains OLE storage internally and this storage already has a class id specifying the
+    //             server that was used to create the object. pClassId could be used to specify the server that should
+    //             be used for the next opening, but this information seems to be out of the file format responsibility
+    //             area.
+    rContainer.GetEmbeddedObject( aName );
 
     return sal_True;
 }
