@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:18:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,17 +158,21 @@ struct ExcelChartData
 class OutlineDataBuffer
 {
 private:
-    OutlineBuffer*                      pColOutlineBuff;
-    OutlineBuffer*                      pRowOutlineBuff;
-    ColRowSettings*                     pColRowBuff;
+    typedef ::std::auto_ptr< OutlineBuffer >    OutlineBufferPtr;
+    typedef ::std::auto_ptr< ColRowSettings >   ColRowSettingsPtr;
+
+    OutlineBufferPtr            pColOutlineBuff;
+    OutlineBufferPtr            pRowOutlineBuff;
+    ColRowSettingsPtr           pColRowBuff;
     SCTAB nTab;
 
 public:
     OutlineDataBuffer(RootData& rRootData, SCTAB nScTab);
+    ~OutlineDataBuffer();
 
-    inline ColRowSettings* GetColRowBuff() const { return pColRowBuff ; }
-    inline OutlineBuffer* GetColOutline()  const { return pColOutlineBuff; }
-    inline OutlineBuffer* GetRowOutline()  const { return pRowOutlineBuff; }
+    inline ColRowSettings* GetColRowBuff() const { return pColRowBuff.get(); }
+    inline OutlineBuffer* GetColOutline()  const { return pColOutlineBuff.get(); }
+    inline OutlineBuffer* GetRowOutline()  const { return pRowOutlineBuff.get(); }
     void Apply(ScDocument* pD);
 };
 
