@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: fme $ $Date: 2002-08-23 08:43:19 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:41:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,25 +62,22 @@
 
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=ctrl
 TARGETSTAT=_ctrl
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"!="DOS"
-SRCFILES=	ctrltool.src		\
+SRS1NAME=$(TARGET)
+SRC1FILES=	ctrltool.src		\
             ctrlbox.src			\
             calendar.src		\
             filectrl.src
-.ENDIF
 
 EXCEPTIONSFILES=\
             $(SLO)$/filectrl2.obj	\
