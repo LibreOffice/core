@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-29 20:25:25 $
+ *  last change: $Author: tl $ $Date: 2001-03-30 15:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,10 @@
 #ifndef _SVX_XEXCH_HXX
 #include <svx/xexch.hxx>
 #endif
+#ifndef _SVX_CLIPFMTITEM_HXX
+#include <svx/clipfmtitem.hxx>
+#endif
+
 #ifndef _MIECLIP_HXX
 #include <sfx2/mieclip.hxx>
 #endif
@@ -2611,6 +2615,77 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh,
     return nRet;
 }
 
+
+void SwTransferable::FillClipFmtItem( SwWrtShell& rSh,
+                                const TransferableDataHelper& rData,
+                                SvxClipboardFmtItem & rToFill )
+{
+    USHORT nDest = SwTransferable::GetSotDestination( rSh );
+    // Vorhandene Formate in die ListBox eintragen
+    if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_SVXB, nDest ))
+        rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_SVXB );
+
+/*
+    if( pClipboard )
+    {
+        if( pClipboard->GetBufferType() & TRNSFR_DOCUMENT )
+            nResId = STR_PRIVATETEXT;
+        else if( pClipboard->GetBufferType() & TRNSFR_GRAPHIC )
+            nResId = STR_PRIVATEGRAPHIC;
+        else if( pClipboard->GetBufferType() == TRNSFR_OLE )
+            nResId = STR_PRIVATEOLE;
+
+        if( nResId )
+        {
+            nPrivateFmt = SOT_FORMATSTR_ID_EMBED_SOURCE;
+            if( STR_PRIVATEOLE == nResId || STR_PRIVATEGRAPHIC == nResId )
+                // fuer den dummen Dialog (privates Format anzeigen)
+                rTypeLst.Insert( SvDataType( nPrivateFmt, MEDIUM_STORAGE ), 0 );
+
+        }
+    }
+    else
+*/
+    {
+        if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_EMBED_SOURCE, nDest ))
+            rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
+        if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_LINK_SOURCE, nDest ))
+            rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_LINK_SOURCE );
+    }
+
+#ifdef DDE_AVAILABLE
+
+    if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_LINK, nDest ))
+        rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_LINK, SW_RES(STR_DDEFORMAT) );
+
+#endif
+
+    static USHORT aIds[] = {
+            SOT_FORMATSTR_ID_HTML,
+            SOT_FORMATSTR_ID_HTML_SIMPLE,
+            FORMAT_RTF,
+            FORMAT_STRING,
+            SOT_FORMATSTR_ID_SONLK,
+            SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK,
+            SOT_FORMATSTR_ID_DRAWING,
+            SOT_FORMATSTR_ID_SVXB,
+            FORMAT_GDIMETAFILE,
+            FORMAT_BITMAP,
+            SOT_FORMATSTR_ID_SVIM,
+            0 };
+
+    for( USHORT* pIds = aIds; *pIds; ++pIds )
+        if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
+        {
+            String sStr;
+            switch( *pIds )
+            {
+            case FORMAT_STRING: sStr = SW_RES( STR_TEXTFORMAT );    break;
+            case FORMAT_RTF:    sStr = SW_RES( STR_RTFFORMAT );     break;
+            }
+            rToFill.AddClipbrdFormat( *pIds, sStr );
+        }
+}
 
 void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-23 15:39:59 $
+ *  last change: $Author: tl $ $Date: 2001-03-30 15:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ class SwNode;
 class SwTextBlocks;
 class SwWrtShell;
 class Reader;
+class SvxClipboardFmtItem;
 
 enum TransferBufferType
 {
@@ -218,6 +219,9 @@ public:
     static int PasteFormat( SwWrtShell& rSh, TransferableDataHelper& rData,
                              ULONG nFormat );
 
+    static void FillClipFmtItem( SwWrtShell& rSh,
+                                const TransferableDataHelper& rData,
+                                SvxClipboardFmtItem & rToFill );
 
     // Interfaces for Drag & Drop
     void StartDrag( Window* pWin, const Point& rPos );
