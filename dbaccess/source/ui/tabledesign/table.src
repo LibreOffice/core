@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-14 21:41:58 $
+ *  last change: $Author: fs $ $Date: 2001-06-22 10:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,7 +958,6 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
         {
             Identifier = SID_INDEXDESIGN ;
             HelpId = SID_INDEXDESIGN ;
-            ItemBitmap = Bitmap { File = "index_slot_sc.bmp"; };
             MID_INDEXDESIGN
         };
         ToolBoxItem
