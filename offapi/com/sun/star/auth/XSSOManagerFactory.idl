@@ -68,6 +68,8 @@ module com { module sun { module star { module auth {
 
 /** Factory for creating an SSO Manager supporting the user's configured
     security mechanism
+
+    @since #107627#
  */
 
 interface XSSOManagerFactory : ::com::sun::star::uno::XInterface

@@ -80,6 +80,8 @@ module com { module sun { module star { module auth {
 
 /** supports the creation of security contexts for both
     the initiator/source side and the acceptor/target side.
+
+    @since #107627#
  */
 interface XSSOManager : ::com::sun::star::uno::XInterface
 {

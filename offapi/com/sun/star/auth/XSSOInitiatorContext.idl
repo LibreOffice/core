@@ -69,6 +69,8 @@ module com { module sun { module star { module auth {
 /** represents an initiator side security context.
     <P>This context may be used to initialise authetication tokens to send to
     an acceptor and to authenticate any token sent back in response.
+
+    @since #107627#
  */
 interface XSSOInitiatorContext : ::com::sun::star::auth::XSSOContext
 {
