@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-10 13:53:36 $
+ *  last change: $Author: pl $ $Date: 2002-09-10 17:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4264,6 +4264,9 @@ void PDFWriterImpl::updateGraphicsState()
         }
         if( ! rNewClip.IsEmpty() && ! rNewClip.IsNull() )
         {
+            getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
+            m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
+
             aLine.append( "q " );
             if( rNewClip.HasPolyPolygon() )
             {
@@ -4286,11 +4289,16 @@ void PDFWriterImpl::updateGraphicsState()
                     }
                     else
                         aLine.append( ' ' );
-            }
+                }
                 rNewClip.EndEnumRects( aHandle );
                 aLine.append( "W* n\r\n" );
             }
         }
+    }
+
+    if( m_aCurrentPDFState.m_aMapMode != rNewState.m_aMapMode )
+    {
+        getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
     }
 
     if( m_aCurrentPDFState.m_aFont != rNewState.m_aFont )
@@ -4302,11 +4310,6 @@ void PDFWriterImpl::updateGraphicsState()
     if( m_aCurrentPDFState.m_nLayoutMode != rNewState.m_nLayoutMode )
     {
         getReferenceDevice()->SetLayoutMode( rNewState.m_nLayoutMode );
-    }
-
-    if( m_aCurrentPDFState.m_aMapMode != rNewState.m_aMapMode )
-    {
-        getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
     }
 
     if( m_aCurrentPDFState.m_aLineColor != rNewState.m_aLineColor &&
