@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:04:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1370,15 +1370,15 @@ sal_Bool PPTWriter::ImplCreateMaster( sal_uInt32 nPageNum )
 
     if ( aBuExMasterStream.Tell() )
     {
-        ppt::ExContainer aProgTags( *mpStrm, EPP_ProgTags );
+        EscherExContainer aProgTags( *mpStrm, EPP_ProgTags );
         // v10
 
         // v9
         if ( aBuExMasterStream.Tell() )
         {
-            ppt::ExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
+            EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
             {
-                ppt::ExAtom( *mpStrm, EPP_CString );
+                EscherExAtom( *mpStrm, EPP_CString );
                *mpStrm << (sal_uInt32)0x5f005f << (sal_uInt32)0x50005f
                        << (sal_uInt32)0x540050 << (sal_uInt16)0x39;
             }
@@ -1734,10 +1734,10 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
         sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
         if ( nmsofbtAnimGroupSize )
         {
-            ppt::ExContainer aProgTags      ( *mpStrm, EPP_ProgTags );
-            ppt::ExContainer aProgBinaryTag ( *mpStrm, EPP_ProgBinaryTag );
+            EscherExContainer aProgTags     ( *mpStrm, EPP_ProgTags );
+            EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
             {
-                ppt::ExAtom aCString( *mpStrm, EPP_CString );
+                EscherExAtom aCString( *mpStrm, EPP_CString );
                 *mpStrm << (sal_uInt32)0x5f005f
                         << (sal_uInt32)0x50005f
                         << (sal_uInt32)0x540050
@@ -1745,21 +1745,21 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
                         << (sal_uInt16)0x30;
             }
             {
-                ppt::ExAtom aBinaryTagData( *mpStrm, EPP_BinaryTagData );
+                EscherExAtom aBinaryTagData( *mpStrm, EPP_BinaryTagData );
                 {
                     {
-                        ppt::ExAtom aMagic2( *mpStrm, 0x2eeb );
+                        EscherExAtom aMagic2( *mpStrm, 0x2eeb );
                         *mpStrm << (sal_uInt32)0x01c45df9
                                 << (sal_uInt32)0xe1471b30;
                     }
                     {
-                        ppt::ExAtom aMagic( *mpStrm, 0x2b00 );
+                        EscherExAtom aMagic( *mpStrm, 0x2b00 );
                         *mpStrm << (sal_uInt32)0;
                     }
                 }
                 mpStrm->Write( amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell() );
                 {
-                    ppt::ExContainer aMagic2( *mpStrm, 0x2b02 );
+                    EscherExContainer aMagic2( *mpStrm, 0x2b02 );
                 }
             }
         }
