@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:29:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,6 +525,16 @@ Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
     else QUERYINT( document::XLinkTargetSupplier );
     else QUERYINT( drawing::XShapeCombiner );
     else QUERYINT( drawing::XShapeBinder );
+    else if( rType == ITYPE( XAnimationNodeSupplier ) )
+    {
+        if( mpModel && mpModel->IsImpressDocument() )
+        {
+            const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
+
+            if( ePageKind == PK_STANDARD )
+                return makeAny( Reference< XAnimationNodeSupplier >( this ) );
+        }
+    }
     else
         return SvxDrawPage::queryInterface( rType );
 
@@ -1657,6 +1667,20 @@ void SdGenericDrawPage::disposing() throw()
     SvxFmDrawPage::disposing();
 }
 
+// XAnimationNodeSupplier
+Reference< XAnimationNode > SAL_CALL SdGenericDrawPage::getAnimationNode() throw (uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pPage == NULL )
+        throw lang::DisposedException();
+
+    SdPage *pSdPage = static_cast<SdPage*>(pPage);
+
+
+    return pSdPage->getAnimationNode();
+}
+
 //========================================================================
 // SdPageLinkTargets
 //========================================================================
@@ -1849,11 +1873,6 @@ Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
             if( ePageKind != PK_HANDOUT && rType == ITYPE( presentation::XPresentationPage ) )
             {
                 return makeAny( Reference< presentation::XPresentationPage >( this ) );
-            }
-
-            if( ePageKind == PK_STANDARD && rType == ITYPE( XAnimationNodeSupplier ) )
-            {
-                return makeAny( Reference< XAnimationNodeSupplier >( this ) );
             }
         }
     }
@@ -2386,20 +2405,6 @@ void SdDrawPage::getBackground( Any& rValue ) throw()
     }
 }
 
-// XAnimationNodeSupplier
-Reference< XAnimationNode > SAL_CALL SdDrawPage::getAnimationNode() throw (uno::RuntimeException)
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if( pPage == NULL )
-        throw lang::DisposedException();
-
-    SdPage *pSdPage = static_cast<SdPage*>(pPage);
-
-
-    return pSdPage->getAnimationNode();
-}
-
 //========================================================================
 // class SdMasterPage
 //========================================================================
@@ -2472,13 +2477,24 @@ uno::Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeE
 
     if( maTypeSequence.getLength() == 0 )
     {
-        sal_Bool bPresPage = mpModel->IsImpressDocument() && pPage && GetPage()->GetPageKind() != PK_HANDOUT;
+        const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PK_STANDARD;
+        sal_Bool bPresPage = mpModel->IsImpressDocument() && pPage && ePageKind != PK_HANDOUT;
 
         const uno::Sequence< uno::Type > aBaseTypes( SdGenericDrawPage::getTypes() );
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
 
-        const sal_Int32 nOwnTypes = bPresPage ? 9 : 8;      // !DANGER! Keep this updated!
+        sal_Int32 nOwnTypes = 8;        // !DANGER! Keep this updated!
+
+        if( bPresPage )
+        {
+            nOwnTypes++;                    // presentation::XPresentationPage
+
+            if( ePageKind == PK_STANDARD )
+            {
+                nOwnTypes++;                // XAnimationNodeSupplier
+            }
+        }
 
         maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
@@ -2494,6 +2510,9 @@ uno::Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeE
 
         if( bPresPage )
             *pTypes++ = ITYPE(presentation::XPresentationPage);
+
+        if( bPresPage && ePageKind == PK_STANDARD )
+            *pTypes++ = ITYPE(XAnimationNodeSupplier);
 
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
             *pTypes++ = *pBaseTypes++;
