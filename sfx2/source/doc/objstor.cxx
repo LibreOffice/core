@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:08:17 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1210,7 +1210,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             // When the new medium ( rMedium ) has the same name as the current one,
             // we need to call DoHandsOff() so Commit() can overwrite the old version
-            if ( bOk && pMedium && ( rMedium.GetName().EqualsIgnoreCaseAscii( pMedium->GetName() ) ) )
+            if ( bOk && pMedium && ( rMedium.GetName().EqualsIgnoreCaseAscii( pMedium->GetName() ) )
+              && rMedium.GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL )
                 DoHandsOff();
         }
 
@@ -1951,7 +1952,8 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
     SfxMedium *pActMed = GetMedium();
     const INetURLObject aActName(pActMed->GetName());
 
-    if ( aURL == aActName )
+    if ( aURL == aActName
+        && aURL != INetURLObject( OUString::createFromAscii( "private:stream" ) ) )
     {
         if ( IsReadOnly() )
         {
@@ -2135,7 +2137,12 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         SetError( pNewFile->GetErrorCode() );
 
         // notify the document that saving was done successfully
-        if ( !bCopyTo )
+        if ( bCopyTo )
+        {
+            if ( IsHandsOff() )
+                bOk = DoSaveCompleted( pMedium );
+        }
+        else
         {
             // Muss !!!
             if ( bToOwnFormat )
