@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdglue.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:54:46 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,18 +72,19 @@
 
 void SdrGluePoint::SetReallyAbsolute(FASTBOOL bOn, const SdrObject& rObj)
 {
-    if (bReallyAbsolute!=bOn) {
-       if (bOn) {
+    if ( bReallyAbsolute != bOn )
+    {
+       if ( bOn )
+       {
            aPos=GetAbsolutePos(rObj);
            bReallyAbsolute=bOn;
-       } else {
+       }
+       else
+       {
            bReallyAbsolute=bOn;
            Point aPt(aPos);
            SetAbsolutePos(aPt,rObj);
        }
-    } else {
-        DBG_ASSERT(bOn,"SdrGluePoint::SetReallyAbsolute(FALSE) mehrfach gerufen");
-        DBG_ASSERT(!bOn,"SdrGluePoint::SetReallyAbsolute(TRUE) mehrfach gerufen");
     }
 }
 
