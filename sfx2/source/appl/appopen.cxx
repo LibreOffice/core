@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 10:54:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,7 +935,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     if ( !pTemplNameItem && !pTemplFileNameItem )
     {
         Window* pTopWin = GetTopWindow();
-        SvtDocumentTemplateDialog* pDocTemplDlg = new SvtDocumentTemplateDialog( DIALOG_NO_PARENT );
+        SvtDocumentTemplateDialog* pDocTemplDlg = new SvtDocumentTemplateDialog( NULL );
         int nRet = pDocTemplDlg->Execute();
         sal_Bool bNewWin = sal_False;
         if ( nRet == RET_OK )
