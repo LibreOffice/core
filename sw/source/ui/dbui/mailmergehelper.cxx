@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:13:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,6 +503,20 @@ String SwAddressPreview::FillData(
     sNotAssigned.Insert('<', 0);
     sNotAssigned += '>';
 
+    sal_Bool bIncludeCountry = rConfigItem.IsIncludeCountry();
+    const ::rtl::OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
+    bool bSpecialReplacementForCountry = (!bIncludeCountry || rExcludeCountry.getLength());
+    String sCountryColumn;
+    if( bSpecialReplacementForCountry )
+    {
+        sCountryColumn = rDefHeaders.GetString(MM_PART_COUNTRY);
+        Sequence< ::rtl::OUString> aAssignment =
+                        rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
+        const ::rtl::OUString* pAssignment = aAssignment.getConstArray();
+        if(aAssignment.getLength() > MM_PART_COUNTRY && aAssignment[MM_PART_COUNTRY].getLength())
+            sCountryColumn = aAssignment[MM_PART_COUNTRY];
+    }
+
     SwAddressIterator aIter(sAddress);
     sAddress.Erase();
     while(aIter.HasMore())
@@ -536,7 +550,18 @@ String SwAddressPreview::FillData(
                 if(xColumn.is())
                 {
                     ::rtl::OUString sReplace = xColumn->getString();
-                    aItem.sText = sReplace;
+
+                    if( bSpecialReplacementForCountry && sCountryColumn == sConvertedColumn )
+                    {
+                        if( rExcludeCountry.getLength() && sReplace != rExcludeCountry )
+                            aItem.sText = sReplace;
+                        else
+                            aItem.sText.Erase();
+                    }
+                    else
+                    {
+                        aItem.sText = sReplace;
+                    }
                 }
             }
             else
