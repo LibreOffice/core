@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-18 07:22:41 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_FONTRELIEF_HPP_
+#include <com/sun/star/awt/FontRelief.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTEMPHASISMARK_HPP_
+#include <com/sun/star/awt/FontEmphasisMark.hpp>
+#endif
 
 #ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
@@ -140,6 +146,7 @@ sal_Int32 findPos(const ::rtl::OUString& aStr, const StringSequence& rList)
 namespace frm
 {
 //.........................................................................
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -185,6 +192,8 @@ OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxF
                     ,m_bPrintable(sal_True)
                     ,m_bAlwaysShowCursor(sal_False)
                     ,m_bDisplaySynchron(sal_True)
+                    ,m_nFontRelief(awt::FontRelief::NONE)
+                    ,m_nFontEmphasis(FontEmphasisMark::NONE)
 {
     DBG_CTOR(OGridControlModel,NULL);
 
@@ -421,7 +430,7 @@ void OGridControlModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_AGGREGATION_PROPERTY_HELPER(30, m_xAggregateSet)
+    BEGIN_AGGREGATION_PROPERTY_HELPER(33, m_xAggregateSet)
         DECL_PROP1(NAME,                ::rtl::OUString,    BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(TAG,                 ::rtl::OUString,    BOUND);
@@ -445,6 +454,9 @@ void OGridControlModel::fillProperties(
         DECL_PROP1(FONT_SLANT,          sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_UNDERLINE,      sal_Int16,          MAYBEDEFAULT);
         DECL_BOOL_PROP1(FONT_WORDLINEMODE,                  MAYBEDEFAULT);
+        DECL_PROP3(TEXTLINECOLOR,       sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP2(FONTEMPHASISMARK,    sal_Int16,          BOUND, MAYBEDEFAULT);
+        DECL_PROP2(FONTRELIEF,          sal_Int16,          BOUND, MAYBEDEFAULT);
         DECL_PROP1(FONT_STRIKEOUT,      sal_Int16,          MAYBEDEFAULT);
         DECL_PROP2(RECORDMARKER,        sal_Bool,           BOUND, MAYBEDEFAULT );
         DECL_PROP2(PRINTABLE,           sal_Bool,           BOUND, MAYBEDEFAULT );
@@ -460,6 +472,15 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_TEXTLINECOLOR:
+            rValue = m_aTextLineColor;
+            break;
+        case PROPERTY_ID_FONTEMPHASISMARK:
+            rValue <<= m_nFontEmphasis;
+            break;
+        case PROPERTY_ID_FONTRELIEF:
+            rValue <<= m_nFontRelief;
+            break;
         case PROPERTY_ID_HELPTEXT:
             rValue <<= m_sHelpText;
             break;
@@ -550,6 +571,15 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
     sal_Bool bModified(sal_False);
     switch (nHandle)
     {
+        case PROPERTY_ID_TEXTLINECOLOR:
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTextLineColor, ::getCppuType((const sal_Int32*)NULL));
+            break;
+        case PROPERTY_ID_FONTEMPHASISMARK:
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nFontEmphasis);
+            break;
+        case PROPERTY_ID_FONTRELIEF:
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nFontRelief);
+            break;
         case PROPERTY_ID_HELPTEXT:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_sHelpText);
             break;
@@ -628,7 +658,7 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aFont.Weight);
             break;
         case PROPERTY_ID_FONT_SLANT:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aFont.Slant);
+            bModified = tryPropertyValueEnum(rConvertedValue, rOldValue, rValue, m_aFont.Slant);
             break;
         case PROPERTY_ID_FONT_UNDERLINE:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, (sal_Int16)m_aFont.Underline);
@@ -650,6 +680,15 @@ void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_TEXTLINECOLOR:
+            m_aTextLineColor = rValue;
+            break;
+        case PROPERTY_ID_FONTEMPHASISMARK:
+            rValue >>= m_nFontEmphasis;
+            break;
+        case PROPERTY_ID_FONTRELIEF:
+            rValue >>= m_nFontRelief;
+            break;
         case PROPERTY_ID_HELPTEXT:
             rValue >>= m_sHelpText;
             break;
@@ -761,10 +800,8 @@ void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
 //------------------------------------------------------------------------------
 IMPL_LINK( OGridControlModel, OnFontChanged, void*, EMPTYARG )
 {
-    Any aOldVal;
-    aOldVal >>= m_aOldFont;
-    Any aNewVal;
-    aNewVal >>= m_aFont;
+    Any aOldVal; aOldVal <<= m_aOldFont;
+    Any aNewVal; aNewVal <<= m_aFont;
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         m_nFontEvent = 0;
@@ -781,6 +818,18 @@ PropertyState OGridControlModel::getPropertyStateByHandle(sal_Int32 nHandle)
     PropertyState eState(PropertyState_DIRECT_VALUE);
     switch (nHandle)
     {
+        case PROPERTY_ID_TEXTLINECOLOR:
+            if (!m_aTextLineColor.hasValue())
+                eState = PropertyState_DEFAULT_VALUE;
+            break;
+        case PROPERTY_ID_FONTEMPHASISMARK:
+            if (FontEmphasisMark::NONE == m_nFontEmphasis)
+                eState = PropertyState_DEFAULT_VALUE;
+            break;
+        case PROPERTY_ID_FONTRELIEF:
+            if (awt::FontRelief::NONE == m_nFontRelief)
+                eState = PropertyState_DEFAULT_VALUE;
+            break;
         case PROPERTY_ID_HELPURL:
             if (m_sHelpURL.getLength() == 0)
                 eState = PropertyState_DEFAULT_VALUE;
@@ -876,6 +925,12 @@ void OGridControlModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 {
     switch (nHandle)
     {
+        case PROPERTY_ID_FONTEMPHASISMARK:
+            setFastPropertyValue(nHandle, makeAny(FontEmphasisMark::NONE));
+            break;
+        case PROPERTY_ID_FONTRELIEF:
+            setFastPropertyValue(nHandle, makeAny(awt::FontRelief::NONE));
+            break;
         case PROPERTY_ID_ALWAYSSHOWCURSOR:
             setFastPropertyValue(nHandle, makeBoolAny(sal_False));
             break;
@@ -891,6 +946,7 @@ void OGridControlModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
         case PROPERTY_ID_BACKGROUNDCOLOR:
         case PROPERTY_ID_ROWHEIGHT:
         case PROPERTY_ID_CURSORCOLOR:
+        case PROPERTY_ID_TEXTLINECOLOR:
             setFastPropertyValue(nHandle, Any());
             break;
         case PROPERTY_ID_HELPURL:
@@ -925,35 +981,50 @@ void OGridControlModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 //------------------------------------------------------------------------------
 Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle )
 {
+    Any aReturn;
     switch (nHandle)
     {
+        case PROPERTY_ID_FONTEMPHASISMARK:
+            aReturn <<= FontEmphasisMark::NONE;
+            break;
+        case PROPERTY_ID_FONTRELIEF:
+            aReturn <<= awt::FontRelief::NONE;
+            break;
         case PROPERTY_ID_PRINTABLE:
         case PROPERTY_ID_HASNAVIGATION:
         case PROPERTY_ID_RECORDMARKER:
-            return makeBoolAny(sal_True);
-        case PROPERTY_ID_TABSTOP:
-        case PROPERTY_ID_TEXTCOLOR:
-        case PROPERTY_ID_BACKGROUNDCOLOR:
-        case PROPERTY_ID_ROWHEIGHT:
-            return Any();
+            aReturn = makeBoolAny(sal_True);
+            break;
+        case PROPERTY_ID_FONT_WORDLINEMODE:
+            aReturn = makeBoolAny(sal_False);
+            break;
         case PROPERTY_ID_FONT_NAME:
         case PROPERTY_ID_FONT_STYLENAME:
-            return makeAny(::rtl::OUString());
+            aReturn <<= ::rtl::OUString();
+            break;
         case PROPERTY_ID_FONT_FAMILY:
         case PROPERTY_ID_FONT_CHARSET:
         case PROPERTY_ID_FONT_SLANT:
         case PROPERTY_ID_FONT_UNDERLINE:
         case PROPERTY_ID_FONT_STRIKEOUT:
-            return makeAny((sal_Int16)0);
+            aReturn <<= (sal_Int16)0;
+            break;
         case PROPERTY_ID_FONT_HEIGHT:
-            return makeAny((float)0);
         case PROPERTY_ID_FONT_WEIGHT:
-            return makeAny((float)0);
-        case PROPERTY_ID_FONT_WORDLINEMODE:
-            return ::cppu::bool2any(sal_False);
+            aReturn <<= (float)0;
+            break;
+        case PROPERTY_ID_TABSTOP:
+        case PROPERTY_ID_TEXTCOLOR:
+        case PROPERTY_ID_BACKGROUNDCOLOR:
+        case PROPERTY_ID_ROWHEIGHT:
+        case PROPERTY_ID_CURSORCOLOR:
+        case PROPERTY_ID_TEXTLINECOLOR:
+            // void
+            break;
         default:
-            return OControlModel::getPropertyDefaultByHandle(nHandle);
+            aReturn = OControlModel::getPropertyDefaultByHandle(nHandle);
     }
+    return aReturn;
 }
 
 // XLoadListener
@@ -1169,7 +1240,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
         _rxOutStream->writeShort( m_aFont.Slant );
         _rxOutStream->writeShort( m_aFont.Underline );
         _rxOutStream->writeShort( m_aFont.Strikeout );
-        _rxOutStream->writeShort( m_aFont.Orientation * 10 );
+        _rxOutStream->writeShort( sal_Int16(m_aFont.Orientation * 10) );
         _rxOutStream->writeBoolean( m_aFont.Kerning );
         _rxOutStream->writeBoolean( m_aFont.WordLineMode );
 
@@ -1297,20 +1368,20 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
 
     if (nAnyMask & FONTATTRIBS)
     {
-        m_aFont.Weight = VCLUnoHelper::ConvertFontWeight( _rxInStream->readShort() );
+        m_aFont.Weight = (float)VCLUnoHelper::ConvertFontWeight( _rxInStream->readShort() );
 
         m_aFont.Slant = (FontSlant)_rxInStream->readShort();
         m_aFont.Underline = _rxInStream->readShort();
         m_aFont.Strikeout = _rxInStream->readShort();
-        m_aFont.Orientation = ( (double)_rxInStream->readShort() ) / 10;
+        m_aFont.Orientation = ( (float)_rxInStream->readShort() ) / 10;
         m_aFont.Kerning = _rxInStream->readBoolean();
         m_aFont.WordLineMode = _rxInStream->readBoolean();
     }
     if (nAnyMask & FONTSIZE)
     {
-        m_aFont.Width = _rxInStream->readLong();
-        m_aFont.Height = _rxInStream->readLong();
-        m_aFont.CharacterWidth = VCLUnoHelper::ConvertFontWidth( _rxInStream->readShort() );
+        m_aFont.Width = (sal_Int16)_rxInStream->readLong();
+        m_aFont.Height = (sal_Int16)_rxInStream->readLong();
+        m_aFont.CharacterWidth = (float)VCLUnoHelper::ConvertFontWidth( _rxInStream->readShort() );
     }
     if (nAnyMask & FONTTYPE)
     {
