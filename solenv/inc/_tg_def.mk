@@ -43,7 +43,7 @@ EXPORT1_PROTECT=$(TMP)$/$(DEF1UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB1NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 
 .IF "$(APP1HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -66,8 +66,8 @@ $(DEF1TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE1)"=="O"
 .ENDIF				# "$(DEFLIB1NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs$/$(OUTPATH)
+.ENDIF			# "$(BSCLIENT)"==""
+#	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL1TARGET) 								 >$@
@@ -93,7 +93,7 @@ $(DEF1TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT1_PROTECT) $(RM) $(SHL1TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE1)"=="O"
 #
@@ -103,7 +103,7 @@ $(DEF1TARGETN) .PHONY : \
     +$(TMP)$/$(DEF1UNIQE:b).bat && $(RM) $(TMP)$/$(DEF1UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE1)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 .ENDIF				# "$(DEFLIB1NAME)"!=""
 .IF "$(DEF1EXPORT1)"!=""
     @echo $(DEF1EXPORT1)										>>$@
@@ -229,7 +229,7 @@ EXPORT2_PROTECT=$(TMP)$/$(DEF2UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB2NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 
 .IF "$(APP2HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -252,8 +252,8 @@ $(DEF2TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE2)"=="O"
 .ENDIF				# "$(DEFLIB2NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs$/$(OUTPATH)
+.ENDIF			# "$(BSCLIENT)"==""
+#	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL2TARGET) 								 >$@
@@ -279,7 +279,7 @@ $(DEF2TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT2_PROTECT) $(RM) $(SHL2TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE2)"=="O"
 #
@@ -289,7 +289,7 @@ $(DEF2TARGETN) .PHONY : \
     +$(TMP)$/$(DEF2UNIQE:b).bat && $(RM) $(TMP)$/$(DEF2UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE2)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 .ENDIF				# "$(DEFLIB2NAME)"!=""
 .IF "$(DEF2EXPORT1)"!=""
     @echo $(DEF2EXPORT1)										>>$@
@@ -415,7 +415,7 @@ EXPORT3_PROTECT=$(TMP)$/$(DEF3UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB3NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 
 .IF "$(APP3HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -438,8 +438,8 @@ $(DEF3TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE3)"=="O"
 .ENDIF				# "$(DEFLIB3NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs$/$(OUTPATH)
+.ENDIF			# "$(BSCLIENT)"==""
+#	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL3TARGET) 								 >$@
@@ -465,7 +465,7 @@ $(DEF3TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT3_PROTECT) $(RM) $(SHL3TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE3)"=="O"
 #
@@ -475,7 +475,7 @@ $(DEF3TARGETN) .PHONY : \
     +$(TMP)$/$(DEF3UNIQE:b).bat && $(RM) $(TMP)$/$(DEF3UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE3)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 .ENDIF				# "$(DEFLIB3NAME)"!=""
 .IF "$(DEF3EXPORT1)"!=""
     @echo $(DEF3EXPORT1)										>>$@
@@ -601,7 +601,7 @@ EXPORT4_PROTECT=$(TMP)$/$(DEF4UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB4NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 
 .IF "$(APP4HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -624,8 +624,8 @@ $(DEF4TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE4)"=="O"
 .ENDIF				# "$(DEFLIB4NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs$/$(OUTPATH)
+.ENDIF			# "$(BSCLIENT)"==""
+#	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL4TARGET) 								 >$@
@@ -651,7 +651,7 @@ $(DEF4TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT4_PROTECT) $(RM) $(SHL4TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE4)"=="O"
 #
@@ -661,7 +661,7 @@ $(DEF4TARGETN) .PHONY : \
     +$(TMP)$/$(DEF4UNIQE:b).bat && $(RM) $(TMP)$/$(DEF4UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE4)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 .ENDIF				# "$(DEFLIB4NAME)"!=""
 .IF "$(DEF4EXPORT1)"!=""
     @echo $(DEF4EXPORT1)										>>$@
@@ -787,7 +787,7 @@ EXPORT5_PROTECT=$(TMP)$/$(DEF5UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB5NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 
 .IF "$(APP5HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -810,8 +810,8 @@ $(DEF5TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE5)"=="O"
 .ENDIF				# "$(DEFLIB5NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs$/$(OUTPATH)
+.ENDIF			# "$(BSCLIENT)"==""
+#	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL5TARGET) 								 >$@
@@ -837,7 +837,7 @@ $(DEF5TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT5_PROTECT) $(RM) $(SHL5TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE5)"=="O"
 #
@@ -847,7 +847,7 @@ $(DEF5TARGETN) .PHONY : \
     +$(TMP)$/$(DEF5UNIQE:b).bat && $(RM) $(TMP)$/$(DEF5UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE5)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 .ENDIF				# "$(DEFLIB5NAME)"!=""
 .IF "$(DEF5EXPORT1)"!=""
     @echo $(DEF5EXPORT1)										>>$@
@@ -973,7 +973,7 @@ EXPORT6_PROTECT=$(TMP)$/$(DEF6UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB6NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 
 .IF "$(APP6HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -996,8 +996,8 @@ $(DEF6TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE6)"=="O"
 .ENDIF				# "$(DEFLIB6NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs$/$(OUTPATH)
+.ENDIF			# "$(BSCLIENT)"==""
+#	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL6TARGET) 								 >$@
@@ -1023,7 +1023,7 @@ $(DEF6TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT6_PROTECT) $(RM) $(SHL6TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE6)"=="O"
 #
@@ -1033,7 +1033,7 @@ $(DEF6TARGETN) .PHONY : \
     +$(TMP)$/$(DEF6UNIQE:b).bat && $(RM) $(TMP)$/$(DEF6UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE6)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 .ENDIF				# "$(DEFLIB6NAME)"!=""
 .IF "$(DEF6EXPORT1)"!=""
     @echo $(DEF6EXPORT1)										>>$@
@@ -1159,7 +1159,7 @@ EXPORT7_PROTECT=$(TMP)$/$(DEF7UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB7NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 
 .IF "$(APP7HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -1182,8 +1182,8 @@ $(DEF7TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE7)"=="O"
 .ENDIF				# "$(DEFLIB7NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs$/$(OUTPATH)
+.ENDIF			# "$(BSCLIENT)"==""
+#	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL7TARGET) 								 >$@
@@ -1209,7 +1209,7 @@ $(DEF7TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT7_PROTECT) $(RM) $(SHL7TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE7)"=="O"
 #
@@ -1219,7 +1219,7 @@ $(DEF7TARGETN) .PHONY : \
     +$(TMP)$/$(DEF7UNIQE:b).bat && $(RM) $(TMP)$/$(DEF7UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE7)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 .ENDIF				# "$(DEFLIB7NAME)"!=""
 .IF "$(DEF7EXPORT1)"!=""
     @echo $(DEF7EXPORT1)										>>$@
@@ -1345,7 +1345,7 @@ EXPORT8_PROTECT=$(TMP)$/$(DEF8UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB8NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 
 .IF "$(APP8HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -1368,8 +1368,8 @@ $(DEF8TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE8)"=="O"
 .ENDIF				# "$(DEFLIB8NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs$/$(OUTPATH)
+.ENDIF			# "$(BSCLIENT)"==""
+#	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL8TARGET) 								 >$@
@@ -1395,7 +1395,7 @@ $(DEF8TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT8_PROTECT) $(RM) $(SHL8TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE8)"=="O"
 #
@@ -1405,7 +1405,7 @@ $(DEF8TARGETN) .PHONY : \
     +$(TMP)$/$(DEF8UNIQE:b).bat && $(RM) $(TMP)$/$(DEF8UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE8)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 .ENDIF				# "$(DEFLIB8NAME)"!=""
 .IF "$(DEF8EXPORT1)"!=""
     @echo $(DEF8EXPORT1)										>>$@
@@ -1531,7 +1531,7 @@ EXPORT9_PROTECT=$(TMP)$/$(DEF9UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB9NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 
 .IF "$(APP9HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -1554,8 +1554,8 @@ $(DEF9TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE9)"=="O"
 .ENDIF				# "$(DEFLIB9NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs$/$(OUTPATH)
+.ENDIF			# "$(BSCLIENT)"==""
+#	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL9TARGET) 								 >$@
@@ -1581,7 +1581,7 @@ $(DEF9TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT9_PROTECT) $(RM) $(SHL9TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE9)"=="O"
 #
@@ -1591,7 +1591,7 @@ $(DEF9TARGETN) .PHONY : \
     +$(TMP)$/$(DEF9UNIQE:b).bat && $(RM) $(TMP)$/$(DEF9UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE9)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 .ENDIF				# "$(DEFLIB9NAME)"!=""
 .IF "$(DEF9EXPORT1)"!=""
     @echo $(DEF9EXPORT1)										>>$@
@@ -1717,7 +1717,7 @@ EXPORT10_PROTECT=$(TMP)$/$(DEF10UNIQE:b).bat &&
 
 .ENDIF			# "$(DEFLIB10NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 
 .IF "$(APP10HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
@@ -1740,8 +1740,8 @@ $(DEF10TARGETN) .PHONY : \
 .ENDIF			# "$(BUILD_DRIVE10)"=="O"
 .ENDIF				# "$(DEFLIB10NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
-    +-attrib -r defs$/$(OUTPATH)
+.ENDIF			# "$(BSCLIENT)"==""
+#	+-attrib -r defs$/$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL10TARGET) 								 >$@
@@ -1767,7 +1767,7 @@ $(DEF10TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +$(EXPORT10_PROTECT) $(RM) $(SHL10TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-.IF "$(BUILD_SOSL)"==""
+.IF "$(BSCLIENT)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(BUILD_DRIVE10)"=="O"
 #
@@ -1777,7 +1777,7 @@ $(DEF10TARGETN) .PHONY : \
     +$(TMP)$/$(DEF10UNIQE:b).bat && $(RM) $(TMP)$/$(DEF10UNIQE:b).bat
 .ENDIF			# "$(BUILD_DRIVE10)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
-.ENDIF			# "$(BUILD_SOSL)"==""
+.ENDIF			# "$(BSCLIENT)"==""
 .ENDIF				# "$(DEFLIB10NAME)"!=""
 .IF "$(DEF10EXPORT1)"!=""
     @echo $(DEF10EXPORT1)										>>$@
