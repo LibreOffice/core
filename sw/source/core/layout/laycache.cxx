@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:07:29 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                 for ( USHORT i = 0; i < rObjs.Count(); ++i )
                 {
                     SdrObject *pO = rObjs[i];
-                    if ( pO->IsWriterFlyFrame() )
+                    if ( pO->ISA(SwVirtFlyDrawObj) )
                     {
                         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                         if( pFly->Frm().Left() != WEIT_WECH &&
@@ -1024,7 +1024,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
         for ( USHORT i = 0; i < rObjs.Count(); ++i )  // check objects
         {
             SdrObject *pO = rObjs[i];
-            if ( pO->IsWriterFlyFrame() )  // a text frame?
+            if ( pO->ISA(SwVirtFlyDrawObj) )  // a text frame?
             {
                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                 if( pFly->Frm().Left() == WEIT_WECH && pFly->GetAnchor() &&
@@ -1089,7 +1089,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
         for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
             SdrObject* pO = rObjs[i];
-            if ( pO->IsWriterFlyFrame() )  // a text frame?
+            if ( pO->ISA(SwVirtFlyDrawObj) )  // a text frame?
             {
                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                 if( pFly->GetAnchor() &&
