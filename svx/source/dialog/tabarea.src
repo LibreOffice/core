@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:13:49 $
+ *  last change: $Author: os $ $Date: 2001-03-16 12:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4025,10 +4025,10 @@ TabPage RID_SVXPAGE_COLOR
         DDExtraWidth = TRUE ;
     };
 
-    GroupBox GRP_COLORTABLE
+    FixedLine GRP_COLORTABLE
     {
         Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 106 , 136 ) ;
+        Size = MAP_APPFONT ( 106 , 8 ) ;
         Text = "Farbtabelle" ;
         Text [ ENGLISH ] = "Colortable" ;
         Text [ norwegian ] = "Fargetabell" ;
@@ -4376,10 +4376,10 @@ TabPage RID_SVXPAGE_COLOR
         < " " ; Default ; > ;
     };
     };
-    GroupBox GRP_PREVIEW
+    FixedLine GRP_PREVIEW
     {
         Pos = MAP_APPFONT ( 119 , 99  ) ;
-        Size = MAP_APPFONT ( 80 , 80 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Preview" ;
         Text [ norwegian ] = "Preview" ;
@@ -4404,33 +4404,12 @@ TabPage RID_SVXPAGE_COLOR
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GRP_COLORMODEL
+    FixedLine GRP_COLORMODEL
     {
         Pos = MAP_APPFONT ( 119 , 3  ) ;
-        Size = MAP_APPFONT ( 80 , 93 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "Farbmodell" ;
-        Text [ ENGLISH ] = "Colormodel" ;
-        Text [ norwegian ] = "Fargemodell" ;
-        Text [ italian ] = "Modello colore" ;
-        Text [ portuguese_brazilian ] = "Modelo de cor" ;
-        Text [ portuguese ] = "Modelo de cor" ;
-        Text [ finnish ] = "Värimalli" ;
-        Text [ danish ] = "Farvemodel" ;
-        Text [ french ] = "Modèle" ;
-        Text [ swedish ] = "Färgmodell" ;
-        Text [ dutch ] = "Kleurmodel" ;
-        Text [ spanish ] = "Modelo color" ;
-        Text [ english_us ] = "Color sample" ;
-        Text[ chinese_simplified ] = "ÑÕÉ«ÀàÐÍ";
-        Text[ russian ] = "Ìîäåëü öâåòà";
-        Text[ polish ] = "Model koloru";
-        Text[ japanese ] = "¶×°ÓÃÞÙ";
-        Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "ÃC¦âÃþ«¬";
-        Text[ arabic ] = "ÚíäÉ Çááæä";
-        Text[ greek ] = "Äåßãìá ÷ñþìáôïò";
-        Text[ korean ] = "»ö ¸ðµ¨";
-        Text[ turkish ] = "Renk modeli";
+        Text [ ENGLISH ] = "Color system" ;
     };
     ImageButton BTN_LOAD
     {
