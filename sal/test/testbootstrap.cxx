@@ -12,12 +12,12 @@ using namespace ::rtl;
 
 void main( int argc, char *argv[] )
 {
-    sal_Int32 nCount = rtl_getCommandArgCount();
+    sal_Int32 nCount = rtl_getAppCommandArgCount();
     fprintf( stdout, "rtl-commandargs (%d)" , nCount );
     for( sal_Int32 i = 0 ; i < nCount ; i ++ )
     {
         OUString data;
-        rtl_getCommandArg( i , &(data.pData) );
+        rtl_getAppCommandArg( i , &(data.pData) );
         OString o = OUStringToOString( data, RTL_TEXTENCODING_ASCII_US );
         fprintf( stdout, " %s", o.getStr() );
     }
