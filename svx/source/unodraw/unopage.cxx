@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-05 08:58:08 $
+ *  last change: $Author: cl $ $Date: 2001-12-11 12:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,6 +781,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                 OUString aIdent( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.") );
                 aIdent += pMap->aIdentifier;
                 pRet->SetShapeType(aIdent);
+                pRet->setShapeKind(nObjId);
                 break ;
             }
             pMap++;

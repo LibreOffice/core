@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2001-12-10 18:33:19 $
+ *  last change: $Author: cl $ $Date: 2001-12-11 12:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,14 @@ SvxShape::~SvxShape() throw()
 
         delete mpImpl;
     }
+}
+
+//----------------------------------------------------------------------
+
+void SvxShape::setShapeKind( sal_uInt32 nKind )
+{
+    if( mpImpl )
+        mpImpl->mnObjId = nKind;
 }
 
 //----------------------------------------------------------------------
@@ -729,7 +737,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
 //----------------------------------------------------------------------
 
 uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
-    throw (uno::RuntimeException)
+    throw(uno::RuntimeException)
 {
     switch( mpImpl->mnObjId )
     {

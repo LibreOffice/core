@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 15:58:02 $
+ *  last change: $Author: cl $ $Date: 2001-12-11 12:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,6 +588,7 @@ uno::Sequence< uno::Type > SvxShapeControl::maTypeSequence;
 SvxShapeControl::SvxShapeControl( SdrObject* pObj )  throw() :
     SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CONTROL) )
 {
+    setShapeKind( OBJ_UNO );
 }
 
 //----------------------------------------------------------------------
