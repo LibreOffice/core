@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-15 07:54:45 $
+ *  last change: $Author: obr $ $Date: 2001-10-18 09:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ static SOICON soicons[] = {
     };
 
 
-static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixmap& aMask )
+static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixmap& aMask, int nSize )
 {
     int nWidth, nHeight, nColors, nCharsPerPixel;
     XColor *pColors;
@@ -201,7 +201,7 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
 
     aPixmap = XCreatePixmap( pDisplay->GetDisplay(),
                                 pDisplay->GetRootWindow(),
-                                nWidth, nHeight,
+                                nSize, nSize,
                                 pDisplay->GetRootVisual()->GetDepth() );
     XSetForeground( pDisplay->GetDisplay(),
                     DefaultGC( pDisplay->GetDisplay(),
@@ -211,22 +211,25 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
     XFillRectangle( pDisplay->GetDisplay(), aPixmap,
                     DefaultGC( pDisplay->GetDisplay(),
                                pDisplay->GetScreenNumber() ),
-                    0,0,nWidth,nHeight );
+                    0,0,nSize,nSize );
 
     aMask   = XCreatePixmap( pDisplay->GetDisplay(),
                                 pDisplay->GetRootWindow(),
-                                nWidth, nHeight, 1 );
+                                nSize, nSize, 1 );
 
     XGCValues aValues;
-    aValues.function   = GXset;
     aValues.foreground = 0xffffffff;
+    aValues.function = GXclear;
     GC aMonoGC = XCreateGC( pDisplay->GetDisplay(), aMask,
                             GCFunction|GCForeground, &aValues );
 
     XFillRectangle( pDisplay->GetDisplay(), aMask, aMonoGC,
-                    0,0, nWidth, nHeight );
-    aValues.function = GXclear;
+                    0,0, nSize, nSize );
+    aValues.function   = GXset;
     XChangeGC( pDisplay->GetDisplay(), aMonoGC, GCFunction, &aValues );
+
+    int nOffX = (nSize-nWidth)/2;
+    int nOffY = (nSize-nHeight)/2;
 
     for( nY=0; nY < nHeight; nY++ )
     {
@@ -249,14 +252,14 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
                             aPixmap,
                             DefaultGC( pDisplay->GetDisplay(),
                                        pDisplay->GetScreenNumber() ),
-                            nX, nY );
+                            nX+nOffX, nY+nOffY );
 
+                XDrawPoint( pDisplay->GetDisplay(),
+                            aMask, aMonoGC, nX+nOffX, nY+nOffY );
             }
             else
             {
                 bTransparent = TRUE;
-                XDrawPoint( pDisplay->GetDisplay(),
-                            aMask, aMonoGC, nX, nY );
             }
             pRun += nCharsPerPixel;
         }
@@ -327,7 +330,7 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
             iIcon = i;
             break;
         }
-        if ( nWidth > maxSize )
+        if ( nWidth < iconSize && nWidth > maxSize )
         {
             // use largest icon if sizes don't match
             maxSize = nWidth;
@@ -344,7 +347,7 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
     }
 
     if( !pIcon->mPixmap[iIcon] )
-        ConvertXpm( pDisplay, pIcon->xpmdata[iIcon], pIcon->mPixmap[iIcon], pIcon->mMask[iIcon] );
+        ConvertXpm( pDisplay, pIcon->xpmdata[iIcon], pIcon->mPixmap[iIcon], pIcon->mMask[iIcon], iconSize );
 
     icon_pixmap = pIcon->mPixmap[iIcon];
     icon_mask   = pIcon->mMask[iIcon];
