@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:21:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,14 +108,14 @@
 #define XML_SCH_TYPE_ERROR_INDICATOR_LOWER  ( XML_SCH_TYPES_START + 5 )
 #define XML_SCH_TYPE_DATAROWSOURCE          ( XML_SCH_TYPES_START + 6 )
 #define XML_SCH_TYPE_TEXT_ORIENTATION       ( XML_SCH_TYPES_START + 7 )
+#define XML_SCH_TYPE_INTERPOLATION          ( XML_SCH_TYPES_START + 8 )
 
 // context ids
 #define XML_SCH_CONTEXT_USER_SYMBOL                 ( XML_SCH_CTF_START + 0 )
 #define XML_SCH_CONTEXT_MIN                         ( XML_SCH_CTF_START + 1 )
 #define XML_SCH_CONTEXT_MAX                         ( XML_SCH_CTF_START + 2 )
 #define XML_SCH_CONTEXT_STEP_MAIN                   ( XML_SCH_CTF_START + 3 )
-#define XML_SCH_CONTEXT_STEP_HELP                   ( XML_SCH_CTF_START + 4 )
-#define XML_SCH_CONTEXT_ORIGIN                      ( XML_SCH_CTF_START + 5 )
+#define XML_SCH_CONTEXT_ORIGIN                      ( XML_SCH_CTF_START + 4 )
 
 #define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER     ( XML_SCH_CTF_START + 10 )
 #define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER     ( XML_SCH_CTF_START + 11 )
@@ -131,10 +131,12 @@
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_HEIGHT       ( XML_SCH_CTF_START + 21 )
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME   ( XML_SCH_CTF_START + 22 )
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE        ( XML_SCH_CTF_START + 23 )
+#define XML_SCH_CONTEXT_SPECIAL_STEP_HELP           ( XML_SCH_CTF_START + 24 )
 
-#define MAP_ENTRY( a, ns, nm, t ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t }
-#define MAP_CONTEXT( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t, XML_SCH_CONTEXT_##c }
-#define MAP_SPECIAL( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t | MID_FLAG_SPECIAL_ITEM, XML_SCH_CONTEXT_SPECIAL_##c }
+#define MAP_ENTRY( a, ns, nm, t ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART }
+#define MAP_CONTEXT( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART, XML_SCH_CONTEXT_##c }
+#define MAP_SPECIAL( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM, XML_SCH_CONTEXT_SPECIAL_##c }
+#define MAP_SPECIAL_IMP( a, ns, nm, t, c ) { a, sizeof(a)-1, XML_NAMESPACE_##ns, xmloff::token::nm, t|XML_TYPE_PROP_CHART | MID_FLAG_SPECIAL_ITEM_IMPORT, XML_SCH_CONTEXT_SPECIAL_##c }
 #define MAP_ENTRY_END { 0,0,0,xmloff::token::XML_TOKEN_INVALID,0 }
 
 // ---------------------------------------------------------
@@ -158,7 +160,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "Lines", CHART, XML_LINES, XML_TYPE_BOOL ),
     MAP_ENTRY( "Percent", CHART, XML_PERCENTAGE, XML_TYPE_BOOL ),
     MAP_ENTRY( "SolidType", CHART, XML_SOLID_TYPE, XML_SCH_TYPE_SOLID_TYPE ),
-    MAP_ENTRY( "SplineType", CHART, XML_SPLINES, XML_TYPE_NUMBER ),
+    MAP_ENTRY( "SplineType", CHART, XML_INTERPOLATION, XML_SCH_TYPE_INTERPOLATION ),
     MAP_ENTRY( "Stacked", CHART, XML_STACKED, XML_TYPE_BOOL ),
     MAP_ENTRY( "SymbolType", CHART, XML_SYMBOL, XML_TYPE_NUMBER ),
     MAP_SPECIAL( "SymbolSize", CHART, XML_SYMBOL_WIDTH, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_WIDTH ),
@@ -185,7 +187,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_CONTEXT( "Max", CHART, XML_MAXIMUM, XML_TYPE_DOUBLE, MAX ),
     MAP_CONTEXT( "Origin", CHART, XML_ORIGIN, XML_TYPE_DOUBLE, ORIGIN ),
     MAP_CONTEXT( "StepMain", CHART, XML_INTERVAL_MAJOR, XML_TYPE_DOUBLE, STEP_MAIN ),
-    MAP_CONTEXT( "StepHelp", CHART, XML_INTERVAL_MINOR, XML_TYPE_DOUBLE, STEP_HELP ),
+//  MAP_CONTEXT( "StepHelp", CHART, XML_INTERVAL_MINOR, XML_TYPE_DOUBLE, STEP_HELP ),
     MAP_ENTRY( "GapWidth", CHART, XML_GAP_WIDTH, XML_TYPE_NUMBER ),
     MAP_ENTRY( "Overlap", CHART, XML_OVERLAP, XML_TYPE_NUMBER ),
     MAP_ENTRY( "TextCanOverlap", CHART, XML_TEXT_OVERLAP, XML_TYPE_BOOL ),
@@ -213,11 +215,15 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "SegmentOffset", CHART, XML_PIE_OFFSET, XML_TYPE_NUMBER ),
 
     // text properties for titles
-    MAP_SPECIAL( "TextRotation", TEXT, XML_ROTATION_ANGLE, XML_TYPE_NUMBER, TEXT_ROTATION ),    // convert 1/100th degrees to degrees
-    MAP_ENTRY( "StackedText", FO, XML_DIRECTION, XML_SCH_TYPE_TEXT_ORIENTATION ),
+    MAP_SPECIAL( "TextRotation", STYLE, XML_ROTATION_ANGLE, XML_TYPE_NUMBER, TEXT_ROTATION ),   // convert 1/100th degrees to degrees
+    MAP_ENTRY( "StackedText", STYLE, XML_DIRECTION, XML_SCH_TYPE_TEXT_ORIENTATION ),
 
     // for compatability to pre 6.0beta documents
     MAP_SPECIAL( "SymbolBitmapURL", CHART, XML_SYMBOL_IMAGE_NAME, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),
+
+    // changed for Oasis file-format
+    // Oasis proposal, see http://lists.oasis-open.org/archives/office/200312/msg00000.html
+    MAP_SPECIAL_IMP( "StepHelp", CHART, XML_INTERVAL_MINOR_DIVISOR, XML_TYPE_NUMBER, STEP_HELP ),
 
     MAP_ENTRY_END
 };
@@ -271,6 +277,15 @@ SvXMLEnumMapEntry aXMLChartDataRowSourceTypeEnumMap[] =
     { ::xmloff::token::XML_COLUMNS,     ::com::sun::star::chart::ChartDataRowSource_COLUMNS },
     { ::xmloff::token::XML_ROWS,        ::com::sun::star::chart::ChartDataRowSource_ROWS },
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
+};
+
+SvXMLEnumMapEntry aXMLChartInterpolationTypeEnumMap[] =
+{
+    // this is neither an enum nor a constants group, but just a
+    // documented long property
+    { ::xmloff::token::XML_NONE,         0 },
+    { ::xmloff::token::XML_CUBIC_SPLINE, 1 },
+    { ::xmloff::token::XML_B_SPLINE,     2 }
 };
 
 #endif  // XML_SCH_CREATE_GLOBAL_MAPS
