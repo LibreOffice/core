@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge_Test.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:14:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 14:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package com.sun.star.lib.uno.bridges.java_remote;
 
 import com.sun.star.bridge.XBridge;
@@ -67,6 +66,7 @@ import com.sun.star.comp.connections.PipedConnection;
 import com.sun.star.connection.XConnection;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lib.uno.environments.java.java_environment;
+import com.sun.star.lib.uno.environments.remote.Protocol;
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.IQueryInterface;
@@ -206,11 +206,15 @@ public final class java_remote_bridge_Test extends ComplexTestCase {
         assure("proxy count", ProxyFactory.getDebugCount() == 0);
 
         System.out.println("waiting for pending messages to be done");
-        while (bridgeB.getProtocol().getRequestsSendCount()
-               > bridgeA.getProtocol().getRequestsReceivedCount()) {
+        while (((Protocol) bridgeB.getProtocol()).getRequestsSendCount()
+               > ((Protocol) bridgeA.getProtocol()).getRequestsReceivedCount())
+        {
             System.out.println(
-                "pending: " + bridgeB.getProtocol().getRequestsSendCount()
-                + ", " + bridgeA.getProtocol().getRequestsReceivedCount());
+                "pending: "
+                + ((Protocol) bridgeB.getProtocol()).getRequestsSendCount()
+                + ", "
+                + (((Protocol) bridgeA.getProtocol()).
+                   getRequestsReceivedCount()));
             Thread.sleep(100);
         }
 
