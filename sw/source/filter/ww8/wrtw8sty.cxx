@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:42:42 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
 #endif
+#ifndef _SVX_ULSPITEM_HXX
+#include <svx/ulspitem.hxx>
+#endif
 
 #ifndef _WRTWW8_HXX
 #include <wrtww8.hxx>
@@ -180,6 +183,9 @@
 #include <lineinfo.hxx>
 #endif
 
+#ifndef SW_MS_MSFILTER_HXX
+#include <msfilter.hxx>
+#endif
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
 #endif
@@ -743,10 +749,7 @@ wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
 
     ShortToSVBT16( 400, &maWW8_FFN[2] );        // weiss ich nicht besser
                                                 // 400 == FW_NORMAL (windows.h)
-    if (RTL_TEXTENCODING_SYMBOL == eChrSet)
-        maWW8_FFN[4] = 2;
-    else
-        maWW8_FFN[4] = rtl_getBestWindowsCharsetFromTextEncoding(eChrSet);
+    maWW8_FFN[4] = sw::types::rtl_TextEncodingToWinCharset(eChrSet);
 
     if (mbAlt)
         maWW8_FFN[5] = msFamilyNm.Len()+1;
@@ -919,7 +922,9 @@ void WW8_WrPlc0::Write( SvStream& rStrm )
 //      behandelt auch Header und Footer
 //------------------------------------------------------------------------------
 
-WW8_WrPlcSepx::WW8_WrPlcSepx() : aSects(4, 4), aCps(4, 4), pAttrs(0), pTxtPos(0)
+WW8_WrPlcSepx::WW8_WrPlcSepx() :
+    mbDocumentIsProtected(false), aSects(4, 4), aCps(4, 4), pAttrs(0),
+    pTxtPos(0)
 {
 }
 
@@ -965,24 +970,24 @@ sal_uInt16 WW8_WrPlcSepx::CurrentNoColumns(const SwDoc &rDoc) const
     return rColumns.Count();
 }
 
-void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp,
-                               const SwPageDesc* pPd,
-                               const SwSectionFmt* pSectionFmt,
-                               ULONG nLnNumRestartNo )
+void WW8_WrPlcSepx::AppendSep(WW8_CP nStartCp, const SwPageDesc* pPd,
+    const SwSectionFmt* pSectionFmt, ULONG nLnNumRestartNo)
 {
-    aCps.Insert( nStartCp, aCps.Count() );
-    aSects.Insert( WW8_SepInfo( pPd, pSectionFmt, nLnNumRestartNo ),
-                   aSects.Count() );
+    aCps.Insert(nStartCp, aCps.Count());
+    aSects.Insert(WW8_SepInfo(pPd, pSectionFmt, nLnNumRestartNo),
+        aSects.Count());
+    NeedsDocumentProtected(aSects[aSects.Count()-1]);
 }
 
 void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwFmtPageDesc& rPD,
     const SwNode& rNd, const SwSectionFmt* pSectionFmt, ULONG nLnNumRestartNo )
 {
-    aCps.Insert( nStartCp, aCps.Count() );
-    WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFmt, nLnNumRestartNo );
+    aCps.Insert(nStartCp, aCps.Count());
+    WW8_SepInfo aI(rPD.GetPageDesc(), pSectionFmt, nLnNumRestartNo);
     aI.nPgRestartNo = rPD.GetNumOffset();
     aI.pPDNd = &rNd;
-    aSects.Insert( aI, aSects.Count() );
+    aSects.Insert(aI, aSects.Count());
+    NeedsDocumentProtected(aI);
 }
 
 // WW8_WrPlcSepx::SetNum() setzt in jeder Section beim 1. Aufruf den
@@ -1123,6 +1128,30 @@ void WW8_WrPlcSepx::OutFooter( SwWW8Writer& rWrt, const SwFmt& rFmt,
         pTxtPos->Append( rCpPos );
 }
 
+void WW8_WrPlcSepx::NeedsDocumentProtected(const WW8_SepInfo &rInfo)
+{
+    if (rInfo.IsProtected())
+        mbDocumentIsProtected = true;
+}
+
+bool WW8_SepInfo::IsProtected() const
+{
+    bool bRet = false;
+    if (
+         pSectionFmt &&
+         ((SwSectionFmt*)0xFFFFFFFF != pSectionFmt)
+       )
+    {
+        const SwSection *pSection = pSectionFmt->GetSection();
+        if (pSection && pSection->IsProtect())
+        {
+            bRet = true;
+        }
+    }
+    return bRet;
+}
+
+
 void WW8_WrPlcSepx::CheckForFacinPg( SwWW8Writer& rWrt ) const
 {
     // 2 Werte werden gesetzt
@@ -1243,6 +1272,16 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
         pO->Remove( 0, pO->Count() );       // leeren
         rWrt.bOutPageDescs = true;
 
+        //If the document is to be exported as protected, then if a segment
+        //is not protected, set the unlocked flag
+        if (mbDocumentIsProtected && !rSepInfo.IsProtected())
+        {
+            if (rWrt.bWrtWW8)
+                SwWW8Writer::InsUInt16(*pO, 0x3006);
+            else
+                pO->Insert(139, pO->Count());
+            pO->Insert(1 , pO->Count());
+        }
 
         if( aLineNum.Count() )
         {
@@ -1365,13 +1404,14 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
                )
             {
                 /*
-                For #i4320# I am going to try this, nothing will ever be
-                perfect with the mismatch from title page of winword sections
-                vs our system. But I am relying on the natural inclination of
-                users to treat title pages as special and to generally always
-                have a manual page break inside them that we can convert to a
-                section break in the test in our page break exporter to see if
-                the page break will cause a new page descriptor to follow
+                For #i4320# & #i14509# I am going to try this, nothing will
+                ever be perfect with the mismatch from title page of winword
+                sections vs our system. But I am relying on the natural
+                inclination of users to treat title pages as special and to
+                generally always have a manual page break inside them that we
+                can convert to a section break in the test in our page break
+                exporter to see if the page break will cause a new page
+                descriptor to follow
                 */
 
                 bool bPlausableTitlePage = true;
@@ -1392,8 +1432,29 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
                 const SwColumns& rFirstColumns = rFirstCols.GetColumns();
                 const SwColumns& rFollowColumns = rFollowCols.GetColumns();
 
-                if (rFirstColumns.Count() != rFollowColumns.Count())
+                if ((rFirstColumns.Count() != rFollowColumns.Count()))
+                {
+                    //e.g. #i4320#
                     bPlausableTitlePage = false;
+                }
+                else
+                {
+                    //e.g. #i14509#
+                    const SvxULSpaceItem &rOneUL = pPdFmt->GetULSpace();
+                    const SvxULSpaceItem &rTwoUL= rFollowFmt.GetULSpace();
+                    const SvxLRSpaceItem &rOneLR = pPdFmt->GetLRSpace();
+                    const SvxLRSpaceItem &rTwoLR= rFollowFmt.GetLRSpace();
+
+                    if (
+                         (rOneUL.GetUpper() != rTwoUL.GetUpper()) ||
+                         (rOneUL.GetLower() != rTwoUL.GetLower()) ||
+                         (rOneLR.GetLeft() != rTwoLR.GetLeft()) ||
+                         (rOneLR.GetRight() != rTwoLR.GetRight())
+                       )
+                    {
+                        bPlausableTitlePage = false;
+                    }
+                }
 
                 if (bPlausableTitlePage)
                 {
