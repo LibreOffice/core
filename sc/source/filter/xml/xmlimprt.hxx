@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:37:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,8 @@ enum ScXMLContentValidationElemTokens
 {
     XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE,
     XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE,
-    XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO
+    XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO,
+    XML_TOK_CONTENT_VALIDATION_ELEM_EVENT_LISTENERS
 };
 
 enum ScXMLContentValidationAttrTokens
