@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-08 09:22:29 $
+ *  last change: $Author: tl $ $Date: 2001-06-01 10:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,6 @@ class Menu;
 
 class SmEditWindow: public Window
 {
-    EditEngine     *pEditEngine;
-    SfxItemPool    *pEditEngineItemPool;
     EditView       *pEditView;
     ScrollBar      *pHScrollBar,
                    *pVScrollBar;
@@ -126,9 +124,10 @@ class SmEditWindow: public Window
     Rectangle   AdjustScrollBars();
     void        SetScrollBarRanges();
     void        InitScrollBars();
-    void        ImplSetFont();
 
-    void        SetEditEngine( EditEngine *pEng, SfxItemPool *pPool );
+    SmDocShell *    GetDoc();
+    EditEngine *    GetEditEngine();
+    SfxItemPool *   GetEditEngineItemPool();
 
 public:
     SmEditWindow( Window *pParent );
@@ -159,6 +158,7 @@ public:
     BOOL                HasMark(const String &rText) const;
 
     void                Flush();
+    void                DeleteEditView( SmViewShell &rView );
 };
 
 
