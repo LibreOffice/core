@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dbo $ $Date: 2003-08-20 12:53:22 $
+#   last change: $Author: vg $ $Date: 2003-10-06 13:06:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,18 +78,23 @@ ALLTAR : \
     $(OUT)$/bin$/cli_ure.dll
 
 CSFILES = \
-    assembly.cs							\
     uno$/util$/DisposeGuard.cs					\
     uno$/util$/WeakAdapter.cs					\
     uno$/util$/WeakBase.cs						\
     uno$/util$/WeakComponentBase.cs					\
 
 $(OUT)$/bin$/cli_ure.dll : $(CSFILES) $(OUT)$/bin$/cli_types.dll
+    +echo \
+[assembly:System.Reflection.AssemblyVersion( "3.2.0.0" )] \
+[assembly:System.Reflection.AssemblyDescription( "CLI-UNO Runtime Library" )] \
+[assembly:System.Reflection.AssemblyCompany( "Sun Microsystems, Inc." )] \
+[assembly:System.Reflection.AssemblyCopyright( "2003" )] \
+    > $(OUT)$/misc$/assembly.cs
     +csc $(CSCFLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(OUT)$/bin$/cli_types.dll \
         -reference:System.dll \
-        $(CSFILES) 
+        $(CSFILES) $(OUT)$/misc$/assembly.cs
 
 .ENDIF
