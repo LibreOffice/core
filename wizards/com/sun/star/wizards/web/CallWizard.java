@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallWizard.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 14:08:17 $
+ *  last change: $Author: vg $  $Date: 2005-03-08 15:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  */
 package com.sun.star.wizards.web;
+
 import com.sun.star.beans.XPropertyAccess;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.XInitialization;
@@ -78,7 +79,7 @@ import com.sun.star.wizards.common.Resource;
  * information into the given registry key (<CODE>__writeRegistryServiceInfo</CODE>).
  *
  * @author rpiterman
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class CallWizard {
 
