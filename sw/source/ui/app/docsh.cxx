@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-25 17:22:03 $
+ *  last change: $Author: os $ $Date: 2002-03-01 14:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,13 @@ using namespace ::com::sun::star::uno;
 #ifndef _SWSLOTS_HXX
 #include <swslots.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::container;
 
 class SwTmpPersist : public SvPersist
 {
@@ -767,26 +773,25 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     {
         OfficeApplication* pOffApp = OFF_APP();
         OfaHtmlOptions* pHtmlOpt = pOffApp->GetHtmlOptions();
-        if( !pHtmlOpt->IsStarBasic() && HasBasic())
+        if( !pHtmlOpt->IsStarBasic() && pHtmlOpt->IsStarBasicWarning() && HasBasic() )
         {
-            BOOL bModules = FALSE;
-            BasicManager *pBasicMan = GetBasicManager();
-
-            for( USHORT i=0; i < pBasicMan->GetLibCount(); i++ )
+            Reference< XLibraryContainer > xLibCont(GetBasicContainer(), UNO_QUERY);
+            Reference< XNameAccess > xLib;
+            Sequence<rtl::OUString> aNames = xLibCont->getElementNames();
+            const rtl::OUString* pNames = aNames.getConstArray();
+            for(sal_Int32 nLib = 0; nLib < aNames.getLength(); nLib++)
             {
-                StarBASIC *pBasic = pBasicMan->GetLib( i  );
-                SbxArray *pModules = pBasic->GetModules();
-                for( USHORT j = 0; j < pModules->Count(); j++ )
+                Any aLib = xLibCont->getByName(pNames[nLib]);
+                aLib >>= xLib;
+                if(xLib.is())
                 {
-                    const SbModule *pModule = PTR_CAST( SbModule, pModules->Get(j) );
-                    bModules = TRUE;
-                    break;
+                    Sequence<rtl::OUString> aModNames = xLib->getElementNames();
+                    if(aModNames.getLength())
+                    {
+                        SetError(WARN_SWG_HTML_NO_MACROS);
+                        break;
+                    }
                 }
-            }
-
-            if(bModules && pHtmlOpt->IsStarBasicWarning())
-            {
-                SetError(WARN_SWG_HTML_NO_MACROS);
             }
         }
         UpdateDocInfoForSave();
