@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:45:12 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 16:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ TabPage TP_COLUMN
     Text [ english_us ] = "Columns" ;
     FixedText FT_NUMBER
     {
-        Pos = MAP_APPFONT ( 7 , 19 ) ;
+        Pos = MAP_APPFONT ( 12 , 19 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
         Text = "~Spalten" ;
         Text [ ENGLISH ] = "~Num." ;
@@ -115,7 +115,7 @@ TabPage TP_COLUMN
     NumericField ED_NUMBER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 7 , 30 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -164,8 +164,8 @@ TabPage TP_COLUMN
     };
     FixedLine FL_COLUMNS
     {
-        Pos = MAP_APPFONT ( 4 , 3 ) ;
-        Size = MAP_APPFONT ( 163 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 164 , 8 ) ;
         Text = "Vorgaben" ;
         Text [ ENGLISH ] = "Columns" ;
         Text[ language_user1 ] = " ";
@@ -192,7 +192,7 @@ TabPage TP_COLUMN
     };
     FixedText FT_COLUMN
     {
-        Pos = MAP_APPFONT ( 7 , 70 ) ;
+        Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Spalte" ;
         Text [ English ] = "Column" ;
@@ -220,20 +220,26 @@ TabPage TP_COLUMN
     };
     Window WN_BSP
     {
-        Pos = MAP_APPFONT ( 176 , 7 ) ;
-        Size = MAP_APPFONT ( 75 , 49 ) ;
+        Pos = MAP_APPFONT ( 176 , 6 ) ;
+        Size = MAP_APPFONT ( 75 , 46 ) ;
+    };
+    Window WN_BSP_BORDER
+    {
+        Pos = MAP_APPFONT ( 176 , 6 ) ;
+        Size = MAP_APPFONT ( 75 , 46 ) ;
+        Border = TRUE ;
     };
     ImageButton BTN_DOWN
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 69 ) ;
+        Pos = MAP_APPFONT ( 62 , 69 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
     };
     FixedText FT_1
     {
-        Pos = MAP_APPFONT ( 101 , 71 ) ;
+        Pos = MAP_APPFONT ( 100 , 71 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
         Text = "~1" ;
         Center = TRUE ;
@@ -255,15 +261,15 @@ TabPage TP_COLUMN
     ImageButton BTN_UP
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 241 , 69 ) ;
+        Pos = MAP_APPFONT ( 238 , 69 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_RIGHT ;
     };
     FixedText FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 7 , 85 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 85 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Breite" ;
         Text [ English ] = "Width" ;
         Left = TRUE ;
@@ -295,8 +301,8 @@ TabPage TP_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 89 , 83 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Pos = MAP_APPFONT ( 87 , 83 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -313,8 +319,8 @@ TabPage TP_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 138 , 83 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Pos = MAP_APPFONT ( 137 , 83 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -332,7 +338,7 @@ TabPage TP_COLUMN
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 187 , 83 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -347,8 +353,8 @@ TabPage TP_COLUMN
     };
     FixedText FT_DIST
     {
-        Pos = MAP_APPFONT ( 7 , 101 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Abstand" ;
         Text [ English ] = "Distance" ;
         Left = TRUE ;
@@ -380,8 +386,8 @@ TabPage TP_COLUMN
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 113 , 99 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Pos = MAP_APPFONT ( 112 , 99 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -399,7 +405,7 @@ TabPage TP_COLUMN
         Disable = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 162 , 99 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -414,7 +420,7 @@ TabPage TP_COLUMN
     };
     CheckBox CB_AUTO_WIDTH
     {
-        Pos = MAP_APPFONT ( 89 , 115 ) ;
+        Pos = MAP_APPFONT ( 87 , 115 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "A~utomatische Breite" ;
         Text [ ENGLISH ] = "Automatic ~width" ;
@@ -446,7 +452,7 @@ TabPage TP_COLUMN
     };
     FixedLine FL_LAYOUT
     {
-        Pos = MAP_APPFONT ( 4 , 58 ) ;
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Breite und Abstand" ;
         Text [ ENGLISH ] = "Column width" ;
@@ -475,8 +481,8 @@ TabPage TP_COLUMN
 
     FixedText FT_STYLE
     {
-        Pos = MAP_APPFONT ( 7 , 140 ) ;
-        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 140 ) ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "A~rt" ;
         Text [ ENGLISH ] = "~Style" ;
         Text [ norwegian ] = "~Style" ;
@@ -507,7 +513,7 @@ TabPage TP_COLUMN
     };
     ListBox LB_STYLE
     {
-        Pos = MAP_APPFONT ( 45 , 138 ) ;
+        Pos = MAP_APPFONT ( 50 , 138 ) ;
         Size = MAP_APPFONT ( 60 , 66 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -563,62 +569,62 @@ TabPage TP_COLUMN
         {
             < "None" ; Default ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
+        StringList [ chinese_simplified ] =
+        {
              < "Œﬁ" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
+        };
+        StringList [ russian ] =
+        {
              < "¡ÂÁ" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
+        };
+        StringList [ polish ] =
+        {
              < "Brak" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
+        };
+        StringList [ japanese ] =
+        {
              < "Ç»Çµ" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
+        };
+        StringList [ language_user1 ] =
+        {
              < " " ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+        };
+        StringList [ chinese_traditional ] =
+        {
              < "µL" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
+        };
+        StringList [ arabic ] =
+        {
              < "»œÊ‰" ; Default ; > ;
-    };
-    StringList [ dutch ] =
-    {
+        };
+        StringList [ dutch ] =
+        {
              < "Geen" ; Default ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+        };
+        StringList [ chinese_simplified ] =
+        {
              < "Œﬁ" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
+        };
+        StringList [ greek ] =
+        {
              < " ·Ì›Ì·" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
+        };
+        StringList [ korean ] =
+        {
              < "æ¯¿Ω" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
+        };
+        StringList [ turkish ] =
+        {
              < "Yok" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
+        };
+        StringList [ catalan ] =
+        {
              < "Ninguno" ; Default ; > ;
-    };
+        };
     };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 7 , 156 ) ;
+        Pos = MAP_APPFONT ( 12 , 156 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "Hˆh~e" ;
         Text [ ENGLISH ] = "Hei~ght" ;
@@ -651,7 +657,7 @@ TabPage TP_COLUMN
     MetricField ED_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 45 , 154 ) ;
+        Pos = MAP_APPFONT ( 50 , 154 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -667,8 +673,8 @@ TabPage TP_COLUMN
     };
     FixedText FT_POSITION
     {
-        Pos = MAP_APPFONT ( 7 , 172 ) ;
-        Size = MAP_APPFONT ( 32 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 172 ) ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "~Position" ;
         Text [ English ] = "~Position" ;
         Left = TRUE ;
@@ -698,7 +704,7 @@ TabPage TP_COLUMN
     };
     ListBox LB_POSITION
     {
-        Pos = MAP_APPFONT ( 45 , 170 ) ;
+        Pos = MAP_APPFONT ( 50 , 170 ) ;
         Size = MAP_APPFONT ( 60 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -780,88 +786,88 @@ TabPage TP_COLUMN
             < "Centered" ; Default ; > ;
             < "Bottom" ; Default ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
+        StringList [ chinese_simplified ] =
+        {
             < "…œ" ; Default ; > ;
-        < "æ”÷–" ; Default ; > ;
-        < "œ¬" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "æ”÷–" ; Default ; > ;
+            < "œ¬" ; Default ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "¬‚ÂıÛ" ; Default ; > ;
-        < "œÓ ˆÂÌÚÛ" ; Default ; > ;
-        < "¬ÌËÁÛ" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "œÓ ˆÂÌÚÛ" ; Default ; > ;
+            < "¬ÌËÁÛ" ; Default ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Na gÛrze" ; Default ; > ;
-        < "Wyúrodkowany" ; Default ; > ;
-        < "Na dole" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Wyúrodkowany" ; Default ; > ;
+            < "Na dole" ; Default ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "è„" ; Default ; > ;
-        < "íÜâõ" ; Default ; > ;
-        < "â∫" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "íÜâõ" ; Default ; > ;
+            < "â∫" ; Default ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "§W" ; Default ; > ;
-        < "∏m§§" ; Default ; > ;
-        < "§U" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "∏m§§" ; Default ; > ;
+            < "§U" ; Default ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "√⁄·Ï" ; Default ; > ;
-        < "„ Ê”ÿ" ; Default ; > ;
-        < "√”›·" ; Default ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "„ Ê”ÿ" ; Default ; > ;
+            < "√”›·" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "Boven" ; Default ; > ;
-        < "Gecentreerd" ; Default ; > ;
-        < "Beneden" ; Default ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "Gecentreerd" ; Default ; > ;
+            < "Beneden" ; Default ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "…œ" ; Default ; > ;
-        < "æ”÷–" ; Default ; > ;
-        < "œ¬" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "æ”÷–" ; Default ; > ;
+            < "œ¬" ; Default ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "–‹Ì˘" ; Default ; > ;
-        < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; Default ; > ;
-        < " ‹Ù˘" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; Default ; > ;
+            < " ‹Ù˘" ; Default ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "¿ß" ; Default ; > ;
-        < "∞°øÓµ•" ; Default ; > ;
-        < "æ∆∑°" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
+            < "∞°øÓµ•" ; Default ; > ;
+            < "æ∆∑°" ; Default ; > ;
+        };
+        StringList [ language_user1 ] =
+        {
             < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < " " ; Default ; > ;
+            < " " ; Default ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "‹st" ; Default ; > ;
-        < "Orta" ; Default ; > ;
-        < "Alt" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "Orta" ; Default ; > ;
+            < "Alt" ; Default ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "Arriba" ; Default ; > ;
-        < "Centrado" ; Default ; > ;
-        < "Abajo" ; Default ; > ;
-    };
+            < "Centrado" ; Default ; > ;
+            < "Abajo" ; Default ; > ;
+        };
     };
     FixedLine FL_LINETYPE
     {
-        Pos = MAP_APPFONT ( 4 , 127 ) ;
+        Pos = MAP_APPFONT ( 6 , 127 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Trennlinie" ;
         Text [ ENGLISH ] = "Lines between" ;
@@ -934,36 +940,36 @@ ModalDialog DLG_COLUMN
     };
     FixedText FT_APPLY_TO
     {
-        Pos = MAP_APPFONT ( 260 , 60 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Anwenden auf:" ;
-        Text [ English ] = "~Apply to:" ;
+        Pos = MAP_APPFONT ( 260 , 63 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Anwenden auf" ;
+        Text [ English ] = "~Apply to" ;
         Left = TRUE ;
-        Text[ english_us ] = "~Apply to:";
-        Text[ portuguese ] = "~Aplicar a:";
-        Text[ greek ] = "≈ˆ~·ÒÏÔ„ﬁ ÛÂ:";
-        Text[ dutch ] = "~Toepassen op:";
-        Text[ french ] = "~Appliquer ‡ :";
-        Text[ spanish ] = "~Aplicar a:";
-        Text[ swedish ] = "~Anv‰nd pÂ:";
-        Text[ russian ] = "œËÏÂÌËÚ¸ Í:";
-        Text[ italian ] = "~Applica a:";
-        Text[ danish ] = "Anvend pÂ:";
+        Text[ english_us ] = "~Apply to";
+        Text[ portuguese ] = "~Aplicar a";
+        Text[ greek ] = "≈ˆ~·ÒÏÔ„ﬁ ÛÂ";
+        Text[ dutch ] = "~Toepassen op";
+        Text[ french ] = "~Appliquer ‡";
+        Text[ spanish ] = "~Aplicar a";
+        Text[ swedish ] = "~Anv‰nd pÂ";
+        Text[ russian ] = "œËÏÂÌËÚ¸ Í";
+        Text[ italian ] = "~Applica a";
+        Text[ danish ] = "Anvend pÂ";
         Text[ polish ] = "Zastosuj w";
-        Text[ portuguese_brazilian ] = "~Apply to:";
-        Text[ japanese ] = "ê›íËëŒè€(~A):";
-        Text[ korean ] = "¿˚øÎ(~A):";
+        Text[ portuguese_brazilian ] = "~Apply to";
+        Text[ japanese ] = "ê›íËëŒè€(~A)";
+        Text[ korean ] = "¿˚øÎ(~A)";
         Text[ chinese_simplified ] = "Ã◊”√µΩ(~A)£∫";
         Text[ chinese_traditional ] = "ÆM•Œ®Ï(~A)°G";
-        Text[ arabic ] = " ÿ»Ìﬁ ⁄·Ï:";
+        Text[ arabic ] = " ÿ»Ìﬁ ⁄·Ï";
         Text[ language_user1 ] = " ";
-        Text[ turkish ] = "~Uygulanaca˝ yer:";
-        Text[ catalan ] = "~Aplicar a:";
-        Text[ finnish ] = "~K‰yt‰:";
+        Text[ turkish ] = "~Uygulanaca˝ yer";
+        Text[ catalan ] = "~Aplicar a";
+        Text[ finnish ] = "~K‰yt‰";
     };
     ListBox LB_APPLY_TO
     {
-        Pos = MAP_APPFONT ( 260 , 75 ) ;
+        Pos = MAP_APPFONT ( 260 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 66 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -980,177 +986,177 @@ ModalDialog DLG_COLUMN
             < "Selection" ;             LISTBOX_SELECTION; > ;
             < "Current section" ;       LISTBOX_SECTION     ; > ;
             < "Selected section" ;      LISTBOX_SECTIONS    ; > ;
-            < "Text Frame" ;            LISTBOX_FRAME       ; > ;
-            < "Page style: " ;          LISTBOX_PAGE        ; > ;
+            < "Text frame" ;            LISTBOX_FRAME       ; > ;
+            < "Page Style: " ;          LISTBOX_PAGE        ; > ;
         };
-    StringList [ language_user1 ] =
-    {
+        StringList [ language_user1 ] =
+        {
             < "Selektion" ;             LISTBOX_SELECTION; > ;
-        < " " ;     LISTBOX_SECTION     ; > ;
-        < "Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
-        < "Rahmen" ;                LISTBOX_FRAME       ; > ;
-        < "Seitenvorlage:" ;        LISTBOX_PAGE        ; > ;
-    };
-    StringList [ english_us ] =
-    {
+            < " " ;     LISTBOX_SECTION     ; > ;
+            < "Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
+            < "Rahmen" ;                LISTBOX_FRAME       ; > ;
+            < "Seitenvorlage:" ;        LISTBOX_PAGE        ; > ;
+        };
+        StringList [ english_us ] =
+        {
             < "Selection" ;             LISTBOX_SELECTION; > ;
-        < "Current Section" ;   LISTBOX_SECTION     ; > ;
-        < "Selected section" ;  LISTBOX_SECTIONS    ; > ;
-        < "Frame" ;                 LISTBOX_FRAME       ; > ;
-        < "Page Style: " ;          LISTBOX_PAGE        ; > ;
-    };
-    StringList [ portuguese ] =
-    {
+            < "Current Section" ;   LISTBOX_SECTION     ; > ;
+            < "Selected section" ;  LISTBOX_SECTIONS    ; > ;
+            < "Frame" ;                 LISTBOX_FRAME       ; > ;
+            < "Page Style: " ;          LISTBOX_PAGE        ; > ;
+        };
+        StringList [ portuguese ] =
+        {
             < "SelecÁ„o" ;              LISTBOX_SELECTION; > ;
-        < "SecÁ„o activa" ;     LISTBOX_SECTION     ; > ;
-        < "SecÁıes seleccionadas" ;  LISTBOX_SECTIONS   ; > ;
-        < "Moldura" ;               LISTBOX_FRAME       ; > ;
-        < "Estilo de p·gina: " ;        LISTBOX_PAGE        ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "SecÁ„o activa" ;     LISTBOX_SECTION     ; > ;
+            < "SecÁıes seleccionadas" ;  LISTBOX_SECTIONS   ; > ;
+            < "Moldura" ;               LISTBOX_FRAME       ; > ;
+            < "Estilo de p·gina: " ;        LISTBOX_PAGE        ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "≈ÈÎÔ„ﬁ" ;           LISTBOX_SELECTION; > ;
-        < "‘Ò›˜˘Ì ÂÒÈÔ˜ﬁ" ;    LISTBOX_SECTION     ; > ;
-        < "≈ÈÎÂ„Ï›ÌÂÚ ÂÒÈÔ˜›Ú" ;  LISTBOX_SECTIONS    ; > ;
-        < "–ÂÒﬂ„Ò·ÏÏ·" ;                LISTBOX_FRAME       ; > ;
-        < "–Ò¸ÙıÔ ÛÂÎﬂ‰·Ú: " ;         LISTBOX_PAGE        ; > ;
-    };
-    StringList [ dutch ] =
-    {
+            < "‘Ò›˜˘Ì ÂÒÈÔ˜ﬁ" ;    LISTBOX_SECTION     ; > ;
+            < "≈ÈÎÂ„Ï›ÌÂÚ ÂÒÈÔ˜›Ú" ;  LISTBOX_SECTIONS    ; > ;
+            < "–ÂÒﬂ„Ò·ÏÏ·" ;                LISTBOX_FRAME       ; > ;
+            < "–Ò¸ÙıÔ ÛÂÎﬂ‰·Ú: " ;         LISTBOX_PAGE        ; > ;
+        };
+        StringList [ dutch ] =
+        {
             < "Selectie" ;              LISTBOX_SELECTION; > ;
-        < "Actueel bereik" ;    LISTBOX_SECTION     ; > ;
-        < "Geselecteerd bereik" ;  LISTBOX_SECTIONS ; > ;
-        < "Kader" ;                 LISTBOX_FRAME       ; > ;
-        < "Pagina-opmaakprofiel:  " ;       LISTBOX_PAGE        ; > ;
-    };
-    StringList [ french ] =
-    {
+            < "Actueel bereik" ;    LISTBOX_SECTION     ; > ;
+            < "Geselecteerd bereik" ;  LISTBOX_SECTIONS ; > ;
+            < "Kader" ;                 LISTBOX_FRAME       ; > ;
+            < "Pagina-opmaakprofiel:  " ;       LISTBOX_PAGE        ; > ;
+        };
+        StringList [ french ] =
+        {
             < "SÈlection" ;             LISTBOX_SELECTION; > ;
-        < "Section active" ;    LISTBOX_SECTION     ; > ;
-        < "Sections sÈlectionnÈes" ;  LISTBOX_SECTIONS  ; > ;
-        < "Cadre" ;                 LISTBOX_FRAME       ; > ;
-        < "Style de page :  " ;         LISTBOX_PAGE        ; > ;
-    };
-    StringList [ spanish ] =
-    {
+            < "Section active" ;    LISTBOX_SECTION     ; > ;
+            < "Sections sÈlectionnÈes" ;  LISTBOX_SECTIONS  ; > ;
+            < "Cadre" ;                 LISTBOX_FRAME       ; > ;
+            < "Style de page :  " ;         LISTBOX_PAGE        ; > ;
+        };
+        StringList [ spanish ] =
+        {
             < "SelecciÛn" ;             LISTBOX_SELECTION; > ;
-        < "¡rea actual" ;   LISTBOX_SECTION     ; > ;
-        < "¡reas seleccionadas" ;  LISTBOX_SECTIONS ; > ;
-        < "Marco" ;                 LISTBOX_FRAME       ; > ;
-        < "Estilo de p·gina: " ;        LISTBOX_PAGE        ; > ;
-    };
-    StringList [ swedish ] =
-    {
+            < "¡rea actual" ;   LISTBOX_SECTION     ; > ;
+            < "¡reas seleccionadas" ;  LISTBOX_SECTIONS ; > ;
+            < "Marco" ;                 LISTBOX_FRAME       ; > ;
+            < "Estilo de p·gina: " ;        LISTBOX_PAGE        ; > ;
+        };
+        StringList [ swedish ] =
+        {
             < "Markering" ;             LISTBOX_SELECTION; > ;
-        < "Aktuellt omrÂde" ;   LISTBOX_SECTION     ; > ;
-        < "Markerade omrÂden" ;  LISTBOX_SECTIONS   ; > ;
-        < "Ram" ;               LISTBOX_FRAME       ; > ;
-        < "Sidformatmall:  " ;          LISTBOX_PAGE        ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "Aktuellt omrÂde" ;   LISTBOX_SECTION     ; > ;
+            < "Markerade omrÂden" ;  LISTBOX_SECTIONS   ; > ;
+            < "Ram" ;               LISTBOX_FRAME       ; > ;
+            < "Sidformatmall:  " ;          LISTBOX_PAGE        ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "¬˚‰ÂÎÂÌË˛" ;             LISTBOX_SELECTION; > ;
-        < "“ÂÍÛ˘ÂÈ Ó·Î‡ÒÚË" ;   LISTBOX_SECTION     ; > ;
-        < "¬˚‰ÂÎÂÌÌÓÈ Ó·Î‡ÒÚË" ;  LISTBOX_SECTIONS  ; > ;
-        < "–‡ÏÍÂ" ;                 LISTBOX_FRAME       ; > ;
-        < "—ÚËÎ˛ ÒÚ‡ÌËˆ˚:  " ;         LISTBOX_PAGE        ; > ;
-    };
-    StringList [ italian ] =
-    {
+            < "“ÂÍÛ˘ÂÈ Ó·Î‡ÒÚË" ;   LISTBOX_SECTION     ; > ;
+            < "¬˚‰ÂÎÂÌÌÓÈ Ó·Î‡ÒÚË" ;  LISTBOX_SECTIONS  ; > ;
+            < "–‡ÏÍÂ" ;                 LISTBOX_FRAME       ; > ;
+            < "—ÚËÎ˛ ÒÚ‡ÌËˆ˚:  " ;         LISTBOX_PAGE        ; > ;
+        };
+        StringList [ italian ] =
+        {
             < "Selezione" ;             LISTBOX_SELECTION; > ;
-        < "Sezione corrente" ;      LISTBOX_SECTION     ; > ;
-        < "Aree contrassegnate" ;  LISTBOX_SECTIONS ; > ;
-        < "Cornice" ;               LISTBOX_FRAME       ; > ;
-        < "Modello di pagina: " ;       LISTBOX_PAGE        ; > ;
-    };
-    StringList [ danish ] =
-    {
+            < "Sezione corrente" ;      LISTBOX_SECTION     ; > ;
+            < "Aree contrassegnate" ;  LISTBOX_SECTIONS ; > ;
+            < "Cornice" ;               LISTBOX_FRAME       ; > ;
+            < "Modello di pagina: " ;       LISTBOX_PAGE        ; > ;
+        };
+        StringList [ danish ] =
+        {
             < "Markering" ;             LISTBOX_SELECTION; > ;
-        < "Aktuelt omrÂde" ;    LISTBOX_SECTION     ; > ;
-        < "Markeret omrÂde" ;  LISTBOX_SECTIONS ; > ;
-        < "Ramme" ;                 LISTBOX_FRAME       ; > ;
-        < "Sidetypografi: " ;       LISTBOX_PAGE        ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Aktuelt omrÂde" ;    LISTBOX_SECTION     ; > ;
+            < "Markeret omrÂde" ;  LISTBOX_SECTIONS ; > ;
+            < "Ramme" ;                 LISTBOX_FRAME       ; > ;
+            < "Sidetypografi: " ;       LISTBOX_PAGE        ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Selekcja" ;              LISTBOX_SELECTION; > ;
-        < "Aktualny obszar" ;   LISTBOX_SECTION     ; > ;
-        < "Zaznaczone obszary" ;  LISTBOX_SECTIONS  ; > ;
-        < "Ramka" ;                 LISTBOX_FRAME       ; > ;
-        < "Styl strony: " ;         LISTBOX_PAGE        ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
+            < "Aktualny obszar" ;   LISTBOX_SECTION     ; > ;
+            < "Zaznaczone obszary" ;  LISTBOX_SECTIONS  ; > ;
+            < "Ramka" ;                 LISTBOX_FRAME       ; > ;
+            < "Styl strony: " ;         LISTBOX_PAGE        ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
             < "Selektion" ;             LISTBOX_SELECTION; > ;
-        < "Aktuellen Bereich" ;     LISTBOX_SECTION     ; > ;
-        < "Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
-        < "Rahmen" ;                LISTBOX_FRAME       ; > ;
-        < "Seitenvorlage: " ;       LISTBOX_PAGE        ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Aktuellen Bereich" ;     LISTBOX_SECTION     ; > ;
+            < "Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
+            < "Rahmen" ;                LISTBOX_FRAME       ; > ;
+            < "Seitenvorlage: " ;       LISTBOX_PAGE        ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "ëIëîÕàÕ" ;              LISTBOX_SELECTION; > ;
-        < "åªç›ÇÃîÕàÕ" ;    LISTBOX_SECTION     ; > ;
-        < "ëIëîÕàÕ" ;  LISTBOX_SECTIONS    ; > ;
-        < "äOòg" ;                  LISTBOX_FRAME       ; > ;
-        < "Õﬂ∞ºﬁΩ¿≤Ÿ: " ;       LISTBOX_PAGE        ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "åªç›ÇÃîÕàÕ" ;    LISTBOX_SECTION     ; > ;
+            < "ëIëîÕàÕ" ;  LISTBOX_SECTIONS    ; > ;
+            < "äOòg" ;                  LISTBOX_FRAME       ; > ;
+            < "Õﬂ∞ºﬁΩ¿≤Ÿ: " ;       LISTBOX_PAGE        ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "º±≈√" ;              LISTBOX_SELECTION; > ;
-        < "«ˆ¿Á ±∏ø™" ;     LISTBOX_SECTION     ; > ;
-        < "º±≈√µ» ±∏ø™" ;  LISTBOX_SECTIONS ; > ;
-        < "«¡∑π¿”" ;                LISTBOX_FRAME       ; > ;
-        < "¬  ¿Ø«¸: " ;         LISTBOX_PAGE        ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
+            < "«ˆ¿Á ±∏ø™" ;     LISTBOX_SECTION     ; > ;
+            < "º±≈√µ» ±∏ø™" ;  LISTBOX_SECTIONS ; > ;
+            < "«¡∑π¿”" ;                LISTBOX_FRAME       ; > ;
+            < "¬  ¿Ø«¸: " ;         LISTBOX_PAGE        ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
             < "—°÷–" ;              LISTBOX_SELECTION; > ;
-        < "µ±«∞µƒ«¯”Ú" ;    LISTBOX_SECTION     ; > ;
-        < "—°÷–µƒ«¯”Ú" ;  LISTBOX_SECTIONS  ; > ;
-        < "øÚ" ;                LISTBOX_FRAME       ; > ;
-        < "“≥√Ê—˘ Ω£∫ " ;       LISTBOX_PAGE        ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "µ±«∞µƒ«¯”Ú" ;    LISTBOX_SECTION     ; > ;
+            < "—°÷–µƒ«¯”Ú" ;  LISTBOX_SECTIONS  ; > ;
+            < "øÚ" ;                LISTBOX_FRAME       ; > ;
+            < "“≥√Ê—˘ Ω£∫ " ;       LISTBOX_PAGE        ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "øÔ®˙" ;              LISTBOX_SELECTION; > ;
-        < "∑Ì´e™∫∞œ∞Ï" ;    LISTBOX_SECTION     ; > ;
-        < "øÔæ‹™∫∞œ∞Ï" ;  LISTBOX_SECTIONS  ; > ;
-        < "Æÿ" ;                LISTBOX_FRAME       ; > ;
-        < "≠∂≠±ºÀ¶°°G " ;       LISTBOX_PAGE        ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "∑Ì´e™∫∞œ∞Ï" ;    LISTBOX_SECTION     ; > ;
+            < "øÔæ‹™∫∞œ∞Ï" ;  LISTBOX_SECTIONS  ; > ;
+            < "Æÿ" ;                LISTBOX_FRAME       ; > ;
+            < "≠∂≠±ºÀ¶°°G " ;       LISTBOX_PAGE        ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "«· ÕœÌœ" ;           LISTBOX_SELECTION; > ;
-        < "«·‰ÿ«ﬁ «·Õ«·Ì" ;     LISTBOX_SECTION     ; > ;
-        < "«·‰ÿ«ﬁ«  «·„Õœœ…" ;  LISTBOX_SECTIONS    ; > ;
-        < "ﬂ«œ—" ;                  LISTBOX_FRAME       ; > ;
-        < "ﬁ«·» «·’›Õ…: " ;         LISTBOX_PAGE        ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "«·‰ÿ«ﬁ «·Õ«·Ì" ;     LISTBOX_SECTION     ; > ;
+            < "«·‰ÿ«ﬁ«  «·„Õœœ…" ;  LISTBOX_SECTIONS    ; > ;
+            < "ﬂ«œ—" ;                  LISTBOX_FRAME       ; > ;
+            < "ﬁ«·» «·’›Õ…: " ;         LISTBOX_PAGE        ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "SeÁim" ;             LISTBOX_SELECTION; > ;
-        < "Y¸r¸rl¸kteki bˆl¸m" ;    LISTBOX_SECTION     ; > ;
-        < "SeÁilen bˆl¸m" ;  LISTBOX_SECTIONS   ; > ;
-        < "«erÁeve" ;               LISTBOX_FRAME       ; > ;
-        < "Sayfa biÁimi: " ;        LISTBOX_PAGE        ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < "Y¸r¸rl¸kteki bˆl¸m" ;    LISTBOX_SECTION     ; > ;
+            < "SeÁilen bˆl¸m" ;  LISTBOX_SECTIONS   ; > ;
+            < "«erÁeve" ;               LISTBOX_FRAME       ; > ;
+            < "Sayfa biÁimi: " ;        LISTBOX_PAGE        ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "SelecciÛn" ;             LISTBOX_SELECTION; > ;
-        < "¡rea actual" ;   LISTBOX_SECTION     ; > ;
-        < "¡reas seleccionadas" ;  LISTBOX_SECTIONS ; > ;
-        < "Marco" ;                 LISTBOX_FRAME       ; > ;
-        < "Estilo de p·gina: " ;        LISTBOX_PAGE        ; > ;
-    };
-    StringList [ finnish ] =
-    {
+            < "¡rea actual" ;   LISTBOX_SECTION     ; > ;
+            < "¡reas seleccionadas" ;  LISTBOX_SECTIONS ; > ;
+            < "Marco" ;                 LISTBOX_FRAME       ; > ;
+            < "Estilo de p·gina: " ;        LISTBOX_PAGE        ; > ;
+        };
+        StringList [ finnish ] =
+        {
             < "Valinta" ;           LISTBOX_SELECTION; > ;
-        < "Nykyinen osio" ;     LISTBOX_SECTION     ; > ;
-        < "Valittu osio" ;  LISTBOX_SECTIONS    ; > ;
-        < "Kehys" ;                 LISTBOX_FRAME       ; > ;
-        < "Sivun tyyli:" ;          LISTBOX_PAGE        ; > ;
-    };
+            < "Nykyinen osio" ;     LISTBOX_SECTION     ; > ;
+            < "Valittu osio" ;  LISTBOX_SECTIONS    ; > ;
+            < "Kehys" ;                 LISTBOX_FRAME       ; > ;
+            < "Sivun tyyli:" ;          LISTBOX_PAGE        ; > ;
+        };
     };
     Text[ english_us ] = "Columns";
     Text[ portuguese ] = "Colunas";

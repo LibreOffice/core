@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:31:32 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 16:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,9 @@ TabPage TP_FOOTNOTE_PAGE
     RadioButton RB_MAXHEIGHT_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 95 , 10 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
         Text = "Höhe maximal wie ~Seite" ;
-        Text [ ENGLISH ] = "Page height at maximum" ;
+        Text [ ENGLISH ] = "~Not larger than page area" ;
         Text [ norwegian ] = "Maksimum Sidehøyde" ;
         Text [ italian ] = "Altezza massima come pagina" ;
         Text [ portuguese_brazilian ] = "Altura de p?gina no m ximo" ;
@@ -101,9 +101,9 @@ TabPage TP_FOOTNOTE_PAGE
     RadioButton RB_MAXHEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 95 , 10 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
         Text = "Ma~x. Höhe der Fußnote" ;
-        Text [ ENGLISH ] = "Max. ~Height of Footnote" ;
+        Text [ ENGLISH ] = "Ma~ximum footnote height" ;
         Text [ norwegian ] = "Maks. ~Høyde på Fotnote" ;
         Text [ italian ] = "Altezza massima nota a piè pagina" ;
         Text [ portuguese_brazilian ] = "Max. ~Height of Footnote" ;
@@ -114,7 +114,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ swedish ] = "Fotnotens ma~ximala höjd" ;
         Text [ dutch ] = "~Maximum hoogte" ;
         Text [ spanish ] = "Altura máx. de ~nota al pie" ;
-        Text [ english_us ] = "Maximum footnote ~height" ;
+        Text [ english_us ] = "Ma~ximum footnote height" ;
         Text[ chinese_simplified ] = "×¢½ÅµÄ×î¸ß¶È(~H)";
         Text[ russian ] = "Ìàêñ. âûñîòà ñíîñêè";
         Text[ polish ] = "~Maks. wysokoœæ przypisów doln.";
@@ -130,7 +130,7 @@ TabPage TP_FOOTNOTE_PAGE
     MetricField ED_MAXHEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 27 ) ;
+        Pos = MAP_APPFONT ( 118 , 26 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -148,10 +148,10 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 45 ) ;
-        Size = MAP_APPFONT ( 95 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Abstand zum Textkörper" ;
-        Text [ ENGLISH ] = "~Distance from Bodytext" ;
+        Text [ ENGLISH ] = "~Space to text" ;
         Text [ norwegian ] = "~Avstand fra Hovedtekst" ;
         Text [ italian ] = "~Distanza dal corpo del testo" ;
         Text [ portuguese_brazilian ] = "~Dist?ncia do Corpo do Texto" ;
@@ -162,7 +162,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ swedish ] = "~Avstånd till brödtext" ;
         Text [ dutch ] = "A~fstand tot tekst" ;
         Text [ spanish ] = "~Distancia al cuerpo del texto" ;
-        Text [ english_us ] = "Space to text" ;
+        Text [ english_us ] = "~Space to text" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÖÁÕýÎÄµÄ¾àÀë(~D)";
         Text[ russian ] = "Ðàññòîÿíèå îò òåêñòà";
@@ -179,7 +179,7 @@ TabPage TP_FOOTNOTE_PAGE
     MetricField ED_DIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 43 ) ;
+        Pos = MAP_APPFONT ( 118 , 42 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -196,7 +196,7 @@ TabPage TP_FOOTNOTE_PAGE
     FixedLine FL_FOOTNOTE_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 247 , 8 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Fußnotenbereich" ;
         Text [ ENGLISH ] = "Footnote range" ;
         Text [ norwegian ] = "+++Footnote range" ;
@@ -224,8 +224,8 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_LINEPOS
     {
-        Pos = MAP_APPFONT ( 12 , 74 ) ;
-        Size = MAP_APPFONT ( 26 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "~Position" ;
         Text [ English ] = "~Position" ;
         Left = TRUE ;
@@ -253,7 +253,7 @@ TabPage TP_FOOTNOTE_PAGE
     };
     ListBox DLB_LINEPOS
     {
-        Pos = MAP_APPFONT ( 118 , 72 ) ;
+        Pos = MAP_APPFONT ( 118 , 71 ) ;
         Size = MAP_APPFONT ( 57 , 40 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -337,79 +337,79 @@ TabPage TP_FOOTNOTE_PAGE
             < "Centered" ; Default ; > ;
             < "Right" ; Default ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
+        StringList [ chinese_simplified ] =
+        {
             < "×ó" ; Default ; > ;
-        < "¾ÓÖÐ" ; Default ; > ;
-        < "ÓÒ" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
+            < "¾ÓÖÐ" ; Default ; > ;
+            < "ÓÒ" ; Default ; > ;
+        };
+        StringList [ russian ] =
+        {
             < "Ñëåâà" ; Default ; > ;
-        < "Ïî öåíòðó" ; Default ; > ;
-        < "Ñïðàâà" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
+            < "Ïî öåíòðó" ; Default ; > ;
+            < "Ñïðàâà" ; Default ; > ;
+        };
+        StringList [ polish ] =
+        {
             < "Z lewej" ; Default ; > ;
-        < "Wyœrodkowany" ; Default ; > ;
-        < "Z prawej" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
+            < "Wyœrodkowany" ; Default ; > ;
+            < "Z prawej" ; Default ; > ;
+        };
+        StringList [ japanese ] =
+        {
             < "¶" ; Default ; > ;
-        < "’†‰›" ; Default ; > ;
-        < "‰E" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+            < "’†‰›" ; Default ; > ;
+            < "‰E" ; Default ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
             < "¥ª" ; Default ; > ;
-        < "¸m¤¤" ; Default ; > ;
-        < "¥k" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
+            < "¸m¤¤" ; Default ; > ;
+            < "¥k" ; Default ; > ;
+        };
+        StringList [ arabic ] =
+        {
             < "Úáì ÇáíÓÇÑ" ; Default ; > ;
-        < "ÊæÓíØ" ; Default ; > ;
-        < "Úáì Çáíãíä" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
+            < "ÊæÓíØ" ; Default ; > ;
+            < "Úáì Çáíãíä" ; Default ; > ;
+        };
+        StringList [ greek ] =
+        {
             < "ÁñéóôåñÜ" ; Default ; > ;
-        < "ÊåíôñáñéóìÝíá" ; Default ; > ;
-        < "ÄåîéÜ" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
+            < "ÊåíôñáñéóìÝíá" ; Default ; > ;
+            < "ÄåîéÜ" ; Default ; > ;
+        };
+        StringList [ korean ] =
+        {
             < "¿ÞÂÊ" ; Default ; > ;
-        < "°¡¿îµ¥" ; Default ; > ;
-        < "¿À¸¥ÂÊ" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
+            < "°¡¿îµ¥" ; Default ; > ;
+            < "¿À¸¥ÂÊ" ; Default ; > ;
+        };
+        StringList [ turkish ] =
+        {
             < "Sol" ; Default ; > ;
-        < "Orta" ; Default ; > ;
-        < "Sað" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
+            < "Orta" ; Default ; > ;
+            < "Sað" ; Default ; > ;
+        };
+        StringList [ language_user1 ] =
+        {
             < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
+            < " " ; Default ; > ;
+            < " " ; Default ; > ;
+        };
+        StringList [ catalan ] =
+        {
             < "A la izquierda" ; Default ; > ;
-        < "Centrado" ; Default ; > ;
-        < "Derecha" ; Default ; > ;
-    };
+            < "Centrado" ; Default ; > ;
+            < "Derecha" ; Default ; > ;
+        };
     };
     FixedText FT_LINETYPE
     {
-        Pos = MAP_APPFONT ( 12 , 90 ) ;
-        Size = MAP_APPFONT ( 26 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 89 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "Stär~ke" ;
-        Text [ ENGLISH ] = "~Thickness" ;
+        Text [ ENGLISH ] = "~Weight" ;
         Group = TRUE ;
         Left = TRUE ;
         Text [ portuguese ] = "~Espessura da linha" ;
@@ -436,7 +436,7 @@ TabPage TP_FOOTNOTE_PAGE
     };
     ListBox DLB_LINETYPE
     {
-        Pos = MAP_APPFONT ( 118 , 88 ) ;
+        Pos = MAP_APPFONT ( 118 , 87 ) ;
         Size = MAP_APPFONT ( 57 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -446,8 +446,8 @@ TabPage TP_FOOTNOTE_PAGE
 
     FixedText FT_LINEWIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 106 ) ;
-        Size = MAP_APPFONT ( 105 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "Län~ge" ;
         Text [ ENGLISH ] = "~Length" ;
         Left = TRUE ;
@@ -476,7 +476,7 @@ TabPage TP_FOOTNOTE_PAGE
     MetricField ED_LINEWIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 104 ) ;
+        Pos = MAP_APPFONT ( 118 , 103 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -491,10 +491,10 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedText FT_LINEDIST
     {
-        Pos = MAP_APPFONT ( 12 , 122 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
         Text = "Abstan~d zum Fußnoteninhalt" ;
-        Text [ ENGLISH ] = "Distan~ce" ;
+        Text [ ENGLISH ] = "~Spacing to footnote contents" ;
         Text [ norwegian ] = "Avsta~nd" ;
         Text [ italian ] = "Distanza dal contenuto delle note" ;
         Text [ portuguese_brazilian ] = "Dist?n~cia" ;
@@ -522,7 +522,7 @@ TabPage TP_FOOTNOTE_PAGE
     MetricField ED_LINEDIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 118 , 120 ) ;
+        Pos = MAP_APPFONT ( 118 , 119 ) ;
         Size = MAP_APPFONT ( 42 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -538,8 +538,8 @@ TabPage TP_FOOTNOTE_PAGE
     };
     FixedLine FL_LINE
     {
-        Pos = MAP_APPFONT ( 6 , 61 ) ;
-        Size = MAP_APPFONT ( 247 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 60 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Trennlinie" ;
         Text [ ENGLISH ] = "Line" ;
         Text [ norwegian ] = "Linje" ;

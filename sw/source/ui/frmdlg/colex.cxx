@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-19 11:52:43 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 16:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,7 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
 
     aWinSize = PixelToLogic( aWinSize );
 
+    SetBorderStyle( WINDOW_BORDER_MONO );
 }
 
 /*-----------------25.10.96 09.16-------------------
@@ -372,87 +373,87 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
 
 void SwColumnOnlyExample::Paint( const Rectangle& rRect )
 {
-        long nWidth = aFrmSize.Width();
-        long nHeight = aFrmSize.Height();
-        Fraction aXScale( aWinSize.Width(), std::max( (long)(nWidth + nWidth / 8), (long) 1 ) );
-        Fraction aYScale( aWinSize.Height(), std::max( nHeight, (long) 1 ) );
-        MapMode aMapMode( GetMapMode() );
-        aMapMode.SetScaleX( aXScale );
-        aMapMode.SetScaleY( aYScale );
-        SetMapMode( aMapMode );
+    long nWidth = aFrmSize.Width();
+    long nHeight = aFrmSize.Height();
+    Fraction aXScale( aWinSize.Width(), std::max( (long)(nWidth + nWidth / 8), (long) 1 ) );
+    Fraction aYScale( aWinSize.Height(), std::max( nHeight, (long) 1 ) );
+    MapMode aMapMode( GetMapMode() );
+    aMapMode.SetScaleX( aXScale );
+    aMapMode.SetScaleY( aYScale );
+    SetMapMode( aMapMode );
 
-        Size aLogSize(PixelToLogic(GetOutputSizePixel()));
-        Point aTL(  (aLogSize.Width() - aFrmSize.Width()) / 2,
-                    (aLogSize.Height() - aFrmSize.Height()) / 2);
-        Rectangle aRect(aTL, aFrmSize);
+    Size aLogSize(PixelToLogic(GetOutputSizePixel()));
+    Point aTL(  (aLogSize.Width() - aFrmSize.Width()) / 2,
+                (aLogSize.Height() - aFrmSize.Height()) / 2);
+    Rectangle aRect(aTL, aFrmSize);
 
-        SetFillColor( Color( COL_WHITE ) );
+    SetFillColor( Color( COL_WHITE ) );
 //      SetPen(aSolidPen);
+    DrawRect(aRect);
+
+    Size aInside(aFrmSize.Width() - nDistance, aFrmSize.Height() - nDistance);
+    long nDist2 = nDistance / 2;
+    aTL.X() += nDist2;
+    aTL.Y() += nDist2;
+    Rectangle aInsRect(aTL, aInside);
+    DrawRect(aInsRect);
+
+    SetFillColor(Color( COL_LIGHTGRAY ) );
+
+    //Spaltentrenner?
+    long nLength = aLogSize.Height() - 2 * aTL.Y();
+    Point aUp( aTL );
+    Point aDown( aTL.X(), nLength );
+    BOOL bLines = FALSE;
+    if(aCols.GetLineAdj() != COLADJ_NONE)
+    {
+        bLines = TRUE;
+
+        USHORT nPercent = aCols.GetLineHeight();
+        if( nPercent != 100 )
+        {
+            nLength -= nLength * nPercent / 100;
+            switch(aCols.GetLineAdj())
+            {
+                case COLADJ_BOTTOM: aUp.Y() += nLength; break;
+                case COLADJ_TOP: aDown.Y() -= nLength; break;
+                case COLADJ_CENTER:
+                        aUp.Y() += nLength / 2;
+                        aDown.Y() -= nLength / 2;
+                break;
+            }
+        }
+
+    }
+
+    const SwColumns& rCols = aCols.GetColumns();
+    USHORT nColCount = rCols.Count();
+    if( nColCount )
+    {
         DrawRect(aRect);
-
-        Size aInside(aFrmSize.Width() - nDistance, aFrmSize.Height() - nDistance);
-        long nDist2 = nDistance / 2;
-        aTL.X() += nDist2;
-        aTL.Y() += nDist2;
-        Rectangle aInsRect(aTL, aInside);
-        DrawRect(aInsRect);
-
-        SetFillColor(Color( COL_LIGHTGRAY ) );
-
-        //Spaltentrenner?
-        long nLength = aLogSize.Height() - 2 * aTL.Y();
-        Point aUp( aTL );
-        Point aDown( aTL.X(), nLength );
-        BOOL bLines = FALSE;
-        if(aCols.GetLineAdj() != COLADJ_NONE)
+        SetFillColor( Color( COL_WHITE ) );
+        Rectangle aFrmRect(aTL, aInside);
+        long nSum = aTL.X();
+        for(USHORT i = 0; i < nColCount; i++)
         {
-            bLines = TRUE;
-
-            USHORT nPercent = aCols.GetLineHeight();
-            if( nPercent != 100 )
-            {
-                nLength -= nLength * nPercent / 100;
-                switch(aCols.GetLineAdj())
-                {
-                    case COLADJ_BOTTOM: aUp.Y() += nLength; break;
-                    case COLADJ_TOP: aDown.Y() -= nLength; break;
-                    case COLADJ_CENTER:
-                          aUp.Y() += nLength / 2;
-                          aDown.Y() -= nLength / 2;
-                    break;
-                }
-            }
-
+            SwColumn* pCol = rCols[i];
+            aFrmRect.Left()    = nSum + pCol->GetLeft();//nSum + pCol->GetLeft() + aTL.X();
+            nSum              += pCol->GetWishWidth();
+            aFrmRect.Right()   = nSum - pCol->GetRight();
+            DrawRect(aFrmRect);
         }
-
-        const SwColumns& rCols = aCols.GetColumns();
-        USHORT nColCount = rCols.Count();
-        if( !nColCount)
-            DrawRect(aRect);
-        else
+        if(bLines )
         {
-            Rectangle aFrmRect(aTL, aInside);
-            long nSum = aTL.X();
-            for(USHORT i = 0; i < nColCount; i++)
+            nSum = aTL.X();
+            for(USHORT i = 0; i < nColCount - 1; i++)
             {
-                SwColumn* pCol = rCols[i];
-                aFrmRect.Left()    = nSum + pCol->GetLeft();//nSum + pCol->GetLeft() + aTL.X();
-                nSum              += pCol->GetWishWidth();
-                aFrmRect.Right()   = nSum - pCol->GetRight();
-                DrawRect(aFrmRect);
-            }
-            if(bLines )
-            {
-                nSum = aTL.X();
-                for(USHORT i = 0; i < nColCount - 1; i++)
-                {
-                    nSum += rCols[i]->GetWishWidth();
-                    aUp.X() = nSum;
-                    aDown.X() = nSum;
-                    DrawLine(aUp, aDown);
-                }
+                nSum += rCols[i]->GetWishWidth();
+                aUp.X() = nSum;
+                aDown.X() = nSum;
+                DrawLine(aUp, aDown);
             }
         }
+    }
 }
 
 /*-----------------25.10.96 12.05-------------------

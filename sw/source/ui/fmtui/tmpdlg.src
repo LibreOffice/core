@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:07:19 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 16:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1420,17 +1420,17 @@ TabDialog DLG_TEMPLATE_5
             PageItem
             {
                 Identifier = RID_SVXPAGE_NUM_OPTIONS;
-                Text = "~Optionen" ;
+                Text = "Optionen" ;
                 Text [ ENGLISH ] = "Customize" ;
-                Text [ portuguese ] = "~Opções" ;
+                Text [ portuguese ] = "Opções" ;
                 Text [ english_us ] = "Options" ;
-                Text [ portuguese_brazilian ] = "~Optionen" ;
+                Text [ portuguese_brazilian ] = "Optionen" ;
                 Text [ swedish ] = "Alternativ" ;
                 Text [ danish ] = "Indstillinger" ;
                 Text [ italian ] = "Opzioni" ;
-                Text [ spanish ] = "~Opciones" ;
-                Text [ french ] = "~Options" ;
-                Text [ dutch ] = "~Opties" ;
+                Text [ spanish ] = "Opciones" ;
+                Text [ french ] = "Options" ;
+                Text [ dutch ] = "Opties" ;
                 Text[ chinese_simplified ] = "Ñ¡Ïî";
                 Text[ russian ] = "Ïàðàìåòðû";
                 Text[ polish ] = "Opcje";
@@ -1441,7 +1441,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ greek ] = "ÅðéëïãÝò";
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
-                Text[ catalan ] = "~Opciones";
+                Text[ catalan ] = "Opciones";
                 Text[ finnish ] = "Asetukset";
             };
         };

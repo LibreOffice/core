@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:00:17 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 16:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #define FL_LINETYPE     39
 
 #define WN_BSP          41
+#define WN_BSP_BORDER   60
 #define LB_REFERENCE        42
 #define CB_REGISTER             43
 #define FL_REGISTER             44
