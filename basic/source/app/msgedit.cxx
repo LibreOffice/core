@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-28 14:43:03 $
+ *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,13 +123,11 @@ MsgEdit::MsgEdit( AppError* pParent, BasicFrame *pBF, const WinBits& aBits )
 , bModified(FALSE)
 , pAppError( pParent )
 {
-    SetFont( aEditTree.GetDefaultFont( DEFAULTFONT_FIXED, aEditTree.GetSettings().GetLanguage(), 0, &aEditTree ) );
+//  SetFont( aEditTree.GetDefaultFont( DEFAULTFONT_FIXED, aEditTree.GetSettings().GetLanguage(), 0, &aEditTree ) );
     aEditTree.SetNodeBitmaps( Bitmap( ResId (MBP_PLUS) ), Bitmap( ResId (MBP_MINUS) ) );
     aEditTree.SetSelectionMode( MULTIPLE_SELECTION );
     if ( aEditTree.GetModel()->GetSortMode() != SortNone )
         aEditTree.GetModel()->SetSortMode( SortNone );
-
-    pParent->bHasFile = Load( pParent->GetText() );
 }
 
 MsgEdit::~MsgEdit()

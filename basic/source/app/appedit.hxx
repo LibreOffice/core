@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appedit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2001-05-04 10:51:40 $
+ *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ public:
     void Mark( short, short, short );// Text markieren
     void Highlight( USHORT nLine, USHORT nCol1, USHORT nCol2 );
     virtual BOOL ReloadAllowed(){ return !StarBASIC::IsRunning(); }
+    virtual void LoadIniFile();     // (re)load ini file after change
 };
 
 #endif

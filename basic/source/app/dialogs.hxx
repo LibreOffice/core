@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-18 15:15:43 $
+ *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,12 @@
 #ifndef _SV_TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
 #endif
+#ifndef _CTRLTOOL_HXX
+#include <svtools/ctrltool.hxx>
+#endif
+#ifndef _CTRLBOX_HXX
+#include <svtools/ctrlbox.hxx>
+#endif
 
 class SbxVariable;
 
@@ -148,7 +154,7 @@ class ConfEdit : public PushButton
     Edit aEdit;
 public:
     ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN );
-    void Save();
+    void Save( Config &aConf );
     void Click();
 };
 
@@ -185,6 +191,32 @@ class SpecialOptions : public TabPage
 
 public:
     SpecialOptions( Window* );
+    void Save();
+};
+
+class FontOptions : public TabPage
+{
+    FixedText aFTFontName;
+    FontNameBox aFontName;
+    FixedText aFTStyle;
+    FontStyleBox aFontStyle;
+    FixedText aFTSize;
+    FontSizeBox aFontSize;
+    FixedText aFTPreview;
+
+    FontList aFontList;
+
+//  FixedLine aDirs;
+//  FixedLine aOther;
+
+    DECL_LINK( FontNameChanged, void* );
+    DECL_LINK( FontStyleChanged, void* );
+    DECL_LINK( FontSizeChanged, void* );
+
+    void UpdatePreview();
+
+public:
+    FontOptions( Window* );
     void Save();
 };
 

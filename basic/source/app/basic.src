@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-18 15:15:01 $
+ *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3226,6 +3226,12 @@ ModelessDialog IDD_OPTIONS_DLG
                 Text[ catalan ] = "Especialitzat";
                 Text[ finnish ] = "Erikoinen";
             };
+            PageItem
+            {
+                Identifier = RID_TP_FON ;
+                Text = "Schrift" ;
+                Text [ english_us ] = "Font" ;
+            };
         };
     OKButton RID_OK {
             Pos = MAP_APPFONT( 65, 124 );
@@ -3726,13 +3732,14 @@ TabPage RID_TP_SPECIAL {
         Text[ catalan ] = "Recàrrega automàtica";
         Text[ finnish ] = "Automaattinen uudelleenlataus";
     };
-// Unbenutzt aber Positioniert
-//  CheckBox CB_AUTOSAVE {
-//          Pos = MAP_APPFONT( 127, 70 );
-//          Size = MAP_APPFONT( 103, 12 );
-//          Text = "Unbenutzt aber Positioniert";
-//          Text [ english_us ] = "Unbenutzt aber Positioniert";
-//      };
+/*  ComboBox LB_FONT {
+            Pos = MAP_APPFONT( 127, 70 );
+            Size = MAP_APPFONT( 103, 12 );
+            Sort = TRUE;
+            DropDown = TRUE;
+            AutoSize = TRUE;
+            AutoHScroll = TRUE;
+        };*/
     CheckBox CB_AUTOSAVE {
             Pos = MAP_APPFONT( 127, 83 );
             Size = MAP_APPFONT( 103, 12 );
@@ -3741,6 +3748,143 @@ TabPage RID_TP_SPECIAL {
         };
 };
 
+
+TabPage RID_TP_FONT {
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( 244, 100 );
+    FixedText FT_FONTNAME {
+        Pos = MAP_APPFONT( 4, 2 );
+        Size = MAP_APPFONT( 123, 8 );
+        Text = "Art";
+        Text [ english_us ] = "art";
+    };
+    ComboBox CB_FONTNAME {
+        Pos = MAP_APPFONT( 4, 12 );
+        Size = MAP_APPFONT( 123, 12*4 );
+        Sort = TRUE;
+        AutoHScroll = TRUE;
+    };
+    FixedText FT_FONTSTYLE {
+        Pos = MAP_APPFONT( 131, 2 );
+        Size = MAP_APPFONT( 65, 8 );
+        Text = "Schnitt";
+        Text [ english_us ] = "??????";
+    };
+    ComboBox CB_FONTSTYLE {
+        Pos = MAP_APPFONT( 131, 12 );
+        Size = MAP_APPFONT( 65, 12*4 );
+        AutoHScroll = TRUE;
+    };
+    FixedText FT_FONTSIZE {
+        Pos = MAP_APPFONT( 200, 2 );
+        Size = MAP_APPFONT( 29, 8 );
+        Text = "Größe";
+        Text [ english_us ] = "Size";
+    };
+    MetricBox MB_FONTSIZE {
+        Pos = MAP_APPFONT( 200, 12 );
+        Size = MAP_APPFONT( 29, 12*4 );
+        AutoHScroll = TRUE;
+    };
+    FixedText FT_PREVIEW {
+        Pos = MAP_APPFONT( 4, 12*5+5 );
+        Size = MAP_APPFONT( 229, 30 );
+    };
+                            // 229 is max
+        /*
+    FixedText LOG_TEXT {
+            Text = "Log Basisverzeichnis";
+            Text [ english_us ] = "Log home directory";
+    };
+    FixedText BASIS_TEXT {
+            Pos = MAP_APPFONT( 7, 28 );
+            Size = MAP_APPFONT( 76, 12 );
+            Text = "Basisverzeichnis";
+            Text [ english_us ] = "Home directory";
+    };
+    FixedText HID_TEXT {
+            Pos = MAP_APPFONT( 7, 44 );
+            Size = MAP_APPFONT( 76, 12 );
+            Text = "HID Verzeichnis";
+            Text [ english_us ] = "HID directory";
+    };
+    Edit LOG_NAME {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 87, 12 );
+            Size = MAP_APPFONT( 126, 12 );
+            TabStop = TRUE;
+        };
+    Edit BASIS_NAME {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 87, 28 );
+            Size = MAP_APPFONT( 126, 12 );
+            TabStop = TRUE;
+        };
+    Edit HID_NAME {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 87, 44 );
+            Size = MAP_APPFONT( 126, 12 );
+            TabStop = TRUE;
+        };
+    PushButton LOG_SET {
+            Pos = MAP_APPFONT( 217, 12 );
+            Size = MAP_APPFONT( 12, 12 );
+            Text = "...";
+            Text [ english_us ] = "...";
+            TabStop = TRUE;
+    };
+    PushButton BASIS_SET {
+            Pos = MAP_APPFONT( 217, 28 );
+            Size = MAP_APPFONT( 12, 12 );
+            Text = "...";
+            Text [ english_us ] = "...";
+            TabStop = TRUE;
+    };
+    PushButton HID_SET {
+            Pos = MAP_APPFONT( 217, 44 );
+            Size = MAP_APPFONT( 12, 12 );
+            Text = "...";
+            Text [ english_us ] = "...";
+            TabStop = TRUE;
+    };
+    FixedLine FL_OTHER {
+            Pos = MAP_APPFONT( 4, 60 );
+            Size = MAP_APPFONT( 230, 8 );
+            Text = "Andere Einstellungen";
+            Text [ english_us ] = "Other settings";
+    };
+    FixedText TIMEOUT_TEXT {
+            Pos = MAP_APPFONT( 8, 70 );
+            Size = MAP_APPFONT( 70, 12 );
+            Text = "Server Timeout";
+            Text [ english_us ] = "Server Timeout";
+    };
+    TimeField SERVER_TIMEOUT {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 83, 70 );
+            Size = MAP_APPFONT( 40, 12 );
+            TabStop = TRUE;
+            Repeat = TRUE;
+            Spin = TRUE;
+            Format = TIMEF_SEC;
+            Duration = TRUE;
+        };
+    CheckBox CB_AUTORELOAD {
+            Pos = MAP_APPFONT( 8, 83 );
+            Size = MAP_APPFONT( 115, 12 );
+            Text = "Automatischer Reload";
+            Text [ english_us ] = "AutoReload";
+    };
+            Pos = MAP_APPFONT( 127, 70 );
+            Size = MAP_APPFONT( 103, 12 );
+    CheckBox CB_AUTOSAVE {
+            Pos = MAP_APPFONT( 127, 83 );
+            Size = MAP_APPFONT( 103, 12 );
+            Text = "Speichern vor Ausführen";
+            Text [ english_us ] = "Save before execute";
+        };*/
+};
 
 
 FloatingWindow IDD_DISPLAY_HID {

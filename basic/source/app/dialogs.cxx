@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-18 15:15:43 $
+ *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@ HACK( #define protected public )
 #endif
 #undef protected
 
+#ifndef _SV_METRIC_HXX
+#include <vcl/metric.hxx>
+#endif
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
@@ -110,6 +113,9 @@ HACK( #define protected public )
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zformat.hxx>
+#endif
+#ifndef _CTRLTOOL_HXX
+#include <svtools/ctrltool.hxx>
 #endif
 
 #include <svtools/pver.hxx>
@@ -214,11 +220,9 @@ ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nR
     aEdit.SetText( aTemp );
 }
 
-void ConfEdit::Save()
+void ConfEdit::Save( Config &aConf )
 {
-    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Path");
-
     aConf.WriteKey( aKeyName, ByteString( aEdit.GetText(), RTL_TEXTENCODING_UTF8 ) );
 }
 
@@ -279,6 +283,9 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
             case RID_TP_GEN:
                 pNewTabPage = new GenericOptions( pTabCtrl );
                 break;
+            case RID_TP_FON:
+                pNewTabPage = new FontOptions( pTabCtrl );
+                break;
             default:    DBG_ERROR( "PageHdl: Unbekannte ID!" );
         }
         DBG_ASSERT( pNewTabPage, "Keine Page!" );
@@ -302,6 +309,12 @@ IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
     if ( pGeneric )
         pGeneric->Save();
 
+    FontOptions *pFonts;
+    pFonts = (FontOptions*)aTabCtrl.GetTabPage( RID_TP_FON );
+    if ( pFonts )
+        pFonts->Save();
+
+    ((BasicApp*)GetpApp())->LoadIniFile();
     Close();
     return 0;
 }
@@ -335,18 +348,96 @@ SpecialOptions::SpecialOptions( Window* pParent )
 
 void SpecialOptions::Save()
 {
-    aLog.Save();
-    aBasis.Save();
-    aHID.Save();
-
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
+    aLog.Save( aConf );
+    aBasis.Save( aConf );
+    aHID.Save( aConf );
+
     aConf.SetGroup("Misc");
     aConf.WriteKey( "ServerTimeout", ByteString::CreateFromInt32( aServerTimeout.GetTime().GetTime() ) );
     aConf.WriteKey( "AutoReload", aAutoReload.IsChecked()?"1":"0" );
     aConf.WriteKey( "AutoSave", aAutoSave.IsChecked()?"1":"0" );
+}
 
-    aConf.Flush();
-    ((BasicApp*)GetpApp())->LoadIniFile();
+
+FontOptions::FontOptions( Window* pParent )
+: TabPage( pParent, ResId( RID_TP_FONT ) )
+, aFTFontName( this, ResId(FT_FONTNAME) )
+, aFontName( this, ResId(CB_FONTNAME) )
+, aFTStyle( this, ResId(FT_FONTSTYLE) )
+, aFontStyle( this, ResId(CB_FONTSTYLE) )
+, aFTSize( this, ResId(FT_FONTSIZE) )
+, aFontSize( this, ResId(MB_FONTSIZE) )
+, aFTPreview( this, ResId(FT_PREVIEW) )
+, aFontList( this )
+{
+    FreeResource();
+
+    aFontName.Fill( &aFontList );
+    aFontName.EnableWYSIWYG();
+    aFontName.EnableSymbols();
+
+//    aFontSize.SetUnit( FUNIT_POINT );
+//    MapMode aMode( MAP_POINT );
+//    aFTPreview.SetMapMode( aMode );
+
+    aFontName.SetModifyHdl( LINK( this, FontOptions, FontNameChanged ) );
+    aFontStyle.SetModifyHdl( LINK( this, FontOptions, FontStyleChanged ) );
+    aFontSize.SetModifyHdl( LINK( this, FontOptions, FontSizeChanged ) );
+
+    ByteString aTemp;
+    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
+    aConf.SetGroup("Misc");
+    aTemp = aConf.ReadKey( "ScriptFontName", "Courier" );
+       aFontName.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+    aFontName.Modify();
+    aTemp = aConf.ReadKey( "ScriptFontStyle", "normal" );
+       aFontStyle.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+    aFontStyle.Modify();
+    aTemp = aConf.ReadKey( "ScriptFontSize", "12" );
+       aFontSize.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+    aFontSize.Modify();
+}
+
+IMPL_LINK( FontOptions, FontNameChanged, void*, EMPTYARG )
+{
+    aFontStyle.Fill( aFontName.GetText(), &aFontList );
+    FontStyleChanged( NULL );
+    return 0;
+}
+
+IMPL_LINK( FontOptions, FontStyleChanged, void*, EMPTYARG )
+{
+    aFontSize.Fill( aFontList.Get( aFontName.GetText(), aFontStyle.GetText() ), &aFontList );
+    FontSizeChanged( NULL );
+    return 0;
+}
+
+IMPL_LINK( FontOptions, FontSizeChanged, void*, EMPTYARG )
+{
+    UpdatePreview();
+    return 0;
+}
+
+void FontOptions::UpdatePreview()
+{
+    Font aFont = aFontList.Get( aFontName.GetText(), aFontStyle.GetText() );
+//    ULONG nFontSize = aFontSize.GetValue( FUNIT_POINT );
+    ULONG nFontSize = (aFontSize.GetValue() + 5) / 10;
+    aFont.SetHeight( nFontSize );
+    aFTPreview.SetFont( aFont );
+    aFTPreview.SetText( aFontName.GetText() );
+    aFTPreview.Invalidate();
+}
+
+
+void FontOptions::Save()
+{
+    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
+    aConf.SetGroup("Misc");
+    aConf.WriteKey( "ScriptFontName", aFontName.GetText(), RTL_TEXTENCODING_UTF8 );
+    aConf.WriteKey( "ScriptFontStyle", aFontStyle.GetText(), RTL_TEXTENCODING_UTF8 );
+    aConf.WriteKey( "ScriptFontSize", aFontSize.GetText(), RTL_TEXTENCODING_UTF8 );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resids.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-18 15:15:43 $
+ *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,16 @@
 #define RID_CB_VALUE       56
 #define RID_PB_NEW_VALUE   57
 #define RID_PB_DEL_VALUE   58
+
+// Font Settings
+#define RID_TP_FON         60
+#define FT_FONTNAME        61
+#define CB_FONTNAME        62
+#define FT_FONTSTYLE       63
+#define CB_FONTSTYLE       64
+#define FT_FONTSIZE        65
+#define MB_FONTSIZE        66
+#define FT_PREVIEW         67
 
 // DisplayHId
 #define RID_TB_CONF        70

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apperror.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-28 14:43:03 $
+ *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _SV_CONFIG_HXX
 #include <vcl/config.hxx>
 #endif
+#ifndef _CTRLTOOL_HXX
+#include <svtools/ctrltool.hxx>
+#endif
 #ifndef _BASIC_TTRESHLP_HXX
 #include "ttstrhlp.hxx"
 #endif
@@ -72,9 +75,10 @@ TYPEINIT1(AppError,AppWin);
 AppError::AppError( BasicFrame* pParent, String aFileName )
 : AppWin( pParent )
 {
-    LoadIniFile();
     SetText( aFileName );   // Muß vor new MsgEdit stehen!!
     pDataEdit = new MsgEdit( this, pParent, WB_HSCROLL | WB_VSCROLL | WB_LEFT );
+    LoadIniFile();
+    bHasFile = pDataEdit->Load( aFileName );
     DirEntry aEntry( aFileName );
     UpdateFileInfo( HAS_BEEN_LOADED );
     // Icon definieren:
@@ -126,4 +130,21 @@ void AppError::LoadIniFile()
     aConf.SetGroup("Path");
 
     aBaseDir = DirEntry( aConf.ReadKey("Basisverzeichnis") );
+
+
+    FontList aFontList( pFrame );   // Just some Window is needed
+    aConf.SetGroup("Misc");
+    String aFontName = String( aConf.ReadKey( "ScriptFontName", "Courier" ), RTL_TEXTENCODING_UTF8 );
+    String aFontStyle = String( aConf.ReadKey( "ScriptFontStyle", "normal" ), RTL_TEXTENCODING_UTF8 );
+    String aFontSize = String( aConf.ReadKey( "ScriptFontSize", "12" ), RTL_TEXTENCODING_UTF8 );
+    Font aFont = aFontList.Get( aFontName, aFontStyle );
+//    ULONG nFontSize = aFontSize.GetValue( FUNIT_POINT );
+    ULONG nFontSize = aFontSize.ToInt32();
+//    aFont.SetSize( Size( nFontSize, nFontSize ) );
+    aFont.SetHeight( nFontSize );
+
+    aFont.SetTransparent( FALSE );
+//    aFont.SetAlign( ALIGN_BOTTOM );
+//    aFont.SetHeight( aFont.GetHeight()+2 );
+    pDataEdit->SetFont( aFont );
 }

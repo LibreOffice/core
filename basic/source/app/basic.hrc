@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,9 +198,10 @@
 #define IDD_PRINT_DIALOG 4006
 #define IDD_OPTIONS_DLG 4007
 #define RID_TP_SPECIAL 4008
-#define RID_TP_GENERIC 4009
-#define IDD_DISPLAY_HID 4010
-#define IDD_EDIT_VAR 4010
+#define RID_TP_FONT 4009
+#define RID_TP_GENERIC 4010
+#define IDD_DISPLAY_HID 4011
+#define IDD_EDIT_VAR 4012
 
 
 //#define RID_APPFONT 5000

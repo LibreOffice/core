@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appedit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2001-05-04 10:51:40 $
+ *  last change: $Author: gh $ $Date: 2002-04-11 08:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,18 @@
  *
  ************************************************************************/
 
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
+#endif
+#ifndef _CTRLTOOL_HXX
+#include <svtools/ctrltool.hxx>
+#endif
 #ifndef _TEXTVIEW_HXX //autogen
 #include <svtools/textview.hxx>
 #endif
-
 #ifndef _TEXTENG_HXX //autogen
 #include <svtools/texteng.hxx>
 #endif
-
 #ifndef _UNDO_HXX
 #include <svtools/undo.hxx>
 #endif
@@ -90,6 +94,7 @@ AppEdit::AppEdit( BasicFrame* pParent )
     // evtl. den Untitled-String laden:
 
     pDataEdit = new TextEdit( this, WB_LEFT );
+    LoadIniFile();
     // Icon definieren:
 //  pIcon = new Icon( ResId( RID_WORKICON ) );
 //  if( pIcon ) SetIcon( *pIcon );
@@ -115,6 +120,37 @@ AppEdit::~AppEdit()
     delete pHold;
     delete pHScroll;
     delete pVScroll;
+}
+
+void AppEdit::LoadIniFile()
+{
+    FontList aFontList( pFrame );   // Just some Window is needed
+    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
+    aConf.SetGroup("Misc");
+    String aFontName = String( aConf.ReadKey( "ScriptFontName", "Courier" ), RTL_TEXTENCODING_UTF8 );
+    String aFontStyle = String( aConf.ReadKey( "ScriptFontStyle", "normal" ), RTL_TEXTENCODING_UTF8 );
+    String aFontSize = String( aConf.ReadKey( "ScriptFontSize", "12" ), RTL_TEXTENCODING_UTF8 );
+    Font aFont = aFontList.Get( aFontName, aFontStyle );
+//    ULONG nFontSize = aFontSize.GetValue( FUNIT_POINT );
+    ULONG nFontSize = aFontSize.ToInt32();
+//    aFont.SetSize( Size( nFontSize, nFontSize ) );
+    aFont.SetHeight( nFontSize );
+
+#ifdef DEBUG
+    {
+        Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0, pFrame ));
+    }
+#endif
+    aFont.SetTransparent( FALSE );
+//    aFont.SetAlign( ALIGN_BOTTOM );
+//    aFont.SetHeight( aFont.GetHeight()+2 );
+    pDataEdit->SetFont( aFont );
+
+    if ( ((TextEdit*)pDataEdit)->GetBreakpointWindow() )
+    {
+        ((TextEdit*)pDataEdit)->GetBreakpointWindow()->SetFont( aFont );
+        ((TextEdit*)pDataEdit)->GetBreakpointWindow()->Invalidate();
+    }
 }
 
 void AppEdit::Command( const CommandEvent& rCEvt )
