@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:06:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #if ! defined INCLUDED_JNI_BRIDGE_H
 #define INCLUDED_JNI_BRIDGE_H
 
@@ -77,13 +78,14 @@
 namespace jni_uno
 {
 
-//==== holds environments and mappings =============================================================
+//==== holds environments and mappings =========================================
 struct Bridge;
 struct Mapping : public uno_Mapping
 {
     Bridge * m_bridge;
 };
-//==================================================================================================
+
+//==============================================================================
 struct Bridge
 {
     mutable oslInterlockedCount m_ref;
@@ -99,7 +101,9 @@ struct Bridge
 
     //
     ~Bridge() SAL_THROW( () );
-    Bridge( uno_Environment * java_env, uno_ExtEnvironment * uno_env, bool registered_java2uno );
+    Bridge(
+        uno_Environment * java_env, uno_ExtEnvironment * uno_env,
+        bool registered_java2uno );
 
     void acquire() const;
     void release() const;
@@ -108,13 +112,15 @@ struct Bridge
     void map_to_uno(
         JNI_context const & jni,
         void * uno_data, jvalue java_data,
-        typelib_TypeDescriptionReference * type, JNI_type_info const * info /* maybe 0 */,
+        typelib_TypeDescriptionReference * type,
+        JNI_type_info const * info /* maybe 0 */,
         bool assign, bool out_param,
         bool special_wrapped_integral_types = false ) const;
     void map_to_java(
         JNI_context const & jni,
         jvalue * java_data, void const * uno_data,
-        typelib_TypeDescriptionReference * type, JNI_type_info const * info /* maybe 0 */,
+        typelib_TypeDescriptionReference * type,
+        JNI_type_info const * info /* maybe 0 */,
         bool in_param, bool out_param,
         bool special_wrapped_integral_types = false ) const;
 
@@ -122,7 +128,8 @@ struct Bridge
     void handle_uno_exc(
         JNI_context const & jni, uno_Any * uno_exc ) const;
     void call_java(
-        jobject javaI, JNI_interface_type_info const * info, sal_Int32 function_pos,
+        jobject javaI,
+        JNI_interface_type_info const * info, sal_Int32 function_pos,
         typelib_TypeDescriptionReference * return_type,
         typelib_MethodParameter * params, sal_Int32 nParams,
         void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) const;
@@ -132,7 +139,8 @@ struct Bridge
 
     // jni_java2uno.cxx
     void handle_java_exc(
-        JNI_context const & jni, JLocalAutoRef const & jo_exc, uno_Any * uno_exc ) const;
+        JNI_context const & jni,
+        JLocalAutoRef const & jo_exc, uno_Any * uno_exc ) const;
     jobject call_uno(
         JNI_context const & jni,
         uno_Interface * pUnoI, typelib_TypeDescription * member_td,
