@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 15:53:05 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 10:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,11 +1047,15 @@ BOOL MA_FASTCALL lcl_CheckInsertPage( SwFrm *pFrm, SwPageFrm *&rpPage,
             if ( 0 != (nPgNum = rDesc.GetNumOffset()) )
                 ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(TRUE);
         }
-        if ( !nPgNum )
-            nPgNum = rpPage->GetVirtPageNum();
-        BOOL bOdd = nPgNum % 2 ? FALSE : TRUE;
+        BOOL bOdd = !rpPage->OnRightPage();
+        BOOL bInsertEmpty = FALSE;
+        if( nPgNum && bOdd != ( ( nPgNum % 2 ) != 0 ) )
+        {
+            bOdd = !bOdd;
+            bInsertEmpty = TRUE;
+        }
         ::InsertNewPage( (SwPageDesc&)*pDesc, rpPage->GetUpper(),
-                         bOdd, FALSE, rpPage->GetNext() );
+                         bOdd, bInsertEmpty, FALSE, rpPage->GetNext() );
         if ( bEnd )
         {
             ASSERT( rpPage->GetNext(), "Keine neue Seite?" );
@@ -2460,7 +2464,7 @@ ULONG MA_FASTCALL SqRt( BigInt nX )
 |*************************************************************************/
 
 SwPageFrm * MA_FASTCALL InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
-                          BOOL bOdd, BOOL bFtn,
+                          BOOL bOdd, BOOL bInsertEmpty, BOOL bFtn,
                           SwFrm *pSibling )
 {
     SwPageFrm *pRet;
@@ -2470,15 +2474,17 @@ SwPageFrm * MA_FASTCALL InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
     //eine Leerseite einfuegen.
     if ( !pFmt )
     {
+        pFmt = bOdd ? rDesc.GetLeftFmt() : rDesc.GetRightFmt();
+        ASSERT( pFmt, "Descriptor without any format?!" );
+        bInsertEmpty = !bInsertEmpty;
+    }
+    if( bInsertEmpty )
+    {
         SwPageDesc *pTmpDesc = pSibling && pSibling->GetPrev() ?
                 ((SwPageFrm*)pSibling->GetPrev())->GetPageDesc() : &rDesc;
         pRet = new SwPageFrm( pDoc->GetEmptyPageFmt(), pTmpDesc );
         pRet->Paste( pUpper, pSibling );
         pRet->PreparePage( bFtn );
-        //Jetzt muss ich ein Format fuer die entsprechende Seite erhalten.
-        bOdd = bOdd ? FALSE : TRUE;
-        pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();
-        ASSERT( pFmt, "Descriptor gibt kein Format her." );
     }
     pRet = new SwPageFrm( pFmt, &rDesc );
     pRet->Paste( pUpper, pSibling );
