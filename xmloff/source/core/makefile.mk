@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: sab $ $Date: 2001-03-11 15:54:05 $
+#   last change: $Author: mib $ $Date: 2001-05-09 12:16:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,9 @@ CXXFILES = \
         ProgressBarHelper.cxx	\
         PropertySetMerger.cxx	\
         SettingsExportHelper.cxx	\
-        DocumentSettingsContext.cxx
+        DocumentSettingsContext.cxx \
+        XMLEmbeddedObjectExportFilter.cxx \
+        XMLEmbeddedObjectImportContext.cxx
 
 SLOFILES =	\
         $(SLO)$/facreg.obj		\
@@ -118,7 +120,9 @@ SLOFILES =	\
         $(SLO)$/ProgressBarHelper.obj	\
         $(SLO)$/PropertySetMerger.obj	\
         $(SLO)$/SettingsExportHelper.obj	\
-        $(SLO)$/DocumentSettingsContext.obj
+        $(SLO)$/DocumentSettingsContext.obj \
+        $(SLO)$/XMLEmbeddedObjectExportFilter.obj \
+        $(SLO)$/XMLEmbeddedObjectImportContext.obj
 
 # --- Tagets -------------------------------------------------------
 

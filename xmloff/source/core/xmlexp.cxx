@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-07 06:03:01 $
+ *  last change: $Author: mib $ $Date: 2001-05-09 12:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _XMLOFF_ATTRLIST_HXX
@@ -168,6 +171,12 @@
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
+#ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
+#include "XMLFilterServiceNames.h"
+#endif
+#ifndef _XMLOFF_XMLEMBEDDEDOBJECTEXPORTFILTER_HXX
+#include "XMLEmbeddedObjectExportFilter.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -175,8 +184,42 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::xml::sax;
 
-sal_Char __READONLY_DATA sXML_0_9[] = "0.9";
+sal_Char __READONLY_DATA sXML_1_0[] = "1.0";
+
+#define XML_MODEL_SERVICE_WRITER    "com.sun.star.text.TextDocument"
+#define XML_MODEL_SERVICE_CALC      "com.sun.star.sheet.SpreadsheetDocument"
+#define XML_MODEL_SERVICE_DRAW      "com.sun.star.drawing.DrawingDocument"
+#define XML_MODEL_SERVICE_IMPRESS   "com.sun.star.presentation.PresentationDocument"
+#define XML_MODEL_SERVICE_MATH      "com.sun.star.formula.FormulaProperties"
+#define XML_MODEL_SERVICE_CHART     "com.sun.star.chart.ChartDocument"
+
+struct XMLServiceMapEntry_Impl
+{
+    const sal_Char *sModelService;
+    sal_Int32      nModelServiceLen;
+    const sal_Char *sFilterService;
+    sal_Int32      nFilterServiceLen;
+};
+
+#define SERVICE_MAP_ENTRY( app ) \
+    { XML_MODEL_SERVICE_##app, sizeof(XML_MODEL_SERVICE_##app)-1, \
+      XML_EXPORT_FILTER_##app, sizeof(XML_EXPORT_FILTER_##app)-1 }
+
+const XMLServiceMapEntry_Impl aServiceMap[] =
+{
+    SERVICE_MAP_ENTRY( WRITER ),
+    SERVICE_MAP_ENTRY( CALC ),
+    SERVICE_MAP_ENTRY( IMPRESS ),// Impress supports DrawingDocument, too, so
+    SERVICE_MAP_ENTRY( DRAW ),   // it must appear before Draw
+    SERVICE_MAP_ENTRY( MATH ),
+    SERVICE_MAP_ENTRY( CHART ),
+    { 0, 0, 0, 0 }
+};
 
 void SvXMLExport::_InitCtor()
 {
@@ -726,7 +769,7 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
 
     // office:version = ...
     if( !bExtended )
-        AddAttributeASCII( XML_NAMESPACE_OFFICE, sXML_version, sXML_0_9 );
+        AddAttributeASCII( XML_NAMESPACE_OFFICE, sXML_version, sXML_1_0 );
 
     {
         char* pRootService;
@@ -757,7 +800,8 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
             pRootService = sXML_document;
         }
 
-        if( xExtHandler.is() )
+        if( (getExportFlags() && EXPORT_NODOCTYPE) == 0 &&
+            xExtHandler.is() )
         {
             OUStringBuffer aDocType(
                 sizeof(sXML_xml_doctype_prefix) +
@@ -1260,6 +1304,59 @@ sal_Int64 SAL_CALL SvXMLExport::getSomething( const uno::Sequence< sal_Int8 >& r
         return (sal_Int64)this;
     }
     return 0;
+}
+
+sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
+{
+    OUString sFilterService;
+
+    Reference < lang::XServiceInfo > xServiceInfo( rComp, UNO_QUERY );
+    if( xServiceInfo.is() )
+    {
+        const XMLServiceMapEntry_Impl *pEntry = aServiceMap;
+        while( pEntry->sModelService )
+        {
+            OUString sModelService( pEntry->sModelService,
+                                    pEntry->nModelServiceLen,
+                                       RTL_TEXTENCODING_ASCII_US );
+            if( xServiceInfo->supportsService( sModelService ) )
+            {
+                sFilterService = OUString( pEntry->sFilterService,
+                                           pEntry->nFilterServiceLen,
+                                              RTL_TEXTENCODING_ASCII_US );
+                break;
+            }
+            pEntry++;
+        }
+    }
+
+    OSL_ENSURE( sFilterService.getLength(), "no export filter for own object" );
+
+    if( !sFilterService.getLength() )
+        return sal_False;
+
+    Reference < XDocumentHandler > xHdl =
+        new XMLEmbeddedObjectExportFilter( xHandler );
+
+    Sequence < Any > aArgs( 1 );
+    aArgs[0] <<= xHdl;
+
+    Reference< lang::XMultiServiceFactory > xServiceFactory =
+            comphelper::getProcessServiceFactory();
+    Reference< document::XExporter > xExporter(
+        xServiceFactory->createInstanceWithArguments( sFilterService, aArgs),
+                                               UNO_QUERY);
+    OSL_ENSURE( xExporter.is(),
+                "can't instantiate export filter component for own object" );
+    if( !xExporter.is() )
+        return sal_False;
+
+    xExporter->setSourceDocument( rComp );
+
+    Reference<XFilter> xFilter( xExporter, UNO_QUERY );
+
+    Sequence < PropertyValue > aMediaDesc( 0 );
+    return xFilter->filter( aMediaDesc );
 }
 
 void SvXMLElementExport::StartElement( SvXMLExport& rExp,

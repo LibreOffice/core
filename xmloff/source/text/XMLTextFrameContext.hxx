@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-25 13:35:19 $
+ *  last change: $Author: mib $ $Date: 2001-05-09 12:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,41 @@ class XMLTextFrameContext : public SvXMLImportContext
     const ::rtl::OUString sTextBoxServiceName;
     const ::rtl::OUString sGraphicServiceName;
 
+    ::rtl::OUString sName;
+    ::rtl::OUString sStyleName;
+    ::rtl::OUString sNextName;
+    ::rtl::OUString sHRef;
+    ::rtl::OUString sFilterName;
+    ::rtl::OUString sCode;
+    ::rtl::OUString sObject;
+    ::rtl::OUString sArchive;
+    ::rtl::OUString sMimeType;
+    ::rtl::OUString sFrameName;
+    ::rtl::OUString sAppletName;
     ::rtl::OUString sDesc;
+    ::rtl::OUString sFilterService;
+
+    ParamMap aParamMap;
+
+    sal_Int32   nX;
+    sal_Int32   nY;
+    sal_Int32   nWidth;
+    sal_Int32   nHeight;
+    sal_Int32   nZIndex;
+    sal_Int16   nPage;
+    sal_Int16   nRotation;
+    sal_Int16   nRelWidth;
+    sal_Int16   nRelHeight;
+
     sal_uInt16 nType;
     ::com::sun::star::text::TextContentAnchorType   eAnchorType;
-    ParamMap aParamMap;
+
+    sal_Bool    bMayScript : 1;
+    sal_Bool    bMinHeight : 1;
+    sal_Bool    bSyncWidth : 1;
+    sal_Bool    bSyncHeight : 1;
+
+    void Create( sal_Bool bLinked );
 
 public:
 

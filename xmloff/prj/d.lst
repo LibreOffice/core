@@ -101,6 +101,8 @@ hedabu: ..\inc\ImageStyle.hxx %_DEST%\inc%_EXT%\xmloff\ImageStyle.hxx
 hedabu: ..\inc\SettingsExportHelper.hxx %_DEST%\inc%_EXT%\xmloff\SettingsExportHelper.hxx
 hedabu: ..\inc\DocumentSettingsContext.hxx %_DEST%\inc%_EXT%\xmloff\DocumentSettingsContext.hxx
 hedabu: ..\inc\XMLGraphicsDefaultStyle.hxx %_DEST%\inc%_EXT%\xmloff\XMLGraphicsDefaultStyle.hxx
+hedabu: ..\inc\XMLEmbeddedObjectExportFilter.hxx %_DEST%\inc%_EXT%\xmloff\XMLEmbeddedObjectExportFilter.hxx
+hedabu: ..\inc\XMLFilterServiceNames.h %_DEST%\inc%_EXT%\xmloff\XMLFilterServiceNames.h
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx

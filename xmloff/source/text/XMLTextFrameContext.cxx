@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 09:49:55 $
+ *  last change: $Author: mib $ $Date: 2001-05-09 12:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTSUPPLIER_HPP_
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#endif
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
@@ -104,6 +107,9 @@
 #endif
 #ifndef _XMLOFF_XMLANCHORTYPEPROPHDL_HXX
 #include "XMLAnchorTypePropHdl.hxx"
+#endif
+#ifndef _XMLOFF_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
+#include "XMLEmbeddedObjectImportContext.hxx"
 #endif
 #ifndef _XMLOFF_PRSTYLEI_HXX_
 #include "prstylei.hxx"
@@ -138,6 +144,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::document;
 using ::com::sun::star::document::XEventsSupplier;
 
 class XMLTextFrameDescContext_Impl : public SvXMLImportContext
@@ -366,6 +373,242 @@ XMLTextFrameContourContext_Impl::~XMLTextFrameContourContext_Impl()
 
 TYPEINIT1( XMLTextFrameContext, SvXMLImportContext );
 
+void XMLTextFrameContext::Create( sal_Bool bLinked )
+{
+    UniReference < XMLTextImportHelper > xTxtImport =
+        GetImport().GetTextImport();
+
+    switch ( nType)
+    {
+        case XML_TEXT_FRAME_OBJECT:
+        case XML_TEXT_FRAME_OBJECT_OLE:
+            if( bLinked )
+            {
+                OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef,
+                                                                OUString() ) );
+
+                if( sURL.getLength() )
+                    xPropSet = GetImport().GetTextImport()
+                            ->createAndInsertOLEObject( GetImport(), sURL,
+                                                        sStyleName,
+                                                        nWidth, nHeight );
+            }
+            else
+            {
+                OUString sURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.ServiceName:") );
+                sURL += sFilterService;
+                xPropSet = GetImport().GetTextImport()
+                            ->createAndInsertOLEObject( GetImport(), sURL,
+                                                        sStyleName,
+                                                        nWidth, nHeight );
+
+            }
+            break;
+        case XML_TEXT_FRAME_APPLET:
+        {
+            xPropSet = GetImport().GetTextImport()
+                            ->createAndInsertApplet( sAppletName, sCode,
+                                                     bMayScript, sHRef,
+                                                     nWidth, nHeight);
+            break;
+        }
+        case XML_TEXT_FRAME_PLUGIN:
+        {
+            xPropSet = GetImport().GetTextImport()
+                            ->createAndInsertPlugin( sMimeType, sHRef,
+                                                         nWidth, nHeight);
+
+            break;
+        }
+        case XML_TEXT_FRAME_FLOATING_FRAME:
+        {
+            xPropSet = GetImport().GetTextImport()
+                            ->createAndInsertFloatingFrame( sFrameName, sHRef,
+                                                            sStyleName,
+                                                            nWidth, nHeight);
+            break;
+        }
+        default:
+        {
+            Reference<XMultiServiceFactory> xFactory( GetImport().GetModel(),
+                                                      UNO_QUERY );
+            if( xFactory.is() )
+            {
+                OUString sServiceName;
+                switch( nType )
+                {
+                    case XML_TEXT_FRAME_TEXTBOX: sServiceName = sTextBoxServiceName; break;
+                    case XML_TEXT_FRAME_GRAPHIC: sServiceName = sGraphicServiceName; break;
+                }
+                Reference<XInterface> xIfc = xFactory->createInstance( sServiceName );
+                DBG_ASSERT( xIfc.is(), "couldn't create frame" );
+                if( xIfc.is() )
+                    xPropSet = Reference < XPropertySet >( xIfc, UNO_QUERY );
+            }
+        }
+    }
+
+    if( !xPropSet.is() )
+        return;
+
+    Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+
+    // set name
+    Reference < XNamed > xNamed( xPropSet, UNO_QUERY );
+    if( xNamed.is() )
+    {
+        OUString sOrigName( xNamed->getName() );
+        if( !sOrigName.getLength() ||
+            (sName.getLength() && sOrigName != sName) )
+        {
+            OUString sOldName( sName );
+            sal_Int32 i = 0;
+            while( xTxtImport->HasFrameByName( sName ) )
+            {
+                sName = sOldName;
+                sName += OUString::valueOf( ++i );
+            }
+            xNamed->setName( sName );
+            if( sName != sOldName )
+                xTxtImport->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_FRAME,
+                                             sOldName, sName );
+        }
+    }
+
+    // frame style
+    XMLPropStyleContext *pStyle = 0;
+    if( sStyleName.getLength() )
+    {
+        pStyle = xTxtImport->FindAutoFrameStyle( sStyleName );
+        if( pStyle )
+            sStyleName = pStyle->GetParent();
+    }
+
+    Any aAny;
+    if( sStyleName.getLength() )
+    {
+        const Reference < XNameContainer > & rStyles =
+            xTxtImport->GetFrameStyles();
+        if( rStyles.is() &&
+            rStyles->hasByName( sStyleName ) )
+        {
+            aAny <<= sStyleName;
+            xPropSet->setPropertyValue( sFrameStyleName, aAny );
+        }
+    }
+
+    // hard properties
+    if( pStyle )
+        pStyle->FillPropertySet( xPropSet );
+
+    // anchor type
+    aAny <<= eAnchorType;
+    xPropSet->setPropertyValue( sAnchorType, aAny );
+
+
+    // x and y
+    aAny <<= nX;
+    xPropSet->setPropertyValue( sHoriOrientPosition, aAny );
+    aAny <<= nY;
+    xPropSet->setPropertyValue( sVertOrientPosition, aAny );
+
+    // width
+    if( nWidth > 0 )
+    {
+        aAny <<= nWidth;
+        xPropSet->setPropertyValue( sWidth, aAny );
+    }
+    if( nRelWidth > 0 || nWidth > 0 )
+    {
+        aAny <<= nRelWidth;
+        xPropSet->setPropertyValue( sRelativeWidth, aAny );
+    }
+    if( bSyncWidth || nWidth > 0 )
+    {
+        sal_Bool bTmp = bSyncWidth;
+        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        xPropSet->setPropertyValue( sIsSyncWidthToHeight, aAny );
+    }
+
+    if( nHeight > 0 )
+    {
+        aAny <<= nHeight;
+        xPropSet->setPropertyValue( sHeight, aAny );
+    }
+    if( nRelHeight > 0 || nHeight > 0 )
+    {
+        aAny <<= nRelHeight;
+        xPropSet->setPropertyValue( sRelativeHeight, aAny );
+    }
+    if( bSyncHeight || nHeight > 0 )
+    {
+        sal_Bool bTmp = bSyncHeight;
+        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        xPropSet->setPropertyValue( sIsSyncHeightToWidth, aAny );
+    }
+    if( xPropSetInfo->hasPropertyByName( sSizeType ) &&
+        (bMinHeight || nHeight > 0 || nRelHeight > 0 ) )
+    {
+        sal_Int16 nSizeType =
+            (bMinHeight && XML_TEXT_FRAME_TEXTBOX == nType) ? SizeType::MIN
+                                                            : SizeType::FIX;
+        aAny <<= nSizeType;
+        xPropSet->setPropertyValue( sSizeType, aAny );
+    }
+
+    if( XML_TEXT_FRAME_GRAPHIC == nType )
+    {
+        // URL
+        UniReference < XMLTextImportHelper > xTxtImport =
+            GetImport().GetTextImport();
+        sal_Bool bForceLoad = xTxtImport->IsInsertMode() ||
+                              xTxtImport->IsBlockMode() ||
+                              xTxtImport->IsStylesOnlyMode() ||
+                              xTxtImport->IsOrganizerMode();
+        aAny <<= GetImport().ResolveGraphicObjectURL( sHRef, !bForceLoad );
+        xPropSet->setPropertyValue( sGraphicURL, aAny );
+
+        // filter name
+        aAny <<=sFilterName;
+        xPropSet->setPropertyValue( sGraphicFilter, aAny );
+
+        // rotation
+        aAny <<= nRotation;
+        xPropSet->setPropertyValue( sGraphicRotation, aAny );
+    }
+
+    // page number (must be set after the frame is inserted, because it
+    // will be overwritten then inserting the frame.
+    if( TextContentAnchorType_AT_PAGE == eAnchorType && nPage > 0 )
+    {
+        aAny <<= nPage;
+        xPropSet->setPropertyValue( sAnchorPageNo, aAny );
+    }
+
+    if( XML_TEXT_FRAME_OBJECT != nType  &&
+        XML_TEXT_FRAME_OBJECT_OLE != nType  &&
+        XML_TEXT_FRAME_APPLET != nType &&
+        XML_TEXT_FRAME_PLUGIN!= nType &&
+        XML_TEXT_FRAME_FLOATING_FRAME != nType)
+    {
+        Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
+        xTxtImport->InsertTextContent( xTxtCntnt );
+
+        Reference < XShape > xShape( xPropSet, UNO_QUERY );
+        GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, nZIndex );
+    }
+
+    if( XML_TEXT_FRAME_TEXTBOX == nType )
+    {
+        xTxtImport->ConnectFrameChains( sName, sNextName, xPropSet );
+        Reference < XTextFrame > xTxtFrame( xPropSet, UNO_QUERY );
+        Reference < XText > xTxt = xTxtFrame->getText();
+        xOldTextCursor = xTxtImport->GetCursor();
+        xTxtImport->SetCursor( xTxt->createTextCursor() );
+    }
+
+}
+
 XMLTextFrameContext::XMLTextFrameContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -395,33 +638,21 @@ XMLTextFrameContext::XMLTextFrameContext(
     sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")),
     sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject"))
 {
-    OUString    sName;
-    OUString    sStyleName;
-    OUString    sChainNextName;
-    OUString    sHRef;
-    OUString    sFilterName;
-    OUString    sCode;
-    OUString    sObject;
-    OUString    sArchive;
-    OUString    sMimeType;
-    OUString    sFrameName;
-    OUString    sAppletName;
+    nX = 0;
+    nY = 0;
+    nWidth = 0;
+    nHeight = 0;
+    nZIndex = -1;
+    nPage = 0;
+    nRotation = 0;
+    nRelWidth = 0;
+    nRelHeight = 0;
+    bMayScript = sal_False;
 
-    sal_Int32   nX = 0;
-    sal_Int32   nY = 0;
-    sal_Int32   nWidth = 0;
-    sal_Int32   nHeight = 0;
-    sal_Int32   nZIndex = -1;
-    sal_Int16   nPage = 0;
-    sal_Int16   nRotation = 0;
-    sal_Int16   nRelWidth = 0;
-    sal_Int16   nRelHeight = 0;
-    sal_Bool    bMayScript = sal_False;
+    bMinHeight = sal_False;
+    bSyncWidth = sal_False;
+    bSyncHeight = sal_False;
 
-
-    sal_Bool    bMinHeight = sal_False;
-    sal_Bool    bSyncWidth = sal_False;
-    sal_Bool    bSyncHeight = sal_False;
     UniReference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
     const SvXMLTokenMap& rTokenMap =
@@ -562,7 +793,7 @@ XMLTextFrameContext::XMLTextFrameContext(
             GetImport().GetMM100UnitConverter().convertNumber( nZIndex, rValue, -1 );
             break;
         case XML_TOK_TEXT_FRAME_NEXT_CHAIN_NAME:
-            sChainNextName = rValue;
+            sNextName = rValue;
             break;
         case XML_TOK_TEXT_FRAME_HREF:
             sHRef = rValue;
@@ -616,221 +847,7 @@ XMLTextFrameContext::XMLTextFrameContext(
         && !sHRef.getLength() )
         return; // no URL: no image or OLE object
 
-    switch ( nType)
-    {
-        case XML_TEXT_FRAME_OBJECT:
-        case XML_TEXT_FRAME_OBJECT_OLE:
-        {
-            OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef, OUString() ) );
-
-            if( sURL.getLength() )
-                xPropSet = GetImport().GetTextImport()
-                        ->createAndInsertOLEObject( GetImport(), sURL,
-                                                    sStyleName,
-                                                    nWidth, nHeight );
-            break;
-        }
-        case XML_TEXT_FRAME_APPLET:
-        {
-            xPropSet = GetImport().GetTextImport()
-                            ->createAndInsertApplet( sAppletName, sCode,
-                                                     bMayScript, sHRef,
-                                                     nWidth, nHeight);
-            break;
-        }
-        case XML_TEXT_FRAME_PLUGIN:
-        {
-            xPropSet = GetImport().GetTextImport()
-                            ->createAndInsertPlugin( sMimeType, sHRef,
-                                                         nWidth, nHeight);
-
-            break;
-        }
-        case XML_TEXT_FRAME_FLOATING_FRAME:
-        {
-            xPropSet = GetImport().GetTextImport()
-                            ->createAndInsertFloatingFrame( sFrameName, sHRef,
-                                                            sStyleName,
-                                                            nWidth, nHeight);
-            break;
-        }
-        default:
-        {
-            Reference<XMultiServiceFactory> xFactory( GetImport().GetModel(),
-                                                      UNO_QUERY );
-            if( xFactory.is() )
-            {
-                OUString sServiceName;
-                switch( nType )
-                {
-                    case XML_TEXT_FRAME_TEXTBOX: sServiceName = sTextBoxServiceName; break;
-                    case XML_TEXT_FRAME_GRAPHIC: sServiceName = sGraphicServiceName; break;
-                }
-                Reference<XInterface> xIfc = xFactory->createInstance( sServiceName );
-                DBG_ASSERT( xIfc.is(), "couldn't create frame" );
-                if( xIfc.is() )
-                    xPropSet = Reference < XPropertySet >( xIfc, UNO_QUERY );
-            }
-        }
-    }
-
-    if( !xPropSet.is() )
-        return;
-
-    Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-
-    // set name
-    Reference < XNamed > xNamed( xPropSet, UNO_QUERY );
-    if( xNamed.is() )
-    {
-        OUString sOrigName( xNamed->getName() );
-        if( !sOrigName.getLength() ||
-            (sName.getLength() && sOrigName != sName) )
-        {
-            OUString sOldName( sName );
-            sal_Int32 i = 0;
-            while( xTxtImport->HasFrameByName( sName ) )
-            {
-                sName = sOldName;
-                sName += OUString::valueOf( ++i );
-            }
-            xNamed->setName( sName );
-            if( sName != sOldName )
-                xTxtImport->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_FRAME,
-                                             sOldName, sName );
-        }
-    }
-
-    // frame style
-    XMLPropStyleContext *pStyle = 0;
-    if( sStyleName.getLength() )
-    {
-        pStyle = xTxtImport->FindAutoFrameStyle( sStyleName );
-        if( pStyle )
-            sStyleName = pStyle->GetParent();
-    }
-
-    Any aAny;
-    if( sStyleName.getLength() )
-    {
-        const Reference < XNameContainer > & rStyles =
-            xTxtImport->GetFrameStyles();
-        if( rStyles.is() &&
-            rStyles->hasByName( sStyleName ) )
-        {
-            aAny <<= sStyleName;
-            xPropSet->setPropertyValue( sFrameStyleName, aAny );
-        }
-    }
-
-    // hard properties
-    if( pStyle )
-        pStyle->FillPropertySet( xPropSet );
-
-    // anchor type
-    aAny <<= eAnchorType;
-    xPropSet->setPropertyValue( sAnchorType, aAny );
-
-
-    // x and y
-    aAny <<= nX;
-    xPropSet->setPropertyValue( sHoriOrientPosition, aAny );
-    aAny <<= nY;
-    xPropSet->setPropertyValue( sVertOrientPosition, aAny );
-
-    // width
-    if( nWidth > 0 )
-    {
-        aAny <<= nWidth;
-        xPropSet->setPropertyValue( sWidth, aAny );
-    }
-    if( nRelWidth > 0 || nWidth > 0 )
-    {
-        aAny <<= nRelWidth;
-        xPropSet->setPropertyValue( sRelativeWidth, aAny );
-    }
-    if( bSyncWidth || nWidth > 0 )
-    {
-        aAny.setValue( &bSyncWidth, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( sIsSyncWidthToHeight, aAny );
-    }
-
-    if( nHeight > 0 )
-    {
-        aAny <<= nHeight;
-        xPropSet->setPropertyValue( sHeight, aAny );
-    }
-    if( nRelHeight > 0 || nHeight > 0 )
-    {
-        aAny <<= nRelHeight;
-        xPropSet->setPropertyValue( sRelativeHeight, aAny );
-    }
-    if( bSyncHeight || nHeight > 0 )
-    {
-        aAny.setValue( &bSyncHeight, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue( sIsSyncHeightToWidth, aAny );
-    }
-    if( xPropSetInfo->hasPropertyByName( sSizeType ) &&
-        (bMinHeight || nHeight > 0 || nRelHeight > 0 ) )
-    {
-        sal_Int16 nSizeType =
-            (bMinHeight && XML_TEXT_FRAME_TEXTBOX == nType) ? SizeType::MIN
-                                                            : SizeType::FIX;
-        aAny <<= nSizeType;
-        xPropSet->setPropertyValue( sSizeType, aAny );
-    }
-
-    if( XML_TEXT_FRAME_GRAPHIC == nType )
-    {
-        // URL
-        UniReference < XMLTextImportHelper > xTxtImport =
-            GetImport().GetTextImport();
-        sal_Bool bForceLoad = xTxtImport->IsInsertMode() ||
-                              xTxtImport->IsBlockMode() ||
-                              xTxtImport->IsStylesOnlyMode() ||
-                              xTxtImport->IsOrganizerMode();
-        aAny <<= GetImport().ResolveGraphicObjectURL( sHRef, !bForceLoad );
-        xPropSet->setPropertyValue( sGraphicURL, aAny );
-
-        // filter name
-        aAny <<=sFilterName;
-        xPropSet->setPropertyValue( sGraphicFilter, aAny );
-
-        // rotation
-        aAny <<= nRotation;
-        xPropSet->setPropertyValue( sGraphicRotation, aAny );
-    }
-
-    // page number (must be set after the frame is inserted, because it
-    // will be overwritten then inserting the frame.
-    if( TextContentAnchorType_AT_PAGE == eAnchorType && nPage > 0 )
-    {
-        aAny <<= nPage;
-        xPropSet->setPropertyValue( sAnchorPageNo, aAny );
-    }
-
-    if( XML_TEXT_FRAME_OBJECT != nType  &&
-        XML_TEXT_FRAME_OBJECT_OLE != nType  &&
-        XML_TEXT_FRAME_APPLET != nType &&
-        XML_TEXT_FRAME_PLUGIN!= nType &&
-        XML_TEXT_FRAME_FLOATING_FRAME != nType)
-    {
-        Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
-        xTxtImport->InsertTextContent( xTxtCntnt );
-
-        Reference < XShape > xShape( xPropSet, UNO_QUERY );
-        GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, nZIndex );
-    }
-
-    if( XML_TEXT_FRAME_TEXTBOX == nType )
-    {
-        xTxtImport->ConnectFrameChains( sName, sChainNextName, xPropSet );
-        Reference < XTextFrame > xTxtFrame( xPropSet, UNO_QUERY );
-        Reference < XText > xTxt = xTxtFrame->getText();
-        xOldTextCursor = xTxtImport->GetCursor();
-        xTxtImport->SetCursor( xTxt->createTextCursor() );
-    }
-
+    Create( sal_True );
 }
 
 XMLTextFrameContext::~XMLTextFrameContext()
@@ -925,6 +942,33 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             // else: no events, no event import
         }
         // else: no object, no event import
+    }
+    else if( XML_TEXT_FRAME_OBJECT == nType &&
+             (XML_NAMESPACE_OFFICE == nPrefix &&
+             rLocalName.equalsAsciiL(sXML_document, sizeof(sXML_document)-1)) ||
+             (XML_NAMESPACE_MATH == nPrefix &&
+             rLocalName.equalsAsciiL(sXML_math, sizeof(sXML_math)-1)) )
+    {
+        if( !xPropSet.is() )
+        {
+            XMLEmbeddedObjectImportContext *pEContext =
+                new XMLEmbeddedObjectImportContext( GetImport(), nPrefix,
+                                                    rLocalName, xAttrList );
+            sFilterService = pEContext->GetFilterServiceName();
+            if( sFilterService.getLength() != 0 )
+            {
+                Create( sal_False );
+                if( xPropSet.is() )
+                {
+                    Reference < XEmbeddedObjectSupplier > xEOS( xPropSet,
+                                                                UNO_QUERY );
+                    OSL_ENSURE( xEOS.is(),
+                            "no embedded object supplier for own object" );
+                    pEContext->SetComponent( xEOS->getEmbeddedObject() );
+                }
+            }
+            pContext = pEContext;
+        }
     }
     if( !pContext && xOldTextCursor.is() )  // text-box
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
