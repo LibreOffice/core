@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-10 17:11:18 $
+ *  last change: $Author: mba $ $Date: 2002-06-14 07:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,14 @@ enum SvxAdjust
     SVX_ADJUST_BLOCKLINE,
     SVX_ADJUST_END
 };
-item SvxAdjust SvxAdjustItem;
+
+struct SvxAdjustStruct
+{
+    SvxAdjust   ParagraphAdjustment MID_PARA_ADJUST;
+    SvxAdjust   LastLineAdjustment  MID_LAST_LINE_ADJUST;
+    BOOL        ExpandSingleWord    MID_EXPAND_SINGLE;
+};
+item SvxAdjustStruct SvxAdjustItem;
 
 //-------------------------------------------------------------------------
 
@@ -392,6 +399,8 @@ item SvxShadowLocation      SvxShadowLocationItem;
 
 //-------------------------------------------------------------------------
 
+item INT16                  SvxParaVertAlignItem;
+item INT16                  SvxCharReliefItem;
 item BOOL                   SvxBlinkItem;
 item BOOL                   SvxAutoKernItem;
 item INT32                  SvxColorItem;
