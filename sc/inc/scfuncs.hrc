@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: dr $ $Date: 2001-02-28 16:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,4 +345,5 @@
 #define HID_FUNC_WECHSELN           (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+23)
 #define HID_FUNC_BASIS              (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+24)
 #define HID_FUNC_DEZIMAL            (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+25)
+#define HID_FUNC_ROEMISCH           (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+26)
 

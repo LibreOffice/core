@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
+ *  last change: $Author: dr $ $Date: 2001-02-28 16:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1974,6 +1974,63 @@ void ScInterpreter::ScConvert()
     }
 }
 
+
+void ScInterpreter::ScRoman()
+{   // Value [Mode]
+    BYTE nParamCount = GetByte();
+    if( MustHaveParamCount( nParamCount, 1, 2 ) )
+    {
+        double fMode = (nParamCount == 2) ? SolarMath::ApproxFloor( GetDouble() ) : 0.0;
+        double fVal = SolarMath::ApproxFloor( GetDouble() );
+        if( nGlobalError )
+            SetIllegalParameter();
+        else if( (fMode >= 0.0) && (fMode < 5.0) && (fVal >= 0.0) && (fVal < 4000.0) )
+        {
+            static const sal_Unicode pChars[] = { 'M', 'D', 'C', 'L', 'X', 'V', 'I' };
+            static const USHORT pValues[] = { 1000, 500, 100, 50, 10, 5, 1 };
+            static const USHORT nMaxIndex = (USHORT)(sizeof(pValues) / sizeof(pValues[0]) - 1);
+
+            String aRoman;
+            USHORT nVal = (USHORT) fVal;
+            USHORT nMode = (USHORT) fMode;
+
+            for( UINT16 i = 0; i <= nMaxIndex / 2; i++ )
+            {
+                USHORT nIndex = 2 * i;
+                USHORT nDigit = nVal / pValues[ nIndex ];
+
+                if( (nDigit % 5) == 4 )
+                {
+                    USHORT nIndex2 = (nDigit == 4) ? nIndex - 1 : nIndex - 2;
+                    USHORT nSteps = 0;
+                    while( (nSteps < nMode) && (nIndex < nMaxIndex) )
+                    {
+                        nSteps++;
+                        if( pValues[ nIndex2 ] - pValues[ nIndex + 1 ] <= nVal )
+                            nIndex++;
+                        else
+                            nSteps = nMode;
+                    }
+                    aRoman += pChars[ nIndex ];
+                    aRoman += pChars[ nIndex2 ];
+                    nVal += pValues[ nIndex ];
+                    nVal -= pValues[ nIndex2 ];
+                }
+                else
+                {
+                    if( nDigit > 4 )
+                        aRoman += pChars[ nIndex - 1 ];
+                    aRoman.Expand( aRoman.Len() + (nDigit % 5), pChars[ nIndex ] );
+                    nVal %= pValues[ nIndex ];
+                }
+            }
+
+            PushString( aRoman );
+        }
+        else
+            SetIllegalArgument();
+    }
+}
 
 
 

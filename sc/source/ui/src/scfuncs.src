@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-12 09:19:57 $
+ *  last change: $Author: dr $ $Date: 2001-02-28 16:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -44435,6 +44435,41 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ korean ] = "È¯»êµÇ´Â ´ÜÀ§¿¡ ÀÖ¾î¼­ ´ë/¼Ò¹®ÀÚ´Â Áß¿äÇÕ´Ï´Ù.";
             Text[ turkish ] = "Dönüþtürme hedef birimi, büyük/küçük harf duyarlýlýðý önemli.";
             Text[ language_user1 ] = " ";
+        };
+    };
+     // -=*# Resource for function ROEMISCH #*=-
+    Resource SC_OPCODE_ROMAN
+    {
+        String 1 // Description
+        {
+            Text = "Wandelt eine Zahl in eine römische Zahl um." ;
+            Text [ english ] = "Converts a number to roman." ;
+        };
+        ExtraData =
+        {
+            ID_FUNCTION_GRP_TEXT;
+            U2S( HID_FUNC_ROEMISCH );
+            2;  0;  1;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text = "Zahl" ;
+            Text [ english ] = "number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text = "Die Zahl, die in eine römische Zahl umgewandelt werden soll, muß im Bereich 0 - 3999 liegen." ;
+            Text [ english ] = "The number to be converted to roman must be in the range 0 - 3999." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text = "Modus" ;
+            Text [ english ] = "mode" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text = "Je höher dieser Wert ist, desto mehr wird die römische Zahl vereinfacht. Der Wert muß im Bereich 0 - 4 liegen." ;
+            Text [ english ] = "The more this value increases the more is the roman number simplified. The value must be in the range 0 - 4." ;
         };
     };
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-02-28 11:50:05 $
+ *  last change: $Author: dr $ $Date: 2001-02-28 16:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,6 +390,7 @@ enum OpCodeEnum
         ocEasterSunday      = SC_OPCODE_EASTERSUNDAY,
         ocDecimal           = SC_OPCODE_DECIMAL,
         ocConvert           = SC_OPCODE_CONVERT,
+        ocRoman             = SC_OPCODE_ROMAN,
         ocEnd2Par           = SC_OPCODE_END_2_PAR,
     // internes Allerlei
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,

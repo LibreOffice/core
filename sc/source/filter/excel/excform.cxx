@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:56:28 $
+ *  last change: $Author: dr $ $Date: 2001-02-28 16:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1854,7 +1854,7 @@ DefTokenId ExcelToSc::IndexToToken( UINT16 nIndex )
         ocGetDiffDate,      // XlfDatedif
         ocNoName,           // XlfDatestring
         ocNoName,           // XlfNumberstring
-        ocNoName,           // XlfRoman
+        ocRoman,            // XlfRoman
         ocNoName,           // XlfOpenDialog
         ocNoName,           // XlfSaveDialog            356
         ocNoName,           //
@@ -2267,7 +2267,7 @@ BYTE ExcelToSc::IndexToAnzahl( UINT16 nIndex )
         0,      // XlfDatedif
         0,      // XlfDatestring
         0,      // XlfNumberstring
-        0,      // XlfRoman
+        1,      // XlfRoman
         0,      // XlfOpenDialog
         0,      // XlfSaveDialog        356
         0,      //

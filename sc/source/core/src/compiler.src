@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:08:02 $
+ *  last change: $Author: dr $ $Date: 2001-02-28 16:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7117,6 +7117,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CONVERT";
         Text[ turkish ] = "CONVERT";
         Text[ language_user1 ] = " ";
+    };
+    String SC_OPCODE_ROMAN
+    {
+        Text = "RÖMISCH";
+        Text [ english ] = "ROMAN" ;
     };
 };
 Resource RID_SC_FUNCTION_NAMES_ENGLISH
