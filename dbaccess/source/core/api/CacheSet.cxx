@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:50:50 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,25 @@ using namespace ::com::sun::star::io;
 //  using namespace ::cppu;
 using namespace ::osl;
 
+// -------------------------------------------------------------------------
+void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet)
+{
+    OSL_ENSURE(_xDriverSet.is(),"Invalid resultSet");
+    if(_xDriverSet.is())
+    {
+        m_xDriverSet = _xDriverSet;
+        m_xDriverRow = Reference<XRow>(_xDriverSet,UNO_QUERY);
+        m_xSetMetaData = Reference<XResultSetMetaDataSupplier>(_xDriverSet,UNO_QUERY)->getMetaData();
+        Reference< XStatement> xStmt(m_xDriverSet->getStatement(),UNO_QUERY);
+        if(xStmt.is())
+            m_xConnection = xStmt->getConnection();
+        else
+        {
+            Reference< XPreparedStatement> xPrepStmt(m_xDriverSet->getStatement(),UNO_QUERY);
+            m_xConnection = xPrepStmt->getConnection();
+        }
+    }
+}
 // -------------------------------------------------------------------------
 OCacheSet::~OCacheSet()
 {

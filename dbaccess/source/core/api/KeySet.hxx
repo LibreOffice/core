@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@ namespace dbaccess
     {
         OKeySetMatrix           m_aKeyMap;
         OKeySetMatrix::iterator m_aKeyIter;
-        OColumnNamePos          m_aKeyColumnNames;  // contains all key column names
-        OColumnNamePos          m_aColumnNames;     // contains all column names
+        OColumnNamePos*         m_pKeyColumnNames;  // contains all key column names
+        OColumnNamePos*         m_pColumnNames;     // contains all column names
         connectivity::ORowVector< connectivity::ORowSetValue > m_aParameterRow; // conazins the parameters from rowset
 
         connectivity::OSQLTable m_xTable; // reference to our table
@@ -116,13 +116,12 @@ namespace dbaccess
         void fillAllRows();
         sal_Bool fetchRow();
     public:
-        OKeySet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,
-                const connectivity::OSQLTable& _xTable,
+        OKeySet(const connectivity::OSQLTable& _xTable,
                 const ::rtl::OUString& _rUpdateTableName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer);
         ~OKeySet();
         // late ctor which can throw exceptions
-        void construct();
+        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
 
         void setExternParameters(const connectivity::ORowVector< connectivity::ORowSetValue >& _rParameterRow);
 
@@ -195,6 +194,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2001/07/24 13:25:25  oj
+    #89430# move ORowSetValue into dbtools
+
     Revision 1.10  2001/07/19 09:29:22  oj
     #86186# check parsetree for joins
 

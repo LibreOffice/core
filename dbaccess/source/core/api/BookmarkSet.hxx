@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:26 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,57 +78,24 @@ namespace dbaccess
 
         void updateColumn(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate > _xParameter,const connectivity::ORowSetValue& _rValue);
     public:
-        OBookmarkSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet)
-            : OCacheSet(_xDriverSet)
-            ,m_xRowLocate(_xDriverSet,::com::sun::star::uno::UNO_QUERY)
+        OBookmarkSet()
         {}
         ~OBookmarkSet()
         {
             m_xRowLocate = NULL;
         }
 
+        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition);
         // ::com::sun::star::sdbcx::XRowLocate
-        virtual ::com::sun::star::uno::Any SAL_CALL getBookmark( const ORowSetRow& _rRow ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
-        {
-            return m_xRowLocate->getBookmark();
-        }
-        // -------------------------------------------------------------------------
-        virtual sal_Bool SAL_CALL moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
-        {
-            return m_xRowLocate->moveToBookmark(bookmark);
-        }
-        // -------------------------------------------------------------------------
-        virtual sal_Bool SAL_CALL moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
-        {
-            return m_xRowLocate->moveRelativeToBookmark(bookmark,rows);
-        }
-        // -------------------------------------------------------------------------
-        virtual sal_Int32 SAL_CALL compareBookmarks( const ::com::sun::star::uno::Any& first, const ::com::sun::star::uno::Any& second ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
-        {
-            return m_xRowLocate->compareBookmarks(first,second);
-        }
-        // -------------------------------------------------------------------------
-        virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
-        {
-            return m_xRowLocate->hasOrderedBookmarks();
-        }
-        // -------------------------------------------------------------------------
-        virtual sal_Int32 SAL_CALL hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
-        {
-            return m_xRowLocate->hashBookmark(bookmark);
-        }
-        // -------------------------------------------------------------------------
+        virtual ::com::sun::star::uno::Any SAL_CALL getBookmark( const ORowSetRow& _rRow ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Int32 SAL_CALL compareBookmarks( const ::com::sun::star::uno::Any& first, const ::com::sun::star::uno::Any& second ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Int32 SAL_CALL hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // ::com::sun::star::sdbcx::XDeleteRows
-        virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ,const connectivity::OSQLTable& _xTable) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XDeleteRows> xDeleteRow(m_xRowLocate,::com::sun::star::uno::UNO_QUERY);
-            if(xDeleteRow.is())
-            {
-                return xDeleteRow->deleteRows(rows);
-            }
-            return ::com::sun::star::uno::Sequence< sal_Int32 >();
-        }
+        virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rows ,const connectivity::OSQLTable& _xTable) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // ::com::sun::star::sdbc::XResultSetUpdate
         virtual void SAL_CALL insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateRow(const ORowSetRow& _rInsertRow,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable   ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -142,6 +109,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/07/24 13:25:26  oj
+    #89430# move ORowSetValue into dbtools
+
     Revision 1.5  2000/11/14 13:28:20  oj
     change for rowset when getRow returns 0
 

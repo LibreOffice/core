@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:50:50 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     // first check if resultset is bookmarkable
     if(xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) && any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)))
     {
-        m_pCacheSet = new OBookmarkSet(_xRs);
+        m_pCacheSet = new OBookmarkSet();
+        m_pCacheSet->construct(_xRs);
 
         // check privileges
         m_nPrivileges = Privilege::SELECT;
@@ -268,7 +269,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         // oj removed because keyset uses only the next// || (xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_RESULTSETTYPE) && comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETTYPE)) == ResultSetType::FORWARD_ONLY)
         if(!bAllKeysFound )
         {
-            m_pCacheSet = new OStaticSet(_xRs);
+            m_pCacheSet = new OStaticSet();
+            m_pCacheSet->construct(_xRs);
             m_nPrivileges = Privilege::SELECT;
         }
         else
@@ -303,10 +305,10 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
 
-            OKeySet* pKeySet = new OKeySet(_xRs,m_aUpdateTable,aUpdateTableName ,_xComposer);
+            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,aUpdateTableName ,_xComposer);
             try
             {
-                pKeySet->construct();
+                pKeySet->construct(_xRs);
 
                 // now we need to set the extern parameters because the select stmt could contain a :var1
                 pKeySet->setExternParameters(_rParameterRow);
@@ -331,7 +333,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 // we couldn't create a keyset here so we have to create a static cache
                 if(m_pCacheSet)
                     delete m_pCacheSet;
-                m_pCacheSet = new OStaticSet(_xRs);
+                m_pCacheSet = new OStaticSet();
+                m_pCacheSet->construct(_xRs);
                 m_nPrivileges = Privilege::SELECT;
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:59:25 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,54 @@ using namespace ::com::sun::star::lang;
 //  using namespace ::cppu;
 using namespace ::osl;
 
+void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet)
+{
+    OCacheSet::construct(_xDriverSet);
+    m_xRowLocate = Reference< XRowLocate>(_xDriverSet,UNO_QUERY);
+}
+// -----------------------------------------------------------------------------
+Any SAL_CALL OBookmarkSet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
+{
+    return m_xRowLocate->getBookmark();
+}
 // -------------------------------------------------------------------------
-void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OBookmarkSet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
+{
+    return m_xRowLocate->moveToBookmark(bookmark);
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OBookmarkSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
+{
+    return m_xRowLocate->moveRelativeToBookmark(bookmark,rows);
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OBookmarkSet::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
+{
+    return m_xRowLocate->compareBookmarks(first,second);
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OBookmarkSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
+{
+    return m_xRowLocate->hasOrderedBookmarks();
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OBookmarkSet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
+{
+    return m_xRowLocate->hashBookmark(bookmark);
+}
+// -------------------------------------------------------------------------
+// ::com::sun::star::sdbcx::XDeleteRows
+Sequence< sal_Int32 > SAL_CALL OBookmarkSet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& _xTable) throw(SQLException, RuntimeException)
+{
+    Reference< ::com::sun::star::sdbcx::XDeleteRows> xDeleteRow(m_xRowLocate,UNO_QUERY);
+    if(xDeleteRow.is())
+    {
+        return xDeleteRow->deleteRows(rows);
+    }
+    return Sequence< sal_Int32 >();
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
     Reference<XRowUpdate> xUpdRow(m_xRowLocate,UNO_QUERY);
     if(!xUpdRow.is())
@@ -212,6 +258,9 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/09/20 12:59:25  oj
+    #92232# fixes for BIGINT type and new property HELPTEXT
+
     Revision 1.6  2001/07/24 13:25:26  oj
     #89430# move ORowSetValue into dbtools
 
