@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 11:48:54 $
+ *  last change: $Author: jp $ $Date: 2001-02-08 14:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,8 +473,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         long nCount = aColNames.getLength();
         for (long n = 0; n < nCount; n++)
         {
-            SwInsDBColumn* pNew = new SwInsDBColumn(
-                                            pColNames[n], n );
+            SwInsDBColumn* pNew = new SwInsDBColumn( pColNames[n], n );
             Any aCol = xCols->getByName(pColNames[n]);
             Reference <XPropertySet> xCol = *(Reference <XPropertySet>*)aCol.getValue();
             Any aType = xCol->getPropertyValue(C2S("Type"));
@@ -1205,11 +1204,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
     }
     if(!xResultSet.is() || !xRow.is())
         return;
-    rSh.StartAllAction();
-    rSh.StartUndo( 0 );
-    BOOL bGroupUndo = rSh.DoesGroupUndo();
-    rSh.DoGroupUndo( FALSE );
 
+    rSh.StartAllAction();
+    BOOL bUndo = rSh.DoesUndo();
+    if( bUndo )
+        rSh.StartUndo( 0 );
+
+    BOOL bAsTable = aRbAsTable.IsChecked();
     SvNumberFormatter& rNumFmtr = *rSh.GetNumberFormatter();
 
     if( rSh.HasSelection() )
@@ -1217,8 +1218,11 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
 
     SwWait *pWait = 0;
 
-    if( aRbAsTable.IsChecked() )            // Daten als Tabelle einfuegen
+    do{                                 // middle checked loop!!
+    if( bAsTable )          // Daten als Tabelle einfuegen
     {
+        rSh.DoUndo( FALSE );
+
         USHORT n, nRows = 0, nCols = aLbTableCol.GetEntryCount();
         if( aCbTableHeadon.IsChecked() )
             nRows++;
@@ -1247,7 +1251,11 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
         }
 
         if(!nRows || !nCols)
-            return;
+        {
+            ASSERT( !this, "wrong parameters" );
+            break;
+        }
+
         const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
         BOOL bHTML = 0 != (::GetHtmlMode( pView->GetDocShell() ) & HTMLMODE_ON);
@@ -1406,6 +1414,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
                 rSh.SwEditShell::SplitNode();
                 rSh.SwCrsrShell::Left();
             }
+
+            rSh.DoUndo( FALSE );
 
             SwTxtFmtColl* pColl = 0;
             {
@@ -1594,13 +1604,10 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
                         // zum Anfang und eine Mark setzen, damit der
                         // Cursor am Ende wieder auf Anfangsposition
                         // gesetzt werden kann.
-                        BOOL bDoesUndo = rSh.DoesUndo();
-                        rSh.DoUndo( FALSE );
                         rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
                         rSh.SetBookmark( KeyCode(), C2S("DB_Mark"), aEmptyStr, MARK );
                         rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaEnd );
                         bSetCrsr = FALSE;
-                        rSh.DoUndo( bDoesUndo );
                     }
                 }
 
@@ -1625,20 +1632,23 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
 
             if( !bSetCrsr && USHRT_MAX != (n = rSh.FindBookmark( C2S("DB_Mark" ))) )
             {
-                BOOL bDoesUndo = rSh.DoesUndo();
-                rSh.DoUndo( FALSE );
+                rSh.SetMark();
                 rSh.GotoBookmark( n );
                 rSh.DelBookmark( n );
-                rSh.DoUndo( bDoesUndo );
             }
         }
     }
-
     // write configuration
     Commit();
+    }while( FALSE );                    // middle checked loop
 
-    rSh.DoGroupUndo( bGroupUndo );
-    rSh.EndUndo( 0 );
+    if( bUndo )
+    {
+        rSh.DoUndo( TRUE );
+        rSh.AppendUndoForInsertFromDB( bAsTable );
+        rSh.EndUndo( 0 );
+    }
+    rSh.ClearMark();
     rSh.EndAllAction();
     delete pWait;
 }
@@ -1727,50 +1737,55 @@ BOOL _DB_ColumnConfigData::IsEqualDB( const _DB_ColumnConfigData& rCmp ) const
 Sequence<OUString> lcl_createSourceNames(const String& rNodeName)
 {
     Sequence<OUString> aSourceNames(11);
-    OUString* pSourceNames = aSourceNames.getArray();
-    pSourceNames[0] = rNodeName;
-    pSourceNames[0] += C2U("/DataSource");
-    pSourceNames[1] = rNodeName;
-    pSourceNames[1] += C2U("/Command");
-    pSourceNames[2] = rNodeName;
-    pSourceNames[2] += C2U("/CommandType");
-    pSourceNames[3] = rNodeName;
-    pSourceNames[3] += C2U("/ColumnsToText");
-    pSourceNames[4] = rNodeName;
-    pSourceNames[4] += C2U("/ColumnsToTable");
-    pSourceNames[5] = rNodeName;
-    pSourceNames[5] += C2U("/ParaStyle");
-    pSourceNames[6] = rNodeName;
-    pSourceNames[6] += C2U("/TableAutoFormat");
-    pSourceNames[7] = rNodeName;
-    pSourceNames[7] += C2U("/IsTable");
-    pSourceNames[8] = rNodeName;
-    pSourceNames[8] += C2U("/IsField");
-    pSourceNames[9] = rNodeName;
-    pSourceNames[9] += C2U("/IsHeadlineOn");
-    pSourceNames[10] = rNodeName;
-    pSourceNames[10] += C2U("/IsEmptyHeadline");
+    OUString* pNames = aSourceNames.getArray();
+
+    String sTmp( rNodeName );
+    const xub_StrLen nPos = sTmp.Len();
+    pNames[0] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/DataSource" ));
+    pNames[1] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/Command" ));
+    pNames[2] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/CommandType" ));
+    pNames[3] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/ColumnsToText" ));
+    pNames[4] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/ColumnsToTable" ));
+    pNames[5] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/ParaStyle" ));
+    pNames[6] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/TableAutoFormat" ));
+    pNames[7] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/IsTable" ));
+    pNames[8] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/IsField" ));
+    pNames[9] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/IsHeadlineOn" ));
+    pNames[10] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/IsEmptyHeadline" ));
     return aSourceNames;
 }
 /* -----------------------------05.12.00 16:25--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence<OUString> lcl_CreateSubNames(const OUString& rSubNodeName)
+Sequence<OUString> lcl_CreateSubNames( const String& rSubNodeName )
 {
     Sequence<OUString> aSubSourceNames(6);
-    OUString* pSubSourceNames = aSubSourceNames.getArray();
-    pSubSourceNames[0] = rSubNodeName;
-    pSubSourceNames[0] += C2U("/ColumnName");
-    pSubSourceNames[1] = rSubNodeName;
-    pSubSourceNames[1] += C2U("/ColumnIndex");
-    pSubSourceNames[2] = rSubNodeName;
-    pSubSourceNames[2] += C2U("/IsNumberFormat");
-    pSubSourceNames[3] = rSubNodeName;
-    pSubSourceNames[3] += C2U("/IsNumberFormatFromDataBase");
-    pSubSourceNames[4] = rSubNodeName;
-    pSubSourceNames[4] += C2U("/NumberFormat");
-    pSubSourceNames[5] = rSubNodeName;
-    pSubSourceNames[5] += C2U("/NumberFormatLocale");
+    OUString* pNames = aSubSourceNames.getArray();
+    String sTmp( rSubNodeName );
+    const xub_StrLen nPos = sTmp.Len();
+    pNames[0] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/ColumnName" ));
+    pNames[1] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/ColumnIndex" ));
+    pNames[2] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/IsNumberFormat" ));
+    pNames[3] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/IsNumberFormatFromDataBase" ));
+    pNames[4] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/NumberFormat" ));
+    pNames[5] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
+                            RTL_CONSTASCII_STRINGPARAM( "/NumberFormatLocale" ));
     return aSubSourceNames;
 }
 /* -----------------------------06.12.00 13:03--------------------------------
@@ -1873,15 +1888,26 @@ void SwInsertDBColAutoPilot::Commit()
     pValues[10].Value.setValue(&bTmp, rBoolType);
 
     SetSetProperties(OUString(), aValues);
+
+    sNewNode += C2U("/ColumnSet");
+    String sDelim( String::CreateFromAscii( "/__" ));
+
+    LanguageType ePrevLang = (LanguageType)-1;
+    OUString sPrevLang;
+
     SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
     for(USHORT nCol = 0; nCol < aDBColumns.Count(); nCol++)
     {
         OUString sColumnNode = sNewNode;
-        sColumnNode += C2U("/ColumnSet");
          SwInsDBColumn* pColumn = aDBColumns[nCol];
-        OUString sColumnInsertNode(sColumnNode);
-        sColumnInsertNode += C2U("/__");
-        sColumnInsertNode += OUString::valueOf(sal_Int32(nCol));
+        String sColumnInsertNode(sColumnNode);
+        sColumnInsertNode += sDelim;
+        if( nCol < 100 )
+            sColumnInsertNode += '0';
+        if( nCol < 10 )
+            sColumnInsertNode += '0';
+        sColumnInsertNode += String::CreateFromInt32(  nCol );
+
         Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sColumnInsertNode);
         Sequence<PropertyValue> aSubValues(aSubNodeNames.getLength());
         PropertyValue* pSubValues = aSubValues.getArray();
@@ -1909,12 +1935,16 @@ void SwInsertDBColAutoPilot::Commit()
             pSubValues[4].Value <<= OUString(sTmp);
             eLang = ::GetSystemLanguage();
         }
-        Locale aLocale;
-        aLocale = SvxLanguageToLocale( aLocale, eLang );
-        OUString sLang = aLocale.Country;
-        sLang += C2U("-");
-        sLang += aLocale.Language;
-        pSubValues[5].Value <<=  sLang;
+
+        if( eLang != ePrevLang )
+        {
+            Locale aLocale;
+            aLocale = SvxLanguageToLocale( aLocale, eLang );
+            (( sPrevLang = aLocale.Country ) += OUString( '-' )) += aLocale.Language;
+            ePrevLang = eLang;
+        }
+
+        pSubValues[5].Value <<=  sPrevLang;
         SetSetProperties(sColumnNode, aSubValues);
     }
 }
