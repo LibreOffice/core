@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:08:48 $
+ *  last change: $Author: tbe $ $Date: 2002-08-01 15:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
 #endif
 
 #include <comphelper/processfactory.hxx>
@@ -438,73 +441,86 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
 {
     SdrRectObj::operator = (rObj);
 
-    // Freigeben des bisherigen Models
+    // release the reference to the current control model
     SetUnoControlModel(uno::Reference< awt::XControlModel >());
 
     aUnoControlModelTypeName = ((SdrUnoObj&) rObj).aUnoControlModelTypeName;
     aUnoControlTypeName = ((SdrUnoObj&) rObj).aUnoControlTypeName;
 
-    // Kopieren des UnoModels
-    uno::Reference< io::XPersistObject > xObj(((SdrUnoObj&) rObj).GetUnoControlModel(), uno::UNO_QUERY );
+    // copy the uno control model
+    uno::Reference< awt::XControlModel > xCtrl( ((SdrUnoObj&) rObj).GetUnoControlModel(), uno::UNO_QUERY );
+    uno::Reference< util::XCloneable > xClone( xCtrl, uno::UNO_QUERY );
 
-    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    if (xObj.is() && xFactory.is() )
+    if ( xClone.is() )
     {
-        // copy it by streaming
-        // creating a pipe
-        uno::Reference< io::XOutputStream > xOutPipe(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), uno::UNO_QUERY);
-        uno::Reference< io::XInputStream > xInPipe(xOutPipe, uno::UNO_QUERY);
+        // copy the model by cloning
+        uno::Reference< awt::XControlModel > xNewModel( xClone->createClone(), uno::UNO_QUERY );
+        DBG_ASSERT( xNewModel.is(), "SdrUnoObj::operator =, no control model!");
+        xUnoControlModel = xNewModel;
+    }
+    else
+    {
+        // copy the model by streaming
+        uno::Reference< io::XPersistObject > xObj( xCtrl, uno::UNO_QUERY );
+        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
-        // creating the mark streams
-        uno::Reference< io::XInputStream > xMarkIn(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), uno::UNO_QUERY);
-        uno::Reference< io::XActiveDataSink > xMarkSink(xMarkIn, uno::UNO_QUERY);
-
-        uno::Reference< io::XOutputStream > xMarkOut(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), uno::UNO_QUERY);
-        uno::Reference< io::XActiveDataSource > xMarkSource(xMarkOut, uno::UNO_QUERY);
-
-        // connect mark and sink
-        uno::Reference< io::XActiveDataSink > xSink(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), uno::UNO_QUERY);
-
-        // connect mark and source
-        uno::Reference< io::XActiveDataSource > xSource(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), uno::UNO_QUERY);
-
-        uno::Reference< io::XObjectOutputStream > xOutStrm(xSource, uno::UNO_QUERY);
-        uno::Reference< io::XObjectInputStream > xInStrm(xSink, uno::UNO_QUERY);
-
-        if (xMarkSink.is() && xMarkSource.is() && xSink.is() && xSource.is())
+        if ( xObj.is() && xFactory.is() )
         {
-            xMarkSink->setInputStream(xInPipe);
-            xMarkSource->setOutputStream(xOutPipe);
-            xSink->setInputStream(xMarkIn);
-            xSource->setOutputStream(xMarkOut);
+            // creating a pipe
+            uno::Reference< io::XOutputStream > xOutPipe(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), uno::UNO_QUERY);
+            uno::Reference< io::XInputStream > xInPipe(xOutPipe, uno::UNO_QUERY);
 
-            // write the object to source
-            xOutStrm->writeObject(xObj);
-            xOutStrm->closeOutput();
-            // read the object
-            uno::Reference< awt::XControlModel > xModel(xInStrm->readObject(), uno::UNO_QUERY);
-            xInStrm->closeInput();
+            // creating the mark streams
+            uno::Reference< io::XInputStream > xMarkIn(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), uno::UNO_QUERY);
+            uno::Reference< io::XActiveDataSink > xMarkSink(xMarkIn, uno::UNO_QUERY);
 
-            DBG_ASSERT(xModel.is(), "SdrUnoObj::operator =, keine Model erzeugt");
+            uno::Reference< io::XOutputStream > xMarkOut(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), uno::UNO_QUERY);
+            uno::Reference< io::XActiveDataSource > xMarkSource(xMarkOut, uno::UNO_QUERY);
 
-            xUnoControlModel = xModel;
+            // connect mark and sink
+            uno::Reference< io::XActiveDataSink > xSink(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), uno::UNO_QUERY);
 
-            // control model muss servicename des controls enthalten
-            uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
-            if (xSet.is())
+            // connect mark and source
+            uno::Reference< io::XActiveDataSource > xSource(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), uno::UNO_QUERY);
+
+            uno::Reference< io::XObjectOutputStream > xOutStrm(xSource, uno::UNO_QUERY);
+            uno::Reference< io::XObjectInputStream > xInStrm(xSink, uno::UNO_QUERY);
+
+            if (xMarkSink.is() && xMarkSource.is() && xSink.is() && xSource.is())
             {
-                uno::Any aValue( xSet->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl")) );
-                OUString aStr;
+                xMarkSink->setInputStream(xInPipe);
+                xMarkSource->setOutputStream(xOutPipe);
+                xSink->setInputStream(xMarkIn);
+                xSource->setOutputStream(xMarkOut);
 
-                if( aValue >>= aStr )
-                    aUnoControlTypeName = String(aStr);
+                // write the object to source
+                xOutStrm->writeObject(xObj);
+                xOutStrm->closeOutput();
+                // read the object
+                uno::Reference< awt::XControlModel > xModel(xInStrm->readObject(), uno::UNO_QUERY);
+                xInStrm->closeInput();
+
+                DBG_ASSERT(xModel.is(), "SdrUnoObj::operator =, keine Model erzeugt");
+
+                xUnoControlModel = xModel;
             }
-
-            uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
-            if (xComp.is())
-                pEventListener->StartListening(xComp);
         }
     }
+
+    // get service name of the control from the control model
+    uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
+    if (xSet.is())
+    {
+        uno::Any aValue( xSet->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl")) );
+        OUString aStr;
+
+        if( aValue >>= aStr )
+            aUnoControlTypeName = String(aStr);
+    }
+
+    uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
+    if (xComp.is())
+        pEventListener->StartListening(xComp);
 }
 
 FASTBOOL SdrUnoObj::HasSpecialDrag() const
