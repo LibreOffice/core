@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edfcol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:54:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:23:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,11 @@
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
+// --> FME 2004-06-29 #114856# Formular view
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+// <--
 #ifndef _SW_REWRITER_HXX
 #include <SwRewriter.hxx>
 #endif
@@ -133,7 +138,10 @@ void SwEditShell::SetTxtFmtColl(SwTxtFmtColl *pFmt)
     GetDoc()->StartUndo(UNDO_SETFMTCOLL, &aRewriter);
     FOREACHPAM_START(this)
 
-        if( !PCURCRSR->HasReadonlySel() )
+        if( !PCURCRSR->HasReadonlySel(
+                    // --> FME 2004-06-29 #114856# Formular view
+                    GetViewOptions()->IsFormView() ) )
+                    // <--
             GetDoc()->SetTxtFmtColl(*PCURCRSR, pLocal);
 
     FOREACHPAM_END()
