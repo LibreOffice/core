@@ -113,7 +113,8 @@ protected:
 public:
                             // properties: Referer, PostMimeType
     static UcbLockBytesRef  CreateLockBytes( const NS_UNO::Reference < NS_UCB::XContent >& xContent,
-                                            const NS_UNO::Sequence < NS_BEANS::PropertyValue >& rProps,
+                                            const ::rtl::OUString& rReferer,
+                                            const ::rtl::OUString& rMediaType,
                                             const NS_UNO::Reference < NS_IO::XInputStream >& xPostData,
                                             const NS_UNO::Reference < NS_TASK::XInteractionHandler >& xInter,
                                             UcbLockBytesHandler* pHandler=0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-18 09:59:36 $
+ *  last change: $Author: mba $ $Date: 2001-09-14 10:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_POSTCOMMANDARGUMENT_HPP_
-#include <com/sun/star/ucb/PostCommandArgument.hpp>
+#ifndef _COM_SUN_STAR_UCB_POSTCOMMANDARGUMENT2_HPP_
+#include <com/sun/star/ucb/PostCommandArgument2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
@@ -433,7 +433,7 @@ sal_Bool CommandThread_Impl::DoIt()
         else
             m_xLockBytes->SetError( ERRCODE_IO_GENERAL );
     }
-    catch ( UnsupportedDataSinkException& r )
+    catch ( UnsupportedDataSinkException& )
     {
         bException = true;
         m_xLockBytes->SetError( ERRCODE_IO_ACCESSDENIED );
@@ -827,7 +827,7 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
     return xLockBytes;
 }
 
-UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xContent, const Sequence < PropertyValue >& rProps,
+UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xContent, const ::rtl::OUString& rReferer, const ::rtl::OUString& rMediaType,
         const Reference < XInputStream >& xPostData, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
 {
     if( !xContent.is() )
@@ -837,19 +837,11 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     xLockBytes->SetSynchronMode( !pHandler );
     Reference< XActiveDataControl > xSink = (XActiveDataControl*) new UcbDataSink_Impl( xLockBytes );
 
-    if ( rProps.getLength() )
-    {
-        Reference < XCommandProcessor > xProcessor( xContent, UNO_QUERY );
-        Command aCommand;
-        aCommand.Name     = ::rtl::OUString::createFromAscii("setPropertyValues");
-        aCommand.Handle   = -1; /* unknown */
-        aCommand.Argument <<= rProps;
-        xProcessor->execute( aCommand, 0, Reference < XCommandEnvironment >() );
-    }
-
-    PostCommandArgument aArgument;
+    PostCommandArgument2 aArgument;
     aArgument.Source = xPostData;
     aArgument.Sink = xSink;
+    aArgument.MediaType = rMediaType;
+    aArgument.Referer = rReferer;
 
     Command aCommand;
     aCommand.Name = ::rtl::OUString::createFromAscii ("post");
