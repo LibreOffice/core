@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>DocBook File</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">DocBook</value>
+            <value>DocBook</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>doctype:-//OASIS//DTD DocBook XML V4.1.2//EN</value></prop>
     </node>
