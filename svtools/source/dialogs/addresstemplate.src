@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-08 09:00:27 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ italian ] = "~Amministra...";
         Text[ danish ] = "~Administrate ...";
         Text[ swedish ] = "~Administrera ...";
-        Text[ polish ] = "Zarz�dzaj ...";
+        Text[ polish ] = "Zarz�dzaj...";
         Text[ portuguese_brazilian ] = "~Administrate ...";
         Text[ japanese ] = "管理(~A)...";
         Text[ korean ] = "관리 (~A)...";
@@ -236,7 +236,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ swedish ] = "F�lttilldelning";
         Text[ polish ] = "Przyporz�dkowanie p�l";
         Text[ portuguese_brazilian ] = "Field assignment";
-        Text[ japanese ] = "ﾌｨｰﾙﾄﾞの順序";
+        Text[ japanese ] = "ﾌｨｰﾙﾄﾞの割り当て";
         Text[ korean ] = "필드 할당";
         Text[ chinese_simplified ] = "指定字段";
         Text[ chinese_traditional ] = "指定欄位";
@@ -698,11 +698,11 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Gru�formel";
         Text [ english ] = "Salutation";
         Text [ english_us ] = "Salutation";
-        Text[ portuguese ] = "Vocativo";
+        Text[ portuguese ] = "Tratamento";
     Text[ russian ] = "���������";
     Text[ greek ] = "����������";
     Text[ dutch ] = "Aanhef";
-    Text[ french ] = "Formule d'ouverture";
+    Text[ french ] = "Formule finale";
     Text[ spanish ] = "Tratamiento";
     Text[ italian ] = "Inizio lettera";
     Text[ danish ] = "Salutation";
@@ -712,7 +712,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ japanese ] = "挨拶文";
     Text[ korean ] = "호칭";
     Text[ chinese_simplified ] = "称呼";
-    Text[ chinese_traditional ] = "稱呼";
+    Text[ chinese_traditional ] = "問候語";
     Text[ turkish ] = "Salutation";
     Text[ arabic ] = "������";
     Text[ catalan ] = "Tratamiento";
@@ -734,7 +734,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ swedish ] = "Telefon priv.";
     Text[ polish ] = "Telefon (pryw.)";
     Text[ portuguese_brazilian ] = "Telephon Home";
-    Text[ japanese ] = "Tel.自宅";
+    Text[ japanese ] = "自宅電話";
     Text[ korean ] = "Tel. 자택";
     Text[ chinese_simplified ] = "私人的电话号码";
     Text[ chinese_traditional ] = "私人電話號碼";
@@ -759,7 +759,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ swedish ] = "Telefon arb.";
     Text[ polish ] = "Telefon (s�u�b.)";
     Text[ portuguese_brazilian ] = "Telephon Work";
-    Text[ japanese ] = "Tel.会社";
+    Text[ japanese ] = "会社電話";
     Text[ korean ] = "Tel. 회사";
     Text[ chinese_simplified ] = "公司的电话号码";
     Text[ chinese_traditional ] = "公司電話號碼";
@@ -784,7 +784,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ swedish ] = "FAX";
     Text[ polish ] = "FAKS";
     Text[ portuguese_brazilian ] = "FAX";
-    Text[ japanese ] = "FAX";
+    Text[ japanese ] = "FAX 番号";
     Text[ korean ] = "팩스";
     Text[ chinese_simplified ] = "传真号码";
     Text[ chinese_traditional ] = "傳真號碼";
@@ -1036,7 +1036,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ swedish ] = "Telefon arbete";
     Text[ polish ] = "Telefon (s�u�b.)";
     Text[ portuguese_brazilian ] = "Telephon Office";
-    Text[ japanese ] = "Tel.ｵﾌｨｽ";
+    Text[ japanese ] = "事務所電話";
     Text[ korean ] = "전화(사무실)";
     Text[ chinese_simplified ] = "办公室的电话号码";
     Text[ chinese_traditional ] = "辦公室電話號碼";
@@ -1111,7 +1111,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ swedish ] = "Telefon annan";
     Text[ polish ] = "Telefony (inne)";
     Text[ portuguese_brazilian ] = "Telephon other";
-    Text[ japanese ] = "Tel.その他";
+    Text[ japanese ] = "その他の電話";
     Text[ korean ] = "기타 전화";
     Text[ chinese_simplified ] = "其他的电话号码";
     Text[ chinese_traditional ] = "其他電話號碼";
@@ -1171,6 +1171,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ finnish ] = "Kutsu";
         };
 };
+
 
 
 
