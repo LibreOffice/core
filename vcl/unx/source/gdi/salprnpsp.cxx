@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-23 17:53:50 $
+ *  last change: $Author: pl $ $Date: 2001-02-09 10:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,24 @@ using namespace rtl;
 static void* driverLib                      = NULL;
 static int(*pSetupFunction)(PrinterInfo&)   = NULL;
 static int(*pFaxNrFunction)(String&)        = NULL;
+
+static String getPdfDir( const PrinterInfo& rInfo )
+{
+    String aDir;
+    int nTokens = rInfo.m_aFeatures.getTokenCount( ',' );
+    for( int i = 0; i < nTokens; i++ )
+    {
+        OUString aToken( rInfo.m_aFeatures.getToken( i, ',' ) );
+        if( ! aToken.compareToAscii( "pdf=", 4 ) )
+        {
+            aDir = aToken.getToken( 1, '=' );
+            if( ! aDir.Len() )
+                aDir = String( ByteString( getenv( "HOME" ) ), gsl_getSystemTextEncoding() );
+            break;
+        }
+    }
+    return aDir;
+}
 
 static void getPaLib()
 {
@@ -237,22 +255,91 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 }
 
-static bool sendAFax( const String& rFaxNumber, const String& rFileName, const String& rCommand )
+static bool passFileToCommandLine( const String& rFilename, const String& rCommandLine )
 {
     bool bSuccess = false;
 
     rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
-    ByteString aFaxNumber( rFaxNumber, aEncoding );
-    ByteString aFileName( rFileName, aEncoding );
-    ByteString aCmdLine( rCommand, aEncoding );
-    // some filters may depend on the extension
-    ByteString aPSFileName( aFileName );
-    aPSFileName.Append( ".ps" );
-    BOOL bPS = link( aFileName.GetBuffer(), aPSFileName.GetBuffer() ) ? FALSE : TRUE;
+    ByteString aCmdLine( rCommandLine, aEncoding );
+    ByteString aFilename( rFilename, aEncoding );
+    ByteString aPSFilename( aFilename );
+    aPSFilename.Append( ".ps" );
 
-    ByteString aUseFileName( bPS ? aPSFileName : aFileName );
+    BOOL bPS = link( aFilename.GetBuffer(), aPSFilename.GetBuffer() ) ? FALSE : TRUE;
 
+    const ByteString& rUseFilename( bPS ? aPSFilename : aFilename );
     bool bPipe = aCmdLine.Search( "(TMP)" ) != STRING_NOTFOUND ? false : true;
+
+    // setup command line for exec
+    if( ! bPipe )
+        while( aCmdLine.SearchAndReplace( "(TMP)", rUseFilename ) != STRING_NOTFOUND )
+            ;
+
+#ifdef DEBUG
+    fprintf( stderr, "%s commandline: \"%s\"\n",
+             bPipe ? "piping to" : "executing",
+             aCmdLine.GetBuffer() );
+#endif
+    const char* argv[4];
+    if( ! ( argv[ 0 ] = getenv( "SHELL" ) ) )
+        argv[ 0 ] = "/bin/sh";
+    argv[ 1 ] = "-c";
+    argv[ 2 ] = aCmdLine.GetBuffer();
+    argv[ 3 ] = 0;
+
+    bool bHavePipes = false;
+    int pid, fd[2];
+
+    if( bPipe )
+        bHavePipes = pipe( fd ) ? false : true;
+    if( ( pid = fork() ) > 0 )
+    {
+        if( bPipe && bHavePipes )
+        {
+            close( fd[0] );
+            char aBuffer[ 2048 ];
+            FILE* fp = fopen( aFilename.GetBuffer(), "r" );
+            while( fp && ! feof( fp ) )
+            {
+                int nBytes = fread( aBuffer, 1, sizeof( aBuffer ), fp );
+                if( nBytes )
+                    write( fd[ 1 ], aBuffer, nBytes );
+            }
+            fclose( fp );
+            close( fd[ 1 ] );
+        }
+        int status = 0;
+        waitpid( pid, &status, 0 );
+        if( ! status )
+            bSuccess = true;
+    }
+    else if( ! pid )
+    {
+        if( bPipe && bHavePipes )
+        {
+            close( fd[1] );
+            if( fd[0] != STDIN_FILENO ) // not probable, but who knows :)
+                dup2( fd[0], STDIN_FILENO );
+        }
+        execv( argv[0], const_cast<char**>(argv) );
+        fprintf( stderr, "failed to execute \"%s\"\n", aCmdLine.GetBuffer() );
+        _exit( 1 );
+    }
+    else
+        fprintf( stderr, "failed to fork\n" );
+
+    // clean up the mess
+    unlink( aFilename.GetBuffer() );
+    if( bPS )
+        unlink( aPSFilename.GetBuffer() );
+    return bSuccess;
+}
+
+static bool sendAFax( const String& rFaxNumber, const String& rFileName, const String& rCommand )
+{
+    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+    String aFaxNumber( rFaxNumber );
+    String aCmdLine( rCommand );
     if( ! aFaxNumber.Len() )
     {
         getPaLib();
@@ -260,75 +347,25 @@ static bool sendAFax( const String& rFaxNumber, const String& rFileName, const S
         {
             String aNewNr;
             if( pFaxNrFunction( aNewNr ) )
-                aFaxNumber = ByteString( aNewNr, aEncoding );
+                aFaxNumber = aNewNr, aEncoding;
         }
     }
 
     if( aFaxNumber.Len() )
     {
-        // setup command line for exec
-        while( aCmdLine.SearchAndReplace( "(TMP)", aUseFileName ) != STRING_NOTFOUND )
+        while( aCmdLine.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "(PHONE)" ) ), aFaxNumber ) != STRING_NOTFOUND )
         ;
-        while( aCmdLine.SearchAndReplace( "(PHONE)", aFaxNumber ) != STRING_NOTFOUND )
-        ;
-#ifdef DEBUG
-        fprintf( stderr, "fax commandline: \"%s\"\n", aCmdLine.GetBuffer() );
-#endif
-
-        const char* argv[4];
-        if( ! ( argv[ 0 ] = getenv( "SHELL" ) ) )
-            argv[ 0 ] = "/bin/sh";
-        argv[ 1 ] = "-c";
-        argv[ 2 ] = aCmdLine.GetBuffer();
-        argv[ 3 ] = 0;
-
-        bool bHavePipes = false;
-        int pid, fd[2];
-
-        if( bPipe )
-            bHavePipes = pipe( fd ) ? false : true;
-        if( ( pid = fork() ) > 0 )
-        {
-            if( bPipe && bHavePipes )
-            {
-                close( fd[0] );
-                char aBuffer[ 2048 ];
-                FILE* fp = fopen( aFileName.GetBuffer(), "r" );
-                while( fp && ! feof( fp ) )
-                {
-                    int nBytes = fread( aBuffer, 1, sizeof( aBuffer ), fp );
-                    if( nBytes )
-                        write( fd[ 1 ], aBuffer, nBytes );
-                }
-                fclose( fp );
-                close( fd[ 1 ] );
-            }
-            int status = 0;
-            waitpid( pid, &status, 0 );
-            if( ! status )
-                bSuccess = true;
-        }
-        else if( ! pid )
-        {
-            if( bPipe && bHavePipes )
-            {
-                close( fd[1] );
-                if( fd[0] != STDIN_FILENO ) // not probable, but who knows :)
-                    dup2( fd[0], STDIN_FILENO );
-            }
-            execv( argv[0], const_cast<char**>(argv) );
-            fprintf( stderr, "failed to execute \"%s\"\n", aCmdLine.GetBuffer() );
-            _exit( 1 );
-        }
-        else
-            fprintf( stderr, "failed to fork\n" );
     }
 
-    // clean up the mess
-    unlink( aFileName.GetBuffer() );
-    if( bPipe )
-        unlink( aPSFileName.GetBuffer() );
-    return bSuccess;
+    return passFileToCommandLine( rFileName, aCmdLine );
+}
+
+static bool createPdf( const String& rToFile, const String& rFromFile, const String& rCommandLine )
+{
+    String aCommandLine( rCommandLine );
+    while( aCommandLine.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "(OUTFILE)" ) ), rToFile ) != STRING_NOTFOUND )
+        ;
+    return passFileToCommandLine( rFromFile, aCommandLine );
 }
 
 /*
@@ -407,6 +444,18 @@ void SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         pInfo->maLocation       = rInfo.m_aLocation;
         pInfo->maComment        = rInfo.m_aComment;
         pInfo->mpSysData        = NULL;
+
+        int nTokens = rInfo.m_aFeatures.getTokenCount( ',' );
+        for( int i = 0; i < nTokens; i++ )
+        {
+            String aToken( rInfo.m_aFeatures.getToken( i, ',' ) );
+            if( aToken.CompareToAscii( "pdf=", 4 ) == COMPARE_EQUAL )
+            {
+                pInfo->maLocation = getPdfDir( rInfo );
+                break;
+            }
+        }
+
         pList->Add( pInfo );
     }
 }
@@ -746,6 +795,13 @@ SalPrinter::~SalPrinter()
 
 // -----------------------------------------------------------------------
 
+static inline String getTmpName()
+{
+    char tmpNam[ L_tmpnam ];
+    tmpnam_r( tmpNam );
+    return String( ByteString( tmpNam ), gsl_getSystemTextEncoding() );
+}
+
 BOOL SalPrinter::StartJob(
     const XubString* pFileName,
     const XubString& rJobName,
@@ -755,6 +811,7 @@ BOOL SalPrinter::StartJob(
 {
     maPrinterData.m_bFax        = false;
     maPrinterData.m_aFileName   = pFileName ? *pFileName : String();
+    maPrinterData.m_aTmpFile    = String();
 
     // get the job data
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, maPrinterData.m_aJobData );
@@ -767,9 +824,7 @@ BOOL SalPrinter::StartJob(
         if( rInfo.m_aFeatures.getToken( i, ',' ).equalsAsciiL( "fax", 3 ) )
         {
             maPrinterData.m_bFax = true;
-            char tmpNam[ L_tmpnam ];
-            tmpnam_r( tmpNam );
-            maPrinterData.m_aFileName = String( ByteString( tmpNam ), gsl_getSystemTextEncoding() );
+            maPrinterData.m_aTmpFile = getTmpName();
 
             ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
             it = pJobSetup->maValueMap.find( ::rtl::OUString::createFromAscii( "FAX#" ) );
@@ -777,9 +832,22 @@ BOOL SalPrinter::StartJob(
                 maPrinterData.m_aFaxNr = it->second;
             break;
         }
+        if( ! rInfo.m_aFeatures.getToken( i, ',' ).compareToAscii( "pdf=", 4 ) )
+        {
+            maPrinterData.m_bPdf = true;
+            maPrinterData.m_aTmpFile = getTmpName();
+            if( ! maPrinterData.m_aFileName.Len() )
+            {
+                maPrinterData.m_aFileName = getPdfDir( rInfo );
+                maPrinterData.m_aFileName.Append( '/' );
+                maPrinterData.m_aFileName.Append( rJobName );
+                maPrinterData.m_aFileName.AppendAscii( ".pdf" );
+            }
+            break;
+        }
     }
 
-    return maPrinterData.m_aPrintJob.StartJob( maPrinterData.m_aFileName, rJobName, rAppName, maPrinterData.m_aJobData ) ? TRUE : FALSE;
+    return maPrinterData.m_aPrintJob.StartJob( maPrinterData.m_aTmpFile.Len() ? maPrinterData.m_aTmpFile : maPrinterData.m_aFileName, rJobName, rAppName, maPrinterData.m_aJobData ) ? TRUE : FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -796,7 +864,12 @@ BOOL SalPrinter::EndJob()
 
             const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( maPrinterData.m_aJobData.m_aPrinterName ) );
             // sendAFax removes the file after use
-            bSuccess = sendAFax( maPrinterData.m_aFaxNr, maPrinterData.m_aFileName, rInfo.m_aCommand );
+            bSuccess = sendAFax( maPrinterData.m_aFaxNr, maPrinterData.m_aTmpFile, rInfo.m_aCommand );
+        }
+        else if( maPrinterData.m_bPdf )
+        {
+            const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( maPrinterData.m_aJobData.m_aPrinterName ) );
+            bSuccess = createPdf( maPrinterData.m_aFileName, maPrinterData.m_aTmpFile, rInfo.m_aCommand );
         }
     }
     return bSuccess;
