@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:47:32 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,8 @@ extern "C" void SAL_CALL createRegistryInfo_ODirectSQLDialog();
 extern "C" void SAL_CALL createRegistryInfo_OAdvancedSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialog();
 extern "C" void SAL_CALL createRegistryInfo_OUserSettingsDialog();
-extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialog();
+extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialogSetup();
+extern "C" void SAL_CALL createRegistryInfo_OCallDBTypeWizDialogSetup();
 extern "C" void SAL_CALL createRegistryInfo_OAdabasSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl();
@@ -128,7 +129,9 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_ODirectSQLDialog();
         createRegistryInfo_OAdvancedSettingsDialog();
         createRegistryInfo_ODBTypeWizDialog();
-        createRegistryInfo_OUserSettingsDialog();
+        createRegistryInfo_ODBTypeWizDialogSetup();
+        createRegistryInfo_OCallDBTypeWizDialogSetup();
+            createRegistryInfo_OUserSettingsDialog();
         createRegistryInfo_OAdabasSettingsDialog();
         createRegistryInfo_OColumnControlModel();
         createRegistryInfo_OColumnControl();
