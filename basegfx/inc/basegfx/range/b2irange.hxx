@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2irange.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:35:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,12 @@ namespace basegfx
         {
             maRangeX.expand(rRange.maRangeX);
             maRangeY.expand(rRange.maRangeY);
+        }
+
+        void intersect(const B2IRange& rRange)
+        {
+            maRangeX.intersect(rRange.maRangeX);
+            maRangeY.intersect(rRange.maRangeY);
         }
 
         void grow(sal_Int32 nValue)
