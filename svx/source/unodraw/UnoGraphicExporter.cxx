@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-24 11:57:40 $
+ *  last change: $Author: cl $ $Date: 2001-08-31 06:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ namespace svx
 
     /** creates a bitmap that is optionaly transparent from a metafile
     */
-    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, BOOL bTransparent )
+    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, BOOL bTransparent, const Size* pSize )
     {
         Graphic     aGraphic( rMtf );
         BitmapEx    aBmpEx;
@@ -330,18 +330,38 @@ namespace svx
         if( bTransparent )
         {
             Graphic aMaskGraphic( rMtf.GetMonochromeMtf( COL_BLACK ) );
-            Bitmap  aMaskBmp( aMaskGraphic.GetBitmap() );
+            Bitmap  aMaskBmp( aMaskGraphic.GetBitmap( pSize ) );
 
             aMaskBmp.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
-            aBmpEx = BitmapEx( aGraphic.GetBitmap(), aMaskBmp );
+            aBmpEx = BitmapEx( aGraphic.GetBitmap( pSize ), aMaskBmp );
         }
         else
-            aBmpEx = BitmapEx( aGraphic.GetBitmap() );
+            aBmpEx = BitmapEx( aGraphic.GetBitmap( pSize ) );
 
         aBmpEx.SetPrefMapMode( rMtf.GetPrefMapMode() );
         aBmpEx.SetPrefSize( rMtf.GetPrefSize() );
 
         return aBmpEx;
+    }
+
+    Size* CalcSize( sal_Int32 nWidth, sal_Int32 nHeight, const Size& aBoundSize, Size& aOutSize )
+    {
+        if( (nWidth == 0) && (nHeight == 0) )
+            return NULL;
+
+        if( (nWidth == 0) && (nHeight != 0) && (aBoundSize.Height() != 0) )
+        {
+            nWidth = ( nHeight * aBoundSize.Width() ) / aBoundSize.Height();
+        }
+        else if( (nWidth != 0) && (nHeight == 0) && (aBoundSize.Width() != 0) )
+        {
+            nHeight = ( nWidth * aBoundSize.Height() ) / aBoundSize.Width();
+        }
+
+        aOutSize.Width() = nWidth;
+        aOutSize.Height() = nHeight;
+
+        return &aOutSize;
     }
 }
 
@@ -367,8 +387,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     SdrPage*            pPage = mpUnoPage->GetSdrPage();
     SdrModel*           pDoc = pPage->GetModel();
 
-    sal_Int32 nWidth = -1;
-    sal_Int32 nHeight = -1;
+    sal_Int32 nWidth = 0;
+    sal_Int32 nHeight = 0;
 
     if( NULL == pFilter || NULL == pPage || NULL == pDoc )
         return sal_False;
@@ -434,8 +454,11 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         if ( !bVectorType && !bTranslucent )
         {
             const Size      aSizePix( Application::GetDefaultDevice()->LogicToPixel( aSize, aMap ) );
-            const long      nWidthPix = ( aSizePix.Width()>MAX_EXT_PIX || aSizePix.Height()>MAX_EXT_PIX ) ? MAX_EXT_PIX : 0;
+            long        nWidthPix = ( aSizePix.Width()>MAX_EXT_PIX || aSizePix.Height()>MAX_EXT_PIX ) ? MAX_EXT_PIX : 0;
             SdrView*        pView;
+
+            if( (nWidth > 0) && (nWidth <= MAX_EXT_PIX)  )
+                nWidthPix = nWidth;
 
             if( PTR_CAST( FmFormModel, pDoc ) )
             {
@@ -478,6 +501,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 pView = new SdrView( pDoc, &aVDev );
             }
 
+            Size aNewSize;
             if ( pView && pPage )
             {
                 pView->SetBordVisible( FALSE );
@@ -485,7 +509,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 pView->ShowPage( pPage, Point() );
 
                 const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
-                const Size  aNewSize( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
+                aNewSize = Size( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
                                       aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
                 const Rectangle aClipRect( aNewOrg, aNewSize );
                 MapMode         aVMap( aMap );
@@ -508,7 +532,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             }
 
             if( bTranslucent )
-                aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), TRUE );
+            {
+                Size aOutSize;
+                aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), TRUE, CalcSize( nWidth, nHeight, aNewSize, aOutSize ) );
+            }
 
             if ( pView )
                 delete pView;
@@ -614,7 +641,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
             if( !bVectorType )
             {
-                aGraphic = GetBitmapFromMetaFile( aMtf, bTranslucent );
+                Size aOutSize;
+                aGraphic = GetBitmapFromMetaFile( aMtf, bTranslucent, CalcSize( nWidth, nHeight, aBoundSize, aOutSize ) );
             }
             else
             {
