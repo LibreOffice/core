@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-10 15:27:43 $
+ *  last change: $Author: gt $ $Date: 2001-05-11 10:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,7 @@ public:
     inline                  Complex( const Complex& rCopy );
                             Complex( const STRING& rComplexAsString ) THROWDEF_RTE_IAE;
 
+    inline static sal_Bool  IsImagUnit( sal_Unicode c );
     static sal_Bool         ParseString( const STRING& rComplexAsString, Complex& rReturn );
     STRING                  GetString( sal_Bool bUse_i = sal_True ) const;
 

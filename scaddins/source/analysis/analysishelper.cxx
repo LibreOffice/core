@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-10 15:27:43 $
+ *  last change: $Author: gt $ $Date: 2001-05-11 10:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1907,9 +1907,24 @@ Complex::Complex( const STRING& r ) THROWDEF_RTE_IAE
 }
 
 
+inline sal_Bool Complex::IsImagUnit( sal_Unicode c )
+{
+    return c == 'i' || c == 'j';
+}
+
+
 sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 {
     const sal_Unicode*      pStr = ( const sal_Unicode * ) rStr;
+
+
+    if( IsImagUnit( *pStr ) && rStr.len() == 1 )
+    {
+        rCompl.r = 0.0;
+        rCompl.i = 1.0;
+        return sal_True;
+    }
+
     double                  f;
 
     if( !ParseDouble( pStr, f ) )
@@ -1920,9 +1935,18 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
         case '-':   // imag part follows
         case '+':
             {
-            double          r = f;
-            if( ParseDouble( pStr, f ) && ( *pStr == 'j' || *pStr == 'i' ) )
+            if( IsImagUnit( pStr[ 1 ] ) )
             {
+                if( pStr[ 2 ] == 0 )
+                {
+                    rCompl.r = f;
+                    rCompl.i = 1.0;
+                    return sal_True;
+                }
+            }
+            else if( ParseDouble( pStr, f ) && IsImagUnit( *pStr ) )
+            {
+                double      r = f;
                 pStr++;
                 if( *pStr == 0 )
                 {
