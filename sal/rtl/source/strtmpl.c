@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:29:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 08:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1574,6 +1574,12 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis
     const IMPL_RTL_STRCODE* pOrgCharStr;
     sal_Int32               nLen            = pStr->length-nIndex;
     sal_Int32               nTokCount       = 0;
+
+    // Set ppThis to an empty string and return -1 if either nToken or nIndex is
+    // negative:
+    if (nIndex < 0) {
+        nToken = -1;
+    }
 
     pCharStr += nIndex;
     pOrgCharStr = pCharStr;
