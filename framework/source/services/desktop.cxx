@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: as $ $Date: 2002-10-10 10:31:25 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,25 +534,29 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
         // Step over all child tasks and ask they "WOULD YOU DIE?"
         css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lTasks = m_aChildTaskContainer.getAllElements();
         sal_Int32                                                       nCount = lTasks.getLength()                    ;
-        for( sal_Int32 nPosition=0; nPosition<nCount; ++nPosition )
+        for( sal_Int32 nPosition=0; !bTaskVeto && nPosition<nCount; ++nPosition )
         {
             // Get an element from container and cast it to task.
-            css::uno::Reference< css::util::XCloseable > xTask( lTasks[nPosition], css::uno::UNO_QUERY );
+            css::uno::Reference< css::frame::XFrame > xTask( lTasks[nPosition], css::uno::UNO_QUERY );
+            css::uno::Reference< css::util::XCloseable > xCloseable( xTask, css::uno::UNO_QUERY );
             // Ask task for terminating. If anyone say "NO" ...
             // ... we must reset our default return value to "NO" too!
             try
             {
                 // Don't deliver ownershipt of this task to any other one! => means call close(sal_False).
-                xTask->close(sal_False);
+                if ( !xTask->getController().is() || xTask->getController()->suspend(TRUE) )
+                    xCloseable->close(sal_False);
+                else
+                    // Controller didn't give permission to close
+                    bTaskVeto = sal_True;
                 // Don't remove the task from our child container!
-                // A task do it by herself inside close ...
+                // A task do it by itself inside close
             }
             catch( css::util::CloseVetoException& )
             {
                 // Any internal process of this task disagree with our request.
                 // Safe this state and break this loop. Following task willn't be asked!
                 bTaskVeto = sal_True;
-                break;
             }
             catch( css::lang::DisposedException& )
             {

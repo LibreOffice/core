@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 10:21:25 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1719,7 +1719,7 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
 
     // Ok - no listener disagreed with this close() request
     // check if this frame is used for any load process currently
-    if (Frame::isActionLocked())
+    if (isActionLocked())
     {
         if (bDeliverOwnerShip)
         {
@@ -1728,37 +1728,13 @@ void SAL_CALL Frame::close( sal_Bool bDeliverOwnerShip ) throw( css::util::Close
             m_bSelfClose = sal_True;
             aWriteLock.unlock();
             /* SAFE */
-            throw css::util::CloseVetoException(DECLARE_ASCII("Frame in use for loading document ..."),static_cast< ::cppu::OWeakObject*>(this));
         }
+
+        throw css::util::CloseVetoException(DECLARE_ASCII("Frame in use for loading document ..."),static_cast< ::cppu::OWeakObject*>(this));
     }
 
-    // If no load proccesses could be detected ... ask controller for his agreement.
-    /* SAFE */
-    ReadGuard aReadLock( m_aLock );
-    sal_Bool bComponentInside = m_bConnected;
-    css::uno::Reference< css::frame::XController > xController = m_xController;
-    aReadLock.unlock();
-    /* SAFE */
-
-    if (bComponentInside)
-    {
-        // Attention: setComponent() call doesn't suspend any existing or modified view (means controller)
-        // It must be done from outside.
-        if (xController.is())
-        {
-            if ( ! xController->suspend(sal_True) )
-            {
-                LOG_ASSERT2( bDeliverOwnerShip==sal_True, "Frame::close()", "Can't accept ownership realy. Because my controller disagree ... but I have no chance to delegate ownership to him!" )
-                throw css::util::CloseVetoException(DECLARE_ASCII("Controller disagree ..."),static_cast< ::cppu::OWeakObject*>(this));
-            }
-        }
-        // It's better to forget this reference here - because
-        // this controller will be disposed inside next setComponent() call ...
-        xController = css::uno::Reference< css::frame::XController >();
-
-        if ( ! setComponent(NULL,NULL) )
-            throw css::util::CloseVetoException(DECLARE_ASCII("Component couldn't be deattached ..."),static_cast< ::cppu::OWeakObject*>(this));
-    }
+    if ( ! setComponent(NULL,NULL) )
+        throw css::util::CloseVetoException(DECLARE_ASCII("Component couldn't be deattached ..."),static_cast< ::cppu::OWeakObject*>(this));
 
     // If closing is allowed ... inform all istener and dispose this frame!
     pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >*) NULL ) );
@@ -2374,7 +2350,7 @@ IMPL_LINK( Frame, implts_windowClosing, void*, pVoid )
     try
     {
         // try to close this frame
-        // But don't deliver the owner shipt to anyone.
+        // But don't deliver the ownership to anyone.
         // Because our "UI owner" will try it again if this request
         // will fail.
         // e.g. Somewhere try to open an impress document ... and during
@@ -2383,11 +2359,21 @@ IMPL_LINK( Frame, implts_windowClosing, void*, pVoid )
         // disagree but gets the owner shipt and practice suicide directly after
         // closing of the dialog. That's not fine.
         // We must ignore this close() request then and user can try it later again ...
-        close(sal_False);
+
+        /* SAFE */
+        ReadGuard aReadLock( m_aLock );
+        css::uno::Reference< css::frame::XController > xController = m_xController;
+        aReadLock.unlock();
+        /* SAFE */
+
+        if ( xController.is() && !xController->suspend(sal_True) )
+            return 0;
+        close( sal_False );
     }
     catch( css::util::CloseVetoException& )
     {
     }
+
     return 0;
 }
 
