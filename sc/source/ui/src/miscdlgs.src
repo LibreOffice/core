@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:21:07 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4340,6 +4340,10 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ hindi ] = "मूल ड़ॉटा फैलाव को बदलो";
     Text[ slovak ] = "Zmeniť zdrojovú dátovú oblasť";
 };
+
+
+
+
 
 
 
