@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2004-11-17 16:40:03 $
+#   last change: $Author: obo $ $Date: 2004-11-19 11:40:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.10 $ ';
+my $id_str = ' $Revision: 1.11 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -133,8 +133,8 @@ $vcsid = "unkown" if ( !$vcsid );
 # modules to be obligatory copied to each cws
 my %obligatory_modules = ();
 $obligatory_modules{'solenv'}++;
-$obligatory_modules{'res'}++;
-$obligatory_modules{'so_res'}++;
+$obligatory_modules{'default_images'}++;
+$obligatory_modules{'custom_images'}++;
 $obligatory_modules{'instset_native'}++;
 $obligatory_modules{'instsetoo_native'}++;
 $obligatory_modules{'smoketest_native'}++;
