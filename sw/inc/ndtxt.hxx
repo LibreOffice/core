@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:08:38 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,6 +425,8 @@ public:
     BOOL IsNumbered() const;
     BOOL HasMarkedLabel() const;
     // <- #i27615#
+
+    USHORT GetWidthOfLeadingTabs() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
