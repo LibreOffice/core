@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-28 14:37:03 $
+ *  last change: $Author: mba $ $Date: 2001-02-01 08:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,14 +69,6 @@
 #ifdef TF_FILTER//MUSTFILTER
     #ifndef _RTL_USTRING_
     #include <rtl/ustring>
-    #endif
-
-    #ifndef __SGI_STL_HASH_MAP
-    #include <stl/hash_map>
-    #endif
-
-    #ifndef __SGI_STL_ITERATOR
-    #include <stl/iterator>
     #endif
 
     #ifndef _TOOLS_DEBUG_HXX
@@ -168,23 +160,6 @@ namespace com
 #define RUNTIME_EXCEPTION ::com::sun::star::uno::RuntimeException
 
 #ifdef TF_FILTER//MUSTFILTER
-// Hash code function for calculation of map key.
-struct TStringHashFunction
-{
-    size_t operator()(const ::rtl::OUString& sString) const
-    {
-        return sString.hashCode();
-    }
-};
-
-// Declaration of string hash table for substitution of filter names.
-typedef ::std::hash_map<    ::rtl::OUString                     ,
-                            ::rtl::OUString                     ,
-                            TStringHashFunction                 ,
-                            ::std::equal_to< ::rtl::OUString >  >   TFilterNames;
-
-typedef TFilterNames::const_iterator    TConstConverterIterator;
-
 class SfxFrameLoader : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::document::XExtendedFilterDetection  >
 {
     REFERENCE < ::com::sun::star::frame::XFrame > xFrame;
@@ -195,14 +170,8 @@ class SfxFrameLoader : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::
     SfxMedium*              pMedium;
     sal_Bool                bLoadDone;
     sal_Bool                bLoadState;
-    TFilterNames            aConverterOld2New;
-    TFilterNames            aConverterNew2Old;
 
     DECL_LINK( LoadDone_Impl, void* );
-    void impl_initFilterHashOld2New( TFilterNames& aHash );
-    void impl_initFilterHashNew2Old( TFilterNames& aHash );
-    ::rtl::OUString impl_getNewFilterName( const ::rtl::OUString& sOldName );
-    ::rtl::OUString impl_getOldFilterName( const ::rtl::OUString& sNewName );
 
 public:
                             SfxFrameLoader( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
