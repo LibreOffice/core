@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2001-05-15 18:11:25 $
+ *  last change: $Author: nn $ $Date: 2001-05-16 15:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@
 #define SC_UNONAME_CFFAMIL          "CharFontFamily"
 #define SC_UNONAME_CFCHARS          "CharFontCharSet"
 #define SC_UNONAME_CFPITCH          "CharFontPitch"
+#define SC_UNONAME_CRELIEF          "CharRelief"
+#define SC_UNONAME_CWORDMOD         "CharWordMode"
 
 #define SC_UNO_CJK_CFNAME           "CharFontNameAsian"
 #define SC_UNO_CJK_CFSTYLE          "CharFontStyleNameAsian"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 14:31:07 $
+ *  last change: $Author: nn $ $Date: 2001-05-16 15:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
+#include <svx/charreliefitem.hxx>
 #include <svx/cntritem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/crsditem.hxx>
@@ -87,6 +88,7 @@
 #include <svx/shdditem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
+#include <svx/wrlmitem.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/outdev.hxx>
@@ -230,10 +232,12 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
     FontWeight eWeight;
     FontItalic eItalic;
     FontUnderline eUnder;
+    BOOL bWordLine;
     FontStrikeout eStrike;
     BOOL bOutline;
     BOOL bShadow;
     FontEmphasisMark eEmphasis;
+    FontRelief eRelief;
     Color aColor;
 
     USHORT nFontId, nHeightId, nWeightId, nPostureId;
@@ -283,6 +287,10 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
             pItem = &rMySet.Get( ATTR_FONT_UNDERLINE );
         eUnder = (FontUnderline)((const SvxUnderlineItem*)pItem)->GetValue();
 
+        if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_FONT_WORDLINE );
+        bWordLine = ((const SvxWordLineModeItem*)pItem)->GetValue();
+
         if ( pCondSet->GetItemState( ATTR_FONT_CROSSEDOUT, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_CROSSEDOUT );
         eStrike = (FontStrikeout)((const SvxCrossedOutItem*)pItem)->GetValue();
@@ -299,6 +307,10 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
             pItem = &rMySet.Get( ATTR_FONT_EMPHASISMARK );
         eEmphasis = ((const SvxEmphasisMarkItem*)pItem)->GetEmphasisMark();
 
+        if ( pCondSet->GetItemState( ATTR_FONT_RELIEF, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_FONT_RELIEF );
+        eRelief = (FontRelief)((const SvxCharReliefItem*)pItem)->GetValue();
+
         if ( pCondSet->GetItemState( ATTR_FONT_COLOR, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_COLOR );
         aColor = ((const SvxColorItem*)pItem)->GetValue();
@@ -314,6 +326,8 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
                         rMySet.Get( nPostureId )).GetValue();
         eUnder = (FontUnderline)((const SvxUnderlineItem&)
                         rMySet.Get( ATTR_FONT_UNDERLINE )).GetValue();
+        bWordLine = ((const SvxWordLineModeItem&)
+                        rMySet.Get( ATTR_FONT_WORDLINE )).GetValue();
         eStrike = (FontStrikeout)((const SvxCrossedOutItem&)
                         rMySet.Get( ATTR_FONT_CROSSEDOUT )).GetValue();
         bOutline = ((const SvxContourItem&)
@@ -322,6 +336,8 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
                         rMySet.Get( ATTR_FONT_SHADOWED )).GetValue();
         eEmphasis = ((const SvxEmphasisMarkItem&)
                         rMySet.Get( ATTR_FONT_EMPHASISMARK )).GetEmphasisMark();
+        eRelief = (FontRelief)((const SvxCharReliefItem&)
+                        rMySet.Get( ATTR_FONT_RELIEF )).GetValue();
         aColor = ((const SvxColorItem&)
                         rMySet.Get( ATTR_FONT_COLOR )).GetValue();
     }
@@ -377,6 +393,8 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
         rFont.SetItalic( eItalic );
     if (rFont.GetUnderline() != eUnder)
         rFont.SetUnderline( eUnder );
+    if (rFont.IsWordLineMode() != bWordLine)
+        rFont.SetWordLineMode( bWordLine );
     if (rFont.GetStrikeout() != eStrike)
         rFont.SetStrikeout( eStrike );
     if (rFont.IsOutline() != bOutline)
@@ -385,6 +403,8 @@ void ScPatternAttr::GetFont( Font& rFont, OutputDevice* pOutDev, const Fraction*
         rFont.SetShadow( bShadow );
     if (rFont.GetEmphasisMark() != eEmphasis)
         rFont.SetEmphasisMark( eEmphasis );
+    if (rFont.GetRelief() != eRelief)
+        rFont.SetRelief( eRelief );
     if (rFont.GetColor() != aColor)
         rFont.SetColor( aColor );
     if (!rFont.IsTransparent())
@@ -404,12 +424,14 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     long            nTHeight, nCjkTHeight, nCtlTHeight;     // Twips
     FontWeight      eWeight, eCjkWeight, eCtlWeight;
     SvxUnderlineItem aUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE);
+    BOOL            bWordLine;
     FontStrikeout   eStrike;
     FontItalic      eItalic, eCjkItalic, eCtlItalic;
     BOOL            bOutline;
     BOOL            bShadow;
     BOOL            bForbidden;
     FontEmphasisMark eEmphasis;
+    FontRelief      eRelief;
     LanguageType    eLang, eCjkLang, eCtlLang;
 
     //! additional parameter to control if language is needed?
@@ -466,6 +488,10 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
             pItem = &rMySet.Get( ATTR_FONT_UNDERLINE );
         aUnderlineItem = *(const SvxUnderlineItem*)pItem;
 
+        if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_FONT_WORDLINE );
+        bWordLine = ((const SvxWordLineModeItem*)pItem)->GetValue();
+
         if ( pCondSet->GetItemState( ATTR_FONT_CROSSEDOUT, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_CROSSEDOUT );
         eStrike = (FontStrikeout)((const SvxCrossedOutItem*)pItem)->GetValue();
@@ -485,6 +511,9 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
         if ( pCondSet->GetItemState( ATTR_FONT_EMPHASISMARK, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_EMPHASISMARK );
         eEmphasis = ((const SvxEmphasisMarkItem*)pItem)->GetEmphasisMark();
+        if ( pCondSet->GetItemState( ATTR_FONT_RELIEF, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_FONT_RELIEF );
+        eRelief = (FontRelief)((const SvxCharReliefItem*)pItem)->GetValue();
 
         if ( pCondSet->GetItemState( ATTR_FONT_LANGUAGE, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_LANGUAGE );
@@ -521,6 +550,8 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
         eCtlItalic = (FontItalic)((const SvxPostureItem&)
                         rMySet.Get( ATTR_CTL_FONT_POSTURE )).GetValue();
         aUnderlineItem = (const SvxUnderlineItem&) rMySet.Get( ATTR_FONT_UNDERLINE );
+        bWordLine = ((const SvxWordLineModeItem&)
+                        rMySet.Get( ATTR_FONT_WORDLINE )).GetValue();
         eStrike = (FontStrikeout)((const SvxCrossedOutItem&)
                         rMySet.Get( ATTR_FONT_CROSSEDOUT )).GetValue();
         bOutline = ((const SvxContourItem&)
@@ -531,6 +562,8 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
                         rMySet.Get( ATTR_FORBIDDEN_RULES )).GetValue();
         eEmphasis = ((const SvxEmphasisMarkItem&)
                         rMySet.Get( ATTR_FONT_EMPHASISMARK )).GetEmphasisMark();
+        eRelief = (FontRelief)((const SvxCharReliefItem&)
+                        rMySet.Get( ATTR_FONT_RELIEF )).GetValue();
         eLang = ((const SvxLanguageItem&)
                         rMySet.Get( ATTR_FONT_LANGUAGE )).GetLanguage();
         eCjkLang = ((const SvxLanguageItem&)
@@ -558,6 +591,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     pEditSet->Put( SvxWeightItem    ( eCjkWeight,   EE_CHAR_WEIGHT_CJK ) );
     pEditSet->Put( SvxWeightItem    ( eCtlWeight,   EE_CHAR_WEIGHT_CTL ) );
     pEditSet->Put( aUnderlineItem );
+    pEditSet->Put( SvxWordLineModeItem( bWordLine,  EE_CHAR_WLM ) );
     pEditSet->Put( SvxCrossedOutItem( eStrike,      EE_CHAR_STRIKEOUT ) );
     pEditSet->Put( SvxPostureItem   ( eItalic,      EE_CHAR_ITALIC ) );
     pEditSet->Put( SvxPostureItem   ( eCjkItalic,   EE_CHAR_ITALIC_CJK ) );
@@ -566,6 +600,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     pEditSet->Put( SvxShadowedItem  ( bShadow,      EE_CHAR_SHADOW ) );
     pEditSet->Put( SfxBoolItem      ( EE_PARA_FORBIDDENRULES, bForbidden ) );
     pEditSet->Put( SvxEmphasisMarkItem( eEmphasis,  EE_CHAR_EMPHASISMARK ) );
+    pEditSet->Put( SvxCharReliefItem( eRelief,      EE_CHAR_RELIEF ) );
     pEditSet->Put( SvxLanguageItem  ( eLang,        EE_CHAR_LANGUAGE ) );
     pEditSet->Put( SvxLanguageItem  ( eCjkLang,     EE_CHAR_LANGUAGE_CJK ) );
     pEditSet->Put( SvxLanguageItem  ( eCtlLang,     EE_CHAR_LANGUAGE_CTL ) );
@@ -609,6 +644,9 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
     // SvxUnderlineItem contains enum and color
     if (pEditSet->GetItemState(EE_CHAR_UNDERLINE,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxUnderlineItem(UNDERLINE_NONE,ATTR_FONT_UNDERLINE) = *(const SvxUnderlineItem*)pItem );
+    if (pEditSet->GetItemState(EE_CHAR_WLM,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxWordLineModeItem( ((const SvxWordLineModeItem*)pItem)->GetValue(),
+                        ATTR_FONT_WORDLINE) );
 
     if (pEditSet->GetItemState(EE_CHAR_STRIKEOUT,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxCrossedOutItem( (FontStrikeout)((const SvxCrossedOutItem*)pItem)->GetValue(),
@@ -633,6 +671,9 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
     if (pEditSet->GetItemState(EE_CHAR_EMPHASISMARK,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxEmphasisMarkItem( ((const SvxEmphasisMarkItem*)pItem)->GetEmphasisMark(),
                         ATTR_FONT_EMPHASISMARK) );
+    if (pEditSet->GetItemState(EE_CHAR_RELIEF,TRUE,&pItem) == SFX_ITEM_SET)
+        rMySet.Put( SvxCharReliefItem( (FontRelief)((const SvxCharReliefItem*)pItem)->GetValue(),
+                        ATTR_FONT_RELIEF) );
 
     if (pEditSet->GetItemState(EE_PARA_JUST,TRUE,&pItem) == SFX_ITEM_SET)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:22:57 $
+ *  last change: $Author: nn $ $Date: 2001-05-16 15:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
+#include <svx/charreliefitem.hxx>
 #include <svx/cntritem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/crsditem.hxx>
@@ -98,6 +99,7 @@
 #include <svx/udlnitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/wghtitem.hxx>
+#include <svx/wrlmitem.hxx>
 
 #include "docpool.hxx"
 #include "global.hxx"
@@ -118,6 +120,7 @@ USHORT* ScDocumentPool::pVersionMap3 = 0;
 USHORT* ScDocumentPool::pVersionMap4 = 0;
 USHORT* ScDocumentPool::pVersionMap5 = 0;
 USHORT* ScDocumentPool::pVersionMap6 = 0;
+USHORT* ScDocumentPool::pVersionMap7 = 0;
 
 static SfxItemInfo __READONLY_DATA  aItemInfos[] =
 {
@@ -143,6 +146,9 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { SID_ATTR_CHAR_CTL_LANGUAGE,   SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_LANGUAGE   from 614
     { SID_ATTR_CHAR_EMPHASISMARK,   SFX_ITEM_POOLABLE },    // ATTR_FONT_EMPHASISMARK   from 614
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_FONT_TWOLINES       from 614
+    { SID_ATTR_CHAR_WORDLINEMODE,   SFX_ITEM_POOLABLE },    // ATTR_FONT_WORDLINE       from 632b
+    { SID_ATTR_CHAR_RELIEF,         SFX_ITEM_POOLABLE },    // ATTR_FONT_RELIEF         from 632b
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_HYPHENATE           from 632b
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_SCRIPTSPACE         from 614d
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_HANGPUNCTUATION     from 614d
     { SID_ATTR_PARA_FORBIDDEN_RULES,SFX_ITEM_POOLABLE },    // ATTR_FORBIDDEN_RULES     from 614d
@@ -265,6 +271,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
                                                                     ATTR_CTL_FONT_LANGUAGE );
     ppPoolDefaults[ ATTR_FONT_EMPHASISMARK-ATTR_STARTINDEX ] = new SvxEmphasisMarkItem;
     ppPoolDefaults[ ATTR_FONT_TWOLINES   - ATTR_STARTINDEX ] = new SvxTwoLinesItem;
+    ppPoolDefaults[ ATTR_FONT_WORDLINE   - ATTR_STARTINDEX ] = new SvxWordLineModeItem;
+    ppPoolDefaults[ ATTR_FONT_RELIEF     - ATTR_STARTINDEX ] = new SvxCharReliefItem;
+    ppPoolDefaults[ ATTR_HYPHENATE       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_HYPHENATE );
     ppPoolDefaults[ ATTR_SCRIPTSPACE     - ATTR_STARTINDEX ] = new SvxScriptSpaceItem;
     ppPoolDefaults[ ATTR_HANGPUNCTUATION - ATTR_STARTINDEX ] = new SvxHangingPunctuationItem;
     ppPoolDefaults[ ATTR_FORBIDDEN_RULES - ATTR_STARTINDEX ] = new SvxForbiddenRuleItem;
@@ -355,6 +364,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
 
     // ATTR_SCRIPTSPACE, ATTR_HANGPUNCTUATION, ATTR_FORBIDDEN_RULES from 614d
     SetVersionMap( 6, 100, 175, pVersionMap6 );
+
+    // ATTR_FONT_WORDLINE, ATTR_FONT_RELIEF, ATTR_HYPHENATE from 632b
+    SetVersionMap( 7, 100, 178, pVersionMap7 );
 }
 
 __EXPORT ScDocumentPool::~ScDocumentPool()
@@ -375,7 +387,8 @@ void ScDocumentPool::InitVersionMaps()
 {
     DBG_ASSERT( !pVersionMap1 && !pVersionMap2 &&
                 !pVersionMap3 && !pVersionMap4 &&
-                !pVersionMap5 && !pVersionMap6, "InitVersionMaps call multiple times" );
+                !pVersionMap5 && !pVersionMap6 &&
+                !pVersionMap7, "InitVersionMaps call multiple times" );
 
     // alte WhichId's mappen
     // nicht mit ATTR_* zaehlen, falls die sich nochmal aendern
@@ -458,14 +471,30 @@ void ScDocumentPool::InitVersionMaps()
     // 3 entries inserted
     for ( i=nMap6New, j=nMap6Start+nMap6New+3; i < nMap6Count; i++, j++ )
         pVersionMap6[i] = j;
+
+    //  seventh map: ATTR_FONT_WORDLINE, ATTR_FONT_RELIEF, ATTR_HYPHENATE added in 632b
+
+    const USHORT nMap7Start = 100;  // ATTR_STARTINDEX
+    const USHORT nMap7End   = 178;  // ATTR_ENDINDEX
+    const USHORT nMap7Count = nMap7End - nMap7Start + 1;
+    const USHORT nMap7New   = 22;   // ATTR_FONT_WORDLINE - ATTR_STARTINDEX
+    pVersionMap7 = new USHORT [ nMap7Count ];
+    for ( i=0, j=nMap7Start; i < nMap7New; i++, j++ )
+        pVersionMap7[i] = j;
+    // 3 entries inserted
+    for ( i=nMap7New, j=nMap7Start+nMap7New+3; i < nMap7Count; i++, j++ )
+        pVersionMap7[i] = j;
 }
 
 void ScDocumentPool::DeleteVersionMaps()
 {
     DBG_ASSERT( pVersionMap1 && pVersionMap2 &&
                 pVersionMap3 && pVersionMap4 &&
-                pVersionMap5 && pVersionMap6, "DeleteVersionMaps without maps" );
+                pVersionMap5 && pVersionMap6 &&
+                pVersionMap7, "DeleteVersionMaps without maps" );
 
+    delete[] pVersionMap7;
+    pVersionMap7 = 0;
     delete[] pVersionMap6;
     pVersionMap6 = 0;
     delete[] pVersionMap5;
