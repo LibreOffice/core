@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 12:23:42 $
+#   last change: $Author: obo $ $Date: 2004-06-04 14:00:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ SLOFILES =	\
         $(SLO)$/xlformula.obj				\
         $(SLO)$/xlescher.obj				\
         $(SLO)$/xlocx.obj					\
+        $(SLO)$/xlpivot.obj					\
         $(SLO)$/xltracer.obj				\
         $(SLO)$/xistream.obj				\
         $(SLO)$/xiroot.obj					\
@@ -97,6 +98,7 @@ SLOFILES =	\
         $(SLO)$/xistyle.obj					\
         $(SLO)$/xipage.obj					\
         $(SLO)$/xiescher.obj				\
+        $(SLO)$/xipivot.obj					\
         $(SLO)$/xestream.obj				\
         $(SLO)$/xerecord.obj				\
         $(SLO)$/xeroot.obj					\
@@ -106,6 +108,7 @@ SLOFILES =	\
         $(SLO)$/xecontent.obj				\
         $(SLO)$/xestyle.obj					\
         $(SLO)$/xepage.obj					\
+        $(SLO)$/xepivot.obj					\
         $(SLO)$/XclChartsApiHelper.obj		\
         $(SLO)$/XclImpCharts.obj			\
         $(SLO)$/XclImpChartsApi.obj			\
@@ -133,7 +136,7 @@ SLOFILES =	\
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
 NOOPTFILES= \
-                $(SLO)$/xiescher.obj	 
+                $(SLO)$/xiescher.obj
 .ENDIF
 
 EXCEPTIONSFILES = \
