@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-16 12:17:44 $
+ *  last change: $Author: ka $ $Date: 2000-11-21 13:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,65 +82,66 @@ SgaObject::SgaObject() :
 
 // ------------------------------------------------------------------------
 
-BOOL SgaObject::CreateThumb( const Bitmap& rBitmap )
+BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
 {
-    const Size  aBmpSize( rBitmap.GetSizePixel() );
-    BOOL        bRet = FALSE;
+    BOOL bRet = FALSE;
 
-    if( aBmpSize.Width() && aBmpSize.Height() )
+    if( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
-        aThumbBmp = rBitmap;
+        const BitmapEx  aBmpEx( rGraphic.GetBitmapEx() );
+        const Size      aBmpSize( aBmpEx.GetSizePixel() );
 
-        if( ( aBmpSize.Width() <= S_THUMB ) && ( aBmpSize.Height() <= S_THUMB ) )
+        if( aBmpSize.Width() && aBmpSize.Height() )
         {
-            aThumbBmp.Dither( BMP_DITHER_FLOYD );
-            bRet = TRUE;
-        }
-        else
-        {
-            const float fFactor  = (float) aBmpSize.Width() / aBmpSize.Height();
-            const Size  aNewSize( Max( (long) (fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
-                                  Max( (long) (fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
+            const Color aWhite( COL_WHITE );
 
-            if( aThumbBmp.Scale( (double) aNewSize.Width() / aBmpSize.Width(),
-                                 (double) aNewSize.Height() / aBmpSize.Height(), BMP_SCALE_INTERPOLATE ) )
+            aThumbBmp = aBmpEx.GetBitmap( &aWhite );
+
+            if( ( aBmpSize.Width() <= S_THUMB ) && ( aBmpSize.Height() <= S_THUMB ) )
             {
-                aThumbBmp.Dither( BMP_DITHER_FLOYD );
+                aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
                 bRet = TRUE;
+            }
+            else
+            {
+                const float fFactor  = (float) aBmpSize.Width() / aBmpSize.Height();
+                const Size  aNewSize( Max( (long) (fFactor < 1. ? S_THUMB * fFactor : S_THUMB), 8L ),
+                                      Max( (long) (fFactor < 1. ? S_THUMB : S_THUMB / fFactor), 8L ) );
+
+                if( aThumbBmp.Scale( (double) aNewSize.Width() / aBmpSize.Width(),
+                                     (double) aNewSize.Height() / aBmpSize.Height(), BMP_SCALE_INTERPOLATE ) )
+                {
+                    aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
+                    bRet = TRUE;
+                }
             }
         }
     }
-
-    return bRet;
-}
-
-// ------------------------------------------------------------------------
-
-BOOL SgaObject::CreateThumbMetaFile( const Graphic& rGraphic )
-{
-    const Size  aMtfSize( rGraphic.GetPrefSize() );
-    BOOL        bRet = FALSE;
-
-    if( aMtfSize.Width() && aMtfSize.Height() )
+    else if( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
     {
-        VirtualDevice*  pVDev = new VirtualDevice;
-        Size            aVSize( S_THUMB, S_THUMB );
-        Point           aVPos;
-        Size            aLogSize;
-        const double    fFactor  = (double) aMtfSize.Width() / aMtfSize.Height();
-        const Size      aNewSize((USHORT)(fFactor < 1. ? S_THUMB * fFactor : S_THUMB),
-                                 (USHORT)(fFactor < 1. ? S_THUMB : S_THUMB / fFactor));
+        const Size aMtfSize( rGraphic.GetPrefSize() );
 
-        pVDev->SetOutputSizePixel( aNewSize );
-        rGraphic.Draw( pVDev, aVPos, aNewSize );
-
-        aThumbBmp = pVDev->GetBitmap( aVPos, aNewSize );
-        delete pVDev;
-
-        if( !!aThumbBmp )
+        if( aMtfSize.Width() && aMtfSize.Height() )
         {
-            aThumbBmp.Dither( BMP_DITHER_FLOYD );
-            bRet = TRUE;
+            VirtualDevice*  pVDev = new VirtualDevice;
+            Size            aVSize( S_THUMB, S_THUMB );
+            Point           aVPos;
+            Size            aLogSize;
+            const double    fFactor  = (double) aMtfSize.Width() / aMtfSize.Height();
+            const Size      aNewSize((USHORT)(fFactor < 1. ? S_THUMB * fFactor : S_THUMB),
+                                     (USHORT)(fFactor < 1. ? S_THUMB : S_THUMB / fFactor));
+
+            pVDev->SetOutputSizePixel( aNewSize );
+            rGraphic.Draw( pVDev, aVPos, aNewSize );
+
+            aThumbBmp = pVDev->GetBitmap( aVPos, aNewSize );
+            delete pVDev;
+
+            if( !!aThumbBmp )
+            {
+                aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
+                bRet = TRUE;
+            }
         }
     }
 
@@ -247,13 +248,7 @@ SgaObjectBmp::SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL, 
 void SgaObjectBmp::Init( const Graphic& rGraphic, const INetURLObject& rURL )
 {
     aURL = rURL;
-
-    if ( rGraphic.GetType() == GRAPHIC_BITMAP )
-        bIsValid = CreateThumb( rGraphic.GetBitmap() );
-    else if( rGraphic.GetType() != GRAPHIC_NONE )
-        bIsValid = CreateThumbMetaFile( rGraphic );
-    else
-        bIsValid = FALSE;
+    bIsValid = CreateThumb( rGraphic );
 }
 
 // ------------------------------------------------------------------------
@@ -383,7 +378,7 @@ SgaObjectAnim::SgaObjectAnim( const Graphic& rGraphic,
                               const String& rFormatName )
 {
     aURL = rURL;
-    bIsValid = CreateThumb( rGraphic.GetBitmap() );
+    bIsValid = CreateThumb( rGraphic );
 }
 
 // -----------------
@@ -443,7 +438,7 @@ BOOL SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
     // Falls das Draw-Objekt nur eine Graphik enthaelt,
     // erzeugen wir mit dieser den Thumb
     if ( CreateIMapGraphic( rModel, aGraphic, aImageMap ) )
-        bRet = SgaObject::CreateThumb( aGraphic.GetBitmap() );
+        bRet = SgaObject::CreateThumb( aGraphic );
     else
     {
         VirtualDevice   aVDev;
