@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-29 02:39:52 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModalDialog DLG_PRESLT
         Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü¤@­Ó­¶­±¼Ë¦¡(~S)";
         Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÊÎØíØ ÇáÕİÍÉ";
         Text[ greek ] = "Åğéëİîôå İíá ğñüôõğï ~óåëßäáò";
-        Text[ korean ] = "ÆäÀÌÁö ¼­½Ä ÆÄÀÏÀ» ¼±ÅÃÇÏ½Ê½Ã¿À(~S)";
+        Text[ korean ] = "ÂÊ À¯ÇüÀ» ¼±ÅÃÇÏ½Ê½Ã¿À(~S)";
         Text[ turkish ] = "Bir sayfa biçimi seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Elija un estil~o de página";
@@ -143,7 +143,7 @@ ModalDialog DLG_PRESLT
         Text[ chinese_traditional ] = "§ó´«­I´º­¶­±(~E)";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÕİÍÉ ÇáÎáİíÉ";
         Text[ greek ] = "~ÁíôáëëáãŞ óåëßäáò öüíôïõ";
-        Text[ korean ] = "¹è°æÂÊ ¹Ù²Ù±â(~E)";
+        Text[ korean ] = "¹è°æÆäÀÌÁö ¹Ù²Ù±â(~E)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Artalan sayfasını değiştir";
         Text[ catalan ] = "~Intercambiar página de fondo";
@@ -235,6 +235,7 @@ ModalDialog DLG_PRESLT
     Text[ catalan ] = "Estilo de página";
     Text[ finnish ] = "Diakuvasuunnitelma";
 };
+
 
 
 
