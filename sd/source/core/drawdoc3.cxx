@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 15:27:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,6 +577,8 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
     {
         if( !pBookmarkList )
             bScaleObjects = pPage->IsScaleObjects();
+        else
+            bScaleObjects = TRUE;
     }
     else
     {
