@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-07 18:45:57 $
+ *  last change: $Author: cl $ $Date: 2000-12-11 07:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,7 +995,7 @@ void ShapeSortContext::restoreConnections()
 
 void ShapeSortContext::createShapeId( sal_Int32 nId )
 {
-    maShapeIdMap[nId] = mnCurrentZ;
+    maShapeIdMap[mnCurrentZ] = nId;
 }
 
 uno::Reference< drawing::XShape > ShapeSortContext::getShapeFromId( sal_Int32 nId )
@@ -1022,9 +1022,6 @@ void XMLShapeImportHelper::popGroupAndSort()
     DBG_ASSERT( mpSortContext, "No context to sort!" );
     if( mpSortContext == NULL )
         return;
-
-    // restore connections for connection shapes
-    mpSortContext->restoreConnections();
 
     // sort shapes
     list<ZOrderHint>& rZList = mpSortContext->maZOrderList;
@@ -1109,6 +1106,18 @@ void XMLShapeImportHelper::addShapeConnection( com::sun::star::uno::Reference< c
 
 void XMLShapeImportHelper::createShapeId( sal_Int32 nId )
 {
+    /*
     if( mpSortContext )
         mpSortContext->createShapeId( nId );
+    */
 }
+
+void XMLShapeImportHelper::restoreConnections()
+{
+    if( mpSortContext )
+    {
+        // restore connections for connection shapes
+        // mpSortContext->restoreConnections();
+    }
+}
+
