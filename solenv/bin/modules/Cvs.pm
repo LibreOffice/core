@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2002-11-06 14:30:57 $
+#   last change: $Author: hr $ $Date: 2002-12-04 15:41:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -414,7 +414,7 @@ sub parse_log
             $comment .= $_ . "\n" ;
         }
         elsif ( $in_tags ) {
-            /^keyword\ssubstitution:/o && do { $self->{FLAGS} = $'; $in_tags--; next; };
+            /^keyword\ssubstitution:\s/o && do { $self->{FLAGS} = $'; $in_tags--; next; };
             /^\t(\w+):\s((\d|\.)+)$/o && do { $self->{TAGS}->{$1} = $2; next; };
         }
         else {
