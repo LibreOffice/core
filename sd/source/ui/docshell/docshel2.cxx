@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 09:56:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
         }
 
         Region aRegion(aVisArea);
-        pView->InitRedraw(pOut, aRegion);
+        pView->CompleteRedraw(pOut, aRegion);
 
         if (pOut->GetOutDevType() == OUTDEV_PRINTER)
         {
@@ -427,7 +427,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
             pView->SetActiveLayer( pFrameView->GetActiveLayer() );
     }
 
-    pView->InitRedraw( &aVDev, Rectangle( aNullPt, aSize ) );
+    pView->CompleteRedraw( &aVDev, Rectangle( aNullPt, aSize ) );
 
     // #111097# IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
     delete pView;
