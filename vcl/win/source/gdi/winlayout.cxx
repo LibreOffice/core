@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: lla $ $Date: 2002-06-27 08:52:48 $
+ *  last change: $Author: ssa $ $Date: 2002-07-11 07:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,8 +295,13 @@ void SimpleWinLayout::Draw() const
     if( mnGlyphCount <= 0 )
         return;
 
-    const Point aPos = GetDrawPosition();
+    Point aPos = GetDrawPosition();
     UINT mnDrawOptions = mbEnableGlyphs ? ETO_GLYPH_INDEX : 0;
+
+    static const char* pEnv = getenv("SAL_RTL_ENABLED" );
+    if( pEnv )  // HACK for Bidi-Testing
+        aPos.X() = aPos.X() - mnWidth;
+
     ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
         mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
 }
