@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:45:53 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 18:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ namespace dbaui
         virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual FmGridControl*  imp_CreateControl(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >,Window* pParent, WinBits nStyle);
+        virtual FmGridControl*  imp_CreateControl(Window* pParent, WinBits nStyle);
 
         void NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > ());
     };

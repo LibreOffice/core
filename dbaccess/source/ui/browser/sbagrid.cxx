@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:41:54 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 18:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ FmXGridPeer* SbaXGridControl::imp_CreatePeer(Window* pParent)
             if (::comphelper::getINT16(xModelSet->getPropertyValue(::rtl::OUString::createFromAscii("Border"))))
                 nStyle |= WB_BORDER;
         }
-        catch(...)
+        catch(Exception&)
         {
         }
 
@@ -804,9 +804,9 @@ void SbaXGridPeer::removeColumnListeners(const ::com::sun::star::uno::Reference<
 }
 
 //---------------------------------------------------------------------------------------
-FmGridControl* SbaXGridPeer::imp_CreateControl(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rM,Window* pParent, WinBits nStyle)
+FmGridControl* SbaXGridPeer::imp_CreateControl(Window* pParent, WinBits nStyle)
 {
-    return new SbaGridControl(_rM,pParent, this, nStyle);
+    return new SbaGridControl(m_xServiceFactory, pParent, this, nStyle);
 }
 
 //==================================================================
@@ -846,7 +846,7 @@ void SbaGridHeader::Command( const CommandEvent& rEvt )
         if (HEADERBAR_ITEM_NOTFOUND != nId)
         {
             Rectangle aColRect = GetItemRect(nId);
-            aColRect.Left() += nId ? 3 : 0; // the handle col (nId == 0) doens not have a left margin for resizing
+            aColRect.Left() += nId ? 3 : 0; // the handle col (nId == 0) does not have a left margin for resizing
             aColRect.Right() -= 3;
             bResizingCol = !aColRect.IsInside(aPos);
         }
@@ -1043,12 +1043,12 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
 //              ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >  xPropState(xAffectedCol, ::com::sun::star::uno::UNO_QUERY);
 //              if (xPropState.is())
 //              {
-//                  try { aNewWidth = xPropState->getPropertyDefault(PROPERTY_WIDTH); } catch(...) { } ;
+//                  try { aNewWidth = xPropState->getPropertyDefault(PROPERTY_WIDTH); } catch(Exception&) { } ;
 //              }
 //          }
 //          else
 //              aNewWidth <<= nValue;
-//          try {  xAffectedCol->setPropertyValue(PROPERTY_WIDTH, aNewWidth); } catch(...) { } ;
+//          try {  xAffectedCol->setPropertyValue(PROPERTY_WIDTH, aNewWidth); } catch(Exception&) { } ;
 //      }
     }
 }
@@ -1074,12 +1074,12 @@ void SbaGridControl::SetRowHeight()
 //          ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >  xPropState(xCols, ::com::sun::star::uno::UNO_QUERY);
 //          if (xPropState.is())
 //          {
-//              try { aNewHeight = xPropState->getPropertyDefault(PROPERTY_ROW_HEIGHT); } catch(...) { } ;
+//              try { aNewHeight = xPropState->getPropertyDefault(PROPERTY_ROW_HEIGHT); } catch(Exception&) { } ;
 //          }
 //      }
 //      else
 //          aNewHeight <<= nValue;
-//      try {  xCols->setPropertyValue(PROPERTY_ROW_HEIGHT, aNewHeight); } catch(...) { } ;
+//      try {  xCols->setPropertyValue(PROPERTY_ROW_HEIGHT, aNewHeight); } catch(Exception&) { } ;
 //  }
 }
 
@@ -1362,7 +1362,7 @@ void SbaGridControl::Select()
                         xSelSupplier->select(::com::sun::star::uno::Any());
                     }
             }
-            catch(...)
+            catch(Exception&)
             {
             }
 
@@ -1456,7 +1456,7 @@ void SbaGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com
         if (aBoundField.hasValue())
             return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)aBoundField.getValue(), ::com::sun::star::uno::UNO_QUERY);
     }
-    catch(...)
+    catch(Exception&)
     {
     }
 
@@ -1600,9 +1600,9 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     {
         nDataType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMANDTYPE));
         sDataSource = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_COMMAND));
-        sDBAlias = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(::rtl::OUString::createFromAscii("DataSource")));
+        sDBAlias = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_DATASOURCENAME));
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("SbaGridControl::DoColumnDrag : could not collect essential data source attributes !");
         return;
@@ -1625,7 +1625,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
         {
             bTryToParse = ::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_ERROR("SbaGridControl::DoColumnDrag : could not ask for the escape processing property ! ignoring this ...");
         }
@@ -1654,7 +1654,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
                 }
             }
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_ERROR("SbaGridControl::DoColumnDrag : could not collect essential data source attributes (part two) !");
             return;
@@ -1676,7 +1676,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xAffectedCol = *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)xCols->getByIndex(nModelPos).getValue();
         sField = (const sal_Unicode*)::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("SbaGridControl::DoColumnDrag : something went wrong while getting the column");
         return;
@@ -1708,9 +1708,9 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
     {
         nDataType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMANDTYPE));
         sDataSource = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_COMMAND));
-        sDBAlias = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(::rtl::OUString::createFromAscii("DataSource")));
+        sDBAlias = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_DATASOURCENAME));
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("SbaGridControl::DoRowDrag : could not collect essential data source attributes !");
         return;
@@ -1745,7 +1745,7 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
         else
             sCompleteStatement = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_ACTIVECOMMAND));
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("SbaGridControl::DoRowDrag : could not collect essential data source attributes (part two) !");
         return;
@@ -1815,9 +1815,9 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
     {
         nDataType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMANDTYPE));
         sDataSource = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_COMMAND));
-        sDBAlias = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(::rtl::OUString::createFromAscii("DataSource")));
+        sDBAlias = (const sal_Unicode*)::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_DATASOURCENAME));
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("SbaGridControl::DoFieldDrag : could not collect essential data source attributes !");
         return;
@@ -1850,7 +1850,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
         xAffectedCol = *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)xCols->getByIndex(nModelPos).getValue();
         sField = (const sal_Unicode*)::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("SbaGridControl::DoFieldDrag : something went wrong while retrieving the column's control source !");
         return;
@@ -1890,7 +1890,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xFormat = xFormats->getByKey(nKey);
             if (xFormat.is())
             {
-                try { nType = ::comphelper::getINT16(xFormat->getPropertyValue(PROPERTY_TYPE)); } catch(...) { } ;
+                try { nType = ::comphelper::getINT16(xFormat->getPropertyValue(PROPERTY_TYPE)); } catch(Exception&) { } ;
             }
 
             // if it is a text format we can ask for the string
@@ -1912,7 +1912,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
                     sInputFormatted.Erase();
             }
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_ERROR("SbaGridControl::DoFieldDrag : could not retrieve the cell's input string !");
             return;
@@ -1938,7 +1938,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
             DragServer::CopyString(aText);
         }
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("SbaGridControl::DoFieldDrag : could not retrieve the cell's contents !");
         return;
@@ -2022,7 +2022,7 @@ sal_Bool SbaGridControl::QueryDrop(const BrowserDropEvent& rEvt)
             if (::comphelper::getBOOL(xField->getPropertyValue(PROPERTY_ISREADONLY)))
                 break;
         }
-        catch(...)
+        catch(Exception&)
         {
             // assume RO
             break;
@@ -2169,7 +2169,7 @@ sal_Bool SbaGridControl::Drop(const BrowserDropEvent& rEvt)
 //  {
 //      nDataType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMANDTYPE));
 //  }
-//  catch(...)
+//  catch(Exception&)
 //  {
 //      DBG_ERROR("SbaGridControl::Drop : could not collect essential data source attributes !");
 //      return sal_False;
