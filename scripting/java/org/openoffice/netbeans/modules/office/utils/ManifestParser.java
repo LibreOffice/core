@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestParser.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 11:42:48 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-20 11:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ import org.openide.xml.XMLUtil;
 
 import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 import org.openoffice.idesupport.xml.XMLParser;
-import org.openoffice.idesupport.SVersionRCFile;
+import org.openoffice.idesupport.OfficeInstallation;
 
 public class ManifestParser implements XMLParser {
 
@@ -99,9 +99,7 @@ public class ManifestParser implements XMLParser {
         Document result = null;
 
         try {
-            SVersionRCFile.OfficeInstallation oi =
-                new SVersionRCFile.OfficeInstallation(
-                    OfficeSettings.getDefault().getOfficeDirectory());
+            OfficeInstallation oi = OfficeSettings.getDefault().getOfficeDirectory();
             String id = oi.getURL("share/dtd/officedocument/1_0/");
 
             is = new InputSource(inputStream);

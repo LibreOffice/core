@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocumentSupport.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:33 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-20 12:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,8 @@ public class OfficeDocumentSupport implements OfficeDocumentCookie, OpenCookie, 
         File file = FileUtil.toFile(dataObj.getPrimaryFile());
 
         OfficeSettings settings = OfficeSettings.getDefault();
-        File soffice = new File(settings.getOfficeDirectory() +
-            File.separator + "soffice");
+        File soffice = new File(settings.getOfficeDirectory().getPath(
+            File.separator + "soffice"));
 
         try {
             Process p = Runtime.getRuntime ().exec (new String[] {

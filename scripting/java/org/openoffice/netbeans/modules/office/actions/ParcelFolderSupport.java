@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolderSupport.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-12 12:40:19 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-20 12:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,8 +224,8 @@ public class ParcelFolderSupport implements ParcelFolderCookie
             result.addElement(tokens.nextToken());
 
         OfficeSettings settings = OfficeSettings.getDefault();
-        File classesDir = new File(settings.getOfficeDirectory() +
-            File.separator + "program" + File.separator + "classes");
+        File classesDir = new File(settings.getOfficeDirectory().getPath(
+            File.separator + "program" + File.separator + "classes"));
         File[] jarfiles = classesDir.listFiles();
 
         for (int i = 0; i < jarfiles.length; i++)
