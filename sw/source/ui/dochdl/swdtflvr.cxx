@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 12:09:21 $
+ *  last change: $Author: jp $ $Date: 2001-07-12 17:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2750,8 +2750,13 @@ void SwTransferable::FillClipFmtItem( SwWrtShell& rSh,
     }
     else
     {
+        TransferableObjectDescriptor aDesc;
+        ((TransferableDataHelper&)rData).GetTransferableObjectDescriptor(
+                                SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc );
+
         if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_EMBED_SOURCE, nDest ))
-            rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
+            rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_EMBED_SOURCE,
+                                            aDesc.maTypeName );
         if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_LINK_SOURCE, nDest ))
             rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_LINK_SOURCE );
     }
