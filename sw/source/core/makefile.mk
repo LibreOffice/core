@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-08 13:56:06 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:01:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,7 @@ SUBLIBS1= \
 
 SUBLIBS2= \
         $(SLB)$/draw.lib \
-        $(SLB)$/sw3io.lib \
+                $(SLB)$/sw3io.lib \
         $(SLB)$/swg.lib \
         $(SLB)$/layout.lib \
         $(SLB)$/text.lib \
