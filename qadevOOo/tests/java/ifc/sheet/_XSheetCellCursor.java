@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSheetCellCursor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:20 $
+ *  last change:$Date: 2003-09-08 11:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 package ifc.sheet;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.sheet.CellFlags;
 import com.sun.star.sheet.XArrayFormulaRange;
 import com.sun.star.sheet.XCellRangeAddressable;
@@ -72,7 +74,6 @@ import com.sun.star.table.XCellRange;
 import com.sun.star.table.XColumnRowRange;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XMergeable;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.sheet.XSheetCellCursor</code>

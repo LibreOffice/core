@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSheetAnnotationsSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:21 $
+ *  last change:$Date: 2003-09-08 11:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.sheet;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.sheet.XSheetAnnotations;
 import com.sun.star.sheet.XSheetAnnotationsSupplier;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.sheet.XSheetAnnotationsSupplier</code>
