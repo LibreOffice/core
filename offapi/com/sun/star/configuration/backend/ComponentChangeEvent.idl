@@ -1,0 +1,36 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ComponentChangeEvent.idl,v $
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_backend_ComponentChangeEvent_idl__
+#define __com_sun_star_configuration_backend_ComponentChangeEvent_idl__
+
+#ifndef __com_sun_star_lang_EventObject_idl__
+#include <com/sun/star/lang/EventObject.idl>
+#endif
+//=============================================================================
+
+module com {  module sun {  module star {  module configuration {  module backend {
+
+//=============================================================================
+
+/** This event is fired when a change becomes effective on the source of the event
+
+    @see XBackendChangesNotifier
+
+ */
+struct ComponentChangeEvent: ::com::sun::star::lang::EventObject
+{
+    //-------------------------------------------------------------------------
+    /** The name of the Component that changed
+    */
+    string Component;
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
