@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:04:40 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -675,37 +674,7 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
             switch( ( pNd = GetNodes()[ --n ])->GetNodeType() )
             {
             case ND_TEXTNODE:
-                if ( !((SwTxtNode*)pNd)->HasHiddenCharAttribute( true ) &&
-                     !((SwTxtNode*)pNd)->HasHiddenParaField() )
-                {
-                    String& rWordStr = (String&)((SwTxtNode*)pNd)->GetTxt();
-                    String aOldStr( rWordStr );
-
-                    // fills the hidden ranges with cChar, so that the break iterator ignores them
-                    const xub_Unicode cChar(' ');
-                    USHORT nNumOfMaskedChars =
-                            SwScriptInfo::MaskHiddenRanges( *((SwTxtNode*)pNd), rWordStr, &cChar );
-
-                    if( rWordStr.Len() && pBreakIt->xBreak.is() )
-                    {
-                        SwScanner aScanner( *((SwTxtNode*)pNd), NULL,
-                                            ::com::sun::star::i18n::WordType::WORD_COUNT,
-                                            0, rWordStr.Len(), sal_False, sal_False );
-
-                        while ( aScanner.NextWord() )
-                        {
-                            if ( aScanner.GetLen() > 1 ||
-                                 CH_TXTATR_BREAKWORD != rWordStr.GetChar( aScanner.GetBegin() ) )
-                                ++rStat.nWord;
-                        }
-                    }
-
-                    ASSERT( rWordStr.Len() >= nNumOfMaskedChars,
-                            "More characters hidden that characters in string!" )
-                    rStat.nChar += rWordStr.Len() - nNumOfMaskedChars;
-                    ++rStat.nPara;
-                    rWordStr = aOldStr;
-                }
+                ((SwTxtNode*)pNd)->CountWords( rStat, 0, ((SwTxtNode*)pNd)->GetTxt().Len() );
                 break;
             case ND_TABLENODE:      ++rStat.nTbl;   break;
             case ND_GRFNODE:        ++rStat.nGrf;   break;
