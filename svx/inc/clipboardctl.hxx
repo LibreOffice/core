@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipboardctl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-30 14:21:22 $
+ *  last change: $Author: tl $ $Date: 2002-09-20 13:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,13 @@
 
 
 class PopupMenu;
+class SvxClipboardFmtItem;
 
 
 class SvxClipBoardControl : public SfxToolBoxControl
 {
+    SfxStatusForwarder      aForwarder;
+    SfxPoolItem*            pClipboardFmtItem;
     PopupMenu*              pPopup;
     USHORT                  nItemId;
 
