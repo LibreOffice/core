@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Block.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-10 15:25:10 $
+ *  last change: $Author: abi $ $Date: 2001-07-05 18:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef _RTL_MEMORY_H_
+#include <rtl/memory.h>
+#endif
 #ifndef _XMLSEARCH_DB_BLOCK_HXX_
 #include <db/Block.hxx>
 #endif
@@ -88,6 +91,7 @@ Block::Block( const DBEnv* dbenv )
     dataL_( dbenv->getDataLen() ),
     data_( new sal_Int8[ dbenv->getDataLen() ] )
 {
+    rtl_zeroMemory( data_,dataL_ );
 }
 
 

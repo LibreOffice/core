@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BtreeDict.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-22 14:13:18 $
+ *  last change: $Author: abi $ $Date: 2001-07-05 18:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,7 @@ BtreeDict::BtreeDict( const util::IndexAccessor& indexAccessor ) throw( IOExcept
     {
         sal_Int32 len = SCHEMA->length();
         char* bff = new char[ 1 + len ];
-        bff[ 1 + len ] = 0;
+        bff[ len ] = 0;
         SCHEMA->readBytes( reinterpret_cast<sal_Int8*>( bff ),len );
         delete SCHEMA;
 

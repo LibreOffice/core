@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryProcessor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-19 13:41:05 $
+ *  last change: $Author: abi $ $Date: 2001-07-05 18:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

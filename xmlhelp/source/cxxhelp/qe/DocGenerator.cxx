@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocGenerator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
+ *  last change: $Author: abi $ $Date: 2001-07-05 18:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,8 @@ RoleFiller::RoleFiller()
       limit_( 0 ),
       parentContext_( 0 ),
       next_( 0 ),
-      fillers_( 0 )
+      fillers_( 0 ),
+      m_nRefcount( 0 )
 {
 }
 
@@ -101,7 +102,8 @@ RoleFiller::RoleFiller( sal_Int32 nColumns,
     : next_( 0 ),
       conceptData_( first ),
       fixedRole_( sal_uInt8( role & 0xF ) ),                    // primary/constitutive concept/role
-      fillers_( nColumns )
+      fillers_( nColumns ),
+      m_nRefcount( 0 )
 {
     filled_ = sal_Int16( 1 << fixedRole_ );
     begin_ = pos;       // offset in file
@@ -119,7 +121,9 @@ RoleFiller::RoleFiller( sal_Int32 nColumns,
 RoleFiller::~RoleFiller()
 {
     for( sal_uInt32 i = 0; i < fillers_.size(); ++i )
-        delete fillers_[i];
+        ;
+//          if( fillers_[i] != this )
+//              delete fillers_[i];
 }
 
 
@@ -193,7 +197,7 @@ sal_Int32 RoleFiller::getConcept()
 
 void RoleFiller::use( std::vector< RoleFiller*>& place,sal_Int32 query )
 {
-    RoleFiller* rf;
+    RoleFiller* rf,*tmp;
     if( rf = place[ query ] )
     {
         place[ query ] = this;  // put at the head of list
@@ -317,7 +321,9 @@ void NextDocGeneratorHeap::step() throw( excep::XmlSearchException )
         heapify(0);
     else if ( heapSize_ > 1 )
     {
+        delete heap_[0];
         heap_[0] = heap_[--heapSize_];
+        heap_[ heapSize_ ] = 0;
         heapify(0);
     }
     else
@@ -363,8 +369,6 @@ ConceptGroupGenerator::ConceptGroupGenerator( sal_Int32 dataL,sal_Int8* data,sal
       bits_( new util::ByteArrayDecompressor( dataL,data,index ) ),
       table_( NConceptsInGroup )
 {
-    for( sal_Int32 i = 0; i < NConceptsInGroup; ++i )
-        table_[i] = 0;
 }
 
 
@@ -396,7 +400,7 @@ bool ConceptGroupGenerator::next() throw( excep::XmlSearchException )
     while( bits_->readNext( k1_,this ) )
     {
         sal_Int32 bla = bits_->read( k2_ );
-        if( cData_ = table_[ bla ] )
+        if( ( cData_ = table_[ bla ] ).is() )
             return true;
     }
     return false;
@@ -420,10 +424,7 @@ void ConceptGroupGenerator::init( sal_Int32 bytesL,sal_Int8* bytes,sal_Int32 ind
     bits_ = new util::ByteArrayDecompressor( bytesL,bytes,index );
     last_ = 0;
     for( sal_Int32 i = 0;i < NConceptsInGroup; i++ )
-    {
-//      delete table_[i];
         table_[i] = 0;
-    }
 }
 
 
@@ -511,6 +512,7 @@ bool GeneratorHeap::next( std::vector< RoleFiller* >& array ) throw( xmlsearch::
             {
                 delete heap_[0];
                 heap_[0] = heap_[--heapSize_];
+                heap_[heapSize_] = 0;
             }
             else
             {

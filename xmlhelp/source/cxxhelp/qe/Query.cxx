@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Query.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-11 12:39:12 $
+ *  last change: $Author: abi $ $Date: 2001-07-05 18:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,10 +153,7 @@ QueryHit* HitStore::firstBestQueryHit()
 {
     if( free_ > 0)
     {
-//          for( sal_uInt32 i = 0; i < heap_.size(); ++i )
-//              printf( " number = %x\n",heap_[i] );
-
-          CompareQueryHit bla;
+        CompareQueryHit bla;
         heap_.resize( free_ );
           std::stable_sort( heap_.begin(),heap_.end(),bla );
         index_ = 0;
@@ -247,13 +244,15 @@ Query::Query( XmlIndex* env,
       ctx_( env ? env->getContextInfo() : 0 ),
       nColumns_( nColumns ),
       nHitsRequested_( nHits ),
-      missingPenalty_( new double[ missingPenaltyL_ = nColumns_ ] ) ,
-      upperboundTemplate_( new double[ upperboundTemplateL_ = nColumns_ ] ),
+      missingPenaltyL_( nColumns ),
+      missingPenalty_( new double[ nColumns ] ),
+      upperboundTemplateL_( nColumns ),
+      upperboundTemplate_( new double[ nColumns ] ),
       penaltiesL_( missingPenaltiesL ),
       penalties_( missingPenalties ),
       currentStandard_( nColumns * MissingTermPenalty - 0.0001 ),
       missingTermsPenalty_( 0.0 ),
-      store_( currentStandard_,nHits,nColumns ),
+      store_( nColumns * MissingTermPenalty - 0.0001,nHits,nColumns ),
       ignoredElementsL_( 0 ),
       ignoredElements_( 0 )
 {

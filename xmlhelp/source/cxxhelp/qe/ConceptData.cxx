@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConceptData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-18 12:10:12 $
+ *  last change: $Author: abi $ $Date: 2001-07-05 18:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,26 +88,32 @@ ConceptData::ConceptData( sal_Int32 id,
       role_( sal_uInt8( role & 0xF ) ),
       penalty_( score ),
       ctx_( contextTables ),
-      next_( 0 )
+      next_( 0 ),
+      m_nRefcount( 0 )
+{
+}
+
+
+ConceptData::~ConceptData()
 {
 }
 
 
 void ConceptData::runBy( std::vector< Query* >& queries )
 {
-    ConceptData* cd = this;
+    rtl::Reference< ConceptData > cd( this );
     do
     {
         Query* query = queries[ cd->queryNo_ ];
         query->updateEstimate( cd->role_,cd->penalty_ );
     }
-    while( cd = cd->next_ );
+    while( (cd = cd->next_).is() );
 }
 
 
 void ConceptData::addLast( ConceptData* r )
 {
-    if( next_ )
+    if( next_.is() )
         next_->addLast( r );
     else
         next_ = r;
@@ -119,15 +125,15 @@ void ConceptData::generateFillers( std::vector< RoleFiller* >& array, sal_Int32 
     if( array[ queryNo_ ] != RoleFiller::STOP() ) // not 'prohibited'
     {
         sal_Int32 wcl = ctx_->wordContextLin( pos );
-        RoleFiller* p = new RoleFiller( nColumns_,
-                                        this,
-                                        role_,
-                                        pos,
-                                        wcl,
-                                        pos + proximity_ );
-        p->use( array, queryNo_ );
+        roleFillers_.push_back( new RoleFiller( nColumns_,
+                                                this,
+                                                role_,
+                                                pos,
+                                                wcl,
+                                                pos + proximity_ ) );
+        roleFillers_.back()->use( array, queryNo_ );
     }
     // !!! maybe eliminate tail recursion
-    if( next_ )
+    if( next_.is() )
         next_->generateFillers( array,pos );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContextTables.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-22 10:12:51 $
+ *  last change: $Author: abi $ $Date: 2001-07-05 18:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _rtl_MEMORY_H_
+#include <rtl/memory.h>
+#endif
 #ifndef _XMLSEARCH_QE_CONTEXTTABLES_HXX_
 #include <qe/ContextTables.hxx>
 #endif
@@ -76,6 +80,21 @@ Tables::Tables( ContextTables* p )
       linkTypesCached_( new sal_Int32[ linkTypesCachedL_ = p->linkTypesL_ ] ),
       seqNumbersCached_( new sal_Int32[ seqNumbersCachedL_ = p->seqNumbersL_ ] )
 {
+    rtl_copyMemory( (void*)initialWordsCached_,
+                    (void*)p->initialWords_,
+                    sizeof(sal_Int32) * p->initialWordsL_ );
+
+    rtl_copyMemory( (void*)destsCached_,
+                    (void*)p->dests_,
+                    sizeof(sal_Int32) * p->destsL_ );
+
+    rtl_copyMemory( (void*)linkTypesCached_,
+                    (void*)p->linkTypes_,
+                    sizeof(sal_Int32) * p->linkTypesL_ );
+
+    rtl_copyMemory( (void*)seqNumbersCached_,
+                    (void*)p->seqNumbers_,
+                    sizeof(sal_Int32) * p->seqNumbersL_ );
 }
 
 
@@ -129,7 +148,6 @@ ContextTables::ContextTables( const std::vector< sal_Int32 >& offsets,
       contextData_( contextData ),
       linkNamesL_( linkNamesL ),
       linkNames_( linkNames ),
-
       cache_( offsets.size() ),
       initialWordsL_( 0 ),
       initialWords_( 0 ),
@@ -179,6 +197,7 @@ void ContextTables::setMicroindex( sal_Int32 docNo ) throw( excep::XmlSearchExce
             auxArray_.clear();
             compr.ascDecode( kTable_[0],auxArray_ ); // _initialWords
 
+            delete[] initialWords_;
             initialWords_ = new sal_Int32[ initialWordsL_ = auxArray_.size() ];
             sal_Int32 k;
             for( k = 0; k < initialWordsL_; ++k )    //?opt
@@ -190,13 +209,16 @@ void ContextTables::setMicroindex( sal_Int32 docNo ) throw( excep::XmlSearchExce
             compr.decode( kTable_[1],auxArray_ ); // _dests
             auxArray_.push_back( -1 );          // sentinel, root
 
+            delete[] dests_;
             dests_ = new sal_Int32[ destsL_ = auxArray_.size() ];
             for( k = 0; k < destsL_; ++k )    //?opt
                 dests_[k] = auxArray_[k];
 
+            delete[] linkTypes_;
             linkTypes_ = new sal_Int32[ linkTypesL_ = destsL_ - nTextNodes_ - 1 ];
             compr.decode( kTable_[2],linkTypes_ );
 
+            delete[] seqNumbers_;
             seqNumbers_ = new sal_Int32[ seqNumbersL_ = destsL_ - 1 ];
             compr.decode( kTable_[ 3 ],seqNumbers_ );
 
@@ -204,6 +226,7 @@ void ContextTables::setMicroindex( sal_Int32 docNo ) throw( excep::XmlSearchExce
         }
 
         lastDocNo_ = docNo;
+        delete[] markers_;
         markers_ = new sal_Int32[ markersL_ = destsL_ ];
     }
     initialWordsIndex_ = 0;
@@ -407,6 +430,19 @@ bool ContextTables::isGoverning(sal_Int32 context)
 void ContextTables::resetContextSearch()
 {
     initialWordsIndex_ = 0;
+}
+
+
+sal_Int32 ContextTables::wordContextLin(sal_Int32 wordNumber)
+{
+    for (sal_Int32 i = initialWordsIndex_; i < nTextNodes_; ++i )
+        if (initialWords_[i] > wordNumber)
+        {   // first such i
+            // - 1 if wordNumbers can be the same
+            initialWordsIndex_ = i; // cached to speed up next search
+            return i - 1;
+        }
+    return nTextNodes_ - 1;
 }
 
 
@@ -686,15 +722,9 @@ void ContextTables::resetContextSearch()
     */
 
 
-sal_Int32 ContextTables::wordContextLin(sal_Int32 wordNumber)
-{
-    for (sal_Int32 i = initialWordsIndex_; i < nTextNodes_; ++i )
-        if (initialWords_[i] > wordNumber)
-        {   // first such i
-            // - 1 if wordNumbers can be the same
-            initialWordsIndex_ = i; // cached to speed up next search
-            return i - 1;
-        }
-    return nTextNodes_ - 1;
-}
+
+
+
+
+
 
