@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:37:32 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
