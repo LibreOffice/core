@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.15 $
-# Date:        $Date: 2004-02-04 15:08:23 $
+# Version:     $Revision: 1.16 $
+# Date:        $Date: 2004-02-25 13:50:35 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -268,31 +268,70 @@ if ( $platform eq "$Solaris" )
    $PROSWITCH      = "-DPRODUCT";
 }
 elsif ( $platform eq "$NetBSD" ) 
-{  print "Setting NetBSD Sparc specific values... ";
-   $outfile        = "NetBSDSparcEnv.Set"; 
-   $BIG_SVX        = "TRUE";
-   $COM            = "GCC";
-   $COMPATH        = '@COMPATH@'; 
-   $CPU            = "S";
-   $CPUNAME        = "SPARC";
-   $CVER           = "C295";
-   $DLLSUFFIX      = "bs";
-   $GUI            = "UNX";
-   $GUIBASE        = "unx";
-   $GUIENV         = "sal";
-   $GVER           = "VCL";
-   $OUTPATH        = "unxbsds";
-   $INPATH         = $OUTPATH.$PROEXT;
-   $GVERDIR        = $INPATH;
-   $OS             = "NETBSD";
-   $PATH_SEPERATOR = $ps;
-   $PROSWITCH      = "-DPRODUCT";
-   $XPVERSION      = "3";
-   $XPVERSION      = "3";
-   $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
-   $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
-   $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
-} 
+{
+#Set machine_type specific values: 
+   if ($machine_type eq "i386")
+   {  print "Setting NetBSD Intel specific values... ";
+      $outfile        = "NetBSDIntelEnv.Set"; 
+      $CPU            = "I";
+      $CPUNAME        = "INTEL";
+      $DLLSUFFIX      = "bi";
+      $OUTPATH        = "unxbsdi";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+   }
+   elsif ($machine_type eq "sparc")
+   {  print "Setting NetBSD Sparc specific values... ";
+      $outfile        = "NetBSDSparcEnv.Set"; 
+      $CPU            = "S";
+      $CPUNAME        = "SPARC";
+      $DLLSUFFIX      = "bs";
+      $OUTPATH        = "unxbsds";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
+   }
+   elsif ($machine_type eq "powerpc")
+   {  print "Setting NetBSD PPC specific values... ";
+      $outfile        = "NetBSDPPCEnv.Set"; 
+      $CPU            = "P";
+      $CPUNAME        = "POWERPC";
+      $DLLSUFFIX      = "bp";
+      $OUTPATH        = "unxbsdppc";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+   }
+   else
+   { print "Unsupported NetBSD architecture: $machine_type \n";
+     exit 1;
+   }
+   #Conditional setting depending on gcc3:
+   if ($USE_GCC3 eq  "TRUE")
+   {
+      $CVER           = "C300";
+      $OUTPATH        = $OUTPATH."2"
+   }
+   else
+   {
+      $CVER           = "C295";
+   }
+   # General NetBSD settings:
+      $BIG_SVX        = "TRUE";
+      $COM            = "GCC";
+      $COMPATH        = '@COMPATH@'; 
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GUIENV         = "sal";
+      $GVER           = "VCL";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $GVERDIR        = $INPATH;
+      $OS             = "NETBSD";
+      $PATH_SEPERATOR = $ps;
+      $PROSWITCH      = "-DPRODUCT";
+      $XPVERSION      = "3"; 
+}
 elsif ( $platform eq "$FreeBSD" ) 
 {     print "Setting FreeBSD specific values... ";
       $outfile        = "FreeBSDEnv.Set"; 
@@ -1245,7 +1284,7 @@ $SOLARINC             = $I.$cur_dir.
 if (($platform eq "$Solaris") or ($platform eq "$Linux") or ($platform eq "$Tru64") or ($platform eq "$FreeBSD") or ($platform eq "$NetBSD") or ($platform eq "$Irix") or ($platform eq "$Irix64"))
 {
 $SOLARINC	     .= $STLPORT_stlport;
-if ($platform eq "$Linux" || $platform eq "$FreeBSD")
+if ($platform eq "$Linux" || $platform eq "$FreeBSD" || $platform eq "$NetBSD")
 {
 # This simply adds an include path, so even cases that break the FHS work
 $SOLARINC            .= $STLPORT_inc_stlport;
@@ -2361,8 +2400,8 @@ sub GetCorrectPath
 	{
 	    # Perl grep is unbelievably strange.
 	    my $needle = shift;
-	    my $haystack;
-	    while ($haystack = shift) {
+	    while (@_) {
+		my $haystack = shift;
 		if ($needle eq $haystack) {
 		    return 1;
 		} 
@@ -2374,9 +2413,9 @@ sub GetCorrectPath
 	{
 	    my @elements = @_;
 	    my @cleanName = ();
-	    my $elem;
 
-	    while ($elem = shift @elements) {
+	    while (@elements) {
+		my $elem = shift @elements;
 		if (!SaneGrep ($elem, @cleanName)) {
 			push @cleanName, $elem;
 		}
