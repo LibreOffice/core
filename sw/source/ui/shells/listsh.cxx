@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: os $ $Date: 2001-07-09 09:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,12 @@ void SwListShell::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
+    BOOL bHasChildren;
+    SwWrtShell& rSh = GetShell();
+    BYTE nCurrentNumLevel = rSh.GetNumLevel( &bHasChildren );
+    BOOL bNoNumbering = nCurrentNumLevel == NO_NUMBERING;
+    BOOL bNoNumLevel = 0 != (nCurrentNumLevel&NO_NUMLEVEL);
+    nCurrentNumLevel &= ~NO_NUMLEVEL;
     while ( nWhich )
     {
         switch( nWhich )
@@ -226,6 +232,23 @@ void SwListShell::GetState(SfxItemSet &rSet)
             break;
             case FN_NUMBER_NEWSTART:
                 rSet.Put(SfxBoolItem(nWhich, GetShell().IsNumRuleStart()));
+            break;
+            case FN_NUM_BULLET_OUTLINE_UP:
+            case FN_NUM_BULLET_UP:
+                if(!nCurrentNumLevel)
+                    rSet.DisableItem(nWhich);
+            break;
+            case FN_NUM_BULLET_OUTLINE_DOWN :
+            {
+                sal_uInt8 nUpper, nLower;
+                rSh.GetCurrentOutlineLevels( nUpper, nLower );
+                if(nLower == (MAXLEVEL - 1))
+                    rSet.DisableItem(nWhich);
+            }
+            break;
+            case FN_NUM_BULLET_DOWN:
+                if(nCurrentNumLevel == (MAXLEVEL - 1))
+                    rSet.DisableItem(nWhich);
             break;
         }
         nWhich = aIter.NextWhich();
@@ -240,123 +263,4 @@ SwListShell::SwListShell(SwView &rView) :
     SetHelpId(SW_LISTSHELL);
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.68  2000/09/18 16:06:04  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.67  2000/09/07 15:59:30  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.66  2000/05/26 07:21:32  os
-    old SW Basic API Slots removed
-
-    Revision 1.65  2000/05/10 11:53:02  os
-    Basic API removed
-
-    Revision 1.64  2000/04/18 14:58:24  os
-    UNICODE
-
-    Revision 1.63  1999/03/12 14:13:38  OS
-    #63141# BulletURL setzen-> Groesse ermitteln
-
-
-      Rev 1.62   12 Mar 1999 15:13:38   OS
-   #63141# BulletURL setzen-> Groesse ermitteln
-
-      Rev 1.61   17 Nov 1998 10:58:32   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.60   06 Nov 1998 14:41:48   OS
-   #57903# NumOff kann weg
-
-      Rev 1.59   08 Dec 1997 11:50:04   OS
-   benannte Numerierungen entfernt
-
-      Rev 1.58   03 Dec 1997 17:07:08   OS
-   FN_NUMBER_NEWSTART eingebaut
-
-      Rev 1.57   24 Nov 1997 11:01:02   JP
-   Execute: bei NumUp/-Down die Statusleiste invalidieren
-
-      Rev 1.56   24 Nov 1997 09:47:04   MA
-   includes
-
-      Rev 1.55   17 Nov 1997 10:21:14   JP
-   Umstellung Numerierung
-
-      Rev 1.54   03 Nov 1997 13:55:48   MA
-   precomp entfernt
-
-      Rev 1.53   19 Aug 1997 10:54:50   OS
-   Exchange wird per API mit String beliefert #42898#
-
-      Rev 1.52   15 Aug 1997 11:48:38   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.51   11 Aug 1997 09:12:28   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.50   05 Aug 1997 16:29:14   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.49   08 Jul 1997 14:11:46   OS
-   ConfigItems von der App ans Module
-
-      Rev 1.48   11 Mar 1997 16:27:00   AMA
-   New: Absaetze verschieben durch Strg + CursorUp/Down (auch ausserhalb von Num.)
-
-      Rev 1.47   20 Feb 1997 19:40:08   OS
-   includes
-
-      Rev 1.46   20 Feb 1997 17:18:26   OS
-   kleiner Bug
-
-      Rev 1.45   20 Feb 1997 11:58:54   OS
-   NumLevel ans Basic rausgeben
-
-      Rev 1.44   19 Feb 1997 16:57:22   OS
-   Basic fuer die NumRules
-
-      Rev 1.43   11 Dec 1996 10:50:56   MA
-   Warnings
-
-      Rev 1.42   11 Nov 1996 13:37:34   MA
-   ResMgr
-
-      Rev 1.41   28 Aug 1996 15:55:18   OS
-   includes
-
-      Rev 1.40   13 Aug 1996 12:38:40   OS
-   neue Shellnamen im IDL-Interface
-
-      Rev 1.39   22 Jul 1996 20:54:26   JP
-   Anpassung an die neuen SwUiNumRules
-
-      Rev 1.38   25 Jun 1996 19:50:52   HJS
-   includes
-
-      Rev 1.37   17 Apr 1996 09:32:52   OM
-   Unbenutzte Fkt Disable entfernt
-
-      Rev 1.36   28 Mar 1996 14:20:50   OS
-   neu: NumberOrNoNumber
-
-      Rev 1.35   03 Dec 1995 11:22:08   OS
-   +include itemdef.hxx
-
-      Rev 1.34   29 Nov 1995 13:48:42   OS
-   -slotadd.hxx
-
-      Rev 1.33   27 Nov 1995 19:39:40   OM
-   swslots->303a
-
-      Rev 1.32   24 Nov 1995 16:59:32   OM
-   PCH->PRECOMPILED
-
-      Rev 1.31   17 Nov 1995 13:02:00   MA
-   Segmentierung
-
-------------------------------------------------------------------------*/
 
