@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DiagramHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-11 12:19:53 $
+ *  last change: $Author: bm $ $Date: 2004-01-19 14:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@ void DiagramHelper::changeDiagram(
     const uno::Reference< chart2::XDiagram > & xSource,
     uno::Reference< chart2::XDiagram > & xDestination )
 {
+    OSL_ASSERT( xSource.is() && xDestination.is());
+    if( ! ( xSource.is() && xDestination.is()))
+        return;
+
     uno::Reference< chart2::XTitled > xSrcTitled( xSource, uno::UNO_QUERY );
     uno::Reference< chart2::XTitled > xDestTitled( xDestination, uno::UNO_QUERY );
 
