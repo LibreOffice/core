@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseForm.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 12:41:15 $
+ *  last change:$Date: 2003-09-08 11:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,21 @@
  *
  *
  ************************************************************************/
-
 package mod._forms;
+
+import java.io.PrintWriter;
+import java.util.Vector;
+
+import lib.Status;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.DBTools;
+import util.DrawTools;
+import util.FormTools;
+import util.WriterTools;
+import util.utils;
 
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
@@ -73,8 +86,6 @@ import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.form.XForm;
 import com.sun.star.form.XLoadable;
-import com.sun.star.io.XDataInputStream;
-import com.sun.star.io.XTextInputStream;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.RowChangeEvent;
 import com.sun.star.sdbc.SQLException;
@@ -84,26 +95,14 @@ import com.sun.star.sdbc.XResultSetUpdate;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbc.XRowSet;
 import com.sun.star.sdbc.XRowUpdate;
-import com.sun.star.sdbcx.XRowLocate;
 import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.view.XControlAccess;
-import java.io.PrintWriter;
-import java.util.Vector;
-import lib.Status;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.DBTools;
-import util.DrawTools;
-import util.FormTools;
-import util.WriterTools;
-import util.utils;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+import com.sun.star.view.XControlAccess;
+
 
 /**
  * Test for object which is represented by service
@@ -248,44 +247,40 @@ import com.sun.star.uno.Type;
  * @see ifc.sdbc._RowSet
  */
 public class ODatabaseForm extends TestCase {
-
+    protected final static String dbSourceName = "ODatabaseFormDataSource";
+    private static int uniqueSuffix = 0;
+    private static String origDB = null;
+    private static String tmpDir = null;
     protected XTextDocument xTextDoc = null;
-
-    protected final static String dbSourceName = "ODatabaseFormDataSource" ;
-
-    private static int uniqueSuffix = 0 ;
-    private DBTools dbTools     = null ;
-    private static String origDB = null ;
-    private static String tmpDir = null ;
+    private DBTools dbTools = null;
     String tableName = null;
     DBTools.DataSourceInfo srcInf = null;
     boolean isMySQLDB = false;
     protected XConnection conn = null;
 
-
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
+    protected void initialize(TestParameters tParam, PrintWriter log) {
         //log.println( "creating a draw document" );
-        //xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
-
-        tmpDir = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
+        //xTextDoc = WriterTools.createTextDoc(t((XMultiServiceFactory) Param.getMSF));
+        tmpDir = utils.getOfficeTemp(((XMultiServiceFactory) tParam.getMSF()));
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
 
-        dbTools = new DBTools((XMultiServiceFactory)tParam.getMSF()) ;
+        dbTools = new DBTools(((XMultiServiceFactory) tParam.getMSF()));
 
         // creating DataSource and registering it in DatabaseContext
-
         String dbURL = (String) tParam.get("test.db.url");
         String dbUser = (String) tParam.get("test.db.user");
         String dbPassword = (String) tParam.get("test.db.password");
 
         log.println("Creating and registering DataSource ...");
         srcInf = dbTools.newDataSourceInfo();
-        if (dbURL != null && dbUser != null && dbPassword != null) {
+
+        if ((dbURL != null) && (dbUser != null) && (dbPassword != null)) {
             isMySQLDB = true;
             log.println("dbURL = " + dbURL);
             log.println("dbUSER = " + dbUser);
             log.println("dbPASSWORD = " + dbPassword);
+
             //DataSource for mysql db
             try {
                 tableName = "soffice_test_table";
@@ -293,87 +288,101 @@ public class ODatabaseForm extends TestCase {
                 srcInf.IsPasswordRequired = new Boolean(true);
                 srcInf.Password = dbPassword;
                 srcInf.User = dbUser;
+
                 PropertyValue[] propInfo = new PropertyValue[1];
                 propInfo[0] = new PropertyValue();
                 propInfo[0].Name = "JavaDriverClass";
                 propInfo[0].Value = "org.gjt.mm.mysql.Driver";
                 srcInf.Info = propInfo;
-                Object dbSrc = srcInf.getDataSourceService() ;
+
+                Object dbSrc = srcInf.getDataSourceService();
                 dbTools.reRegisterDB(dbSourceName, dbSrc);
             } catch (com.sun.star.uno.Exception e) {
-                log.println("Error while object test initialization :") ;
-                e.printStackTrace(log) ;
+                log.println("Error while object test initialization :");
+                e.printStackTrace(log);
                 throw new StatusException("Error while object test" +
-                    " initialization", e);
+                                          " initialization", e);
             }
         } else {
             //DataSource for sdbc db
             try {
-                srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir) ;
-                Object dbSrc = srcInf.getDataSourceService() ;
-                dbTools.reRegisterDB(dbSourceName, dbSrc) ;
+                srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir);
+
+                Object dbSrc = srcInf.getDataSourceService();
+                dbTools.reRegisterDB(dbSourceName, dbSrc);
             } catch (com.sun.star.uno.Exception e) {
-                log.println("Error while object test initialization :") ;
-                e.printStackTrace(log) ;
-                throw new StatusException
-                    ("Error while object test initialization",e) ;
+                log.println("Error while object test initialization :");
+                e.printStackTrace(log);
+                throw new StatusException(
+                        "Error while object test initialization", e);
             }
 
-            String oldF = null ;
-            String newF = null ;
+            String oldF = null;
+            String newF = null;
+
             do {
-                tableName = "ODatabaseForm_tmp" + uniqueSuffix ;
+                tableName = "ODatabaseForm_tmp" + uniqueSuffix;
                 oldF = utils.getFullURL(origDB);
-                newF = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) +
-                    tableName + ".dbf";
-            } while (!utils.overwriteFile((XMultiServiceFactory)tParam.getMSF(), oldF, newF)
-                     && uniqueSuffix++ < 50);
-            }
+                newF = utils.getOfficeTemp((XMultiServiceFactory) tParam.getMSF()) + tableName +
+                       ".dbf";
+            } while (!utils.overwriteFile(((XMultiServiceFactory) tParam.getMSF()), oldF, newF) &&
+                     (uniqueSuffix++ < 50));
+        }
     }
 
     /**
      *  *    creating a Testenvironment for the interfaces to be tested
      */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         if (xTextDoc != null) {
-            xTextDoc.dispose();
-            log.println("Exiting document disposed");
+            try {
+                XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                            XCloseable.class, xTextDoc);
+                closer.close(true);
+            } catch (com.sun.star.util.CloseVetoException e) {
+                log.println("couldn't close document");
+            } catch (com.sun.star.lang.DisposedException e) {
+                log.println("couldn't close document");
+            }
+
+            log.println("Existing document disposed");
         }
 
-        log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
+        log.println("creating a text document");
+        xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) Param.getMSF()));
 
         //initialize test table
         if (isMySQLDB) {
             try {
                 dbTools.initTestTableUsingJDBC(tableName, srcInf);
-            } catch(java.sql.SQLException e) {
+            } catch (java.sql.SQLException e) {
                 e.printStackTrace(log);
-                throw new StatusException(Status.failed("Couldn't " +
-                    " init test table. SQLException..."));
-            } catch(java.lang.ClassNotFoundException e) {
-                throw new StatusException(Status.failed("Couldn't " +
-                    "register mysql driver"));
+                throw new StatusException(Status.failed("Couldn't " + " init test table. SQLException..."));
+            } catch (java.lang.ClassNotFoundException e) {
+                throw new StatusException(Status.failed("Couldn't " + "register mysql driver"));
             }
         }
 
         XInterface oObj = null;
         XShapes oShapes = null;
         XInterface oInstance = null;
-        XConnection connection = null ;
+        XConnection connection = null;
+
 
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "creating a test environment" );
+        log.println("creating a test environment");
 
-        XNameContainer forms = FormTools.getForms
-            (WriterTools.getDrawPage(xTextDoc)) ;
+        XNameContainer forms = FormTools.getForms(WriterTools.getDrawPage(
+                                                          xTextDoc));
+
         try {
             String[] formNames = forms.getElementNames();
+
             for (int i = 0; i < formNames.length; i++) {
                 log.println("Removing form '" + formNames[i] + "' ...");
-                forms.removeByName(formNames[i]) ;
+                forms.removeByName(formNames[i]);
             }
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
@@ -385,72 +394,84 @@ public class ODatabaseForm extends TestCase {
         FormTools.insertForm(xTextDoc, forms, "MyForm");
         formNames = forms.getElementNames();
 
-        XLoadable formLoader = null ;
+        XLoadable formLoader = null;
+
         try {
-            formLoader = FormTools.bindForm(xTextDoc, "MyForm",
-            dbSourceName, tableName);
+            formLoader = FormTools.bindForm(xTextDoc, "MyForm", dbSourceName,
+                                            tableName);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Cann't bind the form to source '" +
-                dbSourceName + "', table '" + tableName + "' :");
+            log.println("Cann't bind the form to source '" + dbSourceName +
+                        "', table '" + tableName + "' :");
             e.printStackTrace(log);
             throw new StatusException("Cann't bind a form", e);
         }
 
+
         // DEBUG
-        log.println("Forms before adding controls : ") ;
-        formNames = forms.getElementNames() ;
+        log.println("Forms before adding controls : ");
+        formNames = forms.getElementNames();
+
         for (int i = 0; i < formNames.length; i++) {
             log.println("    '" + formNames[i] + "'");
         }
 
-        XControlShape shape1 = null ;
-        XControlShape shape2 = null ;
-        try {
-            XNameContainer formElements = (XNameContainer)
-                UnoRuntime.queryInterface
-                (XNameContainer.class, forms.getByName("MyForm")) ;
+        XControlShape shape1 = null;
+        XControlShape shape2 = null;
 
-            log.println("Elements in the 'MyForm' :") ;
-            XIndexAccess formElements1 = (XIndexAccess)
-                UnoRuntime.queryInterface
-                (XIndexAccess.class, forms.getByName("MyForm")) ;
+        try {
+
+            log.println("Elements in the 'MyForm' :");
+
+            XIndexAccess formElements1 = (XIndexAccess) UnoRuntime.queryInterface(
+                                                 XIndexAccess.class,
+                                                 forms.getByName("MyForm"));
+
             for (int i = 0; i < formElements1.getCount(); i++) {
-                XNamed elemName = (XNamed) UnoRuntime.queryInterface
-                    (XNamed.class, formElements1.getByIndex(i)) ;
+                XNamed elemName = (XNamed) UnoRuntime.queryInterface(
+                                          XNamed.class,
+                                          formElements1.getByIndex(i));
                 log.println("   '" + elemName.getName() + "'");
             }
-            // END DEBUG
 
+
+            // END DEBUG
             //put something on the drawpage
-            log.println( "inserting some ControlShapes" );
+            log.println("inserting some ControlShapes");
             oShapes = DrawTools.getShapes(WriterTools.getDrawPage(xTextDoc));
-            shape1 = FormTools.createControlShape(
-                xTextDoc,3000,4500,15000,1000,"CommandButton");
-            shape2 = FormTools.createControlShape(
-                xTextDoc,5000,3500,7500,5000,"TextField");
-            XControlShape shape3 = FormTools.createControlShape(
-                xTextDoc,2000,1500,1000,1000,"CheckBox");
+            shape1 = FormTools.createControlShape(xTextDoc, 3000, 4500, 15000,
+                                                  1000, "CommandButton");
+            shape2 = FormTools.createControlShape(xTextDoc, 5000, 3500, 7500,
+                                                  5000, "TextField");
+
+            XControlShape shape3 = FormTools.createControlShape(xTextDoc, 2000,
+                                                                1500, 1000,
+                                                                1000,
+                                                                "CheckBox");
             oShapes.add((XShape) shape1);
             oShapes.add((XShape) shape2);
-            oShapes.add(shape3) ;
+            oShapes.add(shape3);
         } catch (Exception e) {
             e.printStackTrace(log);
         }
 
-        log.println("Forms after adding controls : ") ;
-        formNames = forms.getElementNames() ;
+        log.println("Forms after adding controls : ");
+        formNames = forms.getElementNames();
+
         for (int i = 0; i < formNames.length; i++) {
             log.println("    '" + formNames[i] + "'");
         }
 
         try {
-            log.println("Elements in the 'MyForm' :") ;
-            XIndexAccess formElements1 = (XIndexAccess)
-                UnoRuntime.queryInterface
-                (XIndexAccess.class, forms.getByName("MyForm")) ;
+            log.println("Elements in the 'MyForm' :");
+
+            XIndexAccess formElements1 = (XIndexAccess) UnoRuntime.queryInterface(
+                                                 XIndexAccess.class,
+                                                 forms.getByName("MyForm"));
+
             for (int i = 0; i < formElements1.getCount(); i++) {
-                XNamed elemName = (XNamed) UnoRuntime.queryInterface
-                    (XNamed.class, formElements1.getByIndex(i)) ;
+                XNamed elemName = (XNamed) UnoRuntime.queryInterface(
+                                          XNamed.class,
+                                          formElements1.getByIndex(i));
                 log.println("   '" + elemName.getName() + "'");
             }
         } catch (Exception e) {
@@ -461,148 +482,168 @@ public class ODatabaseForm extends TestCase {
 
         try {
             oObj = (XForm) AnyConverter.toObject(new Type(XForm.class),
-                (FormTools.getForms(
-                        WriterTools.getDrawPage(xTextDoc))).getByName("MyForm"));
+                                                 (FormTools.getForms(
+                                                         WriterTools.getDrawPage(
+                                                                 xTextDoc)))
+                                                     .getByName("MyForm"));
 
-            XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface
-                (XPropertySet.class, oObj) ;
-            connection = (XConnection) AnyConverter.toObject(new Type(XConnection.class),
-                xSetProp.getPropertyValue("ActiveConnection")) ;
-        } catch ( com.sun.star.uno.Exception e ) {
+            XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface(
+                                            XPropertySet.class, oObj);
+            connection = (XConnection) AnyConverter.toObject(
+                                 new Type(XConnection.class),
+                                 xSetProp.getPropertyValue("ActiveConnection"));
+        } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get Form");
             e.printStackTrace(log);
         }
 
+
         // get a control
         oInstance = FormTools.createControl(xTextDoc, "TextField");
 
-        log.println( "creating a new environment for drawpage object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("creating a new environment for drawpage object");
+
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
 
         // adding relation for closing connection while environment disposing.
         this.conn = connection;
 
         // adding relation for XSubmit
-        XControlModel the_Model = shape2.getControl() ;
+        XControlModel the_Model = shape2.getControl();
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-            XControlAccess.class,xTextDoc.getCurrentController());
-        XControl cntrl = null ;
+                                            XControlAccess.class,
+                                            xTextDoc.getCurrentController());
+        XControl cntrl = null;
 
         //now get the OEditControl
         try {
             cntrl = the_access.getControl(the_Model);
+            log.println(cntrl.getClass().getName());
         } catch (com.sun.star.container.NoSuchElementException e) {
             log.println("Couldn't get OEditControl");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get OEditControl", e );
+            throw new StatusException("Couldn't get OEditControl", e);
         }
 
-        XResultSet the_set = (XResultSet) UnoRuntime.queryInterface
-            (XResultSet.class,oObj);
+        XResultSet the_set = (XResultSet) UnoRuntime.queryInterface(
+                                     XResultSet.class, oObj);
 
         try {
             the_set.first();
         } catch (SQLException e) {
             log.println("Cann't move cursor to the first row.");
-            throw new StatusException
-                ("Cann't move cursor to the first row.", e) ;
+            throw new StatusException("Cann't move cursor to the first row.", e);
         }
 
-        tEnv.addObjRelation("Model1",shape1.getControl());
-        tEnv.addObjRelation("Model2",shape2.getControl());
+        tEnv.addObjRelation("Model1", shape1.getControl());
+        tEnv.addObjRelation("Model2", shape2.getControl());
+
 
         // adding an object for XNameReplace testing
-        log.println( "adding oInstace as obj relation to environment" );
+        log.println("adding oInstace as obj relation to environment");
         tEnv.addObjRelation("INSTANCE", oInstance);
 
+
         // INDEX : _XNameContainer
-        log.println( "adding INDEX as obj relation to environment" );
+        log.println("adding INDEX as obj relation to environment");
         tEnv.addObjRelation("INDEX", "0");
 
+
         // INDEX : _XNameReplace
-        log.println( "adding NameReplaceIndex as obj relation to environment" );
+        log.println("adding NameReplaceIndex as obj relation to environment");
         tEnv.addObjRelation("XNameReplaceINDEX", "2");
 
+
         // INSTANCEn : _XNameContainer; _XNameReplace
-        log.println( "adding INSTANCEn as obj relation to environment" );
+        log.println("adding INSTANCEn as obj relation to environment");
 
         //XComponent xComp = (XComponent)
         //    UnoRuntime.queryInterface(XComponent.class, xDrawDoc);
-        String tc = (String)Param.get("THRCNT");
+        String tc = (String) Param.get("THRCNT");
         int THRCNT = 1;
+
         if (tc != null) {
             THRCNT = Integer.parseInt(tc);
         }
-        for (int n = 1; n < 2*(THRCNT+1) ;n++ ) {
-            log.println( "adding INSTANCE" + n
-                +" as obj relation to environment" );
+
+        for (int n = 1; n < (2 * (THRCNT + 1)); n++) {
+            log.println("adding INSTANCE" + n +
+                        " as obj relation to environment");
             tEnv.addObjRelation("INSTANCE" + n,
-                                FormTools.createControl(xTextDoc,"CheckBox"));
+                                FormTools.createControl(xTextDoc, "CheckBox"));
         }
+
 
         // adding relation for XNameContainer
         tEnv.addObjRelation("XNameContainer.AllowDuplicateNames", new Object());
 
+
         // adding relation for XPersistObject
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component.Form") ;
+        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component.Form");
 
-        if (the_set != null) log.println("The Form has a not empty ResultSet");
+        if (the_set != null) {
+            log.println("The Form has a not empty ResultSet");
+        }
 
-            // Adding obj relation for XRowSetApproveBroadcaster test
-            final XResultSet xResSet = (XResultSet) UnoRuntime.queryInterface
-                (XResultSet.class, oObj) ;
-            final XResultSetUpdate xResSetUpdate = (XResultSetUpdate)
-                UnoRuntime.queryInterface(XResultSetUpdate.class, oObj) ;
-            final XRowSet xRowSet = (XRowSet) UnoRuntime.queryInterface
-                (XRowSet.class, oObj) ;
-            final PrintWriter logF = log ;
-            tEnv.addObjRelation("XRowSetApproveBroadcaster.ApproveChecker",
-                new ifc.sdb._XRowSetApproveBroadcaster.RowSetApproveChecker() {
-                    public void moveCursor() {
-                        try {
-                            xResSet.beforeFirst() ;
-                            xResSet.afterLast() ;
-                        } catch (com.sun.star.sdbc.SQLException e) {
-                            logF.println("### _XRowSetApproveBroadcaster."
-                                +"RowSetApproveChecker.moveCursor() :") ;
-                            e.printStackTrace(logF) ;
-                        }
-                    }
-                    public RowChangeEvent changeRow() {
-                        try {
-                            xResSet.first() ;
-                            XRowUpdate row = (XRowUpdate)
-                                UnoRuntime.queryInterface
-                                (XRowUpdate.class, xResSet);
-                            row.updateString(1, "1");
-                            xResSetUpdate.updateRow() ;
-                        } catch (com.sun.star.sdbc.SQLException e) {
-                            logF.println("### _XRowSetApproveBroadcaster."
-                                +"RowSetApproveChecker.changeRow() :") ;
-                            e.printStackTrace(logF) ;
-                        }
-                        RowChangeEvent ev = new RowChangeEvent() ;
-                        ev.Action = com.sun.star.sdb.RowChangeAction.UPDATE ;
-                        ev.Rows = 1 ;
+        // Adding obj relation for XRowSetApproveBroadcaster test
+        final XResultSet xResSet = (XResultSet) UnoRuntime.queryInterface(
+                                           XResultSet.class, oObj);
+        final XResultSetUpdate xResSetUpdate = (XResultSetUpdate) UnoRuntime.queryInterface(
+                                                       XResultSetUpdate.class,
+                                                       oObj);
+        final XRowSet xRowSet = (XRowSet) UnoRuntime.queryInterface(
+                                        XRowSet.class, oObj);
+        final PrintWriter logF = log;
+        tEnv.addObjRelation("XRowSetApproveBroadcaster.ApproveChecker",
+                            new ifc.sdb._XRowSetApproveBroadcaster.RowSetApproveChecker() {
+            public void moveCursor() {
+                try {
+                    xResSet.beforeFirst();
+                    xResSet.afterLast();
+                } catch (com.sun.star.sdbc.SQLException e) {
+                    logF.println("### _XRowSetApproveBroadcaster." + "RowSetApproveChecker.moveCursor() :");
+                    e.printStackTrace(logF);
+                }
+            }
 
-                        return ev ;
-                    }
-                    public void changeRowSet() {
-                        try {
-                            xRowSet.execute() ;
-                        } catch (com.sun.star.sdbc.SQLException e) {
-                            logF.println("### _XRowSetApproveBroadcaster."
-                                +"RowSetApproveChecker.changeRowSet() :") ;
-                            e.printStackTrace(logF) ;
-                        }
-                    }
-                }) ;
+            public RowChangeEvent changeRow() {
+                try {
+                    xResSet.first();
+
+                    XRowUpdate row = (XRowUpdate) UnoRuntime.queryInterface(
+                                             XRowUpdate.class, xResSet);
+                    row.updateString(1, "1");
+                    xResSetUpdate.updateRow();
+                } catch (com.sun.star.sdbc.SQLException e) {
+                    logF.println("### _XRowSetApproveBroadcaster." + "RowSetApproveChecker.changeRow() :");
+                    e.printStackTrace(logF);
+                }
+
+                RowChangeEvent ev = new RowChangeEvent();
+                ev.Action = com.sun.star.sdb.RowChangeAction.UPDATE;
+                ev.Rows = 1;
+
+                return ev;
+            }
+
+            public void changeRowSet() {
+                try {
+                    xRowSet.execute();
+                } catch (com.sun.star.sdbc.SQLException e) {
+                    logF.println("### _XRowSetApproveBroadcaster." + "RowSetApproveChecker.changeRowSet() :");
+                    e.printStackTrace(logF);
+                }
+            }
+        });
+
 
         // Adding relation for XColumnLocate test
-        tEnv.addObjRelation("XColumnLocate.ColumnName", DBTools.TST_STRING_F) ;
+        tEnv.addObjRelation("XColumnLocate.ColumnName", DBTools.TST_STRING_F);
 
         // Adding relation for XParameters ifc test
-        Vector params = new Vector() ;
+        Vector params = new Vector();
+
 
         /*****  statement parameter types and their initial
                 values must be added here as relation.
@@ -619,70 +660,46 @@ public class ODatabaseForm extends TestCase {
         params.add(new Time(1, 25, 14, 12)) ;
         params.add(new DateTime(1, 25, 14, 12, 26, 1, 2001)) ;
         */
-        tEnv.addObjRelation("XParameters.ParamValues", params) ;
-
-        // Adding relation for XDeleteRows ifc test
-        final XRowLocate rowLoc = (XRowLocate)
-            UnoRuntime.queryInterface(XRowLocate.class, oObj);
-        final XResultSet bMarkResSet = (XResultSet)
-            UnoRuntime.queryInterface(XResultSet.class, oObj);
+        tEnv.addObjRelation("XParameters.ParamValues", params);
 
         // Adding relation for XResultSetUpdate
-        final XRowUpdate xRowUpdate = (XRowUpdate)
-            UnoRuntime.queryInterface(XRowUpdate.class, oObj) ;
-        final XRow xRow = (XRow) UnoRuntime.queryInterface
-            (XRow.class, oObj) ;
+        final XRowUpdate xRowUpdate = (XRowUpdate) UnoRuntime.queryInterface(
+                                              XRowUpdate.class, oObj);
+        final XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, oObj);
 
         tEnv.addObjRelation("XResultSetUpdate.UpdateTester",
-            new ifc.sdbc._XResultSetUpdate.UpdateTester() {
-                String lastUpdate = null ;
+                            new ifc.sdbc._XResultSetUpdate.UpdateTester() {
+            String lastUpdate = null;
 
-                public int rowCount() throws SQLException {
-                    int prevPos = xResSet.getRow() ;
-                    xResSet.last() ;
-                    int count = xResSet.getRow() ;
-                    xResSet.absolute(prevPos) ;
+            public int rowCount() throws SQLException {
+                int prevPos = xResSet.getRow();
+                xResSet.last();
 
-                    return count ;
-                }
+                int count = xResSet.getRow();
+                xResSet.absolute(prevPos);
 
-                public void update() throws SQLException {
-                    lastUpdate = xRow.getString(1) ;
-                    lastUpdate += "_" ;
-                    xRowUpdate.updateString(1, lastUpdate) ;
-                }
+                return count;
+            }
 
-                public boolean wasUpdated() throws SQLException {
-                    String getStr = xRow.getString(1) ;
-                    return lastUpdate.equals(getStr) ;
-                }
+            public void update() throws SQLException {
+                lastUpdate = xRow.getString(1);
+                lastUpdate += "_";
+                xRowUpdate.updateString(1, lastUpdate);
+            }
 
-                public int currentRow() throws SQLException {
-                    return xResSet.getRow() ;
-                }
-            }) ;
+            public boolean wasUpdated() throws SQLException {
+                String getStr = xRow.getString(1);
+
+                return lastUpdate.equals(getStr);
+            }
+
+            public int currentRow() throws SQLException {
+                return xResSet.getRow();
+            }
+        });
 
         // Adding relations for XRow as a Vector with all data
         // of current row of RowSet.
-        try {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF() ;
-            Object oBinStream = xMSF.
-                createInstance("com.sun.star.io.DataInputStream") ;
-            XDataInputStream xBinStream = (XDataInputStream)
-                UnoRuntime.queryInterface(XDataInputStream.class,
-                    oBinStream) ;
-            Object oCharStream = xMSF.
-                createInstance("com.sun.star.io.TextInputStream");
-            XTextInputStream xCharStream = (XTextInputStream)
-                UnoRuntime.queryInterface(XTextInputStream.class,
-                    oCharStream);
-            Object obj = xMSF.createInstance("com.sun.star.io.Pipe");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Object relation cannot be created");
-            e.printStackTrace(log);
-            throw new StatusException(
-                "Object relation cannot be created", e);
-        }
 
         Vector rowData = new Vector();
 
@@ -702,7 +719,7 @@ public class ODatabaseForm extends TestCase {
     /**
     * Closes connection of <code>RowSet</code> instance created.
     */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         try {
             conn.close();
         } catch (com.sun.star.uno.Exception e) {
@@ -711,17 +728,25 @@ public class ODatabaseForm extends TestCase {
         } catch (com.sun.star.lang.DisposedException e) {
             log.println("Connection was already closed. It's OK.");
         }
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
+
+        log.println("    disposing xTextDoc ");
 
         try {
-            dbTools.revokeDB(dbSourceName) ;
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
+
+        try {
+            dbTools.revokeDB(dbSourceName);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Error while object test cleaning up :") ;
-            e.printStackTrace(log) ;
-            throw new StatusException("Error while object test cleaning up",e) ;
+            log.println("Error while object test cleaning up :");
+            e.printStackTrace(log);
+            throw new StatusException("Error while object test cleaning up", e);
         }
     }
-
-}    // finish class ODatabaseForm
-
+} // finish class ODatabaseForm
