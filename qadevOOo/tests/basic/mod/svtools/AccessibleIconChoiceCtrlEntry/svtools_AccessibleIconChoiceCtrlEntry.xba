@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: svtools_AccessibleIconChoiceCtrlEntry.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:21 $ 
+'*  last change:$Date: 2003-05-27 12:17:56 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -110,7 +110,7 @@ On Error Goto ErrHndl
     oObj = utils.at_getAccessibleObjectForRole(xRoot, 22, "Internet")
     Out.log(oObj.getImplementationName)
 
-    closeButton = utils.at_getAccessibleObjectForRole(xRoot, 35, "Close")
+    closeButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON, "Close")
     accText = "Internet"
 Exit Sub
 ErrHndl:
@@ -119,7 +119,7 @@ End Sub
 
 Sub DisposeObj()
     closeButton.soAccessibleAction(0)
-    oDoc.dispose()
+    utils.closeObject(oDoc)
 End Sub
 
 Sub fireEvent()
