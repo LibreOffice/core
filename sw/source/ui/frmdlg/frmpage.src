@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:46:58 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 11:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,7 @@ TabDialog DLG_FRM_GRF
                 Text[ chinese_traditional ] = "°Å¤U";
                 Text[ arabic ] = "ÇŞÊÕÇÕ";
                 Text[ greek ] = "ĞñïóáñìïãŞ";
-                Text[ korean ] = "ÀÚ¸£±â";
+                Text[ korean ] = "´Ùµë±â";
                 Text[ turkish ] = "Kırpma";
             };
             PageItem
@@ -1834,7 +1834,7 @@ TabPage TP_GRF_EXT
         Text[ polish ] = "p~oziomo";
         Text[ portuguese_brazilian ] = "verti~calmente";
         Text[ japanese ] = "¶‰E(~H)";
-        Text[ korean ] = "¼öÆòÀ¸·Î, À§(~Z)";
+        Text[ korean ] = "¼öÆò(~Z)";
         Text[ chinese_simplified ] = "Ë®Æ½·½Ïò(~Z)";
         Text[ chinese_traditional ] = "¤ô¥­¤è¦V";
         Text[ turkish ] = "yata~y";
@@ -1860,7 +1860,7 @@ TabPage TP_GRF_EXT
         Text[ polish ] = "na wszystkich stronach";
         Text[ portuguese_brazilian ] = "on all pages";
         Text[ japanese ] = "‚·‚×‚Ä‚ÌÍß°¼Ş‚É";
-        Text[ korean ] = "on all pages";
+        Text[ korean ] = "¸ğµç ÆäÀÌÁö¿¡";
         Text[ chinese_simplified ] = "È«²¿Ò³Ãæ";
         Text[ chinese_traditional ] = "¦b©Ò¦³­¶­±¤W";
         Text[ turkish ] = "on all pages";
@@ -1886,7 +1886,7 @@ TabPage TP_GRF_EXT
         Text[ polish ] = "na lewych stronach";
         Text[ portuguese_brazilian ] = "on even pages";
         Text[ japanese ] = "¶Íß°¼Ş‚É";
-        Text[ korean ] = "on even pages";
+        Text[ korean ] = "¿ŞÂÊ ÆäÀÌÁö¿¡";
         Text[ chinese_simplified ] = "ÔÚ×ó·½Ò³Ãæ";
         Text[ chinese_traditional ] = "¦b¥ª­¶¤W";
         Text[ turkish ] = "on even pages";
@@ -1912,7 +1912,7 @@ TabPage TP_GRF_EXT
         Text[ polish ] = "na prawych stronach";
         Text[ portuguese_brazilian ] = "on odd pages";
         Text[ japanese ] = "‰EÍß°¼Ş‚É";
-        Text[ korean ] = "on odd pages";
+        Text[ korean ] = "¿À¸¥ÂÊ ÆäÀÌÁö¿¡";
         Text[ chinese_simplified ] = "ÔÚÓÒ·½Ò³Ãæ";
         Text[ chinese_traditional ] = "¦b¥k­¶¤W";
         Text[ turkish ] = "on odd pages";
