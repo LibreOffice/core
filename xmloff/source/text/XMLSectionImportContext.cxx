@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:35:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ void XMLSectionImportContext::ProcessAttributes(
                 {
                     OUString sTmp;
                     sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                                    GetKeyByAttrName( sAttr, &sTmp );
+                                    _GetKeyByAttrName( sAttr, &sTmp, sal_False );
                     if( XML_NAMESPACE_OOOW == nPrefix )
                     {
                         sCond = sTmp;
