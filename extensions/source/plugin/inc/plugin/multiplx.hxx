@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multiplx.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,36 +189,36 @@ public:
     void unadvise(const Type& type, const Reference< XInterface > & listener);
 
     // ::com::sun::star::lang::XEventListener
-    void SAL_CALL   disposing(const ::com::sun::star::lang::EventObject& Source);
+    void SAL_CALL   disposing(const ::com::sun::star::lang::EventObject& Source) throw();
     // ::com::sun::star::awt::XFocusListener
-    void SAL_CALL   focusGained(const ::com::sun::star::awt::FocusEvent& e);
-    void SAL_CALL   focusLost(const ::com::sun::star::awt::FocusEvent& e);
+    void SAL_CALL   focusGained(const ::com::sun::star::awt::FocusEvent& e) throw();
+    void SAL_CALL   focusLost(const ::com::sun::star::awt::FocusEvent& e) throw();
     // ::com::sun::star::awt::XWindowListener
-    void SAL_CALL   windowResized(const ::com::sun::star::awt::WindowEvent& e);
-    void SAL_CALL   windowMoved(const ::com::sun::star::awt::WindowEvent& e);
-    void SAL_CALL   windowShown(const ::com::sun::star::lang::EventObject& e);
-    void SAL_CALL   windowHidden(const ::com::sun::star::lang::EventObject& e);
+    void SAL_CALL   windowResized(const ::com::sun::star::awt::WindowEvent& e) throw();
+    void SAL_CALL   windowMoved(const ::com::sun::star::awt::WindowEvent& e) throw();
+    void SAL_CALL   windowShown(const ::com::sun::star::lang::EventObject& e) throw();
+    void SAL_CALL   windowHidden(const ::com::sun::star::lang::EventObject& e) throw();
     // ::com::sun::star::awt::XKeyListener
-    void SAL_CALL   keyPressed( const ::com::sun::star::awt::KeyEvent& e );
-    void SAL_CALL   keyReleased( const ::com::sun::star::awt::KeyEvent& e );
+    void SAL_CALL   keyPressed( const ::com::sun::star::awt::KeyEvent& e ) throw();
+    void SAL_CALL   keyReleased( const ::com::sun::star::awt::KeyEvent& e ) throw();
     // ::com::sun::star::awt::XMouseListener
-    void SAL_CALL   mousePressed(const ::com::sun::star::awt::MouseEvent& e);
-    void SAL_CALL   mouseReleased(const ::com::sun::star::awt::MouseEvent& e);
-    void SAL_CALL   mouseEntered(const ::com::sun::star::awt::MouseEvent& e);
-    void SAL_CALL   mouseExited(const ::com::sun::star::awt::MouseEvent& e);
+    void SAL_CALL   mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw();
+    void SAL_CALL   mouseReleased(const ::com::sun::star::awt::MouseEvent& e) throw();
+    void SAL_CALL   mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw();
+    void SAL_CALL   mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw();
     // ::com::sun::star::awt::XMouseMotionListener
-    void SAL_CALL   mouseDragged(const ::com::sun::star::awt::MouseEvent& e);
-    void SAL_CALL   mouseMoved(const ::com::sun::star::awt::MouseEvent& e);
+    void SAL_CALL   mouseDragged(const ::com::sun::star::awt::MouseEvent& e) throw();
+    void SAL_CALL   mouseMoved(const ::com::sun::star::awt::MouseEvent& e) throw();
     // ::com::sun::star::awt::XPaintListener
-    void SAL_CALL   windowPaint(const ::com::sun::star::awt::PaintEvent& e);
+    void SAL_CALL   windowPaint(const ::com::sun::star::awt::PaintEvent& e) throw();
     // ::com::sun::star::awt::XTopWindowListener
-    void SAL_CALL   windowOpened( const ::com::sun::star::lang::EventObject& e );
-    void SAL_CALL   windowClosing( const ::com::sun::star::lang::EventObject& e );
-    void SAL_CALL   windowClosed( const ::com::sun::star::lang::EventObject& e );
-    void SAL_CALL   windowMinimized( const ::com::sun::star::lang::EventObject& e );
-    void SAL_CALL   windowNormalized( const ::com::sun::star::lang::EventObject& e );
-    void SAL_CALL   windowActivated( const ::com::sun::star::lang::EventObject& e );
-    void SAL_CALL   windowDeactivated( const ::com::sun::star::lang::EventObject& e );
+    void SAL_CALL   windowOpened( const ::com::sun::star::lang::EventObject& e ) throw();
+    void SAL_CALL   windowClosing( const ::com::sun::star::lang::EventObject& e ) throw();
+    void SAL_CALL   windowClosed( const ::com::sun::star::lang::EventObject& e ) throw();
+    void SAL_CALL   windowMinimized( const ::com::sun::star::lang::EventObject& e ) throw();
+    void SAL_CALL   windowNormalized( const ::com::sun::star::lang::EventObject& e ) throw();
+    void SAL_CALL   windowActivated( const ::com::sun::star::lang::EventObject& e ) throw();
+    void SAL_CALL   windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw();
 protected:
     /**
      * Remove the listener with the uik rUik from the peer rPeer.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 09:43:44 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,9 @@ public:
     virtual ~FileSink();
 
     // ::com::sun::star::io::XOutputStream
-    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& );
-    virtual void SAL_CALL flush();
-    virtual void SAL_CALL closeOutput();
+    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw();
+    virtual void SAL_CALL flush() throw();
+    virtual void SAL_CALL closeOutput() throw();
 };
 
 }
@@ -128,7 +128,7 @@ public:
     virtual ::rtl::OUString SAL_CALL getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & plugin) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
 };
 
-Reference< ::com::sun::star::plugin::XPluginContext >  XPluginManager_Impl::createPluginContext()
+Reference< ::com::sun::star::plugin::XPluginContext >  XPluginManager_Impl::createPluginContext() throw()
 {
     return new XPluginContext_Impl( m_xSMgr );
 }
@@ -310,7 +310,7 @@ FileSink::~FileSink()
     aEntry.Kill();
 }
 
-void FileSink::closeOutput()
+void FileSink::closeOutput() throw()
 {
     if( fp )
         fclose( fp );
@@ -342,13 +342,13 @@ void FileSink::closeOutput()
     release();
 }
 
-void FileSink::writeBytes( const Sequence<sal_Int8>& Buffer )
+void FileSink::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
 {
     if( fp )
         fwrite( Buffer.getConstArray(), 1, Buffer.getLength(), fp );
 }
 
-void FileSink::flush()
+void FileSink::flush() throw()
 {
     if( fp )
         fflush( fp );

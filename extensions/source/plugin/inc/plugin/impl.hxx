@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-07 19:29:03 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,15 +293,18 @@ public:
 //  static const Reference< ::com::sun::star::reflection::XIdlClass > & staticGetIdlClass();
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& );
-    virtual void SAL_CALL acquire() { OWeakAggObject::acquire(); }
-    virtual void SAL_CALL release() { OWeakAggObject::release(); }
+    virtual Any SAL_CALL queryInterface( const Type& ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL acquire()  throw( ::com::sun::star::uno::RuntimeException )
+    { OWeakAggObject::acquire(); }
+    virtual void SAL_CALL release()  throw( ::com::sun::star::uno::RuntimeException )
+    { OWeakAggObject::release(); }
 
     // OWeakAggObject
-    virtual Any SAL_CALL queryAggregation( const Type& );
+    virtual Any SAL_CALL queryAggregation( const Type& )
+        throw( ::com::sun::star::uno::RuntimeException );
 
     // PluginContol_Impl
-    virtual void SAL_CALL dispose();
+    virtual void SAL_CALL dispose() throw();
     virtual void SAL_CALL createPeer( const Reference< ::com::sun::star::awt::XToolkit > & xToolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & Parent) throw( RuntimeException );
 
     virtual sal_Bool SAL_CALL setModel( const Reference< ::com::sun::star::awt::XControlModel > & Model ) throw( RuntimeException );
@@ -311,11 +314,11 @@ public:
     virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( RuntimeException );
 
     // ::com::sun::star::plugin::XPlugin
-    virtual sal_Bool SAL_CALL provideNewStream(const ::rtl::OUString& mimetype, const Reference< ::com::sun::star::io::XActiveDataSource > & stream, const ::rtl::OUString& url, sal_Int32 length, sal_Int32 lastmodified, sal_Bool isfile);
+    virtual sal_Bool SAL_CALL provideNewStream(const ::rtl::OUString& mimetype, const Reference< ::com::sun::star::io::XActiveDataSource > & stream, const ::rtl::OUString& url, sal_Int32 length, sal_Int32 lastmodified, sal_Bool isfile) throw();
 
     // ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rSource );
-    virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvent );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rSource ) throw();
+    virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvent ) throw();
 };
 
 class PluginManager
@@ -353,16 +356,16 @@ public:
     static XPlugin_Impl* getFirstXPlugin();
     static XPlugin_Impl* getPluginImplementation( const Reference< ::com::sun::star::plugin::XPlugin >& plugin );
 
-    virtual Reference< ::com::sun::star::plugin::XPluginContext > SAL_CALL createPluginContext();
+    virtual Reference< ::com::sun::star::plugin::XPluginContext > SAL_CALL createPluginContext() throw();
 
     // has to be implemented per system
-    virtual Sequence< ::com::sun::star::plugin::PluginDescription > SAL_CALL getPluginDescriptions(void) throw(  );
+    virtual Sequence< ::com::sun::star::plugin::PluginDescription > SAL_CALL getPluginDescriptions(void) throw();
 
     virtual Reference< ::com::sun::star::plugin::XPlugin > SAL_CALL createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype) throw( RuntimeException,::com::sun::star::plugin::PluginException );
 
-    virtual Reference< ::com::sun::star::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const Reference< ::com::sun::star::awt::XToolkit > & toolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & parent, const ::rtl::OUString& url );
+    virtual Reference< ::com::sun::star::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const Reference< ::com::sun::star::awt::XToolkit > & toolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & parent, const ::rtl::OUString& url ) throw();
 
-    virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
+    virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw();
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw();
 
     Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
@@ -429,19 +432,19 @@ public:
     void load();
 
     // XOutputStream
-    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& );
-    virtual void SAL_CALL flush();
-    virtual void SAL_CALL closeOutput();
+    virtual void SAL_CALL writeBytes( const Sequence<sal_Int8>& ) throw();
+    virtual void SAL_CALL flush() throw();
+    virtual void SAL_CALL closeOutput() throw();
 
     // XConnectable
-    virtual void SAL_CALL setPredecessor( const Reference< ::com::sun::star::io::XConnectable >& xPredecessor )
+    virtual void SAL_CALL setPredecessor( const Reference< ::com::sun::star::io::XConnectable >& xPredecessor ) throw()
         { m_xPredecessor = xPredecessor; }
-    virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getPredecessor()
+    virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw()
         { return m_xPredecessor; }
 
-    virtual void SAL_CALL setSuccessor( const Reference< ::com::sun::star::io::XConnectable >& xSuccessor )
+    virtual void SAL_CALL setSuccessor( const Reference< ::com::sun::star::io::XConnectable >& xSuccessor ) throw()
         { m_xSuccessor = xSuccessor; }
-    virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getSuccessor()
+    virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw()
         { return m_xSuccessor; }
 };
 
@@ -480,7 +483,7 @@ public:
     void*       getNotifyData() { return m_pNotifyData; }
 
     // ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject&  Source );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject&  Source ) throw();
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: manager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 09:43:44 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,10 +237,10 @@ Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin
     return pImpl;
 }
 
-Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPluginFromURL( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const Reference< ::com::sun::star::awt::XToolkit > & toolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & parent, const ::rtl::OUString& url )
+Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPluginFromURL( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const Reference< ::com::sun::star::awt::XToolkit > & toolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & parent, const ::rtl::OUString& url ) throw()
 {
     XPlugin_Impl* pImpl = new XPlugin_Impl( m_xSMgr );
-    Reference< ::com::sun::star::plugin::XPlugin >  xRef = pImpl;   // festhalten...
+    Reference< ::com::sun::star::plugin::XPlugin >  xRef = pImpl;
 
     pImpl->setPluginContext( acontext );
 

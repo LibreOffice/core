@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-15 06:56:52 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,13 +117,12 @@ void PluginDisposer::onShot()
 
 //==================================================================================================
 
-Any XPlugin_Impl::queryInterface( const Type& type )
-
+Any XPlugin_Impl::queryInterface( const Type& type ) throw( RuntimeException )
 {
     return OWeakAggObject::queryInterface( type );
 }
 
-Any XPlugin_Impl::queryAggregation( const Type& type )
+Any XPlugin_Impl::queryAggregation( const Type& type ) throw( RuntimeException )
 {
     Any aRet( ::cppu::queryInterface( type, static_cast< ::com::sun::star::plugin::XPlugin* >(this) ) );
     if( ! aRet.hasValue() )
@@ -266,7 +265,7 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, pThis )
     return 0;
 }
 
-void XPlugin_Impl::dispose()
+void XPlugin_Impl::dispose() throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -516,9 +515,9 @@ PluginStream* XPlugin_Impl::getStreamFromNPStream( NPStream* stream )
 }
 
 sal_Bool XPlugin_Impl::provideNewStream(const ::rtl::OUString& mimetype,
-                                    const Reference< ::com::sun::star::io::XActiveDataSource > & stream,
-                                    const ::rtl::OUString& url, sal_Int32 length,
-                                    sal_Int32 lastmodified, sal_Bool isfile)
+                                        const Reference< ::com::sun::star::io::XActiveDataSource > & stream,
+                                        const ::rtl::OUString& url, sal_Int32 length,
+                                        sal_Int32 lastmodified, sal_Bool isfile) throw()
 
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
@@ -651,11 +650,11 @@ sal_Bool XPlugin_Impl::provideNewStream(const ::rtl::OUString& mimetype,
     return bRet;
 }
 
-void XPlugin_Impl::disposing( const ::com::sun::star::lang::EventObject& rSource )
+void XPlugin_Impl::disposing( const ::com::sun::star::lang::EventObject& rSource ) throw()
 {
 }
 
-void XPlugin_Impl::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvent )
+void XPlugin_Impl::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvent ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -830,7 +829,7 @@ void PluginInputStream::setMode( sal_uInt32 nMode )
     }
 }
 
-void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer )
+void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
 
@@ -885,7 +884,7 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer )
                        m_pPlugin->getNPWindow());
 }
 
-void PluginInputStream::closeOutput()
+void PluginInputStream::closeOutput() throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_pPlugin->getMutex() );
 
@@ -906,7 +905,7 @@ sal_uInt32 PluginInputStream::read( sal_uInt32 offset, sal_Int8* buffer, sal_uIn
     return nBytes;
 }
 
-void PluginInputStream::flush(void)
+void PluginInputStream::flush(void) throw()
 {
 }
 

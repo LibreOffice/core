@@ -2,9 +2,9 @@
  *
  *  $RCSfile: model.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 21:45:30 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,12 +138,14 @@ class PluginModel : public BroadcasterHelperHolder,
     const ::rtl::OUString& getCreationURL() { return m_aCreationURL; }
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& rType )
+    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( ::com::sun::star::uno::RuntimeException )
         { return OWeakAggObject::queryInterface( rType ); }
-    virtual void SAL_CALL acquire() { OWeakAggObject::acquire(); }
-    virtual void SAL_CALL release() { OWeakAggObject::release(); }
+    virtual void SAL_CALL acquire()  throw( ::com::sun::star::uno::RuntimeException )
+    { OWeakAggObject::acquire(); }
+    virtual void SAL_CALL release()  throw( ::com::sun::star::uno::RuntimeException )
+    { OWeakAggObject::release(); }
 
-    virtual Any SAL_CALL queryAggregation( const Type& );
+    virtual Any SAL_CALL queryAggregation( const Type& ) throw( ::com::sun::star::uno::RuntimeException );
 
 
     // ::com::sun::star::lang::XTypeProvider
@@ -165,22 +167,22 @@ class PluginModel : public BroadcasterHelperHolder,
     virtual sal_Bool  SAL_CALL convertFastPropertyValue( Any & rConvertedValue,
                                                          Any & rOldValue,
                                                          sal_Int32 nHandle,
-                                                         const Any& rValue );
+                                                         const Any& rValue ) throw();
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
                                                             const Any& rValue )
-        throw( ::com::sun::star::lang::IllegalArgumentException );
-    virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const;
-    virtual Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo();
+        throw();
+    virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw();
+    virtual Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw();
 
     // ::com::sun::star::io::XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName();
-    virtual void SAL_CALL write(const Reference< ::com::sun::star::io::XObjectOutputStream > & OutStream);
-    virtual void SAL_CALL read(const Reference< ::com::sun::star::io::XObjectInputStream > & InStream);
+    virtual ::rtl::OUString SAL_CALL getServiceName() throw();
+    virtual void SAL_CALL write(const Reference< ::com::sun::star::io::XObjectOutputStream > & OutStream) throw();
+    virtual void SAL_CALL read(const Reference< ::com::sun::star::io::XObjectInputStream > & InStream) throw();
 
     // ::com::sun::star::lang::XComponent
-    virtual void SAL_CALL addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l );
-    virtual void SAL_CALL removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l );
-    virtual void SAL_CALL dispose();
+    virtual void SAL_CALL addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw();
+    virtual void SAL_CALL removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw();
+    virtual void SAL_CALL dispose() throw();
 };
 Reference< XInterface >  SAL_CALL PluginModel_CreateInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );
 

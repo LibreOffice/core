@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plmodel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ Reference< XInterface > SAL_CALL PluginModel_CreateInstance( const Reference< ::
     return xService;
 }
 
-Any PluginModel::queryAggregation( const Type& type )
+Any PluginModel::queryAggregation( const Type& type ) throw( RuntimeException )
 {
     Any aRet( ::cppu::queryInterface( type,
                                       static_cast< ::com::sun::star::lang::XComponent* >(this),
@@ -88,14 +88,14 @@ Any PluginModel::queryAggregation( const Type& type )
 
 
 // ::com::sun::star::lang::XServiceInfo
-::rtl::OUString PluginModel::getImplementationName() throw(  )
+::rtl::OUString PluginModel::getImplementationName() throw()
 
 {
     return getImplementationName_Static();
 }
 
 // ::com::sun::star::lang::XServiceInfo
-sal_Bool PluginModel::supportsService(const ::rtl::OUString& ServiceName) throw(  )
+sal_Bool PluginModel::supportsService(const ::rtl::OUString& ServiceName) throw()
 {
     Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
     const ::rtl::OUString * pArray = aSNL.getConstArray();
@@ -106,13 +106,13 @@ sal_Bool PluginModel::supportsService(const ::rtl::OUString& ServiceName) throw(
 }
 
 // ::com::sun::star::lang::XServiceInfo
-Sequence< ::rtl::OUString > PluginModel::getSupportedServiceNames(void) throw(  )
+Sequence< ::rtl::OUString > PluginModel::getSupportedServiceNames(void) throw()
 {
     return getSupportedServiceNames_Static();
 }
 
 // XPluginManager_Impl
-Sequence< ::rtl::OUString > PluginModel::getSupportedServiceNames_Static(void) throw(  )
+Sequence< ::rtl::OUString > PluginModel::getSupportedServiceNames_Static(void) throw()
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
     aSNS.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.plugin.PluginModel" );
@@ -152,7 +152,7 @@ PluginModel::~PluginModel()
 {
 }
 
-Reference< ::com::sun::star::beans::XPropertySetInfo >  PluginModel::getPropertySetInfo()
+Reference< ::com::sun::star::beans::XPropertySetInfo >  PluginModel::getPropertySetInfo() throw()
 {
     static Reference< ::com::sun::star::beans::XPropertySetInfo > aInfo =
         createPropertySetInfo( *this );
@@ -165,9 +165,9 @@ Reference< ::com::sun::star::beans::XPropertySetInfo >  PluginModel::getProperty
 }
 
 sal_Bool PluginModel::convertFastPropertyValue( Any & rConvertedValue,
-                                            Any & rOldValue,
-                                            sal_Int32 nHandle,
-                                            const Any& rValue )
+                                                Any & rOldValue,
+                                                sal_Int32 nHandle,
+                                                const Any& rValue ) throw()
 {
     if( rValue.getValueTypeClass() == typelib_TypeClass_STRING )
 
@@ -181,7 +181,7 @@ sal_Bool PluginModel::convertFastPropertyValue( Any & rConvertedValue,
 
 void PluginModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
                                                     const Any& rValue )
-    throw( ::com::sun::star::lang::IllegalArgumentException )
+    throw()
 {
     if( rValue.getValueTypeClass() == typelib_TypeClass_STRING )
 
@@ -192,25 +192,25 @@ void PluginModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
         throw ::com::sun::star::lang::IllegalArgumentException();
 }
 
-void PluginModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
+void PluginModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw()
 {
     rValue <<= m_aCreationURL;
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
-void PluginModel::addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l )
+void PluginModel::addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw()
 {
     m_aDisposeListeners.push_back( l );
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
-void PluginModel::removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l )
+void PluginModel::removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw()
 {
     m_aDisposeListeners.remove( l );
 }
 
 //---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
-void PluginModel::dispose(void)
+void PluginModel::dispose(void) throw()
 {
     // send disposing events
     ::com::sun::star::lang::EventObject aEvt;
@@ -227,17 +227,17 @@ void PluginModel::dispose(void)
 
 
 // ::com::sun::star::io::XPersistObject
-::rtl::OUString PluginModel::getServiceName()
+::rtl::OUString PluginModel::getServiceName() throw()
 {
     return ::rtl::OUString::createFromAscii( "com.sun.star.plugin.PluginModel" );
 }
 
-void PluginModel::write(const Reference< ::com::sun::star::io::XObjectOutputStream > & OutStream)
+void PluginModel::write(const Reference< ::com::sun::star::io::XObjectOutputStream > & OutStream) throw()
 {
     OutStream->writeUTF( m_aCreationURL );
 }
 
-void PluginModel::read(const Reference< ::com::sun::star::io::XObjectInputStream > & InStream)
+void PluginModel::read(const Reference< ::com::sun::star::io::XObjectInputStream > & InStream) throw()
 {
     m_aCreationURL = InStream->readUTF();
 }
