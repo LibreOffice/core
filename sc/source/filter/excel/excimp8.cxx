@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:12:31 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,6 @@
 #include "markdata.hxx"
 #include "rangenam.hxx"
 #include "docoptio.hxx"
-#ifndef SC_DETFUNC_HXX
-#include "detfunc.hxx"
-#endif
 #ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
 #endif
@@ -161,6 +158,7 @@
 #include "scextopt.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
+#include "detfunc.hxx"
 
 using namespace com::sun::star;
 
@@ -239,18 +237,24 @@ void ImportExcel8::Note( void )
     {
         if( nId )
         {
-            if( const XclImpEscherNote* pNoteObj = GetObjectManager().GetEscherNote( nScTab, nId ) )
+            XclImpObjectManager& rObjManager = GetObjectManager();
+            if( XclImpEscherObj* pEscherObj = rObjManager.GetEscherObjAcc( nScTab, nId ) )
             {
-                if( const XclImpString* pString = pNoteObj->GetString() )
+                if( XclImpEscherNote* pNoteObj = PTR_CAST( XclImpEscherNote, pEscherObj ) )
                 {
-                    bool bVisible = ::get_flag( nFlags, EXC_NOTE_VISIBLE );
-                    ScPostIt aNote( pString->GetText() );
-                    aNote.SetShown( bVisible );
-                    GetDoc().SetNote( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nScTab, aNote );
-                    if( bVisible )
+                    pNoteObj->SetCol(nCol);
+                    pNoteObj->SetRow(nRow);
+
+                    if( const XclImpString* pString = pNoteObj->GetString() )
                     {
+                        ::std::auto_ptr< EditTextObject > pEditObj(
+                        XclImpStringHelper::CreateTextObject( GetRoot(), *pString ) );
+                        bool bVisible = ::get_flag( nFlags, EXC_NOTE_VISIBLE );
+
                         ScDocument* pDoc = GetDocPtr();
-                        ScDetectiveFunc( pDoc, nScTab ).ShowComment( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), TRUE );
+                        ScPostIt aNote( pEditObj.get(), pDoc);
+                        aNote.SetShown( bVisible );
+                        GetDoc().SetNote( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nScTab, aNote );
                     }
                 }
             }
