@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:43:43 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <window.hxx>
+#endif
+#ifndef _SV_CTRL_HXX
+#include <ctrl.hxx>
 #endif
 
 // =======================================================================
@@ -896,8 +899,15 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
 
     // no flat borders for standard VCL controls (ie formcontrols that keep their classic look)
     // will not affect frame windows (like dropdowns)
-    if( pWin && pWin->GetType() == WINDOW_BORDERWINDOW && (pWin != pWin->ImplGetFrameWindow()) )
-        bFlatBorders = FALSE;
+    if( bFlatBorders && pWin && pWin->GetType() == WINDOW_BORDERWINDOW && (pWin != pWin->ImplGetFrameWindow()) )
+    {
+        // check for formcontrol, i.e., a control without NWF enabled
+        Control *pControl = dynamic_cast< Control* >( pWin->GetWindow( WINDOW_CLIENT ) );
+        if( pControl && pControl->IsNativeWidgetEnabled() )
+            bFlatBorders = TRUE;
+        else
+            bFlatBorders = FALSE;
+    }
 
     // no round corners for window frame borders
     BOOL bRound = (bFlatBorders && !(nStyle & FRAME_DRAW_WINDOWBORDER));
