@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:34:56 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ static SbiStatement StmntTable [] = {
 { GLOBAL,   &SbiParser::Dim,        Y, N, }, // GLOBAL
 { GOTO,     &SbiParser::Goto,       N, Y, }, // GOTO
 { IF,       &SbiParser::If,         N, Y, }, // IF
+{ IMPLEMENTS, &SbiParser::Implements, Y, N, }, // IMPLEMENTS
 { INPUT,    &SbiParser::Input,      N, Y, }, // INPUT
 { LET,      &SbiParser::Assign,     N, Y, }, // LET
 { LINEINPUT,&SbiParser::LineInput,  N, Y, }, // LINE INPUT
@@ -532,10 +533,10 @@ void SbiParser::Symbol()
             {
                 eOp = _SET;
                 if( pDef->GetTypeId() )
-//              if( pDef->GetTypeId() && !pDef->HabIchAlsTypeDefiniert() )
-                    aGen.Gen( _CLASS, pDef->GetTypeId() );
-                // x = Objektfunktion (ohne Set) is nich drin
-//              Error( SbERR_SYNTAX );
+                {
+                    aGen.Gen( _SETCLASS, pDef->GetTypeId() );
+                    return;
+                }
             }
         }
         aGen.Gen( eOp );
@@ -581,12 +582,13 @@ void SbiParser::Set()
     {
         Next();
         String aStr;
-        SbiSymDef* pDef = new SbiSymDef( aStr );
-        TypeDecl( *pDef, TRUE );
+        SbiSymDef* pTypeDef = new SbiSymDef( aStr );
+        TypeDecl( *pTypeDef, TRUE );
 
         aLvalue.Gen();
-        aGen.Gen( _CLASS, pDef->GetTypeId() | 0x8000 );
-        aGen.Gen( _CREATE, pDef->GetId(), pDef->GetTypeId() );
+        // aGen.Gen( _CLASS, pDef->GetTypeId() | 0x8000 );
+        aGen.Gen( _CREATE, pDef->GetId(), pTypeDef->GetTypeId() );
+        aGen.Gen( _SETCLASS, pDef->GetTypeId() );
     }
     else
     {
@@ -594,9 +596,11 @@ void SbiParser::Set()
         aLvalue.Gen();
         aExpr.Gen();
         if( pDef->GetTypeId() )
-            aGen.Gen( _CLASS, pDef->GetTypeId() );
+            aGen.Gen( _SETCLASS, pDef->GetTypeId() );
+        else
+            aGen.Gen( _SET );
     }
-    aGen.Gen( _SET );
+    // aGen.Gen( _SET );
 }
 
 // JSM 07.10.95
@@ -669,6 +673,23 @@ void SbiParser::Stop()
     Peek();     // #35694: Nur Peek(), damit EOL in Single-Line-If erkannt wird
 }
 
+// IMPLEMENTS
+
+void SbiParser::Implements()
+{
+    if( !bClassModule )
+    {
+        Error( SbERR_UNEXPECTED, IMPLEMENTS );
+        return;
+    }
+
+    if( TestSymbol() )
+    {
+        String aImplementedIface = GetSym();
+        aIfaceVector.push_back( aImplementedIface );
+    }
+}
+
 // OPTION
 
 void SbiParser::Option()
@@ -717,12 +738,17 @@ void SbiParser::Option()
     }
 }
 
-void addStringConst( SbiSymPool& rPool, const char* pSym, const char* pStr )
+void addStringConst( SbiSymPool& rPool, const char* pSym, const String& rStr )
 {
     SbiConstDef* pConst = new SbiConstDef( String::CreateFromAscii( pSym ) );
     pConst->SetType( SbxSTRING );
-    pConst->Set( String::CreateFromAscii( pStr ) );
+    pConst->Set( rStr );
     rPool.Add( pConst );
+}
+
+inline void addStringConst( SbiSymPool& rPool, const char* pSym, const char* pStr )
+{
+    addStringConst( rPool, pSym, String::CreateFromAscii( pStr ) );
 }
 
 void SbiParser::AddConstants( void )
@@ -739,10 +765,14 @@ void SbiParser::AddConstants( void )
 #else
     addStringConst( aPublics, "vbNewLine", "\x0D\x0A" );
 #endif
-    addStringConst( aPublics, "vbNullChar", "\x00" );
-    addStringConst( aPublics, "vbNullString", "\x00" );
+    addStringConst( aPublics, "vbNullString", "" );
     addStringConst( aPublics, "vbTab", "\x09" );
     addStringConst( aPublics, "vbVerticalTab", "\x0B" );
+
+    // Force length 1 and make char 0 afterwards
+    String aNullCharStr( String::CreateFromAscii( " " ) );
+    aNullCharStr.SetChar( 0, 0 );
+    addStringConst( aPublics, "vbNullChar", aNullCharStr );
 }
 
 // ERROR n
