@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2002-05-29 11:08:03 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 07:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,6 @@ namespace dbaui
         SvLBoxEntry*            m_pCurrentlyDisplayed;
 
         sal_Int32               m_nAsyncDrop;
-        sal_Int32               m_nAsyncClose;
 
         sal_Bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
         sal_Bool                m_bHiContrast;          // in which mode we are
@@ -403,7 +402,6 @@ namespace dbaui
 
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
         DECL_LINK( OnAsyncDrop, void* );
-        DECL_LINK( OnAsyncClose, void* );
 
         DECL_LINK( OnShowRefreshDropDown, void* );
 
