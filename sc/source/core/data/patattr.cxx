@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:50:24 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svx/adjitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/boxitem.hxx>
+#include <svx/bolnitem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/charreliefitem.hxx>
 #include <svx/cntritem.hxx>
@@ -107,6 +108,7 @@
 #include "conditio.hxx"
 #include "validat.hxx"
 #include "scmod.hxx"
+#include "fillinfo.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -224,6 +226,31 @@ SvStream& __EXPORT ScPatternAttr::Store(SvStream& rStream, USHORT nItemVersion) 
     GetItemSet().Store( rStream );
 
     return rStream;
+}
+
+SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
+{
+    SvxCellOrientation eOrient = SVX_ORIENTATION_STANDARD;
+
+    if( ((const SfxBoolItem&)GetItem( ATTR_STACKED, rItemSet, pCondSet )).GetValue() )
+    {
+        eOrient = SVX_ORIENTATION_STACKED;
+    }
+    else
+    {
+        INT32 nAngle = ((const SfxInt32Item&)GetItem( ATTR_ROTATE_VALUE, rItemSet, pCondSet )).GetValue();
+        if( nAngle == 9000 )
+            eOrient = SVX_ORIENTATION_BOTTOMTOP;
+        else if( nAngle == 27000 )
+            eOrient = SVX_ORIENTATION_TOPBOTTOM;
+    }
+
+    return eOrient;
+}
+
+SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet* pCondSet ) const
+{
+    return GetCellOrientation( GetItemSet(), pCondSet );
 }
 
 void ScPatternAttr::GetFont(
@@ -1058,21 +1085,31 @@ BOOL ScPatternAttr::IsVisible() const
 
     eState = rSet.GetItemState( ATTR_BACKGROUND, TRUE, &pItem );
     if ( eState == SFX_ITEM_SET )
-        if ( ((SvxBrushItem*)pItem)->GetColor().GetColor() != COL_TRANSPARENT )
+        if ( ((const SvxBrushItem*)pItem)->GetColor().GetColor() != COL_TRANSPARENT )
             return TRUE;
 
     eState = rSet.GetItemState( ATTR_BORDER, TRUE, &pItem );
     if ( eState == SFX_ITEM_SET )
     {
-        SvxBoxItem* pBoxItem = (SvxBoxItem*) pItem;
+        const SvxBoxItem* pBoxItem = (SvxBoxItem*) pItem;
         if ( pBoxItem->GetTop() || pBoxItem->GetBottom() ||
              pBoxItem->GetLeft() || pBoxItem->GetRight() )
             return TRUE;
     }
 
+    eState = rSet.GetItemState( ATTR_BORDER_TLBR, TRUE, &pItem );
+    if ( eState == SFX_ITEM_SET )
+        if( static_cast< const SvxLineItem* >( pItem )->GetLine() )
+            return TRUE;
+
+    eState = rSet.GetItemState( ATTR_BORDER_BLTR, TRUE, &pItem );
+    if ( eState == SFX_ITEM_SET )
+        if( static_cast< const SvxLineItem* >( pItem )->GetLine() )
+            return TRUE;
+
     eState = rSet.GetItemState( ATTR_SHADOW, TRUE, &pItem );
     if ( eState == SFX_ITEM_SET )
-        if ( ((SvxShadowItem*)pItem)->GetLocation() != SVX_SHADOW_NONE )
+        if ( ((const SvxShadowItem*)pItem)->GetLocation() != SVX_SHADOW_NONE )
             return TRUE;
 
     return FALSE;
@@ -1092,6 +1129,8 @@ BOOL ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
 
     return OneEqual( rThisSet, rOtherSet, ATTR_BACKGROUND ) &&
             OneEqual( rThisSet, rOtherSet, ATTR_BORDER ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_BORDER_TLBR ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_BORDER_BLTR ) &&
             OneEqual( rThisSet, rOtherSet, ATTR_SHADOW );
 
     //!     auch hier nur wirklich sichtbare Werte testen !!!
@@ -1223,13 +1262,17 @@ ULONG ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
                     ((SvxLanguageItem*)pLangItem)->GetLanguage() );
 }
 
-const SfxPoolItem& ScPatternAttr::GetItem( USHORT nWhich, const SfxItemSet* pCondSet ) const
+const SfxPoolItem& ScPatternAttr::GetItem( USHORT nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
 {
     const SfxPoolItem* pCondItem;
     if ( pCondSet && pCondSet->GetItemState( nWhich, TRUE, &pCondItem ) == SFX_ITEM_SET )
         return *pCondItem;
+    return rItemSet.Get(nWhich);
+}
 
-    return GetItemSet().Get(nWhich);
+const SfxPoolItem& ScPatternAttr::GetItem( USHORT nWhich, const SfxItemSet* pCondSet ) const
+{
+    return GetItem( nWhich, GetItemSet(), pCondSet );
 }
 
 //  GetRotateVal testet vorher ATTR_ORIENTATION
@@ -1237,24 +1280,14 @@ const SfxPoolItem& ScPatternAttr::GetItem( USHORT nWhich, const SfxItemSet* pCon
 long ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
 {
     long nAttrRotate = 0;
-
-    SvxCellOrientation eOrient;
-    const SfxPoolItem* pCondItem;
-    if ( pCondSet && pCondSet->GetItemState( ATTR_ORIENTATION, TRUE, &pCondItem ) == SFX_ITEM_SET )
-        eOrient = (SvxCellOrientation)((const SvxOrientationItem*)pCondItem)->GetValue();
-    else
-        eOrient = (SvxCellOrientation)((const SvxOrientationItem&)
-                                            GetItem(ATTR_ORIENTATION)).GetValue();
-
-    if ( eOrient == SVX_ORIENTATION_STANDARD )
+    if ( GetCellOrientation() == SVX_ORIENTATION_STANDARD )
     {
-        if ( pCondSet && pCondSet->GetItemState(
-                                        ATTR_ROTATE_VALUE, TRUE, &pCondItem ) == SFX_ITEM_SET )
-            nAttrRotate = ((const SfxInt32Item*)pCondItem)->GetValue();
-        else
-            nAttrRotate = ((const SfxInt32Item&)GetItem(ATTR_ROTATE_VALUE)).GetValue();
+        BOOL bRepeat = ( static_cast<const SvxHorJustifyItem&>(GetItem(ATTR_HOR_JUSTIFY, pCondSet)).
+                            GetValue() == SVX_HOR_JUSTIFY_REPEAT );
+        // ignore orientation/rotation if "repeat" is active
+        if ( !bRepeat )
+            nAttrRotate = ((const SfxInt32Item&)GetItem( ATTR_ROTATE_VALUE, pCondSet )).GetValue();
     }
-
     return nAttrRotate;
 }
 
