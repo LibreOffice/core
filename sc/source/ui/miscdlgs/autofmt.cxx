@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-04 18:54:14 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,10 +419,11 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, pBtn)
         {
             BOOL bFmtRenamed = FALSE;
             pDlg->GetInputString( aFormatName );
+            USHORT n;
 
             if ( aFormatName.Len() > 0 )
             {
-                for( USHORT n = 0; n < pFormat->GetCount(); ++n )
+                for( n = 0; n < pFormat->GetCount(); ++n )
                 {
                     (*pFormat)[n]->GetName(aEntry);
                     if ( aEntry== aFormatName)
