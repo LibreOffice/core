@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2000-12-05 08:46:58 $
+ *  last change: $Author: tbe $ $Date: 2001-05-21 10:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,11 @@
 #include <so3/svstor.hxx>
 #endif
 
-#ifndef _IODLG_HXX //autogen
-#include <sfx2/iodlg.hxx>
+#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
@@ -104,11 +107,13 @@
 #endif
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
-using namespace comphelper;
-using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::ucb;
+using namespace ::comphelper;
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::ui;
 
 
 LibPage::LibPage( Window * pParent ) :
@@ -437,16 +442,27 @@ void LibPage::InsertLib()
     BasicManager* pBasMgr = aLibBox.GetBasicManager();
     DBG_ASSERT( pBasMgr, "BasMgr?!" );
 
-    SfxFileDialog aFileDialogBox( this, WinBits( WB_OPEN | WB_3DLOOK ) );
-    aFileDialogBox.SetText( String( IDEResId( RID_STR_APPENDLIBS ) ) );
-    aFileDialogBox.AddFilter( String( IDEResId( RID_STR_BASIC ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.sbl" ) ) );
-    aFileDialogBox.AddFilter( String( IDEResId( RID_STR_DOC ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.sdw;*.sdc;*.sdd" ) ) );
+    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+    Reference < XFilePicker > xFP;
+    if( xMSF.is() )
+    {
+        Sequence <Any> aProps(1);
+        aProps.getArray()[0] <<= ::rtl::OUString::createFromAscii("FileOpen");
+        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.FilePicker" ) ), aProps ), UNO_QUERY );
+    }
+
+    xFP->setTitle( String( IDEResId( RID_STR_APPENDLIBS ) ) );
+
+    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
+    xFltMgr->appendFilter( String( IDEResId( RID_STR_BASIC ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.sbl" ) ) );
+    xFltMgr->appendFilter( String( IDEResId( RID_STR_DOC ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.sdw;*.sdc;*.sdd" ) ) );
 
     String aPath( IDE_DLL()->GetExtraData()->GetAddLibPath() );
     if ( aPath.Len() )
     {
-        aFileDialogBox.SetPath( aPath );
-        aFileDialogBox.SetCurFilter( IDE_DLL()->GetExtraData()->GetAddLibFilter() );
+        xFP->setDisplayDirectory( aPath );
+        xFltMgr->setCurrentFilter( IDE_DLL()->GetExtraData()->GetAddLibFilter() );
     }
     else
     {
@@ -455,15 +471,16 @@ void LibPage::InsertLib()
         INetURLObject aFileURL( aPath , INetURLObject::FSYS_DETECT );
         aFileURL.setFinalSlash();
         aPath = aFileURL.getFSysPath( INetURLObject::FSYS_DETECT );
-        aFileDialogBox.SetPath( aPath );
-        aFileDialogBox.SetCurFilter( String( IDEResId( RID_STR_DOC ) ) );
+        xFP->setDisplayDirectory( aPath );
+        xFltMgr->setCurrentFilter( String( IDEResId( RID_STR_DOC ) ) );
     }
 
-    if ( aFileDialogBox.Execute() )
+    if( xFP->execute() == RET_OK )
     {
-        aPath = aFileDialogBox.GetPath();
+        Sequence< ::rtl::OUString > aPaths = xFP->getPath();
+        aPath = aPaths[0];
         IDE_DLL()->GetExtraData()->SetAddLibPath( aPath );
-        IDE_DLL()->GetExtraData()->SetAddLibFilter( aFileDialogBox.GetCurFilter() );
+        IDE_DLL()->GetExtraData()->SetAddLibFilter( xFltMgr->getCurrentFilter() );
 
         INetURLObject aFileURL( aPath );
         String aFullName( aFileURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
