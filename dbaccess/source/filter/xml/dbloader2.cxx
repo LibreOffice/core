@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:05:28 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 09:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::ui::dialogs;
+namespace css = ::com::sun::star;
 
 // -------------------------------------------------------------------------
 namespace dbaxml
@@ -529,17 +530,16 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             xController->attachFrame(rFrame);
         try
         {
-            Reference< ::com::sun::star::document::XEventListener > xDocEventBroadcaster(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),
-                UNO_QUERY);
-            if ( xDocEventBroadcaster.is() )
-            {
-                ::com::sun::star::document::EventObject aEvent(xModel, bCreateNew ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnLoad")));
-                xDocEventBroadcaster->notifyEvent(aEvent);
-            }
+            Reference< css::container::XSet > xModelCollection(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),UNO_QUERY_THROW);
+            xModelCollection->insert(css::uno::makeAny(xModel));
+
+            Reference< css::document::XEventListener > xDocEventBroadcaster(xModel,UNO_QUERY_THROW);
+            css::document::EventObject aEvent(xModel, bCreateNew ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnLoad")));
+            xDocEventBroadcaster->notifyEvent(aEvent);
         }
         catch(Exception)
         {
-            OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
+            OSL_ENSURE(0,"Could not add database model to global model collection and broadcast the events OnNew/OnLoad!");
         }
         rListener->loadFinished(this);
 
@@ -611,3 +611,4 @@ extern "C" void SAL_CALL writeDBLoaderInfo2(void* pRegistryKey)
     xNewKey->setAsciiValue( ::rtl::OUString::createFromAscii("private:factory/sdatabase") );
 }
 // -----------------------------------------------------------------------------
+
