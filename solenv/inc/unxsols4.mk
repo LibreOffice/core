@@ -54,7 +54,7 @@ LINK=CC
 
 # -z combreloc combines multiple relocation sections. Reduces overhead on startup
 # -norunpath prevents the compiler from recording his own libs in the runpath
-# LINKFLAGSRUNPATH*=-R\''$$ORIGIN'\'
+LINKFLAGSRUNPATH*=-R\''$$ORIGIN'\'
 LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp $(LINKFLAGSRUNPATH) -norunpath -library=no%Cstd
 
 # -z text force fatal error if non PIC code is linked into shared library. Such code 
@@ -63,26 +63,25 @@ CHECKFORPIC =-z text
 LINKFLAGSSHLGUI=$(CHECKFORPIC) -G
 LINKFLAGSSHLCUI=$(CHECKFORPIC) -G
 
-.IF "$(NO_BSYMBOLIC)"==""
-.IF "$(PRJNAME)"!="schedule"
-#.IF "$(PRJNAME)"!="envtest"
-LINKFLAGSSHLGUI+=-Bsymbolic
-LINKFLAGSSHLCUI+=-Bsymbolic
-#.ENDIF
-.ENDIF
-.ENDIF				# "$(NO_BSYMBOLIC)"==""
-
 # switches for dynamic and static linking
+LINKFLAGSDEFS*= -z defs
 STATIC		= -Bstatic
+DIRECT		= -Bdirect $(LINKFLAGSDEFS)
 DYNAMIC		= -Bdynamic
+
+LINKFLAGSAPPGUI+=$(DIRECT)
+LINKFLAGSAPPCUI+=$(DIRECT)
+LINKFLAGSSHLGUI+=$(DIRECT)
+LINKFLAGSSHLCUI+=$(DIRECT)
 
 LINKFLAGSTACK=
 LINKFLAGSPROF=-L$(COMPATH)/WS6U1/lib/libp -xpg -z allextract
 LINKFLAGSDEBUG=
 LINKFLAGSOPT=
 LINKVERSIONMAPFLAG=-M
-APPLINKSTATIC=-Bstatic
-APPLINKSHARED=-Bdynamic
+
+APPLINKSTATIC=$(STATIC)
+APPLINKSHARED=$(DIRECT)
 APP_LINKTYPE=
 
 # reihenfolge der libs NICHT egal!
@@ -94,19 +93,24 @@ STDSLOGUI=
 .ENDIF
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIST=-Bdynamic -lm
-STDLIBCUIST=-Bdynamic -lm
-STDLIBGUIMT=-Bdynamic -lpthread -lm
-STDLIBCUIMT=-Bdynamic -lpthread -lm
-STDSHLGUIST=-Bdynamic -lCrun -lm -lc
-STDSHLCUIST=-Bdynamic -lCrun -lm -lc
-STDSHLGUIMT=-Bdynamic -lpthread -lCrun -lm -lc
-STDSHLCUIMT=-Bdynamic -lpthread -lCrun -lm -lc
+
+STDLIBGUIST=$(DYNAMIC) -lm
+STDLIBCUIST=$(DYNAMIC) -lm
+STDLIBGUIMT=$(DYNAMIC) -lpthread -lm
+STDLIBCUIMT=$(DYNAMIC) -lpthread -lm
+STDSHLGUIST=$(DYNAMIC) -lCrun -lm -lc
+STDSHLCUIST=$(DYNAMIC) -lCrun -lm -lc
+STDSHLGUIMT=$(DYNAMIC) -lpthread -lCrun -lm -lc
+STDSHLCUIMT=$(DYNAMIC) -lpthread -lCrun -lm -lc
 
 STDLIBGUIST+=-lX11
 STDLIBGUIMT+=-lX11
+STDSHLGUIST+=-lX11
+STDSHLGUIMT+=-lX11
 
-LIBSALCPPRT*=-z allextract -lsalcpprt -z defaultextract
+# @@@ interposer needed for -Bdirect @@@
+# LIBSALCPPRT*=-z allextract -lsalcpprt -z defaultextract
+LIBSALCPPRT=
 
 LIBSTLPORT=$(DYNAMIC) -lstlport_sunpro
 LIBSTLPORTST=$(STATIC) -lstlport_sunpro $(DYNAMIC)
