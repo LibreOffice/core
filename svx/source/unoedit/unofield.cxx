@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:28:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,10 +381,17 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
             {
             case ID_DATEFIELD:
             case ID_EXT_DATEFIELD:
-                mpImpl->mbBoolean2 = sal_True;
-                mpImpl->maDateTime = getDate( ((SvxDateField*)pData)->GetFixDate() );
-                mpImpl->mnInt32 = ((SvxDateField*)pData)->GetFormat();
-                mpImpl->mbBoolean1 = ((SvxDateField*)pData)->GetType() == SVXDATETYPE_FIX;
+                {
+                    mpImpl->mbBoolean2 = sal_True;
+                    // #i35416# for variable date field, don't use invalid "0000-00-00" date,
+                    // use current date instead
+                    sal_Bool bFixed = ((SvxDateField*)pData)->GetType() == SVXDATETYPE_FIX;
+                    mpImpl->maDateTime = getDate( bFixed ?
+                                            ((SvxDateField*)pData)->GetFixDate() :
+                                            Date().GetDate() );
+                    mpImpl->mnInt32 = ((SvxDateField*)pData)->GetFormat();
+                    mpImpl->mbBoolean1 = bFixed;
+                }
                 break;
 
             case ID_TIMEFIELD:
