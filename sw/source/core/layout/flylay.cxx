@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:49:35 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,9 +213,7 @@ void SwFlyFreeFrm::MakeAll()
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea || bFormatHeightOnly )
     {
-#ifdef VERTICAL_LAYOUT
-       SWRECTFN( this )
-#endif
+        SWRECTFN( this )
         const SwFmtFrmSize *pSz;
         {   //Zusaetzlicher Scope, damit aAccess vor dem Check zerstoert wird!
 
@@ -227,9 +225,12 @@ void SwFlyFreeFrm::MakeAll()
             if ( !bValidSize )
             {
                 bValidPrtArea = FALSE;
-                const Size aTmp( CalcRel( *pSz ) );
+/*
+                // This is also done in the Format function, so I think
+                // this code is not necessary anymore:
+                const Size aRelSize( CalcRel( *pSz ) );
                 const SwTwips nMin = MINFLY + rAttrs.CalcLeftLine()+rAttrs.CalcRightLine();
-                long nDiff = bVert ? aTmp.Height() : aTmp.Width();
+                long nDiff = bVert ? aRelSize.Height() : aRelSize.Width();
                 if( nDiff < nMin )
                     nDiff = nMin;
                 nDiff -= (aFrm.*fnRect->fnGetWidth)();
@@ -238,6 +239,7 @@ void SwFlyFreeFrm::MakeAll()
                     (aFrm.*fnRect->fnAddRight)( nDiff );
                     bValidPos = FALSE;
                 }
+*/
             }
 
             if ( !bValidPrtArea )
@@ -252,15 +254,9 @@ void SwFlyFreeFrm::MakeAll()
 
             if ( !bValidPos )
             {
-#ifdef VERTICAL_LAYOUT
                 const Point aOldPos( (Frm().*fnRect->fnGetPos)() );
                 MakeFlyPos();
                 if( aOldPos == (Frm().*fnRect->fnGetPos)() )
-#else
-                const Point aOldPos( Frm().Pos() );
-                MakeFlyPos();
-                if( aOldPos == Frm().Pos() )
-#endif
                 {
                     if( !bValidPos && GetAnchor()->IsInSct() &&
                         !GetAnchor()->FindSctFrm()->IsValid() )
@@ -275,17 +271,12 @@ void SwFlyFreeFrm::MakeAll()
     }
     Unlock();
 
-#ifdef VERTICAL_LAYOUT
 #ifndef PRODUCT
     SWRECTFN( this )
     ASSERT( bHeightClipped || ( (Frm().*fnRect->fnGetHeight)() > 0 &&
             (Prt().*fnRect->fnGetHeight)() > 0),
             "SwFlyFreeFrm::Format(), flipping Fly." );
 
-#endif
-#else
-    ASSERT( bHeightClipped || (Frm().Height() > 0 && Prt().Height() > 0),
-            "SwFlyFreeFrm::Format(), flipping Fly." );
 #endif
 }
 
@@ -315,7 +306,7 @@ bool SwFlyFreeFrm::HasEnvironmentAutoSize() const
              pToBeCheckedFrm->IsFlyFrm() )
         {
             bRetVal = ATT_FIX_SIZE !=
-                      pToBeCheckedFrm->GetAttrSet()->GetFrmSize().GetSizeType();
+                      pToBeCheckedFrm->GetAttrSet()->GetFrmSize().GetHeightSizeType();
             break;
         }
         else
@@ -514,7 +505,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                     aFrmSize.SetWidth( Frm().Width() );
                 if ( bBot )
                 {
-                    aFrmSize.SetSizeType( ATT_FIX_SIZE );
+                    aFrmSize.SetHeightSizeType( ATT_FIX_SIZE );
                     aFrmSize.SetHeight( Frm().Height() );
                     bFixHeight = TRUE;
                     bMinHeight = FALSE;
