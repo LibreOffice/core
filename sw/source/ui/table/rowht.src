@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:03:45 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ ModalDialog DLG_ROW_HEIGHT
         TabStop = TRUE ;
         Text [ english_us ] = "~Fit to size" ;
         Text [ swedish ] = "anpassa ~dynamiskt" ;
-        Text [ danish ] = "tilpas dynamisk" ;
+        Text [ danish ] = "~Tilpas dynamisk" ;
         Text [ italian ] = "Altezza autom~atica" ;
         Text [ spanish ] = "~Ajuste din�mico" ;
         Text [ french ] = "Adaptation dynamique" ;
@@ -153,6 +153,8 @@ ModalDialog DLG_ROW_HEIGHT
         Text[ hebrew ] = "~dynamisch anpassen";
         Text[ hindi ] = "~परिमाण केलिए योग्य";
         Text[ slovak ] = "~Prispôsobiť veľkosti";
+        Text[ hungarian ] = "~Méretre igazítás";
+        Text[ slovenian ] = "~Prilagodi velikosti";
     };
     FixedLine FL_HEIGHT
     {
@@ -186,6 +188,8 @@ ModalDialog DLG_ROW_HEIGHT
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई";
         Text[ slovak ] = "Výška";
+        Text[ hungarian ] = "Magasság";
+        Text[ slovenian ] = "Višina";
     };
     Text[ chinese_simplified ] = "行高";
     Text[ russian ] = "������ ������";
@@ -202,7 +206,10 @@ ModalDialog DLG_ROW_HEIGHT
     Text[ hebrew ] = "‮גובה שורה‬";
     Text[ hindi ] = "पंक्ति ऊँचाई";
     Text[ slovak ] = "Výška riadku";
+    Text[ hungarian ] = "Sormagasság";
+    Text[ slovenian ] = "Višina vrstice";
 };
+
 
 
 
