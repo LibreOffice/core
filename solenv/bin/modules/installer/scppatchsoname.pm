@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scppatchsoname.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:29:20 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:16:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,11 +135,11 @@ sub replace_productname_in_file
 
 sub resolving_patchsoname_flag
 {
-    my ($filesarrayref, $variableshashref, $item) = @_;
+    my ($filesarrayref, $variableshashref, $item, $languagestringref) = @_;
 
     my $diritem = lc($item);
 
-    my $replacedirbase = installer::systemactions::create_directories("patchsoname_$diritem", "");
+    my $replacedirbase = installer::systemactions::create_directories("patchsoname_$diritem", $languagestringref);
 
     installer::logger::include_header_into_logfile("$item with flag PATCH_SO_NAME:");
 
@@ -171,28 +171,29 @@ sub resolving_patchsoname_flag
             my $destinationpath = $replacedir . $onefilename;
             my $movepath = $destinationpath . ".orig";
 
-            if (!(-f $destinationpath)) # do nothing if the file already exists
+            # if (!(-f $destinationpath))   # do nothing if the file already exists
+            # {
+
+            my $copysuccess = installer::systemactions::copy_one_file($sourcepath, $movepath);
+
+            if ( $copysuccess )
             {
-                my $copysuccess = installer::systemactions::copy_one_file($sourcepath, $movepath);
+                # Now the file can be patch (binary!)
+                my $found = replace_productname_in_file($movepath, $destinationpath, $variableshashref);
 
-                if ( $copysuccess )
+                if ($found == 0)
                 {
-                    # Now the file can be patch (binary!)
-
-                    my $found = replace_productname_in_file($movepath, $destinationpath, $variableshashref);
-
-                    if ($found == 0)
-                    {
-                        my $infoline = "Did not patch the file $destinationpath\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                    }
-                    else
-                    {
-                        my $infoline = "Successfully patched $destinationpath, Count: $found\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                    }
+                    my $infoline = "Did not patch the file $destinationpath\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+                else
+                {
+                    my $infoline = "Successfully patched $destinationpath, Count: $found\n";
+                    push( @installer::globals::logfileinfo, $infoline);
                 }
             }
+
+            # }
 
             # Writing the new sourcepath into the hashref, even if it was no copied
 
