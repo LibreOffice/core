@@ -85,6 +85,14 @@ public class FocusTraversalPolicy extends java.awt.FocusTraversalPolicy {
 
     /** Returns the default Component to focus */
     public java.awt.Component getDefaultComponent(java.awt.Container focusCycleRoot) {
+        // getDefaultComponent must not return null for Windows to make them focusable.
+        if (focusCycleRoot instanceof NativeFrame) {
+            java.awt.Component c = ((NativeFrame) focusCycleRoot).getInitialComponent();
+            if (c != null) {
+                return c;
+            }
+        }
+
         if (focusCycleRoot instanceof javax.accessibility.Accessible) {
             return (java.awt.Component) getSelectedAccessibleChild((javax.accessibility.Accessible) focusCycleRoot);
         }
