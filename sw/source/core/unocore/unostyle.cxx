@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-03 14:58:49 $
+ *  last change: $Author: mtg $ $Date: 2001-09-24 19:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1473,6 +1473,38 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
 {
     switch(pMap->nWID)
     {
+        case RES_PAPER_BIN:
+        {
+            SfxPrinter *pPrinter = pDoc->GetPrt();
+            OUString sTmp;
+            sal_uInt16 nBin = USHRT_MAX;
+            if ( !( rValue >>= sTmp ) )
+                throw IllegalArgumentException();
+            if ( sTmp.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "[From printer settings]" ) ) )
+                nBin = USHRT_MAX-1;
+            else if ( pPrinter )
+            {
+                for (sal_uInt16 i=0, nEnd = pPrinter->GetPaperBinCount(); i < nEnd; i++ )
+                {
+                    if (sTmp == OUString ( pPrinter->GetPaperBinName ( i ) ) )
+                    {
+                        nBin = i;
+                        break;
+                    }
+                }
+            }
+            if ( nBin == USHRT_MAX )
+                throw IllegalArgumentException();
+            else
+            {
+                SfxItemSet& rStyleSet = rBase.GetItemSet();
+                SfxItemSet aSet(*rStyleSet.GetPool(), pMap->nWID, pMap->nWID);
+                aSet.SetParent(&rStyleSet);
+                rPropSet.setPropertyValue(*pMap, makeAny ( static_cast < sal_Int8 > ( nBin == USHRT_MAX-1 ? -1 : nBin ) ), aSet);
+                rStyleSet.Put(aSet);
+            }
+        }
+        break;
         case  FN_UNO_NUM_RULES: //Sonderbehandlung fuer das SvxNumRuleItem:
         {
             if(rValue.getValueType() == ::getCppuType((Reference< container::XIndexReplace>*)0) )
@@ -1823,7 +1855,8 @@ Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
                         SfxItemPropertySet& rPropSet,
                         SwStyleBase_Impl& rBase,
                         SfxStyleSheetBase* pBase,
-                        SfxStyleFamily eFamily) throw(RuntimeException)
+                        SfxStyleFamily eFamily,
+                        SwDoc *pDoc) throw(RuntimeException)
 {
     Any aRet;
     if(FN_UNO_IS_PHYSICAL == pMap->nWID)
@@ -1846,6 +1879,24 @@ Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
             rBase.pNewBase = new SwDocStyleSheet( *(SwDocStyleSheet*)pBase );
         switch(pMap->nWID)
         {
+            case RES_PAPER_BIN:
+            {
+                SfxItemSet& rSet = rBase.GetItemSet();
+                aRet = rPropSet.getPropertyValue(*pMap, rSet);
+                sal_Int8 nBin;
+                aRet >>= nBin;
+                if ( nBin == -1 )
+                    aRet <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "[From printer settings]" ) );
+                else
+                {
+                    SfxPrinter *pPrinter = pDoc->GetPrt();
+                    OUString sTmp;
+                    if (pPrinter )
+                        sTmp = pPrinter->GetPaperBinName ( nBin );
+                    aRet <<= sTmp;
+                }
+            }
+            break;
             case  FN_UNO_NUM_RULES: //Sonderbehandlung fuer das SvxNumRuleItem:
             {
                 const SwNumRule* pRule = rBase.pNewBase->GetNumRule();
@@ -1991,7 +2042,7 @@ Sequence< Any > SwXStyle::getPropertyValues(
                 pBase = pBasePool->Find(sStyleName);
                 pBasePool->SetSearchMask(eFamily, nSaveMask );
             }
-            pRet[nProp] = lcl_GetStyleProperty(pMap, aPropSet, aBase, pBase, eFamily);
+            pRet[nProp] = lcl_GetStyleProperty(pMap, aPropSet, aBase, pBase, eFamily, GetDoc() );
         }
         else if(bIsDescriptor)
         {
@@ -2542,30 +2593,6 @@ void SwXPageStyle::setPropertyValues(
                         throw IllegalArgumentException();
                 }
                 break;
-                case RES_PAPER_BIN:
-                {
-                    SfxPrinter *pPrinter = GetDoc()->GetPrt();
-                    OUString sTmp;
-                    sal_uInt16 nBin = USHRT_MAX;
-                    if ( !( pValues[nProp] >>= sTmp ) )
-                        throw IllegalArgumentException();
-                    if ( pPrinter )
-                    {
-                        for (sal_uInt16 i=0, nEnd = pPrinter->GetPaperBinCount(); i < nEnd; i++ )
-                        {
-                            if (sTmp == OUString ( pPrinter->GetPaperBinName ( i ) ) )
-                            {
-                                nBin = i;
-                                break;
-                            }
-                        }
-                        if ( nBin == USHRT_MAX )
-                            throw IllegalArgumentException();
-                        else
-                            pPrinter->SetPaperBin ( nBin );
-                    }
-                }
-                break;
                 default:
                     lcl_SetStyleProperty(pMap, aPropSet, pValues[nProp], aBaseImpl,
                                         GetBasePool(), GetDoc(), GetFamily());
@@ -2775,17 +2802,8 @@ MakeObject:
                     rItem.QueryValue(pRet[nProp], pMap->nMemberId);
                 }
                 break;
-                case RES_PAPER_BIN:
-                {
-                    SfxPrinter *pPrinter = GetDoc()->GetPrt();
-                    OUString sTmp;
-                    if (pPrinter )
-                        sTmp = pPrinter->GetPaperBinName ( pPrinter->GetPaperBin() );
-                    pRet[nProp] <<= sTmp;
-                }
-                break;
                 default:
-                pRet[nProp] = lcl_GetStyleProperty(pMap, aPropSet, aBase, pBase, GetFamily());
+                pRet[nProp] = lcl_GetStyleProperty(pMap, aPropSet, aBase, pBase, GetFamily(), GetDoc() );
             }
         }
         else if(IsDescriptor())
