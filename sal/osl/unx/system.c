@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-20 15:49:46 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 static pthread_mutex_t getrtl_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* struct passwd differs on some platforms */
-#if defined NETBSD || defined MACOSX || defined FREEBSD
+#if defined NETBSD || defined MACOSX
 #include <pwd.h>
 #include <sys/types.h>
 
@@ -712,3 +712,50 @@ int sem_post(sem_t* sem)
 }
 #endif
 
+#if defined(FREEBSD)
+char *fcvt(double value, int ndigit, int *decpt, int *sign)
+{
+  static char ret[256];
+  char buf[256],zahl[256],format[256]="%";
+  char *v1,*v2;
+
+  if (value==0.0) value=1e-30;
+
+  if (value<0.0) *sign=1; else *sign=0;
+
+  if (value<1.0)
+  {
+    *decpt=(int)log10(value);
+    value*=pow(10.0,1-*decpt);
+    ndigit+=*decpt-1;
+    if (ndigit<0) ndigit=0;
+  }
+  else
+  {
+    *decpt=(int)log10(value)+1;
+  }
+
+  sprintf(zahl,"%d",ndigit);
+  strcat(format,zahl);
+  strcat(format,".");
+  strcat(format,zahl);
+  strcat(format,"f");
+
+  sprintf(buf,format,value);
+
+  if (ndigit!=0)
+  {
+    v1=strtok(buf,".");
+    v2=strtok(NULL,".");
+    strcpy(ret,v1);
+    strcat(ret,v2);
+  }
+  else
+  {
+    strcpy(ret,buf);
+  }
+
+  return(ret);
+}
+
+#endif
