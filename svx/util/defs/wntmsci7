@@ -23517,3 +23517,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?GetTextForwarder@AccessibleEditableTextPara@accessibility@@QBEAAVSvxAccessibleTextAdapter@@XZ
 ?GetViewForwarder@AccessibleEditableTextPara@accessibility@@QBEAAVSvxViewForwarder@@XZ
 ?HaveEditView@AccessibleEditableTextPara@accessibility@@QBEEXZ
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx1633126883@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx260832770@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
