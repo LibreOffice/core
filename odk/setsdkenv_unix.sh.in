@@ -77,12 +77,12 @@ then
 fi
 
 # Get the operating system.
-sd_platform=`uname -s`
+sd_platform=`./config.guess | cut -d"-" -f3,4`
 
 # Set the directory name.
 case $sd_platform in
-  SunOS)
-    sd_proctype=`uname -p`
+  solaris*)
+    sd_proctype=`./config.guess | cut -d"-" -f1`
     if [ "$sd_proctype" = "sparc" ]
     then
         directoryname=solsparc
@@ -96,7 +96,7 @@ case $sd_platform in
     export LD_LIBRARY_PATH
     ;;
 
-  Darwin)
+  darwin)
     SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
     export SDK_GXX_INCLUDE_PATH
 
@@ -107,7 +107,7 @@ case $sd_platform in
     export DYLD_LIBRARY_PATH
     ;;
 
-  Linux)
+  linux-gnu)
     SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
     export SDK_GXX_INCLUDE_PATH
 
@@ -117,7 +117,7 @@ case $sd_platform in
     LD_LIBRARY_PATH=$OO_SDK_HOME/$directoryname/lib:$OO_EXAMPLE_OUT/$exampleout/lib:$OFFICE_PROGRAM_PATH:.:$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH
     ;;
-  FreeBSD)
+  freebsd)
     SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
     export SDK_GXX_INCLUDE_PATH
 
