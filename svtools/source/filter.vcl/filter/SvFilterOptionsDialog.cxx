@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-11 13:08:55 $
+ *  last change: $Author: sj $ $Date: 2002-04-17 14:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,8 @@ sal_Int16 SvFilterOptionsDialog::execute()
             OUString aStr;
             aMediaDescriptor[ i ].Value >>= aStr;
             aInternalFilterName = aStr;
+            aInternalFilterName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "draw_" ) ), String(), 0 );
+            aInternalFilterName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "impress_" ) ), String(), 0 );
             break;
        }
     }
