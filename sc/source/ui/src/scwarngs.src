@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:58:14 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ Resource RID_WRNHDLSC
         Text [ french ] = "Seule la feuille active a �t� enregistr�e." ;
         Text [ dutch ] = "Alleen de huidige tabel is opgeslagen." ;
         Text [ swedish ] = "Det �r bara den aktuella tabellen som har sparats." ;
-        Text [ danish ] = "Kun det aktuelle ark blev gemt." ;
+        Text [ danish ] = "Kun det nuv�rende ark kunne gemmes." ;
         Text [ portuguese_brazilian ] = "Somente a planilha ativa p�de ser salva." ;
         Text [ portuguese ] = "S� foi guardada a tabela activa." ;
         Text[ chinese_simplified ] = "只存盘了当前的表格。";
@@ -98,6 +98,8 @@ Resource RID_WRNHDLSC
         Text[ hebrew ] = "Es wurde nur die aktuelle Tabelle gespeichert.";
         Text[ hindi ] = "केवल क्रियाशील शीट् को संचित कर सकते है ।";
         Text[ slovak ] = "Uložený bol len aktívny list.";
+        Text[ hungarian ] = "Csak az aktív munkalapot lehetett menteni.";
+        Text[ slovenian ] = "Shraniti je mogoče le aktivni list.";
     };
     String ERRCODE_SC_IMPORT_WRN_RNGOVRFLW & SH_MAX
     {
@@ -110,7 +112,7 @@ Resource RID_WRNHDLSC
         Text [ spanish ] = "�Se ha excedido el n�mero m�ximo de filas, las filas adicionales no se importaron!" ;
         Text [ french ] = "Le nombre de lignes maximum a �t� d�pass�. Les lignes en surplus n'ont pas �t� import�es !" ;
         Text [ swedish ] = "Det maximala antalet rader �verskreds. �vertaliga rader importerades inte!" ;
-        Text [ danish ] = "Det maksimale antal r�kker blev overskredet. De overtallige r�kker blev ikke importeret!" ;
+        Text [ danish ] = "Det maksimale antal r�kker blev overskredet. De ekstra r�kker blev ikke importeret!" ;
         Text [ portuguese ] = "O n�mero m�ximo de linhas foi ultrapassado. As linhas em excesso n�o foram importadas!" ;
         Text [ portuguese_brazilian ] = "O n�mero m�ximo de linhas foi ultrapassado. As linhas em excesso n�o foram importadas!" ;
         Text[ chinese_simplified ] = "已经超过行的最大数目，超过的行没有被输入！";
@@ -130,6 +132,8 @@ Resource RID_WRNHDLSC
         Text[ hebrew ] = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert";
         Text[ hindi ] = "पंक्तियों की संख्या अधिकतम संख्या से भी अधिक है । अधिकतर पंक्तियों को आयात नहीं कर सकते है!";
         Text[ slovak ] = "Počet riadkov presiahol maximum. Ďalšie riadky neboli vložené!";
+        Text[ hungarian ] = "A sorok száma nagyobb a megengedettnél. Az ezen felüli sorok nem kerültek importálásra!";
+        Text[ slovenian ] = "Dovoljeno število vrstic je bilo preseženo. Dodatne vrstice niso bile uvožene!";
     };
     /*
     String ERRCODE_SC_  & SH_MAX
@@ -139,6 +143,7 @@ Resource RID_WRNHDLSC
         };
 */
 };
+
 
 
 
