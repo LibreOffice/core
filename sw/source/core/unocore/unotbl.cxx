@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 09:22:39 $
+ *  last change: $Author: os $ $Date: 2001-02-28 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart;
 using namespace ::rtl;
@@ -502,9 +503,9 @@ void lcl_GetRowCol(const String& rCellName, sal_uInt16& rRow, sal_uInt16& rCol)
             sal_Unicode cChar = sCol.GetChar(nLen-1);
 
             if( cChar <= 'Z' )
-                rCol += nBase * (cChar - 'A' + nBase > 1 ? 1 : 0  );
+                rCol += nBase * ((cChar - 'A') + (nBase > 1 ? 1 : 0));
             else
-                rCol += nBase * (cChar - 'a' + 25);
+                rCol += nBase * ((cChar - 'a') + (nBase > 1 ? 1 : 0));
 
             sCol.Erase(nLen -1, 1);
             nLen = sCol.Len();
@@ -522,7 +523,7 @@ SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int16 nColumn, sal_Int16 nRow)
     SwXCell* pXCell = 0;
     String sCellName = lcl_GetCellName(nColumn, nRow);
     SwTable* pTable = SwTable::FindTable( pFmt );
-    SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
+    SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName.ToUpperAscii() );
     if(pBox)
     {
         pXCell = SwXCell::CreateXCell(pFmt, pBox, &sCellName);
@@ -805,8 +806,10 @@ sal_Bool    SwXCell::IsValid()
     else
     {
         SwTable* pTable = SwTable::FindTable( pTblFmt );
-        const SwTableBox* pFoundBox = sCellName.Len() ?
-                        pTable->GetTblBox( sCellName ) : SwXCell::FindBox(pTable, pBox);
+        String sTmpCell(sCellName);
+        sTmpCell.ToUpperAscii();
+        const SwTableBox* pFoundBox = sTmpCell.Len() ?
+                        pTable->GetTblBox( sTmpCell.ToUpperAscii() ) : SwXCell::FindBox(pTable, pBox);
         if(pFoundBox != pBox)
             pBox = 0;
     }
@@ -2230,7 +2233,7 @@ uno::Reference< table::XCell >  SwXTextTable::getCellByName(const OUString& Cell
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
         String sCellName(CellName);
-        SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
+        SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName.ToUpperAscii() );
         if(pBox)
         {
             xRet = SwXCell::CreateXCell(pFmt, pBox, &sCellName);
@@ -2280,7 +2283,7 @@ uno::Reference< XTextTableCursor >  SwXTextTable::createCursorByCellName(const O
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
         String sCellName(CellName);
-        SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
+        SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName.ToUpperAscii() );
         if(pBox)
         {
             xRet = new SwXTextTableCursor(pFmt, pBox);
@@ -2461,12 +2464,14 @@ uno::Reference< table::XCell >  SwXTextTable::getCellByPosition(sal_Int32 nColum
  *
  * --------------------------------------------------*/
 uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt, SwTable* pTable,
-                    const String& sTLName, const String& sBRName,
+                    const String& rTLName, const String& rBRName,
                     SwRangeDescriptor& rDesc)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< table::XCellRange >  aRef;
-    const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
+    String sTLName(rTLName);
+    String sBRName(rBRName);
+    const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
     if(pTLBox)
     {
         // hier muessen die Actions aufgehoben werden
@@ -2477,7 +2482,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
         SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
         pUnoCrsr->Move( fnMoveForward, fnGoNode );
         pUnoCrsr->SetRemainInSection( sal_False );
-        const SwTableBox* pBRBox = pTable->GetTblBox( sBRName );
+        const SwTableBox* pBRBox = pTable->GetTblBox( sBRName.ToUpperAscii() );
         if(pBRBox)
         {
             pUnoCrsr->SetMark();
@@ -3579,7 +3584,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
             aNewDesc.nRight  = nRight + aRgDesc.nLeft;
             String sTLName = lcl_GetCellName(aNewDesc.nLeft, aNewDesc.nTop);
             String sBRName = lcl_GetCellName(aNewDesc.nRight, aNewDesc.nBottom);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
+            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
             if(pTLBox)
             {
                 // hier muessen die Actions aufgehoben
@@ -3590,7 +3595,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
                 SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
-                const SwTableBox* pBRBox = pTable->GetTblBox( sBRName );
+                const SwTableBox* pBRBox = pTable->GetTblBox( sBRName.ToUpperAscii() );
                 if(pBRBox)
                 {
                     pUnoCrsr->SetMark();
@@ -3615,10 +3620,21 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
 /*-- 11.12.98 14:27:34---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByName(const OUString& aRange) throw( uno::RuntimeException )
+Reference< XCellRange >  SwXCellRange::getCellRangeByName(const OUString& rRange)
+        throw( RuntimeException )
 {
-    DBG_WARNING("not implemented")
-    return uno::Reference< table::XCellRange > ();
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    String sRange(rRange);
+    String sTLName(sRange.GetToken(0, ':'));
+    String sBRName(sRange.GetToken(1, ':'));
+    if(!sTLName.Len() || !sBRName.Len())
+        throw uno::RuntimeException();
+    SwRangeDescriptor aDesc;
+    aDesc.nTop = aDesc.nLeft =  aDesc.nBottom = aDesc.nRight = -1;
+    lcl_GetRowCol(sTLName, aDesc.nTop, aDesc.nLeft);
+    lcl_GetRowCol(sBRName, aDesc.nBottom, aDesc.nRight);
+    return getCellRangeByPosition(aDesc.nLeft - aRgDesc.nLeft, aDesc.nTop - aRgDesc.nTop,
+                aDesc.nRight - aRgDesc.nLeft, aDesc.nBottom - aRgDesc.nTop);
 }
 /*-- 11.12.98 14:27:35---------------------------------------------------
 
@@ -4263,7 +4279,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         if(!pTable->IsTblComplex())
         {
             String sTLName = lcl_GetCellName(0, (sal_Int16)nIndex);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
+            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
             sal_Bool bAppend = sal_False;
             if(!pTLBox)
             {
@@ -4303,7 +4319,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         if(!pTable->IsTblComplex())
         {
             String sTLName = lcl_GetCellName(0, (sal_Int16)nIndex);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
+            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
             if(pTLBox)
             {
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
@@ -4453,7 +4469,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         if(!pTable->IsTblComplex())
         {
             String sTLName = lcl_GetCellName((sal_Int16)nIndex, 0);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
+            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
             sal_Bool bAppend = sal_False;
             if(!pTLBox)
             {
@@ -4492,7 +4508,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         if(!pTable->IsTblComplex())
         {
             String sTLName = lcl_GetCellName((sal_Int16)nIndex, 0);
-            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
+            const SwTableBox* pTLBox = pTable->GetTblBox( sTLName.ToUpperAscii() );
             if(pTLBox)
             {
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
