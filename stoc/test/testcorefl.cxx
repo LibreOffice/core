@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcorefl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-11 16:43:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include <osl/diagnose.h>
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 #define TEST_ENSHURE(c, m)   OSL_ENSURE(c, m)
 #else
 #define TEST_ENSHURE(c, m)   OSL_VERIFY(c)
