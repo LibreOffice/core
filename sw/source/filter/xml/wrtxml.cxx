@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:21:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,15 @@
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
+#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
+#include <com/sun/star/document/XExporter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
+#include <com/sun/star/document/XFilter.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -128,9 +137,6 @@
 #endif
 #ifndef _WRTXML_HXX
 #include <wrtxml.hxx>
-#endif
-#ifndef _XMLEXP_HXX
-#include <xmlexp.hxx>
 #endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
@@ -235,6 +241,9 @@ sal_uInt32 SwXMLWriter::_Write()
         { "StreamName", sizeof("StreamName")-1, 0,
               &::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "AutoTextMode", sizeof("AutoTextMode")-1, 0,
+              &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -286,7 +295,7 @@ sal_uInt32 SwXMLWriter::_Write()
         OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM("ProgressRange"));
         xInfoSet->setPropertyValue(sProgressRange, aAny);
 
-        aAny <<= XML_PROGRESS_REF_NOT_SET;
+        aAny <<= static_cast < sal_Int32 >( -1 );
         OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM("ProgressMax"));
         xInfoSet->setPropertyValue(sProgressMax, aAny);
     }
@@ -346,6 +355,16 @@ sal_uInt32 SwXMLWriter::_Write()
     }
     else if ( !bBaseURLSet )
         xInfoSet->setPropertyValue( sPropName, makeAny( ::rtl::OUString( INetURLObject::GetBaseURL() ) ) );
+
+    if( bBlock )
+    {
+        OUString sAutoTextMode(
+                RTL_CONSTASCII_USTRINGPARAM("AutoTextMode"));
+        sal_Bool bTmp = sal_True;
+        Any aAny;
+        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        xInfoSet->setPropertyValue( sAutoTextMode, aAny );
+    }
 
 
     // filter arguments
@@ -671,20 +690,6 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
     if( !xExporter.is() )
         return sal_False;
     RTL_LOGFILE_CONTEXT_TRACE1( aFilterLog, "%s instantiated.", pServiceName );
-
-    // set block mode (if appropriate)
-    if( bBlock )
-    {
-        Reference<XUnoTunnel> xFilterTunnel( xExporter, UNO_QUERY );
-        if (xFilterTunnel.is())
-        {
-            SwXMLExport *pFilter = (SwXMLExport *)xFilterTunnel->getSomething(
-                                            SwXMLExport::getUnoTunnelId() );
-            if (NULL != pFilter)
-                pFilter->setBlockMode();
-        }
-    }
-
 
     // connect model and filter
     xExporter->setSourceDocument( xComponent );
