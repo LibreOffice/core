@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetExpression.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:48 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ service SetExpression
     [property]string VariableName;
     /** determines whether changes in language attributes at the position the text field
         is located also change the number format as appropriate for this language.
+
+    @since #107627#
      */
     [optional, property] boolean IsFixedLanguage;
 };
