@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-06 09:47:41 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 11:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1796,10 +1796,13 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
                     }
                 }
 
+                Reference< XComponent > xComponent,xDefinition;
                 if ( E_REPORT == _eType )
-                    aHelper->newReportWithPilot(nCommandType,sName);
+                    xComponent = aHelper->newReportWithPilot(xDefinition,nCommandType,sName);
                 else
-                    aHelper->newFormWithPilot(nCommandType,sName);
+                    xComponent = aHelper->newFormWithPilot(xDefinition,nCommandType,sName);
+
+                addDocumentListener(xComponent,xDefinition);
             }
         }
         break;
