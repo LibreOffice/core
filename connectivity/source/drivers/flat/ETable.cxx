@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:27 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,11 @@ void OFlatTable::fillColumns()
         if (pConnection->isHeaderLine())
         {
             aHeaderLine.GetTokenSpecial(aColumnName,nStartPosHeaderLine,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
+            if ( !aColumnName.Len() )
+            {
+                aColumnName = 'C';
+                aColumnName += String::CreateFromInt32(i+1);
+            }
         }
         else
         {
@@ -438,7 +443,6 @@ void OFlatTable::construct()
                                     nSize > 10000   ? 4096  : 1024);
 
         fillColumns();
-        AllocBuffer();
 
         refreshColumns();
     }
@@ -561,9 +565,9 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
             OFlatTable_BASE::getSomething(rId);
 }
 //------------------------------------------------------------------
-sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
+sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
 {
-    (*_rRow)[0] = m_nFilePos;
+    *(*_rRow)[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return TRUE;
@@ -579,7 +583,7 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
         m_aCurrentLine.GetTokenSpecial(aStr,nStartPos,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
 
         if (aStr.Len() == 0)
-            (*_rRow)[i+1].setNull();
+            (*_rRow)[i+1]->setNull();
         else
         {
             // Laengen je nach Datentyp:
@@ -613,18 +617,18 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                         switch(nType)
                         {
                             case DataType::DATE:
-                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
+                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
                                 break;
                             case DataType::TIMESTAMP:
-                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
+                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
                                 break;
                             default:
-                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
+                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
                         }
                     }
                     catch(Exception&)
                     {
-                        (*_rRow)[i+1].setNull();
+                        (*_rRow)[i+1]->setNull();
                     }
                 }   break;
                 case DataType::DOUBLE:
@@ -658,15 +662,15 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
-                        (*_rRow)[i+1] = String::CreateFromDouble(nVal);
+                        *(*_rRow)[i+1] = ORowSetValue(String::CreateFromDouble(nVal));
                     else
-                        (*_rRow)[i+1] = nVal;
+                        *(*_rRow)[i+1] = nVal;
                 } break;
 
                 default:
                 {
                     // Wert als String in Variable der Row uebernehmen
-                    (*_rRow)[i+1] = aStr;
+                    *(*_rRow)[i+1] = ORowSetValue(aStr);
                 }
                 break;
             }
@@ -674,45 +678,7 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
     }
     return sal_True;
 }
-// -------------------------------------------------------------------------
-BOOL OFlatTable::CreateImpl()
-{
-    return TRUE;
-}
 
-//------------------------------------------------------------------
-BOOL OFlatTable::DropImpl()
-{
-    return TRUE;
-}
-//------------------------------------------------------------------
-BOOL OFlatTable::InsertRow(OValueVector& rRow, BOOL bFlush,const Reference<XIndexAccess>& _xCols)
-{
-    return sal_False;
-}
-
-//------------------------------------------------------------------
-BOOL OFlatTable::UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
-{
-    return sal_False;
-}
-
-//------------------------------------------------------------------
-BOOL OFlatTable::DeleteRow(const OSQLColumns& _rCols)
-{
-    return sal_False;
-}
-
-//------------------------------------------------------------------
-void OFlatTable::AllocBuffer()
-{
-}
-
-//------------------------------------------------------------------
-BOOL OFlatTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
-{
-    return sal_False;
-}
 // -----------------------------------------------------------------------------
 
 
