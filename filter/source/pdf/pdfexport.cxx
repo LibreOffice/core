@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:02:10 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 09:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/solar.hrc>
-
+#include <svtools/graphictools.hxx>
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -148,15 +148,15 @@ OUString GetProperty( const Reference< XPropertySet > & rXPropSet, const sal_Cha
 PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& rxStatusIndicator ) :
     mxSrcDoc                ( rxSrcDoc ),
     mxStatusIndicator       ( rxStatusIndicator ),
-    mnFormsFormat           ( 0 ),
-    mnQuality               ( 90 ),
-    mnMaxImageResolution    ( 300 ),
-    mbReduceImageResolution ( sal_False ),
-    mbUseLosslessCompression( sal_False ),
     mbUseTaggedPDF          ( sal_False ),
     mbExportNotes           ( sal_True ),
     mbExportNotesPages      ( sal_False ),
     mbUseTransitionEffects  ( sal_True ),
+    mbUseLosslessCompression( sal_False ),
+    mbReduceImageResolution ( sal_False ),
+    mnMaxImageResolution    ( 300 ),
+    mnQuality               ( 90 ),
+    mnFormsFormat           ( 0 ),
     mnProgressValue         ( 0 )
 {
 }
@@ -176,11 +176,14 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
     try
     {
         Any* pFirstPage = NULL;
+        Any* pLastPage = NULL;
 
         for( sal_Int32 nData = 0, nDataCount = rRenderOptions.getLength(); nData < nDataCount; ++nData )
         {
             if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) )
                 pFirstPage = &rRenderOptions[ nData ].Value;
+            else if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) ) )
+                pLastPage = &rRenderOptions[ nData ].Value;
         }
 
         OutputDevice* pOut = rPDFWriter.GetReferenceDevice();
@@ -191,13 +194,11 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
             vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
             if ( nPageCount )
             {
-                sal_Int32 nSel;
-                   for( nSel = aMultiSelection.FirstSelected(); nSel != SFX_ENDOFSELECTION;
-                        nSel = aMultiSelection.NextSelected(), mnProgressValue++ )
+                sal_Int32 nSel = aMultiSelection.FirstSelected();
+                while ( nSel != sal_Int32(SFX_ENDOFSELECTION) )
                 {
                     Sequence< PropertyValue >   aRenderer( rRenderable->getRenderer( nSel - 1, rSelection, rRenderOptions ) );
                     awt::Size                   aPageSize;
-                    sal_Bool                    bProcess = sal_True;
 
                     for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
                     {
@@ -219,7 +220,15 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                     aMtf.SetPrefMapMode( aMapMode );
                     aMtf.Record( pOut );
 
-                    rRenderable->render( nSel - 1, rSelection, rRenderOptions );
+                    // --> FME 2004-10-08 #i35176#
+                    // LastPage property.
+                    const sal_Int32 nCurrentRenderer = nSel - 1;
+                    nSel = aMultiSelection.NextSelected();
+                    if ( pLastPage && sal_Int32(SFX_ENDOFSELECTION) == nSel )
+                        *pLastPage <<= sal_True;
+                    // <--
+
+                    rRenderable->render( nCurrentRenderer, rSelection, rRenderOptions );
 
                     aMtf.Stop();
                     aMtf.WindStart();
@@ -233,6 +242,8 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                         mxStatusIndicator->setValue( mnProgressValue );
                     if ( pFirstPage )
                         *pFirstPage <<= sal_False;
+
+                    ++mnProgressValue;
                 }
             }
             else
@@ -338,7 +349,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 pPDFExtOutDevData->SetIsLosslessCompression( mbUseLosslessCompression );
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
 
-                Sequence< PropertyValue > aRenderOptions( 3 );
+                Sequence< PropertyValue > aRenderOptions( 4 );
                 aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
                 aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
                 aRenderOptions[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) );
@@ -346,6 +357,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 Any& rExportNotesValue = aRenderOptions[ 1 ].Value;
                 aRenderOptions[ 2 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) );
                 aRenderOptions[ 2 ].Value <<= sal_True;
+                aRenderOptions[ 3 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) );
+                aRenderOptions[ 3 ].Value <<= sal_False;
 
                 if( aPageRange.getLength() || !aSelection.hasValue() )
                 {
@@ -501,7 +514,10 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 case( META_LINE_ACTION ):
                 {
                     const MetaLineAction* pA = (const MetaLineAction*) pAction;
-                    rWriter.DrawLine( pA->GetStartPoint(), pA->GetEndPoint() );
+                    if ( pA->GetLineInfo().IsDefault() )
+                        rWriter.DrawLine( pA->GetStartPoint(), pA->GetEndPoint() );
+                    else
+                        rWriter.DrawLine( pA->GetStartPoint(), pA->GetEndPoint(), pA->GetLineInfo() );
                 }
                 break;
 
@@ -557,7 +573,10 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                 case( META_POLYLINE_ACTION ):
                 {
                     const MetaPolyLineAction* pA = (const MetaPolyLineAction*) pAction;
-                    rWriter.DrawPolyLine( pA->GetPolygon() );
+                    if ( pA->GetLineInfo().IsDefault() )
+                        rWriter.DrawPolyLine( pA->GetPolygon() );
+                    else
+                        rWriter.DrawPolyLine( pA->GetPolygon(), pA->GetLineInfo() );
                 }
                 break;
 
@@ -724,6 +743,85 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                         if( pGradAction )
                             ImplWriteGradient( rWriter, pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), rDummyVDev );
                     }
+                    else
+                    {
+                        const BYTE* pData = pA->GetData();
+                        if ( pData )
+                        {
+                            SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
+                            sal_Bool        bSkipSequence = sal_False;
+                            ByteString      sSeqEnd;
+
+                            if( pA->GetComment().Equals( "XPATHSTROKE_SEQ_BEGIN" ) )
+                            {
+                                sSeqEnd = ByteString( "XPATHSTROKE_SEQ_END" );
+                                SvtGraphicStroke aStroke;
+                                aMemStm >> aStroke;
+
+                                Polygon aPath;
+                                aStroke.getPath( aPath );
+
+                                PolyPolygon aStartArrow;
+                                PolyPolygon aEndArrow;
+                                double fTransparency( aStroke.getTransparency() );
+                                double fStrokeWidth( aStroke.getStrokeWidth() );
+                                SvtGraphicStroke::JoinType eJT( aStroke.getJoinType() );
+                                SvtGraphicStroke::DashArray aDashArray;
+
+                                aStroke.getStartArrow( aStartArrow );
+                                aStroke.getEndArrow( aEndArrow );
+                                aStroke.getDashArray( aDashArray );
+
+                                bSkipSequence = sal_True;
+                                if ( aStartArrow.Count() || aEndArrow.Count() )
+                                    bSkipSequence = sal_False;
+                                if ( (sal_uInt32)eJT > 2 )
+                                    bSkipSequence = sal_False;
+                                if ( aDashArray.size() && ( fStrokeWidth != 0.0 ) )
+                                    bSkipSequence = sal_False;
+                                if ( bSkipSequence )
+                                {
+                                    PDFWriter::ExtLineInfo aInfo;
+                                    aInfo.m_fLineWidth      = fStrokeWidth;
+                                    aInfo.m_fTransparency   = fTransparency;
+                                    aInfo.m_fMiterLimit     = aStroke.getMiterLimit();
+                                    switch( aStroke.getCapType() )
+                                    {
+                                        default:
+                                        case SvtGraphicStroke::capButt:   aInfo.m_eCap = PDFWriter::capButt;break;
+                                        case SvtGraphicStroke::capRound:  aInfo.m_eCap = PDFWriter::capRound;break;
+                                        case SvtGraphicStroke::capSquare: aInfo.m_eCap = PDFWriter::capSquare;break;
+                                    }
+                                    switch( aStroke.getJoinType() )
+                                    {
+                                        default:
+                                        case SvtGraphicStroke::joinMiter: aInfo.m_eJoin = PDFWriter::joinMiter;break;
+                                        case SvtGraphicStroke::joinRound: aInfo.m_eJoin = PDFWriter::joinRound;break;
+                                        case SvtGraphicStroke::joinBevel: aInfo.m_eJoin = PDFWriter::joinBevel;break;
+                                        case SvtGraphicStroke::joinNone:
+                                            aInfo.m_eJoin = PDFWriter::joinMiter;
+                                            aInfo.m_fMiterLimit = 0.0;
+                                            break;
+                                    }
+                                    aInfo.m_aDashArray = aDashArray;
+                                    rWriter.DrawPolyLine( aPath, aInfo );
+                                }
+                            }
+                            if ( bSkipSequence )
+                            {
+                                while( ++i < nCount )
+                                {
+                                    pAction = rMtf.GetAction( i );
+                                    if ( pAction->GetType() == META_COMMENT_ACTION )
+                                    {
+                                        ByteString sComment( ((MetaCommentAction*)pAction)->GetComment() );
+                                        if ( sComment.Equals( sSeqEnd ) )
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
                 break;
 
@@ -858,8 +956,6 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                 case( META_MAPMODE_ACTION ):
                 {
-                    const MetaMapModeAction* pA = (const MetaMapModeAction*) pAction;
-
                     const_cast< MetaAction* >( pAction )->Execute( &rDummyVDev );
                     rWriter.SetMapMode( rDummyVDev.GetMapMode() );
                 }
@@ -1104,7 +1200,7 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                 aFilterData[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) );
                 aFilterData[ 1 ].Value <<= nColorMode;
 
-                sal_uInt16 nError = aGraphicFilter.ExportGraphic( aGraphic, String(), aStrm, nFormatName, sal_True, &aFilterData );
+                /*sal_uInt16 nError =*/ aGraphicFilter.ExportGraphic( aGraphic, String(), aStrm, nFormatName, sal_True, &aFilterData );
                 rWriter.DrawJPGBitmap( aStrm, aSizePixel, Rectangle( aPoint, aSize ), aMask );
             }
             else
