@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-05 09:51:34 $
+ *  last change: $Author: dvo $ $Date: 2002-06-19 13:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,8 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 
     // RES_PARATR_SNAPTOGRID
     M_E( "SnapToGrid", STYLE, SNAP_TO_LAYOUT_GRID, XML_TYPE_BOOL, 0 ),
+
+    M_E( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
 
     M_END()
 };
@@ -738,6 +740,8 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
 //  M_E( "IsProtected",         STYLE,  PROTECT,    XML_TYPE_BOOL, 0 ),
 
     M_E( "DontBalanceTextColumns", TEXT, DONT_BALANCE_TEXT_COLUMNS, XML_TYPE_BOOL, 0 ),
+
+    M_E( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
 
     // section footnote settings
     M_E( "FootnoteIsOwnNumbering",      TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_NUM_OWN ),
