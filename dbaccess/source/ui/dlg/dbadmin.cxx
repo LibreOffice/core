@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 08:05:56 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 07:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1170,7 +1170,7 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
     // remove all current detail pages
     while (m_aCurrentDetailPages.size())
     {
-        RemoveTabPage(m_aCurrentDetailPages.top());
+        RemoveTabPage((USHORT)m_aCurrentDetailPages.top());
         m_aCurrentDetailPages.pop();
     }
 
@@ -1289,7 +1289,7 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     // remove all current detail pages
     while (m_aCurrentDetailPages.size())
     {
-        RemoveTabPage(m_aCurrentDetailPages.top());
+        RemoveTabPage((USHORT)m_aCurrentDetailPages.top());
         m_aCurrentDetailPages.pop();
     }
     // remove the table/query tab pages
@@ -1385,17 +1385,17 @@ void ODbAdminDialog::implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, c
         {
             ::rtl::OUString sValue;
             _rValue >>= sValue;
-            _rSet.Put(SfxStringItem(_nId, sValue.getStr()));
+            _rSet.Put(SfxStringItem((USHORT)_nId, sValue.getStr()));
         }
         break;
         case TypeClass_BOOLEAN:
-            _rSet.Put(SfxBoolItem(_nId, ::cppu::any2bool(_rValue)));
+            _rSet.Put(SfxBoolItem((USHORT)_nId, ::cppu::any2bool(_rValue)));
             break;
         case TypeClass_LONG:
             {
                 sal_Int32 nValue = 0;
                 _rValue >>= nValue;
-                _rSet.Put(SfxInt32Item(_nId, nValue));
+                _rSet.Put(SfxInt32Item((USHORT)_nId, nValue));
             }
             break;
         case TypeClass_SEQUENCE:
@@ -1413,7 +1413,7 @@ void ODbAdminDialog::implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, c
                 {
                     Sequence< ::rtl::OUString > aStringList;
                     _rValue >>= aStringList;
-                    _rSet.Put(OStringListItem(_nId, aStringList));
+                    _rSet.Put(OStringListItem((USHORT)_nId, aStringList));
                 }
                 break;
                 default:
@@ -1422,7 +1422,7 @@ void ODbAdminDialog::implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, c
         }
         break;
         case TypeClass_VOID:
-            _rSet.ClearItem(_nId);
+            _rSet.ClearItem((USHORT)_nId);
             break;
         default:
             DBG_ERROR("ODbAdminDialog::implTranslateProperty: unsupported property value type!");
@@ -1530,7 +1530,7 @@ void ODbAdminDialog::translateProperties(const SfxItemSet& _rSource, const Refer
             ++aDirect
         )
     {
-        const SfxPoolItem* pCurrentItem = _rSource.GetItem(aDirect->first);
+        const SfxPoolItem* pCurrentItem = _rSource.GetItem((USHORT)aDirect->first);
         if (pCurrentItem)
         {
             sal_Int16 nAttributes = PropertyAttribute::READONLY;
@@ -1656,7 +1656,7 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
     ConstMapInt2StringIterator aTranslation;
     while (pRelevantItems && *pRelevantItems)
     {
-        const SfxPoolItem* pCurrent = _rSource.GetItem(*pRelevantItems);
+        const SfxPoolItem* pCurrent = _rSource.GetItem((USHORT)*pRelevantItems);
         aTranslation = m_aIndirectPropTranslator.find(*pRelevantItems);
         if (pCurrent && (m_aIndirectPropTranslator.end() != aTranslation))
             aRelevantSettings.insert(PropertyValue(aTranslation->second, 0, implTranslateProperty(pCurrent), PropertyState_DIRECT_VALUE));
@@ -2093,7 +2093,7 @@ ODatasourceSelector::ODatasourceSelector(Window* _pParent, const ResId& _rResId)
 ODatasourceSelector::~ODatasourceSelector()
 {
     for (sal_Int32 i=0; i<m_aDatasourceList.GetEntryCount(); ++i)
-        delete reinterpret_cast<EntryData*>(m_aDatasourceList.GetEntryData(i));
+        delete reinterpret_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)i));
 }
 
 //-------------------------------------------------------------------------
@@ -2113,7 +2113,7 @@ sal_Int32 ODatasourceSelector::getImageId(DatasourceState _eState)
 //-------------------------------------------------------------------------
 DatasourceState ODatasourceSelector::getEntryState(sal_Int32 _nPos) const
 {
-    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData(_nPos));
+    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)_nPos));
     if (!pData)
         return CLEAN;
     return pData->eState;
@@ -2122,7 +2122,7 @@ DatasourceState ODatasourceSelector::getEntryState(sal_Int32 _nPos) const
 //-------------------------------------------------------------------------
 void ODatasourceSelector::setEntryState(sal_Int32 _nPos, DatasourceState _eState)
 {
-    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData(_nPos));
+    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)_nPos));
     if (pData ? _eState == pData->eState : CLEAN == _eState)
         // nothing changed
         return;
@@ -2130,23 +2130,23 @@ void ODatasourceSelector::setEntryState(sal_Int32 _nPos, DatasourceState _eState
     // to restore the selection afterwards ...
     sal_Bool bWasSelected = m_aDatasourceList.GetSelectEntryPos() == _nPos;
 
-    String sName = m_aDatasourceList.GetEntry(_nPos);
-    m_aDatasourceList.RemoveEntry(_nPos);
-    _nPos = m_aDatasourceList.InsertEntry(sName, Image(ModuleRes(getImageId(_eState))), _nPos);
+    String sName = m_aDatasourceList.GetEntry((USHORT)_nPos);
+    m_aDatasourceList.RemoveEntry((USHORT)_nPos);
+    _nPos = m_aDatasourceList.InsertEntry(sName, Image(ModuleRes((USHORT)getImageId(_eState))), (USHORT)_nPos);
 
     if (!pData)
         pData = new EntryData;
     pData->eState = _eState;
-    m_aDatasourceList.SetEntryData(_nPos, static_cast<void*>(pData));
+    m_aDatasourceList.SetEntryData((USHORT)_nPos, static_cast<void*>(pData));
 
     if (bWasSelected)
-        m_aDatasourceList.SelectEntryPos(_nPos, sal_True);
+        m_aDatasourceList.SelectEntryPos((USHORT)_nPos, sal_True);
 }
 
 //-------------------------------------------------------------------------
 sal_Int32 ODatasourceSelector::getAccessKey(sal_Int32 _nPos) const
 {
-    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData(_nPos));
+    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)_nPos));
     if (!pData)
         return 0;   // entry is in default state
     return pData->nAccessKey;
@@ -2155,12 +2155,12 @@ sal_Int32 ODatasourceSelector::getAccessKey(sal_Int32 _nPos) const
 //-------------------------------------------------------------------------
 void ODatasourceSelector::setAccessKey(sal_Int32 _nPos, sal_Int32 _nAccessKey)
 {
-    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData(_nPos));
+    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)_nPos));
     DBG_ASSERT(pData, "ODatasourceSelector::setAccessKey: to be called for entry in DELETED state only!");
     if (!pData)
     {
         pData = new EntryData(DELETED);
-        m_aDatasourceList.SetEntryData(_nPos, static_cast<void*>(pData));
+        m_aDatasourceList.SetEntryData((USHORT)_nPos, static_cast<void*>(pData));
     }
     pData->nAccessKey = _nAccessKey;
 }
@@ -2169,12 +2169,12 @@ void ODatasourceSelector::setAccessKey(sal_Int32 _nPos, sal_Int32 _nAccessKey)
 void ODatasourceSelector::implDeleted(sal_Int32 _nPos)
 {
     // remove the entry
-    m_aDatasourceList.RemoveEntry(_nPos);
+    m_aDatasourceList.RemoveEntry((USHORT)_nPos);
 
     // select the one below (or above, if it was the last one)
     if (_nPos >= m_aDatasourceList.GetEntryCount())
         _nPos = m_aDatasourceList.GetEntryCount() - 1;
-    m_aDatasourceList.SelectEntryPos(_nPos);
+    m_aDatasourceList.SelectEntryPos((USHORT)_nPos);
     // call the select handler to propagate the new selection
     m_aDatasourceList.GetSelectHdl().Call(&m_aDatasourceList);
 }
@@ -2209,7 +2209,7 @@ void ODatasourceSelector::restoreDeleted(sal_Int32 _nAccessKey, DatasourceState 
         DBG_ERROR("ODatasourceSelector::restoreDeleted: invalid access key!");
         return;
     }
-    DBG_ASSERT(-1 == getValidEntryPos(m_aDatasourceList.GetEntry(nPos)),
+    DBG_ASSERT(-1 == getValidEntryPos(m_aDatasourceList.GetEntry((USHORT)nPos)),
         "ODatasourceSelector::restoreDeleted: already have a not-deleted entry with that name!");
 
     setEntryState(nPos, _eState);
@@ -2254,7 +2254,7 @@ sal_Int32 ODatasourceSelector::getValidEntryPos(const String& _rName)
     {
         // unfortunally we no such thing as "GetEntryPos(<name>, <startindex>) ... -> search manually
         while ((++nPos<m_aDatasourceList.GetEntryCount()))
-            if (m_aDatasourceList.GetEntry(nPos).Equals(_rName))
+            if (m_aDatasourceList.GetEntry((USHORT)nPos).Equals(_rName))
                 // have a candidate
                 break;
         if (nPos>=m_aDatasourceList.GetEntryCount())
@@ -2272,19 +2272,19 @@ void ODatasourceSelector::renamed(const String& _rOldName, const String& _rNewNa
 
     // save the info about the entry
     DatasourceState eState = getEntryState(nPos);
-    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData(nPos));
+    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)nPos));
 
-    m_aDatasourceList.RemoveEntry(nPos);
-    nPos = m_aDatasourceList.InsertEntry(_rNewName, Image(ModuleRes(getImageId(eState))), nPos);
+    m_aDatasourceList.RemoveEntry((USHORT)nPos);
+    nPos = m_aDatasourceList.InsertEntry(_rNewName, Image(ModuleRes((USHORT)getImageId(eState))), (USHORT)nPos);
 
     // restore the info about the entry
-    m_aDatasourceList.SetEntryData(nPos, static_cast<void*>(pData));
+    m_aDatasourceList.SetEntryData((USHORT)nPos, static_cast<void*>(pData));
 }
 
 //-------------------------------------------------------------------------
 sal_Int32 ODatasourceSelector::insert(const String& _rName)
 {
-    sal_Int16 nPos = m_aDatasourceList.InsertEntry(_rName, Image(ModuleRes(getImageId(CLEAN))));
+    sal_Int16 nPos = m_aDatasourceList.InsertEntry(_rName, Image(ModuleRes((USHORT)getImageId(CLEAN))));
     m_aDatasourceList.SetEntryData(nPos, static_cast<void*>(NULL));
     return nPos;
 }
@@ -2302,7 +2302,7 @@ void ODatasourceSelector::flushed(const String& _rName)
 void ODatasourceSelector::insertNew(const String& _rName)
 {
     // insert the new entry with the appropriate image
-    sal_Int16 nPos = m_aDatasourceList.InsertEntry(_rName, Image(ModuleRes(getImageId(NEW))));
+    sal_Int16 nPos = m_aDatasourceList.InsertEntry(_rName, Image(ModuleRes((USHORT)getImageId(NEW))));
     m_aDatasourceList.SetEntryData(nPos, static_cast<void*>(new EntryData(NEW)));
 }
 
@@ -2312,7 +2312,7 @@ void ODatasourceSelector::select(const String& _rName)
     sal_Int32 nPos = getValidEntryPos(_rName);
     DBG_ASSERT(-1 != nPos, "ODatasourceSelector::select: invalid data source name (maybe deleted or not existent)!");
 
-    m_aDatasourceList.SelectEntryPos(nPos);
+    m_aDatasourceList.SelectEntryPos((USHORT)nPos);
 }
 
 //-------------------------------------------------------------------------
@@ -2321,7 +2321,7 @@ void ODatasourceSelector::select(sal_Int32 _nAccessKey)
     sal_Int32 nPos = getDeletedEntryPos(_nAccessKey);
     DBG_ASSERT(-1 != nPos, "ODatasourceSelector::select: invalid access key (have no such entry)!");
 
-    m_aDatasourceList.SelectEntryPos(nPos);
+    m_aDatasourceList.SelectEntryPos((USHORT)nPos);
 }
 
 //-------------------------------------------------------------------------
@@ -2433,6 +2433,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.40  2001/03/27 08:05:56  oj
+ *  impl new page for adabas
+ *
  *  Revision 1.39  2001/03/15 08:23:00  fs
  *  cppuhelper/extract -> comphelper/extract
  *
