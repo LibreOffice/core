@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2002-08-07 20:16:44 $
+ *  last change: $Author: kz $ $Date: 2002-08-16 20:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2505,12 +2505,12 @@ String STR_QRY_LIKE_LEFT_NO_COLUMN
     Text[ finnish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ italian ] = "L'enunciato 'COME' dev'essere preceduto da un nome di colonna.";
     Text[ danish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
-    Text[ swedish ] = "Det m�ste st� ett kolumnnamn framf�r 'SOM'.";
+    Text[ swedish ] = "Det f�r bara st� ett kolumnnamn framf�r 'SOM'.";
     Text[ polish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ japanese ] = "'LIKE' の前に列名を記述する必要があります。";
-    Text[ korean ] = "'같음' 앞에 열이름을 사용해야만 합니다.";
-    Text[ chinese_simplified ] = "在 'LIKE' 之前必须写入一个列名称。";
-    Text[ chinese_traditional ] = "在 'LIKE' 之前必須寫入一個欄位名稱。";
+    Text[ korean ] = "'LIKE' 문장의 왼쪽에는 열 이름을 하나 밖에 사용할 수 없습니다.";
+    Text[ chinese_simplified ] = "在 LIKE 之前仅允许一个列名称。";
+    Text[ chinese_traditional ] = "在 LIKE 之前僅允許一個欄位名稱。";
     Text[ turkish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ arabic ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
 };
@@ -2529,12 +2529,12 @@ String STR_QRY_CHECK_CASESENSITIVE
     Text[ finnish ] = "Please check if you are using the correct case.";
     Text[ italian ] = "Impossibile trovare la colonna. Vi preghiamo di osservare che il database � sensibile alle maiuscole e minuscole.";
     Text[ danish ] = "Please check if you are using the correct case.";
-    Text[ swedish ] = "Det gick inte att hitta kolumnen. T�nk p� att databasen skiljer mellan stor och liten bokstav.";
+    Text[ swedish ] = "Kontrollera anv�ndningen av stor och liten bokstav.";
     Text[ polish ] = "Please check if you are using the correct case.";
     Text[ japanese ] = "列は見つかりませんでした。データベースでは大文字と小文字が区別されることに注意してください。";
-    Text[ korean ] = "열을 찾지 못했습니다. 데이터베이스가 대소문자를 구분한다는 점을 유의해주십시오.";
-    Text[ chinese_simplified ] = "无法找到列。请注意本数据库区分字母的大小写。";
-    Text[ chinese_traditional ] = "無法找到欄位。請注意本資料庫區分字母的大小寫。";
+    Text[ korean ] = "단락을 찾지 못했습니다. 데이터베이스가 대소문자를 구분한다는 점을 유의해주십시오.";
+    Text[ chinese_simplified ] = "请检查字母的大小写。";
+    Text[ chinese_traditional ] = "請檢查字母的大小寫。";
     Text[ turkish ] = "Please check if you are using the correct case.";
     Text[ arabic ] = "Please check if you are using the correct case.";
 };
