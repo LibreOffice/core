@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 13:15:46 $
+ *  last change: $Author: mba $ $Date: 2002-09-30 17:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,9 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
     // Window erzeugen
     pWindow = new SfxPartDockWnd_Impl( pBindings, this, pParent, WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK );
     eChildAlignment = SFX_ALIGN_TOP;
+    if ( pInfo )
+        pInfo->nFlags |= SFX_CHILDWIN_FORCEDOCK;
+
     ((SfxDockingWindow*)pWindow)->SetFloatingSize( Size( 240, 240 ) );
     pWindow->SetSizePixel( Size( 240, 240 ) );
 
