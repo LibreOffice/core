@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:37:11 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
+#include <com/sun/star/task/XJobExecutor.hpp>
+#endif
 
 #ifndef  _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
@@ -120,11 +123,13 @@
 #define XEVENTBROADCASTER           ::com::sun::star::document::XEventBroadcaster
 #define XDOCEVENTLISTENER           ::com::sun::star::document::XEventListener
 #define XEVENTSSUPPLIER             ::com::sun::star::document::XEventsSupplier
+#define XJOBEXECUTOR                ::com::sun::star::task::XJobExecutor
 #define EVENTOBJECT                 ::com::sun::star::lang::EventObject
 #define ILLEGALARGUMENTEXCEPTION    ::com::sun::star::lang::IllegalArgumentException
 #define WRAPPEDTARGETEXCEPTION      ::com::sun::star::lang::WrappedTargetException
 #define ANY                         ::com::sun::star::uno::Any
 #define REFERENCE                   ::com::sun::star::uno::Reference
+#define WEAKREFERENCE               ::com::sun::star::uno::WeakReference
 #define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
 #define SEQUENCE                    ::com::sun::star::uno::Sequence
 #define UNOTYPE                     ::com::sun::star::uno::Type
@@ -188,12 +193,13 @@ class SfxGlobalEvents_Impl : public ::cppu::WeakImplHelper3< ::com::sun::star::d
 {
     SfxEvents_Impl*             pImp;
     REFERENCE < XNAMEREPLACE >  m_xEvents;
+    WEAKREFERENCE < XJOBEXECUTOR > m_xJobsBinding;
     OINTERFACECONTAINERHELPER   m_aInterfaceContainer;
     ::osl::Mutex                m_aMutex;
 
                                 void Notify( SfxBroadcaster& aBC, const SfxHint& aHint );
 public:
-                                SfxGlobalEvents_Impl( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& );
+                                SfxGlobalEvents_Impl( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xSmgr );
                                 ~SfxGlobalEvents_Impl();
     SFX_DECL_XSERVICEINFO
     virtual REFERENCE< XNAMEREPLACE > SAL_CALL getEvents() throw( RUNTIMEEXCEPTION );
