@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 08:24:08 $
+ *  last change: $Author: os $ $Date: 2000-12-18 13:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ void SwDLL::Init()
     (*ppShlPtr)->pSwWebDocShellFactory      = pWDocFact   ;
     (*ppShlPtr)->pSwGlobalDocShellFactory   = pGlobDocFact;
 
-    SwDocShell::Factory().RegisterPluginMenuBar( SW_RES(CFG_SW_MENU_PORTAL));
+    SwDocShell::Factory().RegisterPluginMenuBar( SW_RES(CFG_SW_MENU));
     SwDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SW_MENU));
     SwDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
     SwWebDocShell::Factory().RegisterPluginMenuBar( SW_RES(CFG_SWWEB_MENU_PORTAL));
