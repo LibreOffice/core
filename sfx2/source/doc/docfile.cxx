@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:22:41 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1904,7 +1904,6 @@ void SfxMedium::SetDataAvailableLink( const Link& rLink )
 //----------------------------------------------------------------
 void SfxMedium::StartDownload()
 {
-    GetMedium_Impl();
     GetInStream();
 }
 
