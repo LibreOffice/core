@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 09:53:43 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 16:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,13 @@ BOOL ScModelObj::IsEmbedded() const
         return pDocShell->IsOle();
     }
     return FALSE;
+}
+
+double ScModelObj::GetOutputFactor() const
+{
+    if (pDocShell)
+        return pDocShell->GetOutputFactor();
+    return 1.0;
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
