@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:19:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,18 +530,26 @@ class stlcomp_removeIfMatchFlags
 
         bool operator() (const ::rtl::OUString& sFilter) const
         {
-            const CacheItem aFilter = m_pCache->getItem(FilterCache::E_FILTER, sFilter);
-                    sal_Int32 nFlags  = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, ((sal_Int32)0));
+            try
+            {
+                const CacheItem aFilter = m_pCache->getItem(FilterCache::E_FILTER, sFilter);
+                        sal_Int32 nFlags  = aFilter.getUnpackedValueOrDefault(PROPNAME_FLAGS, ((sal_Int32)0));
 
-            bool bMatch = false;
-            if (m_bIFlags)
-                // IFlags are interpeted as ALL_FLAGS_MUST_MATCH !
-                bMatch = ((nFlags & m_nFlags) == m_nFlags);
-            else
-                // EFlags are interpreted as ATE_LEAST_ONE_FLAG_MUST_MATCH !
-                bMatch = !(nFlags & m_nFlags);
-            // We are asked for bRemove ! And bMatch = !bRemove => so bRemove = !bMatch .-)
-            return !bMatch;
+                bool bMatch = false;
+                if (m_bIFlags)
+                    // IFlags are interpeted as ALL_FLAGS_MUST_MATCH !
+                    bMatch = ((nFlags & m_nFlags) == m_nFlags);
+                else
+                    // EFlags are interpreted as ATE_LEAST_ONE_FLAG_MUST_MATCH !
+                    bMatch = !(nFlags & m_nFlags);
+                // We are asked for bRemove ! And bMatch = !bRemove => so bRemove = !bMatch .-)
+                return !bMatch;
+            }
+            catch(css::container::NoSuchElementException)
+            {
+                return true;
+            }
+            return true;
         }
 };
 
