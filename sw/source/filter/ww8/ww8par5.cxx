@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-12 12:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2397,9 +2397,8 @@ void lcl_toxMatchACSwitch(  SwWW8ImplReader& rReader,
 }
 
 
-void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader,
-                         SwTOXBase& rBase,
-                         _ReadFieldParams& rParam)
+void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
+    _ReadFieldParams& rParam)
 {
     xub_StrLen n = rParam.GoToTokenParam();
     if( STRING_NOTFOUND != n )
@@ -2409,22 +2408,34 @@ void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader,
         {
             xub_StrLen nIndex = 0;
 
+            //#92940# Delimiters between styles and style levels appears to
+            //allow both ; and ,
+
             String sTemplate( sParams.GetToken(0, ';', nIndex) );
             if( STRING_NOTFOUND == nIndex )
             {
-                const SwFmt* pStyle
-                        = rReader.GetStyleWithOrgWWName( sTemplate );
+                nIndex=0;
+                sTemplate = sParams.GetToken(0, ',', nIndex);
+            }
+            if( STRING_NOTFOUND == nIndex )
+            {
+                const SwFmt* pStyle = rReader.GetStyleWithOrgWWName(sTemplate);
                 if( pStyle )
-                {
                     sTemplate = pStyle->GetName();
-                }
                 // Store Style for Level 0 into TOXBase
                 rBase.SetStyleNames( sTemplate, 0 );
             }
             else while( STRING_NOTFOUND != nIndex )
             {
+                xub_StrLen nOldIndex=nIndex;
                 USHORT nLevel = static_cast<USHORT>(
                     sParams.GetToken(0, ';', nIndex).ToInt32());
+                if( STRING_NOTFOUND == nIndex )
+                {
+                    nIndex = nOldIndex;
+                    nLevel = static_cast<USHORT>(
+                        sParams.GetToken(0, ',', nIndex).ToInt32());
+                }
 
                 if( (0 < nLevel) && (MAXLEVEL >= nLevel) )
                 {
@@ -2432,10 +2443,10 @@ void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader,
                     // Store Style and Level into TOXBase
                     const SwFmt* pStyle
                             = rReader.GetStyleWithOrgWWName( sTemplate );
+
                     if( pStyle )
-                    {
                         sTemplate = pStyle->GetName();
-                    }
+
                     String sStyles( rBase.GetStyleNames( nLevel ) );
                     if( sStyles.Len() )
                         sStyles += TOX_STYLE_DELIMITER;
@@ -2443,12 +2454,17 @@ void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader,
                     rBase.SetStyleNames( sStyles, nLevel );
                 }
                 // read next style name...
+                nOldIndex = nIndex;
                 sTemplate = sParams.GetToken(0, ';', nIndex);
+                if( STRING_NOTFOUND == nIndex )
+                {
+                    nIndex=nOldIndex;
+                    sTemplate = sParams.GetToken(0, ',', nIndex);
+                }
             }
         }
     }
 }
-
 
 eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 {
