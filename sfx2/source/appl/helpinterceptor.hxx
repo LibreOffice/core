@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2001-11-01 12:17:06 $
+ *  last change: $Author: gt $ $Date: 2001-11-01 16:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ friend class HelpDispatch_Impl;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                                 getController() const throw( ::com::sun::star::uno::RuntimeException );
     void                        addURL( const String& rURL );
+    void                        LeavePage();            // e.g. stores the ViewData of actual page
 public:
     HelpInterceptor_Impl();
     ~HelpInterceptor_Impl();

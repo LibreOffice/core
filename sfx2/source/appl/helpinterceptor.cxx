@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2001-11-01 12:17:06 $
+ *  last change: $Author: gt $ $Date: 2001-11-01 16:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,20 +136,6 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
             delete m_pHistory->Remove(i);
     }
 
-    // get view position of _current_ URL
-    HelpHistoryEntry_Impl* pCurEntry = m_pHistory->GetObject( m_nCurPos );
-
-    if( pCurEntry )
-    {
-        try
-        {
-            Reference< XController > xContr( getController() );
-            if( xContr.is() )
-                pCurEntry->aViewData = xContr->getViewData();
-        }
-        catch( const Exception& ) {}
-    }
-
     m_aCurrentURL = rURL;
 
     m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL ), LIST_APPEND );
@@ -166,6 +152,28 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
     }
 
     m_pWindow->UpdateToolbox();
+}
+
+// -----------------------------------------------------------------------
+
+void HelpInterceptor_Impl::LeavePage()
+{
+    if( m_pHistory )
+    {
+        // get view position of _current_ URL
+        HelpHistoryEntry_Impl* pCurEntry = m_pHistory->GetObject( m_nCurPos );
+
+        if( pCurEntry )
+        {
+            try
+            {
+                Reference< XController > xContr( getController() );
+                if( xContr.is() )
+                    pCurEntry->aViewData = xContr->getViewData();
+            }
+            catch( const Exception& ) {}
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -321,6 +329,8 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
     {
         if ( m_pHistory )
         {
+            LeavePage();        // save actual position
+
             ULONG nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
                                                     : ( !bBack && m_nCurPos < m_pHistory->Count() - 1 )
                                                     ? ++m_nCurPos
