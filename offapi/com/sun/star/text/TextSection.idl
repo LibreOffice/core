@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextSection.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:57 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,14 @@ service TextSection
     /** allows columns to be set into the text section
     */
     [property] com::sun::star::text::XTextColumns TextColumns;
-
+    /** determins the left margin of the section
+     */
+    [optional, property] long SectionLeftMargin;
+    //-------------------------------------------------------------------------
+    /** determins the left margin of the section
+     */
+    [optional, property] long SectionRightMargin;
+    //-------------------------------------------------------------------------
 };
 
 //=============================================================================
