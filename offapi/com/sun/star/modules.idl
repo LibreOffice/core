@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modules.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:30 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@ module com { module sun { module star {
 
 /// Java AWT-like user interface toolkit interface specifications for UNO.
 module awt {};
+
+/// UNO Accessibility API
+module accessibility {};
 
 /// Charting diagram interfaces.
 module chart {};
