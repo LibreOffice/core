@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-21 17:36:12 $
+ *  last change: $Author: ka $ $Date: 2000-11-24 18:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@
 #pragma hdrstop
 
 #include <svx/pfiledlg.hxx>
+#include <svx/grafctrl.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -147,7 +148,6 @@
 #include "sdpage.hxx"
 #include "drviewsh.hxx"
 #include "docshell.hxx"
-#include "tbxitem.hxx"
 #include "zoomlist.hxx"
 #include "preview.hxx"
 #include "fuslshow.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-20 16:45:22 $
+ *  last change: $Author: ka $ $Date: 2000-11-24 18:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ Sequence< OUString > SdOptionsGeneric::GetPropertyNames() const
     Sequence< OUString > aNames( nCount );
     OUString*            pNames = aNames.getArray();
 
-    for( long i = 0; i < nCount; i++ )
+    for( ULONG i = 0; i < nCount; i++ )
         pNames[ i ] = OUString::createFromAscii( ppPropNames[ i ] );
 
     return aNames;
@@ -289,8 +289,8 @@ BOOL SdOptionsLayout::ReadData( const Any* pValues )
     if( pValues[2].hasValue() ) SetMoveOutline( *(sal_Bool*) pValues[ 2 ].getValue() );
     if( pValues[3].hasValue() ) SetDragStripes( *(sal_Bool*) pValues[ 3 ].getValue() );
     if( pValues[4].hasValue() ) SetHelplines( *(sal_Bool*) pValues[ 4 ].getValue() );
-    if( pValues[5].hasValue() ) SetMetric( *(sal_Int32*) pValues[ 5 ].getValue() );
-    if( pValues[6].hasValue() ) SetDefTab( *(sal_Int32*) pValues[ 6 ].getValue() );
+    if( pValues[5].hasValue() ) SetMetric( (UINT16) *(sal_Int32*) pValues[ 5 ].getValue() );
+    if( pValues[6].hasValue() ) SetDefTab( (UINT16) *(sal_Int32*) pValues[ 6 ].getValue() );
 
     return TRUE;
 }
@@ -832,9 +832,9 @@ BOOL SdOptionsSnap::ReadData( const Any* pValues )
     if( pValues[4].hasValue() ) SetOrtho( *(sal_Bool*) pValues[ 4 ].getValue() );
     if( pValues[5].hasValue() ) SetBigOrtho( *(sal_Bool*) pValues[ 5 ].getValue() );
     if( pValues[6].hasValue() ) SetRotate( *(sal_Bool*) pValues[ 6 ].getValue() );
-    if( pValues[7].hasValue() ) SetSnapArea( *(sal_Int32*) pValues[ 7 ].getValue() );
-    if( pValues[8].hasValue() ) SetAngle( *(sal_Int32*) pValues[ 8 ].getValue() );
-    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( *(sal_Int32*) pValues[ 9 ].getValue() );
+    if( pValues[7].hasValue() ) SetSnapArea( (INT16) *(sal_Int32*) pValues[ 7 ].getValue() );
+    if( pValues[8].hasValue() ) SetAngle( (INT16) *(sal_Int32*) pValues[ 8 ].getValue() );
+    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( (INT16) *(sal_Int32*) pValues[ 9 ].getValue() );
 
     return TRUE;
 }
@@ -1127,12 +1127,12 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 {
     static const char* aPropNames[] =
     {
-        "Resolution/XAxis",
+        "Resolution/XAxis/Metric",
         "Subdivision/XAxis",
-        "Resolution/YAxis",
+        "Resolution/YAxis/Metric",
         "Subdivision/YAxis",
-        "SnapGrid/XAxis",
-        "SnapGrid/YAxis",
+        "SnapGrid/XAxis/Metric",
+        "SnapGrid/YAxis/Metric",
         "Option/SnapToGrid",
         "Option/Synchronize",
         "Option/VisibleGrid",
@@ -1354,7 +1354,7 @@ BOOL SdOptionsPrint::ReadData( const Any* pValues )
     if( pValues[8].hasValue() ) SetFrontPage( *(sal_Bool*) pValues[ 8 ].getValue() );
     if( pValues[9].hasValue() ) SetBackPage( *(sal_Bool*) pValues[ 9 ].getValue() );
     if( pValues[10].hasValue() ) SetPaperbin( *(sal_Bool*) pValues[ 10 ].getValue() );
-    if( pValues[11].hasValue() ) SetOutputQuality( *(sal_Int32*) pValues[ 11 ].getValue() );
+    if( pValues[11].hasValue() ) SetOutputQuality( (UINT16) *(sal_Int32*) pValues[ 11 ].getValue() );
 
     // just for impress
     if( GetConfigId() == SDCFG_IMPRESS )

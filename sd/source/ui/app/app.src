@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-23 14:34:23 $
+ *  last change: $Author: ka $ $Date: 2000-11-24 18:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,22 +393,10 @@
             SID_INSERT_VIDEO;\
             SID_OBJECT_TRANSPARENCE;\
             SID_OBJECT_GRADIENT;\
-            SID_GRFFILTER;\
-            SID_GRFFILTER_INVERT;\
-            SID_GRFFILTER_SMOOTH;\
-            SID_GRFFILTER_SHARPEN;\
-            SID_GRFFILTER_REMOVENOISE;\
-            SID_GRFFILTER_SOBEL;\
-            SID_GRFFILTER_MOSAIC;\
-            SID_GRFFILTER_EMBOSS;\
-            SID_GRFFILTER_POSTER;\
-            SID_GRFFILTER_POPART;\
-            SID_GRFFILTER_SEPIA;\
-            SID_GRFFILTER_SOLARIZE;\
             SID_ATTR_GRAF_CROP;\
     };\
     IdCount = {\
-        296;\
+        284;\
     };
 
 ImageList RID_DEFAULTIMAGELIST_SC

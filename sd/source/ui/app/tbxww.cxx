@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-18 11:40:48 $
+ *  last change: $Author: ka $ $Date: 2000-11-24 18:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #pragma hdrstop
 
 #include <svx/svxids.hrc>
+#include <svx/grafctrl.hxx>
 
 #include "sddll.hxx"
 #include "grdocsh.hxx"
@@ -69,7 +70,6 @@
 #include "app.hxx"
 #include "app.hrc"
 #include "res_bmp.hrc"
-#include "tbxitem.hxx"
 #include "sdresid.hxx"
 #include "tbx_ww.hxx"
 #include "tbx_ww.hrc"

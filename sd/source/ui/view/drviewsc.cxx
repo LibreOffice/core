@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
+ *  last change: $Author: ka $ $Date: 2000-11-24 18:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,13 @@
 #ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
 #endif
-
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
 #endif
-
 #ifndef _SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
 #endif
+#include <svx/grafctrl.hxx>
 
 #ifndef _SD_STLSHEET_HXX
 #include "stlsheet.hxx"
@@ -117,7 +116,6 @@
 #include "sdresid.hxx"
 #include "drviewsh.hxx"
 #include "drawdoc.hxx"
-#include "tbxitem.hxx"
 #include "docshell.hxx"
 #include "drawview.hxx"
 #include "brkdlg.hxx"
