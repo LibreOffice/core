@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2001-11-27 12:29:43 $
+#   last change: $Author: mi $ $Date: 2002-11-04 09:19:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ IDLFILES=\
     ModelDependent.idl\
     OleApplicationRegistration.idl\
     OleBridgeSupplier.idl\
+    OleBridgeSupplierVar1.idl\
     OleObjectFactory.idl\
     XBridgeSupplier.idl\
     XBridgeSupplier2.idl\
