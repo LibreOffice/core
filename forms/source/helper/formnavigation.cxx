@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formnavigation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:16:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,12 @@
 #ifndef FORMS_FORM_NAVIGATION_HXX
 #include "formnavigation.hxx"
 #endif
+#ifndef FORMS_SOURCE_INC_URLTRANSFORMER_HXX
+#include "urltransformer.hxx"
+#endif
+#ifndef FORMS_SOURCE_INC_CONTROLFEATUREINTERCEPTION_HXX
+#include "controlfeatureinterception.hxx"
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -93,8 +99,7 @@ namespace frm
         ,m_nConnectedFeatures( 0 )
     {
         DBG_CTOR( OFormNavigationHelper, NULL );
-
-        DBG_ASSERT( m_xORB.is(), "OFormNavigationHelper::OFormNavigationHelper: invalid service factory!" );
+        m_pFeatureInterception.reset( new ControlFeatureInterception( m_xORB ) );
     }
 
     //------------------------------------------------------------------
@@ -106,23 +111,7 @@ namespace frm
     //------------------------------------------------------------------
     void SAL_CALL OFormNavigationHelper::dispose( ) throw( RuntimeException )
     {
-        // release all interceptors
-        Reference< XDispatchProviderInterceptor > xInterceptor( m_xFirstDispatchInterceptor );
-        m_xFirstDispatchInterceptor.clear();
-        while ( xInterceptor.is() )
-        {
-            // tell the interceptor it has a new (means no) predecessor
-            xInterceptor->setMasterDispatchProvider( NULL );
-
-            // ask for it's successor
-            Reference< XDispatchProvider > xSlave = xInterceptor->getSlaveDispatchProvider();
-            // and give it the new (means no) successoert
-            xInterceptor->setSlaveDispatchProvider( NULL );
-
-            // start over with the next chain element
-            xInterceptor = xInterceptor.query( xSlave );
-        }
-
+        m_pFeatureInterception->dispose();
         disconnectDispatchers();
     }
 
@@ -147,74 +136,14 @@ namespace frm
     //------------------------------------------------------------------
     void SAL_CALL OFormNavigationHelper::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
-        if ( !_rxInterceptor.is() )
-        {
-            DBG_ERROR( "OFormNavigationHelper::registerDispatchProviderInterceptor: invalid interceptor!" );
-            return;
-        }
-
-        if ( m_xFirstDispatchInterceptor.is() )
-        {
-            // there is already an interceptor; the new one will become its master
-            Reference< XDispatchProvider > xFirstProvider( m_xFirstDispatchInterceptor, UNO_QUERY );
-            _rxInterceptor->setSlaveDispatchProvider( xFirstProvider );
-            m_xFirstDispatchInterceptor->setMasterDispatchProvider( xFirstProvider );
-        }
-
-        // we are the master of the chain's first interceptor
-        m_xFirstDispatchInterceptor = _rxInterceptor;
-        m_xFirstDispatchInterceptor->setMasterDispatchProvider( NULL );
-            // it's the first of the interceptor chain
-
+        m_pFeatureInterception->registerDispatchProviderInterceptor( _rxInterceptor );
         interceptorsChanged();
     }
 
     //------------------------------------------------------------------
     void SAL_CALL OFormNavigationHelper::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
-        if ( !_rxInterceptor.is() )
-        {
-            DBG_ERROR( "OFormNavigationHelper::releaseDispatchProviderInterceptor: invalid interceptor!" );
-            return;
-        }
-
-        Reference< XDispatchProviderInterceptor >  xChainWalk( m_xFirstDispatchInterceptor );
-
-        if ( m_xFirstDispatchInterceptor == _rxInterceptor )
-        {   // our chain will have a new first element
-            Reference< XDispatchProviderInterceptor >  xSlave( m_xFirstDispatchInterceptor->getSlaveDispatchProvider(), UNO_QUERY );
-            m_xFirstDispatchInterceptor = xSlave;
-        }
-        // do this before removing the interceptor from the chain as we won't know it's slave afterwards)
-
-        while ( xChainWalk.is() )
-        {
-            // walk along the chain of interceptors and look for the interceptor that has to be removed
-            Reference< XDispatchProviderInterceptor >  xSlave( xChainWalk->getSlaveDispatchProvider(), UNO_QUERY );
-
-            if ( xChainWalk == _rxInterceptor )
-            {
-                // old master may be an interceptor too
-                Reference< XDispatchProviderInterceptor >  xMaster( xChainWalk->getMasterDispatchProvider(), UNO_QUERY );
-
-                // unchain the interceptor that has to be removed
-                xChainWalk->setSlaveDispatchProvider( NULL );
-                xChainWalk->setMasterDispatchProvider( NULL );
-
-                // reconnect the chain
-                if ( xMaster.is() )
-                {
-                    xMaster->setSlaveDispatchProvider( Reference< XDispatchProvider >::query( xSlave ) );
-                }
-
-                // if somebody has registered the same interceptor twice, then we will remove
-                // it once per call ...
-                break;
-            }
-
-            xChainWalk = xSlave;
-        }
-
+        m_pFeatureInterception->releaseDispatchProviderInterceptor( _rxInterceptor );
         interceptorsChanged();
     }
 
@@ -409,10 +338,7 @@ namespace frm
     //------------------------------------------------------------------
     Reference< XDispatch > OFormNavigationHelper::queryDispatch( const URL& _rURL )
     {
-        Reference< XDispatch > xDispatcher;
-        if ( m_xFirstDispatchInterceptor.is() )
-            xDispatcher = m_xFirstDispatchInterceptor->queryDispatch( _rURL, ::rtl::OUString(), 0 );
-        return xDispatcher;
+        return m_pFeatureInterception->queryDispatch( _rURL );
     }
 
     //------------------------------------------------------------------
@@ -507,10 +433,8 @@ namespace frm
     //==================================================================
     //------------------------------------------------------------------
     OFormNavigationMapper::OFormNavigationMapper( const Reference< XMultiServiceFactory >& _rxORB )
-        :m_xORB( _rxORB )
-        ,m_bTriedToCreateTransformer( false )
     {
-        DBG_ASSERT( m_xORB.is(), "OFormNavigationMapper::OFormNavigationMapper: invalid ORB!" );
+        m_pUrlTransformer.reset( new UrlTransformer( _rxORB ) );
     }
 
     //------------------------------------------------------------------
@@ -523,33 +447,10 @@ namespace frm
     {
         // get the ascii version of the URL
         const char* pAsciiURL = getFeatureURLAscii( _nFeatureId );
-        if ( !pAsciiURL )
-            return false;
+        if ( pAsciiURL )
+            _rURL = m_pUrlTransformer->getStrictURLFromAscii( pAsciiURL );
 
-        // create the transformer, if not already attempted to do so
-        if ( !m_bTriedToCreateTransformer )
-        {
-            if ( m_xORB.is() )
-            {
-                m_xTransformer = m_xTransformer.query(
-                    m_xORB->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) )
-                    )
-                );
-                DBG_ASSERT( m_xTransformer.is(), "OFormNavigationMapper::getFeatureURL: couldn't get an URL transformer!" );
-            }
-
-            m_bTriedToCreateTransformer = true;
-        }
-
-        // reset the URL
-        _rURL = URL();
-        // transform it
-        _rURL.Complete = ::rtl::OUString::createFromAscii( pAsciiURL );
-        if ( m_xTransformer.is() )
-            m_xTransformer->parseStrict( _rURL );
-
-        return true;
+        return ( pAsciiURL != NULL );
     }
 
     //------------------------------------------------------------------
