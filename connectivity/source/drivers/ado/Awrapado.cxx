@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:24:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,7 +570,8 @@ sal_Int32 WpADOField::GetDefinedSize() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     aValVar.setEmpty();
-    pInterface->get_Value(&aValVar);
+    sal_Bool bOk = SUCCEEDED(pInterface->get_Value(&aValVar));
+    OSL_ENSURE(bOk,"get_Value doesn't work!");
 }
 
  OLEVariant WpADOField::get_Value() const
@@ -1008,6 +1009,12 @@ WpADOProperties WpADORecordset::get_Properties() const
     return eType;
 }
 
+void WpADOParameter::put_Type(const DataTypeEnum& _eType)
+{
+    OSL_ENSURE(pInterface,"Interface is null!");
+    pInterface->put_Type(_eType);
+}
+
  sal_Int32 WpADOParameter::GetAttributes() const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
@@ -1054,10 +1061,20 @@ WpADOProperties WpADORecordset::get_Properties() const
     return aValVar;
 }
 
- sal_Bool WpADOParameter::PutValue(const OLEVariant& aVariant)
+sal_Bool WpADOParameter::PutValue(const OLEVariant& aVariant)
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     return (SUCCEEDED(pInterface->put_Value(aVariant)));
+}
+sal_Bool WpADOParameter::AppendChunk(const OLEVariant& aVariant)
+{
+    OSL_ENSURE(pInterface,"Interface is null!");
+    return (SUCCEEDED(pInterface->AppendChunk(aVariant)));
+}
+sal_Bool WpADOParameter::put_Size(const sal_Int32& _nSize)
+{
+    OSL_ENSURE(pInterface,"Interface is null!");
+    return (SUCCEEDED(pInterface->put_Size(_nSize)));
 }
 
  ::rtl::OUString WpADOColumn::get_Name() const
@@ -1067,6 +1084,7 @@ WpADOProperties WpADORecordset::get_Properties() const
     pInterface->get_Name(&aBSTR);
     return aBSTR;
 }
+
 ::rtl::OUString WpADOColumn::get_RelatedColumn() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
