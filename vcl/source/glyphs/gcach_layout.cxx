@@ -4,8 +4,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.4 $
- *  last change: $Author: hdu $ $Date: 2002-04-23 12:31:34 $
+ *  $Revision: 1.5 $
+ *  last change: $Author: vg $ $Date: 2002-04-26 15:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ ServerFontLayout* ServerFontLayoutEngine::operator()( ServerFont* pFont,
 #include <layout/LEScripts.h>
 #include <unicode/uscript.h>
 
-using namespace icu_2_0;
+using namespace icu_2_1;
 
 // -----------------------------------------------------------------------
 
