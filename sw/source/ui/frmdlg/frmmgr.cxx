@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:22:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,18 +578,6 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     Beschreibung: Korrektur fuer Umrandung
  --------------------------------------------------------------------*/
 
-long SwFlyFrmAttrMgr::CalcWidthSpace()
-{
-    SvxLRSpaceItem &rLR = (SvxLRSpaceItem&)aSet.Get(RES_LR_SPACE);
-    return rLR.GetLeft() + rLR.GetRight() + CalcLeftSpace() + CalcRightSpace();
-}
-
-long SwFlyFrmAttrMgr::CalcHeightSpace()
-{
-    SvxULSpaceItem &rUL = (SvxULSpaceItem&)aSet.Get(RES_UL_SPACE);
-    return rUL.GetUpper() + rUL.GetLower() + CalcTopSpace() + CalcBottomSpace();
-}
-
 SwTwips SwFlyFrmAttrMgr::CalcTopSpace()
 {
     const SvxShadowItem& rShadow = GetShadow();
@@ -641,7 +629,7 @@ void SwFlyFrmAttrMgr::SetLRSpace( long nLeft, long nRight )
 
 void SwFlyFrmAttrMgr::SetULSpace( long nTop, long nBottom )
 {
-    ASSERT( LONG_MAX != nTop && LONG_MAX != nBottom, Welchen Raend setzen? );
+    ASSERT(LONG_MAX != nTop && LONG_MAX != nBottom, "Welchen Raend setzen?" );
 
     SvxULSpaceItem aTmp( (SvxULSpaceItem&)aSet.Get( RES_UL_SPACE ) );
     if( LONG_MAX != nTop )
@@ -649,27 +637,6 @@ void SwFlyFrmAttrMgr::SetULSpace( long nTop, long nBottom )
     if( LONG_MAX != nBottom )
         aTmp.SetLower( USHORT(nBottom) );
     aSet.Put( aTmp );
-}
-
-void SwFlyFrmAttrMgr::SetWrapType( SwSurround eFly )
-{
-    SwFmtSurround aWrap( GetSurround() );
-    aWrap.SetSurround( eFly );
-    aSet.Put( aWrap );
-}
-
-void SwFlyFrmAttrMgr::SetAnchorOnly(BOOL bSet)
-{
-    SwFmtSurround aWrap( GetSurround() );
-    aWrap.SetAnchorOnly(bSet);
-    aSet.Put( aWrap );
-}
-
-void SwFlyFrmAttrMgr::SetContour(   BOOL bSet)
-{
-    SwFmtSurround aWrap( GetSurround() );
-    aWrap.SetContour(bSet);
-    aSet.Put( aWrap );
 }
 
 void SwFlyFrmAttrMgr::SetPos( const Point& rPoint )
@@ -714,25 +681,6 @@ void SwFlyFrmAttrMgr::SetSize( const Size& rSize )
     aSize.SetSize(Size(Max(rSize.Width(), long(MINFLY)), Max(rSize.Height(), long(MINFLY))));
     aSet.Put( aSize );
 }
-
-void SwFlyFrmAttrMgr::SetFrmSize(const SwFmtFrmSize& rFrmSize)
-{
-    aSet.Put(rFrmSize);
-}
-
-void SwFlyFrmAttrMgr::ProtectPosSize( BOOL bProt )
-{
-    SvxProtectItem aProtection( ((SvxProtectItem&)aSet.Get(RES_PROTECT)));
-    aProtection.SetSizeProtect( bProt );
-    aProtection.SetPosProtect ( bProt );
-    aSet.Put( aProtection );
-}
-
-void SwFlyFrmAttrMgr::SetTransparent(BOOL bTrans)
-{
-    aSet.Put( SvxOpaqueItem( RES_OPAQUE, !bTrans ));
-}
-
 
 void SwFlyFrmAttrMgr::SetAttrSet(const SfxItemSet& rSet)
 {
