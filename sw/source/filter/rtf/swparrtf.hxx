@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:44:17 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,8 +165,8 @@ struct SwFlySave
 {
     SfxItemSet  aFlySet;
     SwNodeIndex nSttNd, nEndNd;
-    SwTwips     nPageWidth;
     xub_StrLen  nEndCnt;
+    SwTwips     nPageWidth;
     USHORT      nDropLines, nDropAnchor;
 
     SwFlySave( const SwPaM& rPam, SfxItemSet& rSet );
