@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:02:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ SfxItemSet* ODbTypeWizDialog::getWriteOutputSet()
     return m_pOutSet;
 }
 // -----------------------------------------------------------------------------
-Reference< XConnection > ODbTypeWizDialog::createConnection()
+::std::pair< Reference<XConnection>,sal_Bool> ODbTypeWizDialog::createConnection()
 {
     return m_pImpl->createConnection();
 }
