@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-05 16:11:13 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 14:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,6 +636,8 @@ const SystemChildData* SalFrame::GetSystemData() const
     pFrame->maFrameData.maSystemChildData.nDepth        = _GetDisplay()->GetVisual()->GetDepth();
     pFrame->maFrameData.maSystemChildData.aColormap     = _GetDisplay()->GetColormap().GetXColormap();
     pFrame->maFrameData.maSystemChildData.pAppContext   = _GetDisplay()->GetXLib()->GetAppContext();
+    pFrame->maFrameData.maSystemChildData.aShellWindow  = pFrame->maFrameData.GetShellWindow();
+    pFrame->maFrameData.maSystemChildData.pShellWidget  = pFrame->maFrameData.GetShellWidget();
     return &maFrameData.maSystemChildData;
 }
 

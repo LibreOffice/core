@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:48 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 14:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,9 @@ SalObject::SalObject()
     maObjectData.maSystemChildData.pVisual      = 0;
     maObjectData.maSystemChildData.nDepth       = 0;
     maObjectData.maSystemChildData.aColormap    = 0;
+    maObjectData.maSystemChildData.pAppContext  = NULL;
+    maObjectData.maSystemChildData.aShellWindow = 0;
+    maObjectData.maSystemChildData.pShellWidget = NULL;
 
     maObjectData.mpInst                         = NULL;
     maObjectData.mpProc                         = ImplSalObjCallbackDummy;
