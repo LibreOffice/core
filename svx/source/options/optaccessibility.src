@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-21 09:21:28 $
+ *  last change: $Author: os $ $Date: 2002-05-24 13:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Einstellungen für Kontrastdarstellung verwenden" ;
         Text [ English ] = "Use settings for high contrast appearance" ;
-        Text[ english_us ] = "Use settings for high contrast appearance";
+        Text[ english_us ] = "Settings for high contrast appearance";
         Text[ portuguese ] = "Settings for high contrast appearance";
         Text[ russian ] = "Settings for high contrast appearance";
         Text[ greek ] = "Settings for high contrast appearance";
@@ -127,10 +127,18 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ catalan ] = "For ~drawings and presentations";
         Text[ thai ] = "For ~drawings and presentations";
     };
-    CheckBox CB_PAGE_PREVIEWS
+    CheckBox CB_BORDERS
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL1, ROWA_2 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "Für ~Umrandungen und Schatten von Seiten, Absätzen, Tabellen und Rahmen" ;
+        Text [ ENGLISH ] = "For ~borders and shadows of pages, paragraphs, tables and frames" ;
+    };
+    CheckBox CB_PAGE_PREVIEWS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWA_3 );
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text = "In Seiten~ansicht/Seitendruck" ;
         Text [ ENGLISH ] = "For page ~previews" ;
