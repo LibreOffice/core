@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 13:36:30 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,7 @@ std::auto_ptr<Outputter> initOutputter(GetOpt & _aOptions)
     return pOutputter;
 }
 
+void starttest(GetOpt & opt, AutomaticRegisterHelper const& aHelper);
 
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
@@ -257,6 +258,7 @@ int _cdecl main( int argc, char* argv[] )
         "-verbose,      be verbose.",
         "-pid=s,        write current process id to file",
         "-endless,      testshl runs endless, for test only!!!",
+        "-whereami,     shows at runtime, which function is tested next.",
         "-h:s,          display help or help on option",
         "-help:s,       see -h",
         NULL
@@ -274,7 +276,7 @@ int _cdecl main( int argc, char* argv[] )
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.11 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.12 $\n");
     }
 
     // someone indicates that he needs help
@@ -329,6 +331,16 @@ int _cdecl main( int argc, char* argv[] )
 
     AutomaticRegisterHelper aHelper(suLibraryName, opt /*, &aJobs*/);
 
+    // start the tests
+    starttest(opt, aHelper);
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
+// this function is only inserted to give a better startpoint for breakpoints
+
+void starttest(GetOpt & opt, AutomaticRegisterHelper const& aHelper)
+{
     // create a TestResult
     std::auto_ptr<CppUnit::TestResult> pResult = initResult(opt);
 
@@ -348,7 +360,5 @@ int _cdecl main( int argc, char* argv[] )
         fflush(stderr);
         getchar();
     }
-
-    return 0;
 }
 
