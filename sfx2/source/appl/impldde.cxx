@@ -1,0 +1,478 @@
+/*************************************************************************
+ *
+ *  $RCSfile: impldde.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:45:08 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#if defined(WIN) || defined(WNT)
+#include <tools/svwin.h>
+#endif
+
+#include "impldde.hxx"
+
+#include <vcl/svapp.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/button.hxx>
+#include <vcl/msgbox.hxx>
+#include <sot/exchange.hxx>
+#include <rtl/ustring.hxx>
+
+#include "dde.hrc"
+#include "lnkbase.hxx"
+#include "linkmgr.hxx"
+#include "sfxresid.hxx"
+
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+
+#include <svtools/svdde.hxx>
+#include <sot/formats.hxx>
+
+#define DDELINK_COLD        0
+#define DDELINK_HOT         1
+
+#define DDELINK_ERROR_APP   1
+#define DDELINK_ERROR_DATA  2
+#define DDELINK_ERROR_LINK  3
+
+using namespace ::com::sun::star::uno;
+
+namespace sfx2
+{
+
+class SvDDELinkEditDialog : public ModalDialog
+{
+    FixedText aFtDdeApp;
+    Edit aEdDdeApp;
+    FixedText aFtDdeTopic;
+    Edit aEdDdeTopic;
+    FixedText aFtDdeItem;
+    Edit aEdDdeItem;
+    FixedLine aGroupDdeChg;
+    OKButton aOKButton1;
+    CancelButton aCancelButton1;
+
+    DECL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit* );
+public:
+    SvDDELinkEditDialog( Window* pParent, SvBaseLink* );
+    String GetCmd() const;
+};
+
+SvDDELinkEditDialog::SvDDELinkEditDialog( Window* pParent, SvBaseLink* pLink )
+    : ModalDialog( pParent, SfxResId( MD_DDE_LINKEDIT ) ),
+    aFtDdeApp( this, ResId( FT_DDE_APP ) ),
+    aEdDdeApp( this, ResId( ED_DDE_APP ) ),
+    aFtDdeTopic( this, ResId( FT_DDE_TOPIC ) ),
+    aEdDdeTopic( this, ResId( ED_DDE_TOPIC ) ),
+    aFtDdeItem( this, ResId( FT_DDE_ITEM ) ),
+    aEdDdeItem( this, ResId( ED_DDE_ITEM ) ),
+    aGroupDdeChg( this, ResId( GROUP_DDE_CHG ) ),
+    aOKButton1( this, ResId( 1 ) ),
+    aCancelButton1( this, ResId( 1 ) )
+{
+    FreeResource();
+
+    String sServer, sTopic, sItem;
+    pLink->GetLinkManager()->GetDisplayNames( pLink, &sServer, &sTopic, &sItem );
+
+    aEdDdeApp.SetText( sServer );
+    aEdDdeTopic.SetText( sTopic );
+    aEdDdeItem.SetText( sItem );
+
+    aEdDdeApp.SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+    aEdDdeTopic.SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+    aEdDdeItem.SetModifyHdl( STATIC_LINK( this, SvDDELinkEditDialog, EditHdl_Impl));
+
+    aOKButton1.Enable( sServer.Len() && sTopic.Len() && sItem.Len() );
+}
+
+String SvDDELinkEditDialog::GetCmd() const
+{
+    String sCmd( aEdDdeApp.GetText() ), sRet;
+    ::sfx2::MakeLnkName( sRet, &sCmd, aEdDdeTopic.GetText(), aEdDdeItem.GetText() );
+    return sRet;
+}
+
+IMPL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit *, pEdit )
+{
+    pThis->aOKButton1.Enable( pThis->aEdDdeApp.GetText().Len() &&
+                              pThis->aEdDdeTopic.GetText().Len() &&
+                              pThis->aEdDdeItem.GetText().Len() );
+    return 0;
+}
+
+/*  */
+
+
+SvDDEObject::SvDDEObject()
+    : pConnection( 0 ), pLink( 0 ), nError( 0 ), pGetData( 0 ), pRequest( 0 )
+{
+    SetUpdateTimeout( 100 );
+    bWaitForData = FALSE;
+}
+
+SvDDEObject::~SvDDEObject()
+{
+    delete pLink;
+    delete pRequest;
+    delete pConnection;
+}
+
+BOOL SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+                            const String & rMimeType,
+                            BOOL bSynchron )
+{
+    if( !pConnection )
+        return FALSE;
+
+    if( pConnection->GetError() )       // dann versuchen wir es nochmal
+    {
+        String sServer( pConnection->GetServiceName() );
+        String sTopic( pConnection->GetTopicName() );
+
+        delete pConnection;
+        pConnection = new DdeConnection( sServer, sTopic );
+        if( pConnection->GetError() )
+            nError = DDELINK_ERROR_APP;
+    }
+
+    if( bWaitForData )      // wir sind rekursiv drin, wieder raus
+        return FALSE;
+
+    // Verriegeln gegen Reentrance
+    bWaitForData = TRUE;
+
+    // falls gedruckt werden soll, warten wir bis die Daten vorhanden sind
+    if( bSynchron )
+    {
+        DdeRequest aReq( *pConnection, sItem, 5000 );
+        aReq.SetDataHdl( LINK( this, SvDDEObject, ImplGetDDEData ) );
+        aReq.SetFormat( SotExchange::GetFormatIdFromMimeType( rMimeType ));
+
+        pGetData = &rData;
+
+        do {
+            aReq.Execute();
+        } while( aReq.GetError() && ImplHasOtherFormat( aReq ) );
+
+        if( pConnection->GetError() )
+            nError = DDELINK_ERROR_DATA;
+
+        bWaitForData = FALSE;
+    }
+    else
+    {
+        // ansonsten wird es asynchron ausgefuehrt
+//      if( !pLink || !pLink->IsBusy() )
+        {
+            if( pRequest )
+                delete pRequest;
+
+            pRequest = new DdeRequest( *pConnection, sItem );
+            pRequest->SetDataHdl( LINK( this, SvDDEObject, ImplGetDDEData ) );
+            pRequest->SetDoneHdl( LINK( this, SvDDEObject, ImplDoneDDEData ) );
+            pRequest->SetFormat( SotExchange::GetFormatIdFromMimeType(
+                                    rMimeType ) );
+            pRequest->Execute();
+        }
+
+        ::rtl::OUString aEmptyStr;
+        rData <<= aEmptyStr;
+    }
+    return 0 == pConnection->GetError();
+}
+
+
+BOOL SvDDEObject::Connect( SvBaseLink * pSvLink )
+{
+    static BOOL bInWinExec = FALSE;
+
+    USHORT nLinkType = pSvLink->GetUpdateMode();
+    if( pConnection )       // Verbindung steht ja schon
+    {
+        // tja, dann nur noch als Abhaengig eintragen
+        AddDataAdvise( pSvLink,
+                SotExchange::GetFormatMimeType( pSvLink->GetContentType()),
+                LINKUPDATE_ONCALL == nLinkType
+                        ? ADVISEMODE_ONLYONCE
+                        : 0 );
+        AddConnectAdvise( pSvLink );
+
+        return TRUE;
+    }
+
+    if( !pSvLink->GetLinkManager() )
+        return FALSE;
+
+    String sServer, sTopic;
+    pSvLink->GetLinkManager()->GetDisplayNames( pSvLink, &sServer, &sTopic, &sItem );
+
+    if( !sServer.Len() || !sTopic.Len() || !sItem.Len() )
+        return FALSE;
+
+    pConnection = new DdeConnection( sServer, sTopic );
+    if( pConnection->GetError() )
+    {
+        // kann man denn das System-Topic ansprechen ?
+        // dann ist der Server oben, kennt nur nicht das Topic!
+        if( sTopic.EqualsIgnoreCaseAscii( "SYSTEM" ) )
+        {
+            BOOL bSysTopic;
+            {
+                DdeConnection aTmp( sServer, String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "SYSTEM" ) ) );
+                bSysTopic = !aTmp.GetError();
+            }
+
+            if( bSysTopic )
+            {
+                nError = DDELINK_ERROR_DATA;
+                return FALSE;
+            }
+            // ansonsten unter Win/WinNT die Applikation direkt starten
+        }
+
+#if defined(WIN) || defined(WNT)
+
+        // Server nicht da, starten und nochmal versuchen
+        if( !bInWinExec )
+        {
+            ByteString aCmdLine( sServer, RTL_TEXTENCODING_ASCII_US );
+            aCmdLine.Append( ".exe " );
+            aCmdLine.Append( ByteString( sTopic, RTL_TEXTENCODING_ASCII_US ) );
+
+            if( WinExec( aCmdLine.GetBuffer(), SW_SHOWMINIMIZED ) < 32 )
+                nError = DDELINK_ERROR_APP;
+            else
+            {
+                USHORT i;
+                for( i=0; i<5; i++ )
+                {
+                    bInWinExec = TRUE;
+                    Application::Reschedule();
+                    bInWinExec = FALSE;
+
+                    delete pConnection;
+                    pConnection = new DdeConnection( sServer, sTopic );
+                    if( !pConnection->GetError() )
+                        break;
+                }
+
+                if( i == 5 )
+                {
+                    nError = DDELINK_ERROR_APP;
+                }
+            }
+        }
+        else
+#endif  // WIN / WNT
+        {
+            nError = DDELINK_ERROR_APP;
+        }
+    }
+
+    if( LINKUPDATE_ALWAYS == nLinkType && !pLink && !pConnection->GetError() )
+    {
+        // Hot Link einrichten, Daten kommen irgendwann spaeter
+        pLink = new DdeHotLink( *pConnection, sItem );
+        pLink->SetDataHdl( LINK( this, SvDDEObject, ImplGetDDEData ) );
+        pLink->SetDoneHdl( LINK( this, SvDDEObject, ImplDoneDDEData ) );
+        pLink->SetFormat( pSvLink->GetContentType() );
+        pLink->Execute();
+    }
+
+    if( pConnection->GetError() )
+        return FALSE;
+
+    AddDataAdvise( pSvLink,
+                SotExchange::GetFormatMimeType( pSvLink->GetContentType()),
+                LINKUPDATE_ONCALL == nLinkType
+                        ? ADVISEMODE_ONLYONCE
+                        : 0 );
+    AddConnectAdvise( pSvLink );
+    SetUpdateTimeout( 0 );
+    return TRUE;
+}
+
+String SvDDEObject::Edit( Window* pParent, SvBaseLink * pLink )
+{
+    String aRet;
+
+    SvDDELinkEditDialog aDlg( pParent, pLink );
+    if( RET_OK == aDlg.Execute() )
+        aRet = aDlg.GetCmd();
+
+    return aRet;
+}
+
+BOOL SvDDEObject::ImplHasOtherFormat( DdeTransaction& rReq )
+{
+    USHORT nFmt = 0;
+    switch( rReq.GetFormat() )
+    {
+    case FORMAT_RTF:
+        nFmt = FORMAT_STRING;
+        break;
+
+    case SOT_FORMATSTR_ID_HTML_SIMPLE:
+    case SOT_FORMATSTR_ID_HTML:
+        nFmt = FORMAT_RTF;
+        break;
+
+    case FORMAT_GDIMETAFILE:
+        nFmt = FORMAT_BITMAP;
+        break;
+
+    case SOT_FORMATSTR_ID_SVXB:
+        nFmt = FORMAT_GDIMETAFILE;
+        break;
+
+    // sonst noch irgendwas ??
+    }
+    if( nFmt )
+        rReq.SetFormat( nFmt );     // damit nochmal versuchen
+    return 0 != nFmt;
+}
+
+BOOL SvDDEObject::IsPending() const
+/*  [Beschreibung]
+
+    Die Methode stellt fest, ob aus einem DDE-Object die Daten gelesen
+    werden kann.
+    Zurueckgegeben wird:
+        ERRCODE_NONE            wenn sie komplett gelesen wurde
+        ERRCODE_SO_PENDING      wenn sie noch nicht komplett gelesen wurde
+        ERRCODE_SO_FALSE        sonst
+*/
+{
+    return bWaitForData;
+}
+
+BOOL SvDDEObject::IsDataComplete() const
+{
+    return bWaitForData;
+}
+
+IMPL_LINK( SvDDEObject, ImplGetDDEData, DdeData*, pData )
+{
+    ULONG nFmt = pData->GetFormat();
+    switch( nFmt )
+    {
+    case FORMAT_GDIMETAFILE:
+        break;
+
+    case FORMAT_BITMAP:
+        break;
+
+    default:
+        {
+            const sal_Char* p = (sal_Char*)( pData->operator const void*() );
+            long nLen = FORMAT_STRING == nFmt ? (p ? strlen( p ) : 0) : (long)*pData;
+
+            Sequence< sal_Int8 > aSeq( (const sal_Int8*)p, nLen );
+            if( pGetData )
+            {
+                *pGetData <<= aSeq;     // Daten kopieren
+                pGetData = 0;           // und den Pointer bei mir zuruecksetzen
+            }
+            else
+            {
+                Any aVal;
+                aVal <<= aSeq;
+                DataChanged( SotExchange::GetFormatMimeType(
+                                                pData->GetFormat() ), aVal );
+                bWaitForData = FALSE;
+            }
+        }
+    }
+
+    return 0;
+}
+
+IMPL_LINK( SvDDEObject, ImplDoneDDEData, void*, pData )
+{
+    BOOL bValid = (BOOL)(ULONG)pData;
+    if( !bValid && ( pRequest || pLink ))
+    {
+        DdeTransaction* pReq = 0;
+        if( !pLink || ( pLink && pLink->IsBusy() ))
+            pReq = pRequest;        // dann kann nur der fertig sein
+        else if( pRequest && pRequest->IsBusy() )
+            pReq = pLink;           // dann kann nur der fertig sein
+
+        if( pReq )
+        {
+            if( ImplHasOtherFormat( *pReq ) )
+            {
+                pReq->Execute();
+            }
+            else if( pReq == pRequest )
+            {
+                // das wars dann
+                bWaitForData = FALSE;
+            }
+        }
+    }
+    else
+        // das warten ist beendet
+        bWaitForData = FALSE;
+
+    return 0;
+}
+
+}
