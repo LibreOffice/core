@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 14:03:05 $
+ *  last change: $Author: os $ $Date: 2002-10-14 09:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,9 @@ void SwFldRefPage::UpdateSubType()
             if( pType )
             {
                 SwSeqFldList aArr;
-                sOldSel.Erase();
+                // old selection should be kept in non-edit mode
+                if(IsFldEdit())
+                    sOldSel.Erase();
 
                 USHORT nCnt = pType->GetSeqFldList( aArr );
                 for( USHORT n = 0; n < nCnt; ++n )
