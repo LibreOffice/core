@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-24 17:24:02 $
+ *  last change: $Author: sj $ $Date: 2000-12-02 18:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3230,8 +3230,8 @@ sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
 
         UINT32  nSourceFontId( pAtom->nUniqueFontId );
 
-
-        if ( nChar & 0xff00 )                   // may be it is not possible to display this
+        sal_uInt8 nHiByte = nChar >> 8;
+        if ( nHiByte && ( nHiByte != 0xf0 ) )   // may be it is not possible to display this
         {                                       // character by using a symbol font
             eCharSet = eCharSetSystem;
             rFont.SetName( aTimes );
