@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-13 08:31:08 $
+ *  last change: $Author: fs $ $Date: 2002-10-09 14:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4452,15 +4452,16 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseForm::implInserted(const InterfaceRef& _rxObject)
+void ODatabaseForm::implInserted( const ElementDescription* _pElement )
 {
-    OFormComponents::implInserted( _rxObject );
+    OFormComponents::implInserted( _pElement );
 
-    Reference<XSQLErrorBroadcaster>  xBroadcaster(_rxObject, UNO_QUERY);
-    Reference<XForm>  xForm(_rxObject, UNO_QUERY);
-    if (xBroadcaster.is() && !xForm.is())
+    Reference< XSQLErrorBroadcaster >   xBroadcaster( _pElement->xInterface, UNO_QUERY );
+    Reference< XForm >                  xForm       ( _pElement->xInterface, UNO_QUERY );
+
+    if ( xBroadcaster.is() && !xForm.is() )
     {   // the object is an error broadcaster, but no form itself -> add ourself as listener
-        xBroadcaster->addSQLErrorListener(this);
+        xBroadcaster->addSQLErrorListener( this );
     }
 }
 
