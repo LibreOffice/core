@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:58:26 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,9 @@ using namespace dbaccess;
 using namespace cppu;
 
 
-Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
+ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
 {
-    Reference< XNamed > xRet = NULL;
+    ObjectType xRet;
     if ( m_xIndexes.is() && m_xIndexes->hasByName(_rName) )
         xRet.set(m_xIndexes->getByName(_rName),UNO_QUERY);
     else
