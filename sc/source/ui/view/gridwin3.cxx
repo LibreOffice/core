@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:31:23 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,12 +129,28 @@ BOOL ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 
 BOOL ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
 {
+    ScViewFunc* pView = pViewData->GetView();
     BOOL bRet = FALSE;
-    FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
+    FuPoor* pDraw = pView->GetDrawFuncPtr();
     if (pDraw && !pViewData->IsRefMode())
     {
         pDraw->SetWindow( this );
         bRet = pDraw->MouseButtonUp( rMEvt );
+
+        // execute "format paint brush" for drawing objects
+        SfxItemSet* pDrawBrush = pView->GetDrawBrushSet();
+        if ( pDrawBrush )
+        {
+            ScDrawView* pDrView = pViewData->GetScDrawView();
+            if ( pDrView )
+            {
+                BOOL bReplaceAll = TRUE;
+                pDrView->SetAttrToMarked(*pDrawBrush, bReplaceAll);
+            }
+
+            if ( !pView->IsPaintBrushLocked() )
+                pView->ResetBrushDocument();        // end paint brush mode if not locked
+        }
     }
 
     return bRet;
