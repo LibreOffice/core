@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converteuctw.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-19 17:46:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,8 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
         = ((ImplEucTwConverterData const *) pData)->
               m_pCns116431992ToUnicodePlaneOffsets;
     ImplEucTwToUnicodeState eState = IMPL_EUC_TW_TO_UNICODE_STATE_0;
-    sal_Int32 nPlane;
-    sal_Int32 nRow;
+    sal_Int32 nPlane = 0;
+    sal_Int32 nRow = 0;
     sal_uInt32 nInfo = 0;
     sal_Size nConverted = 0;
     sal_Unicode * pDestBufPtr = pDestBuf;
