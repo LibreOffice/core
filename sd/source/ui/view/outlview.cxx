@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-16 11:14:57 $
+ *  last change: $Author: aw $ $Date: 2002-04-26 12:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,11 @@
 #endif
 #ifndef _SVX_NUMITEM_HXX
 #include <svx/numitem.hxx>
+#endif
+
+// #97766#
+#ifndef _EDITOBJ_HXX
+#include <svx/editobj.hxx>
 #endif
 
 #pragma hdrstop
@@ -2059,3 +2064,24 @@ sal_Int8 SdOutlineView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHel
 {
     return DND_ACTION_NONE;
 }
+
+// #97766# Re-implement GetScriptType for this view to get correct results
+sal_uInt16 SdOutlineView::GetScriptType() const
+{
+    sal_uInt16 nScriptType = SdView::GetScriptType();
+
+    if(pOutliner)
+    {
+        OutlinerParaObject* pTempOPObj = pOutliner->CreateParaObject();
+
+        if(pTempOPObj)
+        {
+            nScriptType = pTempOPObj->GetTextObject().GetScriptType();
+            delete pTempOPObj;
+        }
+    }
+
+    return nScriptType;
+}
+
+// eof
