@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdevt.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: th $ $Date: 2000-11-03 09:06:12 $
+ *  last change: $Author: th $ $Date: 2000-11-06 20:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,10 @@ CommandExtTextInputData::CommandExtTextInputData()
 
 CommandExtTextInputData::CommandExtTextInputData( const XubString& rText,
                                                   const USHORT* pTextAttr,
-                                                  USHORT nCursorPos,
+                                                  xub_StrLen nCursorPos,
                                                   USHORT nCursorFlags,
-                                                  USHORT nDeltaStart,
-                                                  USHORT nOldTextLen,
+                                                  xub_StrLen nDeltaStart,
+                                                  xub_StrLen nOldTextLen,
                                                   BOOL bOnlyCursor ) :
     maText( rText )
 {
