@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 11:23:57 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 17:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,11 +174,16 @@ namespace configmgr
     {
         m_pSession = _pSession;
 
+        OSL_ASSERT(_pSession);
     // prepare the options
         // this is a hack asking the session if caching should be supported or not
         // at the time we have complete notification support this hack isn't necessary anymore
-        if (!_pSession->allowsCachingHack())
+        if (!_pSession->allowsCaching_Hack())
             m_xDefaultOptions->setNoCache(sal_True);
+
+        // this is a hack to simulate 'finalized' where the backend doesn't support it
+        if (_rSettings.isAdminSession() && !_pSession->supportsFinalized_Hack())
+            m_xDefaultOptions->setForceWritable(true);
 
         bool bNeedProfile = false;
         this->implInitFromSettings(_rSettings,bNeedProfile);
@@ -222,9 +227,6 @@ namespace configmgr
     void OProviderImpl::implInitFromSettings(const ConnectionSettings& _rSettings, bool& rNeedProfile)
     {
         bool bIntrinsicNeedProfile = true;
-
-        if (_rSettings.isAdminSession())
-            m_xDefaultOptions->setForceWritable(true);
 
         // if we have a user name, we have to add and remember it for the session
         if (_rSettings.hasUser())
