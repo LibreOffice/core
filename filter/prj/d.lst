@@ -1,5 +1,6 @@
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
 ..\%__SRC%\class\XSLTFilter\*.jar %_DEST%\bin%_EXT%\*.jar
 ..\%__SRC%\class\XSLTValidate\*.jar %_DEST%\bin%_EXT%\*.jar
