@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:24 $
+ *  last change: $Author: lkovacs $ $Date: 2002-10-29 16:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,12 @@
  *
  *
  ************************************************************************/
+
+#ifndef _VCL_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+
+#include "ScriptExecDialog.hrc"
 
 #include <cppuhelper/implementationentry.hxx>
 
@@ -188,6 +194,16 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
     // resolve method to contain the storage where the script code is
     // stored
     Any resolvedCtx = invocationCtx;
+
+    LanguageType nLang = LANGUAGE_SYSTEM;
+    ResMgr *pResMgr = ResMgr::SearchCreateResMgr( "scripting" MAKE_NUMSTR(SUPD), nLang );
+    QueryBox aBox( NULL, ResId(DLG_SCRIPTEXEC, pResMgr));
+    sal_Int32 res = aBox.Execute();
+    delete pResMgr;
+    if (res == RET_NO) {
+    return results;
+    }
+
     try
     {
         Reference< XInterface > resolvedScript = resolve( scriptURI,
