@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 14:57:03 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,19 +64,18 @@
 #ifndef _SAL_CONFIG_H_
 #include "sal/config.h"
 #endif
-
 #ifndef INCLUDED_SFX2_DLLAPI_H
 #include "sfx2/dllapi.h"
 #endif
-
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"
 #endif
-#ifndef _HELP_HXX //autogen
+#ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
 #endif
-
+#ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
 
 class SfxHelp_Impl;
 class SfxFrame;
@@ -98,21 +97,20 @@ private:
     SAL_DLLPRIVATE String CreateHelpURL_Impl( const String& aCommandURL, const String& rModuleName );
 
 public:
+    SfxHelp();
+    ~SfxHelp();
 
-                    SfxHelp();
-                    ~SfxHelp();
-    void            SetTicket( const String& rTicket )
-                    { aTicket = rTicket;}
-    void            SetUser( const String& rUser )
-                    { aUser = rUser;}
+    inline void             SetTicket( const String& rTicket )  { aTicket = rTicket; }
+    inline void             SetUser( const String& rUser )      { aUser = rUser; }
 
-    virtual XubString   GetHelpText( ULONG nHelpId, const Window* pWindow );
-    virtual XubString   GetHelpText( const String&, const Window* pWindow );
+    virtual XubString       GetHelpText( ULONG nHelpId, const Window* pWindow );
+    virtual XubString       GetHelpText( const String&, const Window* pWindow );
 
-    static String       CreateHelpURL( ULONG nHelpId, const String& rModuleName );
-    static String       CreateHelpURL( const String& aCommandURL, const String& rModuleName );
-    static void         OpenHelpAgent( SfxFrame* pFrame, ULONG nHelpId );
-    static String       GetDefaultHelpModule();
+    static String           CreateHelpURL( ULONG nHelpId, const String& rModuleName );
+    static String           CreateHelpURL( const String& aCommandURL, const String& rModuleName );
+    static void             OpenHelpAgent( SfxFrame* pFrame, ULONG nHelpId );
+    static String           GetDefaultHelpModule();
+    static ::rtl::OUString  GetCurrentModuleIdentifier();
 };
 
 #endif // #ifndef _SFX_HELP_HXX
