@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:16:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include "xistream.hxx"
 #endif
 
+#ifndef SC_XLSTRING_HXX
+#include "xlstring.hxx"
+#endif
 #ifndef SC_XIROOT_HXX
 #include "xiroot.hxx"
 #endif
@@ -350,7 +353,7 @@ void XclImpStreamPos::Get(
 
 XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
 {
-    XclBiff eBiff = xlBiffUnknown;
+    XclBiff eBiff = EXC_BIFF_UNKNOWN;
 
     rStrm.Seek( STREAM_SEEK_TO_BEGIN );
     sal_uInt16 nBofId, nBofSize;
@@ -359,13 +362,13 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
     if( (4 <= nBofSize) && (nBofSize <= 16) ) switch( nBofId )
     {
         case EXC_ID2_BOF:
-            eBiff = xlBiff2;
+            eBiff = EXC_BIFF2;
         break;
         case EXC_ID3_BOF:
-            eBiff = xlBiff3;
+            eBiff = EXC_BIFF3;
         break;
         case EXC_ID4_BOF:
-            eBiff = xlBiff4;
+            eBiff = EXC_BIFF4;
         break;
         case EXC_ID5_BOF:
         {
@@ -373,15 +376,15 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
             rStrm >> nVersion;
             // #i23425# there are some *really* broken documents out there...
             if( (EXC_BOF_BIFF2 <= nVersion) && (nVersion < EXC_BOF_BIFF3) )
-                eBiff = xlBiff2;
+                eBiff = EXC_BIFF2;
             else if( (EXC_BOF_BIFF3 <= nVersion) && (nVersion < EXC_BOF_BIFF4) )
-                eBiff = xlBiff3;
+                eBiff = EXC_BIFF3;
             else if( (EXC_BOF_BIFF4 <= nVersion) && (nVersion < EXC_BOF_BIFF5) )
-                eBiff = xlBiff4;
+                eBiff = EXC_BIFF4;
             else if( (EXC_BOF_BIFF5 <= nVersion) && (nVersion < EXC_BOF_BIFF8) )
-                eBiff = xlBiff5;
+                eBiff = EXC_BIFF5;
             else if( EXC_BOF_BIFF8 <= nVersion )
-                eBiff = xlBiff8;
+                eBiff = EXC_BIFF8;
             else
                 DBG_ERROR1( "XclImpStream::DetectBiffVersion - unknown BIFF version: 0x%04hX", nVersion );
         }
