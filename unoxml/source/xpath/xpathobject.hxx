@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpathobject.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:32:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace XPath
     public:
     CXPathObject(const xmlXPathObjectPtr xpathObj);
 
-    /**      
+    /**
         get object type
     */
     virtual XPathObjectType SAL_CALL getObjectType() throw (RuntimeException);
@@ -139,7 +139,7 @@ namespace XPath
         get string value
     */
     virtual OUString SAL_CALL getString() throw (RuntimeException);
-    
+
     };
 }
 
