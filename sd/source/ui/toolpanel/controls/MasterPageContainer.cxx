@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-19 12:15:04 $
+ *  last change: $Author: thb $ $Date: 2004-07-22 12:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,7 @@ void MasterPageContainer::Register (void)
 
 void MasterPageContainer::Unregister (void)
 {
+#if 0
     ::osl::MutexGuard aGuard (maMutex);
     if (mnReferenceCount > 0)
         mnReferenceCount--;
@@ -376,6 +377,7 @@ void MasterPageContainer::Unregister (void)
         delete mpInstance;
         mpInstance = NULL;
     }
+#endif
 }
 
 
