@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-27 12:08:41 $
+ *  last change: $Author: hjs $ $Date: 2001-07-18 17:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,9 +481,8 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
     if ( !rFile.Len())
         return TRUE;
 
-    ByteString sRoot( GetEnv( "SOLARVERSION" ));
+    ByteString sRoot( GetEnv( "SRC_ROOT" ));
     DirEntry aEntry( String( sRoot, RTL_TEXTENCODING_ASCII_US ));
-    aEntry += DirEntry( String::CreateFromAscii( "src" ));
     aEntry += DirEntry( String( rPrj, RTL_TEXTENCODING_ASCII_US ));
 
     ByteString sDelimiter(
@@ -817,9 +816,8 @@ int _cdecl main( int argc, char *argv[] )
         return 1;
     }
 
-    ByteString sRoot( GetEnv( "SOLARVERSION" ));
+    ByteString sRoot( GetEnv( "SRC_ROOT" ));
     DirEntry aRoot( String( sRoot, RTL_TEXTENCODING_ASCII_US ));
-    aRoot += DirEntry( String::CreateFromAscii( "src" ));
     sRoot = ByteString( aRoot.GetFull(), RTL_TEXTENCODING_ASCII_US );
     ByteString sVersion( GetEnv( "WORK_STAMP" ));
 
