@@ -81,6 +81,7 @@ hedabu: ..\inc\sfontitm.hxx %_DEST%\inc%_EXT%\svtools\sfontitm.hxx
 hedabu: ..\inc\bintitem.hxx %_DEST%\inc%_EXT%\svtools\bintitem.hxx
 hedabu: ..\inc\pver.hxx %_DEST%\inc%_EXT%\svtools\pver.hxx
 hedabu: ..\inc\eitem.hxx %_DEST%\inc%_EXT%\svtools\eitem.hxx
+hedabu: ..\inc\eventcfg.hxx %_DEST%\inc%_EXT%\svtools\eventcfg.hxx
 hedabu: ..\inc\filedlg.hxx %_DEST%\inc%_EXT%\svtools\filedlg.hxx
 hedabu: ..\inc\filerec.hxx %_DEST%\inc%_EXT%\svtools\filerec.hxx
 hedabu: ..\inc\flagitem.hxx %_DEST%\inc%_EXT%\svtools\flagitem.hxx
@@ -210,6 +211,8 @@ hedabu: ..\inc\templatefoldercache.hxx %_DEST%\inc%_EXT%\svtools\templatefolderc
 hedabu: ..\inc\folderrestriction.hxx %_DEST%\inc%_EXT%\svtools\folderrestriction.hxx
 hedabu: ..\inc\filenotation.hxx %_DEST%\inc%_EXT%\svtools\filenotation.hxx
 hedabu: ..\inc\fileurlbox.hxx %_DEST%\inc%_EXT%\svtools\fileurlbox.hxx
+hedabu: ..\inc\toolboxcontroller.hxx %_DEST%\inc%_EXT%\svtools\toolboxcontroller.hxx
+hedabu: ..\inc\framestatuslistener.hxx %_DEST%\inc%_EXT%\svtools\framestatuslistener.hxx
 
 hedabu: ..\inc\imap.hxx %_DEST%\inc%_EXT%\svtools\imap.hxx
 hedabu: ..\inc\imapobj.hxx %_DEST%\inc%_EXT%\svtools\imapobj.hxx
