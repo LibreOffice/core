@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlbas.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:53:54 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
+
+#include <sfx2/sfx.hrc>
 
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <svtools/svstdarr.hxx>
