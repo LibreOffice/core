@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dl $ $Date: 2001-10-31 08:09:21 $
+ *  last change: $Author: thb $ $Date: 2002-01-14 12:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,10 @@ void SdOutlineViewShell::Activate( BOOL bIsMDIActivate )
 \************************************************************************/
 void SdOutlineViewShell::Deactivate( BOOL bIsMDIActivate )
 {
-    pOlView->ResetLinks();
+    // #96416# Links must be kept also on deactivated viewshell, to allow drag'n'drop
+    // to function properly
+    // pOlView->ResetLinks();
+
     SdViewShell::Deactivate( bIsMDIActivate );
 }
 
@@ -1573,7 +1576,10 @@ void SdOutlineViewShell::WriteFrameViewData()
         bNoColor = TRUE;
     pFrameView->SetNoColors(bNoColor);
     pFrameView->SetNoAttribs( pOutl->IsFlatMode() );
-    pFrameView->SetSelectedPage((pOlView->GetActualPage()->GetPageNum() - 1) / 2);
+    SdPage* pActualPage = pOlView->GetActualPage();
+    DBG_ASSERT(pActualPage, "No current page");
+    if( pActualPage )
+        pFrameView->SetSelectedPage((pActualPage->GetPageNum() - 1) / 2);
 }
 
 
