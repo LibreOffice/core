@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-30 15:59:56 $
+ *  last change: $Author: jp $ $Date: 2001-07-04 18:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
+#endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
 #endif
 
 #include <view.hrc>
@@ -340,6 +343,9 @@ void SwClipboardChangeListener::AddRemoveListener( BOOL bAdd )
     try
     {
         do {
+
+#ifdef _DONT_WORD_FOR_WEBTOP_
+JP 4.7.2001: change for WebTop - get Clipboard from the Window.
             Reference< XMultiServiceFactory > xFact(
                                 ::comphelper::getProcessServiceFactory() );
             if( !xFact.is() )
@@ -348,6 +354,10 @@ void SwClipboardChangeListener::AddRemoveListener( BOOL bAdd )
                 ::rtl::OUString::createFromAscii(
                     "com.sun.star.datatransfer.clipboard.SystemClipboard" )),
                 UNO_QUERY );
+#else
+            Reference< XClipboard > xClipboard(
+                    pView->GetEditWin().GetClipboard() );
+#endif
             if( !xClipboard.is() )
                 break;
 
@@ -371,6 +381,9 @@ void SwClipboardChangeListener::AddRemoveListener( BOOL bAdd )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/04/30 15:59:56  jp
+    use Clipboard state listener instead of polling
+
     Revision 1.2  2000/11/07 14:38:25  os
     Dispatch interface for database component
 
