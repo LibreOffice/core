@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:54:31 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COMPHELPER_STREAMSECTION_HXX_
 #include <comphelper/streamsection.hxx>
 #endif
+#ifndef _COMPHELPER_BASIC_IO_HXX_
+#include <comphelper/basicio.hxx>
+#endif
 
 //.........................................................................
 namespace frm
@@ -137,16 +140,13 @@ void OButtonModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(8)
-        DECL_PROP2(CLASSID,         sal_Int16,                  READONLY, TRANSIENT);
+    BEGIN_DESCRIBE_PROPERTIES( 5, OImageModel )
         DECL_PROP1(BUTTONTYPE,      FormButtonType,             BOUND);
         DECL_PROP1(DISPATCHURLINTERNAL, sal_Bool,               BOUND);
         DECL_PROP1(TARGET_URL,      ::rtl::OUString,            BOUND);
         DECL_PROP1(TARGET_FRAME,    ::rtl::OUString,            BOUND);
-        DECL_PROP1(NAME,            ::rtl::OUString,            BOUND);
-        DECL_PROP1(TAG,             ::rtl::OUString,            BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,                  BOUND);
-    FRM_END_PROP_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
