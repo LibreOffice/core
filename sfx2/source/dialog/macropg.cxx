@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:25:37 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #define ITEMID_MACRO 0
 #include "macropg.hxx"
