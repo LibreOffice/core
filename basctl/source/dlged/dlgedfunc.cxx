@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2002-04-24 14:52:16 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 
 #ifndef _BASCTL_DLGED_HXX
 #include "dlged.hxx"
+#endif
+
+#ifndef _BASCTL_DLGEDVIEW_HXX
+#include "dlgedview.hxx"
 #endif
 
 #ifndef _SV_SELENG_HXX //autogen
