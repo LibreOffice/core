@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 21:44:31 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 21:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Sub- of functieprocedure niet gedefinieerd";
         Text[ chinese_simplified ] = "Ã»ÓĞ¶¨Òå·Ö¹ı³Ì»òº¯Êı¹ı³Ì";
         Text[ greek ] = "Äåí ïñßóôçêå ç äéáäéêáóßá õğü (Sub) Ş ëåéôïõñãßáò (Function)";
-        Text[ korean ] = "Á¤ÀÇµÇÁö ¾ÊÀº ¼­ºê ÇÁ·Î½ÃÀú ¶Ç´Â ±â´É  ÇÁ·Î½ÃÀú";
+        Text[ korean ] = "Á¤ÀÇµÇÁö ¾ÊÀº ¼­ºê ÇÁ·Î½ÃÀú ¶Ç´Â ±â´É ÇÁ·Î½ÃÀú";
         Text[ turkish ] = "Alt yordam ya da işlev yordamı tanımlanmadı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Procedimiento de función o subordinado no definido";
@@ -1383,7 +1383,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Geen enkele applicatie antwoordt op DDE-verbindingsoproep";
         Text[ chinese_simplified ] = "Ã»ÓĞÈÎºÎÓ¦ÓÃ³ÌĞò»ØÓ¦ DDE Á¬½ÓÇëÇó";
         Text[ greek ] = "Äåí áğáíôÜ êáìßá åöáñìïãŞ êáôÜ ôçí åğé÷åßñçóç óıíäåóçò DDE";
-        Text[ korean ] = "DDE Á¢¼Ó¿äÃ»¿¡ ÀÀ´äÇÏ´Â  ÀÀ¿ëÇÁ·Î±×·¥ÀÌ ¾øÀ½";
+        Text[ korean ] = "DDE Á¢¼Ó¿äÃ»¿¡ ÀÀ´äÇÏ´Â ÀÀ¿ëÇÁ·Î±×·¥ÀÌ ¾øÀ½";
         Text[ turkish ] = "Hiçbir uygulama DDE bağlantı talebine yanıt vermiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No responde ninguna aplicación a la conexión DDE deseada";
@@ -2771,7 +2771,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Onverwacht symbool: $(ARG1)";
         Text[ chinese_simplified ] = "ÒâÍâµÄÍ¼±ê£º$(ARG1)";
         Text[ greek ] = "Ìç áíáìåíüìåíï óıìâïëï: $(ARG1)";
-        Text[ korean ] = "¿ä±¸µÇÁö ¾ÊÀº ±âÈ£ :  $(ARG1)";
+        Text[ korean ] = "¿ä±¸µÇÁö ¾ÊÀº ±âÈ£ : $(ARG1)";
         Text[ turkish ] = "Beklenmeyen simge: $(ARG1)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Símbolo inesperado: $(ARG1)";
@@ -3603,7 +3603,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Not implemented in VBScript" ;
         Text [ portuguese ] = "Excepção $(ARG1)" ;
         Text [ french ] = "Exception $(ARG1)" ;
-        Text [ dutch ] = "Bevindt zich niet in VBScript" ;
+        Text [ dutch ] = "Er is een exceptie opgetreden $Arg1)" ;
         Text [ spanish ] = "Ha ocurrido la excepción $(ARG1)" ;
         Text [ danish ] = "Ikke indeholdt i VB-script" ;
         Text [ swedish ] = "Det har uppstått ett undantag $(ARG1)" ;
@@ -3615,7 +3615,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "—áŠO‚ª”­¶‚µ‚Ü‚µ‚½ $(ARG1)";
         Text[ chinese_traditional ] = "µo¥Í¤@­Ó²§±`ªº¿ù»~ $(ARG1)";
         Text[ arabic ] = "VB script áÇ íÔÊãá ÚáíåÇ";
-        Text[ dutch ] = "Bevindt zich niet in VBScript";
+        Text[ dutch ] = "Er is een exceptie opgetreden $Arg1)";
         Text[ chinese_simplified ] = "·¢ÉúÒ»¸öÒì³£µÄ´íÎó $(ARG1)";
         Text[ greek ] = "ĞáñïõóéÜóôçêå ìéá åîáßñåóç $(ARG1)";
         Text[ korean ] = "VB ½ºÅ©¸³Æ®¿¡¡¡Æ÷ÇÔµÇ¾î ÀÖÁö¡¡¾Ê½À´Ï´Ù.";
@@ -3864,4 +3864,5 @@ String ERRCODE_BASMGR_UNLOADLIB & ERRCODE_RES_MASK
     Text[ catalan ] = "No se pudo eliminar la biblioteca de la memoria.";
     Text[ finnish ] = "Kirjastoa ei voitu poistaa muistista.";
 };
+
 
