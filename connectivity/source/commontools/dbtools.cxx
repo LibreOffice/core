@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 13:39:59 $
+ *  last change: $Author: oj $ $Date: 2000-11-13 07:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,7 +538,7 @@ SQLContext prependContextInfo(SQLException& _rException, const Reference< XInter
             ::rtl::OUString aDatabaseName(aTableName.getToken(0, aSeparator));
             sQuotedName += quoteName(sQuote, aDatabaseName);
             sQuotedName = sQuotedName.concat(::rtl::OUString(&aSeparator, 1));
-            aTableName.replaceAt(0, aDatabaseName.getLength() + 1, s_sEmptyString);
+            aTableName = aTableName.replaceAt(0, aDatabaseName.getLength() + 1, s_sEmptyString);
                 // have no "erase" so simulate this with replaceAt
         }
     }
@@ -1141,6 +1141,9 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2000/11/10 13:39:59  oj
+ *  #80159# use of XInteractionHandler when no user nor password is given
+ *
  *  Revision 1.7  2000/11/09 08:46:09  oj
  *  some new methods for db's
  *
