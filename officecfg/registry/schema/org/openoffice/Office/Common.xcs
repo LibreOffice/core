@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:33:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4683,58 +4683,31 @@
 						<info>						
 							<deprecated>Use following properties instead: UseLosslessCompression, Quality, UseResolutionReduction, ResolutionReduction</deprecated>
 							<author>SJ</author>
-							<desc xml:lang="en-US">Deprecated.</desc>
-							<desc xml:lang="el">Deprecated.</desc>
-							<desc xml:lang="nl">Deprecated.</desc>
-							<desc xml:lang="fr">Deprecated.</desc>
-							<desc xml:lang="fi">Deprecated.</desc>
-							<desc xml:lang="cs">Deprecated.</desc>
-							<desc xml:lang="da">Deprecated.</desc>
-							<desc xml:lang="zh-CN">已经拒绝。</desc>
-							<desc xml:lang="zh-TW">Deprecated.</desc>
-							<desc xml:lang="ar">Deprecated.</desc>
-							<desc xml:lang="he">Deprecated.</desc>
-							<desc xml:lang="ca">Deprecated.</desc>
-							<desc xml:lang="hi-IN">Deprecated.</desc>
-							<desc xml:lang="pt">Deprecated.</desc>
-							<desc xml:lang="ru">Deprecated.</desc>
-							<desc xml:lang="es">Deprecated.</desc>
-							<desc xml:lang="it">Deprecated.</desc>
-							<desc xml:lang="sk">Deprecated.</desc>
-							<desc xml:lang="sv">Deprecated.</desc>
-							<desc xml:lang="pl">Deprecated.</desc>
-							<desc xml:lang="pt-BR">Deprecated.</desc>
-							<desc xml:lang="ja">非推奨</desc>
-							<desc xml:lang="ko">Deprecated.</desc>
-							<desc xml:lang="tr">Deprecated.</desc>
-							<desc xml:lang="th">Deprecated.</desc>
-							<desc xml:lang="x-comment">Deprecated.</desc>
-							<desc xml:lang="hu">Deprecated.</desc>
-							<desc xml:lang="sl">Deprecated.</desc>
+							<desc>Deprecated.</desc>
 						</info>
 						<value>1</value>
 					</prop>
 					<prop oor:name="UseLosslessCompression" oor:type="xs:boolean">
 						<info>
 							<author>SJ</author>
-							<desc xml:lang="en-US">Specifies if graphics are exported to PDF using a lossless compression eg. PNG or if they are compressed using the JPEG format.</desc>
+							<desc>Specifies if graphics are exported to PDF using a lossless compression eg. PNG or if they are compressed using the JPEG format.</desc>
 						</info>
 						<value>false</value>
 					</prop>
 					<prop oor:name="Quality" oor:type="xs:int">
 						<info>
 							<author>SJ</author>
-							<desc xml:lang="en-US">Specifies quality of the JPG export. A higher value results in higher quality and file size.</desc>
+							<desc>Specifies quality of the JPG export. A higher value results in higher quality and file size.</desc>
 						</info>
 						<constraints>
 							<minInclusive oor:value="1">
 								<info>
-									<desc xml:lang="en-US">Represents lowest value that can be used. The lower the value, the less good is the compression quality and the bigger is be the file size.</desc>
+									<desc>Represents lowest value that can be used. The lower the value, the less good is the compression quality and the bigger is be the file size.</desc>
 								</info>
 							</minInclusive>
 							<maxInclusive oor:value="100">
 								<info>
-									<desc xml:lang="en-US">Represents highest value that can be used. The higher the value, the better is the compression quality and the smaller is the file size.</desc>
+									<desc>Represents highest value that can be used. The higher the value, the better is the compression quality and the smaller is the file size.</desc>
 								</info>
 							</maxInclusive>
 						</constraints>
@@ -4743,38 +4716,38 @@
 					<prop oor:name="ReduceImageResolution" oor:type="xs:boolean">
 						<info>
 							<author>SJ</author>
-							<desc xml:lang="en-US">Specifies if the resolution of each image is reduced to the resolution specified by the property MaxImageResolution.</desc>
+							<desc>Specifies if the resolution of each image is reduced to the resolution specified by the property MaxImageResolution.</desc>
 						</info>
 						<value>false</value>
 					</prop>
 					<prop oor:name="MaxImageResolution" oor:type="xs:int">
 						<info>
-							<desc xml:lang="en-US">If the property ReduceImageResolution is set to true all images will be reduced to the given value. in DPI.</desc>
+							<desc>If the property ReduceImageResolution is set to true all images will be reduced to the given value. in DPI.</desc>
 						</info>
 						<constraints>
 							<enumeration oor:value="75">
 								<info>
-									<desc xml:lang="en-US">75</desc>
+									<desc>75</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="150">
 								<info>
-									<desc xml:lang="en-US">150</desc>
+									<desc>150</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="300">
 								<info>
-									<desc xml:lang="en-US">300</desc>
+									<desc>300</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="600">
 								<info>
-									<desc xml:lang="en-US">600</desc>
+									<desc>600</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="1200">
 								<info>
-									<desc xml:lang="en-US">1200</desc>
+									<desc>1200</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -4783,54 +4756,54 @@
 					<prop oor:name="UseTaggedPDF" oor:type="xs:boolean">
 						<info>
 							<author>SJ</author>
-							<desc xml:lang="en-US">Determines if PDF are created by using special tags also known as Tagged PDF.</desc>
+							<desc>Determines if PDF are created by using special tags also known as Tagged PDF.</desc>
 						</info>
 						<value>false</value>
 					</prop>
 					<prop oor:name="ExportNotes" oor:type="xs:boolean">
 						<info>
 							<author>SJ</author>
-							<desc xml:lang="en-US">Specifies if notes are exported to PDF.</desc>
+							<desc>Specifies if notes are exported to PDF.</desc>
 						</info>
 						<value>true</value>
 					</prop>
 					<prop oor:name="ExportNotesPages" oor:type="xs:boolean">
 						<info>
 							<author>SJ</author>
-							<desc xml:lang="en-US">Specifies if notes pages are exported to PDF. (Notes pages are available in Impress documents only).</desc>
+							<desc>Specifies if notes pages are exported to PDF. (Notes pages are available in Impress documents only).</desc>
 						</info>
 						<value>false</value>
 					</prop>				
 					<prop oor:name="UseTransitionEffects" oor:type="xs:boolean">
 						<info>
 							<author>SJ</author>
-							<desc xml:lang="en-US">Specifies slide transitions are exported to PDF. This option is active only if storing Impress documents.</desc>
+							<desc>Specifies slide transitions are exported to PDF. This option is active only if storing Impress documents.</desc>
 						</info>
 						<value>true</value>
 					</prop>
 					<prop oor:name="FormsType" oor:type="xs:int">
 						<info>
-							<desc xml:lang="en-US">Specifies the submitted format of a PDF form.</desc>
+							<desc>Specifies the submitted format of a PDF form.</desc>
 						</info>
 						<constraints>
 							<enumeration oor:value="0">
 								<info>
-									<desc xml:lang="en-US">Specifies that forms type FDF is used.</desc>
+									<desc>Specifies that forms type FDF is used.</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="1">
 								<info>
-									<desc xml:lang="en-US">Specifies that forms type PDF is used.</desc>
+									<desc>Specifies that forms type PDF is used.</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="2">
 								<info>
-									<desc xml:lang="en-US">Specifies that forms type HTML is used.</desc>
+									<desc>Specifies that forms type HTML is used.</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="3">
 								<info>
-									<desc xml:lang="en-US">Specifies that forms type XML is used.</desc>
+									<desc>Specifies that forms type XML is used.</desc>
 								</info>
 							</enumeration>
 						</constraints>
