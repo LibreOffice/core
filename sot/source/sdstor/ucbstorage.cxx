@@ -1539,6 +1539,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
                 if ( !bIsWritable && ( nMode & STREAM_WRITE ) )
                     pElement->m_xStream->SwitchToWritable( nMode, bDirect );
 //              DBG_ASSERT( bDirect == pElement->m_xStream->m_bDirect, "Wrong DirectMode!" );
+                pElement->m_xStream->m_pStream->Seek( 0 );
                 return new UCBStorageStream( pElement->m_xStream );
             }
         }
