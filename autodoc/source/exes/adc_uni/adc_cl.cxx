@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:36:36 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <cosv/template/tpltools.hxx>
 #include <ary/ary.hxx>
 #include <tools/tkpchars.hxx>
+#include <adc_msg.hxx>
 #include "adc_cmds.hxx"
 #include "adc_cmd_parse.hxx"
 #include "cmd_sincedata.hxx"
@@ -292,7 +293,8 @@ CommandLine::CommandLine()
     :   nDebugStyle(0),
         pSinceTransformator(new command::SinceTagTransformationData),
         aCommands(),
-        bInitOk(false)
+        bInitOk(false),
+        pCommand_CreateHtml(0)
 {
     csv_assert(pTheInstance_ == 0);
     pTheInstance_ = this;
@@ -320,6 +322,16 @@ CommandLine::Run() const
           ++it )
     {
         ok = (*it)->Run();
+    }
+
+    if (pCommand_CreateHtml != 0)
+    {
+        StreamStr aDiagnosticMessagesFile(700);
+        aDiagnosticMessagesFile
+            << pCommand_CreateHtml->OutputDir()
+            << csv::ploc::Delimiter()
+            << "Autodoc_DiagnosticMessages.txt";
+        TheMessages().WriteFile(aDiagnosticMessagesFile.c_str());
     }
 
     rAry.Destroy_();
@@ -522,10 +534,9 @@ void
 CommandLine::do_clCreateHtml( opt_iter &          it,
                               opt_iter            itEnd )
 {
-    command::Command *
-        pCmd_CreateHtml = new command::CreateHtml;
-    pCmd_CreateHtml->Init(it, itEnd);
-    aCommands.push_back(pCmd_CreateHtml);
+    pCommand_CreateHtml = new command::CreateHtml;
+    pCommand_CreateHtml->Init(it, itEnd);
+    aCommands.push_back(pCommand_CreateHtml);
 }
 
 void
