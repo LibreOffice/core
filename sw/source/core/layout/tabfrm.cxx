@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:15:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,8 +580,12 @@ void SwTabFrm::MakeAll()
 
     //Wenn mein direkter Nachbar gleichzeitig mein Follow ist
     //verleibe ich mir das Teil ein.
-    if ( GetNext() && GetNext() == GetFollow() )
+    // OD 09.04.2003 #108698# - join all follows, which are placed on the
+    // same page/column.
+    while ( GetNext() && GetNext() == GetFollow() )
+    {
         aNotify.AddHeightOfst( Join() );
+    }
 
     if ( bResizeHTMLTable ) //Optimiertes Zusammenspiel mit Grow/Shrink des Inhaltes
     {
