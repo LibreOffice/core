@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2001-09-11 12:47:17 $
+ *  last change: $Author: obr $ $Date: 2001-10-08 15:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,9 +172,9 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
             rtl_string_release( pCountry );
         }
 
-        /* convert variant to ascii */
+        /* convert variant to ascii - check if there is enough space for the variant string and a '.' */
         if( pLocale->Variant && pLocale->Variant->length &&
-            ( pLocale->Variant->length < sizeof(buffer) - 7 ) )
+            ( pLocale->Variant->length < n - 7 ) )
         {
             rtl_String *pVariant = NULL;
 
