@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:25:03 $
+ *  last change: $Author: os $ $Date: 2000-11-21 08:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,12 +850,14 @@ int SwWrtShell::IntelligentCut(int nSelection, BOOL bCut)
 
         // wenn das erste und das letzte Zeichen kein Wortzeichen ist,
         // ist kein Wort selektiert.
-    if( !rCC.isLetterNumeric( ( sTxt = GetChar(FALSE)), 0 ) ||
-        !rCC.isLetterNumeric( ( sTxt = GetChar(TRUE, -1)), 0 ) )
+    sal_Unicode cPrev = GetChar(FALSE);
+    sal_Unicode cNext = GetChar(TRUE, -1);
+    if( !cPrev || !cNext || !rCC.isLetterNumeric( ( sTxt = cPrev), 0 ) ||
+        !rCC.isLetterNumeric( ( sTxt = cNext), 0 ) )
         return NO_WORD;
 
-    const sal_Unicode cPrev = GetChar(FALSE, -1);
-    const sal_Unicode cNext = GetChar(TRUE);
+    cPrev = GetChar(FALSE, -1);
+    cNext = GetChar(TRUE);
 
     int cWord = NO_WORD;
         // ist ein Wort selektiert?
@@ -961,11 +963,14 @@ long SwWrtShell::MoveText(const Point *pPt,BOOL)
 
           Source Code Control System - Header
 
-          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.3 2000-11-20 09:25:03 jp Exp $
+          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.4 2000-11-21 08:49:57 os Exp $
 
           Source Code Control System - Update
 
           $Log: not supported by cvs2svn $
+          Revision 1.3  2000/11/20 09:25:03  jp
+          must change: SearchText->TextSearch and use namespace
+
           Revision 1.2  2000/10/25 15:36:07  jp
           use CharClass/BreakIt instead of old WordSelection
 
