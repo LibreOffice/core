@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-04 17:48:14 $
+ *  last change: $Author: cd $ $Date: 2001-05-07 05:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,10 +889,16 @@ IMPL_LINK( MenuManager, Deactivate, Menu *, pMenu )
 
 IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 {
-    if ( pMenu == m_pVCLMenu )
+    URL                     aTargetURL;
+    Sequence<PropertyValue> aArgs;
+    REFERENCE< XDISPATCH >  xDispatch;
+
     {
+        LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::Select" )
+
         USHORT nCurItemId = pMenu->GetCurItemId();
-        if ( pMenu->GetItemType( nCurItemId ) != MENUITEM_SEPARATOR )
+        if ( pMenu == m_pVCLMenu &&
+             pMenu->GetItemType( nCurItemId ) != MENUITEM_SEPARATOR )
         {
             if ( nCurItemId >= START_ITEMID_WINDOWLIST &&
                  nCurItemId <= END_ITEMID_WINDOWLIST )
@@ -927,9 +933,8 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                 MenuItemHandler* pMenuItemHandler = GetMenuItemHandler( nCurItemId );
                 if ( pMenuItemHandler && pMenuItemHandler->xMenuItemDispatch.is() )
                 {
-                    URL aTargetURL;
                     REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
                     aTargetURL.Complete = pMenuItemHandler->aMenuItemURL;
                     xTrans->parseStrict( aTargetURL );
 
@@ -937,29 +942,26 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                          nCurItemId <  START_ITEMID_WINDOWLIST )
                     {
                         // picklist menu item selected
-                        Sequence<PropertyValue> aArgs;
                         CreatePicklistArguments( aArgs, pMenuItemHandler );
-                        pMenuItemHandler->xMenuItemDispatch->dispatch( aTargetURL, aArgs );
                     }
-                    else
+                    else if ( m_bIsBookmarkMenu )
                     {
-                        Sequence<PropertyValue> aArgs;
-
-                        if ( m_bIsBookmarkMenu )
-                        {
-                            Any a;
-                            aArgs.realloc( 1 );
-                            aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-                            a <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER ));
-                            aArgs[0].Value = a;
-                        }
-
-                        pMenuItemHandler->xMenuItemDispatch->dispatch( aTargetURL, aArgs );
+                        // bookmark menu item selected
+                        Any a;
+                        aArgs.realloc( 1 );
+                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
+                        a <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER ));
+                        aArgs[0].Value = a;
                     }
+
+                    xDispatch = pMenuItemHandler->xMenuItemDispatch;
                 }
             }
         }
     }
+
+    if ( xDispatch.is() )
+        xDispatch->dispatch( aTargetURL, aArgs );
 
     return 1;
 }
