@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-14 15:19:43 $
+ *  last change: $Author: mt $ $Date: 2001-05-31 11:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,7 +729,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             nMaxLineWidth = ( !IsVertical() ? aPaperSize.Width() : aPaperSize.Height() ) - GetXValue( rLRItem.GetRight() );
 
         // Wenn jetzt noch kleiner 0, kann es nur der rechte Rand sein.
-        if ( nMaxLineWidth < 0 )
+        if ( nMaxLineWidth <= 0 )
             nMaxLineWidth = 1;
 
         // Problem: Da eine Zeile _vor_ der ungueltigen Position mit der
@@ -1593,6 +1593,10 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
     i18n::LineBreakResults aLBR = xBI->getLineBreak( *pNode, nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
     sal_uInt16 nBreakPos = (USHORT)aLBR.breakIndex;
+
+    // BUG in I18N - under special condition (break behind field, #87327#) breakIndex is < nMinBreakPos
+    if ( nBreakPos < nMinBreakPos )
+        nBreakPos = nMinBreakPos;
 
     // BUG in I18N - the japanese dot is in the next line!
     // !!!  Testen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
