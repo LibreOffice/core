@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gh $ $Date: 2002-06-10 08:48:47 $
+ *  last change: $Author: hro $ $Date: 2002-10-16 14:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,10 +121,10 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
         szMessage[0] = '\0';
 
         if(pszMessage != 0)
-            snprintf(szMessage, sizeof(szMessage), "Assertion Failed: %s: File %s, Line %lu: %s",
+            snprintf(szMessage, sizeof(szMessage), "Assertion Failed: %s: File %s, Line %lu: %s\n",
                         lpszAppName, pszFileName, nLine, pszMessage);
         else
-            snprintf(szMessage, sizeof(szMessage), "Assertion Failed: %s: File %s, Line %lu:",
+            snprintf(szMessage, sizeof(szMessage), "Assertion Failed: %s: File %s, Line %lu:\n",
                         lpszAppName, pszFileName, nLine);
 
         _pPrintDebugMessage( szMessage );
@@ -146,12 +146,12 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
 #else
         if(pszMessage != 0)
         {
-            fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu: %s",
+            fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu: %s\n",
                     lpszAppName, pszFileName, nLine, pszMessage);
         }
         else
         {
-            fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu ",
+            fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu:\n",
                     lpszAppName, pszFileName, nLine);
         }
 #endif
