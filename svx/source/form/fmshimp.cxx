@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:24:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1540,15 +1540,19 @@ void FmXFormShell::ExecuteSearch()
     // ausgeraeumt sind, sollte hier ein SM_USETHREAD rein, denn die Suche in einem eigenen Thread ist doch etwas fluessiger
     // sollte allerdings irgendwie von dem unterliegenden Cursor abhaengig gemacht werden, DAO zum Beispiel ist nicht thread-sicher
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractFmSearchDialog* dlg = pFact->CreateFmSearchDialog(&m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, strRealContexts, nInitialContext, LINK(this, FmXFormShell, OnSearchContextRequest),ResId(RID_SVXDLG_SEARCHFORM),SM_ALLOWSCHEDULE);
-    DBG_ASSERT(dlg, "Dialogdiet fail!");//CHINA001
-    dlg->SetActiveField(strActiveField);//CHINA001  dlg.SetActiveField(strActiveField);
+    AbstractFmSearchDialog* pDialog = NULL;
+    if ( pFact )
+        pDialog = pFact->CreateFmSearchDialog( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, strRealContexts, nInitialContext, LINK( this, FmXFormShell, OnSearchContextRequest ), SM_ALLOWSCHEDULE );
+    DBG_ASSERT( pDialog, "FmXFormShell::ExecuteSearch: could not create the search dialog!" );
+    if ( pDialog )
+    {
+        pDialog->SetActiveField( strActiveField );
+        pDialog->SetFoundHandler( LINK( this, FmXFormShell, OnFoundData ) );
+        pDialog->SetCanceledNotFoundHdl( LINK( this, FmXFormShell, OnCanceledNotFound ) );
+        pDialog->Execute();
+        delete pDialog;
+    }
 
-    dlg->SetFoundHandler(LINK(this, FmXFormShell, OnFoundData));//CHINA001 dlg.SetFoundHandler(LINK(this, FmXFormShell, OnFoundData));
-    dlg->SetCanceledNotFoundHdl(LINK(this, FmXFormShell, OnCanceledNotFound));//CHINA001 dlg.SetCanceledNotFoundHdl(LINK(this, FmXFormShell, OnCanceledNotFound));
-    dlg->Execute();//CHINA001 dlg.Execute();
-    delete dlg; //add CHINA001
     // GridControls wieder restaurieren
     LoopGrids(GA_ENABLE_SYNC | GA_DISABLE_ROCTRLR);
 
