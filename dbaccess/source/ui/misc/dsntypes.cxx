@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 07:01:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 07:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,23 @@ String ODsnTypeCollection::cutPrefix(const String& _rDsn)
 String ODsnTypeCollection::getTypeDisplayName(const String& _rDsn)
 {
     return getTypeDisplayName(implDetermineType(_rDsn));
+}
+
+//-------------------------------------------------------------------------
+sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
+{
+    switch (_eType)
+    {
+        case DST_ADABAS:
+        case DST_JDBC:
+        case DST_ODBC:
+            return sal_True;
+            break;
+        case DST_DBASE:
+        case DST_TEXT:
+        default:
+            return sal_False;
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -355,6 +372,9 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/20 07:01:39  fs
+ *  sdbc:text -> sdbc:flat:file
+ *
  *  Revision 1.1  2000/10/05 10:09:11  fs
  *  initial checkin
  *
