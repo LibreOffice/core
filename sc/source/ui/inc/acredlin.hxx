@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-30 10:45:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,9 @@ public:
 
                     ScRedlinData();
                     ~ScRedlinData();
-    USHORT          nTable;
-    USHORT          nCol;
-    USHORT          nRow;
+    SCTAB           nTable;
+    SCCOL           nCol;
+    SCROW           nRow;
     ULONG           nActionNo;
     ULONG           nInfo;
     BOOL            bIsRejectable;
