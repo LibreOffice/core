@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-14 09:10:44 $
+ *  last change:$Date: 2003-02-26 08:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,16 @@ public class java_fat implements TestBase {
                     ph.kill();
                     shortWait(5000);
                 }
+            } catch (lib.StatusException e) {
+                System.out.println(e.getMessage());
+                helper.ProcessHandler ph =
+                                (helper.ProcessHandler) param.get("AppProvider");
+                if (ph != null) {
+                    ph.kill();
+                    shortWait(5000);
+                }
+                entry.ErrorMsg = e.getMessage();
+                entry.hasErrorMsg = true;
             }
             return tEnv;
     }
