@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourcemap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:03:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,13 +192,6 @@ namespace dbaui
         */
         ::rtl::OUString adjustRealName(const ::rtl::OUString& _rName);
 
-        /** create a new (floating) datasource<p/>
-            The ds is inserted it into the map under the given name and returned.<br/>
-            If no object could be created, nothing is inserted into the map.<br/>
-            The item pool and the item ranges are used to create the initial SfxItemSet for the new ds.
-        */
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    createNew(const ::rtl::OUString& _rName, SfxItemPool* _pPool, const sal_uInt16* _pRanges);
     protected:
         /** ensure that the DatabaseInfo for the named object is filled<p/>
             This method allows us lazy access to the data sources: They're retrieved from the context
@@ -227,8 +220,6 @@ namespace dbaui
 
         /// check if the datasource settings are modified
         sal_Bool        isModified() const;
-        /// check if the datasource is to be created
-        sal_Bool        isNew() const;
         /// get the name the datasource is registered under
         ::rtl::OUString getName() const { return m_sName; }
         /// get the original name of a datasource (may habe been renamed)
@@ -236,7 +227,7 @@ namespace dbaui
         /// get the real name of the datasource, which is the name which is in the item set
         ::rtl::OUString getRealName() const;
         /// check if the datasource should is about to be renamed (which means the original name does not equal the real name
-        sal_Bool        isRenamed() const { return !isNew() && !getRealName().equals(getOriginalName()); }
+        sal_Bool        isRenamed() const { return !getRealName().equals(getOriginalName()); }
         /// get the key used to acces the object in the data source map
         sal_Int32       getAccessKey() const { return m_nAccessKey; }
 
