@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-08 21:15:49 $
+ *  last change: $Author: kz $ $Date: 2002-02-15 21:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
     Text[ chinese_simplified ] = "ζ ‡η­Ύ";                \
     Text[ russian ] = "Νΰκλεικθ";                       \
     Text[ polish ] = "Etykiety";                        \
-    Text[ japanese ] = "γƒ©γƒ™γƒ«";                          \
+    Text[ japanese ] = "γƒ©γƒ™γƒ«ζ›Έγ";                          \
     Text[ chinese_traditional ] = "θ²Όζ¨™";               \
     Text[ arabic ] = "ΘΨΗήΗΚ ΪδζδΙ";                    \
     Text[ greek ] = "Ετικέτες";                         \
@@ -710,7 +710,7 @@ FloatingWindow DLG_SYNC_BTN
         Text[ chinese_simplified ] = "ζ ‡η­Ύεζ­¥ε–";
         Text[ russian ] = "Ρθνυπξνθηθπξβΰςό νΰκλεικθ";
         Text[ polish ] = "Synchronizacja etykiet";
-        Text[ japanese ] = "γƒ©γƒ™γƒ«γ‚’εζγ•γ›γ‚‹";
+        Text[ japanese ] = "γƒ©γƒ™γƒ«ζ›Έγγ‚’εζγ•γ›γ‚‹";
         Text[ chinese_traditional ] = "θ²Όζ¨™εζ­¥ε–";
         Text[ arabic ] = "ΚÒΗγδ ΘΨΗήΗΚ ΗαΪδζδΙ";
         Text[ greek ] = "Συγχρονισμός ετικετών";
@@ -740,7 +740,7 @@ String STR_DOC_TITLE
     Text[ chinese_simplified ] = "ζ ‡η­Ύ";
     Text[ russian ] = "Νΰκλεικθ";
     Text[ polish ] = "Etykiety";
-    Text[ japanese ] = "γƒ©γƒ™γƒ«";
+    Text[ japanese ] = "γƒ©γƒ™γƒ«ζ›Έγ";
     Text[ chinese_traditional ] = "θ²Όζ¨™";
     Text[ arabic ] = "ΘΨΗήΗΚ ΪδζδΙ";
     Text[ greek ] = "Ετικέτες";
