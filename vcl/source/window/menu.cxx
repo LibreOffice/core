@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-21 16:19:18 $
+ *  last change: $Author: mt $ $Date: 2001-10-09 13:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2633,7 +2633,7 @@ void MenuFloatingWindow::ImplScroll( BOOL bUp )
 
         long nHeight = GetOutputSizePixel().Height();
         USHORT nLastVisible;
-        USHORT nVisible = ((PopupMenu*)pMenu)->ImplCalcVisEntries( nHeight, nFirstEntry, &nLastVisible );
+        ((PopupMenu*)pMenu)->ImplCalcVisEntries( nHeight, nFirstEntry, &nLastVisible );
         if ( pMenu->ImplGetNextVisible( nLastVisible ) == ITEMPOS_INVALID )
         {
             bScrollDown = FALSE;
@@ -2792,8 +2792,13 @@ void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp )
                     ImplScroll( TRUE );
 
                 Size aOutSz = GetOutputSizePixel();
-                while ( n >= ( nFirstEntry + ((PopupMenu*)pMenu)->ImplCalcVisEntries( aOutSz.Height(), nFirstEntry ) ) )
+                USHORT nLastVisible;
+                ((PopupMenu*)pMenu)->ImplCalcVisEntries( aOutSz.Height(), nFirstEntry, &nLastVisible );
+                while ( n > nLastVisible )
+                {
                     ImplScroll( FALSE );
+                    ((PopupMenu*)pMenu)->ImplCalcVisEntries( aOutSz.Height(), nFirstEntry, &nLastVisible );
+                }
             }
             ChangeHighlightItem( n, FALSE );
             break;
