@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-21 17:55:09 $
+ *  last change: $Author: pb $ $Date: 2002-04-15 09:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,6 +620,16 @@ TabDialog DLG_FRM_OLE
     Text [ dutch ] = "Object" ;
     Text [ spanish ] = "Objeto" ;
     Text [ english_us ] = "Object" ;
+    Text[ chinese_simplified ] = "ε―Ήθ±΅";
+    Text[ russian ] = "Ξαϊεκς";
+    Text[ polish ] = "Obiekt";
+    Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ";
+    Text[ chinese_traditional ] = "η‰©δ»¶";
+    Text[ arabic ] = "ίΗΖδ";
+    Text[ greek ] = "Αντικείμενο";
+    Text[ korean ] = "κ°μ²΄";
+    Text[ turkish ] = "Nesne";
+    Text[ catalan ] = "Objeto";
     Moveable = TRUE ;
     TabControl 1
     {
@@ -839,16 +849,6 @@ TabDialog DLG_FRM_OLE
             };
         };
     };
-    Text[ chinese_simplified ] = "ε―Ήθ±΅";
-    Text[ russian ] = "Ξαϊεκς";
-    Text[ polish ] = "Obiekt";
-    Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ";
-    Text[ chinese_traditional ] = "η‰©δ»¶";
-    Text[ arabic ] = "ίΗΖδ";
-    Text[ greek ] = "Αντικείμενο";
-    Text[ korean ] = "κ°μ²΄";
-    Text[ turkish ] = "Nesne";
-    Text[ catalan ] = "Objeto";
 };
 TabPage TP_FRM_STD
 {
@@ -2553,11 +2553,11 @@ TabPage TP_FRM_ADD
         Hide = TRUE ;
         StringList =
         {
-            < "Horizontal von links" ; 0; > ;
-//          < "Horizontal von rechts" ; 1; > ;
-            < "Vertikal von rechts" ; 2; > ;
-//          < "Vertikal von links" ; 3; > ;
-            < "Wie die Umgebung" ; 4; > ;
+            < "Links-nach-rechts (horizontal)" ; 0; > ;
+//          < "Rechts-nach-links (horizontal)" ; 1; > ;
+            < "Rechts nach links (vertikal)" ; 2; > ;
+//          < "Links-nach-rechts (vertikal)" ; 3; > ;
+            < "Einstellung des όbergeordneten Objektes verwenden" ; 4; > ;
         };
         StringList [ ENGLISH ] =
         {
