@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-13 13:27:57 $
+ *  last change: $Author: dr $ $Date: 2002-11-15 14:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2071,33 +2071,85 @@ const ScTokenArray* ImportExcel::ErrorToFormula( BYTE bErrOrVal, BYTE nError, do
 }
 
 
+void lcl_EESetAttribs( EditEngine& rEE, ESelection& rSel, const XclImpFont& rFont )
+{
+    // attributes
+    SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
+    rFont.FillToItemSet( aItemSet, xlFontHFIDs );
+    rEE.QuickSetAttribs( aItemSet, rSel );
+    rSel.nStartPara = rSel.nEndPara;
+    rSel.nStartPos = rSel.nEndPos;
+}
+
+void lcl_EEInsertText( EditEngine& rEE, String& rText, ESelection& rSel, const XclImpFont& rFont )
+{
+    if( rText.Len() )
+    {
+        rEE.QuickInsertText( rText, rSel );
+        rSel.nEndPos += rText.Len();
+        rText.Erase();
+        lcl_EESetAttribs( rEE, rSel, rFont );
+    }
+}
+
+void lcl_EEInsertNewLine( EditEngine& rEE, ESelection& rSel, const XclImpFont& rFont )
+{
+    rEE.QuickInsertText( String( '\n' ), rSel );
+    ++rSel.nEndPara;
+    rSel.nEndPos = 0;
+    lcl_EESetAttribs( rEE, rSel, rFont );
+}
+
+void lcl_EEInsertField( EditEngine& rEE, const SvxFieldItem& rFieldItem, ESelection& rSel, const XclImpFont& rFont )
+{
+    rEE.QuickInsertField( rFieldItem, rSel );
+    ++rSel.nEndPos;
+    lcl_EESetAttribs( rEE, rSel, rFont );
+}
+
 void ImportExcel::ScanHeadFootParts( const String& rIn, EditTextObject*& rpLeft,
     EditTextObject*& rpMid, EditTextObject*& rpRight )
 {
-    enum State { SearchEmb, SearchFunc, AddLeft, AddMid, AddRight, ScanSize, ScanFont };
+    enum State { SearchFunc, AddLeft, AddMid, AddRight, ScanSize, ScanFont };
 
-    EditEngine&         rEdEng = pExcRoot->GetEdEngForHF();
-    ESelection          aAppSel( 0xFFFF, 0xFFFF );
+    EditEngine& rEdEng = pExcRoot->GetEdEngForHF();
+    ESelection aSel;
 
     rEdEng.SetText( EMPTY_STRING );     //NN: wenn nur ein Feld belegt ist, kommt kein &C
 
     const sal_Unicode*  pAct = rIn.GetBuffer();
 
-    State               eAct = AddMid;
-    State               ePrev = AddMid;
-    String              aTmpString;
+    State eAct = AddMid;
+    State ePrev = AddMid;
+    String aTmpString;
+    String aTmpFont;
+    sal_uInt16 nTmpHeight;
+
+    XclImpFont aFont( *pExcRoot );
+    const XclImpFont* pFirstFont = pExcRoot->pFontBuffer->GetFont( 0 );
+    if( pFirstFont )
+        aFont = *pFirstFont;
+
+    String aFontName( aFont.GetFontData().aName );
+    String aStyleName;
+    sal_uInt16 nHeight = aFont.GetFontData().nHeight;   // twips
+    XclUnderline eUnderl = aFont.GetFontData().eUnderline;
+    XclEscapement eEscapem = aFont.GetFontData().eEscapem;
+    sal_Bool bStrike = aFont.GetFontData().bStrikeout;
 
     while( *pAct )
     {
         switch( eAct )
         {
-            case SearchEmb:             // '&' suchen
-                if( *pAct == '&' )
-                    eAct = SearchFunc;
-                break;
             case SearchFunc:            // auf Funktionen verteilen
+            {
+                sal_Bool bNewFormat = sal_False;
                 switch( *pAct )
                 {
+                    case '&':               // the '&' character
+                        aTmpString += '&';
+                        eAct = ePrev;
+                        break;
                     case 'C':               // Start mittlerer Teil
                         if( ePrev == AddLeft )
                         {
@@ -2165,70 +2217,126 @@ void ImportExcel::ScanHeadFootParts( const String& rIn, EditTextObject*& rpLeft,
                         eAct = ePrev = AddRight;
                         break;
                     case 'P':               // Seitennummer
-                        rEdEng.QuickInsertField( SvxFieldItem( SvxPageField() ), aAppSel );
+                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxPageField() ), aSel, aFont );
                         eAct = ePrev;
                         break;
                     case 'N':               // Seitenzahl
-                        rEdEng.QuickInsertField( SvxFieldItem( SvxPagesField() ), aAppSel );
+                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxPagesField() ), aSel, aFont );
                         eAct = ePrev;
                         break;
                     case 'D':               // Datum
-                        rEdEng.QuickInsertField( SvxFieldItem( SvxDateField() ), aAppSel );
+                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxDateField() ), aSel, aFont );
                         eAct = ePrev;
                         break;
                     case 'T':               // Zeit
-                        rEdEng.QuickInsertField( SvxFieldItem( SvxTimeField() ), aAppSel );
+                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxTimeField() ), aSel, aFont );
                         eAct = ePrev;
                         break;
                     case 'F':               // Datei
-                        rEdEng.QuickInsertField( SvxFieldItem( SvxExtFileField() ), aAppSel );
+                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxExtFileField() ), aSel, aFont );
                         eAct = ePrev;
                         break;
                     case 'A':               // Tabellen-Name
-                        rEdEng.QuickInsertField( SvxFieldItem( SvxTableField() ), aAppSel );
+                        lcl_EEInsertField( rEdEng, SvxFieldItem( SvxTableField() ), aSel, aFont );
                         eAct = ePrev;
                         break;
+                    case 'U':               // underline
+                        eUnderl = (eUnderl == xlUnderlSingle) ? xlUnderlNone : xlUnderlSingle;
+                        bNewFormat = sal_True;
+                        break;
+                    case 'E':               // double underline
+                        eUnderl = (eUnderl == xlUnderlDouble) ? xlUnderlNone : xlUnderlDouble;
+                        bNewFormat = sal_True;
+                        break;
+                    case 'S':               // strikeout
+                        bStrike = !bStrike;
+                        bNewFormat = sal_True;
+                        break;
+                    case 'X':               // superscript
+                        eEscapem = (eEscapem == xlEscSuper) ? xlEscNone : xlEscSuper;
+                        bNewFormat = sal_True;
+                        break;
+                    case 'Y':               // subsrcipt
+                        eEscapem = (eEscapem == xlEscSub) ? xlEscNone : xlEscSub;
+                        bNewFormat = sal_True;
+                        break;
                     case '\"':              // Font
+                        aTmpFont.Erase();
                         eAct = ScanFont;
                         break;
                     default:
                         if( *pAct >= '0' && *pAct <= '9' )  // Font Size
+                        {
+                            nTmpHeight = *pAct - '0';
                             eAct = ScanSize;
+                        }
                         else
                             eAct = ePrev;
                 }
+
+                if( bNewFormat )
+                {
+                    lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
+                    aFont.SetHFData( aFontName, aStyleName, nHeight, eUnderl, eEscapem, bStrike );
+                    eAct = ePrev;
+                }
+            }
                 break;
             case AddLeft:               // linkes Drittel fuellen
             case AddMid:                // mittleres Drittel fuellen
             case AddRight:              // rechtes Drittel fuellen
                 if( *pAct == '&' )
                 {
-                    if( aTmpString.Len() )
-                    {
-                        rEdEng.QuickInsertText( aTmpString, aAppSel );
-                        aTmpString.Erase();
-                    }
-
+                    lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
                     eAct = SearchFunc;
+                }
+                else if( *pAct == '\n' )
+                {
+                    lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
+                    lcl_EEInsertNewLine( rEdEng, aSel, aFont );
                 }
                 else
                     aTmpString += *pAct;
                 break;
             case ScanFont:              // Font ueberlesen
                 if( *pAct == '\"' )
+                {
+                    if( aTmpFont.Len() )
+                    {
+                        xub_StrLen nPos = aTmpFont.Search( ',' );
+                        lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
+                        aFontName = aTmpFont.Copy( 0, nPos );
+                        aStyleName = aTmpFont.Copy( nPos + 1 );
+                        aFont.SetHFData( aFontName, aStyleName, nHeight, eUnderl, eEscapem, bStrike );
+                    }
                     eAct = ePrev;
+                }
+                else
+                    aTmpFont += *pAct;
                 break;
             case ScanSize:              // Font Size ueberlesen
-                if( *pAct < '0' || *pAct > '9' )
+                if( *pAct >= '0' && *pAct <= '9' )
                 {
+                    if( nTmpHeight != 0xFFFF )
+                    {
+                        nTmpHeight *= 10;
+                        nTmpHeight += (*pAct - '0');
+                        if( nTmpHeight > 1600 )  // not more than 1600pt = 32000twips
+                            nTmpHeight = 0xFFFF;
+                    }
+                }
+                else
+                {
+                    if( (nTmpHeight != 0) && (nTmpHeight != 0xFFFF) )
+                    {
+                        lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
+                        nHeight = 20 * nTmpHeight;
+                        aFont.SetHFData( aFontName, aStyleName, nHeight, eUnderl, eEscapem, bStrike );
+                    }
+
                     if( *pAct == '&' )
                     {
-                        if( aTmpString.Len() )
-                        {
-                            rEdEng.QuickInsertText( aTmpString, aAppSel );
-                            aTmpString.Erase();
-                        }
-
+                        lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
                         eAct = SearchFunc;
                     }
                     else
@@ -2244,11 +2352,7 @@ void ImportExcel::ScanHeadFootParts( const String& rIn, EditTextObject*& rpLeft,
         pAct++;
     }
 
-    if( aTmpString.Len() )
-    {
-        rEdEng.QuickInsertText( aTmpString, aAppSel );
-        aTmpString.Erase();
-    }
+    lcl_EEInsertText( rEdEng, aTmpString, aSel, aFont );
 
     switch( ePrev )
     {
