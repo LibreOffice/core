@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-15 06:19:04 $
+ *  last change: $Author: mt $ $Date: 2004-07-21 13:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,12 +170,15 @@ class CertificateViewerCertPathTP : public CertificateViewerTP
 private:
     FixedText           maCertPathFT;
     SvTreeListBox       maCertPathLB;
+    PushButton          maViewCertPB;
     FixedText           maCertStatusFT;
     MultiLineEdit       maCertStatusML;
 
+    DECL_LINK(          ViewCertHdl, void* );
     DECL_LINK(          CertSelectHdl, void* );
     void                Clear( void );
-    SvLBoxEntry*        InsertCert( SvLBoxEntry* _pParent, const String& _rName, const String& _rStatus );
+    SvLBoxEntry*        InsertCert( SvLBoxEntry* _pParent, const String& _rName, cssu::Reference< dcss::security::XCertificate > rxCert );
+
 public:
                         CertificateViewerCertPathTP( Window* pParent, CertificateViewer* _pDlg );
     virtual             ~CertificateViewerCertPathTP();

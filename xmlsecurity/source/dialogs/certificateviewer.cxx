@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 09:28:33 $
+ *  last change: $Author: mt $ $Date: 2004-07-21 13:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,12 +407,20 @@ IMPL_LINK( CertificateViewerDetailsTP, ElementSelectHdl, void*, EMPTYARG )
     return 0;
 }
 
+struct CertPath_UserData
+{
+    cssu::Reference< dcss::security::XCertificate > mxCert;
+    String                                          maStatus;
+
+    CertPath_UserData( cssu::Reference< dcss::security::XCertificate > xCert ) { mxCert = xCert; }
+};
 
 
 CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, CertificateViewer* _pDlg )
     :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_CERTPATH ), _pDlg  )
     ,maCertPathFT           ( this, ResId( FT_CERTPATH ) )
     ,maCertPathLB           ( this, ResId( LB_SIGNATURES ) )
+    ,maViewCertPB           ( this, ResId( BTN_VIEWCERT ) )
     ,maCertStatusFT         ( this, ResId( FT_CERTSTATUS ) )
     ,maCertStatusML         ( this, ResId( ML_CERTSTATUS ) )
 {
@@ -429,10 +437,8 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     SvLBoxEntry*    pParent = NULL;
     for( int i = nCnt; i; )
     {
-           pParent = InsertCert( pParent, XmlSec::GetContentPart( pCertPath[ --i ]->getIssuerName(), aCN_Id ), aState );
+           pParent = InsertCert( pParent, XmlSec::GetContentPart( pCertPath[ --i ]->getSubjectName(), aCN_Id ), pCertPath[ i ] );
     }
-
-    InsertCert( pParent, XmlSec::GetContentPart( _pDlg->mxCert->getSubjectName(), aCN_Id ), aState );
 
     while( pParent )
     {
@@ -442,6 +448,7 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
 
     FreeResource();
 
+    maViewCertPB.SetClickHdl( LINK( this, CertificateViewerCertPathTP, ViewCertHdl ) );
     maCertPathLB.SetSelectHdl( LINK( this, CertificateViewerCertPathTP, CertSelectHdl ) );
 
     // MT->GT: After EA, please move path stuff to ActivatePage() and asure it's only done once.
@@ -457,14 +464,37 @@ void CertificateViewerCertPathTP::ActivatePage()
 {
 }
 
+IMPL_LINK( CertificateViewerCertPathTP, ViewCertHdl, void*, EMPTYARG )
+{
+    SvLBoxEntry* pEntry = maCertPathLB.FirstSelected();
+    if( pEntry )
+    {
+        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, ((CertPath_UserData*)pEntry->GetUserData())->mxCert );
+        aViewer.Execute();
+    }
+
+    return 0;
+}
+
 IMPL_LINK( CertificateViewerCertPathTP, CertSelectHdl, void*, EMPTYARG )
 {
-    SvLBoxEntry*    pEntry = maCertPathLB.FirstSelected();
-    String          aStatus;
+    String  aStatus;
+
+    SvLBoxEntry* pEntry = maCertPathLB.FirstSelected();
     if( pEntry )
-        aStatus = *( ( String* ) pEntry->GetUserData() );
+    {
+        CertPath_UserData* pData = (CertPath_UserData*) pEntry->GetUserData();
+        if ( !pData->maStatus.Len() )
+        {
+            // Figure out status...
+            // pData->maStatus = ...
+        }
+        aStatus = pData->maStatus;
+    }
 
     maCertStatusML.SetText( aStatus );
+
+    maViewCertPB.Enable( pEntry && ( pEntry != maCertPathLB.Last() ) );
 
     return 0;
 }
@@ -476,7 +506,7 @@ void CertificateViewerCertPathTP::Clear( void )
     SvLBoxEntry*    pEntry = maCertPathLB.GetEntry( i );
     while( pEntry )
     {
-        delete ( String* ) pEntry->GetUserData();
+        delete ( CertPath_UserData* ) pEntry->GetUserData();
         ++i;
         pEntry = maCertPathLB.GetEntry( i );
     }
@@ -484,10 +514,10 @@ void CertificateViewerCertPathTP::Clear( void )
     maCertPathLB.Clear();
 }
 
-SvLBoxEntry* CertificateViewerCertPathTP::InsertCert( SvLBoxEntry* _pParent, const String& _rName, const String& _rStatus )
+SvLBoxEntry* CertificateViewerCertPathTP::InsertCert( SvLBoxEntry* _pParent, const String& _rName, cssu::Reference< dcss::security::XCertificate > rxCert )
 {
-    SvLBoxEntry*    pEntry = maCertPathLB.InsertEntry( _rName, _pParent );
-    pEntry->SetUserData( ( void* ) new String( _rStatus ) );
+    SvLBoxEntry* pEntry = maCertPathLB.InsertEntry( _rName, _pParent );
+    pEntry->SetUserData( ( void* ) new CertPath_UserData( rxCert ) );
 
     return pEntry;
 }

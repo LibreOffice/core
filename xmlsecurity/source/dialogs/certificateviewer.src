@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 09:28:33 $
+ *  last change: $Author: mt $ $Date: 2004-07-21 13:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,9 +344,17 @@ TabPage RID_XMLSECTP_CERTPATH
     Control LB_SIGNATURES
     {
         Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0A );
-        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_1-CV_ROW_0A );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_1-CV_ROW_0A - 20 /*HACK MT*/ );
         SVLook = TRUE;
         Border = TRUE;
+    };
+    PushButton BTN_VIEWCERT
+    {
+        // MT: Gunnar should check positions, also hack above...
+        Pos = MAP_APPFONT( CV_COL_1-(CV_COL_B-CV_COL_A), CV_ROW_0A+CV_ROW_1-CV_ROW_0A - 20 + 5 );
+        Size = MAP_APPFONT( CV_COL_B-CV_COL_A, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text = "Zertifikat anzeigen...";
+        Text [ en-US ] = "View Certificate...";
     };
     FixedText FT_CERTSTATUS
     {
