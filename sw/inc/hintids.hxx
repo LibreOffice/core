@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 21:29:02 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,16 @@ RES_PARATR_BEGIN = RES_TXTATR_END,
     RES_PARATR_DROP,                                // 62
     RES_PARATR_REGISTER,                            // 63
     RES_PARATR_NUMRULE,                             // 64
-    RES_PARATR_DUMMY2,                              // 65
+    RES_PARATR_SCRIPTSPACE,                         // 65
+    RES_PARATR_HANGINGPUNCTUATION,                  // 66
+    RES_PARATR_DUMMY1,                              // 67
+    RES_PARATR_DUMMY2,                              // 68
+    RES_PARATR_DUMMY3,                              // 69
+    RES_PARATR_DUMMY4,                              // 70
+    RES_PARATR_DUMMY5,                              // 71
+    RES_PARATR_DUMMY6,                              // 72
+    RES_PARATR_DUMMY7,                              // 73
+    RES_PARATR_DUMMY8,                              // 74
 RES_PARATR_END
 };
 
@@ -471,6 +480,9 @@ BOOL IsInRange( const USHORT* pRange, const USHORT nId );
 #define ITEMID_ORPHANS      RES_PARATR_ORPHANS
 #define ITEMID_TABSTOP      RES_PARATR_TABSTOP
 #define ITEMID_HYPHENZONE   RES_PARATR_HYPHENZONE
+#define ITEMID_SCRIPTSPACE  RES_PARATR_SCRIPTSPACE
+#define ITEMID_HANGINGPUNCTUATION   RES_PARATR_HANGINGPUNCTUATION
+
 
 //Defines fuer die ehemaligen GrfAttribute, die jetzt im svx zu finden sind.
 #define ITEMID_GRF_CROP     RES_GRFATR_CROPGRF

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-11-04 21:49:59 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@
 
 #if !defined(MSC) && !defined(UNX) && !defined(PPC) && !defined(CSET) && !defined(__MWERKS__) && !defined(WTC)
 
-#define ATTRFNTAB_SIZE 121
+#define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
 #error "Attribut-Tabelle ist ungueltigt. Wurden neue Hint-ID's zugefuegt ??"
 #endif
@@ -3343,7 +3343,16 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_PARATR_DROP */               0,
 /* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
 /* RES_PARATR_NUMRULE */            OutWW8_SwNumRuleItem,
+/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
+/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
+/* RES_PARATR_DUMMY1 */             0, // Dummy:
 /* RES_PARATR_DUMMY2 */             0, // Dummy:
+/* RES_PARATR_DUMMY3 */             0, // Dummy:
+/* RES_PARATR_DUMMY4 */             0, // Dummy:
+/* RES_PARATR_DUMMY5 */             0, // Dummy:
+/* RES_PARATR_DUMMY6 */             0, // Dummy:
+/* RES_PARATR_DUMMY7 */             0, // Dummy:
+/* RES_PARATR_DUMMY8 */             0, // Dummy:
 
 /* RES_FILL_ORDER   */              0, // OutW4W_SwFillOrder,
 /* RES_FRM_SIZE */                  OutWW8_SwFrmSize,
@@ -3411,6 +3420,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/11/04 21:49:59  er
+      GetMappedFormatstring with LocaleDataWrapper instead of International
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 

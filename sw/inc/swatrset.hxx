@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 21:29:02 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,8 @@ class SvxOrphansItem;
 class SvxTabStopItem;
 class SvxHyphenZoneItem;
 class SwFmtDrop;
+class SvxScriptSpaceItem;
+class SvxHangingPunctuationItem;
 
 // TabellenBox-Attribute
 class SwTblBoxNumFormat;
@@ -172,6 +174,7 @@ class SwAttrPool : public SfxItemPool
     static USHORT* pVersionMap1;
     static USHORT* pVersionMap2;
     static USHORT* pVersionMap3;
+    static USHORT* pVersionMap4;
 
     SwDoc* pDoc;
 
@@ -184,6 +187,7 @@ public:
     static USHORT* GetVersionMap1() { return pVersionMap1; }
     static USHORT* GetVersionMap2() { return pVersionMap2; }
     static USHORT* GetVersionMap3() { return pVersionMap3; }
+    static USHORT* GetVersionMap6() { return pVersionMap4; }
 };
 
 
@@ -331,6 +335,8 @@ public:
     inline const SvxTabStopItem         &GetTabStops( BOOL = TRUE ) const;
     inline const SvxHyphenZoneItem      &GetHyphenZone( BOOL = TRUE ) const;
     inline const SwFmtDrop              &GetDrop( BOOL = TRUE ) const;
+    inline const SvxScriptSpaceItem     &GetScriptSpace(BOOL = TRUE) const;
+    inline const SvxHangingPunctuationItem &GetHangingPunctuation(BOOL = TRUE) const;
 
     // TabellenBox-Attribute    - impl. steht im cellatr.hxx
     inline const SwTblBoxNumFormat      &GetTblBoxNumFmt( BOOL = TRUE ) const;
@@ -344,6 +350,9 @@ public:
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/16 21:29:02  jp
+      SwFmt2Lines moved to SVX and renamed
+
       Revision 1.3  2000/11/02 17:26:48  jp
       TwoLines as char and not as text attribute
 

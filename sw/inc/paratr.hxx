@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,21 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
-#include "hintids.hxx"
-#include "calbck.hxx"
-#include "swatrset.hxx"
-#include "format.hxx"
-#include "swtypes.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+#ifndef _CALBCK_HXX
+#include <calbck.hxx>
+#endif
+#ifndef _SWATRSET_HXX
+#include <swatrset.hxx>
+#endif
+#ifndef _FORMAT_HXX
+#include <format.hxx>
+#endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
 
 class SwCharFmt;
 class International;
@@ -255,6 +265,10 @@ inline const SwFmtDrop &SwAttrSet::GetDrop(BOOL bInP) const
     {   return (const SwFmtDrop&)Get(RES_PARATR_DROP,bInP); }
 inline const SwNumRuleItem &SwAttrSet::GetNumRule(BOOL bInP) const
     {   return (const SwNumRuleItem&)Get(RES_PARATR_NUMRULE,bInP); }
+inline const SvxScriptSpaceItem& SwAttrSet::GetScriptSpace(BOOL bInP) const
+    {   return (const SvxScriptSpaceItem&)Get(RES_PARATR_SCRIPTSPACE,bInP); }
+inline const SvxHangingPunctuationItem &SwAttrSet::GetHangingPunctuation(BOOL bInP) const
+    {   return (const SvxHangingPunctuationItem&)Get(RES_PARATR_HANGINGPUNCTUATION,bInP); }
 
 /******************************************************************************
  *  Implementierung der Paragraph-Attribut Methoden vom SwFmt
@@ -280,6 +294,10 @@ inline const SwFmtDrop &SwFmt::GetDrop(BOOL bInP) const
     {   return aSet.GetDrop(bInP); }
 inline const SwNumRuleItem &SwFmt::GetNumRule(BOOL bInP) const
     {   return aSet.GetNumRule(bInP); }
+inline const SvxScriptSpaceItem& SwFmt::GetScriptSpace(BOOL bInP) const
+    {   return aSet.GetScriptSpace(bInP) ; }
+inline const SvxHangingPunctuationItem &SwFmt::GetHangingPunctuation(BOOL bInP) const
+    {   return aSet.GetHangingPunctuation(bInP) ; }
 
 
 #endif

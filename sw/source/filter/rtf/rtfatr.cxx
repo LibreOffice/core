@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 09:57:35 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@
  */
 #if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(CSET) && !defined(__MWERKS__) && !defined(WTC)
 
-#define ATTRFNTAB_SIZE 121
+#define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
 #error Attribut-Tabelle ist ungueltigt. Wurden neue Hint-IDs zugefuegt ??
 #endif
@@ -3318,7 +3318,16 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_PARATR_DROP */               0,
 /* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
 /* RES_PARATR_NUMRULE */            OutRTF_SwNumRule,
+/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
+/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
+/* RES_PARATR_DUMMY1 */             0, // Dummy:
 /* RES_PARATR_DUMMY2 */             0, // Dummy:
+/* RES_PARATR_DUMMY3 */             0, // Dummy:
+/* RES_PARATR_DUMMY4 */             0, // Dummy:
+/* RES_PARATR_DUMMY5 */             0, // Dummy:
+/* RES_PARATR_DUMMY6 */             0, // Dummy:
+/* RES_PARATR_DUMMY7 */             0, // Dummy:
+/* RES_PARATR_DUMMY8 */             0, // Dummy:
 
 /* RES_FILL_ORDER   */              0, // NOT USED!! OutRTF_SwFillOrder,
 /* RES_FRM_SIZE */                  OutRTF_SwFrmSize,
@@ -3391,11 +3400,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.5 2000-11-16 09:57:35 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.6 2000-11-20 09:37:54 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/16 09:57:35  jp
+      export CJK attributes
+
       Revision 1.4  2000/11/13 12:27:20  jp
       token definition changed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 21:29:02 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ public:
 class SwTxtUnderline : public SwTxtAttrEnd
 {
     FontUnderline ePrevUnderline;
+    Color ePrevColor;
 public:
     SwTxtUnderline( const SvxUnderlineItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 20:32:39 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@
  */
 #if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(CSET) && !defined(__MWERKS__) && !defined(WTC)
 
-#define ATTRFNTAB_SIZE 121
+#define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
 #error Attribut-Tabelle ist ungueltigt. Wurden neue Hint-IDs zugefuegt ??
 #endif
@@ -3017,8 +3017,18 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_PARATR_HYPHENZONE*/          0,
 /* RES_PARATR_DROP */               OutHTML_CSS1Attr,
 /* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
+/* RES_PARATR_NUMRULE */            0, // Dummy:
+/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
+/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
 /* RES_PARATR_DUMMY1 */             0, // Dummy:
 /* RES_PARATR_DUMMY2 */             0, // Dummy:
+/* RES_PARATR_DUMMY3 */             0, // Dummy:
+/* RES_PARATR_DUMMY4 */             0, // Dummy:
+/* RES_PARATR_DUMMY5 */             0, // Dummy:
+/* RES_PARATR_DUMMY6 */             0, // Dummy:
+/* RES_PARATR_DUMMY7 */             0, // Dummy:
+/* RES_PARATR_DUMMY8 */             0, // Dummy:
+
 
 /* RES_FILL_ORDER   */              0,
 /* RES_FRM_SIZE */                  0,
@@ -3086,11 +3096,14 @@ SwAttrFnTab aHTMLAttrFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.4 2000-11-13 20:32:39 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.5 2000-11-20 09:41:15 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/13 20:32:39  jp
+      remove unused headerfile
+
       Revision 1.3  2000/11/01 19:23:14  jp
       export of mail graphics removed
 
