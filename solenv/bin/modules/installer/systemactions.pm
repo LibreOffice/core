@@ -230,8 +230,10 @@ sub copy_one_file
     }
     else
     {
-        $infoline = "ERROR: Could not chmod $dest: $!\n";
-        $returnvalue = 0;
+        # HACK: this isn't exactly the Right Thing(tm),
+        # we should reconsider the use of chmod()
+        $infoline = "WARNING: Could not chmod $dest: $!\n";
+        $returnvalue = 1;
     }
 
     push(@installer::globals::logfileinfo, $infoline);
