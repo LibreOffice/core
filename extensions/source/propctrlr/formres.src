@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
+ *  last change: $Author: vg $ $Date: 2001-10-22 20:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2169,7 +2169,7 @@ String RID_STR_DATASOURCE
     Text [ English ] = "Data Source" ;
     Text[ english_us ] = "Data source";
     Text[ portuguese ] = "Fonte de dados";
-    Text[ russian ] = "»сточник данных";
+    Text[ russian ] = "»сходные данные";
     Text[ greek ] = "–спЁлехуз дедпмЁнщн";
     Text[ dutch ] = "Gegevensbron";
     Text[ french ] = "Source de donnйes";
@@ -4663,7 +4663,7 @@ String RID_STR_EVT_ADJUSTMENTVALUECHANGED
     Text[ language_user1 ] = "EM10.10.01Laut Frank Sch. dies beschreibt, dass ein Event ausgelцst wird wдhrend mit der Scrollbar justiert wird.";
     Text[ english_us ] = "While adjusting";
     Text[ portuguese ] = "On adjust";
-    Text[ russian ] = "On adjust";
+    Text[ russian ] = "¬о врем€ выравнивани€";
     Text[ greek ] = "On adjust";
     Text[ dutch ] = "Bij het justeren";
     Text[ french ] = "ј l'ajustement";
@@ -4715,6 +4715,9 @@ String RID_STR_ENUM_PUSHBUTTONTYPE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2001/10/19 12:58:51  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.28  2001/10/12 20:59:02  kz
  *  Merge SRC641: 12.10.01 - 22:58:19
  *
@@ -4802,6 +4805,7 @@ String RID_STR_ENUM_PUSHBUTTONTYPE
  *
  *  Revision 1.0 08.01.01 14:53:11  fs
  ************************************************************************/
+
 
 
 
