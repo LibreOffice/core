@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-06 11:58:06 $
+ *  last change: $Author: aw $ $Date: 2000-12-07 15:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,14 @@
 #include "svdopath.hxx"
 #include "unoapi.hxx"
 #include "svdomeas.hxx"
+
+#ifndef _E3D_EXTRUD3D_HXX
+#include <extrud3d.hxx>
+#endif
+
+#ifndef _E3D_LATHE3D_HXX
+#include <lathe3d.hxx>
+#endif
 
 using namespace ::vos;
 using namespace ::rtl;
@@ -485,7 +493,28 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 pScene->SetRectsDirty();
                 pScene->InitTransformationSet();
             }
-
+            else if(pNewObj->ISA(E3dExtrudeObj))
+            {
+                E3dExtrudeObj* pObj = (E3dExtrudeObj*)pNewObj;
+                Polygon3D aNewP(3);
+                aNewP[0] = Vector3D(0,0,0);
+                aNewP[1] = Vector3D(0,1,0);
+                aNewP[2] = Vector3D(1,0,0);
+                PolyPolygon3D aNewPP(aNewP);
+                pObj->SetExtrudePolygon(aNewPP);
+                pObj->SetExtrudeCharacterMode(TRUE);
+            }
+            else if(pNewObj->ISA(E3dLatheObj))
+            {
+                E3dLatheObj* pObj = (E3dLatheObj*)pNewObj;
+                Polygon3D aNewP(3);
+                aNewP[0] = Vector3D(0,0,0);
+                aNewP[1] = Vector3D(0,1,0);
+                aNewP[2] = Vector3D(1,0,0);
+                PolyPolygon3D aNewPP(aNewP);
+                pObj->SetPolyPoly3D(aNewPP);
+                pObj->SetLatheCharacterMode(TRUE);
+            }
         }
     }
 
