@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:20:51 $
+ *  last change: $Author: oj $ $Date: 2000-10-04 13:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): _________ Ocke Janssen____________
  *
  *
  ************************************************************************/
@@ -1401,7 +1401,6 @@ Sequence< sal_Int32 > SAL_CALL ORowSetCache::deleteRows( const Sequence< Any >& 
     }
 
     return aRet;
-    //  return m_pCacheSet->deleteRows(rows,m_aUpdateTable);
 }
 
 // -------------------------------------------------------------------------
@@ -1419,6 +1418,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/29 15:20:51  oj
+    rowset impl
+
     Revision 1.1.1.1  2000/09/19 00:15:38  hr
     initial import
 

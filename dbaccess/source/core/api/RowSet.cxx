@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:20:51 $
+ *  last change: $Author: oj $ $Date: 2000-10-04 13:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,8 +551,11 @@ void SAL_CALL ORowSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateBoolean(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -565,8 +568,11 @@ void SAL_CALL ORowSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQL
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateByte(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -580,8 +586,11 @@ void SAL_CALL ORowSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(S
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
 
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateShort(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -594,8 +603,11 @@ void SAL_CALL ORowSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQL
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateInt(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -608,8 +620,11 @@ void SAL_CALL ORowSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQ
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateLong(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -622,8 +637,11 @@ void SAL_CALL ORowSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLEx
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateFloat(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -636,8 +654,11 @@ void SAL_CALL ORowSet::updateDouble( sal_Int32 columnIndex, double x ) throw(SQL
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateDouble(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -651,9 +672,11 @@ void SAL_CALL ORowSet::updateString( sal_Int32 columnIndex, const ::rtl::OUStrin
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
 
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateString(columnIndex,x);
     // we have to notify all listeners
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -666,8 +689,11 @@ void SAL_CALL ORowSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_I
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateBytes(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -680,8 +706,11 @@ void SAL_CALL ORowSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateDate(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -694,8 +723,11 @@ void SAL_CALL ORowSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateTime(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -708,8 +740,11 @@ void SAL_CALL ORowSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun:
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateTimestamp(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -756,8 +791,11 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateObject(columnIndex,x);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -770,8 +808,11 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateNumericObject(columnIndex,x,scale);
-    NOTIFY_COLUMN_VALUE_CHANGE();
+    // we have to notify all listeners
+    (*(*m_aCurrentRow))[columnIndex] = x;
+    firePropertyChange(columnIndex-1 ,aOldValue);
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
 }
 // -------------------------------------------------------------------------
@@ -2313,6 +2354,9 @@ sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/29 15:20:51  oj
+    rowset impl
+
     Revision 1.1.1.1  2000/09/19 00:15:38  hr
     initial import
 
