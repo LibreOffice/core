@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:06:28 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ namespace abp
         SetPageSizePixel(LogicToPixel(Size(WINDOW_SIZE_X, WINDOW_SIZE_Y), MAP_APPFONT));
 
         ShowButtonFixedLine(sal_True);
+
+        enableHeader( Bitmap( ModuleRes( BMP_HEADERIMAGE ) ) );
 
         m_pPrevPage->SetHelpId(HID_ABSPILOT_PREVIOUS);
         m_pNextPage->SetHelpId(HID_ABSPILOT_NEXT);
@@ -435,6 +437,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/01 11:06:28  fs
+ *  initial checkin - address book auto pilot - the dialog itself
+ *
  *
  *  Revision 1.0 26.07.01 08:45:44  fs
  ************************************************************************/

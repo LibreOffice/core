@@ -2,9 +2,9 @@
  *
  *  $RCSfile: admininvokationpage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:04:04 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@ namespace abp
     class AdminDialogInvokationPage : public AddressBookSourcePage
     {
     protected:
-        FixedLine       m_aSeparator;
         FixedText       m_aExplanation;
         PushButton      m_aInvokeAdminDialog;
         FixedText       m_aErrorMessage;
@@ -112,6 +111,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/01 11:04:04  fs
+ *  initial checkin - address book auto pilot - page for invoking the data source admin dialog
+ *
  *
  *  Revision 1.0 26.07.01 09:14:00  fs
  ************************************************************************/

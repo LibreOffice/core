@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeselectionpage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:03:17 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,8 @@ namespace abp
     class TypeSelectionPage : public AddressBookSourcePage
     {
     protected:
-        FixedLine       m_aSeparator;
         FixedText       m_aHint;
         FixedLine       m_aTypeSep;
-        FixedText       m_aChooseTypeLabel;
         RadioButton     m_aMORK;
         RadioButton     m_aLDAP;
         RadioButton     m_aOutlook;
@@ -124,6 +122,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/01 11:03:17  fs
+ *  initial checkin - address book auto pilot - type selection page
+ *
  *
  *  Revision 1.0 26.07.01 09:11:49  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeselectionpage.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:03:10 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,8 @@ namespace abp
     //---------------------------------------------------------------------
     TypeSelectionPage::TypeSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_SELECTABTYPE))
-        ,m_aSeparator       (this,  ResId(FL_SEPARATOR))
         ,m_aHint            (this,  ResId(FT_TYPE_HINTS))
         ,m_aTypeSep         (this,  ResId(FL_TYPE))
-        ,m_aChooseTypeLabel (this,  ResId(FT_CHOOSE_TYPE))
         ,m_aMORK            (this,  ResId(RB_MORK))
         ,m_aLDAP            (this,  ResId(RB_LDAP))
         ,m_aOutlook         (this,  ResId(RB_OUTLOOK))
@@ -220,6 +218,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/01 11:03:10  fs
+ *  initial checkin - address book auto pilot - type selection page
+ *
  *
  *  Revision 1.0 26.07.01 09:11:48  fs
  ************************************************************************/

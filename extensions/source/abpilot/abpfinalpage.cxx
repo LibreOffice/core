@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abpfinalpage.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:05:42 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@ namespace abp
     //---------------------------------------------------------------------
     FinalPage::FinalPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_FINAL))
-        ,m_aSeparator           ( this, ResId( FL_SEPARATOR ) )
         ,m_aExplanation         ( this, ResId( FT_FINISH_EXPL ) )
         ,m_aNameLabel           ( this, ResId( FT_NAME_EXPL ) )
         ,m_aName                ( this, ResId( ET_DATASOURCENAME ) )
@@ -204,6 +203,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/01 11:05:42  fs
+ *  initial checkin - address book auto pilot - final page
+ *
  *
  *  Revision 1.0 27.07.01 14:17:48  fs
  ************************************************************************/

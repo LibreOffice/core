@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:06:48 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 10:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,24 +82,15 @@ TabPage RID_PAGE_SELECTABTYPE
 {
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text = "Adressbuch-Typ";
-    Text [ english ] = "Address Book Type";
-    Text [ english_us ] = "Address Book Type";
 
-    FixedLine FL_SEPARATOR
-    {
-        Pos     = MAP_APPFONT ( 4, 3 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
-
-        Text = "Willkommen";
-        Text [ english ] = "Welcome";
-        Text [ english_us ] = "Welcome";
-    };
+    Text = "Willkommen zum Adress-Datenquellen AutoPiloten";
+    Text [ english ] = "Welcome to the Address Data Source AutoPilot";
+    Text [ english_us ] = "Welcome to the Address Data Source AutoPilot";
 
     FixedText FT_TYPE_HINTS
     {
-        Pos     = MAP_APPFONT ( 7, 12 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 40 ) ;
+        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 40 ) ;
         WordBreak = TRUE;
 
         Text = "%PRODUCTNAME bietet Ihnen die Möglichkeit, auf bereits in Ihrem Systemvorhandene Adress-Daten zuzugreifen.\n"
@@ -115,16 +106,7 @@ TabPage RID_PAGE_SELECTABTYPE
 
     FixedLine FL_TYPE
     {
-        Pos     = MAP_APPFONT ( 4, 59 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
-
-        Text = "Typ";
-        Text [ english ] = "Type";
-        Text [ english_us ] = "Type";
-    };
-    FixedText FT_CHOOSE_TYPE
-    {
-        Pos     = MAP_APPFONT ( 7, 68 ) ;
+        Pos     = MAP_APPFONT ( 7, 56 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 8 ) ;
 
         Text = "Bitte wählen sie den Typ Ihres externen Adressbuches:";
@@ -134,7 +116,7 @@ TabPage RID_PAGE_SELECTABTYPE
 
     RadioButton RB_MORK
     {
-        Pos     = MAP_APPFONT ( 15, 79 ) ;
+        Pos     = MAP_APPFONT ( 15, 68 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
 
         Text = "Mozilla / Netscape 6.x";
@@ -144,7 +126,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_LDAP
     {
-        Pos     = MAP_APPFONT ( 15, 90 ) ;
+        Pos     = MAP_APPFONT ( 15, 79 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
 
         Text = "LDAP Adress-Bestand";
@@ -153,7 +135,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OUTLOOK
     {
-        Pos     = MAP_APPFONT ( 15, 101 ) ;
+        Pos     = MAP_APPFONT ( 15, 90 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
 
         Text = "Outlook Adressbuch";
@@ -162,7 +144,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OUTLOOKEXPRESS
     {
-        Pos     = MAP_APPFONT ( 15, 112 ) ;
+        Pos     = MAP_APPFONT ( 15,101 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
 
         Text = "Windows System-Adressbuch";
@@ -171,7 +153,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OTHER
     {
-        Pos     = MAP_APPFONT ( 15, 123 ) ;
+        Pos     = MAP_APPFONT ( 15, 112 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 22, 8 ) ;
 
         Text = "andere externe Datenquelle";
@@ -185,20 +167,15 @@ TabPage RID_PAGE_ADMININVOKATION
 {
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text = "Adressbuch-Details";
-    Text [ english ] = "Address Book Details";
-    Text [ english_us ] = "Address Book Details";
 
-    FixedLine FL_SEPARATOR
-    {
-        Pos     = MAP_APPFONT ( 4, 3 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
-    };
+    Text = "Zusätzliche Einstellungen";
+    Text [ english ] = "Additional Settings";
+    Text [ english_us ] = "Additional Settings";
 
     FixedText FT_ADMINEXPLANATION
     {
-        Pos     = MAP_APPFONT ( 7, 12 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 48 ) ;
+        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
         WordBreak = TRUE;
 
         Text = "Um die neue Datenquelle einzurichten, sind noch weitergehende Angaben notwendig.\n\n"
@@ -214,7 +191,7 @@ TabPage RID_PAGE_ADMININVOKATION
 
     PushButton PB_INVOKE_ADMIN_DIALOG
     {
-        Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 63 ) ;
+        Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 60 ) ;
         Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
 
         Text = "Einstellungen";
@@ -224,8 +201,8 @@ TabPage RID_PAGE_ADMININVOKATION
 
     FixedText FT_ERROR
     {
-        Pos     = MAP_APPFONT ( 7, WINDOW_SIZE_Y - 7 - 48 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 48 ) ;
+        Pos     = MAP_APPFONT ( BORDER_X, WINDOW_SIZE_Y - HEADER_SIZE_Y - 7 - 48 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
         WordBreak = TRUE;
         Hide = TRUE;
 
@@ -244,20 +221,15 @@ TabPage RID_PAGE_TABLESELECTION
 {
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text = "Tabellen-Auswahl";
-    Text [ english ] = "Table selection";
-    Text [ english_us ] = "Table selection";
 
-    FixedLine FL_SEPARATOR
-    {
-        Pos     = MAP_APPFONT ( 4, 3 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
-    };
+    Text = "Tabelle auswählen";
+    Text [ english ] = "Select Table";
+    Text [ english_us ] = "Select Table";
 
     FixedText FL_TOOMUCHTABLES
     {
-        Pos     = MAP_APPFONT ( 7, 12 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 24 ) ;
+        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 24 ) ;
         WordBreak = TRUE;
 
         Text = "Die von Ihnen gewählte externe Datenquelle enthält mehrere Adress-Bestände (respektive Tabellen).\n"
@@ -270,8 +242,8 @@ TabPage RID_PAGE_TABLESELECTION
 
     ListBox LB_TABLELIST
     {
-        Pos     = MAP_APPFONT ( 7, 39 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 50 ) ;
+        Pos     = MAP_APPFONT ( BORDER_X, 36 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 50 ) ;
         SVLook = TRUE;
         Sort = TRUE;
         DropDown = FALSE;
@@ -285,20 +257,15 @@ TabPage RID_PAGE_FIELDMAPPING
 {
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text = "Feld-Zuordnung";
-    Text [ english ] = "Field assigment";
-    Text [ english_us ] = "Field assigment";
 
-    FixedLine FL_SEPARATOR
-    {
-        Pos     = MAP_APPFONT ( 4, 3 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
-    };
+    Text = "Feldzuordnung";
+    Text [ english ] = "Field Assignment";
+    Text [ english_us ] = "Field Assignment";
 
     FixedText FT_FIELDASSIGMENTEXPL
     {
-        Pos     = MAP_APPFONT ( 7, 12 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 72 ) ;
+        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 72 ) ;
         WordBreak = TRUE;
 
         Text = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu können, muß %PRODUCTNAME wissen, welche Felder welche "
@@ -320,7 +287,7 @@ TabPage RID_PAGE_FIELDMAPPING
 
     PushButton PB_INVOKE_FIELDS_DIALOG
     {
-        Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 87 ) ;
+        Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 84 ) ;
         Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
 
         Text = "Feld-Zuordnung";
@@ -330,8 +297,8 @@ TabPage RID_PAGE_FIELDMAPPING
 
     FixedText FT_ASSIGNEDFIELDS
     {
-        Pos     = MAP_APPFONT ( 7, WINDOW_SIZE_Y - 7 - 32 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 32 ) ;
+        Pos     = MAP_APPFONT ( BORDER_X, WINDOW_SIZE_Y - HEADER_SIZE_Y - 7 - 32 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 32 ) ;
     };
 };
 
@@ -340,20 +307,15 @@ TabPage RID_PAGE_FINAL
 {
     SVLook  = TRUE ;
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text = "Zusammenfassung";
-    Text [ english ] = "Summary";
-    Text [ english_us ] = "Summary";
 
-    FixedLine FL_SEPARATOR
-    {
-        Pos     = MAP_APPFONT ( 4, 3 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8 ) ;
-    };
+    Text = "Datenquellen Titel";
+    Text [ english ] = "Data Source Title";
+    Text [ english_us ] = "Data Source Title";
 
     FixedText FT_FINISH_EXPL
     {
-        Pos     = MAP_APPFONT ( 7, 12 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 32 ) ;
+        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 32 ) ;
         WordBreak = TRUE;
 
         Text = "Das waren alle Angaben, die zu Integration Ihrer Adress-Daten in %PRODUCTNAME benötigt werden.\n\n"
@@ -366,19 +328,19 @@ TabPage RID_PAGE_FINAL
 
     FixedText FT_NAME_EXPL
     {
-        Pos     = MAP_APPFONT ( 7, 48 ) ;
+        Pos     = MAP_APPFONT ( BORDER_X, 45 ) ;
         Size    = MAP_APPFONT ( 50, 8 ) ;
 
-        Text = "Name";
-        Text [ english ] = "Name";
-        Text [ english_us ] = "Name";
+        Text = "Titel";
+        Text [ english ] = "Title";
+        Text [ english_us ] = "Title";
         Group = TRUE;
     };
 
     Edit ET_DATASOURCENAME
     {
-        Pos     = MAP_APPFONT ( 60, 48 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 60 - 7, 12) ;
+        Pos     = MAP_APPFONT ( BORDER_X + 50 + 3, 45 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 60 - BORDER_X, 12) ;
         SVLook = TRUE;
         Border = TRUE;
         Group = FALSE;
@@ -386,8 +348,8 @@ TabPage RID_PAGE_FINAL
 
     FixedText FT_DUPLICATENAME
     {
-        Pos     = MAP_APPFONT ( 7, WINDOW_SIZE_Y - 7 - 24 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 24) ;
+        Pos     = MAP_APPFONT ( BORDER_X, WINDOW_SIZE_Y - HEADER_SIZE_Y - 7 - 24 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 24) ;
         WordBreak = TRUE;
 
         Text =  "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sind, "
@@ -426,6 +388,7 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
     Message [ english_us ] = "Bitte wählen sie einen Adressbuch-Typ aus!";
 };
 
+//........................................................................
 QueryBox RID_QRY_NOTABLES
 {
     Buttons = WB_YES_NO;
@@ -490,9 +453,18 @@ String RID_STR_NOFIELDSASSIGNED
         "translation as for this menu. Does it help if I tell you that it's in svx/inc/globalmn.hrc:ITEM_FILE_DOCTEMPLATE?";
 };
 
+//........................................................................
+Bitmap BMP_HEADERIMAGE
+{
+    file = "addresspilot.bmp";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/01 11:06:48  fs
+ *  initial checkin - address book auto pilot - the dialog itself
+ *
  *
  *  Revision 1.0 26.07.01 09:03:45  fs
  ************************************************************************/

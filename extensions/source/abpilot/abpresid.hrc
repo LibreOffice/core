@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abpresid.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:07:29 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #define RID_ERRORBOX_START              RID_ABP_START
 #define RID_UNTYPED_START               RID_ABP_START
 #define RID_QUERYBOX_START              RID_ABP_START
+#define RID_BITMAP_START                RID_ABP_START
 
 //========================================================================
 // dialogs
@@ -133,6 +134,13 @@
 
 #define RID_UNTYPED_END                 RID_RSC_NOTUSEDYET
 
+//========================================================================
+// bitmaps
+
+#define BMP_HEADERIMAGE                 ( RID_BITMAP_START +  0 )
+// please adjust RID_BITMAP_END (below) when adding new bitmaps
+
+#define RID_BITMAP_END                  BMP_HEADERIMAGE
 
 //========================================================================
 //========================================================================
@@ -156,6 +164,9 @@
 #if RID_UNTYPED_END > RID_ABP_END
     #error "please adjust the resource id ranges!!"
 #endif
+#if RID_BITMAP_END > RID_ABP_END
+    #error "please adjust the resource id ranges!!"
+#endif
 
 //========================================================================
 // local resource ids
@@ -167,7 +178,6 @@
 
 //........................................................................
 #define FT_TYPE_HINTS            1
-#define FT_CHOOSE_TYPE           2
 #define FT_ADMINEXPLANATION      3
 #define FT_NAME_EXPL             4
 #define FT_ERROR                 5
@@ -206,6 +216,10 @@
 
 #define BUTTON_SIZE_X    50
 #define BUTTON_SIZE_Y    14
+
+#define HEADER_SIZE_Y   30
+
+#define BORDER_X        12
 
 //........................................................................
 

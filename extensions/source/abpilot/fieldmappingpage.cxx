@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldmappingpage.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:05:09 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@ namespace abp
     //---------------------------------------------------------------------
     FieldMappingPage::FieldMappingPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage( _pParent, ModuleRes( RID_PAGE_FIELDMAPPING ) )
-        ,m_aSeparator       ( this, ResId( FL_SEPARATOR ) )
         ,m_aExplanation     ( this, ResId( FT_FIELDASSIGMENTEXPL ) )
         ,m_aInvokeDialog    ( this, ResId( PB_INVOKE_FIELDS_DIALOG ) )
         ,m_aHint            ( this, ResId( FT_ASSIGNEDFIELDS ) )
@@ -159,6 +158,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/01 11:05:09  fs
+ *  initial checkin - address book auto pilot - page for invoking the field mapping
+ *
  *
  *  Revision 1.0 27.07.01 14:17:48  fs
  ************************************************************************/

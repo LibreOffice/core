@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tableselectionpage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 11:04:49 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ namespace abp
     class TableSelectionPage : public AddressBookSourcePage
     {
     protected:
-        FixedLine       m_aSeparator;
         FixedText       m_aLabel;
         ListBox         m_aTableList;
 
@@ -113,6 +112,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/01 11:04:49  fs
+ *  initial checkin - address book auto pilot - page for selecting the address table
+ *
  *
  *  Revision 1.0 27.07.01 14:17:31  fs
  ************************************************************************/
