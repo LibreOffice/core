@@ -8148,3 +8148,9 @@ lpfnDrawStateW
 ?s_pType_com_sun_star_util_XStringWidth@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXStringWidth@util@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?SetInteractionHandler@SfxMedium@@QAEXABV?$Reference@VXInteractionHandler@task@star@sun@com@@@uno@star@sun@com@@@Z
 ?lcl_translateBasic2Uno@?%O:\SRC650\src\sfx2\source\doc\objmisc.cxx1760910932@@YAXABVSbxVariableRef@@PAX@Z
+??0WrappedTargetRuntimeException@lang@star@sun@com@@QAE@ABV01234@@Z
+??1CommandAbortedException@ucb@star@sun@com@@QAE@XZ
+??1WrappedTargetRuntimeException@lang@star@sun@com@@QAE@XZ
+??_R0?AVWrappedTargetRuntimeException@lang@star@sun@com@@@8
+?s_pType_com_sun_star_ucb_CommandAbortedException@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBVCommandAbortedException@ucb@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+_TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
