@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:34:20 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,7 +896,6 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
 
     FOREACHPAM_START(this)
 
-/*      TABLE IN TABLE ALLOWED
         if( pSrcNd &&
             0 != ( pDestNd = GetDoc()->IsIdxInTbl( PCURCRSR->GetPoint()->nNode )))
         {
@@ -951,9 +950,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
             }
 
             break;      // aus der "while"-Schleife heraus
-        } */
-
-        if( *aCpyPam.GetPoint() == *aCpyPam.GetMark() &&
+        }
+        else if( *aCpyPam.GetPoint() == *aCpyPam.GetMark() &&
                  pClpDoc->GetSpzFrmFmts()->Count() )
         {
             // so langsam sollte mal eine DrawView erzeugt werden
