@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ma $ $Date: 2001-04-12 15:37:15 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,10 @@ TabPage TP_COLUMN
         Text[ portuguese ] = "Optimizar ~colunas";
         Text[ russian ] = "Ğàñïğåäåëèòü ğàâíîìåğíî ñîäåğæèìîå âî âñåõ êîëîíêàõ";
         Text[ greek ] = "ºóç êáôáíïìŞ ôïõ ğåñéå÷ïìİíïõ óå üëåò ôéò óôŞëåò";
-        Text[ dutch ] = "~Kolommen uitbalanceren";
+        Text[ dutch ] = "Inhoud gelijkmatig verdelen over ~kolommen";
         Text[ french ] = "Répartition régulière du contenu sur toutes les ~colonnes";
         Text[ spanish ] = "Distribución uniforme del contenido sobre todas las ~columnas";
-        Text[ italian ] = "Ottimizza colonne";
+        Text[ italian ] = "Distribuisci in modo uniforme il contenuto di tutte le colonne.";
         Text[ danish ] = "Udjævn kolonner";
         Text[ swedish ] = "Fördela innehåll jämnt över ~alla kolumner";
         Text[ polish ] = "Roz³ó¿ zawartoœæ równomiernie na wszystkie kolumny";
