@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 11:01:13 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,10 @@
 #include "listselectiondlg.hxx"
 #endif
 
+#ifndef EXTENSIONS_PROPCTRLR_PUSHBUTTONNAVIGATION_HXX
+#include "pushbuttonnavigation.hxx"
+#endif
+
 //............................................................................
 namespace pcr
 {
@@ -618,7 +622,7 @@ namespace pcr
                     DBG_ASSERT( bSuccess, "OPropertyBrowserController::getStringRepFromPropertyValue: invalid value (1)!" );
 
                     // the only value binding we support so far is linking to spreadsheet cells
-                    CellBindingHelper aHelper( m_xORB, m_xPropValueAccess );
+                    CellBindingHelper aHelper( m_xPropValueAccess );
                     sReturn = aHelper.getStringAddressFromCellBinding( xBinding );
                 }
                 break;
@@ -633,7 +637,7 @@ namespace pcr
                     DBG_ASSERT( bSuccess, "OPropertyBrowserController::getStringRepFromPropertyValue: invalid value (2)!" );
 
                     // the only value binding we support so far is linking to spreadsheet cells
-                    CellBindingHelper aHelper( m_xORB, m_xPropValueAccess );
+                    CellBindingHelper aHelper( m_xPropValueAccess );
                     sReturn = aHelper.getStringAddressFromCellListSource( xSource );
                 }
                 break;
@@ -822,14 +826,14 @@ namespace pcr
             {
                 case PROPERTY_ID_LIST_CELL_RANGE:
                 {
-                    CellBindingHelper aHelper( m_xORB, m_xPropValueAccess );
+                    CellBindingHelper aHelper( m_xPropValueAccess );
                     aReturn = makeAny( aHelper.createCellListSourceFromStringAddress( _rString ) );
                 }
                 break;
 
                 case PROPERTY_ID_BOUND_CELL:
                 {
-                    CellBindingHelper aHelper( m_xORB, m_xPropValueAccess );
+                    CellBindingHelper aHelper( m_xPropValueAccess );
 
                     // if we have the possibility of an integer binding, then we must preserve
                     // this property's value (e.g. if the current binding is an integer binding, then
@@ -1308,7 +1312,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::ChangeFontProperty( const ::rtl::OUString& rName )
+    void OPropertyBrowserController::ChangeFontProperty( )
     {
         // create an item set for use with the dialog
         SfxItemSet* pSet = NULL;
@@ -1889,15 +1893,17 @@ namespace pcr
                 eType = pProps->Type.getTypeClass();
 
                 //////////////////////////////////////////////////////////////////////
-                // translate the current property value into a string to be displayed
+                // retrieve the value, and convert it to it's string representation
                 eState = PropertyState_DIRECT_VALUE;
-                if ( m_xPropStateAccess.is() && !bIsVirtualProperty )
-                    eState = m_xPropStateAccess->getPropertyState( pProps->Name );
-
                 if ( bIsVirtualProperty )
+                {
+                    eState = getVirtualPropertyState( nPropId );
                     aVal = getVirtualPropertyValue( nPropId );
+                }
                 else
                 {
+                    if ( m_xPropStateAccess.is() )
+                        eState = m_xPropStateAccess->getPropertyState( pProps->Name );
                     aVal = m_xPropValueAccess->getPropertyValue( pProps->Name );
                     fakePropertyValue( aVal, nPropId );
                 }
@@ -2660,7 +2666,7 @@ namespace pcr
             default:
             if ( aName.EqualsAscii( "Font" ) )
             {
-                ChangeFontProperty( aName );
+                ChangeFontProperty( );
             }
             else if ( pData == LINETYPE_EVENT )
             {
@@ -2928,15 +2934,53 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
+    PropertyState OPropertyBrowserController::getVirtualPropertyState( sal_Int32 _nPropId )
+    {
+        PropertyState eState = PropertyState_DIRECT_VALUE;
+
+        switch ( _nPropId )
+        {
+        case PROPERTY_ID_BUTTONTYPE:
+        {
+            PushButtonNavigation aHelper( m_xPropValueAccess );
+            eState = aHelper.getCurrentButtonTypeState();
+        }
+        break;
+        case PROPERTY_ID_TARGET_URL:
+        {
+            PushButtonNavigation aHelper( m_xPropValueAccess );
+            eState = aHelper.getCurrentTargetURLState();
+        }
+        break;
+        }
+
+        return eState;
+    }
+
+    //------------------------------------------------------------------------
     Any OPropertyBrowserController::getVirtualPropertyValue( sal_Int32 _nPropId )
     {
         Any aReturn;
 
         switch ( _nPropId )
         {
+        case PROPERTY_ID_BUTTONTYPE:
+        {
+            PushButtonNavigation aHelper( m_xPropValueAccess );
+            aReturn = aHelper.getCurrentButtonType();
+        }
+        break;
+
+        case PROPERTY_ID_TARGET_URL:
+        {
+            PushButtonNavigation aHelper( m_xPropValueAccess );
+            aReturn = aHelper.getCurrentTargetURL();
+        }
+        break;
+
         case PROPERTY_ID_BOUND_CELL:
         {
-            CellBindingHelper aHelper( m_xORB, m_xPropValueAccess );
+            CellBindingHelper aHelper( m_xPropValueAccess );
             Reference< XValueBinding > xBinding( aHelper.getCurrentBinding() );
             if ( !aHelper.isCellBinding( xBinding ) )
                 xBinding.clear();
@@ -2947,7 +2991,7 @@ namespace pcr
 
         case PROPERTY_ID_LIST_CELL_RANGE:
         {
-            CellBindingHelper aHelper( m_xORB, m_xPropValueAccess );
+            CellBindingHelper aHelper( m_xPropValueAccess );
             Reference< XListEntrySource > xSource( aHelper.getCurrentListSource() );
             if ( !aHelper.isCellRangeListSource( xSource ) )
                 xSource.clear();
@@ -2958,7 +3002,7 @@ namespace pcr
 
         case PROPERTY_ID_CELL_EXCHANGE_TYPE:
         {
-            CellBindingHelper aHelper( m_xORB, m_xPropValueAccess );
+            CellBindingHelper aHelper( m_xPropValueAccess );
             Reference< XValueBinding > xBinding( aHelper.getCurrentBinding() );
             aReturn <<= (sal_Int16)( aHelper.isCellIntegerBinding( xBinding ) ? 1 : 0 );
         }
@@ -2987,9 +3031,23 @@ namespace pcr
     {
         switch ( _nPropId )
         {
+        case PROPERTY_ID_BUTTONTYPE:
+        {
+            PushButtonNavigation aHelper( m_xPropValueAccess );
+            aHelper.setCurrentButtonType( _rValue );
+        }
+        break;
+
+        case PROPERTY_ID_TARGET_URL:
+        {
+            PushButtonNavigation aHelper( m_xPropValueAccess );
+            aHelper.setCurrentTargetURL( _rValue );
+        }
+        break;
+
         case PROPERTY_ID_BOUND_CELL:
         {
-            CellBindingHelper aHelper( m_xORB, m_xPropValueAccess );
+            CellBindingHelper aHelper( m_xPropValueAccess );
             Reference< XValueBinding > xBinding;
             _rValue >>= xBinding;
             aHelper.setBinding( xBinding );
@@ -2998,7 +3056,7 @@ namespace pcr
 
         case PROPERTY_ID_LIST_CELL_RANGE:
         {
-            CellBindingHelper aHelper( m_xORB, m_xPropValueAccess );
+            CellBindingHelper aHelper( m_xPropValueAccess );
             Reference< XListEntrySource > xSource;
             _rValue >>= xSource;
             aHelper.setListSource( xSource );
@@ -3007,7 +3065,7 @@ namespace pcr
 
         case PROPERTY_ID_CELL_EXCHANGE_TYPE:
         {
-            CellBindingHelper aHelper( m_xORB, m_xPropValueAccess );
+            CellBindingHelper aHelper( m_xPropValueAccess );
             Reference< XValueBinding > xBinding = aHelper.getCurrentBinding( );
             OSL_ENSURE( xBinding.is(), "OPropertyBrowserController::setVirtualPropertyValue: how this?" );
                 // this property here should be disabled (see updateDependentProperties) if there's no binding
@@ -3057,7 +3115,7 @@ namespace pcr
         if ( CellBindingHelper::livesInSpreadsheetDocument( m_xPropValueAccess ) )
         {
             // check for properties which are related to binding controls to Calc cells
-            CellBindingHelper aHelper( m_xORB, m_xPropValueAccess );
+            CellBindingHelper aHelper( m_xPropValueAccess );
             bool bAllowCellLinking      = aHelper.isCellBindingAllowed();
             bool bAllowCellIntLinking   = aHelper.isCellIntegerBindingAllowed();
             bool bAllowListCellRange    = aHelper.isListCellRangeAllowed();
