@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:42:51 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 07:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ italian ] = "Ricerca esatta" ;
         Text [ portuguese_brazilian ] = "Igua~lar Caixa" ;
         Text [ portuguese ] = "Procura e~xacta" ;
-        Text [ finnish ] = "E~xakte Suche" ;
+        Text [ finnish ] = "Sama kirjainkoko" ;
         Text [ danish ] = "S鴊 eksakt" ;
         Text [ french ] = "Respecter la ~casse" ;
         Text [ swedish ] = "E~xakt s鰇ning" ;
@@ -549,7 +549,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ polish ] = "Zwyk砤/po硂wa szeroko渃i";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
         Text[ japanese ] = "敿妏偲慡妏傪嬫暿";
-        Text[ korean ] = "Match half/full width forms";
+        Text[ korean ] = "馆气/傈气 屈侥";
         Text[ chinese_simplified ] = "半角和全角字符";
         Text[ chinese_traditional ] = "㎝じ";
         Text[ turkish ] = "Match half/full width forms";
@@ -577,7 +577,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ polish ] = "Podobna pisownia (Japo駍ki)";
         Text[ portuguese_brazilian ] = "Sounds like (Japanese)";
         Text[ japanese ] = "偁偄傑偄専嶕(擔杮岅)";
-        Text[ korean ] = "Sounds like (Japanese)";
+        Text[ korean ] = "蜡荤茄 枚磊过 (老夯绢)";
         Text[ chinese_simplified ] = "类似字符(日文)";
         Text[ chinese_traditional ] = "摸じ(らゅ)";
         Text[ turkish ] = "Sounds like (Japanese)";
