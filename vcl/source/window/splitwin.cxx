@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:19:34 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@
 #endif
 #undef private
 
-#pragma hdrstop
+
 
 // =======================================================================
 
