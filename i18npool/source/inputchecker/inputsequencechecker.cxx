@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputsequencechecker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:07:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,11 @@
  ************************************************************************/
 
 #include <inputsequencechecker.hxx>
-#include <drafts/com/sun/star/i18n/InputSequenceCheckMode.hpp>
+#include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
-#include <unicode.hxx>
+#include <i18nutil/unicode.hxx>
 #include <rtl/ustrbuf.hxx>
 
-using namespace ::drafts::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
