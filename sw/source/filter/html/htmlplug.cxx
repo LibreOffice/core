@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:16:33 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,23 +493,25 @@ void SwHTMLParser::InsertEmbed()
     comphelper::EmbeddedObjectContainer aCnt;
     ::rtl::OUString aObjName;
     uno::Reference < embed::XEmbeddedObject > xObj = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aObjName );
-    svt::EmbeddedObjectRef::TryRunningState( xObj );
-    uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-    if ( xSet.is() )
+    if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
     {
-        if( bHasURL )
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
-                uno::makeAny( ::rtl::OUString( aURL ) ) );
-        if( bHasType )
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType"),
-                uno::makeAny( ::rtl::OUString( aType ) ) );
+        uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+        if ( xSet.is() )
+        {
+            if( bHasURL )
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                    uno::makeAny( ::rtl::OUString( aURL ) ) );
+            if( bHasType )
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType"),
+                    uno::makeAny( ::rtl::OUString( aType ) ) );
 
-        uno::Sequence < beans::PropertyValue > aProps;
-        aCmdLst.FillSequence( aProps );
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands"), uno::makeAny( aProps ) );
+            uno::Sequence < beans::PropertyValue > aProps;
+            aCmdLst.FillSequence( aProps );
+            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands"), uno::makeAny( aProps ) );
 
-        // TODO/LATER: EnableSetModified?!
-        //pPlugin->EnableSetModified( TRUE );
+            // TODO/LATER: EnableSetModified?!
+            //pPlugin->EnableSetModified( TRUE );
+        }
     }
 
     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
@@ -1151,6 +1153,9 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     SwOLEObj &rObj = pOLENd->GetOLEObj();
 
     uno::Reference < embed::XEmbeddedObject > xObj( rObj.GetOleRef() );
+    if ( !svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+        return rWrt;
+
     uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
     BOOL bHiddenEmbed = FALSE;
 
