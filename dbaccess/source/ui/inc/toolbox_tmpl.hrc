@@ -1,0 +1,430 @@
+/*************************************************************************
+ *
+ *  $RCSfile: toolbox_tmpl.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:32:40 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef DBAUI_TOOLBOX_HXX
+#define DBAUI_TOOLBOX_HXX
+
+#define CUR_ITEM ToolBoxItem
+#define CUR_SEPARATOR CUR_ITEM {Type = TOOLBOXITEM_SEPARATOR;}
+
+#define MID_SAVE_RECORD \
+    Identifier = ID_BROWSER_SAVERECORD ; \
+    Command = ".uno:FormSlots/saveRecord" ; \
+    HelpId = HID_BROWSER_SAVE_RECORD ; \
+    Hide = FALSE ;  \
+    Text [ de ] = "Aktuellen Datensatz speichern" ; \
+    Text [ en-US ] = "Save Current Record"; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_UNDO_RECORD \
+    Identifier = ID_BROWSER_UNDORECORD ; \
+    Command = ".uno:FormSlots/undoRecord" ; \
+    HelpID = HID_BROWSER_UNDO_RECORD ; \
+    Hide = FALSE ;  \
+    Text [ de ] = "Rückgängig : Dateneingabe" ; \
+    Text [ en-US ] = "Undo: Data Entry" ;   \
+
+#define MID_SBA_QRY_CUT \
+    Identifier = ID_BROWSER_CUT ; \
+    Text [ de ] = "Ausschneiden" ; \
+    Hide = FALSE ;  \
+    Text [ en-US ] = "Cut"; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_SBA_QRY_COPY \
+    Identifier = ID_BROWSER_COPY ; \
+    Text [ de ] = "Kopieren" ; \
+    Hide = FALSE ;  \
+    Text [ en-US ] = "Copy";    \
+    Text [ x-comment ] = " ";   \
+
+#define MID_SBA_QRY_PASTE \
+    Identifier = ID_BROWSER_PASTE ; \
+    Text [ de ] = "Einfügen" ; \
+    Hide = FALSE ;  \
+    Text [ en-US ] = "Paste";   \
+    Text [ x-comment ] = " ";   \
+
+#define MID_SBA_QRY_EDIT \
+    Identifier = ID_BROWSER_EDITDOC ; \
+    Checkable = TRUE;   \
+    Text [ de ] = "Daten bearbeiten" ; \
+    Hide = FALSE ; \
+    Text [ en-US ] = "Edit Data"; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_SBA_QRY_ORDERCRIT \
+    Identifier = ID_BROWSER_ORDERCRIT ; \
+    Text [ de ] = "Sortierung..." ; \
+    Text [ en-US ] = "Sort Order..."; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_SBA_QRY_FILTERCRIT \
+    Identifier = ID_BROWSER_FILTERCRIT ; \
+    Text [ de ] = "Standardfilter ..." ; \
+    Text [ en-US ] = "Default Filter..."; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_BROWSER_INSERTCONTENT \
+    Hide = TRUE ; \
+    Identifier = ID_BROWSER_INSERTCONTENT ; \
+    Text [ de ] = "Daten in Felder"; \
+    Text [ en-US ] = "Data to Fields"; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_BROWSER_INSERTCOLUMNS \
+    Identifier = ID_BROWSER_INSERTCOLUMNS ; \
+    Hide = TRUE ; \
+    Text [ de ] = "Daten in Text ..."; \
+    Text [ en-US ] = "Data to Text..."; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_BROWSER_DOCUMENT_DATASOURCE \
+    Identifier = ID_BROWSER_DOCUMENT_DATASOURCE; \
+    Hide = TRUE ; \
+    Text [ de ] = "Aktuelle Dokument-Datenquelle"; \
+    Text [ en-US ] = "Data Source of Current Document"; \
+
+#define MID_BROWSER_FORMLETTER \
+    Identifier = ID_BROWSER_FORMLETTER ; \
+    Hide = TRUE ; \
+    Text [ de ] = "~Seriendruck..."; \
+    Text [ en-US ] = "~Mail Merge..."; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_SBA_QRY_SORTUP \
+    Identifier = ID_BROWSER_SORTUP ; \
+    Text [ de ] = "Aufsteigend sortieren" ; \
+    Text [ en-US ] = "Sort Ascending"; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_EXPLORER_PREVLEVEL \
+    Identifier = ID_BROWSER_EXPL_PREVLEVEL; \
+    Text [ de ] = "Übergeordnete Ebene";\
+    Text [ en-US ] = "Superordinate Level"; \
+
+#define MID_BROWSER_EXPLORER \
+    Identifier = ID_BROWSER_EXPLORER; \
+    Checkable = TRUE;   \
+    Text [ de ] = "Explorer ein/aus" ; \
+    Text [ en-US ] = "Explorer On/Off" ; \
+
+#define MID_FM_SEARCH \
+    Identifier = ID_BROWSER_SEARCH ; \
+    Text [ de ] = "Datensatz suchen" ; \
+    Text [ en-US ] = "Find Record"; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_SBA_QRY_SORTDOWN \
+    Identifier = ID_BROWSER_SORTDOWN ; \
+    Text [ de ] = "Absteigend sortieren" ; \
+    Text [ en-US ] = "Sort Descending"; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_SBA_QRY_AUTOFILTER \
+    Identifier = ID_BROWSER_AUTOFILTER ; \
+    Text [ de ] = "Autofilter" ; \
+    Text [ en-US ] = "AutoFilter"; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_SBA_QRY_COUNTALL \
+    Identifier = ID_BROWSER_COUNTALL ; \
+    Text [ de ] = "Anzahl Datensätze" ; \
+    Text [ en-US ] = "Records Count"; \
+    Text [ x-comment ] = " ";   \
+
+
+#define MID_SBA_QRY_REFRESH \
+    Identifier = ID_BROWSER_REFRESH ; \
+    Text [ de ] = "Aktualisieren" ; \
+    Text [ en-US ] = "Refresh"; \
+    Text [ x-comment ] = " ";   \
+
+#define MID_SBA_QRY_REMOVEFILTER \
+    Identifier = ID_BROWSER_REMOVEFILTER ; \
+    Text [ de ] = "Filter/Sortierung entfernen" ; \
+    Text [ en-US ] = "Remove Filter/Sort"; \
+    Text [ x-comment ] = " ";   \
+
+
+#define MID_SBA_BROWSER_FILTERED \
+    Identifier = ID_BROWSER_FILTERED ; \
+    Checkable = TRUE;   \
+    Text [ de ] = "Filter anwenden" ; \
+    Text [ en-US ] = "Apply Filter" ; \
+
+#define MID_DROP_TABLE \
+    Identifier = ID_DROP_TABLE; \
+    HelpId = HID_BROWSER_TABLE_DELETE ; \
+    Text [ de ] = "Tabelle ~löschen..." ; \
+    Text [ en-US ] = "De~lete Table..." ; \
+
+#define MID_RENAME_ENTRY \
+    Identifier = ID_RENAME_ENTRY;   \
+    HelpId = HID_BROWSER_RENAME_ENTRY ; \
+    Text [ de ] = "~Umbenennen" ; \
+    Text [ en-US ] = "~Rename"; \
+
+#define MID_EDIT_TABLE \
+    Identifier = ID_EDIT_TABLE; \
+    HelpId = HID_BROWSER_TABLE_EDIT ; \
+    Text [ de ] = "Tabelle ~bearbeiten" ; \
+    Text [ en-US ] = "Edit Ta~ble" ; \
+
+#define MID_NEW_VIEW_DESIGN \
+    Identifier = ID_NEW_VIEW_DESIGN;    \
+    HelpId = HID_BROWSER_VIEW_CREATE_DESIGN ; \
+    Text [ de ] = "Neuer ~Ansichtsentwurf" ; \
+    Text [ en-US ] = "New ~View Design" ; \
+
+#define MID_NEW_TABLE_DESIGN \
+    Identifier = ID_NEW_TABLE_DESIGN;   \
+    HelpId = HID_BROWSER_TABLE_CREATE_DESIGN ; \
+    Text [ de ] = "Neuer ~Tabellenentwurf" ; \
+    Text [ en-US ] = "New ~Table Design" ;
+
+#define MID_QUERY_WIZARD    \
+    Identifier = ID_NEW_QUERY_WIZARD;   \
+    HelpId = HID_BROWSER_QUERY_WIZARD ; \
+    Text[ de ] = "AutoPilot Abfrage..." ;\
+    Text[ en-US ] = "Query AutoPilot...";
+
+#define MID_QUERY_NEW_DESIGN    \
+    Identifier = ID_NEW_QUERY_DESIGN;   \
+    HelpId = HID_BROWSER_QUERY_CREATE_DESIGN ; \
+    Text [ de ] = "Neue ~Abfrage (Design-Ansicht)" ; \
+    Text [ en-US ] = "New ~Query (Design View)" ; \
+
+#define MID_QUERY_EDIT_DESIGN   \
+    Identifier = ID_EDIT_QUERY_DESIGN;  \
+    HelpId = HID_BROWSER_QUERY_EDIT ; \
+    Text [ de ] = "Abfrage b~earbeiten" ; \
+    Text [ en-US ] = "~Edit Query" ; \
+
+#define MID_QUERY_NEW_SQL   \
+    Identifier = ID_NEW_QUERY_SQL;  \
+    HelpId = HID_BROWSER_QUERY_CREATE_TEXT ; \
+    Text [ de ] = "Neue Abfrage (~SQL-Ansicht)" ; \
+    Text [ en-US ] = "New Query (~SQL View)" ; \
+
+#define MID_QUERY_EDIT_SQL  \
+    Identifier = ID_EDIT_QUERY_SQL; \
+    HelpId = HID_BROWSER_QUERY_EDITSQL ; \
+    Text [ de ] = "SQL Befehl eingeben ..." ;   \
+    Text [ en-US ] = "Enter SQL command..." ;   \
+
+#define MID_QUERY_DROP  \
+    Identifier = ID_DROP_QUERY; \
+    HelpId = HID_BROWSER_QUERY_DELETE ; \
+    Text [ de ] = "Abfrage ~löschen..." ; \
+    Text [ en-US ] = "De~lete Query..." ; \
+
+#define MID_LINK_NEW    \
+    Identifier = ID_NEW_LINK;   \
+    HelpId = HID_BROWSER_NEW_LINK ; \
+    Text [ de ] = "Neue Verknüpfung..." ;   \
+    Text [ en-US ] = "New Link..." ;    \
+
+#define MID_LINK_EDIT   \
+    Identifier = ID_EDIT_LINK;  \
+    HelpId = HID_BROWSER_EDIT_LINK ; \
+    Text [ de ] = "Verknüpfung bearbeiten ..." ;    \
+    Text [ en-US ] = "Edit Link..." ;   \
+
+#define MID_LINK_DROP   \
+    Identifier = ID_DROP_LINK;  \
+    HelpId = HID_BROWSER_DROP_LINK ; \
+    Text [ de ] = "Verknüpfung löschen..." ;    \
+    Text [ en-US ] = "Delete Link..." ; \
+
+#define MID_DOCUMENT_OPEN   \
+    Identifier = ID_OPEN_DOCUMENT;  \
+    HelpId = HID_BROWSER_OPEN_DOCUMENT ; \
+    Text [ de ] = "Dokument öffnen" ;   \
+    Text [ en-US ] = "Open Document" ;  \
+
+#define MID_DOCUMENT_EDIT   \
+    Identifier = ID_EDIT_DOCUMENT;  \
+    HelpId = HID_BROWSER_EDIT_DOCUMENT ; \
+    Text [ de ] = "Dokument bearbeiten" ;   \
+    Text [ en-US ] = "Edit Document" ;  \
+
+#define MID_DOCUMENT_CREATE_NEW \
+    Identifier = ID_CREATE_NEW_DOC; \
+    HelpId = HID_BROWSER_BEW_DOCUMENT ; \
+    Text [ de ] = "Neues Dokument" ;    \
+    Text [ en-US ] = "New Document" ;   \
+
+#define MID_DBUI_REALTION_ADD_RELATION      \
+    Identifier = ID_RELATION_ADD_RELATION ; \
+    HelpId = SID_SBA_ADD_RELATION ;         \
+    Text [ de ] = "Neue Relation..." ;          \
+    Text [ en-US ] = "New Relation..."; \
+
+#define MID_DBUI_QUERY_ADD_JOIN     \
+    Identifier = ID_RELATION_ADD_RELATION ; \
+    HelpId = SID_SBA_ADD_RELATION ;         \
+    Text [ de ] = "Neue Verbindung..." ;            \
+    Text [ en-US ] = "New Join..."; \
+
+#define MID_DBUI_BROWSER_ESACPEPROCESSING                       \
+    Identifier = ID_BROWSER_ESACPEPROCESSING;                   \
+    Checkable = TRUE;                                           \
+    HelpId = SID_FM_NATIVESQL ;                                 \
+    Text [ de ] = "SQL-Kommando direkt ausführen" ;                 \
+    Text [ en-US ] = "Run SQL command directly";            \
+
+#define MID_DBUI_QUERY_VIEW_FUNCTIONS                           \
+    Identifier = ID_BROWSER_QUERY_VIEW_FUNCTIONS;               \
+    HelpId = SID_SBA_QUERY_VIEW_FUNCTIONS ;                     \
+    Checkable = TRUE;   \
+    Text [ de ] = "Funktionen" ;                                        \
+    Text [ en-US ] = "Functions";                           \
+    Text [ x-comment ] = " ";                               \
+
+#define MID_DBUI_QUERY_VIEW_TABLES                              \
+    Identifier = ID_BROWSER_QUERY_VIEW_TABLES;                  \
+    Checkable = TRUE;   \
+    HelpId = SID_SBA_QUERY_VIEW_TABLES ;                        \
+    Text [ de ] = "Tabellenname" ;                                      \
+    Text [ en-US ] = "Table Name";                          \
+    Text [ x-comment ] = " ";                               \
+
+#define MID_DBUI_QUERY_VIEW_ALIASES                             \
+    Identifier = ID_BROWSER_QUERY_VIEW_ALIASES;                 \
+    Checkable = TRUE;   \
+    HelpId = SID_SBA_QUERY_VIEW_ALIASES ;                       \
+    Text [ de ] = "Aliasname" ;                                     \
+    Text [ en-US ] = "Alias";                               \
+    Text [ x-comment ] = " ";                               \
+
+#define MID_DBUI_QUERY_DISTINCT_VALUES                          \
+    Identifier = ID_BROWSER_QUERY_DISTINCT_VALUES;              \
+    Checkable = TRUE;   \
+    HelpId = SID_SBA_QUERY_DISTINCT_VALUES ;                    \
+    Text [ de ] = "Eindeutige Werte" ;                                  \
+    Text [ en-US ] = "Distinct Values";                     \
+    Text [ x-comment ] = " ";                               \
+
+#define MID_DBUI_JOIN_ADD_TABLE                                 \
+    Identifier = ID_BROWSER_ADDTABLE;                           \
+    HelpId = SID_FM_ADDTABLE ;                                  \
+    Text [ de ] = "Tabellen hinzufügen..." ;                            \
+    Text [ en-US ] = "Add Tables...";                       \
+
+#define MID_BROWSER_SQL                                                       \
+    Identifier = ID_BROWSER_SQL;                                              \
+    HelpId = HID_QUERY_SQLMODE;                                               \
+    Checkable = TRUE;   \
+    Text [ de ] = "Design-Ansicht an-, ausschalten" ;                                 \
+    Text [ en-US ] = "Switch Design View On/Off";                         \
+
+#define MID_DBUI_CLEAR_QUERY                                                  \
+    Identifier = ID_BROWSER_CLEAR_QUERY;                                      \
+    HelpId = SID_SBA_CLEAR_QUERY ;                                            \
+    Text [ de ] = "Abfrage löschen" ;                                                 \
+    Text [ en-US ] = "Clear Query";                                       \
+
+#define MID_DBUI_QUERY_EXECUTE                                                \
+    Identifier = ID_BROWSER_QUERY_EXECUTE;                                    \
+    HelpId = SID_FM_EXECUTE ;                                                 \
+    Text [ de ] = "Abfrage ausführen" ;                                           \
+    Text [ en-US ] = "Run Query";                                                 \
+
+#define MID_DBUI_QUERY_EDIT_JOINCONNECTION                                    \
+    Identifier = ID_QUERY_EDIT_JOINCONNECTION;                                \
+    HelpId = HID_QUERY_EDIT_JOINCONNECTION ;                                    \
+    Text [ de ] = "Beabeiten..." ;                                                    \
+    Text [ en-US ] = "Edit..."; \
+
+#define MID_COLUMN_WIDTH\
+    Identifier = ID_BROWSER_COLWIDTH ;\
+    HelpID = HID_BROWSER_COLUMNWIDTH ;\
+    Text [ de ] = "Spalten~breite..." ;\
+    Text [ en-US ] = "Column ~Width..." ;\
+
+#define MID_DOCUMENT_CREATE_REPWIZ\
+    Identifier = ID_DOCUMENT_CREATE_REPWIZ ;\
+    HelpID = HID_DOCUMENT_CREATE_REPWIZ ;\
+    Text [ de ] = "AutoPilot Bericht..." ;\
+    Text [ en-US ] = "Report AutoPilot..."; \
+
+#define MID_DOCUMENT_NEW_AUTOPILOT                              \
+    Identifier = ID_FORM_NEW_PILOT;                             \
+    Text [ de ] = "AutoPilot Formular...";                              \
+    Text [ en-US ] = "Form AutoPilot...";   \
+
+#define MID_UNDO                                                   \
+    Text [ de ] = "Rückgängig" ;                                           \
+    Text [ en-US ] = "Undo";                                   \
+
+#define MID_REDO                                                   \
+    Text [ de ] = "Wiederherstellen" ;                                     \
+    Text [ en-US ] = "Redo";                                   \
+
+#define MID_EDIT_DELETE                                             \
+    Identifier = SID_DELETE ;                                       \
+    Command = ".uno:Delete" ;                                       \
+    HelpID = SID_DELETE ;                                           \
+    Text [ de ] = "~Löschen..." ;                                           \
+    Text [ en-US ] = "~Delete..." ;                         \
+
+#endif // DBAUI_TOOLBOX_HXX
+
