@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-21 14:59:44 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ public:
     void            ClearText();
 
     void            InputSelection( EditView* pView );
-    void            InputChanged( EditView* pView );
+    void            InputChanged( EditView* pView, BOOL bFromNotify = FALSE );
 
     void            ViewShellGone(ScTabViewShell* pViewSh);
     void            SetRefViewShell(ScTabViewShell* pRefVsh) {pRefViewSh=pRefVsh;}
@@ -241,7 +241,7 @@ public:
     EditView*       GetTopView()        { return pTopView; }
 
     BOOL            DataChanging( sal_Unicode cTyped = 0, BOOL bFromCommand = FALSE );
-    void            DataChanged();
+    void            DataChanged( BOOL bFromTopNotify = FALSE );
 
     BOOL            TakesReturn() const     { return ( nTipVisible != 0 ); }
 
