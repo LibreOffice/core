@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:17:58 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,8 +1145,33 @@
             </node>
             <node oor:name=".uno:DesignerDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">St~ylist</value>
-                    <value xml:lang="en-US">St~ylist</value>
+                    <value xml:lang="de">Formatvorlagen und Formatierung</value>
+                    <value xml:lang="en-US">St~yles and Formatting</value>
+                    <value xml:lang="ar">المُصمم</value>
+                    <value xml:lang="no">St~ylist</value>
+                    <value xml:lang="ca">Es~til</value>
+                    <value xml:lang="zh-TW">各類樣式(~Y)</value>
+                    <value xml:lang="cs">Stylista</value>
+                    <value xml:lang="da">St~ylist</value>
+                    <value xml:lang="el">Στ~υλίστας</value>
+                    <value xml:lang="es">~Estilista</value>
+                    <value xml:lang="fi">Tyylityökal~u</value>
+                    <value xml:lang="fr">St~yliste</value>
+                    <value xml:lang="he">‮מסגנן‬</value>
+                    <value xml:lang="it">~Stilista</value>
+                    <value xml:lang="ja">スタイリスト(~Y)</value>
+                    <value xml:lang="ko">스타일리스트(~Y)</value>
+                    <value xml:lang="nl">St~ylist</value>
+                    <value xml:lang="pl">Stylista</value>
+                    <value xml:lang="pt-BR">~Estilista</value>
+                    <value xml:lang="ru">Мастер стилей</value>
+                    <value xml:lang="sk">Št~ylista</value>
+                    <value xml:lang="sv">St~ylist</value>
+                    <value xml:lang="th">ตัวออ~กแบบ</value>
+                    <value xml:lang="tr">Stil listesi</value>
+                    <value xml:lang="hi">स्टइ~लिस्ट्</value>
+                    <value xml:lang="zh-CN">各类样式(~Y)</value>
+                    <value xml:lang="pt">~Estilista</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1187,8 +1212,33 @@
             </node>
             <node oor:name=".uno:OutlineBullet" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Nummerierung/Aufzählung...</value>
-                    <value xml:lang="en-US">~Numbering/Bullets...</value>
+                    <value xml:lang="de">Nummerierung und Aufzählungszeichen...</value>
+                    <value xml:lang="en-US">~Bullets and Numbering...</value>
+                    <value xml:lang="ar">...ترقيم/تعداد</value>
+                    <value xml:lang="no">~Numbering/Bullets...</value>
+                    <value xml:lang="ca">~Numeració/vinyetes...</value>
+                    <value xml:lang="zh-TW">編號/項目編號(~N)...</value>
+                    <value xml:lang="cs">Číslování/odrážky...</value>
+                    <value xml:lang="da">~Nummerering/punktopstilling...</value>
+                    <value xml:lang="el">Αρί~θμηση/Κουκίδες...</value>
+                    <value xml:lang="es">~Numeración y viñetas...</value>
+                    <value xml:lang="fi">Lu~ettelomerkit ja numerointi...</value>
+                    <value xml:lang="fr">N~umérotation/puces...</value>
+                    <value xml:lang="he">‮תבליטים/מיספור...‬</value>
+                    <value xml:lang="it">Elenchi puntati e numerati...</value>
+                    <value xml:lang="ja">箇条書きと番号付け(~N)...</value>
+                    <value xml:lang="ko">번호 매기기/글머리 기호(~N)...</value>
+                    <value xml:lang="nl">~Nummering/opsommingstekens...</value>
+                    <value xml:lang="pl">Nume~racja/wypunktowanie...</value>
+                    <value xml:lang="pt-BR">~Numeração / Marcas...</value>
+                    <value xml:lang="ru">Нумерация/маркировка...</value>
+                    <value xml:lang="sk">Číslova~nie/odrážky...</value>
+                    <value xml:lang="sv">~Numrering/punktuppställning...</value>
+                    <value xml:lang="th">~ลำดับตัวเลข/สัญลักษณ์แสดงหัวข้อย่อย...</value>
+                    <value xml:lang="tr">Numaralama/madde işaretleri...</value>
+                    <value xml:lang="hi">~संख्या देना/बुल्लेट्स...</value>
+                    <value xml:lang="zh-CN">编号和项目符号(~N)...</value>
+                    <value xml:lang="pt">~Marcas/Numeração...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>7</value>
@@ -1214,8 +1264,33 @@
             </node>
             <node oor:name=".uno:BrowseView" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Online-Layout</value>
-                    <value xml:lang="en-US">~Online Layout</value>
+                    <value xml:lang="de">~Weblayout</value>
+                    <value xml:lang="en-US">~Web Layout</value>
+                    <value xml:lang="ar">تخطيط Online</value>
+                    <value xml:lang="no">~Online Layout</value>
+                    <value xml:lang="ca">Disseny en ~línia</value>
+                    <value xml:lang="zh-TW">線上版式(~O)</value>
+                    <value xml:lang="cs">Zobrazení pro Internet</value>
+                    <value xml:lang="da">~Onlinelayout</value>
+                    <value xml:lang="el">Ηλεκτ~ρονική διάταξη</value>
+                    <value xml:lang="es">Diseño en ~línea</value>
+                    <value xml:lang="fi">~Web-asettelu</value>
+                    <value xml:lang="fr">Mise en page En ~ligne</value>
+                    <value xml:lang="he">‮פריסה מקוונת‬</value>
+                    <value xml:lang="it">~Layout online</value>
+                    <value xml:lang="ja">オンラインレイアウト(~O)</value>
+                    <value xml:lang="ko">온라인 레이아웃(~O)</value>
+                    <value xml:lang="nl">~Online lay-out</value>
+                    <value xml:lang="pl">Układ ~online</value>
+                    <value xml:lang="pt-BR">Layout ~Online</value>
+                    <value xml:lang="ru">~Режим веб-страницы</value>
+                    <value xml:lang="sk">Zobrazenie pre ~Internet</value>
+                    <value xml:lang="sv">~Onlinelayout</value>
+                    <value xml:lang="th">เค้าโครง~ออนไลน์</value>
+                    <value xml:lang="tr">Çe~vrimiçi Yerleşim</value>
+                    <value xml:lang="hi">~ऑनलैन अभिन्यास</value>
+                    <value xml:lang="zh-CN">联机版式(~O)</value>
+                    <value xml:lang="pt">Configuração ~online</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1334,8 +1409,33 @@
             </node>
             <node oor:name=".uno:StyleNewByExample" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Neue Vorlage (übernehmen)</value>
-                    <value xml:lang="en-US">New Template (apply)</value>
+                    <value xml:lang="de">Neue Vorlage aus Selektion</value>
+                    <value xml:lang="en-US">New Style from Selection</value>
+                    <value xml:lang="ar">قالب جديد (تطبيق)</value>
+                    <value xml:lang="no">New Template (apply)</value>
+                    <value xml:lang="ca">Plantilla nova (aplica)</value>
+                    <value xml:lang="zh-TW">新樣式(採用)</value>
+                    <value xml:lang="cs">Nová šablona (použít)</value>
+                    <value xml:lang="da">Ny skabelon (anvend)</value>
+                    <value xml:lang="el">Δημιουργία προτύπου (Εφαρμογή)</value>
+                    <value xml:lang="es">Plantilla nueva (aplicar)</value>
+                    <value xml:lang="fi">Uusi malli (käytä)</value>
+                    <value xml:lang="fr">Nouveau style (appliquer) </value>
+                    <value xml:lang="he">‮תבנית חדשה‬</value>
+                    <value xml:lang="it">Nuovo modello (applica)</value>
+                    <value xml:lang="ja">新しいスタイル(適用)</value>
+                    <value xml:lang="ko">새 서식 파일(적용)</value>
+                    <value xml:lang="nl">Nieuw opmaakprofiel (overnemen) </value>
+                    <value xml:lang="pl">Zastosuj nowy szablon </value>
+                    <value xml:lang="pt-BR">Novo modelo (aplicar)</value>
+                    <value xml:lang="ru">Создать шаблон (применить)</value>
+                    <value xml:lang="sk">Nová šablóna (použiť)</value>
+                    <value xml:lang="sv">Ny mall (överta)</value>
+                    <value xml:lang="th">แม่แบบใหม่ (ใช้)</value>
+                    <value xml:lang="tr">Yeni şablon (uygula)</value>
+                    <value xml:lang="hi">नया नमूना (लागू करो)</value>
+                    <value xml:lang="zh-CN">新样式(采用)</value>
+                    <value xml:lang="pt">Novo estilo (aplicar)</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1361,8 +1461,33 @@
             </node>
             <node oor:name=".uno:StyleUpdateByExample" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Vorlage aktualisieren (übernehmen)</value>
-                    <value xml:lang="en-US">Update Template (apply)</value>
+                    <value xml:lang="de">Vorlage aktualisieren</value>
+                    <value xml:lang="en-US">Update Style</value>
+                    <value xml:lang="ar">تحديث القالب (تطبيق)</value>
+                    <value xml:lang="no">Update Template (apply)</value>
+                    <value xml:lang="ca">Actualitza la plantilla (aplica)</value>
+                    <value xml:lang="zh-TW">更新樣式(採用)</value>
+                    <value xml:lang="cs">Aktualizovat šablonu (použít)</value>
+                    <value xml:lang="da">Opdater skabelon (anvend)</value>
+                    <value xml:lang="el">Ενημέρωση προτύπου (εφαρμογή)</value>
+                    <value xml:lang="es">Actualizar plantilla (aplicar)</value>
+                    <value xml:lang="fi">Päivitä malli (käytä)</value>
+                    <value xml:lang="fr">Actualiser le style (appliquer) </value>
+                    <value xml:lang="he">‮עדכון תבנית‬</value>
+                    <value xml:lang="it">Aggiorna modello (applica)</value>
+                    <value xml:lang="ja">スタイルの更新(適用)</value>
+                    <value xml:lang="ko">서식 파일 업데이트 (적용)</value>
+                    <value xml:lang="nl">Opmaakprofiel bijwerken (overnemen) </value>
+                    <value xml:lang="pl">Aktualizuj szablon (zastosuj) </value>
+                    <value xml:lang="pt-BR">Atualizar modelo (aplicar)</value>
+                    <value xml:lang="ru">Обновить шаблон (применить)</value>
+                    <value xml:lang="sk">Aktualizovať šablónu (použiť)</value>
+                    <value xml:lang="sv">Uppdatera mall (överta)</value>
+                    <value xml:lang="th">ปรับปรุงแม่แบบ (ใช้)</value>
+                    <value xml:lang="tr">Şablonu güncelle (uygula)</value>
+                    <value xml:lang="hi">नमूना अपडेट् करो (लागू करो)</value>
+                    <value xml:lang="zh-CN">更新样式(采用)</value>
+                    <value xml:lang="pt">Actualizar modelo (aplicar)</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1793,8 +1918,8 @@
             </node>
             <node oor:name=".uno:AutoPilotMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~AutoPilot</value>
-                    <value xml:lang="en-US">A~utoPilot</value>
+                    <value xml:lang="de">Assistenten</value>
+                    <value xml:lang="en-US">~Wizards</value>
                 </prop>
             </node>
             <node oor:name=".uno:OutlineCollapse" oor:op="replace">
@@ -1952,7 +2077,7 @@
             </node>
             <node oor:name=".uno:FontWork" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Font~Work</value>
+                    <value xml:lang="de">Font~work</value>
                     <value xml:lang="en-US">F~ontwork</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -2105,8 +2230,33 @@
             </node>
             <node oor:name=".uno:SourceView" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">HTML - ~Quelltext</value>
-                    <value xml:lang="en-US">HT~ML - Source</value>
+                    <value xml:lang="de">HTML-~Quelltext</value>
+                    <value xml:lang="en-US">HT~ML Source</value>
+                    <value xml:lang="ar">نص مصدر HTML</value>
+                    <value xml:lang="no">HT~ML - Source</value>
+                    <value xml:lang="ca">Font HT~ML </value>
+                    <value xml:lang="zh-TW">HT~ML 原始檔</value>
+                    <value xml:lang="cs">HTML - zdroj</value>
+                    <value xml:lang="da">HTML-kil~detekst</value>
+                    <value xml:lang="el">HT~ML - Προέλευση</value>
+                    <value xml:lang="es">~HTML - Texto fuente</value>
+                    <value xml:lang="fi">~HTML-lähde</value>
+                    <value xml:lang="fr">HTML - ~Source</value>
+                    <value xml:lang="he">HTML - ~Quelltext</value>
+                    <value xml:lang="it">Testo sorgente HTM~L</value>
+                    <value xml:lang="ja">HT~ML ソーステキスト</value>
+                    <value xml:lang="ko">HTML 원본(~M)</value>
+                    <value xml:lang="nl">~HTML-brontekst</value>
+                    <value xml:lang="pl">Tekst źródłowy HT~ML</value>
+                    <value xml:lang="pt-BR">Origem HT~ML</value>
+                    <value xml:lang="ru">Исходный текст HTM~L</value>
+                    <value xml:lang="sk">HT~ML - zdroj</value>
+                    <value xml:lang="sv">HTML-källtext</value>
+                    <value xml:lang="th">แหล่ง HT~ML </value>
+                    <value xml:lang="tr">~HTML Kaynağı</value>
+                    <value xml:lang="hi">HT~ML मूल</value>
+                    <value xml:lang="zh-CN">HT~ML 源文本</value>
+                    <value xml:lang="pt">Fonte ~HTML</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -2315,8 +2465,33 @@
             </node>
             <node oor:name=".uno:ContourDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Konturdialog</value>
-                    <value xml:lang="en-US">Contour Dialog</value>
+                    <value xml:lang="de">Kontur bearbeiten...</value>
+                    <value xml:lang="en-US">~Edit Contour...</value>
+                    <value xml:lang="ar">محرر الخط الكفافي</value>
+                    <value xml:lang="no">Contour Dialog</value>
+                    <value xml:lang="ca">Quadre de diàleg de contorns</value>
+                    <value xml:lang="zh-TW">影像輪廓編輯器</value>
+                    <value xml:lang="cs">Dialog obrysu</value>
+                    <value xml:lang="da">Konturdialog</value>
+                    <value xml:lang="el">Διάλογος περιγράμματος</value>
+                    <value xml:lang="es">Diálogo de contornos</value>
+                    <value xml:lang="fi">Ääriviivavalintaikkuna</value>
+                    <value xml:lang="fr">Boîte de dialogue Contour</value>
+                    <value xml:lang="he">‮תיבת שיח לקוי מתאר‬</value>
+                    <value xml:lang="it">Dialogo contorno</value>
+                    <value xml:lang="ja">輪郭編集のダイアログ</value>
+                    <value xml:lang="ko">윤곽 대화 상자</value>
+                    <value xml:lang="nl">Contour-dialoogvenster</value>
+                    <value xml:lang="pl">Okno dialogowe konturu</value>
+                    <value xml:lang="pt-BR">Caixa de Diálogo de Contornos</value>
+                    <value xml:lang="ru">Диалог контура</value>
+                    <value xml:lang="sk">Dialóg obrysu</value>
+                    <value xml:lang="sv">Konturdialog</value>
+                    <value xml:lang="th">ไดอะล็อกเค้าโครง</value>
+                    <value xml:lang="tr">Kontur penceresi</value>
+                    <value xml:lang="hi">परिवेश डयलॉग</value>
+                    <value xml:lang="zh-CN">图形轮廓编辑器</value>
+                    <value xml:lang="pt">Editor de contornos</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -2903,8 +3078,33 @@
             </node>
             <node oor:name=".uno:SetDefault" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Standar~d</value>
-                    <value xml:lang="en-US">~Default</value>
+                    <value xml:lang="de">Standar~dformatierung</value>
+                    <value xml:lang="en-US">~Default Formatting</value>
+                    <value xml:lang="ar">~قياسي</value>
+                    <value xml:lang="no">~Default</value>
+                    <value xml:lang="ca">~Per defecte</value>
+                    <value xml:lang="zh-TW">標準(~D)</value>
+                    <value xml:lang="cs">Výchozí</value>
+                    <value xml:lang="da">Standar~d</value>
+                    <value xml:lang="el">~Προεπιλογή</value>
+                    <value xml:lang="es">~Predeterminado</value>
+                    <value xml:lang="fi">Palauta oletustyyl~i</value>
+                    <value xml:lang="fr">P~ar défaut</value>
+                    <value xml:lang="he">‮ברירת מחדל‬</value>
+                    <value xml:lang="it">S~tandard</value>
+                    <value xml:lang="ja">標準(~D)</value>
+                    <value xml:lang="ko">기본값(~D)</value>
+                    <value xml:lang="nl">~Standaard</value>
+                    <value xml:lang="pl">~Domyślnie</value>
+                    <value xml:lang="pt-BR">~Padrão</value>
+                    <value xml:lang="ru">По умолчанию</value>
+                    <value xml:lang="sk">Výcho~dzí</value>
+                    <value xml:lang="sv">Standar~d</value>
+                    <value xml:lang="th">~ค่าเริ่มต้น</value>
+                    <value xml:lang="tr">~Öntanımlı</value>
+                    <value xml:lang="hi">~अनुपस्थिति</value>
+                    <value xml:lang="zh-CN">标准(~D)</value>
+                    <value xml:lang="pt">~Padrão</value>
                 </prop>
             </node>
             <node oor:name=".uno:DecrementIndent" oor:op="replace">
@@ -3084,7 +3284,32 @@
             <node oor:name=".uno:RubyDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Ruby</value>
-                    <value xml:lang="en-US">Ruby</value>
+                    <value xml:lang="en-US">As~ian phonetic guide</value>
+                    <value xml:lang="ar">دليل صوتي</value>
+                    <value xml:lang="no">Ruby</value>
+                    <value xml:lang="ca">Ruby</value>
+                    <value xml:lang="zh-TW">注音</value>
+                    <value xml:lang="cs">Ruby</value>
+                    <value xml:lang="da">Fonetisk tekst</value>
+                    <value xml:lang="el">Κείμενο φωνητικής γραφής</value>
+                    <value xml:lang="es">Ruby</value>
+                    <value xml:lang="fi">Ruby-teksti</value>
+                    <value xml:lang="fr">Ruby</value>
+                    <value xml:lang="he">‮רובי‬</value>
+                    <value xml:lang="it">Testo Ruby</value>
+                    <value xml:lang="ja">ルビ</value>
+                    <value xml:lang="ko">덧말 넣기</value>
+                    <value xml:lang="nl">Ruby</value>
+                    <value xml:lang="pl">Dopisek fonetyczny</value>
+                    <value xml:lang="pt-BR">Ruby</value>
+                    <value xml:lang="ru">Транскрипция</value>
+                    <value xml:lang="sk">Hrubý</value>
+                    <value xml:lang="sv">Ruby</value>
+                    <value xml:lang="th">ทับทิม</value>
+                    <value xml:lang="tr">Ruby</value>
+                    <value xml:lang="hi">रूबी</value>
+                    <value xml:lang="zh-CN">拼音和注音符号</value>
+                    <value xml:lang="pt">Ruby</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertSymbol" oor:op="replace">
@@ -4216,6 +4441,66 @@
                     <value xml:lang="en-US">~Package Manager...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:CommonAlignLeft" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Links</value>
+                    <value xml:lang="en-US">Left</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CommonAlignHorizontalCenter" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Zentriert</value>
+                    <value xml:lang="en-US">Centered</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CommonAlignRight" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Rechts</value>
+                    <value xml:lang="en-US">Right</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CommonAlignTop" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Oben</value>
+                    <value xml:lang="en-US">Top</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CommonAlignVerticalCenter" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Mitte</value>
+                    <value xml:lang="en-US">Center</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CommonAlignBottom" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Unten</value>
+                    <value xml:lang="en-US">Bottom</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CommonAlignJustified" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Blocksatz</value>
+                    <value xml:lang="en-US">Justified</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CommonAlignHorizontalDefault" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Standard</value>
+                    <value xml:lang="en-US">Default</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CommonAlignVerticalDefault" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Standard</value>
+                    <value xml:lang="en-US">Default</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:RecentFileList" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Zuletzt benutzte Dokumente</value>
+                    <value xml:lang="en-US">Recent Doc~uments</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:HelpMenu" oor:op="replace">
@@ -4236,7 +4521,32 @@
             <node oor:name=".uno:ObjectAlign" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Ausrichtung</value>
-                    <value xml:lang="en-US">Alignment</value>
+                    <value xml:lang="en-US">Alignmen~t</value>
+                    <value xml:lang="ar">المحاذاة</value>
+                    <value xml:lang="no">Alignment</value>
+                    <value xml:lang="ca">Alineament</value>
+                    <value xml:lang="zh-TW">對齊</value>
+                    <value xml:lang="cs">Zarovnat</value>
+                    <value xml:lang="da">Justering</value>
+                    <value xml:lang="el">Στοίχιση</value>
+                    <value xml:lang="es">Alineación</value>
+                    <value xml:lang="fi">Tasaus</value>
+                    <value xml:lang="fr">Alignement</value>
+                    <value xml:lang="he">‮ישור‬</value>
+                    <value xml:lang="it">Allineamento</value>
+                    <value xml:lang="ja">配置</value>
+                    <value xml:lang="ko">맞춤</value>
+                    <value xml:lang="nl">Uitlijning</value>
+                    <value xml:lang="pl">Wyrównanie</value>
+                    <value xml:lang="pt-BR">Alinhamento</value>
+                    <value xml:lang="ru">Выравнивание</value>
+                    <value xml:lang="sk">Zarovnanie</value>
+                    <value xml:lang="sv">Justering</value>
+                    <value xml:lang="th">จัดตำแหน่ง</value>
+                    <value xml:lang="tr">Hizalama</value>
+                    <value xml:lang="hi">पंक्तिकरण</value>
+                    <value xml:lang="zh-CN">对齐</value>
+                    <value xml:lang="pt">Alinhamento</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -4292,8 +4602,33 @@
             </node>
             <node oor:name=".uno:GraphicMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Grafik</value>
-                    <value xml:lang="en-US">~Graphics</value>
+                    <value xml:lang="de">~Bild</value>
+                    <value xml:lang="en-US">Pict~ure</value>
+                    <value xml:lang="ar">صورة</value>
+                    <value xml:lang="no">~Graphics</value>
+                    <value xml:lang="ca">~Gràfics</value>
+                    <value xml:lang="zh-TW">圖形(~G)</value>
+                    <value xml:lang="cs">Obrázky</value>
+                    <value xml:lang="da">~Grafik</value>
+                    <value xml:lang="el">~Γραφικό</value>
+                    <value xml:lang="es">~Imagen</value>
+                    <value xml:lang="fi">~Grafiikka</value>
+                    <value xml:lang="fr">I~mage</value>
+                    <value xml:lang="he">‮גרפיקה‬</value>
+                    <value xml:lang="it">Immagin~e</value>
+                    <value xml:lang="ja">図(~G)</value>
+                    <value xml:lang="ko">그림(~G)</value>
+                    <value xml:lang="nl">Afbeeldi~ng</value>
+                    <value xml:lang="pl">Gra~fika</value>
+                    <value xml:lang="pt-BR">~Figura</value>
+                    <value xml:lang="ru">Графический объект</value>
+                    <value xml:lang="sk">~Obrázky</value>
+                    <value xml:lang="sv">~Grafik</value>
+                    <value xml:lang="th">~กราฟิค</value>
+                    <value xml:lang="tr">~Grafik</value>
+                    <value xml:lang="hi">~सुचित्र</value>
+                    <value xml:lang="zh-CN">图形(~G)</value>
+                    <value xml:lang="pt">~Imagem</value>
                 </prop>
             </node>
             <node oor:name=".uno:WindowList" oor:op="replace">
@@ -4342,6 +4677,36 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Feldbefehl</value>
                     <value xml:lang="en-US">Fiel~ds</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:TransliterateMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Gr~oß-/Kleinschreibung</value>
+                    <value xml:lang="en-US">~Change Case</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:GroupMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Gruppieren</value>
+                    <value xml:lang="en-US">~Group</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ArrangeMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Anordnung</value>
+                    <value xml:lang="en-US">A~rrange</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:FlipMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Spiegeln</value>
+                    <value xml:lang="en-US">~Flip</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:AnchorMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Verankerung</value>
+                    <value xml:lang="en-US">A~nchor</value>
                 </prop>
             </node>
             <node oor:name=".uno:Addons" oor:op="replace">
