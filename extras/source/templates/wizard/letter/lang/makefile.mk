@@ -74,7 +74,9 @@ TARGET=templateswizardletter
 ZIPFLAGS                =
 ZIP1TARGET      = $(TEMPLATE_WIZARD_LETTER_TARGET)
 
-ZIP1LIST	= en-US$/*.ott de$/*.ott es$/*.ott fr$/*.ott it$/*.ott ja$/*.ott ko$/*.ott zh-TW$/*.ott zh-CN$/*.ott sv$/*.ott pt-BR$/*.ott
+# */*.ott is here on purpose. It works in all build environments.
+# Do not use $/ here.
+ZIP1LIST	= */*.ott
 
 
 
