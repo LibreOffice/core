@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 12:36:07 $
+#   last change: $Author: hr $ $Date: 2004-11-26 20:44:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,6 +117,7 @@ IDLFILES=\
     XTransferableSupplier.idl\
     XComponentSupplier.idl\
     XStorage.idl\
+    XStorageRawAccess.idl\
     XHatchWindowController.idl\
     XHatchWindowFactory.idl\
     XHatchWindow.idl\
