@@ -72,7 +72,7 @@ TARGET=redhat
 
 # --- Files --------------------------------------------------------
 
-LAUNCHERLIST = writer calc draw impress math printeradmin
+LAUNCHERLIST = writer calc draw impress math base printeradmin
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 LAUNCHERDIR  = $(shell cd $(MISC)$/$(TARGET); pwd)
 
@@ -90,9 +90,33 @@ MIMELIST = \
     presentation \
     presentation-template \
     formula \
-    master-document
+    master-document \
+    oasis-text \
+    oasis-text-template \
+    oasis-spreadsheet \
+    oasis-spreadsheet-template \
+    oasis-drawing \
+    oasis-drawing-template \
+    oasis-presentation \
+    oasis-presentation-template \
+    oasis-formula \
+    oasis-master-document \
+        oasis-database
 
-GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys
+MIMEICONLIST = \
+    text \
+    text-template \
+    spreadsheet \
+    spreadsheet-template \
+    drawing \
+    drawing-template \
+    presentation \
+    presentation-template \
+    formula \
+    master-document \
+        database
+
+GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys ../mimetypes/openoffice.mime
 KDEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.desktop
 
 KDEMIMEFLAGFILE = \
@@ -100,13 +124,13 @@ KDEMIMEFLAGFILE = \
         
 GNOMEICONLIST = \
     {16x16 22x22 32x32 48x48}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    {16x16 22x22 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMELIST)}.png
+    {16x16 22x22 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png
     
 KDEICONLIST = \
     hicolor/{16x16 22x22 32x32 48x48}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    hicolor/{16x16 22x22 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMELIST)}.png \
+    hicolor/{16x16 22x22 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png \
     locolor/{16x16 22x22 32x32}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    locolor/{16x16 22x22 32x32}/mimetypes/$(UNIXFILENAME)-{$(MIMELIST)}.png
+    locolor/{16x16 22x22 32x32}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png
 
 .IF "$(RPM)"!=""
 
@@ -116,6 +140,7 @@ RPMDEPN = \
     $(MISC)/$(TARGET)/usr/share/applnk-$(TARGET)/Office.flag \
     $(MISC)/$(TARGET)/usr/share/application-registry/$(UNIXFILENAME).applications \
     $(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).keys \
+    $(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).mime \
     $(MISC)/$(TARGET)/usr/share/mimelnk/application.flag \
     $(MISC)/$(TARGET)/usr/share/icons/gnome/{$(GNOMEICONLIST)} \
     $(MISC)/$(TARGET)/usr/share/icons/{$(KDEICONLIST)} 
@@ -175,6 +200,12 @@ $(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDEPN) ..
     @$(PERL) ../share/translate.pl -p $(PRODUCTNAME) -d $(MISC)/$(TARGET) --ext "keys" --key "description"  $(ULFDIR)/documents.ulf
     @cat $(MISC)/$(TARGET)/{$(MIMELIST)}.keys > $@
 
+$(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).mime : ../mimetypes/openoffice.mime
+    @$(MKDIRHIER) $(@:d)
+    @echo Creating GNOME .mime file ..
+    @echo ---------------------------------
+    @cat $< | tr -d "\015" > $@
+
 $(KDEMIMEFLAGFILE) : $(KDEMIMEDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
     @$(MKDIRHIER) $(@:db)
     @echo Creating KDE mimelnk entries ..
@@ -187,7 +218,7 @@ $(MISC)/$(TARGET)/usr/share/application-registry/$(UNIXFILENAME).applications : 
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .applications file ..
     @echo ---------------------------------
-    @cat $< | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
+    @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
 
 # --- packaging ---------------------------------------------------
     
