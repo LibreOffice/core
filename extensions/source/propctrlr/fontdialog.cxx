@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-27 07:48:59 $
+ *  last change: $Author: fs $ $Date: 2001-07-20 13:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ namespace pcr
             aUnderlineItem.SetColor(Color(nTextLineColor));
 
             SvxColorItem aSvxColorItem(nColor32,CFID_CHARCOLOR);
-            SvxLanguageItem aLanguageItem(Application::GetAppInternational().GetLanguage(), CFID_LANGUAGE);
+            SvxLanguageItem aLanguageItem(Application::GetSettings().GetUILanguage(), CFID_LANGUAGE);
 
             // the 2 CJK props
             SvxCharReliefItem aFontReliefItem((FontRelief)nFontRelief);
@@ -600,7 +600,7 @@ namespace pcr
         *pCounter++ = new SvxFontHeightItem(aDefaultVCLFont.GetHeight(), 100, CFID_HEIGHT);
         *pCounter++ = new SvxWeightItem(aDefaultVCLFont.GetWeight(), CFID_WEIGHT);
         *pCounter++ = new SvxPostureItem(aDefaultVCLFont.GetItalic(), CFID_POSTURE);
-        *pCounter++ = new SvxLanguageItem(Application::GetAppInternational().GetLanguage(), CFID_LANGUAGE);
+        *pCounter++ = new SvxLanguageItem(Application::GetSettings().GetUILanguage(), CFID_LANGUAGE);
         *pCounter++ = new SvxUnderlineItem(aDefaultVCLFont.GetUnderline(), CFID_UNDERLINE);
         *pCounter++ = new SvxCrossedOutItem(aDefaultVCLFont.GetStrikeout(), CFID_STRIKEOUT);
         *pCounter++ = new SvxWordLineModeItem(aDefaultVCLFont.IsWordLineMode(), CFID_WORDLINEMODE);
@@ -612,7 +612,7 @@ namespace pcr
         *pCounter++ = new SvxFontHeightItem(aDefaultVCLFont.GetHeight(), 100, CFID_CJK_HEIGHT);
         *pCounter++ = new SvxWeightItem(aDefaultVCLFont.GetWeight(), CFID_CJK_WEIGHT);
         *pCounter++ = new SvxPostureItem(aDefaultVCLFont.GetItalic(), CFID_CJK_POSTURE);
-        *pCounter++ = new SvxLanguageItem(Application::GetAppInternational().GetLanguage(), CFID_CJK_LANGUAGE);
+        *pCounter++ = new SvxLanguageItem(Application::GetSettings().GetUILanguage(), CFID_CJK_LANGUAGE);
 
         *pCounter++ = new SvxCaseMapItem(SVX_CASEMAP_NOT_MAPPED, CFID_CASEMAP);
         *pCounter++ = new SvxContourItem(sal_False, CFID_CONTOUR);
@@ -705,6 +705,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/06/27 07:48:59  fs
+ *  #88275# correctly initialize the SvxFontItems
+ *
  *  Revision 1.3  2001/06/11 11:29:45  fs
  *  #86096# added functionallity to allow to use this dialog as UNO service
  *
