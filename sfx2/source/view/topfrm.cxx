@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 10:17:45 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 12:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1230,14 +1230,27 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
                     }
 
                     bClosed = sal_False;
-                    try
+                    com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
+                            xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                            com::sun::star::uno::UNO_QUERY );
+                    com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > xList ( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
+                    sal_Int32 nCount = xList->getCount();
+                    if ( nCount == 1 )
                     {
-                        xTask->close(sal_True);
+                        GetFrame()->CloseDocument_Impl();
                         bClosed = sal_True;
                     }
-                    catch( CloseVetoException& )
+                    else
                     {
-                        bClosed = sal_False;
+                        try
+                        {
+                            xTask->close(sal_True);
+                            bClosed = sal_True;
+                        }
+                        catch( CloseVetoException& )
+                        {
+                            bClosed = sal_False;
+                        }
                     }
                 }
 
