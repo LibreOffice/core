@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 10:52:11 $
+ *  last change: $Author: hro $ $Date: 2001-12-04 13:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,11 +196,23 @@ Window* ImplGetDefaultWindow()
     if ( pSVData->maWinData.mpAppWin )
         return pSVData->maWinData.mpAppWin;
 
+    // First test if we already have a default window.
+    // Don't only place a single if..else inside solar mutex lockframe
+    // because then we might have to wait for the solar mutex what is not neccessary
+    // if we already have a default window.
+
     if ( !pSVData->mpDefaultWin )
     {
-        DBG_WARNING( "ImplGetDefaultWindow(): No AppWindow" );
         Application::GetSolarMutex().acquire();
-        pSVData->mpDefaultWin = new WorkWindow( 0, 0 );
+
+        // Test again because the thread who released the solar mutex could have called
+        // the same method
+
+        if ( !pSVData->mpDefaultWin )
+        {
+            DBG_WARNING( "ImplGetDefaultWindow(): No AppWindow" );
+            pSVData->mpDefaultWin = new WorkWindow( 0, 0 );
+        }
         Application::GetSolarMutex().release();
     }
 
