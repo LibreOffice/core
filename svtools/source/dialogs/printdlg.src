@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:02:21 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ polish ] = "Numer faksu";
         Text[ portuguese_brazilian ] = "Fax number";
         Text[ japanese ] = "Fax ”Ô†";
-        Text[ korean ] = "Fax number";
+        Text[ korean ] = "ÆÑ½º ¹øÈ£";
         Text[ chinese_simplified ] = "´«ÕæºÅÂë";
         Text[ chinese_traditional ] = "¶Ç¯u¸¹½X";
         Text[ turkish ] = "Fax number";
@@ -382,7 +382,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "¦C¦L­S³ò";
         Text[ arabic ] = "äØÇŞ ÇáØÈÇÚÉ";
         Text[ greek ] = "Ğåñéï÷Ş åêôığùóçò";
-        Text[ korean ] = "ÀÎ¼â ¿µ¿ª";
+        Text[ korean ] = "ÀÎ¼â ¹üÀ§";
         Text[ turkish ] = "Yazdırma alanı";
         Text[ language_user1 ] = " ";
     };
