@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoken.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,11 @@
 
 BOOL DbgToken( char );
 ScTokenArray* DbgMakeTokenArray
-    ( ScDocument* pDoc, USHORT nTab, const String& r, USHORT& rErr );
+    ( ScDocument* pDoc, SCTAB nTab, const String& r, USHORT& rErr );
 void DbgDumpTokenArray( const BYTE* pArr, USHORT nLen, const char* pMsg );
 void DbgDelTokenArray( ScTokenArray* );
 StackVar DbgInterpret( ScDocument* pDok, const ScTokenArray* pToken,
-                       USHORT nCOL, USHORT nROW, USHORT nTAB,
+                       SCCOL nCOL, SCROW nROW, SCTAB nTAB,
                                   StackVar eStackVar,
                                   char* &rStringErgPtr,
                                   double& rDoubleErg,
