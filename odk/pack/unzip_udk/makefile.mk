@@ -20,7 +20,6 @@ all: ..$/misc$/deltree.txt
 
 ..$/misc$/deltree.txt .SETDIR=$(OUT)$/bin : $(UDKPATH) ..$/..$/pack$/unzip_udk$/deltree.txt
 # first clean everything
-    +-$(RM) ..$/misc$/unzip_udk_succeeded.txt >& $(NULLDEV)
 .IF "$(BUILD_SOSL)"==""
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME) >& $(NULLDEV)
 .ELSE
@@ -36,13 +35,15 @@ all: ..$/misc$/deltree.txt
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME).zip >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME).tar.gz >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME).tar >& $(NULLDEV)
-    $(GNUCOPY) -p $(UDKPATH) .
-    $(GNUCOPY) -p $(ODKDOCPATH) .
 .IF "$(GUI)"=="WNT"
+    $(GNUCOPY) -p $(UDKPATH) $(UDKZIPPREFIX).zip
+    $(GNUCOPY) -p $(ODKDOCPATH) $(ODKDOCNAME).zip
     unzip -q -d . $(UDKZIPPREFIX)
     +-$(RENAME) $(UDKNAME) $(ODKNAME)
     unzip -q -d . $(ODKDOCNAME).zip
 .ELSE
+    $(GNUCOPY) -p $(UDKPATH) .
+    $(GNUCOPY) -p $(ODKDOCPATH) .
     gzip -df < $(UDKZIPPREFIX).tar.gz | tar -xvf -
     +-$(RENAME) $(UDKNAME) $(ODKNAME)
     gzip -df < $(ODKDOCNAME).tar.gz | tar -xvf -
@@ -58,4 +59,4 @@ all: ..$/misc$/deltree.txt
     +-$(MY_DELETE_RECURSIVE) $(ODKDOCNAME).tar.gz >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(ODKDOCNAME).tar >& $(NULLDEV)
     +$(MY_DELETE_RECURSIVE) $(ODKNAME)$/settings$/dk.mk
-    touch ..$/misc$/deltree.txt
+    +@echo "" > ..$/misc$/deltree.txt
