@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtsetup.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-06 17:19:58 $
+ *  last change: $Author: pl $ $Date: 2001-12-06 19:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,10 +577,10 @@ void RTSOtherPage::initValues()
     nMarginTop      += m_pParent->m_aJobData.m_nTopMarginAdjust;
     nMarginBottom   += m_pParent->m_aJobData.m_nBottomMarginAdjust;
 
-    m_aLeftLB.SetValue( nMarginLeft );
-    m_aRightLB.SetValue( nMarginRight );
-    m_aTopLB.SetValue( nMarginTop );
-    m_aBottomLB.SetValue( nMarginBottom );
+    m_aLeftLB.SetValue( nMarginLeft, FUNIT_POINT );
+    m_aRightLB.SetValue( nMarginRight, FUNIT_POINT );
+    m_aTopLB.SetValue( nMarginTop, FUNIT_POINT );
+    m_aBottomLB.SetValue( nMarginBottom, FUNIT_POINT );
     m_aCommentEdt.SetText( m_pParent->m_aJobData.m_aComment );
 }
 
@@ -600,10 +600,10 @@ void RTSOtherPage::save()
                     nMarginTop,
                     nMarginBottom );
 
-    m_pParent->m_aJobData.m_nLeftMarginAdjust   = m_aLeftLB.GetValue() - nMarginLeft;
-    m_pParent->m_aJobData.m_nRightMarginAdjust  = m_aRightLB.GetValue() - nMarginRight;
-    m_pParent->m_aJobData.m_nTopMarginAdjust    = m_aTopLB.GetValue() - nMarginTop;
-    m_pParent->m_aJobData.m_nBottomMarginAdjust = m_aBottomLB.GetValue() - nMarginBottom;
+    m_pParent->m_aJobData.m_nLeftMarginAdjust   = m_aLeftLB.GetValue( FUNIT_POINT ) - nMarginLeft;
+    m_pParent->m_aJobData.m_nRightMarginAdjust  = m_aRightLB.GetValue( FUNIT_POINT ) - nMarginRight;
+    m_pParent->m_aJobData.m_nTopMarginAdjust    = m_aTopLB.GetValue( FUNIT_POINT ) - nMarginTop;
+    m_pParent->m_aJobData.m_nBottomMarginAdjust = m_aBottomLB.GetValue( FUNIT_POINT ) - nMarginBottom;
     m_pParent->m_aJobData.m_aComment = m_aCommentEdt.GetText();
 }
 
