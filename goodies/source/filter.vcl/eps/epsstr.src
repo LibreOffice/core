@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-28 15:39:38 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,4 +109,6 @@ String KEY_VERSION_CHECK
     Text[ arabic ] = "ÊÍĞíÑ: ÊÚĞÑ ÍİÙ ßá ÕæÑ EPS ÇáãÓÊæÑÏÉ İí ÇáãÓÊæì 1¡\náÊæÇÌÏ ÈÚÖ ãäåÇ İí ãÓÊæì ÃÚáì!";
     Text[ turkish ] = "Dikkat: Bazı EPS grafikleri daha üst düzeyde olduğu için, içe aktarılan tüm grafikler düzey 1'e kaydedilemedi.";
     Text[ language_user1 ] = " ";
+    Text[ finnish ] = "Varoitus: Kaikkien tuotujen EPS-kuvien tallentaminen ei onnistunut tasolla 1,\nkoska joidenkin kuvien taso on korkeampi.";
+    Text[ catalan ] = "¡Atención: No han podido ser guardados en Level1 todos los gráficos EPS importados\nporque existen algunos en un nivel más alto!";
 };
