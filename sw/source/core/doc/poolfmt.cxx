@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-27 09:22:12 $
+ *  last change: $Author: jp $ $Date: 2001-08-16 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,19 +583,22 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCOLL_HEADLINE_BASE:            // Basis Ueberschrift
         {
-//JP 1.6.2001: which font for CJK/CTL ???
-            SvxFontItem aFont( FAMILY_SWISS, String::CreateFromAscii(
-#if defined(OW) || defined (MTF) || defined(UNX)
-                    RTL_CONSTASCII_STRINGPARAM("helvetica")
-#elif defined(WNT) || defined(WIN)
-                    RTL_CONSTASCII_STRINGPARAM("Arial")
-#elif defined(MAC) || defined(PM20)
-                    RTL_CONSTASCII_STRINGPARAM("Helvetica")
-#else
-#error Defaultfont fuer diese Plattform?
-#endif
-                    ), aEmptyStr, PITCH_VARIABLE,
-/*?? GetSystemCharSet() ->*/    ::gsl_getSystemTextEncoding()); // Font
+            static const USHORT aFntInit[] = {
+                DEFAULTFONT_LATIN_HEADING,  RES_CHRATR_FONT,        LANGUAGE_ENGLISH_US,
+                DEFAULTFONT_CJK_HEADING,    RES_CHRATR_CJK_FONT,    LANGUAGE_ENGLISH_US,
+                DEFAULTFONT_CTL_HEADING,    RES_CHRATR_CTL_FONT,    LANGUAGE_ARABIC_SAUDI_ARABIA,
+                0
+            };
+
+            for( const USHORT* pArr = aFntInit; *pArr; pArr += 3 )
+            {
+                Font aFnt( OutputDevice::GetDefaultFont( *pArr,
+                                *(pArr+2), DEFAULTFONT_FLAGS_ONLYONE ) );
+
+                aSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
+                                        aEmptyStr, aFnt.GetPitch(),
+                                        aFnt.GetCharSet(), *(pArr+1) ));
+            }
 
             SvxFontHeightItem aFntSize( PT_14 );
             SvxULSpaceItem aUL( PT_12, PT_6 );
@@ -609,8 +612,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
 
             aSet.Put( aUL );
             ::lcl_SetAllScriptItem( aSet, aFntSize );
-//JP 1.6.2001: which font for CJK/CTL ???
-            aSet.Put( aFont );
         }
         break;
 
