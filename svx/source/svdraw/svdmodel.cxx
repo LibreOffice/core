@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:03:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1664,11 +1664,6 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, USHORT nPos)
     pPage->SetModel(this);
     if (nPos<nAnz) {
         bMPgNumsDirty=TRUE;
-        // Anpassen der MasterPageDescriptoren
-        USHORT nPageAnz=GetPageCount();
-        for (USHORT np=0; np<nPageAnz; np++) {
-            GetPage(np)->ImpMasterPageInserted(nPos);
-        }
     }
     SetChanged();
     SdrHint aHint(HINT_PAGEORDERCHG);
@@ -1687,15 +1682,20 @@ SdrPage* SdrModel::RemoveMasterPage(USHORT nPgNum)
     SdrPage* pRetPg=(SdrPage*)maMaPag.Remove(nPgNum);
     // #109538#
     MasterPageListChanged();
-    // Nun die Verweise der normalen Zeichenseiten auf die entfernte MasterPage loeschen
-    // und Verweise auf dahinterliegende Masterpages anpassen.
-    USHORT nPageAnz=GetPageCount();
-    for (USHORT np=0; np<nPageAnz; np++) {
-        GetPage(np)->ImpMasterPageRemoved(nPgNum);
-    }
-    if (pRetPg!=NULL) {
+
+    if(pRetPg)
+    {
+        // Nun die Verweise der normalen Zeichenseiten auf die entfernte MasterPage loeschen
+        sal_uInt16 nPageAnz(GetPageCount());
+
+        for(sal_uInt16 np(0); np < nPageAnz; np++)
+        {
+            GetPage(np)->TRG_ImpMasterPageRemoved(*pRetPg);
+        }
+
         pRetPg->SetInserted(FALSE);
     }
+
     bMPgNumsDirty=TRUE;
     SetChanged();
     SdrHint aHint(HINT_PAGEORDERCHG);
@@ -1714,11 +1714,6 @@ void SdrModel::MoveMasterPage(USHORT nPgNum, USHORT nNewPos)
         maMaPag.Insert(pPg,nNewPos);
         // #109538#
         MasterPageListChanged();
-        // Anpassen der MasterPageDescriptoren
-        USHORT nPageAnz=GetPageCount();
-        for (USHORT np=0; np<nPageAnz; np++) {
-            GetPage(np)->ImpMasterPageMoved(nPgNum,nNewPos);
-        }
     }
     bMPgNumsDirty=TRUE;
     SetChanged();
@@ -1729,566 +1724,568 @@ void SdrModel::MoveMasterPage(USHORT nPgNum, USHORT nNewPos)
 
 void SdrModel::WriteData(SvStream& rOut) const
 {
-    const ULONG nOldCompressMode = nStreamCompressMode;
-    ULONG       nNewCompressMode = nStreamCompressMode;
-
-    if( SOFFICE_FILEFORMAT_40 <= rOut.GetVersion() )
-    {
-        if( IsSaveCompressed() )
-            nNewCompressMode |= COMPRESSMODE_ZBITMAP;
-
-        if( IsSaveNative() )
-            nNewCompressMode |= COMPRESSMODE_NATIVE;
-    }
-
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    SdrDownCompat aCompat(rOut, STREAM_WRITE);
-
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrModel");
-#endif
-
-    // damit ich meine eigenen SubRecords erkenne (ab V11)
-    rOut.Write(SdrIOJoeMagic, 4);
-
-    {
-        // Focus fuer aModelMiscCompat
-        // ab V11 eingepackt
-        SdrDownCompat aModelMiscCompat(rOut, STREAM_WRITE);
-
-#ifdef DBG_UTIL
-        aModelMiscCompat.SetID("SdrModel(Miscellaneous)");
-#endif
-
-        // ModelInfo muss hier ganz am Anfang stehen!
-        ((SdrModel*)this)->aInfo.aLastWriteDate = DateTime();
-        rtl_TextEncoding eOutCharSet = rOut.GetStreamCharSet();
-        if(eOutCharSet == ((rtl_TextEncoding)9) /* == RTL_TEXTENCODING_SYSTEM */ )
-            eOutCharSet = gsl_getSystemTextEncoding();
-
-        // #90477# ((SdrModel*)this)->aInfo.eLastWriteCharSet = GetStoreCharSet(eOutCharSet);
-        ((SdrModel*)this)->aInfo.eLastWriteCharSet = GetSOStoreTextEncoding(eOutCharSet, (sal_uInt16)rOut.GetVersion());
-
-        // UNICODE: set the target charset on the stream to access it as parameter
-        // in all streaming operations for UniString->ByteString conversions
-        rOut.SetStreamCharSet(aInfo.eLastWriteCharSet);
-
-        /* old SV-stuff, there is no possibility to determine this informations in another way
-        ((SdrModel*)this)->aInfo.eLastWriteGUI=System::GetGUIType();
-        ((SdrModel*)this)->aInfo.eLastWriteCPU=System::GetCPUType();
-        ((SdrModel*)this)->aInfo.eLastWriteSys=System::GetSystemType();
-        */
-
-        if(aReadDate.IsValid())
-        {
-            ((SdrModel*)this)->aInfo.aLastReadDate = aReadDate;
-
-            // ((SdrModel*)this)->aInfo.eLastReadCharSet = GetStoreCharSet(gsl_getSystemTextEncoding());
-            ((SdrModel*)this)->aInfo.eLastReadCharSet = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
-
-            /* old SV-stuff, there is no possibility to determine this informations in another way
-            ((SdrModel*)this)->aInfo.eLastReadGUI=System::GetGUIType();
-            ((SdrModel*)this)->aInfo.eLastReadCPU=System::GetCPUType();
-            ((SdrModel*)this)->aInfo.eLastReadSys=System::GetSystemType();
-            */
-        }
-        rOut << aInfo; // DateiInfo rausschreiben (ab V11)
-
-        { // ein Bereich fuer Statistik reservieren (V11) (kommt spaeter vielleicht mal dazu)
-            SdrDownCompat aModelStatisticCompat(rOut, STREAM_WRITE);
-
-#ifdef DBG_UTIL
-            aModelStatisticCompat.SetID("SdrModel(Statistic)");
-#endif
-        }
-
-        {
-            // ab V11
-            SdrDownCompat aModelFormatCompat(rOut, STREAM_WRITE);
-
-#ifdef DBG_UTIL
-            aModelFormatCompat.SetID("SdrModel(Format)");
-#endif
-
-            // ab V11
-            rOut << nNewCompressMode;
-
-            // ab V11
-            rOut << UINT16(rOut.GetNumberFormatInt());
-
-            rOut.SetCompressMode( (sal_uInt16)nNewCompressMode);
-            // CompressMode erst an dieser Stelle setzen, damit konform zu ReadData()
-        }
-
-        rOut << INT32(aObjUnit.GetNumerator());
-        rOut << INT32(aObjUnit.GetDenominator());
-        rOut << UINT16(eObjUnit);
-        // Komprimiert ?
-        rOut << UINT16(0);
-        // Nur eine DummyPage, jedoch mit relevanten Objekten?
-        rOut << UINT8(bPageNotValid);
-        // Reserve DummyByte
-        rOut << UINT8(0);
-
-        // Tabellen-, Listen- und Palettennamen schreiben
-        // rOut<<INT16(::GetSystemCharSet()); seit V11 hier kein CharSet mehr
-        XubString aEmptyStr;
-
-        if(bExtColorTable)
-        {
-            // der Writer hat seinen eigenen ColorTable
-            // UNICODE: rOut << aEmptyStr;
-            rOut.WriteByteString(aEmptyStr);
-        }
-        else
-        {
-            if(pColorTable && !pColorTable->GetName().Equals(pszStandard))
-            {
-                // UNICODE: rOut << pColorTable->GetName();
-                rOut.WriteByteString(pColorTable->GetName());
-            }
-            else
-            {
-                // UNICODE: rOut << aEmptyStr;
-                rOut.WriteByteString(aEmptyStr);
-            }
-        }
-
-        if(pDashList && !pDashList->GetName().Equals(pszStandard))
-        {
-            // UNICODE: rOut<<pDashList->GetName();
-            rOut.WriteByteString(pDashList->GetName());
-        }
-        else
-        {
-            // UNICODE: rOut << aEmptyStr;
-            rOut.WriteByteString(aEmptyStr);
-        }
-
-        if(pLineEndList && !pLineEndList->GetName().Equals(pszStandard))
-        {
-            // UNICODE: rOut<<pLineEndList->GetName();
-            rOut.WriteByteString(pLineEndList->GetName());
-        }
-        else
-        {
-            // UNICODE: rOut << aEmptyStr;
-            rOut.WriteByteString(aEmptyStr);
-        }
-
-        if(pHatchList && !pHatchList->GetName().Equals(pszStandard))
-        {
-            // UNICODE: rOut<<pHatchList->GetName();
-            rOut.WriteByteString(pHatchList->GetName());
-        }
-        else
-        {
-            // UNICODE: rOut << aEmptyStr;
-            rOut.WriteByteString(aEmptyStr);
-        }
-
-        if(pGradientList && !pGradientList->GetName().Equals(pszStandard))
-        {
-            // UNICODE: rOut<<pGradientList->GetName();
-            rOut.WriteByteString(pGradientList->GetName());
-        }
-        else
-        {
-            // UNICODE: rOut << aEmptyStr;
-            rOut.WriteByteString(aEmptyStr);
-        }
-
-        if(pBitmapList && !pBitmapList->GetName().Equals(pszStandard))
-        {
-            // UNICODE: rOut<<pBitmapList->GetName();
-            rOut.WriteByteString(pBitmapList->GetName());
-        }
-        else
-        {
-            // UNICODE: rOut << aEmptyStr;
-            rOut.WriteByteString(aEmptyStr);
-        }
-
-        // ab 09-02-1996
-        rOut << INT32(aUIScale.GetNumerator());
-        rOut << INT32(aUIScale.GetDenominator());
-        rOut << UINT16(eUIUnit);
-
-        // ab 09-04-1997 fuer #37710#
-        rOut << INT32(nDefTextHgt);
-        rOut << INT32(nDefaultTabulator);
-
-        // StarDraw-Preview: Nummer der MasterPage der ersten Standard-Seite
-        if(GetPageCount() >= 3 && GetPage(1)->GetMasterPageCount())
-        {
-            ((SdrModel*)this)->nStarDrawPreviewMasterPageNum =
-                GetPage(1)->GetMasterPageNum(0);
-        }
-        rOut << nStarDrawPreviewMasterPageNum;
-    }
-
-    UINT16 i;
-
-    for(i=0; i < GetLayerAdmin().GetLayerCount(); i++)
-    {
-        rOut << *GetLayerAdmin().GetLayer(i);
-    }
-
-    //#110094#-10
-    //for(i=0; i < GetLayerAdmin().GetLayerSetCount(); i++)
-    //{
-    //  rOut << *GetLayerAdmin().GetLayerSet(i);
-    //}
-
-    for(i=0; i < GetMasterPageCount(); i++)
-    {
-        const SdrPage* pPg = GetMasterPage(i);
-        rOut << *pPg;
-    }
-
-    for(i=0; i < GetPageCount(); i++)
-    {
-        const SdrPage* pPg = GetPage(i);
-        rOut << *pPg;
-    }
-
-    // Endemarke
-    SdrIOHeader(rOut, STREAM_WRITE, SdrIOEndeID);
+    DBG_ERROR("SdrModel::WriteData(): binfilter still used, but should not (!)");
+//  const ULONG nOldCompressMode = nStreamCompressMode;
+//  ULONG       nNewCompressMode = nStreamCompressMode;
+//
+//  if( SOFFICE_FILEFORMAT_40 <= rOut.GetVersion() )
+//  {
+//      if( IsSaveCompressed() )
+//          nNewCompressMode |= COMPRESSMODE_ZBITMAP;
+//
+//      if( IsSaveNative() )
+//          nNewCompressMode |= COMPRESSMODE_NATIVE;
+//  }
+//
+//  // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//  SdrDownCompat aCompat(rOut, STREAM_WRITE);
+//
+//#ifdef DBG_UTIL
+//  aCompat.SetID("SdrModel");
+//#endif
+//
+//  // damit ich meine eigenen SubRecords erkenne (ab V11)
+//  rOut.Write(SdrIOJoeMagic, 4);
+//
+//  {
+//      // Focus fuer aModelMiscCompat
+//      // ab V11 eingepackt
+//      SdrDownCompat aModelMiscCompat(rOut, STREAM_WRITE);
+//
+//#ifdef DBG_UTIL
+//      aModelMiscCompat.SetID("SdrModel(Miscellaneous)");
+//#endif
+//
+//      // ModelInfo muss hier ganz am Anfang stehen!
+//      ((SdrModel*)this)->aInfo.aLastWriteDate = DateTime();
+//      rtl_TextEncoding eOutCharSet = rOut.GetStreamCharSet();
+//      if(eOutCharSet == ((rtl_TextEncoding)9) /* == RTL_TEXTENCODING_SYSTEM */ )
+//          eOutCharSet = gsl_getSystemTextEncoding();
+//
+//      // #90477# ((SdrModel*)this)->aInfo.eLastWriteCharSet = GetStoreCharSet(eOutCharSet);
+//      ((SdrModel*)this)->aInfo.eLastWriteCharSet = GetSOStoreTextEncoding(eOutCharSet, (sal_uInt16)rOut.GetVersion());
+//
+//      // UNICODE: set the target charset on the stream to access it as parameter
+//      // in all streaming operations for UniString->ByteString conversions
+//      rOut.SetStreamCharSet(aInfo.eLastWriteCharSet);
+//
+//      /* old SV-stuff, there is no possibility to determine this informations in another way
+//      ((SdrModel*)this)->aInfo.eLastWriteGUI=System::GetGUIType();
+//      ((SdrModel*)this)->aInfo.eLastWriteCPU=System::GetCPUType();
+//      ((SdrModel*)this)->aInfo.eLastWriteSys=System::GetSystemType();
+//      */
+//
+//      if(aReadDate.IsValid())
+//      {
+//          ((SdrModel*)this)->aInfo.aLastReadDate = aReadDate;
+//
+//          // ((SdrModel*)this)->aInfo.eLastReadCharSet = GetStoreCharSet(gsl_getSystemTextEncoding());
+//          ((SdrModel*)this)->aInfo.eLastReadCharSet = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
+//
+//          /* old SV-stuff, there is no possibility to determine this informations in another way
+//          ((SdrModel*)this)->aInfo.eLastReadGUI=System::GetGUIType();
+//          ((SdrModel*)this)->aInfo.eLastReadCPU=System::GetCPUType();
+//          ((SdrModel*)this)->aInfo.eLastReadSys=System::GetSystemType();
+//          */
+//      }
+//      rOut << aInfo; // DateiInfo rausschreiben (ab V11)
+//
+//      { // ein Bereich fuer Statistik reservieren (V11) (kommt spaeter vielleicht mal dazu)
+//          SdrDownCompat aModelStatisticCompat(rOut, STREAM_WRITE);
+//
+//#ifdef DBG_UTIL
+//          aModelStatisticCompat.SetID("SdrModel(Statistic)");
+//#endif
+//      }
+//
+//      {
+//          // ab V11
+//          SdrDownCompat aModelFormatCompat(rOut, STREAM_WRITE);
+//
+//#ifdef DBG_UTIL
+//          aModelFormatCompat.SetID("SdrModel(Format)");
+//#endif
+//
+//          // ab V11
+//          rOut << nNewCompressMode;
+//
+//          // ab V11
+//          rOut << UINT16(rOut.GetNumberFormatInt());
+//
+//          rOut.SetCompressMode( (sal_uInt16)nNewCompressMode);
+//          // CompressMode erst an dieser Stelle setzen, damit konform zu ReadData()
+//      }
+//
+//      rOut << INT32(aObjUnit.GetNumerator());
+//      rOut << INT32(aObjUnit.GetDenominator());
+//      rOut << UINT16(eObjUnit);
+//      // Komprimiert ?
+//      rOut << UINT16(0);
+//      // Nur eine DummyPage, jedoch mit relevanten Objekten?
+//      rOut << UINT8(bPageNotValid);
+//      // Reserve DummyByte
+//      rOut << UINT8(0);
+//
+//      // Tabellen-, Listen- und Palettennamen schreiben
+//      // rOut<<INT16(::GetSystemCharSet()); seit V11 hier kein CharSet mehr
+//      XubString aEmptyStr;
+//
+//      if(bExtColorTable)
+//      {
+//          // der Writer hat seinen eigenen ColorTable
+//          // UNICODE: rOut << aEmptyStr;
+//          rOut.WriteByteString(aEmptyStr);
+//      }
+//      else
+//      {
+//          if(pColorTable && !pColorTable->GetName().Equals(pszStandard))
+//          {
+//              // UNICODE: rOut << pColorTable->GetName();
+//              rOut.WriteByteString(pColorTable->GetName());
+//          }
+//          else
+//          {
+//              // UNICODE: rOut << aEmptyStr;
+//              rOut.WriteByteString(aEmptyStr);
+//          }
+//      }
+//
+//      if(pDashList && !pDashList->GetName().Equals(pszStandard))
+//      {
+//          // UNICODE: rOut<<pDashList->GetName();
+//          rOut.WriteByteString(pDashList->GetName());
+//      }
+//      else
+//      {
+//          // UNICODE: rOut << aEmptyStr;
+//          rOut.WriteByteString(aEmptyStr);
+//      }
+//
+//      if(pLineEndList && !pLineEndList->GetName().Equals(pszStandard))
+//      {
+//          // UNICODE: rOut<<pLineEndList->GetName();
+//          rOut.WriteByteString(pLineEndList->GetName());
+//      }
+//      else
+//      {
+//          // UNICODE: rOut << aEmptyStr;
+//          rOut.WriteByteString(aEmptyStr);
+//      }
+//
+//      if(pHatchList && !pHatchList->GetName().Equals(pszStandard))
+//      {
+//          // UNICODE: rOut<<pHatchList->GetName();
+//          rOut.WriteByteString(pHatchList->GetName());
+//      }
+//      else
+//      {
+//          // UNICODE: rOut << aEmptyStr;
+//          rOut.WriteByteString(aEmptyStr);
+//      }
+//
+//      if(pGradientList && !pGradientList->GetName().Equals(pszStandard))
+//      {
+//          // UNICODE: rOut<<pGradientList->GetName();
+//          rOut.WriteByteString(pGradientList->GetName());
+//      }
+//      else
+//      {
+//          // UNICODE: rOut << aEmptyStr;
+//          rOut.WriteByteString(aEmptyStr);
+//      }
+//
+//      if(pBitmapList && !pBitmapList->GetName().Equals(pszStandard))
+//      {
+//          // UNICODE: rOut<<pBitmapList->GetName();
+//          rOut.WriteByteString(pBitmapList->GetName());
+//      }
+//      else
+//      {
+//          // UNICODE: rOut << aEmptyStr;
+//          rOut.WriteByteString(aEmptyStr);
+//      }
+//
+//      // ab 09-02-1996
+//      rOut << INT32(aUIScale.GetNumerator());
+//      rOut << INT32(aUIScale.GetDenominator());
+//      rOut << UINT16(eUIUnit);
+//
+//      // ab 09-04-1997 fuer #37710#
+//      rOut << INT32(nDefTextHgt);
+//      rOut << INT32(nDefaultTabulator);
+//
+//      // StarDraw-Preview: Nummer der MasterPage der ersten Standard-Seite
+//      if(GetPageCount() >= 3 && GetPage(1)->TRF_GetMasterPageCount())
+//      {
+//          ((SdrModel*)this)->nStarDrawPreviewMasterPageNum =
+//              GetPage(1)->TRF_GetMasterPageNum(0);
+//      }
+//      rOut << nStarDrawPreviewMasterPageNum;
+//  }
+//
+//  UINT16 i;
+//
+//  for(i=0; i < GetLayerAdmin().GetLayerCount(); i++)
+//  {
+//      rOut << *GetLayerAdmin().GetLayer(i);
+//  }
+//
+//  //#110094#-10
+//  //for(i=0; i < GetLayerAdmin().GetLayerSetCount(); i++)
+//  //{
+//  //  rOut << *GetLayerAdmin().GetLayerSet(i);
+//  //}
+//
+//  for(i=0; i < GetMasterPageCount(); i++)
+//  {
+//      const SdrPage* pPg = GetMasterPage(i);
+//      rOut << *pPg;
+//  }
+//
+//  for(i=0; i < GetPageCount(); i++)
+//  {
+//      const SdrPage* pPg = GetPage(i);
+//      rOut << *pPg;
+//  }
+//
+//  // Endemarke
+//  SdrIOHeader(rOut, STREAM_WRITE, SdrIOEndeID);
 }
 
 void SdrModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 {
-    if(rIn.GetError())
-        return;
-
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    SdrDownCompat aCompat(rIn, STREAM_READ);
-
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrModel");
-#endif
-
-    if(rHead.GetVersion() >= 11)
-    {
-        // damit ich meine eigenen SubRecords erkenne (ab V11)
-        char cMagic[4];
-        if(rIn.Read(cMagic, 4) != 4 || memcmp(cMagic, SdrIOJoeMagic, 4))
-        {
-            rIn.SetError(SVSTREAM_FILEFORMAT_ERROR);
-            return;
-        }
-    }
-
-    DoProgress(rIn.Tell());
-
-    {
-        // Focus fuer aModelMiscCompat
-        SdrDownCompat* pModelMiscCompat = NULL;
-
-        if(rHead.GetVersion() >= 11)
-        {
-            // MiscellaneousData ab V11 eingepackt
-            // MiscellaneousData ist alles von Recordbeginn bis
-            // zum Anfang der Pages, Layer, ...
-            pModelMiscCompat = new SdrDownCompat(rIn, STREAM_READ);
-
-#ifdef DBG_UTIL
-            pModelMiscCompat->SetID("SdrModel(Miscellaneous)");
-#endif
-        }
-
-        if(rHead.GetVersion() >= 11)
-        {
-            // ModelInfo ab V11
-            // DateiInfo lesen
-            rIn >> aInfo;
-
-            // StreamCharSet setzen, damit Strings beim
-            // Lesen automatisch konvertiert werden
-            rIn.SetStreamCharSet(aInfo.eLastWriteCharSet);
-        }
-
-        if(rHead.GetVersion() >= 11)
-        {
-            // reserviert fuer Statistik
-            SdrDownCompat aModelStatisticCompat(rIn, STREAM_READ);
-
-#ifdef DBG_UTIL
-            aModelStatisticCompat.SetID("SdrModel(Statistik)");
-#endif
-        }
-
-        if(rHead.GetVersion() >= 11)
-        {
-            // Info ueber Dateiformat
-            SdrDownCompat aModelFormatCompat(rIn,STREAM_READ);
-
-#ifdef DBG_UTIL
-            aModelFormatCompat.SetID("SdrModel(Format)");
-#endif
-
-            if(aModelFormatCompat.GetBytesLeft() >= 4)
-            {
-                rIn >> nStreamCompressMode;
-                rIn >> nStreamNumberFormat;
-                rIn.SetCompressMode(nStreamCompressMode);
-            }
-        }
-
-        INT32 nNum,nDen;
-        UINT16 nTmp;
-        UINT8  nTmp8;
-
-        rIn >> nNum;
-        rIn >> nDen;
-
-        aObjUnit = Fraction(nNum,nDen);
-
-        rIn >> nTmp;
-
-        eObjUnit = MapUnit(nTmp);
-
-        // Komprimiert ?
-        rIn >> nTmp;
-
-        //rIn.nJoeDummy=(nTmp==1);
-        rIn >> nTmp8;
-
-        bPageNotValid = (nTmp == 1);
-
-        rIn >> nTmp8; // Reserve DummyByte
-
-        BOOL bExtFiles(rHead.GetVersion() >= 1);
-
-        if(bExtFiles)
-        {
-            // Tabellen-, Listen- und Palettennamen lesen
-            XubString aName;
-
-            if(rHead.GetVersion() < 11)
-            {
-                // vor V11 gab's noch keine ModelInfo, deshalb CharSet von hier
-                // und rein zufaellig gab's genau bis inkl. zur V10
-                // an dieser Stelle einen CharSet
-                INT16 nCharSet;
-
-                // #90477# rIn >> nCharSet;
-                rIn >> nCharSet;
-                nCharSet = (INT16)GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion());
-
-                // StreamCharSet setzen, damit Strings beim
-                // Lesen automatisch konvertiert werden
-                // #90477# rIn.SetStreamCharSet(rtl_TextEncoding(nCharSet));
-                rIn.SetStreamCharSet(GetSOLoadTextEncoding(rtl_TextEncoding(nCharSet), (sal_uInt16)rIn.GetVersion()));
-            }
-
-            // Tabellen- und Listennamen lesen (Tabellen/Listen existieren schon) // SOH!!!
-            // UNICODE: rIn >> aName;
-            rIn.ReadByteString(aName);
-
-            if(!bExtColorTable)
-            {
-                // der Writer hat seinen eigenen ColorTable
-                if(!aName.Len())
-                    aName = pszStandard;
-
-                if(pColorTable)
-                    pColorTable->SetName(aName);
-            }
-
-            rIn.ReadByteString(aName);
-            if(!aName.Len())
-                aName = pszStandard;
-            if(pDashList)
-                pDashList->SetName(aName);
-
-            rIn.ReadByteString(aName);
-            if(!aName.Len())
-                aName = pszStandard;
-            if(pLineEndList)
-                pLineEndList->SetName(aName);
-
-            rIn.ReadByteString(aName);
-            if(!aName.Len())
-                aName = pszStandard;
-            if(pHatchList)
-                pHatchList->SetName(aName);
-
-            rIn.ReadByteString(aName);
-            if(!aName.Len())
-                aName = pszStandard;
-            if(pGradientList)
-                pGradientList->SetName(aName);
-
-            rIn.ReadByteString(aName);
-            if(!aName.Len())
-                aName = pszStandard;
-            if(pBitmapList)
-                pBitmapList->SetName(aName);
-
-            // Wenn gewuenscht kann hier SetDirty() an den Tabellen gesetzt werden, ist m.M. nach aber ueberfluessig ! SOH.
-        }
-        else
-        {
-            // Ansonsten altes Format: Listen und Tables sind embedded
-
-#ifdef DBG_UTIL
-            ByteString aMsg("Das Format dieser Datei ist noch von April '95 (Version ");
-            aMsg += ByteString::CreateFromInt32( rHead.GetVersion() );
-            aMsg += "). Mit dieser Programmversion kann das nicht mehr gelesen werden";
-
-            DBG_ERROR(aMsg.GetBuffer());
-#endif
-
-            // Version zu alt
-            rIn.SetError(SVSTREAM_WRONGVERSION);
-
-            return;
-        }
-
-        // UIUnit wird ab V12 gestreamt
-        if(rHead.GetVersion() >= 12 && pModelMiscCompat->GetBytesLeft() > 0)
-        {
-            rIn >> nNum;
-            rIn >> nDen;
-
-            aUIScale = Fraction(nNum, nDen);
-
-            rIn >> nTmp;
-
-            eUIUnit = FieldUnit(nTmp);
-        }
-
-        // ab 09-04-1997 fuer #37710#: Text in Dafaultgroesse vom Writer ins Draw und umgekehrt
-        if(rHead.GetVersion() >= 13 && pModelMiscCompat->GetBytesLeft() > 0)
-        {
-            rIn >> nNum;
-            nDefTextHgt = nNum;
-
-            rIn >> nNum;
-            nDefaultTabulator = (UINT16)nNum;
-
-            Outliner& rOutliner = GetDrawOutliner();
-            rOutliner.SetDefTab(nDefaultTabulator);
-        }
-
-        if(rHead.GetVersion() >= 14 && pModelMiscCompat->GetBytesLeft() > 0)
-        {
-            // StarDraw-Preview: Nummer der MasterPage der ersten Standard-Seite
-            rIn >> nStarDrawPreviewMasterPageNum;
-        }
-
-        if(pModelMiscCompat)
-        {
-            delete pModelMiscCompat;
-        }
-    }
-
-    DoProgress(rIn.Tell());
-    //SdrIOHeader aHead;
-
-    // Seiten, Layer und LayerSets einlesen
-    BOOL bEnde(FALSE);
-    UINT16 nMasterPageNum(0);
-    BOOL bAllPagesLoaded(TRUE);
-
-    while(!rIn.GetError() && !rIn.IsEof() && !bEnde)
-    {
-        SdrIOHeaderLookAhead aHead(rIn);
-        //ULONG nPos0=rIn.Tell();
-        //rIn>>aHead;
-
-        if(!aHead.IsMagic())
-        {
-            // Format-Fehler
-            rIn.SetError(SVSTREAM_FILEFORMAT_ERROR);
-            return;
-        }
-        else
-        {
-            if(!aHead.IsEnde())
-            {
-                //rIn.Seek(nPos0); // Die Headers wollen alle selbst lesen
-                if(aHead.IsID(SdrIOPageID))
-                {
-                    if(!bStarDrawPreviewMode || GetPageCount() < 3)
-                    {
-                        // Page lesen
-                        SdrPage* pPg = AllocPage(FALSE);
-
-                        rIn >> *pPg;
-                        InsertPage(pPg);
-                    }
-                    else
-                    {
-                        bAllPagesLoaded = FALSE;
-                        aHead.SkipRecord();
-                    }
-                }
-                else if(aHead.IsID(SdrIOMaPgID))
-                {
-                    if(!bStarDrawPreviewMode
-                        || nStarDrawPreviewMasterPageNum == SDRPAGE_NOTFOUND
-                        || nMasterPageNum == 0
-                        || nMasterPageNum <= nStarDrawPreviewMasterPageNum
-                        || nMasterPageNum <= nStarDrawPreviewMasterPageNum + 1)
-                    {
-                        // Im StarDrawPreviewMode Standard und Notizseite lesen!
-                        // MasterPage lesen
-                        SdrPage* pPg = AllocPage(TRUE);
-
-                        rIn >> *pPg;
-                        InsertMasterPage(pPg);
-                    }
-                    else
-                    {
-                        bAllPagesLoaded = FALSE;
-                        aHead.SkipRecord();
-                    }
-
-                    nMasterPageNum++;
-                }
-                else if(aHead.IsID(SdrIOLayrID))
-                {
-                    //SdrLayer* pLay=GetLayer().NewLayer("");
-                    // Layerdefinition lesen
-                    SdrLayer* pLay = new SdrLayer;
-
-                    rIn >> *pLay;
-                    GetLayerAdmin().InsertLayer(pLay);
-                }
-                //#110094#-10
-                //else if(aHead.IsID(SdrIOLSetID))
-                //{
-                //  //SdrLayerSet* pSet=GetLayer().NewLayerSet("");
-                //  SdrLayerSet* pSet = new SdrLayerSet; // Layersetdefinition lesen
-                //  rIn >> *pSet;
-                //  GetLayerAdmin().InsertLayerSet(pSet);
-                //}
-                else
-                {
-                    // aha, das wil keiner. Also ueberlesen.
-                    aHead.SkipRecord();
-                    //rIn.Seek(nPos0+aHead.nBlkSize);
-                }
-            }
-            else
-            {
-                bEnde = TRUE;
-
-                // Endemarke weglesen
-                aHead.SkipRecord();
-            }
-        }
-        DoProgress(rIn.Tell());
-    }
-
-    if(bStarDrawPreviewMode && bAllPagesLoaded)
-    {
-        // Obwohl StarDrawPreviewMode wurden doch alle Seiten geladen,
-        // um dieses kenntlich zu machen, wird das Flag zurueckgesetzt
-        bStarDrawPreviewMode = FALSE;
-    }
+    DBG_ERROR("SdrModel::ReadData(): binfilter still used, but should not (!)");
+//  if(rIn.GetError())
+//      return;
+//
+//  // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//  SdrDownCompat aCompat(rIn, STREAM_READ);
+//
+//#ifdef DBG_UTIL
+//  aCompat.SetID("SdrModel");
+//#endif
+//
+//  if(rHead.GetVersion() >= 11)
+//  {
+//      // damit ich meine eigenen SubRecords erkenne (ab V11)
+//      char cMagic[4];
+//      if(rIn.Read(cMagic, 4) != 4 || memcmp(cMagic, SdrIOJoeMagic, 4))
+//      {
+//          rIn.SetError(SVSTREAM_FILEFORMAT_ERROR);
+//          return;
+//      }
+//  }
+//
+//  DoProgress(rIn.Tell());
+//
+//  {
+//      // Focus fuer aModelMiscCompat
+//      SdrDownCompat* pModelMiscCompat = NULL;
+//
+//      if(rHead.GetVersion() >= 11)
+//      {
+//          // MiscellaneousData ab V11 eingepackt
+//          // MiscellaneousData ist alles von Recordbeginn bis
+//          // zum Anfang der Pages, Layer, ...
+//          pModelMiscCompat = new SdrDownCompat(rIn, STREAM_READ);
+//
+//#ifdef DBG_UTIL
+//          pModelMiscCompat->SetID("SdrModel(Miscellaneous)");
+//#endif
+//      }
+//
+//      if(rHead.GetVersion() >= 11)
+//      {
+//          // ModelInfo ab V11
+//          // DateiInfo lesen
+//          rIn >> aInfo;
+//
+//          // StreamCharSet setzen, damit Strings beim
+//          // Lesen automatisch konvertiert werden
+//          rIn.SetStreamCharSet(aInfo.eLastWriteCharSet);
+//      }
+//
+//      if(rHead.GetVersion() >= 11)
+//      {
+//          // reserviert fuer Statistik
+//          SdrDownCompat aModelStatisticCompat(rIn, STREAM_READ);
+//
+//#ifdef DBG_UTIL
+//          aModelStatisticCompat.SetID("SdrModel(Statistik)");
+//#endif
+//      }
+//
+//      if(rHead.GetVersion() >= 11)
+//      {
+//          // Info ueber Dateiformat
+//          SdrDownCompat aModelFormatCompat(rIn,STREAM_READ);
+//
+//#ifdef DBG_UTIL
+//          aModelFormatCompat.SetID("SdrModel(Format)");
+//#endif
+//
+//          if(aModelFormatCompat.GetBytesLeft() >= 4)
+//          {
+//              rIn >> nStreamCompressMode;
+//              rIn >> nStreamNumberFormat;
+//              rIn.SetCompressMode(nStreamCompressMode);
+//          }
+//      }
+//
+//      INT32 nNum,nDen;
+//      UINT16 nTmp;
+//      UINT8  nTmp8;
+//
+//      rIn >> nNum;
+//      rIn >> nDen;
+//
+//      aObjUnit = Fraction(nNum,nDen);
+//
+//      rIn >> nTmp;
+//
+//      eObjUnit = MapUnit(nTmp);
+//
+//      // Komprimiert ?
+//      rIn >> nTmp;
+//
+//      //rIn.nJoeDummy=(nTmp==1);
+//      rIn >> nTmp8;
+//
+//      bPageNotValid = (nTmp == 1);
+//
+//      rIn >> nTmp8; // Reserve DummyByte
+//
+//      BOOL bExtFiles(rHead.GetVersion() >= 1);
+//
+//      if(bExtFiles)
+//      {
+//          // Tabellen-, Listen- und Palettennamen lesen
+//          XubString aName;
+//
+//          if(rHead.GetVersion() < 11)
+//          {
+//              // vor V11 gab's noch keine ModelInfo, deshalb CharSet von hier
+//              // und rein zufaellig gab's genau bis inkl. zur V10
+//              // an dieser Stelle einen CharSet
+//              INT16 nCharSet;
+//
+//              // #90477# rIn >> nCharSet;
+//              rIn >> nCharSet;
+//              nCharSet = (INT16)GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion());
+//
+//              // StreamCharSet setzen, damit Strings beim
+//              // Lesen automatisch konvertiert werden
+//              // #90477# rIn.SetStreamCharSet(rtl_TextEncoding(nCharSet));
+//              rIn.SetStreamCharSet(GetSOLoadTextEncoding(rtl_TextEncoding(nCharSet), (sal_uInt16)rIn.GetVersion()));
+//          }
+//
+//          // Tabellen- und Listennamen lesen (Tabellen/Listen existieren schon) // SOH!!!
+//          // UNICODE: rIn >> aName;
+//          rIn.ReadByteString(aName);
+//
+//          if(!bExtColorTable)
+//          {
+//              // der Writer hat seinen eigenen ColorTable
+//              if(!aName.Len())
+//                  aName = pszStandard;
+//
+//              if(pColorTable)
+//                  pColorTable->SetName(aName);
+//          }
+//
+//          rIn.ReadByteString(aName);
+//          if(!aName.Len())
+//              aName = pszStandard;
+//          if(pDashList)
+//              pDashList->SetName(aName);
+//
+//          rIn.ReadByteString(aName);
+//          if(!aName.Len())
+//              aName = pszStandard;
+//          if(pLineEndList)
+//              pLineEndList->SetName(aName);
+//
+//          rIn.ReadByteString(aName);
+//          if(!aName.Len())
+//              aName = pszStandard;
+//          if(pHatchList)
+//              pHatchList->SetName(aName);
+//
+//          rIn.ReadByteString(aName);
+//          if(!aName.Len())
+//              aName = pszStandard;
+//          if(pGradientList)
+//              pGradientList->SetName(aName);
+//
+//          rIn.ReadByteString(aName);
+//          if(!aName.Len())
+//              aName = pszStandard;
+//          if(pBitmapList)
+//              pBitmapList->SetName(aName);
+//
+//          // Wenn gewuenscht kann hier SetDirty() an den Tabellen gesetzt werden, ist m.M. nach aber ueberfluessig ! SOH.
+//      }
+//      else
+//      {
+//          // Ansonsten altes Format: Listen und Tables sind embedded
+//
+//#ifdef DBG_UTIL
+//          ByteString aMsg("Das Format dieser Datei ist noch von April '95 (Version ");
+//          aMsg += ByteString::CreateFromInt32( rHead.GetVersion() );
+//          aMsg += "). Mit dieser Programmversion kann das nicht mehr gelesen werden";
+//
+//          DBG_ERROR(aMsg.GetBuffer());
+//#endif
+//
+//          // Version zu alt
+//          rIn.SetError(SVSTREAM_WRONGVERSION);
+//
+//          return;
+//      }
+//
+//      // UIUnit wird ab V12 gestreamt
+//      if(rHead.GetVersion() >= 12 && pModelMiscCompat->GetBytesLeft() > 0)
+//      {
+//          rIn >> nNum;
+//          rIn >> nDen;
+//
+//          aUIScale = Fraction(nNum, nDen);
+//
+//          rIn >> nTmp;
+//
+//          eUIUnit = FieldUnit(nTmp);
+//      }
+//
+//      // ab 09-04-1997 fuer #37710#: Text in Dafaultgroesse vom Writer ins Draw und umgekehrt
+//      if(rHead.GetVersion() >= 13 && pModelMiscCompat->GetBytesLeft() > 0)
+//      {
+//          rIn >> nNum;
+//          nDefTextHgt = nNum;
+//
+//          rIn >> nNum;
+//          nDefaultTabulator = (UINT16)nNum;
+//
+//          Outliner& rOutliner = GetDrawOutliner();
+//          rOutliner.SetDefTab(nDefaultTabulator);
+//      }
+//
+//      if(rHead.GetVersion() >= 14 && pModelMiscCompat->GetBytesLeft() > 0)
+//      {
+//          // StarDraw-Preview: Nummer der MasterPage der ersten Standard-Seite
+//          rIn >> nStarDrawPreviewMasterPageNum;
+//      }
+//
+//      if(pModelMiscCompat)
+//      {
+//          delete pModelMiscCompat;
+//      }
+//  }
+//
+//  DoProgress(rIn.Tell());
+//  //SdrIOHeader aHead;
+//
+//  // Seiten, Layer und LayerSets einlesen
+//  BOOL bEnde(FALSE);
+//  UINT16 nMasterPageNum(0);
+//  BOOL bAllPagesLoaded(TRUE);
+//
+//  while(!rIn.GetError() && !rIn.IsEof() && !bEnde)
+//  {
+//      SdrIOHeaderLookAhead aHead(rIn);
+//      //ULONG nPos0=rIn.Tell();
+//      //rIn>>aHead;
+//
+//      if(!aHead.IsMagic())
+//      {
+//          // Format-Fehler
+//          rIn.SetError(SVSTREAM_FILEFORMAT_ERROR);
+//          return;
+//      }
+//      else
+//      {
+//          if(!aHead.IsEnde())
+//          {
+//              //rIn.Seek(nPos0); // Die Headers wollen alle selbst lesen
+//              if(aHead.IsID(SdrIOPageID))
+//              {
+//                  if(!bStarDrawPreviewMode || GetPageCount() < 3)
+//                  {
+//                      // Page lesen
+//                      SdrPage* pPg = AllocPage(FALSE);
+//
+//                      rIn >> *pPg;
+//                      InsertPage(pPg);
+//                  }
+//                  else
+//                  {
+//                      bAllPagesLoaded = FALSE;
+//                      aHead.SkipRecord();
+//                  }
+//              }
+//              else if(aHead.IsID(SdrIOMaPgID))
+//              {
+//                  if(!bStarDrawPreviewMode
+//                      || nStarDrawPreviewMasterPageNum == SDRPAGE_NOTFOUND
+//                      || nMasterPageNum == 0
+//                      || nMasterPageNum <= nStarDrawPreviewMasterPageNum
+//                      || nMasterPageNum <= nStarDrawPreviewMasterPageNum + 1)
+//                  {
+//                      // Im StarDrawPreviewMode Standard und Notizseite lesen!
+//                      // MasterPage lesen
+//                      SdrPage* pPg = AllocPage(TRUE);
+//
+//                      rIn >> *pPg;
+//                      InsertMasterPage(pPg);
+//                  }
+//                  else
+//                  {
+//                      bAllPagesLoaded = FALSE;
+//                      aHead.SkipRecord();
+//                  }
+//
+//                  nMasterPageNum++;
+//              }
+//              else if(aHead.IsID(SdrIOLayrID))
+//              {
+//                  //SdrLayer* pLay=GetLayer().NewLayer("");
+//                  // Layerdefinition lesen
+//                  SdrLayer* pLay = new SdrLayer;
+//
+//                  rIn >> *pLay;
+//                  GetLayerAdmin().InsertLayer(pLay);
+//              }
+//              //#110094#-10
+//              //else if(aHead.IsID(SdrIOLSetID))
+//              //{
+//              //  //SdrLayerSet* pSet=GetLayer().NewLayerSet("");
+//              //  SdrLayerSet* pSet = new SdrLayerSet; // Layersetdefinition lesen
+//              //  rIn >> *pSet;
+//              //  GetLayerAdmin().InsertLayerSet(pSet);
+//              //}
+//              else
+//              {
+//                  // aha, das wil keiner. Also ueberlesen.
+//                  aHead.SkipRecord();
+//                  //rIn.Seek(nPos0+aHead.nBlkSize);
+//              }
+//          }
+//          else
+//          {
+//              bEnde = TRUE;
+//
+//              // Endemarke weglesen
+//              aHead.SkipRecord();
+//          }
+//      }
+//      DoProgress(rIn.Tell());
+//  }
+//
+//  if(bStarDrawPreviewMode && bAllPagesLoaded)
+//  {
+//      // Obwohl StarDrawPreviewMode wurden doch alle Seiten geladen,
+//      // um dieses kenntlich zu machen, wird das Flag zurueckgesetzt
+//      bStarDrawPreviewMode = FALSE;
+//  }
 }
 
 void SdrModel::AfterRead()
@@ -2569,12 +2566,14 @@ void SdrModel::Merge(SdrModel& rSourceModel,
             USHORT nEnd= bReverse ? nFirstPageNum : nLastPageNum;
             for (USHORT i=nAnf; i<=nEnd; i++) {
                 const SdrPage* pPg=rSourceModel.GetPage(i);
-                USHORT nMasterDescrAnz=pPg->GetMasterPageCount();
-                for (USHORT j=0; j<nMasterDescrAnz; j++) {
-                    const SdrMasterPageDescriptor& rMaster=pPg->GetMasterPageDescriptor(j);
-                    USHORT nMPgNum=rMaster.GetPageNum();
-                    if (nMPgNum<nSrcMasterPageAnz) {
-                        pMasterNeed[nMPgNum]=TRUE;
+                if(pPg->TRG_HasMasterPage())
+                {
+                    SdrPage& rMasterPage = pPg->TRG_GetMasterPage();
+                    sal_uInt16 nMPgNum(rMasterPage.GetPageNum());
+
+                    if(nMPgNum < nSrcMasterPageAnz)
+                    {
+                        pMasterNeed[nMPgNum] = TRUE;
                     }
                 }
             }
@@ -2587,54 +2586,6 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                 nAktMaPagNum++;
                 nMasterNeed++;
             }
-        }
-    }
-
-    // rueberholen der Zeichenseiten
-    if (bInsPages) {
-        USHORT nSourcePos=nFirstPageNum;
-        USHORT nMergeCount=USHORT(Abs((long)((long)nFirstPageNum-nLastPageNum))+1);
-        if (nDestPos>GetPageCount()) nDestPos=GetPageCount();
-        while (nMergeCount>0) {
-            SdrPage* pPg=NULL;
-            if (bTreadSourceAsConst) {
-                const SdrPage* pPg1=rSourceModel.GetPage(nSourcePos);
-                pPg=pPg1->Clone();
-            } else {
-                pPg=rSourceModel.RemovePage(nSourcePos);
-            }
-            if (pPg!=NULL) {
-                InsertPage(pPg,nDestPos);
-                if (bUndo) AddUndo(new SdrUndoNewPage(*pPg));
-                // und nun zu den MasterPageDescriptoren
-                USHORT nMasterDescrAnz=pPg->GetMasterPageCount();
-                for (USHORT nMaster=nMasterDescrAnz; nMaster>0;) {
-                    nMaster--;
-                    const SdrMasterPageDescriptor& rConstMaster=pPg->GetMasterPageDescriptor(nMaster);
-                    USHORT nMaPgNum=rConstMaster.GetPageNum();
-                    if (bMergeMasterPages) {
-                        USHORT nNeuNum=0xFFFF;
-                        if (pMasterMap!=NULL) nNeuNum=pMasterMap[nMaPgNum];
-                        if (nNeuNum!=0xFFFF) {
-                            if (bUndo) AddUndo(new SdrUndoPageChangeMasterPage(*pPg,nNeuNum));
-                            SdrMasterPageDescriptor& rMaster=pPg->GetMasterPageDescriptor(nMaster);
-                            rMaster.SetPageNum(nNeuNum);
-                        }
-                        DBG_ASSERT(nNeuNum!=0xFFFF,"SdrModel::Merge(): Irgendwas ist krumm beim Mappen der MasterPages");
-                    } else {
-                        if (nMaPgNum>=nDstMasterPageAnz) {
-                            // Aha, die ist ausserbalb des urspruenglichen Bereichs der Masterpages des DstModel
-                            pPg->RemoveMasterPage(nMaster);
-                        }
-                    }
-                }
-            } else {
-                DBG_ERROR("SdrModel::Merge(): Zeichenseite im SourceModel nicht gefunden");
-            }
-            nDestPos++;
-            if (bReverse) nSourcePos--;
-            else if (bTreadSourceAsConst) nSourcePos++;
-            nMergeCount--;
         }
     }
 
@@ -2665,6 +2616,66 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     DBG_ERROR("SdrModel::Merge(): MasterPage im SourceModel nicht gefunden");
                 }
             }
+        }
+    }
+
+    // rueberholen der Zeichenseiten
+    if (bInsPages) {
+        USHORT nSourcePos=nFirstPageNum;
+        USHORT nMergeCount=USHORT(Abs((long)((long)nFirstPageNum-nLastPageNum))+1);
+        if (nDestPos>GetPageCount()) nDestPos=GetPageCount();
+        while (nMergeCount>0) {
+            SdrPage* pPg=NULL;
+            if (bTreadSourceAsConst) {
+                const SdrPage* pPg1=rSourceModel.GetPage(nSourcePos);
+                pPg=pPg1->Clone();
+            } else {
+                pPg=rSourceModel.RemovePage(nSourcePos);
+            }
+            if (pPg!=NULL) {
+                InsertPage(pPg,nDestPos);
+                if (bUndo) AddUndo(new SdrUndoNewPage(*pPg));
+                // und nun zu den MasterPageDescriptoren
+
+                if(pPg->TRG_HasMasterPage())
+                {
+                    SdrPage& rMasterPage = pPg->TRG_GetMasterPage();
+                    sal_uInt16 nMaPgNum(rMasterPage.GetPageNum());
+
+                    if (bMergeMasterPages)
+                    {
+                        sal_uInt16 nNeuNum(0xFFFF);
+
+                        if(pMasterMap)
+                        {
+                            nNeuNum = pMasterMap[nMaPgNum];
+                        }
+
+                        if(nNeuNum != 0xFFFF)
+                        {
+                            if(bUndo)
+                            {
+                                AddUndo(new SdrUndoPageChangeMasterPage(*pPg));
+                            }
+
+                            pPg->TRG_SetMasterPage(*GetMasterPage(nNeuNum));
+                        }
+                        DBG_ASSERT(nNeuNum!=0xFFFF,"SdrModel::Merge(): Irgendwas ist krumm beim Mappen der MasterPages");
+                    } else {
+                        if (nMaPgNum>=nDstMasterPageAnz) {
+                            // Aha, die ist ausserbalb des urspruenglichen Bereichs der Masterpages des DstModel
+                            pPg->TRG_ClearMasterPage();
+                        }
+                    }
+                }
+
+            } else {
+                DBG_ERROR("SdrModel::Merge(): Zeichenseite im SourceModel nicht gefunden");
+            }
+            nDestPos++;
+            if (bReverse) nSourcePos--;
+            else if (bTreadSourceAsConst) nSourcePos++;
+            nMergeCount--;
         }
     }
 
@@ -2978,11 +2989,13 @@ SvxNumType SdrModel::GetPageNumType() const
 
 const SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum) const
 {
+    DBG_ASSERT(nPgNum < maPages.Count(), "SdrModel::GetPage: Access out of range (!)");
     return (SdrPage*)(maPages.GetObject(nPgNum));
 }
 
 SdrPage* SdrModel::GetPage(sal_uInt16 nPgNum)
 {
+    DBG_ASSERT(nPgNum < maPages.Count(), "SdrModel::GetPage: Access out of range (!)");
     return (SdrPage*)(maPages.GetObject(nPgNum));
 }
 
@@ -2997,11 +3010,13 @@ void SdrModel::PageListChanged()
 
 const SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum) const
 {
+    DBG_ASSERT(nPgNum < maMaPag.Count(), "SdrModel::GetMasterPage: Access out of range (!)");
     return (SdrPage*)(maMaPag.GetObject(nPgNum));
 }
 
 SdrPage* SdrModel::GetMasterPage(sal_uInt16 nPgNum)
 {
+    DBG_ASSERT(nPgNum < maMaPag.Count(), "SdrModel::GetMasterPage: Access out of range (!)");
     return (SdrPage*)(maMaPag.GetObject(nPgNum));
 }
 
