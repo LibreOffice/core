@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: os $ $Date: 2002-09-10 14:16:36 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1709,7 +1709,7 @@ TabPage TP_STD_FONT
         Text[ swedish ] = "västliga";
         Text[ polish ] = "Zachodnie";
         Text[ portuguese_brazilian ] = "Western";
-        Text[ japanese ] = "è¥¿æ¬§è«¸å›½èªž";
+        Text[ japanese ] = "è¥¿æ´‹è«¸å›½èªž";
         Text[ korean ] = "ì„œì–‘";
         Text[ chinese_simplified ] = "è¥¿æ–‡";
         Text[ chinese_traditional ] = "è¥¿æ–‡";
@@ -2651,7 +2651,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ swedish ] = "Ta~bulatorer" ;
         Text [ dutch ] = "Tabsto~ps" ;
         Text [ spanish ] = "Tabuladores" ;
-        Text [ english_us ] = "Tabs" ;
+        Text [ english_us ] = "Ta~bs" ;
         Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
         Text[ russian ] = "Òàáóëÿòîðû";
         Text[ polish ] = "Tabulatory";
