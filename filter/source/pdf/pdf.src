@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdf.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:23:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ String PDF_PROGRESS_BAR
     Text[ hindi ] = "Export as PDF";
     Text[ slovak ] = "Export do PDF";
 };
+
+
 
 
 
