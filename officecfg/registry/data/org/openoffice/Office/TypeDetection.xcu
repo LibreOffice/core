@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-24 10:02:25 $
+ *  last change: $Author: as $ $Date: 2002-05-28 05:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@
         <value>0,,,,xml,20002,</value>
       </prop>
     </node>
-    <node oor:name="calc_Pocket_Excel_Filee" oor:op="replace">
+    <node oor:name="calc_Pocket_Excel_File" oor:op="replace">
       <prop oor:name="UIName">
         <value xml:lang="en-US">Pocket Excel</value>
       </prop>
