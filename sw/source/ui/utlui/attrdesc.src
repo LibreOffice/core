@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 10:18:04 $
+ *  last change: $Author: fs $ $Date: 2002-04-15 09:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2118,19 +2118,19 @@ String STR_ROTATION
 
 String STR_GRID_NONE
 {
-    Text = "Kein Gitter";
+    Text = "Kein Raster";
     Text[ english ] = "No grid";
 };
 
 String STR_GRID_LINES_ONLY
 {
-    Text = "Zeilengitter";
+    Text = "Raster (nur Linien)";
     Text[ english ] = "Line grid";
 };
 
 String STR_GRID_LINES_CHARS
 {
-    Text = "Zeilen- und Zeichengitter";
+    Text = "Raster (Linien und Zeichen)";
     Text[ english ] = "Line and character grid";
 };
 
