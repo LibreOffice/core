@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 13:22:42 $
+ *  last change: $Author: rt $ $Date: 2002-12-03 08:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1113,7 +1113,7 @@ SvXMLUseStylesContext::SvXMLUseStylesContext(
                 INetURLObject aBaseURL( rImp.GetLocator()->getSystemId() );
                 INetURLObject aURL;
                 if( aBaseURL.GetNewAbsURL( rHRef, &aURL ) )
-                    rHRef = aURL.GetMainURL();
+                    rHRef = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
             }
         }
     }
