@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: sab $ $Date: 2002-12-02 12:50:15 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2314,6 +2314,7 @@ void SAL_CALL ScXMLImport::endDocument(void)
         if (xActionLockable.is())
             xActionLockable->removeActionLock();
     }
+    SvXMLImport::endDocument();
     UnlockSolarMutex();
 }
 
