@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pumptest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:31:19 $
+ *  last change: $Author: jbu $ $Date: 2001-03-20 09:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,10 +152,10 @@ void OPumpTest::testInvariant( const OUString& TestName, const Reference < XInte
                 RuntimeException)
 {
     Reference< XServiceInfo > info( TestObject, UNO_QUERY );
-//      ERROR_ASSERT( info.is() , "XServiceInfo not supported !" );
+      ERROR_ASSERT( info.is() , "XServiceInfo not supported !" );
     if( info.is() )
     {
-//          ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
+          ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
         ERROR_ASSERT( ! info->supportsService(
             OUString( RTL_CONSTASCII_USTRINGPARAM("bla bluzb") ) ), "XServiceInfo test failed" );
     }
