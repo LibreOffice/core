@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 08:03:35 $
+ *  last change: $Author: fs $ $Date: 2000-11-03 09:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,6 +765,7 @@ sal_Bool ODbAdminDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverP
             String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
             sLoginRequest.SearchAndReplaceAscii("$name$", pName ? pName->GetValue() : String()),
             aDlg.SetLoginRequestText(sLoginRequest);
+            aDlg.SetSavePasswordText(ModuleRes(STR_REMEMBERPASSWORD_SESSION));
 
             sal_uInt16 nResult = aDlg.Execute();
             if (nResult != RET_OK)
@@ -2178,6 +2179,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2000/10/31 08:03:35  fs
+ *  +selectDataSource - supporting an initial selecting when creating as service
+ *
  *  Revision 1.14  2000/10/30 15:24:02  fs
  *  getCurrent...: add user property value if not empty only
  *
