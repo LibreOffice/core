@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtnum.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:45:06 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 aRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, FALSE);
 
             aSet.Put(SvxNumBulletItem(aRule));
-            USHORT nLevel = GetShell().GetNumLevel( &bHasChild ) & ~NO_NUMLEVEL;
+            USHORT nLevel = GetRealLevel(GetShell().GetNumLevel( &bHasChild ));
             if( nLevel < MAXLEVEL )
             {
                 nLevel = 1<<nLevel;
@@ -236,71 +236,6 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             GetShell().DelNumRules();
 
         delete pDlg;
-/*
-#else
-        SfxItemSet aSet(GetPool(),
-                SID_HTML_MODE, SID_HTML_MODE,
-                FN_PARAM_ACT_NUMBER,    FN_PARAM_ACT_NUMBER,
-                FN_PARAM_CHILD_LEVELS,  FN_PARAM_CHILD_LEVELS,
-                FN_PARAM_NUM_PRESET,    FN_PARAM_NUM_PRESET,
-                FN_PARAM_ACT_NUMLEVEL,  FN_PARAM_ACT_NUMLEVEL,
-                0 );
-
-        // per default TRUE, damit die Schleife im num.cxx richtig arbeitet!
-        BOOL bHasChild = TRUE;
-        const SwNumRule* pCurRule = GetShell().GetCurNumRule();
-        if( pCurRule )
-        {
-            aSet.Put( SwUINumRuleItem( *pCurRule ));
-            USHORT nLevel = GetShell().GetNumLevel( &bHasChild ) & ~NO_NUMLEVEL;
-            if( nLevel < MAXLEVEL )
-            {
-                nLevel = 1<<nLevel;
-                aSet.Put( SfxUInt16Item( FN_PARAM_ACT_NUMLEVEL, nLevel ));
-            }
-        }
-        else
-        {
-            SwNumRule aRule( GetShell().GetUniqueNumRuleName() );
-            SwDocShell* pDocSh = GetView().GetDocShell();
-            BOOL bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
-            for( BYTE n = 0; n < MAXLEVEL; ++n )
-            {
-                SwNumFmt aFmt( aRule.Get( n ) );
-                if(bHtml && n)
-                {
-                    // 1/2" fuer HTML
-                    aFmt.SetLSpace(720);
-                    aFmt.SetAbsLSpace(n * 720);
-                }
-                aRule.Set( n, aFmt );
-            }
-            aSet.Put( SwUINumRuleItem( aRule ));
-        }
-
-        aSet.Put( SfxBoolItem( FN_PARAM_CHILD_LEVELS, bHasChild ));
-        aSet.Put( SfxBoolItem( FN_PARAM_NUM_PRESET,FALSE ));
-
-        SwNumBulletTabDialog* pDlg = new SwNumBulletTabDialog(
-                            GetView().GetWindow(), &aSet, GetShell() );
-
-        if(RET_OK == pDlg->Execute() )
-        {
-            const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState(
-                                    FN_PARAM_ACT_NUMBER, FALSE, &pItem ))
-            {
-                SwNumRule* pSetRule = ((SwUINumRuleItem*)pItem)->GetNumRule();
-                pSetRule->SetAutoRule( TRUE );
-                GetShell().SetCurNumRule( *pSetRule );
-            }
-            else
-                GetShell().DelNumRules();
-        }
-
-        delete pDlg;
-#endif
-*/
     }
     break;
     default:
