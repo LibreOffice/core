@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svguno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-22 17:49:17 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 11:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
         }
         catch( NMSP_REGISTRY::InvalidRegistryException& )
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
 

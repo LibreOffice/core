@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 11:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, XRegistryKey 
     catch (Exception &)
     {
         // not allowed to throw an exception over the c function.
-        //OSL_ENSHURE( sal_False, "Exception cannot register component!" );
+        //OSL_ENSURE( sal_False, "Exception cannot register component!" );
         return sal_False;
     }
     /**** END NEW ****/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentmodule.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-12 07:06:08 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 11:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,17 +214,17 @@ namespace COMPMOD_NAMESPACE
     {
         if (!s_pImplementationNames)
         {
-            OSL_ENSHURE(!s_pSupportedServices && !s_pCreationFunctionPointers && !s_pFactoryFunctionPointers,
+            OSL_ENSURE(!s_pSupportedServices && !s_pCreationFunctionPointers && !s_pFactoryFunctionPointers,
                 "OModule::registerComponent : inconsistent state (the pointers (1)) !");
             s_pImplementationNames = new Sequence< ::rtl::OUString >;
             s_pSupportedServices = new Sequence< Sequence< ::rtl::OUString > >;
             s_pCreationFunctionPointers = new Sequence< sal_Int64 >;
             s_pFactoryFunctionPointers = new Sequence< sal_Int64 >;
         }
-        OSL_ENSHURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
+        OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::registerComponent : inconsistent state (the pointers (2)) !");
 
-        OSL_ENSHURE(    (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
                     &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
                     &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OModule::registerComponent : inconsistent state !");
@@ -249,9 +249,9 @@ namespace COMPMOD_NAMESPACE
             OSL_ASSERT("OModule::revokeComponent : have no class infos ! Are you sure called this method at the right time ?");
             return;
         }
-        OSL_ENSHURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
+        OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::revokeComponent : inconsistent state (the pointers) !");
-        OSL_ENSHURE(    (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
                     &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
                     &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OModule::revokeComponent : inconsistent state !");
@@ -284,16 +284,16 @@ namespace COMPMOD_NAMESPACE
             const Reference< XMultiServiceFactory >& /*_rxServiceManager*/,
             const Reference< XRegistryKey >& _rxRootKey)
     {
-        OSL_ENSHURE(_rxRootKey.is(), "OModule::writeComponentInfos : invalid argument !");
+        OSL_ENSURE(_rxRootKey.is(), "OModule::writeComponentInfos : invalid argument !");
 
         if (!s_pImplementationNames)
         {
             OSL_ASSERT("OModule::writeComponentInfos : have no class infos ! Are you sure called this method at the right time ?");
             return sal_True;
         }
-        OSL_ENSHURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
+        OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::writeComponentInfos : inconsistent state (the pointers) !");
-        OSL_ENSHURE(    (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
                     &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
                     &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OModule::writeComponentInfos : inconsistent state !");
@@ -332,17 +332,17 @@ namespace COMPMOD_NAMESPACE
         const ::rtl::OUString& _rImplementationName,
         const Reference< XMultiServiceFactory >& _rxServiceManager)
     {
-        OSL_ENSHURE(_rxServiceManager.is(), "OModule::getComponentFactory : invalid argument (service manager) !");
-        OSL_ENSHURE(_rImplementationName.getLength(), "OModule::getComponentFactory : invalid argument (implementation name) !");
+        OSL_ENSURE(_rxServiceManager.is(), "OModule::getComponentFactory : invalid argument (service manager) !");
+        OSL_ENSURE(_rImplementationName.getLength(), "OModule::getComponentFactory : invalid argument (implementation name) !");
 
         if (!s_pImplementationNames)
         {
             OSL_ASSERT("OModule::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
             return NULL;
         }
-        OSL_ENSHURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
+        OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
             "OModule::getComponentFactory : inconsistent state (the pointers) !");
-        OSL_ENSHURE(    (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
+        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
                     &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
                     &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
             "OModule::getComponentFactory : inconsistent state !");
@@ -384,6 +384,9 @@ namespace COMPMOD_NAMESPACE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/12 07:06:08  fs
+ *  initial checkin - helper class for implementing module-functionality in SFX-less components
+ *
  *
  *  Revision 1.0 30.01.01 15:18:48  fs
  ************************************************************************/

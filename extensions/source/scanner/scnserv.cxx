@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scnserv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 11:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
         }
         catch( InvalidRegistryException& )
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
 
