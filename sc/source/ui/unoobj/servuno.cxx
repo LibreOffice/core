@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 09:57:51 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,10 @@ static const sal_Char* __FAR_DATA aProvNames[SC_SERVICE_COUNT] =
         SC_SERVICENAME_LISTCELLBIND,               // SC_SERVICE_LISTCELLBIND
         SC_SERVICENAME_LISTSOURCE,                 // SC_SERVICE_LISTSOURCE
         SC_SERVICENAME_CELLADDRESS,                // SC_SERVICE_CELLADDRESS
-        SC_SERVICENAME_RANGEADDRESS,               // SC_SERVICE_RANGEADDRESS
+        SC_SERVICENAME_RANGEADDRESS,                // SC_SERVICE_RANGEADDRESS
+
+        "com.sun.star.sheet.DocumentSettings",      // SC_SERVICE_SHEETDOCSET
+
         SC_SERVICENAME_CHDATAPROV                  // SC_SERVICE_CHDATAPROV
     };
 
@@ -198,6 +201,7 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_LISTSOURCE
         "",                                         // SC_SERVICE_CELLADDRESS
         "",                                         // SC_SERVICE_RANGEADDRESS
+        "",                                         // SC_SERVICE_SHEETDOCSET
         ""                                          // SC_SERVICE_CHDATAPROV
     };
 
@@ -315,6 +319,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 xRet = SvxCreateNumRule( pDocShell->MakeDrawLayer() );
             break;
         case SC_SERVICE_DOCSPRSETT:
+        case SC_SERVICE_SHEETDOCSET:
         case SC_SERVICE_DOCCONF:
             if (pDocShell)
                 xRet = (beans::XPropertySet*)new ScDocumentConfiguration(pDocShell);
