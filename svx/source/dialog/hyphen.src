@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:35:31 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,8 @@ ModalDialog RID_SVXDLG_HYPHENATE
     Text[ slovak ] = "Delenie slov";
 };
  // ******************************************************************* EOF
+
+
 
 
 
