@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-16 13:55:23 $
+ *  last change: $Author: cl $ $Date: 2001-05-18 09:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ enum SdDocumentSettingsPropertyHandles
         {
             { MAP_LEN("DefaultTabStop"),        HANDLE_TABSTOP,             &::getCppuType((const sal_Int32*)0),    0,  0 },
             { MAP_LEN("PrinterName"),           HANDLE_PRINTERNAME,         &::getCppuType((const OUString*)0),     0,  0 },
-            { MAP_LEN("PrinterSetup"),          HANDLE_PRINTERJOB,          &::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0, 0 },
+            { MAP_LEN("PrinterSetup"),          HANDLE_PRINTERJOB,          &::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0, MID_PRINTER },
 #ifndef SVX_LIGHT
 
             { MAP_LEN("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       &::getBooleanCppuType(),                0,  MID_PRINTER },
@@ -682,15 +682,24 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         sal_uInt32 nSize = aSequence.getLength();
                         SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
                         aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                        SfxItemSet* pItemSet = new SfxItemSet(pDoc->GetPool(),
+                        SfxItemSet* pItemSet;
+
+                        if( pPrinter )
+                        {
+                            pItemSet = pPrinter->GetOptions().Clone();
+                        }
+                        else
+                        {
+                            pItemSet = new SfxItemSet(pDoc->GetPool(),
                                         SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
                                         SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                                         ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
                                         0 );
+                        }
 
-                        SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+                        pDocSh->SetPrinter( SfxPrinter::Create ( aStream, pItemSet ) );
 
-                        pDocSh->SetPrinter( pPrinter );
+                        pPrinter = NULL;
 #endif
                     }
                 }
