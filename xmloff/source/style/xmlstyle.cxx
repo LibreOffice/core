@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 19:14:25 $
+ *  last change: $Author: mib $ $Date: 2000-12-15 12:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,6 +407,7 @@ public:
     }
 
     inline void AddStyle( SvXMLStyleContext *pStyle );
+    void Clear();
 
     const SvXMLStyleContext *FindStyleChildContext( sal_uInt16 nFamily,
                                       sal_uInt16 nSubFamily,
@@ -446,6 +447,18 @@ inline void SvXMLStylesContext_Impl::AddStyle( SvXMLStyleContext *pStyle )
     pStyle->AddRef();
 
     FlushIndex();
+}
+
+void SvXMLStylesContext_Impl::Clear()
+{
+    FlushIndex();
+
+    while( aStyles.Count() )
+    {
+        SvXMLStyleContext *pStyle = aStyles.GetObject(0);
+        aStyles.Remove( 0UL );
+        pStyle->ReleaseRef();
+    }
 }
 
 const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
@@ -943,6 +956,11 @@ void SvXMLStylesContext::EndElement()
 void SvXMLStylesContext::AddStyle(SvXMLStyleContext& rNew)
 {
     pImpl->AddStyle( &rNew );
+}
+
+void SvXMLStylesContext::Clear()
+{
+    pImpl->Clear();
 }
 
 void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,

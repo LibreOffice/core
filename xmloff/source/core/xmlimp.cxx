@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-03 10:16:56 $
+ *  last change: $Author: mib $ $Date: 2000-12-15 12:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
+#endif
+#ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
+#include "XMLFontStylesContext.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLICTXT_HXX
@@ -253,6 +256,15 @@ SvXMLImport::~SvXMLImport() throw ()
         delete pNumImport;
     if (pProgressBarHelper)
         delete pProgressBarHelper;
+
+    if( xFontDecls.Is() )
+        ((SvXMLStylesContext *)&xFontDecls)->Clear();
+    if( xStyles.Is() )
+        ((SvXMLStylesContext *)&xStyles)->Clear();
+    if( xAutoStyles.Is() )
+        ((SvXMLStylesContext *)&xAutoStyles)->Clear();
+    if( xMasterStyles.Is() )
+        ((SvXMLStylesContext *)&xMasterStyles)->Clear();
 }
 
 // XUnoTunnel & co
@@ -659,3 +671,67 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
 
     return sRet;
 }
+
+void SvXMLImport::SetFontDecls( XMLFontStylesContext *pFontDecls )
+{
+    xFontDecls = pFontDecls;
+    GetTextImport()->SetFontDecls( pFontDecls );
+}
+
+void SvXMLImport::SetStyles( SvXMLStylesContext *pStyles )
+{
+    xStyles = pStyles;
+}
+
+void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
+{
+    xAutoStyles = pAutoStyles;
+    GetTextImport()->SetAutoStyles( pAutoStyles );
+    GetShapeImport()->SetAutoStylesContext( pAutoStyles );
+}
+
+void SvXMLImport::SetMasterStyles( SvXMLStylesContext *pMasterStyles )
+{
+    xMasterStyles = pMasterStyles;
+}
+
+XMLFontStylesContext *SvXMLImport::GetFontDecls()
+{
+    return (XMLFontStylesContext *)&xFontDecls;
+}
+
+SvXMLStylesContext *SvXMLImport::GetStyles()
+{
+    return (SvXMLStylesContext *)&xStyles;
+}
+
+SvXMLStylesContext *SvXMLImport::GetAutoStyles()
+{
+    return (SvXMLStylesContext *)&xAutoStyles;
+}
+
+SvXMLStylesContext *SvXMLImport::GetMasterStyles()
+{
+    return (SvXMLStylesContext *)&xMasterStyles;
+}
+
+const XMLFontStylesContext *SvXMLImport::GetFontDecls() const
+{
+    return (const XMLFontStylesContext *)&xFontDecls;
+}
+
+const SvXMLStylesContext *SvXMLImport::GetStyles() const
+{
+    return (const SvXMLStylesContext *)&xStyles;
+}
+
+const SvXMLStylesContext *SvXMLImport::GetAutoStyles() const
+{
+    return (const SvXMLStylesContext *)&xAutoStyles;
+}
+
+const SvXMLStylesContext *SvXMLImport::GetMasterStyles() const
+{
+    return (const SvXMLStylesContext *)&xMasterStyles;
+}
+
