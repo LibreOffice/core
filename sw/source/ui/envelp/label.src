@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 15:05:53 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 18:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_simplified ] = "Êı¾İ¿â×Ö¶Î";
         Text[ russian ] = "Ïîëå áàçû äàííûõ";
         Text[ polish ] = "Pole bazy danych";
-        Text[ japanese ] = "ÃŞ°ÀÍŞ°½ Ì¨°ÙÄŞ";
+        Text[ japanese ] = "ÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ(~F)";
         Text[ chinese_traditional ] = "¸ê®Æ®wÄæ¦ì";
         Text[ arabic ] = "ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ greek ] = "Ğåäßï âÜóçò äåäïìİíùí";
@@ -804,7 +804,7 @@ TabPage TP_VISITING_CARDS
         Text[ swedish ] = "AutoText - område";
         Text[ polish ] = "Obszar Autotekstu";
         Text[ portuguese_brazilian ] = "AutoText group";
-        Text[ japanese ] = "“ü—Íx‰‡ ”ÍˆÍ(~S)";
+        Text[ japanese ] = "“ü—Íx‰‡”ÍˆÍ(~S)";
         Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® - ±¸¿ª(~S)";
         Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯·ÖÀà(~S)";
         Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°¤ÀÃş(~S)";
@@ -1201,7 +1201,7 @@ TabPage TP_PRIVATE_DATA
         Text[ swedish ] = "Fa~x";
         Text[ polish ] = "Faks";
         Text[ portuguese_brazilian ] = "Fax";
-        Text[ japanese ] = "Fa~x";
+        Text[ japanese ] = "Fax(~X)";
         Text[ korean ] = "ÆÑ½º(~X)";
         Text[ chinese_simplified ] = "´«Õæ(~X)";
         Text[ chinese_traditional ] = "¶Ç¯u(~X)";
@@ -1540,7 +1540,7 @@ TabPage TP_BUSINESS_DATA
         Text[ polish ] = "Telefon/Komórka/Faks";
         Text[ portuguese_brazilian ] = "Phone/Mobile/Fax";
         Text[ japanese ] = "“d˜b/Œg‘Ñ“d˜b/Fax";
-        Text[ korean ] = "ÀüÇÏ/ÇÚµåÆù/ÆÑ½º";
+        Text[ korean ] = "ÀüÈ­/ÇÚµåÆù/ÆÑ½º";
         Text[ chinese_simplified ] = "µç»°/ÊÖ»ú/´«Õæ";
         Text[ chinese_traditional ] = "¹q¸Ü/²¾°Ê¹q¸Ü/¶Ç¯u";
         Text[ arabic ] = "ÇáåÇÊİ/ÇáãÍãæá/ÇáİÇßÓ";
