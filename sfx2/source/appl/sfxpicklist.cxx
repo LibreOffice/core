@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:52:08 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,8 +432,8 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case SFX_EVENT_CREATEDOC:
             {
                 pDocSh->GetDocInfo().SetCreated( SvtUserOptions().GetFullName() );
-                break;
             }
+            break;
 
             case SFX_EVENT_OPENDOC:
             {
@@ -448,24 +448,23 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                 // Hilfe nicht in History
                 INetURLObject aURL( pMed->GetOrigURL() );
-                if ( aURL.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP )
-                {
-                    ::rtl::OUString     aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
-                    ::rtl::OUString     aFilter;
+                if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
+                    return;
 
-                    const SfxFilter*    pFilter = pMed->GetOrigFilter();
-                    if ( pFilter )
-                        aFilter = pFilter->GetFilterName();
+                ::rtl::OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
+                ::rtl::OUString  aFilter;
+                const SfxFilter* pFilter = pMed->GetOrigFilter();
+                if ( pFilter )
+                    aFilter = pFilter->GetFilterName();
 
-                    // add to svtool history options
-                    SvtHistoryOptions().AppendItem( eHISTORY,
-                            aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
-                            aFilter,
-                            aTitle,
-                            SfxStringEncode( aURL.GetPass() ) );
-                }
-                break;
+                // add to svtool history options
+                SvtHistoryOptions().AppendItem( eHISTORY,
+                        aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+                        aFilter,
+                        aTitle,
+                        SfxStringEncode( aURL.GetPass() ) );
             }
+            break;
 
             case SFX_EVENT_CLOSEDOC:
             {
@@ -478,46 +477,46 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                      SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
                     return;
 
-                if( pDocSh->Get_Impl()->bWaitingForPicklist &&
-                    !pDocSh->Get_Impl()->bIsHelpObjSh )
-                {
-                    // only add r/w document into picklist
-                    SfxMedium *pMed = pDocSh->GetMedium();
-                    if( !pMed || pDocSh->IsReadOnly() || !pMed->IsUpdatePickList() )
-                        return;
+                // Hilfe nicht in History
+                INetURLObject aURL( pMed->GetOrigURL() );
+                if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
+                    return;
 
-                    // add no document that forbids this (for example Message-Body)
-                    SFX_ITEMSET_ARG( pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST, sal_False );
-                    if ( pPicklistItem && !pPicklistItem->GetValue() )
-                        return;
+                // only add r/w document into picklist
+                if ( pDocSh->IsReadOnly() || !pMed->IsUpdatePickList() )
+                    return;
 
-                    // ignore hidden documents
-                    if ( pDocSh->Get_Impl()->bHidden )
-                        return;
+                // add no document that forbids this (for example Message-Body)
+                SFX_ITEMSET_ARG( pMed->GetItemSet(), pPicklistItem, SfxBoolItem, SID_PICKLIST, sal_False );
+                if (
+                    (pPicklistItem && !pPicklistItem->GetValue()) ||
+                    (!(pDocSh->Get_Impl()->bWaitingForPicklist) )
+                   )
+                    return;
 
-                    ::rtl::OUString     aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
-                    ::rtl::OUString     aFilter;
+                // ignore hidden documents
+                if ( pDocSh->Get_Impl()->bHidden )
+                    return;
 
-                    INetURLObject       aURL( pMed->GetOrigURL() );
-                    const SfxFilter*    pFilter = pMed->GetOrigFilter();
+                ::rtl::OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
+                ::rtl::OUString  aFilter;
+                const SfxFilter* pFilter = pMed->GetOrigFilter();
+                if ( pFilter )
+                    aFilter = pFilter->GetFilterName();
 
-                    if ( pFilter )
-                        aFilter = pFilter->GetFilterName();
+                // add to svtool history options
+                SvtHistoryOptions().AppendItem( ePICKLIST,
+                        aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+                        aFilter,
+                        aTitle,
+                        SfxStringEncode( aURL.GetPass() ) );
 
-                    // add to svtool history options
-                    SvtHistoryOptions().AppendItem( ePICKLIST,
-                            aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
-                            aFilter,
-                            aTitle,
-                            SfxStringEncode( aURL.GetPass() ) );
+                pDocSh->Get_Impl()->bWaitingForPicklist = sal_False;
 
-                    pDocSh->Get_Impl()->bWaitingForPicklist = sal_False;
-
-                    if ( aURL.GetProtocol() == INET_PROT_FILE )
-                        SystemShell::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
-                }
-                break;
+                if ( aURL.GetProtocol() == INET_PROT_FILE )
+                    SystemShell::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
             }
+            break;
         }
     }
 }
