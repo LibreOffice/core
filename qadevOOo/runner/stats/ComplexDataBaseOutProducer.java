@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexDataBaseOutProducer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-10-06 12:40:26 $
+ *  last change:$Date: 2004-11-02 11:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,15 +190,18 @@ public class ComplexDataBaseOutProducer extends DataBaseOutProducer {
         executeSQLCommand("SELECT status as \"test_state.status\" FROM test_state"+
                           " WHERE test_run_id = $test_run.id AND entry_id = $entry.id;", true);
 
+        String entryState = (String)mSqlInput.get("EntryState");
         String status = (String)mSqlInput.get("test_state.status");
 
-        if (status == null) {
-            executeSQLCommand("INSERT test_state (test_run_id, entry_id, status)"+
-                              " VALUES ($test_run.id, $entry.id, \"$EntryState\");");
-        }
-        else {
-            executeSQLCommand("UPDATE test_state SET status = \"$EntryState\""+
-                              " where test_run_id =$test_run.id AND entry_id = $entry.id;");
+        if (!entryState.equals("SKIPPED.FAILED")) { // occurs in case of misspellings: do not make an database entry.
+            if (status == null) {
+                executeSQLCommand("INSERT test_state (test_run_id, entry_id, status)"+
+                                  " VALUES ($test_run.id, $entry.id, \"$EntryState\");");
+            }
+            else {
+                executeSQLCommand("UPDATE test_state SET status = \"$EntryState\""+
+                                  " where test_run_id =$test_run.id AND entry_id = $entry.id;");
+            }
         }
         return true;
     }
