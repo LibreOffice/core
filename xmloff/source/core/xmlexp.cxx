@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-03 16:24:00 $
+ *  last change: $Author: dvo $ $Date: 2001-09-13 14:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,15 +593,26 @@ OUString SAL_CALL SvXMLExport::getImplementationName(  ) throw(uno::RuntimeExcep
     return aStr;
 }
 
-sal_Bool SAL_CALL SvXMLExport::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL SvXMLExport::supportsService( const OUString& rServiceName ) throw(uno::RuntimeException)
 {
-    return sal_False;
+    return
+        rServiceName.equalsAsciiL(
+            "com.sun.star.document.ExportFilter",
+            sizeof("com.sun.star.document.ExportFilter")-1 ) ||
+        rServiceName.equalsAsciiL(
+            "com.sun.star.xml.XMLExportFilter",
+            sizeof("com.sun.star.xml.XMLExportFilter")-1);
 }
 
 uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
     throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq;
+    uno::Sequence<OUString> aSeq(2);
+    OUString* pSeq = aSeq.getArray();
+    aSeq[0] = OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
+    aSeq[1] = OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.XMLExportFilter"));
     return aSeq;
 }
 
@@ -1566,6 +1577,7 @@ SvXMLElementExport::~SvXMLElementExport()
     {
         if( bIgnWS )
             rExport.GetDocHandler()->ignorableWhitespace( rExport.sWS );
+
         rExport.GetDocHandler()->endElement( aName );
     }
 }

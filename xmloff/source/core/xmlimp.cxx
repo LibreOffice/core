@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-03 18:14:08 $
+ *  last change: $Author: dvo $ $Date: 2001-09-13 14:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,16 +694,27 @@ OUString SAL_CALL SvXMLImport::getImplementationName()
     return aStr;
 }
 
-sal_Bool SAL_CALL SvXMLImport::supportsService( const OUString& ServiceName )
+sal_Bool SAL_CALL SvXMLImport::supportsService( const OUString& rServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return sal_False;
+    return
+        rServiceName.equalsAsciiL(
+            "com.sun.star.document.ImportFilter",
+            sizeof("com.sun.star.document.ImportFilter")-1 ) ||
+        rServiceName.equalsAsciiL(
+            "com.sun.star.xml.XMLImportFilter",
+            sizeof("com.sun.star.xml.XMLImportFilter")-1);
 }
 
 uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )
     throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq;
+    uno::Sequence<OUString> aSeq(2);
+    OUString* pSeq = aSeq.getArray();
+    aSeq[0] = OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ImportFilter"));
+    aSeq[1] = OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.XMLImportFilter"));
     return aSeq;
 }
 
