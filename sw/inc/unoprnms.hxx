@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:01:31 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 10:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <tools/solar.h>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 enum SwPropNameIds
 {
@@ -776,7 +779,7 @@ extern const SwPropNameTab aPropNameTab;
 // !!! listed macros from the swui DLL and that can not access the        !!!
 // !!! array aPropNameTab which is located in a different DLL.            !!!
 const SwPropNameLen& GetPropName( USHORT nId );
-
+SW_DLLPUBLIC const SwPropNameLen& SwGetPropName( USHORT nId );
 
 #define SW_PROP_NAME(nId) \
     GetPropName( nId ).pName, GetPropName( nId ).nNameLen
