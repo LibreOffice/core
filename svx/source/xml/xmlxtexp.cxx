@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:23 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,12 +248,15 @@ private:
 
 ///////////////////////////////////////////////////////////////////////
 
+// #110680#
 SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const OUString& rFileName,
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
-    uno::Reference<document::XGraphicObjectResolver >& xGrfResolver ) :
-        SvXMLExport(rFileName, rHandler, NULL, MAP_100TH_MM), mxTable( xTable )
+    uno::Reference<document::XGraphicObjectResolver >& xGrfResolver )
+:   SvXMLExport( xServiceFactory, rFileName, rHandler, NULL, MAP_100TH_MM),
+    mxTable( xTable )
 {
     SetGraphicResolver( xGrfResolver );
     setExportFlags( 0 );
@@ -339,7 +342,11 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
             xMetaSrc->setOutputStream( xOut );
 
             const OUString aName;
-            SvxXMLXTableExportComponent aExporter( aName, xHandler, xTable, xGrfResolver );
+
+            // #110680#
+            // SvxXMLXTableExportComponent aExporter( aName, xHandler, xTable, xGrfResolver );
+            SvxXMLXTableExportComponent aExporter( xServiceFactory, aName, xHandler, xTable, xGrfResolver );
+
             bRet = aExporter.exportTable();
 
         }
