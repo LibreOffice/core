@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:14:40 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@ class FmSearchDialog;
 class Graphic;
 class GraphicFilterDialog;
 class SvxAreaTabDialog;
+class InsertObjectDialog_Impl;
+class SvPasteObjectDialog;
+class SvBaseLinksDlg;
 class SvxTransformTabDialog;
 class SvxCaptionTabDialog;
 
@@ -527,6 +530,31 @@ class AbstractSfxSingleTabDialog_Impl :public AbstractSfxSingleTabDialog
 };
 //add for SvxMeasureDialog & SvxConnectionDialog end
 
+class AbstractInsertObjectDialog_Impl : public SfxAbstractInsertObjectDialog
+{
+    DECL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl, InsertObjectDialog_Impl);
+    virtual com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject();
+    virtual BOOL IsCreateNew();
+};
+
+class AbstractPasteDialog_Impl : public SfxAbstractPasteDialog
+{
+public:
+    DECL_ABSTDLG_BASE(AbstractPasteDialog_Impl, SvPasteObjectDialog );
+    virtual void Insert( SotFormatStringId nFormat, const String & rFormatName );
+    virtual void SetObjName( const SvGlobalName & rClass, const String & rObjName );
+    virtual ULONG GetFormat( const TransferableDataHelper& aHelper,
+                        const DataFlavorExVector* pFormats=0,
+                        const TransferableObjectDescriptor* pDesc=0 );
+};
+
+class AbstractLinksDialog_Impl : public SfxAbstractLinksDialog
+{
+public:
+    DECL_ABSTDLG_BASE(AbstractLinksDialog_Impl, SvBaseLinksDlg );
+};
+
+
 //add for SvxPostItDialog begin
 class SvxPostItDialog;
 class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
@@ -584,6 +612,13 @@ public:
                                             const ResId& rResId,
                                             SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
                                             SvxDistributeVertical eVer = SvxDistributeVerticalNone);
+    virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, USHORT nSlotId,
+            const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStor,
+            const SvObjectServerList* pList = 0 );
+    virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, USHORT nSlotId,
+            const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
+   virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent );
+   virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::SvLinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p=0  );
 
    virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,  //add for HangulHanjaConversionDialog CHINA001
                                             HangulHanjaConversion::ConversionDirection _ePrimaryDirection,
