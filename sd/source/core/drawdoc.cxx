@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-05 13:49:37 $
+ *  last change: $Author: dl $ $Date: 2000-12-06 16:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     }
 #else
     SetLanguage( System::GetLanguage() );
+    SetLanguageCJK( System::GetLanguage() );
+    SetLanguageCTL( System::GetLanguage() );
 #endif // !SVX_LIGHT
 
     // Dem DrawOutliner den StyleSheetPool setzen, damit Textobjekte richtig
@@ -380,13 +382,16 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
                                                             uno::UNO_QUERY );
 
-        Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
-        if ( xSpellChecker.is() )
-            rOutliner.SetSpeller( xSpellChecker );
+        if( xLinguServiceManager.is() )
+        {
+            Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
+            if ( xSpellChecker.is() )
+                rOutliner.SetSpeller( xSpellChecker );
 
-        Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
-        if( xHyphenator.is() )
-            rOutliner.SetHyphenator( xHyphenator );
+            Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
+            if( xHyphenator.is() )
+                rOutliner.SetHyphenator( xHyphenator );
+        }
     }
     catch(...)
     {
