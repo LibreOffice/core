@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:35:21 $
+ *  last change: $Author: oj $ $Date: 2002-04-17 12:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
@@ -204,6 +207,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::container;
+using namespace drafts::com::sun::star::accessibility;
 
 #define ROWSTATUS(row)  !row.Is() ? "NULL" : row->GetStatus() == GRS_CLEAN ? "CLEAN" : row->GetStatus() == GRS_MODIFIED ? "MODIFIED" : row->GetStatus() == GRS_DELETED ? "DELETED" : "INVALID"
 
@@ -520,6 +524,15 @@ DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
     m_aAbsolute.Show();
 }
 
+namespace
+{
+    void SetPosAndSize(Button& _rButton,Point& _rPos,const Size& _rSize)
+    {
+        _rButton.SetPosPixel( _rPos );
+        _rButton.SetSizePixel( _rSize );
+        _rPos.X() += (sal_uInt16)_rSize.Width();
+    }
+}
 //------------------------------------------------------------------------------
 sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 {
@@ -555,25 +568,15 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     m_aRecordCount.SetSizePixel(Size(nTextWidth,nH));
     nX += (sal_uInt16)(nTextWidth + aBorder.Width());
 
-    m_aFirstBtn.SetPosPixel( Point(nX,nY) );
-    m_aFirstBtn.SetSizePixel( Size(nH,nH) );
-    nX += (sal_uInt16)nH;
+    Point aButtonPos(nX,nY);
+    Size  aButtonSize(nH,nH);
+    SetPosAndSize(m_aFirstBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(m_aPrevBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(m_aNextBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(m_aLastBtn, aButtonPos, aButtonSize);
+    SetPosAndSize(m_aNewBtn, aButtonPos, aButtonSize);
 
-    m_aPrevBtn.SetPosPixel( Point(nX,nY) );
-    m_aPrevBtn.SetSizePixel( Size(nH,nH) );
-    nX += (sal_uInt16)nH;
-
-    m_aNextBtn.SetPosPixel( Point(nX,nY) );
-    m_aNextBtn.SetSizePixel( Size(nH,nH) );
-    nX += (sal_uInt16)nH;
-
-    m_aLastBtn.SetPosPixel( Point(nX,nY) );
-    m_aLastBtn.SetSizePixel( Size(nH,nH) );
-    nX += (sal_uInt16)nH;
-
-    m_aNewBtn.SetPosPixel( Point(nX,nY) );
-    m_aNewBtn.SetSizePixel( Size(nH,nH) );
-    nX += (sal_uInt16)(nH + aBorder.Width());
+    nX = aButtonPos.X() + (sal_uInt16)(nH + aBorder.Width());
 
     // Ist der Font des Edits groesser als das Feld?
     Font aOutputFont = m_aAbsolute.GetFont();
@@ -3712,5 +3715,23 @@ void DbGridControl::disposing(sal_uInt16 _nId, const EventObject& _rEvt)
         }
     }
 }
+// -----------------------------------------------------------------------------
+sal_Int32 DbGridControl::GetAccessibleControlCount() const
+{
+    return DbGridControl_Base::GetAccessibleControlCount() + 1; // the navigation control
+}
+// -----------------------------------------------------------------------------
+Reference<XAccessible > DbGridControl::CreateAccessibleControl( sal_Int32 _nIndex )
+{
+    Reference<XAccessible > xRet;
+    if ( _nIndex == DbGridControl_Base::GetAccessibleControlCount() )
+    {
+        xRet = m_aBar.GetAccessible();
+    }
+    else
+        xRet = DbGridControl_Base::CreateAccessibleControl( _nIndex );
+    return xRet;
+}
+// -----------------------------------------------------------------------------
 
 
