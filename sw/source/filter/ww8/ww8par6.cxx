@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 08:29:30 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1935,6 +1935,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     if( nWidth <= 10 )                              // Auto-Breite
     {
         bAutoWidth = true;
+        rIo.maTracer.Log(sw::log::eAutoWidthFrame);
         nWidth = nNettoWidth = (nPgWidth ? nPgWidth : 2268); // 4 cm
     }
     if( nWidth <= MINFLY )
