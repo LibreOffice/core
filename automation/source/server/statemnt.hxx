@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:40:26 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _SMARTID_HXX_
+#include "smartid.hxx"
 #endif
 
 class Window;
@@ -256,7 +260,7 @@ public:
 protected:
     static Window* SearchClientWin( Window *pBase, Search &aSearch, BOOL MaybeBase = TRUE );
 
-    Window* SearchTree( ULONG nUId, BOOL bSearchButtonOnToolbox = FALSE );
+    Window* SearchTree( SmartId aUId, BOOL bSearchButtonOnToolbox = FALSE );
     Window* GetActive( WindowType nRT, BOOL MaybeBase = TRUE );
     Window* GetFocus( WindowType nRT ,BOOL ParentWasRT = FALSE, BOOL MaybeBase = TRUE );
     Window* GetAnyActive( BOOL MaybeBase = TRUE );
@@ -267,7 +271,7 @@ protected:
     Window* GetDocWin( USHORT nNr );
     USHORT GetDocWinCount();
     Window* GetFadeSplitWin( Window *pBase, WindowAlign nAlign, BOOL MaybeBase = TRUE );
-    BOOL ValueOK(ULONG nId, String aBezeichnung, ULONG nValue, ULONG nMax);
+    BOOL ValueOK(SmartId nId, String aBezeichnung, ULONG nValue, ULONG nMax);
 
 public:
 //  void AddStatement( StatementList *pNewStatement );
@@ -286,10 +290,10 @@ public:
 ***************************************************************************/
 
     void ReportError(String aMessage);
-    void ReportError(ULONG nUId, String aMessage);
-    void ReportError(ULONG nUId, String aMessage, ULONG nWhatever);
+    void ReportError(SmartId aUId, String aMessage);
+    void ReportError(String aMessage, ULONG nWhatever);
 
-    static void DirectLog( ULONG nUId, String aString );
+    static void DirectLog( ULONG nType, String aString );
 
     String Tree(Window *pBase, int Indent);
     String ClientTree(Window *pBase, int Indent);
@@ -306,8 +310,8 @@ public:
     static BOOL bDying;
     static BOOL bExecuting;             // Gesetzt, wenn ein Befehl rescheduled ohne einen neuen Befehl zu erlauben
     BOOL bWasExecuting;                 // Wurde bei einem MaybeResetSafeReschedule resettet, so wird der Zustand danach wiederhergestellt
-    static USHORT nSubMenuId1;          // Untermenüs bei PopupMenus
-    static USHORT nSubMenuId2;          // erstmal 2-Stufig
+    static SmartId aSubMenuId1;         // Untermenüs bei PopupMenus
+    static SmartId aSubMenuId2;         // erstmal 2-Stufig
     static SystemWindow *pMenuWindow;   // when using MenuBar as base for MenuCommands
     static TTProperties *pTTProperties; // Hier stehen die SlotIDs aus dem SFX drin
 
@@ -356,6 +360,7 @@ class StatementCommand : public StatementList   // Befehl ausführen (wintree, re
     friend class ImplRemoteControl;
 protected:
     USHORT nMethodId;
+    SmartId aSmartMethodId;
     USHORT nParams;
     USHORT nNr1,nNr2,nNr3,nNr4;
     ULONG nLNr1;
@@ -391,7 +396,7 @@ enum TTHotSpots  { MitteLinks, Mitte, MitteOben };
 class StatementControl : public StatementList
 {
 protected:
-    ULONG nUId;
+    SmartId aUId;
     USHORT nMethodId;
     USHORT nParams;
     USHORT nNr1,nNr2,nNr3,nNr4;
@@ -408,7 +413,7 @@ protected:
     BOOL HandleCommonMethods( Window *pControl );
 
 public:
-    StatementControl (SCmdStream *pIn);
+    StatementControl( SCmdStream *pIn, USHORT nControlType );
     virtual BOOL Execute();
 
 };
@@ -441,10 +446,10 @@ private:
 class SearchUID : public Search
 {
     Window *pMaybeResult;
-    ULONG nUId;
+    SmartId aUId;
     BOOL bSearchButtonOnToolbox;
 public:
-    SearchUID( ULONG nUIdP, BOOL bSearchButtonOnToolboxP ): Search( SEARCH_FOCUS_FIRST ), pMaybeResult(NULL), nUId(nUIdP), bSearchButtonOnToolbox(bSearchButtonOnToolboxP) {}
+    SearchUID( SmartId aUIdP, BOOL bSearchButtonOnToolboxP ): Search( SEARCH_FOCUS_FIRST ), pMaybeResult(NULL), aUId(aUIdP), bSearchButtonOnToolbox(bSearchButtonOnToolboxP) {}
     virtual BOOL IsWinOK( Window *pWin );
     Window* GetMaybeWin() { return pMaybeResult; }
 };
