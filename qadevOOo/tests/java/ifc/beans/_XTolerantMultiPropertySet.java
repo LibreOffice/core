@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTolerantMultiPropertySet.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2004-03-17 09:48:32 $
+ *  last change:$Date: 2005-03-23 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
     protected Property[] properties = null;
     protected XPropertyState pState = null;
     protected XPropertySet PS = null;
+
 
     /*
      * Queries XPropertySet from the given Component and gets XPropertySetInfo
@@ -182,6 +183,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
                 if (!(GPR[i].Value instanceof com.sun.star.uno.Any)) {
                     localres = ValueComparer.equalValue(GPR[i].Value,
                                                         valuesOfProperties[i]);
+
                 }
 
                 if (!localres) {
@@ -278,7 +280,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
                 PropertyState state = pState.getPropertyState(pName);
 
                 if (state.equals(PropertyState.DIRECT_VALUE)) {
-                    direct.add(pName);
+                    if (isUsable(pName)) direct.add(pName);
                 }
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Property '" + pName + "'");
@@ -297,6 +299,13 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
         return ret;
     }
 
+    private boolean isUsable(String name) {
+        boolean isUsable=true;
+        if (name.startsWith("TextWriting")) isUsable = false;
+        if (name.startsWith("MetaFile")) isUsable = false;
+        return isUsable;
+    }
+
     /*
      * This method returns a sorted list of property names
      * contained in a given sequence of properties
@@ -306,7 +315,7 @@ public class _XTolerantMultiPropertySet extends MultiMethodTest {
 
         for (int i = 0; i < properties.length; i++) {
             String pName = properties[i].Name;
-            names.add(pName);
+            if (isUsable(pName)) names.add(pName);
         }
 
         Collections.sort(names);
