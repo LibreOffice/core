@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheupdatelistener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:08:27 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 13:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,17 @@
  ************************************************************************/
 
 #include "cacheupdatelistener.hxx"
-#include "cacheupdatethread.hxx"
 
 //_______________________________________________
 // includes
+
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
+#include <com/sun/star/util/XChangesNotifier.hpp>
+#endif
+
+#ifndef _COMPHELPER_SINGLETONREF_HXX_
+#include <comphelper/singletonref.hxx>
+#endif
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
@@ -81,80 +88,83 @@ namespace css = ::com::sun::star;
 // definitions
 
 /*-----------------------------------------------
-    14.08.2003 07:35
+    05.03.2004 08:36
 -----------------------------------------------*/
 CacheUpdateListener::CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
     : BaseLock(     )
     , m_xSMGR (xSMGR)
     , m_rCache(     )
 {
-    // important to do so ...
-    // Otherwhise the temp. reference to ourselves
-    // will kill us at realeasing time!
-    ++m_refCount;
-
-    m_xBroadcaster = css::uno::Reference< css::document::XEventBroadcaster >(
-        m_xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster")),
-        css::uno::UNO_QUERY);
-
-    m_xBroadcaster->addEventListener(static_cast< css::document::XEventListener* >(this));
-
-    --m_refCount;
 }
 
 /*-----------------------------------------------
-    14.08.2003 07:25
+    05.03.2004 08:37
 -----------------------------------------------*/
 CacheUpdateListener::~CacheUpdateListener()
 {
 }
 
 /*-----------------------------------------------
-    14.08.2003 08:45
+    07.03.2004 07:59
 -----------------------------------------------*/
-void SAL_CALL CacheUpdateListener::notifyEvent(const css::document::EventObject& aEvent)
-    throw(css::uno::RuntimeException)
+void CacheUpdateListener::startListening(const css::uno::Reference< css::uno::XInterface >& xConfigAccess)
 {
-    // wait for events, which indicates finished open of the first document
-    if (
-        (aEvent.EventName.equalsAscii("OnNew") ) ||
-        (aEvent.EventName.equalsAscii("OnLoad"))
-       )
-    {
-        // this thread must be started one times only ...
-        // cancel listener connection before!
+    css::uno::Reference< css::util::XChangesNotifier > xNotifier(xConfigAccess, css::uno::UNO_QUERY);
+    if (!xNotifier.is())
+        return;
 
-        // SAFE ->
-        ::osl::ResettableMutexGuard aLock(m_aLock);
+    css::uno::Reference< css::util::XChangesListener > xThis(static_cast< css::util::XChangesListener* >(this), css::uno::UNO_QUERY);
+    xNotifier->addChangesListener(xThis);
 
-        m_xBroadcaster->removeEventListener(static_cast< css::document::XEventListener* >(this));
-        m_xBroadcaster.clear();
+/*
+    css::uno::Reference< css::container::XContainer > xNotifier(xConfigAccess, css::uno::UNO_QUERY);
+    if (!xNotifier.is())
+        return;
 
-        aLock.clear();
-        // <- SAFE
-
-        CacheUpdateThread* pThread = new CacheUpdateThread();
-        pThread->create();
-    }
+    css::uno::Reference< css::container::XContainerListener > xThis(static_cast< css::container::XContainerListener* >(this), css::uno::UNO_QUERY);
+    xNotifier->addContainerListener(xThis);
+*/
 }
 
 /*-----------------------------------------------
-    14.08.2003 07:48
+    07.03.2004 07:59
+-----------------------------------------------*/
+void CacheUpdateListener::stopListening(const css::uno::Reference< css::uno::XInterface >& xConfigAccess)
+{
+    css::uno::Reference< css::util::XChangesNotifier > xNotifier(xConfigAccess, css::uno::UNO_QUERY);
+    if (!xNotifier.is())
+        return;
+
+    css::uno::Reference< css::util::XChangesListener > xThis(static_cast< css::util::XChangesListener* >(this), css::uno::UNO_QUERY);
+    xNotifier->removeChangesListener(xThis);
+
+/*
+    css::uno::Reference< css::container::XContainer > xNotifier(xConfigAccess, css::uno::UNO_QUERY);
+    if (!xNotifier.is())
+        return;
+
+    css::uno::Reference< css::container::XContainerListener > xThis(static_cast< css::container::XContainerListener* >(this), css::uno::UNO_QUERY);
+    xNotifier->removeContainerListener(xThis);
+*/
+}
+
+/*-----------------------------------------------
+    07.03.2004 08:17
+-----------------------------------------------*/
+void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEvent& aEvent)
+    throw(css::uno::RuntimeException)
+{
+}
+
+/*-----------------------------------------------
+    05.03.2004 08:44
 -----------------------------------------------*/
 void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEvent)
     throw(css::uno::RuntimeException)
 {
-    // ???
-    // Normaly it should never be called. Because we cancel our listener connection
-    // if we got the event about finished open of the first office document.
-    // But if this method was reached, it indicates an office, which was started
-    // (might as remote script container for an external API client) but not realy used.
-
-    // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-    m_xBroadcaster.clear();
-    aLock.clear();
-    // <- SAFE
+    // We dont know the configuration access. Because it was given from outside and its lifetime
+    // is controlled there too. We live, till this external config access lives ...
+    // If we are registered for multiple access points, we live a little bit longer :-)
 }
 
     } // namespace config
