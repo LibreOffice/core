@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: mkout.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2001-04-19 16:20:05 $
+#   last change: $Author: rt $ $Date: 2005-01-26 11:35:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.3 $ ';
+$id_str = ' $Revision: 1.4 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -175,7 +175,10 @@ sub create_dirs {
         if ( $opt_r && $sub_dirs{$dir} ) {
             $path .= "/remote";
         }
-        mkpath($path, 0, $dir_mode);
+        eval { mkpath($path, 0, $dir_mode) };
+        if ( $@ ) {
+            print_error( "$@" );
+        }
         print "Create path: $path\n" if $is_debug;
     }
 }
