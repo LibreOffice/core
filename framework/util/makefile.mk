@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: as $ $Date: 2001-07-02 13:40:19 $
+#   last change: $Author: as $ $Date: 2001-07-20 08:11:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,7 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/dispatchprovider.obj		\
                 $(SLO)$/basedispatcher.obj			\
                 $(SLO)$/blankdispatcher.obj			\
+                $(SLO)$/createdispatcher.obj		\
                 $(SLO)$/selfdispatcher.obj			\
                 $(SLO)$/menudispatcher.obj			\
                 $(SLO)$/mailtodispatcher.obj		\
