@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:22:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,10 @@ TYPEINIT1(ScIndexHint,          SfxHint);
 // -----------------------------------------------------------------------
 
 ScInputStatusItem::ScInputStatusItem( USHORT nWhich,
-                                      USHORT nTab,
-                                      USHORT nCol, USHORT nRow,
-                                      USHORT nStartCol, USHORT nStartRow,
-                                      USHORT nEndCol,   USHORT nEndRow,
+                                      SCTAB nTab,
+                                      SCCOL nCol, SCROW nRow,
+                                      SCCOL nStartCol, SCROW nStartRow,
+                                      SCCOL nEndCol,   SCROW nEndRow,
                                       const String& rString, const EditTextObject* pData )
 
     :   SfxPoolItem ( nWhich ),
@@ -167,7 +167,7 @@ SfxPoolItem* __EXPORT ScInputStatusItem::Clone( SfxItemPool * ) const
 //  ScTablesHint - Views anpassen, wenn Tabellen eingefuegt / geloescht
 // -----------------------------------------------------------------------
 
-ScTablesHint::ScTablesHint(USHORT nNewId, USHORT nTable1, USHORT nTable2) :
+ScTablesHint::ScTablesHint(USHORT nNewId, SCTAB nTable1, SCTAB nTable2) :
     nId( nNewId ),
     nTab1( nTable1 ),
     nTab2( nTable2 )
