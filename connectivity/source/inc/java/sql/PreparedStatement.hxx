@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XPREPAREDBATCHEXECUTION_HPP_
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -85,10 +88,11 @@ namespace connectivity
     //**************************************************************
 
     class java_sql_PreparedStatement :  public  OStatement_BASE2,
-                                                                                public  ::com::sun::star::sdbc::XPreparedStatement,
-                                                                                public  ::com::sun::star::sdbc::XParameters,
-                                                                                public  ::com::sun::star::sdbc::XPreparedBatchExecution,
-                                                                                public  ::com::sun::star::lang::XServiceInfo
+                                        public  ::com::sun::star::sdbc::XPreparedStatement,
+                                        public  ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                        public  ::com::sun::star::sdbc::XParameters,
+                                        public  ::com::sun::star::sdbc::XPreparedBatchExecution,
+                                        public  ::com::sun::star::lang::XServiceInfo
     {
     protected:
     // statische Daten fuer die Klasse
@@ -140,6 +144,8 @@ namespace connectivity
         virtual void SAL_CALL addBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        // XResultSetMetaDataSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     };
 }
 #endif // _CONNECTIVITY_JAVA_SQL_PREPAREDSTATEMENT_HXX_

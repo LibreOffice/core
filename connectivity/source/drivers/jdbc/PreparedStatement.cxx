@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:46:14 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #endif
 #ifndef _CONNECTIVITY_JAVA_SQL_RESULTSET_HXX_
 #include "java/sql/ResultSet.hxx"
+#endif
+#ifndef _CONNECTIVITY_JAVA_SQL_RESULTSETMETADATA_HXX_
+#include "java/sql/ResultSetMetaData.hxx"
 #endif
 #ifndef _CONNECTIVITY_JAVA_SQL_CONNECTION_HXX_
 #include "java/sql/Connection.hxx"
@@ -136,6 +139,7 @@ void java_sql_PreparedStatement::saveClassRef( jclass pClass )
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedStatement > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< XParameters > *)0 ),
+                                    ::getCppuType( (const ::com::sun::star::uno::Reference< XResultSetMetaDataSupplier > *)0 ),
                                     ::getCppuType( (const ::com::sun::star::uno::Reference< XPreparedBatchExecution > *)0 ));
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE2::getTypes());
@@ -838,5 +842,26 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
     return aSeq;
 }
 // -------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL java_sql_PreparedStatement::getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+{
+    jobject out(0);
+    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    if( t.pEnv )
+    {
+        // temporaere Variable initialisieren
+        char * cSignature = "()Ljava/sql/ResultSetMetaData;";
+        char * cMethodName = "getMetaData";
+        // Java-Call absetzen
+        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+        if( mID ){
+            out = t.pEnv->CallObjectMethod( object, mID );
+            ThrowSQLException(t.pEnv,*this);
+        } //mID
+    } //t.pEnv
+    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    return out==0 ? 0 : new java_sql_ResultSetMetaData( t.pEnv, out );
+}
+// -----------------------------------------------------------------------------
+
 
 
