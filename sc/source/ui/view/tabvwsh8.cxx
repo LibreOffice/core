@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh8.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:08:08 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,17 @@ BOOL __EXPORT ScTabViewShell::HasSelection( BOOL bText ) const
 
 //------------------------------------------------------------------
 
+void ScTabViewShell::UIDeactivated( SfxInPlaceClient* pClient )
+{
+    ClearHighlightRanges();
 
-
+    //  Move an der ViewShell soll eigentlich vom Sfx gerufen werden, wenn sich
+    //  das Frame-Window wegen unterschiedlicher Toolboxen o.ae. verschiebt
+    //  (um nicht aus Versehen z.B. Zeichenobjekte zu verschieben, #56515#).
+    //  Dieser Mechanismus funktioniert aber momentan nicht, darum hier der Aufruf
+    //  per Hand (im Move wird verglichen, ob die Position wirklich geaendert ist).
+    ForceMove();
+    SfxViewShell::UIDeactivated( pClient );
+}
 
 
