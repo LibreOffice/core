@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:02:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3321,7 +3321,7 @@ String SwDoc::GetUniqueTblName() const
             break;
         }
 
-    __DELETE( nFlagSize ) pSetFlags;
+    delete [] pSetFlags;
     return aName += String::CreateFromInt32( ++nNum );
 }
 
