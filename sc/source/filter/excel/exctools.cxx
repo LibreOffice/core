@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-29 09:17:27 $
+ *  last change: $Author: gt $ $Date: 2000-11-30 10:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1614,11 +1614,7 @@ void ExcScenario::Apply( ScDocument& r, const BOOL bLast )
     }
 
     if( bLast )
-    {
-        DBG_ASSERT( r.IsActiveScenario( nNewTab ), "*ExcScenario::Apply(): Doppelt-Gemoppelt!" );
-
         r.SetActiveScenario( nNewTab, TRUE );
-    }
 }
 
 
