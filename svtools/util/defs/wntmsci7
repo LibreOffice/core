@@ -7077,3 +7077,4 @@ FreeSpaceStr
 ??0CommunicationManagerClient@@QAE@E@Z
 ?getArray@?$Sequence@ULocale@lang@star@sun@com@@@uno@star@sun@com@@QAAPAULocale@lang@345@XZ
 ?s_pType@?$Sequence@ULocale@lang@star@sun@com@@@uno@star@sun@com@@2PAU_typelib_TypeDescriptionReference@@A
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Sequence@ULocale@lang@star@sun@com@@@2345@@Z
