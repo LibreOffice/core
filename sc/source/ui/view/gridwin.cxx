@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 17:03:48 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@
 #include "seltrans.hxx"
 #include "sizedev.hxx"
 #include "AccessibilityHints.hxx"
+#include "compiler.hxx"
 
 using namespace com::sun::star;
 
