@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:47:59 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ InfoBox MSG_NO_RULER
     Message[ russian ] = "Â òåìå ãàëåğåè 'Ëèíåéêè' ğèñóíêîâ íå èìååòñÿ.";
     Message[ polish ] = "Nie ma ¿adnych grafik w temacie galerii \"Obramowania\"";
     Message[ japanese ] = "·Ş¬×Ø¥Ã°Ï‚ÌuÙ°×°v‚É‚Í¸Ş×Ì¨¯¸‚Í‚ ‚è‚Ü‚¹‚ñB";
-    Message[ chinese_traditional ] = "µe´Y¥DÃD<ªø±ø§Î>¤ºµL¥ô¦ó¹Ï§Î¡C";
+    Message[ chinese_traditional ] = "µe´Y¥DÃD[ªø±ø§Î]¤ºµL¥ô¦ó¹Ï§Î¡C";
     Message[ arabic ] = "áÇ ÊæÌÏ ÃíÉ ÕæÑ İí ãæÖæÚ ÇáÌÇáíÑí 'ãÓÇØÑ'.";
     Message[ dutch ] = "Onder het gallery-onderwerp 'Rulers' komen geen afbeeldingen voor.";
     Message[ chinese_simplified ] = "ÔÚ»­ÀÈÖ÷Ìâ'³¤ÌõĞÎ'ÄÚÎŞÈÎºÎÍ¼ĞÎ¡£";
@@ -277,7 +277,7 @@ String STR_INSERT_GRAPHIC
     Text[ chinese_simplified ] = "²åÈëÍ¼ĞÎ";
     Text[ russian ] = "Âñòàâèòü ğèñóíîê";
     Text[ polish ] = "Wstaw grafikê";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì‘}“ü";
+    Text[ japanese ] = "}‚Ì‘}“ü";
     Text[ chinese_traditional ] = "´¡¤J¹Ï§Î";
     Text[ arabic ] = "ÅÏÑÇÌ ÕæÑÉ";
     Text[ dutch ] = "Afbeelding invoegen";
@@ -700,7 +700,7 @@ String STR_PAGE
     TEXT[ russian ] = "Ñòğàíèöà  ";
     TEXT[ polish ] = "Strona  ";
     TEXT[ japanese ] = "Íß°¼Ş ";
-    TEXT[ chinese_traditional ] = "­¶­± ";
+    TEXT[ chinese_traditional ] = "­¶";
     TEXT[ arabic ] = "ÕİÍÉ ";
     TEXT[ dutch ] = "Pagina  ";
     TEXT[ chinese_simplified ] = "Ò³Ãæ ";
@@ -2035,14 +2035,14 @@ String STR_SHELLNAME_DRAWFORM
     Text [ french ] = "Formulaires" ;
     Text [ dutch ] = "Forms" ;
     Text [ portuguese ] = "Formulários" ;
-    Text[ chinese_simplified ] = "¹«Ê½";
+    Text[ chinese_simplified ] = "±íµ¥";
     Text[ russian ] = "Ôîğìû";
     Text[ polish ] = "Kszta³ty";
     Text[ japanese ] = "Ì«°Ñ";
-    Text[ chinese_traditional ] = "¤½¦¡";
+    Text[ chinese_traditional ] = "ªí³æ";
     Text[ arabic ] = "äãÇĞÌ";
     Text[ dutch ] = "Forms";
-    Text[ chinese_simplified ] = "¹«Ê½";
+    Text[ chinese_simplified ] = "±íµ¥";
     Text[ greek ] = "Öüñìåò";
     Text[ korean ] = "¾ç½Ä";
     Text[ turkish ] = "Form";
@@ -2244,14 +2244,14 @@ String STR_SWBG_TABLE_ROW
     Text [ french ] = "Ligne de tableau" ;
     Text [ dutch ] = "Tabelrij" ;
     Text [ portuguese ] = "Linha de tabela" ;
-    Text[ chinese_simplified ] = "¹¤×÷±íµ¥Ôª¸ñ";
+    Text[ chinese_simplified ] = "±í¸ñĞĞ";
     Text[ russian ] = "Ñòğîêà òàáëèöû";
     Text[ polish ] = "Wiersz tabeli";
     Text[ japanese ] = "•\\‚Ìs";
-    Text[ chinese_traditional ] = "¤u§@ªíÀx¦s®æ";
+    Text[ chinese_traditional ] = "ªí®æ¦C";
     Text[ arabic ] = "Õİ ÌÏæá";
     Text[ dutch ] = "Tabelrij";
-    Text[ chinese_simplified ] = "¹¤×÷±íµ¥Ôª¸ñ";
+    Text[ chinese_simplified ] = "±í¸ñĞĞ";
     Text[ greek ] = "ÃñáììŞ ğßíáêá";
     Text[ korean ] = "Ç¥ Çà";
     Text[ turkish ] = "Tablo satırı";
@@ -2274,7 +2274,7 @@ String STR_SWBG_TABLE_CELL
     Text[ russian ] = "ß÷åéêà òàáëèöû";
     Text[ polish ] = "Komórka tabeli";
     Text[ japanese ] = "Ã°ÌŞÙ‚Ì¾Ù";
-    Text[ chinese_traditional ] = "¤u§@ªíÀx¦s®æ";
+    Text[ chinese_traditional ] = "ªí®æÀx¦s®æ";
     Text[ arabic ] = "ÎáíÉ ÌÏæá";
     Text[ dutch ] = "Tabelcel";
     Text[ chinese_simplified ] = "¹¤×÷±íµ¥Ôª¸ñ";
