@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-11 09:36:40 $
+ *  last change: $Author: dr $ $Date: 2001-01-17 15:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1903,8 +1903,8 @@ void ImportExcel8::Xf( void )
         pXFD->SetValueFormat( pValueFormBuffer->GetValueFormat( nW6 ) );
     if( bCellXF || HASATTRSET( 0x8000 ) )
     {
-        pXFD->SetLocked( TRUEBOOL( nW8 & 0x0001 ) );
-        pXFD->SetHidden( TRUEBOOL( nW8 & 0x0002 ) );
+        pXFD->SetLocked( TRUEBOOL( nW8 & EXC_XF_LOCKED ) );
+        pXFD->SetHidden( TRUEBOOL( nW8 & EXC_XF_HIDDEN ) );
     }
     if( bCellXF )
         pXFD->SetParent( nW8 >> 4 );

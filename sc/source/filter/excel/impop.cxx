@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2001-01-11 14:18:52 $
+ *  last change: $Author: dr $ $Date: 2001-01-17 15:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1794,8 +1794,8 @@ void ImportExcel::XF5( void )
 
     pXFD->SetFill( aFill );
 
-    pXFD->SetLocked( TRUEBOOL( nAttr0 & 0x0001 ) );
-    pXFD->SetHidden( TRUEBOOL( nAttr0 & 0x0002 ) );
+    pXFD->SetLocked( TRUEBOOL( nAttr0 & EXC_XF_LOCKED ) );
+    pXFD->SetHidden( TRUEBOOL( nAttr0 & EXC_XF_HIDDEN ) );
 
     pExcRoot->pXF_Buffer->NewXF( pXFD );
 }
@@ -2212,8 +2212,8 @@ void ImportExcel::XF3( void )
 
     pXFD->SetFill( aFill );
 
-    pXFD->SetLocked( TRUEBOOL( nAttr0 & 0x0001 ) );
-    pXFD->SetHidden( TRUEBOOL( nAttr0 & 0x0002 ) );
+    pXFD->SetLocked( TRUEBOOL( nAttr0 & EXC_XF_LOCKED ) );
+    pXFD->SetHidden( TRUEBOOL( nAttr0 & EXC_XF_HIDDEN ) );
 
     pExcRoot->pXF_Buffer->NewXF( pXFD );
 }
@@ -2312,8 +2312,8 @@ void ImportExcel::XF4( void )
 
     pXFD->SetFill( aFill );
 
-    pXFD->SetLocked( TRUEBOOL( nAttr0 & 0x0001 ) );
-    pXFD->SetHidden( TRUEBOOL( nAttr0 & 0x0002 ) );
+    pXFD->SetLocked( TRUEBOOL( nAttr0 & EXC_XF_LOCKED ) );
+    pXFD->SetHidden( TRUEBOOL( nAttr0 & EXC_XF_HIDDEN ) );
 
     pExcRoot->pXF_Buffer->NewXF( pXFD );
 }
