@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfedt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:15:49 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ ModalDialog DLG_DOCINFO_EDT
         Text[ korean ] = "ÀÌ¸§";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombres";
     };
     OKButton BT_OK
     {
@@ -170,5 +171,6 @@ ModalDialog DLG_DOCINFO_EDT
     Text[ korean ] = "Á¤º¸ÀÌ¸§ ÆíÁý";
     Text[ turkish ] = "Etiketleri düzenle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar nombres informaciones";
 };
  // ********************************************************************** EOF
