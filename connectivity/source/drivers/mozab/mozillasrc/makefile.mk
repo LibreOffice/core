@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 18:34:20 $
+#   last change: $Author: vg $ $Date: 2005-02-21 12:33:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,8 +64,6 @@ CALL_CDECL=TRUE
 #mozilla specific stuff.
 MOZ_LIB=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
 MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
-#MOZ_LIB=$(PRJ)$/$(INPATH)$/lib
-#MOZ_INC=$(PRJ)$/$(INPATH)$/inc$/mozilla
 #End of mozilla specific stuff.
 
 PRJ=..$/..$/..$/..
@@ -101,7 +99,6 @@ dummy:
 # --- Files -------------------------------------
 
 SLOFILES = \
-    $(SLO)$/MNSInit.obj			            \
     $(SLO)$/MQueryHelper.obj			    \
     $(SLO)$/MDatabaseMetaDataHelper.obj		\
     $(SLO)$/MQuery.obj			            \
@@ -109,7 +106,7 @@ SLOFILES = \
     $(SLO)$/MNameMapper.obj					\
     $(SLO)$/MNSMozabProxy.obj	\
     $(SLO)$/MNSTerminateListener.obj
-
+    
 
 .IF "$(GUI)"=="UNX"
 .IF "$(COMNAME)"=="sunpro5"
@@ -118,15 +115,17 @@ CFLAGS += -features=tmplife
 .ENDIF		# "$(COMNAME)"=="sunpro5"
 .ENDIF
 
-.IF "$(GUI)" == "WNT"
-.IF "$(DBG_LEVEL)" == "0"
-INCPRE += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
+MOZINC = . -I.. -I..$/bootstrap -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
         -I$(MOZ_INC)$/string -I$(MOZ_INC)$/rdf -I$(MOZ_INC)$/msgbase \
         -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
         -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
         -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
-        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap \
+        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap -I$(MOZ_INC)$/uconv\
         -I$(MOZ_INC)$/xpcom_obsolete -I$(MOZ_INC)$/content
+        
+.IF "$(GUI)" == "WNT"
+.IF "$(DBG_LEVEL)" == "0"
+INCPRE += $(MOZINC)
 CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
         -DNS_NET_FILE -DCookieManagement -DSingleSignon -DClientWallet \
             -DTRACING -DXP_PC -DXP_WIN -DXP_WIN32 -DHW_THREADS \
@@ -134,16 +133,11 @@ CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
             -DOJI -DWIN32 -D_X86_ -D_WINDOWS \
         -DMOZ_XUL -DMOZ_REFLOW_PERF -DMOZ_REFLOW_PERF_DSP \
         -DNSPR20 -DOS_HAS_DLL -DNO_JNI_STUBS \
-        -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL
+        -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL	\
+        -UDEBUG
 CFLAGS +=   -GR- -W3 -Gy -MD -UDEBUG
 .ELSE
-INCPRE += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
-        -I$(MOZ_INC)$/string -I$(MOZ_INC)$/rdf -I$(MOZ_INC)$/msgbase \
-        -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
-        -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
-        -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
-        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap \
-        -I$(MOZ_INC)$/xpcom_obsolete -I$(MOZ_INC)$/content
+INCPRE += $(MOZINC)
 CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
         -DNS_NET_FILE -DCookieManagement -DSingleSignon -DClientWallet \
             -DTRACING -DXP_PC -DXP_WIN -DXP_WIN32 -DHW_THREADS \
@@ -151,22 +145,19 @@ CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
             -DOJI -DWIN32 -D_X86_ -D_WINDOWS \
         -DMOZ_XUL -DMOZ_REFLOW_PERF -DMOZ_REFLOW_PERF_DSP \
         -DDEBUG_Administrator -DNSPR20 -DOS_HAS_DLL -DNO_JNI_STUBS \
-        -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL
-CFLAGS +=   -Zi -GR- -W3 -Gy -MDd -UNDEBUG
+        -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL	\
+        -UDEBUG
+CFLAGS +=   -Zi -GR- -W3 -Gy -MDd -UDEBUG
 .ENDIF
 .ENDIF
 .IF "$(GUI)" == "UNX"
-INCPOST += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
-        -I$(MOZ_INC)$/string -I$(MOZ_INC)$/rdf -I$(MOZ_INC)$/msgbase \
-        -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
-        -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
-        -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
-        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap \
-        -I$(MOZ_INC)$/xpcom_obsolete -I$(MOZ_INC)$/content
+INCPOST += $(MOZINC)
 CDEFS+=	    -DMOZILLA_CLIENT \
-            -DOSTYPE=\"Linux2.2.14-5\" -DOJI
+            -DXP_UNIX
 .IF "$(OS)" == "LINUX"
 CFLAGS +=   -fPIC -g
+CDEFS+=     -DOSTYPE=\"Linux2.2.14-5\" -DOJI
+
 CFLAGSCXX += \
             -fno-rtti -Wall -Wconversion -Wpointer-arith \
             -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
