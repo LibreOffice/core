@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-09 10:21:09 $
+ *  last change: $Author: mba $ $Date: 2001-03-20 17:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1160,5 +1160,15 @@ BOOL SotStorage::IsOLEStorage() const
 {
     UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
     return !pStg;
+}
+
+BOOL SotStorage::IsOLEStorage( const String & rFileName )
+{
+    return Storage::IsStorageFile( rFileName );
+}
+
+BOOL SotStorage::IsOLEStorage( SvStream* pStream )
+{
+    return Storage::IsStorageFile( pStream );
 }
 
