@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: mba $ $Date: 2005-01-20 09:30:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,19 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
         String aFilterName;
         SFX_ITEMSET_ARG( aParams, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
         if( pFilterNameItem )
+        {
             aFilterName = pFilterNameItem->GetValue();
+        }
+        else
+        {
+            SFX_ITEMSET_ARG( aParams, pContentTypeItem, SfxStringItem, SID_CONTENTTYPE, sal_False );
+            if ( pContentTypeItem )
+            {
+                const SfxFilter* pFilter = SfxFilterMatcher( String::CreateFromAscii(GetFactory().GetShortName()) ).GetFilter4Mime( pContentTypeItem->GetValue(), SFX_FILTER_EXPORT );
+                if ( pFilter )
+                    aFilterName = pFilter->GetName();
+            }
+        }
 
         // in case no filter defined use default one
         if( !aFilterName.Len() )
