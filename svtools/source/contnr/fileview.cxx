@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-31 12:15:21 $
+ *  last change: $Author: fs $ $Date: 2002-11-06 16:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2509,7 +2509,6 @@ String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& r
     aValue = pData->GetTitle();
     // #83004# --------------------
     ReplaceTabWithString( aValue );
-    aValue += aTab;
     aValue += aTab;
     aValue += pData->maType;
     aValue += aTab;
