@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:59:25 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,11 +258,12 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             ||  !(aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE)
             ||   (aTextMetricA.tmPitchAndFamily & TMPF_DEVICE) )
                 mbDisableGlyphs = true;
-#if 0 // #110548# more important than #107885# => TODO: better solution
+/*
+            // #110548# more important than #107885# => TODO: better solution
             DWORD nFLI = GetFontLanguageInfo( mhDC );
             if( !(nFLI & GCP_GLYPHSHAPE) )
                 mbDisableGlyphs = true;
-#endif
+*/
         }
     }
 
@@ -728,11 +729,7 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
     Point aPos = GetDrawPosition( Point( mnBaseAdv, 0 ) );
 
      // #108267#, limit the number of glyphs to avoid paint errors
-#if (_MSC_VER < 1300)
-    UINT limitedGlyphCount = std::min( 8192, mnGlyphCount );
-#else
-     UINT limitedGlyphCount = min( 8192, mnGlyphCount );
-#endif
+    UINT limitedGlyphCount = Min( 8192, mnGlyphCount );
    // #108267#, break up into glyph portions of a limited size required by Win32 API
     const unsigned int maxGlyphCount = 8192;
     UINT numGlyphPortions = mnGlyphCount / maxGlyphCount;
@@ -968,13 +965,12 @@ void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
         {
             nOldWidth += mpGlyphAdvances[ j ];
             int nDiff = nOldWidth - pDXArray[ i ];
-#if 0       // disabled because of #104768#
+
+           // disabled because of #104768#
             // works great for static text, but problems when typing
-            if( nDiff>+1 || nDiff<-1 )
-#else
+            // if( nDiff>+1 || nDiff<-1 )
             // only bother with changing anything when something moved
             if( nDiff != 0 )
-#endif
                 break;
         }
     }
