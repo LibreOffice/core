@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-12 16:59:36 $
+ *  last change: $Author: pl $ $Date: 2002-09-17 11:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,6 +493,7 @@ PDFWriterImpl::PDFWriterImpl( const OUString& rFilename, PDFWriter::PDFVersion e
     if( aError != osl_File_E_None )
         return;
 
+    m_bOpen = true;
     // write header
     OStringBuffer aBuffer( 20 );
     aBuffer.append( "%PDF-" );
@@ -508,9 +509,9 @@ PDFWriterImpl::PDFWriterImpl( const OUString& rFilename, PDFWriter::PDFVersion e
     if( !writeBuffer( aBuffer.getStr(), aBuffer.getLength() ) )
     {
         osl_closeFile( m_aFile );
+        m_bOpen = false;
         return;
     }
-    m_bOpen = true;
 }
 
 PDFWriterImpl::~PDFWriterImpl()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-12 16:59:36 $
+ *  last change: $Author: pl $ $Date: 2002-09-17 11:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,9 @@ private:
                 m_aLineColor( COL_TRANSPARENT ),
                 m_aFillColor( COL_TRANSPARENT ),
                 m_aTextLineColor( COL_BLACK ),
+                m_nAntiAlias( 1 ),
                 m_nLayoutMode( 0 ),
+                m_eTextAlign( ALIGN_BASELINE ),
                 m_nTransparentPercent( 0 ) {}
         GraphicsState( const GraphicsState& rState ) :
                 m_aFont( rState.m_aFont ),
