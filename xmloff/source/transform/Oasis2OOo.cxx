@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:28:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,9 +597,10 @@ static XMLTransformerActionInit aActionTable[] =
     //  text:formula
     ENTRY1( TEXT, TABLE_FORMULA, XML_ETACTION_PROC_ATTRS,
         OASIS_FORMULA_ACTIONS ), /* generated entry */
-    //  table:condition
+
+    //  process table::content-validation
     ENTRY1( TABLE, CONTENT_VALIDATION, XML_ETACTION_PROC_ATTRS,
-        OASIS_FORMULA_ACTIONS ), /* generated entry */
+        OASIS_CONTENT_VALIDATION_ACTIONS ),
 
     // rename <table:dependencies> to <table:dependences>
     ENTRY1Q( TABLE, DEPENDENCIES, XML_ETACTION_RENAME_ELEM,
@@ -1011,6 +1012,7 @@ static XMLTransformerActionInit aAnnotationActionTable[] =
                 XML_NAMESPACE_OFFICE, XML_CREATE_DATE ),
     ENTRY1Q( META, DATE_STRING, XML_ATACTION_MOVE_FROM_ELEM,
                 XML_NAMESPACE_OFFICE, XML_CREATE_DATE_STRING ),
+    ENTRY0( TEXT, P, XML_ETACTION_EXTRACT_CHARACTERS ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1104,6 +1106,14 @@ static XMLTransformerActionInit aFormulaActionTable[] =
     ENTRY0( TEXT, FORMULA, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
     ENTRY0( TABLE, CONDITION, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
     ENTRY0( TABLE, FORMULA, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OASIS_CONTENT_VALIDATION_ACTIONS
+static XMLTransformerActionInit aContentValidationActionTable[] =
+{
+    ENTRY0( TABLE, CONDITION, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
+    ENTRY0( TABLE, DISPLAY_LIST, XML_ATACTION_REMOVE ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1298,6 +1308,19 @@ void XMLTableTransformerContext_Impl::StartElement(
                 }
             }
             // <--
+            else if( IsXMLToken( aLocalName, XML_PRINT ) )
+            {
+                if ( !pMutableAttrList )
+                {
+                    pMutableAttrList =
+                        new XMLMutableAttributeList( xAttrList );
+                    xAttrList = pMutableAttrList;
+                }
+                XMLMutableAttributeList *pMutableAttrList =
+                    new XMLMutableAttributeList( xAttrList );
+                xAttrList = pMutableAttrList;
+                pMutableAttrList->RemoveAttributeByIndex( i );
+            }
         }
     }
 
@@ -1933,6 +1956,9 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
                     new XMLTransformerActions(
                         aAlphabeticalIndexMarkActionTable );
                 break;
+            case OASIS_CONTENT_VALIDATION_ACTIONS:
+                m_aActions[OASIS_CONTENT_VALIDATION_ACTIONS] =
+                    new XMLTransformerActions( aContentValidationActionTable );
             case OASIS_DDE_CONV_MODE_ACTIONS:
                 m_aActions[OASIS_DDE_CONV_MODE_ACTIONS] =
                     new XMLTransformerActions( aDDEConvModeActionTable );
