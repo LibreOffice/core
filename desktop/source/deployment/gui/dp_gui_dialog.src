@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_dialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-30 12:50:40 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,20 +92,20 @@ ModelessDialog RID_DLG_PACKAGE_MANAGER
     PushButton RID_BTN_REMOVE
     {
         TabStop = TRUE;
-        Text [ en-US ] = "~Remove...";
-        Text [ de ] = "~Entfernen...";
+        Text [ en-US ] = "~Remove";
+        Text [ de ] = "~Entfernen";
     };
     PushButton RID_BTN_ENABLE
     {
         TabStop = TRUE;
-        Text [ en-US ] = "~Enable...";
-        Text [ de ] = "~Aktivieren...";
+        Text [ en-US ] = "~Enable";
+        Text [ de ] = "~Aktivieren";
     };
     PushButton RID_BTN_DISABLE
     {
         TabStop = TRUE;
-        Text [ en-US ] = "~Disable...";
-        Text [ de ] = "~Deaktivieren...";
+        Text [ en-US ] = "~Disable";
+        Text [ de ] = "~Deaktivieren";
     };
     PushButton RID_BTN_EXPORT
     {
@@ -238,18 +238,18 @@ String RID_CTX_ITEM_ADD
 };
 String RID_CTX_ITEM_REMOVE
 {
-    Text [ en-US ] = "~Remove...";
-    Text [ de ] = "~Entfernen...";
+    Text [ en-US ] = "~Remove";
+    Text [ de ] = "~Entfernen";
 };
 String RID_CTX_ITEM_ENABLE
 {
-    Text [ en-US ] = "~Enable...";
-    Text [ de ] = "~Aktivieren...";
+    Text [ en-US ] = "~Enable";
+    Text [ de ] = "~Aktivieren";
 };
 String RID_CTX_ITEM_DISABLE
 {
-    Text [ en-US ] = "~Disable...";
-    Text [ de ] = "~Deaktivieren...";
+    Text [ en-US ] = "~Disable";
+    Text [ de ] = "~Deaktivieren";
 };
 String RID_CTX_ITEM_EXPORT
 {
@@ -271,31 +271,31 @@ String RID_STR_EXPORT_PACKAGES
 
 String RID_STR_ADDING_PACKAGES
 {
-    Text [ en-US ] = "Adding Package(s)...";
-    Text [ de ] = "Package(s) werden hinzugefügt...";
+    Text [ en-US ] = "Adding Package(s)";
+    Text [ de ] = "Package(s) werden hinzugefügt";
 };
 
 String RID_STR_REMOVING_PACKAGES
 {
-    Text [ en-US ] = "Removing Package(s)...";
-    Text [ de ] = "Package(s) werden entfernt...";
+    Text [ en-US ] = "Removing Package(s)";
+    Text [ de ] = "Package(s) werden entfernt";
 };
 
 String RID_STR_ENABLING_PACKAGES
 {
-    Text [ en-US ] = "Enabling Package(s)...";
-    Text [ de ] = "Package(s) werden aktiviert...";
+    Text [ en-US ] = "Enabling Package(s)";
+    Text [ de ] = "Package(s) werden aktiviert";
 };
 
 String RID_STR_DISABLING_PACKAGES
 {
-    Text [ en-US ] = "Disabling Package(s)...";
-    Text [ de ] = "Package(s) werden deaktiviert...";
+    Text [ en-US ] = "Disabling Package(s)";
+    Text [ de ] = "Package(s) werden deaktiviert";
 };
 
 String RID_STR_EXPORTING_PACKAGES
 {
-    Text [ en-US ] = "Exporting Package(s)...";
-    Text [ de ] = "Package(s) werden exportiert...";
+    Text [ en-US ] = "Exporting Package(s)";
+    Text [ de ] = "Package(s) werden exportiert";
 };
 
