@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcutl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: nn $ $Date: 2001-09-28 11:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ public:
 
     void            SetSelChangedHdl( const Link& rLink ) { aSelChangedLink = rLink; }
     const Link&     GetSelChangedHdl() const { return aSelChangedLink; }
+
+    void            UpdateOldSel();
 };
 
 

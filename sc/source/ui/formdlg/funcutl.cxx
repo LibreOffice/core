@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcutl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: nn $ $Date: 2001-09-28 11:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,7 +910,7 @@ long ScEditBox::PreNotify( NotifyEvent& rNEvt )
     {
         nResult=Control::PreNotify(rNEvt);
 
-        if(nSwitch==EVENT_MOUSEBUTTONDOWN || nSwitch==EVENT_KEYINPUT)
+        if(nSwitch==EVENT_MOUSEBUTTONDOWN || nSwitch==EVENT_MOUSEBUTTONUP)
         {
             bMouseFlag=TRUE;
             Application::PostUserEvent( LINK( this, ScEditBox, ChangedHdl ) );
@@ -948,5 +948,13 @@ IMPL_LINK( ScEditBox, ChangedHdl, ScEditBox*, pEd )
     return 0;
 }
 
+void ScEditBox::UpdateOldSel()
+{
+    //  if selection is set for editing a function, store it as aOldSel,
+    //  so SelectionChanged isn't called in the next ChangedHdl call
+
+    if (pMEdit)
+        aOldSel = pMEdit->GetSelection();
+}
 
 

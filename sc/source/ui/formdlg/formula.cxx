@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:14:20 $
+ *  last change: $Author: nn $ $Date: 2001-09-28 11:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pMEdit->SetText(rStrExp);
         xub_StrLen nPos=pData->GetFStart();
         pMEdit->SetSelection( pData->GetSelection());
+        aMEFormula.UpdateOldSel();
 
         pCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
         pComp=new ScCompiler( pDoc, aCursorPos );
@@ -343,6 +344,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                 xub_StrLen PrivStart, PrivEnd;
                 pScMod->InputGetSelection( PrivStart, PrivEnd);
                 pMEdit->SetSelection( Selection(PrivStart, PrivEnd));
+                aMEFormula.UpdateOldSel();
                 pMEdit->Invalidate();
                 HighlightFunctionParas(pMEdit->GetSelected());
                 eMode = SC_FORMDLG_EDIT;
@@ -942,7 +944,10 @@ void ScFormulaDlg::EditThisFunc(xub_StrLen nFStart)
         xub_StrLen PrivStart, PrivEnd;
         pScMod->InputGetSelection( PrivStart, PrivEnd);
         if(!bEditFlag)
+        {
             pMEdit->SetSelection( Selection(PrivStart, PrivEnd));
+            aMEFormula.UpdateOldSel();
+        }
 
         pData->SetFStart( nNextFStart );
         pData->SetOffset( 0 );
@@ -1009,7 +1014,10 @@ void ScFormulaDlg::EditNextFunc( BOOL bForward, xub_StrLen nFStart )
         xub_StrLen PrivStart, PrivEnd;
         pScMod->InputGetSelection( PrivStart, PrivEnd);
         if(!bEditFlag)
+        {
             pMEdit->SetSelection( Selection(PrivStart, PrivEnd));
+            aMEFormula.UpdateOldSel();
+        }
 
         pData->SetFStart( nNextFStart );
         pData->SetOffset( 0 );
@@ -1437,6 +1445,7 @@ void ScFormulaDlg::UpdateSelection()
     Selection aSel(nArgPos,nArgPos+nLength);
     pScMod->InputSetSelection(nArgPos,nArgPos+nLength);
     pMEdit->SetSelection(aSel);
+    aMEFormula.UpdateOldSel();
 }
 
 //  virtuelle Methoden von ScAnyRefDlg:
