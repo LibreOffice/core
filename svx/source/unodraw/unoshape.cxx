@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-30 18:14:07 $
+ *  last change: $Author: aw $ $Date: 2000-12-06 11:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1200,7 +1200,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         {
             SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
 //-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
-            aSet.Put(pObj->GetItemSet());
+            aSet.Put(pObj->GetItem(pMap->nWID));
 
             if( SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pMap, rVal, aSet ))
                 return;
@@ -1695,7 +1695,7 @@ beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& Proper
     {
         SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
 //-/            pObj->TakeAttributes( aSet, sal_False, sal_True );
-        aSet.Put(pObj->GetItemSet());
+        aSet.Put(pObj->GetItem(pMap->nWID));
 
         if(!aSet.Count())
         {
@@ -1756,7 +1756,7 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
     {
         SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
 //-/            pObj->TakeAttributes( aSet, sal_False, sal_True );
-        aSet.Put(pObj->GetItemSet());
+        aSet.Put(pObj->GetItem(pMap->nWID));
 
         if(!aSet.Count())
         {
