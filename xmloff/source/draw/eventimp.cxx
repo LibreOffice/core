@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:08:42 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,10 +345,12 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                 }
                 else
                 {
-                    const UniString aTmp( rImp.GetAbsoluteReference(sValue) );
-                    UniString aTmp2;
-                    INetURLObject::translateToInternal( aTmp, aTmp2, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 );
-                    msBookmark = aTmp2;
+                    const rtl::OUString &rTmp =
+                        rImp.GetAbsoluteReference(sValue);
+                    INetURLObject::translateToInternal( rTmp, msBookmark,
+                        INetURLObject::WAS_ENCODED,
+                        INetURLObject::DECODE_UNAMBIGUOUS,
+                        RTL_TEXTENCODING_UTF8 );
                 }
             }
             break;
