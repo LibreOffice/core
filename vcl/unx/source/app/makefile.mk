@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 16:47:34 $
+#   last change: $Author: rt $ $Date: 2005-01-07 09:25:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,10 +115,6 @@ SLOFILES+=$(SLO)$/pasfsound.obj
 .IF "$(WITH_LIBSN)"=="YES"
 CDEFS+=-DHAVE_LIBSN
 CFLAGS+=$(LIBSN_CFLAGS)
-.ENDIF
-
-.IF "$(WITH_WIDGETSET)"!=""
-CFLAGS+= $(WIDGETSET_CFLAGS)
 .ENDIF
 
 .IF "$(USE_XINERAMA)" != "NO"
