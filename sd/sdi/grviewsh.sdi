@@ -5,8 +5,8 @@
 #*    Beschreibung      Draw (Graphic) ViewShell-IDL
 #*
 #*    Ersterstellung    SOH 04.04.97
-#*    Letzte Aenderung  $Author: ka $ $Date: 2001-10-22 13:36:31 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: af $ $Date: 2002-11-29 09:09:38 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:   T:/sd/idl/grviewsh.idv  $
 #*
@@ -16,7 +16,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/grviewsh.sdi,v 1.2 2001-10-22 13:36:31 ka Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sd/sdi/grviewsh.sdi,v 1.3 2002-11-29 09:09:38 af Exp $
 
 *************************************************************************/
 
@@ -26,6 +26,18 @@ interface GraphicEditView : DrawView
     uuid ( "95F11180-ACE0-11D0-89CA-008029E4B0B1" ) ;
 ]
 {
+    SID_SEARCH_OPTIONS // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+    SID_SEARCH_ITEM // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
 }
 
 shell SdGraphicViewShell : SfxViewShell
@@ -38,6 +50,9 @@ shell SdGraphicViewShell : SfxViewShell
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/10/22 13:36:31  ka
+      #93586#: removed __EXPORT compiler flag
+
       Revision 1.1.1.1  2000/09/18 16:48:29  hr
       initial import
 
