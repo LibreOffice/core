@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-07 09:45:16 $
+ *  last change: $Author: os $ $Date: 2002-12-06 11:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #endif
 #ifndef _SVX_POSTITEM_HXX //autogen
 #include <svx/postitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _SVDOUTL_HXX
 #include <svx/svdoutl.hxx>
@@ -514,7 +517,49 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             }
             return;
 
+        case SID_ATTR_PARA_LEFT_TO_RIGHT:
+        case SID_ATTR_PARA_RIGHT_TO_LEFT:
+        {
+            SdrObject* pTmpObj = pSdrView->GetMarkList().GetMark(0)->GetObj();
+            SdrPageView* pTmpPV = pSdrView->GetPageViewPvNum(0);
+            SdrView* pTmpView = pSdrView;
 
+            rSh.EndTextEdit();
+            sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
+
+            const SfxPoolItem* pPoolItem;
+            if( SFX_ITEM_SET == pNewAttrs->GetItemState( nSlot, TRUE, &pPoolItem ) )
+            {
+                if( !( (SfxBoolItem*)pPoolItem)->GetValue() )
+                    bLeftToRight = !bLeftToRight;
+            }
+            SfxItemSet aAttr( *aNewAttr.GetPool(),
+                        EE_PARA_JUST, EE_PARA_JUST,
+                        EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
+                        0 );
+
+            USHORT nAdjust = SVX_ADJUST_LEFT;
+            if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, TRUE, &pPoolItem ) )
+                nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
+
+            if( bLeftToRight )
+            {
+                aAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
+                if( nAdjust == SVX_ADJUST_RIGHT )
+                    aAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
+            }
+            else
+            {
+                aAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
+                if( nAdjust == SVX_ADJUST_LEFT )
+                    aAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+            }
+            pTmpView->SetAttributes( aAttr );
+            rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV,
+                                &rSh.GetView().GetEditWin(), FALSE );
+            rSh.GetView().AttrChangedNotify( &rSh );
+        }
+        return;
         default:
             ASSERT(!this, falscher Dispatcher);
             return;
@@ -639,6 +684,29 @@ ASK_ESCAPE:
                 }
             }
             break;
+        case SID_ATTR_PARA_LEFT_TO_RIGHT:
+        case SID_ATTR_PARA_RIGHT_TO_LEFT:
+        {
+            if(pOutliner && pOutliner->IsVertical())
+            {
+                rSet.DisableItem( nWhich );
+                nSlotId = 0;
+            }
+            else
+            {
+                switch( ( ( (SvxFrameDirectionItem&) aEditAttr.Get( EE_PARA_WRITINGDIR ) ) ).GetValue() )
+                {
+                    case FRMDIR_HORI_LEFT_TOP:
+                        bFlag = nWhich == SID_ATTR_PARA_LEFT_TO_RIGHT;
+                    break;
+
+                    case FRMDIR_HORI_RIGHT_TOP:
+                        bFlag = nWhich != SID_ATTR_PARA_LEFT_TO_RIGHT;
+                    break;
+                }
+            }
+        }
+        break;
         case SID_TRANSLITERATE_HALFWIDTH:
         case SID_TRANSLITERATE_FULLWIDTH:
         case SID_TRANSLITERATE_HIRAGANA:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.sdi,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-09-10 13:06:51 $
+ *  last change: $Author: os $ $Date: 2002-12-06 11:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,18 @@ interface TextDrawText : Selection
     ]
 
     SID_ATTR_PARA_LINESPACE_20 // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_PARA_LEFT_TO_RIGHT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_PARA_RIGHT_TO_LEFT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
