@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-14 17:01:30 $
+ *  last change: $Author: cl $ $Date: 2002-05-28 09:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <svx/grafctrl.hxx>
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
+#endif
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
 #endif
 
 #include "sddll.hxx"
@@ -169,12 +172,20 @@ void SdPopupWindowTbx::PopupModeEnd()
 }
 
 /*-------------------------------------------------------------------------*/
-IMPL_LINK( SdPopupWindowTbx, TbxSelectHdl, void*, EMPTYARG)
+IMPL_LINK( SdPopupWindowTbx, TbxSelectHdl, ToolBox*, pBox)
 {
     if( IsInPopupMode() )
         EndPopupMode();
 
     aSelectLink.Call( &aTbx.GetToolBox() );
+
+    if ( pBox->GetModifier() & KEY_MOD1 )
+    {
+        //  #99013# if selected with control key, return focus to current view
+        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
+        if ( pShellWnd )
+            pShellWnd->GrabFocus();
+    }
 
     return( 0L );
 }
