@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 14:38:20 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,9 +158,6 @@
 #endif
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
-#endif
-#ifndef _XMLNUM_HXX
-#include "xmlnum.hxx"
 #endif
 #ifndef _XMLTBLI_HXX
 #include "xmltbli.hxx"
@@ -845,7 +842,8 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
                             rLocalName, xAttrList, nFamily  );
         break;
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
-        // HACK until CL is back again
+        // As long as there are no element items, we can use the text
+        // style class.
         pStyle = new XMLTextStyleContext( GetImport(), nPrefix,
                             rLocalName, xAttrList, *this );
         break;
@@ -908,10 +906,10 @@ UniReference < SvXMLImportPropertyMapper > SwXMLStylesContext_Impl::GetImportPro
                         sal_uInt16 nFamily ) const
 {
     UniReference < SvXMLImportPropertyMapper > xMapper;
-    if( XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily )
-        xMapper = ((SvXMLImport *)&GetImport())->GetTextImport()
-                     ->GetFrameImportPropertySetMapper();
-    else
+//  if( XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily )
+//      xMapper = ((SvXMLImport *)&GetImport())->GetTextImport()
+//                   ->GetFrameImportPropertySetMapper();
+//  else
         xMapper = SvXMLStylesContext::GetImportPropertyMapper( nFamily );
 
     return xMapper;
@@ -1037,7 +1035,10 @@ void SwXMLImport::InsertStyles( sal_Bool bAuto )
                                                 sal_False );
 
     if( bAuto && xAutoStyles.Is() )
+    {
         GetTextImport()->SetAutoStyles( (SwXMLStylesContext_Impl *)&xAutoStyles );
+        GetShapeImport()->SetAutoStylesContext( (SwXMLStylesContext_Impl *)&xAutoStyles );
+    }
 }
 
 void SwXMLImport::FinishStyles()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-29 10:54:05 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,6 @@
 #ifndef _XMLTEXTE_HXX
 #define _XMLTEXTE_HXX
 
-#ifndef XML_CORE_API
-
 #ifndef _XMLOFF_TEXTPARAE_HXX_
 #include <xmloff/txtparae.hxx>
 #endif
@@ -96,7 +94,6 @@ public:
          SvXMLAutoStylePoolP& rAutoStylePool );
     ~SwXMLTextParagraphExport();
 };
-#endif
 
 
 #endif  //  _XMLTEXTE_HXX

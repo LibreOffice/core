@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:15:00 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,9 +133,6 @@
 #ifndef _XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
-#ifndef _XMLECTXT_HXX
-#include "xmlectxt.hxx"
-#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -143,7 +140,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-#ifndef XML_CORE_API
 Reference < XText > lcl_xml_CreateTableBoxText(
         const SwStartNode& rBoxSttNd )
 {
@@ -158,7 +154,6 @@ Reference < XText > lcl_xml_CreateTableBoxText(
                                      aPaM.GetMark() );
     return xTextRange->getText();
 }
-#endif
 
 class SwXMLTableColumn_Impl : public SwWriteTableCol
 {
@@ -675,25 +670,13 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
             const SwStartNode *pBoxSttNd = pBox->GetSttNd();
             if( pBoxSttNd )
             {
-#ifdef XML_CORE_API
-                SwNode *pStartNd = pDoc->GetNodes()[pBoxSttNd->GetIndex()+1];
-                SwNode *pEndNd =
-                            pDoc->GetNodes()[pBoxSttNd->EndOfSectionIndex()-1];
-                SwXMLExpContext aContext( *this, *pStartNd, *pEndNd,
-                                          0, STRING_LEN );
-#endif
-
                 SwFrmFmt *pFrmFmt = pBox->GetFrmFmt();
                 if( rExpCells.AddCell( *pFrmFmt, rNamePrefix, nOldCol, nLine,
                                        bTop) )
                     ExportFmt( *pFrmFmt, sXML_table_cell );
 
-#ifdef XML_CORE_API
-                ExportCurPaMAutoStyles();
-#else
                 GetTextParagraphExport()->collectTextAutoStyles(
                         lcl_xml_CreateTableBoxText( *pBoxSttNd ) );
-#endif
             }
             else
             {
@@ -746,10 +729,6 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
                                     sName, aExpCols, aExpRows, aExpCells,
                                     sal_True );
     }
-
-#ifdef XML_CORE_API
-    pCurPaM->GetPoint()->nNode = *rTblNd.EndOfSectionNode();
-#endif
 }
 
 // ---------------------------------------------------------------------
@@ -783,16 +762,8 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan )
                                   sXML_table_cell, sal_True, sal_True );
         if( pBoxSttNd )
         {
-#ifdef XML_CORE_API
-            SwNode *pStartNd = pDoc->GetNodes()[pBoxSttNd->GetIndex()+1];
-            SwNode *pEndNd = pDoc->GetNodes()[pBoxSttNd->EndOfSectionIndex()-1];
-            SwXMLExpContext aContext( *this, *pStartNd, *pEndNd,
-                                      0, STRING_LEN );
-            ExportCurPaM();
-#else
             GetTextParagraphExport()->exportText(
                 lcl_xml_CreateTableBoxText( *pBoxSttNd ) );
-#endif
         }
         else
         {
@@ -990,13 +961,8 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
         ((SwTable &)rTbl).GetTabLines().ForEach( &lcl_xmltble_ClearName_Line,
                                                  0 );
     }
-
-#ifdef XML_CORE_API
-    pCurPaM->GetPoint()->nNode = *rTblNd.EndOfSectionNode();
-#endif
 }
 
-#ifndef XML_CORE_API
 void SwXMLTextParagraphExport::exportTable(
         const Reference < XTextContent > & rTextContent,
         sal_Bool bAutoStyles )
@@ -1036,50 +1002,3 @@ void SwXMLTextParagraphExport::exportTable(
         }
     }
 }
-#endif
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmltble.cxx,v 1.1.1.1 2000-09-18 17:15:00 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.11  2000/09/18 16:05:07  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.10  2000/09/05 09:51:10  mib
-      #78063#: table lines cache is sorted now
-
-      Revision 1.9  2000/07/31 09:42:35  mib
-      text export continued
-
-      Revision 1.8  2000/07/21 12:55:15  mib
-      text import/export using StarOffice API
-
-      Revision 1.7  2000/06/08 09:45:54  aw
-      changed to use functionality from xmloff project now
-
-      Revision 1.6  2000/05/03 12:08:05  mib
-      unicode
-
-      Revision 1.5  2000/03/13 14:33:44  mib
-      UNO3
-
-      Revision 1.4  2000/02/11 17:08:37  kz
-      #65293# cast Syntax
-
-      Revision 1.3  2000/02/11 14:42:15  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.2  2000/02/08 06:47:09  mib
-      #70271#: remove temporary table cell format names
-
-      Revision 1.1  2000/02/07 10:02:55  mib
-      #70271#: table export
-
-
-*************************************************************************/
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmliteme.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,9 +133,6 @@
 #include "swrect.hxx"
 #endif
 
-#ifndef _XMLDROPE_HXX
-#include "xmldrope.hxx"
-#endif
 #ifndef _XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
@@ -144,95 +141,10 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#ifdef XML_CORE_API
-extern SvXMLItemMapEntry aXMLParaItemMap[];
-#endif
 extern SvXMLItemMapEntry aXMLTableItemMap[];
 extern SvXMLItemMapEntry aXMLTableRowItemMap[];
 extern SvXMLItemMapEntry aXMLTableCellItemMap[];
 
-#ifdef XML_CORE_API
-class SwXMLTextItemMapper_Impl: public SvXMLExportItemMapper
-{
-protected:
-    SvXMLUnitConverter& mrUnitConverter;
-    const Reference< xml::sax::XDocumentHandler > & mrHandler;
-    SvxXMLTabStopExport maTabStopExport;
-
-public:
-
-    SwXMLTextItemMapper_Impl(
-            SvXMLItemMapEntriesRef rMapEntries,
-            SvXMLUnitConverter& rUnitConverter,
-            const Reference< xml::sax::XDocumentHandler > & rHandler );
-
-    virtual ~SwXMLTextItemMapper_Impl();
-
-    virtual void handleElementItem(
-            const Reference< xml::sax::XDocumentHandler > & rHandler,
-            const SvXMLItemMapEntry& rEntry,
-            const SfxPoolItem& rItem,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap,
-            const SfxItemSet& rSet,
-            sal_uInt16 nFlags ) const;
-};
-
-SwXMLTextItemMapper_Impl::SwXMLTextItemMapper_Impl(
-                SvXMLItemMapEntriesRef rMapEntries,
-                SvXMLUnitConverter& rUnitConverter,
-                const Reference< xml::sax::XDocumentHandler > & rHandler ) :
-    SvXMLExportItemMapper( rMapEntries ),
-    mrUnitConverter(rUnitConverter),
-    mrHandler( rHandler ),
-    maTabStopExport( rHandler, rUnitConverter )
-{
-}
-
-SwXMLTextItemMapper_Impl::~SwXMLTextItemMapper_Impl()
-{
-}
-
-/** this method is called for every item that has the
-    MID_FLAG_ELEMENT_EXPORT flag set */
-void SwXMLTextItemMapper_Impl::handleElementItem(
-    const Reference< xml::sax::XDocumentHandler > & rHandler,
-    const SvXMLItemMapEntry& rEntry,
-    const SfxPoolItem& rItem,
-    const SvXMLUnitConverter& rUnitConverter,
-    const SvXMLNamespaceMap& rNamespaceMap,
-    const SfxItemSet&,
-    sal_uInt16 ) const
-{
-    switch( rEntry.nWhichId )
-    {
-    case RES_PARATR_TABSTOP:
-        {
-            SvxXMLTabStopExport aTabStopExport( rHandler, rUnitConverter );
-
-            Any aAny;
-            rItem.QueryValue( aAny, 0 );
-            aTabStopExport.Export( aAny, rNamespaceMap );
-        }
-        break;
-    case RES_PARATR_DROP:
-        {
-            SwXMLFmtDropExport aFmtDropExport( rHandler, rUnitConverter );
-            aFmtDropExport.exportXML( (const SwFmtDrop&)rItem, rNamespaceMap );
-        }
-        break;
-    case RES_BACKGROUND:
-        {
-            SwXMLBrushItemExport aBrushItemExport( rHandler, rUnitConverter );
-            aBrushItemExport.exportXML( (const SvxBrushItem&)rItem,
-                                         rNamespaceMap );
-        }
-        break;
-    }
-}
-#endif
-
-// ----------------------------------------------------------------------------
 
 class SwXMLTableItemMapper_Impl: public SvXMLExportItemMapper
 {
@@ -412,15 +324,6 @@ void SwXMLExport::_InitItemExport()
     pTwipUnitConv = new SvXMLUnitConverter( MAP_TWIP,
                                 GetMM100UnitConverter().getXMLMeasureUnit() );
 
-#ifdef XML_CORE_API
-    SvXMLItemMapEntriesRef xParaItemMap =
-        new SvXMLItemMapEntries( aXMLParaItemMap );
-
-    pParaItemMapper = new SwXMLTextItemMapper_Impl( xParaItemMap,
-                                                      *pTwipUnitConv,
-                                                      GetDocHandler() );
-#endif
-
     xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );
     xTableRowItemMap = new SvXMLItemMapEntries( aXMLTableRowItemMap );
     xTableCellItemMap = new SvXMLItemMapEntries( aXMLTableCellItemMap );
@@ -432,9 +335,6 @@ void SwXMLExport::_InitItemExport()
 
 void SwXMLExport::_FinitItemExport()
 {
-#ifdef XML_CORE_API
-    delete pParaItemMapper;
-#endif
     delete pTableItemMapper;
     delete pTwipUnitConv;
 }
@@ -445,46 +345,3 @@ void SwXMLExport::ExportTableFmt( const SwFrmFmt& rFmt, sal_uInt32 nAbsWidth )
         ->SetAbsWidth( nAbsWidth );
     ExportFmt( rFmt, sXML_table );
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmliteme.cxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.10  2000/09/18 16:05:07  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.9  2000/08/02 14:52:39  mib
-      text export continued
-
-      Revision 1.8  2000/07/31 09:42:35  mib
-      text export continued
-
-      Revision 1.7  2000/06/08 09:45:54  aw
-      changed to use functionality from xmloff project now
-
-      Revision 1.6  2000/05/03 12:08:05  mib
-      unicode
-
-      Revision 1.5  2000/03/13 14:33:44  mib
-      UNO3
-
-      Revision 1.4  2000/02/11 14:41:45  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.3  2000/02/07 10:03:28  mib
-      #70271#: tables
-
-      Revision 1.2  2000/01/20 14:03:58  mib
-      #70271#: deletion of unit converter
-
-      Revision 1.1  1999/12/14 07:32:49  mib
-      #70271#: XML import/export of drop cap/register/language item, splitted swxmlat
-
-
-*************************************************************************/
-

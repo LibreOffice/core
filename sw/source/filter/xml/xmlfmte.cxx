@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-20 11:19:43 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,12 +176,6 @@
 #ifndef _XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
-#ifndef _XMLECTXT_HXX
-#include "xmlectxt.hxx"
-#endif
-#ifndef _XMLFMTE_HXX
-#include "xmlfmte.hxx"
-#endif
 #ifndef _XMLTEXTE_HXX
 #include "xmltexte.hxx"
 #endif
@@ -195,10 +189,8 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
-#ifndef XML_CORE_API
 #ifndef _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
 #include <xmloff/XMLTextListAutoStylePool.hxx>
-#endif
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HPP_
@@ -302,8 +294,6 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
         }
     }
 }
-
-#ifndef XML_CORE_API
 
 SwXMLTextParagraphExport::SwXMLTextParagraphExport(
         SwXMLExport& rExp,
@@ -414,301 +404,28 @@ void SwXMLTextParagraphExport::exportTextAutoStyles()
 {
     XMLTextParagraphExport::exportTextAutoStyles();
     GetAutoStylePool().exportXML( XML_STYLE_FAMILY_SD_GRAPHICS_ID,
-                                   *GetAutoFramePropMapper().get(),
                                    GetExport().GetDocHandler(),
                                    GetExport().GetMM100UnitConverter(),
                                    GetExport().GetNamespaceMap() );
 }
-#endif
 
 void SwXMLExport::_ExportStyles( sal_Bool bUsed )
 {
-#ifdef XML_CORE_API
-    // text collections
-    SvStringsSort *pCollNames = bUsed ? new SvStringsSort : 0;
-    sal_uInt16 nCount = pDoc->GetTxtFmtColls()->Count();
-    sal_uInt16 i;
-    for( i=0; i<nCount; i++ )
-    {
-        const SwTxtFmtColl *pColl = (*pDoc->GetTxtFmtColls())[i];
-        if( ( !bUsed || pDoc->IsUsed( *pColl ) ) && !pColl->IsDefault() )
-        {
-            ExportFmt( *pColl );
-            if( pCollNames )
-                pCollNames->Insert( (String *)&pColl->GetName() );
-        }
-    }
-    if( bUsed )
-    {
-        // Even if some next styles have not been used, they have to be
-        // exported.
-        for( i = 0; i < nCount; i++ )
-        {
-            const SwTxtFmtColl* pColl = (*pDoc->GetTxtFmtColls())[ i ];
-            if( pColl != &pColl->GetNextTxtFmtColl() &&
-                !pCollNames->Seek_Entry(
-                    (String *)&pColl->GetNextTxtFmtColl().GetName() ) )
-            {
-                ExportFmt( pColl->GetNextTxtFmtColl() );
-                pCollNames->Insert(
-                    (String *)&pColl->GetNextTxtFmtColl().GetName() );
-            }
-        }
-        delete pCollNames;
-    }
-
-    // char fmts
-    nCount = pDoc->GetCharFmts()->Count();
-    for( i=0; i<nCount; i++ )
-    {
-        const SwCharFmt *pFmt = (*pDoc->GetCharFmts())[i];
-        if( ( !bUsed || pDoc->IsUsed( *pFmt ) ) && !pFmt->IsDefault() )
-            ExportFmt( *pFmt );
-    }
-
-    // num rules
-    ExportNumRules( sal_False, bUsed );
-#else
     GetTextParagraphExport()->exportTextStyles( bUsed );
-#endif
 }
-
-// ---------------------------------------------------------------------
-
-#ifdef XML_CORE_API
-void SwXMLExport::AddTextAutoStyle( const SfxPoolItem& rItem )
-{
-    SfxItemSet aItemSet( pDoc->GetAttrPool(),
-                         RES_CHRATR_BEGIN,      RES_CHRATR_END - 1,
-                         RES_UNKNOWNATR_BEGIN,  RES_UNKNOWNATR_END - 1, 0 );
-    aItemSet.Put( rItem );
-    pItemSetAutoStylePool->Add( SFX_STYLE_FAMILY_CHAR, aItemSet );
-}
-
-void SwXMLExport::AddParaAutoStyle( const OUString& rParent,
-                                    const SfxItemSet& rItemSet )
-{
-    pItemSetAutoStylePool->Add( SFX_STYLE_FAMILY_PARA,
-        SwXStyleFamilies::GetProgrammaticName(rParent, SFX_STYLE_FAMILY_PARA ),
-           rItemSet );
-}
-
-OUString SwXMLExport::FindTextAutoStyle( const SfxPoolItem& rItem )
-{
-    SfxItemSet aItemSet( pDoc->GetAttrPool(),
-                         RES_CHRATR_BEGIN,      RES_CHRATR_END - 1,
-                         RES_UNKNOWNATR_BEGIN,  RES_UNKNOWNATR_END - 1, 0 );
-    aItemSet.Put( rItem );
-    return pItemSetAutoStylePool->Find( SFX_STYLE_FAMILY_CHAR, aItemSet );
-}
-
-OUString SwXMLExport::FindParaAutoStyle( const OUString& rParent,
-                                         const SfxItemSet& rItemSet )
-{
-    return pItemSetAutoStylePool->Find(
-        SFX_STYLE_FAMILY_PARA,
-        SwXStyleFamilies::GetProgrammaticName(rParent, SFX_STYLE_FAMILY_PARA ),
-         rItemSet );
-}
-
-void SwXMLExport::ExportTxtNodeAutoStyles( const SwTxtNode& rTxtNd,
-                                           xub_StrLen nStart, xub_StrLen nEnd,
-                                           sal_Bool bExportWholeNode )
-{
-    const SfxItemSet *pItemSet = rTxtNd.GetpSwAttrSet();
-    if( pItemSet )
-    {
-        const SwFmtColl& rColl = rTxtNd.GetAnyFmtColl();
-        OUString sParent( rColl.GetName() );
-        AddParaAutoStyle( sParent, *pItemSet );
-
-        if( rTxtNd.GetCondFmtColl() &&
-             &rColl != rTxtNd.GetFmtColl() )
-        {
-            const SwFmtColl *pColl = rTxtNd.GetFmtColl();
-            sParent = pColl->GetName();
-            AddParaAutoStyle( sParent, *pItemSet );
-        }
-    }
-
-    xub_StrLen nPos = pCurPaM->GetPoint()->nContent.GetIndex();
-    xub_StrLen nEndPos = rTxtNd.GetTxt().Len();
-    if( pCurPaM->GetPoint()->nNode == pCurPaM->GetMark()->nNode )
-        nEndPos = pCurPaM->GetMark()->nContent.GetIndex();
-
-    const SwpHints *pHints = rTxtNd.GetpSwpHints();
-    sal_uInt16 nHintCount = pHints ? pHints->Count() : 0;
-    sal_uInt16 nHintPos = 0;
-    const SwTxtAttr * pTxtAttr = 0;
-
-    if( nHintCount && nPos > *( pTxtAttr = (*pHints)[0] )->GetStart() )
-    {
-        do
-        {
-            nHintPos++;
-            sal_uInt16 nWhich = pTxtAttr->Which();
-            if( pTxtAttr->GetEnd() &&
-                ( (nWhich >= RES_CHRATR_BEGIN && nWhich < RES_CHRATR_END) ||
-                  (nWhich >= RES_UNKNOWNATR_BEGIN &&
-                                             nWhich < RES_UNKNOWNATR_END) ) )
-            {
-                xub_StrLen nHtEnd = *pTxtAttr->GetEnd(),
-                       nHtStt = *pTxtAttr->GetStart();
-                if( (bExportWholeNode || nHtEnd > nPos) &&
-                    nHtEnd != nHtStt )
-                {
-                    AddTextAutoStyle( pTxtAttr->GetAttr() );
-                }
-            }
-
-        }
-        while( nHintPos < nHintCount &&
-               nPos > *( pTxtAttr = (*pHints)[nHintPos ] )->GetStart() );
-    }
-
-    for( ; nPos < nEndPos; nPos++ )
-    {
-        if( nHintPos < nHintCount && *pTxtAttr->GetStart() == nPos
-            && nPos != nEndPos )
-        {
-            do
-            {
-                sal_uInt16 nWhich = pTxtAttr->Which();
-                if( pTxtAttr->GetEnd() && *pTxtAttr->GetEnd() != nPos &&
-                    ( (nWhich >= RES_CHRATR_BEGIN && nWhich < RES_CHRATR_END) ||
-                      (nWhich >= RES_UNKNOWNATR_BEGIN &&
-                                             nWhich < RES_UNKNOWNATR_END) ) )
-                {
-                    AddTextAutoStyle( pTxtAttr->GetAttr() );
-                } else if( nWhich == RES_TXTATR_FIELD ) {
-                    // text field found: export AutoStyle
-#ifdef XML_CORE_API
-//                  Reference < text::XTextField > xFld = new SwXTextField(
-//                      ((const SwFmtFld&)pTxtAttr->GetAttr()), &GetDoc() );
-//
-//                  GetTextFieldExport().ExportFieldAutoStyle( xFld );
-#endif
-                }
-            }
-            while( ++nHintPos < nHintCount &&
-                  nPos == *( pTxtAttr = (*pHints)[nHintPos] )->GetStart() );
-        }
-    }
-}
-
-void SwXMLExport::ExportSectionAutoStyles( const SwSectionNode& rSectNd )
-{
-    SwNode *pStartNd = pDoc->GetNodes()[rSectNd.GetIndex() + 1];
-    SwNode *pEndNd = pDoc->GetNodes()[rSectNd.EndOfSectionIndex() - 1];
-
-    {
-        SwXMLExpContext aContext( *this, *pStartNd, *pEndNd, 0, STRING_LEN );
-        ExportCurPaMAutoStyles();
-    }
-
-    pCurPaM->GetPoint()->nNode = *rSectNd.EndOfSectionNode();
-}
-
-void SwXMLExport::ExportCurPaMAutoStyles( sal_Bool bExportWholePaM )
-{
-    sal_Bool bFirstNode = sal_True;
-    sal_Bool bExportWholeNode = bExportWholePaM;
-
-    while( pCurPaM->GetPoint()->nNode.GetIndex() <
-                                pCurPaM->GetMark()->nNode.GetIndex() ||
-           ( pCurPaM->GetPoint()->nNode.GetIndex() ==
-                                pCurPaM->GetMark()->nNode.GetIndex() &&
-             pCurPaM->GetPoint()->nContent.GetIndex() <=
-                                pCurPaM->GetMark()->nContent.GetIndex() ) )
-    {
-        SwNode *pNd = pCurPaM->GetNode();
-
-        ASSERT( !(pNd->IsGrfNode() || pNd->IsOLENode()),
-                "SwXMLExport::exportCurPaM: grf or OLE node unexpected" );
-        if( pNd->IsTxtNode() )
-        {
-            SwTxtNode* pTxtNd = pNd->GetTxtNode();
-
-            if( !bFirstNode )
-                pCurPaM->GetPoint()->nContent.Assign( pTxtNd, 0 );
-
-            ExportTxtNodeAutoStyles( *pTxtNd, 0, STRING_LEN, bExportWholeNode );
-        }
-        else if( pNd->IsTableNode() )
-        {
-            ExportTableAutoStyles( *pNd->GetTableNode() );
-        }
-        else if( pNd->IsSectionNode() )
-        {
-            ExportSectionAutoStyles( *pNd->GetSectionNode() );
-        }
-        else if( pNd == &pDoc->GetNodes().GetEndOfContent() )
-            break;
-
-        pCurPaM->GetPoint()->nNode++;   // next node
-
-        // if not everything should be exported, the WriteAll flag must be
-        // set for all but the first and last node anyway.
-        bExportWholeNode = bExportWholePaM ||
-                           pCurPaM->GetPoint()->nNode.GetIndex() !=
-                           pCurPaM->GetMark()->nNode.GetIndex();
-        bFirstNode = sal_False;
-    }
-}
-#endif
 
 void SwXMLExport::_ExportAutoStyles()
 {
-#ifdef XML_CORE_API
-    // export all PaMs
-    SwPaM *pPaM = pOrigPaM;
-    sal_Bool bContinue = sal_True;
-    do
-    {
-        // export PaM content
-        ExportCurPaMAutoStyles( bExportWholeDoc );
-
-        bContinue = pPaM->GetNext() != pOrigPaM;
-
-        // the current PaM must be at the start if this loop finishes
-        pPaM = (SwPaM *)pPaM->GetNext();
-        SetCurPaM( *pPaM, bExportWholeDoc, bExportFirstTableOnly );
-
-    } while( bContinue );
-
-    // text collections
-    ((SvXMLAutoStylePool *)pItemSetAutoStylePool)->exportXML( SFX_STYLE_FAMILY_PARA,
-                                                       GetParaItemMapper(),
-                                                       GetDocHandler(),
-                                                       GetTwipUnitConverter(),
-                                                       GetNamespaceMap() );
-
-    // char fmts
-    ((SvXMLAutoStylePool *)pItemSetAutoStylePool)->exportXML( SFX_STYLE_FAMILY_CHAR,
-                                                       GetParaItemMapper(),
-                                                       GetDocHandler(),
-                                                       GetTwipUnitConverter(),
-                                                       GetNamespaceMap() );
-
-    // num rules
-    ExportNumRules( sal_True, sal_False );
-
-    // text field styles
-//  GetNumberFormatExport().Export( GetNamespaceMap() );
-
-#else
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
 
     GetTextParagraphExport()->collectFrameBoundToPageAutoStyles();
     GetTextParagraphExport()->collectTextAutoStyles( xText );
     GetPageExport()->collectAutoStyles( sal_False );
+
     GetTextParagraphExport()->exportTextAutoStyles();
     GetPageExport()->exportAutoStyles();
     exportAutoDataStyles();
-
-#endif
-
 }
 
 XMLPageExport* SwXMLExport::CreatePageExport()
@@ -722,33 +439,6 @@ void SwXMLExport::_ExportMasterStyles()
 }
 
 // ---------------------------------------------------------------------
-
-#ifdef XML_CORE_API
-void SwXMLAutoStylePool::exportXML( SvXMLAttributeList& rAttrList,
-                            SfxStyleFamily eFamily, const SfxItemSet& rItemSet,
-                            const SvXMLUnitConverter& rUnitConverter,
-                            const SvXMLNamespaceMap& rNamespaceMap ) const
-{
-    if( SFX_STYLE_FAMILY_PARA == eFamily )
-    {
-        const SfxPoolItem *pItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_PARATR_NUMRULE, sal_False,
-                                                   &pItem ) )
-        {
-            OUString sName( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE,
-                    OUString::createFromAscii(sXML_list_style_name) ) );
-            rAttrList.AddAttribute( sName,
-                                    OUString::createFromAscii( sXML_CDATA ),
-                                      ((const SwNumRuleItem *)pItem)->GetValue() );
-        }
-    }
-}
-
-SwXMLAutoStylePool::~SwXMLAutoStylePool()
-{
-}
-#else
-
 class SwXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 {
     SvXMLExport& rExport;
@@ -836,171 +526,3 @@ SvXMLAutoStylePoolP* SwXMLExport::CreateAutoStylePool()
 {
     return new SwXMLAutoStylePoolP( *this );
 }
-#endif
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmte.cxx,v 1.5 2000-10-20 11:19:43 mib Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.4  2000/10/18 11:20:44  mib
-      master page import and export continued
-
-      Revision 1.3  2000/10/12 17:30:28  mib
-      export of master pages
-
-      Revision 1.2  2000/09/29 10:54:05  mib
-      export graphics styles again
-
-      Revision 1.1.1.1  2000/09/18 17:15:00  hr
-      initial import
-
-      Revision 1.23  2000/09/18 16:05:06  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.22  2000/09/18 11:58:02  mib
-      text frames/graphics import and export continued
-
-      Revision 1.21  2000/09/07 05:29:00  mib
-      #78555#: Search paragraph styles by programmatic name instead of UI name
-
-      Revision 1.20  2000/08/24 11:16:41  mib
-      text import continued
-
-      Revision 1.19  2000/08/21 11:02:50  dvo
-      - fixed data style export (for textfields)
-
-      Revision 1.18  2000/08/10 10:22:16  mib
-      #74404#: Adeptions to new XSL/XLink working draft
-
-      Revision 1.17  2000/08/02 14:52:39  mib
-      text export continued
-
-      Revision 1.16  2000/07/31 09:42:35  mib
-      text export continued
-
-      Revision 1.15  2000/07/27 08:06:34  mib
-      text import continued
-
-      Revision 1.14  2000/07/26 05:11:20  mib
-      text import/export continued
-
-      Revision 1.13  2000/07/24 10:19:02  dvo
-      - textfield export for XML_CORE_API
-
-      Revision 1.12  2000/07/21 12:55:15  mib
-      text import/export using StarOffice API
-
-      Revision 1.11  2000/07/10 06:58:49  mib
-      text styles
-
-      Revision 1.10  2000/07/07 13:58:36  mib
-      text styles using StarOffice API
-
-      Revision 1.9  2000/06/08 09:45:54  aw
-      changed to use functionality from xmloff project now
-
-      Revision 1.8  2000/05/03 12:08:05  mib
-      unicode
-
-      Revision 1.7  2000/03/13 14:33:44  mib
-      UNO3
-
-      Revision 1.6  2000/03/06 10:46:11  mib
-      #72585#: toInt32
-
-      Revision 1.5  2000/02/11 14:41:57  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.4  2000/02/07 10:03:28  mib
-      #70271#: tables
-
-      Revision 1.3  2000/01/20 10:03:16  mib
-      #70271#: Lists reworked
-
-      Revision 1.2  2000/01/12 15:00:23  mib
-      #70271#: lists
-
-      Revision 1.1  2000/01/06 15:03:40  mib
-      #70271#:separation of text/layout, cond. styles, adaptions to wd-xlink-19991229
-
-      Revision 1.23  1999/12/13 08:28:25  mib
-      #70271#: Support for element items added
-
-      Revision 1.22  1999/12/06 11:41:33  mib
-      #70258#: Container item for unkown attributes
-
-      Revision 1.21  1999/11/26 11:13:57  mib
-      loading of styles only and insert mode
-
-      Revision 1.20  1999/11/22 15:52:34  os
-      headers added
-
-      Revision 1.19  1999/11/17 20:08:49  nn
-      document language
-
-      Revision 1.18  1999/11/12 14:50:28  mib
-      meta import and export reactivated
-
-      Revision 1.17  1999/11/12 11:43:03  mib
-      using item mapper, part iii
-
-      Revision 1.16  1999/11/10 15:08:09  mib
-      Import now uses XMLItemMapper
-
-      Revision 1.15  1999/11/09 15:40:08  mib
-      Using XMLItemMapper for export
-
-      Revision 1.14  1999/11/05 19:44:11  nn
-      handle office:meta
-
-      Revision 1.13  1999/11/01 11:38:50  mib
-      List style import
-
-      Revision 1.12  1999/10/25 10:41:48  mib
-      Using new OUString ASCII methods
-
-      Revision 1.11  1999/10/22 09:49:16  mib
-      List style export
-
-      Revision 1.10  1999/10/15 12:37:05  mib
-      integrated SvXMLStyle into SvXMLStyleContext
-
-      Revision 1.9  1999/10/08 11:47:45  mib
-      moved some file to SVTOOLS/SVX
-
-      Revision 1.8  1999/10/01 13:02:51  mib
-      no comparisons between OUString and char* any longer
-
-      Revision 1.7  1999/09/28 10:47:58  mib
-      char fmts again
-
-      Revision 1.6  1999/09/28 08:31:15  mib
-      char fmts, hints
-
-      Revision 1.5  1999/09/23 11:53:58  mib
-      i18n, token maps and hard paragraph attributes
-
-      Revision 1.4  1999/09/22 11:56:57  mib
-      string -> wstring
-
-      Revision 1.3  1999/08/19 12:57:42  MIB
-      attribute import added
-
-
-      Rev 1.2   19 Aug 1999 14:57:42   MIB
-   attribute import added
-
-      Rev 1.1   18 Aug 1999 17:03:36   MIB
-   Style import
-
-      Rev 1.0   13 Aug 1999 16:18:10   MIB
-   Initial revision.
-
-
-*************************************************************************/
-

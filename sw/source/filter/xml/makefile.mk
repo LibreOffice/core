@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+#   last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,19 +85,16 @@ CXXFILES = \
         xmlimp.cxx      \
         wrtxml.cxx      \
         xmlexp.cxx      \
-        xmlectxt.cxx      \
         xmltext.cxx      \
         xmltbli.cxx      \
         xmltble.cxx      \
         xmlfmt.cxx      \
         xmlfmte.cxx      \
         xmlmeta.cxx      \
-        xmlnum.cxx      \
         xmlitemm.cxx	\
         xmlitemi.cxx	\
         xmliteme.cxx	\
         swxmlat.cxx      \
-        hintlist.cxx	\
         xmlbrsh.cxx
 
 SLOFILES =  \
@@ -105,19 +102,16 @@ SLOFILES =  \
         $(SLO)$/xmlimp.obj \
         $(SLO)$/wrtxml.obj \
         $(SLO)$/xmlexp.obj \
-        $(SLO)$/xmlectxt.obj \
         $(SLO)$/xmltext.obj \
         $(SLO)$/xmltbli.obj \
         $(SLO)$/xmltble.obj \
         $(SLO)$/xmlfmt.obj \
         $(SLO)$/xmlfmte.obj \
         $(SLO)$/xmlmeta.obj \
-        $(SLO)$/xmlnum.obj \
         $(SLO)$/xmlitemm.obj \
         $(SLO)$/xmlitemi.obj \
         $(SLO)$/xmliteme.obj \
         $(SLO)$/swxmlat.obj \
-        $(SLO)$/hintlist.obj \
         $(SLO)$/xmlbrsh.obj
 
 EXCEPTIONSFILES= \

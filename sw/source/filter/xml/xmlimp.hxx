@@ -1,10 +1,10 @@
-/*************************************************************************
+/************************************************************************
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:20:44 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,8 @@ protected:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual XMLTextImportHelper* CreateTextImport();
+
+    virtual XMLShapeImportHelper* CreateShapeImport();
 
 public:
 

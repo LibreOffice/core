@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-26 09:38:52 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,16 +87,6 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; }
 } } }
 
-#ifdef XML_CORE_API
-enum SwXMLStyleSubFamily
-{
-    SW_STYLE_SUBFAMILY_TABLE = 0x0001,
-    SW_STYLE_SUBFAMILY_TABLE_LINE = 0x0002,
-    SW_STYLE_SUBFAMILY_TABLE_BOX = 0x0004,
-    SW_STYLE_SUBFAMILY_TABLE_COL = 0x0008
-};
-#endif
-
 
 class SwXMLTableContext : public XMLTextTableContext
 {
@@ -105,12 +95,11 @@ class SwXMLTableContext : public XMLTextTableContext
     SvUShorts           aColumnWidths;
     SvBools             aColumnRelWidths;
 
-#ifndef XML_CORE_API
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextCursor > xOldCursor;
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextContent > xTextContent;
-#endif
+
     SwXMLTableRows_Impl *pRows;
 
     SwTableNode         *pTableNode;

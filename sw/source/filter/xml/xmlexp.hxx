@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-20 11:19:43 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,6 @@ class SwXMLTableLinesCache_Impl;
 class SwXMLTableColumnsSortByWidth_Impl;
 class SwXMLTableFrmFmtsSort_Impl;
 class SwTableNode;
-#ifdef XML_CORE_API
-class SvXMLNumFmtExport;
-class XMLTextFieldExport;
-#endif
 class XMLPropertySetMapper;
 //class XMLTextMasterPageExport;
 class SwXMLTextParagraphExport;
@@ -119,20 +115,8 @@ class SwXMLExport : public SvXMLExport
 
     SvXMLUnitConverter          *pTwipUnitConv;
 
-#ifdef XML_CORE_API
-    SvXMLExportItemMapper       *pParaItemMapper;
-#endif
     SvXMLExportItemMapper       *pTableItemMapper;
-#ifdef XML_CORE_API
-    SwXMLAutoStylePool          *pItemSetAutoStylePool;
-    OUStrings_Impl              *pListElements;
-    OUStringsSort_Impl          *pExportedLists;
-#endif
     SwXMLTableLinesCache_Impl   *pTableLines;
-#ifdef XML_CORE_API
-    SvXMLNumFmtExport           *pNumberFormatExport;
-    XMLTextFieldExport          *pTextFieldExport;
-#endif
 
     SvXMLItemMapEntriesRef      xTableItemMap;
     SvXMLItemMapEntriesRef      xTableRowItemMap;
@@ -146,21 +130,6 @@ class SwXMLExport : public SvXMLExport
 
     void _InitItemExport();
     void _FinitItemExport();
-#ifdef XML_CORE_API
-    void _FinitNumRuleExport();
-
-    void AddTextAutoStyle( const SfxPoolItem& rItem );
-    void AddParaAutoStyle( const ::rtl::OUString& rParent,
-                           const SfxItemSet& rItemSet );
-    ::rtl::OUString FindTextAutoStyle( const SfxPoolItem& rItem );
-    ::rtl::OUString FindParaAutoStyle( const ::rtl::OUString& rParent,
-                                       const SfxItemSet& rItemSet );
-
-    void ExportCurPaMAutoStyles( sal_Bool bExportWholePaM=sal_True );
-    void ExportTxtNodeAutoStyles( const SwTxtNode& rTxtNd, xub_StrLen nStart,
-                                  xub_StrLen nEnd, sal_Bool bExportWholeNode );
-    void ExportSectionAutoStyles( const SwSectionNode& rSectNd );
-#endif
     void ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                  sal_uInt32 nAbsWidth,
                                  sal_uInt32 nBaseWidth,
@@ -170,21 +139,9 @@ class SwXMLExport : public SvXMLExport
                                  SwXMLTableFrmFmtsSort_Impl& rExpCells,
                                  sal_Bool bTop=sal_False );
 
-#ifdef XML_CORE_API
-    void ExportCurPaM( sal_Bool bExportWholePaM=sal_True );
-    void ExportTxtNode( const SwTxtNode& rTxtNd, xub_StrLen nStart,
-                        xub_StrLen nEnd, sal_Bool bExportWholeNode );
-    void ExportSection( const SwSectionNode& rSectNd );
-#endif
 
     void ExportFmt( const SwFmt& rFmt, const sal_Char *pFamily = 0 );
     void ExportTableFmt( const SwFrmFmt& rFmt, sal_uInt32 nAbsWidth );
-#ifdef XML_CORE_API
-    void ExportNumRules( sal_Bool bAuto, sal_Bool bUsed );
-    void ExportNodeNum( const SwNodeNum& rNdNum );
-    void ExportListChange( const SwXMLNumRuleInfo& rPrvInfo,
-                           const SwXMLNumRuleInfo& rNextInfo );
-#endif
 
     void ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol );
     void ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan );
@@ -205,11 +162,10 @@ class SwXMLExport : public SvXMLExport
 
 protected:
 
-#ifndef XML_CORE_API
     virtual XMLTextParagraphExport* CreateTextParagraphExport();
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool();
     virtual XMLPageExport* CreatePageExport();
-#endif
+    virtual XMLShapeExport* CreateShapeExport();
 
 public:
 
@@ -227,22 +183,11 @@ public:
     void ExportTableAutoStyles( const SwTableNode& rTblNd );
     void ExportTable( const SwTableNode& rTblNd );
 
-#ifdef XML_CORE_API
-    SvXMLExportItemMapper& GetParaItemMapper() { return *pParaItemMapper; }
-#endif
     SvXMLExportItemMapper& GetTableItemMapper() { return *pTableItemMapper; }
     const UniReference < XMLPropertySetMapper >& GetParaPropMapper()
     {
         return xParaPropMapper;
     }
-#ifdef XML_CORE_API
-    SwXMLAutoStylePool& GetItemSetAutoStylePool() { return *pItemSetAutoStylePool; }
-#endif
-
-#ifdef XML_CORE_API
-    SvXMLNumFmtExport& GetNumberFormatExport() { return *pNumberFormatExport; }
-    XMLTextFieldExport& GetTextFieldExport() { return *pTextFieldExport; }
-#endif
 
     SwDoc& GetDoc() { return *pDoc; }
 };

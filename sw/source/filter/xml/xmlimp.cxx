@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:20:44 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,45 +65,32 @@
 
 #pragma hdrstop
 
-#ifndef _PAM_HXX //autogen wg. SwPaM
-#include <pam.hxx>
+#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
+#include <com/sun/star/text/XTextRange.hpp>
 #endif
-
-#ifndef _XMLOFF_NMSPMAP_HXX
-#include <xmloff/nmspmap.hxx>
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-
-#ifndef _XMLOFF_I18NMAP_HXX
-#include <xmloff/i18nmap.hxx>
-#endif
-
 #ifndef _XMLOFF_XMLTKMAP_HXX
 #include <xmloff/xmltkmap.hxx>
 #endif
-
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
 #endif
-
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
 #endif
 #ifndef _XMLOFF_TXTIMP_HXX
 #include <xmloff/txtimp.hxx>
 #endif
-
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
-#include <com/sun/star/text/XTextRange.hpp>
+#ifndef _XMLOFF_XMLTEXTSHAPEIMPORTHELPER_HXX_
+#include <xmloff/XMLTextShapeImportHelper.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
-#include <com/sun/star/text/XText.hpp>
-#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -119,6 +106,10 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
+#ifndef _PAM_HXX //autogen wg. SwPaM
+#include <pam.hxx>
+#endif
+
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
@@ -467,4 +458,10 @@ SwXMLImport::~SwXMLImport()
     delete pDocElemTokenMap;
     delete pTableElemTokenMap;
     _FinitItemImport();
+}
+
+
+XMLShapeImportHelper* SwXMLImport::CreateShapeImport()
+{
+    return new XMLTextShapeImportHelper( *this );
 }

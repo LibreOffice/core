@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-20 11:19:43 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,13 @@
 
 #pragma hdrstop
 
-#ifndef _NODE_HXX //autogen wg. SwTableNode
-#include <node.hxx>
+#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
+#include <com/sun/star/text/XTextDocument.hpp>
 #endif
-#ifndef _NDTXT_HXX //autogen wg. SwTxtNode
-#include <ndtxt.hxx>
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
 #endif
+
 #ifndef _PAM_HXX //autogen wg. SwPaM
 #include <pam.hxx>
 #endif
@@ -94,68 +95,20 @@
 #include <docsh.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
-#include <com/sun/star/text/XTextDocument.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
-#include <com/sun/star/text/XText.hpp>
-#endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
-
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
 #endif
-
 #ifndef _XMLOFF_XMLCNITM_HXX
 #include <xmloff/xmlcnitm.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLASTPL_HXX
-#include <xmloff/xmlastpl.hxx>
-#endif
-
-#ifndef _XMLOFF_TXTFLDE_HXX
-#include <xmloff/txtflde.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNUMFE_HXX
-#include <xmloff/xmlnumfe.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-
-#ifndef _XMLOFF_TXTPARAE_HXX
-#include <xmloff/txtparae.hxx>
-#endif
-#ifndef _XMLOFF_XMLASTPLP_HXX
-#include <xmloff/xmlaustp.hxx>
-#endif
-#ifndef _XMLOFF_TXTPRMAP_HXX
-#include <xmloff/txtprmap.hxx>
-#endif
-#ifndef _XMLOFF_FAMILIES_HXX_
-#include <xmloff/families.hxx>
-#endif
-//#ifndef _XMLOFF_XMLTEXTMASTERPAGEEXPORT
-//#include <xmloff/XMLTextMasterPageExport.hxx>
-//#endif
-
-#ifndef _XMLNUME_HXX
-#include <xmlnume.hxx>
-#endif
-#ifndef _XMLFMTE_HXX
-#include <xmlfmte.hxx>
-#endif
 #ifndef _XMLTEXTE_HXX
 #include <xmltexte.hxx>
 #endif
@@ -217,28 +170,13 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
 #ifdef XML_CORE_API
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
-    pParaItemMapper( 0 ),
 #endif
     pTableItemMapper( 0 ),
-#ifdef XML_CORE_API
-    pItemSetAutoStylePool( new SwXMLAutoStylePool ),
-    pListElements( 0 ),
-    pExportedLists( 0 ),
-#endif
     pTableLines( 0 ),
     bExportWholeDoc( bExpWholeDoc ),
     bExportFirstTableOnly( bExpFirstTableOnly ),
     bShowProgress( bShowProg )
-#ifdef XML_CORE_API
-    , pTextFieldExport( 0 ),
-    pNumberFormatExport( 0 )
-#endif
 {
-//  _GetNamespaceMap().AddAtIndex( XML_NAMESPACE_TEXT, sXML_np_text,
-//                                 sXML_n_text, XML_NAMESPACE_TEXT );
-//  _GetNamespaceMap().AddAtIndex( XML_NAMESPACE_TABLE, sXML_np_table,
-//                                 sXML_n_table, XML_NAMESPACE_TABLE );
-
     const SfxPoolItem* pItem;
     const SfxItemPool& rPool = pDoc->GetAttrPool();
     sal_uInt16 nItems = rPool.GetItemCount( RES_UNKNOWNATR_CONTAINER );
@@ -285,38 +223,22 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
         ::StartProgress( STR_STATSTR_W4WWRITE, 0, pDoc->GetNodes().Count(),
                          pDoc->GetDocShell() );
 
-#ifdef XML_CORE_API
-    Reference< util::XNumberFormatsSupplier > xNumFmtSupp(
-        pDoc->GetDocShell()->GetBaseModel(), UNO_QUERY);
-    pNumberFormatExport = new SvXMLNumFmtExport( rHandler, xNumFmtSupp );
-
-    pTextFieldExport = new XMLTextFieldExport( *this );
-#endif
-//  xMasterPageExport = new XMLTextMasterPageExport( *this );
-
     SfxObjectShell* pObjSh = pDoc->GetDocShell();
     if( pObjSh )
         pObjSh->UpdateDocInfoForSave();     // update information
 }
 
-#ifndef XML_CORE_API
 XMLTextParagraphExport* SwXMLExport::CreateTextParagraphExport()
 {
     return new SwXMLTextParagraphExport( *this, *GetAutoStylePool().get() );
 }
-#endif
+XMLShapeExport* SwXMLExport::CreateShapeExport()
+{
+    return new XMLShapeExport( *this, XMLTextParagraphExport::CreateShapeExtPropMapper( *this ) );
+}
 
 __EXPORT SwXMLExport::~SwXMLExport()
 {
-#ifdef XML_CORE_API
-    delete pItemSetAutoStylePool;
-#endif
-
-#ifdef XML_CORE_API
-    delete pTextFieldExport;
-    delete pNumberFormatExport;
-#endif
-
     if( bShowProgress )
         ::EndProgress( pDoc->GetDocShell() );
 
@@ -329,9 +251,6 @@ __EXPORT SwXMLExport::~SwXMLExport()
     }
 #endif
     _FinitItemExport();
-#ifdef XML_CORE_API
-    _FinitNumRuleExport();
-#endif
     ASSERT( !pTableLines, "there are table columns infos left" );
 }
 
@@ -430,131 +349,3 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
     ExportListChange( aPrevNumInfo, aNextNumInfo );
 }
 #endif
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlexp.cxx,v 1.3 2000-10-20 11:19:43 mib Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2000/10/12 17:30:28  mib
-      export of master pages
-
-      Revision 1.1.1.1  2000/09/18 17:15:00  hr
-      initial import
-
-      Revision 1.35  2000/09/18 16:05:05  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.34  2000/09/18 11:58:02  mib
-      text frames/graphics import and export continued
-
-      Revision 1.33  2000/08/15 11:55:56  kz
-      #65293# del. 2. Parameter
-
-      Revision 1.32  2000/08/10 10:22:15  mib
-      #74404#: Adeptions to new XSL/XLink working draft
-
-      Revision 1.31  2000/08/02 14:52:39  mib
-      text export continued
-
-      Revision 1.30  2000/07/31 09:42:35  mib
-      text export continued
-
-      Revision 1.29  2000/07/27 08:06:33  mib
-      text import continued
-
-      Revision 1.28  2000/07/26 05:11:20  mib
-      text import/export continued
-
-      Revision 1.27  2000/07/24 12:01:21  dvo
-      - field declarations now exported at content beginning
-
-      Revision 1.26  2000/07/24 10:19:02  dvo
-      - textfield export for XML_CORE_API
-
-      Revision 1.25  2000/07/21 12:55:15  mib
-      text import/export using StarOffice API
-
-      Revision 1.24  2000/06/08 09:45:54  aw
-      changed to use functionality from xmloff project now
-
-      Revision 1.23  2000/05/03 12:08:05  mib
-      unicode
-
-      Revision 1.22  2000/03/13 14:33:44  mib
-      UNO3
-
-      Revision 1.21  2000/02/11 14:40:57  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.20  2000/02/07 10:03:28  mib
-      #70271#: tables
-
-      Revision 1.19  2000/01/20 10:03:15  mib
-      #70271#: Lists reworked
-
-      Revision 1.18  2000/01/12 15:00:22  mib
-      #70271#: lists
-
-      Revision 1.17  2000/01/06 15:08:27  mib
-      #70271#:separation of text/layout, cond. styles, adaptions to wd-xlink-19991229
-
-      Revision 1.16  1999/12/06 14:49:49  mib
-      #70271#: office:version attribute
-
-      Revision 1.15  1999/12/06 11:41:33  mib
-      #70258#: Container item for unkown attributes
-
-      Revision 1.14  1999/11/26 11:08:59  mib
-      progress, export-flags
-
-      Revision 1.13  1999/11/22 15:52:34  os
-      headers added
-
-      Revision 1.12  1999/11/17 20:07:53  nn
-      document language
-
-      Revision 1.11  1999/11/12 14:50:28  mib
-      meta import and export reactivated
-
-      Revision 1.10  1999/11/10 15:08:09  mib
-      Import now uses XMLItemMapper
-
-      Revision 1.9  1999/11/09 15:40:29  mib
-      Using XMLItemMapper for export
-
-      Revision 1.8  1999/11/05 19:43:18  nn
-      _ExportMeta
-
-      Revision 1.7  1999/10/26 13:34:30  mib
-      removed 'using namespace' from header files
-
-      Revision 1.6  1999/10/08 11:47:09  mib
-      moved some file to SVTOOLS/SVX
-
-      Revision 1.5  1999/09/22 11:56:47  mib
-      string -> wstring
-
-      Revision 1.4  1999/08/17 14:28:22  MIB
-      namespace map methods renamed consistently
-
-
-      Rev 1.3   17 Aug 1999 16:28:22   MIB
-   namespace map methods renamed consistently
-
-      Rev 1.2   13 Aug 1999 16:21:14   MIB
-   new base class XMLExport, styles and sections
-
-      Rev 1.1   12 Aug 1999 18:05:20   MIB
-   Export ofSvxFontItem, SvxFontHeightItem and SvxLRSpaceItem
-
-      Rev 1.0   12 Aug 1999 12:28:54   MIB
-   Initial revision.
-
-*************************************************************************/
-

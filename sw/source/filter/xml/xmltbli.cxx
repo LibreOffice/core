@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-26 09:38:52 $
+ *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,12 +135,6 @@
 #include "unocrsr.hxx"
 #endif
 
-#ifndef _XMLTEXTI_HXX
-#include "xmltexti.hxx"
-#endif
-#ifndef _XMLNUM_HXX
-#include "xmlnum.hxx"
-#endif
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
 #endif
@@ -2064,6 +2058,8 @@ public:
             const Reference < XModel>& rModel,
             sal_Bool bInsertM, sal_Bool bStylesOnlyM );
     ~SwXMLTextImportHelper();
+
+    virtual sal_Bool IsInHeaderFooter() const;
 };
 
 SwXMLTextImportHelper::SwXMLTextImportHelper(
@@ -2084,6 +2080,20 @@ SvXMLImportContext *SwXMLTextImportHelper::CreateTableChildContext(
 {
     return new SwXMLTableContext(
                 (SwXMLImport&)rImport, nPrefix, rLocalName, xAttrList );
+}
+
+sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
+{
+    Reference<XUnoTunnel> xCrsrTunnel(
+            ((SwXMLTextImportHelper *)this)->GetCursor(), UNO_QUERY );
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    SwXTextCursor *pTxtCrsr =
+                (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    SwDoc *pDoc = pTxtCrsr->GetDoc();
+
+    return pDoc->IsInHeaderFooter( pTxtCrsr->GetPaM()->GetPoint()->nNode );
 }
 
 XMLTextImportHelper* SwXMLImport::CreateTextImport()
