@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,20 +443,20 @@ String RID_STR_COMPILEERROR
     Text [ portuguese_brazilian ] = "Erro-Compilação: " ;
     Text [ portuguese ] = "Erro de compilação:  " ;
     Text [ finnish ] = "Käännösaikanen virhe: " ;
-    Text [ danish ] = "Kompileringsfejl:" ;
+    Text [ danish ] = "Kompileringsfejl: " ;
     Text [ french ] = "Erreur de compilation : " ;
     Text [ swedish ] = "Kompileringsfel:  " ;
-    Text [ dutch ] = "Vertaalfout: " ;
-    Text [ spanish ] = "Error de compilación: " ;
+    Text [ dutch ] = "Vertaalfout:  " ;
+    Text [ spanish ] = "Error de compilación:  " ;
     Text [ english_us ] = "Compile Error: " ;
-    Text[ chinese_simplified ] = "±àÒë´íÎó£º";
-    Text[ russian ] = "Îøèáêà êîìïèëÿöèè:  ";
-    Text[ polish ] = "B³¹d kompilacji:  ";
+    Text[ chinese_simplified ] = "±àÒë´íÎó£º ";
+    Text[ russian ] = "Îøèáêà êîìïèëÿöèè: ";
+    Text[ polish ] = "B³¹d kompilacji: ";
     Text[ japanese ] = "ºİÊß²Ù´×°: ";
-    Text[ chinese_traditional ] = "½sÄ¶¿ù»~:";
+    Text[ chinese_traditional ] = "½sÄ¶¿ù»~: ";
     Text[ arabic ] = ":ÎØÃ İí ÇáÊÑÌãÉ";
-    Text[ dutch ] = "Vertaalfout: ";
-    Text[ chinese_simplified ] = "±àÒë´íÎó£º";
+    Text[ dutch ] = "Vertaalfout:  ";
+    Text[ chinese_simplified ] = "±àÒë´íÎó£º ";
     Text[ greek ] = "ÓöÜëìá ìåôáãëşôôéóçò: ";
     Text[ korean ] = "¹ø¿ª ¿À·ù: ";
     Text[ turkish ] = "Derleme hatası ";
@@ -724,23 +724,23 @@ String RID_STR_FILENAME
 {
     Text = "Dateiname: " ;
     Text [ ENGLISH ] = "File name: " ;
-    Text [ dutch ] = "Bestandsnaam: " ;
+    Text [ dutch ] = "Bestandsnaam:  " ;
     Text [ english_us ] = "File name:" ;
     Text [ italian ] = "Nome file: " ;
-    Text [ spanish ] = "Nom. del archivo: " ;
+    Text [ spanish ] = "Nombre del archivo:  " ;
     Text [ french ] = "Nom de fichier : " ;
     Text [ swedish ] = "Filnamn:   " ;
-    Text [ danish ] = "Filnavn:" ;
+    Text [ danish ] = "Filnavn: " ;
     Text [ portuguese_brazilian ] = "Dateiname: " ;
     Text [ portuguese ] = "Nome do ficheiro:  " ;
-    Text[ chinese_simplified ] = "ÎÄ¼şÃû£º";
-    Text[ russian ] = "Èìÿ ôàéëà:  ";
-    Text[ polish ] = "Nazwa pliku:  ";
-    Text[ japanese ] = "Ì§²Ù–¼:";
-    Text[ chinese_traditional ] = "ÀÉ®×¦W:";
+    Text[ chinese_simplified ] = "ÎÄ¼şÃû£º ";
+    Text[ russian ] = "Èìÿ ôàéëà: ";
+    Text[ polish ] = "Nazwa pliku: ";
+    Text[ japanese ] = "Ì§²Ù–¼: ";
+    Text[ chinese_traditional ] = "ÀÉ®×¦W: ";
     Text[ arabic ] = ":ÇÓã Çáãáİ";
-    Text[ dutch ] = "Bestandsnaam: ";
-    Text[ chinese_simplified ] = "ÎÄ¼şÃû£º";
+    Text[ dutch ] = "Bestandsnaam:  ";
+    Text[ chinese_simplified ] = "ÎÄ¼şÃû£º ";
     Text[ greek ] = "¼íïìá áñ÷åßïõ: ";
     Text[ korean ] = "ÆÄÀÏ¸í: ";
     Text[ turkish ] = "Dosya adı: ";
@@ -1563,20 +1563,20 @@ String RID_STR_REMOVEWATCH
     Text [ portuguese_brazilian ] = "Vis o: " ;
     Text [ portuguese ] = "Observador:  " ;
     Text [ finnish ] = "Vahti: " ;
-    Text [ danish ] = "Observatør:" ;
+    Text [ danish ] = "Observatør: " ;
     Text [ french ] = "Témoin : " ;
     Text [ swedish ] = "Bevakning: " ;
-    Text [ dutch ] = "Waarnemer: " ;
-    Text [ spanish ] = "Observador:" ;
+    Text [ dutch ] = "Waarnemer:  " ;
+    Text [ spanish ] = "Observador: " ;
     Text [ english_us ] = "Watch:" ;
-    Text[ chinese_simplified ] = "²é¿´£º";
-    Text[ russian ] = "Êîíòğîëüíîå çíà÷åíèå:  ";
-    Text[ polish ] = "Czujka:  ";
-    Text[ japanese ] = "µÌŞ»Ş°ÊŞ:";
-    Text[ chinese_traditional ] = "ÀËµø:";
+    Text[ chinese_simplified ] = "²é¿´£º ";
+    Text[ russian ] = "Êîíòğîëüíîå çíà÷åíèå: ";
+    Text[ polish ] = "Czujka: ";
+    Text[ japanese ] = "µÌŞ»Ş°ÊŞ: ";
+    Text[ chinese_traditional ] = "ÀËµø: ";
     Text[ arabic ] = "ãÑÇŞÈÉ: ";
-    Text[ dutch ] = "Waarnemer: ";
-    Text[ chinese_simplified ] = "²é¿´£º";
+    Text[ dutch ] = "Waarnemer:  ";
+    Text[ chinese_simplified ] = "²é¿´£º ";
     Text[ greek ] = "ĞáñáôçñçôŞò: ";
     Text[ korean ] = "Á¶»ç½Ä: ";
     Text[ turkish ] = "İzleyici: ";
@@ -1585,23 +1585,23 @@ String RID_STR_STACK
 {
     Text = "Aufrufe: " ;
     Text [ ENGLISH ] = "Calls: " ;
-    Text [ english_us ] = "Calls:" ;
+    Text [ english_us ] = "Calls: " ;
     Text [ italian ] = "Chiamate: " ;
-    Text [ spanish ] = "Llamadas:" ;
+    Text [ spanish ] = "Llamadas: " ;
     Text [ french ] = "Appels : " ;
-    Text [ dutch ] = "Oproepen: " ;
+    Text [ dutch ] = "Oproepen:  " ;
     Text [ swedish ] = "Anrop: " ;
-    Text [ danish ] = "Opkald:" ;
+    Text [ danish ] = "Opkald: " ;
     Text [ portuguese_brazilian ] = "Aufrufe: " ;
     Text [ portuguese ] = "Chamadas:  " ;
-    Text[ chinese_simplified ] = "ºô½Ğ£º";
-    Text[ russian ] = "Âûçîâû:  ";
-    Text[ polish ] = "Wywo³ania:  ";
-    Text[ japanese ] = "ŒÄ‚Ño‚µ:";
-    Text[ chinese_traditional ] = "©I¥s:";
+    Text[ chinese_simplified ] = "ºô½Ğ£º ";
+    Text[ russian ] = "Âûçîâû: ";
+    Text[ polish ] = "Wywo³ania: ";
+    Text[ japanese ] = "ŒÄ‚Ño‚µ: ";
+    Text[ chinese_traditional ] = "©I¥s: ";
     Text[ arabic ] = ":ÇÓÊÏÚÇÁÇÊ";
-    Text[ dutch ] = "Oproepen: ";
-    Text[ chinese_simplified ] = "ºô½Ğ£º";
+    Text[ dutch ] = "Oproepen:  ";
+    Text[ chinese_simplified ] = "ºô½Ğ£º ";
     Text[ greek ] = "ÊëŞóåéò: ";
     Text[ korean ] = "È£Ãâ: ";
     Text[ turkish ] = "Çağrılar: ";
