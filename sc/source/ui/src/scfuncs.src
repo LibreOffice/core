@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-04 18:49:40 $
+ *  last change: $Author: obo $ $Date: 2001-12-08 22:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -25275,7 +25275,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Anfang" ;
             Text [ english ] = "lower_limit" ;
             Text [ norwegian ] = "Anfang" ;
-            Text [ italian ] = "limite_inf" ;
+            Text [ italian ] = "Limite inferiore" ;
             Text [ portuguese_brazilian ] = "Anfang" ;
             Text [ portuguese ] = "Limite_inferior" ;
             Text [ finnish ] = "Aloita" ;
@@ -41562,6 +41562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
