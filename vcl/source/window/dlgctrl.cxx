@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 
 #include <unohelp.hxx>
 
-#ifndef _COM_SUN_STAR_LANG_XCHARACTERCLASSIFICATION_HPP_
-#include <com/sun/star/lang/XCharacterClassification.hpp>
+#ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -328,7 +328,7 @@ static Window* ImplFindAccelWindow( Window* pParent, USHORT& rIndex, xub_Unicode
     Window* pWindow;
 
     // MT: Where can we keep the CharClass?!
-    static uno::Reference< lang::XCharacterClassification > xCharClass;
+    static uno::Reference< i18n::XCharacterClassification > xCharClass;
     if ( !xCharClass.is() )
         xCharClass = vcl::unohelper::CreateCharacterClassification();
 

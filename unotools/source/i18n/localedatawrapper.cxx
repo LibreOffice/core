@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-10-13 19:52:04 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,16 +84,16 @@
 
 
 #define LOCALEDATA_LIBRARYNAME "int"
-#define LOCALEDATA_SERVICENAME "com.sun.star.lang.LocaleData"
+#define LOCALEDATA_SERVICENAME "com.sun.star.i18n.LocaleData"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
 
 LocaleDataWrapper::LocaleDataWrapper(
-            const Reference< XMultiServiceFactory > & xSF,
-            const Locale& rLocale
+            const Reference< lang::XMultiServiceFactory > & xSF,
+            const lang::Locale& rLocale
             )
         :
         xSMgr( xSF ),
@@ -169,7 +169,7 @@ void LocaleDataWrapper::invalidateData()
 }
 
 
-::com::sun::star::lang::LCInfo LocaleDataWrapper::getLCInfo() const
+::com::sun::star::i18n::LCInfo LocaleDataWrapper::getLCInfo() const
 {
     try
     {
@@ -180,11 +180,11 @@ void LocaleDataWrapper::invalidateData()
     {
         DBG_ERRORFILE( "getLCInfo: Exception caught!" );
     }
-    return ::com::sun::star::lang::LCInfo();
+    return ::com::sun::star::i18n::LCInfo();
 }
 
 
-::com::sun::star::lang::LocaleDataItem LocaleDataWrapper::getLocaleItem() const
+::com::sun::star::i18n::LocaleDataItem LocaleDataWrapper::getLocaleItem() const
 {
     try
     {
@@ -195,11 +195,11 @@ void LocaleDataWrapper::invalidateData()
     {
         DBG_ERRORFILE( "getLocaleItem: Exception caught!" );
     }
-    return ::com::sun::star::lang::LocaleDataItem();
+    return ::com::sun::star::i18n::LocaleDataItem();
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::lang::Calendar > LocaleDataWrapper::getAllCalendars() const
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar > LocaleDataWrapper::getAllCalendars() const
 {
     try
     {
@@ -210,11 +210,11 @@ void LocaleDataWrapper::invalidateData()
     {
         DBG_ERRORFILE( "getAllCalendars: Exception caught!" );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Calendar >(0);
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Calendar >(0);
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::lang::Currency > LocaleDataWrapper::getAllCurrencies() const
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency > LocaleDataWrapper::getAllCurrencies() const
 {
     try
     {
@@ -225,11 +225,11 @@ void LocaleDataWrapper::invalidateData()
     {
         DBG_ERRORFILE( "getAllCurrencies: Exception caught!" );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Currency >(0);
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency >(0);
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::lang::FormatElement > LocaleDataWrapper::getAllFormats() const
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > LocaleDataWrapper::getAllFormats() const
 {
     try
     {
@@ -240,11 +240,11 @@ void LocaleDataWrapper::invalidateData()
     {
         DBG_ERRORFILE( "getAllFormats: Exception caught!" );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::lang::FormatElement >(0);
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement >(0);
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::lang::Implementation > LocaleDataWrapper::getCollatorImplementations() const
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Implementation > LocaleDataWrapper::getCollatorImplementations() const
 {
     try
     {
@@ -255,7 +255,7 @@ void LocaleDataWrapper::invalidateData()
     {
         DBG_ERRORFILE( "getCollatorImplementations: Exception caught!" );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Implementation >(0);
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Implementation >(0);
 }
 
 
@@ -274,7 +274,7 @@ void LocaleDataWrapper::invalidateData()
 }
 
 
-::com::sun::star::lang::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
+::com::sun::star::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
 {
     try
     {
@@ -285,7 +285,7 @@ void LocaleDataWrapper::invalidateData()
     {
         DBG_ERRORFILE( "getForbiddenCharacters: Exception caught!" );
     }
-    return ::com::sun::star::lang::ForbiddenCharacters();
+    return ::com::sun::star::i18n::ForbiddenCharacters();
 }
 
 

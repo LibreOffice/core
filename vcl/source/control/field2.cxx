@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:36 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,12 +95,12 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 
-#ifndef _COM_SUN_STAR_LANG_XCHARACTERCLASSIFICATION_HPP_
-#include <com/sun/star/lang/XCharacterClassification.hpp>
+#ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_KCHARACTERTYPE_HPP_
-#include <com/sun/star/lang/KCharacterType.hpp>
+#ifndef _COM_SUN_STAR_I18N_KCHARACTERTYPE_HPP_
+#include <com/sun/star/i18n/KCharacterType.hpp>
 #endif
 
 #pragma hdrstop
@@ -122,18 +122,18 @@ using namespace ::com::sun::star;
 
 
 const sal_Int32 nCharClassAlphaType =
-    ::com::sun::star::lang::KCharacterType::UPPER |
-    ::com::sun::star::lang::KCharacterType::LOWER |
-    ::com::sun::star::lang::KCharacterType::TITLE_CASE;
+    ::com::sun::star::i18n::KCharacterType::UPPER |
+    ::com::sun::star::i18n::KCharacterType::LOWER |
+    ::com::sun::star::i18n::KCharacterType::TITLE_CASE;
 
 const sal_Int32 nCharClassAlphaTypeMask =
     nCharClassAlphaType |
-    ::com::sun::star::lang::KCharacterType::PRINTABLE |
-    ::com::sun::star::lang::KCharacterType::BASE_FORM;
+    ::com::sun::star::i18n::KCharacterType::PRINTABLE |
+    ::com::sun::star::i18n::KCharacterType::BASE_FORM;
 
 inline sal_Bool isAlphaType( sal_Int32 nType )
 {
-    return ((nType & nCharClassAlphaType) != 0) && (nType & ~(nCharClassAlphaTypeMask) == 0);
+    return ((nType & nCharClassAlphaType) != 0) && ((nType & ~(nCharClassAlphaTypeMask)) == 0);
 }
 
 lang::Locale CreateLocale( const International& rInt )
@@ -147,9 +147,9 @@ lang::Locale CreateLocale( const International& rInt )
     return aLocale;
 }
 
-uno::Reference< lang::XCharacterClassification > ImplGetCharClass()
+uno::Reference< i18n::XCharacterClassification > ImplGetCharClass()
 {
-    static uno::Reference< lang::XCharacterClassification > xCharClass;
+    static uno::Reference< i18n::XCharacterClassification > xCharClass;
     if ( !xCharClass.is() )
         xCharClass = vcl::unohelper::CreateCharacterClassification();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-11 16:01:47 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,8 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XCHARACTERCLASSIFICATION_HPP_
-#include <com/sun/star/lang/XCharacterClassification.hpp>
+#ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 
 #include <unohelp.hxx>
@@ -192,7 +192,7 @@ struct MenuItemData
 
 class MenuItemList : public List
 {
-    uno::Reference< lang::XCharacterClassification > xCharClass;
+    uno::Reference< i18n::XCharacterClassification > xCharClass;
 public:
                     MenuItemList() : List( 16, 4 ) {}
                     ~MenuItemList();
@@ -211,7 +211,7 @@ public:
                         { return (MenuItemData*)List::GetObject( nPos ); }
 
     MenuItemData*   SearchItem( xub_Unicode cSelectChar, USHORT& rPos ) const;
-    uno::Reference< lang::XCharacterClassification > GetCharClass() const;
+    uno::Reference< i18n::XCharacterClassification > GetCharClass() const;
 };
 
 
@@ -305,7 +305,7 @@ MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, USHORT& rPos ) 
     return 0;
 }
 
-uno::Reference< lang::XCharacterClassification > MenuItemList::GetCharClass() const
+uno::Reference< i18n::XCharacterClassification > MenuItemList::GetCharClass() const
 {
     if ( !xCharClass.is() )
         ((MenuItemList*)this)->xCharClass = vcl::unohelper::CreateCharacterClassification();

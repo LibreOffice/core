@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2000-10-27 11:30:27 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #include <com/sun/star/text/XBreakIterator.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XCHARACTERCLASSIFICATION_HPP_
-#include <com/sun/star/lang/XCharacterClassification.hpp>
+#ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
@@ -97,6 +97,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::rtl;
@@ -246,29 +247,29 @@ uno::Reference < text::XBreakIterator > vcl::unohelper::CreateBreakIterator()
     return xB;
 }
 
-uno::Reference < lang::XCharacterClassification > vcl::unohelper::CreateCharacterClassification()
+uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacterClassification()
 {
-    uno::Reference < lang::XCharacterClassification > xB;
+    uno::Reference < i18n::XCharacterClassification > xB;
     uno::Reference< lang::XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
     if ( xMSF.is() )
     {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.lang.CharacterClassification" ) );
+        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.CharacterClassification" ) );
         if ( xI.is() )
         {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< lang::XCharacterClassification >*)0) );
+            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCharacterClassification >*)0) );
             x >>= xB;
         }
     }
     if( !xB.is() )
     {
         uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.lang.CharacterClassification" ) ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.CharacterClassification" ) ),
             Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
 
         uno::Reference < uno::XInterface > xI = xSSF->createInstance();
         if ( xI.is() )
         {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< lang::XCharacterClassification >*)0) );
+            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCharacterClassification >*)0) );
             x >>= xB;
         }
     }

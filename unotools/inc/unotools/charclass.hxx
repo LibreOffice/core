@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-20 07:58:03 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,20 +71,20 @@
 #include <tools/solar.h>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_KCHARACTERTYPE_HPP_
-#include <com/sun/star/lang/KCharacterType.hpp>
+#ifndef _COM_SUN_STAR_I18N_KCHARACTERTYPE_HPP_
+#include <com/sun/star/i18n/KCharacterType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_KPARSETOKENS_HPP_
-#include <com/sun/star/lang/KParseTokens.hpp>
+#ifndef _COM_SUN_STAR_I18N_KPARSETOKENS_HPP_
+#include <com/sun/star/i18n/KParseTokens.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_KPARSETYPE_HPP_
-#include <com/sun/star/lang/KParseType.hpp>
+#ifndef _COM_SUN_STAR_I18N_KPARSETYPE_HPP_
+#include <com/sun/star/i18n/KParseType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_PARSERESULT_HPP_
-#include <com/sun/star/lang/ParseResult.hpp>
+#ifndef _COM_SUN_STAR_I18N_PARSERESULT_HPP_
+#include <com/sun/star/i18n/ParseResult.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XCHARACTERCLASSIFICATION_HPP_
-#include <com/sun/star/lang/XCharacterClassification.hpp>
+#ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 
 class String;
@@ -95,27 +95,27 @@ namespace com { namespace sun { namespace star {
 }}}
 
 const sal_Int32 nCharClassAlphaType =
-    ::com::sun::star::lang::KCharacterType::UPPER |
-    ::com::sun::star::lang::KCharacterType::LOWER |
-    ::com::sun::star::lang::KCharacterType::TITLE_CASE;
+    ::com::sun::star::i18n::KCharacterType::UPPER |
+    ::com::sun::star::i18n::KCharacterType::LOWER |
+    ::com::sun::star::i18n::KCharacterType::TITLE_CASE;
 
 const sal_Int32 nCharClassAlphaTypeMask =
     nCharClassAlphaType |
-    ::com::sun::star::lang::KCharacterType::PRINTABLE |
-    ::com::sun::star::lang::KCharacterType::BASE_FORM;
+    ::com::sun::star::i18n::KCharacterType::PRINTABLE |
+    ::com::sun::star::i18n::KCharacterType::BASE_FORM;
 
 const sal_Int32 nCharClassLetterType =
     nCharClassAlphaType |
-    ::com::sun::star::lang::KCharacterType::LETTER;
+    ::com::sun::star::i18n::KCharacterType::LETTER;
 
 const sal_Int32 nCharClassLetterTypeMask =
     nCharClassAlphaTypeMask |
-    ::com::sun::star::lang::KCharacterType::LETTER;
+    ::com::sun::star::i18n::KCharacterType::LETTER;
 
 class CharClass
 {
     ::com::sun::star::lang::Locale  aLocale;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XCharacterClassification >    xCC;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >    xCC;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
 
                                 // not implemented, prevent usage
@@ -179,18 +179,18 @@ public:
     static  inline  sal_Bool    isNumericType( sal_Int32 nType )
         {
             return ((nType &
-                ::com::sun::star::lang::KCharacterType::DIGIT) != 0) &&
-                ((nType & ~(::com::sun::star::lang::KCharacterType::DIGIT |
-                ::com::sun::star::lang::KCharacterType::PRINTABLE)) == 0);
+                ::com::sun::star::i18n::KCharacterType::DIGIT) != 0) &&
+                ((nType & ~(::com::sun::star::i18n::KCharacterType::DIGIT |
+                ::com::sun::star::i18n::KCharacterType::PRINTABLE)) == 0);
         }
 
     /// whether type is pure alphanumeric or not, e.g. return of getStringType
     static  inline  sal_Bool    isAlphaNumericType( sal_Int32 nType )
         {
             return ((nType & (nCharClassAlphaType |
-                ::com::sun::star::lang::KCharacterType::DIGIT)) != 0) &&
+                ::com::sun::star::i18n::KCharacterType::DIGIT)) != 0) &&
                 ((nType & ~(nCharClassAlphaTypeMask |
-                ::com::sun::star::lang::KCharacterType::DIGIT)) == 0);
+                ::com::sun::star::i18n::KCharacterType::DIGIT)) == 0);
         }
 
     /// whether type is pure letter or not, e.g. return of getStringType
@@ -204,9 +204,9 @@ public:
     static  inline  sal_Bool    isLetterNumericType( sal_Int32 nType )
         {
             return ((nType & (nCharClassLetterType |
-                ::com::sun::star::lang::KCharacterType::DIGIT)) != 0) &&
+                ::com::sun::star::i18n::KCharacterType::DIGIT)) != 0) &&
                 ((nType & ~(nCharClassLetterTypeMask |
-                ::com::sun::star::lang::KCharacterType::DIGIT)) == 0);
+                ::com::sun::star::i18n::KCharacterType::DIGIT)) == 0);
         }
 
 
@@ -222,7 +222,7 @@ public:
             sal_Int32           getCharacterType( const String& rStr, xub_StrLen nPos ) const;
             sal_Int32           getStringType( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const;
 
-    ::com::sun::star::lang::ParseResult parseAnyToken(
+    ::com::sun::star::i18n::ParseResult parseAnyToken(
                                     const String& rStr,
                                     sal_Int32 nPos,
                                     sal_Int32 nStartCharFlags,
@@ -230,7 +230,7 @@ public:
                                     sal_Int32 nContCharFlags,
                                     const String& userDefinedCharactersCont ) const;
 
-    ::com::sun::star::lang::ParseResult parsePredefinedToken(
+    ::com::sun::star::i18n::ParseResult parsePredefinedToken(
                                     sal_Int32 nTokenType,
                                     const String& rStr,
                                     sal_Int32 nPos,

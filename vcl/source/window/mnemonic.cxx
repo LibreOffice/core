@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 
 #include <unohelp.hxx>
 
-#ifndef _COM_SUN_STAR_LANG_XCHARACTERCLASSIFICATION_HPP_
-#include <com/sun/star/lang/XCharacterClassification.hpp>
+#ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -128,7 +128,7 @@ sal_Unicode ImplMnemonicGenerator::ImplFindMnemonic( const XubString& rKey )
 void ImplMnemonicGenerator::RegisterMnemonic( const XubString& rKey )
 {
     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
-    uno::Reference < lang::XCharacterClassification > xCharClass = GetCharClass();
+    uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     XubString aKey = xCharClass->toUpper( rKey, 0, rKey.Len(), rLocale );
 
@@ -170,7 +170,7 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
         return FALSE;
 
     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
-    uno::Reference < lang::XCharacterClassification > xCharClass = GetCharClass();
+    uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     XubString aKey = xCharClass->toUpper( rKey, 0, rKey.Len(), rLocale );
 
@@ -250,7 +250,7 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
     return bChanged;
 }
 
-uno::Reference< lang::XCharacterClassification > ImplMnemonicGenerator::GetCharClass()
+uno::Reference< i18n::XCharacterClassification > ImplMnemonicGenerator::GetCharClass()
 {
     if ( !xCharClass.is() )
         xCharClass = vcl::unohelper::CreateCharacterClassification();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:54 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,16 +84,16 @@
 
 
 #define CHARCLASS_LIBRARYNAME "int"
-#define CHARCLASS_SERVICENAME "com.sun.star.lang.CharacterClassification"
+#define CHARCLASS_SERVICENAME "com.sun.star.i18n.CharacterClassification"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
 
 CharClass::CharClass(
-            const Reference< XMultiServiceFactory > & xSF,
-            const Locale& rLocale
+            const Reference< lang::XMultiServiceFactory > & xSF,
+            const lang::Locale& rLocale
             )
         :
         xSMgr( xSF )
@@ -521,7 +521,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
 }
 
 
-::com::sun::star::lang::ParseResult CharClass::parseAnyToken(
+::com::sun::star::i18n::ParseResult CharClass::parseAnyToken(
             const String& rStr,
             sal_Int32 nPos,
             sal_Int32 nStartCharFlags,
@@ -546,7 +546,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
 }
 
 
-::com::sun::star::lang::ParseResult CharClass::parsePredefinedToken(
+::com::sun::star::i18n::ParseResult CharClass::parsePredefinedToken(
             sal_Int32 nTokenType,
             const String& rStr,
             sal_Int32 nPos,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-23 15:17:16 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,8 @@
 #include <dbggui.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XCHARACTERCLASSIFICATION_HPP_
-#include <com/sun/star/lang/XCharacterClassification.hpp>
+#ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
+#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 
 #include <unohelp.hxx>
@@ -1445,7 +1445,7 @@ void DbgDialogTest( Window* pWindow )
                 if ( nAccelPos != STRING_NOTFOUND )
                 {
                     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
-                    uno::Reference < lang::XCharacterClassification > xCharClass = vcl::unohelper::CreateCharacterClassification();
+                    uno::Reference < i18n::XCharacterClassification > xCharClass = vcl::unohelper::CreateCharacterClassification();
                     XubString aUpperText = xCharClass->toUpper( aText, 0, aText.Len(), rLocale );
                     cAccel = aUpperText.GetChar( nAccelPos+1 );
                     if ( pChild->IsVisible() )

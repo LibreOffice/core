@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberformatcodewrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-10-13 19:50:50 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
 #define _UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
 
-#ifndef _COM_SUN_STAR_LANG_XNUMBERFORMATCODE_HPP_
-#include <com/sun/star/lang/XNumberFormatCode.hpp>
+#ifndef _COM_SUN_STAR_I18N_XNUMBERFORMATCODE_HPP_
+#include <com/sun/star/i18n/XNumberFormatCode.hpp>
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -76,7 +76,7 @@ namespace com { namespace sun { namespace star {
 class NumberFormatCodeWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XNumberFormatCode >   xNFC;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNumberFormatCode >   xNFC;
     ::com::sun::star::lang::Locale          aLocale;
 
                                 // not implemented, prevent usage
@@ -101,9 +101,9 @@ public:
 
     // Wrapper implementations of class NumberFormatCodeMapper
 
-    ::com::sun::star::lang::NumberFormatCode getDefault( sal_Int16 formatType, sal_Int16 formatUsage ) const;
-    ::com::sun::star::lang::NumberFormatCode getFormatCode( sal_Int32 formatIndex ) const;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::lang::NumberFormatCode > getAllFormatCode( sal_Int16 formatUsage ) const;
+    ::com::sun::star::i18n::NumberFormatCode getDefault( sal_Int16 formatType, sal_Int16 formatUsage ) const;
+    ::com::sun::star::i18n::NumberFormatCode getFormatCode( sal_Int32 formatIndex ) const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > getAllFormatCode( sal_Int16 formatUsage ) const;
 
 };
 

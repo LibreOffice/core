@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberformatcodewrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-20 11:07:44 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,16 +81,16 @@
 
 
 #define LOCALEDATA_LIBRARYNAME "int"
-#define LOCALEDATA_SERVICENAME "com.sun.star.lang.NumberFormatMapper"
+#define LOCALEDATA_SERVICENAME "com.sun.star.i18n.NumberFormatMapper"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
 
 NumberFormatCodeWrapper::NumberFormatCodeWrapper(
-            const Reference< XMultiServiceFactory > & xSF,
-            const Locale& rLocale
+            const Reference< lang::XMultiServiceFactory > & xSF,
+            const lang::Locale& rLocale
             )
         :
         xSMgr( xSF )
@@ -143,7 +143,7 @@ void NumberFormatCodeWrapper::setLocale( const ::com::sun::star::lang::Locale& r
 }
 
 
-::com::sun::star::lang::NumberFormatCode
+::com::sun::star::i18n::NumberFormatCode
 NumberFormatCodeWrapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage ) const
 {
     try
@@ -155,11 +155,11 @@ NumberFormatCodeWrapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage
     {
         DBG_ERRORFILE( "getDefault: Exception caught!" );
     }
-    return ::com::sun::star::lang::NumberFormatCode();
+    return ::com::sun::star::i18n::NumberFormatCode();
 }
 
 
-::com::sun::star::lang::NumberFormatCode
+::com::sun::star::i18n::NumberFormatCode
 NumberFormatCodeWrapper::getFormatCode( sal_Int32 formatIndex ) const
 {
     try
@@ -171,11 +171,11 @@ NumberFormatCodeWrapper::getFormatCode( sal_Int32 formatIndex ) const
     {
         DBG_ERRORFILE( "getFormatCode: Exception caught!" );
     }
-    return ::com::sun::star::lang::NumberFormatCode();
+    return ::com::sun::star::i18n::NumberFormatCode();
 }
 
 
-::com::sun::star::uno::Sequence< ::com::sun::star::lang::NumberFormatCode >
+::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >
 NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
 {
     try
@@ -187,5 +187,5 @@ NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
     {
         DBG_ERRORFILE( "getAllFormatCode: Exception caught!" );
     }
-    return ::com::sun::star::uno::Sequence< ::com::sun::star::lang::NumberFormatCode > (0);
+    return ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > (0);
 }
