@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:05:08 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,6 +587,7 @@ Image RID_SVXBMP_SIZE
         Blue = 0xC000 ;
     };
 };
+
 
 
 
