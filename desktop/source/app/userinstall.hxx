@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:06:09 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,6 @@
 
 namespace desktop
 {
-
-class Desktop;
 
 class UserInstall
 {
