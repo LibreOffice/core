@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-11 04:58:01 $
+ *  last change: $Author: dv $ $Date: 2001-07-11 06:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
 #if defined( OS2 ) || defined( MAC )
 #ifndef _EXTATTR_HXX //autogen
-#include <svtools/extattr.hxx>
+#include "extattr.hxx"
 #endif
 #endif
 

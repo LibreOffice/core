@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syslocale.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-07-05 14:59:49 $
+ *  last change: $Author: dv $ $Date: 2001-07-11 06:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #include <tools/string.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
-#include <svtools/syslocaleoptions.hxx>
+#include "syslocaleoptions.hxx"
 #endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
