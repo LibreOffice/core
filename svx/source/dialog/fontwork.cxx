@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-16 11:56:15 $
+ *  last change: $Author: aw $ $Date: 2002-11-14 14:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,8 @@ void SvxFontWorkDialog::SetAdjust_Impl(const XFormTextAdjustItem* pItem)
 
 void SvxFontWorkDialog::SetDistance_Impl(const XFormTextDistanceItem* pItem)
 {
-    if ( pItem && !aMtrFldDistance.HasFocus() )
+    // #104596# Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    if ( pItem && !aMtrFldDistance.HasChildPathFocus() )
     {
         SetMetricValue( aMtrFldDistance, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
     }
@@ -548,7 +549,8 @@ void SvxFontWorkDialog::SetDistance_Impl(const XFormTextDistanceItem* pItem)
 
 void SvxFontWorkDialog::SetStart_Impl(const XFormTextStartItem* pItem)
 {
-    if ( pItem && !aMtrFldTextStart.HasFocus() )
+    // #104596# Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    if ( pItem && !aMtrFldTextStart.HasChildPathFocus() )
     {
         SetMetricValue( aMtrFldTextStart, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
     }
@@ -749,10 +751,16 @@ void SvxFontWorkDialog::SetShadowColor_Impl(const XFormTextShadowColorItem* pIte
 
 void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
 {
-    if ( pItem && !aMtrFldShadowX.HasFocus() )
+    // #104596# Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    if ( pItem && !aMtrFldShadowX.HasChildPathFocus() )
     {
         INT32 nValue = pItem->GetValue();
-        nValue = nValue - ( int( float( nValue ) / 360.0 ) * 360 );
+
+        // #104596# Only fo value correction for angle if TBI_SHADOW_SLANT is
+        // active.
+        if(aTbxShadow.IsItemChecked(TBI_SHADOW_SLANT))
+            nValue = nValue - ( int( float( nValue ) / 360.0 ) * 360 );
+
         SetMetricValue( aMtrFldShadowX, nValue/*pItem->GetValue()*/, SFX_MAPUNIT_100TH_MM );
     }
 }
@@ -765,7 +773,8 @@ void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
 
 void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
 {
-    if ( pItem && !aMtrFldShadowY.HasFocus() )
+    // #104596# Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    if ( pItem && !aMtrFldShadowY.HasChildPathFocus() )
     {
         SetMetricValue( aMtrFldShadowY, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
     }
