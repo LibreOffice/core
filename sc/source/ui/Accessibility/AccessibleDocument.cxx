@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-13 13:12:13 $
+ *  last change: $Author: sab $ $Date: 2002-06-17 11:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,16 +561,18 @@ sal_Bool ScChildrenShapes::SelectionChanged()
         throw uno::RuntimeException();
 
     uno::Reference<drawing::XShapes> xShapes(xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+    sal_uInt32 nOldSelected(mnShapesSelected);
     if (xShapes.is())
-    {
-        sal_uInt32 nOldSelected(mnShapesSelected);
         mnShapesSelected = xShapes->getCount();
-        if (nOldSelected != mnShapesSelected)
-        {
-            FindSelectedShapesChanges(xShapes, sal_True);
-            bResult = sal_True;
-        }
+    else
+        mnShapesSelected = 0;
+
+    if (nOldSelected != mnShapesSelected)
+    {
+        FindSelectedShapesChanges(xShapes, sal_True);
+        bResult = sal_True;
     }
+
     return bResult;
 }
 
@@ -749,11 +751,11 @@ utl::AccessibleRelationSetHelper* ScChildrenShapes::GetRelationSet(const ScAddre
 
 void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::XShapes>& xShapes, sal_Bool bCommitChange) const
 {
+    SortedShapesList aShapesList;
     uno::Reference<container::XIndexAccess> xIndexAcc(xShapes, uno::UNO_QUERY);
     if (xIndexAcc.is())
     {
         mnShapesSelected = xIndexAcc->getCount();
-        SortedShapesList aShapesList;
         for (sal_uInt32 i = 0; i < mnShapesSelected; ++i)
         {
             uno::Reference< drawing::XShape > xShape;
@@ -765,58 +767,60 @@ void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
                 aShapesList.insert(aShapeData);
             }
         }
-
-        SortedShapesList::iterator aSortedShapesEndItr = maSortedShapes.end();
-        SortedShapesList::iterator aXShapesItr(aShapesList.begin());
-        SortedShapesList::const_iterator aXShapesEndItr(aShapesList.end());
-        SortedShapesList::iterator aDataItr(maSortedShapes.begin());
-        SortedShapesList::const_iterator aDataEndItr(maSortedShapes.end());
-        SortedShapesList::const_iterator aFocusedItr = aDataEndItr;
-        while((aDataItr != aDataEndItr))
-        {
-            sal_Int8 nComp(0);
-            if (aXShapesItr == aXShapesEndItr)
-                nComp = -1; // simulate that the Shape is lower, so the selction state will be removed
-            else
-                nComp = Compare(aDataItr->xShape, aXShapesItr->xShape);
-            if (nComp == 0)
-            {
-                if (!aDataItr->bSelected)
-                {
-                    aDataItr->bSelected = sal_True;
-                    if (aDataItr->pAccShape)
-                    {
-                        aDataItr->pAccShape->SetState(AccessibleStateType::SELECTED);
-                        aDataItr->pAccShape->ResetState(AccessibleStateType::FOCUSED);
-                    }
-                    aFocusedItr = aDataItr;
-                }
-                ++aDataItr;
-                ++aXShapesItr;
-            }
-            else if (nComp < 0)
-            {
-                if (aDataItr->bSelected)
-                {
-                    aDataItr->bSelected = sal_False;
-                    if (aDataItr->pAccShape)
-                    {
-                        aDataItr->pAccShape->ResetState(AccessibleStateType::SELECTED);
-                        aDataItr->pAccShape->ResetState(AccessibleStateType::FOCUSED);
-                    }
-                }
-                ++aDataItr;
-            }
-            else
-            {
-                DBG_ERRORFILE("here is a selected shape which is not in the childlist");
-                ++aXShapesItr;
-                --mnShapesSelected;
-            }
-        }
-        if ((aFocusedItr != aDataEndItr) && aFocusedItr->pAccShape && (mnShapesSelected == 1))
-            aFocusedItr->pAccShape->SetState(AccessibleStateType::FOCUSED);
     }
+    else
+        mnShapesSelected = 0;
+
+    SortedShapesList::iterator aSortedShapesEndItr = maSortedShapes.end();
+    SortedShapesList::iterator aXShapesItr(aShapesList.begin());
+    SortedShapesList::const_iterator aXShapesEndItr(aShapesList.end());
+    SortedShapesList::iterator aDataItr(maSortedShapes.begin());
+    SortedShapesList::const_iterator aDataEndItr(maSortedShapes.end());
+    SortedShapesList::const_iterator aFocusedItr = aDataEndItr;
+    while((aDataItr != aDataEndItr))
+    {
+        sal_Int8 nComp(0);
+        if (aXShapesItr == aXShapesEndItr)
+            nComp = -1; // simulate that the Shape is lower, so the selction state will be removed
+        else
+            nComp = Compare(aDataItr->xShape, aXShapesItr->xShape);
+        if (nComp == 0)
+        {
+            if (!aDataItr->bSelected)
+            {
+                aDataItr->bSelected = sal_True;
+                if (aDataItr->pAccShape)
+                {
+                    aDataItr->pAccShape->SetState(AccessibleStateType::SELECTED);
+                    aDataItr->pAccShape->ResetState(AccessibleStateType::FOCUSED);
+                }
+                aFocusedItr = aDataItr;
+            }
+            ++aDataItr;
+            ++aXShapesItr;
+        }
+        else if (nComp < 0)
+        {
+            if (aDataItr->bSelected)
+            {
+                aDataItr->bSelected = sal_False;
+                if (aDataItr->pAccShape)
+                {
+                    aDataItr->pAccShape->ResetState(AccessibleStateType::SELECTED);
+                    aDataItr->pAccShape->ResetState(AccessibleStateType::FOCUSED);
+                }
+            }
+            ++aDataItr;
+        }
+        else
+        {
+            DBG_ERRORFILE("here is a selected shape which is not in the childlist");
+            ++aXShapesItr;
+            --mnShapesSelected;
+        }
+    }
+    if ((aFocusedItr != aDataEndItr) && aFocusedItr->pAccShape && (mnShapesSelected == 1))
+        aFocusedItr->pAccShape->SetState(AccessibleStateType::FOCUSED);
 }
 
 void ScChildrenShapes::FillSelectionSupplier() const
