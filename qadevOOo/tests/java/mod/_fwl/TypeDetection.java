@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDetection.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-11-18 16:28:53 $
+ *  last change:$Date: 2004-01-28 19:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package mod._fwl;
 
+import com.sun.star.beans.NamedValue;
 import com.sun.star.container.XNameAccess;
 import java.io.PrintWriter;
 
@@ -143,12 +144,9 @@ public class TypeDetection extends TestCase {
             (XNameAccess.class, oObj);
         String[] elementNames = xNA.getElementNames();
         String elementName = elementNames[0];
-        //PropertyValue instance = new PropertyValue();
         Object[] instance = null;;
-        PropertyValue instanceProp = new PropertyValue();
         try{
             instance = (Object[]) xNA.getByName(elementName);
-            instanceProp = (PropertyValue) instance[6];
         } catch (com.sun.star.container.NoSuchElementException e){
             throw new StatusException(
             Status.failed("Couldn't get elements from object"));
@@ -157,23 +155,34 @@ public class TypeDetection extends TestCase {
             Status.failed("Couldn't get elements from object"));
         }
 
-        log.println("adding INSTANCEn as obj relation to environment");
+        log.println("adding INSTANCE 1 as obj relation to environment");
 
-        int THRCNT = Integer.parseInt((String) Param.get("THRCNT"));
+        setPropertyValueValue((PropertyValue[])instance, "Preferred", "INSTANCE1");
+        tEnv.addObjRelation("INSTANCE" +1, instance);
 
-        for (int n = 1; n < (THRCNT + 1); n++) {
-            log.println("adding INSTANCE" + n +
-                        " as obj relation to environment");
+        // com.sun.star.container.XContainerQuery
+        NamedValue[] querySequenze = new NamedValue[1];
+        NamedValue query = new NamedValue();
+        query.Name = "Name";
+        query.Value = "writer_Text";
+        querySequenze[0] = query;
 
-            instanceProp.Value = "INSTANCE"+ n + System.currentTimeMillis();
-            instance[6] = instanceProp;
-
-            tEnv.addObjRelation("INSTANCE" + n, instance);
-        }
-
+        tEnv.addObjRelation("XContainerQuery.createSubSetEnumerationByProperties",
+            querySequenze);
 
         return tEnv;
     } // finish method getTestEnvironment
+
+
+    protected void setPropertyValueValue(PropertyValue[] props, String pName, Object pValue) {
+        int i = 0;
+        System.out.println(props[i].Name);
+        while (i < props.length && !props[i].Name.equals(pName)) {
+            i++;
+            System.out.println(props[i].Name);
+        }
+        props[i].Value = pValue;
+    }
 
 }
 
