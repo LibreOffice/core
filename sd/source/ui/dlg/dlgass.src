@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-16 14:53:15 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,7 @@ ModalDialog DLG_ASS
         Text [ french ] = "~Style de page" ;
         Text [ dutch ] = "Kies een pagina-~opmaakprofiel" ;
         Text [ swedish ] = "Välj en ~sidformatmall" ;
-        Text [ danish ] = "Vælg en sidetypografi" ;
+        Text [ danish ] = "Vælg en ~sidetypografi" ;
         Text [ portuguese ] = "Seleccione um estilo de ~página" ;
         Text[ chinese_simplified ] = "è¯·é€‰æ‹©ä¸€ä¸ªé¡µé¢æ ·å¼ã€‚(~S)";
         Text[ russian ] = "Âûáåğèòå ñòèëü ñëàéäà";
@@ -608,7 +608,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "Effet";
         Text[ spanish ] = "~Efecto";
         Text[ italian ] = "~Effetto:";
-        Text[ danish ] = "Effekt:";
+        Text[ danish ] = "~Effekt";
         Text[ swedish ] = "~Effekt";
         Text[ polish ] = "Efekt";
         Text[ portuguese_brazilian ] = "~Effect:";
@@ -649,7 +649,7 @@ ModalDialog DLG_ASS
         Text[ french ] = "Vitesse";
         Text[ spanish ] = "Vel~ocidad";
         Text[ italian ] = "~Velocità";
-        Text[ danish ] = "Hastighed:";
+        Text[ danish ] = "H~astighed";
         Text[ swedish ] = "Hasti~ghet";
         Text[ polish ] = "Szy~bkoœæ";
         Text[ portuguese_brazilian ] = "~Speed:";
@@ -937,7 +937,7 @@ ModalDialog DLG_ASS
         Text [ spanish ] = "Nombre sus ideas principales" ;
         Text [ french ] = "Vos idées fondamentales" ;
         Text [ swedish ] = "Beskriv dina grundidéer" ;
-        Text [ danish ] = "Beskriv dine grundlæggende ideer" ;
+        Text [ danish ] = "Anfør dine hovedpunkter" ;
         Text [ portuguese ] = "Descreva as suas ideias de base" ;
         Text [ portuguese_brazilian ] = "Nennen Sie Ihre Grundgedanken" ;
         Text[ chinese_simplified ] = "è¯·è¾“å…¥æ‚¨çš„åŸºæœ¬è®¾æƒ³ã€‚";
