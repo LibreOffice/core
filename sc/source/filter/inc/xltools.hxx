@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:46:49 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,11 @@ public:
     static sal_Int32            GetScRotation( sal_uInt16 nXclRot );
     /** Calculates the Excel angle value from an angle in 1/100 of degrees. */
     static sal_uInt8            GetXclRotation( sal_Int32 nScRot );
+
+    /** Converts a Calc error code to an Excel error code. */
+    static sal_uInt8            GetXclErrorCode( USHORT nScError );
+    /** Converts an Excel error code to a Calc error code. */
+    static USHORT               GetScErrorCode( sal_uInt8 nXclError );
 
     /** Gets a translated error code or Boolean value from Excel error codes.
         @param rfDblValue  Returns 0.0 for error codes or the value of a Boolean (0.0 or 1.0).
