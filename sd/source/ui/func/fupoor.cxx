@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-12 18:12:39 $
+ *  last change: $Author: aw $ $Date: 2002-03-13 14:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,6 +549,8 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                             ((SdrHdlList&)rHdlList).SetFocusHdl(pNewOne);
                         }
                     }
+
+                    bReturn = TRUE;
                 }
             }
         }
