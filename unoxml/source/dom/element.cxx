@@ -2,9 +2,9 @@
  *
  *  $RCSfile: element.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:23 $
+ *  last change: $Author: lo $ $Date: 2004-02-16 16:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "attr.hxx"
 #include "elementlist.hxx"
 #include "attributesmap.hxx"
+#include "../events/mutationevent.hxx"
 
 namespace DOM
 {
@@ -308,6 +309,18 @@ namespace DOM
             // get the new attr node
             aAttr = Reference< XAttr >(static_cast< CAttr*  >(CNode::get((xmlNodePtr)res)));
         }
+        
+        if (aAttr.is())
+        {
+            // attribute adition event
+            // dispatch DOMAttrModified event
+            events::CMutationEvent *pEvent = new events::CMutationEvent;
+            pEvent->initMutationEvent(EventType_DOMAttrModified, sal_True, 
+                sal_False, Reference< XNode >(aAttr, UNO_QUERY),
+                OUString(), aAttr->getValue(), aAttr->getName(), AttrChangeType_ADDITION);
+            pEvent->m_target = Reference< XEventTarget >(this);
+            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+        }
         return aAttr;
     }
 
@@ -338,8 +351,30 @@ namespace DOM
         xmlChar *xValue = (xmlChar*)o2.getStr();
         if (m_aNodePtr != NULL)
         {
-            xmlNewProp(m_aNodePtr, xName, xValue);
-        }        
+            OUString oldValue;
+            AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
+            xmlChar *xOld = xmlGetProp(m_aNodePtr, xName);
+            if (xOld == NULL)
+            {
+                aChangeType = AttrChangeType_ADDITION;
+                xmlNewProp(m_aNodePtr, xName, xValue);
+            }
+            else
+            {
+                oldValue = OUString((char*)xOld, strlen((char*)xOld), RTL_TEXTENCODING_UTF8);
+                xmlSetProp(m_aNodePtr, xName, xValue);
+            }
+
+            // dispatch DOMAttrModified event
+            
+
+            events::CMutationEvent *pEvent = new events::CMutationEvent;
+            pEvent->initMutationEvent(EventType_DOMAttrModified, sal_True, 
+                sal_False, Reference< XNode >(getAttributeNode(name), UNO_QUERY),
+                oldValue, value, name, aChangeType);
+            pEvent->m_target = Reference< XEventTarget >(this);
+            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+        }
     }
 
     /**
@@ -386,11 +421,33 @@ namespace DOM
             if (strcmp((char*)pNs->href, (char*)xURI) == 0)
             {
                 // found namespace matches
-                xmlNewNsProp(m_aNodePtr, pNs, xLName, xValue);
+
+                OUString oldValue;
+                AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
+                xmlChar *xOld = xmlGetNsProp(m_aNodePtr, xLName, pNs->href);
+                if (xOld == NULL)
+                {
+                    aChangeType = AttrChangeType_ADDITION;
+                    xmlNewNsProp(m_aNodePtr, pNs, xLName, xValue);
+                }
+                else
+                {
+                    oldValue = OUString((char *)xOld, strlen((char *)xOld), RTL_TEXTENCODING_UTF8);
+                    xmlSetNsProp(m_aNodePtr, pNs, xLName, xValue);
+                }
+                // dispatch DOMAttrModified event
+                events::CMutationEvent *pEvent = new events::CMutationEvent;
+                pEvent->initMutationEvent(EventType_DOMAttrModified, sal_True, sal_False, 
+                    Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
+                    oldValue, value, qualifiedName, aChangeType);
+                pEvent->m_target = Reference< XEventTarget >(this);
+                dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+
             } else {
                 // ambigious ns prefix
                 throw RuntimeException();
             }
+
         }           
     }
 

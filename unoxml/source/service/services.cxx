@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:53 $
+ *  last change: $Author: lo $ $Date: 2004-02-16 16:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,12 @@
 #include "../dom/documentbuilder.hxx"
 #include "../dom/saxbuilder.hxx"
 #include "../xpath/xpathapi.hxx"
+#include "../events/testlistener.hxx"
 
 extern "C"
 {
 using namespace ::DOM;
+using namespace ::DOM::events;
 using namespace ::XPath;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -116,6 +118,14 @@ component_writeInfo(void *pServiceManager, void *pRegistryKey)
     xNewKey = xKey->createKey(aImpl);
     xNewKey->createKey(CXPathAPI::_getSupportedServiceNames()[0]);
 
+    // register EventTest service
+    aImpl = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += CTestListener::_getImplementationName();
+    aImpl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey(aImpl);
+    xNewKey->createKey(CTestListener::_getSupportedServiceNames()[0]);
+
+
     return sal_True;
 }
 
@@ -150,6 +160,13 @@ component_getFactory(const sal_Char *pImplementationName, void *pServiceManager,
                 cppu::createSingleFactory( 
                     xServiceManager, CXPathAPI::_getImplementationName(),
                     CXPathAPI::_getInstance, CXPathAPI::_getSupportedServiceNames()));
+        }
+        else if (CTestListener::_getImplementationName().compareToAscii( pImplementationName ) == 0 )
+        {
+            xFactory = Reference< XSingleServiceFactory >(
+                cppu::createSingleFactory( 
+                    xServiceManager, CTestListener::_getImplementationName(),
+                    CTestListener::_getInstance, CTestListener::_getSupportedServiceNames()));
         }
 
         // Factory is valid - service was found.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: characterdata.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:01 $
+ *  last change: $Author: lo $ $Date: 2004-02-16 16:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,23 @@
 
 #include "characterdata.hxx"
 
+#include "../events/mutationevent.hxx"
+
 namespace DOM
 {
 
     CCharacterData::CCharacterData()        
     {}
+
+    void CCharacterData::_dispatchEvent(const OUString& prevValue, const OUString& newValue)
+    {
+        events::CMutationEvent *pEvent = new events::CMutationEvent;
+        pEvent->initMutationEvent(EventType_DOMCharacterDataModified, sal_True, 
+                sal_False, Reference< XNode >(),
+                prevValue, newValue, OUString(), (AttrChangeType)0 );
+            pEvent->m_target = Reference< XEventTarget >(this);
+            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));        
+    }
 
     void CCharacterData::init_characterdata(const xmlNodePtr aNodePtr)
     {
@@ -80,7 +92,10 @@ namespace DOM
     {
         if (m_aNodePtr != NULL)
         {
+            OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
             xmlNodeAddContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(arg, RTL_TEXTENCODING_UTF8).getStr()));
+            OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
+            _dispatchEvent(oldValue, newValue);
         }
     }
     
@@ -102,7 +117,11 @@ namespace DOM
 
             OUString tmp2 = tmp.copy(0, offset);
             tmp2 += tmp.copy(offset+count, tmp.getLength() - (offset+count));
+            OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
             xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
+            OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
+            _dispatchEvent(oldValue, newValue);
+
         }
     }
 
@@ -152,7 +171,11 @@ namespace DOM
             OUString tmp2 = tmp.copy(0, offset);
             tmp2 += arg;
             tmp2 += tmp.copy(offset, tmp.getLength() - offset);
+            OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
             xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
+            OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
+            _dispatchEvent(oldValue, newValue);
+
         }
     }
 
@@ -177,7 +200,10 @@ namespace DOM
             OUString tmp2 = tmp.copy(0, offset);
             tmp2 += arg;
             tmp2 += tmp.copy(offset+count, tmp.getLength() - (offset+count));
+            OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
             xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
+            OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
+            _dispatchEvent(oldValue, newValue);
         }
     }
 
@@ -189,7 +215,11 @@ namespace DOM
     {
         if (m_aNodePtr != NULL)
         {
+            OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
             xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(data, RTL_TEXTENCODING_UTF8).getStr()));
+            OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
+            _dispatchEvent(oldValue, newValue);
+
         }
     }
 

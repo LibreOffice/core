@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:09 $
+ *  last change: $Author: lo $ $Date: 2004-02-16 16:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@
 #include "documenttype.hxx"
 #include "elementlist.hxx"
 #include "domimplementation.hxx"
+
+#include "../events/mutationevent.hxx"
 
 namespace DOM
 {
@@ -496,6 +498,28 @@ namespace DOM
                 aNode->appendChild(ic);
             }
         }        
+
+        /* DOMNodeInsertedIntoDocument
+         * Fired when a node is being inserted into a document, 
+         * either through direct insertion of the Node or insertion of a 
+         * subtree in which it is contained. This event is dispatched after 
+         * the insertion has taken place. The target of this event is the node 
+         * being inserted. If the Node is being directly inserted the DOMNodeInserted 
+         * event will fire before the DOMNodeInsertedIntoDocument event.
+         *   Bubbles: No
+         *   Cancelable: No
+         *   Context Info: None
+         */
+        if (aNode.is())
+        {
+            events::CMutationEvent *pEvent = new events::CMutationEvent;
+            pEvent->initMutationEvent(EventType_DOMNodeInsertedIntoDocument, sal_True, 
+                sal_False, Reference< XNode >(),
+                OUString(), OUString(), OUString(), (AttrChangeType)0 );
+            pEvent->m_target = Reference< XEventTarget >(aNode, UNO_QUERY);
+            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+        }
+
         return aNode;
     }
     OUString SAL_CALL CDocument::getNodeName()throw (RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:36 $
+ *  last change: $Author: lo $ $Date: 2004-02-16 16:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #include "notation.hxx"
 #include "childlist.hxx"
 #include "attr.hxx"
+
+#include "../events/eventdispatcher.hxx"
+#include "../events/mutationevent.hxx"
 
 namespace DOM
 {
@@ -275,6 +278,20 @@ namespace DOM
             Reference< XUnoTunnel > tun(newChild, UNO_QUERY);
             xmlNodePtr cur = (xmlNodePtr)(tun->getSomething(Sequence <sal_Int8>()));
 
+            // error checks:
+            // from other document
+            if (cur->doc != m_aNodePtr->doc)
+                throw (RuntimeException(OUString::createFromAscii(
+                    "appended node belongs to other document"), Reference<XInterface>()));
+            // same node
+            if (cur == m_aNodePtr)
+                throw (RuntimeException(OUString::createFromAscii(
+                    "appended node is same as parent"), Reference<XInterface>()));
+            // already has parant and is not attribute
+            if (cur->parent != NULL && cur->type != XML_ATTRIBUTE_NODE)
+                throw (RuntimeException(OUString::createFromAscii(
+                    "appended node has other parent"), Reference<XInterface>()));
+
             // check whether this is an attribute node so we remove it's
             // carrier node
             xmlNodePtr res = NULL;
@@ -309,6 +326,19 @@ namespace DOM
             aNode = Reference< XNode>(CNode::get(res));
         }
         //XXX check for errors
+
+        // dispatch DOMNodeInserted event, target is the new node
+        // this node is the related node
+        // does bubble
+        if (aNode.is())
+        {
+            events::CMutationEvent *pEvent = new events::CMutationEvent;
+            pEvent->initMutationEvent(EventType_DOMNodeInserted, sal_True, 
+                sal_False, Reference< XNode >(CNode::get(m_aNodePtr)),
+                OUString(), OUString(), OUString(), (AttrChangeType)0 );
+            pEvent->m_target = Reference< XEventTarget >(aNode, UNO_QUERY);
+            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+        }
         return aNode;
     }
 
@@ -643,6 +673,24 @@ namespace DOM
             }
             cur = cur->next;
         }
+
+        /*DOMNodeRemoved
+         * Fired when a node is being removed from its parent node. 
+         * This event is dispatched before the node is removed from the tree. 
+         * The target of this event is the node being removed.
+         *   Bubbles: Yes
+         *   Cancelable: No
+         *   Context Info: relatedNode holds the parent node
+         */
+        if (oldChild.is())
+        {
+            events::CMutationEvent *pEvent = new events::CMutationEvent;
+            pEvent->initMutationEvent(EventType_DOMNodeRemoved, sal_True, 
+                sal_False, Reference< XNode >(CNode::get(m_aNodePtr)),
+                OUString(), OUString(), OUString(), (AttrChangeType)0 );
+            pEvent->m_target = Reference< XEventTarget >(oldChild, UNO_QUERY);
+            dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+        }
         return oldChild;
     }    
 
@@ -656,6 +704,10 @@ namespace DOM
     {
         // XXX check node types
 
+
+        Reference< XNode > aNode = removeChild(oldChild);
+        appendChild(newChild);
+/*
         Reference< XUnoTunnel > tOld(oldChild, UNO_QUERY);
         xmlNodePtr pOld = (xmlNodePtr)tOld->getSomething(Sequence< sal_Int8>());
         Reference< XUnoTunnel > tNew(newChild, UNO_QUERY);
@@ -678,7 +730,17 @@ namespace DOM
             }
             cur = cur->next;
         }
-        return oldChild;
+*/
+        // dispatch DOMSubtreeModified
+        // target is _this_ node
+        events::CMutationEvent *pEvent = new events::CMutationEvent;
+        pEvent->initMutationEvent(EventType_DOMSubtreeModified, sal_True, 
+            sal_False, Reference< XNode >(),
+            OUString(), OUString(), OUString(), (AttrChangeType)0 );
+        pEvent->m_target = Reference< XEventTarget >(this);
+        dispatchEvent(Reference< XEvent >(static_cast< events::CEvent* >(pEvent)));
+
+        return aNode;
     }
 
     /**
@@ -717,6 +779,31 @@ namespace DOM
     {
         // XXX check ID
         return (sal_Int64)m_aNodePtr;
+    }
+
+
+        // --- XEventTarget
+    void SAL_CALL CNode::addEventListener(EventType eventType, 
+        const Reference< XEventListener >& listener, 
+        sal_Bool useCapture)
+        throw (RuntimeException)
+    {
+        events::CEventDispatcher::addListener(m_aNodePtr, eventType, listener, useCapture);
+    }
+
+    void SAL_CALL CNode::removeEventListener(EventType eventType, 
+        const Reference< XEventListener >& listener, 
+        sal_Bool useCapture)
+        throw (RuntimeException)
+    {
+        events::CEventDispatcher::removeListener(m_aNodePtr, eventType, listener, useCapture);
+    }
+
+    sal_Bool SAL_CALL CNode::dispatchEvent(const Reference< XEvent >& evt) 
+        throw(EventException)
+    {
+        events::CEventDispatcher::dispatchEvent(m_aNodePtr, evt);
+        return sal_True;
     }
 }
     

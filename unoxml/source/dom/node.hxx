@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:31:37 $
+ *  last change: $Author: lo $ $Date: 2004-02-16 16:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,21 +66,24 @@
 #include <sal/types.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
+#include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Sequence.h>
-
+#include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 #include <libxml/tree.h>
 
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
+using namespace com::sun::star::xml::dom::events;
 
 namespace DOM 
 {
@@ -88,7 +91,7 @@ namespace DOM
     typedef std::map< const xmlNodePtr, CNode* > nodemap_t;
     
 
-    class CNode : public cppu::WeakImplHelper2< XNode, XUnoTunnel >
+    class CNode : public cppu::WeakImplHelper3< XNode, XUnoTunnel, XEventTarget >
     {
         friend class CDocument;
         friend class CElement;
@@ -289,6 +292,20 @@ namespace DOM
 
         // --- XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething(const Sequence< sal_Int8 >& id) throw (RuntimeException);
+
+        // --- XEventTarget
+        virtual void SAL_CALL addEventListener(EventType eventType, 
+            const Reference< XEventListener >& listener, 
+            sal_Bool useCapture)
+            throw (RuntimeException);
+
+        virtual void SAL_CALL removeEventListener(EventType eventType, 
+            const Reference< XEventListener >& listener, 
+            sal_Bool useCapture)
+            throw (RuntimeException);
+
+        virtual sal_Bool SAL_CALL dispatchEvent(const Reference< XEvent >& evt) 
+            throw(EventException);
 
     };
 }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: lo $ $Date: 2004-01-28 16:31:51 $
+#   last change: $Author: lo $ $Date: 2004-02-16 16:41:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,8 @@ DEF1NAME=$(SHL1TARGET)
 
 SHL1LIBS= \
     $(SLB)$/domimpl.lib \
-    $(SLB)$/xpathimpl.lib 
+    $(SLB)$/xpathimpl.lib \
+    $(SLB)$/eventsimpl.lib
 
 .IF "$(GUI)" == "WNT"
 SHL1STDLIBS= \

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: characterdata.hxx,v $
+ *  $RCSfile: testlistener.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-16 16:41:46 $
+ *  last change: $Author: lo $ $Date: 2004-02-16 16:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,86 +59,82 @@
  *
  ************************************************************************/
 
-#ifndef _CHARACTERDATA_HXX
-#define _CHARACTERDATA_HXX
+#ifndef _TESTLISTENER_HXX
+#define _TESTLISTENER_HXX
+
+#include <map>
 
 #include <sal/types.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.h>
+
+#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
-#include <com/sun/star/xml/dom/XCharacterData.hpp>
-#include <com/sun/star/xml/dom/XElement.hpp>
-#include <com/sun/star/xml/dom/XDOMImplementation.hpp>
-#include <libxml/tree.h>
-#include "node.hxx"
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/xml/dom/events/XEventTarget.hpp>
+#include <com/sun/star/xml/dom/events/XEventListener.hpp>
+#include <com/sun/star/xml/dom/events/XEvent.hpp>
+#include <com/sun/star/xml/dom/events/EventType.hpp>
+#include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
+
+#include "libxml/tree.h"
 
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
+using namespace com::sun::star::xml::dom::events;
 
-namespace DOM
+namespace DOM { namespace events
 {
-    class CCharacterData : public cppu::ImplInheritanceHelper1< CNode, XCharacterData >
-    {        
+    
+    class  CTestListener
+        : public ::cppu::WeakImplHelper3< com::sun::star::xml::dom::events::XEventListener, XInitialization, XServiceInfo >
+    {
 
-
-    protected:
-        CCharacterData();
-        void init_characterdata(const xmlNodePtr aNodePtr);
-        void _dispatchEvent(const OUString& prevValue, const OUString& newValue);
-
-    public:
-        /**
-        Append the string to the end of the character data of the node.
-        */
-        virtual void SAL_CALL appendData(const OUString& arg)
-            throw (RuntimeException);
+    private:
+        Reference< XMultiServiceFactory > m_factory;
+        Reference <XEventTarget> m_target;
+        EventType m_type;
+        sal_Bool m_capture;
+        OUString m_name;
         
-        /**
-        Remove a range of 16-bit units from the node.
-        */
-        virtual void SAL_CALL deleteData(sal_Int32 offset, sal_Int32 count) 
+    public:
+
+        // static helpers for service info and component management
+        static const char* aImplementationName;
+        static const char* aSupportedServiceNames[];
+        static OUString _getImplementationName();
+        static Sequence< OUString > _getSupportedServiceNames();
+        static Reference< XInterface > _getInstance(const Reference< XMultiServiceFactory >& rSMgr);
+
+        CTestListener(const Reference< XMultiServiceFactory >& rSMgr)
+            : m_factory(rSMgr){};
+
+        virtual ~CTestListener();
+
+        // XServiceInfo
+        virtual OUString SAL_CALL getImplementationName()
+            throw (RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
+            throw (RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames ()
             throw (RuntimeException);
 
-        /**
-        Return the character data of the node that implements this interface.
-        */
-        virtual OUString SAL_CALL getData() throw (RuntimeException);
 
-        /**
-        The number of 16-bit units that are available through data and the
-        substringData method below.
-        */
-        virtual sal_Int32 SAL_CALL getLength() throw (RuntimeException);
+        // XEventListener
+        virtual void SAL_CALL initialize(const Sequence< Any >& args) throw (RuntimeException);
 
-        /**
-        Insert a string at the specified 16-bit unit offset.
-        */
-        virtual void SAL_CALL insertData(sal_Int32 offset, const OUString& arg)
-            throw (RuntimeException);
+        virtual void SAL_CALL handleEvent(const Reference< XEvent >& evt) throw (RuntimeException);
 
-        /**
-        Replace the characters starting at the specified 16-bit unit offset 
-        with the specified string.
-        */
-        virtual void SAL_CALL replaceData(sal_Int32 offset, sal_Int32 count, const OUString& arg)
-            throw (RuntimeException);
-
-        /**
-        Set the character data of the node that implements this interface.
-        */
-        virtual void SAL_CALL setData(const OUString& data)
-            throw (RuntimeException);
-
-        /**
-        Extracts a range of data from the node.
-        */
-        virtual OUString SAL_CALL subStringData(sal_Int32 offset, sal_Int32 count)
-            throw (RuntimeException);
 
     };
-}
+}}
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attr.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lo $ $Date: 2004-01-28 16:30:51 $
+ *  last change: $Author: lo $ $Date: 2004-02-16 16:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ namespace DOM
     virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
         throw (RuntimeException)
     {
-        return CNode::setNodeValue(nodeValue);
+        return setValue(nodeValue);
     }
     virtual void SAL_CALL setPrefix(const OUString& prefix)
         throw (RuntimeException)
