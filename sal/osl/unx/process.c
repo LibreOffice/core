@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-19 12:13:08 $
+ *  last change: $Author: hro $ $Date: 2001-07-20 16:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -930,9 +930,14 @@ static void ChildStatusProc(void *pData)
 
             /* Store used pipe ends in data structure */
 
-            *(pdata->m_pInputWrite) = osl_createFileHandleFromFD( stdInput[1] );
-            *(pdata->m_pOutputRead) = osl_createFileHandleFromFD( stdOutput[0] );
-            *(pdata->m_pErrorRead) = osl_createFileHandleFromFD( stdError[0] );
+            if ( pdata->m_pInputWrite )
+                *(pdata->m_pInputWrite) = osl_createFileHandleFromFD( stdInput[1] );
+
+            if ( pdata->m_pOutputRead )
+                *(pdata->m_pOutputRead) = osl_createFileHandleFromFD( stdOutput[0] );
+
+            if ( pdata->m_pErrorRead )
+                *(pdata->m_pErrorRead) = osl_createFileHandleFromFD( stdError[0] );
 
             osl_releaseMutex(ChildListMutex);
 
