@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-11 23:20:52 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,7 +997,7 @@ TabPage TP_INSERT_SECTION
         Text[ chinese_simplified ] = "Κά±£»¤µΔ(~P)";
         Text[ russian ] = "Ηΰωθωενξ";
         Text[ polish ] = "Chroniony";
-        Text[ japanese ] = "•Ϋμ‚·‚ι(~P)";
+        Text[ japanese ] = "‘‚«‚έ•Ϋμ(~P)";
         Text[ chinese_traditional ] = "¨ό«OΕ@(~P)";
         Text[ arabic ] = "γΝγν";
         Text[ language_user1 ] = "(ΔΔ) ΠροστατευEϋN; - - - -";
@@ -1493,7 +1493,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ english_us ] = "C~ollect at end of section";
         Text[ portuguese ] = "Agrupar no ~final da secηγo";
         Text[ russian ] = "Ρξαπΰςό β κξνφε ξαλΰρςθ";
-        Text[ greek ] = "Συγκέντρωση στο τέλος του ~τμήματος";
+        Text[ greek ] = "Συγκέντρωση στο τέλος του τμήμ~ατος";
         Text[ dutch ] = "aan ~bereikseinde verzamelen";
         Text[ french ] = "Regrouper en fin de ~section";
         Text[ spanish ] = "Recoger al fi~nal del αrea";
