@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:38:22 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,9 @@
  *
  ************************************************************************/
 
-#define _SV_FLOATWIN_CXX
-
-#ifndef _DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef _SV_SVSYS_HXX
+#include <svsys.h>
 #endif
-
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
@@ -90,13 +87,13 @@
 #include <window.h>
 #endif
 #ifndef _SV_RC_H
-#include <rc.h>
-#endif
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
+#endif
+#ifndef _DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 
@@ -108,9 +105,10 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     mbInCleanUp = FALSE;
     mbGrabFocus = FALSE;
 
+    DBG_ASSERT( pParent, "FloatWindow::FloatingWindow(): - pParent == NULL!" );
 
     if ( !pParent )
-        pParent = Application::GetAppWindow();
+        pParent = ImplGetSVData()->maWinData.mpAppWin;
 
     DBG_ASSERT( pParent, "FloatWindow::FloatingWindow(): - pParent == NULL and no AppWindow exists" );
 
