@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:33:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,6 +709,10 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             bOK = rValue >>= bSaveAsSingleFile;
         else if (rName.equalsAscii( GetPropName( UNO_NAME_SAVE_FILTER ) ))
             bOK = rValue >>= sSaveFilter;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_SAVE_FILTER_OPTIONS ) ))
+            bOK = rValue >>= sSaveFilterOptions;
+        else if (rName.equalsAscii( GetPropName( UNO_NAME_SAVE_FILTER_DATA ) ))
+            bOK = rValue >>= aSaveFilterData;
         else if (rName.equalsAscii( GetPropName( UNO_NAME_IN_SERVER_PASSWORD ) ))
             bOK = rValue >>= sInServerPassword;
         else if (rName.equalsAscii( GetPropName( UNO_NAME_OUT_SERVER_PASSWORD ) ))
@@ -905,6 +909,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         if(MailMergeType::FILE == nCurOutputType)
         {
             aMergeDesc.sSaveToFilter = sSaveFilter;
+            aMergeDesc.sSaveToFilterOptions = sSaveFilterOptions;
+            aMergeDesc.aSaveToFilterData = aSaveFilterData;
             aMergeDesc.bCreateSingleFile = bSaveAsSingleFile;
         }
         else /*if(MailMergeType::MAIL == nCurOutputType)*/
@@ -1066,6 +1072,8 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
             case WID_PRINT_OPTIONS:             pData = &aPrintSettings; break;
             case WID_SAVE_AS_SINGLE_FILE:       pData = &bSaveAsSingleFile; break;
             case WID_SAVE_FILTER:               pData = &sSaveFilter; break;
+            case WID_SAVE_FILTER_OPTIONS:       pData = &sSaveFilterOptions; break;
+            case WID_SAVE_FILTER_DATA:          pData = &aSaveFilterData; break;
             case WID_COPIES_TO:                 pData = &aCopiesTo; break;
             case WID_BLIND_COPIES_TO:           pData = &aBlindCopiesTo;break;
             case WID_IN_SERVER_PASSWORD:        pData = &sInServerPassword; break;
@@ -1147,6 +1155,10 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
                 bOK = rValue >>= bSaveAsSingleFile;
             else if (pData == &sSaveFilter)
                 bOK = rValue >>= sSaveFilter;
+            else if (pData == &sSaveFilterOptions)
+                bOK = rValue >>= sSaveFilterOptions;
+            else if (pData == &aSaveFilterData)
+                bOK = rValue >>= aSaveFilterData;
             else if (pData == &aCopiesTo)
                 bOK = rValue >>= aCopiesTo;
             else if (pData == &aBlindCopiesTo)
@@ -1212,6 +1224,8 @@ uno::Any SAL_CALL SwXMailMerge::getPropertyValue(
             case WID_PRINT_OPTIONS:             aRet <<= aPrintSettings; break;
             case WID_SAVE_AS_SINGLE_FILE:       aRet <<= bSaveAsSingleFile; break;
             case WID_SAVE_FILTER:               aRet <<= sSaveFilter; break;
+            case WID_SAVE_FILTER_OPTIONS:       aRet <<= sSaveFilterOptions; break;
+            case WID_SAVE_FILTER_DATA:          aRet <<= aSaveFilterData; break;
             case WID_COPIES_TO:                 aRet <<= aCopiesTo; break;
             case WID_BLIND_COPIES_TO:           aRet <<= aBlindCopiesTo;break;
             case WID_IN_SERVER_PASSWORD:        aRet <<= sInServerPassword; break;
