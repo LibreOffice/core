@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: patrick.luby $ $Date: 2000-09-29 14:59:28 $
+ *  last change: $Author: hjs $ $Date: 2000-10-12 13:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,21 +858,13 @@ void BmpWin::WriteInfo( const String& rText, BYTE cExitCode )
     if( EXIT_NOERROR != cExitCode )
         aBmpApp.SetExitCode( cExitCode );
 
-#ifdef UNX
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
+#ifdef UNX
     aText.Append( "\r\n" );
-    fprintf( stderr, aText.GetBuffer() );
 #else
-    FILE* fp = fopen( "bmp.err", "a+" );
-
-    if( fp )
-    {
-        ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
-        aText.Append( "\n" );
-        fprintf( fp, aText.GetBuffer() );
-        fclose(fp);
-    }
+    aText.Append( "\n" );
 #endif
+    fprintf( stderr, aText.GetBuffer() );
 
 /*
 #ifdef WNT
