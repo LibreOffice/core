@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 20:19:29 $
+ *  last change: $Author: gh $ $Date: 2001-03-14 09:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1308,25 +1308,25 @@ String S_BUTTONID_REQUIRED
 };
 String S_UNKNOWN_TYPE
 {
-    Text = "Unbekannter Objekttyp ($Arg1) aus UId";
-    Text[ english_us ] = "Unknown object type ($Arg1) from UId";
-    Text[ portuguese ] = "Tipo de objecto ($Arg1) desconhecido deste UId";
-    Text[ russian ] = "Unknown object type ($Arg1) from UId";
-    Text[ greek ] = "Unknown object type ($Arg1) from UId";
-    Text[ dutch ] = "Onbekend objecttype ($Arg1) uit UId";
-    Text[ french ] = "Type d'objet ($Arg1) inconnu pour cet UId";
-    Text[ spanish ] = "Tipo de objeto ($Arg1) desconocido por su UId";
-    Text[ italian ] = "Unknown object type ($Arg1) from UId";
-    Text[ danish ] = "Unknown object type ($Arg1) from UId";
-    Text[ swedish ] = "Unknown object type ($Arg1) from UId";
-    Text[ polish ] = "Unknown object type ($Arg1) from UId";
+    Text = "Unbekannter Objekttyp ($Arg1) aus UId oder Methode '($Arg2)' nicht unterst¸tzt";
+    Text[ english_us ] = "Unknown object type ($Arg1) from UId($Arg2)";
+    Text[ portuguese ] = "Tipo de objecto ($Arg1) desconhecido deste UId($Arg2)";
+    Text[ russian ] = "Unknown object type ($Arg1) from UId($Arg2)";
+    Text[ greek ] = "Unknown object type ($Arg1) from UId($Arg2)";
+    Text[ dutch ] = "Onbekend objecttype ($Arg1) uit UId($Arg2)";
+    Text[ french ] = "Type d'objet ($Arg1) inconnu pour cet UId($Arg2)";
+    Text[ spanish ] = "Tipo de objeto ($Arg1) desconocido por su UId($Arg2)";
+    Text[ italian ] = "Unknown object type ($Arg1) from UId($Arg2)";
+    Text[ danish ] = "Unknown object type ($Arg1) from UId($Arg2)";
+    Text[ swedish ] = "Unknown object type ($Arg1) from UId($Arg2)";
+    Text[ polish ] = "Unknown object type ($Arg1) from UId($Arg2)";
     Text[ portuguese_brazilian ] = "dummytext";
-    Text[ japanese ] = "Unknown object type ($Arg1) from UId";
-    Text[ korean ] = "UId∑Œ∫Œ≈Õ¿«  æÀ∑¡¡Æ°°¿÷¡ˆæ ¿∫°°∞≥√º ≈∏¿‘ ($Arg1)";
-    Text[ chinese_simplified ] = "Unknown object type ($Arg1) from UId";
-    Text[ chinese_traditional ] = "Unknown object type ($Arg1) from UId";
-    Text[ arabic ] = "Unknown object type ($Arg1) from UId";
-    Text[ turkish ] = "Unknown object type ($Arg1) from UId";
+    Text[ japanese ] = "Unknown object type ($Arg1) from UId($Arg2)";
+    Text[ korean ] = "UId∑Œ∫Œ≈Õ¿«  æÀ∑¡¡Æ°°¿÷¡ˆæ ¿∫°°∞≥√º ≈∏¿‘ ($Arg1)($Arg2)";
+    Text[ chinese_simplified ] = "Unknown object type ($Arg1) from UId($Arg2)";
+    Text[ chinese_traditional ] = "Unknown object type ($Arg1) from UId($Arg2)";
+    Text[ arabic ] = "Unknown object type ($Arg1) from UId($Arg2)";
+    Text[ turkish ] = "Unknown object type ($Arg1) from UId($Arg2)";
 };
 String S_UNPACKING_STORAGE_FAILED
 {
