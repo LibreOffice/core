@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:51:04 $
+ *  last change: $Author: vg $ $Date: 2003-05-23 09:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1544,7 +1544,8 @@ OUString SwAccessibleParagraph::getTextRange(
         aResult.SegmentText = rText.copy( aBound.startPos, aBound.endPos - aBound.startPos );
         aResult.SegmentStart = aBound.startPos;
         aResult.SegmentEnd = aBound.endPos;
-    }
+    };
+    return aResult;
 }
 
 ::com::sun::star::accessibility::TextSegment SwAccessibleParagraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
@@ -1584,6 +1585,7 @@ OUString SwAccessibleParagraph::getTextRange(
         aResult.SegmentStart = aBound.startPos;
         aResult.SegmentEnd = aBound.endPos;
     }
+    return aResult;
 }
 
 sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
