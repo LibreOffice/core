@@ -9,6 +9,7 @@
 #include "TransformationHelper.hxx"
 #include "chartview/ObjectIdentifier.hxx"
 #include "Clipping.hxx"
+#include "Splines.hxx"
 
 #ifndef _SV_GEN_HXX
 #include <vcl/gen.hxx>
@@ -296,6 +297,13 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
+enum SplineMode
+{
+    NO_SPLINE,
+    CUBIC_SPLINE,
+    B_SPLINE
+};
+
 bool AreaChart::impl_createLine( VDataSeries* pSeries
                 , drawing::PolyPolygonShape3D* pSeriesPoly )
 {
@@ -303,8 +311,27 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, m_xLogicTarget);
 
     m_pPosHelper->getTransformedClipRect();
+    SplineMode eSplineMode(B_SPLINE);//@todo get from model
     drawing::PolyPolygonShape3D aPoly;
-    Clipping::clipPolygonAtRectangle( *pSeriesPoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
+    if(CUBIC_SPLINE==eSplineMode)
+    {
+        sal_Int32 nGranularity = 20;//@todo get from model
+        drawing::PolyPolygonShape3D aSplinePoly;
+        SplineCalculater::CalculateCubicSplines( *pSeriesPoly, aSplinePoly, nGranularity );
+        Clipping::clipPolygonAtRectangle( aSplinePoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
+    }
+    else if(B_SPLINE)
+    {
+        sal_Int32 nGranularity = 20;//@todo get from model
+        sal_Int32 nSplineDepth = 3;//@todo get from model
+        drawing::PolyPolygonShape3D aSplinePoly;
+        SplineCalculater::CalculateBSplines( *pSeriesPoly, aSplinePoly, nGranularity, nSplineDepth );
+        Clipping::clipPolygonAtRectangle( aSplinePoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
+    }
+    else
+    {
+        Clipping::clipPolygonAtRectangle( *pSeriesPoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
+    }
 
     if(isPolygonEmptyOrSinglePoint(aPoly))
         return false;
