@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 21:09:23 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,10 +529,13 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                                  pVersionItem, SfxInt16Item, SID_VERSION, sal_False );
 
                 INetURLObject aMedObj( pMed->GetName() );
+
+                // the logic below is following, if the document seems not to need to be reloaded and the physical name is different
+                // to the logical one, then on file system it can be checked that the copy is still newer than the original and no document reload is required
                 if ( ( !bNeedsReload &&
                     ( aMedObj.GetProtocol() == INET_PROT_FILE
-                            && aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) == aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT)
-                            && !SfxContentHelper::IsYounger( aPhysObj.GetMainURL( INetURLObject::NO_DECODE ),
+                            && aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) != aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT)
+                            && SfxContentHelper::IsYounger( aPhysObj.GetMainURL( INetURLObject::NO_DECODE ),
                                                              aMedObj.GetMainURL( INetURLObject::NO_DECODE ) )
                       || pMed->IsRemote()
                     )
@@ -554,7 +557,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pMed->Close();
                         pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & STREAM_WRITE ) ) );
                         pMed->SetOpenMode( nOpenMode, pMed->IsDirect() );
-                        pMed->ReOpen();
+                        pMed->CompleteReOpen();
                         if ( !pMed->GetErrorCode() )
                             bOK = sal_True;
                     }
