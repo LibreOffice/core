@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:25:56 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 07:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,16 @@ void ODatabaseMetaDataResultSet::disposing(void)
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aStatement    = NULL;
     m_xMetaData     = NULL;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    ODatabaseMetaDataResultSet_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseMetaDataResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    ODatabaseMetaDataResultSet_BASE::release();
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType ) throw(RuntimeException)

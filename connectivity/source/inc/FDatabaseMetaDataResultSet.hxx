@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:26:31 $
+ *  last change: $Author: oj $ $Date: 2001-03-29 07:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,8 @@ namespace connectivity
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
     public:
-        DECLARE_CTY_DEFAULTS(ODatabaseMetaDataResultSet_BASE);
+        virtual void    SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+        virtual void    SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         ODatabaseMetaDataResultSet();
         ~ODatabaseMetaDataResultSet();
