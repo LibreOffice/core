@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:06:03 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,7 @@
 #ifndef __SGI_STL_LIST
 #include <list>
 #endif
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
 
 namespace psp {
 
