@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-07 18:07:16 $
+ *  last change: $Author: as $ $Date: 2002-04-24 13:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,10 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         {
             // We must map ID to OpenDoc here ... because
             // We must open this relativ URL!
-            SetId( SID_OPENDOC );
+            pBindings->ENTERREGISTRATIONS();
+            UnBind();
+            Bind( SID_OPENDOC, pBindings );
+            pBindings->LEAVEREGISTRATIONS();
             if( nFileNameArg == - 1 )
             {
                 lNewArgs.realloc( lNewArgs.getLength()+1 );
