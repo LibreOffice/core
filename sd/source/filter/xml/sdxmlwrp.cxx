@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 17:35:22 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 15:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,17 +239,31 @@ sal_Bool SdXMLFilter::Import()
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
 
             XML_SERVICEMAP aServices[4];
-            aServices[0].mpService = IsDraw() ? sXML_import_draw_meta_service : sXML_import_impress_meta_service;
-            aServices[0].mpStream  = sXML_metaStreamName;
 
-            aServices[1].mpService = IsDraw() ? sXML_import_draw_styles_service : sXML_import_impress_styles_service;
-            aServices[1].mpStream  = sXML_styleStreamName;
+            {
+                int i = 0;
+                // old format?
+                if( pStorage->IsStream( String( RTL_CONSTASCII_STRINGPARAM( sXML_oldContentStreamName ) ) ) )
+                {
+                    aServices[i  ].mpService = IsDraw() ? sXML_import_draw_service : sXML_import_impress_service;
+                    aServices[i++].mpStream  = sXML_oldContentStreamName;
+                }
+                else
+                {
+                    aServices[i  ].mpService = IsDraw() ? sXML_import_draw_meta_service : sXML_import_impress_meta_service;
+                    aServices[i++].mpStream  = sXML_metaStreamName;
 
-            aServices[2].mpService = IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service;
-            aServices[2].mpStream  = sXML_contentStreamName;
+                    aServices[i  ].mpService = IsDraw() ? sXML_import_draw_styles_service : sXML_import_impress_styles_service;
+                    aServices[i++].mpStream  = sXML_styleStreamName;
 
-            aServices[3].mpService = NULL;
-            aServices[3].mpStream  = NULL;
+                    aServices[i  ].mpService = IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service;
+                    aServices[i++].mpStream  = sXML_contentStreamName;
+
+                }
+
+                aServices[i].mpService = NULL;
+                aServices[i].mpStream  = NULL;
+            }
 
             XML_SERVICEMAP* pServices;
             for( pServices = aServices; pServices->mpService; pServices++ )
@@ -262,24 +276,10 @@ sal_Bool SdXMLFilter::Import()
 
                 if( pStorage )
                 {
-                    String aStreamName = OUString::createFromAscii( pServices->mpStream );
+                    String aStreamName( OUString::createFromAscii( pServices->mpStream ) );
 
                     if( !pStorage->IsStream( aStreamName ) )
-                    {
-                        if( pServices->mpStream == sXML_contentStreamName )
-                        {
-                            aStreamName = String( RTL_CONSTASCII_USTRINGPARAM( sXML_oldContentStreamName ) );
-                            pServices->mpService = IsDraw() ? sXML_import_draw_service : sXML_import_impress_service;
-                            if( !pStorage->IsStream( aStreamName ) )
-                            {
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
+                        continue;
 
                     xIStm = pStorage->OpenStream( aStreamName, STREAM_READ | STREAM_NOCREATE );
 
