@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-21 15:00:03 $
+ *  last change: $Author: sab $ $Date: 2002-11-29 13:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,6 +1115,8 @@ void ScTextWnd::SetTextString( const String& rNewString )
 {
     if ( rNewString != aString )
     {
+        bInputMode = TRUE;
+
         //  Position der Aenderung suchen, nur Rest painten
 
         long nInvPos = 0;
@@ -1184,6 +1186,8 @@ void ScTextWnd::SetTextString( const String& rNewString )
 
         if (pAccTextData)
             pAccTextData->TextChanged();
+
+        bInputMode = FALSE;
     }
 }
 
