@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.15 $
+*  $Revision: 1.16 $
 *
-*  last change: $Author: rt $ $Date: 2004-01-05 14:13:31 $
+*  last change: $Author: svesik $ $Date: 2004-04-19 23:15:53 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -80,6 +80,12 @@
 #include <cppuhelper/factory.hxx>
 #include <util/util.hxx>
 
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/uri/XUriReference.hpp"
+#include "com/sun/star/uri/XUriReferenceFactory.hpp"
+#include "com/sun/star/uri/XVndSunStarScriptUrl.hpp"
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -92,7 +98,7 @@ namespace scripting_protocolhandler
 
 const sal_Char * const MYSERVICENAME = "com.sun.star.frame.ProtocolHandler";
 const sal_Char * const MYIMPLNAME = "com.sun.star.comp.ScriptProtocolHandler";
-const sal_Char * MYSCHEME = "vnd.sun.star.script:";
+const sal_Char * MYSCHEME = "vnd.sun.star.script";
 const sal_Int32 MYSCHEME_LEN = 20;
 
 void SAL_CALL ScriptProtocolHandler::initialize(
@@ -104,9 +110,11 @@ void SAL_CALL ScriptProtocolHandler::initialize(
         OSL_TRACE( "ScriptProtocolHandler Already initialised" );
         return ;
     }
+
     // first argument contains a reference to the frame (may be empty or the desktop,
     // but usually it's a "real" frame)
-    if ( sal_False == ( aArguments[ 0 ] >>= m_xFrame ) )
+    if ( aArguments.getLength() &&
+         sal_False == ( aArguments[ 0 ] >>= m_xFrame ) )
     {
         ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::initialize: could not extract reference to the frame" );
         throw RuntimeException( temp, Reference< XInterface >() );
@@ -125,15 +133,36 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     Reference< XDispatch > xDispatcher;
     OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 1, for URL.complete %s \n",
         ::rtl::OUStringToOString( aURL.Complete, RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
+    // get scheme of url
 
-    if ( aURL.Complete.compareToAscii( ::scripting_protocolhandler::MYSCHEME,
-                                       ::scripting_protocolhandler::MYSCHEME_LEN ) == 0 )
+    Reference< uri::XUriReferenceFactory > xFac (
+         m_xFactory->createInstance( rtl::OUString::createFromAscii(
+            "com.sun.star.uri.UriReferenceFactory") ) , UNO_QUERY );
+    if ( xFac.is() )
     {
-        xDispatcher = this;
+        Reference<  uri::XUriReference > uriRef(
+            xFac->parse( aURL.Complete ), UNO_QUERY );
+        if ( uriRef.is() )
+        {
+            if ( uriRef->getScheme().equals( ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYSCHEME ) ) )
+            {
+                xDispatcher = this;
+            }
+            else
+            {
+                OSL_TRACE("ScriptProtocolHandler::queryDispatch - 2 scheme doesn't match" );
+            }
+        }
+        else
+        {
+            OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 2 failed to getUrlReference from factory for scheme\n" );
+        }
     }
+
+
     else
     {
-        OSL_TRACE("No match for scheme");
+        OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 2 failed to match scheme\n" );
     }
     OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 2\n" );
 
@@ -167,8 +196,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     sal_Bool bSuccess = sal_False;
     Any invokeResult;
 
-
-
     OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification - start \nInput URL %s and %d args\n",
     ::rtl::OUStringToOString( aURL.Complete, RTL_TEXTENCODING_ASCII_US ).pData->buffer, lArgs.getLength() );
     if ( m_bInitialised )
@@ -177,28 +204,36 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         {
             // obtain the SfxObject shell for our security check
             SfxObjectShell* pDocShell = NULL;
-            Reference < XFrame > xFrame( m_xFrame.get(), UNO_QUERY );
-            if ( xFrame.is() )
+            if ( m_xFrame != NULL )
             {
-                SfxFrame* pFrame=0;
-                for ( pFrame = SfxFrame::GetFirst(); pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
+                Reference < XFrame > xFrame( m_xFrame.get(), UNO_QUERY );
+                if ( xFrame.is() )
                 {
-                    if ( pFrame->GetFrameInterface() == xFrame )
-                        break;
-                }
+                    SfxFrame* pFrame = SfxFrame::GetFirst();
+                    for ( ; pFrame; pFrame = SfxFrame::GetNext( *pFrame ) )
+                    {
+                        if ( pFrame->GetFrameInterface() == xFrame )
+                            break;
+                    }
 
-                if ( pFrame )
-                    pDocShell = pFrame->GetCurrentDocument();
+                    if ( pFrame )
+                        pDocShell = pFrame->GetCurrentDocument();
+                }
             }
 
             // Security check
-            pDocShell->AdjustMacroMode( String() );
-            OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification: MacroMode = %d", pDocShell->GetMacroMode() );
-            if ( pDocShell->GetMacroMode() == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+            if ( pDocShell && aURL.Complete.indexOf( ::rtl::OUString::createFromAscii("document") )!=-1 )
             {
+                pDocShell->AdjustMacroMode( String() );
+                OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification: MacroMode = %d", pDocShell->GetMacroMode() );
+
+                if ( pDocShell->GetMacroMode() ==
+                     ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+                {
                     // check forbids execution
                     ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::dispatchWithNotification: execution permission denied. " );
                     throw RuntimeException( temp, Reference< XInterface >() );
+                }
             }
 
 
@@ -353,6 +388,8 @@ throw ( RuntimeException )
     }
     try
     {
+        OSL_TRACE("ScriptProtocolHandler::createScriptProvider() need one");
+
         css::uno::Sequence < css::uno::Any > args( 1 );
         Reference< XModel > xModel;
         if ( m_xFrame.is() )
@@ -361,15 +398,26 @@ throw ( RuntimeException )
             if ( xController .is() )
             {
                 xModel = xController->getModel();
+                args[ 0 ] <<= xModel;
+
+                Reference< provider::XScriptProviderSupplier > xSPS =
+                    Reference< provider::XScriptProviderSupplier >
+                        ( xModel, UNO_QUERY_THROW );
+                m_xScriptProvider = xSPS->getScriptProvider();
             }
         }
 
-        args[ 0 ] <<= xModel;
+        if ( !m_xScriptProvider.is() )
+        {
+            OSL_TRACE("GOT NO FRAME, create empty MSP");
+            // Create a MasterScriptProvider using m_xFactory
+            ::rtl::OUString serviceName =
+                ::rtl::OUString::createFromAscii(
+                "drafts.com.sun.star.script.provider.MasterScriptProvider" );
 
-        Reference< provider::XScriptProviderSupplier > xSPS =
-            Reference< provider::XScriptProviderSupplier >
-                ( xModel, UNO_QUERY_THROW );
-        m_xScriptProvider = xSPS->getScriptProvider();
+            m_xScriptProvider = Reference< provider::XScriptProvider >
+                ( m_xFactory->createInstance( serviceName ), UNO_QUERY_THROW );
+        }
     }
     catch ( RuntimeException & e )
     {
