@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soreport.cpp,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:17:26 $
+ *  last change: $Author: hro $ $Date: 2004-12-13 10:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 
 #include <systools/win32/uwinapi.h>
 #include <rtl/digest.h>
+#include <rtl/bootstrap.hxx>
+#include <osl/file.hxx>
+#include <osl/process.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -181,44 +184,45 @@ static FILE *_tmpfile(void)
 }
 //***************************************************************************
 
-#define SOFFICE_USER_PATH   "StarOffice8\\user\\crashdata"
-
 static BOOL GetCrashDataPath( LPTSTR szBuffer )
 {
-    if ( SHGetSpecialFolderPath( NULL, szBuffer, CSIDL_APPDATA, TRUE ) )
+    ::rtl::OUString ustrValue = ::rtl::OUString::createFromAscii("${$SYSBINDIR/bootstrap.ini:UserInstallation}");
+    ::rtl::Bootstrap::expandMacros( ustrValue );
+
+    if ( ustrValue.getLength() )
     {
-        if ( szBuffer[0] && '\\' != szBuffer[_tcslen(szBuffer)-1] )
-            _tcscat( szBuffer, _T("\\") );
+        ustrValue += ::rtl::OUString::createFromAscii("/user/crashdata");
 
-        _tcscat( szBuffer, _T(SOFFICE_USER_PATH) );
+        ::osl::FileBase::RC result = ::osl::Directory::createPath( ustrValue );
 
-        CreateDirectory( szBuffer, NULL );
+        if ( ::osl::FileBase::E_None == result || ::osl::FileBase::E_EXIST == result )
+        {
+            ::rtl::OUString ustrPath;
 
-        return TRUE;
+            result = ::osl::FileBase::getSystemPathFromFileURL( ustrValue, ustrPath );
+            if (  ::osl::FileBase::E_None == result  )
+            {
+                _tcsncpy( szBuffer, ustrPath.getStr(), MAX_PATH );
+                return TRUE;
+            }
+        }
     }
 
     return FALSE;
 }
 
 
-static FILE *_open_reportfile( const char *lpExt, const char *lpMode )
+static FILE *_open_reportfile( LPCTSTR lpExt, LPCTSTR lpMode )
 {
     FILE    *fp = NULL;
-    CHAR    szAppDataPath[MAX_PATH] = "";
+    TCHAR   szAppDataPath[MAX_PATH] = _T("");
 
-    if ( SHGetSpecialFolderPathA( NULL, szAppDataPath, CSIDL_APPDATA, TRUE ) )
+    if ( GetCrashDataPath( szAppDataPath ) )
     {
-        if ( szAppDataPath[0] && '\\' != szAppDataPath[strlen(szAppDataPath)-1] )
-            strcat( szAppDataPath, "\\" );
+        _tcscat( szAppDataPath, _T("\\crashdat") );
+        _tcscat( szAppDataPath, lpExt );
 
-        strcat( szAppDataPath, SOFFICE_USER_PATH );
-
-        CreateDirectoryA( szAppDataPath, NULL );
-
-        strcat( szAppDataPath, "\\crashdat" );
-        strcat( szAppDataPath, lpExt );
-
-        fp = fopen( szAppDataPath, lpMode );
+        fp = _tfopen( szAppDataPath, lpMode );
     }
 
     return fp;
@@ -2739,7 +2743,23 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
 int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int )
 {
     int exitcode = -1;
+    int argc = __argc;
 
+#ifdef _UNICODE
+    char **argv = new char *[argc + 1];
+
+    for ( int argn = 0; argn < argc; argn++ )
+    {
+        int nBytes = WideCharToMultiByte( CP_ACP, 0, __targv[argn], -1, NULL, 0, NULL, NULL );
+        argv[argn] = new char[nBytes];
+        WideCharToMultiByte( CP_ACP, 0, __targv[argn], -1, argv[argn], nBytes, NULL, NULL );
+    }
+    argv[argc] = NULL;
+#else
+    char **argv = __targv;
+#endif
+
+    osl_setCommandArgs( argc, argv );
 
     PEXCEPTION_POINTERS pExceptionPointers = NULL;
     DWORD               dwProcessId = 0;
@@ -2772,8 +2792,8 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int )
 
             if ( g_bLoadReport )
             {
-                g_fpStackFile = _open_reportfile( ".stk", "rb" );
-                g_fpChecksumFile = _open_reportfile( ".chk", "rb" );
+                g_fpStackFile = _open_reportfile( _T(".stk"), _T("rb") );
+                g_fpChecksumFile = _open_reportfile( _T(".chk"), _T("rb") );
             }
             else
             {
@@ -2784,10 +2804,10 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int )
                 }
                 else
                 {
-                    g_fpStackFile = _open_reportfile( ".stk", "w+b" );
-                    g_fpChecksumFile = _open_reportfile( ".chk", "w+b" );
+                    g_fpStackFile = _open_reportfile( _T(".stk"), _T("w+b") );
+                    g_fpChecksumFile = _open_reportfile( _T(".chk"), _T("w+b") );
 
-                    FILE    *fpUnsent = _open_reportfile( ".lck", "w+b" );
+                    FILE    *fpUnsent = _open_reportfile( _T(".lck"), _T("w+b") );
                     if ( fpUnsent )
                     {
                         fprintf( fpUnsent, "Unsent\r\n" );
@@ -2799,7 +2819,7 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int )
                 WriteChecksumFile( g_fpChecksumFile, aLibraries );
                 WriteReportFile( &Params );
 
-                FILE    *fpPreview = _open_reportfile( ".prv", "w+b" );
+                FILE    *fpPreview = _open_reportfile( _T(".prv"), _T("w+b") );
 
                 if ( fpPreview )
                 {
