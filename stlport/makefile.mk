@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-16 10:57:14 $
+#   last change: $Author: hjs $ $Date: 2002-08-27 17:28:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ TARFILE_NAME=STLport-4.5.3
 PATCH_FILE_NAME=STLport-4.5.3.patch
 .ENDIF
 
-.IF "$(GUI)"=="WNT"
+.IF "$(USE_SHELL)"=="4nt"
 TAR_EXCLUDES="*/SC5/*"
 .ENDIF          # "$(GUI)"=="WNT"
 
