@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 16:12:08 $
+ *  last change: $Author: fs $ $Date: 2001-09-11 15:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     ,m_nPostApplyPage(0)
     ,m_pPostApplyPageSettings(NULL)
     ,m_eMode(omFull)
+    ,m_bUIEnabled( sal_True )
 {
     // add the initial tab pages
     AddTabPage(PAGE_GENERAL, String(ResId(STR_PAGETITLE_GENERAL)), OGeneralPage::Create, NULL);
@@ -618,8 +619,9 @@ void ODbAdminDialog::applyChangesAsync(const OPageSettings* _pUseTheseSettings)
 //-------------------------------------------------------------------------
 short ODbAdminDialog::Ok()
 {
-    short nResult = SfxTabDialog::Ok();
-    return (AR_LEAVE_MODIFIED == implApplyChanges(sal_False)) ? RET_OK : RET_CANCEL;
+    SfxTabDialog::Ok();
+    disabledUI();
+    return ( AR_LEAVE_MODIFIED == implApplyChanges() ) ? RET_OK : RET_CANCEL;
         // TODO : AR_ERROR is not handled correctly, we always close the dialog here
 }
 
@@ -1105,11 +1107,14 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     // if this is NULL, the page has not been created yet, which means we're called before the
     // dialog was displayed (probably from inside the ctor)
 
-    ShowPage( nOldSelectedPage );
-    // same for the previously selected page, if it is still there
-    SfxTabPage* pOldPage = GetTabPage( nOldSelectedPage );
-    if (pOldPage)
-        pOldPage->Reset(*GetInputSetImpl());
+    if ( isUIEnabled() )
+    {
+        ShowPage( nOldSelectedPage );
+        // same for the previously selected page, if it is still there
+        SfxTabPage* pOldPage = GetTabPage( nOldSelectedPage );
+        if (pOldPage)
+            pOldPage->Reset(*GetInputSetImpl());
+    }
 
     SetUpdateMode(sal_True);
 
@@ -1734,7 +1739,7 @@ IMPL_LINK(ODbAdminDialog, OnRestoreDatasource, Window*, _pWindow)
 }
 
 //-------------------------------------------------------------------------
-ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges(const sal_Bool _bActivateOnSuccess)
+ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
 {
     if (!PrepareLeaveCurrentPage())
     {   // the page did not allow us to leave
@@ -1955,7 +1960,7 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges(const sal_Bool _bAc
     GetApplyButton()->Enable(sal_False);
 
 
-    if (_bActivateOnSuccess)
+    if ( isUIEnabled() )
         ShowPage(GetCurPageId());
         // This does the usual ActivatePage, so the pages can save their current status.
         // This way, next time they're asked what has changed since now and here, they really
@@ -2034,6 +2039,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.73  2001/08/30 16:12:08  fs
+ *  #88427# +OnValidateName
+ *
  *  Revision 1.72  2001/08/27 06:57:23  oj
  *  #90015# some speedup's
  *
