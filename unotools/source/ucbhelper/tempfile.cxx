@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:43:28 $
+ *  last change: $Author: hro $ $Date: 2001-05-11 13:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,15 @@ String ConstructTempDir_Impl( const String* pParent )
 
             // test for valid filename
             rtl::OUString aRet;
+#ifdef TF_FILEURL
+            ::osl::FileBase::getFileURLFromSystemPath(
+                ::ucb::getSystemPathFromFileURL( xManager, aTmp ),
+                aRet );
+#else
             ::osl::FileBase::normalizePath(
                 ::ucb::getSystemPathFromFileURL( xManager, aTmp ),
                 aRet );
+#endif
             if ( aRet.getLength() )
             {
                 ::osl::DirectoryItem aItem;
@@ -219,7 +225,11 @@ String TempFile::CreateTempName( const String* pParent )
     // convert to file URL
     rtl::OUString aTmp;
     if ( aName.Len() )
+#ifdef TF_FILEURL
+        FileBase::getSystemPathFromFileURL( aName, aTmp );
+#else
         FileBase::getSystemPathFromNormalizedPath( aName, aTmp );
+#endif
     return aTmp;
 }
 
@@ -311,7 +321,11 @@ sal_Bool TempFile::IsValid() const
 String TempFile::GetFileName() const
 {
     rtl::OUString aTmp;
+#ifdef TF_FILEURL
+    FileBase::getSystemPathFromFileURL( pImp->aName, aTmp );
+#else
     FileBase::getSystemPathFromNormalizedPath( pImp->aName, aTmp );
+#endif
     return aTmp;
 }
 
@@ -356,7 +370,11 @@ String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
     }
 
     rtl::OUString aTmp;
+#ifdef TF_FILEURL
+    FileBase::getSystemPathFromFileURL( aTempNameBase_Impl, aTmp );
+#else
     FileBase::getSystemPathFromNormalizedPath( aTempNameBase_Impl, aTmp );
+#endif
     return aTmp;
 }
 
@@ -366,7 +384,11 @@ String TempFile::GetTempNameBaseDirectory()
         return String();
 
     rtl::OUString aTmp;
+#ifdef TF_FILEURL
+    FileBase::getSystemPathFromFileURL( aTempNameBase_Impl, aTmp );
+#else
     FileBase::getSystemPathFromNormalizedPath( aTempNameBase_Impl, aTmp );
+#endif
     return aTmp;
 }
 
