@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:22:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,9 +308,9 @@ void FuText::DoExecute ()
             pTextObj = (SdrTextObj*) aVEvt.pObj;
         }
     }
-    else if (pView->HasMarkedObj())
+    else if (pView->AreObjectsMarked())
     {
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
         if (rMarkList.GetMarkCount() == 1)
         {
@@ -729,7 +729,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (pTextObj)
     {
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
         if (rMarkList.GetMarkCount() == 1
             && ( rMarkList.GetMark(0)->GetObj() == pTextObj) )
@@ -845,7 +845,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
     pWindow->ReleaseMouse();
     USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-    if ( !pView->HasMarkedObj() &&
+    if ( !pView->AreObjectsMarked() &&
          Abs(aMDPos.X() - aPnt.X()) < nDrgLog &&
          Abs(aMDPos.Y() - aPnt.Y()) < nDrgLog &&
          !rMEvt.IsShift() && !rMEvt.IsMod2() )
@@ -1024,7 +1024,7 @@ BOOL FuText::KeyInput(const KeyEvent& rKEvt)
     if(pTextObj)
     {
         // maybe object is deleted, test if it's equal to the selected object
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         SdrObject* pSelectedObj = 0L;
 
         if(1 == rMarkList.GetMarkCount())
@@ -1526,9 +1526,9 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
                 }
             }
         }
-        else if (pView->HasMarkedObj())
+        else if (pView->AreObjectsMarked())
         {
-            const SdrMarkList& rMarkList = pView->GetMarkList();
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
             if (rMarkList.GetMarkCount() == 1)
             {
