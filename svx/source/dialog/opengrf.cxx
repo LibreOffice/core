@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:02 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <tools/urlobj.hxx>
 
 #ifndef  _CPPUHELPER_IMPLBASE1_HXX_
@@ -235,7 +234,6 @@ short SvxOpenGraphicDialog::Execute()
             if ( INET_PROT_FILE != aObj.GetProtocol() )
             {
                 SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
-                aMed.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
                 aMed.DownLoad();
                 SvStream* pStream = aMed.GetInStream();
 
