@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-18 09:27:17 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 #include <osl/thread.h>
-
 #include <bridges/remote/helper.hxx>
 
 #include <algorithm>
@@ -82,11 +81,11 @@ inline t mymin( const t & val1, const t & val2 )
  * urp_BridgeImpl
  ***********/
 urp_BridgeImpl::urp_BridgeImpl( sal_Int32 nCacheSize , sal_uInt32 nInitialMarshalerSize ) :
+    m_blockMarshaler( this , nInitialMarshalerSize , ::bridges_remote::remote_retrieveOidFromProxy),
+    m_nMarshaledMessages( 0 ),
     m_oidCacheOut( (sal_uInt16)nCacheSize ),
     m_tidCacheOut( (sal_uInt16)nCacheSize ),
-    m_typeCacheOut( (sal_uInt16)nCacheSize ),
-    m_blockMarshaler( this , nInitialMarshalerSize , ::bridges_remote::remote_retrieveOidFromProxy),
-    m_nMarshaledMessages( 0 )
+    m_typeCacheOut( (sal_uInt16)nCacheSize )
 {
     m_pOidIn = new OUString[ nCacheSize ];
     m_pTidIn = new ByteSequence[ nCacheSize ];
