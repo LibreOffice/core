@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-20 08:54:41 $
+ *  last change: $Author: cmc $ $Date: 2002-11-25 10:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4101,6 +4101,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
         case NTABLE:
             ExportTable(pNode,nLevel);
             break;
+        case NALIGN:
         case NBRACEBODY:
         case NEXPRESSION:
             ExportExpression(pNode,nLevel);
