@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyWithState.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ module com {  module sun {  module star {  module beans {
         also implement <type>XProperty</type>.
     </p>
  */
-interface XPropertyWithState: com::sun::star::uno::XInterface
+published interface XPropertyWithState: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
