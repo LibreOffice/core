@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:41:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
     This usually enahnces objects of type <type scope="com::sun::star::drawing">Shape</type> with
     presentation properties.
 */
-service Shape
+published service Shape
 {
     //-------------------------------------------------------------------------
 
