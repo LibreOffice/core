@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:02:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 
 
-#ifdef PRECOMPILED
-#include "filt_pch.hxx"
-#endif
 
 #pragma hdrstop
 
