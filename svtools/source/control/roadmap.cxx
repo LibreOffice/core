@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:41:49 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,16 +755,16 @@ namespace svt
 
     ORoadmapHyperLabel::ORoadmapHyperLabel( Window* _pParent, const ResId& _rId)
     {
-        mpIDLabel = new ORoadmapIDHyperLabel(_pParent, _rId); // WB_TABSTOP |
-        mpDescHyperLabel = new HyperLabel(_pParent, _rId); // WB_TABSTOP |
+        mpIDLabel = new ORoadmapIDHyperLabel(_pParent, WB_WORDBREAK);
+        mpDescHyperLabel = new HyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
     }
 
 
     ORoadmapHyperLabel::ORoadmapHyperLabel( Window* _pParent, WinBits _nWinStyle)
     {
-        mpIDLabel = new ORoadmapIDHyperLabel(_pParent, _nWinStyle); //WB_TABSTOP |
+        mpIDLabel = new ORoadmapIDHyperLabel(_pParent, WB_WORDBREAK);
         mpIDLabel->SetTextColor( mpIDLabel->GetSettings().GetStyleSettings().GetFieldTextColor( ) );
-        mpDescHyperLabel = new HyperLabel(_pParent, _nWinStyle); // WB_TABSTOP |
+        mpDescHyperLabel = new HyperLabel(_pParent, WB_TABSTOP | WB_WORDBREAK);
     }
 
     //---------------------------------------------------------------------
