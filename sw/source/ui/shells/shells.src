@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:14:59 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ String STR_GRFILTER_OPENERROR
     Text[ dutch ] = "Grafisch bestand kan niet worden geopend";
     Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÍ¼ĞÎÎÄ¼ş";
     Text[ greek ] = "Äåí åßíáé äõíáôü ôï Üíïéãìá ôïõ áñ÷åßïõ ãñáöéêşí";
-    Text[ korean ] = "±×·¡ÇÈ ÆÄÀÏÀ»¡¡¿­¼ö¡¡¾ø½À´Ï´Ù.";
+    Text[ korean ] = "±×·¡ÇÈ ÆÄÀÏÀ»¡¡¿­ ¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Grafik dosyası açılamıyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No es posible abrir el archivo gráfico";
@@ -488,7 +488,7 @@ String STR_REDLINE_FORMATED
     Text[ dutch ] = "Opmaak";
     Text[ chinese_simplified ] = "ÊôĞÔ";
     Text[ greek ] = "Ìïñöïğïßçóç";
-    Text[ korean ] = "Æ¯¼º";
+    Text[ korean ] = "¼Ó¼º";
     Text[ turkish ] = "Öznitelikler";
     Text[ catalan ] = "Formateado";
     Text[ finnish ] = "Muodot";
@@ -743,7 +743,7 @@ String STR_PAGE
     TEXT[ dutch ] = "Pagina  ";
     TEXT[ chinese_simplified ] = "Ò³Ãæ ";
     TEXT[ greek ] = "Óåëßäá ";
-    TEXT[ korean ] = "ÂÊ ";
+    TEXT[ korean ] = "ÆäÀÌÁö ";
     TEXT[ turkish ] = "Sayfa ";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Página  ";
@@ -2181,7 +2181,7 @@ String STR_SHELLNAME_DRAW_TEXT
     Text[ dutch ] = "Tekentekst";
     Text[ chinese_simplified ] = "»æÍ¼ÎÄ×Ö";
     Text[ greek ] = "Êåßìåíï ó÷åäßïõ";
-    Text[ korean ] = "±×¸² ÅØ½ºÆ®";
+    Text[ korean ] = "¹®ÀÚ ÅØ½ºÆ®";
     Text[ turkish ] = "Çizim metni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto de diseño";
@@ -2406,7 +2406,7 @@ String STR_SWBG_PAGE
     Text[ dutch ] = "Pagina";
     Text[ chinese_simplified ] = "Ò³";
     Text[ greek ] = "Óåëßäá";
-    Text[ korean ] = "ÂÊ";
+    Text[ korean ] = "ÆäÀÌÁö";
     Text[ turkish ] = "Sayfa";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Página";
@@ -2469,6 +2469,7 @@ String STR_SWBG_FOOTER
     Text[ finnish ] = "Alaselite";
 };
  //Ende: Strings fuer Gallery/Hintergrund
+
 
 
 
