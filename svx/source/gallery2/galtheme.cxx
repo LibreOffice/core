@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-12 14:32:53 $
+ *  last change: $Author: ka $ $Date: 2001-12-18 14:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,6 +1177,62 @@ BOOL GalleryTheme::InsertURL( const INetURLObject& rURL, ULONG nInsertPos )
 
 // -----------------------------------------------------------------------------
 
+BOOL GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, ULONG nInsertPos )
+{
+    ::std::vector< INetURLObject >  aURLVector;
+    BOOL                            bRet = FALSE;
+
+    try
+    {
+        INetURLObject   aURL;
+        Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
+        sal_Bool        bFolder;
+
+        aCnt.getPropertyValue( OUString::createFromAscii( "IsFolder" ) ) >>= bFolder;
+
+        if( bFolder )
+        {
+            uno::Sequence< OUString > aProps( 1 );
+            aProps.getArray()[ 0 ] == OUString::createFromAscii( "Url" );
+            uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY ) );
+
+            if( xResultSet.is() )
+            {
+                uno::Reference< XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
+
+                if( xContentAccess.is() )
+                {
+                    while( xResultSet->next() )
+                    {
+                        aURL.SetSmartURL( xContentAccess->queryContentIdentifierString() );
+                        aURLVector.push_back( aURL );
+                    }
+                }
+            }
+        }
+        else
+            aURLVector.push_back( rFileOrDirURL );
+    }
+    catch( const ContentCreationException& )
+    {
+    }
+    catch( const ::com::sun::star::uno::RuntimeException& )
+    {
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
+
+    ::std::vector< INetURLObject >::const_iterator aIter( aURLVector.begin() ), aEnd( aURLVector.end() );
+
+    while( aIter != aEnd )
+        bRet = bRet || InsertURL( *aIter++, nInsertPos );
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
 BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable, ULONG nInsertPos )
 {
     BOOL bRet = FALSE;
@@ -1200,47 +1256,17 @@ BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< :
             if( aDataHelper.GetString( FORMAT_FILE, aFile ) )
             {
                 INetURLObject aURL( aFile );
-                DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-                try
+                if( aFile.Len() && ( aURL.GetProtocol() == INET_PROT_NOT_VALID ) )
                 {
-                    Content     aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
-                    sal_Bool    bFolder;
+                    String aLocalURL;
 
-                    aCnt.getPropertyValue( OUString::createFromAscii( "IsFolder" ) ) >>= bFolder;
+                    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFile, aLocalURL ) )
+                        aURL = INetURLObject( aLocalURL );
+                }
 
-                    if( bFolder )
-                    {
-                        uno::Sequence< OUString > aProps( 1 );
-                        aProps.getArray()[ 0 ] == OUString::createFromAscii( "Url" );
-                        uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY ) );
-
-                        if( xResultSet.is() )
-                        {
-                            uno::Reference< XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
-
-                            if( xContentAccess.is() )
-                            {
-                                while( xResultSet->next() )
-                                {
-                                    aURL.SetSmartURL( xContentAccess->queryContentIdentifierString() );
-                                    bRet = bRet || InsertURL( aURL, nInsertPos );
-                                }
-                            }
-                        }
-                    }
-                    else
-                        bRet = InsertURL( aURL, nInsertPos );
-                }
-                catch( const ContentCreationException& )
-                {
-                }
-                catch( const ::com::sun::star::uno::RuntimeException& )
-                {
-                }
-                catch( const ::com::sun::star::uno::Exception& )
-                {
-                }
+                if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+                    bRet = InsertFileOrDirURL( aURL, nInsertPos );
             }
         }
         else
