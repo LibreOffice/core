@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2002-05-28 20:30:02 $
+ *  last change: $Author: os $ $Date: 2002-06-03 08:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,37 +688,55 @@ TabPage RID_SVXPAGE_BORDER
         Text[ catalan ] = "Sombra";
         Text[ thai ] = "ลักษณะการแรเงา";
     };
+#define _PREVIEW_IDLIST_\
+        IdList =                    \
+        {                           \
+            IID_PRENONE ;           \
+            IID_TABLE_PRE1 ;        \
+            IID_TABLE_PRE2 ;        \
+            IID_TABLE_PRE3 ;        \
+            IID_TABLE_PRE4 ;        \
+            IID_PARAGRAPH_PRE1 ;    \
+            IID_PARAGRAPH_PRE2 ;    \
+            IID_PARAGRAPH_PRE3 ;    \
+            IID_PARAGRAPH_PRE4 ;    \
+        };                          \
+        IdCount = { 9 ; };
+
     ImageList IL_PRE_BITMAPS
     {
         ImageBitmap = Bitmap { File = "pr_eview.bmp" ; };
         MaskColor = STD_MASKCOLOR ;
-        IdList =
-        {
-            IID_PRENONE ;
-            IID_TABLE_PRE1 ;
-            IID_TABLE_PRE2 ;
-            IID_TABLE_PRE3 ;
-            IID_TABLE_PRE4 ;
-            IID_PARAGRAPH_PRE1 ;
-            IID_PARAGRAPH_PRE2 ;
-            IID_PARAGRAPH_PRE3 ;
-            IID_PARAGRAPH_PRE4 ;
-        };
-        IdCount = { 9 ; };
+        _PREVIEW_IDLIST_
     };
+    ImageList ILH_PRE_BITMAPS
+    {
+        ImageBitmap = Bitmap { File = "prh_eview.bmp" ; };
+        MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+        _PREVIEW_IDLIST_
+    };
+#define _SHADOW_IDLIST_             \
+        IdList =                    \
+        {                           \
+            IID_SHADOWNONE ;        \
+            IID_SHADOW_BOT_RIGHT ;  \
+            IID_SHADOW_BOT_LEFT ;   \
+            IID_SHADOW_TOP_RIGHT ;  \
+            IID_SHADOW_TOP_LEFT ;   \
+        };                          \
+        IdCount = { 5 ; };
+
     ImageList IL_SDW_BITMAPS
     {
         ImageBitmap = Bitmap { File = "sh_adow.bmp" ; };
         MaskColor = STD_MASKCOLOR ;
-        IdList =
-        {
-            IID_SHADOWNONE ;
-            IID_SHADOW_BOT_RIGHT ;
-            IID_SHADOW_BOT_LEFT ;
-            IID_SHADOW_TOP_RIGHT ;
-            IID_SHADOW_TOP_LEFT ;
-        };
-        IdCount = { 5 ; };
+        _SHADOW_IDLIST_
+    };
+    ImageList ILH_SDW_BITMAPS
+    {
+        ImageBitmap = Bitmap { File = "shh_adow.bmp" ; };
+        MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+        _SHADOW_IDLIST_
     };
     Text[ catalan ] = "Borde";
     Text[ thai ] = "เส้นขอบ";

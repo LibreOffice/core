@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 15:01:56 $
+ *  last change: $Author: os $ $Date: 2002-06-03 08:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,10 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         aEdShadowSize   ( this, ResId( ED_SHADOWSIZE ) ),
         aFtShadowColor  ( this, ResId( FT_SHADOWCOLOR ) ),
         aLbShadowColor  ( this, ResId( LB_SHADOWCOLOR ) ),
-
+        aShadowImgLstH( ResId(ILH_SDW_BITMAPS)),
+        aShadowImgLst( ResId(IL_SDW_BITMAPS)),
+        aBorderImgLstH( ResId(ILH_PRE_BITMAPS)),
+        aBorderImgLst( ResId(IL_PRE_BITMAPS)),
         nMinValue(0),
         bIsTableBorder  ( FALSE ),
         nSWMode(0)
@@ -1352,45 +1355,64 @@ void SvxBorderTabPage::FillValueSets_Impl()
     //Initialize presets window
     aWndPresets.SetColCount( 5 );
     aWndPresets.SetStyle( aWndPresets.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
-
-    ImageList   aIlPre( ResId( IL_PRE_BITMAPS ) );
-
-    aWndPresets.SetSizePixel( aWndPresets.CalcWindowSizePixel( aIlPre.GetImage(IID_PRENONE).GetSizePixel() ) );
-
-    aWndPresets.InsertItem( 1, aIlPre.GetImage(IID_PRENONE) );
-    if ( bIsTableBorder )
-    {
-        aWndPresets.InsertItem( 2, aIlPre.GetImage(IID_TABLE_PRE1) );
-        aWndPresets.InsertItem( 3, aIlPre.GetImage(IID_TABLE_PRE2) );
-        aWndPresets.InsertItem( 4, aIlPre.GetImage(IID_TABLE_PRE3) );
-        aWndPresets.InsertItem( 5, aIlPre.GetImage(IID_TABLE_PRE4) );
-    }
-    else
-    {
-        aWndPresets.InsertItem( 2, aIlPre.GetImage(IID_PARAGRAPH_PRE1) );
-        aWndPresets.InsertItem( 3, aIlPre.GetImage(IID_PARAGRAPH_PRE2) );
-        aWndPresets.InsertItem( 4, aIlPre.GetImage(IID_PARAGRAPH_PRE3) );
-        aWndPresets.InsertItem( 5, aIlPre.GetImage(IID_PARAGRAPH_PRE4) );
-    }
-    aWndPresets.SetNoSelection();
-    aWndPresets.Show();
-
-    // Initialize shadow window
-    ImageList   aIlSdw( ResId( IL_SDW_BITMAPS ) );
-
+    aWndPresets.SetSizePixel( aWndPresets.CalcWindowSizePixel( aBorderImgLst.GetImage(IID_PRENONE).GetSizePixel() ) );
     aWndShadows.SetColCount( 5 );
     aWndShadows.SetStyle(  aWndShadows.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
     aWndShadows.SetPosSizePixel( aWndShadows.GetPosPixel(),
-                    aWndShadows.CalcWindowSizePixel( aIlSdw.GetImage(IID_SHADOWNONE).GetSizePixel() ) );
-    aWndShadows.InsertItem( 1, aIlSdw.GetImage(IID_SHADOWNONE) );
-    aWndShadows.InsertItem( 2, aIlSdw.GetImage(IID_SHADOW_BOT_RIGHT) );
-    aWndShadows.InsertItem( 3, aIlSdw.GetImage(IID_SHADOW_TOP_RIGHT) );
-    aWndShadows.InsertItem( 4, aIlSdw.GetImage(IID_SHADOW_BOT_LEFT) );
-    aWndShadows.InsertItem( 5, aIlSdw.GetImage(IID_SHADOW_TOP_LEFT) );
+                    aWndShadows.CalcWindowSizePixel( aShadowImgLst.GetImage(IID_SHADOWNONE).GetSizePixel() ) );
+
+    for(USHORT i = 1; i < 6; i++)
+    {
+        aWndPresets.InsertItem( i );
+        aWndShadows.InsertItem( i );
+    }
+    aWndPresets.SetNoSelection();
     aWndShadows.SelectItem( 1 );
+
+    InitValueSets_Impl();
+    aWndPresets.Show();
     aWndShadows.Show();
 }
+/* -----------------------------03.06.2002 10:17------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SvxBorderTabPage::InitValueSets_Impl()
+{
+    static const USHORT aTableBorders[] =
+    {
+        IID_PRENONE,
+        IID_TABLE_PRE1,
+        IID_TABLE_PRE2,
+        IID_TABLE_PRE3,
+        IID_TABLE_PRE4
+    };
+
+    static const USHORT aParaBorders[] =
+    {
+        IID_PRENONE,
+        IID_PARAGRAPH_PRE1,
+        IID_PARAGRAPH_PRE2,
+        IID_PARAGRAPH_PRE3,
+        IID_PARAGRAPH_PRE4
+    };
+    static const USHORT aShadows[] =
+    {
+        IID_SHADOWNONE,
+        IID_SHADOW_BOT_RIGHT,
+        IID_SHADOW_TOP_RIGHT,
+        IID_SHADOW_BOT_LEFT,
+        IID_SHADOW_TOP_LEFT
+    };
+
+    BOOL bDark = aWndPresets.GetDisplayBackground().GetColor().IsDark();
+    ImageList& rBorderImgLst = bDark ? aBorderImgLstH : aBorderImgLst;
+    const USHORT * pBorderIds = bIsTableBorder ? aTableBorders : aParaBorders;
+    for(USHORT nBorder = 0; nBorder < aWndPresets.GetItemCount(); nBorder ++)
+        aWndPresets.SetItemImage( nBorder + 1, rBorderImgLst.GetImage(pBorderIds[nBorder]));
+    ImageList& rShadowImgLst = bDark ? aShadowImgLstH : aShadowImgLst;
+    for(USHORT nShadow = 0; nShadow < 5; nShadow++)
+        aWndShadows.SetItemImage( nShadow + 1, rShadowImgLst.GetImage(aShadows[nShadow]));
+}
 // -----------------------------------------------------------------------
 
 void SvxBorderTabPage::FillLineListBox_Impl()
@@ -1532,6 +1554,17 @@ void    SvxBorderTabPage::SetSWMode(BYTE nSet)
 //#define SW_BORDER_MODE_TABLE  0x02
 //#define SW_BORDER_MODE_FRAME  0x04
     nSWMode = nSet;
+}
+/* -----------------------------03.06.2002 10:15------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            InitValueSets_Impl();
+
+    SfxTabPage::DataChanged( rDCEvt );
 }
 
 #undef EQSTYLE

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 15:01:56 $
+ *  last change: $Author: os $ $Date: 2002-06-03 08:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
 #define IID_PARAGRAPH_PRE2      7
 #define IID_PARAGRAPH_PRE3      8
 #define IID_PARAGRAPH_PRE4      9
+#define ILH_PRE_BITMAPS         10
 
 #define IL_SDW_BITMAPS          2
 #define IID_SHADOWNONE          1
@@ -118,7 +119,7 @@
 #define IID_SHADOW_BOT_LEFT     3
 #define IID_SHADOW_TOP_RIGHT    4
 #define IID_SHADOW_TOP_LEFT     5
-
+#define ILH_SDW_BITMAPS         6
 
 
 #endif
