@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:06 $
+ *  last change: $Author: mib $ $Date: 2001-07-25 06:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,12 @@
 #include <comphelper/namecontainer.hxx>
 #endif
 
+#ifdef CONV_STAR_FONTS
+#ifndef _VCL_FONTCVT_HXX
+#include <vcl/fontcvt.hxx>
+#endif
+#endif
+
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -171,6 +177,23 @@ sal_Char __READONLY_DATA sXML_np__table_old[] = "__table";
 sal_Char __READONLY_DATA sXML_np__meta_old[] = "__meta";
 
 
+#ifdef CONV_STAR_FONTS
+class SvXMLImport_Impl
+{
+public:
+    FontToSubsFontConverter hBatsFontConv;
+    FontToSubsFontConverter hMathFontConv;
+
+    SvXMLImport_Impl() : hBatsFontConv( 0 ), hMathFontConv( 0 ) {}
+    ~SvXMLImport_Impl()
+    {
+        if( hBatsFontConv )
+            DestroyFontToSubsFontConverter( hBatsFontConv );
+        if( hMathFontConv )
+            DestroyFontToSubsFontConverter( hMathFontConv );
+    }
+};
+#endif
 
 typedef SvXMLImportContext *SvXMLImportContextPtr;
 SV_DECL_PTRARR( SvXMLImportContexts_Impl, SvXMLImportContextPtr, 20, 5 )
@@ -364,6 +387,11 @@ SvXMLImport::~SvXMLImport() throw ()
         ((SvXMLStylesContext *)&xMasterStyles)->Clear();
 
     xmloff::token::ResetTokens();
+
+#ifdef CONV_STAR_FONTS
+    if( pImpl )
+        delete pImpl;
+#endif
 }
 
 // XUnoTunnel & co
@@ -1107,3 +1135,45 @@ OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue)
 {
     return INetURLObject::RelToAbs( rValue );
 }
+#ifdef CONV_STAR_FONTS
+sal_Unicode SvXMLImport::ConvStarBatsCharToStarSymbol( sal_Unicode c )
+{
+    sal_Unicode cNew = c;
+    if( !pImpl || !pImpl->hBatsFontConv )
+    {
+        if( !pImpl )
+            pImpl = new SvXMLImport_Impl;
+
+        OUString sStarBats( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) );
+        pImpl->hBatsFontConv = CreateFontToSubsFontConverter( sStarBats,
+                 FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+        OSL_ENSURE( pImpl->hBatsFontConv, "Got no symbol font converter" );
+    }
+    if( pImpl->hBatsFontConv )
+    {
+        cNew = ConvertFontToSubsFontChar( pImpl->hBatsFontConv, c );
+    }
+
+    return cNew;
+}
+
+sal_Unicode SvXMLImport::ConvStarMathCharToStarSymbol( sal_Unicode c )
+{
+    sal_Unicode cNew = c;
+    if( !pImpl || !pImpl->hMathFontConv )
+    {
+        if( !pImpl )
+            pImpl = new SvXMLImport_Impl;
+        OUString sStarMath( RTL_CONSTASCII_USTRINGPARAM( "StarMath" ) );
+        pImpl->hMathFontConv = CreateFontToSubsFontConverter( sStarMath,
+                 FONTTOSUBSFONT_IMPORT|FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+        OSL_ENSURE( pImpl->hMathFontConv, "Got no symbol font converter" );
+    }
+    if( pImpl->hMathFontConv )
+    {
+        cNew = ConvertFontToSubsFontChar( pImpl->hMathFontConv, c );
+    }
+
+    return cNew;
+}
+#endif
