@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-05 08:10:00 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,6 @@ namespace dbaui
         ::com::sun::star::lang::Locale      m_aLocale;
         OTableBorderWindow*                 m_pWin;
         OTableController*                   m_pController;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
-                                            m_xController;  // keep the target of m_pController alive
         ChildFocusState                     m_eChildFocus;
 
     protected:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-05 08:16:20 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,6 @@ OTableDesignView::OTableDesignView( Window* pParent,
                                    ) :
     ODataView( pParent ,_pController,_rxOrb )
     ,m_pController( _pController )
-    ,m_xController( _pController )
     ,m_eChildFocus(NONE)
 {
     DBG_CTOR(OTableDesignView,NULL);
@@ -294,7 +293,6 @@ OTableDesignView::~OTableDesignView()
     }
 
     m_pController = NULL;
-    m_xController.clear();
 }
 
 // -----------------------------------------------------------------------------
@@ -336,7 +334,7 @@ IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, pAcc )
     {
         OTableRow* pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
         OFieldDescription* pFieldDescr = pRow ? pRow->GetActFieldDescr() : NULL;
-        if (pFieldDescr)
+        if ( pFieldDescr )
             GetDescWin()->GrabFocus();
         else
             GetEditorCtrl()->GrabFocus();
@@ -441,7 +439,7 @@ void OTableDesignView::reSync()
     GetEditorCtrl()->DeactivateCell();
     OTableRow* pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
     OFieldDescription* pFieldDescr = pRow ? pRow->GetActFieldDescr() : NULL;
-    if(pFieldDescr)
+    if ( pFieldDescr )
         GetDescWin()->DisplayData(pFieldDescr);
 }
 // -----------------------------------------------------------------------------
