@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:37:28 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,22 +66,27 @@
 #include <svx/svdoutl.hxx>
 #endif
 
+#ifndef SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDIT_SOURCE_HXX
 #include <AccessibleOutlineEditSource.hxx>
-#include <outlview.hxx>
+#endif
+#ifndef SD_OUTLINE_VIEW_HXX
+#include "OutlineView.hxx"
+#endif
 
 namespace accessibility
 {
 
-    AccessibleOutlineEditSource::AccessibleOutlineEditSource( SdrOutliner&  rOutliner,
-                                                              SdrView&      rView,
-                                                              OutlinerView& rOutlView,
-                                                              const Window& rViewWindow ) :
-        mrView( rView ),
-        mrWindow( rViewWindow ),
-        mpOutliner( &rOutliner ),
-        mpOutlinerView( &rOutlView ),
-        mTextForwarder( rOutliner, NULL ),
-        mViewForwarder( rOutlView )
+    AccessibleOutlineEditSource::AccessibleOutlineEditSource(
+        SdrOutliner&    rOutliner,
+        SdrView&        rView,
+        OutlinerView& rOutlView,
+        const ::Window& rViewWindow )
+        : mrView( rView ),
+          mrWindow( rViewWindow ),
+          mpOutliner( &rOutliner ),
+          mpOutlinerView( &rOutlView ),
+          mTextForwarder( rOutliner, NULL ),
+          mViewForwarder( rOutlView )
     {
         // register as listener - need to broadcast state change messages
         rOutliner.SetNotifyHdl( LINK(this, AccessibleOutlineEditSource, NotifyHdl) );
