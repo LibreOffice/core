@@ -1,0 +1,8 @@
+UDK_3.1 {
+    global:
+        component_getFactory;
+        component_getImplementationEnvironment;
+        component_writeInfo;
+    local:
+        *;
+};
