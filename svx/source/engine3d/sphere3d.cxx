@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sphere3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
+ *  last change: $Author: aw $ $Date: 2001-07-19 16:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,8 +177,8 @@ void E3dSphereObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
 
     for(a = 0; a < nCntHorPoly; a++)
     {
-        Polygon3D aNewHor(nCntHor);
-        aNewHor.SetClosed(TRUE);
+        Polygon3D aNewHor(nCntHor + 1);
+        //aNewHor.SetClosed(TRUE);
         rLinePolyPolygon.Insert(aNewHor);
     }
 
@@ -220,6 +220,8 @@ void E3dSphereObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
 
                 // insert horizontal
                 rLinePolyPolygon[nIndHorPoly + (nV - 1)][nH] = aPos;
+                if(!nH)
+                    rLinePolyPolygon[nIndHorPoly + (nV - 1)][nCntHor] = aPos;
             }
         }
 

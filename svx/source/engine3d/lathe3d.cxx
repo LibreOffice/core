@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
+ *  last change: $Author: aw $ $Date: 2001-07-19 16:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,8 +258,11 @@ void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 
 void E3dLatheObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
 {
-    // call parent
-    E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
+    // #78972# add extrude line polys
+    rLinePolyPolygon.Insert(maLinePolyPolygon);
+
+    // don't call parent
+    //E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
 }
 
 /*************************************************************************
@@ -280,6 +283,9 @@ void E3dLatheObj::CreateGeometry()
 {
     // Start der Geometrieerzeugung ankuendigen
     StartCreateGeometry();
+
+    // #78972#
+    maLinePolyPolygon.Clear();
 
     // Polygon erzeugen
     PolyPolygon3D aLathePoly3D(aPolyPoly3D);
@@ -312,6 +318,9 @@ void E3dLatheObj::CreateGeometry()
         // Normalen und Vorderseite selbst erzeugen
         AddFrontNormals(aLathePoly3D, aNormalsFront, aNormal);
         CreateFront(aLathePoly3D, aNormalsFront, GetCreateNormals(), GetCreateTexture());
+
+        // #78972#
+        maLinePolyPolygon.Insert(aLathePoly3D);
     }
     else
     {
@@ -384,7 +393,7 @@ void E3dLatheObj::CreateGeometry()
             }
 
             // Jetzt Segment erzeugen
-            CreateSegment(
+            ImpCreateSegment(
                 aFront,
                 aBack,
                 &aPrev,
@@ -402,7 +411,9 @@ void E3dLatheObj::CreateGeometry()
                 GetCreateTexture(),
                 GetCreateNormals(),
                 GetLatheCharacterMode(),
-                TRUE);
+                TRUE,
+                // #78972#
+                &maLinePolyPolygon);
 
             // naechsten Schritt vorbereiten
             fTmpStart += fTmpLength;
@@ -411,6 +422,10 @@ void E3dLatheObj::CreateGeometry()
             aBack = aNext;
         }
     }
+
+    // #78972#
+    BOOL bClosedLines = ((GetEndAngle() == 3600) && (GetBackScale() == 100));
+    ImpCompleteLinePolygon(maLinePolyPolygon, aLathePoly3D.Count(), bClosedLines);
 
     // call parent
     E3dCompoundObject::CreateGeometry();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cube3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
+ *  last change: $Author: aw $ $Date: 2001-07-19 16:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,20 +153,20 @@ SdrObject *E3dCubeObj::DoConvertToPolyObj(BOOL bBezier) const
 void E3dCubeObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
 {
     // add geometry describing polygons to rLinePolyPolygon
-    Polygon3D aNewUpper(4);
+    Polygon3D aNewUpper(5);
     aNewUpper[0] = Vector3D(aCubePos.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z());
     aNewUpper[1] = Vector3D(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z());
     aNewUpper[2] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z() + aCubeSize.Z());
     aNewUpper[3] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z() + aCubeSize.Z());
-    aNewUpper.SetClosed(TRUE);
+    aNewUpper[4] = aNewUpper[0];
     rLinePolyPolygon.Insert(aNewUpper);
 
-    Polygon3D aNewLower(4);
+    Polygon3D aNewLower(5);
     aNewLower[0] = Vector3D(aCubePos.X(), aCubePos.Y(), aCubePos.Z());
     aNewLower[1] = Vector3D(aCubePos.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z());
     aNewLower[2] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y() + aCubeSize.Y(), aCubePos.Z());
     aNewLower[3] = Vector3D(aCubePos.X() + aCubeSize.X(), aCubePos.Y(), aCubePos.Z());
-    aNewLower.SetClosed(TRUE);
+    aNewLower[4] = aNewLower[0];
     rLinePolyPolygon.Insert(aNewLower);
 
     Polygon3D aNewVertical(2);

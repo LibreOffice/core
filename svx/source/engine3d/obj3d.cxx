@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
+ *  last change: $Author: aw $ $Date: 2001-07-19 16:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,9 +574,9 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     if(pScene)
     {
         // pos ermitteln
-        B3dTransformationSet& rSet = pScene->GetCameraSet();
+        B3dTransformationSet& rTransSet = pScene->GetCameraSet();
         Vector3D aScaleCenter((double)rRef.X(), (double)rRef.Y(), 32768.0);
-        aScaleCenter = rSet.ViewToEyeCoor(aScaleCenter);
+        aScaleCenter = rTransSet.ViewToEyeCoor(aScaleCenter);
 
         // scale-faktoren holen
         double fScaleX = xFact;
@@ -586,11 +586,11 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
         Matrix4D mFullTransform(GetFullTransform());
         Matrix4D mTrans(mFullTransform);
 
-        mTrans *= rSet.GetOrientation();
+        mTrans *= rTransSet.GetOrientation();
         mTrans.Translate(-aScaleCenter);
         mTrans.Scale(fScaleX, fScaleY, 1.0);
         mTrans.Translate(aScaleCenter);
-        mTrans *= rSet.GetInvOrientation();
+        mTrans *= rTransSet.GetInvOrientation();
         mFullTransform.Invert();
         mTrans *= mFullTransform;
 
@@ -631,9 +631,9 @@ void E3dObject::NbcMove(const Size& rSize)
         }
 
         // BoundVolume von Weltkoordinaten in Eye-Koordinaten
-        B3dTransformationSet& rSet = pScene->GetCameraSet();
+        B3dTransformationSet& rTransSet = pScene->GetCameraSet();
         const Volume3D& rVol = pScene->GetBoundVolume();
-        Volume3D aEyeVol = rVol.GetTransformVolume(rSet.GetOrientation());
+        Volume3D aEyeVol = rVol.GetTransformVolume(rTransSet.GetOrientation());
 
         // relativen Bewegungsvektor in Augkoordinaten bilden
         Vector3D aMove(
@@ -643,9 +643,9 @@ void E3dObject::NbcMove(const Size& rSize)
 
         // Bewegungsvektor in lokale Koordinaten des Parents des Objektes
         Vector3D aPos;
-        aMove = rSet.EyeToWorldCoor(aMove);
+        aMove = rTransSet.EyeToWorldCoor(aMove);
         aMove *= mInvDispTransform;
-        aPos = rSet.EyeToWorldCoor(aPos);
+        aPos = rTransSet.EyeToWorldCoor(aPos);
         aPos *= mInvDispTransform;
         aMove = aMove - aPos;
 
@@ -2132,8 +2132,15 @@ void E3dCompoundObject::RecalcBoundRect()
             pScene->GetCameraSet().SetObjectTrans(mTransform);
 
             // Schattenpolygon holen
-            PolyPolygon aShadowPoly;
-            GetShadowPolygon(aShadowPoly);
+            PolyPolygon3D aShadowPoly3D;
+            ImpGetShadowPolygon(aShadowPoly3D);
+
+            // invert Y coor cause of GetPolyPolygon() later
+            Matrix4D aTransMat;
+            aTransMat.Scale(1.0, -1.0, 1.0);
+            aShadowPoly3D.Transform(aTransMat);
+
+            PolyPolygon aShadowPoly(aShadowPoly3D.GetPolyPolygon());
 
             // Hinzufuegen
             aOutRect.Union(aShadowPoly.GetBoundRect());
@@ -3931,7 +3938,7 @@ void E3dCompoundObject::DrawObjectWireframe(ExtOutputDevice& rXOut)
     Point aFirstPoint, aLastPoint, aNewPoint;
     B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
     GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
-    B3dTransformationSet& rSet = GetScene()->GetCameraSet();
+    B3dTransformationSet& rTransSet = GetScene()->GetCameraSet();
     BOOL bDrawLine, bLastDrawLine;
     Vector3D aPoint;
 
@@ -3940,7 +3947,7 @@ void E3dCompoundObject::DrawObjectWireframe(ExtOutputDevice& rXOut)
         // Naechstes Primitiv
         nUpperBound = rIndexBucket[nPolyCounter++].GetIndex();
         bDrawLine = bLastDrawLine = rEntityBucket[nEntityCounter].IsEdgeVisible();
-        aPoint = rSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point().GetVector3D());
+        aPoint = rTransSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point().GetVector3D());
         aFirstPoint.X() = (long)(aPoint.X() + 0.5);
         aFirstPoint.Y() = (long)(aPoint.Y() + 0.5);
         aLastPoint = aFirstPoint;
@@ -3950,7 +3957,7 @@ void E3dCompoundObject::DrawObjectWireframe(ExtOutputDevice& rXOut)
         {
             // Punkt holen und auf Weltkoordinaten umrechnen
             bDrawLine = rEntityBucket[nEntityCounter].IsEdgeVisible();
-            aPoint = rSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point().GetVector3D());
+            aPoint = rTransSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point().GetVector3D());
             aNewPoint.X() = (long)(aPoint.X() + 0.5);
             aNewPoint.Y() = (long)(aPoint.Y() + 0.5);
             if(bLastDrawLine)
@@ -3967,11 +3974,63 @@ void E3dCompoundObject::DrawObjectWireframe(ExtOutputDevice& rXOut)
 
 /*************************************************************************
 |*
+|* Create vertical polygons for line polygon
+|*
+\************************************************************************/
+
+// #78972#
+void E3dCompoundObject::ImpCompleteLinePolygon(PolyPolygon3D& rLinePolyPoly,
+    sal_uInt16 nPolysPerRun, BOOL bClosed)
+{
+    if(rLinePolyPoly.Count() && nPolysPerRun)
+    {
+        // get number of layers
+        sal_uInt16 nLayers(rLinePolyPoly.Count() / nPolysPerRun);
+        sal_uInt16 a, b, c;
+
+        // add vertical Polygons if at least two horizontal ones exist
+        if(nLayers > 1)
+        {
+            for(a = 0; a < nPolysPerRun; a++)
+            {
+                const sal_uInt16 nPntCnt = rLinePolyPoly[a].GetPointCount();
+
+                for(b = 0; b < nPntCnt; b++)
+                {
+                    Polygon3D aNewVerPoly(bClosed ? nLayers + 1 : nLayers);
+
+                    for(c = 0; c < nLayers; c++)
+                        aNewVerPoly[c] = rLinePolyPoly[(c * nPolysPerRun) + a][b];
+
+                    // evtl. set first point again to close polygon
+                    if(bClosed)
+                        aNewVerPoly[aNewVerPoly.GetPointCount()] = aNewVerPoly[0];
+
+                    // insert
+                    rLinePolyPoly.Insert(aNewVerPoly);
+                }
+            }
+        }
+
+        // open closed polygons
+        for(a = 0; a < rLinePolyPoly.Count(); a++)
+        {
+            if(rLinePolyPoly[a].IsClosed())
+            {
+                rLinePolyPoly[a][rLinePolyPoly[a].GetPointCount()] = rLinePolyPoly[a][0];
+                rLinePolyPoly[a].SetClosed(FALSE);
+            }
+        }
+    }
+}
+
+/*************************************************************************
+|*
 |* Ein Segment fuer Extrude oder Lathe erzeugen
 |*
 \************************************************************************/
 
-void E3dCompoundObject::CreateSegment(
+void E3dCompoundObject::ImpCreateSegment(
     const PolyPolygon3D& rFront,        // vorderes Polygon
     const PolyPolygon3D& rBack,         // hinteres Polygon
     const PolyPolygon3D* pPrev,         // smooth uebergang zu Vorgaenger
@@ -3988,7 +4047,8 @@ void E3dCompoundObject::CreateSegment(
     BOOL bCreateTexture,
     BOOL bCreateNormals,
     BOOL bCharacterExtrude,             // FALSE=exakt, TRUE=ohne Ueberschneidungen
-    BOOL bRotateTexture90               // Textur der Seitenflaechen um 90 Grad kippen
+    BOOL bRotateTexture90,              // Textur der Seitenflaechen um 90 Grad kippen
+    PolyPolygon3D* pLineGeometry        // For creation of line geometry
     )
 {
     PolyPolygon3D aNormalsLeft, aNormalsRight;
@@ -4060,6 +4120,14 @@ void E3dCompoundObject::CreateSegment(
             fTextureStart,
             fTextureDepth,
             bRotateTexture90);
+
+        // #78972#
+        if(pLineGeometry)
+        {
+            pLineGeometry->Insert(rFront);
+            if(bCreateBack)
+                pLineGeometry->Insert(rBack);
+        }
     }
     else
     {
@@ -4076,9 +4144,11 @@ void E3dCompoundObject::CreateSegment(
             fDiagLen = fPercentDiag * fExtrudeDepth;
         }
 
+        PolyPolygon3D aOuterFront;
+        PolyPolygon3D aOuterBack;
+
         if(bCreateFront)
         {
-            PolyPolygon3D aOuterFront;
             PolyPolygon3D aNormalsOuterFront;
             AddFrontNormals(aLocalFront, aNormalsOuterFront, aOffset);
 
@@ -4187,7 +4257,6 @@ void E3dCompoundObject::CreateSegment(
         // Mit Scraegen, Rueckseite
         if(bCreateBack)
         {
-            PolyPolygon3D aOuterBack;
             PolyPolygon3D aNormalsOuterBack;
             AddBackNormals(aLocalBack, aNormalsOuterBack, aOffset);
 
@@ -4301,6 +4370,19 @@ void E3dCompoundObject::CreateSegment(
             fTexMidStart,
             fTexMidDepth,
             bRotateTexture90);
+
+        // #78972#
+        if(pLineGeometry)
+        {
+            if(bCreateFront)
+                pLineGeometry->Insert(aOuterFront);
+            pLineGeometry->Insert(aLocalFront);
+            if(bCreateBack)
+            {
+                pLineGeometry->Insert(aLocalBack);
+                pLineGeometry->Insert(aOuterBack);
+            }
+        }
     }
 }
 
@@ -4430,10 +4512,38 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
             XLineStyle aLineStyle = ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
             BOOL bDrawLineSolidHair = (aLineStyle == XLINE_SOLID && nLineWidth == 0);
 
+            // get line geometry
+            PolyPolygon3D aLinePolyPolygon;
+            GetLineGeometry(aLinePolyPolygon);
+
             if(bDrawLineSolidHair)
             {
                 // simply draw the object geometry as line (as done before)
-                pBase3D->DrawPolygonGeometry(GetDisplayGeometry(), TRUE);
+                // pBase3D->DrawPolygonGeometry(GetDisplayGeometry(), TRUE);
+                if(aLinePolyPolygon.Count())
+                {
+                    // draw the line geometry as 3d lines
+                    pBase3D->SetRenderMode(Base3DRenderLine);
+                    pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, TRUE);
+
+                    for(sal_uInt32 a(0); a < aLinePolyPolygon.Count(); a++)
+                    {
+                        // start new primitive
+                        const Polygon3D& rPolygon = aLinePolyPolygon[(sal_uInt16)a];
+                        pBase3D->StartPrimitive(Base3DLineStrip);
+
+                        for(sal_uInt32 b(0); b < rPolygon.GetPointCount(); b++)
+                        {
+                            Vector3D aVec = rPolygon[sal_uInt16(b)];
+                            pBase3D->AddVertex(aVec);
+                        }
+
+                        // draw primitive
+                        pBase3D->EndPrimitive();
+                    }
+
+                    pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, FALSE);
+                }
             }
             else
             {
@@ -4442,16 +4552,16 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
                 PolyPolygon3D aPolyPoly3D;
                 PolyPolygon3D aLinePoly3D;
 
-                // get LineStyleParameterPack
-                LineStyleParameterPack aLineAttr(rSet, FALSE, *rOut.GetOutDev());
-                LineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, FALSE);
+                // get ImpLineStyleParameterPack
+                ImpLineStyleParameterPack aLineAttr(rSet, FALSE, rOut.GetOutDev());
+                aLineAttr.ForceNoArrowsLeft(TRUE);
+                aLineAttr.ForceNoArrowsRight(TRUE);
+                ImpLineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, FALSE);
 
                 // get camera set
                 B3dTransformationSet* pTransSet = pBase3D->GetTransformationSet();
 
-                // get object geometry in eye coor
-                PolyPolygon3D aLinePolyPolygon;
-                GetLineGeometry(aLinePolyPolygon);
+                // get transform object geometry in eye coor
                 Matrix4D aMatObjectToEye = pTransSet->GetObjectTrans();
                 aMatObjectToEye *= pTransSet->GetOrientation();
 
@@ -4464,103 +4574,43 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
                     aLineCreator.AddPolygon3D(aLinePoly);
                 }
 
-                if(aPolyPoly3D.Count() || aLinePoly3D.Count())
+                // put together
+                aLinePoly3D.Insert(aPolyPoly3D);
+
+                if(aLinePoly3D.Count())
                 {
-                    Color aColorLine = ((const XLineColorItem&)(rSet.Get(XATTR_LINECOLOR))).GetValue();
-                    BOOL bGhosted = (rInfoRec.pPV && rInfoRec.pPV->GetView().DoVisualizeEnteredGroup()) ? rInfoRec.bNotActive : FALSE;
-
-                    if(bGhosted)
-                        aColorLine = Color((aColorLine.GetRed() >> 1) + 0x80, (aColorLine.GetGreen() >> 1) + 0x80, (aColorLine.GetBlue() >> 1) + 0x80);
-
-                    // set line color
-                    pBase3D->SetColor(aColorLine);
-
-                    // set base color
-                    sal_uInt16 nLineTrans = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
-                    Color aColorLineWithTransparency(aColorLine);
-                    aColorLineWithTransparency.SetTransparency((UINT8)(nLineTrans * 255 / 100));
-
-                    pBase3D->SetMaterial(aColorLine, Base3DMaterialAmbient);
-                    pBase3D->SetMaterial(aColorLineWithTransparency, Base3DMaterialDiffuse);
-                    pBase3D->SetMaterial(GetMaterialSpecular(), Base3DMaterialSpecular);
-                    pBase3D->SetMaterial(GetMaterialEmission(), Base3DMaterialEmission);
-                    pBase3D->SetShininess(GetMaterialSpecularIntensity());
-                    if(GetUseDifferentBackMaterial())
+                    pBase3D->SetCullMode(Base3DCullNone);
+                    for(sal_uInt32 a(0); a < aLinePoly3D.Count(); a++)
                     {
-                        pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialAmbient), Base3DMaterialAmbient, Base3DMaterialBack);
-                        pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialDiffuse), Base3DMaterialDiffuse, Base3DMaterialBack);
-                        pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialSpecular), Base3DMaterialSpecular, Base3DMaterialBack);
-                        pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialEmission), Base3DMaterialEmission, Base3DMaterialBack);
-                        pBase3D->SetShininess(aBackMaterial.GetShininess(), Base3DMaterialBack);
-                    }
+                        // start new primitive
+                        const Polygon3D& rPolygon = aLinePoly3D[(sal_uInt16)a];
 
-                    if((pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_WHITEFILL) != 0)
-                    {
-                        // set material to black and white mode
-                        Color aColorWhite(COL_WHITE);
-                        Color aColorWhiteWithTransparency(COL_WHITE);
-                        aColorWhiteWithTransparency.SetTransparency((UINT8)(nLineTrans * 255 / 100));
-
-                        pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient);
-                        pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse);
-
-                        if(GetUseDifferentBackMaterial())
+                        if(rPolygon.IsClosed())
                         {
-                            pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient, Base3DMaterialBack);
-                            pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse, Base3DMaterialBack);
-                        }
-                    }
-
-                    if(aPolyPoly3D.Count())
-                    {
-                        // draw the line geometry as area polygons
-                        pBase3D->SetRenderMode(Base3DRenderFill);
-                        pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, FALSE);
-
-                        for(sal_uInt32 a(0); a < aPolyPoly3D.Count(); a++)
-                        {
-                            // start new primitive
+                            pBase3D->SetRenderMode(Base3DRenderFill);
                             pBase3D->StartPrimitive(Base3DPolygon);
-                            const Polygon3D& rPolygon = aPolyPoly3D[(sal_uInt16)a];
-
-                            for(sal_uInt32 b(0); b < rPolygon.GetPointCount(); b++)
-                            {
-                                // use backward loop to have the correct orientation since
-                                // the geometry was created in eye coor (with Z-flipped coordinate system)
-                                Vector3D aVec = rPolygon[rPolygon.GetPointCount() - sal_uInt16(b + 1)];
-                                aVec = pTransSet->EyeToObjectCoor(aVec);
-                                pBase3D->AddVertex(aVec);
-                            }
-
-                            // draw primitive
-                            pBase3D->EndPrimitive();
                         }
-                    }
-
-                    if(aLinePoly3D.Count())
-                    {
-                        // draw the line geometry as 3d lines
-                        pBase3D->SetRenderMode(Base3DRenderLine);
-                        pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, TRUE);
-
-                        for(sal_uInt32 a(0); a < aLinePoly3D.Count(); a++)
+                        else
                         {
-                            // start new primitive
+                            pBase3D->SetRenderMode(Base3DRenderLine);
+                            pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, TRUE);
                             pBase3D->StartPrimitive(Base3DLineStrip);
-                            const Polygon3D& rPolygon = aLinePoly3D[(sal_uInt16)a];
-
-                            for(sal_uInt32 b(0); b < rPolygon.GetPointCount(); b++)
-                            {
-                                Vector3D aVec = rPolygon[sal_uInt16(b)];
-                                aVec = pTransSet->EyeToObjectCoor(aVec);
-                                pBase3D->AddVertex(aVec);
-                            }
-
-                            // draw primitive
-                            pBase3D->EndPrimitive();
                         }
 
-                        pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, FALSE);
+                        for(sal_uInt32 b(0); b < rPolygon.GetPointCount(); b++)
+                        {
+                            Vector3D aVec = rPolygon[sal_uInt16(b)];
+                            aVec = pTransSet->EyeToObjectCoor(aVec);
+                            pBase3D->AddVertex(aVec);
+                        }
+
+                        // draw primitive
+                        pBase3D->EndPrimitive();
+
+                        if(!rPolygon.IsClosed())
+                        {
+                            pBase3D->SetPolygonOffset(Base3DPolygonOffsetLine, FALSE);
+                        }
                     }
                 }
             }
@@ -4608,13 +4658,13 @@ void E3dCompoundObject::TakeContour3D(XPolyPolygon& rPoly)
     UINT32 nUpperBound;
     B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
     GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
-    B3dTransformationSet& rSet = GetScene()->GetCameraSet();
+    B3dTransformationSet& rTransSet = GetScene()->GetCameraSet();
     Vector3D aPoint;
     Point aNewPoint;
 
     // ObjectTrans setzen
     Matrix4D mTransform = GetFullTransform();
-    rSet.SetObjectTrans(mTransform);
+    rTransSet.SetObjectTrans(mTransform);
 
     while(nPolyCounter < rIndexBucket.Count())
     {
@@ -4625,7 +4675,7 @@ void E3dCompoundObject::TakeContour3D(XPolyPolygon& rPoly)
 
         while(nEntityCounter < nUpperBound)
         {
-            aPoint = rSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point().GetVector3D());
+            aPoint = rTransSet.ObjectToViewCoor(rEntityBucket[nEntityCounter++].Point().GetVector3D());
             aNewPart[nIndex  ].X() = (long)(aPoint.X() + 0.5);
             aNewPart[nIndex++].Y() = (long)(aPoint.Y() + 0.5);
         }
@@ -4635,12 +4685,17 @@ void E3dCompoundObject::TakeContour3D(XPolyPolygon& rPoly)
     }
 
     // add shadow now too (#61279#)
-    PolyPolygon aShadowPolyPoly;
-    GetShadowPolygon(aShadowPolyPoly);
+    PolyPolygon3D aShadowPolyPoly;
+    ImpGetShadowPolygon(aShadowPolyPoly);
+
+    // invert Y coor cause of GetPolygon() later
+    Matrix4D aTransMat;
+    aTransMat.Scale(1.0, -1.0, 1.0);
+    aShadowPolyPoly.Transform(aTransMat);
 
     for(UINT16 a = 0; a < aShadowPolyPoly.Count(); a++)
     {
-        XPolygon aNewPart(aShadowPolyPoly[a]);
+        XPolygon aNewPart(aShadowPolyPoly[a].GetPolygon());
         rPoly.Insert(aNewPart);
     }
 }
@@ -4671,237 +4726,266 @@ void E3dCompoundObject::DrawShadows(Base3D *pBase3D, ExtOutputDevice& rXOut,
         GetScene()->GetCameraSet().SetObjectTrans(mTransform);
 
         // Schattenpolygon holen
-        PolyPolygon aShadowPoly;
-        GetShadowPolygon(aShadowPoly);
+        PolyPolygon3D aShadowPoly;
+        ImpGetShadowPolygon(aShadowPoly);
+
+        // invert Y coor cause of GetPolyPolygon() in ImpDrawShadowPolygon() later
+        Matrix4D aTransMat;
+        aTransMat.Scale(1.0, -1.0, 1.0);
+        aShadowPoly.Transform(aTransMat);
 
         // ...und Zeichnen
-        DrawShadowPolygon(aShadowPoly, rXOut);
+        ImpDrawShadowPolygon(aShadowPoly, rXOut);
     }
 }
 
-void E3dCompoundObject::GetShadowPolygon(PolyPolygon& rPoly)
+void E3dCompoundObject::ImpGetShadowPolygon(PolyPolygon3D& rPoly)
 {
-    INT32 nXDist = GetShadowXDistance();
-    INT32 nYDist = GetShadowYDistance();
-    UINT32 nPolyCounter = 0;
-    UINT32 nEntityCounter = 0;
-    UINT32 nUpperBound;
-    UINT16 nPolyPos = 0;
-    Point aPolyPoint;
+    // #79585#
+    sal_Int32 nXDist(GetShadowXDistance());
+    sal_Int32 nYDist(GetShadowYDistance());
+    BOOL bDrawAsOutline(DrawShadowAsOutline());
+    PolyPolygon3D aLinePolyPolygon;
+    B3dTransformationSet& rTransSet = GetScene()->GetCameraSet();
+    const SfxItemSet& rSet = GetItemSet();
+    XLineStyle aLineStyle = ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
+    sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
 
-    // Buckets der Geometrie holen
-    B3dTransformationSet& rSet = GetScene()->GetCameraSet();
-    B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
-    GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
-
-    if(GetShadow3D())
+    if(!bDrawAsOutline)
     {
-        // 3D Schatten. Nimm Lichtquelle und Ebene. Projiziere
-        // die Punkte und jage sie durch die 3D Darstellung.
-        Vector3D aLampPositionOrDirection;
-        BOOL bDirectionalSource(TRUE);
-        Vector3D aGroundPosition;
-        Vector3D aGroundDirection;
-        B3dLightGroup& rLightGroup = GetScene()->GetLightGroup();
+        // add basic polygon geometry, generate from 3D bucket
+        B3dEntityBucket& rEntityBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetEntityBucket();
+        GeometryIndexValueBucket& rIndexBucket = ((E3dCompoundObject*)this)->GetDisplayGeometry().GetIndexBucket();
+        sal_uInt32 nPolyCounter(0);
+        sal_uInt32 nEntityCounter(0);
 
-        // Lampe waehlen
-        Base3DLightNumber aLightNumber = Base3DLight0;
-        BOOL bLightNumberValid(FALSE);
-        while(!bLightNumberValid && aLightNumber <= Base3DLight7)
+        while(nPolyCounter < rIndexBucket.Count())
         {
-            if(rLightGroup.IsEnabled(aLightNumber))
-                bLightNumberValid = TRUE;
-            else
-                aLightNumber = (Base3DLightNumber)((UINT16)aLightNumber + 1);
-        }
+            // next primitive
+            sal_uInt32 nUpperBound(rIndexBucket[nPolyCounter++].GetIndex());
+            Polygon3D aNewPolygon((sal_uInt16)(nUpperBound - nEntityCounter));
+            sal_uInt16 nIndex(0);
 
-        if(bLightNumberValid)
-        {
-            // Position oder Vektor aus der Lampe extrahieren
-            if(rLightGroup.IsDirectionalSource(aLightNumber))
-            {
-                // Nur Richtung vorhanden
-                aLampPositionOrDirection = -rLightGroup.GetDirection(aLightNumber);
-                aLampPositionOrDirection.Normalize();
-            }
-            else
-            {
-                // Nur Position vorhanden
-                aLampPositionOrDirection = rLightGroup.GetPosition(aLightNumber);
-                bDirectionalSource = FALSE;
-            }
+            while(nEntityCounter < nUpperBound)
+                aNewPolygon[nIndex++] = rEntityBucket[nEntityCounter++].Point().GetVector3D();
 
-            // Ebene holen, Richtung in Augkoordinaten
-            aGroundDirection = -GetScene()->GetShadowPlaneDirection();
-            aGroundDirection.Normalize();
-
-            // Ist die Lampe auch vor der Ebene?
-            Vector3D aLightNormal = aLampPositionOrDirection;
-            if(!bDirectionalSource)
-            {
-                // Nur Position vorhanden, berechne einen Lichtvektor
-                aLightNormal = GetDisplayGeometry().GetEntityBucket()[0].Point().GetVector3D()
-                    - aLampPositionOrDirection;
-                aLightNormal.Normalize();
-            }
-
-            double fLightAndNormal = aLightNormal.Scalar(aGroundDirection);
-            B3dVolume aVolume = rSet.GetDeviceVolume();
-
-            // auf Augkoordinaten umstellen
-            double fTemp = aVolume.MinVec().Z();
-            aVolume.MinVec().Z() = -aVolume.MaxVec().Z();
-            aVolume.MaxVec().Z() = -fTemp;
-
-            if(fLightAndNormal > 0.0)
-            {
-                // Position der Ebene in Augkoordinaten setzen
-                aGroundPosition.X() = (aGroundDirection.X() < 0.0) ? aVolume.MinVec().X() : aVolume.MaxVec().X();
-                aGroundPosition.Y() = (aGroundDirection.Y() < 0.0) ? aVolume.MinVec().Y() : aVolume.MaxVec().Y();
-                aGroundPosition.Z() = aVolume.MinVec().Z() - ((aVolume.MaxVec().Z() - aVolume.MinVec().Z()) / 8.0);
-
-                // Skalar der Ebenengleichung holen
-                double fGroundScalar = -aGroundPosition.Scalar(aGroundDirection);
-
-                // ObjectTrans setzen
-                BOOL bPolygonVisible(TRUE);
-                B3dTransformationSet& rSet = GetScene()->GetCameraSet();
-                Matrix4D mTransform = GetFullTransform();
-                rSet.SetObjectTrans(mTransform);
-
-                while(nPolyCounter < rIndexBucket.Count())
-                {
-                    // Naechstes Primitiv
-                    nUpperBound = rIndexBucket[nPolyCounter++].GetIndex();
-                    nPolyPos = 0;
-                    bPolygonVisible = TRUE;
-                    Polygon aPoly((UINT16)(nUpperBound - nEntityCounter));
-
-                    // Polygon fuellen
-                    while(nEntityCounter < nUpperBound)
-                    {
-                        // Naechsten Punkt holen
-                        Vector3D aPoint = rEntityBucket[nEntityCounter++].Point().GetVector3D();
-
-                        // Auf Augkoordinaten umrechnen
-                        aPoint = rSet.ObjectToEyeCoor(aPoint);
-
-                        // Richtung bestimmen
-                        Vector3D aDirection = aLampPositionOrDirection;
-                        if(!bDirectionalSource)
-                        {
-                            aDirection = aPoint - aLampPositionOrDirection;
-                            aDirection.Normalize();
-                        }
-
-                        // Schnittpunkt berechnen (N.D)
-                        double fDiv = aGroundDirection.Scalar(aDirection);
-                        if(fabs(fDiv) < SMALL_DVALUE)
-                        {
-                            bPolygonVisible = FALSE;
-                        }
-                        else
-                        {
-                            fDiv = -((fGroundScalar + aGroundDirection.Scalar(aPoint)) / fDiv);
-                            aPoint += aDirection * fDiv;
-                        }
-
-                        // Punkt normal transformieren
-                        if(bPolygonVisible)
-                        {
-                            // Auf ViewKoordinaten
-                            Vector3D aShadowPoint = rSet.EyeToViewCoor(aPoint);
-                            aPolyPoint.X() = (long)(aShadowPoint.X() + 0.5) + nXDist;
-                            aPolyPoint.Y() = (long)(aShadowPoint.Y() + 0.5) + nYDist;
-                            aPoly[nPolyPos++] = aPolyPoint;
-                        }
-                    }
-
-                    // Teilpolygon einfuegen
-                    rPoly.Insert(aPoly);
-                }
-            }
+            aNewPolygon.SetClosed(TRUE);
+            aLinePolyPolygon.Insert(aNewPolygon);
         }
     }
-    else
+
+    if(bDrawAsOutline || (nLineWidth != 0))
     {
-        // ObjectTrans setzen
-        Matrix4D mTransform = GetFullTransform();
-        rSet.SetObjectTrans(mTransform);
+        // add 3D line drawing geometry
+        PolyPolygon3D aBasicLinePolyPoly;
+        GetLineGeometry(aBasicLinePolyPoly);
 
-        if(FALSE /* #78972# DrawShadowAsOutline()*/)
+        // #78972# detect if lines need to be drawn with pattern
+        if(aLineStyle == XLINE_DASH || (aLineStyle == XLINE_SOLID && nLineWidth != 0))
         {
-            //SubPolygon mit Punktpaaren bilden
-            UINT16 nPolySize = (UINT16)(rEntityBucket.Count() * 2);
-            Polygon aPoly(nPolySize);
-            Point aLastPolyPoint;
-            nPolyPos = 0;
+            PolyPolygon3D aPolyPoly3D;
+            PolyPolygon3D aLinePoly3D;
 
-            while(nPolyCounter < rIndexBucket.Count())
+            // get ImpLineStyleParameterPack, bForceHair==FALSE to create polygons
+            ImpLineStyleParameterPack aLineAttr(rSet, FALSE, NULL);
+            aLineAttr.ForceNoArrowsLeft(TRUE);
+            aLineAttr.ForceNoArrowsRight(TRUE);
+            ImpLineGeometryCreator aLineCreator(aLineAttr, aPolyPoly3D, aLinePoly3D, FALSE);
+
+            // get camera set and transform to eye coor
+            Matrix4D aMatObjectToEye = rTransSet.GetObjectTrans();
+            aMatObjectToEye *= rTransSet.GetOrientation();
+
+            for(sal_uInt16 nInd(0); nInd < aBasicLinePolyPoly.Count(); nInd++)
             {
-                // Naechstes Primitiv
-                nUpperBound = rIndexBucket[nPolyCounter++].GetIndex();
-
-                // Polygon bilden
-                BOOL bLastLineVisible = rEntityBucket[nUpperBound - 1].IsEdgeVisible();
-                if(bLastLineVisible)
-                {
-                    Vector3D aLast = rEntityBucket[nUpperBound - 1].Point().GetVector3D();
-                    aLast = rSet.ObjectToViewCoor(aLast);
-                    aLastPolyPoint.X() = (long)(aLast.X() + 0.5) + nXDist;
-                    aLastPolyPoint.Y() = (long)(aLast.Y() + 0.5) + nYDist;
-                }
-
-                while(nEntityCounter < nUpperBound)
-                {
-                    Vector3D aPoint = rEntityBucket[nEntityCounter].Point().GetVector3D();
-                    aPoint = rSet.ObjectToViewCoor(aPoint);
-                    aPolyPoint.X() = (long)(aPoint.X() + 0.5) + nXDist;
-                    aPolyPoint.Y() = (long)(aPoint.Y() + 0.5) + nYDist;
-
-                    // Linie aLast, aPoint erfassen
-                    if(bLastLineVisible)
-                    {
-                        if(nPolyPos + 2 > nPolySize)
-                        {
-                            // Polygon muss groesser
-                            nPolySize *= 2;
-                            aPoly.SetSize(nPolySize);
-                        }
-                        aPoly[nPolyPos++] = aLastPolyPoint;
-                        aPoly[nPolyPos++] = aPolyPoint;
-                    }
-
-                    // naechster Punkt
-                    aLastPolyPoint = aPolyPoint;
-                    bLastLineVisible = rEntityBucket[nEntityCounter++].IsEdgeVisible();
-                }
+                Polygon3D aLinePoly = aBasicLinePolyPoly.GetObject(nInd);
+                aLinePoly.Transform(aMatObjectToEye);
+                aLineCreator.AddPolygon3D(aLinePoly);
             }
 
-            // Wahre Groesse setzen
-            aPoly.SetSize(nPolyPos);
+            // prepare transform back to object coor
+            if(aLinePoly3D.Count() || aPolyPoly3D.Count())
+                aMatObjectToEye.Invert();
 
-            // Teilpolygon einfuegen
-            rPoly.Insert(aPoly);
+            if(aLinePoly3D.Count())
+            {
+                // transform and add all generated line polygons
+                aLinePoly3D.Transform(aMatObjectToEye);
+                aLinePolyPolygon.Insert(aLinePoly3D);
+            }
+
+            if(aPolyPoly3D.Count())
+            {
+                // transform and add all generated polygons
+                aPolyPoly3D.Transform(aMatObjectToEye);
+                aLinePolyPolygon.Insert(aPolyPoly3D);
+            }
         }
         else
         {
-            while(nPolyCounter < rIndexBucket.Count())
+            // simply add basic line geometry
+            aLinePolyPolygon.Insert(aBasicLinePolyPoly);
+        }
+    }
+
+    if(aLinePolyPolygon.Count())
+    {
+        if(GetShadow3D())
+        {
+            // 3D Schatten. Nimm Lichtquelle und Ebene. Projiziere
+            // die Punkte und jage sie durch die 3D Darstellung.
+            Vector3D aLampPositionOrDirection;
+            BOOL bDirectionalSource(TRUE);
+            Vector3D aGroundPosition;
+            Vector3D aGroundDirection;
+            B3dLightGroup& rLightGroup = GetScene()->GetLightGroup();
+
+            // Lampe waehlen
+            Base3DLightNumber aLightNumber = Base3DLight0;
+            BOOL bLightNumberValid(FALSE);
+
+            while(!bLightNumberValid && aLightNumber <= Base3DLight7)
             {
-                // Naechstes Primitiv
-                nUpperBound = rIndexBucket[nPolyCounter++].GetIndex();
-                Polygon aPoly((UINT16)(nUpperBound - nEntityCounter));
-                nPolyPos = 0;
+                if(rLightGroup.IsEnabled(aLightNumber))
+                    bLightNumberValid = TRUE;
+                else
+                    aLightNumber = (Base3DLightNumber)((UINT16)aLightNumber + 1);
+            }
+
+            if(bLightNumberValid)
+            {
+                // Position oder Vektor aus der Lampe extrahieren
+                if(rLightGroup.IsDirectionalSource(aLightNumber))
+                {
+                    // Nur Richtung vorhanden
+                    aLampPositionOrDirection = -rLightGroup.GetDirection(aLightNumber);
+                    aLampPositionOrDirection.Normalize();
+                }
+                else
+                {
+                    // Nur Position vorhanden
+                    aLampPositionOrDirection = rLightGroup.GetPosition(aLightNumber);
+                    bDirectionalSource = FALSE;
+                }
+
+                // Ebene holen, Richtung in Augkoordinaten
+                aGroundDirection = -GetScene()->GetShadowPlaneDirection();
+                aGroundDirection.Normalize();
+
+                // Ist die Lampe auch vor der Ebene?
+                Vector3D aLightNormal = aLampPositionOrDirection;
+                if(!bDirectionalSource)
+                {
+                    // Nur Position vorhanden, berechne einen Lichtvektor
+                    aLightNormal = aLinePolyPolygon[0][0] - aLampPositionOrDirection;
+                    aLightNormal.Normalize();
+                }
+
+                double fLightAndNormal = aLightNormal.Scalar(aGroundDirection);
+                B3dVolume aVolume = rTransSet.GetDeviceVolume();
+
+                // auf Augkoordinaten umstellen
+                double fTemp = aVolume.MinVec().Z();
+                aVolume.MinVec().Z() = -aVolume.MaxVec().Z();
+                aVolume.MaxVec().Z() = -fTemp;
+
+                if(fLightAndNormal > 0.0)
+                {
+                    // Position der Ebene in Augkoordinaten setzen
+                    aGroundPosition.X() = (aGroundDirection.X() < 0.0) ? aVolume.MinVec().X() : aVolume.MaxVec().X();
+                    aGroundPosition.Y() = (aGroundDirection.Y() < 0.0) ? aVolume.MinVec().Y() : aVolume.MaxVec().Y();
+                    aGroundPosition.Z() = aVolume.MinVec().Z() - ((aVolume.MaxVec().Z() - aVolume.MinVec().Z()) / 8.0);
+
+                    // Skalar der Ebenengleichung holen
+                    double fGroundScalar = -aGroundPosition.Scalar(aGroundDirection);
+
+                    // ObjectTrans setzen
+                    BOOL bPolygonVisible(TRUE);
+                    Matrix4D mTransform = GetFullTransform();
+                    rTransSet.SetObjectTrans(mTransform);
+
+                    for(sal_uInt16 a(0); a < aLinePolyPolygon.Count(); a++)
+                    {
+                        Polygon3D& rLinePoly = aLinePolyPolygon[a];
+                        Polygon3D aPoly(rLinePoly.GetPointCount());
+                        sal_uInt16 nPolyPos(0);
+
+                        for(sal_uInt16 b(0); b < rLinePoly.GetPointCount(); b++)
+                        {
+                            // Naechsten Punkt holen
+                            Vector3D aPoint = rLinePoly[b];
+
+                            // Auf Augkoordinaten umrechnen
+                            aPoint = rTransSet.ObjectToEyeCoor(aPoint);
+
+                            // Richtung bestimmen
+                            Vector3D aDirection = aLampPositionOrDirection;
+                            if(!bDirectionalSource)
+                            {
+                                aDirection = aPoint - aLampPositionOrDirection;
+                                aDirection.Normalize();
+                            }
+
+                            // Schnittpunkt berechnen (N.D)
+                            double fDiv = aGroundDirection.Scalar(aDirection);
+                            if(fabs(fDiv) < SMALL_DVALUE)
+                            {
+                                bPolygonVisible = FALSE;
+                            }
+                            else
+                            {
+                                fDiv = -((fGroundScalar + aGroundDirection.Scalar(aPoint)) / fDiv);
+                                aPoint += aDirection * fDiv;
+                            }
+
+                            // Punkt normal transformieren
+                            if(bPolygonVisible)
+                            {
+                                // Auf ViewKoordinaten
+                                Vector3D aShadowPoint = rTransSet.EyeToViewCoor(aPoint);
+                                aPoly[nPolyPos++] = Vector3D(
+                                    aShadowPoint.X() + (double)nXDist,
+                                    aShadowPoint.Y() + (double)nYDist,
+                                    0.0);
+                            }
+                        }
+
+                        // Teilpolygon einfuegen
+                        if(nPolyPos)
+                        {
+                            aPoly.SetClosed(rLinePoly.IsClosed());
+                            rPoly.Insert(aPoly);
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            // ObjectTrans setzen
+            Matrix4D mTransform = GetFullTransform();
+            rTransSet.SetObjectTrans(mTransform);
+
+            for(sal_uInt16 a(0); a < aLinePolyPolygon.Count(); a++)
+            {
+                Polygon3D& rLinePoly = aLinePolyPolygon[a];
+                Polygon3D aPoly(rLinePoly.GetPointCount());
+                sal_uInt16 nPolyPos(0);
 
                 // Polygon fuellen
-                while(nEntityCounter < nUpperBound)
+                for(sal_uInt16 b(0); b < rLinePoly.GetPointCount(); b++)
                 {
-                    Vector3D aPoint = rEntityBucket[nEntityCounter++].Point().GetVector3D();
-                    aPoint = rSet.ObjectToViewCoor(aPoint);
-                    aPolyPoint.X() = (long)(aPoint.X() + 0.5) + nXDist;
-                    aPolyPoint.Y() = (long)(aPoint.Y() + 0.5) + nYDist;
-                    aPoly[nPolyPos++] = aPolyPoint;
+                    // Naechsten Punkt holen
+                    Vector3D aPoint = rLinePoly[b];
+                    aPoint = rTransSet.ObjectToViewCoor(aPoint);
+                    aPoly[nPolyPos++] = Vector3D(
+                        aPoint.X() + (double)nXDist,
+                        aPoint.Y() + (double)nYDist,
+                        0.0);
                 }
+
+                // open/close
+                aPoly.SetClosed(rLinePoly.IsClosed());
 
                 // Teilpolygon einfuegen
                 rPoly.Insert(aPoly);
@@ -4910,13 +4994,13 @@ void E3dCompoundObject::GetShadowPolygon(PolyPolygon& rPoly)
     }
 }
 
-void E3dCompoundObject::DrawShadowPolygon(PolyPolygon& rPoly, ExtOutputDevice& rXOut)
+void E3dCompoundObject::ImpDrawShadowPolygon(PolyPolygon3D& rPoly, ExtOutputDevice& rXOut)
 {
     Color aCol = GetShadowColor();
     OutputDevice *pDevice = rXOut.GetOutDev();
     BOOL bDrawAsOutline(DrawShadowAsOutline());
-
     UINT16 nTransparence = GetShadowTransparence();
+
     if(nTransparence)
     {
         if(nTransparence != 100)
@@ -4934,31 +5018,34 @@ void E3dCompoundObject::DrawShadowPolygon(PolyPolygon& rPoly, ExtOutputDevice& r
             aGradient.SetSteps(3);
 
             // create BoundRectangle
-            Rectangle aBound(rPoly.GetBoundRect());
+            PolyPolygon aPolyPolygon(rPoly.GetPolyPolygon());
+            Rectangle aBound(aPolyPolygon.GetBoundRect());
 
             // prepare VDev and MetaFile
             aVDev.EnableOutput(FALSE);
             aVDev.SetMapMode(rXOut.GetOutDev()->GetMapMode());
             aMetaFile.Record(&aVDev);
 
-            if(bDrawAsOutline)
-            {
-                aVDev.SetLineColor(aCol);
-                aVDev.SetFillColor();
-            }
-            else
-            {
-                aVDev.SetLineColor();
-                aVDev.SetFillColor(aCol);
-            }
-
             aVDev.SetFont(rXOut.GetOutDev()->GetFont());
             aVDev.SetDrawMode(rXOut.GetOutDev()->GetDrawMode());
             aVDev.SetRefPoint(rXOut.GetOutDev()->GetRefPoint());
 
             // create output
-            for(UINT16 a(0); a < rPoly.Count(); a++)
-                aMetaFile.AddAction(new MetaPolygonAction(rPoly[a]));
+            for(UINT16 a(0); a < aPolyPolygon.Count(); a++)
+            {
+                if(rPoly[a].IsClosed())
+                {
+                    aVDev.SetLineColor();
+                    aVDev.SetFillColor(aCol);
+                }
+                else
+                {
+                    aVDev.SetLineColor(aCol);
+                    aVDev.SetFillColor();
+                }
+
+                aMetaFile.AddAction(new MetaPolygonAction(aPolyPolygon[a]));
+            }
 
             // draw metafile
             aMetaFile.Stop();
@@ -4971,20 +5058,22 @@ void E3dCompoundObject::DrawShadowPolygon(PolyPolygon& rPoly, ExtOutputDevice& r
     }
     else
     {
-        // no transparence, draw all single polys directly
-        if(bDrawAsOutline)
-        {
-            pDevice->SetLineColor(aCol);
-            pDevice->SetFillColor();
-        }
-        else
-        {
-            pDevice->SetLineColor();
-            pDevice->SetFillColor(aCol);
-        }
-
+         // no transparence, draw all single polys directly
         for(UINT16 a(0); a < rPoly.Count(); a++)
-            pDevice->DrawPolygon(rPoly[a]);
+        {
+            if(rPoly[a].IsClosed())
+            {
+                pDevice->SetLineColor();
+                pDevice->SetFillColor(aCol);
+            }
+            else
+            {
+                pDevice->SetLineColor(aCol);
+                pDevice->SetFillColor();
+            }
+
+            pDevice->DrawPolygon(rPoly[a].GetPolygon());
+        }
     }
 }
 
@@ -4997,11 +5086,11 @@ void E3dCompoundObject::DrawShadowPolygon(PolyPolygon& rPoly, ExtOutputDevice& r
 XPolyPolygon E3dCompoundObject::TransformToScreenCoor(const PolyPolygon3D &rExtrudePoly)
 {
     XPolyPolygon aNewPolyPolygon;
-    B3dTransformationSet& rSet = GetScene()->GetCameraSet();
+    B3dTransformationSet& rTransSet = GetScene()->GetCameraSet();
 
     // set ObjectTrans
     Matrix4D mTransform = GetFullTransform();
-    rSet.SetObjectTrans(mTransform);
+    rTransSet.SetObjectTrans(mTransform);
 
     // transform base polygon to screen coor
     for(UINT16 a=0;a<rExtrudePoly.Count();a++)
@@ -5013,7 +5102,7 @@ XPolyPolygon E3dCompoundObject::TransformToScreenCoor(const PolyPolygon3D &rExtr
         UINT16 b;
         for(b=0;b<rExtPoly.GetPointCount();b++)
         {
-            Vector3D aPoint = rSet.ObjectToViewCoor(rExtPoly[b]);
+            Vector3D aPoint = rTransSet.ObjectToViewCoor(rExtPoly[b]);
             aNewPoly[b].X() = (long)(aPoint.X() + 0.5);
             aNewPoly[b].Y() = (long)(aPoint.Y() + 0.5);
         }

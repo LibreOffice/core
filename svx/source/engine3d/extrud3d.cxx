@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
+ *  last change: $Author: aw $ $Date: 2001-07-19 16:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,14 +240,20 @@ PolyPolygon3D E3dExtrudeObj::GetBackSide(const PolyPolygon3D& rFrontSide)
 
 void E3dExtrudeObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
 {
-    // call parent
-    E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
+    // #78972# add extrude line polys
+    rLinePolyPolygon.Insert(maLinePolyPolygon);
+
+    // don't call parent
+    // E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
 }
 
 void E3dExtrudeObj::CreateGeometry()
 {
     // Start der Geometrieerzeugung ankuendigen
     StartCreateGeometry();
+
+    // #78972# prepare new line geometry creation
+    maLinePolyPolygon.Clear();
 
     // Polygon als Grundlage holen
     PolyPolygon3D aFrontSide = GetFrontSide();
@@ -279,7 +285,7 @@ void E3dExtrudeObj::CreateGeometry()
         }
 
         // Segment erzeugen
-        CreateSegment(
+        ImpCreateSegment(
             aFrontSide,
             aBackSide,
             0L,
@@ -296,7 +302,9 @@ void E3dExtrudeObj::CreateGeometry()
             GetCreateNormals(),
             GetCreateTexture(),
             bExtrudeCharacterMode,
-            FALSE);
+            FALSE,
+            // #78972#
+            &maLinePolyPolygon);
     }
     else
     {
@@ -313,7 +321,13 @@ void E3dExtrudeObj::CreateGeometry()
         // Normalen und Vorderseite selbst erzeugen
         AddFrontNormals(aFrontSide, aNormalsFront, aOffset);
         CreateFront(aFrontSide, aNormalsFront, GetCreateNormals(), GetCreateTexture());
+
+        // #78972#
+        maLinePolyPolygon.Insert(aFrontSide);
     }
+
+    // #78972#
+    ImpCompleteLinePolygon(maLinePolyPolygon, aFrontSide.Count(), FALSE);
 
     // call parent
     E3dCompoundObject::CreateGeometry();
