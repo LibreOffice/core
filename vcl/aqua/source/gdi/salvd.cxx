@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 11:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ static BOOL InitVirtualDeviceGWorld ( SalVirDevDataPtr rSalVirDevData )
         GWorldPtr    pGWorld     = NULL;
         CTabHandle   hCTable     = NULL;
         GDHandle     hGDevice    = NULL;
-        GWorldFlags  nFlags      = noNewDevice;
+        GWorldFlags  nFlags      = 0; // [ed] 12/1/01 Allow offscreen gworlds
         OSStatus     nOSStatus   = noErr;
 
         // Set the dimensions of the GWorldPtr
