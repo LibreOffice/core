@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblewrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:28:02 $
+ *  last change: $Author: rt $ $Date: 2003-04-25 10:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,7 @@ namespace comphelper
 
             // let the base class dispose the inner object
             // before we do this, remove ourself as listener
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster > xBroadcaster( m_xInner, ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventBroadcaster > xBroadcaster( m_xInner, ::com::sun::star::uno::UNO_QUERY );
             OSL_ENSURE( xBroadcaster.is(), "OAccessibleContextWrapper::disposing(): inner context is no broadcaster!" );
             if ( xBroadcaster.is() )
                 xBroadcaster->removeEventListener( this );
