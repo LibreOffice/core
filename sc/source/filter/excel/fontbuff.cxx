@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontbuff.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:33 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <sfx2/printer.hxx>
-#include <vcl/system.hxx>
 
 #include "attrib.hxx"
 #include "document.hxx"
