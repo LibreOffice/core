@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContextMenuInterceptor.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:59:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,18 +38,11 @@
  *
  *************************************************************************/
 
-import com.sun.star.ui.*;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XIndexContainer;
+import com.sun.star.ui.ActionTriggerSeparatorType;
+import com.sun.star.ui.ContextMenuInterceptorAction;
+import com.sun.star.ui.XContextMenuInterceptor;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Exception;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XController;
-
 
 public class ContextMenuInterceptor implements XContextMenuInterceptor {
 
@@ -62,37 +55,79 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
     public static void main(String args[])
     {
         try {
-            OfficeConnect aConnect = OfficeConnect.createConnection("localhost", "2083");
+            OfficeConnect aConnect = OfficeConnect.createConnection();
 
             com.sun.star.frame.XDesktop xDesktop =
                 (com.sun.star.frame.XDesktop)aConnect.createRemoteInstance(
-                    com.sun.star.frame.XDesktop.class, "com.sun.star.frame.Desktop");
-            com.sun.star.frame.XFrame xFrame = xDesktop.getCurrentFrame();
-            if ( xFrame != null ) {
-                com.sun.star.frame.XController xController = xFrame.getController();
-                if ( xController != null ) {
-                    com.sun.star.ui.XContextMenuInterception xContextMenuInterception =
-                        (com.sun.star.ui.XContextMenuInterception)UnoRuntime.queryInterface(
-                            com.sun.star.ui.XContextMenuInterception.class, xController );
-                    if( xContextMenuInterception != null ) {
-                        ContextMenuInterceptor aContextMenuInterceptor = new ContextMenuInterceptor();
-                        com.sun.star.ui.XContextMenuInterceptor xContextMenuInterceptor =
-                            (com.sun.star.ui.XContextMenuInterceptor)UnoRuntime.queryInterface(
-                                com.sun.star.ui.XContextMenuInterceptor.class, aContextMenuInterceptor );
-                        xContextMenuInterception.registerContextMenuInterceptor( xContextMenuInterceptor );
+                    com.sun.star.frame.XDesktop.class,"com.sun.star.frame.Desktop");
 
-                        System.out.println( "\n ... all context menus of the current frame contains " +
-                                            "now a 'Help' entry with the\n     submenus 'Content', " +
-                                            "'Help Agent' and 'Tips'.\n\n Press 'Return' to remove the " +
-                                            "context menu interceptor and finish the example!");
+            // create a new test document
+            com.sun.star.frame.XComponentLoader xCompLoader =
+                (com.sun.star.frame.XComponentLoader)UnoRuntime.queryInterface(
+                    com.sun.star.frame.XComponentLoader.class, xDesktop);
 
-                        if (System.in.read() > 0) {
-                            xContextMenuInterception.releaseContextMenuInterceptor(
-                                xContextMenuInterceptor );
-                            System.out.println( " ... context menu interceptor removed!" );
-                        }
+            com.sun.star.lang.XComponent xComponent =
+                xCompLoader.loadComponentFromURL("private:factory/swriter",
+                    "_blank", 0, new com.sun.star.beans.PropertyValue[0]);
+
+            // intialize the test document
+            com.sun.star.frame.XFrame xFrame = null;
+            {
+            com.sun.star.text.XTextDocument xDoc =(com.sun.star.text.XTextDocument)
+                UnoRuntime.queryInterface(com.sun.star.text.XTextDocument.class,
+                                          xComponent);
+
+            String infoMsg = new String("All context menus of the created document frame contains now a 'Help' entry with the submenus 'Content', 'Help Agent' and 'Tips'.\n\n Press 'Return' in the shell to remove the context menu interceptor and finish the example!");
+            xDoc.getText().setString(infoMsg);
+
+            // ensure that the document content is optimal visible
+            com.sun.star.frame.XModel xModel =
+                (com.sun.star.frame.XModel)UnoRuntime.queryInterface(
+                    com.sun.star.frame.XModel.class, xDoc);
+            // get the frame for later usage
+            xFrame = xModel.getCurrentController().getFrame();
+
+            com.sun.star.view.XViewSettingsSupplier xViewSettings =
+                (com.sun.star.view.XViewSettingsSupplier)UnoRuntime.queryInterface(
+                    com.sun.star.view.XViewSettingsSupplier.class, xModel.getCurrentController());
+            xViewSettings.getViewSettings().setPropertyValue(
+                "ZoomType", new Short((short)0));
+            }
+            // test document will be closed later
+
+            // reuse the frame
+            com.sun.star.frame.XController xController = xFrame.getController();
+            if ( xController != null ) {
+                com.sun.star.ui.XContextMenuInterception xContextMenuInterception =
+                    (com.sun.star.ui.XContextMenuInterception)UnoRuntime.queryInterface(
+                        com.sun.star.ui.XContextMenuInterception.class, xController );
+                if( xContextMenuInterception != null ) {
+                    ContextMenuInterceptor aContextMenuInterceptor = new ContextMenuInterceptor();
+                    com.sun.star.ui.XContextMenuInterceptor xContextMenuInterceptor =
+                        (com.sun.star.ui.XContextMenuInterceptor)UnoRuntime.queryInterface(
+                            com.sun.star.ui.XContextMenuInterceptor.class, aContextMenuInterceptor );
+                    xContextMenuInterception.registerContextMenuInterceptor( xContextMenuInterceptor );
+
+                    System.out.println( "\n ... all context menus of the created document frame contains now a 'Help' entry with the\n     submenus 'Content', 'Help Agent' and 'Tips'.\n\nPress 'Return' to remove the context menu interceptor and finish the example!");
+
+                    if (System.in.read() > 0) {
+                        xContextMenuInterception.releaseContextMenuInterceptor(
+                            xContextMenuInterceptor );
+                        System.out.println( " ... context menu interceptor removed!" );
                     }
                 }
+            }
+
+            // close test document
+            com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
+                UnoRuntime.queryInterface(com.sun.star.util.XCloseable.class,
+                                          xComponent );
+
+            if (xCloseable != null ) {
+                xCloseable.close(false);
+            } else
+            {
+                xComponent.dispose();
             }
         }
         catch ( com.sun.star.uno.RuntimeException ex ) {
@@ -100,8 +135,8 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
             System.out.println( " Sample caught exception! " + ex );
             System.exit(1);
         }
-        catch ( java.lang.Throwable ex ) {
-            // catch java exceptions – do something useful
+        catch ( java.lang.Exception ex ) {
+            // catch java exceptions and do something useful
             System.out.println( " Sample caught exception! " + ex );
             System.exit(1);
         }
@@ -216,8 +251,8 @@ public class ContextMenuInterceptor implements XContextMenuInterceptor {
         catch ( com.sun.star.uno.Exception ex ) {
             // something strange has happend!
         }
-        catch ( java.lang.Throwable ex ) {
-            // catch java exceptions – do something useful
+        catch ( java.lang.Exception ex ) {
+            // catch java exceptions and something useful
         }
 
         return com.sun.star.ui.ContextMenuInterceptorAction.IGNORED;
