@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:51:44 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 12:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -999,6 +999,10 @@ SwFrm *SwPageFrm::PlaceFly( SwFlyFrm *pFly, SwFrmFmt *pFmt,
 // AND alignment at 'page areas' for to paragraph/to character anchored objects
 // OD 06.11.2003 #i22305# - adjustment for following text flow
 // or not for to frame anchored objects
+// OD 2004-06-02 #???# - Because the calculation of the position of the
+// floating screen object (Writer fly frame or drawing object) doesn't perform
+// a calculation on its upper frames and its anchor frame, a calculation of
+// the upper frames in this method no longer sensible.
 BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
 {
     BOOL bRet = TRUE;
@@ -1019,7 +1023,6 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             {
                 pClip = pFly->GetAnchor();
             }
-            pClip->Calc();
 
             rRect = pClip->Frm();
             SWRECTFN( pClip )
@@ -1116,9 +1119,6 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 }
                 if ( pUp )
                 {
-                    if ( !pUp->IsFooterFrm() && ( !pUp->IsFlyFrm() ||
-                         (!pUp->Lower() || !pUp->Lower()->IsColumnFrm()) ) )
-                        pUp->Calc();
                     if ( pUp->GetType() & FRM_BODY )
                     {
                         const SwPageFrm *pPg;
@@ -1188,8 +1188,6 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         else
         {
             const SwFrm *pUp = pFly->GetAnchor()->GetUpper();
-            if( !pUp->IsFooterFrm() )
-                pUp->Calc();
             SWRECTFN( pFly->GetAnchor() )
             while( pUp->IsColumnFrm() || pUp->IsSctFrm() || pUp->IsColBodyFrm())
                 pUp = pUp->GetUpper();
@@ -1250,8 +1248,6 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 pFrm = pC->GetAnchor();
             }
             const SwFrm *pUp = pFrm->GetUpper();
-            if( !pUp->IsFooterFrm() )
-                pUp->Calc();
             rRect = pUp->Prt();
             rRect += pUp->Frm().Pos();
             SWRECTFN( pFrm )
