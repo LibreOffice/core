@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:49:24 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2418,6 +2418,7 @@ void SwDoc::TransliterateText( const SwPaM& rPaM,
         else
             delete pUndo;
     }
+    SetModified();
 }
 #define MAX_REDLINE_COUNT   250
 // -----------------------------------------------------------------------------
