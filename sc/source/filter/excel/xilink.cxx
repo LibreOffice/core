@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:38:27 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 13:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@ public:
 
     /** Copies the cached value to sheet nTab in the document. */
     void                        SetCell( ScDocument& rDoc, USHORT nScTab ) const;
+
+private:
+    sal_uInt16                  mnCol;      /// Column index of the cached cell.
+    sal_uInt16                  mnRow;      /// Row index of the cached cell.
 };
 
 
@@ -549,46 +553,23 @@ XclImpExtName::XclImpExtName( XclImpStream& rStrm, bool bAddIn )
         meType = ::get_flagvalue( nFlags, EXC_EXTN_OLE, xlExtOLE, xlExtDDE );
     }
 
-    if(meType == xlExtDDE && (rStrm.GetRecLeft() > 1))
-    {
-        sal_uInt8 nLastCol;
-        sal_uInt16 nLastRow;
-        rStrm >> nLastCol >> nLastRow;
-
-        if( nLastRow <= MAXROW && nLastCol <= MAXCOL )
-        {
-            mpDdeMatrix.reset( new XclImpCachedMatrix(nLastCol + 1, nLastRow + 1));
-
-            for( sal_uInt16 nRow = 0; nRow < nLastRow+1 && (rStrm.GetRecLeft() > 1); ++nRow )
-                for( sal_uInt16 nCol = 0; nCol < nLastCol+1 && (rStrm.GetRecLeft() > 1); ++nCol )
-                    mpDdeMatrix->AppendValue( new XclImpCachedValue( rStrm, nCol, nRow ));
-        }
-    }
+    if( (meType == xlExtDDE) && (rStrm.GetRecLeft() > 1) )
+        mpDdeMatrix.reset( new XclImpCachedMatrix( rStrm ) );
 }
 
-
-void XclImpExtName::CreateDdeData( ScDocument& rDoc, const String& rApplic,const String& rTopic  )const
+void XclImpExtName::CreateDdeData( ScDocument& rDoc, const String& rApplic, const String& rTopic ) const
 {
-    rDoc.CreateDdeLink( rApplic, rTopic, GetName() );
-    sal_uInt16 nPosition;
-    if(!rDoc.FindDdeLink(rApplic, rTopic, GetName(), SC_DDE_IGNOREMODE, nPosition))
-        return ;
-
-    if(!mpDdeMatrix.get())
-        return ;
-
-    ScMatrix* pMatrix = NULL;
-    if(!(rDoc.CreateDdeLinkResultDimension(nPosition, mpDdeMatrix->GetColumns(), mpDdeMatrix->GetRows(), pMatrix)) || !pMatrix)
-        return ;
-
-    mpDdeMatrix->FillMatrix( rDoc, pMatrix);
+    ScMatrixRef pResults = mpDdeMatrix.get() ? mpDdeMatrix->CreateScMatrix() : NULL;
+    rDoc.CreateDdeLink( rApplic, rTopic, maName, SC_DDE_DEFAULT, pResults );
 }
 
 
 // Cached external cells ======================================================
 
-XclImpCrn::XclImpCrn( XclImpStream& rStrm, sal_uInt16 nXclCol, sal_uInt16 nXclRow ) :
-    XclImpCachedValue( rStrm, nXclCol, nXclRow )
+XclImpCrn::XclImpCrn( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow ) :
+    XclImpCachedValue( rStrm ),
+    mnCol( nCol ),
+    mnRow( nRow )
 {
 }
 
@@ -599,21 +580,17 @@ void XclImpCrn::SetCell( ScDocument& rDoc, USHORT nScTab ) const
     switch( GetType() )
     {
         case EXC_CACHEDVAL_DOUBLE:
-            rDoc.SetValue( aPos.Col(), aPos.Row(), aPos.Tab(), GetValue() );
+            rDoc.SetValue( mnCol, mnRow, nScTab, GetValue() );
         break;
         case EXC_CACHEDVAL_STRING:
-        {
-            DBG_ASSERT( GetString(), "XclImpCrn::SetCell - missing string" );
-            ScStringCell* pStrCell = new ScStringCell( *GetString() );
-            rDoc.PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pStrCell );
-        }
+            rDoc.PutCell( mnCol, mnRow, nScTab, new ScStringCell( GetString() ) );
         break;
         case EXC_CACHEDVAL_BOOL:
         case EXC_CACHEDVAL_ERROR:
         {
-            ScFormulaCell* pFmlaCell = new ScFormulaCell( &rDoc, aPos, GetTokArray() );
-            pFmlaCell->SetDouble( GetValue() );
-            rDoc.PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pFmlaCell );
+            ScFormulaCell* pFmlaCell = new ScFormulaCell( &rDoc, ScAddress( mnCol, mnRow, nScTab ), GetBoolErrFmla() );
+            pFmlaCell->SetDouble( GetBool() ? 1.0 : 0.0 );  // GetBool() returns false for error codes
+            rDoc.PutCell( mnCol, mnRow, nScTab, pFmlaCell );
         }
         break;
     }
