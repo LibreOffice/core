@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:49:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ FuTemplate::FuTemplate (
         {
             // Z.Z. geht immer noch der Dialog auf, um den Namen
             // der Vorlage einzugeben.
-            if( pView->HasMarkedObj() || TRUE )
+            if( pView->AreObjectsMarked() || TRUE )
             {
                 SfxStyleSheetBase *p = pSSPool->Find(aStyleName, (SfxStyleFamily) nFamily,
                                                         SFXSTYLEBIT_ALL );
@@ -614,10 +614,10 @@ FuTemplate::FuTemplate (
                             {
                                 SdPage* pPage = pViewSh->GetActualPage();
 
-                                if (static_cast<DrawViewShell*>(pViewShell)
-                                    ->GetEditMode() == EM_MASTERPAGE)
-                                    pPage = static_cast<SdPage*>(
-                                        pPage->GetMasterPage(0 ));
+                                if (static_cast<DrawViewShell*>(pViewShell)->GetEditMode() == EM_MASTERPAGE)
+                                {
+                                    pPage = static_cast<SdPage*>((&(pPage->TRG_GetMasterPage())));
+                                }
 
                                 if( pPage )
                                 {
@@ -709,8 +709,8 @@ FuTemplate::FuTemplate (
 
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         {
-            if (pView->HasMarkedObj() &&
-                pView->GetMarkList().GetMarkCount() == 1 ||
+            if (pView->AreObjectsMarked() &&
+                pView->GetMarkedObjectList().GetMarkCount() == 1 ||
                 pView->ISA(OutlineView))
             {
                 pStyleSheet = pView->GetStyleSheet();
