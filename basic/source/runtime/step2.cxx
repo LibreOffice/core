@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-13 08:10:47 $
+ *  last change: $Author: ab $ $Date: 2002-09-30 08:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,18 +171,20 @@ SbxVariable* SbiRuntime::FindElement
                 // #72382 VORSICHT! Liefert jetzt wegen unbekannten
                 // Modulen IMMER ein Ergebnis!
                 SbxVariable* pUnoClass = findUnoClass( aName );
-                pElem = new UnoClassSbxVariable( t, pImg, this );
-                SbxValues aRes( SbxOBJECT );
-                aRes.pObj = pUnoClass;
-                pElem->SbxVariable::Put( aRes );
-                //pElem->SbxVariable::PutObject( pUnoClass );
+                if( pUnoClass )
+                {
+                    pElem = new UnoClassSbxVariable( t, pImg, this );
+                    SbxValues aRes( SbxOBJECT );
+                    aRes.pObj = pUnoClass;
+                    pElem->SbxVariable::Put( aRes );
+                }
 
                 // #62939 Wenn eine Uno-Klasse gefunden wurde, muss
                 // das Wrapper-Objekt gehalten werden, da sonst auch
                 // die Uno-Klasse, z.B. "stardiv" immer wieder neu
                 // aus der Registry gelesen werden muss
-                //if( pElem )
-                //{
+                if( pElem )
+                {
                     // #63774 Darf nicht mit gespeichert werden!!!
                     pElem->SetFlag( SBX_DONTSTORE );
                     pElem->SetFlag( SBX_NO_MODIFY);
@@ -191,8 +193,7 @@ SbxVariable* SbiRuntime::FindElement
                     // deklarierten Vars automatisch global !
                     pElem->SetName( aName );
                     refLocals->Put( pElem, refLocals->Count() );
-                    // OLD: rBasic.Insert( pElem );
-                //}
+                }
             }
 
             if( !pElem )
