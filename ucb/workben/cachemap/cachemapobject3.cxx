@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachemapobject3.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-06-11 13:03:12 $
+ *  last change: $Author: sb $ $Date: 2001-06-14 14:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,20 +125,26 @@ rtl::Reference< Object3 > ObjectContainer3::get(rtl::OUString const & rKey)
 {
     osl::MutexGuard aGuard(m_aMutex);
     Map::iterator aIt(m_aMap.find(rKey));
-    if (aIt != m_aMap.end())
+    if (aIt == m_aMap.end())
     {
-        if (osl_incrementInterlockedCount(&aIt->second->m_nRefCount) > 1)
-        {
-            rtl::Reference< Object3 > xElement(aIt->second);
-            osl_decrementInterlockedCount(&aIt->second->m_nRefCount);
-            return xElement;
-        }
+        std::auto_ptr< Object3 > xElement(new Object3(this));
+        aIt = m_aMap.insert(Map::value_type(rKey, xElement.get())).first;
+        aIt->second->m_aContainerIt = aIt;
+        xElement.release();
+        return aIt->second;
+    }
+    else if (osl_incrementInterlockedCount(&aIt->second->m_nRefCount) > 1)
+    {
+        rtl::Reference< Object3 > xElement(aIt->second);
+        osl_decrementInterlockedCount(&aIt->second->m_nRefCount);
+        return xElement;
+    }
+    else
+    {
         osl_decrementInterlockedCount(&aIt->second->m_nRefCount);
         aIt->second->m_aContainerIt = m_aMap.end();
+        aIt->second = new Object3(this);
+        aIt->second->m_aContainerIt = aIt;
+        return aIt->second;
     }
-    std::auto_ptr< Object3 > xElement(new Object3(this));
-    aIt = m_aMap.insert(Map::value_type(rKey, xElement.get())).first;
-    aIt->second->m_aContainerIt = aIt;
-    xElement.release();
-    return aIt->second;
 }
