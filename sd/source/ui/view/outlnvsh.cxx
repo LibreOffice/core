@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-24 15:19:03 $
+ *  last change: $Author: ka $ $Date: 2002-02-20 11:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,14 +128,8 @@
 #ifndef _SFX_TOPFRM_HXX //autogen wg. SfxTopViewFrame
 #include <sfx2/topfrm.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
 #include <com/sun/star/i18n/TransliterationModules.hdl>
@@ -1344,18 +1338,12 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
         }
         else
         {
-            LanguageType eLang = pDoc->GetLanguage( EE_CHAR_LANGUAGE );
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
-                                                                uno::UNO_QUERY );
+            LanguageType            eLang = pDoc->GetLanguage( EE_CHAR_LANGUAGE );
+            Reference< XThesaurus > xThesaurus( LinguMgr::GetThesaurus() );
+            Locale                  aLocale;
 
-            Reference< XThesaurus > xThesaurus;
-            if ( xLinguServiceManager.is() )
-                xThesaurus = xLinguServiceManager->getThesaurus();
-
-            Locale aLocale;
             SvxLanguageToLocale( aLocale, eLang );
+
             if (!xThesaurus.is() || eLang == LANGUAGE_NONE || !xThesaurus->hasLocale(aLocale))
                 rSet.DisableItem( SID_THESAURUS );
         }

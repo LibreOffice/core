@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-16 11:08:58 $
+ *  last change: $Author: ka $ $Date: 2002-02-20 11:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #endif
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
@@ -493,18 +490,12 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
         else
         {
-            LanguageType eLang = pDoc->GetLanguage( EE_CHAR_LANGUAGE );
-            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
-                                                                uno::UNO_QUERY );
+            LanguageType            eLang = pDoc->GetLanguage( EE_CHAR_LANGUAGE );
+            Reference< XThesaurus > xThesaurus( LinguMgr::GetThesaurus() );
+            Locale                  aLocale;
 
-            Reference< XThesaurus > xThesaurus;
-            if ( xLinguServiceManager.is() )
-                xThesaurus = xLinguServiceManager->getThesaurus();
-
-            Locale aLocale;
             SvxLanguageToLocale( aLocale, eLang );
+
             if (!xThesaurus.is() || eLang == LANGUAGE_NONE || !xThesaurus->hasLocale(aLocale) )
                 rSet.DisableItem( SID_THESAURUS );
         }
