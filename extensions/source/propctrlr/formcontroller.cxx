@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-06 10:21:19 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 16:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1774,9 +1774,16 @@ namespace pcr
 
                 }
 
-                else if (nPropId == PROPERTY_ID_LABEL || nPropId == PROPERTY_ID_DEFAULT_TEXT)
+                else if (nPropId == PROPERTY_ID_LABEL)
                 {
-                    pProperty->eControlType = BCT_MEDIT;  //@ new MultilineEdit
+                    pProperty->eControlType = BCT_MEDIT;
+                }
+                else if (nPropId == PROPERTY_ID_DEFAULT_TEXT)
+                {
+                    if (FormComponentType::FILECONTROL == m_nClassId)
+                        pProperty->eControlType = BCT_EDIT;
+                    else
+                        pProperty->eControlType = BCT_MEDIT;
                 }
                 else if (PROPERTY_ID_CONTROLLABEL == nPropId)
                 {
@@ -2024,13 +2031,17 @@ namespace pcr
                     }
                     break;
 
-                    case PROPERTY_ID_BOUNDCOLUMN:
-                        pProperty->nMinValue = 1;
+                    case PROPERTY_ID_MAXTEXTLEN:
                     case PROPERTY_ID_TABINDEX:
-                        if (PROPERTY_ID_TABINDEX == nPropId)
-                            pProperty->nMinValue = 0;
+                    case PROPERTY_ID_BOUNDCOLUMN:
                         pProperty->nMaxValue = 0x7FFFFFFF;
                         pProperty->bHaveMinMax = sal_True;
+                        switch (nPropId)
+                        {
+                            case PROPERTY_ID_MAXTEXTLEN:    pProperty->nMinValue = -1; break;
+                            case PROPERTY_ID_TABINDEX:      pProperty->nMinValue = 0; break;
+                            case PROPERTY_ID_BOUNDCOLUMN:   pProperty->nMinValue = 1; break;
+                        }
                         break;
                 }
 
@@ -2506,6 +2517,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/02/06 10:21:19  fs
+ *  #83527# set the minimum for the BoundField property to 1
+ *
  *  Revision 1.6  2001/02/05 14:38:26  fs
  *  #83461# no 'not defined' for radio buttons check state
  *
