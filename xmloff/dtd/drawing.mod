@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.41 2001-03-09 12:27:27 mtg Exp $
+	$Id: drawing.mod,v 1.42 2001-03-30 14:18:59 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -491,7 +491,8 @@
 <!ATTLIST style:properties draw:background-size (full|border) #IMPLIED>
 
 <!-- text boxes -->
-<!ELEMENT draw:text-box (office:events?,(text:h|text:p|text:ordered-list|
+<!ELEMENT draw:text-box (office:events?,draw:image-map?,
+		(text:h|text:p|text:ordered-list|
 		text:unordered-list|table:table|chart:chart|
 		draw:a|draw:text-box|draw:image)*)>
 <!ATTLIST draw:text-box %draw-style-name;>
@@ -512,7 +513,7 @@
 <!ATTLIST draw:text-box draw:layer %layerName; #IMPLIED>
 
 <!-- image -->
-<!ELEMENT draw:image (office:events?,svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ELEMENT draw:image (office:events?,draw:image-map?,svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
 <!ATTLIST draw:image %draw-style-name;>
 <!ATTLIST draw:image draw:name %string; #IMPLIED>
 <!ATTLIST draw:image xlink:href %uriReference; #REQUIRED>
@@ -532,7 +533,7 @@
 <!ATTLIST draw:image draw:layer %layerName; #IMPLIED>
 
 <!-- objects -->
-<!ELEMENT draw:object (office:events?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ELEMENT draw:object (office:events?, draw:image-map?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
 <!ATTLIST draw:object %draw-style-name;>
 <!ATTLIST draw:object draw:name %string; #IMPLIED>
 <!ATTLIST draw:object xlink:href %uriReference; #REQUIRED>
@@ -550,7 +551,7 @@
 <!ATTLIST draw:object draw:id %shapeId;>
 <!ATTLIST draw:object draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:object-ole (office:events?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ELEMENT draw:object-ole (office:events?, draw:image-map?, svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
 <!ATTLIST draw:object-ole %draw-style-name;>
 <!ATTLIST draw:object-ole draw:name %string; #IMPLIED>
 <!ATTLIST draw:object-ole xlink:href %uriReference; #REQUIRED>
@@ -764,4 +765,44 @@
 <!ATTLIST draw:floating-frame draw:layer %layerName; #IMPLIED>
 <!ATTLIST draw:floating-frame %draw-position;>
 <!ATTLIST draw:floating-frame %draw-end-position; >
-<!-- view settings -->
+
+<!-- Image Maps -->
+<!ELEMENT draw:image-map
+	(draw:area-rectangle|draw:area-circle|draw:area-polygon)*>
+
+<!ELEMENT draw:area-rectangle (svg:desc?,office:events?)>
+<!ATTLIST draw:area-rectangle xlink:href %uriReference; #IMPLIED>
+<!ATTLIST draw:area-rectangle xlink:type (simple) #IMPLIED>
+<!ATTLIST draw:area-rectangle office:target-frame-name CDATA #IMPLIED>
+<!ATTLIST draw:area-rectangle xlink:show (new|replace) #IMPLIED>
+<!ATTLIST draw:area-rectangle office:name CDATA #IMPLIED>
+<!ATTLIST draw:area-rectangle draw:nohref (nohref) #IMPLIED>
+<!ATTLIST draw:area-rectangle svg:x %coordinate; #REQUIRED>
+<!ATTLIST draw:area-rectangle svg:y %coordinate; #REQUIRED>
+<!ATTLIST draw:area-rectangle svg:width %coordinate; #REQUIRED>
+<!ATTLIST draw:area-rectangle svg:height %coordinate; #REQUIRED>
+
+<!ELEMENT draw:area-circle (svg:desc?,office:events?)>
+<!ATTLIST draw:area-circle xlink:href %uriReference; #IMPLIED>
+<!ATTLIST draw:area-circle xlink:type (simple) #IMPLIED>
+<!ATTLIST draw:area-circle office:target-frame-name CDATA #IMPLIED>
+<!ATTLIST draw:area-circle xlink:show (new|replace) #IMPLIED>
+<!ATTLIST draw:area-circle office:name CDATA #IMPLIED>
+<!ATTLIST draw:area-circle draw:nohref (nohref) #IMPLIED>
+<!ATTLIST draw:area-circle svg:cx %coordinate; #REQUIRED>
+<!ATTLIST draw:area-circle svg:cy %coordinate; #REQUIRED>
+<!ATTLIST draw:area-circle svg:r %coordinate; #REQUIRED>
+
+<!ELEMENT draw:area-polygon (svg:desc?,office:events?)>
+<!ATTLIST draw:area-polygon xlink:href %uriReference; #IMPLIED>
+<!ATTLIST draw:area-polygon xlink:type (simple) #IMPLIED>
+<!ATTLIST draw:area-polygon office:target-frame-name CDATA #IMPLIED>
+<!ATTLIST draw:area-polygon xlink:show (new|replace) #IMPLIED>
+<!ATTLIST draw:area-polygon office:name CDATA #IMPLIED>
+<!ATTLIST draw:area-polygon draw:nohref (nohref) #IMPLIED>
+<!ATTLIST draw:area-polygon svg:x %coordinate; #REQUIRED>
+<!ATTLIST draw:area-polygon svg:y %coordinate; #REQUIRED>
+<!ATTLIST draw:area-polygon svg:width %coordinate; #REQUIRED>
+<!ATTLIST draw:area-polygon svg:height %coordinate; #REQUIRED>
+<!ATTLIST draw:area-polygon svg:points %points; #REQUIRED>
+<!ATTLIST draw:area-polygon svg:viewBox CDATA #REQUIRED>
