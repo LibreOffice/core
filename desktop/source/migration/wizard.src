@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:50:35 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,8 +291,8 @@ TabPage TP_MIGRATION
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*2);
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*8);
         WordBreak = TRUE;
-        Text [ en-US ] = "Personal data from %OLDPRODUCT installation can be used in %PRODUCTNAME %PRODUCTVERSION.\n\nUnmark the check box below if you do not want data such as templates, dictionaries and Gallery themes to be copied to %PRODUCTNAME %PRODUCTVERSION. To migrate all your personal data from the previous version of  %PRODUCTNAME, follow the guidelines in the Readme file.";
-        Text [ de ]    = "Sie können persönliche Daten aus %OLDPRODUCT nach %PRODUCTNAME %PRODUCTVERSION kopieren.\n\nDeaktivieren Sie das  Markierfeld weiter unten, um Benutzerdaten wie Dokumentvorlagen, Wörterbücher und Gallery-Themen nicht nach %PRODUCTNAME %PRODUCTVERSION zu übernehmen. Zur vollständigen Migration Ihrer Daten beachten Sie bitte auch weitere Hinweise in der Readme-Datei.";
+        Text [ en-US ] = "Personal data from %OLDPRODUCT installation can be used in %PRODUCTNAME %PRODUCTVERSION.\n\nUnmark the check box below if you do not want data such as templates, dictionaries and Gallery themes to be copied to %PRODUCTNAME %PRODUCTVERSION.";
+        Text [ de ]    = "Sie können persönliche Daten aus %OLDPRODUCT nach %PRODUCTNAME %PRODUCTVERSION kopieren.\n\nDeaktivieren Sie das  Markierfeld weiter unten, um Benutzerdaten wie Dokumentvorlagen, Wörterbücher und Gallery-Themen nicht nach %PRODUCTNAME %PRODUCTVERSION zu übernehmen. ";
     };
 
     CheckBox CB_MIGRATION
