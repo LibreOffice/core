@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:37:20 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #ifndef _WINCLIPBIMPL_HXX_
 #include "WinClipbImpl.hxx"
 #endif
+
+#include <systools/win32/comtools.hxx>
 
 #ifndef _DTOBJFACTORY_HXX_
 #include "..\..\inc\DtObjFactory.hxx"
@@ -214,7 +216,7 @@ void SAL_CALL CWinClipbImpl::setContents(
         pIDataObj = IDataObjectPtr( m_pCurrentClipContent );
     }
 
-    m_MtaOleClipboard.setClipboard( pIDataObj );
+    m_MtaOleClipboard.setClipboard(pIDataObj.get());
 }
 
 //------------------------------------------------------------------------
