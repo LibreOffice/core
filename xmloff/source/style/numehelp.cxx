@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-16 10:05:41 $
+ *  last change: $Author: sab $ $Date: 2001-05-17 14:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,11 @@
 
 #include "nmspmap.hxx"
 #include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
 #include "xmluconv.hxx"
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 #ifndef _XMLOFF_XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
@@ -95,6 +97,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 #define XML_TYPE "Type"
 #define XML_CURRENCYSYMBOL "CurrencySymbol"
@@ -111,137 +114,6 @@ XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
 
 XMLNumberFormatAttributesExportHelper::~XMLNumberFormatAttributesExportHelper()
 {
-}
-
-void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExport,
-                                const sal_Int16 nTypeKey,
-                                const double& rValue,
-                                const rtl::OUString& rCurrency,
-                                sal_uInt16 nNamespace,
-                                sal_Bool bExportValue)
-{
-    sal_Bool bWasSetTypeAttribute = sal_False;
-    switch(nTypeKey & ~util::NumberFormat::DEFINED)
-    {
-    case 0:
-    case util::NumberFormat::NUMBER:
-    case util::NumberFormat::SCIENTIFIC:
-    case util::NumberFormat::FRACTION:
-        {
-            if (!bWasSetTypeAttribute)
-            {
-                rXMLExport.AddAttributeASCII(nNamespace, sXML_value_type, sXML_float);
-                bWasSetTypeAttribute = sal_True;
-            }
-        }       // No Break
-    case util::NumberFormat::PERCENT:
-        {
-            if (!bWasSetTypeAttribute)
-            {
-                rXMLExport.AddAttributeASCII(nNamespace, sXML_value_type, sXML_percentage);
-                bWasSetTypeAttribute = sal_True;
-            }
-        }       // No Break
-    case util::NumberFormat::CURRENCY:
-        {
-            if (!bWasSetTypeAttribute)
-            {
-                rXMLExport.AddAttributeASCII(nNamespace, sXML_value_type, sXML_currency);
-                if (rCurrency.getLength() > 0)
-                    rXMLExport.AddAttribute(nNamespace, sXML_currency, rCurrency);
-                bWasSetTypeAttribute = sal_True;
-            }
-
-            if (bExportValue)
-            {
-                String sValue;
-                SolarMath::DoubleToString(sValue, rValue, 'A', INT_MAX, '.', sal_True);
-                rXMLExport.AddAttribute(nNamespace, sXML_value, sValue);
-            }
-        }
-        break;
-    case util::NumberFormat::DATE:
-    case util::NumberFormat::DATETIME:
-        {
-            if (!bWasSetTypeAttribute)
-            {
-                rXMLExport.AddAttributeASCII(nNamespace, sXML_value_type, sXML_date);
-                bWasSetTypeAttribute = sal_True;
-            }
-            if (bExportValue)
-            {
-                if ( rXMLExport.GetMM100UnitConverter().setNullDate(rXMLExport.GetModel()) )
-                {
-                    rtl::OUStringBuffer sBuffer;
-                    rXMLExport.GetMM100UnitConverter().convertDateTime(sBuffer, rValue);
-                    rXMLExport.AddAttribute(nNamespace, sXML_date_value, sBuffer.makeStringAndClear());
-                }
-            }
-        }
-        break;
-    case util::NumberFormat::TIME:
-        {
-            if (!bWasSetTypeAttribute)
-            {
-                rXMLExport.AddAttributeASCII(nNamespace, sXML_value_type, sXML_time);
-                bWasSetTypeAttribute = sal_True;
-            }
-            if (bExportValue)
-            {
-                rtl::OUStringBuffer sBuffer;
-                rXMLExport.GetMM100UnitConverter().convertTime(sBuffer, rValue);
-                rXMLExport.AddAttribute(nNamespace, sXML_time_value, sBuffer.makeStringAndClear());
-            }
-        }
-        break;
-    case util::NumberFormat::LOGICAL:
-        {
-            if (!bWasSetTypeAttribute)
-            {
-                rXMLExport.AddAttributeASCII(nNamespace, sXML_value_type, sXML_boolean);
-                bWasSetTypeAttribute = sal_True;
-            }
-            if (bExportValue)
-            {
-                rtl::OUString sOUValue;
-                double fTempValue = rValue;
-                if (SolarMath::ApproxEqual( fTempValue, 1.0 ))
-                {
-                    sOUValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true));
-                }
-                else
-                {
-                    if (SolarMath::ApproxEqual( rValue, 0.0 ))
-                    {
-                        sOUValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_false));
-                    }
-                    else
-                    {
-                        String sValue;
-                        SolarMath::DoubleToString(sValue, fTempValue, 'A', INT_MAX, '.', sal_True);
-                        sOUValue = sValue;
-                    }
-                }
-                rXMLExport.AddAttribute(nNamespace, sXML_boolean_value, sOUValue);
-            }
-        }
-        break;
-    case util::NumberFormat::TEXT:
-        {
-            if (!bWasSetTypeAttribute)
-            {
-                rXMLExport.AddAttributeASCII(nNamespace, sXML_value_type, sXML_float);
-                bWasSetTypeAttribute = sal_True;
-                if (bExportValue)
-                {
-                    String sValue;
-                    SolarMath::DoubleToString(sValue, rValue, 'A', INT_MAX, '.', sal_True);
-                    rXMLExport.AddAttribute(nNamespace, sXML_value, sValue);
-                }
-            }
-        }
-        break;
-    }
 }
 
 sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, sal_Bool& bIsStandard)
@@ -278,6 +150,137 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
     sal_Bool bExportValue, sal_Bool bExportTypeAttribute)
 {
     SetNumberFormatAttributes(rXMLExport, rValue, rCharacters, nNamespace, bExportValue, bExportTypeAttribute);
+}
+
+void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExport,
+                                const sal_Int16 nTypeKey,
+                                const double& rValue,
+                                const rtl::OUString& rCurrency,
+                                sal_uInt16 nNamespace,
+                                sal_Bool bExportValue)
+{
+    sal_Bool bWasSetTypeAttribute = sal_False;
+    switch(nTypeKey & ~util::NumberFormat::DEFINED)
+    {
+    case 0:
+    case util::NumberFormat::NUMBER:
+    case util::NumberFormat::SCIENTIFIC:
+    case util::NumberFormat::FRACTION:
+        {
+            if (!bWasSetTypeAttribute)
+            {
+                rXMLExport.AddAttribute(nNamespace, XML_VALUE_TYPE, XML_FLOAT);
+                bWasSetTypeAttribute = sal_True;
+            }
+        }       // No Break
+    case util::NumberFormat::PERCENT:
+        {
+            if (!bWasSetTypeAttribute)
+            {
+                rXMLExport.AddAttribute(nNamespace, XML_VALUE_TYPE, XML_PERCENTAGE);
+                bWasSetTypeAttribute = sal_True;
+            }
+        }       // No Break
+    case util::NumberFormat::CURRENCY:
+        {
+            if (!bWasSetTypeAttribute)
+            {
+                rXMLExport.AddAttribute(nNamespace, XML_VALUE_TYPE, XML_CURRENCY);
+                if (rCurrency.getLength() > 0)
+                    rXMLExport.AddAttribute(nNamespace, XML_CURRENCY, rCurrency);
+                bWasSetTypeAttribute = sal_True;
+            }
+
+            if (bExportValue)
+            {
+                String sValue;
+                SolarMath::DoubleToString(sValue, rValue, 'A', INT_MAX, '.', sal_True);
+                rXMLExport.AddAttribute(nNamespace, XML_VALUE, sValue);
+            }
+        }
+        break;
+    case util::NumberFormat::DATE:
+    case util::NumberFormat::DATETIME:
+        {
+            if (!bWasSetTypeAttribute)
+            {
+                rXMLExport.AddAttribute(nNamespace, XML_VALUE_TYPE, XML_DATE);
+                bWasSetTypeAttribute = sal_True;
+            }
+            if (bExportValue)
+            {
+                if ( rXMLExport.GetMM100UnitConverter().setNullDate(rXMLExport.GetModel()) )
+                {
+                    rtl::OUStringBuffer sBuffer;
+                    rXMLExport.GetMM100UnitConverter().convertDateTime(sBuffer, rValue);
+                    rXMLExport.AddAttribute(nNamespace, XML_DATE_VALUE, sBuffer.makeStringAndClear());
+                }
+            }
+        }
+        break;
+    case util::NumberFormat::TIME:
+        {
+            if (!bWasSetTypeAttribute)
+            {
+                rXMLExport.AddAttribute(nNamespace, XML_VALUE_TYPE, XML_TIME);
+                bWasSetTypeAttribute = sal_True;
+            }
+            if (bExportValue)
+            {
+                rtl::OUStringBuffer sBuffer;
+                rXMLExport.GetMM100UnitConverter().convertTime(sBuffer, rValue);
+                rXMLExport.AddAttribute(nNamespace, XML_TIME_VALUE, sBuffer.makeStringAndClear());
+            }
+        }
+        break;
+    case util::NumberFormat::LOGICAL:
+        {
+            if (!bWasSetTypeAttribute)
+            {
+                rXMLExport.AddAttribute(nNamespace, XML_VALUE_TYPE, XML_BOOLEAN);
+                bWasSetTypeAttribute = sal_True;
+            }
+            if (bExportValue)
+            {
+                rtl::OUString sOUValue;
+                double fTempValue = rValue;
+                if (SolarMath::ApproxEqual( fTempValue, 1.0 ))
+                {
+                    rXMLExport.AddAttribute(nNamespace, XML_BOOLEAN_VALUE, XML_TRUE);
+                }
+                else
+                {
+                    if (SolarMath::ApproxEqual( rValue, 0.0 ))
+                    {
+                        rXMLExport.AddAttribute(nNamespace, XML_BOOLEAN_VALUE, XML_FALSE);
+                    }
+                    else
+                    {
+                        String sValue;
+                        SolarMath::DoubleToString(sValue, fTempValue, 'A', INT_MAX, '.', sal_True);
+                        rtl::OUString sOUValue(sValue);
+                        rXMLExport.AddAttribute(nNamespace, XML_BOOLEAN_VALUE, sOUValue);
+                    }
+                }
+            }
+        }
+        break;
+    case util::NumberFormat::TEXT:
+        {
+            if (!bWasSetTypeAttribute)
+            {
+                rXMLExport.AddAttribute(nNamespace, XML_VALUE_TYPE, XML_FLOAT);
+                bWasSetTypeAttribute = sal_True;
+                if (bExportValue)
+                {
+                    String sValue;
+                    SolarMath::DoubleToString(sValue, rValue, 'A', INT_MAX, '.', sal_True);
+                    rXMLExport.AddAttribute(nNamespace, XML_VALUE, sValue);
+                }
+            }
+        }
+        break;
+    }
 }
 
 sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nNumberFormat, rtl::OUString& sCurrencySymbol,
@@ -364,13 +367,13 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(SvXMLExpor
     sal_Bool bExportValue, sal_Bool bExportTypeAttribute)
 {
     if (bExportTypeAttribute)
-        rXMLExport.AddAttributeASCII(nNamespace, sXML_value_type, sXML_string);
+        rXMLExport.AddAttribute(nNamespace, XML_VALUE_TYPE, XML_STRING);
     if (bExportValue)
     {
         if (rValue != rCharacters)
         {
             if (!(rValue[0] == '\'' && (rValue.getLength() == rCharacters.getLength() + 1)))
-                rXMLExport.AddAttribute(nNamespace, sXML_string_value, rValue);
+                rXMLExport.AddAttribute(nNamespace, XML_STRING_VALUE, rValue);
         }
     }
 }
