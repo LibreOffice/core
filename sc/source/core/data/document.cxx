@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-18 20:26:04 $
+ *  last change: $Author: dr $ $Date: 2001-10-26 16:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2442,7 +2442,6 @@ BYTE ScDocument::GetColFlags( USHORT nCol, USHORT nTab ) const
     return 0;
 }
 
-
 BYTE ScDocument::GetRowFlags( USHORT nRow, USHORT nTab ) const
 {
     if ( nTab<=MAXTAB && pTab[nTab] )
@@ -2459,7 +2458,6 @@ USHORT ScDocument::GetLastFlaggedCol( USHORT nTab ) const
     return 0;
 }
 
-
 USHORT ScDocument::GetLastFlaggedRow( USHORT nTab ) const
 {
     if ( nTab<=MAXTAB && pTab[nTab] )
@@ -2467,7 +2465,23 @@ USHORT ScDocument::GetLastFlaggedRow( USHORT nTab ) const
     return 0;
 }
 
-USHORT ScDocument::GetNextDifferentFlaggedCol( USHORT nTab, USHORT nStart) const
+
+USHORT ScDocument::GetLastChangedCol( USHORT nTab ) const
+{
+    if ( nTab<=MAXTAB && pTab[nTab] )
+        return pTab[nTab]->GetLastChangedCol();
+    return 0;
+}
+
+USHORT ScDocument::GetLastChangedRow( USHORT nTab ) const
+{
+    if ( nTab<=MAXTAB && pTab[nTab] )
+        return pTab[nTab]->GetLastChangedRow();
+    return 0;
+}
+
+
+USHORT ScDocument::GetNextDifferentChangedCol( USHORT nTab, USHORT nStart) const
 {
     if ( nTab<=MAXTAB && pTab[nTab] )
     {
@@ -2485,7 +2499,7 @@ USHORT ScDocument::GetNextDifferentFlaggedCol( USHORT nTab, USHORT nStart) const
     return 0;
 }
 
-USHORT ScDocument::GetNextDifferentFlaggedRow( USHORT nTab, USHORT nStart) const
+USHORT ScDocument::GetNextDifferentChangedRow( USHORT nTab, USHORT nStart) const
 {
     if ( nTab<=MAXTAB && pTab[nTab] )
     {

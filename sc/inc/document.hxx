@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: er $ $Date: 2001-10-25 17:36:54 $
+ *  last change: $Author: dr $ $Date: 2001-10-26 16:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1190,10 +1190,19 @@ public:
     BYTE            GetColFlags( USHORT nCol, USHORT nTab ) const;
     BYTE            GetRowFlags( USHORT nRow, USHORT nTab ) const;
 
+                    /// @return  the index of the last column with any set flags (auto-pagebreak is ignored).
     USHORT          GetLastFlaggedCol( USHORT nTab ) const;
+                    /// @return  the index of the last row with any set flags (auto-pagebreak is ignored).
     USHORT          GetLastFlaggedRow( USHORT nTab ) const;
-    USHORT          GetNextDifferentFlaggedCol( USHORT nTab, USHORT nStart) const;
-    USHORT          GetNextDifferentFlaggedRow( USHORT nTab, USHORT nStart) const;
+
+                    /// @return  the index of the last changed column (flags and column width, auto pagebreak is ignored).
+    USHORT          GetLastChangedCol( USHORT nTab ) const;
+                    /// @return  the index of the last changed row (flags and row height, auto pagebreak is ignored).
+    USHORT          GetLastChangedRow( USHORT nTab ) const;
+
+    USHORT          GetNextDifferentChangedCol( USHORT nTab, USHORT nStart) const;
+    USHORT          GetNextDifferentChangedRow( USHORT nTab, USHORT nStart) const;
+
     // returns whether to export a Default style for this col/row or not
     // nDefault is setted to one possition in the current row/col where the Default style is
     BOOL            GetColDefault( USHORT nTab, USHORT nCol, USHORT nLastRow, USHORT& nDefault);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-10-18 08:56:15 $
+ *  last change: $Author: dr $ $Date: 2001-10-26 16:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,8 +561,15 @@ public:
     void        SetColFlags( USHORT nCol, BYTE nNewFlags );
     void        SetRowFlags( USHORT nRow, BYTE nNewFlags );
 
+                /// @return  the index of the last column with any set flags (auto-pagebreak is ignored).
     USHORT      GetLastFlaggedCol() const;
+                /// @return  the index of the last row with any set flags (auto-pagebreak is ignored).
     USHORT      GetLastFlaggedRow() const;
+
+                /// @return  the index of the last changed column (flags and column width, auto pagebreak is ignored).
+    USHORT      GetLastChangedCol() const;
+                /// @return  the index of the last changed row (flags and row height, auto pagebreak is ignored).
+    USHORT      GetLastChangedRow() const;
 
     BOOL        IsFiltered(USHORT nRow) const;
 

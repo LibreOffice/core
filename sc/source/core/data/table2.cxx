@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-18 20:26:04 $
+ *  last change: $Author: dr $ $Date: 2001-10-26 16:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2297,7 +2297,7 @@ USHORT ScTable::GetLastFlaggedCol() const
 
     USHORT nLastFound = 0;
     for (USHORT nCol = 1; nCol <= MAXCOL; nCol++)
-        if ((pColFlags[nCol] & ~CR_PAGEBREAK) || (pColWidth[nCol] != STD_COL_WIDTH))
+        if (pColFlags[nCol] & ~CR_PAGEBREAK)
             nLastFound = nCol;
 
     return nLastFound;
@@ -2305,6 +2305,34 @@ USHORT ScTable::GetLastFlaggedCol() const
 
 
 USHORT ScTable::GetLastFlaggedRow() const
+{
+    if ( !pRowFlags )
+        return 0;
+
+    USHORT nLastFound = 0;
+    for (USHORT nRow = 1; nRow <= MAXROW; nRow++)
+        if (pRowFlags[nRow] & ~CR_PAGEBREAK)
+            nLastFound = nRow;
+
+    return nLastFound;
+}
+
+
+USHORT ScTable::GetLastChangedCol() const
+{
+    if ( !pColFlags )
+        return 0;
+
+    USHORT nLastFound = 0;
+    for (USHORT nCol = 1; nCol <= MAXCOL; nCol++)
+        if ((pColFlags[nCol] & ~CR_PAGEBREAK) || (pColWidth[nCol] != STD_COL_WIDTH))
+            nLastFound = nCol;
+
+    return nLastFound;
+}
+
+
+USHORT ScTable::GetLastChangedRow() const
 {
     if ( !pRowFlags )
         return 0;
