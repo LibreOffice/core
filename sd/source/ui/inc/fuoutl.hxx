@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoutl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,21 +59,24 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUOUTL_HXX
-#define _SD_FUOUTL_HXX
+#ifndef SD_FU_OUTLINE_HXX
+#define SD_FU_OUTLINE_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class SdViewShell;
-class SdOutlineViewShell;
-class SdView;
-class SdOutlineView;
-class SdWindow;
 class SdDrawDocument;
 class SfxRequest;
 
+
+namespace sd {
+
+class OutlineView;
+class OutlineViewShell;
+class View;
+class ViewShell;
+class Window;
 
 /*************************************************************************
 |*
@@ -81,18 +84,19 @@ class SfxRequest;
 |*
 \************************************************************************/
 
-class FuOutline : public FuPoor
+class FuOutline
+    : public FuPoor
 {
- protected:
-    SdOutlineViewShell*     pOutlineViewShell;
-    SdOutlineView*          pOutlineView;
-
- public:
+public:
     TYPEINFO();
 
-    FuOutline(SdViewShell* pViewShell, SdWindow* pWindow, SdView* pView,
-              SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuOutline();
+    FuOutline (
+        ViewShell* pViewShell,
+        ::sd::Window* pWindow,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuOutline (void);
 
     virtual BOOL KeyInput(const KeyEvent& rKEvt)
                                 { return FuPoor::KeyInput(rKEvt); }
@@ -110,7 +114,12 @@ class FuOutline : public FuPoor
 
     virtual void ScrollStart()  {}
     virtual void ScrollEnd()    {}
+
+protected:
+    OutlineViewShell* pOutlineViewShell;
+    OutlineView* pOutlineView;
 };
 
+} // end of namespace sd
 
-#endif      // _SD_FUOUTL_HXX
+#endif

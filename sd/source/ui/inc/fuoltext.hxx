@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoltext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,32 +59,40 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUOLTEXT_HXX
-#define _SD_FUOLTEXT_HXX
+#ifndef SD_FU_OUTLINE_TEXT_HXX
+#define SD_FU_OUTLINE_TEXT_HXX
 
-#ifndef _SD_FUOUTL_HXX
+#ifndef SD_FU_OUTLINE_HXX
 #include "fuoutl.hxx"
 #endif
 
-class SdViewShell;
-class SdView;
-class SdWindow;
 class SdDrawDocument;
 class SfxRequest;
+
+namespace sd {
+
+class View;
+class ViewShell;
+class Window;
 
 /*************************************************************************
 |*
 |* Textfunktionen im Outlinermodus
 |*
 \************************************************************************/
-class FuOutlineText : public FuOutline
+class FuOutlineText
+    : public FuOutline
 {
 public:
     TYPEINFO();
 
-    FuOutlineText(SdViewShell* pViewShell, SdWindow* pWin, SdView* pView,
-                   SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuOutlineText();
+    FuOutlineText (
+        ViewShell* pViewShell,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuOutlineText (void);
 
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
@@ -99,5 +107,6 @@ public:
     virtual void Deactivate();         // Function deaktivieren
 };
 
+} // end of namespace sd
 
-#endif      // _SD_FUOLTEXT_HXX
+#endif
