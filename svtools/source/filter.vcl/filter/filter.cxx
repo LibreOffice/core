@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-07 14:52:04 $
+ *  last change: $Author: sj $ $Date: 2000-11-09 19:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,18 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
 
 #define IMPEXP_FILTERPATHES     "Pathes"
 
@@ -248,11 +259,11 @@ BOOL ImplDirEntryHelper::Exists( const INetURLObject& rObj )
 
 // -----------------------------------------------------------------------------
 
-void ImplDirEntryHelper::Kill( const String& rStr )
+void ImplDirEntryHelper::Kill( const String& rMainUrl )
 {
     try
     {
-        ::ucb::Content aCnt( INetURLObject( rStr, INET_PROT_FILE ).GetMainURL(),
+        ::ucb::Content aCnt( rMainUrl,
                              ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
         aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
@@ -393,9 +404,7 @@ inline String ImpGetFilterDialog( const String& rStr )
 inline String ImpGetExtension( const String &rPath )
 {
     String          aExt;
-    INetURLObject   aURL;
-
-    aURL.SetSmartURL( rPath );
+    INetURLObject   aURL( rPath );
     aExt = aURL.GetFileExtension().ToUpperAscii();
     return aExt;
 }
@@ -1196,12 +1205,16 @@ ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( INetURLObject& rFilter, co
 
         if( !pEntry )
         {
-            pEntry = new ImpFilterLibCacheEntry( rFilter.GetFull(), rFiltername );
+            String  aPhysicalName;
+            if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( rFilter.GetMainURL(), aPhysicalName ) )
+            {
+                pEntry = new ImpFilterLibCacheEntry( aPhysicalName, rFiltername );
 
-            if( !mpFirst )
-                mpFirst = mpLast = pEntry;
-            else
-                mpLast = mpLast->mpNext = pEntry;
+                if( !mpFirst )
+                    mpFirst = mpLast = pEntry;
+                else
+                    mpLast = mpLast->mpNext = pEntry;
+            }
         }
 
         mpLastUsed = pEntry;
@@ -1226,7 +1239,7 @@ GraphicFilter::GraphicFilter()
 
 GraphicFilter::GraphicFilter( const INetURLObject& rPath )
 {
-    ImplInit( rPath.PathToFileName() );
+    ImplInit( rPath.GetMainURL() );
 }
 
 // ------------------------------------------------------------------------
@@ -1244,8 +1257,6 @@ GraphicFilter::~GraphicFilter()
     if( !--nFilterCount )
         Application::SetFilterHdl( aLastFilterHdl );
 
-    String aCfgPath( pConfig->GetPathName() );
-
     delete pErrorEx;
     delete pConfig;
     delete pConfigPath;
@@ -1257,7 +1268,6 @@ GraphicFilter::~GraphicFilter()
         pOptionsConfig->Flush();
         delete pOptionsConfig;
     }
-    ImplDirEntryHelper::Kill( aCfgPath );
 }
 
 // ------------------------------------------------------------------------
@@ -1265,7 +1275,8 @@ GraphicFilter::~GraphicFilter()
 void GraphicFilter::ImplInit( const String& rInitPath )
 {
     pErrorEx = new FilterErrorEx;
-    pConfig = new Config( TempFile::CreateTempName() );
+    ::utl::TempFile aTempFile;
+    pConfig = new Config( aTempFile.GetURL() );
     pConfig->EnablePersistence( FALSE );
     pConfigPath = new String;
     pFilterPath = new String;
@@ -1297,26 +1308,30 @@ void GraphicFilter::ImplCreateMultiConfig( const String& rMultiPath )
     {
         for( long i = rMultiPath.GetTokenCount( ';' ); i; )
         {
-            Config aCfg( rMultiPath.GetToken( (USHORT) --i, ';' ) );
-
-            // clone import entries
-            if( aCfg.HasGroup( IMP_FILTERSECTION ) )
+            String      aConfigUrl( rMultiPath.GetToken( (USHORT) --i, ';' ) );
+            String      aPhysicalConfigName;
+            if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aConfigUrl, aPhysicalConfigName ) )
             {
-                aCfg.SetGroup( IMP_FILTERSECTION );
-                pConfig->SetGroup( IMP_FILTERSECTION );
+                Config aCfg( aPhysicalConfigName );
+                // clone import entries
+                if( aCfg.HasGroup( IMP_FILTERSECTION ) )
+                {
+                    aCfg.SetGroup( IMP_FILTERSECTION );
+                    pConfig->SetGroup( IMP_FILTERSECTION );
 
-                for( USHORT n = 0, nCount = aCfg.GetKeyCount(); n < nCount; n++ )
-                    pConfig->WriteKey( aCfg.GetKeyName( n ), aCfg.ReadKey( n ) );
-            }
+                    for( USHORT n = 0, nCount = aCfg.GetKeyCount(); n < nCount; n++ )
+                        pConfig->WriteKey( aCfg.GetKeyName( n ), aCfg.ReadKey( n ) );
+                }
 
-            // clone export entries
-            if( aCfg.HasGroup( EXP_FILTERSECTION ) )
-            {
-                aCfg.SetGroup( EXP_FILTERSECTION );
-                pConfig->SetGroup( EXP_FILTERSECTION );
+                // clone export entries
+                if( aCfg.HasGroup( EXP_FILTERSECTION ) )
+                {
+                    aCfg.SetGroup( EXP_FILTERSECTION );
+                    pConfig->SetGroup( EXP_FILTERSECTION );
 
-                for( USHORT n = 0, nCount = aCfg.GetKeyCount(); n < nCount; n++ )
-                    pConfig->WriteKey( aCfg.GetKeyName( n ), aCfg.ReadKey( n ) );
+                    for( USHORT n = 0, nCount = aCfg.GetKeyCount(); n < nCount; n++ )
+                        pConfig->WriteKey( aCfg.GetKeyName( n ), aCfg.ReadKey( n ) );
+                }
             }
         }
     }
@@ -1342,7 +1357,7 @@ void GraphicFilter::EnableConfigCache( BOOL bEnable )
 
 void GraphicFilter::SetConfigPath( const INetURLObject& rPath )
 {
-    SetConfigPath( rPath.PathToFileName() );
+    SetConfigPath( rPath.GetMainURL() );
 }
 
 // ------------------------------------------------------------------------
@@ -1380,7 +1395,7 @@ Config& GraphicFilter::GetConfig() const
 
 void GraphicFilter::SetFilterPath( const INetURLObject& rPath )
 {
-    SetFilterPath( rPath.PathToFileName() );
+    SetFilterPath( rPath.GetMainURL() );
 }
 
 // ------------------------------------------------------------------------
@@ -1398,13 +1413,12 @@ void GraphicFilter::SetFilterPath( const String& rMultiPath )
     // add new pathes to group
     for( USHORT i = 0, nCount = rMultiPath.GetTokenCount( ';' ); i < nCount; i++ )
     {
-        INetURLObject aPath;
-        aPath.SetSmartURL( rMultiPath.GetToken( i, ';' ) );
+        String aPath( rMultiPath.GetToken( i, ';' ) );
         if( ImplDirEntryHelper::Exists( aPath ) )
         {
             ByteString  aKey( 'P' );
             aKey        += ByteString::CreateFromInt32( i );
-            pConfig->WriteKey( aKey, aPath.PathToFileName(), RTL_TEXTENCODING_UTF8 );
+            pConfig->WriteKey( aKey, aPath, RTL_TEXTENCODING_UTF8 );
         }
     }
 }
@@ -1421,7 +1435,7 @@ const String& GraphicFilter::GetFilterPath() const
 
 void GraphicFilter::SetOptionsConfigPath( const INetURLObject& rConfigPath )
 {
-    const String aNewPath( rConfigPath.PathToFileName() );
+    const String aNewPath( rConfigPath.GetMainURL() );
 
     if( aNewPath != GetOptionsConfigPath() )
     {
@@ -1706,15 +1720,22 @@ BOOL GraphicFilter::IsExportPixelFormat( USHORT nFormat )
 USHORT GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
                                         USHORT nFormat, USHORT* pDeterminedFormat )
 {
-    String          aPath( rPath.PathToFileName() );
-    SvFileStream    aIStream( aPath, STREAM_READ | STREAM_SHARE_DENYNONE );
+    sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
+    DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::CanImportGraphic() : ProtType == INET_PROT_NOT_VALID" );
 
-    return CanImportGraphic( aPath, aIStream, nFormat, pDeterminedFormat );
+    String      aMainUrl( rPath.GetMainURL() );
+    SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE );
+    if ( pStream )
+    {
+        nRetValue = CanImportGraphic( aMainUrl, *pStream, nFormat, pDeterminedFormat );
+        delete pStream;
+    }
+    return nRetValue;
 }
 
 // ------------------------------------------------------------------------
 
-USHORT GraphicFilter::CanImportGraphic( const String& rPath, SvStream& rIStream,
+USHORT GraphicFilter::CanImportGraphic( const String& rMainUrl, SvStream& rIStream,
                                         USHORT nFormat, USHORT* pDeterminedFormat )
 {
     DBG_ASSERT(pConfig,"GraphicFilter:: : no Config");
@@ -1723,7 +1744,7 @@ USHORT GraphicFilter::CanImportGraphic( const String& rPath, SvStream& rIStream,
         pConfig->SetGroup( IMP_FILTERSECTION );
 
     ULONG nStreamPos = rIStream.Tell();
-    USHORT nRes = ImpTestOrFindFormat( *this, *pConfig, rPath, rIStream, NULL, &nFormat );
+    USHORT nRes = ImpTestOrFindFormat( *this, *pConfig, rMainUrl, rIStream, NULL, &nFormat );
 
     rIStream.Seek(nStreamPos);
 
@@ -1738,10 +1759,17 @@ USHORT GraphicFilter::CanImportGraphic( const String& rPath, SvStream& rIStream,
 USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
                                      USHORT nFormat, USHORT * pDeterminedFormat )
 {
-    const String    aPath( rPath.PathToFileName() );
-    SvFileStream    aIStm( aPath, STREAM_READ | STREAM_SHARE_DENYNONE );
+    sal_uInt16 nRetValue = GRFILTER_FORMATERROR;
+    DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ImportGraphic() : ProtType == INET_PROT_NOT_VALID" );
 
-    return ImportGraphic( rGraphic, aPath, aIStm, nFormat, pDeterminedFormat );
+    String      aMainUrl( rPath.GetMainURL() );
+    SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE );
+    if ( pStream )
+    {
+        nRetValue = ImportGraphic( rGraphic, aMainUrl, *pStream, nFormat, pDeterminedFormat );
+        delete pStream;
+    }
+    return nRetValue;
 }
 
 //-------------------------------------------------------------------------
@@ -1901,9 +1929,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         {
             case SGF_BITIMAGE:
             {
-                String aTempFileName( TempFile::CreateTempName() );
-                SvFileStream aTempStream( aTempFileName, STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYNONE );
-
+                SvMemoryStream aTempStream;
                 if( aTempStream.GetError() )
                     return GRFILTER_OPENERROR;
 
@@ -1926,8 +1952,6 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
                     if( aTempStream.GetError() )
                         nStatus = GRFILTER_FILTERERROR;
                 }
-                aTempStream.Close();
-                ImplDirEntryHelper::Kill( aTempFileName );
             }
             break;
 
@@ -1989,8 +2013,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         // find first filter in filter pathes
         for( USHORT i = 0, nPathCount = pConfig->GetKeyCount(); i < nPathCount; i++ )
         {
-            INetURLObject aFilterPath;
-            aFilterPath.SetSmartURL( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
+            INetURLObject aFilterPath( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
             aFilterPath.Append( aFilterName );
             if ( pFilter = aCache.GetFilter( aFilterPath, aFilterName ) )
             {
@@ -2080,17 +2103,21 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
 
 USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath, USHORT nFormat )
 {
-    const BOOL      bAlreadyExists = ImplDirEntryHelper::Exists( rPath );
-    const String    aPath( rPath.PathToFileName() );
-    SvFileStream    aOStm( aPath, STREAM_WRITE | STREAM_TRUNC );
-    USHORT          nRet = ExportGraphic( rGraphic, aPath, aOStm, nFormat );
+    sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
+    DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ExportGraphic() : ProtType == INET_PROT_NOT_VALID" );
+    BOOL        bAlreadyExists = ImplDirEntryHelper::Exists( rPath );
 
-    aOStm.Close();
+    String      aMainUrl( rPath.GetMainURL() );
+    SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_WRITE | STREAM_TRUNC );
+    if ( pStream )
+    {
+        nRetValue = ExportGraphic( rGraphic, aMainUrl, *pStream, nFormat );
+        delete pStream;
 
-    if( ( GRFILTER_OK != nRet ) && !bAlreadyExists )
-        ImplDirEntryHelper::Kill( aPath );
-
-    return nRet;
+        if( ( GRFILTER_OK != nRetValue ) && !bAlreadyExists )
+            ImplDirEntryHelper::Kill( aMainUrl );
+    }
+    return nRetValue;
 }
 
 // ------------------------------------------------------------------------
@@ -2106,8 +2133,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
 
     if( nFormat == GRFILTER_FORMAT_DONTKNOW )
     {
-        INetURLObject aURL;
-        aURL.SetSmartURL( rPath );
+        INetURLObject aURL( rPath );
         String aExt( aURL.GetFileExtension().ToUpperAscii() );
 
 
@@ -2384,7 +2410,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             // find first filter in filter pathes
             for( USHORT i = 0, nPathCount = pConfig->GetKeyCount(); i < nPathCount; i++ )
             {
-                aFilterFilePath.SetSmartURL( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
+                aFilterFilePath = INetURLObject( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
                 aFilterFilePath.Append( aFilterName );
                 if( ImplDirEntryHelper::Exists( aFilterFilePath ) )
                 {
@@ -2397,18 +2423,23 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                 nStatus = GRFILTER_FILTERERROR;
             else
             {
-                ::vos::OModule aLibrary( aFilterFilePath.PathToFileName() );
-                PFilterCall pFunc = (PFilterCall) aLibrary.getSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) );
-
-                if( pFunc )
+                String aPhysicalName;
+                if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aFilterFilePath.GetMainURL(), aPhysicalName ) )
                 {
-                    if( !rOStm.GetError() )
+                    ::vos::OModule aLibrary( aPhysicalName );
+                    PFilterCall pFunc = (PFilterCall) aLibrary.getSymbol( UniString::CreateFromAscii( EXPORT_FUNCTION_NAME ) );
+                    if( pFunc )
                     {
-                        if ( !(*pFunc)( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, GetOptionsConfig(), FALSE ) )
-                            nStatus = GRFILTER_FORMATERROR;
+                        if( !rOStm.GetError() )
+                        {
+                            if ( !(*pFunc)( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, GetOptionsConfig(), FALSE ) )
+                                nStatus = GRFILTER_FORMATERROR;
+                        }
+                        else
+                            nStatus = GRFILTER_IOERROR;
                     }
                     else
-                        nStatus = GRFILTER_IOERROR;
+                        nStatus = GRFILTER_FILTERERROR;
                 }
                 else
                     nStatus = GRFILTER_FILTERERROR;
@@ -2502,8 +2533,7 @@ BOOL GraphicFilter::DoImportDialog( Window* pWindow, USHORT nFormat )
             // find first filter in filter pathes
             for( USHORT i = 0, nPathCount = pConfig->GetKeyCount(); i < nPathCount; i++ )
             {
-                INetURLObject aFilterPath;
-                aFilterPath.SetSmartURL( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
+                INetURLObject aFilterPath( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
                 aFilterPath.Append( aFilterName );
                 if ( pFilter = aCache.GetFilter( aFilterPath, aFilterName ) )
                 {
@@ -2618,7 +2648,7 @@ BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat, FieldUnit e
             // find first filter in filter pathes
             for( USHORT i = 0, nPathCount = pConfig->GetKeyCount(); i < nPathCount; i++ )
             {
-                aFilterFilePath.SetSmartURL( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
+                aFilterFilePath = INetURLObject( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
                 aFilterFilePath.Append( aFilterName );
 
                 if( ImplDirEntryHelper::Exists( aFilterFilePath ) )
@@ -2630,14 +2660,18 @@ BOOL GraphicFilter::DoExportDialog( Window* pWindow, USHORT nFormat, FieldUnit e
 
             if( bFound )
             {
-                ::vos::OModule aLibrary( aFilterFilePath.PathToFileName() );
-                PFilterDlgCall  pFunc = (PFilterDlgCall) aLibrary.getSymbol( UniString( EXPDLG_FUNCTION_NAME, RTL_TEXTENCODING_UTF8 ) );
-
-                // Dialog in DLL ausfuehren
-                if( pFunc )
+                String aPhysicalName;
+                if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aFilterFilePath.GetMainURL(), aPhysicalName ) )
                 {
-                    FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, GetOptionsConfig(), eFieldUnit );
-                    bRet = (*pFunc)( aFltCallDlgPara );
+                    ::vos::OModule aLibrary( aPhysicalName );
+                    PFilterDlgCall  pFunc = (PFilterDlgCall) aLibrary.getSymbol( UniString( EXPDLG_FUNCTION_NAME, RTL_TEXTENCODING_UTF8 ) );
+
+                    // Dialog in DLL ausfuehren
+                    if( pFunc )
+                    {
+                        FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, GetOptionsConfig(), eFieldUnit );
+                        bRet = (*pFunc)( aFltCallDlgPara );
+                    }
                 }
             }
         }

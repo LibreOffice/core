@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: sj $ $Date: 2000-11-09 19:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include "sgfbram.hxx"
 #include "sgvmain.hxx"
 #include "sgvspln.hxx"
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 
 #ifdef DEBUG
 //#include "Debug.c"
@@ -880,23 +883,15 @@ void BmapType::SetPaths(const INetURLObject rFltPath, const INetURLObject rCfgPa
 void BmapType::Draw(OutputDevice& rOut)
 {
     //ifstream aInp;
-    unsigned char nSgfTyp;
-    USHORT        nVersion;
-    String aStr( Filename[ 1 ], (xub_StrLen)Filename[ 0 ], RTL_TEXTENCODING_UTF8 );
-    INetURLObject aFNam;
-    aFNam.SetSmartURL( aStr );
-    BOOL Ok = ImplDirEntryHelper::Exists( aFNam );
-    if (!Ok)
+    unsigned char   nSgfTyp;
+    USHORT          nVersion;
+    String          aStr( Filename[ 1 ], (xub_StrLen)Filename[ 0 ], RTL_TEXTENCODING_UTF8 );
+    INetURLObject   aFNam( aStr );
+
+    SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL(), STREAM_READ );
+    if ( pInp )
     {
-        aStr = aFNam.GetName();  // Path weg, nur nach Namen suchen
-        aFNam.SetSmartURL( aStr );
-        Ok = ImplDirEntryHelper::Exists( aFNam );
-    }
-    SvFileStream aInp( aFNam.PathToFileName(), STREAM_READ );
-    if (Ok)
-        Ok=aInp.GetError() ? FALSE : TRUE;
-    if (Ok) {
-        nSgfTyp=CheckSgfTyp(aInp,nVersion);
+        nSgfTyp=CheckSgfTyp( *pInp,nVersion);
         switch(nSgfTyp) {
             case SGF_BITIMAGE: {
                 GraphicFilter aFlt;
@@ -916,7 +911,7 @@ void BmapType::Draw(OutputDevice& rOut)
                 SgfVectXdiv=0;
                 SgfVectYdiv=0;
                 SgfVectScal=TRUE;
-                Ok=SgfVectFilter(aInp,aMtf);
+                SgfVectFilter(*pInp,aMtf);
                 SgfVectXofs=0;
                 SgfVectYofs=0;
                 SgfVectXmul=0;
@@ -927,6 +922,7 @@ void BmapType::Draw(OutputDevice& rOut)
                 aMtf.Play(&rOut);
             } break;
         }
+        delete pInp;
     }
 }
 
@@ -1149,7 +1145,7 @@ BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath, co
 
     pSgfFonts = new SgfFontLst;
 
-    pSgfFonts->AssignFN( aIniPath.PathToFileName() );
+    pSgfFonts->AssignFN( aIniPath.GetMainURL() );
     nFileStart=rInp.Tell();
     rInp>>aHead;
     if (aHead.ChkMagic() && aHead.Typ==SgfStarDraw && aHead.Version==SGV_VERSION) {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-07 14:52:04 $
+ *  last change: $Author: sj $ $Date: 2000-11-09 19:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <vcl/outdev.hxx>
 #include <vcl/config.hxx>
 #include "filter.hxx"
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 
 #define DATA_SIZE           640
 #define IMP_FILTERSECTION   "Graphics Filters - Import"
@@ -76,7 +79,8 @@
 |*
 \************************************************************************/
 
-GraphicDescriptor::GraphicDescriptor( const String* pPath )
+GraphicDescriptor::GraphicDescriptor( const String* pPath ) :
+    pFileStm        ( NULL )
 {
     ImpConstruct();
 
@@ -85,7 +89,6 @@ GraphicDescriptor::GraphicDescriptor( const String* pPath )
         INetURLObject aURL( *pPath, INET_PROT_FILE );
         aPathExt = aURL.GetFileExtension().ToLowerAscii();
     }
-
     bLinked = TRUE;
     bLinkChanged = FALSE;
     bWideSearch = FALSE;
@@ -99,17 +102,16 @@ GraphicDescriptor::GraphicDescriptor( const String* pPath )
 \************************************************************************/
 
 GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
-            aFileStm( rPath.PathToFileName(), STREAM_READ ),
-            aPathExt( rPath.GetFileExtension().ToLowerAscii() )
+    pFileStm( ::utl::UcbStreamHelper::CreateStream( rPath.GetMainURL(), STREAM_READ ) ),
+    aPathExt( rPath.GetFileExtension().ToLowerAscii() )
 {
-    ImpConstruct();
-
-    if ( aFileStm.IsOpen() && !aFileStm.GetError() )
+    if ( pFileStm )
     {
         nStmPos = 0;
-        aFileStm.Seek( nStmPos );
+        pFileStm->Seek( nStmPos );
         bDataReady = TRUE;
     }
+    ImpConstruct();
 }
 
 /*************************************************************************
@@ -118,17 +120,16 @@ GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
 |*
 \************************************************************************/
 
-GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const String* pPath)
+GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const String* pPath) :
+    pFileStm    ( NULL )
 {
     ImpConstruct();
 
     if ( pPath )
     {
-        INetURLObject aURL( *pPath, INET_PROT_FILE );
-//      aURL.SetSmartURL( *pPath );
+        INetURLObject aURL( *pPath );
         aPathExt = aURL.GetFileExtension().ToLowerAscii();
     }
-
     nStmPos = rInStream.Tell();
     pBaseStm = &rInStream;
     bBaseStm = TRUE;
@@ -146,6 +147,7 @@ GraphicDescriptor::GraphicDescriptor( SvStream& rInStream, const String* pPath)
 
 GraphicDescriptor::~GraphicDescriptor()
 {
+    delete pFileStm;
 }
 
 
@@ -254,7 +256,7 @@ SvStream& GraphicDescriptor::GetSearchStream() const
     else if ( bBaseStm )
         return *pBaseStm;
     else
-        return (SvStream&) aFileStm;
+        return *pFileStm;
 }
 
 
@@ -296,6 +298,8 @@ ULONG GraphicDescriptor::GetRequestedByteCount() const
 
 void GraphicDescriptor::ImpConstruct()
 {
+    if ( !pFileStm )
+        pFileStm = new SvStream();
     nFormat = GFF_NOT;
     nBitsPerPixel = 0;
     nPlanes = 0;
