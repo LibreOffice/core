@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 07:54:40 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1790,7 +1790,7 @@ String STR_IMGBTN_INDEX_ENTRY_UP
     Text[ chinese_simplified ] = "ΙΟÒ»ΈφΔΏΒΌΜυΔΏ";
     Text[ russian ] = "Οπεδϋδσωθι ύλεμενς σκΰηΰςελÿ";
     Text[ polish ] = "Poprzedni wpis do indeksu";
-    Text[ japanese ] = "‘O‚Μυψ€–Ϊ";
+    Text[ japanese ] = "‘O‚Μ–Ϊ¥υψ€–Ϊ";
     Text[ chinese_traditional ] = "¤W¤@­Σ¥ΨΏύ±ψ¥Ψ";
     Text[ arabic ] = "ΗαΕΟΞΗα ΗαέεΡΣν ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενη καταχώριση ευρετηρίου";
