@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-05 22:16:55 $
+ *  last change: $Author: jp $ $Date: 2001-06-11 08:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,13 @@ namespace com { namespace sun { namespace star { namespace io {
 class SmXMLWrapper
 {
 public:
-    SmXMLWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef) : rModel(rRef), bFlat(sal_True) {};
+    SmXMLWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef)
+        : xModel(rRef), bFlat(sal_True) {}
     sal_Bool Import(SfxMedium &rMedium);
     sal_Bool Export(SfxMedium &rMedium);
     void SetFlat(sal_Bool bIn) {bFlat = bIn;}
 private:
-    com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel;
+    com::sun::star::uno::Reference<com::sun::star::frame::XModel> xModel;
     sal_Bool bFlat;     //set true for export to flat .mml, set false for
                         //export to a .sxm (or whatever) package
 
