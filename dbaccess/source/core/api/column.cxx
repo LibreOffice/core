@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 08:06:02 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 14:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,11 +460,81 @@ sal_Bool OColumnSettings::isDefaulted() const
 //------------------------------------------------------------------------------
 sal_Bool OColumnSettings::writeUITo(const OConfigurationNode& _rConfigNode, const Reference< XNumberFormatsSupplier >& _rxFormats)
 {
+    OSL_ENSURE( _rxFormats.is(), "OColumnSettings::writeUITo: invalid (insufficient) context!" );
+
+    // the plain  stuff
     _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_ALIGNMENT, m_aAlignment);
     _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_WIDTH, m_aWidth);
-    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_NUMBERFORMAT, m_aFormatKey);
     _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_RELPOSITION, m_aRelativePosition);
     _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_HIDDEN, ::cppu::bool2any(m_bHidden));
+
+    // for the format key:
+    Any aPersistentFormatKey = m_aFormatKey;
+    Any aPersistentFormatString;
+    Any aPersistentFomatLocale;
+    // first, check if our format is a standard one
+    try
+    {
+        if ( m_aFormatKey.hasValue() && _rxFormats.is() )
+        {
+            // we have a non-NULL format
+
+            // extract it
+            sal_Int32 nFormatKey = 0;
+#ifdef _DEBUG
+            sal_Bool bSuccess =
+#endif
+            m_aFormatKey >>= nFormatKey;
+            OSL_ENSURE( bSuccess, "OColumnSettings::writeUITo: could not extract the format key!" );
+
+            // get the UNO descriptor for the format
+            Reference< XNumberFormats > xFormats = _rxFormats->getNumberFormats();
+            Reference< XPropertySet > xKeyDescriptor;
+            if ( xFormats.is() )
+                xKeyDescriptor = xFormats->getByKey( nFormatKey );
+            OSL_ENSURE( xKeyDescriptor.is(), "OColumnSettings::writeUITo: invalid format key!" );
+
+            // is this a user-defined format?
+            sal_Bool bUserDefinedFormat = sal_False;
+            if ( xKeyDescriptor.is() )
+                bUserDefinedFormat = ::cppu::any2bool( xKeyDescriptor->getPropertyValue( ::rtl::OUString::createFromAscii( "UserDefined" ) ) );
+
+            if ( bUserDefinedFormat )
+            {   // yest
+                // -> obtain format string and locale
+                ::rtl::OUString sFormatString;
+                Locale aFormatLocale;
+                xKeyDescriptor->getPropertyValue( ::rtl::OUString::createFromAscii( "FormatString" ) ) >>= sFormatString;
+                xKeyDescriptor->getPropertyValue( ::rtl::OUString::createFromAscii( "Locale" ) ) >>= aFormatLocale;
+
+                OSL_ENSURE( sFormatString.getLength(), "OColumnSettings::writeUITo: invalid format string!" );
+                OSL_ENSURE( aFormatLocale.Language.getLength(), "OColumnSettings::writeUITo: invalid locale!" );
+
+                // concat the language/Country of the locale
+                ::rtl::OUString sLocaleString = aFormatLocale.Language;
+                if ( aFormatLocale.Country.getLength() )
+                {
+                    sal_Unicode cSeparator = '-';
+                    sLocaleString += ::rtl::OUString( &cSeparator, 1 );
+                    sLocaleString += aFormatLocale.Country;
+                }
+
+                aPersistentFormatString <<= sFormatString;
+                aPersistentFomatLocale <<= sLocaleString;
+                // now that we know that we save the format as descriptor (string/language), reset the key
+                aPersistentFormatKey.clear();
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "OColumnSettings::writeUITo: caught an exception while examining the format!" );
+    }
+
+    _rConfigNode.setNodeValue( CONFIGKEY_COLUMN_NUMBERFORMAT, aPersistentFormatKey );
+    _rConfigNode.setNodeValue( CONFIGKEY_FORMATSTRING, aPersistentFormatString );
+    _rConfigNode.setNodeValue( CONFIGKEY_FORMATLOCALE, aPersistentFomatLocale );
+
     return sal_True;
 }
 
@@ -482,9 +552,62 @@ void OColumnSettings::readUIFrom(const OConfigurationNode& _rConfigNode, const R
 
     m_aAlignment        = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_ALIGNMENT);
     m_aWidth            = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_WIDTH);
-    m_aFormatKey        = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_NUMBERFORMAT);
     m_aRelativePosition = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_RELPOSITION);
     m_bHidden           = ::cppu::any2bool(_rConfigNode.getNodeValue(CONFIGKEY_COLUMN_HIDDEN));
+
+    // the format key is somewhat more complicated
+    m_aFormatKey        = _rConfigNode.getNodeValue( CONFIGKEY_COLUMN_NUMBERFORMAT );
+    if ( !m_aFormatKey.hasValue() && _rxFormats.is() )
+    {
+        Any aPersistentFormatString = _rConfigNode.getNodeValue( CONFIGKEY_FORMATSTRING );
+        Any aPersistentFormatLocale = _rConfigNode.getNodeValue( CONFIGKEY_FORMATLOCALE );
+
+        if ( aPersistentFormatString.hasValue() && aPersistentFormatLocale.hasValue() )
+        {   // okay, the format key is void because the format was user defined, and a format descriptor
+            // (string/locale) has been stored.
+
+            OSL_ENSURE( aPersistentFormatString.getValueTypeClass() == TypeClass_STRING
+                    &&  aPersistentFormatLocale.getValueTypeClass() == TypeClass_STRING,
+                    "OColumnSettings::readUIFrom: invalid format descriptor!" );
+            // the string
+            ::rtl::OUString sFormatString; aPersistentFormatString >>= sFormatString;
+            // the locale
+            ::rtl::OUString sLocale; aPersistentFormatLocale >>= sLocale;
+            // split the parts of the locale
+            Locale aLocale;
+            sal_Int32 nSeparatorPos = sLocale.indexOf( '-' );
+            if ( 0 <= nSeparatorPos )
+            {
+                aLocale.Language = sLocale.copy( 0, nSeparatorPos );
+                aLocale.Country = sLocale.copy( nSeparatorPos + 1 );
+            }
+            else
+                aLocale.Language = sLocale;
+
+            try
+            {
+                // check if the number formatter already knows this format
+                Reference< XNumberFormats > xFormats( _rxFormats->getNumberFormats() );
+                OSL_ENSURE( xFormats.is(), "OColumnSettings::readUIFrom: invalid number formats supplier!" );
+                sal_Int32 nFormatKey = 0;
+                if ( xFormats.is() )
+                {
+                    nFormatKey = xFormats->queryKey( sFormatString, aLocale, sal_False );
+                    if ( -1 == nFormatKey )
+                        nFormatKey = xFormats->addNew( sFormatString, aLocale );
+                    OSL_ENSURE( -1 != nFormatKey, "OColumnSettings::readUIFrom: could not add the format!" );
+                    // normalize in case something went wrong
+                    if ( -1 == nFormatKey )
+                        nFormatKey = 0;
+                }
+                m_aFormatKey <<= nFormatKey;
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "OColumnSettings::readUIFrom: caught an exception while creating the user defined format!" );
+            }
+        }
+    }
 }
 
 //============================================================
