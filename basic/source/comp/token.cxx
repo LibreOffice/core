@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:55:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { ELSE,     "Else" },
     { ELSEIF,   "ElseIf" },
     { END,      "End" },
+    { ENDENUM,  "End Enum" },
     { ENDFUNC,  "End Function" },
     { ENDIF,    "End If" },
     { ENDPROPERTY, "End Property" },
@@ -130,6 +131,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { ENDSUB,   "End Sub" },
     { ENDTYPE,  "End Type" },
     { ENDIF,    "EndIf" },
+    { ENUM,     "Enum" },
     { EQV,      "Eqv" },
     { ERASE,    "Erase" },
     { _ERROR_,  "Error" },
@@ -591,6 +593,7 @@ special:
             case FUNCTION: Next(); eCurTok = ENDFUNC; break;
             case PROPERTY: Next(); eCurTok = ENDPROPERTY; break;
             case TYPE:     Next(); eCurTok = ENDTYPE; break;
+            case ENUM:     Next(); eCurTok = ENDENUM; break;
             case WITH:     Next(); eCurTok = ENDWITH; break;
             default :      eCurTok = END;
         }
@@ -622,9 +625,13 @@ special:
             eCurTok = SYMBOL;
     }
 
-    // #118084 PROPERTY token only visible in compatible mode
-    if( tp->t == PROPERTY && !bCompatible )
-        eCurTok = SYMBOL;
+    // ENUM and PROPERTY token only visible in compatible mode
+    if( !bCompatible )
+    {
+        SbiToken eTok = tp->t;
+        if( eTok == ENUM || eTok == PROPERTY )
+            eCurTok = SYMBOL;
+    }
 
     bEos = IsEoln( eCurTok );
     return eCurTok;
