@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:04:33 $
+ *  last change: $Author: sab $ $Date: 2002-06-10 15:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 class ScCellTextData;
 class ScDocShell;
 class ScViewForwarder;
+class ScEditObjectViewForwarder;
 class ScPreviewViewForwarder;
 class ScEditViewForwarder;
 class ScPreviewShell;
@@ -154,6 +155,34 @@ private:
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }
 
     ScDocShell* GetDocShell(ScTabViewShell* pViewShell);
+};
+
+class ScAccessibleEditObjectTextData : public ScAccessibleTextData
+{
+public:
+                        ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin);
+    virtual             ~ScAccessibleEditObjectTextData();
+
+    virtual ScAccessibleTextData* Clone() const;
+
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    virtual SvxTextForwarder* GetTextForwarder();
+    virtual SvxViewForwarder* GetViewForwarder();
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
+
+    virtual void                UpdateData() {  }
+    virtual void                SetDoUpdate(sal_Bool bValue) {  }
+    virtual sal_Bool            IsDirty() const { return sal_False; }
+
+    DECL_LINK( NotifyHdl, EENotify* );
+private:
+    ScEditObjectViewForwarder* mpViewForwarder;
+    ScEditViewForwarder* mpEditViewForwarder;
+    EditView* mpEditView;
+    EditEngine* mpEditEngine;
+    SvxEditEngineForwarder* mpForwarder;
+    Window* mpWindow;
 };
 
 class ScAccessiblePreviewCellTextData : public ScAccessibleCellBaseTextData
