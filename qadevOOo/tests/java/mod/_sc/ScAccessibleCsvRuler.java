@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessibleCsvRuler.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
  *  last change: $Author: vg $
  *
@@ -77,6 +77,7 @@ import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
 import lib.StatusException;
@@ -105,69 +106,84 @@ public class ScAccessibleCsvRuler extends TestCase {
      * @see TestEnvironment
      * @see #getTestEnvironment()
      */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
 
         shortWait();
 
         try {
-            oObj = (XInterface) Param.getMSF().createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) Param.getMSF()
+                                     .createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-
-        XExtendedToolkit tk = (XExtendedToolkit)
-                        UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
-
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         AccessibilityTools at = new AccessibilityTools();
 
         //log.println("Found "+tk.getTopWindowCount()+ " Windows");
-
-        XWindow xWindow = (XWindow)
-                UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PUSH_BUTTON, "Cancel");
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
+                                             "Cancel");
 
-        accAction = (XAccessibleAction) UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
+        accAction = (XAccessibleAction) UnoRuntime.queryInterface(
+                            XAccessibleAction.class, oObj);
 
-        XAccessibleContext acc = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.RADIO_BUTTON);
+        XAccessibleContext acc = at.getAccessibleObjectForRole(xRoot,
+                                                               AccessibleRole.RADIO_BUTTON);
 
-        System.out.println("Click on: "+acc.getAccessibleName());
+        System.out.println("Click on: " + acc.getAccessibleName());
 
-        XAccessibleAction accAction2 = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, acc);
+        XAccessibleAction accAction2 = (XAccessibleAction) UnoRuntime.queryInterface(
+                                               XAccessibleAction.class, acc);
 
         try {
             accAction2.doAccessibleAction(0);
-        } catch (com.sun.star.lang.IndexOutOfBoundsException iae) {}
+        } catch (com.sun.star.lang.IndexOutOfBoundsException iae) {
+        }
 
 
         //util.dbg.printInterfaces(oObj);
-
         //at.printAccessibleTree(log, xRoot);
-
-        oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.TEXT,"Ruler");
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT,
+                                             "Ruler");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
-        XAccessibleComponent comp = (XAccessibleComponent)
-                UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
+        XAccessibleComponent comp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                            XAccessibleComponent.class, oObj);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("EditOnly",
-                    "This method isn't supported in this dialog");
+                            "This method isn't supported in this dialog");
+
+        XAccessibleText text = (XAccessibleText) UnoRuntime.queryInterface(
+                                       XAccessibleText.class, oObj);
+
+        int lastone = 100;
+
+        for (int i = 0; i < 1000; i++) {
+            try {
+                text.getCharacterBounds(i);
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                lastone = i - 1;
+
+                break;
+            }
+        }
+
+        tEnv.addObjRelation("LimitedBounds", new Integer(lastone));
+        tEnv.addObjRelation("PreviousUsed",new int[]{11,22,33,44,55,66,77,88,99});
 
         return tEnv;
     }
