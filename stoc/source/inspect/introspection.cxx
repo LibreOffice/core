@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-04 12:41:05 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 11:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1461,7 +1461,7 @@ OUString toLower( OUString aUStr )
 {
     // Tabelle fuer XExactName pflegen
     ::rtl::OUString aOWStr( aUStr.getStr() );
-    ::rtl::OUString aOWLowerStr = aOWStr.toLowerCase();
+    ::rtl::OUString aOWLowerStr = aOWStr.toAsciiLowerCase();
     OUString aLowerUStr( aOWLowerStr.getStr() );
     return aLowerUStr;
 }
@@ -2463,7 +2463,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                             }
 
                             // Wenn der Name zu kurz ist, wird's sowieso nichts
-                            if( aMethName.len() <= 3 )
+                            if( aMethName.getLength() <= 3 )
                                 continue;
 
                             // Ist es eine get-Methode?
@@ -2594,8 +2594,8 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                                 OUString aListenerStr( RTL_CONSTASCII_USTRINGPARAM("Listener" ) );
 
                                 // Namen der potentiellen Property
-                                sal_Int32 nStrLen = aMethName.len();
-                                OUString aEndStr = aMethName.copy( nStrLen - aListenerStr.len() );
+                                sal_Int32 nStrLen = aMethName.getLength();
+                                OUString aEndStr = aMethName.copy( nStrLen - aListenerStr.getLength() );
 
                                 // Endet das Teil auf Listener?
                                 // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
@@ -2603,7 +2603,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                                     continue;
 
                                 // Welcher Listener?
-                                OUString aListenerName = aMethName.copy( 3, nStrLen - aListenerStr.len() - 3 );
+                                OUString aListenerName = aMethName.copy( 3, nStrLen - aListenerStr.getLength() - 3 );
 
                                 // TODO: Hier koennten noch genauere Pruefungen vorgenommen werden
                                 // - Rueckgabe-Typ
@@ -2630,10 +2630,10 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                                         continue;
 
                                     // Ist es denn der gleiche Listener?
-                                    if( aMethName2.len() - aRemoveStr.len() <= aListenerStr.len() )
+                                    if( aMethName2.getLength() - aRemoveStr.getLength() <= aListenerStr.getLength() )
                                         continue;
                                     OUString aListenerName2 = aMethName2.copy
-                                        ( 6, aMethName2.len() - aRemoveStr.len() - aListenerStr.len() );
+                                        ( 6, aMethName2.getLength() - aRemoveStr.getLength() - aListenerStr.getLength() );
                                     // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
                                     if( !( aListenerName == aListenerName2 ) )
                                         continue;
@@ -2670,7 +2670,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                             aMethName = rxMethod_i->getName();
 
                             // Wenn der Name zu kurz ist, wird's sowieso nichts
-                            if( aMethName.len() <= 3 )
+                            if( aMethName.getLength() <= 3 )
                                 continue;
 
                             // Ist es eine set-Methode ohne zugehoerige get-Methode?

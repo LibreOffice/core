@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:34:04 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 11:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@ OUString Invocation_Impl::getExactName( const OUString& rApproximateName )
     OUString aRet;
     if (_xENIntrospection.is())
         aRet = _xENIntrospection->getExactName( rApproximateName );
-    if (!aRet.len() && _xENNameAccess.is())
+    if (!aRet.getLength() && _xENNameAccess.is())
         aRet = _xENNameAccess->getExactName( rApproximateName );
     return aRet;
 }
