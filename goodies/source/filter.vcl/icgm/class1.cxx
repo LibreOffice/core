@@ -2,9 +2,9 @@
  *
  *  $RCSfile: class1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-15 12:25:01 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,9 @@ void CGM::ImplDoClass1()
                     pElement->eRealPrecision = RP_FIXED;
                     if ( nI0 != nI1 )
                         mbStatus = sal_False;
-                    if ( nI0 = 16 )
+                    if ( nI0 == 16 )
                         pElement->nRealSize = 4;
-                    else if ( nI0 = 32 )
+                    else if ( nI0 == 32 )
                         pElement->nRealSize = 8;
                     else
                         mbStatus = sal_False;
