@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:46:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,19 @@
 
 #include <svtools/moduleoptions.hxx>
 
+#ifndef _FM_FMOBJFAC_HXX
+#include <svx/fmobjfac.hxx>
+#endif
+#ifndef _SVX_SIIMPORT_HXX
+#include <svx/siimport.hxx>
+#endif
+#ifndef _SVDFIELD_HXX
+#include <svx/svdfield.hxx>
+#endif
+#ifndef _OBJFAC3D_HXX
+#include <svx/objfac3d.hxx>
+#endif
+
 /*************************************************************************
 |*
 |* Init
@@ -140,6 +153,18 @@ void SwDLL::Init()
 
     // WebWriter alway needed because it is used for the help viewer
     SwWebDocShell::RegisterFactory( SDT_SW_DOCFACTPRIO + 1  );
+
+    // SvDraw-Felder registrieren
+    SdrRegisterFieldClasses();
+
+    // 3D-Objekt-Factory eintragen
+    E3dObjFactory();
+
+    // ::com::sun::star::form::component::Form-Objekt-Factory eintragen
+    FmFormObjFactory();
+
+    // factory for dummy import of old si-controls in 3.1 documents
+    SiImportFactory();
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
 
