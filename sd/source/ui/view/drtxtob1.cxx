@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:29:06 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #ifndef _ADJITEM_HXX
 #include <svx/adjitem.hxx>
 #endif
-#ifndef _SV_FONTTYPE_HXX //autogen
-#include <vcl/fonttype.hxx>
+#ifndef _VCL_VCLENUM_HXX
+#include <vcl/vclenum.hxx>
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
