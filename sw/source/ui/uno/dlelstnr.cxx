@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlelstnr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:19:15 $
+ *  last change: $Author: tl $ $Date: 2001-02-27 14:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC_XDICTIONARYLIST_HPP_
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_LINGUSERVICEEVENTFLAGS_HPP_
+#include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
+#endif
 
 #include <com/sun/star/uno/Reference.h>
 
@@ -95,6 +101,13 @@
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _SWVIEW_HXX
+#include <view.hxx>
+#endif
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -102,34 +115,36 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
+using namespace ::com::sun::star::linguistic2::LinguServiceEventFlags;
+
+#define A2OU(x) OUString::createFromAscii(x)
 
 /* -----------------------------17.03.00 09:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwDicListEvtListener::SwDicListEvtListener(
-            const Reference< XDictionaryList >  &rxDicList )
+SwLinguServiceEventListener::SwLinguServiceEventListener()
 {
-    xDicList = rxDicList;
-    if (xDicList.is())
-    {
-        xDicList->addDictionaryListEventListener( this, sal_False );
-    }
-
     Reference< XMultiServiceFactory > xMgr( comphelper::getProcessServiceFactory() );
     if (xMgr.is())
     {
-        OUString aSvcName( OUString::createFromAscii(
-                "com.sun.star.frame.Desktop" ) );
+        OUString aSvcName( A2OU( "com.sun.star.frame.Desktop" ) );
         xDesktop = Reference< frame::XDesktop >(
                 xMgr->createInstance( aSvcName ), UNO_QUERY );
         if (xDesktop.is())
             xDesktop->addTerminateListener( this );
+
+        aSvcName = A2OU( "com.sun.star.linguistic2.LinguServiceManager" );
+        xLngSvcMgr = Reference< XLinguServiceManager >(
+                xMgr->createInstance( aSvcName ), UNO_QUERY );
+        if (xLngSvcMgr.is())
+            xLngSvcMgr->addLinguServiceManagerListener(
+                (XLinguServiceEventListener *) this );
     }
 }
 /* -----------------------------17.03.00 09:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwDicListEvtListener::~SwDicListEvtListener()
+SwLinguServiceEventListener::~SwLinguServiceEventListener()
 {
 }
 
@@ -137,7 +152,7 @@ SwDicListEvtListener::~SwDicListEvtListener()
 
  ---------------------------------------------------------------------------*/
 
-void SwDicListEvtListener::processDictionaryListEvent(
+void SwLinguServiceEventListener::processDictionaryListEvent(
             const DictionaryListEvent& rDicListEvent)
         throw( RuntimeException )
 {
@@ -145,32 +160,67 @@ void SwDicListEvtListener::processDictionaryListEvent(
 
     sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
 
-    sal_Bool bIsSpellWrong  =  ( nEvt & DictionaryListEventFlags::ADD_POS_ENTRY )
-                            || ( nEvt & DictionaryListEventFlags::DEL_NEG_ENTRY )
-                            || ( nEvt & DictionaryListEventFlags::ACTIVATE_POS_DIC )
-                            || ( nEvt & DictionaryListEventFlags::DEACTIVATE_NEG_DIC );
-    sal_Bool bIsSpellAll    =  ( nEvt & DictionaryListEventFlags::ADD_NEG_ENTRY )
-                            || ( nEvt & DictionaryListEventFlags::DEL_POS_ENTRY )
-                            || ( nEvt & DictionaryListEventFlags::ACTIVATE_NEG_DIC )
-                            || ( nEvt & DictionaryListEventFlags::DEACTIVATE_POS_DIC );
-    SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll );
+    sal_Int16 nSpellWrongFlags =
+            DictionaryListEventFlags::ADD_POS_ENTRY     |
+            DictionaryListEventFlags::DEL_NEG_ENTRY     |
+            DictionaryListEventFlags::ACTIVATE_POS_DIC  |
+            DictionaryListEventFlags::DEACTIVATE_NEG_DIC;
+    sal_Bool bIsSpellWrong  =  0 != (nEvt & nSpellWrongFlags);
+    sal_Int16 nSpellAllFlags =
+            DictionaryListEventFlags::ADD_NEG_ENTRY     |
+            DictionaryListEventFlags::DEL_POS_ENTRY     |
+            DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
+            DictionaryListEventFlags::DEACTIVATE_POS_DIC;
+    sal_Bool bIsSpellAll    =  0 != (nEvt & nSpellAllFlags);
+
+    if (bIsSpellWrong || bIsSpellAll)
+        SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll );
 }
 
 
-void SAL_CALL SwDicListEvtListener::disposing(
+void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
+            const LinguServiceEvent& rLngSvcEvent )
+        throw(RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if (rLngSvcEvent.Source == xLngSvcMgr)
+    {
+        sal_Bool bIsSpellWrong =
+                0 != (rLngSvcEvent.nEvent & SPELL_WRONG_WORDS_AGAIN);
+        sal_Bool bIsSpellAll   =
+                0 != (rLngSvcEvent.nEvent & SPELL_CORRECT_WORDS_AGAIN);
+        if (bIsSpellWrong || bIsSpellAll)
+        {
+            SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll );
+        }
+        if (rLngSvcEvent.nEvent & HYPHENATE_AGAIN)
+        {
+            SwView *pSwView = SW_MOD()->GetFirstView();
+            while (pSwView)
+            {
+                pSwView->GetWrtShell().ChgHyphenation();
+                pSwView = SW_MOD()->GetNextView( pSwView );
+            }
+        }
+    }
+}
+
+
+void SAL_CALL SwLinguServiceEventListener::disposing(
             const EventObject& rEventObj )
         throw(RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    if (xDicList.is()  &&  rEventObj.Source == xDicList)
+    if (xLngSvcMgr.is()  &&  rEventObj.Source == xLngSvcMgr)
     {
-        xDicList = 0;
+        xLngSvcMgr = 0;
     }
 }
 
 
-void SAL_CALL SwDicListEvtListener::queryTermination(
+void SAL_CALL SwLinguServiceEventListener::queryTermination(
             const EventObject& rEventObj )
         throw(TerminationVetoException, RuntimeException)
 {
@@ -178,7 +228,7 @@ void SAL_CALL SwDicListEvtListener::queryTermination(
 }
 
 
-void SAL_CALL SwDicListEvtListener::notifyTermination(
+void SAL_CALL SwLinguServiceEventListener::notifyTermination(
             const EventObject& rEventObj )
         throw(RuntimeException)
 {
@@ -186,10 +236,11 @@ void SAL_CALL SwDicListEvtListener::notifyTermination(
 
     if (xDesktop.is()  &&  rEventObj.Source == xDesktop)
     {
-        if (xDicList.is())
+        if (xLngSvcMgr.is())
         {
-            xDicList->removeDictionaryListEventListener( this );
-            xDicList = NULL;
+            xLngSvcMgr->removeLinguServiceManagerListener(
+                    (XLinguServiceEventListener *) this );
+            xLngSvcMgr = 0;
         }
         xDesktop = NULL;
     }

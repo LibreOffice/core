@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlelstnr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-02 13:35:10 $
+ *  last change: $Author: tl $ $Date: 2001-02-27 14:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLISTEVENTLISTENER_HPP_
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEEVENTLISTENER_HPP_
+#include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #endif
@@ -82,6 +85,7 @@
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
         class XDictionaryList;
+        class XLinguServiceManager;
     }
     namespace frame {
         class XTerminateListener;
@@ -89,33 +93,31 @@ namespace com { namespace sun { namespace star {
 } } }
 
 ///////////////////////////////////////////////////////////////////////////
-// SwDicListEvtListener
-// is a XDictionaryListEventListener that triggers spellchecking
-// and hyphenation (yet to be implemented) when relevant changes to the
-// dictionaries of the dictionary list were made.
+// SwLinguServiceEventListener
+// is a EventListener that triggers spellchecking
+// and hyphenation when relevant changes (to the
+// dictionaries of the dictionary list, or properties) were made.
 //
 
-class SwDicListEvtListener :
+class SwLinguServiceEventListener :
     public cppu::WeakImplHelper2
     <
-        ::com::sun::star::linguistic2::XDictionaryListEventListener,
-        ::com::sun::star::frame::XTerminateListener
+        com::sun::star::linguistic2::XLinguServiceEventListener,
+        com::sun::star::frame::XTerminateListener
     >
 {
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XDesktop >                 xDesktop;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XDictionaryList >    xDicList;
+    com::sun::star::uno::Reference<
+        com::sun::star::frame::XDesktop >                   xDesktop;
+    com::sun::star::uno::Reference<
+        com::sun::star::linguistic2::XLinguServiceManager > xLngSvcMgr;
 
     // disallow use of copy-constructor and assignment operator
-    SwDicListEvtListener(const SwDicListEvtListener &);
-    SwDicListEvtListener & operator = (const SwDicListEvtListener &);
+    SwLinguServiceEventListener(const SwLinguServiceEventListener &);
+    SwLinguServiceEventListener & operator = (const SwLinguServiceEventListener &);
 
 public:
-    SwDicListEvtListener(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XDictionaryList >  &rxDicList );
-    virtual ~SwDicListEvtListener();
+    SwLinguServiceEventListener();
+    virtual ~SwLinguServiceEventListener();
 
     // XEventListener
     virtual void SAL_CALL disposing(
@@ -126,6 +128,11 @@ public:
     virtual void    SAL_CALL processDictionaryListEvent(
             const ::com::sun::star::linguistic2::DictionaryListEvent& rDicListEvent)
         throw( ::com::sun::star::uno::RuntimeException );
+
+    // XLinguServiceEventListener
+    virtual void SAL_CALL processLinguServiceEvent(
+            const ::com::sun::star::linguistic2::LinguServiceEvent& rLngSvcEvent )
+        throw(::com::sun::star::uno::RuntimeException);
 
     // XTerminateListener
     virtual void SAL_CALL queryTermination(
