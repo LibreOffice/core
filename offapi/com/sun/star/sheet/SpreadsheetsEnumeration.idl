@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetsEnumeration.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::Spreadsheets
  */
-service SpreadsheetsEnumeration
+published service SpreadsheetsEnumeration
 {
     //-------------------------------------------------------------------------
 
