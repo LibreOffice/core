@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdef.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:34:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  *
  ************************************************************************/
 
-/* NAME $Id: drawdef.h,v 1.1 2003-10-15 14:34:39 dvo Exp $
+/* NAME $Id: drawdef.h,v 1.2 2005-02-16 18:13:50 vg Exp $
  *
  * HISTORY
  *        frog - Jan 11, 1999: Created.
@@ -177,9 +177,9 @@ struct RotationProperty
  */
 struct HWPDOProperty
 {
-    int line_pstyle; // 선 중간 모양
-    int line_hstyle; // 끝 화살표 모양
-    int line_tstyle; // 시작 모양
+    int line_pstyle; /* 선 중간 모양 */
+    int line_hstyle; /* 끝 화살표 모양 */
+    int line_tstyle; /* 시작 모양 */
     DWORD line_color;
     hunit line_width;
     DWORD fill_color;
