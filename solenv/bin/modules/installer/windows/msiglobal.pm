@@ -2,9 +2,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-02 13:46:23 $
+#   last change: $Author: rt $ $Date: 2004-08-03 09:36:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -802,7 +802,7 @@ sub copy_windows_installer_files_into_installset
     @copyfile = ();
     push(@copyfile, "instmsia.exe");
     push(@copyfile, "instmsiw.exe");
-    push(@copyfile, "loader2.exe");
+    push(@copyfile, "Installer.exe");
 
     for ( my $i = 0; $i <= $#copyfile; $i++ )
     {
@@ -814,7 +814,7 @@ sub copy_windows_installer_files_into_installset
         if ( ! -f $$sourcefileref ) { installer::exiter::exit_program("ERROR: msi file not found: $$sourcefileref !", "copy_windows_installer_files_into_installset"); }
 
         my $destfile;
-        if ( $copyfile[$i] eq "loader2.exe" ) { $destfile = "setup.exe"; }  # renaming the loader
+        if ( $copyfile[$i] eq "Installer.exe" ) { $destfile = "setup.exe"; }    # renaming the loader
         else { $destfile = $copyfile[$i]; }
 
         $destfile = $installdir . $installer::globals::separator . $destfile;
@@ -868,7 +868,8 @@ sub get_guid_list
 
     # "-c" for uppercase output
 
-    my $systemcall = "$uuidgen -n$number -c |";
+    # my $systemcall = "$uuidgen -n$number -c |";
+    my $systemcall = "$uuidgen -n$number |";
 
     open (UUIDGEN, "$systemcall");
     my @uuidlist = <UUIDGEN>;
@@ -889,6 +890,9 @@ sub get_guid_list
         $infoline = "ERROR: Could not execute $uuidgen successfully!\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
+
+    # uppercase, no longer "-c", because this is only supported in uuidgen.exe v.1.01
+    for ( my $i = 0; $i <= $#uuidlist; $i++ ) { $uuidlist[$i] = uc($uuidlist[$i]); }
 
     return \@uuidlist;
 }
@@ -997,9 +1001,9 @@ sub set_global_code_variables
 
     # ProductCode has to be specified in each language
 
-    my $searchstring = "PRODUCTCODE";
-    my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
-    $installer::globals::productcode = installer::windows::idtglobal::get_code_from_code_block($codeblock, $onelanguage);
+    # my $searchstring = "PRODUCTCODE";
+    # my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
+    # $installer::globals::productcode = installer::windows::idtglobal::get_code_from_code_block($codeblock, $onelanguage);
 
     # UpgradeCode can take english as default, if not defined in specified language
 
@@ -1007,13 +1011,24 @@ sub set_global_code_variables
     $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
     $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
 
-    if ( $installer::globals::productcode eq "" ) { installer::exiter::exit_program("ERROR: ProductCode for language $onelanguage not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
+    # if ( $installer::globals::productcode eq "" ) { installer::exiter::exit_program("ERROR: ProductCode for language $onelanguage not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
     if ( $installer::globals::upgradecode eq "" ) { installer::exiter::exit_program("ERROR: UpgradeCode not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
 
-    $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
-    push( @installer::globals::logfileinfo, $infoline);
+    # $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
+    # push( @installer::globals::logfileinfo, $infoline);
     $infoline = "Setting UpgradeCode to: $installer::globals::upgradecode \n";
     push( @installer::globals::logfileinfo, $infoline);
+
+    # New: Always generating a new product code for each package
+
+    my $guidref = get_guid_list(1); # only one GUID shall be generated
+
+    ${$guidref}[0] =~ s/\s*$//;     # removing ending spaces
+
+    $installer::globals::productcode = "\{" . ${$guidref}[0] . "\}";
+    $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
+    push( @installer::globals::logfileinfo, $infoline);
+
 }
 
 1;
