@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 06:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
-
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
+#endif
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -343,44 +345,21 @@ void OCopyTableWizard::CheckColumns()
         }
         else
         {
-            //  DlgFieldMatch   dlgMissingFields(this);
-            //  ListBox*        pInfoBox = dlgMissingFields.GetInfoBox();
+            ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
+            sal_Int32 nMaxNameLen       = getMaxColumnNameLength();
             ::rtl::OUString aColumnName,aOldColName;
-            sal_Int32 nMaxNameLen = getMaxColumnNameLength();
+
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
             for(;aSrcIter != m_vSourceVec.end();++aSrcIter)
             {
-                if(nMaxNameLen && nMaxNameLen < (*aSrcIter)->first.getLength())
-                {
-                    ::rtl::OUString aAlias(::dbtools::convertName2SQLName((*aSrcIter)->first,xMetaData->getExtraNameCharacters()));
-
-                    if(nMaxNameLen && aAlias.getLength() > nMaxNameLen)
-                        aAlias = aAlias.copy(0,aAlias.getLength() - (aAlias.getLength()-nMaxNameLen-2));
-
-                    ::rtl::OUString sName(aAlias);
-                    sal_Int32 nPos = 1;
-                    sName += ::rtl::OUString::valueOf(nPos);
-
-                    while(m_vDestColumns.find(sName) != m_vDestColumns.end())
-                    {
-                        sName = aAlias;
-                        sName += ::rtl::OUString::valueOf(++nPos);
-                    }
-                    aAlias = sName;
-
-                    m_mNameMapping[(*aSrcIter)->first] = aAlias;
-                }
-                else
-                    m_mNameMapping[(*aSrcIter)->first] = (*aSrcIter)->first;
+                OFieldDescription* pField = new OFieldDescription(*(*aSrcIter)->second);
+                pField->SetName(convertColumnName(TExportColumnFindFunctor(&m_vDestColumns),(*aSrcIter)->first,sExtraChars,nMaxNameLen));
 
                 // now create a column
-                insertColumn(m_vDestColumns.size(),new OFieldDescription(*(*aSrcIter)->second));
+                insertColumn(m_vDestColumns.size(),pField);
                 m_vColumnPos.push_back(m_vDestColumns.size());
                 m_vColumnTypes.push_back((*aSrcIter)->second->GetType());
             }
-
-    //      if(pInfoBox->GetEntryCount())
-    //          dlgMissingFields.Execute();
         }
     }
 }
@@ -392,6 +371,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
 
     if(bFinish)
     {
+        WaitObject aWait(this);
         sal_Bool bWasEmpty = !m_vDestColumns.size();
         if(getCreateStyle() != WIZARD_DEF_VIEW && getCreateStyle() != WIZARD_APPEND_DATA )
             CheckColumns();
@@ -872,5 +852,40 @@ void OCopyTableWizard::setCreateStyle(const OCopyTableWizard::Wizard_Create_Styl
 OCopyTableWizard::Wizard_Create_Style OCopyTableWizard::getCreateStyle() const
 {
     return m_eCreateStyle;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFunctor,
+                                                    const ::rtl::OUString&  _sColumnName,
+                                                    const ::rtl::OUString&  _sExtraChars,
+                                                    sal_Int32               _nMaxNameLen)
+{
+
+    ::rtl::OUString sAlias(::dbtools::convertName2SQLName(_sColumnName,_sExtraChars));
+    if((_nMaxNameLen && sAlias.getLength() > _nMaxNameLen) || _rCmpFunctor(sAlias))
+    {
+        sal_Int32 nDiff = 1;
+        do
+        {
+            ++nDiff;
+            if(_nMaxNameLen && sAlias.getLength() >= _nMaxNameLen)
+                sAlias = sAlias.copy(0,sAlias.getLength() - (sAlias.getLength()-_nMaxNameLen+nDiff));
+
+            ::rtl::OUString sName(sAlias);
+            sal_Int32 nPos = 1;
+            sName += ::rtl::OUString::valueOf(nPos);
+
+            while(_rCmpFunctor(sName))
+            {
+                sName = sAlias;
+                sName += ::rtl::OUString::valueOf(++nPos);
+            }
+            sAlias = sName;
+            // we have to check again, it could happen that the name is already to long
+        }
+        while(_nMaxNameLen && sAlias.getLength() > _nMaxNameLen);
+    }
+    OSL_ENSURE(m_mNameMapping.find(_sColumnName) == m_mNameMapping.end(),"name doubled!");
+    m_mNameMapping[_sColumnName] = sAlias;
+    return sAlias;
 }
 // -----------------------------------------------------------------------------

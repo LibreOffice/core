@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 06:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,120 +251,33 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
         bAll   = sal_True;
     }
 
-    sal_Int32 nLen = m_pParent->getMaxColumnNameLength();
+    Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
+    ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
+    sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
 
-    //  DlgFieldMatch   dlgMissingFields(GetpApp()->GetDefDialogParent());
-    //  ListBox*        pInfoBox = dlgMissingFields.GetInfoBox();
+    ::comphelper::TStringMixEqualFunctor aCase(xMetaData->storesMixedCaseQuotedIdentifiers());
+    ::std::vector< ::rtl::OUString> aRightColumns;
+    fillColumns(pRight,aRightColumns);
 
-    String aColumnName,aOldColName;
+    String aColumnName;
     if(!bAll)
     {
         for(sal_uInt16 i=0; i < pLeft->GetSelectEntryCount(); ++i)
-        {
-            aColumnName = pLeft->GetSelectEntry(i);
-            aOldColName = aColumnName;
-            if(pRight == &m_lbNewColumnNames)
-            {
-                OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeft->GetEntryData(pLeft->GetEntryPos(aColumnName)));
-                if(nLen && nLen < aColumnName.Len())
-                {
-                    String aNewName( aColumnName.Copy( 0, (xub_StrLen)nLen ));
-                    String aBaseName( aColumnName.Copy( 0, (xub_StrLen)nLen-2 ));
-                    sal_uInt16 i=1;
-                    while( pLeft->GetEntryPos(aNewName) == CONTAINER_ENTRY_NOTFOUND && (i<100) )
-                    {
-                        aNewName = aBaseName;
-                        aNewName += String::CreateFromInt32(i);
-                        i++;
-                    }
-                    m_pParent->m_mNameMapping[aOldColName] = aNewName;
-                    aColumnName = aNewName;
-                }
-                else
-                    m_pParent->m_mNameMapping[aOldColName] = aColumnName;
+            moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectEntry(i),sExtraChars,nMaxNameLen,aCase);
 
-                // now create a column
-                OFieldDescription* pNewField = new OFieldDescription(*pSrcField);
-                pNewField->SetName(aColumnName);
-                pRight->SetEntryData(pRight->InsertEntry(aColumnName),pNewField);
-            }
-            else
-            {
-                OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                                                                        ::std::compose1(
-                                                                            ::std::bind2nd(::std::equal_to< ::rtl::OUString>(), ::rtl::OUString(aColumnName)),
-                                                                            ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
-                                                                            );
-
-                DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must to be defined");
-                const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
-                ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
-                if(aSrcIter != pSrcColumns->end())
-                    pRight->SetEntryData(pRight->InsertEntry((*aIter).first),aSrcIter->second);
-            }
-
-        }
         for(sal_uInt16 j=pLeft->GetSelectEntryCount(); j ; --j)
             pLeft->RemoveEntry(pLeft->GetSelectEntry(j-1));
     }
     else
     {
-        for(sal_uInt16 i=pLeft->GetEntryCount(); i ; --i)
-        {
-            aColumnName = pLeft->GetEntry(i-1);
-            aOldColName = aColumnName;
-
-            if(pRight == &m_lbNewColumnNames)
-            {
-                OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeft->GetEntryData(i-1));
-                if(nLen && nLen < aColumnName.Len())
-                {
-                    String aNewName( aColumnName.Copy( 0, (xub_StrLen)nLen ));
-                    String aBaseName( aColumnName.Copy( 0, (xub_StrLen)nLen-2 ));
-                    sal_uInt16 i=1;
-                    while( pLeft->GetEntryPos(aNewName) == CONTAINER_ENTRY_NOTFOUND && (i<100) )
-                    {
-                        aNewName = aBaseName;
-                        aNewName += String(i);
-                        i++;
-                    }
-                    m_pParent->m_mNameMapping[aOldColName] = aNewName;
-                    aColumnName = aNewName;
-                }
-                else
-                    m_pParent->m_mNameMapping[aOldColName] = aColumnName;
-
-                // now create a column
-                OFieldDescription* pNewField = new OFieldDescription(*pSrcField);
-                pNewField->SetName(aColumnName);
-                pRight->SetEntryData(pRight->InsertEntry(aColumnName,0),pNewField);
-                pLeft->RemoveEntry(pLeft->GetEntry(i-1));
-            }
-            else
-            {
-                OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                                                                        ::std::compose1(
-                                                                            ::std::bind2nd(::std::equal_to< ::rtl::OUString>(), ::rtl::OUString(aColumnName)),
-                                                                            ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
-                                                                            );
-                DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must to be defined");
-                const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
-                ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
-
-                if(aSrcIter != pSrcColumns->end())
-                {
-                    pRight->SetEntryData(pRight->InsertEntry((*aIter).first,0),aSrcIter->second);
-                    pLeft->RemoveEntry(pLeft->GetEntry(i-1));
-                }
-            }
-        }
+        sal_uInt16 nEntries = pLeft->GetEntryCount();
+        for(sal_uInt16 i=0; i < nEntries; ++i)
+            moveColumn(pRight,pLeft,aRightColumns,pLeft->GetEntry(i),sExtraChars,nMaxNameLen,aCase);
+        for(sal_uInt16 j=pLeft->GetEntryCount(); j ; --j)
+            pLeft->RemoveEntry(j-1);
     }
 
-    //  if(pInfoBox->GetEntryCount())
-        //  dlgMissingFields.Execute();
-
-    m_pParent->GetOKButton().Enable(m_lbNewColumnNames.GetEntryCount() != 0);
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA);
+    enableButtons();
 
     if(m_lbOrgColumnNames.GetEntryCount())
         m_lbOrgColumnNames.SelectEntryPos(0);
@@ -388,61 +301,21 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
 
     //////////////////////////////////////////////////////////////////////
     // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
-    sal_Int32 nLen = m_pParent->getMaxColumnNameLength();
+    Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
+    ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
+    sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
+
+    ::comphelper::TStringMixEqualFunctor aCase(xMetaData->storesMixedCaseQuotedIdentifiers());
+    ::std::vector< ::rtl::OUString> aRightColumns;
+    fillColumns(pRight,aRightColumns);
 
     String aColumnName;
     for(sal_uInt16 i=0; i < pLeft->GetSelectEntryCount(); ++i)
-    {
-        aColumnName = pLeft->GetSelectEntry(i);
-
-        // here I move columns from the left side to the right side
-        if(pRight == &m_lbNewColumnNames)
-        {
-            OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeft->GetEntryData(pLeft->GetEntryPos(aColumnName)));
-            if(nLen && nLen < aColumnName.Len())
-            {
-                String aNewName( aColumnName.Copy( 0, (xub_StrLen)nLen ));
-                String aBaseName( aColumnName.Copy( 0, (xub_StrLen)nLen-2 ));
-                sal_uInt16 i=1;
-                while( pLeft->GetEntryPos(aColumnName) == CONTAINER_ENTRY_NOTFOUND && (i<100) )
-                {
-                    aNewName = aBaseName;
-                    aNewName += String(i);
-                    i++;
-                }
-                m_pParent->m_mNameMapping[aColumnName] = aNewName;
-                aColumnName = aNewName;
-            }
-            else
-                m_pParent->m_mNameMapping[aColumnName] = aColumnName;
-
-            // now create a column
-            OFieldDescription* pNewField = new OFieldDescription(*pSrcField);
-            pNewField->SetName(aColumnName);
-
-            pRight->SetEntryData(pRight->InsertEntry(aColumnName),pNewField);
-        }
-        else
-        {
-            OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                                                                        ::std::compose1(
-                                                                            ::std::bind2nd(::std::equal_to< ::rtl::OUString>(), ::rtl::OUString(aColumnName)),
-                                                                            ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
-                                                                            );
-            DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must to be defined");
-            const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
-            ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
-
-            if(aSrcIter != pSrcColumns->end())
-                pRight->SetEntryData(pRight->InsertEntry((*aIter).first),aSrcIter->second);
-        }
-
-    }
+        moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectEntry(i),sExtraChars,nMaxNameLen,aCase);
     for(sal_uInt16 j=pLeft->GetSelectEntryCount(); j ; --j)
         pLeft->RemoveEntry(pLeft->GetSelectEntry(j-1));
 
-    m_pParent->GetOKButton().Enable(m_lbNewColumnNames.GetEntryCount() != 0);
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA);
+    enableButtons();
     return 0;
 }
 // -----------------------------------------------------------------------------
@@ -453,6 +326,73 @@ void OWizColumnSelect::clearListBox(MultiListBox& _rListBox)
     _rListBox.Clear();
 }
 // -----------------------------------------------------------------------------
+void OWizColumnSelect::fillColumns(ListBox* pRight,::std::vector< ::rtl::OUString> &_rRightColumns)
+{
+    sal_uInt16 nCount = pRight->GetEntryCount();
+    _rRightColumns.reserve(nCount);
+    for(sal_uInt16 i=0; i < nCount;++i)
+        _rRightColumns.push_back(pRight->GetEntry(i));
+}
+// -----------------------------------------------------------------------------
+void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
+                                        OFieldDescription* _pSrcField,
+                                        ::std::vector< ::rtl::OUString>& _rRightColumns,
+                                        const ::rtl::OUString&  _sColumnName,
+                                        const ::rtl::OUString&  _sExtraChars,
+                                        sal_Int32               _nMaxNameLen,
+                                        const ::comphelper::TStringMixEqualFunctor& _aCase,
+                                        USHORT nPos)
+{
+    ::rtl::OUString sConvertedName = m_pParent->convertColumnName(TMultiListBoxEntryFindFunctor(&_rRightColumns,_aCase),
+                                                                _sColumnName,
+                                                                _sExtraChars,
+                                                                _nMaxNameLen);
+    OFieldDescription* pNewField = new OFieldDescription(*_pSrcField);
+    pNewField->SetName(sConvertedName);
+    _pListbox->SetEntryData(_pListbox->InsertEntry(sConvertedName),pNewField);
+    _rRightColumns.push_back(sConvertedName);
+}
+// -----------------------------------------------------------------------------
+void OWizColumnSelect::moveColumn(  ListBox* _pRight,
+                                    ListBox* _pLeft,
+                                    ::std::vector< ::rtl::OUString>& _rRightColumns,
+                                    const ::rtl::OUString&  _sColumnName,
+                                    const ::rtl::OUString&  _sExtraChars,
+                                    sal_Int32               _nMaxNameLen,
+                                    const ::comphelper::TStringMixEqualFunctor& _aCase)
+{
+    if(_pRight == &m_lbNewColumnNames)
+    {
+        OFieldDescription* pSrcField = static_cast<OFieldDescription*>(_pLeft->GetEntryData(_pLeft->GetEntryPos(String(_sColumnName))));
+        createNewColumn(_pRight,pSrcField,_rRightColumns,_sColumnName,_sExtraChars,_nMaxNameLen,_aCase);
+    }
+    else
+    {
+        OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
+                                                                ::std::compose1(
+                                                                    ::std::bind2nd(_aCase, _sColumnName),
+                                                                    ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
+                                                                    );
 
+        DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must to be defined");
+        const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
+        ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
+        if(aSrcIter != pSrcColumns->end())
+        {
+            _pRight->SetEntryData(_pRight->InsertEntry((*aIter).first),aSrcIter->second);
+            _rRightColumns.push_back((*aIter).first);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void OWizColumnSelect::enableButtons()
+{
+    sal_Bool bEntries = m_lbNewColumnNames.GetEntryCount() != 0;
+    if(!bEntries)
+        m_pParent->m_mNameMapping.clear();
 
+    m_pParent->GetOKButton().Enable(bEntries);
+    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,bEntries && m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA);
+}
+// -----------------------------------------------------------------------------
 

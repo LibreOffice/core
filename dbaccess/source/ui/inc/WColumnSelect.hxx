@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 06:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,27 @@ namespace dbaui
 
 
         void clearListBox(MultiListBox& _rListBox);
+        void fillColumns(       ListBox* pRight,
+                                ::std::vector< ::rtl::OUString> &_rRightColumns);
+
+        void createNewColumn(   ListBox* _pListbox,
+                                OFieldDescription* _pSrcField,
+                                ::std::vector< ::rtl::OUString>& _rRightColumns,
+                                const ::rtl::OUString&  _sColumnName,
+                                const ::rtl::OUString&  _sExtraChars,
+                                sal_Int32               _nMaxNameLen,
+                                const ::comphelper::TStringMixEqualFunctor& _aCase,
+                                USHORT nPos = LISTBOX_APPEND);
+
+        void moveColumn(        ListBox* _pRight,
+                                ListBox* _pLeft,
+                                ::std::vector< ::rtl::OUString>& _rRightColumns,
+                                const ::rtl::OUString&  _sColumnName,
+                                const ::rtl::OUString&  _sExtraChars,
+                                sal_Int32               _nMaxNameLen,
+                                const ::comphelper::TStringMixEqualFunctor& _aCase);
+
+        void enableButtons();
     public:
         virtual void            Reset ( );
         virtual void            ActivatePage();

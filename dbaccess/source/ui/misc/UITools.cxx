@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 07:55:27 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 06:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,12 +409,14 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             // -> drop the precision and the scale restriction, accept any type with the property
             // type id (nType)
 
+            // we can not assert here because we could be in d&d
+/*
             OSL_ENSURE(sal_False,
                 (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
                 +=  ::rtl::OString(" (expected type name: ")
                 +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
                 +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
-
+*/
             pTypeInfo = aPair.first->second;
             _brForceToType = sal_True;
         }
