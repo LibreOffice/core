@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:28:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,6 +576,8 @@ String RID_STR_COMBOWIZ_DBFIELD
     Text[ hindi ] = "आप कॉम्बो क्षेत्र का मूल्य को लेखासंचय क्षेत्र में संचित कर सकते है अथवा दिखाने के लिए उपयोग कर सकते है ।";
     Text[ slovak ] = "Môžete alebo uložiť hodnotu combo boxu do databázového poľa, alebo ju použiť na zobrazenie.";
 };
+
+
 
 
 
