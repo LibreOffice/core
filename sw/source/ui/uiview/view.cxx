@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 11:37:33 $
+ *  last change: $Author: jp $ $Date: 2000-11-30 22:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -984,7 +984,12 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     pFrame->GetFrame()->GetFrameInterface()->setComponent( aTmpRef,
                                             pViewImpl->GetUNOObject_Impl());
 
-    aTimer.Stop();
+    if( aTimer.IsActive() )
+    {
+        if( bAttrChgNotifiedWithRegistrations )
+            GetViewFrame()->GetBindings().LEAVEREGISTRATIONS();
+        aTimer.Stop();
+    }
     aTimer.SetTimeoutHdl(LINK(this, SwView, TimeoutHdl));
     bAttrChgNotified = bAttrChgNotifiedWithRegistrations = sal_False;
 }
