@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:25:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,8 +238,8 @@ ModelessDialog RID_SVXDLG_RUBY
     {
         Pos = MAP_APPFONT ( 171 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Stylist" ;
-        Text [ en-US ] = "Stylist";
+        Text [ de ] = "~Vorlagen" ;
+        Text [ en-US ] = "Styles";
     };
     FixedText FT_PREVIEW
     {
