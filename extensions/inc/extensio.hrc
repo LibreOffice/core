@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 11:56:50 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,11 @@
 #define UID_FIELDLINK_MASTER3                   (HID_FORMS_START +  156)
 #define UID_FIELDLINK_DETAIL4                   (HID_FORMS_START +  157)
 #define UID_FIELDLINK_MASTER4                   (HID_FORMS_START +  158)
+#define HID_PROP_ICONSIZE                       (HID_FORMS_START +  159)
+#define HID_PROP_SHOW_POSITION                  (HID_FORMS_START +  160)
+#define HID_PROP_SHOW_NAVIGATION                (HID_FORMS_START +  161)
+#define HID_PROP_SHOW_RECORDACTIONS             (HID_FORMS_START +  162)
+#define HID_PROP_SHOW_FILTERSORT                (HID_FORMS_START +  163)
 
 // ----------------------------------------------------------------------------
 #define UID_PROP_DLG_FONT_TYPE                  (HID_FORMS_START +  180)
