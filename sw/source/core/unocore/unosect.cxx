@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:37:41 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,6 +811,12 @@ void SwXTextSection::setPropertyValues(
                 if(rFmts[i]->GetSection()->GetName() == pSect->GetName())
                 {
                     pDoc->ChgSection( i, aSection, aItemSet.pItemSet, pDoc->IsInReading());
+
+                    {
+                        // temporarily remove actions to allow cursor update
+                        UnoActionRemoveContext aRemoveContext( pDoc );
+                    }
+
                     SwSection* pSect = pFmt->GetSection();
                     if( bLinkModeChanged && pSect->GetType() == DDE_LINK_SECTION)
                     {
@@ -1329,6 +1335,12 @@ void SwXTextSection::setPropertyToDefault( const OUString& rPropertyName )
                 if(rFmts[i]->GetSection()->GetName() == pSect->GetName())
                 {
                     pDoc->ChgSection( i, aSection, pNewAttrSet, pDoc->IsInReading());
+
+                    {
+                        // temporarily remove actions to allow cursor update
+                        UnoActionRemoveContext aRemoveContext( pDoc );
+                    }
+
                     break;
                 }
             }
@@ -1436,8 +1448,14 @@ void SwXTextSection::setName(const OUString& rName) throw( uno::RuntimeException
         }
         if(nApplyPos != USHRT_MAX)
         {
-            UnoActionContext aContext(pFmt->GetDoc());
-            pFmt->GetDoc()->ChgSection( nApplyPos, aSection);
+            {
+                UnoActionContext aContext(pFmt->GetDoc());
+                pFmt->GetDoc()->ChgSection( nApplyPos, aSection);
+            }
+            {
+                // temporarily remove actions to allow cursor update
+                UnoActionRemoveContext aRemoveContext( pFmt->GetDoc() );
+            }
         }
     }
     else if(m_bIsDescriptor)
