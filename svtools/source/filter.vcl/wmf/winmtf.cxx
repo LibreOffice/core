@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sj $ $Date: 2004-06-18 15:10:58 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 12:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,19 +120,38 @@ void WinMtfClipPath::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nCl
     else if ( rPolyPolygon.Count() < WIN_MTF_MAX_POLYPOLYCOUNT )
     {
         PolyPolygon aNewClipPath;
+
+        // #115345# Watch out for empty aPolyPoly here - conceptually,
+        // an empty clip path is a rectangle of infinite size, but it
+        // is represented by an empty aPolyPoly. When intersecting
+        // rPolyPolygon with this _empty_ aPolyPoly, set algebra
+        // guarantees wrong results.
         switch ( nClippingMode )
         {
             case RGN_OR :
-                aPolyPoly.GetUnion( rPolyPolygon, aNewClipPath );
+                // #115345# clip stays empty, when ORing an arbitrary
+                // rPolyPolygon. Thus, we can save us the unnecessary
+                // clipper call.
+                if( aPolyPoly.Count() )
+                    aPolyPoly.GetUnion( rPolyPolygon, aNewClipPath );
             break;
             case RGN_XOR :
+                // TODO:
+                // #115345# Cannot handle this case, for the time being
                 aPolyPoly.GetXOR( rPolyPolygon, aNewClipPath );
             break;
             case RGN_DIFF :
+                // TODO:
+                // #115345# Cannot handle this case, for the time being
                 aPolyPoly.GetDifference( rPolyPolygon, aNewClipPath );
             break;
             case RGN_AND :
-                aPolyPoly.GetIntersection( rPolyPolygon, aNewClipPath );
+                // #115345# Clip becomes rPolyPolygon, when ANDing
+                // with an arbitrary rPolyPolygon
+                if( aPolyPoly.Count() )
+                    aPolyPoly.GetIntersection( rPolyPolygon, aNewClipPath );
+                else
+                    aNewClipPath = rPolyPolygon;
             break;
             case RGN_COPY :
                 aNewClipPath = rPolyPolygon;
