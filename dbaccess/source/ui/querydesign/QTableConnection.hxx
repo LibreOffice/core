@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableConnection.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:24:01 $
+ *  last change: $Author: rt $ $Date: 2001-02-06 13:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
