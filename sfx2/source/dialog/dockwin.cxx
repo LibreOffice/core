@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:45:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 #include "workwin.hxx"
 #include "splitwin.hxx"
 #include "viewsh.hxx"
-#include "accmgr.hxx"
 #include "sfxhelp.hxx"
 
 #define MAX_TOGGLEAREA_WIDTH        20
