@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 13:01:36 $
+ *  last change: $Author: kz $ $Date: 2003-11-20 14:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,8 @@ int main( int nArgCount, char* ppArgs[] )
 {
     ::std::vector< String > aArgs;
     BmpApp                  aBmpApp;
+
+    InitVCL( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >() );
 
     for( int i = 1; i < nArgCount; i++ )
         aArgs.push_back( String( ppArgs[ i ], RTL_TEXTENCODING_ASCII_US ) );
