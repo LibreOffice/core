@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationAccess.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 14:39:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ module com { module sun { module star { module configuration {
     an extended service that includes facilities for modifying
     configuration data.
 */
-service ConfigurationAccess
+published service ConfigurationAccess
 {
     /** provides interfaces to access child and descendent elements.
 
