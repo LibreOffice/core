@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:17:12 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@
 #include <frmatr.hxx>
 #endif
 
-#include <dbgoutsw.hxx>
+#include <SwUndoFmt.hxx>
 
 inline BYTE GetUpperLvlChg( BYTE nCurLvl, BYTE nLevel, USHORT nMask )
 {
@@ -475,6 +475,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     if( DoesUndo() )
     {
         ClearRedo();
+        StartUndo(UNDO_OUTLINE_LR);
         AppendUndo( new SwUndoOutlineLeftRight( rPam, nOffset ) );
     }
 
@@ -506,6 +507,8 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         n++;
         // Undo ???
     }
+    if (DoesUndo())
+        EndUndo(UNDO_OUTLINE_LR);
 
     SetModified();
     return TRUE;
@@ -936,7 +939,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
     if( DoesUndo() )
     {
         ClearRedo();
-        StartUndo( UNDO_START );        // Klammerung fuer die Attribute!
+        StartUndo( UNDO_INSNUM );       // Klammerung fuer die Attribute!
         AppendUndo( pUndo = new SwUndoInsNum( rPam, rRule ) );
     }
     else
@@ -1123,7 +1126,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
     }
     UpdateNumRule( pNew->GetName(), nPamPos );
 
-    EndUndo( UNDO_END );
+    EndUndo( UNDO_INSNUM );
 
     SetModified();
 }
@@ -1195,11 +1198,23 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, USHORT nStt )
 }
 
     // loeschen geht nur, wenn die Rule niemand benutzt!
-BOOL SwDoc::DelNumRule( const String& rName )
+BOOL SwDoc::DelNumRule( const String& rName, BOOL bBroadcast )
 {
     USHORT nPos = FindNumRule( rName );
     if( USHRT_MAX != nPos && !IsUsed( *(*pNumRuleTbl)[ nPos ] ))
     {
+        if (DoesUndo())
+        {
+            SwUndo * pUndo =
+                new SwUndoNumruleDelete(*(*pNumRuleTbl)[nPos], this);
+
+            AppendUndo(pUndo);
+        }
+
+        if (bBroadcast)
+            BroadcastStyleOperation(rName, SFX_STYLE_FAMILY_PSEUDO,
+                                    SFX_STYLESHEET_ERASED);
+
         pNumRuleTbl->DeleteAndDestroy( nPos );
         SetModified();
         return TRUE;
@@ -1230,6 +1245,44 @@ void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
 
         SetModified();
     }
+}
+
+sal_Bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName,
+                              BOOL bBroadcast)
+{
+    sal_Bool bResult = sal_False;
+    SwNumRule * pNumRule = FindNumRulePtr(rOldName);
+
+    if (pNumRule)
+    {
+        if (DoesUndo())
+        {
+            SwUndo * pUndo = new SwUndoNumruleRename(rOldName, rNewName, this);
+
+            AppendUndo(pUndo);
+        }
+
+        SwNumRuleInfo aInfo(rOldName);
+        aInfo.MakeList(*this);
+
+        pNumRule->SetName(rNewName);
+
+        SwNumRuleItem aItem(rNewName);
+        for (int nI = 0; nI < aInfo.GetList().Count(); nI++)
+        {
+            SwTxtNode * pTxtNd = aInfo.GetList().GetObject(nI);
+
+            pTxtNd->SwCntntNode::SetAttr(aItem);
+        }
+
+        bResult = sal_True;
+
+        if (bBroadcast)
+            BroadcastStyleOperation(rOldName, SFX_STYLE_FAMILY_PSEUDO,
+                                    SFX_STYLESHEET_MODIFIED);
+    }
+
+    return bResult;
 }
 
 void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
@@ -2235,7 +2288,8 @@ SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
     return 0;
 }
 
-USHORT SwDoc::MakeNumRule( const String &rName, const SwNumRule* pCpy )
+USHORT SwDoc::MakeNumRule( const String &rName, const SwNumRule* pCpy,
+                           BOOL bBroadcast)
 {
     SwNumRule* pNew;
     if( pCpy )
@@ -2254,6 +2308,19 @@ USHORT SwDoc::MakeNumRule( const String &rName, const SwNumRule* pCpy )
         pNew = new SwNumRule( GetUniqueNumRuleName( &rName ) );
     USHORT nRet = pNumRuleTbl->Count();
     pNumRuleTbl->Insert( pNew, nRet );
+
+    if (DoesUndo())
+    {
+        SwUndo * pUndo = new SwUndoNumruleCreate(pNew, this);
+
+        AppendUndo(pUndo);
+    }
+
+    if (bBroadcast)
+        BroadcastStyleOperation(pNew->GetName(), SFX_STYLE_FAMILY_PSEUDO,
+                                SFX_STYLESHEET_CREATED);
+
+
     return nRet;
 }
 
@@ -2958,3 +3025,15 @@ sal_Bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName)
     return bResult;
 }
 
+// #i23726#
+void SwDoc::IndentNumRule(SwPosition & rPos, short nAmount)
+{
+    if (SwTxtNode * pTxtNode = rPos.nNode.GetNode().GetTxtNode())
+    {
+        if (SwNumRule * pNumRule = pTxtNode->GetNumRule())
+        {
+            pNumRule->Indent(nAmount);
+            UpdateNumRule();
+        }
+    }
+}
