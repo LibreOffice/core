@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-07 17:31:40 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 12:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,8 @@ BOOL TextEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
 {
     if( rKeyEvent.GetCharCode() >= 32 && rKeyEvent.GetCharCode() != 127 &&
 #ifndef MAC
-        0 == ((KEY_MOD2|KEY_MOD1) & (rKeyEvent.GetKeyCode().GetModifier() ) ))
+        KEY_MOD1 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT) && // (ssa) #i45714#:
+        KEY_MOD2 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT) )  // check for Ctrl and Alt separately
 #else
         KEY_MOD1 != rKeyEvent.GetKeyCode().GetModifier() )
 #endif
