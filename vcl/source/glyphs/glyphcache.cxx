@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-15 16:47:00 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,9 +353,6 @@ ServerFont::ServerFont( const ImplFontSelectData& rFSD )
     mnExtInfo(0),
     mnRefCount(1),
     mnBytesUsed( sizeof(ServerFont) ),
-#ifdef ENABLE_CTL
-    mpLayoutData( NULL ),
-#endif // ENABLE_CTL
     nCos( 0x10000),
     nSin( 0)
 {
