@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 13:32:38 $
+ *  last change: $Author: oj $ $Date: 2002-08-22 07:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,17 +528,16 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::exportTargetLocationAttribute()
+    void OPropertyExport::exportRelativeTargetLocation(const ConstAsciiString& _sPropertyName,sal_Int32 _nProperty)
     {
-        DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_TARGETURL, ::rtl::OUString);
+        DBG_CHECK_PROPERTY((const sal_Char*)_sPropertyName, ::rtl::OUString);
 
-        ::rtl::OUString sTargetLocation = comphelper::getString(m_xProps->getPropertyValue(PROPERTY_TARGETURL));
+        ::rtl::OUString sTargetLocation = comphelper::getString(m_xProps->getPropertyValue(_sPropertyName));
         sTargetLocation = m_rContext.getGlobalContext().GetRelativeReference(sTargetLocation);
-        AddAttribute(getCommonControlAttributeNamespace(CCA_TARGET_LOCATION), getCommonControlAttributeName(CCA_TARGET_LOCATION), sTargetLocation);
+        AddAttribute(getCommonControlAttributeNamespace(_nProperty), getCommonControlAttributeName(_nProperty), sTargetLocation);
 
-        exportedProperty(PROPERTY_TARGETURL);
+        exportedProperty(_sPropertyName);
     }
-
     //---------------------------------------------------------------------
     void OPropertyExport::flagStyleProperties()
     {
@@ -808,6 +807,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/06/25 13:32:38  fs
+ *  #88691# TargetURL property value must be saved relative to own document
+ *
  *  Revision 1.17  2001/05/28 15:00:42  fs
  *  #86712# don't export DateFormat and TimeFormat directly anymore - the format settings are stored as style now
  *

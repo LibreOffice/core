@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-12 16:35:19 $
+ *  last change: $Author: oj $ $Date: 2002-08-22 07:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,8 @@ namespace xmloff
     void OButtonImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
         static const ::rtl::OUString s_sTargetLocationAttributeName = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_TARGET_LOCATION));
-        if (s_sTargetLocationAttributeName == _rLocalName)
+        static const ::rtl::OUString s_sImageDataAttributeName      = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_IMAGE_DATA));
+        if ( (s_sTargetLocationAttributeName == _rLocalName) || (s_sImageDataAttributeName == _rLocalName) )
         {
             // make a global URL out of the local one
             ::rtl::OUString sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference(_rValue);
@@ -1308,6 +1309,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27  2001/12/12 16:35:19  fs
+ *  #95892# moved the assertion in ListAndComboImport::EndElement to the proper place
+ *
  *  Revision 1.26  2001/11/02 12:34:13  fs
  *  #94196# in case of a non-valuelist-ListBox, do not import the ListSource property twice
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 13:32:38 $
+ *  last change: $Author: oj $ $Date: 2002-08-22 07:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
+#ifndef _XMLOFF_FORMS_STRINGS_HXX_
+#include "strings.hxx"
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -113,6 +116,8 @@ namespace xmloff
         DECLARE_STL_STDKEY_SET(::rtl::OUString, StringSet);
         StringSet       m_aRemainingProps;
             // see examinePersistence
+
+        void exportRelativeTargetLocation(const ConstAsciiString& _sPropertyName,sal_Int32 _nProperty);
 
     protected:
         IFormsExportContext&    m_rContext;
@@ -254,7 +259,15 @@ namespace xmloff
 
             <p>The property needs a special handling because the URL's need to be made relative</p>
         */
-        void exportTargetLocationAttribute();
+        inline void exportTargetLocationAttribute() { exportRelativeTargetLocation(PROPERTY_TARGETURL,CCA_TARGET_LOCATION); }
+
+        /** add the form:image attribute to the export context.
+
+            <p>The value of this attribute is extracted from the ImageURL property of the object given.</p>
+
+            <p>The property needs a special handling because the URL's need to be made relative</p>
+        */
+        inline void exportImageDataAttribute() { exportRelativeTargetLocation(PROPERTY_IMAGEURL,CCA_IMAGE_DATA); }
 
         /** flag the style properties as 'already exported'
 
@@ -412,6 +425,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/06/25 13:32:38  fs
+ *  #88691# TargetURL property value must be saved relative to own document
+ *
  *  Revision 1.12  2001/04/17 07:58:12  fs
  *  #85427# +_bVoidDefault parameter for addEnumPropertyAttribute
  *

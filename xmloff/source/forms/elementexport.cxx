@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-02 11:45:36 $
+ *  last change: $Author: oj $ $Date: 2002-08-22 07:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,12 +461,12 @@ namespace xmloff
             // the attribute ids of all properties which are expected to be of type string
             static sal_Int32 nStringPropertyAttributeIds[] =
             {
-                CCA_IMAGE_DATA, CCA_LABEL, CCA_TITLE
+                CCA_LABEL, CCA_TITLE
             };
             // the names of all properties which are expected to be of type string
             static const sal_Char* pStringPropertyNames[] =
             {
-                PROPERTY_IMAGEURL, PROPERTY_LABEL, PROPERTY_TITLE
+                PROPERTY_LABEL, PROPERTY_TITLE
             };
             OSL_ENSURE( sizeof(pStringPropertyNames)/sizeof(pStringPropertyNames[0]) ==
                         sizeof(nStringPropertyAttributeIds)/sizeof(nStringPropertyAttributeIds[0]),
@@ -600,6 +600,16 @@ namespace xmloff
         #ifdef DBG_UTIL
             //  reset the bit for later checking
             m_nIncludeCommon = m_nIncludeCommon & ~CCA_TARGET_LOCATION;
+        #endif
+        }
+
+        // OJ #99721#
+        if (m_nIncludeCommon & CCA_IMAGE_DATA)
+        {
+            exportImageDataAttribute();
+        #ifdef DBG_UTIL
+            //  reset the bit for later checking
+            m_nIncludeCommon = m_nIncludeCommon & ~CCA_IMAGE_DATA;
         #endif
         }
 
@@ -1543,6 +1553,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/11/02 11:45:36  fs
+ *  #94196# do not export the only ListSource element in case of a non-valuelist-ListBox
+ *
  *  Revision 1.20  2001/10/12 16:30:53  hr
  *  #92830#: required change: std::min()/std::max()
  *
