@@ -1,0 +1,238 @@
+/*************************************************************************
+ *
+ *  $RCSfile: calendar_jewish.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: bustamam $ $Date: 2002-03-26 06:29:47 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <math.h>
+
+#include "calendar_jewish.hxx"
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
+using namespace ::rtl;
+
+#define ERROR RuntimeException()
+
+static UErrorCode status; // status is shared in all calls to Calendar, it has to be reset for each call.
+
+Calendar_jewish::Calendar_jewish()
+{
+    cCalendar = "com.sun.star.i18n.Calendar_jewish";
+}
+
+// The following C++ code is translated from the Lisp code in
+// ``Calendrical Calculations'' by Nachum Dershowitz and Edward M. Reingold,
+// Software---Practice & Experience, vol. 20, no. 9 (September, 1990),
+// pp. 899--928.
+
+// This code is in the public domain, but any use of it
+// should acknowledge its source.
+// http://www.ntu.edu.sg/home/ayxyan/date1.txt
+
+// Hebrew dates
+
+const int HebrewEpoch = -1373429; // Absolute date of start of Hebrew calendar
+
+// True if year is an Hebrew leap year
+sal_Bool HebrewLeapYear(sal_Int32 year) {
+    return ((((7 * year) + 1) % 19) < 7);
+}
+
+// Last month of Hebrew year.
+sal_Int32 LastMonthOfHebrewYear(sal_Int32 year) {
+    return  (HebrewLeapYear(year)) ? 13 : 12;
+}
+
+// Number of days elapsed from the Sunday prior to the start of the
+// Hebrew calendar to the mean conjunction of Tishri of Hebrew year.
+sal_Int32 HebrewCalendarElapsedDays(sal_Int32 year) {
+    sal_Int32 MonthsElapsed =
+        (235 * ((year - 1) / 19))           // Months in complete cycles so far.
+        + (12 * ((year - 1) % 19))          // Regular months in this cycle.
+        + (7 * ((year - 1) % 19) + 1) / 19; // Leap months this cycle
+    sal_Int32 PartsElapsed = 204 + 793 * (MonthsElapsed % 1080);
+    int HoursElapsed =
+        5 + 12 * MonthsElapsed + 793 * (MonthsElapsed  / 1080)
+        + PartsElapsed / 1080;
+    sal_Int32 ConjunctionDay = 1 + 29 * MonthsElapsed + HoursElapsed / 24;
+    sal_Int32 ConjunctionParts = 1080 * (HoursElapsed % 24) + PartsElapsed % 1080;
+    sal_Int32 AlternativeDay;
+
+    if ((ConjunctionParts >= 19440)        // If new moon is at or after midday,
+          || (((ConjunctionDay % 7) == 2)    // ...or is on a Tuesday...
+          && (ConjunctionParts >= 9924)  // at 9 hours, 204 parts or later...
+          && !(HebrewLeapYear(year)))   // ...of a common year,
+          || (((ConjunctionDay % 7) == 1)    // ...or is on a Monday at...
+          && (ConjunctionParts >= 16789) // 15 hours, 589 parts or later...
+          && (HebrewLeapYear(year - 1))))// at the end of a leap year
+        // Then postpone Rosh HaShanah one day
+        AlternativeDay = ConjunctionDay + 1;
+    else
+        AlternativeDay = ConjunctionDay;
+
+    if (((AlternativeDay % 7) == 0)// If Rosh HaShanah would occur on Sunday,
+          || ((AlternativeDay % 7) == 3)     // or Wednesday,
+          || ((AlternativeDay % 7) == 5))    // or Friday
+        // Then postpone it one (more) day
+        return (1+ AlternativeDay);
+    else
+        return AlternativeDay;
+}
+
+// Number of days in Hebrew year.
+sal_Int32 DaysInHebrewYear(sal_Int32 year) {
+    return ((HebrewCalendarElapsedDays(year + 1)) -
+          (HebrewCalendarElapsedDays(year)));
+}
+
+// True if Heshvan is long in Hebrew year.
+sal_Bool LongHeshvan(sal_Int32 year) {
+    return ((DaysInHebrewYear(year) % 10) == 5);
+}
+
+// True if Kislev is short in Hebrew year.
+sal_Bool ShortKislev(sal_Int32 year) {
+    return ((DaysInHebrewYear(year) % 10) == 3);
+}
+
+// Last day of month in Hebrew year.
+sal_Int32 LastDayOfHebrewMonth(sal_Int32 month, sal_Int32 year) {
+    if ((month == 2)
+        || (month == 4)
+        || (month == 6)
+        || ((month == 8) && !(LongHeshvan(year)))
+        || ((month == 9) && ShortKislev(year))
+        || (month == 10)
+        || ((month == 12) && !(HebrewLeapYear(year)))
+        || (month == 13))
+        return 29;
+    else
+        return 30;
+}
+
+
+class HebrewDate {
+private:
+    sal_Int32 year;   // 1...
+    sal_Int32 month;  // 1..LastMonthOfHebrewYear(year)
+    sal_Int32 day;    // 1..LastDayOfHebrewMonth(month, year)
+
+public:
+    HebrewDate(sal_Int32 m, sal_Int32 d, sal_Int32 y) { month = m; day = d; year = y; }
+
+    HebrewDate(sal_Int32 d) { // Computes the Hebrew date from the absolute date.
+    year = (d + HebrewEpoch) / 366; // Approximation from below.
+    // Search forward for year from the approximation.
+    while (d >= HebrewDate(7,1,year + 1))
+      year++;
+    // Search forward for month from either Tishri or Nisan.
+    if (d < HebrewDate(1, 1, year))
+      month = 7;  //  Start at Tishri
+    else
+      month = 1;  //  Start at Nisan
+    while (d > HebrewDate(month, (LastDayOfHebrewMonth(month,year)), year))
+      month++;
+    // Calculate the day by subtraction.
+    day = d - HebrewDate(month, 1, year) + 1;
+    }
+
+    operator int() { // Computes the absolute date of Hebrew date.
+    sal_Int32 DayInYear = day; // Days so far this month.
+    if (month < 7) { // Before Tishri, so add days in prior months
+             // this year before and after Nisan.
+      sal_Int32 m = 7;
+      while (m <= (LastMonthOfHebrewYear(year))) {
+        DayInYear = DayInYear + LastDayOfHebrewMonth(m, year);
+        m++;
+      };
+      m = 1;
+      while (m < month) {
+        DayInYear = DayInYear + LastDayOfHebrewMonth(m, year);
+        m++;
+      }
+    }
+    else { // Add days in prior months this year
+      sal_Int32 m = 7;
+      while (m < month) {
+        DayInYear = DayInYear + LastDayOfHebrewMonth(m, year);
+        m++;
+      }
+    }
+    return (DayInYear +
+        (HebrewCalendarElapsedDays(year)// Days in prior years.
+         + HebrewEpoch));         // Days elapsed before absolute date 1.
+    }
+
+    sal_Int32 GetMonth() { return month; }
+    sal_Int32 GetDay() { return day; }
+    sal_Int32 GetYear() { return year; }
+
+};
+
+#define FIELDS ((1 << CalendarFieldIndex::ERA) |\
+        (1 << CalendarFieldIndex::YEAR) |\
+        (1 << CalendarFieldIndex::MONTH) |\
+        (1 << CalendarFieldIndex::DAY_OF_MONTH))
+
+// convert field value from gregorian calendar to other calendar, it can be overwritten by derived class.
+sal_Bool SAL_CALL
+Calendar_jewish::convertValue( sal_Int16 fieldIndex ) throw(RuntimeException)
+{
+    if ((1 << fieldIndex) & FIELDS) {
+        sal_Int32 y, d;
+        y = body->get(icu::Calendar::YEAR, status = U_ZERO_ERROR);
+        if ( !U_SUCCESS(status) ) throw ERROR;
+        d = body->get(icu::Calendar::DAY_OF_YEAR, status = U_ZERO_ERROR);
+        if ( !U_SUCCESS(status) ) throw ERROR;
+
+        HebrewDate hd(d                 // days this year
+               + 365 * (y - 1)   // days in previous years ignoring leap days
+               + (y - 1)/4       // Julian leap days before this year...
+               - (y - 1)/100     // ...minus prior century years...
+               + (y - 1)/400);   // ...plus prior years divisible by 400
+
+        fieldGetValue[CalendarFieldIndex::ERA] = hd.GetYear() < 0 ? 0 : 1;
+        fieldGetValue[CalendarFieldIndex::MONTH] = hd.GetMonth() - 1;
+        fieldGetValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16)hd.GetDay();
+        fieldGetValue[CalendarFieldIndex::YEAR] = (sal_Int16)hd.GetYear();
+        fieldGet |= FIELDS;
+        return sal_True;
+    }
+    return sal_False;
+}
+
