@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-21 08:22:20 $
+ *  last change: $Author: bm $ $Date: 2003-10-22 07:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,7 +694,6 @@ void VLegend::changePosition( awt::Rectangle & rOutAvailableSpace )
         uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY_THROW );
         xLegendProp->getPropertyValue( C2U( "Position" )) >>= ePos;
 
-        sal_Int32 nExtentY = m_aBoundRect.Y + m_aBoundRect.Height;
         switch( ePos )
         {
             case chart2::LegendPosition_LINE_START:
