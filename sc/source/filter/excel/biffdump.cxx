@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-06 16:12:45 $
+ *  last change: $Author: dr $ $Date: 2002-11-15 15:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,7 +1043,13 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             break;
             case 0x0013:        // PASSWORD
                 DumpValidPassword( rIn, pPre );
-                break;
+            break;
+            case 0x0014:        // HEADER
+            case 0x0015:        // FOOTER
+                if( rIn.GetRecLeft() )
+                    AddUNICODEString( t, rIn );
+                PRINT();
+            break;
             case 0x17:
             {
                 UINT16  n;
@@ -4918,8 +4924,10 @@ void Biff8RecDumper::ObjDump( const ULONG nMaxLen )
                                 const UINT16 nStringOffset = 14;    // MAY be right
                                 rIn.Seek( nPos1 + nStringOffset );
                                 INT32 nBytesLeft = nL - nStringOffset;
+                                UINT16 nStrLen = rIn.ReaduInt16();
                                 ULONG nPos3 = rIn.GetRecPos();
-                                AddUNICODEString( t, rIn );
+                                if( nStrLen )
+                                    AddUNICODEString( t, rIn, TRUE, nStrLen );
                                 nBytesLeft -= (rIn.GetRecPos() - nPos3);
                                 ADDTEXT( '\n' );
                                 if ( nBytesLeft < 4 )
