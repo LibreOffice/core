@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:45:53 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 
 #ifndef _SVX_F3DCHILD_HXX //autogen
 #include <svx/f3dchild.hxx>
+#endif
+#ifndef _SVX_TBXCUSTOMSHAPES_HXX
+#include <svx/tbxcustomshapes.hxx>
 #endif
 
 #include <svx/svxids.hrc>
