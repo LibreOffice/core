@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:11:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,8 +187,8 @@
 #include "GraphicViewShell.hxx"
 #endif
 #include "unmodpg.hxx"
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #ifndef SD_FU_VECTORIZE_HXX
 #include "fuvect.hxx"
@@ -265,11 +265,8 @@ ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
 void DrawViewShell::FuTemporary(SfxRequest& rReq)
 {
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
-    if (pFuSlideShow && !pFuSlideShow->IsLivePresentation() &&
-        rReq.GetSlot() != SID_NAVIGATOR)
-    {
+    if(mpSlideShow)
         return;
-    }
 
     CheckLineTo (rReq);
 
