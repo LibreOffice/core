@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:46:33 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1691,7 +1691,7 @@ void CustomAnimationPane::onChangeCurrentPage()
     }
 }
 
-bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, sal_Int16& nFirstPara, sal_Int16& nLastPara )
+bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::list< sal_Int16 >& rParaList )
 {
     Reference< XTextRange > xSelectedText;
     rSelection >>= xSelectedText;
@@ -1706,8 +1706,7 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, sal_I
         Reference< XTextRange > xStart( xSelectedText->getStart() );
         Reference< XTextRange > xEnd( xSelectedText->getEnd() );
 
-        nFirstPara = 0;
-        nLastPara = 0;
+        sal_Int16 nPara = 0;
         while( xParaEnum->hasMoreElements() )
         {
             xParaEnum->nextElement() >>= xRange;
@@ -1716,21 +1715,25 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, sal_I
             if( xRange.is() && (xTextRangeCompare->compareRegionEnds( xStart, xRange ) >= 0 ) )
                 break;
 
-            nFirstPara++;
-            nLastPara++;
+            nPara++;
         }
 
-        do
+        while( xRange.is() )
         {
+            if( xRange.is() && xRange->getString().getLength() )
+                rParaList.push_back( nPara );
+
             // break if end of selection is before or at end of current paragraph
             if( xRange.is() && xTextRangeCompare->compareRegionEnds( xEnd, xRange ) >= 0 )
                 break;
-            nLastPara++;
+
+            nPara++;
 
             if( xParaEnum->hasMoreElements() )
                 xParaEnum->nextElement() >>= xRange;
+            else
+                xRange.clear();
         }
-        while( xParaEnum->hasMoreElements() );
 
         return true;
     }
@@ -1787,14 +1790,16 @@ void CustomAnimationPane::onChange( bool bCreate )
         {
             Reference< XShape > xShape;
             sal_Int16 nFirstPara, nLastPara;
-            if( getTextSelection( maViewSelection, xShape, nFirstPara, nLastPara ) )
+            std::list< sal_Int16 > aParaList;
+            if( getTextSelection( maViewSelection, xShape, aParaList ) )
             {
                 ParagraphTarget aParaTarget;
                 aParaTarget.Shape = xShape;
 
-                for( ; nFirstPara <= nLastPara; nFirstPara++ )
+                std::list< sal_Int16 >::iterator aIter( aParaList.begin() );
+                for( ; aIter != aParaList.end(); aIter++ )
                 {
-                    aParaTarget.Paragraph = nFirstPara;
+                    aParaTarget.Paragraph = (*aIter);
                     aTargets.push_back( makeAny( aParaTarget ) );
                    }
             }
