@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOASISTContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:11:23 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 14:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,6 +498,15 @@ void XMLPropertiesTContext_Impl::StartElement(
                         OUString aNewAttrQName(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_STYLE,
+                                ::xmloff::token::GetXMLToken(
+                                XML_TEXT_ALIGN ) ) );
+                        pAttrList->AddAttribute( aNewAttrQName, rAttrValue );
+                    }
+                    else
+                    {
+                        OUString aNewAttrQName(
+                            GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_FO,
                                 ::xmloff::token::GetXMLToken(
                                 XML_TEXT_ALIGN ) ) );
                         pAttrList->AddAttribute( aNewAttrQName, rAttrValue );
