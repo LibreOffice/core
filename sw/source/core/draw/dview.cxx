@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:47:09 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,14 @@
 #include <svx/svdvmark.hxx>
 #endif
 #include <vector>
+// --> OD 2004-06-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
+#ifndef _FLYFRMS_HXX
+#include <flyfrms.hxx>
+#endif
+// <--
 
 class SwSdrHdl : public SdrHdl
 {
@@ -209,11 +217,16 @@ void SwDrawView::AddCustomHdl()
     ViewShell &rSh = *Imp().GetShell();
     Point aPos(aAnchorPoint);
 
-    if(FLY_AUTO_CNTNT == rAnchor.GetAnchorId())
+    if ( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
     {
-        SwRect aAutoPos;
-        pAnch->GetCharRect(aAutoPos, *rAnchor.GetCntntAnchor());
-        aPos = aAutoPos.Pos();
+        // --> OD 2004-06-24 #i28701# - use last character rectangle saved at object
+        // in order to avoid a format of the anchor frame
+        SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
+        SwRect aAutoPos = pAnchoredObj->GetLastCharRect();
+        if ( aAutoPos.Height() )
+        {
+            aPos = aAutoPos.Pos();
+        }
     }
 
     // add anchor handle:
@@ -249,7 +262,8 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
                     UINT32 nOrdNum = 0;
                     for ( USHORT i = 0; i < pPage->GetSortedObjs()->Count(); ++i )
                     {
-                        const SdrObject *pO = (*pPage->GetSortedObjs())[i];
+                        const SdrObject *pO =
+                                    (*pPage->GetSortedObjs())[i]->GetDrawObj();
 
                         if ( pO->GetOrdNumDirect() > nOrdNum )
                         {
