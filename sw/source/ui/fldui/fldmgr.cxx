@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-04-02 08:14:06 $
+ *  last change: $Author: os $ $Date: 2001-04-03 07:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,7 +898,7 @@ String SwFldMgr::GetFormatStr(USHORT nTypeId, ULONG nFormatId) const
 
     nStart = aSwFlds[nPos].nFmtBegin;
 
-    if (nTypeId == TYP_FILENAMEFLD)
+    if (TYP_AUTHORFLD == nTypeId|| TYP_FILENAMEFLD == nTypeId)
         nFormatId &= ~FF_FIXED;     // Fixed-Flag ausmaskieren
 
     if((nStart + nFormatId) < aSwFlds[nPos].nFmtEnd)
