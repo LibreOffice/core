@@ -1,6 +1,6 @@
     <node oor:name="png_Export" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="Type"><value>png_Portable_Network_Graphic</value></prop>
-        <prop oor:name="FormatName"><value>epn</value></prop>
+        <prop oor:name="FormatName"><value>SVEPNG</value></prop>
         <prop oor:name="RealFilterName"/>
         <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
         <prop oor:name="UIName">
