@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:34:19 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,8 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
         bPagebreak  ( FALSE ),
         pSpellingView ( NULL )
 {
+    USHORT i;
+
     SetGridMode     ( TRUE );
     SetSyntaxMode   ( FALSE );
     SetHeaderMode   ( TRUE );
@@ -340,7 +342,8 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
     aScrSize = Size( (long) ( STD_COL_WIDTH           * PIXEL_PER_TWIPS * OLE_STD_CELLS_X ),
                      (long) ( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
     pTabData[0] = new ScViewDataTable;
-    for (USHORT i=1; i<=MAXTAB; i++) pTabData[i] = NULL;
+    for ( i = 1; i <= MAXTAB; i++ )
+        pTabData[i] = NULL;
     pThisTab = pTabData[nTabNo];
     for (i=0; i<4; i++)
     {
@@ -391,6 +394,8 @@ ScViewData::ScViewData( const ScViewData& rViewData )
         bPagebreak  ( rViewData.bPagebreak ),
         pSpellingView ( rViewData.pSpellingView )
 {
+    USHORT i;
+
     SetGridMode     ( rViewData.IsGridMode() );
     SetSyntaxMode   ( rViewData.IsSyntaxMode() );
     SetHeaderMode   ( rViewData.IsHeaderMode() );
@@ -400,7 +405,7 @@ ScViewData::ScViewData( const ScViewData& rViewData )
     SetOutlineMode  ( rViewData.IsOutlineMode() );
 
     aScrSize = rViewData.aScrSize;
-    for (USHORT i=0; i<=MAXTAB; i++)
+    for ( i = 0; i <= MAXTAB; i++ )
         if (rViewData.pTabData[i])
             pTabData[i] = new ScViewDataTable( *rViewData.pTabData[i] );
         else
