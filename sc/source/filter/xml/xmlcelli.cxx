@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-26 13:25:27 $
+ *  last change: $Author: dr $ $Date: 2000-10-26 13:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,21 +967,6 @@ void ScXMLTableRowCellContext::SetCellRangeSource( sal_Int16 nSheet, sal_Int32 n
             pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aCellRangeSource.sURL, &sFilterName, &sSourceStr );
         }
     }
-
-
-//  uno::Reference< beans::XPropertySet > xDocProp( xSpreadDoc, uno::UNO_QUERY );
-//  if( xDocProp.is() )
-//  {
-//      uno::Reference< sheet::XAreaLinks > xAreaLinks;
-//      uno::Any aAny( xDocProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_AREALINKS ) ) ) );
-//      if( aAny >>= xAreaLinks )
-//      {
-//          table::CellRangeAddress aRange( nSheet, nColumnPos, nRowPos,
-//              nColumnPos + aCellRangeSource.nColumns - 1, nRowPos + aCellRangeSource.nRows - 1 );
-//          xAreaLinks->insertAtPosition( aRange, aCellRangeSource.sURL, aCellRangeSource.sSourceStr,
-//              aCellRangeSource.sFilterName, aCellRangeSource.sFilterOptions );
-//      }
-//  }
 }
 
 void ScXMLTableRowCellContext::EndElement()
