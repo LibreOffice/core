@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:39:06 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,8 +334,8 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SwFrmValid& rVal, BOOL bOnlyPercentRefVal
 
     // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
     //      aligned to page for fly frame anchored to paragraph or to character.
-    pOwnSh->CalcBoundRect( aBoundRect, rVal.eArea, rVal.eHRel,
-                           rVal.eVRel, rVal.bFollowTextFlow,
+    pOwnSh->CalcBoundRect( aBoundRect, rVal.eArea, rVal.eHRel, rVal.eVRel,
+                           rVal.pToCharCntntPos, rVal.bFollowTextFlow,
                            rVal.bMirror, NULL, &rVal.aPercentSize);
 
     if (bOnlyPercentRefValue)
@@ -381,7 +381,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SwFrmValid& rVal, BOOL bOnlyPercentRefVal
 
         if (rVal.nVPos + rVal.nHeight > aBoundRect.Bottom())
         {
-            if (rVal.eVert == SVX_VERT_NONE)
+            if (rVal.eVert == VERT_NONE)
             {
                 rVal.nVPos -= ((rVal.nVPos + rVal.nHeight) - aBoundRect.Bottom());
                 nV = rVal.nVPos;
@@ -393,7 +393,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SwFrmValid& rVal, BOOL bOnlyPercentRefVal
         if (rVal.nVPos + rVal.nHeight > aBoundRect.Bottom())
             rVal.nHeight = aBoundRect.Bottom() - rVal.nVPos;
 
-        if ( rVal.eVert != SVX_VERT_NONE )
+        if ( rVal.eVert != VERT_NONE )
             nV = aBoundRect.Top();
 
         if ( rVal.eHori != HORI_NONE )
@@ -405,7 +405,12 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SwFrmValid& rVal, BOOL bOnlyPercentRefVal
         rVal.nMaxVPos   = aBoundRect.Bottom() - rVal.nHeight;
         rVal.nMaxWidth  = aBoundRect.Right()  - nH;
     }
-    else if ( rVal.eArea == FLY_AT_CNTNT || rVal.eArea == FLY_AUTO_CNTNT )
+    // OD 12.11.2003 #i22341# - handle to character anchored objects vertical
+    // aligned at character or top of line in a special case
+    else if ( rVal.eArea == FLY_AT_CNTNT ||
+              ( rVal.eArea == FLY_AUTO_CNTNT &&
+                !(rVal.eVRel == REL_CHAR) &&
+                !(rVal.eVRel == REL_VERT_LINE) ) )
     {
         if (rVal.nHPos + rVal.nWidth > aBoundRect.Right())
         {
@@ -429,7 +434,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SwFrmValid& rVal, BOOL bOnlyPercentRefVal
                                   rVal.nHeight;
             if ( rVal.nVPos > nTmpMaxVPos )
             {
-                if (rVal.eVert == SVX_VERT_NONE)
+                if (rVal.eVert == VERT_NONE)
                 {
                     rVal.nVPos = nTmpMaxVPos;
                 }
@@ -460,11 +465,63 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SwFrmValid& rVal, BOOL bOnlyPercentRefVal
         const SwTwips nH = ( rVal.eHori != HORI_NONE )
                            ? aBoundRect.Left()
                            : rVal.nHPos;
-        const SwTwips nV = ( rVal.eVert != SVX_VERT_NONE )
+        const SwTwips nV = ( rVal.eVert != VERT_NONE )
                            ? aBoundRect.Top()
                            : rVal.nVPos;
         rVal.nMaxHeight  = rVal.nMaxVPos + rVal.nHeight - nV;
         rVal.nMaxWidth   = rVal.nMaxHPos + rVal.nWidth - nH;
+    }
+    // OD 12.11.2003 #i22341# - special case for to character anchored objects
+    // vertical aligned at character or top of line.
+    // Note: (1) positive vertical values are positions above the top of line
+    //       (2) negative vertical values are positions below the top of line
+    else if ( rVal.eArea == FLY_AUTO_CNTNT &&
+              ( rVal.eVRel == REL_CHAR ||
+                rVal.eVRel == REL_VERT_LINE ) )
+    {
+        // determine horizontal values
+        rVal.nMinHPos  = aBoundRect.Left();
+
+        rVal.nMaxHPos  = aBoundRect.Right() - rVal.nWidth;
+        if (rVal.nHPos + rVal.nWidth > aBoundRect.Right())
+        {
+            if (rVal.eHori == HORI_NONE)
+            {
+                rVal.nHPos -= ((rVal.nHPos + rVal.nWidth) - aBoundRect.Right());
+            }
+            else
+                rVal.nWidth = aBoundRect.Right() - rVal.nHPos;
+        }
+
+        const SwTwips nH = ( rVal.eHori != HORI_NONE )
+                           ? aBoundRect.Left()
+                           : rVal.nHPos;
+        rVal.nMaxWidth   = rVal.nMaxHPos + rVal.nWidth - nH;
+
+        // determine vertical values
+        const bool bMinVPosAtBottom = !rVal.bFollowTextFlow;
+        rVal.nMinVPos = -( aBoundRect.Bottom() - rVal.nHeight );
+        if ( rVal.nVPos < rVal.nMinVPos &&
+             rVal.eVert == VERT_NONE )
+        {
+            rVal.nVPos = rVal.nMinVPos;
+        }
+
+        rVal.nMaxVPos  = -aBoundRect.Top();
+        if ( rVal.nVPos > rVal.nMaxVPos &&
+             rVal.eVert == VERT_NONE )
+        {
+            rVal.nVPos = rVal.nMaxVPos;
+        }
+
+        if ( rVal.eVert == VERT_NONE )
+        {
+            rVal.nMaxHeight = aBoundRect.Bottom() + rVal.nVPos;
+        }
+        else
+        {
+            rVal.nMaxHeight = aBoundRect.Height();
+        }
     }
     else if ( rVal.eArea == FLY_IN_CNTNT )
     {
@@ -671,6 +728,8 @@ SwFrmValid::SwFrmValid() :
     bMirror(0),
     // OD 18.09.2003 #i18732#
     bFollowTextFlow( false ),
+    // OD 12.11.2003 #i22341#
+    pToCharCntntPos( NULL ),
     nHPos(0),
     nMaxHPos(LONG_MAX),
     nMinHPos(0),
