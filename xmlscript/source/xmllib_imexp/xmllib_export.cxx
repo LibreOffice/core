@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_export.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-10-23 15:25:50 $
+ *  last change: $Author: ab $ $Date: 2001-11-07 18:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,11 @@ using namespace rtl;
 namespace xmlscript
 {
 
+static OUString aTrueStr ( RTL_CONSTASCII_USTRINGPARAM("true") );
+static OUString aFalseStr( RTL_CONSTASCII_USTRINGPARAM("false") );
+
 //##################################################################################################
+
 
 //==================================================================================================
 
@@ -101,8 +105,6 @@ SAL_CALL exportLibraryContainer(
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( aLibrariesName, xAttributes );
 
-    OUString aTrueStr ( RTL_CONSTASCII_USTRINGPARAM("true") );
-    OUString aFalseStr( RTL_CONSTASCII_USTRINGPARAM("false") );
     int nLibCount = pLibArray->mnLibCount;
     for( sal_Int32 i = 0 ; i < nLibCount ; i++ )
     {
@@ -116,7 +118,8 @@ SAL_CALL exportLibraryContainer(
         pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":name") ),
                                     rLib.aName );
 
-        if( rLib.bLink && rLib.aStorageURL.getLength() )
+
+        if( rLib.aStorageURL.getLength() )
         {
             pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_XLINK_PREFIX ":href") ),
                                         rLib.aStorageURL );
@@ -127,29 +130,6 @@ SAL_CALL exportLibraryContainer(
         pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":link") ),
                                     rLib.bLink ? aTrueStr : aFalseStr );
 
-        pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":readonly") ),
-                                    rLib.bReadOnly ? aTrueStr : aFalseStr );
-
-        pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":passwordprotected") ),
-                                    rLib.bPasswordProtected ? aTrueStr : aFalseStr );
-
-        sal_Int32 nElementCount = rLib.aElementNames.getLength();
-        if( nElementCount )
-        {
-            const OUString* pElementNames = rLib.aElementNames.getConstArray();
-            for( sal_Int32 i = 0 ; i < nElementCount ; i++ )
-            {
-                XMLElement* pElement = new XMLElement( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":element" ) ) );
-                Reference< xml::sax::XAttributeList > xElementAttribs;
-                xElementAttribs = static_cast< xml::sax::XAttributeList* >( pElement );
-
-                pElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":name") ),
-                                            pElementNames[i] );
-
-                pLibElement->addSubElement( pElement );
-            }
-        }
-
         pLibElement->dump( xOut );
     }
 
@@ -159,4 +139,60 @@ SAL_CALL exportLibraryContainer(
     xOut->endDocument();
 }
 
+//==================================================================================================
+
+SAL_DLLEXPORT void
+SAL_CALL exportLibrary(
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
+    const LibDescriptor& rLib )
+        SAL_THROW( (::com::sun::star::uno::Exception) )
+{
+    xOut->startDocument();
+
+    OUString aDocTypeStr( RTL_CONSTASCII_USTRINGPARAM(
+        "<!DOCTYPE library:library PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
+        " \"library.dtd\">" ) );
+    xOut->unknown( aDocTypeStr );
+    xOut->ignorableWhitespace( OUString() );
+
+
+    OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":library") );
+    XMLElement* pLibElement = new XMLElement( aLibraryName );
+    Reference< xml::sax::XAttributeList > xAttributes( pLibElement );
+
+    pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_LIBRARY_PREFIX) ),
+                                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_URI) ) );
+
+    pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":name") ),
+                                rLib.aName );
+
+    pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":readonly") ),
+                                rLib.bReadOnly ? aTrueStr : aFalseStr );
+
+    pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":passwordprotected") ),
+                                rLib.bPasswordProtected ? aTrueStr : aFalseStr );
+
+    sal_Int32 nElementCount = rLib.aElementNames.getLength();
+    if( nElementCount )
+    {
+        const OUString* pElementNames = rLib.aElementNames.getConstArray();
+        for( sal_Int32 i = 0 ; i < nElementCount ; i++ )
+        {
+            XMLElement* pElement = new XMLElement( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":element" ) ) );
+            Reference< xml::sax::XAttributeList > xElementAttribs;
+            xElementAttribs = static_cast< xml::sax::XAttributeList* >( pElement );
+
+            pElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":name") ),
+                                        pElementNames[i] );
+
+            pLibElement->addSubElement( pElement );
+        }
+    }
+
+    pLibElement->dump( xOut );
+
+    xOut->endDocument();
+}
+
 };
+
