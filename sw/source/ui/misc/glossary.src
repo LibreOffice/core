@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:05:03 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ ModalDialog DLG_GLOSSARY
             Text[ polish ] = "tylko do odczytu";
             Text[ portuguese_brazilian ] = "readonly";
             Text[ japanese ] = "‘‚«‚έ•Ϋμ";
-            Text[ korean ] = "readonly";
+            Text[ korean ] = "ΐΠ±βΐόΏλ";
             Text[ chinese_simplified ] = "·ΐΈ²Π΄";
             Text[ chinese_traditional ] = "¨ΎΒΠΌg";
             Text[ turkish ] = "readonly";
@@ -416,7 +416,7 @@ ModalDialog DLG_GLOSSARY
     Text[ chinese_simplified ] = "²εΘλ(~I)";
     Text[ chinese_traditional ] = "΄΅¤J(~I)";
         Text[ arabic ] = "ΕΟΡΗΜ";
-        Text[ greek ] = "Εισαγωγή";
+        Text[ greek ] = "~Εισαγωγή";
         Text[ korean ] = "»πΐΤ(~I)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
@@ -546,7 +546,7 @@ ModalDialog DLG_GLOSSARY
         Text = "Fόr die Verzeichnisse fόr 'AutoText' sind sind keine Schreibrechte vorhanden. Mφchten Sie den Pfaddialog aufrufen?" ;
         Text [ ENGLISH ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?" ;
         Text[ english_us ] = "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?";
-        Text[ portuguese ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ portuguese ] = "Os directσrios de 'AutoTexto' sγo sσ de leitura. Abrir a caixa de diαlogo dos atalhos?";
         Text[ russian ] = "Κΰςΰλξγ 'AutoText' οπεδνΰηνΰχεν ςξλόκξ δλÿ χςενθÿ. Βϋ υξςθςε βϋηβΰςό δθΰλξγ ηΰδΰνθÿ οσςθ?";
         Text[ greek ] = "Δεν υπάρχουν δικαιώματα επεξεργασίας για τους καταλόγους του 'ΑυτοΚείμενο'. Θέλετε να καλέσετε τον διάλογο διαδρομής;";
         Text[ dutch ] = "Voor de directory's van 'AutoTekst' bestaan geen schrijfrechten. Wilt u de dialoog voor het definiλren van het pad oproepen?";
@@ -558,7 +558,7 @@ ModalDialog DLG_GLOSSARY
         Text[ polish ] = "Katalogi 'Autotekst' sΉ tylko do odczytu. Czy wywo³aζ dialog cieΏki?";
         Text[ portuguese_brazilian ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
         Text[ japanese ] = "u“ό—Νx‰‡v‚ΜΓή¨ΪΈΔΨ‚Ν‘‚«‚έ•Ϋμ‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρBΚί½έ’θ‚Μΐή²±ΫΈήΞή―Έ½‚πΔ‚Ρo‚µ‚ά‚·‚©B";
-        Text[ korean ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
+        Text[ korean ] = "'AutoText' µπ·ΊΕδΈ®΄Β ΐΠ±β ΐόΏλΐΤ΄Ο΄Ω. °ζ·Ξ Ό³Α¤ ΄λΘ­»σΐΪΈ¦ Θ£ΓβΗÒ±ξΏδ?";
         Text[ chinese_simplified ] = "΅°ΧΤ¶―ΝΌΞΔΌ―΅±µΔΔΏΒΌ²»Ύί±ΈΈ²Π΄ΚτΠΤ΅£Òª΄ςΏªΒ·Ύ¶¶Τ»°ΐΈ£Ώ";
         Text[ chinese_traditional ] = "'AutoText' ¥ΨΏύ¬O¨ΎΒΠΌgªΊ΅C­n¥΄¶}¤@­ΣΈτ®|ΉοΈά¤θ΅H";
         Text[ turkish ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
