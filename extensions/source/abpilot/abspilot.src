@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:19:53 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,30 +342,71 @@ TabPage RID_PAGE_FINAL
         Text [ en-US ] = "That was all the information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name under which you want to register the data source in %PRODUCTNAME.";
     };
 
-    FixedText FT_NAME_EXPL
+    FixedText FT_LOCATION
     {
         Pos     = MAP_APPFONT ( BORDER_X, 53 ) ;
         Size    = MAP_APPFONT ( 50, 8 ) ;
-
-        Text [ de ] = "Titel";
-        Text [ en-US ] = "Name";
         Group = TRUE;
+
+        Text [ de ] = "Pfad";
+        Text [ en-US ] = "Location";
+    };
+
+    ComboBox CBB_LOCATION
+    {
+        Pos     = MAP_APPFONT ( BORDER_X , 64 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 53 - BORDER_X - BORDER_X, 12) ;
+        SVLook = TRUE;
+        Border = TRUE;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+
+    PushButton PB_BROWSE
+    {
+        Pos     = MAP_APPFONT ( WINDOW_SIZE_X - 50 - BORDER_X  , 63 ) ;
+        Size    = MAP_APPFONT ( 50, 14) ;
+        SVLook = TRUE;
+        Group = FALSE;
+
+        Text [ de ] = "Durchsuchen...";
+        Text [ en-US ] = "Browse..";
+    };
+
+    CheckBox CB_REGISTER_DS
+    {
+        Pos     = MAP_APPFONT ( BORDER_X, 82 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 53 - BORDER_X - BORDER_X, 8) ;
+        SVLook = TRUE;
+        Group = TRUE;
+
+        Text [ de ] = "Dieses Adressbuch allen Modulen von %PRODUCTNAME zur Verfügung stellen.";
+        Text [ en-US ] = "Make this address book available to all modules in %PRODUCTNAME.";
+    };
+    FixedText FT_NAME_EXPL
+    {
+        Pos     = MAP_APPFONT ( BORDER_X + 10, 93 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - BORDER_X - BORDER_X - 10, 8 ) ;
+
+        Text [ de ] =  "Name des Adressbuches";
+        Text [ en-US ] = "Address book name";
     };
 
     Edit ET_DATASOURCENAME
     {
-        Pos     = MAP_APPFONT ( BORDER_X + 50 + 3, 53 ) ;
-        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 53 - BORDER_X - BORDER_X, 12) ;
+        Pos     = MAP_APPFONT ( BORDER_X + 10, 104 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 56 - BORDER_X - BORDER_X - 10, 12) ;
         SVLook = TRUE;
         Border = TRUE;
-        Group = FALSE;
     };
 
     FixedText FT_DUPLICATENAME
     {
-        Pos     = MAP_APPFONT ( BORDER_X, WINDOW_SIZE_Y - HEADER_SIZE_Y - 7 - 24 ) ;
+        Pos     = MAP_APPFONT ( BORDER_X + 10, WINDOW_SIZE_Y - HEADER_SIZE_Y - 7 - 24 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 24) ;
         WordBreak = TRUE;
+        Hide = TRUE;
+        Group = FALSE;
 
         Text [ de ] =   "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sind, "
             "müssen sie einen anderen wählen.";
@@ -433,15 +474,15 @@ String RID_STR_NOFIELDSASSIGNED
     Text [ x-comment ] = "The last line of this text refers to a menu entry. Please use the same translation as for this menu. Does it help if I tell you that it's in svx/inc/globalmn.hrc:ITEM_FILE_DOCTEMPLATE?";
 };
 
-String RID_STR_ABP_SUCCESS
-{
-    Text[ de ] = "Ab jetzt können Sie Ihre Adressdaten von %PRODUCTNAME aus erreichen. So öffnen Sie z.B. mit der F4-Taste die Datenquellenansicht, um mit den Adressdaten zu arbeiten.";
-    Text [ en-US ] = "Now you will be able to access your address data from within %PRODUCTNAME. For example, pressing F4 will open the data source view where you can work with the address data.";
-};
-
 //........................................................................
 Bitmap BMP_HEADERIMAGE
 {
     file = "addresspilot.bmp";
+};
+
+String RID_STR_ALREADYEXISTOVERWRITE
+{
+    Text [ de ] =  "Die Datei existiert bereits. Soll sie überschrieben werden?" ;
+    Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
 
