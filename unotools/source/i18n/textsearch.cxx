@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-01 20:29:19 $
+ *  last change: $Author: er $ $Date: 2001-07-17 14:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HDL_
 #include <com/sun/star/util/SearchFlags.hdl>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -207,9 +210,12 @@ void TextSearch::Init( const SearchParam & rParam,
     aSOpt.searchString = rParam.GetSrchStr();
     aSOpt.replaceString = rParam.GetReplaceStr();
     aSOpt.Locale = rLocale;
-    if( !rParam.IsCaseSensitive() )
-        aSOpt.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
     aSOpt.transliterateFlags = rParam.GetTransliterationFlags();
+    if( !rParam.IsCaseSensitive() )
+    {
+        aSOpt.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
+        aSOpt.transliterateFlags |= ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE;
+    }
 
     try
     {
