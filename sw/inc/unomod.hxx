@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-27 13:19:55 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 21:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 
 class SwView;
 class SwViewOption;
-class SwPrintOptions;
+struct SwPrintData;
 class SwDoc;
 
 /******************************************************************************
@@ -136,14 +136,21 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
+enum SwXPrintSettingsType
+{
+    PRINT_SETTINGS_MODULE,
+    PRINT_SETTINGS_WEB,
+    PRINT_SETTINGS_DOCUMENT
+};
 class SwXPrintSettings :public comphelper::ChainablePropertySet,
                         public cppu::OWeakObject,
                         public com::sun::star::lang::XServiceInfo
 {
     friend class SwXDocumentSettings;
 protected:
-    sal_Bool        mbWeb:1;
-    SwPrintOptions* mpPrtOpt;
+    SwXPrintSettingsType meType;
+    SwPrintData * mpPrtOpt;
+    SwDoc *mpDoc;
 
     virtual void _preSetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
@@ -159,7 +166,7 @@ protected:
     virtual void _postGetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
 public:
-    SwXPrintSettings( sal_Bool bWeb );
+    SwXPrintSettings( SwXPrintSettingsType eType, SwDoc * pDoc = NULL );
     virtual ~SwXPrintSettings();
 
     // XInterface
