@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:00:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 11:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,7 @@ String STR_POOLSHEET_TEXTBODY_JUSTIFY
 {
     /* ### ACHTUNG: Neuer Text in Resource? Textkörper Blocksatz : Textk÷rper Blocksatz */
     Text [ de ]= "Textkörper Blocksatz" ;
-    Text [ en-US ] = "Text body justfied" ;
+    Text [ en-US ] = "Text body justified" ;
     Text [ x-comment ] = " ";
 };
 String STR_POOLSHEET_TEXTBODY_INDENT_NT
