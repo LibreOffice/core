@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderCache.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: npower $ $Date: 2003-09-04 07:21:55 $
+ *  last change: $Author: npower $ $Date: 2003-09-15 14:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@ using namespace drafts::com::sun::star::script::framework;
 
 namespace func_provider
 {
+    ::rtl::OUString languageProviderName =
+        ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.framework.provider.LanguageScriptProvider" );
+    ::rtl::OUString providerKey =
+        ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.framework.provider.ScriptProviderFor" );
 
 ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, const Sequence< Any >& scriptContext )
     throw ( RuntimeException ) : m_Sctx( scriptContext ), m_xContext( xContext )
@@ -176,79 +180,58 @@ void
 ProviderCache::populateCache() throw ( RuntimeException )
 {
     OSL_TRACE("ProviderCache::populateCache()");
-    // temporary hard code here for services, will be determined by
-    // createContentEnumeration as soon as registration problems are
-    // sorted out. At the moment can only get the factory for each service
-    // by doing createContentEnumeration on each of the language providers,
-    // will be possible to do this just using "LanguageScriptProvider"
-    // as the service name to get all of the factorys
-   ::rtl::OUString serviceList[] = {
-        ::rtl::OUString::createFromAscii(
-            "drafts.com.sun.star.script.framework.provider.ScriptProviderForJavaScript" ),
-        ::rtl::OUString::createFromAscii(
-            "drafts.com.sun.star.script.framework.provider.ScriptProviderForJava" ),
-        ::rtl::OUString::createFromAscii(
-            "drafts.com.sun.star.script.framework.provider.ScriptProviderForBeanShell" ) };
-
-    Sequence< ::rtl::OUString > s_serviceNames = Sequence <
-        ::rtl::OUString > ( serviceList, 3 );
-
+    // wrong name in services.rdb
+    ::rtl::OUString serviceName;
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
     try
     {
-        for ( int index=0; index < s_serviceNames.getLength(); index++ )
-        {
-            ProviderDetails details;
-            OSL_TRACE("Getting factory for service %s",
-                ::rtl::OUStringToOString(  s_serviceNames[ index ],
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            details.factory = getFactory( s_serviceNames[ index ] );
-            m_hProviderDetailsCache[ s_serviceNames[ index ] ] = details;
-        }
-    }
-    catch ( RuntimeException& e )
-    {
-        ::rtl::OUString temp = OUSTR(
-            "ProviderCache::populateCache: couldn't populate cache" );
-        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
-
-    }
-}
-Reference< lang::XSingleComponentFactory >
-ProviderCache::getFactory( const ::rtl::OUString& serviceName )  throw ( RuntimeException )
-{
-   OSL_TRACE("ProviderCache::getFactor() Getting factory for service %s",
-       ::rtl::OUStringToOString(  serviceName,
-           RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
-    Reference< lang::XSingleComponentFactory > factory;
-    try
-    {
         Reference< container::XContentEnumerationAccess > xEnumAccess = Reference< container::XContentEnumerationAccess >( m_xMgr, UNO_QUERY_THROW );
-        Reference< container::XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( serviceName );
+        Reference< container::XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
 
-        // there will be only one service at the moment until registration
-        // details are sorted out.
-        if ( xEnum->hasMoreElements() )
+        while ( xEnum->hasMoreElements() )
         {
+
+            Reference< lang::XSingleComponentFactory > factory;
             if ( sal_False == ( xEnum->nextElement() >>= factory ) )
             {
+                OSL_TRACE("ProviderCache::populateCache() failed to extract factory from any");
                 throw new RuntimeException( ::rtl::OUString::createFromAscii( "  error extracting XSingleComponentFactory from Content enumeration. " ), Reference< XInterface >() );
             }
+            validateXRef( factory, "ProviderCache::populateCache() invalid factory" );
+            Reference< lang::XServiceInfo > xServiceInfo( factory, UNO_QUERY_THROW );
+            validateXRef( xServiceInfo, "ProviderCache::populateCache() failed to get XServiceInfo from factory" );
+            OSL_TRACE("ProviderCache::populateCache() processing element for implementation name %s",
+                ::rtl::OUStringToOString( xServiceInfo->getImplementationName(),
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+
+            Sequence< ::rtl::OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
+
+            if ( serviceNames.getLength() > 0 )
+            {
+                for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )
+                {
+                    if ( serviceNames[ index ].indexOf( providerKey ) == 0 )
+                    {
+                        serviceName = serviceNames[ index ];
+                        OSL_TRACE("ProviderCache::populateCache(), creating entry with factory for service %s",
+                            ::rtl::OUStringToOString( serviceName,
+                                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                        ProviderDetails details;
+                        details.factory = factory;
+                        m_hProviderDetailsCache[ serviceName ] = details;
+                        break;
+                    }
+                }
+            }
         }
-
-        validateXRef( factory, "ProviderCache::getFactory() invalid factory" );
-
     }
     catch ( Exception e )
     {
         ::rtl::OUString temp = OUSTR(
-            "ProviderCache::getFactory: could'nt obtain XSingleComponentFactory for " );
+            "ProviderCache::populateCache: couldn't obtain XSingleComponentFactory for " );
         temp.concat( serviceName );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
-
     }
-    return factory;
 }
 
 Reference< provider::XScriptProvider >
@@ -257,7 +240,6 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
    OSL_TRACE("ProviderCache::createProvider()");
     try
     {
-        //details.provider  = Reference< provider::XScriptProvider >( details.factory->createInstanceWithArguments( m_Sctx ), UNO_QUERY_THROW );
         details.provider  = Reference< provider::XScriptProvider >( details.factory->createInstanceWithArgumentsAndContext( m_Sctx, m_xContext ), UNO_QUERY_THROW );
         validateXRef( details.provider, "ProviderCache::createProvider, failed to create provider");
     }

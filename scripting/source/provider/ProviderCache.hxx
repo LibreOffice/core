@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderCache.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: npower $ $Date: 2003-09-04 07:20:47 $
+ *  last change: $Author: npower $ $Date: 2003-09-15 14:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,10 +111,6 @@ public:
 private:
     void populateCache()
         throw ( css::uno::RuntimeException );
-    //    getFactory( const ::rtl::OUString& serviceName )  throw ( RuntimeException );
-    //css::uno::Reference< css::lang::XSingleServiceFactory >
-    css::uno::Reference< css::lang::XSingleComponentFactory >
-        getFactory( const rtl::OUString& serviceName ) throw ( css::uno::RuntimeException );
 
    css::uno::Reference< dcsssf::provider::XScriptProvider >
         createProvider( ProviderDetails& details ) throw ( css::uno::RuntimeException );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: npower $ $Date: 2003-09-10 08:08:14 $
+ *  last change: $Author: npower $ $Date: 2003-09-15 14:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,20 +127,22 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
                           "MasterScriptProvider::initialise: cannot get StorageManager" );
         m_xScriptStorageMgr = Reference< storage::XScriptStorageManager > ( xInterface, UNO_QUERY_THROW );
 
+        // Set up contextless cache
+        // if initialise method is called a new ProviderCache will be
+        // created with the appropriate context supplied as an argument
+        Sequence< Any > invokeArgs(1);
+        invokeArgs[ 0 ] <<= m_XScriptingContext;
+        m_pPCache = new ProviderCache( m_xContext, invokeArgs );
     }
     catch ( Exception & e )
     {
+        OSL_TRACE("MasterScriptProvider -ctor caught exception %s",
+            ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         ::rtl::OUString temp = OUSTR(
             "MasterScriptProvider::MasterScriptProvider: could not raise instance of ScriptStorageManager : " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 
-    // Set up contextless cache
-    // if initialise method is called a new ProviderCache will be
-    // created with the appropriate context supplied as an argument
-    Sequence< Any > invokeArgs(1);
-    invokeArgs[ 0 ] <<= m_XScriptingContext;
-    m_pPCache = new ProviderCache( m_xContext, invokeArgs );
 
     m_bIsValid = true;
 }
