@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-02 11:35:50 $
+ *  last change: $Author: cl $ $Date: 2001-04-26 11:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,8 @@ public:
 
             SdOptionsPrint( USHORT nConfigId, BOOL bUseConfig );
             ~SdOptionsPrint() {}
+
+    void    SetPrinterOptions( const SdOptionsPrint* pOptions );
 
     void    SetDefaults();
     BOOL    operator==( const SdOptionsPrint& rOpt ) const;

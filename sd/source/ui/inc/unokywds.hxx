@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-20 14:03:48 $
+ *  last change: $Author: cl $ $Date: 2001-04-26 11:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,39 @@ SD_CONSTASCII_ACTION( sUNO_View_PreviewDrawMode,                "PreviewDrawMode
 SD_CONSTASCII_ACTION( sUNO_View_IsShowPreviewInPageMode,        "IsShowPreviewInPageMode" );
 SD_CONSTASCII_ACTION( sUNO_View_IsShowPreviewInMasterPageMode,  "IsShowPreviewInMasterPageMode" );
 SD_CONSTASCII_ACTION( sUNO_View_SetShowPreviewInOutlineMode,    "SetShowPreviewInOutlineMode" );
+SD_CONSTASCII_ACTION( sUNO_View_EditModeStandard,               "EditModeStandard" );
+SD_CONSTASCII_ACTION( sUNO_View_EditModeNotes,                  "EditModeNotes" );
+SD_CONSTASCII_ACTION( sUNO_View_EditModeHandout,                "EditModeHandout" );
+SD_CONSTASCII_ACTION( sUNO_View_VisArea,                        "VisArea" );
 
+SD_CONSTASCII_ACTION( sUNO_View_GridIsVisible,                  "GridIsVisible" );
+SD_CONSTASCII_ACTION( sUNO_View_GridIsFront,                    "GridIsFront" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapToGrid,                   "IsSnapToGrid" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapToPageMargins,            "IsSnapToPageMargins" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapToSnapLines,              "IsSnapToSnapLines" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapToObjectFrame,            "IsSnapToObjectFrame" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapToObjectPoints,           "IsSnapToObjectPoints" );
+SD_CONSTASCII_ACTION( sUNO_View_IsSnapLinesVisible,             "IsSnapLinesVisible" );
+SD_CONSTASCII_ACTION( sUNO_View_IsDragStripes,                  "IsDragStripes" );
+SD_CONSTASCII_ACTION( sUNO_View_IsPlusHandlesAlwaysVisible,     "IsPlusHandlesAlwaysVisible" );
+SD_CONSTASCII_ACTION( sUNO_View_IsFrameDragSingles,             "IsFrameDragSingles" );
+SD_CONSTASCII_ACTION( sUNO_View_IsMarkedHitMovesAlways,         "IsMarkedHitMovesAlways" );
+SD_CONSTASCII_ACTION( sUNO_View_EliminatePolyPointLimitAngle,   "EliminatePolyPointLimitAngle" );
+SD_CONSTASCII_ACTION( sUNO_View_IsEliminatePolyPoints,          "IsEliminatePolyPoints" );
+SD_CONSTASCII_ACTION( sUNO_View_IsLineDraft,                    "IsLineDraft" );
+SD_CONSTASCII_ACTION( sUNO_View_IsFillDraft,                    "IsFillDraft" );
+SD_CONSTASCII_ACTION( sUNO_View_IsTextDraft,                    "IsTextDraft" );
+SD_CONSTASCII_ACTION( sUNO_View_IsGrafDraft,                    "IsGrafDraft" );
+SD_CONSTASCII_ACTION( sUNO_View_ActiveLayer,                    "ActiveLayer" );
+SD_CONSTASCII_ACTION( sUNO_View_NoAttribs,                      "NoAttribs" );
+SD_CONSTASCII_ACTION( sUNO_View_NoColors,                       "NoColors" );
+SD_CONSTASCII_ACTION( sUNO_View_GridCoarseWidth,                "GridCoarseWidth" );
+SD_CONSTASCII_ACTION( sUNO_View_GridCoarseHeight,               "GridCoarseHeight" );
+SD_CONSTASCII_ACTION( sUNO_View_GridFineWidth,                  "GridFineWidth" );
+SD_CONSTASCII_ACTION( sUNO_View_GridFineHeight,                 "GridFineHeight" );
+SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidth,                  "GridSnapWidth" );
+SD_CONSTASCII_ACTION( sUNO_View_GridSnapHeight,                 "GridSnapHeight" );
+SD_CONSTASCII_ACTION( sUNO_View_IsAngleSnapEnabled,             "IsAngleSnapEnabled" );
+SD_CONSTASCII_ACTION( sUNO_View_SnapAngle,                      "SnapAngle" );
 #endif
 
