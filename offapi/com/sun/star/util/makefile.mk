@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-19 18:27:03 $
+#   last change: $Author: hr $ $Date: 2004-05-10 14:17:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,9 +96,9 @@ IDLFILES=\
     ModeChangeEvent.idl\
     ReplaceDescriptor.idl\
     SearchDescriptor.idl\
-        Sortable.idl\
+    Sortable.idl\
     SortDescriptor.idl\
-        SortDescriptor2.idl\
+    SortDescriptor2.idl\
     SortField.idl\
     SortFieldType.idl\
     TextSearch.idl\
@@ -167,7 +167,9 @@ IDLFILES=\
     XStringSubstitution.idl\
     PathSettings.idl\
     PathSubstitution.idl\
-    XTimeStamped.idl
+    XTimeStamped.idl\
+    OfficeInstallationDirectories.idl\
+    XOfficeInstallationDirectories.idl
 
 # ------------------------------------------------------------------
 
