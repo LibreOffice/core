@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 10:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_BIG5_HKSCS             (RTL_TEXTENC_CAST( 86 ))
 #define RTL_TEXTENCODING_TIS_620                (RTL_TEXTENC_CAST( 87 ))
 #define RTL_TEXTENCODING_KOI8_U                 (RTL_TEXTENC_CAST( 88 ))
+#define RTL_TEXTENCODING_ISCII_DEVANAGARI       (RTL_TEXTENC_CAST( 89 ))
 /* ATTENTION!  Whenever some encoding is added here, make sure to update
  * rtl_isOctetEncoding in tencinfo.c.
  */
@@ -247,6 +248,8 @@ Korean (Windows-Wansung-949)                    RTL_TEXTENCODING_MS_949
 Korean (Windows-Johab-1361)                     RTL_TEXTENCODING_MS_1361
 
 Latin 3 (ISO-8859-3)                            RTL_TEXTENCODING_ISO_8859_3
+
+Indian (ISCII Devanagari)                      RTL_TEXTENCODING_ISCII_DEVANAGARI
 
 Japanese (Apple Macintosh)                      RTL_TEXTENCODING_APPLE_JAPANESE
 Japanese (EUC-JP)                               RTL_TEXTENCODING_EUC_JP
