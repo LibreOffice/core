@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:23:28 $
+ *  last change: $Author: aw $ $Date: 2002-01-08 15:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,9 @@ public:
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
-        const SvXMLUnitConverter& rConv);
+        const SvXMLUnitConverter& rConv,
+        // #96328#
+        const sal_Bool bClosed = sal_True);
     SdXMLImExPointsElement(const rtl::OUString& rNew,
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,

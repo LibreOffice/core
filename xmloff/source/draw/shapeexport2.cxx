@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-10 17:42:16 $
+ *  last change: $Author: aw $ $Date: 2002-01-08 15:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,7 +948,9 @@ void XMLShapeExport::ImpExportPolygonShape(
                     drawing::PointSequence* pSequence = pSourcePolyPolygon->getArray();
                     if(pSequence)
                     {
-                        SdXMLImExPointsElement aPoints(pSequence, aViewBox, aPoint, aSize, rExport.GetMM100UnitConverter());
+                        SdXMLImExPointsElement aPoints(pSequence, aViewBox, aPoint, aSize, rExport.GetMM100UnitConverter(),
+                            // #96328#
+                            bClosed);
 
                         // write point array
                         rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPoints.GetExportString());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-14 15:20:24 $
+ *  last change: $Author: aw $ $Date: 2002-01-08 15:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1233,7 +1233,9 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(drawing::PointSequence* pPoints,
     const SdXMLImExViewBox& rViewBox,
     const awt::Point& rObjectPos,
     const awt::Size& rObjectSize,
-    const SvXMLUnitConverter& rConv)
+    const SvXMLUnitConverter& rConv,
+    // #96328#
+    const sal_Bool bClosed)
 :   maPoly( 0L )
 {
     // add polygon to string
@@ -1242,8 +1244,8 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(drawing::PointSequence* pPoints,
     awt::Point* pArray = pPoints->getArray();
 
     // last point same? Ignore it.
-    if((pArray->X == (pArray + (nCnt - 1))->X)
-        && (pArray->Y == (pArray + (nCnt - 1))->Y))
+    // #96328# ...but only when polygon is CLOSED
+    if(bClosed && (pArray->X == (pArray + (nCnt - 1))->X) && (pArray->Y == (pArray + (nCnt - 1))->Y))
         nCnt--;
 
     // object size and ViewBox size different?
