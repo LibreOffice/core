@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:54:46 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,7 +565,8 @@ void ModuleUIConfigurationManager::impl_storeElementTypeData( Reference< XStorag
 
     // commit element type storage
     Reference< XTransactedObject > xTransactedObject( xStorage, UNO_QUERY );
-    xTransactedObject->commit();
+    if ( xTransactedObject.is() )
+        xTransactedObject->commit();
 
     // mark UIElementType as not modified if we store to our own storage
     if ( bResetModifyState )
@@ -982,7 +983,8 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                     if ( bCommitSubStorage )
                     {
                         Reference< XTransactedObject > xTransactedObject( xSubStorage, UNO_QUERY );
-                        xTransactedObject->commit();
+                        if ( xTransactedObject.is() )
+                            xTransactedObject->commit();
                         m_pStorageHandler[i]->commitUserChanges();
                     }
                 }
@@ -1611,7 +1613,8 @@ void SAL_CALL ModuleUIConfigurationManager::storeToStorage( const Reference< XSt
         }
 
         Reference< XTransactedObject > xTransactedObject( Storage, UNO_QUERY );
-        xTransactedObject->commit();
+        if ( xTransactedObject.is() )
+            xTransactedObject->commit();
     }
 }
 
