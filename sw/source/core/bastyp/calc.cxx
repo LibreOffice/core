@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:09:11 $
+ *  last change: $Author: jbu $ $Date: 2001-11-20 10:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,34 +190,34 @@ struct _CalcOp
 };
 
 _CalcOp __READONLY_DATA aOpTable[] = {
-/* ACOS */    sCalc_Acos,       CALC_ACOS,  // Arcuscosinus
-/* ADD */     sCalc_Add,        CALC_PLUS,  // Addition
-/* AND */     sCalc_And,        CALC_AND,   // log. und
-/* ASIN */    sCalc_Asin,       CALC_ASIN,  // Arcussinus
-/* ATAN */    sCalc_Atan,       CALC_ATAN,  // Arcustangens
-/* COS */     sCalc_Cos,        CALC_COS,   // Cosinus
-/* DIV */     sCalc_Div,        CALC_DIV,   // Dividieren
-/* EQ */      sCalc_Eq,         CALC_EQ,    // gleich
-/* G */       sCalc_G,          CALC_GRE,   // groesser
-/* GEQ */     sCalc_Geq,        CALC_GEQ,   // groesser gleich
-/* L */       sCalc_L,          CALC_LES,   // kleiner
-/* LEQ */     sCalc_Leq,        CALC_LEQ,   // kleiner gleich
-/* MAX */     sCalc_Max,        CALC_MAX,   // Maximalwert
-/* MEAN */    sCalc_Mean,       CALC_MEAN,  // Mittelwert
-/* MIN */     sCalc_Min,        CALC_MIN,   // Minimalwert
-/* MUL */     sCalc_Mul,        CALC_MUL,   // Multiplizieren
-/* NEQ */     sCalc_Neq,        CALC_NEQ,   // nicht gleich
-/* NOT */     sCalc_Not,        CALC_NOT,   // log. nicht
-/* OR */      sCalc_Or,         CALC_OR,    // log. oder
-/* PHD */     sCalc_Phd,        CALC_PHD,   // Prozent
-/* POW */     sCalc_Pow,        CALC_POW,   // Potenzieren
-/* ROUND */   sCalc_Round,      CALC_ROUND, // Runden
-/* SIN */     sCalc_Sin,        CALC_SIN,   // Sinus
-/* SQRT */    sCalc_Sqrt,       CALC_SQRT,  // Wurzel
-/* SUB */     sCalc_Sub,        CALC_MINUS, // Subtraktion
-/* SUM */     sCalc_Sum,        CALC_SUM,   // Summe
-/* TAN */     sCalc_Tan,        CALC_TAN,   // Tangens
-/* XOR */     sCalc_Xor,        CALC_XOR    // log. xoder
+/* ACOS */    {sCalc_Acos,      CALC_ACOS},  // Arcuscosinus
+/* ADD */     {sCalc_Add,        CALC_PLUS},  // Addition
+/* AND */     {sCalc_And,        CALC_AND},     // log. und
+/* ASIN */    {sCalc_Asin,       CALC_ASIN},  // Arcussinus
+/* ATAN */    {sCalc_Atan,       CALC_ATAN},  // Arcustangens
+/* COS */     {sCalc_Cos,        CALC_COS},     // Cosinus
+/* DIV */     {sCalc_Div,        CALC_DIV},   // Dividieren
+/* EQ */      {sCalc_Eq,         CALC_EQ},      // gleich
+/* G */       {sCalc_G,          CALC_GRE},     // groesser
+/* GEQ */     {sCalc_Geq,        CALC_GEQ},     // groesser gleich
+/* L */       {sCalc_L,          CALC_LES},     // kleiner
+/* LEQ */     {sCalc_Leq,        CALC_LEQ},     // kleiner gleich
+/* MAX */     {sCalc_Max,        CALC_MAX},     // Maximalwert
+/* MEAN */    {sCalc_Mean,       CALC_MEAN},  // Mittelwert
+/* MIN */     {sCalc_Min,        CALC_MIN},     // Minimalwert
+/* MUL */     {sCalc_Mul,        CALC_MUL},     // Multiplizieren
+/* NEQ */     {sCalc_Neq,        CALC_NEQ},     // nicht gleich
+/* NOT */     {sCalc_Not,        CALC_NOT},     // log. nicht
+/* OR */      {sCalc_Or,         CALC_OR},      // log. oder
+/* PHD */     {sCalc_Phd,        CALC_PHD},   // Prozent
+/* POW */     {sCalc_Pow,        CALC_POW}, // Potenzieren
+/* ROUND */   {sCalc_Round,      CALC_ROUND},   // Runden
+/* SIN */     {sCalc_Sin,        CALC_SIN},     // Sinus
+/* SQRT */    {sCalc_Sqrt,       CALC_SQRT},    // Wurzel
+/* SUB */     {sCalc_Sub,        CALC_MINUS},   // Subtraktion
+/* SUM */     {sCalc_Sum,        CALC_SUM},     // Summe
+/* TAN */     {sCalc_Tan,        CALC_TAN},     // Tangens
+/* XOR */     {sCalc_Xor,        CALC_XOR}      // log. xoder
 };
 
 double __READONLY_DATA nRoundVal[] = {
