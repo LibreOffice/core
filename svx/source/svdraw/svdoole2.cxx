@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,31 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// Predicate determining whether the given OLE is an internal math
+// object
+static bool ImplIsMathObj( const SvInPlaceObjectRef& rObjRef )
+{
+    if( !rObjRef.Is() )
+        return false;
+
+    SvGlobalName aClassName( rObjRef->GetClassName() );
+
+    if( aClassName == SvGlobalName(SO3_SM_CLASSID_30) ||
+        aClassName == SvGlobalName(SO3_SM_CLASSID_40) ||
+        aClassName == SvGlobalName(SO3_SM_CLASSID_50) ||
+        aClassName == SvGlobalName(SO3_SM_CLASSID_60) ||
+        aClassName == SvGlobalName(SO3_SM_CLASSID)      )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 TYPEINIT1(SdrOle2Obj,SdrRectObj);
 
 SdrOle2Obj::SdrOle2Obj(FASTBOOL bFrame_)
@@ -204,6 +229,10 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, FASTBOOL bFrame_)
     }
 
 #endif // !SVX_LIGHT
+
+    // #108759# For math objects, set closed state to transparent
+    if( ImplIsMathObj( *ppObjRef ) )
+        SetClosedObj( false );
 }
 
 // -----------------------------------------------------------------------------
@@ -229,6 +258,10 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
         SetResizeProtect(TRUE);
     }
 #endif // !SVX_LIGHT
+
+    // #108759# For math objects, set closed state to transparent
+    if( ImplIsMathObj( *ppObjRef ) )
+        SetClosedObj( false );
 }
 
 // -----------------------------------------------------------------------------
@@ -255,6 +288,10 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
         SetResizeProtect(TRUE);
     }
 #endif
+
+    // #108759# For math objects, set closed state to transparent
+    if( ImplIsMathObj( *ppObjRef ) )
+        SetClosedObj( false );
 }
 
 // -----------------------------------------------------------------------------
@@ -507,9 +544,21 @@ void SdrOle2Obj::SetObjRef(const SvInPlaceObjectRef& rNewObjRef)
     }
 #endif // !SVX_LIGHT
 
+    // #108759# For math objects, set closed state to transparent
+    if( ImplIsMathObj( *ppObjRef ) )
+        SetClosedObj( false );
+
     Connect();
     SetChanged();
     SendRepaintBroadcast();
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrOle2Obj::SetClosedObj( bool bIsClosed )
+{
+    // #108759# Allow changes to the closed state of OLE objects
+    bClosedObj = bIsClosed;
 }
 
 // -----------------------------------------------------------------------------
@@ -616,10 +665,23 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
                 if( ( ( (*ppObjRef)->GetMiscStatus() & SVOBJ_MISCSTATUS_SPECIALOBJECT ) == 0 ) ||
                     ( ( rInfoRec.nPaintMode & SDRPAINTMODE_HIDEDRAFTGRAF ) == 0 ) )
                 {
+                    // #108759# Temporarily set the current background
+                    // color, since OLEs rely on that during
+                    // auto-colored text rendering
+                    Wallpaper aOldBg( pOut->GetBackground() );
+
+                    if( rInfoRec.pPV && GetPage() )
+                        pOut->SetBackground( rInfoRec.pPV->GetView().CalcBackgroundColor( GetSnapRect(),
+                                                                                          rInfoRec.pPV->GetVisibleLayers(),
+                                                                                          *GetPage() ) );
+
                     pOut->Push( PUSH_CLIPREGION );
                     pOut->IntersectClipRegion( aRect );
                     (*ppObjRef)->DoDraw(pOut,aRect.TopLeft(),aRect.GetSize(),JobSetup());
                     pOut->Pop();
+
+                    // #108759# Restore old background
+                    pOut->SetBackground( aOldBg );
                 }
             }
             else if( ( rInfoRec.nPaintMode & SDRPAINTMODE_HIDEDRAFTGRAF ) == 0 )
@@ -670,7 +732,7 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
             }
         }
         else
-            pGraphic->Draw( pOutDev, aRect.TopLeft() );
+            pGraphic->Draw( pOutDev, aRect.TopLeft(), aRect.GetSize() );
     }
     // #100499# OLE without context and without bitmap, do the same as
     // for empty groups, additionally draw empty OLE bitmap
@@ -740,6 +802,9 @@ void SdrOle2Obj::ImpAssign( const SdrObject& rObj, SdrPage* pNewPage, SdrModel* 
         Disconnect();
 
     SdrRectObj::operator=( rObj );
+
+    // #108867# Manually copying bClosedObj attribute
+    SetClosedObj( rObj.IsClosedObj() );
 
     if( pNewPage )
         pPage = pNewPage;
@@ -1203,6 +1268,10 @@ const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
             {
                 mpImpl->mbLoadingOLEObjectFailed = sal_True;
             }
+
+            // #108759# For math objects, set closed state to transparent
+            if( ImplIsMathObj( *ppObjRef ) )
+                const_cast<SdrOle2Obj*>(this)->SetClosedObj( false );
         }
 
         if ( ppObjRef->Is() )
