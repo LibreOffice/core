@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-03-07 21:33:56 $
+ *  last change: $Author: th $ $Date: 2001-04-06 12:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,16 +484,6 @@ void SalGraphics::SetTextColor( SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
-int CALLBACK SalEnumQueryFontProcExA( const ENUMLOGFONTEXA*,
-                                      const NEWTEXTMETRICEXA*,
-                                      DWORD, LPARAM lParam )
-{
-    *((BOOL*)(void*)lParam) = TRUE;
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 int CALLBACK SalEnumQueryFontProcExW( const ENUMLOGFONTEXW*,
                                       const NEWTEXTMETRICEXW*,
                                       DWORD, LPARAM lParam )
@@ -504,37 +494,69 @@ int CALLBACK SalEnumQueryFontProcExW( const ENUMLOGFONTEXW*,
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplSalIsVerticalFontAvailableW( HDC hDC, const UniString& rName )
+static void ImplSalGetVerticalFontNameW( HDC hDC, UniString& rName )
 {
     if ( !rName.Len() )
-        return FALSE;
+        return;
 
-    LOGFONTW    aLogFont;
-    UINT        nNameLen = rName.Len();
-    if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1-1 )
-        nNameLen = (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1-1;
+    // Vertical fonts starts with a @
+    UniString aTemp = rName;
+    aTemp.Insert( (sal_Unicode)'@', 0 );
 
     // Test, if vertical Font available
-    BOOL bAvailable = FALSE;
+    LOGFONTW aLogFont;
     memset( &aLogFont, 0, sizeof( aLogFont ) );
-    aLogFont.lfFaceName[0] = '@';
-    memcpy( aLogFont.lfFaceName+1, rName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
-    aLogFont.lfFaceName[nNameLen+1] = 0;
+
+    UINT nNameLen = aTemp.Len();
+    if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
+        nNameLen = (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1;
+    memcpy( aLogFont.lfFaceName, aTemp.GetBuffer(), nNameLen*sizeof( wchar_t ) );
+    aLogFont.lfFaceName[nNameLen] = 0;
+
+    BOOL bAvailable = FALSE;
     EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
                          (LPARAM)(void*)&bAvailable, 0 );
-    return bAvailable;
+    if ( bAvailable )
+        rName = aTemp;
 }
 
-/*
-        LOGFONTA aLogFont;
-        memset( &aLogFont, 0, sizeof( aLogFont ) );
-        aLogFont.lfCharSet = DEFAULT_CHARSET;
-        aInfo.mpLogFontA = &aLogFont;
-        EnumFontFamiliesExA( maGraphicsData.mhDC, &aLogFont, (FONTENUMPROCA)SalEnumFontsProcExA,
-                             (LPARAM)(void*)&aInfo, 0 );
-    }
+// -----------------------------------------------------------------------
+
+int CALLBACK SalEnumQueryFontProcExA( const ENUMLOGFONTEXA*,
+                                      const NEWTEXTMETRICEXA*,
+                                      DWORD, LPARAM lParam )
+{
+    *((BOOL*)(void*)lParam) = TRUE;
+    return 0;
 }
-*/
+
+// -----------------------------------------------------------------------
+
+static void ImplSalGetVerticalFontNameA( HDC hDC, ByteString& rName )
+{
+    if ( !rName.Len() )
+        return;
+
+    // Vertical fonts starts with a @
+    ByteString aTemp = rName;
+    aTemp.Insert( '@', 0 );
+
+    // Test, if vertical Font available
+    LOGFONTA aLogFont;
+    memset( &aLogFont, 0, sizeof( aLogFont ) );
+
+    UINT nNameLen = aTemp.Len();
+    if ( nNameLen > sizeof( aLogFont.lfFaceName )-1 )
+        nNameLen = sizeof( aLogFont.lfFaceName )-1;
+    memcpy( aLogFont.lfFaceName, aTemp.GetBuffer(), nNameLen );
+    aLogFont.lfFaceName[nNameLen] = 0;
+
+    BOOL bAvailable = FALSE;
+    EnumFontFamiliesExA( hDC, &aLogFont, (FONTENUMPROCA)SalEnumQueryFontProcExA,
+                         (LPARAM)(void*)&bAvailable, 0 );
+    if ( bAvailable )
+        rName = aTemp;
+}
 
 // -----------------------------------------------------------------------
 
@@ -549,29 +571,15 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
         aName = pFont->maName.GetToken( 0 );
 
     // Test for vertical
-    UINT nOff = 0;
     if ( pFont->mbVertical )
-    {
-        if ( ImplSalIsVerticalFontAvailableW( hDC, aName ) )
-        {
-            nOff = 1;
-            rLogFont.lfFaceName[0] = '@';
-        }
-    }
+        ImplSalGetVerticalFontNameW( hDC, aName );
 
     UINT nNameLen = aName.Len();
-    if ( nNameLen > (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1-nOff )
-        nNameLen = (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1-nOff;
-    memcpy( rLogFont.lfFaceName+nOff, aName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
-    rLogFont.lfFaceName[nNameLen+nOff] = 0;
-/*
-    if ( pFont->mpFontData &&
-         ((pFont->meCharSet == RTL_TEXTENCODING_DONTKNOW) ||
-          ((WIN_BYTE)(pFont->mpFontData->mpSysData) == OEM_CHARSET)) )
-        rLogFont.lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
-    else
-        rLogFont.lfCharSet = ImplCharSetToWin( pFont->meCharSet );
-*/
+    if ( nNameLen > (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
+        nNameLen = (sizeof( rLogFont.lfFaceName )/sizeof( wchar_t ))-1;
+    memcpy( rLogFont.lfFaceName, aName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
+    rLogFont.lfFaceName[nNameLen] = 0;
+
     if ( pFont->mpFontData )
         rLogFont.lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
     else
@@ -634,28 +642,22 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
             aName = ImplSalGetWinAnsiString( pFont->mpFontData->maName );
         else
             aName = ImplSalGetWinAnsiString( pFont->maName.GetToken( 0 ) );
+
+        // Test for vertical
         if ( pFont->mbVertical )
-        {
-            aName.Insert( '@', 0 );
-        }
+            ImplSalGetVerticalFontNameA( maGraphicsData.mhDC, aName );
 
         UINT nNameLen = aName.Len();
         if ( nNameLen > sizeof( maGraphicsData.mpLogFont->lfFaceName )-1 )
             nNameLen = sizeof( maGraphicsData.mpLogFont->lfFaceName )-1;
         memcpy( maGraphicsData.mpLogFont->lfFaceName, aName.GetBuffer(), nNameLen );
         maGraphicsData.mpLogFont->lfFaceName[nNameLen] = 0;
-/*
-        if ( pFont->mpFontData &&
-             ((pFont->meCharSet == RTL_TEXTENCODING_DONTKNOW) ||
-              ((WIN_BYTE)(pFont->mpFontData->mpSysData) == OEM_CHARSET)) )
-            maGraphicsData.mpLogFont->lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
-        else
-            maGraphicsData.mpLogFont->lfCharSet = ImplCharSetToWin( pFont->meCharSet );
-*/
+
         if ( pFont->mpFontData )
             maGraphicsData.mpLogFont->lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
         else
             maGraphicsData.mpLogFont->lfCharSet = ImplCharSetToWin( pFont->meCharSet );
+
         maGraphicsData.mpLogFont->lfPitchAndFamily  = ImplPitchToWin( pFont->mePitch );
         maGraphicsData.mpLogFont->lfPitchAndFamily |= ImplFamilyToWin( pFont->meFamily );
         maGraphicsData.mpLogFont->lfWeight          = ImplWeightToWin( pFont->meWeight );
