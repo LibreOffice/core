@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gconfbackend.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:00:27 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,10 +151,11 @@ GConfClient* GconfBackend::getGconfClient()
 
     if (mClient == NULL)
     {
-        int argc =0;
-        sal_Char ** argv;
+        /* initialize glib object type library */
+        g_type_init();
+
         GError* aError = NULL;
-        if (!gconf_init(argc, argv, &aError))
+        if (!gconf_init(0, NULL, &aError))
         {
             rtl::OUStringBuffer msg;
             msg.appendAscii("GconfBackend:GconfLayer: Cannot Initialize Gconf connection - " );
@@ -163,10 +164,7 @@ GConfClient* GconfBackend::getGconfClient()
             g_error_free(aError);
             aError = NULL;
             throw uno::RuntimeException(msg.makeStringAndClear(),NULL);
-
         }
-
-
 
         mClient = gconf_client_get_default();
         if (!mClient)
