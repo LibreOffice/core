@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-10 11:39:07 $
+ *  last change: $Author: rt $ $Date: 2001-07-25 08:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
 #include <svtools/pathoptions.hxx>
 
 #ifndef _SB_SBMOD_HXX
-#include <basic/sbmod.hxx>
+#include <sbmod.hxx>
 #endif
 
 #include "basmgr.hxx"
