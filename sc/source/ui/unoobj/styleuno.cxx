@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-26 19:12:35 $
+ *  last change: $Author: nn $ $Date: 2001-10-10 13:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,11 @@
 #include <svx/langitem.hxx>
 #include <svx/numitem.hxx>
 #include <svx/pageitem.hxx>
+#include <svx/pbinitem.hxx>
 #include <svx/unomid.hxx>
 #include <svx/unonrule.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/printer.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/itempool.hxx>
 #include <svtools/itemset.hxx>
@@ -284,7 +286,7 @@ const SfxItemPropertyMap* lcl_GetPageStyleMap()
         {MAP_CHAR_LEN(SC_UNO_PAGE_PRINTHEADER), ATTR_PAGE_HEADERS,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_PRINTOBJS),   ATTR_PAGE_OBJECTS,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_PRINTZERO),   ATTR_PAGE_NULLVALS, &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_PAPERTRAY),   ATTR_PAGE_PAPERBIN, &::getCppuType((const sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_PAPERTRAY),   ATTR_PAGE_PAPERBIN, &::getCppuType((const ::rtl::OUString*)0),      0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTBORDER), ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, RIGHT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTBRDDIST),ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTMARGIN), ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_R_MARGIN | CONVERT_TWIPS },
@@ -407,6 +409,10 @@ inline long HMMToTwips(long nHMM)   { return (nHMM * 72 + 63) / 127; }
 
 SC_SIMPLE_SERVICE_INFO( ScStyleFamiliesObj, "ScStyleFamiliesObj", "com.sun.star.style.StyleFamilies" )
 SC_SIMPLE_SERVICE_INFO( ScStyleFamilyObj, "ScStyleFamilyObj", "com.sun.star.style.StyleFamily" )
+
+//------------------------------------------------------------------------
+
+#define SC_PAPERBIN_DEFAULTNAME     "[From printer settings]"
 
 //------------------------------------------------------------------------
 
@@ -1741,6 +1747,39 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                                     bBool ? VOBJ_MODE_SHOW : VOBJ_MODE_HIDE ) );
                             }
                             break;
+                        case ATTR_PAGE_PAPERBIN:
+                            {
+                                BYTE nTray = PAPERBIN_PRINTER_SETTINGS;
+                                BOOL bFound = FALSE;
+
+                                rtl::OUString aName;
+                                if ( *pValue >>= aName )
+                                {
+                                    if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_PAPERBIN_DEFAULTNAME ) ) )
+                                        bFound = TRUE;
+                                    else
+                                    {
+                                        Printer* pPrinter = pDocShell->GetPrinter();
+                                        if (pPrinter)
+                                        {
+                                            String aNameStr = aName;
+                                            USHORT nCount = pPrinter->GetPaperBinCount();
+                                            for (USHORT i=0; i<nCount; i++)
+                                                if ( aNameStr == pPrinter->GetPaperBinName(i) )
+                                                {
+                                                    nTray = (BYTE) i;
+                                                    bFound = TRUE;
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                }
+                                if ( bFound )
+                                    rSet.Put( SvxPaperBinItem( ATTR_PAGE_PAPERBIN, nTray ) );
+                                else
+                                    throw lang::IllegalArgumentException();
+                            }
+                            break;
                         default:
                             //  #65253# Default-Items mit falscher Slot-ID
                             //  funktionieren im SfxItemPropertySet3 nicht
@@ -1856,6 +1895,23 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                 //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
                 aAny <<= sal_Bool( ((const ScViewObjectModeItem&)pItemSet->
                                 Get(nWhich)).GetValue() == VOBJ_MODE_SHOW );
+                break;
+            case ATTR_PAGE_PAPERBIN:
+                {
+                    // property PrinterPaperTray is the name of the tray
+
+                    BYTE nValue = ((const SvxPaperBinItem&)pItemSet->Get(nWhich)).GetValue();
+                    rtl::OUString aName;
+                    if ( nValue == PAPERBIN_PRINTER_SETTINGS )
+                        aName = rtl::OUString::createFromAscii( SC_PAPERBIN_DEFAULTNAME );
+                    else
+                    {
+                        Printer* pPrinter = pDocShell->GetPrinter();
+                        if (pPrinter)
+                            aName = pPrinter->GetPaperBinName( nValue );
+                    }
+                    aAny <<= aName;
+                }
                 break;
             default:
                 //  #65253# Default-Items mit falscher Slot-ID
