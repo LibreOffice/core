@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
+ *  last change: $Author: sab $ $Date: 2001-03-16 13:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1686,7 +1686,7 @@ ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
             const DateTime& aDateTime, const String& sComment,
             ScBaseCell* pTempOldCell, ScDocument* pDoc, const String& sResult )
         :
-        ScChangeAction(SC_CAT_CONTENT, aBigRange, nActionNumber),
+        ScChangeAction(SC_CAT_CONTENT, aBigRange, nActionNumber, nRejectingNumber, eState, aDateTime, aUser, sComment),
         pOldCell(pTempOldCell),
         pNewCell(NULL),
         pNextContent(NULL),
