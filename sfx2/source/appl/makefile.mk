@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: cd $ $Date: 2001-07-18 07:38:18 $
+#   last change: $Author: rt $ $Date: 2001-07-18 08:30:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -153,14 +153,9 @@ EXCEPTIONSFILES=\
 
 .IF "$(GUI)" == "MAC"
 SLOFILES +=\
-        $(SLO)$/appctor.obj		\
         $(SLO)$/appmac.obj
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
-SLOFILES +=\
-        $(SLO)$/appctor.obj
-.ENDIF
 
 # --- Targets -------------------------------------------------------
 
