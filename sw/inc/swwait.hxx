@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swwait.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,13 @@
 #include <tools/solar.h>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SwDocShell;
 
-class SwWait
+class SW_DLLPUBLIC SwWait
 {
     SwDocShell &rDoc;
     BOOL        bLock;
