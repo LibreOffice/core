@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:23:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "tabbar.hxx"
+
 #ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
 #endif
@@ -84,10 +86,6 @@
 #ifndef _VCL_EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
-
-#define _SV_TABBAR_CXX
-#define private public
-#include <tabbar.hxx>
 
 #ifndef _SVTOOLS_ACCESSIBLETABBAR_HXX_
 #include <accessibletabbar.hxx>
@@ -174,19 +172,20 @@ long ImplTabButton::PreNotify( NotifyEvent& rNEvt )
 
 class ImplTabSizer : public Window
 {
-private:
-    Point           maStartPos;
-    long            mnOff;
-
 public:
                     ImplTabSizer( TabBar* pParent, WinBits nWinStyle = 0 );
 
     TabBar*         GetParent() const { return (TabBar*)Window::GetParent(); }
-    void            ImplTrack( const Point& rMousePos );
+
+private:
+    void            ImplTrack( const Point& rScreenPos );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    Tracking( const TrackingEvent& rTEvt );
     virtual void    Paint( const Rectangle& rRect );
+
+    Point           maStartPos;
+    long            mnStartWidth;
 };
 
 // -----------------------------------------------------------------------
@@ -200,14 +199,11 @@ ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-void ImplTabSizer::ImplTrack( const Point& rMousePos )
+void ImplTabSizer::ImplTrack( const Point& rScreenPos )
 {
     TabBar* pParent = GetParent();
-    Point   aWinPos = pParent->GetPosPixel();
-    Size    aWinSize = GetSizePixel();
-
-    aWinPos = pParent->GetParent()->OutputToScreenPixel( aWinPos );
-    pParent->mnSplitSize = rMousePos.X() - aWinPos.X() + (aWinSize.Width()-mnOff);
+    long nDiff = rScreenPos.X() - maStartPos.X();
+    pParent->mnSplitSize = mnStartWidth + (pParent->IsMirrored() ? -nDiff : nDiff);
     if ( pParent->mnSplitSize < TABBAR_MINSIZE )
         pParent->mnSplitSize = TABBAR_MINSIZE;
     pParent->Split();
@@ -226,9 +222,8 @@ void ImplTabSizer::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeft() )
     {
-        Point aMousePos = rMEvt.GetPosPixel();
-        maStartPos = OutputToScreenPixel( aMousePos );
-        mnOff = aMousePos.X();
+        maStartPos = OutputToScreenPixel( rMEvt.GetPosPixel() );
+        mnStartWidth = GetParent()->GetSizePixel().Width();
         StartTracking();
     }
 }
@@ -402,7 +397,7 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mnCurMaxWidth   = 0;
     mnOffX          = 0;
     mnOffY          = 0;
-    mnOutWidth      = 0;
+    mnLastOffX      = 0;
     mnSplitSize     = 0;
     mnSwitchTime    = 0;
     mnWinStyle      = nWinStyle;
@@ -422,6 +417,7 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mbInSelect      = FALSE;
     mbSelColor      = FALSE;
     mbSelTextColor  = FALSE;
+    mbMirrored      = FALSE;
 
     if ( nWinStyle & WB_3DTAB )
         mnOffY++;
@@ -564,7 +560,7 @@ BOOL TabBar::ImplCalcWidth()
         mnCurMaxWidth = mnMaxPageWidth;
     else if ( mbAutoMaxWidth )
     {
-        mnCurMaxWidth = mnOutWidth-mnOffX-
+        mnCurMaxWidth = mnLastOffX-mnOffX-
                         TABBAR_OFFSET_X-TABBAR_OFFSET_X-
                         TABBAR_OFFSET_X2-TABBAR_OFFSET_X2-TABBAR_OFFSET_X2;
         if ( mnCurMaxWidth < 1 )
@@ -615,7 +611,7 @@ void TabBar::ImplFormat()
     {
         // Bei allen nicht sichtbaren Tabs, wird ein leeres Rechteck
         // gesetzt
-        if ( (n+1 < mnFirstPos) || (x > mnOutWidth) )
+        if ( (n+1 < mnFirstPos) || (x > mnLastOffX) )
             pItem->maRect.SetEmpty();
         else
         {
@@ -630,6 +626,13 @@ void TabBar::ImplFormat()
             }
             pItem->maRect.Right() = x+TABBAR_OFFSET_X+TABBAR_OFFSET_X2;
             pItem->maRect.Bottom() = maWinSize.Height()-1;
+
+            if( mbMirrored )
+            {
+                long nTmp = mnOffX + mnLastOffX - pItem->maRect.Right();
+                pItem->maRect.Right() = mnOffX + mnLastOffX - pItem->maRect.Left();
+                pItem->maRect.Left() = nTmp;
+            }
         }
 
         n++;
@@ -651,7 +654,7 @@ USHORT TabBar::ImplGetLastFirstPos()
         return 0;
 
     USHORT  nLastFirstPos = nCount-1;
-    long    nWinWidth = mnOutWidth-mnOffX-TABBAR_OFFSET_X-ADDNEWPAGE_AREAWIDTH;
+    long    nWinWidth = mnLastOffX-mnOffX-TABBAR_OFFSET_X-ADDNEWPAGE_AREAWIDTH;
     long    nWidth = mpItemList->GetObject( nLastFirstPos )->mnWidth;
     while ( nLastFirstPos && (nWidth < nWinWidth) )
     {
@@ -676,11 +679,7 @@ void TabBar::ImplInitControls()
     }
     else
     {
-        if ( mpSizer )
-        {
-            delete mpSizer;
-            mpSizer = NULL;
-        }
+        DELETEZ( mpSizer );
     }
 
     Link aLink = LINK( this, TabBar, ImplClickHdl );
@@ -690,31 +689,23 @@ void TabBar::ImplInitControls()
         if ( !mpPrevBtn )
         {
             mpPrevBtn = new ImplTabButton( this, WB_REPEAT );
-            mpPrevBtn->SetSymbol( SYMBOL_PREV );
             mpPrevBtn->SetClickHdl( aLink );
         }
+        mpPrevBtn->SetSymbol( mbMirrored ? SYMBOL_NEXT : SYMBOL_PREV );
         mpPrevBtn->Show();
 
         if ( !mpNextBtn )
         {
             mpNextBtn = new ImplTabButton( this, WB_REPEAT );
-            mpNextBtn->SetSymbol( SYMBOL_NEXT );
             mpNextBtn->SetClickHdl( aLink );
         }
+        mpNextBtn->SetSymbol( mbMirrored ? SYMBOL_PREV : SYMBOL_NEXT );
         mpNextBtn->Show();
     }
     else
     {
-        if ( mpPrevBtn )
-        {
-            delete mpPrevBtn;
-            mpPrevBtn = NULL;
-        }
-        if ( mpNextBtn )
-        {
-            delete mpNextBtn;
-            mpNextBtn = NULL;
-        }
+        DELETEZ( mpPrevBtn );
+        DELETEZ( mpNextBtn );
     }
 
     if ( mnWinStyle & WB_SCROLL )
@@ -722,31 +713,23 @@ void TabBar::ImplInitControls()
         if ( !mpFirstBtn )
         {
             mpFirstBtn = new ImplTabButton( this );
-            mpFirstBtn->SetSymbol( SYMBOL_FIRST );
             mpFirstBtn->SetClickHdl( aLink );
         }
+        mpFirstBtn->SetSymbol( mbMirrored ? SYMBOL_LAST : SYMBOL_FIRST );
         mpFirstBtn->Show();
 
         if ( !mpLastBtn )
         {
             mpLastBtn = new ImplTabButton( this );
-            mpLastBtn->SetSymbol( SYMBOL_LAST );
             mpLastBtn->SetClickHdl( aLink );
         }
+        mpLastBtn->SetSymbol( mbMirrored ? SYMBOL_FIRST : SYMBOL_LAST );
         mpLastBtn->Show();
     }
     else
     {
-        if ( mpFirstBtn )
-        {
-            delete mpFirstBtn;
-            mpFirstBtn = NULL;
-        }
-        if ( mpLastBtn )
-        {
-            delete mpLastBtn;
-            mpLastBtn = NULL;
-        }
+        DELETEZ( mpFirstBtn );
+        DELETEZ( mpLastBtn );
     }
 }
 
@@ -1270,52 +1253,66 @@ void TabBar::Resize()
 {
     Size aNewSize = GetOutputSizePixel();
 
+    long nSizerWidth = 0;
+    long nButtonWidth = 0;
+
     // Sizer anordnen
     if ( mpSizer )
     {
         Size    aSizerSize = mpSizer->GetSizePixel();
-        Point   aNewSizerPos( aNewSize.Width()-aSizerSize.Width(), 0 );
+        Point   aNewSizerPos( mbMirrored ? 0 : (aNewSize.Width()-aSizerSize.Width()), 0 );
         Size    aNewSizerSize( aSizerSize.Width(), aNewSize.Height() );
         mpSizer->SetPosSizePixel( aNewSizerPos, aNewSizerSize );
-        mnOutWidth = aNewSize.Width() - aSizerSize.Width() - 1;
+        nSizerWidth = aSizerSize.Width();
     }
-    else
-        mnOutWidth = aNewSize.Width()-1;
 
     // Scroll-Buttons anordnen
     long nHeight = aNewSize.Height();
-    if ( nHeight != maWinSize.Height() )
-    {
-        // Font in der groesse Anpassen?
-        ImplInitSettings( TRUE, FALSE );
+    // Font in der groesse Anpassen?
+    ImplInitSettings( TRUE, FALSE );
 
-        long nX = 0;
-        Size aBtnSize( nHeight, nHeight );
-        if ( mpFirstBtn )
-        {
-            mpFirstBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
-            nX += nHeight;
-        }
-        if ( mpPrevBtn )
-        {
-            mpPrevBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
-            nX += nHeight;
-        }
-        if ( mpNextBtn )
-        {
-            mpNextBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
-            nX += nHeight;
-        }
-        if ( mpLastBtn )
-        {
-            mpLastBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
-            nX += nHeight;
-        }
-        mnOffX = nX;
+    long nX = mbMirrored ? (aNewSize.Width()-nHeight) : 0;
+    long nXDiff = mbMirrored ? -nHeight : nHeight;
+
+    Size aBtnSize( nHeight, nHeight );
+    if ( mpFirstBtn )
+    {
+        mpFirstBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
+        nX += nXDiff;
+        nButtonWidth += nHeight;
+    }
+    if ( mpPrevBtn )
+    {
+        mpPrevBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
+        nX += nXDiff;
+        nButtonWidth += nHeight;
+    }
+    if ( mpNextBtn )
+    {
+        mpNextBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
+        nX += nXDiff;
+        nButtonWidth += nHeight;
+    }
+    if ( mpLastBtn )
+    {
+        mpLastBtn->SetPosSizePixel( Point( nX, 0 ), aBtnSize );
+        nX += nXDiff;
+        nButtonWidth += nHeight;
     }
 
     // Groesse merken
     maWinSize = aNewSize;
+
+    if( mbMirrored )
+    {
+        mnOffX = nSizerWidth;
+        mnLastOffX = maWinSize.Width() - nButtonWidth - 1;
+    }
+    else
+    {
+        mnOffX = nButtonWidth;
+        mnLastOffX = maWinSize.Width() - nSizerWidth - 1;
+    }
 
     // Neu formatieren
     mbSizeFormat = TRUE;
@@ -1373,7 +1370,7 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
             USHORT nPos = GetPagePos( nItemId );
             ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
             if ( pItem->mbShort ||
-                (pItem->maRect.Right()-TABBAR_OFFSET_X-5 > mnOutWidth) )
+                (pItem->maRect.Right()-TABBAR_OFFSET_X-5 > mnLastOffX) )
             {
                 Rectangle aItemRect = GetPageRect( nItemId );
                 Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
@@ -1532,6 +1529,13 @@ long TabBar::AllowRenaming()
 void TabBar::EndRenaming()
 {
     maEndRenamingHdl.Call( this );
+}
+
+// -----------------------------------------------------------------------
+
+void TabBar::Mirror()
+{
+
 }
 
 // -----------------------------------------------------------------------
@@ -1821,7 +1825,7 @@ void TabBar::SetCurPageId( USHORT nPageId )
             else
             {
                 // sichtbare Breite berechnen
-                long nWidth = mnOutWidth;
+                long nWidth = mnLastOffX;
                 if ( nWidth > TABBAR_OFFSET_X )
                     nWidth -= TABBAR_OFFSET_X;
                 if ( nWidth > ADDNEWPAGE_AREAWIDTH )
@@ -1830,7 +1834,7 @@ void TabBar::SetCurPageId( USHORT nPageId )
                 if ( pItem->maRect.IsEmpty() )
                     ImplFormat();
 
-                while ( (pItem->maRect.Right() > nWidth) ||
+                while ( (mbMirrored ? (pItem->maRect.Left() < mnOffX) : (pItem->maRect.Right() > nWidth)) ||
                         pItem->maRect.IsEmpty() )
                 {
                     USHORT nNewPos = mnFirstPos+1;
@@ -1881,7 +1885,7 @@ void TabBar::MakeVisible( USHORT nPageId )
             ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
 
             // sichtbare Breite berechnen
-            long nWidth = mnOutWidth;
+            long nWidth = mnLastOffX;
             if ( nWidth > TABBAR_OFFSET_X )
                 nWidth -= TABBAR_OFFSET_X;
 
@@ -2047,7 +2051,7 @@ BOOL TabBar::IsPageSelected( USHORT nPageId ) const
 BOOL TabBar::StartEditMode( USHORT nPageId )
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( mpEdit || (nPos == TAB_PAGE_NOTFOUND) || (mnOutWidth < 8) )
+    if ( mpEdit || (nPos == TAB_PAGE_NOTFOUND) || (mnLastOffX < 8) )
         return FALSE;
 
     mnEditId = nPageId;
@@ -2063,8 +2067,8 @@ BOOL TabBar::StartEditMode( USHORT nPageId )
         long nWidth = aRect.GetWidth()-(TABBAR_OFFSET_X*2)-TABBAR_OFFSET_X2;
         if ( mnEditId != GetCurPageId() )
             nX += 1;
-        if ( nX+nWidth > mnOutWidth )
-            nWidth = mnOutWidth-nX;
+        if ( nX+nWidth > mnLastOffX )
+            nWidth = mnLastOffX-nX;
         if ( nWidth < 3 )
         {
             nX = aRect.Left();
@@ -2149,6 +2153,21 @@ void TabBar::EndEditMode( BOOL bCancel )
         // reset
         maEditText.Erase();
         mbEditCanceled = FALSE;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void TabBar::SetMirrored( BOOL bMirrored )
+{
+    if( mbMirrored != bMirrored )
+    {
+        mbMirrored = bMirrored;
+        mbSizeFormat = TRUE;
+        ImplInitControls();     // for button images
+        if( IsReallyVisible() && IsUpdateMode() )
+            Resize();           // recalculates control positions
+        Mirror();
     }
 }
 
@@ -2411,7 +2430,7 @@ USHORT TabBar::ShowDropPos( const Point& rPos )
     USHORT      nItemCount = (USHORT)mpItemList->Count();
     short       nScroll = 0;
 
-    if ( rPos.X() > mnOutWidth-TABBAR_DRAG_SCROLLOFF )
+    if ( rPos.X() > mnLastOffX-TABBAR_DRAG_SCROLLOFF )
     {
         pItem = mpItemList->GetObject( mpItemList->Count()-1 );
         if ( !pItem->maRect.IsEmpty() && (rPos.X() > pItem->maRect.Right()) )
@@ -2462,7 +2481,7 @@ USHORT TabBar::ShowDropPos( const Point& rPos )
         // Direkt ausgeben, da kein Paint bei Drag and Drop moeglich
         if ( nOldFirstPos != mnFirstPos )
         {
-            Rectangle aRect( mnOffX, 0, mnOutWidth, maWinSize.Height() );
+            Rectangle aRect( mnOffX, 0, mnLastOffX, maWinSize.Height() );
             SetFillColor( GetBackground().GetColor() );
             DrawRect( aRect );
             Paint( aRect );
@@ -2627,7 +2646,7 @@ Size TabBar::CalcWindowSizePixel() const
 
 Rectangle TabBar::GetPageArea() const
 {
-    return Rectangle( Point( mnOffX, mnOffY ), Size( mnOutWidth-mnOffX+1, GetSizePixel().Height()-mnOffY ) );
+    return Rectangle( Point( mnOffX, mnOffY ), Size( mnLastOffX-mnOffX+1, GetSizePixel().Height()-mnOffY ) );
 }
 
 // -----------------------------------------------------------------------
