@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleauthenticationrequest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 12:42:46 $
+ *  last change: $Author: sb $ $Date: 2001-07-13 12:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,3 +124,62 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
     setContinuations( aContinuations );
 }
 
+//=========================================================================
+SimpleAuthenticationRequest::SimpleAuthenticationRequest(
+                                      const rtl::OUString & rServerName,
+                                      EntityType eRealmType,
+                                      const rtl::OUString & rRealm,
+                                      EntityType eUserNameType,
+                                      const rtl::OUString & rUserName,
+                                      EntityType ePasswordType,
+                                      const rtl::OUString & rPassword,
+                                      EntityType eAccountType,
+                                      const rtl::OUString & rAccount )
+{
+    // Fill request...
+    ucb::AuthenticationRequest aRequest;
+//    aRequest.Message        = // OUString
+//    aRequest.Context        = // XInterface
+    aRequest.Classification = task::InteractionClassification_ERROR;
+    aRequest.ServerName     = rServerName;
+//    aRequest.Diagnostic     = // OUString
+    aRequest.HasRealm       = eRealmType != ENTITY_NA;
+    if ( aRequest.HasRealm )
+        aRequest.Realm = rRealm;
+    aRequest.HasUserName    = eUserNameType != ENTITY_NA;
+    if ( aRequest.HasUserName )
+        aRequest.UserName = rUserName;
+    aRequest.HasPassword    = ePasswordType != ENTITY_NA;
+    if ( aRequest.HasPassword )
+        aRequest.Password = rPassword;
+    aRequest.HasAccount     = eAccountType != ENTITY_NA;
+    if ( aRequest.HasAccount )
+        aRequest.Account = rAccount;
+
+    setRequest( uno::makeAny( aRequest ) );
+
+    // Fill continuations...
+    uno::Sequence< ucb::RememberAuthentication > aRememberModes( 1 );
+    aRememberModes[ 0 ] = ucb::RememberAuthentication_NO;
+
+    m_xAuthSupplier
+        = new InteractionSupplyAuthentication(
+                this,
+                eRealmType == ENTITY_MODIFY, // bCanSetRealm
+                eUserNameType == ENTITY_MODIFY,  // bCanSetUserName
+                ePasswordType == ENTITY_MODIFY,  // bCanSetPassword
+                eAccountType == ENTITY_MODIFY, // bCanSetAccount
+                aRememberModes, // rRememberPasswordModes
+                ucb::RememberAuthentication_NO, // eDefaultRememberPasswordMode
+                aRememberModes, // rRememberAccountModes
+                ucb::RememberAuthentication_NO // eDefaultRememberAccountMode
+            );
+
+    uno::Sequence<
+        uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
+    aContinuations[ 0 ] = new InteractionAbort( this );
+    aContinuations[ 1 ] = new InteractionRetry( this );
+    aContinuations[ 2 ] = m_xAuthSupplier.get();
+
+    setContinuations( aContinuations );
+}

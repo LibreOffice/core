@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleauthenticationrequest.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 12:42:26 $
+ *  last change: $Author: sb $ $Date: 2001-07-13 12:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,16 @@ class SimpleAuthenticationRequest : public ucbhelper::InteractionRequest
         ucbhelper::InteractionSupplyAuthentication > m_xAuthSupplier;
 
 public:
+    /** Specification whether some entity (realm, username, password, account)
+        is either not applicable at all, has a fixed value, or is modifiable.
+     */
+    enum EntityType
+    {
+        ENTITY_NA,
+        ENTITY_FIXED,
+        ENTITY_MODIFY
+    };
+
     /**
       * Constructor.
       *
@@ -113,6 +123,37 @@ public:
                                  const rtl::OUString & rPassword,
                                  const rtl::OUString & rAccount
                                     = rtl::OUString() );
+
+    /**
+      * Constructor.
+      *
+      * @param rServerName contains a server name.
+      * @param eRealmType specifies whether a realm is applicable and
+               modifiable.
+      * @param rRealm contains a realm, if applicable.
+      * @param eUserNameType specifies whether a username is applicable and
+               modifiable.
+      * @param rUserName contains a username, if available (for instance from
+      *        a previous try).
+      * @param ePasswordType specifies whether a password is applicable and
+               modifiable.
+      * @param rPassword contains a password, if available (for instance from
+      *        a previous try).
+      * @param eAccountType specifies whether an account is applicable and
+               modifiable.
+      * @param rAccount contains an account, if applicable.
+      */
+    SimpleAuthenticationRequest( const rtl::OUString & rServerName,
+                                 EntityType eRealmType,
+                                 const rtl::OUString & rRealm,
+                                 EntityType eUserNameType,
+                                 const rtl::OUString & rUserName,
+                                 EntityType ePasswordType,
+                                 const rtl::OUString & rPassword,
+                                 EntityType eAccountType = ENTITY_NA,
+                                 const rtl::OUString & rAccount
+                                    = rtl::OUString() );
+
     /**
       * This method returns the supplier for the missing authentication data,
       * that, for instance can be used to query the password supplied by the
