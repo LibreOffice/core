@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:23:49 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #include <unistd.h>
 #endif
 
+#ifndef _VOS_PROCESS_HXX_
+#include <vos/process.hxx>
+#endif
 #ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
 #endif
@@ -443,10 +446,9 @@ void SalData::Init( int *pArgc, char *ppArgv[] )
 
     aBinaryPath_ = aPath;
 
-    pXLib_->Init( pArgc, ppArgv );
-
     argc_           = *pArgc;
     argv_           = ppArgv;
+    pXLib_->Init( pArgc, ppArgv );
 }
 
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -514,47 +516,77 @@ SalXLib::~SalXLib()
 }
 
 
-static char sDISPLAY___[30];
 void SalXLib::Init( int *pArgc, char *ppArgv[] )
 {
     SalData *pSalData = GetSalData();
     SalI18N_InputMethod* pInputMethod = new SalI18N_InputMethod;
-
     pInputMethod->SetLocale();
-
     XrmInitialize();
-    Display *pDisp = XOpenDisplay( NULL );
 
-    if( !pDisp )
+    /*
+     * open connection to X11 Display
+     * try in this order:
+     *  o  -display command line parameter,
+     *  o  $DISPLAY environment variable
+     *  o  defualt display
+     */
+
+    Display *pDisp = NULL;
+
+    // is there a -display command line parameter?
+    vos::OExtCommandLine aCommandLine;
+    sal_uInt32 nParams = aCommandLine.getCommandArgCount();
+    rtl::OUString aParam;
+    rtl::OString aDisplay;
+    for (USHORT i=0; i<nParams; i++)
     {
-        char *pDisplayString = getenv ("DISPLAY");
+        aCommandLine.getCommandArg(i, aParam);
+        if (aParam.equalsAscii("-display"))
+        {
+            aCommandLine.getCommandArg(i+1, aParam);
+            aDisplay = rtl::OUStringToOString(
+                   aParam, osl_getThreadTextEncoding());
+            if ((pDisp = XOpenDisplay(aDisplay.getStr()))!=NULL)
+            {
+                /*
+                 * if a -display switch was used, we need
+                 * to set the environment accoringly since
+                 * the clipboard build another connection
+                 * to the xserver using $DISPLAY
+                 */
+                const char envpre[] = "DISPLAY=";
+                char *envstr = new char[sizeof(envpre)+aDisplay.getLength()];
+                sprintf(envstr, "DISPLAY=%s", aDisplay.getStr());
+                putenv(envstr);
+            }
+            break;
+        }
+    }
 
+    if (!pDisp && !aDisplay.getLength())
+    {
+        // Open $DISPLAY or default...
+        char *pDisplay = getenv("DISPLAY");
+        if (pDisplay != NULL)
+            aDisplay = rtl::OString(pDisplay);
+        pDisp  = XOpenDisplay(pDisplay);
+    }
+
+    if ( !pDisp )
+    {
         rtl::OUString aProgramFileURL = pSalData->GetCommandLineParam(0);
         rtl::OUString aProgramSystemPath;
         osl_getSystemPathFromFileURL (aProgramFileURL.pData, &aProgramSystemPath.pData);
         rtl::OString  aProgramName = rtl::OUStringToOString(
                                             aProgramSystemPath,
                                             osl_getThreadTextEncoding() );
-
-        if( pDisplayString )
-        {
-            fprintf( stderr, "%s:\n   cannot open display \"%s\"\n",
-                     aProgramName.getStr(),
-                     pDisplayString );
-            fprintf( stderr, "   Please check your \"DISPLAY\" environment variable\n   as well as the permissions to access that display.\n");
-        }
-        else
-        {
-            fprintf( stderr,
-                     "%s:\n   cannot open display; DISPLAY environment variable is not set\n"
-                     "   please set it to the correct value and check\n"
-                     "   the permission to access that display.\n",
-                     aProgramName.getStr()
-                     );
-        }
+        fprintf( stderr, "%s X11 error: Can't open display: %s\n",
+                aProgramName.getStr(), aDisplay.getStr());
+        fprintf( stderr, "   Set DISPLAY environment variable, use -display option\n");
+        fprintf( stderr, "   or check permissions of your X-Server\n");
         fprintf( stderr, "   (See \"man X\" resp. \"man xhost\" for details)\n");
-        fflush ( stderr );
-        exit (0);
+        fflush( stderr );
+        exit(0);
     }
 
     XVisualInfo aVI;
