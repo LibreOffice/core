@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-27 08:32:57 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 08:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,24 @@ TabDialog TAB_CHAR
                 PageResID = RID_SVXPAGE_CHAR_POSITION ;
                 Text = "Position" ;
                 Text [ ENGLISH ] = "Position" ;
+                Text[ english_us ] = "Position";
+                Text[ portuguese ] = "Position";
+                Text[ russian ] = "Position";
+                Text[ greek ] = "ÈÝóç";
+                Text[ dutch ] = "Position";
+                Text[ french ] = "Position";
+                Text[ spanish ] = "Posición";
+                Text[ italian ] = "Position";
+                Text[ danish ] = "Position";
+                Text[ swedish ] = "Position";
+                Text[ polish ] = "Pozycja";
+                Text[ portuguese_brazilian ] = "Position";
+                Text[ japanese ] = "ˆÊ’u";
+                Text[ korean ] = "À§Ä¡";
+                Text[ chinese_simplified ] = "Position";
+                Text[ chinese_traditional ] = "Position";
+                Text[ turkish ] = "Position";
+                Text[ arabic ] = "Position";
             };
         };
     };
