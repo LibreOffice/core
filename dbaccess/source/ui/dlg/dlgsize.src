@@ -1,0 +1,306 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgsize.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:33:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ //---------------------------------------------------------------------------
+ //
+ // (c) Copyright 1996 - 2000 by Star Division GmbH, Hamburg, Germany
+ //
+ // Ersterstellung:
+ // JN
+ //
+ // Letzte Aenderung:
+ // $Author: oj $ $Date: 2000-12-12 12:33:33 $ $Revision: 1.1 $
+ //
+ //---------------------------------------------------------------------------
+
+#ifndef DBAUI_DLGSIZE_HRC
+#include "dlgsize.hrc"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+ModalDialog DLG_ROWHEIGHT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_DLG_ROWHEIGHT ;
+    Size = MAP_APPFONT ( 159 , 59 ) ;
+    Text = "Zeilenhˆhe" ;
+    Text [ ENGLISH ] = "Row height" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    FixedText FT_VALUE
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 23 , 10 ) ;
+        Text = "H~ˆhe" ;
+        Text [ ENGLISH ] = "Height" ;
+        Text [ english_us ] = "Height" ;
+        Text [ italian ] = "Alte~zza" ;
+        Text [ spanish ] = "~Altura" ;
+        Text [ french ] = "Hauteur" ;
+        Text [ dutch ] = "H~oogte" ;
+        Text [ swedish ] = "Hˆjd" ;
+        Text [ danish ] = "H¯jde" ;
+        Text [ portuguese_brazilian ] = "Hˆhe" ;
+        Text [ portuguese ] = "~Altura" ;
+        Text[ chinese_simplified ] = "∏ﬂ∂»";
+        Text[ russian ] = "¬˚ÒÓÚ‡";
+        Text[ polish ] = "WysokoúÊ";
+        Text[ japanese ] = "çÇÇ≥";
+        Text[ chinese_traditional ] = "∞™´◊";
+        Text[ arabic ] = "«·«— ›«⁄";
+        Text[ greek ] = "æ¯ÔÚ";
+        Text[ korean ] = "≥Ù¿Ã";
+        Text[ turkish ] = "Y¸kseklik";
+    };
+    MetricField MF_VALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 36 , 6 ) ;
+        Size = MAP_APPFONT ( 63 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        Maximum = 1600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+    };
+    CheckBox CB_STANDARD
+    {
+        Pos = MAP_APPFONT ( 36 , 25 ) ;
+        Size = MAP_APPFONT ( 62 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Automatisch" ;
+        Text [ ENGLISH ] = "~automatically" ;
+        Text[ english_us ] = "~Automatic";
+        Text[ portuguese ] = "~Autom·tico";
+        Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
+        Text[ greek ] = "¡ıÙ¸Ï·Ù·";
+        Text[ dutch ] = "~Automatisch";
+        Text[ french ] = "~Automatique";
+        Text[ spanish ] = "~Autom·tico";
+        Text[ italian ] = "~Automatico";
+        Text[ danish ] = "Automatisk";
+        Text[ swedish ] = "~Automatiskt";
+        Text[ polish ] = "Automatycznie";
+        Text[ portuguese_brazilian ] = "~Standardwert";
+        Text[ japanese ] = "é©ìÆ(~A)";
+        Text[ korean ] = "¿⁄µø¿∏∑Œ(~A)";
+        Text[ chinese_simplified ] = "◊‘∂Ø(~A)";
+        Text[ chinese_traditional ] = "¶€∞ (~A)";
+        Text[ arabic ] = " ·ﬁ«∆Ì";
+        Text[ turkish ] = "Otomatik";
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 105 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 105 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 105 , 42 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ english_us ] = "Row Height" ;
+    Text [ italian ] = "Altezza riga" ;
+    Text [ spanish ] = "Altura de fila" ;
+    Text [ french ] = "Hauteur de ligne" ;
+    Text [ dutch ] = "Regelhoogte" ;
+    Text [ swedish ] = "Radhˆjd" ;
+    Text [ danish ] = "RÊkkeh¯jde" ;
+    Text [ portuguese ] = "Altura da linha" ;
+    Text [ portuguese_brazilian ] = "Zeilenhˆhe" ;
+    Text[ chinese_simplified ] = "––∏ﬂ";
+    Text[ russian ] = "¬˚ÒÓÚ‡ ÒÚÓÍ";
+    Text[ polish ] = "WysokoúÊ wierszy";
+    Text[ japanese ] = "çsÇÃçÇÇ≥";
+    Text[ chinese_traditional ] = "ƒÊ∞™";
+    Text[ arabic ] = "«— ›«⁄ «·’›";
+    Text[ greek ] = "æ¯ÔÚ „Ò·ÏÏﬁÚ";
+    Text[ korean ] = "«‡ ≥Ù¿Ã";
+    Text[ turkish ] = "Sat˝r y¸kseklii";
+};
+ModalDialog DLG_COLWIDTH
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_DLG_COLWIDTH ;
+    Size = MAP_APPFONT ( 159 , 59 ) ;
+    Text = "Spaltenbreite" ;
+    Text [ ENGLISH ] = "Column width" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    FixedText FT_VALUE
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 23 , 10 ) ;
+        Text = "~Breite" ;
+        Text [ ENGLISH ] = "Width" ;
+        Text [ english_us ] = "Width" ;
+        Text [ italian ] = "~Larghezza" ;
+        Text [ spanish ] = "An~cho" ;
+        Text [ french ] = "Largeur" ;
+        Text [ dutch ] = "~Breedte" ;
+        Text [ swedish ] = "Bredd" ;
+        Text [ danish ] = "Bredde" ;
+        Text [ portuguese_brazilian ] = "Breite" ;
+        Text [ portuguese ] = "~Largura" ;
+        Text[ chinese_simplified ] = "øÌ∂»";
+        Text[ russian ] = "ÿËËÌ‡";
+        Text[ polish ] = "SzerokoúÊ";
+        Text[ japanese ] = "ïù";
+        Text[ chinese_traditional ] = "ºe´◊";
+        Text[ arabic ] = "«·⁄—÷";
+        Text[ greek ] = "–Î‹ÙÔÚ";
+        Text[ korean ] = "≥ ∫Ò";
+        Text[ turkish ] = "Geni˛lik";
+    };
+    MetricField MF_VALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 36 , 6 ) ;
+        Size = MAP_APPFONT ( 63 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        Maximum = 20000 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+    };
+    CheckBox CB_STANDARD
+    {
+        Pos = MAP_APPFONT ( 36 , 25 ) ;
+        Size = MAP_APPFONT ( 62 , 12 ) ;
+        Text = "~Automatisch" ;
+        Text [ ENGLISH ] = "~automatically" ;
+        TabStop = TRUE ;
+        Text[ english_us ] = "~Automatic";
+        Text[ portuguese ] = "~Autom·tico";
+        Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
+        Text[ greek ] = "¡ıÙ¸Ï·Ù·";
+        Text[ dutch ] = "~Automatisch";
+        Text[ french ] = "~Automatique";
+        Text[ spanish ] = "~Autom·tico";
+        Text[ italian ] = "~Automatico";
+        Text[ danish ] = "Automatisk";
+        Text[ swedish ] = "~Automatiskt";
+        Text[ polish ] = "Automatycznie";
+        Text[ portuguese_brazilian ] = "~Standardwert";
+        Text[ japanese ] = "é©ìÆ(~A)";
+        Text[ korean ] = "¿⁄µø¿∏∑Œ(~A)";
+        Text[ chinese_simplified ] = "◊‘∂Ø(~A)";
+        Text[ chinese_traditional ] = "¶€∞ (~A)";
+        Text[ arabic ] = " ·ﬁ«∆Ì";
+        Text[ turkish ] = "Otomatik";
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 105 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 105 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 105 , 42 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ english_us ] = "Column Width" ;
+    Text [ italian ] = "Larghezza colonna" ;
+    Text [ spanish ] = "Ancho de columna" ;
+    Text [ french ] = "Largeur de colonne" ;
+    Text [ dutch ] = "Kolombreedte" ;
+    Text [ swedish ] = "Kolumnbredd" ;
+    Text [ danish ] = "Kolonnebredde" ;
+    Text [ portuguese_brazilian ] = "Spaltenbreite" ;
+    Text [ portuguese ] = "Largura das colunas" ;
+    Text[ chinese_simplified ] = "¡–øÌ";
+    Text[ russian ] = "ÿËËÌ‡ ÍÓÎÓÌÓÍ";
+    Text[ polish ] = "SzeokoúÊ kolumn";
+    Text[ japanese ] = "óÒïù";
+    Text[ chinese_traditional ] = "ƒÊºe";
+    Text[ arabic ] = "⁄—÷ «·√⁄„œ…";
+    Text[ greek ] = "–Î‹ÙÔÚ ÛÙﬁÎÁÚ";
+    Text[ korean ] = "ø≠ ≥ ∫Ò";
+    Text[ turkish ] = "S¸tun geni˛lii";
+};

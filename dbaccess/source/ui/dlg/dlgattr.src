@@ -1,0 +1,249 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgattr.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:33:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SVX_DIALOGS_HRC
+#include <svx/dialogs.hrc>
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef DBAUI_SBATTRDLG_HRC
+#include "dlgattr.hrc"
+#endif
+ //================================================
+ // Der Attributdialog:
+TabDialog DLG_ATTR
+{
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Feldformatierung" ;
+    Text [ ENGLISH ] = "Column Format" ;
+    Text [ norwegian ] = "Column Format" ;
+    Text [ italian ] = "Formattazione di campo" ;
+    Text [ portuguese_brazilian ] = "Formato da Coluna" ;
+    Text [ portuguese ] = "Formato do campo" ;
+    Text [ finnish ] = "Sarakkeen muoto" ;
+    Text [ danish ] = "Feltformatering" ;
+    Text [ french ] = "Formatage de champ" ;
+    Text [ swedish ] = "F‰ltformatering" ;
+    Text [ dutch ] = "Veldopmaak" ;
+    Text [ spanish ] = "Formato de campo" ;
+    Text [ english_us ] = "Field Format" ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+    };
+    OKButton 1
+    {
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE;
+    };
+    CancelButton 1
+    {
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton 1
+    {
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton 1
+    {
+        TabStop = TRUE ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Text = "~ZurÅck" ;
+        Text [ ENGLISH ] = "Undo" ;
+        Text [ norwegian ] = "Undo" ;
+        Text [ italian ] = "Indietro" ;
+        Text [ portuguese_brazilian ] = "Desfazer" ;
+        Text [ portuguese ] = "~Anterior" ;
+        Text [ finnish ] = "Kumoa" ;
+        Text [ danish ] = "Tilbage" ;
+        Text [ french ] = "PrÈcÈdent" ;
+        Text [ swedish ] = "Tillbaka" ;
+        Text [ dutch ] = "~Ongedaan" ;
+        Text [ spanish ] = "~Regresar" ;
+        Text [ english_us ] = "Back" ;
+        Text[ chinese_simplified ] = "∑µªÿ";
+        Text[ russian ] = "Õ‡Á‡‰";
+        Text[ polish ] = "Wstecz";
+        Text[ japanese ] = "ñﬂÇÈ";
+        Text[ chinese_traditional ] = "™¶^";
+        Text[ arabic ] = "«·”«»ﬁ";
+        Text[ greek ] = "–ﬂÛ˘";
+        Text[ korean ] = "µ⁄∑Œ";
+        Text[ turkish ] = "Geri";
+    };
+    String TP_ATTR_CHAR
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Schrift : Zeichen */
+        Text = "Schrift" ;
+        Text [ ENGLISH ] = "Character" ;
+        Text [ norwegian ] = "Character" ;
+        Text [ italian ] = "Carattere" ;
+        Text [ portuguese_brazilian ] = "Caractere" ;
+        Text [ portuguese ] = "Tipo de letra" ;
+        Text [ finnish ] = "Merkki" ;
+        Text [ danish ] = "Skrifttype" ;
+        Text [ french ] = "Police" ;
+        Text [ swedish ] = "Teckensnitt" ;
+        Text [ dutch ] = "Lettertype" ;
+        Text [ spanish ] = "Fuente" ;
+        Text [ english_us ] = "Font" ;
+        Text[ chinese_simplified ] = "◊÷ÃÂ";
+        Text[ russian ] = "ÿËÙÚ";
+        Text[ polish ] = "Czcionka";
+        Text[ japanese ] = "Ã´›ƒ";
+        Text[ chinese_traditional ] = "¶r´¨";
+        Text[ arabic ] = "Œÿ";
+        Text[ greek ] = "√Ò·ÏÏ·ÙÔÛÂÈÒ‹";
+        Text[ korean ] = "±€≤√";
+        Text[ turkish ] = "Yaz˝tipi";
+    };
+    String TP_ATTR_NUMBER
+    {
+        Text = "Format" ;
+        Text [ ENGLISH ] = "Number" ;
+        Text [ norwegian ] = "Number" ;
+        Text [ italian ] = "Formato" ;
+        Text [ portuguese_brazilian ] = "N˙mero" ;
+        Text [ portuguese ] = "Formato" ;
+        Text [ finnish ] = "Numero" ;
+        Text [ danish ] = "Format" ;
+        Text [ french ] = "Format" ;
+        Text [ swedish ] = "Format" ;
+        Text [ dutch ] = "Formaat" ;
+        Text [ spanish ] = "Formato" ;
+        Text [ english_us ] = "Numbers" ;
+        Text[ chinese_simplified ] = "∏Ò Ω";
+        Text[ russian ] = "‘ÓÏ‡Ú";
+        Text[ polish ] = "Format";
+        Text[ japanese ] = "èëéÆ";
+        Text[ chinese_traditional ] = "ÆÊ¶°";
+        Text[ arabic ] = " ‰”Ìﬁ";
+        Text[ greek ] = "ÃÔÒˆﬁ";
+        Text[ korean ] = "º≠Ωƒ";
+        Text[ turkish ] = "Format";
+    };
+    String TP_ATTR_ALIGN
+    {
+        Text = "Ausrichtung" ;
+        Text [ ENGLISH ] = "Align" ;
+        Text [ norwegian ] = "Align" ;
+        Text [ italian ] = "Allineamento" ;
+        Text [ portuguese_brazilian ] = "Alinhar" ;
+        Text [ portuguese ] = "Alinhar" ;
+        Text [ finnish ] = "Tasaa" ;
+        Text [ danish ] = "Justering" ;
+        Text [ french ] = "Alignement" ;
+        Text [ swedish ] = "Justering" ;
+        Text [ dutch ] = "Uitlijning" ;
+        Text [ spanish ] = "AlineaciÛn" ;
+        Text [ english_us ] = "Alignment" ;
+        Text[ chinese_simplified ] = "∂®œÚ";
+        Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ";
+        Text[ polish ] = "WyrÛwnanie";
+        Text[ japanese ] = "îzíu";
+        Text[ chinese_traditional ] = "πÔªÙ";
+        Text[ arabic ] = "„Õ«–«…";
+        Text[ greek ] = "”ÙÔﬂ˜ÈÛÁ";
+        Text[ korean ] = "∏¬√„";
+        Text[ turkish ] = "Hizalama";
+    };
+    String ST_ROW
+    {
+        Text = "Tabellenformatierung" ;
+        Text [ ENGLISH ] = "Table format" ;
+        Text [ english_us ] = "Table Format" ;
+        Text [ italian ] = "Formattazione tabella" ;
+        Text [ spanish ] = "Formateado de tabla" ;
+        Text [ french ] = "Formatage de table" ;
+        Text [ dutch ] = "Tabelopmaak" ;
+        Text [ swedish ] = "Tabellformatering" ;
+        Text [ danish ] = "Tabelformatering" ;
+        Text [ portuguese_brazilian ] = "Tabellenformatierung" ;
+        Text [ portuguese ] = "Formato da tabela" ;
+        Text[ chinese_simplified ] = "±Ìµ•∏Ò Ω";
+        Text[ russian ] = "‘ÓÏ‡Ú Ú‡·ÎËˆ˚";
+        Text[ polish ] = "Formatowanie tabeli";
+        Text[ japanese ] = "√∞ÃﬁŸÇÃèëéÆê›íË";
+        Text[ chinese_traditional ] = "™ÌÆÊÆÊ¶°";
+        Text[ arabic ] = " ‰”Ìﬁ «·ÃœÊ·";
+        Text[ greek ] = "ÃÔÒˆÔÔﬂÁÛÁ ﬂÌ·Í·";
+        Text[ korean ] = "≈◊¿Ã∫Ì º≠Ωƒ";
+        Text[ turkish ] = "Tablo format˝";
+    };
+    Text[ chinese_simplified ] = "◊÷∂Œ∏Ò Ω";
+    Text[ russian ] = "‘ÓÏ‡Ú ÔÓÎˇ";
+    Text[ polish ] = "Formatowanie pola";
+    Text[ japanese ] = "Ã®∞ŸƒﬁÇÃèëéÆê›íË";
+    Text[ chinese_traditional ] = "ƒÊ¶ÏÆÊ¶°";
+    Text[ arabic ] = " ‰”Ìﬁ «·Õﬁ·";
+    Text[ greek ] = "ÃÔÒˆÔÔﬂÁÛÁ Â‰ﬂÔı";
+    Text[ korean ] = "« µÂ º≠Ωƒ";
+    Text[ turkish ] = "Alan format˝";
+};
