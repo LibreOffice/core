@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:45:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1207,8 +1207,8 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     rStrm.WriteZeroBytes( 6 );
     rStrm.EndRecord();
 
-    // SXSTRING record
-    rStrm.StartRecord( EXC_ID_SXSTRING, maUrl.GetSize() );
+    // WQSTRING record
+    rStrm.StartRecord( EXC_ID_WQSTRING, maUrl.GetSize() );
     rStrm << maUrl;
     rStrm.EndRecord();
 
