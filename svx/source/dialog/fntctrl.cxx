@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-24 15:03:55 $
+ *  last change: $Author: gt $ $Date: 2002-06-05 12:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,8 +677,14 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
     }
     else
     {
+        Color aLineCol = GetLineColor();
+
+        SetLineColor( rFont.GetColor() );
         DrawLine( Point( 0,  nY ), Point( nX, nY ) );
         DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
+
+        SetLineColor( aLineCol );
+
         Point aTmpPoint( nX, nY );
         pImpl->DrawPrev( this, pPrinter, aTmpPoint, rFont );
     }
