@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-28 08:37:31 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 06:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,13 +238,13 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
     ,m_nColumnPos(0)
     ,m_nRows(1)
     ,m_nRowCount(0)
-    ,m_bError(FALSE)
-    ,m_bInTbl(FALSE)
+    ,m_bError(sal_False)
+    ,m_bInTbl(sal_False)
     ,m_xFormatter(_rxNumberF)
     ,m_bHead(TRUE)
-    ,m_bDontAskAgain(FALSE)
-    ,m_bIsAutoIncrement(FALSE)
-    ,m_aDestColumns(_rxConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
+    ,m_bDontAskAgain(sal_False)
+    ,m_bIsAutoIncrement(sal_False)
+    ,m_aDestColumns(_rxConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() == sal_True)
     ,m_xFactory(_rM)
     ,m_pTypeInfo(NULL)
     ,m_bFoundTable(sal_False)
@@ -275,7 +275,7 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
         while(xSet->next())
         {
             ::rtl::OUString sTypeName = xRow->getString (1);
-            sal_Int32 nType = xRow->getInt(2);
+            sal_Int16 nType = xRow->getShort(2);
             if( nType == DataType::VARCHAR)
             {
                 m_pTypeInfo                 = new OTypeInfo();

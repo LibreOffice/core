@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-28 08:41:41 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 06:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
 #endif
+#ifndef _RTFOUT_HXX
+#include <svtools/rtfout.hxx>
+#endif
 
 using namespace dbaui;
 using namespace dbtools;
@@ -156,14 +159,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
-
-#if defined(MAC)
-const char __FAR_DATA ODatabaseImportExport::sNewLine = '\015';
-#elif defined(UNX)
-const char __FAR_DATA ODatabaseImportExport::sNewLine = '\012';
-#else
-const char __FAR_DATA ODatabaseImportExport::sNewLine[] = "\015\012";
-#endif
 
 const static char __FAR_DATA sMyBegComment[]    = "<!-- ";
 const static char __FAR_DATA sMyEndComment[]    = " -->";
@@ -365,9 +360,11 @@ BOOL ORTFImportExport::Write()
 {
     (*m_pStream) << '{'     << sRTF_RTF;
 #ifdef MAC
-    (*m_pStream) << sRTF_MAC    << sNewLine;
+    (*m_pStream) << sRTF_MAC    << RTFOutFuncs::sNewLine;
+    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_APPLE_ROMAN;
 #else
-    (*m_pStream) << sRTF_ANSI   << sNewLine;
+    (*m_pStream) << sRTF_ANSI   << RTFOutFuncs::sNewLine;
+    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
 #endif
 
     /*
@@ -428,31 +425,37 @@ BOOL ORTFImportExport::Write()
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
     Color aColor(nColor);
 
-    ByteString aFonts(String(m_aFont.Name),gsl_getSystemTextEncoding());
+    ByteString aFonts(String(m_aFont.Name),eDestEnc);
     if(!aFonts.Len())
     {
-        String aName = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();;
-        aFonts = ByteString (aName,gsl_getSystemTextEncoding());
+        String aName = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();
+        aFonts = ByteString (aName,eDestEnc);
     }
-        // TODO : think about the encoding of the font name
     ::rtl::OString aFormat("\\fcharset0\\fnil ");
     ByteString aFontNr;
 
     (*m_pStream)    << "{\\fonttbl";
-    for(xub_StrLen j=0;j<aFonts.GetTokenCount();++j)
+    xub_StrLen nTokenCount = aFonts.GetTokenCount();
+    for(xub_StrLen j=0;j<nTokenCount;++j)
     {
         (*m_pStream) << "\\f";
-        (*m_pStream) << ::rtl::OString::valueOf((sal_Int32)j);
+        m_pStream->WriteNumber(j);
         (*m_pStream) << aFormat;
         (*m_pStream) << aFonts.GetToken(j).GetBuffer();
         (*m_pStream) << ';';
     }
     (*m_pStream) << '}' ;
-    (*m_pStream) << sNewLine;
-    (*m_pStream) << "{\\colortbl\\red"  << ::rtl::OString::valueOf((sal_Int32)aColor.GetRed())
-                        << "\\green"    << ::rtl::OString::valueOf((sal_Int32)aColor.GetGreen())
-                        << "\\blue"     << ::rtl::OString::valueOf((sal_Int32)aColor.GetBlue())
-                        << ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}"     << sNewLine;
+    (*m_pStream) << RTFOutFuncs::sNewLine;
+    // write the rtf color table
+    (*m_pStream) << '{' << sRTF_COLORTBL << sRTF_RED;
+    m_pStream->WriteNumber(aColor.GetRed());
+    (*m_pStream) << sRTF_GREEN;
+    m_pStream->WriteNumber(aColor.GetGreen());
+    (*m_pStream) << sRTF_BLUE;
+    m_pStream->WriteNumber(aColor.GetBlue());
+
+    (*m_pStream) << ";\\red255\\green255\\blue255;\\red192\\green192\\blue192;}"
+                 << RTFOutFuncs::sNewLine;
 
     sal_Int32 nCellx = 1437;
     ::rtl::OString aTRRH("\\trrh-270\\pard\\intbl");
@@ -461,9 +464,9 @@ BOOL ORTFImportExport::Write()
     ::rtl::OString aCell1("\\clbrdrl\\brdrs\\brdrcf0\\clbrdrt\\brdrs\\brdrcf0\\clbrdrb\\brdrs\\brdrcf0\\clbrdrr\\brdrs\\brdrcf0\\clshdng10000\\clcfpat2\\cellx");
     ::rtl::OString aCell2("\\clbrdrl\\brdrs\\brdrcf2\\clbrdrt\\brdrs\\brdrcf2\\clbrdrb\\brdrs\\brdrcf2\\clbrdrr\\brdrs\\brdrcf2\\clshdng10000\\clcfpat1\\cellx");
 
-    ::rtl::OString s40 = ::rtl::OString::valueOf((sal_Int32)40);
-
-    (*m_pStream) << sRTF_TROWD << sRTF_TRGAPH << s40 << sNewLine;
+    (*m_pStream) << sRTF_TROWD << sRTF_TRGAPH;
+    m_pStream->WriteNumber(40);
+    (*m_pStream) << RTFOutFuncs::sNewLine;
 
     if(m_xObject.is())
     {
@@ -479,12 +482,12 @@ BOOL ORTFImportExport::Write()
         for(i=1;i<=nCount;++i)
         {
             (*m_pStream) << aCell1;
-            (*m_pStream) << ::rtl::OString::valueOf(sal_Int32(i*nCellx));
-            (*m_pStream) << sNewLine;
+            m_pStream->WriteNumber(i*nCellx);
+            (*m_pStream) << RTFOutFuncs::sNewLine;
         }
 
         // Spaltenbeschreibung
-        (*m_pStream) << '{' << sNewLine;
+        (*m_pStream) << '{' << RTFOutFuncs::sNewLine;
         (*m_pStream) << aTRRH;
 
 
@@ -508,7 +511,7 @@ BOOL ORTFImportExport::Write()
 
             pHorzChar[i-1] = pChar; // um sp"ater nicht immer im ITEMSET zuw"uhlen
 
-            (*m_pStream) << sNewLine;
+            (*m_pStream) << RTFOutFuncs::sNewLine;
             (*m_pStream) << '{';
             (*m_pStream) << sRTF_QC;   // column header always centered
 
@@ -519,17 +522,17 @@ BOOL ORTFImportExport::Write()
 
             (*m_pStream) << aFS;
             (*m_pStream) << ' ';
-            (*m_pStream) << ::rtl::OString(*pBegin,pBegin->getLength(), gsl_getSystemTextEncoding());
-                // TODO : think about the encoding of the column name
+            RTFOutFuncs::Out_String(*m_pStream,*pBegin,eDestEnc);
+
             (*m_pStream) << sRTF_CELL;
             (*m_pStream) << '}';
-            (*m_pStream) << sNewLine;
+            (*m_pStream) << RTFOutFuncs::sNewLine;
             (*m_pStream) << sRTF_PARD   << sRTF_INTBL;
         }
 
         (*m_pStream) << sRTF_ROW;
-        (*m_pStream) << sNewLine << '}';
-        (*m_pStream) << sNewLine;
+        (*m_pStream) << RTFOutFuncs::sNewLine << '}';
+        (*m_pStream) << RTFOutFuncs::sNewLine;
 
         sal_Int32 k=1;
         sal_Int32 kk=0;
@@ -539,20 +542,22 @@ BOOL ORTFImportExport::Write()
             if(!m_pRowMarker || m_pRowMarker[kk] == k)
             {
                 ++kk;
-                (*m_pStream) << sRTF_TROWD << sRTF_TRGAPH << s40 << sNewLine;
+                (*m_pStream) << sRTF_TROWD << sRTF_TRGAPH;
+                m_pStream->WriteNumber(40);
+                (*m_pStream) << RTFOutFuncs::sNewLine;
 
                 for(i=1;i<=nCount;++i)
                 {
                     (*m_pStream) << aCell2;
-                    (*m_pStream) << ::rtl::OString::valueOf((sal_Int32)(i*nCellx));
-                    (*m_pStream) << sNewLine;
+                    m_pStream->WriteNumber(i*nCellx);
+                    (*m_pStream) << RTFOutFuncs::sNewLine;
                 }
 
                 (*m_pStream) << '{';
                 (*m_pStream) << aTRRH;
                 for(sal_Int32 i=1;i<=nCount;++i)
                 {
-                    (*m_pStream) << sNewLine;
+                    (*m_pStream) << RTFOutFuncs::sNewLine;
                     (*m_pStream) << '{';
                     (*m_pStream) << pHorzChar[i-1];
 
@@ -568,10 +573,7 @@ BOOL ORTFImportExport::Write()
                     {
                         ::rtl::OUString sValue = m_xRow->getString(i);
                         if (!m_xRow->wasNull())
-                        {
-                            (*m_pStream) << ::rtl::OString(sValue,sValue.getLength(), gsl_getSystemTextEncoding());
-                                // TODO : think about the encoding of the value string
-                        }
+                            RTFOutFuncs::Out_String(*m_pStream,sValue,eDestEnc);
                     }
                     catch (Exception&)
                     {
@@ -580,10 +582,10 @@ BOOL ORTFImportExport::Write()
 
                     (*m_pStream) << sRTF_CELL;
                     (*m_pStream) << '}';
-                    (*m_pStream) << sNewLine;
+                    (*m_pStream) << RTFOutFuncs::sNewLine;
                     (*m_pStream) << sRTF_PARD   << sRTF_INTBL;
                 }
-                (*m_pStream) << sRTF_ROW << sNewLine;
+                (*m_pStream) << sRTF_ROW << RTFOutFuncs::sNewLine;
                 (*m_pStream) << '}';
             }
             ++k;
@@ -592,7 +594,7 @@ BOOL ORTFImportExport::Write()
         delete [] pHorzChar;
     }
 
-    (*m_pStream) << '}' << sNewLine;
+    (*m_pStream) << '}' << RTFOutFuncs::sNewLine;
     (*m_pStream) << (BYTE) 0;
     return ((*m_pStream).GetError() == SVSTREAM_OK);
 }
@@ -625,17 +627,17 @@ const char __FAR_DATA OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t
 //========================================================================
 // Makros fuer HTML-Export
 //========================================================================
-#define OUT_PROLOGUE()      ((*m_pStream) << sHTML30_Prologue << sNewLine << sNewLine)
+#define OUT_PROLOGUE()      ((*m_pStream) << sHTML30_Prologue << RTFOutFuncs::sNewLine << RTFOutFuncs::sNewLine)
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag, FALSE )
 #define OUT_STR( str )      HTMLOutFuncs::Out_String( (*m_pStream), str )
-#define OUT_LF()            (*m_pStream) << sNewLine << GetIndentStr()
-#define lcl_OUT_LF()        (*m_pStream) << sNewLine
-#define TAG_ON_LF( tag )    (TAG_ON( tag ) << sNewLine << GetIndentStr())
-#define TAG_OFF_LF( tag )   (TAG_OFF( tag ) << sNewLine << GetIndentStr())
+#define OUT_LF()            (*m_pStream) << RTFOutFuncs::sNewLine << GetIndentStr()
+#define lcl_OUT_LF()        (*m_pStream) << RTFOutFuncs::sNewLine
+#define TAG_ON_LF( tag )    (TAG_ON( tag ) << RTFOutFuncs::sNewLine << GetIndentStr())
+#define TAG_OFF_LF( tag )   (TAG_OFF( tag ) << RTFOutFuncs::sNewLine << GetIndentStr())
 #define OUT_HR()            TAG_ON_LF( sHTML_horzrule )
-#define OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << sNewLine << GetIndentStr())
-#define lcl_OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << sNewLine)
+#define OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << RTFOutFuncs::sNewLine << GetIndentStr())
+#define lcl_OUT_COMMENT( comment )  ((*m_pStream) << sMyBegComment, OUT_STR( comment ) << sMyEndComment << RTFOutFuncs::sNewLine)
 
 //-------------------------------------------------------------------
 OHTMLImportExport::OHTMLImportExport(const ODataAccessDescriptor& _aDataDescriptor,
@@ -656,7 +658,7 @@ BOOL OHTMLImportExport::Write()
 {
     if(m_xObject.is())
     {
-        (*m_pStream) << '<' << sHTML_doctype << ' ' << sHTML_doctype32 << '>' << sNewLine << sNewLine;
+        (*m_pStream) << '<' << sHTML_doctype << ' ' << sHTML_doctype32 << '>' << RTFOutFuncs::sNewLine << RTFOutFuncs::sNewLine;
         TAG_ON_LF( sHTML_html );
         WriteHeader();
         OUT_LF();
@@ -703,7 +705,10 @@ void OHTMLImportExport::WriteBody()
     (*m_pStream) << sMyBegComment; OUT_LF();
     (*m_pStream) << sHTML_body << " { " << sFontFamily << '\"' << ::rtl::OString(m_aFont.Name,m_aFont.Name.getLength(), gsl_getSystemTextEncoding()) << '\"';
         // TODO : think about the encoding of the font name
-    (*m_pStream) << "; " << sFontSize << ::rtl::OString::valueOf((sal_Int32)m_aFont.Height) << '}';
+    (*m_pStream) << "; " << sFontSize;
+    m_pStream->WriteNumber(m_aFont.Height);
+    (*m_pStream) << '}';
+
     OUT_LF();
     (*m_pStream) << sMyEndComment;
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_style );
