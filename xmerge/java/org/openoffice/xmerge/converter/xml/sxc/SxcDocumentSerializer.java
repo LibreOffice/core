@@ -386,6 +386,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         if (cellAtt == null || cellAtt.item(0) == null)
         {
            Debug.log(Debug.INFO, "No Cell Attributes\n");
+           // return;
         }
         else
         {
@@ -431,6 +432,9 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
                 // has text:p tag
                 fmt.setCategory(CELLTYPE_STRING);
+                Node tableStringValueNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_STRING_VALUE);
+                Debug.log(Debug.TRACE,"Cell Type String :  " + tableStringValueNode);
+                fmt.setValue(tableStringValueNode.getNodeValue());
 
             } else if (cellType.equalsIgnoreCase(CELLTYPE_FLOAT)) {
 
@@ -441,6 +445,8 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 // is displaying for this floating point output.
                 fmt.setCategory(CELLTYPE_FLOAT);
                 fmt.setDecimalPlaces(getDecimalPlaces(node));
+                  Node tableValueNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_VALUE);
+                fmt.setValue(tableValueNode.getNodeValue());
 
 
             } else if (cellType.equalsIgnoreCase(CELLTYPE_TIME)) {
@@ -449,6 +455,8 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 // has text:p tag - which is the value we convert
 
                 fmt.setCategory(CELLTYPE_TIME);
+                Node tableTimeNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_TIME_VALUE);
+                fmt.setValue(tableTimeNode.getNodeValue());
 
             } else if (cellType.equalsIgnoreCase(CELLTYPE_DATE)) {
 
@@ -456,6 +464,8 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 // has text:p tag - which is the value we convert
 
                 fmt.setCategory(CELLTYPE_DATE);
+                Node tableDateNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_DATE_VALUE);
+                fmt.setValue(tableDateNode.getNodeValue());
 
             } else if (cellType.equalsIgnoreCase(CELLTYPE_CURRENCY)) {
 
@@ -465,6 +475,8 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
                 fmt.setCategory(CELLTYPE_CURRENCY);
                 fmt.setDecimalPlaces(getDecimalPlaces(node));
+                Node tableValueNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_VALUE);
+                fmt.setValue(tableValueNode.getNodeValue());
 
             } else if (cellType.equalsIgnoreCase(CELLTYPE_BOOLEAN)) {
 
@@ -472,6 +484,8 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 // has text:p tag - which is the value we convert
 
                 fmt.setCategory(CELLTYPE_BOOLEAN);
+                Node tableBooleanNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_BOOLEAN_VALUE);
+                fmt.setValue(tableBooleanNode.getNodeValue());
 
             } else if (cellType.equalsIgnoreCase(CELLTYPE_PERCENT)) {
 
@@ -480,85 +494,45 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
                 fmt.setCategory(CELLTYPE_PERCENT);
                 fmt.setDecimalPlaces(getDecimalPlaces(node));
+                Node tableValueNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_VALUE);
+                fmt.setValue(tableValueNode.getNodeValue());
 
             } else {
 
+                Debug.log(Debug.TRACE,"No defined value type" + cellType);
                 // Should never get here
 
             }
         }
 
-        Node tableFormulaNode =
-            cellAtt.getNamedItem(ATTRIBUTE_TABLE_FORMULA);
+        Node tableFormulaNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_FORMULA);
 
-        Node tableValueNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_VALUE);
-
-        Node tableBooleanNode =
-            cellAtt.getNamedItem(ATTRIBUTE_TABLE_BOOLEAN_VALUE);
-
-        Node tableStringValueNode =
-            cellAtt.getNamedItem(ATTRIBUTE_TABLE_STRING_VALUE);
-        if (tableFormulaNode != null) {
-            Debug.log(Debug.INFO, "TableFormulaNode\n");
-            if(tableBooleanNode != null) {                  // Formula that returns Boolean
-                fmt.setValue(tableBooleanNode.getNodeValue());
-            } else if(tableStringValueNode != null) {       // Formula Error
+        if(tableFormulaNode != null)
+        {
+            if(tableValueTypeNode == null) {            // If there is no value-type Node we must assume string-value
+                fmt.setCategory(CELLTYPE_STRING);
+                Node tableStringValueNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_STRING_VALUE);
                 fmt.setValue(tableStringValueNode.getNodeValue());
-            } else if (tableValueNode != null) {                                        // Regular Formula
-                fmt.setValue(tableValueNode.getNodeValue());
-            } else {
-                Debug.log(Debug.INFO, "All nodes appear to be null");
             }
             String cellFormula = tableFormulaNode.getNodeValue();
             addCell(cellFormula);
-
-        } else if (tableValueNode != null) {
-
-            // Float node, currency node, percent node
-            //
-            Debug.log(Debug.INFO, "TableValueNode\n");
-            String cellValue = tableValueNode.getNodeValue();
-            addCell(cellValue);
-
-         } else if (tableBooleanNode != null) {
-
-            // Boolean Node
-            //
-            String cellValue = tableBooleanNode.getNodeValue();
-
-            if (cellValue.equalsIgnoreCase("true"))
-            {
-               Debug.log(Debug.INFO, "TableBooleanNode - TRUE\n");
-               addCell("TRUE");
-            }
-            else
-            {
-               Debug.log(Debug.INFO, "TableBooleanNode - FALSE\n");
-               addCell("FALSE");
-            }
-
-         } else {
+        } else {
 
             // Text node, Date node, or Time node
             //
             Debug.log(Debug.INFO,
-              "TextNode, DateNode, TimeNode or BooleanNode\n");
+            "TextNode, DateNode, TimeNode or BooleanNode\n");
+            fmt.clearFormatting();
 
             if (node.hasChildNodes()) {
-
                 NodeList childList = node.getChildNodes();
                 int len = childList.getLength();
 
                 for (int i = 0; i < len; i++) {
-
                     Node child = childList.item(i);
-
                     if (child.getNodeType() == Node.ELEMENT_NODE) {
-
                         String childName = child.getNodeName();
-
                         if (childName.equals(TAG_PARAGRAPH)) {
-
                             traverseParagraph(child);
                         }
                     }
@@ -669,6 +643,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         int col = colID;
         int row = rowID;
 
+        Debug.log(Debug.TRACE, "SxcDocumentSerializer:addCell() " + cellValue);
         for (int i = 0; i < rowsRepeated; i++) {
 
             // Log the columns when there are rowsRepeated.
