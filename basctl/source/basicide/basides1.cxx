@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:58:30 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,12 @@
 #include <sfx2/docfile.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
@@ -345,9 +351,38 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 SfxObjectShell* pShell = pCurWin->GetShell();
                 if ( pShell )
                 {
+                    const SfxPoolItem* aArgs[2];
+                    aArgs[1] = 0;
+                    SFX_REQUEST_ARG( rReq, pStatusIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, FALSE );
+                    if ( !pStatusIndicatorItem )
+                    {
+                        // get statusindicator
+                        uno::Reference< task::XStatusIndicator > xStatusIndicator;
+                        SfxViewFrame *pFrame = GetFrame();
+                        if ( pFrame && pFrame->GetFrame() )
+                        {
+                            uno::Reference< task::XStatusIndicatorFactory > xStatFactory(
+                                                                        pFrame->GetFrame()->GetFrameInterface(),
+                                                                        uno::UNO_QUERY );
+                            if( xStatFactory.is() )
+                                xStatusIndicator = xStatFactory->createStatusIndicator();
+                        }
+
+
+                        OSL_ENSURE( xStatusIndicator.is(), "Can not retrieve default status indicator!\n" );
+                        if ( xStatusIndicator.is() )
+                        {
+                            SfxUnoAnyItem aStatIndItem( SID_PROGRESS_STATUSBAR_CONTROL, uno::makeAny( xStatusIndicator ) );
+                            rReq.AppendItem( aStatIndItem );
+                            aArgs[0] = rReq.GetArgs()->GetItem( SID_PROGRESS_STATUSBAR_CONTROL );
+                        }
+                    }
+                    else
+                        aArgs[0] = pStatusIndicatorItem;
+
                     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( pShell );
                     if ( pViewFrame )
-                        pViewFrame->GetBindings().Execute( nSlot );
+                        pViewFrame->GetBindings().Execute( nSlot, aArgs, 0, SFX_CALLMODE_SYNCHRON );
                 }
 
                 SfxBindings &rBindings = BasicIDE::GetBindings();
