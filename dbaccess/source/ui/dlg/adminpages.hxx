@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 15:20:04 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 17:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ protected:
     void callModifiedHdl() const { if (m_aModifiedHandler.IsSet()) m_aModifiedHandler.Call((void*)this); }
 
     /// called from within DeactivatePage. The page is allowed to be deactivated if this method returns sal_True
-    virtual sal_Bool checkItems(const SfxItemSet& _rSet) { return sal_True; }
+    virtual sal_Bool checkItems() { return sal_True; }
 
     /** called from within Reset and ActivatePage, use to initialize the controls with the items from the given set
         @param      _bSaveValue     if set to sal_True, the implementation should call SaveValue on all relevant controls
@@ -180,6 +180,8 @@ private:
     Link                m_aTypeSelectHandler;   /// to be called if a new type is selected
     Link                m_aNameModifiedHandler; /// to be called whenever the name of the data source is changed by the user
 
+    sal_Bool            m_bDisplayingDeleted : 1;   // the currently displayed data source is deleted
+
 public:
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& _rAttrSet);
 
@@ -199,7 +201,7 @@ protected:
     virtual void Reset(const SfxItemSet& _rCoreAttrs);
 
     virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-    virtual sal_Bool checkItems(const SfxItemSet& _rSet);
+    virtual sal_Bool checkItems();
 
     virtual void GetFocus();
 
@@ -385,7 +387,7 @@ private:
     void        SetSeparator( ComboBox& rBox, const String& rList, const String& rVal );
 
     virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-    virtual sal_Bool checkItems(const SfxItemSet& _rSet);
+    virtual sal_Bool checkItems();
 };
 
 //========================================================================
@@ -456,6 +458,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2000/11/02 15:20:04  fs
+ *  #79983# +isBrowseable / #79830# +checkItems
+ *
  *  Revision 1.8  2000/10/30 15:22:44  fs
  *  no password fields anymore - don't want to have them in and _data source aministration_ dialog
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 15:20:04 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 17:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ int OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
     {
-        if (!checkItems(*_pSet))
+        if (!checkItems())
             return KEEP_PAGE;
         FillItemSet(*_pSet);
     }
@@ -232,6 +232,7 @@ OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems)
     ,m_aSpecialMessage      (this, ResId(FT_SPECIAL_MESSAGE))
     ,m_pCollection(NULL)
     ,m_eCurrentSelection(DST_UNKNOWN)
+    ,m_bDisplayingDeleted(sal_False)
 {
     // fill the listbox with the UI descriptions for the possible types
     // and remember the respective DSN prefixes
@@ -319,9 +320,9 @@ void OGeneralPage::onTypeSelected(DATASOURCE_TYPE _eType)
 }
 
 //-------------------------------------------------------------------------
-sal_Bool OGeneralPage::checkItems(const SfxItemSet& _rSet)
+sal_Bool OGeneralPage::checkItems()
 {
-    if (0 == m_aName.GetText().Len())
+    if ((0 == m_aName.GetText().Len()) && !m_bDisplayingDeleted)
     {
         String sErrorMsg(ModuleRes(STR_ERR_EMPTY_DSN_NAME));
         ErrorBox aErrorBox(GetParent(), WB_OK, sErrorMsg);
@@ -353,6 +354,7 @@ void OGeneralPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValu
 
     String sConnectURL, sName;
     String sMessage;
+    m_bDisplayingDeleted = sal_False;
     if (bValid)
     {
         // collect some items and some values
@@ -370,6 +372,7 @@ void OGeneralPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValu
         {
             OLocalResourceAccess aStringResAccess(PAGE_GENERAL, RSC_TABPAGE);
             sMessage = String(ResId(STR_DATASOURCEDELETED));
+            m_bDisplayingDeleted = sal_True;
         }
     }
     m_aSpecialMessage.SetText(sMessage);
@@ -541,6 +544,13 @@ IMPL_LINK(OGeneralPage, OnBrowseConnections, PushButton*, _pButton)
                         callModifiedHdl();
                     }
                 }
+            }
+            else
+            {
+                OLocalResourceAccess aLocRes(PAGE_GENERAL, RSC_TABPAGE);
+                String sError(ModuleRes(STR_NO_ADABASE_DATASOURCES));
+                ErrorBox aBox(this, WB_OK, sError);
+                aBox.Execute();
             }
         }
         break;
@@ -1207,7 +1217,7 @@ void OTextDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSave
     }
 }
 // -----------------------------------------------------------------------
-sal_Bool OTextDetailsPage::checkItems(const SfxItemSet& _rSet)
+sal_Bool OTextDetailsPage::checkItems()
 {
     OLocalResourceAccess aStringResAccess(PAGE_TEXT, RSC_TABPAGE);
         // for accessing the strings which are local to our own resource block
@@ -1743,6 +1753,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2000/11/02 15:20:04  fs
+ *  #79983# +isBrowseable / #79830# +checkItems
+ *
  *  Revision 1.11  2000/11/02 14:18:21  fs
  *  #79967# check the getenv return against NULL
  *
