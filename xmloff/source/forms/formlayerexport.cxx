@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:36:39 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 08:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,12 +138,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport::exportAutoStyles()
-    {
-        OSL_ENSURE(sal_False, "OFormLayerXMLExport::exportAutoStyles: obsolete method called!");
-    }
-
-    //---------------------------------------------------------------------
     ::vos::ORef< SvXMLExportPropertyMapper > OFormLayerXMLExport::getStylePropertyMapper()
     {
         return m_pImpl->getStylePropertyMapper();
@@ -181,6 +175,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/03/16 14:36:39  sab
+ *  did the required change (move of extract.hxx form cppuhelper to comphelper)
+ *
  *  Revision 1.7  2001/02/01 09:46:47  fs
  *  no own style handling anymore - the shape exporter is responsible for our styles now
  *
