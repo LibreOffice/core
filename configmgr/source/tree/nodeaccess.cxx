@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,16 +97,16 @@ namespace configmgr
         }
     // -------------------------------------------------------------------------
 
-        NodeAccess getSubnode(NodeAccess const & _aParent, NodeAccess::Name const & _aName)
+        NodeAccess getSubnode(NodeAccessRef const & _aParent, NodeAccess::Name const & _aName)
         {
             if (GroupNodeAccess::isInstance(_aParent))
             {
-                return GroupNodeAccess(_aParent).getChildNode(_aName);
+                return GroupNodeAccess(_aParent).getChildNode(_aName).toNodeAccess();
             }
             else if (SetNodeAccess::isInstance(_aParent))
             {
                 TreeAccessor aElement = SetNodeAccess(_aParent).getElementTree(_aName);
-                return aElement.isValid() ? aElement.getRootNode() : NodeAccess::emptyNode();
+                return aElement.isValid() ? aElement.getRootNode().toNodeAccess() : NodeAccess::emptyNode();
             }
             else
             {
@@ -119,19 +119,20 @@ namespace configmgr
 
         NodeAddress getSubnodeAddress(memory::Accessor const& _aAccess, NodeAddress const & _aNodeAddress, NodeAccess::Name const & _aName)
         {
-            return getSubnode( NodeAccess(_aAccess,_aNodeAddress), _aName ).address();
+            return getSubnode( NodeAccessRef(&_aAccess,_aNodeAddress), _aName ).address();
         }
     // -------------------------------------------------------------------------
 
         NodeAddress getSubnodeAddress(memory::UpdateAccessor& _aAccess, NodeAddress const & _aNodeAddress, NodeAccess::Name const & _aName)
         {
-            return getSubnode( NodeAccess(_aAccess.accessor(),_aNodeAddress), _aName ).address();
+            memory::Accessor aAccess = _aAccess.accessor();
+            return getSubnode( NodeAccessRef(&aAccess,_aNodeAddress), _aName ).address();
         }
     // -------------------------------------------------------------------------
 
         SetNodeAddress toSetNodeAddress(memory::Accessor const & _aAccess, NodeAddress const & _aNodeAddr)
         {
-            SetNodeAccess aNodeAccess( NodeAccess(_aAccess,_aNodeAddr) );
+            SetNodeAccess aNodeAccess( NodeAccessRef(&_aAccess,_aNodeAddr) );
             return aNodeAccess.address();
         }
     // -------------------------------------------------------------------------
