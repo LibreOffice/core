@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-28 06:24:39 $
+ *  last change: $Author: pb $ $Date: 2001-09-28 15:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,9 +189,10 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define TBI_FORWARD         1003
 #define TBI_START           1004
 #define TBI_PRINT           1005
-#define TBI_BOOKMARKS       1006
-#define TBI_SEARCHDIALOG    1007
-#define TBI_SOURCEVIEW      1008
+#define TBI_COPY            1006
+#define TBI_BOOKMARKS       1007
+#define TBI_SEARCHDIALOG    1008
+#define TBI_SOURCEVIEW      1009
 
 #define CONFIGNAME_HELPWIN      DEFINE_CONST_UNICODE("OfficeHelp")
 #define CONFIGNAME_INDEXWIN     DEFINE_CONST_UNICODE("OfficeHelpIndex")
@@ -1794,6 +1795,10 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.InsertItem( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ), Image( SfxResId( IMG_HELP_TOOLBOX_SEARCHDIALOG ) ) );
             aMenu.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
 */
+            aMenu.InsertSeparator();
+            aMenu.InsertItem( TBI_COPY, GET_SLOT_NAME( SID_COPY ), Image( SfxResId( IMG_HELP_TOOLBOX_COPY ) ) );
+            aMenu.SetHelpId( TBI_COPY, SID_COPY );
+
             if ( bIsDebug )
             {
                 aMenu.InsertSeparator();
@@ -2321,6 +2326,7 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
         case TBI_PRINT :
         case TBI_SOURCEVIEW :
         case TBI_SEARCHDIALOG :
+        case TBI_COPY :
         {
             Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
             if ( xProv.is() )
@@ -2330,6 +2336,8 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
                     aURL.Complete = DEFINE_CONST_UNICODE(".uno:Print");
                 else if ( TBI_SOURCEVIEW == nActionId )
                     aURL.Complete = DEFINE_CONST_UNICODE(".uno:SourceView");
+                else if ( TBI_COPY == nActionId )
+                    aURL.Complete = DEFINE_CONST_UNICODE(".uno:Copy");
                 else
                     aURL.Complete = DEFINE_CONST_UNICODE(".uno:SearchDialog");
                 PARSE_URL( aURL );
