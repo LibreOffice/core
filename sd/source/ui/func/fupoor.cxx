@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:53 $
+ *  last change: $Author: ka $ $Date: 2002-01-09 12:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
     BOOL bSlideShow = FALSE;
     USHORT nCode = rKEvt.GetKeyCode().GetCode();
 
-    FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
+     FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
 
     if (pFuSlideShow)
     {
@@ -368,7 +368,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             ZoomList* pZoomList = pViewShell->GetZoomList();
 
-            if (!pView->IsTextEdit() && !bSlideShow && pZoomList->IsNextPossible())
+            if (!pView->IsTextEdit() && pZoomList->IsNextPossible() && !bSlideShow)
             {
                 // Naechstes ZoomRect einstellen
                 pViewShell->SetZoomRect(pZoomList->GetNextZoomRect());
@@ -381,7 +381,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             ZoomList* pZoomList = pViewShell->GetZoomList();
 
-            if (!pView->IsTextEdit() && !bSlideShow && pZoomList->IsPreviousPossible())
+            if (!pView->IsTextEdit() && pZoomList->IsPreviousPossible() && !bSlideShow)
             {
                 // Vorheriges ZoomRect einstellen
                 pViewShell->SetZoomRect(pZoomList->GetPreviousZoomRect());
@@ -392,7 +392,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_HOME:
         {
-            if (!pView->IsTextEdit() && pViewShell->ISA(SdDrawViewShell))
+            if (!pView->IsTextEdit() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
             {
                // Sprung zu erster Seite
                ((SdDrawViewShell*) pViewShell)->SwitchPage(0);
@@ -403,7 +403,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_END:
         {
-            if (!pView->IsTextEdit() && pViewShell->ISA(SdDrawViewShell))
+            if (!pView->IsTextEdit() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
             {
                 // Sprung zu letzter Seite
                 SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
@@ -417,7 +417,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         case KEY_PAGEUP:
         {
             pView->EndTextEdit();
-            if (!rKEvt.GetKeyCode().IsMod1() && pViewShell->ISA(SdDrawViewShell))
+            if (!rKEvt.GetKeyCode().IsMod1() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
             {
                 // Vorherige Seite
                 bReturn = TRUE;
@@ -440,7 +440,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         case KEY_PAGEDOWN:
         {
             pView->EndTextEdit();
-            if (!rKEvt.GetKeyCode().IsMod1() && pViewShell->ISA(SdDrawViewShell))
+            if (!rKEvt.GetKeyCode().IsMod1() && pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
             {
                 // Naechste Seite
                 bReturn = TRUE;
