@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-14 16:34:36 $
+ *  last change: $Author: aw $ $Date: 2002-03-14 17:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,11 @@
 #include <svx/bmpmask.hxx>
 #endif
 
+// #97016# IV
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
+
 #define PIPETTE_RANGE 0
 
 #ifdef WNT
@@ -247,7 +252,76 @@ BOOL SdDrawViewShell::KeyInput(const KeyEvent& rKEvt, SdWindow* pWin)
     BOOL bRet = FALSE;
 
     if ( !IsInputLocked() || ( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE ) )
-        bRet = SdViewShell::KeyInput(rKEvt, pWin);
+    {
+        // #97016# IV
+        if(KEY_RETURN == rKEvt.GetKeyCode().GetCode()
+            && rKEvt.GetKeyCode().IsMod1()
+            && pView->IsTextEdit())
+        {
+            // this should be used for cursor travelling.
+            SdPage* pActualPage = GetActualPage();
+            const SdrMarkList& rMarkList = pView->GetMarkList();
+            SdrTextObj* pCandidate = 0L;
+
+            if(pActualPage && 1 == rMarkList.GetMarkCount())
+            {
+                SdrMark* pMark = rMarkList.GetMark(0);
+
+                // remember which object was the text in edit mode
+                SdrObject* pOldObj = pMark->GetObj();
+
+                // end text edit now
+                pView->EndTextEdit();
+
+                // look for a new candidate, a successor of pOldObj
+                SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
+                BOOL bDidVisitOldObject(FALSE);
+
+                while(aIter.IsMore() && !pCandidate)
+                {
+                    SdrObject* pObj = aIter.Next();
+
+                    if(pObj && pObj->ISA(SdrTextObj))
+                    {
+                        sal_uInt32 nInv(pObj->GetObjInventor());
+                        sal_uInt16 nKnd(pObj->GetObjIdentifier());
+
+                        if(SdrInventor == nInv &&
+                            (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd)
+                            && bDidVisitOldObject)
+                        {
+                            pCandidate = (SdrTextObj*)pObj;
+                        }
+
+                        if(pObj == pOldObj)
+                        {
+                            bDidVisitOldObject = TRUE;
+                        }
+                    }
+                }
+            }
+
+            if(pCandidate)
+            {
+                // set the new candidate to text edit mode
+                pView->UnMarkAll();
+                pView->MarkObj(pCandidate, pView->GetPageViewPvNum(0));
+
+                GetViewFrame()->GetDispatcher()->Execute(
+                    SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
+            }
+            else
+            {
+                // insert a new page with the same page layout
+                GetViewFrame()->GetDispatcher()->Execute(
+                    SID_INSERTPAGE_QUICK, SFX_CALLMODE_ASYNCHRON);
+            }
+        }
+        else
+        {
+            bRet = SdViewShell::KeyInput(rKEvt, pWin);
+        }
+    }
 
     return bRet;
 }

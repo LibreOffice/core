@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-04 16:14:07 $
+ *  last change: $Author: aw $ $Date: 2002-03-14 17:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,6 +895,25 @@ BOOL FuText::KeyInput(const KeyEvent& rKEvt)
 
     KeyCode nCode = rKEvt.GetKeyCode();
     BOOL bShift = nCode.IsShift();
+
+    // #97016# IV
+    if(pTextObj)
+    {
+        // maybe object is deleted, test if it's equal to the selected object
+        const SdrMarkList& rMarkList = pView->GetMarkList();
+        SdrObject* pSelectedObj = 0L;
+
+        if(1 == rMarkList.GetMarkCount())
+        {
+            SdrMark* pMark = rMarkList.GetMark(0);
+            pSelectedObj = pMark->GetObj();
+        }
+
+        if(pTextObj != pSelectedObj)
+        {
+            pTextObj = 0L;
+        }
+    }
 
     if ( pTextObj && pTextObj->GetObjInventor() == SdrInventor &&
          pTextObj->GetObjIdentifier() == OBJ_TITLETEXT

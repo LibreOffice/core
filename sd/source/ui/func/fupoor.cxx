@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-13 14:10:05 $
+ *  last change: $Author: aw $ $Date: 2002-03-14 17:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,11 @@
 #include "docshell.hxx"
 #include "zoomlist.hxx"
 #include "fuslshow.hxx"
+
+// #97016# IV
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
 
 TYPEINIT0( FuPoor );
 
@@ -305,6 +310,58 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
     switch (nCode)
     {
+        // #97016# IV
+        case KEY_RETURN:
+        {
+            if(rKEvt.GetKeyCode().IsMod1() && pViewShell && pViewShell->ISA(SdDrawViewShell))
+            {
+                SdDrawViewShell* pDrawViewShell = (SdDrawViewShell*)pViewShell;
+                SdPage* pActualPage = pDrawViewShell->GetActualPage();
+                SdrTextObj* pCandidate = 0L;
+
+                if(pActualPage)
+                {
+                    SdrObjListIter aIter(*pActualPage, IM_DEEPNOGROUPS);
+
+                    while(aIter.IsMore() && !pCandidate)
+                    {
+                        SdrObject* pObj = aIter.Next();
+
+                        if(pObj && pObj->ISA(SdrTextObj))
+                        {
+                            sal_uInt32 nInv(pObj->GetObjInventor());
+                            sal_uInt16 nKnd(pObj->GetObjIdentifier());
+
+                            if(SdrInventor == nInv &&
+                                (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd))
+                            {
+                                pCandidate = (SdrTextObj*)pObj;
+                            }
+                        }
+                    }
+                }
+
+                if(pCandidate)
+                {
+                    pView->UnMarkAll();
+                    pView->MarkObj(pCandidate, pView->GetPageViewPvNum(0));
+
+                    pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
+                }
+                else
+                {
+                    // insert a new page with the same page layout
+                    pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        SID_INSERTPAGE_QUICK, SFX_CALLMODE_ASYNCHRON);
+                }
+
+                // consumed
+                bReturn = TRUE;
+            }
+        }
+        break;
+
         // #97016# II
         case KEY_TAB:
         {
