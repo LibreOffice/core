@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPropertySet.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 20:31:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COMPHELPER_PROPERTYINFOHASH_HXX_
 #include <comphelper/PropertyInfoHash.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 #include <map>
 namespace vos
 {
@@ -106,7 +109,7 @@ typedef std::map < sal_uInt8, comphelper::SlaveData* > SlaveMap;
  */
 namespace comphelper
 {
-    class MasterPropertySet : public ::com::sun::star::beans::XPropertySet,
+    class COMPHELPER_DLLPUBLIC MasterPropertySet : public ::com::sun::star::beans::XPropertySet,
                               public ::com::sun::star::beans::XPropertyState,
                               public ::com::sun::star::beans::XMultiPropertySet
     {
