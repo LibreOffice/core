@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-01 10:45:13 $
+ *  last change: $Author: npower $ $Date: 2002-10-16 08:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,19 +165,29 @@ public:
     //XScriptImplAccess
     //=========================================================================
     /**
+     * Get the logical names for this storage
+     *
+     * @return sequence < ::rtl::OUString >
+     *      The logical names
+     */
+    virtual css::uno::Sequence< ::rtl::OUString >
+        SAL_CALL getScriptLogicalNames()
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+    //=========================================================================
+    /**
      * Get the implementations for a given URI
      *
      * @param queryURI
      *      The URI to get the implementations for
      *
-     * @return XScriptURI
+     * @return sequence < XScriptURI >
      *      The URIs of the implementations
      */
     virtual css::uno::Sequence< css::uno::Reference< dcsssf::scripturi::XScriptURI > >
         SAL_CALL getImplementations(
             const css::uno::Reference< dcsssf::scripturi::XScriptURI >& queryURI )
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-    //=========================================================================
 
 
     //XNamingAccess

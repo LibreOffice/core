@@ -2,9 +2,9 @@
 *
 *  $RCSfile: StorageBridge.hxx,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: npower $ $Date: 2002-10-01 10:45:11 $
+*  last change: $Author: npower $ $Date: 2002-10-16 08:33:27 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -95,6 +95,16 @@ public:
             const css::uno::Reference< dcsssf::scripturi::XScriptURI >& queryURI )
         throw ( css::lang::IllegalArgumentException,
             css::uno::RuntimeException );
+    //=========================================================================
+    /**
+     * Get the all logical names stored in this storage
+     *
+     * @return sequence < ::rtl::OUString >
+     *      The logical names
+     */
+    virtual css::uno::Sequence< ::rtl::OUString >
+        SAL_CALL getScriptLogicalNames()
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 private:
     StorageBridge( const css::uno::Reference< css::uno::XComponentContext >& xContext,
         sal_uInt16 sid );

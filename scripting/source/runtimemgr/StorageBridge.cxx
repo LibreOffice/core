@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageBridge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:26 $
+ *  last change: $Author: npower $ $Date: 2002-10-16 08:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,26 @@ StorageBridge::initStorage() throw ( ::com::sun::star::uno::RuntimeException )
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 }
+//*************************************************************************
+Sequence< ::rtl::OUString >
+StorageBridge::getScriptLogicalNames()
+throw ( lang::IllegalArgumentException,
+        RuntimeException )
+{
+    OSL_TRACE( "In StorageBridge getScriptLogicalNames...\n" );
+    Sequence < ::rtl::OUString  > results;
+    try
+    {
+        results = m_xScriptImplAccess->getScriptLogicalNames();
+    }
+    catch ( Exception e )
+    {
+        OUString temp = OUSTR( "StorageBridge::getScriptLogicalNames: " );
+        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+    }
+    return results;
+}
+
 //*************************************************************************
 Sequence < Reference< scripturi::XScriptURI > >
 StorageBridge::getImplementations( const Reference< scripturi::XScriptURI >& queryURI )

@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.8 $
-*  last change: $Author: jmrice $ $Date: 2002-10-01 07:38:41 $
+*  $Revision: 1.9 $
+*  last change: $Author: npower $ $Date: 2002-10-16 08:33:26 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -530,6 +530,51 @@ Reference<XInterface> ScriptStorage::getView(
 {
 }
 */
+
+//*************************************************************************
+Sequence< ::rtl::OUString >
+ScriptStorage::getScriptLogicalNames()
+throw ( lang::IllegalArgumentException,
+        RuntimeException )
+{
+    Sequence< ::rtl::OUString  > results;
+    ScriptInfo_hash::iterator h_it = mh_implementations.begin();
+    ScriptInfo_hash::iterator h_itEnd =  mh_implementations.end();
+    if ( h_it == h_itEnd  )
+    {
+        OSL_TRACE("ScriptStorage::getImplementations: EMPTY STORAGE");
+        return results;
+    }
+    results.realloc( mh_implementations.size() );
+
+    //find the implementations for the given logical name
+    try
+    {
+
+        ::osl::Guard< osl::Mutex > aGuard( m_mutex );
+
+        for ( sal_Int32 count = 0; h_it != h_itEnd ; ++h_it )
+        {
+            ::rtl::OUString logicalName = h_it->first;
+        OSL_TRACE("Adding %s at index %d ", ::rtl::OUStringToOString( logicalName,
+        RTL_TEXTENCODING_ASCII_US ).pData->buffer, count);
+            results[ count++ ] = logicalName;
+        }
+
+    }
+    catch ( RuntimeException re )
+    {
+        throw RuntimeException(
+            OUSTR( "ScriptStorage::getScriptLogicalNames RuntimeException: " ).concat( re.Message ),
+            Reference<XInterface> () );
+    }
+    catch ( Exception e )
+    {
+        throw RuntimeException( OUSTR( "ScriptStorage::getScriptLogicalNames Exception: " ).concat( e.Message ),
+                                Reference<XInterface> () );
+    }
+    return results;
+}
 
 //*************************************************************************
 Sequence< Reference< scripturi::XScriptURI > >
