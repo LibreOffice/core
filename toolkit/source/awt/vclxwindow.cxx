@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:49:05 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 10:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #ifndef _COM_SUN_STAR_AWT_WINDOWEVENT_HPP_
 #include <com/sun/star/awt/WindowEvent.hpp>
@@ -1023,6 +1022,23 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+             case BASEPROPERTY_PLUGINPARENT:
+             {
+                // correct data type?
+                 sal_Int64 nHandle;
+                 if ( ! (Value >>= nHandle) )
+                {
+                    ::com::sun::star::uno::Exception *pException =
+                        new ::com::sun::star::uno::RuntimeException;
+                    pException->Message = ::rtl::OUString::createFromAscii( "incorrect window handle type" );
+                    throw pException;
+                }
+
+                // set parent handle
+                SetSystemParent_Impl( nHandle);
+             }
+             break;
+
             case BASEPROPERTY_ENABLED:
             {
                 sal_Bool b;
