@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:51:51 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,14 +927,13 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
     int scflag = 1;                                         /*- start contour flag */
     int ecflag = 0;                                         /*- end contour flag */
     int cp = 0;                                             /*- current point */
+    int StartContour = 0, EndContour = 0;
 
     listSetElementDtor(pList, free);
     *path = 0;
 
     /* if (srcCount > 0) for(;;) */
     while (srcCount > 0) {                                  /*- srcCount does not get changed inside the loop. */
-        int StartContour = 0, EndContour = 1;
-
         if (scflag) {
             int l = cp;
             StartContour = cp;
@@ -2154,7 +2153,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
 static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP)
 {
     GlyphOffsets *res = smalloc(sizeof(GlyphOffsets));
-    sal_uInt8 *loca = 0;
+    sal_uInt8 *loca = NULL;
     sal_uInt16 i, numTables = GetUInt16(sfntP, 4, 1);
     sal_uInt32 locaLen = 0;
     sal_Int16 indexToLocFormat = 0;
@@ -2316,7 +2315,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
         return res;
     }
 
-    fprintf(outf, "%%!PS-TrueTypeFont-%d.%d-%d.%d\n", ver>>16, ver & 0xFFFF, rev>>16, rev & 0xFFFF);
+    fprintf(outf, "%%!PS-TrueTypeFont-%d.%d-%d.%d\n", (int)(ver>>16), (int)(ver & 0xFFFF), (int)(rev>>16), (int)(rev & 0xFFFF));
     fprintf(outf, "%%%%Creator: %s %s %s\n", modname, modver, modextra);
     fprintf(outf, "%%- Font subset generated from a source font file: '%s'\n", ttf->fname);
     fprintf(outf, "%%- Original font name: %s\n", ttf->psname);
@@ -2334,7 +2333,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     for (i = 1; i<nGlyphs; i++) {
         fprintf(outf, "Encoding %d /glyph%d put\n", encoding[i], gID[i]);
     }
-    fprintf(outf, "/XUID [103 0 1 16#%08X %d 16#%08X 16#%08X] def\n", rtl_crc32(0, ttf->ptr, ttf->fsize), nGlyphs, rtl_crc32(0, glyphArray, nGlyphs * 2), rtl_crc32(0, encoding, nGlyphs));
+    fprintf(outf, "/XUID [103 0 1 16#%08X %d 16#%08X 16#%08X] def\n", (unsigned int)rtl_crc32(0, ttf->ptr, ttf->fsize), (unsigned int)nGlyphs, (unsigned int)rtl_crc32(0, glyphArray, nGlyphs * 2), (unsigned int)rtl_crc32(0, encoding, nGlyphs));
 
     DumpSfnts(outf, sfntP);
 
