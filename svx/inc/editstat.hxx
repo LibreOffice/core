@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editstat.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:55 $
+ *  last change: $Author: mt $ $Date: 2001-08-01 13:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ public:
 
 #define SPELLCMD_IGNOREWORD         0x0001
 #define SPELLCMD_STARTSPELLDLG      0x0002
+#define SPELLCMD_ADDTODICTIONARY    0x0003
 
 struct SpellCallbackInfo
 {
