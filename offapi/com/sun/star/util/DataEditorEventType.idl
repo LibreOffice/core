@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataEditorEventType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ module com {  module sun {  module star {  module util {
 
 /** specifies the type of an event from an <type>XDataEditor</type>.
  */
-enum DataEditorEventType
+published enum DataEditorEventType
 {
     /** specifies that the data editing is done (data stored).
      */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateTimeRange.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com {  module sun {  module star {  module util {
 
 /** represents a range of date+time values.
  */
-struct DateTimeRange
+published struct DateTimeRange
 {
     /** contains the start hundredth seconds (0-99) for the range.
      */
