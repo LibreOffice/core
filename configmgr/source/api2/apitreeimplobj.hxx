@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
+namespace com { namespace sun { namespace star {
+    namespace script { class XTypeConverter; }
+} } }
+
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
@@ -103,6 +107,7 @@ namespace configmgr
         typedef uno::XInterface UnoInterface;
         typedef uno::Reference<UnoInterface> UnoInterfaceRef;
         typedef uno::Reference<com::sun::star::lang::XComponent> ComponentRef;
+        typedef uno::Reference<com::sun::star::script::XTypeConverter>  UnoTypeConverter;
 
 //-----------------------------------------------------------------------------
 // API object implementation wrappers
@@ -121,6 +126,7 @@ namespace configmgr
             ~ApiProvider()
             {}
 
+            UnoTypeConverter            getTypeConverter() const;
             Factory&                    getFactory()        { return m_rFactory; }
             ConfigurationProviderImpl2& getProviderImpl()   { return m_rProviderImpl; }
             ISynchronizedData*          getSourceLock() const;
@@ -128,7 +134,7 @@ namespace configmgr
         };
 
     //-------------------------------------------------------------------------
-        class ApiTreeImpl : private com::sun::star::lang::XEventListener, private INodeListener, NotCopyable
+        class ApiTreeImpl : private com::sun::star::lang::XEventListener, NotCopyable
         {
             typedef configuration::Tree Tree;
             Tree                m_aTree;
@@ -161,8 +167,6 @@ namespace configmgr
             ISynchronizedData*          getDataLock() const     { return configuration::getRootLock(m_aTree); }
             osl::Mutex&                 getApiLock() const;
 
-            /// toggle whether this object relays notifications from the base provider
-            bool                        enableNotification(bool bEnable);
             /// wire this to a new parent tree
             void                        haveNewParent(ApiTreeImpl* pNewParent);
         private:
@@ -181,20 +185,40 @@ namespace configmgr
             virtual void SAL_CALL release() throw();
             virtual uno::Any SAL_CALL queryInterface(uno::Type const& rType) throw();
             virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw();
+            // ---------------------------------------------------------------------------------------------------
+        };
 
+    //-----------------------------------------------------------------------------
+        class ApiRootTreeImpl : private INodeListener
+        {
+            typedef configuration::Tree Tree;
+        public:
+            explicit ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree);
+            ~ApiRootTreeImpl();
+
+            ApiTreeImpl& getApiTree() { return m_aTreeImpl; }
+            ApiTreeImpl const& getApiTree() const { return m_aTreeImpl; }
+
+        // self-locked methods for dispose handling
+            bool disposeTree();
+
+            /// toggle whether this object relays notifications from the base provider
+            bool                        enableNotification(bool bEnable);
+        private:
+            IConfigBroadcaster* implSetNotificationSource(IConfigBroadcaster* pNew);
+            void implSetLocation();
+
+        private:
         // IConfigListener
             virtual void disposing(IConfigBroadcaster* pSource) ;
         //INodeListener : IConfigListener
             virtual void nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource);
             virtual void nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource);
-        public:
-            IConfigBroadcaster* implSetNotificationSource(IConfigBroadcaster* pNew);
-            void implSetLocation();
-        private:
-            IConfigBroadcaster* m_pNotificationSource;
-            OUString            m_aLocationPath;
 
-        // ---------------------------------------------------------------------------------------------------
+        private:
+            ApiTreeImpl         m_aTreeImpl;
+            OUString            m_aLocationPath;
+            IConfigBroadcaster* m_pNotificationSource;
         };
 //-----------------------------------------------------------------------------
     }

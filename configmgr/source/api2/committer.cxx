@@ -2,9 +2,9 @@
  *
  *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:20:38 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,10 @@ namespace
     //-------------------------------------------------------------------------
     struct NotifyDisabler
     {
-        ApiTreeImpl& m_rTree;
+        ApiRootTreeImpl& m_rTree;
         bool m_bOldState;
 
-        NotifyDisabler(ApiTreeImpl& rTree)
+        NotifyDisabler(ApiRootTreeImpl& rTree)
         : m_rTree(rTree)
         , m_bOldState(rTree .enableNotification(false) )
         {
@@ -101,23 +101,24 @@ namespace
 // class Committer
 //-----------------------------------------------------------------------------
 
-Committer::Committer(ApiTreeImpl& rTree)
+Committer::Committer(ApiRootTreeImpl& rTree)
 : m_rTree(rTree)
 {}
 //-----------------------------------------------------------------------------
 
 ITreeProvider2* Committer::getUpdateProvider()
 {
-    return &m_rTree.getProvider().getProviderImpl();
+    return &m_rTree.getApiTree().getProvider().getProviderImpl();
 }
 
 //-----------------------------------------------------------------------------
 void Committer::commit()
 {
-    OClearableWriteSynchronized aProviderGuard(m_rTree.getProviderLock());
-    OClearableWriteSynchronized aLocalGuard(m_rTree.getDataLock());
+    ApiTreeImpl& rApiTree = m_rTree.getApiTree();
+    OClearableWriteSynchronized aProviderGuard(rApiTree.getProviderLock());
+    OClearableWriteSynchronized aLocalGuard(rApiTree.getDataLock());
 
-    Tree aTree(m_rTree.getTree());
+    Tree aTree(rApiTree.getTree());
     if (!aTree.hasChanges()) return;
 
 

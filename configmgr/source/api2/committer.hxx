@@ -2,9 +2,9 @@
  *
  *  $RCSfile: committer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:20:38 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,15 +70,15 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
-        class ApiTreeImpl;
+        class ApiRootTreeImpl;
 //-----------------------------------------------------------------------------
 
         /// allows to update values of a simple type within a <type>NodeRef</type> that refers to a Group
         class Committer
         {
-            ApiTreeImpl& m_rTree;
+            ApiRootTreeImpl& m_rTree;
         public:
-            Committer(ApiTreeImpl& rTree);
+            Committer(ApiRootTreeImpl& rTree);
 
             void commit();
         private:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiaccessobj.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,14 +163,15 @@ extern ServiceInfo const aRootElementReadAccessSI;
         {
             static ServiceInfo const*const s_pServiceInfo;
 
-            mutable ApiTreeImpl     m_aTree;
+            mutable ApiRootTreeImpl     m_aRootTree;
         public:
             OReadRootElement(UnoInterface* pUnoThis, ApiProvider& rProvider, configuration::Tree const& aTree)
-            : m_aTree(pUnoThis, rProvider,aTree)
+            : m_aRootTree(pUnoThis, rProvider,aTree)
             {}
 
             virtual NodeRef             doGetNode() const;
             virtual ApiTreeImpl&        getApiTree() const;
+            virtual ApiRootTreeImpl&    getRootTree();
 
             virtual UnoInterface*       doGetUnoInstance() const;
             virtual ServiceInfo const*  doGetServiceInfo() const;
@@ -184,14 +185,15 @@ extern ServiceInfo const aRootElementReadAccessSI;
         {
             static ServiceInfo const*const s_pServiceInfo;
 
-            mutable ApiTreeImpl     m_aTree;
+            mutable ApiRootTreeImpl     m_aRootTree;
         public:
             OUpdateRootElement(UnoInterface* pUnoThis, ApiProvider& rProvider, configuration::Tree const& aTree)
-            : m_aTree(pUnoThis, rProvider,aTree)
+            : m_aRootTree(pUnoThis, rProvider,aTree)
             {}
 
             virtual NodeRef             doGetNode() const;
             virtual ApiTreeImpl&        getApiTree() const;
+            virtual ApiRootTreeImpl&    getRootTree();
 
             virtual UnoInterface*       doGetUnoInstance() const;
             virtual ServiceInfo const*  doGetServiceInfo() const;

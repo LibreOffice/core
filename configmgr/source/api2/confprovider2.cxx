@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-09 14:23:05 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,15 +130,15 @@ namespace configmgr
             CreatorFunc2 create;
         };
 
-        AsciiServiceName const aProviderServices[] =
+        AsciiServiceName const aProvider2Services[] =
         {
             "com.sun.star.configuration.ConfigurationProvider",
             0
         };
-        ServiceInfo const aProviderInfo =
+        ServiceInfo const aProvider2Info =
         {
             "com.sun.star.configuration.configmgr.ConfigurationProvider2",
-            aProviderServices
+            aProvider2Services
 
         };
 
@@ -160,12 +160,17 @@ namespace configmgr
             return createServiceData;
         }
     }
+    ServiceInfo const& ConfigurationProvider2::staticServiceInfo = aProvider2Info;
 
-    ServiceInfo const& ConfigurationProvider2::staticServiceInfo = aProviderInfo;
+    const ServiceInfo* getConfigurationProviderServiceInfo()
+    {
+        return &aProvider2Info;
+    }
+
 
     static uno::Reference< lang::XMultiServiceFactory > getConfigurationFactory(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager)
     {
-        uno::Reference< uno::XInterface > aProvider( rServiceManager->createInstance( OUString::createFromAscii(aProviderInfo.implementationName) ) );
+        uno::Reference< uno::XInterface > aProvider( rServiceManager->createInstance( OUString::createFromAscii(aProvider2Info.implementationName) ) );
         uno::Reference< lang::XMultiServiceFactory > aConfigFactory( aProvider, uno::UNO_QUERY );
         return aConfigFactory;
     }
@@ -215,7 +220,7 @@ namespace configmgr
     }
 
     ConfigurationProvider2::ConfigurationProvider2(Module& aModule)
-    : ServiceComponentImpl(&aProviderInfo)
+    : ServiceComponentImpl(&aProvider2Info)
     , m_pImpl(NULL)
     , m_aModule(aModule)
     {

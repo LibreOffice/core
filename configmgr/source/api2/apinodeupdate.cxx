@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace configmgr
 
 configuration::GroupUpdater NodeGroupAccess::getNodeUpdater()
 {
-    return configuration::GroupUpdater(getTree(),getNode());
+    return configuration::GroupUpdater(getTree(),getNode(), getApiTree().getProvider().getTypeConverter());
 }
 //-----------------------------------------------------------------------------
 
@@ -110,7 +110,7 @@ configuration::TreeSetUpdater NodeTreeSetAccess::getNodeUpdater()
 
 configuration::ValueSetUpdater NodeValueSetAccess::getNodeUpdater()
 {
-    return configuration::ValueSetUpdater(getTree(),getNode(),getElementInfo());
+    return configuration::ValueSetUpdater(getTree(),getNode(),getElementInfo(), getApiTree().getProvider().getTypeConverter());
 }
 //-----------------------------------------------------------------------------
 

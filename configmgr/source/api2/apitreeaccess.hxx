@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace configmgr
     // API object implementation wrappers
     //-------------------------------------------------------------------------
         class ApiTreeImpl;
+        class ApiRootTreeImpl;
 
         // these objects just provide the pieces needed to navigate and manipulate trees and nodes
 
@@ -167,6 +168,9 @@ namespace configmgr
         class RootElement : public TreeElement
         {
         public:
+            bool disposeTree();
+        protected:
+            virtual ApiRootTreeImpl& getRootTree() = 0;
         };
 //-----------------------------------------------------------------------------
 

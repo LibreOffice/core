@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,10 @@ void SetElement::haveNewParent(NodeSetInfoAccess* pNewParent)
 
 //-----------------------------------------------------------------------------
 
-//void UpdateRootElement::commit() const;
+bool RootElement::disposeTree()
+{
+    return getRootTree().disposeTree();
+}
 //-----------------------------------------------------------------------------
 
 ISynchronizedData * UpdateRootElement::getDataLock()
@@ -158,7 +161,7 @@ ISynchronizedData * UpdateRootElement::getProviderLock()
 
 Committer UpdateRootElement::getCommitter()
 {
-    return Committer(getApiTree());
+    return Committer(getRootTree());
 }
 //-----------------------------------------------------------------------------
 

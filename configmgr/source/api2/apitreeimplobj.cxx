@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@ configuration::TemplateProvider ApiProvider::getTemplateProvider() const
 }
 //-------------------------------------------------------------------------
 
+UnoTypeConverter ApiProvider::getTypeConverter() const
+{
+    return m_rProviderImpl.getTypeConverter();
+}
+//-------------------------------------------------------------------------
+
 ISynchronizedData* ApiProvider::getSourceLock() const
 {
     return &m_rProviderImpl;
@@ -99,22 +105,27 @@ ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, Tree const& aTree, ApiTreeImpl
 , m_rProvider(rParentTree.getProvider())
 , m_pParentTree(0)
 , m_aNotifier(new NotifierImpl())
-, m_pNotificationSource(0)
 {
     init(&rParentTree);
 }
 //-------------------------------------------------------------------------
-
 ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, ApiTreeImpl* pParentTree)
 : m_pInstance(pInstance)
 , m_aTree(aTree)
 , m_rProvider(rProvider)
 , m_pParentTree(0)
 , m_aNotifier(new NotifierImpl())
-, m_pNotificationSource(0)
 {
     OSL_ENSURE(!pParentTree || &rProvider == &pParentTree->m_rProvider,"WARNING: Parent tree has a different provider - trouble may be ahead");
     init(pParentTree);
+}
+//-------------------------------------------------------------------------
+ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree)
+: m_aTreeImpl(pInstance, rProvider, aTree, 0)
+, m_pNotificationSource(0)
+{
+    implSetLocation();
+    enableNotification(true);
 }
 //-------------------------------------------------------------------------
 
@@ -122,6 +133,11 @@ ApiTreeImpl::~ApiTreeImpl()
 {
     OSL_ENSURE(m_aNotifier->m_aListeners.isDisposed(),"ApiTree Object was not disposed properly");
     deinit();
+}
+//-------------------------------------------------------------------------
+ApiRootTreeImpl::~ApiRootTreeImpl()
+{
+    implSetNotificationSource(0);
 }
 //-------------------------------------------------------------------------
 
@@ -148,9 +164,9 @@ Notifier ApiTreeImpl::getNotifier() const
 }
 //-------------------------------------------------------------------------
 
-bool ApiTreeImpl::enableNotification(bool bEnable)
+bool ApiRootTreeImpl::enableNotification(bool bEnable)
 {
-    IConfigBroadcaster* pSource = bEnable ? m_rProvider.getProviderImpl().getNotifier() : 0;
+    IConfigBroadcaster* pSource = bEnable ? getApiTree().getProvider().getProviderImpl().getNotifier() : 0;
 
     IConfigBroadcaster* pOld = this->implSetNotificationSource(pSource);
 
@@ -169,6 +185,13 @@ bool ApiTreeImpl::disposeTree(bool bForce)
     implDisposeTree();
     return true;
 }
+
+//-------------------------------------------------------------------------
+bool ApiRootTreeImpl::disposeTree()
+{
+    implSetNotificationSource(0);
+    return m_aTreeImpl.disposeTree(true);
+}
 //-------------------------------------------------------------------------
 void ApiTreeImpl::implDisposeTree()
 {
@@ -181,8 +204,6 @@ void ApiTreeImpl::implDisposeTree()
         using configuration::NodeID;
         using configuration::getAllContainedNodes;
         using com::sun::star::lang::EventObject;
-
-        implSetNotificationSource(0);
 
         Factory& rFactory = getFactory();
 
@@ -243,12 +264,10 @@ void ApiTreeImpl::init(ApiTreeImpl* pParentTree)
 
     OSL_ASSERT(m_pParentTree == 0);
     setParentTree(pParentTree);
-    enableNotification(true);
 }
 //-------------------------------------------------------------------------
 void ApiTreeImpl::deinit()
 {
-    implSetNotificationSource(0);
     setParentTree(0);
     OSL_ENSURE(m_xProvider.is(),"WARNING: Provider is no Component - did we still survive ?");
 
@@ -301,8 +320,6 @@ void ApiTreeImpl::setParentTree(ApiTreeImpl*    pParentTree) // internal impleme
 
         OSL_ENSURE( xNew.is() == (pParentTree != 0), "WARNING: Parent Tree is no Component");
     }
-
-    this->implSetLocation();
 }
 //-------------------------------------------------------------------------
 
@@ -349,9 +366,9 @@ void SAL_CALL ApiTreeImpl::disposing(com::sun::star::lang::EventObject const& rE
     // if (xThis.is()) xThis->dispose();
 }
 //-------------------------------------------------------------------------
-IConfigBroadcaster* ApiTreeImpl::implSetNotificationSource(IConfigBroadcaster* pNew)
+IConfigBroadcaster* ApiRootTreeImpl::implSetNotificationSource(IConfigBroadcaster* pNew)
 {
-    osl::MutexGuard aGuard(getApiLock());
+    osl::MutexGuard aGuard(getApiTree().getApiLock());
 
     IConfigBroadcaster* pOld = m_pNotificationSource;
     if (pOld != pNew)
@@ -370,14 +387,15 @@ IConfigBroadcaster* ApiTreeImpl::implSetNotificationSource(IConfigBroadcaster* p
 }
 // ---------------------------------------------------------------------------------------------------
 
-void ApiTreeImpl::implSetLocation()
+void ApiRootTreeImpl::implSetLocation()
 {
-    osl::MutexGuard aGuard(getApiLock());
+    osl::MutexGuard aGuard(getApiTree().getApiLock());
 
-    if (!m_aTree.isEmpty())
+    Tree aTree = getApiTree().getTree();
+    if (!aTree.isEmpty())
     {
-        configuration::Name aRootName = m_aTree.getRootNode().getName();
-        m_aLocationPath = m_aTree.getContextPath().compose( configuration::RelativePath(aRootName) ).toString();
+        configuration::Name aRootName = aTree.getRootNode().getName();
+        m_aLocationPath = aTree.getContextPath().compose( configuration::RelativePath(aRootName) ).toString();
     }
     else
     {
@@ -394,22 +412,22 @@ void ApiTreeImpl::implSetLocation()
 }
 // ---------------------------------------------------------------------------------------------------
 
-void ApiTreeImpl::disposing(IConfigBroadcaster* pSource)
+void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 {
-    osl::MutexGuard aGuard(getApiLock());
-
     OSL_ASSERT(pSource == m_pNotificationSource);
     m_pNotificationSource = 0;
+
+    m_aTreeImpl.disposeTree(true);
 }
 // ---------------------------------------------------------------------------------------------------
 
 //INodeListener : IConfigListener
-void ApiTreeImpl::nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource)
+void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource)
 {
 }
 // ---------------------------------------------------------------------------------------------------
 
-void ApiTreeImpl::nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource)
+void ApiRootTreeImpl::nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource)
 {
 }
 

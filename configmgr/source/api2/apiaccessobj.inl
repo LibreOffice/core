@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiaccessobj.inl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:37:25 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,21 +154,28 @@ ServiceInfo const* OSetElement<NodeClass>::getStaticServiceInfo()
 template <class NodeClass>
 NodeRef OReadRootElement<NodeClass>::doGetNode() const
 {
-    return m_aTree.getTree().getRootNode();
+    return m_aRootTree.getApiTree().getTree().getRootNode();
 }
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
 ApiTreeImpl& OReadRootElement<NodeClass>::getApiTree() const
 {
-    return m_aTree;
+    return m_aRootTree.getApiTree();
+}
+//-----------------------------------------------------------------------------
+
+template <class NodeClass>
+ApiRootTreeImpl& OReadRootElement<NodeClass>::getRootTree()
+{
+    return m_aRootTree;
 }
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
 UnoInterface* OReadRootElement<NodeClass>::doGetUnoInstance() const
 {
-    return m_aTree.getUnoInstance();
+    return m_aRootTree.getApiTree().getUnoInstance();
 }
 //-----------------------------------------------------------------------------
 
@@ -193,21 +200,28 @@ ServiceInfo const* OReadRootElement<NodeClass>::getStaticServiceInfo()
 template <class NodeClass>
 NodeRef OUpdateRootElement<NodeClass>::doGetNode() const
 {
-    return m_aTree.getTree().getRootNode();
+    return m_aRootTree.getApiTree().getTree().getRootNode();
 }
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
 ApiTreeImpl& OUpdateRootElement<NodeClass>::getApiTree() const
 {
-    return m_aTree;
+    return m_aRootTree.getApiTree();
+}
+//-----------------------------------------------------------------------------
+
+template <class NodeClass>
+ApiRootTreeImpl& OUpdateRootElement<NodeClass>::getRootTree()
+{
+    return m_aRootTree;
 }
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
 UnoInterface* OUpdateRootElement<NodeClass>::doGetUnoInstance() const
 {
-    return m_aTree.getUnoInstance();
+    return m_aRootTree.getApiTree().getUnoInstance();
 }
 //-----------------------------------------------------------------------------
 
