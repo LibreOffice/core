@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:04:58 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:08:03 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -120,7 +120,7 @@ $(SAMPLE_NAME) : $(COMP_REGISTERFLAG)
 	@echo You can also load the document "$(QM)$(COMP_NAME).odt$(QM)" and press a button 
 	@echo to run one of the example macros.
 	@echo -
-	@echo make $(COMP_NAME).odt.load
+	@echo $(MAKE) $(COMP_NAME).odt.load
 	@echo --------------------------------------------------------------------------------
 
 $(COMP_NAME).odt.load : $(COMP_REGISTERFLAG)
