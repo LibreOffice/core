@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hro $ $Date: 2001-08-20 09:30:22 $
+ *  last change: $Author: obr $ $Date: 2001-09-11 15:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/security.h>
+#include <osl/mutex.h>
 
 #include "procimpl.h"
 #include "sockimpl.h"
@@ -78,6 +79,39 @@ LPWSTR *lpArgvW = NULL;
 int nArgnW = 0;
 
 extern oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile );
+extern void _imp_getProcessLocale( rtl_Locale ** ppLocale );
+
+rtl_Locale * theProcessLocale = NULL;
+
+/***************************************************************************/
+
+oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
+{
+    osl_acquireMutex( *osl_getGlobalMutex() );
+
+    /* determine the users default locale */
+    if( NULL == theProcessLocale )
+        _imp_getProcessLocale( &theProcessLocale );
+
+    /* or return the cached value */
+    *ppLocale = theProcessLocale;
+
+    osl_releaseMutex( *osl_getGlobalMutex() );
+    return osl_Process_E_None;
+}
+
+/***************************************************************************/
+
+oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
+{
+    osl_acquireMutex( *osl_getGlobalMutex() );
+
+    /* just remember the locale here */
+    theProcessLocale = pLocale;
+
+    osl_releaseMutex( *osl_getGlobalMutex() );
+    return osl_Process_E_None;
+}
 
 /***************************************************************************/
 

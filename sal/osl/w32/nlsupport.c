@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-16 06:43:52 $
+ *  last change: $Author: obr $ $Date: 2001-09-11 15:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 
 #include <osl/mutex.h>
 #include <osl/nlsupport.h>
+#include <osl/diagnose.h>
+#include <osl/process.h>
 #include <rtl/tencinfo.h>
 
 struct EnumLocalesParams
@@ -268,6 +270,10 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         osl_releaseMutex( globalMutex );
     }
 
+    /* if pLocale is NULL, use process locale as default */
+    if( NULL == pLocale )
+        osl_getProcessLocale( &pLocale );
+
     /* copy in parameters to structure */
     if( pLocale && pLocale->Language )
     {
@@ -290,5 +296,31 @@ rtl_TextEncoding SAL_CALL osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     return GetTextEncodingFromLCID( GetUserDefaultLCID() );
 }
 
+/*****************************************************************************/
+/* imp_getProcessLocale
+/*****************************************************************************/
+
+void _imp_getProcessLocale( rtl_Locale ** ppLocale )
+{
+    WCHAR langCode[4];
+    WCHAR ctryCode[4];
+    LCID  localeId;
+
+    OSL_ASSERT( ppLocale );
+
+    /* get the LCID to retrieve information from */
+    localeId = GetUserDefaultLCID();
+
+    /* call GetLocaleInfo to retrieve the iso codes */
+    if( GetLocaleInfo( localeId, LOCALE_SISO639LANGNAME , langCode, 4 )  &&
+        GetLocaleInfo( localeId, LOCALE_SISO3166CTRYNAME , ctryCode, 4 ) )
+    {
+        *ppLocale = rtl_locale_register( langCode, ctryCode, L"" );
+    }
+    else
+    {
+        *ppLocale = rtl_locale_register( L"C", L"", L"" );
+    }
+}
 
 
