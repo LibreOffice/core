@@ -90,7 +90,7 @@ namespace treeview {
 
         // XTypeProvider
 
-        XTYPEPROVIDER_DECL();
+        XTYPEPROVIDER_DECL()
 
 
         // XNameAccess
