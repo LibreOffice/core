@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-04 14:00:23 $
+ *  last change: $Author: fs $ $Date: 2001-12-07 15:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,9 @@ private:
     void            DeleteEntries();
     void            DoQuickSearch( const xub_Unicode& rChar );
     sal_Bool        Kill( const OUString& rURL );
+
+protected:
+    virtual BOOL    DoubleClickHdl();
 
 public:
                     ViewTabListBox_Impl( Window* pParentWin,
@@ -605,6 +608,9 @@ public:
 
 class SvtFileView_Impl
 {
+protected:
+    Link                    m_aSelectHandler;
+
 public:
 
     ::std::vector< SortingData_Impl* >  maContent;
@@ -617,6 +623,8 @@ public:
     sal_Bool                mbAscending     : 1;
     sal_Bool                mbOnlyFolder    : 1;
     sal_Bool                mbReplaceNames  : 1;    // translate folder names or display doc-title instead of file name
+    sal_Bool                mbSuspendSelectCallback : 1;
+
     String                  maViewURL;
     String                  maAllFilter;
     String                  maCurrentFilter;
@@ -659,6 +667,14 @@ public:
     sal_Bool                GetTranslatedName( const OUString& rName, OUString& rTranslatedName ) const;
 
     sal_Bool                GetDocTitle( const OUString& rTargetURL, OUString& rDocTitle ) const;
+
+    void                    SetSelectHandler( const Link& _rHdl );
+
+    void                    InitSelection();
+    void                    ResetCursor();
+
+protected:
+    DECL_LINK( SelectionMultiplexer, void* );
 };
 
 inline void SvtFileView_Impl::EnableContextMenu( sal_Bool bEnable )
@@ -1143,6 +1159,21 @@ void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
 }
 
 // -----------------------------------------------------------------------
+BOOL ViewTabListBox_Impl::DoubleClickHdl()
+{
+    SvHeaderTabListBox::DoubleClickHdl();
+    return FALSE;
+        // this means "do no additional handling". Especially this means that the SvImpLBox does not
+        // recognize that the entry at the double click position change after the handler call (which is
+        // the case if in the handler, our content was replaced)
+        // If it _would_ recognize this change, it would take this as a reason to select the entry, again
+        // - which is not what in the case of content replace
+        // (I really doubt that this behaviour of the SvImpLBox does make any sense at all, but
+        // who knows ...)
+        // 07.12.2001 - 95727 - fs@openoffice.org
+}
+
+// -----------------------------------------------------------------------
 sal_Bool ViewTabListBox_Impl::Kill( const OUString& rContent )
 {
     sal_Bool bRet = sal_True;
@@ -1280,10 +1311,8 @@ void SvtFileView::OpenFolder( const Sequence< OUString >& aContents )
         }
     }
 
-    mpImp->mpView->SelectAll( FALSE );
-    SvLBoxEntry* pFirst = mpImp->mpView->First();
-    if ( pFirst )
-        mpImp->mpView->SetCursor( pFirst, TRUE );
+    mpImp->InitSelection();
+    mpImp->ResetCursor();
 }
 
 // -----------------------------------------------------------------------
@@ -1470,20 +1499,14 @@ void SvtFileView::GetFocus()
 
 void SvtFileView::ResetCursor()
 {
-    // deselect
-    SvLBoxEntry* pEntry = mpImp->mpView->FirstSelected();
-    if ( pEntry )
-        mpImp->mpView->Select( pEntry, FALSE );
-    // set cursor to the first entry
-    mpImp->mpView->SetCursor( mpImp->mpView->First(), TRUE );
-    mpImp->mpView->Update();
+    mpImp->ResetCursor();
 }
 
 // -----------------------------------------------------------------------
 
 void SvtFileView::SetSelectHdl( const Link& rHdl )
 {
-    mpImp->mpView->SetSelectHdl( rHdl );
+    mpImp->SetSelectHandler( rHdl );
 }
 
 // -----------------------------------------------------------------------
@@ -1669,13 +1692,14 @@ const String* NameTranslator_Impl::GetTransTableFileName() const
 // class SvtFileView_Impl ---------------------------------------------
 SvtFileView_Impl::SvtFileView_Impl( Window* pParent,
                                     sal_Int16 nFlags,
-                                    sal_Bool bOnlyFolder ) :
-    mnSortColumn    ( COLUMN_TITLE ),
-    mbAscending     ( sal_True ),
-    mbOnlyFolder    ( bOnlyFolder ),
-    mbReplaceNames  ( sal_False ),
-    maFolderImage   ( SvtResId( IMG_SVT_FOLDER ) ),
-    mpNameTrans     ( NULL )
+                                    sal_Bool bOnlyFolder )
+    :mnSortColumn               ( COLUMN_TITLE )
+    ,mbAscending                ( sal_True )
+    ,mbOnlyFolder               ( bOnlyFolder )
+    ,mbReplaceNames             ( sal_False )
+    ,maFolderImage              ( SvtResId( IMG_SVT_FOLDER ) )
+    ,mpNameTrans                ( NULL )
+    ,mbSuspendSelectCallback    ( sal_False )
 {
     maAllFilter = String::CreateFromAscii( "*.*" );
 
@@ -1958,6 +1982,33 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 }
 
 // -----------------------------------------------------------------------
+IMPL_LINK( SvtFileView_Impl, SelectionMultiplexer, void*, _pSource )
+{
+    return mbSuspendSelectCallback ? 0L : m_aSelectHandler.Call( _pSource );
+}
+
+// -----------------------------------------------------------------------
+void SvtFileView_Impl::SetSelectHandler( const Link& _rHdl )
+{
+    m_aSelectHandler = _rHdl;
+
+    Link aMasterHandler;
+    if ( m_aSelectHandler.IsSet() )
+        aMasterHandler = LINK( this, SvtFileView_Impl, SelectionMultiplexer );
+
+    mpView->SetSelectHdl( aMasterHandler );
+}
+
+// -----------------------------------------------------------------------
+void SvtFileView_Impl::InitSelection()
+{
+    mpView->SelectAll( sal_False );
+    SvLBoxEntry* pFirst = mpView->First();
+    if ( pFirst )
+        mpView->SetCursor( pFirst, sal_True );
+}
+
+// -----------------------------------------------------------------------
 void SvtFileView_Impl::OpenFolder_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1982,12 +2033,25 @@ void SvtFileView_Impl::OpenFolder_Impl()
         pEntry->SetUserData( pUserData );
     }
 
-    mpView->SelectAll( FALSE );
-    SvLBoxEntry* pFirst = mpView->First();
-    if ( pFirst )
-        mpView->SetCursor( pFirst, TRUE );
+    InitSelection();
 
+    mbSuspendSelectCallback = sal_True;
     mpView->SetUpdateMode( TRUE );
+    mbSuspendSelectCallback = sal_False;
+
+    ResetCursor();
+}
+
+// -----------------------------------------------------------------------
+void SvtFileView_Impl::ResetCursor()
+{
+    // deselect
+    SvLBoxEntry* pEntry = mpView->FirstSelected();
+    if ( pEntry )
+        mpView->Select( pEntry, FALSE );
+    // set cursor to the first entry
+    mpView->SetCursor( mpView->First(), TRUE );
+    mpView->Update();
 }
 
 // -----------------------------------------------------------------------
