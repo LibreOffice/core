@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 15:20:59 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,8 @@ throw ( RuntimeException )
         if (( Event.State >>= bValue ) && !m_bEnumCommand )
         {
             // Boolean, treat it as checked/unchecked
-            m_pToolbar->ShowItem( m_nID, TRUE );
+            if ( m_bMadeInvisible )
+                m_pToolbar->ShowItem( m_nID, TRUE );
             m_pToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = STATE_CHECK;
@@ -306,13 +307,15 @@ throw ( RuntimeException )
                 m_pToolbar->SetQuickHelpText( m_nID, aText );
             }
 
-            m_pToolbar->ShowItem( m_nID, TRUE );
+            if ( m_bMadeInvisible )
+                m_pToolbar->ShowItem( m_nID, TRUE );
         }
         else if (( Event.State >>= aItemState ) && !m_bEnumCommand )
         {
             eTri = STATE_DONTKNOW;
             nItemBits |= TIB_CHECKABLE;
-            m_pToolbar->ShowItem( m_nID, TRUE );
+            if ( m_bMadeInvisible )
+                m_pToolbar->ShowItem( m_nID, TRUE );
         }
         else if ( Event.State >>= aItemVisibility )
         {
