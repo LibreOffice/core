@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condition.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:29:51 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ namespace salhelper
 
 
     private:
+        Condition(Condition &); // not defined
+        void operator =(Condition &); // not defined
 
         osl::Mutex&  m_aMutex;
         oslCondition m_aCondition;
@@ -113,6 +115,8 @@ namespace salhelper
 
 
     private:
+        ConditionModifier(ConditionModifier &); // not defined
+        void operator =(ConditionModifier &); // not defined
 
         Condition& m_aCond;
     };
@@ -125,7 +129,15 @@ namespace salhelper
 
         ConditionWaiter(Condition& aCond);
 
-        struct timedout { };
+        struct timedout {
+            timedout();
+
+            timedout(timedout const &);
+
+            virtual ~timedout();
+
+            timedout & operator =(timedout const &);
+        };
 
         ConditionWaiter(Condition& aCond,sal_uInt32 milliSec)
             throw(
@@ -137,6 +149,8 @@ namespace salhelper
 
 
     private:
+        ConditionWaiter(ConditionWaiter &); // not defined
+        void operator =(ConditionWaiter &); // not defined
 
         Condition& m_aCond;
     };
