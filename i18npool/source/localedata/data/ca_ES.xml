@@ -24,8 +24,8 @@
 <Time100SecSeparator>,</Time100SecSeparator>
 <ListSeparator>;</ListSeparator>
 <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
-<LongDateDaySeparator> </LongDateDaySeparator>
-<LongDateMonthSeparator> </LongDateMonthSeparator>
+<LongDateDaySeparator> de </LongDateDaySeparator>
+<LongDateMonthSeparator> de </LongDateMonthSeparator>
 <LongDateYearSeparator> </LongDateYearSeparator>
 </Separators>
 <Markers>
@@ -339,17 +339,17 @@
 <Eras>
 <Era>
 <EraID>bc</EraID>
-<DefaultAbbrvName>BC</DefaultAbbrvName>
-<DefaultFullName>BC</DefaultFullName>
+<DefaultAbbrvName>A.C.</DefaultAbbrvName>
+<DefaultFullName>A.C.</DefaultFullName>
 </Era>
 <Era>
 <EraID>ad</EraID>
-<DefaultAbbrvName>AD</DefaultAbbrvName>
-<DefaultFullName>AD</DefaultFullName>
+<DefaultAbbrvName>D.C.</DefaultAbbrvName>
+<DefaultFullName>D.C.</DefaultFullName>
 </Era>
 </Eras>
 <StartDayOfWeek>
-<DayID>sun</DayID>
+<DayID>mon</DayID>
 </StartDayOfWeek>
 <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
 </Calendar>
@@ -377,12 +377,12 @@
 </LC_TRANSLITERATION>
 <LC_MISC>
 <ReservedWords>
-<trueWord>cert</trueWord>
+<trueWord>veritat</trueWord>
 <falseWord>fals</falseWord>
-<quarter1Word>1r trimestre</quarter1Word>
-<quarter2Word>2n trimestre</quarter2Word>
-<quarter3Word>3r trimestre</quarter3Word>
-<quarter4Word>4t trimestre</quarter4Word>
+<quarter1Word>1r quart</quarter1Word>
+<quarter2Word>2n quart</quarter2Word>
+<quarter3Word>3r quart</quarter3Word>
+<quarter4Word>4t quart</quarter4Word>
 <aboveWord>sobre</aboveWord>
 <belowWord>sota</belowWord>
 </ReservedWords>
