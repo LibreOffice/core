@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 12:37:41 $
+#   last change: $Author: vg $ $Date: 2005-02-21 12:13:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,8 @@ CFLAGSNOOPT=-O0
 SLOFILES= \
     $(SLO)$/except.obj		\
     $(SLO)$/cpp2uno.obj		\
-    $(SLO)$/uno2cpp.obj
+    $(SLO)$/uno2cpp.obj \
+    $(SLO)$/call.obj
 
 SHL1TARGET= $(TARGET)
 
@@ -108,3 +109,6 @@ SHL1STDLIBS= \
 
 .INCLUDE :  target.mk
 
+$(SLO)$/%.obj: %.s
+    $(CC) -c -o $(SLO)$/$(@:b).o $<
+    touch $@
