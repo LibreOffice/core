@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:40:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,9 @@
 #include <svtools/useroptions.hxx>
 #include <unotools/bootstrap.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "appuno.hxx"
 #include "module.hxx"
@@ -877,7 +879,7 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 #if SUPD<613//MUSTINI
     SfxIniManager *pIniMgr = GetIniManager();
 #endif
-    const SfxItemSet *pArgs = rReq.GetArgs();
+    rReq.GetArgs();
     sal_uInt16 nSID = rReq.GetSlot();
     switch ( nSID )
     {
@@ -1136,7 +1138,7 @@ void SfxApplication::PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBasic )
         rReq.ReleaseArgs();
 
         // Statement ausf"uhren
-        SbxVariable* pRet = pBasic->Execute( aStatement );
+        pBasic->Execute( aStatement );
         bOK = 0 == SbxBase::GetError();
         SbxBase::ResetError();
     }
