@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-29 13:16:59 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 20:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,10 +491,10 @@ void SalGraphics::GetResolution( long &rDPIX, long &rDPIY ) // const
 #ifndef _USE_PRINT_EXTENSION_
     if (maGraphicsData.m_pJobData != NULL)
     {
-        int x, y;
-        maGraphicsData.m_pJobData->m_aContext.getResolution( x, y );
+        int x = maGraphicsData.m_pJobData->m_aContext.getRenderResolution();
+
         rDPIX = x;
-        rDPIY = y;
+        rDPIY = x;
     }
     else
     {

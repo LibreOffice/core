@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 17:31:42 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 20:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,27 +707,26 @@ void SalInfoPrinter::GetPageInfo(
         String aPaper;
         int width, height;
         int left = 0, top = 0, right = 0, bottom = 0;
-        int nDPIx, nDPIy;
+        int nDPI = aData.m_aContext.getRenderResolution();
 
 
         if( aData.m_eOrientation == psp::orientation::Portrait )
         {
             aData.m_aContext.getPageSize( aPaper, width, height );
-            aData.m_aContext.getResolution( nDPIx, nDPIy );
             aData.m_pParser->getMargins( aPaper, left, right, top, bottom );
         }
         else
         {
             aData.m_aContext.getPageSize( aPaper, height, width );
-            aData.m_aContext.getResolution( nDPIy, nDPIx );
             aData.m_pParser->getMargins( aPaper, bottom, top, left, right );
         }
-        rPageWidth  = width * nDPIx / 72;
-        rPageHeight = height * nDPIy / 72;
-        rPageOffX   = left * nDPIx / 72;
-        rPageOffY   = top * nDPIy / 72;
-        rOutWidth   = ( width  - left - right ) * nDPIx / 72;
-        rOutHeight  = ( height - top  - bottom ) * nDPIy / 72;
+
+        rPageWidth  = width * nDPI / 72;
+        rPageHeight = height * nDPI / 72;
+        rPageOffX   = left * nDPI / 72;
+        rPageOffY   = top * nDPI / 72;
+        rOutWidth   = ( width  - left - right ) * nDPI / 72;
+        rOutHeight  = ( height - top  - bottom ) * nDPI / 72;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-29 12:04:20 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 20:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,6 @@ public:
 #ifndef _SV_PRNTYPES_HXX
 #include <prntypes.hxx>
 #endif
-
-#include <ppdparser.hxx>
 
 // forward declarations
 class SalInfoPrinter;
