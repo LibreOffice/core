@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
+ *  last change: $Author: ab $ $Date: 2001-03-27 17:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 #include <vector>
 
 #include <xmlscript/xmldlg_imexp.hxx>
+#include <xmlscript/xmllib_imexp.hxx>
+#include <xmlscript/xmlmod_imexp.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -770,5 +772,216 @@ public:
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
+
+
+//==================================================================================================
+// Library import
+
+//==================================================================================================
+struct LibraryImport
+    : public ::cppu::WeakImplHelper1< xml::XImporter >
+{
+    friend class LibrariesElement;
+
+    LibDescriptor*& mrpLibs;
+    sal_Int32& mrnLibCount;
+
+public:
+    inline LibraryImport( LibDescriptor*& rpLibs, sal_Int32& rnLibCount )
+        SAL_THROW( () )
+        : mrpLibs( rpLibs )
+        , mrnLibCount( rnLibCount ) {}
+    virtual ~LibraryImport()
+        SAL_THROW( () );
+
+    // XImporter
+    virtual void SAL_CALL startDocument()
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endDocument()
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL processingInstruction(
+        OUString const & rTarget, OUString const & rData )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL setDocumentLocator(
+        Reference< xml::sax::XLocator > const & xLocator )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual Reference< xml::XImportContext > SAL_CALL createRootContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+};
+
+//==================================================================================================
+class LibElementBase
+    : public ::cppu::WeakImplHelper1< xml::XImportContext >
+{
+protected:
+    LibraryImport * _pImport;
+    LibElementBase * _pParent;
+
+    OUString _aLocalName;
+    Reference< xml::sax2::XExtendedAttributes > _xAttributes;
+
+public:
+    LibElementBase(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        LibElementBase * pParent, LibraryImport * pImport )
+        SAL_THROW( () );
+    virtual ~LibElementBase()
+        SAL_THROW( () );
+
+    // XImportContext
+    virtual Reference< xml::XImportContext > SAL_CALL getParent()
+        throw (RuntimeException);
+    virtual OUString SAL_CALL getLocalName()
+        throw (RuntimeException);
+    virtual sal_Int32 SAL_CALL getUid()
+        throw (RuntimeException);
+    virtual Reference< xml::sax2::XExtendedAttributes > SAL_CALL getAttributes()
+        throw (RuntimeException);
+    virtual void SAL_CALL ignorableWhitespace(
+        OUString const & rWhitespaces )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL characters( OUString const & rChars )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+};
+
+//==================================================================================================
+
+class LibrariesElement : public LibElementBase
+{
+    friend class LibraryElement;
+
+protected:
+    vector< LibDescriptor > mLibDescriptors;
+
+public:
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    LibrariesElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        LibElementBase * pParent, LibraryImport * pImport )
+        SAL_THROW( () )
+        : LibElementBase( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+
+//==================================================================================================
+
+class LibraryElement : public LibElementBase
+{
+protected:
+    vector< OUString > mElements;
+
+public:
+
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+
+    LibraryElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        LibElementBase * pParent, LibraryImport * pImport )
+        SAL_THROW( () )
+        : LibElementBase( rLocalName, xAttributes, pParent, pImport )
+    {}
+};
+
+
+//==================================================================================================
+// Script module import
+
+//==================================================================================================
+struct ModuleImport
+    : public ::cppu::WeakImplHelper1< xml::XImporter >
+{
+    friend class ModuleElement;
+
+    ModuleDescriptor& mrModuleDesc;
+
+public:
+    inline ModuleImport( ModuleDescriptor& rModuleDesc )
+        SAL_THROW( () )
+        : mrModuleDesc( rModuleDesc ) {}
+    virtual ~ModuleImport()
+        SAL_THROW( () );
+
+    // XImporter
+    virtual void SAL_CALL startDocument()
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endDocument()
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL processingInstruction(
+        OUString const & rTarget, OUString const & rData )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL setDocumentLocator(
+        Reference< xml::sax::XLocator > const & xLocator )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual Reference< xml::XImportContext > SAL_CALL createRootContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+};
+
+//==================================================================================================
+class ModuleElement
+    : public ::cppu::WeakImplHelper1< xml::XImportContext >
+{
+protected:
+    ModuleImport * _pImport;
+    ModuleElement * _pParent;
+
+    OUString _aLocalName;
+    Reference< xml::sax2::XExtendedAttributes > _xAttributes;
+
+public:
+    ModuleElement(
+        OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        ModuleElement * pParent, ModuleImport * pImport )
+        SAL_THROW( () );
+    virtual ~ModuleElement()
+        SAL_THROW( () );
+
+    // XImportContext
+    virtual Reference< xml::XImportContext > SAL_CALL getParent()
+        throw (RuntimeException);
+    virtual OUString SAL_CALL getLocalName()
+        throw (RuntimeException);
+    virtual sal_Int32 SAL_CALL getUid()
+        throw (RuntimeException);
+    virtual Reference< xml::sax2::XExtendedAttributes > SAL_CALL getAttributes()
+        throw (RuntimeException);
+    virtual void SAL_CALL ignorableWhitespace(
+        OUString const & rWhitespaces )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL characters( OUString const & rChars )
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (xml::sax::SAXException, RuntimeException);
+    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+        sal_Int32 nUid, OUString const & rLocalName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        throw (xml::sax::SAXException, RuntimeException);
+};
+
+//==================================================================================================
 
 };

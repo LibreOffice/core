@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
+#   last change: $Author: ab $ $Date: 2001-03-27 17:44:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES = \
     $(SLO)$/xmldlg_import.obj		\
+    $(SLO)$/xmlmod_import.obj		\
+    $(SLO)$/xmllib_import.obj		\
     $(SLO)$/xmldlg_impmodels.obj		\
     $(SLO)$/xmldlg_export.obj		\
+    $(SLO)$/xmlmod_export.obj		\
+    $(SLO)$/xmllib_export.obj		\
     $(SLO)$/xmldlg_expmodels.obj		\
     $(SLO)$/xmldlg_addfunc.obj
 
