@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WrappedTargetRuntimeException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-11-08 11:54:23 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 14:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@ module com {  module sun {  module star {  module lang {
 
 /** This is a runtime exception that wraps any other exception thrown
     by the original target.
+    <p>
+    This exception should not be declared at interfaces, use
+    <type>WrappedTargetException</type> instead. It was defined
+    to transport an exception via interface-methods, that do not
+    specify the appropriate exceptions (so using this exception
+    should in general be avoided).
  */
 exception WrappedTargetRuntimeException: ::com::sun::star::uno::RuntimeException
 {
