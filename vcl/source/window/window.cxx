@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:32:58 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8448,6 +8448,18 @@ String Window::GetAccessibleName() const
                     aAccessibleName = GetText();
             }
             break;
+
+            case WINDOW_IMAGEBUTTON:
+            case WINDOW_PUSHBUTTON:
+                aAccessibleName = GetText();
+                if ( !aAccessibleName.Len() )
+                {
+                    aAccessibleName = GetQuickHelpText();
+                    if ( !aAccessibleName.Len() )
+                        aAccessibleName = GetHelpText();
+                }
+            break;
+
             default:
                 aAccessibleName = GetText();
                 break;
