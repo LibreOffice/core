@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:13:06 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ french ] = "Sιlection" ;
                 Text [ swedish ] = "Urval" ;
                 Text [ danish ] = "Marker" ;
-                Text [ portuguese ] = "Seleccionar" ;
+                Text [ portuguese ] = "Selecηγo" ;
                 Text [ portuguese_brazilian ] = "Auswahl" ;
                 /* ### ACHTUNG: Neuer Text in Resource? Objekte auswδhlen : Objekte auswυhlen */
                 Text[ chinese_simplified ] = "Ρ΅Τρ";
@@ -782,7 +782,7 @@ String STR_CONTOURDLG_WORKPLACE
     Text[ chinese_traditional ] = "©wΈq¤@­Σ·sªΊ½sΏθ°Ο°μ·|²M°£½όΉψ΅C\n±z―u­nΔ~Δς΅H";
     Text[ arabic ] = "ΚΪννδ γΣΗΝΙ Ϊγα ΜΟνΟΙ Σζέ\nνΔΟν Εαμ ΝΠέ ΗαΞΨ ΗαίέΗέν. \nεα ΚΡνΟ ΗαγΚΗΘΪΙ ΘΗαέΪαΏ";
     Text[ greek ] = "Ο ορισμός μιας νέας περιοχής εργασίας\nέχει ως αποτέλεσμα τη διαγραφή του περιγράμματος.\nΘέλετε πραγματικά να συνεχίσετε;";
-    Text[ korean ] = "»υ ΐΫΎχΏµΏªΐ» Ό³Α¤ΗΟ°Τ µΗΈι\nΐ±°ϋΐΜ »θΑ¦µΛ΄Ο΄Ω. ±Χ·΅µµ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "»υ ΐΫΎχΏµΏªΐ» Ό³Α¤ΗΟΈι\nΐ±°ϋΐΜ »θΑ¦µΛ΄Ο΄Ω.\n±Χ·΅µµ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Yeni bir ηalύώma alanύ belirlenmesi durumunda\nkontur silinecek.\nDevam etmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Al establecer una nueva αrea de trabajo\nse eliminarα el contorno.\nΏDesea realmente continuar?";
@@ -818,6 +818,7 @@ String STR_CONTOURDLG_LINKED
     Text[ catalan ] = "Esta imagen estα vinculada al documento. ΏDesea deshacer el vνnculo para editar la imagen?";
 };
 /******************************************************************************/
+
 
 
 
