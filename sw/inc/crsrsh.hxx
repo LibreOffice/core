@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:37:07 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _TOXE_HXX
 #include <toxe.hxx>             // SwTOXSearchDir
+#endif
+#ifndef _TBLSEL_HXX
+#include <tblsel.hxx>               //SwTblSearchType
 #endif
 
 #if defined(PRODUCT) && !defined(WIN)
