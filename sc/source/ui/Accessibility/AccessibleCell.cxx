@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:07:40 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 07:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAt(
         throw (uno::RuntimeException)
 {
      ScUnoGuard aGuard;
+    IsObjectValid();
     if(!mpTextHelper)
         CreateTextHelper();
 
@@ -187,6 +188,7 @@ void SAL_CALL ScAccessibleCell::grabFocus(  )
         throw (uno::RuntimeException)
 {
      ScUnoGuard aGuard;
+    IsObjectValid();
     if (getAccessibleParent().is() && mpViewShell)
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -246,6 +248,7 @@ sal_Int32 SAL_CALL
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
     return mpTextHelper->GetChildCount();
@@ -257,6 +260,7 @@ uno::Reference< XAccessible > SAL_CALL
         lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
     return mpTextHelper->GetChild(nIndex);
@@ -276,24 +280,27 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
-    if (IsEditable(xParentStates))
+    else
     {
-        pStateSet->AddState(AccessibleStateType::EDITABLE);
-        pStateSet->AddState(AccessibleStateType::RESIZABLE);
+        if (IsEditable(xParentStates))
+        {
+            pStateSet->AddState(AccessibleStateType::EDITABLE);
+            pStateSet->AddState(AccessibleStateType::RESIZABLE);
+        }
+        pStateSet->AddState(AccessibleStateType::ENABLED);
+        pStateSet->AddState(AccessibleStateType::MULTILINE);
+        pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
+        if (IsOpaque(xParentStates))
+            pStateSet->AddState(AccessibleStateType::OPAQUE);
+        pStateSet->AddState(AccessibleStateType::SELECTABLE);
+        if (IsSelected())
+            pStateSet->AddState(AccessibleStateType::SELECTED);
+        if (isShowing())
+            pStateSet->AddState(AccessibleStateType::SHOWING);
+        pStateSet->AddState(AccessibleStateType::TRANSIENT);
+        if (isVisible())
+            pStateSet->AddState(AccessibleStateType::VISIBLE);
     }
-    pStateSet->AddState(AccessibleStateType::ENABLED);
-    pStateSet->AddState(AccessibleStateType::MULTILINE);
-    pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
-    if (IsOpaque(xParentStates))
-        pStateSet->AddState(AccessibleStateType::OPAQUE);
-    pStateSet->AddState(AccessibleStateType::SELECTABLE);
-    if (IsSelected())
-        pStateSet->AddState(AccessibleStateType::SELECTED);
-    if (isShowing())
-        pStateSet->AddState(AccessibleStateType::SHOWING);
-    pStateSet->AddState(AccessibleStateType::TRANSIENT);
-    if (isVisible())
-        pStateSet->AddState(AccessibleStateType::VISIBLE);
     return pStateSet;
 }
 
@@ -302,6 +309,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     utl::AccessibleRelationSetHelper* pRelationSet = NULL;
     if (mpAccDoc)
         pRelationSet = mpAccDoc->GetRelationSet(&maCellAddress);
@@ -341,6 +349,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
@@ -351,6 +360,12 @@ uno::Sequence<sal_Int8> SAL_CALL
 }
 
     //====  internal  =========================================================
+
+void ScAccessibleCell::ChangeEditMode()
+{
+    if (mpTextHelper)
+        mpTextHelper->UpdateChildren();
+}
 
 sal_Bool ScAccessibleCell::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
