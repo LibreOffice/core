@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:01:10 $
+#   last change: $Author: vg $ $Date: 2003-10-09 10:14:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,6 @@ TARGET := test_com_sun_star_comp_bridgefactory
 
 PACKAGE := com$/sun$/star$/comp$/bridgefactory
 JAVATESTFILES := BridgeFactory_Test.java
-JARFILES := ridl.jar sandbox.jar
+JARFILES := ridl.jar
 
 .INCLUDE: javaunittest.mk
