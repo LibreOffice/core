@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-07-30 10:26:37 $
+ *  last change: $Author: jl $ $Date: 2001-11-01 13:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,10 +443,8 @@ void SjApplet2::settingsChanged(void)
                                  String::CreateFromAscii("true") );
 
             // HTTP settings
-            aCmdList.Append( String::CreateFromAscii("http.proxyHost"),
-                             aINetSettings.GetHttpProxy());
-            aCmdList.Append( String::CreateFromAscii("http.proxyPort"),
-                             aINetSettings.GetHttpProxyPort());
+            // http.proxyHost, http.proxyPort, ftp.proxyHost, ftp.proxyPort are changed within
+            // the JavaVM service.
 
             // Ftp settings
             if( aINetSettings.GetFtpProxy().Len() )
@@ -454,8 +452,6 @@ void SjApplet2::settingsChanged(void)
             else
                 aCmdList.Append( String::CreateFromAscii("ftpProxySet"), String::CreateFromAscii("false") );
 
-            aCmdList.Append( String::CreateFromAscii("ftpProxyHost"), aINetSettings.GetFtpProxy());
-            aCmdList.Append( String::CreateFromAscii("ftpProxyPort"), aINetSettings.GetFtpProxyPort());
 
             JRE_PropertyChanged(jenv.pEnv, aCmdList);
 #endif //_OLD_FEATURE
