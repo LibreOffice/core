@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 15:44:35 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 21:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ portuguese ] = "Posição" ;
         Text [ finnish ] = "Sijainti" ;
         Text [ danish ] = "Placering" ;
-        Text [ french ] = "Position" ;
+        Text [ french ] = "Fonction" ;
         Text [ swedish ] = "Placering" ;
         Text [ dutch ] = "Positie" ;
         Text [ spanish ] = "Posición" ;
@@ -209,6 +209,26 @@ TabPage RID_SVXPAGE_POSITION
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Basispunkt" ;
         Text [ ENGLISH ] = "Base point" ;
+        Text[ english_us ] = "Base point";
+        Text[ portuguese ] = "Base point";
+        Text[ russian ] = "Base point";
+        Text[ greek ] = "Base point";
+        Text[ dutch ] = "Base point";
+        Text[ french ] = "Base point";
+        Text[ spanish ] = "Punto base";
+        Text[ finnish ] = "Base point";
+        Text[ italian ] = "Base point";
+        Text[ danish ] = "Base point";
+        Text[ swedish ] = "Baspunkt";
+        Text[ polish ] = "Punkt wyjœciowy";
+        Text[ portuguese_brazilian ] = "Base point";
+        Text[ japanese ] = "Base point";
+        Text[ korean ] = "Base point";
+        Text[ chinese_simplified ] = "»ùµã";
+        Text[ chinese_traditional ] = "°òÂI";
+        Text[ turkish ] = "Base point";
+        Text[ arabic ] = "Base point";
+        Text[ catalan ] = "Base point";
     };
     Control CTL_RECT
     {
@@ -229,7 +249,7 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText [ french ] = "Point de base" ;
         QuickHelpText [ dutch ] = "Basispunt" ;
         QuickHelpText[ russian ] = "Òî÷êà îñíîâû";
-        QuickHelpText[ polish ] = "Punkt podstawy";
+        QuickHelpText[ polish ] = "Punkt podstawy!";
         QuickHelpText[ japanese ] = "Šî€Îß²İÄ!";
         QuickHelpText[ chinese_simplified ] = "»ùµã";
         QuickHelpText[ chinese_traditional ] = "°òÂI";
@@ -258,7 +278,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ swedish ] = "Sk~ydda" ;
         Text [ dutch ] = "~Beveiligen" ;
         Text [ spanish ] = "~Proteger" ;
-        Text [ english_us ] = "~Protect" ;
+        Text [ english_us ] = "Pr~otect" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "±£»¤(~P)";
         Text[ russian ] = "Çàùèòà";
@@ -685,13 +705,13 @@ TabPage RID_SVXPAGE_POSITION
         {
                 < "Z góry" ; > ;
             < "W górze" ; > ;
-            < "Wy?rodkowany" ; > ;
+            < "Wyœrodkowany" ; > ;
             < "W dole" ; > ;
             < "Znak w górze" ; > ;
-            < "Wy?rodkowany znak" ; > ;
+            < "Wyœrodkowany znak" ; > ;
             < "Znak na dole" ; > ;
             < "Wiersz w górze" ; > ;
-            < "Wy?rodkowany wiersz" ; > ;
+            < "Wyœrodkowany wiersz" ; > ;
             < "Wiersz w dole" ; > ;
         };
         StringList [ japanese ] =
@@ -966,6 +986,26 @@ TabPage RID_SVXPAGE_SIZE
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Basispunkt" ;
         Text [ ENGLISH ] = "Base point" ;
+        Text[ english_us ] = "Base point";
+        Text[ portuguese ] = "Base point";
+        Text[ russian ] = "Base point";
+        Text[ greek ] = "Base point";
+        Text[ dutch ] = "Base point";
+        Text[ french ] = "Base point";
+        Text[ spanish ] = "Punto base";
+        Text[ finnish ] = "Base point";
+        Text[ italian ] = "Base point";
+        Text[ danish ] = "Base point";
+        Text[ swedish ] = "Baspunkt";
+        Text[ polish ] = "Punkt wyjœciowy";
+        Text[ portuguese_brazilian ] = "Base point";
+        Text[ japanese ] = "Base point";
+        Text[ korean ] = "Base point";
+        Text[ chinese_simplified ] = "»ùµã";
+        Text[ chinese_traditional ] = "°òÂI";
+        Text[ turkish ] = "Base point";
+        Text[ arabic ] = "Base point";
+        Text[ catalan ] = "Base point";
     };
     Control CTL_RECT
     {
@@ -986,7 +1026,7 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText [ dutch ] = "Basispunt" ;
         QuickHelpText [ portuguese ] = "Ponto de base" ;
         QuickHelpText[ russian ] = "Òî÷êà îñíîâû";
-        QuickHelpText[ polish ] = "Punkt podstawy";
+        QuickHelpText[ polish ] = "Punkt podstawy!";
         QuickHelpText[ japanese ] = "Šî€Îß²İÄ!";
         QuickHelpText[ chinese_simplified ] = "»ùµã";
         QuickHelpText[ chinese_traditional ] = "°òÂI";
@@ -1044,7 +1084,7 @@ TabPage RID_SVXPAGE_SIZE
         Text [ swedish ] = "Sk~ydda" ;
         Text [ dutch ] = "~Beveiligen" ;
         Text [ spanish ] = "~Proteger" ;
-        Text [ english_us ] = "~Protect" ;
+        Text [ english_us ] = "Pr~otect" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "±£»¤(~P)";
         Text[ russian ] = "Çàùèòà";
@@ -1105,7 +1145,7 @@ TabPage RID_SVXPAGE_SIZE
         Text [ portuguese_brazilian ] = "Br~eite an Text anpassen" ;
         Text[ chinese_simplified ] = "ºÍÎÄ×Ö¿í¶È¶ÔÓ¦(~F)";
         Text[ russian ] = "Âûğîâíÿòü øèğèíó ïî òåêñòó";
-        Text[ polish ] = "Dopasuj szeroko?æ do tekstu";
+        Text[ polish ] = "Dopasuj szerokoœæ do tekstu";
         Text[ japanese ] = "Ã·½Ä‚É•‚ğ‡‚í‚¹‚é(~F)";
         Text[ chinese_traditional ] = "©M¤º¤å¼e«×¹ï»ô(~F)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ ááäÕ";
@@ -1134,7 +1174,7 @@ TabPage RID_SVXPAGE_SIZE
         Text [ portuguese_brazilian ] = "H?~e an Text anpassen" ;
         Text[ chinese_simplified ] = "ºÍÎÄ×Ö¸ß¶È¶ÔÓ¦(~H)";
         Text[ russian ] = "Âûğîâíÿòü âûñîòó ïî òåêñòó";
-        Text[ polish ] = "Dopasuj wysoko?æ do tekstu";
+        Text[ polish ] = "Dopasuj wysokoœæ do tekstu";
         Text[ japanese ] = "Ã·½Ä‚É‚‚³‚ğ‡‚í‚¹‚é(~H)";
         Text[ chinese_traditional ] = "©M¤º¤å°ª«×¹ï»ô(~H)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ááäÕ";
@@ -1299,6 +1339,26 @@ TabPage RID_SVXPAGE_ANGLE
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "Vorgaben" ;
         Text [ ENGLISH ] = "Presets" ;
+        Text[ english_us ] = "Presets";
+        Text[ portuguese ] = "Presets";
+        Text[ russian ] = "Presets";
+        Text[ greek ] = "Presets";
+        Text[ dutch ] = "Presets";
+        Text[ french ] = "Presets";
+        Text[ spanish ] = "Predeterminaciones";
+        Text[ finnish ] = "Presets";
+        Text[ italian ] = "Presets";
+        Text[ danish ] = "Presets";
+        Text[ swedish ] = "Förinställningar";
+        Text[ polish ] = "Ustawienia domyœlne";
+        Text[ portuguese_brazilian ] = "Presets";
+        Text[ japanese ] = "Presets";
+        Text[ korean ] = "Presets";
+        Text[ chinese_simplified ] = "Ô¤ÖÃ";
+        Text[ chinese_traditional ] = "¹w¸m";
+        Text[ turkish ] = "Presets";
+        Text[ arabic ] = "Presets";
+        Text[ catalan ] = "Presets";
     };
     Control CTL_RECT
     {
@@ -1319,8 +1379,8 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText [ dutch ] = "Rotatiepunt" ;
         QuickHelpText [ portuguese ] = "Ponto de rotação" ;
         QuickHelpText[ russian ] = "Òî÷êà âğàùåíèÿ";
-        QuickHelpText[ polish ] = "Punkt obrotu";
-        QuickHelpText[ japanese ] = "‰ñ“]Îß²İÄ";
+        QuickHelpText[ polish ] = "Punkt obrotu!";
+        QuickHelpText[ japanese ] = "‰ñ“]Îß²İÄ!";
         QuickHelpText[ chinese_simplified ] = "Ğı×ªµã!";
         QuickHelpText[ chinese_traditional ] = "±ÛÂàÂI";
         QuickHelpText[ arabic ] = "äŞØÉ ÇáÇÓÊÏÇÑÉ";
@@ -1330,6 +1390,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Rotationspunkt";
         QuickHelpText[ catalan ] = "Punto de rotación";
+        QuickHelpText[ finnish ] = "Kiertopiste!";
     };
     FixedLine FL_ANGLE
     {
@@ -1433,6 +1494,26 @@ TabPage RID_SVXPAGE_ANGLE
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "Vorgaben" ;
         Text [ ENGLISH ] = "Presets" ;
+        Text[ english_us ] = "Presets";
+        Text[ portuguese ] = "Presets";
+        Text[ russian ] = "Presets";
+        Text[ greek ] = "Presets";
+        Text[ dutch ] = "Presets";
+        Text[ french ] = "Presets";
+        Text[ spanish ] = "Predeterminaciones";
+        Text[ finnish ] = "Presets";
+        Text[ italian ] = "Presets";
+        Text[ danish ] = "Presets";
+        Text[ swedish ] = "Förinställningar";
+        Text[ polish ] = "Ustawienia domyœlne";
+        Text[ portuguese_brazilian ] = "Presets";
+        Text[ japanese ] = "Presets";
+        Text[ korean ] = "Presets";
+        Text[ chinese_simplified ] = "Ô¤ÖÃ";
+        Text[ chinese_traditional ] = "¹w¸m";
+        Text[ turkish ] = "Presets";
+        Text[ arabic ] = "Presets";
+        Text[ catalan ] = "Presets";
     };
     Control CTL_ANGLE
     {
@@ -1443,6 +1524,26 @@ TabPage RID_SVXPAGE_ANGLE
         TabStop = TRUE ;
         QuickHelpText = "Drehwinkel" ;
         QuickHelpText [ ENGLISH ] = "Angle" ;
+        QuickHelpText[ english_us ] = "Angle";
+        QuickHelpText[ portuguese ] = "Angle";
+        QuickHelpText[ russian ] = "Angle";
+        QuickHelpText[ greek ] = "Angle";
+        QuickHelpText[ dutch ] = "Angle";
+        QuickHelpText[ french ] = "Angle";
+        QuickHelpText[ spanish ] = "Ángulo de rotación!";
+        QuickHelpText[ finnish ] = "Angle";
+        QuickHelpText[ italian ] = "Angle";
+        QuickHelpText[ danish ] = "Angle";
+        QuickHelpText[ swedish ] = "Rotationsvinkel!";
+        QuickHelpText[ polish ] = "K¹t obrotu!";
+        QuickHelpText[ portuguese_brazilian ] = "Angle";
+        QuickHelpText[ japanese ] = "Angle";
+        QuickHelpText[ korean ] = "Angle";
+        QuickHelpText[ chinese_simplified ] = "Ğı×ª½Ç¶È!";
+        QuickHelpText[ chinese_traditional ] = "±ÛÂà¨¤«×!";
+        QuickHelpText[ turkish ] = "Angle";
+        QuickHelpText[ arabic ] = "Angle";
+        QuickHelpText[ catalan ] = "Angle";
     };
     Text[ chinese_simplified ] = "½Ç¶È";
     Text[ russian ] = "Óãîë";
