@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:55:40 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
 #endif
+#ifndef _DBMGR_HXX
+#include <dbmgr.hxx>
+#endif
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 /*--------------------------------------------------------------------
@@ -127,6 +130,7 @@ SvStringsDtor*  pAuthFieldTypeList = 0;
 
 void _FinitUI()
 {
+    SwNewDBMgr::RemoveDbtoolsClient();
     delete ViewShell::GetShellRes();
     ViewShell::SetShellRes( 0 );
 
