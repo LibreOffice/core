@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkerStyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
+ *  last change: $Author: thb $ $Date: 2001-10-23 10:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,10 @@ using namespace ::rtl;
 using namespace ::xmloff::token;
 
 
+//-------------------------------------------------------------
+// Import
+//-------------------------------------------------------------
+
 XMLMarkerStyleImport::XMLMarkerStyleImport( SvXMLImport& rImp )
     : rImport( rImp )
 {
@@ -120,6 +124,96 @@ XMLMarkerStyleImport::XMLMarkerStyleImport( SvXMLImport& rImp )
 XMLMarkerStyleImport::~XMLMarkerStyleImport()
 {
 }
+
+sal_Bool XMLMarkerStyleImport::importXML(
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    uno::Any& rValue,
+    OUString& rStrName )
+{
+    sal_Bool bRet           = sal_False;
+    sal_Bool bHasViewBox    = sal_False;
+    sal_Bool bHasPathData   = sal_False;
+
+    SdXMLImExViewBox* pViewBox = NULL;
+
+    SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
+    SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    {
+        OUString aStrFullAttrName = xAttrList->getNameByIndex( i );
+        OUString aStrAttrName;
+        rNamespaceMap.GetKeyByAttrName( aStrFullAttrName, &aStrAttrName );
+        OUString aStrValue = xAttrList->getValueByIndex( i );
+
+        if( IsXMLToken( aStrAttrName, XML_NAME ) )
+        {
+            rStrName = aStrValue;
+        }
+        else if( IsXMLToken( aStrAttrName, XML_VIEWBOX ) )
+        {
+            pViewBox = new SdXMLImExViewBox( aStrValue, rUnitConverter );
+            bHasViewBox = sal_True;
+
+        }
+        else if( bHasViewBox && IsXMLToken( aStrAttrName, XML_D ) )
+        {
+            SdXMLImExSvgDElement aPoints(aStrValue, *pViewBox, awt::Point( 0, 0 ),
+                awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ),
+                rUnitConverter );
+
+            if(aPoints.IsCurve())
+            {
+                drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
+                    aPoints.GetPointSequenceSequence(),
+                    aPoints.GetFlagSequenceSequence());
+                rValue <<= aSourcePolyPolygon;
+            }
+            else
+            {
+                drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
+                aSourcePolyPolygon.Coordinates = aPoints.GetPointSequenceSequence();
+                aSourcePolyPolygon.Flags.realloc(aSourcePolyPolygon.Coordinates.getLength());
+
+                // Zeiger auf innere sequences holen
+                const drawing::PointSequence* pInnerSequence = aSourcePolyPolygon.Coordinates.getConstArray();
+                drawing::FlagSequence* pInnerSequenceFlags = aSourcePolyPolygon.Flags.getArray();
+
+                for(sal_Int32 a(0); a < aSourcePolyPolygon.Coordinates.getLength(); a++)
+                {
+                    pInnerSequenceFlags->realloc(pInnerSequence->getLength());
+                    drawing::PolygonFlags* pPolyFlags = pInnerSequenceFlags->getArray();
+
+                    for(sal_Int32 b(0); b < pInnerSequence->getLength(); b++)
+                        *pPolyFlags++ = drawing::PolygonFlags_NORMAL;
+
+                    // next run
+                    pInnerSequence++;
+                    pInnerSequenceFlags++;
+                }
+
+                rValue <<= aSourcePolyPolygon;
+            }
+
+            bHasPathData = sal_True;
+        }
+    }
+
+    if( pViewBox )
+        delete pViewBox;
+
+    bRet = bHasViewBox && bHasPathData;
+
+    return bRet;
+}
+
+
+//-------------------------------------------------------------
+// Export
+//-------------------------------------------------------------
+
+#ifndef SVX_LIGHT
 
 XMLMarkerStyleExport::XMLMarkerStyleExport( SvXMLExport& rExp )
     : rExport( rExp )
@@ -235,85 +329,4 @@ sal_Bool XMLMarkerStyleExport::exportXML(
     return bRet;
 }
 
-sal_Bool XMLMarkerStyleImport::importXML(
-    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-    uno::Any& rValue,
-    OUString& rStrName )
-{
-    sal_Bool bRet           = sal_False;
-    sal_Bool bHasViewBox    = sal_False;
-    sal_Bool bHasPathData   = sal_False;
-
-    SdXMLImExViewBox* pViewBox = NULL;
-
-    SvXMLNamespaceMap& rNamespaceMap = rImport.GetNamespaceMap();
-    SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
-
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
-    {
-        OUString aStrFullAttrName = xAttrList->getNameByIndex( i );
-        OUString aStrAttrName;
-        rNamespaceMap.GetKeyByAttrName( aStrFullAttrName, &aStrAttrName );
-        OUString aStrValue = xAttrList->getValueByIndex( i );
-
-        if( IsXMLToken( aStrAttrName, XML_NAME ) )
-        {
-            rStrName = aStrValue;
-        }
-        else if( IsXMLToken( aStrAttrName, XML_VIEWBOX ) )
-        {
-            pViewBox = new SdXMLImExViewBox( aStrValue, rUnitConverter );
-            bHasViewBox = sal_True;
-
-        }
-        else if( bHasViewBox && IsXMLToken( aStrAttrName, XML_D ) )
-        {
-            SdXMLImExSvgDElement aPoints(aStrValue, *pViewBox, awt::Point( 0, 0 ),
-                awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ),
-                rUnitConverter );
-
-            if(aPoints.IsCurve())
-            {
-                drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
-                    aPoints.GetPointSequenceSequence(),
-                    aPoints.GetFlagSequenceSequence());
-                rValue <<= aSourcePolyPolygon;
-            }
-            else
-            {
-                drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
-                aSourcePolyPolygon.Coordinates = aPoints.GetPointSequenceSequence();
-                aSourcePolyPolygon.Flags.realloc(aSourcePolyPolygon.Coordinates.getLength());
-
-                // Zeiger auf innere sequences holen
-                const drawing::PointSequence* pInnerSequence = aSourcePolyPolygon.Coordinates.getConstArray();
-                drawing::FlagSequence* pInnerSequenceFlags = aSourcePolyPolygon.Flags.getArray();
-
-                for(sal_Int32 a(0); a < aSourcePolyPolygon.Coordinates.getLength(); a++)
-                {
-                    pInnerSequenceFlags->realloc(pInnerSequence->getLength());
-                    drawing::PolygonFlags* pPolyFlags = pInnerSequenceFlags->getArray();
-
-                    for(sal_Int32 b(0); b < pInnerSequence->getLength(); b++)
-                        *pPolyFlags++ = drawing::PolygonFlags_NORMAL;
-
-                    // next run
-                    pInnerSequence++;
-                    pInnerSequenceFlags++;
-                }
-
-                rValue <<= aSourcePolyPolygon;
-            }
-
-            bHasPathData = sal_True;
-        }
-    }
-
-    if( pViewBox )
-        delete pViewBox;
-
-    bRet = bHasViewBox && bHasPathData;
-
-    return bRet;
-}
+#endif // #ifndef SVX_LIGHT

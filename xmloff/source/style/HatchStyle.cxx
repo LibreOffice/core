@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HatchStyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
+ *  last change: $Author: thb $ $Date: 2001-10-23 10:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,72 +139,18 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_HatchStyle_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
+
+//-------------------------------------------------------------
+// Import
+//-------------------------------------------------------------
+
 XMLHatchStyleImport::XMLHatchStyleImport( SvXMLImport& rImp )
     : rImport(rImp)
 {
 }
 
-XMLHatchStyleExport::XMLHatchStyleExport( SvXMLExport& rExp )
-    : rExport(rExp)
-{
-}
-
 XMLHatchStyleImport::~XMLHatchStyleImport()
 {
-}
-
-XMLHatchStyleExport::~XMLHatchStyleExport()
-{
-}
-
-sal_Bool XMLHatchStyleExport::exportXML(
-    const OUString& rStrName,
-    const uno::Any& rValue )
-{
-    sal_Bool bRet = sal_False;
-    drawing::Hatch aHatch;
-
-    if( rStrName.getLength() )
-    {
-        if( rValue >>= aHatch )
-        {
-            OUString aStrValue;
-            OUStringBuffer aOut;
-
-            SvXMLUnitConverter& rUnitConverter =
-                rExport.GetMM100UnitConverter();
-
-            // Name
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
-
-            // Style
-            if( !rUnitConverter.convertEnum( aOut, aHatch.Style, pXML_HatchStyle_Enum ) )
-                return sal_False;
-            aStrValue = aOut.makeStringAndClear();
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
-
-            // Color
-            rUnitConverter.convertColor( aOut, Color( aHatch.Color ) );
-            aStrValue = aOut.makeStringAndClear();
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, aStrValue );
-
-            // Distance
-            rUnitConverter.convertMeasure( aOut, aHatch.Distance );
-            aStrValue = aOut.makeStringAndClear();
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, aStrValue );
-
-            // Angle
-            rUnitConverter.convertNumber( aOut, sal_Int32( aHatch.Angle ) );
-            aStrValue = aOut.makeStringAndClear();
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, aStrValue );
-
-            // Do Write
-            SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_GRADIENT,
-                                      sal_True, sal_False );
-        }
-    }
-
-    return bRet;
 }
 
 sal_Bool XMLHatchStyleImport::importXML(
@@ -282,3 +228,71 @@ sal_Bool XMLHatchStyleImport::importXML(
 
     return bRet;
 }
+
+
+//-------------------------------------------------------------
+// Export
+//-------------------------------------------------------------
+
+#ifndef SVX_LIGHT
+
+XMLHatchStyleExport::XMLHatchStyleExport( SvXMLExport& rExp )
+    : rExport(rExp)
+{
+}
+
+XMLHatchStyleExport::~XMLHatchStyleExport()
+{
+}
+
+sal_Bool XMLHatchStyleExport::exportXML(
+    const OUString& rStrName,
+    const uno::Any& rValue )
+{
+    sal_Bool bRet = sal_False;
+    drawing::Hatch aHatch;
+
+    if( rStrName.getLength() )
+    {
+        if( rValue >>= aHatch )
+        {
+            OUString aStrValue;
+            OUStringBuffer aOut;
+
+            SvXMLUnitConverter& rUnitConverter =
+                rExport.GetMM100UnitConverter();
+
+            // Name
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
+
+            // Style
+            if( !rUnitConverter.convertEnum( aOut, aHatch.Style, pXML_HatchStyle_Enum ) )
+                return sal_False;
+            aStrValue = aOut.makeStringAndClear();
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
+
+            // Color
+            rUnitConverter.convertColor( aOut, Color( aHatch.Color ) );
+            aStrValue = aOut.makeStringAndClear();
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_COLOR, aStrValue );
+
+            // Distance
+            rUnitConverter.convertMeasure( aOut, aHatch.Distance );
+            aStrValue = aOut.makeStringAndClear();
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, aStrValue );
+
+            // Angle
+            rUnitConverter.convertNumber( aOut, sal_Int32( aHatch.Angle ) );
+            aStrValue = aOut.makeStringAndClear();
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, aStrValue );
+
+            // Do Write
+            SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_GRADIENT,
+                                      sal_True, sal_False );
+        }
+    }
+
+    return bRet;
+}
+
+#endif // #ifndef SVX_LIGHT
