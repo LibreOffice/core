@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-19 13:42:21 $
+ *  last change: $Author: aw $ $Date: 2001-03-13 13:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,8 +244,11 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         XPolyPolygon aXPP(XOutGetCharOutline(aUnicode, aVDev));
 
 // offset in Y(!) for testing make rough correction here
-Rectangle aPolyRect(aXPP.GetBoundRect());
-aXPP.Move(0, -aPolyRect.Top());
+if(bIsVertical)
+{
+    Rectangle aPolyRect(aXPP.GetBoundRect());
+    aXPP.Move(0, -aPolyRect.Top());
+}
 
         if(aXPP.Count())
         {
