@@ -18,7 +18,7 @@ ODKDOCPATH=$(UDKZIPPATH)$/$(ODKDOCNAME).tar.gz
 
 all: ..$/misc$/deltree.txt
 
-..$/misc$/deltree.txt .SETDIR=$(OUT)$/bin : $(UDKPATH) ..$/..$/pack$/unzip_udk$/deltree.txt
+..$/misc$/deltree.txt .SETDIR=$(OUT)$/bin : $(UDKPATH) $(ODKDOCPATH) ..$/..$/pack$/unzip_udk$/deltree.txt
 # first clean everything
 .IF "$(BUILD_SOSL)"==""
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME) >& $(NULLDEV)
