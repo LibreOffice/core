@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,8 +1295,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             continue;
 
         if ( !pFly->GetFmt()->GetPrint().GetValue() &&
-                (OUTDEV_PRINTER == pGlobalShell->GetOut()->GetOutDevType() ||
-                pGlobalShell->IsPreView()))
+                (!pGlobalShell->GetWin() || pGlobalShell->IsPreView()))
             continue;
 
         const FASTBOOL bLowerOfSelf = pSelfFly && pFly->IsLowerOf( pSelfFly ) ?
