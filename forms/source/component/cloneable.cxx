@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cloneable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@ namespace frm
     //------------------------------------------------------------------
     Reference< XAggregation > OCloneableAggregation::createAggregateClone( const OCloneableAggregation* _pOriginal )
     {
-        Reference< XCloneable > xAggregateCloneable;    // will be the aggregates XCloneable
-        Reference< XAggregation > xAggregateClone;      // will be the aggregates clone
+        Reference< XCloneable > xAggregateCloneable;    // will be the aggregate's XCloneable
+        Reference< XAggregation > xAggregateClone;      // will be the aggregate's clone
 
         if ( query_aggregation( _pOriginal->m_xAggregate, xAggregateCloneable ) )
         {
