@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-30 13:23:44 $
+ *  last change: $Author: sab $ $Date: 2002-06-10 14:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     void            SetFormulaMode( BOOL bSet );
+
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
 protected:
     virtual void    Paint( const Rectangle& rRec );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-30 13:24:57 $
+ *  last change: $Author: sab $ $Date: 2002-06-10 14:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,12 @@
 #include <svx/fontitem.hxx>
 #endif
 
-
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
+#ifndef _SC_ACCESSIBLEEDITOBJECT_HXX
+#include "AccessibleEditObject.hxx"
+#endif
 
 #define TEXT_STARTPOS       3
 #define THESIZE             1000000 //!!! langt... :-)
@@ -1106,6 +1111,12 @@ void ScTextWnd::ImplInitSettings()
     SetBackground           ( aBgColor );
     Invalidate();
 }
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ScTextWnd::CreateAccessible()
+{
+    return new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), NULL, this, sal_False);
+}
+
 // -----------------------------------------------------------------------
 
 void ScTextWnd::DataChanged( const DataChangedEvent& rDCEvt )
