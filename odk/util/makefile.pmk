@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 11:49:14 $
+#   last change: $Author: vg $ $Date: 2003-06-13 12:11:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,23 +60,7 @@
 #
 #*************************************************************************
 
-.IF "$(BUILD_SPECIAL)"!=""
-PRODUCT_RELEASE=6.1
-OFFICEPRODUCTNAME="StarOffice $(PRODUCT_RELEASE)"
-IDLDOCREFNAME="StarOffice6.1 API Beta"
-TITLE="StarOffice6.1 Beta SDK"
-IDL_CHAPTER_REFS=idl_chapter_refs.txt
-CONVMODE=2
-.ELSE
-PRODUCT_RELEASE=1.1 
-PRODUCT_NAME=OpenOffice.org$(PRODUCT_RELEASE)_RC_SDK
-OFFICEPRODUCTNAME="OpenOffice.org $(PRODUCT_RELEASE) RC"
-IDLDOCREFNAME="OpenOffice.org $(PRODUCT_RELEASE) API RC"
-TITLE="OpenOffice.org$(PRODUCT_RELEASE) RC SDK"
-IDL_CHAPTER_REFS=idl_chapter_refs_oo.txt
-CONVMODE=1
-.ENDIF
-
+PRODUCT_NAME=odk$(UPD)
 PRODUCTZIPFILE=$(PRODUCT_NAME).zip
 PRODUCTTARGZFILE=$(PRODUCT_NAME).tar.gz
 
