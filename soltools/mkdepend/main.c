@@ -60,6 +60,9 @@ int _debugmask;
 
 char *ProgramName;
 
+#define OBJSUFFIX ".obj"
+#define INCLUDEDIR "."
+
 char    *directives[] = {
     "if",
     "ifdef",
