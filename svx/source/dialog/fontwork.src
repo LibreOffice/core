@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 19:59:05 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ english_us ] = "Orientation" ;
                 Text [ italian ] = "Direzione di scorrimento" ;
                 Text [ spanish ] = "Orientación" ;
-                Text [ french ] = "Orientation" ;
+                Text [ french ] = "Direction" ;
                 Text [ swedish ] = "Löpriktning" ;
                 Text [ danish ] = "Retning" ;
                 Text [ portuguese ] = "Orientação" ;
@@ -348,7 +348,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ dutch ] = "Links uitgelijnd" ;
                 Text [ english_us ] = "Align Left" ;
                 Text [ italian ] = "Allineato a sinistra" ;
-                Text [ spanish ] = "Alineado a la izquierda" ;
+                Text [ spanish ] = "Alinear a la izquierda" ;
                 Text [ french ] = "Aligné à gauche" ;
                 Text [ swedish ] = "Vänsterjusterat" ;
                 Text [ danish ] = "Venstrejusteret" ;
@@ -1409,3 +1409,4 @@ String RID_SVXSTR_FONTWORK_UNDOCREATE
     Text[ finnish ] = "Luo fonttityöobjekti";
 };
  // ********************************************************************** EOF
+
