@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-29 12:52:11 $
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,8 +427,8 @@ void OListBoxModel::fillProperties(
         DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,    BOUND);
         DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,                BOUND);
         DECL_PROP1(HELPTEXT,            ::rtl::OUString,                BOUND);
-                DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,                READONLY, TRANSIENT);
-                DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,                BOUND, MAYBEVOID);
+        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,                READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,                BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
 }
@@ -607,6 +607,7 @@ void OListBoxModel::loadData()
     if (m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT)
         m_aBoundColumn >>= nBoundColumn;
 
+    Reference<XStatement> xStmt;
     try
     {
         switch (m_eListSourceType)
@@ -651,7 +652,7 @@ void OListBoxModel::loadData()
                         Reference<XSQLQueryComposer> xComposer = xFactory->createQueryComposer();
                         try
                         {
-                                                        Reference<XPropertySet> xFormAsSet(xForm, UNO_QUERY);
+                            Reference<XPropertySet> xFormAsSet(xForm, UNO_QUERY);
                             ::rtl::OUString aStatement;
                             xFormAsSet->getPropertyValue(PROPERTY_ACTIVECOMMAND) >>= aStatement;
                             xComposer->setQuery(aStatement);
@@ -695,15 +696,15 @@ void OListBoxModel::loadData()
                 aStatement += ::rtl::OUString::createFromAscii(" FROM ");
                 aStatement += quoteTableName(xMeta, sListSource);
 
-                Reference<XStatement> xStmt = xConnection->createStatement();
+                xStmt = xConnection->createStatement();
                 xListCursor = xStmt->executeQuery(aStatement);
             }   break;
             case ListSourceType_QUERY:
             {
                 Reference<XQueriesSupplier> xSupplyQueries(xConnection, UNO_QUERY);
-                                Reference<XPropertySet> xQuery(*(InterfaceRef*)xSupplyQueries->getQueries()->getByName(sListSource).getValue(), UNO_QUERY);
-                Reference<XStatement> xStmt = xConnection->createStatement();
-                                Reference<XPropertySet>(xStmt, UNO_QUERY)->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
+                Reference<XPropertySet> xQuery(*(InterfaceRef*)xSupplyQueries->getQueries()->getByName(sListSource).getValue(), UNO_QUERY);
+                xStmt = xConnection->createStatement();
+                Reference<XPropertySet>(xStmt, UNO_QUERY)->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
 
                 ::rtl::OUString sCommand;
                 xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
@@ -711,10 +712,10 @@ void OListBoxModel::loadData()
             }   break;
             default:
             {
-                Reference<XStatement> xStmt = xConnection->createStatement();
+                xStmt = xConnection->createStatement();
                 if (ListSourceType_SQLPASSTHROUGH == m_eListSourceType)
                 {
-                                        Reference<XPropertySet> xStatementProps(xStmt, UNO_QUERY);
+                    Reference<XPropertySet> xStatementProps(xStmt, UNO_QUERY);
                     xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny(sal_Bool(sal_False)));
                 }
                 xListCursor = xStmt->executeQuery(sListSource);
@@ -763,7 +764,7 @@ void OListBoxModel::loadData()
                 }
                 Reference<XColumn> xDataField;
                 if (xColumns.is())
-                    xDataField = Reference<XColumn>(*(InterfaceRef*)xColumns->getByIndex(0).getValue(), UNO_QUERY);
+                    xColumns->getByIndex(0) >>= xDataField;
                 if (!xDataField.is())
                 {
                     disposeComponent(xListCursor);
@@ -776,12 +777,13 @@ void OListBoxModel::loadData()
                 sal_Int16 nKeyType   = NumberFormat::UNDEFINED;
                 try
                 {
-                                        Reference<XPropertySet> xFieldAsSet(xDataField, UNO_QUERY);
+                    Reference<XPropertySet> xFieldAsSet(xDataField, UNO_QUERY);
                     xFieldAsSet->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
                     xFieldAsSet->getPropertyValue(PROPERTY_FORMATKEY) >>= nFormatKey;
                 }
                 catch(Exception&)
                 {
+                    DBG_ERROR("OListBoxModel::loadData: could not obtain the field type and/or format key of the bound column!");
                 }
 
                 Reference<XNumberFormatter> xFormatter;
@@ -805,7 +807,7 @@ void OListBoxModel::loadData()
                 Reference<XColumn> xBoundField;
                 if ((nBoundColumn > 0) && m_xColumn.is())
                     // don't look for a bound column if we're not connected to a field
-                    xBoundField = Reference<XColumn>(*(InterfaceRef*)xColumns->getByIndex(nBoundColumn).getValue(), UNO_QUERY);
+                    xColumns->getByIndex(nBoundColumn) >>= xBoundField;
                 m_bBoundComponent = xBoundField.is();
 
                 //  Ist die LB an ein Feld gebunden und sind Leereinträge zulaessig
@@ -845,8 +847,8 @@ void OListBoxModel::loadData()
                     sal_Int32 nFieldsCount = seqNames.getLength();
                     const ::rtl::OUString* pustrNames = seqNames.getConstArray();
 
-                    for (sal_Int32 k=0; k<nFieldsCount; ++k)
-                        aStringList.push_back(pustrNames[k]);
+                    for (sal_Int32 k=0; k<nFieldsCount; ++k, ++pustrNames)
+                        aStringList.push_back(*pustrNames);
                 }
             }
             break;
@@ -939,7 +941,7 @@ StringSequence OListBoxModel::GetCurValueSeq() const
         return aCurValues;
     Any aTmp = m_xAggregateFastSet->getFastPropertyValue(OListBoxModel::nSelectHandle);
 
-    Sequence<sal_Int16> aSelectSeq = *(Sequence<sal_Int16>*)aTmp.getValue();
+    Sequence<sal_Int16> aSelectSeq; aTmp >>= aSelectSeq;
     const sal_Int16 *pSels = aSelectSeq.getConstArray();
     sal_uInt32 nSelCount = aSelectSeq.getLength();
 
@@ -1047,7 +1049,7 @@ void OListBoxModel::_onValueChanged()
             aSelSeq = findValue(m_aValueSeq, sValue, m_bBoundComponent);
         else
         {
-            StringSequence aStringSeq = *(StringSequence*)m_xAggregateSet->getPropertyValue(PROPERTY_STRINGITEMLIST).getValue();
+            StringSequence aStringSeq; m_xAggregateSet->getPropertyValue(PROPERTY_STRINGITEMLIST) >>= aStringSeq;
             aSelSeq = findValue(aStringSeq, sValue, m_bBoundComponent);
         }
     }
