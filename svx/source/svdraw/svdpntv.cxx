@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:40:14 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,8 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut):
     // aPagHide(1024,16,16),
     aAni(*(SdrView*)this),
     aDefaultAttr(pModel1->GetItemPool()),
-    aUserMarkers(1024,16,16)
+    aUserMarkers(1024,16,16),
+    mbBufferedOutputAllowed(sal_False)
 {
     DBG_CTOR(SdrPaintView,NULL);
     pMod=pModel1;
@@ -465,7 +466,8 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, ExtOutputDevice* pExtOut):
     // aPagHide(1024,16,16),
     aAni(*(SdrView*)this),
     aDefaultAttr(pModel1->GetItemPool()),
-    aUserMarkers(1024,16,16)
+    aUserMarkers(1024,16,16),
+    mbBufferedOutputAllowed(sal_False)
 {
     DBG_CTOR(SdrPaintView,NULL);
     pMod=pModel1;
@@ -2184,5 +2186,20 @@ Color SdrPaintView::CalcBackgroundColor( const Rectangle& rArea,
     //    maSwappedInGraphicsStack.pop_front();
     //}
 //}
+
+// #114898#
+sal_Bool SdrPaintView::IsBufferedOutputAllowed() const
+{
+    return mbBufferedOutputAllowed;
+}
+
+// #114898#
+void SdrPaintView::SetBufferedOutputAllowed(sal_Bool bNew)
+{
+    if(bNew != mbBufferedOutputAllowed)
+    {
+        mbBufferedOutputAllowed = bNew;
+    }
+}
 
 // eof
