@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSecurityManager.hxx,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-02-12 14:59:01 $
+*  last change: $Author: dfoster $ $Date: 2003-02-13 17:29:39 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -105,6 +105,7 @@ public:
 private:
     void readConfiguration() throw (css::uno::RuntimeException);
     short executeDialog ( const rtl::OUString & path );
+    void addToSecurePaths ( const rtl::OUString & path );
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     sal_Bool m_confirmationRequired;
     sal_Bool m_warning;

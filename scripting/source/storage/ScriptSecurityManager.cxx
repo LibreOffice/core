@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: npower $ $Date: 2003-02-13 14:23:06 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-13 17:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
@@ -91,6 +93,9 @@ static OUString s_configProv = ::rtl::OUString::createFromAscii(
 
 static OUString s_configAccess = ::rtl::OUString::createFromAscii(
     "com.sun.star.configuration.ConfigurationAccess");
+
+static OUString s_configUpdate = ::rtl::OUString::createFromAscii(
+    "com.sun.star.configuration.ConfigurationUpdateAccess");
 
 static OUString s_securityDialog = ::rtl::OUString::createFromAscii(
     "com.sun.star.script.framework.security.SecurityDialog");
@@ -159,9 +164,15 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                     OSL_TRACE("according to path");
                     // check path
                     rtl::OUString path = url.copy( 0, url.lastIndexOf( '/' ) );
+                    OSL_TRACE( "no of elts in path list = %d",
+                        (int)m_secureURL.getLength() );
                     for(int j=m_secureURL.getLength();j>0;j--)
                     {
+#ifdef __WIN32__
+                        if( path.equalsIgnoreAsciiCase( m_secureURL[j-1] ) )
+#else
                         if( path.equals( m_secureURL[j-1] ) )
+#endif
                         {
                             if( m_warning == sal_True )
                             {
@@ -189,9 +200,11 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                         {
                             newPerm.execPermission=sal_True;
                         }
+                        /* this might be better (result ==3) */
                         if ( result&2 == 2 )
                         {
                             /* if checkbox clicked then need to add path to registry*/
+                            addToSecurePaths(path);
                         }
                     }
                     break;
@@ -402,6 +415,67 @@ void ScriptSecurityManager::readConfiguration()
         OSL_TRACE( "ScriptSecurityManager: path = %s",
             ::rtl::OUStringToOString(m_secureURL[j-1] ,
             RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
+    }
+}
+
+void ScriptSecurityManager::addToSecurePaths( const OUString & path )
+{
+    OSL_TRACE( "--->ScriptSecurityManager::addToSecurePaths" );
+    // get the serice manager from the context
+    Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
+    validateXRef( xMgr,
+        "ScriptSecurityManager::ScriptSecurityManager: cannot get ServiceManager" );
+    // create an instance of the ConfigurationProvider
+    Reference< XInterface > xInterface = xMgr->createInstanceWithContext(
+        s_configProv, m_xContext );
+    validateXRef( xInterface,
+        "ScriptSecurityManager::ScriptSecurityManager: cannot get ConfigurationProvider" );
+    beans::PropertyValue configPath;
+    configPath.Name = ::rtl::OUString::createFromAscii( "nodepath" );
+    configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Common/Security/Scripting" );
+    Sequence < Any > aargs( 1 );
+    aargs[ 0 ] <<= configPath;
+    // create an instance of the ConfigurationAccess for accessing the
+    // scripting security settings
+    Reference < lang::XMultiServiceFactory > xFactory( xInterface, UNO_QUERY );
+    validateXRef( xFactory,
+        "ScriptSecurityManager::ScriptSecurityManager: cannot get XMultiServiceFactory interface from ConfigurationProvider" );
+    xInterface = xFactory->createInstanceWithArguments( s_configUpdate,
+            aargs );
+    validateXRef( xInterface,
+        "ScriptSecurityManager::ScriptSecurityManager: cannot get ConfigurationAccess" );
+    Reference < container::XNameReplace > xNameReplace( xInterface, UNO_QUERY );
+    validateXRef( xNameReplace,
+        "ScriptSecurityManager::ScriptSecurityManager: cannot get XNameReplace" );
+    Reference < util::XChangesBatch > xChangesBatch( xInterface, UNO_QUERY );
+    validateXRef( xChangesBatch,
+        "ScriptSecurityManager::ScriptSecurityManager: cannot get XChangesBatch" );
+
+    OSL_TRACE( "--->ScriptSecurityManager::addToSecurePaths: after if stuff" );
+    Reference < beans::XPropertySet > xPropSet( xInterface, UNO_QUERY );
+    css::uno::Sequence< rtl::OUString > newSecureURL;
+    Any value;
+    value=xPropSet->getPropertyValue( OUSTR( "SecureURL" ) );
+    if ( sal_False == ( value >>= newSecureURL ) )
+    {
+        throw RuntimeException(
+            OUSTR( "ScriptSecurityManager: can't get SecureURL setting" ),
+            Reference< XInterface > () );
+    }
+    try
+    {
+        sal_Int32 length = newSecureURL.getLength();
+        newSecureURL.realloc( length + 1 );
+        newSecureURL[ length ] = path;
+        Any aNewSecureURL;
+        aNewSecureURL <<= newSecureURL;
+        xNameReplace->replaceByName( OUSTR( "SecureURL"), aNewSecureURL );
+        xChangesBatch->commitChanges();
+        m_secureURL = newSecureURL;
+    }
+    catch ( Exception e )
+    {
+        OSL_TRACE( "Error updating secure paths: " );
     }
 }
 
