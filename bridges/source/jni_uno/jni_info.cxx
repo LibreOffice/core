@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:30:37 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace jni_uno
 
 //______________________________________________________________________________
 JNI_type_info::JNI_type_info(
-    JNI_context const & jni, ::com::sun::star::uno::TypeDescription const & td )
+    JNI_context const & jni, typelib_TypeDescription * td )
     : m_base( 0 ),
       m_td( td ),
       m_class( 0 )
@@ -89,8 +89,7 @@ JNI_type_info::JNI_type_info(
         OUStringBuffer buf( 128 );
         buf.appendAscii(
             RTL_CONSTASCII_STRINGPARAM("cannot make type incomplete: ") );
-        buf.append(
-            *reinterpret_cast< OUString const * >( &m_td.get()->pTypeName ) );
+        buf.append( OUString::unacquired( &m_td.get()->pTypeName ) );
         buf.append( jni.get_stack_trace() );
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
@@ -109,16 +108,14 @@ void JNI_interface_type_info::destroy( JNIEnv * jni_env )
 
 //______________________________________________________________________________
 JNI_interface_type_info::JNI_interface_type_info(
-    JNI_context const & jni, css::uno::TypeDescription const & td_ )
+    JNI_context const & jni, typelib_TypeDescription * td_ )
     : JNI_type_info( jni, td_ )
 {
     OSL_ASSERT( typelib_TypeClass_INTERFACE == m_td.get()->eTypeClass );
     typelib_InterfaceTypeDescription * td =
         reinterpret_cast< typelib_InterfaceTypeDescription * >( m_td.get() );
 
-    OUString const & uno_name = *reinterpret_cast< OUString const * >(
-        &m_td.get()->pTypeName );
-
+    OUString const & uno_name = OUString::unacquired( &m_td.get()->pTypeName );
     JNI_info const * jni_info = jni.get_info();
 
     // retrieve info for base type
@@ -185,10 +182,9 @@ JNI_interface_type_info::JNI_interface_type_info(
 
                     OString method_signature( sig_buf.makeStringAndClear() );
                     OString method_name(
-                        OUStringToOString(
-                            *reinterpret_cast< OUString const * >(
-                                &method_td->aBase.pMemberName ),
-                            RTL_TEXTENCODING_JAVA_UTF8 ) );
+                        OUStringToOString( OUString::unacquired(
+                                               &method_td->aBase.pMemberName ),
+                                           RTL_TEXTENCODING_JAVA_UTF8 ) );
 
                     m_methods[ nMethodIndex ] = jni->GetMethodID(
                         (jclass) jo_class.get(), method_name.getStr(),
@@ -214,7 +210,7 @@ JNI_interface_type_info::JNI_interface_type_info(
                     sig_buf.ensureCapacity( 64 );
                     // member name
                     OUString const & member_name =
-                        *reinterpret_cast< OUString const * >(
+                        OUString::unacquired(
                             &attribute_td->aBase.pMemberName );
 
                     // getter
@@ -281,7 +277,7 @@ void JNI_compound_type_info::destroy( JNIEnv * jni_env )
 
 //______________________________________________________________________________
 JNI_compound_type_info::JNI_compound_type_info(
-    JNI_context const & jni, css::uno::TypeDescription const & td_ )
+    JNI_context const & jni, typelib_TypeDescription * td_ )
     : JNI_type_info( jni, td_ ),
       m_fields( 0 ),
       m_exc_ctor( 0 )
@@ -292,8 +288,7 @@ JNI_compound_type_info::JNI_compound_type_info(
         reinterpret_cast< typelib_CompoundTypeDescription * >( m_td.get() );
 
     OUString const & uno_name =
-        *reinterpret_cast< OUString const * >(
-            &((typelib_TypeDescription *)td)->pTypeName );
+        OUString::unacquired( &((typelib_TypeDescription *)td)->pTypeName );
 
     OString java_name(
         OUStringToOString(
@@ -349,8 +344,7 @@ JNI_compound_type_info::JNI_compound_type_info(
 
                 OString member_name(
                     OUStringToOString(
-                        *reinterpret_cast< OUString const * >(
-                            &td->ppMemberNames[ nPos ] ),
+                        OUString::unacquired( &td->ppMemberNames[ nPos ] ),
                         RTL_TEXTENCODING_JAVA_UTF8 ) );
 
                 m_fields[ nPos ] = jni->GetFieldID(
@@ -375,22 +369,17 @@ JNI_compound_type_info::JNI_compound_type_info(
 JNI_type_info const * JNI_info::create_type_info(
     JNI_context const & jni, typelib_TypeDescription * td ) const
 {
-    OUString const & uno_name =
-        *reinterpret_cast< OUString const * >( &td->pTypeName );
+    OUString const & uno_name = OUString::unacquired( &td->pTypeName );
 
     JNI_type_info * new_info;
     switch (td->eTypeClass)
     {
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
-        new_info = new JNI_compound_type_info(
-                jni,
-                *reinterpret_cast< css::uno::TypeDescription const * >( &td ) );
+        new_info = new JNI_compound_type_info( jni, td );
         break;
     case typelib_TypeClass_INTERFACE:
-        new_info = new JNI_interface_type_info(
-                jni,
-                *reinterpret_cast< css::uno::TypeDescription const * >( &td ) );
+        new_info = new JNI_interface_type_info( jni, td );
         break;
     default:
     {
@@ -431,8 +420,7 @@ JNI_type_info const * JNI_info::get_type_info(
         return m_XInterface_type_info;
     }
 
-    OUString const & uno_name =
-        *reinterpret_cast< OUString const * >( &td->pTypeName );
+    OUString const & uno_name = OUString::unacquired( &td->pTypeName );
     JNI_type_info const * info;
     ClearableMutexGuard guard( m_mutex );
     t_str2type::const_iterator iFind( m_type_map.find( uno_name ) );
@@ -458,8 +446,7 @@ JNI_type_info const * JNI_info::get_type_info(
         return m_XInterface_type_info;
     }
 
-    OUString const & uno_name =
-        *reinterpret_cast< OUString const * >( &type->pTypeName );
+    OUString const & uno_name = OUString::unacquired( &type->pTypeName );
     JNI_type_info const * info;
     ClearableMutexGuard guard( m_mutex );
     t_str2type::const_iterator iFind( m_type_map.find( uno_name ) );
@@ -883,7 +870,7 @@ JNI_info::JNI_info( JNIEnv * jni_env )
             ::getCppuType(
                 (css::uno::Reference< css::uno::XInterface > const *)0 ) );
         m_XInterface_type_info =
-            new JNI_interface_type_info( jni, XInterface_td );
+            new JNI_interface_type_info( jni, XInterface_td.get() );
     }
     catch (...)
     {
