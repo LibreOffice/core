@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dependency.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-11-26 12:19:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,16 +351,19 @@ sal_Bool checkTypeDependencies(TypeManager& typeMgr, TypeDependency& dependencie
     // make the scope modules as dependencies
     sal_Int32 nPos = type.lastIndexOf( '/' );
 
-    OString aScope( type.copy( 0, nPos ) );
-    OStringBuffer tmpBuf(aScope.getLength());
-
-    nPos = 0;
-    do
+    if ( nPos >= 0 )
     {
-        tmpBuf.append(aScope.getToken(0, '/', nPos));
-        dependencies.insert(type, tmpBuf.getStr(), TYPEUSE_SCOPE);
-        tmpBuf.append('/');
-    } while( nPos != -1 );
+        OString aScope( type.copy( 0, nPos ) );
+        OStringBuffer tmpBuf(aScope.getLength());
+
+        nPos = 0;
+        do
+        {
+            tmpBuf.append(aScope.getToken(0, '/', nPos));
+            dependencies.insert(type, tmpBuf.getStr(), TYPEUSE_SCOPE);
+            tmpBuf.append('/');
+        } while( nPos != -1 );
+    }
 
     return sal_True;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 12:13:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #if defined(SAL_W32) || defined(SAL_OS2)
 #include <io.h>
 #include <direct.h>
@@ -122,34 +121,48 @@ OString makeTempName(sal_Char* prefix)
         if ( osl_getEnvironment(uTEMP.pData, &uPattern.pData) != osl_Process_E_None )
         {
 #if defined(SAL_W32) || defined(SAL_OS2)
-            strcpy(tmpPattern, ".");
+            OSL_ASSERT( sizeof(tmpPattern) > RTL_CONSTASCII_LENGTH( "." ) );
+            strncpy(tmpPattern, ".", sizeof(tmpPattern)-1);
 #else
-            strcpy(tmpPattern, "/tmp");
+            OSL_ASSERT( sizeof(tmpPattern) > RTL_CONSTASCII_LENGTH( "/tmp" ) );
+            strncpy(tmpPattern, "/tmp", sizeof(tmpPattern)-1);
 #endif
         }
     }
 
     if (uPattern.getLength())
     {
-        strcpy(tmpPattern, OUStringToOString(uPattern, RTL_TEXTENCODING_UTF8).getStr());
+        OString aOStr( OUStringToOString(uPattern, RTL_TEXTENCODING_UTF8) );
+        OSL_ASSERT( sizeof(tmpPattern) > aOStr.getLength() );
+        strncpy(tmpPattern, aOStr.getStr(), sizeof(tmpPattern)-1);
     }
 
 #ifdef SAL_W32
-    strcat(tmpPattern, "\\");
-    strcat(tmpPattern, pPrefix);
-    strcat(tmpPattern, "XXXXXX");
+    OSL_ASSERT( sizeof(tmpPattern) > ( strlen(tmpPattern)
+                                       + RTL_CONSTASCII_LENGTH("\\")
+                                       + strlen(pPrefix)
+                                       + RTL_CONSTASCII_LENGTH("XXXXXX") ) );
+    strncat(tmpPattern, "\\", sizeof(tmpPattern)-1-strlen(tmpPattern));
+    strncat(tmpPattern, pPrefix, sizeof(tmpPattern)-1-strlen(tmpPattern));
+    strncat(tmpPattern, "XXXXXX", sizeof(tmpPattern)-1-strlen(tmpPattern));
     pTmpName = mktemp(tmpPattern);
 #endif
 
 #ifdef SAL_OS2
-    strcpy(tmpPattern, tempnam(NULL, prefix);
+    char* tmpname = tempnam(NULL, prefix);
+    OSL_ASSERT( sizeof(tmpPattern) > strlen(tmpname) );
+    strncpy(tmpPattern, tmpname, sizeof(tmpPattern)-1);
     pTmpName = tmpPattern;
 #endif
 
 #ifdef SAL_UNX
-    strcat(tmpPattern, "\\");
-    strcat(tmpPattern, pPrefix);
-    strcat(tmpPattern, "XXXXXX");
+    OSL_ASSERT( sizeof(tmpPattern) > ( strlen(tmpPattern)
+                                       + RTL_CONSTASCII_LENGTH("/")
+                                       + strlen(pPrefix)
+                                       + RTL_CONSTASCII_LENGTH("XXXXXX") ) );
+    strncat(tmpPattern, "/", sizeof(tmpPattern)-1-strlen(tmpPattern));
+    strncat(tmpPattern, pPrefix, sizeof(tmpPattern)-1-strlen(tmpPattern));
+    strncat(tmpPattern, "XXXXXX", sizeof(tmpPattern)-1-strlen(tmpPattern));
     pTmpName = mktemp(tmpPattern);
 #endif
 

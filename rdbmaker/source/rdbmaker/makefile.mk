@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-27 16:12:33 $
+#   last change: $Author: hr $ $Date: 2003-03-26 14:28:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,8 +109,6 @@ APP1OBJS=   $(OBJ)$/rdbmaker.obj	\
             $(OBJ)$/typeblop.obj	\
             $(OBJ)$/specialtypemanager.obj	\
             $(OBJ)$/rdbtype.obj
-
-DEPOBJFILES= $(APP1OBJS)
 
 APP1STDLIBS=\
             $(SALLIB) \
