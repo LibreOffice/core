@@ -397,15 +397,41 @@ public class InstUtil {
             //results.put(parts[0].trim(), f.getPath());
             try {
                         URL url = new URL("file://" + parts[1].trim());
-            System.err.println( "InstUtil URLDecoder path: " + URLDecoder.decode( url.getPath() ) );
+            String opSys =System.getProperty("os.name");
+            if (opSys.indexOf("Windows")!=-1){
+                System.err.println( "InstUtil URLDecoder path: " + URLDecoder.decode( url.getPath() ) );
+                String windowsPath = URLDecoder.decode( url.getPath() );
+                boolean firstSlash = true;
+                while( windowsPath.indexOf("/") != -1 ) {
+                    int forwardSlashPos = windowsPath.indexOf("/");
+                    String firstPart = windowsPath.substring( 0, forwardSlashPos );
+                    String lastPart = windowsPath.substring( forwardSlashPos + 1, windowsPath.length() );
+                    if( firstSlash ) {
+                        windowsPath = lastPart;
+                        firstSlash = false;
+                    }
+                    else {
+                        windowsPath = firstPart + "\\" + lastPart;
+                    }
+                }
+                int lastSlash = windowsPath.lastIndexOf("\\");
+                windowsPath = windowsPath.substring( 0, lastSlash );
+                System.out.println( "InstUtil URLDecoder windowsPath " + windowsPath );
+                results.put( parts[0].trim(), windowsPath );
+            }
+            else {
+                System.err.println( " InstUtil URLDecoder " + URLDecoder.decode(url.getPath()) );
+                results.put(parts[0].trim(), URLDecoder.decode(url.getPath()));
+            }
                         //File f = new File(url);
             
             //.sversion: OpenOffice.org 643=file:///scriptdev/neil/ScriptFrameOpenoffice1.0.1
             // parts = Installation name. f.getPath = Installation path
                         //results.put(parts[0].trim(), f.getPath());
-                        results.put(parts[0].trim(), URLDecoder.decode(url.getPath()));
             
-                        //System.out.println("Putting " + parts[0] + " : " + f.getPath());
+                        //results.put(parts[0].trim(), URLDecoder.decode(url.getPath()));
+            //results.put( parts[0].trim(), windowsPath );
+                        
                     }
                     catch (MalformedURLException eSyntax) {
                         //throw new IOException("Error while reading version information");
