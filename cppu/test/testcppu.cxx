@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-27 08:24:09 $
+ *  last change: $Author: dbo $ $Date: 2001-04-27 11:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1020,11 +1020,11 @@ int SAL_CALL main(int argc, char **argv)
 
     // C++, C bridges test
     void test_CppBridge(void);
-    void test_CBridge(void);
-    void test_CBridge2(void);
     test_CppBridge();
-      test_CBridge();
-    test_CBridge2();
+//      void test_CBridge(void);
+//      void test_CBridge2(void);
+//      test_CBridge();
+//      test_CBridge2();
 
     testAssignment();
     testCppu();

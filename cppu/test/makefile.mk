@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: jsc $ $Date: 2001-04-23 10:21:01 $
+#   last change: $Author: dbo $ $Date: 2001-04-27 11:01:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,15 +84,15 @@ INCPRE+=	$(OUT)$/inc$/test
 OBJFILES=	\
         $(OBJ)$/testcppu.obj	\
         $(OBJ)$/test_di.obj	\
-        $(OBJ)$/test_cuno.obj	\
         $(OBJ)$/test_Cincludes.obj
+#		$(OBJ)$/test_cuno.obj	\
 #		$(OBJ)$/test_sec.obj	\
 
 APP1TARGET=	testcppu
 APP1OBJS=	\
         $(OBJ)$/testcppu.obj	\
-        $(OBJ)$/test_di.obj		\
-        $(OBJ)$/test_cuno.obj
+        $(OBJ)$/test_di.obj
+#		$(OBJ)$/test_cuno.obj
 #		$(OBJ)$/test_sec.obj
 
 APP1STDLIBS+=	\
@@ -169,5 +169,5 @@ $(BIN)$/testcppu.rdb: $(ALLIDLFILES)
     
 unoheader: $(BIN)$/testcppu.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/testcppu.rdb
-    +cunomaker -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/testcppu.rdb
+#	+cunomaker -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/testcppu.rdb
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-23 10:21:01 $
+ *  last change: $Author: dbo $ $Date: 2001-04-27 11:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <uno/mapping.hxx>
 #include <uno/data.h>
 
-#include <uno/cuno.h>
-#include <test/XLanguageBindingTest.h>
+//  #include <uno/cuno.h>
+//  #include <test/XLanguageBindingTest.h>
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -743,7 +743,7 @@ void test_CBridge(void)
     OSL_ENSURE( p->getRefCount() == 1, "### dummy object ref count > 1 !" );
     }
 }
-
+#if 0
 //==================================================================================================
 extern "C" com_sun_star_uno_XInterface* SAL_CALL createTestObject();
 
@@ -793,3 +793,5 @@ void test_CBridge2(void)
     }
 
 }
+#endif
+
