@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-27 12:07:22 $
+ *  last change: $Author: sj $ $Date: 2000-10-30 11:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
 #include <com/sun/star/drawing/XControlShape.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
+#include <com/sun/star/text/GraphicCrop.hpp>
 #endif
 #ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
@@ -4896,6 +4899,34 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                             nLuminance = 0x599a;
                         }
                         break;
+                    }
+                    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "GraphicCrop" ) ) ) )
+                    {
+                        ::com::sun::star::text::GraphicCrop aGraphCrop;
+                        if ( mAny >>= aGraphCrop )
+                        {
+                            ::com::sun::star::awt::Size aCropSize( mXShape->getSize() );
+                            if ( aGraphCrop.Left )
+                            {
+                                sal_uInt32 nLeft = ( aGraphCrop.Left * 65536 ) / aCropSize.Width;
+                                mp_EscherEx->AddOpt( _Escher_Prop_cropFromLeft, nLeft );
+                            }
+                            if ( aGraphCrop.Top )
+                            {
+                                sal_uInt32 nTop = ( aGraphCrop.Top * 65536 ) / aCropSize.Height;
+                                mp_EscherEx->AddOpt( _Escher_Prop_cropFromTop, nTop );
+                            }
+                            if ( aGraphCrop.Right )
+                            {
+                                sal_uInt32 nRight = ( aGraphCrop.Right * 65536 ) / aCropSize.Width;
+                                mp_EscherEx->AddOpt( _Escher_Prop_cropFromRight, nRight );
+                            }
+                            if ( aGraphCrop.Bottom )
+                            {
+                                sal_uInt32 nBottom = ( aGraphCrop.Bottom * 65536 ) / aCropSize.Height;
+                                mp_EscherEx->AddOpt( _Escher_Prop_cropFromBottom, nBottom );
+                            }
+                        }
                     }
                     if ( nContrast )
                         mp_EscherEx->AddOpt( _Escher_Prop_pictureContrast, nContrast );
