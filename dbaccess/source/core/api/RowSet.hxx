@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:00:34 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,11 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposer.hpp>
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
@@ -143,7 +146,8 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTypeMap;
         ::com::sun::star::uno::Any                                                      m_aTypeMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >  m_xStatement;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xComposer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >   m_xAnalyzer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns; // the columns from a table or query
 
         connectivity::OWeakRefArray                 m_aClones;
@@ -160,6 +164,8 @@ namespace dbaccess
         rtl::OUString                               m_aUser;
         rtl::OUString                               m_aPassword;
         rtl::OUString                               m_aFilter;
+        rtl::OUString                               m_aHavingClause;
+        rtl::OUString                               m_aGroupBy;
         rtl::OUString                               m_aOrder;
         rtl::OUString                               m_aActiveCommand;
         rtl::OUString                               m_aCursorName;
