@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInvocation.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,13 @@
 
 //=============================================================================
 /** gives access to an object's methods and properties.
-
     Container access is available through
     <type scope="com::sun::star::container">XIndexContainer</type>,
     <type scope="com::sun::star::container">XNameContainer</type> and
     <type scope="com::sun::star::container">XEnumerationAccess</type>.
     </p>
  */
-interface XInvocation: com::sun::star::uno::XInterface
+published interface XInvocation: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** returns the introspection from this object or <NULL/>
