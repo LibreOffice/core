@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:55:55 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,7 +1095,9 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                     default: sVersionString += '0';
                 }
 
-                sVersionString += Application::IsRemoteServer() ? '1' : '0';
+                // MT: Removed AppServer, do you still need the number?
+                // sVersionString += Application::IsRemoteServer() ? '1' : '0';
+                sVersionString += '0';
                 rSet.Put(SfxStringItem(nSID, sVersionString));
 
             }
