@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:12:30 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,14 +384,14 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ swedish ] = "Centrerat" ;
                 Text [ danish ] = "Centreret" ;
                 Text [ portuguese ] = "Centrado" ;
-                Text [ portuguese_brazilian ] = "Centro" ;
+                Text [ portuguese_brazilian ] = "Centralizado" ;
                 Text[ chinese_simplified ] = "å±…ä¸­";
                 Text[ russian ] = "Ïî öåíòğó";
                 Text[ polish ] = "Do œrodka";
                 Text[ japanese ] = "ä¸­å¤®æƒãˆ";
                 Text[ chinese_traditional ] = "ç½®ä¸­";
                 Text[ arabic ] = "ÊæÓíØ";
-                Text[ greek ] = "Êåíôñáñéóìİíá";
+                Text[ greek ] = "Óôï êİíôñï";
                 Text[ korean ] = "ê°€ìš´ë°";
                 Text[ turkish ] = "Ortala";
                 Text[ language_user1 ] = " ";
@@ -597,6 +597,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ hebrew ] = "â€®×©×•×œ×™×™×â€¬";
         QuickHelpText[ hindi ] = "à¤‡à¤¨à¥à¤¡à¥‡à¤¨à¥à¤Ÿ";
         QuickHelpText[ slovak ] = "Odsadenie";
+        CustomUnitText[ hebrew ] = "â€®-â€¬";
     };
     ToolBox TBX_SHADOW
     {
@@ -655,7 +656,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ swedish ] = "Bokstavskontur" ;
                 Text [ danish ] = "Bogstavramme" ;
                 Text [ portuguese ] = "Contorno de caracteres" ;
-                Text [ portuguese_brazilian ] = "Contorno do Texto" ;
+                Text [ portuguese_brazilian ] = "Contorno das letras" ;
                 Text[ chinese_simplified ] = "å­—æ¯è½®å»“";
                 Text[ russian ] = "Êîíòóğ òåêñòà";
                 Text[ polish ] = "Kontur liter";
@@ -701,7 +702,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ japanese ] = "å½±ãªã—";
                 Text[ chinese_traditional ] = "ä¸ä½¿ç”¨";
                 Text[ arabic ] = "ÅíŞÇİ";
-                Text[ greek ] = "Áğåíåñãïğïßçóç";
+                Text[ greek ] = "×ùñßò óêßáóç";
                 Text[ korean ] = "ê·¸ë¦¼ì ì—†ìŒ";
                 Text[ turkish ] = "Gölge Yok";
                 Text[ language_user1 ] = " ";
@@ -892,10 +893,10 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText [ dutch ] = "Afstand Y" ;
         QuickHelpText [ danish ] = "Afstand Y" ;
         QuickHelpText [ portuguese ] = "Distância Y" ;
-        QuickHelpText [ portuguese_brazilian ] = "Abstand Y" ;
+        QuickHelpText [ portuguese_brazilian ] = "Distância Y" ;
         CustomUnitText [ portuguese ] = "%" ;
         CustomUnitText [ english_us ] = "%" ;
-        CustomUnitText [ portuguese_brazilian ] = "-" ;
+        CustomUnitText [ portuguese_brazilian ] = "%" ;
         CustomUnitText [ swedish ] = "%" ;
         QuickHelpText [ swedish ] = "Avstånd Y" ;
         CustomUnitText [ danish ] = "%" ;
@@ -1612,6 +1613,7 @@ String RID_SVXSTR_FONTWORK_UNDOCREATE
     Text[ slovak ] = "VytvoriÅ¥ pÃ­smomaÄ¾bu";
 };
  // ********************************************************************** EOF
+
 
 
 
