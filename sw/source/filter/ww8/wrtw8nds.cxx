@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 12:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,13 +268,11 @@ public:
     rtl_TextEncoding CharSet() const {return meCharSet;}
     CurrentCharSet(const SwTxtAttr *pPointer, rtl_TextEncoding eCharSet)
         : mpPointer(pPointer), meCharSet(eCharSet) {}
-    bool operator==(const CurrentCharSet &rSecond) const;
+    bool operator==(const CurrentCharSet &rSecond) const
+    {
+        return (mpPointer == rSecond.mpPointer);
+    }
 };
-
-bool CurrentCharSet::operator==(const CurrentCharSet &rSecond) const
-{
-    return (mpPointer == rSecond.mpPointer);
-}
 
 class swFlyFrm
 {
@@ -353,7 +351,7 @@ class sortswflys :
 public:
     bool operator()(const swFlyFrm &rOne, const swFlyFrm &rTwo) const
     {
-        return (rOne.maPos < rTwo.maPos) ? true : false;
+        return rOne.maPos.nContent.GetIndex() < rTwo.maPos.nContent.GetIndex();
     }
 };
 
@@ -631,7 +629,7 @@ void WW8_SwAttrIter::OutAttr( xub_StrLen nSwPos )
     if (rNd.GetpSwAttrSet())
         rWrt.Out_SfxItemSet(*rNd.GetpSwAttrSet(), false, true, nScript);
 
-    if (IsCharRTL())
+    if (rWrt.bWrtWW8 && IsCharRTL())
     {
         SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
         rWrtWW8.InsUInt16(0x85a);
@@ -1345,7 +1343,7 @@ const SvxBrushItem* SwWW8Writer::GetCurrentPageBgBrush() const
     return pRet;
 }
 
-const SvxBrushItem* SwWW8Writer::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
+SvxBrushItem SwWW8Writer::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
 {
     const SwFrmFmt *pFlyFmt = &rFlyFmt;
     const SvxBrushItem* pRet = 0;
@@ -1378,10 +1376,11 @@ const SvxBrushItem* SwWW8Writer::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
     if (!pRet)
         pRet = GetCurrentPageBgBrush();
 
-    ASSERT(pRet &&
-        (pRet->GetGraphic() || pRet->GetColor() != COL_TRANSPARENT),
-        "leaving with no real brush");
-    return pRet;
+    SvxBrushItem aRet(Color(COL_WHITE));
+    if (pRet && (pRet->GetGraphic() || pRet->GetColor() != COL_TRANSPARENT))
+        aRet = *pRet;
+
+    return aRet;
 }
 
 Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
