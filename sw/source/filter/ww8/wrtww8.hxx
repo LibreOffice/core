@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-14 10:24:04 $
+ *  last change: $Author: jp $ $Date: 2001-03-14 15:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,8 +402,6 @@ public:
     SwMSConvertControls& GetOCXExp()        { return *pOCXExp; }
     void ExportDopTypography(WW8DopTypography &rTypo);
 
-    static USHORT TranslateToEditEngineId( USHORT nWhich );
-    static USHORT TranslateFromEditEngineId( USHORT nWhich );
     const SfxPoolItem* HasItem( USHORT nWhich ) const;
     const SfxPoolItem& GetItem( USHORT nWhich ) const;
 

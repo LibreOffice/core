@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 13:50:44 $
+ *  last change: $Author: jp $ $Date: 2001-03-14 15:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,9 +126,6 @@
 #endif
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
-#endif
-#ifndef _EEITEM_HXX
-#include <svx/eeitem.hxx>
 #endif
 #ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
@@ -499,89 +496,10 @@ void SwWW8Writer::AppendFlyInFlys( WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
     }
 }
 
-
-USHORT SwWW8Writer::TranslateToEditEngineId( USHORT nWhich )
-{
-    switch( nWhich )
-    {
-    case RES_LR_SPACE:              nWhich = EE_PARA_LRSPACE;       break;
-    case RES_UL_SPACE:              nWhich = EE_PARA_ULSPACE;       break;
-    case RES_PARATR_LINESPACING:    nWhich = EE_PARA_SBL;           break;
-    case RES_PARATR_ADJUST:         nWhich = EE_PARA_JUST;          break;
-    case RES_PARATR_TABSTOP:        nWhich = EE_PARA_TABS;          break;
-
-    case RES_CHRATR_COLOR:          nWhich = EE_CHAR_COLOR;         break;
-    case RES_CHRATR_FONT:           nWhich = EE_CHAR_FONTINFO;      break;
-    case RES_CHRATR_FONTSIZE:       nWhich = EE_CHAR_FONTHEIGHT;    break;
-    case RES_CHRATR_WEIGHT:         nWhich = EE_CHAR_WEIGHT;        break;
-    case RES_CHRATR_UNDERLINE:      nWhich = EE_CHAR_UNDERLINE;     break;
-    case RES_CHRATR_CROSSEDOUT:     nWhich = EE_CHAR_STRIKEOUT;     break;
-    case RES_CHRATR_POSTURE:        nWhich = EE_CHAR_ITALIC;        break;
-    case RES_CHRATR_CONTOUR:        nWhich = EE_CHAR_OUTLINE;       break;
-    case RES_CHRATR_SHADOWED:       nWhich = EE_CHAR_SHADOW;        break;
-    case RES_CHRATR_ESCAPEMENT:     nWhich = EE_CHAR_ESCAPEMENT;    break;
-    case RES_CHRATR_AUTOKERN:       nWhich = EE_CHAR_PAIRKERNING;   break;
-    case RES_CHRATR_KERNING:        nWhich = EE_CHAR_KERNING;       break;
-    case RES_CHRATR_WORDLINEMODE:   nWhich = EE_CHAR_WLM;           break;
-    case RES_CHRATR_CHARSETCOLOR:   nWhich = EE_FEATURE_NOTCONV;    break;
-
-
-    default:
-//  case EE_PARA_NUMBULLET:
-//  case EE_PARA_HYPHENATE:
-//  case EE_PARA_BULLETSTATE:
-//  case EE_PARA_OUTLLRSPACE:
-//  case EE_PARA_OUTLLEVEL:
-//  case EE_PARA_BULLET:
-//ITEMID_FONTWIDTH        EE_CHAR_FONTWIDTH
-        nWhich = 0;
-        break;
-    }
-    return nWhich;
-}
-
-USHORT SwWW8Writer::TranslateFromEditEngineId( USHORT nWhich )
-{
-    switch( nWhich )
-    {
-    case EE_PARA_LRSPACE:       nWhich = RES_LR_SPACE;              break;
-    case EE_PARA_ULSPACE:       nWhich = RES_UL_SPACE;              break;
-    case EE_PARA_SBL:           nWhich = RES_PARATR_LINESPACING;    break;
-    case EE_PARA_JUST:          nWhich = RES_PARATR_ADJUST;         break;
-    case EE_PARA_TABS:          nWhich = RES_PARATR_TABSTOP;        break;
-
-    case EE_CHAR_COLOR:         nWhich = RES_CHRATR_COLOR;          break;
-    case EE_CHAR_FONTINFO:      nWhich = RES_CHRATR_FONT;           break;
-    case EE_CHAR_FONTHEIGHT:    nWhich = RES_CHRATR_FONTSIZE;       break;
-    case EE_CHAR_WEIGHT:        nWhich = RES_CHRATR_WEIGHT;         break;
-    case EE_CHAR_UNDERLINE:     nWhich = RES_CHRATR_UNDERLINE;      break;
-    case EE_CHAR_STRIKEOUT:     nWhich = RES_CHRATR_CROSSEDOUT;     break;
-    case EE_CHAR_ITALIC:        nWhich = RES_CHRATR_POSTURE;        break;
-    case EE_CHAR_OUTLINE:       nWhich = RES_CHRATR_CONTOUR;        break;
-    case EE_CHAR_SHADOW:        nWhich = RES_CHRATR_SHADOWED;       break;
-    case EE_CHAR_ESCAPEMENT:    nWhich = RES_CHRATR_ESCAPEMENT;     break;
-    case EE_CHAR_PAIRKERNING:   nWhich = RES_CHRATR_AUTOKERN;       break;
-    case EE_CHAR_KERNING:       nWhich = RES_CHRATR_KERNING;        break;
-    case EE_CHAR_WLM:           nWhich = RES_CHRATR_WORDLINEMODE;   break;
-    case EE_FEATURE_NOTCONV:    nWhich = RES_CHRATR_CHARSETCOLOR;   break;
-
-    default:
-//  case EE_PARA_NUMBULLET:
-//  case EE_PARA_HYPHENATE:
-//  case EE_PARA_BULLETSTATE:
-//  case EE_PARA_OUTLLRSPACE:
-//  case EE_PARA_OUTLLEVEL:
-//  case EE_PARA_BULLET:
-//ITEMID_FONTWIDTH        EE_CHAR_FONTWIDTH
-        nWhich = 0;
-        break;
-    }
-    return nWhich;
-}
-
 class WW8_SdrAttrIter : public WW8_AttrIter
 {
     const EditTextObject* pEditObj;
+    const SfxItemPool* pEditPool;
     EECharAttribArray aTxtAtrArr;
     SvPtrarr aChrTxtAtrArr;
     SvUShorts aChrSetArr;
@@ -615,7 +533,8 @@ public:
 WW8_SdrAttrIter::WW8_SdrAttrIter( SwWW8Writer& rWr,
                                     const EditTextObject& rEditObj )
     : WW8_AttrIter( rWr ), pEditObj( &rEditObj ),
-    aTxtAtrArr( 0, 4 ), aChrTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 )
+    aTxtAtrArr( 0, 4 ), aChrTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 ),
+    pEditPool( 0 )
 {
     NextPara( 0 );
 }
@@ -631,6 +550,7 @@ void WW8_SdrAttrIter::NextPara( USHORT nPar )
     nAktSwPos = nTmpSwPos = 0;
 
     SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
+    pEditPool = aSet.GetPool();
     eNdChrSet = ((SvxFontItem&)aSet.Get( EE_CHAR_FONTINFO )).GetCharSet();
     pEditObj->GetCharAttribs( nPara, aTxtAtrArr );
     nAktSwPos = SearchNext( 1 );
@@ -722,19 +642,29 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
         const SwModify* pOldMod = rWrt.pOutFmtNode;
         rWrt.pOutFmtNode = 0;
 
+        const SfxItemPool* pSrcPool = pEditPool,
+                            * pDstPool = &rWrt.pDoc->GetAttrPool();
+
         nTmpSwPos = nSwPos;
-        register USHORT i, nWhich;
+        register USHORT i, nWhich, nSlotId;
         FnAttrOut pOut;
         for( i = 0; i < aTxtAtrArr.Count(); i++ )
         {
             const EECharAttrib& rHt = aTxtAtrArr[ i ];
             if( nSwPos >= rHt.nStart && nSwPos < rHt.nEnd &&
-                0 != ( nWhich = rWrt.TranslateFromEditEngineId(
-                                                rHt.pAttr->Which() )) &&
+                0 != ( nSlotId = pSrcPool->GetSlotId(
+                                        nWhich = rHt.pAttr->Which() )) &&
+                nWhich != nSlotId &&
+                0 != ( nWhich = pDstPool->GetWhich( nSlotId ) ) &&
+                nWhich != nSlotId &&
                 0 != ( pOut = aWW8AttrFnTab[ nWhich - RES_CHRATR_BEGIN ] ) )
-
-                    (*pOut)( rWrt, *rHt.pAttr );
-
+            {
+                // use always the SW-Which Id !
+                SfxPoolItem* pI = rHt.pAttr->Clone();
+                pI->SetWhich( nWhich );
+                (*pOut)( rWrt, *pI );
+                delete pI;
+            }
             else if( nSwPos < rHt.nStart )
                 break;
         }
@@ -766,7 +696,10 @@ return  FALSE;
 const SfxPoolItem* WW8_SdrAttrIter::HasTextItem( USHORT nWhich ) const
 {
     const SfxPoolItem* pRet = 0;
-    if( 0 != ( nWhich = rWrt.TranslateToEditEngineId( nWhich )) )
+    USHORT nSlotId = rWrt.pDoc->GetAttrPool().GetSlotId( nWhich );
+    if( nSlotId && nWhich != nSlotId &&
+        0 != ( nWhich = pEditPool->GetWhich( nSlotId ) ) &&
+        nWhich != nSlotId )
     {
         register USHORT i;
         for( i = 0; i < aTxtAtrArr.Count(); ++i )
@@ -791,7 +724,12 @@ const SfxPoolItem& WW8_SdrAttrIter::GetItem( USHORT nWhich ) const
     if( !pRet )
     {
         SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
-        pRet = &aSet.Get( rWrt.TranslateToEditEngineId( nWhich ) );
+
+        USHORT nNewW, nSlotId = rWrt.pDoc->GetAttrPool().GetSlotId( nWhich );
+        if( nSlotId && nWhich != nSlotId &&
+            0 != ( nNewW = aSet.GetPool()->GetWhich( nSlotId ) ) &&
+            nNewW != nSlotId )
+            pRet = &aSet.Get( nNewW );
     }
     return *pRet;
 }
@@ -808,15 +746,27 @@ void WW8_SdrAttrIter::OutParaAttr( BOOL bCharAttr )
         const SfxPoolItem* pItem = aIter.GetCurItem();
         FnAttrOut pOut;
 
+        const SfxItemPool* pSrcPool = pEditPool,
+                            * pDstPool = &rWrt.pDoc->GetAttrPool();
+
         do {
-            USHORT nWhich = rWrt.TranslateFromEditEngineId( pItem->Which() );
-            if( nWhich && 0 != ( pOut =
-                aWW8AttrFnTab[ nWhich - RES_CHRATR_BEGIN ] )
-                && ( bCharAttr ? ( nWhich >= RES_CHRATR_BEGIN
-                                  && nWhich < RES_TXTATR_END)
-                               : (nWhich >= RES_PARATR_BEGIN
-                                  && nWhich < RES_FRMATR_END) ) )
-                (*pOut)( rWrt, *pItem );
+                USHORT nWhich = pItem->Which(),
+                       nSlotId = pSrcPool->GetSlotId( nWhich );
+                if( nSlotId && nWhich != nSlotId &&
+                    0 != ( nWhich = pDstPool->GetWhich( nSlotId ) ) &&
+                    nWhich != nSlotId &&
+                    0 != ( pOut = aWW8AttrFnTab[ nWhich - RES_CHRATR_BEGIN ] )
+                    && ( bCharAttr ? ( nWhich >= RES_CHRATR_BEGIN
+                                      && nWhich < RES_TXTATR_END)
+                                   : (nWhich >= RES_PARATR_BEGIN
+                                      && nWhich < RES_FRMATR_END) ) )
+                {
+                    // use always the SW-Which Id !
+                    SfxPoolItem* pI = pItem->Clone();
+                    pI->SetWhich( nWhich );
+                    (*pOut)( rWrt, *pI );
+                    delete pI;
+                }
 
         } while( !aIter.IsAtEnd() && 0 != ( pItem = aIter.NextItem() ) );
         rWrt.SetCurItemSet( pOldSet );
@@ -2310,11 +2260,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.10 2001-03-09 13:50:44 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.11 2001-03-14 15:54:34 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/03/09 13:50:44  jp
+      use instead of SvData the GetGDIMetaFile from the SvInPlaceObject
+
       Revision 1.9  2001/02/07 17:28:25  jp
       Bug #73759#: WriteFrmExtraData - set right values
 

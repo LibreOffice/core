@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-14 10:24:04 $
+ *  last change: $Author: jp $ $Date: 2001-03-14 15:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,11 +548,18 @@ const SfxPoolItem* SwWW8Writer::HasItem( USHORT nWhich ) const
     if( pISet )
     {
         // if write a EditEngine text, then the WhichIds are greater as
-        // ourer own Ids. So the Id have to translate from ouer into the
+        // ourer own Ids. So the Id have to translate from our into the
         // EditEngine Range
         if( RES_WHICHHINT_END < *pISet->GetRanges() )
-            nWhich = TranslateToEditEngineId( nWhich );
-        if( SFX_ITEM_SET != pISet->GetItemState( nWhich, TRUE, &pItem ) )
+        {
+            USHORT nSlotId = pDoc->GetAttrPool().GetSlotId( nWhich );
+            if( !nSlotId || nWhich == nSlotId ||
+                0 == ( nWhich = pISet->GetPool()->GetWhich( nSlotId ) ) ||
+                nWhich != nSlotId )
+                nWhich = 0;
+        }
+        if( nWhich &&
+            SFX_ITEM_SET != pISet->GetItemState( nWhich, TRUE, &pItem ) )
             pItem = 0;
     }
     else if( pChpIter )
@@ -571,10 +578,16 @@ const SfxPoolItem& SwWW8Writer::GetItem( USHORT nWhich ) const
     if( pISet )
     {
         // if write a EditEngine text, then the WhichIds are greater as
-        // ourer own Ids. So the Id have to translate from ouer into the
+        // ourer own Ids. So the Id have to translate from our into the
         // EditEngine Range
         if( RES_WHICHHINT_END < *pISet->GetRanges() )
-            nWhich = TranslateToEditEngineId( nWhich );
+        {
+            USHORT nSlotId = pDoc->GetAttrPool().GetSlotId( nWhich );
+            if( !nSlotId || nWhich == nSlotId ||
+                0 == ( nWhich = pISet->GetPool()->GetWhich( nSlotId ) ) ||
+                nWhich != nSlotId )
+                nWhich = 0;
+        }
         pItem = &pISet->Get( nWhich, TRUE );
     }
     else if( pChpIter )
@@ -2262,11 +2275,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.12 2001-03-14 10:24:04 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.13 2001-03-14 15:54:34 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/03/14 10:24:04  jp
+      PieceTableCTOR: depends unicode flag on W95/W97 export
+
       Revision 1.11  2001/02/16 10:08:12  cmc
       Normalize japanese doptypography variable names
 
