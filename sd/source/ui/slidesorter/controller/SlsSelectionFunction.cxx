@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:06:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,6 +790,8 @@ void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEve
 
     mrController.GetPageSelector().DisableBroadcasting();
     bool bMakeSelectionVisible = true;
+    if (nEventType==BUTTON_DOWN)
+        mbPageHit = (pHitPage!=NULL);
 
     // 2a. Set the focus to the slide under the mouse.
     if (pHitPage != NULL)
@@ -803,7 +805,6 @@ void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEve
         // Simple single selection.
         case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE:
         case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE:
-            mbPageHit = true;
             // Without the shift key the selection is set to only the page
             // object under the mouse. The center pane is switched to the
             // edit view that shows the elected slide when the slide sorter
@@ -833,13 +834,11 @@ void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEve
 
         // Multi selection with the control modifier.
         case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | CONTROL_MODIFIER:
-            mbPageHit = true;
             DeselectHitPage(*pHitDescriptor);
             PrepareMouseMotion(pWindow->PixelToLogic(aMousePosition));
             break;
 
         case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | CONTROL_MODIFIER:
-            mbPageHit = true;
             SelectHitPage(*pHitDescriptor);
             PrepareMouseMotion(pWindow->PixelToLogic(aMousePosition));
             break;
