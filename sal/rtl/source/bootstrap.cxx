@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-30 08:18:10 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
     {
         if(handle)
         {
-            found = static_cast< Bootstrap_Impl const * >( handle )->getValue(
+            found = static_cast< Bootstrap_Impl * >( handle )->getValue(
                 pName, ppValue, pDefault );
         }
         else
