@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:55:56 $
+ *  last change: $Author: os $ $Date: 2001-07-03 14:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,6 @@ class SwNavigationPI : public Window,
     DECL_LINK( EditGetFocus, NumEditAction * );
     DECL_LINK( DoneLink, SfxPoolItem * );
     DECL_LINK( MenuSelectHdl, Menu * );
-    DECL_LINK( ReadOnlyHdl, void * );
     DECL_LINK( ChangePageHdl, Timer* );
     DECL_LINK( PageEditModifyHdl, Edit* );
     void UsePage(SwWrtShell *);

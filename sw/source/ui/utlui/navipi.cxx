@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 06:26:04 $
+ *  last change: $Author: os $ $Date: 2001-07-03 14:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ void SwNavigationPI::CleanEntry( String& rEntry )
 void SwNavigationPI::MoveOutline(USHORT nSource, USHORT nTarget,
                                                     BOOL bWithChilds)
 {
-    SwView *pView = ::GetActiveView();
+    SwView *pView = GetCreateView();
     SwWrtShell &rSh = pView->GetWrtShell();
     if(nTarget < nSource || nTarget == USHRT_MAX)
         nTarget ++;
@@ -342,7 +342,7 @@ void SwNavigationPI::FillBox()
     }
     else
     {
-        SwView *pView = ::GetActiveView();
+        SwView *pView = GetCreateView();
         if(!pView)
         {
             aContentTree.SetActiveShell(0);
@@ -363,7 +363,7 @@ void SwNavigationPI::UsePage(SwWrtShell *pSh)
 {
     if (!pSh)
     {
-        SwView *pView = ::GetActiveView();
+        SwView *pView = GetCreateView();
         pSh = pView ? &pView->GetWrtShell() : 0;
         GetPageEdit().SetValue(1);
     }
@@ -387,7 +387,7 @@ void SwNavigationPI::UsePage(SwWrtShell *pSh)
 IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
 {
     const USHORT nId = pBox->GetCurItemId();
-    SwView *pView = ::GetActiveView();
+    SwView *pView = GetCreateView();
     if (!pView)
         return 1;
     SwWrtShell &rSh = pView->GetWrtShell();
@@ -625,7 +625,7 @@ void  SwNavHelpToolBox::RequestHelp( const HelpEvent& rHEvt )
 
 IMPL_LINK( SwNavigationPI, EditAction, NumEditAction *, pEdit )
 {
-    SwView *pView = ::GetActiveView();
+    SwView *pView = GetCreateView();
     if (pView)
     {
         if(aPageChgTimer.IsActive())
@@ -645,7 +645,7 @@ IMPL_LINK( SwNavigationPI, EditAction, NumEditAction *, pEdit )
 
 IMPL_LINK( SwNavigationPI, EditGetFocus, NumEditAction *, pEdit )
 {
-    SwView *pView = ::GetActiveView();
+    SwView *pView = GetCreateView();
     if (!pView)
         return 0;
     SwWrtShell &rSh = pView->GetWrtShell();
@@ -675,7 +675,7 @@ BOOL SwNavigationPI::Close()
 
 void SwNavigationPI::MakeMark()
 {
-    SwView *pView = ::GetActiveView();
+    SwView *pView = GetCreateView();
     if (!pView)
         return;
     SwWrtShell &rSh = pView->GetWrtShell();
@@ -865,9 +865,9 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     pContextWin(pCw),
     nWishWidth(0),
     pConfig(SW_MOD()->GetNavigationConfig()),
-    pCreateView(::GetActiveView())
+    pCreateView(0)
 {
-
+    GetCreateView();
     for(USHORT k = 0; k < aContentToolBox.GetItemCount(); k++)
             aContentToolBox.SetItemImage(aContentToolBox.GetItemId(k),
                     aContentImageList.GetImage(aContentToolBox.GetItemId(k)));
@@ -969,18 +969,20 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
 
     StartListening(*SFX_APP());
     StartListening(*pCreateView);
+#if(SUPD>633)
     SfxImageManager* pImgMan = pBindings->GetImageManager();
+#else
+    SfxImageManager* pImgMan = SFX_APP()->GetImageManager();
+#endif
     pImgMan->RegisterToolBox(&aContentToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
     pImgMan->RegisterToolBox(&aGlobalToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
     if(IsGlobalDoc())
     {
-        SwView *pActView = ::GetActiveView();
+        SwView *pActView = GetCreateView();
         aGlobalToolBox.CheckItem(FN_GLOBAL_SAVE_CONTENT,
                     pActView->GetWrtShellPtr()->IsGlblDocSaveLinks());
         if(pConfig->IsGlobalActive())
             ToggleTree();
-        else
-            Application::PostUserEvent( LINK( this, SwNavigationPI, ReadOnlyHdl ) );
     }
     UsePage(0);
     aPageChgTimer.SetTimeoutHdl(LINK(this, SwNavigationPI, ChangePageHdl));
@@ -995,7 +997,7 @@ SwNavigationPI::~SwNavigationPI()
 {
     if(IsGlobalDoc() && !IsGlobalMode())
     {
-        SwView *pView = ::GetActiveView();
+        SwView *pView = GetCreateView();
         SwWrtShell &rSh = pView->GetWrtShell();
         if( !rSh.IsAllProtect() )
             pView->GetDocShell()->SetReadOnlyUI(FALSE);
@@ -1003,7 +1005,11 @@ SwNavigationPI::~SwNavigationPI()
 
     EndListening(*SFX_APP());
 
-    SfxImageManager* pImgMan = GetBindings().GetImageManager();
+#if(SUPD>633)
+    SfxImageManager* pImgMan = pBindings->GetImageManager();
+#else
+    SfxImageManager* pImgMan = SFX_APP()->GetImageManager();
+#endif
     pImgMan->ReleaseToolBox(&aContentToolBox);
     pImgMan->ReleaseToolBox(&aGlobalToolBox);
     delete aContentToolBox.GetItemWindow(FN_PAGENUMBER);
@@ -1025,7 +1031,7 @@ void SwNavigationPI::StateChanged( USHORT nSID, SfxItemState eState,
 {
     if(nSID == SID_DOCFULLNAME)
     {
-        SwView *pActView = ::GetActiveView();
+        SwView *pActView = GetCreateView();
         if(pActView)
         {
             SwWrtShell* pWrtShell = pActView->GetWrtShellPtr();
@@ -1148,7 +1154,7 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
             else if(((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_OPENDOC)
             {
 
-                SwView *pActView = ::GetActiveView();
+                SwView *pActView = GetCreateView();
                 if(pActView)
                 {
                     SwWrtShell* pWrtShell = pActView->GetWrtShellPtr();
@@ -1194,7 +1200,7 @@ void SwNavigationPI::UpdateListBox()
 {
     aDocListBox.SetUpdateMode(FALSE);
     aDocListBox.Clear();
-    SwView *pActView = ::GetActiveView();
+    SwView *pActView = GetCreateView();
     BOOL bDisable = pActView == 0;
     SwView *pView = SwModule::GetFirstView();
     USHORT nCount = 0;
@@ -1425,10 +1431,6 @@ BOOL    SwNavigationPI::ToggleTree()
         bRet = FALSE;
         SetGlobalMode(FALSE);
     }
-    if(bGlobalDoc)
-    {
-        Application::PostUserEvent( LINK( this, SwNavigationPI, ReadOnlyHdl ) );
-    }
     return bRet;
 }
 
@@ -1438,43 +1440,13 @@ BOOL    SwNavigationPI::ToggleTree()
 BOOL    SwNavigationPI::IsGlobalDoc() const
 {
     BOOL bRet = FALSE;
-    SwView *pView = ::GetActiveView();
+    SwView *pView = GetCreateView();
     if(pView)
     {
         SwWrtShell &rSh = pView->GetWrtShell();
         bRet = rSh.IsGlobalDoc();
     }
     return bRet;
-}
-/*-----------------19.06.97 08:21-------------------
-
---------------------------------------------------*/
-IMPL_LINK( SwNavigationPI, ReadOnlyHdl, void *, EMPTYARG )
-{
-/*
-JP 25.01.99: die Umschaltung auf UI-Readonly wird nicht mehr benoetigt, weil
-            der Cursor jetzt in Readonly-Inhalt gesetzt werden kann.
-
-    if(IsGlobalMode())
-    {
-        SwView *pView = ::GetActiveView();
-        SwWrtShell &rSh = pView->GetWrtShell();
-        if( !rSh.IsAllProtect() )
-            pView->GetDocShell()->SetReadOnlyUI(FALSE);
-    }
-    else
-    {
-        SwView *pView = ::GetActiveView();
-        SwWrtShell &rSh = pView->GetWrtShell();
-        if( !rSh.IsReadOnlyAvailable() )
-        {
-//          SfxObjectShell* pObjShell = SfxObjectShell::Current();
-//          pObjShell->SetReadOnlyUI();
-            pView->GetDocShell()->SetReadOnlyUI( TRUE );
-        }
-    }
-*/
-    return 0;
 }
 /* -----------------26.10.98 08:10-------------------
  *

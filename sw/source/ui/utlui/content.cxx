@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-26 13:34:16 $
+ *  last change: $Author: os $ $Date: 2001-07-03 14:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1994,7 +1994,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
         case FN_ITEM_RIGHT:
         if( !GetWrtShell()->GetView().GetDocShell()->IsReadOnly() &&
                 (bIsActive ||
-                    (bIsConstant && pActiveShell == ::GetActiveView()->GetWrtShellPtr())))
+                    (bIsConstant && pActiveShell == GetParentWindow()->GetCreateView()->GetWrtShellPtr())))
         {
             SwWrtShell* pShell = GetWrtShell();
             sal_Int8 nActOutlineLevel = nOutlineLevel;
@@ -2168,7 +2168,7 @@ IMPL_LINK( SwContentTree, TimerUpdate, Timer*, EMPTYARG)
 {
     // kein Update waehrend D&D
     // Viewabfrage, da der Navigator zu spaet abgeraeumt wird
-    SwView* pView = ::GetActiveView();
+    SwView* pView = GetParentWindow()->GetCreateView();
     if( (!HasFocus() || bViewHasChanged) &&
          !bIsInDrag && !bIsInternalDrag && pView &&
          pView->GetWrtShellPtr() && !pView->GetWrtShellPtr()->ActionPend() )
@@ -2338,7 +2338,7 @@ void  SwContentTree::MouseButtonDown( const MouseEvent& rMEvt )
 
 void  SwContentTree::GetFocus()
 {
-    SwView* pActView = ::GetActiveView();
+    SwView* pActView = GetParentWindow()->GetCreateView();
     if(pActView)
     {
         SwWrtShell* pActShell = pActView->GetWrtShellPtr();
@@ -3116,6 +3116,9 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/06/26 13:34:16  os
+    #84088# index edit: not allowed in protected sections
+
     Revision 1.7  2001/05/08 16:31:20  jp
     remove old clipboard headerfile
 
