@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:36:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 16:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,9 +126,6 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
-#include <drafts/com/sun/star/frame/XDispatchInformationProvider.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGWIDTH_HPP_
 #include <com/sun/star/util/XStringWidth.hpp>
 #endif
@@ -193,7 +190,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
-using namespace ::drafts::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
 
