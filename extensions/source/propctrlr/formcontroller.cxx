@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-08 07:51:27 $
+ *  last change: $Author: fs $ $Date: 2001-06-08 11:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1247,7 +1247,9 @@ namespace pcr
         if (implGetCheckFontProperty(_rPropName, aValue))
             return _nDefault;
 
-        return ::comphelper::getINT16(aValue);
+        sal_Int32 nValue(_nDefault);
+        ::cppu::enum2int(nValue, aValue);
+        return (sal_Int16)nValue;
     }
 
     //------------------------------------------------------------------------
@@ -1257,7 +1259,9 @@ namespace pcr
         if (implGetCheckFontProperty(_rPropName, aValue))
             return _nDefault;
 
-        return ::comphelper::getINT32(aValue);
+        sal_Int32 nValue(_nDefault);
+        ::cppu::enum2int(nValue, aValue);
+        return nValue;
     }
 
     //------------------------------------------------------------------------
@@ -2907,6 +2911,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2001/06/08 07:51:27  fs
+ *  #65293# linux type conversion problem
+ *
  *  Revision 1.30  2001/06/08 07:49:01  fs
  *  #65293# linux type conversion problem
  *
