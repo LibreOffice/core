@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-15 09:37:29 $
+ *  last change: $Author: oj $ $Date: 2001-01-23 10:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,6 +655,7 @@ void OGenericUnoController::dispose()
 
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
+        m_aAsyncInvalidateAll.CancelCall();
         m_aFeaturesToInvalidate.clear();
     }
 
