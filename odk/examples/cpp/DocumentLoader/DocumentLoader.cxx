@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentLoader.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:52:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -70,11 +70,11 @@ using namespace com::sun::star::registry;
 //============================================================================
 int SAL_CALL main( int argc, char **argv )
 {
-    OUString sConnectionString(RTL_CONSTASCII_USTRINGPARAM("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager"));
+    OUString sConnectionString(RTL_CONSTASCII_USTRINGPARAM("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"));
      if (argc < 2)
     {
         printf("using: DocumentLoader <file_url> [<uno_connection_url>]\n\n"
-               "example: DocumentLoader  \"file:///e:/temp/test.sxw\" \"uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\"\n");
+               "example: DocumentLoader  \"file:///e:/temp/test.sxw\" \"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\"\n");
         exit(1);
     }
      if (argc == 3)
