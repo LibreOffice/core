@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lkovacs $ $Date: 2002-10-30 14:25:26 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-30 16:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,16 +327,14 @@ SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
             Reference< storage::XScriptInfo > uri = results[ index ];
 #ifdef _DEBUG
 
-            ::rtl::OString locationO( ::rtl::OUStringToOString( uri->getScriptLocation(),
-                RTL_TEXTENCODING_ASCII_US ) );
             ::rtl::OString languageO( ::rtl::OUStringToOString( uri->getLanguage(),
                 RTL_TEXTENCODING_ASCII_US ) );
             ::rtl::OString functionName( ::rtl::OUStringToOString( uri->getFunctionName(),
                 RTL_TEXTENCODING_ASCII_US ) );
             ::rtl::OString logicalName( ::rtl::OUStringToOString( uri->getLogicalName(),
                 RTL_TEXTENCODING_ASCII_US ) );
-            fprintf( stderr, "[%d] URI, {location = %s}, {language = %s}, {funtionName = %s}, {logicalName = %s}\n",
-                     index, locationO.pData->buffer, languageO.pData->buffer,
+            fprintf( stderr, "[%d] URI, {language = %s}, {funtionName = %s}, {logicalName = %s}\n",
+                     index, languageO.pData->buffer,
                      functionName.pData->buffer, logicalName.pData->buffer );
 #endif
 
