@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:24:45 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3430,10 +3430,21 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
 
             if( rWMAdaptor.getWindowManagerName().EqualsAscii( "Dtwm" ) )
             {
+                // save open documents; would be good for non Dtwm, too,
+                // but there is no real Shutdown message in the ancient
+                // SM protocol; on Dtwm SaveYourself really means Shutdown, too.
+                Application::EnableDialogCancel( TRUE );
+                ApplicationEvent aEvent( String( RTL_CONSTASCII_USTRINGPARAM( "SessionManager" ) ),
+                                         ApplicationAddress(),
+                                         ByteString( APPEVENT_SAVEDOCUMENTS_STRING ),
+                                         String( RTL_CONSTASCII_USTRINGPARAM( "All" ) ) );
+
+                if( GetpApp() )
+                    GetpApp()->AppEvent( aEvent );
+
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "sending ShutDown message\n" );
 #endif
-                Application::EnableDialogCancel( TRUE );
                 ShutDown();
             }
         }
