@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:02:40 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,7 @@ String RID_SVXSTR_COLOR
     Text[ chinese_traditional ] = "ΓC¦β";
     Text[ arabic ] = "Ηααζδ";
     Text[ greek ] = "Χρώμα";
-    Text[ korean ] = "»φ";
+    Text[ korean ] = "»φ»σ";
     Text[ turkish ] = "Renk";
     Text[ language_user1 ] = " ";
 };
@@ -781,7 +781,7 @@ String RID_SVXSTR_DESC_COLOR
     Text[ chinese_traditional ] = "½Π±z¦b¦Ή¬°·sªΊΓC¦βΏι¤J¤@­Σ¦WΊΩ΅G";
     Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ Ηααζδ ΗαΜΟνΟ εδΗ:";
     Text[ greek ] = "Παρακαλώ εισάγετε το όνομα του νέου χρώματος:";
-    Text[ korean ] = "Ώ©±βΏ΅ »υ·ΞΏξ »φΐΗ ΐΜΈ§ΐ» ΐΤ·ΒΗΟ½Κ½ΓΏΐ:";
+    Text[ korean ] = "Ώ©±βΏ΅Ό­  »υ·ΞΏξ »φ»σΐΗ ΐΜΈ§ΐ» ΐΤ·ΒΗΟ½Κ½ΓΏΐ:";
     Text[ turkish ] = "Yeni rengin adύnύ girin:";
     Text[ language_user1 ] = " ";
 };
@@ -865,7 +865,7 @@ String RID_SVXSTR_ASK_CHANGE_COLOR
     Text[ chinese_traditional ] = "³o­ΣΓC¦β¤wΈgΕά§σ΅M¦ύ¬O©|¥Όΐx¦s΅C \n±z―ΰ°χΕά§σΏο¨ϊªΊΓC¦β\n©ΞªΜΌW¥[¤@­Σ·sªΊΓC¦β΅C";
     Text[ arabic ] = "Κγ ΚΫννΡ Ηααζδ ζαγ νΚγ ΝέΩε ΘΪΟ.\nνγίδί ΚΫννΡ Ηααζδ ΗαγΝΟΟ΅\nΓζ ΕΦΗέΙ αζδ ΜΟνΟ.";
     Text[ greek ] = "Το χρώμα τροποποιήθηκε χωρίς να γίνει αποθήκευση. \nΜπορείτε να αλλάξετε το επιλεγμένο χρώμα \nή να προσθέσετε ένα καινούριο χρώμα.";
-    Text[ korean ] = "»φΐΜ Ί―°ζµΗΎϊΐΈ³ª ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.\nΌ±ΕΓµΘ »φΐ» Ί―°ζΗΟ°Ε³ª \n»υ·ΞΏξ »φΐ» Γί°΅ΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "»φ»σΐΜ Ί―°ζµΗΎϊΑφΈΈ  ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.\nΌ±ΕΓµΘ »φΐ» Ί―°ζΗΟ°Ε³ª \n»υ·ΞΏξ »φΐ» Γί°΅ΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Renk deπiώtirildi ancak kaydedilmedi.\nSeηili rengi deπiώtirebilir ya da\nyeni bir renk ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
 };
@@ -4585,7 +4585,7 @@ String RID_SVXSTR_LEND6
     Text[ swedish ] = "Symmetrisk pil";
     Text[ polish ] = "Symetryczna strza³ka";
     Text[ portuguese_brazilian ] = "Symmetric Arrow";
-    Text[ japanese ] = "ƒoƒ‰ƒ“ƒX‚Μ‚Ζ‚κ‚½–ξσ";
+    Text[ japanese ] = "ΚήΧέ½‚Μ‚Ζ‚κ‚½–ξσ";
     Text[ korean ] = "΄λΔª Θ­»μΗ¥";
     Text[ chinese_simplified ] = "¶Τ³ΖΌύΝ·";
     Text[ chinese_traditional ] = "ΉοΊΩ¦΅½bΐY";
