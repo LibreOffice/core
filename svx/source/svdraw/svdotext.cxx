@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-08 09:35:14 $
+ *  last change: $Author: aw $ $Date: 2002-05-15 13:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,7 +1109,37 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                 }
                 FASTBOOL bAnimated=GetTextAniKind()!=SDRTEXTANI_NONE;
                 OutputDevice* pOutDev=rXOut.GetOutDev();
-                if (bPrinter || (rInfoRec.nPaintMode & SDRPAINTMODE_ANILIKEPRN) !=0 || !bAnimated)
+
+                // #98825# Text animation is initialized and strted from this Paint()
+                // no one seems to use StartTextAnimation(...) or StopTextAnimation(...)
+                // at all. Thus, I need to stop text animation here when necessary.
+                sal_Bool bDoNotPaintAnimatedText =
+                    bPrinter || (rInfoRec.nPaintMode & SDRPAINTMODE_ANILIKEPRN) !=0 || !bAnimated;
+
+                if(!bDoNotPaintAnimatedText)
+                {
+                    // if animated text is disabled, do not start it here...
+                    if(0L != rInfoRec.pPV)
+                    {
+                        const SdrView& rTargetView = rInfoRec.pPV->GetView();
+                        const SvtAccessibilityOptions& rOpt = ((SdrView&)rTargetView).getAccessibilityOptions();
+                        sal_Bool bIsAllowedAnimatedText = rOpt.GetIsAllowAnimatedText();
+
+                        if(!bIsAllowedAnimatedText)
+                        {
+                            bDoNotPaintAnimatedText = sal_True;
+
+                            if(pPlusData && pPlusData->pAnimator)
+                            {
+                                pPlusData->pAnimator->Stop();
+                                delete pPlusData->pAnimator;
+                                pPlusData->pAnimator = 0L;
+                            }
+                        }
+                    }
+                }
+
+                if(bDoNotPaintAnimatedText)
                 {
                     if (!bAnimated && pPlusData!=NULL && pPlusData->pAnimator!=NULL)
                     {
@@ -1213,7 +1243,9 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                     }
                 }
                 else
+                {
                     ImpPaintAnimatedText(*rXOut.GetOutDev(),rXOut.GetOffset(),rOutliner,aAnchorRect,aPaintRect,rInfoRec);
+                }
 
                 rOutliner.Clear();
             }
