@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atom.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2000-10-27 15:18:38 $
+ *  last change: $Author: pl $ $Date: 2000-11-14 11:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,6 @@
 #include <com/sun/star/util/XAtomServer.hpp>
 #endif
 
-struct std::hash< rtl::OUString >
-{
-    size_t operator()(const rtl::OUString& rString) const
-        { return (size_t)rString.hashCode(); }
-};
-
 #define INVALID_ATOM 0
 
 namespace utl {
@@ -103,7 +97,7 @@ namespace utl {
     {
         int                                     m_nAtoms;
         ::std::hash_map< int, ::rtl::OUString, ::std::hash< int > > m_aStringMap;
-        ::std::hash_map< ::rtl::OUString, int, ::std::hash< ::rtl::OUString > > m_aAtomMap;
+        ::std::hash_map< ::rtl::OUString, int, OUStringHash >   m_aAtomMap;
     public:
         AtomProvider();
         ~AtomProvider();
