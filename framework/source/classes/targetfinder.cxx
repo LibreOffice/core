@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:51:45 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,6 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
-#include <com/sun/star/mozilla/XPluginInstance.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
@@ -185,7 +181,6 @@ TargetInfo::TargetInfo( const css::uno::Reference< css::frame::XFrame >& xFrame 
     {
         //case E_DESKTOP    :   // Nothing to do .. because: Desktop has no parent, no name ... Use default values!
                                 // But - values for children info is set later ...
-        case E_PLUGINFRAME  :
         case E_TASK         :   {
                                     css::uno::Reference< css::frame::XFrame > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
                                     bParentExist = xParent.is();
@@ -243,16 +238,12 @@ EFrameType TargetInfo::getFrameType( const css::uno::Reference< css::frame::XFra
 
     // Try to cast it to right interfaces to get informations about right frame type.
     css::uno::Reference< css::frame::XDesktop >           xDesktopCheck( xFrame, css::uno::UNO_QUERY );
-    css::uno::Reference< css::mozilla::XPluginInstance >  xPlugInCheck ( xFrame, css::uno::UNO_QUERY );
     css::uno::Reference< css::frame::XFrame >             xFrameCheck  ( xFrame, css::uno::UNO_QUERY );
 
     EFrameType eType = E_UNKNOWNFRAME;
 
     if (xDesktopCheck.is())
         eType=E_DESKTOP;
-    else
-    if (xPlugInCheck.is())
-        eType=E_PLUGINFRAME;
     else
     if (xFrameCheck.is())
     {
@@ -332,8 +323,6 @@ ETargetClass TargetFinder::classifyFindFrame( TargetInfo& aInfo )
     {
         case E_DESKTOP      :   eResult = impl_classifyForDesktop_findFrame( aInfo.bChildrenExist, aInfo.sTargetName, aInfo.nSearchFlags );
                                 break;
-        case E_PLUGINFRAME  :   eResult = impl_classifyForPlugInFrame_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sTargetName, aInfo.nSearchFlags );
-                                break;
         case E_TASK         :   eResult = impl_classifyForTask_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sTargetName, aInfo.nSearchFlags );
                                 break;
         case E_FRAME        :   eResult = impl_classifyForFrame_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sParentName, aInfo.sTargetName, aInfo.nSearchFlags );
@@ -370,14 +359,13 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
     // II) handle "_helpagent"
     //      DESKTOP             =>  Could not be handled by our desktop ...
     //                              because: Its a supported property of a task ... but which one should be used, if call comes from the top?!
-    //      TASK & PLUGINFRAME  =>  Supported! return SELF
+    //      TASK                =>  Supported! return SELF
     //      FRAME               =>  Not supported ... but search for tasks ... if flags allow this search.
     //*************************************************************************************************************
     if( aInfo.sTargetName == SPECIALTARGET_MENUBAR )
     {
         switch( aInfo.eFrameType )
         {
-            case E_PLUGINFRAME  :
             case E_TASK         :   eResult = E_MENUBAR;
                                     break;
             case E_FRAME        :   if( aInfo.bParentExist == sal_True )
@@ -392,7 +380,6 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
     {
         switch( aInfo.eFrameType )
         {
-            case E_PLUGINFRAME  :
             case E_TASK         :   eResult = E_HELPAGENT;
                                     break;
             case E_FRAME        :   if( aInfo.bParentExist == sal_True )
@@ -407,7 +394,6 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
     //          DESKTOP     =>  Only the desktop can create new tasks ... he has a special dispatch helper to do that!
     //                          return CREATETASK
     //          TASK
-    //          PLUGINFRAME
     //          FRAME       =>  They couldn't create any new task => They must forward it to the desktop dispatch helper!
     //                          return FORWARD_UP
     //*************************************************************************************************************
@@ -418,7 +404,6 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
         {
             case E_DESKTOP      :   eResult = E_CREATETASK;
                                     break;
-            case E_PLUGINFRAME  :
             case E_TASK         :
             case E_FRAME        :   if( aInfo.bParentExist == sal_True )
                                     {
@@ -434,7 +419,6 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
         {
             case E_DESKTOP      :   eResult = E_DEFAULT;
                                     break;
-            case E_PLUGINFRAME  :
             case E_TASK         :
             case E_FRAME        :   if( aInfo.bParentExist == sal_True )
                                     {
@@ -467,8 +451,6 @@ ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
         switch( aInfo.eFrameType )
         {
             case E_DESKTOP      :   eResult = impl_classifyForDesktop_findFrame( aInfo.bChildrenExist, aInfo.sTargetName, aInfo.nSearchFlags );
-                                    break;
-            case E_PLUGINFRAME  :   eResult = impl_classifyForPlugInFrame_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sTargetName, aInfo.nSearchFlags );
                                     break;
             case E_TASK         :   eResult = impl_classifyForTask_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sTargetName, aInfo.nSearchFlags );
                                     break;
@@ -599,17 +581,6 @@ ETargetClass TargetFinder::impl_classifyForDesktop_findFrame(       sal_Bool    
     //      E_FLAT_DOWN
     //*************************************************************************************************************
     return eResult;
-}
-
-//*****************************************************************************************************************
-ETargetClass TargetFinder::impl_classifyForPlugInFrame_findFrame(         sal_Bool           bParentExist    ,
-                                                                          sal_Bool           bChildrenExist  ,
-                                                                    const ::rtl::OUString&   sFrameName      ,
-                                                                    const ::rtl::OUString&   sTargetName     ,
-                                                                          sal_Int32          nSearchFlags    )
-{
-    // At the moment a PlugInFrame is a special task ... but we can use the same search algorithm!
-    return impl_classifyForTask_findFrame( bParentExist, bChildrenExist, sFrameName, sTargetName, nSearchFlags );
 }
 
 //*****************************************************************************************************************
