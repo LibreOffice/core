@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpstat.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:08:23 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,16 +83,16 @@ TabPage RID_SCPAGE_STAT
         Text [ spanish ] = "Núm. de hojas:" ;
         Text [ english_us ] = "Number of sheets:" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "¹¤×÷±íÊıÄ¿:";
+        Text[ chinese_simplified ] = "å·¥ä½œè¡¨æ•°ç›®:";
         Text[ russian ] = "Êîëè÷åñòâî òàáëèö:";
         Text[ polish ] = "Liczba tabel:";
-        Text[ japanese ] = "•\\‚Ì”:";
-        Text[ chinese_traditional ] = "¤u§@ªí¼Æ¥Ø¡G";
+        Text[ japanese ] = "è¡¨ã®æ•°:";
+        Text[ chinese_traditional ] = "å·¥ä½œè¡¨æ•¸ç›®ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÌÏÇæá:";
         Text[ dutch ] = "Aantal werkbladen:";
-        Text[ chinese_simplified ] = "¹¤×÷±íÊıÄ¿:";
+        Text[ chinese_simplified ] = "å·¥ä½œè¡¨æ•°ç›®:";
         Text[ greek ] = "Áñéèìüò ğéíÜêùí:";
-        Text[ korean ] = "½ÃÆ® ¼ö:";
+        Text[ korean ] = "ì‹œíŠ¸ ìˆ˜:";
         Text[ turkish ] = "Tablo sayısı:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Núm. de hojas:";
@@ -119,16 +119,16 @@ TabPage RID_SCPAGE_STAT
         Text [ danish ] = "Antal celler:" ;
         Text [ portuguese ] = "Número de células:" ;
         Text [ portuguese_brazilian ] = "Anzahl Zellen:" ;
-        Text[ chinese_simplified ] = "µ¥Ôª¸ñµÄÊıÄ¿£º";
+        Text[ chinese_simplified ] = "å•å…ƒæ ¼çš„æ•°ç›®ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî ÿ÷ååê:";
         Text[ polish ] = "Liczba komórek:";
-        Text[ japanese ] = "¾Ù‚Ì”F";
-        Text[ chinese_traditional ] = "Àx¦s®æªº¼Æ¥Ø¡G";
+        Text[ japanese ] = "ï½¾ï¾™ã®æ•°ï¼š";
+        Text[ chinese_traditional ] = "å„²å­˜æ ¼çš„æ•¸ç›®ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÎáÇíÇ:";
         Text[ dutch ] = "Aantal cellen:";
-        Text[ chinese_simplified ] = "µ¥Ôª¸ñµÄÊıÄ¿£º";
+        Text[ chinese_simplified ] = "å•å…ƒæ ¼çš„æ•°ç›®ï¼š";
         Text[ greek ] = "Áñéèìüò êåëéşí:";
-        Text[ korean ] = "¼¿ °³¼ö:";
+        Text[ korean ] = "ì…€ ê°œìˆ˜:";
         Text[ turkish ] = "Hücre sayısı:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cantidad de celdas:";
@@ -156,16 +156,16 @@ TabPage RID_SCPAGE_STAT
         Text [ danish ] = "Antal sider:" ;
         Text [ portuguese_brazilian ] = "Anzahl Seiten:" ;
         Text [ portuguese ] = "Número de páginas:" ;
-        Text[ chinese_simplified ] = "Ò³Êı£º";
+        Text[ chinese_simplified ] = "é¡µæ•°ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî ñòğàíèö:";
         Text[ polish ] = "Liczba stron:";
-        Text[ japanese ] = "Íß°¼Ş‘”:";
-        Text[ chinese_traditional ] = "­¶¼Æ¡G";
+        Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç·æ•°:";
+        Text[ chinese_traditional ] = "é æ•¸ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÕİÍÇÊ:";
         Text[ dutch ] = "Aantal pagina´s:";
-        Text[ chinese_simplified ] = "Ò³Êı£º";
+        Text[ chinese_simplified ] = "é¡µæ•°ï¼š";
         Text[ greek ] = "Áñéèìüò óåëéäşí:";
-        Text[ korean ] = "ÆäÀÌÁö ¼ö:";
+        Text[ korean ] = "í˜ì´ì§€ ìˆ˜:";
         Text[ turkish ] = "Sayfa sayısı:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cantidad de páginas:";
@@ -192,22 +192,23 @@ TabPage RID_SCPAGE_STAT
         Text [ danish ] = "Dokument: " ;
         Text [ portuguese_brazilian ] = "Dokument: " ;
         Text [ portuguese ] = "Documento: " ;
-        Text[ chinese_simplified ] = "ÎÄµµ£º ";
+        Text[ chinese_simplified ] = "æ–‡æ¡£ï¼š ";
         Text[ russian ] = "Äîêóìåíò:  ";
         Text[ polish ] = "Dokument:";
-        Text[ japanese ] = "ÄŞ·­ÒİÄ: ";
-        Text[ chinese_traditional ] = "¤å¥ó¡G ";
+        Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„: ";
+        Text[ chinese_traditional ] = "æ–‡ä»¶ï¼š ";
         Text[ arabic ] = "ÇáãÓÊäÏ: ";
         Text[ dutch ] = "Document:  ";
-        Text[ chinese_simplified ] = "ÎÄµµ£º ";
+        Text[ chinese_simplified ] = "æ–‡æ¡£ï¼š ";
         Text[ greek ] = "¸ããñáöï:";
-        Text[ korean ] = "¹®¼­: ";
+        Text[ korean ] = "ë¬¸ì„œ: ";
         Text[ turkish ] = "Belge: ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Documento:  ";
         Text[ finnish ] = "Asiakirja: ";
     };
 };
+
 
 
 
