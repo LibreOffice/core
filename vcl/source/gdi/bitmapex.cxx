@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:28:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,43 +768,3 @@ SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx )
     return rIStm;
 }
 
-// ------------------------------------------------------------------
-
-#ifdef REMOTE_APPSERVER
-
-void BitmapEx::ImplDrawRemote( OutputDevice* pOut,
-                               const Point& rSrcPt, const Size& rSrcSz,
-                               const Point& rDestPt, const Size& rDestSz ) const
-{
-    if( !!aBitmap )
-    {
-        switch( eTransparent )
-        {
-            case( TRANSPARENT_NONE ):
-                aBitmap.ImplDrawRemote( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz );
-            break;
-
-            case( TRANSPARENT_BITMAP ):
-            {
-                if( !!aMask )
-                {
-                    if( IsAlpha() )
-                        aBitmap.ImplDrawRemoteAlpha( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz, GetAlpha() );
-                    else
-                        aBitmap.ImplDrawRemoteEx( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz, aMask );
-                }
-                else
-                    aBitmap.ImplDrawRemote( pOut, rSrcPt, rSrcSz, rDestPt, rDestSz );
-            }
-            break;
-
-            default:
-            {
-                DBG_ERROR( "BitmapEx::ImplDrawRemote???" );
-            }
-            break;
-        }
-    }
-}
-
-#endif // REMOTE
