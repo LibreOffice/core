@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-02 20:17:53 $
+ *  last change: $Author: sab $ $Date: 2001-03-16 11:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,6 +779,14 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
     }
 
     return sRet;
+}
+
+void SvXMLImport::SetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> aViewProps)
+{
+}
+
+void SvXMLImport::SetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> aConfigProps)
+{
 }
 
 XMLEventImportHelper& SvXMLImport::GetEventImport()
