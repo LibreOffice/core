@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:41:52 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 11:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,7 +885,7 @@ TabPage TP_OUTLINE_NUM
         Text[ arabic ] = "äãØ ÇáİŞÑÉ";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ greek ] = "Ğñüôõğá ğáñáãñÜöïõ";
-        Text[ korean ] = "´Ü¶ô À¯Çü(~P)";
+        Text[ korean ] = "´Ü¶ô À¯Çü";
         Text[ turkish ] = "Paragraf şablonu";
     };
     ListBox LB_COLL
@@ -1212,7 +1212,7 @@ TabPage TP_OUTLINE_NUM
         Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ À¯Çü(~C)";
+        Text[ korean ] = "¹®ÀÚ À¯Çü";
         Text[ turkish ] = "Karakter şablonu";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     };
