@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-20 14:52:35 $
+ *  last change: $Author: sj $ $Date: 2000-11-29 15:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
 #endif
 #ifndef _INC_STDLIB
 #include <stdlib.h>
@@ -321,7 +324,7 @@ void _EscherEx::ImplWriteDggContainer( SvStream& rSt )
     UINT32 nSize = ImplDggContainerSize();
     if ( nSize )
     {
-        rSt << (UINT32)( 0xf | ( _Escher_DggContainer << 16 ) )
+        rSt << (UINT32)( 0xf | ( ESCHER_DggContainer << 16 ) )
             << (UINT32)( nSize - 8 );
 
         ImplWriteDggAtom( rSt );
@@ -343,7 +346,7 @@ void _EscherEx::ImplWriteDggAtom( SvStream& rSt )
     UINT32 nSize = ImplDggAtomSize();
     if ( nSize )
     {
-        rSt << (UINT32)( _Escher_Dgg << 16 )
+        rSt << (UINT32)( ESCHER_Dgg << 16 )
             << (UINT32)( nSize - 8 )
             << mnCurrentShapeID
             << (UINT32)( mnFIDCLs + 1 )
@@ -369,14 +372,14 @@ void _EscherEx::ImplWriteBlibStoreContainer( SvStream& rSt )
     UINT32 nSize = ImplBlibStoreContainerSize();
     if ( nSize )
     {
-        rSt << (UINT32)( ( _Escher_BstoreContainer << 16 ) | 0x1f )
+        rSt << (UINT32)( ( ESCHER_BstoreContainer << 16 ) | 0x1f )
             << (UINT32)( nSize - 8 );
 
         for ( UINT32 i = 0; i < mpGraphicProvider->mnBlibEntrys; i++ )
         {
             _EscherBlibEntry* pBlibEntry = mpGraphicProvider->mpBlibEntrys[ i ];
             BYTE nBlibType = pBlibEntry->meBlibType;
-            AddAtom( 36, _Escher_BSE, 2, nBlibType );
+            AddAtom( 36, ESCHER_BSE, 2, nBlibType );
             rSt << nBlibType;
             if ( ( nBlibType == WMF ) || ( nBlibType == EMF ) )
             {                                                       // WMF auf OS2 zu Pict Konvertieren
@@ -411,14 +414,14 @@ void _EscherEx::ImplWriteOptAtom( SvStream& rSt )
     UINT32 nSize = ImplOptAtomSize();
     if ( nSize )
     {
-        rSt << (UINT32)( ( _Escher_OPT << 16 ) | ( ESCHER_OPT_COUNT << 4 ) | 0x3 )
+        rSt << (UINT32)( ( ESCHER_OPT << 16 ) | ( ESCHER_OPT_COUNT << 4 ) | 0x3 )
             << (UINT32)( nSize - 8 )
-            << (UINT16)_Escher_Prop_fillColor           << (UINT32)0xffb800
-            << (UINT16)_Escher_Prop_fillBackColor       << (UINT32)0
-            << (UINT16)_Escher_Prop_fNoFillHitTest      << (UINT32)0x00100010
-            << (UINT16)_Escher_Prop_lineColor           << (UINT32)0x8000001
-            << (UINT16)_Escher_Prop_fNoLineDrawDash     << (UINT32)0x00080008
-            << (UINT16)_Escher_Prop_shadowColor         << (UINT32)0x8000002;
+            << (UINT16)ESCHER_Prop_fillColor            << (UINT32)0xffb800
+            << (UINT16)ESCHER_Prop_fillBackColor        << (UINT32)0
+            << (UINT16)ESCHER_Prop_fNoFillHitTest       << (UINT32)0x00100010
+            << (UINT16)ESCHER_Prop_lineColor            << (UINT32)0x8000001
+            << (UINT16)ESCHER_Prop_fNoLineDrawDash      << (UINT32)0x00080008
+            << (UINT16)ESCHER_Prop_shadowColor          << (UINT32)0x8000002;
     }
 
 }
@@ -440,7 +443,7 @@ void _EscherEx::ImplWriteSplitMenuColorsAtom( SvStream& rSt )
     UINT32 nSize = ImplSplitMenuColorsAtomSize();
     if ( nSize )
     {
-        rSt << (UINT32)( ( _Escher_SplitMenuColors << 16 ) | ( ESCHER_SPLIT_MENU_COLORS_COUNT << 4 ) )
+        rSt << (UINT32)( ( ESCHER_SplitMenuColors << 16 ) | ( ESCHER_SPLIT_MENU_COLORS_COUNT << 4 ) )
             << (UINT32)( nSize - 8 )
             << (UINT32)0x08000004
             << (UINT32)0x08000001
@@ -745,7 +748,7 @@ BOOL _EscherEx::SeekBehindRecHeader( UINT16 nRecType )
 
 void _EscherEx::InsertPersistOffset( UINT32 nKey, UINT32 nOffset )
 {
-    PtInsert( _Escher_Persist_PrivateEntry | nKey, nOffset );
+    PtInsert( ESCHER_Persist_PrivateEntry | nKey, nOffset );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -768,7 +771,7 @@ BOOL _EscherEx::ImplSeek( UINT32 nKey )
 
 BOOL _EscherEx::SeekToPersistOffset( UINT32 nKey )
 {
-    return ImplSeek( _Escher_Persist_PrivateEntry | nKey );
+    return ImplSeek( ESCHER_Persist_PrivateEntry | nKey );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -795,7 +798,7 @@ void _EscherEx::OpenContainer( UINT16 n_EscherContainer, int nRecInstance )
 
     switch( n_EscherContainer )
     {
-        case _Escher_DgContainer :
+        case ESCHER_DgContainer :
         {
             if ( !mb_EscherDg )
             {
@@ -805,15 +808,15 @@ void _EscherEx::OpenContainer( UINT16 n_EscherContainer, int nRecInstance )
                 mnTotalShapeIdUsedDg = 0;
                 mnCurrentShapeID = ( mnCurrentShapeMaximumID &~0x3ff ) + 0x400; // eine neue Seite bekommt immer eine neue ShapeId die ein vielfaches von 1024 ist,
                                                                                 // damit ist erste aktuelle Shape ID 0x400
-                AddAtom( 8, _Escher_Dg, 0, mnCurrentDg );
-                PtReplaceOrInsert( _Escher_Persist_Dg | mnCurrentDg, mpOutStrm->Tell() );
+                AddAtom( 8, ESCHER_Dg, 0, mnCurrentDg );
+                PtReplaceOrInsert( ESCHER_Persist_Dg | mnCurrentDg, mpOutStrm->Tell() );
                 *mpOutStrm << (UINT32)0     // The number of shapes in this drawing
                            << (UINT32)0;    // The last MSOSPID given to an SP in this DG
             }
         }
         break;
 
-        case _Escher_SpgrContainer :
+        case ESCHER_SpgrContainer :
         {
             if ( mb_EscherDg )
             {
@@ -822,7 +825,7 @@ void _EscherEx::OpenContainer( UINT16 n_EscherContainer, int nRecInstance )
         }
         break;
 
-        case _Escher_SpContainer :
+        case ESCHER_SpContainer :
         {
         }
         break;
@@ -843,12 +846,12 @@ void _EscherEx::CloseContainer()
 
     switch( mpRecTypes[ mnLevel ] )
     {
-        case _Escher_DgContainer :
+        case ESCHER_DgContainer :
         {
             if ( mb_EscherDg )
             {
                 mb_EscherDg = FALSE;
-                if ( ImplSeek( _Escher_Persist_Dg | mnCurrentDg ) )
+                if ( ImplSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
                 {
                     // shapeanzahl des drawings setzen
                     mnTotalShapesDgg += mnTotalShapesDg;
@@ -886,7 +889,7 @@ void _EscherEx::CloseContainer()
         }
         break;
 
-        case _Escher_SpgrContainer :
+        case ESCHER_SpgrContainer :
         {
             if ( mb_EscherSpgr )
             {
@@ -933,7 +936,7 @@ void _EscherEx::AddAtom( UINT32 nAtomSize, UINT16 nRecType, int nRecVersion, int
 
 void _EscherEx::AddClientAnchor( const Rectangle& rRect )
 {
-    AddAtom( 8, _Escher_ClientAnchor );
+    AddAtom( 8, ESCHER_ClientAnchor );
     *mpOutStrm << (INT16)rRect.Top() << (INT16)rRect.Left() << (INT16)rRect.Right() << (INT16)rRect.Bottom();
 }
 
@@ -945,22 +948,22 @@ void _EscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData )
     if ( pBoundRect )
         aRect = *pBoundRect;
 
-    OpenContainer( _Escher_SpgrContainer );
-    OpenContainer( _Escher_SpContainer );
-    AddAtom( 16, _Escher_Spgr, 1 );
-    PtReplaceOrInsert( _Escher_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
+    OpenContainer( ESCHER_SpgrContainer );
+    OpenContainer( ESCHER_SpContainer );
+    AddAtom( 16, ESCHER_Spgr, 1 );
+    PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
     *mpOutStrm  << (INT32)aRect.Left()  // Bounding box fuer die Gruppierten shapes an die sie attached werden
                 << (INT32)aRect.Top()
                 << (INT32)aRect.Right()
                 << (INT32)aRect.Bottom();
 
     if ( !mnGroupLevel )
-        AddShape( _Escher_ShpInst_Min, 5 );                             // Flags: Group | Patriarch
+        AddShape( ESCHER_ShpInst_Min, 5 );                              // Flags: Group | Patriarch
     else
     {
-        AddShape( _Escher_ShpInst_Min, 0x201 );                         // Flags: Group | HaveAnchor
-        AddAtom( 8, _Escher_ClientAnchor );
-        PtReplaceOrInsert( _Escher_Persist_Grouping_Logic | mnGroupLevel, mpOutStrm->Tell() );
+        AddShape( ESCHER_ShpInst_Min, 0x201 );                          // Flags: Group | HaveAnchor
+        AddAtom( 8, ESCHER_ClientAnchor );
+        PtReplaceOrInsert( ESCHER_Persist_Grouping_Logic | mnGroupLevel, mpOutStrm->Tell() );
         *mpOutStrm << (INT16)aRect.Top() << (INT16)aRect.Left() << (INT16)aRect.Right() << (INT16)aRect.Bottom();
     }
     if ( pClientData )
@@ -969,12 +972,12 @@ void _EscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData )
         sal_uInt32 nSize = pClientData->Tell();
         if ( nSize )
         {
-            *mpOutStrm << (sal_uInt32)( ( _Escher_ClientData << 16 ) | 0xf )
+            *mpOutStrm << (sal_uInt32)( ( ESCHER_ClientData << 16 ) | 0xf )
                        << nSize;
             mpOutStrm->Write( pClientData->GetData(), nSize );
         }
     }
-    CloseContainer();                                               // _Escher_SpContainer
+    CloseContainer();                                               // ESCHER_SpContainer
     mnGroupLevel++;
 }
 
@@ -986,7 +989,7 @@ BOOL _EscherEx::SetGroupSnapRect( UINT32 nGroupLevel, const Rectangle& rRect )
     if ( nGroupLevel )
     {
         UINT32 nCurrentPos = mpOutStrm->Tell();
-        if ( ImplSeek( _Escher_Persist_Grouping_Snap | ( nGroupLevel - 1 ) ) )
+        if ( ImplSeek( ESCHER_Persist_Grouping_Snap | ( nGroupLevel - 1 ) ) )
         {
             *mpOutStrm  << (INT32)rRect.Left()  // Bounding box fuer die Gruppierten shapes an die sie attached werden
                         << (INT32)rRect.Top()
@@ -1006,7 +1009,7 @@ BOOL _EscherEx::SetGroupLogicRect( UINT32 nGroupLevel, const Rectangle& rRect )
     if ( nGroupLevel )
     {
         UINT32 nCurrentPos = mpOutStrm->Tell();
-        if ( ImplSeek( _Escher_Persist_Grouping_Logic | ( nGroupLevel - 1 ) ) )
+        if ( ImplSeek( ESCHER_Persist_Grouping_Logic | ( nGroupLevel - 1 ) ) )
         {
             *mpOutStrm << (INT16)rRect.Top() << (INT16)rRect.Left() << (INT16)rRect.Right() << (INT16)rRect.Bottom();
             mpOutStrm->Seek( nCurrentPos );
@@ -1020,8 +1023,8 @@ BOOL _EscherEx::SetGroupLogicRect( UINT32 nGroupLevel, const Rectangle& rRect )
 void _EscherEx::LeaveGroup()
 {
     --mnGroupLevel;
-    PtDelete( _Escher_Persist_Grouping_Snap | mnGroupLevel );
-    PtDelete( _Escher_Persist_Grouping_Logic | mnGroupLevel );
+    PtDelete( ESCHER_Persist_Grouping_Snap | mnGroupLevel );
+    PtDelete( ESCHER_Persist_Grouping_Logic | mnGroupLevel );
     CloseContainer();
 }
 
@@ -1029,7 +1032,7 @@ void _EscherEx::LeaveGroup()
 
 void _EscherEx::AddShape( UINT32 nShpInstance, UINT32 nFlags, UINT32 nShapeID )
 {
-    AddAtom( 8, _Escher_Sp, 2, nShpInstance );
+    AddAtom( 8, ESCHER_Sp, 2, nShpInstance );
 
     if ( !nShapeID )
         nShapeID = GetShapeID();
@@ -1287,11 +1290,11 @@ void _EscherEx::WriteGradient( const ::com::sun::star::awt::Gradient* pGradient 
         }
         break;
     }
-    AddOpt( _Escher_Prop_fillType, _Escher_FillShadeScale );
-    AddOpt( _Escher_Prop_fillAngle, ( ( -3600 + pGradient->Angle ) << 16 ) / 10 );
-    AddOpt( _Escher_Prop_fillColor, GetGradientColor( pGradient, nFirstColor ) );
-    AddOpt( _Escher_Prop_fillBackColor, GetGradientColor( pGradient, nFirstColor ^ 1 ) );
-    AddOpt( _Escher_Prop_fillFocus, nFillFocus );
+    AddOpt( ESCHER_Prop_fillType, ESCHER_FillShadeScale );
+    AddOpt( ESCHER_Prop_fillAngle, ( ( -3600 + pGradient->Angle ) << 16 ) / 10 );
+    AddOpt( ESCHER_Prop_fillColor, GetGradientColor( pGradient, nFirstColor ) );
+    AddOpt( ESCHER_Prop_fillBackColor, GetGradientColor( pGradient, nFirstColor ^ 1 ) );
+    AddOpt( ESCHER_Prop_fillFocus, nFillFocus );
 };
 
 // ---------------------------------------------------------------------------------------------
