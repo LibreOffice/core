@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:30:45 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,8 @@
     text[ thai ] = "กราฟิคที่ไม่เชื่อมโยง";   \
     text[ czech ] = "Obrázek bez odkazu";  \
     text[ hebrew ] = "unverknüpfte Grafik";    \
-    text[ hindi ] = "लिंक हटाया हुआ सुचित्र";
+    text[ hindi ] = "लिंक हटाया हुआ सुचित्र"; \
+    text[ slovak ] = "Obrázok bez odkazu";
 
  // pragma ----------------------------------------------------------------
 
@@ -147,6 +148,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Jako";
         Text[ hebrew ] = "~Als";
         Text[ hindi ] = "जै~से";
+        Text[ slovak ] = "A~ko";
     };
     ListBox LB_SELECTOR
     {
@@ -290,6 +292,11 @@ TabPage RID_SVXPAGE_BACKGROUND
          < "रंग" ; Default ; > ;
         < "सुचित्र" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Farba" ; Default ; > ;
+        < "Obrázok" ; Default ; > ;
+    };
     };
     FixedText FT_TBL_DESC
     {
@@ -325,6 +332,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Pro";
         Text[ hebrew ] = "Fü~r";
         Text[ hindi ] = "के~लिए";
+        Text[ slovak ] = "~Pre";
     };
     ListBox LB_TBL_BOX
     {
@@ -495,6 +503,12 @@ TabPage RID_SVXPAGE_BACKGROUND
         < "पंक्ति" ; > ;
         < "सारणी" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Bunka" ; > ;
+        < "Riadok" ; > ;
+        < "Tabuľka" ; > ;
+    };
     };
     ListBox LB_PARA_BOX
     {
@@ -638,6 +652,11 @@ TabPage RID_SVXPAGE_BACKGROUND
          < "परिच्छेद" ; > ;
         < "अक्षर" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Odstavec" ; > ;
+        < "Znak" ; > ;
+    };
     };
      // Hintergrund-Brush  ----------------------------------------------------
     Window CT_BORDER
@@ -688,6 +707,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Barva pozadí";
         Text[ hebrew ] = "‮צבע רקע‬";
         Text[ hindi ] = "पृष्ठभाग की रंग";
+        Text[ slovak ] = "Farba pozadia";
     };
     Window WIN_PREVIEW1
     {
@@ -726,6 +746,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Průhlednost";
         Text[ hebrew ] = "~Transparenz";
         Text[ hindi ] = "~पारदर्शकता";
+        Text[ slovak ] = "Priehľadno~sť";
     };
     MetricField MF_COL_TRANS
     {
@@ -777,6 +798,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Soubor";
         Text[ hebrew ] = "‮קובץ‬";
         Text[ hindi ] = "फाइल";
+        Text[ slovak ] = "Súbor";
     };
     PushButton BTN_BROWSE
     {
@@ -810,6 +832,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Listovat...";
         Text[ hebrew ] = "‮עיון...‬";
         Text[ hindi ] = "~ब्रउज़...";
+        Text[ slovak ] = "~Listovať...";
     };
     CheckBox BTN_LINK
     {
@@ -843,6 +866,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Odkaz";
         Text[ hebrew ] = "~Verknüpfen";
         Text[ hindi ] = "~लिंक";
+        Text[ slovak ] = "~Odkaz";
     };
     FixedText FT_FILE
     {
@@ -883,6 +907,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
+        Text[ slovak ] = "Typ";
     };
     RadioButton BTN_POSITION
     {
@@ -916,6 +941,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "~स्थान";
+        Text[ slovak ] = "~Umiestnenie";
     };
     RadioButton BTN_AREA
     {
@@ -950,6 +976,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Oblast";
         Text[ hebrew ] = "~Fläche";
         Text[ hindi ] = "वि~स्तीर्ण";
+        Text[ slovak ] = "~Oblasť";
     };
     RadioButton BTN_TILE
     {
@@ -983,6 +1010,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Dlaždice";
         Text[ hebrew ] = "~Kachel";
         Text[ hindi ] = "~टइल";
+        Text[ slovak ] = "~Dlaždica";
     };
     Control WND_POSITION
     {
@@ -1023,6 +1051,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Průhlednost";
         Text[ hebrew ] = "Transparenz";
         Text[ hindi ] = "पारदर्शकता";
+        Text[ slovak ] = "Priehľadnosť";
     };
     MetricField MF_GRAPH_TRANS
     {
@@ -1086,6 +1115,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Náhled";
         Text[ hebrew ] = "V~orschau";
         Text[ hindi ] = "पूर्व~दृश्य";
+        Text[ slovak ] = "~Náhľad";
     };
     String STR_BROWSE
     {
@@ -1104,7 +1134,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ russian ] = "����� ����������� �������";
         Text[ polish ] = "Znajd� grafiki";
         Text[ japanese ] = "図を検索";
-        Text[ chinese_traditional ] = "搜尋圖形";
+        Text[ chinese_traditional ] = "尋找圖形";
         Text[ arabic ] = "����� �� ���";
         Text[ greek ] = "��������� ��������";
         Text[ korean ] = "그림 찾기";
@@ -1116,6 +1146,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ czech ] = "Hledat obrázek";
         Text[ hebrew ] = "Grafik suchen";
         Text[ hindi ] = "सुचित्र अन्वेषण";
+        Text[ slovak ] = "Hľadať obrázok";
     };
     String STR_UNLINKED
     {
@@ -1136,8 +1167,11 @@ TabPage RID_SVXPAGE_BACKGROUND
     Text[ czech ] = "Pozadí";
     Text[ hebrew ] = "‮רקע‬";
     Text[ hindi ] = "पृष्ठभाग";
+    Text[ slovak ] = "Pozadie";
 };
  // ********************************************************************** EOF
+
+
 
 
 
