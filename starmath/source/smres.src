@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: os $ $Date: 2002-05-28 14:46:35 $
+ *  last change: $Author: tl $ $Date: 2002-06-20 10:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10647,6 +10647,32 @@ FloatingWindow RID_TOOLBOXWINDOW
     };
 };
 
+#define CMDBOXWINDOW_TEXT           \
+    Text = "Kommandos" ;                            \
+    Text [ ENGLISH ] = "Commands" ;                 \
+    Text [ norwegian ] = "Kommandoer" ;             \
+    Text [ italian ] = "Comandi" ;                  \
+    Text [ portuguese_brazilian ] = "Comandos" ;    \
+    Text [ portuguese ] = "Comandos" ;              \
+    Text [ finnish ] = "Komennot" ;                 \
+    Text [ danish ] = "Kommandoer" ;                \
+    Text [ french ] = "Commandes" ;                 \
+    Text [ swedish ] = "Kommandon" ;                \
+    Text [ dutch ] = "Commando´s" ;                 \
+    Text [ spanish ] = "Comandos" ;                 \
+    Text [ english_us ] = "Commands" ;              \
+    Text[ chinese_simplified ] = "å‘½ä»¤";          \
+    Text[ russian ] = "Êîìàíäû";                    \
+    Text[ polish ] = "Polecenia";                   \
+    Text[ japanese ] = "ã‚³ãƒžãƒ³ãƒ‰";              \
+    Text[ chinese_traditional ] = "æŒ‡ä»¤";         \
+    Text[ arabic ] = "ÃæÇãÑ";                       \
+    Text[ greek ] = "ÅíôïëÝò";                      \
+    Text[ korean ] = "ëª…ë ¹";                      \
+    Text[ turkish ] = "Komutlar";                   \
+    Text[ language_user1 ] = " ";                   \
+    Text[ catalan ] = "Comandos";                   \
+    Text[ thai ] = "à¸„à¸³à¸ªà¸±à¹ˆà¸‡";
 
 DockingWindow RID_CMDBOXWINDOW
 {
@@ -10659,32 +10685,9 @@ DockingWindow RID_CMDBOXWINDOW
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 292 , 94 ) ;
     Dockable = TRUE ;
-    Text = "Kommandos" ;
-    Text [ ENGLISH ] = "Commands" ;
-    Text [ norwegian ] = "Kommandoer" ;
-    Text [ italian ] = "Comandi" ;
-    Text [ portuguese_brazilian ] = "Comandos" ;
-    Text [ portuguese ] = "Comandos" ;
-    Text [ finnish ] = "Komennot" ;
-    Text [ danish ] = "Kommandoer" ;
-    Text [ french ] = "Commandes" ;
-    Text [ swedish ] = "Kommandon" ;
-    Text [ dutch ] = "Commando´s" ;
-    Text [ spanish ] = "Comandos" ;
-    Text [ english_us ] = "Commands" ;
-    Text[ chinese_simplified ] = "å‘½ä»¤";
-    Text[ russian ] = "Êîìàíäû";
-    Text[ polish ] = "Polecenia";
-    Text[ japanese ] = "ã‚³ãƒžãƒ³ãƒ‰";
-    Text[ chinese_traditional ] = "æŒ‡ä»¤";
-    Text[ arabic ] = "ÃæÇãÑ";
-    Text[ greek ] = "ÅíôïëÝò";
-    Text[ korean ] = "ëª…ë ¹";
-    Text[ turkish ] = "Komutlar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Comandos";
-    Text[ thai ] = "à¸„à¸³à¸ªà¸±à¹ˆà¸‡";
+    CMDBOXWINDOW_TEXT
 };
+
 #define _ID_LIST \
     IdList =\
     {\
@@ -10777,6 +10780,11 @@ ImageList RID_DEFAULTIMAGELIST_SCH
     };
     MaskColor = IMAGE_STDBTN_COLOR_HC ;
     _ID_LIST
+};
+
+String STR_CMDBOXWINDOW
+{
+    CMDBOXWINDOW_TEXT
 };
 
 String RID_DOCUMENTSTR
