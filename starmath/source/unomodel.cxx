@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-23 12:49:27 $
+ *  last change: $Author: tl $ $Date: 2001-08-16 12:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,12 @@
 #ifndef SYMBOL_HXX
 #include <symbol.hxx>
 #endif
-
+#ifndef STARMATH_HRC
+#include <starmath.hrc>
+#endif
+#ifndef CONFIG_HXX
+#include <config.hxx>
+#endif
 
 using namespace ::vos;
 using namespace ::rtl;
@@ -601,11 +606,17 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                     static sal_uInt16 __READONLY_DATA nRange[] =
                     {
-                        SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                        SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                        SID_PRINTSIZE,       SID_PRINTSIZE,
+                        SID_PRINTZOOM,       SID_PRINTZOOM,
+                        SID_PRINTTITLE,      SID_PRINTTITLE,
+                        SID_PRINTTEXT,       SID_PRINTTEXT,
+                        SID_PRINTFRAME,      SID_PRINTFRAME,
+                        SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
                         0
                     };
                     SfxItemSet *pItemSet = new SfxItemSet( pDocSh->GetPool(), nRange );
+                    SmModule *pp = SM_MOD1();
+                    pp->GetConfig()->ConfigToItemSet(*pItemSet);
                     SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
                     pDocSh->SetPrinter( pPrinter );
