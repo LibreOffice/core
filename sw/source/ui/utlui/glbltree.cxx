@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:40:20 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,7 @@ SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
     SetHelpId(HID_NAVIGATOR_GLOB_TREELIST);
     SelectHdl();
     SetDoubleClickHdl(LINK(this, SwGlobalTree, DoubleClickHdl));
+    EnableContextMenuHandling();
 }
 
 /*-----------------12.06.97 09:38-------------------
@@ -446,91 +447,65 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
 /*-----------------12.06.97 09:38-------------------
 
 --------------------------------------------------*/
-void     SwGlobalTree::Command( const CommandEvent& rCEvt )
+PopupMenu* SwGlobalTree::CreateContextMenu()
 {
-    BOOL bParent = FALSE;
-    switch( rCEvt.GetCommand() )
+    PopupMenu* pPop = 0;
+    if(pActiveShell &&
+        !pActiveShell->GetView().GetDocShell()->IsReadOnly())
     {
-        case COMMAND_CONTEXTMENU:
+        USHORT nEnableFlags = GetEnableFlags();
+        pPop = new PopupMenu;
+        PopupMenu* pSubPop1 = new PopupMenu;
+        PopupMenu* pSubPop2 = new PopupMenu;
+
+        for (USHORT i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
         {
-            if(!pActiveShell ||
-                !pActiveShell->GetView().GetDocShell()->IsReadOnly())
-            {
-                USHORT nEnableFlags = GetEnableFlags();
-                PopupMenu aPop;
-                PopupMenu aSubPop1;
-                PopupMenu aSubPop2;
-
-                for (USHORT i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
-                {
-                    aSubPop2.InsertItem( i, aContextStrings[ST_UPDATE_SEL - ST_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
-                    aSubPop2.SetHelpId(i, aHelpForMenu[i]);
-                }
-                aSubPop2.EnableItem(CTX_UPDATE_SEL, nEnableFlags&ENABLE_UPDATE_SEL);
-                aSubPop2.SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
-
-                aSubPop1.InsertItem(CTX_INSERT_ANY_INDEX, aContextStrings[ST_INDEX  - ST_GLOBAL_CONTEXT_FIRST]);
-                aSubPop1.SetHelpId(CTX_INSERT_ANY_INDEX, aHelpForMenu[CTX_INSERT_ANY_INDEX]);
-                aSubPop1.InsertItem(CTX_INSERT_FILE, aContextStrings[ST_FILE   - ST_GLOBAL_CONTEXT_FIRST]);
-                aSubPop1.SetHelpId(CTX_INSERT_FILE, aHelpForMenu[CTX_INSERT_FILE]);
-                aSubPop1.InsertItem(CTX_INSERT_NEW_FILE, aContextStrings[ST_NEW_FILE   - ST_GLOBAL_CONTEXT_FIRST]);
-                aSubPop1.SetHelpId(CTX_INSERT_NEW_FILE, aHelpForMenu[CTX_INSERT_NEW_FILE]);
-                aSubPop1.InsertItem(CTX_INSERT_TEXT, aContextStrings[ST_TEXT   - ST_GLOBAL_CONTEXT_FIRST]);
-                aSubPop1.SetHelpId(CTX_INSERT_TEXT, aHelpForMenu[CTX_INSERT_TEXT]);
-
-
-                aPop.InsertItem(CTX_UPDATE, aContextStrings[ST_UPDATE - ST_GLOBAL_CONTEXT_FIRST]);
-                aPop.SetHelpId(CTX_UPDATE, aHelpForMenu[CTX_UPDATE]);
-                aPop.InsertItem(CTX_EDIT, aContextStrings[ST_EDIT_CONTENT - ST_GLOBAL_CONTEXT_FIRST]);
-                aPop.SetHelpId(CTX_EDIT, aHelpForMenu[CTX_EDIT]);
-                if(nEnableFlags&ENABLE_EDIT_LINK)
-                {
-                    aPop.InsertItem(CTX_EDIT_LINK, aContextStrings[ST_EDIT_LINK - ST_GLOBAL_CONTEXT_FIRST]);
-                    aPop.SetHelpId(CTX_EDIT_LINK, aHelpForMenu[CTX_EDIT_LINK]);
-                }
-                aPop.InsertItem(CTX_INSERT, aContextStrings[ST_INSERT - ST_GLOBAL_CONTEXT_FIRST]);
-                aPop.SetHelpId(CTX_INSERT, aHelpForMenu[CTX_INSERT]);
-                aPop.InsertSeparator() ;
-                aPop.InsertItem(CTX_DELETE, aContextStrings[ST_DELETE - ST_GLOBAL_CONTEXT_FIRST]);
-                aPop.SetHelpId(CTX_DELETE, aHelpForMenu[CTX_DELETE]);
-
-                //evtl. disablen
-                aSubPop1.EnableItem(CTX_INSERT_ANY_INDEX,   nEnableFlags&ENABLE_INSERT_IDX );
-                aSubPop1.EnableItem(CTX_INSERT_TEXT,    nEnableFlags&ENABLE_INSERT_TEXT);
-                aSubPop1.EnableItem(CTX_INSERT_FILE,    nEnableFlags&ENABLE_INSERT_FILE);
-                aSubPop1.EnableItem(CTX_INSERT_NEW_FILE, nEnableFlags&ENABLE_INSERT_FILE);
-
-                aPop.EnableItem(CTX_UPDATE,             nEnableFlags&ENABLE_UPDATE);
-                aPop.EnableItem(CTX_INSERT,             nEnableFlags&ENABLE_INSERT_IDX);
-                aPop.EnableItem(CTX_EDIT,               nEnableFlags&ENABLE_EDIT);
-                aPop.EnableItem(CTX_DELETE,             nEnableFlags&ENABLE_DELETE);
-
-
-                aPop.SetPopupMenu( CTX_INSERT, &aSubPop1 );
-                aPop.SetPopupMenu( CTX_UPDATE, &aSubPop2 );
-                Link aLk = LINK(this, SwGlobalTree, PopupHdl );
-                aPop.SetSelectHdl(aLk);
-                aSubPop1.SetSelectHdl(aLk);
-                aSubPop2.SetSelectHdl(aLk);
-
-                //determine the position to execute the PopupMenu
-                Point   aPopupPos;
-                if( rCEvt.IsMouseEvent() )
-                    aPopupPos = rCEvt.GetMousePosPixel();
-                else if(FirstSelected())
-                {
-                    SvLBoxEntry*  pSelected = FirstSelected();
-                    MakeVisible( pSelected );
-                    aPopupPos = GetFocusRect( pSelected, GetEntryPos( pSelected ).Y() ).Center();
-                }
-                aPop.Execute( this, aPopupPos );
-            }
+            pSubPop2->InsertItem( i, aContextStrings[ST_UPDATE_SEL - ST_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
+            pSubPop2->SetHelpId(i, aHelpForMenu[i]);
         }
-        break;
-        default: bParent = TRUE;
+        pSubPop2->EnableItem(CTX_UPDATE_SEL, nEnableFlags&ENABLE_UPDATE_SEL);
+
+        pSubPop1->InsertItem(CTX_INSERT_ANY_INDEX, aContextStrings[ST_INDEX  - ST_GLOBAL_CONTEXT_FIRST]);
+        pSubPop1->SetHelpId(CTX_INSERT_ANY_INDEX, aHelpForMenu[CTX_INSERT_ANY_INDEX]);
+        pSubPop1->InsertItem(CTX_INSERT_FILE, aContextStrings[ST_FILE   - ST_GLOBAL_CONTEXT_FIRST]);
+        pSubPop1->SetHelpId(CTX_INSERT_FILE, aHelpForMenu[CTX_INSERT_FILE]);
+        pSubPop1->InsertItem(CTX_INSERT_NEW_FILE, aContextStrings[ST_NEW_FILE   - ST_GLOBAL_CONTEXT_FIRST]);
+        pSubPop1->SetHelpId(CTX_INSERT_NEW_FILE, aHelpForMenu[CTX_INSERT_NEW_FILE]);
+        pSubPop1->InsertItem(CTX_INSERT_TEXT, aContextStrings[ST_TEXT   - ST_GLOBAL_CONTEXT_FIRST]);
+        pSubPop1->SetHelpId(CTX_INSERT_TEXT, aHelpForMenu[CTX_INSERT_TEXT]);
+
+
+        pPop->InsertItem(CTX_UPDATE, aContextStrings[ST_UPDATE - ST_GLOBAL_CONTEXT_FIRST]);
+        pPop->SetHelpId(CTX_UPDATE, aHelpForMenu[CTX_UPDATE]);
+        pPop->InsertItem(CTX_EDIT, aContextStrings[ST_EDIT_CONTENT - ST_GLOBAL_CONTEXT_FIRST]);
+        pPop->SetHelpId(CTX_EDIT, aHelpForMenu[CTX_EDIT]);
+        if(nEnableFlags&ENABLE_EDIT_LINK)
+        {
+            pPop->InsertItem(CTX_EDIT_LINK, aContextStrings[ST_EDIT_LINK - ST_GLOBAL_CONTEXT_FIRST]);
+            pPop->SetHelpId(CTX_EDIT_LINK, aHelpForMenu[CTX_EDIT_LINK]);
+        }
+        pPop->InsertItem(CTX_INSERT, aContextStrings[ST_INSERT - ST_GLOBAL_CONTEXT_FIRST]);
+        pPop->SetHelpId(CTX_INSERT, aHelpForMenu[CTX_INSERT]);
+        pPop->InsertSeparator() ;
+        pPop->InsertItem(CTX_DELETE, aContextStrings[ST_DELETE - ST_GLOBAL_CONTEXT_FIRST]);
+        pPop->SetHelpId(CTX_DELETE, aHelpForMenu[CTX_DELETE]);
+
+        //evtl. disablen
+        pSubPop1->EnableItem(CTX_INSERT_ANY_INDEX,   nEnableFlags&ENABLE_INSERT_IDX );
+        pSubPop1->EnableItem(CTX_INSERT_TEXT,    nEnableFlags&ENABLE_INSERT_TEXT);
+        pSubPop1->EnableItem(CTX_INSERT_FILE,    nEnableFlags&ENABLE_INSERT_FILE);
+        pSubPop1->EnableItem(CTX_INSERT_NEW_FILE, nEnableFlags&ENABLE_INSERT_FILE);
+
+        pPop->EnableItem(CTX_UPDATE,             nEnableFlags&ENABLE_UPDATE);
+        pPop->EnableItem(CTX_INSERT,             nEnableFlags&ENABLE_INSERT_IDX);
+        pPop->EnableItem(CTX_EDIT,               nEnableFlags&ENABLE_EDIT);
+        pPop->EnableItem(CTX_DELETE,             nEnableFlags&ENABLE_DELETE);
+
+
+        pPop->SetPopupMenu( CTX_INSERT, pSubPop1 );
+        pPop->SetPopupMenu( CTX_UPDATE, pSubPop2 );
     }
-    if(bParent)
-        SvTreeListBox::Command(rCEvt);
+    return pPop;
 }
 /*-----------------16.06.97 10:41-------------------
 
@@ -1047,7 +1022,16 @@ void    SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
 --------------------------------------------------*/
 IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
 {
-    USHORT nId = pMenu->GetCurItemId();
+    ExcecuteContextMenuAction( pMenu->GetCurItemId());
+    return TRUE;
+}
+/* -----------------26.08.2003 11:57-----------------
+
+ --------------------------------------------------*/
+void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
+//IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
+{
+//  USHORT nId = pMenu->GetCurItemId();
     SvLBoxEntry* pEntry = FirstSelected();
     SwGlblDocContent* pCont = pEntry ? (SwGlblDocContent*)pEntry->GetUserData() : 0;
     // wird waehrend des Dialogs ein RequestHelp gerufen,
@@ -1058,7 +1042,7 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
         pContCopy = new SwGlblDocContent(pCont->GetDocPos());
     SfxDispatcher& rDispatch = *pActiveShell->GetView().GetViewFrame()->GetDispatcher();
     USHORT nSlot = 0;;
-    switch( nId )
+    switch( nSelectedPopupEntry )
     {
         case CTX_UPDATE_SEL:
         {
@@ -1096,7 +1080,7 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
         case CTX_UPDATE_ALL:
         {
             pActiveShell->GetLinkManager().UpdateAllLinks(TRUE);
-            if(CTX_UPDATE_ALL == nId)
+            if(CTX_UPDATE_ALL == nSelectedPopupEntry)
                 nSlot = FN_UPDATE_TOX;
             pCont = 0;
         }
@@ -1194,7 +1178,7 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
             SfxViewFrame* pGlobFrm = pActiveShell->GetView().GetViewFrame();
             SwGlobalFrameListener_Impl aFrmListener(*pGlobFrm);
 
-            USHORT nEntryPos = pEntry ? GetModel()->GetAbsPos(pEntry) : USHRT_MAX;
+            ULONG nEntryPos = pEntry ? GetModel()->GetAbsPos(pEntry) : (ULONG)-1;
             // neues Dok anlegen
             SfxStringItem aFactory(SID_NEWDOCDIRECT,
                             SwDocShell::Factory().GetFilterContainer()->GetName());
@@ -1221,7 +1205,7 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
                 {
                     pGlobFrm->ToTop();
                     // durch das Update sind die Eintraege invalid
-                    if(nEntryPos != USHRT_MAX)
+                    if(nEntryPos != (ULONG)-1)
                     {
                         Update();
                         Display();
@@ -1246,7 +1230,7 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
                 else
                 {
                     pFrame->ToTop();
-                    return TRUE;
+                    return;
                 }
             }
         }
@@ -1276,7 +1260,7 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
     if(Update())
         Display();
     delete pContCopy;
-    return TRUE;
+//  return TRUE;
 }
 
 /*-----------------16.06.97 07:57-------------------
