@@ -60,41 +60,51 @@
         </tr>
         <tr> 
           <td colspan="4">
-            <p>The [PRODUCTNAME] SDK comes with a set of development tools, base libraries and jar files which 
-               can be used to develop Java/C++ components, to embed [PRODUCTNAME] application in your own programs
-	       or to use the API (scripting or remote control the office). For a complete working 
-               environment we have some additional requirements.
+            <p>The [PRODUCTNAME] SDK comes with a set of development tools, base libraries and jar files
+               which can be used to develop Java/C++ components, to embed [PRODUCTNAME] application in 
+               your own programs or to use the API (scripting or remote control the office). For a 
+               complete working environment we have some additional requirements.
             </p>
             <dl>
-              <dt><b>StarOffice&#153 or OpenOffice.org installation</b>
-              <dd>The SDK works on top of an existing office installation and uses the same libraries as the office.
+              <dt><b>StarOffice&#153 6.0 PP2 or OpenOffice.org 1.0.2 installation</b>
+              <dd>The SDK works on top of an existing office installation and uses the same libraries as
+                  the office installation.
               <dt><b>JDK (1.3.1_02 or higher)</b>
-              <dd>A JDK is necessary for developing Java components or applications. An appropriate Java SDK can be 
-              found on <a target="_blank" href="http://java.sun.com/products">http://java.sun.com/products</a>.
+              <dd>A JDK is necessary for developing Java components or applications. An appropriate Java
+                  SDK can be found on <a target="_blank" href="http://java.sun.com/products">
+                  http://java.sun.com/products</a>.
               <dt><b>C++ compiler</b>
               <dd>A C++ compler is necessary for developing C++ components or applications. UNO depends
                   on a compiler dependent language binding so that we use the appropriate compiler where a 
                   language binsing exists:<br>
                   Solaris, Sun WorkShop 6 update 1 C++ 5.2 2000/09/11<br>
                   Linux, GNU C++ compiler, gcc version 3.0.1<br>
-                  Windows, Microsoft C++ Compiler, Microsoft Developer Studio 6.0 (cl, version 12.00.8168)<br> 
+                  Windows, Microsoft C++ Compiler, Microsoft Developer Studio 6.0 (cl, version 12.00.8168) 
               <dt><b>GNU make (3.79.1 or higher)</b>
               <dd>GNU make is used to build the examples of the SDK. GNU make is available from 
                   <a target="_blank" href="http://www.gnu.org">http://www.gnu.org</a>, it can be ftped via 
                   <a target="_blank" href="ftp://ftp.gnu.org/gnu/make">ftp://ftp.gnu.org/gnu/make</a><br> 
                   NOTE: Windows user can find an executable of gnu make under 
-                  <a href="http://www.nextgeneration.dk/gnu/make.zip">http://www.nextgeneration.dk/gnu/make.zip</a>.
-                  It is not recommendable to use the Cygwin make because it don't work.
+                  <a target="_blank" href="http://www.nextgeneration.dk/gnu/make.zip">
+                  http://www.nextgeneration.dk/gnu/make.zip</a>. It is not recommendable to use the Cygwin
+                  make because it don't work.
+              <dt><b>STLPORT (4.5.3)</b>
+              <dd>Some examples uses the STL, if you want to test this exmaples you have to install
+                  a vesion of the STLPORT library on your machine. The STLPORT library is available from 
+                  <a target="_blank" href="http://www.stlport.org">http://www.stlport.org</a>.
             </dl>
-            <p>The SDK provides a configure script (Unix and WindowsNT) that asks for relevant directories (SDK, StarOffice, GNU make, Java, C++, and ANT). After
-               completing the configure script a new script will be created (WindowsNT and UNIX) to set the necessary environment variables for using the SDK and the required
-               tools. 
+            <p>The SDK provides a configure script (Unix and WindowsNT/2000/XP) that asks for relevant 
+               directories (SDK, StarOffice, GNU make, Java, C++, STLPORT and ANT). After completing the
+               configure script a new script will be created (WindowsNT//2000/XP and UNIX) to set the 
+               necessary environment variables for using the SDK and the required tools. 
             </p>
             <ul>
-              <li><a href="../configure">configure</a>
-              <li><a href="../configureWindowsNT.bat">configureWindowsNT.bat</a>
+              <li><a href="../configure">configure</a>&nbsp;&nbsp;-> for Unix
+              <li><a href="../configureWindowsNT.bat">configureWindowsNT.bat</a>&nbsp;&nbsp;-> for 
+              WindowsNT/2000/XP
             </ul>
-            <p>Other versions of the operating system Windows should use the batch program setsdkenv_windows.bat .
+            <p>Other versions of the operating system Windows should use the batch program 
+	        &lt;SDK_HOME&gt;setsdkenv_windows.bat directly and adopt it to their local environment.
             </p>
             <ul>
               <li><a href="../setsdkenv_windows.bat">setsdkenv_windows.bat</a>
@@ -127,6 +137,10 @@
                    <td widht=65%>path to GNU make</td>
                  </tr>
                  <tr> 
+                   <td widht=35%><b>STLPORT_HOME</b></td>
+                   <td widht=65%>path to the STLPORT installation directory</td>
+                 </tr>
+                 <tr> 
                    <td widht=35%><b>SDK_AUTO_DEPLOYMENT</b></td>
                    <td widht=65%>if this variable is set, the component examples will be automatically deployed 
                    into the Office installation referenced by OFFICE_HOME. See also ((reference deployment mechanism)).
@@ -137,6 +151,7 @@
                environment variables by yourself. The script sets the following environment variables.
             </p>
             <p><b>Environment variables for UNIX</b></p>
+            <p>Solaris</p>	    
             <p> 
                <table width="100%" border=1 cellpadding=4 cellspacing=0>
                  <tr> 
@@ -148,24 +163,25 @@
                  </tr>
                  <tr> 
                    <td widht=35%>LD_LIBRARY_PATH</td>
-                   <td widht=65%><b>=<i>$LD_LIBRARY_PATH/$OFFICE_PROGRAM_PATH:$SDK_HOM/solsparc/lib</i></b><br>
-                       The LD_LIBRARY_PATH will be set or will be extended by the office program path and the platform 
-                       dependent lib directory for some additional libraries.
+                   <td widht=65%><b>=<i>$OFFICE_PROGRAM_PATH:$SDK_HOME/solsparc/lib:$STLPORT_HOME/lib:
+                       $LD_LIBRARY_PATH</i></b><br>
+                       The LD_LIBRARY_PATH will be set or will be extended by the office program path,
+                       the platform dependent lib directory for some additional libraries and the 
+                       &lt;STLPORT_HOME&gt;/lib directory (optional).
                    </td>
                  </tr>
                  <tr> 
                    <td widht=35%>PATH</td>
-                   <td widht=65%><b>=<i>$PATH:$SDK_HOME/solsparc/bin:$SDK_MAKE:$SDK_CPP_HOME:$SDK_JAVA_HOME/bin</i></b><br>
-                       The PATH variable will be extended by the pathes for the SDK development tools, the compiler,
-                       the JDK, GNU make.
+                   <td widht=65%><b>=<i>$SDK_HOME/solsparc/bin:$SDK_MAKE:$SDK_CPP_HOME:$SDK_JAVA_HOME/bin:
+                       $PATH</i></b><br>
+                       The PATH variable will be extended by the pathes for the SDK development tools, 
+                       the compiler, the JDK and GNU make.
                    </td>
                  </tr>
                </table>
             </p>
-            <p><b>Environment variables for Windows</b></p>
-            <p> Additionally to setting these environment varibales the script calls the "vcvar32.bat" batch file 
-               which is provided by the Microsoft Develper Studio to set the necessary environment varibales for 
-               the compiler.
+            <p>Linux</p>	    
+            <p> 
                <table width="100%" border=1 cellpadding=4 cellspacing=0>
                  <tr> 
                    <td widht=35%>OFFICE_PROGRAM_PATH</td>
@@ -175,24 +191,56 @@
                        pleace comment this variable out in the script.</td>
                  </tr>
                  <tr> 
+                   <td widht=35%>LD_LIBRARY_PATH</td>
+                   <td widht=65%><b>=<i>$OFFICE_PROGRAM_PATH:$SDK_HOM/linux/lib:$STLPORT_HOME/lib:
+                       $LD_LIBRARY_PATH</i></b><br>
+                       The LD_LIBRARY_PATH will be set or will be extended by the office program path,
+                       the platform dependent lib directory for some additional libraries and the
+                       &lt;STLPORT_HOME&gt;/lib directory (optional).
+                   </td>
+                 </tr>
+                 <tr> 
                    <td widht=35%>PATH</td>
-                   <td widht=65%><b>=<i>$PATH:$SDK_HOME/solsparc/bin:$SDK_MAKE:$SDK_CPP_HOME:$SDK_JAVA_HOME/bin
-                       :$OFFICE_PROGRAM_PATH</i></b><br>                    
-                       The PATH variable will be extended by the pathes for the SDK development tools, the compiler,
-                       the JDK, GNU make and the $OFFICE_PROGRAM_PATH.
+                   <td widht=65%><b>=<i>$SDK_HOME/linux/bin:$SDK_MAKE:$SDK_CPP_HOME:$SDK_JAVA_HOME/bin:
+                       $PATH</i></b><br>
+                       The PATH variable will be extended by the pathes for the SDK development tools, 
+                       the compiler, the JDK and GNU make.
+                   </td>
+                 </tr>
+               </table>
+            </p>
+            <p><b>Environment variables for Windows</b></p>
+            <p> Additionally to setting these environment varibales the script calls the "vcvar32.bat" 
+               batch file which is provided by the Microsoft Develper Studio to set the necessary 
+               environment varibales for the compiler.
+               <table width="100%" border=1 cellpadding=4 cellspacing=0>
+                 <tr> 
+                   <td widht=35%>OFFICE_PROGRAM_PATH</td>
+                   <td widht=65%><b>=<i>%OFFICE_HOME%\program</i></b><br>
+                       This variable is used to register example components
+                       automatically in your Office installation. If you don't want automatic registration,
+                       pleace comment this variable out in the script.</td>
+                 </tr>
+                 <tr> 
+                   <td widht=35%>PATH</td>
+                   <td widht=65%><b>=<i>%SDK_HOME%\windows\bin;%SDK_MAKE%;%SDK_CPP_HOME%;%SDK_JAVA_HOME%
+                       \bin;%OFFICE_PROGRAM_PATH%;%STLPORT_HOME%\lib;%PATH%</i></b><br>                    
+                       The PATH variable will be extended by the pathes for the SDK development tools, 
+                       the compiler, the JDK, the STLPORT library, GNU make and the 
+                       &lt;OFFICE_PROGRAM_PATH&gt;.
                    </td>
                  </tr>
                  <tr> 
                    <td widht=35%>LIB</td>
-                   <td widht=65%><b>=<i>$LIB:$SDK_HOME/windows/lib</i></b><br>                    
-                       The LIB variable will be extended by the path to the import libraries which are necessary 
-                       for winsows.
+                   <td widht=65%><b>=<i>%SDK_HOME%\windows\lib;%STLPORT_HOME\lib;;%LIB%</i></b><br>                    
+                       The LIB variable will be extended by the path to the import libraries which are 
+                       necessary for winsows.
                    </td>
                  </tr>
                  <tr> 
                    <td colspan="2">Additionally to setting these environment varibales the script calls the 
-                      "vcvar32.bat" batch file which is provided by the Microsoft Develper Studio to set the 
-                      necessary environment variables for the compiler.</td>
+                      "vcvar32.bat" batch file which is provided by the Microsoft Develper Studio to set
+                      the necessary environment variables for the compiler.</td>
                  </tr>
                </table>    
             </p>
