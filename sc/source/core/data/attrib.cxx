@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:22:57 $
+ *  last change: $Author: nn $ $Date: 2001-08-07 12:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,6 +1068,32 @@ SfxPoolItem* __EXPORT ScPageHFItem::Create( SvStream& rStream, USHORT nVer ) con
     EditTextObject* pRight  = EditTextObject::Create(rStream);
 
     DBG_ASSERT( pLeft && pCenter && pRight, "Error reading ScPageHFItem" );
+
+    if ( pLeft == NULL   || pLeft->GetParagraphCount() == 0 ||
+         pCenter == NULL || pCenter->GetParagraphCount() == 0 ||
+         pRight == NULL  || pRight->GetParagraphCount() == 0 )
+    {
+        //  If successfully loaded, each object contains at least one paragraph.
+        //  Excel import in 5.1 created broken TextObjects (#67442#) that are
+        //  corrected here to avoid saving wrong files again (#90487#).
+
+        ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), TRUE );
+        if ( pLeft == NULL || pLeft->GetParagraphCount() == 0 )
+        {
+            delete pLeft;
+            pLeft = aEngine.CreateTextObject();
+        }
+        if ( pCenter == NULL || pCenter->GetParagraphCount() == 0 )
+        {
+            delete pCenter;
+            pCenter = aEngine.CreateTextObject();
+        }
+        if ( pRight == NULL || pRight->GetParagraphCount() == 0 )
+        {
+            delete pRight;
+            pRight = aEngine.CreateTextObject();
+        }
+    }
 
     if ( nVer < 1 )             // alte Feldbefehle umsetzen
     {
