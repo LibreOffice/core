@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentBase.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 13:50:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ public:
     //=====  internal  ========================================================
     ScAccessibleDocumentBase(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent);
+        ::com::sun::star::accessibility::XAccessible>& rxParent);
 protected:
     virtual ~ScAccessibleDocumentBase   (void);
 };
