@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2000-12-12 15:34:39 $
+ *  last change: $Author: er $ $Date: 2001-01-16 15:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1745,7 +1745,6 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
     aFormatSeq[nIdx].Default = bDefault;
 
-//! TODO: where to build the CurrencyTable now?
 #if 0   // erDEBUG
     {   // ab SV_NUMBERFORMATTER_VERSION_NEW_CURR EURo und letztes Format testen
         NfWSStringsDtor aArr;
@@ -2600,6 +2599,7 @@ void lcl_CheckCurrencySymbolPosition( const NfCurrencyEntry& rCurr )
         aStr += ByteString::CreateFromInt32( rCurr.GetNegativeFormat() );
         aStr += ( nNeg ? " (postfix)" : " (prefix)" );
 #if 0
+// seems that there really are some currencies which differ, e.g. YugoDinar
         DBG_ERRORFILE( aStr.GetBuffer() );
 #endif
     }
@@ -2620,10 +2620,19 @@ void SvNumberFormatter::ImpInitCurrencyTable() const
     Locale aSaveLocale( pLocaleData->getLocale() );
     LanguageType eSysLang = System::GetLanguage();
     NfCurrencyEntryPtr pEntry;
-    USHORT n = International::GetAvailableFormatCount();
-    for ( USHORT j = 0; j < n; j++ )
+
+    // first entry is SYSTEM
+    pLocaleData->setLocale( ConvertLanguageToLocale( eSysLang ) );
+    pEntry = new NfCurrencyEntry( *pLocaleData, LANGUAGE_SYSTEM );
+    theCurrencyTable.Insert( pEntry, 0 );
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
+        LocaleDataWrapper::getInstalledLocaleNames();
+    sal_Int32 nCount = xLoc.getLength();
+    for ( sal_Int32 j = 0; j < nCount; j++ )
     {
-        LanguageType eLang = International::GetAvailableFormat( j );
+        LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[j].Language,
+            xLoc[j].Country );
 #ifdef DEBUG
         LanguageType eReal = International::GetRealLanguage( eLang );
         LanguageType eNeut = International::GetNeutralLanguage( eLang );
@@ -2632,14 +2641,14 @@ void SvNumberFormatter::ImpInitCurrencyTable() const
         if ( eNeut != eLang )
             BOOL bBreak = TRUE;
 #endif
-        pLocaleData->setLocale( ConvertLanguageToLocale( eLang ) );
+        pLocaleData->setLocale( xLoc[j] );
         pEntry = new NfCurrencyEntry( *pLocaleData, eLang );
 #ifndef PRODUCT
         lcl_CheckCurrencySymbolPosition( *pEntry );
 #endif
-        theCurrencyTable.Insert( pEntry, j );
+        theCurrencyTable.Insert( pEntry, j+1 );
         if ( !nSystemCurrencyPosition && pEntry->GetLanguage() == eSysLang )
-            nSystemCurrencyPosition = j;
+            nSystemCurrencyPosition = j+1;
     }
     pLocaleData->setLocale( aSaveLocale );
     DBG_ASSERT( theCurrencyTable.Count(),
