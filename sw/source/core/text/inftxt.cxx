@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-28 13:44:45 $
+ *  last change: $Author: ama $ $Date: 2000-10-16 13:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,9 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bOnWin( rNew.OnWin() ),
       bNotEOL( rNew.NotEOL() ),
       bURLNotify( rNew.URLNotify() ),
-      bStopUnderFlow( rNew.StopUnderFlow() )
+      bStopUnderFlow( rNew.StopUnderFlow() ),
+      bMulti( rNew.IsMulti() ),
+      bFirstMulti( rNew.IsFirstMulti() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
@@ -339,6 +341,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     bNotEOL = sal_False;
     bStopUnderFlow = sal_False;
     bSpecialUnderline = sal_False;
+    bMulti = bFirstMulti = sal_False;
     SetLen( GetMinLen( *this ) );
 }
 
@@ -358,7 +361,9 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bOnWin( rNew.OnWin() ),
       bNotEOL( rNew.NotEOL() ),
       bURLNotify( rNew.URLNotify() ),
-      bStopUnderFlow( rNew.StopUnderFlow() )
+      bStopUnderFlow( rNew.StopUnderFlow() ),
+      bMulti( rNew.IsMulti() ),
+      bFirstMulti( rNew.IsFirstMulti() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
@@ -880,6 +885,68 @@ void SwTxtFormatInfo::Init()
     SetIdx(0);
     SetLen( GetTxt().Len() );
     SetPaintOfst(0);
+}
+
+/*-----------------16.10.00 11:39-------------------
+ * There are a few differences between a copy constructor
+ * and the following constructor for multi-line formatting.
+ * The root is the first line inside the multi-portion,
+ * the line start is the actual position in the text,
+ * the line width is the rest width from the surrounding line
+ * and the bMulti and bFirstMulti-flag has to be set correctly.
+ * --------------------------------------------------*/
+
+SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
+    SwLineLayout& rLay, SwTwips nActWidth ) : SwTxtPaintInfo( rInf )
+{
+    pRoot = &rLay;
+    pLast = &rLay;
+    pFly = NULL;
+    pLastFld = NULL;
+    pUnderFlow = NULL;
+    pRest = NULL;
+    pLastTab = NULL;
+
+    nSoftHyphPos = 0;
+    nHyphStart = 0;
+    nHyphWrdStart = 0;
+    nHyphWrdLen = 0;
+    nLineStart = rInf.GetIdx();
+    nLeft = rInf.nLeft;
+    nRight = rInf.nRight;
+    nFirst = rInf.nLeft;
+    nRealWidth = nActWidth;
+    nWidth = nRealWidth;
+    nLineHeight = 0;
+    nForcedLeftMargin = 0;
+
+    nMinLeading = 0;
+    nMinTrailing = 0;
+    nMinWordLength = 0;
+    bRestoreHyphOptions = FALSE;
+    bFull = FALSE;
+    bFtnDone = TRUE;
+    bErgoDone = TRUE;
+    bNumDone = TRUE;
+    bStop = FALSE;
+    bNewLine = TRUE;
+    bShift  = FALSE;
+    bUnderFlow = FALSE;
+    bInterHyph = FALSE;
+    bAutoHyph = FALSE;
+    bDropInit = FALSE;
+    bQuick  = rInf.bQuick;
+    bNoEndHyph  = FALSE;
+    bNoMidHyph  = FALSE;
+    bIgnoreFly = FALSE;
+
+    cTabDecimal = 0;
+    cHookChar = 0;
+    nMaxHyph = 0;
+    bTestFormat = rInf.bTestFormat;
+    SetMulti( sal_True );
+    SetFirstMulti( rInf.IsMulti() ? rInf.IsFirstMulti() :
+                   nLineStart == rInf.GetLineStart() );
 }
 
 /*************************************************************************

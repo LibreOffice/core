@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-16 13:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,8 @@ protected:
     sal_Bool bSpecialUnderline : 1; // Hoch/Tief-Unterstreichung auf der Grundlinie
     sal_Bool bArrowDone : 1;    // Pfeil nach links bei gescrollten Absaetzen
     sal_Bool bFtnInside : 1;    // the current line contains a footnote
+    sal_Bool bMulti : 1;        // inside a multiportion
+    sal_Bool bFirstMulti : 1;   // the multiportion is the first lineportion
 
 protected:
     void _NoteAnimation();
@@ -208,6 +210,10 @@ public:
                    const xub_StrLen nLen = STRING_LEN )
            { CtorInit( pFrm, pFnt, nIdx, nLen ); }
 
+    // EndOfMulti returns the end of the multi-line part of the text,
+    // but zero, if nPos is not inside any multi-line part.
+    xub_StrLen EndOfMulti( const xub_StrLen nPos ) const;
+
     inline sal_Bool OnWin() const { return bOnWin; }
     inline void SetOnWin( const sal_Bool bNew ) { bOnWin = bNew; }
     inline sal_Bool NotEOL() const { return bNotEOL; }
@@ -219,6 +225,10 @@ public:
     inline sal_Bool SpecialUnderline() const { return bSpecialUnderline; }
     inline void SetSpecialUnderline( const sal_Bool bNew )
         { bSpecialUnderline = bNew; }
+    inline sal_Bool IsMulti() const { return bMulti; }
+    inline void SetMulti( const sal_Bool bNew ) { bMulti = bNew; }
+    inline sal_Bool IsFirstMulti() const { return bFirstMulti; }
+    inline void SetFirstMulti( const sal_Bool bNew ) { bFirstMulti = bNew; }
     inline ViewShell *GetVsh() { return pVsh; }
     inline const ViewShell *GetVsh() const { return pVsh; }
     inline OutputDevice *GetOut() { return pOut; }
@@ -448,11 +458,16 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     sal_Bool _CheckFtnPortion( SwLineLayout* pCurr );
 
 public:
-    void CtorInit( SwTxtFrm *pFrm,
-                   const sal_Bool bInterHyph = sal_False, const sal_Bool bQuick = sal_False, const sal_Bool bTst = sal_False );
-    inline SwTxtFormatInfo( SwTxtFrm *pFrame, const sal_Bool bInterHyph = sal_False, const sal_Bool bQuick = sal_False,
-            const sal_Bool bTst = sal_False )
+    void CtorInit( SwTxtFrm *pFrm, const sal_Bool bInterHyph = sal_False,
+        const sal_Bool bQuick = sal_False, const sal_Bool bTst = sal_False );
+    inline SwTxtFormatInfo(SwTxtFrm *pFrame,const sal_Bool bInterHyph=sal_False,
+            const sal_Bool bQuick = sal_False, const sal_Bool bTst = sal_False )
            { CtorInit( pFrame, bInterHyph, bQuick, bTst ); }
+
+    // For the formatting inside a double line in a line (multi-line portion)
+    // we need a modified text-format-info:
+    SwTxtFormatInfo( const SwTxtFormatInfo& rInf, SwLineLayout& rLay,
+        SwTwips nActWidth );
 
     inline KSHORT Width() const { return nWidth; }
     inline void Width( const KSHORT nNew ) { nWidth = nNew; }
