@@ -17,8 +17,7 @@ ex	extensions\source\pgp\win32_65			nmake	-	w	ex_pgpw65 NULL
 ex	extensions\source\pgp\util			nmake	-	w	ex_pgput ex_pgpfac ex_pgpsrc ex_pgpw32 ex_pgpw60 ex_pgpw65 NULL
 ex	extensions\source\installation			nmake	-	w	ex_inst NULL
 ex	extensions\source\installation\office\instchk		nmake	-	all	ex_ichk NULL
-ex	extensions\source\installation\system\inetset		nmake	-	all	ex_isys ex_inst.w NULL
-ex	extensions\source\installation\office\protchk		nmake	-	all	ex_pchk NULL
+ex	extensions\source\installation\office\protchk		nmake	-	w	ex_pchk NULL
 ex	extensions\source\installuser			nmake	-	all	ex_instu NULL
 ex	extensions\source\plugin\base			nmake	-	all	ex_plbase NULL
 ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase NULL
