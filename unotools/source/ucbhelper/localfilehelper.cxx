@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-18 11:11:27 $
+ *  last change: $Author: as $ $Date: 2001-07-25 10:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,10 @@
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
+#include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 
-using namespace osl;
+using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
@@ -88,18 +89,14 @@ namespace utl
 
 sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const String& rBaseURL, String& rReturn )
 {
-    rtl::OUString aRet;
+    rReturn = ::rtl::OUString();
+
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
-#ifdef TF_FILEURL
-        FileBase::getFileURLFromSystemPath( rName, aRet );
-#else
-        ::rtl::OUString aTmp;
-
-        FileBase::normalizePath( rName, aTmp );
-        FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
-#endif
+        rtl::OUString aRet;
+        if ( FileBase::getFileURLFromSystemPath( rName, aRet ) == FileBase::E_None )
+            rReturn = aRet;
     }
     else
     {
@@ -107,7 +104,7 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const Str
                 pBroker->getContentProviderManagerInterface();
         try
         {
-            aRet = ::ucb::getFileURLFromSystemPath( xManager, rBaseURL, rName );
+            rReturn = ::ucb::getFileURLFromSystemPath( xManager, rBaseURL, rName );
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
@@ -115,23 +112,18 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const Str
         }
     }
 
-    rReturn = aRet;
-    return ( aRet.getLength() != 0 );
+    return ( rReturn.Len() != 0 );
 }
 
 sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& rReturn )
 {
-    rtl::OUString aRet;
+    rReturn = ::rtl::OUString();
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
-#ifdef TF_FILEURL
-        FileBase::getSystemPathFromFileURL( rName, aRet );
-#else
-        ::rtl::OUString aTmp;
-        FileBase::getNormalizedPathFromFileURL( rName, aTmp );
-        FileBase::getSystemPathFromNormalizedPath( aTmp, aRet );
-#endif
+        rtl::OUString aRet;
+        if( FileBase::getSystemPathFromFileURL( rName, aRet ) == FileBase::E_None )
+            rReturn = aRet;
     }
     else
     {
@@ -139,32 +131,25 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& r
                 pBroker->getContentProviderManagerInterface();
         try
         {
-            aRet = ::ucb::getSystemPathFromFileURL( xManager, rName );
+            rReturn = ::ucb::getSystemPathFromFileURL( xManager, rName );
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
-            return sal_False;
         }
     }
 
-    rReturn = aRet;
-    return ( aRet.getLength() != 0 );
+    return ( rReturn.Len() != 0 );
 }
 
 sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String& rReturn )
 {
-    rtl::OUString aRet;
-
+    rReturn = ::rtl::OUString();
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
-#ifdef TF_FILEURL
-        FileBase::getFileURLFromSystemPath( rName, aRet );
-#else
-        ::rtl::OUString aTmp;
-        FileBase::normalizePath( rName, aTmp );
-        FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
-#endif
+        rtl::OUString aRet;
+        if ( FileBase::getFileURLFromSystemPath( rName, aRet ) == FileBase::E_None )
+            rReturn = aRet;
     }
     else
     {
@@ -174,34 +159,25 @@ sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String&
         try
         {
             rtl::OUString aBase( ::ucb::getLocalFileURL( xManager ) );
-            aRet = ::ucb::getFileURLFromSystemPath( xManager, aBase, rName );
+            rReturn = ::ucb::getFileURLFromSystemPath( xManager, aBase, rName );
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
-            return sal_False;
         }
     }
 
-    rReturn = aRet;
-    return ( aRet.getLength() != 0 );
+    return ( rReturn.Len() != 0 );
 }
 
 sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String& rReturn )
 {
-    rtl::OUString aRet;
+    rReturn = ::rtl::OUString();
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
-#ifdef TF_FILEURL
-        FileBase::getSystemPathFromFileURL( rName, aRet );
-#else
-        ::rtl::OUString aTmp;
-        FileBase::getNormalizedPathFromFileURL( rName, aTmp );
-        FileBase::getSystemPathFromNormalizedPath( aTmp, aRet );
-
-        /* HR0: Why this ??? */
-        aRet = aTmp;
-#endif
+        ::rtl::OUString aRet;
+        if ( FileBase::getSystemPathFromFileURL( rName, aRet ) == FileBase::E_None )
+            rReturn = aRet;
     }
     else
     {
@@ -209,16 +185,17 @@ sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String&
                 pBroker->getContentProviderManagerInterface();
         try
         {
-            aRet = ::ucb::getSystemPathFromFileURL( xManager, rName );
+            INetURLObject aObj( rName );
+            INetURLObject aLocal( ::ucb::getLocalFileURL( xManager ) );
+            if ( aObj.GetProtocol() == aLocal.GetProtocol() )
+                rReturn = ::ucb::getSystemPathFromFileURL( xManager, rName );
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
         {
-            return sal_False;
         }
     }
 
-    rReturn = aRet;
-    return ( aRet.getLength() != 0 );
+    return ( rReturn.Len() != 0 );
 }
 
 sal_Bool LocalFileHelper::IsLocalFile( const String& rName )

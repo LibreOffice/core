@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-29 09:01:10 $
+ *  last change: $Author: as $ $Date: 2001-07-25 10:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,14 +352,7 @@ void SvtPathOptions_Impl::SetPath( StrPtr pPtr, const String& rNewPath )
 
 OUString SvtPathOptions_Impl::SubstituteAndConvert( const rtl::OUString& rPath )
 {
-    OUString aPath = SubstVar( rPath );
-    OUString aSysPath;
-#ifdef TF_FILEURL
-#else
-    if ( FileBase::getSystemPathFromNormalizedPath( aPath, aSysPath ) == FileBase::E_None )
-        aPath = aSysPath;
-#endif
-    return aPath;
+    return SubstVar( rPath );
 }
 
 //-------------------------------------------------------------------------
@@ -394,7 +387,6 @@ OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath )
     }
     else
     {
-#ifdef TF_FILEURL
         if ( FileBase::getFileURLFromSystemPath( aPath, aTmp )  == FileBase::E_None )
         {
             nIdx = aPath.indexOf( m_aProgPath );
@@ -416,30 +408,6 @@ OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath )
                 nIdx = aPath.indexOf( m_aInstPath );
             }
         }
-#else
-        if ( FileBase::normalizePath( aPath, aTmp )  == FileBase::E_None )
-        {
-            aPath = aTmp;
-            nIdx = aPath.indexOf( m_aProgPath );
-            while ( nIdx != -1 )
-            {
-                aPath = aPath.replaceAt( nIdx, m_aProgPath.Len(), SUBSTITUTE_PROGPATH );
-                nIdx = aPath.indexOf( m_aProgPath );
-            }
-            nIdx = aPath.indexOf( m_aUserPath );
-            while ( nIdx != -1 )
-            {
-                aPath = aPath.replaceAt( nIdx, m_aUserPath.Len(), SUBSTITUTE_USERPATH );
-                nIdx = aPath.indexOf( m_aUserPath );
-            }
-            nIdx = aPath.indexOf( m_aInstPath );
-            while ( nIdx != -1 )
-            {
-                aPath = aPath.replaceAt( nIdx, m_aInstPath.Len(), SUBSTITUTE_INSTPATH );
-                nIdx = aPath.indexOf( m_aInstPath );
-            }
-        }
-#endif
     }
 
     return aPath;
@@ -455,6 +423,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
     // Search for first occure of "$(...".
     sal_Int32 nPosition = aWorkText.indexOf( SIGN_STARTVARIABLE );  // = first position of "$(" in string
     sal_Int32 nLength = 0; // = count of letters from "$(" to ")" in string
+    BOOL bConvertLocal = FALSE;
 
     // Have we found any variable like "$(...)"?
     if ( nPosition != STRPOS_NOTFOUND )
@@ -482,33 +451,64 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         // $(inst) - directory of the master (server) installation
         if ( SUBSTITUTE_INST == aSubString )
         {
+            bConvertLocal = TRUE;
+            DBG_ERROR( "Don't use $(inst) any longer" );
             nReplaceLength = REPLACELENGTH_INST;
-            aReplacement = m_aInstPath;
+    //        aReplacement = m_aInstPath;
+            aReplacement = m_aInstURL;
+
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
-        // $(user) - directory of the user installation (== dir of soffice.ini)
-        if ( SUBSTITUTE_USER == aSubString || SUBSTITUTE_USERPATH == aSubString )
+        // $(user) - directory of the user installation
+        if ( SUBSTITUTE_USER == aSubString )
         {
-            DBG_ASSERT( SUBSTITUTE_USERPATH == aSubString, "don't user $(user) any longer" );
+            bConvertLocal = TRUE;
+            DBG_ERROR( "Don't use $(user) any longer" );
             nReplaceLength = REPLACELENGTH_USERPATH;
-            aReplacement = m_aUserPath;
+    //        aReplacement = m_aUserPath;
+            aReplacement = m_aUserURL;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
         // $(prog) - directory of the executable file
         if ( SUBSTITUTE_PROG == aSubString )
         {
+            bConvertLocal = TRUE;
+            DBG_ERROR( "Don't use $(prog) any longer" );
             nReplaceLength = REPLACELENGTH_PROG;
-            aReplacement = m_aProgPath;
+    //        aReplacement = m_aProgPath;
+            aReplacement = m_aProgURL;
+        }
+        else
+        // -------------------------------------------------------------------------------------------------------------------
+        // $(userpath) - directory of the user installation (== dir of soffice.ini)
+        if ( SUBSTITUTE_USERPATH == aSubString )
+        {
+            bConvertLocal = TRUE;
+            nReplaceLength = REPLACELENGTH_USERPATH;
+    //        aReplacement = m_aUserPath;
+            aReplacement = m_aUserURL;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
         // $(progpath) - directory of the executable file
         if ( SUBSTITUTE_PROGPATH == aSubString )
         {
+            bConvertLocal = TRUE;
             nReplaceLength = REPLACELENGTH_PROGPATH;
-            aReplacement = m_aProgPath;
+    //        aReplacement = m_aProgPath;
+            aReplacement = m_aProgURL;
+        }
+        else
+        // -------------------------------------------------------------------------------------------------------------------
+        // $(instpath) - directory of the master (server) installation as URL
+        if ( SUBSTITUTE_INSTPATH == aSubString )
+        {
+            bConvertLocal = TRUE;
+            nReplaceLength = REPLACELENGTH_INSTPATH;
+    //        aReplacement = m_aInstPath;
+            aReplacement = m_aInstURL;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
@@ -517,14 +517,6 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         {
             nReplaceLength = REPLACELENGTH_INSTURL;
             aReplacement = m_aInstURL;
-        }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(instpath) - directory of the master (server) installation as URL
-        if ( SUBSTITUTE_INSTPATH == aSubString )
-        {
-            nReplaceLength = REPLACELENGTH_INSTPATH;
-            aReplacement = m_aInstPath;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
@@ -541,6 +533,14 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         {
             nReplaceLength = REPLACELENGTH_PROGURL;
             aReplacement = m_aProgURL;
+        }
+        else
+        // -------------------------------------------------------------------------------------------------------------------
+        // $(workdirurl)
+        if ( SUBSTITUTE_WORKDIRURL == aSubString )
+        {
+            nReplaceLength = REPLACELENGTH_WORKDIRURL;
+            aReplacement = m_aWorkPath;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
@@ -717,15 +717,6 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                                                         break ;
             }
         }
-        else
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(workdirurl)
-        if ( SUBSTITUTE_WORKDIRURL == aSubString )
-        {
-            nReplaceLength = REPLACELENGTH_WORKDIRURL;
-            INetURLObject aObj( m_aWorkPath, INET_PROT_FILE );
-            aReplacement = aObj.GetMainURL();
-        }
 
         // Have we found something to replace?
         if ( nReplaceLength > 0 )
@@ -773,6 +764,13 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         }
     }
 
+    if ( bConvertLocal )
+    {
+        String aReturn;
+        ::utl::LocalFileHelper::ConvertURLToPhysicalName( aWorkText, aReturn );
+        return aReturn;
+    }
+
     return aWorkText;
 }
 
@@ -786,11 +784,9 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     OUString aOfficePath;
     if ( aAny >>= aOfficePath )
     {
-#ifdef TF_FILEURL
+        // "OFFICEINSTALL" is the physical path name of the office installation directory
+        // it is always on the machine where the office program is running
         aTmp = aOfficePath;
-#else
-        FileBase::normalizePath( aOfficePath, aTmp );
-#endif
         m_aInstPath = aTmp;
     }
     else
@@ -799,14 +795,15 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALLURL );
     if ( !aAny.hasValue() || ( aAny >>= aOfficePath ) )
     {
+        // "OFFICEINSTALLURL" is a UCB compatible URL for the office installation directory
+        // in the Webtop this MUST be set, in Office it can be retrieved by converting the
+        // physical name for this directory
         m_aInstURL = aOfficePath;
         if ( !m_aInstURL.Len() )
         {
-#ifdef TF_FILEURL
+            // convert and make sure that it is correctly encoded
+            // ( shouldn't it be converted already after conversion ?! )
             FileBase::getFileURLFromSystemPath( m_aInstPath, aTmp );
-#else
-            FileBase::getFileURLFromNormalizedPath( m_aInstPath, aTmp );
-#endif
             INetURLObject aObj( aTmp );
             m_aInstURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
         }
@@ -818,11 +815,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     OUString aUserPath;
     if ( aAny >>= aUserPath )
     {
-#ifdef TF_FILEURL
         aTmp = aUserPath;
-#else
-        FileBase::normalizePath( aUserPath, aTmp );
-#endif
         m_aUserPath = aTmp;
     }
     else
@@ -834,11 +827,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
         m_aUserURL = aUserPath;
         if ( !m_aUserURL.Len() )
         {
-#ifdef TF_FILEURL
             FileBase::getFileURLFromSystemPath( m_aUserPath, aTmp );
-#else
-            FileBase::getFileURLFromNormalizedPath( m_aUserPath, aTmp );
-#endif
             INetURLObject aObj( aTmp );
             m_aUserURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
         }
@@ -852,16 +841,10 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     sal_Int32 lastIndex = aProgName.lastIndexOf('/');
     if ( lastIndex >= 0 )
     {
-#ifdef TF_FILEURL
         ::rtl::OUString aTmpProgPath;
-
         aTmp = aProgName.copy( 0, lastIndex );
         FileBase::getSystemPathFromFileURL( aTmp, aTmpProgPath );
         m_aProgPath = aTmpProgPath;
-#else
-        m_aProgPath = aProgName.copy( 0, lastIndex );
-        FileBase::getFileURLFromNormalizedPath( m_aProgPath, aTmp );
-#endif
         INetURLObject aObj( aTmp );
         m_aProgURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
     }
