@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:40:53 $
+ *  last change: $Author: mtg $ $Date: 2001-03-28 11:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,19 @@
 #endif
 #ifndef _UTLUI_HRC
 #include <utlui.hrc>
+
+#ifndef _FLDUPDE_HXX
+#include <fldupde.hxx>
+#endif
+
+#ifndef _LINKENUM_HXX
+#include <linkenum.hxx>
+#endif
+
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
+#endif
+
 #endif
 #ifndef _SWCONT_HXX
 #include <swcont.hxx>
@@ -230,6 +243,8 @@
 #ifndef _UNODEFAULTS_HXX
 #include <unodefaults.hxx>
 #endif
+
+
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::i18n;
@@ -1958,6 +1973,63 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             pDocShell->GetDoc()->SetRedlineMode(nSet);
         }
         break;
+        case WID_DOC_LINK_UPDATE_MODE:
+        {
+            sal_Int16 nMode;
+            aValue >>= nMode;
+            switch (nMode)
+            {
+                case NEVER:
+                case MANUAL:
+                case AUTOMATIC:
+                case GLOBALSETTING:
+                    break;
+                default:
+                    throw IllegalArgumentException();
+            }
+            pDocShell->GetDoc()->SetLinkUpdMode(nMode);
+        }
+        break;
+        case WID_DOC_FIELD_AUTO_UPDATE:
+        {
+            sal_Bool bUpdateField = *(sal_Bool*)aValue.getValue();
+            sal_Int16 nFlag = pDocShell->GetDoc()->GetFldUpdateFlags();
+            pDocShell->GetDoc()->SetFldUpdateFlags( bUpdateField ?
+                    nFlag == AUTOUPD_FIELD_AND_CHARTS ? AUTOUPD_FIELD_AND_CHARTS
+                    : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF );
+        }
+        break;
+        case WID_DOC_CHART_AUTO_UPDATE:
+        {
+            sal_Bool bUpdateChart = *(sal_Bool*)aValue.getValue();
+            sal_Int16 nFlag = pDocShell->GetDoc()->GetFldUpdateFlags();
+            pDocShell->GetDoc()->SetFldUpdateFlags ( (nFlag == AUTOUPD_FIELD_ONLY || nFlag == AUTOUPD_FIELD_AND_CHARTS )
+                    ? bUpdateChart ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF );
+        }
+        break;
+        case WID_DOC_ADD_PARA_TABLE_SPACING:
+        {
+            sal_Bool bParaSpace;
+            aValue >>= bParaSpace;
+            pDocShell->GetDoc()->SetParaSpaceMax( bParaSpace, pDocShell->GetDoc()->IsParaSpaceMaxAtPages());
+        }
+        break;
+        case WID_DOC_ADD_PARA_TABLE_SPACING_AT_START:
+        {
+            sal_Bool bParaSpacePage;
+            aValue >>= bParaSpacePage;
+            pDocShell->GetDoc()->SetParaSpaceMax( pDocShell->GetDoc()->IsParaSpaceMax(), bParaSpacePage);
+        }
+        break;
+        case WID_DOC_PRINTER_NAME:
+        {
+            OUString sPrinterName;
+            aValue >>= sPrinterName;
+            SfxItemSet *pSet = new SfxItemSet ( pDocShell->GetDoc()->GetAttrPool());
+            SfxPrinter *pPrinter = new SfxPrinter ( pSet, sPrinterName );
+            pDocShell->GetDoc()->SetPrt (pPrinter);
+        }
+        break;
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pMap->nWID);
@@ -2056,6 +2128,43 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             }
             Reference<XForbiddenCharacters> xRet(xPropertyHelper, UNO_QUERY);
             aAny <<= xRet;
+        }
+        break;
+        case WID_DOC_LINK_UPDATE_MODE:
+        {
+            aAny <<= static_cast < sal_Int16 > ( pDocShell->GetDoc()->GetLinkUpdMode() );
+        }
+        break;
+        case WID_DOC_FIELD_AUTO_UPDATE:
+        {
+            sal_uInt16 nFlags = pDocShell->GetDoc()->GetFldUpdateFlags();
+            BOOL bFieldUpd = (nFlags == AUTOUPD_FIELD_ONLY || nFlags == AUTOUPD_FIELD_AND_CHARTS );
+            aAny.setValue(&bFieldUpd, ::getBooleanCppuType());
+        }
+        break;
+        case WID_DOC_CHART_AUTO_UPDATE:
+        {
+            sal_uInt16 nFlags = pDocShell->GetDoc()->GetFldUpdateFlags();
+            BOOL bChartUpd = nFlags == AUTOUPD_FIELD_AND_CHARTS;
+            aAny.setValue(&bChartUpd, ::getBooleanCppuType());
+        }
+        break;
+        case WID_DOC_ADD_PARA_TABLE_SPACING:
+        {
+            sal_Bool bParaSpace = pDocShell->GetDoc()->IsParaSpaceMax();
+            aAny.setValue(&bParaSpace, ::getBooleanCppuType());
+        }
+        break;
+        case WID_DOC_ADD_PARA_TABLE_SPACING_AT_START:
+        {
+            sal_Bool bParaSpace = pDocShell->GetDoc()->IsParaSpaceMaxAtPages();
+            aAny.setValue(&bParaSpace, ::getBooleanCppuType());
+        }
+        break;
+        case WID_DOC_PRINTER_NAME:
+        {
+            SfxPrinter *pPrinter = pDocShell->GetDoc()->GetPrt ( sal_False );
+            aAny <<= OUString ( pPrinter->GetName());
         }
         break;
         default:
@@ -2169,6 +2278,133 @@ void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
         UnoActionContext aAction(pDoc);
         rLnkMan.UpdateAllLinks( FALSE, FALSE, TRUE );
     }
+}
+//XPropertyState
+PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPropertyName )
+    throw (UnknownPropertyException, RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    PropertyState eRet = PropertyState_DIRECT_VALUE;
+    if(!IsValid())
+        throw RuntimeException();
+    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                    aPropSet.getPropertyMap(), rPropertyName);
+
+    if(!pMap)
+        throw UnknownPropertyException();
+    Any aAny;
+    switch(pMap->nWID)
+    {
+        case WID_DOC_LINK_UPDATE_MODE:
+        {
+            if (pDocShell->GetDoc()->GetLinkUpdMode() == GLOBALSETTING )
+                eRet = PropertyState_DEFAULT_VALUE;
+        }
+        break;
+        case WID_DOC_FIELD_AUTO_UPDATE:
+        case WID_DOC_CHART_AUTO_UPDATE:
+        {
+            if ( pDocShell->GetDoc()->GetFldUpdateFlags() == AUTOUPD_GLOBALSETTING )
+                eRet = PropertyState_DEFAULT_VALUE;
+        }
+        break;
+        case WID_DOC_ADD_PARA_TABLE_SPACING:
+        {
+            if (!pDocShell->GetDoc()->IsParaSpaceMax())
+                eRet = PropertyState_DEFAULT_VALUE;
+        }
+        break;
+        case WID_DOC_ADD_PARA_TABLE_SPACING_AT_START:
+        {
+            if (!pDocShell->GetDoc()->IsParaSpaceMaxAtPages())
+                eRet = PropertyState_DEFAULT_VALUE;
+        }
+        break;
+    }
+    return eRet;
+}
+Sequence< PropertyState > SAL_CALL SwXTextDocument::getPropertyStates( const Sequence< OUString >& rPropertyNames )
+    throw (UnknownPropertyException, RuntimeException)
+{
+    const sal_Int32 nCount = rPropertyNames.getLength();
+    const OUString * pNames = rPropertyNames.getConstArray();
+    Sequence < PropertyState > aRet ( nCount );
+    PropertyState *pState = aRet.getArray();
+
+    for ( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++)
+        pState[nIndex] = getPropertyState( pNames[nIndex] );
+
+    return aRet;
+}
+void SAL_CALL SwXTextDocument::setPropertyToDefault( const OUString& rPropertyName )
+    throw (UnknownPropertyException, RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw RuntimeException();
+    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                    aPropSet.getPropertyMap(), rPropertyName);
+    if(!pMap)
+        throw UnknownPropertyException();
+    switch(pMap->nWID)
+    {
+        case WID_DOC_LINK_UPDATE_MODE:
+        {
+            pDocShell->GetDoc()->SetLinkUpdMode( GLOBALSETTING );
+        }
+        break;
+        case WID_DOC_FIELD_AUTO_UPDATE:
+        case WID_DOC_CHART_AUTO_UPDATE:
+        {
+            pDocShell->GetDoc()->SetFldUpdateFlags( AUTOUPD_GLOBALSETTING );
+        }
+        break;
+        case WID_DOC_ADD_PARA_TABLE_SPACING:
+        {
+            pDocShell->GetDoc()->SetParaSpaceMax( sal_False, pDocShell->GetDoc()->IsParaSpaceMaxAtPages());
+        }
+        break;
+        case WID_DOC_ADD_PARA_TABLE_SPACING_AT_START:
+        {
+            pDocShell->GetDoc()->SetParaSpaceMax( pDocShell->GetDoc()->IsParaSpaceMax(), sal_False );
+        }
+        break;
+    }
+}
+Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName )
+    throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw RuntimeException();
+    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                    aPropSet.getPropertyMap(), rPropertyName);
+    if(!pMap)
+        throw UnknownPropertyException();
+    Any aAny;
+    switch(pMap->nWID)
+    {
+        case WID_DOC_LINK_UPDATE_MODE:
+        {
+            aAny <<= static_cast < sal_Int16  > (GLOBALSETTING);
+        }
+        break;
+        case WID_DOC_FIELD_AUTO_UPDATE:
+        case WID_DOC_CHART_AUTO_UPDATE:
+        {
+            sal_Bool bParaSpacePage = sal_True;
+            aAny.setValue(&bParaSpacePage, ::getBooleanCppuType());
+        }
+        break;
+        case WID_DOC_ADD_PARA_TABLE_SPACING:
+        case WID_DOC_ADD_PARA_TABLE_SPACING_AT_START:
+        {
+            sal_Bool bParaSpacePage = sal_False;
+            aAny.setValue(&bParaSpacePage, ::getBooleanCppuType());
+        }
+        break;
+    }
+    return aAny;
 }
 /* -----------------------------20.06.00 09:54--------------------------------
 
