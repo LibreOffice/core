@@ -13268,3 +13268,9 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?ImpFallBackToGregorianCalendar@SvNumberformat@@AAEEAAVString@@AAN@Z
 ?ImpSwitchToGregorianCalendar@SvNumberformat@@AAEXABVString@@N@Z
 ?ImpSwitchToOtherCalendar@SvNumberformat@@AAEXAAVString@@AAN@Z
+??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx2915814672@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx856314293@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx856314293@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx856314293@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx856314293@@YAXPAVControl@@JJAAJ@Z
+?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx856314293@@YAEABVString@@AAV2@@Z
