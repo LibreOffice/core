@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addruno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:50:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ sal_Bool ScAddressConversionObj::ParseUIString( const String& rUIString )
         if ( nResult & SCA_VALID )
         {
             if ( ( nResult & SCA_TAB_3D ) == 0 )
-                aRange.aStart.SetTab( (USHORT) nRefSheet );
+                aRange.aStart.SetTab( static_cast<SCTAB>(nRefSheet) );
             if ( ( nResult & SCA_TAB2_3D ) == 0 )
                 aRange.aEnd.SetTab( aRange.aStart.Tab() );
             // different sheets are not supported in CellRangeAddress
@@ -131,7 +131,7 @@ sal_Bool ScAddressConversionObj::ParseUIString( const String& rUIString )
         if ( nResult & SCA_VALID )
         {
             if ( ( nResult & SCA_TAB_3D ) == 0 )
-                aRange.aStart.SetTab( (USHORT) nRefSheet );
+                aRange.aStart.SetTab( static_cast<SCTAB>(nRefSheet) );
             bSuccess = sal_True;
         }
     }
