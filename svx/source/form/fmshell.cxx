@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 16:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,7 @@ sal_uInt16 ControllerSlotMap[] =    // slots des Controllers
     SID_FM_IMAGECONTROL,
     SID_FM_USE_WIZARDS,
     SID_FM_FORMATTEDFIELD,
+    SID_DATASOURCE_ADMINISTRATION,
     0
 };
 
@@ -943,11 +944,20 @@ void FmFormShell::Execute(SfxRequest &rReq)
                     pModel->GetUndoEnv().UnLock();
             }
         }   break;
+        case SID_FM_AUTOCONTROLFOCUS:
+        {
+            FmFormModel* pModel = GetFormModel();
+            DBG_ASSERT(pModel, "FmFormShell::Execute : invalid call !");
+                // should have been disabled in GetState if we don't have a FormModel
+            pModel->SetAutoControlFocus( !pModel->GetAutoControlFocus() );
+            GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_AUTOCONTROLFOCUS);
+        }
+        break;
         case SID_FM_OPEN_READONLY:
         {
             FmFormModel* pModel = GetFormModel();
-            DBG_ASSERT(pModel, "FmFormShell::Execute : ungueltiger Aufruf !");
-                // der Slot sollte in GetState disabled worden sein, wenn ich kein FormModel habe
+            DBG_ASSERT(pModel, "FmFormShell::Execute : invalid call !");
+                // should have been disabled in GetState if we don't have a FormModel
             pModel->SetOpenInDesignMode( !pModel->GetOpenInDesignMode() );
             GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_OPEN_READONLY);
         }
@@ -1443,6 +1453,12 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem(nWhich, GetImpl()->GetWizardUsing() ) );
+                break;
+            case SID_FM_AUTOCONTROLFOCUS:
+                if (!m_bDesignMode || !GetFormModel())
+                    rSet.DisableItem( nWhich );
+                else
+                    rSet.Put( SfxBoolItem(nWhich, GetFormModel()->GetAutoControlFocus() ) );
                 break;
             case SID_FM_OPEN_READONLY:
                 if (!m_bDesignMode || !GetFormModel())
