@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-20 11:25:11 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 12:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XAUTHORIZABLE_HPP_
+#include <com/sun/star/sdbcx/XAuthorizable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -80,14 +83,21 @@ namespace dbaui
 
 class OTableGrantControl : public DbBrowseBox
 {
-    DECLARE_STL_USTRINGACCESS_MAP(sal_Int32,TTablePrivilegeMap);
+    typedef struct
+    {
+        sal_Int32 nRights;
+        sal_Int32 nWithGrant;
+    } TPrivileges;
+
+    DECLARE_STL_USTRINGACCESS_MAP(TPrivileges,TTablePrivilegeMap);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>       m_xGrantUser;
     ::com::sun::star::uno::Sequence< ::rtl::OUString>                               m_aTableNames;
 
-    TTablePrivilegeMap  m_aPrivMap;
+    mutable TTablePrivilegeMap  m_aPrivMap;
     ::rtl::OUString     m_sUserName;
     DbCheckBoxCtrl*     m_pCheckCell;
     Edit*               m_pEdit;
@@ -99,6 +109,7 @@ public:
     virtual ~OTableGrantControl();
     void UpdateTables();
     void setUserName(const ::rtl::OUString _sUserName);
+    void setGrantUser(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>& _xGrantUser);
 
     void setTablesSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >& _xTablesSup);
     void setORB(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xORB);
@@ -124,8 +135,9 @@ private:
     DECL_LINK( AsynchActivate, void* );
     DECL_LINK( AsynchDeactivate, void* );
 
-    sal_Bool isAllowed(USHORT _nColumnId,sal_Int32 _nPrivilege) const;
-    sal_Int32 fillPrivilege(sal_Int32 _nRow);
+    sal_Bool    isAllowed(USHORT _nColumnId,sal_Int32 _nPrivilege) const;
+    void        fillPrivilege(sal_Int32 _nRow) const;
+    TTablePrivilegeMap::const_iterator findPrivilege(sal_Int32 _nRow) const;
 };
 
 }

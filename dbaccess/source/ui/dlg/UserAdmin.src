@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:00:35 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 12:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,26 +151,9 @@ TabPage TAB_PAGE_USERADMIN
         TabStop             = TRUE ;
         DefButton           = TRUE ;
         HelpId              = HID_TAB_PAGE_PBUSER ;
-        Text                = "~Neuer Benutzer...";
-        Text[ENGLISH]       = "~New user...";
-        Text[ english_us ] = "~New user...";
-        Text[ portuguese ] = "~Novo utilizador...";
-        Text[ russian ] = "Íîâûé ïîëüçîâàòåëü...";
-        Text[ greek ] = "Íİïò ÷ñŞóôçò...";
-        Text[ dutch ] = "~Nieuwe gebruiker...";
-        Text[ french ] = "~Nouvel utilisateur...";
-        Text[ spanish ] = "~Nuevo usuario...";
-        Text[ italian ] = "~Nuovo utente...";
-        Text[ danish ] = "Ny bruger...";
-        Text[ swedish ] = "~Ny användare...";
-        Text[ polish ] = "Nowy u¿ytkownik...";
-        Text[ portuguese_brazilian ] = "~New user...";
-        Text[ japanese ] = "V‚µ‚¢Õ°»Ş°(~N)...";
-        Text[ korean ] = "»õ »ç¿ëÀÚ(~N)...";
-        Text[ chinese_simplified ] = "ĞÂÔöÊ¹ÓÃÕß(~N)...";
-        Text[ chinese_traditional ] = "·s¼W¨Ï¥ÎªÌ(~N)...";
-        Text[ arabic ] = "ãÓÊÎÏã ÌÏíÏ...";
-        Text[ turkish ] = "Yeni kullanıcı...";
+        Text                = "Benutzer ~hinzufügen...";
+        Text[ENGLISH]       = "~User add...";
+        Text[ english_us ] = "~User add...";
     };
 
     PushButton PB_CHANGEPWD
@@ -235,8 +218,8 @@ TabPage TAB_PAGE_USERADMIN
     {
         Pos                 = MAP_APPFONT ( 6 , 52  ) ;
         Size                = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
-        Text                = "Benutzerrechte für ausgewählten Benutzer" ;
-        Text [ ENGLISH ]    = "User rights for choosen user" ;
+        Text                = "Zugriffsrechte für ausgewählten Benutzer" ;
+        Text [ ENGLISH ]    = "Access rights for choosen user" ;
         Text[ english_us ] = "Access rights for user selected";
         Text[ portuguese ] = "Direitos de acesso para utilizador seleccionado";
         Text[ russian ] = "Ïğàâà ïîëüçîâàòåëÿ äëÿ âûáğàííîãî ïîëüçîâàòåëÿ";
@@ -265,5 +248,12 @@ TabPage TAB_PAGE_USERADMIN
         TabStop             = TRUE ;
         HelpId              = HID_TAB_PAGE_TBLGRANTS ;
     };
+};
+
+QueryBox QUERY_USERADMIN_DELETE_USER
+{
+    Buttons = WB_YES_NO ;
+    Message = "Soll der Benutzer wirklich gelöscht werden?" ;
+    Message [ English ] = "Do you really want to delete the select user?" ;
 };
 

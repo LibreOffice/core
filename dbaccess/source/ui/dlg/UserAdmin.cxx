@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:00:42 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 12:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
@@ -135,8 +138,6 @@ OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
     ,m_PB_DELETEUSER(   this , ResId(PB_DELETEUSER))
     ,m_FL_TABLE_GRANTS( this , ResId(FL_TABLE_GRANTS))
     ,m_TableCtrl(       this , ResId(CTRL_TABLE_GRANTS))
-    ,m_bSysDba(FALSE)
-    ,m_bDba(FALSE)
     ,m_pAdminDialog(NULL)
 {
     DBG_CTOR(OUserAdmin,NULL);
@@ -152,6 +153,7 @@ OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
 OUserAdmin::~OUserAdmin()
 {
     DBG_DTOR(OUserAdmin,NULL);
+    ::comphelper::disposeComponent(m_xConnection);
 }
 // -----------------------------------------------------------------------
 void OUserAdmin::FillUserNames()
@@ -172,21 +174,31 @@ void OUserAdmin::FillUserNames()
         m_aUserNames = m_xUsers->getElementNames();
         const ::rtl::OUString* pBegin = m_aUserNames.getConstArray();
         const ::rtl::OUString* pEnd   = pBegin + m_aUserNames.getLength();
+        ::rtl::OUString sUserName = m_UserName;
         for(;pBegin != pEnd;++pBegin)
         {
-            m_LB_USER.InsertEntry(*pBegin);
+            // the user which is connected to the database should be in the list because
+            // he doesn't have the possibility to revoke his own rights
+            if(sUserName != *pBegin)
+                m_LB_USER.InsertEntry(*pBegin);
         }
 
         m_LB_USER.SelectEntryPos(0);
+        if(m_xUsers->hasByName(m_UserName))
+        {
+            Reference<XAuthorizable> xAuth;
+            m_xUsers->getByName(m_UserName) >>= xAuth;
+            m_TableCtrl.setGrantUser(xAuth);
+        }
 
         m_TableCtrl.setUserName(GetUser());
         m_TableCtrl.Init();
     }
-//  if(!(m_bSysDba || m_bDba))
-//  {
-//      m_PB_NEWUSER.Enable(FALSE);
-//      m_PB_DELETEUSER.Enable(FALSE);
-//  }
+
+    Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
+    m_PB_NEWUSER.Enable(xAppend.is());
+    Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
+    m_PB_DELETEUSER.Enable(xDrop.is());
 }
 // -----------------------------------------------------------------------
 SfxTabPage* OUserAdmin::Create( Window* pParent, const SfxItemSet& _rAttrSet )
@@ -240,12 +252,13 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
             String aName = GetUser();
 
             SfxPasswordDialog aPwdDlg(this,&aName);
-            aPwdDlg.ShowExtras(SHOWEXTRAS_NONE);
+            aPwdDlg.ShowExtras(SHOWEXTRAS_USER);
             if(aPwdDlg.Execute())
             {
                 String sOldPwd = aPwdDlg.GetPassword();
-                aPwdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
-                if(aPwdDlg.Execute() && m_xUsers->hasByName(GetUser()))
+                SfxPasswordDialog aPwdDlg2(this,&aName);
+                aPwdDlg2.ShowExtras(SHOWEXTRAS_CONFIRM);
+                if(aPwdDlg2.Execute() && m_xUsers->hasByName(GetUser()))
                 {
                     Reference<XUser> xUser;
                     m_xUsers->getByName(GetUser()) >>= xUser;
@@ -260,7 +273,11 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
             {
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
                 if(xDrop.is())
-                    xDrop->dropByName(GetUser());
+                {
+                    QueryBox aQry(this, ModuleRes(QUERY_USERADMIN_DELETE_USER));
+                    if(aQry.Execute() == RET_YES)
+                        xDrop->dropByName(GetUser());
+                }
             }
         }
     }

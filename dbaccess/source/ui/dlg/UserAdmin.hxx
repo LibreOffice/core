@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:00:50 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 12:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,6 @@ protected:
 
     String              m_UserName;
     ODbAdminDialog*     m_pAdminDialog;
-    BOOL                m_bSysDba; // true if i am SYSDBA user else false
-    BOOL                m_bDba;
 
     // methods
     DECL_LINK( ListDblClickHdl, ListBox * );
