@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+ *  last change: $Author: ka $ $Date: 2001-01-30 14:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,16 @@
 #include "formats.hxx"
 #include "dtrans.hxx"
 #include "filelist.hxx"
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#endif
+
+using namespace::com::sun::star::uno;
+using namespace::com::sun::star::datatransfer;
 
 struct SotAction_Impl
 {
@@ -1651,6 +1661,10 @@ static SotDestinationEntry_Impl __READONLY_DATA aDestinationArray[] =     \
     }                                                                     \
 };
 
+// ---------------------------------
+// - old style GetExchange methods -
+// ---------------------------------
+
 static BOOL CheckContext_Impl( const SotDataObject& rData,
                                 const SotAction_Impl& rEntry )
 {
@@ -1816,20 +1830,218 @@ USHORT SotExchange::GetExchangeAction(
     return nUserAction;
 }
 
+// ---------------------------------
+// - new style GetExchange methods -
+// ---------------------------------
 
-
-#if SUPD <= 397
-
-USHORT SotExchange::GetExchangeAction(
-    const SotDataObject& rData, USHORT nDestination, USHORT nSourceOptions,
-    USHORT nUserAction, ULONG& rFormat, USHORT& rDefaultAction )
+static BOOL CheckTransferableContext_Impl( const Reference< XTransferable >& rxTransferable, const SotAction_Impl& rEntry )
 {
-    USHORT nFmt = 0,
-        nRet = GetExchangeAction( rData, nDestination, nSourceOptions,
-                                nUserAction, nFmt , rDefaultAction );
-    rFormat = RegisterSotFormatName( nFmt );
-    return nRet;
+    DataFlavor  aFlavor;
+    BOOL        bRet = TRUE;
+
+    try
+    {
+        if( rxTransferable.is() &&
+            SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aFlavor ) &&
+            rxTransferable->isDataFlavorSupported( aFlavor ) )
+        {
+#ifdef WNT
+            switch( rEntry.nContextCheckId )
+            {
+                case FILEGRPDSC_ONLY_URL:
+                {
+                    bRet = FALSE;
+
+                    if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILECONTENT, aFlavor ) &&
+                        rxTransferable->isDataFlavorSupported( aFlavor ) &&
+                        SotExchange::GetFormatDataFlavor( rEntry.nFormatId, aFlavor ) &&
+                        rxTransferable->isDataFlavorSupported( aFlavor ) )
+                    {
+                        Any aAny( rxTransferable->getTransferData( aFlavor ) );
+
+                        if( aAny.hasValue() )
+                        {
+                            Sequence< sal_Int8 > aSeq; aAny >>= aSeq;
+
+                            if( aSeq.getLength() )
+                            {
+                                FILEGROUPDESCRIPTOR* pFDesc = (FILEGROUPDESCRIPTOR*) aSeq.getConstArray();
+
+                                if( pFDesc->cItems )
+                                {
+                                    ByteString sDesc( pFDesc->fgd[ 0 ].cFileName );
+                                    bRet = 4 < sDesc.Len() && sDesc.Copy( sDesc.Len()-4 ).EqualsIgnoreCaseAscii( ".URL" );
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+#endif
+        }
+    }
+    catch( const UnsupportedFlavorException& )
+    {
+        DBG_ERROR( "UnsupportedFlavorException" );
+    }
+    catch( const RuntimeException& )
+    {
+        DBG_ERROR( "Runtime Exception" );
+    }
+
+
+    return bRet;
 }
 
-#endif
+static USHORT GetTransferableAction_Impl( const Reference< XTransferable >& rxTransferable,
+                                          const SotAction_Impl* pArray, ULONG& rFormat )
+{
+    try
+    {
+        if( rxTransferable.is() )
+        {
+            DataFlavor              aFlavor;
+            const SotAction_Impl*   pArrayStart = pArray;
+            ULONG                   nId = pArray->nFormatId;
+
+            while( nId != 0xffff )
+            {
+                rFormat = nId;
+
+                if( SotExchange::GetFormatDataFlavor( nId, aFlavor ) &&
+                    rxTransferable->isDataFlavorSupported( aFlavor ) &&
+                    ( !pArray->nContextCheckId || CheckTransferableContext_Impl( rxTransferable, *pArray ) ) )
+                {
+                    if( SOT_FORMAT_FILE_LIST == rFormat )
+                    {
+                        const DataFlavor aFileListFlavor( aFlavor );
+
+                        if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_FILE, aFlavor ) &&
+                            rxTransferable->isDataFlavorSupported( aFlavor ) )
+                        {
+                            Any aAny( rxTransferable->getTransferData( aFileListFlavor ) );
+
+                            if( aAny.hasValue() )
+                            {
+                                Sequence< sal_Int8 >    aSeq; aAny >>= aSeq;
+                                SvMemoryStream          aMemStm( (void*) aSeq.getConstArray(), aSeq.getLength(), STREAM_READ );
+                                FileList                aFileList;
+
+                                aMemStm >> aFileList;
+
+                                if( !aMemStm.GetError() && ( aFileList.Count() == 1 ) )
+                                {
+                                    const SotAction_Impl* pCur = pArrayStart;
+
+                                    while( pCur->nFormatId != 0xffff )
+                                    {
+                                        if( pCur->nFormatId == SOT_FORMAT_FILE )
+                                        {
+                                            rFormat = SOT_FORMAT_FILE;
+                                            return pCur->nAction;
+                                        }
+                                        pCur++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch( const UnsupportedFlavorException& )
+    {
+        DBG_ERROR( "UnsupportedFlavorException" );
+    }
+    catch( const RuntimeException& )
+    {
+        DBG_ERROR( "Runtime Exception" );
+    }
+
+    return EXCHG_INOUT_ACTION_NONE;
+}
+
+USHORT SotExchange::GetExchangeAction( const Reference< XTransferable >& rxTransferable,
+                                       USHORT nDestination, USHORT nSourceOptions,
+                                       USHORT nUserAction, ULONG& rFormat, USHORT& rDefaultAction )
+{
+    // hier wird jetzt die oben definierte Tabelle "implementiert"
+    IMPL_DATA_ARRAY_1;
+    IMPL_DATA_ARRAY_2;
+    IMPL_DATA_ARRAY_3;
+
+    rFormat = SOT_FORMAT_STRING;
+
+    //Todo: Binaere Suche einbauen
+    const SotDestinationEntry_Impl* pEntry = aDestinationArray;
+    while( 0xffff != pEntry->nDestination )
+    {
+        if( pEntry->nDestination == nDestination )
+            break;
+        ++pEntry;
+    }
+
+    if( 0xffff == pEntry->nDestination )
+    {
+        return EXCHG_INOUT_ACTION_NONE;
+    }
+
+    nUserAction &= EXCHG_ACTION_MASK;
+    rFormat = 0;
+
+    /* Behandlung der Default-Action nach folgender Vorgehensweise:
+
+       - Das Ziel wird nach der Default-Action gefragt
+       - Unterstuetzt die Quelle diese Aktion so wird sie uebernommen
+       - Anderenfalls wird aus den von der Quelle zur Verfuegung gestellten
+         Aktionen eine ausgewaehlt, die zu einer moeglichst nicht leeren
+          Ergebnisaktion fuehrt. Hierbei wird in dieser Reihenfolge
+          vorgegangen: Copy -> Link -> Move
+    */
+    if( nUserAction == EXCHG_IN_ACTION_DEFAULT )
+    {
+        nUserAction = GetTransferableAction_Impl(rxTransferable, pEntry->aDefaultActions,rFormat);
+        // Unterstuetzt die Quelle die Aktion?
+        if( !(nUserAction & nSourceOptions ))
+        {
+            // Nein -> Alle Aktionen der Quelle checken
+            rDefaultAction = (EXCHG_IN_ACTION_COPY & nSourceOptions);
+            if( rDefaultAction && (nUserAction=GetTransferableAction_Impl(rxTransferable,pEntry->aCopyActions,rFormat)))
+                return nUserAction;
+            rDefaultAction = (EXCHG_IN_ACTION_LINK & nSourceOptions);
+            if( rDefaultAction && (nUserAction=GetTransferableAction_Impl(rxTransferable,pEntry->aLinkActions,rFormat)))
+                return nUserAction;
+            rDefaultAction = (EXCHG_IN_ACTION_MOVE & nSourceOptions);
+            if( rDefaultAction && (nUserAction=GetTransferableAction_Impl(rxTransferable,pEntry->aMoveActions,rFormat)))
+                return nUserAction;
+            rDefaultAction = 0;
+            return 0;
+        }
+        rDefaultAction = nUserAction;
+    }
+      else
+        rDefaultAction = nUserAction;
+
+    switch( nUserAction )
+    {
+    case EXCHG_IN_ACTION_MOVE:
+        nUserAction = GetTransferableAction_Impl(rxTransferable, pEntry->aMoveActions, rFormat);
+        break;
+
+    case EXCHG_IN_ACTION_COPY:
+        nUserAction = GetTransferableAction_Impl(rxTransferable, pEntry->aCopyActions, rFormat);
+        break;
+
+    case EXCHG_IN_ACTION_LINK:
+        nUserAction = GetTransferableAction_Impl(rxTransferable, pEntry->aLinkActions, rFormat);
+        break;
+
+    default:
+        nUserAction = EXCHG_INOUT_ACTION_NONE;
+    }
+    return nUserAction;
+}
+
 
