@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-15 09:03:46 $
+ *  last change: $Author: dr $ $Date: 2001-03-22 11:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,6 +783,7 @@ private:
     ScDBData*                   pCurrDBData;
     ScQueryParam                aParam;
     UINT16                      nFirstEmpty;
+    BOOL                        bActive;
     BOOL                        bHasDropDown;
     BOOL                        bHasConflict;
 
@@ -804,6 +805,7 @@ public:
 
     void                        ReadAutoFilter( XclImpStream& rStrm );
 
+    inline void                 Activate()          { bActive = TRUE; }
     void                        SetAdvancedRange( const ScRange* pRange );
     void                        SetExtractPos( const ScAddress& rAddr );
     void                        Apply();

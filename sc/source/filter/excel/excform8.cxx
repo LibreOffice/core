@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-15 09:02:52 $
+ *  last change: $Author: dr $ $Date: 2001-03-22 11:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1254,12 +1254,12 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, UINT32 nFormulaLen, c
             case 0x5C:
             case 0x7C:
             case 0x3C: // Deleted 3-D Cell Reference            [    277]
-                aIn.Ignore( 17 );
+                aIn.Ignore( 6 );
                 break;
             case 0x5D:
             case 0x7D:
             case 0x3D: // Deleted 3-D Area Reference            [    277]
-                aIn.Ignore( 20 );
+                aIn.Ignore( 10 );
                 break;
             default:
                 bError = TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-15 09:43:29 $
+ *  last change: $Author: dr $ $Date: 2001-03-22 11:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1798,8 +1798,6 @@ static sal_Bool lcl_ImportBackgroundGraphic( XclImpStream& rIn, Graphic& rGraphi
         && ( aBackground.nBitsPerPixel == 24 )
         && ( aBackground.nPlanes == 1 ) )
     {
-        sal_Bool                bImportPossible;
-        sal_Bool                bAlignment = FALSE;
         sal_uInt32              nWidth = aBackground.nWidth;
         sal_uInt32              nHeight = aBackground.nHeight;
         sal_uInt16              nPadding = aBackground.nWidth % 4;
@@ -1817,9 +1815,7 @@ static sal_Bool lcl_ImportBackgroundGraphic( XclImpStream& rIn, Graphic& rGraphi
                 for( x = 0 ; x < nWidth ; x++ )
                 {
                     rIn >> nBlue >> nGreen >> nRed;
-
                     pAcc->SetPixel( ys, x, BitmapColor( nRed, nGreen, nBlue ) );
-
                 }
                 rIn.Ignore( nPadding );
             }
@@ -3080,7 +3076,10 @@ void ImportExcel8::AutoFilterInfo( void )
 {
     AutoFilterData* pData = pAutoFilter->GetByTab( nTab );
     if( pData )
+    {
         pData->SetAdvancedRange( NULL );
+        pData->Activate();
+    }
 }
 
 void ImportExcel8::AutoFilter( void )
@@ -3095,6 +3094,7 @@ void ImportExcel8::AutoFilter( void )
 AutoFilterData::AutoFilterData( RootData* pRoot, const ScRange& rRange, const String& rName ) :
         ExcRoot( pRoot ),
         nFirstEmpty( 0 ),
+        bActive( FALSE ),
         bHasDropDown( FALSE ),
         bHasConflict( FALSE )
 {
@@ -3309,15 +3309,18 @@ void AutoFilterData::SetExtractPos( const ScAddress& rAddr )
 
 void AutoFilterData::Apply()
 {
-    InsertQueryParam();
-
-    BYTE nFlags;
-    for( UINT16 nRow = StartRow(); nRow <= EndRow(); nRow++ )
+    if( bActive )
     {
-        nFlags = pExcRoot->pDoc->GetRowFlags( nRow, Tab() );
-        if( nFlags & CR_HIDDEN )
-            nFlags |= CR_FILTERED;
-        pExcRoot->pDoc->SetRowFlags( nRow, Tab(), nFlags );
+        InsertQueryParam();
+
+        BYTE nFlags;
+        for( UINT16 nRow = StartRow(); nRow <= EndRow(); nRow++ )
+        {
+            nFlags = pExcRoot->pDoc->GetRowFlags( nRow, Tab() );
+            if( nFlags & CR_HIDDEN )
+                nFlags |= CR_FILTERED;
+            pExcRoot->pDoc->SetRowFlags( nRow, Tab(), nFlags );
+        }
     }
 }
 
