@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-01-28 13:06:09 $
+ *  last change: $Author: os $ $Date: 2002-02-04 09:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,20 +92,20 @@ SvxFrameLine::SvxFrameLine()
         aMidPos      ( 0, 0 ),
         aEndPos      ( 0, 0 ),
         aColor       ( COL_BLACK ),
-        theState     ( SVX_FRMLINESTATE_HIDE ),
+        aState     ( SVX_FRMLINESTATE_HIDE ),
 #ifndef MIPS
-        theStyle     ( NO_LINE ),
-        theCoreStyle ( NO_LINE ),
+        aStyle     ( NO_LINE ),
+        aCoreStyle ( NO_LINE ),
 #endif
         bIsSelected  ( FALSE )
 {
 #if defined MIPS
-    theStyle.nLeft=0;
-    theStyle.nMiddle=0;
-    theStyle.nRight=0;
-    theCoreStyle.nLeft=0;
-    theCoreStyle.nMiddle=0;
-    theCoreStyle.nRight=0;
+    aStyle.nLeft=0;
+    aStyle.nMiddle=0;
+    aStyle.nRight=0;
+    aCoreStyle.nLeft=0;
+    aCoreStyle.nMiddle=0;
+    aCoreStyle.nRight=0;
 #endif
 }
 
@@ -113,47 +113,47 @@ SvxFrameLine::SvxFrameLine()
 
 #define WIDTH_THICK     (DEF_LINE_WIDTH_2 *100)
 
-void SvxFrameLine::SetStyle( const SvxLineStruct& aStyle )
+void SvxFrameLine::SetStyle( const SvxLineStruct& rStyle )
 {
-    theCoreStyle = aStyle;
+    aCoreStyle = rStyle;
     /*
      * Mapping: (in TWIPS, 1pt = 100 * 20 TWIPS = duenn)
      * alles was <=0                    ist -> NO_LINE
      * alles was <=DEF_SLINE_WIDTH_2    ist -> THIN_LINE
      * alles andere                         -> THICK_LINE
      */
-    if ( ( aStyle.nLeft <= 0 ) && ( aStyle.nRight <= 0 ) )
+    if ( ( rStyle.nLeft <= 0 ) && ( rStyle.nRight <= 0 ) )
     {
-        theStyle = NO_LINE;
-        theState = SVX_FRMLINESTATE_HIDE;
+        aStyle = NO_LINE;
+        aState = SVX_FRMLINESTATE_HIDE;
     }
-    else if ( ( aStyle.nRight == 0 ) &&             // einzelne Linie
-              ( aStyle.nLeft  >  0 ) &&             // sichtbar
-              ( aStyle.nLeft  < WIDTH_THICK ) )     // duenn
+    else if ( ( rStyle.nRight == 0 ) &&             // einzelne Linie
+              ( rStyle.nLeft  >  0 ) &&             // sichtbar
+              ( rStyle.nLeft  < WIDTH_THICK ) )     // duenn
     {
-        theStyle = THIN_LINE;
-        theState = SVX_FRMLINESTATE_SHOW;
+        aStyle = THIN_LINE;
+        aState = SVX_FRMLINESTATE_SHOW;
     }
-    else if ( ( aStyle.nRight == 0 ) &&             // einzelne Linie
-              ( aStyle.nLeft   > 0 ) &&             // sichtbar
-              ( aStyle.nLeft  >= WIDTH_THICK ) )    // dick
+    else if ( ( rStyle.nRight == 0 ) &&             // einzelne Linie
+              ( rStyle.nLeft   > 0 ) &&             // sichtbar
+              ( rStyle.nLeft  >= WIDTH_THICK ) )    // dick
     {
-        theStyle = THICK_LINE;
-        theState = SVX_FRMLINESTATE_SHOW;
+        aStyle = THICK_LINE;
+        aState = SVX_FRMLINESTATE_SHOW;
     }
-    else if ( ( aStyle.nRight > 0 ) &&              // doppelte Linie
-              ( aStyle.nLeft  > 0 ) &&              // sichtbar
-              ( aStyle.nLeft  < WIDTH_THICK ) )     // duenn
+    else if ( ( rStyle.nRight > 0 ) &&              // doppelte Linie
+              ( rStyle.nLeft  > 0 ) &&              // sichtbar
+              ( rStyle.nLeft  < WIDTH_THICK ) )     // duenn
     {
-        theStyle = THIN_DOUBLE_LINE;
-        theState = SVX_FRMLINESTATE_SHOW;
+        aStyle = THIN_DOUBLE_LINE;
+        aState = SVX_FRMLINESTATE_SHOW;
     }
-    else if ( ( aStyle.nRight > 0 ) &&              // doppelte Linie
-              ( aStyle.nLeft  > 0 ) &&              // sichtbar
-              ( aStyle.nLeft  >= WIDTH_THICK ) )    // dick
+    else if ( ( rStyle.nRight > 0 ) &&              // doppelte Linie
+              ( rStyle.nLeft  > 0 ) &&              // sichtbar
+              ( rStyle.nLeft  >= WIDTH_THICK ) )    // dick
     {
-        theStyle = THICK_DOUBLE_LINE;
-        theState = SVX_FRMLINESTATE_SHOW;
+        aStyle = THICK_DOUBLE_LINE;
+        aState = SVX_FRMLINESTATE_SHOW;
     }
 }
 
@@ -163,39 +163,78 @@ void SvxFrameLine::SetStyle( const SvxLineStruct& aStyle )
 
 void SvxFrameLine::SetState( SvxFrameLineState eState )
 {
-    theState = eState;
+    aState = eState;
 
     if ( SVX_FRMLINESTATE_DONT_CARE == eState )
     {
-        theStyle     = THICK_LINE;
-        theCoreStyle = NO_LINE;
+        aStyle     = THICK_LINE;
+        aCoreStyle = NO_LINE;
     }
 }
+// class SvxFrameSelector_Impl ------------------------------------------------
+struct SvxFrameSelector_Impl
+{
+    SvxFrameSelectorType    eSel; // Selektor-Typ (Tabelle oder Absatz)
+
+    Color               aCurLineCol;  // aktuelle Linienfarbe
+    SvxLineStruct       aCurLineStyle;// aktueller LineStyle
+    Bitmap              aBackBmp;         // Hintergrund-Bitmap
+    Rectangle           aRectFrame;     // der Rahmen (Mitte der Linien)
+    Rectangle           aBoundingRect;// alle Linien umschliessender Rahmen
+    SvxFrameLine        aLeftLine;    // seine Linien
+    SvxFrameLine        aRightLine;
+    SvxFrameLine        aTopLine;
+    SvxFrameLine        aBottomLine;
+    SvxFrameLine        aHorLine;
+    SvxFrameLine        aVerLine;
+    Rectangle           aSpotLeft;      // Click-HotSpots auf der Bitmap
+    Rectangle           aSpotRight;
+    Rectangle           aSpotTop;
+    Rectangle           aSpotBottom;
+    Rectangle           aSpotHor;
+    Rectangle           aSpotVer;
+    BOOL                bIsDontCare;
+
+    SvxFrameSelector_Impl() :
+        eSel            ( SVX_FRMSELTYPE_PARAGRAPH ),
+        aCurLineStyle ( SvxFrameLine::NO_LINE ),
+        aCurLineCol   ( COL_BLACK ),
+        bIsDontCare     ( sal_False ){}
+};
 
 // class SvxFrameSelector ------------------------------------------------
 
 SvxFrameSelector::SvxFrameSelector( Window* pParent,
-                                    SvxFrameSelectorType eType,
-                                    BOOL bDontCare )
-    :   Window          ( pParent, (WinBits)0x0000 ),
-        eSel            ( eType ),
+                                    const ResId& rResId )
+    :   Control         ( pParent, rResId ),
         eShadow         ( SVX_FRMSHADOW_NONE ),
-        theCurLineStyle ( SvxFrameLine::NO_LINE ),
-        theCurLineCol   ( COL_BLACK ),
-        theShadowCol    ( COL_BLACK ),
-        bIsDontCare     ( bDontCare ),
-        bIsClicked      ( FALSE )
+        aShadowCol    ( COL_BLACK ),
+        bIsClicked      ( FALSE ),
+        pImpl(new SvxFrameSelector_Impl)
 {
+}
+/* -----------------------------01.02.2002 16:47------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvxFrameSelector::~SvxFrameSelector()
+{
+    delete pImpl;
+}
+/* -----------------------------01.02.2002 14:37------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxFrameSelector::Initialize(  SvxFrameSelectorType eType, BOOL bDontCare )
+{
+    pImpl->eSel = eType;
+    pImpl->bIsDontCare = bDontCare;
     InitBitmap_Impl();
-    SetPosSizePixel( Point(), theBmp.GetSizePixel() );
     Show();
 }
-
 // -----------------------------------------------------------------------
 
 void SvxFrameSelector::InitBitmap_Impl()
 {
-    Size aSzParent( GetParent()->GetSizePixel() );
+    Size aSzParent( GetSizePixel() );
     aSzParent.Width() -= 4;
     aSzParent.Height() -= 4;
     VirtualDevice   aVirDev;
@@ -207,50 +246,50 @@ void SvxFrameSelector::InitBitmap_Impl()
     /*
      * Berechnen des Frame-Rects und der Linie-Mittelpunkte
      */
-    theBoundingRect = aRectFrame = Rectangle( 21, 21, nX - 21, nY - 21 );
+    pImpl->aBoundingRect = pImpl->aRectFrame = Rectangle( 21, 21, nX - 21, nY - 21 );
 
-    theLeftLine.aStartPos   = Point( 21, 21 );
-    theLeftLine.aEndPos     = Point( 21, nY - 21 );
-    theLeftLine.aMidPos     = Point( 21, nYMid );
+    pImpl->aLeftLine.aStartPos   = Point( 21, 21 );
+    pImpl->aLeftLine.aEndPos     = Point( 21, nY - 21 );
+    pImpl->aLeftLine.aMidPos     = Point( 21, nYMid );
 
-    theRightLine.aStartPos  = Point( nX - 21, 21 );
-    theRightLine.aEndPos    = Point( nX - 21, nY - 21 );
-    theRightLine.aMidPos    = Point( nX - 21, nYMid );
+    pImpl->aRightLine.aStartPos  = Point( nX - 21, 21 );
+    pImpl->aRightLine.aEndPos    = Point( nX - 21, nY - 21 );
+    pImpl->aRightLine.aMidPos    = Point( nX - 21, nYMid );
 
-    theVerLine.aStartPos    = Point( nXMid, 21 );
-    theVerLine.aEndPos      = Point( nXMid, nY - 21 );
-    theVerLine.aMidPos      = Point( nXMid, nYMid );
+    pImpl->aVerLine.aStartPos    = Point( nXMid, 21 );
+    pImpl->aVerLine.aEndPos      = Point( nXMid, nY - 21 );
+    pImpl->aVerLine.aMidPos      = Point( nXMid, nYMid );
 
-    theTopLine.aStartPos    = theLeftLine.aStartPos;
-    theTopLine.aEndPos      = theRightLine.aStartPos;
-    theTopLine.aMidPos      = theVerLine.aStartPos;
+    pImpl->aTopLine.aStartPos    = pImpl->aLeftLine.aStartPos;
+    pImpl->aTopLine.aEndPos      = pImpl->aRightLine.aStartPos;
+    pImpl->aTopLine.aMidPos      = pImpl->aVerLine.aStartPos;
 
-    theBottomLine.aStartPos = theLeftLine.aEndPos;
-    theBottomLine.aEndPos   = theRightLine.aEndPos;
-    theBottomLine.aMidPos   = theVerLine.aEndPos;
+    pImpl->aBottomLine.aStartPos = pImpl->aLeftLine.aEndPos;
+    pImpl->aBottomLine.aEndPos   = pImpl->aRightLine.aEndPos;
+    pImpl->aBottomLine.aMidPos   = pImpl->aVerLine.aEndPos;
 
-    theHorLine.aStartPos    = theLeftLine.aMidPos;
-    theHorLine.aEndPos      = theRightLine.aMidPos;
-    theHorLine.aMidPos      = theVerLine.aMidPos;
+    pImpl->aHorLine.aStartPos    = pImpl->aLeftLine.aMidPos;
+    pImpl->aHorLine.aEndPos      = pImpl->aRightLine.aMidPos;
+    pImpl->aHorLine.aMidPos      = pImpl->aVerLine.aMidPos;
 
     // HotSpot-Rectangles:
-    aSpotLeft   = Rectangle( Point( 0, 0 ),
-                             Size( theLeftLine.aStartPos.X() + 3,
+    pImpl->aSpotLeft   = Rectangle( Point( 0, 0 ),
+                             Size( pImpl->aLeftLine.aStartPos.X() + 3,
                                    nY ) );
-    aSpotRight  = Rectangle( Point( theRightLine.aStartPos.X() - 3, 0 ),
-                             aSpotLeft.GetSize() );
-    aSpotTop        = Rectangle( Point( theTopLine.aStartPos.X(), 0 ),
-                             Size( aRectFrame.GetWidth(),
-                                   theTopLine.aStartPos.Y() + 3 ) );
-    aSpotBottom = Rectangle( theBottomLine.aStartPos - Point( 0, 3 ),
-                             aSpotTop.GetSize() );
-    aSpotHor        = ( eSel == SVX_FRMSELTYPE_TABLE )
-                  ? Rectangle( theHorLine.aStartPos + Point( 0, -2 ),
-                               Size( aRectFrame.GetWidth(), 5 ) )
+    pImpl->aSpotRight  = Rectangle( Point( pImpl->aRightLine.aStartPos.X() - 3, 0 ),
+                             pImpl->aSpotLeft.GetSize() );
+    pImpl->aSpotTop        = Rectangle( Point( pImpl->aTopLine.aStartPos.X(), 0 ),
+                             Size( pImpl->aRectFrame.GetWidth(),
+                                   pImpl->aTopLine.aStartPos.Y() + 3 ) );
+    pImpl->aSpotBottom = Rectangle( pImpl->aBottomLine.aStartPos - Point( 0, 3 ),
+                             pImpl->aSpotTop.GetSize() );
+    pImpl->aSpotHor        = ( pImpl->eSel == SVX_FRMSELTYPE_TABLE )
+                  ? Rectangle( pImpl->aHorLine.aStartPos + Point( 0, -2 ),
+                               Size( pImpl->aRectFrame.GetWidth(), 5 ) )
                   : Rectangle( Point( -1, -1 ), Size(- 1, -1 ) );
-    aSpotVer        = ( eSel == SVX_FRMSELTYPE_TABLE )
-                  ? Rectangle( theVerLine.aStartPos + Point( -2, 0 ),
-                               Size( 5, aRectFrame.GetHeight() ) )
+    pImpl->aSpotVer        = ( pImpl->eSel == SVX_FRMSELTYPE_TABLE )
+                  ? Rectangle( pImpl->aVerLine.aStartPos + Point( -2, 0 ),
+                               Size( 5, pImpl->aRectFrame.GetHeight() ) )
                   : Rectangle( Point( -1, -1 ), Size( -1, -1 ) );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -285,7 +324,7 @@ void SvxFrameSelector::InitBitmap_Impl()
     /*
      * Tabelle: Malen der vier Mitte-Winkel:
      */
-    if ( eSel == SVX_FRMSELTYPE_TABLE )
+    if ( pImpl->eSel == SVX_FRMSELTYPE_TABLE )
     {
         // links/rechts
         aVirDev.DrawLine( Point( 10, nYMid ),       Point( 15, nYMid ) );
@@ -299,7 +338,7 @@ void SvxFrameSelector::InitBitmap_Impl()
         aVirDev.DrawLine( Point( nXMid, nY-10 ),    Point( nXMid, nY-15 ) );
         aVirDev.DrawLine( Point( nXMid-2, nY-15 ),  Point( nXMid+2, nY-15 ) );
     }
-    theBmp = aVirDev.GetBitmap( Point( 0, 0 ), aSzParent );
+    pImpl->aBackBmp = aVirDev.GetBitmap( Point( 0, 0 ), aSzParent );
 }
 
 // -----------------------------------------------------------------------
@@ -379,44 +418,44 @@ void SvxFrameSelector::DrawFrameLine_Impl( OutputDevice& rVirDev, Point from,
     long y1 = Min( from.Y(), from2.Y() );
     long y2 = Max( to.Y(),   to2.Y()   );
 
-    if ( x1 < theBoundingRect.Left() )
-        theBoundingRect.Left() = x1;
-    else if ( x1 > theBoundingRect.Right() )
-        theBoundingRect.Right() = x1;
+    if ( x1 < pImpl->aBoundingRect.Left() )
+        pImpl->aBoundingRect.Left() = x1;
+    else if ( x1 > pImpl->aBoundingRect.Right() )
+        pImpl->aBoundingRect.Right() = x1;
 
-    if ( x2 < theBoundingRect.Left() )
-        theBoundingRect.Left() = x2;
-    else if ( x2 > theBoundingRect.Right() )
-        theBoundingRect.Right() = x2;
+    if ( x2 < pImpl->aBoundingRect.Left() )
+        pImpl->aBoundingRect.Left() = x2;
+    else if ( x2 > pImpl->aBoundingRect.Right() )
+        pImpl->aBoundingRect.Right() = x2;
 
-    if ( y1 < theBoundingRect.Top() )
-        theBoundingRect.Top() = y1;
-    else if ( y1 > theBoundingRect.Bottom() )
-        theBoundingRect.Bottom() = y1;
+    if ( y1 < pImpl->aBoundingRect.Top() )
+        pImpl->aBoundingRect.Top() = y1;
+    else if ( y1 > pImpl->aBoundingRect.Bottom() )
+        pImpl->aBoundingRect.Bottom() = y1;
 
-    if ( y2 < theBoundingRect.Top() )
-        theBoundingRect.Top() = y2;
-    else if ( y2 > theBoundingRect.Bottom() )
-        theBoundingRect.Bottom() = y2;
+    if ( y2 < pImpl->aBoundingRect.Top() )
+        pImpl->aBoundingRect.Top() = y2;
+    else if ( y2 > pImpl->aBoundingRect.Bottom() )
+        pImpl->aBoundingRect.Bottom() = y2;
 }
 
 // class SvxFrameSelector ------------------------------------------------
 
 void SvxFrameSelector::HideLines()
 {
-    theLeftLine.theState    =
-    theRightLine.theState   =
-    theTopLine.theState     =
-    theBottomLine.theState  =
-    theHorLine.theState     =
-    theVerLine.theState     = SVX_FRMLINESTATE_HIDE;
-    theLeftLine.theStyle    =
-    theRightLine.theStyle   =
-    theTopLine.theStyle     =
-    theBottomLine.theStyle  =
-    theHorLine.theStyle     =
-    theHorLine.theStyle     =
-    theVerLine.theStyle     = SvxFrameLine::NO_LINE;
+    pImpl->aLeftLine.aState    =
+    pImpl->aRightLine.aState   =
+    pImpl->aTopLine.aState     =
+    pImpl->aBottomLine.aState  =
+    pImpl->aHorLine.aState     =
+    pImpl->aVerLine.aState     = SVX_FRMLINESTATE_HIDE;
+    pImpl->aLeftLine.aStyle    =
+    pImpl->aRightLine.aStyle   =
+    pImpl->aTopLine.aStyle     =
+    pImpl->aBottomLine.aStyle  =
+    pImpl->aHorLine.aStyle     =
+    pImpl->aHorLine.aStyle     =
+    pImpl->aVerLine.aStyle     = SvxFrameLine::NO_LINE;
 
     ShowLines();
 }
@@ -431,15 +470,15 @@ void SvxFrameSelector::ShowLines()
     const Color aFieldColor = rStyleSettings.GetFieldColor();
     Color aBackgroundColor = aFieldColor; //was: COL_WHITE
 
-    aVirDev.SetOutputSizePixel( theBmp.GetSizePixel() );
-    aVirDev.DrawBitmap( Point( 0, 0 ), theBmp );
+    aVirDev.SetOutputSizePixel( pImpl->aBackBmp.GetSizePixel() );
+    aVirDev.DrawBitmap( Point( 0, 0 ), pImpl->aBackBmp );
 
     // gesamten Rahmen loeschen und Inhalt malen
     aVirDev.SetLineColor();
     aVirDev.SetFillColor( aBackgroundColor );
-    aVirDev.DrawRect( theBoundingRect );
+    aVirDev.DrawRect( pImpl->aBoundingRect );
     DrawContents_Impl( aVirDev );
-    theBoundingRect = aRectFrame;
+    pImpl->aBoundingRect = pImpl->aRectFrame;
 
     /*
      * Zeichnen aller Linien:
@@ -451,12 +490,12 @@ void SvxFrameSelector::ShowLines()
 
     // innere Linien: ---------------------------------------------
 
-    if ( eSel == SVX_FRMSELTYPE_TABLE &&
-         ( theVerLine.theState == SVX_FRMLINESTATE_SHOW ||
-           theVerLine.theState == SVX_FRMLINESTATE_DONT_CARE ) )
+    if ( pImpl->eSel == SVX_FRMSELTYPE_TABLE &&
+         ( pImpl->aVerLine.aState == SVX_FRMLINESTATE_SHOW ||
+           pImpl->aVerLine.aState == SVX_FRMLINESTATE_DONT_CARE ) )
     {
-        if ( theVerLine.theState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = theVerLine.aColor;
+        if ( pImpl->aVerLine.aState == SVX_FRMLINESTATE_SHOW )
+            aFillColor = pImpl->aVerLine.aColor;
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -466,38 +505,38 @@ void SvxFrameSelector::ShowLines()
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
-            theVerLine.aStartPos,
-            theVerLine.aMidPos,
+            pImpl->aVerLine.aStartPos,
+            pImpl->aVerLine.aMidPos,
             FALSE,
-            theVerLine.theStyle,    // dline
-            theHorLine.theStyle,    // rb
-            theVerLine.theStyle,    // lLine
-            theHorLine.theStyle,    // rt
-            theTopLine.theStyle,    // lb
+            pImpl->aVerLine.aStyle,    // dline
+            pImpl->aHorLine.aStyle,    // rb
+            pImpl->aVerLine.aStyle,    // lLine
+            pImpl->aHorLine.aStyle,    // rt
+            pImpl->aTopLine.aStyle,    // lb
             SvxFrameLine::NO_LINE,  // rLine
-            theTopLine.theStyle     // lt
+            pImpl->aTopLine.aStyle     // lt
         );
 
         DrawFrameLine_Impl( aVirDev,
-            theVerLine.aMidPos,
-            theVerLine.aEndPos,
+            pImpl->aVerLine.aMidPos,
+            pImpl->aVerLine.aEndPos,
             FALSE,
-            theVerLine.theStyle,    // dline
-            theBottomLine.theStyle, // rb
+            pImpl->aVerLine.aStyle,    // dline
+            pImpl->aBottomLine.aStyle, // rb
             SvxFrameLine::NO_LINE,  // lLine
-            theBottomLine.theStyle, // rb
-            theHorLine.theStyle,    // lb
-            theVerLine.theStyle,    // rLine
-            theHorLine.theStyle     // lt
+            pImpl->aBottomLine.aStyle, // rb
+            pImpl->aHorLine.aStyle,    // lb
+            pImpl->aVerLine.aStyle,    // rLine
+            pImpl->aHorLine.aStyle     // lt
         );
     }
 
-    if ( eSel == SVX_FRMSELTYPE_TABLE &&
-         ( theHorLine.theState == SVX_FRMLINESTATE_SHOW ||
-           theHorLine.theState == SVX_FRMLINESTATE_DONT_CARE ) )
+    if ( pImpl->eSel == SVX_FRMSELTYPE_TABLE &&
+         ( pImpl->aHorLine.aState == SVX_FRMLINESTATE_SHOW ||
+           pImpl->aHorLine.aState == SVX_FRMLINESTATE_DONT_CARE ) )
     {
-        if ( theHorLine.theState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = theHorLine.aColor;
+        if ( pImpl->aHorLine.aState == SVX_FRMLINESTATE_SHOW )
+            aFillColor = pImpl->aHorLine.aColor;
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -507,39 +546,39 @@ void SvxFrameSelector::ShowLines()
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
-            theHorLine.aStartPos,
-            theHorLine.aMidPos,
+            pImpl->aHorLine.aStartPos,
+            pImpl->aHorLine.aMidPos,
             TRUE,
-            theHorLine.theStyle,    // dline
-            theLeftLine.theStyle,   // lt
+            pImpl->aHorLine.aStyle,    // dline
+            pImpl->aLeftLine.aStyle,   // lt
             SvxFrameLine::NO_LINE,  // lLine
-            theLeftLine.theStyle,   // lb
-            theVerLine.theStyle,    // rt
-            theHorLine.theStyle,    // rLine
-            theVerLine.theStyle     // rb
+            pImpl->aLeftLine.aStyle,   // lb
+            pImpl->aVerLine.aStyle,    // rt
+            pImpl->aHorLine.aStyle,    // rLine
+            pImpl->aVerLine.aStyle     // rb
         );
 
         DrawFrameLine_Impl( aVirDev,
-            theHorLine.aMidPos,
-            theHorLine.aEndPos,
+            pImpl->aHorLine.aMidPos,
+            pImpl->aHorLine.aEndPos,
             TRUE,
-            theHorLine.theStyle,    // dline
-            theVerLine.theStyle,    // lt
-            theHorLine.theStyle,    // lLine
-            theVerLine.theStyle,    // lb
-            theRightLine.theStyle,  // rt
+            pImpl->aHorLine.aStyle,    // dline
+            pImpl->aVerLine.aStyle,    // lt
+            pImpl->aHorLine.aStyle,    // lLine
+            pImpl->aVerLine.aStyle,    // lb
+            pImpl->aRightLine.aStyle,  // rt
             SvxFrameLine::NO_LINE,  // rLine
-            theRightLine.theStyle   // rb
+            pImpl->aRightLine.aStyle   // rb
         );
     }
 
     // aeussere Linien: -------------------------------------------
 
-    if ( theLeftLine.theState == SVX_FRMLINESTATE_SHOW ||
-         theLeftLine.theState == SVX_FRMLINESTATE_DONT_CARE )
+    if ( pImpl->aLeftLine.aState == SVX_FRMLINESTATE_SHOW ||
+         pImpl->aLeftLine.aState == SVX_FRMLINESTATE_DONT_CARE )
     {
-        if ( theLeftLine.theState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = theLeftLine.aColor;
+        if ( pImpl->aLeftLine.aState == SVX_FRMLINESTATE_SHOW )
+            aFillColor = pImpl->aLeftLine.aColor;
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -549,37 +588,37 @@ void SvxFrameSelector::ShowLines()
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
-            theLeftLine.aStartPos,
-            theLeftLine.aMidPos,
+            pImpl->aLeftLine.aStartPos,
+            pImpl->aLeftLine.aMidPos,
             FALSE,
-            theLeftLine.theStyle,   // dline
+            pImpl->aLeftLine.aStyle,   // dline
             SvxFrameLine::NO_LINE,  // lb
-            theLeftLine.theStyle,   // lLine
-            theHorLine.theStyle,    // lt
+            pImpl->aLeftLine.aStyle,   // lLine
+            pImpl->aHorLine.aStyle,    // lt
             SvxFrameLine::NO_LINE,  // rb
             SvxFrameLine::NO_LINE,  // rLine
-            theTopLine.theStyle     // rt
+            pImpl->aTopLine.aStyle     // rt
         );
 
         DrawFrameLine_Impl( aVirDev,
-            theLeftLine.aMidPos,
-            theLeftLine.aEndPos,
+            pImpl->aLeftLine.aMidPos,
+            pImpl->aLeftLine.aEndPos,
             FALSE,
-            theLeftLine.theStyle,   // dline
+            pImpl->aLeftLine.aStyle,   // dline
             SvxFrameLine::NO_LINE,  // lb
             SvxFrameLine::NO_LINE,  // lLine
-            theBottomLine.theStyle, // lt
+            pImpl->aBottomLine.aStyle, // lt
             SvxFrameLine::NO_LINE,  // rb
-            theLeftLine.theStyle,   // rLine
-            theHorLine.theStyle     // rt
+            pImpl->aLeftLine.aStyle,   // rLine
+            pImpl->aHorLine.aStyle     // rt
         );
     }
 
-    if ( theRightLine.theState == SVX_FRMLINESTATE_SHOW ||
-         theRightLine.theState == SVX_FRMLINESTATE_DONT_CARE )
+    if ( pImpl->aRightLine.aState == SVX_FRMLINESTATE_SHOW ||
+         pImpl->aRightLine.aState == SVX_FRMLINESTATE_DONT_CARE )
     {
-        if ( theRightLine.theState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = theRightLine.aColor;
+        if ( pImpl->aRightLine.aState == SVX_FRMLINESTATE_SHOW )
+            aFillColor = pImpl->aRightLine.aColor;
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -589,37 +628,37 @@ void SvxFrameSelector::ShowLines()
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
-            theRightLine.aStartPos,
-            theRightLine.aMidPos,
+            pImpl->aRightLine.aStartPos,
+            pImpl->aRightLine.aMidPos,
             FALSE,
-            theRightLine.theStyle,  // dline
-            theHorLine.theStyle,    // rb
-            theRightLine.theStyle,  // lLine
+            pImpl->aRightLine.aStyle,  // dline
+            pImpl->aHorLine.aStyle,    // rb
+            pImpl->aRightLine.aStyle,  // lLine
             SvxFrameLine::NO_LINE,  // rt
-            theTopLine.theStyle,    // lb
+            pImpl->aTopLine.aStyle,    // lb
             SvxFrameLine::NO_LINE,  // eLine
             SvxFrameLine::NO_LINE   // lt
         );
 
         DrawFrameLine_Impl( aVirDev,
-            theRightLine.aMidPos,
-            theRightLine.aEndPos,
+            pImpl->aRightLine.aMidPos,
+            pImpl->aRightLine.aEndPos,
             FALSE,
-            theRightLine.theStyle,  // dline
-            theBottomLine.theStyle, // rb
+            pImpl->aRightLine.aStyle,  // dline
+            pImpl->aBottomLine.aStyle, // rb
             SvxFrameLine::NO_LINE,  // lLine
             SvxFrameLine::NO_LINE,  // lt
-            theHorLine.theStyle,    // lb
-            theRightLine.theStyle,  // lLine
+            pImpl->aHorLine.aStyle,    // lb
+            pImpl->aRightLine.aStyle,  // lLine
             SvxFrameLine::NO_LINE   // rt
         );
     }
 
-    if ( theTopLine.theState == SVX_FRMLINESTATE_SHOW ||
-         theTopLine.theState == SVX_FRMLINESTATE_DONT_CARE )
+    if ( pImpl->aTopLine.aState == SVX_FRMLINESTATE_SHOW ||
+         pImpl->aTopLine.aState == SVX_FRMLINESTATE_DONT_CARE )
     {
-        if ( theTopLine.theState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = theTopLine.aColor;
+        if ( pImpl->aTopLine.aState == SVX_FRMLINESTATE_SHOW )
+            aFillColor = pImpl->aTopLine.aColor;
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -629,37 +668,37 @@ void SvxFrameSelector::ShowLines()
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
-            theTopLine.aStartPos,
-            theTopLine.aMidPos,
+            pImpl->aTopLine.aStartPos,
+            pImpl->aTopLine.aMidPos,
             TRUE,
-            theTopLine.theStyle,    // dline
+            pImpl->aTopLine.aStyle,    // dline
             SvxFrameLine::NO_LINE,  // lt
             SvxFrameLine::NO_LINE,  // lLine
-            theLeftLine.theStyle,   // lb
+            pImpl->aLeftLine.aStyle,   // lb
             SvxFrameLine::NO_LINE,  // rt
-            theTopLine.theStyle,    // rLine
-            theVerLine.theStyle     // rb
+            pImpl->aTopLine.aStyle,    // rLine
+            pImpl->aVerLine.aStyle     // rb
         );
 
         DrawFrameLine_Impl( aVirDev,
-            theTopLine.aMidPos,
-            theTopLine.aEndPos,
+            pImpl->aTopLine.aMidPos,
+            pImpl->aTopLine.aEndPos,
             TRUE,
-            theTopLine.theStyle,    // dline
+            pImpl->aTopLine.aStyle,    // dline
             SvxFrameLine::NO_LINE,  // lt
-            theTopLine.theStyle,    // lLine
-            theVerLine.theStyle,    // lb
+            pImpl->aTopLine.aStyle,    // lLine
+            pImpl->aVerLine.aStyle,    // lb
             SvxFrameLine::NO_LINE,  // rt
             SvxFrameLine::NO_LINE,  // rLine
-            theRightLine.theStyle   // rb
+            pImpl->aRightLine.aStyle   // rb
         );
     }
 
-    if ( theBottomLine.theState == SVX_FRMLINESTATE_SHOW ||
-         theBottomLine.theState == SVX_FRMLINESTATE_DONT_CARE )
+    if ( pImpl->aBottomLine.aState == SVX_FRMLINESTATE_SHOW ||
+         pImpl->aBottomLine.aState == SVX_FRMLINESTATE_DONT_CARE )
     {
-        if ( theBottomLine.theState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = theBottomLine.aColor;
+        if ( pImpl->aBottomLine.aState == SVX_FRMLINESTATE_SHOW )
+            aFillColor = pImpl->aBottomLine.aColor;
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -669,33 +708,33 @@ void SvxFrameSelector::ShowLines()
         aVirDev.SetFillColor( aFillColor );
 
         DrawFrameLine_Impl( aVirDev,
-            theBottomLine.aStartPos,
-            theBottomLine.aMidPos,
+            pImpl->aBottomLine.aStartPos,
+            pImpl->aBottomLine.aMidPos,
             TRUE,
-            theBottomLine.theStyle, // dline
-            theLeftLine.theStyle,   // lt
+            pImpl->aBottomLine.aStyle, // dline
+            pImpl->aLeftLine.aStyle,   // lt
             SvxFrameLine::NO_LINE,  // lLine
             SvxFrameLine::NO_LINE,  // lb
-            theVerLine.theStyle,    // rt
-            theBottomLine.theStyle, // rLine
+            pImpl->aVerLine.aStyle,    // rt
+            pImpl->aBottomLine.aStyle, // rLine
             SvxFrameLine::NO_LINE   // rb
         );
 
         DrawFrameLine_Impl( aVirDev,
-            theBottomLine.aMidPos,
-            theBottomLine.aEndPos,
+            pImpl->aBottomLine.aMidPos,
+            pImpl->aBottomLine.aEndPos,
             TRUE,
-            theBottomLine.theStyle, // dline
-            theVerLine.theStyle,    // lt
-            theBottomLine.theStyle, // lLine
+            pImpl->aBottomLine.aStyle, // dline
+            pImpl->aVerLine.aStyle,    // lt
+            pImpl->aBottomLine.aStyle, // lLine
             SvxFrameLine::NO_LINE,  // lb
-            theRightLine.theStyle,  // rt
+            pImpl->aRightLine.aStyle,  // rt
             SvxFrameLine::NO_LINE,  // rLine
             SvxFrameLine::NO_LINE   // rb
         );
     }
 
-    theBmp = aVirDev.GetBitmap( Point(0,0), theBmp.GetSizePixel() );
+    pImpl->aBackBmp = aVirDev.GetBitmap( Point(0,0), pImpl->aBackBmp.GetSizePixel() );
 
 //    if ( eShadow != SVX_FRMSHADOW_NONE )
 //        ShowShadow();
@@ -705,30 +744,30 @@ void SvxFrameSelector::ShowLines()
 
 // -----------------------------------------------------------------------
 
-void SvxFrameSelector::SetCurLineStyle( const SvxLineStruct& aStyle )
+void SvxFrameSelector::SetCurLineStyle( const SvxLineStruct& rStyle )
 {
-    theCurLineStyle = aStyle;
+    pImpl->aCurLineStyle = rStyle;
 
-    if ( theLeftLine.bIsSelected )      theLeftLine.SetStyle( aStyle );
-    if ( theRightLine.bIsSelected )     theRightLine.SetStyle( aStyle );
-    if ( theTopLine.bIsSelected )       theTopLine.SetStyle( aStyle );
-    if ( theBottomLine.bIsSelected )    theBottomLine.SetStyle( aStyle );
-    if ( theHorLine.bIsSelected )       theHorLine.SetStyle( aStyle );
-    if ( theVerLine.bIsSelected )       theVerLine.SetStyle( aStyle );
+    if ( pImpl->aLeftLine.bIsSelected )      pImpl->aLeftLine.SetStyle( rStyle );
+    if ( pImpl->aRightLine.bIsSelected )     pImpl->aRightLine.SetStyle( rStyle );
+    if ( pImpl->aTopLine.bIsSelected )       pImpl->aTopLine.SetStyle( rStyle );
+    if ( pImpl->aBottomLine.bIsSelected )    pImpl->aBottomLine.SetStyle( rStyle );
+    if ( pImpl->aHorLine.bIsSelected )       pImpl->aHorLine.SetStyle( rStyle );
+    if ( pImpl->aVerLine.bIsSelected )       pImpl->aVerLine.SetStyle( rStyle );
 }
 
 //------------------------------------------------------------------------
 
 void SvxFrameSelector::SetCurLineColor( const Color& aColor )
 {
-    theCurLineCol = aColor;
+    pImpl->aCurLineCol = aColor;
 
-    if ( theLeftLine.bIsSelected )      theLeftLine.aColor   = aColor;
-    if ( theRightLine.bIsSelected )     theRightLine.aColor  = aColor;
-    if ( theTopLine.bIsSelected )       theTopLine.aColor    = aColor;
-    if ( theBottomLine.bIsSelected )    theBottomLine.aColor = aColor;
-    if ( theHorLine.bIsSelected )       theHorLine.aColor    = aColor;
-    if ( theVerLine.bIsSelected )       theVerLine.aColor    = aColor;
+    if ( pImpl->aLeftLine.bIsSelected )      pImpl->aLeftLine.aColor   = aColor;
+    if ( pImpl->aRightLine.bIsSelected )     pImpl->aRightLine.aColor  = aColor;
+    if ( pImpl->aTopLine.bIsSelected )       pImpl->aTopLine.aColor    = aColor;
+    if ( pImpl->aBottomLine.bIsSelected )    pImpl->aBottomLine.aColor = aColor;
+    if ( pImpl->aHorLine.bIsSelected )       pImpl->aHorLine.aColor    = aColor;
+    if ( pImpl->aVerLine.bIsSelected )       pImpl->aVerLine.aColor    = aColor;
 }
 
 //------------------------------------------------------------------------
@@ -738,7 +777,7 @@ void SvxFrameSelector::DrawContents_Impl( OutputDevice& rVirDev )
     /*
      * Malen des Inhaltes:
      */
-    if ( eSel == SVX_FRMSELTYPE_TABLE )
+    if ( pImpl->eSel == SVX_FRMSELTYPE_TABLE )
     {
         Color aPrevLineColor = rVirDev.GetLineColor();
         rVirDev.SetLineColor( Color( COL_LIGHTGRAY ) );
@@ -746,20 +785,20 @@ void SvxFrameSelector::DrawContents_Impl( OutputDevice& rVirDev )
         rVirDev.SetFillColor( Color( COL_LIGHTGRAY ) );
 
         Size aContentsSize =
-            Size( theVerLine.aStartPos.X() - theLeftLine.aStartPos.X() - 8,
-                  theHorLine.aStartPos.Y() - theTopLine.aStartPos.Y() - 8 );
+            Size( pImpl->aVerLine.aStartPos.X() - pImpl->aLeftLine.aStartPos.X() - 8,
+                  pImpl->aHorLine.aStartPos.Y() - pImpl->aTopLine.aStartPos.Y() - 8 );
 
         // links-oben
-        rVirDev.DrawRect( Rectangle( theLeftLine.aStartPos + Point( 4, 4 ),
+        rVirDev.DrawRect( Rectangle( pImpl->aLeftLine.aStartPos + Point( 4, 4 ),
                                      aContentsSize ) );
         // rechts-oben
-        rVirDev.DrawRect( Rectangle( theVerLine.aStartPos + Point( 4, 4 ),
+        rVirDev.DrawRect( Rectangle( pImpl->aVerLine.aStartPos + Point( 4, 4 ),
                                      aContentsSize ) );
         // links-unten
-        rVirDev.DrawRect( Rectangle( theHorLine.aStartPos + Point( 4, 4 ),
+        rVirDev.DrawRect( Rectangle( pImpl->aHorLine.aStartPos + Point( 4, 4 ),
                                      aContentsSize ) );
         // rechts-unten
-        rVirDev.DrawRect( Rectangle( theHorLine.aMidPos + Point( 4, 4 ),
+        rVirDev.DrawRect( Rectangle( pImpl->aHorLine.aMidPos + Point( 4, 4 ),
                                      aContentsSize ) );
 
         rVirDev.SetLineColor( aPrevLineColor );
@@ -772,41 +811,41 @@ void SvxFrameSelector::DrawContents_Impl( OutputDevice& rVirDev )
         Color aPrevFillColor = rVirDev.GetFillColor();
         rVirDev.SetFillColor( Color( COL_LIGHTGRAY ) );
         Size aContentsSize =
-            Size( theRightLine.aStartPos.X() - theLeftLine.aStartPos.X() - 8 ,
-                  theBottomLine.aStartPos.Y() - theLeftLine.aStartPos.Y() - 8 );
+            Size( pImpl->aRightLine.aStartPos.X() - pImpl->aLeftLine.aStartPos.X() - 8 ,
+                  pImpl->aBottomLine.aStartPos.Y() - pImpl->aLeftLine.aStartPos.Y() - 8 );
 
-        rVirDev.DrawRect( Rectangle( theLeftLine.aStartPos + Point( 4, 4 ),
+        rVirDev.DrawRect( Rectangle( pImpl->aLeftLine.aStartPos + Point( 4, 4 ),
                                      aContentsSize ) );
 
     /* symbolisierter Paragraph ist nicht gewuenscht - vielleicht spaeter mal wieder...
         Size aContentsSize =
-            Size( theRightLine.aStartPos.X() - theLeftLine.aStartPos.X() - 8,
-                  theBottomLine.aStartPos.Y() - theLeftLine.aStartPos.Y() - 13 );
+            Size( pImpl->aRightLine.aStartPos.X() - pImpl->aLeftLine.aStartPos.X() - 8,
+                  pImpl->aBottomLine.aStartPos.Y() - pImpl->aLeftLine.aStartPos.Y() - 13 );
 
-        rVirDev.DrawRect( Rectangle( theLeftLine.aStartPos + Point( 4, 4 ),
+        rVirDev.DrawRect( Rectangle( pImpl->aLeftLine.aStartPos + Point( 4, 4 ),
                                      aContentsSize ) );
-        rVirDev.DrawRect( Rectangle( theLeftLine.aEndPos + Point( 4, -13 ),
+        rVirDev.DrawRect( Rectangle( pImpl->aLeftLine.aEndPos + Point( 4, -13 ),
                                      Size( 20, 8 ) ) );
     */
         /* -------------------------------------------------------------------
             kann StarWriter noch nicht - vielleicht spaeter mal:
             Size    aContentsSize =
-                    Size(  theRightLine.aStartPos.X()
-                         - theLeftLine.aStartPos.X()
+                    Size(  pImpl->aRightLine.aStartPos.X()
+                         - pImpl->aLeftLine.aStartPos.X()
                          - 8,
-                           theHorLine.aStartPos.Y()
-                         - theLeftLine.aStartPos.Y()
+                           pImpl->aHorLine.aStartPos.Y()
+                         - pImpl->aLeftLine.aStartPos.Y()
                          - 13 );
 
             // oben
-            rVirDev.DrawRect( Rectangle( theLeftLine.aStartPos + Point(4,4),
+            rVirDev.DrawRect( Rectangle( pImpl->aLeftLine.aStartPos + Point(4,4),
                                          aContentsSize ) );
-            rVirDev.DrawRect( Rectangle( theLeftLine.aMidPos + Point(4,-13),
+            rVirDev.DrawRect( Rectangle( pImpl->aLeftLine.aMidPos + Point(4,-13),
                                          Size(20,8) ) );
             // unten
-            rVirDev.DrawRect( Rectangle( theLeftLine.aMidPos + Point(4,4),
+            rVirDev.DrawRect( Rectangle( pImpl->aLeftLine.aMidPos + Point(4,4),
                                          aContentsSize ) );
-            rVirDev.DrawRect( Rectangle( theLeftLine.aEndPos + Point(4,-13),
+            rVirDev.DrawRect( Rectangle( pImpl->aLeftLine.aEndPos + Point(4,-13),
                                          Size(20,8) ) );
         --------------------------------------------------------------------*/
     }
@@ -823,13 +862,13 @@ void SvxFrameSelector::SelectLine( SvxFrameSelectorLine eNewLine, BOOL bSet )
         ( bSet && ( eNewLine != SVX_FRMSELLINE_NONE ) ) ?
             rStyleSettings.GetFieldTextColor() : rStyleSettings.GetFieldColor() );
 
-    long nX    = theBmp.GetSizePixel().Width();
-    long nY    = theBmp.GetSizePixel().Height();
-    long nXMid = theVerLine.aStartPos.X();
-    long nYMid = theHorLine.aStartPos.Y();
+    long nX    = pImpl->aBackBmp.GetSizePixel().Width();
+    long nY    = pImpl->aBackBmp.GetSizePixel().Height();
+    long nXMid = pImpl->aVerLine.aStartPos.X();
+    long nYMid = pImpl->aHorLine.aStartPos.Y();
 
-    aVirDev.SetOutputSizePixel( theBmp.GetSizePixel() );
-    aVirDev.DrawBitmap( Point( 0, 0 ), theBmp );
+    aVirDev.SetOutputSizePixel( pImpl->aBackBmp.GetSizePixel() );
+    aVirDev.DrawBitmap( Point( 0, 0 ), pImpl->aBackBmp );
 
     switch ( eNewLine )
     {
@@ -839,7 +878,7 @@ void SvxFrameSelector::SelectLine( SvxFrameSelectorLine eNewLine, BOOL bSet )
                           SVX_SELARROWTYPE_DOWN );
             DrawSelArrow_Impl( aVirDev, Point( 13, nY - 8 ), aDrawColor,
                           SVX_SELARROWTYPE_UP );
-            theLeftLine.bIsSelected = bSet;
+            pImpl->aLeftLine.bIsSelected = bSet;
         }
         break;
 
@@ -849,7 +888,7 @@ void SvxFrameSelector::SelectLine( SvxFrameSelectorLine eNewLine, BOOL bSet )
                           SVX_SELARROWTYPE_DOWN );
             DrawSelArrow_Impl( aVirDev, Point( nX - 17, nY - 8 ), aDrawColor,
                           SVX_SELARROWTYPE_UP );
-            theRightLine.bIsSelected = bSet;
+            pImpl->aRightLine.bIsSelected = bSet;
         }
         break;
 
@@ -859,7 +898,7 @@ void SvxFrameSelector::SelectLine( SvxFrameSelectorLine eNewLine, BOOL bSet )
                           SVX_SELARROWTYPE_RIGHT );
             DrawSelArrow_Impl( aVirDev, Point( nX - 8, 13 ), aDrawColor,
                           SVX_SELARROWTYPE_LEFT );
-            theTopLine.bIsSelected = bSet;
+            pImpl->aTopLine.bIsSelected = bSet;
         }
         break;
 
@@ -869,29 +908,29 @@ void SvxFrameSelector::SelectLine( SvxFrameSelectorLine eNewLine, BOOL bSet )
                           SVX_SELARROWTYPE_RIGHT );
             DrawSelArrow_Impl( aVirDev, Point( nX - 8, nY - 17 ), aDrawColor,
                           SVX_SELARROWTYPE_LEFT );
-            theBottomLine.bIsSelected = bSet;
+            pImpl->aBottomLine.bIsSelected = bSet;
         }
         break;
 
         case SVX_FRMSELLINE_HOR:
-        if ( eSel == SVX_FRMSELTYPE_TABLE )
+        if ( pImpl->eSel == SVX_FRMSELTYPE_TABLE )
         {
             DrawSelArrow_Impl( aVirDev, Point( 3, nYMid - 2 ), aDrawColor,
                           SVX_SELARROWTYPE_RIGHT );
             DrawSelArrow_Impl( aVirDev, Point( nX - 8, nYMid - 2 ), aDrawColor,
                           SVX_SELARROWTYPE_LEFT );
-            theHorLine.bIsSelected = bSet;
+            pImpl->aHorLine.bIsSelected = bSet;
         }
         break;
 
         case SVX_FRMSELLINE_VER:
-        if ( eSel == SVX_FRMSELTYPE_TABLE )
+        if ( pImpl->eSel == SVX_FRMSELTYPE_TABLE )
         {
             DrawSelArrow_Impl( aVirDev, Point( nXMid - 2, 3 ), aDrawColor,
                           SVX_SELARROWTYPE_DOWN);
             DrawSelArrow_Impl( aVirDev, Point( nXMid - 2, nY - 8 ), aDrawColor,
                           SVX_SELARROWTYPE_UP );
-            theVerLine.bIsSelected = bSet;
+            pImpl->aVerLine.bIsSelected = bSet;
         }
         break;
 
@@ -918,7 +957,7 @@ void SvxFrameSelector::SelectLine( SvxFrameSelectorLine eNewLine, BOOL bSet )
             DrawSelArrow_Impl( aVirDev, Point( nX - 8, nY - 17 ), aDrawColor,
                           SVX_SELARROWTYPE_LEFT );
 
-            if ( eSel == SVX_FRMSELTYPE_TABLE )
+            if ( pImpl->eSel == SVX_FRMSELTYPE_TABLE )
             {
                 // horizontal
                 DrawSelArrow_Impl( aVirDev, Point( 3, nYMid-2 ), aDrawColor,
@@ -933,15 +972,15 @@ void SvxFrameSelector::SelectLine( SvxFrameSelectorLine eNewLine, BOOL bSet )
                               SVX_SELARROWTYPE_UP );
             }
 
-            theLeftLine.bIsSelected     =
-            theRightLine.bIsSelected    =
-            theTopLine.bIsSelected      =
-            theBottomLine.bIsSelected   =
-            theHorLine.bIsSelected      =
-            theVerLine.bIsSelected      = FALSE;
+            pImpl->aLeftLine.bIsSelected     =
+            pImpl->aRightLine.bIsSelected    =
+            pImpl->aTopLine.bIsSelected      =
+            pImpl->aBottomLine.bIsSelected   =
+            pImpl->aHorLine.bIsSelected      =
+            pImpl->aVerLine.bIsSelected      = FALSE;
         }
     }
-    theBmp = aVirDev.GetBitmap( Point( 0, 0 ), theBmp.GetSizePixel() );
+    pImpl->aBackBmp = aVirDev.GetBitmap( Point( 0, 0 ), pImpl->aBackBmp.GetSizePixel() );
     Invalidate( INVALIDATE_NOERASE );
     if(aSelectLink.IsSet())
         aSelectLink.Call(0);
@@ -997,94 +1036,50 @@ void SvxFrameSelector::DrawSelArrow_Impl(
     rDev.SetFillColor( aPrevFillColor );
 }
 
-//------------------------------------------------------------------------
-
-void SvxFrameSelector::SetShadowPos( SvxFrameShadow eShadowPos )
-{
-    eShadow = eShadowPos;
-}
-
-//------------------------------------------------------------------------
-
-//void SvxFrameSelector::ShowShadow()
-//{
-//    VirtualDevice aVirDev;
-//    Bitmap theFrameBmp;
-//    Color aWhiteCol( COL_WHITE );
-//    Color theDrawCol =
-//        eShadow != SVX_FRMSHADOW_NONE ? theShadowCol : aWhiteCol;
-//    long nX = theBmp.GetSizePixel().Width();
-//    long nY = theBmp.GetSizePixel().Height();
-//    Point theOldPos;
-//    Rectangle theFrameRect = theBoundingRect;
-//    Rectangle theEraseRect( Point( 16, 16 ), Size( nX - 31, nY - 31 ) );
-//
-//    aVirDev.SetOutputSizePixel( theBmp.GetSizePixel() );
-//    aVirDev.DrawBitmap( Point( 0, 0 ), theBmp );
-//
-//    // Rahmen-Bitmap sichern
-//    theFrameBmp = aVirDev.GetBitmap( theFrameRect.TopLeft(),
-//                                     theFrameRect.GetSize() );
-//    // aktuellen Schatten entfernen:
-//    aVirDev.SetLineColor( aWhiteCol );
-//    aVirDev.SetFillColor( aWhiteCol );
-//    aVirDev.DrawRect( theEraseRect );
-//    aVirDev.SetLineColor( theDrawCol );
-//    aVirDev.SetFillColor( theDrawCol );
-//
-//    if ( eShadow != SVX_FRMSHADOW_NONE )
-//    {
-//        Point aDeltaPnt( 3, 3 );
-//
-//        switch ( eShadow )
-//        {
-//            case SVX_FRMSHADOW_TOP_RIGHT:
-//                aDeltaPnt.Y() *= -1; break;
-//
-//            case SVX_FRMSHADOW_BOT_LEFT:
-//                aDeltaPnt.X() *= -1;
-//                break;
-//
-//            case SVX_FRMSHADOW_TOP_LEFT:
-//                aDeltaPnt.X() *= -1; aDeltaPnt.Y() *= -1;
-//                break;
-//        }
-//        Rectangle aTempRect( Point( theFrameRect.Left()+aDeltaPnt.X(),
-//                                    theFrameRect.Top()+aDeltaPnt.Y() ),
-//                             theFrameRect.GetSize() );
-//        aVirDev.DrawRect( aTempRect );
-//    }
-//    aVirDev.DrawBitmap( theFrameRect.TopLeft(), theFrameBmp );
-//    theBmp = aVirDev.GetBitmap( Point( 0, 0 ), theBmp.GetSizePixel() );
-//    Invalidate( INVALIDATE_NOERASE );
-//}
-
-//------------------------------------------------------------------------
-
-void SvxFrameSelector::SetShadowColor( const Color& aColor )
-{
-    theShadowCol = aColor;
-}
 
 // -----------------------------------------------------------------------
-
-Color SvxFrameSelector::GetShadowColor() const
+void lcl_InvertTracking(Window& rWin, const SvxFrameLine& rLine, sal_Bool bHori)
 {
-    return theShadowCol;
+    Rectangle aCompleteRect;
+    aCompleteRect.Left() = bHori ? rLine.GetStartPos().X() : rLine.GetStartPos().X() - 2;
+    aCompleteRect.Right() = bHori ? rLine.GetEndPos().X() : rLine.GetEndPos().X() + 2;
+    aCompleteRect.Top() = bHori ? rLine.GetStartPos().Y() - 2 : rLine.GetStartPos().Y();
+    aCompleteRect.Bottom() = bHori ? rLine.GetStartPos().Y() + 2 : rLine.GetEndPos().Y();
+    rWin.InvertTracking(aCompleteRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
 }
-
-// -----------------------------------------------------------------------
-
-SvxFrameShadow SvxFrameSelector::GetShadowPos() const
-{
-    return eShadow;
-}
-
-// -----------------------------------------------------------------------
 
 void SvxFrameSelector::Paint( const Rectangle& )
 {
-    DrawBitmap( Point( 0, 0 ), theBmp );
+    DrawBitmap( Point( 0, 0 ), pImpl->aBackBmp );
+    if(HasFocus())
+    {
+        if(pImpl->aLeftLine.bIsSelected || pImpl->aRightLine.bIsSelected ||
+            pImpl->aTopLine.bIsSelected || pImpl->aBottomLine.bIsSelected ||
+                pImpl->aHorLine.bIsSelected || pImpl->aVerLine.bIsSelected )
+        {
+            if(pImpl->aLeftLine.bIsSelected)
+                lcl_InvertTracking(*this, pImpl->aLeftLine, sal_False);
+            if(pImpl->aRightLine.bIsSelected)
+                lcl_InvertTracking(*this, pImpl->aRightLine, sal_False);
+            if(pImpl->aTopLine.bIsSelected)
+                lcl_InvertTracking(*this, pImpl->aTopLine, sal_True);
+            if(pImpl->aBottomLine.bIsSelected)
+                lcl_InvertTracking(*this, pImpl->aBottomLine, sal_True);
+            if(pImpl->aHorLine.bIsSelected)
+                lcl_InvertTracking(*this, pImpl->aHorLine, sal_True);
+            if(pImpl->aVerLine.bIsSelected)
+                lcl_InvertTracking(*this, pImpl->aVerLine, sal_False);
+        }
+        else
+        {
+            Size aSize = GetSizePixel();
+            aSize.Width() -= 3;
+            aSize.Height() -= 3;
+            Rectangle aCompleteRect(Point(0, 0), aSize);
+            InvertTracking(aCompleteRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
+        }
+    }
+
 }
 
 // -----------------------------------------------------------------------
@@ -1114,82 +1109,83 @@ void SvxFrameSelector::MouseButtonUp( const MouseEvent& rMEvt )
      * o Click auf die gleiche Linie -> Toggle SHOW/HIDE/DONT_CARE
      */
 
+    GrabFocus();
     if ( rMEvt.IsLeft() )
     {
         Point aBtnUpPos( rMEvt.GetPosPixel() );
 
-        if ( !bIsClicked && !bIsDontCare )
+        if ( !bIsClicked && !pImpl->bIsDontCare )
         {
             bIsClicked = TRUE;
 
             // wenn Linien auf DontCare sind, muessen diese auf HIDE
             // gesetzt werden (ausser der aktuellen Linie)
 
-            if ( theLeftLine.theState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !aSpotLeft.IsInside( aBtnUpPos ) )
+            if ( pImpl->aLeftLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
+                 !pImpl->aSpotLeft.IsInside( aBtnUpPos ) )
             {
-                theLeftLine.SetStyle( SvxFrameLine::NO_LINE );
+                pImpl->aLeftLine.SetStyle( SvxFrameLine::NO_LINE );
             }
-            if ( theRightLine.theState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !aSpotRight.IsInside( aBtnUpPos ) )
+            if ( pImpl->aRightLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
+                 !pImpl->aSpotRight.IsInside( aBtnUpPos ) )
             {
-                theRightLine.SetStyle( SvxFrameLine::NO_LINE );
+                pImpl->aRightLine.SetStyle( SvxFrameLine::NO_LINE );
             }
-            if ( theTopLine.theState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !aSpotTop.IsInside( aBtnUpPos ) )
+            if ( pImpl->aTopLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
+                 !pImpl->aSpotTop.IsInside( aBtnUpPos ) )
             {
-                theTopLine.SetStyle( SvxFrameLine::NO_LINE );
+                pImpl->aTopLine.SetStyle( SvxFrameLine::NO_LINE );
             }
-            if ( theBottomLine.theState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !aSpotBottom.IsInside( aBtnUpPos ) )
+            if ( pImpl->aBottomLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
+                 !pImpl->aSpotBottom.IsInside( aBtnUpPos ) )
             {
-                theBottomLine.SetStyle( SvxFrameLine::NO_LINE );
+                pImpl->aBottomLine.SetStyle( SvxFrameLine::NO_LINE );
             }
-            if ( theVerLine.theState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !aSpotVer.IsInside( aBtnUpPos ) )
+            if ( pImpl->aVerLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
+                 !pImpl->aSpotVer.IsInside( aBtnUpPos ) )
             {
-                theVerLine.SetStyle( SvxFrameLine::NO_LINE );
+                pImpl->aVerLine.SetStyle( SvxFrameLine::NO_LINE );
             }
-            if ( theHorLine.theState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !aSpotHor.IsInside( aBtnUpPos ) )
+            if ( pImpl->aHorLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
+                 !pImpl->aSpotHor.IsInside( aBtnUpPos ) )
             {
-                theHorLine.SetStyle( SvxFrameLine::NO_LINE );
+                pImpl->aHorLine.SetStyle( SvxFrameLine::NO_LINE );
             }
         }
 
-        if ( aSpotLeft.IsInside( aBtnUpPos ) )
+        if ( pImpl->aSpotLeft.IsInside( aBtnUpPos ) )
         {
-            LineClicked_Impl( theLeftLine, rMEvt.IsShift(),
+            LineClicked_Impl( pImpl->aLeftLine, rMEvt.IsShift(),
                          ( rMEvt.GetClicks() != 1 ) );
             SelectLine( SVX_FRMSELLINE_LEFT );
         }
-        else if ( aSpotRight.IsInside( aBtnUpPos ) )
+        else if ( pImpl->aSpotRight.IsInside( aBtnUpPos ) )
         {
-            LineClicked_Impl( theRightLine, rMEvt.IsShift(),
+            LineClicked_Impl( pImpl->aRightLine, rMEvt.IsShift(),
                          ( rMEvt.GetClicks() != 1 ) );
             SelectLine( SVX_FRMSELLINE_RIGHT );
         }
-        else if ( aSpotTop.IsInside( aBtnUpPos ) )
+        else if ( pImpl->aSpotTop.IsInside( aBtnUpPos ) )
         {
-            LineClicked_Impl( theTopLine, rMEvt.IsShift(),
+            LineClicked_Impl( pImpl->aTopLine, rMEvt.IsShift(),
                          ( rMEvt.GetClicks() != 1 ) );
             SelectLine( SVX_FRMSELLINE_TOP );
         }
-        else if ( aSpotBottom.IsInside( aBtnUpPos ) )
+        else if ( pImpl->aSpotBottom.IsInside( aBtnUpPos ) )
         {
-            LineClicked_Impl( theBottomLine, rMEvt.IsShift(),
+            LineClicked_Impl( pImpl->aBottomLine, rMEvt.IsShift(),
                          ( rMEvt.GetClicks() != 1 ) );
             SelectLine( SVX_FRMSELLINE_BOTTOM );
         }
-        else if ( aSpotVer.IsInside( aBtnUpPos ) &&
-                  aSpotHor.IsInside( aBtnUpPos ) )
+        else if ( pImpl->aSpotVer.IsInside( aBtnUpPos ) &&
+                  pImpl->aSpotHor.IsInside( aBtnUpPos ) )
         {
-            if ( !theHorLine.bIsSelected || !theVerLine.bIsSelected )
+            if ( !pImpl->aHorLine.bIsSelected || !pImpl->aVerLine.bIsSelected )
             {
-                theVerLine.aColor   =
-                theHorLine.aColor   = theCurLineCol;
-                theVerLine.SetStyle( theCurLineStyle );
-                theHorLine.SetStyle( theCurLineStyle );
+                pImpl->aVerLine.aColor   =
+                pImpl->aHorLine.aColor   = pImpl->aCurLineCol;
+                pImpl->aVerLine.SetStyle( pImpl->aCurLineStyle );
+                pImpl->aHorLine.SetStyle( pImpl->aCurLineStyle );
 
                 if ( !rMEvt.IsShift() )
                     SelectLine( SVX_FRMSELLINE_NONE );
@@ -1197,25 +1193,25 @@ void SvxFrameSelector::MouseButtonUp( const MouseEvent& rMEvt )
                 SelectLine( SVX_FRMSELLINE_VER );
                 SelectLine( SVX_FRMSELLINE_HOR );
             }
-            else if ( theHorLine.bIsSelected && theVerLine.bIsSelected )
+            else if ( pImpl->aHorLine.bIsSelected && pImpl->aVerLine.bIsSelected )
             {
                 if ( !rMEvt.IsShift() )
                     SelectLine( SVX_FRMSELLINE_NONE );
                 SelectLine( SVX_FRMSELLINE_VER );
                 SelectLine( SVX_FRMSELLINE_HOR );
-                LineClicked_Impl( theVerLine, TRUE, ( rMEvt.GetClicks() != 1 ) );
-                LineClicked_Impl( theHorLine, TRUE, ( rMEvt.GetClicks() != 1 ) );
+                LineClicked_Impl( pImpl->aVerLine, TRUE, ( rMEvt.GetClicks() != 1 ) );
+                LineClicked_Impl( pImpl->aHorLine, TRUE, ( rMEvt.GetClicks() != 1 ) );
             }
         }
-        else if ( aSpotVer.IsInside( aBtnUpPos ) )
+        else if ( pImpl->aSpotVer.IsInside( aBtnUpPos ) )
         {
-            LineClicked_Impl( theVerLine, rMEvt.IsShift(),
+            LineClicked_Impl( pImpl->aVerLine, rMEvt.IsShift(),
                          ( rMEvt.GetClicks() != 1 ) );
             SelectLine( SVX_FRMSELLINE_VER );
         }
-        else if ( aSpotHor.IsInside( aBtnUpPos ) )
+        else if ( pImpl->aSpotHor.IsInside( aBtnUpPos ) )
         {
-            LineClicked_Impl( theHorLine, rMEvt.IsShift(),
+            LineClicked_Impl( pImpl->aHorLine, rMEvt.IsShift(),
                          ( rMEvt.GetClicks() != 1 ) );
             SelectLine( SVX_FRMSELLINE_HOR );
         }
@@ -1232,29 +1228,29 @@ void SvxFrameSelector::LineClicked_Impl( SvxFrameLine& aLine,
 {
     if ( aLine.bIsSelected )
     {
-        int nMod = bIsDontCare ? 3 : 2;
-        aLine.theState = SvxFrameLineState(
-            ( ( (int)aLine.theState ) + ( ( !bDoubleClick ) ? 1 : 2 ) ) % nMod );
+        int nMod = pImpl->bIsDontCare ? 3 : 2;
+        aLine.aState = SvxFrameLineState(
+            ( ( (int)aLine.aState ) + ( ( !bDoubleClick ) ? 1 : 2 ) ) % nMod );
 
-        switch ( aLine.theState )
+        switch ( aLine.aState )
         {
             case SVX_FRMLINESTATE_SHOW:
-                aLine.SetStyle( theCurLineStyle );
-                aLine.aColor = theCurLineCol;
+                aLine.SetStyle( pImpl->aCurLineStyle );
+                aLine.aColor = pImpl->aCurLineCol;
                 break;
             case SVX_FRMLINESTATE_HIDE:
                 aLine.SetStyle( SvxFrameLine::NO_LINE );
                 break;
             case SVX_FRMLINESTATE_DONT_CARE:
-                aLine.theStyle = SvxFrameLine::THICK_LINE;
+                aLine.aStyle = SvxFrameLine::THICK_LINE;
                 break;
         }
     }
     else
     {
-        aLine.theState = SVX_FRMLINESTATE_SHOW;
-        aLine.aColor    = theCurLineCol;
-        aLine.SetStyle( theCurLineStyle );
+        aLine.aState = SVX_FRMLINESTATE_SHOW;
+        aLine.aColor    = pImpl->aCurLineCol;
+        aLine.SetStyle( pImpl->aCurLineStyle );
     }
 
     if ( !bShiftPressed )
@@ -1265,12 +1261,12 @@ void SvxFrameSelector::LineClicked_Impl( SvxFrameLine& aLine,
 
 BOOL    SvxFrameSelector::IsAnyLineSet() const
 {
-    if( theLeftLine.theState    == SVX_FRMLINESTATE_SHOW ||
-        theRightLine.theState   == SVX_FRMLINESTATE_SHOW ||
-        theTopLine.theState     == SVX_FRMLINESTATE_SHOW ||
-        theBottomLine.theState  == SVX_FRMLINESTATE_SHOW ||
-        theHorLine.theState     == SVX_FRMLINESTATE_SHOW ||
-        theVerLine.theState     == SVX_FRMLINESTATE_SHOW )
+    if( pImpl->aLeftLine.aState    == SVX_FRMLINESTATE_SHOW ||
+        pImpl->aRightLine.aState   == SVX_FRMLINESTATE_SHOW ||
+        pImpl->aTopLine.aState     == SVX_FRMLINESTATE_SHOW ||
+        pImpl->aBottomLine.aState  == SVX_FRMLINESTATE_SHOW ||
+        pImpl->aHorLine.aState     == SVX_FRMLINESTATE_SHOW ||
+        pImpl->aVerLine.aState     == SVX_FRMLINESTATE_SHOW )
         return TRUE;
     else
         return FALSE;
@@ -1286,3 +1282,66 @@ void SvxFrameSelector::DataChanged( const DataChangedEvent& rDCEvt )
 
     Window::DataChanged( rDCEvt );
 }
+/* -----------------------------01.02.2002 13:50------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxFrameSelector::KeyInput( const KeyEvent& rKEvt )
+{
+    sal_Bool bHandled = sal_False;
+    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    if ( !aKeyCode.GetModifier())
+    {
+        switch(aKeyCode.GetCode())
+        {
+            case KEY_SPACE:
+                //toggle current line type
+                bHandled = sal_True;
+            break;
+        }
+    }
+    if(!bHandled)
+        Window::KeyInput(rKEvt);
+}
+/* -----------------------------01.02.2002 15:34------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxFrameSelector::GetFocus()
+{
+    Invalidate();
+    Control::GetFocus();
+}
+/* -----------------------------01.02.2002 15:34------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxFrameSelector::LoseFocus()
+{
+    Invalidate();
+    Control::LoseFocus();
+}
+/* -----------------------------01.02.2002 16:54------------------------------
+
+ ---------------------------------------------------------------------------*/
+//    SvxFrameLine&       GetTop()    { return pImpl->aTopLine; }
+//    SvxFrameLine&       GetBottom() { return pImpl->aBottomLine; }
+//    SvxFrameLine&       GetLeft()   { return pImpl->aLeftLine; }
+//    SvxFrameLine&       GetRight()  { return pImpl->aRightLine; }
+//    SvxFrameLine&       GetHor()    { return pImpl->aHorLine; }
+//    SvxFrameLine&       GetVer()    { return pImpl->aVerLine; }
+
+SvxFrameLine&       SvxFrameSelector::GetAnyLine(SvxFrameSelectorLine eWhich)
+{
+    SvxFrameLine* pRet = 0;
+    switch(eWhich)
+    {
+        case SVX_FRMSELLINE_TOP:        pRet = &pImpl->aTopLine;    break;
+        case SVX_FRMSELLINE_BOTTOM:     pRet = &pImpl->aBottomLine; break;
+        case SVX_FRMSELLINE_LEFT:       pRet = &pImpl->aLeftLine;   break;
+        case SVX_FRMSELLINE_RIGHT:      pRet = &pImpl->aRightLine;  break;
+        case SVX_FRMSELLINE_HOR:        pRet = &pImpl->aHorLine;    break;
+        case SVX_FRMSELLINE_NONE:
+                DBG_ERROR("wrong line selected!")
+        case SVX_FRMSELLINE_VER:        pRet = &pImpl->aVerLine;    break;
+    }
+    return *pRet;
+}
+
