@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-22 10:52:30 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,7 +763,7 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, p )
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soh" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-        aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if( aDlg.Execute() == ERRCODE_NONE )
         {
@@ -774,7 +774,7 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, p )
             aPathURL.removeFinalSlash();
 
             // Liste speichern
-            XHatchList* pHatchList = new XHatchList( aPathURL.GetMainURL(), pXPool );
+            XHatchList* pHatchList = new XHatchList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
             pHatchList->SetName( aURL.getName() );
             if( pHatchList->Load() )
             {
@@ -853,7 +853,7 @@ IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, p )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soh" ) ) );
     }
 
-    aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         INetURLObject aURL( aDlg.GetPath() );
@@ -863,7 +863,7 @@ IMPL_LINK( SvxHatchTabPage, ClickSaveHdl_Impl, void *, p )
         aPathURL.removeFinalSlash();
 
         pHatchingList->SetName( aURL.getName() );
-        pHatchingList->SetPath( aPathURL.GetMainURL() );
+        pHatchingList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if( pHatchingList->Save() )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-05 15:43:41 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -996,7 +996,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, p )
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sob" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-        aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if ( aDlg.Execute() == ERRCODE_NONE )
         {
@@ -1008,7 +1008,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, p )
             aPathURL.removeFinalSlash();
 
             // Tabelle speichern
-            XBitmapList* pBmpList = new XBitmapList( aPathURL.GetMainURL(), pXPool );
+            XBitmapList* pBmpList = new XBitmapList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
             pBmpList->SetName( aURL.getName() );
             if( pBmpList->Load() )
             {
@@ -1091,7 +1091,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, p )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sob" ) ) );
     }
 
-    aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         INetURLObject   aURL( aDlg.GetPath() );
@@ -1101,7 +1101,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickSaveHdl_Impl, void *, p )
         aPathURL.removeFinalSlash();
 
         pBitmapList->SetName( aURL.getName() );
-        pBitmapList->SetPath( aPathURL.GetMainURL() );
+        pBitmapList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if( pBitmapList->Save() )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-22 10:53:12 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ void SvxHyperlinkNewDocTp::GetCurentItemData ( String& aStrURL, String& aStrName
             if( !aTmpURL.hasFinalSlash() )
                 aTmpURL.setFinalSlash();
             aTmpURL.Append( maCbbPath.GetText() );
-            aStrURL = aTmpURL.GetMainURL();
+            aStrURL = aTmpURL.GetMainURL( INetURLObject::NO_DECODE );
         }
     }
 
@@ -491,7 +491,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
             if( !aTmpURL.hasFinalSlash() )
                 aTmpURL.setFinalSlash();
             aTmpURL.Append( aStrNewName );
-            aTempName = aTmpURL.GetMainURL();
+            aTempName = aTmpURL.GetMainURL( INetURLObject::NO_DECODE );
         }
 
         aStrNewName = aTempName;
@@ -562,7 +562,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
             if (pViewFrame)
             {
                 //SfxViewFrame *pViewFrame = pFrame->GetCurrentViewFrame();
-                SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL() );
+                SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
                 pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
                                                       SFX_CALLMODE_SYNCHRON,

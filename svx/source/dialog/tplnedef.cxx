@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplnedef.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-22 10:52:30 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,7 +819,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, p )
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sod" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-        aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if( aDlg.Execute() == ERRCODE_NONE )
         {
@@ -830,7 +830,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickLoadHdl_Impl, void *, p )
             aPathURL.removeFinalSlash();
 
             // Liste speichern
-            XDashList* pDshLst = new XDashList( aPathURL.GetMainURL(), pXPool );
+            XDashList* pDshLst = new XDashList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
             pDshLst->SetName( aURL.getName() );
 
             if( pDshLst->Load() )
@@ -913,7 +913,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, p )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sod" ) ) );
     }
 
-    aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         INetURLObject aURL( aDlg.GetPath() );
@@ -923,7 +923,7 @@ IMPL_LINK( SvxLineDefTabPage, ClickSaveHdl_Impl, void *, p )
         aPathURL.removeFinalSlash();
 
         pDashList->SetName( aURL.getName() );
-        pDashList->SetPath( aPathURL.GetMainURL() );
+        pDashList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if( pDashList->Save() )
         {

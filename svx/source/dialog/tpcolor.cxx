@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-22 10:52:30 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,7 +769,7 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, p )
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.soc" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-        aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if ( aDlg.Execute() == ERRCODE_NONE )
         {
@@ -780,7 +780,7 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, p )
             aPathURL.removeFinalSlash();
 
             // Tabelle speichern
-            XColorTable* pColTab = new XColorTable( aPathURL.GetMainURL(), pXPool );
+            XColorTable* pColTab = new XColorTable( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
             pColTab->SetName( aURL.getName() ); // XXX
             if( pColTab->Load() )
             {
@@ -883,7 +883,7 @@ IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, p )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "soc" ) ) );
     }
 
-    aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         INetURLObject aURL( aDlg.GetPath() );
@@ -893,7 +893,7 @@ IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, p )
         aPathURL.removeFinalSlash();
 
         pColorTab->SetName( aURL.getName() );
-        pColorTab->SetPath( aPathURL.GetMainURL() );
+        pColorTab->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if( pColorTab->Save() )
         {

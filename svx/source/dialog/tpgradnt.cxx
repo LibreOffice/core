@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-22 10:52:30 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,7 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, p )
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sog" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-        aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+        aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if( aDlg.Execute() == ERRCODE_NONE )
         {
@@ -719,7 +719,7 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, p )
             aPathURL.removeFinalSlash();
 
             // Liste speichern
-            XGradientList* pGrdList = new XGradientList( aPathURL.GetMainURL(), pXPool );
+            XGradientList* pGrdList = new XGradientList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
             pGrdList->SetName( aURL.getName() );
 
             if ( pGrdList->Load() )
@@ -806,7 +806,7 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, p )
             aFile.SetExtension( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sog" ) ) );
     }
 
-    aDlg.SetDisplayDirectory( aFile.GetMainURL() );
+    aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         INetURLObject   aURL( aDlg.GetPath() );
@@ -816,7 +816,7 @@ IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, p )
         aPathURL.removeFinalSlash();
 
         pGradientList->SetName( aURL.getName() );
-        pGradientList->SetPath( aPathURL.GetMainURL() );
+        pGradientList->SetPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
         if( pGradientList->Save() )
         {

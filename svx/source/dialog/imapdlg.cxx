@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 11:08:59 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,7 +668,7 @@ void SvxIMapDlg::DoOpen()
     {
         INetURLObject aURL( aDlg.GetPath() );
         DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
         if( pIStm )
         {
@@ -743,7 +743,7 @@ BOOL SvxIMapDlg::DoSave()
             if( !aURL.getExtension().Len() )
                 aURL.setExtension( aExt );
 
-            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
+            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
 
             if( pOStm )
             {

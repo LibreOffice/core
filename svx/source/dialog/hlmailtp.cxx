@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-10 13:28:04 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,8 @@ void SvxHyperlinkMailTp::FillDlgFields ( String& aStrURL )
 
     if ( aStrScheme != aEmptyStr )
     {
-        xub_StrLen nPos = aURL.GetMainURL().Search ( aStrScheme, 0 ) + aStrScheme.Len();
-        String aStrURLc ( aURL.GetMainURL() );
+        xub_StrLen nPos = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ).Search ( aStrScheme, 0 ) + aStrScheme.Len();
+        String aStrURLc ( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
 
         if ( eProtocol == INET_PROT_MAILTO )
         {
@@ -259,7 +259,7 @@ void SvxHyperlinkMailTp::GetCurentItemData ( String& aStrURL, String& aStrName,
         eMode = (SvxLinkInsertMode) ( UINT16(eMode) | HLINK_HTMLMODE );
 
     if ( aStrURL != aEmptyStr )
-        aStrURL     = aURL.GetMainURL();
+        aStrURL     = aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
 
     if ( aStrName == aEmptyStr )
         aStrName = aStrURL;
@@ -546,7 +546,7 @@ IMPL_LINK ( SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *, EMPTYARG )
         aObj.SetMark( aMark );
 
         util::URL aURL;
-        aURL.Complete = ::rtl::OUString( aObj.GetMainURL() );
+        aURL.Complete = ::rtl::OUString( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
         uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
         if( xFactory.is() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pw $ $Date: 2000-11-22 13:40:45 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
     if ( aStrScheme != aEmptyStr )
     {
         // Show the scheme, #72740
-        maCbbTarget.SetText( aURL.GetMainURL() );
+        maCbbTarget.SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
     }
     else
         maCbbTarget.SetText ( aEmptyStr );
@@ -373,7 +373,7 @@ void SvxHyperlinkInternetTp::GetCurentItemData ( String& aStrURL, String& aStrNa
         eMode = (SvxLinkInsertMode) ( UINT16(eMode) | HLINK_HTMLMODE );
 
     if( aStrURL != aEmptyStr )
-        aStrURL = aURL.GetMainURL();
+        aStrURL = aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
 
     if( aStrName == aEmptyStr )
         aStrName = aStrURL;

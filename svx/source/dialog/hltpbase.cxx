@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-09 14:55:56 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,7 +693,7 @@ BOOL SvxHyperlinkTabPageBase::FileExists( const INetURLObject& rURL )
     {
         try
         {
-            Content     aCnt( rURL.GetMainURL(), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
+            Content     aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
             ::rtl::OUString aTitle;
 
             aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= aTitle;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-11 16:38:02 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 14:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,13 +259,13 @@ short SvxOpenGraphicDialog::Execute()
             // non-local?
             if ( INET_PROT_FILE != aObj.GetProtocol() )
             {
-                SfxMedium aMed( aObj.GetMainURL(), STREAM_READ, TRUE );
+                SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
                 aMed.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
                 aMed.DownLoad();
                 SvStream* pStream = aMed.GetInStream();
 
                 if( pStream )
-                    nImpRet = pFilter->CanImportGraphic( aObj.GetMainURL(), *pStream, nFormatNum, &nRetFormat );
+                    nImpRet = pFilter->CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream, nFormatNum, &nRetFormat );
                 else
                     nImpRet = pFilter->CanImportGraphic( aObj, nFormatNum, &nRetFormat );
 
@@ -274,7 +274,7 @@ short SvxOpenGraphicDialog::Execute()
                     if ( !pStream )
                         nImpRet = pFilter->CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
                     else
-                        nImpRet = pFilter->CanImportGraphic( aObj.GetMainURL(), *pStream,
+                        nImpRet = pFilter->CanImportGraphic( aObj.GetMainURL( INetURLObject::NO_DECODE ), *pStream,
                                                              GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
                 }
             }
