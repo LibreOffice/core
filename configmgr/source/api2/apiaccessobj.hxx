@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiaccessobj.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:32:38 $
+ *  last change: $Author: jb $ $Date: 2000-11-30 13:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,8 @@ namespace configmgr
             ApiTreeImpl&    m_rTree;
             NodeRef         m_aNode;
         public:
-            OInnerElement(UnoInterface* pUnoThis,ApiTreeImpl& rTree, NodeRef const& aNode)
-            : m_pUnoThis(pUnoThis)
-            , m_rTree(rTree)
-            , m_aNode(aNode)
-            { rTree.setNodeInstance(aNode,pUnoThis); }
+            OInnerElement(UnoInterface* pUnoThis,ApiTreeImpl& rTree, NodeRef const& aNode);
+            ~OInnerElement();
 
             virtual NodeRef             doGetNode() const;
             virtual ApiTreeImpl&        getApiTree() const;
