@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:34 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,18 +345,19 @@ void SdrPathObj::RecalcBoundRect()
     ImpAddTextToBoundRect();
 }
 
-FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrPathObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
-    // Hidden objects on masterpages, draw nothing
-    if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
-        return TRUE;
+    // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
+    //// Hidden objects on masterpages, draw nothing
+    //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
+    //  return TRUE;
 
     BOOL bHideContour(IsHideContour());
     BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
     BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
 
     // prepare ItemSet of this object
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
 
     // perepare ItemSet to avoid old XOut line drawing
     SfxItemSet aEmptySet(*rSet.GetPool());
@@ -429,13 +430,15 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         }
     }
 
-    FASTBOOL bOk=TRUE;
+    sal_Bool bOk(sal_True);
     if (HasText()) {
-        bOk=SdrTextObj::Paint(rXOut,rInfoRec);
+        bOk = SdrTextObj::DoPaintObject(rXOut,rInfoRec);
     }
-    if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-        bOk=PaintGluePoints(rXOut,rInfoRec);
-    }
+
+    // #110094#-13
+    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
+    //  bOk=PaintGluePoints(rXOut,rInfoRec);
+    //}
 
     return bOk;
 }
@@ -583,9 +586,10 @@ void SdrPathObj::TakeContour(XPolyPolygon& rPoly) const
     SdrTextObj::TakeContour(rPoly);
 }
 
-void SdrPathObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-{
-}
+//#110094#-12
+//void SdrPathObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
+//{
+//}
 
 USHORT SdrPathObj::GetHdlCount() const
 {
@@ -1436,8 +1440,8 @@ FASTBOOL SdrPathObj::EndDrag(SdrDragStat& rDrag)
             DBG_ERROR("SdrPathObj::EndDrag(): ImpSdrPathDragData ist ungueltig");
             return FALSE;
         }
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-        SendRepaintBroadcast();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        // #110094#-14 SendRepaintBroadcast();
         // Referenz auf das Polygon
         XPolygon& rXP=aPathPolygon[pHdl->GetPolyNum()];
 
@@ -1477,7 +1481,7 @@ FASTBOOL SdrPathObj::EndDrag(SdrDragStat& rDrag)
             }
         }
         SetChanged();
-        SendRepaintBroadcast();
+        BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     }
 
@@ -2820,11 +2824,11 @@ void SdrPathObj::NbcSetPathPoly(const XPolyPolygon& rPathPoly)
 
 void SdrPathObj::SetPathPoly(const XPolyPolygon& rPathPoly)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-    SendRepaintBroadcast();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    // #110094#-14 SendRepaintBroadcast();
     NbcSetPathPoly(rPathPoly);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
@@ -2833,7 +2837,7 @@ void SdrPathObj::ToggleClosed(long nOpenDistance)
     Rectangle aBoundRect0;
 
     if(pUserCall != NULL)
-        aBoundRect0 = GetBoundRect();
+        aBoundRect0 = GetLastBoundRect();
 
     FASTBOOL bClosed = IsClosed();
     FASTBOOL bBCFlag = FALSE;
@@ -2849,7 +2853,7 @@ void SdrPathObj::ToggleClosed(long nOpenDistance)
             USHORT nPntMax = nPntAnz-1;
             if(!bBCFlag)
             {
-                SendRepaintBroadcast();
+                // #110094#-14 SendRepaintBroadcast();
                 bBCFlag = TRUE;
             }
             if(bClosed)
@@ -2891,7 +2895,7 @@ void SdrPathObj::ToggleClosed(long nOpenDistance)
         ImpForceKind(); // wg. Line->Poly->PolyLine statt Line->Poly->Line
         SetRectsDirty();
         SetChanged();
-        SendRepaintBroadcast();
+        BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
     }
 }
@@ -2905,6 +2909,12 @@ XPolyFlags SdrPathObj::GetSmoothFlag(const SdrHdl* pHdl) const
         eRet=rXPoly.GetFlags(nPnt);
     }
     return eRet;
+}
+
+// fuer friend class SdrPolyEditView auf einigen Compilern:
+void SdrPathObj::SetRectsDirty(sal_Bool bNotMyself)
+{
+    SdrTextObj::SetRectsDirty(bNotMyself);
 }
 
 void SdrPathObj::ImpSetSmoothFlag(USHORT nPolyNum, USHORT nPointNum, XPolyFlags eFlag)
@@ -2958,11 +2968,11 @@ void SdrPathObj::NbcSetSmoothFlag(const SdrHdl* pHdl, XPolyFlags eFlag)
 
 void SdrPathObj::SetSmoothFlag(const SdrHdl* pHdl, XPolyFlags eFlag)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-    SendRepaintBroadcast();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    // #110094#-14 SendRepaintBroadcast();
     NbcSetSmoothFlag(pHdl,eFlag);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
@@ -3015,12 +3025,12 @@ void SdrPathObj::ConvertSegment(const SdrHdl* pHdl)
     USHORT nP1=pHdl->GetPointNum();
     USHORT nPntMax=rXPoly.GetPointCount();
     if (nPntMax==0) return;
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     nPntMax--;
     if (nP1<nPntMax) {
         USHORT nP2=nP1+1;
 
-        SendRepaintBroadcast();
+        // #110094#-14 SendRepaintBroadcast();
 
         if (rXPoly.IsControl(nP2)) {
             rXPoly.Remove(nP2, 2);
@@ -3061,7 +3071,7 @@ void SdrPathObj::ConvertSegment(const SdrHdl* pHdl)
         ImpForceKind();
         SetRectsDirty();
         SetChanged();
-        SendRepaintBroadcast();
+        BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     }
 }
@@ -3131,17 +3141,17 @@ void SdrPathObj::NbcConvertSegment(const SdrHdl* pHdl, SdrPathType ePathType, FA
 
 void SdrPathObj::ConvertSegment(const SdrHdl* pHdl, SdrPathType ePathType, FASTBOOL bIgnoreSmooth)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-    SendRepaintBroadcast();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    // #110094#-14 SendRepaintBroadcast();
     NbcConvertSegment(pHdl,ePathType,bIgnoreSmooth);
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
 void SdrPathObj::ConvertAllSegments(SdrPathType ePathType)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
     FASTBOOL bBroadcastFlg=FALSE;
     FASTBOOL bClosed=IsClosed();
     // von hinten anfangen, da evtl. Punkte geloescht oder eingefuegt werden
@@ -3161,14 +3171,22 @@ void SdrPathObj::ConvertAllSegments(SdrPathType ePathType)
                     nPnt-=3;
                 }
                 if (ePathType==SDRPATH_LINE || ePathType==SDRPATH_NONE) {
-                    if (!bBroadcastFlg) { SendRepaintBroadcast(); bBroadcastFlg=TRUE; }
+                    if (!bBroadcastFlg)
+                    {
+                        // #110094#-14 SendRepaintBroadcast();
+                        bBroadcastFlg=TRUE;
+                    }
                     bSmoothFlg=TRUE;
                     ImpConvertSegment(nPoly,nPnt,ePathType,TRUE);
                 }
             } else {
                 nPnt--;
                 if (ePathType==SDRPATH_CURVE || ePathType==SDRPATH_NONE) {
-                    if (!bBroadcastFlg) { SendRepaintBroadcast(); bBroadcastFlg=TRUE; }
+                    if (!bBroadcastFlg)
+                    {
+                        // #110094#-14 SendRepaintBroadcast();
+                        bBroadcastFlg=TRUE;
+                    }
                     bSmoothFlg=TRUE;
                     ImpConvertSegment(nPoly,nPnt,ePathType,TRUE);
                 }
@@ -3209,7 +3227,7 @@ void SdrPathObj::ConvertAllSegments(SdrPathType ePathType)
         ImpForceKind();
         SetRectsDirty();
         SetChanged();
-        SendRepaintBroadcast();
+        BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     }
 }
