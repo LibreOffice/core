@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:12:28 $
+#   last change: $Author: kz $ $Date: 2004-06-11 17:54:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,14 +112,12 @@ PARFILES=                          \
 .IF "$(GUI)"=="WNT"
 PARFILES +=                        \
         folder_ooo.par             \
-        folderitem_ooo.par         \
         registryitem_ooo.par
 .ENDIF
 
 LNGFILES=                          \
         configurationitem_ooo.lng  \
         directory_ooo.lng          \
-        folderitem_ooo.lng         \
         helptext_ooo.lng           \
         module_ooo.lng             \
         registryitem_ooo.lng
