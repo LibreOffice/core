@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ssa $ $Date: 2002-01-07 12:07:16 $
+ *  last change: $Author: ssa $ $Date: 2002-01-10 08:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,9 +902,9 @@ void SalFrame::SetIcon( USHORT nIcon )
 }
 
 // -----------------------------------------------------------------------
-
 HWND ImplGetParentHwnd( HWND hWnd )
 {
+#ifndef REMOTE_APPSERVER
     SalFrame* pFrame = GetWindowPtr( hWnd );
     if( !pFrame )
         return ::GetParent( hWnd );
@@ -913,6 +913,10 @@ HWND ImplGetParentHwnd( HWND hWnd )
         return pRealParent->mpFrame->maFrameData.mhWnd;
     else
         return ::GetParent( hWnd );
+#else
+    return ::GetParent( hWnd ); // just to get it compiled for remote case, this function is never executed...
+#endif
+
 }
 
 // -----------------------------------------------------------------------
