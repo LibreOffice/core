@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:05:04 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,8 +305,10 @@ class SwFrm: public SwClient
     //layact.cxx
     friend BOOL CheckPos( SwFrm *pFrm );
 
+#if OSL_DEBUG_LEVEL > 1
     //entfernt leere SwSectionFrms aus einer Kette
     friend SwFrm* SwClearDummies( SwFrm* pFrm );
+#endif
 
         //Zum validieren eines unsinnig invalidierten in SwCntntFrm::MakeAll
     friend void ValidateSz( SwFrm *pFrm );
@@ -621,7 +623,6 @@ public:
     SwFtnFrm            *ImplFindFtnFrm();
     SwFlyFrm            *ImplFindFlyFrm();
     SwSectionFrm        *ImplFindSctFrm();
-    SwSectionFrm        *ImplFindTopSctFrm();
     SwFrm               *FindFooterOrHeader();
     SwFrm               *GetLower();
     const SwFrm         *GetNext()  const { return pNext; }
@@ -631,7 +632,6 @@ public:
     inline SwFtnFrm     *FindFtnFrm();
     inline SwFlyFrm     *FindFlyFrm();
     inline SwSectionFrm *FindSctFrm();
-    inline SwSectionFrm *FindTopSctFrm();
     inline SwFrm        *FindNext();
     inline SwCntntFrm   *FindNextCnt();
     inline SwFrm        *FindPrev();
@@ -644,7 +644,6 @@ public:
     inline const SwFtnFrm  *FindFtnFrm() const;
     inline const SwFlyFrm  *FindFlyFrm() const;
     inline const SwSectionFrm *FindSctFrm() const;
-    inline const SwSectionFrm *FindTopSctFrm() const;
     inline const SwFrm     *FindNext() const;
     inline const SwCntntFrm *FindNextCnt() const;
     inline const SwFrm     *FindPrev() const;
@@ -1053,11 +1052,6 @@ inline SwSectionFrm *SwFrm::FindSctFrm()
     return IsInSct() ? ImplFindSctFrm() : 0;
 }
 
-inline SwSectionFrm *SwFrm::FindTopSctFrm()
-{
-    return IsInSct() ? ImplFindTopSctFrm() : 0;
-}
-
 inline const SwTabFrm *SwFrm::FindTabFrm() const
 {
     return IsInTab() ? ((SwFrm*)this)->ImplFindTabFrm() : 0;
@@ -1073,10 +1067,6 @@ inline const SwFlyFrm *SwFrm::FindFlyFrm() const
 inline const SwSectionFrm *SwFrm::FindSctFrm() const
 {
     return IsInSct() ? ((SwFrm*)this)->ImplFindSctFrm() : 0;
-}
-inline const SwSectionFrm *SwFrm::FindTopSctFrm() const
-{
-    return IsInSct() ? ((SwFrm*)this)->ImplFindTopSctFrm() : 0;
 }
 inline SwFrm *SwFrm::FindNext()
 {
