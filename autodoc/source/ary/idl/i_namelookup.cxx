@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_namelookup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ NameLookup::Has_Name( const String &      i_name,
     IteratorRange<Map_Names::const_iterator>
         aResult( aNames.equal_range(i_name) );
 
-    for ( ; BOOL_OF(aResult); ++aResult )
+    for ( ; aResult.operator bool(); ++aResult )
     {
         if ( (i_class == 0
                 OR (*aResult.cur()).second.nClass == i_class)
