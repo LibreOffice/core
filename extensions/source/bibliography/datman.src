@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:34:01 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,8 @@ ModalDialog RID_DLG_MAPPING
         Text[ hebrew ] = "Spaltennamen";
         Text[ hindi ] = "स्तंभ का नाम्";
         Text[ slovak ] = "Názvy stĺpcov";
+        Text[ hungarian ] = "Oszlopnevek";
+        Text[ slovenian ] = "Imena stolpcev";
     };
     FixedText   FT_IDENTIFIER
     {
@@ -489,6 +491,8 @@ ModalDialog RID_DLG_MAPPING
         Text[ hebrew ] = "<kein>";
         Text[ hindi ] = "<कोई नहीं>";
         Text[ slovak ] = "<nič>";
+        Text[ hungarian ] = "<semmi>";
+        Text[ slovenian ] = "<brez>";
     };
     Text[ english_us ] = "Column Layout for Table %1";
     Text[ portuguese ] = "Atribui��o de colunas para a tabela %1";
@@ -499,7 +503,7 @@ ModalDialog RID_DLG_MAPPING
     Text[ spanish ] = "Asignaci�n de columnas para tabla %1";
     Text[ finnish ] = "Taulukon %1 sarakeasettelu";
     Text[ italian ] = "Assegnazione colonne per la tabella %1";
-    Text[ danish ] = "Kolonnetildeling for tabel %1";
+    Text[ danish ] = "Kolonnelayout for tabel %1";
     Text[ swedish ] = "Kolumntilldelning f�r tabell %1";
     Text[ polish ] = "Uk�ad kolumn w tabeli %1";
     Text[ portuguese_brazilian ] = "Layout das colunas para a tabela %1";
@@ -516,6 +520,8 @@ ModalDialog RID_DLG_MAPPING
     Text[ hebrew ] = "Spaltenzuordnung für Tabelle %1";
     Text[ hindi ] = "सारणी %1 केलिए स्तंभ के अभिन्यास";
     Text[ slovak ] = "Rozloženie stĺpcov pre tabuľku %1";
+    Text[ hungarian ] = "%1 tábla oszlopainak elrendezése";
+    Text[ slovenian ] = "Postavitev stolpcev za tabelo %1";
 };
 ModalDialog RID_DLG_DBCHANGE
 {
@@ -575,6 +581,8 @@ ModalDialog RID_DLG_DBCHANGE
         Text[ hebrew ] = "‮שורה‬";
         Text[ hindi ] = "प्रविष्टि";
         Text[ slovak ] = "Položka";
+        Text[ hungarian ] = "Bejegyzés";
+        Text[ slovenian ] = "Vnos";
     };
     Control LB_SELECTION
     {
@@ -614,7 +622,10 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ hebrew ] = "Datenquelle auswählen";
     Text[ hindi ] = "ड़ॉटा मूल चुनो";
     Text[ slovak ] = "Vyberte zdroj dát";
+    Text[ hungarian ] = "Adatforrás választása";
+    Text[ slovenian ] = "Izberi vir podatkov";
 };
+
 
 
 
