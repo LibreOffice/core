@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-04 10:40:40 $
+ *  last change: $Author: pb $ $Date: 2001-09-18 08:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #include "../source/inc/helpid.hrc"         // HID_XXX
 #include "../inc/sfxsids.hrc"               // SID_XXX
 #include "../inc/sfx.hrc"
@@ -215,10 +216,12 @@ hidspecial HID_FILEDLG_PREVIEW_CB               { HelpID = HID_FILEDLG_PREVIEW_C
 hidspecial HID_HELP_WINDOW                      { HelpID = HID_HELP_WINDOW; };
 hidspecial HID_HELP_TOOLBOX                     { HelpID = HID_HELP_TOOLBOX; };
 hidspecial HID_HELP_TOOLBOXITEM_INDEX           { HelpID = HID_HELP_TOOLBOXITEM_INDEX; };
-hidspecial HID_HELP_TOOLBOXITEM_START           { HelpID = HID_HELP_TOOLBOXITEM_START; };
 hidspecial HID_HELP_TOOLBOXITEM_BACKWARD        { HelpID = HID_HELP_TOOLBOXITEM_BACKWARD; };
 hidspecial HID_HELP_TOOLBOXITEM_FORWARD         { HelpID = HID_HELP_TOOLBOXITEM_FORWARD; };
+hidspecial HID_HELP_TOOLBOXITEM_START           { HelpID = HID_HELP_TOOLBOXITEM_START; };
 hidspecial HID_HELP_TOOLBOXITEM_PRINT           { HelpID = HID_HELP_TOOLBOXITEM_PRINT; };
 hidspecial HID_HELP_TOOLBOXITEM_BOOKMARKS       { HelpID = HID_HELP_TOOLBOXITEM_BOOKMARKS; };
-hidspecial HID_TBXCONTROL_FILENEW       { HelpID = HID_TBXCONTROL_FILENEW; };
+hidspecial HID_HELP_TOOLBOXITEM_SEARCHDIALOG    { HelpID = HID_HELP_TOOLBOXITEM_SEARCHDIALOG; };
+hidspecial HID_TBXCONTROL_FILENEW               { HelpID = HID_TBXCONTROL_FILENEW; };
+hidspecial HID_GLOBAL_FALLBACK                  { HelpID = HID_GLOBAL_FALLBACK; };
 
