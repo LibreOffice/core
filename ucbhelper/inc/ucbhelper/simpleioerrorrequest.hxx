@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleioerrorrequest.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-15 08:47:28 $
+ *  last change: $Author: kso $ $Date: 2001-06-18 09:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #endif
 
 namespace com { namespace sun { namespace star { namespace ucb {
-    class XContentIdentifier;
+    class XCommandProcessor;
 } } } }
 
 namespace ucbhelper {
@@ -91,13 +91,13 @@ public:
     /**
       * Constructor.
       *
-      * @param xId contains the identifier of the UCB content related to the
-      *        request.
+      * @param xContext contains the command processor that executes the
+      *        command related to the request.
       *
       * @param eError
       */
     SimpleIOErrorRequest( const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XContentIdentifier > & xId,
+                            com::sun::star::ucb::XCommandProcessor > & xContext,
                           const com::sun::star::ucb::IOErrorCode eError );
 };
 
