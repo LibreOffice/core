@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:00:38 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ french ] = "~Format";
         Text[ spanish ] = "~Formato";
         Text[ italian ] = "F~ormato";
-        Text[ danish ] = "~Format";
+        Text[ danish ] = "Forma~ter";
         Text[ swedish ] = "~Format";
         Text[ polish ] = "~Format";
         Text[ portuguese_brazilian ] = "~Format";
@@ -113,9 +113,10 @@ TabPage RID_SVXPAGE_PAGE
         Text[ korean ] = "~Format";
         Text[ chinese_simplified ] = "¸ñÊ½";
         Text[ chinese_traditional ] = "®æ¦¡";
-        Text[ turkish ] = "~Format";
+        Text[ turkish ] = "Format";
         Text[ arabic ] = "ÇáÊäÓíÞ";
         Text[ catalan ] = "~Format";
+        Text[ finnish ] = "~Format";
     };
     ListBox LB_PAPER_SIZE
     {
@@ -281,7 +282,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "Ca~ssetto" ;
         Text [ portuguese_brazilian ] = "~Bandeja" ;
         Text [ portuguese ] = "~Tabuleiro" ;
-        Text [ finnish ] = "L~okero" ;
+        Text [ finnish ] = "~Paperilähde" ;
         Text [ danish ] = "Papirkilde" ;
         Text [ french ] = "Ba~c" ;
         Text [ swedish ] = "Fac~k" ;
@@ -318,7 +319,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "Layout di pagina" ;
         Text [ portuguese_brazilian ] = "Layout da página" ;
         Text [ portuguese ] = "Configurar página" ;
-        Text [ finnish ] = "Sivun asettelu" ;
+        Text [ finnish ] = "Seitenlayout" ;
         Text [ danish ] = "Sidelayout" ;
         Text [ french ] = "Mise en page" ;
         Text [ swedish ] = "Sidlayout" ;
@@ -387,10 +388,10 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ finnish ] =
         {
-            < "Alle" ; Default ; > ;
-            < "Gespiegelt" ; Default ; > ;
-            < "Rechts" ; Default ; > ;
-            < "Links" ; Default ; > ;
+            < "All" ; Default ; > ;
+            < "Peilattu" ; Default ; > ;
+            < "Right" ; Default ; > ;
+            < "Left" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -523,7 +524,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "Formato foglio" ;
         Text [ portuguese_brazilian ] = "Formato de papel" ;
         Text [ portuguese ] = "Formato do papel" ;
-        Text [ finnish ] = "Paperin muoto" ;
+        Text [ finnish ] = "Papierformat" ;
         Text [ danish ] = "Papirformat" ;
         Text [ french ] = "Format de papier" ;
         Text [ swedish ] = "Pappersformat" ;
@@ -554,7 +555,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "A sinistra" ;
         Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
-        Text [ finnish ] = "~Vasemmalle" ;
+        Text [ finnish ] = "~Vasen" ;
         Text [ danish ] = "Venstre" ;
         Text [ french ] = "~À gauche" ;
         Text [ swedish ] = "~Vänster" ;
@@ -642,7 +643,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "In alto" ;
         Text [ portuguese_brazilian ] = "T~opo" ;
         Text [ portuguese ] = "~Superior" ;
-        Text [ finnish ] = "~Ylä" ;
+        Text [ finnish ] = "~Yläosa" ;
         Text [ danish ] = "Top" ;
         Text [ french ] = "~En haut" ;
         Text [ swedish ] = "Ö~vre" ;
@@ -686,7 +687,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "In basso" ;
         Text [ portuguese_brazilian ] = "~Base" ;
         Text [ portuguese ] = "~Inferior" ;
-        Text [ finnish ] = "~Alas" ;
+        Text [ finnish ] = "~Alaosa" ;
         Text [ danish ] = "Bund" ;
         Text [ french ] = "En ~bas" ;
         Text [ swedish ] = "~Nedre" ;
@@ -730,7 +731,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "Margini" ;
         Text [ portuguese_brazilian ] = "Margens" ;
         Text [ portuguese ] = "Margens" ;
-        Text [ finnish ] = "Reunukset" ;
+        Text [ finnish ] = "Ränder" ;
         Text [ danish ] = "Margener" ;
         Text [ french ] = "Marges" ;
         Text [ swedish ] = "Marginaler" ;
@@ -764,7 +765,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ french ] = "For~mat";
         Text[ spanish ] = "For~mato";
         Text[ italian ] = "For~mato";
-        Text[ danish ] = "For~mat";
+        Text[ danish ] = "Format";
         Text[ swedish ] = "For~mat";
         Text[ polish ] = "For~mat";
         Text[ portuguese_brazilian ] = "For~mat";
@@ -775,6 +776,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ turkish ] = "For~mat";
         Text[ arabic ] = "ÇáÊäÓíÞ";
         Text[ catalan ] = "For~mat";
+        Text[ finnish ] = "For~mat";
     };
     ListBox LB_NUMBER_FORMAT
     {
@@ -843,7 +845,7 @@ TabPage RID_SVXPAGE_PAGE
             < "I, II, III, ..." ; Default ; > ;
             < "i, ii, iii, ..." ; Default ; > ;
             < "1, 2, 3, ..." ; Default ; > ;
-            < "Ohne" ; Default ; > ;
+            < "Ei mitään" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -1009,7 +1011,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "Numerazione" ;
         Text [ portuguese_brazilian ] = "Numeração" ;
         Text [ portuguese ] = "Numeração" ;
-        Text [ finnish ] = "Numerointi" ;
+        Text [ finnish ] = "Nummerierung" ;
         Text [ danish ] = "Nummerering" ;
         Text [ french ] = "Numérotation" ;
         Text [ swedish ] = "Numrering" ;
@@ -1051,7 +1053,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ spanish ] = "Hori~zontal" ;
         Text [ danish ] = "Vandret" ;
         Text [ swedish ] = "H~orisontellt" ;
-        Text [ finnish ] = "Hor~izontal" ;
+        Text [ finnish ] = "~Vaakataso" ;
         Text [ english_us ] = "Hori~zontal" ;
         Text[ chinese_simplified ] = "Ë®Æ½·½Ïò(~Z)";
         Text[ russian ] = "Ãîðèçîíòàëüíî";
@@ -1076,7 +1078,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "~Verticale" ;
         Text [ portuguese_brazilian ] = "~Vertical" ;
         Text [ portuguese ] = "~Vertical" ;
-        Text [ finnish ] = "~Rinnakkain" ;
+        Text [ finnish ] = "~Pystysuora" ;
         Text [ danish ] = "Lodret" ;
         Text [ french ] = "~Vertical" ;
         Text [ swedish ] = "Ve~rtikalt" ;
@@ -1111,7 +1113,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ spanish ] = "~Ajustar al tamaño" ;
         Text [ danish ] = "Tilpas til størrelse" ;
         Text [ swedish ] = "~Anpassa till storlek" ;
-        Text [ finnish ] = "~Fit to size" ;
+        Text [ finnish ] = "~Sovita kokoon" ;
         Text [ english_us ] = "~Fit to size" ;
         Text[ chinese_simplified ] = "µ÷Õû´óÐ¡(~F)";
         Text[ russian ] = "Ñîãëàñíî ðàçìåðà";
@@ -1142,7 +1144,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ italian ] = "Modello successivo" ;
         Text [ portuguese_brazilian ] = "Página" ;
         Text [ portuguese ] = "Estilo seguinte" ;
-        Text [ finnish ] = "Sivu" ;
+        Text [ finnish ] = "Folgevorlage" ;
         Text [ danish ] = "Næste typografi" ;
         Text [ french ] = "Style suivant" ;
         Text [ swedish ] = "Nästa formatmall" ;
@@ -1190,6 +1192,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ turkish ] = "Çalý~þtýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ac~tivar";
+        Text[ finnish ] = "~Aktivoi";
     };
     FixedText FT_REGISTER
     {
@@ -1218,6 +1221,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ turkish ] = "Referans par~agraf biçimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estilo de ~referencia";
+        Text[ finnish ] = "~Viitteen tyyli";
     };
     ListBox LB_REGISTER
     {
@@ -1256,6 +1260,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ turkish ] = "Eþit satýr yüksekliði";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Conformidad registro";
+        Text[ finnish ] = "Registerhaltigkeit";
     };
 
 
@@ -1283,6 +1288,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ turkish ] = "Ý~ç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Int~erior";
+        Text[ finnish ] = "~Sisempi";
     };
     String STR_OUTSIDE
     {
@@ -1308,6 +1314,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ turkish ] = "D~ýþ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~xterior";
+        Text[ finnish ] = "~Ulompi";
     };
     String STR_QUERY_PRINTRANGE
     {
@@ -1333,6 +1340,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ turkish ] = "Marj ayarlarýnýz, yazdýrma aralýðýnýn dýþýnda.\n\nBu ayarlarý yine de uygulamak istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Con esta definición, los márgenes quedarán fuera del área de impresión.\n\n¿Desea aplicar esta definición de márgenes?";
+        Text[ finnish ] = "Marginaaliasetukset ovat tulostusalueen ulkopuolella.\n\nHaluatko kuitenkin ottaa nämä asetukset käyttöön?";
     };
     Text[ chinese_traditional ] = "­¶";
     Text[ arabic ] = "ÇáÕÝÍÉ";
@@ -1351,7 +1359,7 @@ String RID_SVXSTR_CALC_PAGE
     Text [ italian ] = "Allineamento" ;
     Text [ portuguese_brazilian ] = "Orientação" ;
     Text [ portuguese ] = "Alinhamento" ;
-    Text [ finnish ] = "Suunta" ;
+    Text [ finnish ] = "Tasaus" ;
     Text [ danish ] = "Justering" ;
     Text [ french ] = "Alignement" ;
     Text [ swedish ] = "Orientering" ;
@@ -1382,8 +1390,8 @@ String RID_SVXSTR_DRAW_PAGE
     Text [ dutch ] = "Extra" ;
     Text [ spanish ] = "Opciones" ;
     Text [ danish ] = "Supplerende" ;
-    Text [ swedish ] = "Verktyg" ;
-    Text [ finnish ] = "Extras" ;
+    Text [ swedish ] = "Extra" ;
+    Text [ finnish ] = "Asetukset" ;
     Text [ english_us ] = "Options" ;
     Text[ chinese_simplified ] = "ÆäËû";
     Text[ russian ] = "Äîïîëíèòåëüíî";
@@ -1405,7 +1413,7 @@ String RID_SVXSTR_WRITER_PAGE
     Text [ italian ] = "Pagina successiva" ;
     Text [ portuguese_brazilian ] = "Próxima Página" ;
     Text [ portuguese ] = "Página seguinte" ;
-    Text [ finnish ] = "Seuraava sivu" ;
+    Text [ finnish ] = "Jatkosivu" ;
     Text [ danish ] = "Næste side" ;
     Text [ french ] = "Page suivante" ;
     Text [ swedish ] = "Följande sida" ;
@@ -1477,7 +1485,7 @@ String RID_SVXSTR_PAPER_USER
     Text [ italian ] = "Personalizzata" ;
     Text [ portuguese_brazilian ] = "Pessoal" ;
     Text [ portuguese ] = "Personalizar" ;
-    Text [ finnish ] = "Mukautettu" ;
+    Text [ finnish ] = "Käyttäjän määrittämä" ;
     Text [ danish ] = "Bruger" ;
     Text [ french ] = "Utilisateur" ;
     Text [ swedish ] = "Användare" ;
@@ -2002,7 +2010,7 @@ ItemList [ chinese_simplified ] =
         < "A5 148x210 mm" ; PAPERSIZE_A5 ; > ;
         < "B4 250x353 mm" ; PAPERSIZE_B4 ; > ;
         < "B5 176x250 mm" ; PAPERSIZE_B5 ; > ;
-        < "ŽèŽ† 8.5x11 ²ÝÁ" ; PAPERSIZE_LETTER ; > ;
+        < "ÚÀ° 8.5x11 ²ÝÁ" ; PAPERSIZE_LETTER ; > ;
         < "‹KŠi»²½Þ 8.5x14 ²ÝÁ" ; PAPERSIZE_LEGAL ; > ;
         < "ÀÌÞÛ²ÄÞ" ; PAPERSIZE_TABLOID ; > ;
         < "Õ°»Þ°" ; PAPERSIZE_USER ; > ;
@@ -2186,30 +2194,57 @@ ItemList [ chinese_simplified ] =
     };
     ItemList [ catalan ] =
     {
+            < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Carta 8,5 x 11 pulgadas" ; PAPERSIZE_LETTER ; > ;
+        < "Oficio 8,5 x 14 pulgadas" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloide" ; PAPERSIZE_TABLOID ; > ;
+        < "Usuario" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Sobre #6¾ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Sobre Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Sobre #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Sobre #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Sobre #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Sobre #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai grande 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ finnish ] =
+    {
             < "A3 297 x 420 mm" ; PAPERSIZE_KAI32BIG; > ;
         < "A4 210 x 297 mm" ; PAPERSIZE_KAI32BIG; > ;
         < "A5 148 x 210 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "B4 250 x 353 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "B4.250 x 353 mm" ; PAPERSIZE_KAI32BIG; > ;
         < "B5 176 x 250 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "Carta 8,5 x 11 pulgadas" ; PAPERSIZE_KAI32BIG; > ;
-        < "Oficio 8,5 x 14 pulgadas" ; PAPERSIZE_KAI32BIG; > ;
-        < "Tabloide" ; PAPERSIZE_KAI32BIG; > ;
-        < "Usuario" ; PAPERSIZE_KAI32BIG; > ;
-        < "B6 125 x 176 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C4 229 x 324 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C5 162 x 229 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C6 114 x 162 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C65 114 x 227 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "Letter 8,5 x 11 tuumaa" ; PAPERSIZE_KAI32BIG; > ;
+        < "Legal 8,5 x 14 tuumaa" ; PAPERSIZE_KAI32BIG; > ;
+        < "Tabloidi" ; PAPERSIZE_KAI32BIG; > ;
+        < "Käyttäjä" ; PAPERSIZE_KAI32BIG; > ;
+        < "B6.125 x 176 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "C4.229 x 324 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "C5.162 x 229 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "C6.114 x 162 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "C65.114 x 227 mm" ; PAPERSIZE_KAI32BIG; > ;
         < "DL 110 x 220 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "Sobre #6¾ 3,625 x 6,5 in" ; PAPERSIZE_KAI32BIG; > ;
-        < "Sobre Monarch 3,875 x 7,5 in" ; PAPERSIZE_KAI32BIG; > ;
-        < "Sobre #9 3,875 x 8,875 in" ; PAPERSIZE_KAI32BIG; > ;
-        < "Sobre #10 4,125 x 9,5 in" ; PAPERSIZE_KAI32BIG; > ;
-        < "Sobre #11 4,5 x 10,375 in" ; PAPERSIZE_KAI32BIG; > ;
-        < "Sobre #12 4,75 x 11 in" ; PAPERSIZE_KAI32BIG; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "32 kai grande 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "Env. 63/4 3,6252\" x 6,5\"" ; PAPERSIZE_KAI32BIG; > ;
+        < "Env. Monarch 3,875\" x 7,5\"" ; PAPERSIZE_KAI32BIG; > ;
+        < "Env. 9 3,875\" x 8,875\"" ; PAPERSIZE_KAI32BIG; > ;
+        < "Env. 10 4,125\" x 9,5\"" ; PAPERSIZE_KAI32BIG; > ;
+        < "Env. 11 4,5\" x 10,375\"" ; PAPERSIZE_KAI32BIG; > ;
+        < "Env. 12 4,75\" x 11\"" ; PAPERSIZE_KAI32BIG; > ;
+        < "16 kai 184 mm x 260 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai 130 mm x 184 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai groß 140 mm x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
     };
     };
 StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
@@ -2588,7 +2623,7 @@ ItemList [ chinese_simplified ] =
         < "A5 148x210 mm" ; PAPERSIZE_A5 ; > ;
         < "B4 250x353 mm" ; PAPERSIZE_B4 ; > ;
         < "B5 176x250 mm" ; PAPERSIZE_B5 ; > ;
-        < "ŽèŽ† 8.5x11 ²ÝÁ" ; PAPERSIZE_LETTER ; > ;
+        < "ÚÀ° 8.5x11 ²ÝÁ" ; PAPERSIZE_LETTER ; > ;
         < "‹KŠi»²½Þ 8.5x14 ²ÝÁ" ; PAPERSIZE_LEGAL ; > ;
         < "ÀÌÞÛ²ÄÞ" ; PAPERSIZE_TABLOID ; > ;
         < "Õ°»Þ°" ; PAPERSIZE_USER ; > ;
@@ -2762,29 +2797,55 @@ ItemList [ chinese_simplified ] =
     };
     ItemList [ catalan ] =
     {
+            < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 pulgadas" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 pulgadas" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloide" ; PAPERSIZE_TABLOID ; > ;
+        < "Usuario" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Diapositiva" ; PAPERSIZE_DIA ; > ;
+        < "Pantalla" ; PAPERSIZE_SCREEN ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai grande 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ finnish ] =
+    {
             < "A0 841 x 1189 mm" ; PAPERSIZE_KAI32BIG; > ;
         < "A1 594 x 841 mm" ; PAPERSIZE_KAI32BIG; > ;
         < "A2 420 x 594 mm" ; PAPERSIZE_KAI32BIG; > ;
         < "A3 297 x 420 mm" ; PAPERSIZE_KAI32BIG; > ;
         < "A4 210 x 297 mm" ; PAPERSIZE_KAI32BIG; > ;
         < "A5 148 x 210 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "B4 250 x 353 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "B4.250 x 353 mm" ; PAPERSIZE_KAI32BIG; > ;
         < "B5 176 x 250 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "Letter 8,5 x 11 pulgadas" ; PAPERSIZE_KAI32BIG; > ;
-        < "Legal 8,5 x 14 pulgadas" ; PAPERSIZE_KAI32BIG; > ;
-        < "Tabloide" ; PAPERSIZE_KAI32BIG; > ;
-        < "Usuario" ; PAPERSIZE_KAI32BIG; > ;
-        < "B6 125 x 176 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C4 229 x 324 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C5 162 x 229 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C6 114 x 162 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "C65 114 x 227 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "Letter 8,5 x 11 tuumaa" ; PAPERSIZE_KAI32BIG; > ;
+        < "Legal 8,5 x 14 tuumaa" ; PAPERSIZE_KAI32BIG; > ;
+        < "Tabloidi" ; PAPERSIZE_KAI32BIG; > ;
+        < "Käyttäjän määrittämä" ; PAPERSIZE_KAI32BIG; > ;
+        < "B6.125 x 176 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "C4.229 x 324 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "C5.162 x 229 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "C6.114 x 162 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "C65.114 x 227 mm" ; PAPERSIZE_KAI32BIG; > ;
         < "DL 110 x 220 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "Diapositiva" ; PAPERSIZE_KAI32BIG; > ;
-        < "Pantalla" ; PAPERSIZE_KAI32BIG; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32BIG; > ;
-        < "32 kai grande 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "Dia" ; PAPERSIZE_KAI32BIG; > ;
+        < "Ruutu" ; PAPERSIZE_KAI32BIG; > ;
+        < "16 kai 184 mm x 260 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai 130 mm x 184 mm" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai groß 140 mm x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
     };
     };
 String RID_SVXSTR_PAPERBIN
@@ -2795,7 +2856,7 @@ String RID_SVXSTR_PAPERBIN
     Text [ italian ] = "Cassetto" ;
     Text [ portuguese_brazilian ] = "Bandeja" ;
     Text [ portuguese ] = "Origem do papel" ;
-    Text [ finnish ] = "Lokero" ;
+    Text [ finnish ] = "Paperilähde" ;
     Text [ danish ] = "Papirkilde" ;
     Text [ french ] = "Bac" ;
     Text [ swedish ] = "Fack" ;
@@ -2837,6 +2898,7 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ arabic ] = "[ãä ÅÚÏÇÏÇÊ ÇáØÇÈÚÉ]";
     Text[ turkish ] = "[Yazýcý ayarlarýndan]";
     Text[ catalan ] = "[De la configuración de impresora]";
+    Text[ finnish ] = "[Tulostinasetuksien mukaan]";
 };
 String RID_SVXSTR_FULLSIZE
 {
@@ -2862,5 +2924,6 @@ String RID_SVXSTR_FULLSIZE
     Text[ turkish ] = "Sayfayý tam doldur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Llenar página completa";
+    Text[ finnish ] = "Täytä koko sivu";
 };
  // ********************************************************************** EOF
