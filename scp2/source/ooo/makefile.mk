@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-07 09:28:40 $
+#   last change: $Author: kz $ $Date: 2005-01-18 13:30:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,10 @@ SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
 
 .IF "$(ENABLE_GTK)" != ""
 SCPDEFS+=-DENABLE_GTK
+GTK_TWO_FOUR=$(shell +-pkg-config --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
+.IF "$(GTK_TWO_FOUR)" != ""
+SCPDEFS+=-DGTK_TWO_FOUR
+.ENDIF
 .ENDIF
 
 .IF "$(ENABLE_PASF)" != ""
