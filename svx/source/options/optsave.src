@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-22 23:18:46 $
+ *  last change: $Author: obo $ $Date: 2001-11-27 23:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,9 +351,9 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "Size optimization for XML files (no pretty printing)";
         Text[ dutch ] = "Grootte van XML-bestanden optimaliseren (zonder Pretty Printing)";
         Text[ french ] = "Optimisation de la taille pour le format XML (sans pretty printing)";
-        Text[ spanish ] = "Optimar tamaño para el formato XML (sin pretty printing)";
+        Text[ spanish ] = "Optimar el tamaño del formato XML (sin pretty printing)";
         Text[ finnish ] = "Size optimization for XML files (no pretty printing)";
-        Text[ italian ] = "Size optimization for XML files (no pretty printing)";
+        Text[ italian ] = "Ottimizza dimensioni del formato XML (senza stampa elegante)";
         Text[ danish ] = "Size optimization for XML files (no pretty printing)";
         Text[ swedish ] = "Storleksoptimering för XML-format (utan pretty printing)";
         Text[ polish ] = "Size optimization for XML files (no pretty printing)";
@@ -736,11 +736,11 @@ TabPage RID_SFXPAGE_SAVE
         };
     StringList [ catalan ] =
     {
-            < "Textdokument" ;     APP_WRITER    ; > ;
-        < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
-        < "Tabellendokument" ; APP_CALC      ; > ;
-        < "Präsentation" ;     APP_IMPRESS   ; > ;
-        < "Zeichnung" ;        APP_DRAW      ; > ;
+            < "Document de text" ;     APP_WRITER    ; > ;
+        < "Document HTML" ;    APP_WRITER_WEB;  > ;
+        < "Full de càlcul" ; APP_CALC      ; > ;
+        < "Presentació" ;     APP_IMPRESS   ; > ;
+        < "Dibuix" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
         };
     };
@@ -786,7 +786,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Text[ french ] = "L'application de \"%1\" comme format de fichier par défaut peut entraîner une perte d'information.\n";
         Text[ spanish ] = "El uso de \"%1\" como formato de archivo predeterminado puede causar una pérdida de información.\n";
         Text[ finnish ] = "Saving with \"%1\" may cause information loss.\n";
-        Text[ italian ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ italian ] = "L'uso di \"%1\" quale formato standard può causare la perdita di dati.\n";
         Text[ danish ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ swedish ] = "Att använda \"%1\" som standarfilformat kan leda till att information går förlorad.\n";
         Text[ polish ] = "Saving with \"%1\" may cause information loss.\n";
@@ -819,6 +819,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Size = MAP_APPFONT( 50, 14 );
     };
 };
+
 
 
 
