@@ -3326,7 +3326,7 @@ SfxBoolItem FirstRecord SID_FM_RECORD_FIRST
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem Flash SID_ATTR_FLASH
+SvxBlinkItem Flash SID_ATTR_FLASH
 
 [
     /* flags: */
