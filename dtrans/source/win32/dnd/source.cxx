@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-26 11:28:05 $
+ *  last change: $Author: tra $ $Date: 2002-08-02 12:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include <rtl/unload.h>
 #endif
 
+#include <process.h>
+#include <memory>
+
 #include "source.hxx"
 #include "globals.hxx"
 #include "sourcecontext.hxx"
@@ -104,8 +107,114 @@ extern Reference< XTransferable > g_XTransferable;
 
 //<-- TRA
 
-DWORD WINAPI DndOleSTAFunc(LPVOID pParams);
+unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
 
+//#############################
+// - BAD HACK - BAD HACK - BAD HACK - BAD HACK
+
+const BOOL EVENT_AUTO_RESET      = FALSE;
+const BOOL EVENT_MANUAL_RESET  = TRUE;
+const BOOL EVENT_SIGNALED          = TRUE;
+const BOOL EVENT_NOT_SIGNALED   = FALSE;
+
+struct DelayedStartDndParam
+{
+    DelayedStartDndParam(
+        DragSource* DragSource,
+        const DragGestureEvent& trigger,
+        sal_Int8 sourceActions,
+        sal_Int32 cursor,
+        sal_Int32 image,
+        const Reference<XTransferable >& trans,
+        const Reference<XDragSourceListener >& listener) :
+        m_DragSource(DragSource),
+        m_Trigger(trigger),
+        m_SourceActions(sourceActions),
+        m_Cursor(cursor),
+        m_Image(image),
+        m_Trans(trans),
+        m_Listener(listener)
+    {}
+
+    DragSource*                                         m_DragSource;
+    const DragGestureEvent                       m_Trigger;
+    sal_Int8                                                m_SourceActions;
+    sal_Int32                                              m_Cursor;
+    sal_Int32                                              m_Image;
+    const Reference<XTransferable >          m_Trans;
+    const Reference<XDragSourceListener > m_Listener;
+};
+
+/** Delayed dnd start drag thread function
+*/
+unsigned __stdcall DelayedStartDndThreadFunc(void* Param)
+{
+    std::auto_ptr<DelayedStartDndParam> dndParam(
+        reinterpret_cast<DelayedStartDndParam*>(Param));
+
+    // duplicate the wait handles and release the
+    // source object
+
+    HANDLE hWaitHandles[2];
+
+    DuplicateHandle(
+        GetCurrentProcess(),
+        dndParam->m_DragSource->m_hWaitEvents[0],
+        GetCurrentProcess(),
+        &hWaitHandles[0],
+        0,
+        FALSE,
+        DUPLICATE_SAME_ACCESS);
+
+    DuplicateHandle(
+        GetCurrentProcess(),
+        dndParam->m_DragSource->m_hWaitEvents[1],
+        GetCurrentProcess(),
+        &hWaitHandles[1],
+        0,
+        FALSE,
+        DUPLICATE_SAME_ACCESS);
+
+    dndParam->m_DragSource->release();
+
+
+    DWORD dwRet = WaitForMultipleObjects(
+        2,
+        hWaitHandles,
+        FALSE,
+        INFINITE);
+
+    switch(dwRet)
+    {
+        // cancel delayed dnd operation, do not access
+        // m_DragSource anymore because it may already
+        // be destroyed
+        case WAIT_OBJECT_0:
+            return(0);
+
+        case WAIT_OBJECT_0 + 1:
+                dndParam->m_DragSource->DelayedStartDrag(
+                    dndParam->m_Trigger,
+                    dndParam->m_SourceActions,
+                    dndParam->m_Cursor,
+                    dndParam->m_Image,
+                    dndParam->m_Trans,
+                    dndParam->m_Listener);
+            break;
+
+        default:
+            OSL_ENSURE(false, "Unknown error during wait for event");
+            break;
+    };
+
+    CloseHandle(hWaitHandles[0]);
+    CloseHandle(hWaitHandles[1]);
+
+    return (0);
+}
+
+// - BAD HACK - BAD HACK - BAD HACK - BAD HACK
+//#############################
 
 DragSource::DragSource( const Reference<XMultiServiceFactory>& sf):
     m_serviceFactory( sf),
@@ -115,46 +224,47 @@ DragSource::DragSource( const Reference<XMultiServiceFactory>& sf):
     m_MouseButton(0)
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+
+    m_hWaitEvents[0] = CreateEventA(
+        0,
+        EVENT_MANUAL_RESET,
+        EVENT_NOT_SIGNALED,
+        0);
+
+    m_hWaitEvents[1] = CreateEventA(
+        0,
+        EVENT_AUTO_RESET,
+        EVENT_SIGNALED,
+        0);
 }
 
 DragSource::~DragSource()
 {
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+
+    CancelPendingDelayedStartDragOperations();
+
+    CloseHandle(m_hWaitEvents[0]);
+    CloseHandle(m_hWaitEvents[1]);
 }
 
-  // XInitialization
+//#############################
+// - BAD HACK - BAD HACK - BAD HACK - BAD HACK
 
-// aArguments contains a machine id
-void SAL_CALL DragSource::initialize( const Sequence< Any >& aArguments )
-    throw(Exception, RuntimeException)
+// First starting a new drag and drop thread if
+// the last one has finished
+void DragSource::DelayedStartDrag(
+    const DragGestureEvent& trigger,
+    sal_Int8 sourceActions,
+    sal_Int32 cursor,
+    sal_Int32 image,
+    const Reference<XTransferable >& trans,
+    const Reference<XDragSourceListener >& listener )
 {
-    if( aArguments.getLength() >=2)
-        m_hAppWindow= *(HWND*)aArguments[1].getValue();
-    OSL_ASSERT( IsWindow( m_hAppWindow) );
-}
+#ifdef _DEBUG
+    OutputDebugStringA("\n\nWin DnD: StartDrag\n\n" );
+#endif
 
-// XDragSource
-sal_Bool SAL_CALL DragSource::isDragImageSupported(  )
-         throw(RuntimeException)
-{
-    return 0;
-}
-
-sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 dragAction )
-          throw( IllegalArgumentException, RuntimeException)
-{
-    return 0;
-}
-
-// Notifies the XDragSourceListener by calling dragDropEnd
-void SAL_CALL DragSource::startDrag( const DragGestureEvent& trigger,
-                             sal_Int8 sourceActions,
-                             sal_Int32 cursor,
-                             sal_Int32 image,
-                             const Reference<XTransferable >& trans,
-                             const Reference<XDragSourceListener >& listener )
-        throw( RuntimeException)
-{
     // The actions supported by the drag source
     m_sourceActions= sourceActions;
     // We need to know which mouse button triggered the operation.
@@ -190,9 +300,81 @@ void SAL_CALL DragSource::startDrag( const DragGestureEvent& trigger,
 
     // The thread acccesses members of this instance but does not call acquire.
     // Hopefully this instance is not destroyed before the thread has terminated.
-    DWORD threadId;
-    HANDLE holeThread= CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)DndOleSTAFunc,
-                         static_cast<DragSource*>(this), 0, &threadId);
+    unsigned threadId;
+    HANDLE hThread= reinterpret_cast<HANDLE>(_beginthreadex(
+        0, 0, DndOleSTAFunc, reinterpret_cast<void*>(this), 0, &threadId));
+
+    CloseHandle(hThread);
+}
+
+/** Cancel all pending delayed start drag operation
+*/
+void DragSource::CancelPendingDelayedStartDragOperations()
+{
+    SetEvent(m_hWaitEvents[0]);
+}
+
+/** Release the next pending delayed dnd operation thread
+*/
+void DragSource::SignalDndComplete()
+{
+    SetEvent(m_hWaitEvents[1]);
+}
+
+// - BAD HACK - BAD HACK - BAD HACK - BAD HACK
+//#############################
+
+  // XInitialization
+
+// aArguments contains a machine id
+void SAL_CALL DragSource::initialize( const Sequence< Any >& aArguments )
+    throw(Exception, RuntimeException)
+{
+    if( aArguments.getLength() >=2)
+        m_hAppWindow= *(HWND*)aArguments[1].getValue();
+    OSL_ASSERT( IsWindow( m_hAppWindow) );
+}
+
+// XDragSource
+sal_Bool SAL_CALL DragSource::isDragImageSupported(  )
+         throw(RuntimeException)
+{
+    return 0;
+}
+
+sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 dragAction )
+          throw( IllegalArgumentException, RuntimeException)
+{
+    return 0;
+}
+
+// Notifies the XDragSourceListener by calling dragDropEnd
+void SAL_CALL DragSource::startDrag(
+    const DragGestureEvent& trigger,
+    sal_Int8 sourceActions,
+    sal_Int32 cursor,
+    sal_Int32 image,
+    const Reference<XTransferable >& trans,
+    const Reference<XDragSourceListener >& listener ) throw( RuntimeException)
+{
+    // stay alive until the
+    // delayed dnd start drag
+    // thread has duplicated the
+    // wait handles
+    // the thread shall release
+    // immediately after duplicating
+    // the handles
+    acquire();
+
+    // structure must be deleted by the delayed dnd operation thread!!!
+    DelayedStartDndParam* dndParam = new DelayedStartDndParam(
+        this, trigger, sourceActions, cursor, image, trans, listener);
+
+    unsigned threadId;
+    HANDLE hThread= reinterpret_cast<HANDLE>(_beginthreadex(
+        0, 0, DelayedStartDndThreadFunc, reinterpret_cast<void*>(dndParam), 0, &threadId));
+
+    CloseHandle(hThread);
 }
 
 #ifdef DEBUG
@@ -294,7 +476,7 @@ HRESULT STDMETHODCALLTYPE DragSource::GiveFeedback(
 // This function is called as extra thread from DragSource::executeDrag.
 // The function carries out a drag and drop operation by calling
 // DoDragDrop. The thread also notifies all XSourceListener.
-DWORD WINAPI DndOleSTAFunc(LPVOID pParams)
+unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
 {
     // The structure contains all arguments for DoDragDrop and other
     DragSource *pSource= (DragSource*)pParams;
@@ -337,6 +519,11 @@ DWORD WINAPI DndOleSTAFunc(LPVOID pParams)
         static_cast<SourceContext*>(pSource->m_currentContext.get())->fire_dragDropEnd(
                                                         hr == DRAGDROP_S_DROP ? sal_True : sal_False,
                                                         action);
+
+#ifdef _DEBUG
+        OutputDebugStringA("\n\nWin DnD: DragEnd\n\n" );
+#endif
+
         // Destroy SourceContextslkfgj
         pSource->m_currentContext= 0;
         // Destroy the XTransferable wrapper
@@ -345,6 +532,8 @@ DWORD WINAPI DndOleSTAFunc(LPVOID pParams)
         // Detach this thread from the window thread
         AttachThreadInput( threadId, pSource->m_threadIdWindow, FALSE);
         OleUninitialize();
+
+        pSource->SignalDndComplete();
     }
     pSource->release();
     return 0;
