@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-08 12:30:37 $
+ *  last change: $Author: aw $ $Date: 2001-11-13 19:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,6 +599,13 @@ void SdModule::Execute(SfxRequest& rReq)
                         rInfo.SetTime( 0L );
                         rInfo.SetDocumentNumber( 1 );
                         rInfo.SetUseUserData( TRUE );
+
+                        // #94652# clear UNDO stack after autopilot
+                        SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
+                        DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
+                        if(pUndoManager->GetUndoActionCount())
+                            pUndoManager->Clear();
+
                     }
                 }
             }
