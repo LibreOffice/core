@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleFooterView.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2003-04-28 11:27:14 $
+ *  last change: $Date: 2003-05-27 13:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 package mod._sw;
 
 import com.sun.star.awt.XWindow;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.frame.XController;
@@ -175,7 +176,7 @@ public class SwAccessibleFooterView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.FOOTER);
@@ -227,7 +228,7 @@ public class SwAccessibleFooterView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
     }
 
     private void shortWait() {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleHeaderView.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2003-04-28 11:27:20 $
+ *  last change: $Date: 2003-05-27 13:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 package mod._sw;
 
 import lib.TestCase;
+import com.sun.star.lang.XMultiServiceFactory;
 import lib.TestParameters;
 import java.io.PrintWriter;
 import lib.TestEnvironment;
@@ -167,7 +168,7 @@ public class SwAccessibleHeaderView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.HEADER);
@@ -219,6 +220,6 @@ public class SwAccessibleHeaderView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
     }
 }
