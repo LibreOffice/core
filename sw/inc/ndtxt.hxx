@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-12-12 12:33:48 $
+ *  last change: $Author: fme $ $Date: 2002-03-08 11:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,12 @@ public:
     long GetLeftMarginWithNum( BOOL bTxtLeft = FALSE ) const;
     BOOL GetFirstLineOfsWithNum( short& rFirstOffset ) const;
 
+#ifdef VERTICAL_LAYOUT
+    USHORT GetLang( const xub_StrLen nBegin, const xub_StrLen nLen = 0,
+                    USHORT nScript = 0 ) const;
+#else
     USHORT GetLang( const xub_StrLen nBegin, const xub_StrLen nLen = 0) const;
+#endif
         // steht in ndcopy.cxx
     BOOL IsSymbol( const xub_StrLen nBegin ) const; // steht in itratr.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
