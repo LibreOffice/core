@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:41 $
+ *  last change: $Author: jl $ $Date: 2000-10-05 09:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1010,8 +1010,22 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown)
     return ret;
 }
 
-// if the object supports only one type then it does not have to implement the property
-// SUPPORTER_INTERFACES_PROP ( define)
+// If the parameter "aType" has a value then the COM object ( pUnknown) is supposed to
+// implement the interface described by "aType". Moreover it ( pUnknown) can implement
+// several other
+// UNO interfaces in which case it has to support the SUPPORTED_INTERFACES_PROP (see
+// #define) property. That property contains all names of interfaces.
+// "pUnknown" is wrapped by a COM wrapper object that implements XInvocation, e.g.
+// IUnknownWrapper_Impl. Additionally an object of type "aType" is created by help
+// of the INTERFACE_ADAPTER_FACTORY (see #define) service. The implementation of
+// "aType" calls on the COM wrapper's XInvocation::invoke. If the COM object supports
+// more then one UNO interfaces, as can be determined by the property
+// SUPPORTED_INTERFACES_PROP, then the INTERFACE_ADAPTER_FACTORY creates an object that
+// implements all these interfaces.
+// This is only done if "pUnknown" is not already a UNO wrapper,
+// that is it is actually NOT an UNO object that was converted to a COM object. If it is an
+// UNO wrapper than the original UNO object is being extracted, queried for "aType" (if
+// it is no struct) and returned.
 template<class T>
 Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const Type& aType)
 {
@@ -1029,6 +1043,8 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const 
     }
     else
     {
+        // Check if "pUnknown" is a UNO wrapper. Then it supports IUnoObjectWrapper
+        // and we extract the original UNO object.
         CComQIPtr<IUnoObjectWrapper> spUno( pUnknown);
         if( spUno)
         {
@@ -1051,18 +1067,10 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const 
         }
         else
         {
+            // "pUnknown" is a real COM object.
             Reference<XInterface> xInt= createComWrapperInstance();
             if( xInt.is())
             {
-//              Reference<XInitialization> xInit( xInt, UNO_QUERY);
-//              if( xInit.is())
-//              {
-//                  Any  params[2];
-//                  params[0] <<= (sal_uInt32) pUnknown;
-//                  params[1] <<= aType;
-//                  xInit->initialize( Sequence<Any>( params, 2));
-//              }
-
                 Reference<XInvocation> xInv( xInt, UNO_QUERY);
 
                 Sequence<Type> seqTypes;
@@ -1088,9 +1096,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const 
 
                     // We create an adapter object that does not only implement the required type but also
                     // all types that the COM object pretends to implement. An COM object must therefore
-                    // support the property "_implementedInterfaces". If it does not an Adapter of param
-                    // type
-//                  Sequence<Type> seqTypes;
+                    // support the property "_implementedInterfaces".
                     CComDispatchDriver disp( pUnknown);
                     if( disp)
                     {
