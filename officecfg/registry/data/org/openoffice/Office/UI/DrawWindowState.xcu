@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DrawWindowState.xcu,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:15:00 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@
                     <value>false</value>
                 </prop>
             </node>
-            <node oor:name="private:resource/toolbar/fontworkshapetypes" oor:op="replace">
+            <node oor:name="private:resource/toolbar/fontworkshapetype" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>
