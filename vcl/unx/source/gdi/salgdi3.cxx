@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-06 10:37:37 $
+ *  last change: $Author: cp $ $Date: 2001-04-06 15:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1833,9 +1833,13 @@ InitializeWidthArray( long *pWidthArray, sal_Size nItems, int nValue = 0  )
 
 // ---------------------------------------------------------------------------
 
+#ifdef USE_BUILTIN_RASTERIZER
 static int
 GetCharWidth( ServerFont *pServerFont, int nChar, long* nWidth )
 {
+    if (pServerFont == NULL)
+        return 0;
+
     int nGlyphIndex = pServerFont->GetGlyphIndex( nChar );
 
     const GlyphMetric& rGM = pServerFont->GetGlyphMetric( nGlyphIndex );
@@ -1843,6 +1847,7 @@ GetCharWidth( ServerFont *pServerFont, int nChar, long* nWidth )
 
     return nGlyphIndex;
 }
+#endif
 
 long
 SalGraphics::GetCharWidth( USHORT nChar1, USHORT nChar2, long  *pWidthAry )
