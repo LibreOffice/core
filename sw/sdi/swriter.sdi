@@ -4041,7 +4041,7 @@ SfxStringItem InsertColumnSection FN_INSERT_COLUMN_SECTION
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt16Item InsertCtrl FN_INSERT_CTRL
+SfxImageItem InsertCtrl FN_INSERT_CTRL
 
 [
     /* flags: */
@@ -4632,7 +4632,7 @@ SfxVoidItem InsertNonBreakingSpace FN_INSERT_HARD_SPACE
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt16Item InsertObjCtrl FN_INSERT_OBJ_CTRL
+SfxImageItem InsertObjCtrl FN_INSERT_OBJ_CTRL
 
 [
     /* flags: */
