@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CalendarFieldIndex.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-03-26 02:49:24 $
+ *  last change: $Author: er $ $Date: 2002-05-02 17:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,12 @@ module com { module sun { module star { module i18n {
 /**
     Field indexes to be passed to various <type>XCalendar</type> methods.
 
-    <p>Field is writable only if marked both Get/Set.</p>
+    <p> Field is writable only if marked both Get/Set. </p>
+
+    <p> ZONE_OFFSET and DST_OFFSET cooperate such that both values are added,
+    for example, ZoneOffset=1*60 and DstOffset=1*60 results in a time
+    difference of GMT+2. The calculation is
+    GMT = LocalTime - ZoneOffset - DstOffset </p>
  */
 constants CalendarFieldIndex
 {
@@ -84,7 +89,7 @@ constants CalendarFieldIndex
     const short DAY_OF_WEEK     = 2;
     /// Get
     const short DAY_OF_YEAR     = 3;
-    /// Get/Set daylight saving time offset in minutes.
+    /// Get/Set daylight saving time offset in minutes [0*60..1*60]
     const short DST_OFFSET      = 4;
     /// Get/Set [0-23]
     const short HOUR            = 5;
@@ -104,8 +109,10 @@ constants CalendarFieldIndex
     const short MONTH           = 12;
     /// Get/Set
     const short ERA             = 13;
-    /// Total number of field
-    const short FIELD_COUNT     = 14;
+    /// Get/Set time zone offset in minutes [-12*60..12*60]
+    const short ZONE_OFFSET     = 14;
+    /// Total number of fields
+    const short FIELD_COUNT     = 15;
 };
 
 //=============================================================================
