@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:56:00 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,10 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
         if (0 == aProperty.Name.compareToAscii("InitialSelection"))
         {
             m_aInitialSelection = aProperty.Value;
+        }
+        else if (0 == aProperty.Name.compareToAscii("ActiveConnection"))
+        {
+            m_xActiveConnection.set(aProperty.Value,UNO_QUERY);
         }
         else
             ODatabaseAdministrationDialogBase::implInitialize(_rValue);
