@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtochar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:05:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #define TRANSLITERATION_ALL
 #include <numtochar.hxx>
-#include <drafts/com/sun/star/i18n/NativeNumberMode.hpp>
+#include <com/sun/star/i18n/NativeNumberMode.hpp>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -78,7 +78,7 @@ NumToChar##name::NumToChar##name() \
         implementationName = "com.sun.star.i18n.Transliteration.NumToChar"#name; \
 }
 
-using namespace drafts::com::sun::star::i18n::NativeNumberMode;
+using namespace com::sun::star::i18n::NativeNumberMode;
 
 TRANSLITERATION_NUMTOCHAR( Halfwidth, NATNUM0 )
 TRANSLITERATION_NUMTOCHAR( Fullwidth, NATNUM3 )
