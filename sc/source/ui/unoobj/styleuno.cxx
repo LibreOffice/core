@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:16:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,8 +568,8 @@ String ScStyleNameConversion::ProgrammaticToDisplayName( const String& rProgName
 
 sal_Bool lcl_AnyTabProtected( ScDocument& rDoc )
 {
-    USHORT nTabCount = rDoc.GetTableCount();
-    for (USHORT i=0; i<nTabCount; i++)
+    SCTAB nTabCount = rDoc.GetTableCount();
+    for (SCTAB i=0; i<nTabCount; i++)
         if (rDoc.IsTabProtected(i))
             return sal_True;
     return sal_False;
