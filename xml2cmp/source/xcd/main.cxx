@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: np $ $Date: 2001-07-10 13:15:13 $
+ *  last change: $Author: hjs $ $Date: 2001-07-18 17:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ main( int       argc,
 
     if (! aCommandLine.IsOk())
     {
-        cerr <<  aCommandLine.ErrorText() << endl;
+        std::cerr <<  aCommandLine.ErrorText() << std::endl ;
         return 1;
     }
 
