@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:39:14 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,7 +827,7 @@ TabPage TP_CONTENT_OPT
         Text[ japanese ] = "g‚¤’PˆÊ";
         Text [ norwegian ] = "Metriske Enheter" ;
         Text [ finnish ] = "Mittayksiköt" ;
-        Text[ chinese_traditional ] = "­p¶q³æ¦ì";
+        Text[ chinese_traditional ] = "¤Ø¤o³æ¦ì";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
         Text[ greek ] = "~ÌïíÜäá ìİôñçóçò";
         Text[ korean ] = "ÃøÁ¤ ´ÜÀ§";
@@ -1387,8 +1387,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ portuguese_brazilian ] = "Other";
         Text[ japanese ] = "‚»‚Ì‘¼";
         Text[ korean ] = "±âÅ¸";
-        Text[ chinese_simplified ] = "ÆäËü";
-        Text[ chinese_traditional ] = "¨ä¥¦";
+        Text[ chinese_simplified ] = "ÆäËû";
+        Text[ chinese_traditional ] = "¨ä¥L";
         Text[ turkish ] = "Other";
         Text[ arabic ] = "ÛíÑ Ğáß";
         Text[ finnish ] = "Muu";
@@ -1545,8 +1545,8 @@ TabPage TP_STD_FONT
         Text[ portuguese_brazilian ] = "Fontes padrao";
         Text[ japanese ] = "Šù’è‚ÌÌ«İÄ(%1)";
         Text[ korean ] = "±âº» ±Û²Ã";
-        Text[ chinese_simplified ] = "±ê×¼×ÖÌå";
-        Text[ chinese_traditional ] = "¼Ğ·Ç¦r«¬";
+        Text[ chinese_simplified ] = "±ê×¼×ÖÌå (%1)";
+        Text[ chinese_traditional ] = "¼Ğ·Ç¦r«¬ (%1)";
         Text[ turkish ] = "Standart yazıtipi";
         Text[ arabic ] = "ÇáÎØæØ ÇáÃÓÇÓíÉ";
         Text[ catalan ] = "Fuentes estándar";
@@ -1877,7 +1877,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese_brazilian ] = "Defaults";
         Text[ japanese ] = "•W€";
         Text[ korean ] = "±âº»";
-        Text[ chinese_simplified ] = "Ä¬ÈÏ";
+        Text[ chinese_simplified ] = "±ê×¼";
         Text[ chinese_traditional ] = "¼Ğ·Ç";
         Text[ turkish ] = "Defaults";
         Text[ arabic ] = "ÇİÊÑÇÖí";
@@ -2394,7 +2394,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ italian ] = "Comportamento durante lo spostamento";
         Text[ danish ] = "Behaviour while moving";
         Text[ swedish ] = "Effekt av ändringar";
-        Text[ polish ] = "Zachowanie podczas przesuwania";
+        Text[ polish ] = "Efekt przesuwania";
         Text[ portuguese_brazilian ] = "Behaviour while moving";
         Text[ japanese ] = "»²½Ş•ÏX‚Ìì—p";
         Text[ korean ] = "ÀÌµ¿½Ã¿¡ ¿òÁ÷ÀÓ";
@@ -3322,12 +3322,13 @@ TabPage TP_OPTSHDWCRSR
         Text[ japanese ] = "i“ü‚µ‚Ä‚à‚¢‚¢";
         Text[ korean ] = "Çã¿ë(~A)";
         Text[ chinese_simplified ] = "ÔÊĞí";
-        Text[ chinese_traditional ] = "®e³\\";
+        Text[ chinese_traditional ] = "¤¹³\\";
         Text[ turkish ] = "İmlecin korumalı bölümlere girmesine izin ver";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇÓÊÎÏÇã";
         Text[ finnish ] = "~Allow cursor in protected areas";
         Text[ catalan ] = "~Permitir cursor en zonas protegidas";
     };
 };
+
 
 
