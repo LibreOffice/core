@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:09:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,11 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+// --> OD 2005-03-03 #i43771#
+#ifndef _OBJECTFORMATTER_HXX
+#include <objectformatter.hxx>
+#endif
+// <--
 
 extern FASTBOOL bObjsDirect;    //frmtool.cxx
 
@@ -312,6 +317,19 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                 while( pFrm )
                 {
                     pFrm->Calc();
+                    // --> OD 2005-03-03 #i43771# - format also object anchored
+                    // at the frame
+                    if ( pFrm->IsTxtFrm() )
+                    {
+                        if ( !SwObjectFormatter::FormatObjsAtFrm( *pFrm,
+                                                                  *(pFrm->FindPageFrm()) ) )
+                        {
+                            // restart format with first content
+                            pFrm = Lower();
+                            continue;
+                        }
+                    }
+                    // <--
                     pFrm = pFrm->GetNext();
                 }
                 nRemaining = 0;
