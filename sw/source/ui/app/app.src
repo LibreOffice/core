@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:31:31 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ String STR_PRINT_MERGE_MACRO
     Text[ korean ] = "∆˚ ∑π≈Õ ¿Œº‚";
     Text[ turkish ] = "Standart mektup yazd˝r";
     Text[ catalan ] = "Imprimir cartas en serie";
+    Text[ finnish ] = "Tulosta joukkokirjeet";
 };
 
 String STR_PAGE_COUNT_MACRO
@@ -136,6 +137,7 @@ String STR_PAGE_COUNT_MACRO
     Text[ turkish ] = "Sayfa say˝s˝n˝n dei˛tirilmesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ModificaciÛn del n˙mero de p·ginas";
+    Text[ finnish ] = "Muutetaan sivum‰‰r‰‰";
 };
 
  // Image-Liste ----------------------------------------------------------------
@@ -753,17 +755,31 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Text[ catalan ] = "Estilos de p·rrafo";
             FilterList [ catalan ] =
         {
-            < "Autom·tico" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Todos los estilos" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Estilos aplicados" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Estilos del usuario" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Estilos de texto" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Estilos de capÌtulos" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Estilos de listas" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Estilos de Ìndices" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Estilos de ·reas especiales" ; SWSTYLEBIT_CONDCOLL ; > ;
-            < "Estilos HTML" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Autom·tico" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Todos los estilos" ; SFXSTYLEBIT_ALL ; > ;
+            < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
+            < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
+            < "Estilos de capÌtulos" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Estilos de listas" ; SWSTYLEBIT_LIST ; > ;
+            < "Estilos de Ìndices" ; SWSTYLEBIT_IDX ; > ;
+            < "Estilos de ·reas especiales" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Estilos HTML" ; SWSTYLEBIT_HTML ; > ;
             < "Estilos condicionados" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ finnish ] =
+        {
+            < "Automaattinen" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Kaikki tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "K‰ytetyt tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Mukautetut tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Tekstityylit" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Luvun tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Luettelotyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Hakemistotyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Erikoistyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "HTML-tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
+            < "Ehdolliset tyylit" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
     };
         SfxStyleFamilyItem
@@ -779,7 +795,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ italian ] = "Modelli di carattere" ;
             Text [ portuguese_brazilian ] = "Estilo de Caracter" ;
             Text [ portuguese ] = "Estilos de caracteres" ;
-            Text [ finnish ] = "Merkkityylit" ;
+            Text [ finnish ] = "Merkistˆjen tyylit" ;
             Text [ danish ] = "Tegntypografier" ;
             Text [ french ] = "Styles de caractËres" ;
             Text [ swedish ] = "Teckenformatmallar" ;
@@ -946,9 +962,15 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Text[ catalan ] = "Estilos de caracteres";
             FilterList [ catalan ] =
         {
-            < "Todos" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Estilos aplicados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+            < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
             < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ finnish ] =
+        {
+            < "Kaikki" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
         SfxStyleFamilyItem
@@ -964,7 +986,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ italian ] = "Modelli di cornice" ;
             Text [ portuguese_brazilian ] = "Estilos de Moldura" ;
             Text [ portuguese ] = "Estilos de molduras" ;
-            Text [ finnish ] = "Kehystyylit" ;
+            Text [ finnish ] = "Kehysten tyylit" ;
             Text [ danish ] = "Rammetypografier" ;
             Text [ french ] = "Styles de cadre" ;
             Text [ swedish ] = "Ramformatmallar" ;
@@ -1131,9 +1153,15 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Text[ catalan ] = "Estilos de marcos";
             FilterList [ catalan ] =
         {
-            < "Todos" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Estilos aplicados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+            < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
             < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ finnish ] =
+        {
+            < "Kaikki" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
         SfxStyleFamilyItem
@@ -1149,7 +1177,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ italian ] = "Modelli di pagina" ;
             Text [ portuguese_brazilian ] = "Estilos da P·gina" ;
             Text [ portuguese ] = "Estilos de p·gina" ;
-            Text [ finnish ] = "Sivutyylit" ;
+            Text [ finnish ] = "Sivujen tyylit" ;
             Text [ danish ] = "Sidetypografier" ;
             Text [ french ] = "Styles de page" ;
             Text [ swedish ] = "Sidformatmallar" ;
@@ -1316,9 +1344,15 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ catalan ] = "Estilos de p·gina";
             FilterList [ catalan ] =
         {
-            < "Todos" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Estilos aplicados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+            < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
             < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ finnish ] =
+        {
+            < "Kaikki" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
         SfxStyleFamilyItem
@@ -1499,9 +1533,16 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Text[ catalan ] = "Estilos de numeraciÛn";
             FilterList [ catalan ] =
         {
-            < "Todos" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Estilos aplicados" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+            < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
             < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ finnish ] = "Numerointityylit";
+            FilterList [ finnish ] =
+        {
+            < "Kaikki" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "K‰ytetyt tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Mukautetut tyylit" ; SFXSTYLEBIT_USERDEF ; > ;
         };
     };
     };
@@ -1522,7 +1563,7 @@ String STR_ENV_TITLE
     Text [ italian ] = "Busta" ;
     Text [ portuguese_brazilian ] = "Envelope" ;
     Text [ portuguese ] = "Envelope" ;
-    Text [ finnish ] = "Kirjekuori" ;
+    Text [ finnish ] = "Kirjekuori (Envelope)" ;
     Text [ danish ] = "Konvolut" ;
     Text [ french ] = "Enveloppe" ;
     Text [ swedish ] = "Kuvert" ;
@@ -1552,7 +1593,7 @@ String STR_LAB_TITLE
     Text [ italian ] = "Etichette" ;
     Text [ portuguese_brazilian ] = "Etiquetas" ;
     Text [ portuguese ] = "Etiquetas" ;
-    Text [ finnish ] = "Tarrat" ;
+    Text [ finnish ] = "Nimiˆt" ;
     Text [ danish ] = "Etiketter" ;
     Text [ french ] = "…tiquettes" ;
     Text [ swedish ] = "Etiketter" ;
@@ -1602,6 +1643,7 @@ String STR_HUMAN_SWDOC_NAME
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto";
+    Text[ finnish ] = "Teksti";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE_31
@@ -1630,6 +1672,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text[ turkish ] = "%PRODUCTNAME 3.0 metni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 3.0 Texto";
+    Text[ finnish ] = "Teksti (%PRODUCTNAME 3,0)";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE_40
@@ -1658,6 +1701,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text[ korean ] = "%PRODUCTNAME 4.0°°Text ";
     Text[ turkish ] = "%PRODUCTNAME 4.0 metni";
     Text[ catalan ] = "%PRODUCTNAME 4.0 texto";
+    Text[ finnish ] = "Teksti (%PRODUCTNAME 4.0)";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE_50
@@ -1686,12 +1730,13 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 5.0 Texto";
+    Text[ finnish ] = "%PRODUCTNAME 5.0 Text";
 };
 String STR_WRITER_DOCUMENT_FULLTYPE
 {
     Text = "%PRODUCTNAME 6.0 Text Dokument" ;
     Text [ English ] = "%PRODUCTNAME 6.0 Text Document" ;
-    Text[ english_us ] = "Text Document (%PRODUCTNAME 6.0)";
+    Text[ english_us ] = "%PRODUCTNAME 6.0 Text Document";
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Texto";
     Text[ russian ] = "“ÂÍÒÚÓ‚˚È ‰ÓÍÛÏÂÌÚ (%PRODUCTNAME 6.0)";
     Text[ greek ] = " ÂﬂÏÂÌÔ %PRODUCTNAME 6.0";
@@ -1706,10 +1751,11 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ japanese ] = "%PRODUCTNAME 6.0 ï∂èëƒﬁ∑≠“›ƒ";
     Text[ korean ] = "%PRODUCTNAME 5.0°°Text ";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Œƒ◊÷";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 §Â¶r";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 §Â¶r§Â•Û";
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
     Text[ arabic ] = "‰’ „‰ %PRODUCTNAME 6.0";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Texto";
+    Text[ finnish ] = "Text (%PRODUCTNAME 5.0)";
 };
 
 
@@ -1721,7 +1767,7 @@ String STR_CANTOPEN
     TEXT [ italian ] = "Impossibile aprire il documento" ;
     TEXT [ portuguese_brazilian ] = "N„o posso abrir o documento." ;
     TEXT [ portuguese ] = "ImpossÌvel abrir o documento." ;
-    TEXT [ finnish ] = "Asiakirjaa ei voi avata." ;
+    TEXT [ finnish ] = "Asiakirjan avaaminen ei onnistu." ;
     TEXT [ danish ] = "Kan ikke Âbne dokument." ;
     TEXT [ french ] = "Impossible d'ouvrir le document." ;
     TEXT [ swedish ] = "Kan inte ˆppna dokumentet." ;
@@ -1769,6 +1815,7 @@ String STR_CANTCREATE
     TEXT[ turkish ] = "Belge olu˛turulamad˝.";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "El documento no pudo ser creado.";
+    TEXT[ finnish ] = "Asiakirjaa ei voi luoda.";
 };
 String STR_DLLNOTFOUND
 {
@@ -1778,7 +1825,7 @@ String STR_DLLNOTFOUND
     TEXT [ italian ] = "Filtro non trovato." ;
     TEXT [ portuguese_brazilian ] = "Filtro n„o encontrado." ;
     TEXT [ portuguese ] = "Filtro n„o encontrado." ;
-    TEXT [ finnish ] = "Suodinta ei lˆydy." ;
+    TEXT [ finnish ] = "Suodatinta ei lˆydy." ;
     TEXT [ danish ] = "Filter blev ikke fundet." ;
     TEXT [ french ] = "Filtre introuvable." ;
     TEXT [ swedish ] = "Filter hittades ej." ;
@@ -1858,6 +1905,7 @@ String STR_LOAD_GLOBAL_DOC
     Text[ turkish ] = "Ana belgenin ad˝ ve veri yolu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nombre y ruta del documento maestro";
+    Text[ finnish ] = "P‰‰asiakirjan nimi ja polku";
 };
 
 String STR_LOAD_HTML_DOC
@@ -1886,6 +1934,7 @@ String STR_LOAD_HTML_DOC
     Text[ turkish ] = "HTML belgesinin ad˝ ve veri yolu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nombre y ruta del documento HTML ";
+    Text[ finnish ] = "Html-asiakirjan nimi ja polku";
 };
 
 InfoBox MSG_ERROR_SEND_MAIL
@@ -1898,7 +1947,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE [ italian ] = "Errore durante l'invio del messaggio." ;
     MESSAGE [ portuguese_brazilian ] = "Erro ao enviar correio." ;
     MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
-    MESSAGE [ finnish ] = "Virhe s‰hkˆpostia l‰hetett‰ess‰." ;
+    MESSAGE [ finnish ] = "Virhe postia l‰hetett‰ess‰." ;
     MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen." ;
     MESSAGE [ french ] = "Erreur lors de l'envoi du message." ;
     MESSAGE [ swedish ] = "Fel vid s‰ndning av meddelande." ;
@@ -1929,7 +1978,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE [ italian ] = "La password non corrisponde." ;
     MESSAGE [ portuguese_brazilian ] = "A senha n„o combina." ;
     MESSAGE [ portuguese ] = "A senha n„o È v·lida." ;
-    MESSAGE [ finnish ] = "Salasana ei kelpaa." ;
+    MESSAGE [ finnish ] = "Virheellinen salasana." ;
     MESSAGE [ danish ] = "Fejagtig adgangskode" ;
     MESSAGE [ french ] = "Mot de passe incorrect." ;
     MESSAGE [ swedish ] = "Felaktigt lˆsenord." ;
@@ -2044,7 +2093,7 @@ String STR_FMT_STD
     TEXT [ italian ] = "(senza)" ;
     TEXT [ portuguese_brazilian ] = "(nenhum)" ;
     TEXT [ portuguese ] = "(nenhum)" ;
-    TEXT [ finnish ] = "(ei mit‰‰n)" ;
+    TEXT [ finnish ] = "(Ei mit‰‰n)" ;
     TEXT [ danish ] = "(ingen)" ;
     TEXT [ french ] = "(aucun(e))" ;
     TEXT [ swedish ] = "(ingen)" ;
@@ -2074,7 +2123,7 @@ String STR_DOC_STAT
     TEXT [ italian ] = "Statistiche" ;
     TEXT [ portuguese_brazilian ] = "EstatÌstica" ;
     TEXT [ portuguese ] = "EstatÌstica" ;
-    TEXT [ finnish ] = "Tilasto" ;
+    TEXT [ finnish ] = "Tiedot" ;
     TEXT [ danish ] = "Statistik" ;
     TEXT [ french ] = "Statistique" ;
     TEXT [ swedish ] = "Statistik" ;
@@ -2108,7 +2157,7 @@ String STR_STATSTR_W4WREAD
     Text [ italian ] = "Il documento viene importato..." ;
     Text [ portuguese_brazilian ] = "Importando..." ;
     Text [ portuguese ] = "A importar documento..." ;
-    Text [ finnish ] = "Tuonti..." ;
+    Text [ finnish ] = "Tuodaan asiakirjaa..." ;
     Text [ danish ] = "Importerer dokument..." ;
     Text [ french ] = "Import du document en cours..." ;
     Text [ swedish ] = "Dokument importeras..." ;
@@ -2138,7 +2187,7 @@ String STR_STATSTR_W4WWRITE
     Text [ italian ] = "Il documento viene esportato..." ;
     Text [ portuguese_brazilian ] = "Exportando..." ;
     Text [ portuguese ] = "A exportar documento..." ;
-    Text [ finnish ] = "Vienti..." ;
+    Text [ finnish ] = "Vied‰‰n asiakirjaa..." ;
     Text [ danish ] = "Eksporterer dokument" ;
     Text [ french ] = "Export du document en cours..." ;
     Text [ swedish ] = "Dokument exporteras..." ;
@@ -2168,7 +2217,7 @@ String STR_STATSTR_SWGREAD
     Text [ italian ] = "Il documento viene caricato..." ;
     Text [ portuguese_brazilian ] = "Carregando..." ;
     Text [ portuguese ] = "A carregar documento..." ;
-    Text [ finnish ] = "Lataus..." ;
+    Text [ finnish ] = "Ladataan asiakirjaa..." ;
     Text [ danish ] = "IndlÊser dokument..." ;
     Text [ french ] = "Document en cours de chargement..." ;
     Text [ swedish ] = "Dokument laddas..." ;
@@ -2198,7 +2247,7 @@ String STR_STATSTR_SWGWRITE
     Text [ italian ] = "Il documento viene salvato..." ;
     Text [ portuguese_brazilian ] = "Gravando..." ;
     Text [ portuguese ] = "A guardar documento..." ;
-    Text [ finnish ] = "Tallennus..." ;
+    Text [ finnish ] = "Tallennetaan asiakirjaa..." ;
     Text [ danish ] = "Gemmer dokument..." ;
     Text [ french ] = "Enreg. du document en cours..." ;
     Text [ swedish ] = "Dokument sparas..." ;
@@ -2229,7 +2278,7 @@ String STR_STATSTR_REFORMAT
     TEXT [ italian ] = "Riformattazione del documento..." ;
     TEXT [ portuguese_brazilian ] = "Repaginando..." ;
     TEXT [ portuguese ] = "Nova formataÁ„o do documento..." ;
-    TEXT [ finnish ] = "Sivutus..." ;
+    TEXT [ finnish ] = "Uudelleensivutus" ;
     TEXT [ danish ] = "Genformatering af dokumentet..." ;
     TEXT [ french ] = "Nouveau formatage du document..." ;
     TEXT [ swedish ] = "Omformatering av dokumentet..." ;
@@ -2259,7 +2308,7 @@ String STR_STATSTR_AUTOFORMAT
     TEXT [ italian ] = "Formattazione automatica..." ;
     TEXT [ portuguese_brazilian ] = "FormataÁ„o autom·tica..." ;
     TEXT [ portuguese ] = "A formatar documento automaticamente..." ;
-    TEXT [ finnish ] = "Automaattimuotoilu..." ;
+    TEXT [ finnish ] = "Muotoillaan asiakirjaa automaattisesti..." ;
     TEXT [ danish ] = "Autoformatering af dokumentet..." ;
     TEXT [ french ] = "Mise en forme automatique du document..." ;
     TEXT [ swedish ] = "Autoformatering av dokumentet..." ;
@@ -2289,7 +2338,7 @@ String STR_STATSTR_IMPGRF
     Text [ italian ] = "L'immagine viene importata..." ;
     Text [ portuguese_brazilian ] = "Importando figura..." ;
     Text [ portuguese ] = "A importar imagem..." ;
-    Text [ finnish ] = "Kuvan tuonti..." ;
+    Text [ finnish ] = "Tuodaan grafiikkoja..." ;
     Text [ danish ] = "Importerer grafik..." ;
     Text [ french ] = "Import de l'image en cours..." ;
     Text [ swedish ] = "Grafik importeras..." ;
@@ -2319,7 +2368,7 @@ String STR_STATSTR_SEARCH
     Text [ italian ] = "Cerca..." ;
     Text [ portuguese_brazilian ] = "buscar..." ;
     Text [ portuguese ] = "A localizar..." ;
-    Text [ finnish ] = "Etsint‰..." ;
+    Text [ finnish ] = "Etsi" ;
     Text [ danish ] = "S¯ger..." ;
     Text [ french ] = "Recherche..." ;
     Text [ swedish ] = "Sˆker..." ;
@@ -2349,7 +2398,7 @@ String STR_STATSTR_FORMAT
     Text [ italian ] = "Formattazione..." ;
     Text [ portuguese_brazilian ] = "Formatando..." ;
     Text [ portuguese ] = "A formatar..." ;
-    Text [ finnish ] = "Muotoilu..." ;
+    Text [ finnish ] = "Muotoillaan..." ;
     Text [ danish ] = "Formaterer..." ;
     Text [ french ] = "Formatage..." ;
     Text [ swedish ] = "Formaterar..." ;
@@ -2379,7 +2428,7 @@ String STR_STATSTR_PRINT
     Text [ italian ] = "Stampa..." ;
     Text [ portuguese_brazilian ] = "Imprimindo..." ;
     Text [ portuguese ] = "A imprimir..." ;
-    Text [ finnish ] = "Tulostus..." ;
+    Text [ finnish ] = "Tulostetaan..." ;
     Text [ danish ] = "Udskriver..." ;
     Text [ french ] = "Impression..." ;
     Text [ swedish ] = "Skriver ut ..." ;
@@ -2409,7 +2458,7 @@ String STR_STATSTR_LAYOUTINIT
     Text [ italian ] = "Converti..." ;
     Text [ portuguese_brazilian ] = "Convertendo..." ;
     Text [ portuguese ] = "A converter..." ;
-    Text [ finnish ] = "Muunto..." ;
+    Text [ finnish ] = "Muunnetaan..." ;
     Text [ danish ] = "Konverterer..." ;
     Text [ french ] = "Conversion..." ;
     Text [ swedish ] = "Konverterar..." ;
@@ -2457,6 +2506,7 @@ String STR_STATSTR_LETTER
     Text[ turkish ] = "Mektup";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carta";
+    Text[ finnish ] = "Kirje (Letter)";
 };
 
 String STR_STATSTR_SPELL
@@ -2485,6 +2535,7 @@ String STR_STATSTR_SPELL
     Text[ turkish ] = "Yaz˝m denetimi...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "RevisiÛn ortogr·fica...";
+    Text[ finnish ] = "Oikeinkirjoituksen tarkistus";
 };
 
 String STR_STATSTR_HYPHEN
@@ -2513,6 +2564,7 @@ String STR_STATSTR_HYPHEN
     Text[ turkish ] = "Heceleme...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "SeparaciÛn sil·bica...";
+    Text[ finnish ] = "Tavutus";
 };
 
 String STR_STATSTR_TOX_INSERT
@@ -2541,6 +2593,7 @@ String STR_STATSTR_TOX_INSERT
     Text[ korean ] = "ªˆ¿Œ ª¿‘...";
     Text[ turkish ] = "Dizin ekleniyor...";
     Text[ catalan ] = "Insertando directorio...";
+    Text[ finnish ] = "Lis‰t‰‰n hakemisto...";
 };
 
 String STR_STATSTR_TOX_UPDATE
@@ -2569,6 +2622,7 @@ String STR_STATSTR_TOX_UPDATE
     Text[ korean ] = "ªˆ¿Œ æ˜µ•¿Ã∆Æ...";
     Text[ turkish ] = "Dizin g¸ncelleniyor...";
     Text[ catalan ] = "Actualizando directorio...";
+    Text[ finnish ] = "P‰ivitet‰‰n hakemistoa...";
 };
 
 String STR_STATSTR_SUMMARY
@@ -2597,6 +2651,7 @@ String STR_STATSTR_SUMMARY
     Text[ korean ] = "ø‰æ‡ ∏∏µÈ±‚...";
     Text[ turkish ] = "÷zet olu˛turuluyor...";
     Text[ catalan ] = "Creando el extracto...";
+    Text[ finnish ] = "Luodaan tiivistelm‰‰...";
 };
 
 String STR_STATSTR_SWGPRTOLENOTIFY
@@ -2625,6 +2680,7 @@ String STR_STATSTR_SWGPRTOLENOTIFY
     Text[ turkish ] = "Nesneleri uyarla...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ajustar objetos...";
+    Text[ finnish ] = "Sovita objektit";
 };
 
 
@@ -2638,7 +2694,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message [ italian ] = "L'annullamento di questa azione occorre molta memoria.\nVolete disattivare la possibilit‡ di annullare?" ;
     Message [ portuguese_brazilian ] = "Esta aÁ„o requer muita memÛria para desfazer.\nDeseja desativar a funÁ„o desfazer?" ;
     Message [ portuguese ] = "Para poder anular esta acÁ„o È necess·ria muita memÛria.\nDeseja cancelar esta funÁ„o?" ;
-    Message [ finnish ] = "T‰m‰n toiminnon kumoamiseen tarvitaan paljon muistia.\nPoistetaanko kumoamismahdollisuus k‰ytˆst‰?" ;
+    Message [ finnish ] = "T‰m‰n toiminnon peruuttamiseen tarvitaan suuri m‰‰r‰ muistia.\nHaluatko peruuttaa peruutuksen?" ;
     Message [ danish ] = "Denne handling krÊver megen hukommelse til fortryd-funktionen\nVil du slÂ fortryd-funktionen fra?" ;
     Message [ french ] = "Cette action nÈcessite beaucoup de mÈmoire pour l'annulation (Undo).\nVoulez-vous dÈsactiver l'annulation ?" ;
     Message [ swedish ] = "Denna Âtg‰rd kr‰ver alltfˆr mycket minne fˆr ≈ngra-funktionen.\nVill Du st‰nga av ≈ngra-funktionen?" ;
@@ -2797,7 +2853,7 @@ String STR_REGION_DEFNAME
     Text [ italian ] = "Sezione" ;
     Text [ portuguese_brazilian ] = "seÁ„o" ;
     Text [ portuguese ] = "SecÁ„o" ;
-    Text [ finnish ] = "osa" ;
+    Text [ finnish ] = "Osio" ;
     Text [ danish ] = "OmrÂde" ;
     Text [ french ] = "Section" ;
     Text [ swedish ] = "OmrÂde" ;
@@ -2873,6 +2929,7 @@ String STR_EMPTYPAGE
     Text[ turkish ] = "Bo˛ sayfa";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "P·gina vacÌa";
+    Text[ finnish ] = "tyhj‰ sivu";
 };
 
 QueryBox MSG_CLPBRD_CLEAR
@@ -2886,7 +2943,7 @@ QueryBox MSG_CLPBRD_CLEAR
     MESSAGE [ portuguese_brazilian ] = "O Conte˙do do Clipboard deve estar disponÌvel para outros Aplicativos?" ;
     MESSAGE [ portuguese ] = "Na ·rea de transferÍncia encontram-se grandes quantidades de dados.\nColocar o conte˙do da ·rea de transferÍncia ‡ disposiÁ„o de outras aplicaÁıes?" ;
     MESSAGE [ english_us ] = "You have a large amount of data saved in the clipboard.\nShould the clipboard contents remain available for other applications?" ;
-    MESSAGE [ finnish ] = "Pit‰‰kˆ leikepˆyd‰n sis‰llˆn olla muiden sovellusten k‰ytett‰viss‰?" ;
+    MESSAGE [ finnish ] = "Olet tallentanut leikepˆyd‰lle suuren m‰‰r‰n tietoja.\nHaluatko n‰iden tietojen olevan k‰ytett‰viss‰ muissa sovelluksissa?" ;
     MESSAGE [ danish ] = "Du har placeret en stor mÊngde data i udklipsholderen.\nSkal udklipholderens indhold vÊre tilgÊngeligt for andre applikationer?" ;
     MESSAGE [ french ] = "Vous avez dÈposÈ un grand nombre de donnÈes dans le presse-papiers. \nSouhaitez-vous en conserver le contenu pour une utilisation ultÈrieure sous une autre application ?" ;
     MESSAGE [ swedish ] = "Du har stora datam‰ngder i urklippet.\nSkall innehÂllet i urklippet gˆras tillg‰ngligt fˆr andra applikationer?" ;
@@ -2936,6 +2993,7 @@ QueryBox MSG_SAVE_HTML_QUERY
     Message[ turkish ] = "HTML format˝na \ndˆn¸˛¸m sonucunda veri kayb˝ olabilir. \nBelgeyi kaydetmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La transformaciÛn en el formato HTML \npuede causar la pÈrdida de informaciÛn. \nøDesea guardar el documento?";
+    Message[ finnish ] = "Muunnettaessa HTML-muotoon\ntietoja saattaa h‰vit‰. \nHaluatko tallentaa asiakirjan?";
 };
 
 String STR_ABSTRACT_TITLE
@@ -2964,6 +3022,7 @@ String STR_ABSTRACT_TITLE
     Text[ korean ] = "√ﬂªÛ: ";
     Text[ turkish ] = "÷zet: ";
     Text[ catalan ] = "Extracto:  ";
+    Text[ finnish ] = "Tiivistelm‰: ";
 };
 
 String STR_FDLG_TEMPLATE_BUTTON
@@ -2992,6 +3051,7 @@ String STR_FDLG_TEMPLATE_BUTTON
     Text[ turkish ] = "BiÁim";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Plantilla";
+    Text[ finnish ] = "Tyyli";
 };
 
 String STR_FDLG_TEMPLATE_NAME
@@ -3020,6 +3080,7 @@ String STR_FDLG_TEMPLATE_NAME
     Text[ turkish ] = "Y¸r¸rl¸kteki biÁim: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Plantilla actual:  ";
+    Text[ finnish ] = "Nykyinen tyyli: ";
 };
 
 String STR_PAGEOFFSET
@@ -3048,6 +3109,7 @@ String STR_PAGEOFFSET
     Text[ turkish ] = "Sayfa numaras˝: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "N˙mero de p·gina:  ";
+    Text[ finnish ] = "Sivunumero: ";
 };
 String STR_PAGEBREAK
 {
@@ -3057,7 +3119,7 @@ String STR_PAGEBREAK
     Text [ italian ] = "Interrompi prima della pagina nuova" ;
     Text [ portuguese_brazilian ] = "Interromper antes de nova p·gina" ;
     Text [ portuguese ] = "Quebra antes de nova p·gina" ;
-    Text [ finnish ] = "V‰li ennen uutta sivua" ;
+    Text [ finnish ] = "Rivinvaihto ennen uutta sivua" ;
     Text [ danish ] = "Skift f¯r ny side" ;
     Text [ french ] = "Saut avant nouvelle page" ;
     Text [ swedish ] = "Bryt fˆre ny sida" ;
@@ -3102,5 +3164,6 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ turkish ] = "unknown";
     Text[ arabic ] = "€Ì— „⁄—Ê›";
     Text[ catalan ] = "desconocido";
+    Text[ finnish ] = "tuntematon";
 };
 
