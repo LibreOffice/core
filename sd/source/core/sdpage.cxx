@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-22 11:24:34 $
+ *  last change: $Author: aw $ $Date: 2001-08-09 12:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,6 +1644,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             {
                 pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
                 pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+
+                // #90790#
+                pObj->SetItem( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
+                pObj->SetItem( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
+
                 pObj->SetLogicRect( aRect1 );
             }
             aSize.Height() = aRect0.GetSize().Height();
@@ -1686,6 +1691,10 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             {
                 pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
                 pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+
+                // #90790#
+                pObj->SetItem( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
+                pObj->SetItem( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
             }
         }
         break;
@@ -1704,6 +1713,10 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             {
                 pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
                 pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+
+                // #90790#
+                pObj->SetItem( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
+                pObj->SetItem( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
             }
         }
         break;
@@ -1732,6 +1745,10 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             {
                 pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
                 pObj->SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+
+                // #90790#
+                pObj->SetItem( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
+                pObj->SetItem( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
             }
         }
         break;
