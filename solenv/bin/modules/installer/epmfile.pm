@@ -147,6 +147,12 @@ sub get_string_from_headerfile
 sub put_directories_into_epmfile
 {
     my ($directoriesarrayref, $epmfileref) = @_;
+    my $group = "bin";
+
+    if ( $installer::globals::islinuxbuild )
+    {
+        $group = "root";
+    }
 
     for ( my $i = 0; $i <= $#{$directoriesarrayref}; $i++ )
     {
@@ -160,7 +166,7 @@ sub put_directories_into_epmfile
         {
             my $hostname = $onedir->{'HostName'};
 
-            my $line = "d 755 root other $hostname -\n";
+            my $line = "d 755 root $group $hostname -\n";
 
             push(@{$epmfileref}, $line)
         }
@@ -170,6 +176,12 @@ sub put_directories_into_epmfile
 sub put_files_into_epmfile
 {
     my ($filesinproductarrayref, $epmfileref) = @_;
+    my $group = "bin";
+
+    if ( $installer::globals::islinuxbuild )
+    {
+        $group = "root";
+    }
 
     for ( my $i = 0; $i <= $#{$filesinproductarrayref}; $i++ )
     {
@@ -179,7 +191,7 @@ sub put_files_into_epmfile
         my $destination = $onefile->{'destination'};
         my $sourcepath = $onefile->{'sourcepath'};
 
-        my $line = "f $unixrights root other $destination $sourcepath\n";
+        my $line = "f $unixrights root $group $destination $sourcepath\n";
 
         push(@{$epmfileref}, $line)
     }
@@ -188,6 +200,13 @@ sub put_files_into_epmfile
 sub put_links_into_epmfile
 {
     my ($linksinproductarrayref, $epmfileref) = @_;
+    my $group = "bin";
+
+    if ( $installer::globals::islinuxbuild )
+    {
+        $group = "root";
+    }
+
 
     for ( my $i = 0; $i <= $#{$linksinproductarrayref}; $i++ )
     {
@@ -195,7 +214,7 @@ sub put_links_into_epmfile
         my $destination = $onelink->{'destination'};
         my $destinationfile = $onelink->{'destinationfile'};
 
-        my $line = "l 000 root other $destination $destinationfile\n";
+        my $line = "l 000 root $group $destination $destinationfile\n";
 
         push(@{$epmfileref}, $line)
     }
