@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: os $ $Date: 2002-05-21 15:39:27 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,8 +785,9 @@ void SwEditWin::FlushInBuffer( SwWrtShell *pSh )
 {
     if ( aInBuffer.Len() )
     {
-        SfxMacro *pMacro = SfxRequest::GetRecordingMacro();
-        if ( pMacro )
+        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                rView.GetViewFrame()->GetBindings().GetRecorder();
+        if ( xRecorder.is() )
         {
             //Shell ermitteln
             SfxShell *pSfxShell = lcl_GetShellFromDispatcher( rView, TYPE(SwTextShell) );
