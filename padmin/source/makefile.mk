@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-03 20:00:15 $
+#   last change: $Author: kz $ $Date: 2005-03-04 15:08:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,8 +132,6 @@ APP1STDLIBS=	\
     -lXext -lX11
 
 .ENDIF
-
-all: $(BIN)$/so ALLTAR
 
 # --- Targets ------------------------------------------------------
 
