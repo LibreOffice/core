@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:47:05 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,9 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
-
+#ifndef _UITOOL_HXX
+#include "uitool.hxx"
+#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -614,7 +616,8 @@ IMPL_LINK_INLINE_END( SwLabPage, TypeHdl, ListBox *, EMPTYARG )
 void SwLabPage::DisplayFormat()
 {
     MetricField aField(this, WinBits(0));
-    aField.SetUnit        (FUNIT_CM);
+    FieldUnit aMetric = ::GetDfltMetric(FALSE);
+    SetMetric(aField, aMetric);
     aField.SetDecimalDigits(2);
     aField.SetMin         (0);
     aField.SetMax         (LONG_MAX);
