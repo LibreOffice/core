@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:14:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #include "measure.hxx" //add for SvxMeasureDialog
 #include "connect.hxx" //add for SvxConnectionDialog
 #include "cuioptgenrl.hxx"  //add for SvxGeneralTabPage
+#include "insdlg.hxx"
+#include "pastedlg.hxx"
+#include "linkdlg.hxx"
 #include "SpellDialog.hxx"
 #include "cfg.hxx"    //add for SvxConfigDialog
 #define ITEMID_TABSTOP  0 //add for #include "tabstpge.hxx"
@@ -164,6 +167,9 @@ IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxAreaTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractPasteDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractLinksDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
 
@@ -293,6 +299,33 @@ void AbstractHangulHanjaConversionDialog_Impl::FocusSuggestion( )
 String  AbstractHangulHanjaConversionDialog_Impl::GetCurrentSuggestion( ) const
 {
     return pDlg->GetCurrentSuggestion();
+}
+
+com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > AbstractInsertObjectDialog_Impl::GetObject()
+{
+   return pDlg->GetObject();
+}
+
+BOOL AbstractInsertObjectDialog_Impl::IsCreateNew()
+{
+    return pDlg->IsCreateNew();
+}
+
+void AbstractPasteDialog_Impl::Insert( SotFormatStringId nFormat, const String & rFormatName )
+{
+    pDlg->Insert( nFormat, rFormatName );
+}
+
+void AbstractPasteDialog_Impl::SetObjName( const SvGlobalName & rClass, const String & rObjName )
+{
+    pDlg->SetObjName( rClass, rObjName );
+}
+
+ULONG AbstractPasteDialog_Impl::GetFormat( const TransferableDataHelper& aHelper,
+                        const DataFlavorExVector* pFormats,
+                        const TransferableObjectDescriptor* pDesc )
+{
+    return pDlg->GetFormat( aHelper, pFormats, pDesc );
 }
 
 // for HangulHanjaConversionDialog end
@@ -2139,4 +2172,58 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId )
     }
 
     return 0;
+}
+
+SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDialog( Window* pParent, USHORT nSlotId,
+            const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStor,
+            const SvObjectServerList* pList )
+{
+    InsertObjectDialog_Impl* pDlg=0;
+    switch ( nSlotId )
+    {
+        case SID_INSERT_OBJECT : pDlg = new SvInsertOleDlg( pParent, xStor, pList ); break;
+        case SID_INSERT_PLUGIN : pDlg = new SvInsertPlugInDialog( pParent, xStor ); break;
+        case SID_INSERT_APPLET : pDlg = new SvInsertAppletDialog( pParent, xStor ); break;
+        case SID_INSERT_FLOATINGFRAME : pDlg = new SfxInsertFloatingFrameDialog( pParent, xStor ); break;
+        default: break;
+    }
+
+    if ( pDlg )
+    {
+        pDlg->SetHelpId( nSlotId );
+        return new AbstractInsertObjectDialog_Impl( pDlg );
+    }
+    return 0;
+}
+
+VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( Window* pParent, USHORT nSlotId,
+            const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj )
+{
+    InsertObjectDialog_Impl* pDlg=0;
+    switch ( nSlotId )
+    {
+        case SID_INSERT_APPLET : pDlg = new SvInsertAppletDialog( pParent, xObj ); break;
+        case SID_INSERT_FLOATINGFRAME : pDlg = new SfxInsertFloatingFrameDialog( pParent, xObj ); break;
+        default: break;
+    }
+
+    if ( pDlg )
+    {
+        pDlg->SetHelpId( nSlotId );
+        return new VclAbstractDialog_Impl( pDlg );
+    }
+    return 0;
+}
+
+SfxAbstractPasteDialog* AbstractDialogFactory_Impl::CreatePasteDialog( Window* pParent )
+{
+    return new AbstractPasteDialog_Impl( new SvPasteObjectDialog( pParent ) );
+}
+
+SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( Window* pParent, sfx2::SvLinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p)
+{
+    SvBaseLinksDlg* pLinkDlg = new SvBaseLinksDlg( pParent, pMgr, bHTML );
+    if ( p )
+        pLinkDlg->SetActLink(p);
+    return new AbstractLinksDialog_Impl( pLinkDlg );
 }
