@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:30 $
+ *  last change: $Author: pluby $ $Date: 2000-11-17 03:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,8 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 
     SalFrame *pFrame = new SalFrame;
 
-    pFrame->maFrameData.mhWnd = VCLWindow_new( nSalFrameStyle, NULL );
+    pFrame->maFrameData.mhWnd = VCLWindow_new( nSalFrameStyle, NULL, pFrame,
+        &(pFrame->maFrameData) );
 
     return pFrame;
 }
