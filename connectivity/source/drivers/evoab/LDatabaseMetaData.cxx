@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:55:46 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,8 +450,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getCrossReference(
 ::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    return ::rtl::OUString::createFromAscii("sdbc:flat:");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:flat:")) + m_pConnection->getURL();
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
