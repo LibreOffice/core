@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpmread.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: sj $ $Date: 2001-05-17 15:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,19 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                 if ( mbStatus )
                 {
                     // bei mehr als 256 Farben wird eine 24 Bit Grafik erstellt
-                    maBmp = Bitmap( Size( mnWidth, mnHeight ), ( mnColors > 256 ) ? 24 : 8 );
+                    sal_uInt16  nBits = 1;
+                    if ( mnColors > 256 )
+                        nBits = 24;
+                    else if ( mnColors > 16 )
+                        nBits = 8;
+                    else if ( mnColors > 4 )
+                        nBits = 4;
+                    else if ( mnColors > 2 )
+                        nBits = 2;
+                    else
+                        nBits = 1;
+
+                    maBmp = Bitmap( Size( mnWidth, mnHeight ), nBits );
                     mpAcc = maBmp.AcquireWriteAccess();
 
                     // mbTransparent ist TRUE wenn mindestens eine Farbe Transparent ist
