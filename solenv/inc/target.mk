@@ -5,8 +5,8 @@
 #*	  Beschreibung		TARGET-Rules
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-10-18 15:03:19 $
-#*	  $Revision: 1.13 $
+#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-10-19 16:02:20 $
+#*	  $Revision: 1.14 $
 #*
 #*	  $Logfile:   T:/solar/inc/target.mkv  $
 #*
@@ -2076,9 +2076,9 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
 
 .IF "$(XMLPROPERTIES)"!=""
 $(MISC)$/$(TARGET)_%.done : %.xrb
-    native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm
-    @xmlex -i $(MISC)$/$(<:b).interm -o $(CLASSDIR) -g -d $@
-    @+$(RM)  $(MISC)$/$(<:b).interm >& $(NULLDEV)
+    native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET)
+    @xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) -g -d $@
+    @+$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
 .INCLUDE : tg_sdi.mk
