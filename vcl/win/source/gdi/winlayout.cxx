@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 09:57:02 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2268,6 +2268,8 @@ void UniscribeLayout::Justify( long nNewWidth )
 
 SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
+    DBG_ASSERT( mpWinFontEntry[nFallbackLevel], "WinSalGraphics mpWinFontEntry==NULL");
+
     WinLayout* pWinLayout = NULL;
 
     ImplWinFontData& rFontFace      = *mpWinFontData[ nFallbackLevel ];
