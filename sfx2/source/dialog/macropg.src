@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:54:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ russian ] = "�������";
         Text[ polish ] = "Wydarzenie";
         Text[ japanese ] = "イベント";
-        Text[ chinese_traditional ] = "動作";
+        Text[ chinese_traditional ] = "事件";
         Text[ arabic ] = "�����";
         Text[ greek ] = "�������";
         Text[ korean ] = "이벤트";
@@ -108,6 +108,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ czech ] = "Událost";
         Text[ hebrew ] = "‮אירוע‬";
         Text[ hindi ] = "घटना";
+        Text[ slovak ] = "Udalosť";
     };
     String STR_ASSMACRO
     {
@@ -137,6 +138,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ czech ] = "Přiřazené makro";
         Text[ hebrew ] = "‮מקרו מושם‬";
         Text[ hindi ] = "Assigned macro";
+        Text[ slovak ] = "Priradené makro";
     };
     Control LB_EVENT
     {
@@ -196,6 +198,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ czech ] = "Existující makra v:\n";
         Text[ hebrew ] = "‮מקרואים קיימים ב:\n‬";
         Text[ hindi ] = "~Existing macros in:\n";
+        Text[ slovak ] = "Makrá ~v:\n";
     };
     Control LB_MACROS
     {
@@ -238,6 +241,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ czech ] = "Přiřadit";
         Text[ hebrew ] = "‮השמה‬";
         Text[ hindi ] = "~निर्दिष्ट करो";
+        Text[ slovak ] = "Prir~adiť";
     };
     PushButton PB_DELETE
     {
@@ -271,6 +275,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ czech ] = "Odstranit";
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "~हटाओ";
+        Text[ slovak ] = "Odst~rániť";
     };
     ListBox LB_SCRIPTTYPE
     {
@@ -309,6 +314,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ czech ] = "Makra";
         Text[ hebrew ] = "‮מאקרו‬";
         Text[ hindi ] = "मॉक्रोस";
+        Text[ slovak ] = "Makrá";
     };
     Text[ russian ] = "��������� ������";
     Text[ greek ] = "������������ ������������";
@@ -325,7 +331,10 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text[ czech ] = "Přiřadit makro";
     Text[ hebrew ] = "‮השמת מקרו‬";
     Text[ hindi ] = "मॉक्रो निर्दिष्ट करो";
+    Text[ slovak ] = "Priradiť makro";
 };
+
+
 
 
 
