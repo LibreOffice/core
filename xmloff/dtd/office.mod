@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.34 2001-03-04 23:22:19 cl Exp $
+	$Id: office.mod,v 1.35 2001-03-23 07:48:44 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -83,7 +83,7 @@
 <!ATTLIST office:document office:version	%string; #IMPLIED>
 
 <!-- document-styles -->
-<!ELEMENT office:document-styles ( 
+<!ELEMENT office:document-styles (
 							office:font-decls?,
 							office:styles?,
 							office:automatic-styles?,
@@ -112,7 +112,7 @@
 
 <!-- document-content -->
 
-<!ELEMENT office:document-content ( 
+<!ELEMENT office:document-content (
 							office:script?,
 							office:font-decls?,
 							office:automatic-styles?,
@@ -164,7 +164,16 @@
 
 <!ATTLIST office:document-meta office:version	%string; #IMPLIED>
 
+<!ELEMENT office:document-settings (office:settings) >
+<!ATTLIST office:document-settings xmlns:office	CDATA #FIXED "&nOffice;">
+<!ATTLIST office:document-settings xmlns:xlink	CDATA #FIXED "&nXLink;">
+<!ATTLIST office:document-settings xmlns:config	CDATA #FIXED "&nConfig;">
 
+<!ATTLIST office:document-settings office:class
+						  (text|online-text|
+						   drawing|presentation|
+						   spreadsheet|chart) #REQUIRED>
+<!ATTLIST office:document-settings office:version	%string; #IMPLIED>
 
 <!ENTITY % meta "(meta:generator?,
 				  dc:title?,
