@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directview.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 14:55:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,25 +84,11 @@ void DirectViewStrategy::implMarkNondefault(SetNode const& _aSetNode)
 
     OSL_ASSERT(aSetAccess.isValid());
 
-// -----------------------------------------------------------------------------
-#ifdef NON_SHARABLE_DATA
-// -----------------------------------------------------------------------------
-    ISubtree* pTree = this->getDataForUpdate(aSetAccess);
-
-    OSL_ASSERT(pTree);
-
-    pTree->markAsDefault(false);
-// -----------------------------------------------------------------------------
-#else  // SHARABLE_DATA
-// -----------------------------------------------------------------------------
     sharable::SetNode* pNode = this->getDataForUpdate(aSetAccess);
 
     OSL_ASSERT(pNode);
 
     pNode->info.markAsDefault(false);
-// -----------------------------------------------------------------------------
-#endif // SHARABLE_DATA
-// -----------------------------------------------------------------------------
 }
 //-----------------------------------------------------------------------------
 

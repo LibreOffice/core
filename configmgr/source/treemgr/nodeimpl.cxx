@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,12 +154,7 @@ bool GroupNodeImpl::areValueDefaultsAvailable(data::Accessor const& _aAccessor) 
 {
     data::GroupNodeAccess aGroupAccess = getDataAccess(_aAccessor);
 
-#ifdef NON_SHARABLE_DATA
-    return  aGroupAccess.data().getDefaultsLevel() != 0 ||
-            aGroupAccess.isDefault();
-#else // SHARABLE_DATA
     return aGroupAccess.data().hasDefaultsAvailable();
-#endif
 }
 //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,77 +921,6 @@ void ElementTreeImpl::rebuild(rtl::Reference<view::ViewStrategy> const & _xStrat
 /// transfer ownership to the given set
 
 // -----------------------------------------------------------------------------
-#ifdef NON_SHARABLE_DATA
-// -----------------------------------------------------------------------------
-void ElementTreeImpl::attachTo(data::SetNodeAccess const & aOwningSet, Name const& aElementName)
-{
-    OSL_ENSURE(m_aOwnData.is(),"ERROR: Cannot add a non-owned node to a subtree");
-
-    if (m_aOwnData.is())
-    {
-        OSL_ENSURE(this->getSimpleRootName() == aElementName,"ElementTree: Attaching with unexpected element name");
-        m_aOwnData.setName(aElementName);
-
-        INode * pOldNode = m_aOwnData.getTreeData();
-        OSL_ASSERT(pOldNode);
-
-        // copy over to the new segment
-        std::auto_ptr<INode> aNewNode(pOldNode->clone());
-
-        TreeImpl* pOwningTree = this->getContextTree();
-        OSL_ENSURE(pOwningTree, "Element Tree Context must be set before attaching data");
-        OSL_ENSURE( getUpdatableSegment(*pOwningTree) != NULL, "Cannot attach directly to new tree - no update access available");
-
-        rtl::Reference<view::ViewStrategy> xNewBehavior = pOwningTree->getViewBehavior();
-
-        ISubtree * pOwningNodeData = xNewBehavior->getDataForUpdate(aOwningSet);
-        OSL_ASSERT(pOwningNodeData);
-
-        INode * pNewNode = pOwningNodeData->addChild(aNewNode);
-
-        data::TreeAccessor aNewAccessor(aOwningSet.accessor(),pNewNode);
-
-        this->rebuild(xNewBehavior,aNewAccessor,m_aOwnData.getAccessor());
-
-        m_aOwnData.clearData();
-        OSL_ASSERT(!m_aOwnData.is());
-    }
-}
-//-----------------------------------------------------------------------------
-
-/// tranfer ownership from the given set
-void ElementTreeImpl::detachFrom(data::SetNodeAccess const & aOwningSet, Name const& aElementName)
-{
-    OSL_ENSURE(!m_aOwnData.is(),"ERROR: Cannot detach a already owned node from a subtree");
-    if (!m_aOwnData.is())
-    {
-        OSL_ENSURE(this->getSimpleRootName() == aElementName,"ElementTree: Detaching with unexpected element name");
-
-        TreeImpl* pOwningTree = this->getContextTree();
-        OSL_ENSURE(pOwningTree, "Element Tree Context must still be set when detaching data");
-        OSL_ENSURE( getUpdatableSegment(*pOwningTree) != NULL, "Cannot detach directly from old tree - no update access available");
-
-        rtl::Reference<view::ViewStrategy> xOldBehavior = pOwningTree->getViewBehavior();
-
-        ISubtree * pOwningNodeData = xOldBehavior->getDataForUpdate(aOwningSet);
-        OSL_ASSERT(pOwningNodeData);
-
-        std::auto_ptr<INode> aOldNode =  pOwningNodeData->removeChild(aElementName.toString());
-        OSL_ENSURE(aOldNode.get(),"ERROR: Detached node not found in the given subtree");
-
-        // copy over to the new segment
-        std::auto_ptr<INode> aNewNode(aOldNode->clone());
-
-        data::TreeSegment aNewSegment = data::TreeSegment::createNew(aNewNode);
-
-        this->takeTreeAndRebuild( aNewSegment, aOwningSet.accessor() );
-
-        OSL_ENSURE(m_aOwnData.is(),"ERROR: Could not create own data segment for detached node");
-    }
-}
-//-----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-#else // SHARABLE_DATA
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 void ElementTreeImpl::attachTo(data::SetNodeAccess const & aOwningSet, Name const& aElementName)
@@ -1067,7 +996,6 @@ void ElementTreeImpl::detachFrom(data::SetNodeAccess const & aOwningSet, Name co
 }
 //-----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-#endif // SHARABLE_DATA
 // -----------------------------------------------------------------------------
 
 /// transfer ownership from the given owner

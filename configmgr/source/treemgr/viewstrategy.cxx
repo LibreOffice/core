@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstrategy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 13:20:52 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,12 +182,10 @@ namespace configmgr
         data::SetNodeAddress::DataType * ViewStrategy::getDataForUpdate(data::SetNodeAccess const & _aNode)
         {
             typedef data::SetNodeAddress::DataType DataType;
-#ifdef NON_SHARABLE_DATA
-            DataType * pResult = static_cast<DataType *>(implAccessForUpdate(_aNode));
-#else  // SHARABLE_DATA
+
             sharable::Node * pNode = implAccessForUpdate(_aNode);
             DataType * pResult = pNode ? pNode->setData() : 0;
-#endif // SHARABLE_DATA
+
             OSL_ASSERT(!pResult || &_aNode.data() == pResult);
             return pResult;
         }
@@ -195,12 +193,10 @@ namespace configmgr
         data::GroupNodeAddress::DataType * ViewStrategy::getDataForUpdate(data::GroupNodeAccess const & _aNode)
         {
             typedef data::GroupNodeAddress::DataType DataType;
-#ifdef NON_SHARABLE_DATA
-            DataType * pResult = static_cast<DataType *>(implAccessForUpdate(_aNode));
-#else  // SHARABLE_DATA
+
             sharable::Node * pNode = implAccessForUpdate(_aNode);
             DataType * pResult = pNode ? pNode->groupData() : 0;
-#endif // SHARABLE_DATA
+
             OSL_ASSERT(!pResult || &_aNode.data() == pResult);
             return pResult;
         }
@@ -208,12 +204,10 @@ namespace configmgr
         data::ValueNodeAddress::DataType * ViewStrategy::getDataForUpdate(data::ValueNodeAccess const & _aNode)
         {
             typedef data::ValueNodeAddress::DataType DataType;
-#ifdef NON_SHARABLE_DATA
-            DataType * pResult = static_cast<DataType *>(implAccessForUpdate(_aNode));
-#else  // SHARABLE_DATA
+
             sharable::Node * pNode = implAccessForUpdate(_aNode);
             DataType * pResult = pNode ? pNode->valueData() : 0;
-#endif // SHARABLE_DATA
+
             OSL_ASSERT(!pResult || &_aNode.data() == pResult);
             return pResult;
         }
