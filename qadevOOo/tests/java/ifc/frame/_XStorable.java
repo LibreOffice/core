@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XStorable.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:40:05 $
+ *  last change:$Date: 2005-03-29 11:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,9 @@ public class _XStorable extends MultiMethodTest {
         String url = (String) utils.getOfficeTemp(
                                 (XMultiServiceFactory)tParam.getMSF());
 
-        url += "xstorable.store.as.test";
         if (url != null) {
+            url += "xstorable.store.as.test";
+            log.println("store as '" + url + "'");
             try {
                 oObj.storeAsURL(url, new PropertyValue[0]);
                 storeUrl = url;
@@ -202,8 +203,9 @@ public class _XStorable extends MultiMethodTest {
         String url = (String) utils.getOfficeTemp(
                                 (XMultiServiceFactory)tParam.getMSF());
 
-        url += "xstorable.store.as.test";
         if (url != null) {
+            url += "xstorable.store.as.test";
+            log.println("store to '" + url + "'");
             try {
                 oObj.storeToURL(url, new PropertyValue[0]);
                 tRes.tested("storeToURL()", true);
