@@ -8564,3 +8564,10 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ??0FileDialogHelper@sfx2@@QAE@KABVSfxObjectFactory@@KK@Z
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx239018836@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx1294123183@@YAXABVSbxVariableRef@@PAX@Z
+?acquire@SfxMacroLoader@@WBA@AAXXZ
+?queryDispatch@SfxMacroLoader@@UAA?AV?$Reference@VXDispatch@frame@star@sun@com@@@uno@star@sun@com@@ABUURL@util@456@ABVOUString@rtl@@J@Z
+?queryDispatches@SfxMacroLoader@@UAA?AV?$Sequence@V?$Reference@VXDispatch@frame@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@ABV?$Sequence@UDispatchDescriptor@frame@star@sun@com@@@3456@@Z
+?queryInterface@SfxMacroLoader@@WBA@AA?AVAny@uno@star@sun@com@@ABVType@3456@@Z
+?queryInterface@cppu@@YA?AVAny@uno@star@sun@com@@ABVType@3456@PAVXTypeProvider@lang@456@PAVXDispatchProvider@frame@456@PAVXNotifyingDispatch@frame@456@PAVXDispatch@frame@456@@Z
+?release@SfxMacroLoader@@WBA@AAXXZ
+?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx621216006@@YAXABVSbxVariableRef@@PAX@Z
