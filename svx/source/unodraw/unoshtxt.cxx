@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 15:13:37 $
+ *  last change: $Author: dl $ $Date: 2001-04-20 09:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,13 @@ SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
 
     if( pObj && !bDataValid )
     {
-        OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
+        OutlinerParaObject* pOutlinerParaObject = NULL;
+        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
+        if( pTextObj )
+            pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
+        if( !pOutlinerParaObject )
+            pOutlinerParaObject = pObj->GetOutlinerParaObject();  // no text edit active
+
         if( pOutlinerParaObject && (!pObj->IsEmptyPresObj() || pObj->GetPage()->IsMasterPage()) )
         {
             pOutliner->SetText( *pOutlinerParaObject );

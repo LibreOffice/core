@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-04 17:26:06 $
+ *  last change: $Author: dl $ $Date: 2001-04-20 09:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,7 +868,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
         rTextRect=aAnkRect;
 }
 
-OutlinerParaObject* SdrTextObj::ImpGetEditOutlinerParaObject() const
+OutlinerParaObject* SdrTextObj::GetEditOutlinerParaObject() const
 {
     OutlinerParaObject* pPara=NULL;
     if (pEdtOutl!=NULL) { // Wird gerade editiert, also das ParaObject aus dem aktiven Editor verwenden
@@ -1819,7 +1819,7 @@ void SdrTextObj::WriteData(SvStream& rOut) const
     // Das war frueher. Jetzt wird beim Speichern sowas aehnliches wie EndTextEdit gemacht! #43095#
     if (pEdtOutl!=NULL) {
         // #43095#
-        OutlinerParaObject* pPara=ImpGetEditOutlinerParaObject();
+        OutlinerParaObject* pPara=GetEditOutlinerParaObject();
         // casting auf nicht-const
         ((SdrTextObj*)this)->SetOutlinerParaObject(pPara);
     }

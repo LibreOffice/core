@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-13 13:57:50 $
+ *  last change: $Author: dl $ $Date: 2001-04-20 09:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ void ImpTextPortionHandler::DrawTextToPath(ExtOutputDevice& rXOut, FASTBOOL bDra
 
     OutlinerParaObject* pPara=rTextObj.GetOutlinerParaObject();
     if (rTextObj.IsTextEditActive()) {
-        pPara=rTextObj.ImpGetEditOutlinerParaObject();
+        pPara=rTextObj.GetEditOutlinerParaObject();
     }
     if (pPara!=NULL) {
         XPolyPolygon aXPP;
