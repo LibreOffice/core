@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_smpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-10-25 17:31:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #ifndef XLFD_ATTRIBUTE_HXX
 #include "xlfd_attr.hxx"
@@ -271,7 +270,7 @@ Xlfd::FromString( const char* pXlfdstring, AttributeProvider *pFactory )
     return True;
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 // pure debug for now: this is only to inspect/pretty print a Xlfd struct
 const char*
 Xlfd::ToString( ByteString &rString ) const
