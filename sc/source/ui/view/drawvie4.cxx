@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:35:13 $
+ *  last change: $Author: nn $ $Date: 2001-02-08 16:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,8 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>
+#include <sfx2/docfile.hxx>
+#include <tools/urlobj.hxx>
 
 #include "drawview.hxx"
 #include "global.hxx"
@@ -404,10 +406,12 @@
 #include "document.hxx"
 #include "docsh.hxx"
 #include "dataobj.hxx"
+#include "drwtrans.hxx"
 #include "drawutil.hxx"
 #include "scmod.hxx"
 #include "globstr.hrc"
 
+using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -547,6 +551,7 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 void ScDrawView::DoCopy()
 {
     {
+        // release clipboard
         SvDataObjectRef pDummyObj = new SvDataObject;
         pDummyObj->CopyClipboard();
     }
@@ -573,9 +578,21 @@ void ScDrawView::DoCopy()
     SdrModel* pModel = GetAllMarkedModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-    ScGlobal::SetClipDraw(pModel);
-    SvDataObjectRef pData = new ScDataObject( pModel, pViewData->GetDocShell(), bOneOle );
-    pData->CopyClipboard();
+//  ScGlobal::SetClipDraw(pModel);
+//  SvDataObjectRef pData = new ScDataObject( pModel, pViewData->GetDocShell(), bOneOle );
+//  pData->CopyClipboard();
+
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+
+    TransferableObjectDescriptor aObjDesc;
+    pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+    aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+    // maSize is set in ScDrawTransferObj ctor
+
+    ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
+    uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+
+    pTransferObj->CopyToClipboard();
 }
 
 //  Korrektur fuer 100% berechnen, unabhaengig von momentanen Einstellungen
