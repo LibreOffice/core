@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlattr.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:04:35 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _SV_CTRL_HXX
 #include <vcl/ctrl.hxx>
 #endif
-#ifndef _SV_COLOR_HXX
-#include <vcl/color.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 class SdHtmlAttrPreview : public Control
