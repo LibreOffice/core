@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:21:21 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1864,7 +1864,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             aTxtSize.Width() =
                     pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
 
-            ASSERT( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading(),
+            ASSERT( !rInf.GetShell() ||
+                    ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading() ),
                 "Leading values should be already calculated" )
             aTxtSize.Height() = pOutDev->GetTextHeight() +
                                 GetFontLeading( rInf.GetShell(), rInf.GetOut() );
@@ -1992,8 +1993,9 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     if ( rInf.GetKern() && nLn )
         aTxtSize.Width() += ( nLn - 1 ) * long( rInf.GetKern() );
 
-    ASSERT( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading(),
-            "Leading values should be already calculated" )
+    ASSERT( !rInf.GetShell() ||
+            ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExtLeading() ),
+              "Leading values should be already calculated" )
     aTxtSize.Height() += GetFontLeading( rInf.GetShell(), rInf.GetOut() );
     return aTxtSize;
 }
