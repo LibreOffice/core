@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpnt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-13 06:37:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 17:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #include <osl/diagnose.h>
 #include <uno/environment.h>
 #include <cppuhelper/factory.hxx>
+// OPTIONAL is a constant in com.sun.star.beans.PropertyAttributes but it must be
+// undef'd in some header files
+#define OPTIONAL OPTIONAL
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
@@ -98,6 +101,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
+
 
 #define IMPL_NAME L"oletest.OleTestImpl"  // oletest.OleTestImpl in applicat.rdb
 #define SERVICE_NAME L"oletest.OleTest"
