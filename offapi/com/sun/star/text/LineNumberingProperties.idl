@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineNumberingProperties.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 09:10:36 $
+ *  last change: $Author: dvo $ $Date: 2000-12-12 10:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,19 +107,19 @@ service LineNumberingProperties
     [property] long Distance;
 
     //-------------------------------------------------------------------------
-    /** Line numbers are shown on every <var>LineInterval</var>th line.
+    /** Line numbers are shown on every <var>Interval</var>th line.
      */
-    [property] short LineInterval;
+    [property] short Interval;
 
     //-------------------------------------------------------------------------
-    /** specifies the symbol that is shown between the line numbers.
+    /** specifies the string that is used for the line separator.
      */
-    [property] string LineSeparator;
+    [property] string SeparatorText;
 
     //-------------------------------------------------------------------------
-    /** The line separator is shown every <var>SeparatorLineDistance</var>th line.
+    /** The line separator is shown every <var>SeparatorInterval</var>th line.
      */
-    [property] short SeparatorLineDistance;
+    [property] short SeparatorInterval;
 
     //-------------------------------------------------------------------------
     /** specifies the position of the line number (constant LineNumberPositions
