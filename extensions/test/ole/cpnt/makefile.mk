@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+#   last change: $Author: jl $ $Date: 2001-06-27 06:57:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,7 +137,7 @@ ALL: 	ALLDEP
 
 
 $(BIN)$/oletest.rdb: $(ALLIDLFILES)
-    +unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
+    +idlc -I$(PRJ) -I$(SOLARIDLDIR)  -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     touch $@
 
