@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:50:45 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,10 @@ sal_uInt16 DlgFilterCrit::GetSelectionPos(sal_Int32 eType,const ListBox& rListBo
             break;
         case SQLFilterOperator::NOT_SQLNULL:
             nPos = rListBox.GetEntryCount()-1;
+            break;
+        default:
+            //  TODO  What value should this be?
+            nPos = 0;
             break;
     }
     return nPos;
