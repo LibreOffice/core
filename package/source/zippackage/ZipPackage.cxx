@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-05 15:14:23 $
+ *  last change: $Author: mtg $ $Date: 2001-06-12 11:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,16 +98,23 @@
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #endif
 
+#if SUPD>634
+#ifndef _COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandFailedException.hpp>
+#endif
+#endif
+
 using namespace rtl;
 using namespace std;
 using namespace com::sun::star::io;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::container;
+using namespace com::sun::star::ucb;
+using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::packages;
+using namespace com::sun::star::registry;
+using namespace com::sun::star::container;
 using namespace com::sun::star::packages::manifest;
 using namespace com::sun::star::packages::ZipConstants;
 
@@ -345,9 +352,22 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             throw;
         }
     }
-    catch (::com::sun::star::ucb::CommandAbortedException&)
+    catch (CommandAbortedException&)
     {
-        // File doesn't exist, we'll create it at commitChanges time
+        // Command was aborted by css::ucb:XComandProcessor::abort
+    }
+#if SUPD>634
+    catch (CommandFailedException&)
+    {
+        // error was handled by an interaction handler which cancelled the
+        // command
+    }
+#endif
+    catch (com::sun::star::uno::Exception&)
+    {
+        // Exception derived from uno::Exception thrown. This probably
+        // means the file doesn't exist...we'll create it at
+        // commitChanges time
     }
 }
 
@@ -577,9 +597,21 @@ void SAL_CALL ZipPackage::commitChanges(  )
         xContentSeek = Reference < XSeekable > (xContentStream, UNO_QUERY);
         pZipFile->setInputStream ( xContentStream );
     }
-    catch (::com::sun::star::ucb::CommandAbortedException&)
+    catch (CommandAbortedException&)
     {
-        // What the hell ?! In theory we just wrote it !
+        // Command was aborted by css::ucb:XComandProcessor::abort
+    }
+#if SUPD>634
+    catch (CommandFailedException&)
+    {
+        // error was handled by an interaction handler which cancelled the
+        // command
+    }
+#endif
+    catch (com::sun::star::uno::Exception&)
+    {
+        // Exception thrown derived from css::uno::Exception...
+        // exact error unknown
     }
 }
 
