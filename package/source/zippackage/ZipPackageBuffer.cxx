@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
+ *  last change: $Author: mtg $ $Date: 2001-05-15 13:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ sal_Int32 SAL_CALL ZipPackageBuffer::readBytes( Sequence< sal_Int8 >& aData, sal
     if (nBytesToRead + nCurrent > nEnd)
         nBytesToRead = static_cast < sal_Int32 > (nEnd - nCurrent);
 
+    aData.realloc ( nBytesToRead );
     memcpy(aData.getArray(), aBuffer.getConstArray() + nCurrent, nBytesToRead);
     nCurrent +=nBytesToRead;
     return nBytesToRead;
