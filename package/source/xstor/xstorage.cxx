@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-04 10:03:40 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -113,6 +117,9 @@
 #include <cppuhelper/typeprovider.hxx>
 #endif
 
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
 
 #include "xstorage.hxx"
 #include "owriteablestream.hxx"
@@ -436,9 +443,6 @@ void OStorage_Impl::OpenOwnPackage()
     {
         if ( !m_xPackage.is() )
         {
-            sal_Bool bRepairPackage = sal_False;
-            uno::Reference< ucb::XProgressHandler > xProgressHandler;
-
             uno::Sequence< uno::Any > aArguments( 1 );
             if ( m_nStorageMode & embed::ElementModes::WRITE )
                 aArguments[ 0 ] <<= m_xStream;
@@ -453,26 +457,19 @@ void OStorage_Impl::OpenOwnPackage()
             sal_Int32 nArgNum = 1;
             for ( sal_Int32 aInd = 0; aInd < m_xProperties.getLength(); aInd++ )
             {
-                if ( m_xProperties[aInd].Name.equalsAscii( "RepairPackage" ) )
+                if ( m_xProperties[aInd].Name.equalsAscii( "RepairPackage" )
+                  || m_xProperties[aInd].Name.equalsAscii( "ProgressHandler" ) )
                 {
+                    beans::NamedValue aNamedValue( m_xProperties[aInd].Name,
+                                                    m_xProperties[aInd].Value );
                     aArguments.realloc( ++nArgNum );
-                    // TODO: implement in package component
-                    // May be it should not be just a boolean value
-                    // but a property value
-                    aArguments[nArgNum] = m_xProperties[aInd].Value;
+                    aArguments[nArgNum-1] <<= aNamedValue;
                 }
                 else if ( m_xProperties[aInd].Name.equalsAscii( "Password" ) )
                 {
                     // TODO: implement password setting for documents
                     // the password entry must be removed after setting
                 }
-                /* TODO:
-                else if ( m_xProperties[aInd].Name.equalsAscii( "ProgressHandler" ) )
-                {
-                    aArguments.realloc( ++nArgNum );
-                    aArguments[nArgNum] = m_xProperties[aInd].Value;
-                }
-                */
             }
 
             m_xPackage = uno::Reference< lang::XSingleServiceFactory > (
@@ -715,11 +712,12 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
             {
                 throw;
             }
-            catch( uno::Exception& e )
+            catch( uno::Exception& )
             {
+                uno::Any aCaught( ::cppu::getCaughtException() );
                 throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
                                                  uno::Reference< io::XInputStream >(),
-                                                 uno::makeAny( e ) );
+                                                 aCaught );
             }
         }
     }
@@ -1020,7 +1018,7 @@ void OStorage_Impl::SetModifiedInternally( sal_Bool bModified )
 }
 
 ::rtl::OUString OStorage_Impl::GetCommonRootPass()
-    throw ( ::com::sun::star::packages::NoEncryptionException )
+    throw ( packages::NoEncryptionException )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
@@ -2311,11 +2309,12 @@ void SAL_CALL OStorage::commit()
     {
         throw;
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Problems on commit!" ),
                                   uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
-                                  uno::makeAny( e ) );
+                                  aCaught );
     }
 
     BroadcastTransaction( STOR_MESS_COMMITED );
@@ -2361,11 +2360,12 @@ void SAL_CALL OStorage::revert()
     {
         throw;
     }
-    catch( uno::Exception& e )
+    catch( uno::Exception& )
     {
+        uno::Any aCaught( ::cppu::getCaughtException() );
         throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Problems on revert!" ),
                                   uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
-                                  uno::makeAny( e ) );
+                                  aCaught );
     }
 
     BroadcastTransaction( STOR_MESS_REVERTED );
@@ -2499,12 +2499,17 @@ uno::Any SAL_CALL OStorage::getByName( const ::rtl::OUString& aName )
         try {
             aResult <<= openStorageElement( aName, embed::ElementModes::READ );
         }
-        catch ( uno::Exception& e )
+        catch ( uno::RuntimeException& )
         {
+            throw;
+        }
+        catch ( uno::Exception& )
+        {
+            uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetException( ::rtl::OUString::createFromAscii( "Can not open storage!\n" ),
                                                 uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                     uno::UNO_QUERY ),
-                                                uno::makeAny( e ) );
+                                                aCaught );
         }
     }
     else
@@ -2512,12 +2517,17 @@ uno::Any SAL_CALL OStorage::getByName( const ::rtl::OUString& aName )
         try {
             aResult <<= openStreamElement( aName, embed::ElementModes::READ );
         }
-        catch ( uno::Exception& e )
+        catch ( uno::RuntimeException& )
         {
+            throw;
+        }
+        catch ( uno::Exception& )
+        {
+            uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetException( ::rtl::OUString::createFromAscii( "Can not open storage!\n" ),
                                                 uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                     uno::UNO_QUERY ),
-                                                uno::makeAny( e ) );
+                                                aCaught );
         }
     }
 
@@ -2646,12 +2656,17 @@ void SAL_CALL OStorage::setEncryptionPassword( const ::rtl::OUString& aPass )
         try {
             m_pImpl->ReadContents();
         }
-        catch ( uno::Exception& e )
+        catch ( uno::RuntimeException& )
         {
+            throw;
+        }
+        catch ( uno::Exception& )
+        {
+            uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetException( ::rtl::OUString::createFromAscii( "Can not open package!\n" ),
                                                 uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                     uno::UNO_QUERY ),
-                                                uno::makeAny( e ) );
+                                                aCaught );
         }
 
         uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY );
@@ -2691,12 +2706,17 @@ void SAL_CALL OStorage::removeEncryption()
         try {
             m_pImpl->ReadContents();
         }
-        catch ( uno::Exception& e )
+        catch ( uno::RuntimeException& )
         {
+            throw;
+        }
+        catch ( uno::Exception& )
+        {
+            uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetException( ::rtl::OUString::createFromAscii( "Can not open package!\n" ),
                                                 uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                     uno::UNO_QUERY ),
-                                                uno::makeAny( e ) );
+                                                aCaught );
         }
 
         // TODO: check if the password is valid
@@ -2790,12 +2810,17 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
         {
             m_pImpl->ReadContents();
         }
-        catch ( uno::Exception& e )
+        catch ( uno::RuntimeException& )
         {
+            throw;
+        }
+        catch ( uno::Exception& )
+        {
+            uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetException(
                                         ::rtl::OUString::createFromAscii( "Can't read contents!" ),
                                         uno::Reference< XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ),
-                                        uno::makeAny( e ) ); // TODO:
+                                        aCaught );
         }
 
         return uno::makeAny( m_pImpl->m_aMediaType );
@@ -2829,12 +2854,17 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const ::rtl::OUString& aPropertyNa
             try {
                 m_pImpl->ReadContents();
             }
-            catch ( uno::Exception& e )
+            catch ( uno::RuntimeException& )
             {
+                throw;
+            }
+            catch ( uno::Exception& )
+            {
+                uno::Any aCaught( ::cppu::getCaughtException() );
                 throw lang::WrappedTargetException( ::rtl::OUString::createFromAscii( "Can not open package!\n" ),
                                                     uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                         uno::UNO_QUERY ),
-                                                    uno::makeAny( e ) );
+                                                    aCaught );
             }
 
             uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY );
