@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificatechooser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 07:29:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <dialogs.hrc>
 #include <resourcemanager.hxx>
 
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+
 /* HACK: disable some warnings for MS-C */
 #ifdef _MSC_VER
 #pragma warning (disable : 4355)    // 4355: this used in initializer-list
@@ -114,9 +118,9 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::
     FreeResource();
 
     mxSecurityEnvironment = _rxSecurityEnvironment;
-
     maCertLB.SetSelectHdl( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
     maCertLB.SetDoubleClickHdl( LINK( this, CertificateChooser, CertificateSelectHdl ) );
+    maViewBtn.SetClickHdl( LINK( this, CertificateChooser, ViewButtonHdl ) );
 
     try
     {
@@ -140,7 +144,8 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::
             for( sal_Int32 nSig = 0; nSig < nCertificatesToIgnore; ++nSig )
             {
                 const SignatureInformation& rInf = _rCertsToIgnore[ nSig ];
-                if( ( aIssuerName == rInf.ouX509IssuerName ) && ( bigIntegerToNumericString( xCert->getSerialNumber() ) == rInf.ouX509SerialNumber ) )
+                if ( ( aIssuerName == rInf.ouX509IssuerName ) &&
+                     ( bigIntegerToNumericString( xCert->getSerialNumber() ) == rInf.ouX509SerialNumber ) )
                 {
                     bIgnoreThis = true;
                     break;
@@ -165,22 +170,20 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::
         }
     }
 
-    String  aCN_Id( String::CreateFromAscii( "CN" ) );
-
-    for( sal_Int32 nC = 0; nC < nCertificates; ++nC )
+    // fill list of certificates; the first entry will be selected
+    for ( sal_Int32 nC = 0; nC < nCertificates; ++nC )
     {
-        String          aSubject    ( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName(), aCN_Id ) );
-        String          aDateTimeStr( XmlSec::GetDateString( maCerts[ nC ]->getNotAfter() ) );
-        String          aIssuer     ( XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName(), aCN_Id ) );
-
-        SvLBoxEntry*    pEntry = maCertLB.InsertEntry( aSubject );
-        maCertLB.SetEntryText( aIssuer, pEntry, 1 );
-        maCertLB.SetEntryText( aDateTimeStr, pEntry, 2 );
-        pEntry->SetUserData( ( void* ) nC );        // missuse user data as index
+        String sEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() ) );
+        sEntry += '\t';
+        sEntry += XmlSec::GetDateString( maCerts[ nC ]->getNotAfter() );
+        sEntry += '\t';
+        sEntry += XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() );
+        SvLBoxEntry* pEntry = maCertLB.InsertEntry( sEntry );
+        pEntry->SetUserData( ( void* )nC ); // missuse user data as index
     }
 
-    maViewBtn.SetClickHdl( LINK( this, CertificateChooser, ViewButtonHdl ) );
-    maViewBtn.Disable();
+    // enable/disable buttons
+    CertificateHighlightHdl( NULL );
 }
 
 CertificateChooser::~CertificateChooser()
@@ -191,21 +194,22 @@ uno::Reference< dcss::security::XCertificate > CertificateChooser::GetSelectedCe
 {
     uno::Reference< dcss::security::XCertificate > xCert;
     USHORT  nSelected = GetSelectedEntryPos();
-    if( nSelected < maCerts.getLength() )
+    if ( nSelected < maCerts.getLength() )
         xCert = maCerts[ nSelected ];
-
     return xCert;
 }
 
 IMPL_LINK( CertificateChooser, CertificateHighlightHdl, void*, EMPTYARG )
 {
-    maViewBtn.Enable();
+    sal_Bool bEnable = GetSelectedCertificate().is();
+    maViewBtn.Enable( bEnable );
+    maOKBtn.Enable( bEnable );
     return 0;
 }
 
 IMPL_LINK( CertificateChooser, CertificateSelectHdl, void*, EMPTYARG )
 {
-    EndDialog( 1 );
+    EndDialog( RET_OK );
     return 0;
 }
 
@@ -220,7 +224,8 @@ void CertificateChooser::ImplShowCertificateDetails()
     uno::Reference< dcss::security::XCertificate > xCert = GetSelectedCertificate();
     if( xCert.is() )
     {
-        CertificateViewer aViewer( this, mxSecurityEnvironment, xCert );
+        CertificateViewer aViewer( this, mxSecurityEnvironment, xCert, TRUE );
         aViewer.Execute();
     }
 }
+
