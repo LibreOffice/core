@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfout.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:23:57 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                     //If we can't convert to the dest encoding, or if
                     //its an uncommon multibyte sequence which most
                     //readers won't be able to handle correctly, then
+                    //If we can't convert to the dest encoding, then
                     //export as unicode
                     OUString sBuf(&c, 1);
                     OString sConverted;
@@ -180,8 +181,6 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                             eDestEnc, OUSTRING_TO_OSTRING_CVTFLAGS);
                     }
                     const sal_Int32 nLen = sConverted.getLength();
-                    if (sConverted.getLength() > 1)
-                        bWriteAsUnicode = true;
 
                     if (bWriteAsUnicode && pUCMode)
                     {
