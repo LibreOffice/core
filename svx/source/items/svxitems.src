@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-11 23:02:39 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5061,7 +5061,7 @@ String RID_SVXITEMS_AUTOKERN_FALSE
     Text [ norwegian ] = "Ingen Auto Bokstavsperring" ;
     Text [ italian ] = "Senza kerning automatico" ;
     Text [ portuguese_brazilian ] = "Sem Kerning Automático" ;
-    Text [ portuguese ] = "Sem Kerning de pares" ;
+    Text [ portuguese ] = "Sem kerning de pares" ;
     Text [ finnish ] = "Ei automaattista välistystä" ;
     Text [ danish ] = "Ingen parvis knibning" ;
     Text [ french ] = "Pas de crénage pair" ;
@@ -5395,7 +5395,7 @@ String RID_SVXITEMS_FMTSPLIT_FALSE
     Text [ finnish ] = "Ei jaettu kappale" ;
     Text [ danish ] = "Del afsnit ikke" ;
     Text [ french ] = "Lignes solidaires" ;
-    Text [ swedish ] = "Dela inte upp stycket" ;
+    Text [ swedish ] = "Dela inte stycke" ;
     Text [ dutch ] = "Alinea niet splitsen" ;
     Text [ spanish ] = "No dividir párrafo" ;
     Text [ english_us ] = "Don't split paragraph" ;
@@ -7324,15 +7324,15 @@ String RID_SVXITEMS_TWOLINES_OFF
     Text [ English ] = "Two lines off" ;
     Text[ english_us ] = "Double lined off";
     Text[ portuguese ] = "Two lines off";
-    Text[ russian ] = "Two lines off";
+    Text[ russian ] = "Îòêë. äâóñòğî÷íûé";
     Text[ greek ] = "Äßãñáììá - ¼÷é";
     Text[ dutch ] = "Tweeregelig uit";
     Text[ french ] = "Two lines off";
     Text[ spanish ] = "Two lines off";
     Text[ italian ] = "Two lines off";
     Text[ danish ] = "Two lines off";
-    Text[ swedish ] = "Two lines off";
-    Text[ polish ] = "Two lines off";
+    Text[ swedish ] = "Tvåradigt av";
+    Text[ polish ] = "Wy³¹cz dwuwierszowoœæ";
     Text[ portuguese_brazilian ] = "Two lines off";
     Text[ japanese ] = "2sg‚¢ µÌ";
     Text[ korean ] = "µÎ Çà, ¿ÀÇÁ";
@@ -7351,10 +7351,10 @@ String RID_SVXITEMS_TWOLINES
     Text[ greek ] = "Äßãñáììá";
     Text[ dutch ] = "Tweeregelig";
     Text[ french ] = "Two lines";
-    Text[ spanish ] = "Two lines";
+    Text[ spanish ] = "Dos líneas";
     Text[ italian ] = "Per riga";
     Text[ danish ] = "Two lines";
-    Text[ swedish ] = "Två rader";
+    Text[ swedish ] = "Tvåradig";
     Text[ polish ] = "Dwa wiersze";
     Text[ portuguese_brazilian ] = "Two lines";
     Text[ japanese ] = "2sg‚¢";
@@ -7425,7 +7425,7 @@ String RID_SVXITEMS_HNGPNCT_OFF
     Text[ spanish ] = "Sin puntuación libre al final de línea";
     Text[ italian ] = "Nessuna interpunzione a fine riga";
     Text[ danish ] = "No hanging punctuation at line end";
-    Text[ swedish ] = "No hanging punctuation at line end";
+    Text[ swedish ] = "Ingen hängande interpunktion vid radslutet";
     Text[ polish ] = "No hanging punctuation at line end";
     Text[ portuguese_brazilian ] = "No hanging punctuation at line end";
     Text[ japanese ] = "s––‚É‹å“Ç“_‚ğ‚Â‚¯‚È‚¢";
@@ -7448,7 +7448,7 @@ String RID_SVXITEMS_HNGPNCT_ON
     Text[ spanish ] = "Puntuación libre al final de línea";
     Text[ italian ] = "Interpunzione a fine riga";
     Text[ danish ] = "Hanging punctuation at line end";
-    Text[ swedish ] = "Hanging punctuation at line end";
+    Text[ swedish ] = "Hängande interpunktion vid radslutet";
     Text[ polish ] = "Hanging punctuation at line end";
     Text[ portuguese_brazilian ] = "Hanging punctuation at line end";
     Text[ japanese ] = "s––‚É‹å“Ç“_‚ğ‚Â‚¯‚é";
@@ -7465,13 +7465,13 @@ String RID_SVXITEMS_FORBIDDEN_RULE_OFF
     Text[ english_us ] = "Apply list of forbidden characters to beginning and end of lines";
     Text[ portuguese ] = "Apply list of forbidden characters at line end and line start";
     Text[ russian ] = "Ó÷èòûâàòü íåäîïóñòèìûå çíàêè â íà÷àëå è êîíöå ñòğîêè";
-    Text[ greek ] = "Apply list of forbidden characters at line end and line start";
-    Text[ dutch ] = "Apply list of forbidden characters at line end and line start";
+    Text[ greek ] = "Íá ëçöèïıí õğüøç ïé ìç åğéôñåğüìåíïé ÷áñáêôŞñåò óôçí áñ÷Ş êáé óôï ôİëïò ôçò ãñáììŞò";
+    Text[ dutch ] = "Rekening houden met verboden tekens aan regelbegin en -einde";
     Text[ french ] = "Tenir compte des caractères interdits en début et en fin de ligne";
-    Text[ spanish ] = "Apply list of forbidden characters at line end and line start";
-    Text[ italian ] = "Apply list of forbidden characters at line end and line start";
+    Text[ spanish ] = "Considerar caracteres no aceptables a comienzo y final de línea.";
+    Text[ italian ] = "Considera elenco dei caratteri non consentiti all'inizio e alla fine della riga";
     Text[ danish ] = "Apply list of forbidden characters at line end and line start";
-    Text[ swedish ] = "Apply list of forbidden characters at line end and line start";
+    Text[ swedish ] = "Använd lista med förbjudna tecken vid radens början och slut";
     Text[ polish ] = "Uwzglêdnij niedozwolone znaki na pocz¹tku i na koñcu wiersza";
     Text[ portuguese_brazilian ] = "Apply list of forbidden characters at line end and line start";
     Text[ japanese ] = "s“ª‚¨‚æ‚Ñs––‚Ég—p‚µ‚Ä‚Í‚¢‚¯‚È‚¢‹L†‚É’ˆÓ";
@@ -7479,7 +7479,7 @@ String RID_SVXITEMS_FORBIDDEN_RULE_OFF
     Text[ chinese_simplified ] = "¹Ë¼°ÔÚĞĞÊ×ĞĞÄ©½ûÖ¹Ê¹ÓÃµÄ×Ö·û";
     Text[ chinese_traditional ] = "ÅU¤Î¦æ­º¦æ¥½¸T¤î¨Ï¥Îªº¦r¤¸";
     Text[ turkish ] = "Apply list of forbidden characters at line end and line start";
-    Text[ arabic ] = "Apply list of forbidden characters at line end and line start";
+    Text[ arabic ] = "ÊØÈíŞ ÇáÃÍÑİ ÇáããäæÚÉ Úáì ÈÏÇíÉ ÇáÃÓØÑ æäåÇíÊåÇ";
 };
 
 String RID_SVXITEMS_FORBIDDEN_RULE_ON
@@ -7489,13 +7489,13 @@ String RID_SVXITEMS_FORBIDDEN_RULE_ON
     Text[ english_us ] = "Don't apply list of forbidden characters to beginning and end of lines";
     Text[ portuguese ] = "Don't Apply list of forbidden characters at line end and line start";
     Text[ russian ] = "Ó÷èòûâàòü íåäîïóñòèìûå çíàêè â íà÷àëå è êîíöå ñòğîêè";
-    Text[ greek ] = "Don't Apply list of forbidden characters at line end and line start";
-    Text[ dutch ] = "Don't Apply list of forbidden characters at line end and line start";
+    Text[ greek ] = "Íá ìçí ëçöèïıí õğüøç ïé ìç åğéôñåğüìåíïé ÷áñáêôŞñåò óôçí áñ÷Ş êáé óôï ôİëïò ôçò ãñáììŞò";
+    Text[ dutch ] = "Geen rekening houden met verboden tekens aan regelbegin en-einde";
     Text[ french ] = "Ignorer les caractères interdits en début et en fin de ligne";
-    Text[ spanish ] = "Don't Apply list of forbidden characters at line end and line start";
-    Text[ italian ] = "Don't Apply list of forbidden characters at line end and line start";
+    Text[ spanish ] = "No considerar caracteres no aceptables a comienzo y final de línea.";
+    Text[ italian ] = "Non considerare elenco dei caratteri non consentiti all'inizio e alla fine della riga";
     Text[ danish ] = "Don't Apply list of forbidden characters at line end and line start";
-    Text[ swedish ] = "Don't Apply list of forbidden characters at line end and line start";
+    Text[ swedish ] = "Använd inte lista med förbjudna tecken i radens början och slut";
     Text[ polish ] = "Nie uwzglêdniaj niedozwolonych znaków na pocz¹tku i na koñcu wiersza";
     Text[ portuguese_brazilian ] = "Don't Apply list of forbidden characters at line end and line start";
     Text[ japanese ] = "s“ª‚¨‚æ‚Ñs––‚Ég—p‚µ‚Ä‚Í‚¢‚¯‚È‚¢‹L†‚ğ–³‹";
@@ -7503,6 +7503,6 @@ String RID_SVXITEMS_FORBIDDEN_RULE_ON
     Text[ chinese_simplified ] = "²»¹Ë¼°ÔÚĞĞÊ×ĞĞÄ©½ûÖ¹Ê¹ÓÃµÄ×Ö·û";
     Text[ chinese_traditional ] = "¤£ÅU¤Î¦æ­º¦æ¥½¸T¤î¨Ï¥Îªº¦r¤¸";
     Text[ turkish ] = "Don't Apply list of forbidden characters at line end and line start";
-    Text[ arabic ] = "Don't Apply list of forbidden characters at line end and line start";
+    Text[ arabic ] = "ÚÏã ÊØÈíŞ ÇáÃÍÑİ ÇáããäæÚÉ Úáì ÈÏÇíÉ ÇáÃÓØÑ æäåÇíÊåÇ";
 };
  // ********************************************************************** EOF
