@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-27 08:59:09 $
+ *  last change: $Author: ssa $ $Date: 2002-10-17 16:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,7 @@ void ToolBox::DoubleClick()
 
 void ToolBox::Activate()
 {
+    mnActivateCount++;
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ACTIVATE );
     maActivateHdl.Call( this );
 }
@@ -313,6 +314,7 @@ void ToolBox::Activate()
 
 void ToolBox::Deactivate()
 {
+    mnActivateCount--;
     ImplCallEventListeners( VCLEVENT_TOOLBOX_DEACTIVATE );
     maDeactivateHdl.Call( this );
 

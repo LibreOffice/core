@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-22 14:02:04 $
+ *  last change: $Author: ssa $ $Date: 2002-10-17 16:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,7 +1494,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mnWinStyle        = nStyle;
     mnLastFocusItemId          = 0;
     mnKeyModifier     = 0;
-
+    mnActivateCount   = 0;
 
     maTimer.SetTimeout( 50 );
     maTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
@@ -1640,6 +1640,10 @@ ToolBox::ToolBox( Window* pParent, const ResId& rResId ) :
 
 ToolBox::~ToolBox()
 {
+    // #103005# make sure our activate/deactivate balance is right
+    while( mnActivateCount )
+        Deactivate();
+
     // Falls noch ein Floating-Window connected ist, dann den
     // PopupModus beenden
     if ( mpFloatWin )
