@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-01-10 10:15:54 $
+ *  last change: $Author: svesik $ $Date: 2001-02-02 13:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #include    <rtl/ustrbuf.hxx>
 #endif
 
-#if defined ( GCC ) && ( defined ( SCO ) || defined ( NETBSD ) || defined ( OS2 ) )
+#if defined ( GCC ) && ( defined ( SCO ) || defined ( OS2 ) )
 NAMESPACE_VOS(ORealDynamicLoader)* NAMESPACE_VOS(ODynamicLoader)<RegistryTypeReader_Api>::m_pLoader = NULL;
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-18 23:34:16 $
+ *  last change: $Author: svesik $ $Date: 2001-02-02 13:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 
 using namespace vos;
 
-#if defined ( GCC ) && ( defined ( SCO ) || defined ( NETBSD ) )
+#if defined ( GCC ) && ( defined ( SCO ) )
 ORealDynamicLoader* ODynamicLoader<Registry_Api>::m_pLoader = NULL;
 #endif
 
