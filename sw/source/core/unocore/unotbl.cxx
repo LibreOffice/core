@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 06:51:48 $
+ *  last change: $Author: os $ $Date: 2000-10-12 10:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2634,7 +2634,7 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     if(pFmt)
     {
         sal_Int16 nRowCount = getRowCount();
-        if(rRowDesc.getLength() < bFirstRowAsLabel ? nRowCount - 1 : nRowCount)
+        if(rRowDesc.getLength() < (bFirstRowAsLabel ? nRowCount - 1 : nRowCount))
         {
             throw uno::RuntimeException();
             return;
