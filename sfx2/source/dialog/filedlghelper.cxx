@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-12 13:06:37 $
+ *  last change: $Author: fs $ $Date: 2001-10-12 13:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,7 @@ public:
 
     ErrCode                 getGraphic( Graphic& rGraphic ) const;
 
-    Reference< XFilePicker >    getTopMostFilePicker( ) const;
+    static Reference< XFilePicker > getTopMostFilePicker( );
 };
 
 // ------------------------------------------------------------------------
@@ -1055,7 +1055,7 @@ void SAL_CALL PickerThread_Impl::run()
 }
 
 // ------------------------------------------------------------------------
-Reference< XFilePicker > FileDialogHelper_Impl::getTopMostFilePicker( ) const
+Reference< XFilePicker > FileDialogHelper_Impl::getTopMostFilePicker( )
 {
     Reference< XFilePicker > xReturn;
     DBG_ASSERT( !maDialogQueue.empty(), "FileDialogHelper_Impl::popPicker: no active picker!" );
@@ -1811,9 +1811,9 @@ FileDialogHelper::~FileDialogHelper()
 }
 
 // ------------------------------------------------------------------------
-Reference< XFilePicker > FileDialogHelper::GetTopMostFilePicker( ) const
+Reference< XFilePicker > FileDialogHelper::GetTopMostFilePicker( )
 {
-    return mpImp->getTopMostFilePicker();
+    return FileDialogHelper_Impl::getTopMostFilePicker();
 }
 
 // ------------------------------------------------------------------------
