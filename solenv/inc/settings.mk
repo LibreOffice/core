@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-28 13:29:08 $
+#   last change: $Author: hjs $ $Date: 2001-08-30 12:02:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -445,6 +445,10 @@ ENVRCFLAGS*=$(envrcflags)
 .IF "$(envrclinkflags)"!=""
 ENVRCLINKFLAGS*=$(envrclinkflags)
 .ENDIF
+
+# --- set both L10N variables to keep things working ---------------
+
+L10N-framework=$(L10N_framework)
 
 # --- Parameter Einstellungen ueberpruefen und umsetzen ------------
 
@@ -997,9 +1001,9 @@ SCPDEFS+=-DUDK_MINOR=$(UDK_MINOR)
 SCPDEFS+=-DUDK_MICRO=$(UDK_MICRO)
 .ENDIF			# "$(UDK_MICRO)"!=""
 
-.IF "$(L10N-framework)"!=""
-SCPDEFS+=-DISO_CODE=$(L10N-framework)
-.ENDIF			# "$(L10N-framework)"!=""
+.IF "$(L10N_framework)"!=""
+SCPDEFS+=-DISO_CODE=$(L10N_framework)
+.ENDIF			# "$(L10N_framework)"!=""
 
 UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 

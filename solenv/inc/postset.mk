@@ -2,9 +2,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-20 13:16:46 $
+#   last change: $Author: hjs $ $Date: 2001-08-30 12:06:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -299,7 +299,7 @@ iso_37=ca
 
 .ENDIF			#  "$(UPDATER)"!="" || "$(give_me_all_languages)"!=""
 
-.IF "$(L10N-framework)"!=""
+.IF "$(L10N_framework)"!=""
 alllangext+=99
 extern$(LANG_GUI)*=$(default$(LANG_GUI))
 cmd_extern:=extern 99 -lgEXTERN $(UTF8) $(extern$(LANG_GUI))
@@ -309,7 +309,7 @@ langext_99=99
 rsclang_99=-lgEXTERN $(UTF8)
 rescharset_99=$(extern$(LANG_GUI))
 RCLANGFLAGS_99+= -d EXTERN
-iso_99=$(L10N-framework)
+iso_99=$(L10N_framework)
 
 .IF "$(RES_FINN)"!=""
 alllangext+=35

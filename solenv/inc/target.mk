@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-28 12:25:06 $
+#   last change: $Author: hjs $ $Date: 2001-08-30 12:06:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,12 +143,12 @@ DEPFILESx+=$(uniq $(DEPFILES_TEST))
 .ENDIF			# "$(TESTOBJECTS)"!=""
 
 #DEPFILESx+=$(CXXFILES) $(CFILES) $(HXXFILES) $(RCFILES)
-.IF "$(L10N-framework)"==""
+.IF "$(L10N_framework)"==""
 DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(DEPOBJFILES:s/.obj/.dpcc/)))
 DEPFILESx+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(OBJFILES:s/.obj/.dpcc/))
 DEPFILESx+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SLOFILES:s/.obj/.dpcc/))
 DEPFILESx+=$(subst,$(PAR),$(MISC) $(ALLPARFILES:s/.par/.dpsc/))
-.ENDIF			# "$(L10N-framework)"==""
+.ENDIF			# "$(L10N_framework)"==""
 .IF "$(RCFILES)"!=""
 .IF "$(RESNAME)"!=""
 #RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
@@ -302,7 +302,7 @@ DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i -print) 
 .ENDIF			# "$(LOCALIDLFILES)$(EXTERNIDLFILES)"!=""
 .ENDIF			# "$(IDLFILES)"!=""
 
-.IF "$(L10N-framework)"==""
+.IF "$(L10N_framework)"==""
 .IF "$(JARFILES)"!=""
 NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell $(FIND) $(JARDIR) -name $i) $(SOLARBINDIR)$/$i $(shell $(FIND) $(JARDIR) -name $i)))
 .ENDIF			# "$(JARFILES)"!=""
@@ -323,7 +323,7 @@ CLASSPATH:=.:$(CLASSDIR):$(XCLASSPATH):$(NEWCLASS:s/ /:/)
 CLASSPATH:=.;$(CLASSDIR);$(XCLASSPATH);$(NEWCLASS:s/ /;/)
 .ENDIF
 .ENDIF			# "$(NEWCLASS)"!=""
-.ENDIF			# "$(L10N-framework)"==""
+.ENDIF			# "$(L10N_framework)"==""
 
 .IF "$(NOOPTFILES)" != ""
 NOOPTTARGET=do_it_noopt
@@ -1828,9 +1828,9 @@ CONVERTUNIXTEXT:=$(UNIXTEXT)
 .ENDIF			# "$(UNIXTEXT)"!=""
 
 .IF "$(JAVACLASSFILES:s/DEFINED//)"!="" || "$(javauno)"!=""
-.IF "$(L10N-framework)"==""
+.IF "$(L10N_framework)"==""
 TARGETDPJ=$(MISC)$/$(TARGET).dpj
-.ENDIF			# "$(L10N-framework)"==""
+.ENDIF			# "$(L10N_framework)"==""
 .ENDIF
 
 .IF "$(UPDATER)"=="YES"
@@ -1880,7 +1880,7 @@ MAKELANGDIR=makelang.dir
 .ENDIF
 
 .IF "$(lintit)"==""
-.IF "$(L10N-framework)"!=""
+.IF "$(L10N_framework)"!=""
 ALLTAR:	\
         $(OS2_COPY_MK)		\
         $(SUBDIRS)		\
@@ -1927,7 +1927,7 @@ ALLTAR:	\
         $(REMOTE_BUILD)\
         last_target
 
-.ELSE			# "$(L10N-framework)"!=""
+.ELSE			# "$(L10N_framework)"!=""
 #		$(NOOPTTARGET) $(EXCEPTIONSTARGET)
 
 ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
@@ -2105,7 +2105,7 @@ $(UNOUCRTARGET) : $(UNOUCRDEP)
 .ENDIF			# "$(SINGLE_SHOT)" == ""
 .ENDIF			# "$(UNOTYPES)" != ""
 
-.ENDIF			# "$(L10N-framework)"!=""
+.ENDIF			# "$(L10N_framework)"!=""
 .ELSE			# "$(lintit)"==""
 
 ALLTAR: $(OBJFILES) $(SLOFILES)
@@ -2227,8 +2227,8 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
 .ENDIF
 
 .IF "$(XMLPROPERTIES)"!=""
-.IF "$(L10N-framework)"!=""
-XML_ISO_CODE*=-ISO99 $(L10N-framework)
+.IF "$(L10N_framework)"!=""
+XML_ISO_CODE*=-ISO99 $(L10N_framework)
 .ENDIF
 $(MISC)$/$(TARGET)_%.done : %.xrb
     native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET)
@@ -2237,8 +2237,8 @@ $(MISC)$/$(TARGET)_%.done : %.xrb
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
 .IF "$(XMLXULRES)"!=""
-.IF "$(L10N-framework)"!=""
-XML_ISO_CODE*=-ISO99 $(L10N-framework)
+.IF "$(L10N_framework)"!=""
+XML_ISO_CODE*=-ISO99 $(L10N_framework)
 .ENDIF
 $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
     @xmlex -i $(<:b).xxl -o $(OUT)$/xul$/locale $(XML_ISO_CODE) -g:dtd -d $@
@@ -2434,10 +2434,10 @@ $(URDDOCTARGET) : $(DEPIDLFILES)
 .ENDIF			# "$(IDLFILES)"!=""
 
 .IF "$(JAVACLASSFILES:s/DEFINED//)"!=""
-.IF "$(L10N-framework)"==""
+.IF "$(L10N_framework)"==""
 .INCLUDE .IGNORE : $(MISC)$/$(TARGET).dpj
 $(TARGETDPJ) : $(JAVAFILES) $(JAVATARGET)
-.ENDIF			# "$(L10N-framework)"==""
+.ENDIF			# "$(L10N_framework)"==""
 .ENDIF
 
 .INCLUDE : tg_jar.mk
