@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:18:52 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,25 @@ XclExpStringPtr XclExpStringHelper::CreateString(
     {
         DBG_ERRORFILE( "XclExpStringHelper::CreateString - textbox without para object" );
         pString.reset( new XclExpString );
+    }
+    return pString;
+}
+
+XclExpStringPtr XclExpStringHelper::CreateString(
+        const XclExpRoot& rRoot, const EditTextObject& rEditObj,
+        XclStrFlags nFlags, sal_uInt16 nMaxLen )
+{
+    XclExpStringPtr pString;
+    EditEngine& rEE = rRoot.GetDrawEditEngine();
+    BOOL bOldUpdateMode = rEE.GetUpdateMode();
+    rEE.SetUpdateMode( TRUE );
+    rEE.SetText( rEditObj);
+    pString = lclCreateString( rRoot, rEE, nFlags, nMaxLen, false );
+    rEE.SetUpdateMode( bOldUpdateMode );
+    if( !pString->IsEmpty() )
+    {
+        pString->LimitFormatCount( EXC_MAXRECSIZE_BIFF8 / 8 - 1 );
+        pString->AppendFormat( pString->Len(), EXC_FONT_APP );
     }
     return pString;
 }
