@@ -22,33 +22,18 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\en-US
 ..\%__SRC%\inc\svxlink.hxx %_DEST%\inc%_EXT%\svxlink.hxx
 ..\%__SRC%\inc\\*.ilb* %_DEST%\inc%_EXT%\*.ilb*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
-..\%__SRC%\lib\dl.lib %_DEST%\lib%_EXT%\dl.lib
-..\%__SRC%\slb\dg.lib %_DEST%\lib%_EXT%\xdg.lib
-..\%__SRC%\lib\svx.lib %_DEST%\lib%_EXT%\svx.lib
-..\%__SRC%\slb\svx.lib %_DEST%\lib%_EXT%\xsvx.lib
-..\%__SRC%\lib\svl.lib %_DEST%\lib%_EXT%\svl.lib
-..\%__SRC%\lib\dl1.lib %_DEST%\lib%_EXT%\dl1.lib
-..\%__SRC%\lib\dl2.lib %_DEST%\lib%_EXT%\dl2.lib
-..\%__SRC%\lib\svx1.lib %_DEST%\lib%_EXT%\svx1.lib
-..\%__SRC%\lib\svx2.lib %_DEST%\lib%_EXT%\svx2.lib
+..\%__SRC%\lib\isvx.lib %_DEST%\lib%_EXT%\isvx.lib
 ..\%__SRC%\slb\xdraw.lib %_DEST%\lib%_EXT%\svxsmrtd.lib
 ..\%__SRC%\bin\svxslots.tlb %_DEST%\bin%_EXT%\svxslots.tlb
-..\%__SRC%\bin\cu*.dll %_DEST%\bin%_EXT%\cu*.dll
-..\%__SRC%\bin\dg*.dll %_DEST%\bin%_EXT%\dg*.dll
-..\%__SRC%\bin\dl*.dll %_DEST%\bin%_EXT%\dl*.dll
-..\%__SRC%\bin\dg*.sym %_DEST%\bin%_EXT%\dg*.sym
-..\%__SRC%\misc\dg*.map %_DEST%\bin%_EXT%\dg*.map
+..\%__SRC%\bin\cui*.dll %_DEST%\bin%_EXT%\cui*.dll
 ..\%__SRC%\bin\svx*.dll %_DEST%\bin%_EXT%\svx*.dll
 ..\%__SRC%\bin\textconversiondlgs*.dll %_DEST%\bin%_EXT%\textconversiondlgs*.dll
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
-..\%__SRC%\bin\svx*.sym %_DEST%\bin%_EXT%\svx*.sym
-..\%__SRC%\misc\svx*.map %_DEST%\bin%_EXT%\svx*.map
 ..\%__SRC%\misc\svx.csv %_DEST%\inc%_EXT%\svx.csv
-..\%__SRC%\bin\svl*.dll %_DEST%\bin%_EXT%\svl*.dll
-..\%__SRC%\bin\svl*.sym %_DEST%\bin%_EXT%\svl*.sym
 ..\%COMMON_OUTDIR%\srs\svxslots_srs.hid %COMMON_DEST%\res%_EXT%\svxslots_srs.hid
 ..\%__SRC%\lib\svxl.lib %_DEST%\lib%_EXT%\svxl.lib
 ..\%__SRC%\lib\libsvxl.a %_DEST%\lib%_EXT%\libsvxl.a
+
 mkdir: %COMMON_DEST%\pck%_EXT%\starsuite_bitmap
 mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
 ..\res\cjkabout.bmp %COMMON_DEST%\pck%_EXT%\starsuite_bitmap\about.bmp
@@ -660,6 +645,7 @@ hedabu: ..\inc\xmlsecctrl.hxx %_DEST%\inc%_EXT%\svx\xmlsecctrl.hxx
 hedabu: ..\inc\framelink.hxx %_DEST%\inc%_EXT%\svx\framelink.hxx
 hedabu: ..\inc\xmlexchg.hxx %_DEST%\inc%_EXT%\svx\xmlexchg.hxx
 hedabu: ..\inc\tbxcolor.hxx %_DEST%\inc%_EXT%\svx\tbxcolor.hxx
+hedabu: ..\inc\svx\svxdllapi.h %_DEST%\inc%_EXT%\svx\svxdllapi.h
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
