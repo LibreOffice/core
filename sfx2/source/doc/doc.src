@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2002-01-14 21:19:35 $
+ *  last change: $Author: nf $ $Date: 2002-01-24 15:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
     Message [ finnish ] = "Nimi on jo käytössä.\nHaluatko korvata asiakirjan mallipohjan?" ;
     Message [ danish ] = "Der eksisterer allerede et dokument med dette navn.\nSkal det erstattes?" ;
     Message [ french ] = "Un modèle de ce nom existe déjà.\nRemplacer le modèle existant ?" ;
-    Message [ swedish ] = "Det finns redan en mall med det här namnet.\nVill Du skriva över den?" ;
+    Message [ swedish ] = "Det finns redan en mall med det här namnet.\nVill du skriva över den?" ;
     Message [ dutch ] = "Er bestaat reeds een sjabloon met deze naam.\nOverschrijven?" ;
     Message [ spanish ] = "Ya existe una plantilla con este nombre.\n¿Desea sobrescribirla?" ;
     Message [ english_us ] = "Name already in use.\nDo you want to overwrite document template?" ;
@@ -946,7 +946,7 @@ QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
     Message [ finnish ] = "Haluatko palauttaa oletusmallipohjat?" ;
     Message [ danish ] = "Vil du nulstille standardskabelonen?" ;
     Message [ french ] = "Souhaitez-vous restaurer le modèle par défaut ?" ;
-    Message [ swedish ] = "Vill Du återställa standardmallen?" ;
+    Message [ swedish ] = "Vill du återställa standardmallen?" ;
     Message [ dutch ] = "Wilt u de veranderingen in de standaardsjabloon ongedaan maken?" ;
     Message [ spanish ] = "¿Desea usted restablecer la plantilla predeterminada?" ;
     Message [ english_us ] = "Do you want to reset the default template?" ;
@@ -1265,7 +1265,7 @@ String STR_CLOSEDOC_ANDRETURN
     Text[ chinese_simplified ] = "å…³é—­å’Œè¿”å›(~C)";
     Text[ russian ] = "Çàêğûòü & íàçàä ê  ";
     Text[ polish ] = "Zamknij & Powróæ do ";
-    Text[ japanese ] = "é–‰ã˜ã‚‹&æˆ»ã‚‹(~C)";
+    Text[ japanese ] = "é–‰ã˜ã‚‹ & æˆ»ã‚‹(~C)";
     Text[ chinese_traditional ] = "é—œé–‰å’Œè¿”å›(~C)";
     Text[ arabic ] = "ÇáÅÛáÇŞ æÇáÚæÏÉ Åáì ";
     Text[ dutch ] = "S~luiten en terug naar  ";
@@ -1545,7 +1545,7 @@ QueryBox MSG_OPEN_READONLY
     MESSAGE [ finnish ] = "Asiakirjaa ei voida avata muokattavaksi.\nHaluatko tallentaa sen vain luku -muodossa?" ;
     MESSAGE [ danish ] = "Det er ikke muligt at åbne dokumentet til redigering.\nVil du åbne det i skrivebeskyttet tilstand?" ;
     MESSAGE [ french ] = "Impossible d'ouvrir le document pour modification.\nVoulez-vous l'ouvrir en lecture seule ?" ;
-    MESSAGE [ swedish ] = "Dokumentet kan inte öppnas för redigering. \nVill Du öppna det för läsning?" ;
+    MESSAGE [ swedish ] = "Dokumentet kan inte öppnas för redigering. \nVill du öppna det för läsning?" ;
     MESSAGE [ dutch ] = "Dit document is schrijfbeveiligd.\nWilt u het alleen-lezen?" ;
     MESSAGE [ spanish ] = "El documento no se puede abrir para editar.\n¿Desea abrirlo sólo para leer?" ;
     MESSAGE [ english_us ] = "Document cannot be opened for editing.\nDo you want to open it as read-only?" ;
@@ -2162,7 +2162,7 @@ QueryBox DLG_MACROQUERY
     Title[ portuguese_brazilian ] = "Makro ausf?ren";
     Title[ portuguese ] = "Executar macro";
     Title[ danish ] = "Udfør makro";
-    Title[ swedish ] = "Utför makro";
+    Title[ swedish ] = "Kör makro";
     Title[ dutch ] = "Macro uitvoeren";
     Title[ spanish ] = "Ejecutar macro";
     Title[ chinese_simplified ] = "æ‰§è¡Œå®";
@@ -2188,6 +2188,20 @@ QueryBox DLG_MACROQUERY
     Message[ japanese ] = "ã“ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«ã¯ãƒã‚¯ãƒ­ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚$(TEXT)";
     Message[ italian ] = "Dieses Dokument enthält Makros. $(TEXT)";
     Message[ korean ] = "ì´ ë¬¸ì„œì—ëŠ” ë§¤í¬ë¡œê°€ í¬í•¨ë˜ì–´ ìˆìŠµë‹ˆë‹¤. $(TEXT)";
+    Message[ portuguese ] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message[ russian ] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message[ greek ] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message[ dutch ] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message[ finnish ] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message[ danish ] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message[ swedish ] = "Det här dokumentet innehåller makron. $(TEXT)";
+    Message[ polish ] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message[ portuguese_brazilian ] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message[ chinese_simplified ] = "è¿™ä¸ªæ–‡æ¡£å«æœ‰å® $(TEXT)";
+    Message[ chinese_traditional ] = "é€™å€‹æ–‡ä»¶å«æœ‰å·¨é›† $(TEXT)";
+    Message[ turkish ] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message[ arabic ] = "Dieses Dokument enthält Makros. $(TEXT)";
+    Message[ catalan ] = "Dieses Dokument enthält Makros. $(TEXT)";
 };
 
 String BTN_OK
@@ -2197,7 +2211,7 @@ String BTN_OK
     Text [ portuguese ] = "Executar" ;
     Text [ english_us ] = "Run" ;
     Text [ portuguese_brazilian ] = "Ausf?ren" ;
-    Text [ swedish ] = "Utför" ;
+    Text [ swedish ] = "Kör" ;
     Text [ danish ] = "Udfør" ;
     Text [ italian ] = "Esegui" ;
     Text [ spanish ] = "Ejecutar" ;
@@ -2224,7 +2238,7 @@ String BTN_CANCEL
     Text [ ENGLISH ] = "Don't execute" ;
     Text [ english_us ] = "Do Not Run" ;
     Text [ portuguese_brazilian ] = "Nicht Ausf?ren" ;
-    Text [ swedish ] = "Utför inte" ;
+    Text [ swedish ] = "Kör inte" ;
     Text [ danish ] = "Udfør ikke" ;
     Text [ italian ] = "Non eseguire" ;
     Text [ spanish ] = "No ejecutar" ;
@@ -2256,6 +2270,20 @@ String FT_CANCEL
     Text[ japanese ] = "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£è¨­å®šã«å¾“ã†ã¨ã€ã“ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ãƒã‚¯ãƒ­ã¯å®Ÿè¡Œã§ãã¾ã›ã‚“ã€‚ãã‚Œã§ã‚‚å®Ÿè¡Œã—ã¾ã™ã‹ã€‚";
     Text[ italian ] = "In base alle impostazioni di sicurezza le macro di questo documento non devono essere eseguite. Volete eseguirle ugualmente?";
     Text[ korean ] = "ë³´ì•ˆ ì„¤ì •ì— ë”°ë¼ ì´ ë¬¸ì„œì˜ ë§¤í¬ë¡œëŠ” ì‹¤í–‰ë  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ì´ ë§¤í¬ë¡œë¥¼ ì‹¤í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ portuguese ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text[ russian ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text[ greek ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text[ dutch ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text[ finnish ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text[ danish ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text[ swedish ] = "Enligt säkerhetsinställningarna ska makrona i det här dokumentet inte köras. Vill du köra dem i alla fall?";
+    Text[ polish ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text[ portuguese_brazilian ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text[ chinese_simplified ] = "æ ¹æ®ç°æœ‰çš„å®‰å…¨è®¾å®šï¼Œä¸åº”è¯¥æ‰§è¡Œè¿™ä¸ªæ–‡æ¡£çš„å®ã€‚æ‚¨è¿˜æ˜¯è¦æ‰§è¡Œè¿™ä¸ªå®ï¼Ÿ";
+    Text[ chinese_traditional ] = "æ ¹æ“šç¾æœ‰çš„å®‰å…¨è¨­å®šï¼Œä¸æ‡‰è©²åŸ·è¡Œé€™å€‹æ–‡ä»¶çš„å·¨é›†ã€‚æ‚¨é‚„æ˜¯åŸ·è¡Œé€™å€‹å·¨é›†ï¼Ÿ";
+    Text[ turkish ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text[ arabic ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
+    Text[ catalan ] = "Nach den Sicherheitseinstellungen sollen die Makros dieses Dokuments nicht ausgeführt werden. Möchten Sie sie trotzdem ausführen?";
 };
 String FT_OK
 {
@@ -2266,6 +2294,21 @@ String FT_OK
     Text[ spanish ] = "¿Desea autorizar la ejecución de estas macros?";
     Text[ italian ] = "Volete far eseguire questa macro?";
     Text[ korean ] = "ì´ ë§¤í¬ë¡œê°€ ì‹¤í–‰ë˜ë„ë¡ í—ˆë½í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ portuguese ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text[ russian ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text[ greek ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text[ dutch ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text[ finnish ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text[ danish ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text[ swedish ] = "Vill du tillåta att de här makrona körs?";
+    Text[ polish ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text[ portuguese_brazilian ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text[ japanese ] = "ã“ã®ãƒã‚¯ãƒ­ã‚’å®Ÿè¡Œã—ã¦ã‚‚ã‹ã¾ã„ã¾ã›ã‚“ã‹ã€‚";
+    Text[ chinese_simplified ] = "è¦å…è®¸æ‰§è¡Œè¿™ä¸ªå®ï¼Ÿ";
+    Text[ chinese_traditional ] = "è¦å…è¨±åŸ·è¡Œé€™å€‹å·¨é›†ï¼Ÿ";
+    Text[ turkish ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text[ arabic ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
+    Text[ catalan ] = "Möchten Sie erlauben, dass diese Makros ausgeführt werden?";
 };
 
 // ******************************************************************* EOF
