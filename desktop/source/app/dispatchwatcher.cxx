@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-18 13:12:57 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
-#include <com/sun/star/frame/XTasksSupplier.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -103,9 +103,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
-#include <com/sun/star/frame/XTasksSupplier.hpp>
 #endif
 
 #include <tools/urlobj.hxx>
@@ -385,12 +382,12 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
     if ( !m_nRequestCount /*m_aRequestContainer.empty()*/ )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
-        Reference< XTasksSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
+        Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
         aGuard.clear();
 
-        Reference< XEnumeration > xList = xTasksSupplier->getTasks()->createEnumeration();
+        Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
 
-        if ( !xList->hasMoreElements() )
+        if ( !xList->hasElements() )
         {
             // We don't have any task open so we have to shutdown ourself!!
             Reference< XDesktop > xDesktop( xTasksSupplier, UNO_QUERY );
@@ -428,12 +425,12 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& aEve
     if ( !nCount && !OfficeIPCThread::AreRequestsPending() )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.
-        Reference< XTasksSupplier > xTasksSupplier( ::comphelper::getProcessServiceFactory()->createInstance(
+        Reference< XFramesSupplier > xTasksSupplier( ::comphelper::getProcessServiceFactory()->createInstance(
                                                     OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                                                 UNO_QUERY );
-        Reference< XEnumeration > xList = xTasksSupplier->getTasks()->createEnumeration();
+        Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
 
-        if ( !xList->hasMoreElements() )
+        if ( !xList->hasElements() )
         {
             // We don't have any task open so we have to shutdown ourself!!
             Reference< XDesktop > xDesktop( xTasksSupplier, UNO_QUERY );
