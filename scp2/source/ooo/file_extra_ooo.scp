@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_extra_ooo.scp,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: is $ $Date: 2004-02-05 18:10:01 $
+*  last change: $Author: kz $ $Date: 2004-05-19 13:46:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -377,18 +377,17 @@ File gid_File_Extra_Tplwizfax_Lang
     EXTRA_ALL_LANG(tplwizfax);
 End
 
-File gid_File_Extra_Tplwizhomepage_Lang
+File gid_File_Extra_Tplwizweb_Lang
     Dir = gid_Dir_Template_Wizard_Web;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizhomepage);
+    EXTRA_ALL_LANG(tplwizweb);
 End
 
-File gid_File_Extra_Tplwizletter_Lang
-    Dir = gid_Dir_Template_Wizard;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tplwizletter);
+File gid_File_Extra_Tplwizletter
+    Dir = gid_Dir_Template_Wizard_Letter;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "tplwizletter.zip";
 End
 
 File gid_File_Extra_Tplwizmemo_Lang
