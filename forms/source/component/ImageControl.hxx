@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 11:53:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ protected:
                             translateDbColumnToControlValue( );
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
 
-    virtual void            setControlValue( const ::com::sun::star::uno::Any& _rValue );
+    virtual void            doSetControlValue( const ::com::sun::star::uno::Any& _rValue );
 
     virtual sal_Bool        approveDbColumnType(sal_Int32 _nColumnType);
 
@@ -192,7 +192,7 @@ protected:
         @precond
             our own mutex is locked
     */
-    sal_Bool    handleNewImageURL( const ::rtl::OUString& _rURL );
+    sal_Bool    handleNewImageURL( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator );
 };
 
 //==================================================================
