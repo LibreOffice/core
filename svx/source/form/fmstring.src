@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:45:31 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,6 +736,7 @@ String RID_STR_CURSORSOURCE
     Text[ arabic ] = "ΗαγΝΚζνΗΚ";
     Text[ catalan ] = "Contenido";
     Text[ finnish ] = "Sisδltφ";
+    Text[ language_user1 ] = " ";
 };
 String RID_STR_CURSORSOURCETYPE
 {
@@ -761,6 +762,7 @@ String RID_STR_CURSORSOURCETYPE
     Text[ arabic ] = "δζΪ ΗαγΝΚζνΗΚ";
     Text[ catalan ] = "Tipo de contenido";
     Text[ finnish ] = "Sisδltφlaji";
+    Text[ language_user1 ] = " ";
 };
 String RID_STR_ALLOW_ADDITIONS
 {
@@ -890,6 +892,7 @@ String RID_STR_DATASOURCE
     Text[ arabic ] = "γΥΟΡ ΗαΘνΗδΗΚ";
     Text[ catalan ] = "Fuente de datos";
     Text[ finnish ] = "Tietolδhde";
+    Text[ language_user1 ] = " ";
 };
 String RID_STR_LOCKED
 {
@@ -3155,7 +3158,7 @@ String RID_STR_SUBMIT_ENCODING
     Text [ dutch ] = "Codering bij de submissie" ;
     Text[ chinese_simplified ] = "Μα½»Κ±Φ΄ΠΠ±ΰΒλ΄¦ΐν";
     Text[ russian ] = "Κξδθπξβΰνθε οπθ οεπεδΰχε";
-    Text[ polish ] = "Kodowanie submitu";
+    Text[ polish ] = "Kodowanie podczas submitu";
     Text[ japanese ] = "»ΜήΠ―Δ‚Μ΄έΊ°Δή";
     Text[ chinese_traditional ] = "΄£¥ζ®Ι°υ¦ζ½s½X³B²z";
     Text[ greek ] = "Κωδικοποίηση κατά την υποβολή";
@@ -3962,11 +3965,11 @@ String RID_STR_CURRENCYSYMBOL
     Text [ spanish ] = "Sνmbolo de moneda" ;
     Text [ french ] = "Symbole monιtaire" ;
     Text [ dutch ] = "Valutasymbool" ;
-    Text[ chinese_simplified ] = "»υ±ÒΝΌ±κ";
+    Text[ chinese_simplified ] = "»υ±Ò·ϋΊΕ";
     Text[ russian ] = "Ρθμβξλ βΰλώςϋ";
     Text[ polish ] = "Symbol waluty";
     Text[ japanese ] = "’Κ‰έΌέΞήΩ";
-    Text[ chinese_traditional ] = "³fΉτΉΟ¥ά";
+    Text[ chinese_traditional ] = "³fΉτ²ΕΈΉ";
     Text[ greek ] = "Σύμβολο νομίσματος";
     Text[ korean ] = "ΕλΘ­ ±βΘ£";
     Text[ arabic ] = "ΡγÒ ΗαΪγαΙ";
@@ -4091,7 +4094,7 @@ String RID_STR_ENABLED
     Text [ spanish ] = "Activado" ;
     Text [ french ] = "Activι" ;
     Text [ dutch ] = "Geactiveerd" ;
-    Text[ chinese_simplified ] = "Ό¤»ξµΔ";
+    Text[ chinese_simplified ] = "ΚΉΣΓΦΠ";
     Text[ russian ] = "ΐκςθβθπξβΰνξ";
     Text[ polish ] = "Aktywny";
     Text[ japanese ] = "±ΈΓ¨Μή‚Ι‚·‚ι";
@@ -5110,7 +5113,7 @@ String RID_STR_EVT_FOCUSGAINED
     Text [ dutch ] = "Indien focus bereikt" ;
     Text[ chinese_simplified ] = "ΤΪΓιΧΌΚ±";
     Text[ russian ] = "Οπθ οξλσχενθθ τξκσρΰ";
-    Text[ polish ] = "Przy otrzymaniu ogniska";
+    Text[ polish ] = "Po otrzymaniu ogniska";
     Text[ japanese ] = "Μ«°¶½‚π“Ύ‚½";
     Text[ chinese_traditional ] = "¦bΊΛ·Η®Ι";
     Text[ greek ] = "Σε περίπτωση εστίασης";
@@ -5136,7 +5139,7 @@ String RID_STR_EVT_FOCUSLOST
     Text [ dutch ] = "Bij focusverlies" ;
     Text[ chinese_simplified ] = "ΤΪΖ«ΐλΔΏ±κΚ±";
     Text[ russian ] = "Οπθ οξςεπε τξκσρΰ";
-    Text[ polish ] = "Przy utracie ogniska";
+    Text[ polish ] = "Po utracie ogniska";
     Text[ japanese ] = "Μ«°¶½‚πΈ‚Α‚½";
     Text[ chinese_traditional ] = "¦b°ΎΒχ¥ΨΌΠ®Ι";
     Text[ greek ] = "Στην περίπτωση απώλειας εστίας";
@@ -5188,7 +5191,7 @@ String RID_STR_EVT_KEYTYPED
     Text [ dutch ] = "Met ingedrukte toets" ;
     Text[ chinese_simplified ] = "°΄Χ΅°΄Όό";
     Text[ russian ] = "Κλΰβθψΰ νΰζΰςΰ";
-    Text[ polish ] = "Wciniκty klawisz";
+    Text[ polish ] = "Po naciniκciu klawisza";
     Text[ japanese ] = "·°‚π‰‚µ‚½";
     Text[ chinese_traditional ] = "«φ¦ν«φΑδ";
     Text[ greek ] = "Πλήκτρο πατημένο";
@@ -5215,7 +5218,7 @@ String RID_STR_EVT_KEYUP
     Text [ dutch ] = "Toets losgelaten" ;
     Text[ chinese_simplified ] = "·ΕΏª°΄Όό";
     Text[ russian ] = "Ξςοσωεννΰÿ κλΰβθψΰ";
-    Text[ polish ] = "Zwolniony przycisk";
+    Text[ polish ] = "Po zwolnieniu klawisza";
     Text[ japanese ] = "·°‚©‚η—£‚κ‚½";
     Text[ chinese_traditional ] = "©ρ¶}«φΑδ";
     Text[ greek ] = "Πλήκτρο απελευθερωμένο";
@@ -5425,7 +5428,7 @@ String RID_STR_EVT_MOUSEPRESSED
     Text [ dutch ] = "Muistoets ingedrukt" ;
     Text[ chinese_simplified ] = "°΄Χ΅Κσ±κΌό";
     Text[ russian ] = "Κλΰβθψΰ μϋψθ νΰζΰςΰ";
-    Text[ polish ] = "Naciniκty przycisk myszy";
+    Text[ polish ] = "Przycisk myszy naciniκty";
     Text[ japanese ] = "Ο³½Ξήΐέ‚π‰‚µ‚½";
     Text[ chinese_traditional ] = "«φ¦ν·ΖΉ«Αδ";
     Text[ greek ] = "Πλήκτρο ποντικιού πιεσμένο";
@@ -5451,7 +5454,7 @@ String RID_STR_EVT_MOUSERELEASED
     Text [ dutch ] = "Muistoetst losgelaten" ;
     Text[ chinese_simplified ] = "·ΕΏªΚσ±κΌό";
     Text[ russian ] = "Κλΰβθψΰ μϋψθ ξςοσωενΰ";
-    Text[ polish ] = "Zwolnij przycisk myszy";
+    Text[ polish ] = "Po zwolnieniu przycisku myszy";
     Text[ japanese ] = "Ο³½Ξήΐέ‚©‚η—£‚κ‚½";
     Text[ chinese_traditional ] = "©ρ¶}·ΖΉ«Αδ";
     Text[ greek ] = "Πλήκτρο ποντικιού απελευθερωμένο";
@@ -5912,7 +5915,7 @@ String RID_STR_PROPTITLE_FIXEDTEXT
 {
     Text = "Beschriftungsfeld" ;
     Text [ ENGLISH ] = "Label" ;
-    Text [ portuguese ] = "Campo de rσtulo" ;
+    Text [ portuguese ] = "Campo de etiqueta" ;
     Text [ english_us ] = "Label field" ;
     Text [ portuguese_brazilian ] = "Fixed text" ;
     Text [ swedish ] = "Etikettfδlt" ;
@@ -6391,7 +6394,7 @@ String RID_STR_EVT_CHANGED
     Text [ dutch ] = "Gemodificeerd" ;
     Text[ chinese_simplified ] = "ÒΡΎ­ΠήΈΔ";
     Text[ russian ] = "Θημενενξ";
-    Text[ polish ] = "Zmodyfikowany";
+    Text[ polish ] = "Zmodyfikowano";
     Text[ japanese ] = "•ΟX‚µ‚½";
     Text[ chinese_traditional ] = "¤wΈg­Χ§ο";
     Text[ greek ] = "Τροποποιημένο";
@@ -7206,6 +7209,7 @@ Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
         Text[ finnish ] = "Automaattista ryhmδruudun ohjausta ei voitu kδynnistδδ.";
     };
 };
+
 
 
 
