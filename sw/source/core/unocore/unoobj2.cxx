@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-26 07:24:43 $
+ *  last change: $Author: tl $ $Date: 2002-10-14 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,9 @@
 #ifndef _SVX_FLSTITEM_HXX //autogen
 #include <svx/flstitem.hxx>
 #endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
 #ifndef _CTRLTOOL_HXX //autogen
 #include <svtools/ctrltool.hxx>
 #endif
@@ -277,6 +280,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
 #endif
 #ifndef _UNOIDX_HXX
 #include <unoidx.hxx>
@@ -507,7 +513,7 @@ void SwXTextCursor::insertDocumentFromURL(const OUString& rURL,
  ---------------------------------------------------------------------------*/
 uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(sal_Bool bFromTable)
 {
-    uno::Sequence< beans::PropertyValue > aRet(12);
+    uno::Sequence< beans::PropertyValue > aRet(17);
     beans::PropertyValue* pArray = aRet.getArray();
 
     uno::Any aVal;
@@ -528,7 +534,7 @@ uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(sal_Bo
     aVal <<= (INT16)1;
     pArray[3] = beans::PropertyValue(C2U("SortRowOrColumnNo0"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal.setValue( &bTrue, ::getCppuBooleanType());
+    aVal.setValue( &bFalse, ::getCppuBooleanType());
     pArray[4] = beans::PropertyValue(C2U("IsSortNumeric0"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     aVal.setValue( &bTrue, ::getCppuBooleanType());
@@ -537,7 +543,7 @@ uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(sal_Bo
     aVal <<= (INT16)1;
     pArray[6] = beans::PropertyValue(C2U("SortRowOrColumnNo1"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal.setValue( &bTrue, ::getCppuBooleanType());
+    aVal.setValue( &bFalse, ::getCppuBooleanType());
     pArray[7] = beans::PropertyValue(C2U("IsSortNumeric1"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     aVal.setValue( &bTrue, ::getCppuBooleanType());
@@ -546,11 +552,39 @@ uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(sal_Bo
     aVal <<= (INT16)1;
     pArray[9] = beans::PropertyValue(C2U("SortRowOrColumnNo2"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal.setValue( &bTrue, ::getCppuBooleanType());
+    aVal.setValue( &bFalse, ::getCppuBooleanType());
     pArray[10] = beans::PropertyValue(C2U("IsSortNumeric2"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     aVal.setValue( &bTrue, ::getCppuBooleanType());
     pArray[11] = beans::PropertyValue(C2U("IsSortAscending2"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+
+    aVal.setValue( &bFalse, ::getCppuBooleanType());
+    pArray[12] = beans::PropertyValue(C2U("IsCaseSensitive"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+
+    Locale aLang( SvxCreateLocale( LANGUAGE_SYSTEM ) );
+    aVal.setValue( &aLang, ::getCppuType( (Locale*)0) );
+    pArray[13] = beans::PropertyValue(C2U("CollatorLocale"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+
+    // get collator algorithm to be used for the locale
+    Sequence < OUString > aSeq( GetAppCollator().listCollatorAlgorithms( aLang ) );
+    INT32 nLen = aSeq.getLength();
+    DBG_ASSERT( nLen > 0, "list of collator algorithms is empty!");
+    OUString aTxt;
+    if (nLen > 0)
+        aTxt = aSeq.getConstArray()[0];
+#ifdef DEBUG
+    const OUString *pTxt = aSeq.getConstArray();
+#endif
+
+    aVal.setValue( &aTxt, ::getCppuType( (OUString*)0 ) );
+    pArray[14] = beans::PropertyValue(C2U("CollatorAlgorithm0"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+
+    aVal.setValue( &aTxt, ::getCppuType( (OUString*)0 ) );
+    pArray[15] = beans::PropertyValue(C2U("CollatorAlgorithm1"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+
+    aVal.setValue( &aTxt, ::getCppuType( (OUString*)0 ) );
+    pArray[16] = beans::PropertyValue(C2U("CollatorAlgorithm2"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+
     return aRet;
 }
 
@@ -573,7 +607,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
 
     rSortOpt.bTable = sal_False;
     rSortOpt.cDeli = ' ';
-    rSortOpt.eDirection = SRT_COLUMNS;
+    rSortOpt.eDirection = SRT_COLUMNS;  //!! UI text may be contrary though !!
 
     rSortOpt.aKeys;
     SwSortKey* pKey1 = new SwSortKey;
@@ -622,6 +656,36 @@ sal_Bool SwXTextCursor::convertSortProperties(
             else
                 bRet = sal_False;
         }
+        else if(COMPARE_EQUAL == rPropName.compareToAscii("IsCaseSensitive"))
+        {
+            if ( aValue.getValueType() == ::getBooleanCppuType() )
+            {
+                sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
+                rSortOpt.bIgnoreCase = !bTemp;
+            }
+            else
+                bRet = sal_False;
+        }
+        else if(COMPARE_EQUAL == rPropName.compareToAscii("CollatorLocale"))
+        {
+            Locale aLocale;
+            if (aValue >>= aLocale)
+                rSortOpt.nLanguage = SvxLocaleToLanguage( aLocale );
+            else
+                bRet = sal_False;
+        }
+        else if(COMPARE_EQUAL == rPropName.compareToAscii("CollatorAlgorithm", 17) &&
+            rPropName.getLength() == 18 &&
+            (rPropName.getStr()[17] >= '0' && rPropName.getStr()[17] <= '9'))
+        {
+            sal_uInt16 nIndex = rPropName.getStr()[17];
+            nIndex -= '0';
+            OUString aTxt;
+            if ((aValue >>= aTxt) && nIndex < 3)
+                aKeys[nIndex]->sSortType = aTxt;
+            else
+                bRet = sal_False;
+        }
         else if(COMPARE_EQUAL == rPropName.compareToAscii("SortRowOrColumnNo", 17) &&
             rPropName.getLength() == 18 &&
             (rPropName.getStr()[17] >= '0' && rPropName.getStr()[17] <= '9'))
@@ -645,19 +709,17 @@ sal_Bool SwXTextCursor::convertSortProperties(
             if ( aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3 )
             {
                 sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
-
-//JP 6.4.2001: must be changed in the API to the correct string
-                if( !bTemp )
-                    aKeys[nIndex]->sSortType.AssignAscii( "normal" );
-//JP 6.4.2001: must be changed in the API to the correct string
+                aKeys[nIndex]->bIsNumeric = bTemp;
             }
             else
                 bRet = sal_False;
         }
-        else if(0 == rPropName.indexOf(C2U("IsSortAscending")) && rPropName.getLength() == 16 &&
-            lcl_IsNumeric(String(rPropName[(sal_uInt16)15])))
+        else if(0 == rPropName.indexOf(C2U("IsSortAscending")) &&
+            rPropName.getLength() == 16 &&
+            (rPropName.getStr()[15] >= '0' && rPropName.getStr()[15] <= '9'))
         {
-            sal_uInt16 nIndex = rPropName.getStr()[16];
+            sal_uInt16 nIndex = rPropName.getStr()[15];
+            nIndex -= '0';
             if ( aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3 )
             {
                 sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
@@ -667,6 +729,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
                 bRet = sal_False;
         }
     }
+
     if(pKey1->nColumnId != USHRT_MAX)
         rSortOpt.aKeys.C40_INSERT(SwSortKey, pKey1, rSortOpt.aKeys.Count());
     if(pKey2->nColumnId != USHRT_MAX)
