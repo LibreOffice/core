@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:47:03 $
+ *  last change: $Author: oj $ $Date: 2002-04-30 07:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,9 +228,16 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
         {
             m_bHiContrast = bHiContrast;
             // change all bitmap entries
+            Bitmap aPlus(ModuleRes( bHiContrast ? BMP_PLUSBUTTON_SCH : BMP_PLUSBUTTON));
+            Bitmap aMinus(ModuleRes( bHiContrast ? BMP_MINUSBUTTON_SCH : BMP_MINUSBUTTON));
+            DBTreeListBox* pListBox = m_pTreeView->getListBox();
+
             SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
-            while (pEntryLoop)
+            while ( pEntryLoop )
             {
+                pListBox->SetExpandedEntryBmp(pEntryLoop,aMinus);
+                pListBox->SetCollapsedEntryBmp(pEntryLoop,aPlus);
+
                 DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
                 if ( pData )
                 {
