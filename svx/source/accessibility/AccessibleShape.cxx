@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 16:10:31 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 19:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ void AccessibleShape::Init (void)
     {
         SvxEditSource* pEditSource = new SvxTextEditSource (
             *GetSdrObjectFromXShape (mxShape), *pView, *pWindow);
-        mpText = new SvxAccessibleTextHelper (
+        mpText = new AccessibleTextHelper (
             this,
             ::std::auto_ptr<SvxEditSource>(pEditSource));
     }
