@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-15 16:15:05 $
+ *  last change: $Author: rt $ $Date: 2002-12-02 16:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2620,7 +2620,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                     nError = (FileBase::RC)symlink( aFromPath.GetBuffer(), aToPath.GetBuffer() );
                 }
                 else
-                    nError = File::copy( aFromAfm.GetMainURL(), aToAfm.GetMainURL() );
+                    nError = File::copy( aFromAfm.GetMainURL(INetURLObject::DECODE_TO_IURI), aToAfm.GetMainURL(INetURLObject::DECODE_TO_IURI) );
                 if( nError )
                 {
                     if( pCallback )
@@ -2636,7 +2636,7 @@ int PrintFontManager::importFonts( const ::std::list< OString >& rFiles, bool bL
                 nError = (FileBase::RC)symlink( aFromPath.GetBuffer(), aToPath.GetBuffer() );
             }
             else
-                nError = File::copy( aFrom.GetMainURL(), aTo.GetMainURL() );
+                nError = File::copy( aFrom.GetMainURL(INetURLObject::DECODE_TO_IURI), aTo.GetMainURL(INetURLObject::DECODE_TO_IURI) );
             // copy font file
             if( nError )
             {
