@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-14 14:15:16 $
+ *  last change: $Author: ama $ $Date: 2001-05-02 14:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1731,9 +1731,22 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType eMakeFtn )
     {
         pLayLeaf = FIRSTLEAF( pNew );
         if( pLayLeaf->IsColBodyFrm() )
-        {   // Bei bereits vorhandenen spaltigen Bereichen suchen wir den Body der letzten Spalte
+        {
+            // In existent section columns we're looking for the last not empty
+            // column.
+            SwLayoutFrm *pTmp = pLayLeaf;
             while( pLayLeaf->GetUpper()->GetNext() )
+            {
                 pLayLeaf = (SwLayoutFrm*)((SwLayoutFrm*)pLayLeaf->GetUpper()->GetNext())->Lower();
+                if( pLayLeaf->Lower() )
+                    pTmp = pLayLeaf;
+            }
+            // If we skipped an empty column, we've to set the jump-flag
+            if( pLayLeaf != pTmp )
+            {
+                pLayLeaf = pTmp;
+                SwFlowFrm::SetMoveBwdJump( TRUE );
+            }
         }
     }
     return pLayLeaf;
