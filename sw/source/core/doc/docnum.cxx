@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:17:20 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,12 @@
 #endif
 #ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
+#ifndef _FRMATR_HXX
+#include <frmatr.hxx>
 #endif
 
 inline BYTE GetUpperLvlChg( BYTE nCurLvl, BYTE nLevel, USHORT nMask )
@@ -309,10 +315,71 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             aCollArr[ nLevel ] = (*pTxtFmtCollTbl)[ n ];
     }
 
+    /* --> #111107# */
+    /* Find the last occupied level (backward). */
+    for (n = MAXLEVEL - 1; n > 0; n--)
+    {
+        if (aCollArr[n] != 0)
+            break;
+    }
+
+    /* If an occupied level is found, choose next level (which IS
+       unoccupied) until a valid level is found. If no occupied level
+       was found n is 0 and aCollArr[0] is 0. In this case no demoting
+       is possible. */
+    if (aCollArr[n] != 0)
+    {
+        while (n < MAXLEVEL - 1)
+        {
+            n++;
+
+            SwTxtFmtColl *aTmpColl =
+                GetTxtCollFromPool(RES_POOLCOLL_HEADLINE1 + n);
+
+            if (aTmpColl->GetOutlineLevel() == n)
+            {
+                aCollArr[n] = aTmpColl;
+
+                break;
+            }
+        }
+    }
+
+    /* Find the first occupied level (forward). */
+    for (n = 0; n < MAXLEVEL - 1; n++)
+    {
+        if (aCollArr[n] != 0)
+            break;
+    }
+
+    /* If an occupied level is found, choose previous level (which IS
+       unoccupied) until a valid level is found. If no occupied level
+       was found n is MAXLEVEL - 1 and aCollArr[MAXLEVEL - 1] is 0. In
+       this case no demoting is possible. */
+    if (aCollArr[n] != 0)
+    {
+        while (n > 0)
+        {
+            n--;
+
+            SwTxtFmtColl *aTmpColl =
+                GetTxtCollFromPool(RES_POOLCOLL_HEADLINE1 + n);
+
+            if (aTmpColl->GetOutlineLevel() == n)
+            {
+                aCollArr[n] = aTmpColl;
+
+                break;
+            }
+        }
+    }
+    /* <-- #111107# */
+
     /* --> #i13747#
 
        Build a move table that states from which level an outline will
-       be moved to which other level. */
+
+  be moved to which other level. */
 
     /* the move table
 
@@ -856,7 +923,9 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
     {
         pNew = (*pNumRuleTbl)[ MakeNumRule( rRule.GetName(), &rRule ) ];
 
-        /* #109308# If called from a shell propagate an existing
+        /* #109308# ATTENTION THIS IS NOW PARTLY WRONG! SEE #111078#.
+
+            If called from a shell propagate an existing
             adjust item at the beginning am rPam into the new
             numbering rule. */
         if (bCalledFromShell)
@@ -866,12 +935,29 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
             if (pCntntNode)
             {
                 SwAttrSet & rAttrSet = pCntntNode->GetSwAttrSet();
-                const SfxPoolItem * pItem = NULL;
 
-                if (SFX_ITEM_SET == rAttrSet.GetItemState(RES_PARATR_ADJUST,
-                                                          TRUE,
-                                                          &pItem))
-                    pNew->SetNumAdjust(((SvxAdjustItem *) pItem)->GetAdjust());
+                /* #111078# Do not propagate the adjustment but set
+                    the adjustment according to the text direction of
+                    the paragraph. */
+
+                SvxFrameDirection aDir = (SvxFrameDirection)
+                    rAttrSet.GetFrmDir().GetValue();
+
+                switch (aDir)
+                {
+                case FRMDIR_HORI_LEFT_TOP:
+                    pNew->SetNumAdjust(SVX_ADJUST_LEFT);
+
+                    break;
+
+                case FRMDIR_HORI_RIGHT_TOP:
+                    pNew->SetNumAdjust(SVX_ADJUST_RIGHT);
+
+                    break;
+
+                default:
+                    break;
+                }
             }
         }
 
