@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-03 15:54:39 $
+ *  last change: $Author: ab $ $Date: 2001-05-17 13:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1290,6 +1290,16 @@ RTLFUNC(CreateUnoDialog)
     RTL_Impl_CreateUnoDialog( pBasic, rPar, bWrite );
 }
 
+// Return the application standard lib as root scope
+RTLFUNC(GlobalScope)
+{
+    SbxObject* p = pBasic;
+    while( p->GetParent() )
+        p = p->GetParent();
+
+    SbxVariableRef refVar = rPar.Get(0);
+    refVar->PutObject( p );
+}
 
 
 

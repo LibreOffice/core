@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-03 15:51:15 $
+ *  last change: $Author: ab $ $Date: 2001-05-17 13:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,10 +290,11 @@ static Methods aMethods[] = {
 { "GetGUIVersion",  SbxLONG,     _FUNCTION,RTLNAME(GetGUIVersion)      },
 { "GetPathSeparator",  SbxSTRING,     _FUNCTION,RTLNAME(GetPathSeparator)  },
 { "GetProcessServiceManager", SbxOBJECT, 0 | _FUNCTION, RTLNAME(GetProcessServiceManager) },
-{ "GetSolarVersion",  SbxLONG,     _FUNCTION,RTLNAME(GetSolarVersion)      },
-{ "GetSystemTicks",  SbxLONG,     _FUNCTION,RTLNAME(GetSystemTicks)      },
-{ "GetSystemType",  SbxINTEGER,     _FUNCTION,RTLNAME(GetSystemType)      },
-{ "Green",        SbxINTEGER,   1 | _FUNCTION, RTLNAME(Green)           },
+{ "GetSolarVersion",  SbxLONG,     _FUNCTION,RTLNAME(GetSolarVersion)     },
+{ "GetSystemTicks",  SbxLONG,      _FUNCTION,RTLNAME(GetSystemTicks)      },
+{ "GetSystemType",  SbxINTEGER,    _FUNCTION,RTLNAME(GetSystemType)       },
+{ "GlobalScope",    SbxOBJECT,     _FUNCTION,RTLNAME(GlobalScope)      },
+{ "Green",          SbxINTEGER,   1 | _FUNCTION, RTLNAME(Green)           },
   { "RGB-Value",     SbxLONG },
 
 { "HasUnoInterfaces",   SbxBOOL,  1 | _FUNCTION, RTLNAME(HasUnoInterfaces)  },
