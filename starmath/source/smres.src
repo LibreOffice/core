@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 07:47:23 $
+ *  last change: $Author: ihi $ $Date: 2002-11-15 15:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@
 
 #define MN_SUB_TOOLBAR 32
 
+#define WORKAROUND_10 10
+#define WORKAROUND_3 3
 
 ModalDialog RID_FONTDIALOG
 {
@@ -4170,7 +4172,7 @@ Menu RID_DISTANCEMENU
         };
         MenuItem
         {
-            Identifier = 3 ;
+            Identifier = WORKAROUND_3 ;
             /* ### ACHTUNG: Neuer Text in Resource? Brüche : Br³che */
             Text = "Brüche" ;
             Text [ ENGLISH ] = "Fractions" ;
@@ -4368,7 +4370,7 @@ Menu RID_DISTANCEMENU
         };
         MenuItem
         {
-            Identifier = 10 ;
+            Identifier = WORKAROUND_10 ;
             Text = "Ränder" ;
             Text [ ENGLISH ] = "Border" ;
                     TEXT[ italian ] = "Margini";
