@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 19:29:02 $
+#   last change: $Author: kz $ $Date: 2004-02-27 15:16:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,9 +82,7 @@ PYUNO_MODULE=$(DLLDEST)$/pyuno$(DLLPOST)
 # so this library cannot be checked
 SHL1NOCHECK=yes
 PYUNORC=pyunorc
-.IF "$(OS)"=="SOLARIS" || "$(OS)"=="MACOSX"
 PYTHONLIB=-lpython
-.ENDIF
 .ELSE
 # on windows, the python executable also uses the shared library,
 # so we link pyuno directly to it
