@@ -2,63 +2,13 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: obo $ $Date: 2000-09-20 15:42:41 $
  *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
- *
- *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
- *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
- *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
- *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
+ *  Copyright according the GNU Public License.
  *
  ************************************************************************/
-
 #include "app.hrc"
 #define ITEMID_HYPERLINK    SID_HYPERLINK_SETLINK
 #ifndef _SVX_DLG_HYPERLINK_HXX //autogen
@@ -144,6 +94,10 @@
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
+#endif
+
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _SD_OPTSITEM_HXX
@@ -621,7 +575,7 @@ void __EXPORT SdOutlineViewShell::GetCtrlState(SfxItemSet &rSet)
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_BLACKWHITE ) )
     {
         USHORT nId = SdPreviewChildWindow::GetChildWindowId();
-        if( GetViewFrame()->GetChildWindow( nId ) )
+        if( SFX_APP()->GetChildWindow( nId ) )
         {
             ULONG nMode = pFrameView->GetPreviewDrawMode();
             rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_COLOR, (BOOL)(nMode == PREVIEW_DRAWMODE_COLOR) ) );
@@ -879,7 +833,7 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) )
     {
-        SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
+        SfxChildWindow* pPreviewChildWindow = SFX_APP()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
         SdPreviewWin*   pPreviewWin = (SdPreviewWin*) ( pPreviewChildWindow ? pPreviewChildWindow->GetWindow() : NULL );
         FuSlideShow*    pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
 
@@ -1109,7 +1063,7 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_WIN ) )
     {
         USHORT nId = SdPreviewChildWindow::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
+        rSet.Put( SfxBoolItem( SID_PREVIEW_WIN, SFX_APP()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_STATE ) )
     {
@@ -1911,6 +1865,103 @@ SdPage* SdOutlineViewShell::GetActualPage()
 
 /*************************************************************************
 |*
+|* Retrieve range of marked pages
+|*
+\************************************************************************/
+
+String SdOutlineViewShell::GetPageRangeString()
+{
+    SdWindow*      pWin             = GetActiveWindow();
+    OutlinerView*  pActiveView      = pOlView->GetViewByWindow(pWin);
+    Outliner*      pOutl            = pActiveView->GetOutliner();
+    List*          pSelList         = (List*)pActiveView->CreateSelectionList();
+    Paragraph*     pPara            = (Paragraph*)pSelList->First();
+
+    String aStrPageRange;
+    BOOL bFirstPageNo = TRUE;
+    BOOL bOpenRange = FALSE;
+    USHORT nLastPage;
+    USHORT nLastUsedPage = -1;
+
+    USHORT nPageCount = 0;
+    for( USHORT n = 0; n< pDoc->GetPageCount(); n++ )
+        if( ( (SdPage*)pDoc->GetPage( n ) )->GetPageKind() == PK_STANDARD )
+            nPageCount++;
+
+    while ( pPara )
+    {
+        if ( pOutl->GetDepth( pOutl->GetAbsPos( pPara ) ) > 0 )
+        {
+            pPara = pOlView->GetPrevTitle(pPara);
+        }
+        USHORT nPageToSelect = 0;
+        while(pPara)
+        {
+            pPara = pOlView->GetPrevTitle(pPara);
+            if (pPara)
+                nPageToSelect++;
+        }
+
+        if( bFirstPageNo )
+        {
+            bFirstPageNo = FALSE;
+            aStrPageRange = String::CreateFromInt32( sal_Int32( nPageToSelect+1 ) );
+            nLastUsedPage = nPageToSelect;
+            nPageCount--;
+        }
+        else
+        {
+            if( nPageToSelect != nLastPage )
+            {
+                if( nPageToSelect == nLastPage+1 )
+                {
+                    bOpenRange = TRUE;
+                    nPageCount--;
+                }
+                else
+                {
+                    if( bOpenRange )
+                    {
+                        if( nLastPage == nLastUsedPage+1 )
+                            aStrPageRange.Append( sal_Unicode(',') );
+                        else
+                            aStrPageRange.Append( sal_Unicode('-') );
+
+                        aStrPageRange.Append( String::CreateFromInt32( sal_Int32( nLastPage+1 ) ) );
+                    }
+                    aStrPageRange.Append( sal_Unicode(',') );
+                    aStrPageRange.Append( String::CreateFromInt32( sal_Int32( nPageToSelect+1 ) ) );
+                    nLastUsedPage = nPageToSelect;
+                    bOpenRange = FALSE;
+                    nPageCount--;
+                }
+            }
+        }
+
+        nLastPage = nPageToSelect;
+        pPara = (Paragraph*)pSelList->Next();
+    }
+
+    if( bOpenRange )
+    {
+        if( nLastPage == nLastUsedPage+1 )
+            aStrPageRange.Append( sal_Unicode(',') );
+        else
+            aStrPageRange.Append( sal_Unicode('-') );
+
+        aStrPageRange.Append( String::CreateFromInt32( sal_Int32( nLastPage+1 ) ) );
+    }
+
+    if( nPageCount == 0 )
+        aStrPageRange.Erase();
+
+    delete pSelList;                // die wurde extra fuer uns erzeugt
+
+    return aStrPageRange;
+}
+
+/*************************************************************************
+|*
 |* Update Preview
 |*
 \************************************************************************/
@@ -1920,7 +1971,7 @@ void SdOutlineViewShell::UpdatePreview()
     // vom ShowWindow der DiaShow?
     // ggfs. Preview den neuen Kontext mitteilen
     SfxChildWindow* pPreviewChildWindow =
-        GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
+        SFX_APP()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
     if (pPreviewChildWindow)
     {
         SdPreviewWin* pPreviewWin =
@@ -2009,6 +2060,7 @@ BOOL SdOutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
 
         pTO  = new SdrRectObj( OBJ_TITLETEXT );
         pOPO = pOutliner->CreateParaObject( pOutliner->GetAbsPos( pPara ), 1 );
+        pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
         pTO->SetOutlinerParaObject( pOPO );
         pTO->SetEmptyPresObj( FALSE );
 
@@ -2030,7 +2082,7 @@ BOOL SdOutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
     else if( pTO && bText )
     {
         pOPO = pOutliner->CreateParaObject( pOutliner->GetAbsPos( pPara ), 1 );
-
+        pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
         pTO->SetOutlinerParaObject( pOPO );
         pTO->SetEmptyPresObj( FALSE );
 
@@ -2161,9 +2213,6 @@ ULONG SdOutlineViewShell::Read(SvStream& rInput, USHORT eFormat)
         }
     }
 
-
     return( bRet );
 }
-
-
 
