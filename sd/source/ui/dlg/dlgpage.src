@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:45:14 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 21:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,11 @@ TabDialog TAB_PAGE
                 Text [ spanish ] = "Página" ;
                 Text [ english_us ] = "Page" ;
                 PageResID = RID_SVXPAGE_PAGE ;
-                Text[ chinese_simplified ] = "Ò³Ãæ";
+                Text[ chinese_simplified ] = "Ò³";
                 Text[ russian ] = "Ñòğàíèöà";
                 Text[ polish ] = "Strona";
                 Text[ japanese ] = "Íß°¼Ş";
-                Text[ chinese_traditional ] = "­¶­±";
+                Text[ chinese_traditional ] = "­¶";
                 Text[ arabic ] = "ÕİÍÉ";
                 Text[ greek ] = "Óåëßäá";
                 Text[ korean ] = "ÂÊ";
@@ -197,7 +197,7 @@ TabDialog TAB_PAGE
     Text[ russian ] = "Ïàğàìåòğû ñòğàíèöû";
     Text[ polish ] = "Uk³ad strony";
     Text[ japanese ] = "Íß°¼Şİ’è";
-    Text[ chinese_traditional ] = "³]©w­¶­±";
+    Text[ chinese_traditional ] = "³]¸m­¶­±";
     Text[ arabic ] = "ÅÚÏÇÏ ÇáÕİÍÉ";
     Text[ greek ] = "Äéáìüñöùóç óåëßäáò";
     Text[ korean ] = "ÂÊ ¼³Á¤";
