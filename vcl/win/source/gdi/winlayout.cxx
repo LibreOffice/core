@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:22:38 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 09:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,28 +286,20 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     // if there are RTL runs we need room to remember individual BiDi flags
     if( bHasRTL )
     {
-        // count chars to process as LTR
-        rArgs.ResetPos();
-        bool bRTL;
-        for( bRTL; rArgs.GetNextRun( &i, &j, &bRTL ) && !bRTL; )
-            mnGlyphCount += j - i;
-        // if there are RTL runs we need room to remember the RTL status
-        if( bRTL )
-        {
-            mpGlyphRTLFlags = new bool[ mnCharCount ];
-            for( i = 0; i < mnCharCount; ++i )
-                mpGlyphRTLFlags[i] = false;
-        }
+        mpGlyphRTLFlags = new bool[ mnCharCount ];
+        for( i = 0; i < mnCharCount; ++i )
+            mpGlyphRTLFlags[i] = false;
     }
 
+    // rewrite the logical string if needed to prepare for the API calls
     const sal_Unicode* pBidiStr = rArgs.mpStr + rArgs.mnMinCharPos;
     if( (mnGlyphCount != mnCharCount) || bVertical )
     {
-        // we need to rewrite the pBidiStr when either
+        // we need to rewrite the pBidiStr when any of
         // - BiDirectional layout
         // - vertical layout
-        // - with partial runs (e.g. with control chars or for glyph fallback)
-        // is involved
+        // - partial runs (e.g. with control chars or for glyph fallback)
+        // are involved
         sal_Unicode* pRewrittenStr = (sal_Unicode*)alloca( mnCharCount * sizeof(sal_Unicode) );
         pBidiStr = pRewrittenStr;
 
@@ -324,7 +316,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         {
             do
             {
-                // get current character
+                // get the next leftmost character in this run
                 int nCharPos = bIsRTL ? --j : i++;
                 sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
 
@@ -332,7 +324,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                 if( bIsRTL )
                 {
                     cChar = ::GetMirroredChar( cChar );
-                    mpGlyphRTLFlags[ nCharPos ] = true;
+                    mpGlyphRTLFlags[ mnGlyphCount ] = true;
                 }
 
                 // for vertical writing use vertical alternatives
@@ -2275,7 +2267,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     ImplWinFontData& rFontFace      = *mpWinFontData[ nFallbackLevel ];
     ImplWinFontEntry& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
 
-#ifdef USE_UNISCRIBE
+#if defined( USE_UNISCRIBE )
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)  // complex text
     &&   (aUspModule || (bUspEnabled && InitUSP())) )   // CTL layout engine
     {
