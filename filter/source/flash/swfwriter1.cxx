@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-05 18:25:37 $
+ *  last change: $Author: cl $ $Date: 2002-12-05 23:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,6 +1333,47 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
 
 // -----------------------------------------------------------------------------
 
+bool Writer::Impl_writePageField( Rectangle& rTextBounds )
+{
+    startTag( TAG_DEFINEEDITTEXT );
+
+    sal_uInt16 nTextId = createID();
+
+    mpTag->addUI16( nTextId );
+    mpTag->addRect( rTextBounds );
+
+    BitStream aBits;
+    aBits.writeUB( 1, 1 );                  // HasText
+    aBits.writeUB( 0, 1 );                  // WordWrap
+    aBits.writeUB( 0, 1 );                  // MultiLine
+    aBits.writeUB( 0, 1 );                  // Password
+    aBits.writeUB( 1, 1 );                  // HasTextColor
+    aBits.writeUB( 0, 1 );                  // HasMaxLength
+    aBits.writeUB( 0, 1 );                  // HasFont
+    aBits.writeUB( 0, 1 );                  // Reserved
+    aBits.writeUB( 0, 1 );                  // AutoSize
+    aBits.writeUB( 0, 1 );                  // HasLayout
+    aBits.writeUB( 1, 1 );                  // NoSelect
+    aBits.writeUB( 1, 1 );                  // Border
+    aBits.writeUB( 0, 1 );                  // Reserved
+    aBits.writeUB( 0, 1 );                  // HTML
+    aBits.writeUB( 0, 1 );                  // UseOutlines
+    mpTag->addBits( aBits );
+
+    Color aColor( COL_BLACK );
+    mpTag->addRGB( aColor );
+    mpTag->addString( "PageNumber" );
+    mpTag->addString( "XXX" );
+
+    endTag();
+
+    maShapeIds.push_back( nTextId );
+
+    return true;
+}
+
+// -----------------------------------------------------------------------------
+
 void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 {
     Rectangle clipRect;
@@ -1639,6 +1680,29 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                             {
                                 bDone = sal_True;
                             }
+                        }
+                    }
+                }
+                else if( pA->GetComment().CompareIgnoreCaseToAscii( "FIELD_SEQ_BEGIN;PageField" ) == COMPARE_EQUAL )
+                {
+
+                    bool bDone = sal_False;
+
+                    while( !bDone && ( ++i < nCount ) )
+                    {
+                        pAction = rMtf.GetAction( i );
+
+                        if( pAction->GetType() == META_TEXTARRAY_ACTION )
+                        {
+                            const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pAction;
+                            Rectangle aRect( pA->GetPoint(), Size( 100, 100 ) );
+                            Impl_writePageField( aRect );
+                        }
+
+                        if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
+                                 ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "FIELD_SEQ_END" ) == COMPARE_EQUAL ) )
+                        {
+                            bDone = sal_True;
                         }
                     }
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-05 17:09:51 $
+ *  last change: $Author: cl $ $Date: 2002-12-05 23:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ const sal_uInt8 TAG_DEFINEBITSLOSSLESS = 20;
 const sal_uInt8 TAG_DEFINEBITSJPEG2 = 21;
 const sal_uInt8 TAG_DEFINEBITSJPEG3 = 35;
 const sal_uInt8 TAG_DEFINEBITSLOSSLESS2 = 36;
-
+const sal_uInt8 TAG_DEFINEEDITTEXT= 37;
 const sal_uInt8 TAG_PLACEOBJECT     = 4;
 const sal_uInt8 TAG_PLACEOBJECT2    = 26;
 const sal_uInt8 TAG_REMOVEOBJECT2   = 28;
@@ -441,6 +441,7 @@ private:
     void Impl_writeEllipse( const Point& rCenter, long nRadX, long nRadY );
     bool Impl_writeFilling( SvtGraphicFill& rFilling );
     bool Impl_writeStroke( SvtGraphicStroke& rStroke );
+    bool Impl_writePageField( Rectangle& rTextBounds );
 
     FlashFont& Impl_getFont( const Font& rFont );
 
