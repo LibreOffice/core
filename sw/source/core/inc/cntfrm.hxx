@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cntfrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-07 15:52:49 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,10 @@ public:
     inline  BOOL    EndNextPage( SwPaM * ) const;
     inline  BOOL    EndPrevPage( SwPaM * ) const;
 
-    //nMaxHeight liefert die benoetigte Hoehe,
-    //bSplit sagt, obj der Absatz gesplittet werden muss.
-    virtual BOOL WouldFit( SwTwips &nMaxHeight, BOOL &bSplit );
+    // nMaxHeight is the required height
+    // bSplit indicates, that the paragraph has to be split
+    // bTst indicates, that we are currently doing a test formatting
+    virtual sal_Bool WouldFit( SwTwips &nMaxHeight, sal_Bool &bSplit, sal_Bool bTst );
 
     BOOL MoveFtnCntFwd( BOOL, SwFtnBossFrm* );//von MoveFwd gerufen bei Ftn-Inhalt
 };
