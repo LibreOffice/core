@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:46:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,6 +926,9 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_TEXT_SECTION), FN_UNO_TEXT_SECTION, CPPU_E2T(CPPUTYPE_REFTEXTSECTION),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
+                    // --> collapsing borders DVO, FME 2005-05-27 #i29550#
+                    { SW_PROP_NMID(UNO_NAME_COLLAPSING_BORDERS), RES_COLLAPSING_BORDERS, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
+                    // <-- collapsing
                     _REDLINE_NODE_PROPERTIES
                     {0,0,0,0,0}
                 };
@@ -1649,6 +1652,9 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     COMMON_HYPERLINK_PROPERTIES
                     { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),  PropertyAttribute::MAYBEVOID,     0},
                     { SW_PROP_NMID(UNO_NAME_IS_SPLIT_ALLOWED), RES_ROW_SPLIT,       CPPU_E2T(CPPUTYPE_BOOLEAN)  , PropertyAttribute::MAYBEVOID, 0},
+                    // --> collapsing borders DVO, FME 2005-05-27 #i29550#
+                    { SW_PROP_NMID(UNO_NAME_COLLAPSING_BORDERS), RES_COLLAPSING_BORDERS, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
+                    // <-- collapsing
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextDefaultMap_Impl;
