@@ -9,8 +9,8 @@ mkdir: %_DEST%\inc%_EXT%\bridges\remote
 ..\%__SRC%\lib\librmcxt* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\bin\rmcxt* %_DEST%\bin%_EXT%\*
 
-..\%__SRC%\lib\libremote_uno* %_DEST%\lib%_EXT%\libremote_uno*
-..\%__SRC%\bin\remote_uno* %_DEST%\bin%_EXT%\remote_uno*
+..\%__SRC%\lib\libiiop_uno* %_DEST%\lib%_EXT%\libiiop_uno*
+..\%__SRC%\bin\iiop_uno* %_DEST%\bin%_EXT%\iiop_uno*
 ..\%__SRC%\lib\liburp_uno* %_DEST%\lib%_EXT%\liburp_uno*
 ..\%__SRC%\bin\urp_uno* %_DEST%\bin%_EXT%\urp_uno*
 ..\%__SRC%\lib\libjava_uno* %_DEST%\lib%_EXT%\libjava_uno*
