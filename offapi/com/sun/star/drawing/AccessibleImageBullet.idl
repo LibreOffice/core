@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:08:42 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_text_AccessibleImageBullet_idl__
-#define __com_sun_star_text_AccessibleImageBullet_idl__
+#ifndef __com_sun_star_drawing_AccessibleImageBullet_idl__
+#define __com_sun_star_drawing_AccessibleImageBullet_idl__
 
 #ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
 #include <com/sun/star/accessibility/XAccessibleContext.idl>
@@ -76,7 +76,7 @@
 
 //=============================================================================
 
-module com {  module sun {  module star {  module text {
+module com {  module sun {  module star {  module drawing {
 
 //=============================================================================
 
@@ -91,11 +91,15 @@ service AccessibleImageBullet
           screen.
 
         <ul>
-            <li>The parent returned by <type>getAccessibleParent</type>
+            <li>The parent returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleParent</method>
                 is the accessible object of a text paragraph.
             <li>There are no children returned by
-                <type>getAccessibleChild</type>.
-            <li>The role is <type>GRAPHIC</type>.
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleChild</method>.
+            <li>The role is <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::GRAPHIC</const>.
             <li>The name is "image bullet" (or the equivalent term
                 in application's language).
             <li>The description contains the term "image bullet" (or the equivalent
@@ -103,16 +107,24 @@ service AccessibleImageBullet
                 within this bullet appears.
             <li>There are no relations.
             <li>The following states are supported by the
-                <type>XAccessibleStateSet</type> returned by
-                <type>getAccessibleStateSet</type>.
+                <type scope="::com::sun::star::accessibility"
+                >XAccessibleStateSet</type> returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleStateSet</method>.
                 <ul>
-                    <li><type>DEFUNC</type> (indicates that the document
-                        window has been closed or the image bullet is
-                        not existing any longer).
-                    <li><type>ENABLED</type> (always contained)
-                    <li><type>SHOWING</type>
-                    <li><type>VISIBLE</type>
-                    <li><type>INVALID</type>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::DEFUNC</const> (indicates that
+                        the document window has been closed or the image bullet
+                        is not existing any longer).
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::ENABLED</const> (always
+                        contained)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::SHOWING</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::VISIBLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::INVALID</const>
                 </ul>
         </ul>
 
