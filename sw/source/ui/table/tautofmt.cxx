@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:16:40 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
+
 
 #pragma hdrstop
 
@@ -74,6 +78,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -112,15 +119,11 @@
 #ifndef _SHELLRES_HXX
 #include "shellres.hxx"
 #endif
-#ifndef _BREAKIT_HXX
-#include "breakit.hxx"
-#endif
 #ifndef _TAUTOFMT_HRC
 #include "tautofmt.hrc"
 #endif
 
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+namespace css = com::sun::star;
 
 #define FRAME_OFFSET 4
 
@@ -156,6 +159,10 @@ private:
     const String            aStrSouth;
     const String            aStrSum;
     SvNumberFormatter*      pNumFmt;
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xMSF;
+    css::uno::Reference< css::i18n::XBreakIterator >       m_xBreak;
+
     //-------------------------------------------
     void    Init            ();
     void    DoPaint         ( const Rectangle& rRect );
@@ -649,10 +656,18 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
         nLabelColWidth  ( (aPrvSize.Width() - 4) / 4 - 12 ),
         nDataColWidth1  ( (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 3 ),
         nDataColWidth2  ( (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 4 ),
-        nRowHeight      ( (aPrvSize.Height() - 4) / 5 )
+        nRowHeight      ( (aPrvSize.Height() - 4) / 5 ),
+        m_xMSF          ( comphelper::getProcessServiceFactory() )
 {
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    pNumFmt = new SvNumberFormatter( xMSF, LANGUAGE_SYSTEM );
+    DBG_ASSERT( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
+    if ( m_xMSF.is() )
+    {
+        m_xBreak = css::uno::Reference< css::i18n::XBreakIterator >(
+            m_xMSF->createInstance (
+                rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
+            css::uno::UNO_QUERY);
+    }
+    pNumFmt = new SvNumberFormatter( m_xMSF, LANGUAGE_SYSTEM );
 
     Init();
 }
@@ -666,7 +681,7 @@ __EXPORT AutoFmtPreview::~AutoFmtPreview()
 
 //------------------------------------------------------------------------
 
-void lcl_SetFontProperties(
+static void lcl_SetFontProperties(
         Font& rFont,
         const SvxFontItem& rFontItem,
         const SvxWeightItem& rWeightItem,
@@ -835,7 +850,7 @@ MAKENUMSTR:
         else
             aScriptedText.SetDefaultFont();
 
-        aScriptedText.SetText( cellString, ::GetBreakIt()->xBreak ); //CHINA001 aScriptedText.SetText( cellString, pBreakIt->xBreak );
+        aScriptedText.SetText( cellString, m_xBreak );
         aStrSize = aScriptedText.GetTextSize();
 
         if( aCurData.IsFont() &&
@@ -855,7 +870,7 @@ MAKENUMSTR:
 //                          cellString.Erase( 0, 1 );
 //                  else
             cellString.Erase( cellString.Len() - 1 );
-            aScriptedText.SetText( cellString, ::GetBreakIt()->xBreak ); //CHINA001 aScriptedText.SetText( cellString, pBreakIt->xBreak );
+            aScriptedText.SetText( cellString, m_xBreak );
             aStrSize = aScriptedText.GetTextSize();
         }
 
@@ -1109,5 +1124,3 @@ void __EXPORT AutoFmtPreview::Paint( const Rectangle& rRect )
 {
     DoPaint( rRect );
 }
-
-
