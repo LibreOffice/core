@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ui_pch.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:00:44 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@
 #include <sfx2/ipfrm.hxx>
 #include <so3/factory.hxx>
 #include <docsh.hxx>
-#include <sfx2/interno.hxx>
+//REMOVE    #include <sfx2/interno.hxx>
 #include <vcl/wintypes.hxx>
 #include <sfx2/docfac.hxx>
 #include <scitems.hxx>
