@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: gh $ $Date: 2002-09-25 09:19:24 $
+ *  last change: $Author: rt $ $Date: 2002-11-04 18:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,6 +1353,7 @@ TabPage PAGE_DBASE
         Text[ arabic ] = "General";
         Text[ catalan ] = "Continguts";
         Text[ thai ] = "ทั่วไป";
+        Text[ portuguese_brazilian ] = "Geral";
     };
     CheckBox CB_SHOWDELETEDROWS
     {
@@ -1593,6 +1594,7 @@ TabPage PAGE_ADO
         Text[ arabic ] = "General";
         Text[ catalan ] = "Continguts";
         Text[ thai ] = "ทั่วไป";
+        Text[ portuguese_brazilian ] = "Geral";
     };
 
     CheckBox CB_SQL92CHECK
@@ -1802,6 +1804,7 @@ TabPage PAGE_JDBC
         Text[ arabic ] = "General";
         Text[ catalan ] = "Continguts";
         Text[ thai ] = "ทั่วไป";
+        Text[ portuguese_brazilian ] = "Geral";
     };
 
     AUTO_INCREMENT_CONTROLS (73)
@@ -2021,6 +2024,7 @@ TabPage PAGE_ODBC
         Text[ arabic ] = "General";
         Text[ catalan ] = "Continguts";
         Text[ thai ] = "ทั่วไป";
+        Text[ portuguese_brazilian ] = "Geral";
     };
 
     AUTO_INCREMENT_CONTROLS (80 )
@@ -2742,6 +2746,7 @@ TabPage PAGE_TEXT
         Text[ arabic ] = "General";
         Text[ catalan ] = "Continguts";
         Text[ thai ] = "ทั่วไป";
+        Text[ portuguese_brazilian ] = "Geral";
     };
 
     CheckBox CB_SQL92CHECK
@@ -3951,6 +3956,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.111  2002/09/25 09:19:24  gh
+ *  #103161#changes to fix confusion of the HID-generation
+ *
  *  Revision 1.110  2002/09/13 14:37:58  kz
  *  Merge SRX643: 13.09.02 - 16:34:30
  *
