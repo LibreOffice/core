@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-31 11:45:53 $
+ *  last change: $Author: jb $ $Date: 2001-06-07 07:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,7 @@ namespace configmgr
             OUString sNormalized;
 
         #ifdef TF_FILEURL
-            bOK = oslOK(osl_getFileURLFromSystemPath(sRawPath.pData, &sNormalized.pData));
+            bOK = oslOK(osl::File::getFileURLFromSystemPath(sRawPath, sNormalized));
         #else
             bOK = oslOK(osl_normalizePath(sRawPath.pData, &sNormalized.pData));
         #endif
@@ -1204,40 +1204,88 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
 namespace {
 
-// substitutePathVariables
+// normalizeAndSubstitutePathVariables
 // ---------------------------------------------------------------------------------------
 
-    typedef sal_Bool (SAL_CALL * getSystemDirectoryFunction)(oslSecurity, rtl_uString **);
-
-    void substitutePathVariables(OUString& _rPath)
+    bool normalizeAndSubstitutePathVariables(OUString& _rPath)
     {
-        // recognized variables
-        static const sal_Char* pVariablePattern[] =
+        OSL_PRECOND(_rPath.getLength() != 0 , "Invalid parameter: Empty path in normalizeAndSubstitutePathVariables" );
+
+        typedef sal_Bool (SAL_CALL * getSystemDirectoryFunction)(oslSecurity, rtl_uString **);
+        // recognized variables and methods to retrieve their substitute pathes
+        // Note: variables are expected to be a system path and thus must be at the beginning of _rPath
+        struct
         {
-            "$(SYSUSERHOME)", "$(SYSUSERCONFIG)"
+            sal_Char const *            pattern;
+            getSystemDirectoryFunction  getPath;
+        }
+        aPathVariables[] =
+        {
+            { "$(SYSUSERHOME)",   ::osl_getHomeDir    },
+            { "$(SYSUSERCONFIG)", ::osl_getConfigDir  }
         };
 
-        // methods to retrieve the variable substitutes
-        static const getSystemDirectoryFunction pRetrievePathMethod[] =
-        {
-            osl_getHomeDir, osl_getConfigDir
-        };
-
-        OUString sVariable;
-        OUString sSubstitute;
-        oslSecurity aCurrentUserSec = osl_getCurrentSecurity();
+        bool bIsNormalized = false;
 
         // check for all variables
-        for (sal_Int32 i=0; i<sizeof(pVariablePattern) / sizeof(pVariablePattern[0]); ++i)
+        for (sal_Int32 i=0; i < sizeof(aPathVariables)/sizeof(aPathVariables[0]); ++i)
         {
-            sVariable = OUString::createFromAscii(pVariablePattern[i]);
+            OUString sVariable = OUString::createFromAscii(aPathVariables[i].pattern);
             sal_Int32 nVariablePos = _rPath.indexOf(sVariable);
-            if (-1 != nVariablePos)
+
+            OSL_ENSURE( 0 >= nVariablePos, "Unexpected: System directory variable in the middle of a path");
+            if (0 == nVariablePos)
             {
-                (*pRetrievePathMethod[i])(aCurrentUserSec, &sSubstitute.pData);
+                OSL_ENSURE( !bIsNormalized, "Found duplicate path variable");
+
+                oslSecurity aCurrentUserSec = osl_getCurrentSecurity();
+
+                OUString sSubstitute;
+                aPathVariables[i].getPath(aCurrentUserSec, &sSubstitute.pData);
                 _rPath = _rPath.replaceAt(nVariablePos, sVariable.getLength(), sSubstitute);
+
+                bIsNormalized = true;
+
+            #ifndef DBG_UTIL
+                break; // in debug builds continue for additional checks
+            #endif // DBG_UTIL
             }
         }
+
+    #ifdef TF_FILEURL
+        if ( !bIsNormalized)
+        {
+            OUString sOther;
+
+            // make a normalized path
+            if ( oslOK(osl::File::getFileURLFromSystemPath(_rPath, sOther)))
+            {
+                _rPath = sOther;
+
+            }
+            // check if it already was normalized
+            else if ( !oslOK(osl::File::getSystemPathFromFileURL(_rPath, sOther)) )
+                return false;
+        }
+
+    #else // ! TF_FILEURL
+        OUString sNormalized;
+        if ( oslOK(osl_normalizePath(_rPath.pData, &sNormalized.pData)) )
+        {
+            _rPath = sNormalized;
+        }
+        else
+            return false;
+
+    #endif // TF_FILEURL
+
+        #ifdef _DEBUG
+        OUString sSystemPathCheck; // check that this has become a file url for a local path
+        #endif // _DEBUG
+        OSL_POSTCOND( oslOK( osl::File::getSystemPathFromFileURL(_rPath, sSystemPathCheck) ),
+                      "Unexpected: System path variable substitution did not result in valid file URL");
+
+        return true;
     }
 
 
@@ -1327,26 +1375,13 @@ namespace {
 
             nStatus = SVERSION_INI_NOT_FOUND;
 
-            // in the path to the product, replace the reference to the user system directory
-            substitutePathVariables(sProductVersionFile);
-            CFG_TRACE_INFO_NI("provider bootstrapping: product version file to find (after substituting): %s", OUSTRING2ASCII(sProductVersionFile));
-
+            // in the path to the product, replace the reference to the user system directory, make it a file URL
+            if ( ! normalizeAndSubstitutePathVariables(sProductVersionFile) )
             {
-                // normalize the path
-                OUString sNormalized;
-    #ifdef TF_FILEURL
-                if (!oslOK(osl_getFileURLFromSystemPath(sProductVersionFile.pData, &sNormalized.pData)))
-    #else
-                if (!oslOK(osl_normalizePath(sProductVersionFile.pData, &sNormalized.pData)))
-    #endif
-                {
-                    CFG_TRACE_ERROR_NI("provider bootstrapping: could not normalize the product version file name from the bootstrap file");
-                    return BOOTSTRAP_INI_INVALID;
-                }
-                sProductVersionFile = sNormalized;
+                CFG_TRACE_ERROR_NI("provider bootstrapping: could not normalize the product version file name from the bootstrap file");
+                return BOOTSTRAP_INI_INVALID;
             }
-
-            CFG_TRACE_INFO_NI("provider bootstrapping: product version file to find (normalized): %s", OUSTRING2ASCII(sProductVersionFile));
+            CFG_TRACE_INFO_NI("provider bootstrapping: product version file to find (after substituting and normalizing): %s", OUSTRING2ASCII(sProductVersionFile));
 
             _sIniPath = sProductVersionFile;
 
@@ -1395,7 +1430,7 @@ namespace {
                 OUString sNormalized;
                 // normalize the user directory path
     #ifdef TF_FILEURL
-                if (!oslOK(osl_getFileURLFromSystemPath(sUserPath.pData, &sNormalized.pData)))
+                if (!oslOK(osl::File::getFileURLFromSystemPath(sUserPath, sNormalized)))
     #else
                 if (!oslOK(osl_normalizePath(sUserPath.pData, &sNormalized.pData)))
     #endif
