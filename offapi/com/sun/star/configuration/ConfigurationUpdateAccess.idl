@@ -2,12 +2,12 @@
  *
  *  $RCSfile: ConfigurationUpdateAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
 <<<<<<< ConfigurationUpdateAccess.idl
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: jb $ $Date: 2001-02-05 14:39:42 $
 =======
- *  last change: $Author: jb $ $Date: 2001-02-01 14:31:41 $
+ *  last change: $Author: jb $ $Date: 2001-02-05 14:39:42 $
 >>>>>>> 1.4
  *
  *  The Contents of this file are made available subject to the terms of
@@ -150,7 +150,7 @@ service ConfigurationUpdateAccess
      <BR/>[Alternatively to <type>GroupUpdate</type>]
      </p>
     */
-    [optional] service SetUpdate;
+    /*[optional]*/ service SetUpdate;
 
     /** specializes <type>GroupAccess</type> to support modifying contained
      data.
@@ -159,7 +159,7 @@ service ConfigurationUpdateAccess
      <BR/>[Alternatively to <type>SetUpdate</type>]
      </p>
     */
-    [optional] service GroupUpdate;
+    /*[optional]*/ service GroupUpdate;
 
     /** specializes <type>AccessRootElement</type>, to support transaction-like
      control over a batch of changes accumulated within the tree (fragment).
@@ -172,7 +172,7 @@ service ConfigurationUpdateAccess
         Instances obtained from a <type>ConfigurationProvider</type> will
         implement this version of <type>HierarchyElement</type>.
     */
-    [optional] service UpdateRootElement;
+    /*[optional]*/ service UpdateRootElement;
 };
 
 //=============================================================================

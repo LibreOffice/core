@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationAccess.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-02 15:50:23 $
+ *  last change: $Author: jb $ $Date: 2001-02-05 14:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,13 +252,13 @@ service ConfigurationAccess
      if this element is a <em>Set</em>.
      <BR/>[Alternatively to <type>GroupAccess</type>]
     */
-    [optional] service SetAccess;
+    /*[optional]*/ service SetAccess;
 
     /** specializes <type>HierarchyAccess</type>,
      if this element is a <em>Group</em>.
      <BR/>[Alternatively to <type>SetAccess</type>]
     */
-    [optional] service GroupAccess;
+    /*[optional]*/ service GroupAccess;
 
     /** specializes <type>HierarchyElement</type>,
      if this element is the <em>Root</em> of the whole hierarchy.
@@ -269,21 +269,21 @@ service ConfigurationAccess
         Instances obtained from a <type>ConfigurationProvider</type> will
         implement this version of <type>HierarchyElement</type>.
     */
-    [optional] service AccessRootElement;
+    /*[optional]*/ service AccessRootElement;
 
     /** specializes <type>HierarchyElement</type>,
      if this element may be contained in a <em>Set</em>.
      <BR/>[Alternatively to <type>AccessRootElement</type>
      or <type>GroupElement</type>]
     */
-    [optional] service SetElement;
+    /*[optional]*/ service SetElement;
 
     /** specializes <type>HierarchyElement</type>,
      if this element is child of a <em>Group</em>.
      <BR/>[Alternatively to <type>AccessRootElement</type>
      or <type>SetElement</type>]
     */
-    [optional] service GroupElement;
+    /*[optional]*/ service GroupElement;
 };
 
 //=============================================================================
