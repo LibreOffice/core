@@ -347,6 +347,12 @@
      <value xml:lang="de">Farbe</value>
     </prop>
    </node>
+   <node oor:name="private:resource/toolbar/alignmentbar" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Align</value>
+     <value xml:lang="de">Ausrichtung</value>
+    </prop>
+   </node>
   </node>
  </node>
 </oor:component-data>
