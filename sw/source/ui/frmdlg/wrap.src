@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:55:46 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TabPage TP_FRM_WRAP
         Text[ korean ] = "¾øÀ½(~N)";
         Text[ turkish ] = "~Yok";
         Text[ catalan ] = "~Ninguno";
+        Text[ finnish ] = "~Ei mitään";
     };
     ImageRadioButton RB_WRAP_LEFT
     {
@@ -135,6 +136,7 @@ TabPage TP_FRM_WRAP
         Text[ korean ] = "¿ÞÂÊ(~L)";
         Text[ turkish ] = "So~l";
         Text[ catalan ] = "Iz~quierda";
+        Text[ finnish ] = "~Vasen";
     };
     ImageRadioButton RB_WRAP_RIGHT
     {
@@ -162,6 +164,7 @@ TabPage TP_FRM_WRAP
         Text[ korean ] = "¿À¸¥ÂÊ(~I)";
         Text[ turkish ] = "Sa~ð";
         Text[ catalan ] = "~Derecha";
+        Text[ finnish ] = "~Oikea";
     };
     ImageRadioButton RB_WRAP_PARALLEL
     {
@@ -189,6 +192,7 @@ TabPage TP_FRM_WRAP
         Text[ korean ] = "ÆòÇà(~P)";
         Text[ turkish ] = "~Paralel";
         Text[ catalan ] = "~Paralelo";
+        Text[ finnish ] = "~Samansuuntainen";
     };
     ImageRadioButton RB_WRAP_THROUGH
     {
@@ -200,7 +204,7 @@ TabPage TP_FRM_WRAP
         Text [ italian ] = "~Attraverso" ;
         Text [ portuguese_brazilian ] = "Circundarmento ~através" ;
         Text [ portuguese ] = "~Através do objecto" ;
-        Text [ finnish ] = "Kierrätys ~läpi" ;
+        Text [ finnish ] = "~Kautta" ;
         Text [ danish ] = "Gennem" ;
         Text [ french ] = "À ~travers" ;
         Text [ swedish ] = "Genomflö~de" ;
@@ -245,6 +249,7 @@ TabPage TP_FRM_WRAP
         Text[ korean ] = "ÃÖÀûÀÇ(~O)";
         Text[ turkish ] = "D~inamik";
         Text[ catalan ] = "Diná~mico";
+        Text[ finnish ] = "~Optimaalinen";
     };
     CheckBox CB_ANCHOR_ONLY
     {
@@ -271,6 +276,7 @@ TabPage TP_FRM_WRAP
         Text[ korean ] = "Ã¹ ´Ü¶ô(~F)";
         Text[ turkish ] = "Ýlk paragraf";
         Text[ catalan ] = "Primer párra~fo";
+        Text[ finnish ] = "~Ensimmäinen kappale";
     };
     CheckBox CB_TRANSPARENT
     {
@@ -297,6 +303,7 @@ TabPage TP_FRM_WRAP
         Text[ korean ] = "¹è°æ¿¡(~K)";
         Text[ turkish ] = "Arta~landa";
         Text[ catalan ] = "En el f~ondo";
+        Text[ finnish ] = "~Taustalla";
     };
     CheckBox CB_OUTLINE
     {
@@ -324,6 +331,7 @@ TabPage TP_FRM_WRAP
         Text[ korean ] = "À±°û(~C)";
         Text[ turkish ] = "Kontu~r";
         Text[ catalan ] = "Conto~rno";
+        Text[ finnish ] = "~Ääriviiva";
     };
     CheckBox CB_ONLYOUTSIDE
     {
@@ -351,6 +359,7 @@ TabPage TP_FRM_WRAP
         Text[ korean ] = "¹Ù±ùÂÊ¸¸";
         Text[ turkish ] = "Yalnýzca dýþarýda";
         Text[ catalan ] = "Solo en el exterior";
+        Text[ finnish ] = "Vain ulkopuoli";
     };
     GroupBox GB_OPTION
     {
@@ -377,6 +386,7 @@ TabPage TP_FRM_WRAP
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
         Text[ catalan ] = "Opciones";
+        Text[ finnish ] = "Asetukset";
     };
     FixedText FT_LEFT_MARGIN
     {
@@ -388,7 +398,7 @@ TabPage TP_FRM_WRAP
         Text [ italian ] = "~Sinistra" ;
         Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
-        Text [ finnish ] = "~Vasemmalle" ;
+        Text [ finnish ] = "~Vasen" ;
         Text [ danish ] = "Venstre" ;
         Text [ french ] = "À ~gauche" ;
         Text [ swedish ] = "~Vänster" ;
@@ -432,7 +442,7 @@ TabPage TP_FRM_WRAP
         Text [ italian ] = "Destra" ;
         Text [ portuguese_brazilian ] = "~Direita" ;
         Text [ portuguese ] = "~Direita" ;
-        Text [ finnish ] = "~Oikealle" ;
+        Text [ finnish ] = "~Oikea" ;
         Text [ danish ] = "Højre" ;
         Text [ french ] = "À ~droite" ;
         Text [ swedish ] = "H~öger" ;
@@ -476,7 +486,7 @@ TabPage TP_FRM_WRAP
         Text [ italian ] = "~Alto" ;
         Text [ portuguese_brazilian ] = "~Topo" ;
         Text [ portuguese ] = "Em ~cima" ;
-        Text [ finnish ] = "~Ylös" ;
+        Text [ finnish ] = "~Yläosa" ;
         Text [ danish ] = "Øverst" ;
         Text [ french ] = "En ~haut" ;
         Text [ swedish ] = "Övers~t" ;
@@ -520,7 +530,7 @@ TabPage TP_FRM_WRAP
         Text [ italian ] = "~Basso" ;
         Text [ portuguese_brazilian ] = "~Base" ;
         Text [ portuguese ] = "Em ~baixo" ;
-        Text [ finnish ] = "~Alas" ;
+        Text [ finnish ] = "~Alaosa" ;
         Text [ danish ] = "Nederst" ;
         Text [ french ] = "En ~bas" ;
         Text [ swedish ] = "Und~erst" ;
@@ -564,7 +574,7 @@ TabPage TP_FRM_WRAP
         Text [ italian ] = "Distanze" ;
         Text [ portuguese_brazilian ] = "Margens" ;
         Text [ portuguese ] = "Espaçamento" ;
-        Text [ finnish ] = "Reunukset" ;
+        Text [ finnish ] = "Välit" ;
         Text [ danish ] = "Afstand" ;
         Text [ french ] = "Écarts" ;
         Text [ swedish ] = "Avstånd" ;
