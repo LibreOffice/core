@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: fs $ $Date: 2001-12-20 13:11:58 $
+#   last change: $Author: iha $ $Date: 2002-04-15 18:47:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,8 @@ SLOFILES = \
     $(SLO)$/printoptions.obj			\
     $(SLO)$/syslocaleoptions.obj        \
     $(SLO)$/cacheoptions.obj			\
-    $(SLO)$/regoptions.obj
+    $(SLO)$/regoptions.obj				\
+    $(SLO)$/accessibilityoptions.obj
 
 EXCEPTIONSFILES = \
     $(SLO)$/accelcfg.obj				\
