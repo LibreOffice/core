@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-03 15:16:30 $
+ *  last change: $Author: ab $ $Date: 2001-08-10 15:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,9 +296,9 @@ void OFileAccess::transferImpl( const OUString& rSource, const OUString& rDest, 
     aDestObj.removeSegment();
     aDestObj.setFinalSlash();
 
-    Content aDestPath( aDestObj.GetMainURL(), mxEnvironment );
+    Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     aDestPath.executeCommand( OUString::createFromAscii( "transfer" ), makeAny(
-        ::com::sun::star::ucb::TransferInfo( bMoveData, aSourceObj.GetMainURL(), aName,
+        ::com::sun::star::ucb::TransferInfo( bMoveData, aSourceObj.GetMainURL( INetURLObject::NO_DECODE ), aName,
                                              ::com::sun::star::ucb::NameClash::OVERWRITE ) ) );
 }
 
@@ -319,7 +319,7 @@ void OFileAccess::kill( const OUString& FileURL )
 {
     // SfxContentHelper::Kill
     INetURLObject aDeleteObj( FileURL, INET_PROT_FILE );
-    Content aCnt( aDeleteObj.GetMainURL(), mxEnvironment );
+    Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
 }
 
@@ -330,7 +330,7 @@ sal_Bool OFileAccess::isFolder( const OUString& FileURL )
     try
     {
         INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-        Content aCnt( aURLObj.GetMainURL(), mxEnvironment );
+        Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
         bRet = aCnt.isFolder();
     }
     catch (CommandAbortedException &) {}
@@ -343,7 +343,7 @@ sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-    Content aCnt( aURLObj.GetMainURL(), mxEnvironment );
+    Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Any aRetAny = aCnt.getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) );
     sal_Bool bRet = sal_False;
     aRetAny >>= bRet;
@@ -354,7 +354,7 @@ void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
-    Content aCnt( aURLObj.GetMainURL(), mxEnvironment );
+    Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Any aAny;
     aAny <<= bReadOnly;
     aCnt.setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ), aAny );
@@ -369,14 +369,14 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
 
     // SfxContentHelper::MakeFolder
     INetURLObject aURL( NewFolderURL, INET_PROT_FILE );
-    String aNewFolderURLStr = aURL.GetMainURL();
-    String aTitle = aURL.getName();
+    String aNewFolderURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
+    String aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     if ( aTitle.Len() )
     {
         aURL.removeSegment();
 
         // Does the base folder exist? Otherwise create it first
-        String aBaseFolderURLStr = aURL.GetMainURL();
+        String aBaseFolderURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
         if( !isFolder( aBaseFolderURLStr ) )
         {
             createFolder( aBaseFolderURLStr );
@@ -393,7 +393,7 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
     pValues[1] = makeAny( sal_Bool( sal_True ) );
     Reference< XCommandEnvironment > aCmdEnv;
 
-    Content aCnt( aURL.GetMainURL(), aCmdEnv );
+    Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
     Content aNewFolder( aNewFolderURLStr, aCmdEnv );
     OUString aType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.staroffice.fsys-folder" ) );
     aCnt.insertNewContent( aType, aNames, aValues, aNewFolder );
@@ -406,7 +406,7 @@ sal_Int32 OFileAccess::getSize( const OUString& FileURL )
     sal_Int32 nSize = 0;
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INET_PROT_FILE );
-    Content aCnt( aObj.GetMainURL(), mxEnvironment );
+    Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= nTemp;
     nSize = (sal_Int32)nTemp;
     return nSize;
@@ -416,7 +416,7 @@ OUString OFileAccess::getContentType( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     INetURLObject aObj( FileURL, INET_PROT_FILE );
-    Content aCnt( aObj.GetMainURL(), mxEnvironment );
+    Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
 
     Reference< XContent > xContent = aCnt.get();
     OUString aTypeStr = xContent->getContentType();
@@ -430,7 +430,7 @@ DateTime OFileAccess::getDateTimeModified( const OUString& FileURL )
     DateTime aDateTime;
 
     Reference< XCommandEnvironment > aCmdEnv;
-    Content aYoung( aFileObj.GetMainURL(), aCmdEnv );
+    Content aYoung( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
     aYoung.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDateTime;
     return aDateTime;
 }
@@ -446,7 +446,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
     StringList_Impl* pFiles = NULL;
     INetURLObject aFolderObj( FolderURL, INET_PROT_FILE );
 
-    Content aCnt( aFolderObj.GetMainURL(), mxEnvironment );
+    Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(0);
     //Sequence< OUString > aProps(1);
@@ -514,7 +514,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const OUString& FileURL )
 {
     Reference< XInputStream > xRet;
     INetURLObject aObj( FileURL, INET_PROT_FILE );
-    Content aCnt( aObj.GetMainURL(), mxEnvironment );
+    Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
 
     Reference< XActiveDataSink > xSink = (XActiveDataSink*)(new OActiveDataSink());
     sal_Bool bRet = aCnt.openStream( xSink );
@@ -544,7 +544,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     aInsertArg.ReplaceExisting = sal_False;
 
     INetURLObject aFileObj( FileURL, INET_PROT_FILE );
-    Content aCnt( aFileObj.GetMainURL(), mxEnvironment );
+    Content aCnt( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
     Any aCmdArg;
 
     aCmdArg <<= aInsertArg;
