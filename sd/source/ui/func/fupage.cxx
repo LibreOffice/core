@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:46:16 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 16:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #include <svx/ulspitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/pbinitem.hxx>
+#include <sfx2/app.hxx>
 
 
 #include "strings.hrc"
