@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleList.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-03-19 13:29:31 $
+ *  last change: $Date: 2003-03-25 09:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ import drafts.com.sun.star.accessibility.AccessibleRole;
 import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.XAccessibleAction;
 import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleSelection;
 import drafts.com.sun.star.awt.XExtendedToolkit;
 import java.io.PrintWriter;
@@ -177,17 +178,25 @@ public class AccessibleList extends TestCase {
             throw new StatusException("Can't switch to required tab", e);
         }
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LIST,
-            "", "com.sun.star.comp.toolkit.AccessibleList");
-        Object list = at.getAccessibleObjectForRole(at.SearchedAccessible,
-            AccessibleRole.LIST);
+        log.println("# Getting the ListBox");
+
+        XAccessibleContext parent = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL,
+            "", "com.sun.star.comp.toolkit.AccessibleListBox");
+
+        log.println("# Getting the first child");
+
+        try {
+            oObj = parent.getAccessibleChild(0);
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+
+        }
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         final XAccessibleComponent acomp = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class,list) ;
+            UnoRuntime.queryInterface(XAccessibleComponent.class,oObj) ;
         final XAccessibleComponent acomp1 = (XAccessibleComponent)
             UnoRuntime.queryInterface(XAccessibleComponent.class,action) ;
 
