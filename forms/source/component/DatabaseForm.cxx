@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:17:59 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,20 +294,15 @@ namespace frm
 //------------------------------------------------------------------
 Reference< XModel> getXModel(const Reference< XInterface>& xIface)
 {
-    Reference< XModel> xModel(xIface, UNO_QUERY);
-    if (xModel.is())
-        return xModel;
-    else
+    Reference< XInterface > xParent = xIface;
+    Reference< XModel > xModel(xParent,UNO_QUERY);;
+    while( xParent.is() && !xModel.is() )
     {
-        Reference< XChild> xChild(xIface, UNO_QUERY);
-        if (xChild.is())
-        {
-            Reference< XInterface> xParent( xChild->getParent());
-            return getXModel(xParent);
-        }
-        else
-            return NULL;
+        Reference<XChild> xChild(xParent,UNO_QUERY);
+        xParent.set(xChild.is() ? xChild->getParent() : NULL,UNO_QUERY);
+        xModel.set(xParent,UNO_QUERY);
     }
+    return xModel;
 }
 
 //==================================================================
@@ -452,6 +447,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_bForwardingConnection(sal_False)
         ,m_pAggregatePropertyMultiplexer(NULL)
         ,m_bSharingConnection( sal_False )
+        ,m_bInContext(sal_False)
         ,m_bInsertOnly( sal_False )
 {
     DBG_CTOR(ODatabaseForm,NULL);
@@ -1455,7 +1451,7 @@ void ODatabaseForm::fillProperties(
         RemoveProperty( _rAggregateProps, PROPERTY_FILTER );
         RemoveProperty( _rAggregateProps, PROPERTY_APPLYFILTER );
 
-        DECL_IFACE_PROP3( ACTIVE_CONNECTION,XConnection,                    BOUND, TRANSIENT, MAYBEVOID    );
+        DECL_IFACE_PROP4(ACTIVE_CONNECTION,         XConnection,    BOUND, TRANSIENT, MAYBEVOID, CONSTRAINED);
         DECL_BOOL_PROP2 ( APPLYFILTER,                                      BOUND, MAYBEDEFAULT            );
         DECL_PROP1      ( NAME,             ::rtl::OUString,                BOUND                          );
         DECL_PROP1      ( MASTERFIELDS,     Sequence< ::rtl::OUString >,    BOUND                          );
@@ -1730,10 +1726,18 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
         break;
 
         case PROPERTY_ID_DATASOURCE:
-            m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, rValue);
+            if ( m_bInContext )
+                throw PropertyVetoException();
+            try
+            {
+                m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, rValue);
+            }
+            catch(Exception&) { }
             break;
 
         case PROPERTY_ID_ACTIVE_CONNECTION:
+            if ( m_bInContext )
+                throw PropertyVetoException();
             try
             {
                 if ( m_bSharingConnection )
@@ -2394,16 +2398,49 @@ void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com
 
     OFormComponents::setParent(Parent);
 
-    xParentForm = Reference<XForm> (getParent(), UNO_QUERY);
-    if (xParentForm.is())
+    xParentForm.set(getParent(), UNO_QUERY);
+    if ( xParentForm.is() )
     {
-        Reference<XRowSetApproveBroadcaster>  xParentApprBroadcast(xParentForm, UNO_QUERY);
-        if (xParentApprBroadcast.is())
-            xParentApprBroadcast->addRowSetApproveListener(this);
-        Reference<XLoadable>  xParentLoadable(xParentForm, UNO_QUERY);
-        if (xParentLoadable.is())
-            xParentLoadable->addLoadListener(this);
+        {
+            Reference<XRowSetApproveBroadcaster>  xParentApprBroadcast(xParentForm, UNO_QUERY);
+            if (xParentApprBroadcast.is())
+                xParentApprBroadcast->addRowSetApproveListener(this);
+            Reference<XLoadable>  xParentLoadable(xParentForm, UNO_QUERY);
+            if (xParentLoadable.is())
+                xParentLoadable->addLoadListener(this);
+        }
     }
+
+    Any aNewValue;
+    if ( Parent.is() )
+    {
+        // do we have a connection in the hierarchy than take that connection
+        // this overwrites all the other connnections
+        Reference< XConnection> xConnection = ::dbtools::getActiveConnectionFromParent(Parent);
+        if ( m_bInContext = xConnection.is() )
+        {
+            Reference<XChild> xChild(xConnection,UNO_QUERY);
+            if ( xChild.is() )
+            {
+                Reference<XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
+                if ( xProp.is() )
+                    m_xAggregateSet->setPropertyValue( PROPERTY_DATASOURCE ,xProp->getPropertyValue(PROPERTY_NAME));
+            }
+            aNewValue <<= xConnection;
+            m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION ,aNewValue);
+        }
+    }
+    else
+    {
+        m_bInContext = sal_False;
+        m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION ,Any());
+        m_xAggregateSet->setPropertyValue( PROPERTY_DATASOURCE ,Any());
+    }
+    // clear the guard before notify
+    aGuard.clear();
+    sal_Int32 nHandle = PROPERTY_ID_ACTIVE_CONNECTION;
+    Any aEmpty;
+    fire(&nHandle, &aNewValue, &aEmpty, 1, sal_False);
 }
 
 //==============================================================================
@@ -2771,6 +2808,12 @@ sal_Bool ODatabaseForm::implEnsureConnection()
             // if our aggregate already has a connection, nothing needs to be done about it
             return sal_True;
 
+        Reference< XConnection >  xConnection;
+        if ( m_xAggregateSet.is() )
+        {
+
+        }
+
         m_bSharingConnection = sal_False;
 
         // if we're a sub form, we try to re-use the connection of our parent
@@ -2793,16 +2836,17 @@ sal_Bool ODatabaseForm::implEnsureConnection()
             }
         }
 
-        if (m_xAggregateSet.is())
+        if ( !xConnection .is() )
         {
             // do we have a connection in the hierarchy than take that connection
             // this overwrites all the other connnections
-            Reference< XConnection >  xConnection = calcConnection(
-                Reference<XRowSet> (m_xAggregate, UNO_QUERY),
-                m_xServiceFactory
-            );      // will set a calculated connection implicitly
-            return xConnection.is();
+            if ( m_xAggregateSet.is() )
+                xConnection = calcConnection(
+                    Reference<XRowSet> (m_xAggregate, UNO_QUERY),
+                    m_xServiceFactory
+                );      // will set a calculated connection implicitly
         }
+        return xConnection.is();
     }
     catch(SQLException& eDB)
     {
