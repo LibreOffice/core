@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-21 11:00:40 $
+ *  last change: $Author: mt $ $Date: 2001-08-28 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,11 +124,14 @@ void ImpEditEngine::SetStyleSheet( USHORT nPara, SfxStyleSheet* pStyle )
             if ( pCurStyle )
                 aPrevStyleName = pCurStyle->GetName();
 
+            XubString aNewStyleName;
+            if ( pStyle )
+                aNewStyleName = pStyle->GetName();
+
             InsertUndo(
                 new EditUndoSetStyleSheet( this, aEditDoc.GetPos( pNode ),
-                        aPrevStyleName,
-                        pCurStyle ? pCurStyle->GetFamily() : SFX_STYLE_FAMILY_PARA,
-                        pStyle->GetName(), pStyle->GetFamily(),
+                        aPrevStyleName, pCurStyle ? pCurStyle->GetFamily() : SFX_STYLE_FAMILY_PARA,
+                        aNewStyleName, pStyle ? pStyle->GetFamily() : SFX_STYLE_FAMILY_PARA,
                         pNode->GetContentAttribs().GetItems() ) );
         }
 #endif
