@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:48:39 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2578,9 +2578,8 @@ void SvTreeListBox::FillAccessibleEntryStateSet( SvLBoxEntry* pEntry, ::utl::Acc
     if ( pEntry->HasChildsOnDemand() || pEntry->HasChilds() )
     {
         rStateSet.AddState( AccessibleStateType::EXPANDABLE );
-        sal_Int16 nState = IsExpanded( pEntry ) ? (sal_Int16)AccessibleStateType::EXPANDED
-                                                : (sal_Int16)AccessibleStateType::COLLAPSED;
-        rStateSet.AddState( nState );
+        if ( IsExpanded( pEntry ) )
+            rStateSet.AddState( (sal_Int16)AccessibleStateType::EXPANDED );
     }
 
     if ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
