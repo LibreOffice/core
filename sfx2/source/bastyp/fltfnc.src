@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:15:31 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ String STR_FILTER_CHANNELON_OFFLINE
     Text [ english_us ] = "This subscription is set to be read in the offline mode.\n\n%PRODUCTNAME is presently in the online mode. Switch to offline mode now?" ;
     Text [ portuguese_brazilian ] = "Esta assinatura foi definida para ser lida em modo offline.\n\nNo momento o %PRODUCTNAME encontra-se no modo online. Deseja passar ao modo offline? " ;
     Text [ swedish ] = "Den h�r prenumerationen skall enligt inst�llningarna l�sas i offlinel�get.\n\nMen %PRODUCTNAME �r i onlinel�ge. Vill du v�xla till offlinel�get nu?" ;
-    Text [ danish ] = "Dette abonnement skal if�lge indstillingerne l�ses i offlinetilstand.\n\nDit %PRODUCTNAME befinder sig for tiden i onlinetilstand. Vil du skifte til offlinetilstand nu?" ;
+    Text [ danish ] = "Dette abonnement er indstillet til at blive l�st i offlinetilstand.\n\n%PRODUCTNAME er i �jeblikket i onlinetilstand. Vil du skifte til offlinetilstand nu?" ;
     Text [ italian ] = "Questa sottoscrizione deve essere letta nel modo offline conformemente all'impostazione. \n\n%PRODUCTNAME attualmente si trova nel modo online. Volete passare al modo offline?" ;
     Text [ spanish ] = "Esta suscripci�n est� pensada para ser le�da en el modo 'fuera de l�nea'.\n\nSin embargo %PRODUCTNAME se encuentra en el modo 'en l�nea'. �Desea desconectar ahora %PRODUCTNAME?" ;
     Text [ french ] = "Cet abonnement ne peut �tre lu que hors connexion.\n\n%PRODUCTNAME est cependant en ligne. Souhaitez-vous d�connecter  %PRODUCTNAME maintenant?" ;
@@ -92,6 +92,8 @@ String STR_FILTER_CHANNELON_OFFLINE
     Text[ hebrew ] = "‮מנוי זה מיועד לקריאה במצב לא מקוון.\n\n%PRODUCTNAME כעת במצב מקוון. האם לעבור למצב לא מקוון?‬";
     Text[ hindi ] = "इस सबस्क्रिप्शन् को ऑफलैन प्रकार में पढ़ने के लिए सेट्ट किया गया है ।\n\n%PRODUCTNAME अभी ऑनलैन् प्रकार में है । अभी ऑफलैन प्रकार केलिए स्विच् करना चाहते है?";
     Text[ slovak ] = "Táto položka je nastavená na čítanie offline.\n\n%PRODUCTNAME sa práve nachádza v režime online. Prajete si ihneď prejsť do režimu offline?";
+    Text[ hungarian ] = "Ez az aláírás offline módban olvasható.\n \nAz %PRODUCTNAME jelenleg online módban van. Átkapcsol offline módra?";
+    Text[ slovenian ] = "Ta naročnina je nastavljena tako, da jo lahko berete v načinu brez povezave.\n\n%PRODUCTNAME je trenutno povezan. Ali želite prekiniti povezavo?";
 };
 String STR_FILTER_EXTERNAL
 {
@@ -101,7 +103,7 @@ String STR_FILTER_EXTERNAL
     Text [ portuguese ] = "Outra aplica��o" ;
     Text [ portuguese_brazilian ] = "Outra aplica��o" ;
     Text [ swedish ] = "Annan till�mpning" ;
-    Text [ danish ] = "Anden applikation" ;
+    Text [ danish ] = "Ande program" ;
     Text [ italian ] = "Altra applicazione" ;
     Text [ spanish ] = "Otra aplicaci�n" ;
     Text [ french ] = "Autres applications" ;
@@ -123,6 +125,8 @@ String STR_FILTER_EXTERNAL
     Text[ hebrew ] = "‮יישום אחר‬";
     Text[ hindi ] = "अन्य कार्यक्रम";
     Text[ slovak ] = "Ostatné aplikácie";
+    Text[ hungarian ] = "Egyéb alkalmazás.";
+    Text[ slovenian ] = "Druga aplikacija";
 };
 
 String STR_FILTER_COMPONENT
@@ -137,7 +141,7 @@ String STR_FILTER_COMPONENT
     Text[ french ] = "Composants de %PRODUCTNAME";
     Text[ spanish ] = "%PRODUCTNAME - Componentes";
     Text[ italian ] = "Componenti %PRODUCTNAME";
-    Text[ danish ] = "%PRODUCTNAME komponent";
+    Text[ danish ] = "%PRODUCTNAME-komponent";
     Text[ swedish ] = "%PRODUCTNAME-komponent";
     Text[ polish ] = "Komponent %PRODUCTNAME ";
     Text[ portuguese_brazilian ] = "Componente %PRODUCTNAME";
@@ -154,6 +158,8 @@ String STR_FILTER_COMPONENT
     Text[ hebrew ] = "‮רכיב %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME Component";
     Text[ slovak ] = "Komponent %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME összetevő";
+    Text[ slovenian ] = "Komponenta programa %PRODUCTNAME";
 };
 
 String STR_FILTER_NOT_INSTALLED
@@ -167,7 +173,7 @@ String STR_FILTER_NOT_INSTALLED
     Text[ french ] = "Le filtre $(FILTER) que vous avez s�lectionn� n'est pas install�\nSouhaitez-vous l'installer ?";
     Text[ spanish ] = "El filtro seleccionado $(FILTER) no ha sido instalado.\n�Desea instalarlo?";
     Text[ italian ] = "Il filtro selezionato $(FILTER) non � stato instalalto.\nVolete installarlo adesso?";
-    Text[ danish ] = "Det udvalgte filter $(FILTER) er ikke installeret.\nVil du installere det nu?";
+    Text[ danish ] = "Det valgte filter $(FILTER) er ikke installeret.\nVil du installere det nu?";
     Text[ swedish ] = "Det utvalda filtret $(FILTER) �r inte installerat.\nVill du g�ra det nu?";
     Text[ polish ] = "Wybrany filtr $(FILTER) nie jest zainstalowany.\nCzy to teraz zrobi� ?";
     Text[ portuguese_brazilian ] = "O filtro selecionado $(FILTER) n�o foi instalado.\nVoc� deseja instalar agora?";
@@ -186,6 +192,8 @@ String STR_FILTER_NOT_INSTALLED
     Text[ hebrew ] = "‮המסנן שנבחר, $(FILTER), תרם הותקן.\nהאם להתקינו עכשיו?‬";
     Text[ hindi ] = "चुना हुआ फ़िल्टर $(FILTER) का प्रतिष्ठापन नहीं किया है ।\nअभी आप प्रतिष्ठापन करना चाहते है ?";
     Text[ slovak ] = "Vybraný filter $(FILTER) nebol nainštalovaný.\nPrejete si ho doinštalovať teraz ?";
+    Text[ hungarian ] = "A választott szűrő $(FILTER) nincs telepítve. \nKívánja most telepíteni?";
+    Text[ slovenian ] = "Izbrani filter $(FILTER) ni bil nameščen.\nAli bi želeli to storiti sedaj?";
 };
 
 String STR_FILTER_CONSULT_SERVICE
@@ -199,7 +207,7 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ french ] = "Le filtre $(FILTER) que vous avez s�lectionn� n'est pas inclus dans votre version.\nVous trouverez les renseignements n�cessaires � une �ventuelle commande sur notre page d'accueil.";
     Text[ spanish ] = "El filtro seleccionado $(FILTER) no est� incluido en su edici�n.\nEn nuestra p�gina de Internet encontrar� las informaciones para poder pedirlos.";
     Text[ italian ] = "Il filtro selezionato $(FILTER) non � incluso nella vostra versione.\nTroverete informazioni su eventuali ordini sulla nostra home page.";
-    Text[ danish ] = "De udvalgte filter $(FILTER) er ikke indeholdt i din version.\nDu kan finde informationer omkring ordremuligheder p� vores hjemmeside.";
+    Text[ danish ] = "Det valgte filter $(FILTER) er ikke indeholdt i din udgave.\nDu kan finde oplysninger om ordremuligheder p� vores hjemmeside.";
     Text[ swedish ] = "Det utvalda filtret $(FILTER) finns inte med i din version.\nDu hittar information om best�llningsm�jligheter p� v�r hemsida.";
     Text[ polish ] = "Wybrany filtr $(FILTER) nie jest do��czony do zainstalowanej edycji.\nInformacje na temat zamawiania s� dost�pne na naszej stronie internetowej.";
     Text[ portuguese_brazilian ] = "O filtro selecionado $(FILTER) n�o est� inclu�do na sua edi��o\nVoc� pode encontrar informa��es sobre como adquiri-las na nossa p�gina principal.";
@@ -218,7 +226,10 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ hebrew ] = "‮המסנן שנבחר, $(FILTER), אינו כלול בגרסה זו של התוכנית.\nמידע באשר להזמנת גרסה אחרת ניתן למצוא באתר האינטרנט שלנו.‬";
     Text[ hindi ] = "चुना हुआ फ़िल्टर $(FILTER) को आपके प्रकाशन में सम्मिलित नहीं किया है ।\nहम्हारे मुख्य पृष्ठ में आप ऑर्डर के बार में विषय अन्वेषण कर सकते है ।";
     Text[ slovak ] = "Vybraný filter $(FILTER) nebol zahrnutý vo vašej verzii programu.\nInformácie o objednávkach môžete nájsť na našich domovských stránkach.";
+    Text[ hungarian ] = "A kijelölt szűrőt $(FILTER) nem tartalmazza a program ezen verziója.\nA rendelésekről honlapunkon tájékozódhat.";
+    Text[ slovenian ] = "Izbrani filter $(FILTER) ni vključen v vašo različico.\nInformacije glede naročil lahko najdete na naši domači strani.";
 };
+
 
 
 
