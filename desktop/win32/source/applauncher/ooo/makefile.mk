@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 09:05:10 $
+#   last change: $Author: hr $ $Date: 2004-11-26 22:36:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ TARGETTYPE=GUI
 APP1TARGET=swriter
 APP1NOSAL=TRUE
 APP1LINKRES=$(MISC)$/$(TARGET).res
-APP1ICON=$(SOLARRESDIR)$/icons/ooo_writer.ico
+APP1ICON=$(SOLARRESDIR)$/icons/ooo-writer-app.ico
 APP1OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/swriter.obj
@@ -85,7 +85,7 @@ APP1OBJS = \
 APP2TARGET=scalc
 APP2NOSAL=TRUE
 APP2LINKRES=$(MISC)$/$(TARGET).res
-APP2ICON=$(SOLARRESDIR)$/icons/ooo_calc.ico
+APP2ICON=$(SOLARRESDIR)$/icons/ooo-calc-app.ico
 APP2OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/scalc.obj
@@ -93,7 +93,7 @@ APP2OBJS = \
 APP3TARGET=sdraw
 APP3NOSAL=TRUE
 APP3LINKRES=$(MISC)$/$(TARGET).res
-APP3ICON=$(SOLARRESDIR)$/icons/ooo_draw.ico
+APP3ICON=$(SOLARRESDIR)$/icons/ooo-draw-app.ico
 APP3OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sdraw.obj
@@ -101,7 +101,7 @@ APP3OBJS = \
 APP4TARGET=simpress
 APP4NOSAL=TRUE
 APP4LINKRES=$(MISC)$/$(TARGET).res
-APP4ICON=$(SOLARRESDIR)$/icons/ooo_impress.ico
+APP4ICON=$(SOLARRESDIR)$/icons/ooo-impress-app.ico
 APP4OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/simpress.obj
@@ -109,7 +109,7 @@ APP4OBJS = \
 APP5TARGET=smath
 APP5NOSAL=TRUE
 APP5LINKRES=$(MISC)$/$(TARGET).res
-APP5ICON=$(SOLARRESDIR)$/icons/ooo_math.ico
+APP5ICON=$(SOLARRESDIR)$/icons/ooo-math-app.ico
 APP5OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/smath.obj
@@ -117,7 +117,7 @@ APP5OBJS = \
 APP6TARGET=sbase
 APP6NOSAL=TRUE
 APP6LINKRES=$(MISC)$/$(TARGET).res
-APP6ICON=$(SOLARRESDIR)$/icons/ooo_base.ico
+APP6ICON=$(SOLARRESDIR)$/icons/ooo-base-app.ico
 APP6OBJS = \
         $(OBJ)$/launcher.obj\
        $(OBJ)$/sbase.obj
