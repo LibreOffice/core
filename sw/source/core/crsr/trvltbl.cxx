@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-31 14:00:09 $
+ *  last change: $Author: dvo $ $Date: 2002-05-07 11:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,61 @@ FASTBOOL SwCrsrShell::SelTblCol()
     pTblCrsr->GetPoint()->nNode = *aBoxes[aBoxes.Count()-1]->GetSttNd();
     pTblCrsr->Move( fnMoveForward, fnGoCntnt );
     UpdateCrsr();                 // und den akt. Updaten
+    return TRUE;
+}
+
+
+FASTBOOL SwCrsrShell::SelTblBox()
+{
+    // if we're in a table, create a table cursor, and select the cell
+    // that the current cursor's point resides in
+
+    // search for start node of our table box. If not found, exit realy
+    const SwStartNode* pStartNode =
+        pCurCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+
+#ifndef PRODUCT
+    // the old code checks whether we're in a table by asking the
+    // frame. This should yield the same result as searching for the
+    // table box start node, right?
+    SwFrm *pFrm = GetCurrFrm();
+    DBG_ASSERT( !pFrm->IsInTab() == !(pStartNode != NULL),
+                "Schroedinger's table: We're in a box, and also we aren't." )
+#endif
+
+    if( pStartNode == NULL )
+        return FALSE;
+
+
+    SET_CURR_SHELL( this );
+
+    // create a table cursor, if there isn't one already
+    if( !pTblCrsr )
+    {
+        pTblCrsr = new SwShellTableCrsr( *this, *pCurCrsr->GetPoint() );
+        pCurCrsr->DeleteMark();
+        pCurCrsr->SwSelPaintRects::Hide();
+    }
+
+    // select the complete box with our shiny new pTblCrsr
+    // 1. delete mark, and move point to first content node in box
+    // 2. set mark, and move point to last content node in box
+    // 3. exchange
+
+    pTblCrsr->DeleteMark();
+    *(pTblCrsr->GetPoint()) = SwPosition( *pStartNode );
+    pTblCrsr->Move( fnMoveForward, fnGoNode );
+
+    pTblCrsr->SetMark();
+    *(pTblCrsr->GetPoint()) = SwPosition( *(pStartNode->EndOfSectionNode()) );
+    pTblCrsr->Move( fnMoveBackward, fnGoNode );
+
+    pTblCrsr->Exchange();
+
+    // with some luck, UpdateCrsr() will now update everything that
+    // needs updateing
+    UpdateCrsr();
+
     return TRUE;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-06 09:54:52 $
+ *  last change: $Author: dvo $ $Date: 2002-05-07 11:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,9 +633,10 @@ public:
     FASTBOOL GotoTblBox( const String& rName );
     FASTBOOL GotoTable( const String& rName );
 
-    // selectiere diese Zeile/Spalte
+    // select a table row, column or box (based on the current cursor)
     FASTBOOL SelTblRow();
     FASTBOOL SelTblCol();
+    FASTBOOL SelTblBox();
 
     // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
     FASTBOOL GotoNextNum();
