@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:50:30 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_GRFATR_INVERT
     MG_E( "GraphicIsInverted", DRAW, COLOR_INVERSION,       XML_TYPE_BOOL, 0 ),
     // RES_GRFATR_TRANSPARENCY
-    MG_E( "Transparency",   DRAW, OPACITY,      XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MG_E( "Transparency",   DRAW, IMAGE_OPACITY,        XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ), // #i25616#
     // RES_GRFATR_DRAWMODE
     MG_E( "GraphicColorMode", DRAW, COLOR_MODE,         XML_TYPE_COLOR_MODE, 0 ),
     MG_E( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
