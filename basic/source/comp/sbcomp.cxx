@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbcomp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:35:10 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,11 +170,15 @@ BOOL SbModule::Compile()
     {
         pBasic->ClearAllModuleVars();
 
-        SbxObject* pParent = pBasic->GetParent();
-        if( pParent )
-            pBasic = PTR_CAST(StarBASIC,pParent);
-        if( pBasic )
-            pBasic->ClearAllModuleVars();
+        // #i31510 Init other libs only if Basic isn't running
+        if( pINST == NULL )
+        {
+            SbxObject* pParent = pBasic->GetParent();
+            if( pParent )
+                pBasic = PTR_CAST(StarBASIC,pParent);
+            if( pBasic )
+                pBasic->ClearAllModuleVars();
+        }
     }
 
 #ifdef DBG_SAVE_DISASSEMBLY
