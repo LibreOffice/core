@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-28 09:59:34 $
+ *  last change: $Author: gh $ $Date: 2002-06-07 17:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,13 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
         sal_Char szMessage[1024];
         szMessage[0] = '\0';
 
-        sprintf(szMessage, "Assertion Failed: %s: File %s, Line %lu: %s",
+        if(pszMessage != 0)
+            sprintf(szMessage, "Assertion Failed: %s: File %s, Line %lu: %s",
                         lpszAppName, pszFileName, nLine, pszMessage);
+        else
+            sprintf(szMessage, "Assertion Failed: %s: File %s, Line %lu:",
+                        lpszAppName, pszFileName, nLine);
+
         _pPrintDebugMessage( szMessage );
     }
     else
