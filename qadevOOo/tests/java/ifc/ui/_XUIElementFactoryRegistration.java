@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XUIElementFactoryRegistration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-02-25 18:12:37 $
+ *  last change: $Date: 2005-03-01 20:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@ package ifc.ui;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.ui.XUIElement;
-import drafts.com.sun.star.ui.XUIElementFactory;
-import drafts.com.sun.star.ui.XUIElementFactoryRegistration;
+import com.sun.star.ui.XUIElement;
+import com.sun.star.ui.XUIElementFactory;
+import com.sun.star.ui.XUIElementFactoryRegistration;
 import lib.MultiMethodTest;
 
 public class _XUIElementFactoryRegistration extends MultiMethodTest {
