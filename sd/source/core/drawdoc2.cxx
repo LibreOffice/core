@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:45:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,15 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
+#include <com/sun/star/embed/XVisualObject.hpp>
+#endif
+
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
 
 #ifndef SVX_LIGHT
-#include <so3/iface.hxx>
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
@@ -188,6 +191,7 @@ using namespace ::sd;
 
 const long PRINT_OFFSET = 30;       // siehe \svx\source\dialog\page.cxx (PB)
 
+using namespace com::sun::star;
 
 /*************************************************************************
 |*
@@ -1367,15 +1371,13 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
         }
         else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
         {
-#ifndef SVX_LIGHT
-            SvInPlaceObjectRef aIPObjRef = ( (SdrOle2Obj*) pObj )->GetObjRef();
-
-            if ( aIPObjRef.Is() )
+            ::uno::Reference < embed::XVisualObject > xObj( ( (SdrOle2Obj*) pObj )->GetObjRef(), uno::UNO_QUERY );
+            if ( xObj.is() )
             {
-                aGraphSize = aIPObjRef->GetVisArea().GetSize();
+                awt::Size aSize = xObj->getVisualAreaSize( ( (SdrOle2Obj*) pObj )->GetAspect() );
+                aGraphSize = Size( aSize.Width, aSize.Height );
                 bObjSupported = TRUE;
             }
-#endif // !SVX_LIGHT
         }
 
         // hat alles geklappt, dann HitTest ausfuehren
@@ -1403,32 +1405,31 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
 
 Graphic SdDrawDocument::GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj )
 {
-    Graphic             aGraphic;
-
 #ifndef SVX_LIGHT
-    SvInPlaceObjectRef  aIPObjRef = pOle2Obj->GetObjRef();
-
-    if ( aIPObjRef.Is() )
+    Graphic             aGraphic;
+/*
+    ::uno::Reference < embed::XVisualObject > xObj( ( (SdrOle2Obj*) pObj )->GetObjRef(), UNO_QUERY );
+    if ( xObj.is() )
     {
         VirtualDevice   aVDev;
         GDIMetaFile     aGDIMtf;
         const MapMode   aMap100( MAP_100TH_MM );
-        const Size&     rSize = aIPObjRef->GetVisArea().GetSize();
+        awt::Size       aSz = xObj->getVisualAreaSize();
+        Size            aSize = Size( aSz.Width, aSz.Height );
 
         aVDev.SetMapMode( aMap100 );
         aGDIMtf.Record( &aVDev );
 
-        aIPObjRef->DoDraw( &aVDev, Point(), rSize, JobSetup() );
+        aIPObjRef->DoDraw( &aVDev, Point(), aSize, JobSetup() );
 
         aGDIMtf.Stop();
         aGDIMtf.WindStart();
         aGDIMtf.SetPrefMapMode( aMap100 );
         aGDIMtf.SetPrefSize( rSize );
         aGraphic = Graphic( aGDIMtf );
-    }
-#endif // !SVX_LIGHT
-
+    }*/
     return aGraphic;
+#endif // !SVX_LIGHT
 }
 
 
