@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-21 09:48:35 $
+ *  last change: $Author: sab $ $Date: 2001-03-01 13:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
     {
         rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_float);
         rtl::OUStringBuffer sBuffer;
-        SvXMLUnitConverter::convertNumber(sBuffer, fValue);
+        SvXMLUnitConverter::convertDouble(sBuffer, fValue);
         rtl::OUString sValue(sBuffer.makeStringAndClear());
         if (sValue.getLength())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_value, sValue);
