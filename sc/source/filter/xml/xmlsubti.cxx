@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:10:43 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 06:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,7 +647,7 @@ void ScMyTables::DeleteTable()
     }
     if (bProtection)
     {
-        uno::Sequence<sal_uInt8> aPass;
+        uno::Sequence<sal_Int8> aPass;
         SvXMLUnitConverter::decodeBase64(aPass, sPassword);
         rImport.GetDocument()->SetTabProtection(nCurrentSheet, bProtection, aPass);
         /*uno::Reference <util::XProtectable> xProtectable(xCurrentSheet, uno::UNO_QUERY);

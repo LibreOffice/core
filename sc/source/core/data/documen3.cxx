@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:06:27 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 06:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1563,13 +1563,13 @@ void ScDocument::SnapVisArea( Rectangle& rRect ) const
     lcl_SnapVer( pTable, rRect.Bottom(), nRow );
 }
 
-void ScDocument::SetDocProtection( BOOL bProtect, const uno::Sequence<sal_uInt8>& rPasswd )
+void ScDocument::SetDocProtection( BOOL bProtect, const uno::Sequence<sal_Int8>& rPasswd )
 {
     bProtected = bProtect;
     aProtectPass = rPasswd;
 }
 
-void ScDocument::SetTabProtection( USHORT nTab, BOOL bProtect, const uno::Sequence<sal_uInt8>& rPasswd )
+void ScDocument::SetTabProtection( USHORT nTab, BOOL bProtect, const uno::Sequence<sal_Int8>& rPasswd )
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
@@ -1598,12 +1598,12 @@ BOOL ScDocument::IsTabProtected( USHORT nTab ) const
     return FALSE;
 }
 
-const uno::Sequence<sal_uInt8>& ScDocument::GetDocPassword() const
+const uno::Sequence<sal_Int8>& ScDocument::GetDocPassword() const
 {
     return aProtectPass;
 }
 
-const uno::Sequence<sal_uInt8>& ScDocument::GetTabPassword( USHORT nTab ) const
+const uno::Sequence<sal_Int8>& ScDocument::GetTabPassword( USHORT nTab ) const
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])

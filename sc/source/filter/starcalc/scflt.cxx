@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:09:04 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 06:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1162,7 +1162,7 @@ void Sc10Import::LoadProtect()
     //rStream.Read(&SheetProtect, sizeof(SheetProtect));
     lcl_ReadSheetProtect(rStream, SheetProtect);
     nError = rStream.GetError();
-    uno::Sequence<sal_uInt8> aPass;
+    uno::Sequence<sal_Int8> aPass;
     SvPasswordHelper::GetHashPassword(aPass, SC10TOSTRING( SheetProtect.PassWord ));
     pDoc->SetDocProtection( SheetProtect.Protect,  aPass);
 }
@@ -1517,7 +1517,7 @@ void Sc10Import::LoadTables()
 
         //rStream.Read(&TabProtect, sizeof(TabProtect));
         lcl_ReadTabProtect(rStream, TabProtect);
-        uno::Sequence<sal_uInt8> aPass;
+        uno::Sequence<sal_Int8> aPass;
         SvPasswordHelper::GetHashPassword(aPass, SC10TOSTRING( TabProtect.PassWord ));
 
         pDoc->SetTabProtection( Tab, TabProtect.Protect, aPass);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:11:43 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 06:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2378,9 +2378,9 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
 //------------------------------------------------------------------------
 
 BOOL lcl_ValidPassword( ScDocument* pDoc, USHORT nTab,
-                        const uno::Sequence<sal_uInt8>& rPassword, uno::Sequence<sal_uInt8>* pReturnOld = NULL )
+                        const uno::Sequence<sal_Int8>& rPassword, uno::Sequence<sal_Int8>* pReturnOld = NULL )
 {
-    uno::Sequence<sal_uInt8> aOldPassword;
+    uno::Sequence<sal_Int8> aOldPassword;
     if ( nTab == TABLEID_DOC )
     {
         if (pDoc->IsDocProtected())
@@ -2404,7 +2404,7 @@ BOOL ScDocFunc::Protect( USHORT nTab, const String& rPassword, BOOL bApi )
 
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo(pDoc->IsUndoEnabled());
-    uno::Sequence<sal_uInt8> aPass;
+    uno::Sequence<sal_Int8> aPass;
     if (rPassword.Len())
         SvPasswordHelper::GetHashPassword(aPass, rPassword);
     BOOL bOk = lcl_ValidPassword( pDoc, nTab, aPass );
@@ -2444,15 +2444,15 @@ BOOL ScDocFunc::Unprotect( USHORT nTab, const String& rPassword, BOOL bApi )
 
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo(pDoc->IsUndoEnabled());
-    uno::Sequence<sal_uInt8> aOldPassword;
-    uno::Sequence<sal_uInt8> aPass;
+    uno::Sequence<sal_Int8> aOldPassword;
+    uno::Sequence<sal_Int8> aPass;
     if (rPassword.Len())
         SvPasswordHelper::GetHashPassword(aPass, rPassword);
     BOOL bOk = lcl_ValidPassword( pDoc, nTab, aPass, &aOldPassword );
 
     if ( bOk )
     {
-        uno::Sequence<sal_uInt8> aEmptyPass;
+        uno::Sequence<sal_Int8> aEmptyPass;
         if ( nTab == TABLEID_DOC )
             pDoc->SetDocProtection( FALSE, aEmptyPass );
         else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:07:57 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 06:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1311,7 +1311,7 @@ void ImportExcel8::Protect( void )
 {
     if( aIn.ReaduInt16() )
     {
-        uno::Sequence<sal_uInt8> aEmptyPass;
+        uno::Sequence<sal_Int8> aEmptyPass;
         pD->SetTabProtection( nTab, TRUE, aEmptyPass );
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:12:31 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 07:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,7 +1177,7 @@ String __EXPORT ScUndoShowHideTab::GetComment() const
 //
 
 ScUndoProtect::ScUndoProtect( ScDocShell* pShell, USHORT nNewTab,
-                            BOOL bNewProtect, const uno::Sequence<sal_uInt8>& rNewPassword ) :
+                            BOOL bNewProtect, const uno::Sequence<sal_Int8>& rNewPassword ) :
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
     bProtect( bNewProtect ),
@@ -1202,7 +1202,7 @@ void ScUndoProtect::DoProtect( BOOL bDo )
     }
     else
     {
-        uno::Sequence<sal_uInt8> aEmptyPass;
+        uno::Sequence<sal_Int8> aEmptyPass;
         if ( nTab == TABLEID_DOC )
             pDoc->SetDocProtection( FALSE, aEmptyPass );
         else

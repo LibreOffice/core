@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:04:47 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 06:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ private:
     USHORT          nRepeatEndY;
 
     BOOL            bProtected;
-    com::sun::star::uno::Sequence<sal_uInt8>    aProtectPass;
+    com::sun::star::uno::Sequence<sal_Int8> aProtectPass;
 
     USHORT*         pColWidth;
     USHORT*         pRowHeight;
@@ -239,8 +239,8 @@ public:
     void            PageStyleModified( const String& rNewName );
 
     BOOL            IsProtected() const                     { return bProtected; }
-    const com::sun::star::uno::Sequence<sal_uInt8>& GetPassword() const                     { return aProtectPass; }
-    void            SetProtection( BOOL bProtect, const com::sun::star::uno::Sequence<sal_uInt8>& rPasswd )
+    const com::sun::star::uno::Sequence<sal_Int8>&  GetPassword() const                     { return aProtectPass; }
+    void            SetProtection( BOOL bProtect, const com::sun::star::uno::Sequence<sal_Int8>& rPasswd )
                                         { bProtected = bProtect; aProtectPass = rPasswd; }
 
     Size            GetPageSize() const;

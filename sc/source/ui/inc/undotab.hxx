@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:12:14 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 06:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ class ScUndoProtect : public ScSimpleUndo
 public:
                     TYPEINFO();
                     ScUndoProtect( ScDocShell* pShell, USHORT nNewTab,
-                                    BOOL bNewProtect, const com::sun::star::uno::Sequence<sal_uInt8>& rNewPassword );
+                                    BOOL bNewProtect, const com::sun::star::uno::Sequence<sal_Int8>& rNewPassword );
     virtual         ~ScUndoProtect();
 
     virtual void    Undo();
@@ -384,7 +384,7 @@ public:
 private:
     USHORT  nTab;
     BOOL    bProtect;
-    com::sun::star::uno::Sequence<sal_uInt8>    aPassword;
+    com::sun::star::uno::Sequence<sal_Int8> aPassword;
 
     void    DoProtect( BOOL bDo );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:03:10 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 06:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ private:
     ScChangeViewSettings* pChangeViewSettings;
     ScScriptTypeData*   pScriptTypeData;
 
-    com::sun::star::uno::Sequence<sal_uInt8>    aProtectPass;
+    com::sun::star::uno::Sequence<sal_Int8> aProtectPass;
     String              aDocName;                       // opt: Dokumentname
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
@@ -544,13 +544,13 @@ public:
     inline USHORT   GetTableCount() const { return nMaxTableNumber; }
     SvULONGTable*   GetFormatExchangeList() const { return pFormatExchangeList; }
 
-    void            SetDocProtection( BOOL bProtect, const com::sun::star::uno::Sequence <sal_uInt8>& aPass );
-    void            SetTabProtection( USHORT nTab, BOOL bProtect, const com::sun::star::uno::Sequence <sal_uInt8>& aPass );
+    void            SetDocProtection( BOOL bProtect, const com::sun::star::uno::Sequence <sal_Int8>& aPass );
+    void            SetTabProtection( USHORT nTab, BOOL bProtect, const com::sun::star::uno::Sequence <sal_Int8>& aPass );
     BOOL            IsDocProtected() const;
     BOOL            IsDocEditable() const;
     BOOL            IsTabProtected( USHORT nTab ) const;
-    const com::sun::star::uno::Sequence <sal_uInt8>&    GetDocPassword() const;
-    const com::sun::star::uno::Sequence <sal_uInt8>&    GetTabPassword( USHORT nTab ) const;
+    const com::sun::star::uno::Sequence <sal_Int8>& GetDocPassword() const;
+    const com::sun::star::uno::Sequence <sal_Int8>& GetTabPassword( USHORT nTab ) const;
 
     void            LockTable(USHORT nTab);
     void            UnlockTable(USHORT nTab);
