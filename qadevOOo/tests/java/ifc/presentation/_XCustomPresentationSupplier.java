@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCustomPresentationSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:16 $
+ *  last change:$Date: 2003-09-08 10:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.presentation;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.container.XNameAccess;
 import com.sun.star.presentation.XCustomPresentationSupplier;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.presentation.XCustomPresentationSupplier</code>
