@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-20 08:21:29 $
+ *  last change: $Author: dvo $ $Date: 2002-03-21 11:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,7 +584,7 @@ void SwAccessibleContext::_InvalidateCaretPos()
 
 OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
                                            const OUString *pArg1,
-                                           const OUString *pArg2 ) const
+                                           const OUString *pArg2 )
 {
     String sStr;
     {

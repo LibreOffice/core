@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-20 10:02:26 $
+ *  last change: $Author: dvo $ $Date: 2002-03-21 11:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,12 +474,9 @@ void SwAccessibleParagraph::UpdatePortionData()
     DBG_ASSERT( GetFrm()->IsTxtFrm(), "The text frame has mutated!" );
     const SwTxtFrm* pFrm = static_cast<const SwTxtFrm*>( GetFrm() );
 
-    // obtain the model string via the text node
-    const String& rModelString = pFrm->GetTxtNode()->GetTxt();
-
     // build new portion data
     delete pPortionData;
-    pPortionData = new SwAccessiblePortionData( rModelString );
+    pPortionData = new SwAccessiblePortionData( pFrm->GetTxtNode() );
     pFrm->VisitPortions( *pPortionData );
 
     DBG_ASSERT( pPortionData != NULL, "UpdatePortionData() failed" );
@@ -588,7 +585,7 @@ sal_Bool SwAccessibleParagraph::GetSentenceBoundary(
     const OUString& rText,
     sal_Int32 nPos )
 {
-    GetPortionData().GetSentenceBoundary( rBound, nPos, GetTxtNode() );
+    GetPortionData().GetSentenceBoundary( rBound, nPos );
     return sal_True;
 }
 
@@ -616,7 +613,7 @@ sal_Bool SwAccessibleParagraph::GetAttributeBoundary(
     const OUString& rText,
     sal_Int32 nPos )
 {
-    GetPortionData().GetAttributeBoundary( rBound, nPos, GetTxtNode() );
+    GetPortionData().GetAttributeBoundary( rBound, nPos );
     return sal_True;
 }
 

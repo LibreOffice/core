@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-20 10:02:26 $
+ *  last change: $Author: dvo $ $Date: 2002-03-21 11:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,13 +86,15 @@ namespace com { namespace sun { namespace star {
  */
 class SwAccessiblePortionData : public SwPortionHandler
 {
+    // the node this portion is referring to
+    const SwTxtNode* pTxtNode;
+
     // variables used while collecting the data
     rtl::OUStringBuffer aBuffer;
     sal_Int32 nModelPosition;
     sal_Bool bFinished;
 
-    // the model and the accessible string
-    rtl::OUString sModelString;
+    // the accessible string
     rtl::OUString sAccessibleString;
 
     // positions array
@@ -125,11 +127,11 @@ class SwAccessiblePortionData : public SwPortionHandler
                       size_t nPos );
 
     // add pseudo-portions induced by auto-spell
-    void AddAutoSpellPortions( const SwTxtNode* pNode );
+    void AddAutoSpellPortions( );
 
 
 public:
-    SwAccessiblePortionData( const String& rCoreString );
+    SwAccessiblePortionData( const SwTxtNode* pTxtNd );
     virtual ~SwAccessiblePortionData();
 
     // SwPortionHandler methods
@@ -169,17 +171,13 @@ public:
 
 
     // get boundaries of words/sentences. The data structures are
-    // created on-demand.  The SwTxtNode is needed to get the language
-    // for the words.
+    // created on-demand.
     void GetSentenceBoundary( com::sun::star::i18n::Boundary& rBound,
-                              sal_Int32 nPos,
-                              const SwTxtNode* pNode );
+                              sal_Int32 nPos );
 
     // get (a) boundary for attribut change
-    // The SwTxtNode is needed to add the AutoSpell portions (if necessary)
     void GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
-                               sal_Int32 nPos,
-                               const SwTxtNode* pNode );
+                               sal_Int32 nPos );
 
     /// Have AutoSpell pseudo portions already been included in the
     /// portions arrays?

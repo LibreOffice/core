@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-19 12:49:27 $
+ *  last change: $Author: dvo $ $Date: 2002-03-21 11:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,10 +168,12 @@ protected:
 
     void FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent );
 
-    ::rtl::OUString GetResource( sal_uInt16 nResId,
+public:
+    static ::rtl::OUString GetResource( sal_uInt16 nResId,
                                  const ::rtl::OUString *pArg1 = 0,
-                                 const ::rtl::OUString *pArg2 = 0 ) const;
+                                 const ::rtl::OUString *pArg2 = 0 );
 
+protected:
     // Set states for getAccessibleStateSet.
     // This base class sets DEFUNC(0/1), EDITABLE(0/1), ENABLED(1),
     // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).

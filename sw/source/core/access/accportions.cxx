@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-20 10:24:33 $
+ *  last change: $Author: dvo $ $Date: 2002-03-21 11:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,28 @@
 #include "crstate.hxx"
 #endif
 
+// for SwAccessibleContext::GetResource()
+#ifndef _ACCBASE_HXX
+#include "acccontext.hxx"
+#endif
+
+// for Post-It replacement text:
+#ifndef _TXATBASE_HXX
+#include "txatbase.hxx"
+#endif
+#ifndef _FMTFLD_HXX
+#include "fmtfld.hxx"
+#endif
+#ifndef _FLDBAS_HXX
+#include "fldbas.hxx"
+#endif
+#ifndef _DOCUFLD_HXX
+#include "docufld.hxx"
+#endif
+
+
+
+
 
 using rtl::OUString;
 using com::sun::star::i18n::Boundary;
@@ -116,12 +138,12 @@ using com::sun::star::i18n::Boundary;
 
 
 SwAccessiblePortionData::SwAccessiblePortionData(
-    const String& rCoreString ) :
+    const SwTxtNode* pTxtNd ) :
     SwPortionHandler(),
+    pTxtNode( pTxtNd ),
     aBuffer(),
     nModelPosition( 0 ),
     bFinished( sal_False ),
-    sModelString( rCoreString ),
     sAccessibleString(),
     aLineBreaks(),
     aModelPositions(),
@@ -130,6 +152,8 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     nBeforePortions( 0 ),
     bLastIsSpecial( sal_False )
 {
+    DBG_ASSERT( pTxtNode != NULL, "Text node is needed!" );
+
     // reserve some space to reduce memory allocations
     aLineBreaks.reserve( 5 );
     aModelPositions.reserve( 10 );
@@ -147,7 +171,7 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
 void SwAccessiblePortionData::Text(USHORT nLength, USHORT nType)
 {
     DBG_ASSERT( nLength >= 0, "illegal length" );
-    DBG_ASSERT( (nModelPosition + nLength) <= sModelString.getLength(),
+    DBG_ASSERT( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
                 "portion exceeds model string!" )
 
     DBG_ASSERT( !bFinished, "We are already done!" );
@@ -161,7 +185,10 @@ void SwAccessiblePortionData::Text(USHORT nLength, USHORT nType)
     aAccessiblePositions.push_back( aBuffer.getLength() );
 
     // update buffer + nModelPosition
-    aBuffer.append( sModelString.copy(nModelPosition, nLength) );
+    aBuffer.append( OUString(
+        pTxtNode->GetTxt().Copy(
+            static_cast<USHORT>( nModelPosition ),
+            nLength ) ) );
     nModelPosition += nLength;
 
     bLastIsSpecial = sal_False;
@@ -172,7 +199,7 @@ void SwAccessiblePortionData::Special(
 {
     DBG_ASSERT( nLength >= 0, "illegal length" );
     DBG_ASSERT( nModelPosition >= 0, "illegal position" );
-    DBG_ASSERT( (nModelPosition + nLength) <= sModelString.getLength(),
+    DBG_ASSERT( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
                 "portion exceeds model string!" )
 
     DBG_ASSERT( !bFinished, "We are already done!" );
@@ -187,11 +214,35 @@ void SwAccessiblePortionData::Special(
     switch( nType )
     {
         case POR_POSTITS:
-            sDisplay = SW_RES(STR_ACCESS_REPLACEMENT_POSTIT);
-            break;
+        {
+            // get field, and if it's a Post-It, generate the replacement text
+            // (e.g. script fields also use Post-It portions, so we need
+            //  to check)
+            SwTxtAttr* pAttr = pTxtNode->GetTxtAttr(
+                static_cast<USHORT>( nModelPosition ), RES_TXTATR_FIELD );
+            DBG_ASSERT( pAttr != NULL, "Frank hat mich angelogen!" );
+
+            const SwField* pField = pAttr->GetFld().GetFld();
+            DBG_ASSERT( pField != NULL, "A field without field? Frank?!?" );
+            if( pField->Which() == RES_POSTITFLD )
+            {
+                // We have a real Post-It portion, so we can now
+                // construct the replacement text
+                sDisplay = SwAccessibleContext::GetResource(
+                    STR_ACCESS_REPLACEMENT_POSTIT,
+                    & OUString(
+                        static_cast<const SwPostItField*>(pField)->GetTxt()) );
+            }
+            else
+                sDisplay = rText;   // for non-Post-It
+        }
+        break;
         case POR_FLYCNT:
+        {
+            // TODO: get frame text
             sDisplay = SW_RES(STR_ACCESS_REPLACEMENT_FRAME);
-            break;
+        }
+        break;
         default:
             sDisplay = rText;
             break;
@@ -249,7 +300,7 @@ void SwAccessiblePortionData::Finish()
 }
 
 
-void SwAccessiblePortionData::AddAutoSpellPortions( const SwTxtNode* pNode )
+void SwAccessiblePortionData::AddAutoSpellPortions()
 {
     // not implemented!
 }
@@ -386,8 +437,7 @@ size_t SwAccessiblePortionData::FindLastBreak(
 
 void SwAccessiblePortionData::GetSentenceBoundary(
     Boundary& rBound,
-    sal_Int32 nPos,
-    const SwTxtNode* pNode )
+    sal_Int32 nPos )
 {
     DBG_ASSERT( nPos >= 0, "illegal position; check before" );
     DBG_ASSERT( nPos < sAccessibleString.getLength(), "illegal position" );
@@ -413,7 +463,7 @@ void SwAccessiblePortionData::GetSentenceBoundary(
 
                  sal_Int32 nNew = pBreakIt->xBreak->endOfSentence(
                      sAccessibleString, nCurrent,
-                     pBreakIt->GetLocale( pNode->GetLang( nModelPos ) ) ) + 1;
+                     pBreakIt->GetLocale(pTxtNode->GetLang(nModelPos)) ) + 1;
 
                  if( (nNew < 0) && (nNew > nLength) )
                      nNew = nLength;
@@ -442,14 +492,13 @@ void SwAccessiblePortionData::GetSentenceBoundary(
 
 void SwAccessiblePortionData::GetAttributeBoundary(
     Boundary& rBound,
-    sal_Int32 nPos,
-    const SwTxtNode* pNode)
+    sal_Int32 nPos)
 {
-    DBG_ASSERT( pNode != NULL, "Need SwTxtNode!" );
+    DBG_ASSERT( pTxtNode != NULL, "Need SwTxtNode!" );
 
     // include auto spell portions, if not already available
     if( ! HasAutoSpellPortions() )
-        AddAutoSpellPortions( pNode );
+        AddAutoSpellPortions();
 
     // attribute boundaries can only occur on portion boundaries
     // (if autospell pseudo-portion are included)
@@ -460,7 +509,7 @@ void SwAccessiblePortionData::GetAttributeBoundary(
 
 sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( USHORT nPos )
 {
-    DBG_ASSERT( nPos <= sModelString.getLength(), "illegal position" );
+    DBG_ASSERT( nPos <= pTxtNode->GetTxt().Len(), "illegal position" );
 
     // find the portion number
     size_t nPortionNo = FindBreak( aModelPositions,
@@ -539,7 +588,7 @@ USHORT SwAccessiblePortionData::FillSpecialPos(
 
         // if we have anything except plain text, compute nExtend + nRefPos
         if( (nModelEndPos - nModelPos == 1) &&
-            (sModelString.getStr()[nModelPos] !=
+            (pTxtNode->GetTxt().GetChar(static_cast<USHORT>(nModelPos)) !=
              sAccessibleString.getStr()[nPos]) )
         {
             // case 1: a one-character, non-text portion
