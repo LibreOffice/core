@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 18:06:39 $
+#   last change: $Author: rt $ $Date: 2004-03-30 16:05:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ TARGET=doc
 SLOFILES =	\
         $(SLO)$/SwStyleNameMapper.obj \
         $(SLO)$/acmplwrd.obj \
+        $(SLO)$/dbgoutsw.obj \
         $(SLO)$/doc.obj \
         $(SLO)$/docbasic.obj \
         $(SLO)$/docbm.obj \
