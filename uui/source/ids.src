@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:12:43 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,30 @@ Resource RID_UUI_ERRHDL
     {
         Text [ de ] = "Die Datei '$(ARG1)' konnte nicht repariert werden und kann deshalb nicht geöffnet werden.";
         Text [ en-US ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
+    };
+
+    String (ERRCODE_UUI_CONFIGURATION_BROKENDATA_NOREMOVE & ERRCODE_RES_MASK)
+    {
+        Text [ de ] = "Konfigurationsdaten aus '$(ARG1)' sind beschädigt. Ohne diese beschädigten Daten können einige Funktionen nicht korrekt ausgeführt werden.\nSoll %PRODUCTNAME ohne die beschädigten Konfigurationsdaten starten?";
+        Text [ en-US ] = "Configuration data in '$(ARG1)' is corrupted. Without this data some functions may not operate correctly.\nDo you want to continue startup of %PRODUCTNAME without the corrupted configuration data?";
+    };
+
+    String (ERRCODE_UUI_CONFIGURATION_BROKENDATA_WITHREMOVE & ERRCODE_RES_MASK)
+    {
+        Text [ de ] = "Die persönliche Konfigurationsdatei '$(ARG1)' ist beschädigt und muss gelöscht werden. Einige Ihrer persönlichen Einstellungen gehen dabei verloren.\nSoll %PRODUCTNAME ohne die beschädigten Konfigurationsdaten starten?";
+        Text [ en-US ] = "The personal configuration file '$(ARG1)' is corrupted and must be deleted to continue. Some of your personal settings may be lost.\nDo you want to continue startup of %PRODUCTNAME without the corrupted configuration data?";
+    };
+
+    String (ERRCODE_UUI_CONFIGURATION_BACKENDMISSING & ERRCODE_RES_MASK)
+    {
+        Text [ de ] = "Die Konfigurationsdatenquelle '$(ARG1)' ist nicht verfügbar. Ohne diese fehlenden Daten können einige Funktionen nicht korrekt ausgeführt werden.";
+        Text [ en-US ] = "The configuration data source '$(ARG1)' is unavailable. Without this data some functions may not operate correctly.";
+    };
+
+    String (ERRCODE_UUI_CONFIGURATION_BACKENDMISSING_WITHRECOVER & ERRCODE_RES_MASK)
+    {
+        Text [ de ] = "Die Konfigurationsdatenquelle '$(ARG1)' ist nicht verfügbar. Ohne diese fehlenden Daten können einige Funktionen nicht korrekt ausgeführt werden.\nSoll %PRODUCTNAME ohne die fehlenden Konfigurationsdaten starten?";
+        Text [ en-US ] = "The configuration data source '$(ARG1)' is unavailable. Without this data some functions may not operate correctly.\nDo you want to continue startup of %PRODUCTNAME without the missing configuration data?";
     };
 
 };
