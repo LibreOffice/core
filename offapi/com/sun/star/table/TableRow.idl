@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-02-09 09:27:11 $
+ *  last change: $Author: mi $ $Date: 2001-03-23 08:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@ service TableRow
 
     // DocMerge from xml: property com::sun::star::table::TableRow::Height
     /** height of the row.
+
+        <p>When hidden, it returns the height which the row would have, if
+        it were visible. </p>
      */
     [property] long Height;
 
@@ -130,6 +133,9 @@ service TableRow
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/02/09 09:27:11  mi
+    #74964 no XNamed anymore (why ever it was in there again)
+
     Revision 1.4  2000/12/14 12:53:43  mi
     <true></true> -> <TRUE/> and same with FALSE
 
