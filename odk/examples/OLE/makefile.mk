@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:44:53 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:46:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,17 +105,21 @@ VBSCRIPT_FILES=\
     $(DESTDIROLEEXAMPLES)$/vbscript$/readme.txt \
     $(DESTDIROLEEXAMPLES)$/vbscript$/WriterDemo.vbs
 
-EXAMPLESLIST= \
+DIR_FILE_LIST= \
     $(ACTIVEX_FILES) \
     $(DELPHI_FILES) \
     $(VBSCRIPT_FILES)
 
+DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
+DIR_CREATE_FLAG=$(MISC)$/ex_ole_dirs_created.txt
+DIR_FILE_FLAG=$(MISC)$/ex_ole_files.txt
 
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
 all : \
-    $(EXAMPLESLIST)
+    $(DIR_FILE_LIST) \
+    $(DIR_FILE_FLAG)
 
 #--------------------------------------------------
 # use global rules
