@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:02 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,14 @@ FloatingWindow SID_RECORDING_FLOATWINDOW
     Text[ korean ] = "매크로 기록";
     Text[ chinese_simplified ] = "记录宏";
     Text[ chinese_traditional ] = "記錄巨集";
-    Text[ turkish ] = "Record Macro";
+    Text[ turkish ] = "Makro Kaydet";
     Text[ arabic ] = "Record Macro";
+    Text[ czech ] = "Zaznamenat makro";
+    Text[ hebrew ] = "‮רישום מקרו‬";
+    Text[ catalan ] = "Record Macro";
+    Text[ portuguese_brazilian ] = "Record Macro";
+    Text[ thai ] = "Record Macro";
+    Text[ hindi ] = "Record Macro";
 };
 
 ToolBox SID_RECORDING_FLOATWINDOW
@@ -127,8 +133,14 @@ String STR_MACRO_LOSS
     Text[ korean ] = "기록을 정말로 취소하시겠습니까? 지금까지 기록된 모든 작업 진행 내용을 잃을 수 있습니다.";
     Text[ chinese_simplified ] = "真的要取消记录？所有当前的记录内容就会消失。";
     Text[ chinese_traditional ] = "真的要取消記錄？所有的目前的記錄內容就會流失。";
-    Text[ turkish ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+    Text[ turkish ] = "Ger�ekten kayd� iptal etmek istiyor musunuz? �imdiye kadar yap�lan t�m kay�tlar silinecektir.";
     Text[ arabic ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+    Text[ czech ] = "Opravdu chcete přerušit nahrávání? Veškeré doposud zaznamenané kroky budou ztraceny.";
+    Text[ hebrew ] = "‮האם אכן לבטל את הרישום? כל צעד שנרשם עד כה יאובד.‬";
+    Text[ catalan ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+    Text[ portuguese_brazilian ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+    Text[ thai ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
+    Text[ hindi ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";
 };
 
 String STR_CANCEL_RECORDING
@@ -151,8 +163,23 @@ String STR_CANCEL_RECORDING
     Text[ korean ] = "기록 취소";
     Text[ chinese_simplified ] = "取消记录";
     Text[ chinese_traditional ] = "取消記錄";
-    Text[ turkish ] = "Cancel Recording";
+    Text[ turkish ] = "Kayd� �ptal Et";
     Text[ arabic ] = "Cancel Recording";
+    Text[ czech ] = "Zrušit nahrávání";
+    Text[ hebrew ] = "‮ביטול רישום‬";
+    Text[ catalan ] = "Cancel Recording";
+    Text[ portuguese_brazilian ] = "Cancel Recording";
+    Text[ thai ] = "Cancel Recording";
+    Text[ hindi ] = "Cancel Recording";
 };
+
+
+
+
+
+
+
+
+
 
 
