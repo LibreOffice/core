@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 16:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,12 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
          pRubyFont = new SwFont( rFnt );
         pRubyFont->SetDiffFnt( &rSet, &rDoc );
         // we do not allow a vertical font for the ruby text
+
+#ifdef VERTICAL_LAYOUT
+        pRubyFont->SetVertical( rFnt.GetOrientation() );
+#else
         pRubyFont->SetVertical( 0 );
+#endif
     }
     else
         pRubyFont = NULL;
