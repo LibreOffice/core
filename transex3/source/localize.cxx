@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:44:02 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 09:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,6 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
         aPath.SetCWD();
 
         system( sCommand.GetBuffer());
-
         SvFileStream aInStream( aOut.GetFull(), STREAM_READ );
         if ( !aInStream.IsOpen()) {
             fprintf( stderr,
@@ -586,7 +585,6 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 
             ByteString test(myStr2,RTL_TEXTENCODING_ASCII_US);
             SvFileStream aOutStream( myStr2, STREAM_STD_WRITE | STREAM_TRUNC );
-
             if ( !aOutStream.IsOpen()) {
                 ByteString test2(myStr2,RTL_TEXTENCODING_ASCII_US);
                 fprintf( stderr,"ERROR: Unable to open file %s for modification!\n", test2.GetBuffer());
@@ -595,11 +593,12 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 
             else {
                 ByteString sLine;
-                aOutStream.SetLineDelimiter( LINEEND_CRLF );
-                while ( !aInStream.IsEof()) {
-                    aInStream.ReadLine( sLine );
-                    sLine.EraseAllChars( '\r' );
+                                aOutStream.SetLineDelimiter( LINEEND_LF );
+
+                                aInStream.ReadLine( sLine );
+                                while ( !aInStream.IsEof()) {
                     aOutStream.WriteLine( sLine );
+                                        aInStream.ReadLine( sLine );
                 }
                 aInStream.Close();
                 aOutStream.Close();
