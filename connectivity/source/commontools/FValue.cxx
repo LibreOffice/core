@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 04:53:53 $
+ *  last change: $Author: oj $ $Date: 2002-01-10 10:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,8 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
     }
 
     m_bNull     = _rRH.m_bNull;
+    // OJ: BUGID: 96277
+    m_eTypeKind = _rRH.m_eTypeKind;
 
     return *this;
 }
@@ -472,7 +474,7 @@ ORowSetValue& ORowSetValue::operator=(const float& _rRH)
         m_bNull = sal_False;
     }
     else
-        *(double*)m_aValue.m_pValue = _rRH;
+        *(float*)m_aValue.m_pValue = _rRH;
 
     return *this;
 }
@@ -1273,7 +1275,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
             case DataType::LONGVARCHAR:
-                aSeq = *(Sequence<sal_Int8>*)m_aValue.m_pValue;
+                aSeq = *static_cast< Sequence<sal_Int8>*>(m_aValue.m_pValue);
                 break;
             default:
                 ;
@@ -1305,7 +1307,16 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 break;
 
             case DataType::DATE:
-                aValue = *(::com::sun::star::util::Date*)m_aValue.m_pValue;
+                aValue = *static_cast< ::com::sun::star::util::Date*>(m_aValue.m_pValue);
+                break;
+            case DataType::TIMESTAMP:
+                {
+                    ::com::sun::star::util::DateTime* pDateTime = static_cast< ::com::sun::star::util::DateTime*>(m_aValue.m_pValue);
+                    aValue.Day      = pDateTime->Day;
+                    aValue.Month    = pDateTime->Month;
+                    aValue.Year     = pDateTime->Year;
+                }
+                break;
         }
     }
     return aValue;
@@ -1331,9 +1342,17 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::REAL:
                 aValue = DBTypeConversion::toTime((double)*this);
                 break;
-
+            case DataType::TIMESTAMP:
+                {
+                    ::com::sun::star::util::DateTime* pDateTime = static_cast< ::com::sun::star::util::DateTime*>(m_aValue.m_pValue);
+                    aValue.HundredthSeconds = pDateTime->HundredthSeconds;
+                    aValue.Seconds          = pDateTime->Seconds;
+                    aValue.Minutes          = pDateTime->Minutes;
+                    aValue.Hours            = pDateTime->Hours;
+                }
+                break;
             case DataType::TIME:
-                    aValue = *(::com::sun::star::util::Time*)m_aValue.m_pValue;
+                aValue = *static_cast< ::com::sun::star::util::Time*>(m_aValue.m_pValue);
         }
     }
     return aValue;
@@ -1359,8 +1378,25 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::REAL:
                 aValue = DBTypeConversion::toDateTime((double)*this);
                 break;
+            case DataType::DATE:
+                {
+                    ::com::sun::star::util::Date* pDate = static_cast< ::com::sun::star::util::Date*>(m_aValue.m_pValue);
+                    aValue.Day      = pDate->Day;
+                    aValue.Month    = pDate->Month;
+                    aValue.Year     = pDate->Year;
+                }
+                break;
+            case DataType::TIME:
+                {
+                    ::com::sun::star::util::Time* pTime = static_cast< ::com::sun::star::util::Time*>(m_aValue.m_pValue);
+                    aValue.HundredthSeconds = pTime->HundredthSeconds;
+                    aValue.Seconds          = pTime->Seconds;
+                    aValue.Minutes          = pTime->Minutes;
+                    aValue.Hours            = pTime->Hours;
+                }
+                break;
             case DataType::TIMESTAMP:
-                aValue = *(::com::sun::star::util::DateTime*)m_aValue.m_pValue;
+                aValue = *static_cast< ::com::sun::star::util::DateTime*>(m_aValue.m_pValue);
                 break;
         }
     }
