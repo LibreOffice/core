@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentIdentifierMapping.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 11:29:29 $
+ *  last change: $Author: kso $ $Date: 2001-01-15 12:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,13 @@ interface XContentIdentifier;
 
 //=============================================================================
 /** A mapping from a (source) set of XContentIdentifiers to another (target)
-    set of XContentIdentifiers.  For convenience and performance, mapping
-    between the string representations of source/target XContentIdentifiers,
-    as well as mapping between XContents identified by source/target
-    XContentIdentifiers is also supported.
+    set of XContentIdentifiers.
+
+    <p>
+    For convenience and performance, mapping between the string representations
+    of source/target XContentIdentifiers, as well as mapping between XContents
+    identified by source/target XContentIdentifiers is also supported.
+    </p>
 
     <p> This interface can be useful in cases where the identifieres (and
     associated contents) returned by the various methods of an XContentAccess
