@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:02:26 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         {
             < "Total" ; Default ; > ;
             < "Contar" ; Default ; > ;
-            < "Valor médio" ; Default ; > ;
+            < "Média" ; Default ; > ;
             < "Máx." ; Default ; > ;
             < "Min." ; Default ; > ;
             < "Produto" ; Default ; > ;
@@ -524,7 +524,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ japanese ] = "ÃŞ°À‚È‚µ‚Å—v‘f‚Ì•\\¦(~E)";
         Text[ korean ] = "µ¥ÀÌÅÍ ¾øÀÌ ¿ä¼Ò º¸±â(~E)";
         Text[ chinese_simplified ] = "ÏÔÊ¾²»º¬Êı¾İµÄÌõÄ¿(~E)";
-        Text[ chinese_traditional ] = "Åã¥ÜµL¼ÆÕuªº³æ¤¸(~E)";
+        Text[ chinese_traditional ] = "Åã¥ÜµL¼Æ¾Úªº³æ¤¸(~E)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÚäÇÕÑ ÈÏæä ÈíÇäÇÊ";
         Text[ turkish ] = "~Ögeleri veriler olmadan görüntüle";
         Text[ language_user1 ] = " ";
