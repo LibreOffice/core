@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:15:38 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,33 +87,9 @@ TabPage TP_COLUMN
     {
         Pos = MAP_APPFONT ( 7 , 19 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text = "~Anzahl" ;
+        Text = "~Spalten" ;
         Text [ ENGLISH ] = "~Num." ;
-        Text [ norwegian ] = "~Num." ;
-        Text [ italian ] = "~Num." ;
-        Text [ portuguese_brazilian ] = "~N?m." ;
-        Text [ portuguese ] = "~Quantidade" ;
-        Text [ finnish ] = "~M‰‰r‰" ;
-        Text [ danish ] = "Antal" ;
-        Text [ french ] = "~Nombre" ;
-        Text [ swedish ] = "~Antal" ;
-        Text [ dutch ] = "~Aantal" ;
-        Text [ spanish ] = "~Cantidad" ;
-        Text [ english_us ] = "~Amount" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = " ˝ƒø(~A)";
-        Text[ russian ] = "◊ËÒÎÓ";
-        Text[ polish ] = "Liczba";
-        Text[ japanese ] = "íiêî(~A)";
-        Text[ chinese_traditional ] = "º∆•ÿ(~A)";
-        Text[ arabic ] = "«·⁄œœ";
-        Text[ dutch ] = "~Aantal";
-        Text[ chinese_simplified ] = " ˝ƒø(~A)";
-        Text[ greek ] = "~¡ÒÈËÏ¸Ú";
-        Text[ korean ] = "∞≥ºˆ(~A)";
-        Text[ language_user1 ] = " ";
-        Text[ turkish ] = "S~ay˝";
-        Text[ catalan ] = "~Cantidad";
     };
     NumericField ED_NUMBER
     {
@@ -168,41 +144,23 @@ TabPage TP_COLUMN
     FixedLine FL_COLUMNS
     {
         Pos = MAP_APPFONT ( 4 , 3 ) ;
-        Size = MAP_APPFONT ( 157 , 8 ) ;
-        Text = "Spalten" ;
+        Size = MAP_APPFONT ( 163 , 8 ) ;
+        Text = "Vorgaben" ;
         Text [ ENGLISH ] = "Columns" ;
-        Text [ norwegian ] = "Kolonner" ;
-        Text [ italian ] = "Colonne" ;
-        Text [ portuguese_brazilian ] = "Colunas" ;
-        Text [ portuguese ] = "Colunas" ;
-        Text [ finnish ] = "Sarakkeet" ;
-        Text [ danish ] = "Kolonner" ;
-        Text [ french ] = "Colonnes" ;
-        Text [ swedish ] = "Kolumner" ;
-        Text [ dutch ] = "Kolommen" ;
-        Text [ spanish ] = "Columnas" ;
-        Text [ english_us ] = "Columns" ;
-        Text[ chinese_simplified ] = "¿∏";
-        Text[ russian ] = " ÓÎÓÌÍË";
-        Text[ polish ] = "Kolumny";
-        Text[ japanese ] = "íiëgÇ›";
-        Text[ chinese_traditional ] = "ƒÊ";
-        Text[ arabic ] = "«·√⁄„œ…";
-        Text[ dutch ] = "Kolommen";
-        Text[ chinese_simplified ] = "¿∏";
-        Text[ greek ] = "”ÙﬁÎÂÚ";
-        Text[ korean ] = "ø≠";
-        Text[ language_user1 ] = " ";
-        Text[ turkish ] = "S¸tun";
-        Text[ catalan ] = "Columnas";
     };
-
+    FixedText FT_COLUMN
+    {
+        Pos = MAP_APPFONT ( 7 , 70 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "Spalte" ;
+        Text [ English ] = "Column" ;
+        Left = TRUE ;
+    };
     Window WN_BSP
     {
-        Pos = MAP_APPFONT ( 176 , 12 ) ;
-        Size = MAP_APPFONT ( 72 , 41 ) ;
+        Pos = MAP_APPFONT ( 176 , 7 ) ;
+        Size = MAP_APPFONT ( 75 , 49 ) ;
     };
-
     ImageButton BTN_DOWN
     {
         Disable = TRUE ;
@@ -235,7 +193,7 @@ TabPage TP_COLUMN
     ImageButton BTN_UP
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 241 , 71 ) ;
+        Pos = MAP_APPFONT ( 241 , 69 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
         SYMBOL = IMAGEBUTTON_ARROW_RIGHT ;
@@ -243,7 +201,7 @@ TabPage TP_COLUMN
     FixedText FT_WIDTH
     {
         Pos = MAP_APPFONT ( 7 , 85 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "Breite" ;
         Text [ English ] = "Width" ;
         Left = TRUE ;
@@ -328,7 +286,7 @@ TabPage TP_COLUMN
     FixedText FT_DIST
     {
         Pos = MAP_APPFONT ( 7 , 101 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "Abstand" ;
         Text [ English ] = "Distance" ;
         Left = TRUE ;
@@ -394,7 +352,7 @@ TabPage TP_COLUMN
     };
     CheckBox CB_AUTO_WIDTH
     {
-        Pos = MAP_APPFONT ( 7 , 115 ) ;
+        Pos = MAP_APPFONT ( 89 , 115 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "A~utomatische Breite" ;
         Text [ ENGLISH ] = "Automatic ~width" ;
@@ -428,32 +386,8 @@ TabPage TP_COLUMN
     {
         Pos = MAP_APPFONT ( 4 , 58 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Spaltenbreite" ;
+        Text = "Breite und Abstand" ;
         Text [ ENGLISH ] = "Column width" ;
-        Text [ norwegian ] = "Bredde pÂ kolonne " ;
-        Text [ italian ] = "Larghezza colonna" ;
-        Text [ portuguese_brazilian ] = "Largura da coluna" ;
-        Text [ portuguese ] = "Largura da coluna" ;
-        Text [ finnish ] = "Sarakkeen leveys" ;
-        Text [ danish ] = "Kolonnebredde" ;
-        Text [ french ] = "Largeur de colonne" ;
-        Text [ swedish ] = "Kolumnbredd" ;
-        Text [ dutch ] = "Kolombreedte" ;
-        Text [ spanish ] = "Ancho de columna" ;
-        Text [ english_us ] = "Column width" ;
-        Text[ chinese_simplified ] = "¿∏øÌ";
-        Text[ russian ] = "ÿËËÌ‡ ÍÓÎÓÌÓÍ";
-        Text[ polish ] = "Szer. kolumny";
-        Text[ japanese ] = "íiÇÃïù";
-        Text[ chinese_traditional ] = "ƒÊºe";
-        Text[ arabic ] = "⁄—÷ «·⁄„Êœ";
-        Text[ dutch ] = "Kolombreedte";
-        Text[ chinese_simplified ] = "¿∏øÌ";
-        Text[ greek ] = "–Î‹ÙÔÚ ÛÙﬁÎÁÚ";
-        Text[ korean ] = "ø≠ ≥ ∫Ò";
-        Text[ language_user1 ] = " ";
-        Text[ turkish ] = "S¸tun geni˛lii";
-        Text[ catalan ] = "Ancho de columna";
     };
 
     FixedText FT_STYLE

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 14:55:21 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ class SwSequenceOptionDialog : public SvxStandardDialog
     OKButton        aOKButton;
     CancelButton    aCancelButton;
     HelpButton      aHelpButton;
-    GroupBox        aGbHeader;
+    FixedLine       aFlHeader;
     SwView&         rView;
     String          aFldTypeName;
 
@@ -191,7 +191,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     aCopyAttributesCB(this, SW_RES(CB_COPY_ATTR    )),
     aObjectNameFT(this, SW_RES(FT_OBJECT_NAME )),
     aObjectNameED(this, SW_RES(ED_OBJECT_NAME )),
-    aSettingsGroup(this, SW_RES(GRP_SETTINGS)),
+    aSettingsFL  (this, SW_RES(FL_SETTINGS)),
     rView( rV ),
     pMgr( new SwFldMgr() )
 
@@ -507,7 +507,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
     aLbLevel        (this, SW_RES(LB_LEVEL     )),
     aFtDelim        (this, SW_RES(FT_SEPARATOR )),
     aEdDelim        (this, SW_RES(ED_SEPARATOR )),
-    aGbHeader       (this, SW_RES(GB_HEADER    )),
+    aFlHeader       (this, SW_RES(FL_HEADER    )),
     aFldTypeName( rSeqFldType ),
     rView( rV )
 {

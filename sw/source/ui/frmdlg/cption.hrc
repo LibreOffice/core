@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,10 @@
 #define EDT_TEXT       9
 #define TXT_POS       10
 #define BOX_POS       11
-#define GRP_SETTINGS  12
+#define FL_SETTINGS  12
 #define BTN_HELP      13
 #define BTN_OPTION    14
-#define GB_HEADER     15
+#define FL_HEADER         15
 #define FT_LEVEL      16
 #define LB_LEVEL      17
 #define FT_SEPARATOR  18

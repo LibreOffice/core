@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-04-22 15:09:10 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,6 +499,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aBtnUp(this,            ResId(BTN_DOWN)),
     aBtnDown(this,          ResId(BTN_UP)),
 
+    aColumnFT(this,         ResId(FT_COLUMN)),
     aWidthFT(this,          ResId(FT_WIDTH)),
     aDistFT(this,           ResId(FT_DIST)),
     aLbl1(this,             ResId(FT_1)),
@@ -530,6 +531,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aDefaultVS.SetStyle(  aDefaultVS.GetStyle()
                             | WB_ITEMBORDER
                             | WB_DOUBLEBORDER );
+
     for(USHORT i = 0; i < 5; i++)
         aDefaultVS.InsertItem( i + 1, i );
 
@@ -1394,9 +1396,6 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 --------------------------------------------------*/
 
-
 ColumnValueSet::~ColumnValueSet()
 {
 }
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:18:18 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,34 +359,12 @@ ModalDialog DLG_CAPTION
         TabStop = TRUE ;
         Left = TRUE ;
     };
-    GroupBox GRP_SETTINGS
+    FixedLine FL_SETTINGS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 182 , 118 ) ;
-        Text = "Einstellungen" ;
+        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Text = "Eigenschaften" ;
         Text [ English ] = "Settings" ;
-        Text [ norwegian ] = "Settings" ;
-        Text [ italian ] = "Impostazioni" ;
-        Text [ portuguese_brazilian ] = "Par?metros" ;
-        Text [ portuguese ] = "DefiniÁıes" ;
-        Text [ finnish ] = "Asetukset" ;
-        Text [ danish ] = "Indstillinger" ;
-        Text [ french ] = "ParamËtres" ;
-        Text [ swedish ] = "Inst‰llningar" ;
-        Text [ dutch ] = "Instellingen" ;
-        Text [ spanish ] = "ConfiguraciÛn" ;
-        Text [ english_us ] = "Settings" ;
-        Text[ chinese_simplified ] = "…Ë∂®";
-        Text[ russian ] = "Õ‡ÒÚÓÈÍË";
-        Text[ polish ] = "Ustawienia";
-        Text[ japanese ] = "ê›íË";
-        Text[ chinese_traditional ] = "≥]©w";
-        Text[ arabic ] = "«·≈⁄œ«œ« ";
-        Text[ greek ] = "—ıËÏﬂÛÂÈÚ";
-        Text[ korean ] = "º≥¡§";
-        Text[ turkish ] = "Ayarlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ConfiguraciÛn";
     };
     String STR_BEGINNING
     {
@@ -536,10 +514,10 @@ ModalDialog DLG_SEQUENCE_OPTION
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_HEADER
+    FixedLine FL_HEADER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 97 , 54 ) ;
+        Size = MAP_APPFONT ( 97 , 8 ) ;
         TEXT = "Kapitelweise Nummerierung" ;
         TEXT [ English ] = "Chapter numbering" ;
         Text [ english_us ] = "Numbering by chapter" ;
@@ -566,8 +544,8 @@ ModalDialog DLG_SEQUENCE_OPTION
     };
     FixedText FT_LEVEL
     {
-        Pos = MAP_APPFONT ( 17 , 20 ) ;
-        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Pos = MAP_APPFONT ( 17 , 21 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         TEXT = "E~bene" ;
         TEXT [ English ] = "~Level" ;
         Text [ portuguese ] = "~NÌvel" ;
@@ -694,8 +672,8 @@ ModalDialog DLG_SEQUENCE_OPTION
     };
     FixedText FT_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 17 , 35 ) ;
-        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Pos = MAP_APPFONT ( 17 , 37 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
         TEXT = "~Trenner" ;
         TEXT [ English ] = "~Separator" ;
         Text [ english_us ] = "~Separator" ;
@@ -722,7 +700,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     };
     Edit ED_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 50 , 34 ) ;
+        Pos = MAP_APPFONT ( 50 , 35 ) ;
         Size = MAP_APPFONT ( 46 , 12 ) ;
         Border = TRUE ;
         MaxTextLength = 1 ;
