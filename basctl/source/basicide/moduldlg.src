@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:43:55 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ TabDialog RID_TD_ORGANIZE
     SVLook = TRUE ;
     /* ### ACHTUNG: Neuer Text in Resource? Makros verwalten : Verwalten */
     /* ### ACHTUNG: Neuer Text in Resource? Makros verwalten : Verwalten */
-    Text = "Makros verwalten" ;
+    Text = "%PRODUCTNAME Basic Makros verwalten" ;
     Text [ ENGLISH ] = "Manage macros" ;
     Moveable = TRUE ;
     TEXT[ italian ] = "Gestione macro";
@@ -79,7 +79,7 @@ TabDialog RID_TD_ORGANIZE
     TEXT[ swedish ] = "Administrera makron";
     TEXT[ dutch ] = "Macro's beheren";
     TEXT[ spanish ] = "Administrar";
-    TEXT[ english_us ] = "Macro Organizer";
+    TEXT[ english_us ] = "%PRODUCTNAME Basic Macro Organizer";
     TEXT[ chinese_simplified ] = "ÁÆ°ÁêÜÂÆè";
     TEXT[ russian ] = "”Ô‡‚ÎÂÌËÂ Ï‡ÍÓÒ‡ÏË";
     TEXT[ polish ] = "Zarzπdzaj makrami";
@@ -127,6 +127,13 @@ TabDialog RID_TD_ORGANIZE
                 Text[ slovak ] = "Moduly";
                 Text[ hungarian ] = "Modulok";
                 Text[ slovenian ] = "Moduli";
+            };
+            PageItem
+            {
+                Identifier = RID_TP_DLG ;
+                Text = "Dialogs" ;
+                Text [ ENGLISH ] = "Dialogs" ;
+                Text [ english_us ] = "Dialogs" ;
             };
             PageItem
             {
@@ -195,8 +202,8 @@ TabPage RID_TP_MODULS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text = "M~odul/Dialog" ;
-        Text [ ENGLISH ] = "M~odule/Dialog" ;
+        Text = "M~odul" ;
+        Text [ ENGLISH ] = "M~odule" ;
         Text [ norwegian ] = "M~odule/Dialog" ;
         Text [ italian ] = "M~odulo/Dialogo" ;
         Text [ portuguese_brazilian ] = "MÛdulo / Di·l~ogo" ;
@@ -207,7 +214,7 @@ TabPage RID_TP_MODULS
         Text [ swedish ] = "M~odul/dialog" ;
         Text [ dutch ] = "M~odule/dialoogvenster" ;
         Text [ spanish ] = "MÛd~ulo/Di·logo" ;
-        Text [ english_us ] = "M~odule/Dialog" ;
+        Text [ english_us ] = "M~odule" ;
         Text[ chinese_simplified ] = "Ê®°Âùó/ÂØπËØùÊ°Ü(~O)";
         Text[ russian ] = "ÃÓ‰ÛÎ¸/‰Ë‡ÎÓ„";
         Text[ polish ] = "M~odu≥/okno dialogowe";
@@ -339,7 +346,232 @@ TabPage RID_TP_MODULS
     };
     PushButton RID_PB_NEWMOD
     {
-        Pos = MAP_APPFONT ( 144 , 86 ) ;
+        Pos = MAP_APPFONT ( 144 , 103 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "Neues ~Modul..." ;
+        Text [ ENGLISH ] = "New ~module..." ;
+        Text [ norwegian ] = "New ~module..." ;
+        Text [ italian ] = "Nuovo ~modulo..." ;
+        Text [ portuguese_brazilian ] = "Novo ~MÛdulo..." ;
+        Text [ portuguese ] = "~Novo mÛdulo..." ;
+        Text [ finnish ] = "Uusi ~moduuli..." ;
+        Text [ danish ] = "Nyt ~modul..." ;
+        Text [ french ] = "Nouveau ~module..." ;
+        Text [ swedish ] = "Ny ~modul..." ;
+        Text [ dutch ] = "Nieuwe ~module..." ;
+        Text [ spanish ] = "~MÛdulo nuevo..." ;
+        Text [ english_us ] = "New ~Module..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Êñ∞Âª∫Ê®°Âùó(~M)...";
+        Text[ russian ] = "ÕÓ‚˚È ÏÓ‰ÛÎ¸...";
+        Text[ polish ] = "Nowy ~modu≥...";
+        Text[ japanese ] = "Êñ∞„Åó„ÅÑ„É¢„Ç∏„É•„Éº„É´(~M)...";
+        Text[ chinese_traditional ] = "Êñ∞Âª∫Ê®°ÁµÑ(~M)...";
+        Text[ arabic ] = "ÊÕœ… ‰„ÿÌ… ÃœÌœ…...";
+        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ· ÎÂÈÙÔıÒ„ÈÍﬁÚ ~ÏÔÌ‹‰·Ú...";
+        Text[ korean ] = "ÏÉà Î™®Îìà(~M)...";
+        Text[ turkish ] = "Yeni ~Mod¸l...";
+        Text[ catalan ] = "~MÚdul nou...";
+        Text[ thai ] = "‡πÇ~‡∏°‡∏î‡∏π‡∏•‡πÉ‡∏´‡∏°‡πà...";
+        Text[ czech ] = "Nov√Ω modul..";
+        Text[ hebrew ] = "Neues ~Modul...";
+        Text[ hindi ] = "‡§®‡§Ø‡§æ ~‡§Æ‡•ã‡§°‡•ç‡§Ø‡•Ç‡§≤...";
+        Text[ slovak ] = "Nov√Ω ~Modul...";
+        Text[ hungarian ] = "√öj ~modul...";
+        Text[ slovenian ] = "Nov ~modul...";
+    };
+    PushButton RID_PB_NEWDLG
+    {
+        Pos = MAP_APPFONT ( 144 , 103 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "Neuer Dialo~g..." ;
+        Text [ ENGLISH ] = "New dialo~g..." ;
+        Text [ norwegian ] = "New dialo~g..." ;
+        Text [ italian ] = "Nuovo dialo~go" ;
+        Text [ portuguese_brazilian ] = "Novo Di·lo~go..." ;
+        Text [ portuguese ] = "Novo di·lo~go..." ;
+        Text [ finnish ] = "~Uusi valintaikkuna..." ;
+        Text [ danish ] = "Ny dialo~g..." ;
+        Text [ french ] = "Nouv. boÓte dialogue" ;
+        Text [ swedish ] = "Ny dialo~g..." ;
+        Text [ dutch ] = "Nieuw ~dialoogvenster..." ;
+        Text [ spanish ] = "Di·lo~go nuevo..." ;
+        Text [ english_us ] = "~New Dialog..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Êñ∞Âª∫ÂØπËØùÊ°Ü(~N)...";
+        Text[ russian ] = "ÕÓ‚˚È ‰Ë‡ÎÓ„...";
+        Text[ polish ] = "~Nowe okno dialogowe...";
+        Text[ japanese ] = "Êñ∞„Åó„ÅÑ„ÉÄ„Ç§„Ç¢„É≠„Ç∞(~N)...";
+        Text[ chinese_traditional ] = "ÈñãÂïüÂ∞çË©±ÊñπÂ°ä(~N)...";
+        Text[ arabic ] = "„—»⁄ ÕÊ«— ÃœÌœ...";
+        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ· ‰È·Î¸~„Ôı...";
+        Text[ korean ] = "ÏÉà ÎåÄÌôî ÏÉÅÏûê(~N)...";
+        Text[ turkish ] = "~Yeni Diyalog...";
+        Text[ catalan ] = "Di‡leg ~nou...";
+        Text[ thai ] = "‡πÑ‡∏î‡∏≠‡∏∞‡∏•‡πá‡∏≠‡∏Å‡πÉ~‡∏´‡∏°‡πà...";
+        Text[ czech ] = "Nov√Ω dialog...";
+        Text[ hebrew ] = "Neuer Dialo~g...";
+        Text[ hindi ] = "~‡§®‡§Ø‡§æ ‡§°‡§Ø‡§≤‡•â‡§ó...";
+        Text[ slovak ] = "~Nov√Ω Dial√≥g...";
+        Text[ hungarian ] = "√öj ~p√°rbesz√©dablak...";
+        Text[ slovenian ] = "~Novo pogov. okno...";
+    };
+    PushButton RID_PB_DELETE
+    {
+        Pos = MAP_APPFONT ( 144 , 120 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen... : ~L˜schen... */
+        Text = "~Lˆschen" ;
+        Text [ ENGLISH ] = "~Delete" ;
+        Text [ norwegian ] = "~Slett..." ;
+        Text [ italian ] = "~Elimina" ;
+        Text [ portuguese_brazilian ] = "~Excluir" ;
+        Text [ portuguese ] = "E~liminar..." ;
+        Text [ finnish ] = "~Poista" ;
+        Text [ danish ] = "~Slet" ;
+        Text [ french ] = "Supprimer" ;
+        Text [ swedish ] = "Ra~dera..." ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ spanish ] = "~Borrar" ;
+        Text [ english_us ] = "~Delete" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Âà†Èô§(~D)";
+        Text[ russian ] = "”‰‡ÎËÚ¸";
+        Text[ polish ] = "~UsuÒ";
+        Text[ japanese ] = "ÂâäÈô§(~D)";
+        Text[ chinese_traditional ] = "Âà™Èô§(~D)...";
+        Text[ arabic ] = "Õ–›";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+        Text[ korean ] = "ÏÇ≠Ï†ú(~D)";
+        Text[ turkish ] = "~Sil";
+        Text[ catalan ] = "~Suprimeix...";
+        Text[ thai ] = "~‡∏•‡∏ö";
+        Text[ czech ] = "Smazat";
+        Text[ hebrew ] = "‚ÄÆ◊û◊ó◊ô◊ß◊î‚Ä¨";
+        Text[ hindi ] = "~‡§Æ‡§ø‡§ü‡§æ‡§ì";
+        Text[ slovak ] = "~Zmaza≈•";
+        Text[ hungarian ] = "~T√∂rl√©s";
+        Text[ slovenian ] = "~Izbri≈°i";
+    };
+};
+TabPage RID_TP_DLGS
+{
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 210 , 140 ) ;
+    FixedText RID_STR_LIB
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text = "Dialog" ;
+        Text [ ENGLISH ] = "Dialog" ;
+        Text [ english_us ] = "Dialog" ;
+    };
+    Control RID_TRLBOX
+    {
+        HelpId = HID_BASICIDE_MODULES_TREE ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 130 , 117 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    PushButton RID_PB_EDIT
+    {
+        Text= "~Bearbeiten";
+        Text[ italian ] = "Modi~fica";
+        Text[ portuguese_brazilian ] = "~Editar";
+        Text[ portuguese ] = "~Editar";
+        Text[ danish ] = "~Rediger";
+        Text[ french ] = "…diter";
+        Text[ swedish ] = "~Redigera";
+        Text[ dutch ] = "~Bewerken";
+        Text[ spanish ] = "Editar";
+        Text[ english_us ] = "~Edit";
+    Text[ chinese_simplified ] = "ÁºñËæë(~E)";
+        Pos = MAP_APPFONT ( 144 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+    Text[ chinese_traditional ] = "Á∑®ËºØ(~E)";
+        Text = "~Bearbeiten" ;
+        Text [ ENGLISH ] = "~Edit" ;
+        Text [ norwegian ] = "~Rediger" ;
+        Text [ italian ] = "Modi~fica" ;
+        Text [ portuguese_brazilian ] = "~Editar" ;
+        Text [ portuguese ] = "~Editar" ;
+        Text [ finnish ] = "~Muokkaa" ;
+        Text [ danish ] = "~Rediger" ;
+        Text [ french ] = "…diter" ;
+        Text [ swedish ] = "~Redigera" ;
+        Text [ dutch ] = "~Bewerken" ;
+        Text [ spanish ] = "Editar" ;
+        Text [ english_us ] = "~Edit" ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text[ arabic ] = " Õ—Ì—";
+        Text[ russian ] = "~»ÁÏÂÌËÚ¸";
+        Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ·";
+        Text[ polish ] = "~Edytuj";
+        Text[ japanese ] = "Á∑®ÈõÜ(~E)";
+        Text[ korean ] = "Ìé∏Ïßë(~E)";
+        Text[ turkish ] = "~D¸zenle";
+        Text[ catalan ] = "~Edita";
+        Text[ thai ] = "‡πÅ~‡∏Å‡πâ‡πÑ‡∏Ç";
+        Text[ czech ] = "Upravit";
+        Text[ hebrew ] = "‚ÄÆ◊¢◊®◊ô◊õ◊î‚Ä¨";
+        Text[ hindi ] = "~‡§∏‡§Ç‡§™‡§æ‡§¶‡§®";
+        Text[ slovak ] = "~Upravi≈•";
+        Text[ hungarian ] = "~Szerkeszt√©s";
+        Text[ slovenian ] = "~Uredi";
+    };
+    CancelButton RID_PB_CLOSE
+    {
+        Text= "Schlieﬂen";
+        Text[ italian ] = "Chiudi";
+        Text[ portuguese_brazilian ] = "Fechar";
+        Text[ portuguese ] = "Fechar";
+        Text[ danish ] = "Luk";
+        Text[ french ] = "Fermer";
+        Text[ swedish ] = "St‰ng";
+        Text[ dutch ] = "Sluiten";
+        Text[ spanish ] = "Cerrar";
+        Text[ english_us ] = "Close";
+    Text[ chinese_simplified ] = "ÂÖ≥Èó≠";
+        Pos = MAP_APPFONT ( 144 , 23 ) ;
+    Text[ chinese_traditional ] = "ÈóúÈñâ";
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Schlieﬂen : Schlieòen */
+        Text = "Schlieﬂen" ;
+        Text [ ENGLISH ] = "Close" ;
+        Text [ norwegian ] = "Lukk" ;
+        Text [ italian ] = "Chiudi" ;
+        Text [ portuguese_brazilian ] = "Fechar" ;
+        Text [ portuguese ] = "Fechar" ;
+        Text [ finnish ] = "Sulje" ;
+        Text [ danish ] = "Luk" ;
+        Text [ french ] = "Fermer" ;
+        Text [ swedish ] = "St‰ng" ;
+        Text [ dutch ] = "Sluiten" ;
+        Text [ spanish ] = "Cerrar" ;
+        Text [ english_us ] = "Close" ;
+        TabStop = TRUE ;
+        Text[ arabic ] = "≈€·«ﬁ";
+        Text[ russian ] = "«‡Í˚Ú¸";
+        Text[ greek ] = " ÎÂﬂÛÈÏÔ";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "Èñâ„Åò„Çã";
+        Text[ korean ] = "Îã´Í∏∞";
+        Text[ turkish ] = "Kapat";
+        Text[ catalan ] = "Tanca";
+        Text[ thai ] = "‡∏õ‡∏¥‡∏î";
+        Text[ czech ] = "Zav≈ô√≠t";
+        Text[ hebrew ] = "‚ÄÆ◊°◊í◊ô◊®◊î‚Ä¨";
+        Text[ hindi ] = "‡§¨‡§®‡•ç‡§¶ ‡§ï‡§∞‡•ã";
+        Text[ slovak ] = "Zavrie≈•";
+        Text[ hungarian ] = "Bez√°r√°s";
+        Text[ slovenian ] = "Zapri";
+    };
+    PushButton RID_PB_NEWMOD
+    {
+        Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "Neues ~Modul..." ;
         Text [ ENGLISH ] = "New ~module..." ;
