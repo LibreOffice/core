@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-09 18:41:35 $
+#   last change: $Author: obo $ $Date: 2004-11-17 13:02:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -149,13 +149,18 @@ SCP1FILES +=                           \
              registryitem_impress.par  \
              folderitem_impress.par    \
              registryitem_math.par     \
-             folderitem_math.par       \
+             folderitem_math.par
+
+.IF "$(NETTOOLKIT)"==""
+SCP1FILES +=                           \
              module_activex.par        \
              file_activex.par          \
              custom_activex.par \
          module_winexplorerext.par  \
          file_winexplorerext.par          \
          registryitem_winexplorerext.par
+.ENDIF
+
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
