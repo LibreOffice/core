@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ namespace frm
     template <class ELEMENT, class LESS_COMPARE>
     sal_Int32 insert_sorted(::std::vector<ELEMENT>& _rArray, const ELEMENT& _rNewElement, const LESS_COMPARE& _rCompareOp)
     {
-        ::std::vector<ELEMENT>::iterator aInsertPos = lower_bound(
+        typename ::std::vector<ELEMENT>::iterator aInsertPos = lower_bound(
             _rArray.begin(),
             _rArray.end(),
             _rNewElement,
@@ -141,7 +141,7 @@ namespace frm
     template <class ELEMENT, class LESS_COMPARE>
     sal_Bool seek_entry(const ::std::vector<ELEMENT>& _rArray, const ELEMENT& _rNewElement, sal_Int32& nPos, const LESS_COMPARE& _rCompareOp)
     {
-        ::std::vector<ELEMENT>::const_iterator aExistentPos = ::std::lower_bound(
+        typename ::std::vector<ELEMENT>::const_iterator aExistentPos = ::std::lower_bound(
             _rArray.begin(),
             _rArray.end(),
             _rNewElement,
