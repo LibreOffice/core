@@ -4,6 +4,7 @@
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlignLeft" toolbar:helpid="helpid:10131" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:AlignCenter" toolbar:helpid="helpid:10132" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlignRight" toolbar:helpid="helpid:10133" toolbar:text="" />
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignUp" toolbar:helpid="helpid:10134" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:AlignMiddle" toolbar:helpid="helpid:10135" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:AlignDown" toolbar:helpid="helpid:10136" toolbar:text="" />
