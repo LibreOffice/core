@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-06 19:19:26 $
+ *  last change: $Author: hr $ $Date: 2000-11-09 14:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 #include "pagectrl.hxx"
 #include "boxitem.hxx"
 
-#include <string>
 #include <algorithm>
 
 // struct PageWindow_Impl ------------------------------------------------
@@ -155,7 +154,7 @@ SvxPageWindow::~SvxPageWindow()
 
 void __EXPORT SvxPageWindow::Paint( const Rectangle& rRect )
 {
-    Fraction aXScale( aWinSize.Width(), std::max( aSize.Width() * 2 + aSize.Width() / 8, 1 ) );
+    Fraction aXScale( aWinSize.Width(), std::max( aSize.Width() * 2 + aSize.Width() / 8, 1L ) );
     Fraction aYScale( aWinSize.Height(), std::max( aSize.Height(), 1L ) );
     MapMode aMapMode( GetMapMode() );
 
