@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:53:03 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,8 @@ SvxUnoDrawPool::~SvxUnoDrawPool() throw()
 
 void SvxUnoDrawPool::init()
 {
-    mpDefaultsPool = new SdrItemPool(SDRATTR_START, SDRATTR_END );
+    mpDefaultsPool = new SdrItemPool();
+//BFS01    mpDefaultsPool = new SdrItemPool(SDRATTR_START, SDRATTR_END );
     SfxItemPool* pOutlPool=EditEngine::CreatePool();
     mpDefaultsPool->SetSecondaryPool(pOutlPool);
 
