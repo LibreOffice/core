@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,6 +1146,8 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         // Should we only return available fonts on the given device
         if ( pOutDev )
         {
+            pOutDev->ImplInitFontList();
+
             // Search Font in the FontList
             String      aName;
             String      aTempName;
@@ -1179,6 +1181,8 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
                     aFont.SetName( aSearch.GetToken( 0, ';', nIndex ) );
                 else
                 {
+                    pOutDev->ImplInitFontList();
+
                     aFont.SetName( aSearch );
 
                     // convert to pixel height
@@ -1353,18 +1357,16 @@ void ImplDevFontList::ImplClear()
     ImplFontSelectData aIFSD;
     for( ImplDevFontListData* pEntry = First(); pEntry; pEntry = Next() )
     {
-        ImplFontData* pNextFD = pEntry->mpFirst;
-        do
+        for( ImplFontData* pFontData = pEntry->mpFirst; pFontData; )
         {
-            ImplFontData* pFontData = pNextFD;
-            pNextFD = pFontData->mpNext;
+            ImplFontData* pNextFD = pFontData->mpNext;
 
             // tell lower layers about the imminent death
             SalGraphics::RemovingFont( pFontData );
-
             delete pFontData;
+
+            pFontData = pNextFD;
         }
-        while( pNextFD );
 
         delete pEntry;
     }
@@ -2668,7 +2670,7 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
         // TODO: implement dynamic lists or improve static lists
         #define FALLBACKFONT_NAMELIST \
             "Arial Unicode MS;Andale Sans UI;Cyberbit;StarSymbol;Lucida TypeWriter;"  \
-            "FZMingTi;SunBatang;"                                           \
+            "FZMingTi;SunDotum;"                                           \
             "HGMinchoLightJ;MSungLightSC;MSungLightTC;HYMyeongJoLight K;" \
             "Lucida Sans;Tahoma;"                       \
             "Shree;Mangal;Raavi;Shruti;Tunga;Latha;"    \
@@ -2753,17 +2755,21 @@ void ImplFontCache::Release( ImplFontEntry* pEntry )
 
 void ImplFontCache::Clear()
 {
-    // delete all entries
-    for( ImplFontEntry* pNext = mpFirstEntry; pNext != NULL; )
+    // delete unreferenced entries
+    ImplFontEntry** pNextPtr = &mpFirstEntry;
+    while( ImplFontEntry* pEntry = *pNextPtr )
     {
-        ImplFontEntry* pEntry = pNext;
-        pNext = pEntry->mpNext;
-        DBG_ASSERT( !pEntry->mnRefCount, "ImplFontCache::Clear() - Font in use" );
-        delete pEntry;
+        if( pEntry->mnRefCount > 0 )
+            pNextPtr = &pEntry->mpNext;
+        else
+        {
+            *pNextPtr = pEntry->mpNext;
+            delete pEntry;
+            --mnRef0Count;
+        }
     }
 
-    mpFirstEntry = NULL;
-    mnRef0Count  = 0;
+    DBG_ASSERT( (mnRef0Count==0), "ImplFontCache::Clear() - mnRef0Count non-zero" );
 }
 
 // =======================================================================
@@ -2872,6 +2878,23 @@ BOOL OutputDevice::ImplIsUnderlineAbove( const Font& rFont )
 
 // =======================================================================
 
+void OutputDevice::ImplInitFontList() const
+{
+    if( ! mpFontList->Count() )
+    {
+        if( mpGraphics || ImplGetGraphics() )
+        {
+            mpGraphics->GetDevFontList( mpFontList );
+            if( !mpFontList->Count() )
+                // dummy mode, no fonts at all
+                // at least we should not crash or loop
+                return;
+        }
+    }
+}
+
+// =======================================================================
+
 void OutputDevice::ImplInitFont()
 {
     DBG_TESTSOLARMUTEX();
@@ -2881,11 +2904,11 @@ void OutputDevice::ImplInitFont()
         if ( meOutDevType != OUTDEV_PRINTER )
         {
             // decide if antialiasing is appropriate
-            BOOL bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
+            bool bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             bNonAntialiased |= (rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0;
             bNonAntialiased |= (rStyleSettings.GetAntialiasingMinPixelHeight() > mpFontEntry->maFontSelData.mnHeight);
-            mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
+            mpFontEntry->maFontSelData.mbNonAntialiased = (BOOL)bNonAntialiased;
         }
 
         if( !mpPDFWriter || !mpPDFWriter->isBuiltinFont( mpFontEntry->maFontSelData.mpFontData ) )
@@ -2944,6 +2967,7 @@ int OutputDevice::ImplNewFont()
     ImplGetServerGraphics();
     ImplServerGraphics* pGraphics = mpGraphics;
 #endif
+    ImplInitFontList();
 
     // convert to pixel height
     Size aSize = ImplLogicToDevicePixel( maFont.GetSize() );
@@ -4595,88 +4619,77 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 
 bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 {
+    int nX = rSalLayout.DrawBase().X();
+    int nY = rSalLayout.DrawBase().Y();
+
+    Rectangle aBoundRect;
+    rSalLayout.DrawBase() = Point( 0, 0 );
+    rSalLayout.DrawOffset() = Point( 0, 0 );
+    int nWidthFactor = rSalLayout.GetUnitsPerPixel();
+    if( !rSalLayout.GetBoundRect( *mpGraphics, aBoundRect ) )
+    {
+        // guess vertical text extents if GetBoundRect failed
+        int nRight = rSalLayout.GetTextWidth();
+        int nTop = mpFontEntry->maMetric.mnAscent + mnEmphasisAscent;
+        long nHeight = mpFontEntry->mnLineHeight + mnEmphasisAscent + mnEmphasisDescent;
+        aBoundRect = Rectangle( 0, -nTop, nRight, nHeight - nTop );
+    }
+
+    // cache virtual device for rotation
     if ( !mpOutDevData )
         ImplInitOutDevData();
     if ( !mpOutDevData->mpRotateDev )
         mpOutDevData->mpRotateDev = new VirtualDevice( *this, 1 );
+    VirtualDevice* pVDev = mpOutDevData->mpRotateDev;
 
-    VirtualDevice*  pVDev = mpOutDevData->mpRotateDev;
-    long            nWidth = rSalLayout.GetTextWidth();
-    long            nHeight = mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
-    Size            aSize( nWidth, nHeight );
+    // size it accordingly
+    if( !pVDev->SetOutputSizePixel( aBoundRect.GetSize() ) )
+        return false;
 
-    if ( pVDev->SetOutputSizePixel( aSize ) )
-    {
-        Font    aFont( GetFont() );
-        Bitmap  aBmp;
-/*### TODO: implement rotation also for non-rotatable bitmap fonts
-        long    nOff;
-        nX -= mnTextOffX;
-        nY -= mnTextOffY;
-        if ( GetTextAlign() == ALIGN_TOP )
-        {
-            nOff = 0L;
-            nY  += mpFontEntry->maMetric.mnAscent;
-        }
-        else if ( GetTextAlign() == ALIGN_BOTTOM )
-        {
-            nOff = mpFontEntry->maMetric.mnAscent;
-            nY  += -mpFontEntry->maMetric.mnDescent;
-        }
-        else
-            nOff = mpFontEntry->maMetric.mnAscent;
+    Font aFont( GetFont() );
+    aFont.SetOrientation( 0 );
+    aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
+    pVDev->SetFont( aFont );
+    pVDev->SetTextColor( Color( COL_BLACK ) );
+    pVDev->SetTextFillColor();
+    pVDev->ImplNewFont();
+    pVDev->ImplInitFont();
+    pVDev->ImplInitTextColor();
 
-        aFont.SetShadow( FALSE );
-        aFont.SetOutline( FALSE );
-        aFont.SetRelief( RELIEF_NONE );
-        aFont.SetOrientation( 0 );
-        aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
-        pVDev->SetFont( aFont );
-        // Da Farben und Alignment noch im Font haengen, muessen diese jedesmal
-        // gesetzt werden
-        pVDev->SetTextAlign( ALIGN_TOP );
-        pVDev->SetTextColor( Color( COL_BLACK ) );
-        pVDev->SetTextFillColor();
-        pVDev->ImplNewFont();
-        pVDev->ImplInitFont();
-        pVDev->ImplInitTextColor();
-        pVDev->ImplDrawText( 0, 0, rSalLayout );
+    // draw text into upper left corner
+    rSalLayout.DrawBase() -= aBoundRect.TopLeft();
+    rSalLayout.DrawText( *pVDev->mpGraphics );
 
-        aBmp = pVDev->GetBitmap( Point(), aSize );
-        if ( !!aBmp && aBmp.Rotate( mpFontEntry->mnOwnOrientation, COL_WHITE ) )
-        {
-            Point           aTempPoint;
-            Polygon         aPoly( Rectangle( aTempPoint, aSize ) );
-            long            nOldOffX = mnOutOffX;
-            long            nOldOffY = mnOutOffY;
-            GDIMetaFile*    pOldMetaFile = mpMetaFile;
-            BOOL            bOldMap = mbMap;
+    Bitmap aBmp = pVDev->GetBitmap( Point(), aBoundRect.GetSize() );
+    if ( !aBmp || !aBmp.Rotate( mpFontEntry->mnOwnOrientation, COL_WHITE ) )
+        return false;
 
-            aTempPoint.Y() = nOff;
-            aPoly.Rotate( aTempPoint, mpFontEntry->mnOwnOrientation );
-            const Rectangle aBound( aPoly.GetBoundRect() );
+    // calculate rotation offset
+    Point aPoint = aBoundRect.TopLeft();
+    Polygon aPoly( Rectangle( aPoint, aBoundRect.GetSize() ) );
+    aPoly.Rotate( aPoint, mpFontEntry->mnOwnOrientation );
+    aPoint = aPoly.GetBoundRect().TopLeft();
+    aPoint += Point( nX, nY );
 
-            mnOutOffX   = 0L;
-            mnOutOffY   = 0L;
-            mpMetaFile  = NULL;
-            mbMap       = FALSE;
+    // mask output with text colored bitmap
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    long nOldOffX = mnOutOffX;
+    long nOldOffY = mnOutOffY;
+    BOOL bOldMap = mbMap;
 
-            DrawMask( Point( nX + aBound.Left(),
-                             nY + aBound.Top() - (mpFontEntry->maMetric.mnAscent+mnEmphasisAscent) ),
-                      aBmp, GetTextColor() );
+    mnOutOffX   = 0L;
+    mnOutOffY   = 0L;
+    mpMetaFile  = NULL;
+    mbMap       = FALSE;
 
-            mnOutOffX   = nOldOffX;
-            mnOutOffY   = nOldOffY;
+    DrawMask( aPoint, aBmp, GetTextColor() );
 
-            mbMap       = bOldMap;
-            mpMetaFile  = pOldMetaFile;
-        }
-###*/
+    mbMap       = bOldMap;
+    mnOutOffX   = nOldOffX;
+    mnOutOffY   = nOldOffY;
+    mpMetaFile  = pOldMetaFile;
 
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -4701,7 +4714,6 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, BOOL bTextLines )
                 long devX = w-mnOutWidth-mnOutOffX;   // re-mirrored mnOutOffX
                 rSalLayout.DrawBase().X() = devX + ( mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) ) ;
             }
-
         }
 
         rSalLayout.DrawText( *mpGraphics );
@@ -5685,11 +5697,11 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 #ifndef REMOTE_APPSERVER
     // we need a graphics
     if( !mpGraphics )
-        if( !(const_cast<OutputDevice&>(*this).ImplGetGraphics()) )
+        if( !ImplGetGraphics() )
             return NULL;
 #else
     // due to clipping we may get NULL, so don't use return value
-    const_cast<OutputDevice&>(*this).ImplGetServerGraphics();
+    ImplGetServerGraphics();
 #endif
 
     // initialize font if needed
@@ -5841,7 +5853,11 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             aFontSelData.mpFontData = pFallbackFont->maFontSelData.mpFontData;
             if( mpFontEntry
              && mpFontEntry->maFontSelData.mpFontData == aFontSelData.mpFontData )
+            {
+                mpFontCache->Release( pFallbackFont );
                 continue;
+            }
+
             pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nLevel );
 
             // create and add fallback layout to multilayout
@@ -5853,7 +5869,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
                 {
                     if( !pMultiSalLayout )
                         pMultiSalLayout = new MultiSalLayout( *pSalLayout );
-                    pMultiSalLayout->AddFallback( *pFallback );
+                    pMultiSalLayout->AddFallback( *pFallback, aFontSelData.mpFontData );
                 }
                 else
                     pFallback->Release();
@@ -6791,6 +6807,8 @@ FontInfo OutputDevice::GetDevFont( USHORT nDevFont ) const
     DBG_TRACE( "OutputDevice::GetDevFont()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
+    ImplInitFontList();
+
     FontInfo    aFontInfo;
     USHORT      nCount = GetDevFontCount();
 
@@ -6819,7 +6837,9 @@ BOOL OutputDevice::AddTempDevFont( const String& rFileURL, const String& rFontNa
     DBG_TRACE( "OutputDevice::AddTempDevFont()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if( !mpGraphics && !(const_cast<OutputDevice*>(this)->ImplGetGraphics()) )
+    ImplInitFontList();
+
+    if( !mpGraphics && !ImplGetGraphics() )
         return FALSE;
 
     ImplFontData* pFontData = mpGraphics->AddTempDevFont( rFileURL, rFontName );
@@ -6838,8 +6858,7 @@ USHORT OutputDevice::GetDevFontSizeCount( const Font& rFont ) const
 
     XubString aFontName = rFont.GetName();
 
-    // Wenn die Liste schon existiert und der FontName sich nicht
-    // unterscheidet, dann brauchen wir Sie nicht neu erzeugen
+    // create size list if it doesn't exists yet or the font name differs
     if ( mpGetDevSizeList )
     {
         if ( mpGetDevSizeList->GetFontName() == aFontName )
@@ -6853,7 +6872,8 @@ USHORT OutputDevice::GetDevFontSizeCount( const Font& rFont ) const
     else
         ((OutputDevice*)this)->mpGetDevSizeList = new ImplGetDevSizeList( aFontName );
 
-    // Fonts aus unserer Fontliste in die GetDevFontSizeListe eintragen
+    ImplInitFontList();
+    // add fonts from the font list to the size list
     ImplDevFontListData* pFontListData = mpFontList->FindFont( aFontName );
     if ( pFontListData )
     {
@@ -6923,15 +6943,13 @@ FontMetric OutputDevice::GetFontMetric() const
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     FontMetric aMetric;
-
-    if( mbNewFont )
-        if( !(const_cast<OutputDevice&>(*this).ImplNewFont()) )
-            return aMetric;
+    if( mbNewFont && !(const_cast<OutputDevice&>(*this).ImplNewFont()) )
+        return aMetric;
 
     ImplFontEntry*      pEntry = mpFontEntry;
     ImplFontMetricData* pMetric = &(pEntry->maMetric);
 
-    // map and fill StarView structure
+    // prepare metric
     aMetric.Font::operator=( maFont );
 
     // set aMetric with info from font
@@ -6997,7 +7015,7 @@ FontMetric OutputDevice::GetFontMetric() const
         }
     }
 
-    // restliche Metricen setzen
+    // set remaining metric fields
     aMetric.mpImplMetric->meType        = pMetric->meType;
     aMetric.mpImplMetric->mbDevice      = pMetric->mbDevice;
     aMetric.mpImplMetric->mnAscent      = ImplDevicePixelToLogicHeight( pMetric->mnAscent+mnEmphasisAscent );
@@ -7363,6 +7381,8 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     // Here, we can savely assume that the mapping between characters and glyphs
     // is one-to-one.
 
+    // fall back to bitmap method to get the bounding rectangle,
+    // so we need a monochrome virtual device with matching font
     pSalLayout = ImplLayout(rStr, nIndex, nLen );
     if (pSalLayout == 0)
         return false;
@@ -7371,7 +7391,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
         + mnEmphasisDescent;
     pSalLayout->Release();
 
-    std::auto_ptr< VirtualDevice > xVDev(new VirtualDevice(1));
+    VirtualDevice aVDev(1);
 
     Font aFont(GetFont());
     aFont.SetShadow(false);
@@ -7381,39 +7401,34 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     if( bOptimize )
     {
         aFont.SetSize( Size( 0, GLYPH_FONT_HEIGHT ) );
-        xVDev->SetMapMode( MAP_PIXEL );
+        aVDev.SetMapMode( MAP_PIXEL );
     }
-    xVDev->SetFont(aFont);
-    xVDev->SetTextAlign(ALIGN_TOP);
-    xVDev->SetTextColor(Color(COL_BLACK));
-    xVDev->SetTextFillColor();
+    aVDev.SetFont( aFont );
+    aVDev.SetTextAlign( ALIGN_TOP );
+    aVDev.SetTextColor( Color(COL_BLACK) );
+    aVDev.SetTextFillColor();
 
-    pSalLayout = xVDev->ImplLayout(rStr, nIndex, nLen );
+    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen );
     if (pSalLayout == 0)
         return false;
     long nWidth = pSalLayout->GetTextWidth();
-    long nHeight = xVDev->mpFontEntry->mnLineHeight + xVDev->mnEmphasisAscent
-        + xVDev->mnEmphasisDescent;
+    long nHeight = aVDev.mpFontEntry->mnLineHeight + aVDev.mnEmphasisAscent
+        + aVDev.mnEmphasisDescent;
     pSalLayout->Release();
 
-    double fScaleX
-        = nWidth == 0 ? 0.0 : static_cast< double >(nOrgWidth) / nWidth;
-    double fScaleY
-        = nHeight == 0 ? 0.0 : static_cast< double >(nOrgHeight) / nHeight;
+    if( !nWidth || !nHeight )
+        return TRUE;
+    double fScaleX = static_cast< double >(nOrgWidth) / nWidth;
+    double fScaleY = static_cast< double >(nOrgHeight) / nHeight;
 
     // calculate offset when nBase!=nIndex
     // TODO: fix offset calculation for Bidi case
     nXOffset = 0;
     if( nBase != nIndex )
     {
-#if (_MSC_VER < 1300)
-        xub_StrLen nStart = std::min( nBase, nIndex );
-        xub_StrLen nLength = std::max( nBase, nIndex ) - nStart;
-#else
-        xub_StrLen nStart = min( nBase, nIndex );
-        xub_StrLen nLength = max( nBase, nIndex ) - nStart;
-#endif
-        pSalLayout = xVDev->ImplLayout( rStr, nStart, nLength );
+        xub_StrLen nStart  = ((nBase < nIndex) ? nBase : nIndex);
+        xub_StrLen nLength = ((nBase > nIndex) ? nBase : nIndex) - nStart;
+        pSalLayout = aVDev.ImplLayout( rStr, nStart, nLength );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -7429,31 +7444,30 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
         bool bSuccess = false;
 
         // draw character into virtual device
-        pSalLayout = xVDev->ImplLayout(rStr, i, 1 );
+        pSalLayout = aVDev.ImplLayout(rStr, i, 1 );
         if (pSalLayout == 0)
             return false;
         long nCharWidth = pSalLayout->GetTextWidth();
 
         Point aOffset(nCharWidth / 2, 8);
         Size aSize(nCharWidth + 2 * aOffset.X(), nHeight + 2 * aOffset.Y());
-        bSuccess = xVDev->SetOutputSizePixel(aSize);
-        if (bSuccess)
+        bSuccess = (bool)aVDev.SetOutputSizePixel(aSize);
+        if( bSuccess )
         {
-            xVDev->Erase();
+            // draw glyph into virtual device
+            aVDev.Erase();
             pSalLayout->DrawBase() += aOffset;
-            pSalLayout->DrawText( *xVDev->mpGraphics );
-        }
-        pSalLayout->Release();
+            pSalLayout->DrawBase() += Point( aVDev.mnTextOffX, aVDev.mnTextOffY );
+            pSalLayout->DrawText( *aVDev.mpGraphics );
+            pSalLayout->Release();
 
-        if (bSuccess)
-        {
             // convert character image into outline
-            Bitmap aBmp(xVDev->GetBitmap(Point(0, 0), aSize));
+            Bitmap aBmp( aVDev.GetBitmap(Point(0, 0), aSize));
 
             PolyPolygon aPolyPoly;
-            if (aBmp.Vectorize(aPolyPoly,
-                               BMP_VECTORIZE_OUTER
-                               | BMP_VECTORIZE_REDUCE_EDGES))
+            if( !aBmp.Vectorize(aPolyPoly, BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES) )
+                bSuccess = false;
+            else
             {
                 // convert units to logical width
                 for (USHORT j = 0; j < aPolyPoly.Count(); ++j)
@@ -7464,11 +7478,11 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
                         Point& rPt = rPoly[k];
                         rPt.X() = FRound(ImplDevicePixelToLogicWidth(
                                              nXOffset + rPt.X() - aOffset.X()
-                                             - xVDev->mnTextOffX)
+                                             - aVDev.mnTextOffX)
                                          * fScaleX);
                         rPt.Y() = FRound(ImplDevicePixelToLogicHeight(
                                              rPt.Y() - aOffset.Y()
-                                             - xVDev->mnTextOffY)
+                                             - aVDev.mnTextOffY)
                                          * fScaleY);
                     }
                 }
@@ -7481,8 +7495,6 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
                 if (aPolyPoly.Count() > 0)
                     rVector.push_back(aPolyPoly);
             }
-            else
-                bSuccess = false;
         }
 
         nXOffset += nCharWidth;
@@ -7500,10 +7512,10 @@ BOOL OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
 
 #ifndef REMOTE_APPSERVER
     // we need a graphics
-    if( !mpGraphics && !(const_cast<OutputDevice*>(this)->ImplGetGraphics()) )
+    if( !mpGraphics && !ImplGetGraphics() )
         return FALSE;
 #else
-    const_cast<OutputDevice&>(*this).ImplGetServerGraphics();
+    ImplGetServerGraphics();
 #endif
 
     if( mbNewFont )
