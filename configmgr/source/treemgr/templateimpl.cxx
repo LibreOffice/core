@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-07-27 11:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,25 @@
 
 #include <stdio.h>
 #include "templateimpl.hxx"
+
+#ifndef CONFIGMGR_TREEPROVIDER_HXX
 #include "treeprovider.hxx"
+#endif
 
+#ifndef _CONFIGMGR_STRDECL_HXX_
 #include "strdecl.hxx"
+#endif
+#ifndef CONFIGMGR_TYPECONVERTER_HXX
 #include "typeconverter.hxx"
+#endif
 
+#ifndef _VOS_REFERNCE_HXX_
 #include <vos/refernce.hxx>
+#endif
+#ifndef INCLUDED_MAP
 #include <map>
+#define INCLUDED_MAP
+#endif
 
 namespace configmgr
 {
@@ -103,15 +115,15 @@ Name TemplateName::makeLocalizedTypeModuleName()
 //-----------------------------------------------------------------------------
 bool TemplateName::isSimpleTypeName() const
 {
-    OUString aPrefix = TEMPLATE_MODULE_NATIVE_PREFIX;
-    if (aModule.toString().compareTo(aPrefix,aPrefix.getLength()) != 0)
-        return false;
+    bool bIsSimple = (aModule.toString().compareToAscii(TEMPLATE_MODULE_NATIVE_PREFIX,
+                                                        TEMPLATE_MODULE_NATIVE_PREFIX.getLength()) == 0);
 
-    OSL_ENSURE( aModule == makeNativeTypeModuleName() ||
+    OSL_ENSURE(!bIsSimple ||
+                aModule == makeNativeTypeModuleName() ||
                 aModule == makeLocalizedTypeModuleName(),
                 "ERROR: Invalid template module with native prefix found");
 
-    return true;
+    return bIsSimple;
 }
 //-----------------------------------------------------------------------------
 
@@ -285,24 +297,26 @@ namespace
         TypeDetector aDetector;
         aDetector.applyToChildren( aSet );
 
+        bool bResult = false;
         switch(aDetector.result)
         {
         case TypeDetector::SomeTree:        // found tree
         case TypeDetector::VariousValue:    // found an Any
             aType = aDetector.type;
-            return true;
+            bResult = true;
+            break;
 
         case TypeDetector::SomeValue:       // found a value or an any
         case TypeDetector::NotFound:        // found no element
-            return false;
+            break;
 
         case TypeDetector::Contradicting:
             OSL_ENSURE(false,"Invalid Set: contains values and subtrees");
-            return false;
+            break;
 
+        default: OSL_ENSURE(false,"Unreachable code");  break;
         }
-        OSL_ENSURE(false,"Unreachable code");
-        return false;
+        return bResult;
     }
 //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-06 13:40:14 $
+ *  last change: $Author: jb $ $Date: 2001-07-27 11:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,19 +115,14 @@ bool isSimpleName(OUString const& sName) SAL_THROW(())
 {
     sal_Unicode const* const pStr = sName.getStr();
     sal_Unicode const* const pEnd = pStr + sName.getLength();
-    if (pStr == pEnd)
+
+    if ( (pStr == pEnd) || !isValidNameStart(*pStr) )
         return false;
 
-    for (sal_Unicode const* pValidate = pStr; pValidate != pEnd; ++pValidate)
+    for (sal_Unicode const* pValidate = pStr+1; pValidate != pEnd; ++pValidate)
     {
-        if (!isValidNameStart(*pValidate))
-        {
-            if (pValidate == pStr) // first char - then this means failure
-                return false;
-
-            else if (!isValidNameCont(*pValidate))
-                return false;
-        }
+        if (!isValidNameStart(*pValidate) && !isValidNameCont(*pValidate))
+            return false;
     }
 
     return true;
@@ -217,6 +212,7 @@ namespace // path helpers I
     inline
     bool isWildcardType(sal_Unicode const* _sType) SAL_THROW(())
     {
+        OSL_ASSERT( _sType != NULL );
         return  _sType[0] == c_cAnytype &&
                 _sType[1] == 0;
     }
@@ -226,6 +222,7 @@ namespace // path helpers I
     inline
     bool isEmptyString(sal_Unicode const* _sType) SAL_THROW(())
     {
+        OSL_ASSERT( _sType != NULL );
         return  _sType[0] == 0;
     }
 //-----------------------------------------------------------------------------
@@ -355,8 +352,8 @@ Component wrapSimpleName(Name const& _aName)
 
 Component makeCompositeName(Name const& _aElementName, Name const& _aTypeName)
 {
-    OUString const sElementName = _aElementName.toString();
-    OUString const sTypeName    = _aTypeName.toString();
+    OUString const & sElementName = _aElementName.toString();
+    OUString const & sTypeName    = _aTypeName.toString();
 
     return Component( implMakeCompositeName(sTypeName,sElementName), PackageOnly() );
 }
@@ -630,9 +627,9 @@ namespace
 
     /** find the start of the bracketed & quoted predicate ending before pEnd in the string starting at pBegin
         @return
-            a pointer to the opening bracket matching the closing bracket at pEnd[-1], if found
-            <var>pEnd</var>, if no bracketed string was found
-            NULL, if there was a closing bracket, but the beginning could not be discovered
+            <ul><li>a pointer to the opening bracket matching the closing bracket at pEnd[-1], if found</li>
+            <li><var>pEnd</var>, if no bracketed string was found</li>
+            <li>NULL, if there was a closing bracket, but the beginning could not be discovered</li></ul>
     */
     StrPos implFindPredicateStart(StrPos pBegin, StrPos pEnd) SAL_THROW(())
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
+ *  last change: $Author: jb $ $Date: 2001-07-27 11:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ namespace configmgr
         Name makeNodeName(OUString const& sName, argument::NoValidate) SAL_THROW(());
 
         /** make a <type>Name</type> out of <var>sName</var>,
-            which should be used for a config Node (excluding set elements)
+            which should be used for a config set elements
         */
         Name makeElementName(OUString const& sName, argument::NoValidate) SAL_THROW(());
 
@@ -272,7 +272,7 @@ namespace configmgr
                 typedef Components::const_reverse_iterator Iterator;
                 /// a (mutating) iterator to the element names which make up a path
                 typedef Components::reverse_iterator MutatingIterator;
-                /// a (mutating) iterator to the element names which make up a path
+                /// type used to specify a component count
                 typedef Components::size_type size_type;
 
             public:
