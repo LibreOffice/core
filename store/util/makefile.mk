@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mhu $ $Date: 2002-08-17 17:37:02 $
+#   last change: $Author: mhu $ $Date: 2002-08-22 15:31:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,9 @@ SHL1VERSIONMAP=	$(TARGET).map
 .ENDIF
 
 SHL1STDLIBS=	$(SALLIB)
+.IF "$(COM)"=="GCC"
+SHL1STDLIBS+= 	-lsupc++
+.ENDIF # GCC
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1DEPN=	$(L)$/isal.lib
