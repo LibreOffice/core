@@ -399,7 +399,7 @@ public class InstUtil {
                         URL url = new URL("file://" + parts[1].trim());
             String opSys =System.getProperty("os.name");
             if (opSys.indexOf("Windows")!=-1){
-                System.err.println( "InstUtil URLDecoder path: " + URLDecoder.decode( url.getPath() ) );
+                //System.err.println( "InstUtil URLDecoder path: " + URLDecoder.decode( url.getPath() ) );
                 String windowsPath = URLDecoder.decode( url.getPath() );
                 boolean firstSlash = true;
                 while( windowsPath.indexOf("/") != -1 ) {
@@ -416,11 +416,11 @@ public class InstUtil {
                 }
                 int lastSlash = windowsPath.lastIndexOf("\\");
                 windowsPath = windowsPath.substring( 0, lastSlash );
-                System.out.println( "InstUtil URLDecoder windowsPath " + windowsPath );
+                //System.out.println( "InstUtil URLDecoder windowsPath " + windowsPath );
                 results.put( parts[0].trim(), windowsPath );
             }
             else {
-                System.err.println( " InstUtil URLDecoder " + URLDecoder.decode(url.getPath()) );
+                //System.err.println( " InstUtil URLDecoder " + URLDecoder.decode(url.getPath()) );
                 results.put(parts[0].trim(), URLDecoder.decode(url.getPath()));
             }
                         //File f = new File(url);

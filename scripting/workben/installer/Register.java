@@ -131,25 +131,29 @@ public class Register{
             
             // updating ProtocolHandler
             statusLabel.setText("Updating ProtocolHandler...");            
-            if(!FileUpdater.updateProtocolHandler(path)) {
+            if(!FileUpdater.updateProtocolHandler(path, statusLabel)) {
             // output text set label
             return false;
         }
             
             // updating StarBasic libraries
             statusLabel.setText("Updating StarBasic libraries...");            
-            if(!FileUpdater.updateScriptXLC(path)) {
+            if(!FileUpdater.updateScriptXLC(path, statusLabel)) {
             // output text set label
             return false;
         }
-            if(!FileUpdater.updateDialogXLC(path)) {
+            if(!FileUpdater.updateDialogXLC(path, statusLabel)) {
             // output text set label
             return false;
         }
         
     }
     catch(Exception e){
-        System.out.println("Error:"+e);
+        String message = "\nError installing scripting package, please view SFrameworkInstall.log.";
+        System.out.println(message);
+        e.printStackTrace();
+        statusLabel.setText(message);
+        return false;   
     }
     return true;
     }// windows

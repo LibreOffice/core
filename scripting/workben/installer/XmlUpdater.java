@@ -3,48 +3,21 @@ package installer;
 import java.io.*;
 import java.util.*;
 import java.util.jar.*;
-//import org.xml.sax.*;
-//import org.w3c.dom.*;
-//import javax.xml.parsers.*;
 import java.net.URL;
 import java.net.JarURLConnection;
-//import javax.xml.parsers.*;
 import javax.swing.*;
 
 /**
- *  The <code>XmlUpdater</code> pulls a META-INF/converter.xml
- *  file out of a jar file and parses it, providing access to this
- *  information in a <code>Vector</code> of <code>ConverterInfo</code>
- *  objects.
+ *
  *
  *  @author  Aidan Butler
  */
 public class XmlUpdater extends Thread {
 
-    /*
-    private final static String TAG_TYPES         = "Types";
-    private final static String TAG_TYPEDETECTION = "TypeDetection";
-    private final static String TAG_TYPE          = "Type";
-    private final static String TAG_DATA          = "Data";
-    private final static String TAG_FILTERS       = "Filters";
-    private final static String TAG_FILTER        = "Filter";
-    private final static String TAG_CLASSPATH     = "UserClassPath";
-    */
-
     private String classesPath = null;
     private String jarfilename;
     private String installPath;
 
-    /*
-    private Document document;
-
-    private Element filterNode;
-    private Element installedNode;
-    private Element uinameNode;
-    private Element cfgvalueNode;
-    private Element dataNode;
-    private Element typeNode;
-    */
     private JLabel statusLabel;
 
     private Vector listeners;
@@ -354,18 +327,6 @@ public class XmlUpdater extends Thread {
 
 //--------------------------------
 
-    // Adding IDE support
-      /*  if (!zd.extractEntry("ide/netbeans/office.jar",netbeansPath, statusLabel))
-        {
-           onInstallComplete();
-            return;
-    } */
-      /*  if (!zd.extractEntry("ide/jedit/?.jar",jeditPath, statusLabel))
-        {
-           onInstallComplete();
-            return;
-    } */
-
         //System.out.println("About to call register");
     if(!Register.register(installPath+File.separator, statusLabel, progressBar) )
         {
@@ -380,20 +341,6 @@ public class XmlUpdater extends Thread {
 
     }// run
 
-/*
-    private void checkexists(String path){
-        File checkFile = new File(path);
-        String justPath= path.substring(0,path.lastIndexOf(File.separator)+1);
-        //System.out.println("\n"+justPath);
-        if(!checkFile.exists()){
-            ZipData zd = new ZipData("XMergeInstall.jar");
-            if (!zd.extractEntry("xml/Java.xml",justPath, statusLabel))
-            {
-                System.out.println("Fail");
-            }
-        }
-    }// checkexists
-*/
 
     public void addInstallListener(InstallListener listener)
     {
