@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCalendar.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:40:51 $
+ *  last change:$Date: 2004-07-23 10:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ public class _XCalendar extends MultiMethodTest {
     public short newValue = 0;
     public short firstDay = 2;
     public short mdfw = 3;
+    double aOriginalDTime = 0;
     Locale[] installed_locales;
 
     public void before() {
@@ -123,6 +124,17 @@ public class _XCalendar extends MultiMethodTest {
         installed_locales = locData.getAllInstalledLocaleNames();
         calendars = new String[installed_locales.length][];
         count = new int[installed_locales.length];
+        oObj.loadDefaultCalendar(installed_locales[0]);
+        aOriginalDTime = oObj.getDateTime();
+    }
+
+    /**
+     * Restore the changed time during the test to the original value of the
+     * machine: has to be correct for the following interface tests.
+     */
+    public void after() {
+        oObj.loadDefaultCalendar(installed_locales[0]);
+        oObj.setDateTime(aOriginalDTime);
     }
 
     /**
@@ -269,6 +281,7 @@ public class _XCalendar extends MultiMethodTest {
 
     public void _setDateTime() {
         boolean res = true;
+
         for (int i=0; i<installed_locales.length; i++) {
             String lang = "Language: "+installed_locales[i].Language +
                           ", Country: "+ installed_locales[i].Country +
@@ -308,7 +321,6 @@ public class _XCalendar extends MultiMethodTest {
             }
             res &= (aDTime == newDTime);
         }
-
         tRes.tested("getDateTime()", res);
     }
 
