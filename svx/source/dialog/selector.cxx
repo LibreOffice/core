@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-21 15:02:13 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,21 +68,6 @@
 #ifndef _SV_METRIC_HXX //autogen
 #include <vcl/metric.hxx>
 #endif
-#ifndef _SBXCLASS_HXX //autogen
-#include <svtools/sbx.hxx>
-#endif
-#ifndef _SB_SBSTAR_HXX //autogen
-#include <basic/sbstar.hxx>
-#endif
-#ifndef __SBX_SBXMETHOD_HXX //autogen
-#include <svtools/sbxmeth.hxx>
-#endif
-#ifndef _SB_SBMOD_HXX //autogen
-#include <basic/sbmod.hxx>
-#endif
-#ifndef _BASMGR_HXX //autogen
-#include <basic/basmgr.hxx>
-#endif
 
 #pragma hdrstop
 
@@ -105,52 +90,23 @@
 #include <unotools/processfactory.hxx>
 #endif
 
-#ifndef _UNOTOOLS_CONFIGMGR_HXX_
-#include <unotools/configmgr.hxx>
-#endif
-
-#ifndef  _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
-#endif
 
-#ifndef  _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERSUPPLIER_HPP_
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORY_HPP_
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORYVIEWTYPE_HPP_
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
-#endif
+
 #include <drafts/com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_DISPATCHINFORMATION_HPP_
 #include <com/sun/star/frame/DispatchInformation.hpp>
-#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -271,19 +227,12 @@ void SvxConfigFunctionListBox_Impl::ClearAll()
     {
         SvxGroupInfo_Impl *pData = aArr[i];
 
-        if ( pData->nKind == SFX_CFGFUNCTION_SLOT && pData->pObject != NULL )
+        if ( pData->nKind == SVX_CFGFUNCTION_SLOT && pData->pObject != NULL )
         {
             delete (OUString*)pData->pObject;
         }
 
-        if ( pData->nKind == SFX_CFGFUNCTION_MACRO )
-        {
-            SfxMacroInfo *pInfo = (SfxMacroInfo*) pData->pObject;
-            SFX_APP()->GetMacroConfig()->ReleaseSlotId( pInfo->GetSlotId() );
-            delete pInfo;
-        }
-
-        if ( pData->nKind == SFX_CFGFUNCTION_SCRIPT )
+        if ( pData->nKind == SVX_CFGFUNCTION_SCRIPT )
         {
             ScriptInfo *pInfo = (ScriptInfo*) pData->pObject;
             if ( pInfo != NULL )
@@ -292,7 +241,7 @@ void SvxConfigFunctionListBox_Impl::ClearAll()
             }
         }
 
-        if ( pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER )
+        if ( pData->nKind == SVX_CFGGROUP_SCRIPTCONTAINER )
         {
             XInterface* xi = static_cast<XInterface *>(pData->pObject);
             if (xi != NULL)
@@ -335,20 +284,6 @@ SvLBoxEntry* SvxConfigFunctionListBox_Impl::GetEntry_Impl( USHORT nId )
     return NULL;
 }
 
-SfxMacroInfo* SvxConfigFunctionListBox_Impl::GetMacroInfo()
-{
-    SvLBoxEntry *pEntry = GetLastSelectedEntry();
-    if ( pEntry )
-    {
-        SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();
-        if ( pData && ( pData->nKind == SFX_CFGFUNCTION_MACRO ||
-                                        pData->nKind == SFX_CFGFUNCTION_SCRIPT ) )
-            return (SfxMacroInfo*) pData->pObject;
-    }
-
-    return 0;
-}
-
 USHORT SvxConfigFunctionListBox_Impl::GetId( SvLBoxEntry *pEntry )
 {
     SvxGroupInfo_Impl *pData = pEntry ?
@@ -366,7 +301,7 @@ String SvxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
 
     if ( pInfo )
     {
-        if ( pInfo->nKind == SFX_CFGFUNCTION_SLOT )
+        if ( pInfo->nKind == SVX_CFGFUNCTION_SLOT )
         {
             OUString* aCmdURL = (OUString*) pInfo->pObject;
 
@@ -375,16 +310,10 @@ String SvxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
 
             return aHelpText;
         }
-        else if ( pInfo->nKind == SFX_CFGFUNCTION_SCRIPT )
+        else if ( pInfo->nKind == SVX_CFGFUNCTION_SCRIPT )
         {
             ScriptInfo* pScriptInfo = (ScriptInfo*) pInfo->pObject;
             return pScriptInfo->GetHelpText();
-        }
-        else if ( pInfo->nKind == SFX_CFGFUNCTION_MACRO )
-        {
-            // Eintrag ist ein Macro, Hilfe aus der MacroInfo
-            SfxMacroInfo *pMacInfo = (SfxMacroInfo*) pInfo->pObject;
-            return pMacInfo->GetHelpText();
         }
     }
 
@@ -419,7 +348,7 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
     Window* pParent, const ResId& rResId,
     ULONG nConfigMode, const Reference< frame::XFrame >& xFrame )
         : SvTreeListBox( pParent, rResId )
-        , nMode( nConfigMode ), bShowSF( FALSE ), bShowBasic( TRUE ),
+        , nMode( nConfigMode ), bShowSF( TRUE ),
     m_sMyMacros(ResId(STR_MYMACROS)),
     m_sProdMacros(ResId(STR_PRODMACROS)),
     m_hdImage(ResId(IMG_HARDDISK)),
@@ -451,37 +380,6 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
         aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
         aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
         BMP_COLOR_HIGHCONTRAST );
-
-    // Check configuration to see whether only Basic macros,
-    // only Scripting Framework scripts, or both should be listed
-    Any value;
-    sal_Bool tmp;
-
-    value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
-        OUString::createFromAscii(
-            "Office.Scripting/ScriptDisplaySettings/ShowBasic" ) );
-
-    value >>= tmp;
-
-    if (tmp == sal_True) {
-        bShowBasic = TRUE;
-    }
-    else {
-        bShowBasic = FALSE;
-    }
-
-    value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
-        OUString::createFromAscii(
-            "Office.Scripting/ScriptDisplaySettings/ShowSF" ) );
-
-    value >>= tmp;
-
-    if (tmp == sal_True) {
-        bShowSF = TRUE;
-    }
-    else {
-        bShowSF = FALSE;
-    }
 }
 
 
@@ -496,7 +394,7 @@ void SvxConfigGroupListBox_Impl::ClearAll()
     for ( USHORT i=0; i<nCount; i++ )
     {
         SvxGroupInfo_Impl *pData = aArr[i];
-        if ( pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER )
+        if ( pData->nKind == SVX_CFGGROUP_SCRIPTCONTAINER )
         {
             XInterface* xi = static_cast<XInterface *>(pData->pObject);
             if (xi != NULL)
@@ -509,38 +407,6 @@ void SvxConfigGroupListBox_Impl::ClearAll()
 
     aArr.Remove( 0, nCount );
     Clear();
-}
-
-String SvxConfigGroupListBox_Impl::GetGroup()
-{
-    SvLBoxEntry *pEntry = FirstSelected();
-    while ( pEntry )
-    {
-        SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
-        if ( pInfo->nKind == SFX_CFGGROUP_FUNCTION )
-        {
-            return GetEntryText( pEntry );
-            break;
-        }
-
-        if ( pInfo->nKind == SFX_CFGGROUP_BASICMGR )
-        {
-            BasicManager *pMgr = (BasicManager*) pInfo->pObject;
-            return pMgr->GetName();
-            break;
-        }
-
-        if ( pInfo->nKind == SFX_CFGGROUP_DOCBASICMGR )
-        {
-            SfxObjectShell *pDoc = (SfxObjectShell*) pInfo->pObject;
-            return pDoc->GetTitle();
-            break;
-        }
-
-        pEntry = GetParent( pEntry );
-    }
-
-    return String();
 }
 
 void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
@@ -651,101 +517,12 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
                 SvLBoxEntry *pEntry = InsertEntry( group, NULL );
 
                 SvxGroupInfo_Impl *pInfo =
-                    new SvxGroupInfo_Impl( SFX_CFGGROUP_FUNCTION, gids[i] );
+                    new SvxGroupInfo_Impl( SVX_CFGGROUP_FUNCTION, gids[i] );
                 aArr.Insert( pInfo, aArr.Count() );
 
                 pEntry->SetUserData( pInfo );
             }
         }
-    }
-
-    if ( bShowBasic )
-    {
-        // Basics einsammeln
-        SfxApplication* pSfxApp = SFX_APP();
-
-        pSfxApp->EnterBasicCall();
-        String aMacroName(' ');
-        aMacroName += String( ResId( STR_BASICMACROS, DIALOG_MGR() ) );
-
-
-        // Zuerst AppBasic
-        BasicManager *pAppBasicMgr = pSfxApp->GetBasicManager();
-        BOOL bInsert = TRUE;
-        if ( pArr )
-        {
-            bInsert = FALSE;
-            for ( USHORT n=0; n<pArr->Count(); n++ )
-            {
-                if ( *(*pArr)[n] == pSfxApp->GetName() )
-                {
-                    bInsert = TRUE;
-                    break;
-                }
-            }
-        }
-
-        if ( bInsert )
-        {
-            pAppBasicMgr->SetName( pSfxApp->GetName() );
-            if ( pAppBasicMgr->GetLibCount() )
-            {
-                // Nur einf"ugen, wenn Bibliotheken vorhanden
-                OUString aAppBasTitle;
-                utl::ConfigManager::GetDirectConfigProperty(
-                    utl::ConfigManager::PRODUCTNAME) >>= aAppBasTitle;
-                aAppBasTitle += aMacroName;
-
-                SvLBoxEntry *pEntry = InsertEntry( aAppBasTitle, 0 );
-                SvxGroupInfo_Impl *pInfo = new SvxGroupInfo_Impl( SFX_CFGGROUP_BASICMGR, 0, pAppBasicMgr );
-                aArr.Insert( pInfo, aArr.Count() );
-                pEntry->SetUserData( pInfo );
-                pEntry->EnableChildsOnDemand( TRUE );
-    //          Expand( pEntry );
-            }
-        }
-
-        //SfxObjectShell *pDoc = SfxObjectShell::GetFirst();
-        SfxObjectShell *pDoc = SfxObjectShell::GetWorkingDocument();
-        //while ( pDoc )
-        if ( pDoc )
-        {
-            BOOL bInsert = TRUE;
-            if ( pArr )
-            {
-                bInsert = FALSE;
-                for ( USHORT n=0; n<pArr->Count(); n++ )
-                {
-                    if ( *(*pArr)[n] == pDoc->GetTitle() )
-                    {
-                        bInsert = TRUE;
-                        break;
-                    }
-                }
-            }
-
-            if ( bInsert )
-            {
-                BasicManager *pBasicMgr = pDoc->GetBasicManager();
-                if ( pBasicMgr != pAppBasicMgr && pBasicMgr->GetLibCount() )
-                {
-                    pBasicMgr->SetName( pDoc->GetTitle() );
-
-                    // Nur einf"ugen, wenn eigenes Basic mit Bibliotheken
-                    SvLBoxEntry *pEntry = InsertEntry( pDoc->GetTitle().Append(aMacroName), NULL );
-                    SvxGroupInfo_Impl *pInfo =
-                        new SvxGroupInfo_Impl( SFX_CFGGROUP_DOCBASICMGR, 0, pDoc );
-                    aArr.Insert( pInfo, aArr.Count() );
-                    pEntry->SetUserData( pInfo );
-                    pEntry->EnableChildsOnDemand( TRUE );
-    //              Expand( pEntry );
-                }
-            }
-
-            //pDoc = SfxObjectShell::GetNext(*pDoc);
-        }
-
-        pSfxApp->LeaveBasicCall();
     }
 
     if ( bShowSF && xContext.is() )
@@ -781,7 +558,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
             rootNode->acquire();
 
             SvxGroupInfo_Impl *pInfo =
-                new SvxGroupInfo_Impl( SFX_CFGGROUP_SCRIPTCONTAINER, 0,
+                new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0,
                     static_cast<void *>(rootNode.get()));
 
             String aTitle =
@@ -864,7 +641,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
                                 theChild->acquire();
 
                                 SvxGroupInfo_Impl* pInfo =
-                                    new SvxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
+                                    new SvxGroupInfo_Impl(SVX_CFGGROUP_SCRIPTCONTAINER,
                                         0, static_cast<void *>( theChild.get()));
 
                                 OSL_TRACE("adding child node %s",::rtl::OUStringToOString( uiName, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
@@ -1045,9 +822,8 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
     SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
     pFunctionListBox->SetUpdateMode(FALSE);
     pFunctionListBox->ClearAll();
-    if ( pInfo->nKind != SFX_CFGGROUP_FUNCTION &&
-             pInfo->nKind != SFX_CFGGROUP_BASICMOD &&
-             pInfo->nKind != SFX_CFGGROUP_SCRIPTCONTAINER )
+    if ( pInfo->nKind != SVX_CFGGROUP_FUNCTION &&
+             pInfo->nKind != SVX_CFGGROUP_SCRIPTCONTAINER )
     {
         pFunctionListBox->SetUpdateMode(TRUE);
         return;
@@ -1055,7 +831,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
 
     switch ( pInfo->nKind )
     {
-        case SFX_CFGGROUP_FUNCTION :
+        case SVX_CFGGROUP_FUNCTION :
         {
             SvLBoxEntry *pEntry = FirstSelected();
             if ( pEntry != NULL )
@@ -1086,7 +862,6 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                     Image aImage;
 
                     OUString* aCmdURL = new OUString( commands[i].Command );
-                        // RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) );
 
                     if ( m_pImageProvider )
                     {
@@ -1133,7 +908,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                     }
 
                     SvxGroupInfo_Impl *pInfo = new SvxGroupInfo_Impl(
-                        SFX_CFGFUNCTION_SLOT, 123, aCmdURL );
+                        SVX_CFGFUNCTION_SLOT, 123, aCmdURL );
 
                     pFunctionListBox->aArr.Insert(
                         pInfo, pFunctionListBox->aArr.Count() );
@@ -1144,113 +919,71 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
             break;
         }
 
-        case SFX_CFGGROUP_BASICMOD :
+        case SVX_CFGGROUP_SCRIPTCONTAINER:
         {
-            SvLBoxEntry *pLibEntry = GetParent( pEntry );
-            SvxGroupInfo_Impl *pLibInfo =
-                (SvxGroupInfo_Impl*) pLibEntry->GetUserData();
-            SvLBoxEntry *pBasEntry = GetParent( pLibEntry );
-            SvxGroupInfo_Impl *pBasInfo =
-                (SvxGroupInfo_Impl*) pBasEntry->GetUserData();
+            Reference< browse::XBrowseNode > rootNode(
+                reinterpret_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
 
-            StarBASIC *pLib = (StarBASIC*) pLibInfo->pObject;
-            SfxObjectShell *pDoc = NULL;
-            if ( pBasInfo->nKind == SFX_CFGGROUP_DOCBASICMGR )
-                pDoc = (SfxObjectShell*) pBasInfo->pObject;
+            try {
+                if ( rootNode->hasChildNodes() )
+                {
+                    Sequence< Reference< browse::XBrowseNode > > children =
+                        rootNode->getChildNodes();
 
-            SbModule *pMod = (SbModule*) pInfo->pObject;
-            for ( USHORT nMeth=0; nMeth < pMod->GetMethods()->Count(); nMeth++ )
-            {
-                SbxMethod *pMeth = (SbxMethod*)pMod->GetMethods()->Get(nMeth);
-                SfxMacroInfoPtr pInf = new SfxMacroInfo( pDoc,
-                                                         pLib->GetName(),
-                                                         pMod->GetName(),
-                                                         pMeth->GetName());
-                if ( pMeth->GetInfo() )
-                    pInf->SetHelpText( pMeth->GetInfo()->GetComment() );
-                USHORT nId = SFX_APP()->GetMacroConfig()->GetSlotId( pInf );
-                if ( !nId )
-                    break;      // Kein Slot mehr frei
-
-                SvLBoxEntry* pFuncEntry =
-                    pFunctionListBox->InsertEntry( pMeth->GetName(), NULL );
-                SvxGroupInfo_Impl *pInfo =
-                    new SvxGroupInfo_Impl( SFX_CFGFUNCTION_MACRO, nId, pInf );
-                pFunctionListBox->aArr.Insert( pInfo, pFunctionListBox->aArr.Count() );
-                pFuncEntry->SetUserData( pInfo );
-            }
-
-            break;
-        }
-
-        case SFX_CFGGROUP_SCRIPTCONTAINER:
-        {
-            if ( !GetChildCount( pEntry ) )
-            {
-                Reference< browse::XBrowseNode > rootNode(
-                    reinterpret_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
-
-                try {
-                    if ( rootNode->hasChildNodes() )
+                    for ( ULONG n = 0; n < children.getLength(); n++ )
                     {
-                        Sequence< Reference< browse::XBrowseNode > > children =
-                            rootNode->getChildNodes();
-
-                        for ( ULONG n = 0; n < children.getLength(); n++ )
+                        if (children[n]->getType() == browse::BrowseNodeTypes::SCRIPT)
                         {
-                            if (children[n]->getType() == browse::BrowseNodeTypes::SCRIPT)
+                            OUString uri;
+                            OUString description;
+
+                            Reference < beans::XPropertySet >xPropSet( children[n], UNO_QUERY );
+                            if (!xPropSet.is())
                             {
-                                OUString uri;
-                                OUString description;
-
-                                Reference < beans::XPropertySet >xPropSet( children[n], UNO_QUERY );
-                                if (!xPropSet.is())
-                                {
-                                    continue;
-                                }
-
-                                Any value =
-                                    xPropSet->getPropertyValue( String::CreateFromAscii( "URI" ) );
-                                value >>= uri;
-
-                                try
-                                {
-                                    value = xPropSet->getPropertyValue(
-                                        String::CreateFromAscii( "Description" ) );
-                                    value >>= description;
-                                }
-                                catch (Exception &e) {
-                                    // do nothing, the description will be empty
-                                }
-
-                                ScriptInfo* aInfo = new ScriptInfo( uri );
-                                aInfo->SetHelpText( description );
-
-                                SvxGroupInfo_Impl* pInfo =
-                                    new SvxGroupInfo_Impl(
-                                        SFX_CFGFUNCTION_SCRIPT, 123, aInfo );
-
-                                Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
-                                SvLBoxEntry* pNewEntry =
-                                    pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
-                                pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_HIGHCONTRAST );
-                                pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-                                pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-
-                                pNewEntry->SetUserData( pInfo );
-
-                                pFunctionListBox->aArr.Insert(
-                                    pInfo, pFunctionListBox->aArr.Count() );
-
+                                continue;
                             }
+
+                            Any value =
+                                xPropSet->getPropertyValue( String::CreateFromAscii( "URI" ) );
+                            value >>= uri;
+
+                            try
+                            {
+                                value = xPropSet->getPropertyValue(
+                                    String::CreateFromAscii( "Description" ) );
+                                value >>= description;
+                            }
+                            catch (Exception &e) {
+                                // do nothing, the description will be empty
+                            }
+
+                            ScriptInfo* aInfo = new ScriptInfo( uri );
+                            aInfo->SetHelpText( description );
+
+                            SvxGroupInfo_Impl* pInfo =
+                                new SvxGroupInfo_Impl(
+                                    SVX_CFGFUNCTION_SCRIPT, 123, aInfo );
+
+                            Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
+                            SvLBoxEntry* pNewEntry =
+                                pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
+                            pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                            aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_HIGHCONTRAST );
+                            pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+
+                            pNewEntry->SetUserData( pInfo );
+
+                            pFunctionListBox->aArr.Insert(
+                                pInfo, pFunctionListBox->aArr.Count() );
+
                         }
                     }
                 }
-                catch (RuntimeException &e) {
-                    // do nothing, the entry will not be displayed in the UI
-                }
+            }
+            catch (RuntimeException &e) {
+                // do nothing, the entry will not be displayed in the UI
             }
             break;
         }
@@ -1311,74 +1044,7 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
     pInfo->bWasOpened = TRUE;
     switch ( pInfo->nKind )
     {
-        case SFX_CFGGROUP_BASICMGR :
-        case SFX_CFGGROUP_DOCBASICMGR :
-        {
-            if ( !GetChildCount( pEntry ) )
-            {
-                // Erstmaliges "Offnen
-                BasicManager *pMgr;
-                if ( pInfo->nKind == SFX_CFGGROUP_DOCBASICMGR )
-                    pMgr = ((SfxObjectShell*)pInfo->pObject)->GetBasicManager();
-                else
-                    pMgr = (BasicManager*) pInfo->pObject;
-
-                SvLBoxEntry *pLibEntry = 0;
-                for ( USHORT nLib=0; nLib<pMgr->GetLibCount(); nLib++)
-                {
-                    StarBASIC* pLib = pMgr->GetLib( nLib );
-                    pLibEntry = InsertEntry( pMgr->GetLibName( nLib ), pEntry );
-                    SvxGroupInfo_Impl *pInfo = new SvxGroupInfo_Impl( SFX_CFGGROUP_BASICLIB, nLib, pLib );
-                    aArr.Insert( pInfo, aArr.Count() );
-                    pLibEntry->SetUserData( pInfo );
-                    pLibEntry->EnableChildsOnDemand( TRUE );
-                }
-            }
-
-            break;
-        }
-
-        case SFX_CFGGROUP_BASICLIB :
-        {
-            if ( !GetChildCount( pEntry ) )
-            {
-                // Erstmaliges "Offnen
-                StarBASIC *pLib = (StarBASIC*) pInfo->pObject;
-                if ( !pLib )
-                {
-                    // Lib mu\s nachgeladen werden
-                    SvLBoxEntry *pParent = GetParent( pEntry );
-                    SvxGroupInfo_Impl *pInf =
-                        (SvxGroupInfo_Impl*) pParent->GetUserData();
-                    BasicManager *pMgr;
-                    if ( pInf->nKind == SFX_CFGGROUP_DOCBASICMGR )
-                        pMgr = ((SfxObjectShell*)pInf->pObject)->GetBasicManager();
-                    else
-                        pMgr = (BasicManager*) pInf->pObject;
-
-                    if ( pMgr->LoadLib( pInfo->nOrd ) )
-                        pInfo->pObject = pLib = pMgr->GetLib( pInfo->nOrd );
-                    else
-                        break;
-                }
-
-                SvLBoxEntry *pModEntry = 0;
-                for ( USHORT nMod=0; nMod<pLib->GetModules()->Count(); nMod++ )
-                {
-                    SbModule* pMod = (SbModule*)pLib->GetModules()->Get( nMod );
-
-                    pModEntry = InsertEntry( pMod->GetName(), pEntry );
-                    SvxGroupInfo_Impl *pInfo =
-                        new SvxGroupInfo_Impl( SFX_CFGGROUP_BASICMOD, 0, pMod );
-                    aArr.Insert( pInfo, aArr.Count() );
-                    pModEntry->SetUserData( pInfo );
-                }
-            }
-
-            break;
-        }
-
-        case SFX_CFGGROUP_SCRIPTCONTAINER:
+        case SVX_CFGGROUP_SCRIPTCONTAINER:
         {
             if ( !GetChildCount( pEntry ) )
             {
@@ -1454,7 +1120,7 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                                 theChild->acquire();
 
                                 SvxGroupInfo_Impl* pInfo =
-                                    new SvxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
+                                    new SvxGroupInfo_Impl(SVX_CFGGROUP_SCRIPTCONTAINER,
                                         0, static_cast<void *>( theChild.get()));
 
                                 OUString uiName = theChild->getName();
@@ -1505,74 +1171,6 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
         default:
             DBG_ERROR( "Falscher Gruppentyp!" );
             break;
-    }
-}
-
-void SvxConfigGroupListBox_Impl::SelectMacro( const SfxMacroInfoItem *pItem )
-{
-    SelectMacro( pItem->GetBasicManager()->GetName(),
-                 pItem->GetQualifiedName() );
-}
-
-void SvxConfigGroupListBox_Impl::SelectMacro( const String& rBasic,
-         const String& rMacro )
-{
-    String aBasicName( rBasic );
-    aBasicName += ' ';
-    aBasicName += String( ResId( STR_BASICMACROS, DIALOG_MGR() ) );
-
-    String aLib, aModule, aMethod;
-    USHORT nCount = rMacro.GetTokenCount('.');
-    aMethod = rMacro.GetToken( nCount-1, '.' );
-    if ( nCount > 2 )
-    {
-        aLib = rMacro.GetToken( 0, '.' );
-        aModule = rMacro.GetToken( nCount-2, '.' );
-    }
-
-    SvLBoxEntry *pEntry = FirstChild(0);
-    while ( pEntry )
-    {
-        String aEntryBas = GetEntryText( pEntry );
-        if ( aEntryBas == aBasicName )
-        {
-            Expand( pEntry );
-            SvLBoxEntry *pLib = FirstChild( pEntry );
-            while ( pLib )
-            {
-                String aEntryLib = GetEntryText( pLib );
-                if ( aEntryLib == aLib )
-                {
-                    Expand( pLib );
-                    SvLBoxEntry *pMod = FirstChild( pLib );
-                    while ( pMod )
-                    {
-                        String aEntryMod = GetEntryText( pMod );
-                        if ( aEntryMod == aModule )
-                        {
-                            Expand( pMod );
-                            MakeVisible( pMod );
-                            Select( pMod );
-                            SvLBoxEntry *pMethod = pFunctionListBox->First();
-                            while ( pMethod )
-                            {
-                                String aEntryMethod = GetEntryText( pMethod );
-                                if ( aEntryMethod == aMethod )
-                                {
-                                    pFunctionListBox->Select( pMethod );
-                                    pFunctionListBox->MakeVisible( pMethod );
-                                    return;
-                                }
-                                pMethod = pFunctionListBox->Next( pMethod );
-                            }
-                        }
-                        pMod = NextSibling( pMod );
-                    }
-                }
-                pLib = NextSibling( pLib );
-            }
-        }
-        pEntry = NextSibling( pEntry );
     }
 }
 
@@ -1674,8 +1272,8 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
         aOKButton.SetText( String( ResId( STR_SELECTOR_ADD, pMgr ) ) );
         aCancelButton.SetText( String( ResId( STR_SELECTOR_CLOSE, pMgr ) ) );
         aFunctionText.SetText( String( ResId( STR_SELECTOR_COMMANDS, pMgr ) ) );
-        aDialogDescription.SetText(
-                    String( ResId( STR_SELECTOR_ADD_COMMANDS_DESCRIPTION, pMgr ) ) );
+        SetDialogDescription(
+            String( ResId( STR_SELECTOR_ADD_COMMANDS_DESCRIPTION, pMgr ) ) );
         SetText( String( ResId( STR_SELECTOR_ADD_COMMANDS, pMgr ) ) );
 
         aCommands.SetDragDropMode( SV_DRAGDROP_APP_COPY );
@@ -1845,6 +1443,12 @@ SvxScriptSelectorDialog::SetRunLabel()
     aOKButton.SetText( String( ResId( STR_SELECTOR_RUN, DIALOG_MGR() ) ) );
 }
 
+void
+SvxScriptSelectorDialog::SetDialogDescription( const String& rDescription )
+{
+    aDialogDescription.SetText( rDescription );
+}
+
 USHORT
 SvxScriptSelectorDialog::GetSelectedId()
 {
@@ -1860,7 +1464,7 @@ SvxScriptSelectorDialog::GetScriptURL()
     if ( pEntry )
     {
         SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();
-        if ( pData->nKind == SFX_CFGFUNCTION_SLOT )
+        if ( pData->nKind == SVX_CFGFUNCTION_SLOT )
         {
             if ( pData->pObject != NULL )
             {
@@ -1868,21 +1472,12 @@ SvxScriptSelectorDialog::GetScriptURL()
                 result = OUString( *tmp );
             }
         }
-        else if ( pData->nKind == SFX_CFGFUNCTION_SCRIPT )
+        else if ( pData->nKind == SVX_CFGFUNCTION_SCRIPT )
         {
             ScriptInfo* pInfo = (ScriptInfo*) pData->pObject;
             if ( pInfo != NULL )
             {
                 result = pInfo->GetURI();
-            }
-        }
-        else
-        {
-            SfxMacroInfo* info = aCommands.GetMacroInfo();
-
-            if ( info != NULL )
-            {
-                result = info->GetURL();
             }
         }
     }
