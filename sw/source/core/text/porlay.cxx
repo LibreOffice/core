@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 09:52:10 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,14 +405,14 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                             if( pPos->InNumberGrp() )
                             {
                                 KSHORT nTmp = rInf.GetFont()->GetAscent(
-                                                rInf.GetVsh(), rInf.GetOut() );
+                                                rInf.GetVsh(), *rInf.GetOut() );
                                 if( nTmp > nPosAscent )
                                 {
                                     nPosHeight += nTmp - nPosAscent;
                                     nPosAscent = nTmp;
                                 }
                                 nTmp = rInf.GetFont()->GetHeight( rInf.GetVsh(),
-                                                                rInf.GetOut() );
+                                                                 *rInf.GetOut() );
                                 if( nTmp > nPosHeight )
                                     nPosHeight = nTmp;
                             }
@@ -491,8 +491,8 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 Height( nMaxDescent + nAscent );
             if( bOnlyPostIts )
             {
-                Height( rInf.GetFont()->GetHeight( rInf.GetVsh(), rInf.GetOut() ) );
-                nAscent = rInf.GetFont()->GetAscent( rInf.GetVsh(), rInf.GetOut() );
+                Height( rInf.GetFont()->GetHeight( rInf.GetVsh(), *rInf.GetOut() ) );
+                nAscent = rInf.GetFont()->GetAscent( rInf.GetVsh(), *rInf.GetOut() );
             }
         }
     }
