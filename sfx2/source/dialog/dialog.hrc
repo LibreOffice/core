@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-22 07:44:45 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,8 @@
 // 100-106 in tbxcust.hrc
 #define STR_MACRO_LOSS                  ( RC_DIALOG_BEGIN + 107 )
 #define STR_CANCEL_RECORDING            ( RC_DIALOG_BEGIN + 108 )
+
+#define RID_DLG_SEARCH                  ( RC_DIALOG_BEGIN + 109 )
 
 
 #endif // #ifndef _SFX_DIALOG_HRC
