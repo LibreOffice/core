@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleEventListener.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 10:57:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com { module sun { module star { module accessibility {
 
     @since #107627#
  */
-interface XAccessibleEventListener: ::com::sun::star::lang::XEventListener
+published interface XAccessibleEventListener: ::com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
