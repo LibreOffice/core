@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-08 09:39:53 $
+ *  last change: $Author: dvo $ $Date: 2000-11-16 11:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 #include <xmloff/families.hxx>
 #endif
 
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
+
 #ifndef _POOLFMT_HXX
 #include "poolfmt.hxx"
 #endif
@@ -134,6 +138,10 @@
 #ifndef _UNOCRSR_HXX
 #include "unocrsr.hxx"
 #endif
+#ifndef _CELLATR_HXX
+#include "cellatr.hxx"
+#endif
+
 
 #ifndef _XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -189,6 +197,9 @@ class SwXMLTableCell_Impl
 {
     OUString aStyleName;
 
+    OUString sFormula;  // cell formula; valid if length > 0
+    double dValue;      // formula value
+
     SvXMLImportContextRef   xSubTable;
 
     const SwStartNode *pStartNode;
@@ -208,7 +219,8 @@ public:
 
     inline void Set( const OUString& rStyleName,
                       sal_uInt32 nRSpan, sal_uInt32 nCSpan,
-                     const SwStartNode *pStNd, SwXMLTableContext *pTable  );
+                     const SwStartNode *pStNd, SwXMLTableContext *pTable,
+                     OUString* pFormula = NULL, double dVal = 0.0 );
 
     sal_Bool IsUsed() const { return pStartNode!=0 ||
                                      xSubTable.Is() || bProtected;}
@@ -217,6 +229,8 @@ public:
     void SetRowSpan( sal_uInt32 nSet ) { nRowSpan = nSet; }
     sal_uInt32 GetColSpan() const { return nColSpan; }
     const OUString& GetStyleName() const { return aStyleName; }
+    const OUString& GetFormula() const { return sFormula; }
+    double GetValue() const { return dValue; }
 
     const SwStartNode *GetStartNode() const { return pStartNode; }
     inline void SetStartNode( const SwStartNode *pSttNd );
@@ -229,13 +243,22 @@ public:
 inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
                                       sal_uInt32 nRSpan, sal_uInt32 nCSpan,
                                       const SwStartNode *pStNd,
-                                      SwXMLTableContext *pTable )
+                                      SwXMLTableContext *pTable,
+                                      OUString* pFormula,
+                                      double dVal)
 {
     aStyleName = rStyleName;
     nRowSpan = nRSpan;
     nColSpan = nCSpan;
     pStartNode = pStNd;
     xSubTable = pTable;
+    dValue = dVal;
+
+    // set formula, if valid
+    if (pFormula != NULL)
+    {
+        sFormula = *pFormula;
+    }
 }
 
 inline void SwXMLTableCell_Impl::SetStartNode( const SwStartNode *pSttNd )
@@ -348,8 +371,11 @@ void SwXMLTableRow_Impl::Dispose()
 class SwXMLTableCellContext_Impl : public SvXMLImportContext
 {
     OUString aStyleName;
+    OUString sFormula;
 
     SvXMLImportContextRef   xMyTable;
+
+    double fValue;
 
     sal_uInt32                  nRowSpan;
     sal_uInt32                  nColSpan;
@@ -389,7 +415,9 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     nRowSpan( 1UL ),
     nColSpan( 1UL ),
     bHasTextContent( sal_False ),
-    bHasTableContent( sal_False )
+    bHasTableContent( sal_False ),
+    sFormula(),
+    fValue(0.0)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -419,6 +447,48 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                 if( nRowSpan < 1UL )
                     nRowSpan = 1UL;
             }
+            else if (aLocalName.equalsAsciiL(sXML_formula,
+                                             sizeof(sXML_formula)-1))
+            {
+                sFormula = rValue;
+            }
+            else if (aLocalName.equalsAsciiL(sXML_value,
+                                             sizeof(sXML_value)-1))
+            {
+                double fTmp;
+                if (SvXMLUnitConverter::convertNumber(fTmp, rValue))
+                {
+                    fValue = fTmp;
+                }
+            }
+            else if (aLocalName.equalsAsciiL(sXML_time_value,
+                                             sizeof(sXML_time_value)-1))
+            {
+                double fTmp;
+                if (SvXMLUnitConverter::convertTime(fTmp, rValue))
+                {
+                    fValue = fTmp;
+                }
+            }
+            else if (aLocalName.equalsAsciiL(sXML_date_value,
+                                             sizeof(sXML_date_value)-1))
+            {
+                double fTmp;
+                if (GetImport().GetMM100UnitConverter().convertDateTime(fTmp,
+                                                                      rValue))
+                {
+                    fValue = fTmp;
+                }
+            }
+            else if (aLocalName.equalsAsciiL(sXML_boolean_value,
+                                             sizeof(sXML_boolean_value)-1))
+            {
+                sal_Bool bTmp;
+                if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+                {
+                    fValue = (bTmp ? 1.0 : 0.0);
+                }
+            }
         }
     }
 }
@@ -432,7 +502,8 @@ inline void SwXMLTableCellContext_Impl::InsertContentIfNotThere()
     if( !HasContent() )
     {
         GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan,
-                                GetTable()->InsertTableSection() );
+                                GetTable()->InsertTableSection(),
+                                NULL, &sFormula, fValue);
         bHasTextContent = sal_True;
     }
 }
@@ -1022,7 +1093,9 @@ sal_Int32 SwXMLTableContext::GetColumnWidth( sal_uInt32 nCol,
 void SwXMLTableContext::InsertCell( const OUString& rStyleName,
                                     sal_uInt32 nRowSpan, sal_uInt32 nColSpan,
                                     const SwStartNode *pStartNode,
-                                    SwXMLTableContext *pTable )
+                                    SwXMLTableContext *pTable,
+                                    OUString* pFormula,
+                                    double fValue)
 {
     ASSERT( nCurCol < GetColumnCount(),
             "SwXMLTableContext::InsertCell: row is full" );
@@ -1097,7 +1170,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
     for( i=nColSpan; i>0UL; i-- )
         for( j=nRowSpan; j>0UL; j-- )
             GetCell( nRowsReq-j, nColsReq-i )
-                ->Set( rStyleName, j, i, pStartNode, pTable );
+                ->Set( rStyleName, j, i, pStartNode, pTable, pFormula, fValue);
 
     // Set current col to the next (free) column
     nCurCol = nColsReq;
@@ -1385,6 +1458,21 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     {
         if( pAutoItemSet )
             pFrmFmt->SetAttr( *pAutoItemSet );
+    }
+
+    if( pCell->GetStartNode() )
+    {
+        const OUString& rFormula = pCell->GetFormula();
+        if (rFormula.getLength() > 0)
+        {
+            // formula cell: insert formula if valid
+            SwTblBoxFormula aFormulaItem( rFormula );
+            pFrmFmt->SetAttr( aFormulaItem );
+        }
+
+        // always insert value, even if default
+        SwTblBoxValue aValueItem( pCell->GetValue() );
+        pFrmFmt->SetAttr( aValueItem );
     }
 
     pFrmFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
+ *  last change: $Author: dvo $ $Date: 2000-11-16 11:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,9 @@ public:
     void InsertCell( const ::rtl::OUString& rStyleName,
                      sal_uInt32 nRowSpan=1U, sal_uInt32 nColSpan=1U,
                      const SwStartNode *pStNd=0,
-                     SwXMLTableContext *pTable=0 );
+                     SwXMLTableContext *pTable=0,
+                     ::rtl::OUString *pFormula=0,
+                     double fValue=0.0);
     void InsertRow( const ::rtl::OUString& rStyleName,
                     sal_Bool bInHead );
     void FinishRow();

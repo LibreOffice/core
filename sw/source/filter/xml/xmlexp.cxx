@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-13 08:44:24 $
+ *  last change: $Author: dvo $ $Date: 2000-11-16 11:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,9 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
     pTableLines( 0 ),
     bExportWholeDoc( bExpWholeDoc ),
     bExportFirstTableOnly( bExpFirstTableOnly ),
-    bShowProgress( bShowProg )
+    bShowProgress( bShowProg ),
+    sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
+    sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
 {
     const SfxPoolItem* pItem;
     const SfxItemPool& rPool = pDoc->GetAttrPool();

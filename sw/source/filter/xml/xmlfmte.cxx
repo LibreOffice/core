@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
+ *  last change: $Author: dvo $ $Date: 2000-11-16 11:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,10 @@
 #include "unostyle.hxx"
 #endif
 
+#ifndef _CELLATR_HXX
+#include "cellatr.hxx"
+#endif
+
 
 using namespace rtl;
 using namespace ::com::sun::star;
@@ -266,6 +270,30 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
                                     pPageDesc->GetName(),
                                     SFX_STYLE_FAMILY_PAGE );
             AddAttribute( XML_NAMESPACE_STYLE, sXML_master_page_name, sName );
+        }
+    }
+
+    if( sXML_table_cell == pStr )
+    {
+        DBG_ASSERT(RES_FRMFMT == rFmt.Which(), "only frame format");
+
+        const SfxPoolItem *pItem;
+        if( SFX_ITEM_SET ==
+            rFmt.GetAttrSet().GetItemState( RES_BOXATR_FORMAT,
+                                            sal_False, &pItem ) )
+        {
+            sal_Int32 nFormat = (sal_Int32)
+                ((const SwTblBoxNumFormat *)pItem)->GetValue();
+
+            if (-1 != nFormat)
+            {
+                // if we have a format, register and then export
+                // (Careful: here we assume that data styles will be
+                // written after cell styles)
+                addDataStyle(nFormat);
+                AddAttribute( XML_NAMESPACE_STYLE, sXML_data_style_name,
+                              getDataStyleName(nFormat) );
+            }
         }
     }
 
@@ -425,6 +453,9 @@ void SwXMLExport::_ExportAutoStyles()
 
     GetTextParagraphExport()->exportTextAutoStyles();
     GetPageExport()->exportAutoStyles();
+
+    // we rely on data styles being written after cell styles in the
+    // ExportFmt() method; so be careful when changing order.
     exportAutoDataStyles();
 }
 

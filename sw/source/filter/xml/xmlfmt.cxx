@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
+ *  last change: $Author: dvo $ $Date: 2000-11-16 11:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,10 @@
 #ifndef _XMLTBLI_HXX
 #include "xmltbli.hxx"
 #endif
+#ifndef _CELLATR_HXX
+#include "cellatr.hxx"
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -567,8 +571,11 @@ class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
     OUString                sMasterPageName;
     SfxItemSet              *pItemSet;
 
+    OUString                sDataStyleName;
+
     sal_Bool                bHasMasterPageName : 1;
     sal_Bool                bPageDescConnected : 1;
+    sal_Bool                bDataStyleIsResolved;
 
     SvXMLImportContext *CreateItemSetContext(
             sal_uInt16 nPrefix,
@@ -610,17 +617,35 @@ public:
 
     sal_Bool IsPageDescConnected() const { return bPageDescConnected; }
     void ConnectPageDesc();
+
+    sal_Bool ResolveDataStyleName();
 };
 
 void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
                                            const OUString& rLocalName,
                                            const OUString& rValue )
 {
-    if( XML_NAMESPACE_STYLE == nPrefixKey &&
-        rLocalName.compareToAscii( sXML_master_page_name ) == 0 )
+    if( XML_NAMESPACE_STYLE == nPrefixKey )
     {
-        sMasterPageName = rValue;
-        bHasMasterPageName = sal_True;
+        if (rLocalName.compareToAscii( sXML_master_page_name ) == 0)
+        {
+            sMasterPageName = rValue;
+            bHasMasterPageName = sal_True;
+        }
+        else if (rLocalName.equalsAsciiL( sXML_data_style_name,
+                                          sizeof(sXML_data_style_name)-1 ))
+        {
+            // if we have a valid data style name
+            if (rValue.getLength() > 0)
+            {
+                sDataStyleName = rValue;
+                bDataStyleIsResolved = sal_False;   // needs to be resolved
+            }
+        }
+        else
+        {
+            SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
+        }
     }
     else
     {
@@ -685,7 +710,9 @@ SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImpo
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
     pItemSet( 0 ),
     bHasMasterPageName( sal_False ),
-    bPageDescConnected( sal_False )
+    bPageDescConnected( sal_False ),
+    sDataStyleName(),
+    bDataStyleIsResolved( sal_True )
 {
     SetFamily( nFamily );
 }
@@ -768,6 +795,36 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
         pPageDesc->Add( pFmtPageDesc );
         pItemSet->Put( *pFmtPageDesc );
         delete pFmtPageDesc;
+    }
+}
+
+sal_Bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
+{
+    sal_Bool bTmp = bDataStyleIsResolved;
+
+    // resolve, if not already done
+    if (! bDataStyleIsResolved)
+    {
+        // get the format key
+        sal_Int32 nFormat =
+            GetImport().GetTextImport()->GetDataStyleKey(sDataStyleName);
+
+        // if the key is valid, insert Item into ItemSet
+        DBG_ASSERT(NULL != pItemSet, "need ItemSet");
+        if ((NULL != pItemSet) && (-1 != nFormat))
+        {
+            SwTblBoxNumFormat aNumFormatItem(nFormat);
+            pItemSet->Put(aNumFormatItem);
+        }
+
+        // now resolved
+        bDataStyleIsResolved = sal_True;
+        return sal_True;
+    }
+    else
+    {
+        // was already resolved; nothing to do
+        return sal_False;
     }
 }
 
@@ -1070,6 +1127,14 @@ sal_Bool SwXMLImport::FindAutomaticStyle(
                     !pStyle->IsPageDescConnected() )
                     pStyle->ConnectPageDesc();
                 (*ppItemSet) = pStyle->GetItemSet();
+
+                // resolve data style name late
+                if( XML_STYLE_FAMILY_TABLE_CELL == pStyle->GetFamily() &&
+                    pStyle->ResolveDataStyleName() )
+                {
+                    (*ppItemSet) = pStyle->GetItemSet();
+                }
+
             }
 
             if( pParent )
