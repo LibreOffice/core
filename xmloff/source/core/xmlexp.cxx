@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-28 10:28:16 $
+ *  last change: $Author: mtg $ $Date: 2001-03-29 17:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,8 +759,8 @@ void SvXMLExport::_ExportConfigurationSettings(const XMLSettingsExportHelper& rS
 {
     uno::Sequence<beans::PropertyValue> aProps;
     GetConfigurationSettings(aProps);
-    OUString sViewSettings(RTL_CONSTASCII_USTRINGPARAM(sXML_configuration_settings));
-    rSettingsExportHelper.exportSettings(aProps, sViewSettings);
+    OUString sConfigurationSettings(RTL_CONSTASCII_USTRINGPARAM(sXML_configuration_settings));
+    rSettingsExportHelper.exportSettings(aProps, sConfigurationSettings);
 }
 
 void SvXMLExport::_ExportScripts()
