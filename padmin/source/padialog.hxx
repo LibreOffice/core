@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
+ *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,10 @@ namespace padmin {
         Printer*                            m_pPrinter;
         ::psp::PrinterInfoManager&          m_rPIManager;
         ::std::list< ::rtl::OUString >      m_aPrinters;
+
+        Image                               m_aPrinterImg;
+        Image                               m_aFaxImg;
+        Image                               m_aPdfImg;
 
         DECL_LINK( ClickBtnHdl, PushButton* );
         DECL_LINK( DoubleClickHdl, ListBox* );

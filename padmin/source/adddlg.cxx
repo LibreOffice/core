@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
+ *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,12 @@
 using namespace rtl;
 using namespace psp;
 using namespace padmin;
+
+APTabPage::APTabPage( Window* pParent, const ResId& rResId )
+            : TabPage( pParent, rResId ),
+              m_aTitle( PaResId( RID_ADDP_STR_TITLE ) )
+{
+}
 
 APChooseDevicePage::APChooseDevicePage( Window* pParent ) :
         APTabPage( pParent, PaResId( RID_ADDP_PAGE_CHOOSEDEV ) ),
@@ -733,6 +739,7 @@ AddPrinterDialog::AddPrinterDialog( Window* pParent )
           m_aFinishPB( this, PaResId( RID_ADDP_BTN_FINISH ) ),
           m_aCancelPB( this, PaResId( RID_ADDP_BTN_CANCEL ) ),
           m_aLine( this, PaResId( RID_ADDP_LINE ) ),
+          m_aTitleImage( this, PaResId( RID_ADDP_CTRL_TITLE ) ),
           m_pCurrentPage( NULL ),
           m_pChooseDevicePage( NULL ),
           m_pChooseDriverPage( NULL ),
@@ -758,6 +765,10 @@ AddPrinterDialog::AddPrinterDialog( Window* pParent )
     m_aPrevPB.SetClickHdl( LINK( this, AddPrinterDialog, ClickBtnHdl ) );
     m_aFinishPB.SetClickHdl( LINK( this, AddPrinterDialog, ClickBtnHdl ) );
     m_aCancelPB.SetClickHdl( LINK( this, AddPrinterDialog, ClickBtnHdl ) );
+
+    m_aTitleImage.SetBackgroundColor( Color( 0xff, 0xff, 0xff ) );
+    m_aTitleImage.SetText( m_pCurrentPage->getTitle() );
+    m_aTitleImage.SetImage( Image( Bitmap( PaResId( RID_BMP_PRINTER ) ) ) );
 }
 
 AddPrinterDialog::~AddPrinterDialog()
@@ -900,6 +911,7 @@ void AddPrinterDialog::advance()
     }
 
     m_pCurrentPage->Show( TRUE );
+    m_aTitleImage.SetText( m_pCurrentPage->getTitle() );
 }
 
 void AddPrinterDialog::back()
@@ -962,6 +974,7 @@ void AddPrinterDialog::back()
         m_pCurrentPage = m_pPdfDriverPage->isDefault() || m_pPdfDriverPage->isDist() ? (APTabPage*)m_pPdfDriverPage : (APTabPage*)m_pPdfSelectDriverPage;
     }
     m_pCurrentPage->Show( TRUE );
+    m_aTitleImage.SetText( m_pCurrentPage->getTitle() );
 }
 
 void AddPrinterDialog::addPrinter()

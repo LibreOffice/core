@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
+ *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _PAD_HELPER_HXX_
 #include <helper.hxx>
 #endif
+#ifndef _PAD_TITLECTRL_HXX_
+#include <titlectrl.hxx>
+#endif
 
 namespace padmin
 {
@@ -93,14 +96,14 @@ namespace DeviceKind { enum type { Printer, Fax, Pdf }; }
 
 class APTabPage : public TabPage
 {
+    String              m_aTitle;
 public:
-    APTabPage( Window* pParent, const ResId& rResId )
-            : TabPage( pParent, rResId )
-    {}
+    APTabPage( Window* pParent, const ResId& rResId );
 
     // returns false if information is incomplete or invalid
     virtual bool check() = 0;
     virtual void fill( ::psp::PrinterInfo& rInfo ) = 0;
+    const String& getTitle() const { return m_aTitle; }
 };
 
 class APChooseDevicePage : public APTabPage
@@ -247,6 +250,7 @@ class AddPrinterDialog : public ModalDialog
     PushButton              m_aNextPB;
     OKButton                m_aFinishPB;
     FixedLine               m_aLine;
+    TitleImage              m_aTitleImage;
 
     ::psp::PrinterInfo      m_aPrinter;
 

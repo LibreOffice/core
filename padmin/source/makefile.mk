@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: pl $ $Date: 2001-05-08 11:56:35 $
+#   last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,8 @@ SLOFILES=\
     $(SLO)$/prgsbar.obj			\
     $(SLO)$/fontentry.obj		\
     $(SLO)$/helper.obj			\
-    $(SLO)$/adddlg.obj
+    $(SLO)$/adddlg.obj			\
+    $(SLO)$/titlectrl.obj
 
 
 OBJFILES=\

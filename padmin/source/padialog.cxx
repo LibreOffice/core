@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
+ *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@ PADialog::PADialog( Window* pParent, BOOL bAdmin ) :
         m_aComment( this, PaResId( RID_PA_TXT_COMMENT_STRING ) ),
         m_aDefPrt( PaResId( RID_PA_STR_DEFPRT ) ),
         m_aRenameStr( PaResId( RID_PA_STR_RENAME ) ),
+        m_aPrinterImg( Bitmap( PaResId( RID_BMP_SMALL_PRINTER ) ), Color( 0xff, 0x00, 0xff ) ),
+        m_aFaxImg( Bitmap( PaResId( RID_BMP_SMALL_FAX ) ), Color( 0xff, 0x00, 0xff ) ),
+        m_aPdfImg( Bitmap( PaResId( RID_BMP_SMALL_PDF ) ), Color( 0xff, 0x00, 0xff ) ),
         m_pPrinter( 0 ),
         m_rPIManager( PrinterInfoManager::get() )
 {
@@ -657,11 +660,20 @@ void PADialog::UpdateDevice()
         const PrinterInfo& rInfo( m_rPIManager.getPrinterInfo( *it ) );
         sal_Int32 nIndex = 0;
         bool bAutoQueue = false;
+        bool bFax = false;
+        bool bPdf = false;
         while( nIndex != -1 && ! bAutoQueue )
         {
             OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-            if( aToken.getLength() && aToken.compareToAscii( "autoqueue" ) == 0 )
-                bAutoQueue = true;
+            if( aToken.getLength() )
+            {
+                if( aToken.compareToAscii( "autoqueue" ) == 0 )
+                    bAutoQueue = true;
+                else if( aToken.compareToAscii( "pdf=", 4 ) == 0 )
+                    bPdf = true;
+                else if( aToken.compareToAscii( "fax", 3 ) == 0 )
+                    bFax = true;
+            }
         }
         if( bAutoQueue )
             continue;
@@ -673,7 +685,11 @@ void PADialog::UpdateDevice()
             aEntry += m_aDefPrt;
             aEntry.AppendAscii( ")" );
         }
-        int nPos = m_aDevicesLB.InsertEntry( aEntry );
+        int nPos =
+            m_aDevicesLB.InsertEntry( aEntry,
+                                      bFax ? m_aFaxImg :
+                                      bPdf ? m_aPdfImg : m_aPrinterImg
+                                      );
         m_aDevicesLB.SetEntryData( nPos, (void*)it->getLength() );
         if( *it == m_rPIManager.getDefaultPrinter() )
         {

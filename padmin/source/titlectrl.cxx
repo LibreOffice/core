@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: newppdlg.hxx,v $
+ *  $RCSfile: titlectrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
  *
@@ -60,56 +60,77 @@
  ************************************************************************/
 
 #ifndef _PAD_NEWPPDLG_HXX_
-#define _PAD_NEWPPDLG_HXX_
-
-#ifndef _SV_DIALOG_HXX
-#include <vcl/dialog.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-#ifndef _SV_COMBOBOX_HXX
-#include <vcl/combobox.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_GROUP_HXX
-#include <vcl/group.hxx>
+#include <titlectrl.hxx>
 #endif
 
-namespace psp { class PPDParser; }
+using namespace padmin;
 
-namespace padmin {
+TitleImage::TitleImage( Window* pParent, const ResId& rResId ) :
+        Control( pParent, rResId ),
+        m_bArranged( false )
+{
+    Font aFont = GetFont();
+    aFont.SetHeight( aFont.GetHeight()*3/2 );
+    SetFont( aFont );
+}
 
-    class PPDImportDialog : public ModalDialog
-    {
-        OKButton            m_aOKBtn;
-        CancelButton        m_aCancelBtn;
-        FixedText           m_aPathTxt;
-        ComboBox            m_aPathBox;
-        PushButton          m_aSearchBtn;
-        FixedText           m_aDriverTxt;
-        MultiListBox        m_aDriverLB;
+// -----------------------------------------------------------------------
 
-        FixedLine           m_aPathGroup;
-        FixedLine           m_aDriverGroup;
+TitleImage::~TitleImage()
+{
+}
 
-        String              m_aLoadingPPD;
+// -----------------------------------------------------------------------
 
-        DECL_LINK( ClickBtnHdl, PushButton* );
-        DECL_LINK( SelectHdl, ComboBox* );
-        DECL_LINK( ModifyHdl, ComboBox* );
+void TitleImage::arrange()
+{
+    m_bArranged = true;
+    Size aCtrlSize( GetSizePixel() );
+    Size aImageSize( m_aImage.GetSizePixel() );
+    Size aTextSize( GetTextWidth( m_aText ), GetTextHeight() );
 
-        void Import();
-    public:
-        PPDImportDialog( Window* pParent );
-        ~PPDImportDialog();
-    };
+    m_aImagePos.Y() = ( aCtrlSize.Height() - aImageSize.Height() ) / 2;
+    m_aImagePos.X() = m_aImagePos.Y() < 0 ? -m_aImagePos.Y() : m_aImagePos.Y();
+    m_aTextPos.X() = m_aImagePos.X() + aImageSize.Width() + aTextSize.Height()/2;
+    m_aTextPos.Y() = ( aCtrlSize.Height() - aTextSize.Height() ) / 2;
+}
 
-} // namespace
+// -----------------------------------------------------------------------
 
-#endif // _NEWPPDLG_HXX
+void TitleImage::Paint( const Rectangle& rRect )
+{
+    if( ! m_bArranged )
+        arrange();
+
+    SetLineColor( m_aBGColor );
+    SetFillColor( m_aBGColor );
+    DrawRect( Rectangle( Point( 0, 0 ), Size( GetSizePixel() ) ) );
+    DrawImage( m_aImagePos, m_aImage );
+    DrawText( m_aTextPos, m_aText );
+}
+
+// -----------------------------------------------------------------------
+
+void TitleImage::SetText( const String& rText )
+{
+    m_aText = rText;
+    m_bArranged = false;
+    Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+void TitleImage::SetImage( const Image& rImage )
+{
+    m_aImage = rImage;
+    m_bArranged = false;
+    Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+void TitleImage::SetBackgroundColor( const Color& rColor )
+{
+    m_aBGColor = rColor;
+    Invalidate();
+}

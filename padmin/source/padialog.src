@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
+ *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1387,6 +1387,26 @@ Bitmap RID_BUTTERFLY
     File = "butter.bmp" ;
 };
 
+Bitmap RID_BMP_SMALL_PRINTER
+{
+    File = "print.bmp";
+};
+
+Bitmap RID_BMP_SMALL_FAX
+{
+    File = "fax.bmp";
+};
+
+Bitmap RID_BMP_SMALL_PDF
+{
+    File = "pdf.bmp";
+};
+
+Bitmap RID_BMP_PRINTER
+{
+    File = "printer_large.bmp";
+};
+
 String RID_AFMERROR_OK
 {
     Text = "Kein Fehler" ;
@@ -1710,12 +1730,12 @@ ModalDialog RID_PPDIMPORT_DLG
     Text = "Treiberinstallation" ;
     Text [ English ] = "Driver installation" ;
 
-    GroupBox RID_PPDIMP_GROUP_PATH
+    FixedLine RID_PPDIMP_GROUP_PATH
     {
         Pos = MAP_APPFONT( 5, 5 );
-        Size = MAP_APPFONT( 200, 50 );
-        Text = "Treiberverzeichnis";
-        Text [ English ] = "Driver directory";
+        Size = MAP_APPFONT( 200, 8 );
+        Text = "Treiber~verzeichnis";
+        Text [ English ] = "Driver ~directory";
         Text[ english_us ] = "Driver directory";
         Text[ portuguese ] = "Directório do controlador";
         Text[ russian ] = "Êàòàëîã äðàéâåðîâ";
@@ -1801,12 +1821,12 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ catalan ] = "~Examinar...";
     };
 
-    GroupBox RID_PPDIMP_GROUP_DRIVER
+    FixedLine RID_PPDIMP_GROUP_DRIVER
     {
         Pos = MAP_APPFONT( 5, 60 );
-        Size = MAP_APPFONT( 200, 160 );
-        Text = "Treiberauswahl";
-        Text [ English ] = "Installable drivers";
+        Size = MAP_APPFONT( 200, 8 );
+        Text = "Treiber~auswahl";
+        Text [ English ] = "~Installable drivers";
         Text[ english_us ] = "Installable drivers";
         Text[ portuguese ] = "Controladores disponíveis";
         Text[ russian ] = "Âûáîð äðàéâåðîâ";
@@ -2168,21 +2188,25 @@ ModalDialog RID_ADD_PRINTER_DIALOG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 240 , 162 ) ;
+    Size = MAP_APPFONT ( 240 , 172 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "Drucker hinzufügen" ;
     Text [ English ] = "Add printer" ;
 
+    Control RID_ADDP_CTRL_TITLE
+    {
+        Pos = MAP_APPFONT( 0, 0 );
+        Size = MAP_APPFONT( 240, 26 );
+    };
     FixedLine RID_ADDP_LINE
     {
-        Pos = MAP_APPFONT( 0, 140 );
+        Pos = MAP_APPFONT( 0, 150 );
         Size = MAP_APPFONT( 240, 2 );
     };
-
     OKButton RID_ADDP_BTN_FINISH
     {
-        Pos = MAP_APPFONT( 185, 145 );
+        Pos = MAP_APPFONT( 185, 155 );
         Size = MAP_APPFONT( 50, 12 );
         Text = "~Fertig stellen";
         Text [english] = "~Finish";
@@ -2209,12 +2233,12 @@ ModalDialog RID_ADD_PRINTER_DIALOG
     };
     CancelButton RID_ADDP_BTN_CANCEL
     {
-        Pos = MAP_APPFONT( 5, 145 );
+        Pos = MAP_APPFONT( 5, 155 );
         Size = MAP_APPFONT( 50, 12 );
     };
     PushButton RID_ADDP_BTN_NEXT
     {
-        Pos = MAP_APPFONT( 130, 145 );
+        Pos = MAP_APPFONT( 130, 155 );
         Size = MAP_APPFONT( 50, 12 );
         Text = "~Weiter >>";
         Text [english] = "~Next >>";
@@ -2241,7 +2265,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
     };
     PushButton RID_ADDP_BTN_PREV
     {
-        Pos = MAP_APPFONT( 75, 145 );
+        Pos = MAP_APPFONT( 75, 155 );
         Size = MAP_APPFONT( 50, 12 );
         Text = "<< ~Zurück";
         Text [english] = "<< ~Back";
@@ -2291,13 +2315,19 @@ ModalDialog RID_ADD_PRINTER_DIALOG
 TabPage RID_ADDP_PAGE_CHOOSEDRIVER
 {
     Hide = TRUE;
-    Size = MAP_APPFONT( 240, 140 );
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text = "Einen Treiber auswählen";
+        Text [ English ] = "Choose a driver";
+    };
     FixedText RID_ADDP_CHDRV_TXT_DRIVER
     {
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 230, 8 );
-        Text = "Bitte wählen Sie einen passenden Treiber aus";
-        Text [english] = "Please select an auspicous driver";
+        Text = "Bitte wählen Sie einen passenden ~Treiber aus";
+        Text [english] = "Please select an auspicous ~driver";
         Text[ english_us ] = "Please select a suitable driver";
         Text[ portuguese ] = "Seleccione um controlador compatível";
         Text[ russian ] = "Âûáåðèòå, ïîæàëóéñòà, ïîäõîäÿùèé äðàéâåð";
@@ -2322,7 +2352,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
     ListBox RID_ADDP_CHDRV_BOX_DRIVER
     {
         Pos = MAP_APPFONT( 5, 15 );
-        Size = MAP_APPFONT( 175, 120 );
+        Size = MAP_APPFONT( 175, 100 );
         Border = TRUE;
         Sort = TRUE;
     };
@@ -2410,10 +2440,16 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
 TabPage RID_ADDP_PAGE_CHOOSEDEV
 {
     Hide = TRUE;
-    Size = MAP_APPFONT( 240, 140 );
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text = "Einen Gerätetyp auswählen";
+        Text [ English ] = "Choose a device type";
+    };
     FixedText RID_ADDP_CHDEV_TXT_OVER
     {
-        Pos = MAP_APPFONT( 40, 35 );
+        Pos = MAP_APPFONT( 40, 25 );
         Size = MAP_APPFONT( 220, 8 );
         Text = "Möchten Sie";
         Text [english] = "Do you want to";
@@ -2440,7 +2476,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
     };
     RadioButton RID_ADDP_CHDEV_BTN_PRINTER
     {
-        Pos = MAP_APPFONT ( 40, 50 );
+        Pos = MAP_APPFONT ( 40, 40 );
         Size = MAP_APPFONT( 200, 10 );
         Text = "einen ~Drucker anlegen";
         Text [english] = "add a ~printer";
@@ -2467,21 +2503,21 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
     };
     RadioButton RID_ADDP_CHDEV_BTN_FAX
     {
-        Pos = MAP_APPFONT ( 40, 60 );
+        Pos = MAP_APPFONT ( 40, 50 );
         Size = MAP_APPFONT( 200, 10 );
         Text = "eine Fa~xlösung anbinden";
         Text [english] = "connect to a fa~x solution";
     };
     RadioButton RID_ADDP_CHDEV_BTN_PDF
     {
-        Pos = MAP_APPFONT ( 40, 70 );
+        Pos = MAP_APPFONT ( 40, 60 );
         Size = MAP_APPFONT( 200, 10 );
         Text = "einen ~PDF-Konverter anbinden";
         Text [english] = "connect to a P~DF converter";
     };
     RadioButton RID_ADDP_CHDEV_BTN_OLD
     {
-        Pos = MAP_APPFONT ( 40, 80 );
+        Pos = MAP_APPFONT ( 40, 70 );
         Size = MAP_APPFONT( 200, 10 );
         Text = "Drucker aus einer StarOffice Installation ~importieren";
         Text [english] = "~import printers from a StarOffice installation";
@@ -2511,10 +2547,16 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
 TabPage RID_ADDP_PAGE_NAME
 {
     Hide = TRUE;
-    Size = MAP_APPFONT( 240, 140 );
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text = "Einen Namen auswählen";
+        Text [ English ] = "Choose a name";
+    };
     FixedText RID_ADDP_NAME_TXT_NAME
     {
-        Pos = MAP_APPFONT( 40, 35 );
+        Pos = MAP_APPFONT( 40, 25 );
         Size = MAP_APPFONT( 220, 8 );
         Text = "Bitte geben Sie einen ~Namen für den Drucker ein";
         Text [english] = "Please enter a ~name for the printer";
@@ -2541,27 +2583,27 @@ TabPage RID_ADDP_PAGE_NAME
     };
     FixedText RID_ADDP_NAME_TXT_FAXNAME
     {
-        Pos = MAP_APPFONT( 40, 35 );
+        Pos = MAP_APPFONT( 40, 25 );
         Size = MAP_APPFONT( 220, 8 );
         Text = "Bitte geben Sie einen ~Namen für die Faxanbindung ein";
         Text [english] = "Please enter a ~name for the fax connection";
     };
     FixedText RID_ADDP_NAME_TXT_PDFNAME
     {
-        Pos = MAP_APPFONT( 40, 35 );
+        Pos = MAP_APPFONT( 40, 25 );
         Size = MAP_APPFONT( 220, 8 );
         Text = "Bitte geben Sie einen ~Namen für die PDF Anbindung ein";
         Text [english] = "Please enter a ~name for the PDF connection";
     };
     Edit RID_ADDP_NAME_EDT_NAME
     {
-        Pos = MAP_APPFONT( 40, 45 );
+        Pos = MAP_APPFONT( 40, 35 );
         Size = MAP_APPFONT( 160, 12 );
         Border = TRUE;
     };
     Edit RID_ADDP_NAME_EDT_FAXNAME
     {
-        Pos = MAP_APPFONT( 40, 45 );
+        Pos = MAP_APPFONT( 40, 35 );
         Size = MAP_APPFONT( 160, 12 );
         Border = TRUE;
         Text = "Faxdrucker";
@@ -2589,7 +2631,7 @@ TabPage RID_ADDP_PAGE_NAME
     };
     Edit RID_ADDP_NAME_EDT_PDFNAME
     {
-        Pos = MAP_APPFONT( 40, 45 );
+        Pos = MAP_APPFONT( 40, 35 );
         Size = MAP_APPFONT( 160, 12 );
         Border = TRUE;
         Text = "PDF-Konverter";
@@ -2617,7 +2659,7 @@ TabPage RID_ADDP_PAGE_NAME
     };
     CheckBox RID_ADDP_NAME_BOX_DEFAULT
     {
-        Pos = MAP_APPFONT( 40, 60 );
+        Pos = MAP_APPFONT( 40, 50 );
         Size = MAP_APPFONT( 160, 12 );
         Text = "Als ~Standarddrucker verwenden";
         Text [english] = "~Use as default printer";
@@ -2644,7 +2686,7 @@ TabPage RID_ADDP_PAGE_NAME
     };
     CheckBox RID_ADDP_NAME_BOX_FAXSWALLOW
     {
-        Pos = MAP_APPFONT( 40, 60 );
+        Pos = MAP_APPFONT( 40, 50 );
         Size = MAP_APPFONT( 160, 12 );
         Text = "~Faxnummer aus der Ausgabe entfernen";
         Text [english] = "~fax number will be removed from output";
@@ -2674,14 +2716,20 @@ TabPage RID_ADDP_PAGE_NAME
 TabPage RID_ADDP_PAGE_COMMAND
 {
     Hide = TRUE;
-    Size = MAP_APPFONT( 240, 140 );
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text = "Eine Kommandozeile auswählen";
+        Text [ English ] = "Choose a command line";
+    };
     FixedText RID_ADDP_CMD_TXT_COMMAND
     {
         Pos = MAP_APPFONT( 10, 10 );
         Size = MAP_APPFONT( 165, 24 );
         WordBreak = TRUE;
-        Text = "Geben Sie bitte eine Kommandozeile ein, mit der dieses Gerät angesprochend werden kann";
-        Text [english] = "Please enter a command line appropriate for this device";
+        Text = "Geben Sie bitte eine ~Kommandozeile ein, mit der dieses Gerät angesprochend werden kann";
+        Text [english] = "Please enter a command ~line appropriate for this device";
         Text[ english_us ] = "Please enter a command line appropriate for this device.";
         Text[ portuguese ] = "Indique uma linha de comando que permita contactar este periférico.";
         Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, êîìàíäíóþ ñòðîêó, ïîñðåäñòâîì êîòîðîé íåîáõîäèìî âûçûâàòü äàííîå óñòðîéñòâî.";
@@ -2706,53 +2754,53 @@ TabPage RID_ADDP_PAGE_COMMAND
     ComboBox RID_ADDP_CMD_BOX_COMMAND
     {
         Pos = MAP_APPFONT( 10, 30);
-        Size = MAP_APPFONT( 220, 105 );
+        Size = MAP_APPFONT( 220, 85 );
         Border = TRUE;
     };
     ComboBox RID_ADDP_CMD_BOX_PDFCOMMAND
     {
         Pos = MAP_APPFONT( 10, 30);
-        Size = MAP_APPFONT( 220, 80 );
+        Size = MAP_APPFONT( 220, 60 );
         Border = TRUE;
     };
     FixedText RID_ADDP_CMD_TXT_PDFDIR
     {
-        Pos = MAP_APPFONT( 10, 115 );
+        Pos = MAP_APPFONT( 10, 95 );
         Size = MAP_APPFONT( 220, 8 );
-        Text = "PDF Zielverzeichnis :";
-        Text [ english ] = "PDF target directory :";
-        Text[ english_us ] = "PDF target directory :";
-        Text[ portuguese ] = "Directório destino PDF:";
-        Text[ russian ] = "Êîíå÷íàÿ ïàïêà PDF :";
-        Text[ greek ] = "PDF target directory :";
-        Text[ dutch ] = "PDF doeldirectory :";
-        Text[ french ] = "Répertoire cible PDF :";
-        Text[ spanish ] = "Directorio destino PDF:";
-        Text[ italian ] = "Cartella destinazione PDF :";
-        Text[ danish ] = "PDF target directory :";
-        Text[ swedish ] = "PDF-målkatalog :";
-        Text[ polish ] = "Katalog docelowy PDF :";
-        Text[ portuguese_brazilian ] = "PDF target directory :";
-        Text[ japanese ] = "PDF À°¹Þ¯ÄÃÞ¨Ú¸ÄØ:";
-        Text[ korean ] = "PDF ¸ñÇ¥ µð·ºÅä¸® :";
+        Text = "PDF ~Zielverzeichnis";
+        Text [ english ] = "PDF ~target directory";
+        Text[ english_us ] = "PDF target directory";
+        Text[ portuguese ] = "Directório destino PDF";
+        Text[ russian ] = "Êîíå÷íàÿ ïàïêà PDF";
+        Text[ greek ] = "PDF target directory";
+        Text[ dutch ] = "PDF doeldirectory";
+        Text[ french ] = "Répertoire cible PDF";
+        Text[ spanish ] = "Directorio destino PDF";
+        Text[ italian ] = "Cartella destinazione PDF";
+        Text[ danish ] = "PDF target directory";
+        Text[ swedish ] = "PDF-målkatalog";
+        Text[ polish ] = "Katalog docelowy PDF";
+        Text[ portuguese_brazilian ] = "PDF target directory";
+        Text[ japanese ] = "PDF À°¹Þ¯ÄÃÞ¨Ú¸ÄØ";
+        Text[ korean ] = "PDF ¸ñÇ¥ µð·ºÅä¸®";
         Text[ chinese_simplified ] = "PDF Ä¿±êÄ¿Â¼£º";
         Text[ chinese_traditional ] = "PDF ¥Ø¼Ð¥Ø¿ý¡G";
-        Text[ turkish ] = "PDF target directory :";
-        Text[ arabic ] = "ÇáÏáíá PDF ÇáåÏÝ:";
-        Text[ finnish ] = "PDF Zielverzeichnis :";
-        Text[ catalan ] = "PDF target directory :";
+        Text[ turkish ] = "PDF target directory";
+        Text[ arabic ] = "ÇáÏáíá PDF ÇáåÏÝ";
+        Text[ finnish ] = "PDF Zielverzeichnis";
+        Text[ catalan ] = "PDF target directory";
     };
     Edit RID_ADDP_CMD_EDT_PDFDIR
     {
         Border = TRUE;
-        Pos = MAP_APPFONT( 10, 124 );
+        Pos = MAP_APPFONT( 10, 104 );
         Size = MAP_APPFONT( 190, 12 );
     };
     PushButton RID_ADDP_CMD_BTN_PDFDIR
     {
-        Pos = MAP_APPFONT( 205, 124 );
+        Pos = MAP_APPFONT( 205, 104 );
         Size = MAP_APPFONT( 25, 12 );
-        Text = "...";
+        Text = "~...";
     };
     PushButton RID_ADDP_CMD_BTN_HELP
     {
@@ -2816,19 +2864,25 @@ TabPage RID_ADDP_PAGE_COMMAND
 TabPage RID_ADDP_PAGE_OLDPRINTERS
 {
     Hide = TRUE;
-    Size = MAP_APPFONT( 240, 140 );
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text = "Drucker älterer Versionen importieren";
+        Text [ English ] = "Import printers from old versions";
+    };
     FixedText RID_ADDP_OLD_TXT_PRINTERS
     {
         Pos = MAP_APPFONT( 10, 10 );
         Size = MAP_APPFONT( 165, 25 );
         WordBreak = TRUE;
-        Text = "Diese Drucker können importiert werden. Bitte wählen Sie diejenigen, die Sie importieren möchten.";
-        Text [english] = "These printers can be imported. Please select those you want to import.";
+        Text = "~Diese Drucker können importiert werden. Bitte wählen Sie diejenigen, die Sie importieren möchten.";
+        Text [english] = "~These printers can be imported. Please select those you want to import.";
     };
     MultiListBox RID_ADDP_OLD_BOX_PRINTERS
     {
         Pos = MAP_APPFONT( 10, 35 );
-        Size = MAP_APPFONT( 165, 100 );
+        Size = MAP_APPFONT( 165, 80 );
         Border = TRUE;
     };
     PushButton RID_ADDP_OLD_BTN_SELECTALL
@@ -2843,22 +2897,28 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
 TabPage RID_ADDP_PAGE_FAXDRIVER
 {
     Hide = TRUE;
-    Size = MAP_APPFONT( 240, 140 );
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text = "Einen Treiber auswählen";
+        Text [ English ] = "Choose a driver";
+    };
     FixedText RID_ADDP_FAXDRV_TXT_DRIVER
     {
-        Pos = MAP_APPFONT( 40, 40 );
+        Pos = MAP_APPFONT( 40, 20 );
         Size = MAP_APPFONT( 160, 19 );
         WordBreak = TRUE;
-        Text = "Für diese Faxanbindung soll folgender Treiber verwendet werden:";
-        Text [english] = "Use the following driver for this fax connection:";
+        Text = "Für diese Faxanbindung soll folgender Treiber verwendet werden";
+        Text [english] = "Use the following driver for this fax connection";
     };
     RadioButton RID_ADDP_FAXDRV_BTN_DEFAULT
     {
-        Pos = MAP_APPFONT( 40,60 );
+        Pos = MAP_APPFONT( 40,40 );
         Size = MAP_APPFONT( 160, 10 );
-        Text = "der Standardtreiber";
-        Text [english] = "the default driver";
-        Text[ english_us ] = "The default driver";
+        Text = "der ~Standardtreiber";
+        Text [english] = "the ~standard driver";
+        Text[ english_us ] = "The standard driver";
         Text[ portuguese ] = "Controlador padrão";
         Text[ russian ] = "Äðàéâåð ïî óìîë÷àíèþ";
         Text[ greek ] = "Ôï ðñïåðéëåãìÝíï ðñüãñáììá ïäÞãçóçò";
@@ -2881,10 +2941,10 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
     };
     RadioButton RID_ADDP_FAXDRV_BTN_SELECT
     {
-        Pos = MAP_APPFONT( 40, 70 );
+        Pos = MAP_APPFONT( 40, 50 );
         Size = MAP_APPFONT( 160,24 );
-        Text = "ein spezifischer Treiber, um die Formatierung einem anderen Drucker anzugleichen";
-        Text [ english ] = "a specific driver to format identical to a certain printer";
+        Text = "ein spezifischer ~Treiber, um die Formatierung einem anderen Drucker anzugleichen";
+        Text [ english ] = "a specific ~driver to format identical to a certain printer";
         Text[ english_us ] = "A specific driver, to adapt the format to another printer";
         Text[ portuguese ] = "Controlador específico para adaptar o formato a outra impressora";
         Text[ russian ] = "Ñïåöèàëüíûé äðàéâåð äëÿ ñîãëàñîâàíèÿ ôîðìàòà ñ äðóãèì ïðèíòåðîì";
@@ -2911,42 +2971,48 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
 TabPage RID_ADDP_PAGE_PDFDRIVER
 {
     Hide = TRUE;
-    Size = MAP_APPFONT( 240, 140 );
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text = "Einen Treiber auswählen";
+        Text [ English ] = "Choose a driver";
+    };
     FixedText RID_ADDP_PDFDRV_TXT_DRIVER
     {
-        Pos = MAP_APPFONT( 40, 40 );
+        Pos = MAP_APPFONT( 40, 20 );
         Size = MAP_APPFONT( 160, 19 );
         WordBreak = TRUE;
-        Text = "Für diesen PDF-Konverter soll folgender Treiber verwendet werden:";
-        Text [english] = "Use the following driver for this PDF converter:";
-        Text[ english_us ] = "Use the following driver for this PDF converter:";
-        Text[ portuguese ] = "Utilizar o seguinte controlador para o conversor PDF:";
-        Text[ russian ] = "Äëÿ ýòîãî ïðåîáðàçîâàòåëÿ PDF íåîáõîäèìî èñïîëüçîâàòü ñëåäóþùèé äðàéâåð:";
-        Text[ greek ] = "Use the following driver for this PDF printer:";
+        Text = "Für diesen PDF-Konverter soll folgender Treiber verwendet werden";
+        Text [english] = "Use the following driver for this PDF converter";
+        Text[ english_us ] = "Use the following driver for this PDF converter";
+        Text[ portuguese ] = "Utilizar o seguinte controlador para o conversor PDF";
+        Text[ russian ] = "Äëÿ ýòîãî ïðåîáðàçîâàòåëÿ PDF íåîáõîäèìî èñïîëüçîâàòü ñëåäóþùèé äðàéâåð";
+        Text[ greek ] = "Use the following driver for this PDF printer";
         Text[ dutch ] = "Voor deze PDF-converter moet u de volgende driver gebruiken:";
-        Text[ french ] = "Pilote à utiliser pour le convertisseur PDF :";
-        Text[ spanish ] = "Use el siguiente controlador para este convertidor PDF:";
-        Text[ italian ] = "Per questo convertitore PDF utilizzate il seguente driver:";
-        Text[ danish ] = "Use the following driver for this PDF printer:";
-        Text[ swedish ] = "Använd följande drivrutin för den här PDF-konverteraren:";
-        Text[ polish ] = "Dany konwerter PDF ma korzystaæ z nastêpuj¹cego sterownika:";
-        Text[ portuguese_brazilian ] = "Use the following driver for this PDF printer:";
-        Text[ japanese ] = "‚±‚Ì PDF ºÝÊÞ°À‚É‚ÍŽŸ‚ÌÄÞ×²ÊÞ‚ªŽg—p‚Å‚«‚Ü‚·:";
-        Text[ korean ] = "ÀÌ PDF ÄÁ¹öÅÍ¸¦ À§ÇØ¼­´Â ´ÙÀ½°ú °°Àº µå¶óÀÌ¹ö¸¦ »ç¿ëÇØ¾ß ÇÕ´Ï´Ù:";
+        Text[ french ] = "Pilote à utiliser pour le convertisseur PDF";
+        Text[ spanish ] = "Use el siguiente controlador para este convertidor PDF";
+        Text[ italian ] = "Per questo convertitore PDF utilizzate il seguente driver";
+        Text[ danish ] = "Use the following driver for this PDF printer";
+        Text[ swedish ] = "Använd följande drivrutin för den här PDF-konverteraren";
+        Text[ polish ] = "Dany konwerter PDF ma korzystaæ z nastêpuj¹cego sterownika";
+        Text[ portuguese_brazilian ] = "Use the following driver for this PDF printer";
+        Text[ japanese ] = "‚±‚Ì PDF ºÝÊÞ°À‚É‚ÍŽŸ‚ÌÄÞ×²ÊÞ‚ªŽg—p‚Å‚«‚Ü‚·";
+        Text[ korean ] = "ÀÌ PDF ÄÁ¹öÅÍ¸¦ À§ÇØ¼­´Â ´ÙÀ½°ú °°Àº µå¶óÀÌ¹ö¸¦ »ç¿ëÇØ¾ß ÇÕ´Ï´Ù";
         Text[ chinese_simplified ] = "Õâ¸ö PDF ×ª»»Æ÷Ê¹ÓÃÒÔÏÂµÄÇý¶¯³ÌÐò£º";
         Text[ chinese_traditional ] = "½Ð¿ï¾Ü¥H¤UÓì¥Î©ó³o­Ó PDF Âà´«¾¹ªºÅX°Êµ{¦¡¡G";
-        Text[ turkish ] = "Use the following driver for this PDF printer:";
-        Text[ arabic ] = "ÇÓÊÎÏã ÈÑäÇãÌ ÇáÊÔÛíá ÇáÊÇáí áãÍæá PDF åÐÇ:";
-        Text[ finnish ] = "Für diesen PDF-Konverter soll folgender Treiber verwendet werden:";
-        Text[ catalan ] = "Use the following driver for this PDF printer:";
+        Text[ turkish ] = "Use the following driver for this PDF printer";
+        Text[ arabic ] = "ÇÓÊÎÏã ÈÑäÇãÌ ÇáÊÔÛíá ÇáÊÇáí áãÍæá PDF åÐÇ";
+        Text[ finnish ] = "Für diesen PDF-Konverter soll folgender Treiber verwendet werden";
+        Text[ catalan ] = "Use the following driver for this PDF printer";
     };
     RadioButton RID_ADDP_PDFDRV_BTN_DEFAULT
     {
-        Pos = MAP_APPFONT( 40,60 );
+        Pos = MAP_APPFONT( 40, 40 );
         Size = MAP_APPFONT( 160, 10 );
-        Text = "der Standardtreiber";
-        Text [english] = "the default driver";
-        Text[ english_us ] = "The default driver";
+        Text = "Der ~Standardtreiber";
+        Text [english] = "The ~standard driver";
+        Text[ english_us ] = "The standard driver";
         Text[ portuguese ] = "Controlador padrão";
         Text[ russian ] = "Äðàéâåð ïî óìîë÷àíèþ";
         Text[ greek ] = "Ôï ðñïåðéëåãìÝíï ðñüãñáììá ïäÞãçóçò";
@@ -2969,10 +3035,10 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
     };
     RadioButton RID_ADDP_PDFDRV_BTN_DIST
     {
-        Pos = MAP_APPFONT( 40,70 );
+        Pos = MAP_APPFONT( 40,50 );
         Size = MAP_APPFONT( 160, 10 );
-        Text = "der Adobe Distiller(tm) Treiber";
-        Text [english] = "the Adobe Distiller(tm) driver";
+        Text = "Der Adobe ~Distiller(tm) Treiber";
+        Text [english] = "The Adobe ~Distiller(tm) driver";
         Text[ english_us ] = "The Adobe Distiller(tm) driver";
         Text[ portuguese ] = "Controlador Adobe Distiller(tm)";
         Text[ russian ] = "Äðàéâåð Adobe Distiller(tm)";
@@ -2996,10 +3062,10 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
     };
     RadioButton RID_ADDP_PDFDRV_BTN_SELECT
     {
-        Pos = MAP_APPFONT( 40, 80 );
-        Size = MAP_APPFONT( 160,24 );
-        Text = "ein spezifischer Treiber, um die Formatierung einem anderen Drucker anzugleichen";
-        Text [ english ] = "a specific driver to format identical to a certain printer";
+        Pos = MAP_APPFONT( 40, 60 );
+        Size = MAP_APPFONT( 160, 24 );
+        Text = "Ein spezifischer ~Treiber, um die Formatierung einem anderen Drucker anzugleichen";
+        Text [ english ] = "~A specific driver to format identical to a certain printer";
         Text[ english_us ] = "A specific driver, to adapt the format to another printer";
         Text[ portuguese ] = "Controlador específico para adaptar o formato a outra impressora";
         Text[ russian ] = "Ñïåöèàëüíûé äðàéâåð äëÿ ñîãëàñîâàíèÿ ôîðìàòà ñ äðóãèì ïðèíòåðîì";

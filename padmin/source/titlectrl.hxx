@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: newppdlg.hxx,v $
+ *  $RCSfile: titlectrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
  *
@@ -59,57 +59,46 @@
  *
  ************************************************************************/
 
-#ifndef _PAD_NEWPPDLG_HXX_
-#define _PAD_NEWPPDLG_HXX_
+#ifndef _PAD_TITLECTRL_HXX_
+#define _PAD_TITLECTRL_HXX_
 
-#ifndef _SV_DIALOG_HXX
-#include <vcl/dialog.hxx>
+#ifndef _SV_CTRL_HXX
+#include <vcl/ctrl.hxx>
 #endif
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-#ifndef _SV_COMBOBOX_HXX
-#include <vcl/combobox.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_GROUP_HXX
-#include <vcl/group.hxx>
+#ifndef _SV_IMAGE_HXX
+#include <vcl/image.hxx>
 #endif
 
-namespace psp { class PPDParser; }
+namespace padmin
+{
 
-namespace padmin {
+class TitleImage : public Control
+{
+    Image               m_aImage;
+    String              m_aText;
+    Color               m_aBGColor;
+    Point               m_aImagePos;
+    Point               m_aTextPos;
 
-    class PPDImportDialog : public ModalDialog
-    {
-        OKButton            m_aOKBtn;
-        CancelButton        m_aCancelBtn;
-        FixedText           m_aPathTxt;
-        ComboBox            m_aPathBox;
-        PushButton          m_aSearchBtn;
-        FixedText           m_aDriverTxt;
-        MultiListBox        m_aDriverLB;
+    bool                m_bArranged;
 
-        FixedLine           m_aPathGroup;
-        FixedLine           m_aDriverGroup;
+    void arrange();
+public:
+    TitleImage( Window* pParent, const ResId& rResId );
+    ~TitleImage();
 
-        String              m_aLoadingPPD;
+    virtual void Paint( const Rectangle& rRect );
 
-        DECL_LINK( ClickBtnHdl, PushButton* );
-        DECL_LINK( SelectHdl, ComboBox* );
-        DECL_LINK( ModifyHdl, ComboBox* );
+    void SetImage( const Image& rImage );
+    const Image& GetImage() const { return m_aImage; }
 
-        void Import();
-    public:
-        PPDImportDialog( Window* pParent );
-        ~PPDImportDialog();
-    };
+    virtual void SetText( const String& rText );
+    virtual String GetText() const { return m_aText; }
 
-} // namespace
+    void SetBackgroundColor( const Color& rColor );
+    const Color& GetBackgroundColor() const { return m_aBGColor; }
+};
 
-#endif // _NEWPPDLG_HXX
+}
+
+#endif // _PAD_TITLECTRL_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
+ *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,11 @@
 #define RID_TXT_FONT_ULTRAEXPANDED               1094
 #define RID_TXT_FONT_REGULAR                     1095
 
+#define RID_BMP_SMALL_PRINTER                    1096
+#define RID_BMP_SMALL_FAX                        1097
+#define RID_BMP_SMALL_PDF                        1098
+#define RID_BMP_PRINTER                      1099
+
 #define RID_AFMERROR_OK                         1300
 #define RID_AFMERROR_NO_FONT_NAME               1301
 #define RID_AFMERROR_NO_FULL_NAME               1302
@@ -241,6 +246,8 @@
 #define RID_ADDP_BTN_NEXT                       3
 #define RID_ADDP_BTN_PREV                       4
 #define RID_ADDP_LINE                           5
+#define RID_ADDP_CTRL_TITLE                     6
+#define RID_ADDP_STR_TITLE                       127
 
 #define RID_ADDP_PAGE_CHOOSEDEV                 2001
 #define RID_ADDP_CHDEV_TXT_OVER                 1

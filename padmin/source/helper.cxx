@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-22 14:59:21 $
+ *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,8 @@ long DelMultiListBox::Notify( NotifyEvent& rEvent )
         m_aDelPressedLink.Call( this );
         nRet = 1;
     }
+    else
+        nRet = MultiListBox::Notify( rEvent );
 
     return nRet;
 }
@@ -182,6 +184,8 @@ long DelListBox::Notify( NotifyEvent& rEvent )
         m_aDelPressedLink.Call( this );
         nRet = 1;
     }
+    else
+        nRet = ListBox::Notify( rEvent );
 
     return nRet;
 }
