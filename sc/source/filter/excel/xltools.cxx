@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:21:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,47 +359,6 @@ double XclTools::GetXclDefColWidthCorrection( long nXclDefFontHeight )
     return 40960.0 / ::std::max( nXclDefFontHeight - 15L, 60L ) + 50.0;
 }
 
-// cell/range addresses -------------------------------------------------------
-
-ScAddress XclTools::MakeScAddress( sal_uInt16 nXclCol, sal_uInt16 nXclRow, SCTAB nScTab )
-{
-    return ScAddress( static_cast< SCCOL >( nXclCol ), static_cast< SCROW >( nXclRow ), nScTab );
-}
-
-ScRange XclTools::MakeScRange(
-        sal_uInt16 nStartXclCol, sal_uInt16 nStartXclRow, SCTAB nStartScTab,
-        sal_uInt16 nEndXclCol, sal_uInt16 nEndXclRow, SCTAB nEndScTab )
-{
-    return ScRange(
-        static_cast< SCCOL >( nStartXclCol ), static_cast< SCROW >( nStartXclRow ), nStartScTab,
-        static_cast< SCCOL >( nEndXclCol ), static_cast< SCROW >( nEndXclRow ), nEndScTab );
-}
-
-void XclTools::WriteRangeList( XclExpStream& rStrm, const ScRangeList& rRanges,
-        ULONG nFirstRange, ULONG nRangeCount)
-{
-    DBG_ASSERT( nFirstRange <= rRanges.Count(), "XclTools::WriteRangeList - error in range index" );
-    DBG_ASSERT( nRangeCount <= rRanges.Count(), "XclTools::WriteRangeList - error in range count" );
-
-    sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( nRangeCount);
-    rStrm << nCount;
-    rStrm.SetSliceSize( 8 );
-
-    for( sal_uInt16 nRange = 0; nRange < nCount; ++nRange )
-    {
-        const ScRange* pRange = rRanges.GetObject( nRange + nFirstRange );
-        DBG_ASSERT( pRange, "XclTools::WriteCellRangeList - missing range" );
-        if( pRange )
-            rStrm   << static_cast< sal_uInt16 >( pRange->aStart.Row() )
-                    << static_cast< sal_uInt16 >( pRange->aEnd.Row() )
-                    << static_cast< sal_uInt16 >( pRange->aStart.Col() )
-                    << static_cast< sal_uInt16 >( pRange->aEnd.Col() );
-        else
-            // write dummy range to keep file format valid
-            rStrm.WriteZeroBytes( 8 );
-    }
-}
-
 // text encoding --------------------------------------------------------------
 
 namespace {
@@ -499,7 +458,7 @@ String XclTools::GetXclFontName( const String& rFontName )
     return rFontName;
 }
 
-// built-in names -------------------------------------------------------------
+// built-in defined names -----------------------------------------------------
 
 const String XclTools::maDefNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
 
@@ -688,25 +647,19 @@ bool XclTools::IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNe
     return false;
 }
 
-// read/write range lists -----------------------------------------------------
+// read/write colors ----------------------------------------------------------
 
-XclImpStream& operator>>( XclImpStream& rStrm, ScRangeList& rRanges )
+XclImpStream& operator>>( XclImpStream& rStrm, Color& rColor )
 {
-    SCTAB nScTab = rStrm.GetRoot().GetCurrScTab();
-    sal_uInt16 nCount, nRow1, nRow2, nCol1, nCol2;
-    rStrm >> nCount;
-    for( ; nCount; --nCount )
-    {
-        rStrm >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-        rRanges.Append( XclTools::MakeScRange( nCol1, nRow1, nScTab, nCol2, nRow2, nScTab ) );
-    }
+    sal_uInt8 nR, nG, nB, nD;
+    rStrm >> nR >> nG >> nB >> nD;
+    rColor.SetColor( RGB_COLORDATA( nR, nG, nB ) );
     return rStrm;
 }
 
-XclExpStream& operator<<( XclExpStream& rStrm, const ScRangeList& rRanges )
+XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor )
 {
-    XclTools::WriteRangeList(rStrm, rRanges, 0, rRanges.Count());
-    return rStrm;
+    return rStrm << rColor.GetRed() << rColor.GetGreen() << rColor.GetBlue() << sal_uInt8( 0 );
 }
 
 // ============================================================================
