@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:25:38 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,14 @@ public:
 
     const SwField*      GetField() const;
     const SwFmtFld*     GetFldFmt(){return GetField() ? pFmtFld : 0; };
+
+    // #111840#
+    /**
+       Returns position of this field.
+
+       @return position of this field
+     */
+    SwPosition * GetPosition();
     void Invalidate();
 };
 /* -----------------21.12.98 10:26-------------------
