@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:12:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,5 +898,23 @@ void SwTextBlocks::EndPutMuchBlockEntries()
         pImp->PutMuchEntries( FALSE );
 }
 
+/*-- 20.09.2004 10:25:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+String    SwTextBlocks::GetBaseURL() const
+{
+    String sRet;
+    if(pImp)
+        sRet = pImp->GetBaseURL();
+    return sRet;
+}
+/*-- 20.09.2004 10:25:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwTextBlocks::SetBaseURL( const String& rURL )
+{
+    if(pImp)
+        pImp->SetBaseURL(rURL);
+}
 
 
