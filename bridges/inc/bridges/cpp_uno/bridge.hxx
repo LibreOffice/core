@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-06 10:37:15 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 11:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ inline void SAL_CALL cppu_Mapping_uno2cpp(
             // proxy may be exchanged during registration
             (*pBridge->pCppEnv->registerProxyInterface)(
                 pBridge->pCppEnv, reinterpret_cast< void ** >( &pSurrogate ),
-                cppu_cppInterfaceProxy_free, pOId, pTypeDescr );
+                (uno_freeProxyFunc)cppu_cppInterfaceProxy_free, pOId, pTypeDescr );
 
             *ppCppI = pSurrogate;
         }
@@ -158,7 +158,8 @@ inline void cppu_cppInterfaceProxy::acquireProxy() throw ()
         // register at cpp env
         void * pThis = static_cast< ::com::sun::star::uno::XInterface * >( this );
         (*pBridge->pCppEnv->registerProxyInterface)(
-            pBridge->pCppEnv, &pThis, cppu_cppInterfaceProxy_free, oid.pData, pTypeDescr );
+            pBridge->pCppEnv, &pThis, (uno_freeProxyFunc)cppu_cppInterfaceProxy_free,
+            oid.pData, pTypeDescr );
         OSL_ASSERT( pThis == static_cast< ::com::sun::star::uno::XInterface * >( this ) );
     }
 }
@@ -228,7 +229,8 @@ inline void SAL_CALL cppu_unoInterfaceProxy_acquire( uno_Interface * pUnoI ) thr
 #endif
         (*static_cast< cppu_unoInterfaceProxy * >( pUnoI )->pBridge->pUnoEnv->registerProxyInterface)(
             static_cast< cppu_unoInterfaceProxy * >( pUnoI )->pBridge->pUnoEnv,
-            reinterpret_cast< void ** >( &pUnoI ), cppu_unoInterfaceProxy_free,
+            reinterpret_cast< void ** >( &pUnoI ),
+            (uno_freeProxyFunc)cppu_unoInterfaceProxy_free,
             static_cast< cppu_unoInterfaceProxy * >( pUnoI )->oid.pData,
             static_cast< cppu_unoInterfaceProxy * >( pUnoI )->pTypeDescr );
 #ifdef DEBUG
@@ -281,7 +283,7 @@ inline void SAL_CALL cppu_Mapping_cpp2uno(
             // proxy may be exchanged during registration
             (*pBridge->pUnoEnv->registerProxyInterface)(
                 pBridge->pUnoEnv, reinterpret_cast< void ** >( &pSurrogate ),
-                cppu_unoInterfaceProxy_free, pOId, pTypeDescr );
+                (uno_freeProxyFunc)cppu_unoInterfaceProxy_free, pOId, pTypeDescr );
 
             *ppUnoI = pSurrogate;
         }
@@ -310,7 +312,7 @@ inline cppu_unoInterfaceProxy::cppu_unoInterfaceProxy(
     // uno_Interface
     uno_Interface::acquire = CPPU_CURRENT_NAMESPACE::cppu_unoInterfaceProxy_acquire;
     uno_Interface::release = CPPU_CURRENT_NAMESPACE::cppu_unoInterfaceProxy_release;
-    uno_Interface::pDispatcher = CPPU_CURRENT_NAMESPACE::cppu_unoInterfaceProxy_dispatch;
+    uno_Interface::pDispatcher = (uno_DispatchMethod)CPPU_CURRENT_NAMESPACE::cppu_unoInterfaceProxy_dispatch;
 }
 
 

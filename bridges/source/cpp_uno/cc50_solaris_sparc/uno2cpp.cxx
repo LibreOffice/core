@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-06 10:39:17 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 11:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ using namespace com::sun::star::uno;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-void callVirtualMethod(
+extern "C" void callVirtualMethod(
         void * pThis,
         sal_Int32 nVtableIndex,
         void * pRegisterReturn,

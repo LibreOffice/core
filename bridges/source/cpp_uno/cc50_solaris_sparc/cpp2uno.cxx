@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-06 10:39:17 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 11:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,7 @@ int cpp_vtable_call( int nTableEntry, void** pCallStack )
 
 enum SpecialReturnType { None, ReturnFloat, ReturnDouble };
 
-void privateSnippetExecutor();
+extern "C" void privateSnippetExecutor();
 
 //__________________________________________________________________________________________________
 void MediateClassData::createVTable( ClassDataBuffer* pBuffer, typelib_InterfaceTypeDescription* pType )
