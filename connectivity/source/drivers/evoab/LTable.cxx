@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:24:26 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,7 +752,7 @@ sal_Bool OEvoabTable::setColumnAliases()
         }
         if(!bFound)
             aColumnFinalName = aColumnReadName;
-        sColumnFinalName = String::CreateFromAscii(::rtl::OUStringToOString(aColumnFinalName, RTL_TEXTENCODING_ASCII_US).getStr());
+        sColumnFinalName = aColumnFinalName;
 
         sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
         ::rtl::OUString aTypeName;
