@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinViewAccessibility.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2005-03-01 20:22:42 $
+ *  last change:$Date: 2005-03-29 11:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,9 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.AccessibilityTools;
-import util.DBTools;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleAction;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.awt.PosSize;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XExtendedToolkit;
@@ -86,17 +82,15 @@ import com.sun.star.container.XNameContainer;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XIsolatedConnection;
 import com.sun.star.sdbc.XStatement;
 import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.ui.dialogs.XExecutableDialog;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
 import util.DesktopTools;
-import util.dbg;
 import util.utils;
 
 
@@ -224,7 +218,10 @@ public class JoinViewAccessibility extends TestCase {
         try
         {
             log.println ("writing database file ...");
-            store = (XStorable) UnoRuntime.queryInterface (XStorable.class, oDBSource);
+            XDocumentDataSource xDDS = (XDocumentDataSource)
+            UnoRuntime.queryInterface(XDocumentDataSource.class, oDBSource);
+            store = (XStorable) UnoRuntime.queryInterface(XStorable.class,
+                    xDDS.getDatabaseDocument());
             aFile = utils.getOfficeTemp ((XMultiServiceFactory) Param.getMSF ())+"JoinView.odb";
             log.println ("... filename will be "+aFile);
             store.storeAsURL (aFile,new PropertyValue[]
@@ -372,7 +369,7 @@ public class JoinViewAccessibility extends TestCase {
 
         XAccessible xRoot = AccessibilityTools.getAccessibleObject (xWindow);
 
-        AccessibilityTools.printAccessibleTree (log,xRoot);
+        AccessibilityTools.printAccessibleTree (log,xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.VIEW_PORT);
 
