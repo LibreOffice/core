@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:41:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,6 +811,11 @@ public:
     SwTxtNode * GetNumRuleNodeAtPos(const Point &rPot);
     BOOL IsNumLabel( const Point &rPt, int nMaxOffset = -1 );
     // <- #i23726#
+    // --> OD 2005-02-21 #i42921#
+    bool IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
+                                   const Point& _rDocPos ) const;
+    // <--
+
 };
 
 #endif
