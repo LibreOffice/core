@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-16 10:56:37 $
+ *  last change: $Author: mib $ $Date: 2002-10-31 10:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@ typedef ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStri
 typedef ::std::map < const ::rtl::OUString, ::rtl::OUString, less_functor> ParamMap;
 #endif
 
+class XMLTextFrameContextHyperlink_Impl;
+
 class XMLTextFrameContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference <
@@ -158,6 +160,8 @@ class XMLTextFrameContext : public SvXMLImportContext
 
     ParamMap aParamMap;
 
+    XMLTextFrameContextHyperlink_Impl   *pHyperlink;
+
     sal_Int32   nX;
     sal_Int32   nY;
     sal_Int32   nWidth;
@@ -175,10 +179,11 @@ class XMLTextFrameContext : public SvXMLImportContext
     sal_Bool    bMinHeight : 1;
     sal_Bool    bSyncWidth : 1;
     sal_Bool    bSyncHeight : 1;
-    sal_Bool    bCreateBase64StreamFailed : 1;
+    sal_Bool    bCreateFailed : 1;
     sal_Bool    bOwnBase64Stream : 1;
 
     void Create( sal_Bool bHRefOrBase64 );
+    sal_Bool CreateIfNotThere();
 
 public:
 

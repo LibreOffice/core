@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-26 11:45:54 $
+ *  last change: $Author: mib $ $Date: 2002-10-31 10:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,36 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 using ::com::sun::star::document::XEventsSupplier;
+
+class XMLTextFrameContextHyperlink_Impl
+{
+    OUString sHRef;
+    OUString sName;
+    OUString sTargetFrameName;
+    sal_Bool bMap;
+
+public:
+
+    inline XMLTextFrameContextHyperlink_Impl( const OUString& rHRef,
+                       const OUString& rName,
+                       const OUString& rTargetFrameName,
+                       sal_Bool bMap );
+
+    const OUString& GetHRef() const { return sHRef; }
+    const OUString& GetName() const { return sName; }
+    const OUString& GetTargetFrameName() const { return sTargetFrameName; }
+    sal_Bool GetMap() const { return bMap; }
+};
+
+inline XMLTextFrameContextHyperlink_Impl::XMLTextFrameContextHyperlink_Impl(
+    const OUString& rHRef, const OUString& rName,
+    const OUString& rTargetFrameName, sal_Bool bM ) :
+    sHRef( rHRef ),
+    sName( rName ),
+    sTargetFrameName( rTargetFrameName ),
+    bMap( bM )
+{
+}
 
 class XMLTextFrameDescContext_Impl : public SvXMLImportContext
 {
@@ -486,7 +516,10 @@ void XMLTextFrameContext::Create( sal_Bool bHRefOrBase64 )
     }
 
     if( !xPropSet.is() )
+    {
+        bCreateFailed = sal_True;
         return;
+    }
 
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
@@ -677,6 +710,29 @@ void XMLTextFrameContext::Create( sal_Bool bHRefOrBase64 )
         xTxtImport->SetListItem( NULL );
     }
 
+    if( pHyperlink )
+    {
+        SetHyperlink( pHyperlink->GetHRef(), pHyperlink->GetName(),
+                      pHyperlink->GetTargetFrameName(), pHyperlink->GetMap() );
+        delete pHyperlink;
+        pHyperlink = 0;
+    }
+
+}
+
+sal_Bool XMLTextFrameContext::CreateIfNotThere()
+{
+    if( !xPropSet.is() &&
+        ( XML_TEXT_FRAME_OBJECT_OLE == nType ||
+          XML_TEXT_FRAME_GRAPHIC == nType ) &&
+        xBase64Stream.is() && !bCreateFailed )
+    {
+        if( bOwnBase64Stream )
+            xBase64Stream->closeOutput();
+        Create( sal_True );
+    }
+
+    return xPropSet.is();
 }
 
 XMLTextFrameContext::XMLTextFrameContext(
@@ -708,7 +764,8 @@ XMLTextFrameContext::XMLTextFrameContext(
     sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName")),
     sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation")),
     sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")),
-    sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject"))
+    sGraphicServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GraphicObject")),
+    pHyperlink( 0 )
 {
     nX = 0;
     nY = 0;
@@ -724,7 +781,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     bMinHeight = sal_False;
     bSyncWidth = sal_False;
     bSyncHeight = sal_False;
-    bCreateBase64StreamFailed = sal_False;
+    bCreateFailed = sal_False;
     bOwnBase64Stream = sal_False;
 
     UniReference < XMLTextImportHelper > xTxtImport =
@@ -926,18 +983,14 @@ XMLTextFrameContext::XMLTextFrameContext(
 
 XMLTextFrameContext::~XMLTextFrameContext()
 {
+    delete pHyperlink;  // should be 0, but might exist not only because of
+                        // a filter bug but also because of an improper XML
+                        // file, so an OSL_ENSURE is not correct either.
 }
 
 void XMLTextFrameContext::EndElement()
 {
-    if( ( XML_TEXT_FRAME_OBJECT_OLE == nType ||
-          XML_TEXT_FRAME_GRAPHIC == nType )
-        && !xPropSet.is() && xBase64Stream.is() )
-    {
-        if( bOwnBase64Stream )
-            xBase64Stream->closeOutput();
-        Create( sal_True );
-    }
+    CreateIfNotThere();
 
     // alternative text
     if( sDesc.getLength() )
@@ -997,22 +1050,31 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                                               nPrefix, rLocalName,
                                                xAttrList, nType, aParamMap );
         }
-        else if( xPropSet.is() )
+        else
         {
             if( IsXMLToken( rLocalName, XML_CONTOUR_POLYGON ) )
-                pContext = new XMLTextFrameContourContext_Impl( GetImport(),
-                                              nPrefix, rLocalName,
-                                               xAttrList, xPropSet, sal_False );
+            {
+                if( CreateIfNotThere() )
+                    pContext = new XMLTextFrameContourContext_Impl( GetImport(),
+                                                  nPrefix, rLocalName,
+                                                  xAttrList, xPropSet, sal_False );
+            }
             else if( IsXMLToken( rLocalName, XML_CONTOUR_PATH ) )
-                pContext = new XMLTextFrameContourContext_Impl( GetImport(),
-                                              nPrefix, rLocalName,
-                                               xAttrList, xPropSet, sal_True );
+            {
+                if( CreateIfNotThere() )
+                    pContext = new XMLTextFrameContourContext_Impl( GetImport(),
+                                                  nPrefix, rLocalName,
+                                                  xAttrList, xPropSet, sal_True );
+            }
             else if ( IsXMLToken( rLocalName, XML_IMAGE_MAP ) &&
                       ( nType == XML_TEXT_FRAME_TEXTBOX ||
                         nType == XML_TEXT_FRAME_GRAPHIC ||
                         nType == XML_TEXT_FRAME_OBJECT_OLE ) )
-                pContext = new XMLImageMapContext( GetImport(), nPrefix,
-                                                   rLocalName, xPropSet );
+            {
+                if( CreateIfNotThere() )
+                    pContext = new XMLImageMapContext( GetImport(), nPrefix,
+                                                       rLocalName, xPropSet );
+            }
         }
     }
     else if( (XML_NAMESPACE_OFFICE == nPrefix) )
@@ -1020,7 +1082,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         if( IsXMLToken( rLocalName, XML_EVENTS ) )
         {
             // do we still have the frame object?
-            if (xPropSet.is())
+            if( CreateIfNotThere() )
             {
                 // is it an event supplier?
                 Reference<XEventsSupplier> xEventsSupplier(xPropSet, UNO_QUERY);
@@ -1037,7 +1099,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         else if( xmloff::token::IsXMLToken( rLocalName,
                                             xmloff::token::XML_BINARY_DATA ) )
         {
-            if( !xPropSet.is() && !xBase64Stream.is() )
+            if( !xPropSet.is() && !xBase64Stream.is() && !bCreateFailed )
             {
                 switch( nType )
                 {
@@ -1064,7 +1126,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
               (XML_NAMESPACE_MATH == nPrefix &&
                IsXMLToken(rLocalName, XML_MATH) ) ) )
     {
-        if( !xPropSet.is() )
+        if( !xPropSet.is() && !bCreateFailed )
         {
             XMLEmbeddedObjectImportContext *pEContext =
                 new XMLEmbeddedObjectImportContext( GetImport(), nPrefix,
@@ -1101,12 +1163,12 @@ void XMLTextFrameContext::Characters( const OUString& rChars )
 {
     if( ( XML_TEXT_FRAME_OBJECT_OLE == nType ||
           XML_TEXT_FRAME_GRAPHIC == nType) &&
-        !xPropSet.is() )
+        !xPropSet.is() && !bCreateFailed )
     {
         OUString sTrimmedChars( rChars. trim() );
         if( sTrimmedChars.getLength() )
         {
-            if( !xBase64Stream.is() && !bCreateBase64StreamFailed )
+            if( !xBase64Stream.is() )
             {
                 if( XML_TEXT_FRAME_GRAPHIC == nType )
                 {
@@ -1152,7 +1214,13 @@ void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,
                        sal_Bool bMap )
 {
     if( !xPropSet.is() )
+    {
+        OSL_ENSURE( !pHyperlink, "recursive SetHyperlink call" );
+        delete pHyperlink;
+        pHyperlink = new XMLTextFrameContextHyperlink_Impl(
+                rHRef, rName, rTargetFrameName, bMap );
         return;
+    }
 
     UniReference< XMLTextImportHelper > xTxtImp = GetImport().GetTextImport();
     Reference < XPropertySetInfo > xPropSetInfo =
