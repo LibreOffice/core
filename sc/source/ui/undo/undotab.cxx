@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:48:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
 //
 
 ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
-                                  USHORT nTabNum,
+                                  SCTAB nTabNum,
                                   BOOL bApp,
                                   const String& rNewName) :
     ScSimpleUndo( pNewDocShell ),
@@ -231,7 +231,7 @@ BOOL __EXPORT ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
-                                        USHORT nTabNum,
+                                        SCTAB nTabNum,
                                         BOOL bApp,SvStrings *pNewNameList) :
     ScSimpleUndo( pNewDocShell ),
     nTab( nTabNum ),
@@ -293,7 +293,7 @@ void __EXPORT ScUndoInsertTables::Undo()
     pDocShell->SetInUndo( TRUE );               //! BeginUndo
     bDrawIsInUndo = TRUE;
 
-    SvUShorts TheTabs;
+    SvShorts TheTabs;
     for(int i=0;i<pNameList->Count();i++)
     {
         TheTabs.Insert(nTab+i,TheTabs.Count());
@@ -326,7 +326,7 @@ void __EXPORT ScUndoInsertTables::Redo()
     pDocShell->SetInUndo( TRUE );               //! BeginRedo
     bDrawIsInUndo = TRUE;
     pViewShell->SetTabNo(nTab);
-    pViewShell->InsertTables( pNameList, nTab,pNameList->Count(),FALSE );
+    pViewShell->InsertTables( pNameList, nTab, static_cast<SCTAB>(pNameList->Count()),FALSE );
 
     bDrawIsInUndo = FALSE;
     pDocShell->SetInUndo( FALSE );              //! EndRedo
@@ -352,7 +352,7 @@ BOOL __EXPORT ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
 //      Tabelle loeschen
 //
 
-ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell,const SvUShorts &aTab, //USHORT nNewTab,
+ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell,const SvShorts &aTab, //SCTAB nNewTab,
                                     ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
     ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST )
 {
@@ -393,7 +393,7 @@ void ScUndoDeleteTab::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
-USHORT lcl_GetVisibleTabBefore( ScDocument& rDoc, USHORT nTab )
+SCTAB lcl_GetVisibleTabBefore( ScDocument& rDoc, SCTAB nTab )
 {
     while ( nTab > 0 && !rDoc.IsVisible( nTab ) )
         --nTab;
@@ -522,7 +522,7 @@ BOOL __EXPORT ScUndoDeleteTab::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoRenameTab::ScUndoRenameTab( ScDocShell* pNewDocShell,
-                                  USHORT nT,
+                                  SCTAB nT,
                                   const String& rOldName,
                                   const String& rNewName) :
     ScSimpleUndo( pNewDocShell ),
@@ -541,7 +541,7 @@ String __EXPORT ScUndoRenameTab::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_RENAME_TAB );
 }
 
-void ScUndoRenameTab::DoChange( USHORT nTab, const String& rName ) const
+void ScUndoRenameTab::DoChange( SCTAB nTab, const String& rName ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->RenameTab( nTab, rName );
@@ -585,8 +585,8 @@ BOOL __EXPORT ScUndoRenameTab::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoMoveTab::ScUndoMoveTab( ScDocShell* pNewDocShell,
-                                  const SvUShorts &aOldTab,
-                                  const SvUShorts &aNewTab) :
+                                  const SvShorts &aOldTab,
+                                  const SvShorts &aNewTab) :
     ScSimpleUndo( pNewDocShell )
 {
     int i;
@@ -617,10 +617,10 @@ void ScUndoMoveTab::DoChange( BOOL bUndo ) const
     {
         for(int i=theNewTabs.Count()-1;i>=0;i--)
         {
-            USHORT nDestTab = theNewTabs[i];
-            USHORT nNewTab = theNewTabs[i];
-            USHORT nOldTab = theOldTabs[i];
-            if (nDestTab > MAXCOL)                          // angehaengt ?
+            SCTAB nDestTab = theNewTabs[i];
+            SCTAB nNewTab = theNewTabs[i];
+            SCTAB nOldTab = theOldTabs[i];
+            if (nDestTab > MAXTAB)                          // angehaengt ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
             pDoc->MoveTab( nDestTab, nOldTab );
@@ -632,10 +632,10 @@ void ScUndoMoveTab::DoChange( BOOL bUndo ) const
     {
         for(int i=0;i<theNewTabs.Count();i++)
         {
-            USHORT nDestTab = theNewTabs[i];
-            USHORT nNewTab = theNewTabs[i];
-            USHORT nOldTab = theOldTabs[i];
-            if (nDestTab > MAXCOL)                          // angehaengt ?
+            SCTAB nDestTab = theNewTabs[i];
+            SCTAB nNewTab = theNewTabs[i];
+            SCTAB nOldTab = theOldTabs[i];
+            if (nDestTab > MAXTAB)                          // angehaengt ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
             pDoc->MoveTab( nOldTab, nNewTab );
@@ -678,8 +678,8 @@ BOOL __EXPORT ScUndoMoveTab::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoCopyTab::ScUndoCopyTab( ScDocShell* pNewDocShell,
-                                  const SvUShorts &aOldTab,
-                                  const SvUShorts &aNewTab) :
+                                  const SvShorts &aOldTab,
+                                  const SvShorts &aNewTab) :
     ScSimpleUndo( pNewDocShell ),
     pDrawUndo( NULL )
 {
@@ -727,7 +727,7 @@ void __EXPORT ScUndoCopyTab::Undo()
     int i;
     for(i=theNewTabs.Count()-1;i>=0;i--)
     {
-        USHORT nDestTab = theNewTabs[i];
+        SCTAB nDestTab = theNewTabs[i];
         if (nDestTab > MAXTAB)                          // append?
             nDestTab = pDoc->GetTableCount() - 1;
 
@@ -741,7 +741,7 @@ void __EXPORT ScUndoCopyTab::Undo()
 
     for(i=theNewTabs.Count()-1;i>=0;i--)
     {
-        USHORT nDestTab = theNewTabs[i];
+        SCTAB nDestTab = theNewTabs[i];
         if (nDestTab > MAXTAB)                          // append?
             nDestTab = pDoc->GetTableCount() - 1;
 
@@ -756,13 +756,13 @@ void __EXPORT ScUndoCopyTab::Redo()
     ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    USHORT nDestTab = 0;
+    SCTAB nDestTab = 0;
     for(int i=0;i<theNewTabs.Count();i++)
     {
         nDestTab = theNewTabs[i];
-        USHORT nNewTab = theNewTabs[i];
-        USHORT nOldTab = theOldTabs[i];
-        if (nDestTab > MAXCOL)                          // angehaengt ?
+        SCTAB nNewTab = theNewTabs[i];
+        SCTAB nOldTab = theOldTabs[i];
+        if (nDestTab > MAXTAB)                          // angehaengt ?
             nDestTab = pDoc->GetTableCount() - 1;
 
         bDrawIsInUndo = TRUE;
@@ -771,7 +771,7 @@ void __EXPORT ScUndoCopyTab::Redo()
 
         pViewShell->GetViewData()->MoveTab( nOldTab, nNewTab );
 
-        USHORT nAdjSource = nOldTab;
+        SCTAB nAdjSource = nOldTab;
         if ( nNewTab <= nOldTab )
             ++nAdjSource;               // new position of source table after CopyTab
 
@@ -819,7 +819,7 @@ BOOL __EXPORT ScUndoCopyTab::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoMakeScenario::ScUndoMakeScenario( ScDocShell* pNewDocShell,
-                        USHORT nSrc, USHORT nDest, ScDocument* pUndo,
+                        SCTAB nSrc, SCTAB nDest, ScDocument* pUndo,
                         const String& rN, const String& rC,
                         const Color& rCol, USHORT nF,
                         const ScMarkData& rMark ) :
@@ -897,7 +897,7 @@ BOOL __EXPORT ScUndoMakeScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoImportTab::ScUndoImportTab( ScDocShell* pShell,
-                        USHORT nNewTab, USHORT nNewCount, BOOL bNewLink ) :
+                        SCTAB nNewTab, SCTAB nNewCount, BOOL bNewLink ) :
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
     nCount( nNewCount ),
@@ -923,7 +923,7 @@ void ScUndoImportTab::DoChange() const
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     ScDocument* pDoc = pDocShell->GetDocument();
-    USHORT nCount = pDoc->GetTableCount();
+    SCTAB nCount = pDoc->GetTableCount();
     if (pViewShell)
     {
         if(nTab<nCount)
@@ -945,7 +945,7 @@ void __EXPORT ScUndoImportTab::Undo()
 {
     //! eingefuegte Bereichsnamen etc.
 
-    USHORT i;
+    SCTAB i;
     ScDocument* pDoc = pDocShell->GetDocument();
     BOOL bMakeRedo = !pRedoDoc;
     if (bMakeRedo)
@@ -956,7 +956,7 @@ void __EXPORT ScUndoImportTab::Undo()
         String aOldName;
         for (i=0; i<nCount; i++)
         {
-            USHORT nTabPos=nTab+i;
+            SCTAB nTabPos=nTab+i;
 
             pDoc->CopyToDocument(0,0,nTabPos, MAXCOL,MAXROW,nTabPos, IDF_ALL,FALSE, pRedoDoc );
             pDoc->GetName( nTabPos, aOldName );
@@ -1003,10 +1003,10 @@ void __EXPORT ScUndoImportTab::Redo()
 
     ScDocument* pDoc = pDocShell->GetDocument();
     String aName;
-    USHORT i;
+    SCTAB i;
     for (i=0; i<nCount; i++)                // first insert all sheets (#63304#)
     {
-        USHORT nTabPos=nTab+i;
+        SCTAB nTabPos=nTab+i;
         pRedoDoc->GetName(nTabPos,aName);
         bDrawIsInUndo = TRUE;
         pDoc->InsertTab(nTabPos,aName);
@@ -1014,7 +1014,7 @@ void __EXPORT ScUndoImportTab::Redo()
     }
     for (i=0; i<nCount; i++)                // then copy into inserted sheets
     {
-        USHORT nTabPos=nTab+i;
+        SCTAB nTabPos=nTab+i;
         pRedoDoc->CopyToDocument(0,0,nTabPos, MAXCOL,MAXROW,nTabPos, IDF_ALL,FALSE, pDoc );
 
         if ( pRedoDoc->IsScenario(nTabPos) )
@@ -1065,12 +1065,12 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
     nCount( 0 )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    USHORT nTabCount = pDoc->GetTableCount();
-    pTabs     = new USHORT[nTabCount];
+    SCTAB nTabCount = pDoc->GetTableCount();
+    pTabs     = new SCTAB[nTabCount];
     pModes    = new BYTE[nTabCount];
     pTabNames = new String[nTabCount];
 
-    for (USHORT i=0; i<nTabCount; i++)
+    for (SCTAB i=0; i<nTabCount; i++)
     {
         BYTE nMode = pDoc->GetLinkMode(i);
         if (nMode)
@@ -1144,7 +1144,7 @@ BOOL __EXPORT ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& rTarget) const
 //      Tabellen ein-/ausblenden
 //
 
-ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, USHORT nNewTab, BOOL bNewShow ) :
+ScUndoShowHideTab::ScUndoShowHideTab( ScDocShell* pShell, SCTAB nNewTab, BOOL bNewShow ) :
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
     bShow( bNewShow )
@@ -1202,7 +1202,7 @@ String __EXPORT ScUndoShowHideTab::GetComment() const
 //      Tabelle/Dokument schuetzen oder Schutz aufheben
 //
 
-ScUndoProtect::ScUndoProtect( ScDocShell* pShell, USHORT nNewTab,
+ScUndoProtect::ScUndoProtect( ScDocShell* pShell, SCTAB nNewTab,
                             BOOL bNewProtect, const uno::Sequence<sal_Int8>& rNewPassword ) :
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
@@ -1284,7 +1284,7 @@ String __EXPORT ScUndoProtect::GetComment() const
 //      Druck-/Wiederholungsbereiche aendern
 //
 
-ScUndoPrintRange::ScUndoPrintRange( ScDocShell* pShell, USHORT nNewTab,
+ScUndoPrintRange::ScUndoPrintRange( ScDocShell* pShell, SCTAB nNewTab,
                                     ScPrintRangeSaver* pOld, ScPrintRangeSaver* pNew ) :
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
@@ -1353,7 +1353,7 @@ String __EXPORT ScUndoPrintRange::GetComment() const
 //      Szenario-Flags
 //
 
-ScUndoScenarioFlags::ScUndoScenarioFlags( ScDocShell* pNewDocShell, USHORT nT,
+ScUndoScenarioFlags::ScUndoScenarioFlags( ScDocShell* pNewDocShell, SCTAB nT,
                     const String& rON, const String& rNN, const String& rOC, const String& rNC,
                     const Color& rOCol, const Color& rNCol, USHORT nOF, USHORT nNF ) :
     ScSimpleUndo( pNewDocShell ),
@@ -1510,7 +1510,7 @@ BOOL ScUndoRenameObject::CanRepeat(SfxRepeatTarget& rTarget) const
 //      Switch sheet between left-to-right and right-to-left
 //
 
-ScUndoLayoutRTL::ScUndoLayoutRTL( ScDocShell* pShell, USHORT nNewTab, BOOL bNewRTL ) :
+ScUndoLayoutRTL::ScUndoLayoutRTL( ScDocShell* pShell, SCTAB nNewTab, BOOL bNewRTL ) :
     ScSimpleUndo( pShell ),
     nTab( nNewTab ),
     bRTL( bNewRTL )
