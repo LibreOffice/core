@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 16:03:00 $
+ *  last change: $Author: nf $ $Date: 2002-06-13 13:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text [ finnish ] = "Sijainti" ;
         Text [ danish ] = "Placering" ;
         Text [ french ] = "Position" ;
-        Text [ swedish ] = "Placering" ;
+        Text [ swedish ] = "Position" ;
         Text [ dutch ] = "Positie" ;
         Text [ spanish ] = "Posiciσn" ;
         Text [ english_us ] = "Position" ;
@@ -454,7 +454,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text [ spanish ] = "~Igualar" ;
         Text [ french ] = "Proportionnel" ;
         Text [ dutch ] = "~Synchroniseren" ;
-        Text [ swedish ] = "~Anpassa proportionellt" ;
+        Text [ swedish ] = "Anpassa proportionellt" ;
         Text [ danish ] = "Proportional" ;
         Text [ portuguese_brazilian ] = "~Abgleich" ;
         Text [ portuguese ] = "Pr~oporcional" ;
@@ -521,7 +521,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ finnish ] = "Sijainti";
         Text[ italian ] = "Posizione";
         Text[ danish ] = "Placering";
-        Text[ swedish ] = "~Position";
+        Text[ swedish ] = "Position";
         Text[ polish ] = "~Pozycja";
         Text[ portuguese_brazilian ] = "~Position";
         Text[ japanese ] = "δ½η½®";
@@ -551,7 +551,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ finnish ] = "~Size";
         Text[ italian ] = "~Dimensione";
         Text[ danish ] = "~Size";
-        Text[ swedish ] = "~Storlek";
+        Text[ swedish ] = "Storlek";
         Text[ polish ] = "~Size";
         Text[ portuguese_brazilian ] = "~Size";
         Text[ japanese ] = "γ‚µγ‚¤γ‚Ί";
@@ -618,7 +618,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ chinese_traditional ] = "ε’ε…§ζ–‡ε―¬εΊ¦ε°ι½(~F)";
         Text[ arabic ] = "γαΗΑγΙ ΗαΪΡΦ ααδΥ";
         Text[ greek ] = "Προσαρμογή πλάτους ως προς κείμενο";
-        Text[ korean ] = "ν…μ¤νΈμ— λ„λΉ„ λ§μ¶¤(~F)";
+        Text[ korean ] = "ν…μ¤νΈμ— λ„λΉ„ λ§μ¶”κΈ°(~F)";
         Text[ turkish ] = "Geniώliπi, metne gφre a~yarla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ajustar ~ancho al texto";
@@ -1043,7 +1043,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         {
             < "Uppifrεn" ; > ;
             < "Uppe" ; > ;
-            < "Centrerat" ; > ;
+            < "Centrerad" ; > ;
             < "Nere" ; > ;
             < "Tecken uppe" ; > ;
             < "Tecken centrerat" ; > ;
