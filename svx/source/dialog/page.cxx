@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-12 09:53:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,20 @@ BOOL IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
         return FALSE;
 }
 
+// -----------------------------------------------------------------------
+
+#define MARGIN_LEFT     ( (MarginPosition)0x0001 )
+#define MARGIN_RIGHT    ( (MarginPosition)0x0002 )
+#define MARGIN_TOP      ( (MarginPosition)0x0004 )
+#define MARGIN_BOTTOM   ( (MarginPosition)0x0008 )
+
+struct SvxPage_Impl
+{
+    MarginPosition  m_nPos;
+
+    SvxPage_Impl() : m_nPos( 0 ) {}
+};
+
 // class SvxPageDescPage --------------------------------------------------
 
 // gibt den Bereich der Which-Werte zur"uck
@@ -282,17 +296,17 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aOutsideText        (       ResId( STR_OUTSIDE ) ),
     aPrintRangeQueryText(       ResId( STR_QUERY_PRINTRANGE ) ),
 
-    bLandscape      ( FALSE ),
-    eMode           ( SVX_PAGE_MODE_STANDARD ),
-    ePaperStart     ( SVX_PAPER_A3 ),
-    ePaperEnd       ( SVX_PAPER_DL )
+    bLandscape          ( FALSE ),
+    eMode               ( SVX_PAGE_MODE_STANDARD ),
+    ePaperStart         ( SVX_PAPER_A3 ),
+    ePaperEnd           ( SVX_PAPER_DL ),
+    pImpl               ( new SvxPage_Impl )
 
 {
     bBorderModified = FALSE;
     FreeResource();
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
-
 
     SvtLanguageOptions aLangOptions;
     sal_Bool bCJK = aLangOptions.IsAsianTypographyEnabled();
@@ -391,6 +405,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
 SvxPageDescPage::~SvxPageDescPage()
 {
+    delete pImpl;
 }
 
 // -----------------------------------------------------------------------
@@ -666,6 +681,8 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     aVertBox.SaveValue();
     aHorzBox.SaveValue();
     aAdaptBox.SaveValue();
+
+    CheckMarginEdits( true );
 
     // Registerhaltigkeit
     if(SFX_ITEM_SET == rSet.GetItemState(SID_SWREGISTER_MODE))
@@ -1246,8 +1263,6 @@ void SvxPageDescPage::UpdateExample_Impl()
     // Layout
     aBspWin.SetUsage( PosToPageUsage_Impl( aLayoutBox.GetSelectEntryPos() ) );
     aBspWin.Invalidate();
-
-
 }
 
 // -----------------------------------------------------------------------
@@ -1464,71 +1479,29 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* pSet )
     USHORT nPos = aPaperSizeBox.GetSelectEntryPos();
     SvxPaper ePaper = (SvxPaper)(ULONG)aPaperSizeBox.GetEntryData( nPos );
 
-    if ( ePaper != SVX_PAPER_SCREEN && (
-         aLeftMarginEdit.GetValue() < nFirstLeftMargin ||
-         aRightMarginEdit.GetValue() < nFirstRightMargin ||
-         aTopMarginEdit.GetValue() < nFirstTopMargin ||
-         aBottomMarginEdit.GetValue() < nFirstBottomMargin ||
-         aLeftMarginEdit.GetValue() > nLastLeftMargin ||
-         aRightMarginEdit.GetValue() > nLastRightMargin ||
-         aTopMarginEdit.GetValue() > nLastTopMargin ||
-         aBottomMarginEdit.GetValue() > nLastBottomMargin ) )
+    if ( ePaper != SVX_PAPER_SCREEN && IsMarginOutOfRange() )
     {
         if ( QueryBox( this, WB_YES_NO | WB_DEF_NO, aPrintRangeQueryText ).Execute() == RET_NO )
         {
             MetricField* pField = NULL;
-            if ( aLeftMarginEdit.GetValue() < nFirstLeftMargin )
-            {
-                aLeftMarginEdit.SetValue( nFirstLeftMargin );
+            if ( IsPrinterRangeOverflow( aLeftMarginEdit, nFirstLeftMargin, nLastLeftMargin, MARGIN_LEFT ) )
                 pField = &aLeftMarginEdit;
-            }
-            if ( aRightMarginEdit.GetValue() < nFirstRightMargin )
-            {
-                aRightMarginEdit.SetValue( nFirstRightMargin );
-                if ( !pField )
-                    pField = &aRightMarginEdit;
-            }
-            if ( aTopMarginEdit.GetValue() < nFirstTopMargin )
-            {
-                aTopMarginEdit.SetValue( nFirstTopMargin );
-                if ( !pField )
-                    pField = &aTopMarginEdit;
-            }
-            if ( aBottomMarginEdit.GetValue() < nFirstBottomMargin )
-            {
-                aBottomMarginEdit.SetValue( nFirstBottomMargin );
-                if ( !pField )
-                    pField = &aBottomMarginEdit;
-            }
-            if ( aLeftMarginEdit.GetValue() > nLastLeftMargin )
-            {
-                aLeftMarginEdit.SetValue( nLastLeftMargin );
-                if ( !pField )
-                    pField = &aLeftMarginEdit;
-            }
-            if ( aRightMarginEdit.GetValue() > nLastRightMargin )
-            {
-                aRightMarginEdit.SetValue( nLastRightMargin );
-                if ( !pField )
-                    pField = &aRightMarginEdit;
-            }
-            if ( aTopMarginEdit.GetValue() > nLastTopMargin )
-            {
-                aTopMarginEdit.SetValue( nLastTopMargin );
-                if ( !pField )
-                    pField = &aTopMarginEdit;
-            }
-            if ( aBottomMarginEdit.GetValue() > nLastBottomMargin )
-            {
-                aBottomMarginEdit.SetValue( nLastBottomMargin );
-                if ( !pField )
-                    pField = &aBottomMarginEdit;
-            }
+            if (    IsPrinterRangeOverflow( aRightMarginEdit, nFirstRightMargin, nLastRightMargin, MARGIN_RIGHT )
+                 && !pField )
+                pField = &aRightMarginEdit;
+            if (    IsPrinterRangeOverflow( aTopMarginEdit, nFirstTopMargin, nLastTopMargin, MARGIN_TOP )
+                 && !pField )
+                pField = &aTopMarginEdit;
+            if (    IsPrinterRangeOverflow( aBottomMarginEdit, nFirstBottomMargin, nLastBottomMargin, MARGIN_BOTTOM )
+                 && !pField )
+                pField = &aBottomMarginEdit;
             if ( pField )
                 pField->GrabFocus();
             UpdateExample_Impl();
             return KEEP_PAGE;
         }
+        else
+            CheckMarginEdits( false );
     }
 
     if ( pSet )
@@ -1546,6 +1519,7 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* pSet )
         if ( aSize.Width() && ( !pSize || !IsEqualSize_Impl( pSize, aSize ) ) )
             pSet->Put( SvxSizeItem( nWh, aSize ) );
     }
+
     return LEAVE_PAGE;
 }
 
@@ -1730,3 +1704,64 @@ IMPL_LINK( SvxPageDescPage, FrameDirectionModify_Impl, ListBox*,  pListBox)
     aBspWin.Invalidate();
     return 0;
 }
+
+bool SvxPageDescPage::IsPrinterRangeOverflow(
+    MetricField& rField, long nFirstMargin, long nLastMargin, MarginPosition nPos )
+{
+    bool bRet = false;
+    bool bCheck = ( ( pImpl->m_nPos & nPos ) == 0 );
+    long nValue = rField.GetValue();
+    if ( bCheck &&
+         (  nValue < nFirstMargin || nValue > nLastMargin ) &&
+         rField.GetText() != rField.GetSavedValue() )
+    {
+        rField.SetValue( nValue < nFirstMargin ? nFirstMargin : nLastMargin );
+         bRet = true;
+    }
+
+    return bRet;
+}
+
+/** Check if a value of a margin edit is outside the printer paper margins
+    and save this information.
+*/
+void SvxPageDescPage::CheckMarginEdits( bool _bClear )
+{
+    if ( _bClear )
+        pImpl->m_nPos = 0;
+
+    long nValue = aLeftMarginEdit.GetValue();
+    if (  nValue < nFirstLeftMargin || nValue > nLastLeftMargin )
+        pImpl->m_nPos |= MARGIN_LEFT;
+    nValue = aRightMarginEdit.GetValue();
+    if (  nValue < nFirstRightMargin || nValue > nLastRightMargin )
+        pImpl->m_nPos |= MARGIN_RIGHT;
+    nValue = aTopMarginEdit.GetValue();
+    if (  nValue < nFirstTopMargin || nValue > nLastTopMargin )
+        pImpl->m_nPos |= MARGIN_TOP;
+    nValue = aBottomMarginEdit.GetValue();
+    if (  nValue < nFirstBottomMargin || nValue > nLastBottomMargin )
+        pImpl->m_nPos |= MARGIN_BOTTOM;
+}
+
+bool SvxPageDescPage::IsMarginOutOfRange()
+{
+    bool bRet = ( ( ( !( pImpl->m_nPos & MARGIN_LEFT ) &&
+                      ( aLeftMarginEdit.GetText() != aLeftMarginEdit.GetSavedValue() ) ) &&
+                    ( aLeftMarginEdit.GetValue() < nFirstLeftMargin ||
+                      aLeftMarginEdit.GetValue() > nLastLeftMargin ) ) ||
+                  ( ( !( pImpl->m_nPos & MARGIN_RIGHT ) &&
+                      ( aRightMarginEdit.GetText() != aRightMarginEdit.GetSavedValue() ) ) &&
+                    ( aRightMarginEdit.GetValue() < nFirstRightMargin ||
+                      aRightMarginEdit.GetValue() > nLastRightMargin ) ) ||
+                  ( ( !( pImpl->m_nPos & MARGIN_TOP ) &&
+                      ( aTopMarginEdit.GetText() != aTopMarginEdit.GetSavedValue() ) ) &&
+                    ( aTopMarginEdit.GetValue() < nFirstTopMargin ||
+                      aTopMarginEdit.GetValue() > nLastTopMargin ) ) ||
+                  ( ( !( pImpl->m_nPos & MARGIN_BOTTOM ) &&
+                      ( aBottomMarginEdit.GetText() != aBottomMarginEdit.GetSavedValue() ) ) &&
+                    ( aBottomMarginEdit.GetValue() < nFirstBottomMargin ||
+                      aBottomMarginEdit.GetValue() > nLastBottomMargin ) ) );
+    return bRet;
+}
+
