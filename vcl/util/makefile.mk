@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 15:17:20 $
+#   last change: $Author: kz $ $Date: 2003-11-18 14:47:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -184,17 +184,15 @@ LIB1FILES=  $(SLB)$/app.lib     \
 LIB1OBJFILES=$(SLO)$/salmain.obj
 .ENDIF
 .ELSE           # "$(remote)" != ""
+.IF "$(GUI)" == "UNX"
+LIB1FILES+=$(SLB)$/salplug.lib
+.ELSE
 LIB1FILES+= \
             $(SLB)$/salwin.lib  \
             $(SLB)$/salgdi.lib  \
             $(SLB)$/salapp.lib
 .ENDIF          # "$(remote)" != ""
-
-.IF "$(GUI)" == "UNX"
-.IF "$(USE_XPRINT)" != "TRUE"
-    SHL1STDLIBS=-lpsp$(VERSION)$(DLLPOSTFIX)
-.ENDIF # ! USE_XPRINT
-.ENDIF # UNX
+.ENDIF
 
 SHL1TARGET= vcl$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= ivcl
@@ -226,6 +224,8 @@ SHL1DEPN=   $(L)$/itools.lib $(L)$/sot.lib
 SHL1LIBS=   $(LIB1TARGET)
 .IF "$(GUI)"!="UNX"
 SHL1OBJS=   $(SLO)$/salshl.obj
+.ELSE
+SHL1STDLIBS+=-ldl
 .ENDIF
 
 .IF "$(GUI)" != "MAC"
@@ -258,8 +258,8 @@ SHL1STDLIBS += uwinapi.lib      \
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
 LINKFLAGSSHL += /ENTRY:LibMain@12
 .ENDIF
-
 .ENDIF
+
 
 # --- UNX ----------------------------------------------------------------
 
@@ -273,47 +273,67 @@ SHL1STDLIBS += -ldl
 SHL1STDLIBS += -framework Cocoa
 .ENDIF
 
-.IF "$(GUIBASE)"=="unx"
-
-.IF "$(WITH_LIBSN)"=="YES"
-SHL1STDLIBS+=$(LIBSN_LIBS)
-.ENDIF
-
-# Solaris
-.IF "$(OS)"=="SOLARIS"
-
-.IF "$(USE_XPRINT)" == "TRUE"
-SHL1STDLIBS += -lXp -lXext -lSM -lICE -lX11
-.ELSE
-SHL1STDLIBS += -lXext -lSM -lICE -lX11
-.ENDIF          # "$(USE_XPRINT)" == "TRUE"
-
-# Others
-.ELSE           # "$(OS)"=="SOLARIS"
-.IF "$(USE_XPRINT)" == "TRUE"
-SHL1STDLIBS += -lXp -lXext -lSM -lICE -lX11
-.ELSE
-.IF "$(CPU)" == "I"
-SHL1STDLIBS += -Wl,-Bstatic -lXinerama -Wl,-Bdynamic 
-.ENDIF
-SHL1STDLIBS += -lXext -lSM -lICE -lX11
-.ENDIF          # "$(USE_XPRINT)" == "TRUE"
-.ENDIF          # "$(OS)"=="SOLARIS"
-.ENDIF          # "$(GUIBASE)"=="unx"
 
 .IF "$(OS)"=="MACOSX"
 SHL1STDLIBS += -lXinerama
 .ENDIF
 
+.ENDIF          # "$(GUI)"=="UNX"
+
+# UNX sal plugins
+.IF "$(GUI)" == "UNX"
+
+# basic pure X11 plugin
+LIB2TARGET=$(SLB)$/ipure_x
+LIB2FILES= \
+            $(SLB)$/salwin.lib  \
+            $(SLB)$/salgdi.lib  \
+            $(SLB)$/salapp.lib
+SHL2TARGET=pure_x_$(UPD)$(DLLPOSTFIX)
+SHL2IMPLIB=ipure_x
+SHL2LIBS=  $(LIB2TARGET)
+
+# libs for pure_x plugin
+SHL2STDLIBS=\
+            $(VCLLIB)\
+            -lpsp$(VERSION)$(DLLPOSTFIX)\
+            $(SOTLIB)           \
+            $(UNOTOOLSLIB)      \
+            $(TOOLSLIB)         \
+            $(COMPHELPERLIB)	\
+            $(UCBHELPERLIB)     \
+            $(CPPUHELPERLIB)    \
+            $(CPPULIB)          \
+            $(VOSLIB)           \
+            $(SALLIB)
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
-SHL1STDLIBS += -laudio
+SHL2STDLIBS += -laudio
 .IF "$(OS)"=="SOLARIS"
 # needed by libaudio.a
-SHL1STDLIBS += -ldl -lnsl -lsocket
+SHL2STDLIBS += -ldl -lnsl -lsocket
 .ENDIF # SOLARIS
-.ENDIF          # "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
+.ENDIF # "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 
-.ENDIF          # "$(GUI)"=="UNX"
+.IF "$(GUIBASE)"=="unx"
+
+.IF "$(WITH_LIBSN)"=="YES"
+SHL2STDLIBS+=$(LIBSN_LIBS)
+.ENDIF
+
+# Solaris
+.IF "$(OS)"=="SOLARIS"
+SHL2STDLIBS += -lXext -lSM -lICE -lX11
+# Others
+.ELSE           # "$(OS)"=="SOLARIS"
+.IF "$(CPU)" == "I"
+SHL2STDLIBS += -Wl,-Bstatic -lXinerama -Wl,-Bdynamic 
+SHL2STDLIBS += -lXext -lSM -lICE -lX11
+.ENDIF 			# "$(CPU)=="I"
+.ENDIF          # "$(OS)"=="SOLARIS"
+
+.ENDIF          # "$(GUIBASE)"=="unx"
+
+.ENDIF # UNX
 
 # --- Allgemein ----------------------------------------------------------
 
