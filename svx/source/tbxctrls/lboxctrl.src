@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:33:22 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ String RID_SVXSTR_NUM_UNDO_ACTIONS
     Text[ portuguese ] = "Anular operaηγo $(ARG1)";
     Text[ russian ] = "Ξςμενθςό $(ARG1)";
     Text[ greek ] = "Αναίρεση της(ων) ενέργειας(ών) $(ARG1)";
-    Text[ dutch ] = "Ongedaan maken $(ARG1) activiteit(en)";
+    Text[ dutch ] = "Ongedaan maken $(ARG1) handeling(en)";
     Text[ french ] = "Annuler $(ARG1) opιration(s)";
     Text[ spanish ] = "Deshacer $(ARG1) acciσn(es)";
     Text[ finnish ] = "Kumoa $(ARG1) toiminto(a)";
@@ -118,6 +118,8 @@ String RID_SVXSTR_NUM_UNDO_ACTIONS
     Text[ hebrew ] = "β€®Χ‘Χ™ΧΧ•Χ Χ¤ΧΆΧ•ΧΧ•Χª $(ARG1)β€¬";
     Text[ hindi ] = "$(ARG1) ΰ¤•ΰ¤Ύΰ¤°ΰ¥ΰ¤―ΰ¥‹ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤…ΰ¤¨ΰ¤Ύΰ¤µΰ¥ƒΰ¤¤ΰ¥ΰ¤¤ΰ¤Ώ ΰ¤•ΰ¤°ΰ¥‹";
     Text[ slovak ] = "SpΓ¤Ε¥ akcia $(ARG1)";
+    Text[ hungarian ] = "VisszacsinΓ΅l $(ARG1) mΕ±veletet";
+    Text[ slovenian ] = "Razveljavi $(ARG1) dejanje/a";
 };
 
 String RID_SVXSTR_NUM_REDO_ACTIONS
@@ -128,7 +130,7 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ portuguese ] = "Restaurar operaηγo $(ARG1)";
     Text[ russian ] = "Βεπνσςό $(ARG1)";
     Text[ greek ] = "Επανεκτέλεση $(ARG1) ενέργειας(ών)";
-    Text[ dutch ] = "Herhalen $(ARG1) activiteit(en)";
+    Text[ dutch ] = "Herhalen $(ARG1) handeling(en)";
     Text[ french ] = "Restaurer $(ARG1) opιration(s)";
     Text[ spanish ] = "Restaurar $(ARG1) acciσn(es)";
     Text[ finnish ] = "Toista $(ARG1) toiminto(a)";
@@ -149,7 +151,10 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ hebrew ] = "β€®Χ—Χ–Χ¨Χ” ΧΆΧ Χ¤ΧΆΧ•ΧΧ•Χª $(ARG1)β€¬";
     Text[ hindi ] = "$(ARG1) ΰ¤•ΰ¤Ύΰ¤°ΰ¥ΰ¤―ΰ¥‹ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤«ΰ¤Ώΰ¤° ΰ¤Έΰ¥‡ ΰ¤•ΰ¤°ΰ¥‹";
     Text[ slovak ] = "Znova akcia $(ARG1)";
+    Text[ hungarian ] = "MegismΓ©tel $(ARG1) mΕ±veletet";
+    Text[ slovenian ] = "Uveljavi $(ARG1) dejanje/a";
 };
+
 
 
 
