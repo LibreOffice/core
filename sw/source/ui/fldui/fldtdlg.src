@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:49:02 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 21:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ korean ] = "¹®¼­";
                 Text[ turkish ] = "Belge";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Documento";
             };
             PageItem
             {
@@ -127,6 +128,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ korean ] = "ÂüÁ¶";
                 Text[ turkish ] = "Referanslar";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Referencias";
             };
             PageItem
             {
@@ -153,6 +155,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ korean ] = "±â´É";
                 Text[ turkish ] = "Ýþlevler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Funciones";
             };
             PageItem
             {
@@ -179,6 +182,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ korean ] = "¹®¼­Á¤º¸";
                 Text[ turkish ] = "Belge bilgileri";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Información del documento";
             };
             PageItem
             {
@@ -205,6 +209,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ korean ] = "º¯¼ö";
                 Text[ turkish ] = "Deðiþkenler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Variables";
             };
             PageItem
             {
@@ -231,6 +236,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º";
                 Text[ turkish ] = "Veritabaný";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Base de datos";
             };
         };
     };
@@ -259,6 +265,7 @@ TabDialog DLG_FLD_INSERT
         Text[ korean ] = "»ðÀÔ(~I)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Insertar";
     };
     String STR_FLD_CLOSE
     {
@@ -283,6 +290,7 @@ TabDialog DLG_FLD_INSERT
         Text[ korean ] = "´Ý±â(~C)";
         Text[ turkish ] = "~Çýkýþ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cerrar";
     };
     Text [ english_us ] = "Fields" ;
     Text [ portuguese_brazilian ] = "Feldbefehle" ;
@@ -303,4 +311,5 @@ TabDialog DLG_FLD_INSERT
     Text[ korean ] = "ÇÊµå";
     Text[ turkish ] = "Alan öðeleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campos";
 };
