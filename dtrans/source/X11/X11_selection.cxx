@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-24 09:58:31 $
+ *  last change: $Author: pl $ $Date: 2001-07-24 13:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,13 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
                 m_xDropTransferable = new X11Transferable( *this, static_cast< OWeakObject* >(this), m_nXdndSelection );
                 registerHandler( m_nXdndSelection, *this );
 
-                m_aThread = osl_createThread( run, this );
+                m_aThread = osl_createSuspendedThread( run, this );
+                if( m_aThread )
+                    osl_resumeThread( m_aThread );
+#ifdef DEBUG
+                else
+                    fprintf( stderr, "SelectionManager::initialize: creation of dispatch thread failed !\n" );
+#endif
             }
         }
     }
@@ -443,6 +449,9 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
 
 SelectionManager::~SelectionManager()
 {
+#ifdef DEBUG
+    fprintf( stderr, "SelectionManager::~SelectionManager (%s)\n", m_pDisplay ? DisplayString(m_pDisplay) : "no display" );
+#endif
     {
         MutexGuard aGuard( *Mutex::getGlobalMutex() );
 
@@ -2440,6 +2449,9 @@ void SelectionManager::dragDoDispatch()
 #ifdef DEBUG
     fprintf( stderr, "begin executeDrag dispatching\n" );
 #endif
+    TimeValue aTVal;
+    aTVal.Seconds = 0;
+    aTVal.Nanosec = 200000000;
     oslThread aThread = m_aDragExecuteThread;
     osl_yieldThread();
     while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(NULL)-m_nDropTimeout < 5 ) && osl_scheduleThread( aThread ) )
@@ -2447,7 +2459,7 @@ void SelectionManager::dragDoDispatch()
         osl_yieldThread();
         // let the thread in the run method do the dispatching
         // just look occasionally here whether drop timed out or is completed
-        poll( NULL, 0, 200 );
+        osl_waitThread( &aTVal );
     }
 #ifdef DEBUG
     fprintf( stderr, "end executeDrag dispatching\n" );
@@ -2706,6 +2718,9 @@ void SelectionManager::dispatchEvent( int millisec )
 
 void SelectionManager::run( void* pThis )
 {
+#ifdef DEBUG
+    fprintf(stderr, "SelectionManager::run\n" );
+#endif
     // dispatch until the cows come home
 
     SelectionManager* This = (SelectionManager*)pThis;
@@ -2742,6 +2757,9 @@ void SelectionManager::run( void* pThis )
             }
         }
     }
+#ifdef DEBUG
+    fprintf(stderr, "SelectionManager::run end\n" );
+#endif
 }
 
 // ------------------------------------------------------------------------
