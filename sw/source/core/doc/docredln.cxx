@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-07 18:38:36 $
+ *  last change: $Author: dvo $ $Date: 2002-11-11 15:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,8 +308,9 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                     {
                         // ggfs. verschmelzen?
                         if( (( POS_BEHIND == eCmpPos &&
-                                    IsPrevPos( *pREnd, *pStt ) ) ||
-                             POS_COLLIDE_START == eCmpPos ) &&
+                               IsPrevPos( *pREnd, *pStt ) ) ||
+                             ( POS_COLLIDE_START == eCmpPos ) ||
+                             ( POS_OVERLAP_BEHIND == eCmpPos ) ) &&
                             pRedl->CanCombine( *pNewRedl ) &&
                             ( n+1 >= pRedlineTbl->Count() ||
                              *(*pRedlineTbl)[ n+1 ]->Start() != *pREnd ))
@@ -324,7 +325,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         }
                         else if( (( POS_BEFORE == eCmpPos &&
                                     IsPrevPos( *pEnd, *pRStt ) ) ||
-                                   POS_COLLIDE_END == eCmpPos ) &&
+                                   ( POS_COLLIDE_END == eCmpPos ) ||
+                                  ( POS_OVERLAP_BEFORE == eCmpPos ) ) &&
                             pRedl->CanCombine( *pNewRedl ) &&
                             ( !n ||
                              *(*pRedlineTbl)[ n-1 ]->End() != *pRStt ))
