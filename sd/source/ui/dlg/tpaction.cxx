@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 15:48:05 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,14 +148,18 @@
 #include <offmgr/app.hxx>
 #endif
 
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "sdresid.hxx"
 #include "tpaction.hxx"
 #include "tpaction.hrc"
 #include "strmname.h"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "filedlg.hxx"
@@ -190,7 +194,8 @@ static USHORT pEffectRanges[] =
 |*
 \************************************************************************/
 
-SdActionDlg::SdActionDlg( Window* pParent, const SfxItemSet* pAttr, SdView* pView ) :
+SdActionDlg::SdActionDlg (
+    ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView ) :
         SfxSingleTabDialog  ( pParent, *pAttr, TP_ANIMATION_ACTION ),
         rOutAttrs           ( *pAttr )
 {
@@ -281,12 +286,13 @@ SdTPAction::~SdTPAction()
 
 // -----------------------------------------------------------------------
 
-void SdTPAction::SetView( const SdView* pSdView )
+void SdTPAction::SetView( const ::sd::View* pSdView )
 {
     pView = pSdView;
 
     // Holen der ColorTable und Fuellen der ListBox
-    SdDrawDocShell* pDocSh = ( (SdView*) pView )->GetDocSh();
+    ::sd::DrawDocShell* pDocSh =
+          static_cast<const ::sd::View*>(pView)->GetDocSh();
     pDoc = pDocSh->GetDoc();
     SfxViewFrame* pFrame = pDocSh->GetViewShell()->GetViewFrame();
     aLbTree.SetViewFrame( pFrame );
