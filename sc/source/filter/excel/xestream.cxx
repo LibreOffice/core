@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:36:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include "xestream.hxx"
 #endif
 
-#ifndef SC_XLCONST_HXX
-#include "xlconst.hxx"
+#ifndef SC_XLSTRING_HXX
+#include "xlstring.hxx"
 #endif
 #ifndef SC_XEROOT_HXX
 #include "xeroot.hxx"
@@ -87,7 +87,7 @@ XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uIn
     mbInRec( false )
 {
     if( !mnMaxRecSize )
-        mnMaxRecSize = (mrRoot.GetBiff() < xlBiff8) ? EXC_MAXRECSIZE_BIFF5 : EXC_MAXRECSIZE_BIFF8;
+        mnMaxRecSize = (mrRoot.GetBiff() <= EXC_BIFF5) ? EXC_MAXRECSIZE_BIFF5 : EXC_MAXRECSIZE_BIFF8;
     mnMaxContSize = nMaxRecSize;
 }
 
