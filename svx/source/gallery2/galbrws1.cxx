@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-21 11:31:21 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 16:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ GalleryBrowser1::~GalleryBrowser1()
 {
     EndListening( *mpGallery );
     delete mpThemes;
+    mpThemes = NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -452,7 +453,8 @@ void GalleryBrowser1::Resize()
 void GalleryBrowser1::GetFocus()
 {
     Control::GetFocus();
-    mpThemes->GrabFocus();
+    if( mpThemes )
+        mpThemes->GrabFocus();
 }
 
 // -----------------------------------------------------------------------------
