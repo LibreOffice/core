@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Class.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:27 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@ namespace connectivity
         sal_Bool isAssignableFrom( java_lang_Class * _par0 );
         java_lang_Object * newInstance();
         ::rtl::OUString getName();
+        // return the jre object
+        jobject newInstanceObject();
+
     };
 }
 
