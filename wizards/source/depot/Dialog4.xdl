@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog4" dlg:left="161" dlg:top="81" dlg:width="160" dlg:height="120" dlg:page="1" dlg:help-url="HID:34547">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog4" dlg:left="161" dlg:top="81" dlg:width="160" dlg:height="120" dlg:page="1" dlg:help-url="HID:34547" dlg:closeable="true" dlg:moveable="true">
  <dlg:bulletinboard>
   <dlg:text dlg:id="lblWelcome" dlg:tab-index="0" dlg:left="6" dlg:top="6" dlg:width="148" dlg:height="49" dlg:value="lblWelcome" dlg:multiline="true"/>
   <dlg:text dlg:id="lblHint" dlg:tab-index="1" dlg:left="6" dlg:top="73" dlg:width="148" dlg:height="26" dlg:value="lblHint" dlg:multiline="true"/>

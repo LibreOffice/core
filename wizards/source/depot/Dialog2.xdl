@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog2" dlg:left="91" dlg:top="24" dlg:width="220" dlg:height="128" dlg:help-url="HID:34520">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog2" dlg:left="91" dlg:top="24" dlg:width="220" dlg:height="128" dlg:page="3" dlg:help-url="HID:34520" dlg:closeable="true" dlg:moveable="true">
  <dlg:bulletinboard>
   <dlg:text dlg:id="lblStockNames" dlg:tab-index="0" dlg:left="6" dlg:top="6" dlg:width="102" dlg:height="8" dlg:value="lblStockNames"/>
   <dlg:menulist dlg:id="lstSellStocks" dlg:tab-index="1" dlg:left="6" dlg:top="17" dlg:width="102" dlg:height="12" dlg:page="1" dlg:help-url="HID:34530" dlg:spin="true">
@@ -19,7 +19,7 @@
   </dlg:datefield>
   <dlg:text dlg:id="lblRate" dlg:tab-index="9" dlg:left="68" dlg:top="36" dlg:width="77" dlg:height="8" dlg:value="lblRate"/>
   <dlg:text dlg:id="lblDate" dlg:tab-index="10" dlg:left="150" dlg:top="37" dlg:width="66" dlg:height="8" dlg:value="lblDate"/>
-  <dlg:formattedfield dlg:id="txtCommission" dlg:tab-index="11" dlg:left="6" dlg:top="90" dlg:width="46" dlg:height="12" dlg:help-url="HID:34525" dlg:spin="true" dlg:value-default="2.0" dlg:format-code="0,00%" dlg:format-locale="de;DE"/>
+  <dlg:formattedfield dlg:id="txtCommission" dlg:tab-index="11" dlg:left="6" dlg:top="90" dlg:width="46" dlg:height="12" dlg:help-url="HID:34525" dlg:spin="true" dlg:format-code="0,00%" dlg:format-locale="de;DE"/>
   <dlg:text dlg:id="lblCommission" dlg:tab-index="12" dlg:left="6" dlg:top="79" dlg:width="60" dlg:height="8" dlg:value="lblCommission"/>
   <dlg:currencyfield dlg:id="txtFix" dlg:tab-index="13" dlg:left="68" dlg:top="90" dlg:width="40" dlg:height="12" dlg:help-url="HID:34526" dlg:value-min="0.0"/>
   <dlg:currencyfield dlg:id="txtMinimum" dlg:tab-index="14" dlg:left="150" dlg:top="90" dlg:width="40" dlg:height="12" dlg:help-url="HID:34527" dlg:value-min="0.0"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog3" dlg:left="161" dlg:top="81" dlg:width="176" dlg:height="119" dlg:help-url="HID:34532">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog3" dlg:left="161" dlg:top="81" dlg:width="176" dlg:height="119" dlg:page="3" dlg:help-url="HID:34532" dlg:closeable="true" dlg:moveable="true">
  <dlg:bulletinboard>
   <dlg:text dlg:id="lblStockNames" dlg:tab-index="0" dlg:left="6" dlg:top="6" dlg:width="98" dlg:height="8" dlg:value="lblStockNames"/>
   <dlg:menulist dlg:id="lstStockNames" dlg:tab-index="1" dlg:left="5" dlg:top="17" dlg:width="102" dlg:height="12" dlg:help-url="HID:34533" dlg:spin="true">
@@ -37,8 +37,8 @@
   <dlg:text dlg:id="lblColon" dlg:tab-index="16" dlg:left="40" dlg:top="55" dlg:width="5" dlg:height="8" dlg:page="2" dlg:value=" :"/>
   <dlg:text dlg:id="lblDate" dlg:tab-index="17" dlg:left="5" dlg:top="75" dlg:width="66" dlg:height="8" dlg:page="2" dlg:value="lblDate"/>
   <dlg:fixedline dlg:id="hlnInterval" dlg:tab-index="18" dlg:left="6" dlg:top="72" dlg:width="164" dlg:height="8" dlg:page="3" dlg:value="hlnInterval"/>
-  <dlg:text dlg:id="lblStartDate" dlg:tab-index="19" dlg:left="6" dlg:top="39" dlg:width="57" dlg:height="8" dlg:page="3" dlg:value="lblStartDate"/>
-  <dlg:text dlg:id="lblEndDate" dlg:tab-index="20" dlg:left="6" dlg:top="55" dlg:width="57" dlg:height="8" dlg:page="3" dlg:value="lblEndDate"/>
+  <dlg:text dlg:id="lblStartDate" dlg:tab-index="19" dlg:left="6" dlg:top="39" dlg:width="53" dlg:height="8" dlg:page="3" dlg:value="lblStartDate"/>
+  <dlg:text dlg:id="lblEndDate" dlg:tab-index="20" dlg:left="6" dlg:top="55" dlg:width="53" dlg:height="8" dlg:page="3" dlg:value="lblEndDate"/>
   <dlg:numericfield dlg:id="txtOldRate" dlg:tab-index="21" dlg:left="6" dlg:top="53" dlg:width="30" dlg:height="12" dlg:page="2" dlg:help-url="HID:34540" dlg:decimal-accuracy="0" dlg:value-min="1.0" dlg:spin="true"/>
   <dlg:numericfield dlg:id="txtNewRate" dlg:tab-index="22" dlg:left="50" dlg:top="53" dlg:width="30" dlg:height="12" dlg:page="2" dlg:help-url="HID:34541" dlg:decimal-accuracy="0" dlg:value-min="1.0" dlg:spin="true"/>
  </dlg:bulletinboard>

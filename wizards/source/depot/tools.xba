@@ -190,23 +190,6 @@ Dim iLastRow as Integer
 End Function
 
 
-Sub DisposeTransactDialog()
-	DlgTransaction.EndExecute()
-&apos;	DlgTransaction.Dispose()
-End Sub
-
-
-Sub DisposeStockRateDialog()
-	DlgStockRates.EndExecute()
-&apos;	DlgStockRates.Dispose()
-End Sub
-
-
-Sub DisposeTransactDialog()
-	DlgStartUp.EndExecute
-End Sub
-
-
 Function CheckDocLocale(LocLanguage as String, LocCountry as String)			
 Dim bIsDocLanguage as Boolean
 Dim bIsDocCountry as Boolean
