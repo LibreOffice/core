@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OUString.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:44:07 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 //------------------------------------------------------------------------
 // test classes
 //------------------------------------------------------------------------
-const MAXBUFLENGTH = 255;
+const int MAXBUFLENGTH = 255;
 //------------------------------------------------------------------------
 // helper functions
 //------------------------------------------------------------------------
@@ -1774,12 +1774,12 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int32_defaultParam(
          new OUString(newUChar3,3,kEncodingRTLTextUSASCII,
                       kConvertFlagsOStringToOUString)
         },
-        {"input Int32 2147483647 and return OUString 2147483647",2147483647,
+        {"input Int32 2147483647 and return OUString 2147483647", SAL_MAX_INT32 /* 2147483647 */,
          new OUString(newUChar4,10,kEncodingRTLTextUSASCII,
                       kConvertFlagsOStringToOUString)
         },
         {"input Int32 -2147483648 and return OUString -2147483648",
-         -2147483648,
+         SAL_MIN_INT32 /* 2-2147483648 */,
          new OUString(newUChar5,11,kEncodingRTLTextUSASCII,
                       kConvertFlagsOStringToOUString)
         }
@@ -2045,7 +2045,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
     sal_Char*    newUChar1="15";
     sal_Char*    newUChar2="0";
     sal_Char*    newUChar3="-15";
-    sal_Char*    newUChar4="9223372036854775807";
+    sal_Char*    newUChar4= "9223372036854775807";
     sal_Char*    newUChar5="-9223372036854775808";
 
     typedef struct TestCase
@@ -2071,12 +2071,12 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
                       kConvertFlagsOStringToOUString)
         },
         {"input Int64 9223372036854775807 and return 9223372036854775807",
-         9223372036854775807,
+         SAL_MAX_INT64 /* 9223372036854775807*/,
          new OUString(newUChar4,19,kEncodingRTLTextUSASCII,
                       kConvertFlagsOStringToOUString)
         },
         {"input Int64 -9223372036854775808 and return -9223372036854775808",
-         9223372036854775808,
+         SAL_MIN_INT64 /* 9223372036854775808*/,
          new OUString(newUChar5,20,kEncodingRTLTextUSASCII,
                       kConvertFlagsOStringToOUString)
         }
