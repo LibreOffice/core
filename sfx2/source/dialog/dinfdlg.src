@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:18:03 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,8 +563,7 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 6 , 116 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "Bearbeitungszeit:" ;
-        Text [ ENGLISH ] = "Editing time:" ;
+        Text = "Gesamtbearbeitungszeit:" ;
         Text [ norwegian ] = "Editing time:" ;
         Text [ italian ] = "Durata revisioni:" ;
         Text [ portuguese_brazilian ] = "Editado:" ;
@@ -575,7 +574,7 @@ TabPage TP_DOCINFODOC
         Text [ danish ] = "Redigeringstid:" ;
         Text [ swedish ] = "Redigeringstid:" ;
         Text [ finnish ] = "Muokattu:" ;
-        Text [ english_us ] = "Editing time:" ;
+        Text [ english_us ] = "Total editing time:" ;
         Text[ chinese_simplified ] = "ç¼–è¾‘æ—¶é—´:";
         Text[ russian ] = "Îòðåäàêòèðîâàí:";
         Text[ polish ] = "Edycja:";
@@ -604,9 +603,8 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 6 , 128 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "Dokumentnummer:" ;
-        Text [ ENGLISH ] = "Document number:" ;
-        Text [ english_us ] = "Document number:" ;
+        Text = "Version:" ;
+        Text [ english_us ] = "Revision number:" ;
         Text [ portuguese_brazilian ] = "Versão:" ;
         Text [ swedish ] = "Dokumentnummer:" ;
         Text [ danish ] = "Dokumentnummer:" ;
