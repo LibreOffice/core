@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-17 08:25:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #endif
 
+#include "sfxurlrelocator.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -2675,6 +2676,9 @@ sal_Bool getTextProperty_Impl( Content& rContent,
 
         aAnyValue = rContent.getPropertyValue( rPropName );
         aAnyValue >>= rPropValue;
+
+        if ( SfxURLRelocator_Impl::propertyCanContainOfficeDir( rPropName ) )
+            SfxURLRelocator_Impl( ::comphelper::getProcessServiceFactory() ).makeAbsoluteURL( rPropValue );
 
         bGotProperty = sal_True;
     }
