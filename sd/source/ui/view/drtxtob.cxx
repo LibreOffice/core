@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-11 11:49:41 $
+ *  last change: $Author: aw $ $Date: 2002-01-15 12:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,13 +279,29 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
                     List* pList = pOLV->CreateSelectionList();
                     Paragraph* pPara = (Paragraph*) pList->First();
 
-                    // #96250# and #78665#
-                    // allow move up if position is 2 or greater OR it
-                    // is a title object (and thus depth==0)
-                    if(pOutl->GetAbsPos(pPara) > 1 || (1 == pOutl->GetAbsPos(pPara) && 0 == pOutl->GetDepth(1)))
+                    // #96539# find out if we are a OutlineView
+                    BOOL bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
+
+                    // #96539# This is ONLY for OutlineViews
+                    if(bIsOutlineView)
                     {
-                        // Nicht ganz oben
-                        bDisableUp = FALSE;
+                        // #96250# and #78665#
+                        // allow move up if position is 2 or greater OR it
+                        // is a title object (and thus depth==0)
+                        if(pOutl->GetAbsPos(pPara) > 1 || (1 == pOutl->GetAbsPos(pPara) && 0 == pOutl->GetDepth(1)))
+                        {
+                            // Nicht ganz oben
+                            bDisableUp = FALSE;
+                        }
+                    }
+                    else
+                    {
+                        // #96539# old behaviour for OUTLINERMODE_OUTLINEOBJECT
+                        if(pOutl->GetAbsPos(pPara) > 0)
+                        {
+                            // Nicht ganz oben
+                            bDisableUp = FALSE;
+                        }
                     }
 
                     USHORT nMinDepth = 0;
@@ -331,8 +347,12 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
                         && pOutl->GetParagraphCount() > 1
                         && 0 != pOutl->GetDepth(1))
                     {
-                        // Needs to be disabled
-                        bDisableDown = TRUE;
+                        // #96539# This is ONLY for OutlineViews
+                        if(bIsOutlineView)
+                        {
+                            // Needs to be disabled
+                            bDisableDown = TRUE;
+                        }
                     }
 
                     delete pList;
