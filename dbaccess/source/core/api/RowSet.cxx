@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
+ *  last change: $Author: oj $ $Date: 2000-11-30 16:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1782,18 +1782,24 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         pColumn->setName(*pBegin);
                         aNames.push_back(*pBegin);
 
-                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-                        sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
-                        if(!nFormatKey)
-                            nFormatKey = assginFormatByType(::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISCURRENCY)),
-                                                            ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE)),
-                                                            aLocale);
+                        try
+                        {
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
+                            sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+                            if(!nFormatKey)
+                                nFormatKey = assginFormatByType(::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISCURRENCY)),
+                                                                ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE)),
+                                                                aLocale);
 
-                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
-                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
-                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
-                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
-                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
+                        }
+                        catch(Exception&)
+                        {
+                        }
 
                     }
                     m_pColumns = new ORowSetDataColumns(m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
@@ -2031,6 +2037,11 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
                 m_xComposer->setOrder(m_aOrder);
 
             aFilterStatement = m_xComposer->getComposedQuery();
+            if(!m_xColumns.is())
+            {
+                Reference<XColumnsSupplier> xCols(m_xComposer,UNO_QUERY);
+                m_xColumns = xCols->getColumns();
+            }
         }
     }
     return aFilterStatement;
