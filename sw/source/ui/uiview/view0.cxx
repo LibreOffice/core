@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:34:12 $
+ *  last change: $Author: rt $ $Date: 2000-10-10 16:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #include "hintids.hxx"
 
+#ifndef _SV_GRAPH_HXX
+#include <vcl/graph.hxx>
+#endif
 #ifndef _SVX_GALBRWS_HXX_
 #include <svx/galbrws.hxx>
 #endif
@@ -178,6 +181,9 @@ view::XSelectionSupplier* SwView::GetUNOObject()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/09/28 15:34:12  os
+    gallery child window registered
+
     Revision 1.1.1.1  2000/09/18 17:14:49  hr
     initial import
 
