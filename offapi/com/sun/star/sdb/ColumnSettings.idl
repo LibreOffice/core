@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnSettings.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 13:59:38 $
+ *  last change: $Author: fs $ $Date: 2001-09-19 12:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,16 +68,13 @@
  module com {  module sun {  module star {  module sdb {
 
 
-// DocMerge from xml: service com::sun::star::sdb::ColumnSettings
 /** describes the common properties of a database column.
  */
 service ColumnSettings
 {
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ColumnSettings::FormatKey
     /** contains the index of the number format that is used for the
         column.
 
@@ -92,7 +89,6 @@ service ColumnSettings
     [property] long FormatKey;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ColumnSettings::Align
     /** specifies the alignment of columns text.
 
         <pre>
@@ -106,7 +102,6 @@ service ColumnSettings
     [property] long Align;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ColumnSettings::Width
     /** specifies the width of the column displayed in a grid, the unit is 10THMM.
 
         <p> If the value is <void/>, a default width should be used according to the label
@@ -115,7 +110,6 @@ service ColumnSettings
     [property] long Width;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ColumnSettings::Position
     /** Position of the column within a grid.
 
         <p> If the value is <void/>, the default position should be taken according.        </p>
@@ -123,17 +117,19 @@ service ColumnSettings
     [property] long Position;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ColumnSettings::Hidden
     /** determines whether the column should be displayed or not.
      */
     [property] boolean Hidden;
 
 
-    // DocMerge from xml: property com::sun::star::sdb::ColumnSettings::ControlModel
     /** indicates a control model whichs defines the settings for layouting.
         The default is <NULL/>.
      */
     [optional, property] com::sun::star::beans::XPropertySet ControlModel;
+
+    /** describes an optional help text which can be used by UI components when representing this column.
+    */
+    [optional, property] HelpText;
 };
 
 //=============================================================================
@@ -142,6 +138,9 @@ service ColumnSettings
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/19 13:59:38  mi
+    syntax errors in documentation fixed
+
     Revision 1.4  2000/12/19 13:46:03  mi
     syntax errors in documentation fixed
 
