@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-09 15:28:53 $
+ *  last change: $Author: mba $ $Date: 2001-11-15 15:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,7 +956,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             // When the new medium ( rMedium ) has the same name as the current one,
             // we need to call DoHandsOff() so Commit() can overwrite the old version
-            if ( bOk && pMedium && ( rMedium.GetName() == pMedium->GetName() ) )
+            if ( bOk && pMedium && ( rMedium.GetName().EqualsIgnoreCaseAscii( pMedium->GetName() ) ) )
                 DoHandsOff();
         }
 
