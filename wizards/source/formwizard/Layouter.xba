@@ -131,7 +131,7 @@ End Function
 Sub OpenFormDocument()
 Dim NoArgs() as new com.sun.star.beans.PropertyValue
 Dim oViewSettings as Object
-	oDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 0, NoArgs())
+	oDocument = CreateNewDocument(&quot;swriter&quot;)
 	oProgressbar = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator()
 	oProgressbar.Start(&quot;&quot;, 100)
 	oDocument.ApplyFormDesignMode = False

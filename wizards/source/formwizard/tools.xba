@@ -179,12 +179,15 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 				oLocObject.EffectiveMax = 127
 				oLocObject.EffectiveMin = -128
 			Case com.sun.star.sdbc.DataType.FLOAT, com.sun.star.sdbc.DataType.REAL, com.sun.star.sdbc.DataType.DOUBLE, com.sun.star.sdbc.DataType.DECIMAL, com.sun.star.sdbc.DataType.NUMERIC
+&apos;Todo:			oLocObject.DecimalAccuracy = ...
 	 			oLocObject.EffectiveDefault = CurDefaultValue
+&apos; Todo: HelpText???
 		End Select
 		If oLocObject.PropertySetinfo.HasPropertyByName(&quot;Width&quot;)Then &apos; Note: an Access AutoincrementField does not provide this property Width
 			oLocObject.Width = CurFieldLength + CurScale + 1
 		End If
 		If CurIsCurrency Then
+&apos;Todo: How do you set currencies?
 		End If
 	ElseIf CurControlType = cTextBox Then	&apos;com.sun.star.sdbc.DataType.CHAR, com.sun.star.sdbc.DataType.VARCHAR, com.sun.star.sdbc.DataType.LONGVARCHAR
 		If oLocObject.MaxTextLen = 0 Or oLocObject.MaxTextLen &gt; 30 Then
@@ -195,10 +198,12 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 		End If
 		oLocObject.DefaultText = CurDefaultValue
 	ElseIf CurControlType = cDateBox Then
-	ElseIf CurControlType = cTimeBox Then	&apos;com.sun.star.sdbc.DataType.DATE, com.sun.star.sdbc.DataType.TIME
+&apos; Todo Why does this not work?:		oLocObject.DefaultDate = CurDefaultValue
+	ElseIf CurControlType = cTimeBox Then	&apos; com.sun.star.sdbc.DataType.DATE, com.sun.star.sdbc.DataType.TIME
 		oLocObject.DefaultTime = CurDefaultValue
+&apos; Todo: Property TimeFormat? frome where?
 	ElseIf CurControlType = cCheckBox Then
-&apos;Todo Why does this not work?:		oLocObject.DefautState = CurDefaultValue
+&apos; Todo Why does this not work?:		oLocObject.DefautState = CurDefaultValue
 	End If
 	If oLocObject.PropertySetInfo.HasPropertybyName(&quot;FormatKey&quot;) Then
 		On Local Error Resume Next
