@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salpixmaputils.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:31 $
+ *  last change: $Author: pluby $ $Date: 2001-03-13 09:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,30 +63,7 @@
 #define _SV_SALPIXMAPUTILS_HXX
 
 #include <premac.h>
-
-    #ifndef __FIXMATH__
-        #include <CarbonCore/FixMath.h>
-    #endif
-
-    #ifndef __MACERRORS__      #include <CarbonCore/MacErrors.h>
-    #endif
-
-    #ifndef __MACTYPES__
-        #include <CarbonCore/MacTypes.h>
-    #endif
-
-    #ifndef __MACMEMORY__
-        #include <CarbonCore/MacMemory.h>
-    #endif
-
-    #ifndef __QUICKDRAW__
-        #include <QD/Quickdraw.h>
-    #endif
-
-    #ifndef __QDOFFSCREEN__
-        #include <QD/QDOffscreen.h>
-    #endif
-
+#include <ApplicationServices/ApplicationServices.h>
 #include <postmac.h>
 
 #ifndef _GEN_HXX
@@ -109,7 +86,7 @@
     #include <salcolorutils.hxx>
 #endif
 
-#if PRAGMA_ONCE    #pragma once#endif// ------------------------------------------------------------------
+// ------------------------------------------------------------------
 
 
 PixMapHandle GetNewPixMap ( const Size           &rPixMapSize,
@@ -125,4 +102,6 @@ PixMapHandle GetCGrafPortPixMap ( const Size           &rPixMapSize,
                                   const CGrafPtr        pCGraf
                                 );
 
-// ------------------------------------------------------------------#endif   // _SV_SALPIXMAPUTILS_HXX
+// ------------------------------------------------------------------
+
+#endif  // _SV_SALPIXMAPUTILS_HXX

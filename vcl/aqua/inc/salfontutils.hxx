@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salfontutils.hxx,v $
  *
- *  $Revision: 1.1 $
- *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:31 $
+ *  $Revision: 1.2 $
+ *  last change: $Author: pluby $ $Date: 2001-03-13 09:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
     #include <outfont.hxx>
 #endif
 
-#if PRAGMA_ONCE    #pragma once#endif// =======================================================================
+// =======================================================================
 
 // =======================================================================
 

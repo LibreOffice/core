@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:31 $
+ *  last change: $Author: pluby $ $Date: 2001-03-13 09:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,26 +63,7 @@
 #define _SV_SALGDI_H
 
 #include <premac.h>
-
-    #ifndef __MACERRORS__      #include <CarbonCore/MacErrors.h>
-    #endif
-
-    #ifndef __MACTYPES__
-        #include <CarbonCore/MacTypes.h>
-    #endif
-
-    #ifndef __MACMEMORY__
-        #include <CarbonCore/MacMemory.h>
-    #endif
-
-    #ifndef __QUICKDRAW__
-        #include <QD/Quickdraw.h>
-    #endif
-
-    #ifndef __QDOFFSCREEN__
-        #include <QD/QDOffscreen.h>
-    #endif
-
+#include <ApplicationServices/ApplicationServices.h>
 #include <postmac.h>
 
 #ifndef _SV_SV_H
@@ -93,7 +74,7 @@
     #include <VCLWindow.h>
 #endif
 
-#if PRAGMA_ONCE    #pragma once#endif// -------------------
+// -------------------
 // - Structures -
 // -------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmathutils.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:31 $
+ *  last change: $Author: pluby $ $Date: 2001-03-13 09:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,11 @@
 #ifndef _SV_SALMATHUTILS_HXX
 #define _SV_SALMATHUTILS_HXX
 
-#if PRAGMA_ONCE    #pragma once#endif#ifdef __cplusplus    extern "C" {#endif// ------------------------------------------------------------------
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
+// ------------------------------------------------------------------
 //
 //                            Structures
 //
@@ -110,4 +114,8 @@ unsigned long  Euclidian2Norm ( const LRectCoorVector  pVec );
 
 // ------------------------------------------------------------------
 
-#ifdef __cplusplus}#endif#endif // _SV_SALMATHUTILS_HXX
+#ifdef __cplusplus
+}
+#endif
+
+#endif  // _SV_SALMATHUTILS_HXX

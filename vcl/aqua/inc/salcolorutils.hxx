@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcolorutils.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:31 $
+ *  last change: $Author: pluby $ $Date: 2001-03-13 09:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,22 +67,7 @@
 #endif
 
 #include <premac.h>
-
-    #ifndef __MACERRORS__      #include <CarbonCore/MacErrors.h>
-    #endif
-
-    #ifndef __MACTYPES__
-        #include <CarbonCore/MacTypes.h>
-    #endif
-
-    #ifndef __MACMEMORY__
-        #include <CarbonCore/MacMemory.h>
-    #endif
-
-    #ifndef __QUICKDRAW__
-        #include <QD/Quickdraw.h>
-    #endif
-
+#include <ApplicationServices/ApplicationServices.h>
 #include <postmac.h>
 
 #ifndef _SV_SALBTYPE_HXX
@@ -101,7 +86,7 @@
     #include <salmathutils.hxx>
 #endif
 
-#if PRAGMA_ONCE    #pragma once#endif// ------------------------------------------------------------------
+// ------------------------------------------------------------------
 
 SalColor RGBColor2SALColor ( const RGBColor *pRGBColor );
 

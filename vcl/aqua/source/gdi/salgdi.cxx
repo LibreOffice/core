@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.53 $
- *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:32 $
+ *  $Revision: 1.54 $
+ *  last change: $Author: pluby $ $Date: 2001-03-13 09:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
     #include <salrectangleutils.hxx>
 #endif
 
-#if PRAGMA_ONCE    #pragma once#endif// =======================================================================
+// =======================================================================
 
 // =======================================================================
 
@@ -266,8 +266,6 @@ void SalGraphics::ResetClipRegion()
 
 void SalGraphics::BeginSetClipRegion( ULONG nRectCount )
 {
-    #pragma unused(nRectCount)
-
     if ( maGraphicsData.mhClipRgn != NULL )
     {
         DisposeRgn( maGraphicsData.mhClipRgn );
@@ -748,8 +746,6 @@ void SalGraphics::CopyArea( long    nDstX,
                             USHORT  nFlags
                           )
 {
-    #pragma unused(nFlags)
-
     if ( BeginGraphics( &maGraphicsData ) )
     {
         const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
@@ -1115,8 +1111,6 @@ void SalGraphics::Invert( long       nX,
                           SalInvert  nFlags
                         )
 {
-    #pragma unused(nSalFlags)
-
     // Implementation not yet complete
 
     if ( BeginGraphics( &maGraphicsData ) )
@@ -1142,8 +1136,6 @@ void SalGraphics::Invert( ULONG            nPoints,
                           SalInvert        nSalFlags
                         )
 {
-    #pragma unused(nSalFlags)
-
     // Implementation not yet complete
 
     if ( ( pPtAry != NULL ) && ( nPoints > 1 ) )

@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salatsuifontutils.hxx,v $
  *
- *  $Revision: 1.1 $
- *  last change: $Author: bmahbod $ $Date: 2001-03-12 23:15:30 $
+ *  $Revision: 1.2 $
+ *  last change: $Author: pluby $ $Date: 2001-03-13 09:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,55 +86,29 @@
 #endif
 
 #include <premac.h>
-
-    #ifndef __MACERRORS__      #include <CarbonCore/MacErrors.h>
-    #endif
-
-    #ifndef __MACTYPES__
-        #include <CarbonCore/MacTypes.h>
-    #endif
-
-    #ifndef __MACMEMORY__
-        #include <CarbonCore/MacMemory.h>
-    #endif
-
-    #ifndef __SCRIPT__
-        #include <CarbonCore/Script.h>
-    #endif
-
-    #ifndef __STRINGCOMPARE__
-        #include <CarbonCore/StringCompare.h>
-    #endif
-
-    #if (ATSU_TARG_VERSION >= ATSU_1_2)
-        #ifndef __UNICODEUTILITIES__
-            #include <CarbonCore/UnicodeUtilities.h>
-        #endif
-    #endif
-
-    #ifndef __MENUS__
-        #include <HIToolbox/Menus.h>
-    #endif
-
-    #ifndef __ATSUNICODE__     #include <QD/ATSUnicode.h>
-    #endif
-
-    #ifndef __FONTS__
-        #include <QD/Fonts.h>
-    #endif
-
+#include <Carbon/Carbon.h>
+#include <ApplicationServices/ApplicationServices.h>
 #include <postmac.h>
 
-#if PRAGMA_ONCE    #pragma once#endif#ifdef __cplusplus    extern "C" {#endif// =======================================================================
+#ifdef __cplusplus
+    extern "C" {
+#endif
+
+// =======================================================================
 
 // =======================================================================
 
 const short kMacOSCharSize = sizeof(char);
-// -----------------------------------------------------------------------
 
-const short kFontFamilyNameLength = 32;const short kFontStyleNameLength  = 32;
-const long  kFontFamilyNameMemSize  = kFontFamilyNameLength * kMacOSCharSize;
+// -----------------------------------------------------------------------
+
+const short kFontFamilyNameLength = 32;
+const short kFontStyleNameLength  = 32;
+
+const long  kFontFamilyNameMemSize  = kFontFamilyNameLength * kMacOSCharSize;
+
 const long  kFontStyleNameMemSize   = kFontStyleNameLength  * kMacOSCharSize;
+
 
 // -----------------------------------------------------------------------
 
@@ -175,7 +149,53 @@ enum
 
 // =======================================================================
 
-typedef short ATSUIInstanceIndex;// -----------------------------------------------------------------------struct FontNameEncodingRecord{ FontPlatformCode  mnFontPlatformCode;  FontScriptCode    mnFontScriptCode;    FontLanguageCode  mnFontLanguageCode;  ItemCount         mnFontItemCount;};typedef struct FontNameEncodingRecord   FontNameEncodingRecord;typedef FontNameEncodingRecord         *FontNameEncodingPtr;typedef FontNameEncodingPtr            *FontNameEncodingMatrix;// -----------------------------------------------------------------------struct FontNamesRecord { ATSUFontID              mnFontID;  FontNameEncodingRecord  maFontFamilyNameEncoding;  FontNameEncodingRecord  maFontStyleNameEncoding;   ATSUIInstanceIndex      mnFontInstanceIndex;   ByteOffset              mnFontStyleByteOffset; char                    mpFontName[ 1 ];};typedef struct FontNamesRecord   FontNamesRecord;typedef FontNamesRecord         *FontNamesPtr;typedef FontNamesPtr            *FontNamesMatrix;// -----------------------------------------------------------------------struct FontMenuItemRecord {  short               mnFontMenuID;  short               mnFontItemNum; ATSUFontID          mnFontID;  ATSUIInstanceIndex  mnFontInstanceIndex;};typedef struct FontMenuItemRecord   FontMenuItemRecord;typedef FontMenuItemRecord         *FontMenuItemPtr;typedef FontMenuItemPtr            *FontMenuItemsHandle;// =======================================================================
+typedef short ATSUIInstanceIndex;
+
+// -----------------------------------------------------------------------
+
+struct FontNameEncodingRecord
+{
+    FontPlatformCode  mnFontPlatformCode;
+    FontScriptCode    mnFontScriptCode;
+    FontLanguageCode  mnFontLanguageCode;
+    ItemCount         mnFontItemCount;
+};
+
+typedef struct FontNameEncodingRecord   FontNameEncodingRecord;
+typedef FontNameEncodingRecord         *FontNameEncodingPtr;
+typedef FontNameEncodingPtr            *FontNameEncodingMatrix;
+
+// -----------------------------------------------------------------------
+
+struct FontNamesRecord
+{
+    ATSUFontID              mnFontID;
+    FontNameEncodingRecord  maFontFamilyNameEncoding;
+    FontNameEncodingRecord  maFontStyleNameEncoding;
+    ATSUIInstanceIndex      mnFontInstanceIndex;
+    ByteOffset              mnFontStyleByteOffset;
+    char                    mpFontName[ 1 ];
+};
+
+typedef struct FontNamesRecord   FontNamesRecord;
+typedef FontNamesRecord         *FontNamesPtr;
+typedef FontNamesPtr            *FontNamesMatrix;
+
+// -----------------------------------------------------------------------
+
+struct FontMenuItemRecord
+{
+    short               mnFontMenuID;
+    short               mnFontItemNum;
+    ATSUFontID          mnFontID;
+    ATSUIInstanceIndex  mnFontInstanceIndex;
+};
+
+typedef struct FontMenuItemRecord   FontMenuItemRecord;
+typedef FontMenuItemRecord         *FontMenuItemPtr;
+typedef FontMenuItemPtr            *FontMenuItemsHandle;
+
+// =======================================================================
 
 // =======================================================================
 
@@ -275,5 +295,11 @@ void ATSUIPrintFontList( const ItemCount  nFontItemsCount,
 
 // =======================================================================
 
-// =======================================================================#ifdef __cplusplus}#endif#endif // _SV_SALATSUIFONTUTILS_HXX
+// =======================================================================
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif  // _SV_SALATSUIFONTUTILS_HXX
 
