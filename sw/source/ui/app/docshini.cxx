@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:33:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,10 +390,23 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
             else
             {
                 const SvxLanguageItem& rLang = (const SvxLanguageItem&)pDoc->GetDefault( aLangTypes[i] );
+                // #107782# OJ use korean language if latin was used
+                LanguageType eLanguage = rLang.GetLanguage();
+                if ( i == 0 )
+                {
+                    LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
+                    switch( eUiLanguage )
+                    {
+                        case LANGUAGE_KOREAN:
+                        case LANGUAGE_KOREAN_JOHAB:
+                            eLanguage = eUiLanguage;
+                        break;
+                    }
+                }
 
                 Font aLangDefFont = OutputDevice::GetDefaultFont(
                     nFontTypes[i],
-                    rLang.GetLanguage(),
+                    eLanguage,
                     DEFAULTFONT_FLAGS_ONLYONE );
                 pFontItem = new SvxFontItem(aLangDefFont.GetFamily(), aLangDefFont.GetName(),
                                     aEmptyStr, aLangDefFont.GetPitch(), aLangDefFont.GetCharSet(), nFontWhich);
