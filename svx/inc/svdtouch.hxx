@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtouch.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,23 +74,29 @@ class PolyPolygon;
 class XPolygon;
 class XPolyPolygon;
 class Rectangle;
-class OutputDevice;
+//BFS09class OutputDevice;
 
-FASTBOOL IsPointInsidePoly(const Polygon& rPoly, const Point& rHit);
-FASTBOOL IsPointInsidePoly(const PolyPolygon& rPoly, const Point& rHit);
-FASTBOOL IsPointInsidePoly(const XPolygon& rPoly, const Point& rHit, OutputDevice* pOut=NULL);
-FASTBOOL IsPointInsidePoly(const XPolyPolygon& rPoly, const Point& rHit, OutputDevice* pOut=NULL);
+sal_Bool IsPointInsidePoly(const Polygon& rPoly, const Point& rHit);
+sal_Bool IsPointInsidePoly(const PolyPolygon& rPoly, const Point& rHit);
+//BFS09sal_Bool IsPointInsidePoly(const XPolygon& rPoly, const Point& rHit, OutputDevice* pOut=NULL);
+//BFS09sal_Bool IsPointInsidePoly(const XPolyPolygon& rPoly, const Point& rHit, OutputDevice* pOut=NULL);
+sal_Bool IsPointInsidePoly(const XPolygon& rPoly, const Point& rHit);
+sal_Bool IsPointInsidePoly(const XPolyPolygon& rPoly, const Point& rHit);
 
-FASTBOOL IsRectTouchesPoly(const Polygon& rPoly, const Rectangle& rHit);
-FASTBOOL IsRectTouchesPoly(const PolyPolygon& rPoly, const Rectangle& rHit);
-FASTBOOL IsRectTouchesPoly(const XPolygon& rPoly, const Rectangle& rHit, OutputDevice* pOut=NULL);
-FASTBOOL IsRectTouchesPoly(const XPolyPolygon& rPoly, const Rectangle& rHit, OutputDevice* pOut=NULL);
+sal_Bool IsRectTouchesPoly(const Polygon& rPoly, const Rectangle& rHit);
+sal_Bool IsRectTouchesPoly(const PolyPolygon& rPoly, const Rectangle& rHit);
+//BFS09sal_Bool IsRectTouchesPoly(const XPolygon& rPoly, const Rectangle& rHit, OutputDevice* pOut=NULL);
+//BFS09sal_Bool IsRectTouchesPoly(const XPolyPolygon& rPoly, const Rectangle& rHit, OutputDevice* pOut=NULL);
+sal_Bool IsRectTouchesPoly(const XPolygon& rPoly, const Rectangle& rHit);
+sal_Bool IsRectTouchesPoly(const XPolyPolygon& rPoly, const Rectangle& rHit);
 
-FASTBOOL IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle& rHit);
-FASTBOOL IsRectTouchesLine(const Polygon& rLine, const Rectangle& rHit);
-FASTBOOL IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit);
-FASTBOOL IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut=NULL);
-FASTBOOL IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut=NULL);
+sal_Bool IsRectTouchesLine(const Point& rPt1, const Point& rPt2, const Rectangle& rHit);
+sal_Bool IsRectTouchesLine(const Polygon& rLine, const Rectangle& rHit);
+sal_Bool IsRectTouchesLine(const PolyPolygon& rLine, const Rectangle& rHit);
+//BFS09sal_Bool IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut=NULL);
+//BFS09sal_Bool IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit, OutputDevice* pOut=NULL);
+sal_Bool IsRectTouchesLine(const XPolygon& rLine, const Rectangle& rHit);
+sal_Bool IsRectTouchesLine(const XPolyPolygon& rLine, const Rectangle& rHit);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
