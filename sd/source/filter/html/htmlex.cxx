@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-23 15:18:37 $
+ *  last change: $Author: cl $ $Date: 2002-09-13 13:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,6 +989,9 @@ BOOL HtmlExport::SavePresentation()
     ByteString aFull( m_aExportPath );
     aFull += m_aDocFileName;
 
+
+    pDocSh->EnableSetModified( true );
+
     String aURL( aFull, RTL_TEXTENCODING_UTF8 );
     try
     {
@@ -1002,12 +1005,16 @@ BOOL HtmlExport::SavePresentation()
             aProperties[ 1 ].Value <<= OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice XML (Impress)"));
             xStorable->storeToURL( OUString( aURL ), aProperties );
 
+            pDocSh->EnableSetModified( false );
+
             return true;
         }
     }
     catch( Exception& )
     {
     }
+
+    pDocSh->EnableSetModified( false );
 
     return false;
 }
