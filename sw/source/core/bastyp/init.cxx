@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-06 12:22:09 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 10:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,9 @@
 #endif
 #ifndef _SWCALWRP_HXX
 #include <swcalwrp.hxx>
+#endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
 #endif
 
 
@@ -965,19 +968,46 @@ void _FinitCore()
     if ( aAttrTab[0]->GetRef() )
         SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN, FALSE);
 #endif
-
-    delete SwDoc::pTextNmArray;
-    delete SwDoc::pListsNmArray;
-    delete SwDoc::pExtraNmArray;
-    delete SwDoc::pRegisterNmArray;
-    delete SwDoc::pDocNmArray;
-    delete SwDoc::pHTMLNmArray;
-    delete SwDoc::pFrmFmtNmArray;
-    delete SwDoc::pChrFmtNmArray;
-    delete SwDoc::pHTMLChrFmtNmArray;
-    delete SwDoc::pPageDescNmArray;
-    delete SwDoc::pNumRuleNmArray;
     delete SwDoc::pACmpltWords;
+
+    delete SwStyleNameMapper::pTextUINameArray;
+    delete SwStyleNameMapper::pListsUINameArray;
+    delete SwStyleNameMapper::pExtraUINameArray;
+    delete SwStyleNameMapper::pRegisterUINameArray;
+    delete SwStyleNameMapper::pDocUINameArray;
+    delete SwStyleNameMapper::pHTMLUINameArray;
+    delete SwStyleNameMapper::pFrmFmtUINameArray;
+    delete SwStyleNameMapper::pChrFmtUINameArray;
+    delete SwStyleNameMapper::pHTMLChrFmtUINameArray;
+    delete SwStyleNameMapper::pPageDescUINameArray;
+    delete SwStyleNameMapper::pNumRuleUINameArray;
+
+    // Delete programmatic name arrays also
+    delete SwStyleNameMapper::pTextProgNameArray;
+    delete SwStyleNameMapper::pListsProgNameArray;
+    delete SwStyleNameMapper::pExtraProgNameArray;
+    delete SwStyleNameMapper::pRegisterProgNameArray;
+    delete SwStyleNameMapper::pDocProgNameArray;
+    delete SwStyleNameMapper::pHTMLProgNameArray;
+    delete SwStyleNameMapper::pFrmFmtProgNameArray;
+    delete SwStyleNameMapper::pChrFmtProgNameArray;
+    delete SwStyleNameMapper::pHTMLChrFmtProgNameArray;
+    delete SwStyleNameMapper::pPageDescProgNameArray;
+    delete SwStyleNameMapper::pNumRuleProgNameArray;
+
+    // And finally, any hash tables that we used
+    delete SwStyleNameMapper::pParaUIMap;
+    delete SwStyleNameMapper::pCharUIMap;
+    delete SwStyleNameMapper::pPageUIMap;
+    delete SwStyleNameMapper::pFrameUIMap;
+    delete SwStyleNameMapper::pNumRuleUIMap;
+
+    delete SwStyleNameMapper::pParaProgMap;
+    delete SwStyleNameMapper::pCharProgMap;
+    delete SwStyleNameMapper::pPageProgMap;
+    delete SwStyleNameMapper::pFrameProgMap;
+    delete SwStyleNameMapper::pNumRuleProgMap;
+
 
     // loesche alle default-Attribute
     SfxPoolItem* pHt;
