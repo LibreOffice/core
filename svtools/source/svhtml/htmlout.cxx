@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-14 09:29:42 $
+ *  last change: $Author: dvo $ $Date: 2001-03-28 17:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
     rStream << sOut.GetBuffer();
     sOut.Erase();
     Out_String( rStream, rOutName, eDestEnc );
-    rStream << '\"';
+    rStream << "\">";
 
     for( USHORT i=0U; i<rIMap.GetIMapObjectCount(); i++ )
     {
