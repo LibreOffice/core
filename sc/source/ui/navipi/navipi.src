@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 07:55:42 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,7 +885,7 @@ String SCSTR_CONTENT_DBAREA
     Text[ dutch ] = "Database-bereiken";
     Text[ chinese_simplified ] = "ΚύΎέΏβΗψΣς";
     Text[ greek ] = "Πεδία βάσης δεδομένων";
-    Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί ΏµΏª";
+    Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί Ήόΐ§";
     Text[ turkish ] = "Veritabanύ alanlarύ";
     Text[ language_user1 ] = " ";
 };
@@ -990,7 +990,7 @@ String SCSTR_CONTENT_AREALINK
     Text[ dutch ] = "Gekoppelde bereiken";
     Text[ chinese_simplified ] = "Α΄½ΣµΔΗψΣς";
     Text[ greek ] = "Συνδεδεμένες περιοχές";
-    Text[ korean ] = "ΏµΏªΐΜ Ώ¬°αµΗΎϊ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΈµΕ©µΘ ΏµΏª.";
     Text[ turkish ] = "Baπlantύlύ alanlar";
     Text[ language_user1 ] = " ";
 };
