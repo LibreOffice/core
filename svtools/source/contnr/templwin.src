@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-27 20:05:32 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 08:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,7 @@ StringArray STRARY_SVT_DOCINFO
         < "瓏derungdatum" ; DI_MODIFIEDDATE ; > ;
         < "Ge鄚dert von" ; DI_MODIFIEDBY ; > ;
         < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "ZL : \\\\\\\\\\\\\\\\" ; DI_PRINTBY ; > ;
+        < "ZL : \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" ; DI_PRINTBY ; > ;
         < "Thema" ; DI_THEME ; > ;
         < "Gr廲e" ; DI_SIZE ; > ;
     };
@@ -785,7 +785,7 @@ StringArray STRARY_SVT_DOCINFO
     ItemList [ chinese_traditional ] =
     {
         < "大標題" ; DI_TITLE ; > ;
-        < "從" ; DI_FROM ; > ;
+        < "作者" ; DI_FROM ; > ;
         < "日期" ; DI_DATE ; > ;
         < "關鍵字" ; DI_KEYWORDS ; > ;
         < "描述" ; DI_DESCRIPTION ; > ;
@@ -843,6 +843,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Gr廲e" ; DI_SIZE ; > ;
     };
 };
+
 
 
 
