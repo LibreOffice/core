@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-16 14:35:15 $
+#   last change: $Author: kz $ $Date: 2004-08-02 10:09:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/formatclipboard.obj		\
         $(SLO)$/docshell.obj \
         $(SLO)$/docshel2.obj \
         $(SLO)$/docshel3.obj \
