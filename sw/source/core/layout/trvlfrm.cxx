@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-01-29 12:33:53 $
+ *  last change: $Author: ama $ $Date: 2001-02-14 09:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,12 +361,15 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                             const SwCrsrMoveState* pCMS ) const
 {
+    sal_Bool bOldAction = IsCallbackActionEnabled();
+    ((SwRootFrm*)this)->SetCallbackActionEnabled( FALSE );
     ASSERT( (Lower() && Lower()->IsPageFrm()), "Keinen PageFrm gefunden." );
     if( pCMS && pCMS->pFill )
         ((SwCrsrMoveState*)pCMS)->bFillRet = FALSE;
     Point aOldPoint = rPoint;
     const SwPageFrm *pPage = (SwPageFrm*)Lower();
     pPage->SwPageFrm::GetCrsrOfst( pPos, rPoint, pCMS );
+    ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
     if( pCMS )
     {
         if( pCMS->bStop )
