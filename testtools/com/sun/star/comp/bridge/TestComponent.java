@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-27 10:07:33 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ import com.sun.star.test.bridge.TestDataElements;
 import com.sun.star.test.bridge.TestElement;
 import com.sun.star.test.bridge.TestEnum;
 import com.sun.star.test.bridge.XBridgeTest;
+import com.sun.star.test.bridge.XBridgeTest2;
 import com.sun.star.test.bridge.XRecursiveCall;
 
 import com.sun.star.lang.XMultiServiceFactory;
@@ -317,7 +318,7 @@ public class TestComponent {
         }
     }
 
-    static public class _TestObject implements XBridgeTest, XRecursiveCall, XServiceInfo, XTypeProvider {
+    static public class _TestObject implements XBridgeTest2, XRecursiveCall, XServiceInfo, XTypeProvider {
         static private final String __serviceName = "com.sun.star.test.bridge.JavaTestObject";
 
         private boolean  _bool;
@@ -342,6 +343,23 @@ public class TestComponent {
         private boolean _bFirstCall;
         private boolean _bSequenceOfCallTestPassed;
 
+        private boolean[] arBool;
+        private char[] arChar;
+        private byte[] arByte;
+        private short[] arShort;
+        private short[] arUShort;
+        private int[] arLong;
+        private int[] arULong;
+        private long[] arHyper;
+        private long[] arUHyper;
+        private float[] arFloat;
+        private double[] arDouble;
+        private String[] arString;
+        private Object[] arObject;
+        private Object[] arAny;
+        private TestEnum[] arEnum;
+        private int[][] arLong2;
+        private int[][][] arLong3;
         public _TestObject(XMultiServiceFactory xMultiServiceFactory) {
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".<init> " + xMultiServiceFactory);
 
@@ -731,6 +749,155 @@ public class TestComponent {
         public byte[] getImplementationId() throws com.sun.star.uno.RuntimeException {
             return toString().getBytes();
         }
+
+        //XBridgeTest2
+        public boolean[] setSequenceBool( /*IN*/boolean[] aSeq )
+        {
+            arBool = aSeq;
+            return aSeq;
+        }
+        public char[] setSequenceChar( /*IN*/char[] aSeq )
+        {
+            arChar = aSeq;
+            return aSeq;
+        }
+        public byte[] setSequenceByte( /*IN*/byte[] aSeq )
+        {
+            arByte = aSeq;
+            return aSeq;
+        }
+        public short[] setSequenceShort( /*IN*/short[] aSeq )
+        {
+            arShort = aSeq;
+            return aSeq;
+        }
+        public short[] setSequenceUShort( /*IN*/short[] aSeq )
+        {
+            arUShort = aSeq;
+            return aSeq;
+        }
+        public int[] setSequenceLong( /*IN*/int[] aSeq )
+        {
+            arLong = aSeq;
+            return aSeq;
+        }
+        public int[] setSequenceULong( /*IN*/int[] aSeq )
+        {
+            arULong = aSeq;
+            return aSeq;
+        }
+        public long[] setSequenceHyper( /*IN*/long[] aSeq )
+        {
+            arHyper = aSeq;
+            return aSeq;
+        }
+        public long[] setSequenceUHyper( /*IN*/long[] aSeq )
+        {
+            arUHyper = aSeq;
+            return aSeq;
+        }
+        public float[] setSequenceFloat( /*IN*/float[] aSeq )
+        {
+            arFloat = aSeq;
+            return aSeq;
+        }
+        public double[] setSequenceDouble( /*IN*/double[] aSeq )
+        {
+            arDouble = aSeq;
+            return aSeq;
+        }
+        public TestEnum[] setSequenceEnum( /*IN*/TestEnum[] aSeq )
+        {
+            arEnum = aSeq;
+            return aSeq;
+        }
+        public String[] setSequenceString( /*IN*/String[] aSeq )
+        {
+            arString = aSeq;
+            return aSeq;
+        }
+        public java.lang.Object[] setSequenceXInterface( /*IN*/java.lang.Object[] aSeq )
+        {
+            arObject = aSeq;
+            return aSeq;
+        }
+        public java.lang.Object[] setSequenceAny( /*IN*/java.lang.Object[] aSeq )
+        {
+            arAny = aSeq;
+            return aSeq;
+        }
+        public TestElement[] setSequenceStruct( /*IN*/TestElement[] aSeq )
+        {
+            _testElements = aSeq;
+            return aSeq;
+        }
+        public int[][] setDim2( /*IN*/int[][] aSeq )
+        {
+            arLong2 = aSeq;
+            return aSeq;
+        }
+        public int[][][] setDim3( /*IN*/int[][][] aSeq )
+        {
+            arLong3 = aSeq;
+            return aSeq;
+        }
+        public void setSequencesInOut( /*INOUT*/boolean[][] aSeqBoolean,
+                                       /*INOUT*/char[][] aSeqChar, /*INOUT*/byte[][] aSeqByte,
+                                       /*INOUT*/short[][] aSeqShort, /*INOUT*/short[][] aSeqUShort,
+                                       /*INOUT*/int[][] aSeqLong, /*INOUT*/int[][] aSeqULong,
+                                       /*INOUT*/long[][] aSeqHyper, /*INOUT*/long[][] aSeqUHyper,
+                                       /*INOUT*/float[][] aSeqFloat, /*INOUT*/double[][] aSeqDouble,
+                                       /*INOUT*/TestEnum[][] aSeqEnum, /*INOUT*/String[][] aSeqString,
+                                       /*INOUT*/java.lang.Object[][] aSeqXInterface,
+                                       /*INOUT*/java.lang.Object[][] aSeqAny,
+                                       /*INOUT*/int[][][] aSeqDim2, /*INOUT*/int[][][][] aSeqDim3 )
+        {
+            arBool = aSeqBoolean[0];
+            arChar = aSeqChar[0];
+            arByte = aSeqByte[0];
+            arShort = aSeqShort[0];
+            arUShort = aSeqUShort[0];
+            arLong = aSeqLong[0];
+            arULong = aSeqULong[0];
+            arFloat = aSeqFloat[0];
+            arDouble = aSeqDouble[0];
+            arEnum = aSeqEnum[0];
+            arString = aSeqString[0];
+            arObject = aSeqXInterface[0];
+            arAny = aSeqAny[0];
+            arLong2 = aSeqDim2[0];
+            arLong3 = aSeqDim3[0];
+        }
+        public void setSequencesOut( /*OUT*/boolean[][] aSeqBoolean, /*OUT*/char[][] aSeqChar,
+                                     /*OUT*/byte[][] aSeqByte, /*OUT*/short[][] aSeqShort,
+                                     /*OUT*/short[][] aSeqUShort, /*OUT*/int[][] aSeqLong,
+                                     /*OUT*/int[][] aSeqULong, /*OUT*/long[][] aSeqHyper,
+                                     /*OUT*/long[][] aSeqUHyper, /*OUT*/float[][] aSeqFloat,
+                                     /*OUT*/double[][] aSeqDouble, /*OUT*/TestEnum[][] aSeqEnum,
+                                     /*OUT*/String[][] aSeqString,
+                                     /*OUT*/java.lang.Object[][] aSeqXInterface,
+                                     /*OUT*/java.lang.Object[][] aSeqAny, /*OUT*/int[][][] aSeqDim2,
+                                     /*OUT*/int[][][][] aSeqDim3 )
+        {
+             aSeqBoolean[0] = arBool;
+             aSeqChar[0] = arChar;
+             aSeqByte[0] = arByte;
+             aSeqShort[0] = arShort;
+             aSeqUShort[0] = arUShort;
+             aSeqLong[0] = arLong;
+             aSeqULong[0] = arULong;
+             aSeqHyper[0] = arHyper;
+             aSeqUHyper[0] = arUHyper;
+             aSeqFloat[0] = arFloat;
+             aSeqDouble[0] = arDouble;
+             aSeqEnum[0] = arEnum;
+             aSeqString[0] = arString;
+             aSeqXInterface[0] = arObject;
+             aSeqAny[0] = arAny;
+             aSeqDim2[0] = arLong2;
+             aSeqDim3[0] = arLong3;
+        }
+
     }
 
     /**
