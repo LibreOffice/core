@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=text
+Type=MimeType
+Patterns=*.sxw
+MimeType=application/vnd.sun.xml.writer
+Comment=%PRODUCTNAME Text Document
