@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarwrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:42:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 
     if ( !m_bInitialized )
     {
+        rtl::OUString aModuleIdentifier;
         UIConfigElementWrapperBase::initialize( aArguments );
 
         Reference< XFrame > xFrame( m_xWeakFrame );
@@ -209,7 +210,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 {
                     // Fill menubar with container contents
                     USHORT nId = 1;
-                    MenuBarManager::FillMenu( nId, pVCLMenuBar, m_xConfigData );
+                    MenuBarManager::FillMenu( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData );
                 }
             }
             catch ( NoSuchElementException& )
@@ -234,7 +235,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 // a menu bar created with this property is not fully supported. It must be attached to a real menu bar manager to have full
                 // support. This feature is currently used for "Inplace editing"!
                 // #110897# MenuBarManager* pMenuBarManager = new MenuBarManager( xFrame, pVCLMenuBar, sal_False, sal_True );
-                MenuBarManager* pMenuBarManager = new MenuBarManager( getServiceFactory(), xFrame, pVCLMenuBar, sal_False, sal_True );
+                MenuBarManager* pMenuBarManager = new MenuBarManager( getServiceFactory(), xFrame, aModuleIdentifier, pVCLMenuBar, sal_False, sal_True );
 
                 m_xMenuBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
             }
