@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 08:35:44 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 10:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,6 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
                     i++;
             }
             if (bEqualFound)
-                //aValidationRange.nIndex = i;
                 nValidationIndex = i;
             else
             {
@@ -235,7 +234,6 @@ sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
                 aValidation.sName += sPrefix;
                 aValidation.sName += sCount;
                 aValidationVec.push_back(aValidation);
-                //aValidationRange.nIndex = nCount;
                 nValidationIndex = nCount;
                 bAdded = sal_True;
             }
@@ -370,7 +368,6 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
             {
                 SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
                 rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
-                //rExport.GetDocHandler()->characters(sTemp.makeStringAndClear());
             }
             else
                 sTemp.append(sText[i]);
@@ -380,7 +377,6 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         {
             SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
             rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
-            //rExport.GetDocHandler()->characters(sTemp.makeStringAndClear());
         }
     }
     if (pMessage)
@@ -840,7 +836,6 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
     sal_Int32 nColumns = 0;
     while (aItr != pFormatRanges->end() && nColumns < nTotalColumns)
     {
-        table::CellRangeAddress aRange = (*aItr).aRangeAddress;
         if (((*aItr).aRangeAddress.StartRow <= nRow) &&
             ((*aItr).aRangeAddress.EndRow >= nRow))
         {
@@ -852,7 +847,6 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
                 ((*aItr).aRangeAddress.EndColumn <= nEndColumn)))
             {
                 ScMyRowFormatRange aRange;
-//              aRange.aRangeAddress = aItr->aRangeAddress;
                 aRange.nIndex = aItr->nStyleNameIndex;
                 aRange.nValidationIndex = aItr->nValidationIndex;
                 aRange.bIsAutoStyle = aItr->bIsAutoStyle;
