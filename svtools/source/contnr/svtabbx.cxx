@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-13 12:37:32 $
+ *  last change: $Author: pb $ $Date: 2002-09-20 10:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,13 +436,12 @@ SvLBoxEntry* SvTabListBox::InsertEntry( const XubString& rStr, ULONG nPos,
 
 #endif
 
-XubString SvTabListBox::GetEntryText( ULONG nPos, USHORT nCol ) const
+String SvTabListBox::GetEntryText( SvLBoxEntry* pEntry ) const
 {
-    SvLBoxEntry* pEntry = SvTreeListBox::GetEntry( nPos );
-    return GetEntryText( pEntry, nCol );
+    return GetEntryText( pEntry, 0xffff );
 }
 
-XubString SvTabListBox::GetEntryText( SvLBoxEntry* pEntry, USHORT nCol ) const
+String SvTabListBox::GetEntryText( SvLBoxEntry* pEntry, USHORT nCol ) const
 {
     DBG_ASSERT(pEntry,"GetEntryText:Invalid Entry");
     XubString aResult;
@@ -472,6 +471,12 @@ XubString SvTabListBox::GetEntryText( SvLBoxEntry* pEntry, USHORT nCol ) const
         }
     }
     return aResult;
+}
+
+String SvTabListBox::GetEntryText( ULONG nPos, USHORT nCol ) const
+{
+    SvLBoxEntry* pEntry = SvTreeListBox::GetEntry( nPos );
+    return GetEntryText( pEntry, nCol );
 }
 
 void SvTabListBox::SetEntryText( const XubString& rStr, ULONG nPos,

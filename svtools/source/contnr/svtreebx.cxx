@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-06 09:07:06 $
+ *  last change: $Author: pb $ $Date: 2002-09-20 10:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,12 +386,12 @@ void SvTreeListBox::InitEntry( SvLBoxEntry* pEntry,
     pEntry->AddItem( pString );
 }
 
-XubString SvTreeListBox::GetEntryText(SvLBoxEntry* pEntry) const
+String SvTreeListBox::GetEntryText(SvLBoxEntry* pEntry) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    DBG_ASSERT(pEntry,"Entry?")
+    DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): no entry" )
     SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
-    DBG_ASSERT(pItem,"GetEntryText:Item not found")
+    DBG_ASSERT( pEntry, "SvTreeListBox::GetEntryText(): item not found" )
     return pItem->GetText();
 }
 
