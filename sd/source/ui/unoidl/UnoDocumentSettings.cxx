@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2001-04-19 16:41:29 $
+ *  last change: $Author: cl $ $Date: 2001-04-26 12:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,21 @@
 #endif
 #include "unomodel.hxx"
 
+#ifndef SVX_LIGHT
+#ifndef _SD_OPTSITEM_HXX
+#include "optsitem.hxx"
+#endif
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
+#endif
+#ifndef _SDATTR_HXX
+#include "sdattr.hxx"
+#endif
+#endif
+#ifndef _SVX_UNOAPI_HXX_
+#include <svx/unoapi.hxx>
+#endif
+
 #define MAP_LEN(x) x, sizeof(x)-1
 
 using namespace ::comphelper;
@@ -186,66 +201,52 @@ namespace sd
 
 enum SdDocumentSettingsPropertyHandles
 {
-    HANDLE_PRINTDRAWING, HANDLE_PRINTNOTES, HANDLE_PRINTHANDOUT, HANDLE_PRINTOUTLINE, HANDLE_MEASUREUNIT, HANDLE_SCALEX,
-    HANDLE_SCALEY, HANDLE_TABSTOP, HANDLE_SNAPTO_GRID, HANDLE_SNAPTO_SNAPLINES, HANDLE_SNAPTO_PAGEMARGINS, HANDLE_SNAPTO_OBJECTFRAME,
-    HANDLE_SNAPTO_OBJECTPOINTS, HANDLE_SNAPRANGE, HANDLE_SNAPTOGRID, HANDLE_VISIBLEGRID, HANDLE_GRIDRESX, HANDLE_GRIDRESY,
-    HANDLE_GRIDSUBX, HANDLE_GRIDSUBY, HANDLE_GRIDAXISSYNC, HANDLE_PRINTPAGENAME, HANDLE_PRINTDATE, HANDLE_PRINTTIME,
+    HANDLE_PRINTDRAWING, HANDLE_PRINTNOTES, HANDLE_PRINTHANDOUT, HANDLE_PRINTOUTLINE, HANDLE_MEASUREUNIT, HANDLE_SCALE_NUM,
+    HANDLE_SCALE_DOM, HANDLE_TABSTOP, HANDLE_PRINTPAGENAME, HANDLE_PRINTDATE, HANDLE_PRINTTIME,
     HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
     HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
-    HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA
+    HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT
 };
+
+#define MID_PRINTER 1
 
     PropertySetInfo* createSettingsInfoImpl( sal_Bool bIsDraw )
     {
         static PropertyMapEntry aImpressSettingsInfoMap[] =
         {
-/*
-            { MAP_LEN("IsPrintDrawing"),        HANDLE_PRINTDRAWING,        &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintNotes"),          HANDLE_PRINTNOTES,          &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintHandout"),        HANDLE_PRINTHANDOUT,        &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintOutline"),        HANDLE_PRINTOUTLINE,        &::getBooleanCppuType(),                0,  0 },
-*/
+#ifndef SVX_LIGHT
+            { MAP_LEN("IsPrintDrawing"),        HANDLE_PRINTDRAWING,        &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintNotes"),          HANDLE_PRINTNOTES,          &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintHandout"),        HANDLE_PRINTHANDOUT,        &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintOutline"),        HANDLE_PRINTOUTLINE,        &::getBooleanCppuType(),                0,  MID_PRINTER },
+#endif
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
         static PropertyMapEntry aDrawSettingsInfoMap[] =
         {
-/*
-            { MAP_LEN("MeasureUnit"),           HANDLE_MEASUREUNIT,         &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("ScaleX"),                HANDLE_SCALEX,              &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("ScaleY"),                HANDLE_SCALEY,              &::getCppuType((const sal_Int32*)0),    0,  0 },
-*/
+            { MAP_LEN("MeasureUnit"),           HANDLE_MEASUREUNIT,         &::getCppuType((const sal_Int16*)0),    0,  0 },
+            { MAP_LEN("ScaleNominator"),        HANDLE_SCALE_NUM,           &::getCppuType((const sal_Int32*)0),    0,  0 },
+            { MAP_LEN("ScaleDominator"),        HANDLE_SCALE_DOM,           &::getCppuType((const sal_Int32*)0),    0,  0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
         static PropertyMapEntry aCommonSettingsInfoMap[] =
         {
-/*
             { MAP_LEN("DefaultTabStop"),        HANDLE_TABSTOP,             &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("IsSnapToGrid"),          HANDLE_SNAPTO_GRID,         &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsSnapToSnapLines"),     HANDLE_SNAPTO_SNAPLINES,    &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsSnapToPageMargins"),   HANDLE_SNAPTO_PAGEMARGINS,  &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsSnapToObjectFrame"),   HANDLE_SNAPTO_OBJECTFRAME,  &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsSnapToObjectPoints"),  HANDLE_SNAPTO_OBJECTPOINTS, &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("SnapRange"),             HANDLE_SNAPRANGE,           &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("GridIsEnabled"),         HANDLE_SNAPTOGRID,          &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("GridIsVisible"),         HANDLE_VISIBLEGRID,         &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("GridResolutionX"),       HANDLE_GRIDRESX,            &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("GridResolutionY"),       HANDLE_GRIDRESY,            &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("GridSubdivisionX"),      HANDLE_GRIDSUBX,            &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("GridSubdivisionY"),      HANDLE_GRIDSUBY,            &::getCppuType((const sal_Int32*)0),    0,  0 },
-            { MAP_LEN("IsGridAxisSynchronized"),HANDLE_GRIDAXISSYNC,        &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintDate"),           HANDLE_PRINTDATE,           &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintTime"),           HANDLE_PRINTTIME,           &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintHiddenPages"),    HANDLE_PRINTHIDENPAGES,     &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintFitPage"),        HANDLE_PRINTFITPAGE,        &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintTilePage"),       HANDLE_PRINTTILEPAGE,       &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintBooklet"),        HANDLE_PRINTBOOKLET,        &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintBookletFront"),   HANDLE_PRINTBOOKLETFRONT,   &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("IsPrintBookletBack"),    HANDLE_PRINTBOOKLETBACK,    &::getBooleanCppuType(),                0,  0 },
-            { MAP_LEN("PrintQuality"),          HANDLE_PRINTQUALITY,        &::getCppuType((const sal_Int32*)0),    0,  0 },
-*/
+#ifndef SVX_LIGHT
+
+            { MAP_LEN("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintDate"),           HANDLE_PRINTDATE,           &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintTime"),           HANDLE_PRINTTIME,           &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintHiddenPages"),    HANDLE_PRINTHIDENPAGES,     &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintFitPage"),        HANDLE_PRINTFITPAGE,        &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintTilePage"),       HANDLE_PRINTTILEPAGE,       &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintBooklet"),        HANDLE_PRINTBOOKLET,        &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintBookletFront"),   HANDLE_PRINTBOOKLETFRONT,   &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("IsPrintBookletBack"),    HANDLE_PRINTBOOKLETBACK,    &::getBooleanCppuType(),                0,  MID_PRINTER },
+            { MAP_LEN("PrintQuality"),          HANDLE_PRINTQUALITY,        &::getCppuType((const sal_Int32*)0),    0,  MID_PRINTER },
+#endif
             { MAP_LEN("ColorTableURL"),         HANDLE_COLORTABLEURL,       &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("DashTableURL"),          HANDLE_DASHTABLEURL,        &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("LineEndTableURL"),       HANDLE_LINEENDTABLEURL,     &::getCppuType((const OUString*)0),     0,  0 },
@@ -255,6 +256,8 @@ enum SdDocumentSettingsPropertyHandles
 
             { MAP_LEN("ForbiddenCharacters"),   HANDLE_FORBIDDENCHARS,      &::getCppuType((const Reference< XForbiddenCharacters >*)0),    0, 0 },
             { MAP_LEN("ApplyUserData"),         HANDLE_APPLYUSERDATA,       &::getBooleanCppuType(),                0,  0 },
+
+            { MAP_LEN("PageNumberFormat"),      HANDLE_PAGENUMFMT,          &::getCppuType((const sal_Int32*)0),    0,  0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -285,11 +288,30 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
     if( NULL == pDoc || NULL == pDocSh )
         throw UnknownPropertyException();
 
-    sal_Bool bOk, bChanged = sal_False;
+    sal_Bool bOk, bChanged = sal_False, bValue;
 
-    while( *ppEntries )
+#ifndef SVX_LIGHT
+    SfxPrinter* pPrinter = NULL;
+    SdOptionsPrintItem* pPrinterOptions = NULL;
+#endif
+
+    for( ; *ppEntries; ppEntries++, pValues++ )
     {
         bOk = sal_False;
+#ifndef SVX_LIGHT
+        if( ((*ppEntries)->mnMemberId == MID_PRINTER) && (pPrinter == NULL) )
+        {
+            pPrinter = pDocSh->GetPrinter( sal_True );
+            if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrinterOptions) != SFX_ITEM_SET)
+            {
+                DBG_ERROR( "could not get printer options!" );
+                pPrinter = NULL;
+                pPrinterOptions = NULL;
+                continue;
+            }
+        }
+#endif
+
         switch( (*ppEntries)->mnHandle )
         {
             case HANDLE_COLORTABLEURL:
@@ -446,37 +468,170 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     }
                 }
                 break;
+#ifndef SVX_LIGHT
             case HANDLE_PRINTDRAWING:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetDraw( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTNOTES:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetNotes( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTHANDOUT:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetHandout( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTOUTLINE:
-            case HANDLE_MEASUREUNIT:
-            case HANDLE_SCALEX:
-            case HANDLE_SCALEY:
-            case HANDLE_TABSTOP:
-            case HANDLE_SNAPTO_GRID:
-            case HANDLE_SNAPTO_SNAPLINES:
-            case HANDLE_SNAPTO_PAGEMARGINS:
-            case HANDLE_SNAPTO_OBJECTFRAME:
-            case HANDLE_SNAPTO_OBJECTPOINTS:
-            case HANDLE_SNAPRANGE:
-            case HANDLE_SNAPTOGRID:
-            case HANDLE_VISIBLEGRID:
-            case HANDLE_GRIDRESX:
-            case HANDLE_GRIDRESY:
-            case HANDLE_GRIDSUBX:
-            case HANDLE_GRIDSUBY:
-            case HANDLE_GRIDAXISSYNC:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetOutline( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTPAGENAME:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetPagename( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTDATE:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetDate( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTTIME:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetTime( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTHIDENPAGES:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetHiddenPages( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTFITPAGE:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetPagesize( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTTILEPAGE:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetPagetile( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTBOOKLET:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetBooklet( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTBOOKLETFRONT:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetFrontPage( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTBOOKLETBACK:
+                if( *pValues >>= bValue )
+                {
+                    pPrinterOptions->SetBackPage( bValue );
+                    bOk = sal_True;
+                }
+                break;
             case HANDLE_PRINTQUALITY:
+                {
+                    sal_Int32 nValue;
+                    if( *pValues >>= nValue )
+                    {
+                        pPrinterOptions->SetOutputQuality( (sal_uInt16)nValue );
+                        bOk = sal_True;
+                    }
+                }
+                break;
+#endif
+            case HANDLE_MEASUREUNIT:
+                {
+                    sal_Int16 nValue;
+                    if( *pValues >>= nValue )
+                    {
+                        short nFieldUnit;
+                        if( SvxMeasureUnitToFieldUnit( nValue, nFieldUnit ) )
+                        {
+                            pDoc->SetUIUnit((FieldUnit)nFieldUnit );
+                            bOk = sal_True;
+                        }
+                    }
+                }
+                break;
+            case HANDLE_SCALE_NUM:
+                {
+                    sal_Int32 nValue;
+                    if( *pValues >>= nValue )
+                    {
+                        Fraction aFract( nValue, pDoc->GetUIScale().GetDenominator() );
+                        pDoc->SetUIScale( aFract );
+                        bOk = sal_True;
+                        bChanged = sal_True;
+                    }
+                }
+                break;
+            case HANDLE_SCALE_DOM:
+                {
+                    sal_Int32 nValue;
+                    if( *pValues >>= nValue )
+                    {
+                        Fraction aFract( pDoc->GetUIScale().GetNumerator(), nValue );
+                        pDoc->SetUIScale( aFract );
+                        bOk = sal_True;
+                        bChanged = sal_True;
+                    }
+                }
+                break;
+
+            case HANDLE_TABSTOP:
+                {
+                    sal_Int32 nValue;
+                    if( (*pValues >>= nValue) && (nValue >= 0) )
+                    {
+                        pDoc->SetDefaultTabulator((sal_uInt16)nValue);
+                        bOk = sal_True;
+                        bChanged = sal_True;
+                    }
+                }
+                break;
+            case HANDLE_PAGENUMFMT:
+                {
+                    sal_Int32 nValue;
+                    if( (*pValues >>= nValue ) && (nValue >= SVX_CHARS_UPPER_LETTER ) && (nValue <= SVX_PAGEDESC) )
+                    {
+                        pDoc->SetPageNumType((SvxNumType)nValue);
+                        bOk = sal_True;
+                        bChanged = sal_True;
+                    }
+                }
+                break;
             default:
                 throw UnknownPropertyException();
 
@@ -484,10 +639,20 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
         if( !bOk )
             throw IllegalArgumentException();
-
-        ppEntries++;
-        pValues++;
     }
+
+#ifndef SVX_LIGHT
+    if( pPrinter && pPrinterOptions )
+    {
+        SfxItemSet aNewOptions( pPrinter->GetOptions() );
+        SdOptionsPrintItem aOpts( *pPrinterOptions );
+        aNewOptions.Put( aOpts );
+        pPrinter->SetOptions( aNewOptions );
+
+        SdOptions* pOptions = SD_MOD()->GetSdOptions( pDoc->GetDocumentType() );
+        pOptions->SetPrinterOptions( &aOpts );
+    }
+#endif
 
     if( bChanged )
         mpModel->SetModified( sal_True );
@@ -500,8 +665,28 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
     if( NULL == pDoc || NULL == pDocSh )
         throw UnknownPropertyException();
 
-    while( *ppEntries )
+#ifndef SVX_LIGHT
+    SfxPrinter* pPrinter = NULL;
+    SdOptionsPrintItem* pPrinterOptions = NULL;
+#endif
+
+    for( ; *ppEntries; ppEntries++, pValue++ )
     {
+
+#ifndef SVX_LIGHT
+        if( (*ppEntries)->mnMemberId == MID_PRINTER && pPrinter == NULL )
+        {
+            pPrinter = pDocSh->GetPrinter( sal_True );
+            if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrinterOptions) != SFX_ITEM_SET)
+            {
+                DBG_ERROR( "could not get printer options!" );
+                pPrinter = NULL;
+                pPrinterOptions = NULL;
+                continue;
+            }
+        }
+#endif
+
         switch( (*ppEntries)->mnHandle )
         {
             case HANDLE_COLORTABLEURL:
@@ -576,43 +761,72 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
 #endif
                 break;
 
+#ifndef SVX_LIGHT
             case HANDLE_PRINTDRAWING:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsDraw();
+                break;
             case HANDLE_PRINTNOTES:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsNotes();
+                break;
             case HANDLE_PRINTHANDOUT:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsHandout();
+                break;
             case HANDLE_PRINTOUTLINE:
-            case HANDLE_MEASUREUNIT:
-            case HANDLE_SCALEX:
-            case HANDLE_SCALEY:
-            case HANDLE_TABSTOP:
-            case HANDLE_SNAPTO_GRID:
-            case HANDLE_SNAPTO_SNAPLINES:
-            case HANDLE_SNAPTO_PAGEMARGINS:
-            case HANDLE_SNAPTO_OBJECTFRAME:
-            case HANDLE_SNAPTO_OBJECTPOINTS:
-            case HANDLE_SNAPRANGE:
-            case HANDLE_SNAPTOGRID:
-            case HANDLE_VISIBLEGRID:
-            case HANDLE_GRIDRESX:
-            case HANDLE_GRIDRESY:
-            case HANDLE_GRIDSUBX:
-            case HANDLE_GRIDSUBY:
-            case HANDLE_GRIDAXISSYNC:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsOutline();
+                break;
             case HANDLE_PRINTPAGENAME:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsPagename();
+                break;
             case HANDLE_PRINTDATE:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsDate();
+                break;
             case HANDLE_PRINTTIME:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsTime();
+                break;
             case HANDLE_PRINTHIDENPAGES:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsHiddenPages();
+                break;
             case HANDLE_PRINTFITPAGE:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsPagesize();
+                break;
             case HANDLE_PRINTTILEPAGE:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsPagetile();
+                break;
             case HANDLE_PRINTBOOKLET:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsBooklet();
+                break;
             case HANDLE_PRINTBOOKLETFRONT:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsFrontPage();
+                break;
             case HANDLE_PRINTBOOKLETBACK:
+                *pValue <<= (sal_Bool)pPrinterOptions->IsBackPage();
+                break;
             case HANDLE_PRINTQUALITY:
+                *pValue <<= (sal_Int32)pPrinterOptions->GetOutputQuality();
+                break;
+#endif
+            case HANDLE_MEASUREUNIT:
+                {
+                    sal_Int16 nMeasure;
+                    SvxFieldUnitToMeasureUnit( pDoc->GetUIUnit(), nMeasure );
+                    *pValue <<= nMeasure;
+                }
+                break;
+            case HANDLE_SCALE_NUM:
+                *pValue <<= (sal_Int32)pDoc->GetUIScale().GetNumerator();
+                break;
+            case HANDLE_SCALE_DOM:
+                *pValue <<= (sal_Int32)pDoc->GetUIScale().GetDenominator();
+                break;
+            case HANDLE_TABSTOP:
+                *pValue <<= (sal_Int32)pDoc->GetDefaultTabulator();
+                break;
+            case HANDLE_PAGENUMFMT:
+                *pValue <<= (sal_Int32)pDoc->GetPageNumType();
+                break;
             default:
                 throw UnknownPropertyException();
         }
-
-        ppEntries++;
-        pValue++;
     }
 }
 
