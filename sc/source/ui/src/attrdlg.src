@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ finnish ] =
         "Suojaa aktiivinen taulukko, jotta voit valita solujen suojauksen.\n\nValitse sitten Muut-valikosta Suojaa asiakirja ja Taulukko." ;
         Text [ danish ] = "Cellebeskyttelsen er kun effektiv, når det aktive regneark er beskyttet.\n\nVælg 'Bekyt dokument' i menuen 'Funktioner'og derefter 'Regneark' for at beskytte regnearket." ;
-        Text [ french ] = "Pour activer la protection d'une cellule, vous devez protéger la feuille courante.\n\nChoisissez 'Protection' dans le menu 'Outils' puis la commande 'Feuille'." ;
+        Text [ french ] = "Pour activer la protection d'une cellule, vous devez protéger la feuille active.\n\nChoisissez 'Protection' dans le menu 'Outils' puis la commande 'Feuille'." ;
         Text [ swedish ] = "Cellskyddet är endast verksamt om den aktiva tabellen är skyddad.\n\nVälj kommandot 'Skydda dokument' i menyn 'Verktyg' och därefter kommandot 'Tabell' för att skydda tabellen." ;
         Text [ dutch ] = "De celbeveiliging functioneert alleen als het actieve werkblad beveiligd is.\n\nKies eerst in menu 'Extra' de optie \"Document beveiligen\" en vervolgens de optie 'Werkblad'." ;
         Text [ spanish ] = "La protección de celdas es efectiva solamente si la hoja activa está protegida.\n\nSeleccione en 'Herramientas' la instrucción 'Proteger documento' y luego 'Hoja'." ;
@@ -399,7 +399,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ chinese_simplified ] = "Ö»ÓĞÔÚÄú¼¤»î±£»¤¹¤×÷±íºó£¬µ¥Ôª¸ñ²Å»áÊÜµ½±£»¤¡£\n\nÇëÄú°´»÷²Ëµ¥ÃüÁî¡°¹¤¾ß¡±£¬¡°±£»¤ÎÄµµ¡±£¬¡°¹¤×÷±í¡±¡£";
         Text[ russian ] = "Çàùèòà ÿ÷åéêè äåéñòâóåò òîëüêî ïîñëå çàùèòû òåêóùåãî ëèñòà.\n\nÄëÿ çàùèòû ëèñòà âûáåğèòå â ìåíş 'Ñåğâèñ' êîìàíäó 'Çàùèòà äîêóìåíòà', à çàòåì êîìàíäó 'Òàáëèöà'.";
         Text[ polish ] = "Ochrona komórek jest wtedy uaktywniona, jeœli bie¿¹cy arkusz jest chroniony.\n\nWybierz dla tego celu z menu 'Narzêdzia' polecenie 'Chroñ dokument', a nastêpnie polecenie 'Arkusz'.";
-        Text[ japanese ] = "¾Ù‚Ì•ÛŒì‚Í¤ì‹Æ’†‚Ì•\\‚ª•ÛŒì‚³‚ê‚Ä‚¢‚é‚Ì‚İ—LŒø‚Å‚·B\n\nÒÆ­°‚Ì[Â°Ù][ÄŞ·­ÒİÄ‚Ì•ÛŒì]‚ğ‘I‘ğ‚µ‚Ä[•\\]‚ğw’è‚µ‚Ä‰º‚³‚¢B";
+        Text[ japanese ] = "¾Ù‚Ì•ÛŒì‚ÍŒ»İ‚Ì•\\‚ª•ÛŒì‚³‚ê‚Ä‚¢‚é‚Ì‚İ—LŒø‚Å‚·B\n\n•\\‚ğ•ÛŒì‚·‚é‚É‚ÍÒÆ­°‚ÌÂ°Ù‚ÅÄŞ·­ÒİÄ‚Ì•ÛŒì‚Ì•\\‚ÅºÏİÄŞ‚ğÀs‚µ‚Ü‚·B";
         Text[ chinese_traditional ] = "¥u¦³¦b±z¿E¬¡«OÅ@¤u§@ªí«á¡AÀx¦s®æ¤~·|¨ü¨ì«OÅ@¡C\n\n½Ğ±z«ö¤@¤U³o­Ó¥\\¯àªíªº©R¥O¡G\"«OÅ@¤å¥ó\"¡A\"¤u§@ªí\"¡C";
         Text[ arabic ] = "áÇ ÊÕÈÍ ÍãÇíÉ ÇáÎáÇíÇ İÚøÇáÉ¡ ÅáÇ ÚäÏãÇ íßæä ÇáÌÏæá ÇáÍÇáí ãÍãí.\n\náÊäİíĞ Ğáß ÇáÑÌÇÁ ÇÎÊíÇÑ ÇáÃãÑ 'ÍãÇíÉ ÇáãÓÊäÏ' ãä ÇáŞÇÆãÉ 'ÃÏæÇÊ'¡ Ëã ÇáÃãÑ 'ÌÏæá'.";
         Text[ greek ] = "Ç ğñïóôáóßá êåëéşí éó÷ıåé ìüíï åöüóïí ôåèåß ï ôñİ÷ùí ğßíáêáò õğü ğñïóôáóßá.\n\nÃéá íá åğéôåõ÷èåß áõôü åğéëİîôå óôï ìåíïı 'Åñãáëåßá' ôçí åíôïëŞ 'Ğñïóôáóßá åããñÜöïõ' êáé óôç óõíİ÷åéá 'Ğßíáêáò'.";
