@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:09:58 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,8 @@ class SwDrawFrmFmt;
 class SwDrawView;
 class SwEditShell;
 class SwFieldType;
+class SwField;
+class SwTxtFld;
 class SwFldTypes;
 class SwFlyFrm;
 class SwFlyFrmFmt;
@@ -239,6 +241,9 @@ struct SwPrintData;
 struct SwTableEntry;
 // OD 26.06.2003 #108784#
 class SdrPageView;
+class SwRewriter;
+class SwFmtFld;
+class SwMsgPoolItem;
 
 namespace com { namespace sun { namespace star {
 namespace i18n {
@@ -339,7 +344,7 @@ class SwDoc
     // die Pointer
                                 //Defaultformate
     SwFrmFmt        *pDfltFrmFmt;
-    SwFrmFmt        *pEmptyPageFmt;     // Format fuer die Default-Leerseite.
+     SwFrmFmt       *pEmptyPageFmt;     // Format fuer die Default-Leerseite.
     SwFrmFmt        *pColumnContFmt;    // Format fuer Spaltencontainer
     SwCharFmt       *pDfltCharFmt;
     SwTxtFmtColl    *pDfltTxtFmtColl;   // Defaultformatcollections
@@ -896,10 +901,40 @@ public:
         // 0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId
         // In rUndoRange wird der restaurierte Bereich gesetzt.
     sal_Bool Undo( SwUndoIter& );
-        // setzt Undoklammerung auf, nUndoId kommt von der UI-Seite
-    sal_uInt16 StartUndo( sal_uInt16 nUndoId = 0 );
-        // schliesst Klammerung der nUndoId
-    sal_uInt16 EndUndo( sal_uInt16 nUndoId = 0 );
+    // -> #111827#
+
+    /**
+        Opens undo block.
+
+        @param nUndoId        undo ID for the start object
+        @param pRewriter      rewriter for comments @see SwUndo::GetComment
+
+        If the given nUndoId is equal to zero an undo object with ID
+        UNDO_START will be generated.
+
+        @return the undo ID of the created object
+    */
+    sal_uInt16 StartUndo( sal_uInt16 nUndoId = 0,
+                          const SwRewriter * pRewriter = 0);
+
+    /**
+       Closes undo block.
+
+       @param nUndoId         undo ID for the closure object
+       @param pRewriter       rewriter for comments @see SwUndo::GetComment
+
+       If the given nUndoId is equal to zero an undo object with ID
+       UNDO_START will be generated.
+
+       If pRewriter is not equal to zero the given rewriter will be
+       set for the generated closure object and the corresponding
+       start object. Otherwise an existent rewriter in the
+       corresponding start object will be propagated to the generated
+       closure object.
+    */
+    sal_uInt16 EndUndo( sal_uInt16 nUndoId = 0,
+                        const SwRewriter * pRewriter = 0);
+    // <- #111827#
         // loescht die gesamten UndoObjecte ( fuer Methoden die am Nodes
         // Array drehen ohne entsprechendes Undo !!)
     void DelAllUndoObj();
@@ -907,6 +942,7 @@ public:
         // oder USHRT_MAX
         // fuellt ggf. VARARR mit ::com::sun::star::sdbcx::User-UndoIds
     sal_uInt16 GetUndoIds( String* pStr = 0, SwUndoIds *pUndoIds = 0) const;
+    String GetUndoIdsStr( String* pStr = 0, SwUndoIds *pUndoIds = 0) const;
         // gibt es Klammerung mit der Id?
     sal_Bool HasUndoId(sal_uInt16 nId) const;
         // die drei folgenden Methoden werden beim Undo und nur dort
@@ -938,6 +974,7 @@ public:
         // liefert die Id der letzten Redofaehigen Aktion zurueck
         // fuellt ggf. VARARR mit RedoIds
     sal_uInt16 GetRedoIds( String* pStr = 0, SwUndoIds *pRedoIds = 0) const;
+    String GetRedoIdsStr( String* pStr = 0, SwUndoIds *pRedoIds = 0) const;
 
         // Repeat
         // wiederholt
@@ -945,6 +982,7 @@ public:
         // liefert die Id der letzten Repeatfaehigen Aktion zurueck
         // fuellt ggf. VARARR mit RedoIds
     sal_uInt16 GetRepeatIds( String* pStr = 0, SwUndoIds *pRedoIds = 0) const;
+    String GetRepeatIdsStr( String* pStr = 0, SwUndoIds *pRedoIds = 0) const;
 
     /* Felder */
     const SwFldTypes *GetFldTypes() const { return pFldTypes; }
@@ -956,8 +994,42 @@ public:
     void InsDeletedFldType( SwFieldType & );
     sal_Bool RenameUserFields(const String& rOldName, const String& rNewName);
 
-        // rufe das Update der Expression Felder auf; alle Ausdruecke werden
-        // neu berechnet.
+    // #111840#
+    /**
+       Puts a value into a field at a certain position.
+
+       A missing field at the given position leads to a failure.
+
+       @param rPosition        position of the field
+       @param rVal             the value
+       @param nMId
+
+       @retval TRUE            putting of value was successful
+       @retval FALSE           else
+    */
+    BOOL PutValueToField(const SwPosition & rPos,
+                         const com::sun::star::uno::Any& rVal, BYTE nMId);
+
+    // rufe das Update der Expression Felder auf; alle Ausdruecke werden
+    // neu berechnet.
+
+    // #111840#
+
+    /**
+       Updates a field.
+
+       @param rDstFmtFld        field to update
+       @param rSrcFld           field containing the new values
+       @param pMsgHnt
+       @param bUpdateTblFlds    TRUE: update table fields, too.
+
+       @retval TRUE             update was successful
+       @retval FALSE            else
+    */
+    BOOL  UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld,
+                    SwMsgPoolItem * pMsgHnt,
+                    BOOL bUpdateTblFlds);
+
     void UpdateRefFlds( SfxPoolItem* pHt = 0);
     void UpdateTblFlds( SfxPoolItem* pHt = 0);
     void UpdateExpFlds( SwTxtFld* pFld = 0, sal_Bool bUpdateRefFlds = sal_True );
@@ -1395,9 +1467,14 @@ public:
         { _CopyPageDescHeaderFooter( sal_False, rSrcFmt, rDestFmt ); }
 
         //fuer Reader
+    SwPageDesc * GetPageDesc( const String & rName );
     SwPageDesc& _GetPageDesc( sal_uInt16 i ) const { return *aPageDescs[i]; }
+    void ChgPageDesc( const String & rName, const SwPageDesc& );
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
+    BOOL FindPageDesc( const String & rName, sal_uInt16 * pFound );
+    void DelPageDesc( const String & rName);
     void DelPageDesc( sal_uInt16 i );
+    void PreDelPageDesc(SwPageDesc * pDel); // #i7983#
     sal_uInt16 MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
                              BOOL bRegardLanguage = TRUE);
 
@@ -2129,6 +2206,74 @@ public:
      */
     void SetMarkedNumLevel(SwNumRule & rNumRule, BYTE nLevel, BOOL bValue);
     // <- #i27615#
+
+    // Change a format undoable.
+    void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
+    void ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem);
+
+    // Change a TOX undoable.
+    void ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew);
+
+    // #111827#
+    /**
+       Returns a textual description of a PaM.
+
+       @param rPaM     the PaM to describe
+
+       If rPaM only spans one paragraph the result is:
+
+            '<text in the PaM>'
+
+       <text in the PaM> is shortened to nUndoStringLength characters.
+
+       If rPaM spans more than one paragraph the result is:
+
+            paragraphs                               (STR_PARAGRAPHS)
+
+       @return the textual description of rPaM
+     */
+    String GetPaMDescr(const SwPaM & rPaM) const;
+
+    // -> #111840#
+
+    /**
+        Checks if there is a character at a certain position.
+
+        @param rPos       position to search at
+
+        @retval TRUE      there is a character at \a rPos
+        @retval FALSE     else
+    */
+    static BOOL IsChar(const SwPosition & rPos);
+
+    /**
+       Returns the character at a certain position.
+
+       @param rPos        position to search at
+
+       @return the character at the given position
+    */
+    static xub_Unicode GetChar(const SwPosition & rPos);
+
+    /**
+       Returns the field at a certain position.
+
+       @param rPos        position to search at
+
+       @return     pointer to field at the given position or NULL in case no field is found
+    */
+    static SwField * GetField(const SwPosition & rPos);
+
+    /**
+       Returns the field at a certain position.
+
+       @param rPos        position to search at
+
+       @return     pointer to field at the given position or NULL in case no field is found
+    */
+    static SwTxtFld * GetTxtFld(const SwPosition & rPos);
+
+    // <- #111840#
 
     // -> #i23726#
     BOOL IsFirstOfNumRule(SwPosition & rPos);
