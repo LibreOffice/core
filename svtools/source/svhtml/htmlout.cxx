@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-22 14:12:34 $
+ *  last change: $Author: mib $ $Date: 2001-11-20 15:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,60 +398,27 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
     }
     else
     {
-        if( RTL_TEXTENCODING_UTF8 == eDestEnc )
+        sal_Char cBuffer[5];
+        size_t nLen = ByteString::ConvertFromUnicode( c, cBuffer, 5, eDestEnc );
+        if( nLen )
         {
-            sal_Char cBuffer[3];
-            size_t nLen = ByteString::ConvertFromUnicode( c, cBuffer, 3,
-                                                    RTL_TEXTENCODING_UTF8 );
-            if( nLen )
-            {
-                sal_Char *pBuffer = cBuffer;
-                while( nLen-- )
-                    rDest += *pBuffer++;
-            }
-            else
-            {
-                rDest += (sal_Char)c;
-            }
+            sal_Char *pBuffer = cBuffer;
+            while( nLen-- )
+                rDest += *pBuffer++;
         }
         else
         {
-            // We allow 8 bit encoding here only
-            sal_Char cOut = ByteString::ConvertFromUnicode( c,
-                                                    eDestEnc, FALSE );
             // If the character could not be converted to the destination
             // character set, the UNICODE character is exported as character
             // entity.
-            if( !cOut )
-            {
-                (((rDest += '&') += '#') +=
-                        ByteString::CreateFromInt64( (sal_uInt32)c )) += ';';
-                if( pNonConvertableChars &&
-                    STRING_NOTFOUND == pNonConvertableChars->Search( c ) )
-                    pNonConvertableChars->Append( c );
-            }
-            else if( (cOut>=' ' && cOut<='~') || cOut=='\t' )
-            {
-                rDest += cOut;
-            }
-            else
-            {
-                (((rDest += '&') += '#') +=
-                        ByteString::CreateFromInt32( (sal_uChar)cOut )) += ';';
-            }
+            (((rDest += '&') += '#') +=
+                    ByteString::CreateFromInt64( (sal_uInt32)c )) += ';';
+            if( pNonConvertableChars &&
+                STRING_NOTFOUND == pNonConvertableChars->Search( c ) )
+                pNonConvertableChars->Append( c );
         }
     }
 }
-
-#if SUPD < 638
-void HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
-                                        ByteString& rDest,
-                                        rtl_TextEncoding eDestEnc )
-{
-
-    ConvertStringToHTML( rSrc, rDest, eDestEnc );
-}
-#endif
 
 void HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
                                         ByteString& rDest,
