@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:54:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
@@ -93,7 +96,13 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
 
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
 #include <com/sun/star/io/XTruncate.hpp>
 #endif
@@ -145,10 +154,205 @@ void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, cons
 }
 
 //------------------------------------------------------
+void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStream )
+{
+    uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY );
+    if ( !xPropSet.is() )
+        throw uno::RuntimeException(); // Only StorageStreams must be provided here, they must implement the interface
+
+    xPropSet->setPropertyValue( ::rtl::OUString::createFromAscii( "UseCommonStoragePasswordEncryption" ),
+                                uno::makeAny( (sal_Bool)sal_True ) );
+}
+
+//------------------------------------------------------
+uno::Reference< io::XStream > TryToGetAcceptableFormat_Impl( const uno::Reference< io::XStream >& xStream,
+                                                             const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+        throw ( uno::Exception )
+{
+    // TODO/LATER: Actually this should be done by a centralized component ( may be a graphical filter )
+    if ( !xFactory.is() )
+        throw uno::RuntimeException();
+
+    uno::Reference< io::XInputStream > xInStream = xStream->getInputStream();
+    if ( !xInStream.is() )
+        throw uno::RuntimeException();
+
+    uno::Reference< io::XSeekable > xSeek( xStream, uno::UNO_QUERY_THROW );
+    xSeek->seek( 0 );
+
+    uno::Sequence< sal_Int8 > aData( 8 );
+    sal_Int32 nRead = xInStream->readBytes( aData, 8 );
+    xSeek->seek( 0 );
+
+    if ( ( nRead >= 2 && aData[0] == 'B' && aData[1] == 'M' )
+      || ( nRead >= 4 && aData[0] == 1 && aData[1] == 0 && aData[2] == 9 && aData[3] == 0 ) )
+    {
+        // it should be a bitmap or a Metafile
+        return xStream;
+    }
+
+    if ( ( nRead >= 8 && aData[0] == -1 && aData[1] == -1 && aData[2] == -1 && aData[3] == -1 )
+      && ( aData[4] == 2 || aData[4] == 3 ) && aData[5] == 0 && aData[6] == 0 && aData[7] == 0 )
+    {
+        // this is either a bitmap or a metafile clipboard format, retrieve the pure stream
+        uno::Reference < io::XStream > xResult(
+            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+            uno::UNO_QUERY_THROW );
+        uno::Reference < io::XSeekable > xResultSeek( xResult, uno::UNO_QUERY_THROW );
+        uno::Reference < io::XOutputStream > xResultOut = xResult->getOutputStream();
+        uno::Reference < io::XInputStream > xResultIn = xResult->getInputStream();
+        if ( !xResultOut.is() || !xResultIn.is() )
+            throw uno::RuntimeException();
+
+        xSeek->seek( 40 ); // header size for these formats
+        copyInputToOutput_Impl( xInStream, xResultOut );
+        xResultOut->closeOutput();
+        xResultSeek->seek( 0 );
+        xSeek->seek( 0 );
+
+        return xResult;
+    }
+
+    return uno::Reference< io::XStream >();
+}
+
+//------------------------------------------------------
+void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStream >& xTargetStream,
+                                                const uno::Reference< io::XStream >& xCachedVisualRepresentation )
+        throw ( uno::Exception )
+{
+    OSL_ENSURE( xTargetStream.is() && xCachedVisualRepresentation.is(), "Invalid argumants!\n" );
+    if ( !xTargetStream.is() || !xCachedVisualRepresentation.is() )
+        throw uno::RuntimeException();
+
+    uno::Sequence< uno::Any > aArgs( 1 );
+    aArgs[0] <<= xTargetStream;
+    uno::Reference< container::XNameContainer > xNameContainer(
+            m_xFactory->createInstanceWithArguments(
+                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLESimpleStorage" ),
+                    aArgs ),
+            uno::UNO_QUERY );
+
+    if ( !xNameContainer.is() )
+        throw uno::RuntimeException();
+
+    ::rtl::OUString aCacheName = ::rtl::OUString::createFromAscii( "\002OlePres000" );
+    if ( xNameContainer->hasByName( aCacheName ) )
+        xNameContainer->replaceByName( aCacheName, uno::makeAny( xCachedVisualRepresentation ) );
+    else
+        xNameContainer->insertByName( aCacheName, uno::makeAny( xCachedVisualRepresentation ) );
+
+    uno::Reference< embed::XTransactedObject > xTransacted( xNameContainer, uno::UNO_QUERY );
+    if ( !xTransacted.is() )
+        throw uno::RuntimeException();
+
+    xTransacted->commit();
+}
+
+//------------------------------------------------------
+void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStream >& xTargetStream )
+        throw ( uno::Exception )
+{
+    OSL_ENSURE( xTargetStream.is(), "Invalid argumant!\n" );
+    if ( !xTargetStream.is() )
+        throw uno::RuntimeException();
+
+    uno::Sequence< uno::Any > aArgs( 1 );
+    aArgs[0] <<= xTargetStream;
+    uno::Reference< container::XNameContainer > xNameContainer(
+            m_xFactory->createInstanceWithArguments(
+                    ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLESimpleStorage" ),
+                    aArgs ),
+            uno::UNO_QUERY );
+
+    if ( !xNameContainer.is() )
+        throw uno::RuntimeException();
+
+    for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
+    {
+        ::rtl::OUString aStreamName = ::rtl::OUString::createFromAscii( "\002OlePres00" );
+        aStreamName += ::rtl::OUString::valueOf( (sal_Int32)nInd );
+        if ( xNameContainer->hasByName( aStreamName ) )
+            xNameContainer->removeByName( aStreamName );
+    }
+
+    uno::Reference< embed::XTransactedObject > xTransacted( xNameContainer, uno::UNO_QUERY );
+    if ( !xTransacted.is() )
+        throw uno::RuntimeException();
+
+    xTransacted->commit();
+}
+
+//------------------------------------------------------
+uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation_Impl(
+        const uno::Reference< io::XStream >& xStream )
+    throw ()
+{
+    uno::Reference< io::XStream > xResult;
+
+    if ( xStream.is() )
+    {
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[0] <<= xStream;
+        uno::Reference< container::XNameContainer > xNameContainer(
+                m_xFactory->createInstanceWithArguments(
+                        ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLESimpleStorage" ),
+                        aArgs ),
+                uno::UNO_QUERY );
+
+        if ( xNameContainer.is() )
+        {
+            for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
+            {
+                ::rtl::OUString aStreamName = ::rtl::OUString::createFromAscii( "\002OlePres00" );
+                aStreamName += ::rtl::OUString::valueOf( (sal_Int32)nInd );
+                uno::Reference< io::XStream > xCachedCopyStream;
+                try
+                {
+                    if ( ( xNameContainer->getByName( aStreamName ) >>= xCachedCopyStream ) && xCachedCopyStream.is() )
+                    {
+                        xResult = TryToGetAcceptableFormat_Impl( xCachedCopyStream, m_xFactory );
+                        if ( xResult.is() )
+                            break;
+                    }
+                }
+                catch( uno::Exception& )
+                {}
+
+                if ( nInd == 0 )
+                {
+                    // to be compatible with the old versions Ole10Native is checked after OlePress000
+                    aStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\001Ole10Native" ) );
+                    try
+                    {
+                        if ( ( xNameContainer->getByName( aStreamName ) >>= xCachedCopyStream ) && xCachedCopyStream.is() )
+                        {
+                            xResult = TryToGetAcceptableFormat_Impl( xCachedCopyStream, m_xFactory );
+                            if ( xResult.is() )
+                                break;
+                        }
+                    }
+                    catch( uno::Exception& )
+                    {}
+                }
+            }
+        }
+    }
+
+    return xResult;
+}
+
+//------------------------------------------------------
 void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
                                               const uno::Reference< io::XStream >& xNewObjectStream,
                                               const ::rtl::OUString& aNewName )
 {
+    if ( xNewParentStorage == m_xParentStorage && aNewName.equals( m_aEntryName ) )
+    {
+        OSL_ENSURE( xNewObjectStream == m_xObjectStream, "The streams must be the same!\n" );
+        return;
+    }
+
     try {
         uno::Reference< lang::XComponent > xComponent( m_xObjectStream, uno::UNO_QUERY );
         OSL_ENSURE( !m_xObjectStream.is() || xComponent.is(), "Wrong stream implementation!" );
@@ -168,6 +372,9 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
 void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
                                               const ::rtl::OUString& aNewName )
 {
+    if ( xNewParentStorage == m_xParentStorage && aNewName.equals( m_aEntryName ) )
+        return;
+
     sal_Int32 nStreamMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
 
     uno::Reference< io::XStream > xNewOwnStream = xNewParentStorage->openStreamElement( aNewName, nStreamMode );
@@ -208,10 +415,17 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
         return sal_False;
 
     // the object is either activated or deactivated
+    sal_Int32 nOldState = m_nObjectState;
     if ( bShow && m_nObjectState == embed::EmbedStates::RUNNING )
+    {
         m_nObjectState = embed::EmbedStates::ACTIVE;
+        StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+    }
     else if ( !bShow && m_nObjectState == embed::EmbedStates::ACTIVE )
+    {
         m_nObjectState = embed::EmbedStates::RUNNING;
+        StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+    }
 
     if ( m_xClientSite.is() )
     {
@@ -291,6 +505,132 @@ uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
 }
 
 //------------------------------------------------------
+void OleEmbeddedObject::StoreToLocation_Impl(
+                            const uno::Reference< embed::XStorage >& xStorage,
+                            const ::rtl::OUString& sEntName,
+                            const uno::Sequence< beans::PropertyValue >& lArguments,
+                            const uno::Sequence< beans::PropertyValue >& lObjArgs,
+                            sal_Bool bSaveAs )
+        throw ( uno::Exception )
+{
+    // TODO: use lObjArgs
+    // TODO: exchange StoreVisualReplacement by SO file format version?
+
+    if ( m_nObjectState == -1 )
+    {
+        // the object is still not loaded
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
+                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    }
+
+    if ( m_bWaitSaveCompleted )
+        throw embed::WrongStateException(
+                    ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
+                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+
+    OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
+
+    sal_Bool bVisReplIsStored = sal_False;
+
+    sal_Bool bStoreVis = m_bStoreVisRepl;
+    uno::Reference< io::XStream > xCachedVisualRepresentation;
+    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
+    {
+        if ( lObjArgs[nInd].Name.equalsAscii( "StoreVisualReplacement" ) )
+            lObjArgs[nInd].Value >>= bStoreVis;
+        if ( lObjArgs[nInd].Name.equalsAscii( "VisualReplacement" ) )
+            lObjArgs[nInd].Value >>= xCachedVisualRepresentation;
+    }
+
+    // ignore visual representation provided from outside if it should not be stored
+    if ( !bStoreVis )
+        xCachedVisualRepresentation = uno::Reference< io::XStream >();
+
+    if ( bStoreVis && !m_bVisReplInStream && !xCachedVisualRepresentation.is() )
+        throw io::IOException(); // TODO: there is no cached visual representation and nothing is provided from outside
+
+    uno::Reference< io::XStream > xTargetStream;
+
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
+    {
+        m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
+        bVisReplIsStored = m_bVisReplInStream;
+    }
+#ifdef WNT
+    else if ( m_pOleComponent )
+    {
+        xTargetStream =
+                xStorage->openStreamElement( sEntName, embed::ElementModes::READWRITE );
+        if ( !xTargetStream.is() )
+            throw io::IOException(); //TODO: access denied
+
+        SetStreamMediaType_Impl( xTargetStream, ::rtl::OUString::createFromAscii( "application/vnd.sun.star.oleobject" ) );
+        uno::Reference< io::XOutputStream > xOutStream = xTargetStream->getOutputStream();
+        if ( !xOutStream.is() )
+            throw io::IOException(); //TODO: access denied
+
+        m_pOleComponent->StoreObjectToStream( xOutStream );
+        bVisReplIsStored = sal_True;
+
+        if ( !xCachedVisualRepresentation.is() )
+            xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( xTargetStream );
+    }
+#endif
+    else
+    {
+        throw io::IOException(); // TODO
+    }
+
+    if ( !xTargetStream.is() )
+    {
+        xTargetStream =
+            xStorage->openStreamElement( sEntName, embed::ElementModes::READWRITE );
+        if ( !xTargetStream.is() )
+            throw io::IOException(); //TODO: access denied
+    }
+
+    LetCommonStoragePassBeUsed_Impl( xTargetStream );
+
+    if ( bStoreVis != bVisReplIsStored )
+    {
+        if ( bStoreVis )
+            InsertVisualCache_Impl( xTargetStream, xCachedVisualRepresentation );
+        else
+        {
+            // the removed representation could be cached by this method
+            RemoveVisualCache_Impl( xTargetStream );
+        }
+    }
+
+    if ( bSaveAs )
+    {
+        m_bWaitSaveCompleted = sal_True;
+        m_xNewObjectStream = xTargetStream;
+        m_xNewParentStorage = xStorage;
+        m_aNewEntryName = sEntName;
+        m_bNewVisReplInStream = bStoreVis;
+
+        if ( xCachedVisualRepresentation.is() )
+            m_xNewCachedVisRepl = xCachedVisualRepresentation;
+
+        // TODO: register listeners for storages above, in case they are disposed
+        //       an exception will be thrown on saveCompleted( true )
+    }
+    else
+    {
+        uno::Reference< lang::XComponent > xComp( xTargetStream, uno::UNO_QUERY );
+        if ( xComp.is() )
+        {
+            try {
+                xComp->dispose();
+            } catch( uno::Exception& )
+            {
+            }
+        }
+    }
+}
+
+//------------------------------------------------------
 void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const ::rtl::OUString& sEntName,
@@ -340,9 +680,14 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     }
 
     if ( m_bWaitSaveCompleted )
-        throw embed::WrongStateException(
-                    ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    {
+        if ( nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
+            saveCompleted( ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) ) );
+        else
+            throw embed::WrongStateException(
+                        ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
+                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    }
 
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
     if ( !xNameAccess.is() )
@@ -373,8 +718,17 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
             // load object from the stream
             // after the loading the object can appear as a link
             // will be detected by olecomponent
-            CreateOleComponentAndLoad_Impl( NULL );
-            m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
+            try
+            {
+                CreateOleComponentAndLoad_Impl( NULL );
+                m_aClassID = m_pOleComponent->GetCLSID(); // was not set during consruction
+            }
+            catch( uno::Exception& )
+            {
+                // TODO/LATER: detect classID of the object if possible
+                // means that the object inprocess server could not be successfuly instantiated
+                GetRidOfComponent();
+            }
 
             m_nObjectState = embed::EmbedStates::LOADED;
         }
@@ -447,87 +801,20 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
     // On unix the ole object can not do anything except storing itself somewere
     if ( nEntryConnectionMode == embed::EntryInitModes::DEFAULT_INIT && bElExists )
     {
-        // TODO: detect classID of the object
+        // TODO/LATER: detect classID of the object
         // can be a real problem for the links
+
+        m_nObjectState = embed::EmbedStates::LOADED;
+    }
+    else if ( nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
+    {
+        // do nothing, the object has already switched it's persistence
     }
     else
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "Wrong connection mode is provided!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
                                     3 );
 
-#endif
-}
-
-//------------------------------------------------------
-void SAL_CALL OleEmbeddedObject::storeOwn()
-        throw ( embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException )
-{
-    // during switching from Activated to Running and from Running to Loaded states the object will
-    // ask container to store the object, the container has to make decision
-    // to do so or not
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
-
-    if ( m_nObjectState == -1 )
-    {
-        // the object is still not loaded
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-    }
-
-    if ( m_bWaitSaveCompleted )
-        throw embed::WrongStateException(
-                    ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-
-    if ( m_bReadOnly )
-        throw io::IOException(); // TODO: access denied
-
-    if ( m_nObjectState == embed::EmbedStates::LOADED )
-        return; // nothing to do, the object is in loaded state
-
-#ifdef WNT
-    if ( !m_pOleComponent )
-        throw uno::RuntimeException();
-
-    OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
-
-    if ( !m_xObjectStream.is() )
-        throw io::IOException(); //TODO: access denied
-
-    SetStreamMediaType_Impl( m_xObjectStream, ::rtl::OUString::createFromAscii( "application/vnd.sun.star.oleobject" ) );
-    uno::Reference< io::XOutputStream > xOutStream = m_xObjectStream->getOutputStream();
-    if ( !xOutStream.is() )
-        throw io::IOException(); //TODO: access denied
-
-    if ( m_bIsLink )
-    {
-        // just let the link store itself
-        // in case visual repersentation must be stored also
-        // the procedure should be the same as for embedded objects
-
-        uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
-
-        // should the component detect that it is a link???
-        m_pOleComponent->StoreObjectToStream( xOutStream, m_bStoreVisRepl );
-    }
-    else
-    {
-        uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
-        m_pOleComponent->StoreObjectToStream( xOutStream, m_bStoreVisRepl );
-    }
-
-    // TODO:
-    // notify listeners
-    if ( m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
-    {
-        // TODO: update visual representation
-    }
 #endif
 }
 
@@ -542,67 +829,11 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
                 uno::Exception,
                 uno::RuntimeException )
 {
-    // TODO: use lObjArgs
-
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 )
-    {
-        // the object is still not loaded
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-    }
-
-    if ( m_bWaitSaveCompleted )
-        throw embed::WrongStateException(
-                    ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-
-    OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
-
-    if ( m_nObjectState == embed::EmbedStates::LOADED )
-    {
-        m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
-    }
-#ifdef WNT
-    else
-    {
-        if ( !m_pOleComponent )
-            throw uno::RuntimeException();
-
-        uno::Reference< io::XStream > xTargetStream =
-                xStorage->openStreamElement( sEntName, embed::ElementModes::READWRITE );
-        if ( !xTargetStream.is() )
-            throw io::IOException(); //TODO: access denied
-
-        SetStreamMediaType_Impl( xTargetStream, ::rtl::OUString::createFromAscii( "application/vnd.sun.star.oleobject" ) );
-        uno::Reference< io::XOutputStream > xOutStream = xTargetStream->getOutputStream();
-        if ( !xOutStream.is() )
-            throw io::IOException(); //TODO: access denied
-
-        sal_Bool bStoreVis = m_bStoreVisRepl;
-        for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
-            if ( lObjArgs[nInd].Name.equalsAscii( "StoreVisualReplacement" ) )
-                lObjArgs[nInd].Value >>= bStoreVis;
-
-        m_pOleComponent->StoreObjectToStream( xOutStream, bStoreVis );
-
-        uno::Reference< lang::XComponent > xComp( xTargetStream, uno::UNO_QUERY );
-        if ( xComp.is() )
-        {
-            try {
-                xComp->dispose();
-            } catch( uno::Exception& )
-            {
-            }
-        }
-    }
-#else
-    else
-        throw io::IOException(); // TODO
-#endif
+    StoreToLocation_Impl( xStorage, sEntName, lArguments, lObjArgs, sal_False );
 
     // TODO: should the listener notification be done?
 }
@@ -618,73 +849,11 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
                 uno::Exception,
                 uno::RuntimeException )
 {
-    // TODO: use lObjArgs
-
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 )
-    {
-        // the object is still not loaded
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-    }
-
-    if ( m_bWaitSaveCompleted )
-        throw embed::WrongStateException(
-                    ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
-                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-
-    OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
-
-    uno::Reference< io::XStream > xTargetStream =
-            xStorage->openStreamElement( sEntName, embed::ElementModes::READWRITE );
-    if ( !xTargetStream.is() )
-        throw io::IOException(); //TODO: access denied
-
-    SetStreamMediaType_Impl( xTargetStream, ::rtl::OUString::createFromAscii( "application/vnd.sun.star.oleobject" ) );
-    uno::Reference< io::XOutputStream > xOutStream = xTargetStream->getOutputStream();
-    if ( !xOutStream.is() )
-        throw io::IOException(); //TODO: access denied
-
-    sal_Bool bStoreVis = m_bStoreVisRepl;
-    for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
-        if ( lObjArgs[nInd].Name.equalsAscii( "StoreVisualReplacement" ) )
-            lObjArgs[nInd].Value >>= bStoreVis;
-
-    if ( m_nObjectState == embed::EmbedStates::LOADED )
-    {
-        if ( bStoreVis != m_bStoreVisRepl )
-            throw lang::IllegalArgumentException(
-                            ::rtl::OUString::createFromAscii( "Can't change store mode in loaded state!\n" ),
-                            uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
-                            1 );
-
-        uno::Reference< io::XInputStream > xInStream = m_xObjectStream->getInputStream();
-        copyInputToOutput_Impl( xInStream, xOutStream );
-    }
-#ifdef WNT
-    else
-    {
-        if ( !m_pOleComponent )
-            throw uno::RuntimeException(); // TODO:
-
-        m_pOleComponent->StoreObjectToStream( xOutStream, bStoreVis );
-    }
-#else
-    else
-        throw io::IOException(); // TODO
-#endif
-
-    m_bWaitSaveCompleted = sal_True;
-    m_xNewObjectStream = xTargetStream;
-    m_xNewParentStorage = xStorage;
-    m_aNewEntryName = sEntName;
-    m_bNewStoreVisRepl = bStoreVis;
-
-    // TODO: register listeners for storages above, in case thay are disposed
-    //       an exception will be thrown on saveCompleted( true )
+    StoreToLocation_Impl( xStorage, sEntName, lArguments, lObjArgs, sal_True );
 
     // TODO: should the listener notification be done here or in saveCompleted?
 }
@@ -717,7 +886,9 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     if ( bUseNew )
     {
         SwitchOwnPersistence( m_xNewParentStorage, m_xNewObjectStream, m_aNewEntryName );
-        m_bStoreVisRepl = m_bNewStoreVisRepl;
+        m_bStoreVisRepl = m_bNewVisReplInStream;
+        if ( m_xNewCachedVisRepl.is() )
+            m_xCachedVisualRepresentation = m_xNewCachedVisRepl;
     }
     else
     {
@@ -737,15 +908,17 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     m_xNewParentStorage = uno::Reference< embed::XStorage >();
     m_aNewEntryName = ::rtl::OUString();
     m_bWaitSaveCompleted = sal_False;
+    m_bNewVisReplInStream = sal_False;
+    m_xNewCachedVisRepl = uno::Reference< io::XStream >();
+
 
     if ( bUseNew )
     {
-        // TODO: notify listeners
+        MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnSaveAsDone" ) );
 
-        if ( m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
-        {
-            // TODO: update visual representation
-        }
+        // the object can be changed only on windows
+        if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
+            MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnVisAreaChanged" ) );
     }
 }
 
@@ -791,6 +964,104 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_aEntryName;
+}
+
+
+//------------------------------------------------------
+void SAL_CALL OleEmbeddedObject::storeOwn()
+        throw ( embed::WrongStateException,
+                io::IOException,
+                uno::Exception,
+                uno::RuntimeException )
+{
+    // during switching from Activated to Running and from Running to Loaded states the object will
+    // ask container to store the object, the container has to make decision
+    // to do so or not
+
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
+    if ( m_nObjectState == -1 )
+    {
+        // the object is still not loaded
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    }
+
+    if ( m_bWaitSaveCompleted )
+        throw embed::WrongStateException(
+                    ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
+                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+
+    if ( m_bReadOnly )
+        throw io::IOException(); // TODO: access denied
+
+    LetCommonStoragePassBeUsed_Impl( m_xObjectStream );
+
+#ifdef WNT
+    if ( m_nObjectState != embed::EmbedStates::LOADED && m_pOleComponent )
+    {
+        OSL_ENSURE( m_xParentStorage.is() && m_xObjectStream.is(), "The object has no valid persistence!\n" );
+
+        if ( !m_xObjectStream.is() )
+            throw io::IOException(); //TODO: access denied
+
+        SetStreamMediaType_Impl( m_xObjectStream, ::rtl::OUString::createFromAscii( "application/vnd.sun.star.oleobject" ) );
+        uno::Reference< io::XOutputStream > xOutStream = m_xObjectStream->getOutputStream();
+        if ( !xOutStream.is() )
+            throw io::IOException(); //TODO: access denied
+
+        if ( m_bIsLink )
+        {
+            // just let the link store itself
+            // in case visual repersentation must be stored also
+            // the procedure should be the same as for embedded objects
+
+            uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
+
+            // should the component detect that it is a link???
+            m_pOleComponent->StoreObjectToStream( xOutStream );
+        }
+        else
+        {
+            uno::Reference< io::XOutputStream > xOutStream = GetStreamForSaving();
+            m_pOleComponent->StoreObjectToStream( xOutStream );
+        }
+
+        // the replacement is changed probably
+        m_xCachedVisualRepresentation = uno::Reference< io::XStream >();
+        m_bVisReplInStream = sal_True;
+    }
+#endif
+
+    if ( m_bStoreVisRepl != m_bVisReplInStream )
+    {
+        if ( m_bStoreVisRepl )
+        {
+            // the m_xCachedVisualRepresentation must be set or it should be already stored
+            if ( m_xCachedVisualRepresentation.is() )
+                InsertVisualCache_Impl( m_xObjectStream, m_xCachedVisualRepresentation );
+            else
+            {
+                m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream );
+                OSL_ENSURE( m_xCachedVisualRepresentation.is(), "No representation is available!" );
+            }
+        }
+        else
+        {
+            m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream );
+            RemoveVisualCache_Impl( m_xObjectStream );
+        }
+
+        m_bVisReplInStream = m_bStoreVisRepl;
+    }
+
+    MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnSaveDone" ) );
+
+    // the object can be changed only on Windows
+    if ( m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
+        MakeEventListenerNotification_Impl( ::rtl::OUString::createFromAscii( "OnVisAreaChanged" ) );
 }
 
 //------------------------------------------------------
@@ -882,7 +1153,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
                     ::rtl::OUString::createFromAscii( "The object is not a valid linked object!\n" ),
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
     }
-#ifdef WNT
+
     if ( m_bReadOnly )
         throw io::IOException(); // TODO: Access denied
 
@@ -892,57 +1163,60 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
 
-    // TODO: if the parent storage and entry are the same as object uses the breaking of link must be done
-    // just by through OLE functionality
-
-    // TODO: create an object based on the link
-    OleComponent* pNewOleComponent = new OleComponent( m_xFactory, this );
-    try {
-        pNewOleComponent->InitEmbeddedCopyOfLink( m_pOleComponent );
-    }
-    catch ( uno::Exception& )
+#ifdef WNT
+    if ( m_pOleComponent )
     {
-        delete pNewOleComponent;
-        throw;
-    }
-
-    try {
-        GetRidOfComponent();
-    }
-    catch( uno::Exception& )
-    {
-        delete pNewOleComponent;
-        throw;
-    }
-
-    CreateOleComponent_Impl( pNewOleComponent );
-
-    if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
-        SwitchOwnPersistence( xStorage, sEntName );
-
-    if ( m_nObjectState != embed::EmbedStates::LOADED )
-    {
-        // TODO: should we activate the new object if the link was activated?
-
-        sal_Int32 nTargetState = m_nObjectState;
-        m_nObjectState = embed::EmbedStates::LOADED;
-
-        if ( m_nObjectState == embed::EmbedStates::RUNNING )
-            m_pOleComponent->RunObject();
-        else // m_nObjectState == embed::EmbedStates::ACTIVE
+        // TODO: create an object based on the link
+        OleComponent* pNewOleComponent = new OleComponent( m_xFactory, this );
+        try {
+            pNewOleComponent->InitEmbeddedCopyOfLink( m_pOleComponent );
+        }
+        catch ( uno::Exception& )
         {
-            m_pOleComponent->RunObject();
-            m_pOleComponent->ExecuteVerb( embed::EmbedVerbs::MS_OLEVERB_OPEN );
+            delete pNewOleComponent;
+            throw;
         }
 
-        m_nObjectState = nTargetState;
-    }
+        try {
+            GetRidOfComponent();
+        }
+        catch( uno::Exception& )
+        {
+            delete pNewOleComponent;
+            throw;
+        }
 
-    m_bIsLink = sal_False;
-    m_aLinkURL = ::rtl::OUString();
-#else
-    throw io::IOException(); //TODO:
+        CreateOleComponent_Impl( pNewOleComponent );
+
+        if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
+            SwitchOwnPersistence( xStorage, sEntName );
+
+        if ( m_nObjectState != embed::EmbedStates::LOADED )
+        {
+            // TODO: should we activate the new object if the link was activated?
+
+            sal_Int32 nTargetState = m_nObjectState;
+            m_nObjectState = embed::EmbedStates::LOADED;
+
+            if ( m_nObjectState == embed::EmbedStates::RUNNING )
+                m_pOleComponent->RunObject(); // the object already was in running state, the server must be installed
+            else // m_nObjectState == embed::EmbedStates::ACTIVE
+            {
+                m_pOleComponent->RunObject(); // the object already was in running state, the server must be installed
+                m_pOleComponent->ExecuteVerb( embed::EmbedVerbs::MS_OLEVERB_OPEN );
+            }
+
+            m_nObjectState = nTargetState;
+        }
+
+        m_bIsLink = sal_False;
+        m_aLinkURL = ::rtl::OUString();
+    }
+    else
 #endif
+    {
+        throw io::IOException(); //TODO:
+    }
 }
 
 //------------------------------------------------------
