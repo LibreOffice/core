@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 11:02:04 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 15:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,7 @@ void GtkXLib::Init()
     osl_getSystemPathFromFileURL( aParam.pData, &aBin.pData );
     pCmdLineAry[0] = g_strdup( OUStringToOString( aBin, aEnc ).getStr() );
     int i;
-    for (i=0; i<nParams; i++)
+    for (i = 0; i<nParams; i++)
     {
         osl_getCommandArg(i, &aParam.pData );
         OString aBParam( OUStringToOString( aParam, aEnc ) );
