@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:09:47 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,6 +615,12 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( TABLE, CONVERSION_MODE, XML_ETACTION_PROC_ATTRS,
             OOO_DDE_CONV_MODE_ACTIONS ),
 
+    // fix <text:alphabatical-index-mark text:main-etry>
+    ENTRY1( TEXT, ALPHABETICAL_INDEX_MARK, XML_ETACTION_PROC_ATTRS,
+            OOO_ALPHABETICAL_INDEX_MARK_ACTIONS ),
+    ENTRY1( TEXT, ALPHABETICAL_INDEX_MARK_START, XML_ETACTION_PROC_ATTRS,
+            OOO_ALPHABETICAL_INDEX_MARK_ACTIONS ),
+
     // process table::data-pilot-member
     ENTRY1( TABLE, DATA_PILOT_MEMBER, XML_ETACTION_PROC_ATTRS,
             OOO_DATAPILOT_MEMBER_ACTIONS ),
@@ -1095,6 +1101,14 @@ static XMLTransformerActionInit aChartActionTable[] =
     ENTRY0( SVG, WIDTH, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
     ENTRY0( SVG, HEIGHT, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
     ENTRY0( CHART, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OOO_ALPHABETICAL_INDEX_MARK_ACTIONS
+static XMLTransformerActionInit aAlphabeticalIndexMarkActionTable[] =
+{
+    ENTRY1Q( TEXT, MAIN_ETRY, XML_ATACTION_RENAME,
+             XML_NAMESPACE_TEXT, XML_MAIN_ENTRY ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1718,6 +1732,10 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                 case OOO_DDE_CONV_MODE_ACTIONS:
                     m_aActions[OOO_DDE_CONV_MODE_ACTIONS] =
                         new XMLTransformerActions( aDDEConvModeActionTable );
+                    break;
+                case OOO_ALPHABETICAL_INDEX_MARK_ACTIONS:
+                    m_aActions[OOO_ALPHABETICAL_INDEX_MARK_ACTIONS] =
+                        new XMLTransformerActions( aAlphabeticalIndexMarkActionTable );
                     break;
                 case OOO_DATAPILOT_MEMBER_ACTIONS:
                     m_aActions[OOO_DATAPILOT_MEMBER_ACTIONS] =
