@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-18 16:22:02 $
+ *  last change: $Author: sab $ $Date: 2002-10-01 16:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,6 +757,30 @@ void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
 ScAccessibleTextData* ScAccessibleCellTextData::Clone() const
 {
     return new ScAccessibleCellTextData(mpViewShell, aCellPos, meSplitPos);
+}
+
+void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, String& rText)
+{
+    ScCellTextData::GetCellText(rCellPos, rText);
+    if (mpViewShell)
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        if (pDoc)
+        {
+            const ScViewOptions& aOptions = mpViewShell->GetViewData()->GetOptions();
+            CellType aCellType;
+            pDoc->GetCellType(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), aCellType);
+            if (aCellType == CELLTYPE_FORMULA && aOptions.GetOption( VOPT_FORMULAS ))
+            {
+                pDoc->GetFormula( rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), rText);
+            }
+            else if (!aOptions.GetOption( VOPT_NULLVALS ))
+            {
+                if ((aCellType == CELLTYPE_VALUE || aCellType == CELLTYPE_FORMULA) && pDoc->GetValue(rCellPos) == 0.0)
+                    rText.Erase();
+            }
+        }
+    }
 }
 
 SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
