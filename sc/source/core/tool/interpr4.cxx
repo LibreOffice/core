@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:30:25 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include <signal.h>
 #include <math.h>
 #include <float.h>
+#include <map>
+#include <algorithm>
+#include <functional>
 
 #include <com/sun/star/table/XCellRange.hpp>
 
@@ -724,8 +727,8 @@ void ScInterpreter::PushTempToken( const ScToken& r )
 
 
 //! The Token had to be allocated with `new' and must not be used after this
-//! call because eventually it gets deleted in case of a errStackOverflow if
-//! no RefCount was set!
+//! call if no RefCount was set because possibly it gets deleted in case of a
+//! errStackOverflow!
 void ScInterpreter::PushTempToken( ScToken* p )
 {
     p->IncRef();
@@ -1083,6 +1086,12 @@ void ScInterpreter::PopDoubleRefPushMatrix()
 }
 
 
+ScTokenMatrixMap* ScInterpreter::CreateTokenMatrixMap()
+{
+    return new ScTokenMatrixMap;
+}
+
+
 bool ScInterpreter::ConvertMatrixParameters()
 {
     USHORT nParams = pCur->GetParamCount();
@@ -1130,17 +1139,15 @@ bool ScInterpreter::ConvertMatrixParameters()
                         ScParameterClassification::GetParameterType( pCur, nParams - i);
                     if ( eType != ScParameterClassification::Reference )
                     {
-                        SCCOL nCol1;
-                        SCROW nRow1;
-                        SCTAB nTab1;
-                        SCCOL nCol2;
-                        SCROW nRow2;
-                        SCTAB nTab2;
-                        DoubleRefToVars( p, nCol1, nRow1, nTab1, nCol2, nRow2,
-                                nTab2);
-                        ScMatrixRef pMat = CreateMatrixFromDoubleRef(
+                        SCCOL nCol1, nCol2;
+                        SCROW nRow1, nRow2;
+                        SCTAB nTab1, nTab2;
+                        DoubleRefToVars( p, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                        // Make sure the map exists, created if not.
+                        GetTokenMatrixMap();
+                        ScMatrixRef pMat = CreateMatrixFromDoubleRef( p,
                                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-                        if ( pMat )
+                        if (pMat)
                         {
                             if ( eType == ScParameterClassification::Value )
                             {   // only if single value expected
@@ -1149,7 +1156,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                                 if ( nJumpRows < static_cast<SCSIZE>(nRow2 - nRow1 + 1) )
                                     nJumpRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
                             }
-                            ScMatrixToken* pNew = new ScMatrixToken( pMat);
+                            ScToken* pNew = new ScMatrixToken( pMat);
                             pNew->IncRef();
                             pStack[ sp - i ] = pNew;
                             p->DecRef();    // p may be dead now!
@@ -1164,29 +1171,39 @@ bool ScInterpreter::ConvertMatrixParameters()
     }
     if( nJumpCols && nJumpRows )
     {
-        ScJumpMatrix* pJumpMat = new ScJumpMatrix( nJumpCols, nJumpRows);
         short nPC = aCode.GetPC();
         short nStart = nPC - 1;     // restart on current code (-1)
         short nNext = nPC;          // next instruction after subroutine
         short nStop = nPC + 1;      // stop subroutine before reaching that
-        pJumpMat->SetAllJumps( 1.0, nStart, nNext, nStop);
-        // pop parameters and store in ScJumpMatrix, push in JumpMatrix()
-        ScTokenVec* pParams = new ScTokenVec( nParams);
-        for ( USHORT i=1; i <= nParams && sp > 0; ++i )
+        ScTokenRef xNew;
+        ScTokenMatrixMap::const_iterator aMapIter;
+        if (pTokenMatrixMap && ((aMapIter = pTokenMatrixMap->find( pCur)) !=
+                    pTokenMatrixMap->end()))
+            xNew = (*aMapIter).second;
+        else
         {
-            ScToken* p = pStack[ --sp ];
-            p->IncRef();
-            // store in reverse order such that a push may simply iterate
-            (*pParams)[ nParams - i ] = p;
+            ScJumpMatrix* pJumpMat = new ScJumpMatrix( nJumpCols, nJumpRows);
+            pJumpMat->SetAllJumps( 1.0, nStart, nNext, nStop);
+            // pop parameters and store in ScJumpMatrix, push in JumpMatrix()
+            ScTokenVec* pParams = new ScTokenVec( nParams);
+            for ( USHORT i=1; i <= nParams && sp > 0; ++i )
+            {
+                ScToken* p = pStack[ --sp ];
+                p->IncRef();
+                // store in reverse order such that a push may simply iterate
+                (*pParams)[ nParams - i ] = p;
+            }
+            pJumpMat->SetJumpParameters( pParams);
+            xNew = new ScJumpMatrixToken( pJumpMat );
+            GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur,
+                        xNew));
         }
-        pJumpMat->SetJumpParameters( pParams);
-        PushTempToken( new ScJumpMatrixToken( pJumpMat));
+        PushTempToken( xNew);
         // set continuation point of path for main code line
         aCode.Jump( nNext, nNext);
         return true;
     }
-    else
-        return false;
+    return false;
 }
 
 
@@ -3082,6 +3099,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     aPos( rPos ),
     rArr( r ),
     pDok( pDoc ),
+    pTokenMatrixMap( NULL ),
     pMyFormulaCell( pCell ),
     pFormatter( pDoc->GetFormatTable() ),
     bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
@@ -3109,7 +3127,6 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     pErrorStack = pErrorStackObj->pPointer;
 }
 
-
 ScInterpreter::~ScInterpreter()
 {
 //  delete pStack;
@@ -3121,6 +3138,8 @@ ScInterpreter::~ScInterpreter()
         delete pStackObj;
         delete pErrorStackObj;
     }
+    if (pTokenMatrixMap)
+        delete pTokenMatrixMap;
 }
 
 
@@ -3153,6 +3172,7 @@ StackVar ScInterpreter::Interpret()
     pJumpMatrix = NULL;
     glSubTotal = FALSE;
     UINT16 nOldOpCode = ocStop;
+    ScTokenMatrixMap::const_iterator aTokenMatrixMapIter;
 
     // Once upon a time we used to have FP exceptions on, and there was a
     // Windows printer driver that kept switching off exceptions, so we had to
@@ -3172,6 +3192,18 @@ StackVar ScInterpreter::Interpret()
             Push( (ScToken&) *pCur );
             if ( sp <= MAXSTACK )
                 pErrorStack[ sp - 1 ] = 0;      // RPN code push without error
+        }
+        else if (pTokenMatrixMap && !(eOp == ocIf || eOp == ocChose) &&
+                ((aTokenMatrixMapIter = pTokenMatrixMap->find( pCur)) !=
+                 pTokenMatrixMap->end()) &&
+                (*aTokenMatrixMapIter).second->GetType() != svJumpMatrix)
+        {
+            // Path already calculated, reuse result.
+            nStackBase = sp - pCur->GetParamCount();
+            if ( nStackBase > sp )
+                nStackBase = sp;        // underflow?!?
+            sp = nStackBase;
+            PushTempToken( (*aTokenMatrixMapIter).second);
         }
         else
         {
@@ -3511,6 +3543,11 @@ StackVar ScInterpreter::Interpret()
                 case ocNone : nFuncFmtType = NUMBERFORMAT_UNDEFINED;    break;
                 default : SetError(errUnknownOpCode); PushInt(0);       break;
             }
+
+            // Remember result matrix in case it could be reused.
+            if (pTokenMatrixMap && sp && GetStackType() == svMatrix)
+                pTokenMatrixMap->insert( ScTokenMatrixMap::value_type( pCur,
+                            pStack[sp-1]));
 
             // outer function determines format of an expression
             if ( nFuncFmtType != NUMBERFORMAT_UNDEFINED )
