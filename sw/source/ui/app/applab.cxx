@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:28 $
+ *  last change: $Author: os $ $Date: 2001-03-28 14:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 
 // steht im appenv.cxx
-extern sal_Bool InsertLabEnvText( SwWrtShell& , SwFldMgr& , const String& );
+extern String InsertLabEnvText( SwWrtShell& , SwFldMgr& , const String& );
 
 const char __FAR_DATA MASTER_LABEL[] = "MasterLabel";
 
@@ -284,8 +284,12 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
     rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
     // Ggf. "Naechster Datensatz"
-    if( (!rItem.bSynchron || !(nCol|nRow)) && InsertLabEnvText( rSh, rFldMgr, rItem.aWriting ) && !bLast )
-        rFldMgr.InsertFld( TYP_DBNEXTSETFLD, 0, String::CreateFromAscii("sal_True"), aEmptyStr, 0, &rSh );
+    String sDBName;
+    if( (!rItem.bSynchron || !(nCol|nRow)) && (sDBName = InsertLabEnvText( rSh, rFldMgr, rItem.aWriting )).Len() && !bLast )
+    {
+        sDBName.SetToken( 2, DB_DELIM, String::CreateFromAscii("True"));
+        rFldMgr.InsertFld( TYP_DBNEXTSETFLD, 0, sDBName, aEmptyStr, 0, &rSh );
+    }
 
     return pFmt;
 }

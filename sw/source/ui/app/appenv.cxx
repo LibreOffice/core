@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:28 $
+ *  last change: $Author: os $ $Date: 2001-03-28 14:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,9 +157,9 @@
 
 // Funktion wird fuer Etiketten und Briefumschlaege benutzt!
 //  im applab.cxx und appenv.cxx
-BOOL InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText )
+String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText )
 {
-    BOOL bRet = FALSE;
+    String sRet;
     String aText(rText);
     aText.EraseAllChars( '\r' );
 
@@ -202,7 +202,7 @@ BOOL InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText )
                     {
                         ::ReplacePoint(sDBName);
                         rFldMgr.InsertFld( TYP_DBFLD, 0, sDBName, aEmptyStr, 0, &rSh );
-                        bRet = TRUE;
+                        sRet = sDBName;
                         bField = TRUE;
                     }
                 }
@@ -214,7 +214,7 @@ BOOL InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText )
     }
     rSh.DelLeft();  // Letzten Linebreak wieder l”schen
 
-    return bRet;
+    return sRet;
 }
 
 // ----------------------------------------------------------------------------
