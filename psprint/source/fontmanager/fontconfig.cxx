@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:03:24 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ bool PrintFontManager::initFontconfig()
                      , family, file
                      , eWeightRes == FcResultMatch ? weight : -1
                      , eSpacRes == FcResultMatch ? slant : -1
-                     , eStyleRes == FcResultMatch ? style : "<nil>"
+                     , eStyleRes == FcResultMatch ? (const char*)style : "<nil>"
                      , eSpacRes == FcResultMatch ? spacing : -1
                      , eOutRes == FcResultMatch ? outline : -1
                      );
