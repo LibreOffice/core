@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:00:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByName_Impl(const rtl::OUStr
 {
     if (hasByName(aName))
     {
-        String aNamStr = aName;
+        String aNamStr(aName);
         return new ScDataPilotTableObj( pDocShell, nTab, aNamStr );
     }
     return NULL;
@@ -404,7 +404,7 @@ void SAL_CALL ScDataPilotTablesObj::removeByName( const rtl::OUString& aName )
                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameStr = aName;
+    String aNameStr(aName);
     ScDPObject* pDPObj = lcl_GetDPObject( pDocShell, nTab, aNameStr );
     if (pDPObj && pDocShell)
     {
@@ -459,13 +459,12 @@ uno::Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XDataPilotTable> xTable = GetObjectByIndex_Impl(static_cast<SCSIZE>(nIndex));
-    uno::Any aAny;
+    uno::Reference<sheet::XDataPilotTable> xTable(GetObjectByIndex_Impl(static_cast<SCSIZE>(nIndex)));
     if (xTable.is())
-        aAny <<= xTable;
+        return uno::makeAny(xTable);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScDataPilotTablesObj::getElementType() throw(uno::RuntimeException)
@@ -487,13 +486,12 @@ uno::Any SAL_CALL ScDataPilotTablesObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XDataPilotTable> xTable = GetObjectByName_Impl(aName);
-    uno::Any aAny;
+    uno::Reference<sheet::XDataPilotTable> xTable(GetObjectByName_Impl(aName));
     if (xTable.is())
-        aAny <<= xTable;
+        return uno::makeAny(xTable);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
@@ -546,7 +544,7 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const rtl::OUString& aName )
         ScDPCollection* pColl = pDoc->GetDPCollection();
         if ( pColl )
         {
-            String aNamStr = aName;
+            String aNamStr(aName);
             USHORT nCount = pColl->GetCount();
             for (USHORT i=0; i<nCount; i++)
             {
@@ -964,7 +962,7 @@ uno::Sequence<uno::Type> SAL_CALL ScDataPilotTableObj::getTypes()
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
     {
-        uno::Sequence<uno::Type> aParentTypes = ScDataPilotDescriptorBase::getTypes();
+        uno::Sequence<uno::Type> aParentTypes(ScDataPilotDescriptorBase::getTypes());
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
@@ -1027,7 +1025,7 @@ void SAL_CALL ScDataPilotTableObj::setName( const rtl::OUString& aNewName )
     {
         //! test for existing names !!!
 
-        String aString = aNewName;
+        String aString(aNewName);
         pDPObj->SetName( aString );     //! Undo - DBDocFunc ???
         aName = aString;
 
@@ -1052,7 +1050,7 @@ void SAL_CALL ScDataPilotTableObj::setTag( const ::rtl::OUString& aNewTag )
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
     if (pDPObj)
     {
-        String aString = aNewTag;
+        String aString(aNewTag);
         pDPObj->SetTag( aString );      //! Undo - DBDocFunc ???
 
         //  DataPilotUpdate would do too much (output table is not changed)
@@ -1070,7 +1068,7 @@ table::CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRange()
     ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
     if (pDPObj)
     {
-        ScRange aRange = pDPObj->GetOutRange();
+        ScRange aRange(pDPObj->GetOutRange());
         aRet.Sheet       = aRange.aStart.Tab();
         aRet.StartColumn = aRange.aStart.Col();
         aRet.StartRow    = aRange.aStart.Row();
@@ -1327,7 +1325,7 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByIndex_Impl(SCSIZE nIndex) 
 
 ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByName_Impl(const rtl::OUString& aName) const
 {
-    String aNameStr = aName;
+    String aNameStr(aName);
 
 // TODO
     ScDPObject* pDPObj(pParent->GetDPObject());
@@ -1529,8 +1527,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDataPilotFieldObj::getPropert
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -1541,7 +1539,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
     if ( aNameString.EqualsAscii( SC_UNONAME_FUNCTION ) )
     {
         //! test for correct enum type?
@@ -1597,7 +1595,7 @@ uno::Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const rtl::OUString& aP
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
     uno::Any aRet;
 
     if ( aNameString.EqualsAscii( SC_UNONAME_FUNCTION ) )
