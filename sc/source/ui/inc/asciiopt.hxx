@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-30 13:33:54 $
+ *  last change: $Author: dr $ $Date: 2002-07-05 15:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,11 @@
  *
  ************************************************************************/
 
+// ============================================================================
+
 #ifndef SC_ASCIIOPT_HXX
 #define SC_ASCIIOPT_HXX
 
-#include <tools/solar.h>
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -84,12 +85,6 @@
 #ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
 #endif
-#ifndef _SCRBAR_HXX //autogen
-#include <vcl/scrbar.hxx>
-#endif
-#ifndef _SVTABBX_HXX //autogen
-#include <svtools/svtabbx.hxx>
-#endif
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -97,28 +92,12 @@
 #include <svx/txencbox.hxx>
 #endif
 
-#ifndef _SVSTDARR_ULONGS
-#define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#ifndef _SC_CSVTABLEBOX_HXX
+#include "csvtablebox.hxx"
 #endif
 
-#include "tabrul.hxx"
 
-//===================================================================
-
-//  Spaltenformate (Werte wie bei OpenText in Excel)
-
-#define SC_COL_STANDARD     1
-#define SC_COL_TEXT         2
-#define SC_COL_MDY          3
-#define SC_COL_DMY          4
-#define SC_COL_YMD          5
-#define SC_COL_SKIP         9
-#define SC_COL_ENGLISH      10
-
-#define SC_ASCIIOPT_PREVIEW_LINES 6     // Anzahl Preview Lines
-
-//  Import-Optionen
+// ============================================================================
 
 class ScAsciiOptions
 {
@@ -131,8 +110,8 @@ private:
     BOOL        bCharSetSystem;
     long        nStartRow;
     USHORT      nInfoCount;
-    xub_StrLen* pColStart;
-    BYTE*       pColFormat;
+    xub_StrLen* pColStart;  //! TODO replace with vector
+    BYTE*       pColFormat; //! TODO replace with vector
 
 public:
                     ScAsciiOptions();
@@ -168,100 +147,96 @@ public:
     void    SetStartRow( long nRow)             { nStartRow= nRow; }
 
     void    SetColInfo( USHORT nCount, const xub_StrLen* pStart, const BYTE* pFormat );
+    void    SetColumnInfo( const ScCsvExtColPosVec& rColPosVec, const ScCsvExtColTypeVec& rColTypeVec );
 };
 
 
-//  Import-Dialog
+// ============================================================================
 
 class ScImportAsciiDlg : public ModalDialog
 {
-    SvStream*       pDatStream;
-    ULONG*          pRowPosArray;
-    ULONG*          pRowPosArrayUnicode;
-    USHORT          nArrayEndPos;
-    USHORT          nArrayEndPosUnicode;
-    ULONG           nStreamPos;
-    ULONG           nStreamPosUnicode;
+    SvStream*                   pDatStream;
+    ULONG*                      pRowPosArray;
+    ULONG*                      pRowPosArrayUnicode;
+    USHORT                      nArrayEndPos;
+    USHORT                      nArrayEndPosUnicode;
+    ULONG                       nStreamPos;
+    ULONG                       nStreamPosUnicode;
+    BOOL                        bVFlag;
 
-    BOOL            bVFlag;
+    FixedLine                   aFlFieldOpt;
+    FixedText                   aFtCharSet;
+    SvxTextEncodingBox          aLbCharSet;
 
-    FixedLine       aFlFieldOpt;
-    FixedText       aFtCharSet;
-    SvxTextEncodingBox aLbCharSet;
-    BOOL            bCharSetSystem;
+    FixedText                   aFtRow;
+    NumericField                aNfRow;
 
-    FixedText       aFtRow;
-    NumericField    aNfRow;
+    FixedLine                   aFlSepOpt;
+    RadioButton                 aRbFixed;
+    RadioButton                 aRbSeparated;
 
-    FixedLine       aFlSepOpt;
-    RadioButton     aRbFixed;
-    RadioButton     aRbSeparated;
+    CheckBox                    aCkbTab;
+    CheckBox                    aCkbSemicolon;
+    CheckBox                    aCkbComma;
+    CheckBox                    aCkbSpace;
+    CheckBox                    aCkbOther;
+    Edit                        aEdOther;
+    CheckBox                    aCkbAsOnce;
+    FixedText                   aFtTextSep;
+    ComboBox                    aCbTextSep;
 
-    CheckBox        aCkbTab;
-    CheckBox        aCkbSemicolon;
-    CheckBox        aCkbComma;
-    CheckBox        aCkbSpace;
-    CheckBox        aCkbOther;
-    Edit            aEdOther;
-    CheckBox        aCkbAsOnce;
-    FixedText       aFtTextSep;
-    ComboBox        aCbTextSep;
+    FixedLine                   aFlWidth;
+    FixedText                   aFtType;
+    ListBox                     aLbType;
 
-    FixedLine       aFlWidth;
-    FixedText       aFtType;
-    ListBox         aLbType;
-    ScTableWithRuler aTableBox;
-    ScrollBar       aScrollbar;
-    ScrollBar       aVScroll;
+    ScCsvTableBox               maTableBox;
 
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    OKButton                    aBtnOk;
+    CancelButton                aBtnCancel;
+    HelpButton                  aBtnHelp;
 
-    String          aStringCol;
-    String          aStringTo;
-    String          aCharSetUser;
-    String          aColumnUser;
-    String          aFldSepList;
-    String          aTextSepList;
+    String                      aCharSetUser;
+    String                      aColumnUser;
+    String                      aFldSepList;
+    String                      aTextSepList;
 
     // aPreviewLine contains the byte string as read from the file
-    ByteString      aPreviewLine[SC_ASCIIOPT_PREVIEW_LINES];
+    ByteString                  aPreviewLine[ CSV_PREVIEW_LINES ];
     // same for Unicode
-    String          aPreviewLineUnicode[SC_ASCIIOPT_PREVIEW_LINES];
+    String                      aPreviewLineUnicode[ CSV_PREVIEW_LINES ];
 
-    USHORT          nScrollPos;
-    USHORT          nUsedCols;
-    USHORT*         pEndValues;
-    BYTE*           pFlags;
-    CharSet         eCharSet;
-
-    void        CheckDisable();
-    void        CheckValues(BOOL bReadVal = FALSE, USHORT nEditField = USHRT_MAX);
-    void        CheckColTypes(BOOL bReadVal,void *pCtr=NULL);
-    void        CheckScrollRange();
-    void        CheckScrollPos();
-    void        UpdateVertical( BOOL bSwitchToFromUnicode = FALSE );
-    void        DelimitedPreview();
-    void        GetCharSet();
-
-    DECL_LINK( VarFixHdl, void* );
-    DECL_LINK( ScrollHdl, void* );
-    DECL_LINK( SelectHdl, ScTableWithRuler* );
-    DECL_LINK( ColTypeHdl, void* );
-    DECL_LINK( CharSetHdl, void* );
-    DECL_LINK( VarSepHdl, void* );
+    CharSet                     meCharSet;          /// Selected char set.
+    bool                        mbCharSetSystem;    /// Is System char set selected?
 
 public:
-                ScImportAsciiDlg( Window* pParent, String aDatName,
+                                ScImportAsciiDlg(
+                                    Window* pParent, String aDatName,
                                     SvStream* pInStream, sal_Unicode cSep = '\t' );
-                ~ScImportAsciiDlg();
+                                ~ScImportAsciiDlg();
 
-    void        GetOptions( ScAsciiOptions& rOpt );
+    void                        GetOptions( ScAsciiOptions& rOpt );
+
+private:
+    /** Sets the selected char set data to meCharSet and mbCharSetSystem. */
+    void                        SetSelectedCharSet();
+    /** Returns all separator characters in a string. */
+    String                      GetSeparators() const;
+
+    /** Enables or disables all separator checkboxes and edit fields. */
+    void                        SetupSeparatorCtrls();
+
+    void                        UpdateVertical( bool bSwitchToFromUnicode = false );
+
+                                DECL_LINK( CharSetHdl, SvxTextEncodingBox* );
+                                DECL_LINK( RbSepFixHdl, RadioButton* );
+                                DECL_LINK( SeparatorHdl, Control* );
+                                DECL_LINK( LbColTypeHdl, ListBox* );
+                                DECL_LINK( UpdateTextHdl, ScCsvTableBox* );
+                                DECL_LINK( ColSelectHdl, ScCsvTableBox* );
 };
 
 
+// ============================================================================
 
 #endif
-
 
