@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:15:21 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ ModalDialog RID_CALLDLG {
     Text[ arabic ] = "Dynamic Link No. ";
     Text[ turkish ] = "Dinamik balant˝ no. ";
     Text[ catalan ] = "VÌnculo din·mico n˙m.: ";
+    Text[ finnish ] = "Dynaaminen linkki numero ";
 };
 
 ModalDialog IDD_ABOUT_DIALOG {
@@ -192,6 +193,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
         TEXT[ arabic ] = "StarTestTool";
         TEXT[ turkish ] = "StarTestTool";
         TEXT[ catalan ] = "StarTestTool";
+        TEXT[ finnish ] = "StarTestTool";
     };
     FixedText 3 {
             Pos = MAP_APPFONT( 40, 45 );
@@ -217,6 +219,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
         TEXT[ arabic ] = "Version 1.0";
         TEXT[ turkish ] = "S¸r¸m 1.0";
         TEXT[ catalan ] = "VersiÛn 1.0";
+        TEXT[ finnish ] = "versio 1.0";
     };
     FixedText RID_VERSIONSTRING {
             Pos = MAP_APPFONT( 40, 55 );
@@ -248,6 +251,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
         TEXT[ arabic ] = "Æ1995-1998 Sun Microsystems, Inc.";
         TEXT[ turkish ] = "Æ1995-1998 Sun Microsystems, Inc.";
         TEXT[ catalan ] = "Æ1995-1998 Sun Microsystems, Inc.";
+        TEXT[ finnish ] = "(r)1995-1998 Sun Microsystems Inc.";
     };
 //  FixedIcon RID_ICON {
 //          Pos = MAP_APPFONT( 20, 26 );
@@ -295,6 +299,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ arabic ] = "~Text";
         TEXT[ turkish ] = "~Metin";
         TEXT[ catalan ] = "Te~xto";
+        TEXT[ finnish ] = "~Teksti";
     };
     Edit RID_FIND {
             BORDER = TRUE;
@@ -327,6 +332,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ arabic ] = "~Find";
         TEXT[ turkish ] = "~Ara";
         TEXT[ catalan ] = "~Buscar";
+        TEXT[ finnish ] = "~Etsi";
     };
     CancelButton RID_CANCEL {
             Pos = MAP_APPFONT( 105, 30 );
@@ -352,6 +358,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ arabic ] = "~Cancel";
         TEXT[ turkish ] = "~›ptal";
         TEXT[ catalan ] = "~Cancelar";
+        TEXT[ finnish ] = "~Peruuta";
     };
     TEXT[ portuguese ] = "StarBasic: Localizar texto";
     TEXT[ russian ] = "Testtool: Find Text";
@@ -371,6 +378,7 @@ ModalDialog IDD_FIND_DIALOG {
     TEXT[ arabic ] = "Testtool: Find Text";
     TEXT[ turkish ] = "StarBasic: Metni ara";
     TEXT[ catalan ] = "StarBasic: Buscar texto";
+    TEXT[ finnish ] = "StarBasic: Find Text";
 };
 
 ModalDialog IDD_REPLACE_DIALOG {
@@ -404,6 +412,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ arabic ] = "~Previous text";
         TEXT[ turkish ] = "~Eski metin";
         TEXT[ catalan ] = "~Antiguo texto";
+        TEXT[ finnish ] = "~Edellinen teksti";
     };
     FixedText RID_FIXEDTEXT2 {
             Pos = MAP_APPFONT( 5, 30 );
@@ -428,6 +437,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ arabic ] = "~New text";
         TEXT[ turkish ] = "~Yeni metin";
         TEXT[ catalan ] = "~Nuevo texto";
+        TEXT[ finnish ] = "~Uusi teksti";
     };
     Edit RID_FIND {
             BORDER = TRUE;
@@ -466,6 +476,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ arabic ] = "~Replace";
         TEXT[ turkish ] = "~Dei˛tir";
         TEXT[ catalan ] = "~Sustituir";
+        TEXT[ finnish ] = "~Korvaa";
     };
     CancelButton RID_CANCEL {
             Pos = MAP_APPFONT( 105, 50 );
@@ -491,6 +502,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ arabic ] = "~Cancel";
         TEXT[ turkish ] = "›ptal";
         TEXT[ catalan ] = "~Cancelar";
+        TEXT[ finnish ] = "~Peruuta";
     };
     TEXT[ portuguese ] = "StarBasic: Substituir texto";
     TEXT[ russian ] = "Testtool: Replace Text";
@@ -510,6 +522,7 @@ ModalDialog IDD_REPLACE_DIALOG {
     TEXT[ arabic ] = "Testtool: Replace Text";
     TEXT[ turkish ] = "StarBasic: Metni dei˛tir";
     TEXT[ catalan ] = "StarBasic: Sustituir texto";
+    TEXT[ finnish ] = "StarBasic: Replace Text";
 };
 
 InfoBox IDS_NOPRINTERERROR {
@@ -533,6 +546,7 @@ InfoBox IDS_NOPRINTERERROR {
     MESSAGE[ arabic ] = "The print function is not available";
     MESSAGE[ turkish ] = "Yazd˝rma i˛levi kullan˝lamaz!";
     MESSAGE[ catalan ] = "°No disponible la funciÛn para imprimir!";
+    MESSAGE[ finnish ] = "Tulostustoiminto ei ole k‰ytett‰viss‰.";
 };
 ErrorBox IDS_CANTLOAD {
     TITLE = "Testtool-Fehler";
@@ -575,6 +589,8 @@ ErrorBox IDS_CANTLOAD {
     Title[ turkish ] = "StarBasic-Fehler";
     MESSAGE[ catalan ] = "°No se puede cargar la biblioteca!";
     Title[ catalan ] = "Error de StarBasic";
+    MESSAGE[ finnish ] = "Library cannot be loaded!";
+    Title[ finnish ] = "StarBasic Error";
 };
 ErrorBox IDS_CANTSAVE {
     TITLE = "Testtool-Fehler";
@@ -617,6 +633,8 @@ ErrorBox IDS_CANTSAVE {
     Title[ turkish ] = "StarBasic-Fehler";
     MESSAGE[ catalan ] = "°No se puede guardar la biblioteca!";
     Title[ catalan ] = "Error de StarBasic";
+    MESSAGE[ finnish ] = "Library cannot be saved!";
+    Title[ finnish ] = "StarBasic Error";
 };
 ErrorBox IDS_NOMAINPGM {
     TITLE = "Testtool-Fehler";
@@ -659,6 +677,8 @@ ErrorBox IDS_NOMAINPGM {
     Title[ turkish ] = "StarBasic-Fehler";
     MESSAGE[ catalan ] = "°Esta ventana no contiene ning˙n programa principal!";
     Title[ catalan ] = "Error de StarBasic";
+    MESSAGE[ finnish ] = "This window does not contain a main program!";
+    Title[ finnish ] = "StarBasic Error";
 };
 ErrorBox IDS_READERROR {
     TITLE = "Testtool-Fehler";
@@ -701,6 +721,8 @@ ErrorBox IDS_READERROR {
     Title[ turkish ] = "StarBasic-Fehler";
     MESSAGE[ catalan ] = "°No se puede leer el archivo!";
     Title[ catalan ] = "Error de StarBasic";
+    MESSAGE[ finnish ] = "File cannot be read!";
+    Title[ finnish ] = "StarBasic Error";
 };
 ErrorBox IDS_WRITEERROR {
     TITLE = "Testtool-Fehler";
@@ -743,6 +765,8 @@ ErrorBox IDS_WRITEERROR {
     Title[ turkish ] = "StarBasic-Fehler";
     MESSAGE[ catalan ] = "°No se puede guardar el archivo!";
     Title[ catalan ] = "Error de StarBasic";
+    MESSAGE[ finnish ] = "File cannot be saved!";
+    Title[ finnish ] = "StarBasic Error";
 };
 ErrorBox IDS_PATTERNNOTFOUND {
     TITLE = "Testtool-Fehler";
@@ -785,6 +809,8 @@ ErrorBox IDS_PATTERNNOTFOUND {
     Title[ turkish ] = "StarBasic-Fehler";
     MESSAGE[ catalan ] = "°No se encontrÛ el tÈrmino buscado!";
     Title[ catalan ] = "Error de StarBasic";
+    MESSAGE[ finnish ] = "Search key not found!";
+    Title[ finnish ] = "StarBasic Error";
 };
 ErrorBox IDS_INVALID_VALUE {
     TITLE = "Testtool-Fehler";
@@ -827,6 +853,8 @@ ErrorBox IDS_INVALID_VALUE {
     Title[ turkish ] = "StarBasic-Fehler";
     MESSAGE[ catalan ] = "Valor incorrecto; no se puede aplicar.";
     Title[ catalan ] = "StarBasic Error";
+    MESSAGE[ finnish ] = "The value is invalid and cannot be set.";
+    Title[ finnish ] = "StarBasic Error";
 };
 
 QueryBox IDS_ASKSAVEERROR {
@@ -871,6 +899,8 @@ QueryBox IDS_ASKSAVEERROR {
     Title[ turkish ] = "StarBasic";
     MESSAGE[ catalan ] = "°Error al guardar los archivos! øEjecutar de todas formas?";
     Title[ catalan ] = "StarBasic";
+    MESSAGE[ finnish ] = "Error saving files! Run anyway?";
+    Title[ finnish ] = "StarBasic";
 };
 QueryBox IDS_ASK_DIRTY_SAVE {
     TITLE = "Testtool";
@@ -914,6 +944,8 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     Title[ turkish ] = "StarBasic";
     MESSAGE[ catalan ] = "El archivo ha sido modificado. øGuardar?";
     Title[ catalan ] = "StarBasic";
+    MESSAGE[ finnish ] = "File has been changed. Save?";
+    Title[ finnish ] = "StarBasic";
 };
 QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     TITLE = "Testtool";
@@ -957,6 +989,8 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     Title[ turkish ] = "StarBasic";
     MESSAGE[ catalan ] = "El archivo se ha modificado en el disco\ny en el editor. øDesea guardarlo?";
     Title[ catalan ] = "StarBasic";
+    MESSAGE[ finnish ] = "File has been changed on data medium\nand in the Editor. Save?";
+    Title[ finnish ] = "StarBasic";
 };
 QueryBox IDS_ASK_DISKCHANGE_SAVE {
     TITLE = "Testtool";
@@ -1000,6 +1034,8 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     Title[ turkish ] = "StarBasic";
     MESSAGE[ catalan ] = "El archivo en el disco se ha modificado\nøDesea sobrescribirlo?";
     Title[ catalan ] = "StarBasic";
+    MESSAGE[ finnish ] = "File has been changed on data medium.\nOverwrite?";
+    Title[ finnish ] = "StarBasic";
 };
 QueryBox IDS_ASKRELOAD {
     TITLE = "Testtool";
@@ -1043,6 +1079,8 @@ QueryBox IDS_ASKRELOAD {
     Title[ turkish ] = "StarBasic";
     MESSAGE[ catalan ] = "Se ha modificado el archivo en el disco. øDesea recargarlo?";
     Title[ catalan ] = "StarBasic";
+    MESSAGE[ finnish ] = "File has been changed on data medium. Reload?";
+    Title[ finnish ] = "StarBasic";
 };
 QueryBox IDS_ASKDIRTYRELOAD {
     TITLE = "Testtool";
@@ -1086,6 +1124,8 @@ QueryBox IDS_ASKDIRTYRELOAD {
     Title[ turkish ] = "StarBasic";
     MESSAGE[ catalan ] = "Se ha modificado el archivo en el disco y\nen el editor. øDesea recargarlo?";
     Title[ catalan ] = "StarBasic";
+    MESSAGE[ finnish ] = "File has been changed on data medium\nand in the Editor. Reload?";
+    Title[ finnish ] = "StarBasic";
 };
 QueryBox IDS_RUNNING {
     TITLE = "Testtool";
@@ -1129,6 +1169,8 @@ QueryBox IDS_RUNNING {
     Title[ turkish ] = "StarBasic";
     MESSAGE[ catalan ] = "°El programa BASIC est· a˙n activo! øDesea cerrar de todas formas?";
     Title[ catalan ] = "StarBasic";
+    MESSAGE[ finnish ] = "BASIC is still running! Exit anyway?";
+    Title[ finnish ] = "StarBasic";
 };
 QueryBox IDS_LOSS_OF_INFORMATION {
     TITLE = "Testtool";
@@ -1172,6 +1214,8 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     Title[ turkish ] = "StarBasic";
     MESSAGE[ catalan ] = "Al guardar en formato externo se perder· informaciÛn";
     Title[ catalan ] = "StarBasic";
+    MESSAGE[ finnish ] = "Saving in an external format causes information loss.";
+    Title[ finnish ] = "StarBasic";
 };
 
 InfoBox IDS_NOT_YET_IMPLEMENTED
@@ -1196,6 +1240,7 @@ InfoBox IDS_NOT_YET_IMPLEMENTED
     MESSAGE[ arabic ] = "Not yet implemented";
     MESSAGE[ turkish ] = "Hen¸z uygulanmad˝";
     MESSAGE[ catalan ] = "TodavÌa no implementado";
+    MESSAGE[ finnish ] = "Ei viel‰ k‰ytˆss‰";
 };
 
 
@@ -1220,6 +1265,7 @@ String IDS_WARNING1 {
     TEXT[ arabic ] = "Warning ";
     TEXT[ turkish ] = "Uyar˝ ";
     TEXT[ catalan ] = "Advertencia  ";
+    TEXT[ finnish ] = "Varoitus";
 };
 String IDS_ERROR1 {
     TEXT = "Fehler ";
@@ -1242,6 +1288,7 @@ String IDS_ERROR1 {
     TEXT[ arabic ] = "Error ";
     TEXT[ turkish ] = "Hata ";
     TEXT[ catalan ] = "Error ";
+    TEXT[ finnish ] = "Virhe";
 };
 String IDS_ERROR2 {
     TEXT = " in Zeile ";
@@ -1264,6 +1311,7 @@ String IDS_ERROR2 {
     TEXT[ arabic ] = "in row ";
     TEXT[ turkish ] = "Sat˝r: ";
     TEXT[ catalan ] = "en fila ";
+    TEXT[ finnish ] = "rivill‰ ";
 };
 String IDS_NO_LONGNAME {
     TEXT = "Kein Eintrag in Hid.Lst";
@@ -1286,6 +1334,7 @@ String IDS_NO_LONGNAME {
     TEXT[ arabic ] = "No entries in Hid.Lst";
     TEXT[ turkish ] = "Hid.Lst'te giri˛ yok";
     TEXT[ catalan ] = "Ninguna entrada en Hid.Lst";
+    TEXT[ finnish ] = "Ei merkintˆj‰ piiloluettelossa";
 };
 String IDS_WARNING_PREFIX
 {
@@ -1309,6 +1358,7 @@ String IDS_WARNING_PREFIX
     Text[ arabic ] = "Warning: ";
     Text[ turkish ] = "Uyar˝: ";
     Text[ catalan ] = "Advertencia: ";
+    Text[ finnish ] = "Varoitus: ";
 };
 String IDS_OBJECT
 {
@@ -1333,6 +1383,7 @@ String IDS_OBJECT
     Text[ arabic ] = "Object";
     Text[ turkish ] = "Nesne";
     Text[ catalan ] = "Objeto";
+    Text[ finnish ] = "Objekti";
 };
 String IDS_EDIT_VAR
 {
@@ -1357,6 +1408,7 @@ String IDS_EDIT_VAR
     Text[ arabic ] = "Edit ($Arg1)";
     Text[ turkish ] = "($Arg1) D¸zenle";
     Text[ catalan ] = "Editar ($Arg1)";
+    Text[ finnish ] = "Muokkaa ($Arg1)";
 };
 
 String IDS_APPNAME {
@@ -1380,6 +1432,7 @@ String IDS_APPNAME {
     TEXT[ arabic ] = "Testtool";
     TEXT[ turkish ] = "%PRODUCTNAME Basic";
     TEXT[ catalan ] = "StarBasic";
+    TEXT[ finnish ] = "StarBasic";
 };
 String IDS_APPNAME2 {
     TEXT = "StarTestTool";
@@ -1402,6 +1455,7 @@ String IDS_APPNAME2 {
     TEXT[ arabic ] = "StarTestTool";
     TEXT[ turkish ] = "StarTestTool";
     TEXT[ catalan ] = "StarTestTool";
+    TEXT[ finnish ] = "StarTestTool";
 };
 String IDS_APPMODE_BREAK {
     text = "Break";
@@ -1424,6 +1478,7 @@ String IDS_APPMODE_BREAK {
     text[ arabic ] = "Break";
     text[ turkish ] = "Break";
     text[ catalan ] = "Break";
+    text[ finnish ] = "Keskeytys";
 };
 String IDS_APPMODE_RUN {
     text = "Run";
@@ -1446,6 +1501,7 @@ String IDS_APPMODE_RUN {
     text[ arabic ] = "Run";
     text[ turkish ] = "Run";
     text[ catalan ] = "Run";
+    text[ finnish ] = "Suorita";
 };
 String IDS_NONAME {
     TEXT = "Unbenannt";
@@ -1468,6 +1524,7 @@ String IDS_NONAME {
     TEXT[ arabic ] = "Unnamed";
     TEXT[ turkish ] = "Ads˝z";
     TEXT[ catalan ] = "Desconocido";
+    TEXT[ finnish ] = "Nimetˆn";
 };
 
 String IDS_NONAMEFILE {
@@ -1527,6 +1584,7 @@ String IDS_LOADDLG {
     TEXT[ arabic ] = "Testtool: Load File";
     TEXT[ turkish ] = "StarBasic: Dosyay˝ y¸kle";
     TEXT[ catalan ] = "StarBasic: Leer archivo";
+    TEXT[ finnish ] = "StarBasic: Load File";
 };
 String IDS_SAVEDLG {
     TEXT = "Testtool: Datei speichern";
@@ -1549,6 +1607,7 @@ String IDS_SAVEDLG {
     TEXT[ arabic ] = "Testtool: Save File";
     TEXT[ turkish ] = "StarBasic: Dosyay˝ kaydet";
     TEXT[ catalan ] = "StarBasic: Guardar archivo";
+    TEXT[ finnish ] = "StarBasic: Save File";
 };
 String IDS_BASFILTER {
     TEXT = "Quelltexte (*.BAS)";
@@ -1571,6 +1630,7 @@ String IDS_BASFILTER {
     TEXT[ arabic ] = "Source text (*.BAS)";
     TEXT[ turkish ] = "Kaynak metinler (*.BAS)";
     TEXT[ catalan ] = "Textos fuente (*.BAS)";
+    TEXT[ finnish ] = "L‰hdeteksti (*.BAS)";
 };
 String IDS_INCFILTER {
     TEXT = "Include-Dateien (*.INC)";
@@ -1593,6 +1653,7 @@ String IDS_INCFILTER {
     TEXT[ arabic ] = "Include files (*.INC)";
     TEXT[ turkish ] = "Include dosyalar˝ (*.INC)";
     TEXT[ catalan ] = "Archivos \"Include\" (*.INC)";
+    TEXT[ finnish ] = "Include- tiedostot (*.INC)";
 };
 String IDS_LIBFILTER {
     TEXT = "Libraries (*.SB)";
@@ -1615,6 +1676,7 @@ String IDS_LIBFILTER {
     TEXT[ arabic ] = "Libraries (*.SB)";
     TEXT[ turkish ] = "Kitapl˝klar (*.SB)";
     TEXT[ catalan ] = "Bibliotecas (*.SB)";
+    TEXT[ finnish ] = "Kirjastot (*.SB)";
 };
 String IDS_RESFILTER {
     TEXT = "Results (*.RES)";
@@ -1637,6 +1699,7 @@ String IDS_RESFILTER {
     TEXT[ arabic ] = "Results (*.RES)";
     TEXT[ turkish ] = "SonuÁlar (*.RES)";
     TEXT[ catalan ] = "Resultados (*.RES)";
+    TEXT[ finnish ] = "Tulokset (*.RES)";
 };
 String IDS_TXTFILTER {
     TEXT = "Results als Textdatei (*.TXT)";
@@ -1659,6 +1722,7 @@ String IDS_TXTFILTER {
     TEXT[ arabic ] = "Results as text file (*.TXT)";
     TEXT[ turkish ] = "Metin dosyas˝ olarak sonuÁlar (*.TXT)";
     TEXT[ catalan ] = "Resultados como archivo de texto (*.TXT)";
+    TEXT[ finnish ] = "Tulokset tekstitiedostona (*.TXT)";
 };
 String IDS_PAGE {
     TEXT = "Seite ";
@@ -1681,6 +1745,7 @@ String IDS_PAGE {
     TEXT[ arabic ] = "Page  ";
     TEXT[ turkish ] = "Sayfa ";
     TEXT[ catalan ] = "P·gina ";
+    TEXT[ finnish ] = "Sivu ";
 };
 String IDS_PRINTMSG {
     TEXT = "Ausdruck von ";
@@ -1703,6 +1768,7 @@ String IDS_PRINTMSG {
     TEXT[ arabic ] = "Printout from ";
     TEXT[ turkish ] = "«˝kt˝ kayna˝: ";
     TEXT[ catalan ] = "Imprimir ";
+    TEXT[ finnish ] = "Tuloste kohteesta";
 };
 String IDS_CONTINUE {
     TEXT = "Weiter";
@@ -1725,6 +1791,7 @@ String IDS_CONTINUE {
     TEXT[ arabic ] = "Continue";
     TEXT[ turkish ] = "›leri";
     TEXT[ catalan ] = "Avanzar";
+    TEXT[ finnish ] = "Jatka";
 };
 String IDS_CANCEL {
     TEXT = "Abbruch";
@@ -1747,6 +1814,7 @@ String IDS_CANCEL {
     TEXT[ arabic ] = "Cancel";
     TEXT[ turkish ] = "›ptal";
     TEXT[ catalan ] = "Cancelar";
+    TEXT[ finnish ] = "Peruuta";
 };
 String IDS_DISASWIN {
     TEXT = "Disassembly";
@@ -1769,6 +1837,7 @@ String IDS_DISASWIN {
     TEXT[ arabic ] = "Disassembly";
     TEXT[ turkish ] = "Disassembly";
     TEXT[ catalan ] = "Desensamblar";
+    TEXT[ finnish ] = "Purkaminen";
 };
 //Icon RID_APPICON {
 //  FILE = "basic.ico";
@@ -1817,6 +1886,7 @@ Menu RID_APPMENUBAR {
             TEXT[ arabic ] = "~File";
             TEXT[ turkish ] = "~Dosya";
             TEXT[ catalan ] = "~Archivo";
+            TEXT[ finnish ] = "~Tiedosto";
         };
     MenuItem  {
             Identifier = RID_APPEDIT;
@@ -1843,6 +1913,7 @@ Menu RID_APPMENUBAR {
             TEXT[ arabic ] = "~Edit";
             TEXT[ turkish ] = "D¸~zenle";
             TEXT[ catalan ] = "~Editar";
+            TEXT[ finnish ] = "~Muokkaa";
         };
     MenuItem  {
             Identifier = RID_APPRUN;
@@ -1869,6 +1940,7 @@ Menu RID_APPMENUBAR {
             TEXT[ arabic ] = "~Program";
             TEXT[ turkish ] = "P~rogram";
             TEXT[ catalan ] = "~Programa";
+            TEXT[ finnish ] = "~Ohjelma";
         };
     MenuItem  {
             Identifier = RID_APPWINDOW;
@@ -1895,6 +1967,7 @@ Menu RID_APPMENUBAR {
             TEXT[ arabic ] = "~Window";
             TEXT[ turkish ] = "~Pencere";
             TEXT[ catalan ] = "~Ventana";
+            TEXT[ finnish ] = "~Ikkuna";
         };
     MenuItem  {
             SEPARATOR = TRUE;
@@ -1925,6 +1998,7 @@ Menu RID_APPMENUBAR {
             TEXT[ arabic ] = "~Help";
             TEXT[ turkish ] = "~Yard˝m";
             TEXT[ catalan ] = "~Ayuda";
+            TEXT[ finnish ] = "~Ohje";
         };
     };
 };
@@ -1955,6 +2029,7 @@ Menu RID_FILE {
             TEXT[ arabic ] = "~New";
             TEXT[ turkish ] = "Y~eni";
             TEXT[ catalan ] = "~Nuevo";
+            TEXT[ finnish ] = "~Uusi";
         };
     MenuItem  {
         Identifier = RID_FILEOPEN;
@@ -1981,6 +2056,7 @@ Menu RID_FILE {
             TEXT[ arabic ] = "~Open...";
             TEXT[ turkish ] = "~AÁ...";
             TEXT[ catalan ] = "A~brir...";
+            TEXT[ finnish ] = "~Avaa";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2009,6 +2085,7 @@ Menu RID_FILE {
             TEXT[ arabic ] = "~Close";
             TEXT[ turkish ] = "Kapa~t";
             TEXT[ catalan ] = "~Cerrar";
+            TEXT[ finnish ] = "~Sulje";
         };
     MenuItem  {
         Identifier = RID_FILESAVE;
@@ -2035,6 +2112,7 @@ Menu RID_FILE {
             TEXT[ arabic ] = "~Save";
             TEXT[ turkish ] = "Kay~det";
             TEXT[ catalan ] = "~Guardar";
+            TEXT[ finnish ] = "~Tallenna";
         };
     MenuItem  {
         Identifier = RID_FILESAVEAS;
@@ -2061,6 +2139,7 @@ Menu RID_FILE {
             TEXT[ arabic ] = "Save~ As...";
             TEXT[ turkish ] = "~Farkl˝ kaydet...";
             TEXT[ catalan ] = "Guardar ~como...";
+            TEXT[ finnish ] = "Tallenna~ nimell‰";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2089,6 +2168,7 @@ Menu RID_FILE {
             TEXT[ arabic ] = "~Load Library...";
             TEXT[ turkish ] = "~Kitapl˝˝ y¸kle";
             TEXT[ catalan ] = "Cargar ~Biblioteca...";
+            TEXT[ finnish ] = "~Lataa kirjasto";
         };
     MenuItem  {
         Identifier = RID_FILESAVELIB;
@@ -2114,6 +2194,7 @@ Menu RID_FILE {
             TEXT[ arabic ] = "Save Li~brary...";
             TEXT[ turkish ] = "Kitapl˝˝ kaydet...";
             TEXT[ catalan ] = "Guardar Bibli~oteca...";
+            TEXT[ finnish ] = "Tallenna kir~jasto";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2142,6 +2223,7 @@ Menu RID_FILE {
             TEXT[ arabic ] = "~Print";
             TEXT[ turkish ] = "~Yazd˝r";
             TEXT[ catalan ] = "~Imprimir";
+            TEXT[ finnish ] = "~Tulosta";
         };
     MenuItem  {
         Identifier = RID_FILESETUP;
@@ -2167,6 +2249,7 @@ Menu RID_FILE {
             TEXT[ arabic ] = "P~rinter Setup...";
             TEXT[ turkish ] = "Yaz˝c˝ ayarlar˝...";
             TEXT[ catalan ] = "~ConfiguraciÛn de impresora...";
+            TEXT[ finnish ] = "Tu~lostinasetukset";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2196,6 +2279,7 @@ Menu RID_FILE {
             TEXT[ arabic ] = "~Exit";
             TEXT[ turkish ] = "«˝~k˝˛";
             TEXT[ catalan ] = "~Terminar";
+            TEXT[ finnish ] = "~Lopeta";
         };
     };
 };
@@ -2226,6 +2310,7 @@ Menu RID_EDIT {
             TEXT[ arabic ] = "~Undo";
             TEXT[ turkish ] = "Geri ~al";
             TEXT[ catalan ] = "~Deshacer";
+            TEXT[ finnish ] = "~Peruuta";
         };
     MenuItem  {
         Identifier = RID_EDITREDO;
@@ -2252,6 +2337,7 @@ Menu RID_EDIT {
             TEXT[ arabic ] = "~Repeat";
             TEXT[ turkish ] = "~Yinele";
             TEXT[ catalan ] = "~Repetir";
+            TEXT[ finnish ] = "~Toista";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2281,6 +2367,7 @@ Menu RID_EDIT {
             TEXT[ arabic ] = "~Cut";
             TEXT[ turkish ] = "Kes";
             TEXT[ catalan ] = "~Cortar";
+            TEXT[ finnish ] = "~Leikkaa";
         };
     MenuItem  {
         Identifier = RID_EDITCOPY;
@@ -2307,6 +2394,7 @@ Menu RID_EDIT {
             TEXT[ arabic ] = "~Copy";
             TEXT[ turkish ] = "Kopyala";
             TEXT[ catalan ] = "Copiar";
+            TEXT[ finnish ] = "~Kopioi";
         };
     MenuItem  {
         Identifier = RID_EDITPASTE;
@@ -2333,6 +2421,7 @@ Menu RID_EDIT {
             TEXT[ arabic ] = "~Insert";
             TEXT[ turkish ] = "Ekle";
             TEXT[ catalan ] = "In~sertar";
+            TEXT[ finnish ] = "L~iit‰";
         };
     MenuItem  {
         Identifier = RID_EDITDEL;
@@ -2359,6 +2448,7 @@ Menu RID_EDIT {
             TEXT[ arabic ] = "~Delete";
             TEXT[ turkish ] = "Sil";
             TEXT[ catalan ] = "~Eliminar";
+            TEXT[ finnish ] = "~Poista";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2388,6 +2478,7 @@ Menu RID_EDIT {
             TEXT[ arabic ] = "~Find...";
             TEXT[ turkish ] = "Ara...";
             TEXT[ catalan ] = "~Buscar...";
+            TEXT[ finnish ] = "~Etsi";
         };
     MenuItem  {
         Identifier = RID_EDITREPLACE;
@@ -2413,6 +2504,7 @@ Menu RID_EDIT {
             TEXT[ arabic ] = "~Replace...";
             TEXT[ turkish ] = "Dei˛tir...";
             TEXT[ catalan ] = "~Sustituir...";
+            TEXT[ finnish ] = "~Korvaa";
         };
     MenuItem  {
         Identifier = RID_EDITREPEAT;
@@ -2440,6 +2532,7 @@ Menu RID_EDIT {
             TEXT[ arabic ] = "Repeat S~earch";
             TEXT[ turkish ] = "Yeniden ara";
             TEXT[ catalan ] = "~Repetir b˙squeda";
+            TEXT[ finnish ] = "Toista ~haku";
         };
     };
 };
@@ -2470,6 +2563,7 @@ Menu RID_RUN {
             TEXT[ arabic ] = "~Compile";
             TEXT[ turkish ] = "~Derle";
             TEXT[ catalan ] = "~Compilar";
+            TEXT[ finnish ] = "~Kokoa";
         };
     MenuItem  {
         Identifier = RID_RUNDISAS;
@@ -2495,6 +2589,7 @@ Menu RID_RUN {
             TEXT[ arabic ] = "~Disassemble";
             TEXT[ turkish ] = "~Disassemble";
             TEXT[ catalan ] = "~Desensamblar";
+            TEXT[ finnish ] = "~Pura";
         };
     MenuItem  {
         Identifier = RID_RUNSTART;
@@ -2521,6 +2616,7 @@ Menu RID_RUN {
             TEXT[ arabic ] = "~Start";
             TEXT[ turkish ] = "~Ba˛lat";
             TEXT[ catalan ] = "~Iniciar";
+            TEXT[ finnish ] = "~Aloita";
         };
     MenuItem  {
         Identifier = RID_RUNSTEPINTO;
@@ -2547,6 +2643,7 @@ Menu RID_RUN {
             TEXT[ arabic ] = "~Single Stepping";
             TEXT[ turkish ] = "~Tek ad˝m";
             TEXT[ catalan ] = "~Paso a paso";
+            TEXT[ finnish ] = "~Askel kerrallaan";
         };
     MenuItem  {
         Identifier = RID_RUNSTEPOVER;
@@ -2573,6 +2670,7 @@ Menu RID_RUN {
             TEXT[ arabic ] = "Si~ngle Step over Procedure";
             TEXT[ turkish ] = "Si~ngle Step over Procedure";
             TEXT[ catalan ] = "Procesos ~paso a paso";
+            TEXT[ finnish ] = "As~kel kerrallaan toiminnoissa";
         };
 //  MenuItem  {
 //      Identifier = RID_RUNTOCURSOR;
@@ -2607,6 +2705,7 @@ Menu RID_RUN {
             TEXT[ arabic ] = "Set / Delete Break Point";
             TEXT[ turkish ] = "Set / Delete Break Point";
             TEXT[ catalan ] = "Poner/eliminar punto de detenciÛn";
+            TEXT[ finnish ] = "Aseta/poista keskeytyspiste";
         };
     MenuItem  {
         Identifier = RID_RUNBREAK;
@@ -2633,6 +2732,7 @@ Menu RID_RUN {
             TEXT[ arabic ] = "~Interrupt";
             TEXT[ turkish ] = "~Duraklat";
             TEXT[ catalan ] = "Interru~mpir";
+            TEXT[ finnish ] = "~Keskeyt‰";
         };
     MenuItem  {
         Identifier = RID_RUNSTOP;
@@ -2658,6 +2758,7 @@ Menu RID_RUN {
             TEXT[ arabic ] = "~Cancel";
             TEXT[ turkish ] = "~›ptal";
             TEXT[ catalan ] = "~Cancelar";
+            TEXT[ finnish ] = "~Peruuta";
         };
     MenuItem  {
         Identifier = RID_RUNNEXTERR;
@@ -2684,6 +2785,7 @@ Menu RID_RUN {
             TEXT[ arabic ] = "~Next Error";
             TEXT[ turkish ] = "~Sonraki hata";
             TEXT[ catalan ] = "~Error siguiente";
+            TEXT[ finnish ] = "~Seuraava virhe";
         };
     MenuItem  {
         Identifier = RID_RUNPREVERR;
@@ -2710,6 +2812,7 @@ Menu RID_RUN {
             TEXT[ arabic ] = "~Previous Error";
             TEXT[ turkish ] = "~÷nceki hata";
             TEXT[ catalan ] = "Error ~anterior";
+            TEXT[ finnish ] = "~Edellinen virhe";
         };
     MenuItem  {
         SEPARATOR = TRUE;
@@ -2741,6 +2844,7 @@ String RID_TT_EXTRAS_NAME
     Text[ arabic ] = "E~xtras";
     Text[ turkish ] = "AraÁlar";
     Text[ catalan ] = "~Opciones";
+    Text[ finnish ] = "Li~s‰objektit";
 };
 
 Menu RID_TT_EXTRAS {
@@ -2769,6 +2873,7 @@ Menu RID_TT_EXTRAS {
             TEXT[ arabic ] = "~Settings";
             TEXT[ turkish ] = "~Ayarlar";
             TEXT[ catalan ] = "~ConfiguraciÛn";
+            TEXT[ finnish ] = "~Asetukset";
         };
     MenuItem  {
             Identifier = RID_DECLARE_HELPER;
@@ -2794,6 +2899,7 @@ Menu RID_TT_EXTRAS {
             TEXT[ arabic ] = "~Include Dialogs";
             TEXT[ turkish ] = "~Pencereleri ekle";
             TEXT[ catalan ] = "In~cluir di·logos";
+            TEXT[ finnish ] = "~Myˆs valintaikkunat";
         };
     };
 };
@@ -2823,6 +2929,7 @@ Menu RID_WINDOW {
             TEXT[ arabic ] = "~Overlapping";
             TEXT[ turkish ] = "B~asamakla";
             TEXT[ catalan ] = "~Cascada";
+            TEXT[ finnish ] = "~P‰‰llekk‰in";
         };
     MenuItem  {
             Identifier = RID_WINTILE;
@@ -2848,6 +2955,7 @@ Menu RID_WINDOW {
             TEXT[ arabic ] = "~Tiled";
             TEXT[ turkish ] = "~Yan yana";
             TEXT[ catalan ] = "~Mosaico";
+            TEXT[ finnish ] = "~Vierekk‰in";
         };
     MenuItem  {
             Identifier = RID_WINTILEHORZ;
@@ -2873,6 +2981,7 @@ Menu RID_WINDOW {
             TEXT[ arabic ] = "~Arrange Horizontally";
             TEXT[ turkish ] = "~Yatay yerle˛tir";
             TEXT[ catalan ] = "~Horizontal";
+            TEXT[ finnish ] = "~J‰rjest‰ vaakatasossa";
         };
     MenuItem  {
             Identifier = RID_WINTILEVERT;
@@ -2898,6 +3007,7 @@ Menu RID_WINDOW {
             TEXT[ arabic ] = "~Arrange Vertically";
             TEXT[ turkish ] = "~Dikey yerle˛tir";
             TEXT[ catalan ] = "~Vertical";
+            TEXT[ finnish ] = "~J‰rjest‰ pystytasossa";
         };
     };
 };
@@ -2965,6 +3075,7 @@ Menu RID_HELP {
             TEXT[ arabic ] = "~About...";
             TEXT[ turkish ] = "~Bilgi...";
             TEXT[ catalan ] = "~InformaciÛn...";
+            TEXT[ finnish ] = "~Tietoja";
         };
     };
 };
@@ -2999,6 +3110,7 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ arabic ] = "Print from ";
         TEXT[ turkish ] = "«˝kt˝ kayna˝ ";
         TEXT[ catalan ] = "Imprimir ";
+        TEXT[ finnish ] = "Tulosta kohteesta ";
     };
     CancelButton RID_CANCEL {
             Pos = MAP_APPFONT( 56, 46 );
@@ -3023,6 +3135,7 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ arabic ] = "Cancel";
         TEXT[ turkish ] = "›ptal";
         TEXT[ catalan ] = "Cancelar";
+        TEXT[ finnish ] = "Peruuta";
     };
     TEXT[ portuguese ] = "StarBasic: imprimir ficheiro";
     TEXT[ russian ] = "Testtool: Print File";
@@ -3042,6 +3155,7 @@ ModelessDialog IDD_PRINT_DIALOG {
     TEXT[ arabic ] = "Testtool: Print File";
     TEXT[ turkish ] = "StarBasic: Dosyay˝ yazd˝r";
     TEXT[ catalan ] = "StarBasic: Imprimir archivo";
+    TEXT[ finnish ] = "StarBasic: Print File";
 };
 
 
@@ -3085,6 +3199,7 @@ ModelessDialog IDD_OPTIONS_DLG
                 Text[ arabic ] = "Generic";
                 Text[ turkish ] = "Genel";
                 Text[ catalan ] = "GenÈrico";
+                Text[ finnish ] = "Yleinen";
             };
             PageItem
             {
@@ -3109,6 +3224,7 @@ ModelessDialog IDD_OPTIONS_DLG
                 Text[ arabic ] = "Specialized";
                 Text[ turkish ] = "÷zel";
                 Text[ catalan ] = "Especial";
+                Text[ finnish ] = "Erikoinen";
             };
         };
     OKButton RID_OK {
@@ -3141,6 +3257,7 @@ ModelessDialog IDD_OPTIONS_DLG
     Text[ arabic ] = "Settings";
     Text[ turkish ] = "Ayarlar";
     Text[ catalan ] = "ConfiguraciÛn";
+    Text[ finnish ] = "Asetukset";
 };
 
 
@@ -3171,6 +3288,7 @@ TabPage RID_TP_GENERIC {
         Text[ arabic ] = "Range";
         Text[ turkish ] = "Aral˝k";
         Text[ catalan ] = "¡rea";
+        Text[ finnish ] = "Alue";
     };
     ComboBox RID_CB_AREA {
             HScroll              = TRUE;
@@ -3198,7 +3316,7 @@ TabPage RID_TP_GENERIC {
         Text[ danish ] = "New";
         Text[ swedish ] = "New";
         Text[ polish ] = "New ";
-        Text[ portuguese_brazilian ] = "Neu";
+        Text[ portuguese_brazilian ] = "Novo";
         Text[ japanese ] = "êVãK";
         Text[ korean ] = "ªı∑Œ";
         Text[ chinese_simplified ] = "New";
@@ -3206,6 +3324,7 @@ TabPage RID_TP_GENERIC {
         Text[ arabic ] = "New";
         Text[ turkish ] = "Yeni";
         Text[ catalan ] = "Nuevo";
+        Text[ finnish ] = "Uusi";
     };
     PushButton RID_PD_DEL_AREA {
             Pos = MAP_APPFONT( 188, 16 );
@@ -3231,6 +3350,7 @@ TabPage RID_TP_GENERIC {
         Text[ arabic ] = "Delete";
         Text[ turkish ] = "Sil";
         Text[ catalan ] = "Eliminar";
+        Text[ finnish ] = "Poista";
     };
     GroupBox RID_GB_VALUE {
             Pos = MAP_APPFONT( 4, 36 );
@@ -3255,6 +3375,7 @@ TabPage RID_TP_GENERIC {
         Text[ arabic ] = "Setting";
         Text[ turkish ] = "Ayarlar";
         Text[ catalan ] = "ConfiguraciÛn";
+        Text[ finnish ] = "Asetus";
     };
     ComboBox RID_CB_VALUE {
             HScroll              = TRUE;
@@ -3281,7 +3402,7 @@ TabPage RID_TP_GENERIC {
         Text[ danish ] = "New";
         Text[ swedish ] = "New";
         Text[ polish ] = "New";
-        Text[ portuguese_brazilian ] = "Neu";
+        Text[ portuguese_brazilian ] = "Novo";
         Text[ japanese ] = "êVãK";
         Text[ korean ] = "ªı∑Œ";
         Text[ chinese_simplified ] = "New";
@@ -3289,6 +3410,7 @@ TabPage RID_TP_GENERIC {
         Text[ arabic ] = "New";
         Text[ turkish ] = "Yeni";
         Text[ catalan ] = "Nuevo";
+        Text[ finnish ] = "Uusi";
     };
     PushButton RID_PB_DEL_VALUE {
             Pos = MAP_APPFONT( 188, 64 );
@@ -3314,6 +3436,7 @@ TabPage RID_TP_GENERIC {
         Text[ arabic ] = "Delete";
         Text[ turkish ] = "Sil";
         Text[ catalan ] = "Eliminar";
+        Text[ finnish ] = "Poista";
     };
 };
 
@@ -3345,6 +3468,7 @@ TabPage RID_TP_SPECIAL {
         Text[ arabic ] = "Directories";
         Text[ turkish ] = "Dizinler";
         Text[ catalan ] = "Directorios";
+        Text[ finnish ] = "Hakemistot";
     };
     FixedText LOG_TEXT {
             Pos = MAP_APPFONT( 7, 12 );
@@ -3369,6 +3493,7 @@ TabPage RID_TP_SPECIAL {
         Text[ arabic ] = "Log home directory";
         Text[ turkish ] = "Log ana dizin";
         Text[ catalan ] = "Directorio base de Log";
+        Text[ finnish ] = "Lokihakemisto";
     };
     FixedText BASIS_TEXT {
             Pos = MAP_APPFONT( 7, 28 );
@@ -3393,6 +3518,7 @@ TabPage RID_TP_SPECIAL {
         Text[ arabic ] = "Home directory";
         Text[ turkish ] = "Ana dizin";
         Text[ catalan ] = "Directorio base";
+        Text[ finnish ] = "Kotihakemisto";
     };
     FixedText HID_TEXT {
             Pos = MAP_APPFONT( 7, 44 );
@@ -3417,6 +3543,7 @@ TabPage RID_TP_SPECIAL {
         Text[ arabic ] = "HID directory";
         Text[ turkish ] = "HID diziniz";
         Text[ catalan ] = "Directorio HID";
+        Text[ finnish ] = "HID-hakemisto";
     };
     Edit LOG_NAME {
             Border = TRUE;
@@ -3460,6 +3587,7 @@ TabPage RID_TP_SPECIAL {
         Text[ arabic ] = "...";
         Text[ turkish ] = "...";
         Text[ catalan ] = "...";
+        Text[ finnish ] = "...";
     };
     PushButton BASIS_SET {
             Pos = MAP_APPFONT( 217, 28 );
@@ -3485,6 +3613,7 @@ TabPage RID_TP_SPECIAL {
         Text[ arabic ] = "...";
         Text[ turkish ] = "...";
         Text[ catalan ] = "...";
+        Text[ finnish ] = "...";
     };
     PushButton HID_SET {
             Pos = MAP_APPFONT( 217, 44 );
@@ -3510,6 +3639,7 @@ TabPage RID_TP_SPECIAL {
         Text[ arabic ] = "...";
         Text[ turkish ] = "...";
         Text[ catalan ] = "...";
+        Text[ finnish ] = "...";
     };
     GroupBox GB_OTHER {
             Pos = MAP_APPFONT( 4, 62 );
@@ -3534,6 +3664,7 @@ TabPage RID_TP_SPECIAL {
         Text[ arabic ] = "Other settings";
         Text[ turkish ] = "Dier ayarlar";
         Text[ catalan ] = "Otra configuraciÛn";
+        Text[ finnish ] = "Muut asetukset";
     };
     FixedText TIMEOUT_TEXT {
             Pos = MAP_APPFONT( 8, 70 );
@@ -3558,6 +3689,7 @@ TabPage RID_TP_SPECIAL {
         Text[ arabic ] = "Server Timeout";
         Text[ turkish ] = "Sunucu zaman a˛˝m˝";
         Text[ catalan ] = "DesconexiÛn temporal del servidor";
+        Text[ finnish ] = "Palvelimen aikakatkaisu";
     };
     TimeField SERVER_TIMEOUT {
             Border = TRUE;
@@ -3592,6 +3724,7 @@ TabPage RID_TP_SPECIAL {
         Text[ arabic ] = "AutoReload";
         Text[ turkish ] = "Otomatik yeniden y¸kleme";
         Text[ catalan ] = "Recarga autom·tica";
+        Text[ finnish ] = "Automaattinen uudelleenlataus";
     };
 //  CheckBox 5555 {
 //          Pos = MAP_APPFONT( 127, 70 );
@@ -3650,6 +3783,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ arabic ] = "Controls";
         Text[ turkish ] = "Denetimler";
         Text[ catalan ] = "Controles";
+        Text[ finnish ] = "Ohjaimet";
     };
     MultiListBox RID_MLB_CONTROLS {
             Border = TRUE;
@@ -3681,6 +3815,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ arabic ] = "Slots";
         Text[ turkish ] = "Yuvalar";
         Text[ catalan ] = "Puertos (slots)";
+        Text[ finnish ] = "Paikat";
     };
     MultiListBox RID_MLB_SLOTS {
             Border = TRUE;
@@ -3713,6 +3848,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ arabic ] = "Copy";
         Text[ turkish ] = "Kopyala";
         Text[ catalan ] = "Copiar";
+        Text[ finnish ] = "Kopioi";
     };
     PushButton RID_PB_BENENNEN {
             Pos = MAP_APPFONT( 216, 44 );
@@ -3739,6 +3875,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ arabic ] = "Name";
         Text[ turkish ] = "Adland˝r";
         Text[ catalan ] = "Nombrar";
+        Text[ finnish ] = "Nimi";
     };
     PushButton RID_PB_SELECTALL {
             Pos = MAP_APPFONT( 216, 44 );
@@ -3764,6 +3901,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ arabic ] = "Select all";
         Text[ turkish ] = "T¸m¸n¸ seÁ";
         Text[ catalan ] = "Seleccionar todos";
+        Text[ finnish ] = "Valitse kaikki";
     };
     OKButton RID_OK_CLOSE {
             Pos = MAP_APPFONT( 216, 144 );
@@ -3789,6 +3927,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ arabic ] = "Close";
         Text[ turkish ] = "Kapat";
         Text[ catalan ] = "Cerrar";
+        Text[ finnish ] = "Sulje";
     };
     Text[ portuguese ] = "Mostrar HId";
     Text[ russian ] = "Display HId";
@@ -3808,6 +3947,7 @@ FloatingWindow IDD_DISPLAY_HID {
     Text[ arabic ] = "Display HId";
     Text[ turkish ] = "Gˆr¸nt¸le: HId";
     Text[ catalan ] = "Mostrar HId";
+    Text[ finnish ] = "N‰yt‰ piilotunnus";
 };
 
 
@@ -3942,6 +4082,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ arabic ] = "Name";
         Text[ turkish ] = "Ad";
         Text[ catalan ] = "Nombre";
+        Text[ finnish ] = "Nimi";
     };
     FixedText RID_FT_CONTENT {
             Pos = MAP_APPFONT( 8, 21 );
@@ -3966,6 +4107,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ arabic ] = "Content";
         Text[ turkish ] = "›Áerik";
         Text[ catalan ] = "Contenido";
+        Text[ finnish ] = "Sis‰ltˆ";
     };
     FixedText RID_FT_NEW_CONTENT {
             Pos = MAP_APPFONT( 8, 38 );
@@ -3990,6 +4132,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ arabic ] = "New content";
         Text[ turkish ] = "Yeni iÁerik";
         Text[ catalan ] = "Nuevo contenido";
+        Text[ finnish ] = "Uusi sis‰ltˆ";
     };
     FixedText RID_FT_NAME_VALUE {
             Pos = MAP_APPFONT( 53, 8 );
@@ -4014,6 +4157,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ arabic ] = "Name of variable";
         Text[ turkish ] = "Dei˛ken ad˝";
         Text[ catalan ] = "nombre de variables";
+        Text[ finnish ] = "Muuttujan nimi";
     };
     FixedText RID_FT_CONTENT_VALUE {
             Pos = MAP_APPFONT( 53, 21 );
@@ -4038,6 +4182,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ arabic ] = "Previous contents";
         Text[ turkish ] = "Eski iÁerik";
         Text[ catalan ] = "Contenido antiguo";
+        Text[ finnish ] = "Edellinen sis‰ltˆ";
     };
     RadioButton RID_RB_NEW_BOOL_T {
             Hide = TRUE;
@@ -4064,6 +4209,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ arabic ] = "True";
         Text[ turkish ] = "Doru";
         Text[ catalan ] = "Verdadero";
+        Text[ finnish ] = "Tosi";
     };
     RadioButton RID_RB_NEW_BOOL_F {
             Hide = TRUE;
@@ -4090,6 +4236,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ arabic ] = "False";
         Text[ turkish ] = "Yanl˝˛";
         Text[ catalan ] = "Falso";
+        Text[ finnish ] = "Ep‰tosi";
     };
     NumericField RID_NF_NEW_INTEGER {
             Border = TRUE;
@@ -4145,6 +4292,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ arabic ] = "Edit";
         Text[ turkish ] = "D¸zenle";
         Text[ catalan ] = "Editar";
+        Text[ finnish ] = "Muokkaa";
     };
     OKButton RID_OK {
             Pos = MAP_APPFONT( 33, 58 );
@@ -4174,6 +4322,7 @@ ModelessDialog IDD_EDIT_VAR {
     Text[ arabic ] = "Edit variable";
     Text[ turkish ] = "Dei˛ken d¸zenle";
     Text[ catalan ] = "Editar variable";
+    Text[ finnish ] = "Muokkaa muuttujaa";
 };
 
 FloatingWindow LOAD_CONF {
@@ -4208,6 +4357,7 @@ FloatingWindow LOAD_CONF {
         Text[ arabic ] = "Slot IDs";
         Text[ turkish ] = "Slot IDs";
         Text[ catalan ] = "Slot IDs";
+        Text[ finnish ] = "Paikkatunnukset";
     };
     FixedText FILENAME {
             SVLook = TRUE;
@@ -4234,6 +4384,7 @@ FloatingWindow LOAD_CONF {
         Text[ arabic ] = "File.win";
         Text[ turkish ] = "File.win";
         Text[ catalan ] = "Archivo.win";
+        Text[ finnish ] = "Tiedosto.win";
     };
     Text[ portuguese ] = "A ler ficheiros de configuraÁ„o";
     Text[ russian ] = "Reading Configuration Files";
@@ -4253,4 +4404,5 @@ FloatingWindow LOAD_CONF {
     Text[ arabic ] = "Reading Configuration Files";
     Text[ turkish ] = "Konfig¸rasyon dosyalar˝ okunuyor";
     Text[ catalan ] = "Leyendo archivos de configuraciÛn";
+    Text[ finnish ] = "Luetaan kokoonpanotiedostoja";
 };
