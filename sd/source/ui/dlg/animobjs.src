@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-19 11:59:07 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1242,14 +1242,14 @@ DockingWindow FLT_WIN_ANIMATION
         StringList [ italian ] =
         {
             < "A sinistra/in alto" ; Default ; > ;
-            < "Sinistra" ; Default ; > ;
-            < "Sinistra/basso" ; Default ; > ;
+            < "A sinistra" ; Default ; > ;
+            < "A sinistra/in basso" ; Default ; > ;
             < "In alto" ; Default ; > ;
             < "Al centro" ; Default ; > ;
-            < "Basso" ; Default ; > ;
+            < "In basso" ; Default ; > ;
             < "A destra/in alto" ; Default ; > ;
-            < "Destra" ; Default ; > ;
-            < "Destra/basso" ; Default ; > ;
+            < "A destra" ; Default ; > ;
+            < "A destra/in basso" ; Default ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
@@ -1562,3 +1562,4 @@ DockingWindow FLT_WIN_ANIMATION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Animació";
 };
+
