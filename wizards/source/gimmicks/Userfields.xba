@@ -1,196 +1,274 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Userfields" script:language="StarBasic">Option Explicit
+&apos;Todo: Controlling Scrollbar via Keyboard
 
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Userfields" script:language="StarBasic">
-Public iUserFieldCount as integer
-Public LabelArray(10) as Object
-Public EditArray(10) as Object
-Public UserFieldName(255) as String
-Public UserFieldValue(255) as String
+Public Const SBMAXFIELDINDEX = 14
+
+Public DlgUserFields as Object
 Public oDocument as Object
-Public aTextField as Object
-Public aTextFieldEnum as Object
-Public const MAXFIELDCOUNT = 9
-Public UserFieldDataType(14) as String
+Public UserFieldDataType(SBMAXFIELDINDEX,1) as String
 Public ScrollBarValue as Integer
+Public UserFieldFamily(0, SBMAXfIELDINDEX) as String
+Public Const SBTBCOUNT = 9 
+Public oUserDataAccess as Object
+Public CurFieldIndex as Integer
+Public FilePath as String
 
 Sub StartChangesUserfields
-Dim a as Integer
-Dim CurElement, TFMaster as Object
-
-        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-	LoadLanguage(StarDesktop.ISOLocale.Language)
+Dim SystemPath as String
+	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	UserFieldDatatype(0,0) = &quot;COMPANY&quot;
+	UserFieldDatatype(0,1) = &quot;o&quot;
+	UserFieldDatatype(1,0) = &quot;FIRSTNAME&quot;
+	UserFieldDatatype(1,1) = &quot;givenname&quot;
+	UserFieldDatatype(2,0) = &quot;NAME&quot;
+	UserFieldDatatype(2,1) = &quot;sn&quot;
+	UserFieldDatatype(3,0) = &quot;SHORTCUT&quot;
+	UserFieldDatatype(3,1) = &quot;initials&quot;
+	UserFieldDatatype(4,0) = &quot;STREET&quot;
+	UserFieldDatatype(4,1) = &quot;street&quot;
+	UserFieldDatatype(5,0) = &quot;COUNTRY&quot;
+	UserFieldDatatype(5,1) = &quot;c&quot;
+	UserFieldDatatype(6,0) = &quot;ZIP&quot;
+	UserFieldDatatype(6,1) = &quot;postalcode&quot;
+	UserFieldDatatype(7,0) = &quot;CITY&quot;
+	UserFieldDatatype(7,1) = &quot;l&quot;
+	UserFieldDatatype(8,0) = &quot;TITLE&quot;
+	UserFieldDatatype(8,1) = &quot;title&quot;
+	UserFieldDatatype(9,0) = &quot;POSITION&quot;
+	UserFieldDatatype(9,1) = &quot;position&quot;
+	UserFieldDatatype(10,0) = &quot;PHONE_PRIVATE&quot;
+	UserFieldDatatype(10,1) = &quot;homephone&quot;
+	UserFieldDatatype(11,0) = &quot;PHONE_COMPANY&quot;
+	UserFieldDatatype(11,1) = &quot;telephonenumber&quot;
+	UserFieldDatatype(12,0) = &quot;FAX&quot;
+	UserFieldDatatype(12,1) = &quot;facsimiletelephonenumber&quot;
+	UserFieldDatatype(13,0) = &quot;EMAIL&quot;
+	UserFieldDatatype(13,1) = &quot;mail&quot;
+	UserFieldDatatype(14,0) = &quot;STATE&quot;
+	UserFieldDatatype(14,1) = &quot;st&quot;
+	FilePath = GetPathSettings(&quot;Config&quot;, False) &amp; &quot;/&quot; &amp; &quot;UserData.dat&quot;
+	DlgUserFields = LoadDialog(&quot;Gimmicks&quot;,&quot;UserfieldDlg&quot;)
+	SystemPath = ConvertFromUrl(FilePath)
+	DlgUserFields.Model.Label10.Label = ReplaceString(DlgUserFields.Model.Label10.Label, &quot;&apos;&quot; &amp; SystemPath &amp; &quot;&apos;&quot;, &quot;&lt;ConfigDir&gt;&quot;)
 	ScrollBarValue = 0
-	UserFieldDatatype(0) = &quot;COMPANY&quot;
-	UserFieldDatatype(1) = &quot;FIRSTNAME&quot;
-	UserFieldDatatype(2) = &quot;NAME&quot;
-	UserFieldDatatype(3) = &quot;SHORTCUT&quot;
-	UserFieldDatatype(4) = &quot;STREET&quot;
-	UserFieldDatatype(5) = &quot;COUNTRY&quot;
-	UserFieldDatatype(6) = &quot;ZIP&quot;
-	UserFieldDatatype(7) = &quot;CITY&quot;
-	UserFieldDatatype(8) = &quot;TITLE&quot;
-	UserFieldDatatype(9) = &quot;POSITION&quot;
-	UserFieldDatatype(10) = &quot;PHONE_PRIVATE&quot;
-	UserFieldDatatype(11) = &quot;PHONE_COMPANY&quot;
-	UserFieldDatatype(12) = &quot;FAX&quot;
-	UserFieldDatatype(13) = &quot;EMAIL&quot;
-	UserFieldDatatype(14) = &quot;STATE&quot;
-
-	On Local Error GoTo NODOCUMENT
-	oDocument = StarDesktop.ActiveFrame.Controller.Model
-	NODOCUMENT:
-	If Err &lt;&gt; 0 Then
-		Msgbox(Error$ &amp; &quot;This Macro gives you the opportunity to change all Userfields of a displayed Document.&quot; &amp; chr(13) &amp;_
-			   &quot;To start this macro you have to activate a Document first!&quot; , 16, &quot;StarOffice 5.2&quot;)
-		Exit Sub
-	End If
-	On Local Error Goto 0
-
-	&apos; Define TextFields
-	aTextfield = oDocument.getTextfields
-	aTextFieldEnum = aTextField.CreateEnumeration
-	a = 0
-	While aTextFieldEnum.hasmoreElements
-		CurElement = aTextFieldEnum.NextElement
-		If Not IsNull(CurElement) Then
-			If CurElement.PropertySetInfo.hasPropertybyName(&quot;Content&quot;) Then
-				TFMaster = CurElement.TextFieldMaster
-				a = a + 1
-				If a &gt;= 255 Then
-					MsgBox ErrorMsg1, 0 + 16, ErrorHeader
-					Exit Sub
-				End If
-				UserFieldName(a) = UserFieldDataType(CurElement.UserDataType)
-				UserFieldValue(a) = CurElement.Content
-			End If
-		End If
-	Wend
-	iUserFieldCount = a
-	If iUserFieldCount = 0 Then
-		MsgBox ErrorMsg2, 0+48, ErrorHeader
-		Exit Sub
-	End If
-
-	UserfieldDlg.Load
-
-	Call SetControlArray()
-	Call FillDialog()
-
-	UserFieldDlg.Show
+	oUserDataAccess = GetRegistryKeyContent(&quot;org.openoffice.UserProfile/Data&quot;, True)
+	InitializeUserFamily()
+	FillDialog()
+	DlgUserFields.Execute
+	DlgUserFields.Dispose()
 End Sub
-
 
 
 Sub FillDialog()
 Dim a as Integer
-	Call SetDialogText
-	For a = 1 To MaxFieldCount
-		If a &lt;= iUserFieldCount Then
-			LabelArray(a).Caption = UserFieldName(a)
-			EditArray(a).Text = UserFieldValue(a)
-		Else
-			LabelArray(a).Caption = &quot;&quot;
-			EditArray(a).Text = &quot;&quot;
-			LabelArray(a).Enabled = False
-			EditArray(a).Enabled = false
-		End If
-	Next a
-
-	If iUserFieldCount &gt; MaxFieldCount Then
-		UserfieldDlg.VScrollbar.Min = 0
-		UserfieldDlg.VScrollbar.Max = iUserFieldCount-MaxFieldCount
-		UserfieldDlg.VScrollbar.LargeChange = MaxFieldCount
-		UserfieldDlg.VScrollbar.SmallChange = 1
-	Else
-		UserfieldDlg.VScrollbar.enabled = False
-	End If
-
+	With DlgUserFields
+		For a = 1 To SBTBCount
+			.GetControl(&quot;Label&quot; &amp; a).Model.Label = UserFieldDataType(a-1,0)
+			.GetControl(&quot;TextField&quot; &amp; a).Model.Text = UserFieldFamily(CurFieldIndex, a-1)
+		Next a
+		.Model.ScrollBar1.ScrollValueMax = (SBMAXFIELDINDEX+1) - SBTBCOUNT
+		.Model.ScrollBar1.BlockIncrement = SBTBCOUNT
+		.Model.ScrollBar1.LineIncrement = 1
+		.Model.ScrollBar1.ScrollValue = ScrollBarValue
+	End With
 End Sub
 
 
-
-Sub Dlg_Scroll(ScrollValue)
-	Call ChangeArray(ScrollBarValue)
-	ScrollBarValue = UserfieldDlg.VScrollbar.Value
-	If (ScrollBarValue + MaxFieldCount) &gt; iUserFieldCount Then
-		ScrollBarValue = iUserFieldCount - MaxFieldCount
+Sub ScrollControls()
+	ScrollTextFieldInfo(ScrollBarValue)
+	ScrollBarValue = DlgUserFields.Model.ScrollBar1.ScrollValue
+	If (ScrollBarValue + SBTBCOUNT) &gt;= SBMAXFIELDINDEX + 1 Then
+		ScrollBarValue = (SBMAXFIELDINDEX + 1) - SBTBCOUNT
 	End If
-
-	For a = 1 To MaxFieldCount
-		LabelArray(a).Caption = UserFieldName(a + ScrollBarValue)
-		EditArray(a).Text = UserFieldValue(a + ScrollBarValue)
-	Next a
+	FillupTextFields()
 End Sub
 
 
-Sub ChangeArray(ByVal ScrollBarValue)
+Sub ScrollTextFieldInfo(ByVal iScrollValue as Integer)
 Dim a as Integer
-	For a = 1 To MaxFieldCount
-		UserFieldValue(a + ScrollBarValue) = EditArray(a).Text
+Dim CurIndex as Integer
+	For a = 1 To SBTBCOUNT
+		CurIndex = (a-1) + iScrollValue
+		UserFieldFamily(CurFieldIndex,CurIndex) = DlgUserFields.GetControl(&quot;TextField&quot; &amp; a).Model.Text
 	Next a
 End Sub
 
 
-Sub Cancel_Click
-	UserfieldDlg.Hide
+Sub StopMacro()
+	DlgUserFields.EndExecute
 End Sub
 
 
-Sub Save_Click
+Sub SaveSettings()
+Dim n as Integer
+Dim m as Integer
+Dim MaxIndex as Integer
+	ScrollTextFieldInfo(DlgUserFields.Model.ScrollBar1.ScrollValue)
+	MaxIndex = Ubound(UserFieldFamily(), 1)
+	Dim FileStrings(MaxIndex) as String
+	For n = 0 To MaxIndex
+		FileStrings(n) = &quot;&quot;
+		For m = 0 To SBMAXFIELDINDEX
+			FileStrings(n) = FileStrings(n) &amp; UserFieldFamily(n,m) &amp; &quot;;&quot;
+		Next m
+	Next n
+	SaveDataToFile(FilePath, FileStrings(), True)
+End Sub
+
+
+Sub SaveDataToFile(FilePath as String, DataList() as String)
+Dim FileChannel as Integer
 Dim i as Integer
-Dim CurElement, TFMaster as Object
+Dim oFile as Object
+Dim oOutputStream as Object
+Dim oStreamString as Object
+Dim oUcb as Object
+Dim sCRLF as String
 
-	UserfieldDlg.CancelChanges.Enabled = false
-	UserfieldDlg.SaveChanges.Enabled = false
+	sCRLF = CHR(10) &amp; CHR(13)
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	oOutputStream = createUnoService(&quot;com.sun.star.io.TextOutputStream&quot;)
+	If oUcb.Exists(FilePath) Then
+		oUcb.Kill(FilePath)
+	End If
+	oFile = oUcb.OpenFileReadWrite(FilePath)
+	oOutputStream.SetOutputStream(oFile.GetOutputStream)
+	For i = 0 To Ubound(DataList())
+		oOutputStream.WriteString(DataList(i) &amp; sCRLF)
+	Next i
+	oOutputStream.CloseOutput()
+End Sub
 
-	ChangeArray(UserfieldDlg.VScrollbar.Value)
 
-	aTextfield = oDocument.getTextfields
-	aTextFieldEnum = aTextField.CreateEnumeration
-	i = 1
-	While aTextFieldEnum.hasmoreElements
-		CurElement = aTextFieldEnum.NextElement
-		If Not IsNull(CurElement) Then
-			If Curelement.PropertySetInfo.hasPropertybyName(&quot;Content&quot;) Then
-				If CurElement.Content &lt;&gt; UserFieldValue(i) Then
-					CurElement.Content = UserFieldValue(i)
-				End If
-				i = i  + 1
+Sub ToggleButtons(ByVal Index as Integer)
+Dim i as Integer
+	CurFieldIndex = Index
+	DlgUserFields.Model.cmdNextUser.Enabled = CurFieldIndex &lt;&gt; Ubound(UserFieldFamily(), 1)
+	DlgUserFields.Model.cmdPrevUser.Enabled = CurFieldIndex &lt;&gt; 0
+End Sub
+
+
+Function LoadDataFromFile(FilePath as String, DataList() as String) as Boolean
+Dim oInputStream as Object
+Dim i as Integer
+Dim oUcb as Object
+Dim oFile as Object
+Dim MaxIndex as Integer
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	If oUcb.Exists(FilePath) Then
+		MaxIndex = 10
+		oInputStream = createUnoService(&quot;com.sun.star.io.TextInputStream&quot;)
+		oFile = oUcb.OpenFileReadWrite(FilePath)
+		oInputStream.SetInputStream(oFile.GetInputStream)
+		i = -1
+		Redim Preserve DataList(MaxIndex) as String
+		While Not oInputStream.IsEOF
+			i = i + 1
+			If i &gt; MaxIndex Then
+				MaxIndex = MaxIndex + 10
+				Redim Preserve DataList(MaxIndex) as String
 			End If
+			DataList(i) = oInputStream.ReadLine
+		Wend
+		If i &gt; -1 And i &lt;&gt; MaxIndex Then
+			Redim Preserve DataList(i) as String
 		End If
-	Wend
-	aTextField.Refresh
-	UserfieldDlg.Hide
+		LoadDataFromFile() = True
+		oOutputStream.CloseInput()
+	Else
+		LoadDataFromFile() = False
+	End If
+End Function
+
+
+Sub InitializeUserFamily()
+Dim FirstIndex as Integer
+Dim UserFieldstrings() as String
+Dim LocStrings() as String
+Dim bFileExists as Boolean
+Dim n as Integer
+Dim m as Integer
+	bFileExists = LoadDataFromFile(GetPathSettings(&quot;Config&quot;, False) &amp; &quot;/&quot; &amp; &quot;UserData.dat&quot;, UserFieldStrings())
+	If bFileExists Then
+		FirstIndex = Ubound(UserFieldStrings())
+		ReDim Preserve UserFieldFamily(FirstIndex, SBMAXFIELDINDEX) as String
+		For n = 0 To FirstIndex
+			LocStrings() = ArrayOutofString(UserFieldStrings(n), &quot;;&quot;)
+			For m = 0 To SBMAXFIELDINDEX
+				UserFieldFamily(n,m) = LocStrings(m)
+			Next m
+		Next n
+	Else
+		ReDim Preserve UserFieldFamily(0,SBMAXFIELDINDEX) as String
+		For m = 0 To SBMAXFIELDINDEX
+			UserFieldFamily(0,m) = oUserDataAccess.GetByName(UserFieldDataType(m,1))
+		Next m
+	End If
+	ToggleButtons(0)
 End Sub
 
 
-
-Sub SetControlArray()
-	Set LabelArray(1) = UserfieldDlg.Label1
-	Set EditArray(1) = UserfieldDlg.Textbox1
-	Set LabelArray(2) = UserfieldDlg.Label2
-	Set EditArray(2) = UserfieldDlg.Textbox2
-	Set LabelArray(3) = UserfieldDlg.Label3
-	Set EditArray(3) = UserfieldDlg.Textbox3
-	Set LabelArray(4) = UserfieldDlg.Label4
-	Set EditArray(4) = UserfieldDlg.Textbox4
-	Set LabelArray(5) = UserfieldDlg.Label5
-	Set EditArray(5) = UserfieldDlg.Textbox5
-	Set LabelArray(6) = UserfieldDlg.Label6
-	Set EditArray(6) = UserfieldDlg.Textbox6
-	Set LabelArray(7) = UserfieldDlg.Label7
-	Set EditArray(7) = UserfieldDlg.Textbox7
-	Set LabelArray(8) = UserfieldDlg.Label8
-	Set EditArray(8) = UserfieldDlg.Textbox8
-	Set LabelArray(9) = UserfieldDlg.Label9
-	Set EditArray(9) = UserfieldDlg.Textbox9
+Sub AddRecord()
+Dim i as Integer
+Dim MaxIndex as Integer
+	For i = 1 To SBTBCount
+		DlgUserFields.GetControl(&quot;TextField&quot; &amp; i).Model.Text = &quot;&quot;
+	Next i
+	MaxIndex = Ubound(UserFieldFamily(),1)
+	ReDim Preserve UserFieldFamily(MaxIndex + 1, SBMAXFIELDINDEX) as String
+	ToggleButtons(MaxIndex + 1, 1)
 End Sub
 
 
-Sub SetDialogText
-	UserfieldDlg.caption = HeaderLabel
-	UserfieldDlg.HeaderLabel.Caption = HeaderLabel
-	UserfieldDlg.CancelChanges.Caption = CancelButton
-	UserfieldDlg.SaveChanges.Caption = SaveButton
+Sub FillupTextFields()
+Dim a as Integer
+Dim CurIndex as Integer
+	For a = 1 To SBTBCOUNT
+		CurIndex = (a-1) + ScrollBarValue
+		DlgUserFields.GetControl(&quot;Label&quot; &amp; a).Model.Label = UserFieldDataType(CurIndex,0)
+		DlgUserFields.GetControl(&quot;TextField&quot; &amp; a).Model.Text = UserFieldFamily(CurFieldIndex, CurIndex)
+	Next a
 End Sub
-</script:module>
+
+
+Sub StepToRecord(aEvent as Object)
+Dim iStep as Integer
+	iStep = CInt(aEvent.Source.Model.Tag)
+	ScrollTextFieldInfo(ScrollBarValue)
+	ToggleButtons(CurFieldIndex  + iStep)
+	FillUpTextFields()
+End Sub
+
+
+Sub SelectCurrentFields()
+Dim MaxIndex as Integer
+Dim i as Integer
+	ScrollTextFieldInfo(ScrollBarValue)
+	MaxIndex = Ubound(UserFieldFamily(),2)
+	For i = 0 To MaxIndex
+		oUserDataAccess.ReplaceByName(UserFieldDataType(i,1), UserFieldFamily(CurFieldIndex, i))
+	Next i
+	oUserDataAccess.commitChanges()
+End Sub
+
+
+Sub DeleteCurrentSettings()
+Dim n as Integer
+Dim m as Integer
+Dim MaxIndex as Integer
+	MaxIndex = Ubound(UserFieldFamily(),1)
+	If CurFieldIndex &lt; MaxIndex Then
+		For n = CurFieldIndex To MaxIndex - 1
+			For m = 0 To SBMAXFIELDINDEX
+				UserFieldFamily(n,m) = UserFieldFamily(n + 1,m)
+			Next m
+		Next n	
+	Else
+		CurFieldIndex = MaxIndex - 1
+	End If
+	ReDim Preserve UserFieldFamily(MaxIndex-1, SBMAXfIELDINDEX) as String
+	FillupTextFields()
+	ToggleButtons(CurFieldIndex)
+End Sub</script:module>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="GetTexts" script:language="StarBasic">Option Explicit
 &apos; Option für doppelte Strings
 &apos; Alternativtexte, Namen usw für HTML-Seiten--&gt; ist Anbindung an StarOfficeAPI geplant?
@@ -27,35 +27,34 @@ Sub Main
 Dim sDocType as String
 Dim oHyperCursor as Object
 Dim oCharStyles as Object
-
-        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-
+    BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	On Local Error GoTo NODOCUMENT
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	sDocType = GetDocumentType(oDocument)
 	NODOCUMENT:
 	If Err &lt;&gt; 0 Then
 		Msgbox(&quot;This Macro extracts all Data of the displayed Writer-, Calc or Draw-Documents.&quot; &amp; chr(13) &amp;_
-			   &quot;To start this macro you have to activate a Document first!&quot; , 16, &quot;StarOffice 5.2&quot;)
+			   &quot;To start this macro you have to activate a Document first!&quot; , 16, GetProductName)
 		Exit Sub
 	End If
 	On Local Error Goto 0
 
 	&apos; Open a new document where all the texts are inserted
-	oLogDocument = StarDesktop.LoadComponentFromURL( &quot;staroffice:factory/swriter&quot;,&quot;_blank&quot;,0,NoArgs())
+	oLogDocument = StarDesktop.LoadComponentFromURL( &quot;private:factory/swriter&quot;,&quot;_blank&quot;,0,NoArgs())
 	oLogText = oLogDocument.Text
 
 	&apos; create and define the character styles of the Log-document
 	oCharStyles = oLogDocument.StyleFamilies.GetByName(&quot;CharacterStyles&quot;)
 	oLogHeaderStyle = oLogDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
+	oCharStyles.InsertbyName(&quot;LogHeaderText&quot;, oLogHeaderStyle)
+
 	oLogHeaderStyle.charWeight = com.sun.star.awt.FontWeight.BOLD
 	oLogBodyTextStyle = oLogDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
-	oCharStyles.InsertbyName(&quot;LogHeading&quot;, oLogHeaderStyle)
 	oCharStyles.InsertbyName(&quot;LogBodyText&quot;, oLogBodyTextStyle)
 
 	&apos; Insert the title of the activated document as a hyperlink
 	oHyperCursor = oLogText.createTextCursor()
-	oHyperCursor.charWeight = com.sun.star.awt.FontWeight.BOLD
+	oHyperCursor.CharWeight = com.sun.star.awt.FontWeight.BOLD
 	oHyperCursor.gotoStart(False)
 	oHyperCursor.HyperLinkURL = oDocument.URL
 	oHyperCursor.HyperLinkTarget = oDocument.URL
@@ -77,14 +76,14 @@ Dim oCharStyles as Object
 	GetDocumentInfo()
 
 	Select Case sDocType
-		Case &quot;sWriter&quot;
+		Case &quot;swriter&quot;
 			GetWriterStrings()
-		Case &quot;sCalc&quot;
+		Case &quot;scalc&quot;
 			GetCalcStrings()
-		Case &quot;sDraw&quot;
+		Case &quot;sdraw&quot;
 			GetDrawStrings()
 		Case Else
-			Msgbox(&quot;This Macro only works with Writer-, Calc or Draw/Impress-Documents!&quot;, 16, &quot;StarOffice 5.2&quot;)
+			Msgbox(&quot;This Macro only works with Writer-, Calc or Draw/Impress-Documents!&quot;, 16, GetProductName())
 	End Select
 
 End Sub
@@ -134,7 +133,7 @@ Dim BigRange, BigEnum, oCell as Object
 	BigEnum = BigRange.GetCells.CreateEnumeration
 	While BigEnum.hasmoreElements
 		oCell = BigEnum.NextElement
-		If (oCell.Type = com.sun.star.util.NumberFormat.TEXT) AND (oCell.String &lt;&gt; &quot;&quot;) then
+		If oCell.String &lt;&gt; &quot;&quot; And Val(oCell.String) = 0then
 			WriteStringtoLogFile(oCell.String)
 		End If
 	Wend
@@ -382,7 +381,7 @@ Dim oPage, oPageElement, oShape as Object
 					For s = 0 To oPageElement.Count - 1
 						WriteStringToLogFile(oPageElement.GetByIndex(s).String)
 					Next s
-				Else
+				ElseIf HasUnoInterfaces(oPageElement, &quot;com.sun.star.text.XText&quot;) Then
 					WriteStringtoLogFile(oPageElement.String)
 				End If
 			Next
@@ -512,8 +511,6 @@ End Sub
 &apos; ***********************************************LogDocument**************************************************
 
 Sub WriteStringtoLogFile( sString as String)
-
-	&apos; Schreibt den String in ein Array
 	If (Not FieldInArray(LogArray(),LogIndex,sString))AND (NOT ISNULL(sString)) Then
 		LogArray(LogIndex) = sString
 		LogIndex = LogIndex + 1
@@ -524,89 +521,9 @@ End Sub
 
 
 Sub MakeLogHeadLine(HeadText as String)
-	oLogCursor.CharStyle = &quot;LogHeading&quot;
+	oLogCursor.CharStyleName = &quot;LogHeaderText&quot;
 	oLogText.insertControlCharacter(oLogCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
 	oLogText.insertString(oLogCursor,HeadText,False)
 	oLogText.insertControlCharacter(oLogCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
-	oLogCursor.CharStyle = &quot;LogBodyText&quot;
-End Sub
-
-
-
-&apos;Sub GetHTMLStrings(SearchString as String)
-&apos;Dim i,AsciiCount as integer
-&apos;Dim AsciiLocChar as string
-&apos;Dim TTString,AddString as String
-&apos;Dim oTextCursor as object
-&apos;Dim LeaveLoop as Boolean
-
-&apos;	oSearchDesc = oDocument.createSearchDescriptor()
-&apos;	oSearchDesc.SearchRegularExpression = True
-&apos;	oSearchDesc.Searchstring = SearchString &amp; &quot;&quot;&quot;&quot; &amp; &quot;*&quot; &amp; &quot;&quot;&quot;&quot;
-&apos;	oFoundall = oDocument.FindAll(oSearchDesc)
-
-&apos;	For i = 0 to oFoundAll.Count-1
-&apos;		oFound = oFoundall(i)
-&apos;		oTextCursor = oDocument.text.CreateTextCursorbyRange(oFound)
-&apos;		oTextCursor.GotoNextWord(false)
-&apos;		oTextCursor.GotoStartofWord(True)
-&apos;		oTextCursor.GoRight(1,True)
-&apos;		TTString = oTextCursor.String
-&apos;		If	Left(TTString,1) = &quot;&quot;&quot;&quot; Then
-&apos;			LeaveLoop = False
-&apos;			oTextCursor.GoRight(1,True)
-&apos;			Do
-&apos;				oTextCursor.GoRight(1,True)
-&apos;				TTString = TTString + Right(oTextCursor.String,1)
-&apos;				If Right(oTextCursor.String,1) = &quot;&quot;&quot;&quot; Then
-&apos;					TTString = ReplaceString(TTString,&quot;&quot;,&quot;&quot;&quot;&quot;)
-&apos;					LeaveLoop = True
-&apos;				End If
-&apos;			Loop Until LeaveLoop = True
-&apos;
-&apos;		End If
-&apos;
-&apos;		If TTString &lt;&gt; &quot;&quot; then
-&apos;			TTString = ReplaceHTMLChars(TTString)
-&apos;			WriteStringtoLogFile(TTString)
-&apos;		End if
-&apos;	Next i
-&apos;
-&apos;End Sub
-
-&apos;	If sDocMimeType = &quot;text/html&quot; then
-&apos;		FileProperties(0).Name = &quot;FilterName&quot;
-&apos;		FileProperties(0).Value = &quot;swriter: TEXT&quot;
-&apos;		FilePath = oDocument.URL
-&apos;		oDocument.Dispose
-&apos;
-&apos;		oDocument = OpenDocument(FilePath,FileProperties(),StarDesktop)   	&apos;!!!!!!!
-&apos;
-&apos;		MakeLogHeadLine(&quot;Alternativtexte&quot;)
-&apos;		GetHTMLStrings(&quot;ALT=&quot;)
-&apos;
-&apos;		MakeLogHeadLine(&quot;Referenzen&quot;)
-&apos;		GetHTMLStrings(&quot;HREF=&quot;)
-&apos;
-&apos;		MakeLogHeadLine(&quot;Namen&quot;)
-&apos;		GetHTMLStrings(&quot;NAME=&quot;)
-&apos;	Else
-
-
-Sub LoadLibrary(sLibname as String)
-Dim oArg(0) as new com.sun.star.beans.PropertyValue
-Dim oUrl as new com.sun.star.util.URL
-Dim oTrans as Object
-Dim oDisp as Object
-
-	oArg(0).Name = &quot;LibraryName&quot;
-	oArg(0).Value = sLibname
-
-	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
-	oUrl.Complete = &quot;slot:6517&quot;
-	oTrans.parsestrict(oUrl)
-
-	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)
-	oDisp.dispatch(oUrl, oArg())
-End Sub
-</script:module>
+	oLogCursor.CharStyleName = &quot;LogBodyText&quot;
+End Sub</script:module>

@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="AutoText" script:language="StarBasic">&apos; BASIC
 Option Explicit
+Dim oDocument as Object
+Dim sDocumentTitle as String
 
 &apos; Todo: Problem mit der Spaltenbreite lösen
 &apos; Internationale Vorlage für Überschrift
-Sub Main
-Dim oDocument, oTable, oRows, oDocuText, oTitleCursor as Object
-Dim oAutoTextContainer, oAutogroup, oAutoText as Object
-Dim oCharStyles, oContentStyle, oHeaderStyle, oGroupTitleStyle as Object
+Sub Main()
+Dim oTable as Object
+Dim oRows as Object
+Dim oDocuText as Object
+Dim oAutoTextCursor as Object
+Dim oAutoTextContainer as Object
+Dim oAutogroup as Object
+Dim oAutoText as Object
+Dim oCharStyles as Object
+Dim oContentStyle as Object
+Dim oHeaderStyle as Object
+Dim oGroupTitleStyle as Object
 Dim n, m, iAutoCount as Integer
-
-        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-	LoadLanguage(StarDesktop.ISOLocale.Language)
+Dim oLocale as New com.sun.star.lang.Locale	
+	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	oLocale = GetStarOfficeLocale()
+	strHeading1 = &quot;Überschrift 1&quot;
+	strGroup = &quot;Bereich:&quot;
+	strBlockName = &quot;Name des Bausteins&quot;
+	strBlockShortName = &quot;Kürzel&quot;
+	strColumnWidth = &quot;13cm&quot;
+	sDocumentTitle = &quot;Installierte Autotextbausteine&quot;
 
 	&apos; Open a new empty document
-	oDocument = StarDesktop.LoadComponentFromURL(&quot;staroffice:factory/swriter&quot;,&quot;_blank&quot;,0,NoArgs)
+	oDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;,&quot;_blank&quot;,0,NoArgs)
+	oDocument.DocumentInfo.Title = sDocumentTitle
 	oDocuText = oDocument.Text
 
 	&apos; Create The Character-templates
@@ -23,14 +40,15 @@ Dim n, m, iAutoCount as Integer
 
 	&apos; The Characterstyle for the Header that describes the Title of Autotextgroups
 	oGroupTitleStyle = oDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
-	oGroupTitleStyle.charWeight = com.sun.star.awt.FontWeight.BOLD
-	oGroupTitleStyle.CharHeight = 14
 	oCharStyles.InsertbyName(&quot;AutoTextGroupTitle&quot;, oGroupTitleStyle)
+
+	oGroupTitleStyle.CharWeight = com.sun.star.awt.FontWeight.BOLD
+	oGroupTitleStyle.CharHeight = 14
 
 	&apos; The Characterstyle for the Header that describes the Title of Autotextgroups
 	oHeaderStyle = oDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
-	oHeaderStyle.charWeight = com.sun.star.awt.FontWeight.BOLD
 	oCharStyles.InsertbyName(&quot;AutoTextHeading&quot;, oHeaderStyle)
+	oHeaderStyle.CharWeight = com.sun.star.awt.FontWeight.BOLD
 
 	&apos; &quot;Ordinary&quot; Table Content
 	oContentStyle = oDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
@@ -38,23 +56,24 @@ Dim n, m, iAutoCount as Integer
 
 	oAutoTextContainer = CreateUnoService(&quot;com.sun.star.text.AutoTextContainer&quot;)
 
-	oTitleCursor = oDocuText.CreateTextCursor()
-	oTitleCursor.CharStyle = &quot;AutoTextGroupTitle&quot;
+	oAutoTextCursor = oDocuText.CreateTextCursor()
+	
+	oAutoTextCursor.CharStyleName = &quot;AutoTextGroupTitle&quot;
 	&apos; Link the Title with the following table
-	oTitleCursor.ParaKeepTogether = True
+	oAutoTextCursor.ParaKeepTogether = True
 
 	For n = 0 To oAutoTextContainer.Count - 1
 		oAutoGroup = oAutoTextContainer.GetByIndex(n)
 
-		oTitleCursor.SetString(oAutoGroup.Title)
-		oTitleCursor.CollapseToEnd()
-   		oDocuText.insertControlCharacter(oCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
+		oAutoTextCursor.SetString(oAutoGroup.Title)
+		oAutoTextCursor.CollapseToEnd()
+   		oDocuText.insertControlCharacter(oAutoTextCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
 		oTable = oDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
 		&apos; Divide the table if necessary
 		oTable.Split = True
 &apos;		oTable.KeepTogether = False
 		oTable.RepeatHeadLine = True
-		oTitleCursor.Text.InsertTextContent(oCursor,oTable,False)
+		oAutoTextCursor.Text.InsertTextContent(oAutoTextCursor,oTable,False)
 		InsertStringToCell(&quot;AutoText-Title&quot;,oTable.GetCellbyPosition(0,0), &quot;AutoTextHeading&quot;)
 		InsertStringToCell(&quot;AutoText-Name&quot;,oTable.GetCellbyPosition(1,0), &quot;AutoTextHeading&quot;)
 		&apos; Insert one row at the bottom of the table
@@ -69,8 +88,8 @@ Dim n, m, iAutoCount as Integer
 				oRows.InsertbyIndex(m + 2,1)
 			End If
 		Next m
-   		oDocuText.insertControlCharacter(oCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
-		oCursor.CollapseToEnd()
+   		oDocuText.insertControlCharacter(oAutoTextCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
+		oAutoTextCursor.CollapseToEnd()
 	Next n
 End Sub
 
@@ -78,6 +97,7 @@ End Sub
 Sub InsertStringToCell(sCellString as String, oCell as Object, sCellStyle as String)
 Dim oCellCursor as Object
 	oCellCursor = oCell.CreateTextCursor()
-	oCellCursor.CharStyle = sCellStyle
+	oCellCursor.CharStyleName = sCellStyle
 	oCell.Text.insertString(oCellCursor,sCellString,False)
+	oDocument.CurrentController.Select(oCellCursor)
 End Sub</script:module>
