@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-02 15:07:16 $
+ *  last change: $Author: tl $ $Date: 2000-11-03 13:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,8 +196,7 @@ void SmConfig::UseDefault()
     bNoRightSpaces = TRUE;
 
     aSymbolFile = C2S(DEFSYMFILE);
-    SfxIniManager* pIniMgr = SFX_INIMANAGER();
-    pIniMgr->SearchFile( aSymbolFile, SFX_KEY_USERCONFIG_PATH );
+    SFX_INIMANAGER()->SearchFile( aSymbolFile, SFX_KEY_USERCONFIG_PATH );
 
     ePrintSize  = PRINT_SIZE_NORMAL;
     nPrintZoom  = 100;

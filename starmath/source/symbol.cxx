@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-02 15:07:16 $
+ *  last change: $Author: tl $ $Date: 2000-11-03 13:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,8 +579,7 @@ void SmSymSetManager::Load(const String &rURL)
         {
             ErrorBox aErrorBox( NULL, SmResId( RID_READSYMBOLERROR ) );
             String aString( aErrorBox.GetMessText() );
-            String aIniFile = SFX_INIMANAGER()->SubstPathVars( aStreamName );
-            aString.SearchAndReplaceAscii( "%FILE%", aIniFile );
+            aString.SearchAndReplaceAscii( "%FILE%", aStreamName );
             aErrorBox.SetMessText( aString );
             aErrorBox.Execute();
 

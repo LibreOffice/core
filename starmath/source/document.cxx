@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: tl $ $Date: 2000-11-03 13:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,8 +262,6 @@ void SmDocShell::LoadSymbols()
 {
     SmModule *pp = SM_MOD1();
     String sURL(pp->GetConfig()->GetSymbolFile());
-    SfxIniManager* pIniMgr = SFX_INIMANAGER();
-    sURL = pIniMgr->SubstPathVars( sURL );
     BOOL bExist = FALSE;
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INET_PROT_FILE );
@@ -276,7 +274,7 @@ void SmDocShell::LoadSymbols()
     }
     catch(...){}
     if(!bExist)
-        pIniMgr->SearchFile( sURL, SFX_KEY_USERCONFIG_PATH );
+        SFX_INIMANAGER()->SearchFile( sURL, SFX_KEY_USERCONFIG_PATH );
 
     sURL = URIHelper::SmartRelToAbs(sURL);
     pp->GetSymSetManager()->Load(sURL);
