@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-06 09:02:44 $
+ *  last change: $Author: cl $ $Date: 2001-06-29 09:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@ struct SvxIDPropertyCombine
 
 DECLARE_LIST( SvxIDPropertyCombineList, SvxIDPropertyCombine * );
 
-SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMap* pMap )
-:   _pMap(pMap)
+SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMap* pMap, sal_Bool bConvertTwips )
+:   _pMap(pMap), mbConvertTwips(bConvertTwips)
 {
     pItemPool = NULL;
     pCombiList = NULL;
