@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:22:57 $
+ *  last change: $Author: kz $ $Date: 2002-01-17 21:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1684,7 +1684,7 @@ TabPage TP_STD_FONT
         Text [ finnish ] = "~Hakemisto" ;
         Text [ danish ] = "Indeks" ;
         Text [ french ] = "~Index" ;
-        Text [ swedish ] = "~Katalog" ;
+        Text [ swedish ] = "~Förteckning" ;
         Text [ dutch ] = "~Index" ;
         Text [ spanish ] = "Í~ndice" ;
         Text [ english_us ] = "~Index" ;
