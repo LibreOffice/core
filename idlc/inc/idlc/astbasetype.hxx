@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astbasetype.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ public:
 
     virtual ~AstBaseType() {}
 
-    const ExprType getExprType()
+    const ExprType getExprType() const
         { return m_exprType; }
 private:
     const ExprType m_exprType;
