@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-26 14:25:20 $
+ *  last change: $Author: os $ $Date: 2002-04-05 07:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,6 +354,51 @@ ImageList RID_DEFAULTIMAGELIST_SC
     IMAGELIST_AND_COUNT
 };
 ImageList RID_DEFAULTIMAGELIST_LC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lc_out.bmp" ;
+        File [ english ] = "lc_out01.bmp" ;
+        File [ english_us ] = "lc_out01.bmp" ;
+        File [ dutch ] = "lc_out31.bmp" ;
+        File [ french ] = "lc_out33.bmp" ;
+        File [ spanish ] = "lc_out34.bmp" ;
+        File [ italian ] = "lc_out39.bmp" ;
+        File [ swedish ] = "lc_out46.bmp" ;
+        File [ danish ] = "lc_out45.bmp" ;
+        File [ russian ] = "lc_out07.bmp" ;
+        File [ polish ] = "lc_out48.bmp" ;
+        File [ greek ] = "lc_out30.bmp" ;
+        File [ japanese ] = "lc_out81.bmp" ;
+        File [ portuguese ] = "lc_out03.bmp" ;
+    };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    IMAGELIST_AND_COUNT
+};
+
+ImageList RID_DEFAULTIMAGELIST_SCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc_out.bmp" ;
+        File [ english ] = "sc_out01.bmp" ;
+        File [ english_us ] = "sc_out01.bmp" ;
+        File [ dutch ] = "sc_out31.bmp" ;
+        File [ french ] = "sc_out33.bmp" ;
+        File [ spanish ] = "sc_out34.bmp" ;
+        File [ italian ] = "sc_out39.bmp" ;
+        File [ swedish ] = "sc_out46.bmp" ;
+        File [ danish ] = "sc_out45.bmp" ;
+        File [ russian ] = "sc_out07.bmp" ;
+        File [ polish ] = "sc_out48.bmp" ;
+        File [ greek ] = "sc_out30.bmp" ;
+        File [ japanese ] = "sc_out81.bmp" ;
+        File [ portuguese ] = "sc_out03.bmp" ;
+    };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    IMAGELIST_AND_COUNT
+};
+ImageList RID_DEFAULTIMAGELIST_LCH
 {
     ImageBitmap = Bitmap
     {
