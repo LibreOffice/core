@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:22:16 $
+#   last change: $Author: vg $ $Date: 2003-10-09 10:16:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,6 @@ JAVATESTFILES := \
     AnyConverter_Test.java \
     UnoRuntime_Test.java \
     WeakReference_Test.java
-JARFILES := ridl.jar sandbox.jar
+JARFILES := ridl.jar
 
 .INCLUDE: javaunittest.mk
