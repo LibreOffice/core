@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:47:09 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ ModalDialog DLG_VECTORIZE
         Text[ hebrew ] = "~Vorschau";
         Text[ hindi ] = "पूर्वदृश्य";
         Text[ slovak ] = "Náhľad";
+        Text[ hungarian ] = "Előnézet";
+        Text[ slovenian ] = "Predogled";
     };
 
     FixedLine GRP_SETTINGS
@@ -171,6 +173,8 @@ ModalDialog DLG_VECTORIZE
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "Settings";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Nastavitve";
     };
 
     FixedText FT_LAYERS
@@ -205,6 +209,8 @@ ModalDialog DLG_VECTORIZE
         Text[ hebrew ] = "~Farbanzahl:";
         Text[ hindi ] = "रंगों की संख्या:";
         Text[ slovak ] = "Počet farieb:";
+        Text[ hungarian ] = "Színek száma:";
+        Text[ slovenian ] = "Število barv:";
     };
 
     NumericField NM_LAYERS
@@ -255,6 +261,8 @@ ModalDialog DLG_VECTORIZE
         Text[ hebrew ] = "~Punkt-Reduktion:";
         Text[ hindi ] = "बिन्दु घटाना:";
         Text[ slovak ] = "Redukcia bodov:";
+        Text[ hungarian ] = "Pontkisebbítés:";
+        Text[ slovenian ] = "Zmanjšanje števila točk:";
     };
 
     MetricField MT_REDUCE
@@ -286,7 +294,7 @@ ModalDialog DLG_VECTORIZE
         Text[ italian ] = "Riempi vuoti:";
         Text[ portuguese_brazilian ] = "~Preencher buracos:";
         Text[ portuguese ] = "~Preencher buracos:";
-        Text[ danish ] = "Fyld huller:";
+        Text[ danish ] = "~Fyld huller:";
         Text[ french ] = "~Boucher les trous";
         Text[ swedish ] = "F~yll h�l";
         Text[ dutch ] = "~Gaten opvullen";
@@ -308,6 +316,8 @@ ModalDialog DLG_VECTORIZE
         Text[ hebrew ] = "~Löcher füllen";
         Text[ hindi ] = "~छेदों को भरो:";
         Text[ slovak ] = "Vy~plnenie dier:";
+        Text[ hungarian ] = "~Lyukak kitöltése:";
+        Text[ slovenian ] = "Zapol~ni luknje:";
     };
 
     FixedText FT_FILLHOLES
@@ -342,6 +352,8 @@ ModalDialog DLG_VECTORIZE
         Text[ hebrew ] = "~Kachelgröße:";
         Text[ hindi ] = "टइल परिमाण:";
         Text[ slovak ] = "Veľkosť dlaždice:";
+        Text[ hungarian ] = "Mozaikméret:";
+        Text[ slovenian ] = "Velikost ploščice:";
     };
 
     MetricField MT_FILLHOLES
@@ -394,6 +406,8 @@ ModalDialog DLG_VECTORIZE
         Text[ hebrew ] = "Originalbild:";
         Text[ hindi ] = "मूल चित्र:";
         Text[ slovak ] = "Zdrojový obrázok:";
+        Text[ hungarian ] = "Forráskép:";
+        Text[ slovenian ] = "Izvirna slika:";
     };
 
     Control CTL_BMP
@@ -435,6 +449,8 @@ ModalDialog DLG_VECTORIZE
         Text[ hebrew ] = "Vektorisiertes Bild:";
         Text[ hindi ] = "वेक्टरइस्ड चित्र:";
         Text[ slovak ] = "Vektorizovaný obrázok:";
+        Text[ hungarian ] = "Vektorizált kép:";
+        Text[ slovenian ] = "Vektorizirana slika:";
     };
 
     Control CTL_WMF
@@ -476,6 +492,8 @@ ModalDialog DLG_VECTORIZE
         Text[ hebrew ] = "Fortschritt";
         Text[ hindi ] = "Progress";
         Text[ slovak ] = "Priebeh";
+        Text[ hungarian ] = "Folyamat";
+        Text[ slovenian ] = "Potek";
     };
 
     Window WND_PRGS
@@ -510,7 +528,10 @@ ModalDialog DLG_VECTORIZE
     Text[ hebrew ] = "In Polygon umwandeln";
     Text[ hindi ] = "बहुभुज में बदलो";
     Text[ slovak ] = "Previesť na mnohouholník";
+    Text[ hungarian ] = "Sokszöggé alakítás";
+    Text[ slovenian ] = "Pretvori v mnogokotnik";
 };
+
 
 
 
