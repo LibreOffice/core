@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-23 15:54:23 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,7 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::i18n;
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
@@ -831,90 +832,40 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
 {
     ExtTextView* pTextView = aEditWin.GetTextView();
     TextSelection aSel;
+    TextPaM aPaM;
+
     BOOL bForward = !rSearchItem.GetBackward();
-    BOOL bAtStart = pTextView->GetSelection() == TextSelection( TextPaM( 0x0, 0x0 ), TextPaM( 0x0, 0x0 ) );
-    if ( bFromStart )
+    BOOL bAtStart = pTextView->GetSelection() == TextSelection( aPaM, aPaM );
+
+    if( !bForward )
+        aPaM = TextPaM( (ULONG)-1, (USHORT)-1 );
+
+    if( bFromStart )
     {
         aSel = pTextView->GetSelection();
-        if ( !rSearchItem.GetBackward() )
-            pTextView->SetSelection( TextSelection( TextPaM( 0x0, 0x0 ), TextPaM( 0x0, 0x0 ) ) );
-        else
-            pTextView->SetSelection( TextSelection( TextPaM( 0xFFFFFFFF, 0xFFFF ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
+        pTextView->SetSelection( TextSelection( aPaM, aPaM ));
     }
 
-#ifdef NEVER
-    utl::SearchParam    aSearchParam( rSearchItem.GetSearchString(),
-                        utl::SearchParam::SRCH_NORMAL, rSearchItem.GetExact(),
-                        rSearchItem.GetWordOnly(), rSearchItem.GetSelection() );
-    if ( rSearchItem.GetRegExp() )
-        aSearchParam.SetSrchType( utl::SearchParam::SRCH_REGEXP );
-    else if ( rSearchItem.IsLevenshtein() )
-    {
-        aSearchParam.SetSrchType( utl::SearchParam::SRCH_LEVDIST );
-        aSearchParam.SetSrchRelaxed( rSearchItem.IsLEVRelaxed() ? TRUE : FALSE );
-        aSearchParam.SetLEVOther( rSearchItem.GetLEVOther() );
-        aSearchParam.SetLEVShorter( rSearchItem.GetLEVShorter() );
-        aSearchParam.SetLEVLonger( rSearchItem.GetLEVLonger() );
-    }
-#endif
+    SearchOptions aSearchOpt( rSearchItem.GetSearchOptions() );
+    aSearchOpt.Locale = CreateLocale( GetAppLanguage() );
 
-    SearchAlgorithms eSrchType  = SearchAlgorithms_ABSOLUTE;
-    //OUString aSrchStr = rText;
-    BOOL bCaseSensitive = rSearchItem.GetExact();
-    BOOL bWordOnly      = rSearchItem.GetWordOnly();
-    BOOL bSrchInSel     = rSearchItem.GetSelection();
-    BOOL bLEV_Relaxed   = TRUE;
-    INT32 nLEV_Other    = 2;    //  -> changedChars;
-    INT32 nLEV_Longer   = 3;    //! -> deletedChars;
-    INT32 nLEV_Shorter  = 1;    //! -> insertedChars;
-    INT32 nTransliterationFlags = 0;
-    //
-    if ( rSearchItem.GetRegExp() )
-        eSrchType = SearchAlgorithms_REGEXP;
-    else if ( rSearchItem.IsLevenshtein() )
+    USHORT nFound;
+    BOOL bAll = FALSE;
+    switch( rSearchItem.GetCommand() )
     {
-        eSrchType       = SearchAlgorithms_APPROXIMATE;
-        bLEV_Relaxed    = rSearchItem.IsLEVRelaxed();
-        nLEV_Other      = rSearchItem.GetLEVOther();
-        nLEV_Longer     = rSearchItem.GetLEVLonger();
-        nLEV_Shorter    = rSearchItem.GetLEVShorter();
-    }
-    //
-    INT32 nSrchFlags = 0;
-    if (!bCaseSensitive)
-    {
-        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
-        nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
-    }
-    if ( bWordOnly)
-        nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
-    if ( bLEV_Relaxed)
-        nSrchFlags |= SearchFlags::LEV_RELAXED;
-    if ( bSrchInSel)
-        nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
-                       SearchFlags::REG_NOT_ENDOFLINE );
-    //
-    SearchOptions aSearchOpt(
-                        eSrchType, nSrchFlags,
-                        rSearchItem.GetSearchString(), rtl::OUString(),
-                        CreateLocale( LANGUAGE_SYSTEM ),
-                        nLEV_Other, nLEV_Longer, nLEV_Shorter,
-                        nTransliterationFlags );
-
-    USHORT nFound = 0;
-    if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND ) ||
-         ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL ) )
-    {
+    case SVX_SEARCHCMD_FIND:
+    case SVX_SEARCHCMD_FIND_ALL:
         nFound = pTextView->Search( aSearchOpt, bForward );
-    }
-    else if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE ) ||
-              ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL ) )
-    {
-        aSearchOpt.replaceString = rSearchItem.GetReplaceString();
-        BOOL bAll = rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
+        break;
+
+    case SVX_SEARCHCMD_REPLACE_ALL: bAll = TRUE;
+    case SVX_SEARCHCMD_REPLACE:
         nFound = pTextView->Replace( aSearchOpt, bAll, bForward );
+    default:
+        nFound = 0;
     }
-    if(!nFound)
+
+    if( !nFound )
     {
         BOOL bNotFoundMessage = FALSE;
         if(!bRecursive)
@@ -944,11 +895,8 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
                 QueryBox(0, SW_RES( bForward ? MSG_SEARCH_END
                                              : MSG_SEARCH_START)).Execute())
             {
-                if ( bForward )
-                    pTextView->SetSelection( TextSelection( TextPaM( 0x0, 0x0 ), TextPaM( 0x0, 0x0 ) ) );
-                else
-                    pTextView->SetSelection( TextSelection( TextPaM( 0xFFFFFFFF, 0xFFFF ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
-                StartSearchAndReplace(rSearchItem, FALSE, FALSE, TRUE);
+                pTextView->SetSelection( TextSelection( aPaM, aPaM ) );
+                StartSearchAndReplace( rSearchItem, FALSE, FALSE, TRUE );
             }
     }
     return nFound;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 16:00:48 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,17 +67,15 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
-#include "hintids.hxx"
-#include "uiparam.hxx"
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+#ifndef _UIPARAM_HXX
+#include <uiparam.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
-#include <com/sun/star/util/SearchFlags.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -129,20 +127,37 @@
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
-#include "workctrl.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "swundo.hxx"                   // fuer Undo-Ids
-#include "uitool.hxx"
-#include "cmdid.h"
-#include "docsh.hxx"
+#ifndef _WORKCTRL_HXX
+#include <workctrl.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>                   // fuer Undo-Ids
+#endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
 
-#include "view.hrc"
+#ifndef _VIEW_HRC
+#include <view.hrc>
+#endif
 
 using namespace com::sun::star;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
+using namespace com::sun::star::i18n;
 
 #define SRCH_ATTR_OFF   0
 #define SRCH_ATTR_ON    1
@@ -683,72 +698,12 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     //
     // build SearchOptions to be used
     //
-    SearchAlgorithms eSrchType  = SearchAlgorithms_ABSOLUTE;
-    rtl::OUString aSrchStr      = pSrchItem->GetSearchString();
-    rtl::OUString aRplcStr;
-    BOOL bCaseSensitive = pSrchItem->GetExact();
-    BOOL bWordOnly      = pSrchItem->GetWordOnly();
-    BOOL bSrchInSel     = pSrchItem->GetSelection();
-    BOOL bLEV_Relaxed   = pSrchItem->IsLEVRelaxed();
-    INT32 nLEV_Other    = pSrchItem->GetLEVOther();     //  -> changedChars;
-    INT32 nLEV_Longer   = pSrchItem->GetLEVLonger();    //! -> deletedChars;
-    INT32 nLEV_Shorter  = pSrchItem->GetLEVShorter();   //! -> insertedChars;
-    INT32 nTransliterationFlags = 0;
-    //
-    if (bDoReplace)
-        aRplcStr = pSrchItem->GetReplaceString();
-    if (pSrchItem->IsLevenshtein())
-        eSrchType = SearchAlgorithms_APPROXIMATE;
-    if (pSrchItem->GetRegExp())
-        eSrchType = SearchAlgorithms_REGEXP;
-    //
-    INT32 nSrchFlags = 0;
-    if (!bCaseSensitive)
-    {
-        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
-        nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
-    }
-    if ( bWordOnly)
-        nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
-    if ( bLEV_Relaxed)
-        nSrchFlags |= SearchFlags::LEV_RELAXED;
-    if ( bSrchInSel)
-        nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
-                        SearchFlags::REG_NOT_ENDOFLINE );
-    //
-    SearchOptions aSearchOpt(
-                        eSrchType, nSrchFlags,
-                        aSrchStr, aRplcStr,
-                        CreateLocale( LANGUAGE_SYSTEM ),
-                        nLEV_Other, nLEV_Longer, nLEV_Shorter,
-                        nTransliterationFlags );
+    SearchOptions aSearchOpt( pSrchItem->GetSearchOptions() );
+    aSearchOpt.Locale = CreateLocale( GetAppLanguage() );
 
     ULONG nFound;
     if( aSrchSet.Count() || ( pReplSet && pReplSet->Count() ))
     {
-#ifdef NEVER
-        // Suche nach Attributen
-        utl::SearchParam aPar( pSrchItem->GetSearchString() );
-        if( aPar.GetSrchStr().Len() )
-        {
-            if( bDoReplace )
-                aPar.SetReplaceStr( pSrchItem->GetReplaceString() );
-            aPar.SetSrchType( pSrchItem->GetRegExp()
-                                ? utl::SearchParam::SRCH_REGEXP :
-                                pSrchItem->IsLevenshtein() ?
-                                    utl::SearchParam::SRCH_LEVDIST :
-                                    utl::SearchParam::SRCH_NORMAL );
-            aPar.SetCaseSensitive( pSrchItem->GetExact() );
-            aPar.SetSrchInSelection( pSrchItem->GetSelection() );
-            aPar.SetSrchWordOnly( pSrchItem->GetWordOnly() );
-
-            aPar.SetSrchRelaxed(    pSrchItem->IsLEVRelaxed() );
-            aPar.SetLEVOther(       pSrchItem->GetLEVOther());
-            aPar.SetLEVShorter(     pSrchItem->GetLEVShorter());
-            aPar.SetLEVLonger(      pSrchItem->GetLEVLonger());
-        }
-#endif
-
         nFound = pWrtShell->SearchAttr(
             aSrchSet,
             !pSrchItem->GetPattern(),
@@ -770,26 +725,6 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     else
     {
         // Normale Suche
-
-#ifdef NEVER
-        utl::SearchParam aParam( pSrchItem->GetSearchString(),
-                            pSrchItem->GetRegExp()
-                                ? utl::SearchParam::SRCH_REGEXP :
-                                pSrchItem->IsLevenshtein() ?
-                                    utl::SearchParam::SRCH_LEVDIST :
-                                        utl::SearchParam::SRCH_NORMAL,
-                            pSrchItem->GetExact(),
-                            pSrchItem->GetWordOnly(),
-                            pSrchItem->GetSelection() );
-        aParam.SetSrchRelaxed(  pSrchItem->IsLEVRelaxed() );
-        aParam.SetLEVOther(       pSrchItem->GetLEVOther());
-        aParam.SetLEVShorter(     pSrchItem->GetLEVShorter());
-        aParam.SetLEVLonger(      pSrchItem->GetLEVLonger());
-
-        if (bDoReplace)
-            aParam.SetReplaceStr(pSrchItem->GetReplaceString());
-#endif
-
         nFound = pWrtShell->SearchPattern(aSearchOpt,
                                           rOptions.eStart,
                                           rOptions.eEnd,
@@ -898,6 +833,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/19 16:00:48  tl
+    use TransliterationModules_IGNORE_CASE now
+
     Revision 1.4  2001/03/12 08:12:45  tl
     SearcParam => SearchOptions and implied changes
 

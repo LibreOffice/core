@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 16:00:27 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,7 @@ using namespace com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
+using namespace ::com::sun::star::i18n;
 
 /*---------------------------------------------------------------------------
     Beschreibung:   String fuer die Seitenanzeige in der Statusbar basteln.
@@ -1187,40 +1188,12 @@ BOOL SwView::JumpToSwMark( const String& rMark )
                 // Normale Textsuche
                 pWrtShell->EnterStdMode();
 
-//              utl::SearchParam aParam( sName, utl::SearchParam::SRCH_NORMAL,
-//                                  TRUE, FALSE, FALSE );
-
-                //SearchAlgorithms eSrchType    = SearchAlgorithms_ABSOLUTE;
-                //OUString aSrchStr = rText;
-                BOOL bCaseSensitive = TRUE;
-                BOOL bWordOnly      = FALSE;
-                BOOL bSrchInSel     = FALSE;
-                BOOL bLEV_Relaxed   = TRUE;
-                INT32 nLEV_Other    = 2;    //  -> changedChars;
-                INT32 nLEV_Longer   = 3;    //! -> deletedChars;
-                INT32 nLEV_Shorter  = 1;    //! -> insertedChars;
-                INT32 nTransliterationFlags = 0;
-                //
-                INT32 nSrchFlags = 0;
-                if (!bCaseSensitive)
-                {
-                    //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
-                    nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
-                }
-                if ( bWordOnly)
-                    nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
-                if ( bLEV_Relaxed)
-                    nSrchFlags |= SearchFlags::LEV_RELAXED;
-                if ( bSrchInSel)
-                    nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
-                                   SearchFlags::REG_NOT_ENDOFLINE );
-                //
                 SearchOptions aSearchOpt(
-                                    SearchAlgorithms_ABSOLUTE, nSrchFlags,
+                                    SearchAlgorithms_ABSOLUTE, 0,
                                     sName, rtl::OUString(),
                                     CreateLocale( LANGUAGE_SYSTEM ),
-                                    nLEV_Other, nLEV_Longer, nLEV_Shorter,
-                                    nTransliterationFlags );
+                                    0,0,0,
+                                    TransliterationModules_IGNORE_CASE );
 
                 if( pWrtShell->SearchPattern( aSearchOpt, DOCPOS_START, DOCPOS_END ))
                 {

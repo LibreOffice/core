@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 15:59:00 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,11 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
+#ifndef _HELPID_H
+#include <helpid.h>
+#endif
+#define _SVSTDARR_STRINGSSORT
+#include <svtools/svstdarr.hxx>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -93,10 +98,6 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
-
-#include "helpid.h"
-#define _SVSTDARR_STRINGSSORT
-#include <svtools/svstdarr.hxx>
 
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
@@ -182,6 +183,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
+using namespace com::sun::star::i18n;
 using namespace ::rtl;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -471,43 +473,15 @@ void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSensitive)
 {
     rSh.Push();
 
-//  utl::SearchParam aParam( rSh.GetSelTxt(), utl::SearchParam::SRCH_NORMAL,
-//                                              TRUE, FALSE, FALSE );
-
-//  aParam.SetCaseSensitive( bCaseSensitive );
-//  aParam.SetSrchWordOnly( bWordOnly );
-
-    //SearchAlgorithms eSrchType    = SearchAlgorithms_ABSOLUTE;
-    //OUString aSrchStr = rText;
-    //BOOL bCaseSensitive   = TRUE;
-    //BOOL bWordOnly        = FALSE;
-    BOOL bSrchInSel     = FALSE;
-    BOOL bLEV_Relaxed   = TRUE;
-    INT32 nLEV_Other    = 2;    //  -> changedChars;
-    INT32 nLEV_Longer   = 3;    //! -> deletedChars;
-    INT32 nLEV_Shorter  = 1;    //! -> insertedChars;
-    INT32 nTransliterationFlags = 0;
-    //
-    INT32 nSrchFlags = 0;
-    if (!bCaseSensitive)
-    {
-        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
-        nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
-    }
-    if ( bWordOnly)
-        nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
-    if ( bLEV_Relaxed)
-        nSrchFlags |= SearchFlags::LEV_RELAXED;
-    if ( bSrchInSel)
-        nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
-                        SearchFlags::REG_NOT_ENDOFLINE );
-    //
     SearchOptions aSearchOpt(
-                        SearchAlgorithms_ABSOLUTE, nSrchFlags,
+                        SearchAlgorithms_ABSOLUTE,
+                        ( bWordOnly ? SearchFlags::NORM_WORD_ONLY : 0 ),
                         rSh.GetSelTxt(), OUString(),
-                        CreateLocale( LANGUAGE_SYSTEM ),
-                        nLEV_Other, nLEV_Longer, nLEV_Shorter,
-                        nTransliterationFlags );
+                        CreateLocale( GetAppLanguage() ),
+                        0, 0, 0,
+                        (bCaseSensitive
+                            ? 0
+                            : TransliterationModules_IGNORE_CASE) );
 
     rSh.ClearMark();
     ULONG nRet = rSh.Find( aSearchOpt,  DOCPOS_START, DOCPOS_END,
@@ -1810,6 +1784,9 @@ void    SwAuthMarkModalDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/03/19 15:59:00  tl
+    use TransliterationModules_IGNORE_CASE now
+
     Revision 1.6  2001/03/12 08:17:20  tl
     SearcParam => SearchOptions and implied changes
 
