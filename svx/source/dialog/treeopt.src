@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 10:03:04 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Pfade" ;  RID_SFXPAGE_PATH; > ;
             < "Farben" ;  RID_SVXPAGE_COLOR; > ;
             < "Schriftarten" ; RID_SVX_FONT_SUBSTITUTION ; > ;
-            < "Sicherheit" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
+            < "Sicherheit" ; RID_SVXPAGE_INET_SECURITY ; > ;
             < "Darstellung" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Zugänglichkeit" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
             < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
@@ -240,7 +240,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "; Pfade" ;  RID_SFXPAGE_PATH; > ;
             < "; Farben" ;  RID_SVXPAGE_COLOR; > ;
             < "; Schriftersetzung" ; RID_SVX_FONT_SUBSTITUTION ; > ;
-            < "; Sicherheit" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
+            < "; Sicherheit" ; RID_SVXPAGE_INET_SECURITY ; > ;
             < "; Appearance" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "; Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
             < "; Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
@@ -257,7 +257,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Paths" ;  RID_SFXPAGE_PATH; > ;
             < "Colors" ;  RID_SVXPAGE_COLOR; > ;
             < "Fonts" ; RID_SVX_FONT_SUBSTITUTION ; > ;
-            < "Security" ; RID_SVXPAGE_INET_SCRIPTING ; > ;
+            < "Security" ; RID_SVXPAGE_INET_SECURITY ; > ;
             < "Appearance" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
             < "Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
             < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
