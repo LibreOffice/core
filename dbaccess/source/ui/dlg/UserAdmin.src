@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-24 20:28:43 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ ModalDialog DLG_PASSWORD
         Text[ japanese ] = "’∞ªﬁ∞ \"$Name: not supported by cvs2svn $\"";
         Text[ korean ] = "User \"$Name: not supported by cvs2svn $\"";
         Text[ chinese_simplified ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ chinese_traditional ] = "User \"$Name: not supported by cvs2svn $\"";
+        Text[ chinese_traditional ] = "®œ•Œ™Ã \"$Name: not supported by cvs2svn $\"";
         Text[ turkish ] = "User \"$Name: not supported by cvs2svn $\"";
         Text[ arabic ] = "User \"$Name: not supported by cvs2svn $\"";
         Text[ catalan ] = "User \"$Name: not supported by cvs2svn $\"";
@@ -372,7 +372,7 @@ ModalDialog DLG_PASSWORD
         Text[ japanese ] = "ãå ﬂΩ‹∞ƒﬁ";
         Text[ korean ] = "old p~assword";
         Text[ chinese_simplified ] = "old p~assword";
-        Text[ chinese_traditional ] = "old p~assword";
+        Text[ chinese_traditional ] = "¬¬±KΩX";
         Text[ turkish ] = "old p~assword";
         Text[ arabic ] = "old p~assword";
         Text[ catalan ] = "old p~assword";
@@ -407,7 +407,7 @@ ModalDialog DLG_PASSWORD
         Text[ japanese ] = " ﬂΩ‹∞ƒﬁ";
         Text[ korean ] = " password";
         Text[ chinese_simplified ] = " password";
-        Text[ chinese_traditional ] = " password";
+        Text[ chinese_traditional ] = "±KΩX";
         Text[ turkish ] = " password";
         Text[ arabic ] = " password";
         Text[ catalan ] = " password";
@@ -441,7 +441,7 @@ ModalDialog DLG_PASSWORD
         Text[ japanese ] = " ﬂΩ‹∞ƒﬁÇÃämîF";
         Text[ korean ] = "~Confirm  password";
         Text[ chinese_simplified ] = "~Confirm  password";
-        Text[ chinese_traditional ] = "~Confirm  password";
+        Text[ chinese_traditional ] = "ΩTª{±KΩX";
         Text[ turkish ] = "~Confirm  password";
         Text[ arabic ] = "~Confirm  password";
         Text[ catalan ] = "~Confirm  password";
@@ -486,7 +486,7 @@ ModalDialog DLG_PASSWORD
     Text[ japanese ] = " ﬂΩ‹∞ƒﬁÇÃïœçX";
     Text[ korean ] = "Change password";
     Text[ chinese_simplified ] = "Change password";
-    Text[ chinese_traditional ] = "Change password";
+    Text[ chinese_traditional ] = "≈‹ßÛ±KΩX";
     Text[ turkish ] = "Change password";
     Text[ arabic ] = "Change password";
     Text[ catalan ] = "Change password";
@@ -517,6 +517,7 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ arabic ] = "Passwords are different, please enter again";
     Text[ catalan ] = "Passwords are different, please enter again";
 };
+
 
 
 
