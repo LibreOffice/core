@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:25:41 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,9 @@ BOOL lcl_HasRowOutline( const ScViewData& rViewData )
             pInputHintWindow( NULL ),                                       \
             pPageBreakData( NULL ),                                         \
             pHighlightRanges( NULL ),                                       \
+            pBrushDocument( NULL ),                                         \
+            pDrawBrushSet( NULL ),                                          \
+            bLockPaintBrush( FALSE ),                                       \
             bDragging( FALSE ),                                             \
             bIsBlockMode( FALSE ),                                          \
             bBlockNeg( FALSE ),                                             \
