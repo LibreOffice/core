@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 19:34:26 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 19:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ TabPage TP_ANIMATION
         Text [ french ] = "Action par clic de souris" ;
         Text [ dutch ] = "Activiteit per muisklik" ;
         Text [ swedish ] = "≈tg‰rd vid musklick" ;
-        Text [ danish ] = "Handling ved klik med musen" ;
+        Text [ danish ] = "Handling ved museklik" ;
         Text [ portuguese ] = "AcÁ„o com clique no rato" ;
         Text [ portuguese_brazilian ] = "Aktion bei Mausklick" ;
         Text[ chinese_simplified ] = "ÂçïÂáªÈº†Ê†áÊó∂ÊâßË°åÁöÑÊìç‰Ωú";
@@ -202,7 +202,7 @@ TabPage TP_ANIMATION
         Text[ spanish ] = "Velocidad";
         Text[ finnish ] = "Speed";
         Text[ italian ] = "Velocit‡";
-        Text[ danish ] = "Speed";
+        Text[ danish ] = "Hastighed";
         Text[ swedish ] = "Hastighet";
         Text[ polish ] = "SzybkoúÊ";
         Text[ portuguese_brazilian ] = "Speed";
@@ -227,7 +227,7 @@ TabPage TP_ANIMATION
         Text [ french ] = "Lent" ;
         Text [ dutch ] = "~Langzaam" ;
         Text [ spanish ] = "~Lenta" ;
-        Text [ danish ] = "Langsom" ;
+        Text [ danish ] = "~Langsom" ;
         Text [ swedish ] = "~LÂngsamt" ;
         Text [ finnish ] = "~Hidas" ;
         Text [ english_us ] = "~Slow" ;
@@ -258,7 +258,7 @@ TabPage TP_ANIMATION
         Text [ french ] = "Moyen" ;
         Text [ dutch ] = "~Middel" ;
         Text [ spanish ] = "~Media" ;
-        Text [ danish ] = "Middel" ;
+        Text [ danish ] = "~Middel" ;
         Text [ swedish ] = "~Medel" ;
         Text [ finnish ] = "~Normaali" ;
         Text [ english_us ] = "~Medium" ;
@@ -289,7 +289,7 @@ TabPage TP_ANIMATION
         Text [ french ] = "Rapide" ;
         Text [ dutch ] = "~Snel" ;
         Text [ spanish ] = "~R·pida" ;
-        Text [ danish ] = "Hurtig" ;
+        Text [ danish ] = "H~urtig" ;
         Text [ swedish ] = "S~nabbt" ;
         Text [ finnish ] = "~Nopea" ;
         Text [ english_us ] = "~Fast" ;
@@ -326,7 +326,7 @@ TabPage TP_ANIMATION
         Text[ spanish ] = "Ocultar con sonido";
         Text[ finnish ] = "Vanish with sound";
         Text[ italian ] = "Sfuma con suono";
-        Text[ danish ] = "Vanish with sound";
+        Text[ danish ] = "Skjul med lyd";
         Text[ swedish ] = "Tona ut med ljud";
         Text[ polish ] = "Ukryj z düwiÍkiem";
         Text[ portuguese_brazilian ] = "Vanish with sound";
@@ -362,7 +362,7 @@ TabPage TP_ANIMATION
         Text [ spanish ] = "E~xaminar..." ;
         Text [ french ] = "Parcourir..." ;
         Text [ swedish ] = "Genom~sˆk..." ;
-        Text [ danish ] = "Gennemse..." ;
+        Text [ danish ] = "Gennem~se..." ;
         Text [ portuguese_brazilian ] = "~Buscar..." ;
         Text [ portuguese ] = "~Pesquisar..." ;
         Text[ chinese_simplified ] = "ÊµèËßà(~B)...";
@@ -392,7 +392,7 @@ TabPage TP_ANIMATION
         Text [ spanish ] = "Reproducir el sonido ~completo" ;
         Text [ french ] = "Jouer le son en entier" ;
         Text [ swedish ] = "Spela ~upp ljud fullst‰ndigt" ;
-        Text [ danish ] = "Afspil lyden helt" ;
+        Text [ danish ] = "Afspil lyd ful~dstÊndig" ;
         Text [ portuguese_brazilian ] = "Klang ~vollst?ndig abspielen" ;
         Text [ portuguese ] = "Tocar som ~completo" ;
         Text[ chinese_simplified ] = "ÂÆåÊï¥Âú∞Êí≠ÊîæÂ£∞Èü≥(~P)";
@@ -495,7 +495,7 @@ TabPage TP_ANIMATION
         Text [ french ] = "Rechercher" ;
         Text [ dutch ] = "~Zoeken" ;
         Text [ swedish ] = "~Sˆk" ;
-        Text [ danish ] = "S¯g" ;
+        Text [ danish ] = "~S¯g" ;
         Text [ portuguese ] = "~Localizar..." ;
         Text [ portuguese_brazilian ] = "~Buscar..." ;
         Text[ chinese_simplified ] = "ÊêúÂØª(~F)";
@@ -517,7 +517,7 @@ TabPage TP_ANIMATION
     Text [ italian ] = "Interazione";
     Text [ portuguese_brazilian ] = "Interaktion";
     Text [ portuguese ] = "InteracÁ„o";
-    Text [ danish ] = "Interaction";
+    Text [ danish ] = "Interaktion";
     Text [ french ] = "Interaction";
     Text [ swedish ] = "Interaktion";
     Text [ dutch ] = "Interactie";
@@ -541,7 +541,7 @@ TabPage TP_ANIMATION
     Text [ spanish ] = "InteracciÛn" ;
     Text [ french ] = "Interaction" ;
     Text [ swedish ] = "Interaktion" ;
-    Text [ danish ] = "Interaction" ;
+    Text [ danish ] = "Interaktion" ;
     Text [ portuguese_brazilian ] = "Interaktion" ;
     Text [ portuguese ] = "InteracÁ„o" ;
 };
