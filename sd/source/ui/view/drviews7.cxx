@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:18:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,10 @@
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#include "LayerTabBar.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -783,10 +787,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem(SID_ANIMATION_OBJECTS);
         }
 
-        rSet.Put( SfxBoolItem( SID_LAYERMODE, bLayerMode ) );
+        rSet.Put (SfxBoolItem (SID_LAYERMODE, IsLayerModeActive()));
     }
 
-    if( !aLayerBtn.IsChecked() )
+    if ( ! IsLayerModeActive())
     {
         rSet.DisableItem( SID_INSERTLAYER );
         rSet.DisableItem( SID_MODIFYLAYER );
@@ -925,7 +929,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             eEditMode == EM_MASTERPAGE      ||
             ePageKind == PK_NOTES           ||
             ePageKind == PK_HANDOUT         ||
-            bLayerMode)
+            IsLayerModeActive())
         {
             rSet.DisableItem(SID_DELETE_PAGE);
         }
@@ -936,10 +940,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         SdrLayerAdmin& rAdmin = GetDoc()->GetLayerAdmin();
 
-        USHORT        nCurrentLayer = aLayerTab.GetCurPageId();
-        const String& rName         = aLayerTab.GetPageText(nCurrentLayer);
+        USHORT        nCurrentLayer = GetLayerTabControl()->GetCurPageId();
+        const String& rName         = GetLayerTabControl()->GetPageText(nCurrentLayer);
 
-        BOOL bDisableIt = !bLayerMode;
+        BOOL bDisableIt = !IsLayerModeActive();
         bDisableIt |= (rName == String(SdResId(STR_LAYER_LAYOUT)));
         bDisableIt |= (rName == String(SdResId(STR_LAYER_BCKGRND)));
         bDisableIt |= (rName == String(SdResId(STR_LAYER_BCKGRNDOBJ)));
@@ -1039,12 +1043,12 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ZOOM_OUT )||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ZOOM_PANNING ) )
     {
-        if( pWindow->GetZoom() <= pWindow->GetMinZoom() || GetDocSh()->IsUIActive() )
+        if( GetActiveWindow()->GetZoom() <= GetActiveWindow()->GetMinZoom() || GetDocSh()->IsUIActive() )
         {
             rSet.DisableItem( SID_ZOOM_IN );
             rSet.DisableItem( SID_ZOOM_PANNING );
         }
-        if( pWindow->GetZoom() >= pWindow->GetMaxZoom() || GetDocSh()->IsUIActive() )
+        if( GetActiveWindow()->GetZoom() >= GetActiveWindow()->GetMaxZoom() || GetDocSh()->IsUIActive() )
             rSet.DisableItem( SID_ZOOM_OUT );
     }
 
@@ -1058,8 +1062,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // EditText aktiv
-    if (GetObjectBarManager().GetTopObjectBarId()
-        == RID_DRAW_TEXT_TOOLBOX)
+    if (GetObjectBarManager().GetTopObjectBarId() == RID_DRAW_TEXT_TOOLBOX)
     {
         USHORT nCurrentSId = SID_ATTR_CHAR;
 
@@ -1599,7 +1602,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     GetModeSwitchingMenuState (rSet);
 }
 
-
 void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
 {
     //draview
@@ -1664,55 +1666,6 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
 
         rSet.ClearItem( SID_HANDOUTMODE );
         rSet.DisableItem( SID_HANDOUTMODE );
-    }
-    // #94252# Hands off from controls if we're editing an OLE
-    OSL_ASSERT (GetViewShell()!=NULL);
-    const Client* pIPClient = static_cast<Client*>(
-        GetViewShell()->GetIPClient());
-
-    // editing an internal OLE switches off our UI
-    if( !pIPClient || !pIPClient->IsUIActive() )
-    {
-        SfxItemState nState = rSet.GetItemState(SID_PRESENTATION);
-        if( GetDocSh()->IsPreview() || SFX_ITEM_DISABLED == nState )
-            aPresentationBtn.Disable();
-        else if( SFX_ITEM_UNKNOWN != nState )
-            aPresentationBtn.Enable();
-
-        nState = rSet.GetItemState(SID_NOTESMODE);
-        if( SFX_ITEM_DISABLED == nState )
-            aNotesBtn.Disable();
-        else if( SFX_ITEM_UNKNOWN != nState )
-            aNotesBtn.Enable();
-
-        nState = rSet.GetItemState(SID_HANDOUTMODE);
-        if( SFX_ITEM_DISABLED == nState )
-            aHandoutBtn.Disable();
-        else if( SFX_ITEM_UNKNOWN != nState )
-            aHandoutBtn.Enable();
-
-        nState = rSet.GetItemState(SID_OUTLINEMODE);
-        if( SFX_ITEM_DISABLED == nState )
-            aOutlineBtn.Disable();
-        else if( SFX_ITEM_UNKNOWN != nState )
-            aOutlineBtn.Enable();
-
-        nState = rSet.GetItemState(SID_DIAMODE);
-        if( SFX_ITEM_DISABLED == nState )
-            aSlideBtn.Disable();
-        else if( SFX_ITEM_UNKNOWN != nState )
-            aSlideBtn.Enable();
-
-        nState = rSet.GetItemState(SID_DRAWINGMODE);
-        if( SFX_ITEM_DISABLED == nState )
-            aDrawBtn.Disable();
-        else if( SFX_ITEM_UNKNOWN != nState )
-            aDrawBtn.Enable();
-
-        // these are manually changed from DrawViewShell::ActivateObject()
-        // and DrawViewShell::SelectionHasChanged
-        // aTabControl.Enable();
-        // aLayerTab.Enable();
     }
 
 
