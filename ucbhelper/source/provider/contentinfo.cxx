@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentinfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-27 14:02:48 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -154,8 +153,20 @@ Sequence< Property > SAL_CALL PropertySetInfo::getProperties()
             // Get info for core ( native) properties.
             //////////////////////////////////////////////////////////////
 
-            Sequence< Property > aProps = m_pContent->getProperties( m_xEnv );
-            m_pProps = new Sequence< Property >( aProps );
+            try
+            {
+                Sequence< Property > aProps
+                    = m_pContent->getProperties( m_xEnv );
+                m_pProps = new Sequence< Property >( aProps );
+            }
+            catch ( RuntimeException const & )
+            {
+                throw;
+            }
+            catch ( Exception const & )
+            {
+                m_pProps = new Sequence< Property >( 0 );
+            }
 
             //////////////////////////////////////////////////////////////
             // Get info for additional properties.
@@ -314,8 +325,20 @@ Sequence< CommandInfo > SAL_CALL CommandProcessorInfo::getCommands()
             // Get info for commands.
             //////////////////////////////////////////////////////////////
 
-            Sequence< CommandInfo > aCmds = m_pContent->getCommands( m_xEnv );
-            m_pCommands = new Sequence< CommandInfo >( aCmds );
+            try
+            {
+                Sequence< CommandInfo > aCmds
+                    = m_pContent->getCommands( m_xEnv );
+                m_pCommands = new Sequence< CommandInfo >( aCmds );
+            }
+            catch ( RuntimeException const & )
+            {
+                throw;
+            }
+            catch ( Exception const & )
+            {
+                m_pCommands = new Sequence< CommandInfo >( 0 );
+            }
         }
     }
     return *m_pCommands;
