@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-01 11:35:58 $
+ *  last change: $Author: dr $ $Date: 2002-03-05 13:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,13 +287,14 @@ void __EXPORT ScDPLayoutDlg::Init()
     InitWnd( thePivotData.aRowArr,  thePivotData.nRowCount,  TYPE_ROW );
     InitWnd( thePivotData.aDataArr, thePivotData.nDataCount, TYPE_DATA );
 
+    aSlider.SetPageSize( PAGE_SIZE );
+    aSlider.SetVisibleSize( PAGE_SIZE );
+    aSlider.SetLineSize( LINE_SIZE );
+    aSlider.SetRange( Range( 0, ((thePivotData.nLabels+LINE_SIZE-1)/LINE_SIZE)*LINE_SIZE ) );
+
     if ( thePivotData.nLabels > PAGE_SIZE )
     {
         aSlider.SetEndScrollHdl( LINK( this, ScDPLayoutDlg, ScrollHdl ) );
-        aSlider.SetPageSize( PAGE_SIZE );
-        aSlider.SetVisibleSize( PAGE_SIZE );
-        aSlider.SetLineSize( LINE_SIZE );
-        aSlider.SetRange( Range( 0, ((thePivotData.nLabels+LINE_SIZE-1)/LINE_SIZE)*LINE_SIZE ) );
         aSlider.Show();
     }
     else
