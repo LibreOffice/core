@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:11:32 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ OResultSetMetaData::~OResultSetMetaData()
                                     ),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     }
 
-    ::rtl::OUString sValue = ::rtl::OUString::createFromAscii(pName);
+    ::rtl::OUString sValue(pName,nRealLen,m_pConnection->getTextEncoding());
     delete [] pName;
     return  sValue;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 13:57:34 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,13 @@ namespace connectivity
             // other methods
             SQLHANDLE getConnectionHandle() { return m_pConnection->getConnection(); }
             OConnection* getOwnConnection() const { return m_pConnection;}
+            /** getCursorProperties return the properties for a specific cursor type
+                @param _nCursorType     the CursorType
+                @param bFirst           when true the first property set is returned
+
+                @return the cursor properties
+            */
+            SQLUINTEGER getCursorProperties(SQLINTEGER _nCursorType,sal_Bool bFirst);
         };
 
         class OStatement_BASE2  :public OStatement_Base

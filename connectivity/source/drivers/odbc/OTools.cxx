@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-20 14:14:27 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,8 +609,8 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
     SQLINTEGER pcbValue = 0;
     OTools::ThrowException(_pConnection,(*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,
-                                        SQL_C_BINARY,
-                                        &aCharArray,
+                                        _fSqlType,
+                                        (SQLPOINTER)aCharArray,
                                         (SQLINTEGER)nMaxLen,
                                         &pcbValue),
                             _aStatementHandle,SQL_HANDLE_STMT,_xInterface);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:41:55 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,44 @@ namespace connectivity
         typedef ::std::allocator< TVoidPtr > TVoidAlloc;
         typedef ::std::vector<TVoidPtr> TVoidVector;
         //  typedef ::com::sun::star::uno::Sequence<TVoidPtr> TVoidVector;
+        /// unary_function Functor object for class ZZ returntype is void
+        struct TBookmarkPosMapCompare : ::std::less< ::com::sun::star::uno::Sequence<sal_Int8> >
+        {
+            inline bool operator()( const ::com::sun::star::uno::Sequence<sal_Int8>& _rLH,
+                                    const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH)
+            {
+                if(_rLH.getLength() == _rRH.getLength())
+                {
+                    sal_Int32 nCount = _rLH.getLength();
+                    if(nCount != 4)
+                    {
+                        const sal_Int8* pLH     = _rLH.getConstArray();
+                        const sal_Int8* pLHBack = _rLH.getConstArray() + nCount - 1;
+                        const sal_Int8* pRHBack = _rRH.getConstArray() + nCount - 1;
+
+                        sal_Int32 i;
+                        for(i=0;i < nCount;++i,--pLHBack,--pRHBack)
+                        {
+                            if(!(*pLHBack) && *pRHBack)
+                                return sal_True;
+                            else if(*pLHBack && !(*pRHBack))
+                                return sal_False;
+                        }
+                        for(i=0,++pLHBack,++pRHBack;i < nCount;++pLHBack,++pRHBack,++i)
+                            if(*pLHBack < *pRHBack)
+                                return sal_True;
+                        return sal_False;
+                    }
+                    else
+                        return *reinterpret_cast<const sal_Int32*>(_rLH.getConstArray()) < *reinterpret_cast<const sal_Int32*>(_rRH.getConstArray());
+
+                }
+                else
+                    return _rLH.getLength() < _rRH.getLength();
+            }
+        };
+
+        typedef ::std::map< ::com::sun::star::uno::Sequence<sal_Int8>, sal_Int32,TBookmarkPosMapCompare > TBookmarkPosMap;
 
         class OResultSet :  public  comphelper::OBaseMutex,
                             public  ::connectivity::IResultSetHelper,
@@ -151,6 +189,7 @@ namespace connectivity
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
         protected:
+            TBookmarkPosMap                             m_aPosToBookmarks;
             // used top hold the information about the value and the datatype to save calls to metadata
             typedef ::std::vector<ORowSetValue>         TDataRow;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-20 14:14:27 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,12 +307,12 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
                 {
-                    ::rtl::OUString aRet = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,nType,m_bWasNull,**this,m_nTextEncoding);
+                    ::rtl::OUString aRet = OTools::getStringValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_BINARY,m_bWasNull,**this,m_nTextEncoding);
                     return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
                 }
                 break;
         }
-        return OTools::getBytesValue(m_pConnection,m_aStatementHandle,columnIndex,nType,m_bWasNull,**this);
+        return OTools::getBytesValue(m_pConnection,m_aStatementHandle,columnIndex,SQL_C_BINARY,m_bWasNull,**this);
     }
     else
         m_bWasNull = sal_True;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 08:13:08 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,20 +182,9 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     try
     {
         N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nCurType,SQL_IS_UINTEGER,0);
-
-        SQLUSMALLINT nAskFor = SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2;
-        if(SQL_CURSOR_KEYSET_DRIVEN == nCurType)
-            nAskFor = SQL_KEYSET_CURSOR_ATTRIBUTES2;
-        else if(SQL_CURSOR_STATIC  == nCurType)
-            nAskFor = SQL_STATIC_CURSOR_ATTRIBUTES2;
-        else if(SQL_CURSOR_FORWARD_ONLY == nCurType)
-            nAskFor = SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2;
-        else if(SQL_CURSOR_DYNAMIC == nCurType)
-            nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
-
-        SQLUINTEGER nValueLen = 0;
-        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,nAskFor,nValueLen,NULL);
-        if((nValueLen & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS)
+        SQLUINTEGER nValueLen = m_pStatement->getCursorProperties(nCurType,sal_False);
+        if( (nValueLen & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS ||
+            (nValueLen & SQL_CA2_CRC_EXACT) != SQL_CA2_CRC_EXACT)
             m_pSkipDeletedSet = new OSkipDeletedSet(this);
     }
     catch(Exception&)
@@ -520,7 +509,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
             }
             break;
     }
-    return OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,(SWORD)nType,m_bWasNull,**this);
+    return OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_BINARY,m_bWasNull,**this);
 }
 // -------------------------------------------------------------------------
 
@@ -565,10 +554,7 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    sal_Int32 nValue = 0;
-    OTools::ThrowException(m_pStatement->getOwnConnection(),N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_NUMBER,&nValue,SQL_IS_UINTEGER,0),m_aStatementHandle,SQL_HANDLE_STMT,*this);
-
-    return m_pSkipDeletedSet ? m_pSkipDeletedSet->getMappedPosition(nValue) : nValue;
+    return m_pSkipDeletedSet ? m_pSkipDeletedSet->getMappedPosition(getDriverPos()) : getDriverPos();
 }
 // -------------------------------------------------------------------------
 
@@ -685,8 +671,6 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-
     return m_nRowPos == 0;
 }
 // -------------------------------------------------------------------------
@@ -695,7 +679,6 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeExcepti
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
     return m_nRowPos != 0 && m_nCurrentFetchState == SQL_NO_DATA;
 }
 // -------------------------------------------------------------------------
@@ -703,7 +686,6 @@ sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
 
     return m_nRowPos == 1;
 }
@@ -1111,8 +1093,10 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
     if(nValue == SQL_UB_OFF)
         throw SQLException();
 
-
-     return makeAny(OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_BINARY,m_bWasNull,**this));
+    Sequence<sal_Int8> aBookmark = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
+    m_aPosToBookmarks[aBookmark] = m_nRowPos;
+    OSL_ENSURE(aBookmark.getLength(),"Invalid bookmark from length 0!");
+    return makeAny(aBookmark);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException)
@@ -1120,15 +1104,27 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
     m_nLastColumnPos = 0;
     Sequence<sal_Int8> aBookmark;
     bookmark >>= aBookmark;
-    SQLRETURN nReturn = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_FETCH_BOOKMARK_PTR,aBookmark.getArray(),SQL_IS_POINTER);
+    OSL_ENSURE(aBookmark.getLength(),"Invalid bookmark from length 0!");
+    if(aBookmark.getLength())
+    {
+        SQLRETURN nReturn = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_FETCH_BOOKMARK_PTR,aBookmark.getArray(),SQL_IS_POINTER); // SQL_LEN_BINARY_ATTR(aBookmark.getLength())
 
-    m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,0);
-    OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
+        m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,0);
+        OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+        TBookmarkPosMap::iterator aFind = m_aPosToBookmarks.find(aBookmark);
+        if(aFind != m_aPosToBookmarks.end())
+            m_nRowPos = aFind->second;
+        else
+        {
+            m_nRowPos = m_pSkipDeletedSet ? (m_pSkipDeletedSet->getLastPosition() + 1) : 0; // special case: Noone ask for a bookmark so this one was inserted before
+            m_aPosToBookmarks[aBookmark] = m_nRowPos;
+        }
+        return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
+    }
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
@@ -1196,7 +1192,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const  Sequence<  Any >& 
 sal_Int32 OResultSet::getResultSetConcurrency() const
 {
     sal_uInt32 nValue = 0;
-    N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CONCURRENCY,&nValue,SQL_IS_UINTEGER,0);
+    SQLRETURN nReturn = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CONCURRENCY,&nValue,SQL_IS_UINTEGER,0);
     if(SQL_CONCUR_READ_ONLY == nValue)
         nValue = ResultSetConcurrency::READ_ONLY;
     else
@@ -1214,7 +1210,18 @@ sal_Int32 OResultSet::getResultSetType() const
     else if(SQL_INSENSITIVE == nValue)
         nValue = ResultSetType::SCROLL_INSENSITIVE;
     else
-        nValue = ResultSetType::FORWARD_ONLY;
+    {
+        SQLINTEGER nCurType = 0;
+        N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nCurType,SQL_IS_UINTEGER,0);
+        if(SQL_CURSOR_KEYSET_DRIVEN == nCurType)
+            nValue = ResultSetType::SCROLL_SENSITIVE;
+        else if(SQL_CURSOR_STATIC  == nCurType)
+            nValue = ResultSetType::SCROLL_INSENSITIVE;
+        else if(SQL_CURSOR_FORWARD_ONLY == nCurType)
+            nValue = ResultSetType::FORWARD_ONLY;
+        else if(SQL_CURSOR_DYNAMIC == nCurType)
+            nValue = ResultSetType::SCROLL_SENSITIVE;
+    }
     return nValue;
 }
 //------------------------------------------------------------------------------
@@ -1507,13 +1514,40 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
             nFetchOrientation = SQL_FETCH_ABSOLUTE;
             break;
     }
+    m_bEOF = sal_False;
 
     m_nLastColumnPos = 0;
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,nFetchOrientation,_nOffset);
-
     OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+
     if(m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO)
-        ++m_nRowPos;
+    {
+        switch(_eCursorPosition)
+        {
+            case IResultSetHelper::NEXT:
+                ++m_nRowPos;
+                break;
+            case IResultSetHelper::PRIOR:
+                --m_nRowPos;
+                break;
+            case IResultSetHelper::FIRST:
+                m_nRowPos = 1;
+                break;
+            case IResultSetHelper::LAST:
+                m_bEOF = sal_True;
+                break;
+            case IResultSetHelper::RELATIVE:
+                m_nRowPos += _nOffset;
+                break;
+            case IResultSetHelper::ABSOLUTE:
+            case IResultSetHelper::BOOKMARK: // special case here because we are only called with position numbers
+                m_nRowPos = _nOffset;
+                break;
+        }
+    }
+    else if(IResultSetHelper::PRIOR == _eCursorPosition && m_nCurrentFetchState == SQL_NO_DATA)
+        m_nRowPos = 0;
+
     return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
 }
 // -----------------------------------------------------------------------------
@@ -1521,7 +1555,7 @@ sal_Int32 OResultSet::getDriverPos() const
 {
     sal_Int32 nValue = 0;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_NUMBER,&nValue,SQL_IS_UINTEGER,0);
-    return nValue;
+    return nValue ? nValue : m_nRowPos;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OResultSet::deletedVisible() const

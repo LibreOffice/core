@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 14:55:07 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,6 +815,7 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_ROW_BIND_TYPE,(SQLPOINTER)SQL_BIND_BY_COLUMN,SQL_IS_UINTEGER);
 
+    sal_Bool bUseBookmark = isUsingBookmarks();
     SQLUINTEGER nSet;
     switch(_par0)
     {
@@ -826,7 +827,27 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
             N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)SQL_CURSOR_KEYSET_DRIVEN,SQL_IS_UINTEGER);
             break;
         case ResultSetType::SCROLL_SENSITIVE:
-            nSet = SQL_CURSOR_DYNAMIC;
+            if(bUseBookmark)
+            {
+                SQLUINTEGER nCurProp = getCursorProperties(SQL_CURSOR_DYNAMIC,sal_True);
+                if((nCurProp & SQL_CA1_BOOKMARK) != SQL_CA1_BOOKMARK) // check if bookmark for this type isn't supported
+                { // we have to test the next one
+                    nCurProp = getCursorProperties(SQL_CURSOR_KEYSET_DRIVEN,sal_True);
+                    sal_Bool bNotBookmarks = ((nCurProp & SQL_CA1_BOOKMARK) != SQL_CA1_BOOKMARK);
+                    nCurProp = getCursorProperties(SQL_CURSOR_KEYSET_DRIVEN,sal_False);
+                    nSet = SQL_CURSOR_KEYSET_DRIVEN;
+                    if(bNotBookmarks || ((nCurProp & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS))
+                    {
+                        // bookmarks for keyset isn't supported so reset bookmark setting
+                        setUsingBookmarks(sal_False);
+                        nSet = SQL_CURSOR_DYNAMIC;
+                    }
+                }
+                else
+                    nSet = SQL_CURSOR_DYNAMIC;
+            }
+            else
+                nSet = SQL_CURSOR_DYNAMIC;
             if(N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)nSet,SQL_IS_UINTEGER) != SQL_SUCCESS)
             {
                 nSet = SQL_CURSOR_KEYSET_DRIVEN;
@@ -1091,4 +1112,28 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base:
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
+SQLUINTEGER OStatement_Base::getCursorProperties(SQLINTEGER _nCursorType,sal_Bool bFirst)
+{
+    SQLUINTEGER nValueLen = 0;
+    try
+    {
+        SQLUSMALLINT nAskFor = SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2;
+        if(SQL_CURSOR_KEYSET_DRIVEN == _nCursorType)
+            nAskFor = bFirst ? SQL_KEYSET_CURSOR_ATTRIBUTES1 : SQL_KEYSET_CURSOR_ATTRIBUTES2;
+        else if(SQL_CURSOR_STATIC  == _nCursorType)
+            nAskFor = bFirst ? SQL_STATIC_CURSOR_ATTRIBUTES1 : SQL_STATIC_CURSOR_ATTRIBUTES2;
+        else if(SQL_CURSOR_FORWARD_ONLY == _nCursorType)
+            nAskFor = bFirst ? SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES1 : SQL_FORWARD_ONLY_CURSOR_ATTRIBUTES2;
+        else if(SQL_CURSOR_DYNAMIC == _nCursorType)
+            nAskFor = bFirst ? SQL_DYNAMIC_CURSOR_ATTRIBUTES1 : SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
 
+
+        OTools::GetInfo(getOwnConnection(),getConnectionHandle(),nAskFor,nValueLen,NULL);
+    }
+    catch(Exception&)
+    { // we don't want our result destroy here
+        nValueLen = 0;
+    }
+    return nValueLen;
+}
+// -----------------------------------------------------------------------------

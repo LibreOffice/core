@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSkipDeletedSet.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:40:58 $
+ *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,11 @@ namespace connectivity
                 sal_Int32 _nPos the logical position
         */
         void        deletePosition(sal_Int32 _nPos);
+        /**
+            getLastPosition returns the last position
+            @return the last position
+        */
+        sal_Int32   getLastPosition() const { return m_aBookmarksPositions.size(); }
     };
 }
 #endif // CONNECTIVITY_SKIPDELETEDSSET_HXX
