@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:04:14 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:07:49 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -132,7 +132,7 @@ $(EXAMPLE_NAME) : $(REGISTERFLAG)
 	@echo Please load the "$(QM)CreatingDialogs.odt$(QM)" document to use the component or use it
 	@echo by yourself in your office installation, see the example description.
 	@echo -
-	@echo make CreatingDialogs.odt.load
+	@echo $(MAKE) CreatingDialogs.odt.load
 	@echo --------------------------------------------------------------------------------
 
 CreatingDialogs.odt.load : $(REGISTERFLAG)
