@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:25:07 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1924,9 +1924,12 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     else //If a size is set, adjust it to consider border thickness
     {
         SwFmtFrmSize aSize = (const SwFmtFrmSize &)(rFlySet.Get(RES_FRM_SIZE));
-        rFlySet.Put( SwFmtFrmSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
+
+        SwFmtFrmSize aNewSize = SwFmtFrmSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
             aSize.GetWidth()  + 2*nOutside,
-            aSize.GetHeight() + 2*nOutside) );
+            aSize.GetHeight() + 2*nOutside);
+        aNewSize.SetWidthSizeType(aSize.GetWidthSizeType());
+        rFlySet.Put( aNewSize );
     }
 
     //Sadly word puts escher borders outside the graphic, but orients the
@@ -3120,8 +3123,12 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
             pRecord->nDxTextRight, pRecord->nDyTextBottom);
 
-        rFlySet.Put(SwFmtFrmSize(ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft,
-            pF->nYaBottom - pF->nYaTop));
+        SwFmtFrmSize adsfgdfSize(ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft, pF->nYaBottom - pF->nYaTop);
+        adsfgdfSize.SetWidthSizeType(pRecord->bAutoWidth ? ATT_VAR_SIZE : ATT_FIX_SIZE);
+        rFlySet.Put(adsfgdfSize);
+        //rFlySet.Put(SwFmtFrmSize(pRecord->bAutoWidth ? ATT_VAR_SIZE : ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft,
+          //  pF->nYaBottom - pF->nYaTop));
+
 
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
             pRecord->eShapeType, aInnerDist );
