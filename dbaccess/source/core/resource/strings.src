@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:13:22 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@ String RID_STR_TRIED_OPEN_TABLE
     Text[ hebrew ] = "Es wurde versucht, die Tabelle $name$ zu öffnen.";
     Text[ hindi ] = "$name$ सारणी को खोलने का प्रयत्न किया ।";
     Text[ slovak ] = "Pokus o otvorenie tabuľky $name$.";
+    Text[ hungarian ] = "Kísérlet a következő tábla megnyitására: $name$.";
+    Text[ slovenian ] = "Poskušali ste odpreti tabelo $name$.";
 };
 String RID_STR_CONNECTION_INVALID
 {
@@ -103,7 +105,7 @@ String RID_STR_CONNECTION_INVALID
     Text[ french ] = "Impossible d'�tablir une connexion !";
     Text[ spanish ] = "No se pudo crear ninguna conexi�n.";
     Text[ italian ] = "Impossibile creare il collegamento!";
-    Text[ danish ] = "Det var ikke muligt at oprette forbindelse.";
+    Text[ danish ] = "Der kunne ikke etableres forbindelse.";
     Text[ swedish ] = "Det gick inte att skapa en f�rbindelse.";
     Text[ polish ] = "Nie uda�o si� nawi�za� po��czenia.";
     Text[ portuguese_brazilian ] = "N�o foi poss�vel estabelecer a conex�o.";
@@ -120,6 +122,8 @@ String RID_STR_CONNECTION_INVALID
     Text[ hebrew ] = "Es konnte keine Verbindung erstellt werden.";
     Text[ hindi ] = "कोई कनेक्शन स्थापित नहीं कर सकते है ।";
     Text[ slovak ] = "Nemohlo byť vytvorené spojenie.";
+    Text[ hungarian ] = "Nem sikerült létrehozni a kapcsolatot.";
+    Text[ slovenian ] = "Ni mogoče vzpostaviti povezave.";
 };
 
 String RID_STR_TABLE_IS_FILTERED
@@ -151,6 +155,8 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ hebrew ] = "Die Tabelle $name$ existiert bereits. Sie ist nicht sichtbar, da sie ausgefiltert wurde.";
     Text[ hindi ] = "सारणी $name$ पहिले से ही अस्तित्व में है । यह दृष्टिगोचर नहीं है, क्यों कि इसको फिल्टर किया है ।";
     Text[ slovak ] = "Tabuľka $name$ už existuje. Nieje viditeľná, pretože bola odfiltrovaná.";
+    Text[ hungarian ] = "$name$: a tábla már létezik, de ki van szűrve, ezért nem látható.";
+    Text[ slovenian ] = "Tabela $name$ že obstaja. Tabela ni vidna, ker je bil njen prikaz filtriran.";
 };
 
 String RID_STR_NEED_CONFIG_WRITE_ACCESS
@@ -182,6 +188,8 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
     Text[ hebrew ] = "Sie haben keinen Schreibzugriff auf die Konfigurationsdaten des Objektes.";
     Text[ hindi ] = "आपको वस्तु के आधारित रूपरेखा ड़ॉटा में लिखने का अधिकार नहीं है ।";
     Text[ slovak ] = "Nemáte prístup na zapisovanie ku konfiguračným dátam, na ktorých je založený objekt.";
+    Text[ hungarian ] = "Nincs írási joga a konfigurációs adatra, amelyen az objektum alapul.";
+    Text[ slovenian ] = "Nimate pisalnega dostopa do konfiguracijskih podatkov, na katerih temelji predmet.";
 };
 
 
@@ -198,7 +206,7 @@ String RID_STR_COULDNOTCONNECT_UNSPECIFIED
     Text[ spanish ] = "La conexi�n a la fuente de datos externa no se pudo realizar. Se ha producido un error desconocido. Es posible que el controlador est� defectuoso.";
     Text[ finnish ] = "Yhteytt� ulkoiseen tietol�hteeseen ei voitu muodostaa. Ilmeni tuntematon virhe. Ohjain on ehk� viallinen.";
     Text[ italian ] = "Impossibile creare il collegamento alla sorgente dati esterna a causa di un errore non classificato. Probabile difetto al driver.";
-    Text[ danish ] = "Der kunne ikke oprettes forbindelse til den eksterne datakilde. Der opstod en ukendt fejl. Driveren er sandsynligvis beskadiget.";
+    Text[ danish ] = "Der kunne ikke oprettes forbindelse til den eksterne datakilde. Der opstod en ukendt fejl. Driveren er sandsynligvis defekt. .";
     Text[ swedish ] = "Det gick inte att skapa f�rbindelsen till den externa datak�llan. Ett ok�nt fel uppstod. Det �r antagligen fel p� drivrutinen.";
     Text[ polish ] = "Nie uda�o si� nawi�za� po��czenia z zewn�trznym �r�d�em danych. Wyst�pi� nieznany b��d. Prawdopodobnie sterownik jest wadliwy.";
     Text[ portuguese_brazilian ] = "N�o foi poss�vel estabelecer a conex�o com a fonte de dados externa. Ocorreu um erro desconhecido. Provavelmente o controlador est� com defeito.";
@@ -214,6 +222,8 @@ String RID_STR_COULDNOTCONNECT_UNSPECIFIED
     Text[ hebrew ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Ein unbekannter Fehler trat auf. Wahrscheinlich ist der Treiber fehlerhaft.";
     Text[ hindi ] = "बाहरी ड़ॉटा मूल को कनेक्शन स्थापित नहीं कर सकते है । एक अज्ञात गलती घटित हुआ । शायद ड्रइवर दोषयुक्त है ।";
     Text[ slovak ] = "Spojenie k externému zdroju dát nemohlo byť vytvorené. Objavila sa neznáma chyba. Driver je pravdepodobne chybný.";
+    Text[ hungarian ] = "A külső adatforráshoz való csatlakozás nem sikerült. Ismeretlen hiba történt. Az illesztőprogram valószínűleg hibás.";
+    Text[ slovenian ] = "Ni mogoče vzpostaviti povezave z zunanjim virom podatkov. Pojavila se je neznana napaka. Verjetno je okvarjen gonilnik.";
 };
 
 String RID_STR_COULDNOTCONNECT_NODRIVER
@@ -245,6 +255,8 @@ String RID_STR_COULDNOTCONNECT_NODRIVER
     Text[ hebrew ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Es wurde kein SDBC-Treiber für die angegebene URL gefunden.";
     Text[ hindi ] = "बाहरी ड़ॉटा मूल को कनेक्शन स्थापित नहीं कर सकते है । दी हुयी URL केलिए कोई SDBC ड्रइवर प्राप्त नहीं हुआ ।";
     Text[ slovak ] = "Spojenie k externému zdroju dát nemohlo byť vytvorené. Pre zadanú URL adresu nebol nájdený SDBC driver.";
+    Text[ hungarian ] = "A külső adatforráshoz való csatlakozás nem sikerült. Nem található SDBC-illesztőprogram a megadott URL-hez.";
+    Text[ slovenian ] = "Ni mogoče vzpostaviti povezave z zunanjim virom podatkov. Za podani URL ni bil najden SDBC-gonilnik.";
 };
 
 String RID_STR_COULDNOTLOAD_MANAGER
@@ -260,7 +272,7 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text[ spanish ] = "No se pudo realizar la conexi�n a la fuente de datos externa porque no se pudo cargar el gestor de controladores SDBC.";
     Text[ finnish ] = "Yhteytt� ulkoiseen tietol�hteeseen ei voitu muodostaa. SDBC-ohjaimen hallintaa ei voitu ladata.";
     Text[ italian ] = "Impossibile stabilire il collegamento alla sorgente dati esterna in quanto non � stato caricato il gestore del driver SDBC.";
-    Text[ danish ] = "Der kunne ikke oprettes forbindelse til den eksterne datakilde. SDBC-drivermanageren kunne ikke indl�ses.";
+    Text[ danish ] = "Der kunne ikke oprettes forbindelse til den eksterne datakilde. SDBC-driverh�ndteringen kunne ikke indl�ses.";
     Text[ swedish ] = "Det gick inte att skapa f�rbindelsen till den externa datak�llan. Det gick inte att ladda managern f�r SDBC-drivrutinen.";
     Text[ polish ] = "Nie uda�o si� nawi�za� po��czenia z zewn�trznym �r�d�em danych. Nie mo�na za�adowa� mened�era sterownika SDCB.";
     Text[ portuguese_brazilian ] = "N�o foi poss�vel estabelecer a conex�o com o banco de dados externa. N�o foi poss�vel carregar o gerenciador de drivers SDBC.";
@@ -276,7 +288,13 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text[ hebrew ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Der SDBC-Treiber-Manager konnte nicht geladen werden.";
     Text[ hindi ] = "बाहरी ड़ॉटा मूल को कनेक्शन स्थापित नहीं कर सकते है । SDBC ड्रइवर प्रबंधक को लोड़ नहीं कर सकते है ।";
     Text[ slovak ] = "Spojenie k externému zdroju dát nemohlo byť vytvorené. Nemohol byť spustený SDBC driver manager.";
+    Text[ hungarian ] = "A külső adatforráshoz való csatlakozás nem sikerült. Nem sikerült betölteni az SDBC-illesztőprogramkezelőt.";
+    Text[ slovenian ] = "Ni mogoče vzpostaviti povezave z zunanjim virom podatkov. Upravitelja SDBC-gonilnikov ni mogoče naložiti.";
 };
+
+
+
+
 
 
 
