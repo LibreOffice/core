@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-23 10:08:36 $
+ *  last change: $Author: obr $ $Date: 2001-06-05 07:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
                     rtl_uString_newFromStr( &ustrFile, sFile);
                 }
 
-                bSuccess = osl_getFileURLFromSystemPath( ustrFile, pustrDirectory );
+                bSuccess = osl_File_E_None == osl_getFileURLFromSystemPath( ustrFile, pustrDirectory );
 
                 if ( ustrFile )
                     rtl_uString_release( ustrFile );
