@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-25 12:08:45 $
+ *  last change: $Author: obo $ $Date: 2001-10-29 15:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,8 @@ static void doTab( Printer* pPrinter )
         Font aBigBoldFont( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ), Size( 0, 60 ) );
         aBigBoldFont.SetWeight( WEIGHT_BOLD );
 
-        String aHeader( ByteString( pHead ), RTL_TEXTENCODING_ISO_8859_1 );
-        String aFooter( ByteString( pFoot ), RTL_TEXTENCODING_ISO_8859_1 );
+        String aHeader = String( ByteString( pHead ), RTL_TEXTENCODING_ISO_8859_1 );
+        String aFooter = String( ByteString( pFoot ), RTL_TEXTENCODING_ISO_8859_1 );
 
         // calculate size of box
         int nWidth = 0, nHeight = 0, w, i;
@@ -235,7 +235,7 @@ static void doTab( Printer* pPrinter )
         int nNormHeigth = pPrinter->GetTextHeight();
         for( i = 0; i < sizeof( pLines )/sizeof( pLines[0] ); i++ )
         {
-            String aLine( ByteString( pLines[i] ), RTL_TEXTENCODING_ISO_8859_1 );
+            String aLine = String( ByteString( pLines[i] ), RTL_TEXTENCODING_ISO_8859_1 );
             w = pPrinter->GetTextWidth( aLine );
             nWidth = w > nWidth ? w : nWidth;
         }
@@ -253,7 +253,7 @@ static void doTab( Printer* pPrinter )
         int nY = aTopLeft.Y() + (nHeight-nNormHeigth*sizeof(pLines)/sizeof(pLines[0]))/2;
         for( i = 0; i < sizeof( pLines )/sizeof( pLines[0] ); i++ )
         {
-            String aLine( ByteString( pLines[i] ), RTL_TEXTENCODING_ISO_8859_1 );
+            String aLine = String( ByteString( pLines[i] ), RTL_TEXTENCODING_ISO_8859_1 );
             w = pPrinter->GetTextWidth( aLine );
             pPrinter->DrawText( Point( aTopLeft.X() + (nWidth-w)/2, nY ), aLine );
             nY += nNormHeigth;
