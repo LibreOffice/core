@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: tra $ $Date: 2002-10-31 11:23:43 $
+ *  last change: $Author: ssa $ $Date: 2002-11-12 11:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,11 +181,22 @@ static void ImplSaveFrameState( SalFrame* pFrame )
         {
             RECT aRect;
             GetWindowRect( pFrame->maFrameData.mhWnd, &aRect );
+
+            // to be consistent with Unix, the frame state is without(!) decoration
+            RECT aRect2 = aRect;
+            AdjustWindowRectEx( &aRect2, GetWindowStyle( pFrame->maFrameData.mhWnd ),
+                            FALSE,     GetWindowExStyle( pFrame->maFrameData.mhWnd ) );
+            long nTopDeco = abs( aRect.top - aRect2.top );
+            long nLeftDeco = abs( aRect.left - aRect2.left );
+            long nBottomDeco = abs( aRect.bottom - aRect2.bottom );
+            long nRightDeco = abs( aRect.right - aRect2.right );
+
             pFrame->maFrameData.maState.mnState &= ~(SAL_FRAMESTATE_MINIMIZED | SAL_FRAMESTATE_MAXIMIZED);
-            pFrame->maFrameData.maState.mnX      = aRect.left;
-            pFrame->maFrameData.maState.mnY      = aRect.top;
-            pFrame->maFrameData.maState.mnWidth  = aRect.right-aRect.left;
-            pFrame->maFrameData.maState.mnHeight = aRect.bottom-aRect.top;
+            // subtract decoration
+            pFrame->maFrameData.maState.mnX      = aRect.left+nLeftDeco;
+            pFrame->maFrameData.maState.mnY      = aRect.top+nTopDeco;
+            pFrame->maFrameData.maState.mnWidth  = aRect.right-aRect.left-nLeftDeco-nRightDeco;
+            pFrame->maFrameData.maState.mnHeight = aRect.bottom-aRect.top-nTopDeco-nBottomDeco;
             if ( bVisible )
                 pFrame->maFrameData.mnShowState = SW_SHOWNORMAL;
             pFrame->maFrameData.mbRestoreMaximize = FALSE;
@@ -1504,25 +1515,35 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
     RECT    aWinRect;
     GetWindowRect( maFrameData.mhWnd, &aWinRect );
 
+    // to be consistent with Unix, the frame state is without(!) decoration
+    // ->add the decoration
+    RECT aRect2 = aWinRect;
+    AdjustWindowRectEx( &aRect2, GetWindowStyle( maFrameData.mhWnd ),
+                    FALSE,     GetWindowExStyle( maFrameData.mhWnd ) );
+    long nTopDeco = abs( aWinRect.top - aRect2.top );
+    long nLeftDeco = abs( aWinRect.left - aRect2.left );
+    long nBottomDeco = abs( aWinRect.bottom - aRect2.bottom );
+    long nRightDeco = abs( aWinRect.right - aRect2.right );
+
     // Fenster-Position/Groesse in den Bildschirm einpassen
     if ( !(pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y)) )
         nPosSize |= SWP_NOMOVE;
     if ( !(pState->mnMask & (SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT)) )
         nPosSize |= SWP_NOSIZE;
     if ( pState->mnMask & SAL_FRAMESTATE_MASK_X )
-        nX = (int)pState->mnX;
+        nX = (int)pState->mnX - nLeftDeco;
     else
         nX = aWinRect.left;
     if ( pState->mnMask & SAL_FRAMESTATE_MASK_Y )
-        nY = (int)pState->mnY;
+        nY = (int)pState->mnY - nTopDeco;
     else
         nY = aWinRect.top;
     if ( pState->mnMask & SAL_FRAMESTATE_MASK_WIDTH )
-        nWidth = (int)pState->mnWidth;
+        nWidth = (int)pState->mnWidth + nLeftDeco + nRightDeco;
     else
         nWidth = aWinRect.right-aWinRect.left;
     if ( pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT )
-        nHeight = (int)pState->mnHeight;
+        nHeight = (int)pState->mnHeight + nTopDeco + nBottomDeco;
     else
         nHeight = aWinRect.bottom-aWinRect.top;
 
@@ -3193,8 +3214,10 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         if ( bIgnoreCharMsg )
         {
             bIgnoreCharMsg = FALSE;
-            return 1;   // #101635# if zero is returned here for WM_SYSCHAR (ALT+<key>) Windows will beep
-                        // becaus this 'hotkey' was not processed -> better return 1
+            // #101635# if zero is returned here for WM_SYSCHAR (ALT+<key>) Windows will beep
+            // becaus this 'hotkey' was not processed -> better return 1
+            // except for Alt-SPACE which should always open the sysmenu (#104616#)
+            return ( wParam == 0x20 ) ? 0 : 1;
         }
 
         // Backspace ignorieren wir als eigenstaendige Taste,
