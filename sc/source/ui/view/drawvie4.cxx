@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-10 07:55:11 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,8 +594,8 @@ void ScDrawView::DoCopy()
         pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
     }
 
-    pTransferObj->CopyToClipboard();                    // system clipboard
-    SC_MOD()->SetClipObject( NULL, pTransferObj );      // internal clipboard
+    pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
+    SC_MOD()->SetClipObject( NULL, pTransferObj );                  // internal clipboard
 }
 
 //  Korrektur fuer 100% berechnen, unabhaengig von momentanen Einstellungen

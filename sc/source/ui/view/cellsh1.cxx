@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-27 19:31:24 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,7 +1278,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             pDlg->Insert( nFormatId, aName );
                         }
 
-                        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+                        TransferableDataHelper aDataHelper(
+                            TransferableDataHelper::CreateFromSystemClipboard( GetViewData()->GetActiveWin() ) );
                         ULONG nFormat = pDlg->Execute( pTabViewShell->GetDialogParent(), aDataHelper.GetTransferable() );
                         if (nFormat > 0)
                         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-09 12:52:26 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 pDlg->Insert( SOT_FORMAT_STRING, ScResId( SCSTR_CLIP_STRING ) );
                 pDlg->Insert( SOT_FORMAT_RTF,    ScResId( SCSTR_CLIP_RTF ) );
 
-                TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+                TransferableDataHelper aDataHelper(
+                    TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
                 ULONG nFormat = pDlg->Execute( pViewData->GetDialogParent(), aDataHelper.GetTransferable() );
                 DELETEZ(pDlg);
@@ -568,7 +569,7 @@ const SvxURLField* ScEditShell::GetURLField()
 
 void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
 {
-    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
     BOOL bPaste = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
 
     SfxWhichIter aIter( rSet );

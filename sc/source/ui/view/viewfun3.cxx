@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 19:14:44 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ void ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut )
                 ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
                 uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-                pTransferObj->CopyToClipboard();                    // system clipboard
+                pTransferObj->CopyToClipboard( GetActiveWin() );    // system clipboard
                 SC_MOD()->SetClipObject( pTransferObj, NULL );      // internal clipboard
             }
         }
@@ -476,7 +476,7 @@ BOOL ScViewFunc::PasteFromSystem( ULONG nFormatId, BOOL bApi )
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument() );
     else
     {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWin() ) );
         if ( !aDataHelper.GetTransferable().is() )
             return FALSE;
 

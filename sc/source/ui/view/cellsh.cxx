@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-02 15:44:59 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,12 +332,12 @@ void lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper
     }
 }
 
-// static
 void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 {
     BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard() != NULL );
 
-    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+    TransferableDataHelper aDataHelper(
+        TransferableDataHelper::CreateFromSystemClipboard( GetViewData()->GetActiveWin() ) );
 
     lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_DRAWING );
     lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_SVXB );
@@ -371,7 +371,8 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
         bDisable = FALSE;
     else
     {
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+        TransferableDataHelper aDataHelper(
+            TransferableDataHelper::CreateFromSystemClipboard( GetViewData()->GetActiveWin() ) );
 
         if ( aDataHelper.HasFormat( SOT_FORMAT_BITMAP ) ||
              aDataHelper.HasFormat( SOT_FORMAT_GDIMETAFILE ) ||
