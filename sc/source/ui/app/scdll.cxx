@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-20 18:50:27 $
+ *  last change: $Author: os $ $Date: 2001-05-02 12:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,9 @@
 #include <svx/galbrws.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/lboxctrl.hxx>
-
+#ifndef _SVX_VERT_TEXT_TBXCTRL_HXX
+#include <svx/verttexttbxctrl.hxx>
+#endif
 #include "tbinsert.hxx"
 
 // Child-Windows
@@ -232,6 +234,9 @@ void ScDLL::Init()
     SvxGrafGammaToolBoxControl      ::RegisterControl(SID_ATTR_GRAF_GAMMA,      pMod);
     SvxGrafTransparenceToolBoxControl::RegisterControl(SID_ATTR_GRAF_TRANSPARENCE, pMod);
     SvxGrafFilterToolBoxControl     ::RegisterControl(SID_GRFFILTER,            pMod);
+
+    SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_CAPTION_VERTICAL, pMod);
+    SvxVertTextTbxCtrl::RegisterControl(SID_DRAW_TEXT_VERTICAL, pMod);
 
     // Svx-StatusBar-Controller
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
