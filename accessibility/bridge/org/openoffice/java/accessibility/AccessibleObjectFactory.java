@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-09 15:10:55 $
+ *  last change: $Author: obr $ $Date: 2002-08-14 12:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,11 @@ public class AccessibleObjectFactory {
 
             switch(info.Role) {
                 case AccessibleRole.CHECKBOX:
-                    o = new AccessibleCheckBox(xAccessibleContext);
+                    o = new AccessibleButton(
+                        javax.accessibility.AccessibleRole.CHECK_BOX,
+                        javax.accessibility.AccessibleState.CHECKED,
+                        xAccessibleContext
+                        );
                     break;
                 case AccessibleRole.COMBOBOX:
                 case AccessibleRole.LIST:
@@ -175,10 +179,18 @@ public class AccessibleObjectFactory {
                     o = new AccessibleParagraph(xAccessibleContext);
                     break;
                 case AccessibleRole.PUSHBUTTON:
-                    o = new AccessiblePushButton(xAccessibleContext);
+                    o = new AccessibleButton(
+                        javax.accessibility.AccessibleRole.PUSH_BUTTON,
+                        javax.accessibility.AccessibleState.SELECTED,
+                        xAccessibleContext
+                        );
                     break;
                 case AccessibleRole.RADIOBUTTON:
-                    o = new AccessibleRadioButton(xAccessibleContext);
+                    o = new AccessibleButton(
+                        javax.accessibility.AccessibleRole.RADIO_BUTTON,
+                        javax.accessibility.AccessibleState.CHECKED,
+                        xAccessibleContext
+                        );
                     break;
                 case AccessibleRole.SCROLLBAR:
                     o = new AccessibleScrollBar(xAccessibleContext);
@@ -294,6 +306,9 @@ public class AccessibleObjectFactory {
         if(o instanceof AccessibleWindow) {
             AccessibleWindow w = (AccessibleWindow) o;
             w.setAccessibleChildrenCount(info.ChildrenCount);
+        } else if(o instanceof AccessibleMenu) {
+            AccessibleMenu m = (AccessibleMenu) o;
+            m.setAccessibleChildrenCount(info.ChildrenCount);
         } else if(o instanceof AccessibleFixedText) {
             AccessibleFixedText t = (AccessibleFixedText) o;
             if( info.Text != null )
