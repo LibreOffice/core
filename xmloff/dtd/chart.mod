@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.22 2001-06-22 11:55:26 bm Exp $
+	$Id: chart.mod,v 1.23 2001-06-22 12:06:56 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -217,7 +217,7 @@
 
 <!ELEMENT chart:domain EMPTY>
 <!ATTLIST chart:domain
-		  table:cell-range-address %cell-range-address; #REQUIRED >
+		  table:cell-range-address %cell-range-address; #IMPLIED >
 
 <!ELEMENT chart:data-point EMPTY>
 <!ATTLIST chart:data-point
