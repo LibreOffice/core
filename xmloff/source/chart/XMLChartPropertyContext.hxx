@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartPropertyContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-14 11:54:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ public:
                              const ::rtl::OUString& rLName,
                              const ::com::sun::star::uno::Reference<
                                  ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+                             sal_uInt32 nFamily,
                              ::std::vector< XMLPropertyState >& rProps,
                              const UniReference< SvXMLImportPropertyMapper >& rMapper );
     virtual ~XMLChartPropertyContext();
