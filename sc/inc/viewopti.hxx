@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopti.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 07:54:25 $
+ *  last change: $Author: nn $ $Date: 2000-11-02 19:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <svx/svxids.hrc>
 #endif
 
-#ifndef _UTL_CONFIGITEM_HXX_
-#include <unotools/configitem.hxx>
+#ifndef SC_OPTUTIL_HXX
+#include "optutil.hxx"
 #endif
 
 #ifndef SC_SCGLOB_HXX
@@ -204,35 +204,6 @@ public:
 
 private:
     ScViewOptions   theOptions;
-};
-
-
-//  ConfigItem for classes that use items from several sub trees
-//! move to separate header file
-
-class ScLinkConfigItem : public utl::ConfigItem
-{
-    Link    aCommitLink;
-
-public:
-            ScLinkConfigItem( const rtl::OUString rSubTree );
-    void    SetCommitLink( const Link& rLink );
-
-    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
-    virtual void    Commit();
-
-    void    SetModified()   { ConfigItem::SetModified(); }
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any>
-            GetProperties(const com::sun::star::uno::Sequence< rtl::OUString >& rNames)
-                            { return ConfigItem::GetProperties( rNames ); }
-    sal_Bool PutProperties( const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
-                            const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues)
-                            { return ConfigItem::PutProperties( rNames, rValues ); }
-    sal_Bool EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames)
-                            { return ConfigItem::EnableNotification( rNames ); }
-
-    com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
-                            { return ConfigItem::GetNodeNames( rNode ); }
 };
 
 

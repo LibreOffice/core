@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appoptio.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 07:55:02 $
+ *  last change: $Author: nn $ $Date: 2000-11-02 19:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include "global.hxx"
 #endif
 
-#ifndef SC_VIEWOPTI_HXX
-#include "viewopti.hxx"         //! move ScLinkConfigItem to separate header!
+#ifndef SC_OPTUTIL_HXX
+#include "optutil.hxx"
 #endif
 
 
