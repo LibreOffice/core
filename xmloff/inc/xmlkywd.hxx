@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-19 15:01:08 $
+ *  last change: $Author: cl $ $Date: 2001-01-19 16:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,6 +841,8 @@ XML_CONSTASCII_ACTION( sXML_label_cell_address, "label-cell-address" );
 XML_CONSTASCII_ACTION( sXML_label_cell_range_address, "label-cell-range-address" );
 XML_CONSTASCII_ACTION( sXML_label_range, "label-range" );
 XML_CONSTASCII_ACTION( sXML_label_ranges, "label-ranges" );
+XML_CONSTASCII_ACTION( sXML_layer, "layer" );
+XML_CONSTASCII_ACTION( sXML_layer_set, "layer-set" );
 XML_CONSTASCII_ACTION( sXML_lambda, "lambda" );
 XML_CONSTASCII_ACTION( sXML_landscape, "landscape" );
 XML_CONSTASCII_ACTION( sXML_language, "language" );
@@ -889,6 +891,7 @@ XML_CONSTASCII_ACTION( sXML_list_level_style_number, "list-level-style-number" )
 XML_CONSTASCII_ACTION( sXML_list_style, "list-style" );
 XML_CONSTASCII_ACTION( sXML_list_style_name, "list-style-name" );
 XML_CONSTASCII_ACTION( sXML_ln, "ln" );
+XML_CONSTASCII_ACTION( sXML_locked, "locked" );
 XML_CONSTASCII_ACTION( sXML_log, "log" );
 XML_CONSTASCII_ACTION( sXML_logarithmic, "logarithmic" );
 XML_CONSTASCII_ACTION( sXML_logbase, "logbase" );
@@ -1159,6 +1162,7 @@ XML_CONSTASCII_ACTION( sXML_presentation_table , "table" );
 XML_CONSTASCII_ACTION( sXML_presentation_title , "title" );
 XML_CONSTASCII_ACTION( sXML_previous, "previous" );
 XML_CONSTASCII_ACTION( sXML_print, "print" );
+XML_CONSTASCII_ACTION( sXML_printable, "printable" );
 XML_CONSTASCII_ACTION( sXML_print_content, "print-content");
 XML_CONSTASCII_ACTION( sXML_print_date, "print-date" );
 XML_CONSTASCII_ACTION( sXML_print_orientation, "print-orientation");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-18 14:49:52 $
+ *  last change: $Author: cl $ $Date: 2001-01-19 16:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,29 @@ void SdXMLShapeContext::SetStyle()
     }
 }
 
+void SdXMLShapeContext::SetLayer()
+{
+    if( maLayerName.getLength() )
+    {
+        try
+        {
+            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+            if(xPropSet.is() )
+            {
+                uno::Any aAny;
+                aAny <<= maLayerName;
+
+                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LayerName")), aAny);
+                return;
+            }
+        }
+        catch( uno::Exception e )
+        {
+        }
+        DBG_ERROR( "could not attach shape to layer!" );
+    }
+}
+
 // this is called from the parent group for each unparsed attribute in the attribute list
 void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
 {
@@ -364,6 +387,10 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_style_name)) )
         {
             maDrawStyleName = rValue;
+        }
+        else if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_layer)) )
+        {
+            maLayerName = rValue;
         }
     }
     else if( XML_NAMESPACE_PRESENTATION == nPrefix )
@@ -466,6 +493,7 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     {
         // Add, set Style and properties from base shape
         SetStyle();
+        SetLayer();
 
         // set local parameters on shape
         SetSizeAndPosition();
@@ -553,6 +581,7 @@ void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     {
         // Add, set Style and properties from base shape
         SetStyle();
+        SetLayer();
 
         // set local parameters on shape
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
@@ -680,6 +709,7 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     {
         // Add, set Style and properties from base shape
         SetStyle();
+        SetLayer();
 
         // set local parameters on shape
         awt::Point aPoint(mnCX - mnRX, mnCY - mnRY);
@@ -766,6 +796,7 @@ void SdXMLPolygonShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     if( mxShape.is() )
     {
         SetStyle();
+        SetLayer();
 
         // set parameters on shape
         SetSizeAndPosition();
@@ -877,6 +908,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         if( mxShapes.is() )
         {
             SetStyle();
+            SetLayer();
 
             // set parameters on shape
             SetSizeAndPosition();
@@ -980,6 +1012,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     if( mxShape.is() )
     {
         SetStyle();
+        SetLayer();
 
         if(bIsPresShape)
         {
@@ -1058,6 +1091,7 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     if( mxShape.is() )
     {
         SetStyle();
+        SetLayer();
 
         // set parameters on shape
         SetSizeAndPosition();
@@ -1228,6 +1262,7 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
             xProps->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine3Delta")), aAny );
         }
         SetStyle();
+        SetLayer();
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
@@ -1299,6 +1334,7 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     if(mxShape.is())
     {
         SetStyle();
+        SetLayer();
         uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
         if( xProps.is() )
         {
@@ -1344,6 +1380,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     if(mxShape.is())
     {
         SetStyle();
+        SetLayer();
 
         // set parameters on shape
         SetSizeAndPosition();
@@ -1383,6 +1420,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     if( mxShape.is() )
     {
         SetStyle();
+        SetLayer();
 
         // set parameters on shape
         SetSizeAndPosition();
@@ -1434,6 +1472,7 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
     if(mxShape.is())
     {
         SetStyle();
+        SetLayer();
         if( !mbIsPlaceholder )
         {
             uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
@@ -1522,6 +1561,7 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
     if(mxShape.is())
     {
         SetStyle();
+        SetLayer();
 
         if( !mbIsPlaceholder )
         {

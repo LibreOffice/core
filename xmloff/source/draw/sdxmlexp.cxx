@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-18 14:49:52 $
+ *  last change: $Author: cl $ $Date: 2001-01-19 16:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,10 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_CAMERAGEOMETRY_HPP_
 #include <com/sun/star/drawing/CameraGeometry.hpp>
+#endif
+
+#ifndef _XMLOFF_LAYEREXP_HXX
+#include "layerexp.hxx"
 #endif
 
 using namespace ::rtl;
@@ -669,6 +673,8 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
     // add namespaces
     _GetNamespaceMap().AddAtIndex(
         XML_NAMESPACE_PRESENTATION, sXML_np_presentation, sXML_n_presentation, XML_NAMESPACE_PRESENTATION);
+
+    GetShapeExport()->enableLayerExport();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -3650,6 +3656,33 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfo(
         rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_id, sId );
     }
 
+    if( rExp.GetShapeExport()->IsLayerExportEnabled() )
+    {
+        try
+        {
+            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
+            OUString aLayerName;
+            xProps->getPropertyValue( OUString::createFromAscii( "LayerName" ) ) >>= aLayerName;
+            rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_layer, aLayerName );
+
+/*
+            sal_Int16 nLayerId;
+
+            uno::Reference< drawing::XLayer > xLayer;
+            xLayerManager->getByIndex( nLayerId ) >>= xLayer;
+            if( xLayer.is() )
+            {
+
+            }
+*/
+        }
+        catch( uno::Exception e )
+        {
+            DBG_ERROR( "could not export layer name for shape!" );
+        }
+
+    }
+
     switch(eShapeType)
     {
         case XmlShapeTypeDrawRectangleShape:
@@ -3779,6 +3812,7 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfo(
             break;
         }
     }
+
 }
 
 void SdXMLExport::ImpWriteSingleShapeStyleInfos(uno::Reference< container::XIndexAccess >& xShapes, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */ )
@@ -4188,6 +4222,9 @@ void SdXMLExport::_ExportAutoStyles()
 
 void SdXMLExport::_ExportMasterStyles()
 {
+    // export layer
+    SdXMLayerExporter::exportLayer( *this );
+
     // export MasterPages in master-styles section
     for(sal_Int32 nMPageId = 0L; nMPageId < mnDocMasterPageCount; nMPageId++)
     {

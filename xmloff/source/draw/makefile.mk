@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mib $ $Date: 2001-01-05 16:58:04 $
+#   last change: $Author: cl $ $Date: 2001-01-19 16:25:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,8 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/layerexp.obj\
+        $(SLO)$/layerimp.obj\
         $(SLO)$/ximpshow.obj\
         $(SLO)$/animimp.obj\
         $(SLO)$/animexp.obj\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-18 14:49:52 $
+ *  last change: $Author: cl $ $Date: 2001-01-19 16:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ protected:
     sal_Bool                    mbIsUserTransformed;
     sal_Int32                   mnZOrder;
     sal_Int32                   mnShapeId;
+    rtl::OUString               maLayerName;
 
     com::sun::star::awt::Size   maSize;
     com::sun::star::awt::Point  maPosition;
@@ -121,6 +122,7 @@ protected:
     sal_Int32                   mnHeight;
 
     void SetStyle();
+    void SetLayer();
     void AddShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape);
     void AddShape(const char* pServiceName );
     void SetSize();
