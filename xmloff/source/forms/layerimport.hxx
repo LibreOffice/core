@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:15:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,15 @@ namespace xmloff
         ::std::vector< ModelStringPair >
                                 m_aCellRangeListSources;// information about controls bound to spreadsheet cell range list sources
 
+        ::std::vector< ModelStringPair >
+                                m_aXFormsValueBindings; // collect xforms:bind attributes to be resolved
+
+        ::std::vector< ModelStringPair >
+                                m_aXFormsListBindings; // collect forms:xforms-list-source attributes to be resolved
+
+        ::std::vector< ModelStringPair >
+                                m_aXFormsSubmissions;   // collect xforms:submission attributes to be resolved
+
     public:
         // IControlIdMap
         virtual void    registerControlId(
@@ -187,6 +196,21 @@ namespace xmloff
         virtual void                        registerCellRangeListSource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
             const ::rtl::OUString& _rCellRangeAddress
+        );
+
+        virtual void                        registerXFormsValueBinding(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rBindingID
+        );
+
+        virtual void                        registerXFormsListBinding(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rBindingID
+        );
+
+        virtual void                        registerXFormsSubmission(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rSubmissionID
         );
 
     protected:
