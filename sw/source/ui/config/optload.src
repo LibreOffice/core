@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:20:34 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ french ] = "~Sιlection d'objet :";
         Text[ swedish ] = "~Objekturval:";
         Text[ dutch ] = "~Objectselectie";
-        Text[ spanish ] = "Selecciσn objeto:";
+        Text[ spanish ] = "Selecciσn de objeto:";
         Text[ english_us ] = "Object selection:";
         Text[ chinese_simplified ] = "ι€‰ζ‹©ε―Ήθ±΅οΌ";
         Text[ russian ] = "Βϋαξπ ξαϊεκςΰ:";
@@ -569,7 +569,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ greek ] = "Άθροισμα των αποστάσεων των παραγράφων και των πινάκων στην αρχή της σελίδας";
         Text[ dutch ] = "~Alinea- en tabellenafstanden invoegen aan paginabegin.";
         Text[ french ] = "Additionner les ~espaces entre paragraphes et tableaux en dιbut de page";
-        Text[ spanish ] = "Su~mar espacios de tablas y pαrrafos a los comienzos de pαginas";
+        Text[ spanish ] = "Su~mar espacios de tablas y pαrrafos en los comienzos de pαginas";
         Text[ italian ] = "Aggiungi distanze paragrafi e tabelle a inizio pagina.";
         Text[ danish ] = "Lζg afsnits- og tabelafstande til ved sidebegyndelser";
         Text[ swedish ] = "Lδgg till stycke- och ta~bellavstεnd i bφrjan av sidor";
