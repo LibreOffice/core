@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 16:44:42 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,13 @@
  *
  ************************************************************************/
  // include ------------------------------------------------------------------
+#include <svtools/controldims.hrc>
 #include "helpid.hrc"
 #include "dialogs.hrc"
 #include "transfrm.hrc"
  // pragma -------------------------------------------------------------------
+
+#define MA_TABPAGE_HEIGHT       82 + 22 + 48 + RSC_MA_TABPAGE_INNERBORDER_BOTTOM
 
  // RID_SVXPAGE_POSITION -----------------------------------------------------
 TabPage RID_SVXPAGE_POSITION
@@ -82,11 +85,11 @@ TabPage RID_SVXPAGE_POSITION
     Text [ dutch ] = "Positie" ;
     Text [ spanish ] = "Posición" ;
     Text [ english_us ] = "Position" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    GroupBox GRP_POSITION
+    Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
+    FixedLine FL_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , 65 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
         Text = "Position" ;
         Text [ English ] = "Position" ;
         Text [ norwegian ] = "Posisjon" ;
@@ -114,7 +117,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     FixedText FT_POS_X
     {
-        Pos = MAP_APPFONT ( 12 , 16  ) ;
+        Pos = MAP_APPFONT ( 12 , 16 + 11  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "Position ~X" ;
         Text [ English ] = "Position ~X" ;
@@ -143,7 +146,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     FixedText FT_POS_Y
     {
-        Pos = MAP_APPFONT ( 12 , 32  ) ;
+        Pos = MAP_APPFONT ( 12 , 32 + 11  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "Position ~Y" ;
         Text [ English ] = "Position ~Y" ;
@@ -173,7 +176,7 @@ TabPage RID_SVXPAGE_POSITION
     MetricField MTR_FLD_POS_X
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 14  ) ;
+        Pos = MAP_APPFONT ( 56 , 14 + 11  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -188,7 +191,7 @@ TabPage RID_SVXPAGE_POSITION
     MetricField MTR_FLD_POS_Y
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 30  ) ;
+        Pos = MAP_APPFONT ( 56 , 30 + 11  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -200,11 +203,18 @@ TabPage RID_SVXPAGE_POSITION
         Unit = FUNIT_MM ;
         SpinSize = 10 ;
     };
+    FixedText FT_REFERENCE
+    {
+        Pos = MAP_APPFONT ( 178 , 14  ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "Basispunkt" ;
+        Text [ ENGLISH ] = "Base point" ;
+    };
     Control CTL_RECT
     {
         HelpId = HID_TPPOSITION_CTRL ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 14  ) ;
+        Pos = MAP_APPFONT ( 178 , 14 + 11  ) ;
         Size = MAP_APPFONT ( 70 , 48 ) ;
         TabStop = TRUE ;
         QuickHelpText = "Basispunkt" ;
@@ -234,7 +244,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     TriStateBox TSB_PROTECT
     {
-        Pos = MAP_APPFONT ( 12 , 46  ) ;
+        Pos = MAP_APPFONT ( 12 , 46 + 11  ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         Text = "Sch~ützen" ;
         Text [ ENGLISH ] = "~Protect" ;
@@ -263,10 +273,10 @@ TabPage RID_SVXPAGE_POSITION
         Text[ catalan ] = "~Proteger";
     };
 
-    GroupBox GB_ANCHOR
+    FixedLine FL_ANCHOR
     {
-        Pos = MAP_APPFONT ( 6 , 71  ) ;
-        Size = MAP_APPFONT ( 248 , 45 ) ;
+        Pos = MAP_APPFONT ( 6 , 71 + 11  ) ;
+        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
         Text = "Verankerung" ;
         Text [ ENGLISH ] = "Anchor" ;
         Hide = TRUE ;
@@ -294,7 +304,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     FixedText FT_ANCHOR
     {
-        Pos = MAP_APPFONT ( 12 , 84  ) ;
+        Pos = MAP_APPFONT ( 12 , 84 + 11  ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
         Text = "~Anker" ;
         Text [ ENGLISH ] = "~Anchor" ;
@@ -323,7 +333,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     ListBox LB_ANCHOR
     {
-        Pos = MAP_APPFONT ( 53 , 82  ) ;
+        Pos = MAP_APPFONT ( 53 , 82 + 11  ) ;
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
         DropDown = TRUE ;
@@ -491,14 +501,14 @@ TabPage RID_SVXPAGE_POSITION
     };
     FixedText FT_ORIENT
     {
-        Pos = MAP_APPFONT ( 12 , 100  ) ;
+        Pos = MAP_APPFONT ( 12 , 100 + 11  ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
         Text = "~Position" ;
         Hide = TRUE ;
     };
     ListBox LB_ORIENT
     {
-        Pos = MAP_APPFONT ( 53 , 98  );
+        Pos = MAP_APPFONT ( 53 , 98 + 11  );
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
         DropDown = TRUE ;
@@ -832,11 +842,11 @@ TabPage RID_SVXPAGE_SIZE
     Text [ dutch ] = "Grootte" ;
     Text [ spanish ] = "Tamaño" ;
     Text [ english_us ] = "Size" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    GroupBox GRP_SIZE
+    Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
+    FixedLine FL_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , 73 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
         Text = "Größe" ;
         Text [ ENGLISH ] = "Size" ;
         Text [ norwegian ] = "Størrelse" ;
@@ -864,7 +874,7 @@ TabPage RID_SVXPAGE_SIZE
     };
     FixedText FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 16  ) ;
+        Pos = MAP_APPFONT ( 12 , 16 + 11  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
@@ -893,7 +903,7 @@ TabPage RID_SVXPAGE_SIZE
     };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 32  ) ;
+        Pos = MAP_APPFONT ( 12 , 32 + 11  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "H~öhe" ;
         Text [ ENGLISH ] = "H~eight" ;
@@ -923,7 +933,7 @@ TabPage RID_SVXPAGE_SIZE
     MetricField MTR_FLD_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 14  ) ;
+        Pos = MAP_APPFONT ( 56 , 14 + 11  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -938,7 +948,7 @@ TabPage RID_SVXPAGE_SIZE
     MetricField MTR_FLD_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 30  ) ;
+        Pos = MAP_APPFONT ( 56 , 30 + 11  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -950,11 +960,18 @@ TabPage RID_SVXPAGE_SIZE
         Unit = FUNIT_MM ;
         SpinSize = 10 ;
     };
+    FixedText FT_REFERENCE
+    {
+        Pos = MAP_APPFONT ( 178 , 14  ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "Basispunkt" ;
+        Text [ ENGLISH ] = "Base point" ;
+    };
     Control CTL_RECT
     {
         HelpId = HID_TPSIZE_CTRL ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 14  ) ;
+        Pos = MAP_APPFONT ( 178 , 14 + 11 ) ;
         Size = MAP_APPFONT ( 70 , 48 ) ;
         TabStop = TRUE ;
         QuickHelpText = "Basispunkt" ;
@@ -984,7 +1001,7 @@ TabPage RID_SVXPAGE_SIZE
     };
     CheckBox CBX_SCALE
     {
-        Pos = MAP_APPFONT ( 12 , 46  ) ;
+        Pos = MAP_APPFONT ( 12 , 46 + 11  ) ;
         Size = MAP_APPFONT ( 162 , 10 ) ;
         Text = "~Abgleich" ;
         Text [ ENGLISH ] = "~Match" ;
@@ -1013,7 +1030,7 @@ TabPage RID_SVXPAGE_SIZE
     };
     TriStateBox TSB_PROTECT
     {
-        Pos = MAP_APPFONT ( 12 , 60  ) ;
+        Pos = MAP_APPFONT ( 12 , 60 + 11  ) ;
         Size = MAP_APPFONT ( 162 , 10 ) ;
         Text = "Sch~ützen" ;
         Text [ ENGLISH ] = "~Protect" ;
@@ -1042,10 +1059,10 @@ TabPage RID_SVXPAGE_SIZE
         Text[ catalan ] = "~Proteger";
     };
 
-    GroupBox GRP_ADJUST
+    FixedLine FL_ADJUST
     {
-        Pos = MAP_APPFONT ( 6 , 79  ) ;
-        Size = MAP_APPFONT ( 248 , 45 ) ;
+        Pos = MAP_APPFONT ( 6 , 79 + 11  ) ;
+        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
         Text = "Anpassen" ;
         Text [ ENGLISH ] = "Adjust" ;
         Text [ english_us ] = "Adapt" ;
@@ -1072,7 +1089,7 @@ TabPage RID_SVXPAGE_SIZE
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 90  ) ;
+        Pos = MAP_APPFONT ( 12 , 90 + 11  ) ;
         Size = MAP_APPFONT ( 220 , 12 ) ;
         Text = "Br~eite an Text anpassen" ;
         Text [ ENGLISH ] = "Fit ~width to text" ;
@@ -1101,7 +1118,7 @@ TabPage RID_SVXPAGE_SIZE
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 106  ) ;
+        Pos = MAP_APPFONT ( 12 , 106 + 11  ) ;
         Size = MAP_APPFONT ( 220 , 12 ) ;
         Text = "Höhe ~an Text anpassen" ;
         Text [ ENGLISH ] = "Fit ~height to text" ;
@@ -1158,11 +1175,11 @@ TabPage RID_SVXPAGE_ANGLE
     Text [ dutch ] = "Hoek" ;
     Text [ spanish ] = "Ángulo" ;
     Text [ english_us ] = "Angle" ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    GroupBox GRP_POSITION
+    Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
+    FixedLine FL_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , 65 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
         Text = "Drehpunkt" ;
         Text [ ENGLISH ] = "Pivot" ;
         Text [ norwegian ] = "Pivot" ;
@@ -1190,7 +1207,7 @@ TabPage RID_SVXPAGE_ANGLE
     };
     FixedText FT_POS_X
     {
-        Pos = MAP_APPFONT ( 12 , 16  ) ;
+        Pos = MAP_APPFONT ( 12 , 16 + 11  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "Position ~X" ;
         Text [ English ] = "Position ~X" ;
@@ -1219,7 +1236,7 @@ TabPage RID_SVXPAGE_ANGLE
     };
     FixedText FT_POS_Y
     {
-        Pos = MAP_APPFONT ( 12 , 32  ) ;
+        Pos = MAP_APPFONT ( 12 , 32 + 11  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "Position ~Y" ;
         Text [ English ] = "Position ~Y" ;
@@ -1249,7 +1266,7 @@ TabPage RID_SVXPAGE_ANGLE
     MetricField MTR_FLD_POS_X
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 14  ) ;
+        Pos = MAP_APPFONT ( 56 , 14 + 11  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1264,7 +1281,7 @@ TabPage RID_SVXPAGE_ANGLE
     MetricField MTR_FLD_POS_Y
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 30  ) ;
+        Pos = MAP_APPFONT ( 56 , 30 + 11 ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1276,10 +1293,48 @@ TabPage RID_SVXPAGE_ANGLE
         Unit = FUNIT_MM ;
         SpinSize = 10 ;
     };
-    GroupBox GRP_ANGLE
+    FixedText FT_POSPRESETS
     {
-        Pos = MAP_APPFONT ( 6 , 71  ) ;
-        Size = MAP_APPFONT ( 248 , 65 ) ;
+        Pos = MAP_APPFONT ( 178 , 14  ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Vorgaben" ;
+        Text [ ENGLISH ] = "Presets" ;
+    };
+    Control CTL_RECT
+    {
+        HelpId = HID_TPROTATION_CTRL1 ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 178 , 14 + 11 ) ;
+        Size = MAP_APPFONT ( 70 , 48 ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Rotationspunkt" ;
+        QuickHelpText [ English ] = "Rotation point" ;
+        QuickHelpText [ english_us ] = "Rotation point" ;
+        QuickHelpText [ portuguese_brazilian ] = "Rotationspunkt" ;
+        QuickHelpText [ swedish ] = "Rotationspunkt" ;
+        QuickHelpText [ danish ] = "Rotationspunkt" ;
+        QuickHelpText [ italian ] = "Punto di rotazione" ;
+        QuickHelpText [ spanish ] = "Punto de rotación" ;
+        QuickHelpText [ french ] = "Point de rotation" ;
+        QuickHelpText [ dutch ] = "Rotatiepunt" ;
+        QuickHelpText [ portuguese ] = "Ponto de rotação" ;
+        QuickHelpText[ russian ] = "Òî÷êà âðàùåíèÿ";
+        QuickHelpText[ polish ] = "Punkt obrotu";
+        QuickHelpText[ japanese ] = "‰ñ“]Îß²ÝÄ";
+        QuickHelpText[ chinese_simplified ] = "Ðý×ªµã!";
+        QuickHelpText[ chinese_traditional ] = "±ÛÂàÂI";
+        QuickHelpText[ arabic ] = "äÞØÉ ÇáÇÓÊÏÇÑÉ";
+        QuickHelpText[ greek ] = "Óçìåßï ðåñéóôñïöÞò";
+        QuickHelpText[ korean ] = "È¸ÀüÁ¡!";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Rotationspunkt";
+        QuickHelpText[ catalan ] = "Punto de rotación";
+    };
+    FixedLine FL_ANGLE
+    {
+        Pos = MAP_APPFONT ( 6 , 71 + 11 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
         Text = "Drehwinkel" ;
         Text [ ENGLISH ] = "Angle" ;
         Text [ norwegian ] = "Vinkel" ;
@@ -1307,7 +1362,7 @@ TabPage RID_SVXPAGE_ANGLE
     };
     FixedText FT_ANGLE
     {
-        Pos = MAP_APPFONT ( 12 , 84  ) ;
+        Pos = MAP_APPFONT ( 12 , 84 + 22  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Winkel" ;
         Text [ ENGLISH ] = "~Angle" ;
@@ -1337,7 +1392,7 @@ TabPage RID_SVXPAGE_ANGLE
     MetricField MTR_FLD_ANGLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 82  ) ;
+        Pos = MAP_APPFONT ( 56 , 82 + 22  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1372,45 +1427,22 @@ TabPage RID_SVXPAGE_ANGLE
         CustomUnitText[ catalan ] = "grados";
         CustomUnitText[ finnish ] = " asteet";
     };
-    Control CTL_RECT
+    FixedText FT_ANGLEPRESETS
     {
-        HelpId = HID_TPROTATION_CTRL1 ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 14  ) ;
-        Size = MAP_APPFONT ( 70 , 48 ) ;
-        TabStop = TRUE ;
-        QuickHelpText = "Rotationspunkt" ;
-        QuickHelpText [ English ] = "Rotation point" ;
-        QuickHelpText [ english_us ] = "Rotation point" ;
-        QuickHelpText [ portuguese_brazilian ] = "Rotationspunkt" ;
-        QuickHelpText [ swedish ] = "Rotationspunkt" ;
-        QuickHelpText [ danish ] = "Rotationspunkt" ;
-        QuickHelpText [ italian ] = "Punto di rotazione" ;
-        QuickHelpText [ spanish ] = "Punto de rotación" ;
-        QuickHelpText [ french ] = "Point de rotation" ;
-        QuickHelpText [ dutch ] = "Rotatiepunt" ;
-        QuickHelpText [ portuguese ] = "Ponto de rotação" ;
-        QuickHelpText[ russian ] = "Òî÷êà âðàùåíèÿ";
-        QuickHelpText[ polish ] = "Punkt obrotu";
-        QuickHelpText[ japanese ] = "‰ñ“]Îß²ÝÄ!";
-        QuickHelpText[ chinese_simplified ] = "Ðý×ªµã!";
-        QuickHelpText[ chinese_traditional ] = "±ÛÂàÂI";
-        QuickHelpText[ arabic ] = "äÞØÉ ÇáÇÓÊÏÇÑÉ";
-        QuickHelpText[ greek ] = "Óçìåßï ðåñéóôñïöÞò";
-        QuickHelpText[ korean ] = "È¸ÀüÁ¡!";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Rotationspunkt";
-        QuickHelpText[ catalan ] = "Punto de rotación";
-        QuickHelpText[ finnish ] = "Kiertopiste!";
+        Pos = MAP_APPFONT ( 178 , 82 + 11  ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Vorgaben" ;
+        Text [ ENGLISH ] = "Presets" ;
     };
     Control CTL_ANGLE
     {
         HelpId = HID_TPROTATION_CTRL2 ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 82  ) ;
+        Pos = MAP_APPFONT ( 178 , 82 + 22  ) ;
         Size = MAP_APPFONT ( 70 , 48 ) ;
         TabStop = TRUE ;
+        QuickHelpText = "Drehwinkel" ;
+        QuickHelpText [ ENGLISH ] = "Angle" ;
     };
     Text[ chinese_simplified ] = "½Ç¶È";
     Text[ russian ] = "Óãîë";
@@ -1429,7 +1461,7 @@ TabPage RID_SVXPAGE_SLANT
 {
     HelpId = HID_TRANS_SLANT ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
     Text = "Schräg stellen / Eckenradius" ;
     Text [ ENGLISH ] = "Slant" ;
     Text [ english_us ] = "Slant & Corner Radius" ;
@@ -1441,10 +1473,10 @@ TabPage RID_SVXPAGE_SLANT
     Text [ danish ] = "Hældning / hjørneradius" ;
     Text [ portuguese ] = "Inclinações /Raio do ângulo" ;
     Text [ portuguese_brazilian ] = "Schr?gstellen / Eckenradius" ;
-    GroupBox GRP_RADIUS
+    FixedLine FL_RADIUS
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , 29 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
         Text = "Eckenradius" ;
         Text [ ENGLISH ] = "Edge radius" ;
         Text [ dutch ] = "Hoekafronding" ;
@@ -1512,10 +1544,10 @@ TabPage RID_SVXPAGE_SLANT
         Unit = FUNIT_MM ;
         SpinSize = 10 ;
     };
-    GroupBox GRP_SLANT
+    FixedLine FL_SLANT
     {
         Pos = MAP_APPFONT ( 6 , 35  ) ;
-        Size = MAP_APPFONT ( 248 , 29 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
         Text = "Schräg stellen" ;
         Text [ ENGLISH ] = "Slant" ;
         Text [ english_us ] = "Slant" ;
@@ -1626,7 +1658,7 @@ TabDialog RID_SVXDLG_TRANSFORM
 {
     OutputSize = TRUE ;
     SvLook = TRUE ;
-    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Size = MAP_APPFONT ( 289 , MA_TABPAGE_HEIGHT + 41 ) ;
     Text = "Position und Größe" ;
     Text [ ENGLISH ] = "Position and Size" ;
     Text [ norwegian ] = "Posisjon og størrelse" ;
@@ -1645,7 +1677,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     {
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
         PageList =
         {
             PageItem

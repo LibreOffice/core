@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 09:31:05 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
         aFtType                 ( this, ResId( FT_TYPE ) ),
         aLbType                 ( this, ResId( LB_TYPE ) ),
 
+        aFlDistance             ( this, ResId( FL_DISTANCE ) ),
         aFtHorz1                ( this, ResId( FT_HORZ_1 ) ),
         aMtrFldHorz1            ( this, ResId( MTR_FLD_HORZ_1 ) ),
         aFtHorz2                ( this, ResId( FT_HORZ_2 ) ),
@@ -149,18 +150,16 @@ SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttr
         aMtrFldVert1            ( this, ResId( MTR_FLD_VERT_1 ) ),
         aFtVert2                ( this, ResId( FT_VERT_2 ) ),
         aMtrFldVert2            ( this, ResId( MTR_FLD_VERT_2 ) ),
-        aGrpDistance            ( this, ResId( GRP_DISTANCE ) ),
 
+        aFlDelta                ( this, ResId( FL_DELTA ) ),
         aFtLine1                ( this, ResId( FT_LINE_1 ) ),
         aMtrFldLine1            ( this, ResId( MTR_FLD_LINE_1 ) ),
         aFtLine2                ( this, ResId( FT_LINE_2 ) ),
         aMtrFldLine2            ( this, ResId( MTR_FLD_LINE_2 ) ),
         aFtLine3                ( this, ResId( FT_LINE_3 ) ),
         aMtrFldLine3            ( this, ResId( MTR_FLD_LINE_3 ) ),
-        aGrpDelta               ( this, ResId( GRP_DELTA ) ),
 
-        aCtlPreview             ( this, ResId( CTL_PREVIEW ), rInAttrs ),
-        aGrpPreview             ( this, ResId( GRP_PREVIEW ) )
+        aCtlPreview             ( this, ResId( CTL_PREVIEW ), rInAttrs )
 {
     FreeResource();
 

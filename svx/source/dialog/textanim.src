@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 16:36:45 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,17 +60,53 @@
  ************************************************************************/
  // pragma ----------------------------------------------------------------
 
+#include <svtools/controldims.hrc>
 #include "dialogs.hrc"
 #include "textanim.hrc"
-#define HALFBUTTON_WIDTH 7
-#define BUTTON_WIDTH 2 * HALFBUTTON_WIDTH
-#define BUTTON_SIZE MAP_APPFONT( BUTTON_WIDTH, BUTTON_WIDTH )
+
+// direction image buttons
+#define MA_HALFBUTTON_WIDTH     7
+#define MA_BUTTON_WIDTH         (2 * MA_HALFBUTTON_WIDTH)
+#define MA_BUTTON_HEIGHT        (2 * MA_HALFBUTTON_WIDTH)
+#define BUTTON_SIZE             MAP_APPFONT( MA_BUTTON_WIDTH, MA_BUTTON_WIDTH )
+#define MA_MOVEBUT_GRACE_X      12
+
+// height of first group         Text effects
+#define MA_EFFECTSGROUP_HEIGHT  (RSC_CD_FIXEDLINE_HEIGHT + \
+                                 RSC_SP_FLGR_INNERBORDER_LEFT + \
+/* direction buttons */          3*MA_BUTTON_HEIGHT + \
+                                 RSC_SP_FLGR_INNERBORDER_BOTTOM + RSC_SP_FLGR_SPACE_Y)
+
+// height of second group                height of FIXEDTEXT
+#define MA_PROPERTIESGROUP_HEIGHT       (RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_LEFT + \
+/* text initially visible */             RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* text finally visible */               RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* animation runs */                     RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* number of runs */                     RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* step size */                          RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* number of pixel */                    RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* step delay */                         RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_GROUP_Y + \
+/* delay time */                         RSC_CD_TEXTBOX_HEIGHT)
+
+
+// left space for real controls
+#define MA_LEFT_SPACE                   (RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT)
+
+// tabpage total size
+#define MA_TOTAL_WIDTH          260
+#define MA_TOTAL_HEIGHT         RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + MA_PROPERTIESGROUP_HEIGHT + RSC_SP_TBPG_INNERBORDER_BOTTOM
+
+// X position and width of effects drop down
+#define MA_EFFECTLIST_X                 50
+#define MA_EFFECTLIST_WIDTH             95
+
+
  // RID_SVXPAGE_TEXTANIMATION ---------------------------------------------
 TabPage RID_SVXPAGE_TEXTANIMATION
 {
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( MA_TOTAL_WIDTH , 185 ) ;
     Text = "Textanimation" ;
     Text [ ENGLISH ] = "Text animation" ;
     Text [ dutch ] = "Tekstanimatie" ;
@@ -82,11 +118,29 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     Text [ danish ] = "Tekstanimation" ;
     Text [ portuguese ] = "AnimaÁ„o de texto" ;
     Text [ portuguese_brazilian ] = "Textanimation" ;
+    FixedLine FL_EFFECT
+    {
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT, RSC_SP_TBPG_INNERBORDER_TOP  ) ;
+        Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Lauftext Effekte" ;
+        Text [ ENGLISH ] = "Text Animation Effects" ;
+        Text [ english_us ] = "Text Animation Effects" ;
+    };
+#define MA_CURR_Y       RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT
+    FixedText FT_EFFECTS
+    {
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y + 2 ) ;
+        Size = MAP_APPFONT ( MA_EFFECTLIST_X - RSC_SP_CTRL_DESC_X - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_FLGR_INNERBORDER_LEFT,
+                             RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text = "Effekt" ;
+        Text [ ENGLISH ] = "Effect" ;
+        Text [ english_us ] = "Effect" ;
+    };
     ListBox LB_EFFECT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 14 , 14 ) ;
-        Size = MAP_APPFONT ( 95 , 57 ) ;
+        Pos = MAP_APPFONT ( MA_EFFECTLIST_X, MA_CURR_Y + 1 ) ;
+        Size = MAP_APPFONT ( MA_EFFECTLIST_WIDTH , 57 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         StringList =
@@ -276,9 +330,22 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         < "Vierit‰ sis‰‰n" ; Default ; > ;
     };
     };
+    FixedText FT_DIRECTION
+    {
+        Pos = MAP_APPFONT ( MA_EFFECTLIST_X + MA_EFFECTLIST_WIDTH + RSC_SP_CTRL_X, MA_CURR_Y + 2 ) ;
+        Size = MAP_APPFONT ( MA_TOTAL_WIDTH -
+                             (MA_MOVEBUT_GRACE_X + 3*MA_BUTTON_WIDTH + RSC_SP_TBPG_INNERBORDER_RIGHT + RSC_SP_FLGR_INNERBORDER_RIGHT) -
+                             (MA_EFFECTLIST_X + MA_EFFECTLIST_WIDTH + RSC_SP_CTRL_X + RSC_SP_CTRL_DESC_X + 6),
+                             RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Right = TRUE;
+        Text = "Laufrichtung" ;
+        Text [ ENGLISH ] = "Direction" ;
+        Text [ english_us ] = "Direction" ;
+    };
     ImageButton BTN_UP
     {
-        Pos = MAP_APPFONT ( 62 - HALFBUTTON_WIDTH , 35 ) ;
+        Pos = MAP_APPFONT ( MA_TOTAL_WIDTH - MA_MOVEBUT_GRACE_X - 2*MA_BUTTON_WIDTH - RSC_SP_TBPG_INNERBORDER_RIGHT - RSC_SP_FLGR_INNERBORDER_RIGHT,
+                            RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP );
         Size = BUTTON_SIZE ;
         Symbol = IMAGEBUTTON_ARROW_UP ;
         QuickHelpText = "Nach Oben" ;
@@ -308,7 +375,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     };
     ImageButton BTN_LEFT
     {
-        Pos = MAP_APPFONT ( 62 - HALFBUTTON_WIDTH - BUTTON_WIDTH , 35 + BUTTON_WIDTH ) ;
+        Pos = MAP_APPFONT ( MA_TOTAL_WIDTH - MA_MOVEBUT_GRACE_X - 3*MA_BUTTON_WIDTH - RSC_SP_TBPG_INNERBORDER_RIGHT - RSC_SP_FLGR_INNERBORDER_RIGHT,
+                            RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT);
         Size = BUTTON_SIZE ;
         Symbol = IMAGEBUTTON_ARROW_LEFT ;
         QuickHelpText = "Nach Links" ;
@@ -338,7 +406,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     };
     ImageButton BTN_RIGHT
     {
-        Pos = MAP_APPFONT ( 62 + HALFBUTTON_WIDTH , 35 + BUTTON_WIDTH ) ;
+        Pos = MAP_APPFONT ( MA_TOTAL_WIDTH - MA_MOVEBUT_GRACE_X - MA_BUTTON_WIDTH - RSC_SP_TBPG_INNERBORDER_RIGHT - RSC_SP_FLGR_INNERBORDER_RIGHT,
+                            RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT ) ;
         Size = BUTTON_SIZE ;
         Symbol = IMAGEBUTTON_ARROW_RIGHT ;
         QuickHelpText = "Nach Rechts" ;
@@ -368,7 +437,8 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     };
     ImageButton BTN_DOWN
     {
-        Pos = MAP_APPFONT ( 62 - HALFBUTTON_WIDTH , 35 + 2*BUTTON_WIDTH ) ;
+        Pos = MAP_APPFONT ( MA_TOTAL_WIDTH - MA_MOVEBUT_GRACE_X - 2*MA_BUTTON_WIDTH - RSC_SP_TBPG_INNERBORDER_RIGHT - RSC_SP_FLGR_INNERBORDER_RIGHT,
+                            RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + 2*MA_BUTTON_HEIGHT ) ;
         Size = BUTTON_SIZE ;
         Symbol = IMAGEBUTTON_ARROW_DOWN ;
         QuickHelpText = "Nach Unten" ;
@@ -396,11 +466,21 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ catalan ] = "Hacia abajo";
         QuickHelpText[ finnish ] = "Alaosaan!";
     };
+
+    FixedLine FL_PROPERTIES
+    {
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT , RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT  ) ;
+        Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Eigenschaften" ;
+        Text [ ENGLISH ] = "Properties" ;
+        Text [ english_us ] = "Properties" ;
+    };
+#define MA_CURR_Y2      RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_START_INSIDE
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 100 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y2 ) ;
+        Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT, RSC_CD_CHECKBOX_HEIGHT );
         Text = "Text sichtbar beim ~Starten" ;
         Text [ ENGLISH ] = "S~tart inside" ;
         Text [ dutch ] = "Tekst zichtbaar bij ~starten" ;
@@ -425,11 +505,12 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ catalan ] = "Texto visible al ~iniciar";
         Text[ finnish ] = "~Aloita kohteessa";
     };
+#define MA_CURR_Y3      MA_CURR_Y2 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     TriStateBox TSB_STOP_INSIDE
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 114 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y3 ) ;
+        Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT, RSC_CD_CHECKBOX_HEIGHT );
         Text = "Text sichtbar beim ~Beenden" ;
         Text [ ENGLISH ] = "S~top inside" ;
         Text [ dutch ] = "Tekst zichtbaar bij ~beÎindigen" ;
@@ -454,11 +535,41 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ catalan ] = "Texto visible al ~finalizar";
         Text[ finnish ] = "Teksti n‰kyviss‰ muokattaessa";
     };
+#define MA_CURR_Y4      MA_CURR_Y3 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
+    FixedText FT_COUNT
+    {
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y4 ) ;
+        Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT,
+                             RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text = "Animationsdurchl‰ufe" ;
+        Text [ ENGLISH ] = "Count" ;
+        Text [ english_us ] = "Count" ;
+        Text [ italian ] = "Numero" ;
+        Text [ spanish ] = "Cantidad" ;
+        Text [ french ] = "Nombre" ;
+        Text [ dutch ] = "Aantal" ;
+        Text [ swedish ] = "Antal" ;
+        Text [ danish ] = "Antal" ;
+        Text [ portuguese_brazilian ] = "Anzahl" ;
+        Text [ portuguese ] = "Quantidade" ;
+        Text[ chinese_simplified ] = " ˝ƒø";
+        Text[ russian ] = " ÓÎË˜ÂÒÚ‚Ó";
+        Text[ polish ] = "Liczba";
+        Text[ japanese ] = "âÒêî";
+        Text[ chinese_traditional ] = "º∆•ÿ";
+        Text[ greek ] = "–ÎﬁËÔÚ";
+        Text[ korean ] = "∞≥ºˆ";
+        Text[ arabic ] = "«·⁄œœ";
+        Text[ turkish ] = "Adet say˝s˝";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cantidad";
+    };
+#define MA_CURR_Y5      MA_CURR_Y4 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_ENDLESS
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 130 , 14  ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y5 ) ;
+        Size = MAP_APPFONT ( 60 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text = "~Endlos" ;
         Text [ ENGLISH ] = "~Endless" ;
         Text [ dutch ] = "~Eindeloos" ;
@@ -486,75 +597,51 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     NumericField NUM_FLD_COUNT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 196 , 14  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + 60 + RSC_SP_CTRL_GROUP_X,
+                            MA_CURR_Y5 ) ;
+        Size = MAP_APPFONT ( 50 , RSC_CD_TEXTBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
         Minimum = 1 ;
         First = 1 ;
     };
-    GroupBox GRP_EFFECT
+#define MA_CURR_Y6      MA_CURR_Y5 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
+    FixedText FT_AMOUNT
     {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 112 , 176 ) ;
-        Text = "Effekt" ;
-        Text [ ENGLISH ] = "Effect" ;
-        Text [ english_us ] = "Effects" ;
-        Text [ italian ] = "Effetto" ;
-        Text [ spanish ] = "Efecto" ;
-        Text [ french ] = "Effet" ;
-        Text [ dutch ] = "Effect" ;
-        Text [ swedish ] = "Effekt" ;
-        Text [ danish ] = "Effekt" ;
-        Text [ portuguese_brazilian ] = "Effekt" ;
-        Text [ portuguese ] = "Efeitos" ;
-        Text[ chinese_simplified ] = "–ßπ˚";
-        Text[ russian ] = "›ÙÙÂÍÚ";
-        Text[ polish ] = "Efekt";
-        Text[ japanese ] = "å¯â ";
-        Text[ chinese_traditional ] = "Æƒ™G";
-        Text[ greek ] = "≈ˆ›";
-        Text[ korean ] = "»ø∞˙";
-        Text[ arabic ] = "«· √ÀÌ—« ";
-        Text[ turkish ] = "Efekt";
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y6 ) ;
+        Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT,
+                             RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text = "Schrittweite" ;
+        Text [ ENGLISH ] = "Amount" ;
+        Text [ english_us ] = "Increment" ;
+        Text [ italian ] = "Incremento" ;
+        Text [ spanish ] = "Incremento" ;
+        Text [ french ] = "Pas de progression" ;
+        Text [ dutch ] = "Stapgrootte" ;
+        Text [ swedish ] = "Stegl‰ngd" ;
+        Text [ danish ] = "Trinvidde" ;
+        Text [ portuguese_brazilian ] = "Schrittweite" ;
+        Text [ portuguese ] = "Incremento" ;
+        Text[ chinese_simplified ] = "µ›‘ˆ";
+        Text[ russian ] = "œË‡˘ÂÌËÂ";
+        Text[ polish ] = "Inkrement";
+        Text[ japanese ] = "Ω√ØÃﬂêî";
+        Text[ chinese_traditional ] = "∫•∂i";
+        Text[ greek ] = "¬ﬁÏ·";
+        Text[ korean ] = "¡ı∞°∆¯";
+        Text[ arabic ] = "«· “«Ìœ";
+        Text[ turkish ] = "Ad˝m";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Efecto";
         Text[ finnish ] = "Tehosteet";
     };
-    GroupBox GRP_COUNT
-    {
-        Pos = MAP_APPFONT ( 124 , 3 ) ;
-        Size = MAP_APPFONT ( 130 , 30 ) ;
-        Text = "Anzahl" ;
-        Text [ ENGLISH ] = "Count" ;
-        Text [ english_us ] = "Count" ;
-        Text [ italian ] = "Numero" ;
-        Text [ spanish ] = "Cantidad" ;
-        Text [ french ] = "Nombre" ;
-        Text [ dutch ] = "Aantal" ;
-        Text [ swedish ] = "Antal" ;
-        Text [ danish ] = "Antal" ;
-        Text [ portuguese_brazilian ] = "Anzahl" ;
-        Text [ portuguese ] = "Quantidade" ;
-        Text[ chinese_simplified ] = " ˝ƒø";
-        Text[ russian ] = " ÓÎË˜ÂÒÚ‚Ó";
-        Text[ polish ] = "Liczba";
-        Text[ japanese ] = "âÒêî";
-        Text[ chinese_traditional ] = "º∆•ÿ";
-        Text[ greek ] = "–ÎﬁËÔÚ";
-        Text[ korean ] = "∞≥ºˆ";
-        Text[ arabic ] = "«·⁄œœ";
-        Text[ turkish ] = "Adet say˝s˝";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cantidad";
-        Text[ finnish ] = "Laske";
-    };
+#define MA_CURR_Y7      MA_CURR_Y6 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_PIXEL
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 130 , 80  ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y7 ) ;
+        Size = MAP_APPFONT ( 60 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text = "~Pixel" ;
         Text [ ENGLISH ] = "~Pixel" ;
         Text [ dutch ] = "~Pixels" ;
@@ -577,41 +664,13 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ turkish ] = "~Piksel";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "PÌ~xel";
-        Text[ finnish ] = "~Kuvapisteet";
-    };
-    GroupBox GRP_AMOUNT
-    {
-        Pos = MAP_APPFONT ( 124 , 69  ) ;
-        Size = MAP_APPFONT ( 130 , 30 ) ;
-        Text = "Schrittweite" ;
-        Text [ ENGLISH ] = "Amount" ;
-        Text [ english_us ] = "Increment" ;
-        Text [ italian ] = "Incremento" ;
-        Text [ spanish ] = "Incremento" ;
-        Text [ french ] = "Pas de progression" ;
-        Text [ dutch ] = "Stapgrootte" ;
-        Text [ swedish ] = "Stegl‰ngd" ;
-        Text [ danish ] = "Trinvidde" ;
-        Text [ portuguese_brazilian ] = "Schrittweite" ;
-        Text [ portuguese ] = "Incremento" ;
-        Text[ chinese_simplified ] = "µ›‘ˆ";
-        Text[ russian ] = "œË‡˘ÂÌËÂ";
-        Text[ polish ] = "Inkrement";
-        Text[ japanese ] = "Ω√ØÃﬂêî";
-        Text[ chinese_traditional ] = "∫•∂i";
-        Text[ greek ] = "¬ﬁÏ·";
-        Text[ korean ] = "¡ı∞°∆¯";
-        Text[ arabic ] = "«· “«Ìœ";
-        Text[ turkish ] = "Ad˝m";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Incremento";
-        Text[ finnish ] = "Lis‰ys";
     };
     MetricField MTR_FLD_AMOUNT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 196 , 80  ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + 60 + RSC_SP_CTRL_GROUP_X,
+                            MA_CURR_Y7 ) ;
+        Size = MAP_APPFONT ( 50 , RSC_CD_TEXTBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -623,10 +682,42 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Maximum = 10000 ;
         Last = 10000 ;
     };
+#define MA_CURR_Y8      MA_CURR_Y7 + RSC_CD_TEXTBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
+    FixedText FT_DELAY
+    {
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y8 ) ;
+        Size = MAP_APPFONT ( MA_TOTAL_WIDTH - RSC_SP_TBPG_INNERBORDER_LEFT - RSC_SP_TBPG_INNERBORDER_RIGHT,
+                             RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Verzˆgerung : Verz˜gerung */
+        /* ### ACHTUNG: Neuer Text in Resource? Verzˆgerung : Verz˜gerung */
+        Text = "Schrittverzˆgerung" ;
+        Text [ ENGLISH ] = "Delay" ;
+        Text [ english_us ] = "Delay" ;
+        Text [ italian ] = "Ritardo" ;
+        Text [ spanish ] = "Retardo" ;
+        Text [ french ] = "Cadence" ;
+        Text [ dutch ] = "Vertraging" ;
+        Text [ swedish ] = "Fˆrdrˆjning" ;
+        Text [ danish ] = "Forsinkelse" ;
+        Text [ portuguese_brazilian ] = "Verzˆgerung" ;
+        Text [ portuguese ] = "Atraso" ;
+        Text[ chinese_simplified ] = "—”≥Ÿ";
+        Text[ russian ] = "«‡‰ÂÊÍ‡";
+        Text[ polish ] = "OpÛünienie";
+        Text[ japanese ] = "íxÇ≠Ç∑ÇÈ";
+        Text[ chinese_traditional ] = "©µø";
+        Text[ greek ] = " ·ËıÛÙ›ÒÁÛÁ";
+        Text[ korean ] = "¡ˆø¨";
+        Text[ arabic ] = " √ŒÌ—";
+        Text[ turkish ] = "Gecikme";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Retardo";
+    };
+#define MA_CURR_Y9      MA_CURR_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_AUTO
     {
-        Pos = MAP_APPFONT ( 130 , 47  ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT, MA_CURR_Y9 ) ;
+        Size = MAP_APPFONT ( 60 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text = "~Automatisch" ;
         Text [ ENGLISH ] = "~Automatic" ;
         TabStop = TRUE ;
@@ -655,8 +746,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     MetricField MTR_FLD_DELAY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 196 , 47 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_TBPG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + 60 + RSC_SP_CTRL_GROUP_X,
+                            MA_CURR_Y9 ) ;
+        Size = MAP_APPFONT ( 50 , RSC_CD_TEXTBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -666,36 +758,6 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         CustomUnitText = " ms" ;
         Maximum = 100000 ;
         Last = 100000 ;
-    };
-    GroupBox GRP_DELAY
-    {
-        Pos = MAP_APPFONT ( 124 , 36  ) ;
-        Size = MAP_APPFONT ( 130 , 30 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Verzˆgerung : Verz˜gerung */
-        /* ### ACHTUNG: Neuer Text in Resource? Verzˆgerung : Verz˜gerung */
-        Text = "Verzˆgerung" ;
-        Text [ ENGLISH ] = "Delay" ;
-        Text [ english_us ] = "Delay" ;
-        Text [ italian ] = "Ritardo" ;
-        Text [ spanish ] = "Retardo" ;
-        Text [ french ] = "Cadence" ;
-        Text [ dutch ] = "Vertraging" ;
-        Text [ swedish ] = "Fˆrdrˆjning" ;
-        Text [ danish ] = "Forsinkelse" ;
-        Text [ portuguese_brazilian ] = "Verz?erung" ;
-        Text [ portuguese ] = "Atraso" ;
-        Text[ chinese_simplified ] = "—”≥Ÿ";
-        Text[ russian ] = "«‡‰ÂÊÍ‡";
-        Text[ polish ] = "OpÛ?nienie";
-        Text[ japanese ] = "íxÇ≠Ç∑ÇÈ";
-        Text[ chinese_traditional ] = "©µø";
-        Text[ greek ] = " ·ËıÛÙ›ÒÁÛÁ";
-        Text[ korean ] = "¡ˆø¨";
-        Text[ arabic ] = " √ŒÌ—";
-        Text[ turkish ] = "Gecikme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Retardo";
-        Text[ finnish ] = "Viivyt‰";
     };
     Text[ chinese_simplified ] = "ªÓ∂ØŒƒ◊÷";
     Text[ russian ] = "¿ÌËÏ‡ˆËˇ ÚÂÍÒÚ‡";
@@ -715,7 +777,7 @@ TabDialog RID_SVXDLG_TEXT
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Size = MAP_APPFONT ( 289 , 185 + 46 ) ;
     Text = "Text" ;
     Text [ ENGLISH ] = "Text" ;
     Text [ english_us ] = "Text" ;
@@ -732,7 +794,7 @@ TabDialog RID_SVXDLG_TEXT
     {
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
+        Size = MAP_APPFONT ( 260 , 185 ) ;
         PageList =
         {
             PageItem

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 15:16:07 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
  // include ---------------------------------------------------------------
+#include <svtools/controldims.hrc>
 #include "helpid.hrc"
 #include "dialogs.hrc"
 #include "backgrnd.hrc"
@@ -563,11 +564,17 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     };
      // Hintergrund-Brush  ----------------------------------------------------
+    Window CT_BORDER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 116+2 , 145+2 ) ;
+    };
     Control SET_BGDCOLOR
     {
         HelpId = HID_BACKGROUND_CTL_BGDCOLORSET ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 22 , 32 ) ;
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
         Size = MAP_APPFONT ( 116 , 145 ) ;
         TabStop = TRUE ;
     };
@@ -575,7 +582,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 21 ) ;
-        Size = MAP_APPFONT ( 148 , 8) ;
+        Size = MAP_APPFONT ( 248 , 8) ;
         Text = "Hintergrundfarbe" ;
         Text [ ENGLISH ] = "Background Color" ;
         Text [ NORWEGIAN ] = "Background Color" ;
@@ -601,36 +608,6 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Background color";
     };
-    FixedLine GB_COL_PREVIEW
-    {
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 160 , 21 ) ;
-        Size = MAP_APPFONT ( 94 , 8 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ NORWEGIAN ] = "Preview" ;
-        Text [ DANISH ] = "Eksempel" ;
-        Text [ ENGLISH_US ] = "Preview" ;
-        Text [ SPANISH ] = "Previsualización" ;
-        Text [ FINNISH ] = "Vorschau" ;
-        Text [ FRENCH ] = "Aperçu" ;
-        Text [ ITALIAN ] = "Anteprima" ;
-        Text [ DUTCH ] = "Voorbeeld" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Examinar" ;
-        Text [ SWEDISH ] = "Förhandsvisning" ;
-        Text [ PORTUGUESE ] = "Previsualizar" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°";
-        Text[ chinese_traditional ] = "¹wÄý";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸® º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Preview";
-    };
     Window WIN_PREVIEW1
     {
         Hide = TRUE ;
@@ -640,99 +617,6 @@ TabPage RID_SVXPAGE_BACKGROUND
         Size = MAP_APPFONT ( 82 , 40 ) ;
     };
      // Hintergrund-Bitmap ----------------------------------------------------
-    FixedText FT_FILE
-    {
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 34 ) ;
-        Size = MAP_APPFONT ( 141 , 8 ) ;
-        UNLINKED_IMAGE
-    };
-    CheckBox BTN_LINK
-    {
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 48 ) ;
-        Size = MAP_APPFONT ( 78 , 10 ) ;
-        Text = "~Verknüpfen" ;
-        Text [ ENGLISH ] = "~Link" ;
-        Text [ ENGLISH_US ] = "~Link" ;
-        Text [ dutch ] = "~Koppelen" ;
-        Text [ italian ] = "Collega" ;
-        Text [ spanish ] = "~Vincular" ;
-        Text [ french ] = "~Lien" ;
-        Text [ swedish ] = "Län~ka" ;
-        Text [ danish ] = "Kæd" ;
-        Text [ portuguese_brazilian ] = "~Verkn?fen" ;
-        Text [ portuguese ] = "~Ligar" ;
-        Text[ chinese_simplified ] = "Á´½Ó(~L)";
-        Text[ russian ] = "Ñâÿçàòü";
-        Text[ polish ] = "Po~³¹cz";
-        Text[ japanese ] = "ØÝ¸(~L)";
-        Text[ chinese_traditional ] = "±¶®|(~L)";
-        Text[ arabic ] = "ÑÈØ";
-        Text[ greek ] = "Óýíäåóç";
-        Text[ korean ] = "¿¬°á(~L)";
-        Text[ turkish ] = "Baðla";
-        Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Linkitä";
-        Text[ catalan ] = "~Vincular";
-    };
-    PushButton BTN_BROWSE
-    {
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 93 , 46 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "Au~swählen..." ;
-        Text [ ENGLISH ] = "~Select..." ;
-        Text [ english_us ] = "~Browse..." ;
-        Text [ portuguese_brazilian ] = "~Durchsuchen..." ;
-        Text [ swedish ] = "~Välj ut..." ;
-        Text [ danish ] = "Gennemse..." ;
-        Text [ italian ] = "~Sfoglia..." ;
-        Text [ spanish ] = "Seleccio~nar..." ;
-        Text [ french ] = "~Parcourir..." ;
-        Text [ dutch ] = "~Doorzoeken..." ;
-        Text [ portuguese ] = "~Pesquisar..." ;
-        Text[ chinese_simplified ] = "ä¯ÀÀ(~B)...";
-        Text[ russian ] = "Âûáðàòü...";
-        Text[ polish ] = "Przegl¹d~aj...";
-        Text[ japanese ] = "‘I‘ð(~B)...";
-        Text[ chinese_traditional ] = "ÂsÄý(~B)...";
-        Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
-        Text[ greek ] = "ÅðéëïãÞ...";
-        Text[ korean ] = "¼±ÅÃÇÏ±â(~B)...";
-        Text[ turkish ] = "Seç...";
-        Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Selaa";
-        Text[ catalan ] = "Seleccio~nar...";
-    };
-    CheckBox BTN_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 12 , 62 ) ;
-        Size = MAP_APPFONT ( 141 , 10 ) ;
-        Text = "V~orschau" ;
-        Text [ ENGLISH ] = "P~review" ;
-        Text [ ENGLISH_US ] = "Pre~view" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ spanish ] = "Previsuali~zación" ;
-        Text [ french ] = "A~perçu" ;
-        Text [ dutch ] = "V~oorbeeld" ;
-        Text [ swedish ] = "Fö~rhandsvisning" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ portuguese ] = "~Previsualizar" ;
-        Text [ portuguese_brazilian ] = "V~orschau" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ(~V)";
-        Text[ russian ] = "Ïðîñìîòð";
-        Text[ polish ] = "P~odgl¹d";
-        Text[ japanese ] = "ÌßÚËÞ­°(~V)";
-        Text[ chinese_traditional ] = "¹wÄý(~V)";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "¹Ì¸® º¸±â(~V)";
-        Text[ turkish ] = "Ö~nizleme";
-        Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Esikatselu";
-        Text[ catalan ] = "Previsuali~zación";
-    };
     FixedLine GB_FILE
     {
         Hide = TRUE ;
@@ -758,6 +642,96 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ greek ] = "Áñ÷åßï";
         Text[ korean ] = "ÆÄÀÏ";
         Text[ turkish ] = "Dosya";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_BROWSE
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 + RSC_SP_FLGR_INNERBORDER_LEFT , 23 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "Au~swählen..." ;
+        Text [ ENGLISH ] = "~Select..." ;
+        Text [ english_us ] = "~Browse..." ;
+        Text [ portuguese_brazilian ] = "~Durchsuchen..." ;
+        Text [ swedish ] = "~Välj ut..." ;
+        Text [ danish ] = "Gennemse..." ;
+        Text [ italian ] = "~Sfoglia..." ;
+        Text [ spanish ] = "Seleccio~nar..." ;
+        Text [ french ] = "~Parcourir..." ;
+        Text [ dutch ] = "~Doorzoeken..." ;
+        Text [ portuguese ] = "~Pesquisar..." ;
+        Text[ chinese_simplified ] = "ä¯ÀÀ(~B)...";
+        Text[ russian ] = "Âûáðàòü...";
+        Text[ polish ] = "Przegl¹d~aj...";
+        Text[ japanese ] = "‘I‘ð(~B)...";
+        Text[ chinese_traditional ] = "ÂsÄý(~B)...";
+        Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
+        Text[ greek ] = "ÅðéëïãÞ...";
+        Text[ korean ] = "¼±ÅÃÇÏ±â(~B)...";
+        Text[ turkish ] = "Seç...";
+        Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Selaa";
+        Text[ catalan ] = "Seleccio~nar...";
+    };
+    CheckBox BTN_LINK
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 + RSC_SP_FLGR_INNERBORDER_LEFT + 60 + 2*RSC_SP_CTRL_X, 23 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + 3 ) ;
+        Size = MAP_APPFONT ( 78 , 10 ) ;
+        Text = "~Verknüpfen" ;
+        Text [ ENGLISH ] = "~Link" ;
+        Text [ ENGLISH_US ] = "~Link" ;
+        Text [ dutch ] = "~Koppelen" ;
+        Text [ italian ] = "Collega" ;
+        Text [ spanish ] = "~Vincular" ;
+        Text [ french ] = "~Lien" ;
+        Text [ swedish ] = "Län~ka" ;
+        Text [ danish ] = "Kæd" ;
+        Text [ portuguese_brazilian ] = "~Verknüpfen" ;
+        Text [ portuguese ] = "~Ligar" ;
+        Text[ chinese_simplified ] = "Á´½Ó(~L)";
+        Text[ russian ] = "Ñâÿçàòü";
+        Text[ polish ] = "Po~³¹cz";
+        Text[ japanese ] = "ØÝ¸(~L)";
+        Text[ chinese_traditional ] = "±¶®|(~L)";
+        Text[ arabic ] = "ÑÈØ";
+        Text[ greek ] = "Óýíäåóç";
+        Text[ korean ] = "¿¬°á(~L)";
+        Text[ turkish ] = "Baðla";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_FILE
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 + RSC_SP_FLGR_INNERBORDER_LEFT , 23 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_CTRL_Y ) ;
+        Size = MAP_APPFONT ( 141 , 8 ) ;
+        UNLINKED_IMAGE
+    };
+    FixedLine GB_POSITION
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 78 ) ;
+        Size = MAP_APPFONT ( 153 , 8 ) ;
+        Text = "Art" ;
+        Text [ ENGLISH ] = "Type" ;
+        Text [ ENGLISH_US ] = "Type" ;
+        Text [ dutch ] = "Soort" ;
+        Text [ italian ] = "Tipo" ;
+        Text [ spanish ] = "Tipo" ;
+        Text [ french ] = "Type" ;
+        Text [ swedish ] = "Typ" ;
+        Text [ danish ] = "Type" ;
+        Text [ portuguese_brazilian ] = "Art" ;
+        Text [ portuguese ] = "Tipo" ;
+        Text[ chinese_simplified ] = "ÀàÐÍ";
+        Text[ russian ] = "Òèï";
+        Text[ polish ] = "Typ";
+        Text[ japanese ] = "Ží—Þ";
+        Text[ chinese_traditional ] = "Ãþ«¬";
+        Text[ arabic ] = "ÇáäæÚ";
+        Text[ greek ] = "Ôýðïò";
+        Text[ korean ] = "Çü½Ä";
+        Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "File";
         Text[ finnish ] = "Datei";
@@ -859,57 +833,38 @@ TabPage RID_SVXPAGE_BACKGROUND
         Size = MAP_APPFONT ( 90 , 87 ) ;
         TabStop = TRUE ;
     };
-    FixedLine GB_POSITION
-    {
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 78 ) ;
-        Size = MAP_APPFONT ( 153 , 8 ) ;
-        Text = "Art" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text [ ENGLISH_US ] = "Type" ;
-        Text [ dutch ] = "Soort" ;
-        Text [ italian ] = "Tipo" ;
-        Text [ spanish ] = "Tipo" ;
-        Text [ french ] = "Type" ;
-        Text [ swedish ] = "Typ" ;
-        Text [ danish ] = "Type" ;
-        Text [ portuguese_brazilian ] = "Art" ;
-        Text [ portuguese ] = "Tipo" ;
-        Text[ chinese_simplified ] = "ÀàÐÍ";
-        Text[ russian ] = "Òèï";
-        Text[ polish ] = "Typ";
-        Text[ japanese ] = "Ží—Þ";
-        Text[ chinese_traditional ] = "Ãþ«¬";
-        Text[ arabic ] = "ÇáäæÚ";
-        Text[ greek ] = "Ôýðïò";
-        Text[ korean ] = "Çü½Ä";
-        Text[ turkish ] = "Tür";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Type";
-        Text[ finnish ] = "Art";
-    };
     Window WIN_PREVIEW2
     {
         Hide = TRUE ;
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 34 ) ;
+        Pos = MAP_APPFONT ( 170 , 23 + 4 ) ;
         Size = MAP_APPFONT ( 81 , 139 ) ;
     };
-    FixedLine GB_PREVIEW
+    CheckBox BTN_PREVIEW
     {
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( 165 , 23 ) ;
-        Size = MAP_APPFONT ( 91 , 8 ) ;
-        Text = "Grafikvorschau" ;
-        Text [ ENGLISH ] = "Image Preview" ;
-        Text [ ENGLISH_US ] = "Preview" ;
-        Text [ italian ] = "Anteprima immagine" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ dutch ] = "Afbeeldingvoorbeeld" ;
-        Text [ swedish ] = "Grafikförhandsvisning" ;
+        Pos = MAP_APPFONT ( 170 , 23 + 4 + 139 + RSC_SP_CTRL_GROUP_Y ) ;
+        Size = MAP_APPFONT ( 141 , 10 ) ;
+        Text = "V~orschau" ;
+        Text [ ENGLISH ] = "P~review" ;
+        Text [ ENGLISH_US ] = "Pre~view" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ spanish ] = "Previsuali~zación" ;
+        Text [ french ] = "A~perçu" ;
+        Text [ dutch ] = "V~oorbeeld" ;
+        Text [ swedish ] = "Fö~rhandsvisning" ;
         Text [ danish ] = "Eksempel" ;
+        Text [ portuguese ] = "~Previsualizar" ;
+        Text [ portuguese_brazilian ] = "V~orschau" ;
+        Text[ chinese_simplified ] = "Ô¤ÀÀ(~V)";
+        Text[ russian ] = "Ïðîñìîòð";
+        Text[ polish ] = "P~odgl¹d";
+        Text[ japanese ] = "ÌßÚËÞ­°(~V)";
+        Text[ chinese_traditional ] = "¹wÄý(~V)";
+        Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ greek ] = "Ðñïåðéóêüðçóç";
+        Text[ korean ] = "¹Ì¸® º¸±â(~V)";
+        Text[ turkish ] = "Ö~nizleme";
         Text [ portuguese_brazilian ] = "Grafikvorschau" ;
         Text [ portuguese ] = "Previsualizar" ;
         Text[ chinese_simplified ] = "Ô¤ÀÀÍ¼ÐÎ";
@@ -919,11 +874,6 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ chinese_traditional ] = "¹Ï§Î¹wÄý";
         Text[ arabic ] = "ãÚÇíäÉ ÇáÕæÑÉ";
         Text[ language_user1 ] = " ";
-        Text[ greek ] = "Ðñïåðéóêüðçóç";
-        Text[ korean ] = "±×·¡ÇÈ ¹Ì¸® º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ catalan ] = "Preview";
-        Text[ finnish ] = "Grafikvorschau";
     };
     String STR_BROWSE
     {

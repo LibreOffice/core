@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 16:38:50 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
  // include ---------------------------------------------------------------
+#include <svtools/controldims.hrc>
 #include "dialogs.hrc"
 #include "textattr.hrc"
 #include "helpid.hrc"
@@ -81,6 +82,33 @@ TabPage RID_SVXPAGE_TEXTATTR
     Text [ danish ] = "Tekst" ;
     Text [ portuguese_brazilian ] = "Text" ;
     Text [ portuguese ] = "Texto" ;
+    FixedLine FL_TEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Text" ;
+        Text [ ENGLISH ] = "Text" ;
+        Text [ english_us ] = "Text" ;
+        Text [ italian ] = "Testo" ;
+        Text [ spanish ] = "Texto" ;
+        Text [ french ] = "Texte" ;
+        Text [ dutch ] = "Tekst" ;
+        Text [ swedish ] = "Text" ;
+        Text [ danish ] = "Tekst" ;
+        Text [ portuguese_brazilian ] = "Text" ;
+        Text [ portuguese ] = "Texto" ;
+        Text[ chinese_simplified ] = "ÎÄ×Ö";
+        Text[ russian ] = "Òåêñò";
+        Text[ polish ] = "Tekst";
+        Text[ japanese ] = "•¶Žš—ñ";
+        Text[ chinese_traditional ] = "¤º¦r";
+        Text[ arabic ] = "ÇáäÕ";
+        Text[ greek ] = "Êåßìåíï";
+        Text[ korean ] = "ÅØ½ºÆ®";
+        Text[ turkish ] = "Metin";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Texto";
+    };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
         TabStop = TRUE ;
@@ -201,33 +229,33 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ catalan ] = "Ajustar al ~contorno";
         Text[ finnish ] = "~Säädä ääriviivaan";
     };
-    GroupBox GRP_TEXT
+    FixedLine FL_DISTANCE
     {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , 77 ) ;
-        Text = "Text" ;
-        Text [ ENGLISH ] = "Text" ;
-        Text [ english_us ] = "Text" ;
-        Text [ italian ] = "Testo" ;
-        Text [ spanish ] = "Texto" ;
-        Text [ french ] = "Texte" ;
-        Text [ dutch ] = "Tekst" ;
-        Text [ swedish ] = "Text" ;
-        Text [ danish ] = "Tekst" ;
-        Text [ portuguese_brazilian ] = "Text" ;
-        Text [ portuguese ] = "Texto" ;
-        Text[ chinese_simplified ] = "ÎÄ×Ö";
-        Text[ russian ] = "Òåêñò";
-        Text[ polish ] = "Tekst";
-        Text[ japanese ] = "•¶Žš—ñ";
-        Text[ chinese_traditional ] = "¤º¦r";
-        Text[ arabic ] = "ÇáäÕ";
-        Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "ÅØ½ºÆ®";
-        Text[ turkish ] = "Metin";
+        Pos = MAP_APPFONT ( 6 , 83  ) ;
+        Size = MAP_APPFONT ( 114 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+         //Size = MAP_APPFONT ( 98 , 75 ) ;
+        Text = "Abstand vom Rahmen" ;
+        Text [ ENGLISH ] = "Distance from border" ;
+        Text [ english_us ] = "Spacing to borders" ;
+        Text [ italian ] = "Distanza dalla cornice" ;
+        Text [ spanish ] = "Distancia al marco" ;
+        Text [ french ] = "Écart du cadre" ;
+        Text [ dutch ] = "Afstand tot kader" ;
+        Text [ swedish ] = "Avstånd till ram" ;
+        Text [ danish ] = "Afstand fra rammen" ;
+        Text [ portuguese_brazilian ] = "Abstand vom Rahmen" ;
+        Text [ portuguese ] = "Espaço até moldura" ;
+        Text[ chinese_simplified ] = "Óë±ß¿òµÄ¾àÀë";
+        Text[ russian ] = "Ðàññòîÿíèå îò ðàìêè";
+        Text[ polish ] = "Odleg³oœæ od ramki";
+        Text[ japanese ] = "˜g‚©‚ç‚ÌŠÔŠu";
+        Text[ chinese_traditional ] = "Ãä®Øªº¶¡¹j";
+        Text[ arabic ] = "ÇáãÓÇÝÉ ÍÊì ÇáßÇÏÑ";
+        Text[ greek ] = "Áðüóôáóç áðü ðëáßóéï";
+        Text[ korean ] = "Å×µÎ¸®¿ÍÀÇ °£°Ý";
+        Text[ turkish ] = "Çerçeveye uzaklýk";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Texto";
-        Text[ finnish ] = "Teksti";
+        Text[ catalan ] = "Distancia al marco";
     };
     FixedText FT_LEFT
     {
@@ -408,34 +436,38 @@ TabPage RID_SVXPAGE_TEXTATTR
         Last = 10000 ;
         SpinSize = 10 ;
     };
-    GroupBox GRP_DISTANCE
+    FixedLine FL_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 6 , 83  ) ;
-        Size = MAP_APPFONT ( 114 , 96 ) ;
-         //Size = MAP_APPFONT ( 98 , 75 ) ;
-        Text = "Abstand vom Rahmen" ;
-        Text [ ENGLISH ] = "Distance from border" ;
-        Text [ english_us ] = "Spacing to borders" ;
-        Text [ italian ] = "Distanza dalla cornice" ;
-        Text [ spanish ] = "Distancia al marco" ;
-        Text [ french ] = "Écart du cadre" ;
-        Text [ dutch ] = "Afstand tot kader" ;
-        Text [ swedish ] = "Avstånd till ram" ;
-        Text [ danish ] = "Afstand fra rammen" ;
-        Text [ portuguese_brazilian ] = "Abstand vom Rahmen" ;
-        Text [ portuguese ] = "Espaço até moldura" ;
-        Text[ chinese_simplified ] = "Óë±ß¿òµÄ¾àÀë";
-        Text[ russian ] = "Ðàññòîÿíèå îò ðàìêè";
-        Text[ polish ] = "Odleg³o?æ od ramki";
-        Text[ japanese ] = "˜g‚©‚ç‚ÌŠÔŠu";
-        Text[ chinese_traditional ] = "Ãä®Øªº¶¡¹j";
-        Text[ arabic ] = "ÇáãÓÇÝÉ ÍÊì ÇáßÇÏÑ";
-        Text[ greek ] = "Áðüóôáóç áðü ðëáßóéï";
-        Text[ korean ] = "Å×µÎ¸®¿ÍÀÇ °£°Ý";
-        Text[ turkish ] = "Çerçeveye uzaklýk";
+        Pos = MAP_APPFONT ( 6 + 114, 83 + 10 ) ;
+        Size = MAP_APPFONT ( RSC_CD_FIXEDLINE_WIDTH, 150 - 83 - 10 + 12 ) ;
+//      Vert = TRUE;
+    };
+    FixedLine FL_POSITION
+    {
+        Pos = MAP_APPFONT ( 126 , 83 ) ;
+        Size = MAP_APPFONT ( 128 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Textverankerung" ;
+        Text [ ENGLISH ] = "Anchor text" ;
+        Text [ dutch ] = "Tekstverankering" ;
+        Text [ english_us ] = "Text anchor" ;
+        Text [ italian ] = "Ancoraggio testo" ;
+        Text [ spanish ] = "Anclaje del texto" ;
+        Text [ french ] = "Ancrage de texte" ;
+        Text [ swedish ] = "Textförankring" ;
+        Text [ danish ] = "Tekstforankring" ;
+        Text [ portuguese_brazilian ] = "Textverankerung" ;
+        Text [ portuguese ] = "Âncora do texto" ;
+        Text[ chinese_simplified ] = "ÎÄ×ÖËø¶¨";
+        Text[ russian ] = "Ïðèâÿçêà òåêñòà";
+        Text[ polish ] = "Zakotwiczenie tekstu";
+        Text[ japanese ] = "Ã·½Ä‚Ì±Ý¶°";
+        Text[ chinese_traditional ] = "¤å¦rÂê©w";
+        Text[ arabic ] = "ãÑÓÇÉ ÇáäÕ";
+        Text[ greek ] = "Áãêýñùóç êåéìÝíïõ";
+        Text[ korean ] = "ÅØ½ºÆ® À§Ä¡ °íÁ¤";
+        Text[ turkish ] = "Metin sabitleme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Distancia al marco";
-        Text[ finnish ] = "Välit reunoihin";
+        Text[ catalan ] = "Anclaje del texto";
     };
     Control CTL_POSITION
     {
@@ -472,35 +504,6 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ turkish ] = "Metni, ~nesne geniþliðine göre ayarla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Todo el a~ncho";
-        Text[ finnish ] = "~Täysi leveys";
-    };
-    GroupBox GRP_POSITION
-    {
-        Pos = MAP_APPFONT ( 126 , 83  ) ;
-        Size = MAP_APPFONT ( 128 , 96 ) ;
-        Text = "Textverankerung" ;
-        Text [ ENGLISH ] = "Anchor text" ;
-        Text [ dutch ] = "Tekstverankering" ;
-        Text [ english_us ] = "Text anchor" ;
-        Text [ italian ] = "Ancoraggio testo" ;
-        Text [ spanish ] = "Anclaje del texto" ;
-        Text [ french ] = "Ancrage de texte" ;
-        Text [ swedish ] = "Textförankring" ;
-        Text [ danish ] = "Tekstforankring" ;
-        Text [ portuguese_brazilian ] = "Textverankerung" ;
-        Text [ portuguese ] = "Âncora do texto" ;
-        Text[ chinese_simplified ] = "ÎÄ×ÖËø¶¨";
-        Text[ russian ] = "Ïðèâÿçêà òåêñòà";
-        Text[ polish ] = "Zakotwiczenie tekstu";
-        Text[ japanese ] = "Ã·½Ä‚Ì±Ý¶°";
-        Text[ chinese_traditional ] = "¤å¦rÂê©w";
-        Text[ arabic ] = "ãÑÓÇÉ ÇáäÕ";
-        Text[ greek ] = "Áãêýñùóç êåéìÝíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® À§Ä¡ °íÁ¤";
-        Text[ turkish ] = "Metin sabitleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Anclaje del texto";
-        Text[ finnish ] = "Tekstiankkuri";
     };
     Text[ chinese_simplified ] = "ÎÄ×Ö";
     Text[ russian ] = "Òåêñò";

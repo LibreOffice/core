@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:09:55 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,18 +269,19 @@ void SvxTransformTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 SvxPositionTabPage::SvxPositionTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
     SvxTabPage      ( pParent, ResId( RID_SVXPAGE_POSITION, DIALOG_MGR() ), rInAttrs ),
+    aFlPosition    ( this, ResId( FL_POSITION ) ),
     aFtPosX         ( this, ResId( FT_POS_X ) ),
     aMtrPosX        ( this, ResId( MTR_FLD_POS_X ) ),
     aFtPosY         ( this, ResId( FT_POS_Y ) ),
     aMtrPosY        ( this, ResId( MTR_FLD_POS_Y ) ),
-    aGrpPosition    ( this, ResId( GRP_POSITION ) ),
+    aTsbProtect     ( this, ResId( TSB_PROTECT ) ),
+    aFtReference    ( this, ResId( FT_REFERENCE ) ),
     aCtl            ( this, ResId( CTL_RECT ), RP_LT ),
-    aAnchorBox      ( this, ResId( GB_ANCHOR ) ),
+    aAnchorBox      ( this, ResId( FL_ANCHOR ) ),
     aFtAnchor       ( this, ResId( FT_ANCHOR ) ),
     aDdLbAnchor     ( this, ResId( LB_ANCHOR ) ),
     aFtOrient       ( this, ResId( FT_ORIENT ) ),
     aDdLbOrient     ( this, ResId( LB_ORIENT ) ),
-    aTsbProtect     ( this, ResId( TSB_PROTECT ) ),
     bPageDisabled   ( FALSE ),
     rOutAttrs       ( rInAttrs )
 {
@@ -348,7 +349,8 @@ void SvxPositionTabPage::Construct()
                     aFtPosY.Disable();
                     aMtrPosY.Disable();
                     aMtrPosY.SetText( String() );
-                    aGrpPosition.Disable();
+                    aFlPosition.Disable();
+                    aFtReference.Disable();
                     aCtl.Disable();
                     aTsbProtect.Disable();
                     bPageDisabled = TRUE;
@@ -884,17 +886,18 @@ IMPL_LINK( SvxPositionTabPage, SetOrientHdl, ListBox *, pBox )
 
 SvxSizeTabPage::SvxSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
     SvxTabPage              ( pParent, ResId( RID_SVXPAGE_SIZE, DIALOG_MGR() ), rInAttrs ),
+    aFlSize                         ( this, ResId( FL_SIZE ) ),
     aFtWidth                        ( this, ResId( FT_WIDTH ) ),
     aMtrWidth                       ( this, ResId( MTR_FLD_WIDTH ) ),
     aFtHeight                       ( this, ResId( FT_HEIGHT ) ),
     aMtrHeight                      ( this, ResId( MTR_FLD_HEIGHT ) ),
-    aGrpSize                        ( this, ResId( GRP_SIZE ) ),
-    aGrpAdjust                      ( this, ResId( GRP_ADJUST ) ),
     aCbxScale                       ( this, ResId( CBX_SCALE ) ),
+    aTsbProtect                     ( this, ResId( TSB_PROTECT ) ),
+    aFtReference                    ( this, ResId( FT_REFERENCE) ),
     aCtl                            ( this, ResId( CTL_RECT ), RP_LT ),
-    aTsbProtect             ( this, ResId( TSB_PROTECT ) ),
-    aTsbAutoGrowWidth   ( this, ResId( TSB_AUTOGROW_WIDTH ) ),
-    aTsbAutoGrowHeight  ( this, ResId( TSB_AUTOGROW_HEIGHT ) ),
+    aFlAdjust                       ( this, ResId( FL_ADJUST ) ),
+    aTsbAutoGrowWidth               ( this, ResId( TSB_AUTOGROW_WIDTH ) ),
+    aTsbAutoGrowHeight              ( this, ResId( TSB_AUTOGROW_HEIGHT ) ),
     rOutAttrs                       ( rInAttrs )
 {
     FreeResource();
@@ -919,7 +922,7 @@ SvxSizeTabPage::SvxSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
 
     aTsbAutoGrowWidth.Disable();
     aTsbAutoGrowHeight.Disable();
-    aGrpAdjust.Disable();
+    aFlAdjust.Disable();
 }
 
 // -----------------------------------------------------------------------
@@ -953,7 +956,7 @@ void SvxSizeTabPage::Construct()
             ( eKind==OBJ_TEXT || eKind==OBJ_TITLETEXT || eKind==OBJ_OUTLINETEXT) &&
             ( (SdrTextObj*) pObj )->HasText() )
         {
-            aGrpAdjust.Enable();
+            aFlAdjust.Enable();
             aTsbAutoGrowWidth.Enable();
             aTsbAutoGrowHeight.Enable();
             aTsbAutoGrowWidth.SetClickHdl( LINK( this, SvxSizeTabPage, ClickProtectHdl ) );
@@ -1508,15 +1511,18 @@ void SvxSizeTabPage::FillUserData()
 
 SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
     SvxTabPage              ( pParent, ResId( RID_SVXPAGE_ANGLE, DIALOG_MGR() ), rInAttrs ),
+    aFlPosition             ( this, ResId( FL_POSITION ) ),
     aFtPosX                 ( this, ResId( FT_POS_X ) ),
     aMtrPosX                ( this, ResId( MTR_FLD_POS_X ) ),
     aFtPosY                 ( this, ResId( FT_POS_Y ) ),
     aMtrPosY                ( this, ResId( MTR_FLD_POS_Y ) ),
-    aGrpPosition    ( this, ResId( GRP_POSITION ) ),
+    aFtPosPresets           ( this, ResId(FT_POSPRESETS) ),
+    aCtlRect                ( this, ResId( CTL_RECT ) ),
+
+    aFlAngle                ( this, ResId( FL_ANGLE ) ),
     aFtAngle                ( this, ResId( FT_ANGLE ) ),
     aMtrAngle               ( this, ResId( MTR_FLD_ANGLE ) ),
-    aGrpAngle               ( this, ResId( GRP_ANGLE ) ),
-    aCtlRect                ( this, ResId( CTL_RECT ) ),
+    aFtAnglePresets         ( this, ResId(FT_ANGLEPRESETS) ),
     aCtlAngle               ( this, ResId( CTL_ANGLE ),
                                 RP_RB, 200, 80, CS_ANGLE ),
     rOutAttrs               ( rInAttrs )
@@ -1580,15 +1586,17 @@ void SvxAngleTabPage::Construct()
 
     if( !pView->IsRotateAllowed() )
     {
+        aFlPosition.Disable();
         aFtPosX.Disable();
         aMtrPosX.Disable();
         aFtPosY.Disable();
         aMtrPosY.Disable();
-        aGrpPosition.Disable();
+        aFtPosPresets.Disable();
+        aCtlRect.Disable();
+        aFlAngle.Disable();
         aFtAngle.Disable();
         aMtrAngle.Disable();
-        aGrpAngle.Disable();
-        aCtlRect.Disable();
+        aFtAnglePresets.Disable();
         aCtlAngle.Disable();
     }
 }
@@ -1833,12 +1841,12 @@ IMPL_LINK( SvxAngleTabPage, ModifiedHdl, void *, p )
 SvxSlantTabPage::SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
     SvxTabPage              ( pParent, ResId( RID_SVXPAGE_SLANT, DIALOG_MGR() ), rInAttrs ),
 
+    aFlRadius               ( this, ResId( FL_RADIUS ) ),
     aFtRadius               ( this, ResId( FT_RADIUS ) ),
     aMtrRadius              ( this, ResId( MTR_FLD_RADIUS ) ),
-    aGrpRadius              ( this, ResId( GRP_RADIUS ) ),
+    aFlAngle                ( this, ResId( FL_ANGLE ) ),
     aFtAngle                ( this, ResId( FT_ANGLE ) ),
     aMtrAngle               ( this, ResId( MTR_FLD_ANGLE ) ),
-    aGrpAngle               ( this, ResId( GRP_ANGLE ) ),
     rOutAttrs               ( rInAttrs )
 {
     FreeResource();
@@ -1934,10 +1942,10 @@ void SvxSlantTabPage::Reset( const SfxItemSet& rAttrs )
 //A {
     if( !pView->IsEdgeRadiusAllowed() )
     {
+        aFlRadius.Disable();
         aFtRadius.Disable();
         aMtrRadius.Disable();
         aMtrRadius.SetText( String() );
-        aGrpRadius.Disable();
     }
     else
     {
@@ -1960,10 +1968,10 @@ void SvxSlantTabPage::Reset( const SfxItemSet& rAttrs )
     //if( ( bMarkedObj && SFX_ITEM_DEFAULT == eState ) ||
     if( !pView->IsShearAllowed() )
     {
+        aFlAngle.Disable();
         aFtAngle.Disable();
         aMtrAngle.Disable();
         aMtrAngle.SetText( String() );
-        aGrpAngle.Disable();
     }
     else
     {

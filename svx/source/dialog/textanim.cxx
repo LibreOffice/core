@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:20:14 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,27 +145,31 @@ void __EXPORT SvxTextTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 SvxTextAnimationPage::SvxTextAnimationPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
                 SfxTabPage      ( pWindow, ResId( RID_SVXPAGE_TEXTANIMATION, DIALOG_MGR() ),
                                   rInAttrs ),
+                aFlEffect       ( this, ResId(FL_EFFECT)),
+                aFtEffects      ( this, ResId(FT_EFFECTS)),
                 aLbEffect       ( this, ResId( LB_EFFECT ) ),
                 //aCtlEffect        ( this, ResId( CTL_EFFECT ) ),
+                aFtDirection    ( this, ResId(FT_DIRECTION) ),
                 aBtnUp          ( this, ResId( BTN_UP ) ),
                 aBtnLeft        ( this, ResId( BTN_LEFT ) ),
                 aBtnRight       ( this, ResId( BTN_RIGHT ) ),
                 aBtnDown        ( this, ResId( BTN_DOWN ) ),
+
+                aFlProperties   ( this, ResId(FL_PROPERTIES)),
                 aTsbStartInside ( this, ResId( TSB_START_INSIDE ) ),
                 aTsbStopInside  ( this, ResId( TSB_STOP_INSIDE ) ),
-                aGrpEffect      ( this, ResId( GRP_EFFECT ) ),
 
+                aFtCount        ( this, ResId(FT_COUNT)),
                 aTsbEndless     ( this, ResId( TSB_ENDLESS ) ),
                 aNumFldCount    ( this, ResId( NUM_FLD_COUNT ) ),
-                aGrpCount       ( this, ResId( GRP_COUNT ) ),
 
-                aTsbAuto        ( this, ResId( TSB_AUTO ) ),
-                aMtrFldDelay    ( this, ResId( MTR_FLD_DELAY ) ),
-                aGrpDelay       ( this, ResId( GRP_DELAY ) ),
-
+                aFtAmount       ( this, ResId(FT_AMOUNT)),
                 aTsbPixel       ( this, ResId( TSB_PIXEL ) ),
                 aMtrFldAmount   ( this, ResId( MTR_FLD_AMOUNT ) ),
-                aGrpAmount      ( this, ResId( GRP_AMOUNT ) ),
+
+                aFtDelay        ( this, ResId(FT_DELAY)),
+                aTsbAuto        ( this, ResId( TSB_AUTO ) ),
+                aMtrFldDelay    ( this, ResId( MTR_FLD_DELAY ) ),
 
                 rOutAttrs       ( rInAttrs ),
                 eAniKind        ( SDRTEXTANI_NONE )
@@ -590,15 +594,15 @@ IMPL_LINK( SvxTextAnimationPage, SelectEffectHdl_Impl, void *, EMPTYARG )
 
                 aTsbEndless.Disable();
                 aNumFldCount.Disable();
-                aGrpCount.Disable();
+                aFtCount.Disable();
 
                 aTsbAuto.Disable();
                 aMtrFldDelay.Disable();
-                aGrpDelay.Disable();
+                aFtDelay.Disable();
 
                 aTsbPixel.Disable();
                 aMtrFldAmount.Disable();
-                aGrpAmount.Disable();
+                aFtAmount.Disable();
             }
             break;
 
@@ -624,10 +628,10 @@ IMPL_LINK( SvxTextAnimationPage, SelectEffectHdl_Impl, void *, EMPTYARG )
                     aTsbEndless.Enable();
                     ClickEndlessHdl_Impl( NULL );
                 }
-                aGrpCount.Enable();
+                aFtCount.Enable();
 
                 aTsbAuto.Enable();
-                aGrpDelay.Enable();
+                aFtDelay.Enable();
                 ClickAutoHdl_Impl( NULL );
 
                 if( eAniKind == SDRTEXTANI_BLINK )
@@ -639,7 +643,7 @@ IMPL_LINK( SvxTextAnimationPage, SelectEffectHdl_Impl, void *, EMPTYARG )
 
                     aTsbPixel.Disable();
                     aMtrFldAmount.Disable();
-                    aGrpAmount.Disable();
+                    aFtAmount.Disable();
                 }
                 else
                 {
@@ -650,7 +654,7 @@ IMPL_LINK( SvxTextAnimationPage, SelectEffectHdl_Impl, void *, EMPTYARG )
 
                     aTsbPixel.Enable();
                     aMtrFldAmount.Enable();
-                    aGrpAmount.Enable();
+                    aFtAmount.Enable();
                 }
             }
             break;

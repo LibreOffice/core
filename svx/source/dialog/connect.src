@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:56:59 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
  // pragma ----------------------------------------------------------------
 
  // include ---------------------------------------------------------------
+#include <svtools/controldims.hrc>
 #include "connect.hrc"
 #include "dialogs.hrc"
 #include "helpid.hrc"
@@ -82,34 +83,6 @@ TabPage RID_SVXPAGE_CONNECTION
     Text [ french ] = "Connecteur" ;
     Text [ dutch ] = "Verbinding" ;
     Text [ portuguese ] = "Conector" ;
-    GroupBox GRP_DISTANCE
-    {
-        Pos = MAP_APPFONT ( 6 , 90  ) ;
-        Size = MAP_APPFONT ( 120 , 77 ) ;
-        Text = "Linienabstand" ;
-        Text [ ENGLISH ] = "Distance" ;
-        Text [ english_us ] = "Line spacing" ;
-        Text [ portuguese_brazilian ] = "Linienabstand" ;
-        Text [ swedish ] = "Linjeavstånd" ;
-        Text [ danish ] = "Linjeafstand" ;
-        Text [ italian ] = "Distanza tra le linee" ;
-        Text [ spanish ] = "Distancia entre líneas" ;
-        Text [ french ] = "Interligne" ;
-        Text [ dutch ] = "Lijnafstand" ;
-        Text [ portuguese ] = "Intervalo entre linhas" ;
-        Text[ chinese_simplified ] = "Ïß¼ä¸ô";
-        Text[ russian ] = "Ïğîìåæóòîê ìåæäó ëèíèÿìè";
-        Text[ polish ] = "Odstêp wierszy";
-        Text[ japanese ] = "üŠÔŠu";
-        Text[ chinese_traditional ] = "½u¶¡¹j";
-        Text[ arabic ] = "ÊÈÇÚÏ ÇáÎØæØ";
-        Text[ greek ] = "ÄéÜóôé÷ï";
-        Text[ korean ] = "¼± °£°İ";
-        Text[ turkish ] = "Çizgi aralığı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Distancia entre líneas";
-        Text[ finnish ] = "Riviväli";
-    };
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 8  ) ;
@@ -138,10 +111,18 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ catalan ] = "~Tipo";
         Text[ finnish ] = "~Tyyppi";
     };
-    GroupBox GRP_DELTA
+    ListBox LB_TYPE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 37 , 6  ) ;
+        Size = MAP_APPFONT ( 96 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedLine FL_DELTA
     {
         Pos = MAP_APPFONT ( 6 , 26  ) ;
-        Size = MAP_APPFONT ( 120 , 61 ) ;
+        Size = MAP_APPFONT ( 120 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Linienversatz" ;
         Text [ ENGLISH ] = "Delta" ;
         Text [ english_us ] = "Line skew" ;
@@ -165,42 +146,6 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desplazamiento de líneas";
         Text[ finnish ] = "Viivan viistotus";
-    };
-    GroupBox GRP_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 132 , 26  ) ;
-        Size = MAP_APPFONT ( 122 , 127 ) ;
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ english_us ] = "Preview" ;
-        Text [ portuguese_brazilian ] = "Vorschau" ;
-        Text [ swedish ] = "Förhandsvisning" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ spanish ] = "Previsualización" ;
-        Text [ french ] = "Aperçu" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text[ chinese_simplified ] = "Ô¤ÀÀ";
-        Text[ russian ] = "Ïğîñìîòğ";
-        Text[ polish ] = "Podgl¹d";
-        Text[ japanese ] = "ÌßÚËŞ­°";
-        Text[ chinese_traditional ] = "¹wµø";
-        Text[ arabic ] = "ãÚÇíäÉ";
-        Text[ greek ] = "Ğñïåğéóêüğçóç";
-        Text[ korean ] = "¹Ì¸® º¸±â";
-        Text[ turkish ] = "Önizleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Previsualización";
-        Text[ finnish ] = "Esikatselu";
-    };
-    ListBox LB_TYPE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 37 , 6  ) ;
-        Size = MAP_APPFONT ( 96 , 60 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
     };
     FixedText FT_LINE_1
     {
@@ -333,6 +278,33 @@ TabPage RID_SVXPAGE_CONNECTION
         Last = 10000 ;
         SpinSize = 10 ;
         Unit = FUNIT_CM ;
+    };
+    FixedLine FL_DISTANCE
+    {
+        Pos = MAP_APPFONT ( 6 , 90  ) ;
+        Size = MAP_APPFONT ( 120 , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Linienabstand" ;
+        Text [ ENGLISH ] = "Distance" ;
+        Text [ english_us ] = "Line spacing" ;
+        Text [ portuguese_brazilian ] = "Linienabstand" ;
+        Text [ swedish ] = "Linjeavstånd" ;
+        Text [ danish ] = "Linjeafstand" ;
+        Text [ italian ] = "Distanza tra le linee" ;
+        Text [ spanish ] = "Distancia entre líneas" ;
+        Text [ french ] = "Interligne" ;
+        Text [ dutch ] = "Lijnafstand" ;
+        Text [ portuguese ] = "Intervalo entre linhas" ;
+        Text[ chinese_simplified ] = "Ïß¼ä¸ô";
+        Text[ russian ] = "Ïğîìåæóòîê ìåæäó ëèíèÿìè";
+        Text[ polish ] = "Odstêp wierszy";
+        Text[ japanese ] = "üŠÔŠu";
+        Text[ chinese_traditional ] = "½u¶¡¹j";
+        Text[ arabic ] = "ÊÈÇÚÏ ÇáÎØæØ";
+        Text[ greek ] = "ÄéÜóôé÷ï";
+        Text[ korean ] = "¼± °£°İ";
+        Text[ turkish ] = "Çizgi aralığı";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Distancia entre líneas";
     };
     FixedText FT_HORZ_1
     {
@@ -514,9 +486,11 @@ TabPage RID_SVXPAGE_CONNECTION
     {
         HelpId = HID_PAGE_CONNECTION_CTL_PREVIEW ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 138 , 37  ) ;
-        Size = MAP_APPFONT ( 110 , 110 ) ;
+        Pos = MAP_APPFONT ( 6 + 120 + RSC_SP_FLGR_SPACE_Y + RSC_SP_FLGR_INNERBORDER_LEFT , 30  ) ;
+        Size = MAP_APPFONT ( 117 , 117 ) ;
         TabStop = TRUE ;
+        QuickHelpText = "Vorschau" ;
+        QuickHelpText [ ENGLISH ] = "Preview" ;
     };
     Text[ chinese_simplified ] = "Á¬½Ó·û";
     Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëîìàíàÿ ëèíèÿ";

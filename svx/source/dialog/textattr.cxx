@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 15:10:47 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,12 +162,13 @@ SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) 
                 SvxTabPage      ( pWindow, ResId( RID_SVXPAGE_TEXTATTR, DIALOG_MGR() ),
                                   rInAttrs ),
 
+                aFlText         ( this, ResId( FL_TEXT ) ),
                 aTsbAutoGrowWidth  ( this, ResId( TSB_AUTOGROW_WIDTH ) ),
                 aTsbAutoGrowHeight ( this, ResId( TSB_AUTOGROW_HEIGHT ) ),
                 aTsbFitToSize   ( this, ResId( TSB_FIT_TO_SIZE ) ),
                 aTsbContour     ( this, ResId( TSB_CONTOUR ) ),
-                aGrpText        ( this, ResId( GRP_TEXT ) ),
 
+                aFlDistance     ( this, ResId( FL_DISTANCE ) ),
                 aFtLeft         ( this, ResId( FT_LEFT ) ),
                 aMtrFldLeft     ( this, ResId( MTR_FLD_LEFT ) ),
                 aFtRight        ( this, ResId( FT_RIGHT ) ),
@@ -176,12 +177,13 @@ SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) 
                 aMtrFldTop      ( this, ResId( MTR_FLD_TOP ) ),
                 aFtBottom       ( this, ResId( FT_BOTTOM ) ),
                 aMtrFldBottom   ( this, ResId( MTR_FLD_BOTTOM ) ),
-                aGrpDistance    ( this, ResId( GRP_DISTANCE ) ),
 
+                aFlSeparator    ( this, ResId( FL_SEPARATOR ) ),
+
+                aFlPosition     ( this, ResId( FL_POSITION ) ),
                 aCtlPosition    ( this, ResId( CTL_POSITION ),
                                             RP_MM, 240, 100 ),
                 aTsbFullWidth   ( this, ResId( TSB_FULL_WIDTH ) ),
-                aGrpPosition    ( this, ResId( GRP_POSITION ) ),
 
                 rOutAttrs       ( rInAttrs )
 {
@@ -661,7 +663,7 @@ IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, p )
     // #83698# enable/disable text anchoring dependent of contour
     aCtlPosition.Enable(!bContour);
     aTsbFullWidth.Enable(!bContour);
-    aGrpPosition.Enable(!bContour);
+    aFlPosition.Enable(!bContour);
 
 /*
     // Am Rahmen anpassen

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,10 @@
  *
  *
  ************************************************************************/
-#define GRP_TEXT 2
-#define GRP_DISTANCE 1
-#define GRP_POSITION 3
+#define FL_TEXT 2
+#define FL_DISTANCE 1
+#define FL_POSITION 3
+#define FL_SEPARATOR 4
 #define TSB_AUTOGROW_HEIGHT 1
 #define TSB_AUTOGROW_WIDTH 2
 #define TSB_FIT_TO_SIZE 3

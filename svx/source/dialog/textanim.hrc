@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,16 @@
 #define CTL_EFFECT 1
 #define TSB_START_INSIDE 1
 #define TSB_STOP_INSIDE 2
-#define GRP_EFFECT 1
-#define GRP_COUNT 2
+#define FL_EFFECT 1
+#define FT_EFFECTS 1
+#define FT_DIRECTION 2
+#define FL_PROPERTIES 2
+#define FT_COUNT 3
 #define TSB_ENDLESS 3
 #define NUM_FLD_COUNT 1
-#define GRP_AMOUNT 3
+#define FT_AMOUNT 4
 #define MTR_FLD_AMOUNT 1
-#define GRP_DELAY 4
+#define FT_DELAY 5
 #define MTR_FLD_DELAY 2
 #define TSB_PIXEL 4
 #define TSB_AUTO 5

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 11:03:29 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,9 +335,9 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
 
     SvxTabPage( pParent, SVX_RES( RID_SVXPAGE_BACKGROUND ), rCoreSet ),
 
-    aBackgroundColorSet ( this, ResId( SET_BGDCOLOR ) ),
+    aBorderWin          ( this, ResId(CT_BORDER) ),
+    aBackgroundColorSet ( &aBorderWin, ResId( SET_BGDCOLOR ) ),
     aBackgroundColorBox ( this, ResId( GB_BGDCOLOR ) ),
-    aPreviewBox         ( this, ResId( GB_COL_PREVIEW ) ),
     pPreviewWin1        ( new BackgroundPreviewImpl(
                             this, ResId( WIN_PREVIEW1 ), FALSE ) ),
     aBtnBrowse          ( this, ResId( BTN_BROWSE ) ),
@@ -352,7 +352,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
     aGbPosition         ( this, ResId( GB_POSITION ) ),
     pPreviewWin2        ( new BackgroundPreviewImpl(
                             this, ResId( WIN_PREVIEW2 ), TRUE ) ),
-    aGbPreview          ( this, ResId( GB_PREVIEW ) ),
     aSelectTxt          ( this, ResId( FT_SELECTOR ) ),
     aLbSelect           ( this, ResId( LB_SELECTOR ) ),
     aTblDesc            ( this, ResId( FT_TBL_DESC ) ),
@@ -616,14 +615,15 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
     {
         if(!aLbSelect.IsVisible() && !aTblLBox.IsVisible() && !aParaLBox.IsVisible())
         {
-            long nY = aLbSelect.GetPosPixel().Y();
-            Point aPos(pPreviewWin1->GetPosPixel());
-            aPos.Y() = nY;
-            pPreviewWin1->SetPosPixel(aPos);
-            aPos = aBackgroundColorSet.GetPosPixel();
+            long nY(LogicToPixel(Point(11,14), MAP_APPFONT).X());
+            long nX(LogicToPixel(Point(11,14), MAP_APPFONT).Y());
+            Point aPos(aBackgroundColorSet.GetPosPixel());
+            aPos.X() = nX;
             aPos.Y() = nY;
             aBackgroundColorSet.SetPosPixel(aPos);
-            aPreviewBox.Hide();
+            aPos = pPreviewWin1->GetPosPixel();
+            aPos.Y()  = nY;
+            pPreviewWin1->SetPosPixel(aPos);
             aBackgroundColorBox.Hide();
         }
     }
@@ -1241,7 +1241,7 @@ void SvxBackgroundTabPage::ShowColorUI_Impl()
     {
         aBackgroundColorSet.Show();
         aBackgroundColorBox.Show();
-        aPreviewBox.Show();
+        aBorderWin.Show();
         pPreviewWin1->Show();
         aBtnBrowse.Hide();
         aFtFile.Hide();
@@ -1254,7 +1254,6 @@ void SvxBackgroundTabPage::ShowColorUI_Impl()
         aWndPosition.Hide();
         aGbPosition.Hide();
         pPreviewWin2->Hide();
-        aGbPreview.Hide();
     }
 }
 
@@ -1276,7 +1275,7 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
     {
         aBackgroundColorSet.Hide();
         aBackgroundColorBox.Hide();
-        aPreviewBox.Hide();
+        aBorderWin.Hide();
         pPreviewWin1->Hide();
         aBtnBrowse.Show();
         aFtFile.Show();
@@ -1291,7 +1290,6 @@ void SvxBackgroundTabPage::ShowBitmapUI_Impl()
         aWndPosition.Show();
         aGbPosition.Show();
         pPreviewWin2->Show();
-        aGbPreview.Show();
     }
 }
 
