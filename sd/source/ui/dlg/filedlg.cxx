@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: iha $ $Date: 2002-09-25 14:37:46 $
+ *  last change: $Author: fs $ $Date: 2002-11-14 10:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
 
     if( mxControlAccess.is() )
     {
-        if( nDialogType == FILEOPEN_PLAY )
+        if( nDialogType == ::sfx2::FILEOPEN_PLAY )
         {
             try
             {
@@ -419,7 +419,7 @@ sal_Bool SdFileDialog_Imp::SelectionBoxState() const
 
 // these are simple forwarders
 SdExportFileDialog::SdExportFileDialog(BOOL bHaveCheckbox) :
-    mpImpl( new SdFileDialog_Imp( FILESAVE_AUTOEXTENSION_SELECTION,
+    mpImpl( new SdFileDialog_Imp( ::sfx2::FILESAVE_AUTOEXTENSION_SELECTION,
                                   bHaveCheckbox ) )
 {
     // setup filter
@@ -482,7 +482,7 @@ BOOL SdExportFileDialog::IsExportSelection() const
 
 // these are simple forwarders
 SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
-    mpImpl( new SdFileDialog_Imp( FILEOPEN_PLAY, sal_False ) )
+    mpImpl( new SdFileDialog_Imp( ::sfx2::FILEOPEN_PLAY, sal_False ) )
 {
     // setup filter
 #if defined UNX
