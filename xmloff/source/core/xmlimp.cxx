@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:58:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 
 #ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
+#endif
+
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -289,6 +293,8 @@ public:
             DestroyFontToSubsFontConverter( hMathFontConv );
 #endif
     }
+
+    ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
 };
 
 typedef SvXMLImportContext *SvXMLImportContextPtr;
@@ -384,6 +390,9 @@ void SvXMLImport::_InitCtor()
         xEventListener.set(new SvXMLImportEventListener(this));
         xModel->addEventListener(xEventListener);
     }
+
+        ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
+
 }
 
 // #110680#
@@ -1739,6 +1748,11 @@ void SvXMLImport::DisposingModel()
 
     xModel.set(0);
     xEventListener.set(NULL);
+}
+
+::comphelper::UnoInterfaceToUniqueIdentifierMapper& SvXMLImport::getInterfaceToIdentifierMapper()
+{
+    return pImpl->maInterfaceToIdentifierMapper;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SvXMLImport::getServiceFactory()
