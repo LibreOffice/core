@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextSortable.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-10 11:15:50 $
+ *  last change: $Author: tl $ $Date: 2002-10-10 12:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,16 @@ module com {  module sun {  module star {  module text {
 
 //=============================================================================
 
-/** provides an interface and a sort descriptor to be used for sorting of text.
+/** provides an interface for sorting.
  */
 service TextSortable
 {
-        service com::sun::star::text::TextSortDescriptor;
+        /** the properties returned by a call to the 'createSortDescriptor' method
+            of this interfaces implementation are those of the
+            'com.sun.star.text.TextSortDescriptor' service.
 
+           @see <type scope="com::sun::star::text">TextSortDescriptor</type>
+         */
         interface com::sun::star::util::XSortable;
 };
 
