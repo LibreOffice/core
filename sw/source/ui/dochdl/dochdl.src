@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-10-07 13:10:38 $
+ *  last change: $Author: os $ $Date: 2002-11-11 10:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@ String STR_NOGLOS1
     TEXT[ korean ] = "자동텍 스트 바로가기 '";
     TEXT[ turkish ] = "Otomatik metin k�saltmas� '";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "AutoTexto para la abreviatura '";
+    TEXT[ catalan ] = "AutoText per al nom curt '";
+    TEXT[ thai ] = "ข้อความอัตโนมัติสำหรับเป็นทางลัด '";
 };
 String STR_NOGLOS2
 {
@@ -127,14 +128,14 @@ String STR_NOGLOS2
     TEXT[ korean ] = "' 을(를) 찾지 못했습니다.";
     TEXT[ turkish ] = "' bulunamad�.";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "' no se encontr�.";
+    TEXT[ catalan ] = "' no s'ha trobat.";
+    TEXT[ thai ] = "' ไม่พบ";
 };
 
 String STR_NO_TABLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Zu diesem Zeitpunkt kann keine Tabelle eingef�gt werden. : Zu diesem Zeitpunkt kann keine Tabelle eingef�gt werden. */
-    Text = "Zu diesem Zeitpunkt kann keine Tabelle eingef�gt werden." ;
-    Text [ English ] = "Inserting a table is impossible now." ;
+    Text = "Eine Tabelle kann nicht in eine andere Tabelle eingef�gt werden. Sie k�nnen die Daten jedoch einf�gen, wenn sich der Cursor nicht in einer Tabelle befindet." ;
+    Text [ english_us ] = "A table cannot be inserted into another table. However, you can paste the data into the document when the cursor is not in a table.";
     Text [ norwegian ] = "Inserting a table is impossible now." ;
     Text [ italian ] = "Adesso � impossibile inserire una tabella." ;
     Text [ portuguese_brazilian ] = "Inserir a tabela ? agora imposs?vel." ;
@@ -145,7 +146,6 @@ String STR_NO_TABLE
     Text [ swedish ] = "En tabell kan inte infogas vid denna tidpunkt." ;
     Text [ dutch ] = "Tabel kan op dit ogenblik niet worden ingevoegd." ;
     Text [ spanish ] = "Actualmente no se puede insertar ninguna tabla." ;
-    Text [ english_us ] = "It is currently not possible to insert a table" ;
     Text[ chinese_simplified ] = "当前无法插入任何表格。";
     Text[ russian ] = "� ��������� ����� �������� ������� ����������.";
     Text[ polish ] = "W tym momencie nie mo�e by� wstawiona tabela.";
@@ -158,7 +158,8 @@ String STR_NO_TABLE
     Text[ korean ] = "표를 삽입하는것이 현재 불가능합니다.";
     Text[ turkish ] = "�u an tablo eklenemiyor.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Actualmente no se puede insertar ninguna tabla.";
+    Text[ catalan ] = "Ara no es pot inserir cap taula.";
+    Text[ thai ] = "มันเป็นไปไม่ได้ที่จะแทรกตารางปัจจุบัน";
 };
 
 
@@ -189,7 +190,8 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE[ korean ] = "자동 텍스트를 만들수 없습니다.";
     MESSAGE[ turkish ] = "Otomatik metin olu�turulamad�.";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "No se pudo crear el AutoTexto.";
+    MESSAGE[ catalan ] = "No s'ha pogut crear l'autotext.";
+    MESSAGE[ thai ] = "ไม่สามารถสร้างข้อความอัตโนมัติ";
 };
 
 InfoBox MSG_CLPBRD_FORMAT_ERROR
@@ -219,7 +221,8 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE[ korean ] = "요청된 클립보드 서식은 가능하지 않습니다.";
     MESSAGE[ turkish ] = "�stenen pano format� mevcut de�il.";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "El formato deseado del portapapeles no est� disponible.";
+    MESSAGE[ catalan ] = "El format desitjat del porta-retalls no est� disponible.";
+    MESSAGE[ thai ] = "ร้องขอรูปแบบคลิปบอร์ดไม่ได้";
 };
 
 QueryBox MSG_UPDATE_NEW_GLOS_FMT
@@ -235,7 +238,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     MESSAGE [ finnish ] = "Osion muoto on vanhentunut.\nSe on muunnettava, jotta\nsit� voisi muuttaa.\nMuunnetaanko osio nyt?" ;
     MESSAGE [ danish ] = "Omr�dets filformat er for�ldet.\nDet skal konverteres, for at �ndringerne kan gemmes.\nVil du konvertere det?" ;
     MESSAGE [ french ] = "La section se trouve dans un format p�rim�.\nVous ne pourrrez enregistrer aucune modification \n � moins de le convertir.\nVoulez-vous proc�der � la conversion sans plus attendre ?" ;
-    MESSAGE [ swedish ] = "Omr�det har ett gammalt format.\nDet m�ste konverteras f�r att\n�ndringar skall kunna sparas.\nVill Du konvertera det?" ;
+    MESSAGE [ swedish ] = "Omr�det har ett gammalt format.\nDet m�ste konverteras f�r att\n�ndringar skall kunna sparas.\nVill du konvertera det?" ;
     MESSAGE [ dutch ] = "Het bereik heeft een verouderd formaat.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?" ;
     MESSAGE [ spanish ] = "El formato del �rea no es actual.\nHay que convertirlo\npara poder guardar las modificaciones.\n�Desea usted convertirlo?" ;
     MESSAGE [ english_us ] = "The section format is outdated.\nIt needs to be converted so that changes\ncan be saved.\nShould it be converted now?" ;
@@ -253,7 +256,8 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     Message[ korean ] = "영역 서식은 오래된 것입니다.\n 이것을 변환하여야 변경 사항을\n저장할 수 있습니다.\n 지금 변환 하겠습니까?";
     Message[ turkish ] = "B�l�m�n format� eski.\nDe�i�ikliklerin kaydedilebilmesi n\ni�in de�i�tirilmesi gerekiyor.\nFormat de�i�tirilsin mi?";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "El formato del �rea no es actual.\nHay que convertirlo\npara poder guardar las modificaciones.\n�Desea usted convertirlo?";
+    Message[ catalan ] = "El format de l'�rea no �s actual.\nS'ha de convertir\nper poder desar les modificacions.\nVoleu convertir-lo?";
+    Message[ thai ] = "รูปแบบส่วนล้าสมัย\nมันจำเป็นต้องถูกแปลงเพื่อ\nสามารถบันทึกการเปลี่ยนแปลง\nต้องการแปลงขณะนี้หรือไม่?";
 };
 
 String STR_PRIVATETEXT
@@ -281,6 +285,7 @@ String STR_PRIVATETEXT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME Writer";
     Text[ finnish ] = "%PRODUCTNAME Writer";
+    Text[ thai ] = "%PRODUCTNAME Writer";
 };
 String STR_PRIVATEGRAPHIC
 {
@@ -306,7 +311,8 @@ String STR_PRIVATEGRAPHIC
     Text[ chinese_traditional ] = "圖形 [%PRODUCTNAME Writer]";
     Text[ arabic ] = "[%PRODUCTNAME Writer] ������";
     Text[ turkish ] = "Grafik [%PRODUCTNAME Writer]";
-    Text[ catalan ] = "Imagen [%PRODUCTNAME Writer]";
+    Text[ catalan ] = "Imatge [%PRODUCTNAME Writer]";
+    Text[ thai ] = "กราฟิค [%PRODUCTNAME Writer]";
 };
 String STR_PRIVATEOLE
 {
@@ -330,8 +336,9 @@ String STR_PRIVATEOLE
     Text[ chinese_traditional ] = "物件 [%PRODUCTNAME Writer]";
     Text[ arabic ] = "[%PRODUCTNAME Writer]���� ";
     Text[ turkish ] = "Nesne [%PRODUCTNAME Writer]";
-    Text[ catalan ] = "Objeto [%PRODUCTNAME Writer]";
+    Text[ catalan ] = "Objecte [%PRODUCTNAME Writer]";
     Text[ finnish ] = "Objekti [%PRODUCTNAME Writer]";
+    Text[ thai ] = "วัตถุ [%PRODUCTNAME Writer]";
 };
 String STR_DDEFORMAT
 {
@@ -361,7 +368,8 @@ String STR_DDEFORMAT
     Text[ korean ] = "DDE 연결";
     Text[ turkish ] = "DDE ba�lant�s�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "V�nculo DDE";
+    Text[ catalan ] = "Enlla� DDE";
+    Text[ thai ] = "เชื่อมโยง DDE ";
 };
 Bitmap BMP_SW_TEAM_MUGSHOT
 {
