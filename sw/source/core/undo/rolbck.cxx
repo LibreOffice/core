@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-16 10:31:56 $
+ *  last change: $Author: jp $ $Date: 2001-01-16 19:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,16 +204,14 @@ SwSetFmtHint::SwSetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNd )
         break;
     case RES_PARATR_NUMRULE:
         {
-            if( ((SwNumRuleItem*)pAttr)->GetDefinedIn() &&
-                ((SwNumRuleItem*)pAttr)->GetDefinedIn()->ISA( SwTxtNode ))
+            const SwModify* pMod = ((SwNumRuleItem*)pFmtHt)->GetDefinedIn();
+            const SwNodeNum* pNdNum;
+            if( pMod && pMod->ISA( SwTxtNode ) &&
+                0 != (pNdNum = ((SwTxtNode*)pMod)->GetNum() ) )
             {
-                SwTxtNode* pTNd = (SwTxtNode*)((SwNumRuleItem*)pAttr)->GetDefinedIn();
-                if( pTNd->GetNum() )
-                {
-                    nNumLvl = pTNd->GetNum()->GetLevel();
-                    bNumStt = pTNd->GetNum()->IsStart();
-                    nSetStt = pTNd->GetNum()->GetSetValue();
-                }
+                nNumLvl = pNdNum->GetLevel();
+                bNumStt = pNdNum->IsStart();
+                nSetStt = pNdNum->GetSetValue();
             }
             ((SwNumRuleItem*)pAttr)->ChgDefinedIn( 0 );
         }
