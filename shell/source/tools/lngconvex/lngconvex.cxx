@@ -11,6 +11,9 @@
 
 #include <iostream>
 #include <fstream>
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 #include <map>
 #include <sstream>
