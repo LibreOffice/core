@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verttexttbxctrl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:16:43 $
+ *  last change: $Author: os $ $Date: 2001-05-03 07:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,13 +101,32 @@ void SvxVertTextTbxCtrl::StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
     BOOL bVisible = GetToolBox().IsItemVisible(GetId());
+    BOOL bCalc = sal_False;
     if(SvtCJKOptions().IsVerticalTextEnabled())
     {
         if(!bVisible)
+        {
             GetToolBox().ShowItem( GetId(), TRUE );
+            bCalc = sal_True;
+        }
     }
     else if(bVisible)
+    {
         GetToolBox().HideItem( GetId() );
+        bCalc = sal_True;
+    }
+    if(bCalc)
+    {
+        ToolBox& rTbx = GetToolBox();
+        Window* pParent = rTbx.GetParent();
+        WindowType nWinType = pParent->GetType();
+        if(WINDOW_FLOATINGWINDOW == nWinType)
+        {
+            Size aSize(rTbx.CalcWindowSizePixel());
+            rTbx.SetPosSizePixel( Point(), aSize );
+            pParent->SetOutputSizePixel( aSize );
+        }
+    }
 }
 /* -----------------------------27.04.01 15:50--------------------------------
 
