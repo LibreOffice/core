@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:54:01 $
+ *  last change: $Author: er $ $Date: 2001-07-20 18:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,32 +96,6 @@ Resource RID_ERRHDLSC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo establecer conexión con el archivo.";
         Text[ finnish ] = "Tiedostoon yhdistäminen ei ole mahdollista.";
-    };
-    String SCERR_IMPORT_CURSOR & SH_MAX
-    {
-        Text = "Das Dateiformat konnte nicht gelesen werden." ;
-        Text [ ENGLISH ] = "The fileformat could not be read." ;
-        Text [ dutch ] = "Het bestandsformaat kon niet worden gelezen." ;
-        Text [ english_us ] = "The file format could not be read." ;
-        Text [ italian ] = "Impossibile leggere il formato del file" ;
-        Text [ spanish ] = "No se pudo leer el formato del archivo." ;
-        Text [ french ] = "Impossible de lire ce format de fichier." ;
-        Text [ swedish ] = "Filformatet kunde inte läsas." ;
-        Text [ danish ] = "Det var ikke muligt at læse filformatet." ;
-        Text [ portuguese ] = "Foi impossível ler o formato do ficheiro." ;
-        Text [ portuguese_brazilian ] = "Das Dateiformat konnte nicht gelesen werden." ;
-        Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡Õâ¸öÎÄ¼ş¸ñÊ½¡£";
-        Text[ russian ] = "Íå óäàåòñÿ ïğî÷èòàòü ôîğìàò ôàéëà.";
-        Text[ polish ] = "Format pliku nie móg³ zostaæ odczytany.";
-        Text[ japanese ] = "Ì§²Ù‘®‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-        Text[ chinese_traditional ] = "µLªkÅª¨ú³o­ÓÀÉ®×®æ¦¡¡C";
-        Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ ÊäÓíŞ Çáãáİ.";
-        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé áíÜãíùóç ôçò ìïñöŞò áñ÷åßïõ.";
-        Text[ korean ] = "ÆÄÀÏ¼­½ÄÀ» ÀĞÁö¡¡¸øÇß½À´Ï´Ù.";
-        Text[ turkish ] = "Dosya formatı okunamadı.";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "No se pudo leer el formato del archivo.";
-        Text[ finnish ] = "Tiedostomuotoa ei voitu lukea.";
     };
     String SCERR_IMPORT_OPEN & SH_MAX
     {
@@ -441,32 +415,6 @@ Resource RID_ERRHDLSC
         Text[ catalan ] = "No se pudo establecer conexión con el archivo.";
         Text[ finnish ] = "Tiedostoon ei voitu muodostaa yhteyttä.";
     };
-    String SCERR_EXPORT_CURSOR & SH_MAX
-    {
-        Text = "Das Dateiformat konnte nicht geschrieben werden." ;
-        Text [ ENGLISH ] = "The fileformat could not be written." ;
-        Text [ english_us ] = "The file format could not be written." ;
-        Text [ italian ] = "Impossibile scrivere il formato dei dati." ;
-        Text [ spanish ] = "No se pudo guardar el formato del archivo." ;
-        Text [ french ] = "Impossible d'écrire ce format de fichier." ;
-        Text [ dutch ] = "Het bestandsformaat kon niet worden geschreven." ;
-        Text [ swedish ] = "Filformatet kunde inte skrivas." ;
-        Text [ danish ] = "Det var ikke muligt at skrive filformatet." ;
-        Text [ portuguese ] = "Não foi possível guardar o formato do ficheiro." ;
-        Text [ portuguese_brazilian ] = "Das Dateiformat konnte nicht geschrieben werden." ;
-        Text[ chinese_simplified ] = "ÎŞ·¨Ğ´ÈëÎÄ¼ş¸ñÊ½¡£";
-        Text[ russian ] = "Çàïèñàòü ôîğìàò ôàéëà íåâîçìîæíî.";
-        Text[ polish ] = "Formatu pliku nie mo¿na by³o zapisaæ.";
-        Text[ japanese ] = "Ì§²Ù‘®‚Í‘‚«‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-        Text[ chinese_traditional ] = "µLªk¼g¤JÀÉ®×®æ¦¡¡C";
-        Text[ arabic ] = "ÊÚĞÑ ßÊÇÈÉ ÊäÓíŞ Çáãáİ.";
-        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé åããñáöŞ ôçò ìïñöŞò áñ÷åßïõ..";
-        Text[ korean ] = "ÆÄÀÏ ¼­½ÄÀ» ¾µ ¼ö ¾ø¾ú½À´Ï´Ù.";
-        Text[ turkish ] = "Dosya formatı yazılamadı.";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "No se pudo guardar el formato del archivo.";
-        Text[ finnish ] = "Tiedostomuotoa ei voitu kirjoittaa.";
-    };
     String SCERR_EXPORT_DATA & SH_MAX
     {
         Text = "Die Daten konnten nicht geschrieben werden." ;
@@ -709,6 +657,12 @@ Resource RID_ERRHDLSC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudieron guardar todos los contenidos de las celdas en el formato especificado.";
         Text[ finnish ] = "Kaikkia solujen sisältöjä ei voitu tallentaa määritetyssä muodossa.";
+    };
+    String SCWARN_EXPORT_NONCONVERTIBLE_CHARS & SH_MAX
+    {
+        Text = "Die folgenden Zeichen konnten nicht in den gewählten Zeichensatz konvertiert werden\nund wurden in &#1234; Ersatzdarstellung geschrieben:\n\n$(ARG1)";
+        Text[ENGLISH] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ENGLISH_US] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
     };
 };
 
