@@ -1,15 +1,17 @@
 mkdir: %_DEST%\pck%_EXT%
 mkdir: %_DEST%\pck%_EXT%\openoffice
+mkdir: %COMMON_DEST%\pck%_EXT%
+mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
 
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
-..\common.pro\bin\*.zip %_DEST%\pck%_EXT%\*.zip
-..\source\truetype\decorative\*.ttf %_DEST%\pck%_EXT%\*.ttf
-..\source\truetype\standard_sans\*.ttf %_DEST%\pck%_EXT%\*.ttf
-..\source\truetype\standard_serif\*.ttf %_DEST%\pck%_EXT%\*.ttf
-..\source\truetype\symbol\*.ttf %_DEST%\pck%_EXT%\*.ttf
-..\source\shellnew\soffice.* %_DEST%\pck%_EXT%\soffice.*
-..\unx\source\fonts\fonts\type1\fontunxtype1portal.zip %_DEST%\pck%_EXT%\fontunxtype1portal.zip
-..\unx\source\fonts\fonts.dir %_DEST%\pck%_EXT%\openoffice\fonts.dir
+..\common.pro\bin\*.zip %COMMON_DEST%\pck%_EXT%\*.zip
+..\source\truetype\decorative\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
+..\source\truetype\standard_sans\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
+..\source\truetype\standard_serif\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
+..\source\truetype\symbol\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
+..\source\shellnew\soffice.* %COMMON_DEST%\pck%_EXT%\soffice.*
+..\unx\source\fonts\fonts\type1\fontunxtype1portal.zip %COMMON_DEST%\pck%_EXT%\fontunxtype1portal.zip
+..\unx\source\fonts\fonts.dir %COMMON_DEST%\pck%_EXT%\openoffice\fonts.dir
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
