@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:19:42 $
+#   last change: $Author: pluby $ $Date: 2001-03-07 08:18:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,11 @@ DEF1EXPORT1 =component_getImplementationEnvironment
 DEF1EXPORT2 =component_writeInfo
 DEF1EXPORT3 =component_getFactory
 DEF1DES=Cached Dynamic Resultset
+
+# Make symbol renaming match library name for Mac OS X
+.IF "$(OS)"=="MACOSX"
+SYMBOLPREFIX=$(TARGET)$(UCB_MAJOR)
+.ENDIF
 
 .INCLUDE: target.mk
 
