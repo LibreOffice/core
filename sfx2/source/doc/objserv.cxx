@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-29 14:27:02 $
+ *  last change: $Author: dv $ $Date: 2001-05-03 09:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,13 +730,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 // TemplatePath nicht angebgeben => aus Region+Name ermitteln
                 // Dateiname zusammenbauen lassen
-                String aTemplPath = pTemplates->GetTemplatePath(
-                    nRegion, aTemplateName );
-                rReq.AppendItem(
-                    SfxStringItem(SID_FILE_NAME, aTemplPath) );
-                rReq.AppendItem( SfxStringItem(SID_FILE_NAME, aTemplPath) );
-            }
+                String aTemplPath = pTemplates->GetTemplatePath( nRegion, aTemplateName );
+                INetURLObject aURLObj( aTemplPath );
+                String aExtension( pFilter->GetDefaultExtension().Copy(2) );
+                aURLObj.setExtension( aExtension, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
 
+                rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aURLObj.GetMainURL() ) );
+            }
 
             // Dateiname
             SFX_REQUEST_ARG(rReq, pFileItem, SfxStringItem, SID_FILE_NAME, FALSE);
