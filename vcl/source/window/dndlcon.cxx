@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndlcon.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-28 12:51:04 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@ using namespace ::com::sun::star::datatransfer::dnd;
 //
 //==================================================================================================
 
-DNDListenerContainer::DNDListenerContainer( sal_Int8 nDefaultActions ) : m_aMutex(),
-    WeakComponentImplHelper4< XDragGestureRecognizer, XDropTargetDragContext, XDropTargetDropContext, XDropTarget >(m_aMutex)
+DNDListenerContainer::DNDListenerContainer( sal_Int8 nDefaultActions )
+    : WeakComponentImplHelper4< XDragGestureRecognizer, XDropTargetDragContext, XDropTargetDropContext, XDropTarget >(GetMutex())
 {
     m_bActive = sal_True;
     m_nDefaultActions = nDefaultActions;
