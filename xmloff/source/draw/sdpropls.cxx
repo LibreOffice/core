@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:14:10 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // fill attributes
     MAP( "FillStyle",                       XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, 0 ),
     MAP( "FillColor",                       XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, 0 ),
+    MAP( "FillColor2",                      XML_NAMESPACE_DRAW, XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR, 0 ),
     MAP( "FillGradientName",                XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STRING, CTF_FILLGRADIENTNAME ),
     MAP( "FillGradientStepCount",           XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER, 0 ),
     MAP( "FillHatchName",                   XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STRING, CTF_FILLHATCHNAME ),
@@ -288,6 +289,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     MAP( "NumberingRules",                  XML_NAMESPACE_TEXT, XML_LIST_STYLE,             XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES ),
     MAP( "NumberingRules",                  XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_SD_NUMBERINGRULES_NAME ),
     MAP( "FontIndependentLineSpacing",      XML_NAMESPACE_DRAW, XML_FONT_INDEPENDENT_LINE_SPACING, XML_TYPE_BOOL, 0 ),
+    MAP( "TextWordWrap",                    XML_NAMESPACE_DRAW, XML_WORD_WRAP,              XML_TYPE_BOOL, 0 ),
+    MAP( "TextAutoGrowSize",                XML_NAMESPACE_DRAW, XML_AUTO_GROW_SIZE,         XML_TYPE_BOOL, 0 ),
 
     // shadow attributes
     MAP( "Shadow",                          XML_NAMESPACE_DRAW, XML_SHADOW,                 XML_SD_TYPE_SHADOW, 0 ),
