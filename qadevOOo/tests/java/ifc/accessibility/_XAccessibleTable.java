@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleTable.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-22 13:30:13 $
+ *  last change:$Date: 2003-09-08 10:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,11 @@
 package ifc.accessibility;
 
 import lib.MultiMethodTest;
-import com.sun.star.accessibility.XAccessibleTable;
+
 import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleSelection;
+import com.sun.star.accessibility.XAccessibleTable;
 import com.sun.star.uno.UnoRuntime;
 
 /**
@@ -95,13 +96,6 @@ import com.sun.star.uno.UnoRuntime;
  * @see com.sun.star.accessibility.XAccessibleTable
  */
 public class _XAccessibleTable extends MultiMethodTest {
-    private static final String className =
-        "com.sun.star.accessibility.XAccessibleTable";
-
-    // temporary while accessibility package is in com.sun.star
-    protected String getTestedClassName() {
-        return className;
-    }
 
     public XAccessibleTable oObj = null;
     XAccessibleSelection xASel = null;
