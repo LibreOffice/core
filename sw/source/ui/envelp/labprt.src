@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:18:47 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage TP_LAB_PRT
         Text [ DANISH ] = "Hele siden" ;
         Text [ ENGLISH_US ] = "~Entire page" ;
         Text [ SPANISH ] = "~Toda la pαgina" ;
-        Text [ FINNISH ] = "Koko sivu" ;
+        Text [ FINNISH ] = "~Koko sivu" ;
         Text [ FRENCH ] = "~Page entiθre" ;
         Text [ ITALIAN ] = "Pagina ~intera" ;
         Text [ DUTCH ] = "~Hele pagina" ;
@@ -97,6 +97,7 @@ TabPage TP_LAB_PRT
         Text[ greek ] = "Ολόκληρη σελίδα";
         Text[ korean ] = "ΐόΓΌ ΒΚ(~E)";
         Text[ turkish ] = "~Tam sayfa";
+        Text[ catalan ] = "~Toda la pαgina";
     };
     RadioButton BTN_SINGLE
     {
@@ -108,7 +109,7 @@ TabPage TP_LAB_PRT
         Text [ DANISH ] = "Enkelt etiket" ;
         Text [ ENGLISH_US ] = "~Single label" ;
         Text [ SPANISH ] = "~Una etiqueta" ;
-        Text [ FINNISH ] = "Yksi tarra" ;
+        Text [ FINNISH ] = "~Yksittδinen nimiφ" ;
         Text [ FRENCH ] = "~Ιtiquette unique" ;
         Text [ ITALIAN ] = "Singola etichetta" ;
         Text [ DUTCH ] = "~Een enkel" ;
@@ -124,6 +125,7 @@ TabPage TP_LAB_PRT
         Text[ greek ] = "Μεμονωμένη ετικέτα";
         Text[ korean ] = "°Ά ¶σΊ§(~S)";
         Text[ turkish ] = "Tek Eti~ket";
+        Text[ catalan ] = "~Una etiqueta";
     };
     FixedText TXT_COL
     {
@@ -135,7 +137,7 @@ TabPage TP_LAB_PRT
         Text [ DANISH ] = "Kolonne" ;
         Text [ ENGLISH_US ] = "Colu~mn" ;
         Text [ SPANISH ] = "C~olumna" ;
-        Text [ FINNISH ] = "Sarake" ;
+        Text [ FINNISH ] = "~Sarake" ;
         Text [ FRENCH ] = "~Colonne" ;
         Text [ ITALIAN ] = "Colonna" ;
         Text [ DUTCH ] = "~Kolom" ;
@@ -152,6 +154,7 @@ TabPage TP_LAB_PRT
         Text[ greek ] = "Στήλη";
         Text[ korean ] = "Ώ­(~M)";
         Text[ turkish ] = "~Sόtun";
+        Text[ catalan ] = "C~olumna";
     };
     NumericField FLD_COL
     {
@@ -175,7 +178,7 @@ TabPage TP_LAB_PRT
         Text [ DANISH ] = "Rζkke" ;
         Text [ ENGLISH_US ] = "Ro~w" ;
         Text [ SPANISH ] = "~Fila" ;
-        Text [ FINNISH ] = "Rivi" ;
+        Text [ FINNISH ] = "Ri~vi" ;
         Text [ FRENCH ] = "~Ligne" ;
         Text [ ITALIAN ] = "Riga" ;
         Text [ DUTCH ] = "~Rij" ;
@@ -192,6 +195,7 @@ TabPage TP_LAB_PRT
         Text[ greek ] = "Γραμμή";
         Text[ korean ] = "Ηΰ(~)";
         Text[ turkish ] = "S~atύr";
+        Text[ catalan ] = "~Fila";
     };
     NumericField FLD_ROW
     {
@@ -230,6 +234,8 @@ TabPage TP_LAB_PRT
         Text[ greek ] = "Συγχρονισμός περιεχομένων";
         Text[ korean ] = "³»Ώλ µΏ±βΘ­(~Z)";
         Text[ turkish ] = "έηeriπi ηoπalt";
+        Text[ finnish ] = "~Synkronoi sisδltφ";
+        Text[ catalan ] = "~Sincronizar contenidos";
     };
     GroupBox GB_DONTKNOW
     {
@@ -261,6 +267,8 @@ TabPage TP_LAB_PRT
         Text[ greek ] = "Όνομα εκτυπωτή";
         Text[ korean ] = "ΗΑΈ°ΕΝ ΐΜΈ§";
         Text[ turkish ] = "Yazύcύ adύ";
+        Text[ finnish ] = "Tulostimen nimi";
+        Text[ catalan ] = "Nombre de la impresora";
     };
     PushButton BTN_PRTSETUP
     {
@@ -287,6 +295,8 @@ TabPage TP_LAB_PRT
         Text[ greek ] = "~Εγκατάσταση...";
         Text[ korean ] = "ΌΒΎχ...";
         Text[ turkish ] = "Ayarlar...";
+        Text[ finnish ] = "Asennus";
+        Text[ catalan ] = "Configurar...";
     };
     GroupBox GB_PRINTER
     {
@@ -312,6 +322,8 @@ TabPage TP_LAB_PRT
         Text[ greek ] = "Εκτυπωτής ";
         Text[ korean ] = "ΗΑΈ°ΕΝ ";
         Text[ turkish ] = "Yazύcύ ";
+        Text[ finnish ] = "Tulostin ";
+        Text[ catalan ] = "Impresora  ";
     };
 };
  // **************************************************************************
