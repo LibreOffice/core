@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 13:50:42 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,35 +65,8 @@
 
 String SV_RESID_STRING_NOSELECTIONPOSSIBLE
 {
-    Text ="<Keine Auswahl möglich>";
-    Text[English] ="<No selection possible>";
-    Text[ english_us ] = "<No selection possible>";
-    Text[ portuguese ] = "<Selecção impossível>";
-    Text[ russian ] = "<Âûáîğ íåâîçìîæåí>";
-    Text[ greek ] = "<Äåí åßíáé äõíáôüí íá ãßíåé åğéëïãŞ>";
-    Text[ dutch ] = "<Geen selectie mogelijk>";
-    Text[ french ] = "<Aucune sélection possible>";
-    Text[ spanish ] = "<Ninguna selección posible>";
-    Text[ italian ] = "<Impossibile selezionare>";
-    Text[ danish ] = "<Intet udvalg muligt>";
-    Text[ swedish ] = "<Inget urval möjligt>";
-    Text[ polish ] = "<Wybór niemo¿liwy>";
-    Text[ portuguese_brazilian ] = "<Seleção impossível>";
-    Text[ japanese ] = "<ä½•ã‚‚é¸æŠã§ãã¾ã›ã‚“>";
-    Text[ korean ] = "<ì„ íƒ ë¶ˆê°€ëŠ¥>";
-    Text[ chinese_simplified ] = "<æ— æ³•é€‰æ‹©>";
-    Text[ chinese_traditional ] = "<ç„¡æ³•é¸æ“‡>";
-    Text[ arabic ] = "<áÇ íãßä ÇáÊÍÏíÏ>";
-    Text[ turkish ] = "<Seçim yapılamaz>";
-    Text[ catalan ] = "<Cap selecció possible>";
-    Text[ finnish ] = "<Valinta ei mahdollinen >";
-    Text[ thai ] = "<à¸à¸²à¸£à¹€à¸¥à¸·à¸­à¸à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¹‡à¸™à¹„à¸›à¹„à¸”à¹‰>";
-    Text[ czech ] = "<VÃ½bÄ›r nenÃ­ moÅ¾nÃ½>";
-    Text[ hebrew ] = "â€®<××™×Ÿ ××¤×©×¨×•×ª ×œ×‘×—×•×¨>â€¬";
-    Text[ hindi ] = "<à¤•à¥‹à¤ˆ à¤šà¥à¤¨à¤¾à¤µ à¤¸à¤‚à¤­à¤µ à¤¨à¤¹à¥€à¤‚>";
-    Text[ slovak ] = "<VÃ½ber nie je moÅ¾nÃ½>";
-    Text[ hungarian ] = "<Nem lehet kijelÃ¶lni>";
-    Text[ slovenian ] = "<Ni mogoÄa izbira>";
+    Text [ de ] ="<Keine Auswahl möglich>";
+    Text [ en-US ] = "<No selection possible>";
 };
 
 Menu SV_RESID_MENU_EDIT
@@ -103,249 +76,55 @@ Menu SV_RESID_MENU_EDIT
         MenuItem
         {
             Identifier = SV_MENU_EDIT_UNDO ;
-            Text = "~Rückgängig" ;
-            Text [ English ] = "~Undo" ;
-            Text [ portuguese ] = "~Anular" ;
-            Text [ english_us ] = "~Undo" ;
-            Text [ portuguese_brazilian ] = "~Desfazer" ;
-            Text [ swedish ] = "~Ångra" ;
-            Text [ danish ] = "Fo~rtryd" ;
-            Text [ italian ] = "~Annulla" ;
-            Text [ spanish ] = "~Deshacer" ;
-            Text [ french ] = "~Annuler" ;
-            Text [ dutch ] = "~Ongedaan maken" ;
-            Text[ russian ] = "Îòìåíèòü";
-            Text[ polish ] = "Co~fnij";
-            Text[ japanese ] = "å…ƒã«æˆ»ã™(~U)";
-            Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤(~U)";
-            Text[ chinese_traditional ] = "å¾©åŸ(~U)";
-            Text[ greek ] = "Áíáß~ñåóç";
-            Text[ korean ] = "ì‹¤í–‰ ì·¨ì†Œ(~U)";
-            Text[ arabic ] = "ÊÑÇÌÚ";
-            Text[ turkish ] = "~Geri al";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Desfés";
-            Text[ finnish ] = "~Kumoa";
-            Text[ thai ] = "à¹€~à¸¥à¸´à¸à¸—à¸³";
-            Text[ czech ] = "ZpÄ›t";
-            Text[ hebrew ] = "â€®×‘×™×˜×•×œ ×¤×¢×•×œ×”â€¬";
-            Text[ hindi ] = "~à¤…à¤¨à¤¾à¤µà¥ƒà¤¤à¥à¤¤à¤¿";
-            Text[ slovak ] = "~SpÃ¤Å¥";
-            Text[ hungarian ] = "~VisszavonÃ¡s";
-            Text[ slovenian ] = "Ra~zveljavi";
+            Text [ de ] = "~Rückgängig" ;
+            Text [ en-US ] = "~Undo" ;
+            Text [ x-comment ] = " ";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
         {
             Identifier = SV_MENU_EDIT_CUT ;
-            Text = "~Ausschneiden" ;
-            Text [ English ] = "Cu~t" ;
-            Text [ norwegian ] = "Klipp~ut" ;
-            Text [ italian ] = "~Taglia" ;
-            Text [ portuguese_brazilian ] = "Co~rtar" ;
-            Text [ portuguese ] = "Co~rtar" ;
-            Text [ finnish ] = "~Leikkaa" ;
-            Text [ danish ] = "~Klip" ;
-            Text [ french ] = "~Couper" ;
-            Text [ swedish ] = "~Klipp ut" ;
-            Text [ dutch ] = "K~nippen" ;
-            Text [ spanish ] = "C~ortar" ;
-            Text [ english_us ] = "Cu~t" ;
-            Text[ russian ] = "~Âûğåçàòü";
-            Text[ polish ] = "Wy~tnij";
-            Text[ japanese ] = "åˆ‡ã‚Šå–ã‚Š(~T)";
-            Text[ chinese_simplified ] = "å‰ªåˆ‡(~T)";
-            Text[ chinese_traditional ] = "å‰ªä¸‹(~T)";
-            Text[ greek ] = "~ÁğïêïğŞ";
-            Text[ korean ] = "ì˜ë¼ë‚´ê¸°(~T)";
-            Text[ arabic ] = "ŞÕ";
-            Text[ turkish ] = "K~es";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Retalla";
-            Text[ thai ] = "à¸•à¸±~à¸”";
-            Text[ czech ] = "Vyjmout";
-            Text[ hebrew ] = "â€®×’×–×™×¨×”â€¬";
-            Text[ hindi ] = "à¤•à¤¾~à¤Ÿà¥‹";
-            Text[ slovak ] = "Vys~trihnÃºÅ¥";
-            Text[ hungarian ] = "~KivÃ¡gÃ¡s";
-            Text[ slovenian ] = "I~zreÅ¾i";
+            Text [ de ] = "~Ausschneiden" ;
+            Text [ en-US ] = "Cu~t" ;
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SV_MENU_EDIT_COPY ;
-            Text = "~Kopieren" ;
-            Text [ English ] = "~Copy" ;
-            Text [ norwegian ] = "~Kopier" ;
-            Text [ italian ] = "~Copia" ;
-            Text [ portuguese_brazilian ] = "~Copiar" ;
-            Text [ portuguese ] = "~Copiar" ;
-            Text [ finnish ] = "K~opioi" ;
-            Text [ danish ] = "K~opier" ;
-            Text [ french ] = "Co~pier" ;
-            Text [ swedish ] = "K~opiera" ;
-            Text [ dutch ] = "~Kopiëren" ;
-            Text [ spanish ] = "~Copiar" ;
-            Text [ english_us ] = "~Copy" ;
-            Text[ russian ] = "~Êîïèğîâàòü";
-            Text[ polish ] = "~Kopiuj";
-            Text[ japanese ] = "ã‚³ãƒ”ãƒ¼(~C)";
-            Text[ chinese_simplified ] = "å¤åˆ¶(~C)";
-            Text[ chinese_traditional ] = "è¤‡è£½(~C)";
-            Text[ greek ] = "Áíôé~ãñáöŞ";
-            Text[ korean ] = "ë³µì‚¬(~C)";
-            Text[ arabic ] = "äÓÎ";
-            Text[ turkish ] = "~Kopyala";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Copia";
-            Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸";
-            Text[ czech ] = "KopÃ­rovat";
-            Text[ hebrew ] = "â€®×”×¢×ª×§×”â€¬";
-            Text[ hindi ] = "~à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿";
-            Text[ slovak ] = "~KopÃ­rovaÅ¥";
-            Text[ hungarian ] = "~MÃ¡solÃ¡s";
-            Text[ slovenian ] = "Kopir~aj";
+            Text [ de ] = "~Kopieren" ;
+            Text [ en-US ] = "~Copy" ;
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SV_MENU_EDIT_PASTE ;
-            Text = "~Einfügen" ;
-            Text [ English ] = "~Paste" ;
-            Text [ norwegian ] = "~Paste" ;
-            Text [ italian ] = "~Incolla" ;
-            Text [ portuguese_brazilian ] = "~Colar" ;
-            Text [ portuguese ] = "Co~lar" ;
-            Text [ finnish ] = "Lii~tä" ;
-            Text [ danish ] = "Sæt i~nd" ;
-            Text [ french ] = "C~oller" ;
-            Text [ swedish ] = "K~listra in" ;
-            Text [ dutch ] = "~Plakken" ;
-            Text [ spanish ] = "~Pegar" ;
-            Text [ english_us ] = "~Paste" ;
-            Text[ russian ] = "Âñò~àâèòü";
-            Text[ polish ] = "Wkle~j";
-            Text[ japanese ] = "è²¼ã‚Šä»˜ã‘(~P)";
-            Text[ chinese_simplified ] = "ç²˜è´´(~P)";
-            Text[ chinese_traditional ] = "è²¼ä¸Š(~P)";
-            Text[ greek ] = "~Åğéêüëëçóç";
-            Text[ korean ] = "ë¶™ì—¬ë„£ê¸°(~P)";
-            Text[ arabic ] = "áÕŞ";
-            Text[ turkish ] = "~Yapıştır";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Engan~xa";
-            Text[ thai ] = "~à¸§à¸²à¸‡";
-            Text[ czech ] = "VloÅ¾it";
-            Text[ hebrew ] = "â€®×”×“×‘×§×”â€¬";
-            Text[ hindi ] = "~à¤›à¤¿à¤ªà¤•à¤¾à¤“";
-            Text[ slovak ] = "~VloÅ¾iÅ¥";
-            Text[ hungarian ] = "~BeillesztÃ©s";
-            Text[ slovenian ] = "P~rilepi";
+            Text [ de ] = "~Einfügen" ;
+            Text [ en-US ] = "~Paste" ;
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SV_MENU_EDIT_DELETE ;
-            Text = "~Löschen" ;
-            Text [ English ] = "~Delete" ;
-            Text [ norwegian ] = "~Slett" ;
-            Text [ italian ] = "Cancella" ;
-            Text [ portuguese_brazilian ] = "~Excluir" ;
-            Text [ portuguese ] = "E~liminar" ;
-            Text [ finnish ] = "~Poista" ;
-            Text [ danish ] = "~Slet" ;
-            Text [ french ] = "~Supprimer" ;
-            Text [ swedish ] = "~Radera" ;
-            Text [ dutch ] = "~Wissen" ;
-            Text [ spanish ] = "~Borrar" ;
-            Text [ english_us ] = "~Delete" ;
-            Text[ russian ] = "~Óäàëèòü";
-            Text[ polish ] = "~Usuñ";
-            Text[ japanese ] = "å‰Šé™¤(~D)";
-            Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-            Text[ chinese_traditional ] = "åˆªé™¤(~D)";
-            Text[ greek ] = "Äéáãñá~öŞ";
-            Text[ korean ] = "ì‚­ì œ(~D)";
-            Text[ arabic ] = "ÍĞİ";
-            Text[ turkish ] = "~Sil";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Suprimeix";
-            Text[ thai ] = "~à¸¥à¸š";
-            Text[ czech ] = "Smazat";
-            Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-            Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
-            Text[ slovak ] = "~ZmazaÅ¥";
-            Text[ hungarian ] = "~TÃ¶rlÃ©s";
-            Text[ slovenian ] = "~IzbriÅ¡i";
+            Text [ de ] = "~Löschen" ;
+            Text [ en-US ] = "~Delete" ;
+            Text [ x-comment ] = " ";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
         {
             Identifier = SV_MENU_EDIT_SELECTALL ;
-            Text = "Alles aus~wählen" ;
-            Text [ English ] = "Select ~All" ;
-            Text [ norwegian ] = "Select ~All" ;
-            Text [ italian ] = "Seleziona tutto" ;
-            Text [ portuguese_brazilian ] = "Selecionar ~Tudo" ;
-            Text [ portuguese ] = "Seleccionar ~tudo" ;
-            Text [ finnish ] = "~Valitse kaikki" ;
-            Text [ danish ] = "~Marker alt" ;
-            Text [ french ] = "Tout ~sélectionner" ;
-            Text [ swedish ] = "Markera ~allt" ;
-            Text [ dutch ] = "~Alles selecteren" ;
-            Text [ spanish ] = "Seleccionar ~todo" ;
-            Text [ english_us ] = "Select ~All" ;
-            Text[ russian ] = "Âûäåëèòü âñå";
-            Text[ polish ] = "~Zaznacz wszystko";
-            Text[ japanese ] = "ã™ã¹ã¦é¸æŠ(~A)";
-            Text[ chinese_simplified ] = "å…¨éƒ¨é€‰ä¸­(~A)";
-            Text[ chinese_traditional ] = "å…¨éƒ¨é¸å–(~A)";
-            Text[ greek ] = "ÅğéëïãŞ üë~ùí";
-            Text[ korean ] = "ëª¨ë‘ ì„ íƒ(~A)";
-            Text[ arabic ] = "ÊÍÏíÏ Çáßá";
-            Text[ turkish ] = "Tümünü ~seç";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Selecciona-ho ~tot";
-            Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-            Text[ czech ] = "Vybrat vÅ¡e";
-            Text[ hebrew ] = "â€®×‘×—×™×¨×ª ×”×›×œâ€¬";
-            Text[ hindi ] = "~à¤¸à¤¬ à¤šà¥à¤¨à¥‹";
-            Text[ slovak ] = "Vybr~aÅ¥ vÅ¡etko";
-            Text[ hungarian ] = "~Mindet kijelÃ¶li";
-            Text[ slovenian ] = "Izberi ~vse";
+            Text [ de ] = "Alles aus~wählen" ;
+            Text [ en-US ] = "Select ~All" ;
+            Text [ x-comment ] = " ";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
         {
             Identifier = SV_MENU_EDIT_INSERTSYMBOL;
-            Text = "~Sonderzeichen einfügen...";
-            Text [ English ] = "insert ~symbol...";
-                    TEXT[ italian ] = "Inserisci caratteri speciali...";
-            TEXT[ portuguese_brazilian ] = "~Caracteres especiais...";
-            TEXT[ portuguese ] = "~Inserir caracteres especiais...";
-            TEXT[ danish ] = "~Specialtegn...";
-            TEXT[ french ] = "~Insérer des caractères spéciaux...";
-            TEXT[ swedish ] = "Infoga ~specialtecken...";
-            TEXT[ dutch ] = "~Speciaal teken invoegen...";
-            TEXT[ spanish ] = "Insertar ~símbolo...";
-            TEXT[ english_us ] = "~Special Character...";
-    TEXT[ russian ] = "Ñèìâîëû...";
-            TEXT[ polish ] = "Znak ~specjalny...";
-            TEXT[ japanese ] = "è¨˜å·ã¨ç‰¹æ®Šæ–‡å­—ã®æŒ¿å…¥(~S)...";
+            Text [ de ] = "~Sonderzeichen einfügen...";
+            Text [ en-US ] = "~Special Character...";
 
-            TEXT[ chinese_simplified ] = "æ’å…¥ç‰¹æ®Šå­—ç¬¦(~S)...";
-            TEXT[ chinese_traditional ] = "æ’å…¥ç‰¹æ®Šå­—å…ƒ(~S)...";
-            TEXT[ greek ] = "Åé~óáãùãŞ åéäéêïı ÷áñáêôŞñá...";
-            TEXT[ korean ] = "ê¸°í˜¸ ë° íŠ¹ìˆ˜ ë¬¸ì ì‚½ì…(~S)...";
-            TEXT[ arabic ] = "ÅÏÑÇÌ ÑãæÒ ÎÇÕÉ";
-            TEXT[ turkish ] = "~Özel karakter ekle...";
-            TEXT[ language_user1 ] = " ";
-            TEXT[ catalan ] = "Insereix ~símbol...";
-            TEXT[ finnish ] = "Merkk~i...";
-            TEXT[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°~à¸à¸´à¹€à¸¨à¸©...";
-            TEXT[ czech ] = "SpeciÃ¡lnÃ­ symbol...";
-            TEXT[ hebrew ] = "â€®×ª×• ××™×•×—×“...â€¬";
-            TEXT[ hindi ] = "~à¤µà¤¿à¤¶à¥‡à¤· à¤…à¤•à¥à¤·à¤°...";
-            TEXT[ slovak ] = "Å peciÃ¡lny ~znak...";
-            TEXT[ hungarian ] = "~KÃ¼lÃ¶nleges karakter...";
-            TEXT[ slovenian ] = "Po~seben znak...";
+            Text [ x-comment ] = " ";
         };
     };
 };
