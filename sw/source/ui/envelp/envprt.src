@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 02:57:11 $
+ *  last change: $Author: oj $ $Date: 2002-07-23 11:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,6 +424,55 @@ Bitmap BMP_VER_RGHT_LOWER
 Bitmap BMP_VER_RGHT_UPPER
 {
     File = "envvr_u.bmp" ;
+};
+// HighContrast Bitmaps
+Bitmap BMP_HOR_LEFT_LOWER_H
+{
+    File = "envhl_l_h.bmp" ;
+};
+Bitmap BMP_HOR_LEFT_UPPER_H
+{
+    File = "envhl_u_h.bmp" ;
+};
+Bitmap BMP_HOR_CNTR_LOWER_H
+{
+    File = "envhc_l_h.bmp" ;
+};
+Bitmap BMP_HOR_CNTR_UPPER_H
+{
+    File = "envhc_u_h.bmp" ;
+};
+Bitmap BMP_HOR_RGHT_LOWER_H
+{
+    File = "envhr_l_h.bmp" ;
+};
+Bitmap BMP_HOR_RGHT_UPPER_H
+{
+    File = "envhr_u_h.bmp" ;
+};
+Bitmap BMP_VER_LEFT_LOWER_H
+{
+    File = "envvl_l_h.bmp" ;
+};
+Bitmap BMP_VER_LEFT_UPPER_H
+{
+    File = "envvl_u_h.bmp" ;
+};
+Bitmap BMP_VER_CNTR_LOWER_H
+{
+    File = "envvc_l_h.bmp" ;
+};
+Bitmap BMP_VER_CNTR_UPPER_H
+{
+    File = "envvc_u_h.bmp" ;
+};
+Bitmap BMP_VER_RGHT_LOWER_H
+{
+    File = "envvr_l_h.bmp" ;
+};
+Bitmap BMP_VER_RGHT_UPPER_H
+{
+    File = "envvr_u_h.bmp" ;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 08:19:39 $
+ *  last change: $Author: oj $ $Date: 2002-07-23 11:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,25 +140,26 @@ SwEnvPrtPage::~SwEnvPrtPage()
 
 IMPL_LINK( SwEnvPrtPage, ClickHdl, Button *, EMPTYARG )
 {
+    sal_Bool bHC = GetBackground().GetColor().IsDark();
     if (aBottomButton.IsChecked())
     {
         // Briefumschlaege von unten
-        aAlignBox.SetItemImage(ITM_HOR_LEFT, Bitmap(SW_RES(BMP_HOR_LEFT_LOWER)));
-        aAlignBox.SetItemImage(ITM_HOR_CNTR, Bitmap(SW_RES(BMP_HOR_CNTR_LOWER)));
-        aAlignBox.SetItemImage(ITM_HOR_RGHT, Bitmap(SW_RES(BMP_HOR_RGHT_LOWER)));
-        aAlignBox.SetItemImage(ITM_VER_LEFT, Bitmap(SW_RES(BMP_VER_LEFT_LOWER)));
-        aAlignBox.SetItemImage(ITM_VER_CNTR, Bitmap(SW_RES(BMP_VER_CNTR_LOWER)));
-        aAlignBox.SetItemImage(ITM_VER_RGHT, Bitmap(SW_RES(BMP_VER_RGHT_LOWER)));
+        aAlignBox.SetItemImage(ITM_HOR_LEFT, Bitmap(SW_RES(bHC ? BMP_HOR_LEFT_LOWER_H : BMP_HOR_LEFT_LOWER)));
+        aAlignBox.SetItemImage(ITM_HOR_CNTR, Bitmap(SW_RES(bHC ? BMP_HOR_CNTR_LOWER_H : BMP_HOR_CNTR_LOWER)));
+        aAlignBox.SetItemImage(ITM_HOR_RGHT, Bitmap(SW_RES(bHC ? BMP_HOR_RGHT_LOWER_H : BMP_HOR_RGHT_LOWER)));
+        aAlignBox.SetItemImage(ITM_VER_LEFT, Bitmap(SW_RES(bHC ? BMP_VER_LEFT_LOWER_H : BMP_VER_LEFT_LOWER)));
+        aAlignBox.SetItemImage(ITM_VER_CNTR, Bitmap(SW_RES(bHC ? BMP_VER_CNTR_LOWER_H : BMP_VER_CNTR_LOWER)));
+        aAlignBox.SetItemImage(ITM_VER_RGHT, Bitmap(SW_RES(bHC ? BMP_VER_RGHT_LOWER_H : BMP_VER_RGHT_LOWER)));
     }
     else
     {
         // Briefumschlaege von oben
-        aAlignBox.SetItemImage(ITM_HOR_LEFT, Bitmap(SW_RES(BMP_HOR_LEFT_UPPER)));
-        aAlignBox.SetItemImage(ITM_HOR_CNTR, Bitmap(SW_RES(BMP_HOR_CNTR_UPPER)));
-        aAlignBox.SetItemImage(ITM_HOR_RGHT, Bitmap(SW_RES(BMP_HOR_RGHT_UPPER)));
-        aAlignBox.SetItemImage(ITM_VER_LEFT, Bitmap(SW_RES(BMP_VER_LEFT_UPPER)));
-        aAlignBox.SetItemImage(ITM_VER_CNTR, Bitmap(SW_RES(BMP_VER_CNTR_UPPER)));
-        aAlignBox.SetItemImage(ITM_VER_RGHT, Bitmap(SW_RES(BMP_VER_RGHT_UPPER)));
+        aAlignBox.SetItemImage(ITM_HOR_LEFT, Bitmap(SW_RES(bHC ? BMP_HOR_LEFT_UPPER_H : BMP_HOR_LEFT_UPPER)));
+        aAlignBox.SetItemImage(ITM_HOR_CNTR, Bitmap(SW_RES(bHC ? BMP_HOR_CNTR_UPPER_H : BMP_HOR_CNTR_UPPER)));
+        aAlignBox.SetItemImage(ITM_HOR_RGHT, Bitmap(SW_RES(bHC ? BMP_HOR_RGHT_UPPER_H : BMP_HOR_RGHT_UPPER)));
+        aAlignBox.SetItemImage(ITM_VER_LEFT, Bitmap(SW_RES(bHC ? BMP_VER_LEFT_UPPER_H : BMP_VER_LEFT_UPPER)));
+        aAlignBox.SetItemImage(ITM_VER_CNTR, Bitmap(SW_RES(bHC ? BMP_VER_CNTR_UPPER_H : BMP_VER_CNTR_UPPER)));
+        aAlignBox.SetItemImage(ITM_VER_RGHT, Bitmap(SW_RES(bHC ? BMP_VER_RGHT_UPPER_H : BMP_VER_RGHT_UPPER)));
     }
     return 0;
 }
@@ -294,6 +295,9 @@ void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
 // ----------------------------------------------------------------------------
 /*
 $Log: not supported by cvs2svn $
+Revision 1.3  2002/07/23 08:19:39  gt
+#101614#, #101547# handling of pSet==NULL in DeactivatePage()
+
 Revision 1.2  2001/05/30 16:32:13  fme
 Fix #86988#: Redesign of dialogs
 

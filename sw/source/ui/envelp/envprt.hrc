@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
+ *  last change: $Author: oj $ $Date: 2002-07-23 11:10:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,26 @@
 #define ITM_VER_CNTR        (RC_ENVPRT_BEGIN + 16)
 #define ITM_VER_RGHT        (RC_ENVPRT_BEGIN + 17)
 
+#define BMP_HOR_LEFT_LOWER_H  (RC_ENVPRT_HC_BEGIN   )
+#define BMP_HOR_LEFT_UPPER_H  (RC_ENVPRT_HC_BEGIN + 1)
+#define BMP_HOR_CNTR_LOWER_H  (RC_ENVPRT_HC_BEGIN + 2)
+#define BMP_HOR_CNTR_UPPER_H  (RC_ENVPRT_HC_BEGIN + 3)
+#define BMP_HOR_RGHT_LOWER_H  (RC_ENVPRT_HC_BEGIN + 4)
+#define BMP_HOR_RGHT_UPPER_H  (RC_ENVPRT_HC_BEGIN + 5)
+
+#define BMP_VER_LEFT_LOWER_H  (RC_ENVPRT_HC_BEGIN + 6)
+#define BMP_VER_LEFT_UPPER_H  (RC_ENVPRT_HC_BEGIN + 7)
+#define BMP_VER_CNTR_LOWER_H  (RC_ENVPRT_HC_BEGIN + 8)
+#define BMP_VER_CNTR_UPPER_H  (RC_ENVPRT_HC_BEGIN + 9)
+#define BMP_VER_RGHT_LOWER_H  (RC_ENVPRT_HC_BEGIN + 10)
+#define BMP_VER_RGHT_UPPER_H  (RC_ENVPRT_HC_BEGIN + 11)
+
+
 // Ueberlaufpruefung ********************************************************
 
-#define ENVPRT_ACT_END  BMP_VER_RGHT_UPPER
+#define ENVPRT_ACT_END  BMP_VER_RGHT_UPPER_H
 
-#if ENVPRT_ACT_END > RC_ENVPRT_END
+#if ENVPRT_ACT_END > RC_ENVPRT_HC_END
 #error Resource-Ueberlauf in #file, #line
 #endif
 
