@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-12 14:11:37 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,14 +192,14 @@ class XPlugin_Impl;
 class PluginDisposer;
 class PluginEventListener;
 
-class XPlugin_Impl : public ::com::sun::star::plugin::XPlugin,
+class XPlugin_Impl : public com::sun::star::plugin::XPlugin,
                      public PluginControl_Impl,
-                     public ::com::sun::star::beans::XPropertyChangeListener
+                     public com::sun::star::beans::XPropertyChangeListener
 {
 private:
     ::osl::Mutex                m_aMutex;
-    Reference< ::com::sun::star::lang::XMultiServiceFactory >       m_xSMgr;
-    Reference< ::com::sun::star::plugin::XPluginContext >           m_rBrowserContext;
+    Reference< com::sun::star::lang::XMultiServiceFactory >         m_xSMgr;
+    Reference< com::sun::star::plugin::XPluginContext >             m_rBrowserContext;
 
     PluginComm*                 m_pPluginComm;
     NPP_t                       m_aInstance;
@@ -209,8 +209,9 @@ private:
     const char**                m_pArgv;
     const char**                m_pArgn;
     int                         m_nArgs;
+    rtl::OString                m_aLastGetUrl;
 
-    Reference< ::com::sun::star::awt::XControlModel >           m_xModel;
+    Reference< com::sun::star::awt::XControlModel >             m_xModel;
 
     ::com::sun::star::plugin::PluginDescription         m_aDescription;
     sal_Int16                       m_aPluginMode;
@@ -226,18 +227,24 @@ private:
 
     sal_Bool                        m_bIsDisposed;
 
-    void init( const ::com::sun::star::plugin::PluginDescription& rDescription );
+    void initArgs( const Sequence< rtl::OUString >& argn,
+                   const Sequence< rtl::OUString >& argv,
+                   sal_Int16 mode );
     void loadPlugin();
     void destroyInstance();
     void modelChanged();
 
 public:
-    XPlugin_Impl( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & rSMgr );
+    XPlugin_Impl( const Reference< com::sun::star::lang::XMultiServiceFactory >  & rSMgr );
     virtual ~XPlugin_Impl();
 
     ::osl::Mutex& getMutex() { return m_aMutex; }
 
     void destroyStreams();
+
+    void setLastGetUrl( const rtl::OString& rUrl ) { m_aLastGetUrl = rUrl; }
+
+    com::sun::star::plugin::PluginDescription fitDescription( const rtl::OUString& rURL );
 
     ::std::list<PluginInputStream*>& getInputStreams() { return m_aInputStreams; }
     ::std::list<PluginOutputStream*>& getOutputStreams() { return m_aOutputStreams; }
@@ -250,7 +257,8 @@ public:
                 m_pPluginComm->addRef();
             }
         }
-    Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceManager() { return m_xSMgr; }
+    Reference< com::sun::star::lang::XMultiServiceFactory > getServiceManager() { return m_xSMgr; }
+    const com::sun::star::plugin::PluginDescription& getDescription() const { return m_aDescription; }
     rtl_TextEncoding getTextEncoding() { return m_aEncoding; }
     NPP             getNPPInstance() { return &m_aInstance; }
     NPWindow*       getNPWindow() { return &m_aNPWindow; }
@@ -265,12 +273,17 @@ public:
     void checkListeners( const char* normalizedURL );
 
     void            initInstance(
-        const ::com::sun::star::plugin::PluginDescription& rDescription,
-        const Sequence< ::rtl::OUString >& argn,
-        const Sequence< ::rtl::OUString >& argv,
+        const com::sun::star::plugin::PluginDescription& rDescription,
+        const Sequence< rtl::OUString >& argn,
+        const Sequence< rtl::OUString >& argv,
+        sal_Int16 mode );
+    void            initInstance(
+        const rtl::OUString& rURL,
+        const Sequence< rtl::OUString >& argn,
+        const Sequence< rtl::OUString >& argv,
         sal_Int16 mode );
 
-    const ::rtl::OUString&  getRefererURL() { return m_aURL; }
+    const rtl::OUString&    getRefererURL() { return m_aURL; }
     ::rtl::OUString getCreationURL();
 
     PluginStream* getStreamFromNPStream( NPStream* );
@@ -278,16 +291,16 @@ public:
     const SystemEnvData* getSysChildSysData()
         { return _pSysChild->GetSystemData(); }
 
-    const Reference< ::com::sun::star::plugin::XPluginContext > & getPluginContext() const
+    const Reference< com::sun::star::plugin::XPluginContext > & getPluginContext() const
         { return m_rBrowserContext; }
-    void setPluginContext( const Reference< ::com::sun::star::plugin::XPluginContext > & );
+    void setPluginContext( const Reference< com::sun::star::plugin::XPluginContext > & );
 
     void secondLevelDispose();
 
-//  static const Reference< ::com::sun::star::reflection::XIdlClass > & staticGetIdlClass();
+//  static const Reference< com::sun::star::reflection::XIdlClass > &   staticGetIdlClass();
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual Any SAL_CALL queryInterface( const Type& ) throw( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL acquire()  throw()
     { OWeakAggObject::acquire(); }
     virtual void SAL_CALL release()  throw()
@@ -295,30 +308,30 @@ public:
 
     // OWeakAggObject
     virtual Any SAL_CALL queryAggregation( const Type& )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( com::sun::star::uno::RuntimeException );
 
     // PluginContol_Impl
     virtual void SAL_CALL dispose() throw();
-    virtual void SAL_CALL createPeer( const Reference< ::com::sun::star::awt::XToolkit > & xToolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & Parent) throw( RuntimeException );
+    virtual void SAL_CALL createPeer( const Reference< com::sun::star::awt::XToolkit > & xToolkit, const Reference< com::sun::star::awt::XWindowPeer > & Parent) throw( RuntimeException );
 
-    virtual sal_Bool SAL_CALL setModel( const Reference< ::com::sun::star::awt::XControlModel > & Model ) throw( RuntimeException );
-    virtual Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel(void) const throw( RuntimeException )
+    virtual sal_Bool SAL_CALL setModel( const Reference< com::sun::star::awt::XControlModel > & Model ) throw( RuntimeException );
+    virtual Reference< com::sun::star::awt::XControlModel > SAL_CALL getModel(void) const throw( RuntimeException )
     { return m_xModel; }
 
     virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( RuntimeException );
 
-    // ::com::sun::star::plugin::XPlugin
-    virtual sal_Bool SAL_CALL provideNewStream(const ::rtl::OUString& mimetype, const Reference< ::com::sun::star::io::XActiveDataSource > & stream, const ::rtl::OUString& url, sal_Int32 length, sal_Int32 lastmodified, sal_Bool isfile) throw();
+    // com::sun::star::plugin::XPlugin
+    virtual sal_Bool SAL_CALL provideNewStream(const rtl::OUString& mimetype, const Reference< com::sun::star::io::XActiveDataSource > & stream, const rtl::OUString& url, sal_Int32 length, sal_Int32 lastmodified, sal_Bool isfile) throw();
 
-    // ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& rSource ) throw();
-    virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvent ) throw();
+    // com::sun::star::beans::XPropertyChangeListener
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& rSource ) throw();
+    virtual void SAL_CALL propertyChange( const com::sun::star::beans::PropertyChangeEvent& rEvent ) throw();
 };
 
 class PluginManager
 {
 private:
-    Reference< ::com::sun::star::lang::XMultiServiceFactory >       m_xSMgr;
+    Reference< com::sun::star::lang::XMultiServiceFactory >         m_xSMgr;
     ::std::list<PluginComm*>        m_aPluginComms;
     ::std::list<XPlugin_Impl*>      m_aAllPlugins;
     ::osl::Mutex                    m_aPluginMutex;
@@ -330,8 +343,8 @@ private:
 public:
 
     static PluginManager& get();
-    static void setServiceFactory( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
-    static const Sequence< ::rtl::OUString >& getAdditionalSearchPaths();
+    static void setServiceFactory( const Reference< com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    static const Sequence< rtl::OUString >& getAdditionalSearchPaths();
 
     ::std::list<PluginComm*>& getPluginComms() { return m_aPluginComms; }
     ::std::list<XPlugin_Impl*>& getPlugins() { return m_aAllPlugins; }
@@ -339,38 +352,38 @@ public:
 };
 
 class XPluginManager_Impl :
-    public ::cppu::WeakAggImplHelper1< ::com::sun::star::plugin::XPluginManager >
+    public cppu::WeakAggImplHelper1< com::sun::star::plugin::XPluginManager >
 {
-    Reference< ::com::sun::star::lang::XMultiServiceFactory >   m_xSMgr;
+    Reference< com::sun::star::lang::XMultiServiceFactory >     m_xSMgr;
 public:
-    XPluginManager_Impl( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & );
+    XPluginManager_Impl( const Reference< com::sun::star::lang::XMultiServiceFactory >  & );
     virtual ~XPluginManager_Impl();
 
     static XPlugin_Impl* getXPluginFromNPP( NPP );
     static XPlugin_Impl* getFirstXPlugin();
-    static XPlugin_Impl* getPluginImplementation( const Reference< ::com::sun::star::plugin::XPlugin >& plugin );
+    static XPlugin_Impl* getPluginImplementation( const Reference< com::sun::star::plugin::XPlugin >& plugin );
 
-    virtual Reference< ::com::sun::star::plugin::XPluginContext > SAL_CALL createPluginContext() throw();
+    virtual Reference< com::sun::star::plugin::XPluginContext > SAL_CALL createPluginContext() throw();
 
     // has to be implemented per system
-    virtual Sequence< ::com::sun::star::plugin::PluginDescription > SAL_CALL getPluginDescriptions(void) throw();
+    virtual Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL getPluginDescriptions(void) throw();
 
-    virtual Reference< ::com::sun::star::plugin::XPlugin > SAL_CALL createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype) throw( RuntimeException,::com::sun::star::plugin::PluginException );
+    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPlugin( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< rtl::OUString >& argn, const Sequence< rtl::OUString >& argv, const com::sun::star::plugin::PluginDescription& plugintype) throw( RuntimeException,::com::sun::star::plugin::PluginException );
 
-    virtual Reference< ::com::sun::star::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const Reference< ::com::sun::star::awt::XToolkit > & toolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & parent, const ::rtl::OUString& url ) throw();
+    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< rtl::OUString >& argn, const Sequence< rtl::OUString >& argv, const Reference< com::sun::star::awt::XToolkit > & toolkit, const Reference< com::sun::star::awt::XWindowPeer > & parent, const rtl::OUString& url ) throw();
 
-    virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw();
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw();
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw();
+    virtual rtl::OUString SAL_CALL getImplementationName() throw();
 
-    Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
-    static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw(  );
-    static ::rtl::OUString              getImplementationName_Static() throw(  )
+    Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
+    static Sequence< rtl::OUString > getSupportedServiceNames_Static(void) throw(  );
+    static rtl::OUString                getImplementationName_Static() throw(  )
     {
         /** the soplayer uses this name in its source! maybe not after 5.2 */
-        return ::rtl::OUString::createFromAscii( "com.sun.star.extensions.PluginManager" );
+        return rtl::OUString::createFromAscii( "com.sun.star.extensions.PluginManager" );
     }
 };
-Reference< XInterface >  SAL_CALL PluginManager_CreateInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );
+Reference< XInterface >  SAL_CALL PluginManager_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );
 
 enum PluginStreamType { InputStream, OutputStream };
 
@@ -392,7 +405,7 @@ public:
 
 class PluginInputStream :
     public PluginStream,
-    public ::cppu::WeakAggImplHelper2<
+    public cppu::WeakAggImplHelper2<
                 ::com::sun::star::io::XOutputStream,
                 ::com::sun::star::io::XConnectable
                 >
@@ -402,11 +415,11 @@ private:
     UINT32                      m_nMode;
     UINT32                      m_nWritePos;
 
-    Reference< ::com::sun::star::io::XActiveDataSource >    m_xSource;
+    Reference< com::sun::star::io::XActiveDataSource >  m_xSource;
     // hold a reference on input until closeOutput is called
 
-    Reference< ::com::sun::star::io::XConnectable >         m_xPredecessor;
-    Reference< ::com::sun::star::io::XConnectable >         m_xSuccessor;
+    Reference< com::sun::star::io::XConnectable >           m_xPredecessor;
+    Reference< com::sun::star::io::XConnectable >           m_xSuccessor;
 
     SvFileStream                m_aFileStream;
 public:
@@ -421,8 +434,8 @@ public:
 
     void setMode( UINT32 nMode );
     UINT32 read( UINT32 offset, sal_Int8* buffer, UINT32 size );
-    void setSource( const Reference< ::com::sun::star::io::XActiveDataSource >& xSource ) { m_xSource = xSource; }
-    // get contents ot url via ::ucb::Content
+    void setSource( const Reference< com::sun::star::io::XActiveDataSource >& xSource ) { m_xSource = xSource; }
+    // get contents ot url via ucb::Content
     void load();
 
     // XOutputStream
@@ -431,21 +444,21 @@ public:
     virtual void SAL_CALL closeOutput() throw();
 
     // XConnectable
-    virtual void SAL_CALL setPredecessor( const Reference< ::com::sun::star::io::XConnectable >& xPredecessor ) throw()
+    virtual void SAL_CALL setPredecessor( const Reference< com::sun::star::io::XConnectable >& xPredecessor ) throw()
         { m_xPredecessor = xPredecessor; }
-    virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw()
+    virtual Reference< com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw()
         { return m_xPredecessor; }
 
-    virtual void SAL_CALL setSuccessor( const Reference< ::com::sun::star::io::XConnectable >& xSuccessor ) throw()
+    virtual void SAL_CALL setSuccessor( const Reference< com::sun::star::io::XConnectable >& xSuccessor ) throw()
         { m_xSuccessor = xSuccessor; }
-    virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw()
+    virtual Reference< com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw()
         { return m_xSuccessor; }
 };
 
 class PluginOutputStream : public PluginStream
 {
 private:
-    Reference< ::com::sun::star::io::XOutputStream >    m_xStream;
+    Reference< com::sun::star::io::XOutputStream >  m_xStream;
 public:
     PluginOutputStream( XPlugin_Impl* pPlugin, const char* url,
                         sal_uInt32 len, sal_uInt32 lastmod );
@@ -453,15 +466,15 @@ public:
 
     virtual PluginStreamType getStreamType();
 
-    Reference< ::com::sun::star::io::XOutputStream > & getOutputStream() { return m_xStream; }
+    Reference< com::sun::star::io::XOutputStream > & getOutputStream() { return m_xStream; }
 };
 
 class PluginEventListener :
-    public ::cppu::WeakAggImplHelper1< ::com::sun::star::lang::XEventListener >
+    public cppu::WeakAggImplHelper1< com::sun::star::lang::XEventListener >
 {
 private:
     XPlugin_Impl*   m_pPlugin;
-    Reference< ::com::sun::star::plugin::XPlugin >      m_xPlugin; // just to hold the plugin
+    Reference< com::sun::star::plugin::XPlugin >        m_xPlugin; // just to hold the plugin
     char*           m_pUrl;
     char*           m_pNormalizedUrl;
     void*           m_pNotifyData;
@@ -476,8 +489,8 @@ public:
     const char* getNormalizedURL() { return m_pNormalizedUrl; }
     void*       getNotifyData() { return m_pNotifyData; }
 
-    // ::com::sun::star::lang::XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject&  Source ) throw();
+    // com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject&  Source ) throw();
 };
 
 #endif
