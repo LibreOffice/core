@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-18 10:22:34 $
+ *  last change: $Author: pl $ $Date: 2001-12-19 16:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,7 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
 
         if ( IsRollUp() )
         {
-            aSize = maOrgSize;
+            aSize.Height() += maOrgSize.Height();
             nState |= WINDOWSTATE_STATE_ROLLUP;
         }
 
