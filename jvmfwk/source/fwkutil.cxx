@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-18 08:37:33 $
+ *  last change: $Author: jl $ $Date: 2004-05-18 09:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,6 +438,19 @@ rtl::OUString getVendorSettingsURL()
     osl::File::RC fileError = osl::DirectoryItem::get(sVendor, vendorItem);
     if (fileError == osl::FileBase::E_None)
         return sVendor;
+
+    //Hack. try the so sub dir of the executable dir. Necessery for build process
+    //where javavendors.xml is delivered to ../bin/so for StarOffice
+    sVendor = getDirFromFile(ouExe);
+    sBufVendor.append(sVendor);
+    sBufVendor.appendAscii("/so/");
+    sBufVendor.appendAscii(VENDORSETTINGS);
+    sVendor = sBufVendor.makeStringAndClear();
+    //check if the file exists
+    fileError = osl::DirectoryItem::get(sVendor, vendorItem);
+    if (fileError == osl::FileBase::E_None)
+        return sVendor;
+
 
     //try next to the jvmfwk.dll
     rtl::OUString sLib;
