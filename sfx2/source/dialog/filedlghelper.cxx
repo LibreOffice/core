@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:05:42 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2259,16 +2259,6 @@ FileDialogHelper::FileDialogHelper( const short nDialogType,
     // create the list of filters
     mpImp->addFilters( nFlags, rFact, nMust, nDont );
 }
-
-#ifdef FS_PRIV_DEBUG
-// ------------------------------------------------------------------------
-FileDialogHelper::FileDialogHelper( const short nDialogType,
-                                    sal_uInt32 nFlags )
-{
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
-    mxImp = mpImp;
-}
-#endif
 
 // ------------------------------------------------------------------------
 FileDialogHelper::FileDialogHelper( const short nDialogType,
