@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
+ *  last change: $Author: os $ $Date: 2001-02-13 13:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,9 @@ BibliographyLoader::BibliographyLoader() :
 
 BibliographyLoader::~BibliographyLoader()
 {
+    Reference< lang::XComponent >  xComp(m_xCursor, UNO_QUERY);
+    if (xComp.is())
+        xComp->dispose();
     if(m_pBibMod)
         CloseBibModul(m_pBibMod);
 }
