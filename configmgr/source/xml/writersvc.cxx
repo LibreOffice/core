@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writersvc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:20:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,15 @@
 #include "confapifactory.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERHANDLER_HPP_
+#include <com/sun/star/configuration/backend/XLayerHandler.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
 
 // -----------------------------------------------------------------------------
 
@@ -80,7 +87,7 @@ namespace configmgr
         namespace lang  = ::com::sun::star::lang;
         namespace io    = ::com::sun::star::io;
         namespace sax   = ::com::sun::star::xml::sax;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 
 template <class BackendInterface>
