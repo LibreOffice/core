@@ -2,9 +2,9 @@
  *
  *  $RCSfile: countryid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:52:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #endif
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
+#endif
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -326,7 +330,7 @@ const CountryId COUNTRY_UZBEKISTAN          = 998;
         The best Windows country ID for the passed language type, or
         COUNTRY_DONTKNOW on error.
  */
-CountryId ConvertLanguageToCountry( LanguageType eLanguage );
+SVX_DLLPUBLIC CountryId ConvertLanguageToCountry( LanguageType eLanguage );
 
 /** Converts a Windows country ID to a language type.
 
@@ -343,7 +347,7 @@ CountryId ConvertLanguageToCountry( LanguageType eLanguage );
         The most used language type in the passed country, or LANGUAGE_DONTKNOW
         on error.
  */
-LanguageType ConvertCountryToLanguage( CountryId eCountry );
+SVX_DLLPUBLIC LanguageType ConvertCountryToLanguage( CountryId eCountry );
 
 // ============================================================================
 
