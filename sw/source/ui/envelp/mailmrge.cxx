@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:51:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 #endif
 #ifndef _MAILMRGE_HXX
 #include <mailmrge.hxx>
+#endif
+
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
@@ -628,7 +632,13 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
     else
     {
         nMergeType = DBMGR_MERGE_MAILFILES;
-        String sPath(URIHelper::SmartRelToAbs(aPathED.GetText()));
+        SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
+        INetURLObject aAbs;
+        if( pMedium )
+            aAbs = pMedium->GetURLObject();
+        String sPath(
+            URIHelper::SmartRel2Abs(
+                aAbs, aPathED.GetText(), URIHelper::GetMaybeFileHdl()));
         pModOpt->SetMailingPath(sPath);
         String sDelim(INET_PATH_TOKEN);
 
