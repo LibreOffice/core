@@ -8266,3 +8266,10 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?lcl_ReadGlobalFilters@sfx2@@YAXABVOConfigurationNode@utl@@AAV?$list@U_tagFilterClass@sfx2@@V?$allocator@U_tagFilterClass@sfx2@@@_STL@@@_STL@@AAV?$vector@VOUString@rtl@@V?$allocator@VOUString@rtl@@@_STL@@@5@@Z
 ?resize@?$vector@VOUString@rtl@@V?$allocator@VOUString@rtl@@@_STL@@@_STL@@QAEXIABVOUString@rtl@@@Z
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx614724087@@YAXABVSbxVariableRef@@PAX@Z
+?lcl_translateBasic2Uno@?%O:/SRX641/src/sfx2/source/doc\objmisc.cxx2105532431@@YAXABVSbxVariableRef@@PAX@Z
+??0?$Reference@VXSimpleMailClient@system@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+??0?$Reference@VXSimpleMailMessage@system@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+??0OMailSendThread@@QAE@V?$Reference@VXSimpleMailClient@system@star@sun@com@@@uno@star@sun@com@@V?$Reference@VXSimpleMailMessage@system@star@sun@com@@@2345@J@Z
+??1OMailSendThread@@UAE@XZ
+?onTerminated@OMailSendThread@@UAAXXZ
+?run@OMailSendThread@@UAAXXZ
