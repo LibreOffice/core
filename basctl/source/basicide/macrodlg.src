@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:10:18 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "Nome ~macro" ;
         Text [ portuguese_brazilian ] = "Nome da ~macro" ;
         Text [ portuguese ] = "Nome da ~macro" ;
-        Text [ finnish ] = "Makron nimi" ;
+        Text [ finnish ] = "~Makron nimi" ;
         Text [ danish ] = "~Makronavn" ;
         Text [ french ] = "~Nom de la macro" ;
         Text [ swedish ] = "~Makronamn" ;
@@ -177,8 +177,8 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "Macro ~da" ;
         Text [ portuguese_brazilian ] = "Macro ~from" ;
         Text [ portuguese ] = "Macro ~de" ;
-        Text [ finnish ] = "Makro tiedostosta" ;
-        Text [ danish ] = "Makro f~ra" ;
+        Text [ finnish ] = "Makro ~tiedostosta" ;
+        Text [ danish ] = "Ma~kro fra" ;
         Text [ french ] = "~Macro de" ;
         Text [ swedish ] = "Ma~kro från" ;
         Text [ dutch ] = "Ma~cro uit" ;
@@ -300,7 +300,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ dutch ] = "Sluiten";
         Text[ french ] = "Fermer";
         Text[ spanish ] = "Cerrar";
-        Text[ finnish ] = "Close";
+        Text[ finnish ] = "Sulje";
         Text[ italian ] = "Chiudi";
         Text[ danish ] = "Luk";
         Text[ swedish ] = "Stäng";
@@ -326,7 +326,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "~Assegna..." ;
         Text [ portuguese_brazilian ] = "~Assign..." ;
         Text [ portuguese ] = "~Atribuir" ;
-        Text [ finnish ] = "~Määritä" ;
+        Text [ finnish ] = "Määritä..." ;
         Text [ danish ] = "~Tilknyt..." ;
         Text [ french ] = "~Assigner..." ;
         Text [ swedish ] = "~Tilldela..." ;
@@ -365,7 +365,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ english_us ] = "~Edit" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
-        Text[ russian ] = "~Ïğàâêà";
+        Text[ russian ] = "~Èçìåíèòü";
         Text[ polish ] = "~Edytuj";
         Text[ japanese ] = "ç·¨é›†(~E)";
         Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
@@ -473,7 +473,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ italian ] = "~Gestisci..." ;
         Text [ portuguese_brazilian ] = "Geren~ciar..." ;
         Text [ portuguese ] = "~Gerir..." ;
-        Text [ finnish ] = "~Järjestelytyökalu" ;
+        Text [ finnish ] = "~Järjestelytyökalu..." ;
         Text [ danish ] = "~Administrer..." ;
         Text [ french ] = "~Gérer..." ;
         Text [ swedish ] = "~Administrera..." ;
@@ -481,7 +481,7 @@ ModalDialog RID_MACROCHOOSER
         Text [ spanish ] = "~Administrar..." ;
         Text [ english_us ] = "~Organizer..." ;
         Text[ chinese_simplified ] = "ç®¡ç†(~O)...";
-        Text[ russian ] = "Îğãàíèçîâàòü...";
+        Text[ russian ] = "Óïğàâëåíèå...";
         Text[ polish ] = "Zarz¹dzaj...";
         Text[ japanese ] = "ç®¡ç†(~O)...";
         Text[ chinese_traditional ] = "ç®¡ç†(~O)...";
@@ -590,7 +590,7 @@ String RID_STR_BTNNEW
     Text [ spanish ] = "~Nuevo" ;
     Text [ english_us ] = "~New" ;
     Text[ chinese_simplified ] = "æ–°å»º(~N)";
-    Text[ russian ] = "Ñîçä~àòü";
+    Text[ russian ] = "Ñîçäàòü";
     Text[ polish ] = "Nowy";
     Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";
     Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)";
