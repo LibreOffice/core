@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-17 13:33:36 $
+ *  last change: $Author: mba $ $Date: 2000-10-18 10:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,9 +389,11 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         if( aMime.Len() )
             pFilter = rMatcher.GetFilter4Mime( aMime );
 */
+        const SfxFilter* pOldFilter = pFilter;
         ErrCode nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
-        if ( !pFilter )
+        if ( !pFilter || pOldFilter == pFilter && nErr != ERRCODE_NONE )
         {
+            pFilter = NULL;
             SvStorageRef aStor = aMedium.GetStorage();
             if ( aStor.Is() )
                 pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
@@ -399,8 +401,11 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                 nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
         }
 
-        if ( !pFilter )
+        if ( !pFilter || pOldFilter == pFilter && nErr != ERRCODE_NONE )
+        {
+            pFilter = NULL;
             nErr = rMatcher.GetFilter4Content( aMedium, &pFilter );
+        }
 
         if ( pFilter )
             pFilter = rMatcher.ResolveRedirection( pFilter, aMedium );
