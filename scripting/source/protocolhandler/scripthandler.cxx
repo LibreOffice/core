@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:40 $
+*  last change: $Author: npower $ $Date: 2003-02-12 09:41:39 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -162,12 +162,17 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     throw( ::com::sun::star::uno::RuntimeException )
 {
     Reference< XDispatch > xDispatcher;
-    OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 1\n" );
+    OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 1, for URL.complete %s \n",
+        ::rtl::OUStringToOString( aURL.Complete, RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
 
     if ( aURL.Complete.compareToAscii( ::scripting_protocolhandler::MYSCHEME,
                                        ::scripting_protocolhandler::MYSCHEME_LEN ) == 0 )
     {
         xDispatcher = this;
+    }
+    else
+    {
+        OSL_TRACE("No match for scheme");
     }
     OSL_TRACE( "ScriptProtocolHandler::queryDispatch - 2\n" );
 
@@ -211,10 +216,19 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             validateXRef( xFunc,
                 "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XFunction interface" );
 
+
             Sequence< Any > inArgs( 0 );
             Sequence< Any > outArgs( 0 );
             Sequence< sal_Int16 > outIndex;
-
+            if ( lArgs.getLength() > 0 )
+            {
+               inArgs.realloc( lArgs.getLength() );
+               for ( int index = 0; index < lArgs.getLength(); index++ )
+               {
+                   OSL_TRACE(" processing arg %d, of type", index, lArgs[ index ].Value.getValueTypeName() );
+                   inArgs[ index ] = lArgs[ index ].Value;
+               }
+            }
             invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
             bSuccess = sal_True;
         }
@@ -302,6 +316,7 @@ void SAL_CALL ScriptProtocolHandler::dispatch(
 const URL& aURL, const Sequence< PropertyValue >& lArgs )
 throw ( RuntimeException )
 {
+    OSL_TRACE("ScriptProtocolHandler::dispatch");
     dispatchWithNotification( aURL, lArgs, Reference< XDispatchResultListener >() );
 }
 
