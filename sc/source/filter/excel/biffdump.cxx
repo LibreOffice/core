@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:22:14 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,11 +423,11 @@ static const sal_Char* GetSeriesType( const UINT16 n )
 
     switch( n )
     {
-        case 0:     p = "date";         break;
-        case 1:     p = "numeric";      break;
-        case 2:     p = "sequence";     break;
-        case 3:     p = "text";         break;
-        default:    p = pU;
+        case 0:     p = "(date)    "; break;
+        case 1:     p = "(numeric) "; break;
+        case 2:     p = "(sequence)"; break;
+        case 3:     p = "(text)    "; break;
+        default:    p = "(unknown) ";
     }
 
     return p;
@@ -948,6 +948,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
         case 0x00EC:        // MSODRAWING
         case 0x01B6:        // TXO
             pIn->ResetRecord( false );
+        break;
+        case 0x1066:        // CHGELFRAME
+            pIn->ResetRecord( bReadContRecs, 0x1066 );
         break;
         default:
             pIn->ResetRecord( bReadContRecs );
@@ -4212,31 +4215,25 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 break;
             case 0x1003:        // ChartSeries
             {
-                UINT16  nSdtX, nSdtY, nCValx, nCValy, nSdtBSize, nCValBSize;
-                rIn >> nSdtX >> nSdtY >> nCValx >> nCValy >> nSdtBSize >> nCValBSize;
+                sal_uInt16 nCatType, nValType, nCatCnt, nValCnt, nBubType, nBubCnt;
+                rIn >> nCatType >> nValType >> nCatCnt >> nValCnt >> nBubType >> nBubCnt;
                 LINESTART();
-                ADDTEXT( "categories: " );
-                ADDTEXT( GetSeriesType( nSdtX ) );
-                ADDTEXT( "     values: " );
-                ADDTEXT( GetSeriesType( nSdtY ) );
+                ADDTEXT( "category-type=" );    __AddDec( t, nCatType );
+                ADDTEXT( " " );                 ADDTEXT( GetSeriesType( nCatType ) );
+                ADDTEXT( "   count=" );         __AddDec( t, nCatCnt );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "Count of categories = " );
-                __AddDec( t, nCValx );
-                ADDTEXT( "       Count of values = " );
-                __AddDec( t, nCValy );
+                ADDTEXT( "   value-type=" );    __AddDec( t, nValType );
+                ADDTEXT( " " );                 ADDTEXT( GetSeriesType( nValType ) );
+                ADDTEXT( "   count=" );         __AddDec( t, nValCnt );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "Type of data in Bubble size series: " );
-                const sal_Char* p = GetSeriesType( nSdtBSize );
-                ADDTEXT( p );
-                if ( p == pU )
-                    __AddHex( t, nSdtBSize );
-                ADDTEXT( "    count = " );
-                __AddDec( t, nCValBSize );
+                ADDTEXT( "  bubble-type=" );    __AddDec( t, nBubType );
+                ADDTEXT( " " );                 ADDTEXT( GetSeriesType( nBubType ) );
+                ADDTEXT( "   count=" );         __AddDec( t, nBubCnt );
                 PRINT();
             }
-                break;
+            break;
             case 0x1006:        // ChartDataformat
             {
                 INT16   n;
@@ -4488,142 +4485,95 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 break;
             case 0x101D:        // ChartAxis
             {
+                static const sal_Char* const ppcIds[] = { "x-axis", "y-axis", "z-axis" };
                 LINESTART();
-                switch( Read2( rIn ) )
-                {
-                    case 0:     p = "category axis or x axis on a scatter chart";   break;
-                    case 1:     p = "value axis";                                   break;
-                    case 2:     p = "series axis";                                  break;
-                    default:    p = pU;
-                }
-                ADDTEXT( p );
+                sal_uInt16 nAxisId = rIn.ReaduInt16();
+                ADDTEXT( "axis-id=" );          __AddDec( t, nAxisId );
+                lcl_AddEnum( t, nAxisId, ppcIds, STATIC_TABLE_SIZE( ppcIds ) );
                 PRINT();
                 ContDump( 16 );
             }
                 break;
-            case 0x101E:        // ChartTick
+            case 0x101E:        // CHTICK
             {
+                static const sal_Char* const ppcTickMode[] = { "off", "inside", "outside", "cross" };
+                static const sal_Char* const ppcTickPos[] = { "off", "low", "high", "next-to-axis" };
+                static const sal_Char* const ppcText[] = { "transparent", "opaque" };
                 LINESTART();
-                switch( Read1( rIn ) )
-                {
-                    case 0:     p = "invisible";                break;
-                    case 1:     p = "inside of axis line";      break;
-                    case 2:     p = "outside of axis line";     break;
-                    case 3:     p = "cross axis line";          break;
-                    default:    p = pU;
-                }
-                ADDTEXT( "major = " );
-                ADDTEXT( p );
-                switch( Read1( rIn ) )
-                {
-                    case 0:     p = "invisible";                break;
-                    case 1:     p = "inside of axis line";      break;
-                    case 2:     p = "outside of axis line";     break;
-                    case 3:     p = "cross axis line";          break;
-                    default:    p = pU;
-                }
-                ADDTEXT( "    minor = " );
-                ADDTEXT( p );
+                sal_uInt8 nMajor, nMinor, nPos, nText;
+                rIn >> nMajor >> nMinor >> nPos >> nText;
+                ADDTEXT( "major=" );            __AddDec( t, nMajor );
+                lcl_AddEnum( t, nMajor, ppcTickMode, STATIC_TABLE_SIZE( ppcTickMode ) );
+                ADDTEXT( "   minor=" );         __AddDec( t, nMinor );
+                lcl_AddEnum( t, nMinor, ppcTickMode, STATIC_TABLE_SIZE( ppcTickMode ) );
                 PRINT();
                 LINESTART();
-                switch( Read1( rIn ) )
-                {
-                    case 0:     p = "invisible";                break;
-                    case 1:     p = "low end";                  break;
-                    case 2:     p = "high end";                 break;
-                    case 3:     p = "next to axis";             break;
-                    default:    p = pU;
-                }
-                ADDTEXT( "position = " );
-                ADDTEXT( p );
-                switch( Read1( rIn ) )
-                {
-                    case 1:     p = "transparent";              break;
-                    case 2:     p = "opaque";                   break;
-                    default:    p = pU;
-                }
-                ADDTEXT( "    mode = " );
-                ADDTEXT( p );
-                ADDTEXT( "    text col = " );
+                ADDTEXT( "position=" );         __AddDec( t, nPos );
+                lcl_AddEnum( t, nPos, ppcTickPos, STATIC_TABLE_SIZE( ppcTickPos ) );
+                ADDTEXT( "   text-mode=" );     __AddDec( t, nText );
+                lcl_AddEnum( t, nText, ppcText, STATIC_TABLE_SIZE( ppcText ) );
+                ADDTEXT( "    text-color=" );
                 ADDTEXT( GetRGB( Read4( rIn ) ) );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "reserved = " );
-                ADDHEX( 4 ); t += ' ';
-                ADDHEX( 4 ); t += ' ';
-                ADDHEX( 4 ); t += ' ';
-                ADDHEX( 4 );
+                ADDTEXT( "reserved=" );         ADDHEX( 4 );
+                ADDTEXT( "," );                 ADDHEX( 4 );
+                ADDTEXT( "," );                 ADDHEX( 4 );
+                ADDTEXT( "," );                 ADDHEX( 4 );
                 PRINT();
                 rIn >> __nFlags;
-                if( __nFlags )
-                {
-                    LINESTART();
-                    STARTFLAG();
-                    ADDFLAG( 0x0001, "fAutoCol" );
-                    ADDFLAG( 0x0002, "fAutoBack" );
-                    ADDFLAG( 0x0020, "fAutoRot" );
-                    PRINT();
-                }
                 LINESTART();
-                ADDTEXT( "color index = " );
-                ADDDEC( 2 );
-                ADDTEXT( "   rotation = " );
-                ADDDEC( 2 );
+                STARTFLAG();
+                ADDFLAG( 0x0001, "fAutoCol" );
+                ADDFLAG( 0x0002, "fAutoBack" );
+                ADDFLAG( 0x0020, "fAutoRot" );
+                ADDRESERVED( 0xFFDC );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "color=" );            ADDDEC( 2 );
+                ADDTEXT( "   rotation=" );      ADDDEC( 2 );
                 PRINT();
             }
                 break;
-            case 0x101F:        // ChartValuerange
+            case 0x101F:        // CHVALUERANGE
             {
                 LINESTART();
-                ADDTEXT( "min val = " );        ADDDOUBLE();
-                ADDTEXT( "  max val = " );      ADDDOUBLE();
-                PRINT();
-                LINESTART();
-                ADDTEXT( "major incr = " );     ADDDOUBLE();
-                ADDTEXT( "  minor incr = " );   ADDDOUBLE();
-                PRINT();
-                LINESTART();
-                ADDTEXT( "cross val = " );      ADDDOUBLE();
+                ADDTEXT( "min=" );              ADDDOUBLE();
+                ADDTEXT( "   max=" );           ADDDOUBLE();
+                ADDTEXT( "   major=" );         ADDDOUBLE();
+                ADDTEXT( "   minor=" );         ADDDOUBLE();
+                ADDTEXT( "   axis-cross=" );    ADDDOUBLE();
                 PRINT();
                 rIn >> __nFlags;
-                if( __nFlags )
-                {
-                    LINESTART();
-                    STARTFLAG();
-                    ADDFLAG( 0x0001, "fAutoMin" );
-                    ADDFLAG( 0x0002, "fAutoMax" );
-                    ADDFLAG( 0x0004, "fAutoMajor" );
-                    ADDFLAG( 0x0008, "fAutoMinor" );
-                    ADDFLAG( 0x0010, "fAutoCross" );
-                    ADDFLAG( 0x0020, "fLogScale" );
-                    ADDFLAG( 0x0040, "fReverse" );
-                    ADDFLAG( 0x0080, "fMaxCross" );
-                    PRINT();
-                }
+                LINESTART();
+                STARTFLAG();
+                ADDFLAG( 0x0001, "fAutoMin" );
+                ADDFLAG( 0x0002, "fAutoMax" );
+                ADDFLAG( 0x0004, "fAutoMajor" );
+                ADDFLAG( 0x0008, "fAutoMinor" );
+                ADDFLAG( 0x0010, "fAutoCross" );
+                ADDFLAG( 0x0020, "fLogScale" );
+                ADDFLAG( 0x0040, "fReverse" );
+                ADDFLAG( 0x0080, "fMaxCross" );
+                ADDRESERVED( 0xFF00 );
+                PRINT();
             }
                 break;
-            case 0x1020:        // ChartCatserrange
+            case 0x1020:        // CHEXTRANGE
             {
                 LINESTART();
-                ADDTEXT( "Value axis / category crossing point: " );
-                ADDDEC( 2 );
-                PRINT();
-                LINESTART();
-                ADDTEXT( "label freq = " );
-                ADDDEC( 2 );
-                ADDTEXT( "  mark freq = " );
-                ADDDEC( 2 );
+                ADDTEXT( "axis-cross=" );       ADDDEC( 2 );
+                ADDTEXT( "   label-freq=" );    ADDDEC( 2 );
+                ADDTEXT( "   mark-freq=" );     ADDDEC( 2 );
                 PRINT();
                 rIn >> __nFlags;
-                if( __nFlags )
-                {
-                    LINESTART();
-                    STARTFLAG();
-                    ADDFLAG( 0x0001, "fBetween" );
-                    ADDFLAG( 0x0002, "fMaxCross" );
-                    ADDFLAG( 0x0004, "fReverse" );
-                    PRINT();
-                }
+                LINESTART();
+                STARTFLAG();
+                ADDFLAG( 0x0001, "fBetween" );
+                ADDFLAG( 0x0002, "fMaxCross" );
+                ADDFLAG( 0x0004, "fReverse" );
+                ADDRESERVED( 0xFFF8 );
+                PRINT();
             }
                 break;
             case 0x1021:        // ChartAxislineformat
@@ -4663,6 +4613,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     case 2:     p = "center";       break;
                     case 3:     p = "right";        break;
                     case 4:     p = "justify";      break;
+                    case 5:     p = "distribute";   break;
                     default:    p = pU;
                 }
                 ADDTEXT( p );
@@ -4673,6 +4624,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     case 2:     p = "center";       break;
                     case 3:     p = "bottom";       break;
                     case 4:     p = "justify";      break;
+                    case 5:     p = "distribute";   break;
                     default:    p = pU;
                 }
                 ADDTEXT( p );
@@ -4769,9 +4721,19 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             case 0x1026:        // ChartFontx
                 ContDump( nL );
                 break;
-            case 0x1027:        // ChartObjectLink
-                ContDump( nL );
-                break;
+            case 0x1027:        // CHOBJECTLINK
+            {
+                static const sal_Char* const ppcObjLink[] = { 0, "title", "y-axis", "x-axis", "data", "legend", "none", "z-axis" };
+                LINESTART();
+                sal_uInt16 nObjLink;
+                rIn >> nObjLink;
+                ADDTEXT( "link=" );             __AddDec( t, nObjLink );
+                lcl_AddEnum( t, nObjLink, ppcObjLink, STATIC_TABLE_SIZE( ppcObjLink ) );
+                ADDTEXT( "   series=" );        ADDDEC( 2 );
+                ADDTEXT( "   point=" );         ADDDEC( 2 );
+                PRINT();
+            }
+            break;
             case 0x1032:        // ChartFrame
             {
                 LINESTART();
@@ -4805,7 +4767,12 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ContDump( nL );
                 break;
             case 0x103C:        // ChartPicf
-                ContDump( nL );
+                LINESTART();
+                ADDTEXT( "bmp-mode=" );             ADDDEC( 2 );
+                ADDTEXT( "   format=" );            ADDDEC( 2 );
+                ADDTEXT( "   flags=" );             ADDHEX( 2 );
+                ADDTEXT( "   scale=" );             ADDDOUBLE();
+                PRINT();
                 break;
             case 0x103D:        // ChartDropbar
                 ContDump( nL );
@@ -4906,6 +4873,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     case 0:     p = "title or text";        break;
                     case 1:     p = "values";               break;
                     case 2:     p = "categories";           break;
+                    case 3:     p = "bubble sizes";         break;
                     default:    p = pU;
                 }
                 ADDTEXT( "Link index identifier: " );
@@ -4916,7 +4884,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 switch( Read1( rIn ) )
                 {
-                    case 0:     p = "use default categories";   break;
+                    case 0:     p = "default categories";       break;
                     case 1:     p = "text or value";            break;
                     case 2:     p = "linked to worksheet";      break;
                     case 3:     p = "not used (HaHaHa...)";     break;
@@ -5067,7 +5035,6 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ContDump( nL );
                 break;
             case 0x1066:        // ChartGelframe
-                rIn.ResetRecord( true, 0x1066 );
                 EscherDump( nL );
                 break;
             case 0x1067:        // ChartBoppcustom
