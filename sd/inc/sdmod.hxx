@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-28 17:54:27 $
+ *  last change: $Author: ka $ $Date: 2001-01-11 16:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ class BasicIDE;
 class SvxSearchItem;
 class SdAppLinkHdl; ;
 class SvxErrorHandler;
-class SdDataObject;
+class SvDataObject;
 class EditFieldInfo;
 class SvFactory;
 
@@ -133,8 +133,8 @@ public:
                         SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact);
     virtual             ~SdModule();
 
-    SdDataObject*       pDragData;
-    SdDataObject*       pClipboardData;
+    SvDataObject*       pDragData;
+    SvDataObject*       pClipboardData;
 
     void                Execute(SfxRequest& rReq);
     void                GetState(SfxItemSet&);
