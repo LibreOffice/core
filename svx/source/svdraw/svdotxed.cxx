@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:13:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,14 @@
 
 #ifndef _EDITSTAT_HXX //autogen
 #include <editstat.hxx>
+#endif
+
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
+
+#ifndef _EEITEM_HXX
+#include "eeitem.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,13 +149,18 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
             // Parent enthaltenen Items hart am Absatz attributiert werden.
             // -> BugID 22467
             const SfxItemSet& rSet = GetObjectItemSet();
-            SdrOutlinerSetItem aOutlSetItem(rSet.GetPool());
-            aOutlSetItem.GetItemSet().Put(rSet);
-            const SfxItemSet* pTmpSet = &aOutlSetItem.GetItemSet();
-            const SfxItemSet* pParentMerk = pTmpSet->GetParent();
-            ((SfxItemSet*)pTmpSet)->SetParent(NULL);
-            rOutl.SetParaAttribs(0,*pTmpSet);
-            ((SfxItemSet*)pTmpSet)->SetParent(pParentMerk);
+//BFS01         SdrOutlinerSetItem aOutlSetItem(rSet.GetPool());
+//BFS01         aOutlSetItem.GetItemSet().Put(rSet);
+//BFS01         const SfxItemSet* pTmpSet = &aOutlSetItem.GetItemSet();
+//BFS01         const SfxItemSet* pParentMerk = pTmpSet->GetParent();
+//BFS01         ((SfxItemSet*)pTmpSet)->SetParent(NULL);
+//BFS01         rOutl.SetParaAttribs(0,*pTmpSet);
+//BFS01         ((SfxItemSet*)pTmpSet)->SetParent(pParentMerk);
+
+            //BFS01
+            SfxItemSet aFilteredSet(*rSet.GetPool(), EE_ITEMS_START, EE_ITEMS_END);
+            aFilteredSet.Put(rSet);
+            rOutl.SetParaAttribs(0, aFilteredSet);
         }
     }
     if (bFitToSize) {
