@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-08 13:32:31 $
+ *  last change: $Author: hr $ $Date: 2001-10-18 18:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,8 @@ void SwDoc::InitDrawModel()
     SdrOutliner& rOutliner = pDrawModel->GetDrawOutliner();
     uno::Reference< XSpellChecker1 > xSpell = ::GetSpellChecker();
     rOutliner.SetSpeller( xSpell );
-    rOutliner.SetHyphenator( ::GetHyphenator() );
+    uno::Reference<XHyphenator> xHyphenator( ::GetHyphenator() );
+    rOutliner.SetHyphenator( xHyphenator );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create Spellchecker/Hyphenator" );
 
     SetCalcFieldValueHdl(&rOutliner);
