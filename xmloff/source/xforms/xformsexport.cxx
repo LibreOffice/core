@@ -1,0 +1,745 @@
+/*************************************************************************
+ *
+ *  $RCSfile: xformsexport.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:16:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "XFormsModelExport.hxx"
+#include "xformsapi.hxx"
+
+#include "xmlexp.hxx"
+#include "xmltoken.hxx"
+#include "xmlnmspe.hxx"
+#include "nmspmap.hxx"
+#include "DomExport.hxx"
+#include "xmluconv.hxx"
+
+#include "tools/debug.hxx"
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/form/binding/XValueBinding.hpp>
+#include <com/sun/star/form/binding/XBindableValue.hpp>
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
+#include <com/sun/star/form/binding/XListEntrySource.hpp>
+#include <com/sun/star/form/submission/XSubmissionSupplier.hpp>
+#include <com/sun/star/xforms/XModel.hpp>
+#include <com/sun/star/xforms/XDataTypeRepository.hpp>
+#include <com/sun/star/xforms/XFormsSupplier.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
+#include <com/sun/star/xsd/DataTypeClass.hpp>
+#include <com/sun/star/xsd/XDataType.hpp>
+
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace xmloff::token;
+
+using rtl::OUString;
+using rtl::OUStringBuffer;
+using com::sun::star::beans::XPropertySet;
+using com::sun::star::beans::XPropertySetInfo;
+using com::sun::star::container::XIndexAccess;
+using com::sun::star::container::XNameAccess;
+using com::sun::star::container::XNameContainer;
+using com::sun::star::container::XEnumerationAccess;
+using com::sun::star::container::XEnumeration;
+using com::sun::star::xml::dom::XDocument;
+using com::sun::star::form::binding::XValueBinding;
+using com::sun::star::form::binding::XBindableValue;
+using com::sun::star::form::binding::XListEntrySink;
+using com::sun::star::form::submission::XSubmissionSupplier;
+using com::sun::star::beans::PropertyValue;
+using com::sun::star::xsd::XDataType;
+using com::sun::star::xforms::XDataTypeRepository;
+using com::sun::star::xforms::XFormsSupplier;
+
+void exportXForms( SvXMLExport& rExport )
+{
+    Reference<XFormsSupplier> xSupplier( rExport.GetModel(), UNO_QUERY );
+    if( xSupplier.is() )
+    {
+        Reference<XNameContainer> xForms = xSupplier->getXForms();
+        if( xForms.is() )
+        {
+            Sequence<OUString> aNames = xForms->getElementNames();
+            const OUString* pNames = aNames.getConstArray();
+            sal_Int32 nNames = aNames.getLength();
+
+            for( sal_Int32 n = 0; n < nNames; n++ )
+            {
+                Reference<XPropertySet> xModel( xForms->getByName( pNames[n] ),
+                                                UNO_QUERY );
+                exportXFormsModel( rExport, xModel );
+            }
+        }
+    }
+}
+
+
+void exportXFormsInstance( SvXMLExport&, const Sequence<PropertyValue>& );
+void exportXFormsBinding( SvXMLExport&, const Reference<XPropertySet>& );
+void exportXFormsSubmission( SvXMLExport&, const Reference<XPropertySet>& );
+void exportXFormsSchemas( SvXMLExport&, const Reference<com::sun::star::xforms::XModel>& );
+
+
+typedef OUString (*convert_t)( const Any& );
+typedef struct
+{
+    sal_Char* pPropertyName;
+    sal_uInt16 nPropertyNameLength;
+    sal_uInt16 nNamespace;
+    sal_uInt16 nToken;
+    convert_t aConverter;
+} ExportTable;
+void lcl_export( const Reference<XPropertySet>& rPropertySet,
+                 SvXMLExport& rExport,
+                 const ExportTable* pTable );
+
+#define TABLE_ENTRY(NAME,NAMESPACE,TOKEN,CONVERTER) { NAME,sizeof(NAME)-1,XML_NAMESPACE_##NAMESPACE,xmloff::token::XML_##TOKEN, CONVERTER }
+#define TABLE_END { NULL, 0, 0, 0, NULL }
+
+
+// any conversion functions
+OUString lcl_toString( const Any& rAny );
+OUString lcl_bool( const Any& rAny );
+OUString lcl_int32( const Any& rAny );
+OUString lcl_double( const Any& rAny );
+OUString lcl_whitespace( const Any& rAny );
+
+// other functions
+OUString lcl_getXSDType( SvXMLExport& rExport,
+                         const Reference<XPropertySet>& xType );
+
+
+//
+// the model
+//
+
+static const ExportTable aXFormsModelTable[] =
+{
+    TABLE_ENTRY( "ID", NONE, ID, lcl_toString ),
+    TABLE_ENTRY( "SchemaRef", NONE, SCHEMA, lcl_toString ),
+    TABLE_END
+};
+
+void exportXFormsModel( SvXMLExport& rExport,
+                        const Reference<XPropertySet>& xModelPropSet )
+{
+    // no model -> don't do anything!
+    Reference<com::sun::star::xforms::XModel> xModel( xModelPropSet, UNO_QUERY );
+    if( ! xModel.is() || ! xModelPropSet.is() )
+        return;
+
+    lcl_export( xModelPropSet, rExport, aXFormsModelTable );
+    SvXMLElementExport aModelElement( rExport, XML_NAMESPACE_XFORMS, XML_MODEL,
+                                      sal_True, sal_True );
+
+    // instances
+    Reference<XIndexAccess> xInstances( xModel->getInstances(),
+                                        UNO_QUERY_THROW);
+    sal_Int32 nCount = xInstances->getCount();
+    sal_Int32 i = 0;
+    for( i = 0; i < nCount; i++ )
+    {
+        Sequence<PropertyValue> aInstance;
+        xInstances->getByIndex( i ) >>= aInstance;
+        exportXFormsInstance( rExport, aInstance );
+    }
+
+
+    // bindings
+    Reference<XIndexAccess> xBindings( xModel->getBindings(), UNO_QUERY_THROW);
+    nCount = xBindings->getCount();
+    for( i = 0; i < nCount; i++ )
+    {
+        Reference<XPropertySet> aBinding( xBindings->getByIndex( i ),
+                                          UNO_QUERY_THROW );
+        exportXFormsBinding( rExport, aBinding );
+    }
+
+    // submissions
+    Reference<XIndexAccess> xSubmissions( xModel->getSubmissions(),
+                                          UNO_QUERY_THROW );
+    nCount = xSubmissions->getCount();
+    for( i = 0; i < nCount; i++ )
+    {
+        Reference<XPropertySet> xSubmission( xSubmissions->getByIndex( i ),
+                                          UNO_QUERY_THROW );
+        exportXFormsSubmission( rExport, xSubmission );
+    }
+
+    // schemas
+    exportXFormsSchemas( rExport, xModel );
+}
+
+//
+// the instance
+//
+
+static const ExportTable aXFormsInstanceTable[] =
+{
+    TABLE_ENTRY( "InstanceURL", NONE, SRC, lcl_toString ),
+    TABLE_END
+};
+
+void exportXFormsInstance( SvXMLExport& rExport,
+                           const Sequence<PropertyValue>& xInstance )
+{
+    OUString sId;
+    OUString sURL;
+    Reference<XDocument> xDoc;
+
+    const PropertyValue* pInstance = xInstance.getConstArray();
+    sal_Int32 nCount = xInstance.getLength();
+    for( sal_Int32 i = 0; i < nCount; i++ )
+    {
+        OUString sName = pInstance[i].Name;
+        const Any& rAny = pInstance[i].Value;
+        if( sName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ID") ) )
+            rAny >>= sId;
+        else if( sName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL") ) )
+            rAny >>= sURL;
+        else if( sName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Instance") ))
+            rAny >>= xDoc;
+    }
+
+    if( sId.getLength() > 0 )
+        rExport.AddAttribute( XML_NAMESPACE_NONE, XML_ID, sId );
+
+    if( sURL.getLength() > 0 )
+        rExport.AddAttribute( XML_NAMESPACE_NONE, XML_SRC, sURL );
+
+    SvXMLElementExport aElem( rExport, XML_NAMESPACE_XFORMS, XML_INSTANCE,
+                              sal_True, sal_True );
+    rExport.IgnorableWhitespace();
+    if( xDoc.is() )
+    {
+        exportDom( rExport, xDoc );
+    }
+}
+
+
+//
+// the binding
+//
+
+static const ExportTable aXFormsBindingTable[] =
+{
+    TABLE_ENTRY( "BindingID",            NONE, ID,         lcl_toString ),
+    TABLE_ENTRY( "BindingExpression",    NONE, NODESET,    lcl_toString ),
+    TABLE_ENTRY( "ReadonlyExpression",   NONE, READONLY,   lcl_toString ),
+    TABLE_ENTRY( "RelevantExpression",   NONE, RELEVANT,   lcl_toString ),
+    TABLE_ENTRY( "RequiredExpression",   NONE, REQUIRED,   lcl_toString ),
+    TABLE_ENTRY( "ConstraintExpression", NONE, CONSTRAINT, lcl_toString ),
+    TABLE_ENTRY( "CalculateExpression",  NONE, CALCULATE,  lcl_toString ),
+    // type handled separatly, for type name <-> XSD type conversion
+    // TABLE_ENTRY( "Type",                 NONE, TYPE,       lcl_toString ),
+    TABLE_END
+};
+
+void exportXFormsBinding( SvXMLExport& rExport,
+                        const Reference<XPropertySet>& xBinding )
+{
+    // name check; generate binding ID if necessary
+    {
+        OUString sName;
+        xBinding->getPropertyValue( OUSTRING("BindingID") ) >>= sName;
+        if( sName.getLength() == 0 )
+        {
+            // if we don't have a name yet, generate one on the fly
+            OUStringBuffer aBuffer;
+            aBuffer.append( OUSTRING("bind_" ) );
+            sal_Int64 nId = reinterpret_cast<sal_uInt64>( xBinding.get() );
+            aBuffer.append( nId , 16 );
+            sName = aBuffer.makeStringAndClear();
+            xBinding->setPropertyValue( OUSTRING("BindingID"), makeAny(sName));
+        }
+    }
+
+    lcl_export( xBinding, rExport, aXFormsBindingTable );
+
+    // handle type attribute
+    {
+        OUString sTypeName;
+        xBinding->getPropertyValue( OUSTRING("Type") ) >>= sTypeName;
+
+        try
+        {
+            // now get type, and determine whether its a standard type. If
+            // so, export the XSD name
+            Reference<com::sun::star::xforms::XModel> xModel(
+                xBinding->getPropertyValue( OUSTRING("Model") ),
+                UNO_QUERY );
+            Reference<XDataTypeRepository> xRepository(
+                xModel.is() ? xModel->getDataTypeRepository() : NULL );
+            if( xRepository.is() )
+            {
+                Reference<XPropertySet> xDataType(
+                    xRepository->getDataType( sTypeName ),
+                    UNO_QUERY );
+
+                // if it's a basic data type, write out the XSD name
+                // for the XSD type class
+                bool bIsBasic = false;
+                xDataType->getPropertyValue( OUSTRING("IsBasic") ) >>= bIsBasic;
+                if( bIsBasic )
+                    sTypeName = lcl_getXSDType( rExport, xDataType );
+            }
+        }
+        catch( Exception& )
+        {
+            ; // ignore; just use typename
+        }
+
+        // now that we have the proper type name, write out the attribute
+        if( sTypeName.getLength() > 0 )
+        {
+            rExport.AddAttribute( XML_NAMESPACE_NONE, XML_TYPE,
+                                  sTypeName );
+        }
+    }
+
+    // we need to ensure all the namespaces in the binding will work correctly.
+    // to do so, we will write out all missing namespace declaractions.
+    const SvXMLNamespaceMap& rMap = rExport.GetNamespaceMap();
+    Reference<XNameAccess> xNamespaces(
+        xBinding->getPropertyValue( OUSTRING("BindingNamespaces")), UNO_QUERY);
+    if( xNamespaces.is() )
+    {
+        // iterate over Prefixes for this binding
+        Sequence<OUString> aPrefixes = xNamespaces->getElementNames();
+        const OUString* pPrefixes = aPrefixes.getConstArray();
+        sal_Int32 nPrefixes = aPrefixes.getLength();
+        for( sal_Int32 i = 0; i < nPrefixes; i++ )
+        {
+            const OUString& rPrefix = pPrefixes[i];
+            OUString sURI;
+            xNamespaces->getByName( rPrefix ) >>= sURI;
+
+            // check whether prefix/URI pair is in map; else write declaration
+            // (we don't need to change the map, since this element has no
+            // other content)
+            sal_Int16 nKey = rMap.GetKeyByPrefix( rPrefix );
+            if( nKey == XML_NAMESPACE_UNKNOWN  ||
+                rMap.GetNameByKey( nKey ) != sURI )
+            {
+                rExport.AddAttribute( OUSTRING("xmlns:") + rPrefix, sURI );
+            }
+        }
+    }
+
+    SvXMLElementExport aElement( rExport, XML_NAMESPACE_XFORMS, XML_BIND,
+                                 sal_True, sal_True );
+}
+
+
+//
+// the submission
+//
+
+static const ExportTable aXFormsSubmissionTable[] =
+{
+    TABLE_ENTRY( "ID",         NONE, ID,        lcl_toString ),
+    TABLE_ENTRY( "Bind",       NONE, BIND,      lcl_toString ),
+    TABLE_ENTRY( "Ref",        NONE, REF,       lcl_toString ),
+    TABLE_ENTRY( "Action",     NONE, ACTION,    lcl_toString ),
+    TABLE_ENTRY( "Method",     NONE, METHOD,    lcl_toString ),
+    TABLE_ENTRY( "Version",    NONE, VERSION,   lcl_toString ),
+    TABLE_ENTRY( "Indent",     NONE, INDENT,    lcl_bool ),
+    TABLE_ENTRY( "MediaType",  NONE, MEDIATYPE, lcl_toString ),
+    TABLE_ENTRY( "Encoding",   NONE, ENCODING, lcl_toString ),
+    TABLE_ENTRY( "OmitXmlDeclaration",  NONE, OMIT_XML_DECLARATION, lcl_bool ),
+    TABLE_ENTRY( "Standalone", NONE, STANDALONE, lcl_bool ),
+    TABLE_ENTRY( "CDataSectionElement", NONE, CDATA_SECTION_ELEMENTS, lcl_toString ),
+    TABLE_ENTRY( "Replace",    NONE, REPLACE, lcl_toString ),
+    TABLE_ENTRY( "Separator",  NONE, SEPARATOR, lcl_toString ),
+    TABLE_ENTRY( "IncludeNamespacePrefixes", NONE, INCLUDENAMESPACEPREFIXES, lcl_toString ),
+    TABLE_END
+};
+
+void exportXFormsSubmission( SvXMLExport& rExport,
+                             const Reference<XPropertySet>& xSubmission )
+{
+    lcl_export( xSubmission, rExport, aXFormsSubmissionTable );
+    SvXMLElementExport aElement( rExport, XML_NAMESPACE_XFORMS, XML_SUBMISSION,
+                                 sal_True, sal_True );
+}
+
+
+
+//
+// export data types as XSD schema
+//
+
+static const ExportTable aDataTypeFacetTable[] =
+{
+    TABLE_ENTRY( "Length",         XSD, LENGTH,         lcl_int32 ),
+    TABLE_ENTRY( "MinLength",      XSD, MINLENGTH,      lcl_int32 ),
+    TABLE_ENTRY( "MaxLength",      XSD, MAXLENGTH,      lcl_int32 ),
+    TABLE_ENTRY( "MinInclusive",   XSD, MININCLUSIVE,   lcl_double ),
+    TABLE_ENTRY( "MinExclusive",   XSD, MINEXCLUSIVE,   lcl_double ),
+    TABLE_ENTRY( "MaxInclusive",   XSD, MAXINCLUSIVE,   lcl_double ),
+    TABLE_ENTRY( "MaxExclusive",   XSD, MAXEXCLUSIVE,   lcl_double ),
+    TABLE_ENTRY( "Pattern",        XSD, PATTERN,        lcl_toString ),
+    // ??? XML_ENUMERATION,
+    TABLE_ENTRY( "WhiteSpace",     XSD, WHITESPACE,     lcl_whitespace ),
+    TABLE_ENTRY( "TotalDigits",    XSD, TOTALDIGITS,    lcl_int32 ),
+    TABLE_ENTRY( "FractionDigits", XSD, FRACTIONDIGITS, lcl_int32 ),
+    TABLE_END
+};
+
+// export facets through table; use the same table as lcl_export does
+void lcl_exportDataTypeFacets( SvXMLExport& rExport,
+                               const Reference<XPropertySet>& rPropertySet,
+                               const ExportTable* pTable )
+{
+    Reference<XPropertySetInfo> xInfo = rPropertySet->getPropertySetInfo();
+    for( const ExportTable* pCurrent = pTable;
+         pCurrent->pPropertyName != NULL;
+         pCurrent++ )
+    {
+        OUString sName( OUString::createFromAscii( pCurrent->pPropertyName ) );
+        if( xInfo->hasPropertyByName( sName ) )
+        {
+            OUString sValue = (*pCurrent->aConverter)(
+                rPropertySet->getPropertyValue( sName ) );
+
+            if( sValue.getLength() > 0 )
+            {
+                rExport.AddAttribute( XML_NAMESPACE_NONE, XML_VALUE, sValue );
+                SvXMLElementExport aFacet(
+                    rExport,
+                    pCurrent->nNamespace,
+                    static_cast<XMLTokenEnum>( pCurrent->nToken ),
+                    sal_True, sal_True );
+            }
+        }
+    }
+}
+
+OUString lcl_getXSDType( SvXMLExport& rExport,
+                         const Reference<XPropertySet>& xType )
+{
+    // we use string as default...
+    XMLTokenEnum eToken = XML_STRING;
+
+    sal_uInt16 nDataTypeClass;
+    xType->getPropertyValue( OUSTRING("TypeClass") ) >>= nDataTypeClass;
+    switch( nDataTypeClass )
+    {
+    case com::sun::star::xsd::DataTypeClass::STRING:
+        eToken = XML_STRING;
+        break;
+    case com::sun::star::xsd::DataTypeClass::anyURI:
+        eToken = XML_ANYURI;
+        break;
+    case com::sun::star::xsd::DataTypeClass::DECIMAL:
+        eToken = XML_DECIMAL;
+        break;
+    case com::sun::star::xsd::DataTypeClass::DOUBLE:
+        eToken = XML_DOUBLE;
+        break;
+    case com::sun::star::xsd::DataTypeClass::FLOAT:
+        eToken = XML_FLOAT;
+        break;
+    case com::sun::star::xsd::DataTypeClass::BOOLEAN:
+        eToken = XML_BOOLEAN;
+        break;
+    case com::sun::star::xsd::DataTypeClass::DATETIME:
+        eToken = XML_DATETIME_XSD;
+        break;
+    case com::sun::star::xsd::DataTypeClass::DURATION:
+    case com::sun::star::xsd::DataTypeClass::TIME:
+    case com::sun::star::xsd::DataTypeClass::DATE:
+    case com::sun::star::xsd::DataTypeClass::gYearMonth:
+    case com::sun::star::xsd::DataTypeClass::gYear:
+    case com::sun::star::xsd::DataTypeClass::gMonthDay:
+    case com::sun::star::xsd::DataTypeClass::gDay:
+    case com::sun::star::xsd::DataTypeClass::gMonth:
+    case com::sun::star::xsd::DataTypeClass::hexBinary:
+    case com::sun::star::xsd::DataTypeClass::base64Binary:
+    case com::sun::star::xsd::DataTypeClass::QName:
+    case com::sun::star::xsd::DataTypeClass::NOTATION:
+    default:
+        DBG_ERROR( "unknown data type" );
+    }
+
+    return rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_XSD,
+                                                    GetXMLToken( eToken ) );
+}
+
+void lcl_exportDataType( SvXMLExport& rExport,
+                         const Reference<XPropertySet>& xType )
+{
+    // we do not need to export basic types; exit if we have one
+    bool bIsBasic;
+    xType->getPropertyValue( OUSTRING("IsBasic") ) >>= bIsBasic;
+    if( bIsBasic )
+        return;
+
+    // no basic type -> export
+
+    // <xsd:simpleType name="...">
+    OUString sName;
+    xType->getPropertyValue( OUSTRING("Name") ) >>= sName;
+    rExport.AddAttribute( XML_NAMESPACE_NONE, XML_NAME, sName );
+    SvXMLElementExport aSimpleType( rExport,
+                                    XML_NAMESPACE_XSD, XML_SIMPLETYPE,
+                                    sal_True, sal_True );
+
+    // <xsd:restriction base="xsd:...">
+    rExport.AddAttribute( XML_NAMESPACE_NONE, XML_BASE,
+                          lcl_getXSDType( rExport, xType ) );
+    SvXMLElementExport aRestriction( rExport,
+                                     XML_NAMESPACE_XSD,
+                                     XML_RESTRICTION,
+                                     sal_True, sal_True );
+
+    // export facets
+    lcl_exportDataTypeFacets( rExport,
+                              Reference<XPropertySet>( xType, UNO_QUERY ),
+                              aDataTypeFacetTable );
+}
+
+void exportXFormsSchemas( SvXMLExport& rExport,
+                          const Reference<com::sun::star::xforms::XModel>& xModel )
+{
+    // TODO: for now, we'll fake this...
+    {
+        SvXMLElementExport aSchemaElem( rExport, XML_NAMESPACE_XSD, XML_SCHEMA,
+                                        sal_True, sal_True );
+
+        // now get data type repositry, and export
+        Reference<XEnumerationAccess> xTypes( xModel->getDataTypeRepository(),
+                                              UNO_QUERY );
+        if( xTypes.is() )
+        {
+            Reference<XEnumeration> xEnum = xTypes->createEnumeration();
+            DBG_ASSERT( xEnum.is(), "no enum?" );
+            while( xEnum->hasMoreElements() )
+            {
+                Reference<XPropertySet> xType( xEnum->nextElement(), UNO_QUERY );
+                lcl_exportDataType( rExport, xType );
+            }
+        }
+    }
+
+    // export other, 'foreign' schemas
+    Reference<XPropertySet> xPropSet( xModel, UNO_QUERY );
+    if( xPropSet.is() )
+    {
+        Reference<XDocument> xDocument(
+            xPropSet->getPropertyValue( OUSTRING("ForeignSchema") ),
+            UNO_QUERY );
+
+        if( xDocument.is() )
+            exportDom( rExport, xDocument );
+    }
+}
+
+
+
+//
+// helper functions
+//
+
+void lcl_export( const Reference<XPropertySet>& rPropertySet,
+                 SvXMLExport& rExport,
+                 const ExportTable* pTable )
+{
+    for( const ExportTable* pCurrent = pTable;
+         pCurrent->pPropertyName != NULL;
+         pCurrent++ )
+    {
+        Any aAny = rPropertySet->getPropertyValue(
+                       OUString::createFromAscii( pCurrent->pPropertyName ) );
+        OUString sValue = (*pCurrent->aConverter)( aAny );
+
+        if( sValue.getLength() > 0 )
+            rExport.AddAttribute(
+                pCurrent->nNamespace,
+                static_cast<XMLTokenEnum>( pCurrent->nToken ),
+                sValue );
+    }
+}
+
+
+
+//
+// any conversion functions
+//
+
+OUString lcl_toString( const Any& rAny )
+{
+    OUString aResult;
+    rAny >>= aResult;
+    return aResult;
+}
+
+OUString lcl_bool( const Any& rAny )
+{
+    bool bResult;
+    if( rAny >>= bResult )
+        return GetXMLToken( bResult ? XML_TRUE : XML_FALSE );
+    DBG_ERROR( "expected boolean value" );
+    return OUString();
+}
+
+OUString lcl_int32( const Any& rAny )
+{
+    OUStringBuffer aBuffer;
+    sal_Int32 nResult;
+    if( rAny >>= nResult )
+    {
+        SvXMLUnitConverter::convertNumber( aBuffer, nResult );
+    }
+    return aBuffer.makeStringAndClear();
+}
+
+OUString lcl_double( const Any& rAny )
+{
+    OUStringBuffer aBuffer;
+    double d;
+    if( rAny >>= d )
+    {
+        SvXMLUnitConverter::convertDouble( aBuffer, d );
+    }
+    return aBuffer.makeStringAndClear();
+}
+
+OUString lcl_whitespace( const Any& rAny )
+{
+    OUString sResult;
+    sal_uInt16 n;
+    if( rAny >>= n )
+    {
+        switch( n )
+        {
+        case com::sun::star::xsd::WhiteSpaceTreatment::Preserve:
+            sResult = GetXMLToken( XML_PRESERVE );
+            break;
+        case com::sun::star::xsd::WhiteSpaceTreatment::Replace:
+            sResult = GetXMLToken( XML_REPLACE );
+            break;
+        case com::sun::star::xsd::WhiteSpaceTreatment::Collapse:
+            sResult = GetXMLToken( XML_COLLAPSE );
+            break;
+        }
+    }
+    return sResult;
+}
+
+
+/// return name of Binding
+OUString lcl_getXFormsBindName( const Reference<XPropertySet>& xBinding )
+{
+    OUString sProp( OUSTRING( "BindingID" ) );
+
+    OUString sReturn;
+    if( xBinding.is() &&
+        xBinding->getPropertySetInfo()->hasPropertyByName( sProp ) )
+    {
+        xBinding->getPropertyValue( sProp ) >>= sReturn;
+    }
+    return sReturn;
+}
+
+// return name of binding
+OUString getXFormsBindName( const Reference<XPropertySet>& xControl )
+{
+    Reference<XBindableValue> xBindable( xControl, UNO_QUERY );
+    return xBindable.is()
+        ? lcl_getXFormsBindName(
+            Reference<XPropertySet>( xBindable->getValueBinding(), UNO_QUERY ))
+        : OUString();
+}
+
+// return name of list binding
+OUString getXFormsListBindName( const Reference<XPropertySet>& xControl )
+{
+    Reference<XListEntrySink> xListEntrySink( xControl, UNO_QUERY );
+    return xListEntrySink.is()
+        ? lcl_getXFormsBindName(
+            Reference<XPropertySet>( xListEntrySink->getListEntrySource(),
+                                     UNO_QUERY ) )
+        : OUString();
+}
+
+OUString getXFormsSubmissionName( const Reference<XPropertySet>& xBinding )
+{
+    OUString sReturn;
+
+    Reference<XSubmissionSupplier> xSubmissionSupplier( xBinding, UNO_QUERY );
+    if( xSubmissionSupplier.is() )
+    {
+        Reference<XPropertySet> xPropertySet(
+            xSubmissionSupplier->getSubmission(), UNO_QUERY );
+        OUString sProp( OUSTRING("ID") );
+        if( xPropertySet.is() &&
+            xPropertySet->getPropertySetInfo()->hasPropertyByName( sProp ) )
+        {
+            xPropertySet->getPropertyValue( sProp ) >>= sReturn;
+        }
+    }
+
+    return sReturn;
+}
