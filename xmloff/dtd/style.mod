@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.31 2001-04-02 11:04:15 sab Exp $
+	$Id: style.mod,v 1.32 2001-04-04 13:32:32 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -351,7 +351,7 @@
 <!ATTLIST style:column-sep style:color %color; "#000000">
 
 <!-- page master properties -->
-<!ELEMENT style:page-master (style:properties?, style:header-style?, style:footer-style?, style:footnote-layout?)>
+<!ELEMENT style:page-master (style:properties?, style:header-style?, style:footer-style?)>
 <!ATTLIST style:page-master style:name %styleName; #REQUIRED>
 <!ATTLIST style:page-master style:page-usage (all|left|right|mirrored) "all">
 
@@ -369,15 +369,15 @@
 <!ATTLIST style:properties style:scale-to-pages %positiveInteger; #IMPLIED>
 <!ATTLIST style:properties style:table-centering (horizontal | vertical | both | none) #IMPLIED>
 
-<!ELEMENT style:footnote-layout (style:properties?,style:footnote-sep?)>
-<!ATTLIST style:properties style:max-height %lengthOrNoLimit; #IMPLIED>
-<!ATTLIST style:properties style:distance-before-sep %length; #IMPLIED>
-<!ATTLIST style:properties style:distance-after-sep %length; #IMPLIED>
+<!ATTLIST style:properties style:footnote-max-height %lengthOrNoLimit; #IMPLIED>
 
 <!ELEMENT style:footnote-sep EMPTY>
 <!ATTLIST style:footnote-sep style:width %length; #REQUIRED>
-<!ATTLIST style:footnote-sep style:length %percentage; "100%">
-<!ATTLIST style:footnote-sep style:horizontal-align (left|center|right) "left">
+<!ATTLIST style:footnote-sep style:rel-width %percentage; "100%">
+<!ATTLIST style:footnote-sep style:color %color; #IMPLIED>
+<!ATTLIST style:footnote-sep style:adjustment (left|center|right) "left">
+<!ATTLIST style:footnote-sep style:distance-before-sep %length; #IMPLIED>
+<!ATTLIST style:footnote-sep style:distance-after-sep %length; #IMPLIED>
 
 <!-- master page properties -->
 <!ELEMENT style:master-page ( (style:header, style:header-left?)?, (style:footer, style:footer-left?)?,
