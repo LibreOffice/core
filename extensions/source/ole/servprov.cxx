@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-13 15:27:56 $
+ *  last change: $Author: jl $ $Date: 2000-10-20 11:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,53 +609,7 @@ Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& Se
 
 Reference<XInterface> SAL_CALL OleClient_Impl::createInstanceWithArguments(const OUString& ServiceSpecifier, const Sequence< Any >& Arguments) throw (Exception, RuntimeException)
 {
-    Reference<XInterface>   ret;
-    HRESULT         result;
-    IUnknown*       pUnknown = NULL;
-    CLSID           classId;
-
-    o2u_attachCurrentThread();
-
-    result = CLSIDFromProgID(
-                      ServiceSpecifier.getStr(),    //Pointer to the ProgID
-                      &classId);                        //Pointer to the CLSID
-
-
-    if (result == NOERROR)
-    {
-        result = CoCreateInstance(
-                      classId,              //Class identifier (CLSID) of the object
-                      NULL,                 //Pointer to whether object is or isn't part of an aggregate
-                      CLSCTX_LOCAL_SERVER,  //Context for running executable code
-                      IID_IUnknown,         //Reference to the identifier of the interface
-                      (void**)&pUnknown);   //Address of output variable that receives
-                                                  // the interface pointer requested in riid
-    }
-
-    if (pUnknown != NULL)
-    {
-        Any any;
-        VARIANT variant;
-
-        VariantInit(&variant);
-
-        V_VT(&variant) = VT_UNKNOWN;
-        V_UNKNOWN(&variant) = pUnknown;
-
-        pUnknown->AddRef();
-
-        if (variantToAny(&variant, any))
-        {
-            if (any.getValueTypeClass() == TypeClass_INTERFACE)
-            {
-                ret = *(Reference<XInterface>*)any.getValue();
-            }
-        }
-
-        VariantClear(&variant);
-    }
-
-    return ret;
+    return createInstance( ServiceSpecifier);
 }
 
 // UnoConversionUtilities -----------------------------------------------------------------------------
