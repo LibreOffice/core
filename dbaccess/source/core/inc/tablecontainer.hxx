@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:19:42 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 15:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #define _DBA_CORE_TABLECONTAINER_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -99,6 +99,9 @@
 #ifndef _DBA_CONFIGNODE_HXX_
 #include "confignode.hxx"
 #endif
+#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
+#include <connectivity/sdbcx/VCollection.hxx>
+#endif
 
 
 #ifndef _DBASHARED_APITOOLS_HXX_
@@ -108,11 +111,7 @@
 class WildCard;
 namespace dbaccess
 {
-    typedef ::cppu::WeakImplHelper5< ::com::sun::star::container::XEnumerationAccess,
-                                     ::com::sun::star::container::XNameAccess,
-                                     ::com::sun::star::container::XIndexAccess,
-                                     ::com::sun::star::util::XFlushable,
-                                     ::com::sun::star::lang::XServiceInfo > OTableContainer_Base;
+    typedef ::cppu::ImplHelper1< ::com::sun::star::util::XFlushable > OTableContainer_Base;
 
 
     //==========================================================================
@@ -120,17 +119,10 @@ namespace dbaccess
     //==========================================================================
     class OTable;
 
-    class OTableContainer :  public OTableContainer_Base
+    class OTableContainer :  public ::connectivity::sdbcx::OCollection,
+                             public OTableContainer_Base
     {
     protected:
-
-        ::cppu::OWeakObject&        m_rParent;
-        ::osl::Mutex&               m_rMutex;
-
-        DECLARE_STL_MAP(::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>,::comphelper::UStringMixLess, Tables);
-        DECLARE_STL_VECTOR(TablesIterator, TablesIndexAccess);
-        Tables                  m_aTables;
-        TablesIndexAccess       m_aTablesIndexed;
 
         OConfigurationTreeRoot  m_aCommitLocation; // need to commit new table nodes
         OConfigurationNode      m_aTablesConfig;
@@ -146,6 +138,11 @@ namespace dbaccess
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
             const ::std::vector< WildCard >& _rWCSearch) const;
+
+        // ::connectivity::sdbcx::OCollection
+        virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >     createObject(const ::rtl::OUString& _rName);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createEmptyObject();
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
             interface.<BR>
@@ -185,34 +182,30 @@ namespace dbaccess
         /** tell the container to free all elements and all additional resources.<BR>
             After using this method the object may be reconstructed by calling one of the <code>constrcuct</code> methods.
         */
-        virtual void SAL_CALL dispose();
+        virtual void SAL_CALL disposing();
 
-    // ::com::sun::star::uno::XInterface
-        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { m_rParent.acquire(); }
-        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) { m_rParent.release(); }
-
+        // XInterface
+        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)
+        {
+            m_rParent.acquire();
+        }
+        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)
+        {
+            m_rParent.release();
+        }
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
 
-    // ::com::sun::star::container::XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::container::XEnumerationAccess
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::container::XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
         // ::com::sun::star::util::XFlushable
         virtual void SAL_CALL flush(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw(::com::sun::star::uno::RuntimeException){}
         virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw(::com::sun::star::uno::RuntimeException){}
+
+        // XAppend
+        virtual void SAL_CALL appendByDescriptor( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+        // XDrop
+        virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     };
 }
 #endif // _DBA_CORE_TABLECONTAINER_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:19:42 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 15:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,10 @@ namespace dbaccess
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable,
                 const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName,
                 const ::rtl::OUString& _rType, const ::rtl::OUString& _rDesc)
+            throw(::com::sun::star::sdbc::SQLException);
+
+        ODBTable(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxNewTable)
             throw(::com::sun::star::sdbc::SQLException);
         virtual ~ODBTable();
 
