@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-05 08:25:46 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,8 +439,9 @@ ScMyDetectiveObjContainer::~ScMyDetectiveObjContainer()
 {
 }
 
-void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const ScAddress& rPosition,
-                                            const ScRange& rSourceRange, sal_Bool bHasError )
+void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const sal_uInt16 nSheet,
+                                            const ScAddress& rPosition, const ScRange& rSourceRange,
+                                            sal_Bool bHasError )
 {
     if( (eObjType == SC_DETOBJ_ARROW) ||
         (eObjType == SC_DETOBJ_FROMOTHERTAB) ||
@@ -454,6 +455,16 @@ void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const Sc
         else
             ScUnoConversion::FillApiAddress( aDetObj.aPosition, rPosition );
         ScUnoConversion::FillApiRange( aDetObj.aSourceRange, rSourceRange );
+
+        // #111064#; take the sheet where the object is found and not the sheet given in the ranges, because they are not always true
+        if (eObjType != SC_DETOBJ_FROMOTHERTAB)
+        {
+            // if the ObjType == SC_DETOBJ_FROMOTHERTAB then the SourceRange is not used and so it has not to be tested and changed
+            DBG_ASSERT(aDetObj.aPosition.Sheet == aDetObj.aSourceRange.Sheet, "It seems to be possible to have different sheets");
+            aDetObj.aSourceRange.Sheet = nSheet;
+        }
+        aDetObj.aPosition.Sheet = nSheet;
+
         aDetObj.bHasError = bHasError;
         aDetectiveObjList.push_back( aDetObj );
     }
