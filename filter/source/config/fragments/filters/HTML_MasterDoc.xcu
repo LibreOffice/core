@@ -7,7 +7,8 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">HTML Document (MasterDocument)</value>
+            <value xml:lang="en-US">HTML-Document (%productname% Global Document)</value>
+            <value xml:lang="de">HTML-Dokument (%productname% Globaldokument)</value>
         </prop>
         <prop oor:name="Flags"><value>EXPORT INTERNAL NOTINFILEDIALOG NOTINCHOOSER</value></prop>
     </node>
