@@ -19,6 +19,8 @@ TYPES = \
 	-Tcom.sun.star.bridge.XUnoUrlResolver \
 	-Tcom.sun.star.frame.XComponentLoader \
 	-Tcom.sun.star.lang.XMultiComponentFactory \
+	-Tcom.sun.star.container.XHierarchicalNameAccess \
+	-Tcom.sun.star.registry.XSimpleRegistry
 
 TYPEFILES = $(subst \\,\,$(patsubst -T%,$(OUT)$(PS)inc$(PS)examples$(PS)%.hpp,$(TYPES)))
 
