@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-28 17:31:13 $
+ *  last change: $Author: os $ $Date: 2001-04-20 08:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,8 +509,6 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
                 aLeftIndent.SetRelative();
                 SetFieldUnit( aLeftIndent, eFUnit );
                 SetMetricValue( aLeftIndent, rOldItem.GetTxtLeft(), eUnit );
-                if(bNegativeIndents)
-                    aLeftIndent.SetMin(-9999);
             }
 
             if ( rOldItem.GetPropRight() != 100 )
@@ -523,8 +521,6 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
                 aRightIndent.SetRelative();
                 SetFieldUnit( aRightIndent, eFUnit );
                 SetMetricValue( aRightIndent, rOldItem.GetRight(), eUnit );
-                if(bNegativeIndents)
-                    aRightIndent.SetMin(-9999);
             }
 
             if ( rOldItem.GetPropTxtFirstLineOfst() != 100 )
@@ -731,6 +727,10 @@ void SvxStdParagraphTabPage::EnableNegativeMode()
 {
      aLeftIndent.SetMin(-9999);
     aRightIndent.SetMin(-9999);
+#if SUPD>629
+    aRightIndent.EnableNegativeMode();
+    aLeftIndent.EnableNegativeMode();
+#endif
     bNegativeIndents = TRUE;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: os $ $Date: 2001-04-20 08:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nWinSize ) :
     MetricField( pParent, nWinSize )
 {
+#if SUPD>629
+    bNegativeEnabled = FALSE;
+#endif
     bRelativeMode = FALSE;
     bRelative     = FALSE;
 
@@ -84,6 +87,9 @@ SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nWinSize ) :
 SvxRelativeField::SvxRelativeField( Window* pParent, const ResId& rResId ) :
     MetricField( pParent, rResId )
 {
+#if SUPD>629
+    bNegativeEnabled = FALSE;
+#endif
     bRelativeMode = FALSE;
     bRelative     = FALSE;
 
@@ -165,7 +171,11 @@ void SvxRelativeField::SetRelative( BOOL bNewRelative )
     {
         bRelative = FALSE;
         SetDecimalDigits( 2 );
+#if SUPD>629
+        SetMin( bNegativeEnabled ? -9999 : 0 );
+#else
         SetMin( 0 );
+#endif
         SetMax( 9999 );
         SetUnit( FUNIT_CM );
     }

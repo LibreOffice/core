@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relfld.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:58 $
+ *  last change: $Author: os $ $Date: 2001-04-20 08:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #endif
 
 
-
 // class SvxRelativeField ------------------------------------------------
 /*
     [Beschreibung]
@@ -85,6 +84,9 @@ private:
     USHORT          nRelStep;
     BOOL            bRelativeMode;
     BOOL            bRelative;
+#if SUPD>629
+    BOOL            bNegativeEnabled;
+#endif
 
 protected:
     void            Modify();
@@ -98,6 +100,9 @@ public:
     BOOL            IsRelativeMode() const { return bRelativeMode; }
     void            SetRelative( BOOL bRelative = FALSE );
     BOOL            IsRelative() const { return bRelative; }
+#if SUPD>629
+    BOOL            EnableNegativeMode() {bNegativeEnabled = TRUE;}
+#endif
 };
 
 
