@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:22:35 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,7 @@ BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
            aName.EqualsAscii("calc_StarOffice_XML_Calc") ||
            aName.EqualsAscii("calc_StarOffice_XML_Calc_Template");
 }
-
+#if 0
 ULONG __EXPORT ScDLL::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter,
                                     SfxFilterFlags nMust, SfxFilterFlags nDont )
 {
@@ -856,4 +856,4 @@ ULONG __EXPORT ScDLL::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilt
 
     return ERRCODE_ABORT;       // war nix
 }
-
+#endif
