@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmsg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ String S_WARNING_PREFIX
     Text[ swedish ] = "Warning: ";
     Text[ polish ] = "Ostrzeøenie: ";
     Text[ portuguese_brazilian ] = "Warning: ";
-    Text[ japanese ] = "åxçê: ";
+    Text[ japanese ] = "Warning: ";
     Text[ korean ] = "∞Ê∞Ì: ";
     Text[ chinese_simplified ] = "Warning: ";
     Text[ chinese_traditional ] = "Warning: ";
