@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:35:50 $
+ *  last change: $Author: mib $ $Date: 2001-06-12 07:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,20 +978,17 @@ sal_Bool SwXFrames::hasByName(const OUString& rName) throw( uno::RuntimeExceptio
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-        sal_uInt16 nCount = GetDoc()->GetFlyCount(eType);
-    sal_Bool bRet = sal_False;
-    for( sal_uInt16 i = 0; i < nCount; i++)
+
+    BYTE nNodeType = ND_TEXTNODE;
+    switch( eType )
     {
-        String aName(rName);
-        SwFrmFmt* pFmt = GetDoc()->GetFlyNum(i, eType);
-        if(aName == pFmt->GetName() )
-        {
-            bRet = sal_True;
-            break;
-        }
+        case FLYCNTTYPE_GRF:    nNodeType = ND_GRFNODE; break;
+        case FLYCNTTYPE_OLE:    nNodeType = ND_OLENODE; break;
     }
-    return bRet;
+
+    return 0 != GetDoc()->FindFlyByName( rName, nNodeType );
 }
+
 /*-- 14.01.99 08:25:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
