@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-09 15:34:31 $
+ *  last change: $Author: os $ $Date: 2000-11-10 10:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -985,7 +985,7 @@ void SwXDocumentIndex::attachToRange(const Reference< text::XTextRange > & xText
                 SwTOXBase& rTOXBase = pProps->GetTOXBase();
                 //TODO: apply Section attributes (columns and background)
                 const SwTOXBaseSection* pTOX = pDoc->InsertTableOf(
-                                    *aPam.GetPoint(), rTOXBase, 0, sal_True );
+                                    *aPam.GetPoint(), rTOXBase, 0, sal_False );
 
                 pDoc->SetTOXBaseName( *pTOX, pProps->GetTOXBase().GetTOXName() );
 
