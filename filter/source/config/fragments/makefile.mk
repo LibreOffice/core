@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Date: 2004-02-05 10:45:20 $
+#   last change: $Date: 2004-03-09 12:25:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,7 +123,9 @@ INTERNALFILTERPACKAGES  =   \
 
 .INCLUDE: target.mk
 
+.IF "$(SOLAR_JAVA)"!=""
 ALLTAR: $(REALFILTERPACKAGES) $(INTERNALFILTERPACKAGES)
+.ENDIF
 
 # -----------------------------------------------------------------------------
 # build every module seperated
