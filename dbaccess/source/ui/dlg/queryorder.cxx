@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 10:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,13 +255,22 @@ void DlgOrderCrit::EnableLines()
 void DlgOrderCrit::SetOrderList( const String& _rOrderList )
 {
     DBG_CHKTHIS(DlgOrderCrit,NULL);
+    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
+    ::rtl::OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
+
     xub_StrLen nLen = _rOrderList.GetTokenCount(',');
     xub_StrLen i;
     for(i=0;i<nLen && i<DOG_ROWS;++i)
     {
         String aOrder = _rOrderList.GetToken(i,',');
         aOrder.EraseTrailingChars();
-        arrLbFields[i]->SelectEntry( aOrder.GetToken(0,' ') );
+        String sColumnName = aOrder.GetToken(0,' ');
+        if(sQuote.getLength() && sColumnName.Len() && sColumnName.GetChar(0) == sQuote.getStr()[0] && sColumnName.GetChar(sColumnName.Len()-1) == sQuote.getStr()[0])
+        {
+            sColumnName.Erase(0,1);
+            sColumnName.Erase(sColumnName.Len()-1,1);
+        }
+        arrLbFields[i]->SelectEntry( sColumnName );
         xub_StrLen nAsc = (aOrder.GetTokenCount(' ') == 2) ? (aOrder.GetToken(1,' ').EqualsAscii("ASC") ? 0 : 1) : 1;
         arrLbValues[i]->SelectEntryPos( nAsc );
     }
@@ -277,25 +286,30 @@ void DlgOrderCrit::SetOrderList( const String& _rOrderList )
 }
 
 //------------------------------------------------------------------------------
-String DlgOrderCrit::GetOrderList( )
+::rtl::OUString DlgOrderCrit::GetOrderList( ) const
 {
     DBG_CHKTHIS(DlgOrderCrit,NULL);
-    String aOrder;
+    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
+    ::rtl::OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
+    static const ::rtl::OUString sDESC = ::rtl::OUString::createFromAscii(" DESC ");
+    static const ::rtl::OUString sASC  = ::rtl::OUString::createFromAscii(" ASC ");
+
+    ::rtl::OUString sOrder;
     for( sal_uInt16 i=0 ; i<DOG_ROWS; i++ )
     {
         if(arrLbFields[i]->GetSelectEntryPos() != 0)
         {
-            if(aOrder.Len())
-                aOrder.AppendAscii(",");
+            if(sOrder.getLength())
+                sOrder += ::rtl::OUString::createFromAscii(",");
 
-            aOrder += arrLbFields[i]->GetSelectEntry();
+            sOrder += ::dbtools::quoteName(sQuote,arrLbFields[i]->GetSelectEntry());
             if(arrLbValues[i]->GetSelectEntryPos())
-                aOrder.AppendAscii(" DESC ");
+                sOrder += sDESC;
             else
-                aOrder.AppendAscii(" ASC ");
+                sOrder += sASC;
         }
     }
-    return aOrder;
+    return sOrder;
 }
 
 //------------------------------------------------------------------------------
