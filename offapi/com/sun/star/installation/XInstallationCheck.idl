@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInstallationCheck.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 15:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,8 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::installation::XInstallationCheck
-/** a flag called "suppressed" changes the action of check and checkWithDialog@see         com::sun::star::uno::XInterface
+/** a flag called "suppressed", changes the action of check and checkWithDialog
+     @see com::sun::star::uno::XInterface
  */
 interface XInstallationCheck: com::sun::star::uno::XInterface
 {
@@ -82,8 +83,8 @@ interface XInstallationCheck: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::check
     /** checks if something of the installation is missing.
 
-        <p>If missing parts are detected check should try to automaticly repair/
-        reinstall these parts. Only if this is not possible return <FALSE/>.
+        <p>If missing parts are detected, check should try to automatically repair/
+        reinstall these parts. Only if this is not possible, return <FALSE/>.
 
         </p>@see resetSuppressed
      */
@@ -93,8 +94,6 @@ interface XInstallationCheck: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::checkWithDialog
     /** same as check, but additionally shows a dialog if result is <FALSE/>.
-
-
 
         <p>The dialog shows which parts of the installation are missing and
         can't be repaired/reinstalled automatically. It also contains some
@@ -109,9 +108,7 @@ interface XInstallationCheck: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::executeDialog
     /** shows a dialog if something of the installation is missing.
 
-
-
-        <p>The dialog shows which part(s) is (are) missing and have a checkbox,
+        <p>The dialog shows which part(s) is (are) missing, and has a checkbox
         that represents the state of the flag suppressed. This dialog is
         the only way to set the flag suppressed to <TRUE/>. This method is
         not affected by the value of the flag suppressed.
@@ -124,13 +121,12 @@ interface XInstallationCheck: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::installation::XInstallationCheck::getSuppressed
     /** gets the status of flag suppressed
 
-
         <p>The flag suppressed is stored in the OfficeRegistry. If suppressed is
-        <FALSE/>, the methods check and checkWithDialog ignores the parameter
-        bForce. If suppressed is <TRUE/> check and checkWithDialog only
-        perform any action if their parameter bForce is <TRUE/>. otherwise
+        <FALSE/>, the methods check and checkWithDialog ignore the parameter
+        bForce.
+        If suppressed is <TRUE/>, check and checkWithDialog only
+        perform an action if their parameter bForce is <TRUE/>; otherwise,
         they return TRUE.
-
         </p>
      */
     boolean getSuppressed();
@@ -151,6 +147,9 @@ interface XInstallationCheck: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/16 16:41:27  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/12/14 12:53:37  mi
     <true></true> -> <TRUE/> and same with FALSE
 
