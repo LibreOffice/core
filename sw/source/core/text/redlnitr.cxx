@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:29:48 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,9 +152,6 @@
 
 using namespace ::com::sun::star;
 
-extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
-                       const SwScriptInfo* pSI );
-
 /*************************************************************************
  *                      SwAttrIter::CtorInit()
  *************************************************************************/
@@ -204,7 +201,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
 
     if ( pBreakIt->xBreak.is() )
     {
-        pFnt->SetActual( WhichFont( 0, 0, pScriptInfo ) );
+        pFnt->SetActual( SwScriptInfo::WhichFont( 0, 0, pScriptInfo ) );
 
         xub_StrLen nChg = 0;
         USHORT nCnt = 0;
