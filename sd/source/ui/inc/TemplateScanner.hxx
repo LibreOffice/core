@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TemplateScanner.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-09-11 13:30:12 $
+ *  last change: $Author: af $ $Date: 2002-09-12 15:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,9 @@
 
 #include <vector>
 
-namespace {
+namespace sd
+{
+
 /** Representation of a template or layout file.
 */
 class TemplateEntry
@@ -100,6 +102,7 @@ public:
     String m_aTitle;
     String m_aPath;
 };
+
 
 
 
@@ -115,11 +118,9 @@ public:
     String                      m_aUrl;
     std::vector<TemplateEntry*> m_aEntries;
 };
-}
 
 
-namespace sd
-{
+
 
 /** This class scans the template folders for impress templates and puts
     them into listboxes.  While scanning the found templates are collected
