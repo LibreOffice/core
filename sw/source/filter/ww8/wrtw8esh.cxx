@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:40:22 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,9 +172,6 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
 
-#ifndef _WRTWW8_HXX
-#include <wrtww8.hxx>
-#endif
 #ifndef _FLYPOS_HXX
 #include <flypos.hxx>
 #endif
@@ -250,6 +247,9 @@
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
 #endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
+#endif
 #ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
 #endif
@@ -257,8 +257,14 @@
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
 #endif
+#ifndef _WRTWW8_HXX
+#include "wrtww8.hxx"
+#endif
 #ifndef _ESCHER_HXX
 #include "escher.hxx"
+#endif
+#ifndef WW_FIELDS_HXX
+#include "fields.hxx"
 #endif
 
 using namespace ::com::sun::star;
@@ -324,7 +330,8 @@ void SwWW8Writer::DoComboBox(const rtl::OUString &rName, const rtl::OUString &rS
     ASSERT(bWrtWW8, "Not allowed");
     if (!bWrtWW8)
         return;
-    OutField(0, 83, CREATE_CONST_ASC(" FORMDROPDOWN "), WRITEFIELD_START | WRITEFIELD_CMD_START);
+    OutField(0, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
+        WRITEFIELD_START | WRITEFIELD_CMD_START);
     // write the refence to the "picture" structure
     ULONG nDataStt = pDataStrm->Tell();
     pChpPlc->AppendFkpEntry( Strm().Tell() );
@@ -343,7 +350,8 @@ void SwWW8Writer::DoComboBox(const rtl::OUString &rName, const rtl::OUString &rS
 
     pChpPlc->AppendFkpEntry(Strm().Tell(), sizeof(aArr1), aArr1);
 
-    OutField(0, 83, CREATE_CONST_ASC(" FORMDROPDOWN "), WRITEFIELD_CLOSE);
+    OutField(0, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
+        WRITEFIELD_CLOSE);
 
     static BYTE __READONLY_DATA aComboData1[] =
     {
@@ -421,7 +429,8 @@ void SwWW8Writer::DoComboBox(const rtl::OUString &rName, const rtl::OUString &rS
 
 void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
 {
-    OutField(0, 71, CREATE_CONST_ASC(" FORMCHECKBOX "), WRITEFIELD_START | WRITEFIELD_CMD_START);
+    OutField(0, ww::eFORMCHECKBOX, FieldString(ww::eFORMCHECKBOX),
+        WRITEFIELD_START | WRITEFIELD_CMD_START);
     // write the refence to the "picture" structure
     ULONG nDataStt = pDataStrm->Tell();
     pChpPlc->AppendFkpEntry( Strm().Tell() );
@@ -506,7 +515,7 @@ void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
     SwWW8Writer::WriteLong( *pDataStrm, nDataStt,
         pDataStrm->Tell() - nDataStt );
 
-    OutField( 0, 0, aEmptyStr, WRITEFIELD_CLOSE );
+    OutField(0, ww::eFORMCHECKBOX, aEmptyStr, WRITEFIELD_CLOSE);
 }
 
 namespace wwUtility
@@ -549,7 +558,7 @@ bool SwWW8Writer::MiserableRTLGraphicsHack(long &rLeft,  long nWidth,
     nPageSize = CurrentPageWidth(nPageLeft, nPageRight);
 
     return RTLGraphicsHack(rLeft, nWidth,
-    eHoriOri, eHoriRel, nPageLeft, nPageRight, nPageSize, bBiDi);
+        eHoriOri, eHoriRel, nPageLeft, nPageRight, nPageSize, bBiDi);
 }
 
 void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
@@ -1169,7 +1178,7 @@ void WW8_SdrAttrIter::OutParaAttr(bool bCharAttr)
         FnAttrOut pOut;
 
         const SfxItemPool* pSrcPool = pEditPool,
-                            * pDstPool = &rWrt.pDoc->GetAttrPool();
+                         * pDstPool = &rWrt.pDoc->GetAttrPool();
 
         do {
                 USHORT nWhich = pItem->Which(),
@@ -1293,7 +1302,9 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
 
 void SwWW8Writer::CreateEscher()
 {
-    if(pHFSdrObjs->size() || pSdrObjs->size())
+    SfxItemState eBackSet =
+        pDoc->GetPageDesc(0).GetMaster().GetItemState(RES_BACKGROUND);
+    if (pHFSdrObjs->size() || pSdrObjs->size() || SFX_ITEM_SET == eBackSet)
     {
         ASSERT( !pEscher, "wer hat den Pointer nicht geloescht?" );
         SvMemoryStream* pEscherStrm = new SvMemoryStream;
@@ -1304,7 +1315,7 @@ void SwWW8Writer::CreateEscher()
 
 void SwWW8Writer::WriteEscher()
 {
-    if( pEscher )
+    if (pEscher)
     {
         ULONG nStart = pTableStrm->Tell();
 
@@ -1394,7 +1405,7 @@ INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
 
         if ( aUniqueId.Len() )
         {
-             const  MapMode aMap100mm( MAP_100TH_MM );
+            const   MapMode aMap100mm( MAP_100TH_MM );
             Size    aSize( aGraphic.GetPrefSize() );
 
             if ( MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit() )
@@ -1413,8 +1424,8 @@ INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
 
             sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId,
                 aRect, 0 );
-            if ( nBlibId )
-                aPropOpt.AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
+            if (nBlibId)
+                aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
         }
     }
 
@@ -1568,8 +1579,67 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
     return nBorderThick;
 }
 
-INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
+void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
     EscherPropertyContainer& rPropOpt)
+{
+    bool bSetOpacity = false;
+    sal_uInt32 nOpaque = 0;
+    if (const GraphicObject *pGraphicObject = rBrush.GetGraphicObject())
+    {
+        ByteString aUniqueId = pGraphicObject->GetUniqueID();
+        if (aUniqueId.Len())
+        {
+            const Graphic &rGraphic = pGraphicObject->GetGraphic();
+            Size aSize(rGraphic.GetPrefSize());
+            const MapMode aMap100mm(MAP_100TH_MM);
+            if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
+            {
+                aSize = Application::GetDefaultDevice()->PixelToLogic(
+                    aSize, aMap100mm);
+            }
+            else
+            {
+                aSize = OutputDevice::LogicToLogic(aSize,
+                    rGraphic.GetPrefMapMode(), aMap100mm);
+            }
+
+            Point aEmptyPoint = Point();
+            Rectangle aRect(aEmptyPoint, aSize);
+
+            sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aUniqueId,
+                aRect, 0);
+            if (nBlibId)
+                rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
+        }
+
+        if ((nOpaque = pGraphicObject->GetAttr().GetTransparency()))
+            bSetOpacity = true;
+
+        rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+        rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
+        rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
+    }
+    else
+    {
+        UINT32 nFillColor = GetColor(rBrush.GetColor(), false);
+        rPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
+        rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
+        rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
+
+        if ((nOpaque = rBrush.GetColor().GetTransparency()))
+            bSetOpacity = true;
+    }
+
+    if (bSetOpacity)
+    {
+        nOpaque = (nOpaque * 100) / 0xFE;
+        nOpaque = ((100 - nOpaque) << 16) / 100;
+        rPropOpt.AddOpt(ESCHER_Prop_fillOpacity, nOpaque);
+    }
+}
+
+INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
+    MSO_SPT eShapeType, EscherPropertyContainer& rPropOpt)
 {
     INT32 nLineWidth=0;
     const SfxPoolItem* pItem;
@@ -1637,60 +1707,7 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeTyp
     }
 
     SvxBrushItem aBrush(rWrt.TrueFrameBgBrush(rFmt));
-    bool bSetOpacity = false;
-    sal_uInt32 nOpaque = 0;
-    if (const GraphicObject *pGraphicObject = aBrush.GetGraphicObject())
-    {
-        ByteString aUniqueId = pGraphicObject->GetUniqueID();
-        if (aUniqueId.Len())
-        {
-            const Graphic &rGraphic = pGraphicObject->GetGraphic();
-            Size aSize(rGraphic.GetPrefSize());
-            const MapMode aMap100mm(MAP_100TH_MM);
-            if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
-            {
-                aSize = Application::GetDefaultDevice()->PixelToLogic(
-                    aSize, aMap100mm);
-            }
-            else
-            {
-                aSize = OutputDevice::LogicToLogic(aSize,
-                    rGraphic.GetPrefMapMode(), aMap100mm);
-            }
-
-            Point aEmptyPoint = Point();
-            Rectangle aRect(aEmptyPoint, aSize);
-
-            sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aUniqueId,
-                aRect, 0);
-            if (nBlibId)
-                rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
-        }
-
-        if ((nOpaque = pGraphicObject->GetAttr().GetTransparency()))
-            bSetOpacity = true;
-
-        rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
-        rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
-        rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
-    }
-    else
-    {
-        UINT32 nFillColor = GetColor(aBrush.GetColor(), false);
-        rPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
-        rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
-        rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
-
-        if ((nOpaque = aBrush.GetColor().GetTransparency()))
-            bSetOpacity = true;
-    }
-
-    if (bSetOpacity)
-    {
-        nOpaque = (nOpaque * 100) / 0xFE;
-        nOpaque = ((100 - nOpaque) << 16) / 100;
-        rPropOpt.AddOpt(ESCHER_Prop_fillOpacity, nOpaque);
-    }
+    WriteBrushAttr(aBrush, rPropOpt);
 
     const SdrObject* pObj = rFmt.FindRealSdrObject();
     if( pObj && (pObj->GetLayer() == GetHellLayerId() ||
@@ -1902,11 +1919,15 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
             AddShape( ESCHER_ShpInst_Rectangle, 0xe00, nSecondShapeId );
 
             EscherPropertyContainer aPropOpt;
-            // default Fuellfarbe ist das StarOffice blau7
-            // ----> von DrawingLayer besorgen !!
-            aPropOpt.AddOpt( ESCHER_Prop_fillColor, 0xffb800 );
-            aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
-            aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00100010 );
+            const SwFrmFmt &rFmt = rWrt.pDoc->GetPageDesc(0).GetMaster();
+            const SfxPoolItem* pItem = 0;
+            SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true,
+                &pItem);
+            if (SFX_ITEM_SET == eState && pItem)
+            {
+                const SvxBrushItem* pBrush = (const SvxBrushItem*)pItem;
+                WriteBrushAttr(*pBrush, aPropOpt);
+            }
             aPropOpt.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
             aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080008 );
             aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
@@ -2726,6 +2747,7 @@ UINT32 SwEscherEx::QueryTextID(
 
 bool SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 {
+    using namespace ww;
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
 
     if (!rWW8Wrt.bWrtWW8)
@@ -2774,16 +2796,18 @@ bool SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
     BYTE *pData = aSpecOLE+2;
     Set_UInt32(pData,(UINT32)pObj);
 
-    sName.InsertAscii(" CONTROL Forms.",0);
-    sName.APPEND_CONST_ASC(".1 \\s ");
+    String sFld(FieldString(eCONTROL));
+    sFld.APPEND_CONST_ASC("Forms.");
+    sFld += sName;
+    sFld.APPEND_CONST_ASC(".1 \\s ");
 
-    rWW8Wrt.OutField(0,87,sName,
+    rWW8Wrt.OutField(0, eCONTROL, sFld,
         WRITEFIELD_START|WRITEFIELD_CMD_START|WRITEFIELD_CMD_END);
 
     rWW8Wrt.pChpPlc->AppendFkpEntry(rWW8Wrt.Strm().Tell(),sizeof(aSpecOLE),
         aSpecOLE);
     rWW8Wrt.WriteChar( 0x1 );
-    rWW8Wrt.OutField( 0, 87, aEmptyStr, WRITEFIELD_END | WRITEFIELD_CLOSE );
+    rWW8Wrt.OutField(0, eCONTROL, aEmptyStr, WRITEFIELD_END | WRITEFIELD_CLOSE);
     return true;
 }
 
