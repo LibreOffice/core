@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:54:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,9 @@ sal_Bool ConvertBufferToFormat( void* pBuf,
 
 void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& aIn,
                              const uno::Reference< io::XOutputStream >& aOut );
-
+::rtl::OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
+::rtl::OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
+sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
 
 typedef ::std::vector< FORMATETC* > FormatEtcList;
 
@@ -333,121 +335,8 @@ sal_Bool OleComponentNative_Impl::GraphicalFlavor( const datatransfer::DataFlavo
     return sal_False;
 }
 
-//-----------------------------------------------
-sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-{
-    if ( !xFactory.is() )
-        return sal_False;
-
-    sal_Bool bRet = sal_False;
-
-    try
-    {
-        uno::Reference < ucb::XSimpleFileAccess > xAccess(
-                xFactory->createInstance (
-                        ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-                uno::UNO_QUERY );
-
-        if ( xAccess.is() )
-        {
-            xAccess->kill( aURL );
-            bRet = sal_True;
-        }
-    }
-    catch( uno::Exception& )
-    {
-    }
-
-    return bRet;
-}
-
 //----------------------------------------------
-::rtl::OUString GetNewTempFileURL( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-{
-    OSL_ENSURE( xFactory.is(), "No factory is provided!\n" );
-
-    ::rtl::OUString aResult;
-
-    uno::Reference < beans::XPropertySet > xTempFile(
-            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
-            uno::UNO_QUERY );
-
-    if ( !xTempFile.is() )
-        throw uno::RuntimeException(); // TODO
-
-    try {
-        xTempFile->setPropertyValue( ::rtl::OUString::createFromAscii( "RemoveFile" ), uno::makeAny( sal_False ) );
-        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) );
-        aUrl >>= aResult;
-    }
-    catch ( uno::Exception& )
-    {
-    }
-
-    if ( !aResult.getLength() )
-        throw uno::RuntimeException(); // TODO: can not create tempfile
-
-    return aResult;
-}
-
-//-----------------------------------------------
-::rtl::OUString GetNewFilledTempFile( const uno::Reference< io::XInputStream >& xInStream,
-                                      const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-        throw( io::IOException )
-{
-    OSL_ENSURE( xInStream.is() && xFactory.is(), "Wrong parameters are provided!\n" );
-
-    ::rtl::OUString aResult = GetNewTempFileURL( xFactory );
-
-    if ( aResult )
-    {
-        try {
-            uno::Reference < ucb::XSimpleFileAccess > xTempAccess(
-                            xFactory->createInstance (
-                                    ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
-                            uno::UNO_QUERY );
-
-            if ( !xTempAccess.is() )
-                throw uno::RuntimeException(); // TODO:
-
-            uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aResult );
-            if ( xTempOutStream.is() )
-            {
-                // copy stream contents to the file
-                copyInputToOutput_Impl( xInStream, xTempOutStream );
-                xTempOutStream->closeOutput();
-                xTempOutStream = uno::Reference< io::XOutputStream >();
-            }
-            else
-                throw io::IOException(); // TODO:
-        }
-        catch( packages::WrongPasswordException& )
-        {
-               KillFile( aResult, xFactory );
-            throw io::IOException(); //TODO:
-        }
-        catch( io::IOException& )
-        {
-               KillFile( aResult, xFactory );
-            throw;
-        }
-        catch( uno::RuntimeException& )
-        {
-               KillFile( aResult, xFactory );
-            throw;
-        }
-        catch( uno::Exception& )
-        {
-               KillFile( aResult, xFactory );
-            aResult = ::rtl::OUString();
-        }
-    }
-
-    return aResult;
-}
-
-//----------------------------------------------
-sal_Bool GetClassIDFromSequence( uno::Sequence< sal_Int8 > aSeq, CLSID& aResult )
+sal_Bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > aSeq, CLSID& aResult )
 {
     if ( aSeq.getLength() == 16 )
     {
@@ -464,7 +353,7 @@ sal_Bool GetClassIDFromSequence( uno::Sequence< sal_Int8 > aSeq, CLSID& aResult 
 }
 
 //----------------------------------------------
-::rtl::OUString WinAccToVcl( const sal_Unicode* pStr )
+::rtl::OUString WinAccToVcl_Impl( const sal_Unicode* pStr )
 {
     ::rtl::OUString aResult;
 
@@ -619,7 +508,7 @@ void OleComponent::CreateIStorageOnXInputStream_Impl( const uno::Reference< io::
     OSL_ENSURE( !m_aTempURL.getLength(), "The object already has temporary representation!\n" );
 
     // write the stream to the temporary file
-    m_aTempURL = GetNewFilledTempFile( xInStream, m_xFactory );
+    m_aTempURL = GetNewFilledTempFile_Impl( xInStream, m_xFactory );
     if ( !m_aTempURL.getLength() )
         throw uno::RuntimeException(); // TODO
 
@@ -648,7 +537,7 @@ void OleComponent::CreateNewIStorage_Impl()
     OSL_ENSURE( !m_aTempURL.getLength(), "The object already has temporary representation!\n" );
 
     // write the stream to the temporary file
-    m_aTempURL = GetNewTempFileURL( m_xFactory );
+    m_aTempURL = GetNewTempFileURL_Impl( m_xFactory );
     if ( !m_aTempURL.getLength() )
         throw uno::RuntimeException(); // TODO
 
@@ -831,7 +720,7 @@ void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSe
 {
     CLSID aClsID;
 
-    if ( !GetClassIDFromSequence( aSeqCLSID, aClsID ) )
+    if ( !GetClassIDFromSequence_Impl( aSeqCLSID, aClsID ) )
         throw lang::IllegalArgumentException(); // TODO
 
     if ( m_pNativeImpl->m_pIStorage || m_aTempURL.getLength() )
@@ -1074,7 +963,7 @@ uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
                     for( sal_uInt32 nInd = 0; nInd < nNum; nInd++ )
                     {
                         m_aVerbList[nSeqSize-nNum+nInd].VerbID = szEle[ nInd ].lVerb;
-                        m_aVerbList[nSeqSize-nNum+nInd].VerbName = WinAccToVcl( szEle[ nInd ].lpszVerbName );
+                        m_aVerbList[nSeqSize-nNum+nInd].VerbName = WinAccToVcl_Impl( szEle[ nInd ].lpszVerbName );
                         m_aVerbList[nSeqSize-nNum+nInd].VerbFlags = szEle[ nInd ].fuFlags;
                         m_aVerbList[nSeqSize-nNum+nInd].VerbAttributes = szEle[ nInd ].grfAttribs;
                     }
