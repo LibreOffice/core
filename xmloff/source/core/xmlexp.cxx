@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:09 $
+ *  last change: $Author: sab $ $Date: 2000-10-20 05:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,13 +102,6 @@
 
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
-#endif
-
-#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
-#include "PageMasterPropMapper.hxx"
-#endif
-#ifndef _XMLOFF_PAGEMASTEREXPORTPROPMAPPER_HXX
-#include "PageMasterExportPropMapper.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
@@ -636,15 +629,6 @@ OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat) const
     if(pNumExport)
         sTemp = pNumExport->GetStyleName(nNumberFormat);
     return sTemp;
-}
-
-void SvXMLExport::exportPageMaster()
-{
-    const UniReference< XMLPropertySetMapper > aPageMasterMapperRef = GetPageExport()->GetPageMasterPropSetMapper();
-    XMLPageMasterExportPropMapper* pPageMasterExportPropMapper = new XMLPageMasterExportPropMapper(aPageMasterMapperRef);
-    GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_PAGE_MASTER,
-        *pPageMasterExportPropMapper, GetDocHandler(), GetMM100UnitConverter(),
-        GetNamespaceMap());
 }
 
 SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
