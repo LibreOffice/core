@@ -51,20 +51,6 @@ struct ToolBoxItemDescriptor
 typedef ToolBoxItemDescriptor* ToolBoxItemDescriptorPtr;
 SV_DECL_PTRARR_DEL( ToolBoxDescriptor, ToolBoxItemDescriptorPtr, 10, 2)
 
-struct ToolBoxConfigItemDescriptor
-{
-        String          aContext;       // Name des Contexts ( "Text", "Table", "Graphic" etc. )
-        String          aName;          // Name der Toolbar ( "writertableobjectbar", "calctextobjectbar" etc. )
-        BOOL            bVisible;       // ein - oder ausgeschaltet
-        ButtonType      eType;          // Text, Symbol oder Text+Symbol
-
-        ToolBoxConfigItemDescriptor() : bVisible( sal_False )
-                                        ,eType( BUTTON_SYMBOL ) {}
-};
-
-typedef ToolBoxConfigItemDescriptor* ToolBoxConfigItemDescriptorPtr;
-SV_DECL_PTRARR_DEL( ToolBoxConfigDescriptor, ToolBoxConfigItemDescriptorPtr, 10, 2)
-
 struct ToolBoxLayoutItemDescriptor
 {
     String                      aName;          // Name der Toolbox ( Objectbar, Toolbar etc. )
@@ -74,14 +60,12 @@ struct ToolBoxLayoutItemDescriptor
     ToolBoxAlign                eAlign;         // Alignment im angedockten Zustand
     BOOL                        bVisible;       // ein - oder ausgeschaltet
     BOOL                        bFloating;      // angedockt oder nicht
-    ToolBoxConfigDescriptor*    pContexts;      // Context information
 
     ToolBoxLayoutItemDescriptor() : nFloatingLines( 0 )
-                                    ,nLines( 0 )
+                                    ,nLines( 1 )
                                     ,eAlign( BOXALIGN_LEFT )
                                     ,bVisible( sal_False )
-                                    ,bFloating( sal_False )
-                                    ,pContexts( NULL ) {}
+                                    ,bFloating( sal_False ) {}
 };
 
 typedef ToolBoxLayoutItemDescriptor* ToolBoxLayoutItemDescriptorPtr;

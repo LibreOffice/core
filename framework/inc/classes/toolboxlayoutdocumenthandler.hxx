@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxlayoutdocumenthandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-18 09:47:09 $
+ *  last change: $Author: cd $ $Date: 2001-08-03 16:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,6 @@ class OReadToolBoxLayoutDocumentHandler : public ::com::sun::star::xml::sax::XDo
         sal_Bool                                                                    m_bToolBarConfigItemStartFound;
         ToolBoxLayoutHashMap                                                        m_aToolBoxMap;
         ToolBoxLayoutDescriptor&                                                    m_aToolBoxItems;
-        ToolBoxConfigDescriptor*                                                    m_pCurrentToolBoxConfigs;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
 };
 
@@ -226,10 +225,6 @@ class OWriteToolBoxLayoutDocumentHandler : private ThreadHelpBase // Struct for 
 
     protected:
         virtual void WriteToolBoxLayoutItem( const ToolBoxLayoutItemDescriptor* ) throw
-            ( ::com::sun::star::xml::sax::SAXException,
-              ::com::sun::star::uno::RuntimeException );
-
-        virtual void WriteToolBoxConfigItem( const ToolBoxConfigItemDescriptor* ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
