@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swpossizetabpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 14:05:34 $
+ *  last change: $Author: hjs $ $Date: 2004-06-30 13:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1130,7 +1130,8 @@ IMPL_LINK( SvxSwPosSizeTabPage, RangeModifyHdl, Edit *, pEdit )
     SvxSwFrameValidation        aVal;
 
     aVal.nAnchorType = GetAnchorType();
-    aVal.bAuto = FALSE;
+    aVal.bAutoHeight = false;
+    aVal.bAutoWidth = false;
     aVal.bMirror = m_aHoriMirrorCB.IsChecked();
     // OD 18.09.2003 #i18732#
     aVal.bFollowTextFlow = m_aFollowCB.IsChecked();
