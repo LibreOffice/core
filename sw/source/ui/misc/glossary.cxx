@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:44:51 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,8 +306,10 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
 
 String SwGlossaryDlg::GetCurrGroup()
 {
-    if( pCurrGlosGroup && pCurrGlosGroup->Len() )
-        return *pCurrGlosGroup;
+//CHINA001  if( pCurrGlosGroup && pCurrGlosGroup->Len() )
+//CHINA001  return *pCurrGlosGroup;
+    if( ::GetCurrGlosGroup() && ::GetCurrGlosGroup()->Len() )
+        return *(::GetCurrGlosGroup());
     return SwGlossaries::GetDefName();
 }
 
@@ -315,9 +317,12 @@ String SwGlossaryDlg::GetCurrGroup()
 
 void SwGlossaryDlg::SetActGroup(const String &rGrp)
 {
-    if( !pCurrGlosGroup )
-        pCurrGlosGroup = new String;
-    *pCurrGlosGroup = rGrp;
+//CHINA001  if( !pCurrGlosGroup )
+//CHINA001  pCurrGlosGroup = new String;
+//CHINA001  *pCurrGlosGroup = rGrp;
+    if( !::GetCurrGlosGroup() )
+        ::SetCurrGlosGroup( new String );
+    *(::GetCurrGlosGroup()) = rGrp;
 }
 
 
@@ -362,8 +367,10 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     SwLinguConfig aLocalLinguConfig;
 
     // Static-Pointer initialisieren
-    if( !pCurrGlosGroup )
-        pCurrGlosGroup = new String;//(SwGlossaries::GetDefName());
+//CHINA001  if( !pCurrGlosGroup )
+//CHINA001  pCurrGlosGroup = new String;//(SwGlossaries::GetDefName());
+    if( !::GetCurrGlosGroup() )
+        ::SetCurrGlosGroup(new String);//(SwGlossaries::GetDefName());
 
     pMenu->SetActivateHdl(LINK(this,SwGlossaryDlg,EnableHdl));
     pMenu->SetSelectHdl(LINK(this,SwGlossaryDlg,MenuHdl));
@@ -428,10 +435,15 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         return 0;
     SvLBoxEntry* pParent = pBox->GetParent(pEntry) ? pBox->GetParent(pEntry) : pEntry;
     GroupUserData* pGroupData = (GroupUserData*)pParent->GetUserData();
-    (*pCurrGlosGroup) = pGroupData->sGroupName;
-    (*pCurrGlosGroup) += GLOS_DELIM;
-    (*pCurrGlosGroup) += String::CreateFromInt32(pGroupData->nPathIdx);
-    pGlossaryHdl->SetCurGroup(*pCurrGlosGroup);
+//CHINA001  (*pCurrGlosGroup) = pGroupData->sGroupName;
+//CHINA001  (*pCurrGlosGroup) += GLOS_DELIM;
+//CHINA001  (*pCurrGlosGroup) += String::CreateFromInt32(pGroupData->nPathIdx);
+//CHINA001  pGlossaryHdl->SetCurGroup(*pCurrGlosGroup);
+    String *pGlosGroup = ::GetCurrGlosGroup();
+    (*pGlosGroup) = pGroupData->sGroupName;
+    (*pGlosGroup) += GLOS_DELIM;
+    (*pGlosGroup) += String::CreateFromInt32(pGroupData->nPathIdx);
+    pGlossaryHdl->SetCurGroup(*pGlosGroup);
     const sal_uInt16 nCount = pGlossaryHdl->GetGlossaryCnt();
     // Aktuellen Textbaustein setzen
     bReadOnly = pGlossaryHdl->IsReadOnly();
@@ -445,7 +457,8 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         aShortNameEdit.SetText(*(String*)pEntry->GetUserData());
         pEntry = pBox->GetParent(pEntry);
         aInsertBtn.Enable( !bIsDocReadOnly);
-        ShowAutoText(*pCurrGlosGroup, aShortNameEdit.GetText());
+        //CHINA001 ShowAutoText(*pCurrGlosGroup, aShortNameEdit.GetText());
+        ShowAutoText(*::GetCurrGlosGroup(), aShortNameEdit.GetText());
     }
     else
         ShowAutoText(aEmptyStr, aEmptyStr);
@@ -454,7 +467,8 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
-        String sTemp(*pCurrGlosGroup);
+        //CHINA001 String sTemp(*pCurrGlosGroup);
+        String sTemp(*::GetCurrGlosGroup());
         // der nullte Pfad wird nicht aufgezeichnet!
         if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
             sTemp = sTemp.GetToken(0, GLOS_DELIM);
@@ -891,8 +905,8 @@ void SwGlossaryDlg::Init()
     // Textbausteinbereiche anzeigen
     const sal_uInt16 nCnt = pGlossaryHdl->GetGroupCnt();
     SvLBoxEntry* pSelEntry = 0;
-    const String sSelStr(pCurrGlosGroup->GetToken(0, GLOS_DELIM));
-    const sal_uInt16 nSelPath = pCurrGlosGroup->GetToken(1, GLOS_DELIM).ToInt32();
+    const String sSelStr(::GetCurrGlosGroup()->GetToken(0, GLOS_DELIM)); //CHINA001 const String sSelStr(pCurrGlosGroup->GetToken(0, GLOS_DELIM));
+    const sal_uInt16 nSelPath = ::GetCurrGlosGroup()->GetToken(1, GLOS_DELIM).ToInt32(); //CHINA001 const sal_uInt16 nSelPath = pCurrGlosGroup->GetToken(1, GLOS_DELIM).ToInt32();
     for(sal_uInt16 nId = 0; nId < nCnt; ++nId )
     {
         String sTitle;
@@ -1345,8 +1359,10 @@ IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
     BOOL bShow = pBox->IsChecked() && !bCreated;
     aExampleWIN.Show( bShow );
     aExampleDummyWIN.Show(!bShow);
-    if( pCurrGlosGroup )
-        ShowAutoText(*pCurrGlosGroup, aShortNameEdit.GetText());
+//CHINA001  if( pCurrGlosGroup )
+//CHINA001  ShowAutoText(*pCurrGlosGroup, aShortNameEdit.GetText());
+    if( ::GetCurrGlosGroup() )
+        ShowAutoText(*::GetCurrGlosGroup(), aShortNameEdit.GetText());
 
     return 0;
 };
