@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-17 13:24:29 $
+ *  last change: $Author: nn $ $Date: 2002-10-18 14:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1245,7 +1245,7 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
         nButtonDown = rMEvt.GetButtons();       // vorher, damit StopMarking klappt
 
 //  pViewData->GetViewShell()->GetViewFrame()->GetWindow().GrabFocus();
-    if (bEditMode || !bFormulaMode)
+    if ( ( bEditMode && pViewData->GetActivePart() == eWhich ) || !bFormulaMode )
         GrabFocus();
 
     if ( nMouseStatus == SC_GM_IGNORE )
