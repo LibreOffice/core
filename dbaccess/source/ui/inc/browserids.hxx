@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-02 07:32:28 $
+ *  last change: $Author: fs $ $Date: 2002-05-22 12:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,8 @@
 #define ID_BROWSER_COPY                     SID_COPY
 #define ID_BROWSER_CUT                      SID_CUT
 #define ID_BROWSER_EDITDOC                  SID_EDITDOC
-#define ID_BROWSER_UNDORECORD               SID_UNDO
+#define ID_BROWSER_UNDORECORD               SID_FM_RECORD_UNDO
+#define ID_BROWSER_SAVERECORD               SID_FM_RECORD_SAVE
 #define ID_BROWSER_PASTE                    SID_PASTE
 #define ID_BROWSER_REDO                     SID_REDO
 #define ID_BROWSER_SAVEDOC                  SID_SAVEDOC
