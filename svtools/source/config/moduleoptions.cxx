@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:06:32 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,8 +177,9 @@ namespace css = ::com::sun::star;
 #define FACTORYNAME_IMPRESS                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"))
 #define FACTORYNAME_MATH                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.formula.FormulaProperties"        ))
 #define FACTORYNAME_CHART                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.ChartDocument"              ))
+#define FACTORYNAME_STARTMODULE             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule"                ))
 
-#define FACTORYCOUNT                        8
+#define FACTORYCOUNT                        9
 
 /*-************************************************************************************************************//**
     @descr  This struct hold information about one factory. We declare a complete array which can hold infos
@@ -603,6 +604,8 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
                                                 break;
         case SvtModuleOptions::E_SCHART     :   bInstalled = m_lFactories[SvtModuleOptions::E_CHART].getInstalled();
                                                 break;
+        case SvtModuleOptions::E_SSTARTMODULE :   bInstalled = m_lFactories[SvtModuleOptions::E_STARTMODULE].getInstalled();
+                                                break;
         case SvtModuleOptions::E_SBASIC     :   bInstalled = sal_True; // Couldn't be deselected by setup yet!
                                                 break;
     }
@@ -896,6 +899,12 @@ sal_Bool SvtModuleOptions_Impl::ClassifyFactoryByName( const ::rtl::OUString& sN
     {
         eFactory = SvtModuleOptions::E_CHART     ;
         bState   = ( sName == FACTORYNAME_CHART );
+    }
+    // no else!
+    if( bState == sal_False )
+    {
+        eFactory = SvtModuleOptions::E_STARTMODULE    ;
+        bState   = ( sName == FACTORYNAME_STARTMODULE);
     }
 
     return bState;
