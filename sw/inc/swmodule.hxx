@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:39:28 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,14 @@
 #include <sfx2/module.hxx>
 #endif
 
+#include <tools/shl.hxx>
+
+#ifndef _SFXLSTNER_HXX //autogen
+#include <svtools/lstner.hxx>
+#endif
+//#ifndef SW_SWDLL_HXX
+//#include <swdll.hxx>
+//#endif
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
