@@ -2,9 +2,9 @@
 *
  *  $RCSfile: osl_File_Const.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 14:19:18 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,11 @@
 #include <rtl/ustring.h>
 #endif
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 
@@ -131,7 +136,6 @@ const sal_Char pBuffer_Blank[]  = "";
 #if ( defined UNX ) || ( defined OS2 )  //Unix
 #   include <unistd.h>
 #   include <limits.h>
-#   include <string.h>
 #   include <math.h>
 #   include <errno.h>
 #   include <fcntl.h>
@@ -145,7 +149,7 @@ const sal_Char pBuffer_Blank[]  = "";
 #   define PATH_LIST_DELIMITER  ":"
 #   define PATH_SEPERATOR       "/"
 #else                                   // Windows
-#   include <string.h>
+#   include <windows.h>
 #   define PATH_MAX             MAX_PATH
 #   define TEST_PLATFORM        "c:/"
 #   define TEST_PLATFORM_ROOT   "c:/"
@@ -163,9 +167,7 @@ const sal_Char pBuffer_Blank[]  = "";
 //------------------------------------------------------------------------
 
 #define OSLTEST_DECLARE( str_name, str_value ) \
-    static const sal_Char  p##str_name[]        = str_value;  \
-    static const sal_Int32 n##str_name##Len     = sizeof( p##str_name ) -1; \
-    ::rtl::OUString a##str_name                 = rtl::OUString::createFromAscii( p##str_name )
+    ::rtl::OUString a##str_name                 = rtl::OUString::createFromAscii( str_value )
 
 
 //------------------------------------------------------------------------
@@ -174,15 +176,20 @@ const sal_Char pBuffer_Blank[]  = "";
 OSLTEST_DECLARE( NullURL,  "" );
 OSLTEST_DECLARE( SlashURL, PATH_SEPERATOR );
 OSLTEST_DECLARE( PreURL, FILE_PREFIX );
+OSLTEST_DECLARE( RootURL,  FILE_PREFIX TEST_PLATFORM );
+
+OSLTEST_DECLARE( TempDirectoryURL,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP );
+OSLTEST_DECLARE( TempDirectorySys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP );
+OSLTEST_DECLARE( UserDirectoryURL,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "" );
+OSLTEST_DECLARE( UserDirectorySys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "" );
 
 //------------------------------------------------------------------------
 // common used URL:temp, canonical, root, relative, link,etc
 //------------------------------------------------------------------------
-OSLTEST_DECLARE( RootURL,  FILE_PREFIX TEST_PLATFORM );
-OSLTEST_DECLARE( TmpURL1,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP );
 OSLTEST_DECLARE( CanURL1,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/canonical.name" );
 OSLTEST_DECLARE( CanURL2,  "ca@#;+.,$///78no\0ni..name" );
 OSLTEST_DECLARE( CanURL3,  "ca@#;+.,$//tmp/678nonical//name" );
+OSLTEST_DECLARE( CanURL4,  "canonical.name" );
 OSLTEST_DECLARE( TmpName1, "tmpdir" );
 OSLTEST_DECLARE( TmpName2, "tmpname" );
 OSLTEST_DECLARE( TmpName3, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir" );
@@ -196,6 +203,7 @@ OSLTEST_DECLARE( RelURL1,  "relative/file1" );
 OSLTEST_DECLARE( RelURL2,  "relative/./file2" );
 OSLTEST_DECLARE( RelURL3,  "relative/../file3" );
 OSLTEST_DECLARE( RelURL4,  "././relative/../file4" );
+OSLTEST_DECLARE( RelURL5,  TEST_PLATFORM_TEMP "/./../" TEST_PLATFORM_TEMP );
 OSLTEST_DECLARE( LnkURL1,  FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/link.file" );
 OSLTEST_DECLARE( HidURL1,  ".hiddenfile" );
 
@@ -203,10 +211,11 @@ OSLTEST_DECLARE( HidURL1,  ".hiddenfile" );
 // common used System Path:temp, root,etc
 //------------------------------------------------------------------------
 OSLTEST_DECLARE( RootSys,  TEST_PLATFORM_ROOT );
-OSLTEST_DECLARE( TmpSys1,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP );
 OSLTEST_DECLARE( SysPath1, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system.path" );
 OSLTEST_DECLARE( SysPath2, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system/path" );
 OSLTEST_DECLARE( SysPath3, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir" );
+OSLTEST_DECLARE( SysPath4, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpname" );
+OSLTEST_DECLARE( FifoSys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir/fifo" );
 
 //------------------------------------------------------------------------
 // FileType URL, we pick some canonical file in corresponding system for test:
