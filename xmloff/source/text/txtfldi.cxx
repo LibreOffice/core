@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 13:43:09 $
+ *  last change: $Author: sab $ $Date: 2000-11-22 13:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,8 +447,16 @@ void XMLTextFieldImportContext::EndElement()
 
             // attach field to document
             Reference<XTextContent> xTextContent(xPropSet, UNO_QUERY);
-            rTextImportHelper.InsertTextContent(xTextContent);
 
+            // workaround for #80606#
+            try
+            {
+                rTextImportHelper.InsertTextContent(xTextContent);
+            }
+            catch (lang::IllegalArgumentException e)
+            {
+                // ignore
+            }
             return;
         }
     }
