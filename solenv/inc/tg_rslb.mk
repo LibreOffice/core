@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-09 17:19:09 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:47:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,15 +84,7 @@ $(RESLIB9TARGETN) .NULL : RESLIB9
 
 .IF "$(MULTI_RESLIB_FLAG)"==""
 RESLIB1 RESLIB2 RESLIB3 RESLIB4 RESLIB5 RESLIB6 RESLIB7 RESLIB8 RESLIB9:
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"=="UNX"
-    @dmake $(RESLIB$(TNR)TARGETN) solarlang=$(solarlang) MULTI_RESLIB_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-    dmake $(RESLIB$(TNR)TARGETN) solarlang=$(solarlang) MULTI_RESLIB_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ENDIF
-.ELSE
-    @dmake "$(RESLIB$(TNR)TARGETN)" MULTI_RESLIB_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ENDIF
+    @dmake $(RESLIB$(TNR)TARGETN) $(HIDRES$(TNR)PARTICLE) solarlang=$(solarlang) MULTI_RESLIB_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
 .ELSE
 
 
@@ -101,6 +93,23 @@ RESLIB1 RESLIB2 RESLIB3 RESLIB4 RESLIB5 RESLIB6 RESLIB7 RESLIB8 RESLIB9:
 # unroll begin
 
 .IF "$(RESLIB$(TNR)TARGETN)"!=""
+
+.IF "$(BUILDHIDS)"!=""
+HIDRES$(TNR)PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(RESLIB$(TNR)NAME)_res.hid
+
+#HACK cut off the dirty srs files which are included from solver
+#RESLIB$(TNR)HIDFILESx=$(shell @+echo $(RESLIB$(TNR)SRSFILES:t"\n") | $(GREP) -v "$(SOLARRESDIR:s/\/\\/)" )
+RESLIB$(TNR)HIDFILES:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(subst,.srs,_srs.hid $(RESLIB$(TNR)SRSFILES)))
+$(HIDRES$(TNR)PARTICLE): $(RESLIB$(TNR)HIDFILES)
+    @echo ------------------------------
+    @echo Making: $@
+    @+if exist $@ rm $@
+    $(TYPE) $(RESLIB$(TNR)HIDFILES) > $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+ALLTAR : $(HIDRES$(TNR)PARTICLE)
+
+.ENDIF # "$(BUILDHIDS)"!=""
 
 $(RSC_MULTI$(TNR)) : \
         $(RESLIB$(TNR)SRSFILES) \
