@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BridgeFactory_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-17 09:33:25 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,26 +61,24 @@
 
 package com.sun.star.comp.bridgefactory;
 
-
-import java.util.Vector;
-
-
 import com.sun.star.bridge.BridgeExistsException;
 import com.sun.star.bridge.XBridge;
-
-import com.sun.star.connection.XConnection;
-
 import com.sun.star.comp.connections.PipedConnection;
-
+import com.sun.star.connection.XConnection;
 import com.sun.star.lang.XComponent;
-
 import com.sun.star.uno.UnoRuntime;
+import complexlib.ComplexTestCase;
 
+public final class BridgeFactory_Test extends ComplexTestCase {
+    public String getTestObjectName() {
+        return getClass().getName();
+    }
 
-public class BridgeFactory_Test {
-    static public boolean test(Vector notpassed) throws Exception {
-        System.err.print("Testing BridgeFactory...");
+    public String[] getTestMethodNames() {
+        return new String[] { "test" };
+    }
 
+    public void test() throws Exception {
         PipedConnection rightSide = new PipedConnection(new Object[0]);
         PipedConnection leftSide = new PipedConnection(new Object[]{rightSide});
 
@@ -90,13 +88,14 @@ public class BridgeFactory_Test {
         XBridge xBridge = bridgeFactory.createBridge("testbridge", "urp", (XConnection)leftSide, null);
 
         // test that we get the same bridge
-        boolean passed = UnoRuntime.areSame(xBridge, bridgeFactory.getBridge("testbridge"));
+        assure("", UnoRuntime.areSame(xBridge,
+                                      bridgeFactory.getBridge("testbridge")));
 
         // test that we can not create another bridge with same name
         try {
             XBridge dummy = bridgeFactory.createBridge("testbridge", "urp", (XConnection)leftSide, null);
 
-            passed = false;
+            failed("");
         }
         catch(BridgeExistsException bridgeExistsException) {
         }
@@ -104,7 +103,7 @@ public class BridgeFactory_Test {
 
         // test getExistingBridges
         XBridge xBridges[] = bridgeFactory.getExistingBridges();
-        passed = UnoRuntime.areSame(xBridge, xBridges[0]) && passed;
+        assure("", UnoRuntime.areSame(xBridge, xBridges[0]));
 
         // dispose the bridge
         XComponent xComponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, xBridge);
@@ -112,7 +111,7 @@ public class BridgeFactory_Test {
 
 
         // test that the bridge has been removed
-        passed = (bridgeFactory.getBridge("testbridge") == null) && passed;
+        assure("", bridgeFactory.getBridge("testbridge") == null);
 
 
 
@@ -122,7 +121,7 @@ public class BridgeFactory_Test {
 
         // test that we really get a new bridge
         XBridge xBridge_new = bridgeFactory.createBridge("testbridge", "urp", (XConnection)leftSide, null);
-        passed = !UnoRuntime.areSame(xBridge, xBridge_new) && passed;
+        assure("", !UnoRuntime.areSame(xBridge, xBridge_new));
 
         for(int i = 0; i <10000; ++ i) {
             Object x[] = new Object[100];
@@ -130,25 +129,12 @@ public class BridgeFactory_Test {
 
         // test getExistingBridges
         xBridges = bridgeFactory.getExistingBridges();
-        if(xBridges.length == 1)
-            passed = UnoRuntime.areSame(xBridge_new, xBridges[0]) && passed;
-        else
-            passed = false;
+        assure("",
+               xBridges.length == 1
+               && UnoRuntime.areSame(xBridge_new, xBridges[0]));
 
         // dispose the new bridge
         XComponent xComponent_new = (XComponent)UnoRuntime.queryInterface(XComponent.class, xBridge_new);
         xComponent_new.dispose();
-
-
-
-        System.err.println(" passed? " + passed);
-        if(!passed && notpassed != null)
-            notpassed.addElement("BridgeFactory - passed? " + passed);
-
-        return passed;
-    }
-
-    static public void main(String argv[]) throws Exception {
-        test(null);
     }
 }
