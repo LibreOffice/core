@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 14:13:31 $
+ *  last change: $Author: os $ $Date: 2002-10-25 09:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,9 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
@@ -214,6 +217,9 @@ void SwReadOnlyPopup::Check( USHORT nMID, USHORT nSID, SfxDispatcher &rDis )
             CheckItem ( nMID, !pItem->ISA(SfxVoidItem) &&
                             pItem->ISA(SfxBoolItem) &&
                             ((SfxBoolItem*)pItem)->GetValue());
+            //remove full screen entry when not in full screen mode
+            if(SID_WIN_FULLSCREEN == nSID && !IsItemChecked(SID_WIN_FULLSCREEN) )
+                EnableItem(nMID, FALSE);
         }
     }
     else
@@ -352,6 +358,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         EnableItem( MN_READONLY_OPENURLNEW, FALSE );
         EnableItem( MN_READONLY_COPYLINK, FALSE );
     }
+    Check( SID_WIN_FULLSCREEN,         SID_WIN_FULLSCREEN,        rDis );
 
     RemoveDisabledEntries( TRUE, TRUE );
 }
@@ -397,6 +404,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
     USHORT nFilter = USHRT_MAX;
     switch( nId )
     {
+        case SID_WIN_FULLSCREEN :           nExecId = SID_WIN_FULLSCREEN; break;
         case MN_READONLY_OPENURL:           nFilter = URLLOAD_NOFILTER;   break;
         case MN_READONLY_OPENURLNEW:        nFilter = URLLOAD_NEWVIEW;    break;
         case MN_READONLY_EDITDOC:           nExecId = SID_EDITDOC;        break;
@@ -494,7 +502,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
     String sGrfPath( aPathOpt.GetGraphicPath() );
     SwWrtShell &rSh = rView.GetWrtShell();
 
-    FileDialogHelper aDlgHelper( FILESAVE_SIMPLE, 0 );
+    FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
 //    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);

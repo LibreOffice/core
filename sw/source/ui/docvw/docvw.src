@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 14:21:38 $
+ *  last change: $Author: os $ $Date: 2002-10-25 09:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,6 +779,14 @@ Menu MN_READONLY_POPUP
             Text[ thai ] = "ปิดปลั๊กอิน";
         };
 #endif
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = SID_WIN_FULLSCREEN;
+            HelpID =  SID_WIN_FULLSCREEN;
+            Text = "Vollbildschirm-Modus verlassen" ;
+            Text [ english_us ] = "Leave Full-Screen Mode" ;
+        };
     };
 };
 String STR_EXPORT_GRAFIK_TITLE
