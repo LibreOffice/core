@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:03:11 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,6 +520,7 @@ void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
         delete mpFontCache;
 
     // get font list with scalable fonts only
+    ImplGetGraphics();
     ImplDevFontList* pScalableDevFonts = new ImplDevFontList();
     ImplDevFontListData* pData = pSVData->maGDIData.mpScreenFontList->First();
     for(; pData; pData = pSVData->maGDIData.mpScreenFontList->Next() )
