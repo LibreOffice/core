@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsFocusManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:28:15 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "controller/SlsFocusManager.hxx"
 
 #include "controller/SlideSorterController.hxx"
@@ -66,8 +65,9 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
-#include "Window.hxx"
 
+#include "Window.hxx"
+#include "sdpage.hxx"
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -229,6 +229,24 @@ void FocusManager::FocusPage (sal_Int32 nPageIndex)
 
 
 
+void FocusManager::SetFocusedPage (const model::PageDescriptor& rDescriptor)
+{
+    FocusHider aFocusHider (*this);
+    mnPageIndex = (rDescriptor.GetPage()->GetPageNum()-1)/2;
+}
+
+
+
+
+void FocusManager::SetFocusedPage (sal_Int32 nPageIndex)
+{
+    FocusHider aFocusHider (*this);
+    mnPageIndex = nPageIndex;
+}
+
+
+
+
 bool FocusManager::IsFocusShowing (void) const
 {
     return HasFocus() && mbPageIsFocused;
@@ -239,8 +257,11 @@ bool FocusManager::IsFocusShowing (void) const
 
 void FocusManager::HideFocusIndicator (model::PageDescriptor* pDescriptor)
 {
-    pDescriptor->RemoveFocus();
-    mrController.GetView().RequestRepaint (*pDescriptor);
+    if (pDescriptor != NULL)
+    {
+        pDescriptor->RemoveFocus();
+        mrController.GetView().RequestRepaint (*pDescriptor);
+    }
 }
 
 
