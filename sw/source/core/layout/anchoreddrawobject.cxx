@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: od $ $Date: 2004-08-03 06:00:02 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,11 @@
 #ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
 #endif
-
-enum tLayoutDir
-{
-    HORI_L2R,
-    HORI_R2L,
-    VERT_R2L,
-    VERT_L2R    // not supported yet
-};
+// --> OD 2004-08-10 #i28749#
+#ifndef _COM_SUN_STAR_TEXT_POSITIONLAYOUTDIR_HPP_
+#include <com/sun/star/text/PositionLayoutDir.hpp>
+#endif
+// <--
 
 // ============================================================================
 // helper class for correct notification due to the positioning of
@@ -178,7 +175,10 @@ SwAnchoredDrawObject::SwAnchoredDrawObject() :
     SwAnchoredObject(),
     mbValidPos( false ),
     maLastObjRect(),
-    mbNotYetAttachedToAnchorFrame( true )
+    mbNotYetAttachedToAnchorFrame( true ),
+    // --> OD 2004-08-09 #i28749#
+    mbNotYetPositioned( true )
+    // <--
 {
 }
 
@@ -203,6 +203,29 @@ void SwAnchoredDrawObject::MakeObjPos()
         // nothing to do - position is valid
         return;
     }
+
+    // --> OD 2004-08-09 #i28749# - anchored drawing object has to be attached
+    // to anchor frame
+    if ( NotYetAttachedToAnchorFrm() )
+    {
+        ASSERT( false,
+                "<SwAnchoredDrawObject::MakeObjPos() - drawing object not yet attached to anchor frame -> no positioning" );
+        return;
+    }
+
+    // --> OD 2004-08-09 #i28749# - if anchored drawing object hasn't been yet
+    // positioned, convert its positioning attributes, if its positioning
+    // attributes are given in horizontal left-to-right layout
+    if ( mbNotYetPositioned )
+    {
+        mbNotYetPositioned = false;
+        if ( GetFrmFmt().GetPositionLayoutDir() ==
+                    com::sun::star::text::PositionLayoutDir::PositionInHoriL2R )
+        {
+            _ConvertPositioningAttr();
+        }
+    }
+    // <--
 
     // indicate that positioning is in progress
     SwObjPositioningInProgress aObjPosInProgress( *this );
@@ -230,28 +253,41 @@ void SwAnchoredDrawObject::MakeObjPos()
             case FLY_AT_CNTNT:
             case FLY_AUTO_CNTNT:
             {
+                // --> OD 2004-07-29 #i31698#
+                _SetDrawObjAnchor();
+                // <--
                 objectpositioning::SwToCntntAnchoredObjectPosition
                         aObjPositioning( *DrawObj() );
                 aObjPositioning.CalcPosition();
                 SetVertPosOrientFrm ( aObjPositioning.GetVertPosOrientFrm() );
-                _SetDrawObjAnchor( aObjPositioning.GetOffsetToFrmAnchorPos() );
             }
             break;
             case FLY_PAGE:
             case FLY_AT_FLY:
             {
+                // --> OD 2004-07-29 #i31698#
+                _SetDrawObjAnchor();
+                // <--
                 objectpositioning::SwToLayoutAnchoredObjectPosition
                         aObjPositioning( *DrawObj() );
                 aObjPositioning.CalcPosition();
-                Point aOffsetToFrmAnchorPos( aObjPositioning.GetOffsetToFrmAnchorPos() );
-                _SetDrawObjAnchor( aOffsetToFrmAnchorPos );
+                // --> OD 2004-07-29 #i31698#
+//                Point aOffsetToFrmAnchorPos( aObjPositioning.GetOffsetToFrmAnchorPos() );
+//                _SetDrawObjAnchor( aOffsetToFrmAnchorPos );
+//                SetCurrRelPos( aObjPositioning.GetRelPos() );
+//                SetObjLeft( ( DrawObj()->GetAnchorPos().X() -
+//                              aOffsetToFrmAnchorPos.X() ) +
+//                            GetCurrRelPos().X() );
+//                SetObjTop( ( DrawObj()->GetAnchorPos().Y() -
+//                             aOffsetToFrmAnchorPos.Y() ) +
+//                           GetCurrRelPos().Y() );
                 SetCurrRelPos( aObjPositioning.GetRelPos() );
-                SetObjLeft( ( DrawObj()->GetAnchorPos().X() -
-                              aOffsetToFrmAnchorPos.X() ) +
-                            GetCurrRelPos().X() );
-                SetObjTop( ( DrawObj()->GetAnchorPos().Y() -
-                             aOffsetToFrmAnchorPos.Y() ) +
-                           GetCurrRelPos().Y() );
+                const SwFrm* pAnchorFrm = GetAnchorFrm();
+                SWRECTFN( pAnchorFrm );
+                const Point aAnchPos( (pAnchorFrm->Frm().*fnRect->fnGetPos)() );
+                SetObjLeft( aAnchPos.X() + GetCurrRelPos().X() );
+                SetObjTop( aAnchPos.Y() + GetCurrRelPos().Y() );
+                // <--
             }
             break;
             default:
@@ -275,12 +311,12 @@ void SwAnchoredDrawObject::MakeObjPos()
     }
 }
 
-void SwAnchoredDrawObject::_SetDrawObjAnchor( const Point _aOffsetToFrmAnchorPos )
+void SwAnchoredDrawObject::_SetDrawObjAnchor()
 {
     // new anchor position
+    // --> OD 2004-07-29 #i31698# -
     Point aNewAnchorPos =
-                GetAnchorFrm()->GetFrmAnchorPos( ::HasWrap( GetDrawObj() ) ) +
-                _aOffsetToFrmAnchorPos;
+                GetAnchorFrm()->GetFrmAnchorPos( ::HasWrap( GetDrawObj() ) );
     Point aCurrAnchorPos = GetDrawObj()->GetAnchorPos();
     if ( aNewAnchorPos != aCurrAnchorPos )
     {
@@ -413,78 +449,17 @@ Rectangle& SwAnchoredDrawObject::LastObjRect()
 
 void SwAnchoredDrawObject::ObjectAttachedToAnchorFrame()
 {
+    // --> OD 2004-07-27 #i31698#
+    SwAnchoredObject::ObjectAttachedToAnchorFrame();
+    // <--
+
     if ( mbNotYetAttachedToAnchorFrame )
     {
         mbNotYetAttachedToAnchorFrame = false;
-
-        // convert positioning attributes, if needed
-        const SwFrm* pAnchorFrm = GetAnchorFrm();
-        ASSERT( pAnchorFrm,
-                "<SwAnchoredDrawObject::ObjectAttachedToAnchorFrame()> - missing anchor frame" );
-        const bool bVert = pAnchorFrm->IsVertical();
-        const bool bR2L = pAnchorFrm->IsRightToLeft();
-        tLayoutDir nLayoutDir = HORI_L2R;
-        if ( bVert )
-        {
-            nLayoutDir = VERT_R2L;
-        }
-        else if ( bR2L )
-        {
-            nLayoutDir = HORI_R2L;
-        }
-        if ( nLayoutDir != HORI_L2R )
-        {
-            SwRect aObjRect( GetObjRect() );
-            const SwFmtHoriOrient& rHori = GetFrmFmt().GetHoriOrient();
-            SwTwips nCurrHoriPos( rHori.GetPos() );
-            const SwFmtVertOrient& rVert = GetFrmFmt().GetVertOrient();
-            SwTwips nCurrVertPos( rVert.GetPos() );
-            if ( rHori.GetHoriOrient() == HORI_NONE )
-            {
-                SwTwips nNewHoriPos( nCurrHoriPos );
-                switch ( nLayoutDir )
-                {
-                    case HORI_R2L:
-                    {
-                        nNewHoriPos = -rHori.GetPos() - aObjRect.Width();
-                    }
-                    break;
-                    case VERT_R2L:
-                    {
-                        nNewHoriPos = nCurrVertPos;
-                    }
-                    break;
-                }
-                if ( nNewHoriPos != nCurrHoriPos )
-                {
-                    GetFrmFmt().SetAttr( SwFmtHoriOrient( nNewHoriPos,
-                                                  rHori.GetHoriOrient(),
-                                                  rHori.GetRelationOrient() ) );
-                }
-            }
-            if ( rVert.GetVertOrient() == VERT_NONE )
-            {
-                SwTwips nNewVertPos( nCurrVertPos );
-                switch ( nLayoutDir )
-                {
-                    case VERT_R2L:
-                    {
-                        nNewVertPos = -nCurrHoriPos - aObjRect.Width();
-                    }
-                    break;
-                }
-                if ( nNewVertPos != nCurrVertPos )
-                {
-                    GetFrmFmt().SetAttr( SwFmtVertOrient( nNewVertPos,
-                                                  rVert.GetVertOrient(),
-                                                  rVert.GetRelationOrient() ) );
-                }
-            }
-        }
     }
 }
 
-void SwAnchoredDrawObject::_SetPositioningAttr()
+void SwAnchoredDrawObject::_ConvertPositioningAttr()
 {
     SwDrawContact* pDrawContact =
                         static_cast<SwDrawContact*>(GetUserCall( GetDrawObj() ));
@@ -493,13 +468,40 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
     {
         SwRect aObjRect( GetObjRect() );
 
+        SwTwips nHoriPos = aObjRect.Left();
+        SwTwips nVertPos = aObjRect.Top();
+        SwFrmFmt::tLayoutDir eLayoutDir = GetFrmFmt().GetLayoutDir();
+        switch ( eLayoutDir )
+        {
+            case SwFrmFmt::HORI_L2R:
+            {
+                // nothing to do
+            }
+            break;
+            case SwFrmFmt::HORI_R2L:
+            {
+                nHoriPos = -aObjRect.Left() - aObjRect.Width();
+            }
+            break;
+            case SwFrmFmt::VERT_R2L:
+            {
+                nHoriPos = aObjRect.Top();
+                nVertPos = -aObjRect.Left() - aObjRect.Width();
+            }
+            break;
+            default:
+            {
+                ASSERT( false,
+                        "<SwAnchoredDrawObject::_ConvertPositioningAttr()> - unsupported layout direction" );
+            }
+        }
+
         const SwFmtHoriOrient& rHori = GetFrmFmt().GetHoriOrient();
-        GetFrmFmt().SetAttr( SwFmtHoriOrient( GetObjRect().Left(),
+        GetFrmFmt().SetAttr( SwFmtHoriOrient( nHoriPos,
                                               rHori.GetHoriOrient(),
                                               rHori.GetRelationOrient() ) );
 
         const SwFmtVertOrient& rVert = GetFrmFmt().GetVertOrient();
-        SwTwips nVertPos = GetObjRect().Top();
         if ( rVert.GetRelationOrient() == REL_CHAR ||
              rVert.GetRelationOrient() == REL_VERT_LINE )
         {
