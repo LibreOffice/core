@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 09:00:33 $
+ *  last change: $Author: nn $ $Date: 2001-08-13 17:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: os $ $Date: 2001-07-20 09:00:33 $ $Revision: 1.23 $
+ // $Author: nn $ $Date: 2001-08-13 17:25:43 $ $Revision: 1.24 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -144,14 +144,14 @@ String SCSTR_QHELP_POSWND
     Text [ dutch ] = "Werkbladbereik" ;
     Text [ spanish ] = "Área de hoja" ;
     Text [ english_us ] = "Sheet Area" ;
-    Text[ chinese_simplified ] = "¹¤×÷±íÇøÓò";
+    Text[ chinese_simplified ] = "å·¥ä½œè¡¨åŒºåŸŸ";
     Text[ russian ] = "Îáëàñòü ëèñòà";
     Text[ polish ] = "Obszar arkusza";
-    Text[ japanese ] = "•\\”ÍˆÍ";
-    Text[ chinese_traditional ] = "¤u§@ªí°Ï°ì";
+    Text[ japanese ] = "è¡¨ç¯„å›²";
+    Text[ chinese_traditional ] = "å·¥ä½œè¡¨å€åŸŸ";
     Text[ arabic ] = "äØÇŞ ÇáÌÏæá";
     Text[ greek ] = "Ğåñéï÷Ş ğßíáêá";
-    Text[ korean ] = "½ÃÆ® ¿µ¿ª";
+    Text[ korean ] = "ì‹œíŠ¸ ì˜ì—­";
     Text[ turkish ] = "Tablo bölümü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Área de hoja";
@@ -172,14 +172,14 @@ String SCSTR_QHELP_INPUTWND
     Text [ dutch ] = "Invoerregel" ;
     Text [ spanish ] = "Línea de entrada" ;
     Text [ english_us ] = "Input line" ;
-    Text[ chinese_simplified ] = "ÊäÈëĞĞ";
+    Text[ chinese_simplified ] = "è¾“å…¥è¡Œ";
     Text[ russian ] = "Ñòğîêà ââîäà";
     Text[ polish ] = "Wiersz wprowadzania";
-    Text[ japanese ] = "”®“ü—ÍÎŞ¯¸½";
-    Text[ chinese_traditional ] = "¿é¤JÄæ";
+    Text[ japanese ] = "æ•°å¼å…¥åŠ›ï¾ï¾ï½¯ï½¸ï½½";
+    Text[ chinese_traditional ] = "è¼¸å…¥æ¬„";
     Text[ arabic ] = "ÓØÑ ÇáÅÏÎÇá";
     Text[ greek ] = "ÃñáììŞ åéóáãùãŞò";
-    Text[ korean ] = "ÀÔ·ÂÇà";
+    Text[ korean ] = "ì…ë ¥í–‰";
     Text[ turkish ] = "Giriş satırı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línea de entrada";
@@ -200,14 +200,14 @@ String SCSTR_QHELP_BTNCALC
     Text [ dutch ] = "Functie-AutoPiloot" ;
     Text [ spanish ] = "AutoPiloto de funciones" ;
     Text [ english_us ] = "AutoPilot: Functions" ;
-    Text[ chinese_simplified ] = "º¯Êı×Ô¶¯ÖúÀí";
+    Text[ chinese_simplified ] = "å‡½æ•°è‡ªåŠ¨åŠ©ç†";
     Text[ russian ] = "Àâòîïèëîò ôóíêöèé";
     Text[ polish ] = "AutoPilot funkcji";
-    Text[ japanese ] = "ŠÖ”µ°ÄÊß²Û¯Ä";
-    Text[ chinese_traditional ] = "¨ç¼Æ¦Û°Ê§U²z";
+    Text[ japanese ] = "é–¢æ•°ï½µï½°ï¾„ï¾Šï¾Ÿï½²ï¾›ï½¯ï¾„";
+    Text[ chinese_traditional ] = "å‡½æ•¸è‡ªå‹•åŠ©ç†";
     Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí ááÏÇáÇÊ";
     Text[ greek ] = "Function Autopilot";
-    Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ±â´É";
+    Text[ korean ] = "ìë™íŒŒì¼ëŸ¿ ê¸°ëŠ¥";
     Text[ turkish ] = "Fonksyon OtoPilotu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPiloto de funciones";
@@ -229,14 +229,14 @@ String SCSTR_QHELP_BTNOK
     Text [ dutch ] = "Accepteren" ;
     Text [ spanish ] = "Aplicar" ;
     Text [ english_us ] = "Accept" ;
-    Text[ chinese_simplified ] = "Ì×ÓÃ";
+    Text[ chinese_simplified ] = "é‡‡ç”¨";
     Text[ russian ] = "Ïğèíÿòü";
     Text[ polish ] = "Zaakceptuj";
     Text[ japanese ] = "OK";
-    Text[ chinese_traditional ] = "±Ä¥Î";
+    Text[ chinese_traditional ] = "æ¡ç”¨";
     Text[ arabic ] = "ÅÏÎÇá";
     Text[ greek ] = "Accept";
-    Text[ korean ] = "Àû¿ë";
+    Text[ korean ] = "ì ìš©";
     Text[ turkish ] = "Kabul";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aplicar";
@@ -257,14 +257,14 @@ String SCSTR_QHELP_BTNCANCEL
     Text [ dutch ] = "Verwerpen" ;
     Text [ spanish ] = "Rechazar" ;
     Text [ english_us ] = "Cancel" ;
-    Text[ chinese_simplified ] = "·ÅÆú";
+    Text[ chinese_simplified ] = "èˆå¼ƒ";
     Text[ russian ] = "Îòìåíà";
     Text[ polish ] = "Odrzuæ";
-    Text[ japanese ] = "·¬İ¾Ù";
-    Text[ chinese_traditional ] = "©ñ±ó";
+    Text[ japanese ] = "ï½·ï½¬ï¾ï½¾ï¾™";
+    Text[ chinese_traditional ] = "æ¨æ£„";
     Text[ arabic ] = "ÑİÖ";
     Text[ greek ] = "Áêıñùóç";
-    Text[ korean ] = "¾Æ´Ï¿À";
+    Text[ korean ] = "ì•„ë‹ˆì˜¤";
     Text[ turkish ] = "İptal";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rechazar";
@@ -285,14 +285,14 @@ String SCSTR_QHELP_BTNSUM
     Text [ dutch ] = "Som" ;
     Text [ spanish ] = "Suma" ;
     Text [ english_us ] = "Sum" ;
-    Text[ chinese_simplified ] = "×Ü¼Æ";
+    Text[ chinese_simplified ] = "æ€»è®¡";
     Text[ russian ] = "Ñóììà";
     Text[ polish ] = "Suma";
-    Text[ japanese ] = "µ°Ä Sum";
-    Text[ chinese_traditional ] = "¤p­p";
+    Text[ japanese ] = "ï½µï½°ï¾„ Sum";
+    Text[ chinese_traditional ] = "å°è¨ˆ";
     Text[ arabic ] = "ÇáãÌãæÚ";
     Text[ greek ] = "¢èñïéóìá";
-    Text[ korean ] = "ÇÕ°è";
+    Text[ korean ] = "í•©ê³„";
     Text[ turkish ] = "Toplam";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Suma";
@@ -313,14 +313,14 @@ String SCSTR_QHELP_BTNEQUAL
     Text [ dutch ] = "Functie" ;
     Text [ spanish ] = "Función" ;
     Text [ english_us ] = "Function" ;
-    Text[ chinese_simplified ] = "º¯Êı";
+    Text[ chinese_simplified ] = "å‡½æ•°";
     Text[ russian ] = "Ôóíêöèÿ";
     Text[ polish ] = "Funkcja";
-    Text[ japanese ] = "”®‚Ì•ÒW";
-    Text[ chinese_traditional ] = "¨ç¼Æ";
+    Text[ japanese ] = "æ•°å¼ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "å‡½æ•¸";
     Text[ arabic ] = "ÇáÏÇáÉ";
     Text[ greek ] = "ÓõíÜñôçóç";
-    Text[ korean ] = "±â´É";
+    Text[ korean ] = "ê¸°ëŠ¥";
     Text[ turkish ] = "İşlev";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Función";
@@ -345,14 +345,14 @@ String RID_OBJECTBAR_APP
     Text [ dutch ] = "Werkbalk" ;
     Text [ spanish ] = "Barra de funciones" ;
     Text [ english_us ] = "Function Bar" ;
-    Text[ chinese_simplified ] = "¹¦ÄÜÀ¸";
+    Text[ chinese_simplified ] = "åŠŸèƒ½æ ";
     Text[ russian ] = "Ïàíåëü ôóíêöèé";
     Text[ polish ] = "Pasek funkcji";
-    Text[ japanese ] = "Ì§İ¸¼®İÊŞ°";
-    Text[ chinese_traditional ] = "¤u¨ã¦C";
+    Text[ japanese ] = "ï¾Œï½§ï¾ï½¸ï½¼ï½®ï¾ï¾Šï¾ï½°";
+    Text[ chinese_traditional ] = "å·¥å…·åˆ—";
     Text[ arabic ] = "ÔÑíØ ÇáãåÇã";
     Text[ greek ] = "ÃñáììŞ ëåéôïõñãéşí";
-    Text[ korean ] = "ÇÔ¼ö ¸ğÀ½";
+    Text[ korean ] = "í•¨ìˆ˜ ëª¨ìŒ";
     Text[ turkish ] = "İşlev çubuğu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de funciones";
@@ -530,14 +530,14 @@ String RID_PLUGINTOOLBOX
     Text [ danish ] = "Funktionslinje for PlugIns" ;
     Text [ portuguese ] = "Barra para Plugins" ;
     Text [ portuguese_brazilian ] = "Funktionsleiste f? PlugIns" ;
-    Text[ chinese_simplified ] = "Plug-In ¹¦ÄÜÀ¸";
+    Text[ chinese_simplified ] = "ç”¨äº Plug-ins çš„åŠŸèƒ½æ ";
     Text[ russian ] = "Ïàíåëü ôóíêöèé äëÿ Plug-Ins";
     Text[ polish ] = "Pasek funkcji wtyczek plug-in";
-    Text[ japanese ] = "Ìß×¸Ş²İ‚ÌÌ§İ¸¼®İÊŞ°";
-    Text[ chinese_traditional ] = "Plug-In ¥\\¯à¦C";
+    Text[ japanese ] = "ï¾Œï¾Ÿï¾—ï½¸ï¾ï½²ï¾ã®ï¾Œï½§ï¾ï½¸ï½¼ï½®ï¾ï¾Šï¾ï½°";
+    Text[ chinese_traditional ] = "é©ç”¨æ–¼ Plug-ins çš„å·¥å…·åˆ—";
     Text[ arabic ] = "ÔÑíØ æÙíİÉ Plug-Ins";
     Text[ greek ] = "ÃñáììŞ ëåéôïõñãéşí ãéá óõíäåüìåíåò õğïìïíÜäåò";
-    Text[ korean ] = "ÇÃ·¯±×ÀÎÀÇ ±â´É ¸ğÀ½";
+    Text[ korean ] = "í”ŒëŸ¬ê·¸ì¸ì˜ ê¸°ëŠ¥ ëª¨ìŒ";
     Text[ turkish ] = "PlugIn işlev çubuğu";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisäosien toimintopalkki";
@@ -707,14 +707,14 @@ String RID_OBJECTBAR_FORMAT
     Text [ swedish ] = "Tabellobjektlist" ;
     Text [ finnish ] = "Laskentataulukon objektipalkki" ;
     Text [ english_us ] = "Spreadsheet Object Bar" ;
-    Text[ chinese_simplified ] = "¹¤×÷±í¶ÔÏóÀ¸";
+    Text[ chinese_simplified ] = "å·¥ä½œè¡¨å¯¹è±¡æ ";
     Text[ russian ] = "Ïàíåëü îáúåêòà ëèñòà";
     Text[ polish ] = "Pasek obiektów arkusza kalkulacyjnego.";
-    Text[ japanese ] = "•\\µÌŞ¼Şª¸ÄÊŞ°";
-    Text[ chinese_traditional ] = "¤u§@ªíª«¥ó¦C";
+    Text[ japanese ] = "è¡¨ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ï¾Šï¾ï½°";
+    Text[ chinese_traditional ] = "å·¥ä½œè¡¨ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáÌÏÇæá";
     Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí ğéíÜêùí";
-    Text[ korean ] = "½ºÇÁ·¹µå½ÃÆ® °³Ã¼¸ğÀ½";
+    Text[ korean ] = "ìŠ¤í”„ë ˆë“œì‹œíŠ¸ ê°œì²´ëª¨ìŒ";
     Text[ turkish ] = "Tablo nesne çubuğu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de objetos para tablas";
@@ -969,14 +969,14 @@ String RID_OBJECTBAR_PREVIEW
     Text [ dutch ] = "Afdrukvoorbeeld" ;
     Text [ spanish ] = "Barra de vista preliminar" ;
     Text [ english_us ] = "Page View Object Bar" ;
-    Text[ chinese_simplified ] = "Ò³Ãæ¶ÔÏóÀ¸";
+    Text[ chinese_simplified ] = "é¡µé¢å¯¹è±¡æ ";
     Text[ russian ] = "Ïàíåëü îáúåêòîâ ïğîñìîòğà ñòğàíèöû";
     Text[ polish ] = "Pasek obiektów podgl¹du strony";
-    Text[ japanese ] = "ÌßÚËŞ­°µÌŞ¼Şª¸ÄÊŞ°";
-    Text[ chinese_traditional ] = "­¶­±ÀËµøª«¥ó¦C";
+    Text[ japanese ] = "ï¾Œï¾Ÿï¾šï¾‹ï¾ï½­ï½°ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ï¾Šï¾ï½°";
+    Text[ chinese_traditional ] = "é é¢æª¢è¦–ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ãÚÇíäÉ ÇáÕİÍÉ";
     Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí ğñïåğéóêüğçóçò óåëßäáò";
-    Text[ korean ] = "ÂÊ ¹Ì¸®º¸±â °³Ã¼ ¸ğÀ½";
+    Text[ korean ] = "ìª½ ë¯¸ë¦¬ë³´ê¸° ê°œì²´ ëª¨ìŒ";
     Text[ turkish ] = "Sayfa önizleme nesne çubuğu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de vista preliminar";
@@ -1083,14 +1083,14 @@ String RID_OBJECTBAR_TOOLS
     Text [ danish ] = "Værktøjslinje" ;
     Text [ portuguese ] = "Barra de ferramentas" ;
     Text [ portuguese_brazilian ] = "Werkzeugleiste" ;
-    Text[ chinese_simplified ] = "Ö÷¹¤¾ßÀ¸";
+    Text[ chinese_simplified ] = "ä¸»å·¥å…·æ ";
     Text[ russian ] = "Ïàíåëü èíñòğóìåíòîâ";
     Text[ polish ] = "Pasek narzêdziowy";
-    Text[ japanese ] = "•W€Â°ÙÊŞ°";
-    Text[ chinese_traditional ] = "¥D¤u¨ã¦C";
+    Text[ japanese ] = "æ¨™æº–ï¾‚ï½°ï¾™ï¾Šï¾ï½°";
+    Text[ chinese_traditional ] = "ä¸»å·¥å…·åˆ—";
     Text[ arabic ] = "ÔÑíØ ÇáÃÏæÇÊ";
     Text[ greek ] = "ÃñáììŞ åñãáëåßùí";
-    Text[ korean ] = "ÁÖ µµ±¸¸ğÀ½";
+    Text[ korean ] = "ì£¼ ë„êµ¬ëª¨ìŒ";
     Text[ turkish ] = "Ana araç çubuğu";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Päätyökalurivi";
@@ -1266,10 +1266,10 @@ FloatingWindow RID_TBXCTL_INSERT
     Text [ danish ] = "Indsæt" ;
     Text [ portuguese ] = "Inserir" ;
     Text [ portuguese_brazilian ] = "Einf?en" ;
-    Text[ chinese_simplified ] = "²åÈë";
+    Text[ chinese_simplified ] = "æ’å…¥";
     Text[ russian ] = "Âñòàâèòü";
     Text[ polish ] = "Wstaw";
-    Text[ japanese ] = "‘}“ü";
+    Text[ japanese ] = "æŒ¿å…¥";
 
     ToolBox RID_TOOLBOX_INSERT
     {
@@ -1290,10 +1290,10 @@ FloatingWindow RID_TBXCTL_INSERT
             };
         };
     };
-    Text[ chinese_traditional ] = "´¡¤J";
+    Text[ chinese_traditional ] = "æ’å…¥";
     Text[ arabic ] = "ÅÏÑÇÌ";
     Text[ greek ] = "ÅéóáãùãŞ";
-    Text[ korean ] = "»ğÀÔ";
+    Text[ korean ] = "ì‚½ì…";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisää";
@@ -1319,10 +1319,10 @@ FloatingWindow RID_TBXCTL_INSCELLS
     Text [ danish ] = "Indsæt celler" ;
     Text [ portuguese_brazilian ] = "Zellen einf?en" ;
     Text [ portuguese ] = "Inserir células" ;
-    Text[ chinese_simplified ] = "²åÈëµ¥Ôª¸ñ";
+    Text[ chinese_simplified ] = "æ’å…¥å•å…ƒæ ¼";
     Text[ russian ] = "Âñòàâèòü ÿ÷åéêè";
     Text[ polish ] = "Wstaw komórki";
-    Text[ japanese ] = "¾Ù‚ğ‘}“ü";
+    Text[ japanese ] = "ï½¾ï¾™ã‚’æŒ¿å…¥";
 
     ToolBox RID_TOOLBOX_INSCELLS
     {
@@ -1353,10 +1353,10 @@ FloatingWindow RID_TBXCTL_INSCELLS
             };
         };
     };
-    Text[ chinese_traditional ] = "´¡¤JÀx¦s®æ";
+    Text[ chinese_traditional ] = "æ’å…¥å„²å­˜æ ¼";
     Text[ arabic ] = "ÅÏÑÇÌ ÎáÇíÇ";
     Text[ greek ] = "ĞñïóèŞêç êåëéşí";
-    Text[ korean ] = "¼¿ »ğÀÔ";
+    Text[ korean ] = "ì…€ ì‚½ì…";
     Text[ turkish ] = "Hücre ekle";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisää solut";
@@ -1425,14 +1425,14 @@ FloatingWindow RID_TBXCTL_INSOBJ
     };
     Text [ portuguese ] = "Inserir objecto" ;
     Text [ portuguese_brazilian ] = "Objekt einf?en" ;
-    Text[ chinese_simplified ] = "²åÈë¶ÔÏó";
+    Text[ chinese_simplified ] = "æ’å…¥å¯¹è±¡";
     Text[ russian ] = "Âñòàâèòü îáúåêò";
     Text[ polish ] = "Wstaw obiekt";
-    Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤Jª«¥ó";
+    Text[ japanese ] = "ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥ç‰©ä»¶";
     Text[ arabic ] = "ÅÏÑÇÌ ßÇÆä";
     Text[ greek ] = "ÅéóáãùãŞ áíôéêåéìİíïõ";
-    Text[ korean ] = "°³Ã¼ »ğÀÔ";
+    Text[ korean ] = "ê°œì²´ ì‚½ì…";
     Text[ turkish ] = "Nesne ekle";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisää objekti";
@@ -1636,7 +1636,6 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_CLOSEDOC;  \
         SID_RELOAD; \
         SID_SETUPPRINTER;  \
-        SID_QUITAPP;  \
         SID_EDITMACRO; \
         SID_OBJECT_ALIGN_CENTER; \
         SID_OBJECT_ALIGN_DOWN; \
@@ -1689,7 +1688,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
         SID_ATTR_GRAF_CROP;\
     };                                                  \
     IdCount = {                                         \
-        169;                                            \
+        168;                                            \
     };
 
 ImageList RID_DEFAULTIMAGELIST_SC
@@ -1761,6 +1760,8 @@ ImageList RID_OFFICEIMAGELIST_LC
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
+
+
 
 
 
