@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.30 $
- *  last change: $Author: hdu $ $Date: 2001-04-25 18:14:27 $
+ *  $Revision: 1.31 $
+ *  last change: $Author: hdu $ $Date: 2001-04-26 16:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,8 +609,10 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 {
     int nGlyphFlags;
     SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
+    FT_Int nLoadFlags = mnLoadFlags;
+    if( nGlyphFlags != 0 )
+        nLoadFlags |= FT_LOAD_NO_BITMAP;
 
-    FT_Int nLoadFlags = mnLoadFlags | FT_LOAD_NO_BITMAP;
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
     if( rc != FT_Err_Ok )
         return false;
@@ -629,9 +631,13 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         ((FT_OutlineGlyph)aGlyphFT)->outline.flags |= ft_outline_high_precision;
     }
 
-    rc = FT_Glyph_To_Bitmap( &aGlyphFT, ft_render_mode_normal, NULL, TRUE );
-    if( rc != FT_Err_Ok )
-        return false;
+    bool bEmbedded = (aGlyphFT->format == ft_glyph_format_bitmap);
+    if( !bEmbedded )
+    {
+        rc = FT_Glyph_To_Bitmap( &aGlyphFT, ft_render_mode_normal, NULL, TRUE );
+        if( rc != FT_Err_Ok )
+            return false;
+    }
 
     const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(aGlyphFT);
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
@@ -640,7 +646,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
     rRawBitmap.mnWidth          = rBitmapFT.width;
-    rRawBitmap.mnScanlineSize   = (rBitmapFT.pitch + 3) & -4;
+    rRawBitmap.mnScanlineSize   = ((bEmbedded?rBitmapFT.width:rBitmapFT.pitch) + 3) & -4;
     rRawBitmap.mnBitCount       = 8;
 
     const ULONG nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
@@ -653,12 +659,30 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 
     const unsigned char* pSrc = rBitmapFT.buffer;
     unsigned char* pDest = rRawBitmap.mpBits;
-    for( int y = rRawBitmap.mnHeight, x; --y >= 0 ; )
+    if( !bEmbedded )
     {
-        for( x = 0; x < rBitmapFT.width; ++x )
-            *(pDest++) = *(pSrc++);
-        for(; x < rRawBitmap.mnScanlineSize; ++x )
-            *(pDest++) = 0;
+        for( int y = rRawBitmap.mnHeight, x; --y >= 0 ; )
+        {
+            for( x = 0; x < rBitmapFT.width; ++x )
+                *(pDest++) = *(pSrc++);
+            for(; x < rRawBitmap.mnScanlineSize; ++x )
+                *(pDest++) = 0;
+        }
+    }
+    else
+    {
+        for( int y = rRawBitmap.mnHeight, x; --y >= 0 ; )
+        {
+            unsigned char nSrc;
+            for( x = 0; x < rBitmapFT.width; ++x, nSrc+=nSrc )
+            {
+                if( (x & 7) == 0 )
+                    nSrc = *(pSrc++);
+                *(pDest++) = (nSrc & 0x80) ? 0xFF : 0;
+            }
+            for(; x < rRawBitmap.mnScanlineSize; ++x )
+                *(pDest++) = 0;
+        }
     }
 
     FT_Done_Glyph( aGlyphFT );
