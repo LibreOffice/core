@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-22 10:35:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include "csvsplits.hxx"
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 class ScAccessibleCsvControl;
 
@@ -83,7 +86,7 @@ class ScAccessibleCsvControl;
 
 /** A ruler control for the CSV import dialog. Supports setting and moving
     splits (which divide lines of data into several columns). */
-class ScCsvRuler : public ScCsvControl
+class SC_DLLPUBLIC ScCsvRuler : public ScCsvControl
 {
 private:
     VirtualDevice               maBackgrDev;        /// Ruler background, scaling.
@@ -123,19 +126,19 @@ public:
 
 private:
     /** Reads colors from system settings. */
-    void                        InitColors();
+    SC_DLLPRIVATE void                        InitColors();
     /** Initializes all data dependent from the control's size. */
-    void                        InitSizeData();
+    SC_DLLPRIVATE void                        InitSizeData();
 
     /** Moves cursor to a new position.
         @param bScroll  TRUE = The method may scroll the ruler. */
-    void                        MoveCursor( sal_Int32 nPos, bool bScroll = true );
+    SC_DLLPRIVATE void                        MoveCursor( sal_Int32 nPos, bool bScroll = true );
     /** Moves cursor to the given direction. */
-    void                        MoveCursorRel( ScMoveMode eDir );
+    SC_DLLPRIVATE void                        MoveCursorRel( ScMoveMode eDir );
     /** Sets cursor to an existing split, according to eDir. */
-    void                        MoveCursorToSplit( ScMoveMode eDir );
+    SC_DLLPRIVATE void                        MoveCursorToSplit( ScMoveMode eDir );
     /** Scrolls data grid vertically. */
-    void                        ScrollVertRel( ScMoveMode eDir );
+    SC_DLLPRIVATE void                        ScrollVertRel( ScMoveMode eDir );
 
     // split handling ---------------------------------------------------------
 public:
@@ -163,12 +166,12 @@ public:
 
 private:
     /** Finds next position without a split. */
-    sal_Int32                   FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const;
+    SC_DLLPRIVATE sal_Int32                   FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const;
 
     /** Moves split and cursor to nNewPos and commits event. */
-    void                        MoveCurrSplit( sal_Int32 nNewPos );
+    SC_DLLPRIVATE void                        MoveCurrSplit( sal_Int32 nNewPos );
     /** Moves split and cursor to the given direction and commits event. */
-    void                        MoveCurrSplitRel( ScMoveMode eDir );
+    SC_DLLPRIVATE void                        MoveCurrSplitRel( ScMoveMode eDir );
 
     // event handling ---------------------------------------------------------
 protected:
@@ -185,12 +188,12 @@ protected:
 
 private:
     /** Starts tracking at the specified position. */
-    void                        StartMouseTracking( sal_Int32 nPos );
+    SC_DLLPRIVATE void                        StartMouseTracking( sal_Int32 nPos );
     /** Moves tracking to a new position. */
-    void                        MoveMouseTracking( sal_Int32 nPos );
+    SC_DLLPRIVATE void                        MoveMouseTracking( sal_Int32 nPos );
     /** Applies tracking action for the current tracking position.
         @param bApply  TRUE = apply action, FALSE = cancel action. */
-    void                        EndMouseTracking( bool bApply );
+    SC_DLLPRIVATE void                        EndMouseTracking( bool bApply );
 
     // painting ---------------------------------------------------------------
 protected:
@@ -207,24 +210,24 @@ private:
     inline sal_Int32            GetHeight() const { return maWinSize.Height(); }
 
     /** Draws the background and active area to maBackgrDev (only the given X range). */
-    void                        ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth );
+    SC_DLLPRIVATE void                        ImplDrawArea( sal_Int32 nPosX, sal_Int32 nWidth );
     /** Draws the entire ruler background with scaling to maBackgrDev. */
-    void                        ImplDrawBackgrDev();
+    SC_DLLPRIVATE void                        ImplDrawBackgrDev();
 
     /** Draws a split to maRulerDev. */
-    void                        ImplDrawSplit( sal_Int32 nPos );
+    SC_DLLPRIVATE void                        ImplDrawSplit( sal_Int32 nPos );
     /** Erases a split from maRulerDev. */
-    void                        ImplEraseSplit( sal_Int32 nPos );
+    SC_DLLPRIVATE void                        ImplEraseSplit( sal_Int32 nPos );
     /** Draws the ruler background, all splits and the cursor to maRulerDev. */
-    void                        ImplDrawRulerDev();
+    SC_DLLPRIVATE void                        ImplDrawRulerDev();
 
     /** Inverts the cursor bar at the specified position in maRulerDev. */
-    void                        ImplInvertCursor( sal_Int32 nPos );
+    SC_DLLPRIVATE void                        ImplInvertCursor( sal_Int32 nPos );
     /** Draws directly tracking rectangle to the column with the specified index. */
-    void                        ImplDrawTrackingRect();
+    SC_DLLPRIVATE void                        ImplDrawTrackingRect();
 
     /** Sets arrow or horizontal split pointer. */
-    void                        ImplSetMousePointer( sal_Int32 nPos );
+    SC_DLLPRIVATE void                        ImplSetMousePointer( sal_Int32 nPos );
 
     // accessibility ----------------------------------------------------------
 protected:
