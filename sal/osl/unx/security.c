@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-09 11:45:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,8 @@ typedef struct {
 /*
  * Implement a pam-conversation callback-routine,
  * it just supply name and password instead of prompting the user.
- * I guess that echo-off means ´ask for password´ and echo-on means
- * ´ask for user-name´. In fact I´ve never been asked anything else
+ * I guess that echo-off means 'ask for password' and echo-on means
+ * 'ask for user-name'. In fact I've never been asked anything else
  * than the password
  * XXX Please notice that if a pam-module does ask anything else, we
  *     are completely lost, and a pam-module is free to do so
@@ -358,7 +358,7 @@ osl_getCrypt()
 }
 
 /* replacement for crypt function for password encryption, uses either
-   strong encryption of dlopen´ed libcrypt.so.1 or dummy implementation
+   strong encryption of dlopen'ed libcrypt.so.1 or dummy implementation
    with no encryption. Objective target is to avoid linking against
    libcrypt (not available on caldera open linux 2.2 #63822#) */
 static sal_Char* SAL_CALL
