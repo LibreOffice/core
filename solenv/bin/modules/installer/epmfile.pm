@@ -235,6 +235,8 @@ sub create_epm_header
     my $foundlicensefile = 0;
     my $foundreadmefile = 0;
 
+    my $line = "";
+
     # %product OpenOffice.org Software
     # %version 2.0
     # %description A really great software
@@ -249,20 +251,13 @@ sub create_epm_header
 
     my $searchlanguage = ${$languagesref}[0];
 
-    # Setting the global variable $installer:globals::listfileproductname
+    # using the description for the %product line in the epm list file
 
-    if ( $variableshashref->{'PRODUCTEXTENSION'} )
-    {
-        $installer::globals::listfileproductname = $variableshashref->{'PRODUCTNAME'} . " " . $variableshashref->{'PRODUCTEXTENSION'};
-    }
-    else
-    {
-        $installer::globals::listfileproductname = $variableshashref->{'PRODUCTNAME'};
-    }
+    my $productnamestring = $onepackage->{'description'};
+    installer::packagelist::resolve_packagevariables(\$productnamestring, $variableshashref, 0);
+    if ( $variableshashref->{'PRODUCTEXTENSION'} ) { $productnamestring = $productnamestring . " " . $variableshashref->{'PRODUCTEXTENSION'}; }
 
-    # Productame and Productversion are stored in ziplistfile
-    my $line = "";
-    $line = "%product" . " " . $installer::globals::listfileproductname . "\n";
+    $line = "%product" . " " . $productnamestring . "\n";
     push(@epmheader, $line);
 
     # Determining the release version
@@ -277,23 +272,16 @@ sub create_epm_header
     # Description, Copyright and Vendor are multilingual and are defined in
     # the string file for the header file ($headerfileref)
 
-#   my $onestringref = get_string_from_headerfile("description", $searchlanguage, $headerfileref);
-#   $line = "%description" . " " . $$onestringref . "\n";
-
     my $descriptionstring = $onepackage->{'description'};
     installer::packagelist::resolve_packagevariables(\$descriptionstring, $variableshashref, 0);
     $line = "%description" . " " . $descriptionstring . "\n";
     push(@epmheader, $line);
 
-#   $onestringref = get_string_from_headerfile("copyright", $searchlanguage, $headerfileref);
-#   $line = "%copyright" . " " . $$onestringref . "\n";
     my $copyrightstring = $onepackage->{'copyright'};
     installer::packagelist::resolve_packagevariables(\$copyrightstring, $variableshashref, 0);
     $line = "%copyright" . " " . $copyrightstring . "\n";
     push(@epmheader, $line);
 
-#   $onestringref = get_string_from_headerfile("vendor", $searchlanguage, $headerfileref);
-#   $line = "%vendor" . " " . $$onestringref . "\n";
     my $vendorstring = $onepackage->{'vendor'};
     installer::packagelist::resolve_packagevariables(\$vendorstring, $variableshashref, 0);
     $line = "%vendor" . " " . $vendorstring . "\n";
@@ -559,8 +547,10 @@ sub call_epm
 
     my $packageformat = $installer::globals::packageformat;
 
-    # my $systemcall = $epmname . " -f " . $packageformat . " " . $packagename . " " . $epmlistfilename;
-    my $systemcall = $epmname . " -f " . $packageformat . " " . $packagename . " " . $epmlistfilename . " 2\>\&1 |";
+    my $outdirstring = "";
+    if ( $installer::globals::epmoutpath ne "" ) { $outdirstring = " --output-dir $installer::globals::epmoutpath"; }
+
+    my $systemcall = $epmname . " -f " . $packageformat . " " . $packagename . " " . $epmlistfilename . $outdirstring . " 2\>\&1 |";
 
     print "... $systemcall ...\n";
 
@@ -599,34 +589,6 @@ sub call_epm
             last;
         }
     }
-}
-
-###############################################################
-# Finding the complete file name for the pkginfo (Solaris)
-# or spec file (Linux) created by epm
-###############################################################
-
-sub get_completefilename
-{
-    my ($searchfile) = @_;
-
-    my $completefile = "";
-
-    my $systemcall = "find . -name $searchfile |";
-    open (FIND, "$systemcall");
-    $completefile = <FIND>;
-    close (FIND);
-
-    $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
-
-    if ( $completefile eq "" )
-    {
-        $infoline = "ERROR: Could not find file $searchfile !\n";
-        push( @installer::globals::logfileinfo, $infoline);
-    }
-
-    return $completefile;
 }
 
 #####################################################################
@@ -677,8 +639,8 @@ sub set_topdir_in_specfile
 {
     my ($changefile, $filename, $newepmdir) = @_;
 
-    $newepmdir =~ s/^\s*.//;    # removing leading "."
-    $newepmdir = cwd() . $newepmdir; # only absolute path allowed
+    # $newepmdir =~ s/^\s*\.//; # removing leading "."
+    $newepmdir = cwd() . $installer::globals::separator . $newepmdir; # only absolute path allowed
 
     # removing "%define _topdir", if existing
 
@@ -857,8 +819,9 @@ sub prepare_packages
 {
     my ($loggingdir, $packagename, $staticpath, $relocatablepath, $onepackage, $variableshashref) = @_;
 
-    my $filename;
-    my $newline;
+    my $filename = "";
+    my $newline = "";
+    my $newepmdir = $installer::globals::epmoutpath . $installer::globals::separator;
 
     my $localrelocatablepath = $relocatablepath;
     $localrelocatablepath =~ s/\/\s*$//;
@@ -875,14 +838,15 @@ sub prepare_packages
         $newline = "Prefix\:\ " . $localrelocatablepath . "\n";
     }
 
-    my $completefilename = get_completefilename($filename);
-    if ($completefilename eq "") { installer::exiter::exit_program("ERROR: Did not find file: $filename", "prepare_packages"); }
+    my $completefilename = $newepmdir . $filename;
+
+    if ( ! -f $completefilename) { installer::exiter::exit_program("ERROR: Did not find file: $completefilename", "prepare_packages"); }
     my $changefile = installer::files::read_file($completefilename);
     add_one_line_into_file($changefile, $newline, $filename);
     installer::files::save_file($completefilename, $changefile);
 
-    my $newepmdir = $completefilename;
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$newepmdir);
+    # my $newepmdir = $completefilename;
+    # installer::pathanalyzer::get_path_from_fullqualifiedname(\$newepmdir);
 
     # adding new "topdir" and removing old "topdir" in specfile
 
@@ -962,7 +926,9 @@ sub determine_rpm_version
     push( @installer::globals::logfileinfo, $infoline);
 
     if ( $rpmout =~ /(\d+)\.(\d+)\.(\d+)/ ) { $rpmversion = $1; }
-    else { installer::exiter::exit_program("ERROR: Unknown format: $rpmout ! Expected: a.b.c", "determine_rpm_version"); }
+    elsif ( $rpmout =~ /(\d+)\.(\d+)/ ) { $rpmversion = $1; }
+    elsif ( $rpmout =~ /(\d+)/ ) { $rpmversion = $1; }
+    else { installer::exiter::exit_program("ERROR: Unknown format: $rpmout ! Expected: \"a.b.c\", or \"a.b\", or \"a\"", "determine_rpm_version"); }
 
     return $rpmversion;
 }
@@ -1299,62 +1265,19 @@ sub make_systemcall
     }
 }
 
-######################################################
+###########################################################
 # Creating a better directory structure in the solver.
-# This is also preparation for the Java installer.
-# Linux: Removing the directory "linux-..."
-# Solaris: Renaming "solaris-..." to "packages"
-######################################################
+###########################################################
 
 sub create_new_directory_structure
 {
     my ($newepmdir) = @_;
 
-    my $localdir = $newepmdir;
-    installer::remover::remove_ending_pathseparator(\$localdir);
-    my $newdir = "";
-
-    if ( $installer::globals::issolarispkgbuild )
-    {
-        $newdir = "packages";
-
-        installer::systemactions::create_directory($newdir);
-
-        my $systemcall = "mv $localdir/* $newdir";  # moving the packages into the directory "packages"
-
-        my $returnvalue = system($systemcall);
-
-        my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
-
-        if ($returnvalue)
-        {
-            $infoline = "ERROR: Could not move \"$localdir\" to \"packages\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-        else
-        {
-            $infoline = "Success: Moved \"$localdir\" to \"packages\"!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-
-        my $localcall = "chmod 775 $newdir \>\/dev\/null 2\>\&1";
-        system($localcall);
-
-        # and removing the empty directory
-        installer::systemactions::remove_empty_directory("$localdir");
-    }
+    my $newdir = $installer::globals::epmoutpath;
 
     if ( $installer::globals::islinuxrpmbuild )
     {
-        # my $directoryname = installer::systemactions::get_directoryname($localdir, "linux");
-
-        # creating a directory "RPMS" directly in the current directory
-
-        $newdir = "RPMS";
-        my $rpmdir = "$localdir/RPMS/i586";
-
-        installer::systemactions::create_directory($newdir);
+        my $rpmdir = "$installer::globals::epmoutpath/RPMS/i586";
 
         my $systemcall = "mv $rpmdir/* $newdir";    # moving the rpms into the directory "RPMS"
 
@@ -1376,10 +1299,9 @@ sub create_new_directory_structure
 
         # and removing the empty directory
 
-        installer::systemactions::remove_empty_directory("$localdir/RPMS/i586");
-        installer::systemactions::remove_empty_directory("$localdir/RPMS/i386");
-        installer::systemactions::remove_empty_directory("$localdir/RPMS");
-        installer::systemactions::remove_empty_directory("$localdir");
+        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i586");
+        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i386");
+        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS");
 
     }
 
@@ -1397,112 +1319,63 @@ sub put_childprojects_into_installset
 
     my $infoline = "";
 
-    # the source directory is defined with the parameter "-javafilespath"
-    # in the variable $installer::globals::javafilespath (no extra path shall be used now (scp todo!)
+    my $sopackpath = "";
+    if ( $ENV{'SO_PACK'} ) { $sopackpath  = $ENV{'SO_PACK'}; }
+    else { installer::exiter::exit_program("ERROR: Environment variable SO_PACK not set!", "add_childprojects"); }
 
-    if (! ($installer::globals::javafilespath))
+    my $destdir = "$newdir";
+
+    # adding Java
+
+    my $sourcefile = "";
+
+    if ( $installer::globals::javafilename ne "" )
     {
-        $infoline = "Warning: Cannot copy child project, \"-javafilespath\" not set!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename;
+        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
+        installer::systemactions::copy_one_file($sourcefile, $destdir);
     }
-    else
+
+    if ( $installer::globals::javafilename2 ne "" )
     {
-        my $sourcedir = "$installer::globals::javafilespath";
-        installer::remover::remove_ending_pathseparator(\$sourcedir);
+        $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename2;
+        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java file not found: $sourcefile !", "put_childprojects_into_installset"); }
+        installer::systemactions::copy_one_file($sourcefile, $destdir);
+    }
 
-        my $destdir = "$newdir";
+    # adding Ada
 
-        # adding Java
+    if ( $installer::globals::adafilename ne "" )
+    {
+        $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "adabas" . $installer::globals::separator . $installer::globals::adafilename;
+        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Ada file not found: $sourcefile !", "put_childprojects_into_installset"); }
+        installer::systemactions::copy_one_file($sourcefile, $destdir);
+    }
 
-        if ( $installer::globals::issolarissparcbuild )
+    # unpacking and removing the ada tar.gz file
+
+    if ( $installer::globals::issolarispkgbuild )
+    {
+        # determining the tar.gz files in directory $destdir
+        my $fileextension = "gz";
+        my $targzfiles = installer::systemactions::find_file_with_file_extension($fileextension, $destdir);
+
+        for ( my $i = 0; $i <= $#{$targzfiles}; $i++ )
         {
-            $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "solaris_sparc" . $installer::globals::separator . $installer::globals::javafilename;
-            installer::systemactions::copy_one_file($sourcedirjava, $destdir);
-            $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "solaris_sparc" . $installer::globals::separator . $installer::globals::javafilename2;
-            installer::systemactions::copy_one_file($sourcedirjava, $destdir);
-        }
-        if ( $installer::globals::issolarisx86build )
-        {
-            $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "solaris_x86" . $installer::globals::separator . $installer::globals::javafilename;
-            installer::systemactions::copy_one_file($sourcedirjava, $destdir);
-            $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "solaris_x86" . $installer::globals::separator . $installer::globals::javafilename2;
-            installer::systemactions::copy_one_file($sourcedirjava, $destdir);
-        }
-        if ( $installer::globals::islinuxrpmbuild )
-        {
-            $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "linux" . $installer::globals::separator . $installer::globals::javafilename;
-            installer::systemactions::copy_one_file($sourcedirjava, $destdir);
-        }
+            # unpacking
+            my $systemcall = "cd $destdir; cat ${$targzfiles}[$i] | gunzip | tar -xf -";
+            make_systemcall($systemcall);
 
-        # adding Ada
-
-        if ( $installer::globals::issolarissparcbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas2" . $installer::globals::separator . "solaris_sparc" . $installer::globals::separator . $installer::globals::adafilename; }
-        if ( $installer::globals::islinuxrpmbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas2" . $installer::globals::separator . "linux" . $installer::globals::separator . $installer::globals::adafilename; }
-
-        if (( $installer::globals::issolarissparcbuild ) || ( $installer::globals::islinuxrpmbuild ))
-        {
-            installer::systemactions::copy_one_file($sourcedirada, $destdir);
-        }
-
-        # unpacking and removing the ada tar.gz file
-
-        if ( $installer::globals::issolarispkgbuild )
-        {
-            # determining the tar.gz files in directory $destdir
-
-            my $fileextension = "gz";
-            my $targzfiles = installer::systemactions::find_file_with_file_extension($fileextension, $destdir);
-
-            for ( my $i = 0; $i <= $#{$targzfiles}; $i++ )
-            {
-                # unpacking
-
-                my $systemcall = "cd $destdir; cat ${$targzfiles}[$i] | gunzip | tar -xf -";
-
-                make_systemcall($systemcall);
-
-                # deleting the tar.gz files
-
-                $systemcall = "cd $destdir; rm -f ${$targzfiles}[$i]";
-
-                make_systemcall($systemcall);
-            }
+            # deleting the tar.gz files
+            $systemcall = "cd $destdir; rm -f ${$targzfiles}[$i]";
+            make_systemcall($systemcall);
         }
     }
-}
-
-######################################################
-# Including the Java installer into the
-# installation sets.
-######################################################
-
-sub put_java_installer_into_installset
-{
-    my ($newdir) = @_;
-
-    # the source directory is defined with the parameter "-javafilespath"
-    # in the variable $installer::globals::javafilespath
-
-    my $sourcedir = $installer::globals::javafilespath;
-    installer::remover::remove_ending_pathseparator(\$sourcedir);
-
-    my $destdir = ".";
-
-    if ( $installer::globals::issolarissparcbuild ) { $sourcedir = $sourcedir . $installer::globals::separator . "solaris_sparc"; }
-    if ( $installer::globals::issolarisx86build ) { $sourcedir = $sourcedir . $installer::globals::separator . "solaris_x86"; }
-    if ( $installer::globals::islinuxrpmbuild ) { $sourcedir = $sourcedir . $installer::globals::separator . "linux"; }
-
-    installer::systemactions::copy_directory_except_fileextension($sourcedir, $destdir, "xml");
-
-    # Setting Unix rights for Java starter (file "setup")
-
-    my $localcall = "chmod 775 $destdir/setup \>\/dev\/null 2\>\&1";
-    system($localcall);
 
 }
 
 ######################################################
-# Including the Java installer into the
+# Including the system integration files into the
 # installation sets.
 ######################################################
 
