@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refltype.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2000-10-09 11:53:09 $
+ *  last change: $Author: hr $ $Date: 2000-10-09 14:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/09 11:53:09  jsc
+    change the binary typelibrary format, make it extendable
+
     Revision 1.1.1.1  2000/09/18 15:18:42  hr
     initial import
 
@@ -144,7 +147,7 @@ enum RTTypeSource
 {
     RT_UNO_IDL,
     RT_CORBA_IDL,
-    RT_JAVA,
+    RT_JAVA
 };
 
 enum RTTypeClass
