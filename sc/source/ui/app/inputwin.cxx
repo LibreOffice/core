@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:18:14 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@
 #include <stdlib.h>     // qsort
 #include <svx/scriptspaceitem.hxx>
 #include <svx/scripttypeitem.hxx>
+#include <vcl/cursor.hxx>
+#include <vcl/help.hxx>
 
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
@@ -105,6 +107,8 @@
 #include "rangenam.hxx"
 #include "compiler.hrc"
 #include "dbcolect.hxx"
+#include "rangeutl.hxx"
+#include "docfunc.hxx"
 
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <svx/fontitem.hxx>
@@ -123,6 +127,19 @@
 #define TEXT_STARTPOS       3
 #define THESIZE             1000000 //!!! langt... :-)
 #define TBX_WINDOW_HEIGHT   22 // in Pixeln - fuer alle Systeme gleich?
+
+enum ScNameInputType
+{
+    SC_NAME_INPUT_CELL,
+    SC_NAME_INPUT_RANGE,
+    SC_NAME_INPUT_NAMEDRANGE,
+    SC_NAME_INPUT_DATABASE,
+    SC_NAME_INPUT_ROW,
+    SC_NAME_INPUT_SHEET,
+    SC_NAME_INPUT_DEFINE,
+    SC_NAME_INPUT_BAD_NAME,
+    SC_NAME_INPUT_BAD_SELECTION
+};
 
 
 //==================================================================
@@ -1349,6 +1366,7 @@ void ScTextWnd::DataChanged( const DataChangedEvent& rDCEvt )
 ScPosWnd::ScPosWnd( Window* pParent ) :
     ComboBox    ( pParent, WinBits(WB_HIDE | WB_DROPDOWN) ),
     pAccel      ( NULL ),
+    nTipVisible ( 0 ),
     bFormulaMode( FALSE )
 {
     Size aSize( GetTextWidth( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("GW99999:GW99999")) ),
@@ -1366,6 +1384,8 @@ __EXPORT ScPosWnd::~ScPosWnd()
 {
     EndListening( *SFX_APP() );
 
+    HideTip();
+
     delete pAccel;
 }
 
@@ -1379,6 +1399,8 @@ void ScPosWnd::SetFormulaMode( BOOL bSet )
             FillFunctions();
         else
             FillRangeNames();
+
+        HideTip();
     }
 }
 
@@ -1501,9 +1523,125 @@ void __EXPORT ScPosWnd::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     }
 }
 
+void ScPosWnd::HideTip()
+{
+    if ( nTipVisible )
+    {
+        Help::HideTip( nTipVisible );
+        nTipVisible = 0;
+    }
+}
+
+ScNameInputType lcl_GetInputType( const String& rText )
+{
+    ScNameInputType eRet = SC_NAME_INPUT_BAD_NAME;      // the more general error
+
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+    if ( pViewSh )
+    {
+        ScViewData* pViewData = pViewSh->GetViewData();
+        ScDocument* pDoc = pViewData->GetDocument();
+        SCTAB nTab = pViewData->GetTabNo();
+
+        // test in same order as in SID_CURRENTCELL execute
+
+        ScRange aRange;
+        ScAddress aAddress;
+        ScRangeUtil aRangeUtil;
+        SCTAB nNameTab;
+        sal_Int32 nNumeric;
+
+        if ( aRange.Parse( rText, pDoc ) & SCA_VALID )
+            eRet = SC_NAME_INPUT_NAMEDRANGE;
+        else if ( aAddress.Parse( rText, pDoc ) & SCA_VALID )
+            eRet = SC_NAME_INPUT_CELL;
+        else if ( aRangeUtil.MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_NAMES ) )
+            eRet = SC_NAME_INPUT_NAMEDRANGE;
+        else if ( aRangeUtil.MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_DBASE ) )
+            eRet = SC_NAME_INPUT_DATABASE;
+        else if ( ByteString( rText, RTL_TEXTENCODING_ASCII_US ).IsNumericAscii() &&
+                  ( nNumeric = rText.ToInt32() ) > 0 && nNumeric <= MAXROW+1 )
+            eRet = SC_NAME_INPUT_ROW;
+        else if ( pDoc->GetTable( rText, nNameTab ) )
+            eRet = SC_NAME_INPUT_SHEET;
+        else if ( ScRangeData::IsNameValid( rText, pDoc ) )     // nothing found, create new range?
+        {
+            if ( pViewData->GetSimpleArea( aRange ) )
+                eRet = SC_NAME_INPUT_DEFINE;
+            else
+                eRet = SC_NAME_INPUT_BAD_SELECTION;
+        }
+        else
+            eRet = SC_NAME_INPUT_BAD_NAME;
+    }
+
+    return eRet;
+}
+
+void ScPosWnd::Modify()
+{
+    ComboBox::Modify();
+
+    HideTip();
+
+    if ( !IsTravelSelect() && !bFormulaMode )
+    {
+        // determine the action that would be taken for the current input
+
+        ScNameInputType eType = lcl_GetInputType( GetText() );      // uses current view
+        USHORT nStrId = 0;
+        switch ( eType )
+        {
+            case SC_NAME_INPUT_CELL:
+                nStrId = STR_NAME_INPUT_CELL;
+                break;
+            case SC_NAME_INPUT_RANGE:
+            case SC_NAME_INPUT_NAMEDRANGE:
+                nStrId = STR_NAME_INPUT_RANGE;      // named range or range reference
+                break;
+            case SC_NAME_INPUT_DATABASE:
+                nStrId = STR_NAME_INPUT_DBRANGE;
+                break;
+            case SC_NAME_INPUT_ROW:
+                nStrId = STR_NAME_INPUT_ROW;
+                break;
+            case SC_NAME_INPUT_SHEET:
+                nStrId = STR_NAME_INPUT_SHEET;
+                break;
+            case SC_NAME_INPUT_DEFINE:
+                nStrId = STR_NAME_INPUT_DEFINE;
+                break;
+            default:
+                // other cases (error): no tip help
+                break;
+        }
+
+        if ( nStrId )
+        {
+            // show the help tip at the text cursor position
+
+            Window* pWin = GetSubEdit();
+            if (!pWin)
+                pWin = this;
+            Point aPos;
+            Cursor* pCur = pWin->GetCursor();
+            if (pCur)
+                aPos = pWin->LogicToPixel( pCur->GetPos() );
+            aPos = pWin->OutputToScreenPixel( aPos );
+            Rectangle aRect( aPos, aPos );
+
+            String aText = ScGlobal::GetRscString( nStrId );
+            USHORT nAlign = QUICKHELP_LEFT|QUICKHELP_BOTTOM;
+            nTipVisible = Help::ShowTip(pWin, aRect, aText, nAlign);
+        }
+    }
+}
+
 void __EXPORT ScPosWnd::Select()
 {
     ComboBox::Select();     //  in VCL gibt GetText() erst danach den ausgewaehlten Eintrag
+
+    HideTip();
 
     if (!IsTravelSelect())
         DoEnter();
@@ -1538,16 +1676,54 @@ void ScPosWnd::DoEnter()
         }
         else
         {
-            //  Position (Zelle oder Namen) setzen
-            SfxStringItem aPosItem( SID_CURRENTCELL, aText );
-            SfxBoolItem aUnmarkItem( FN_PARAM_1, TRUE );        // Selektion aufheben
-            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-            if ( pViewFrm )
-                pViewFrm->GetDispatcher()->Execute( SID_CURRENTCELL,
-                                      SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
-                                      &aPosItem, &aUnmarkItem, 0L );
+            // depending on the input, select something or create a new named range
 
-            //! Fehler erkennen und meckern
+            ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+            if ( pViewSh )
+            {
+                ScNameInputType eType = lcl_GetInputType( aText );
+                if ( eType == SC_NAME_INPUT_BAD_NAME || eType == SC_NAME_INPUT_BAD_SELECTION )
+                {
+                    USHORT nId = ( eType == SC_NAME_INPUT_BAD_NAME ) ? STR_NAME_ERROR_NAME : STR_NAME_ERROR_SELECTION;
+                    pViewSh->ErrorMessage( nId );
+                }
+                else if ( eType == SC_NAME_INPUT_DEFINE )
+                {
+                    ScViewData* pViewData = pViewSh->GetViewData();
+                    ScDocShell* pDocShell = pViewData->GetDocShell();
+                    ScDocument* pDoc = pDocShell->GetDocument();
+                    ScRangeName* pNames = pDoc->GetRangeName();
+                    ScRange aSelection;
+                    USHORT nIndex = 0;
+                    if ( pNames && !pNames->SearchName( aText, nIndex ) && pViewData->GetSimpleArea( aSelection ) )
+                    {
+                        ScRangeName aNewRanges( *pNames );
+                        ScAddress aCursor( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
+                        String aContent;
+                        aSelection.Format( aContent, SCR_ABS_3D, pDoc );
+                        ScRangeData* pNew = new ScRangeData( pDoc, aText, aContent, aCursor );
+                        if ( aNewRanges.Insert(pNew) )
+                        {
+                            ScDocFunc aFunc(*pDocShell);
+                            aFunc.ModifyRangeNames( aNewRanges, FALSE );
+                            pViewSh->UpdateInputHandler(TRUE);
+                        }
+                        else
+                            delete pNew;        // shouldn't happen
+                    }
+                }
+                else
+                {
+                    // for all selection types, excecute the SID_CURRENTCELL slot
+
+                    SfxStringItem aPosItem( SID_CURRENTCELL, aText );
+                    SfxBoolItem aUnmarkItem( FN_PARAM_1, TRUE );        // remove existing selection
+
+                    pViewSh->GetViewData()->GetDispatcher().Execute( SID_CURRENTCELL,
+                                        SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
+                                        &aPosItem, &aUnmarkItem, 0L );
+                }
+            }
         }
     }
     else
@@ -1572,9 +1748,17 @@ long __EXPORT ScPosWnd::Notify( NotifyEvent& rNEvt )
                 break;
 
             case KEY_ESCAPE:
-                if (!bFormulaMode)
-                    SetText( aPosStr );
-                ReleaseFocus_Impl();
+                if (nTipVisible)
+                {
+                    // escape when the tip help is shown: only hide the tip
+                    HideTip();
+                }
+                else
+                {
+                    if (!bFormulaMode)
+                        SetText( aPosStr );
+                    ReleaseFocus_Impl();
+                }
                 nHandled = 1;
                 break;
         }
@@ -1583,11 +1767,16 @@ long __EXPORT ScPosWnd::Notify( NotifyEvent& rNEvt )
     if ( !nHandled )
         nHandled = ComboBox::Notify( rNEvt );
 
+    if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
+        HideTip();
+
     return nHandled;
 }
 
 void ScPosWnd::ReleaseFocus_Impl()
 {
+    HideTip();
+
     SfxViewShell* pCurSh = SfxViewShell::Current();
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( PTR_CAST( ScTabViewShell, pCurSh ) );
     if ( pHdl && pHdl->IsTopMode() )
