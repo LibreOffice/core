@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
+ *  last change: $Author: gt $ $Date: 2001-06-29 08:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,9 +502,9 @@ INT32   FilterProgressBar::nInstances = 0;
 
 FilterProgressBar::FilterProgressBar( SvStream& rStream ) : pStr( &rStream ), pXIStr( NULL )
 {
-    ULONG nOldPos = rStream.Tell();
+    ULONG   nOldPos = rStream.Tell();
     rStream.Seek( STREAM_SEEK_TO_END );
-    ULONG nStrmLen = rStream.Tell();
+    ULONG   nStrmLen = rStream.Tell();
     rStream.Seek( nOldPos );
     Init( nOldPos, nStrmLen );
 }
@@ -532,12 +532,14 @@ void FilterProgressBar::Init( ULONG nStreamPos, ULONG nStreamLen )
     nCnt = 0;
 
     if( nInstances == 1 )
+    {
+        nUnitSize = nStreamLen / 128;   // I think, this number of steps is enough
+        nNextUnit = 0;
         pPrgrs = new ScProgress( NULL, ScGlobal::GetRscString( STR_LOAD_DOC ), nStreamLen );
+        pPrgrs->SetState( nStreamPos );
+    }
     else
         pPrgrs = NULL;
-
-    if( pPrgrs )
-        pPrgrs->SetState( nStreamPos );
 }
 
 
@@ -545,14 +547,21 @@ void FilterProgressBar::Progress( void )
 {
     if( pPrgrs )
     {
+        UINT32      nNewState;
         if( pStr )
-            pPrgrs->SetState( pStr->Tell() );
+            nNewState = pStr->Tell();
         else if( pXIStr )
-            pPrgrs->SetState( pXIStr->GetStreamPos() );
+            nNewState = pXIStr->GetStreamPos();
         else
         {
             nCnt++;
-            pPrgrs->SetState( nCnt );
+            nNewState = nCnt;
+        }
+
+        if( nNewState >= nNextUnit )
+        {
+            pPrgrs->SetState( nNewState );
+            nNextUnit += nUnitSize;
         }
     }
 }
@@ -569,8 +578,9 @@ void FilterProgressBar::StartPostLoadProgress( const UINT32 nObj )
         delete pPrgrs;
         if( nObj )
         {
-            pPrgrs = new ScProgress( NULL,
-                    ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ), nObj );
+            pPrgrs = new ScProgress( NULL, ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ), nObj );
+            nUnitSize = ( nObj < 128 )? nObj : nObj / 128;  // I think, this number of steps is enough
+            nNextUnit = 0;
         }
         else
             pPrgrs = NULL;
