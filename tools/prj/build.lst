@@ -1,4 +1,4 @@
-tl	tools	:	cppu external offuh vos zlib expat NULL
+tl	tools	:	cppu external offuh vos zlib expat ucbhelper NULL
 tl	tools								usr1	-	all	tl_mkout NULL
 tl	tools\bootstrp\isdll				get		-	all	tl_bsisdll NULL
 tl	tools\bootstrp\addexes				get		-	all	tl_bsexes NULL
