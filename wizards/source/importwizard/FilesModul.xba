@@ -152,11 +152,13 @@ End Sub
 
 Function SetExtension(LocExtension) as String
 	if (Instr(LocExtension, &quot;vnd.sun.xml.impress&quot;)) &gt; 0 then
-		SetExtension() = &quot;vor|sti&quot;
+		SetExtension() = &quot;vor|sti|std&quot;
 	elseif (Instr(LocExtension, &quot;vnd.sun.xml.writer&quot;)) &gt; 0 then
 		SetExtension() = &quot;vor|stw&quot;	
 	elseif (Instr(LocExtension, &quot;vnd.sun.xml.calc&quot;)) &gt; 0 then
 		SetExtension() = &quot;vor|stc&quot;
+	elseif (Instr(LocExtension, &quot;vnd.sun.xml.draw&quot;)) &gt; 0 then
+		SetExtension() = &quot;vor|std|sti&quot;	
 	endif
 End Function
 
