@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabdash.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:37:11 $
+ *  last change: $Author: cl $ $Date: 2001-02-27 10:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,7 @@ BOOL XDashList::Load()
 
 BOOL XDashList::Save()
 {
+#ifndef SVX_LIGHT
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
@@ -406,7 +407,6 @@ BOOL XDashList::Save()
 
 
 /*
-#ifndef SVX_LIGHT
 
 
     SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, TRUE );
@@ -425,10 +425,10 @@ BOOL XDashList::Save()
     aMedium.Commit();
 
     return( aMedium.GetError() == 0 );
+*/
 #else
     return FALSE;
 #endif
-*/
 }
 
 /************************************************************************/
