@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 10:05:14 $
+ *  last change: $Author: os $ $Date: 2001-03-29 08:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1849,7 +1849,7 @@ void SwFmtURL::SetMap( const ImageMap *pM )
         delete pMap;
     pMap = pM ? new ImageMap( *pM ) : 0;
 }
-
+extern const SvEventDescription* lcl_GetSupportedMacroItems();
 
 BOOL SwFmtURL::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
@@ -1875,18 +1875,18 @@ BOOL SwFmtURL::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             break;
         case MID_URL_CLIENTMAP:
         {
+            Reference< XInterface > xInt;
             if(pMap)
             {
-                static const SvEventDescription aMacroDescriptionsImpl[] =
-                {
-                    { SFX_EVENT_MOUSEOVER_OBJECT, "OnMouseOver" },
-                    { SFX_EVENT_MOUSEOUT_OBJECT, "OnMouseOut" },
-                    { 0, NULL }
-                };
-                Reference< XInterface > xInt = SvUnoImageMap_createInstance( *pMap, aMacroDescriptionsImpl );
-                Reference< XIndexContainer > xCont(xInt, UNO_QUERY);
-                rVal <<= xCont;
+                xInt = SvUnoImageMap_createInstance( *pMap, lcl_GetSupportedMacroItems() );
             }
+            else
+            {
+                ImageMap aEmptyMap;
+                xInt = SvUnoImageMap_createInstance( aEmptyMap, lcl_GetSupportedMacroItems() );
+            }
+            Reference< XIndexContainer > xCont(xInt, UNO_QUERY);
+            rVal <<= xCont;
         }
         break;
         case MID_URL_SERVERMAP:
