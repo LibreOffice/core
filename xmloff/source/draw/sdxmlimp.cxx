@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
+ *  last change: $Author: cl $ $Date: 2001-06-06 13:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,7 +972,7 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
         }
         catch( uno::Exception& e )
         {
-            DBG_ERROR( "SdXMLImport::SetConfigurationSettings: Exception!" );
+            OSL_TRACE( "#SdXMLImport::SetConfigurationSettings: Exception!" );
         }
 
         pValues++;
