@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condedit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-11 17:05:38 $
+ *  last change: $Author: os $ $Date: 2001-07-30 14:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,12 @@
 #ifndef _CONDEDIT_HXX
 #include <condedit.hxx>
 #endif
-
+#ifndef _SVX_DBAEXCHANGE_HXX_
+#include <svx/dbaexchange.hxx>
+#endif
+using namespace ::svx;
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
 #define DB_DD_DELIM 0x0b
 
 // STATIC DATA -----------------------------------------------------------
@@ -95,8 +100,9 @@ ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
 
 sal_Int8 ConditionEdit::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    return IsFormatSupported( GetDataFlavorExVector(),
-                                SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE )
+    return OColumnTransferable::canExtractColumnDescriptor
+        ( GetDataFlavorExVector(),
+                                CTF_COLUMN_DESCRIPTOR )
                 ? DND_ACTION_COPY
                 : DND_ACTION_NONE;
 }
@@ -108,24 +114,33 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         String sTxt;
         TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
-        if( aData.GetString( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, sTxt ) &&
-            sTxt.Len() )
-        {
-            String sDBName;
-            if (bBrackets)
-                sDBName += '[';
-            sDBName += sTxt.GetToken(0, DB_DD_DELIM);
-            sDBName += '.';
-            sDBName += sTxt.GetToken(1, DB_DD_DELIM);
-            sDBName += '.';
-            sDBName += sTxt.GetToken(3, DB_DD_DELIM);   // ColumnName
-            if (bBrackets)
-                sDBName += ']';
 
-            SetText( sDBName );
-            bHasDroppedData = TRUE;
-            nRet = DND_ACTION_COPY;
-        }
+            DataFlavorExVector& rVector = aData.GetDataFlavorExVector();
+            if(OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR))
+            {
+                ODataAccessDescriptor aColDesc = OColumnTransferable::extractColumnDescriptor(
+                                                                    aData);
+                String sDBName;
+                if (bBrackets)
+                    sDBName += '[';
+                OUString sTmp;
+                aColDesc[daDataSource] >>= sTmp;
+                sDBName += String(sTmp);
+                sDBName += '.';
+
+                aColDesc[daCommand] >>= sTmp;
+                sDBName += String(sTmp);
+                sDBName += '.';
+
+                aColDesc[daColumnName] >>= sTmp;
+                sDBName += String(sTmp);
+                if (bBrackets)
+                    sDBName += ']';
+
+                SetText( sDBName );
+                bHasDroppedData = TRUE;
+                nRet = DND_ACTION_COPY;
+            }
     }
     return nRet;
 }
