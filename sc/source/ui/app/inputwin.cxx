@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:01:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <svx/frmdiritem.hxx>
 #include <svx/lspcitem.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/imgmgr.hxx>
