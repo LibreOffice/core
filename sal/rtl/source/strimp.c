@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimp.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 14:54:23 $
+ *  last change: $Author: th $ $Date: 2001-04-03 12:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,9 @@ sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix )
 
 /* ----------------------------------------------------------------------- */
 
-static sal_Int32 SAL_CALL rtl_ImplFloatNumToString( sal_Char* pStr,
-                                                    double d,
-                                                    sal_Int16 nSignificantDigits )
+static sal_Int32 rtl_ImplFloatNumToString( sal_Char* pStr,
+                                           double d,
+                                           sal_Int16 nSignificantDigits )
 {
     sal_Char*   pTempStr = pStr;
     sal_Char*   pEndStr;
@@ -245,8 +245,7 @@ static sal_Int32 SAL_CALL rtl_ImplFloatNumToString( sal_Char* pStr,
 
 /* ----------------------------------------------------------------------- */
 
-static sal_Int32 SAL_CALL rtl_ImplGetInfinityStr( sal_Char* pStr,
-                                                  sal_Bool bNeg )
+static sal_Int32 rtl_ImplGetInfinityStr( sal_Char* pStr, sal_Bool bNeg )
 {
     static const sal_Char aInfinityStr[] = "Infinity";
     const sal_Char* pTempStr = aInfinityStr;
@@ -273,7 +272,7 @@ static sal_Int32 SAL_CALL rtl_ImplGetInfinityStr( sal_Char* pStr,
 
 /* ----------------------------------------------------------------------- */
 
-static sal_Int32 SAL_CALL rtl_ImplGetNaNStr( sal_Char* pStr )
+static sal_Int32 rtl_ImplGetNaNStr( sal_Char* pStr )
 {
     *pStr = 'N';
     pStr++;
@@ -292,7 +291,7 @@ static sal_Int32 SAL_CALL rtl_ImplGetNaNStr( sal_Char* pStr )
 #define FLOAT_FRACTMASK     (~(FLOAT_SIGNMASK|FLOAT_EXPMASK))
 #define FLOAT_EXPSHIFT      ((sal_uInt32)23)
 
-sal_Int32 SAL_CALL rtl_ImplFloatToString( sal_Char* pStr, float f )
+sal_Int32 rtl_ImplFloatToString( sal_Char* pStr, float f )
 {
     /* Discover obvious special cases of NaN and Infinity
      * (like in Java Ctor FloatingDecimal( float f ) ) */
@@ -322,7 +321,7 @@ sal_Int32 SAL_CALL rtl_ImplFloatToString( sal_Char* pStr, float f )
 #define DOUBLE_FRACTMASK    (~(DOUBLE_SIGNMASK|DOUBLE_EXPMASK))
 #define DOUBLE_EXPSHIFT     ((sal_uInt32)52)
 
-sal_Int32 SAL_CALL rtl_ImplDoubleToString( sal_Char* pStr, double d )
+sal_Int32 rtl_ImplDoubleToString( sal_Char* pStr, double d )
 {
     /* Discover obvious special cases of NaN and Infinity.
      * (like in Java Ctor FloatingDecimal( double d ) ) */
