@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 15:40:26 $
+ *  last change: $Author: cl $ $Date: 2001-11-08 16:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ private:
     SdPage* InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate = sal_False ) throw();
 
     sal_Bool mbImpressDoc;
+    sal_Bool mbClipBoard;
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::drawing::XDrawPages > mxDrawPagesAccess;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::drawing::XDrawPages > mxMasterPagesAccess;
@@ -201,6 +202,7 @@ private:
     void initializeDocument();
 public:
     SdXImpressDocument( SdDrawDocShell* pShell ) throw();
+    SdXImpressDocument( SdDrawDocument* pDoc, sal_Bool bClipBoard = sal_False ) throw();
     virtual ~SdXImpressDocument() throw();
 
     // intern

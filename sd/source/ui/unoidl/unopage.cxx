@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 09:37:53 $
+ *  last change: $Author: cl $ $Date: 2001-11-08 16:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,7 +1698,8 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
         GetPage()->SetName( aName );
 
         SdPage* pNotesPage = mpModel->GetDoc()->GetSdPage( (GetPage()->GetPageNum()-1)>>1, PK_NOTES );
-        pNotesPage->SetName(aName);
+        if( pNotesPage )
+            pNotesPage->SetName(aName);
 
 #ifndef SVX_LIGHT
         // fake a mode change to repaint the page tab bar

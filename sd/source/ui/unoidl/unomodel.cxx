@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-19 08:48:58 $
+ *  last change: $Author: cl $ $Date: 2001-11-08 16:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,8 @@ const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
 SdXImpressDocument::SdXImpressDocument( SdDrawDocShell* pShell ) throw()
 :   SfxBaseModel( pShell ),
     pDocShell( pShell ),
-    aPropSet( ImplGetDrawModelPropertyMap() )
+    aPropSet( ImplGetDrawModelPropertyMap() ),
+    mbClipBoard( sal_False )
 {
     if( pDocShell )
     {
@@ -271,6 +272,25 @@ SdXImpressDocument::SdXImpressDocument( SdDrawDocShell* pShell ) throw()
     else
     {
         DBG_ERROR("DocShell is invalid");
+    }
+
+    mbImpressDoc = pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
+}
+
+SdXImpressDocument::SdXImpressDocument( SdDrawDocument* _pDoc, sal_Bool bClipBoard ) throw()
+:   SfxBaseModel( NULL ),
+    pDocShell( NULL ),
+    aPropSet( ImplGetDrawModelPropertyMap() ),
+    pDoc( _pDoc ),
+    mbClipBoard( bClipBoard )
+{
+    if( pDoc )
+    {
+        StartListening( *pDoc );
+    }
+    else
+    {
+        DBG_ERROR("SdDrawDocument is invalid");
     }
 
     mbImpressDoc = pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
@@ -460,95 +480,107 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
     BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
     BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
 
-    // Hier wird die Seite ermittelt, hinter der eingefuegt werden soll
-    SdPage* pPreviousStandardPage = pDoc->GetSdPage( Min( (sal_uInt16)(nPageCount - 1), nPage ), PK_STANDARD );
-
-    sal_uInt16 nPos = 0;
-    SetOfByte aVisibleLayers = pPreviousStandardPage->GetMasterPageVisibleLayers( nPos );
-    sal_Bool bIsPageBack = aVisibleLayers.IsSet( aBckgrnd );
-    sal_Bool bIsPageObj = aVisibleLayers.IsSet( aBckgrndObj );
-
-    // AutoLayouts muessen fertig sein
-    pDoc->StopWorkStartupDelay();
-
-    /**************************************************************
-    * Es wird stets zuerst eine Standardseite und dann eine
-    * Notizseite erzeugt. Es ist sichergestellt, dass auf eine
-    * Standardseite stets die zugehoerige Notizseite folgt.
-    **************************************************************/
-
-    sal_uInt16 nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
-    SdPage* pPreviousNotesPage = (SdPage*) pDoc->GetPage( nStandardPageNum - 1 );
-    sal_uInt16 nNotesPageNum = nStandardPageNum + 1;
-    String aStandardPageName;
-    String aNotesPageName;
-    AutoLayout eStandardLayout = pPreviousStandardPage->GetAutoLayout();
-    AutoLayout eNotesLayout = pPreviousNotesPage->GetAutoLayout();
-
-    /**************************************************************
-    * Standardseite
-    **************************************************************/
     SdPage* pStandardPage = NULL;
 
-    if( bDuplicate )
-        pStandardPage = (SdPage*) pPreviousStandardPage->Clone();
-    else
+    if( 0 == nPageCount )
+    {
+        // this is only used for clipboard where we only have one page
         pStandardPage = (SdPage*) pDoc->AllocPage(sal_False);
 
-    pStandardPage->SetSize( pPreviousStandardPage->GetSize() );
-    pStandardPage->SetBorder( pPreviousStandardPage->GetLftBorder(),
-                                pPreviousStandardPage->GetUppBorder(),
-                                pPreviousStandardPage->GetRgtBorder(),
-                                pPreviousStandardPage->GetLwrBorder() );
-
-    pStandardPage->SetName(aStandardPageName);
-
-    // Seite hinter aktueller Seite einfuegen
-    pDoc->InsertPage(pStandardPage, nStandardPageNum);
-
-    if( !bDuplicate )
-    {
-        // MasterPage der aktuellen Seite verwenden
-        sal_uInt16 nPgNum = pPreviousStandardPage->GetMasterPageNum(nPos=0);
-        pStandardPage->InsertMasterPage(nPgNum);
-        pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
-        pStandardPage->SetAutoLayout(eStandardLayout, sal_True, sal_True);
+        Size aDefSize(21000, 29700);   // A4-Hochformat
+        pStandardPage->SetSize( aDefSize );
+        pDoc->InsertPage(pStandardPage, 0);
     }
-
-    aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
-    aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
-    aVisibleLayers.Set(aBckgrnd, bIsPageBack);
-    aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
-    pStandardPage->SetMasterPageVisibleLayers(aVisibleLayers, nPos=0);
-
-    /**************************************************************
-    * Notizseite
-    **************************************************************/
-    SdPage* pNotesPage = NULL;
-
-    if( bDuplicate )
-        pNotesPage = (SdPage*) pPreviousNotesPage->Clone();
     else
-        pNotesPage = (SdPage*) pDoc->AllocPage(sal_False);
-
-    pNotesPage->SetSize( pPreviousNotesPage->GetSize() );
-    pNotesPage->SetBorder( pPreviousNotesPage->GetLftBorder(),
-                            pPreviousNotesPage->GetUppBorder(),
-                            pPreviousNotesPage->GetRgtBorder(),
-                            pPreviousNotesPage->GetLwrBorder() );
-    pNotesPage->SetName(aNotesPageName);
-    pNotesPage->SetPageKind(PK_NOTES);
-
-    // Seite hinter aktueller Seite einfuegen
-    pDoc->InsertPage(pNotesPage, nNotesPageNum);
-
-    if( !bDuplicate )
     {
-        // MasterPage der aktuellen Seite verwenden
-        sal_uInt16 nPgNum = pPreviousNotesPage->GetMasterPageNum(nPos=0);
-        pNotesPage->InsertMasterPage(nPgNum);
-        pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
-        pNotesPage->SetAutoLayout(eNotesLayout, sal_True, sal_True);
+        // Hier wird die Seite ermittelt, hinter der eingefuegt werden soll
+        SdPage* pPreviousStandardPage = pDoc->GetSdPage( Min( (sal_uInt16)(nPageCount - 1), nPage ), PK_STANDARD );
+
+        sal_uInt16 nPos = 0;
+        SetOfByte aVisibleLayers = pPreviousStandardPage->GetMasterPageVisibleLayers( nPos );
+        sal_Bool bIsPageBack = aVisibleLayers.IsSet( aBckgrnd );
+        sal_Bool bIsPageObj = aVisibleLayers.IsSet( aBckgrndObj );
+
+        // AutoLayouts muessen fertig sein
+        pDoc->StopWorkStartupDelay();
+
+        /**************************************************************
+        * Es wird stets zuerst eine Standardseite und dann eine
+        * Notizseite erzeugt. Es ist sichergestellt, dass auf eine
+        * Standardseite stets die zugehoerige Notizseite folgt.
+        **************************************************************/
+
+        sal_uInt16 nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
+        SdPage* pPreviousNotesPage = (SdPage*) pDoc->GetPage( nStandardPageNum - 1 );
+        sal_uInt16 nNotesPageNum = nStandardPageNum + 1;
+        String aStandardPageName;
+        String aNotesPageName;
+        AutoLayout eStandardLayout = pPreviousStandardPage->GetAutoLayout();
+        AutoLayout eNotesLayout = pPreviousNotesPage->GetAutoLayout();
+
+        /**************************************************************
+        * Standardseite
+        **************************************************************/
+        if( bDuplicate )
+            pStandardPage = (SdPage*) pPreviousStandardPage->Clone();
+        else
+            pStandardPage = (SdPage*) pDoc->AllocPage(sal_False);
+
+        pStandardPage->SetSize( pPreviousStandardPage->GetSize() );
+        pStandardPage->SetBorder( pPreviousStandardPage->GetLftBorder(),
+                                    pPreviousStandardPage->GetUppBorder(),
+                                    pPreviousStandardPage->GetRgtBorder(),
+                                    pPreviousStandardPage->GetLwrBorder() );
+
+        pStandardPage->SetName(aStandardPageName);
+
+        // Seite hinter aktueller Seite einfuegen
+        pDoc->InsertPage(pStandardPage, nStandardPageNum);
+
+        if( !bDuplicate )
+        {
+            // MasterPage der aktuellen Seite verwenden
+            sal_uInt16 nPgNum = pPreviousStandardPage->GetMasterPageNum(nPos=0);
+            pStandardPage->InsertMasterPage(nPgNum);
+            pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
+            pStandardPage->SetAutoLayout(eStandardLayout, sal_True, sal_True);
+        }
+
+        aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
+        aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
+        aVisibleLayers.Set(aBckgrnd, bIsPageBack);
+        aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
+        pStandardPage->SetMasterPageVisibleLayers(aVisibleLayers, nPos=0);
+
+        /**************************************************************
+        * Notizseite
+        **************************************************************/
+        SdPage* pNotesPage = NULL;
+
+        if( bDuplicate )
+            pNotesPage = (SdPage*) pPreviousNotesPage->Clone();
+        else
+            pNotesPage = (SdPage*) pDoc->AllocPage(sal_False);
+
+        pNotesPage->SetSize( pPreviousNotesPage->GetSize() );
+        pNotesPage->SetBorder( pPreviousNotesPage->GetLftBorder(),
+                                pPreviousNotesPage->GetUppBorder(),
+                                pPreviousNotesPage->GetRgtBorder(),
+                                pPreviousNotesPage->GetLwrBorder() );
+        pNotesPage->SetName(aNotesPageName);
+        pNotesPage->SetPageKind(PK_NOTES);
+
+        // Seite hinter aktueller Seite einfuegen
+        pDoc->InsertPage(pNotesPage, nNotesPageNum);
+
+        if( !bDuplicate )
+        {
+            // MasterPage der aktuellen Seite verwenden
+            sal_uInt16 nPgNum = pPreviousNotesPage->GetMasterPageNum(nPos=0);
+            pNotesPage->InsertMasterPage(nPgNum);
+            pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
+            pNotesPage->SetAutoLayout(eNotesLayout, sal_True, sal_True);
+        }
     }
 
     SetModified();
@@ -859,7 +891,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor );
 
         // set shape type
-        if( pShape )
+        if( pShape && !mbClipBoard )
             pShape->SetShapeType(aServiceSpecifier);
 
         xRet = (uno::XWeak*)pShape;
@@ -1140,7 +1172,7 @@ uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCha
 
 void SdXImpressDocument::initializeDocument()
 {
-    if( pDoc->GetPageCount() <= 1)
+    if( (pDoc->GetPageCount() <= 1) && !mbClipBoard )
     {
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
