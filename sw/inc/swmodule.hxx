@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-19 13:42:29 $
+ *  last change: $Author: os $ $Date: 2002-04-12 10:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ class SwNavigationConfig;
 class SwTransferable;
 class SwToolbarConfigItem;
 class SwAttrPool;
+namespace svx{ class ColorConfig;}
 struct SwDBData;
 #define VIEWOPT_DEST_VIEW       0
 #define VIEWOPT_DEST_TEXT       1
@@ -134,6 +135,7 @@ class SwModule: public SwModuleDummy , public SfxListener
     SwToolbarConfigItem*pToolbarConfig;     //fuer gestackte Toolbars, welche
     SwToolbarConfigItem*pWebToolbarConfig;  //war sichtbar?
     SwDBConfig*         pDBConfig;
+    svx::ColorConfig* pColorConfig;
 
     SfxErrorHandler*    pErrorHdl;
 
@@ -222,6 +224,7 @@ public:
     SwToolbarConfigItem*GetToolbarConfig()      { return pToolbarConfig;    }
     SwToolbarConfigItem*GetWebToolbarConfig()   { return pWebToolbarConfig; }
     SwDBConfig*         GetDBConfig();
+    svx::ColorConfig&   GetColorConfig();
 
     // UNO
 //  virtual Reflection* GetReflection( UsrUik aUIK );

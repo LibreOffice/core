@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-08 14:33:17 $
+ *  last change: $Author: os $ $Date: 2002-04-12 10:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
+#endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
 #endif
 #ifndef _FESH_HXX
 #include <fesh.hxx>
@@ -1394,7 +1397,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
 void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
 {
     GetOut()->Push( PUSH_FILLCOLOR );
-    GetOut()->SetFillColor( Color(RGB_COLORDATA( 0xE0, 0xE0, 0xE0 )) );
+    GetOut()->SetFillColor( Color(SW_MOD()->GetColorConfig().GetColorValue(svx::APPBACKGROUND).nColor) );
     for ( USHORT i = 0; i < rRegion.Count(); ++i )
         GetOut()->DrawRect( rRegion[i].SVRect() );
     GetOut()->Pop();

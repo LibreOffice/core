@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-18 11:19:29 $
+ *  last change: $Author: os $ $Date: 2002-04-12 10:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _SVX_SRCHITEM_HXX
 #include <svx/srchitem.hxx>
 #endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
+#endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -145,6 +148,12 @@
 
 #ifndef _VIEW_HXX
 #include <view.hxx>
+#endif
+#ifndef _SWPVIEW_HXX
+#include <pview.hxx>
+#endif
+#ifndef _SRCVIEW_HXX
+#include <srcview.hxx>
 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
@@ -1007,28 +1016,53 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     GetItemState( SID_ATTR_ADDRESS, sal_False ))
             bAuthorInitialised = FALSE;
     }
-    else if(rHint.ISA(SfxSimpleHint) &&
-        ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DEINITIALIZING)
+    else if(rHint.ISA(SfxSimpleHint))
     {
-        if(pSrcViewConfig)
+        ULONG nHintId = ((SfxSimpleHint&)rHint).GetId();
+        if(SFX_HINT_COLORS_CHANGED == nHintId)
         {
-            if(pSrcViewConfig->IsModified())
-                pSrcViewConfig->Commit();
-            DELETEZ( pSrcViewConfig );
-        }
+            SwViewOption::SetSpellColor(pColorConfig->GetColorValue(svx::WRITERSPELL).nColor);
+            //invalidate all edit windows
+            const TypeId aSwViewTypeId = TYPE(SwView);
+            const TypeId aSwPreViewTypeId = TYPE(SwPagePreView);
+            const TypeId aSwSrcViewTypeId = TYPE(SwSrcView);
+            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+            while(pViewShell)
+            {
+                if(pViewShell->GetWindow() &&
+                    (pViewShell->IsA(aSwViewTypeId) ||
+                        pViewShell->IsA(aSwViewTypeId) ||
+                        pViewShell->IsA(aSwViewTypeId)))
+                    pViewShell->GetWindow()->Invalidate();
+                pViewShell = SfxViewShell::GetNext( *pViewShell );
+            }
 
-        DELETEZ(pWebUsrPref);
-        DELETEZ(pUsrPref)   ;
-        DELETEZ(pModuleConfig);
-        DELETEZ(pPrtOpt)      ;
-        DELETEZ(pWebPrtOpt)   ;
-        DELETEZ(pChapterNumRules);
-        DELETEZ(pStdFontConfig)     ;
-        DELETEZ(pNavigationConfig)  ;
-        DELETEZ(pToolbarConfig)     ;
-        DELETEZ(pWebToolbarConfig)  ;
-        DELETEZ(pAuthorNames)       ;
-        DELETEZ(pDBConfig);
+
+        }
+        else if(SFX_HINT_DEINITIALIZING == nHintId)
+        {
+            if(pSrcViewConfig)
+            {
+                if(pSrcViewConfig->IsModified())
+                    pSrcViewConfig->Commit();
+                DELETEZ( pSrcViewConfig );
+            }
+
+            DELETEZ(pWebUsrPref);
+            DELETEZ(pUsrPref)   ;
+            DELETEZ(pModuleConfig);
+            DELETEZ(pPrtOpt)      ;
+            DELETEZ(pWebPrtOpt)   ;
+            DELETEZ(pChapterNumRules);
+            DELETEZ(pStdFontConfig)     ;
+            DELETEZ(pNavigationConfig)  ;
+            DELETEZ(pToolbarConfig)     ;
+            DELETEZ(pWebToolbarConfig)  ;
+            DELETEZ(pAuthorNames)       ;
+            DELETEZ(pDBConfig);
+            EndListening(*pColorConfig);
+            DELETEZ(pColorConfig);
+        }
     }
 }
 void SwModule::FillStatusBar( StatusBar& rStatusBar )
@@ -1100,6 +1134,17 @@ SwDBConfig* SwModule::GetDBConfig()
     if(!pDBConfig)
         pDBConfig = new SwDBConfig;
     return pDBConfig;
+}
+/* -----------------------------11.04.2002 15:27------------------------------
+
+ ---------------------------------------------------------------------------*/
+svx::ColorConfig& SwModule::GetColorConfig()
+{
+    if(!pColorConfig)
+        pColorConfig = new svx::ColorConfig;
+    StartListening(*pColorConfig);
+    SwViewOption::SetSpellColor(pColorConfig->GetColorValue(svx::WRITERSPELL).nColor);
+    return *pColorConfig;
 }
 /*-----------------30.01.97 08.30-------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-10 15:13:43 $
+ *  last change: $Author: os $ $Date: 2002-04-12 10:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ public:
 extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
 extern BYTE *pMagicNo;
-extern Color *pSpellCol;
 extern Color *pWaveCol;
 
 /*************************************************************************

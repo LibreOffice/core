@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 13:48:54 $
+ *  last change: $Author: os $ $Date: 2002-04-12 10:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,9 @@
 #ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
 #endif
-
+#ifndef _SWMODULE_HXX //autogen
+#include <swmodule.hxx>
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -116,6 +118,8 @@
 #ifndef PRODUCT
 BOOL   SwViewOption::bTest9 = FALSE;        //DrawingLayerNotLoading
 #endif
+Color SwViewOption::aSpellColor(COL_LIGHTRED);
+
 USHORT SwViewOption::nPixelTwips = 0;   //ein Pixel auf dem Bildschirm
 
 
@@ -413,7 +417,7 @@ USHORT SwViewOption::GetPostItsWidth( const OutputDevice *pOut ) const
  *************************************************************************/
 
 void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
-                                 long nCol ) const
+                                 sal_Bool bIsScript ) const
 {
     if( pOut )
     {
@@ -426,7 +430,8 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
         const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
         const Point aBotRight( rRect.Right() - nPix, rRect.Bottom() - nPix );
         const SwRect aRect( aTopLeft, aBotRight );
-        DrawRect( pOut, aRect, nCol );
+        sal_Int32 nColor = bIsScript ? COL_LIGHTGREEN : COL_YELLOW;
+        DrawRect( pOut, aRect, nColor );
         pOut->SetLineColor( aOldLineColor );
     }
 }
@@ -627,158 +632,18 @@ USHORT      GetHtmlMode(const SwDocShell* pShell)
     }
     return nRet;
 }
+/* -----------------------------12.04.2002 10:39------------------------------
 
+ ---------------------------------------------------------------------------*/
+Color&   SwViewOption::GetSpellColor()
+{
+    return aSpellColor;
+}
+/* -----------------------------12.04.2002 10:41------------------------------
 
-/************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.3  2001/04/27 17:47:50  jp
-      remove unused line
-
-      Revision 1.2  2000/11/20 09:07:00  jp
-      should change: use LocaleDataWrapper
-
-      Revision 1.1.1.1  2000/09/18 17:14:33  hr
-      initial import
-
-      Revision 1.57  2000/09/18 16:05:18  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.56  2000/04/11 08:02:24  os
-      UNICODE
-
-      Revision 1.55  2000/03/03 15:16:59  os
-      StarView remainders removed
-
-      Revision 1.54  2000/01/19 18:24:09  jp
-      Bug #72118#: change default of view sectionboundaries
-
-      Revision 1.53  2000/01/13 21:28:44  jp
-      Task #71894#: new Options for SW-AutoComplete
-
-      Revision 1.52  1999/09/20 10:35:00  os
-      Color changes
-
-      Revision 1.51  1999/07/28 11:03:20  OS
-      index background in lighter gray
-
-
-      Rev 1.50   28 Jul 1999 13:03:20   OS
-   index background in lighter gray
-
-      Rev 1.49   13 Jul 1999 08:47:52   OS
-   #67584# Scrollbar settings via StarOne
-
-      Rev 1.48   09 Jun 1999 13:22:34   OS
-   index background
-
-      Rev 1.47   17 Mar 1999 11:24:10   JP
-   Task #63576#: IsAutoCompleteWords - das Flag von der OffApp erfragen
-
-      Rev 1.46   15 Mar 1999 09:47:52   MA
-   #63047# neue Defaults
-
-      Rev 1.45   09 Mar 1999 19:34:34   JP
-   Task #61405#: AutoCompletion von Woertern
-
-      Rev 1.44   19 Jan 1999 08:47:36   MIB
-   #60957#: Kapitaelchen auch fuer IE4
-
-      Rev 1.43   29 Apr 1998 09:27:06   MA
-   BackgroundBrush -> RetoucheColor
-
-      Rev 1.42   20 Apr 1998 09:10:42   OS
-   IE3 entfaellt
-
-      Rev 1.41   03 Apr 1998 14:42:22   OS
-   HTMLMODE_SOME/FULL_ABS_POS
-
-      Rev 1.40   05 Mar 1998 14:34:12   OM
-   Redline-Attribute in Module-Cfg speichern
-
-      Rev 1.39   23 Feb 1998 12:40:46   OM
-   Redlining-Optionen
-
-      Rev 1.38   04 Feb 1998 17:53:06   MA
-   chg: Notiz wieder per default an
-
-      Rev 1.37   09 Jan 1998 17:15:14   AMA
-   Fix #46523#: Colors sollten als long durchgereicht werden...
-
-      Rev 1.36   28 Nov 1997 15:24:22   MA
-   includes
-
-      Rev 1.35   24 Nov 1997 17:58:48   MA
-   include
-
-      Rev 1.34   03 Nov 1997 16:12:36   JP
-   neu: Optionen/-Page/Basic-Schnittst. fuer ShadowCursor
-
-      Rev 1.33   01 Sep 1997 13:16:58   OS
-   DLL-Umstellung
-
-      Rev 1.32   08 Aug 1997 17:37:24   OM
-   Headerfile-Umstellung
-
-      Rev 1.31   05 Aug 1997 14:52:06   OS
-   Option fuer Grafikhintergrund #41663#
-
-      Rev 1.30   02 Jul 1997 12:46:00   MA
-   inlines
-
-      Rev 1.29   17 Jun 1997 17:24:06   MIB
-   HTML-Modus-Flgas fuer Netacpe 4.0
-
-      Rev 1.28   06 Jun 1997 12:44:24   MA
-   chg: versteckte Absaetze ausblenden
-
-      Rev 1.27   05 May 1997 10:56:32   AMA
-   Fix #39418#: Tabulatorsymbolgroesse jetzt zoomabhaengig.
-
-      Rev 1.26   25 Feb 1997 09:11:14   MA
-   chg: Option fuer SolidHdl
-
-      Rev 1.25   13 Feb 1997 18:57:16   AMA
-   New: JavaScript-Felder werden gruen dargestellt.
-
-      Rev 1.24   07 Feb 1997 18:25:30   OS
-   HtmlMode auch fuer pDocSh == 0; Flags berichtigt
-
-      Rev 1.23   05 Feb 1997 13:44:18   OS
-   HTML-Modi erweitert
-
-      Rev 1.22   27 Jan 1997 16:33:52   OS
-   GetHtmlMode wird mit der DocShell ermittelt
-
-      Rev 1.21   08 Jan 1997 10:47:10   OS
-   neu: ::GetHtmlMode()
-
-      Rev 1.20   13 Dec 1996 14:33:32   OS
-   UndoCount wird aus der SfxApp besorgt
-
-      Rev 1.19   10 Dec 1996 16:58:46   OS
-   TabDist ab sofort in der OFA
-
-      Rev 1.18   28 Nov 1996 15:20:24   OS
-   neu: Schwarz drucken
-
-      Rev 1.17   25 Sep 1996 14:56:18   OS
-   Linealabfragen nicht mehr inline
-
-      Rev 1.16   19 Sep 1996 18:40:54   OS
-   SetUIOptions enthaelt auch nTblDest
-
-      Rev 1.15   06 Sep 1996 14:32:20   OS
-   UsrPrefs wieder vereinheitlicht
-
-      Rev 1.14   30 Aug 1996 08:44:04   OS
-   neu: sSymbolFont
-
-      Rev 1.13   27 Aug 1996 10:11:44   OS
-   IsEqualFlags: Brush vergleichen
-
-      Rev 1.12   27 Aug 1996 09:44:46   OS
-   operator=
-
-*************************************************************************/
+ ---------------------------------------------------------------------------*/
+void     SwViewOption::SetSpellColor(ColorData nColor)
+{
+    aSpellColor.SetColor(nColor);
+}
 

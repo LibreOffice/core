@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:56:20 $
+ *  last change: $Author: os $ $Date: 2002-04-12 10:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ extern void SyncVout( const OutputDevice *pOut );
 
 class SwViewOption
 {
+    static Color    aSpellColor;     // mark color of online spell checking
 protected:
     static USHORT   nPixelTwips;// 1 Pixel == ? Twips
 
@@ -294,7 +295,7 @@ public:
     inline void SetPostIts( BOOL b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_POSTITS ) : ( nCoreOptions &= ~VIEWOPT_1_POSTITS); }
            void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
-                              long nCol ) const;
+                              sal_Bool bIsScript ) const;
            USHORT GetPostItsWidth( const OutputDevice *pOut = 0 ) const;
 
     inline BOOL IsHidden() const
@@ -565,6 +566,9 @@ public:
 
     const Color&    GetIndexBackgrndColor() const { return aIdxBackgrndCol;}
     void            SetIndexBackgrndColor(const Color& rCol) {aIdxBackgrndCol = rCol;}
+
+    static Color&   GetSpellColor();
+    static void     SetSpellColor(ColorData nColor);
 };
 
 
