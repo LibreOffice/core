@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicregister.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-09 11:46:11 $
+ *  last change: $Author: lla $ $Date: 2003-01-21 13:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,11 @@ DynamicLibraryHelper::DynamicLibraryHelper(rtl::OUString const& _sDLLName, GetOp
          m_aOptions(_aOptions)
 {
     // create and load the module (shared library)
-    if (! m_pModule->load( FileHelper::convertPath( _sDLLName ) ))
+    rtl::OUString suFile = FileHelper::convertPath( _sDLLName );
+    rtl::OString sDLLName = rtl::OUStringToOString(suFile, RTL_TEXTENCODING_ASCII_US);
+    fprintf(stderr, "Try to load '%s'.\n", sDLLName.getStr());
+
+    if (! m_pModule->load( suFile ))
     {
         rtl::OString sDLLName = rtl::OUStringToOString(_sDLLName, RTL_TEXTENCODING_ASCII_US);
         fprintf(stderr, "warning: Can't load module '%s'.\n", sDLLName.getStr());
