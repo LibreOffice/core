@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:55:26 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,9 @@ void ImplEntryList::Clear()
 void ImplEntryList::SelectEntry( USHORT nPos, BOOL bSelect )
 {
     ImplEntryType* pImplEntry = GetEntry( nPos );
-    if ( pImplEntry && ( pImplEntry->mbIsSelected != bSelect ) )
+    if ( pImplEntry &&
+       ( pImplEntry->mbIsSelected != bSelect ) &&
+       ( (pImplEntry->mnFlags & LISTBOX_ENTRY_FLAG_DISABLE_SELECTION) == 0  ) )
     {
         pImplEntry->mbIsSelected = bSelect;
         if ( mbCallSelectionChangedHdl )
@@ -428,6 +430,23 @@ void* ImplEntryList::GetEntryData( USHORT nPos ) const
 
 // -----------------------------------------------------------------------
 
+void ImplEntryList::SetEntryFlags( USHORT nPos, long nFlags )
+{
+    ImplEntryType* pImplEntry = (ImplEntryType*)List::GetObject( nPos );
+    if ( pImplEntry )
+        pImplEntry->mnFlags = nFlags;
+}
+
+// -----------------------------------------------------------------------
+
+long ImplEntryList::GetEntryFlags( USHORT nPos ) const
+{
+    ImplEntryType* pImplEntry = (ImplEntryType*)List::GetObject( nPos );
+    return pImplEntry ? pImplEntry->mnFlags : 0;
+}
+
+// -----------------------------------------------------------------------
+
 USHORT ImplEntryList::GetSelectEntryCount() const
 {
     USHORT nSelCount = 0;
@@ -485,6 +504,42 @@ BOOL ImplEntryList::IsEntryPosSelected( USHORT nIndex ) const
 {
     ImplEntryType* pImplEntry = GetEntry( nIndex );
     return pImplEntry ? pImplEntry->mbIsSelected : FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplEntryList::IsEntrySelectable( USHORT nPos ) const
+{
+    ImplEntryType* pImplEntry = GetEntry( nPos );
+    return pImplEntry ? ((pImplEntry->mnFlags & LISTBOX_ENTRY_FLAG_DISABLE_SELECTION) == 0) : true;
+}
+
+// -----------------------------------------------------------------------
+
+USHORT ImplEntryList::FindFirstSelectable( USHORT nPos, bool bForward /* = true */ )
+{
+    if( IsEntrySelectable( nPos ) )
+        return nPos;
+
+    if( bForward )
+    {
+        for( nPos = nPos + 1; nPos < GetEntryCount(); nPos++ )
+        {
+            if( IsEntrySelectable( nPos ) )
+                return nPos;
+        }
+    }
+    else
+    {
+        while( nPos )
+        {
+            nPos--;
+            if( IsEntrySelectable( nPos ) )
+                return nPos;
+        }
+    }
+
+    return LISTBOX_ENTRY_NOTFOUND;
 }
 
 // =======================================================================
@@ -864,8 +919,9 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 nSelect = Min( nSelect, (USHORT) ( mnTop + mnMaxVisibleEntries ) );
                 nSelect = Min( nSelect, (USHORT) ( mpEntryList->GetEntryCount() - 1 ) );
                 // Select only visible Entries with MouseMove, otherwise Tracking...
-                if ( IsVisible( nSelect ) && (
-                     ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() || ( nSelect != GetEntryList()->GetSelectEntryPos( 0 ) ) ) )
+                if ( IsVisible( nSelect ) &&
+                    mpEntryList->IsEntrySelectable( nSelect ) &&
+                    ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() || ( nSelect != GetEntryList()->GetSelectEntryPos( 0 ) ) ) )
                 {
                     mbTrackingSelect = TRUE;
                     if ( SelectEntries( nSelect, LET_TRACKING, FALSE, FALSE ) )
@@ -915,7 +971,7 @@ void ImplListBoxWindow::DeselectAll()
 
 void ImplListBoxWindow::SelectEntry( USHORT nPos, BOOL bSelect )
 {
-    if ( mpEntryList->IsEntryPosSelected( nPos ) != bSelect )
+    if( (mpEntryList->IsEntryPosSelected( nPos ) != bSelect) && mpEntryList->IsEntrySelectable( nPos ) )
     {
         ImplHideFocusRect();
         if( bSelect )
@@ -968,7 +1024,7 @@ BOOL ImplListBoxWindow::SelectEntries( USHORT nSelect, LB_EVENT_TYPE eLET, BOOL 
     BOOL bFocusChanged = FALSE;
     BOOL bSelectionChanged = FALSE;
 
-    if( IsEnabled() )
+    if( IsEnabled() && mpEntryList->IsEntrySelectable( nSelect ) )
     {
         // Hier (Single-ListBox) kann nur ein Eintrag deselektiert werden
         if( !mbMulti )
@@ -1282,6 +1338,10 @@ void ImplListBoxWindow::KeyInput( const KeyEvent& rKEvt )
 
 // -----------------------------------------------------------------------
 
+#define IMPL_SELECT_NODIRECTION 0
+#define IMPL_SELECT_UP          1
+#define IMPL_SELECT_DOWN        2
+
 BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 {
     // zu selektierender Eintrag
@@ -1294,6 +1354,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
     BOOL bCtrl  = aKeyCode.IsMod1();
     BOOL bMod2 = aKeyCode.IsMod2();
     BOOL bDone = FALSE;
+    USHORT nSelectDirection = IMPL_SELECT_NODIRECTION;
 
     switch( aKeyCode.GetCode() )
     {
@@ -1307,9 +1368,14 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             else if ( !bMod2 )
             {
                 if( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND )
-                    nSelect = mpEntryList->GetEntryCount() ? 0 : LISTBOX_ENTRY_NOTFOUND;
+                {
+                    nSelect = mpEntryList->FindFirstSelectable( 0, true );
+                }
                 else if ( mnCurrentPos )
-                    nSelect = mnCurrentPos - 1;
+                {
+                    // search first selectable above the current position
+                    nSelect = mpEntryList->FindFirstSelectable( mnCurrentPos - 1, false );
+                }
 
                 if( ( nSelect != LISTBOX_ENTRY_NOTFOUND ) && ( nSelect < mnTop ) )
                     SetTopEntry( mnTop-1 );
@@ -1329,9 +1395,14 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             else if ( !bMod2 )
             {
                 if( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND )
-                    nSelect = mpEntryList->GetEntryCount() ? 0 : LISTBOX_ENTRY_NOTFOUND;
+                {
+                    nSelect = mpEntryList->FindFirstSelectable( 0, true );
+                }
                 else if ( (mnCurrentPos+1) < mpEntryList->GetEntryCount() )
-                    nSelect = mnCurrentPos+1;
+                {
+                    // search first selectable below the current position
+                    nSelect = mpEntryList->FindFirstSelectable( mnCurrentPos + 1, true );
+                }
 
                 if( ( nSelect != LISTBOX_ENTRY_NOTFOUND ) && ( nSelect >= ( mnTop + mnMaxVisibleEntries ) ) )
                     SetTopEntry( mnTop+1 );
@@ -1352,13 +1423,16 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             else if ( !bCtrl && !bMod2 )
             {
                 if( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND )
-                    nSelect = mpEntryList->GetEntryCount() ? 0 : LISTBOX_ENTRY_NOTFOUND;
+                {
+                    nSelect = mpEntryList->FindFirstSelectable( 0, true );
+                }
                 else if ( mnCurrentPos )
                 {
                     if( mnCurrentPos == mnTop )
-                        SetTopEntry( ( mnTop > mnMaxVisibleEntries ) ?
-                                     ( mnTop-mnMaxVisibleEntries+1 ) : 0 );
-                    nSelect = mnTop;
+                        SetTopEntry( ( mnTop > mnMaxVisibleEntries ) ? ( mnTop-mnMaxVisibleEntries+1 ) : 0 );
+
+                    // find first selectable starting from mnTop looking foreward
+                    nSelect = mpEntryList->FindFirstSelectable( mnTop, true );
                 }
                 bDone = TRUE;
             }
@@ -1375,7 +1449,9 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             else if ( !bCtrl && !bMod2 )
             {
                 if( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND )
-                    nSelect = mpEntryList->GetEntryCount() ? 0 : LISTBOX_ENTRY_NOTFOUND;
+                {
+                    nSelect = mpEntryList->FindFirstSelectable( 0, true );
+                }
                 else if ( (mnCurrentPos+1) < mpEntryList->GetEntryCount() )
                 {
                     USHORT nCount = mpEntryList->GetEntryCount();
@@ -1388,7 +1464,8 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                         nTmp = (USHORT)(nTmp2+(mnMaxVisibleEntries-1) );
                         SetTopEntry( (USHORT)nTmp2 );
                     }
-                    nSelect = nTmp;
+                    // find first selectable starting from nTmp looking backwards
+                    nSelect = mpEntryList->FindFirstSelectable( nTmp, false );
                 }
                 bDone = TRUE;
             }
@@ -1406,7 +1483,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             {
                 if ( mnCurrentPos )
                 {
-                    nSelect = mpEntryList->GetEntryCount() ? 0 : LISTBOX_ENTRY_NOTFOUND;
+                    nSelect = mpEntryList->FindFirstSelectable( mpEntryList->GetEntryCount() ? 0 : LISTBOX_ENTRY_NOTFOUND, true );
                     if( mnTop != 0 )
                         SetTopEntry( 0 );
 
@@ -1426,11 +1503,13 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             else if ( !bCtrl && !bMod2 )
             {
                 if( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND )
-                    nSelect = mpEntryList->GetEntryCount() ? 0 : LISTBOX_ENTRY_NOTFOUND;
+                {
+                    nSelect = mpEntryList->FindFirstSelectable( 0, true );
+                }
                 else if ( (mnCurrentPos+1) < mpEntryList->GetEntryCount() )
                 {
                     USHORT nCount = mpEntryList->GetEntryCount();
-                    nSelect = nCount - 1;
+                    nSelect = mpEntryList->FindFirstSelectable( nCount - 1, false );
                     if( nCount > mnMaxVisibleEntries )
                         SetTopEntry( nCount - mnMaxVisibleEntries );
                 }
@@ -2064,6 +2143,20 @@ void ImplListBox::RemoveEntry( USHORT nPos )
 {
     maLBWindow.RemoveEntry( nPos );
     StateChanged( STATE_CHANGE_DATA );
+}
+
+// -----------------------------------------------------------------------
+
+void ImplListBox::SetEntryFlags( USHORT nPos, long nFlags )
+{
+    maLBWindow.GetEntryList()->SetEntryFlags( nPos, nFlags );
+}
+
+// -----------------------------------------------------------------------
+
+long ImplListBox::GetEntryFlags( USHORT nPos ) const
+{
+    return maLBWindow.GetEntryList()->GetEntryFlags( nPos );
 }
 
 // -----------------------------------------------------------------------
