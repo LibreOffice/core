@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:07:24 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,6 +536,10 @@ public:
     Graphic             GetGraphicFromOle2Obj( const SdrOle2Obj* pOle2Obj );
 
     List*               GetDeletedPresObjList();
+    /** Clear the list of deleted presentation objects.  Call this
+        method when the undo stack is also cleared.
+    */
+    void ClearDeletedPresObjList (void);
 
     CharClass*          GetCharClass() const { return mpCharClass; }
     International*      GetInternational() const { return mpInternational; }
