@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:25:32 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 18:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String STR_TEXTCOLL_HEADER
     TEXT[ chinese_simplified ] = "(¶ÎÂäÑùÊ½£º ";
     TEXT[ russian ] = "(Ñòèëü àáçàöà:  ";
     TEXT[ polish ] = "(Styl akapitu:  ";
-    TEXT[ japanese ] = "(’i—½À²Ù: ";
+    TEXT[ japanese ] = " (’i—½À²ÙF ";
     TEXT[ chinese_traditional ] = "(¬q¸¨¼Ë¦¡¡G ";
     TEXT[ arabic ] = "(äãØ İŞÑÉ: ";
     TEXT[ greek ] = "(Ğñüôõğï ğáñáãñÜöïõ: ";
@@ -104,7 +104,7 @@ String STR_PAGEFMT_HEADER
     TEXT[ chinese_simplified ] = "(Ò³ÃæÑùÊ½£º ";
     TEXT[ russian ] = "(Ñòèëü ñòğàíèöû:  ";
     TEXT[ polish ] = "(Styl strony:  ";
-    TEXT[ japanese ] = "(Íß°¼Ş½À²Ù: ";
+    TEXT[ japanese ] = " (Íß°¼Ş½À²ÙF ";
     TEXT[ chinese_traditional ] = "(­¶­±¼Ë¦¡¡G ";
     TEXT[ arabic ] = "(ŞÇáÈ ÇáÕİÍÉ: ";
     TEXT[ greek ] = "(Ğñüôõğï óåëßäáò: ";
