@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:53:34 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1130,7 +1130,18 @@ BOOL SdrEditView::CombineMarkedObjects(BOOL bNoPolyPoly)
     // if this command is a 'Combine' or a 'Connect' command. On Connect it's sal_True.
     // To not concert line segments with a set line width to polygons in that case,
     // use this info. Do not convert LineToArea on Connect commands.
-    ConvertMarkedToPathObj(!bNoPolyPoly);
+    // ConvertMarkedToPathObj(!bNoPolyPoly);
+
+    // #114310#
+    // This is used for Combine and Connect. In no case it is necessary to force
+    // the content to curve, but it is also not good to force to polygons. Thus,
+    // curve is the less information loosing one. Remember: This place is not
+    // used for merge.
+    // LineToArea is never necessary, both commands are able to take over the
+    // set line style and to display it correctly. Thus, i will use a
+    // ConvertMarkedToPathObj with a sal_False in any case. Only drawback is that
+    // simple polygons will be changed to curves, but with no information loss.
+    ConvertMarkedToPathObj(sal_False /* bLineToArea */);
 
     // continue as before
     bCombineError = FALSE;
