@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:07:20 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,8 @@
 #include "utility.hxx"
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER >=1310)
 #ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
-#endif
 #endif
 
 #ifndef CONFIGMGR_ACCESSOR_HXX
