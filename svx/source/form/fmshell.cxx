@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-04 12:49:36 $
+ *  last change: $Author: fs $ $Date: 2002-04-15 16:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,8 +832,17 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             SfxUInt16Item aIdentifierItem( SID_FM_CONTROL_IDENTIFIER, nIdentifier );
             SfxUInt32Item aInventorItem( SID_FM_CONTROL_INVENTOR, FmFormInventor );
+            const SfxPoolItem* pArgs[] =
+            {
+                &aIdentifierItem, &aInventorItem, NULL
+            };
+            const SfxPoolItem* pInternalArgs[] =
+            {
+                NULL
+            };
+
             GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_CREATE_CONTROL, SFX_CALLMODE_ASYNCHRON,
-                                      &aInventorItem, &aIdentifierItem, 0L );
+                                      pArgs, rReq.GetModifier(), pInternalArgs );
             rReq.Done();
         }   break;
     }
