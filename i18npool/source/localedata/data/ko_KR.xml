@@ -337,6 +337,12 @@
 <TransliterationModules>IGNORE_WIDTH</TransliterationModules>
 </SearchOptions>
 </LC_SEARCH>
+<LC_INDEX>
+<IndexKey unoid="dict" default="true" phonetic="true"/>
+<UnicodeScript>70</UnicodeScript>
+<FollowPageWord>p.</FollowPageWord>
+<FollowPageWord>pp.</FollowPageWord>
+</LC_INDEX>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
