@@ -8,7 +8,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.*;
 import com.sun.star.text.*;
 
-import drafts.com.sun.star.script.framework.XScriptContext;
+import drafts.com.sun.star.script.framework.runtime.XScriptContext;
 
 
 public class HelloWorld {

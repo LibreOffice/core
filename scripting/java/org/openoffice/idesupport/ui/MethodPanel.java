@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodPanel.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-21 10:56:33 $
+ *  last change: $Author: npower $ $Date: 2003-03-03 18:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ public class MethodPanel extends JPanel {
     private File basedir;
     private Vector classpath;
     private final static String FIRST_PARAM =
-        "drafts.com.sun.star.script.framework.XScriptContext";
+        "drafts.com.sun.star.script.framework.runtime.XScriptContext";
 
     // private JTable table;
     // private MethodTableModel model;

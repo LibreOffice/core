@@ -19,7 +19,7 @@ public class JavaFinder implements MethodFinder {
     private static final String CLASS_SUFFIX = ".class";
     private static final String LANGUAGE = "Java";
     private static final String FIRST_PARAM =
-        "drafts.com.sun.star.script.framework.XScriptContext";
+        "drafts.com.sun.star.script.framework.runtime.XScriptContext";
 
     private Vector classpath = null;
 

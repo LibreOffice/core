@@ -7,7 +7,7 @@
 // If using XComponent need to uncomment import directive below:
 // import com.sun.star.frame.XModel;
 
-import drafts.com.sun.star.script.framework.XScriptContext;
+import drafts.com.sun.star.script.framework.runtime.XScriptContext;
 
 /* Use the XScriptContext variable "context" to access the document for
    which this script was invoked. This variable will be initialised
