@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 09:39:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
         Reference<XLibraryContainer> xLibContainer = rDocSh.GetDialogContainer();
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
-        String aLibName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Standard")));
+        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
         Reference<XNameContainer> xLib;
         if (xLibContainer.is())
         {
@@ -196,25 +196,20 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
                     continue;
 
                 SvStorageStreamRef xFrame = xForm->OpenSotStream(
-                    String(RTL_CONSTASCII_STRINGPARAM("\3VBFrame"),
-                        RTL_TEXTENCODING_MS_1252),
+                    String( RTL_CONSTASCII_USTRINGPARAM( "\3VBFrame" ) ),
                     STREAM_STD_READ | STREAM_NOCREATE);
 
                 if (!xFrame.Is() || xFrame->GetError())
                     continue;
 
                 SvStorageStreamRef xContents = xForm->OpenSotStream(
-                    String(RTL_CONSTASCII_STRINGPARAM("o"),
-                        RTL_TEXTENCODING_MS_1252),
-                    STREAM_STD_READ | STREAM_NOCREATE);
+                    String( 'o' ), STREAM_STD_READ | STREAM_NOCREATE);
 
                 if (!xContents.Is() || xContents->GetError())
                     continue;
 
                 SvStorageStreamRef xTypes = xForm->OpenSotStream(
-                    String(RTL_CONSTASCII_STRINGPARAM("f"),
-                        RTL_TEXTENCODING_MS_1252),
-                    STREAM_STD_READ | STREAM_NOCREATE);
+                    String( 'f' ), STREAM_STD_READ | STREAM_NOCREATE);
 
                 if (!xTypes.Is() || xTypes->GetError())
                     continue;
@@ -303,8 +298,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
         Reference<XNameContainer> xLib;
         if( xLibContainer.is() && nStreamCount )
         {
-            String aLibName( String::CreateFromAscii(
-                    RTL_CONSTASCII_STRINGPARAM( "Standard" )));
+            String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
             if( !xLibContainer->hasByName( aLibName ) )
                 xLibContainer->createLibrary( aLibName );
 
@@ -341,8 +335,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 const String &sOrigVBAModName = aVBA.GetStreamName( i );
                 ModuleType mType = aVBA.GetModuleType( sOrigVBAModName );
 
-                rtl::OUString sClassRem(
-                    rtl::OUString::createFromAscii("Rem Attribute VBA_ModuleType=") );
+                rtl::OUString sClassRem( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=" ) );
                 OSL_TRACE("Type for Module %s is %d",
                     ::rtl::OUStringToOString( sOrigVBAModName, RTL_TEXTENCODING_ASCII_US ).pData->buffer, mType );
 
@@ -351,22 +344,27 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 switch( mType )
                 {
                     case Class:
-                        modeTypeComment = sClassRem + rtl::OUString::createFromAscii(
-                            "VBAClassModule\n" );
+                        modeTypeComment = sClassRem +
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAClassModule\n" ) );
                         break;
                     case Form:
-                        modeTypeComment = sClassRem + rtl::OUString::createFromAscii(
-                            "VBAFormModule\n" );
+                        modeTypeComment = sClassRem +
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAFormModule\n" ) );
+                        break;
+                    case Document:
+                        modeTypeComment = sClassRem +
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBADocumentModule\n" ) );
                         break;
                     case Normal:
-                        modeTypeComment = sClassRem + rtl::OUString::createFromAscii(
-                            "VBAModule\n" );
+                        modeTypeComment = sClassRem +
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAModule\n" ) );
                         break;
                     case Unknown:
-                        modeTypeComment = sClassRem + rtl::OUString::createFromAscii(
-                            "VBAUnknown\n" );
+                        modeTypeComment = sClassRem +
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAUnknown\n" ) );
                         break;
                     default:
+                        DBG_ERRORFILE( "SvxImportMSVBasic::ImportCode_Impl - unknown module type" );
                         break;
                 }
 
@@ -407,8 +405,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                     {
                         if (bAsComment)
                         {
-                            String sTemp( String::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "Sub " )));
+                            String sTemp( RTL_CONSTASCII_USTRINGPARAM( "Sub " ) );
                             String sMunge(sModule);
                             //Streams can have spaces in them, but modulenames
                             //cannot !
@@ -486,8 +483,7 @@ ULONG SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocSh)
 
 String SvxImportMSVBasic::GetMSBasicStorageName()
 {
-char __READONLY_DATA sSO_VBAStgName[] = "_MS_VBA_Macros";
-    return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(sSO_VBAStgName));
+    return String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Macros" ) );
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
