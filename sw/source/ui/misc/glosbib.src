@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:48:08 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ ModalDialog DLG_BIB_BASE
         Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
         Text[ arabic ] = "ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "»õ·Î";
+        Text[ korean ] = "»õ·Î(~N)";
         Text[ turkish ] = "~Yeni";
         Text[ language_user1 ] = " ";
     };
@@ -137,7 +137,7 @@ ModalDialog DLG_BIB_BASE
         Text[ chinese_traditional ] = "§R°£(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦";
+        Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
     };
@@ -165,7 +165,7 @@ ModalDialog DLG_BIB_BASE
         Text[ chinese_traditional ] = "­«·s©R¦W(~R)";
         Text[ arabic ] = "ÅÚÇÏÉ ÇáÊÓãíÉ";
         Text[ greek ] = "Ìåôïíïìáóßá";
-        Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â";
+        Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â(~R)";
         Text[ turkish ] = "Y~eniden adlandır";
         Text[ language_user1 ] = " ";
     };
