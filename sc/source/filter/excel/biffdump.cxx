@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-10 14:57:56 $
+ *  last change: $Author: dr $ $Date: 2002-04-11 12:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2962,8 +2962,6 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             break;
             case 0x01B2:    // DVAL - header of DV recs
             {
-                PreDump( nL );
-
                 rIn >> __nFlags;
                 LINESTART();
                 STARTFLAG();
@@ -2993,7 +2991,6 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             break;
             case 0x01BE:    // DV - data validation record
             {
-                PreDump( nL );
                 UINT32  __nFlags;
                 rIn >> __nFlags;
                 LINESTART();
