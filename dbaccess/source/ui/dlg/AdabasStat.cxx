@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-04 13:09:12 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 07:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,84 +141,47 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
     FreeResource();
 
     DBG_ASSERT(m_xConnection.is(),"No connection");
-    if(!m_xConnection.is())
-        return;
-    Reference<XStatement> xStmt;
-    Reference<XResultSet> xRes;
-
-    sal_Bool bCanSelect     = sal_False;
-    ::rtl::OUString aStmt;
-    ::rtl::OUString sSchema = _rUser.toAsciiUpperCase();
-
-    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-    // first read the sizes
-    try
+    if(m_xConnection.is())
     {
-        bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("SERVERDBSTATISTICS"),sSchema);
+        Reference<XStatement> xStmt;
+        Reference<XResultSet> xRes;
 
-        if(bCanSelect)
-        {
-            aStmt = ::rtl::OUString::createFromAscii("SELECT SERVERDBSIZE, UNUSEDPAGES FROM ");
+        sal_Bool bCanSelect     = sal_False;
+        ::rtl::OUString aStmt;
+        ::rtl::OUString sSchema = _rUser.toAsciiUpperCase();
 
-            aStmt += ::dbtools::quoteTableName(xMetaData,sSchema);
-            aStmt += ::rtl::OUString::createFromAscii(".\"SERVERDBSTATISTICS\"");
-
-            xStmt = m_xConnection->createStatement();
-            xRes = xStmt->executeQuery(aStmt);
-
-
-            Reference<XRow> xRow(xRes,UNO_QUERY);
-            // first the db sizes
-            if(xRes.is() && xRes->next())
-            {
-                double nUsedPages = xRow->getInt(1) / 256;
-                double nFreePages = xRow->getInt(2) / 256;
-
-                m_ET_SIZE.SetText(::rtl::OUString::valueOf((INT32)nUsedPages));
-                m_ET_FREESIZE.SetText(::rtl::OUString::valueOf((INT32)nFreePages));
-                m_ET_MEMORYUSING.SetValue(((nUsedPages-nFreePages)/nUsedPages)*100);
-            }
-            else
-                showError();
-
-            xRow = NULL;
-        }
-        else
-            showError();
-    }
-    catch(const SQLException& e)
-    {
-        ::dbaui::showError(SQLExceptionInfo(e),pParent,_xFactory);
-    }
-    catch(const Exception&)
-    {
-        OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
-    }
-    ::comphelper::disposeComponent(xStmt);
-
-    // now fill the datadev spaces
-    if(bCanSelect)
-    {
+        Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
+        // first read the sizes
         try
         {
-            bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("DATADEVSPACES"),sSchema);
+            bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("SERVERDBSTATISTICS"),sSchema);
 
             if(bCanSelect)
             {
-                // then the db files
-                aStmt = ::rtl::OUString::createFromAscii("SELECT DEVSPACENAME FROM ");
+                aStmt = ::rtl::OUString::createFromAscii("SELECT SERVERDBSIZE, UNUSEDPAGES FROM ");
+
                 aStmt += ::dbtools::quoteTableName(xMetaData,sSchema);
-                aStmt += ::rtl::OUString::createFromAscii(".\"DATADEVSPACES\"");
+                aStmt += ::rtl::OUString::createFromAscii(".\"SERVERDBSTATISTICS\"");
+
                 xStmt = m_xConnection->createStatement();
                 xRes = xStmt->executeQuery(aStmt);
 
+
                 Reference<XRow> xRow(xRes,UNO_QUERY);
-                while(xRes.is() && xRes->next())
+                // first the db sizes
+                if(xRes.is() && xRes->next())
                 {
-                    m_LB_DATADEVS.InsertEntry(xRow->getString(1));
+                    double nUsedPages = xRow->getInt(1) / 256;
+                    double nFreePages = xRow->getInt(2) / 256;
+
+                    m_ET_SIZE.SetText(::rtl::OUString::valueOf((INT32)nUsedPages));
+                    m_ET_FREESIZE.SetText(::rtl::OUString::valueOf((INT32)nFreePages));
+                    m_ET_MEMORYUSING.SetValue(((nUsedPages-nFreePages)/nUsedPages)*100);
                 }
-                if(!m_LB_DATADEVS.GetEntryCount())
+                else
                     showError();
+
+                xRow = NULL;
             }
             else
                 showError();
@@ -233,38 +196,28 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
         }
         ::comphelper::disposeComponent(xStmt);
 
-        // now fill the sysdatadev spaces
+        // now fill the datadev spaces
         if(bCanSelect)
         {
             try
             {
-                bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("CONFIGURATION"),sSchema);
+                bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("DATADEVSPACES"),sSchema);
 
                 if(bCanSelect)
                 {
-                    aStmt = ::rtl::OUString::createFromAscii("SELECT * FROM ");
+                    // then the db files
+                    aStmt = ::rtl::OUString::createFromAscii("SELECT DEVSPACENAME FROM ");
                     aStmt += ::dbtools::quoteTableName(xMetaData,sSchema);
-                    aStmt += ::rtl::OUString::createFromAscii(".CONFIGURATION WHERE DESCRIPTION LIKE 'SYS%DEVSPACE%NAME'");
+                    aStmt += ::rtl::OUString::createFromAscii(".\"DATADEVSPACES\"");
                     xStmt = m_xConnection->createStatement();
                     xRes = xStmt->executeQuery(aStmt);
-                    if(xRes.is() && xRes->next())
-                    {
-                        Reference<XRow> xRow(xRes,UNO_QUERY);
-                        m_ET_SYSDEVSPACE.SetText(xRow->getString(2));
-                    }
-                    else
-                        showError();
 
-                    aStmt = ::rtl::OUString::createFromAscii("SELECT * FROM ");
-                    aStmt += ::dbtools::quoteTableName(xMetaData,sSchema);
-                    aStmt += ::rtl::OUString::createFromAscii(".CONFIGURATION WHERE DESCRIPTION = 'TRANSACTION LOG NAME'");
-                    xRes = xStmt->executeQuery(aStmt);
-                    if(xRes.is() && xRes->next())
+                    Reference<XRow> xRow(xRes,UNO_QUERY);
+                    while(xRes.is() && xRes->next())
                     {
-                        Reference<XRow> xRow(xRes,UNO_QUERY);
-                        m_ET_TRANSACTIONLOG.SetText(xRow->getString(2));
+                        m_LB_DATADEVS.InsertEntry(xRow->getString(1));
                     }
-                    else
+                    if(!m_LB_DATADEVS.GetEntryCount())
                         showError();
                 }
                 else
@@ -279,6 +232,54 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                 OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
             }
             ::comphelper::disposeComponent(xStmt);
+
+            // now fill the sysdatadev spaces
+            if(bCanSelect)
+            {
+                try
+                {
+                    bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("CONFIGURATION"),sSchema);
+
+                    if(bCanSelect)
+                    {
+                        aStmt = ::rtl::OUString::createFromAscii("SELECT * FROM ");
+                        aStmt += ::dbtools::quoteTableName(xMetaData,sSchema);
+                        aStmt += ::rtl::OUString::createFromAscii(".CONFIGURATION WHERE DESCRIPTION LIKE 'SYS%DEVSPACE%NAME'");
+                        xStmt = m_xConnection->createStatement();
+                        xRes = xStmt->executeQuery(aStmt);
+                        if(xRes.is() && xRes->next())
+                        {
+                            Reference<XRow> xRow(xRes,UNO_QUERY);
+                            m_ET_SYSDEVSPACE.SetText(xRow->getString(2));
+                        }
+                        else
+                            showError();
+
+                        aStmt = ::rtl::OUString::createFromAscii("SELECT * FROM ");
+                        aStmt += ::dbtools::quoteTableName(xMetaData,sSchema);
+                        aStmt += ::rtl::OUString::createFromAscii(".CONFIGURATION WHERE DESCRIPTION = 'TRANSACTION LOG NAME'");
+                        xRes = xStmt->executeQuery(aStmt);
+                        if(xRes.is() && xRes->next())
+                        {
+                            Reference<XRow> xRow(xRes,UNO_QUERY);
+                            m_ET_TRANSACTIONLOG.SetText(xRow->getString(2));
+                        }
+                        else
+                            showError();
+                    }
+                    else
+                        showError();
+                }
+                catch(const SQLException& e)
+                {
+                    ::dbaui::showError(SQLExceptionInfo(e),pParent,_xFactory);
+                }
+                catch(const Exception&)
+                {
+                    OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
+                }
+                ::comphelper::disposeComponent(xStmt);
+            }
         }
     }
 

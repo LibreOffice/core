@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 12:30:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-09 07:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,41 +158,42 @@ OUserAdmin::~OUserAdmin()
 // -----------------------------------------------------------------------
 void OUserAdmin::FillUserNames()
 {
-    if(!m_xConnection.is())
-        return;
-    m_LB_USER.Clear();
-
-    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-
-    m_UserName = xMetaData->getUserName();
-
-    // first we need the users
-    if(m_xUsers.is())
+    if(m_xConnection.is())
     {
         m_LB_USER.Clear();
 
-        m_aUserNames = m_xUsers->getElementNames();
-        const ::rtl::OUString* pBegin = m_aUserNames.getConstArray();
-        const ::rtl::OUString* pEnd   = pBegin + m_aUserNames.getLength();
-        ::rtl::OUString sUserName = m_UserName;
-        for(;pBegin != pEnd;++pBegin)
-        {
-            // the user which is connected to the database should be in the list because
-            // he doesn't have the possibility to revoke his own rights
-            if(sUserName != *pBegin)
-                m_LB_USER.InsertEntry(*pBegin);
-        }
+        Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
 
-        m_LB_USER.SelectEntryPos(0);
-        if(m_xUsers->hasByName(m_UserName))
-        {
-            Reference<XAuthorizable> xAuth;
-            m_xUsers->getByName(m_UserName) >>= xAuth;
-            m_TableCtrl.setGrantUser(xAuth);
-        }
+        m_UserName = xMetaData->getUserName();
 
-        m_TableCtrl.setUserName(GetUser());
-        m_TableCtrl.Init();
+        // first we need the users
+        if(m_xUsers.is())
+        {
+            m_LB_USER.Clear();
+
+            m_aUserNames = m_xUsers->getElementNames();
+            const ::rtl::OUString* pBegin = m_aUserNames.getConstArray();
+            const ::rtl::OUString* pEnd   = pBegin + m_aUserNames.getLength();
+            ::rtl::OUString sUserName = m_UserName;
+            for(;pBegin != pEnd;++pBegin)
+            {
+                // the user which is connected to the database should be in the list because
+                // he doesn't have the possibility to revoke his own rights
+                if(sUserName != *pBegin)
+                    m_LB_USER.InsertEntry(*pBegin);
+            }
+
+            m_LB_USER.SelectEntryPos(0);
+            if(m_xUsers->hasByName(m_UserName))
+            {
+                Reference<XAuthorizable> xAuth;
+                m_xUsers->getByName(m_UserName) >>= xAuth;
+                m_TableCtrl.setGrantUser(xAuth);
+            }
+
+            m_TableCtrl.setUserName(GetUser());
+            m_TableCtrl.Init();
+        }
     }
 
     Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
@@ -269,7 +270,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
         }
         else
         {// delete user
-            if(m_xUsers->hasByName(GetUser()))
+            if(m_xUsers.is() && m_xUsers->hasByName(GetUser()))
             {
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
                 if(xDrop.is())
