@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 14:40:43 $
+ *  last change: $Author: ama $ $Date: 2001-08-23 16:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,8 +292,10 @@ void SwPageFrm::CheckDirection( BOOL bVert )
 {
     if( bVert )
     {
-        if( GetFmt()->GetName().GetChar(0)=='X')
+        if( pDesc && pDesc->GetLandscape() )
             bVertical = 1;
+        else
+            bVertical = 0;
         bInvalidVert = 0;
     }
     else
