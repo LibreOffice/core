@@ -2,14 +2,7 @@ mkdir: %_DEST%\inc%_EXT%\automation
 
 ..\%__SRC%\bin\sts?????.dll %_DEST%\bin%_EXT%\sts?????.dll
 ..\%__SRC%\lib\libsts* %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\automation.lib %_DEST%\lib%_EXT%\automation.lib
 
 hedabu: ..\inc\automation.hxx %_DEST%\inc%_EXT%\automation\automation.hxx
-
-
-..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
-..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
-
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
