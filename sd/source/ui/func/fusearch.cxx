@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusearch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:57 $
+ *  last change: $Author: dl $ $Date: 2001-12-14 07:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ FuSearch::FuSearch( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
 FuSearch::~FuSearch()
 {
-    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
+    pDocSh->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
     if (pSdOutliner)
         pSdOutliner->EndSpelling();
