@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-16 11:43:19 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 16:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
 
     SdrObjList& rList = *pSdrShape->GetObjList();
 
-    const nObjCount = rList.GetObjCount();
+    const sal_uInt32 nObjCount = rList.GetObjCount();
     sal_uInt32 nObjNum = 0;
     while( nObjNum < nObjCount )
     {
@@ -354,7 +354,7 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
         throw uno::RuntimeException();
 
 
-    if( pObj->GetSubList()->GetObjCount() <= Index )
+    if( pObj->GetSubList()->GetObjCount() <= (sal_uInt32)Index )
         throw lang::IndexOutOfBoundsException();
 
     Reference< drawing::XShape >  xShape;
@@ -839,14 +839,14 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
             sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
 
             // Neues XPolygon vorbereiten
-            XPolygon aNewPolygon(nInnerSequenceCount);
+            XPolygon aNewPolygon((USHORT)nInnerSequenceCount);
 
             // Zeiger auf Arrays holen
             awt::Point* pArray = pInnerSequence->getArray();
 
             for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
             {
-                aNewPolygon[b] = Point( pArray->X, pArray->Y );
+                aNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
                 pArray++;
             }
             pInnerSequence++;
@@ -872,14 +872,14 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
         XPolyPolygon aNewPolyPolygon;
 
         // Neues XPolygon vorbereiten
-        XPolygon aNewPolygon(nSequenceCount);
+        XPolygon aNewPolygon((USHORT)nSequenceCount);
 
         // Zeiger auf Arrays holen
         awt::Point* pArray = pSequence->getArray();
 
         for(sal_Int32 b=0;b<nSequenceCount;b++)
         {
-            aNewPolygon[b] = Point( pArray->X,  pArray->Y );
+            aNewPolygon[(USHORT)b] = Point( pArray->X,  pArray->Y );
             pArray++;
         }
 
@@ -1060,7 +1060,7 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
                 throw IllegalArgumentException();
 
             // Neues XPolygon vorbereiten
-            XPolygon aNewPolygon(nInnerSequenceCount);
+            XPolygon aNewPolygon((USHORT)nInnerSequenceCount);
 
             // Zeiger auf Arrays holen
             const awt::Point* pArray = pInnerSequence->getConstArray();
@@ -1068,9 +1068,9 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
 
             for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
             {
-                aNewPolygon[b] = Point( pArray->X, pArray->Y );
+                aNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
                 pArray++;
-                aNewPolygon.SetFlags(b, (XPolyFlags)((sal_uInt16)*pArrayFlags++));
+                aNewPolygon.SetFlags((USHORT)b, (XPolyFlags)((sal_uInt16)*pArrayFlags++));
             }
 
             pInnerSequence++;

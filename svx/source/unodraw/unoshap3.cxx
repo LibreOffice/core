@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-21 14:43:35 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 16:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
     {
         SdrObjList& rList = *pSdrShape->GetObjList();
 
-        const nObjCount = rList.GetObjCount();
+        const sal_uInt32 nObjCount = rList.GetObjCount();
         sal_uInt32 nObjNum = 0;
         while( nObjNum < nObjCount )
         {
@@ -294,7 +294,7 @@ uno::Any SAL_CALL Svx3DSceneObject::getByIndex( sal_Int32 Index )
     if( pObj == NULL || pObj->GetSubList() == NULL )
         throw uno::RuntimeException();
 
-    if( pObj->GetSubList()->GetObjCount() <= Index )
+    if( pObj->GetSubList()->GetObjCount() <= (sal_uInt32)Index )
         throw lang::IndexOutOfBoundsException();
 
     Reference< drawing::XShape > xShape;
@@ -678,15 +678,15 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
         { \
             throw lang::IllegalArgumentException(); \
         } \
-        Polygon3D aNewPolygon(nInnerSequenceCount); \
+        Polygon3D aNewPolygon((USHORT)nInnerSequenceCount); \
         double* pArrayX = pInnerSequenceX->getArray(); \
         double* pArrayY = pInnerSequenceY->getArray(); \
         double* pArrayZ = pInnerSequenceZ->getArray(); \
         for(sal_Int32 b=0;b<nInnerSequenceCount;b++) \
         { \
-            aNewPolygon[b].X() = *pArrayX++; \
-            aNewPolygon[b].Y() = *pArrayY++; \
-            aNewPolygon[b].Z() = *pArrayZ++; \
+            aNewPolygon[(USHORT)b].X() = *pArrayX++; \
+            aNewPolygon[(USHORT)b].Y() = *pArrayY++; \
+            aNewPolygon[(USHORT)b].Z() = *pArrayZ++; \
         } \
         pInnerSequenceX++; \
         pInnerSequenceY++; \
@@ -716,9 +716,9 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
         double* pInnerSequenceZ = pOuterSequenceZ->getArray(); \
         for(sal_uInt16 b=0;b<rPoly.GetPointCount();b++) \
         { \
-            *pInnerSequenceX++ = rPoly[b].X(); \
-            *pInnerSequenceY++ = rPoly[b].Y(); \
-            *pInnerSequenceZ++ = rPoly[b].Z(); \
+            *pInnerSequenceX++ = rPoly[(USHORT)b].X(); \
+            *pInnerSequenceY++ = rPoly[(USHORT)b].Y(); \
+            *pInnerSequenceZ++ = rPoly[(USHORT)b].Z(); \
         } \
         if(rPoly.IsClosed()) \
         { \
