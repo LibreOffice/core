@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-22 11:56:37 $
+ *  last change: $Author: bm $ $Date: 2001-01-08 12:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ enum SchXMLSeriesAttrMap
 {
     XML_TOK_SERIES_CELL_RANGE,
     XML_TOK_SERIES_LABEL_ADDRESS,
+    XML_TOK_SERIES_ATTACHED_AXIS,
     XML_TOK_SERIES_STYLE_NAME,
     XML_TOK_SERIES_CHART_CLASS          // not available yet
 };

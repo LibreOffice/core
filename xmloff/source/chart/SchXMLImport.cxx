@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-22 11:57:05 $
+ *  last change: $Author: bm $ $Date: 2001-01-08 12:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,7 @@ static __FAR_DATA SvXMLTokenMapEntry aSeriesAttrTokenMap[] =
 {
     { XML_NAMESPACE_CHART,  sXML_values_cell_range_address, XML_TOK_SERIES_CELL_RANGE    },
     { XML_NAMESPACE_CHART,  sXML_label_cell_address,        XML_TOK_SERIES_LABEL_ADDRESS },
+    { XML_NAMESPACE_CHART,  sXML_attached_axis,             XML_TOK_SERIES_ATTACHED_AXIS },
     { XML_NAMESPACE_CHART,  sXML_style_name,                XML_TOK_SERIES_STYLE_NAME    },
     { XML_NAMESPACE_CHART,  sXML_class,                     XML_TOK_SERIES_CHART_CLASS   },
     XML_TOKEN_MAP_END
