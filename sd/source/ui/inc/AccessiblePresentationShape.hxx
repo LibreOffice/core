@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationShape.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:27:23 $
+ *  last change: $Author: af $ $Date: 2002-04-11 13:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,18 +107,13 @@ private:
     /** Don't use the default constructor.  Use the public constructor that
         takes the original shape and the parent as arguments instead.
     */
-    AccessiblePresentationShape (void) : AccessibleShape (NULL,NULL,*(AccessibleShapeTreeInfo*)NULL)
-    { OSL_ENSURE (sal_False, "Illegal call of default constructor of AccessiblePresentationShape");};
+    AccessiblePresentationShape (void);
 
     /// Don't use the constructor.  Not yet implemented.
-    AccessiblePresentationShape (const AccessiblePresentationShape&)
-        : AccessibleShape (NULL,NULL,*(AccessibleShapeTreeInfo*)NULL)
-    { OSL_ENSURE (sal_False, "Illegal call of copy constructor of AccessiblePresentationShape");};
+    AccessiblePresentationShape (const AccessiblePresentationShape&);
 
     /// Don't use the assignment operator.  Not yet implemented.
-    AccessiblePresentationShape& operator= (const AccessiblePresentationShape&)
-    { OSL_ENSURE (sal_False, "Illegal call of asignment operator of AccessiblePresentationShape");
-    return *this;};
+    AccessiblePresentationShape& operator= (const AccessiblePresentationShape&);
 };
 
 } // end of namespace accessibility
