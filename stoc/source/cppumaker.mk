@@ -2,9 +2,9 @@
 #
 #   $RCSfile: cppumaker.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-09 07:28:43 $
+#   last change: $Author: vg $ $Date: 2003-10-06 13:03:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,22 +59,17 @@
 #
 #
 #*************************************************************************
-UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
+UNOUCRRDB = $(SOLARBINDIR)$/udkapi.rdb
+UNOUCRDEP = $(UNOUCRRDB)
 
 .IF "$(BOOTSTRAP_SERVICE)" != ""
-
+# fully functional C++-UNO (no bridging); no types.rdb needed at runtime
 CPPUMAKERFLAGS =
-UNOUCROUT=	$(OUT)$/inc$/bootstrap
-INCPRE+=	$(OUT)$/inc$/bootstrap
-
-.ELSE
-
-UNOUCROUT=	$(OUT)$/inc$/light
-INCPRE+=	$(OUT)$/inc$/light
-
 .ENDIF
+
+UNOUCROUT = $(OUT)$/inc$/$(TARGET)
+INCPRE += $(UNOUCROUT)
 
 .IF "$(debug)" != ""
 
@@ -84,3 +79,4 @@ CFLAGS += -Ob0
 .ENDIF
 
 .ENDIF
+
