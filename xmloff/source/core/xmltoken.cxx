@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.91 $
+*  $Revision: 1.92 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-23 11:24:34 $
+*  last change: $Author: rt $ $Date: 2005-03-29 12:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2516,7 +2516,7 @@ namespace xmloff { namespace token {
 
         TOKEN( "show-filter-button",                   XML_SHOW_FILTER_BUTTON ),
         TOKEN( "drill-down-on-double-click",           XML_DRILL_DOWN_ON_DOUBLE_CLICK ),
-        TOKEN( "group-part",                           XML_GROUP_PART ),
+        TOKEN( "grouped-by",                           XML_GROUPED_BY ),
         TOKEN( "days",                                 XML_DAYS ),
         TOKEN( "months",                               XML_MONTHS ),
         TOKEN( "quarters",                             XML_QUARTERS ),
@@ -2527,7 +2527,6 @@ namespace xmloff { namespace token {
         TOKEN( "is-group-field",                       XML_IS_GROUP_FIELD ),
         TOKEN( "data-pilot-groups",                    XML_DATA_PILOT_GROUPS ),
         TOKEN( "data-pilot-group",                     XML_DATA_PILOT_GROUP ),
-        TOKEN( "group-source-field-name",              XML_GROUP_SOURCE_FIELD_NAME ),
         TOKEN( "japanese-candle-stick",        XML_JAPANESE_CANDLE_STICK ),
         TOKEN( "named-symbol",                 XML_NAMED_SYMBOL ),
         TOKEN( "diamond",                      XML_DIAMOND ),
