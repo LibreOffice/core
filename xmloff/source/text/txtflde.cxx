@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-22 13:01:41 $
+ *  last change: $Author: svesik $ $Date: 2000-11-27 18:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@
 #include <tools/solmath.hxx>
 #endif
 
-#include <stl/vector>
+#include <vector>
 
 using namespace ::rtl;
 using namespace ::std;
