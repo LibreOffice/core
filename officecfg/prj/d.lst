@@ -8,6 +8,7 @@ mkdir: %_DEST%\xml%_EXT%\office\definition
 
 ..\schema\schema.description.dtd %_DEST%\xml%_EXT%\office\schema\schema.description.dtd
 
+..\%__SRC%\misc\org.openoffice.Office.Bibliography.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Bibliography.xml
 ..\%__SRC%\misc\org.openoffice.Office.Calc.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Calc.xml
 ..\%__SRC%\misc\org.openoffice.Office.Chart.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Chart.xml
 ..\%__SRC%\misc\org.openoffice.Office.Common.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Common.xml
