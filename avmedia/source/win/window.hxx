@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2004-08-23 09:04:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@ class Window : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPlayer
 {
 public:
 
-            Window( Player& rPlayer );
+            Window( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr,
+                    Player& rPlayer );
             ~Window();
 
     bool    create( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
@@ -136,6 +137,8 @@ public:
     void fireSetFocusEvent( const ::com::sun::star::awt::FocusEvent& rEvt );
 
 private:
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
 
     ::osl::Mutex                                maMutex;
     ::cppu::OMultiTypeInterfaceContainerHelper  maListeners;
