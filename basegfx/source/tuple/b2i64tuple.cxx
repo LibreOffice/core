@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2i64tuple.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:37:42 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,18 @@
 #ifndef _BGFX_TUPLE_B2I64TUPLE_HXX
 #include <basegfx/tuple/b2i64tuple.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
+
+namespace { struct EmptyTuple : public rtl::Static<basegfx::B2I64Tuple, EmptyTuple> {}; }
 
 namespace basegfx
 {
-    // initialize static member
-    ::basegfx::B2I64Tuple B2I64Tuple::maEmptyTuple(0, 0);
+    const B2I64Tuple& B2I64Tuple::getEmptyTuple()
+    {
+        return EmptyTuple::get();
+    }
 
 } // end of namespace basegfx
 
