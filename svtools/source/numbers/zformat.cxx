@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: er $ $Date: 2002-05-31 18:06:00 $
+ *  last change: $Author: er $ $Date: 2002-05-31 18:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,6 @@ BYTE SvNumberNatNum::MapNatNumToDBNum( BYTE nNatNum, LanguageType eLang )
         case 3:
             switch ( eLang )
             {
-                case (LANGUAGE_CHINESE  & 0x03FF) : nDBNum = 3; break;
                 case (LANGUAGE_KOREAN   & 0x03FF) : nDBNum = 3; break;
             }
             break;
@@ -312,16 +311,26 @@ BYTE SvNumberNatNum::MapNatNumToDBNum( BYTE nNatNum, LanguageType eLang )
         case 6:
             switch ( eLang )
             {
-                case (LANGUAGE_JAPANESE & 0x03FF) : nDBNum = 4; break;
+                case (LANGUAGE_CHINESE  & 0x03FF) : nDBNum = 3; break;
             }
             break;
         case 7:
+            switch ( eLang )
+            {
+                case (LANGUAGE_JAPANESE & 0x03FF) : nDBNum = 4; break;
+            }
             break;
         case 8:
+            break;
+        case 9:
             switch ( eLang )
             {
                 case (LANGUAGE_KOREAN   & 0x03FF) : nDBNum = 4; break;
             }
+            break;
+        case 10:
+            break;
+        case 11:
             break;
     }
     return nDBNum;
