@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:59:20 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5360,7 +5360,7 @@ WW8Fib::WW8Fib(BYTE nVer)
         wMagicCreated = 0x6143;
         wMagicRevised = 0x6C6F;
         wMagicCreatedPrivate = 0x6E61;
-        wMagicRevisedPrivate = 0x3037;
+        wMagicRevisedPrivate = 0x3038;
     }
     else
     {
@@ -6031,6 +6031,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                     p->sFontname.Append(';');
                     p->sFontname.Append(pVer8->szFfn+p->ibszAlt);
                 }
+#if 0       //#115157#, that wasn't such a good idea after all
                 else    //No alternative name
                 {
                     //#i18369# if its a symbol font set Symbol as fallback
@@ -6042,6 +6043,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                         p->sFontname.APPEND_CONST_ASC(";Symbol");
                     }
                 }
+#endif
 
                 // Zeiger auf Ursprungsarray einen Font nach hinten setzen
                 pVer8 = (WW8_FFN_Ver8*)( ((BYTE*)pVer8) + pVer8->cbFfnM1 + 1 );
