@@ -1276,6 +1276,9 @@ sub populateEventList( focusPosition as integer )
 	for n = 0 to ubound( allEventTypes() ) 	
 		&apos; If the line number is 1 then SB macro
 		&apos; more than 1 it is the line number of the script
+		if isApp and n &gt; 12 then
+			exit for
+		endif
 		if isApp then
 			lineNumber = allEventTypesApp( n ).Value
 			scriptName = allEventTypesApp( n ).Name
@@ -1359,10 +1362,11 @@ sub createAllEventTypes()
 	allEventTypes( 11 ).Value = &quot;DeActivate document&quot;
 	allEventTypes( 12 ).Name = &quot;OnPrint&quot;
 	allEventTypes( 12 ).Value = &quot;Print Document&quot;
-	allEventTypes( 13 ).Name = &quot;OnError&quot;
-	allEventTypes( 13 ).Value = &quot;JavaScript Error&quot;
-	allEventTypes( 14 ).Name = &quot;OnNewMail&quot;
-	allEventTypes( 14 ).Value = &quot;Message received&quot;
+	REM The following are document-only events
+	allEventTypes( 13 ).Name = &quot;on-mail-merge&quot;
+	allEventTypes( 13 ).Value = &quot;Print form letters&quot;
+	allEventTypes( 14 ).Name = &quot;page-count-change&quot;
+	allEventTypes( 14 ).Value = &quot;Changing the page count&quot;
 end sub
 
 
