@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-22 14:16:09 $
+ *  last change: $Author: tra $ $Date: 2001-07-24 07:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,11 +165,14 @@ private:
 
     HRESULT SAL_CALL translateStgExceptionCode( HRESULT hr ) const;
 
+    inline void SAL_CALL InitializeFormatEtcContainer( );
+
 private:
     LONG m_nRefCnt;
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_SrvMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >      m_XTransferable;
     CFormatEtcContainer                                                                    m_FormatEtcContainer;
+    sal_Bool                                                                               m_bFormatEtcContainerInitialized;
     CDataFormatTranslator                                                                  m_DataFormatTranslator;
     CFormatRegistrar                                                                       m_FormatRegistrar;
 };

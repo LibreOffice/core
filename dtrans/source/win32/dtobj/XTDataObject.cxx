@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-22 14:16:09 $
+ *  last change: $Author: tra $ $Date: 2001-07-24 07:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,9 @@ CXTDataObject::CXTDataObject( const Reference< XMultiServiceFactory >& aServiceM
     m_SrvMgr( aServiceManager ),
     m_XTransferable( aXTransferable ),
     m_DataFormatTranslator( aServiceManager ),
+    m_bFormatEtcContainerInitialized( sal_False ),
     m_FormatRegistrar( m_SrvMgr, m_DataFormatTranslator )
 {
-    m_FormatRegistrar.RegisterFormats( m_XTransferable,
-                                       m_FormatEtcContainer );
 }
 
 //------------------------------------------------------------------------
@@ -537,6 +536,8 @@ STDMETHODIMP CXTDataObject::EnumFormatEtc(
 
     *ppenumFormatetc = NULL;
 
+    InitializeFormatEtcContainer( );
+
     HRESULT hr;
     if ( DATADIR_GET == dwDirection )
     {
@@ -560,6 +561,8 @@ STDMETHODIMP CXTDataObject::QueryGetData( LPFORMATETC pFormatetc )
 {
     if ( (NULL == pFormatetc) || IsBadReadPtr( pFormatetc, sizeof( FORMATETC ) ) )
         return E_INVALIDARG;
+
+    InitializeFormatEtcContainer( );
 
     return m_FormatEtcContainer.hasFormatEtc( *pFormatetc ) ? S_OK : S_FALSE;
 }
@@ -745,6 +748,19 @@ HRESULT SAL_CALL CXTDataObject::translateStgExceptionCode( HRESULT hr ) const
     }
 
     return hrTransl;
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+inline void SAL_CALL CXTDataObject::InitializeFormatEtcContainer( )
+{
+    if ( !m_bFormatEtcContainerInitialized )
+    {
+        m_FormatRegistrar.RegisterFormats( m_XTransferable, m_FormatEtcContainer );
+        m_bFormatEtcContainerInitialized = sal_True;
+    }
 }
 
 //============================================================================
