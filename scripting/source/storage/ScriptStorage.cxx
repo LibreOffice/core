@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.21 $
-*  last change: $Author: dfoster $ $Date: 2003-05-23 14:59:52 $
+*  $Revision: 1.22 $
+*  last change: $Author: toconnor $ $Date: 2003-05-27 13:40:49 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -84,6 +84,8 @@ using namespace ::drafts::com::sun::star::script::framework;
 
 namespace scripting_impl
 {
+
+ScriptLanguages_hash* ScriptStorage::mh_scriptLangs = NULL;
 
 const sal_Char* const SERVICE_NAME =
     "drafts.com.sun.star.script.framework.storage.ScriptStorage";
