@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XWarningsSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:46 $
+ *  last change:$Date: 2003-09-08 10:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,18 @@
 
 package ifc.sdbc;
 
-import com.sun.star.sdbc.SQLException;
-import com.sun.star.sdbc.XWarningsSupplier;
 import lib.MultiMethodTest;
-import com.sun.star.sdbc.XRowUpdate;
-import com.sun.star.sdbc.XResultSetUpdate;
-import com.sun.star.sdbc.XRow;
+import lib.Status;
+import lib.StatusException;
 import util.DBTools;
 import util.utils;
+
+import com.sun.star.sdbc.SQLException;
+import com.sun.star.sdbc.XResultSetUpdate;
+import com.sun.star.sdbc.XRow;
+import com.sun.star.sdbc.XRowUpdate;
+import com.sun.star.sdbc.XWarningsSupplier;
 import com.sun.star.uno.UnoRuntime;
-import lib.StatusException;
-import lib.Status;
 
 /**
 * Testing <code>com.sun.star.sdbc.XWarningsSupplier</code>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRowSet.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:47 $
+ *  last change:$Date: 2003-09-08 10:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,14 @@
 
 package ifc.sdbc;
 
+import ifc.sdb._XRowSetApproveBroadcaster;
+import lib.MultiMethodTest;
+import lib.StatusException;
+
 import com.sun.star.lang.EventObject;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XRowSet;
 import com.sun.star.sdbc.XRowSetListener;
-import ifc.sdb._XRowSetApproveBroadcaster;
-import lib.MultiMethodTest;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.sdbc.XRowSet</code>
