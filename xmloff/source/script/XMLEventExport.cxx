@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 14:00:16 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 20:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,10 +194,9 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
     for(sal_Int32 i = 0; i < nCount; i++)
     {
         // translate name
-        OUString sXmlName;
         if (aNameTranslationMap.count(aNames[i]))
         {
-            sXmlName = aNameTranslationMap[aNames[i]];
+            OUString sXmlName = aNameTranslationMap[aNames[i]];
 
             // get PropertyValues for this event
             Any aAny = rAccess->getByName( aNames[i] );
@@ -298,7 +297,7 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnNonAlphaCharInput",    "on-non-alpha-char-input" },
     { "OnResize",           "on-resize" },
     { "OnMove",             "on-move" },
-    { "PageCountChange",    "page-count-change" },
+    { "OnPageCountChange",  "page-count-change" },
     { "OnMouseOver",        "on-mouse-over" },
     { "OnClick",            "on-click" },
     { "OnMouseOut",         "on-mouse-out" },

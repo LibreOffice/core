@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlscripti.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 18:53:01 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 20:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,17 +68,20 @@
 #include "xmlkywd.hxx"
 #include "xmlimp.hxx"
 #include "nmspmap.hxx"
+#include "XMLEventsImportContext.hxx"
 
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 #include <com/sun/star/script/XStarBasicModuleInfo.hpp>
 #include <com/sun/star/script/XStarBasicDialogInfo.hpp>
 #include <com/sun/star/script/XStarBasicLibraryInfo.hpp>
+#include <com/sun/star/document/XEventsSupplier.hpp>
 
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::script;
+using namespace com::sun::star::document;
 using namespace com::sun::star::xml::sax;
 
 
@@ -315,7 +318,7 @@ void XMLScriptModuleContext::Characters( const rtl::OUString& rChars )
 
 //-------------------------------------------------------------------------
 //
-//  context for <office:meta> element
+//  context for <office:script> element
 //
 
 XMLScriptContext::XMLScriptContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -337,8 +340,33 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext( sal_uInt16 nPrefix,
                                     const Reference<XAttributeList>& xAttrList )
 {
     SvXMLImportContext* pContext = NULL;
-    pContext = new XMLScriptElementContext( GetImport(),
-        nPrefix, rLName, xAttrList, *this, mxBasicAccess );
+
+    if (XML_NAMESPACE_SCRIPT == nPrefix)
+    {
+        if( rLName.equalsAsciiL( sXML_library_embedded,
+                                 sizeof(sXML_library_embedded)-1 ) ||
+            rLName.equalsAsciiL( sXML_library_linked,
+                                 sizeof(sXML_library_linked)-1 )    )
+        {
+            pContext = new XMLScriptElementContext(
+                GetImport(), nPrefix, rLName, xAttrList, *this, mxBasicAccess);
+        }
+    }
+    else if (XML_NAMESPACE_OFFICE == nPrefix)
+    {
+        if ( rLName.equalsAsciiL(sXML_events, sizeof(sXML_events)-1) )
+        {
+            Reference<XEventsSupplier> xSupplier(GetImport().GetModel(),
+                                                 UNO_QUERY);
+            pContext = new XMLEventsImportContext(GetImport(), nPrefix, rLName,
+                                                  xSupplier);
+        }
+    }
+
+    if (NULL == pContext)
+        pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLName,
+                                                          xAttrList);
+
     return pContext;
 }
 

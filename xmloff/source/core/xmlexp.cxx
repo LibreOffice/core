@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 06:24:00 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 20:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
 
 #ifndef _XMLOFF_GRADIENTSTYLE_HXX
@@ -636,6 +639,10 @@ void SvXMLExport::_ExportScripts()
 
     XMLBasicExport aBasicExp( *this );
     aBasicExp.Export();
+
+    // export document events
+    Reference<document::XEventsSupplier> xEvents(GetModel(), UNO_QUERY);
+    GetEventExport().Export(xEvents, sal_True);
 }
 
 void SvXMLExport::_ExportFontDecls()
