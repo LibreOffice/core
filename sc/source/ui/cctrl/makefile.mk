@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+#   last change: $Author: obo $ $Date: 2003-10-20 15:36:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,8 +70,6 @@ PROJECTPCH=ui_pch
 PDBTARGET=ui_pch
 PROJECTPCHSOURCE=..$/pch$/ui_pch
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  scpre.mk
@@ -80,11 +78,6 @@ AUTOSEG=true
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-        popmenu.cxx \
-        tbinsert.cxx\
-        cbuttonw.cxx
 
 SLOFILES =	\
         $(SLO)$/popmenu.obj \
