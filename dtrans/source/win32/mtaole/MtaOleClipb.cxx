@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-24 07:56:42 $
+ *  last change: $Author: tra $ $Date: 2001-07-26 11:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,10 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
     }
 
     if ( SUCCEEDED( hr ) )
+    {
         hr = UnmarshalIDataObjectAndReleaseStream( lpStream, ppIDataObject );
+        OSL_ENSURE( SUCCEEDED( hr ), "unmarshalling clipboard data object failed" );
+    }
 
     return hr;
 }
@@ -370,8 +373,7 @@ HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
 
     CAutoComInit comAutoInit;
 
-    OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, \
-        "setClipboard from within the clipboard sta thread called" );
+    OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, "setClipboard from within the clipboard sta thread called" );
 
     // because we marshall this request
     // into the sta thread we better
@@ -409,8 +411,7 @@ sal_Bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncC
 
     sal_Bool bRet = sal_False;
 
-    OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, \
-        "registerClipViewer from within the OleThread called" );
+    OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, "registerClipViewer from within the OleThread called" );
 
     MsgCtx  aMsgCtx;
 
@@ -482,7 +483,10 @@ LRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
     // forward the request to the OleClipboard
     HRESULT hr = OleGetClipboard( &pIDataObject );
     if ( SUCCEEDED( hr ) )
+    {
         hr = MarshalIDataObjectInStream( pIDataObject, ppStream );
+        OSL_ENSURE( SUCCEEDED( hr ), "marshalling cliboard data object failed" );
+    }
 
     return static_cast< LRESULT >( hr );
 }
