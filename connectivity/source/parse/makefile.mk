@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 16:38:46 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:47:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ TARGET=sql
 
 YACCTARGET= $(MISC)$/sqlbison.cxx
 YACCFILES= sqlbison.y
-YACCFLAGS=-v -d -l -pSQLyy -bsql -o
+YACCFLAGS=-v -d -l -pSQLyy -bsql
 
 SLOFILES =  \
         $(SLO)$/sqlNoException.obj	\
