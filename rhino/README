@@ -1,0 +1,12 @@
+The Scripting Framework makes use of the Rhino (http://www.mozilla.org/rhino/)
+JavaScript interpreter, available under the Mozilla Public License 
+(http://www.mozilla.org/MPL/MPL-1.1.html).
+
+In addition, to support the debugging of scripts contained in OpenOffice.org
+documents, we have modified the Java source file Main.java.
+
+The modified source code is rebuilt and repackaged in the Rhino js.jar file
+before being deliver to the OpenOffice.org solver. The modified source is
+also available from the OpenOffice.org website at:
+
+http://framework.openoffice.org/source/browse/framework/scripting/examples/java/debugger/rhino/Main.java
