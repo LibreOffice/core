@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:02:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,11 @@
 
 #ifndef _SDR_PROPERTIES_TEXTPROPERTIES_HXX
 #include <svx/sdr/properties/textproperties.hxx>
+#endif
+
+// #110496#
+#ifndef _SV_METAACT_HXX
+#include <vcl/metaact.hxx>
 #endif
 
 // #111111#
@@ -1330,6 +1335,24 @@ sal_Bool SdrTextObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
                 ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
                 OutputDevice* pOutDev=rXOut.GetOutDev();
 
+                GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
+
+                // #110496# Apply verbose mode to outliner
+                BOOL bOldVerboseState( rOutliner.IsVerboseTextComments() );
+                BOOL bWritePaintEndComment( FALSE );
+                if( rInfoRec.nPaintMode & SDRPAINTMODE_VERBOSE_MTF )
+                {
+                    rOutliner.EnableVerboseTextComments(TRUE);
+
+                    if( pMtf != NULL )
+                    {
+                        // #110496# Added some more optional metafile comments.
+                        pMtf->AddAction( new MetaCommentAction( "XTEXT_PAINTSHAPE_BEGIN" ) );
+
+                        bWritePaintEndComment = TRUE;
+                    }
+                }
+
                 if (aGeo.nDrehWink!=0)
                 {
                     // #49328# bei AutoGrowHeight()=TRUE nicht mehr clippen
@@ -1417,6 +1440,13 @@ sal_Bool SdrTextObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
                         //  rOutliner.Draw(pOutDev, aAnchorRect);
                     }
                 }
+
+                // #110496# Added some more optional metafile comments.
+                if( bWritePaintEndComment )
+                    pMtf->AddAction( new MetaCommentAction( "XTEXT_PAINTSHAPE_END" ) );
+
+                // #110496# Restore previous value
+                rOutliner.EnableVerboseTextComments( bOldVerboseState );
 
                 rOutliner.Clear();
                 rOutliner.ClearPaintInfoRec();
