@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-08-16 14:17:55 $
+ *  last change: $Author: os $ $Date: 2002-08-26 08:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,6 +786,7 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, pField )
     else
     {
         pColMgr->NoCols();
+        nCols = 0;
     }
 
     //Maximalwerte setzen
