@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 07:15:01 $
+ *  last change: $Author: mba $ $Date: 2002-06-14 07:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,7 +951,7 @@ SwTextShell::~SwTextShell()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
+void SwTextShell::InsertSymbol( String& rChars, String& rFontName)
 {
     SwWrtShell &rSh = GetShell();
     String aChars( rChars );
@@ -977,7 +977,6 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
     }
 
     Font aNewFont(rFontName, Size(1,1)); // Size nur wg. CTOR
-
     if( !rChars.Len() )
     {
         // Eingestellten Font als Default
@@ -1001,9 +1000,11 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
             aOpt.SetSymbolFont(aNewFont.GetName());
             SW_MOD()->ApplyUsrPref(aOpt, &GetView());
         }
+
         delete pDlg;
     }
 
+    BOOL bFontChanged = FALSE;
     if( aChars.Len() )
     {
         rSh.StartAllAction();
@@ -1031,8 +1032,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
         rSh.Insert( aChars );
 
         // Muss der Font geaendert werden
-        if( aNewFont.GetName() != aFont.GetFamilyName() )
+        if( aNewFont.GetName().Len() && aNewFont.GetName() != aFont.GetFamilyName() )
         {
+            bFontChanged = TRUE;
             SvxFontItem aNewFontItem( aFont );
             aNewFontItem.GetFamilyName() = aNewFont.GetName();
             aNewFontItem.GetFamily()     = aNewFont.GetFamily();
@@ -1059,12 +1061,18 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
         rSh.EndAllAction();
         rSh.EndUndo( UNDO_INSERT );
     }
-}
 
+    if ( bFontChanged )
+        rFontName = aNewFont.GetName();
+    rChars = aChars;
+}
 
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.14  2002/05/06 07:15:01  os
+    #98428# recording of text input re-implemented
+
     Revision 1.13  2002/04/05 14:18:34  os
     #96840# decrease use of open files
 

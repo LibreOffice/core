@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-04-29 11:25:22 $
+ *  last change: $Author: mba $ $Date: 2002-06-14 07:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ class SwTextShell: public SwBaseShell
 {
     SwFldMgr*   pPostItFldMgr;
 
-    void InsertSymbol( const String& rChars, const String& rFont );
+    void InsertSymbol( String& rChars, String& rFont );
     void InsertHyperlink(const SvxHyperlinkItem& rHlnkItem);
     BOOL InsertGraphicDlg();
 
