@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-04 08:44:14 $
+ *  last change: $Author: oj $ $Date: 2002-12-04 11:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,8 +613,6 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
         // select the appropriate condition
         pPredicateListControl->SelectEntryPos( GetSelectionPos( (OSQLPredicateType)_rItem.Handle, *pPredicateListControl ) );
 
-        // set the appropriate value
-        correctCondition( _rItem.Name, aStr );
         // initially normalize this value
         ::rtl::OUString aString( aStr );
         m_aPredicateInput.normalizePredicateString( aString, xColumn );
@@ -825,41 +823,8 @@ String DlgFilterCrit::BuildWherePart()
     return m_xQueryComposer->getFilter();
 }
 // -----------------------------------------------------------------------------
-void DlgFilterCrit::correctCondition(const ::rtl::OUString& _rColumnName,String& _rCondition)
-{
-
-    Reference<XPropertySet> xColumn;
-    if(m_xColumns->hasByName(_rColumnName))
-        m_xColumns->getByName(_rColumnName) >>= xColumn;
-
-    if(!m_xMetaData.is() || !xColumn.is())
-        return;
-    sal_Int32 nType = 0;
-    xColumn->getPropertyValue(PROPERTY_TYPE) >>= nType;
-    Reference< XResultSet> xRs = m_xMetaData->getTypeInfo();
-    Reference< XRow> xRow(xRs,UNO_QUERY);
-    // Information for a single SQL type
-    // Loop on the result set
-    if ( xRs.is() )
-        while ( xRs->next() )
-        {
-            if(nType == xRow->getShort(2))
-            {
-                String sPreSuffix = xRow->getString(4);
-                if(!xRow->wasNull() && _rCondition.Search(sPreSuffix) == 0) // found prefix so remove it
-                    _rCondition.Erase(0,sPreSuffix.Len());
-                sPreSuffix = xRow->getString(5);
-                if(!xRow->wasNull() && _rCondition.SearchCharBackward(sPreSuffix.GetBuffer()) == (_rCondition.Len()-sPreSuffix.Len())) // found suffix so remove it
-                    _rCondition.Erase(_rCondition.Len()-1,1);
-
-                break;
-            }
-        }
-}
-// -----------------------------------------------------------------------------
 void DlgFilterCrit::addQuoting(const ::rtl::OUString& _rColumnName,String& _rCondition) const
 {
-
     Reference<XPropertySet> xColumn;
     if(m_xColumns->hasByName(_rColumnName))
         m_xColumns->getByName(_rColumnName) >>= xColumn;
@@ -878,9 +843,16 @@ void DlgFilterCrit::addQuoting(const ::rtl::OUString& _rColumnName,String& _rCon
         {
             if(nType == xRow->getShort(2))
             {
-                aCondition = String(xRow->getString(4));
-                aCondition += _rCondition;
-                aCondition += String(xRow->getString(5));
+                ::rtl::OUString sPrefix = xRow->getString(4);
+                if ( !xRow->wasNull() )
+                {
+                    aCondition = String(sPrefix);
+                    aCondition += _rCondition;
+                }
+
+                ::rtl::OUString sSuffix = xRow->getString(5);
+                if ( !xRow->wasNull() )
+                    aCondition += String(sSuffix);
                 break;
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:26:31 $
+ *  last change: $Author: oj $ $Date: 2002-12-04 11:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,6 @@ namespace dbaui
         ::connectivity::OSQLPredicateType GetOSQLPredicateType(USHORT nPos,USHORT nCount) const;
         USHORT          GetSelectionPos(::connectivity::OSQLPredicateType eType,const ListBox& rListBox) const;
         ::rtl::OUString getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue) const;
-        void            correctCondition(const ::rtl::OUString& _rColumnName,String& _rCondition);
         void            addQuoting(const ::rtl::OUString& _rColumnName,String& _rCondition)  const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getMatchingColumn( const Edit& _rValueInput ) const;
