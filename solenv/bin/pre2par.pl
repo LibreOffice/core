@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pre2par.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:41:45 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:09:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,12 +86,12 @@ my $parfile = pre2par::work::convert($prefile);
 
 pre2par::work::formatter($parfile);
 
-my $lngfilename = pre2par::work::getlngfilename($pre2par::globals::prefilename);
+my $ulffilename = pre2par::work::getulffilename($pre2par::globals::prefilename);
 
-if ( pre2par::work::fileexists($lngfilename) )
+if ( pre2par::work::fileexists($ulffilename) )
 {
-    my $lngfile = pre2par::files::read_file($lngfilename);
-    pre2par::language::localize($parfile, $lngfile);
+    my $ulffile = pre2par::files::read_file($ulffilename);
+    pre2par::language::localize($parfile, $ulffile);
 }
 
 pre2par::files::save_file($pre2par::globals::parfilename, $parfile);
