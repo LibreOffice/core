@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:29:27 $
+ *  last change: $Author: jsc $ $Date: 2001-05-03 14:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,8 +839,9 @@ sal_Bool InterfaceType::dumpFile(FileStream& o)
     dumpAttributes(o, &aUnoTypeInfos);
     dumpMethods(o, &aUnoTypeInfos);
 
-    o << indent() << "// static Member\n" << indent() << "public static "
-      << "com.sun.star.uno.Uik UIK = new com.sun.star.uno.Uik( ";
+    o << indent() << "// static Member\n";
+/*
+    o << indent() << "public static com.sun.star.uno.Uik UIK = new com.sun.star.uno.Uik( ";
 
     RTUik uik;
     m_reader.getUik(uik);
@@ -848,7 +849,7 @@ sal_Bool InterfaceType::dumpFile(FileStream& o)
     sprintf(buffer, "0x%.8x, (short)0x%.4x, (short)0x%.4x, 0x%.8x, 0x%.8x",
             uik.m_Data1, uik.m_Data2, uik.m_Data3, uik.m_Data4, uik.m_Data5);
     o << buffer << " );\n\n";
-
+*/
     o << indent() << "public static final com.sun.star.lib.uno.typeinfo.TypeInfo UNOTYPEINFO[] = ";
 
     if (!aUnoTypeInfos.empty())
@@ -911,13 +912,15 @@ void InterfaceType::dumpAttributes(FileStream& o, UnoInfoList* pUnoInfos)
 
         o << indent() << "public ";
         dumpType(o, fieldType);
-        o << " get" << fieldName << "() throws com.sun.star.uno.RuntimeException;\n";
+//      o << " get" << fieldName << "() throws com.sun.star.uno.RuntimeException;\n";
+        o << " get" << fieldName << "();\n";
 
         if (access != RT_ACCESS_READONLY)
         {
             o << indent() << "public void set" << fieldName << "( ";
             dumpType(o, fieldType);
-            o << " _" << fieldName.toLowerCase() << " ) throws com.sun.star.uno.RuntimeException;\n";
+//          o << " _" << fieldName.toLowerCase() << " ) throws com.sun.star.uno.RuntimeException;\n";
+            o << " _" << fieldName.toLowerCase() << " );\n";
         }
 
         if (access == RT_ACCESS_READONLY)
@@ -1032,15 +1035,25 @@ void InterfaceType::dumpMethods(FileStream& o, UnoInfoList* pUnoInfos)
         }
         o << " )";
 
-        o << " throws ";
         OString excpName;
+        sal_Bool notFirst = sal_False;
         for (j=0; j < excCount; j++)
         {
             excpName = m_reader.getMethodExcType(i, j);
             if (excpName != "com/sun/star/uno/RuntimeException")
-                o << scopedName(m_typeName, excpName) << ", ";
+            {
+                if (notFirst)
+                    o << ", ";
+                else
+                {
+                    o << " throws ";
+                    notFirst = sal_True;
+                }
+                o << scopedName(m_typeName, excpName);
+            }
         }
-        o << "com.sun.star.uno.RuntimeException;\n";
+//      o << "com.sun.star.uno.RuntimeException;\n";
+        o << ";\n";
     }
 
     if (!first)
