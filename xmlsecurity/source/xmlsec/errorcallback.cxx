@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorcallback.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:57:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,10 +185,14 @@ void errorCallback(const char *file,
         int reason,
         const char *msg)
 {
-    if (g_xErrorRecorder.is() && !g_bErrorRecorded && reason != XMLSEC_ERRORS_R_ASSERTION)
+    if (g_xErrorRecorder.is() && !g_bErrorRecorded)
     {
         g_xErrorRecorder->setStatus(getOperationStatus(reason));
-        g_bErrorRecorded = true;
+
+        if ( reason != XMLSEC_ERRORS_R_ASSERTION && reason!=XMLSEC_ERRORS_R_XMLSEC_FAILED)
+        {
+            g_bErrorRecorded = true;
+        }
     }
 }
 
