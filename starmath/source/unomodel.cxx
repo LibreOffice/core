@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:27:16 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
+#endif
+#ifndef _SFXDOCINF_HXX
+#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
@@ -228,7 +231,10 @@ enum SmModelPropertyHandles
     HANDLE_PRINTER_SETUP,
     HANDLE_SYMBOLS,
     HANDLE_BASIC_LIBRARIES,     /* #93295# */
-    HANDLE_RUNTIME_UID
+    HANDLE_RUNTIME_UID,
+    // --> PB 2004-08-25 #i33095# Security Options
+    HANDLE_LOAD_READONLY
+    // <--
 };
 
 PropertySetInfo * lcl_createModelPropertyInfo ()
@@ -295,6 +301,9 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "RuntimeUID"                      ), HANDLE_RUNTIME_UID                        ,      &::getCppuType(static_cast< const rtl::OUString * >(0)),    PropertyAttribute::READONLY, 0 },
         { RTL_CONSTASCII_STRINGPARAM( "Symbols"                       ),        HANDLE_SYMBOLS                       ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PROPERTY_NONE, 0  },
         { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                         ),    HANDLE_TOP_MARGIN                    ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
+        // --> PB 2004-08-25 #i33095# Security Options
+        { RTL_CONSTASCII_STRINGPARAM( "LoadReadonly" ), HANDLE_LOAD_READONLY, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
+        // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
     PropertySetInfo *pInfo = new PropertySetInfo ( aModelPropertyInfoMap );
@@ -702,6 +711,17 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     throw IllegalArgumentException();
             }
             break;
+            // --> PB 2004-08-25 #i33095# Security Options
+            case HANDLE_LOAD_READONLY :
+            {
+                if ( (*pValues).getValueType() != ::getBooleanCppuType() )
+                    throw IllegalArgumentException();
+                sal_Bool bReadonly;
+                if ( *pValues >>= bReadonly )
+                    pDocSh->GetDocInfo().SetLoadReadonly( bReadonly );
+                break;
+            }
+            // <--
         }
     }
 }
@@ -888,6 +908,13 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_RUNTIME_UID:
                 *pValue <<= getRuntimeUID();
             break;
+            // --> PB 2004-08-25 #i33095# Security Options
+            case HANDLE_LOAD_READONLY :
+            {
+                 *pValue <<= pDocSh->GetDocInfo().IsLoadReadonly();
+                break;
+            }
+            // <--
         }
     }
 }
