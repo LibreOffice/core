@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 08:04:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ typedef struct _typelib_TypeDescription
     sal_Bool                            bOnDemand;
 } typelib_TypeDescription;
 
-/** Type description of a struct or exception.
+/** Type description for exception types.
 */
 typedef struct _typelib_CompoundTypeDescription
 {
@@ -191,6 +191,31 @@ typedef struct _typelib_CompoundTypeDescription
     */
     rtl_uString **                      ppMemberNames;
 } typelib_CompoundTypeDescription;
+
+/**
+   Type description for struct types.
+
+   This is only used to represent plain struct types and instantiated
+   polymorphic struct types; there is no representation of polymorphic struct
+   type templates at this level.
+
+   @since #i21150#
+ */
+typedef struct _typelib_StructTypeDescription
+{
+    /**
+       Derived from typelib_CompoundTypeDescription.
+     */
+    typelib_CompoundTypeDescription aBase;
+
+    /**
+       Flags for direct members, specifying whether they are of parameterized
+       type (true) or explict type (false).
+
+       For a plain struct type, this is a null pointer.
+     */
+    sal_Bool * pParameterizedTypes;
+} typelib_StructTypeDescription;
 
 /** Type description of a union. The type class of this description is typelib_TypeClass_UNION.
 */
@@ -419,11 +444,6 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
         @since #i21150#
     */
     typelib_TypeDescriptionReference **         ppSetExceptions;
-    /** determines whether attribute is bound
-
-        @since #i21150#
-    */
-    sal_Bool                                    bBound;
 } typelib_InterfaceAttributeTypeDescription;
 
 /// @HTML
@@ -512,12 +532,34 @@ typedef struct _typelib_CompoundMember_Init
     */
     typelib_TypeClass   eTypeClass;
     /** name of type of compound member
+
+        For a member of an instantiated polymorphic struct type that is of
+        parameterized type, this will be a null pointer.
     */
     rtl_uString *       pTypeName;
     /** name of compound member
     */
     rtl_uString *       pMemberName;
 } typelib_CompoundMember_Init;
+
+/**
+   Init struct of members for typelib_typedescription_newStruct().
+
+   @since #i21150#
+ */
+typedef struct _typelib_StructMember_Init
+{
+    /**
+       Derived from typelib_CompoundMember_Init;
+     */
+    typelib_CompoundMember_Init aBase;
+
+    /**
+       Flag specifying whether the member is of parameterized type (true) or
+       explict type (false).
+     */
+    sal_Bool bParameterizedType;
+} typelib_StructMember_Init;
 
 /** Init struct of interface methods for typelib_typedescription_new().
 */
@@ -617,6 +659,11 @@ void SAL_CALL typelib_typedescription_newArray(
 
 /** Creates a new type description.
 
+    Since this function can only be used to create type descriptions for plain
+    struct types, not for instantiated polymorphic struct types, the function
+    typelib_typedescription_newStruct should be used instead for all struct
+    types.
+
     @param ppRet inout type description
     @param eTypeClass type class
     @param pTypeName name of type
@@ -632,6 +679,24 @@ void SAL_CALL typelib_typedescription_new(
     typelib_TypeDescriptionReference * pType,
     sal_Int32 nMembers,
     typelib_CompoundMember_Init * pMembers )
+    SAL_THROW_EXTERN_C();
+
+/** Creates a new struct type description.
+
+    @param ppRet inout type description
+    @param pTypeName name of type
+    @param pType base type;
+    @param nMembers number of members
+    @param pMember array of members
+
+    @since #i21150#
+*/
+void SAL_CALL typelib_typedescription_newStruct(
+    typelib_TypeDescription ** ppRet,
+    rtl_uString * pTypeName,
+    typelib_TypeDescriptionReference * pType,
+    sal_Int32 nMembers,
+    typelib_StructMember_Init * pMembers )
     SAL_THROW_EXTERN_C();
 
 /** Creates an interface type description.
@@ -743,7 +808,6 @@ void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     @param eAttributeTypeClass type class of attribute type
     @param pAttributeTypeName type name of attribute type
     @param bReadOnly determines whether attribute is read-only
-    @param bBound determines whether attribute is bound
     @param nGetExceptions number of getter exceptions
     @param ppGetExceptionNames type names of getter exceptions
     @param nSetExceptions number of setter exceptions
@@ -757,7 +821,7 @@ void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     rtl_uString * pAttributeName,
     typelib_TypeClass eAttributeTypeClass,
     rtl_uString * pAttributeTypeName,
-    sal_Bool bReadOnly, sal_Bool bBound,
+    sal_Bool bReadOnly,
     sal_Int32 nGetExceptions, rtl_uString ** ppGetExceptionNames,
     sal_Int32 nSetExceptions, rtl_uString ** ppSetExceptionNames )
     SAL_THROW_EXTERN_C();
@@ -1036,6 +1100,10 @@ void SAL_CALL typelib_static_array_type_init(
 
 /** Inits incomplete static compound type reference. Thread synchronizes on typelib init mutex.
 
+    Since this function can only be used to create type descriptions for plain
+    struct types, not for instantiated polymorphic struct types, the function
+    typelib_static_struct_type_init should be used instead for all struct types.
+
     @param ppRef pointer to type reference pointer
     @param eTypeClass typelib_TypeClass_STRUCT or typelib_TypeClass_EXCEPTION
     @param pTypeName name of type
@@ -1048,6 +1116,28 @@ void SAL_CALL typelib_static_compound_type_init(
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers )
+    SAL_THROW_EXTERN_C();
+
+/** Inits incomplete static struct type reference.
+
+    Thread synchronizes on typelib init mutex.
+
+    @param ppRef pointer to type reference pointer
+    @param pTypeName name of type
+    @param pBaseType base type
+    @param nMembers number of members
+    @param ppMembers member types
+    @param pParameterizedTypes flags for direct members, specifying whether they
+        are of parameterized type (true) or explict type (false); must be null
+        for a plain struct type
+
+    @since #i21150#
+*/
+void SAL_CALL typelib_static_struct_type_init(
+    typelib_TypeDescriptionReference ** ppRef, const sal_Char * pTypeName,
+    typelib_TypeDescriptionReference * pBaseType,
+    sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
+    sal_Bool * pParameterizedTypes )
     SAL_THROW_EXTERN_C();
 
 /** Inits incomplete static interface type reference. Thread synchronizes on typelib init mutex.
