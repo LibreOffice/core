@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:12:52 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3949,7 +3949,7 @@ ImageButton::ImageButton( Window* pParent, WinBits nStyle ) :
 ImageButton::ImageButton( Window* pParent, const ResId& rResId ) :
     PushButton( pParent, rResId.SetRT( RSC_IMAGEBUTTON ) )
 {
-    USHORT nObjMask = ReadShortRes();
+    ULONG nObjMask = ReadLongRes();
 
     if ( RSC_IMAGEBUTTON_IMAGE & nObjMask )
     {
@@ -3958,10 +3958,10 @@ ImageButton::ImageButton( Window* pParent, const ResId& rResId ) :
     }
 
     if ( RSC_IMAGEBUTTON_SYMBOL & nObjMask )
-        SetSymbol( (SymbolType)ReadShortRes() );
+        SetSymbol( (SymbolType)ReadLongRes() );
 
     if ( RSC_IMAGEBUTTON_STATE & nObjMask )
-        SetState( (TriState)ReadShortRes() );
+        SetState( (TriState)ReadLongRes() );
 
     ImplInitStyle();
 }
@@ -3998,7 +3998,7 @@ ImageRadioButton::ImageRadioButton( Window* pParent, WinBits nStyle ) :
 ImageRadioButton::ImageRadioButton( Window* pParent, const ResId& rResId ) :
     RadioButton( pParent, rResId.SetRT( RSC_IMAGERADIOBUTTON ) )
 {
-    USHORT nObjMask = ReadShortRes();
+    ULONG nObjMask = ReadLongRes();
 
     if ( RSC_IMAGERADIOBUTTON_IMAGE & nObjMask )
     {
@@ -4028,7 +4028,7 @@ TriStateBox::TriStateBox( Window* pParent, const ResId& rResId ) :
 {
     EnableTriState( TRUE );
 
-    USHORT nTriState        = ReadShortRes();
+    ULONG  nTriState        = ReadLongRes();
     USHORT bDisableTriState = ReadShortRes();
     //anderer Wert als Default ?
     if ( (TriState)nTriState != STATE_NOCHECK )
