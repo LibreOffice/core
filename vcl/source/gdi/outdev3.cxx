@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-30 18:29:43 $
+ *  last change: $Author: cp $ $Date: 2000-11-03 14:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1536,6 +1536,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     FontItalic eItalic          = rFont.GetItalic();
     FontPitch ePitch            = rFont.GetPitch();
     short nOrientation          = (short)(rFont.GetOrientation() % 3600);
+    BOOL bVertical              = rFont.IsVertical();
     BOOL bShadow                = rFont.IsShadow();
     BOOL bOutline               = rFont.IsOutline();
 
@@ -1560,6 +1561,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
              (eFamily       == pFontSelData->meFamily)    &&
              (ePitch        == pFontSelData->mePitch)     &&
              (nWidth        == pFontSelData->mnWidth)     &&
+             (bVertical     == pFontSelData->mbVertical)  &&
              (nOrientation  == pFontSelData->mnOrientation) )
         {
             if ( !pEntry->mnRefCount )
@@ -2146,6 +2148,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     pEntry->mpKernInfo              = NULL;
     pEntry->mnOwnOrientation        = 0;
     pEntry->mnOrientation           = 0;
+    pEntry->mbVertical              = FALSE;
     mpFirstEntry                    = pEntry;
 
     // Font-Selection-Daten setzen
@@ -2163,6 +2166,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     pFontSelData->meItalic          = eItalic;
     pFontSelData->mePitch           = ePitch;
     pFontSelData->mnOrientation     = nOrientation;
+    pFontSelData->mbVertical        = bVertical;
 
     return pEntry;
 }
@@ -2338,6 +2342,7 @@ void OutputDevice::ImplInitFont()
         aFont.meItalic      = pFontEntry->maFontSelData.meItalic;
         aFont.mePitch       = pFontEntry->maFontSelData.mePitch;
         aFont.mnOrientation = pFontEntry->maFontSelData.mnOrientation;
+        aFont.mbVertical    = pFontEntry->maFontSelData.mbVertical;
         mpGraphics->SetFont( aFont );
         pFontEntry->mnSetFontFlags = 0;
         mbInitFont = FALSE;
@@ -3026,8 +3031,15 @@ void OutputDevice::ImplInitTextLineSize()
     if ( !n2LineDY2 )
         n2LineDY2 = 1;
 
-    nUnderlineOffset = mpFontEntry->maMetric.mnDescent/2 + 1;
-    nStrikeoutOffset = -((mpFontEntry->maMetric.mnAscent-mpFontEntry->maMetric.mnLeading)/3);
+    BOOL bVertical = maFont.IsVertical();
+    if ( bVertical )
+        nUnderlineOffset = -( mpFontEntry->maMetric.mnAscent * 3/4 );
+    else
+        nUnderlineOffset = mpFontEntry->maMetric.mnDescent/2 + 1;
+    if ( bVertical )
+          nStrikeoutOffset = 0;
+    else
+        nStrikeoutOffset = -((mpFontEntry->maMetric.mnAscent-mpFontEntry->maMetric.mnLeading)/3);
 
     if ( !pFontEntry->maMetric.mnUnderlineSize )
     {

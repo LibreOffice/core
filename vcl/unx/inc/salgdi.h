@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: cp $ $Date: 2000-11-03 15:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.1.1.1 $  $Author: hr $  $Date: 2000-09-18 17:05:41 $   //
+// $Revision: 1.2 $  $Author: cp $  $Date: 2000-11-03 15:03:36 $   //
 //                                                                            //
 // $Workfile:   salgdi.h  $                                                   //
 //  $Modtime:   10 Sep 1997 11:55:36  $                                       //
@@ -128,6 +128,7 @@ class SalGraphicsData
             SalColor        nTextColor_;
             Pixel           nTextPixel_;
             short           nFontOrientation_;
+            BOOL            bFontVertical_;
 
             GC              pBrushGC_;          // Brush attributes
             SalColor        nBrushColor_;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: cp $ $Date: 2000-11-03 15:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,6 +468,7 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
     xFont_      = NULL; // ->ReleaseRef()
     aScale_     = Fraction( 1, 1 );
     nFontOrientation_ = pEntry->mnOrientation;
+    bFontVertical_  = pEntry->mbVertical;
 
     if( pEntry->mpFontData && pEntry->mpFontData->mpSysData )
     {
@@ -631,11 +632,88 @@ XPrinterDrawText16( Display* pDisplay, Drawable nDrawable, GC nGC,
     }
 }
 
+// draw string vertically
+static void
+DrawVerticalString ( Display *pDisplay, Drawable nDrawable, GC nGC,
+                     int nX, int nY, const sal_Unicode *pStr, int nLength,
+                     ExtendedFontStruct *pFont )
+{
+    VerticalTextItem** pTextItems;
+    int nNumItem = pFont->GetVerticalTextItems( pStr, nLength, RTL_TEXTENCODING_UNICODE,
+                            pStr, pTextItems );
+
+    for ( int nIdx = 0; nIdx < nNumItem; nIdx++ )
+    {
+        if ( pTextItems[nIdx]->mpXFontStruct == NULL )
+            continue;
+
+        XSetFont( pDisplay, nGC, pTextItems[nIdx]->mpXFontStruct->fid );
+        for ( int nChar = 0; nChar < pTextItems[nIdx]->mnLength; nChar++ )
+        {
+            XDrawString16( pDisplay, nDrawable, nGC,
+                       nX + pTextItems[nIdx]->mnTransX,
+                       nY + pTextItems[nIdx]->mnTransY,
+                       (XChar2b*)(pTextItems[nIdx]->mpString + nChar), 1 );
+            nY += (pTextItems[nIdx]->mbFixed ?
+                   pTextItems[nIdx]->mnFixedAdvance : pTextItems[nIdx]->mpAdvanceAry[nChar]);
+        }
+    }
+
+    for (int nIdx2 = 0; nIdx2 < nNumItem; nIdx2++)
+    {
+        delete( pTextItems[nIdx2] );
+    }
+    free( pTextItems );
+}
+
+struct VTextItemExt
+{
+    rtl_TextEncoding mnEncoding;
+    const sal_Unicode* mpString;
+};
+
+static void
+DrawVerticalTextItem( Display *pDisplay, Drawable nDrawable, GC nGC,
+              int nX, int nY, XTextItem16* pTextItem, int nItem,
+              VTextItemExt* pVTextItemExt, ExtendedFontStruct* pFont )
+{
+    for ( int nItemIdx = 0; nItemIdx < nItem; nItemIdx++ )
+    {
+        VerticalTextItem** pVTextItems;
+        int nNumItem = pFont->GetVerticalTextItems( pVTextItemExt[nItemIdx].mpString,
+                                pTextItem[nItemIdx].nchars,
+                                pVTextItemExt[nItemIdx].mnEncoding,
+                                (sal_Unicode *)pTextItem[nItemIdx].chars,
+                                pVTextItems );
+        for ( int nIdx = 0; nIdx < nNumItem; nIdx++ )
+        {
+            if ( pVTextItems[nIdx]->mpXFontStruct == NULL )
+                continue;
+
+            XSetFont( pDisplay, nGC, pVTextItems[nIdx]->mpXFontStruct->fid );
+            for (int nChar = 0; nChar < pVTextItems[nIdx]->mnLength; nChar++ )
+            {
+                XDrawString16( pDisplay, nDrawable, nGC,
+                           nX + pVTextItems[nIdx]->mnTransX,
+                           nY + pVTextItems[nIdx]->mnTransY,
+                           (XChar2b*)(pVTextItems[nIdx]->mpString + nChar), 1 );
+                nY += (pVTextItems[nIdx]->mbFixed ?
+                       pVTextItems[nIdx]->mnFixedAdvance : pVTextItems[nIdx]->mpAdvanceAry[nChar]);
+            }
+        }
+        for ( int nIdx2 = 0; nIdx2 < nNumItem; nIdx2++ )
+        {
+            delete( pVTextItems[nIdx2] );
+        }
+        free( pVTextItems );
+    }
+}
+
 // draw string in one of the fonts / encodings that are available in the
 // extended font
 static void
 DrawString( Display *pDisplay, Drawable nDrawable, GC nGC,
-        int nX, int nY, const sal_Unicode *pStr, int nLength, int nAngle,
+        int nX, int nY, const sal_Unicode *pStr, int nLength, int nAngle, BOOL bVertical,
         SalConverterCache *pCvt, ExtendedFontStruct *pFont )
 {
     // sanity check
@@ -646,23 +724,29 @@ DrawString( Display *pDisplay, Drawable nDrawable, GC nGC,
 
     if ( nAsciiEnc == RTL_TEXTENCODING_UNICODE )
     {
-        // plain Unicode, can handle all chars and can be handled straight forward
-        XFontStruct* pFontStruct = pFont->GetFontStruct( nAsciiEnc );
+        if ( bVertical )
+            DrawVerticalString( pDisplay, nDrawable, nGC, nX, nY, pStr, nLength, pFont );
+        else
+        {
 
-        if ( pFontStruct == NULL )
-            return;
+            // plain Unicode, can handle all chars and can be handled straight forward
+            XFontStruct* pFontStruct = pFont->GetFontStruct( nAsciiEnc );
 
-        XSetFont( pDisplay, nGC, pFontStruct->fid );
+            if ( pFontStruct == NULL )
+                return;
 
-        #ifdef OSL_LITENDIAN
-        sal_Unicode *pBuffer = (sal_Unicode*)alloca( nLength * sizeof(sal_Unicode) );
-        for ( int i = 0; i < nLength; i++ )
-            pBuffer[ i ] = SwapBytes(pStr[ i ]) ;
-        #else
-        sal_Unicode *pBuffer = const_cast<sal_Unicode*>(pStr);
-        #endif
+            XSetFont( pDisplay, nGC, pFontStruct->fid );
 
-        XDrawString16( pDisplay, nDrawable, nGC, nX, nY, (XChar2b*)pBuffer, nLength );
+            #ifdef OSL_LITENDIAN
+            sal_Unicode *pBuffer = (sal_Unicode*)alloca( nLength * sizeof(sal_Unicode) );
+            for ( int i = 0; i < nLength; i++ )
+                pBuffer[ i ] = SwapBytes(pStr[ i ]) ;
+            #else
+            sal_Unicode *pBuffer = const_cast<sal_Unicode*>(pStr);
+            #endif
+
+            XDrawString16( pDisplay, nDrawable, nGC, nX, nY, (XChar2b*)pBuffer, nLength );
+        }
     }
     else
     {
@@ -678,10 +762,17 @@ DrawString( Display *pDisplay, Drawable nDrawable, GC nGC,
         if ( pFontStruct == NULL )
             return;
 
+        VTextItemExt* pVTextItemExt;
+        if ( bVertical )
+            pVTextItemExt = (VTextItemExt*)alloca( nLength * sizeof(VTextItemExt) );
+
         for ( int nChar = 0, nItem = -1; nChar < nLength; nChar++ )
         {
             rtl_TextEncoding nOldEnc = nEncoding;
             pFont->GetFontStruct( pStr[nChar], &nEncoding, &pFontStruct, pCvt );
+
+            if ( pFontStruct == NULL )
+                continue;
 
             if ( (nItem != -1) && (pFontStruct->fid == pTextItem[ nItem ].font) )
             {
@@ -698,16 +789,32 @@ DrawString( Display *pDisplay, Drawable nDrawable, GC nGC,
                 pTextItem[ nItem ].delta  = 0;
                 pTextItem[ nItem ].font   = pFontStruct->fid;
                 pTextItem[ nItem ].nchars = 1;
+
+                if ( bVertical )
+                {
+                    pVTextItemExt[ nItem ].mnEncoding = nEncoding;
+                    pVTextItemExt[ nItem ].mpString = pStr + nChar;
+                }
             }
         }
         ConvertTextItem16( &pTextItem[ nItem ], pCvt, nEncoding );
         ++nItem;
 
-        if ( XSalIsDisplay( pDisplay ) )
-            XDrawText16( pDisplay, nDrawable, nGC, nX, nY, pTextItem, nItem );
+        if ( bVertical )
+        {
+            pVTextItemExt[ nItem - 1 ].mnEncoding = nEncoding;
+            DrawVerticalTextItem( pDisplay, nDrawable, nGC, nX, nY,
+                          pTextItem, nItem, pVTextItemExt, pFont );
+            free( pVTextItemExt );
+        }
         else
-            XPrinterDrawText16( pDisplay, nDrawable, nGC, nX, nY, nAngle,
-                    pTextItem, nItem );
+        {
+            if ( XSalIsDisplay( pDisplay ) )
+                XDrawText16( pDisplay, nDrawable, nGC, nX, nY, pTextItem, nItem );
+            else
+                XPrinterDrawText16( pDisplay, nDrawable, nGC, nX, nY, nAngle,
+                        pTextItem, nItem );
+        }
     }
 }
 
@@ -774,7 +881,7 @@ SalGraphicsData::DrawText( long nX, long nY,
     GC                  pGC       = SelectFont();
 
     DrawString( pDisplay, hDrawable_, pGC, nX, nY,
-            pStr, nLen, nFontOrientation_ * 64 / 10, pCvt, xFont_ );
+            pStr, nLen, nFontOrientation_ * 64 / 10, bFontVertical_, pCvt, xFont_ );
 }
 
 void
@@ -837,12 +944,13 @@ SalGraphicsData::DrawText(
     // draw every single character
     SalConverterCache *pCvt = GetDisplay()->GetConverter();
     int angle = nFontOrientation_ * 64 / 10;
+    BOOL bVertical = bFontVertical_;
     Polygon aPolygon(1);
     Point   aOrigin( nX, nY );
     Point   aCharPos;
 
     DrawString( GetXDisplay(), hDrawable_, pGC,
-            aOrigin.X(), aOrigin.Y(), pStr, 1, angle, pCvt, xFont_ );
+            aOrigin.X(), aOrigin.Y(), pStr, 1, angle, bVertical, pCvt, xFont_ );
 
     for( int i = 1; i < nLen ; i++ )
     {
@@ -852,7 +960,7 @@ SalGraphicsData::DrawText(
         aCharPos = aPolygon.GetPoint( 0 );
 
         DrawString( GetXDisplay(), hDrawable_, pGC,
-                aCharPos.X(), aCharPos.Y(), pStr + i, 1, angle, pCvt, xFont_ );
+                aCharPos.X(), aCharPos.Y(), pStr + i, 1, angle, bVertical, pCvt, xFont_ );
     }
 
     if( pTmpAry )
@@ -928,6 +1036,8 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
 
         if( XSalCanDrawRotString( maGraphicsData.GetXDisplay(), None ) )
             pMetric->mnOrientation = maGraphicsData.nFontOrientation_;
+        if ( maGraphicsData.bFontVertical_ )
+            pMetric->mnOrientation = 2700;
 
         long n;
 

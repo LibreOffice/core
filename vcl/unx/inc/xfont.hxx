@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: cp $ $Date: 2000-11-03 15:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,56 @@ class ImplFontMetricData;
 class SalConverterCache;
 class ExtendedXlfd;
 
+struct VerticalTextItem
+{
+      BOOL              mbFixed;
+    XFontStruct*        mpXFontStruct;
+    const sal_Unicode*  mpString;
+    int                 mnLength;
+    int                 mnTransX;
+    int                 mnTransY;
+    int                 mnFixedAdvance;
+    int*                mpAdvanceAry;
+
+    VerticalTextItem::VerticalTextItem( XFontStruct* pXFontStruct,
+                        const sal_Unicode* pString,
+                        int nLength,
+                        int nTransX,
+                        int nTransY,
+                        int nFixedAdvance )
+      : mbFixed( TRUE ),
+        mpXFontStruct( pXFontStruct ),
+        mpString( pString ),
+        mnLength( nLength ),
+        mnTransX( nTransX ),
+        mnTransY( nTransY ),
+        mnFixedAdvance( nFixedAdvance )
+    {}
+
+    VerticalTextItem::VerticalTextItem( XFontStruct* pXFontStruct,
+                        const sal_Unicode* pString,
+                        int nLength,
+                        int nTransX,
+                        int nTransY,
+                        int* pAdvanceAry )
+      : mbFixed( FALSE ),
+        mpXFontStruct( pXFontStruct ),
+        mpString( pString ),
+        mnLength( nLength ),
+        mnTransX( nTransX ),
+        mnTransY( nTransY ),
+        mpAdvanceAry( pAdvanceAry )
+    {}
+
+    VerticalTextItem::~VerticalTextItem()
+    {
+        if (!mbFixed)
+        {
+            delete( mpAdvanceAry );
+        }
+    }
+};
+
 class ExtendedFontStruct : public SvRefBase
 {
     private:
@@ -88,6 +138,7 @@ class ExtendedFontStruct : public SvRefBase
         unsigned short      mnPixelSize;
         ExtendedXlfd*       mpXlfd;
         XFontStruct**       mpXFontStruct;
+        XFontStruct***      mpVXFontStruct;
         sal_Size            mnDefaultWidth;
 
         int                 LoadEncoding( rtl_TextEncoding nEncoding );
@@ -104,6 +155,9 @@ class ExtendedFontStruct : public SvRefBase
         sal_Size            GetCharWidth16( SalConverterCache *pCvt,
                                     sal_Unicode nFrom, sal_Unicode nTo,
                                     long *pWidthArray );
+        XFontStruct*        GetVXFontStruct( rtl_TextEncoding nEncoding, short nVClass );
+        int                 GetVTransX( rtl_TextEncoding nEncoding, short nVClass );
+        int                 GetVTransY( short );
 
     public:
                             ExtendedFontStruct( Display* pDisplay,
@@ -114,6 +168,11 @@ class ExtendedFontStruct : public SvRefBase
         Bool                Match( const ExtendedXlfd *pXlfd,
                                     int nPixelSize) const;
         XFontStruct*        GetFontStruct( rtl_TextEncoding nEncoding );
+        int                 GetVerticalTextItems( const sal_Unicode* pStr,
+                                    int nLength,
+                                    rtl_TextEncoding nEncoding,
+                                    const sal_Unicode* pOutStr,
+                                    VerticalTextItem** &pTextItems );
         Bool                GetFontStruct( sal_Unicode nChar,
                                     rtl_TextEncoding *pEncodingInOut,
                                     XFontStruct **pFontInOut,
