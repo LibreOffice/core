@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-04 12:36:59 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:19:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ sub WinFormat {
   $variable =~ s/(\$\w+)/$1/eeg ; # expand the variables twice!
   $variable =~ s/:/;/g;
   $variable =~ s/([;]|\A)(\w);/$1$2:/g; # get back the drives
+
   # Search for posix path ;entry; and replace with cygpath -w entry, accept quotes.
   while ( $variable =~ /(?:;|\A)[\'\"]?((?:\/[\w\.\- ~]+)+)[\'\"]?(?:;|\Z)/ ) { # Normal paths
     if ( defined $debug ) { print(STDERR "WinFormat:\nnormal path:\n$variable\n");};
@@ -112,12 +113,24 @@ sub WinFormat {
     chomp( $d2 = qx{cygpath -w "$d1"} ) ;
     $variable =~ s/$d1/$d2/ ;
   }
-  if ( $variable =~ /\A(-\w(?:[\w\.]+=)?)[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) { # Include paths (sometimes with "/" at the end)
-    # This regex: option -> $1, filename without quotes -> $2
-    # option may be of the form -X<path> or -X<something>=<path>
-    if ( defined $debug ) { print(STDERR "WinFormat:\ninclude path:\n$variable\n");};
-    $d1_prefix = $1;
-    $d1 = $2;
+
+  # Include paths or parameters with filenames
+  if ( $variable =~ /\A(-\w)[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+      # This regex evaluates -X<path>, sometimes with quotes or "/" at the end
+      # option -> $1, filename without quotes -> $2
+      if ( defined $debug ) { print(STDERR "WinFormat:\ninclude (-X<path>) path:\n$variable\n"); }
+      $d1_prefix = $1;
+      $d1 = $2;
+  } elsif ( $variable =~ /\A(-?\w[\w\.]*=)[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+      # This regex evaluates [-]X<something>=<path>, sometimes with quotes or "/" at the end
+      # option -> $1, filename without quotes -> $2
+      if ( defined $debug ) { print(STDERR "WinFormat:\ninclude ([-]<something>=<path>) path:\n$variable\n"); }
+      $d1_prefix = $1;
+      $d1 = $2;
+  } else {
+      $d1 = "";
+  }
+  if ( $d1 ne "" ) {
     # Some programs (e.g. rsc have problems with filenames with spaces), use short dos paths
     if ( $d1 =~ / / ) {
         chomp( $d1 = qx{cygpath -d "$d1"} );
@@ -131,10 +144,18 @@ sub WinFormat {
     }
     $variable = $d1_prefix.$d1;
   }
+
+  # Sanity check for -X<path>
   if ( $variable =~ /-\w[\'\"]?(?:(?:\/[\w\.\- ~]+)+)/ ) {
       print(STDERR "Error: guw.pl: WinFormat: Not converted -X/... type switch in :$variable:.\n");
       if ( (defined $debug_light) or (defined $debug) ) { die "\nNot processed -X/...\n"; }
   }
+  # Sanity check for [-]X<something>=<path> case
+  if ( $variable =~ /-?\w[\w\.]*=[\'\"]?(?:\/[\w\.\- ~]+)+/ ) {
+      print(STDERR "Error: guw.pl: WinFormat: Not converted [-]X<something>=<path> type switch in :$variable:.\n");
+      if ( (defined $debug_light) or (defined $debug) ) { die "\nNot processed [-]X<something>=/...\n"; }
+  }
+
   $variable =~ s/\//\\/g;       # Remaining \ come from e.g.: ../foo/baa
   $variable =~ s/^\\$/\//g; # a single "/" needs to be preserved
 
