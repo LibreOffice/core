@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: jp $ $Date: 2001-06-13 11:48:25 $
+#   last change: $Author: jp $ $Date: 2001-10-18 12:14:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ LIBFLAGS=/NOI /NOE /PAGE:512
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/swunohelper.obj\
         $(SLO)$/SwXTextDefaults.obj\
         $(SLO)$/unobkm.obj\
         $(SLO)$/unoclbck.obj\
@@ -117,6 +118,7 @@ SLOFILES =	\
         $(SLO)$/unotext.obj
 
 EXCEPTIONSFILES=	\
+        $(SLO)$/swunohelper.obj\
         $(SLO)$/SwXTextDefaults.obj\
     $(SLO)$/unobkm.obj\
     $(SLO)$/unoclbck.obj\
