@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:13:53 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 14:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,7 @@ void OTableTreeListBox::Command( const CommandEvent& rEvt )
 
 //------------------------------------------------------------------------
 Reference< XConnection > OTableTreeListBox::UpdateTableList(
-        const ::rtl::OUString& _rConnectionURL, const Sequence< PropertyValue > _rProperties,
-        Reference< XNameAccess >& /* [out] */ _rxTables) throw(SQLException)
+        const ::rtl::OUString& _rConnectionURL, const Sequence< PropertyValue > _rProperties) throw(SQLException)
 {
     Reference< XDatabaseMetaData > xMetaData;
     Reference< XConnection > xConnection;
@@ -332,8 +331,6 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(
                     sTables = xTables->getElementNames();
                 if (xViews.is())
                     sViews = xViews->getElementNames();
-
-                _rxTables = xTables;
             }
         }
     }
@@ -604,6 +601,9 @@ void OTableTreeListBox::removedTable( const Reference< XConnection >& _rxConn, c
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/08/14 12:13:53  fs
+ *  preparations for #86945#
+ *
  *  Revision 1.16  2001/07/16 15:43:24  fs
  *  #89709# special emphasizing handling for the 'all objects' entry
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:00:23 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 14:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
             UpdateTableList(
                 const   ::rtl::OUString& _rConnectionURL,
-                const   ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > _rProperties,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* [out] */ _rxTables
+                const   ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > _rProperties
             )   throw(::com::sun::star::sdbc::SQLException);
 
     /** fill the table list with the tables and views determined by the two given containers
@@ -190,6 +189,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/08/14 12:00:23  fs
+ *  preparations for #86945#
+ *
  *  Revision 1.5  2001/06/05 12:39:02  fs
  *  #87680# implEmphasize signature changed
  *
