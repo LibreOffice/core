@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-12 10:34:26 $
+ *  last change: $Author: hr $ $Date: 2002-04-30 15:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1627,7 +1627,7 @@ void SdrObjGroup::AfterRead()
 }
 
 // ItemPool fuer dieses Objekt wechseln
-void SdrObjGroup::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
+void SdrObjGroup::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel*)
 {
     if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
     {
