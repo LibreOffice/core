@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldapuserprofilelayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 14:39:07 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_PROPERTYINFO_HPP_
 #include <com/sun/star/configuration/backend/PropertyInfo.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERCONTENTDESCIBER_HPP_
-#include <com/sun/star/configuration/backend/XLayerContentDescriber.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_CONNECTIONLOSTEXCEPTION_HPP_
+#include <com/sun/star/configuration/backend/ConnectionLostException.hpp>
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -78,24 +78,98 @@
 //==============================================================================
 namespace extensions { namespace config { namespace ldap {
 
+static const sal_Unicode kPathSeparator = '/' ;
+
+static
+uno::Reference<backend::XLayerContentDescriber>
+    newLayerDescriber(const uno::Reference<lang::XMultiServiceFactory>& xFactory)
+{
+    typedef uno::Reference<backend::XLayerContentDescriber> LayerDescriber;
+
+    rtl::OUString const k_sLayerDescriberService (
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.backend.LayerDescriber"));
+
+    LayerDescriber xResult(xFactory->createInstance(k_sLayerDescriberService), uno::UNO_QUERY_THROW);
+    return xResult;
+}
+//------------------------------------------------------------------------------
+
+void LdapUserProfileSource::getUserProfile(const rtl::OUString & aUser, LdapUserProfile & aProfile)
+{
+    mConnection.getUserProfile(aUser,
+                               mProfileMap,
+                               aProfile);
+}
+
+rtl::OUString LdapUserProfileSource::getConfigurationBasePath() const
+{
+    rtl::OUStringBuffer sComponentNameBuffer(mProfileMap.getComponentName());
+    sComponentNameBuffer.append(kPathSeparator);
+    sComponentNameBuffer.append (mProfileMap.getGroupName());
+    sComponentNameBuffer.append(kPathSeparator);
+
+    return sComponentNameBuffer.makeStringAndClear();
+}
+//------------------------------------------------------------------------------
+
+struct LdapUserProfileLayer::ProfileData
+{
+    LdapUserProfile mProfile;
+    rtl::OUString mBasePath;
+
+    explicit ProfileData(LdapUserProfileSource & aSource, const rtl::OUString & aUser)
+    {
+        aSource.getUserProfile(aUser, mProfile);
+        mBasePath = aSource.getConfigurationBasePath();
+    }
+};
+//------------------------------------------------------------------------------
 
 LdapUserProfileLayer::LdapUserProfileLayer(
     const uno::Reference<lang::XMultiServiceFactory>& xFactory,
     const rtl::OUString& aUser,
-    const LdapUserProfileMap& aUserProfileMap,
-    LdapConnection& aConnection,
-    const rtl::OUString& aTimeStamp)
-  : mFactory(xFactory),
-    mUserName(aUser),
-    mConnection(aConnection),
-    mUserProfileMap(aUserProfileMap),
-    mTimeStamp(aTimeStamp)
+    const LdapUserProfileSourceRef & aUserProfileSource,
+    const rtl::OUString& aTimestamp)
+: mLayerDescriber( newLayerDescriber(xFactory) )
+, mSource( aUserProfileSource )
+, mUser(aUser)
+, mTimestamp(aTimestamp)
+, mProfile( 0 )
 {
+    OSL_ASSERT(mSource.is());
+}
 
-
+//------------------------------------------------------------------------------
+LdapUserProfileLayer::~LdapUserProfileLayer()
+{
+    delete mProfile;
 }
 //------------------------------------------------------------------------------
-static const sal_Unicode kPathSeparator = '/' ;
+bool LdapUserProfileLayer::readProfile()
+{
+    if (mSource.is())
+    try
+    {
+        OSL_ASSERT(!mProfile);
+        mProfile = new ProfileData(*mSource,mUser);
+
+        mSource.clear();
+    }
+    catch (ldap::LdapConnectionException & e)
+    {
+        // without existing Ldap Connection we should never have gotten a timestamp
+        OSL_ENSURE(false, "Unexpected: Have Ldap Backedn Layer but no vaild LDAP connection ?!");
+        throw backend::ConnectionLostException(e.Message, *this, uno::makeAny(e) );
+    }
+    catch (ldap::LdapGenericException & e)
+    {
+        throw backend::BackendAccessException(e.Message, *this, uno::makeAny(e) );
+    }
+    OSL_ASSERT( !mSource.is() );
+    OSL_ASSERT( mProfile != 0 );
+    return mProfile != 0;
+}
+//------------------------------------------------------------------------------
 
 void SAL_CALL LdapUserProfileLayer::readData(
     const uno::Reference<backend::XLayerHandler>& xHandler)
@@ -104,67 +178,51 @@ void SAL_CALL LdapUserProfileLayer::readData(
             lang::WrappedTargetException,
             uno::RuntimeException)
 {
+    std::vector<backend::PropertyInfo> aPropList;
+#ifdef SUPPRESS_BACKEND_ERRORS
     try
+#endif
+    if ( readProfile() )
     {
-        LdapUserProfile aUserProfile;
-        mConnection.getUserProfile(mUserName,
-                                   mUserProfileMap,
-                                   aUserProfile);
+        // initialize PropInfo members that are the same for all settings
+        const rtl::OUString k_sTypeString(RTL_CONSTASCII_USTRINGPARAM("string"));
 
-
-        std::vector<LdapUserProfile::ProfileEntry>::const_iterator entry ;
-
-
-        rtl::OUStringBuffer sComponentNameBuffer(mUserProfileMap.getComponentName());
-        sComponentNameBuffer.append(kPathSeparator);
-        sComponentNameBuffer.append (mUserProfileMap.getGroupName());
-        sComponentNameBuffer.append(kPathSeparator);
-        rtl::OUString sComponentName = sComponentNameBuffer.makeStringAndClear();
-
-        std::vector<backend::PropertyInfo> aPropList;
         backend::PropertyInfo aPropInfo;
-        for (entry = aUserProfile.mProfile.begin() ;
-            entry != aUserProfile.mProfile.end() ; ++ entry)
+        aPropInfo.Type = k_sTypeString;
+        aPropInfo.Protected = sal_False;
+
+        LdapUserProfile * pProfile = &mProfile->mProfile;
+        aPropList.reserve(pProfile->mProfile.size());
+
+        for (LdapUserProfile::Iterator entry = pProfile->mProfile.begin() ;
+             entry != pProfile->mProfile.end() ; ++ entry)
         {
-            if ((*entry).mAttribute.getLength()==0) { continue ; }
-            if ((*entry).mValue.getLength()==0) { continue ; }
-            aPropInfo.Name = sComponentName + entry->mAttribute;
-            aPropInfo.Type = rtl::OUString::createFromAscii("string");
+            if (entry->mAttribute.getLength()==0) { continue ; }
+            if (entry->mValue.getLength()==0) { continue ; }
+
+            aPropInfo.Name = mProfile->mBasePath + entry->mAttribute;
             aPropInfo.Value <<= entry->mValue;
-            aPropInfo.Protected = sal_False;
+
             aPropList.push_back(aPropInfo);
         }
-        if ( !aPropList.empty())
-        {
-            //Describe UserProfileLayer (the list of properties) to the XHandler
-            //Object using com.sun.star.comp.backend.LayerContentDescriber Service
-            uno::Sequence<backend::PropertyInfo> aPropInfoList(aPropList.size());
-            for( sal_uInt32 i = 0; i < aPropList.size(); i++)
-            {
-                aPropInfoList[i] = aPropList[i];
-            }
-            rtl::OUString const k_sLayerDescriberService (
-                RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.comp.configuration.backend.LayerDescriber"));
-
-            typedef uno::Reference<backend::XLayerContentDescriber> LayerDescriber;
-            LayerDescriber xLayerDescriber = LayerDescriber::query(
-                mFactory->createInstance(k_sLayerDescriberService));
-
-            if (xLayerDescriber.is())
-            {
-                xLayerDescriber->describeLayer(xHandler, aPropInfoList);
-            }
-            else
-            {
-                OSL_TRACE("LdapUserProfileLayer::readData- cannot create com.sun.star.configuration.backend.LayerContentDescriber Service");
-            }
-        }
     }
-    catch(uno::Exception e)
+#ifdef SUPPRESS_BACKEND_ERRORS
+    catch (uno::Exception & e)
     {
-        OSL_TRACE("LdapUserProfileLayer::readData- cannot read LDAP User Profile Layer");
+        OSL_TRACE("LDAP Backend - Reading data from LDAP failed: %s\n",
+                  rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
     }
+#endif
+
+    if ( !aPropList.empty())
+    {
+        //Describe UserProfileLayer (the list of properties) to the XHandler
+        //Object using com.sun.star.comp.backend.LayerContentDescriber Service
+        uno::Sequence<backend::PropertyInfo> aPropInfoList(&aPropList.front(),aPropList.size());
+
+        mLayerDescriber->describeLayer(xHandler, aPropInfoList);
+    }
+    // else { check handler not NULL; xHandler->startLayer(); xHandler->endLayer(); }
 }
 //------------------------------------------------------------------------------
 }}}

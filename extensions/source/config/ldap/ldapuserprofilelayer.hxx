@@ -16,6 +16,10 @@
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDACCESSEXCEPTION_HPP_
 
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERCONTENTDESCIBER_HPP_
+#include <com/sun/star/configuration/backend/XLayerContentDescriber.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_XTIMESTAMPED_HPP_
 #include <com/sun/star/util/XTimeStamped.hpp>
 #endif // _COM_SUN_STAR_UTIL_XTIMESTAMPED_HPP_
@@ -23,6 +27,13 @@
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif // _CPPUHELPER_IMPLBASE2_HXX_
+
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
+#endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 
 
 namespace extensions { namespace config { namespace ldap {
@@ -33,6 +44,17 @@ namespace lang = css::lang ;
 namespace backend = css::configuration::backend ;
 namespace util = css::util ;
 
+//------------------------------------------------------------------------------
+struct LdapUserProfileSource : public salhelper::SimpleReferenceObject
+{
+    LdapConnection      mConnection;
+    LdapUserProfileMap  mProfileMap;
+
+    rtl::OUString getConfigurationBasePath() const;
+    void getUserProfile(rtl::OUString const & aUser, LdapUserProfile & aProfile);
+};
+typedef rtl::Reference< LdapUserProfileSource > LdapUserProfileSourceRef;
+//------------------------------------------------------------------------------
 /**
   Implementation of the XLayer interfaces  for LdapUserProfileBe.
   Class reads UserProfile setting form LDAP.
@@ -46,12 +68,12 @@ namespace util = css::util ;
         LdapUserProfileLayer(
             const uno::Reference<lang::XMultiServiceFactory>& xFactory,
             const rtl::OUString& aUser,
-            const LdapUserProfileMap& aUserProfileMap,
-            LdapConnection& aConnection,
-            const rtl::OUString& aTimeStamp);
+            const LdapUserProfileSourceRef & aUserProfileSource,
+            const rtl::OUString& aTimestamp);
+        // throw (uno::RuntimeException
 
         /** Destructor */
-        ~LdapUserProfileLayer(void) {}
+        ~LdapUserProfileLayer();
 
         // XLayer
         virtual void SAL_CALL readData(
@@ -63,14 +85,18 @@ namespace util = css::util ;
 
         // XTimeStamped
         virtual rtl::OUString SAL_CALL getTimestamp(void)
-            throw (uno::RuntimeException){
-                return mTimeStamp;}
+            throw (uno::RuntimeException)
+        { return mTimestamp; }
+
     private :
-        uno::Reference<lang::XMultiServiceFactory> mFactory;
-        LdapConnection& mConnection;
-        const LdapUserProfileMap& mUserProfileMap;
-        rtl::OUString  mUserName;
-        rtl::OUString  mTimeStamp;
+        struct ProfileData;
+        bool readProfile();
+
+        uno::Reference<backend::XLayerContentDescriber> mLayerDescriber;
+        LdapUserProfileSourceRef mSource;
+        rtl::OUString mUser;
+        rtl::OUString mTimestamp;
+        ProfileData * mProfile;
   } ;
 }}}
 #endif // EXTENSIONS_CONFIG_LDAP_LADPUSERPROFILELAYER_HXX_
