@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-17 12:01:31 $
+ *  last change: $Author: oj $ $Date: 2002-04-23 07:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2167,6 +2167,20 @@ Rectangle BrowseBox::calcTableRect(BOOL _bOnScreen)
     Size aSize(aRect.GetSize());
 
     return Rectangle(aRowBar.TopRight(), Size(aSize.A() - nX, aSize.B() - nY - aHScroll.GetSizePixel().Height()) );
+}
+// -----------------------------------------------------------------------------
+Rectangle BrowseBox::GetFieldRectPixelAbs(sal_Int32 _nRowId,sal_uInt16 _nColId, BOOL _bOnScreen)
+{
+    Window* pParent = NULL;
+    if ( !_bOnScreen )
+        pParent = GetAccessibleParentWindow();
+
+    Rectangle aRect = GetFieldRectPixel(_nRowId,_nColId,_bOnScreen);
+
+    Point aTopLeft = aRect.TopLeft();
+    aTopLeft += GetWindowExtentsRelative( pParent ).TopLeft();
+
+    return Rectangle(aTopLeft,aRect.GetSize());
 }
 // -----------------------------------------------------------------------------
 

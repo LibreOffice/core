@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-17 11:56:23 $
+ *  last change: $Author: oj $ $Date: 2002-04-23 07:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point
 
 // Object data and state ------------------------------------------------------
 
-OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjType ) const
+OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition ) const
 {
     OUString aRetText;
     switch( eObjType )
@@ -263,7 +263,7 @@ OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjTyp
 }
 // -----------------------------------------------------------------------------
 
-OUString BrowseBox::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType eObjType ) const
+OUString BrowseBox::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition ) const
 {
     OUString aRetText;
     switch( eObjType )
@@ -272,22 +272,22 @@ OUString BrowseBox::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType 
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BrowseBox description" ) );
             break;
         case ::svt::BBTYPE_TABLE:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLE description" ) );
+            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLE description" ) );
             break;
         case ::svt::BBTYPE_ROWHEADERBAR:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERBAR description" ) );
+            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERBAR description" ) );
             break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERBAR description" ) );
+            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERBAR description" ) );
             break;
         case ::svt::BBTYPE_TABLECELL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLECELL description" ) );
+            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TABLECELL description" ) );
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERCELL description" ) );
+            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ROWHEADERCELL description" ) );
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERCELL description" ) );
+            //  aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "COLUMNHEADERCELL description" ) );
             break;
     }
     return aRetText;
