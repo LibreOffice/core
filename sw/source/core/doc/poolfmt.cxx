@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:17:42 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #endif
 #ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
+#endif
+#ifndef _SVX_SRIPTSPACEITEM_HXX
+#include <svx/scriptspaceitem.hxx>
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
@@ -554,12 +557,21 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
     {
     // allgemeine Inhaltsformen
     case RES_POOLCOLL_STANDARD:
-        if (bRegardLanguage &&
-            GetDefaultFrameDirection(GetAppLanguage()) ==
-            FRMDIR_HORI_RIGHT_TOP)
+        /* #111214# koreans do not like SvxScriptItem(TRUE) */
+        if (bRegardLanguage)
         {
-            SvxAdjustItem aAdjust(SVX_ADJUST_RIGHT);
-            aSet.Put(aAdjust);
+            ULONG nAppLanguage = GetAppLanguage();
+            if (GetDefaultFrameDirection(nAppLanguage) ==
+                FRMDIR_HORI_RIGHT_TOP)
+            {
+                SvxAdjustItem aAdjust(SVX_ADJUST_RIGHT);
+                aSet.Put(aAdjust);
+            }
+            if (nAppLanguage == LANGUAGE_KOREAN)
+            {
+                SvxScriptSpaceItem aScriptSpace(FALSE);
+                aSet.Put(aScriptSpace);
+            }
         }
         break;
 
@@ -2530,7 +2542,12 @@ void SwDoc::RemoveAllFmtLanguageDependencies()
 {
     /* #106748# Restore the language independ pool defaults and styles. */
     GetAttrPool().ResetPoolDefaultItem( RES_PARATR_ADJUST );
-    GetTxtCollFromPool( RES_POOLCOLL_STANDARD )->ResetAttr( RES_PARATR_ADJUST );
+
+    SwTxtFmtColl * pTxtFmtColl = GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
+
+    pTxtFmtColl->ResetAttr( RES_PARATR_ADJUST );
+    /* #111214# koreans do not like SvxScriptItem(TRUE) */
+    pTxtFmtColl->ResetAttr( RES_PARATR_SCRIPTSPACE );
 
     SvxFrameDirectionItem aFrameDir( FRMDIR_HORI_LEFT_TOP );
 
