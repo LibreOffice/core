@@ -2,9 +2,9 @@
  *
  *  $RCSfile: countryid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:26:14 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,9 @@ struct CountryEntry
 
 // ----------------------------------------------------------------------------
 
-#ifndef LANGUAGE_DIVEHI
-#define LANGUAGE_DIVEHI 0x0465
+// Dhivehi not yet implemented -> #i11530#
+#ifndef LANGUAGE_DHIVEHI
+#define LANGUAGE_DHIVEHI 0x0465
 #endif
 
 /** Table for Windows country ID <-> language type conversion.
@@ -126,7 +127,6 @@ struct CountryEntry
 static const CountryEntry pTable[] =
 {
     { COUNTRY_USA,                  LANGUAGE_ENGLISH_US                             },
-    { COUNTRY_CARRIBEAN,            LANGUAGE_ENGLISH_CARRIBEAN,             true    },
     { COUNTRY_DOMINICAN_REPUBLIC,   LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,    true    },
     { COUNTRY_JAMAICA,              LANGUAGE_ENGLISH_JAMAICA,               true    },
     { COUNTRY_PUERTO_RICO,          LANGUAGE_SPANISH_PUERTO_RICO,           true    },
@@ -134,10 +134,8 @@ static const CountryEntry pTable[] =
     { COUNTRY_CANADA,               LANGUAGE_ENGLISH_CAN,                   true    },
     { COUNTRY_CANADA,               LANGUAGE_FRENCH_CANADIAN,               true    },
     { COUNTRY_RUSSIA,               LANGUAGE_RUSSIAN                                },
-    { COUNTRY_KAZACHSTAN,           LANGUAGE_KAZAK                                  },
+    { COUNTRY_KAZAKHSTAN,           LANGUAGE_KAZAK                                  },
     { COUNTRY_TATARSTAN,            LANGUAGE_TATAR                                  },
-    { COUNTRY_TAJIKISTAN,           LANGUAGE_TAJIK                                  },
-    { COUNTRY_UZBEKISTAN,           LANGUAGE_UZBEK                                  },
     { COUNTRY_EGYPT,                LANGUAGE_ARABIC_EGYPT,                  true    },
     { COUNTRY_SOUTH_AFRICA,         LANGUAGE_AFRIKAANS                              },
     { COUNTRY_SOUTH_AFRICA,         LANGUAGE_ENGLISH_SAFRICA,               true    },
@@ -145,21 +143,12 @@ static const CountryEntry pTable[] =
     { COUNTRY_SOUTH_AFRICA,         LANGUAGE_VENDA                                  },
     { COUNTRY_SOUTH_AFRICA,         LANGUAGE_XHOSA                                  },
     { COUNTRY_SOUTH_AFRICA,         LANGUAGE_ZULU                                   },
-    { COUNTRY_BOTSWANA,             LANGUAGE_TSWANA                                 },
-    { COUNTRY_LESOTHO,              LANGUAGE_SESOTHO                                },
     { COUNTRY_GREECE,               LANGUAGE_GREEK                                  },
     { COUNTRY_NETHERLANDS,          LANGUAGE_DUTCH                                  },
     { COUNTRY_NETHERLANDS,          LANGUAGE_FRISIAN_NETHERLANDS                    },
     { COUNTRY_BELGIUM,              LANGUAGE_DUTCH_BELGIAN,                 true    },
     { COUNTRY_BELGIUM,              LANGUAGE_FRENCH_BELGIAN,                true    },
     { COUNTRY_FRANCE,               LANGUAGE_FRENCH                                 },
-    { COUNTRY_CAMEROON,             LANGUAGE_FRENCH_CAMEROON,               true    },
-    { COUNTRY_COTE_D_IVOIRE,        LANGUAGE_FRENCH_COTE_D_IVOIRE,          true    },
-    { COUNTRY_MALI,                 LANGUAGE_FRENCH_MALI,                   true    },
-    { COUNTRY_REUNION,              LANGUAGE_FRENCH_REUNION,                true    },
-    { COUNTRY_SENEGAL,              LANGUAGE_FRENCH_SENEGAL,                true    },
-    { COUNTRY_WEST_INDIES,          LANGUAGE_FRENCH_WEST_INDIES,            true    },
-    { COUNTRY_ZAIRE,                LANGUAGE_FRENCH_ZAIRE,                  true    },
     { COUNTRY_SPAIN,                LANGUAGE_SPANISH                                },
     { COUNTRY_SPAIN,                LANGUAGE_CATALAN                                },
     { COUNTRY_SPAIN,                LANGUAGE_BASQUE                                 },
@@ -167,13 +156,10 @@ static const CountryEntry pTable[] =
     { COUNTRY_HUNGARY,              LANGUAGE_HUNGARIAN                              },
     { COUNTRY_ITALY,                LANGUAGE_ITALIAN                                },
     { COUNTRY_ROMANIA,              LANGUAGE_ROMANIAN                               },
-    { COUNTRY_MOLDOVA,              LANGUAGE_ROMANIAN_MOLDOVA,              true    },
-    { COUNTRY_MOLDOVA,              LANGUAGE_RUSSIAN_MOLDOVA,               true    },
     { COUNTRY_SWITZERLAND,          LANGUAGE_GERMAN_SWISS,                  true    },
     { COUNTRY_SWITZERLAND,          LANGUAGE_FRENCH_SWISS,                  true    },
     { COUNTRY_SWITZERLAND,          LANGUAGE_ITALIAN_SWISS,                 true    },
     { COUNTRY_SWITZERLAND,          LANGUAGE_RHAETO_ROMAN                           },
-    { COUNTRY_LIECHTENSTEIN,        LANGUAGE_GERMAN_LIECHTENSTEIN,          true    },
     { COUNTRY_AUSTRIA,              LANGUAGE_GERMAN_AUSTRIAN,               true    },
     { COUNTRY_UNITED_KINGDOM,       LANGUAGE_ENGLISH_UK,                    true    },
     { COUNTRY_UNITED_KINGDOM,       LANGUAGE_GAELIC_SCOTLAND,               true    },
@@ -196,10 +182,10 @@ static const CountryEntry pTable[] =
     { COUNTRY_AUSTRALIA,            LANGUAGE_ENGLISH_AUS,                   true    },
     { COUNTRY_INDONESIA,            LANGUAGE_INDONESIAN                             },
     { COUNTRY_PHILIPPINES,          LANGUAGE_ENGLISH_PHILIPPINES,           true    },
+    { COUNTRY_NEW_ZEALAND,          LANGUAGE_USER_MAORI                             },
     { COUNTRY_NEW_ZEALAND,          LANGUAGE_ENGLISH_NZ,                    true    },
     { COUNTRY_SINGAPORE,            LANGUAGE_CHINESE_SINGAPORE,             true    },
     { COUNTRY_THAILAND,             LANGUAGE_THAI                                   },
-    { COUNTRY_CAMBODIA,             LANGUAGE_KHMER                                  },
     { COUNTRY_JAPAN,                LANGUAGE_JAPANESE                               },
     { COUNTRY_SOUTH_KOREA,          LANGUAGE_KOREAN                                 },
     { COUNTRY_VIET_NAM,             LANGUAGE_VIETNAMESE                             },
@@ -222,15 +208,23 @@ static const CountryEntry pTable[] =
     { COUNTRY_INDIA,                LANGUAGE_MANIPURI                               },
     { COUNTRY_INDIA,                LANGUAGE_SINDHI                                 },
     { COUNTRY_INDIA,                LANGUAGE_KASHMIRI                               },
-    { COUNTRY_BANGLADESH,           LANGUAGE_BENGALI                                },
-    { COUNTRY_NEPAL,                LANGUAGE_NEPALI                                 },
     { COUNTRY_PAKISTAN,             LANGUAGE_URDU_PAKISTAN                          },
+    { COUNTRY_MYANMAR,              LANGUAGE_BURMESE                                },
     { COUNTRY_MOROCCO,              LANGUAGE_ARABIC_MOROCCO,                true    },
     { COUNTRY_ALGERIA,              LANGUAGE_ARABIC_ALGERIA,                true    },
     { COUNTRY_TUNISIA,              LANGUAGE_ARABIC_TUNISIA,                true    },
     { COUNTRY_LIBYA,                LANGUAGE_ARABIC_LIBYA,                  true    },
+    { COUNTRY_SENEGAL,              LANGUAGE_FRENCH_SENEGAL,                true    },
+    { COUNTRY_MALI,                 LANGUAGE_FRENCH_MALI,                   true    },
+    { COUNTRY_COTE_D_IVOIRE,        LANGUAGE_FRENCH_COTE_D_IVOIRE,          true    },
+    { COUNTRY_CAMEROON,             LANGUAGE_FRENCH_CAMEROON,               true    },
+    { COUNTRY_ZAIRE,                LANGUAGE_FRENCH_ZAIRE,                  true    },
+    { COUNTRY_RWANDA,               LANGUAGE_USER_KINYARWANDA                       },
     { COUNTRY_KENYA,                LANGUAGE_SWAHILI                                },
+    { COUNTRY_REUNION,              LANGUAGE_FRENCH_REUNION,                true    },
     { COUNTRY_ZIMBABWE,             LANGUAGE_ENGLISH_ZIMBABWE,              true    },
+    { COUNTRY_LESOTHO,              LANGUAGE_SESOTHO                                },
+    { COUNTRY_BOTSWANA,             LANGUAGE_TSWANA                                 },
     { COUNTRY_FAEROE_ISLANDS,       LANGUAGE_FAEROESE                               },
     { COUNTRY_PORTUGAL,             LANGUAGE_PORTUGUESE                             },
     { COUNTRY_LUXEMBOURG,           LANGUAGE_GERMAN_LUXEMBOURG,             true    },
@@ -239,12 +233,15 @@ static const CountryEntry pTable[] =
     { COUNTRY_IRELAND,              LANGUAGE_GAELIC_IRELAND,                true    },
     { COUNTRY_ICELAND,              LANGUAGE_ICELANDIC                              },
     { COUNTRY_ALBANIA,              LANGUAGE_ALBANIAN                               },
+    { COUNTRY_MALTA,                LANGUAGE_MALTESE                                },
     { COUNTRY_FINLAND,              LANGUAGE_FINNISH                                },
     { COUNTRY_FINLAND,              LANGUAGE_SWEDISH_FINLAND,               true    },
     { COUNTRY_BULGARIA,             LANGUAGE_BULGARIAN                              },
     { COUNTRY_LITHUANIA,            LANGUAGE_LITHUANIAN                             },
     { COUNTRY_LATVIA,               LANGUAGE_LATVIAN                                },
     { COUNTRY_ESTONIA,              LANGUAGE_ESTONIAN                               },
+    { COUNTRY_MOLDOVA,              LANGUAGE_ROMANIAN_MOLDOVA,              true    },
+    { COUNTRY_MOLDOVA,              LANGUAGE_RUSSIAN_MOLDOVA,               true    },
     { COUNTRY_ARMENIA,              LANGUAGE_ARMENIAN                               },
     { COUNTRY_BELARUS,              LANGUAGE_BELARUSIAN                             },
     { COUNTRY_MONACO,               LANGUAGE_FRENCH_MONACO,                 true    },
@@ -255,6 +252,7 @@ static const CountryEntry pTable[] =
     { COUNTRY_MACEDONIA,            LANGUAGE_MACEDONIAN                             },
     { COUNTRY_CZECH,                LANGUAGE_CZECH                                  },
     { COUNTRY_SLOVAK,               LANGUAGE_SLOVAK                                 },
+    { COUNTRY_LIECHTENSTEIN,        LANGUAGE_GERMAN_LIECHTENSTEIN,          true    },
     { COUNTRY_BELIZE,               LANGUAGE_ENGLISH_BELIZE,                true    },
     { COUNTRY_GUATEMALA,            LANGUAGE_SPANISH_GUATEMALA,             true    },
     { COUNTRY_EL_SALVADOR,          LANGUAGE_SPANISH_EL_SALVADOR,           true    },
@@ -269,8 +267,11 @@ static const CountryEntry pTable[] =
     { COUNTRY_BRUNEI_DARUSSALAM,    LANGUAGE_MALAY_BRUNEI_DARUSSALAM,       true    },
     { COUNTRY_HONG_KONG,            LANGUAGE_CHINESE_HONGKONG,              true    },
     { COUNTRY_MACAU,                LANGUAGE_CHINESE_MACAU,                 true    },
+    { COUNTRY_CAMBODIA,             LANGUAGE_KHMER                                  },
+    { COUNTRY_LAOS,                 LANGUAGE_LAO                                    },
+    { COUNTRY_BANGLADESH,           LANGUAGE_BENGALI                                },
     { COUNTRY_TAIWAN,               LANGUAGE_CHINESE_TRADITIONAL,           true    },
-    { COUNTRY_MALEDIVES,            LANGUAGE_DIVEHI                                 },
+    { COUNTRY_MALDIVES,             LANGUAGE_DHIVEHI                                },
     { COUNTRY_LEBANON,              LANGUAGE_ARABIC_LEBANON,                true    },
     { COUNTRY_JORDAN,               LANGUAGE_ARABIC_JORDAN,                 true    },
     { COUNTRY_SYRIA,                LANGUAGE_ARABIC_SYRIA,                  true    },
@@ -284,11 +285,14 @@ static const CountryEntry pTable[] =
     { COUNTRY_BAHRAIN,              LANGUAGE_ARABIC_BAHRAIN,                true    },
     { COUNTRY_QATAR,                LANGUAGE_ARABIC_QATAR,                  true    },
     { COUNTRY_MONGOLIA,             LANGUAGE_MONGOLIAN                              },
+    { COUNTRY_NEPAL,                LANGUAGE_NEPALI                                 },
     { COUNTRY_IRAN,                 LANGUAGE_FARSI                                  },
+    { COUNTRY_TAJIKISTAN,           LANGUAGE_TAJIK                                  },
     { COUNTRY_TURKMENISTAN,         LANGUAGE_TURKMEN                                },
     { COUNTRY_AZERBAIJAN,           LANGUAGE_AZERI_LATIN                            },
     { COUNTRY_GEORGIA,              LANGUAGE_GEORGIAN                               },
-    { COUNTRY_KYRGYZSTAN,           LANGUAGE_KIRGHIZ                                }
+    { COUNTRY_KYRGYZSTAN,           LANGUAGE_KIRGHIZ                                },
+    { COUNTRY_UZBEKISTAN,           LANGUAGE_UZBEK                                  }
 };
 
 const CountryEntry * const pEnd = pTable + sizeof( pTable ) / sizeof( pTable[ 0 ] );
