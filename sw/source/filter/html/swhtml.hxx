@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:48:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,9 +549,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     ViewShell *CallEndAction( sal_Bool bChkAction = sal_False, sal_Bool bChkPtr = sal_True );
     ViewShell *CheckActionViewShell();
 
-    inline void GetSaveAndSetOwnBaseURL();
-    inline void SetSaveBaseURL();
-
     DECL_LINK( AsyncCallback, void* );
 
     // Attribute am Dok setzen
@@ -969,7 +966,9 @@ protected:
 public:
 
     SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
-                    const String& rFileName, int bReadNewDoc = sal_True,
+                    const String& rFileName,
+                    const String& rBaseURL,
+                    int bReadNewDoc = sal_True,
                     SfxMedium* pMed = 0, sal_Bool bReadUTF8 = sal_False,
                     sal_Bool bIgnoreHTMLComments = sal_False );
 
@@ -1064,18 +1063,6 @@ inline const _HTMLAttrContext *SwHTMLParser::GetTopContext() const
 inline void SwHTMLParser::PushContext( _HTMLAttrContext *pCntxt )
 {
     aContexts.Insert( pCntxt, aContexts.Count() );
-}
-
-
-inline void SwHTMLParser::GetSaveAndSetOwnBaseURL()
-{
-    sSaveBaseURL = INetURLObject::GetBaseURL();
-    INetURLObject::SetBaseURL( sBaseURL );
-}
-
-inline void SwHTMLParser::SetSaveBaseURL()
-{
-    INetURLObject::SetBaseURL( sSaveBaseURL );
 }
 
 
