@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:18:51 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,14 @@
  *
  ************************************************************************/
 
-#ifndef SD_TOOLPANEL_LAYOUT_MENU_HXX
-#define SD_TOOLPANEL_LAYOUT_MENU_HXX
+#ifndef SD_TASKPANE_LAYOUT_MENU_HXX
+#define SD_TASKPANE_LAYOUT_MENU_HXX
 
-#include "TaskPaneTreeNode.hxx"
+#include "taskpane/TaskPaneTreeNode.hxx"
+
+#ifndef _COM_SUN_STAR_FRAME_XSTATUS_LISTENER_HPP_
+#include <com/sun/star/frame/XStatusListener.hpp>
+#endif
 
 #include "glob.hxx"
 #ifndef _PRESENTATION_HXX
@@ -81,12 +85,14 @@
 class SfxModule;
 
 namespace sd {
-
 class DrawDocShell;
 class PaneManagerEvent;
 class ViewShellBase;
+}
 
-namespace toolpanel {
+namespace sd { namespace toolpanel {
+
+class ControlFactory;
 
 
 class LayoutMenu
@@ -122,6 +128,10 @@ public:
         bool bUseOwnScrollBar);
     virtual ~LayoutMenu (void);
 
+    static std::auto_ptr<ControlFactory> CreateControlFactory (
+        ViewShellBase& rBase,
+        DrawDocShell& rDocShell);
+
     /** Return the name of the currently selected layout.
     */
     String GetSelectedLayoutName (void);
@@ -151,6 +161,12 @@ public:
     void Execute (SfxRequest& rRequest);
     void GetState (SfxItemSet& rItemSet);
 
+    /** Call this method when the set of displayed layouts is not up-to-date
+        anymore.  It will re-assemple this set according to the current
+        settings.
+    */
+    void InvalidateContent (void);
+
     // DragSourceHelper
     virtual void StartDrag (sal_Int8 nAction, const Point& rPosPixel);
 
@@ -171,9 +187,13 @@ private:
     */
     const int mnPreferredColumnCount;
 
-    /** Depending on the given number of columns and the item size
-        calculate the number of rows that are necessary to display all
-        items.
+    ::com::sun::star::uno::Reference<com::sun::star::frame::XStatusListener> mxListener;
+
+    /** Calculate the number of displayed rows.  This depends on the given
+        item size, the given number of columns, and the size of the
+        control.  Note that this is not the number of rows managed by the
+        valueset.  This number may be larger.  In that case a vertical
+        scroll bar is displayed.
     */
     int CalculateRowCount (const Size& rItemSize, int nColumnCount);
 
@@ -217,6 +237,7 @@ private:
     DECL_LINK(ClickHandler, ValueSet*);
     DECL_LINK(ViewShellChangeCallback, PaneManagerEvent*);
     DECL_LINK(RightClickHandler, MouseEvent*);
+    DECL_LINK(StateChangeHandler, ::rtl::OUString*);
 };
 
 } } // end of namespace ::sd::toolpanel
