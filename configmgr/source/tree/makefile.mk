@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: lla $ $Date: 2001-04-11 11:40:46 $
+#   last change: $Author: jb $ $Date: 2001-07-16 17:03:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 SLOFILES=\
     $(SLO)$/localizedtreeactions.obj		\
     $(SLO)$/treenodefactory.obj		\
+    $(SLO)$/treechangefactory.obj		\
     $(SLO)$/changes.obj		\
     $(SLO)$/treeactions.obj		\
     $(SLO)$/cmtreemodel.obj	\
