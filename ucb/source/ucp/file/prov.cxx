@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-16 14:53:56 $
+ *  last change: $Author: abi $ $Date: 2001-07-20 11:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,11 +276,16 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
             rtl::OUString::createFromAscii( "com.sun.star.Security" );
 #endif
 
-        Reference< container::XHierarchicalNameAccess > xHierAccess(
-            sProvider->createInstanceWithArguments( sReaderService,aArguments ),
-            UNO_QUERY );
+        Reference< container::XHierarchicalNameAccess > xHierAccess;
+        if( sProvider.is() )
+            xHierAccess =
+                Reference< container::XHierarchicalNameAccess >(
+                    sProvider->createInstanceWithArguments( sReaderService,aArguments ),
+                    UNO_QUERY );
 
-        Reference< container::XNameAccess > xSubNode( xHierAccess,UNO_QUERY );
+        Reference< container::XNameAccess > xSubNode;
+        if( xHierAccess.is() )
+            xSubNode = Reference< container::XNameAccess >( xHierAccess,UNO_QUERY );
 
 #ifdef TF_CFGDATA
         rtl::OUString d = rtl::OUString::createFromAscii( "oowSecDir" );
