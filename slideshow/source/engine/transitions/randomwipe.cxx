@@ -2,9 +2,9 @@
  *
  *  $RCSfile: randomwipe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:07:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include "randomwipe.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
 #include "basegfx/numeric/ftools.hxx"
-#include <stdlib.h>
+#include "tools.hxx"
 
 
 namespace presentation {
@@ -100,9 +100,9 @@ RandomWipe::RandomWipe( sal_Int32 nElements, bool randomBars )
     // mix up:
     for ( sal_Int32 i = (nElements / 2); i--; )
     {
-        sal_Int32 pos1 = (rand() * nElements / RAND_MAX);
-        sal_Int32 pos2 = (rand() * nElements / RAND_MAX);
-        ::basegfx::B2DPoint point( m_positions[ pos1 ] );
+        const sal_Int32 pos1 = getRandomOrdinal(nElements);
+        const sal_Int32 pos2 = getRandomOrdinal(nElements);
+        const ::basegfx::B2DPoint point( m_positions[ pos1 ] );
         m_positions[ pos1 ] = m_positions[ pos2 ];
         m_positions[ pos2 ] = point;
     }
