@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-30 20:12:41 $
+ *  last change: $Author: aw $ $Date: 2001-09-18 09:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,7 +852,8 @@ DockingWindow RID_SVXFLOAT_3D
         Maximum = 36000 ;
         Last = 36000 ;
         DecimalDigits = 1 ;
-        CustomUnitText = " °" ;
+        CustomUnitText = " Grad" ;
+        CustomUnitText [ ENGLISH ] = " degree" ;
     };
     FixedText FT_DEPTH
     {
@@ -1429,7 +1430,8 @@ DockingWindow RID_SVXFLOAT_3D
         SpinSize = 5 ;
         Maximum = 90 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " °" ;
+        CustomUnitText = " Grad" ;
+        CustomUnitText [ ENGLISH ] = " degree" ;
         Last = 90 ;
     };
     FixedLine FL_SHADOW
