@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-20 15:03:38 $
+ *  last change: $Author: mib $ $Date: 2001-11-29 11:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,9 +398,23 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
     }
     else
     {
+        rtl_UnicodeToTextConverter  hConv =
+            rtl_createUnicodeToTextConverter( eDestEnc );
+
         sal_Char cBuffer[5];
-        size_t nLen = ByteString::ConvertFromUnicode( c, cBuffer, 5, eDestEnc );
-        if( nLen )
+        sal_uInt32 nInfo = 0;
+        sal_Size nSrcChars;
+        const sal_uInt32 nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE|
+                                  RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE|
+                                  RTL_UNICODETOTEXT_FLAGS_FLUSH|
+                                  RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|
+                                  RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
+        sal_Size nLen = rtl_convertUnicodeToText( hConv, 0, &c, 1,
+                                                     cBuffer, 5, nFlags,
+                                                  &nInfo, &nSrcChars );
+        rtl_destroyUnicodeToTextConverter( hConv );
+
+        if( nLen > 0 && (nInfo & (RTL_UNICODETOTEXT_INFO_ERROR|RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) == 0 )
         {
             sal_Char *pBuffer = cBuffer;
             while( nLen-- )
