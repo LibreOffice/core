@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsub.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-02 12:11:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,10 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile, unsigned char* pGsubBase,
     const USHORT nOfsFeatureTable   = NEXT_UShort( pGsubHeader );
     const USHORT nOfsLookupList     = NEXT_UShort( pGsubHeader );
 
-    // sanity check
+    // sanity check the GSUB header
     if( nVersion != 0x00010000 )
-        return -1; // unknown format or broken
+        if( nVersion != 0x00001000 )    // workaround for SunBatang etc.
+            return -1;                  // unknown format or broken
 
     typedef std::vector<ULONG> ReqFeatureTagList;
     ReqFeatureTagList aReqFeatureTagList;
