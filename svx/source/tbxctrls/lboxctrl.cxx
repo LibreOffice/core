@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-09 08:47:42 $
+ *  last change: $Author: ssa $ $Date: 2002-07-02 15:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,6 @@ class SvxPopupWindowListBox : public SfxPopupWindow
     ListBox *       pListBox;
     ToolBox &       rToolBox;
     BOOL            bUserSel;
-
     // disallow copy-constructor and assignment-operator
 
     SvxPopupWindowListBox(const& );
@@ -154,6 +153,7 @@ public:
 
     BOOL                        IsUserSelected() const          { return bUserSel; }
     void                        SetUserSelected( BOOL bVal )    { bUserSel = bVal; }
+    /*virtual*/Window*                     GetPreferredKeyInputWindow();
 };
 
 /////////////////////////////////////////////////////////////////
@@ -214,6 +214,12 @@ void SvxPopupWindowListBox::StartSelection()
     rToolBox.StartSelection();
 }
 
+Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
+{
+    // allows forwarding key events in the correct window
+    // without setting the focus
+    return pListBox->GetPreferredKeyInputWindow();
+}
 
 /////////////////////////////////////////////////////////////////
 
@@ -342,33 +348,10 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
         Impl_SetInfo( rListBox.GetSelectEntryCount() );
 
 
-        // #92220# MT: use special StartPopupMode instead...
-/*
-        // position window at the bottom-left of the toolbox icon.
-        // The -2 offset takes the distance from the item-rect to
-        // the toolbox border into account (can't be obtained from
-        // the toolbox).
-        Rectangle aItemRect( rBox.GetItemRect( nId ) );
-        aItemRect.Bottom() += aItemRect.GetHeight() - 2;
-        {
-            MouseEvent aMEvt( aItemRect.TopLeft(), 1, 0, 0, 0 );
-            Link aSave( rBox.GetSelectHdl() );
-            rBox.SetSelectHdl( Link() );
-            rBox.Tracking( TrackingEvent( aMEvt, ENDTRACK_END ) );
-            rBox.SetSelectHdl( aSave );
-        }
-
-        pPopupWin->StartPopupMode( aItemRect );
-*/
-
-        pPopupWin->StartPopupMode( &rBox );
-
-        //! Focus has to be altered *after* StartPopupMode
-        //  It's probably better to overload 'GetFocus' but this would
-        //  be an incompatible fix right now.
-        pPopupWin->GetListBox().GrabFocus();    // needed for cursor-traveling
-
-//      pPopupWin->StartSelection();
+        // move focus in floating window without
+        // closing it (GrabFocus() would close it!)
+        pPopupWin->StartPopupMode( &rBox, FLOATWIN_POPUPMODE_GRABFOCUS );
+        //pPopupWin->GetListBox().GrabFocus();
     }
     return pPopupWin;
 }
