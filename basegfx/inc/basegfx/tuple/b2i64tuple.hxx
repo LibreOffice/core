@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2i64tuple.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:08 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@ namespace basegfx
     */
     class B2I64Tuple
     {
-    private:
-        static B2I64Tuple                               maEmptyTuple;
-
     protected:
         sal_Int64                                       mnX;
         sal_Int64                                       mnY;
@@ -239,10 +236,7 @@ namespace basegfx
             return *this;
         }
 
-        static const B2I64Tuple& getEmptyTuple()
-        {
-            return maEmptyTuple;
-        }
+        static const B2I64Tuple& getEmptyTuple();
     };
 
     // external operators
