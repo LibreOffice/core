@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertiesRetriever.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:06:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,13 +38,14 @@
  *
  *************************************************************************/
 
-// base classes
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.ucb.*;
-import com.sun.star.sdbc.XRow;
-import com.sun.star.beans.Property;
 import java.util.Vector;
 import java.util.StringTokenizer;
+
+import com.sun.star.beans.Property;
+import com.sun.star.ucb.XContent;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.sdbc.XRow;
+
 
 /**
  * Obtaining Property Values from a UCB Content
@@ -56,7 +57,6 @@ public class PropertiesRetriever {
      */
     private  Helper   m_helper;
     private  XContent m_content;
-    private  String   m_connectString = "";
     private  String   m_contenturl    = "";
     private  Vector   m_propNames     = new Vector();
 
@@ -64,9 +64,8 @@ public class PropertiesRetriever {
      * Constructor.
      *
      *@param      String[]   This construtor requires the arguments:
-     *                          -connect=socket,host=..., port=...
-     *                          -url=..
-     *                          -propName=... (optional).
+     *                          -url=...       (optional)
+     *                          -propNames=... (optional)
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
      *                       running office cannot created.
@@ -76,11 +75,9 @@ public class PropertiesRetriever {
 
         // Parse arguments
         parseArguments( args );
-        String connect = getConnect();
-        String url     = getContentURL();
 
         // Init
-        m_helper       = new Helper( connect, url );
+        m_helper       = new Helper( getContentURL() );
 
         // Create UCB content
         m_content      = m_helper.createUCBContent();
@@ -160,15 +157,6 @@ public class PropertiesRetriever {
     }
 
     /**
-     * Get source data connection.
-     *
-     *@return String  That contains the source data connection
-     */
-    public String getConnect() {
-        return m_connectString;
-    }
-
-    /**
      * Get the properties.
      *
      *@return Vector  That contains the properties
@@ -186,9 +174,7 @@ public class PropertiesRetriever {
     public void parseArguments( String[] args ) throws java.lang.Exception {
 
         for ( int i = 0; i < args.length; i++ ) {
-            if ( args[i].startsWith( "-connect=" )) {
-                m_connectString = args[i].substring( 9 );
-            } else if ( args[i].startsWith( "-url=" )) {
+            if ( args[i].startsWith( "-url=" )) {
                 m_contenturl    = args[i].substring( 5 );
             } else if ( args[i].startsWith( "-propNames=" )) {
                 StringTokenizer tok
@@ -204,12 +190,8 @@ public class PropertiesRetriever {
             }
         }
 
-        if ( m_connectString == null || m_connectString.equals( "" )) {
-            m_connectString = "socket,host=localhost,port=2083";
-        }
-
         if ( m_contenturl == null || m_contenturl.equals( "" )) {
-            m_contenturl = Helper.getAbsoluteFileURL( "data/data.txt" );
+            m_contenturl = Helper.prependCurrentDirAsAbsoluteFileURL( "data/data.txt" );
         }
 
         if ( m_propNames.size() == 0 ) {
@@ -223,9 +205,9 @@ public class PropertiesRetriever {
      */
     public void printCmdLineUsage() {
         System.out.println(
-            "Usage   : PropertiesRetriever -connect=socket,host=...,port=... -url=... -propNames=..." );
+            "Usage   : PropertiesRetriever -url=... -propNames=..." );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/data/data.txt -propNames=Title;IsDocument" );
+            "Defaults: -url=<currentdir>/data/data.txt -propNames=Title;IsDocument" );
         System.out.println(
             "\nExample : -propNames=Title;IsFolder" );
     }
