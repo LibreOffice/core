@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:45:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,13 +117,13 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ polish ] = "Edytuj";
             Text[ portuguese_brazilian ] = "Edit";
             Text[ japanese ] = "•ÒW";
-            Text[ korean ] = "Edit";
+            Text[ korean ] = "ÆíÁı";
             Text[ chinese_simplified ] = "±à¼­";
             Text[ chinese_traditional ] = "½s¿è";
             Text[ turkish ] = "Edit";
             Text[ arabic ] = "ÊÍÑíÑ";
             Text[ catalan ] = "Editar";
-            Text[ finnish ] = "Bearbeiten";
+            Text[ finnish ] = "Muokkaa";
         };
         ToolBoxItem
         {
@@ -148,13 +148,13 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ polish ] = "Zapisz";
             Text[ portuguese_brazilian ] = "Save";
             Text[ japanese ] = "•Û‘¶";
-            Text[ korean ] = "Save";
+            Text[ korean ] = "ÀúÀå";
             Text[ chinese_simplified ] = "´æÅÌ";
             Text[ chinese_traditional ] = "Àx¦s";
             Text[ turkish ] = "Save";
             Text[ arabic ] = "ÍİÙ";
             Text[ catalan ] = "Guardar";
-            Text[ finnish ] = "Speichern";
+            Text[ finnish ] = "Tallenna";
         };
         ToolBoxItem
         {
@@ -176,13 +176,13 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ polish ] = "Drukuj";
             Text[ portuguese_brazilian ] = "Print";
             Text[ japanese ] = "ˆóü";
-            Text[ korean ] = "Print";
+            Text[ korean ] = "ÀÎ¼â";
             Text[ chinese_simplified ] = "´òÓ¡";
             Text[ chinese_traditional ] = "¦C¦L";
             Text[ turkish ] = "Print";
             Text[ arabic ] = "ØÈÇÚÉ";
             Text[ catalan ] = "Imprimir";
-            Text[ finnish ] = "Drucken";
+            Text[ finnish ] = "Tulostetaan";
         };
         ToolBoxItem
         {
@@ -207,13 +207,13 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ polish ] = "Cofnij";
             Text[ portuguese_brazilian ] = "Undo";
             Text[ japanese ] = "Œ³‚É–ß‚·";
-            Text[ korean ] = "Undo";
+            Text[ korean ] = "½ÇÇàÃë¼Ò";
             Text[ chinese_simplified ] = "³·ÏûÃüÁî";
             Text[ chinese_traditional ] = "´_­ì";
             Text[ turkish ] = "Undo";
             Text[ arabic ] = "ÊÑÇÌÚ";
             Text[ catalan ] = "Deshacer";
-            Text[ finnish ] = "Rückgängig";
+            Text[ finnish ] = "Peruuta ";
         };
         ToolBoxItem
         {
@@ -235,13 +235,13 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ polish ] = "Przywróæ";
             Text[ portuguese_brazilian ] = "Redo";
             Text[ japanese ] = "‚â‚è’¼‚µ";
-            Text[ korean ] = "Redo";
+            Text[ korean ] = "º¹±¸";
             Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî";
             Text[ chinese_traditional ] = "«ì´_ºM®ø«ü¥O";
             Text[ turkish ] = "Redo";
             Text[ arabic ] = "ÅÚÇÏÉ";
             Text[ catalan ] = "Restaurar";
-            Text[ finnish ] = "Wiederherstellen";
+            Text[ finnish ] = "Palauta";
         };
         ToolBoxItem
         {
@@ -266,7 +266,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ polish ] = "Dodaj tabele ...";
             Text[ portuguese_brazilian ] = "Add tables ...";
             Text[ japanese ] = "Ã°ÌŞÙ‚Ì’Ç‰Á...";
-            Text[ korean ] = "Add tables ...";
+            Text[ korean ] = "Ç¥ Ãß°¡ ...";
             Text[ chinese_simplified ] = "Ôö¼Ó±í¸ñ...";
             Text[ chinese_traditional ] = "¼W¥[ªí®æ...";
             Text[ turkish ] = "Add tables ...";
@@ -338,7 +338,7 @@ String STR_RELATIONDESIGN
     Text[ polish ] = "Projekt relacji";
     Text[ portuguese_brazilian ] = "Relation design";
     Text[ japanese ] = "ØÚ°¼®İÃŞ»Ş²İ";
-    Text[ korean ] = "Relation design";
+    Text[ korean ] = "°ü°è µğÀÚÀÎ";
     Text[ chinese_simplified ] = "¹ØÏµÉè¼Æ";
     Text[ chinese_traditional ] = "Ãö«Y³]­p";
     Text[ turkish ] = "Relation design";
@@ -363,7 +363,7 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ polish ] = "Baza danych nie obs³uguje relacji.";
     Text[ portuguese_brazilian ] = "The database doesn't support any relations. The relation design will be closed!";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ÍØÚ°¼®İ‚ğx‰‡‚µ‚Ü‚¹‚ñB";
-    Text[ korean ] = "The database doesn't support any relations. The relation design will be closed!";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º´Â ¾î¶°ÇÑ °ü°èµµ Áö¿øÇÏÁö ¾Ê½À´Ï´Ù. °ü°è µğÀÚÀÎÀº ´İÈü´Ï´Ù!";
     Text[ chinese_simplified ] = "Õâ¸öÊı¾İ¿â²»Ö§³Ö¹ØÏµ¹¦ÄÜ£¡";
     Text[ chinese_traditional ] = "³o­Ó¸ê®Æ®w¤£¤ä´©Ãö«Y¥\\¯à¡I";
     Text[ turkish ] = "The database doesn't support any relations. The relation design will be closed!";
@@ -390,7 +390,7 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message[ polish ] = "Zmieniono projekt relacji.\nZapisaæ zmiany?";
     Message[ portuguese_brazilian ] = "The relation design has been changed.\nDo you want to save the changes?";
     Message[ japanese ] = "ØÚ°¼®İ‚ÌÃŞ»Ş²İ‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
-    Message[ korean ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ korean ] = "°ü°è µğÀÚÀÎÀÌ º¯°æµÇ¾ú½À´Ï´Ù.\nº¯°æ»çÇ×À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Message[ chinese_simplified ] = "Õâ¸ö¹ØÏµÊı¾İÒÑ¾­¸ü¸Ä¡£\nÒª´æÅÌÕâĞ©¸ü¸ÄÄÚÈİ£¿";
     Message[ chinese_traditional ] = "³o­ÓÃö«Y³]­p¤w¸gÅÜ§ó¡C\n­nÀx¦sÅÜ§ó¤º®e¡H";
     Message[ turkish ] = "The relation design has been changed.\nDo you want to save the changes?";
@@ -458,7 +458,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
         Text [ italian ] = "~Modifica" ;
         Text [ portuguese_brazilian ] = "~Editar" ;
         Text [ portuguese ] = "~Editar" ;
-        Text [ finnish ] = "~Bearbeiten" ;
+        Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "~Rediger" ;
         Text [ french ] = "~Édition" ;
         Text [ swedish ] = "R~edigera" ;
@@ -495,7 +495,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ turkish ] = "Undo";
                     Text[ arabic ] = "ÊÑÇÌÚ";
                     Text[ catalan ] = "Undo";
-                        Text[ finnish ] = "Rückgängig";
+                        Text[ finnish ] = "Peruuta ";
                     };
                 MenuItem
                 {
@@ -525,7 +525,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ turkish ] = "Redo";
                     Text[ arabic ] = "ÅÚÇÏÉ";
                     Text[ catalan ] = "Redo";
-                        Text[ finnish ] = "Wiederherstellen";
+                        Text[ finnish ] = "Palauta";
                     };
                 MenuItem
                 {
@@ -556,7 +556,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
         Text [ italian ] = "~Strumenti" ;
         Text [ portuguese_brazilian ] = "F~erramentas" ;
         Text [ portuguese ] = "~Ferramentas" ;
-        Text [ finnish ] = "E~xtras" ;
+        Text [ finnish ] = "~Työkalut" ;
         Text [ danish ] = "Fun~ktioner" ;
         Text [ french ] = "~Outils" ;
         Text [ swedish ] = "~Verktyg" ;
