@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFrame.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:40:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,9 @@
 
  module com {  module sun {  module star {  module frame {
 
-interface XFrameActionListener;
-interface XController;
-interface XFramesSupplier;
+ published interface XFrameActionListener;
+ published interface XController;
+ published interface XFramesSupplier;
 
 //=============================================================================
 /** a frame object can be considered to be an "anchor" object where a component
@@ -89,7 +89,7 @@ interface XFramesSupplier;
 
     @see Desktop
  */
-interface XFrame: com::sun::star::lang::XComponent
+published interface XFrame: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------
     /** is called to initialize the frame within a window - the container window.
