@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:32:04 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -1829,9 +1828,11 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
     rInf.SetIdx( nStart );
 
     // Handle overflows:
+    // --> FME 2004-11-25 #i34348# Changed type from USHORT to SwTwips
     SwTwips nTmpLeft = Left();
     SwTwips nTmpRight = Right();
     SwTwips nTmpFirst = FirstLeft();
+    // <--
 
     if ( nTmpLeft > USHRT_MAX ||
          nTmpRight > USHRT_MAX ||
@@ -1843,9 +1844,9 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
         nTmpFirst = nTmpLeft;
     }
 
-    rInf.Left(  KSHORT( nTmpLeft  ) );
-    rInf.Right( KSHORT( nTmpRight ) );
-    rInf.First( KSHORT( nTmpFirst ) );
+    rInf.Left(  nTmpLeft  );
+    rInf.Right( nTmpRight );
+    rInf.First( nTmpFirst );
 
     rInf.RealWidth( KSHORT(rInf.Right()) - KSHORT(GetLeftMargin()) );
     rInf.Width( rInf.RealWidth() );
