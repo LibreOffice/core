@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-21 08:57:25 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,15 +661,8 @@ String SfxObjectShell::GetTitle
         // wird der gesetzte Titel nicht beachtet.
         // (s.u., Auswertung von aTitleMap_Impl)
         SFX_ITEMSET_ARG( pMed->GetItemSet(), pNameItem, SfxStringItem, SID_DOCINFO_TITLE, sal_False );
-
-        // Demn"achst nur noch SID_FILE_LONGNAME statt SID_DOCINFO_TITLE
-        if ( !pNameItem )
-            SFX_ITEMSET_ARG( pMed->GetItemSet(), pNameItem, SfxStringItem, SID_FILE_LONGNAME, sal_False );
-
         if ( pNameItem )
-        {
             return X( pNameItem->GetValue() );
-        }
     }
 
     if ( nMaxLength >= SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
