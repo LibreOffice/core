@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2001-01-11 23:54:53 $
+ *  last change: $Author: pluby $ $Date: 2001-02-21 00:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,24 +314,26 @@ void BmpApp::Main( )
     else
     {
         ResMgr*     pAppResMgr = new ResMgr( String( RTL_CONSTASCII_USTRINGPARAM( "bmp.res" ) ), NULL, NULL );
-        MenuBar     aMB;
-        PopupMenu   aPB;
+        MenuBar*    pMB = new MenuBar();
+        PopupMenu*  pPB = new PopupMenu();
 
         Resource::SetResManager( pAppResMgr );
 
-        aMB.InsertItem( 1, String( RTL_CONSTASCII_USTRINGPARAM( "~ImageList" ) ) );
-            aPB.InsertItem( 1, String( RTL_CONSTASCII_USTRINGPARAM( "~Erstellen..." ) ) );
-            aPB.InsertSeparator();
-            aPB.InsertItem( 2, String( RTL_CONSTASCII_USTRINGPARAM( "~Beenden" ) ) );
+        pMB->InsertItem( 1, String( RTL_CONSTASCII_USTRINGPARAM( "~ImageList" ) ) );
+            pPB->InsertItem( 1, String( RTL_CONSTASCII_USTRINGPARAM( "~Erstellen..." ) ) );
+            pPB->InsertSeparator();
+            pPB->InsertItem( 2, String( RTL_CONSTASCII_USTRINGPARAM( "~Beenden" ) ) );
 
-        aMB.SetPopupMenu( 1, &aPB );
-        aMB.SetSelectHdl( LINK( this, BmpApp, Select ) );
+        pMB->SetPopupMenu( 1, pPB );
+        pMB->SetSelectHdl( LINK( this, BmpApp, Select ) );
 
         pBmpWin = new BmpWin( NULL, WB_APP | WB_STDWORK );
-        pBmpWin->SetMenuBar( &aMB );
+        pBmpWin->SetMenuBar( pMB );
         pBmpWin->Show();
 
         Execute();
+        delete pPB;
+        delete pMB;
         delete pBmpWin;
     }
 
