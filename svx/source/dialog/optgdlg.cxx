@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:11:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 18:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,6 +788,23 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
 /*-----------------06.12.96 11.50-------------------
 
 --------------------------------------------------*/
+static sal_Int16 GetCurrentSymbolSet()
+{
+    sal_Int16   eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
+
+    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
+    {
+        // Use system settings, we have to retrieve the toolbar icon size from the
+        // Application class
+        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
+        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
+            eOptSymbolSet = SFX_SYMBOLS_LARGE;
+        else
+            eOptSymbolSet = SFX_SYMBOLS_SMALL;
+    }
+
+    return eOptSymbolSet;
+}
 
 void OfaViewTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -802,7 +819,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
     SvtMiscOptions aMiscOptions;
 
     if( aMiscOptions.GetSymbolSet() != SFX_SYMBOLS_AUTO )
-        nBigLB_InitialSelection = ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE )? 2 : 1;
+        nBigLB_InitialSelection = ( GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE )? 2 : 1;
     aIconSizeLB.SelectEntryPos( nBigLB_InitialSelection );
     aIconSizeLB.SaveValue();
 
