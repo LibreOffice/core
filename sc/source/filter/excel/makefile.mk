@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-21 08:47:46 $
+#   last change: $Author: hr $ $Date: 2003-11-05 13:33:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ SLOFILES =	\
         $(SLO)$/xltools.obj					\
         $(SLO)$/xlroot.obj					\
         $(SLO)$/xlstyle.obj					\
+        $(SLO)$/xlpage.obj					\
         $(SLO)$/xlformula.obj				\
         $(SLO)$/xlocx.obj					\
         $(SLO)$/xltracer.obj				\
@@ -93,14 +94,17 @@ SLOFILES =	\
         $(SLO)$/xilink.obj					\
         $(SLO)$/xicontent.obj				\
         $(SLO)$/xistyle.obj					\
+        $(SLO)$/xipage.obj					\
         $(SLO)$/xiescher.obj				\
         $(SLO)$/xestream.obj				\
         $(SLO)$/xerecord.obj				\
         $(SLO)$/xeroot.obj					\
+        $(SLO)$/xestring.obj				\
         $(SLO)$/xehelper.obj				\
         $(SLO)$/xelink.obj					\
         $(SLO)$/xecontent.obj				\
         $(SLO)$/xestyle.obj					\
+        $(SLO)$/xepage.obj					\
         $(SLO)$/XclChartsApiHelper.obj		\
         $(SLO)$/XclImpCharts.obj			\
         $(SLO)$/XclImpChartsApi.obj			\
