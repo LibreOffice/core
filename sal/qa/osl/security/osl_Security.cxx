@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Security.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $  $Date: 2003-10-06 13:41:06 $
+ *  last change: $Author: kz $  $Date: 2003-12-11 12:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,14 +206,19 @@ namespace osl_Security
         {
             ::osl::Security aSec;
 #ifdef WNT
-            ::rtl::OUString strName( strComputerName + ::rtl::OUString::createFromAscii( "/") + strUserName ), strGetName;
+            ::rtl::OUString strName( strUserName ), strGetName;
 #else
             ::rtl::OUString strName( strUserName ), strGetName;
 #endif
             bRes = aSec.getUserName( strGetName );
 
+            sal_Int32 nPos = -1;
+            if (strName.getLength() > 0)
+            {
+                nPos = strGetName.indexOf(strName);
+            }
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: get UserName and compare it with names got at the beginning of the test.",
-                                    ( sal_True == strGetName.equals( strName ) ) && ( sal_True == bRes ) );
+                                    ( nPos >= 0 ) && ( sal_True == bRes ) );
         }
 
         CPPUNIT_TEST_SUITE( getUserName );
