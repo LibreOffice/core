@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:47:44 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4286,7 +4286,7 @@ String STR_FORMAT_STRING
     Text [ english_us ] = "Unformatted Text" ;
     Text[ chinese_simplified ] = "ÉĞÎ´¸ñÊ½»¯µÄÎÄ±¾";
     Text[ russian ] = "Íåôîğìàòèğîâàííûé òåêñò";
-    Text[ polish ] = "Niesformatowany tekst";
+    Text[ polish ] = "niesformatowany tekst";
     Text[ japanese ] = "‘®İ’è‚³‚ê‚Ä‚¢‚È‚¢Ã·½Ä";
     Text[ greek ] = "Ìç ìïñöïğïéçìİíï êåßìåíï";
     Text[ korean ] = "Æ÷¸ËµÇÁö¾ÊÀº ÅØ½ºÆ®";
@@ -4312,7 +4312,7 @@ String STR_FORMAT_RTF
     Text [ english_us ] = "Formatted Text (RTF)" ;
     Text[ chinese_simplified ] = "º¬ÓĞ¸ñÊ½µÄÎÄ±¾(RTF)";
     Text[ russian ] = "Ôîğìàòèğîâàííûé òåêñò (RTF)";
-    Text[ polish ] = "Sformatowany tekst (RTF)";
+    Text[ polish ] = "sformatowany tekst (RTF)";
     Text[ japanese ] = "‘®İ’è‚³‚ê‚½Ã·½Ä(RTF)";
     Text[ greek ] = "Ìïñöïğïéçìİíï êåßìåíï (RTF)";
     Text[ korean ] = "Æ÷¸ËµÈ ÅØ½ºÆ® (RTF)";
@@ -5405,7 +5405,7 @@ String STR_SCALE_OBJECTS
     Text[ polish ] = "Format nowych stron zostanie dopasowany.\nCzy dopasowaæ równie¿ obiekty?";
     Text[ japanese ] = "V‚µ‚¢Íß°¼Ş‚Ì‘®‚ğ“K‡‚³‚¹‚Ü‚·B\nµÌŞ¼Şª¸Ä‚à“K‡‚³‚¹‚Ü‚·‚©B";
     Text[ greek ] = "Ç ìïñöŞ ôùí íİùí óåëéäşí èá ğñïóáñìïóôåß.\nÈİëåôå íá ãßíåé ğñïóáñìïãŞ êáé ôùí áíôéêåéìİíùí;";
-    Text[ korean ] = "»õ ÂÊÀÇ ¼­½ÄÀÌ Á¶Á¤µÉ °ÍÀÔ´Ï´Ù. \n°³Ã¼µµ Á¶Á¤ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "»õ ÂÊÀÇ ¼­½ÄÀÌ Á¶Á¤µÉ °ÍÀÔ´Ï´Ù.\n°³Ã¼µµ Á¶Á¤ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ chinese_traditional ] = "·s­¶ªº®æ¦¡¤w¸gÅÜ§ó¡C\n±z¤]­n½Õ¾ã³o­Óª«¥ó¡H";
     Text[ arabic ] = "Óæİ íÊã ãáÇÁãÉ ÊäÓíŞ ÇáÕİÍÇÊ ÇáÌÏíÏÉ.\nåá ÊÑíÏ ãáÇÁãÉ ÇáßÇÆäÇÊ ÃíÖÇğ¿";
     Text[ turkish ] = "Yeni sayfanın formatı ayarlanıyor.\nNesnelerin de ayarlanmasını istiyor musunuz?";
@@ -5708,7 +5708,7 @@ String STR_WARN_DEL_SEL_PAGE
     Text[ polish ] = "Akcja ta usuwa zaznaczon¹ stronê.\nStrona ta zawiera obiekty graficzne.";
     Text[ portuguese_brazilian ] = "This action will delete the selected page.\nNote: the page contains drawing objects!";
     Text[ japanese ] = "‚±‚Ì±¸¼®İ‚Í‘I‘ğÍß°¼Ş‚ğíœ‚µ‚Ü‚·B\n‚±‚Ìƒy[ƒW‚Í•`‰æµÌŞ¼Şª¸Ä‚ğŠÜ‚ñ‚Å‚¢‚Ü‚·B";
-    Text[ korean ] = "ÀÌ°ÍÀ» ½ÇÇàÇÏ¸é ¼±ÅÃµÈ ÂÊÀÌ »èÁ¦µË´Ï´Ù.\nÀÌ ÂÊÀº ±×¸®±â°³Ã¼¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù!";
+    Text[ korean ] = "ÀÌ°ÍÀ» ½ÇÇàÇÏ¸é ¼±ÅÃµÈ ÂÊÀÌ »èÁ¦µË´Ï´Ù. \nÀÌ ÂÊÀº ±×¸®±â°³Ã¼¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù!";
     Text[ chinese_simplified ] = "ÕâÏî²Ù×÷»áÉ¾³ıÑ¡ÖĞµÄÒ³Ãæ¡£\n´ËÒ³Ãæº¬ÓĞ»æÍ¼¶ÔÏó£¡";
     Text[ chinese_traditional ] = "³o­Ó°Ê§@·|§R°£¿ï¨úªº­¶­±¡C\nµù·N¡G³o­Ó­¶­±¤º§tÃ¸¹Ïª«¥ó¡I";
     Text[ arabic ] = "ÊÍĞİ åĞå ÇáÚãáíÉ ÇáÕİÍÉ ÇáãÍÏÏÉ. \nÊÍÊæí åĞå ÇáÕİÍÉ Úáì ßÇÆäÇÊ ÑÓæãíÉ!";
@@ -6984,13 +6984,13 @@ String STR_CLICK_ACTION_VANISH
     Text [ danish ] = "Fade objektet ud" ;
     Text [ portuguese ] = "Ocultar objecto" ;
     Text [ portuguese_brazilian ] = "Objekt ausblenden" ;
-    Text[ chinese_simplified ] = "ÒşÈë¶ÔÏó";
+    Text[ chinese_simplified ] = "²»ÏÔÊ¾¶ÔÏó";
     Text[ russian ] = "Ñïğÿòàòü îáúåêò";
     Text[ polish ] = "Ukryj obiekt z efektem";
     Text[ japanese ] = "µÌŞ¼Şª¸Ä‚ğÌª°ÄŞ±³Ä‚·‚é";
     Text[ greek ] = "Áğüêñõøç áíôéêåéìİíïõ";
     Text[ korean ] = "°³Ã¼ Èå·ÁÁö°ÔÇÏ±â";
-    Text[ chinese_traditional ] = "Áô¤Jª«¥ó";
+    Text[ chinese_traditional ] = "¤£Åã¥Üª«¥ó";
     Text[ arabic ] = "ÅÎİÇÁ ÇáßÇÆä";
     Text[ turkish ] = "Nesneyi gizle";
     Text[ catalan ] = "Ocultar objeto";
@@ -11355,13 +11355,13 @@ String STR_VAR
     Text [ spanish ] = "Variable" ;
     Text [ french ] = "Variable" ;
     Text [ dutch ] = "Variabel" ;
-    Text[ chinese_simplified ] = "±äÊı";
+    Text[ chinese_simplified ] = "¿É±ä";
     Text[ russian ] = "Èçìåíÿåìûé";
     Text[ polish ] = "Zmienny";
     Text[ japanese ] = "•ÏX‰Â”\\";
     Text[ greek ] = "ÌåôáâëçôŞ";
     Text[ korean ] = "À¯µ¿Àû";
-    Text[ chinese_traditional ] = "ÅÜ¼Æ";
+    Text[ chinese_traditional ] = "¥iÅÜ";
     Text[ arabic ] = "ãÊÛíÑ";
     Text[ turkish ] = "Değişken";
     Text[ catalan ] = "Variable";
@@ -11994,7 +11994,7 @@ String STR_PUBDLG_SAMENAME
     Text[ japanese ] = "‚±‚Ì–¼‘O‚ÌÃŞ»Ş²İ‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B\nã‘‚«‚µ‚Ü‚·‚©B";
     Text[ language_user1 ] = "èëè: Äèçàéí - - - -";
     Text[ greek ] = "ÕğÜñ÷åé Şäç İíá ó÷İäéï ìå áõôü ôï üíïìá.\nÈİëåôå íá áíôéêáôáóôáèåß;";
-    Text[ korean ] = "ÀÌ ÀÌ¸§À» °¡Áø µğÀÚÀÎÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù \nµ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "ÀÌ ÀÌ¸§À» °¡Áø µğÀÚÀÎÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù\nµ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
     Text[ chinese_traditional ] = "¤w¸g¦³¤@­Ó¦P¦Wªº¼Ë¦¡¡C\n±z­nÂĞ¼g¡H";
     Text[ arabic ] = "íæÌÏ ãä ŞÈá ÊÕãíã ÈåĞÇ ÇáÇÓã\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     Text[ turkish ] = "Bu adı taşıyan bir tasarım mevcut durumda.\nÜzerine yazmak istiyor musunuz?";
@@ -12772,7 +12772,7 @@ String STR_ERROR_OBJNOCREATE_PLUGIN
     Text[ italian ] = "Non è stato possibile inserire il Plug-in dal documento %.";
     Text[ danish ] = "Det er ikke muligt at indsætte PlugIn fra dokument %.";
     Text[ swedish ] = "Plug-in från dokument % kan inte infogas.";
-    Text[ polish ] = "Wstawienie wtyczki Plug-In z dokumentu % nie jest mo¿liwe.";
+    Text[ polish ] = "Wstawienie wtyczki plug-in z dokumentu % nie jest mo¿liwe.";
     Text[ portuguese_brazilian ] = "Plug-in from document % could not be inserted.";
     Text[ japanese ] = "ÄŞ·­ÒİÄ % ‚©‚ç‚ÌÌß×¸Ş²İ‚Í‘}“ü‚Å‚«‚Ü‚¹‚ñB";
     Text[ korean ] = "¹®¼­%·Î ºÎÅÍ ÇÃ·¯±×ÀÎÀ» »ğÀÔÇÏÁö ¸øÇß½À´Ï´Ù.";
@@ -13342,4 +13342,5 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
 
