@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 14:44:26 $
+ *  last change: $Author: nn $ $Date: 2002-05-06 16:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ BOOL ScDrawStringsVars::SetText( ScBaseCell* pCell )
             if (aString.Len() > DRAWTEXT_MAX)
                 aString.Erase(DRAWTEXT_MAX);
 
-            if ( pColor && !pOutput->bSyntaxMode )
+            if ( pColor && !pOutput->bSyntaxMode && !( pOutput->bUseStyleColor && pOutput->bForceAutoColor ) )
             {
                 OutputDevice* pDev = pOutput->pDev;
                 aFont.SetColor(*pColor);
@@ -1687,7 +1687,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
                             pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
                             pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
-                            //! EditEngine needs methods to handle bUseStyleColor, bForceAutoColor
+                            pEngine->EnableAutoColor( bUseStyleColor );
                         }
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(FALSE)
@@ -2071,12 +2071,14 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                                              ftCheck );
 
                                     pEngine->SetText(aString);
-                                    if ( pColor && !bSyntaxMode )
+                                    if ( pColor && !bSyntaxMode && !( bUseStyleColor && bForceAutoColor ) )
                                         lcl_SetEditColor( *pEngine, *pColor );
                                 }
 
                                 if ( bSyntaxMode )
                                     SetEditSyntaxColor( *pEngine, pCell );
+                                else if ( bUseStyleColor && bForceAutoColor )
+                                    lcl_SetEditColor( *pEngine, COL_AUTO );     //! or have a flag at EditEngine
                             }
                             else
                                 DBG_ERROR("pCell == NULL");
@@ -2515,7 +2517,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
                             pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
                             pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
-                            //! EditEngine needs methods to handle bUseStyleColor, bForceAutoColor
+                            pEngine->EnableAutoColor( bUseStyleColor );
                         }
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(FALSE)
@@ -2782,12 +2784,14 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                                              ftCheck );
 
                                     pEngine->SetText(aString);
-                                    if ( pColor && !bSyntaxMode )
+                                    if ( pColor && !bSyntaxMode && !( bUseStyleColor && bForceAutoColor ) )
                                         lcl_SetEditColor( *pEngine, *pColor );
                                 }
 
                                 if ( bSyntaxMode )
                                     SetEditSyntaxColor( *pEngine, pCell );
+                                else if ( bUseStyleColor && bForceAutoColor )
+                                    lcl_SetEditColor( *pEngine, COL_AUTO );     //! or have a flag at EditEngine
                             }
                             else
                                 DBG_ERROR("pCell == NULL");

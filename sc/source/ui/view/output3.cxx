@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-13 11:20:16 $
+ *  last change: $Author: nn $ $Date: 2002-05-06 16:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <svx/eeitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
@@ -155,6 +156,9 @@ void ScOutputData::DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect,
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return;
+
+    SdrOutliner& rOutl = pModel->GetDrawOutliner();
+    rOutl.EnableAutoColor( bUseStyleColor );
 
     ExtOutputDevice* pXOut = new ExtOutputDevice( pDev );
     pXOut->SetOutDev( pDev );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-06 09:19:15 $
+ *  last change: $Author: nn $ $Date: 2002-05-06 16:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1685,6 +1685,7 @@ void ScPrintFunc::MakeEditEngine()
         pEditEngine->SetWordDelimiters(
                 ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
         pEditEngine->SetControlWord( pEditEngine->GetControlWord() & ~EE_CNTRL_RTFSTYLESHEETS );
+        pEditEngine->EnableAutoColor( bUseStyleColor );
 
         //  Default-Set fuer Ausrichtung
         pEditDefaults = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
@@ -2296,6 +2297,8 @@ void ScPrintFunc::SetClearFlag( BOOL bFlag )
 void ScPrintFunc::SetUseStyleColor( BOOL bFlag )
 {
     bUseStyleColor = bFlag;
+    if (pEditEngine)
+        pEditEngine->EnableAutoColor( bUseStyleColor );
 }
 
 //
