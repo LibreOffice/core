@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:19:28 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,6 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
     bClickChangeRotation( FALSE ),
     bStartWithActualPage( FALSE ),
     bSummationOfParagraphs( FALSE ),
-    nPreviewQuality( DRAWMODE_DEFAULT ),
     bSolidDragging( FALSE ),
     bSolidMarkHdl( TRUE ),
     // #90356#
@@ -619,7 +618,6 @@ void SdOptionsMisc::SetDefaults()
     SetClickChangeRotation( FALSE );
     SetStartWithActualPage( FALSE );
     SetSummationOfParagraphs( FALSE );
-    SetPreviewQuality( DRAWMODE_DEFAULT );
     SetSolidDragging( FALSE );
     SetSolidMarkHdl( TRUE );
     // #90356#
@@ -652,7 +650,6 @@ BOOL SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsClickChangeRotation() == rOpt.IsClickChangeRotation() &&
             IsStartWithActualPage() == rOpt.IsStartWithActualPage() &&
             IsSummationOfParagraphs() == rOpt.IsSummationOfParagraphs() &&
-            GetPreviewQuality() == rOpt.GetPreviewQuality() &&
             IsSolidDragging() == rOpt.IsSolidDragging() &&
             IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() &&
             // #90356#
@@ -724,7 +721,7 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
     if( pValues[6].hasValue() ) SetBigHandles( *(sal_Bool*) pValues[ 6 ].getValue() );
     if( pValues[7].hasValue() ) SetDoubleClickTextEdit( *(sal_Bool*) pValues[ 7 ].getValue() );
     if( pValues[8].hasValue() ) SetClickChangeRotation( *(sal_Bool*) pValues[ 8 ].getValue() );
-    if( pValues[9].hasValue() ) SetPreviewQuality( FRound( *(double*) pValues[ 9 ].getValue() ) );
+    //  if( pValues[9].hasValue() ) SetPreviewQuality( FRound( *(double*) pValues[ 9 ].getValue() ) );
     if( pValues[10].hasValue() ) SetSolidDragging( *(sal_Bool*) pValues[ 10 ].getValue() );
     if( pValues[11].hasValue() ) SetSolidMarkHdl( *(sal_Bool*) pValues[ 11 ].getValue() );
     // #97016#
@@ -772,7 +769,8 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
     pValues[ 6 ] <<= IsBigHandles();
     pValues[ 7 ] <<= IsDoubleClickTextEdit();
     pValues[ 8 ] <<= IsClickChangeRotation();
-    pValues[ 9 ] <<= (double) GetPreviewQuality();
+    // The preview is not supported anymore.  Use a dummy value.
+    pValues[ 9 ] <<= (double)0;// GetPreviewQuality();
     pValues[ 10 ] <<= IsSolidDragging();
     pValues[ 11 ] <<= IsSolidMarkHdl();
     // #97016#
@@ -845,7 +843,6 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts,
         SetBigHandles( pView->IsBigHandles() );
         SetDoubleClickTextEdit( pView->IsDoubleClickTextEdit() );
         SetClickChangeRotation( pView->IsClickChangeRotation() );
-        SetPreviewQuality( pView->GetPreviewDrawMode() );
         SetSolidDragging( pView->IsSolidDragging() );
         SetSolidMarkHdl( pView->IsSolidMarkHdl() );
     }
@@ -861,7 +858,6 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts,
         SetBigHandles( pOpts->IsBigHandles() );
         SetDoubleClickTextEdit( pOpts->IsDoubleClickTextEdit() );
         SetClickChangeRotation( pOpts->IsClickChangeRotation() );
-        SetPreviewQuality( pOpts->GetPreviewQuality() );
         SetSolidDragging( pOpts->IsSolidDragging() );
         SetSolidMarkHdl( pOpts->IsSolidMarkHdl() );
     }
@@ -900,7 +896,6 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetClickChangeRotation( IsClickChangeRotation() );
     pOpts->SetStartWithActualPage( IsStartWithActualPage() );
     pOpts->SetSummationOfParagraphs( IsSummationOfParagraphs() );
-    pOpts->SetPreviewQuality( GetPreviewQuality() );
     pOpts->SetSolidDragging( IsSolidDragging() );
     pOpts->SetSolidMarkHdl( IsSolidMarkHdl() );
     // #90356#
