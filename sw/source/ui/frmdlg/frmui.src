@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-10 20:39:39 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ String STR_CENTER_VERT
     Text [ dutch ] = "~Midden" ;
     Text[ chinese_simplified ] = "ÖÐ(~E)";
     Text[ russian ] = "Ïî ñåðåäèíå";
-    Text[ polish ] = "Wyœrodkuj";
+    Text[ polish ] = "Poœrodku";
     Text[ japanese ] = "’†‰›(~E)";
     Text[ chinese_traditional ] = "¸m¤¤(~E)";
     Text[ arabic ] = "ÇáæÓØ";
