@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInteractionApprove.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 // DocMerge from xml: interface com::sun::star::task::XInteractionApprove
 /** An intearaction continuation specifing 'approval'.
  */
-interface XInteractionApprove: com::sun::star::task::XInteractionContinuation
+published interface XInteractionApprove: com::sun::star::task::XInteractionContinuation
 {
 };
 
