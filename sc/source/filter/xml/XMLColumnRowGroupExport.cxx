@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-08 15:50:07 $
+ *  last change: $Author: nn $ $Date: 2002-09-17 16:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,24 @@ sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
     sal_Bool bGroupStart(sal_False);
     if (!aTableStart.empty())
     {
-        if (aTableStart.begin()->nField == nField)
+        ScMyColumnRowGroupVec::iterator aItr = aTableStart.begin();
+        sal_Int32 nItrField = aItr->nField;
+        if ( nItrField < nField )
+        {
+            //  #103327# when used to find repeated rows at the beginning of a group,
+            //  aTableStart may contain entries before nField. They must be skipped here
+            //  (they will be used for OpenGroups later in the right order).
+
+            ScMyColumnRowGroupVec::iterator aEnd = aTableStart.end();
+            while ( aItr != aEnd && nItrField < nField )
+            {
+                aItr++;
+                if ( aItr != aEnd )
+                    nItrField = aItr->nField;
+            }
+        }
+
+        if (nItrField == nField)
             bGroupStart = sal_True;
     }
     return bGroupStart;
