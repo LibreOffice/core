@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GridControl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:32:04 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 13:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ public class GridControl extends Shape{
         }
 
     } catch (Exception e) {
-        // TODO Auto-generated catch block
         e.printStackTrace(System.out);
     }}
 }
