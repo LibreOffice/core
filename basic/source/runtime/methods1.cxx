@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2002-12-12 16:48:03 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
+#endif
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
 #endif
 #ifndef _SBXVAR_HXX
 #include <svtools/sbxvar.hxx>
@@ -430,41 +433,12 @@ RTLFUNC(Wait)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-#if defined(OS2)
-    ULONG nStart, nCur;
-    DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT,&nStart,sizeof(ULONG) );
-    // drucken wir gerade?
-    int bPrinting = Sysdepen::IsMultiThread() ? TRUE : FALSE;
-    do
-    {
-        Application::Reschedule();
-        if( bPrinting )
-            DosSleep( 50 ); // damit der Druck-Thread mehr CPU-Zeit bekommt
-        DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT,&nCur,sizeof(ULONG) );
-    } while( (nCur-nStart) < (ULONG)nWait );
-#else
-    long nSeconds = nWait / 1000;
-    if( !nSeconds ) nSeconds = 1;
-#if defined(UNX) || defined(WIN)
-    // Unix hat kein clock()
-    time_t nStart = time( 0 );
-    time_t nEnd;
-    do
-    {
-        Application::Reschedule();
-        nEnd = time( 0 );
-    } while( (nEnd-nStart) < nSeconds );
-#else
-    clock_t nStart = clock() / CLK_TCK;
-    clock_t nEnd;
-    do
-    {
-        Application::Reschedule();
-        nEnd = clock() / CLK_TCK;
-    } while( (nEnd-nStart) < nSeconds );
-#endif
 
-#endif
+    Timer aTimer;
+    aTimer.SetTimeout( nWait );
+    aTimer.Start();
+    while ( aTimer.IsActive() )
+        Application::Yield();
 }
 
 RTLFUNC(GetGUIVersion)
