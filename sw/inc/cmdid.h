@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:12:36 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,6 +1186,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #endif
 #define FN_PRINT_PAGEPREVIEW        (FN_PGPREVIEW + 3)
 #define FN_CLOSE_PAGEPREVIEW        (FN_PGPREVIEW + 4)
+#define FN_SHOW_BOOKVIEW            (FN_PGPREVIEW + 5)
 
 /*--------------------------------------------------------------------
     Bereich: Rahmenattribute
