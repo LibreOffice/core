@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:28:13 $
+ *  last change: $Author: dbo $ $Date: 2001-03-30 12:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,24 +371,17 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     aAny = makeAny( (sal_uInt16)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt16 *)0 ) );
     OSL_ASSERT( *(sal_Int16*)aAny.getValue() == 2 );
-    sal_Int64 aInt64;
-    sal_setInt64( &aInt64, 2, 0 );
+    sal_Int64 aInt64 = 0x200000000;
     aAny = makeAny( aInt64 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_Int64 *)0 ) );
-    sal_uInt32 lowInt;
-    sal_Int32  highInt;
-    sal_getInt64( *(sal_Int64*)aAny.getValue(), &lowInt, &highInt );
-    OSL_ASSERT( lowInt == 2 && highInt == 0 );
+    OSL_ASSERT( *(sal_Int64*)aAny.getValue() == 0x200000000 );
     aAny = makeAny( (sal_Int32)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_Int32 *)0 ) );
     OSL_ASSERT( *(sal_Int32*)aAny.getValue() == 2 );
-    sal_uInt64 auInt64;
-    sal_setUInt64( &auInt64, 2, 0 );
+    sal_uInt64 auInt64 = 0x200000000;
     aAny = makeAny( auInt64 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt64 *)0 ) );
-    sal_uInt32  uhighInt;
-    sal_getUInt64( *(sal_Int64*)aAny.getValue(), &lowInt, &uhighInt );
-    OSL_ASSERT( lowInt == 2 && uhighInt == 0 );
+    OSL_ASSERT( *(sal_uInt64*)aAny.getValue() == 0x200000000 );
     aAny = makeAny( (sal_uInt32)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt32 *)0 ) );
     OSL_ASSERT( *(sal_uInt32*)aAny.getValue() == 2 );
@@ -429,24 +422,17 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     aAny <<=( (sal_uInt16)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt16 *)0 ) );
     OSL_ASSERT( *(sal_Int16*)aAny.getValue() == 2 );
-    sal_Int64 aInt64;
-    sal_setInt64( &aInt64, 2, 0 );
+    sal_Int64 aInt64 = 0x200000000;
     aAny <<=( aInt64 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_Int64 *)0 ) );
-    sal_uInt32 lowInt;
-    sal_Int32  highInt;
-    sal_getInt64( *(sal_Int64*)aAny.getValue(), &lowInt, &highInt );
-    OSL_ASSERT( lowInt == 2 && highInt == 0 );
+    OSL_ASSERT( *(sal_Int64*)aAny.getValue() == 0x200000000 );
     aAny <<=( (sal_Int32)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_Int32 *)0 ) );
     OSL_ASSERT( *(sal_Int32*)aAny.getValue() == 2 );
-    sal_uInt64 auInt64;
-    sal_setUInt64( &auInt64, 2, 0 );
+    sal_uInt64 auInt64 = 0x200000000;
     aAny <<=( auInt64 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt64 *)0 ) );
-    sal_uInt32  uhighInt;
-    sal_getUInt64( *(sal_Int64*)aAny.getValue(), &lowInt, &uhighInt );
-    OSL_ASSERT( lowInt == 2 && uhighInt == 0 );
+    OSL_ASSERT( *(sal_uInt64*)aAny.getValue() == 0x200000000 );
     aAny <<=( (sal_uInt32)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt32 *)0 ) );
     OSL_ASSERT( *(sal_uInt32*)aAny.getValue() == 2 );
@@ -466,20 +452,13 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     OSL_ASSERT( (makeAny( OUString( RTL_CONSTASCII_USTRINGPARAM("2") )) >>= a3.aString) &&
                 a3.aString == OUString::createFromAscii("2") );
     OSL_ASSERT( (makeAny( (sal_uInt16)2) >>= a3.nuInt16) && a3.nuInt16 == 2 );
-    sal_Int64 aInt64;
-    sal_uInt32 lowInt;
-    sal_Int32  highInt;
-    sal_setInt64( &aInt64, 2, 0 );
+    sal_Int64 aInt64 = 0x200000000;
     OSL_ASSERT( makeAny( aInt64 ) >>= a3.nInt64 );
-    sal_getInt64( a3.nInt64, &lowInt, &highInt );
-    OSL_ASSERT( lowInt == 2 );
+    OSL_ASSERT( a3.nInt64 == 0x200000000 );
     OSL_ASSERT( (makeAny( (sal_Int32)2) >>= a3.nInt32) && a3.nInt32 == 2 );
-    sal_uInt64 auInt64;
-    sal_uInt32  uhighInt;
-    sal_setUInt64( &auInt64, 2, 0 );
+    sal_uInt64 auInt64 = 0x200000000;
     OSL_ASSERT( makeAny( auInt64 ) >>= a3.nuInt64 );
-    sal_getUInt64( a3.nuInt64, &lowInt, &uhighInt );
-    OSL_ASSERT( lowInt == 2 );
+    OSL_ASSERT( a3.nuInt64 == 0x200000000 );
     OSL_ASSERT( (makeAny( (sal_uInt32)2) >>= a3.nuInt32) && a3.nuInt32 == 2 );
     OSL_ASSERT( (makeAny( TypeClass_STRUCT) >>= a3.eType) && a3.eType == TypeClass_STRUCT );
     //OSL_ASSERT( (makeAny( L'2' ) >>= a3.wChar) && a3.nInt8 ==L'2';
