@@ -2,9 +2,9 @@
  *
  *  $RCSfile: codec.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-07 08:42:05 $
+ *  last change: $Author: ka $ $Date: 2001-11-08 19:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,12 @@ private:
 
     SvStream&   rStm;
 
-    BYTE*       ImpReadRLEBuffer( SvStream& rIStm, ULONG nCompressedSize, ULONG nUnCompressedSize );
-    BYTE*       ImpReadZBuffer( SvStream& rIStm, ULONG nCompressedSize, ULONG nUnCompressedSize );
-
 public:
                 GalleryCodec( SvStream& rIOStm );
                 ~GalleryCodec();
 
-    ULONG       Write( SvMemoryStream& rStmToWrite );
-    ULONG       Read( SvMemoryStream& rStmToRead );
+    void        Write( SvStream& rStmToWrite );
+    void        Read( SvStream& rStmToRead );
 
     static BOOL IsCoded( SvStream& rStm, UINT32& rVersion );
 };

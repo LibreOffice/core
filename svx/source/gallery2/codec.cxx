@@ -2,9 +2,9 @@
  *
  *  $RCSfile: codec.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-07 08:42:05 $
+ *  last change: $Author: ka $ $Date: 2001-11-08 19:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ BOOL GalleryCodec::IsCoded( SvStream& rStm, UINT32& rVersion )
 
 // -----------------------------------------------------------------------------
 
-ULONG GalleryCodec::Write( SvMemoryStream& rStmToWrite )
+void GalleryCodec::Write( SvStream& rStmToWrite )
 {
     UINT32 nPos, nCompSize;
 
@@ -122,23 +122,20 @@ ULONG GalleryCodec::Write( SvMemoryStream& rStmToWrite )
 
     ZCodec aCodec;
     aCodec.BeginCompression();
-    aCodec.Write( rStm, static_cast< const BYTE* >( rStmToWrite.GetData() ), nSize );
+    aCodec.Compress( rStmToWrite, rStm );
     aCodec.EndCompression();
 
     nCompSize = rStm.Tell() - nPos - 4UL;
     rStm.Seek( nPos );
     rStm << nCompSize;
     rStm.Seek( STREAM_SEEK_TO_END );
-
-    return 0UL;
 }
 
 // -----------------------------------------------------------------------------
 
-ULONG GalleryCodec::Read( SvMemoryStream& rStmToRead )
+void GalleryCodec::Read( SvStream& rStmToRead )
 {
-    UINT32  nVersion = 0;
-    UINT32  nReadBytes = 0;
+    UINT32 nVersion = 0;
 
     if( IsCoded( rStm, nVersion ) )
     {
@@ -150,78 +147,59 @@ ULONG GalleryCodec::Read( SvMemoryStream& rStmToRead )
 
         // decompress
         if( 1 == nVersion )
-            pUnCompressedBuffer = ImpReadRLEBuffer( rStm, nCompressedSize, nUnCompressedSize );
-        else if( 2 == nVersion )
-            pUnCompressedBuffer = ImpReadZBuffer( rStm, nCompressedSize, nUnCompressedSize );
-
-        if( pUnCompressedBuffer )
-            rStmToRead.SetBuffer( reinterpret_cast< char* >( pUnCompressedBuffer ), nUnCompressedSize, TRUE, nUnCompressedSize );
-    }
-
-    return nReadBytes;
-}
-
-// -----------------------------------------------------------------------------
-
-BYTE* GalleryCodec::ImpReadRLEBuffer( SvStream& rIStm, ULONG nCompressedSize, ULONG nUnCompressedSize )
-{
-    BYTE*   pCompressedBuffer = new BYTE[ nCompressedSize ]; rIStm.Read( pCompressedBuffer, nCompressedSize );
-    BYTE*   pInBuf = pCompressedBuffer;
-    BYTE*   pOutBuf = new BYTE[ nUnCompressedSize ];
-    BYTE*   pTmpBuf = pOutBuf;
-    BYTE*   pLast = pOutBuf + nUnCompressedSize - 1;
-    ULONG   nIndex = 0UL;
-    ULONG   nCountByte;
-    ULONG   nRunByte;
-    BOOL    bEndDecoding = FALSE;
-
-    do
-    {
-        nCountByte = *pInBuf++;
-
-        if ( !nCountByte )
         {
-            nRunByte = *pInBuf++;
+            BYTE*   pCompressedBuffer = new BYTE[ nCompressedSize ]; rStm.Read( pCompressedBuffer, nCompressedSize );
+            BYTE*   pInBuf = pCompressedBuffer;
+            BYTE*   pOutBuf = new BYTE[ nUnCompressedSize ];
+            BYTE*   pTmpBuf = pOutBuf;
+            BYTE*   pLast = pOutBuf + nUnCompressedSize - 1;
+            ULONG   nIndex = 0UL, nCountByte, nRunByte;
+            BOOL    bEndDecoding = FALSE;
 
-            if ( nRunByte > 2 )
+            do
             {
-                // absolutes Fuellen
-                memcpy( &pTmpBuf[ nIndex ], pInBuf, nRunByte );
-                pInBuf += nRunByte;
-                nIndex += nRunByte;
+                nCountByte = *pInBuf++;
 
-                // WORD-Alignment beachten
-                if ( nRunByte & 1 )
-                    pInBuf++;
+                if ( !nCountByte )
+                {
+                    nRunByte = *pInBuf++;
+
+                    if ( nRunByte > 2 )
+                    {
+                        // absolutes Fuellen
+                        memcpy( &pTmpBuf[ nIndex ], pInBuf, nRunByte );
+                        pInBuf += nRunByte;
+                        nIndex += nRunByte;
+
+                        // WORD-Alignment beachten
+                        if ( nRunByte & 1 )
+                            pInBuf++;
+                    }
+                    else if ( nRunByte == 1 )   // Ende des Bildes
+                        bEndDecoding = TRUE;
+                }
+                else
+                {
+                    const BYTE cVal = *pInBuf++;
+
+                    memset( &pTmpBuf[ nIndex ], cVal, nCountByte );
+                    nIndex += nCountByte;
+                }
             }
-            else if ( nRunByte == 1 )   // Ende des Bildes
-                bEndDecoding = TRUE;
-        }
-        else
-        {
-            const BYTE cVal = *pInBuf++;
+            while ( !bEndDecoding && ( pTmpBuf <= pLast ) );
 
-            memset( &pTmpBuf[ nIndex ], cVal, nCountByte );
-            nIndex += nCountByte;
+               rStmToRead.Write( pOutBuf, nUnCompressedSize );
+
+            delete[] pOutBuf;
+            delete[] pCompressedBuffer;
+        }
+        else if( 2 == nVersion )
+        {
+            ZCodec aCodec;
+
+            aCodec.BeginCompression();
+            aCodec.Decompress( rStm, rStmToRead );
+            aCodec.EndCompression();
         }
     }
-    while ( !bEndDecoding && ( pTmpBuf <= pLast ) );
-
-    delete[] pCompressedBuffer;
-
-    return pOutBuf;
-}
-
-// -----------------------------------------------------------------------------
-
-BYTE* GalleryCodec::ImpReadZBuffer( SvStream& rIStm, ULONG nCompressedSize, ULONG nUnCompressedSize )
-{
-    ZCodec  aCodec;
-    BYTE*   pOutBuf = new BYTE[ nUnCompressedSize ];
-
-    aCodec.BeginCompression();
-    aCodec.Read( rIStm, pOutBuf, nUnCompressedSize );
-    aCodec.EndCompression();
-
-    return pOutBuf;
 }

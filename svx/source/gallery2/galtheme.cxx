@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-07 08:43:31 $
+ *  last change: $Author: ka $ $Date: 2001-11-08 19:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,6 +1031,106 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
 
 // -----------------------------------------------------------------------------
 
+BOOL GalleryTheme::GetModelStream( ULONG nPos, SotStorageStreamRef& rxModelStream, BOOL bProgress )
+{
+    const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
+    BOOL                    bRet = FALSE;
+
+    if( pObject && ( SGA_OBJ_SVDRAW == pObject->eObjKind ) )
+    {
+        const INetURLObject aURL( ImplGetURL( pObject ) );
+        SvStorageRef        xStor( GetSvDrawStorage() );
+
+        if( xStor.Is() )
+        {
+            const String        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
+            SvStorageStreamRef  xIStm( xStor->OpenStream( aStmName, STREAM_READ ) );
+
+            if( xIStm.Is() && !xIStm->GetError() )
+            {
+                UINT32 nVersion = 0;
+
+                xIStm->SetBufferSize( 16348 );
+
+                if( GalleryCodec::IsCoded( *xIStm, nVersion ) )
+                {
+                    if( 1 == nVersion )
+                    {
+                        FmFormModel aModel;
+
+                        aModel.GetItemPool().FreezeIdRanges();
+
+                        if( GallerySvDrawImport( *xIStm, aModel ) )
+                        {
+                            aModel.BurnInStyleSheetAttributes();
+                            aModel.SetStreamingSdrModel( TRUE );
+                            aModel.RemoveNotPersistentObjects( TRUE );
+
+                            {
+                                com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxModelStream ) );
+
+                                if( SvxDrawingLayerExport( &aModel, xDocOut ) )
+                                    rxModelStream->Commit();
+                            }
+
+                            aModel.SetStreamingSdrModel( FALSE );
+                        }
+                    }
+                    else if( 2 == nVersion )
+                    {
+                        GalleryCodec aCodec( *xIStm );
+                        aCodec.Read( *rxModelStream );
+                    }
+
+                    bRet = ( rxModelStream->GetError() == ERRCODE_NONE );
+                }
+
+                xIStm->SetBufferSize( 0 );
+            }
+        }
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+BOOL GalleryTheme::InsertModelStream( const SotStorageStreamRef& rxModelStream, ULONG nInsertPos )
+{
+    INetURLObject   aURL( ImplCreateUniqueURL( SGA_OBJ_SVDRAW ) );
+    SvStorageRef    xStor( GetSvDrawStorage() );
+    BOOL            bRet = FALSE;
+
+    if( xStor.Is() )
+    {
+        const String        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
+        SvStorageStreamRef  xOStm( xStor->OpenStream( aStmName, STREAM_WRITE | STREAM_TRUNC ) );
+
+        if( xOStm.Is() && !xOStm->GetError() )
+        {
+            GalleryCodec    aCodec( *xOStm );
+            SvMemoryStream  aMemStm( 65535, 65535 );
+
+            xOStm->SetBufferSize( 16348 );
+            aCodec.Write( *rxModelStream );
+
+            if( !xOStm->GetError() )
+            {
+                xOStm->Seek( 0 );
+                SgaObjectSvDraw aObjSvDraw( *xOStm, aURL );
+                bRet = InsertObject( aObjSvDraw, nInsertPos );
+            }
+
+            xOStm->SetBufferSize( 0L );
+            xOStm->Commit();
+        }
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
 BOOL GalleryTheme::GetURL( ULONG nPos, INetURLObject& rURL, BOOL bProgress )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
@@ -1091,14 +1191,7 @@ BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< :
             SotStorageStreamRef xModelStm;
 
             if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xModelStm ) )
-            {
-                FmFormModel aModel;
-
-                aModel.GetItemPool().FreezeIdRanges();
-
-                if( GallerySvDrawImport( *xModelStm, aModel ) )
-                    bRet = InsertModel( aModel, nInsertPos );
-            }
+                bRet = InsertModelStream( xModelStm, nInsertPos );
         }
         else if( aDataHelper.HasFormat( FORMAT_FILE ) )
         {

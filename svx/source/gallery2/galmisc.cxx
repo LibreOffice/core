@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-07 08:43:31 $
+ *  last change: $Author: ka $ $Date: 2001-11-08 19:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,23 +306,30 @@ BOOL CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& 
 // - GetReducedString -
 // --------------------
 
-String GetReducedString( const INetURLObject& rURL )
+String GetReducedString( const INetURLObject& rURL, ULONG nMaxLen )
 {
-    String aStr;
+    String aReduced( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-    if ( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ).Len() > 30 )
+    aReduced = aReduced.GetToken( aReduced.GetTokenCount( '/' ) - 1, '/' );
+
+    if( INET_PROT_PRIV_SOFFICE != rURL.GetProtocol() )
     {
-        const String aName( rURL.GetName() );
+        sal_Unicode     aDelimiter;
+           const String    aPath( rURL.getFSysPath( INetURLObject::FSYS_DETECT, &aDelimiter ) );
+        const String    aName( aReduced );
 
-        aStr = rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ).Copy( 0, 30 - aName.Len() - 4 );
-        aStr += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
-        aStr += '/';
-        aStr += aName;
+        if( aPath.Len() > nMaxLen )
+        {
+            aReduced = aPath.Copy( 0, (USHORT)( nMaxLen - aName.Len() - 4 ) );
+            aReduced += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+            aReduced += aDelimiter;
+            aReduced += aName;
+        }
+        else
+            aReduced = aPath;
     }
-    else
-        aStr = rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
-    return aStr;
+    return aReduced;
 }
 
 // -----------------------------------------------------------------------------
@@ -536,7 +543,6 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos
     mpTheme( pTheme ),
     meObjectKind( mpTheme->GetObjectKind( nObjectPos ) ),
     mnObjectPos( nObjectPos ),
-    mpModel( NULL ),
     mpGraphicObject( NULL ),
     mpImageMap( NULL ),
     mpURL( NULL ),
@@ -586,14 +592,17 @@ void GalleryTransferable::InitData()
             {
                 Graphic aGraphic;
 
+
                 if( mpTheme->GetGraphic( mnObjectPos, aGraphic ) )
                     mpGraphicObject = new GraphicObject( aGraphic );
 
-                mpModel = new FmFormModel;
-                mpModel->GetItemPool().FreezeIdRanges();
+                mxModelStream = new SotStorageStream( String() );
+                mxModelStream->SetBufferSize( 16348 );
 
-                if( !mpTheme->GetModel( mnObjectPos, *mpModel ) )
-                    delete mpModel, mpModel = NULL;
+                if( !mpTheme->GetModelStream( mnObjectPos, mxModelStream ) )
+                    mxModelStream.Clear();
+                else
+                    mxModelStream->Seek( 0 );
             }
             break;
 
@@ -615,8 +624,9 @@ void GalleryTransferable::AddSupportedFormats()
     if( mpURL )
         AddFormat( FORMAT_FILE );
 
-    if( mpModel )
+    if( mxModelStream.Is() )
     {
+/*!!!
         Graphic     aGraphic;
         ImageMap    aImageMap;
 
@@ -628,6 +638,7 @@ void GalleryTransferable::AddSupportedFormats()
             AddFormat( SOT_FORMATSTR_ID_SVIM );
         }
         else
+*/
             AddFormat( SOT_FORMATSTR_ID_DRAWING );
     }
 
@@ -657,9 +668,9 @@ sal_Bool GalleryTransferable::GetData( const ::com::sun::star::datatransfer::Dat
 
     InitData();
 
-    if( ( SOT_FORMATSTR_ID_DRAWING == nFormat ) && mpModel )
+    if( ( SOT_FORMATSTR_ID_DRAWING == nFormat ) && mxModelStream.Is() )
     {
-        bRet = SetObject( mpModel, 0, rFlavor );
+        bRet = SetObject( &mxModelStream, 0, rFlavor );
     }
     else if( ( SOT_FORMATSTR_ID_SVIM == nFormat ) && mpImageMap )
     {
@@ -694,21 +705,7 @@ sal_Bool GalleryTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pU
 
     if( pUserObject )
     {
-        FmFormModel* pModel = static_cast< FmFormModel* >( pUserObject );
-
-        pModel->BurnInStyleSheetAttributes();
-        pModel->SetStreamingSdrModel( TRUE );
-        pModel->RemoveNotPersistentObjects( TRUE );
-        rxOStm->SetBufferSize( 16348 );
-
-        {
-            com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
-
-            if( xDocOut.is() && SvxDrawingLayerExport( pModel, xDocOut ) )
-                rxOStm->Commit();
-        }
-
-        pModel->SetStreamingSdrModel( FALSE );
+        *rxOStm << *static_cast< SotStorageStream* >( pUserObject );
         bRet = ( rxOStm->GetError() == ERRCODE_NONE );
     }
 
@@ -727,7 +724,7 @@ void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 
 void GalleryTransferable::ObjectReleased()
 {
-    delete mpModel, mpModel = NULL;
+    mxModelStream.Clear();
     delete mpGraphicObject, mpGraphicObject = NULL;
     delete mpImageMap, mpImageMap = NULL;
     delete mpURL, mpURL = NULL;
@@ -741,6 +738,7 @@ void GalleryTransferable::CopyToClipboard( Window* pWindow )
     TransferableHelper::CopyToClipboard( pWindow );
 }
 
+// ------------------------------------------------------------------------
 
 void GalleryTransferable::StartDrag( Window* pWindow, sal_Int8 nDragSourceActions,
                                      sal_Int32 nDragPointer, sal_Int32 nDragImage )
