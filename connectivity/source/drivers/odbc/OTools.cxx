@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:17:46 $
+ *  last change: $Author: oj $ $Date: 2001-11-06 10:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,9 @@ void OTools::bindParameter( OConnection* _pConnection,
 
     OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nJDBCtype,fCType,fSqlType,nColumnSize,nDecimalDigits);
 
-    OTools::bindData(fSqlType,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding);
+    OTools::bindData(fSqlType,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding,nColumnSize);
+    if ((nColumnSize == 0) && (fSqlType == SQL_CHAR || fSqlType == SQL_VARCHAR || fSqlType == SQL_LONGVARCHAR))
+        nColumnSize = 1;
     if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
         memcpy(pDataBuffer,&nPos,sizeof(nPos));
 
@@ -157,9 +159,10 @@ void OTools::bindData(  SWORD fSqlType,
                         sal_Int8 *&_pData,
                         SDWORD*& pLen,
                         const void* _pValue,
-                        rtl_TextEncoding _nTextEncoding)
+                        rtl_TextEncoding _nTextEncoding,
+                        SQLUINTEGER& _nColumnSize)
 {
-    SDWORD  nMaxLen = 0;
+    _nColumnSize = 0;
 
     switch (fSqlType)
     {
@@ -168,7 +171,9 @@ void OTools::bindData(  SWORD fSqlType,
             if(_bUseWChar)
             {
                 *pLen = SQL_NTS;
-                *((rtl::OUString*)_pData) = *(::rtl::OUString*)_pValue;
+                ::rtl::OUString sStr(*(::rtl::OUString*)_pValue);
+                _nColumnSize = sStr.getLength();
+                *((rtl::OUString*)_pData) = sStr;
 
                 // Zeiger auf Char*
                 _pData = (sal_Int8*)((rtl::OUString*)_pData)->getStr();
@@ -177,21 +182,24 @@ void OTools::bindData(  SWORD fSqlType,
             {
                 ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
                 *pLen = SQL_NTS;
+                _nColumnSize = aString.getLength();
                 memcpy(_pData,aString.getStr(),aString.getLength());
                 ((sal_Int8*)_pData)[aString.getLength()] = '\0';
-            }   break;
+            }
+            break;
 
         case SQL_BIGINT:
             *((sal_Int64*)_pData) = *(sal_Int64*)_pValue;
             *pLen = sizeof(sal_Int64);
+            _nColumnSize = *pLen;
             break;
         case SQL_DECIMAL:
         case SQL_NUMERIC:
             if(_bUseWChar)
             {
                 ::rtl::OUString aString = rtl::OUString::valueOf(*(double*)_pValue);
-                nMaxLen = aString.getLength();
-                *pLen = nMaxLen;
+                _nColumnSize = aString.getLength();
+                *pLen = _nColumnSize;
                 *((rtl::OUString*)_pData) = aString;
                 // Zeiger auf Char*
                 _pData = (sal_Int8*)((rtl::OUString*)_pData)->getStr();
@@ -199,10 +207,10 @@ void OTools::bindData(  SWORD fSqlType,
             else
             {
                 ::rtl::OString aString = ::rtl::OString::valueOf(*(double*)_pValue);
-                nMaxLen = aString.getLength();
-                *pLen = nMaxLen;
+                _nColumnSize = aString.getLength();
+                *pLen = _nColumnSize;
                 memcpy(_pData,aString.getStr(),aString.getLength());
-                ((sal_Int8*)_pData)[aString.getLength()] = '\0';
+                ((sal_Int8*)_pData)[_nColumnSize] = '\0';
             }   break;
         case SQL_BIT:
             *((sal_Int8*)_pData) = *(sal_Int8*)_pValue;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-29 10:23:33 $
+ *  last change: $Author: oj $ $Date: 2001-11-06 10:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,8 +412,13 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex,sal_Int32 _nType,
 
 
     checkParameterIndex(parameterIndex);
+    sal_Int32 nRealSize = _nSize;
+    SQLSMALLINT fSqlType = OTools::jdbcTypeToOdbc(_nType);
+    if( fSqlType == SQL_CHAR    || fSqlType == SQL_VARCHAR ||
+        fSqlType == SQL_DECIMAL || fSqlType == SQL_NUMERIC)
+        ++nRealSize;
 
-    sal_Int8* bindBuf = allocBindBuf(parameterIndex, _nSize);
+    sal_Int8* bindBuf = allocBindBuf(parameterIndex, nRealSize);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     OTools::bindParameter(  m_pConnection,
@@ -504,12 +509,16 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
 
 
     SQLINTEGER  prec = 0;
+    SQLUINTEGER nColumnSize = 0;
     if (sqlType == SQL_CHAR || sqlType == SQL_VARCHAR || sqlType == SQL_LONGVARCHAR)
+    {
         prec = 1;
+        nColumnSize = 1;
+    }
 
     SQLSMALLINT fCType = 0;
     SQLSMALLINT fSqlType = 0;
-    SQLUINTEGER nColumnSize = 0;
+
     SQLSMALLINT nDecimalDigits = 0;
     OTools::getBindTypes(sal_False,m_pConnection->useOldDateFormat(),sqlType,fCType,fSqlType,nColumnSize,nDecimalDigits);
 

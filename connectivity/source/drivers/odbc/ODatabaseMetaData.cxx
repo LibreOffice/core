@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-29 11:18:01 $
+ *  last change: $Author: oj $ $Date: 2001-11-06 10:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,12 +1446,12 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar(  ) throw(SQLExcepti
     if(m_bOdbc3)
     {
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
-        return nValue == SQL_OIC_CORE;
+        return nValue == SQL_OIC_CORE || nValue == SQL_OAC_LEVEL2 || nValue == SQL_OIC_LEVEL1;
     }
     else
     {
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_SQL_CONFORMANCE,nValue,*this);
-        return nValue == SQL_OSC_CORE;
+        return nValue == SQL_OSC_CORE || nValue == SQL_OAC_LEVEL1 || nValue == SQL_OAC_LEVEL2;
     }
 }
 // -------------------------------------------------------------------------
@@ -1461,12 +1461,12 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar(  ) throw(SQLExce
     if(m_bOdbc3)
     {
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
-        return nValue == SQL_OIC_LEVEL1;
+        return nValue == SQL_OIC_LEVEL1 || nValue == SQL_OIC_LEVEL2;
     }
     else
     {
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ODBC_INTERFACE_CONFORMANCE,nValue,*this);
-        return nValue == SQL_OAC_LEVEL1;
+        return nValue == SQL_OAC_LEVEL1 || nValue == SQL_OAC_LEVEL2;
     }
 }
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 11:22:27 $
+ *  last change: $Author: oj $ $Date: 2001-11-06 10:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,8 @@ namespace connectivity
                                     sal_Int8 *&_pData,
                                     SDWORD*& pLen,
                                     const void* _pValue,
-                                    rtl_TextEncoding _nTextEncoding);
+                                    rtl_TextEncoding _nTextEncoding,
+                                    SQLUINTEGER& _nColumnSize);
 
             static void bindParameter(  OConnection* _pConnection,
                                         SQLHANDLE _hStmt,
