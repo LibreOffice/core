@@ -49,4 +49,4 @@ ul	unoil\com\sun\star\xml				nmake	-	all	ul_xml ul_xml_sax ul_genall NULL
 ul	unoil\com\sun\star\xml\input			nmake	-	all	ul_xml_input ul_xml_sax ul_genall NULL
 ul	unoil\com\sun\star\xml\sax			nmake	-	all	ul_xml_sax ul_genall NULL
 ul	unoil\drafts\com\sun\star\form			   nmake    -   all ul_drafts_form ul_genall NULL
-ul	unoil\util					nmake	-	all	ul_util ul_chart ul_configuration ul_configbackend ul_dattrans ul_dattrans_clip ul_dattrans_dnd ul_document ul_embed ul_form ul_formula ul_installation ul_linguistic2 ul_mozilla ul_plugin ul_presentation ul_resource ul_scanner ul_setup ul_sheet ul_style ul_sync ul_sync2 ul_ui_dialogs ul_view ul_ui ul_xml_sax ul_xml_input ul_i18n ul_pck_zip ul_pck_manifest ul_accessibility ui_drafts_form NULL
+ul	unoil\util					nmake	-	all	ul_util ul_chart ul_configuration ul_configbackend ul_dattrans ul_dattrans_clip ul_dattrans_dnd ul_document ul_embed ul_form ul_formula ul_installation ul_linguistic2 ul_mozilla ul_plugin ul_presentation ul_resource ul_scanner ul_setup ul_sheet ul_style ul_sync ul_sync2 ul_ui_dialogs ul_view ul_ui ul_xml_sax ul_xml_input ul_i18n ul_pck_zip ul_pck_manifest ul_accessibility ul_drafts_form NULL
