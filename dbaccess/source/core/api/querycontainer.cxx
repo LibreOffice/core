@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:38:15 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ void SAL_CALL OQueryContainer::elementInserted( const ::com::sun::star::containe
             return;
 
         DBG_ASSERT(sElementName.getLength(), "OQueryContainer::elementInserted : invalid name !");
-        DBG_ASSERT(!hasByName(sElementName), "OQueryContainer::elementInserted : oops .... we're inconsistent with our master container !");
+        DBG_ASSERT(m_aDocumentMap.find(sElementName) == m_aDocumentMap.end(), "OQueryContainer::elementInserted         : oops .... we're inconsistent with our master container !");
         if (!sElementName.getLength() || hasByName(sElementName))
             return;
 
@@ -323,7 +323,7 @@ void SAL_CALL OQueryContainer::elementRemoved( const ::com::sun::star::container
     _rEvent.Accessor >>= sAccessor;
     {
         DBG_ASSERT(sAccessor.getLength(), "OQueryContainer::elementRemoved : invalid name !");
-        DBG_ASSERT(hasByName(sAccessor), "OQueryContainer::elementRemoved : oops .... we're inconsistent with our master container !");
+        DBG_ASSERT(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementRemoved : oops .... we're inconsistent with our master container !");
         if ( !sAccessor.getLength() || !hasByName(sAccessor) )
             return;
     }
@@ -341,7 +341,7 @@ void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::containe
     {
         MutexGuard aGuard(m_aMutex);
         DBG_ASSERT(sAccessor.getLength(), "OQueryContainer::elementReplaced : invalid name !");
-        DBG_ASSERT(hasByName(sAccessor), "OQueryContainer::elementReplaced : oops .... we're inconsistent with our master container !");
+        DBG_ASSERT(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementReplaced         : oops .... we're inconsistent with our master container !");
         if (!sAccessor.getLength() || !hasByName(sAccessor))
             return;
 
