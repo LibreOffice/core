@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:44:34 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,10 +289,10 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                 if( pAny )
                 {
                     if(pMap->nWID == FN_UNO_NUM_LEVEL)
-                        *pAny <<= (sal_Int16)(pTxtNd->GetNum()->GetLevel()&~NO_NUMLEVEL);
+                        *pAny <<= (sal_Int16)(pTxtNd->GetNum()->GetRealLevel());
                     else if(pMap->nWID == FN_UNO_IS_NUMBER)
                     {
-                        BOOL bIsNumber = 0 == (pTxtNd->GetNum()->GetLevel() & NO_NUMLEVEL);
+                        BOOL bIsNumber = pTxtNd->GetNum()->IsNum();
                         pAny->setValue(&bIsNumber, ::getBooleanCppuType());
                     }
                     else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
