@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepgm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 10:14:15 $
+ *  last change: $Author: sj $ $Date: 2001-05-15 14:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <svtools/fltcall.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/group.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <svtools/stdctrl.hxx>
 
@@ -82,7 +82,7 @@ class ResMgr;
 class DlgExportEPGM : public ModalDialog
 {
 private:
-    GroupBox            aGrpFormat;
+    FixedLine           aGrpFormat;
     RadioButton         aRBRaw;
     RadioButton         aRBASCII;
     OKButton            aBtnOK;

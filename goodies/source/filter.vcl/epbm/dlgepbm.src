@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepbm.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:14:09 $
+ *  last change: $Author: sj $ $Date: 2001-05-15 14:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@ ModalDialog DLG_EXPORT_EPBM
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 133 , 67 ) ;
+    Size = MAP_APPFONT ( 133 , 63 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "PBM Optionen" ;
@@ -89,10 +89,10 @@ ModalDialog DLG_EXPORT_EPBM
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GRP_FORMAT
+    FixedLine GRP_FORMAT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 60 , 54 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Datei Format" ;
         Text [ ENGLISH ] = "file format" ;
         Text[ italian ] = "Formato file";
@@ -152,7 +152,7 @@ ModalDialog DLG_EXPORT_EPBM
     };
     RadioButton RB_ASCII
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "~Text" ;
         Text [ ENGLISH ] = "~text" ;
