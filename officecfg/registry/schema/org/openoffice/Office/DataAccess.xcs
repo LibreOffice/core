@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-20 17:03:38 $
+ *  last change: $Author: oj $ $Date: 2002-11-28 08:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 				<info>
 					<desc xml:lang="en-US">Contains a filter condition for a data object like a database table or query. The conditions must be defined according to the rules of SQL.</desc>
 				</info>
+				<value/>
 			</prop>
 			<prop oor:name="ApplyFilter" oor:type="xs:boolean">
 				<info>
@@ -89,36 +90,37 @@
 				<info>
 					<desc xml:lang="en-US">Contains a sort rule for a data object, such as a database table or query. The rule must be defined according to the rules of SQL.</desc>
 				</info>
+				<value/>
 			</prop>
 			<prop oor:name="RowHeight" oor:type="xs:int">
 				<info>
 					<desc xml:lang="en-US">Specifies the height of a data row.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="TextColor" oor:type="xs:int">
 				<info>
 					<desc xml:lang="en-US">Specifies the text color (RGB) for displaying text.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="TextLineColor" oor:type="xs:int">
 				<info>
 					<desc xml:lang="en-US">Specifies the color (RGB) for text lines (i.e. underlining and outstriking).</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="CharacterEmphasis" oor:type="xs:short">
 				<info>
 					<desc xml:lang="en-US">Specifies the character emphasis to use. This is a com.sun.star.awt.FontEmphasisMark value.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="CharacterRelief" oor:type="xs:short">
 				<info>
 					<desc xml:lang="en-US">Specifies the character relief to use. This is a com.sun.star.FontRelief value.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<node-ref oor:name="Font" oor:node-type="Font">
 				<!-- oor:component="org.openoffice.Office.Common" -->
@@ -135,19 +137,19 @@
 				<info>
 					<desc xml:lang="en-US">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can't be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the datatype of the column.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="FormatString" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Contains the format which will be used to query the format key when not already set.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="FormatLocale" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Contains the locale which will be used to query the format key when not already set.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Align" oor:type="xs:int">
 				<info>
@@ -170,13 +172,13 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Width" oor:type="xs:int">
 				<info>
 					<desc xml:lang="en-US">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Position" oor:type="xs:int">
 				<info>
@@ -193,13 +195,13 @@
 				<info>
 					<desc xml:lang="en-US">Contains information about a control used for displaying and editing the columns data.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="HelpText" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Describes an optional help text which can be used by UI components when representing this column.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="ControlDefault" oor:type="xs:string">
 				<info>
@@ -431,25 +433,25 @@
 				<info>
 					<desc xml:lang="en-US">Specifies the exact name of the font ("Arial","Courier", "Frutiger").</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Height" oor:type="xs:short">
 				<info>
 					<desc xml:lang="en-US">Specifies the height of the font in the measure of the destination.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Width" oor:type="xs:short">
 				<info>
 					<desc xml:lang="en-US">Specifies the width of the font in the measure of the destination.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="StyleName" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Specifies the style name of the font ("Bold", "Italic", "Italic Bold").</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Family" oor:type="xs:short">
 				<info>
@@ -497,7 +499,7 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="CharSet" oor:type="xs:short">
 				<info>
@@ -560,7 +562,7 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Pitch" oor:type="xs:short">
 				<info>
@@ -583,19 +585,19 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="CharacterWidth" oor:type="xs:double">
 				<info>
 					<desc xml:lang="en-US">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%]</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Weight" oor:type="xs:double">
 				<info>
 					<desc xml:lang="en-US">Specifies the thickness of the line.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Slant" oor:type="xs:short">
 				<info>
@@ -633,7 +635,7 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="UnderLine" oor:type="xs:short">
 				<info>
@@ -736,7 +738,7 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Strikeout" oor:type="xs:short">
 				<info>
@@ -779,25 +781,25 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Orientation" oor:type="xs:double">
 				<info>
 					<desc xml:lang="en-US">Specifies the rotation of the font.  [UNIT=degree]</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Kerning" oor:type="xs:boolean">
 				<info>
 					<desc xml:lang="en-US">For requesting, specifies if there is a kerning table available. For selecting, specifies if the kerning table is to be used.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="WordLineMode" oor:type="xs:boolean">
 				<info>
 					<desc xml:lang="en-US">Specifies if only words get underlined.</desc>
 				</info>
-				<value xsi:nil="true"/>
+				
 			</prop>
 			<prop oor:name="Type" oor:type="xs:short">
 				<info>
@@ -825,7 +827,7 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
+				
 			</prop>
 		</group>
 	</templates>
