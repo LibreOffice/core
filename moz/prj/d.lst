@@ -1,8 +1,10 @@
 mkdir: %_DEST%\inc%_EXT%\mozilla
 mkdir: %_DEST%\inc%_EXT%\mozilla\nspr
+mkdir: %_DEST%\inc%_EXT%\mozilla\nspr\obsolete
 
 ..\%__SRC%\inc\* %_DEST%\inc%_EXT%\mozilla
 ..\%__SRC%\inc\nspr\* %_DEST%\inc%_EXT%\mozilla\nspr
+..\%__SRC%\inc\nspr\obsolete\* %_DEST%\inc%_EXT%\mozilla\nspr\obsolete
 ..\%__SRC%\lib\* %_DEST%\lib%_EXT%
 ..\%__SRC%\bin\*.zip %_DEST%\bin%_EXT%
 
