@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:23:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,11 +277,11 @@ DockingWindow RID_SVXDLG_HYPERLINK
     Text [ danish ] = "Indsæt hyperlink" ;
     Text [ portuguese_brazilian ] = "Hyperlink einf?en" ;
     Text [ portuguese ] = "Inserir hiperligação" ;
-    Text[ chinese_simplified ] = "ĞÂÔö³¬Á´½Ó";
+    Text[ chinese_simplified ] = "²åÈë³¬Á´½Ó";
     Text[ russian ] = "Âñòàâèòü ãèïåğññûëêó";
     Text[ polish ] = "Wstaw hiper³¹cze";
     Text[ japanese ] = "Ê²Êß°Øİ¸‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "·s¼W¶W³sµ²";
+    Text[ chinese_traditional ] = "´¡¤J¶W³sµ²";
     Text[ arabic ] = "ÅÏÑÇÌ ÇÑÊÈÇØ ÊÔÚÈí";
     Text[ greek ] = "ÅéóáãùãŞ õğåñ-óıíäåóçò";
     Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ© »ğÀÔ";
@@ -376,7 +376,7 @@ QueryBox RID_SVXQB_NOCONNECT
     Message[ chinese_traditional ] = "¥u¦³¦b«Ø¥ß³s½u«á¤~¯à½T©w³o­Ó URL ¬O§_¥¿½T¡C\n±z­n²{¦b³s½u¨ì Internet¡S";
     Message[ arabic ] = "áÇ íãßä İÍÕ ÇáÚäæÇä (URL)¡ ÅáÇ ÈÚÏ ÅŞÇãÉ ÇáÇÊÕÇá.\nåá ÊÑíÏ ÅŞÇãÉ ÇáÇÊÕÇá¿";
     Message[ greek ] = "Ï İëåã÷ïò áõôïı ôïõ URL åßíáé äõíáôüí íá ãßíåé ìåôÜ ôçí óıíäåóç.\nÈİëåôå íá óõíäåèåßôå;";
-    Message[ korean ] = "ÀÌ URLÀº Á¢¼ÓÀÌ ÀÌ·ç¾îÁø ÈÄ¿¡¾ß °Ë»çÇÒ ¼ö ÀÖ½À´Ï´Ù. Á¢¼ÓÀ» ±¸ÃàÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "ÀÌ URLÀº Á¢¼ÓÀÌ ÀÌ·ç¾îÁø ÈÄ¿¡¾ß °Ë»çÇÒ ¼ö ÀÖ½À´Ï´Ù. Á¢¼ÓÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Bu URL bağlantı kurulduktan sonra kontrol edilebilir.\nBağlantı kurulsun mu?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La URL solo puede ser verificada después de haberse establecido una conexión.\n¿Desea establecer la conexión?";
@@ -412,6 +412,7 @@ QueryBox RID_SVXQB_DONTEXIST
     Message[ catalan ] = "La URL no existe.\n¿Desea insertarla de todas formas?";
     Message[ finnish ] = "URL-osoitetta ei ole olemassa. Lisätäänkö kuitenkin?";
 };
+
 
 
 
