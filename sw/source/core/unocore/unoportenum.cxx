@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 10:27:11 $
+ *  last change: $Author: jp $ $Date: 2001-03-20 18:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 
 #pragma hdrstop
+
+#define _SVSTDARR_XUB_STRLEN
+#include <svtools/svstdarr.hxx>
 
 #ifndef _BOOKMRK_HXX //autogen
 #include <bookmrk.hxx>
@@ -182,43 +185,38 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(SwPaM& rParaCrsr, uno::Refe
     SwUnoCrsr* pUnoCrsr = rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), sal_False);
     pUnoCrsr->Add(this);
 
-    //alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz AM ZEICHEN gebunden sind
+    //alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz
+    // AM ZEICHEN gebunden sind
+
     SwDoc* pDoc = pUnoCrsr->GetDoc();
-    sal_uInt16 nCount = pDoc->GetFlyCount();
-    const SwNodeIndex nOwnNode = pUnoCrsr->GetPoint()->nNode;
+    const SwNodeIndex& rOwnNode = pUnoCrsr->GetPoint()->nNode;
+    const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
+    sal_uInt16 nCount = rFmts.Count();
+    const SwPosition* pAnchorPos;
+    SvXub_StrLens aSortArr( 8, 8 );
+
     for( sal_uInt16 i = 0; i < nCount; i++)
     {
-        SwFrmFmt* pFmt = pDoc->GetFlyNum(i);
+        SwFrmFmt* pFmt = rFmts[ i ];
+        const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+
         //steht der Anker in diesem Node und ist er absatzgebunden?
-        if( pFmt->GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT )
+        if( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() &&
+            0 != ( pAnchorPos = rAnchor.GetCntntAnchor() ) &&
+            RES_FLYFRMFMT == pFmt->Which() &&
+            pAnchorPos->nNode == rOwnNode )
         {
-            const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-            const SwPosition* pAnchorPos = rAnchor.GetCntntAnchor();
-            if(pAnchorPos->nNode == nOwnNode)
-            {
-                //jetzt einen SwDepend anlegen und sortiert in das Array einfuegen
-                SwDepend* pNewDepend = new SwDepend(this, pFmt);
-                const SwFmtAnchor& rNewAnchor = pFmt->GetAnchor();
-                const SwPosition* pNewAnchorPos = rNewAnchor.GetCntntAnchor();
-                xub_StrLen nInsertIndex = pNewAnchorPos->nContent.GetIndex();
+            //jetzt einen SwDepend anlegen und sortiert in das Array einfuegen
+            SwDepend* pNewDepend = new SwDepend(this, pFmt);
+            xub_StrLen nInsertIndex = pAnchorPos->nContent.GetIndex();
 
-                for(sal_uInt16 nFrame = 0; nFrame < aFrameArr.Count(); nFrame++)
-                {
-                    SwDepend* pCurDepend = aFrameArr.GetObject(nFrame);
-                    SwFrmFmt* pFormat = (SwFrmFmt*)pCurDepend->GetRegisteredIn();
-                    const SwFmtAnchor& rAnchor = pFormat->GetAnchor();
-                    const SwPosition* pAnchorPos = rAnchor.GetCntntAnchor();
+            USHORT nInsPos = 0, nEnd = aSortArr.Count();
+            for( ; nInsPos < nEnd; ++nInsPos )
+                if( aSortArr[ nInsPos ] > nInsertIndex )
+                    break;
 
-                    if(pAnchorPos->nContent.GetIndex() > nInsertIndex)
-                    {
-                        aFrameArr.C40_INSERT(SwDepend, pNewDepend, nFrame);
-                        pNewDepend = 0;
-                        break;
-                    }
-                }
-                if(pNewDepend)
-                    aFrameArr.C40_INSERT(SwDepend, pNewDepend, aFrameArr.Count());
-            }
+            aSortArr.Insert( nInsertIndex, nInsPos );
+            aFrameArr.C40_INSERT( SwDepend, pNewDepend, nInsPos );
         }
     }
     CreatePortions();
@@ -228,12 +226,9 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(SwPaM& rParaCrsr, uno::Refe
   -----------------------------------------------------------------------*/
 SwXTextPortionEnumeration::~SwXTextPortionEnumeration()
 {
-    for(sal_uInt16 nFrame = aFrameArr.Count(); nFrame; nFrame--)
-    {
-        SwDepend* pCurDepend = aFrameArr.GetObject(nFrame - 1);
-        delete pCurDepend;
-        aFrameArr.Remove(nFrame - 1);
-    }
+    for(sal_uInt16 nFrame = aFrameArr.Count(); nFrame; )
+        delete aFrameArr.GetObject( --nFrame );
+    aFrameArr.Remove(0, aFrameArr.Count());
 
     if( aPortionArr.Count() )
         aPortionArr.DeleteAndDestroy(0, aPortionArr.Count() );
