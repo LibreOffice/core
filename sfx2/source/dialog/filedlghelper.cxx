@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-01 16:34:14 $
+ *  last change: $Author: fs $ $Date: 2001-10-02 16:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,17 +259,18 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     const short             m_nDialogType;
 
     ErrCode                 mnError;
-    sal_Bool                mbHasPassword   : 1;
-    sal_Bool                mbIsPwdEnabled  : 1;
-    sal_Bool                mbHasVersions   : 1;
-    sal_Bool                mbHasAutoExt    : 1;
-    sal_Bool                mbHasLink       : 1;
-    sal_Bool                mbHasPreview    : 1;
-    sal_Bool                mbShowPreview   : 1;
-    sal_Bool                mbIsSaveDlg     : 1;
+    sal_Bool                mbHasPassword           : 1;
+    sal_Bool                mbIsPwdEnabled          : 1;
+    sal_Bool                m_bHaveFilterOptions    : 1;
+    sal_Bool                mbHasVersions           : 1;
+    sal_Bool                mbHasAutoExt            : 1;
+    sal_Bool                mbHasLink               : 1;
+    sal_Bool                mbHasPreview            : 1;
+    sal_Bool                mbShowPreview           : 1;
+    sal_Bool                mbIsSaveDlg             : 1;
 
-    sal_Bool                mbDeleteMatcher : 1;
-    sal_Bool                mbInsert        : 1;
+    sal_Bool                mbDeleteMatcher         : 1;
+    sal_Bool                mbInsert                : 1;
 
 private:
     void                    addFilters( sal_uInt32 nFlags,
@@ -278,11 +279,15 @@ private:
                                        const OUString& rExtension );
     void                    addGraphicFilter();
     void                    enablePasswordBox();
+    void                    updateFilterOptionsBox();
     void                    updateVersions();
     void                    dispose();
 
     void                    loadConfig();
     void                    saveConfig();
+
+    const SfxFilter*        getCurentSfxFilter();
+    sal_Bool                updateExtendedControl( sal_Int16 _nExtendedControlId, sal_Bool _bEnable );
 
     ErrCode                 getGraphic( const OUString& rURL, Graphic& rGraphic ) const;
     void                    setDefaultValues();
@@ -476,31 +481,38 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aEvent )
 {
-    if ( ( aEvent.ElementId == CommonFilePickerElementIds::LISTBOX_FILTER ) && mbHasPassword )
-        enablePasswordBox();
-    if ( ( aEvent.ElementId == ExtendedFilePickerElementIds::CHECKBOX_PREVIEW ) && mbHasPreview )
+    switch ( aEvent.ElementId )
     {
-        Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        case CommonFilePickerElementIds::LISTBOX_FILTER:
+            updateFilterOptionsBox();
+            enablePasswordBox();
+            break;
 
-        // check, wether or not we have to display a preview
-        if ( xCtrlAccess.is() )
-        {
-            try
+        case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW:
+            if ( mbHasPreview )
             {
-                Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
-                sal_Bool bShowPreview = sal_False;
+                Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
-                if ( aValue >>= bShowPreview )
+                // check, wether or not we have to display a preview
+                if ( xCtrlAccess.is() )
                 {
-                    mbShowPreview = bShowPreview;
-                    TimeOutHdl_Impl( NULL );
+                    try
+                    {
+                        Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
+                        sal_Bool bShowPreview = sal_False;
+
+                        if ( aValue >>= bShowPreview )
+                        {
+                            mbShowPreview = bShowPreview;
+                            TimeOutHdl_Impl( NULL );
+                        }
+                    }
+                    catch( Exception )
+                    {
+                        DBG_ERRORFILE( "FileDialogHelper_Impl::controlStateChanged: caught an exception!" );
+                    }
                 }
             }
-            catch( Exception )
-            {
-                DBG_ERRORFILE( "FileDialogHelper_Impl::controlStateChanged: caught an exception!" );
-            }
-        }
     }
 }
 
@@ -536,33 +548,82 @@ void FileDialogHelper_Impl::dispose()
 }
 
 // ------------------------------------------------------------------------
+const SfxFilter* FileDialogHelper_Impl::getCurentSfxFilter()
+{
+    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+    ::rtl::OUString aFilterName = xFltMgr->getCurrentFilter();
+
+    const SfxFilter* pFilter = NULL;
+    if ( mpMatcher )
+        pFilter = mpMatcher->GetFilter4UIName( aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
+
+    return pFilter;
+}
+
+// ------------------------------------------------------------------------
+sal_Bool FileDialogHelper_Impl::updateExtendedControl( sal_Int16 _nExtendedControlId, sal_Bool _bEnable )
+{
+    sal_Bool bIsEnabled = sal_False;
+
+    Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+    if ( xCtrlAccess.is() )
+    {
+        try
+        {
+            xCtrlAccess->enableControl( _nExtendedControlId, _bEnable );
+            bIsEnabled = _bEnable;
+        }
+        catch( const IllegalArgumentException& )
+        {
+            DBG_ERROR( "FileDialogHelper_Impl::updateExtendedControl: caught an exception!" );
+        }
+    }
+    return bIsEnabled;
+}
+
+// ------------------------------------------------------------------------
+struct CheckFilterOptionsCapability
+{
+    sal_Bool operator() ( const SfxFilter* _pFilter )
+    {
+        return  _pFilter
+            &&  ( 0 != ( _pFilter->GetFilterFlags() & SFX_FILTER_USESOPTIONS ) );
+    }
+};
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::updateFilterOptionsBox()
+{
+    if ( !m_bHaveFilterOptions )
+        return;
+
+    updateExtendedControl(
+        ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS,
+        CheckFilterOptionsCapability()( getCurentSfxFilter() )
+    );
+}
+
+// ------------------------------------------------------------------------
+struct CheckPasswordCapability
+{
+    sal_Bool operator() ( const SfxFilter* _pFilter )
+    {
+        return  _pFilter
+            &&  _pFilter->UsesStorage()
+            &&  ( SOFFICE_FILEFORMAT_60 <= _pFilter->GetVersion() );
+    }
+};
+
+// ------------------------------------------------------------------------
 void FileDialogHelper_Impl::enablePasswordBox()
 {
     if ( ! mbHasPassword )
         return;
 
-    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
-    OUString aFilterName = xFltMgr->getCurrentFilter();
-
-    mbIsPwdEnabled = sal_False;
-
-    if ( mpMatcher )
-    {
-        const SfxFilter* pFilter = mpMatcher->GetFilter4UIName(
-                            aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
-
-        BOOL bEnablePasswd = pFilter && pFilter->UsesStorage() &&
-                             ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() );
-
-        Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-
-        try
-        {
-            xCtrlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, bEnablePasswd );
-            mbIsPwdEnabled = bEnablePasswd;
-        }
-        catch( IllegalArgumentException ){}
-    }
+    mbIsPwdEnabled = updateExtendedControl(
+        ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
+        CheckPasswordCapability()( getCurentSfxFilter() )
+    );
 }
 
 // ------------------------------------------------------------------------
@@ -810,18 +871,19 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
     // create the file open dialog
     // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
 
-    mpParent        = pParent;
-    mnError         = ERRCODE_NONE;
-    mbHasAutoExt    = sal_False;
-    mbHasPassword   = sal_False;
-    mbIsPwdEnabled  = sal_True;
-    mbHasVersions   = sal_False;
-    mbHasPreview    = sal_False;
-    mbShowPreview   = sal_False;
-    mbHasLink       = sal_False;
-    mbDeleteMatcher = sal_False;
-    mbInsert        = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
-    mbIsSaveDlg     = sal_False;
+    mpParent                = pParent;
+    mnError                 = ERRCODE_NONE;
+    mbHasAutoExt            = sal_False;
+    mbHasPassword           = sal_False;
+    m_bHaveFilterOptions    = sal_False;
+    mbIsPwdEnabled          = sal_True;
+    mbHasVersions           = sal_False;
+    mbHasPreview            = sal_False;
+    mbShowPreview           = sal_False;
+    mbHasLink               = sal_False;
+    mbDeleteMatcher         = sal_False;
+    mbInsert                = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
+    mbIsSaveDlg             = sal_False;
 
     mpMatcher = NULL;
     mpGraphicFilter = NULL;
@@ -856,6 +918,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
     case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
         mbHasPassword = sal_True;
+        m_bHaveFilterOptions = sal_True;
         mbHasAutoExt = sal_True;
         mbIsSaveDlg = sal_True;
         break;
@@ -994,6 +1057,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
     loadConfig();
     setDefaultValues();
     enablePasswordBox();
+    updateFilterOptionsBox();
 
     PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
     pThread->create();
@@ -1123,6 +1187,7 @@ ErrCode FileDialogHelper_Impl::execute()
     loadConfig();
     setDefaultValues();
     enablePasswordBox();
+    updateFilterOptionsBox();
 
     PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
     pThread->create();
