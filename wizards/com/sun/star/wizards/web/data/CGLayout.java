@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CGLayout.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:18:44 $
+ *  last change: $Author: kz $  $Date: 2005-03-18 16:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,10 @@ public class CGLayout extends ConfigSetItem {
 
     }
 
-    public String getImageURL() {
-        return FileAccess.connectURLs(getSettings().workPath, "layouts/" + cp_FSName + ".png");
+    public Object[] getImageUrls() {
+        Object[] sRetUrls = new Object[1];
+        sRetUrls[0] = FileAccess.connectURLs(getSettings().workPath, "layouts/" + cp_FSName + ".png");
+        return sRetUrls;
     }
 
     public Map getTemplates(XMultiServiceFactory xmsf) throws Exception {
