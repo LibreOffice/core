@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 21:05:53 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,21 +347,21 @@ ItemList [ language_user1 ] =
         < "Eastern Europe (Apple Macintosh/Rumanian)"           ; RTL_TEXTENCODING_APPLE_ROMANIAN   ; > ;
         < "Turkish (Apple Macintosh)"                       ; RTL_TEXTENCODING_APPLE_TURKISH    ; > ;
         < "Cyrillic (Apple Macintosh/Ukrainian)"            ; RTL_TEXTENCODING_APPLE_UKRAINIAN  ; > ;
-        < "Chinese simple (Apple Macintosh)"        ; RTL_TEXTENCODING_APPLE_CHINSIMP   ; > ;
+        < "Chinese simplified (Apple Macintosh)"        ; RTL_TEXTENCODING_APPLE_CHINSIMP   ; > ;
         < "Chinese traditional (Apple Macintosh)"       ; RTL_TEXTENCODING_APPLE_CHINTRAD   ; > ;
         < "Japanese (Apple Macintosh)"                      ; RTL_TEXTENCODING_APPLE_JAPANESE   ; > ;
         < "Korean (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_KOREAN     ; > ;
         < "Japanese (Windows-932)"                          ; RTL_TEXTENCODING_MS_932           ; > ;
-        < "Chinese simple (Windows-936)"            ; RTL_TEXTENCODING_MS_936           ; > ;
+        < "Chinese simplified (Windows-936)"            ; RTL_TEXTENCODING_MS_936           ; > ;
         < "Korean (Windows-949)"                        ; RTL_TEXTENCODING_MS_949           ; > ;
         < "Chinese traditional (Windows-950)"           ; RTL_TEXTENCODING_MS_950           ; > ;
         < "Japanese (Shift-JIS)"                            ; RTL_TEXTENCODING_SHIFT_JIS        ; > ;
-        < "Chinese simple (GB-2312)"                ; RTL_TEXTENCODING_GB_2312          ; > ;
+        < "Chinese simplified (GB-2312)"                ; RTL_TEXTENCODING_GB_2312          ; > ;
         < "Chinese traditional (GBT-12345)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
-        < "Chinese simple (GBK/GB-2312-80)"         ; RTL_TEXTENCODING_GBK              ; > ;
+        < "Chinese simplified (GBK/GB-2312-80)"         ; RTL_TEXTENCODING_GBK              ; > ;
         < "Chinese traditional (BIG5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
         < "Japanese (EUC-JP)"                               ; RTL_TEXTENCODING_EUC_JP           ; > ;
-        < "Chinese simple (EUC-CN)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
+        < "Chinese simplified (EUC-CN)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
         < "Cyrillic (KOI8-R)"                               ; RTL_TEXTENCODING_KOI8_R           ; > ;
         < "Unicode (UTF-7)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
         < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
