@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:17:57 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 07:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,32 +297,6 @@ namespace connectivity
         //==================================================================
         // inline implementation
         //==================================================================
-//      inline ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, UINT32 nRec)
-//          : ONDXKey_BASE(eType)
-//          , nRecord(nRec),xValue(rVal)
-//      {
-//      }
-
-
-//      inline ONDXKey::ONDXKey(const rtl::OUString& aStr, UINT32 nRec)
-//                  : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
-//                   ,nRecord(nRec)
-//      {
-//          if (aStr.len())
-//              xValue = aStr;
-//      }
-
-//      inline ONDXKey::ONDXKey(double aVal, UINT32 nRec)
-//                   : ONDXKey_BASE(::com::sun::star::sdbc::DataType::DOUBLE)
-//                   ,nRecord(nRec)
-//                   ,xValue(aVal)
-//      {
-//      }
-
-//      inline ONDXKey::ONDXKey(UINT32 nRec)
-//                   :nRecord(nRec)
-//      {
-//      }
 
         inline ONDXKey::ONDXKey(const ONDXKey& rKey)
                      : ONDXKey_BASE(rKey.getDBType())

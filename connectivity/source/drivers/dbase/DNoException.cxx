@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:44:25 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 07:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,19 +757,20 @@ USHORT ONDXPage::Search(const ONDXPage* pPage)
 void ONDXPage::SearchAndReplace(const ONDXKey& rSearch,
                                   ONDXKey& rReplace)
 {
-    if (rSearch == rReplace)
-        return;
-
-    USHORT nPos = NODE_NOTFOUND;
-    ONDXPage* pPage = this;
-
-    while (pPage && (nPos = pPage->Search(rSearch)) == NODE_NOTFOUND)
-        pPage = pPage->aParent;
-
-    if (pPage)
+    OSL_ENSURE(rSearch != rReplace,"Invalid here:rSearch == rReplace");
+    if (rSearch != rReplace)
     {
-        (*pPage)[nPos].GetKey() = rReplace;
-        pPage->SetModified(TRUE);
+        USHORT nPos = NODE_NOTFOUND;
+        ONDXPage* pPage = this;
+
+        while (pPage && (nPos = pPage->Search(rSearch)) == NODE_NOTFOUND)
+            pPage = pPage->aParent;
+
+        if (pPage)
+        {
+            (*pPage)[nPos].GetKey() = rReplace;
+            pPage->SetModified(TRUE);
+        }
     }
 }
 // -----------------------------------------------------------------------------
