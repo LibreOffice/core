@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:44:23 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 18:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,6 +447,7 @@
 #define SC_UNO_RASTERSYNC           "IsRasterAxisSynchronized"
 #define SC_UNO_AUTOCALC             "AutoCalculate"
 #define SC_UNO_PRINTERNAME          "PrinterName"
+#define SC_UNO_APPLYDOCINF          "ApplyUserData"
 
 //  old (5.2) property names for view options - for compatibility only!
 #define OLD_UNO_COLROWHDR           "ColumnRowHeaders"
