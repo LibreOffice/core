@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:13:23 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ public:
                 ::com::sun::star::uno::RuntimeException );
     void clearAccessibleSelection(  )
         throw ( ::com::sun::star::uno::RuntimeException );
-    void selectAllAccessible(  )
+    void selectAllAccessibleChildren(  )
         throw ( ::com::sun::star::uno::RuntimeException );
     sal_Int32 getSelectedAccessibleChildCount(  )
         throw ( ::com::sun::star::uno::RuntimeException );
