@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-22 14:01:37 $
+ *  last change: $Author: tbe $ $Date: 2002-12-10 17:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,6 @@ protected:
 
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent ) const;
 
-    // OAccessibleContextHelper
-    virtual void SAL_CALL NotifyAccessibleEvent( const sal_Int16 _nEventId, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Any& _rNewValue );
-
 public:
     VCLXAccessibleComponent( VCLXWindow* pVCLXindow );
     ~VCLXAccessibleComponent();
@@ -181,7 +178,6 @@ public:
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -215,9 +211,6 @@ private:
     OUString getAccessibleName() => VCL Window::GetAccessibleText() => Most windows return Window::GetText()
     Reference< XAccessibleRelationSet > getAccessibleRelationSet()
     Reference< XAccessibleStateSet > getAccessibleStateSet() => overload FillAccessibleStateSet( ... )
-
-// ::drafts::com::sun::star::accessibility::XAccessibleComponent
-    Any getAccessibleKeyBinding()
 
 ---------------------------------------------------------- */
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-06 15:12:43 $
+ *  last change: $Author: tbe $ $Date: 2002-12-10 17:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,6 @@
 #include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_AWT_KEYEVENT_HPP_
-#include <com/sun/star/awt/KeyEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
-#include <com/sun/star/awt/KeyModifier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_KEY_HPP_
-#include <com/sun/star/awt/Key.hpp>
-#endif
-
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #endif
@@ -116,10 +106,6 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef MNEMONIC_CHAR
-#define MNEMONIC_CHAR               ((sal_Unicode)'~')
 #endif
 
 #ifndef VCLEVENT_WINDOW_FRAMETITLECHANGED
@@ -426,11 +412,6 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         }
         break;
     }
-}
-
-void VCLXAccessibleComponent::NotifyAccessibleEvent( const sal_Int16 _nEventId, const uno::Any& _rOldValue, const uno::Any& _rNewValue )
-{
-    AccessibleExtendedComponentHelper_BASE::NotifyAccessibleEvent( _nEventId, _rOldValue, _rNewValue );
 }
 
 void VCLXAccessibleComponent::disposing()
@@ -811,36 +792,6 @@ void VCLXAccessibleComponent::grabFocus(  ) throw (uno::RuntimeException)
     uno::Reference< accessibility::XAccessibleStateSet > xStates = getAccessibleStateSet();
     if ( mxWindow.is() && xStates.is() && xStates->contains( accessibility::AccessibleStateType::FOCUSABLE ) )
         mxWindow->setFocus();
-}
-
-uno::Any VCLXAccessibleComponent::getAccessibleKeyBinding() throw (uno::RuntimeException)
-{
-    OExternalLockGuard aGuard( this );
-
-    uno::Any aRet;
-
-    if ( GetWindow() )
-    {
-        KeyEvent aVclKeyEvent = GetWindow()->GetActivationKey();
-        KeyCode aVclKeyCode = aVclKeyEvent.GetKeyCode();
-        awt::KeyEvent aKeyEvent;
-
-        aKeyEvent.Modifiers = 0;
-        if ( aVclKeyCode.IsShift() )
-            aKeyEvent.Modifiers |= awt::KeyModifier::SHIFT;
-        if ( aVclKeyCode.IsMod1() )
-            aKeyEvent.Modifiers |= awt::KeyModifier::MOD1;
-        if ( aVclKeyCode.IsMod2() )
-            aKeyEvent.Modifiers |= awt::KeyModifier::MOD2;
-
-        aKeyEvent.KeyCode = aVclKeyCode.GetCode();
-        aKeyEvent.KeyChar = aVclKeyEvent.GetCharCode();
-        aKeyEvent.KeyFunc = aVclKeyCode.GetFunction();
-
-        aRet <<= aKeyEvent;
-    }
-
-    return aRet;
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::RuntimeException)
