@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-31 07:02:49 $
+ *  last change: $Author: khong $ $Date: 2002-06-18 22:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,22 +172,22 @@ IMPL_CREATEINSTANCE_MSF( NumberFormatCodeMapper )
 IMPL_CREATEINSTANCE( LocaleData )
 IMPL_CREATEINSTANCE_MSF( DefaultNumberingProvider )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_pinyin )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_radical )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_stroke )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_zhuyin )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_TW_radical )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_TW_stroke )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_ko_dict )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_ja_phonetic )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_alphanumeric )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_nl_alphanumeric )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_da_alphanumeric )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_ar_alphanumeric )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_he_alphanumeric )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_hi_alphanumeric )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_th_alphanumeric )
-IMPL_CREATEINSTANCE( IndexEntrySupplier_Unicode )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_pinyin )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_radical )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_stroke )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_zhuyin )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_radical )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_stroke )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ko_dict )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_alphanumeric )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_nl_alphanumeric )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_da_alphanumeric )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ar_alphanumeric )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_he_alphanumeric )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_hi_alphanumeric )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_th_alphanumeric )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_Unicode )
 IMPL_CREATEINSTANCE_MSF( CalendarImpl )
 IMPL_CREATEINSTANCE( Calendar_gregorian )
 IMPL_CREATEINSTANCE( Calendar_hanja_yoil )

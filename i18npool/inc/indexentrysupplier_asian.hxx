@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-31 04:53:29 $
+ *  last change: $Author: khong $ $Date: 2002-06-18 22:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef _I18N_INDEXENTRYSUPPLIER_CJK_HXX_
 #define _I18N_INDEXENTRYSUPPLIER_CJK_HXX_
 
-#include <indexentrysupplier.hxx>
+#include <indexentrysupplier_default.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -70,52 +70,57 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //  class IndexEntrySupplier_CJK
 //  ----------------------------------------------------
 
-class IndexEntrySupplier_CJK : public IndexEntrySupplier {
+class IndexEntrySupplier_CJK : public IndexEntrySupplier_Unicode {
 public:
-    IndexEntrySupplier_CJK () {
+    IndexEntrySupplier_CJK( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF ) : IndexEntrySupplier_Unicode(rxMSF) {
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_CJK";
     };
-    ~IndexEntrySupplier_CJK () {};
 
-    virtual rtl::OUString SAL_CALL getIndexString( const rtl::OUString & IndexEntry, const sal_Unicode idxStr[],
+    virtual rtl::OUString SAL_CALL getIndexString( const sal_Unicode ch, const sal_Unicode idxStr[],
         const sal_uInt16 idx1[], const sal_uInt16 idx2[]) throw (com::sun::star::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getIndexString( const rtl::OUString & IndexEntry,
+    virtual rtl::OUString SAL_CALL getIndexString( const sal_Unicode ch,
         const sal_uInt16 idx1[], const sal_Unicode idx2[]) throw (com::sun::star::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL compareIndexKey( const rtl::OUString& IndexEntry1,
+        const rtl::OUString& PhoneticEntry1, const com::sun::star::lang::Locale& rLocale1,
+        const rtl::OUString& IndexEntry2, const ::rtl::OUString& PhoneticEntry2,
+        const com::sun::star::lang::Locale& rLocale2 )
+        throw (com::sun::star::uno::RuntimeException);
 };
 
-#define INDEXENTRYSUPPLIER_CJK( algorithm ) \
+#define INDEXENTRYSUPPLIER_CJK( algorithm, UsePhonetic ) \
 class IndexEntrySupplier_##algorithm : public IndexEntrySupplier_CJK {\
 public:\
-    IndexEntrySupplier_##algorithm () {\
+    IndexEntrySupplier_##algorithm (const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF) : IndexEntrySupplier_CJK (rxMSF) {\
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_##algorithm";\
+        usePhonetic = UsePhonetic;\
     };\
     virtual rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& rIndexEntry,\
         const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm ) throw (com::sun::star::uno::RuntimeException);\
 };
 
 #if defined( INDEXENTRYSUPPLIER_zh_pinyin ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( zh_pinyin )
+INDEXENTRYSUPPLIER_CJK( zh_pinyin, sal_False )
 #endif
 #if defined( INDEXENTRYSUPPLIER_zh_stroke ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( zh_stroke )
+INDEXENTRYSUPPLIER_CJK( zh_stroke, sal_False )
 #endif
 #if defined( INDEXENTRYSUPPLIER_zh_radical ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( zh_radical )
+INDEXENTRYSUPPLIER_CJK( zh_radical, sal_False )
 #endif
 #if defined( INDEXENTRYSUPPLIER_zh_zhuyin ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( zh_zhuyin )
+INDEXENTRYSUPPLIER_CJK( zh_zhuyin, sal_False )
 #endif
 #if defined( INDEXENTRYSUPPLIER_zh_TW_radical ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( zh_TW_radical )
+INDEXENTRYSUPPLIER_CJK( zh_TW_radical, sal_False )
 #endif
 #if defined( INDEXENTRYSUPPLIER_zh_TW_stroke ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( zh_TW_stroke )
+INDEXENTRYSUPPLIER_CJK( zh_TW_stroke, sal_False )
 #endif
 #if defined( INDEXENTRYSUPPLIER_ko_dict ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( ko_dict )
+INDEXENTRYSUPPLIER_CJK( ko_dict, sal_False )
 #endif
 #if defined( INDEXENTRYSUPPLIER_ja_phonetic ) || defined( INDEXENTRYSUPPLIER_ALL )
-INDEXENTRYSUPPLIER_CJK( ja_phonetic )
+INDEXENTRYSUPPLIER_CJK( ja_phonetic, sal_True )
 #endif
 #undef INDEXENTRYSUPPLIER_CJK
 
