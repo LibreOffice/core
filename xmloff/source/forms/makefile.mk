@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-21 08:40:29 $
+#   last change: $Author: rt $ $Date: 2004-04-02 10:31:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,9 +80,9 @@ UNOUCROUT=$(OUT)$/inc
 INCPRE+=$(UNOUCROUT)
 
 UNOTYPES=\
-    drafts.com.sun.star.form.XBindableValue \
-    drafts.com.sun.star.form.XListEntrySource \
-    drafts.com.sun.star.form.XListEntrySink
+    com.sun.star.form.binding.XBindableValue \
+    com.sun.star.form.binding.XListEntrySource \
+    com.sun.star.form.binding.XListEntrySink
 
 SLOFILES =	\
         $(SLO)$/formstyles.obj \
