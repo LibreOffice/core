@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInputStreamProvider.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include <com/sun/star/io/XInputStream.idl>
 #endif
 
-
 //=============================================================================
 
 module com {  module sun {  module star {  module io {
@@ -79,7 +78,7 @@ module com {  module sun {  module star {  module io {
     input streams returned by <member>createInputStream()</member>
     are completely independend from each other.</p>
 */
-interface XInputStreamProvider : com::sun::star::uno::XInterface
+published interface XInputStreamProvider : com::sun::star::uno::XInterface
 {
     /** Creates a new input stream, every time providing
         the same data.
