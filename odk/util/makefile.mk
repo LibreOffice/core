@@ -88,9 +88,17 @@ all: deliver convertit zipit checkit cleanit
 .ENDIF
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
+.IF "$(COM)"=="GCC"
+BINDINGDLL=gcc2_uno
+.ELSE
 BINDINGDLL=sunpro5_uno
+.ENDIF
 .ELIF "$(OS)$(CPU)"=="SOLARISI"
+.IF "$(COM)"=="GCC"
+BINDINGDLL=gcc2_uno
+.ELSE
 BINDINGDLL=sunprocc5_uno
+.ENDIF
 .ELIF "$(OS)"=="LINUX"
 BINDINGDLL=gcc2_uno
 .ELIF "$(OS)"=="WNT"
@@ -272,9 +280,9 @@ zipdocu .SETDIR=$(DESTDIRDOC)$/.. .PHONY:
 convertit: rwit dos2unx roit
 rwit .SETDIR=$(DESTDIR):
     +echo rwit
-    +chmod 666 $(foreach,file,$(MKFILES_CONVERT) $(file))
-    +chmod 666 $(foreach,file,$(CXFILES_CONVERT) $(file))
-    +chmod 666 $(foreach,file,$(HXFILES_CONVERT) $(file))
+    +-chmod 666 $(foreach,file,$(MKFILES_CONVERT) $(file))
+    +-chmod 666 $(foreach,file,$(CXFILES_CONVERT) $(file))
+    +-chmod 666 $(foreach,file,$(HXFILES_CONVERT) $(file))
 dos2unx .SETDIR=$(DESTDIR):
     +echo dos2unx
     +-any2all $(foreach,file,$(MKFILES_CONVERT) $(file))
@@ -282,9 +290,9 @@ dos2unx .SETDIR=$(DESTDIR):
     +-any2all $(foreach,file,$(HXFILES_CONVERT) $(file))
 roit .SETDIR=$(DESTDIR):
     +echo roit
-    +chmod 444 $(foreach,file,$(MKFILES_CONVERT) $(file))
-    +chmod 444 $(foreach,file,$(CXFILES_CONVERT) $(file))
-    +chmod 444 $(foreach,file,$(HXFILES_CONVERT) $(file))
+    +-chmod 444 $(foreach,file,$(MKFILES_CONVERT) $(file))
+    +-chmod 444 $(foreach,file,$(CXFILES_CONVERT) $(file))
+    +-chmod 444 $(foreach,file,$(HXFILES_CONVERT) $(file))
 .ENDIF
 
 checkit .SETDIR=$(DESTDIR)$/.. .PHONY:
@@ -346,3 +354,4 @@ cleanit .PHONY:
     +-$(MY_DELETE_RECURSIVE) $(OUT)$/bin$/$(CHECKDIR) >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(DESTDIR) >& $(NULLDEV)
     +-$(MY_DELETE_RECURSIVE) $(DESTDIRDOC) >& $(NULLDEV)
+
