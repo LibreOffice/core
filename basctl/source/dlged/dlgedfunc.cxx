@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:49:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 pView->BrkAction();
                 bReturn = TRUE;
             }
-            else if ( pView->HasMarkedObj() )
+            else if ( pView->AreObjectsMarked() )
             {
                 const SdrHdlList& rHdlList = pView->GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -227,7 +227,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     pView->MarkNextObj( !aCode.IsShift() );
                 }
 
-                if ( pView->HasMarkedObj() )
+                if ( pView->AreObjectsMarked() )
                     pView->MakeVisible( pView->GetAllMarkedRect(), *pWindow );
 
                 bReturn = TRUE;
@@ -284,7 +284,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 nY =  0;
             }
 
-            if ( pView->HasMarkedObj() && !aCode.IsMod1() )
+            if ( pView->AreObjectsMarked() && !aCode.IsMod1() )
             {
                 if ( aCode.IsMod2() )
                 {
@@ -453,7 +453,7 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
         // if selected object was hit, drag object
         if ( pHdl!=NULL || pView->IsMarkedHit(aPos, nHitLog) )
             pView->BegDragObj(aPos, (OutputDevice*) NULL, pHdl, nDrgLog);
-        else if ( pView->HasMarkedObj() )
+        else if ( pView->AreObjectsMarked() )
             pView->UnmarkAll();
 
         // if no action, create object
@@ -490,20 +490,20 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     {
         pView->EndCreateObj(SDRCREATE_FORCEEND);
 
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if(rMarkList.GetMarkCount() == 1)
         {
             SdrMark* pMark = rMarkList.GetMark(0);
             SdrObject* pObj = pMark->GetObj();
         }
 
-        if ( !pView->HasMarkedObj() )
+        if ( !pView->AreObjectsMarked() )
         {
             USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
             pView->MarkObj(aPos, nHitLog);
         }
 
-        if( pView->HasMarkedObj() )
+        if( pView->AreObjectsMarked() )
             return TRUE;
         else
             return FALSE;
@@ -657,9 +657,9 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 
 //  if (nClicks == 2)
 //  {
-//      if ( pView->HasMarkedObj() )
+//      if ( pView->AreObjectsMarked() )
 //      {
-//          const SdrMarkList& rMarkList = pView->GetMarkList();
+//          const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 //
 //          if (rMarkList.GetMarkCount() == 1)
 //          {
