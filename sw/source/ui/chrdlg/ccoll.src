@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-28 13:15:17 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 09:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ TabPage TP_CONDCOLL
         Text[ turkish ] = "Uygulanan biçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estilos utilizados";
-        Text[ finnish ] = "Käytetyt tyylit";
+        Text[ finnish ] = "K?ytetyt tyylit";
     };
     Control TB_CONDCOLLS
     {
@@ -303,7 +303,7 @@ TabPage TP_CONDCOLL
         Text[ turkish ] = "~Ata";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Asignar";
-        Text[ finnish ] = "~Käytä";
+        Text[ finnish ] = "~K?yt?";
     };
     StringArray STR_REGIONS
     {
@@ -992,33 +992,33 @@ TabPage TP_CONDCOLL
     };
     ItemList [ finnish ] =
     {
-            < "Lomakkeen yläotsikko" ; > ;
+            < "Taulukon yl?otsikko" ; > ;
         < "Taulukko" ; > ;
         < "Kehys" ; > ;
         < "Osio" ; > ;
         < "Alaviite" ; > ;
         < "Loppuhuomautus" ; > ;
-        < "Yläotsikko" ; > ;
+        < "Yl?otsikko" ; > ;
         < "Alaselite" ; > ;
-        < " 1. jäsennystaso" ; > ;
-        < " 2. jäsennystaso" ; > ;
-        < " 3. jäsennystaso" ; > ;
-        < " 4. jäsennystaso" ; > ;
-        < " 5. jäsennystaso" ; > ;
-        < " 6. jäsennystaso" ; > ;
-        < " 7. jäsennystaso" ; > ;
-        < " 8. jäsennystaso" ; > ;
-        < " 9. jäsennystaso" ; > ;
-        < "10. jäsennystaso" ; > ;
+        < " 1. j?sennystaso" ; > ;
+        < " 2. j?sennystaso" ; > ;
+        < " 3. j?sennystaso" ; > ;
+        < " 4. j?sennystaso" ; > ;
+        < " 5. j?sennystaso" ; > ;
+        < " 6. j?sennystaso" ; > ;
+        < " 7. j?sennystaso" ; > ;
+        < " 8. j?sennystaso" ; > ;
+        < " 9. j?sennystaso" ; > ;
+        < "10. j?sennystaso" ; > ;
         < " 1. numerointitaso" ; > ;
         < " 2. numerointitaso" ; > ;
         < " 3. numerointitaso" ; > ;
         < " 4. numerointitaso" ; > ;
         < " 5. numerointitaso" ; > ;
         < " 6. numerointitaso" ; > ;
-        < " 7. jäsennystaso" ; > ;
-        < " 8. jäsennystaso" ; > ;
-        < " 9. jäsennystaso" ; > ;
+        < " 7. j?sennystaso" ; > ;
+        < " 8. j?sennystaso" ; > ;
+        < " 9. j?sennystaso" ; > ;
         < "10. numerointitaso" ; > ;
     };
     };
@@ -1046,10 +1046,11 @@ TabPage TP_CONDCOLL
         Text[ korean ] = "<ì—†ìŒ>";
         Text[ turkish ] = "<yok>";
         Text[ catalan ] = "<ninguno>";
-        Text[ finnish ] = "<Ei mitään>";
+        Text[ finnish ] = "<ei mit??n>";
     };
 };
  // ********************************************************************** EOF
+
 
 
 
