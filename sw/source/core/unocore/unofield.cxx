@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-05 14:32:40 $
+ *  last change: $Author: jp $ $Date: 2001-10-17 07:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1048,22 +1048,22 @@ BOOL SwXFieldMaster::supportsService(const OUString& rServiceName) throw( Runtim
         bRet = sal_True;
     else
     {
-        switch(nResTypeId)
+        const sal_Char* pEntry;
+        switch( nResTypeId )
         {
-            case RES_USERFLD:
-                bRet = rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.fieldmaster.User"));
-            break;
-            case RES_DBFLD:
-                bRet = rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.fieldmaster.Database"));
-            case RES_SETEXPFLD:
-                bRet = rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.fieldmaster.SetExpression"));
-            break;
-            case RES_DDEFLD:
-                bRet = rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.fieldmaster.DDE"));
-            break;
-            case RES_AUTHORITY:
-                bRet = rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.fieldmaster.Bibliography"));
-            break;
+        case RES_USERFLD:   pEntry = "User";            break;
+        case RES_DBFLD:     pEntry = "Database";        break;
+        case RES_SETEXPFLD: pEntry = "SetExpression";   break;
+        case RES_DDEFLD:    pEntry = "DDE";             break;
+        case RES_AUTHORITY: pEntry = "Bibliography";    break;
+        default: pEntry = 0;
+        }
+        if( pEntry )
+        {
+            ByteString aTmp( RTL_CONSTASCII_STRINGPARAM(
+                            "com.sun.star.text.fieldmaster."));
+            aTmp.Append( pEntry );
+            bRet = rServiceName.equalsAsciiL(aTmp.GetBuffer(), aTmp.Len());
         }
     }
     return bRet;
@@ -1076,16 +1076,23 @@ Sequence< OUString > SwXFieldMaster::getSupportedServiceNames(void) throw( Runti
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.TextFieldMaster");
-    if(nResTypeId == RES_USERFLD)
-        pArray[1] = C2U("com.sun.star.text.fieldmaster.User");
-    else if(nResTypeId == RES_DBFLD)
-        pArray[1] = C2U("com.sun.star.text.fieldmaster.Database");
-    else if(nResTypeId == RES_SETEXPFLD)
-        pArray[1] = C2U("com.sun.star.text.fieldmaster.SetExpression");
-    else if(nResTypeId == RES_DDEFLD)
-        pArray[1] = C2U("com.sun.star.text.fieldmaster.DDE");
-    else if(nResTypeId == RES_AUTHORITY)
-        pArray[1] = C2U("com.sun.star.text.fieldmaster.Bibliography");
+
+    const sal_Char* pEntry1;
+    switch( nResTypeId )
+    {
+    case RES_USERFLD:   pEntry1 = "User";           break;
+    case RES_DBFLD:     pEntry1 = "Database";       break;
+    case RES_SETEXPFLD: pEntry1 = "SetExpression";  break;
+    case RES_DDEFLD:    pEntry1 = "DDE";            break;
+    case RES_AUTHORITY: pEntry1 = "Bibliography";   break;
+    default: pEntry1 = 0;
+    }
+    if( pEntry1 )
+    {
+        String s;
+        s.AppendAscii( "com.sun.star.text.fieldmaster." ).AppendAscii( pEntry1 );
+        pArray[1] = s;
+    }
     return aRet;
 }
 /*-- 14.12.98 11:08:33---------------------------------------------------
@@ -1132,18 +1139,18 @@ uno::Reference< XPropertySetInfo >  SwXFieldMaster::getPropertySetInfo(void)
                                             throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    const SfxItemPropertyMap* pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_DUMMY2);
-    if(nResTypeId == RES_USERFLD)
-        pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_USER);
-    else if(nResTypeId == RES_DBFLD)
-        pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_DATABASE);
-    else if(nResTypeId == RES_SETEXPFLD)
-        pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_SET_EXP);
-    else if(nResTypeId == RES_DDEFLD)
-        pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_DDE);
-    else if(nResTypeId == RES_AUTHORITY)
-        pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY);
-    uno::Reference< XPropertySetInfo >  aRef = new SfxItemPropertySetInfo(pCreate);
+    USHORT nId;
+    switch( nResTypeId )
+    {
+    case RES_USERFLD:   nId = SW_SERVICE_FIELDMASTER_USER;          break;
+    case RES_DBFLD:     nId = SW_SERVICE_FIELDMASTER_DATABASE;      break;
+    case RES_SETEXPFLD: nId = SW_SERVICE_FIELDMASTER_SET_EXP;       break;
+    case RES_DDEFLD:    nId = SW_SERVICE_FIELDMASTER_DDE;           break;
+    case RES_AUTHORITY: nId = SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY;  break;
+    default:            nId = SW_SERVICE_FIELDMASTER_DUMMY2;
+    }
+    uno::Reference< XPropertySetInfo >  aRef = new SfxItemPropertySetInfo(
+                            SwFieldPropMapProvider::GetPropertyMap( nId ));
     return aRef;
 }
 /*-- 14.12.98 11:08:35---------------------------------------------------
@@ -1735,59 +1742,67 @@ SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
     m_nServiceId = lcl_GetServiceForResId(nResId);
     //special handling of SwInputField
 
-    if(RES_INPUTFLD == nResId && (((SwInputField*)pFmtFld->GetFld())->GetSubType()& 0x00ff) == INP_USR)
-        m_nServiceId = SW_SERVICE_FIELDTYPE_INPUT_USER;
-    else if(RES_DOCINFOFLD == nResId)
+    switch( nResId )
     {
-        USHORT nSubType = ((SwDocInfoField*)pFmtFld->GetFld())->GetSubType();
-        if(DI_CHANGE == (nSubType & 0xff))
+    case RES_INPUTFLD:
+        if( (((SwInputField*)pFmtFld->GetFld())->GetSubType()& 0x00ff) == INP_USR )
+            m_nServiceId = SW_SERVICE_FIELDTYPE_INPUT_USER;
+        break;
+
+    case RES_DOCINFOFLD:
         {
-            m_nServiceId = ((nSubType&0x300) == DI_SUB_AUTHOR) ?
-                SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR :
-                    SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME;
+            USHORT nSubType = ((SwDocInfoField*)pFmtFld->GetFld())->GetSubType();
+            switch( (nSubType & 0xff))
+            {
+            case DI_CHANGE:
+                m_nServiceId = ((nSubType&0x300) == DI_SUB_AUTHOR)
+                        ? SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR
+                        : SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME;
+                break;
+            case DI_CREATE:
+                m_nServiceId = ((nSubType&0x300) == DI_SUB_AUTHOR)
+                        ? SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR
+                        : SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME;
+                break;
+            case DI_PRINT:
+                m_nServiceId = ((nSubType&0x300) == DI_SUB_AUTHOR)
+                        ? SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR
+                        : SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME;
+                break;
+            case DI_EDIT:
+                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME;      break;
+            case DI_COMMENT:
+                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION;    break;
+            case DI_INFO1:
+                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0;         break;
+            case DI_INFO2:
+                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1;         break;
+            case DI_INFO3:
+                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2;         break;
+            case DI_INFO4:
+                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3;         break;
+            case DI_KEYS:
+                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS;      break;
+            case DI_THEMA:
+                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT;        break;
+            case DI_TITEL:
+                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_TITLE;          break;
+            case DI_DOCNO:
+                m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_REVISION;       break;
+            }
         }
-        else if(DI_CREATE == (nSubType & 0xff))
+        break;
+
+    case RES_HIDDENTXTFLD:
+        m_nServiceId = ((SwHiddenTxtField*)pFmtFld->GetFld())->GetSubType() == TYP_CONDTXTFLD
+                ? SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT
+                : SW_SERVICE_FIELDTYPE_HIDDEN_TEXT;
+        break;
+
+    case RES_DOCSTATFLD:
         {
-            m_nServiceId = ((nSubType&0x300) == DI_SUB_AUTHOR) ?
-                SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR :
-                    SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME;
-        }
-        else if(DI_PRINT == (nSubType & 0xff))
-        {
-            m_nServiceId = ((nSubType&0x300) == DI_SUB_AUTHOR) ?
-                SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR :
-                    SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME;
-        }
-        else if(DI_EDIT == (nSubType & 0xff))
-            m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME;
-        else if(DI_COMMENT == (nSubType & 0xff))
-            m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION;
-        else if(DI_INFO1 == (nSubType & 0xff))
-            m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0;
-        else if(DI_INFO2 == (nSubType & 0xff))
-            m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1;
-        else if(DI_INFO3 == (nSubType & 0xff))
-            m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2;
-        else if(DI_INFO4 == (nSubType & 0xff))
-            m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3;
-        else if(DI_KEYS == (nSubType & 0xff))
-            m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS;
-        else if(DI_THEMA == (nSubType & 0xff))
-            m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT;
-        else if(DI_TITEL == (nSubType & 0xff))
-            m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_TITLE;
-        else if(DI_DOCNO == (nSubType & 0xff))
-            m_nServiceId = SW_SERVICE_FIELDTYPE_DOCINFO_REVISION;
-    }
-    else if(RES_HIDDENTXTFLD == nResId)
-    {
-        m_nServiceId = ((SwHiddenTxtField*)pFmtFld->GetFld())->GetSubType() == TYP_CONDTXTFLD ?
-            SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT : SW_SERVICE_FIELDTYPE_HIDDEN_TEXT;
-    }
-    else if(RES_DOCSTATFLD == nResId)
-    {
-        switch(((SwDocStatField*)pFmtFld->GetFld())->GetSubType())
-        {
+            switch(((SwDocStatField*)pFmtFld->GetFld())->GetSubType())
+            {
             case DS_PAGE: m_nServiceId = SW_SERVICE_FIELDTYPE_PAGE_COUNT; break;
             case DS_PARA: m_nServiceId = SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT; break;
             case DS_WORD: m_nServiceId = SW_SERVICE_FIELDTYPE_WORD_COUNT     ; break;
@@ -1795,8 +1810,11 @@ SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
             case DS_TBL:  m_nServiceId = SW_SERVICE_FIELDTYPE_TABLE_COUNT    ; break;
             case DS_GRF:  m_nServiceId = SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT; break;
             case DS_OLE:  m_nServiceId = SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT; break;
+            }
         }
+        break;
     }
+
     if (pDc)
         pDc->GetUnoCallBack()->Add(this);
 }
@@ -2939,41 +2957,44 @@ sal_Bool SwXTextFieldMasters::getInstanceName(
     const SwFieldType& rFldType, String& rName)
 {
     sal_Bool bRet = sal_True;
-
-    sal_uInt16 nWhich = rFldType.Which();
-    if(RES_USERFLD == nWhich)
+    switch( rFldType.Which() )
     {
+    case RES_USERFLD:
         rName += C2S("com.sun.star.text.FieldMaster.");
         rName += C2S("User.");
         rName += rFldType.GetName();
-    }
-    else if(RES_DDEFLD == nWhich)
-    {
+        break;
+    case RES_DDEFLD:
         rName += C2S("com.sun.star.text.FieldMaster.");
         rName += C2S("DDE.");
         rName += rFldType.GetName();
-    }
-    else if(RES_SETEXPFLD == nWhich)
-    {
+        break;
+
+    case RES_SETEXPFLD:
         rName += C2S("com.sun.star.text.FieldMaster.");
         rName += C2S("SetExpression.");
-        rName += String(SwStyleNameMapper::GetProgName(rFldType.GetName(), GET_POOLID_TXTCOLL ));
-    }
-    else if(RES_DBFLD == nWhich)
-    {
-        rName += C2S("com.sun.star.text.FieldMaster.");
-        rName += C2S("DataBase.");
-        String sDBName(rFldType.GetName());
-        sDBName.SearchAndReplaceAll(DB_DELIM, '.');
-        rName += sDBName;
-    }
-    else if(RES_AUTHORITY == nWhich)
-    {
+        rName += String(SwStyleNameMapper::GetProgName( rFldType.GetName(),
+                                                        GET_POOLID_TXTCOLL ));
+        break;
+
+    case RES_DBFLD:
+        {
+            rName += C2S("com.sun.star.text.FieldMaster.");
+            rName += C2S("DataBase.");
+            String sDBName(rFldType.GetName());
+            sDBName.SearchAndReplaceAll(DB_DELIM, '.');
+            rName += sDBName;
+        }
+        break;
+
+    case RES_AUTHORITY:
         rName += C2S("com.sun.star.text.FieldMaster.");
         rName += C2S("Bibliography");
-    }
-    else
+        break;
+
+    default:
         bRet = sal_False;
+    }
 
     return bRet;
 }
