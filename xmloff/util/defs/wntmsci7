@@ -10166,3 +10166,4 @@ _real@8@4003a000000000000000
 ??0?$_rbT__B@U?$pair@$$CBJV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@_STL@@V?$allocator@U?$pair@$$CBJV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@_STL@@@2@@_STL@@QAE@ABV?$allocator@U?$pair@$$CBJV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@@_STL@@@1@@Z
 ?IsHandleProgressBarEnabled@XMLShapeImportHelper@@QBEEXZ
 ?enableHandleProgressBar@XMLShapeImportHelper@@QAEXE@Z
+?get@OnDemandCalendarWrapper@@QBEPAVCalendarWrapper@@XZ
