@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-21 07:02:10 $
+ *  last change: $Author: iha $ $Date: 2002-12-03 13:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,6 @@
 #include "hldocntp.hxx"
 
 #include "hyperdlg.hrc"
-
-#define INET_PROT_TELNET_PRIVATE    INET_PROT_HTTP
 
 //########################################################################
 //#                                                                      #
@@ -405,6 +403,7 @@ USHORT SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
     {
         case INET_PROT_HTTP :
         case INET_PROT_FTP :
+        case INET_PROT_TELNET :
             nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
             break;
         case INET_PROT_FILE :
@@ -417,15 +416,9 @@ USHORT SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
             nPageId = RID_SVXPAGE_HYPERLINK_MAIL;
             break;
         default :
-            sal_Char const sTelnet[] = "telnet";
             sal_Char const sNewsSrvScheme[] = INET_NEWS_SRV_SCHEME;
 
-            if ( aStrURL.ToLowerAscii().SearchAscii( sTelnet ) == 0 )
-            {
-                nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
-                eProtocolTyp = INET_PROT_TELNET_PRIVATE;
-            }
-            else if ( aStrURL.SearchAscii( sNewsSrvScheme ) == 0 )
+            if ( aStrURL.SearchAscii( sNewsSrvScheme ) == 0 )
                 nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;
             else
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-15 11:50:04 $
+ *  last change: $Author: iha $ $Date: 2002-12-03 13:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,8 +704,10 @@ BOOL SvxHyperlinkTabPageBase::FileExists( const INetURLObject& rURL )
 |*
 |************************************************************************/
 
-INetProtocol SvxHyperlinkTabPageBase::ImplGetProtocol( const String& aStrURL, String& aStrScheme )
+String SvxHyperlinkTabPageBase::GetSchemeFromURL( String aStrURL )
 {
+    String aStrScheme;
+
     INetURLObject aURL( aStrURL );
     INetProtocol aProtocol = aURL.GetProtocol();
 
@@ -716,33 +718,32 @@ INetProtocol SvxHyperlinkTabPageBase::ImplGetProtocol( const String& aStrURL, St
     {
         if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTP_SCHEME, 0, 7 ) )
         {
-            aProtocol = INET_PROT_HTTP;
             aStrScheme = String::CreateFromAscii( INET_HTTP_SCHEME );
         }
         else if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTPS_SCHEME, 0, 8 ) )
         {
-            aProtocol = INET_PROT_HTTPS;
             aStrScheme = String::CreateFromAscii( INET_HTTPS_SCHEME );
         }
         else if ( aStrURL.EqualsIgnoreCaseAscii( INET_FTP_SCHEME, 0, 6 ) )
         {
-            aProtocol = INET_PROT_FTP;
             aStrScheme = String::CreateFromAscii( INET_FTP_SCHEME );
         }
         else if ( aStrURL.EqualsIgnoreCaseAscii( INET_MAILTO_SCHEME, 0, 7 ) )
         {
-            aProtocol = INET_PROT_MAILTO;
             aStrScheme = String::CreateFromAscii( INET_MAILTO_SCHEME );
         }
         else if ( aStrURL.EqualsIgnoreCaseAscii( INET_NEWS_SCHEME, 0, 5 ) )
         {
-            aProtocol = INET_PROT_NEWS;
             aStrScheme = String::CreateFromAscii( INET_NEWS_SCHEME );
+        }
+        else if ( aStrURL.EqualsIgnoreCaseAscii( INET_TELNET_SCHEME, 0, 9 ) )
+        {
+            aStrScheme = String::CreateFromAscii( INET_TELNET_SCHEME );
         }
     }
     else
         aStrScheme = INetURLObject::GetScheme( aProtocol );
-    return aProtocol;
+    return aStrScheme;
 }
 
 
@@ -829,20 +830,9 @@ String SvxHyperlinkTabPageBase::CreateUiNameFromURL( const String& aStrURL )
                 aStrUiURL = aTmpURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
             }
             break;
-        case INET_PROT_HTTP :
-        case INET_PROT_HTTPS :
-        case INET_PROT_MAILTO :
-        case INET_PROT_NEWS :
-            aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
-            break;
         default :
             {
-                if ( aStrURL.EqualsIgnoreCaseAscii( INET_TELNET_SCHEME, 0, 9 ) )
-                    aStrUiURL = aStrURL;
-                else
-                {
-                    aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
-                }
+                aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
             }
     }
     return aStrUiURL;

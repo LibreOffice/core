@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-20 12:22:11 $
+ *  last change: $Author: iha $ $Date: 2002-12-03 13:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,11 +250,6 @@ String SvxHyperlinkInternetTp::CreateAbsoluteURL() const
     String aStrURL = maCbbTarget.GetText();
     String aScheme = GetSchemeFromURL(aStrURL);
 
-    //special handling for telnet (as it is not known as valid INetProtocol )
-    if( aScheme.SearchAscii( sTelnetScheme ) == 0 )
-        return aStrURL;
-
-
     INetURLObject aURL(aStrURL);
 
     if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
@@ -265,15 +260,6 @@ String SvxHyperlinkInternetTp::CreateAbsoluteURL() const
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID
             && aScheme.Len() == 0 )
         {
-            //first check wether it should be telnet:
-            if( maRbtLinktypTelnet.IsChecked() ) //add 'telnet:'
-            {
-                String aTelnet;
-                aTelnet.AssignAscii( RTL_CONSTASCII_STRINGPARAM( sTelnetScheme ) );
-                aTelnet += aStrURL;
-                return aTelnet;
-            }
-
             //try wether this might be a relative link to the local fileystem
             aURL.SetSmartURL( SvtPathOptions().GetWorkPath() );
             if( !aURL.hasFinalSlash() )
@@ -428,28 +414,6 @@ void SvxHyperlinkInternetTp::RemoveImproperProtocol(const String& aProperScheme)
     }
 }
 
-String SvxHyperlinkInternetTp::GetSchemeFromURL( String aStrURL ) const
-{
-    String aStrScheme;
-    if ( aStrURL != aEmptyStr )
-    {
-        INetProtocol aProtocol = ImplGetProtocol( aStrURL, aStrScheme );
-        switch ( aProtocol )
-        {
-            case INET_PROT_HTTP :
-            case INET_PROT_HTTPS :
-            case INET_PROT_FTP :
-            break;
-            default :
-            {
-                if ( aStrURL.EqualsIgnoreCaseAscii( INET_TELNET_SCHEME, 0, 9 ) )
-                    aStrScheme = String::CreateFromAscii( INET_TELNET_SCHEME );
-            }
-        }
-    }
-    return aStrScheme;
-}
-
 String SvxHyperlinkInternetTp::GetSchemeFromButtons() const
 {
     if( maRbtLinktypFTP.IsChecked() )
@@ -471,7 +435,7 @@ INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
     }
     else if( maRbtLinktypTelnet.IsChecked() )
     {
-        return INET_PROT_NOT_VALID; //there is no INET_PROT_XXX known for telnet; to return invalid here is necessary for a correct detection in method 'CreateAbsoluteURL'
+        return INET_PROT_TELNET;
     }
     return INET_PROT_HTTP;
 }

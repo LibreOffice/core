@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-15 11:51:03 $
+ *  last change: $Author: iha $ $Date: 2002-12-03 13:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,13 +307,6 @@ void SvxHyperlinkMailTp::RemoveImproperProtocol(const String& aProperScheme)
             maCbbReceiver.SetText ( aStrURL );
         }
     }
-}
-
-String SvxHyperlinkMailTp::GetSchemeFromURL( String aStrURL ) const
-{
-    String aStrScheme;
-    INetProtocol aProtocol = ImplGetProtocol( aStrURL, aStrScheme );
-    return aStrScheme;
 }
 
 String SvxHyperlinkMailTp::GetSchemeFromButtons() const
