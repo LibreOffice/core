@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rot13.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:19:13 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,11 +137,11 @@ Resource RID_SC_ADDIN_ROT13
         Text[ polish ] = "Tekst, który ma zostaæ obrócony";
         Text[ portuguese_brazilian ] = "the text which should be rotated";
         Text[ japanese ] = "ŒJ‚è•Ô‚·Ã·½Ä";
-        Text[ chinese_simplified ] = "ÒªĞı×ªµÄÎÄ±¾";
+        Text[ chinese_simplified ] = "ÒªĞı×ªµÄÎÄ×Ö";
         Text[ chinese_traditional ] = "­n±ÛÂàªº¥»¤å";
         Text[ arabic ] = "ÇáäÕ ÇáæÇÌÈ ÇÓÊÏÇÑÊå";
         Text[ dutch ] = "de tekst die roteert";
-        Text[ chinese_simplified ] = "ÒªĞı×ªµÄÎÄ±¾";
+        Text[ chinese_simplified ] = "ÒªĞı×ªµÄÎÄ×Ö";
         Text[ greek ] = "Ôï êåßìåíï ğïõ ğñüêåéôáé íá ğåñéóôñáöåß";
         Text[ korean ] = "È¸ÀüµÉ ÅØ½ºÆ®";
         Text[ turkish ] = "Döndürülecek metin";
@@ -150,6 +150,7 @@ Resource RID_SC_ADDIN_ROT13
         Text[ finnish ] = "Kierrettävä teksti";
     };
 };
+
 
 
 
