@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-10 19:31:56 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 10:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _CHART2__HXX
-#define _CHART2__HXX
+#ifndef _CHART2_CHARTTYPEHELPER_HXX
+#define _CHART2_CHARTTYPEHELPER_HXX
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
 #include <drafts/com/sun/star/chart2/XChartType.hpp>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointSymbolSupplier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-12 17:53:45 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 10:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _CHART2__HXX
-#define _CHART2__HXX
+#ifndef _CHART2_DATAPOINTSYMBOLSUPPLIER_HXX
+#define _CHART2_DATAPOINTSYMBOLSUPPLIER_HXX
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
