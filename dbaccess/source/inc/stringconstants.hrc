@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:42:49 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,11 @@
 #define PROPERTY_ID_CONTROLDEFAULT          98
 #define PROPERTY_ID_AUTOINCREMENTCREATION   99
 #define PROPERTY_ID_ORIGINAL                100
+#define PROPERTY_ID_TABSTOP                 101
+#define PROPERTY_ID_DEFAULTCONTROL          102
+#define PROPERTY_ID_ENABLED                 103
+#define PROPERTY_ID_BORDER                  104
+#define PROPERTY_ID_COLUMN                  105
 
 //============================================================
 //= property names
