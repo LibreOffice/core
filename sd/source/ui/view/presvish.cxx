@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 14:41:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@
 #define PresentationViewShell
 using namespace sd;
 #include "sdslots.hxx"
+
+#include <memory>
 
 
 namespace sd {
@@ -223,12 +225,17 @@ void PresentationViewShell::FinishInitialization (
         SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
     GetViewFrame()->Show();
 
-    mpSlideShow = new sd::Slideshow( this, GetView(), GetDoc() );
+    std::auto_ptr<Slideshow> pSlideShow(
+        new sd::Slideshow( this, GetView(), GetDoc() ) );
+    pSlideShow->setRehearseTimings(
+        rRequest.GetSlot() == SID_REHEARSE_TIMINGS );
     GetActiveWindow()->GrabFocus();
 
     // Start the show.
-    mpSlideShow->startShow(0);
-    mbShowStarted = sal_True;
+    if (pSlideShow->startShow(0)) {
+        mpSlideShow = pSlideShow.release();
+        mbShowStarted = sal_True;
+    }
 
     Activate(TRUE);
 }
@@ -263,8 +270,12 @@ void PresentationViewShell::Activate( BOOL bIsMDIActivate )
 
     if( mpSlideShow && !mbShowStarted )
     {
-        mpSlideShow->startShow(0);
-        mbShowStarted = sal_True;
+        if (mpSlideShow->startShow(0))
+            mbShowStarted = sal_True;
+        else {
+            delete mpSlideShow;
+            mpSlideShow = 0;
+        }
     }
 }
 
