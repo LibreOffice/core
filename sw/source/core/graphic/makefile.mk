@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+#   last change: $Author: jp $ $Date: 2000-09-28 13:04:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,20 +83,8 @@ CXXFILES = \
         grfatr.cxx \
         ndgrf.cxx
 
-.IF "$(USE_GRFOBJECT)" == ""
-CXXFILES += grfcache.cxx
-.ENDIF
-
 SLOFILES =	\
         $(SLO)$/grfatr.obj \
-        $(SLO)$/ndgrf.obj
-
-.IF "$(USE_GRFOBJECT)" == ""
-SLOFILES += $(SLO)$/grfcache.obj
-.ENDIF
-
-EXCEPTIONSFILES = \
-        $(SLO)$/grfcache.obj \
         $(SLO)$/ndgrf.obj
 
 # --- Tagets -------------------------------------------------------

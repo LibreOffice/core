@@ -2,9 +2,9 @@
 #
 #   $RCSfile: sw.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+#   last change: $Author: jp $ $Date: 2000-09-28 13:02:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,11 +66,6 @@
 
 #CDEFS+=-DXML_CORE_API
 CDEFS+=-DNUM_RELSPACE
-
-# use the new GrahicObject - the old code with our own GraphicCache will be removed
-# if all the new code runs correct.
-CDEFS+=-DUSE_GRFOBJECT
-USE_GRFOBJECT=TRUE
 
 # MakeDepn nicht das segdefs.hxx und die PCHs auswerten lassen
 # PCHs werden nur in den ..._1st Verzeichnissen aufgenommen

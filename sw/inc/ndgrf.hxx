@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2000-09-28 13:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 class SwGrfFmtColl;
 class SwDoc;
 class GraphicAttr;
-
-// Code for the new GraphicObject
-#ifdef USE_GRFOBJECT
 
 // --------------------
 // SwGrfNode
@@ -201,151 +198,6 @@ public:
 #endif
 };
 
-/*  */
-#else
-// USE_GRFOBJECT
-
-// --------------------
-// SwGrfNode
-// --------------------
-class SwGrfNode: public SwNoTxtNode
-{
-    friend class SwNodes;
-    friend class SwGrfFrm;
-    friend class SwGraphicAccess;
-
-    Graphic aGraphic;
-    SvBaseLinkRef refLink;      // falls Grafik nur als Link, dann Pointer gesetzt
-    Size nGrfSize;
-    String aStrmName;           // SW3: Name des Storage-Streams fuer Embedded
-    String aNewStrmName;        // SW3: name des Storage-Streams bei SaveAs
-    String aLowResGrf;          // HTML: LowRes Grafik (Ersatzdarstellung bis
-                                //      die normale (HighRes) geladen ist.
-
-    const void *pCchMagic;      // "MagicNumber" innerhalb des Grafikcaches
-    USHORT nCchIndex;           // Index im Grafikcache
-
-    BOOL bTransparentFlagValid  :1;
-    BOOL bIsTransparent         :1;
-    BOOL bInSwapIn              :1;
-    BOOL bGrafikArrived         :1;
-    BOOL bChgTwipSize           :1;
-    BOOL bLoadLowResGrf         :1;
-    BOOL bFrameInPaint          :1; //Um Start-/EndActions im Paint (ueber
-                                    //SwapIn zu verhindern.
-    BOOL bScaleImageMap         :1; //Image-Map in SetTwipSize skalieren
-
-    SwGrfNode( const SwNodeIndex& rWhere,
-               const String& rGrfName, const String& rFltName,
-               const Graphic* pGraphic,
-               SwGrfFmtColl* pGrfColl,
-               SwAttrSet* pAutoAttr = 0 );
-    // Ctor fuer Einlesen (SW/G) ohne Grafik
-    SwGrfNode( const SwNodeIndex& rWhere,
-               const String& rGrfName, const String& rFltName,
-               SwGrfFmtColl* pGrfColl,
-               SwAttrSet* pAutoAttr = 0 );
-
-    void InsertLink( const String& rGrfName, const String& rFltName );
-    void DelStreamName();
-
-    void Impl_IsTransparent();
-
-public:
-    ~SwGrfNode();
-
-    const Graphic& GetGrf() const  { return aGraphic; }
-
-    virtual SwCntntNode *SplitNode( const SwPosition & );
-
-    virtual Size GetTwipSize() const;
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-    void SetTwipSize( const Size& rSz );
-
-    inline BOOL IsTransparent() const;
-    inline void InvalidateTransparentFlag() { bTransparentFlagValid = FALSE; }
-    inline void SetTransparent( BOOL bFlag )
-        { bIsTransparent = bFlag, bTransparentFlagValid = TRUE; }
-
-    inline BOOL IsChgTwipSize() const           { return bChgTwipSize; }
-    inline void SetChgTwipSize( BOOL b )        { bChgTwipSize = b; }
-
-    inline BOOL IsGrafikArrived() const         { return bGrafikArrived; }
-    inline void SetGrafikArrived( BOOL b )      { bGrafikArrived = b; }
-
-    inline BOOL IsFrameInPaint() const          { return bFrameInPaint; }
-    inline void SetFrameInPaint( BOOL b )       { bFrameInPaint = b; }
-
-    inline BOOL IsScaleImageMap() const         { return bScaleImageMap; }
-    inline void SetScaleImageMap( BOOL b )      { bScaleImageMap = b; }
-
-    inline void SetCacheFlags( const void* p, USHORT nIdx = 0 )
-        {   pCchMagic = p;  nCchIndex = nIdx;   }
-    void ClearQBmpCache();
-    inline BOOL HasMagicId() const              { return 0 != pCchMagic; }
-
-    // alles fuers Laden der LowRes-Grafiken
-    inline BOOL IsLoadLowResGrf() const         { return bLoadLowResGrf; }
-    inline void SetLoadLowResGrf( BOOL b )      { bLoadLowResGrf = b; }
-    const String& GetLowResGrfName() const      { return aLowResGrf; }
-    void SetLowResGrfName( const String& r )    { aLowResGrf = r; }
-#endif
-        // steht in ndcopy.cxx
-    virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
-        // erneutes Einlesen, falls Graphic nicht Ok ist. Die
-        // aktuelle wird durch die neue ersetzt.
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-    BOOL ReRead( const String& rGrfName, const String& rFltName,
-                  const Graphic* pGraphic = 0, BOOL bModify = TRUE );
-        // Laden der Grafik unmittelbar vor der Anzeige
-    short SwapIn( BOOL bWaitForData = FALSE );
-        // Entfernen der Grafik, um Speicher freizugeben
-    short SwapOut();
-        // Schreiben der Grafik
-    BOOL StoreGraphics( SvStorage* pDocStg = NULL );
-        // Zugriff auf den Storage-Streamnamen
-    const String& GetStreamName() const;
-    void SetStreamName( const String& r ) { aStrmName = r; }
-    void SaveCompleted( BOOL bClear );
-#endif
-
-        // Der Grafik sagen, dass sich der Node im Undobereich befindet
-    virtual BOOL SavePersistentData();
-    virtual BOOL RestorePersistentData();
-
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-        // Abfrage der Link-Daten
-    BOOL IsGrfLink() const                  { return refLink.Is(); }
-    inline BOOL IsLinkedFile() const;
-    inline BOOL IsLinkedDDE() const;
-    SvBaseLinkRef GetLink() const               { return refLink; }
-    BOOL GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
-    void ReleaseLink();
-
-        // Prioritaet beim Laden der Grafik setzen. Geht nur, wenn der Link
-        // ein FileObject gesetzt hat
-    void SetTransferPriority( USHORT nPrio );
-
-    // Skalieren einer Image-Map: Die Image-Map wird um den Faktor
-    // zwischen Grafik-Groesse und Rahmen-Groesse vergroessert/verkleinert
-    void ScaleImageMap();
-#endif
-};
-
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-inline BOOL SwGrfNode::IsTransparent() const
-{
-    if ( !bTransparentFlagValid )
-        ((SwGrfNode*)this)->Impl_IsTransparent();
-    return bIsTransparent;
-}
-// fuer den Zugriff auf die CacheDaten
-BOOL FindGrfSizeFromCache( const String& rGrfName, Size& rGrfSz );
-#endif
-
-/*  */
-#endif
-// USE_GRFOBJECT
 
 // ----------------------------------------------------------------------
 // Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
