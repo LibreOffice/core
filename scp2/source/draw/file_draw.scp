@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_draw.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 08:55:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 File gid_File_Registry_Spool_Oo_Office_Embedding_Draw_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/embedding_draw.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
+    Name = "/registry/spool/org/openoffice/Office/Embedding-draw.xcu";
 End
 
 #ifdef SOLAR_JAVA
@@ -98,29 +98,29 @@ End
 File gid_File_Registry_Spool_Oo_TypeDetection_Draw_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_draw_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Draw_Filters_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_draw_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Common_Draw_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/org.openoffice.Office.Common-draw.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
+    Name = "/registry/spool/org/openoffice/Office/Common-draw.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Setup_Draw_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/org.openoffice.Setup-draw.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
+    Name = "/registry/spool/org/openoffice/Setup-draw.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Drawwindowstate_Xcs
