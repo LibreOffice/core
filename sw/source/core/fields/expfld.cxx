@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:33:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,7 @@ SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDoc, const String& rName, USHORT n
     : SwValueFieldType( pDoc, RES_SETEXPFLD ),
     sName( rName ),
     nType(nTyp),
-    cDelim( '.' ), nLevel( UCHAR_MAX ),
+    sDelim( String::CreateFromAscii( "." ) ), nLevel( UCHAR_MAX ),
     bDeleted( FALSE ),
     pOutlChgNd( 0 )
 {
@@ -607,7 +607,7 @@ SwFieldType* SwSetExpFieldType::Copy() const
 {
     SwSetExpFieldType* pNew = new SwSetExpFieldType(GetDoc(), sName, nType);
     pNew->bDeleted = bDeleted;
-    pNew->cDelim = cDelim;
+    pNew->sDelim = sDelim;
     pNew->nLevel = nLevel;
 
     return pNew;
@@ -724,7 +724,7 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
         String sNumber( GetDoc()->GetOutlineNumRule()->MakeNumString(
                                                 aNum, FALSE ));
         if( sNumber.Len() )
-            rFld.ChgExpStr(  ( sNumber += cDelim ) += rFld.GetExpStr() );
+            rFld.ChgExpStr(  ( sNumber += sDelim ) += rFld.GetExpStr() );
     }
 }
 
@@ -773,9 +773,10 @@ BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, BYTE nMId )
         {
             String sTmp;
             if( ::GetString( rAny, sTmp ).Len() )
-                SetDelimiter( sTmp.GetChar( 0 ));
+//              SetDelimiter( sTmp.GetChar( 0 ));
+                SetDelimiter( sTmp );
             else
-                SetDelimiter(' ');
+                SetDelimiter(String::CreateFromAscii( " "));
         }
         break;
     case FIELD_PROP_SHORT1:
