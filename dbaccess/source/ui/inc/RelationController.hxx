@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 13:27:03 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #ifndef DBAUI_JOINCONTROLLER_HXX
 #include "JoinController.hxx"
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 #ifndef DBAUI_RELATIONDESIGNVIEW_HXX
 #include "RelationDesignView.hxx"
 #endif
@@ -81,7 +78,6 @@ namespace dbaui
     class OTableWindow;
     class ORelationController : public OJoinController
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDataSource;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
     protected:
         // all the features which should be handled by this class

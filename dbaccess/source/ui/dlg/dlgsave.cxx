@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 11:43:45 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
             break;
         case CommandType::TABLE:
             {
+                OSL_ENSURE(m_xMetaData.is(),"The metadata can not be null!");
                 if(m_aName.Search('.') != STRING_NOTFOUND)
                 {
                     ::rtl::OUString sCatalog,sSchema,sTable;
@@ -213,6 +214,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
         sal_Bool bError = m_xNames->hasByName(m_aName);
         if(m_nType == CommandType::TABLE)
         {
+            OSL_ENSURE(m_xMetaData.is(),"The metadata can not be null!");
             ::rtl::OUString sComposedName;
             ::dbtools::composeTableName(m_xMetaData,getCatalog(),getSchema(),m_aName,sComposedName,sal_False);
             bError = m_xNames->hasByName(sComposedName);

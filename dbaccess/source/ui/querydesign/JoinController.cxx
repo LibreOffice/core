@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:17:54 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,7 @@ void OJoinController::disposing()
         ::comphelper::disposeComponent(m_xConnection);
     }
     m_xConnection = NULL;
+    m_xDataSource = NULL;
 }
 // -----------------------------------------------------------------------------
 SfxUndoManager* OJoinController::getUndoMgr()

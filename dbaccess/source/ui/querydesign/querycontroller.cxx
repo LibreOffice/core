@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-12 15:09:37 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
+#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -280,12 +283,12 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
 {
     FeatureState aReturn;
         // (disabled automatically)
-    aReturn.bEnabled = m_xConnection.is();
-    if(!m_xConnection.is()) // so what should otherwise happen
-    {
-        aReturn.aState = ::cppu::bool2any(sal_False);
-        return aReturn;
-    }
+//  aReturn.bEnabled = m_xConnection.is();
+//  if(!m_xConnection.is()) // so what should otherwise happen
+//  {
+//      aReturn.aState = ::cppu::bool2any(sal_False);
+//      return aReturn;
+//  }
 
     switch (_nId)
     {
@@ -296,10 +299,10 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             break;
         case ID_BROWSER_SAVEASDOC:
-            aReturn.bEnabled = m_xConnection.is() && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size()));
+            aReturn.bEnabled = (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size()));
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = m_xConnection.is() && m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size()));
+            aReturn.bEnabled = m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size()));
             break;
         case SID_PRINTDOCDIRECT:
             break;
@@ -312,7 +315,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
             aReturn.bEnabled = m_bEditable;
             break;
         case ID_BROWSER_SQL:
-            aReturn.bEnabled = m_bEsacpeProcessing;
+            aReturn.bEnabled = m_bEsacpeProcessing && m_pSqlIterator;
             aReturn.aState = ::cppu::bool2any(m_bDesign);
             break;
         case ID_BROWSER_CLEAR_QUERY:
@@ -355,13 +358,9 @@ void OQueryController::Execute(sal_uInt16 _nId)
             {
                 OSL_ENSURE(m_bEditable,"Slot ID_BROWSER_SAVEDOC should not be enabled!");
 
-                Reference<XQueriesSupplier> xQuerySup(m_xConnection,UNO_QUERY);
-                if(xQuerySup.is())
+                Reference<XNameAccess> xQueries = getQueries();
+                if(xQueries.is())
                 {
-                    OSL_ENSURE(xQuerySup.is(),"Parent must be a datasource!");
-                    Reference<XNameAccess> xQueries(xQuerySup->getQueries(),UNO_QUERY);
-                    OSL_ENSURE(xQueries.is(),"The queries can't be null!");
-
                     // first we need a name for our query so ask the user
                     sal_Bool bNew = 0 == m_sName.getLength();
                     bNew = bNew || (ID_BROWSER_SAVEASDOC == _nId);
@@ -377,7 +376,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                             aDefaultName = String(::dbtools::createUniqueName(xQueries,aName));
                         }
 
-                        OSaveAsDlg aDlg(getView(),CommandType::QUERY,xQueries,m_xConnection->getMetaData(),aDefaultName,(ID_BROWSER_SAVEASDOC == _nId));
+                        OSaveAsDlg aDlg(getView(),CommandType::QUERY,xQueries,m_xConnection.is() ? m_xConnection->getMetaData() : NULL,aDefaultName,(ID_BROWSER_SAVEASDOC == _nId));
                         if(aDlg.Execute() == RET_OK)
                             m_sName = aDlg.getName();
                     }
@@ -393,7 +392,9 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                 if(xQueries->hasByName(m_sName))
                                 {
                                     Reference<XDrop> xNameCont(xQueries,UNO_QUERY);
-                                    xNameCont->dropByName(m_sName);
+                                    OSL_ENSURE(xNameCont.is(),"Can not drop query!");
+                                    if(xNameCont.is())
+                                        xNameCont->dropByName(m_sName);
                                 }
 
                                 Reference<XDataDescriptorFactory> xFact(xQueries,UNO_QUERY);
@@ -433,14 +434,15 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                     break;
                                 }
                             }
-                            else if(!m_bEsacpeProcessing && m_sStatement.getLength())
-                                sTranslatedStmt = m_sStatement;
                             else if(!m_sStatement.getLength())
                             {
                                 ErrorBox aBox( getQueryView(), ModuleRes( ERR_QRY_NOSELECT ) );
                                 aBox.Execute();
                                 break;
                             }
+                            else
+                                sTranslatedStmt = m_sStatement;
+
                             xQuery->setPropertyValue(PROPERTY_COMMAND,makeAny(sTranslatedStmt));
                             xQuery->setPropertyValue(CONFIGKEY_QRYDESCR_USE_ESCAPE_PROCESSING,::cppu::bool2any(m_bEsacpeProcessing));
                             xQuery->setPropertyValue(CONFIGKEY_QRYDESCR_UPDATE_TABLENAME,makeAny(m_sUpdateTableName));
@@ -501,7 +503,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                 {
                     ::rtl::OUString aErrorMsg;
                     m_sStatement = m_pWindow->getView()->getStatement();
-                    if(!m_sStatement.getLength())
+                    if(!m_sStatement.getLength() && m_pSqlIterator)
                     {
                         // change the view of the data
                         delete m_pSqlIterator->getParseTree();
@@ -606,7 +608,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                         break;
                     }
                 }
-                else if(!m_bEsacpeProcessing)
+                else
                     sTranslatedStmt = m_sStatement;
                 if(m_sDataSourceName.getLength() && sTranslatedStmt.getLength())
                 {
@@ -746,19 +748,28 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         if (!m_xConnection.is())    // we have no connection so what else should we do
             m_bDesign = sal_False;
 
+        // we need a datasource
+        if(m_xConnection.is())
+        {
+            Reference<XChild> xChild(m_xConnection,UNO_QUERY);
+            if(xChild.is())
+                m_xDataSource = Reference< XPropertySet >(xChild->getParent(),UNO_QUERY);
+        }
+        else
+        {
+            Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+            xDatabaseContext->getByName(m_sDataSourceName) >>= m_xDataSource;
+            OSL_ENSURE(m_xDataSource.is(),"We need a datasource!");
+        }
 
         // get command from the query if a query name was supplied
         if(m_sName.getLength())
         {
-            Reference<XNameAccess> xNameAccess;
-            Reference<XQueriesSupplier> xSup(m_xConnection,UNO_QUERY);
-            if(xSup.is())
+            Reference<XNameAccess> xQueries = getQueries();
+            if(xQueries.is())
             {
-                xNameAccess = xSup->getQueries();
-                OSL_ENSURE(xNameAccess.is(),"no nameaccess for the queries!");
-
                 Reference<XPropertySet> xProp;
-                if(xNameAccess->hasByName(m_sName) && ::cppu::extractInterface(xProp,xNameAccess->getByName(m_sName)) && xProp.is())
+                if(xQueries->hasByName(m_sName) && ::cppu::extractInterface(xProp,xQueries->getByName(m_sName)) && xProp.is())
                 {
                     xProp->getPropertyValue(PROPERTY_COMMAND) >>= m_sStatement;
                     m_bEsacpeProcessing = ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
@@ -787,13 +798,21 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                     //  m_pParseNode = pNode;
                     if(pNode)
                     {
-                        delete m_pSqlIterator->getParseTree();
-                        m_pSqlIterator->setParseTree(pNode);
-                        m_pSqlIterator->traverseAll();
-                        SQLWarning aWarning = m_pSqlIterator->getWarning();
-                        if(aWarning.Message.getLength())
+                        if(m_pSqlIterator)
                         {
-                            showError(SQLExceptionInfo(aWarning));
+                            delete m_pSqlIterator->getParseTree();
+                            m_pSqlIterator->setParseTree(pNode);
+                            m_pSqlIterator->traverseAll();
+                            SQLWarning aWarning = m_pSqlIterator->getWarning();
+                            if(aWarning.Message.getLength())
+                            {
+                                showError(SQLExceptionInfo(aWarning));
+                                m_bDesign = sal_False;
+                            }
+                        }
+                        else
+                        {
+                            delete pNode;
                             m_bDesign = sal_False;
                         }
                     }
@@ -806,28 +825,21 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                     }
                 }
             }
+
         }
         else
             setQueryComposer();
-        if(!m_xFormatter.is())
+        if(!m_xFormatter.is() && m_xDataSource.is())
         {
-            Reference< XChild> xChild(m_xConnection,UNO_QUERY);
-            if(xChild.is())
+            Reference< XNumberFormatsSupplier> xSupplier;
+            ::cppu::extractInterface(xSupplier,m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER));
+            if(xSupplier.is())
             {
-                Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
-                if(xProp.is())
-                {
-                    Reference< XNumberFormatsSupplier> xSupplier;
-                    ::cppu::extractInterface(xSupplier,xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER));
-                    if(xSupplier.is())
-                    {
-                        m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(getORB()
-                            ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
-                        m_xFormatter->attachNumberFormatsSupplier(xSupplier);
-                    }
-                }
-                OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
+                m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(getORB()
+                    ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+                m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
+            OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
         }
         m_pWindow->getView()->initialize();
         getUndoMgr()->Clear();
@@ -964,7 +976,10 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
 // -----------------------------------------------------------------------------
 void OQueryController::createNewConnection(sal_Bool _bUI)
 {
+    delete m_pSqlIterator;
+    m_pSqlIterator  = NULL;
     ::comphelper::disposeComponent(m_xComposer);
+
     OJoinController::createNewConnection(_bUI);
     if (m_xConnection.is())
     {
@@ -973,6 +988,16 @@ void OQueryController::createNewConnection(sal_Bool _bUI)
             m_pAddTabDlg->Hide();
         InvalidateFeature(ID_BROWSER_ADDTABLE);
         setQueryComposer();
+    }
+    else
+    {
+        if(m_bDesign)
+        {
+            m_bDesign = sal_False;
+            // don't call Execute(SQL) because this changes the sql statement
+            m_pWindow->switchView();
+        }
+        InvalidateAll();
     }
 }
 // -----------------------------------------------------------------------------
@@ -1028,8 +1053,21 @@ OTableWindowData* OQueryController::createTableWindowData()
 {
     return new OQueryTableWindowData();
 }
-
 // -----------------------------------------------------------------------------
-
+Reference<XNameAccess> OQueryController::getQueries()
+{
+    Reference<XNameAccess> xQueries;
+    Reference<XQueriesSupplier> xConSup(m_xConnection,UNO_QUERY);
+    if(xConSup.is())
+        xQueries = xConSup->getQueries();
+    else
+    {
+        Reference<XQueryDefinitionsSupplier> xSup(m_xDataSource,UNO_QUERY);
+        if(xSup.is())
+            xQueries = xSup->getQueryDefinitions();
+    }
+    return xQueries;
+}
+// -----------------------------------------------------------------------------
 
 

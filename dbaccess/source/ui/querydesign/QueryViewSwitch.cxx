@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ void OQueryViewSwitch::paste()
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::switchView()
 {
-    m_pTextView->Show(!m_pTextView->IsVisible());
+    m_pTextView->Show(!static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode());
 
     ToolBox* pToolBox = m_pDesignView->getToolBox();
     if(pToolBox && m_pTextView->IsVisible())
@@ -261,7 +261,7 @@ void OQueryViewSwitch::switchView()
         getAddTableDialog()->Update();
         m_pDesignView->InitFromParseNode();
         // only show the view when the data is inserted
-        m_pDesignView->Show(!m_pDesignView->IsVisible());
+        m_pDesignView->Show(static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode());
     }
     m_pDesignView->Resize();
 }

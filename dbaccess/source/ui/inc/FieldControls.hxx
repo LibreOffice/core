@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldControls.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:36:47 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef DBAUI_FIELDCONTROLS_HXX
 #define DBAUI_FIELDCONTROLS_HXX
 
-#ifndef _SV_EDIT_HXX
-#include <vcl/edit.hxx>
-#endif
 #ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
 #endif
@@ -76,6 +73,10 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef DBAUI_SQLNAMEEDIT_HXX
+#include "SqlNameEdit.hxx"
+#endif
+
 
 namespace dbaui
 {
@@ -92,6 +93,36 @@ namespace dbaui
     public:
         virtual void SetSpecialReadOnly(BOOL _bReadOnly) = 0;
     };
+    //==================================================================
+    class OPropColumnEditCtrl : public OSQLNameEdit
+                                ,public OSpecialReadOnly
+    {
+        short   m_nPos;
+        String  m_strHelpText;
+    public:
+        inline OPropColumnEditCtrl(Window* pParent, ::rtl::OUString& _rAllowedChars, INT32 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+
+        inline BOOL IsModified() { return GetText() != GetSavedValue(); }
+
+        short GetPos() const { return m_nPos; }
+        String GetHelp() const { return m_strHelpText; }
+
+        virtual void SetSpecialReadOnly(BOOL _bReadOnly)
+        {
+            SetReadOnly(_bReadOnly);
+            OSpecialReadOnly::SetSpecialReadOnly(_bReadOnly,this);
+        }
+    };
+    inline OPropColumnEditCtrl::OPropColumnEditCtrl(Window* pParent,
+                                                    ::rtl::OUString& _rAllowedChars,
+                                                    INT32 nHelpId,
+                                                    short nPosition,
+                                                    WinBits nWinStyle)
+        :OSQLNameEdit(pParent, _rAllowedChars,nWinStyle)
+        ,m_nPos(nPosition)
+    {
+        m_strHelpText = String(ModuleRes(nHelpId));
+    }
     //==================================================================
     class OPropEditCtrl :   public Edit
                             ,public OSpecialReadOnly

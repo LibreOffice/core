@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldControl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:26:39 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdbc;
 using namespace dbaui;
 
 //------------------------------------------------------------------
@@ -152,7 +153,10 @@ void OTableFieldControl::SetModified(BOOL bModified)
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OTableFieldControl::getMetaData()
 {
-    return GetCtrl()->GetView()->getController()->getConnection()->getMetaData();
+    Reference<XConnection> xCon = GetCtrl()->GetView()->getController()->getConnection();
+    if(!xCon.is())
+        return NULL;
+    return xCon->getMetaData();
 }
 // -----------------------------------------------------------------------------
 Reference< XNumberFormatter >   OTableFieldControl::GetFormatter()

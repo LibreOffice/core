@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:40:54 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,6 +934,16 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
             Text[ turkish ] = "Redo";
             Text[ arabic ] = "ÅÚÇÏÉ";
         };
+        ToolBoxItem
+        {
+            Identifier  = ID_TABLE_DESIGN_NO_CONNECTION;
+            HelpId      = HID_TABLE_DESIGN_NO_CONNECTION ;
+            Hide = TRUE;
+            ItemImage = IMG_DATABASE;
+
+            Text = "Keine Verbindung" ;
+            Text [ ENGLISH ] = "No connection" ;
+        };
     };
 };
 String STR_DEFAULT_VALUE
@@ -1567,8 +1577,27 @@ QueryBox TABLE_DESIGN_SAVEMODIFIED
     Message[ turkish ] = "The table has been changed.\nDo you want to save the changes?";
     Message[ arabic ] = "The table has been changed.\nDo you want to save the changes?";
 };
-
-
+QueryBox TABLE_QUERY_CONNECTION_LOST
+{
+    Buttons = WB_YES_NO ;
+    Message = "Die Verbindung zur Datenbank wurde gelöscht! Ohne sie kann der Tabellenentwurf nur eingeschränkt benutzt werden.\nSoll die Verbindung zur Datenbank wieder aufgebaut werden?" ;
+    Message [ English ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?" ;
+    Message [ english_us ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?" ;
+};
+String STR_TABLEDESIGN_CONNECTION_MISSING
+{
+    Text = "Die Tabelle konnte nicht gespeichert werden, da keine Verbindung zur Datenbank hergestellt werden konnte.";
+    Text [ english_us ] = "The table couldn't be saved due to connection problems.";
+    Text [ english ] = "The table couldn't be saved due to connection problems.";
+};
+FixedText FIXED_NO_CONNECTION
+{
+    Pos                 = MAP_APPFONT ( 0,0 ) ;
+    Size                = MAP_APPFONT ( 120 , 10 ) ;
+    Text                = "Keine Verbindung" ;
+    Text [ English ]    = "no connection" ;
+    Text [ english_us ] = "no connection" ;
+};
 
 
 

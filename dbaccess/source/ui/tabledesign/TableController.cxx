@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-12 14:47:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,12 +140,6 @@
 #ifndef _COMPHELPER_STREAMSECTION_HXX_
 #include <comphelper/streamsection.hxx>
 #endif
-//#ifndef _COMPHELPER_BASIC_IO_HXX_
-//#include <comphelper/basicio.hxx>
-//#endif
-//#ifndef _COMPHELPER_SEQSTREAM_HXX
-//#include <comphelper/seqstream.hxx>
-//#endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
@@ -235,6 +229,7 @@ OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM)
     ,m_bOwnConnection(sal_False)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_bNew(sal_True)
+    ,m_pNoConnection(NULL)
 {
     InvalidateAll();
 }
@@ -251,6 +246,7 @@ OTableController::~OTableController()
 void OTableController::disposing()
 {
     OGenericUnoController::disposing();
+
     delete m_pView;
     m_pView     = NULL;
 
@@ -276,6 +272,9 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
 
     switch (_nId)
     {
+        case ID_TABLE_DESIGN_NO_CONNECTION:
+            aReturn.aState = ::cppu::bool2any(m_xConnection.is());
+            break;
         case ID_BROWSER_EDITDOC:
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             aReturn.bEnabled = m_bNew || m_bEditable;
@@ -284,7 +283,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
             aReturn.bEnabled = m_xConnection.is();
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = m_xConnection.is() && m_bModified;
+            aReturn.bEnabled = m_bModified;
             break;
         case ID_BROWSER_CUT:
             aReturn.bEnabled = m_bEditable && static_cast<OTableDesignView*>(getView())->isCutAllowed();
@@ -308,6 +307,10 @@ void OTableController::Execute(sal_uInt16 _nId)
 {
     switch(_nId)
     {
+        case ID_TABLE_DESIGN_NO_CONNECTION:
+            if(!m_xConnection.is())
+                createNewConnection(sal_False); // ask the user for a new connection
+            break;
         case ID_BROWSER_EDITDOC:
             m_bEditable = !m_bEditable;
             static_cast<OTableDesignView*>(getView())->setReadOnly(!m_bEditable);
@@ -317,8 +320,8 @@ void OTableController::Execute(sal_uInt16 _nId)
         case ID_BROWSER_SAVEASDOC:
         case ID_BROWSER_SAVEDOC:
             {
-                OSL_ENSURE(m_bEditable,"Slot ID_BROWSER_SAVEDOC should not be enabled!");
-
+                if(!m_xConnection.is())
+                    createNewConnection(sal_True); // ask the user for a new connection
                 Reference<XTablesSupplier> xTablesSup(m_xConnection,UNO_QUERY);
                 if(xTablesSup.is())
                 {
@@ -394,9 +397,8 @@ void OTableController::Execute(sal_uInt16 _nId)
                                 OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
                                 xAppend->appendByDescriptor(xTable);
 
-                                if(xTables->hasByName(m_sName))
-                                    xTables->getByName(m_sName) >>= m_xTable;
-                                else
+                                assignTable();
+                                if(!m_xTable.is()) // correct name and try again
                                 {
                                     // it can be that someone inserted new data for us
                                     ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
@@ -405,17 +407,8 @@ void OTableController::Execute(sal_uInt16 _nId)
                                     xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
                                     ::dbtools::composeTableName(m_xConnection->getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False);
-                                    if(xTables->hasByName(sComposedName))
-                                        xTables->getByName(sComposedName) >>= m_xTable;
-                                    else
-                                        m_xTable = NULL;
-                                }
-                                // be notified when the table is in disposing
-                                Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
-                                if (xComponent.is())
-                                {
-                                    Reference<XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-                                    xComponent->addEventListener(xEvtL);
+                                    m_sName = sComposedName;
+                                    assignTable();
                                 }
                             }
                             else if(m_xTable.is())
@@ -451,6 +444,13 @@ void OTableController::Execute(sal_uInt16 _nId)
                         showError(aInfo);
                     }
                 }
+                else
+                {
+                    String aMessage(ModuleRes(STR_TABLEDESIGN_CONNECTION_MISSING));
+                    String sTitle(ModuleRes(STR_STAT_WARNING));
+                    OSQLMessageBox aMsg(getView(),sTitle,aMessage);
+                    aMsg.Execute();
+                }
             }
             break;
         case ID_BROWSER_CUT:
@@ -479,8 +479,6 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
     try
     {
         OGenericUnoController::initialize(aArguments);
-
-        //  m_pWindow->initialize(m_xCurrentFrame);
 
         PropertyValue aValue;
         const Any* pBegin   = aArguments.getConstArray();
@@ -521,8 +519,6 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
                 ODataView* pWindow = getView();
                 InfoBox(pWindow, aMessage).Execute();
             }
-            dispose();
-            return;
         }
 
         assignTable();
@@ -656,6 +652,7 @@ void SAL_CALL OTableController::disposing( const EventObject& Source ) throw(Run
         {
             m_bNew      = sal_True;
             setModified(sal_True);
+            InvalidateAll();
         }
     }
     else if(Reference<XPropertySet>(Source.Source,UNO_QUERY) == m_xTable)
@@ -679,13 +676,28 @@ void OTableController::Load(const Reference< XObjectInputStream>& _rxIn)
 // -----------------------------------------------------------------------------
 void OTableController::createNewConnection(sal_Bool _bUI)
 {
-    m_xConnection = NULL;
-    m_bOwnConnection = sal_False;
+    m_xConnection       = NULL;
+    m_bOwnConnection    = sal_False;
 
-    if (!_bUI || (RET_YES == QueryBox(getView(),ModuleRes(QUERY_CONNECTION_LOST)).Execute()))
+    if (!_bUI || (RET_YES == QueryBox(getView(),ModuleRes(TABLE_QUERY_CONNECTION_LOST)).Execute()))
     {
         m_xConnection = connect(m_sDataSourceName);
         m_bOwnConnection = m_xConnection.is();
+    }
+    ToolBox* pToolBox = getView()->getToolBox();
+    if(pToolBox)
+    {
+        if(m_xConnection.is())
+        {
+            pToolBox->RemoveItem(pToolBox->GetItemPos(ID_TABLE_DESIGN_NO_CONNECTION)-1);
+            pToolBox->HideItem(ID_TABLE_DESIGN_NO_CONNECTION);
+        }
+        else if(!pToolBox->IsItemVisible(ID_TABLE_DESIGN_NO_CONNECTION))
+        {
+
+            pToolBox->InsertSeparator(pToolBox->GetItemPos(ID_TABLE_DESIGN_NO_CONNECTION));
+            pToolBox->ShowItem(ID_TABLE_DESIGN_NO_CONNECTION);
+        }
     }
 }
 // -----------------------------------------------------------------------------
@@ -947,10 +959,10 @@ void OTableController::loadData()
     m_vRowList.clear();
 
     OTableRow* pTabEdRow = NULL;
-    Reference< XDatabaseMetaData> xMetaData = getConnection()->getMetaData();
+    Reference< XDatabaseMetaData> xMetaData = getConnection().is() ? getConnection()->getMetaData() : NULL;
     //////////////////////////////////////////////////////////////////////
     // Datenstruktur mit Daten aus DatenDefinitionsObjekt fuellen
-    if(m_xTable.is())
+    if(m_xTable.is() && xMetaData.is())
     {
         Reference<XColumnsSupplier> xColSup(m_xTable,UNO_QUERY);
         OSL_ENSURE(xColSup.is(),"No XColumnsSupplier!");
@@ -962,7 +974,6 @@ void OTableController::loadData()
         // Bei Drop darf keine Zeile editierbar sein.
         // Bei Add duerfen nur die leeren Zeilen editierbar sein.
         // Bei Add und Drop koennen alle Zeilen editiert werden.
-        Reference< XDatabaseMetaData> xMetaData = getConnection()->getMetaData();
         sal_Bool bReadOldRow = xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn();
         Sequence< ::rtl::OUString> aColumns = xColumns->getElementNames();
         const ::rtl::OUString* pBegin   = aColumns.getConstArray();
@@ -1070,18 +1081,13 @@ void OTableController::loadData()
 
     OSL_ENSURE(aTypeIter != m_aTypeInfo.end(),"We have no type infomation!");
 
-    sal_Bool bReadRow = m_xTable.is() && xMetaData->supportsAlterTableWithAddColumn();
+    sal_Bool bReadRow = m_xTable.is() && xMetaData.is() && xMetaData->supportsAlterTableWithAddColumn();
     for(sal_Int32 i=m_vRowList.size(); i<128; i++ )
     {
         pTabEdRow = new OTableRow();
         pTabEdRow->SetReadOnly(bReadRow);
-        //  pTabEdRow->SetFieldType( aTypeIter->second );
         m_vRowList.push_back( pTabEdRow);
     }
-
-    // da sich die FieldDescriptions geaendert haben und meine UI eventuell noch Referenzen darauf hat ...
-    //  static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->DisplayData(0);
-    //  static_cast<OTableDesignView*>(getView())->GetTabDescWin()->Init();
 }
 // -----------------------------------------------------------------------------
 Reference<XNameAccess> OTableController::getKeyColumns() const
@@ -1118,7 +1124,9 @@ Reference<XNameAccess> OTableController::getKeyColumns() const
 // -----------------------------------------------------------------------------
 void OTableController::checkColumns() throw(::com::sun::star::sdbc::SQLException)
 {
-    ::comphelper::UStringMixEqual bCase(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : NULL;
+
+    ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
     ::std::vector<OTableRow*>::const_iterator aIter = m_vRowList.begin();
     for(;aIter != m_vRowList.end();++aIter)
     {
@@ -1162,7 +1170,8 @@ void OTableController::alterColumns()
 
     sal_Bool bReload = sal_False; // refresh the data
 
-    ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : NULL;
+    ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
     ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
     for(;aIter != m_vRowList.end();++aIter)
     {
@@ -1392,6 +1401,12 @@ void OTableController::assignTable()
                 m_xTable = xProp;
                 Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
                 m_bEditable = xAlter.is();
+                if(!m_bEditable)
+                {
+                    ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
+                    for(; aIter != m_vRowList.end(); ++aIter)
+                        (*aIter)->SetReadOnly(sal_True);
+                }
                 m_bNew = sal_False;
                 // be notified when the table is in disposing
                 Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
@@ -1400,6 +1415,7 @@ void OTableController::assignTable()
                     Reference<XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
                     xComponent->addEventListener(xEvtL);
                 }
+                InvalidateAll();
             }
         }
     }

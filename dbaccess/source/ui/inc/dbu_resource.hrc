@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-02 17:05:09 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@
 #define QUERY_BRW_DELETE_QUERY_CONFIRM  RID_QUERYBOX_START +  3
 #define QUERY_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  4
 #define TABLE_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  5
+#define TABLE_QUERY_CONNECTION_LOST     RID_QUERYBOX_START +  6
 
 //========================================================================
 // warning boxes
@@ -346,6 +347,7 @@
 #define STR_RELATIONDESIGN_NOT_AVAILABLE    RID_STRING_START + 127
 #define STR_OPENTABLES_WARNINGS             RID_STRING_START + 128
 #define STR_OPENTABLES_WARNINGS_DETAILS     RID_STRING_START + 129
+#define STR_TABLEDESIGN_CONNECTION_MISSING  RID_STRING_START + 130
 
 
 //========================================================================
@@ -354,12 +356,16 @@
 #define RSC_DATASOURCE_TYPES            RID_UNTYPED_START +  1
 #define RSC_CHARSETS                    RID_UNTYPED_START +  2
 #define PB_FORMAT                       RID_UNTYPED_START +  3
+#define FIXED_NO_CONNECTION             RID_UNTYPED_START +  4
 
 #endif // _DBU_RESOURCE_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2001/03/02 17:05:09  fs
+ *  +RID_OPENTABLES_WARNINGS*
+ *
  *  Revision 1.28  2001/03/01 15:22:17  oj
  *  #84511# change message
  *

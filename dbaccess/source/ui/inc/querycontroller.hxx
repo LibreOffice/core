@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:17:54 $
+ *  last change: $Author: oj $ $Date: 2001-03-14 10:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ namespace dbaui
         sal_Bool        m_bViewFunction;    // show the function row in the design view
         sal_Bool        m_bEsacpeProcessing;// is true when we shouldn't parse the statement
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getQueries();
         // creates the querycomposer
         void setQueryComposer();
 
