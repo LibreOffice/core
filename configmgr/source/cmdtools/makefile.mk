@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jb $ $Date: 2002-10-24 15:29:25 $
+#   last change: $Author: jb $ $Date: 2002-11-26 08:54:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,7 @@ APPSTDLIBS=\
 OBJFILES=\
     $(OBJ)$/configshutdown.obj \
     $(OBJ)$/configimport.obj \
-    $(OBJ)$/unomain.obj \
+    $(OBJ)$/unomain.obj 
 
 
 # --- Apps --------------------------------------------------------
@@ -120,13 +120,16 @@ APP2OBJS=	\
     $(OBJ)$/oslstream.obj \
     $(OBJ)$/trivialbufferedfile.obj \
     $(OBJ)$/configimport.obj \
-    $(OBJ)$/unomain.obj \
+    $(OBJ)$/unomain.obj 
 
 .INCLUDE :  target.mk
 
 #**************************************************************************
 # history:
 #	$Log: not supported by cvs2svn $
+#	Revision 1.2  2002/10/24 15:29:25  jb
+#	#102602# New application for importing configuration data into a backend
+#	
 #	Revision 1.1.1.1  2000/09/18 16:13:40  hr
 #	initial import
 #	
