@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-27 13:00:39 $
+ *  last change: $Author: mav $ $Date: 2003-10-28 16:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,19 +149,15 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetDocument() { return m_xDocument; }
 
 // XEventListener
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aSource );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
 // XCloseListener
-    virtual void SAL_CALL queryClosing( const com::sun::star::lang::EventObject& aSource, sal_Bool bGetsOwnership )
-        throw( ::com::sun::star::util::CloseVetoException );
-
-    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aSource );
+    virtual void SAL_CALL queryClosing( const ::com::sun::star::lang::EventObject& Source, sal_Bool GetsOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyClosing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
 // XTerminateListener
-    virtual void SAL_CALL queryTermination( const com::sun::star::lang::EventObject& aSource )
-        throw( ::com::sun::star::frame::TerminationVetoException );
-
-    virtual void SAL_CALL notifyTermination( const com::sun::star::lang::EventObject& aSource );
+    virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
 
 // XModifyListener
     virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw ( ::com::sun::star::uno::RuntimeException );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: closepreventer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-27 13:00:38 $
+ *  last change: $Author: mav $ $Date: 2003-10-28 16:32:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,9 @@
 
 class OClosePreventer : public ::cppu::WeakImplHelper1 < ::com::sun::star::util::XCloseListener >
 {
-    virtual void SAL_CALL queryClosing( const ::com::sun::star::lang::EventObject& Source, sal_Bool GetsOwnership )
-            throw( ::com::sun::star::util::CloseVetoException );
+    virtual void SAL_CALL queryClosing( const ::com::sun::star::lang::EventObject& Source, sal_Bool GetsOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyClosing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& Source );
-
-    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 };
 

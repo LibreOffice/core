@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-27 12:58:19 $
+ *  last change: $Author: mav $ $Date: 2003-10-28 16:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,6 +519,7 @@ sal_Bool DocumentHolder::GetExtent( awt::Size *pSize )
 }
 
 void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject& aSource )
+        throw (::com::sun::star::uno::RuntimeException)
 {
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
         m_xDocument = uno::Reference< frame::XModel >();
@@ -529,13 +530,14 @@ void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject
 
 
 void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sal_Bool bGetsOwnership )
-        throw( util::CloseVetoException )
+        throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException)
 {
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
         throw util::CloseVetoException();
 }
 
 void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
+        throw (::com::sun::star::uno::RuntimeException)
 {
     uno::Reference< util::XCloseBroadcaster > xEventBroadcaster(
         aSource.Source, uno::UNO_QUERY );
@@ -550,13 +552,14 @@ void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
 }
 
 void SAL_CALL DocumentHolder::queryTermination( const lang::EventObject& aSource )
-        throw( frame::TerminationVetoException )
+        throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
 {
     if ( m_xDocument.is() )
         throw frame::TerminationVetoException();
 }
 
 void SAL_CALL DocumentHolder::notifyTermination( const lang::EventObject& aSource )
+        throw (::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE( !m_xDocument.is(), "Just a disaster..." );
 
