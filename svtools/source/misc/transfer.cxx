@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-25 10:12:13 $
+ *  last change: $Author: ka $ $Date: 2001-09-28 11:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,17 +363,58 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
     {
     }
 
-    DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
+    Reference< XMimeContentTypeFactory >    xMimeFact;
+    DataFlavorExVector::iterator            aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    const ::rtl::OUString                   aCharsetStr( ::rtl::OUString::createFromAscii( "charset" ) );
+    const ::rtl::OUString                   aClassStr( ::rtl::OUString::createFromAscii( "class" ) );
+    Reference< XMimeContentType >           xRequestType;
+
+    if( xFact.is() )
+        xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.MimeContentTypeFactory" ) ), UNO_QUERY );
+
+    try
+    {
+        if( xMimeFact.is() )
+            xRequestType = xMimeFact->createMimeContentType( rFlavor.MimeType );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
 
     while( aIter != aEnd )
     {
-        if( TransferableDataHelper::IsEqual( rFlavor, *aIter ) )
+        if( FORMAT_STRING == (*aIter).mnSotId )
         {
-            bRet = sal_True;
-            aIter = aEnd;
+            Reference< XMimeContentType >   xOwnType;
+            const ::rtl::OUString           aCharsetStr( ::rtl::OUString::createFromAscii( "charset" ) );
+            const ::rtl::OUString           aClassStr( ::rtl::OUString::createFromAscii( "class" ) );
+
+            try
+            {
+                if( xMimeFact.is() )
+                    xOwnType = xMimeFact->createMimeContentType( (*aIter).MimeType );
+            }
+            catch( const ::com::sun::star::uno::Exception& )
+            {
+            }
+
+            if( xOwnType.is() && xRequestType.is() )
+            {
+                bRet = ( ( xOwnType->getFullMediaType().equalsIgnoreAsciiCase( xRequestType->getFullMediaType() ) ) &&
+                         ( !xRequestType->hasParameter( aCharsetStr ) || xRequestType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "utf-16" ) ) ) &&
+                         ( !xRequestType->hasParameter( aClassStr ) || xRequestType->getParameterValue( aClassStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "java.nio.bytebuffer" ) ) ) );
+            }
+            else
+                bRet = TransferableDataHelper::IsEqual( rFlavor, *aIter );
         }
         else
-            ++aIter;
+            bRet = TransferableDataHelper::IsEqual( rFlavor, *aIter );
+
+        if( bRet )
+            aIter = aEnd;
+        else
+            aIter++;
     }
 
     return bRet;
@@ -1144,11 +1185,12 @@ void TransferableDataHelper::InitFormats()
             const Sequence< DataFlavor >            aFlavors( mxTransfer->getTransferDataFlavors() );
             Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
             Reference< XMimeContentTypeFactory >    xMimeFact;
+            const ::rtl::OUString                   aCharsetStr( ::rtl::OUString::createFromAscii( "charset" ) );
+            const ::rtl::OUString                   aClassStr( ::rtl::OUString::createFromAscii( "class" ) );
+            const ::rtl::OUString                   aJavaByteBufferStr( ::rtl::OUString::createFromAscii( "java.nio.bytebuffer" ) );
 
             if( xFact.is() )
-                xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii(
-                                                                  "com.sun.star.datatransfer.MimeContentTypeFactory" ) ),
-                                                                  UNO_QUERY );
+                xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.MimeContentTypeFactory" ) ), UNO_QUERY );
 
             for( sal_Int32 i = 0; i < aFlavors.getLength(); i++ )
             {
@@ -1156,8 +1198,14 @@ void TransferableDataHelper::InitFormats()
                 const DataFlavor&               rFlavor = aFlavors[ i ];
                    Reference< XMimeContentType >   xMimeType;
 
-                if( xMimeFact.is() && rFlavor.MimeType.getLength() )
-                    xMimeType = xMimeFact->createMimeContentType( rFlavor.MimeType );
+                try
+                {
+                    if( xMimeFact.is() && rFlavor.MimeType.getLength() )
+                        xMimeType = xMimeFact->createMimeContentType( rFlavor.MimeType );
+                }
+                catch( const ::com::sun::star::uno::Exception& )
+                {
+                }
 
                 aFlavorEx.MimeType = rFlavor.MimeType;
                 aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
@@ -1166,27 +1214,67 @@ void TransferableDataHelper::InitFormats()
 
                 mpFormats->push_back( aFlavorEx );
 
-                // check alien formats and add appropriate internal match to formats list
-                if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) &&
-                    !HasFormat( SOT_FORMAT_GDIMETAFILE ) )
+                // add additional formats for special mime types
+                if( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId )
                 {
-                    if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
+                    if( !HasFormat( SOT_FORMAT_GDIMETAFILE ) && SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
                     {
                         aFlavorEx.mnSotId = SOT_FORMAT_GDIMETAFILE;
                         mpFormats->push_back( aFlavorEx );
                     }
                 }
-                else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/plain" ) ) &&
-                         !HasFormat( FORMAT_STRING ) )
+                else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/rtf" ) ) )
                 {
-                    // set format id ofd alien FlavorEx to FORMAT_STRING
-                    (*mpFormats)[ mpFormats->size() - 1 ].mnSotId = FORMAT_STRING;
+                    (*mpFormats)[ mpFormats->size() - 1 ].mnSotId = FORMAT_RTF;
 
-                    // add standard format FORMAT_STRING to get used by application
-                    if( SotExchange::GetFormatDataFlavor( FORMAT_STRING, aFlavorEx ) )
+                    if( !HasFormat( FORMAT_RTF ) && SotExchange::GetFormatDataFlavor( FORMAT_RTF, aFlavorEx ) )
                     {
-                        aFlavorEx.mnSotId = FORMAT_STRING;
+                        aFlavorEx.mnSotId = FORMAT_RTF;
                         mpFormats->push_back( aFlavorEx );
+                    }
+                }
+                else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/plain" ) ) )
+                {
+                    // add, if it is a UTF-8 byte buffer
+                    if( xMimeType->hasParameter( aCharsetStr ) )
+                    {
+                        const ::rtl::OUString aCharset( xMimeType->getParameterValue( aCharsetStr ) );
+
+                        if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "utf-8" ) ) )
+                        {
+                            if( !xMimeType->hasParameter( aClassStr ) || xMimeType->getParameterValue( aClassStr ).equalsIgnoreAsciiCase( aJavaByteBufferStr ) )
+                            {
+                                (*mpFormats)[ mpFormats->size() - 1 ].mnSotId = FORMAT_STRING;
+
+                                if( !HasFormat( FORMAT_STRING ) && SotExchange::GetFormatDataFlavor( FORMAT_STRING, aFlavorEx ) )
+                                {
+                                    aFlavorEx.mnSotId = FORMAT_STRING;
+                                    mpFormats->push_back( aFlavorEx );
+                                }
+                            }
+                        }
+                    }
+                }
+                else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/html" ) ) )
+                {
+                    // add, if it is a ISO-8859-1 byte buffer
+                    if( xMimeType->hasParameter( aCharsetStr ) )
+                    {
+                        const ::rtl::OUString aCharset( xMimeType->getParameterValue( aCharsetStr ) );
+
+                        if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "iso-8859-1" ) ) )
+                        {
+                            if( !xMimeType->hasParameter( aClassStr ) || xMimeType->getParameterValue( aClassStr ).equalsIgnoreAsciiCase( aJavaByteBufferStr ) )
+                            {
+                                (*mpFormats)[ mpFormats->size() - 1 ].mnSotId = SOT_FORMATSTR_ID_HTML;
+
+                                if( !HasFormat( SOT_FORMATSTR_ID_HTML ) && SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_HTML, aFlavorEx ) )
+                                {
+                                    aFlavorEx.mnSotId = SOT_FORMATSTR_ID_HTML;
+                                    mpFormats->push_back( aFlavorEx );
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1298,7 +1386,28 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
     try
     {
         if( mxTransfer.is() )
-            aRet = mxTransfer->getTransferData( rFlavor );
+        {
+            DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+            const SotFormatStringId         nRequestFormat = SotExchange::GetFormat( rFlavor );
+
+            if( nRequestFormat )
+            {
+                // try to get alien format first
+                while( aIter != aEnd )
+                {
+                    if( ( nRequestFormat == (*aIter).mnSotId ) && ( rFlavor.MimeType != (*aIter).MimeType ) )
+                        aRet = mxTransfer->getTransferData( *aIter );
+
+                    if( aRet.hasValue() )
+                        aIter = aEnd;
+                    else
+                        aIter++;
+                }
+            }
+
+            if( !aRet.hasValue() )
+                aRet = mxTransfer->getTransferData( rFlavor );
+        }
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -1345,71 +1454,52 @@ sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, ::rtl::OU
 
 sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, ::rtl::OUString& rStr )
 {
-    Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
-    Reference< XMimeContentTypeFactory >    xMimeFact;
     Any                                     aAny;
+    DataFlavorExVector::iterator            aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    const SotFormatStringId                 nRequestFormat = SotExchange::GetFormat( rFlavor );
     sal_Bool                                bRet = sal_False;
 
-    try
+    if( nRequestFormat )
     {
-        // do we have an UTF-8 encoded format (JAVA)
-        if( xFact.is() )
-            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii(
-                                                              "com.sun.star.datatransfer.MimeContentTypeFactory" ) ),
-                                                              UNO_QUERY );
-
-        if( xMimeFact.is() )
+        // try to get alien format first
+        while( aIter != aEnd )
         {
-            DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
-
-            while( aIter != aEnd )
+            if( ( nRequestFormat == (*aIter).mnSotId ) && ( rFlavor.MimeType != (*aIter).MimeType ) )
             {
-                const DataFlavorEx aFlavorEx( *aIter++ );
+                const sal_uInt32 nRef = Application::ReleaseSolarMutex();
 
-                if( FORMAT_STRING == aFlavorEx.mnSotId )
+                try
                 {
-                    Reference< XMimeContentType >   xMimeType( xMimeFact->createMimeContentType( aFlavorEx.MimeType ) );
-                    const ::rtl::OUString           aCharsetStr( ::rtl::OUString::createFromAscii( "charset" ) );
-
-                    if( xMimeType->hasParameter( aCharsetStr ) )
+                    if( ( aAny = mxTransfer->getTransferData( *aIter ) ).hasValue() )
                     {
-                        const ::rtl::OUString aCharset( xMimeType->getParameterValue( aCharsetStr ) );
+                        ::rtl::OUString         aOUString;
+                        Sequence< sal_Int8 >    aSeq;
 
-                        if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "utf-8" ) ) )
+                        if( aAny >>= aSeq )
                         {
-                            const ::rtl::OUString aClassStr( ::rtl::OUString::createFromAscii( "class" ) );
-
-                            if( !xMimeType->hasParameter( aClassStr ) ||
-                                xMimeType->getParameterValue( aClassStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "java.nio.bytebuffer" ) ) )
-                            {
-                                aAny = GetAny( aFlavorEx );
-
-                                if( aAny.hasValue() )
-                                {
-                                    ::rtl::OUString         aOUString;
-                                    Sequence< sal_Int8 >    aSeq;
-
-                                    if( aAny >>= aSeq )
-                                    {
-                                        aIter = aEnd;
-                                        rStr = ::rtl::OUString( (sal_Char*) aSeq.getArray(), aSeq.getLength(),
-                                                                RTL_TEXTENCODING_UTF8 );
-                                    }
-                                    else
-                                        aAny = Any();
-                                }
-                            }
+                            aIter = aEnd;
+                            rStr = ::rtl::OUString( (sal_Char*) aSeq.getArray(), aSeq.getLength(), RTL_TEXTENCODING_UTF8 );
+                            bRet = sal_True;
                         }
+                        else
+                            aAny = Any();
                     }
                 }
+                catch( const ::com::sun::star::uno::Exception& )
+                {
+                }
+
+                Application::AcquireSolarMutex( nRef );
             }
+
+            if( bRet )
+                aIter = aEnd;
+            else
+                aIter++;
         }
     }
-    catch( const ::com::sun::star::uno::Exception& )
-    {
-    }
 
-    if( !aAny.hasValue() )
+    if( !bRet )
     {
         // do normal extraction
         aAny = GetAny( rFlavor );

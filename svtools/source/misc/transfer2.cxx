@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-14 14:45:02 $
+ *  last change: $Author: ka $ $Date: 2001-09-28 11:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,8 @@ void DragSourceHelper::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 // ----------------------------------------
 
 DropTargetHelper::DropTargetListener::DropTargetListener( DropTargetHelper& rDropTargetHelper ) :
-    mrParent( rDropTargetHelper )
+    mrParent( rDropTargetHelper ),
+    mpLastDragOverEvent( NULL )
 {
 }
 
@@ -184,6 +185,7 @@ DropTargetHelper::DropTargetListener::DropTargetListener( DropTargetHelper& rDro
 
 DropTargetHelper::DropTargetListener::~DropTargetListener()
 {
+    delete mpLastDragOverEvent;
 }
 
 // -----------------------------------------------------------------------------
@@ -230,6 +232,12 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
             rDTDE.Context->acceptDrop( nRet );
 
         rDTDE.Context->dropComplete( DNDConstants::ACTION_NONE != nRet );
+
+        if( mpLastDragOverEvent )
+        {
+            delete mpLastDragOverEvent;
+            mpLastDragOverEvent = NULL;
+        }
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
@@ -255,31 +263,19 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragEnter( const DropTargetD
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEvent& dte ) throw( RuntimeException )
-{
-    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-    try
-    {
-        mrParent.ImplEndDrag();
-    }
-    catch( const ::com::sun::star::uno::Exception& )
-    {
-    }
-}
-
-// -----------------------------------------------------------------------------
-
 void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDragEvent& rDTDE ) throw( RuntimeException )
 {
     const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     try
     {
-        AcceptDropEvent aEvt( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE );
-        aEvt.mbDefault = ( ( rDTDE.DropAction & DNDConstants::ACTION_DEFAULT ) != 0 );
+        if( mpLastDragOverEvent )
+            delete mpLastDragOverEvent;
 
-        const sal_Int8 nRet = mrParent.AcceptDrop( aEvt );
+        mpLastDragOverEvent = new AcceptDropEvent( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE );
+        mpLastDragOverEvent->mbDefault = ( ( rDTDE.DropAction & DNDConstants::ACTION_DEFAULT ) != 0 );
+
+        const sal_Int8 nRet = mrParent.AcceptDrop( *mpLastDragOverEvent );
 
         if( DNDConstants::ACTION_NONE == nRet )
             rDTDE.Context->rejectDrag();
@@ -290,6 +286,30 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDr
     {
     }
 }
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEvent& dte ) throw( RuntimeException )
+{
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    try
+    {
+        if( mpLastDragOverEvent )
+        {
+            mpLastDragOverEvent->mbLeaving = sal_True;
+            mrParent.AcceptDrop( *mpLastDragOverEvent );
+            delete mpLastDragOverEvent;
+            mpLastDragOverEvent = NULL;
+        }
+
+        mrParent.ImplEndDrag();
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
+}
+
 
 // -----------------------------------------------------------------------------
 
