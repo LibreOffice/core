@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-18 14:23:56 $
+ *  last change: $Author: kso $ $Date: 2001-12-03 17:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,17 +129,17 @@ struct ContentProperties
     sal_Bool         bIsDocument;           // IsDocument
     sal_Bool         bIsFolder;             // IsFolder
     ::rtl::OUString  aMediaType;            // MediaType
-    com::sun::star::uno::Sequence < sal_Int8 >   aEncryptionKey;        // EncryptionKey
+    com::sun::star::uno::Sequence <
+        sal_Int8 >   aEncryptionKey;        // EncryptionKey
     sal_Int64        nSize;                 // Size
-    sal_Int32        nSegmentSize;          // SegmentSize
     sal_Bool         bCompressed;           // Compressed
     sal_Bool         bEncrypted;            // Encrypted
     sal_Bool         bHasEncryptedEntries;  // HasEncryptedEntries
 
     ContentProperties()
     : bIsDocument( sal_True ), bIsFolder( sal_False ), nSize( 0 ),
-      nSegmentSize( 0 ), bCompressed( sal_True ),
-      bEncrypted( sal_False ), bHasEncryptedEntries( sal_False ) {}
+      bCompressed( sal_True ), bEncrypted( sal_False ),
+      bHasEncryptedEntries( sal_False ) {}
 
     ContentProperties( const ::rtl::OUString& rContentType );
 };

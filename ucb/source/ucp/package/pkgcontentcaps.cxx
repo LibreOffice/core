@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:11:47 $
+ *  last change: $Author: kso $ $Date: 2001-12-03 17:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
     Compressed                    x
     Encrypted                     x
     HasEncryptedEntries   x (root folder only)
-    SegmentSize           x (root folder only)
 
     getCommandInfo        x       x
     getPropertySetInfo    x       x
@@ -202,17 +201,10 @@ uno::Sequence< beans::Property > Content::getProperties(
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
-                ),
-                beans::Property(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "SegmentSize" ) ),
-                    -1,
-                    getCppuType( static_cast< const sal_Int32 * >( 0 ) ),
-                    beans::PropertyAttribute::BOUND
                 )
             };
             return uno::Sequence< beans::Property >(
-                                            aRootFolderPropertyInfoTable, 7 );
+                                            aRootFolderPropertyInfoTable, 6 );
         }
         else
         {

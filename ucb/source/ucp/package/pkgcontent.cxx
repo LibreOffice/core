@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:34:08 $
+ *  last change: $Author: kso $ $Date: 2001-12-03 17:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,7 @@ using namespace package_ucp;
 #define MEDIATYPE_MODIFIED      sal_uInt32( 0x01 )
 #define COMPRESSED_MODIFIED     sal_uInt32( 0x02 )
 #define ENCRYPTED_MODIFIED      sal_uInt32( 0x04 )
-#define SEGMENTSIZE_MODIFIED    sal_uInt32( 0x08 )
-#define ENCRYPTIONKEY_MODIFIED  sal_uInt32( 0x10 )
+#define ENCRYPTIONKEY_MODIFIED  sal_uInt32( 0x08 )
 
 //=========================================================================
 //=========================================================================
@@ -206,7 +205,6 @@ using namespace package_ucp;
 ContentProperties::ContentProperties( const rtl::OUString& rContentType )
 : aContentType( rContentType ),
   nSize( 0 ),
-  nSegmentSize( 0 ),
   bCompressed( sal_True ),
   bEncrypted( sal_False ),
   bHasEncryptedEntries( sal_False )
@@ -961,16 +959,6 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 else
                     xRow->appendVoid( rProp );
             }
-            else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "SegmentSize" ) ) )
-            {
-                // Property only available for root folder.
-                PackageUri aURI( rContentId );
-                if ( aURI.isRootFolder() )
-                    xRow->appendLong( rProp, rData.nSegmentSize );
-                else
-                    xRow->appendVoid( rProp );
-            }
             else
             {
                 // Not a Core Property! Maybe it's an Additional Core Property?!
@@ -1086,15 +1074,6 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
                 rData.bHasEncryptedEntries );
-
-            xRow->appendLong(
-                beans::Property(
-                        rtl::OUString::createFromAscii( "SegmentSize" ),
-                        -1,
-                        getCppuType( static_cast< const sal_Int32 * >( 0 ) ),
-                        beans::PropertyAttribute::BOUND
-                            | beans::PropertyAttribute::READONLY ),
-                rData.nSegmentSize );
         }
 
         // Append all Additional Core Properties.
@@ -1342,43 +1321,6 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "SegmentSize" ) ) )
-        {
-            // Only supported by root folder.
-            if ( m_aUri.isRootFolder() )
-            {
-                sal_Int32 nNewValue;
-                if ( rValue.Value >>= nNewValue )
-                {
-                    if ( nNewValue != m_aProps.nSegmentSize )
-                    {
-                        aEvent.PropertyName = rValue.Name;
-                        aEvent.OldValue = uno::makeAny( m_aProps.nSegmentSize );
-                        aEvent.NewValue = uno::makeAny( nNewValue );
-
-                        m_aProps.nSegmentSize = nNewValue;
-                          nChanged++;
-                        bStore = sal_True;
-                        m_nModifiedProps |= SEGMENTSIZE_MODIFIED;
-                    }
-                }
-                else
-                {
-                    aRet[ n ] <<= beans::IllegalTypeException(
-                                rtl::OUString::createFromAscii(
-                                        "Property value has wrong type!" ),
-                                static_cast< cppu::OWeakObject * >( this ) );
-                }
-            }
-            else
-            {
-                aRet[ n ] <<= beans::UnknownPropertyException(
-                            rtl::OUString::createFromAscii(
-                                "SegmentSize only supported by root folder!" ),
-                            static_cast< cppu::OWeakObject * >( this ) );
-            }
-        }
-        else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "EncryptionKey" ) ) )
         {
             // @@@ This is a temporary solution. In the future submitting
@@ -1564,8 +1506,9 @@ uno::Any Content::open(
                 const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
-    if ( rArg.Mode == star::ucb::OpenMode::ALL || rArg.Mode == star::ucb::OpenMode::FOLDERS || rArg.Mode == star::ucb::OpenMode::DOCUMENTS )
-    //if ( IsFolder() )
+    if ( rArg.Mode == star::ucb::OpenMode::ALL ||
+         rArg.Mode == star::ucb::OpenMode::FOLDERS ||
+         rArg.Mode == star::ucb::OpenMode::DOCUMENTS )
     {
         //////////////////////////////////////////////////////////////////
         // open command for a folder content
@@ -1575,7 +1518,7 @@ uno::Any Content::open(
             = new DynamicResultSet( m_xSMgr, this, rArg, xEnv );
         return uno::makeAny( xSet );
       }
-      else
+    else
     {
         //////////////////////////////////////////////////////////////////
         // open command for a document content
@@ -2445,35 +2388,8 @@ sal_Bool Content::loadData(
                             "Got no HasEncryptedEntries value!" );
                 return sal_False;
             }
-
-            // SegmentSize ( only avalibale at root folder )
-            try
-            {
-                uno::Any aSegmentSize
-                    = xPackagePropSet->getPropertyValue(
-                        rtl::OUString::createFromAscii( "SegmentSize" ) );
-                if ( !( aSegmentSize >>= rProps.nSegmentSize ) )
-                {
-                    OSL_ENSURE( sal_False,
-                                "Content::loadData - "
-                                "Got no SegmentSize value!" );
-                    return sal_False;
-                }
-            }
-            catch ( beans::UnknownPropertyException const & )
-            {
-                OSL_ENSURE( sal_False,
-                            "Content::loadData - Got no SegmentSize value!" );
-                return sal_False;
-            }
-            catch ( lang::WrappedTargetException const & )
-            {
-                OSL_ENSURE( sal_False,
-                            "Content::loadData - Got no SegmentSize value!" );
-                return sal_False;
-            }
         }
-     }
+    }
 
     if ( !rxPackage->hasByHierarchicalName( rURI.getPath() ) )
         return sal_False;
@@ -2695,37 +2611,6 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 
     if ( !xPackagePropSet.is() )
         return sal_False;
-
-    if ( m_nModifiedProps & SEGMENTSIZE_MODIFIED )
-    {
-        if ( m_aUri.isRootFolder() )
-        {
-            // Property available only from package
-            try
-            {
-                xPackagePropSet->setPropertyValue(
-                        rtl::OUString::createFromAscii( "SegmentSize" ),
-                        uno::makeAny( m_aProps.nSegmentSize ) );
-                m_nModifiedProps &= ~SEGMENTSIZE_MODIFIED;
-            }
-            catch ( beans::UnknownPropertyException const & )
-            {
-                // setPropertyValue
-            }
-            catch ( beans::PropertyVetoException const & )
-            {
-                // setPropertyValue
-            }
-            catch ( lang::IllegalArgumentException const & )
-            {
-                // setPropertyValue
-            }
-            catch ( lang::WrappedTargetException const & )
-            {
-                // setPropertyValue
-            }
-        }
-    }
 
     if ( m_nModifiedProps & ENCRYPTIONKEY_MODIFIED )
     {
