@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-18 12:15:26 $
+ *  last change: $Author: sab $ $Date: 2001-10-18 13:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1876,7 +1876,7 @@ void ScXMLExport::_ExportAutoStyles()
                                 uno::Reference<sheet::XSheetOperation> xSheetOperation(xSheetCellRanges, uno::UNO_QUERY);
                                 if (xSheetCellRanges.is() && xSheetOperation.is())
                                 {
-                                    sal_Int32 nCount(sal_Int32(xSheetOperation->computeFunction(sheet::GeneralFunction_COUNT)));
+                                    sal_uInt32 nCount(sal_uInt32(xSheetOperation->computeFunction(sheet::GeneralFunction_COUNT)));
                                     uno::Reference<container::XEnumerationAccess> xCellsAccess = xSheetCellRanges->getCells();
                                     if (xCellsAccess.is())
                                     {
@@ -1884,6 +1884,7 @@ void ScXMLExport::_ExportAutoStyles()
                                         uno::Reference<container::XEnumeration>xCells = xCellsAccess->createEnumeration();
                                         if (xCells.is())
                                         {
+                                            sal_uInt32 nCount2(0);
                                             while (xCells->hasMoreElements())
                                             {
                                                 uno::Any aCell = xCells->nextElement();
@@ -1897,8 +1898,11 @@ void ScXMLExport::_ExportAutoStyles()
                                                             GetTextParagraphExport()->collectTextAutoStyles(xText, sal_False, sal_False);
                                                     }
                                                 }
+                                                nCount2++;
                                                 GetProgressBarHelper()->Increment();
                                             }
+                                            if(nCount2 > nCount)
+                                                GetProgressBarHelper()->SetReference(GetProgressBarHelper()->GetReference() + nCount2 - nCount);
                                         }
                                     }
                                 }
@@ -2588,7 +2592,7 @@ void ScXMLExport::SetRepeatAttribute (const sal_Int32 nEqualCellCount)
         sal_Int32 nTemp = nEqualCellCount + 1;
         OUString sOUEqualCellCount = OUString::valueOf(nTemp);
         AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, sOUEqualCellCount);
-        GetProgressBarHelper()->Increment(nEqualCellCount - 1);
+        GetProgressBarHelper()->Increment(nEqualCellCount);
     }
 }
 
