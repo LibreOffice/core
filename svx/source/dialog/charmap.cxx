@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hdu $ $Date: 2001-08-15 14:20:51 $
+ *  last change: $Author: hdu $ $Date: 2001-10-31 15:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,13 +133,6 @@ private:
 friend class SvxCharacterMap;
     SfxModalDialog* mpDialog;
 
-    FixedText       aFontText;
-    ListBox         aFontLB;
-    FixedText       aSubsetText;
-    ListBox         aSubsetLB;
-    FixedText       aSymbolText;
-    SvxShowText     aShowChar;
-    FixedText       aCharCodeText;
     SvxShowCharSet  aShowSet;
 //    Edit            aShowText;
     SvxShowText     aShowText;
@@ -147,6 +140,13 @@ friend class SvxCharacterMap;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
     PushButton      aDeleteBtn;
+    FixedText       aFontText;
+    ListBox         aFontLB;
+    FixedText       aSubsetText;
+    ListBox         aSubsetLB;
+    FixedText       aSymbolText;
+    SvxShowText     aShowChar;
+    FixedText       aCharCodeText;
 
     Font            aFont;
     BOOL            bOne;
@@ -998,6 +998,7 @@ IMPL_LINK( SvxCharMapData, SubsetSelectHdl, ListBox *, EMPTYARG )
         sal_Unicode cFirst = pSubset->GetRangeMin();
         aShowSet.SelectCharacter( cFirst );
     }
+    aSubsetLB.SelectEntryPos( nPos );
     return 0;
 }
 
@@ -1154,7 +1155,6 @@ void SubsetMap::InitList()
         *(ppSubSet++) = new Subset( 0x0020, 0x007A, RID_SUBSETSTR_BASIC_LATIN);
         *(ppSubSet++) = new Subset( 0x00A0, 0x00FF, RID_SUBSETSTR_LATIN_1);
         *(ppSubSet++) = new Subset( 0x0100, 0x017F, RID_SUBSETSTR_LATIN_EXTENDED_A);
-
         *(ppSubSet++) = new Subset( 0x0180, 0x024F, RID_SUBSETSTR_LATIN_EXTENDED_B);
         *(ppSubSet++) = new Subset( 0x0250, 0x02AF, RID_SUBSETSTR_IPA_EXTENSIONS);
         *(ppSubSet++) = new Subset( 0x02B0, 0x02FF, RID_SUBSETSTR_SPACING_MODIFIERS);
@@ -1169,7 +1169,6 @@ void SubsetMap::InitList()
     //  *(ppSubSet++) = new Subset( 0x0660, 0x06FF, RID_SUBSETSTR_ARABIC_EXTENDED);
         *(ppSubSet++) = new Subset( 0x0700, 0x074F, RID_SUBSETSTR_SYRIAC);
         *(ppSubSet++) = new Subset( 0x0780, 0x07BF, RID_SUBSETSTR_THAANA);
-
         *(ppSubSet++) = new Subset( 0x0900, 0x097F, RID_SUBSETSTR_DEVANAGARI);
         *(ppSubSet++) = new Subset( 0x0980, 0x09FF, RID_SUBSETSTR_BENGALI);
         *(ppSubSet++) = new Subset( 0x0A00, 0x0A7F, RID_SUBSETSTR_GURMUKHI);
