@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:01:08 $
+ *  last change: $Author: aw $ $Date: 2001-03-14 13:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,6 +678,7 @@ BOOL E3dView::Paste(const SdrModel& rMod, const Point& rPos,
         {
             pDestScene->SetRectsDirty();
             pDestScene->CorrectSceneDimensions();
+            bRetval = TRUE;
         }
     }
     else
