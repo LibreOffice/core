@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globlac.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-03-08 10:45:21 $
+ *  last change: $Author: os $ $Date: 2002-09-02 13:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@
                                         ACC_KEY( polish,        KEY_U, FALSE, TRUE, FALSE ) \
                                         ACC_KEY( russian,       KEY_U, FALSE, TRUE, FALSE ) };
 
-#define AI_STYLE_CATALOG            ACC_CODE( SID_STYLE_CATALOG, KEY_Y, FALSE, TRUE, FALSE )
+#define AI_STYLE_CATALOG            ACC_CODE( SID_STYLE_CATALOG, KEY_F11, FALSE, TRUE, FALSE )
 #define AI_WIN_FULLSCREEN           ACC_CODE( SID_WIN_FULLSCREEN, KEY_J, TRUE, TRUE, FALSE )
 #define AI_DESKTOPMODE              ACC_CODE( SID_DESKTOPMODE, KEY_I, TRUE, TRUE, FALSE )
 #define AI_FOCUSURLBOX              ACC_CODE( SID_FOCUSURLBOX, KEY_O, TRUE, TRUE, FALSE )
@@ -238,7 +238,8 @@
                                     ACC_CODE( SID_UNDO, KEY_BACKSPACE, FALSE, FALSE, TRUE ) \
                                     ACC_CODE( SID_UNDO, KEY_UNDO, FALSE, FALSE, FALSE )
 #define AI_REDO
-#define AI_REPEAT                   ACC_CODE( SID_REPEAT, KEY_REPEAT, FALSE, FALSE, FALSE )
+#define AI_REPEAT                   ACC_CODE( SID_REPEAT, KEY_Y, FALSE, TRUE, FALSE )\
+                                    ACC_CODE( SID_REPEAT, KEY_REPEAT, FALSE, FALSE, FALSE )
 #define AI_DELETE                   ACC_CODE( SID_DELETE, KEY_DELETE, FALSE, FALSE, FALSE )
 
 // Non Product
