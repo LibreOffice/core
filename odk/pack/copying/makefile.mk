@@ -32,6 +32,9 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/Inspector	\
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess	\
     $(DESTDIRJAVAEXAMPLES)$/ToDo	\
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean	\
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean/SimpleBean	\
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean/FontWizard	\
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector   \
     $(DESTDIRBASICEXAMPLES)		 	\
     $(DESTDIRBASICEXAMPLES)$/drawing 	\
@@ -206,6 +209,15 @@ JAVA_WRITERSELECTOR= \
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/makefile.mk \
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/README
 
+JAVA_OFFICEBEAN_SIMPLEBEAN= \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/SimpleBean.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/Makefile
+
+JAVA_OFFICEBEAN_FONTWIZARD= \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/FontWizard$/Wizard.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/FontWizard$/WizardDialog.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/FontWizard$/Makefile
+
 BASIC_EXAMPLES= \
     $(DESTDIRBASICEXAMPLES)$/drawing$/dirtree.txt			\
     $(DESTDIRBASICEXAMPLES)$/drawing$/importexportofasciifiles.sxd 	\
@@ -260,6 +272,8 @@ EXAMPLESLIST= \
     $(JAVA_NOTESACCESS)            \
     $(JAVA_TODO)                   \
     $(JAVA_WRITERSELECTOR)         \
+    $(JAVA_OFFICEBEAN_SIMPLEBEAN)  \
+    $(JAVA_OFFICEBEAN_FONTWIZARD)  \
     $(BASIC_EXAMPLES)              \
     $(OLE_EXAMPLES)                \
     $(OLE_EXAMPLES_DELPHI)                \
@@ -278,8 +292,10 @@ all : 	\
     $(EXAMPLESLIST) \
     $(DESTIDLLIST)  \
     $(DESTDIRBIN)$/applicat.rdb  \
+    $(DESTDIRLIB)$/libofficebean.so  \
     $(DESTDIR)$/settings$/dk.mk \
     $(DESTDIR)$/classes$/unoil.jar \
+    $(DESTDIR)$/classes$/officebean.jar \
     $(DESTDIR)$/odk_overview.html \
     convert_links
 
@@ -317,8 +333,14 @@ $(DESTDIROLEEXAMPLES)$/% : $(PRJ)$/examples$/OLE$/% $(DIRLIST) $(BIN)$/$(UDKNAME
 $(DESTDIR)$/classes$/unoil.jar : $(BINOUT)$/unoil.jar 
     $(GNUCOPY) -p $? $@
 
+$(DESTDIR)$/classes$/officebean.jar : $(OUT)$/class$/officebean.jar 
+    $(GNUCOPY) -p $? $@
+
 $(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb 
     $(GNUCOPY) -p $(BINOUT)$/applicat.rdb $@
+
+$(DESTDIRLIB)$/libofficebean.so : $(OUT)$/lib$/libofficebean.so
+    $(GNUCOPY) -p $? $@
 
 $(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
     +-rm -f $@ >& $(NULLDEV)
