@@ -810,4 +810,8 @@ Dim oFrame as Object
 	End If
 End Sub
 
+&apos;Function to calculate if the year is a leap year
+Function CalIsLeapYear(ByVal iYear as Integer) as Boolean
+        CalIsLeapYear = ((iYear Mod 4 = 0) And ((iYear Mod 100 &lt;&gt; 0) Or (iYear Mod 400 = 0)))
+End Function
 </script:module>
