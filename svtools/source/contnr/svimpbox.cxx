@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-23 11:44:30 $
+ *  last change: $Author: pb $ $Date: 2002-06-12 08:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3291,3 +3291,28 @@ void SvImpLBox::CancelPendingEdit()
         aEditTimer.Stop();
     nFlags &= ~F_START_EDITTIMER;
 }
+
+// -----------------------------------------------------------------------
+
+void SvImpLBox::CallEventListeners( ULONG nEvent, void* pData )
+{
+    VclWindowEvent aEvent( pView, nEvent, pData );
+
+    if ( !maEventListeners.empty() )
+        maEventListeners.Call( &aEvent );
+}
+
+// -----------------------------------------------------------------------
+
+void SvImpLBox::AddEventListener( const Link& rEventListener )
+{
+    maEventListeners.push_back( rEventListener );
+}
+
+// -----------------------------------------------------------------------
+
+void SvImpLBox::RemoveEventListener( const Link& rEventListener )
+{
+    maEventListeners.remove( rEventListener );
+}
+

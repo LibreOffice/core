@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-24 09:48:23 $
+ *  last change: $Author: pb $ $Date: 2002-06-12 08:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,14 +108,14 @@ DBG_NAME(SvTreeListBox);
 
 #define SV_LBOX_DEFAULT_INDENT_PIXEL 20
 
-__EXPORT SvTreeListBox::SvTreeListBox( Window* pParent, WinBits nWinStyle )
+SvTreeListBox::SvTreeListBox( Window* pParent, WinBits nWinStyle )
     : SvLBox(pParent,nWinStyle )
 {
     DBG_CTOR(SvTreeListBox,0);
     InitTreeView( nWinStyle );
 }
 
-__EXPORT SvTreeListBox::SvTreeListBox( Window* pParent , const ResId& rResId )
+SvTreeListBox::SvTreeListBox( Window* pParent , const ResId& rResId )
     : SvLBox( pParent,rResId )
 {
     DBG_CTOR(SvTreeListBox,0);
@@ -153,11 +153,12 @@ void SvTreeListBox::InitTreeView( WinBits nWinStyle )
 }
 
 
-__EXPORT SvTreeListBox::~SvTreeListBox()
+SvTreeListBox::~SvTreeListBox()
 {
     DBG_DTOR(SvTreeListBox,0);
     if( IsInplaceEditingEnabled() )
         Application::RemoveAccel( &aInpEditAcc );
+    pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
     delete pImp;
     delete (Link*)pReserved;
     ClearTabList();
@@ -224,7 +225,7 @@ IMPL_LINK_INLINE_START( SvTreeListBox, InpEdActivateHdl, Accelerator *, pAcceler
 IMPL_LINK_INLINE_END( SvTreeListBox, InpEdActivateHdl, Accelerator *, pAccelerator )
 
 
-void __EXPORT SvTreeListBox::Resize()
+void SvTreeListBox::Resize()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( IsEditingActive() )
@@ -613,7 +614,7 @@ SvButtonState SvTreeListBox::GetCheckButtonState( SvLBoxEntry* pEntry ) const
 }
 
 
-void __EXPORT SvTreeListBox::CheckButtonHdl()
+void SvTreeListBox::CheckButtonHdl()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     aCheckButtonHdl.Call( this );
@@ -631,7 +632,7 @@ void __EXPORT SvTreeListBox::CheckButtonHdl()
 //  Basisklasse SvListEntry
 //
 
-SvLBoxEntry* __EXPORT SvTreeListBox::CloneEntry( SvLBoxEntry* pSource )
+SvLBoxEntry* SvTreeListBox::CloneEntry( SvLBoxEntry* pSource )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     XubString aStr;
@@ -771,7 +772,7 @@ void SvTreeListBox::EnableInplaceEditing( BOOL bOn )
         Application::InsertAccel( &aInpEditAcc );
 }
 
-void __EXPORT SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
+void SvTreeListBox::KeyInput( const KeyEvent& rKEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     // unter OS/2 bekommen wir auch beim Editieren Key-Up/Down
@@ -820,7 +821,7 @@ void SvTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
         InsertEntry( String::CreateFromAscii("<dummy>"), pParent, FALSE, LIST_APPEND );
 }
 
-void __EXPORT SvTreeListBox::GetFocus()
+void SvTreeListBox::GetFocus()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( IsInplaceEditingEnabled() )
@@ -829,7 +830,7 @@ void __EXPORT SvTreeListBox::GetFocus()
     SvLBox::GetFocus();
 }
 
-void __EXPORT SvTreeListBox::LoseFocus()
+void SvTreeListBox::LoseFocus()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( IsInplaceEditingEnabled() )
@@ -838,7 +839,7 @@ void __EXPORT SvTreeListBox::LoseFocus()
     SvLBox::LoseFocus();
 }
 
-void __EXPORT SvTreeListBox::ModelHasCleared()
+void SvTreeListBox::ModelHasCleared()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->pCursor = 0; //sonst Absturz beim Inplace-Editieren im GetFocus
@@ -1060,7 +1061,10 @@ BOOL SvTreeListBox::Select( SvLBoxEntry* pEntry, BOOL bSelect )
         pImp->EntrySelected( pEntry, bSelect );
         pHdlEntry = pEntry;
         if( bSelect )
+        {
             SelectHdl();
+            pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
+        }
         else
             DeselectHdl();
     }
@@ -1093,7 +1097,7 @@ void SvTreeListBox::SelectAll( BOOL bSelect, BOOL bPaint )
         TRUE );     // auch bei SINGLE_SELECTION den Cursor deselektieren
 }
 
-void __EXPORT SvTreeListBox::ModelHasInsertedTree( SvListEntry* pEntry )
+void SvTreeListBox::ModelHasInsertedTree( SvListEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     USHORT nRefDepth = pModel->GetDepth( (SvLBoxEntry*)pEntry );
@@ -1106,14 +1110,14 @@ void __EXPORT SvTreeListBox::ModelHasInsertedTree( SvListEntry* pEntry )
     pImp->TreeInserted( (SvLBoxEntry*)pEntry );
 }
 
-void __EXPORT SvTreeListBox::ModelHasInserted( SvListEntry* pEntry )
+void SvTreeListBox::ModelHasInserted( SvListEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     ImpEntryInserted( (SvLBoxEntry*)pEntry );
     pImp->EntryInserted( (SvLBoxEntry*)pEntry );
 }
 
-void __EXPORT SvTreeListBox::ModelIsMoving(SvListEntry* pSource,
+void SvTreeListBox::ModelIsMoving(SvListEntry* pSource,
                                         SvListEntry* /* pTargetParent */,
                                         ULONG /* nChildPos */ )
 {
@@ -1121,13 +1125,13 @@ void __EXPORT SvTreeListBox::ModelIsMoving(SvListEntry* pSource,
     pImp->MovingEntry( (SvLBoxEntry*)pSource );
 }
 
-void __EXPORT SvTreeListBox::ModelHasMoved( SvListEntry* pSource )
+void SvTreeListBox::ModelHasMoved( SvListEntry* pSource )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->EntryMoved( (SvLBoxEntry*)pSource );
 }
 
-void __EXPORT SvTreeListBox::ModelIsRemoving( SvListEntry* pEntry )
+void SvTreeListBox::ModelIsRemoving( SvListEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if(pEdEntry == pEntry)
@@ -1137,7 +1141,7 @@ void __EXPORT SvTreeListBox::ModelIsRemoving( SvListEntry* pEntry )
     NotifyRemoving( (SvLBoxEntry*)pEntry );
 }
 
-void __EXPORT SvTreeListBox::ModelHasRemoved( SvListEntry* /* pEntry */ )
+void SvTreeListBox::ModelHasRemoved( SvListEntry* /* pEntry */ )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->EntryRemoved();
@@ -1171,7 +1175,7 @@ void SvTreeListBox::SetFont( const Font& rFont )
 }
 
 
-void __EXPORT SvTreeListBox::Paint( const Rectangle& rRect )
+void SvTreeListBox::Paint( const Rectangle& rRect )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     SvLBox::Paint( rRect );
@@ -1180,26 +1184,26 @@ void __EXPORT SvTreeListBox::Paint( const Rectangle& rRect )
     pImp->Paint( rRect );
 }
 
-void __EXPORT SvTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
+void SvTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->MouseButtonDown( rMEvt );
 }
 
-void __EXPORT SvTreeListBox::MouseButtonUp( const MouseEvent& rMEvt )
+void SvTreeListBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->MouseButtonUp( rMEvt );
 }
 
-void __EXPORT SvTreeListBox::MouseMove( const MouseEvent& rMEvt )
+void SvTreeListBox::MouseMove( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->MouseMove( rMEvt );
 }
 
 
-void __EXPORT SvTreeListBox::SetUpdateMode( BOOL bUpdate )
+void SvTreeListBox::SetUpdateMode( BOOL bUpdate )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->SetUpdateMode( bUpdate );
@@ -1267,7 +1271,7 @@ void SvTreeListBox::MakeVisible( SvLBoxEntry* pEntry, BOOL bMoveToTop )
     pImp->MakeVisible( pEntry, bMoveToTop );
 }
 
-void __EXPORT SvTreeListBox::ModelHasEntryInvalidated( SvListEntry* pEntry )
+void SvTreeListBox::ModelHasEntryInvalidated( SvListEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     // die einzelnen Items des Entries reinitialisieren
@@ -2460,6 +2464,16 @@ BOOL SvTreeListBox::IsContextMenuHandlingEnabled( void ) const
     DBG_ASSERT( pImp, "-SvTreeListBox::IsContextMenuHandlingEnabled(): No implementation!" );
 
     return pImp->bContextMenuHandling;
+}
+
+void SvTreeListBox::AddEventListener( const Link& rEventListener )
+{
+    pImp->AddEventListener( rEventListener );
+}
+
+void SvTreeListBox::RemoveEventListener( const Link& rEventListener )
+{
+    pImp->RemoveEventListener( rEventListener );
 }
 
 ::com::sun::star::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
