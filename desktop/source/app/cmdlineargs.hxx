@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2002-07-09 05:21:17 $
+ *  last change: $Author: cd $ $Date: 2002-09-23 12:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,81 +68,101 @@
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
 
 namespace desktop
 {
 
 class CommandLineArgs
 {
-    private:
-        sal_Bool        InterpretCommandLineParameter( const ::rtl::OUString& );
-        void            ParseCommandLine_Impl( const ::vos::OExtCommandLine& );
-        void            ParseCommandLine_String( const ::rtl::OUString& );
-        void            ResetParamValues();
-
-        sal_Bool            m_bMaster;
-        sal_Bool            m_bMinimized;
-        sal_Bool            m_bInvisible;
-        sal_Bool            m_bNoRestore;
-        sal_Bool            m_bBean;
-        sal_Bool            m_bPlugin;
-        sal_Bool            m_bServer;
-        sal_Bool            m_bHeadless;
-        sal_Bool            m_bQuickstart;
-        sal_Bool            m_bOpenList;
-        sal_Bool            m_bPrintList;
-        sal_Bool            m_bPortalConnectString;
-        sal_Bool            m_bAcceptString;
-        sal_Bool            m_bUserDir;
-        sal_Bool            m_bClientDisplay;
-        sal_Bool            m_bTerminateAfterInit;
-        sal_Bool            m_bVersionString;
-        sal_Bool            m_bPrintToList;
-        sal_Bool            m_bPrinterName;
-        sal_Bool            m_bForceOpenList;
-        sal_Bool            m_bForceNewList;
-        sal_Bool            m_bNoLogo;
-
-        ::rtl::OUString     m_aOpenList;
-        ::rtl::OUString     m_aPrintList;
-        ::rtl::OUString     m_aPortalConnectString;
-        ::rtl::OUString     m_aAcceptString;
-        ::rtl::OUString     m_aUserDir;
-        ::rtl::OUString     m_aClientDisplay;
-        ::rtl::OUString     m_aVersionString;
-        ::rtl::OUString     m_aPrintToList;
-        ::rtl::OUString     m_aPrinterName;
-        ::rtl::OUString     m_aForceOpenList;
-        ::rtl::OUString     m_aForceNewList;
-
     public:
+        enum BoolParam  // must be zero based!
+        {
+            CMD_BOOLPARAM_MINIMIZED,
+            CMD_BOOLPARAM_INVISIBLE,
+            CMD_BOOLPARAM_NORESTORE,
+            CMD_BOOLPARAM_BEAN,
+            CMD_BOOLPARAM_PLUGIN,
+            CMD_BOOLPARAM_SERVER,
+            CMD_BOOLPARAM_HEADLESS,
+            CMD_BOOLPARAM_QUICKSTART,
+            CMD_BOOLPARAM_TERMINATEAFTERINIT,
+            CMD_BOOLPARAM_NOLOGO,
+            CMD_BOOLPARAM_MASTER,
+            CMD_BOOLPARAM_COUNT             // must be last element!
+        };
+
+        enum StringParam // must be zero based!
+        {
+            CMD_STRINGPARAM_PORTAL,
+            CMD_STRINGPARAM_ACCEPT,
+            CMD_STRINGPARAM_USERDIR,
+            CMD_STRINGPARAM_CLIENTDISPLAY,
+            CMD_STRINGPARAM_OPENLIST,
+            CMD_STRINGPARAM_FORCEOPENLIST,
+            CMD_STRINGPARAM_FORCENEWLIST,
+            CMD_STRINGPARAM_PRINTLIST,
+            CMD_STRINGPARAM_VERSION,
+            CMD_STRINGPARAM_PRINTTOLIST,
+            CMD_STRINGPARAM_PRINTERNAME,
+            CMD_STRINGPARAM_COUNT           // must be last element!
+        };
+
         CommandLineArgs();
         CommandLineArgs( const ::vos::OExtCommandLine& aExtCmdLine );
         CommandLineArgs( const ::rtl::OUString& aIPCThreadCmdLine );
 
-        sal_Bool        IsMaster(){ return m_bMaster; }
-        sal_Bool        IsMinimized(){ return m_bMinimized; }
-        sal_Bool        IsInvisible(){ return m_bInvisible; }
-        sal_Bool        IsNoRestore(){ return m_bNoRestore; }
-        sal_Bool        IsBean(){ return m_bBean; }
-        sal_Bool        IsPlugin(){ return m_bPlugin; }
-        sal_Bool        IsServer(){ return m_bServer; }
-        sal_Bool        IsHeadless(){ return m_bHeadless; }
-        sal_Bool        IsQuickstart(){ return m_bQuickstart; }
-        sal_Bool        IsTerminateAfterInit() { return m_bTerminateAfterInit; }
-        sal_Bool        IsNoLogo() { return m_bNoLogo; }
+        // generic methods to access parameter
+        sal_Bool                GetBoolParam( BoolParam eParam ) const;
+        void                    SetBoolParam( BoolParam eParam, sal_Bool bNewValue );
 
-        sal_Bool        GetPortalConnectString( ::rtl::OUString& rPara){ rPara = m_aPortalConnectString; return m_bPortalConnectString; }
-        sal_Bool        GetAcceptString( ::rtl::OUString& rPara){ rPara =  m_aAcceptString; return m_bAcceptString; }
-        sal_Bool        GetUserDir( ::rtl::OUString& rPara){ rPara = m_aUserDir; return m_bUserDir; }
-        sal_Bool        GetClientDisplay( ::rtl::OUString& rPara){ rPara = m_aClientDisplay; return m_bClientDisplay; }
-        sal_Bool        GetOpenList( ::rtl::OUString& rPara){ rPara = m_aOpenList; return m_bOpenList; }
-        sal_Bool        GetForceOpenList( ::rtl::OUString& rPara){ rPara = m_aForceOpenList; return m_bForceOpenList; }
-        sal_Bool        GetForceNewList( ::rtl::OUString& rPara){ rPara = m_aForceNewList; return m_bForceNewList; }
-        sal_Bool        GetPrintList( ::rtl::OUString& rPara){ rPara = m_aPrintList; return m_bPrintList; }
-        sal_Bool        GetVersionString( ::rtl::OUString& rPara){ rPara =  m_aVersionString; return m_bVersionString; }
-        sal_Bool        GetPrintToList( ::rtl::OUString& rPara ){ rPara = m_aPrintToList; return m_bPrintToList; }
-        sal_Bool        GetPrinterName( ::rtl::OUString& rPara ){ rPara = m_aPrinterName; return m_bPrinterName; }
+        const rtl::OUString&    GetStringParam( BoolParam eParam ) const;
+        void                    SetStringParam( BoolParam eParam, const rtl::OUString& bNewValue );
+
+        sal_Bool                IsMaster() const;
+        sal_Bool                IsMinimized() const;
+        sal_Bool                IsInvisible() const;
+        sal_Bool                IsNoRestore() const;
+        sal_Bool                IsBean() const;
+        sal_Bool                IsPlugin() const;
+        sal_Bool                IsServer() const;
+        sal_Bool                IsHeadless() const;
+        sal_Bool                IsQuickstart() const;
+        sal_Bool                IsTerminateAfterInit() const;
+        sal_Bool                IsNoLogo() const;
+
+        sal_Bool                GetPortalConnectString( ::rtl::OUString& rPara) const;
+        sal_Bool                GetAcceptString( ::rtl::OUString& rPara) const;
+        sal_Bool                GetUserDir( ::rtl::OUString& rPara) const;
+        sal_Bool                GetClientDisplay( ::rtl::OUString& rPara) const;
+        sal_Bool                GetOpenList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetForceOpenList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetForceNewList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetPrintList( ::rtl::OUString& rPara) const;
+        sal_Bool                GetVersionString( ::rtl::OUString& rPara) const;
+        sal_Bool                GetPrintToList( ::rtl::OUString& rPara ) const;
+        sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;
+
+    private:
+        // no copy and operator=
+        CommandLineArgs( const CommandLineArgs& );
+        operator=( const CommandLineArgs& );
+
+        sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString& );
+        void                    ParseCommandLine_Impl( const ::vos::OExtCommandLine& );
+        void                    ParseCommandLine_String( const ::rtl::OUString& );
+        void                    ResetParamValues();
+
+        void                    AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam );
+        void                    SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue );
+
+        sal_Bool                m_aBoolParams[ CMD_BOOLPARAM_COUNT ];       // Stores boolean parameters
+        rtl::OUString           m_aStrParams[ CMD_STRINGPARAM_COUNT ];      // Stores string parameters
+        sal_Bool                m_aStrSetParams[ CMD_STRINGPARAM_COUNT ];   // Stores if string parameters are provided on cmdline
+        mutable ::osl::Mutex    m_aMutex;
 };
 
 }
