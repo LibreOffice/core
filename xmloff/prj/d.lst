@@ -93,4 +93,9 @@ hedabu: ..\inc\contextid.hxx %_DEST%\inc%_EXT%\xmloff\contextid.hxx
 hedabu: ..\inc\formsimp.hxx %_DEST%\inc%_EXT%\xmloff\formsimp.hxx
 hedabu: ..\inc\VisAreaExport.hxx %_DEST%\inc%_EXT%\xmloff\VisAreaExport.hxx
 hedabu: ..\inc\VisAreaContext.hxx %_DEST%\inc%_EXT%\xmloff\VisAreaContext.hxx
+hedabu: ..\inc\DashStyle.hxx %_DEST%\inc%_EXT%\xmloff\DashStyle.hxx
+hedabu: ..\inc\GradientStyle.hxx %_DEST%\inc%_EXT%\xmloff\GradientStyle.hxx
+hedabu: ..\inc\MarkerStyle.hxx %_DEST%\inc%_EXT%\xmloff\MarkerStyle.hxx
+hedabu: ..\inc\HatchStyle.hxx %_DEST%\inc%_EXT%\xmloff\HatchStyle.hxx
+hedabu: ..\inc\ImageStyle.hxx %_DEST%\inc%_EXT%\xmloff\ImageStyle.hxx
 
