@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:29:24 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 17:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,8 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     };
 
     Text = "Datenquellen verwalten" ;
-    Text [ english ] = "Datasource administration" ;
-    Text [ english_us ] = "Data Source Administration" ;
+    Text [ english ] = "Data source administration" ;
+    Text [ english_us ] = "Data source administration" ;
 
     //.........................................................................
     String STR_PAGETITLE_GENERAL
@@ -631,6 +631,12 @@ TabPage PAGE_GENERAL
         Text[ chinese_traditional ] = "µL™k≈™®˙µ{¶°Æw #lib# ©Œ§w∏g§w∏g∑lß•°CµL™køÔæ‹ ODBC ∏ÍÆ∆∑Ω°C";
         Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
         Text[ arabic ] = "≈„« √‰Â  ⁄–—  Õ„Ì· „ﬂ »… «·»—‰«„Ã #lib#° √Ê √‰Â« „⁄ÿÊ»…. «Œ Ì«— „’«œ— »Ì«‰«  ODBC €Ì— „ Ê›—.";
+    };
+    String STR_NO_ADABASE_DATASOURCES
+    {
+        Text = "Auf Ihrem System wurden keine Adabas-Datenquellen gefunden.";
+        Text [ english ] = "No Adabas data sources have been found on your system.";
+        Text [ english_us ] = "No Adabas data sources have been found on your system.";
     };
 };
 
@@ -1830,6 +1836,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2000/11/09 12:29:24  kz
+ *  Merge SRC612: 09.11.00 - 13:28:47 (NoBranch)
+ *
  *  Revision 1.11  2000/11/02 15:20:15  fs
  *  #79380# +STR_ERR_EMPTY_DSN_NAME
  *

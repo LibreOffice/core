@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:11:15 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 17:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@
 #define STR_NAMEINVALID                     13
 #define STR_DATASOURCEDELETED               14
 #define STR_COULDNOTLOAD_ODBCLIB            15
+#define STR_NO_ADABASE_DATASOURCES          16
 
 //========================================================================
 // menu item ids
@@ -158,6 +159,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/10/24 12:11:15  fs
+ *  functionality added: browsing for system data sources (ODBC/Adabas/dbase/text)
+ *
  *  Revision 1.5  2000/10/20 09:53:17  fs
  *  handling for the SuppresVersionColumns property of a data source
  *
