@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:57:12 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ SdrGrafObj::SdrGrafObj():
     pGraphicLink    ( NULL )
 {
     pGraphic = new GraphicObject;
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), 20000 );
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
     bCopyToPoolOnAfterRead = FALSE;
@@ -255,7 +255,7 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect):
     pGraphicLink    ( NULL )
 {
     pGraphic = new GraphicObject( rGrf );
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), 20000 );
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
     bCopyToPoolOnAfterRead = FALSE;
@@ -271,7 +271,7 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf ):
     pGraphicLink    ( NULL )
 {
     pGraphic = new GraphicObject( rGrf );
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), 20000 );
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
     bCopyToPoolOnAfterRead = FALSE;
@@ -293,7 +293,7 @@ SdrGrafObj::~SdrGrafObj()
 void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
 {
     *pGraphic = rGrfObj;
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), 20000 );
     pGraphic->SetUserData();
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     SetChanged();
