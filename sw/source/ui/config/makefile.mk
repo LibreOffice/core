@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:17:53 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:55:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=config
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -75,22 +73,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        barcfg.cxx \
-        caption.cxx \
-        cfgitems.cxx \
-        dbconfig.cxx \
-        fontcfg.cxx \
-        modcfg.cxx \
-        optload.cxx \
-        optpage.cxx \
-        prtopt.cxx \
-        uinums.cxx \
-        usrpref.cxx \
-        viewopt.cxx \
-        swlinguconfig.cxx
-
-SRCFILES =	\
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
         optdlg.src \
         optload.src \
         redlopt.src
