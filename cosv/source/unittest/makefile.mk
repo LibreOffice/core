@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 11:13:01 $
+#   last change: $Author: rt $ $Date: 2004-07-12 15:48:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,8 +92,12 @@ APP1TARGET=	$(TARGET)
 APP1STACK=	1000000
 APP1OBJS=   $(OBJ)$/ut_main.obj
 
-.IF "$(COMEX)"!="10"
-APP1STDLIBS= $(STATIC_LIBS) msvcirt.lib
+.IF "$(GUI)"=="WNT"
+APP1STDLIBS= $(LIBSTLPORT)
+.ELSE
+.IF "$(OS)"=="MACOSX"
+APP1STDLIBS= $(LIBSTLPORT)
+.ENDIF
 .ENDIF
 
 
