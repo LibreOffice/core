@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-03 11:35:59 $
+#   last change: $Author: rt $ $Date: 2004-08-23 09:29:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=cctrl
+LIBTARGET=NO
 
 PROJECTPCH4DLL=TRUE
 PROJECTPCH=ui_pch
@@ -84,6 +85,12 @@ SLOFILES =	\
         $(SLO)$/tbinsert.obj	\
         $(SLO)$/cbuttonw.obj	\
         $(SLO)$/editfield.obj
+
+LIB1TARGET=$(SLB)$/$(TARGET).lib
+LIB1OBJFILES= \
+        $(SLO)$/popmenu.obj		\
+        $(SLO)$/tbinsert.obj	\
+        $(SLO)$/cbuttonw.obj
 
 # --- Tagets -------------------------------------------------------
 
