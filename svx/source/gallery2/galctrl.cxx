@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:36:55 $
+ *  last change: $Author: ka $ $Date: 2002-06-20 09:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,10 @@ void GalleryIconView::Command( const CommandEvent& rCEvt )
     ValueSet::Command( rCEvt );
 
     if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
-        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this, &rCEvt.GetMousePosPixel() );
+    {
+        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this,
+            ( rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : NULL ) );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -465,7 +468,7 @@ BOOL GalleryListView::SeekRow( long nRow )
 String GalleryListView::GetCellText(long _nRow, USHORT nColumnId) const
 {
     String sRet;
-    if( mpTheme && ( _nRow < mpTheme->GetObjectCount() ) )
+    if( mpTheme && ( _nRow < static_cast< long >( mpTheme->GetObjectCount() ) ) )
     {
         SgaObject* pObj = mpTheme->AcquireObject( _nRow );
 
@@ -557,8 +560,15 @@ void GalleryListView::Command( const CommandEvent& rCEvt )
 {
     BrowseBox::Command( rCEvt );
 
-    if( ( GetRowAtYPosPixel( rCEvt.GetMousePosPixel().Y() ) != BROWSER_ENDOFSELECTION ) && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) )
-        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this, &rCEvt.GetMousePosPixel() );
+    if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    {
+        const Point* pPos = NULL;
+
+        if( rCEvt.IsMouseEvent() && ( GetRowAtYPosPixel( rCEvt.GetMousePosPixel().Y() ) != BROWSER_ENDOFSELECTION ) )
+            pPos = &rCEvt.GetMousePosPixel();
+
+        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this, pPos );
+    }
 }
 
 // ------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 14:57:27 $
+ *  last change: $Author: ka $ $Date: 2002-06-20 09:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,7 +587,14 @@ IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, p )
         aMenu.EnableItem( MN_PROPERTIES, ::std::find( aExecVector.begin(), aExecVector.end(), MN_PROPERTIES ) != aExecVector.end() );
         aMenu.SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
         aMenu.RemoveDisabledEntries();
-        aMenu.Execute( this, GetPointerPosPixel() );
+
+        const Rectangle aThemesRect( mpThemes->GetPosPixel(), mpThemes->GetOutputSizePixel() );
+        Point           aSelPos( mpThemes->GetBoundingRectangle( mpThemes->GetSelectEntryPos() ).Center() );
+
+        aSelPos.X() = Max( Min( aSelPos.X(), aThemesRect.Right() ), aThemesRect.Left() );
+        aSelPos.Y() = Max( Min( aSelPos.Y(), aThemesRect.Bottom() ), aThemesRect.Top() );
+
+        aMenu.Execute( this, aSelPos );
     }
 
     return 0L;

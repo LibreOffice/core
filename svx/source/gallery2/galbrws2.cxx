@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 11:29:25 $
+ *  last change: $Author: ka $ $Date: 2002-06-20 09:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,8 +473,9 @@ sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper& rTarget, const ExecuteD
 
     if( mpCurTheme )
     {
-        const ULONG     nItemId = ImplGetSelectedItemId( &rEvt.maPosPixel );
-        const ULONG     nInsertPos = ( nItemId ? ( nItemId - 1 ) : LIST_APPEND );
+        Point       aSelPos;
+        const ULONG nItemId = ImplGetSelectedItemId( &rEvt.maPosPixel, aSelPos );
+        const ULONG nInsertPos = ( nItemId ? ( nItemId - 1 ) : LIST_APPEND );
 
         if( mpCurTheme->IsDragging() )
             mpCurTheme->ChangeObjectPos( mpCurTheme->GetDragPos(), nInsertPos );
@@ -491,7 +492,8 @@ void GalleryBrowser2::StartDrag( Window* pWindow, const Point* pDragPoint )
 {
     if( mpCurTheme )
     {
-        const ULONG nItemId = ImplGetSelectedItemId( pDragPoint );
+        Point       aSelPos;
+        const ULONG nItemId = ImplGetSelectedItemId( pDragPoint, aSelPos );
 
         if( nItemId )
             mpCurTheme->StartDrag( this, nItemId - 1 );
@@ -509,7 +511,8 @@ void GalleryBrowser2::TogglePreview( Window* pWindow, const Point* pPreviewPoint
 
 void GalleryBrowser2::ShowContextMenu( Window* pWindow, const Point* pContextPoint )
 {
-    const ULONG nItemId = ImplGetSelectedItemId( pContextPoint );
+    Point       aSelPos;
+    const ULONG nItemId = ImplGetSelectedItemId( pContextPoint, aSelPos );
 
     if( mpCurTheme && nItemId && ( nItemId <= mpCurTheme->GetObjectCount() ) )
     {
@@ -520,7 +523,7 @@ void GalleryBrowser2::ShowContextMenu( Window* pWindow, const Point* pContextPoi
         GalleryThemePopup aMenu( mpCurTheme, nItemId - 1, GALLERYBROWSERMODE_PREVIEW == GetMode() );
         rBindings.LEAVEREGISTRATIONS();
         aMenu.SetSelectHdl( LINK( this, GalleryBrowser2, MenuSelectHdl ) );
-        aMenu.Execute( this, GetPointerPosPixel() );
+        aMenu.Execute( this, aSelPos  );
     }
 }
 
@@ -528,7 +531,8 @@ void GalleryBrowser2::ShowContextMenu( Window* pWindow, const Point* pContextPoi
 
 BOOL GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 {
-    const ULONG nItemId = ImplGetSelectedItemId( NULL );
+    Point       aSelPos;
+    const ULONG nItemId = ImplGetSelectedItemId( NULL, aSelPos );
     BOOL        bRet = static_cast< GalleryBrowser* >( GetParent() )->KeyInput( rKEvt, pWindow );
 
     if( !bRet && !maViewBox.HasFocus() && nItemId && mpCurTheme )
@@ -689,7 +693,8 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
             case( GALLERYBROWSERMODE_PREVIEW ):
             {
                 Graphic     aGraphic;
-                const ULONG nItemId = ImplGetSelectedItemId( NULL );
+                Point       aSelPos;
+                const ULONG nItemId = ImplGetSelectedItemId( NULL, aSelPos );
 
                 if( nItemId )
                 {
@@ -744,7 +749,8 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
 {
     if( mpCurTheme )
     {
-        const ULONG nItemId = ImplGetSelectedItemId( NULL );
+        Point       aSelPos;
+        const ULONG nItemId = ImplGetSelectedItemId( NULL, aSelPos );
 
         if( nItemId )
         {
@@ -829,7 +835,8 @@ void GalleryBrowser2::ImplUpdateInfoBar()
 
     if( mpCurTheme )
     {
-        const ULONG nItemId = ImplGetSelectedItemId( NULL );
+        Point       aSelPos;
+        const ULONG nItemId = ImplGetSelectedItemId( NULL, aSelPos );
 
         if( nItemId )
         {
@@ -855,15 +862,28 @@ void GalleryBrowser2::ImplUpdateInfoBar()
 
 // -----------------------------------------------------------------------------
 
-ULONG GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos )
+ULONG GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelPos )
 {
+    const Size                  aOutputSizePixel( GetOutputSizePixel() );
     const GalleryBrowserMode    eValidMode = ( ( GALLERYBROWSERMODE_PREVIEW == GetMode() ) ? meLastMode : GetMode() );
     ULONG                       nRet = 0;
 
     if( GALLERYBROWSERMODE_ICON == eValidMode )
+    {
         nRet = pSelPos ? mpIconView->GetItemId( *pSelPos ) : mpIconView->GetSelectItemId();
+        rSelPos = pSelPos ? GetPointerPosPixel() : mpIconView->GetItemRect( (USHORT) nRet ).Center();
+    }
     else
+    {
         nRet = ( pSelPos ? mpListView->GetRowAtYPosPixel( pSelPos->Y() ) : mpListView->FirstSelectedRow() ) + 1;
+        rSelPos = pSelPos ? GetPointerPosPixel() : mpListView->GetFieldRectPixel( (USHORT) nRet, 1 ).Center();
+    }
+
+    if( !pSelPos && ( GALLERYBROWSERMODE_PREVIEW == GetMode() ) )
+        rSelPos = Point( aOutputSizePixel.Width() >> 1, aOutputSizePixel.Height() >> 1 );
+
+    rSelPos.X() = Max( Min( rSelPos.X(), aOutputSizePixel.Width() - 1L ), 0L );
+    rSelPos.Y() = Max( Min( rSelPos.Y(), aOutputSizePixel.Height() - 1L ), 0L );
 
     return nRet;
 }
@@ -883,7 +903,8 @@ void GalleryBrowser2::ImplSelectItemId( ULONG nItemId )
 
 void GalleryBrowser2::ImplExecute( USHORT nId )
 {
-    const ULONG nItemId = ImplGetSelectedItemId( NULL );
+    Point       aSelPos;
+    const ULONG nItemId = ImplGetSelectedItemId( NULL, aSelPos );
 
     if( mpCurTheme && nItemId )
     {
