@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-10 05:29:45 $
+ *  last change: $Author: mba $ $Date: 2001-07-10 11:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ void Desktop::Main()
 //      Reference < XComponent > xWrapper( ::utl::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.office.OfficeWrapper" ) ), UNO_QUERY );
 
         // Post user event to startup first application component window
-        Application::PostUserEvent( LINK( this, Desktop, OpenClients ) );
+        Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "start call SfxApplicationClass::Main()" );
         SfxApplicationClass::Main();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "end call SfxApplicationClass::Main()" );
@@ -269,9 +269,9 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
     OFF_APP()->SystemSettingsChanging( rSettings, pFrame );
 }
 
-IMPL_LINK( Desktop, OpenClients, void*, pvoid )
+IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 {
-    SFX_APP()->OpenClients();
+    SfxApplicationClass::OpenClients();
     CloseStartupScreen();
 
     return 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-06 15:51:53 $
+ *  last change: $Author: mba $ $Date: 2001-07-10 11:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ public:
     virtual void        Main();
     virtual void        SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
 
-    DECL_LINK(          OpenClients, void* );
+    DECL_LINK(          OpenClients_Impl, void* );
 
 private:
     void                ParseCommandLine();
