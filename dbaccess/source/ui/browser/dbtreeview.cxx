@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-01 11:51:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 21:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,17 @@ namespace dbaui
 {
 // .........................................................................
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 
 //========================================================================
 // class DBTreeView
 //========================================================================
-DBTreeView::DBTreeView( Window* pParent, WinBits nBits)
+DBTreeView::DBTreeView( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, WinBits nBits)
                     :   Window( pParent, nBits )
                     , m_pTreeListBox(NULL)
 {
-    m_pTreeListBox = new DBTreeListBox(this,WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
+    m_pTreeListBox = new DBTreeListBox(this, _rxORB ,WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
     m_pTreeListBox->EnableCheckButton(NULL);
     m_pTreeListBox->SetDragDropMode( 0 );
     m_pTreeListBox->EnableInplaceEditing( sal_False );

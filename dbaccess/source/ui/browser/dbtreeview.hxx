@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 10:45:28 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 21:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <vcl/window.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 class SvTreeListBox;
 namespace dbaui
 {
@@ -84,7 +88,9 @@ namespace dbaui
         virtual void Resize();
     public:
 
-        DBTreeView( Window* pParent, WinBits nBits );
+        DBTreeView( Window* pParent,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+                WinBits nBits );
         ~DBTreeView();
 
         /** sets a handler which is called when an list box entry is to be expanded.
