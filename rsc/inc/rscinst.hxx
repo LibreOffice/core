@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinst.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:50:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ class RscTop;
 class RscInstCopy;
 
 /******************* F u n c t i o n   F o r w a r d s *******************/
-HASHID HashId( const char * );        // Gibt zu einem String eine HashId
-const char * GetHashString( HASHID ); // Gibt zu einer HASHID einen String
+Atom HashId( const char * );          // Gibt zu einem String eine HashId
+const char * GetHashString( Atom ); // Gibt zu einer Atom einen String
                                       // NULL, wenn kein Eintrag vorhanden
 
 /******************* S t r u c t s ***************************************/
@@ -103,52 +103,52 @@ public:
 
                 // Listen Methoden
     ERRTYPE     SetElement( const RscId & rName, RscInstCopy & rInst );
-    ERRTYPE     SetPosEle( USHORT nPos, RscInstCopy & rInst );
-    ERRTYPE     SetPosRscId( USHORT nPos, const RscId & rId );
-    SUBINFO_STRUCT  GetInfoEle( USHORT nPos );
-    USHORT      GetCount();
+    ERRTYPE     SetPosEle( sal_uInt32 nPos, RscInstCopy & rInst );
+    ERRTYPE     SetPosRscId( sal_uInt32 nPos, const RscId & rId );
+    SUBINFO_STRUCT  GetInfoEle( sal_uInt32 nPos );
+    sal_uInt32      GetCount();
     RscInst     GetElement( RscTop * pClass, const RscId & rName );
-    RscInst     GetPosEle( USHORT nPos );
-    ERRTYPE     MovePosEle( USHORT nDestPos, USHORT nSourcePos );
+    RscInst     GetPosEle( sal_uInt32 nPos );
+    ERRTYPE     MovePosEle( sal_uInt32 nDestPos, sal_uInt32 nSourcePos );
     ERRTYPE     DeleteElement( RscTop * pClass, const RscId & rName );
-    ERRTYPE     DeletePosEle( USHORT nPos );
+    ERRTYPE     DeletePosEle( sal_uInt32 nPos );
 
-    ERRTYPE     SetVar( HASHID nVarName, RscInstCopy & rInst );
-    ERRTYPE     SetConst( HASHID nVarName, HASHID nConstId );
-    ERRTYPE     SetBool( HASHID nVarName, BOOL );
+    ERRTYPE     SetVar( Atom nVarName, RscInstCopy & rInst );
+    ERRTYPE     SetConst( Atom nVarName, Atom nConstId );
+    ERRTYPE     SetBool( Atom nVarName, BOOL );
 
     // Hack fuer X, Y, Width, Height
     static ERRTYPE SetCorrectValues( RSCINST & rInst, RSCINST & rVarInst,
-                                    INT32 lValue, USHORT nTupelIdx );
-    ERRTYPE     SetNumber( HASHID nVarName, INT32 );
+                                    INT32 lValue, sal_uInt32 nTupelIdx );
+    ERRTYPE     SetNumber( Atom nVarName, INT32 );
 
-    ERRTYPE     SetString( HASHID nVarName, const char * );
-    ERRTYPE     SetConst( HASHID nConstId );
+    ERRTYPE     SetString( Atom nVarName, const char * );
+    ERRTYPE     SetConst( Atom nConstId );
     ERRTYPE     SetBool( BOOL );
     ERRTYPE     SetNumber( INT32 );
     ERRTYPE     SetString( const char * );
     ERRTYPE     SetRef( const RscId & rRscId );
-    ERRTYPE     SetDefault( HASHID nVarName );
+    ERRTYPE     SetDefault( Atom nVarName );
 
-    RscInst     GetVar( HASHID nVarName );
-    HASHID      GetConst( HASHID nVarName = HASH_NONAME );
-    USHORT      GetConstPos( HASHID nVarName = HASH_NONAME );
-    BOOL        GetBool( HASHID nVarName = HASH_NONAME );
+    RscInst     GetVar( Atom nVarName );
+    Atom        GetConst( Atom nVarName = InvalidAtom );
+    sal_uInt32      GetConstPos( Atom nVarName = InvalidAtom );
+    BOOL        GetBool( Atom nVarName = InvalidAtom );
 
     // Hack fuer X, Y, Width, Height
     static INT32 GetCorrectValues( RSCINST & rInst, RSCINST & rVarInst,
-                                    USHORT nTupelIdx );
-    INT32       GetNumber( HASHID nVarName = HASH_NONAME );
+                                    sal_uInt32 nTupelIdx );
+    INT32       GetNumber( Atom nVarName = InvalidAtom );
 
-    const char *GetString( HASHID nVarName = HASH_NONAME );
+    const char *GetString( Atom nVarName = InvalidAtom );
     RscId       GetRef();
-    BOOL        IsDefault( HASHID nVarName );
+    BOOL        IsDefault( Atom nVarName );
     BOOL        IsConsistent( RscInconsList * pList );
 
-    HASHID      GetClassEnum( HASHID nVarName, USHORT nPos );
-    HASHID      GetClassEnum( USHORT nPos );
+    Atom        GetClassEnum( Atom nVarName, sal_uInt32 nPos );
+    Atom        GetClassEnum( sal_uInt32 nPos );
     RscTop *    GetClassType(){ return aInst.pClass; };
-    HASHID      GetClassName();
+    Atom        GetClassName();
     void        EnumClassVariables( void * pData, VarEnumCallbackProc ) const;
     ERRTYPE     WriteRc( RscWriteRc & aMem );
 };
@@ -180,13 +180,13 @@ public:
                 ~RscDataBase();
 
 //  void        SetLanguage( LanguageType nTyp ) { nLangType = nTyp; }
-    void        SetLanguage( HASHID nId );
-    HASHID      GetLanguage() const;
+    void        SetLanguage( Atom nId );
+    Atom        GetLanguage() const;
 
     ByteString  GetPath() const;
     void        SetPath( const ByteString & rPath );
                 // Konvertiert einen Namen in einen Typ
-    RscTop*     GetClassType( HASHID nClassName );
+    RscTop*     GetClassType( Atom nClassName );
                 // Instanz einer Klasse erzeugen
     BOOL        MakeConsistent( RscInconsList * pList );
                 // Array mit Dateinamen
