@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:25:55 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 11:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "¨ü«OÅ@ªºªÅ¥Õ¦r¤¸(~P)";
         Text[ arabic ] = "ÃÍÑİ ãÓÇİÉ ãÍãíÉ";
         Text[ greek ] = "×áñáêôŞñå~ò êåíşí ìå ğñïóôáóßá";
-        Text[ korean ] = "°£°İ º¸È£(~P)";
+        Text[ korean ] = "°ø¹é º¸È£(~P)";
         Text[ turkish ] = "Korunan boşluklar";
         Text[ language_user1 ] = " ";
     };
@@ -1564,7 +1564,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_traditional ] = "¦C¦L¶Â¦â(~K)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ÈÇáæä ÃÓæÏ";
         Text[ greek ] = "Åêôığùóç óå ìáıñï";
-        Text[ korean ] = "Èæ»ö ÀÎ¼â(~K)";
+        Text[ korean ] = "Èæ»ö ÀÎ¼â";
         Text[ turkish ] = "Siyah/beyaz yazdır";
         Text[ language_user1 ] = " ";
     };
@@ -2778,7 +2778,7 @@ TabPage TP_OPTSRCVIEW
         Text[ chinese_traditional ] = "~SGML";
         Text[ arabic ] = "SGML~";
         Text[ greek ] = "SGML";
-        Text[ korean ] = "~SGML";
+        Text[ korean ] = "SGML";
         Text[ turkish ] = "~SGML";
         Text[ language_user1 ] = " ";
     };
@@ -2811,7 +2811,7 @@ TabPage TP_OPTSRCVIEW
         Text[ chinese_traditional ] = "ª`¸Ñ(~C)";
         Text[ arabic ] = "ÊÚáíŞ";
         Text[ greek ] = "Ó÷üëéï";
-        Text[ korean ] = "¸Ş¸ğ(~C)";
+        Text[ korean ] = "ÁÖ";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
     };
