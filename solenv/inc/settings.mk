@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.96 $
+#   $Revision: 1.97 $
 #
-#   last change: $Author: hjs $ $Date: 2002-02-04 17:04:56 $
+#   last change: $Author: hjs $ $Date: 2002-02-13 16:58:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1499,4 +1499,9 @@ $(COMP8TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP8TYP
 .INCLUDE : $(MISC)$/$(COMP9TYPELIST).mk
 $(COMP9TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP9TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
+
+# workaround for strange dmake bug:
+# if the previous block was a rule or a target, "\#" isn't recognized
+# as an escaped "#". if it was an assignment, escaping works...
+some_unique_variable_name:=1
 

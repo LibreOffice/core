@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.99 $
+#   $Revision: 1.100 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-31 12:45:38 $
+#   last change: $Author: hjs $ $Date: 2002-02-13 16:58:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2981,4 +2981,9 @@ $(SUBDIRS) .PHONY :
 #.ENDIF
 .ENDIF			# "$(mk_tmp)$(BSCLIENT)"!=""
 .ENDIF			# "$(SUBDIRS)"!=""
+
+# workaround for strange dmake bug:
+# if the previous block was a rule or a target, "\#" isn't recognized
+# as an escaped "#". if it was an assignment, escaping works...
+some_unique_variable_name:=1
 

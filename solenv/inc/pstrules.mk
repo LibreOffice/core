@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-21 17:13:21 $
+#   last change: $Author: hjs $ $Date: 2002-02-13 16:58:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -273,3 +273,23 @@ $(UNOUCROUT)$/%.hdl : $(UNOUCRDEP)
     +cppumaker $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) -T{$(subst,$/,. $(subst,$(UNOUCROUT)$/, $(@:db)))}  $(UNOUCRRDB)
 
 
+.IF "$(TESTDIR)"!=""
+
+# workaround for strange dmake bug:
+# if the previous block was a rule or a target, "\#" isn't recognized
+# as an escaped "#". if it was an assignment, escaping works...
+some_unique_variable_name:=1
+
+.IF "$(OS)" == "WNT"
+REGEXP:="s/^[\#].*$$//"
+.ELSE
+REGEXP:='s/^[\#].*$$//'
+.ENDIF
+
+$(MISC)$/%.exp : sce$/%.sce
+    @+-$(RM) $@ >& $(NULLDEV)
+    @+-$(RM) $(@:d)$(@:b).tst >& $(NULLDEV)
+    +$(TYPE) $< | sed $(REGEXP) | sed "s/^/test_/" > $(@:d)$(@:b).tst
+    +$(TYPE) $(@:d)$(@:b).tst | sed "/test_./ w $@"
+
+.ENDIF			# "$(TESTDIR)"!=""

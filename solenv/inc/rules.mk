@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-08 11:58:56 $
+#   last change: $Author: hjs $ $Date: 2002-02-13 16:58:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -553,7 +553,6 @@ $(MISC)$/%.dprc :
     @+echo LAZY_DEPS=were_used_to_generate >> $@
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
-.IF "$(MAKEFILERC)"==""
 $(MISC)$/%.dpc : $(CFILES) $(CXXFILES) $(RCFILES) $(UNOIDLTARGETS) $(SLOFILES) $(OBJFILES) $(DEPOBJFILES)
     @echo ------------------------------
     @echo Making: $@
@@ -573,11 +572,6 @@ $(MISC)$/%.dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
     +-$(TYPE) $(SRS)$/$(PWD:f).*.dpr >> $@
 .ELSE
     @+echo "#" > $@
-.ENDIF
-.ELSE		# MAKEFILERC == ""
-$/.dpc : 
-    @echo ------------------------------
-    @echo Ignoring: $@
 .ENDIF
 
 $(MISC)$/%.dpz :
