@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:35:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ private:
 
 public:
     SfxPSStringProperty_Impl( UINT32 nIdP, const String& aStr ) :
-        aString(aStr), SfxPSProperty_Impl( nIdP, VT_LPSTR ), bIsUniCode(FALSE)
+        SfxPSProperty_Impl( nIdP, VT_LPSTR ), aString(aStr), bIsUniCode(FALSE)
     {
         nEncoding = RTL_TEXTENCODING_UTF8;
     }
@@ -322,7 +322,7 @@ private:
 
   public:
     SfxPSUINT32Property_Impl( UINT32 nIdP, UINT32 aIntP ) :
-        aInt( aIntP ), SfxPSProperty_Impl( nIdP, VT_I4 ) {}
+        SfxPSProperty_Impl( nIdP, VT_I4 ), aInt( aIntP ) {}
 
     virtual ULONG   Save( SvStream& rStream );
     virtual ULONG   Len();
@@ -352,7 +352,7 @@ private:
 
 public:
     SfxPSDateTimeProperty_Impl( UINT32 nIdP, const DateTime& rDateTime ) :
-        aDateTime( rDateTime ), SfxPSProperty_Impl( nIdP, VT_FILETIME ) {}
+        SfxPSProperty_Impl( nIdP, VT_FILETIME ), aDateTime( rDateTime ) {}
     SfxPSDateTimeProperty_Impl( UINT32 nIdP ) :
         SfxPSProperty_Impl( nIdP, VT_FILETIME ) {};
 
@@ -922,7 +922,9 @@ BOOL SfxDocumentInfo::Load( SvStream& rStream )
     return bOK;
 }
 
+#ifndef GCC
 #pragma optimize ( "", off )
+#endif
 
 ULONG SfxDocumentInfo::LoadPropertySet( SvStorage* pStorage )
 {
@@ -932,7 +934,7 @@ ULONG SfxDocumentInfo::LoadPropertySet( SvStorage* pStorage )
         return ERRCODE_IO_ACCESSDENIED;
     aStrPropSet->SetBufferSize( STREAM_BUFFER_SIZE );
     SfxPS_Impl* pPS = new SfxPS_Impl;
-    ULONG nErr = pPS->Load( *aStrPropSet );
+    pPS->Load( *aStrPropSet );
 
     UINT32 aStrArr[] =  { PID_TITLE, PID_SUBJECT, PID_KEYWORDS, PID_TEMPLATE, PID_COMMENTS, 0 };
     UINT32 aLens[] =    { SFXDOCINFO_TITLELENMAX, SFXDOCINFO_THEMELENMAX,
@@ -1008,7 +1010,9 @@ ULONG SfxDocumentInfo::LoadPropertySet( SvStorage* pStorage )
     return ERRCODE_NONE;
 }
 
+#ifndef GCC
 #pragma optimize ( "", on )
+#endif
 
 //-------------------------------------------------------------------------
 BOOL SfxDocumentInfo::SavePropertySet( SvStorage *pStorage) const
@@ -1457,24 +1461,24 @@ String SfxDocumentInfo::AdjustTextLen_Impl( const String& rText, USHORT nMax )
 //-------------------------------------------------------------------------
 
 SfxDocumentInfo::SfxDocumentInfo() :
+    eFileCharSet(gsl_getSystemTextEncoding()),
     bPasswd(FALSE),
     bQueryTemplate(FALSE),
     bTemplateConfig(FALSE),
-    eFileCharSet(gsl_getSystemTextEncoding()),
-    nUserDataSize(0),
-    pUserData(0),
-    lTime(0),
-    nDocNo(1),
+    bSaveVersionOnClose( FALSE ),
     aChanged( TIMESTAMP_INVALID_DATETIME ),
     aPrinted( TIMESTAMP_INVALID_DATETIME ),
-    bSaveVersionOnClose( FALSE )
+    nUserDataSize(0),
+    nDocNo(1),
+    pUserData(0),
+    lTime(0)
 {
     pImp = new SfxDocumentInfo_Impl;
 
     bReadOnly = FALSE;
     bReloadEnabled = FALSE;
     nReloadSecs = 60;
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();
     bPortableGraphics = TRUE;
     SvtSaveOptions aSaveOptions;
     bSaveGraphicsCompressed = aSaveOptions.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsCompressed;
