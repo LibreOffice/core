@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:25:14 $
+ *  last change: $Author: er $ $Date: 2001-05-29 15:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -41135,9 +41135,9 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text = "Rechnet einen Wert anhand eines Eintrags der convert.ini Tabelle um." ;
-            Text [ english ] = "Converts a value according to an entry of the convert.ini table." ;
-            Text[ english_us ] = "Converts a value according to an entry in the convert.ini table.";
+            Text = "Rechnet einen Wert anhand einer Umrechnungstabelle aus der Konfiguration um." ;
+            Text [ english ] = "Converts a value according to a conversion table defined in the configuration." ;
+            Text[ english_us ] = "Converts a value according to a conversion table defined in the configuration.";
             Text[ portuguese ] = "Converte um valor a partir de uma entrada da tabela convert.ini.";
             Text[ russian ] = "Преобразует значение на основании элементов таблицы convert.ini.";
             Text[ dutch ] = "Converteert een waarde aan de hand van een item in de tabel convert.ini.";
@@ -41256,7 +41256,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Einheit, aus der umgerechnet wird, GroЯ-/Kleinschreibung ist relevant." ;
             Text [ english ] = "Unit to convert from, case sensitive." ;
-            Text[ english_us ] = "Unit into which something is converted, case-sensitive.";
+            Text[ english_us ] = "Unit from which something is converted, case-sensitive.";
             Text[ portuguese ] = "Unidade de conversгo; relevвncia de Maiъsculas/Minъsculas.";
             Text[ russian ] = "Единица, из которой осуществляется преобразование, с учетом регистра.";
             Text[ dutch ] = "Eenheid van waaruit wordt omgerekend, hoofd-/kleine letters zijn relevant.";
