@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:31:18 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 15:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2832,14 +2832,21 @@ sal_Int16 ScXMLExport::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsS
         uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
         if (xNumberFormats.is())
         {
-            uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
-            uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)));
-            aIsStandardFormat >>= bIsStandard;
-            uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TYPE)));
-            sal_Int16 nNumberFormat;
-            if ( aNumberFormat >>= nNumberFormat )
+            try
             {
-                return nNumberFormat;
+                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
+                uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)));
+                aIsStandardFormat >>= bIsStandard;
+                uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TYPE)));
+                sal_Int16 nNumberFormat;
+                if ( aNumberFormat >>= nNumberFormat )
+                {
+                    return nNumberFormat;
+                }
+            }
+            catch ( uno::Exception& )
+            {
+                DBG_ERROR("Numberformat not found");
             }
         }
     }
