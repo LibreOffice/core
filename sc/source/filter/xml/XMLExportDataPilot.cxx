@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:13:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
         SCSIZE nEntries(0);
         SCSIZE j;
 
-        for ( j = 0; (j < nQueryEntryCount) && bHasEntries; j++)
+        for ( j = 0; (j < nQueryEntryCount) && bHasEntries; ++j)
         {
             ScQueryEntry aEntry = aQueryParam.GetEntry(j);
             if (aEntry.bDoQuery)
@@ -275,7 +275,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                     else
                         bOr = sal_True;
                 }
-                nEntries++;
+                ++nEntries;
             }
             else
                 bHasEntries = sal_False;
@@ -312,7 +312,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
             else if (bOr && !bAnd)
             {
                 SvXMLElementExport aElemOr(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, sal_True, sal_True);
-                for (j = 0; j < nQueryEntryCount; j++)
+                for (sal_Int32 j = 0; j < nQueryEntryCount; ++j)
                 {
                     WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.bRegExp);
                 }
@@ -320,7 +320,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
             else if (bAnd && !bOr)
             {
                 SvXMLElementExport aElemAnd(rExport, XML_NAMESPACE_TABLE, XML_FILTER_AND, sal_True, sal_True);
-                for (j = 0; j < nQueryEntryCount; j++)
+                for (sal_Int32 j = 0; j < nQueryEntryCount; ++j)
                 {
                     WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.bRegExp);
                 }
@@ -328,10 +328,10 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
             else
             {
                 SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, sal_True, sal_True);
-                ScQueryEntry aPrevFilterField = aQueryParam.GetEntry(0);
+                ScQueryEntry aPrevFilterField(aQueryParam.GetEntry(0));
                 ScQueryConnect aConnection = aQueryParam.GetEntry(1).eConnect;
                 sal_Bool bOpenAndElement;
-                rtl::OUString aName = rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND));
+                rtl::OUString aName(rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND)));
                 if (aConnection == SC_AND)
                 {
                     rExport.StartElement( aName, sal_True );
@@ -339,7 +339,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 }
                 else
                     bOpenAndElement = sal_False;
-                for (j = 1; j < nQueryEntryCount; j++)
+                for (sal_Int32 j = 1; j < nQueryEntryCount; ++j)
                 {
                     if (aConnection != aQueryParam.GetEntry(j).eConnect)
                     {
@@ -816,12 +816,12 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
             {
                 SvXMLElementExport aElemDPs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLES, sal_True, sal_True);
                 rExport.CheckAttrList();
-                for (sal_Int16 i = 0; i < nDPCount; i++)
+                for (sal_Int16 i = 0; i < nDPCount; ++i)
                 {
                     ScDPSaveData* pDPSave = (*pDPs)[i]->GetSaveData();
                     if (pDPSave)
                     {
-                        ScRange aOutRange = (*pDPs)[i]->GetOutRange();
+                        ScRange aOutRange((*pDPs)[i]->GetOutRange());
                         rtl::OUString sTargetRangeAddress;
                         ScXMLConverter::GetStringFromRange( sTargetRangeAddress, aOutRange, pDoc );
                         ScDocAttrIterator aAttrItr(pDoc, aOutRange.aStart.Tab(),
@@ -836,7 +836,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                             ScMergeFlagAttr& rItem = (ScMergeFlagAttr&)pAttr->GetItem(ATTR_MERGE_FLAG);
                             if (rItem.HasButton())
                             {
-                                for (SCROW nButtonRow = nRow1; nButtonRow <= nRow2; nButtonRow++)
+                                for (SCROW nButtonRow = nRow1; nButtonRow <= nRow2; ++nButtonRow)
                                 {
                                     ScAddress aButtonAddr(nCol, nButtonRow, aOutRange.aStart.Tab());
                                     ScXMLConverter::GetStringFromAddress(
