@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 13:50:44 $
+ *  last change: $Author: jp $ $Date: 2001-03-14 10:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,8 @@ void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
     pChpPlc->AppendFkpEntry( pStrm->Tell(), pArr - aArr, aArr );
 
     RndStdIds eAn = pFlyFmt->GetAttrSet().GetAnchor( FALSE ).GetAnchorId();
-    if( eAn == FLY_AT_CNTNT || eAn == FLY_PAGE )
+    if( ( eAn == FLY_AT_CNTNT && (bWrtWW8 || !bIsInTable )) ||
+        eAn == FLY_PAGE )
     {
         WriteChar( (char)0x0d ); // umgebenden Rahmen mit CR abschliessen
 
@@ -347,7 +348,7 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
 
 
     BOOL bWrtWW8 = rWrt.bWrtWW8;
-    UINT16 nHdrLen = bWrtWW8 ? 0x3A : 0x44;
+    UINT16 nHdrLen = bWrtWW8 ? 0x44 : 0x3A;
 
     BYTE aArr[ sizeof( WW8_PIC_SHADOW ) ];
     memset( aArr, 0, nHdrLen );
@@ -621,11 +622,14 @@ void SwWW8WrGrf::Write()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.3 2001-03-09 13:50:44 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.4 2001-03-14 10:22:09 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/03/09 13:50:44  jp
+      use instead of SvData the GetGDIMetaFile from the SvInPlaceObject
+
       Revision 1.2  2000/10/20 13:43:47  jp
       use correct INetURL-Decode enum
 
