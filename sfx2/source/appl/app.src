@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:42:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1082,80 +1082,12 @@ ToolBox RID_ENVTOOLBOX
     };
 };
 
- // Image-Listen ----------------------------------------------------------
-
-#define IMAGE_ID_LIST\
-    IdList = {\
-        SID_OPENURL;\
-        SID_BROWSE_BACKWARD;\
-        SID_BROWSE_FORWARD;\
-        SID_BROWSE_STOP;\
-        SID_BROWSE_HOME;\
-        SID_RELOAD;\
-        SID_EDITDOC;\
-        SID_SAVEDOC;\
-        SID_CREATELINK;\
-        SID_PRINTDOCDIRECT;\
-        SID_CUT;\
-        SID_COPY;\
-        SID_UNDO;\
-        SID_REDO;\
-        SID_EXPLORER;\
-        SID_NAVIGATOR;\
-        SID_STYLE_DESIGNER;\
-        SID_AUTOBROWSE;\
-        SID_EXPLORER_CREATEFOLDER;\
-        SID_EXPLORER_CREATEBOOKMARK;\
-        SID_EXPLORER_CREATEWORKPLACE;\
-        SID_EXPLORER_CREATELINK;\
-        SID_EXPLORER_CREATEMAILINTRAY;\
-        SID_EXPLORER_CREATENEWSSERVER;\
-        SID_EXPLORER_CREATEFTPSERVER;\
-        SID_EXPLORER_CREATEDATABASE;\
-        SID_PROPERTIES;\
-        SID_EXPLORER_MAKEROOT;\
-        SID_EXPLORER_MAKEBMKDIR;\
-        SID_EXPLORER_PREVLEVEL;\
-        SID_EXPLORER_IMPORTBOOKMARKS;\
-        SID_EDIT_FRAMESET;\
-        SID_SPLIT_HORIZONTAL;\
-        SID_SPLIT_VERTICAL;\
-        SID_SPLIT_PARENT_HORIZONTAL;\
-        SID_SPLIT_PARENT_VERTICAL;\
-        SID_MODIFY_FRAME;\
-        SID_EXPLORER_SEARCHORIGINAL;\
-        SID_EXPLORER_DETAILS;\
-        SID_EXPLORER_ICONS;\
-    };\
-    IdCount = {\
-        40;\
-    };
-
-#ifndef IMAGE_STDBTN_COLOR
-#define IMAGE_STDBTN_COLOR Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
-#endif
-
-ImageList RID_DEFAULTIMAGELIST_SC
-{
-    Prefix = "sc" ;
-    MaskColor = IMAGE_STDBTN_COLOR ;
-    IMAGE_ID_LIST
-};
-
-ImageList RID_DEFAULTIMAGELIST_LC
-{
-    Prefix = "lc" ;
-    MaskColor = IMAGE_STDBTN_COLOR ;
-    IMAGE_ID_LIST
-};
-
 String RID_SPECIALCONFIG_ERROR
 {
     Text [ x-comment ] = " " ;
     Text [ de ] = "In der Spezialkonfiguration wurde ein Fehler festgestellt.\nBitte wenden Sie sich an Ihren Administrator!" ;
     Text [ en-US ] = "An error has occurred in the special configuration.\nPlease contact your administrator." ;
 };
-
 
 String STR_MEMINFO_HEADER
 {
