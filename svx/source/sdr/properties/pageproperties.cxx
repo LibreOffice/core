@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pageproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:51:17 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace sdr
         {
             if(!mpEmptyItemSet)
             {
-                ((PageProperties*)this)->mpEmptyItemSet = &(((PageProperties*)this)->CreateObjectSpecificItemSet(*GetSdrObject().GetItemPool()));
+                ((PageProperties*)this)->mpEmptyItemSet = &(((PageProperties*)this)->CreateObjectSpecificItemSet(*GetSdrObject().GetObjectItemPool()));
             }
 
             DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");
