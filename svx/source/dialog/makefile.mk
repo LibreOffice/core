@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ka $ $Date: 2000-11-16 16:36:22 $
+#   last change: $Author: pb $ $Date: 2000-11-24 11:07:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -218,10 +218,10 @@ SRC1FILES =  \
         fontwork.src \
         grfpage.src \
         hdft.src \
-    hyperdlg.src \
-    hlmarkwn.src\
+        hyperdlg.src \
+        hlmarkwn.src\
         hyphen.src \
-    iconcdlg.src \
+        iconcdlg.src \
         imapdlg.src \
         impgrf.src \
         langtab.src \
@@ -244,7 +244,8 @@ SRC1FILES =  \
         tp3dattr.src \
         zoom.src	\
         dlgctrl.src \
-        grfflt.src 
+        grfflt.src \
+        langbox.src
 
 SRS2NAME=drawdlgs
 SRC2FILES =  \
@@ -347,7 +348,7 @@ SLOFILES=\
         $(SLO)$/transfrm.obj \
         $(SLO)$/worient.obj    \
         $(SLO)$/zoom.obj	 \
-        $(SLO)$/grfflt.obj	
+        $(SLO)$/grfflt.obj
 
 EXCEPTIONSFILES=\
         $(SLO)$/_bmpmask.obj	\
