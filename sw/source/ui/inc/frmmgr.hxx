@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-08-12 13:42:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ public:
     Beschreibung: Validierung von Metriken
  --------------------------------------------------------------------*/
 
+// OD 18.09.2003 #i18732# - extend by new member <bFollowTextFlow>
 struct SwFrmValid
 {
     RndStdIds           eArea;
@@ -213,6 +214,8 @@ struct SwFrmValid
     SwRelationOrient    eVRel;
     BOOL                bAuto;
     BOOL                bMirror;
+    // OD 18.09.2003 #i18732#
+    bool                bFollowTextFlow;
 
     SwTwips nHPos;
     SwTwips nMaxHPos;
