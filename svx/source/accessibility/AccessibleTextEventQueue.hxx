@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextEventQueue.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:55:58 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,8 @@ namespace accessibility
         */
         template < typename Functor > void ForEach( Functor& rFunctor ) const
         {
-            ::std::for_each( maEventQueue.begin(), maEventQueue.end(), rFunctor );
+            // #109864# Make sure results are put back into rFunctor
+            rFunctor = ::std::for_each( maEventQueue.begin(), maEventQueue.end(), rFunctor );
         }
 
         /// Query whether queue is empty
