@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphf.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 20:25:27 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ PushButton RID_SCBTN_HFEDIT
     Text[ chinese_traditional ] = "½s¿è(~E)...";
     Text[ arabic ] = "ÊÍÑíÑ...";
     Text[ greek ] = "Åðåîåñãáóßá...";
-    Text[ korean ] = "ÆíÁý..";
+    Text[ korean ] = "ÆíÁý.(~E).";
     Text[ turkish ] = "~Düzenle...";
     Text[ language_user1 ] = " ";
 };
