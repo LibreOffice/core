@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-23 14:49:56 $
+ *  last change: $Author: tl $ $Date: 2001-09-14 11:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,40 @@ static LangCheckState & GetLangCheckState()
     return aState;
 }
 
+
+static void ShowLanguageErrors()
+{
+    // display message boxes for languages not available for
+    // spellchecking or hyphenation
+    LangCheckState &rLCS = GetLangCheckState();
+    sal_uInt16 nCount = rLCS.GetCount();
+    for (sal_uInt16 i = 0;  i < nCount;  ++i)
+    {
+        sal_Int16 nLang = (sal_Int16) rLCS.GetLanguage( i );
+        sal_uInt16 nVal = rLCS.GetState( i );
+        sal_uInt16 nTmpSpell = nVal & 0x00FF;
+        sal_uInt16 nTmpHyph  = (nVal >> 8) & 0x00FF;
+
+        if (SVX_LANG_MISSING_DO_WARN == nTmpSpell)
+        {
+            String aErr( ::GetLanguageString( nLang ) );
+            ErrorHandler::HandleError(
+                *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
+            nTmpSpell = SVX_LANG_MISSING;
+        }
+        if (SVX_LANG_MISSING_DO_WARN == nTmpHyph)
+        {
+            String aErr( ::GetLanguageString( nLang ) );
+            ErrorHandler::HandleError(
+                *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
+            nTmpHyph = SVX_LANG_MISSING;
+        }
+
+        rLCS.SetState( i, (nTmpHyph << 8) | nTmpSpell );
+    }
+
+}
+
 /*--------------------------------------------------------------------
  *  Beschreibung: Ctor, die Pruefreihenfolge wird festgelegt
  *
@@ -342,6 +376,9 @@ sal_Bool SvxSpellWrapper::SpellMore()
 
 void SvxSpellWrapper::SpellEnd()
 {   // Bereich ist abgeschlossen, ggf. Aufraeumen
+
+    // display error for last language not found
+    ShowLanguageErrors();
 }
 
 // -----------------------------------------------------------------------
@@ -654,35 +691,7 @@ Reference< XDictionary1 >  SvxSpellWrapper::GetAllRightDic() const
 
 sal_Bool SvxSpellWrapper::FindSpellError()
 {
-    // display message boxes for languages not available for
-    // spellchecking or hyphenation
-    LangCheckState &rLCS = GetLangCheckState();
-    sal_uInt16 nCount = rLCS.GetCount();
-    for (sal_uInt16 i = 0;  i < nCount;  ++i)
-    {
-        sal_Int16 nLang = (sal_Int16) rLCS.GetLanguage( i );
-        sal_uInt16 nVal = rLCS.GetState( i );
-        sal_uInt16 nTmpSpell = nVal & 0x00FF;
-        sal_uInt16 nTmpHyph  = (nVal >> 8) & 0x00FF;
-
-        if (SVX_LANG_MISSING_DO_WARN == nTmpSpell)
-        {
-            String aErr( ::GetLanguageString( nLang ) );
-            ErrorHandler::HandleError(
-                *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
-            nTmpSpell = SVX_LANG_MISSING;
-        }
-        if (SVX_LANG_MISSING_DO_WARN == nTmpHyph)
-        {
-            String aErr( ::GetLanguageString( nLang ) );
-            ErrorHandler::HandleError(
-                *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
-            nTmpHyph = SVX_LANG_MISSING;
-        }
-
-        rLCS.SetState( i, (nTmpHyph << 8) | nTmpSpell );
-    }
-
+    ShowLanguageErrors();
 
      Reference< XInterface >    xRef;
 
