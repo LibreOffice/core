@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-08 15:54:52 $
+ *  last change: $Author: jbu $ $Date: 2001-05-18 15:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 
 #ifndef _UNO_DISPATCHER_H_
 #include <uno/dispatcher.h>
+#endif
+
+#ifndef _RTL_UNLOAD_H_
+#include <rtl/unload.h>
 #endif
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -164,12 +168,14 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
     @param fptr function pointer for instanciating the object
     @param rImplementationName implementation name of service
     @param rServiceNames supported services
+    @param pModCount             for future extension (library unloading concept).
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >
 SAL_CALL createSingleComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames )
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
+    rtl_ModuleCount * pModCount = 0 )
     SAL_THROW( () );
 
 /**
@@ -181,39 +187,41 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SA
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager );
 
 /**
- * Create a single service factory.<BR>
- * Note: The function pointer ComponentInstantiation points to a function throws Exception.
- *
- * @param rServiceManager       the service manager used by the implementation.
- * @param rImplementationName   the implementation name. An empty string is possible.
- * @param ComponentInstantiation the function pointer to create an object.
- * @param rServiceNames         the service supported by the implementation.
- * @return a factory that support the interfaces XServiceProvider, XServiceInfo
- *          XSingleServiceFactory and XComponent.
- *
- * @see createOneInstanceFactory
+  Create a single service factory.<BR>
+  Note: The function pointer ComponentInstantiation points to a function throws Exception.
+
+  @param rServiceManager        the service manager used by the implementation.
+  @param rImplementationName    the implementation name. An empty string is possible.
+  @param ComponentInstantiation the function pointer to create an object.
+  @param rServiceNames          the service supported by the implementation.
+  @param pModCount             for future extension (library unloading concept).
+  @return a factory that support the interfaces XServiceProvider, XServiceInfo
+             XSingleServiceFactory and XComponent.
+
+  @see createOneInstanceFactory
  */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
 createSingleFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames )
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames,
+    rtl_ModuleCount * pModCount = 0  )
     SAL_THROW( () );
 
 /**
- * Create a factory, that wrappes another one.<BR>
- * This means the methods of the interfaces XServiceProvider, XServiceInfo and
- * XSingleServiceFactory are forwarded.
- * <B>It is not possible to put a factory into two service managers!<BR>
- * The XComponent interface is not supported!</B>
- *
- * @param rServiceManager       the service manager used by the implementation.
- * @param xSingleServiceFactory the wrapped service factory.
- * @return a factory that support the interfaces XServiceProvider, XServiceInfo
- *          XSingleServiceFactory.
- *
- * @see createSingleFactory
+  Create a factory, that wrappes another one.<BR>
+  This means the methods of the interfaces XServiceProvider, XServiceInfo and
+  XSingleServiceFactory are forwarded.
+  <B>It is not possible to put a factory into two service managers!<BR>
+  The XComponent interface is not supported!</B>
+
+  @param rServiceManager        the service manager used by the implementation.
+  @param xSingleServiceFactory  the wrapped service factory.
+  @return a factory that support the interfaces XServiceProvider, XServiceInfo
+             XSingleServiceFactory.
+
+  @see createSingleFactory
  */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
 createFactoryProxy(
@@ -222,38 +230,39 @@ createFactoryProxy(
     SAL_THROW( () );
 
 /**
- * Create a single service factory which hold the instance created. If the
- * "XSingleServiceFactory::createFactoryWithArguments" method is called with arguments
- * new objects are created.
- * Note: The function pointer ComponentInstantiation points to a function throws Exception.
- *
- * @param rServiceManager       the service manager used by the implementation.
- * @param rImplementationName   the implementation name. An empty string is possible.
- * @param ComponentInstantiation the function pointer to create an object.
- * @param rServiceNames         the service supported by the implementation.
- * @return a factory that support the interfaces XServiceProvider, XServiceInfo
- *          XSingleServiceFactory and XComponent.
- *
- * @see createSingleFactory
+  Create a single service factory which hold the instance created. If the
+  "XSingleServiceFactory::createFactoryWithArguments" method is called with arguments
+  new objects are created.
+  Note: The function pointer ComponentInstantiation points to a function throws Exception.
+
+  @param rServiceManager        the service manager used by the implementation.
+  @param rImplementationName    the implementation name. An empty string is possible.
+  @param ComponentInstantiation the function pointer to create an object.
+  @param rServiceNames          the service supported by the implementation.
+  @param pModCount             for future extension (library unloading concept).
+  @return a factory that support the interfaces XServiceProvider, XServiceInfo
+             XSingleServiceFactory and XComponent.
+
+  @see createSingleFactory
  */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
 createOneInstanceFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rComponentName,
     ComponentInstantiation pCreateFunction,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames )
+    const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames,
+    rtl_ModuleCount * pModCount = 0  )
     SAL_THROW( () );
 
 /**
- * Create a single service factory.<BR>
- * Note: The function pointer ComponentInstantiation points to a function throws Exception.
- *
- * @param rServiceManager       the service manager used by the implementation.
- * @param rImplementationName   the implementation name. An empty string is possible.
- * @param ComponentInstantiation the function pointer to create an object.
- * @param rImplementationKey    the registry key of the implementation section.
- * @return a factory that support the interfaces XServiceProvider, XServiceInfo
- *          XSingleServiceFactory and XComponent.
+  Create a single service factory.<BR>
+  Note: The function pointer ComponentInstantiation points to a function throws Exception.
+
+  @param rServiceManager        the service manager used by the implementation.
+  @param rImplementationName    the implementation name. An empty string is possible.
+  @param rImplementationKey the registry key of the implementation section.
+  @return a factory that support the interfaces XServiceProvider, XServiceInfo
+             XSingleServiceFactory and XComponent.
  */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createSingleRegistryFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
@@ -262,19 +271,18 @@ createOneInstanceFactory(
     SAL_THROW( () );
 
 /**
- * Create a single service factory which hold the instance created. If the
- * "XSingleServiceFactory::createFactoryWithArguments" method is called with arguments
- * new objects are created.
- * Note: The function pointer ComponentInstantiation points to a function throws Exception.
- *
- * @param rServiceManager       the service manager used by the implementation.
- * @param rImplementationName   the implementation name. An empty string is possible.
- * @param ComponentInstantiation the function pointer to create an object.
- * @param rImplementationKey    the registry key of the implementation section.
- * @return a factory that support the interfaces XServiceProvider, XServiceInfo
- *          XSingleServiceFactory and XComponent.
- *
- * @see createSingleRegistryFactory
+  Create a single service factory which hold the instance created. If the
+  "XSingleServiceFactory::createFactoryWithArguments" method is called with arguments
+  new objects are created.
+  Note: The function pointer ComponentInstantiation points to a function throws Exception.
+
+  @param rServiceManager        the service manager used by the implementation.
+  @param rImplementationName    the implementation name. An empty string is possible.
+  @param rImplementationKey the registry key of the implementation section.
+  @return a factory that support the interfaces XServiceProvider, XServiceInfo
+             XSingleServiceFactory and XComponent.
+
+  @see createSingleRegistryFactory
  */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL createOneInstanceRegistryFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
@@ -285,4 +293,3 @@ createOneInstanceFactory(
 }
 
 #endif
-
