@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:22:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@
 #endif
 #include "strmname.h"
 #include "unomodel.hxx"
+#include "ViewClipboard.hxx"
 
 #include <tools/stream.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -319,58 +320,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() && ISA( View ) )
         {
-            USHORT  nInsertPgCnt, nInsertPos = pDoc->GetSdPageCount( PK_STANDARD ) * 2 + 1;
-            USHORT  nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
-            BOOL    bMergeMasterPages = !pOwnData->HasSourceDoc( pDoc );
-
-            for( USHORT nPage = 0; nPage < nPgCnt; nPage++ )
-            {
-                SdPage* pPage = pDoc->GetSdPage( nPage, PK_STANDARD );
-
-                if( pPage->IsSelected() )
-                    nInsertPos = nPage * 2 + 3;
-            }
-
-            if( pOwnData->HasPageBookmarks() )
-            {
-                const List&         rBookmarkList = pOwnData->GetPageBookmarks();
-                const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-                const BOOL          bWait = pWin && pWin->IsWait();
-
-                if( bWait )
-                    pWin->LeaveWait();
-
-                nInsertPgCnt = (USHORT) rBookmarkList.Count();
-                pDoc->InsertBookmarkAsPage( const_cast< List* >( &rBookmarkList ), NULL, FALSE, FALSE, nInsertPos,
-                                            pOwnData == SD_MOD()->pTransferDrag,
-                                            pOwnData->GetPageDocShell(), TRUE, bMergeMasterPages, FALSE );
-
-                if( bWait )
-                    pWin->EnterWait();
-            }
-            else
-            {
-                SvEmbeddedObject*   pObj = pOwnData->GetDocShell();
-                DrawDocShell*       pDataDocSh = (DrawDocShell*) pObj;
-                SdDrawDocument*     pDataDoc = pDataDocSh->GetDoc();
-
-                if( pDataDoc && pDataDoc->GetSdPageCount( PK_STANDARD ) )
-                {
-                    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-                    const BOOL          bWait = pWin && pWin->IsWait();
-
-                    if( bWait )
-                        pWin->LeaveWait();
-
-                    nInsertPgCnt = pDataDoc->GetSdPageCount( PK_STANDARD );
-                    pDoc->InsertBookmarkAsPage( NULL, NULL, FALSE, FALSE, nInsertPos,
-                                                pOwnData == SD_MOD()->pTransferDrag,
-                                                pDataDocSh, TRUE, bMergeMasterPages, FALSE );
-
-                    if( bWait )
-                        pWin->EnterWait();
-                }
-            }
+            mpClipboard->HandlePageDrop (*pOwnData);
         }
         else if( pSourceView )
         {
