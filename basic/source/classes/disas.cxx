@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,18 +416,19 @@ BOOL SbiDisas::DisasLine( String& rText )
     if( eOp == _STMNT && (short) nOp1 != nLine )
     {
         // Zeile raussuchen
+        String aSource = rImg.aOUSource;
         USHORT n = 0, l = nLine = nOp1;
         while( --l ) {
-            n = rImg.aSource.SearchAscii( "\n", n );
+            n = aSource.SearchAscii( "\n", n );
             if( n == STRING_NOTFOUND ) break;
             else n++;
         }
         // Stelle anzeigen
         if( n != STRING_NOTFOUND )
         {
-            USHORT n2 = rImg.aSource.SearchAscii( "\n", n );
-            if( n2 == STRING_NOTFOUND ) n2 = rImg.aSource.Len() - n;
-            String s( rImg.aSource.Copy( n, n2 - n + 1 ) );
+            USHORT n2 = aSource.SearchAscii( "\n", n );
+            if( n2 == STRING_NOTFOUND ) n2 = aSource.Len() - n;
+            String s( aSource.Copy( n, n2 - n + 1 ) );
             BOOL bDone;
             do {
                 bDone = TRUE;
