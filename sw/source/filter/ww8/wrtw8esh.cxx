@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:42:09 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,9 @@
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
 #endif
+#ifndef SW_WRITERWORDGLUE
+#include "writerwordglue.hxx"
+#endif
 #ifndef _WRTWW8_HXX
 #include "wrtww8.hxx"
 #endif
@@ -267,8 +270,9 @@
 #include "fields.hxx"
 #endif
 
-using namespace ::com::sun::star;
+using namespace com::sun::star;
 using namespace sw::util;
+using namespace sw::types;
 //#110185# get a part fix for this type of element
 bool SwWW8Writer::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
 {
@@ -396,7 +400,7 @@ void SwWW8Writer::DoComboBox(const rtl::OUString &rName, const rtl::OUString &rS
     };
     pDataStrm->Write( aComboData9, sizeof(aComboData9) );
 
-    sal_uInt16 nLen = rName.getLength();
+    sal_uInt16 nLen = msword_cast<sal_uInt16>(rName.getLength());
     *pDataStrm << nLen;
     WriteString16(*pDataStrm, rName, true);
 
@@ -417,7 +421,7 @@ void SwWW8Writer::DoComboBox(const rtl::OUString &rName, const rtl::OUString &rS
         for (sal_uInt32 i = 0; i < nNoStrings; ++i)
         {
             const rtl::OUString &rItem = rListItems[i];
-            sal_uInt16 nStrLen = rItem.getLength();
+            sal_uInt16 nStrLen = msword_cast<sal_uInt16>(rItem.getLength());
             *pDataStrm << nStrLen;
             WriteString16(*pDataStrm, rItem, false);
         }
@@ -495,7 +499,7 @@ void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
 
     uno::Any aTmp = xPropSet->getPropertyValue(C2U("Name"));
     const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
-    sal_uInt16 nLen = pStr ? pStr->getLength() : 0;
+    sal_uInt16 nLen = pStr ? msword_cast<sal_uInt16>(pStr->getLength()) : 0;
     *pDataStrm << nLen;
     if (pStr)
         WriteString16(*pDataStrm, String(*pStr), true);
@@ -1074,6 +1078,11 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
                     OutEEField(*rHt.pAttr);
                     continue;
                 }
+                else if (nWhich == EE_FEATURE_TAB)
+                {
+                    rWrt.WriteChar(0x9);
+                    continue;
+                }
                 nSlotId = pSrcPool->GetSlotId(nWhich);
 
                 if (nSlotId && nWhich != nSlotId)
@@ -1111,8 +1120,13 @@ bool WW8_SdrAttrIter::IsTxtAttr(xub_StrLen nSwPos)
         const EECharAttrib& rHt = aTxtAtrArr[ i ];
         if (nSwPos >= rHt.nStart && nSwPos < rHt.nEnd)
         {
-            if (rHt.pAttr->Which() == EE_FEATURE_FIELD)
+            if (
+                 (rHt.pAttr->Which() == EE_FEATURE_FIELD) ||
+                 (rHt.pAttr->Which() == EE_FEATURE_TAB)
+               )
+            {
                 return true;
+            }
         }
     }
     return false;
@@ -1376,12 +1390,17 @@ INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
     EscherPropertyContainer aPropOpt;
 
     UINT32 nFlags = ESCHER_BlipFlagDefault;
-    SwNodeIndex aIdx( *rFmt.GetCntnt().GetCntntIdx(), 1 );
-    SwGrfNode& rGrfNd = *aIdx.GetNode().GetGrfNode();
-    if( rGrfNd.IsLinkedFile() )
+
+    SwNoTxtNode *pNd = GetNoTxtNodeFromSwFrmFmt(rFmt);
+    SwGrfNode *pGrfNd = pNd ? pNd->GetGrfNode() : 0;
+    ASSERT(pGrfNd, "No SwGrfNode ?, suspicious");
+    if (!pGrfNd)
+        return nBorderThick;
+
+    if (pGrfNd->IsLinkedFile())
     {
         String sURL;
-        rGrfNd.GetFileFilterNms( &sURL, 0 );
+        pGrfNd->GetFileFilterNms( &sURL, 0 );
 
         WW8Bytes aBuf;
         SwWW8Writer::InsAsString16( aBuf, sURL );
@@ -1397,9 +1416,9 @@ INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
     }
     else
     {
-        rGrfNd.SwapIn(true);
+        pGrfNd->SwapIn(true);
 
-        Graphic         aGraphic( rGrfNd.GetGrf() );
+        Graphic         aGraphic(pGrfNd->GetGrf());
         GraphicObject   aGraphicObject( aGraphic );
         ByteString      aUniqueId = aGraphicObject.GetUniqueID();
 
@@ -1431,7 +1450,7 @@ INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
 
     aPropOpt.AddOpt( ESCHER_Prop_pibFlags, nFlags );
     nBorderThick = WriteFlyFrameAttr(rFmt,mso_sptPictureFrame,aPropOpt);
-    WriteGrfAttr( rGrfNd, aPropOpt );
+    WriteGrfAttr(*pGrfNd, aPropOpt);
 
     aPropOpt.Commit( GetStream() );
 
@@ -1751,6 +1770,62 @@ INT32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
                 DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetUpper() ) );
         rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistBottom,
                 DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetLower() ) );
+    }
+
+    if (rFmt.GetSurround().IsContour())
+    {
+        if (const SwNoTxtNode *pNd = GetNoTxtNodeFromSwFrmFmt(rFmt))
+        {
+            const PolyPolygon *pPolyPoly = pNd->HasContour();
+            if (pPolyPoly && pPolyPoly->Count())
+            {
+                Polygon aPoly(PolygonFromPolyPolygon(*pPolyPoly));
+                const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
+                Fraction aMapPolyX(ww::nWrap100Percent, rOrigSize.Width());
+                Fraction aMapPolyY(ww::nWrap100Percent, rOrigSize.Height());
+                aPoly.Scale(aMapPolyX, aMapPolyY);
+
+                /*
+                 a) stretch right bound by 15twips
+                 b) shrink bottom bound to where it would have been in word
+                 c) Move it to the left by 15twips
+
+                 See the import for details
+                */
+                const Size &rSize = pNd->GetTwipSize();
+                Fraction aMoveHack(ww::nWrap100Percent, rSize.Width());
+                aMoveHack *= Fraction(15, 1);
+                long nMove(aMoveHack);
+
+                Fraction aHackX(ww::nWrap100Percent + nMove,
+                        ww::nWrap100Percent);
+                Fraction aHackY(ww::nWrap100Percent - nMove,
+                        ww::nWrap100Percent);
+                aPoly.Scale(aHackX, aHackY);
+
+                aPoly.Move(-nMove, 0);
+
+                SvMemoryStream aPolyDump;
+                aPolyDump.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+
+                sal_uInt16 nLen = aPoly.GetSize();
+                aPolyDump << nLen;
+                aPolyDump << nLen;
+                aPolyDump << sal_uInt16(8);
+                for (sal_uInt16 nI = 0; nI < nLen; ++nI)
+                {
+                    aPolyDump << sal_uInt32(aPoly[nI].X());
+                    aPolyDump << sal_uInt32(aPoly[nI].Y());
+                }
+
+                sal_uInt16 nArrLen = msword_cast<sal_uInt16>(aPolyDump.Tell());
+                void *pArr = const_cast<void *>(aPolyDump.GetData());
+                //PropOpt wants to own the buffer
+                aPolyDump.ObjectOwnsMemory(false);
+                rPropOpt.AddOpt(DFF_Prop_pWrapPolygonVertices, false,
+                    nArrLen, static_cast<BYTE *>(pArr), nArrLen);
+            }
+        }
     }
 
     return nLineWidth;
