@@ -2,9 +2,9 @@
  *
  *  $RCSfile: renderer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:52:01 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,19 +105,25 @@ namespace cppcanvas
 
             @param nStartIndex
             The index of the first action to be rendered (the indices
-            correspond to the action indices of the originating
-            GDIMetaFile).
+            correspond roughly to the action indices of the
+            originating GDIMetaFile. Note, although, that certain
+            actions, e.g. text, accounts for more than one index: a
+            text produces as many addressable indices as it has
+            characters).
 
             @param nEndIndex
             The index of the first action _not_ painted anymore,
             i.e. the action after the last action rendered (the
-            indices correspond to the action indices of the
-            originating GDIMetaFile).
+            indices correspond roughly to the action indices of the
+            originating GDIMetaFile. Note, although, that certain
+            actions, e.g. text, accounts for more than one index: a
+            text produces as many addressable indices as it has
+            characters).
 
             @return whether the rendering finished successfully.
          */
-        virtual bool drawSubset( int    nStartIndex,
-                                 int    nEndIndex ) const = 0;
+        virtual bool drawSubset( sal_Int32  nStartIndex,
+                                 sal_Int32  nEndIndex ) const = 0;
 
         /** Parameters for the Renderer
          */
