@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:12:16 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1338,6 +1338,34 @@ bool FuPoor::cancel()
     }
 
     return false;
+}
+
+// #i33136#
+bool FuPoor::doConstructOrthogonal() const
+{
+    return (
+        SID_DRAW_XLINE == nSlotId ||
+        SID_DRAW_CIRCLEARC == nSlotId ||
+        SID_DRAW_SQUARE == nSlotId ||
+        SID_DRAW_SQUARE_NOFILL == nSlotId ||
+        SID_DRAW_SQUARE_ROUND == nSlotId ||
+        SID_DRAW_SQUARE_ROUND_NOFILL == nSlotId ||
+        SID_DRAW_CIRCLE == nSlotId ||
+        SID_DRAW_CIRCLE_NOFILL == nSlotId ||
+        SID_DRAW_CIRCLEPIE == nSlotId ||
+        SID_DRAW_CIRCLEPIE_NOFILL == nSlotId ||
+        SID_DRAW_CIRCLECUT == nSlotId ||
+        SID_DRAW_CIRCLECUT_NOFILL == nSlotId ||
+        SID_DRAW_XPOLYGON == nSlotId ||
+        SID_DRAW_XPOLYGON_NOFILL == nSlotId ||
+        SID_3D_CUBE == nSlotId ||
+        SID_3D_SPHERE == nSlotId ||
+        SID_3D_SHELL == nSlotId ||
+        SID_3D_HALF_SPHERE == nSlotId ||
+        SID_3D_TORUS == nSlotId ||
+        SID_3D_CYLINDER == nSlotId ||
+        SID_3D_CONE == nSlotId ||
+        SID_3D_PYRAMID == nSlotId);
 }
 
 } // end of namespace sd
