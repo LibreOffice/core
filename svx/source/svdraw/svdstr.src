@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:56:23 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4875,7 +4875,7 @@ String STR_EditAlignVTop
     Text [ norwegian ] = "Juster %O" ;
     Text [ italian ] = "Allinea %O in alto" ;
     Text [ portuguese_brazilian ] = "Alinhar %O" ;
-    Text [ portuguese ] = "Alinhar %O para cima" ;
+    Text [ portuguese ] = "Alinhar %O em cima" ;
     Text [ finnish ] = "Tasaa %O" ;
     Text [ danish ] = "Juster %O til toppen" ;
     Text [ french ] = "Aligner %O à l'en-tête" ;
@@ -4905,7 +4905,7 @@ String STR_EditAlignVBottom
     Text [ norwegian ] = "Juster %O" ;
     Text [ italian ] = "Allinea %O in basso" ;
     Text [ portuguese_brazilian ] = "Alinhar %O" ;
-    Text [ portuguese ] = "Alinhar %O para baixo" ;
+    Text [ portuguese ] = "Alinhar %O em baixo" ;
     Text [ finnish ] = "Tasaa %O" ;
     Text [ danish ] = "Juster %O til bunden" ;
     Text [ french ] = "Aligner %O au pied de page " ;
@@ -6510,7 +6510,7 @@ String STR_UndoInsertObj
     Text [ norwegian ] = "Sett inn %O" ;
     Text [ italian ] = "Inserisci %O" ;
     Text [ portuguese_brazilian ] = "Inserir %O" ;
-    Text [ portuguese ] = "Introduzir %O" ;
+    Text [ portuguese ] = "Inserir %O" ;
     Text [ finnish ] = "Lisää %O" ;
     Text [ danish ] = "Indsæt %O" ;
     Text [ french ] = "Insérer %O" ;
