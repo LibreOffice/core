@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-23 10:20:49 $
+ *  last change: $Author: sj $ $Date: 2002-08-27 12:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1799,7 +1799,7 @@ FASTBOOL SdrObject::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& /*rInfo
         return ::std::auto_ptr< ImpLineGeometry > (new ImpLineGeometry(aPolyPoly3D, aLinePoly3D,
                                                                        aLineAttr, bForceOnePixel, bForceTwoPixel));
     else
-        return NULL;
+        return ::std::auto_ptr< ImpLineGeometry > ();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
