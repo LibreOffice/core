@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 09:52:11 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,10 @@
 #include <svx/svdundo.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
-#include <sch/schdll0.hxx>
 #include <so3/svstor.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/moduleoptions.hxx>
+#include <sot/clsids.hxx>
 
 #include "chartuno.hxx"
 #include "miscuno.hxx"
@@ -253,12 +253,9 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     }
     ScRangeListRef xNewRanges( pList );
 
-    SvStorageRef aStor = new SvStorage( String() );
     SvInPlaceObjectRef aIPObj;
     if ( SvtModuleOptions().IsChart() )
-        aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                                        *SCH_MOD()->pSchChartDocShellFactory,
-                                        aStor );
+        aIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
     if ( aIPObj.Is() )
     {
         SvEmbeddedInfoObject* pInfoObj = pDocShell->InsertObject( aIPObj, aNameString );
