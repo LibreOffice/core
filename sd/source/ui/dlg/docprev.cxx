@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-25 13:34:16 $
+ *  last change: $Author: cl $ $Date: 2002-08-01 11:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,10 @@ void SdDocPreviewWin::ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev )
 
 void SdDocPreviewWin::Paint( const Rectangle& rRect )
 {
+    SvtAccessibilityOptions aAccOptions;
+    bool bUseContrast = aAccOptions.GetIsForPagePreviews() && Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+    SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+
     ImpPaint( pMetaFile, (VirtualDevice*)this );
 }
 
