@@ -7580,6 +7580,33 @@ SfxVoidItem ShowTwoPages FN_SHOW_TWO_PAGES
 ]
 
 //--------------------------------------------------------------------------
+SfxBoolItem ShowBookview FN_SHOW_BOOKVIEW
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem Shrink FN_SHRINK_FONT_SIZE
 ()
 [
