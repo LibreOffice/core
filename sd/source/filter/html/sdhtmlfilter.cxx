@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdhtmlfilter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:04:35 $
+ *  last change: $Author: cl $ $Date: 2002-05-30 12:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,13 +105,14 @@ sal_Bool SdHTMLFilter::Export()
 
     if( aDlg.Execute() )
     {
-        String aTmp;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( mrMedium.GetPhysicalName(), aTmp );
-        const INetURLObject aURL( aTmp );
+//      String aTmp;
+//      ::utl::LocalFileHelper::ConvertSystemPathToURL( mrMedium.GetName(), aTmp );
+//      const INetURLObject aURL( aTmp );
 
         mrMedium.Close();
+        mrMedium.Commit();
         aDlg.FillItemSet( aArgs );
-        aArgs.Put( SfxStringItem( ATTR_PUBLISH_LOCATION, aURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
+        aArgs.Put( SfxStringItem( ATTR_PUBLISH_LOCATION, mrMedium.GetName() ) );
         delete( new HtmlExport( &mrDocument, &mrDocShell, &aArgs ) );
 
         bRet = sal_True;
