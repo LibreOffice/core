@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: th $ $Date: 2001-08-16 16:08:58 $
+ *  last change: $Author: th $ $Date: 2001-08-24 15:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4676,9 +4676,23 @@ void Window::PostStateChanged( StateChangedType nState )
 
 // -----------------------------------------------------------------------
 
-BOOL Window::IsLocked( BOOL bChilds, BOOL bSystemWindows ) const
+BOOL Window::IsLocked( BOOL bChilds ) const
 {
-    return mnLockCount != 0;
+    if ( mnLockCount != 0 )
+        return TRUE;
+
+    if ( bChilds || mbChildNotify )
+    {
+        Window* pChild = mpFirstChild;
+        while ( pChild )
+        {
+            if ( pChild->IsLocked( TRUE ) )
+                return TRUE;
+            pChild = pChild->mpNext;
+        }
+    }
+
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
