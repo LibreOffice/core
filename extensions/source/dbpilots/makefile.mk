@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:51:54 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:08:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,14 +99,15 @@ SLOFILES=			$(SLO)$/dbptools.obj	\
                     $(SLO)$/dbpservices.obj
 
 
-SRCFILES=			gridpages.src	\
+SRS1NAME=$(TARGET)
+SRC1FILES=			gridpages.src	\
                     commonpagesdbp.src	\
                     dbpilots.src	\
                     groupboxpages.src	\
                     listcombopages.src
 
 RESLIB1NAME=dbp
-RESLIB1SRSFILES= $(SRS)/dbp.srs
+RESLIB1SRSFILES= $(SRS)$/dbp.srs
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1VERSIONMAP= $(TARGET).map
