@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:28:09 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ chinese_simplified ] = "¶¨ÒåÊı¾İ±êÖ¾ÇøÓò";
     Text[ russian ] = "Óñòàíîâèòü äèàïàçîí íàçâàíèÿ";
     Text[ polish ] = "Zdefiniuj zakres etykiet";
-    Text[ japanese ] = "×ÍŞÙ”ÍˆÍ‚ğw’è";
+    Text[ japanese ] = "×ÍŞÙ”ÍˆÍ‚Ìw’è";
     Text[ chinese_traditional ] = "©w¸q¼ĞÃD°Ï°ì";
     Text[ arabic ] = "ÊÚÑíİ äØÇŞ ÇáÚäæäÉ";
     Text[ greek ] = "Ïñéóìüò ğåñéï÷Şò åğéãñáöŞò";
