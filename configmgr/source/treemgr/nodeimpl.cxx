@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,9 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
 /// provide access to the data of the underlying node
-data::NodeAccess NodeImpl::getOriginalNodeAccess(data::Accessor const& _aAccessor) const
+data::NodeAccessRef NodeImpl::getOriginalNodeAccessRef(data::Accessor const * _pAccessor) const
 {
-    return data::NodeAccess(_aAccessor,m_aNodeRef_);
+    return data::NodeAccessRef(_pAccessor,m_aNodeRef_);
 }
 //-----------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ data::GroupNodeAccess GroupNodeImpl::getDataAccess(data::Accessor const& _aAcces
 {
     using namespace data;
 
-    NodeAccess aNodeAccess = getOriginalNodeAccess(_aAccessor);
+    NodeAccessRef aNodeAccess = getOriginalNodeAccessRef(&_aAccessor);
     OSL_ASSERT(GroupNodeAccess::isInstance(aNodeAccess));
 
     GroupNodeAccess aGroupAccess(aNodeAccess);
@@ -166,7 +166,7 @@ data::ValueNodeAccess GroupNodeImpl::getOriginalValueNode(data::Accessor const& 
 
     using namespace data;
 
-    NodeAccess aChild = this->getDataAccess(_aAccessor).getChildNode(_aName);
+    NodeAccessRef aChild = this->getDataAccess(_aAccessor).getChildNode(_aName);
 
     return ValueNodeAccess(aChild);
 }
@@ -179,7 +179,7 @@ data::ValueNodeAccess ValueElementNodeImpl::getDataAccess(data::Accessor const& 
 {
     using namespace data;
 
-    NodeAccess aNodeAccess = getOriginalNodeAccess(_aAccessor);
+    NodeAccessRef aNodeAccess = getOriginalNodeAccessRef(&_aAccessor);
     OSL_ASSERT(ValueNodeAccess::isInstance(aNodeAccess));
 
     ValueNodeAccess aValueAccess(aNodeAccess);
@@ -236,7 +236,7 @@ namespace
         NodeCast(NodeImpl& rOriginalNode, data::Accessor const& _aAccessor)
         : m_pNode(0)
         {
-            if (this->visitNode(rOriginalNode.getOriginalNodeAccess(_aAccessor)) == DONE)
+            if (this->visitNode(rOriginalNode.getOriginalNodeAccessRef(&_aAccessor)) == DONE)
                 m_pNode = static_cast<NodeType*>(&rOriginalNode);
         }
 
