@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:46:59 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     aAutoSaveBtn        ( this, ResId( BTN_AUTOSAVE ) ),
     aAutoSaveEdit       ( this, ResId( ED_AUTOSAVE ) ),
     aMinuteText         ( this, ResId( FT_MINUTE ) ),
-//  aAutoSavePromptBtn  ( this, ResId( BTN_AUTOSAVEPROMPT ) ),
+    aWarnAlienFormatBtn ( this, ResId( BTN_WARNALIENFORMAT ) ),
     aRelBox             ( this, ResId( GB_RELATIVE ) ),
     aRelFsysBtn         ( this, ResId( BTN_RELATIVE_FSYS ) ),
     aRelInetBtn         ( this, ResId( BTN_RELATIVE_INET ) ),
@@ -299,6 +299,7 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     aFiltersFT          ( this, ResId( FT_FILTER ) ),
     aFiltersFI          ( this, ResId( FI_FILTER ) ),
     aFiltersLB          ( this, ResId( LB_FILTER ) ),
+    aWarningFT          ( this, ResId( FT_WARN   ) ),
 #pragma warning (default : 4355)
     pImpl(new SvxSaveTabPage_Impl)
 {
@@ -416,7 +417,7 @@ bool SfxSaveTabPage::AcceptFilter( USHORT nPos )
         }
     }
     bool bSet = true;
-    if(bAlien)
+    /*if(bAlien)
     {
         FilterWarningDialog_Impl aDlg(this);
         aDlg.SetFilterName(sUIName);
@@ -424,7 +425,7 @@ bool SfxSaveTabPage::AcceptFilter( USHORT nPos )
         {
             bSet = false;
         }
-    }
+    } */
     return bSet;
 }
 // -----------------------------------------------------------------------
@@ -463,14 +464,13 @@ BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
                                aAutoSaveBtn.IsChecked() ) );
         bModified |= TRUE;
     }
-/*
-    if ( aAutoSavePromptBtn.IsChecked() != aAutoSavePromptBtn.GetSavedValue() )
+    if ( aWarnAlienFormatBtn.IsChecked() != aWarnAlienFormatBtn.GetSavedValue() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_AUTOSAVEPROMPT ),
-                               aAutoSavePromptBtn.IsChecked() ) );
+        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_WARNALIENFORMAT ),
+                               aWarnAlienFormatBtn.IsChecked() ) );
         bModified |= TRUE;
     }
-*/
+
     if ( aAutoSaveEdit.GetText() != aAutoSaveEdit.GetSavedValue() )
     {
         rSet.Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
@@ -613,10 +613,9 @@ void SfxSaveTabPage::Reset( const SfxItemSet& rSet )
     aBackupFI.Show(bBackupRO);
 
     aAutoSaveBtn.Check(aSaveOpt.IsAutoSave());
+    aWarnAlienFormatBtn.Check(aSaveOpt.IsWarnAlienFormat());
+    aWarnAlienFormatBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT));
 //    aAutoSaveBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVE));
-
-//    aAutoSavePromptBtn.Check(aSaveOpt.IsAutoSavePrompt());
-//    aAutoSavePromptBtn.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVEPROMPT));
 
     // the pretty printing
     pImpl->m_pNoPrettyPrinting->Check( !aSaveOpt.IsPrettyPrinting());
@@ -637,6 +636,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& rSet )
 
     aDocInfoBtn.SaveValue();
     aBackupBtn.SaveValue();
+    aWarnAlienFormatBtn.SaveValue();
     pImpl->m_pNoPrettyPrinting->SaveValue();
     aAutoSaveBtn.SaveValue();
     aAutoSaveEdit.SaveValue();
