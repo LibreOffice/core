@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: pluby $ $Date: 2000-10-31 03:12:44 $
+#   last change: $Author: pluby $ $Date: 2000-11-17 08:04:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,9 @@ LINKOUTPUT_FILTER=
 
 # _PTHREADS is needed for the stl
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DSTLPORT_VERSION=321 -D_USE_NAMESPACE=1
+
+# Temporary defines to make debugging more convenient
+CDEFS+=-DDBG_UTIL
 
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
