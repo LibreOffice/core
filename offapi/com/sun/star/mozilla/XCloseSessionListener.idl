@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCloseSessionListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:29 $
+ *  last change: $Author: ssa $ $Date: 2001-04-25 16:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,10 @@ interface XCloseSessionListener: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XCloseSessionListener::sessionClosed
-    /** notifies the plugin that a closeSession operation on the
-        corresponding XSessionManager was finished.
+    /** Notifies a closesession listener that the corresponding session was logged out
+
+        @param sessionData  [in]:   the data identifying the session that was closed
+
      */
     [oneway] void sessionClosed( [in] any sessionData );
 };

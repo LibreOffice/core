@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMenuProxy.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:29 $
+ *  last change: $Author: ssa $ $Date: 2001-04-25 16:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,22 +84,31 @@ interface XMenuProxy: com::sun::star::lang::XComponent
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxy::executeMenuItem
-    /** executes dispatch for given menu id
+    /** Executes dispatch for the given menu id
+
+        @param ID   [in]:   the menu item
+
      */
     void executeMenuItem([in] short ID);
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxy::addMenuProxyListener
-    /** registers an event listener, which will be called when the menu changes
+    /** Registers an event listener, which will be called when the menu changes
+
+        @param xListener    [in]:   the listener to be set
+
      */
     [oneway] void addMenuProxyListener([in] XMenuProxyListener xListener );
 
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxy::removeMenuProxyListener
-    /** unregisters an event listener which was registered with
+    /** Unregisters an event listener which was registered with
         <member>XMenuProxy::addMenuProxyListener()</member>.
+
+        @param xListener    [in]:   the listener to be removed
+
      */
     [oneway] void removeMenuProxyListener([in] XMenuProxyListener xListener );
 };

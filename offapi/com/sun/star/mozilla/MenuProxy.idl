@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MenuProxy.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:25 $
+ *  last change: $Author: ssa $ $Date: 2001-04-25 16:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ service MenuProxy
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: service com::sun::star::mozilla::MenuProxy: interface com::sun::star::mozilla::XMenuProxy
-    /** @see XMenuProxy@see XMenuProxy
+    /** @see XMenuProxy
      */
     interface XMenuProxy;
 };

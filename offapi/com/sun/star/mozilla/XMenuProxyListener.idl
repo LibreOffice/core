@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMenuProxyListener.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:29 $
+ *  last change: $Author: ssa $ $Date: 2001-04-25 16:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ interface XMenuProxyListener: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxyListener::menuChangedMultiple
-    /** is called if the content or graphical representation/state if the menu changes
+    /** Is called if the content or graphical representation/state of the menu changes
         completely for one or more menu items
      */
     void menuChangedMultiple([in] sequence<MenuMultipleChange> MenuMultipleChanges);
@@ -96,7 +96,7 @@ interface XMenuProxyListener: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxyListener::menuChangedSingle
-    /** is called if the content or graphical representation/state if the menu changes
+    /** Is called if the content or graphical representation/state of the menu changes
         by one property for one or more menu items
      */
     void menuChangedSingle([in] sequence<MenuSingleChange> MenuSingleChanges);
@@ -104,7 +104,10 @@ interface XMenuProxyListener: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::mozilla::XMenuProxyListener::menuItemDeleted
-    /** is called if one menu item, designated by the ID, is deleted
+    /** Is called if one menu item, designated by the ID, is deleted
+
+        @param ID   [in]:   the menu item
+
      */
     void menuItemDeleted([in] short ID);
 };

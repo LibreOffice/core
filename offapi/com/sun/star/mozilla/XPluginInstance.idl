@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginInstance.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:29 $
+ *  last change: $Author: ssa $ $Date: 2001-04-25 16:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,8 @@ interface XPluginInstance: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::start
-    /** starts plugin operation. This is called after a plugin instance is
-        created and may be called after the plugin is stopped by the
-        <member>XPluginInstance::stop</member> method.
+    /** Starts plugin operation. This is called after a plugin instance is
+        created.
      */
     [oneway] void start();
 
@@ -94,9 +93,9 @@ interface XPluginInstance: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::stop
-    /** stops plugin operation. This is called the user goes to another web
-        page. The <member>XPluginInstance::start</member> method is called if the user
-        returns to the original page in the history.
+    /** Stops plugin operation. This is called when the user goes to another web
+        page. The <member>XPluginInstance::destroy</member> method is directly called
+        afterwards.
      */
     [oneway] void stop();
 
@@ -104,9 +103,9 @@ interface XPluginInstance: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::destroy
-    /** destroy the plugin instance. This method is called when it is no
-        longer possible to return to the plugin instance, most likely because
-        the list of allowed plugins is exhausted.
+    /** Destroy the plugin instance. This method is called when it is no
+        longer possible to return to the plugin instance, because it was
+        destroyed by the browser (eg window close).
      */
     [oneway] void destroy();
 
@@ -114,7 +113,11 @@ interface XPluginInstance: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::createWindow
-    /** creates a new window for plugin operation.
+    /** Creates a new window for plugin operation.
+
+        @param PlatformParentData   [in]:   platform dependent window data
+        @param embedded             [in]:   selects embedded or full page plugin mode
+
      */
     [oneway] void createWindow( [in] any PlatformParentData, [in] boolean embedded );
 
@@ -122,7 +125,14 @@ interface XPluginInstance: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::newStream
-    /** notifies the plugin of a new stream to display.
+    /** Notifies the plugin of a new stream to display.
+
+        @param MIMEDesc     [in]:   the MIMEtype of the data stream
+        @param theURL       [in]:   the URL that denotes the stream
+        @param filter       [in]:   a filter string to suggest a component that should handle the document
+        @param stream       [in]:   the data stream
+        @param sessiondata  [in]:   the data specifying the current session
+
      */
     [oneway] void newStream(
         [in] string MIMEDesc,
@@ -136,7 +146,13 @@ interface XPluginInstance: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstance::newURL
-    /** notifies the plugin of a new document to open as document.
+    /** Notifies the plugin of a new url to open as document.
+
+        @param MIMEDesc     [in]:   the MIMEtype of the data stream
+        @param theURL       [in]:   the URL to be openend
+        @param filter       [in]:   a filter string to suggest a component that should handle the document
+        @param sessiondata  [in]:   the data specifying the current session
+
      */
     [oneway] void newURL( [in] string MIMEDesc, [in] string theURL, [in] string filter, [in] any sessionData );
 
@@ -144,16 +160,12 @@ interface XPluginInstance: com::sun::star::uno::XInterface
 
 
     // DocMerge from idl: method com::sun::star::mozilla::XPluginInstance::getHttpServerURL
-    /** retrieves the URL of the HTTP Loadbalancing Slave.
+    /** Retrieves the URL of the HTTP Loadbalancing Slave.
 
-        @param aURL
-            the full qualified host name of the LBS
+        @param aURL     [out]:  the full qualified host name of the LBS
+        @param aPort    [out]:  the port number
+        @param aPrefix  [out]:  the url prefix to the portal
 
-        @param aPort
-            the port number
-
-        @param aPrefix
-            the url prefix to the portal
      */
     void getHttpServerURL( [out] string aHost, [out] unsigned short aPort,
                            [out] string aPrefix);
@@ -166,6 +178,9 @@ interface XPluginInstance: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 16:41:29  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/19 14:59:01  mi
     documentation sytax errors fixed
 

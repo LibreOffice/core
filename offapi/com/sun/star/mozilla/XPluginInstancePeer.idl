@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginInstancePeer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:29 $
+ *  last change: $Author: ssa $ $Date: 2001-04-25 16:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,12 @@ interface XPluginInstancePeer: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::setWindowSize
-    /** alters the plugin's window size in the browser window.
+    /** Alters the plugin's window size in the browser window.
+
+        @param width    [in]: the new window width
+        @param height   [in]: the new window height
+
+        @return <CODE>TRUE</CODE> on success
      */
     boolean setWindowSize( [in] long width, [in] long heigth );
 
@@ -103,7 +108,9 @@ interface XPluginInstancePeer: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::showStatusMessage
-    /** show status / hint message in browser's message area.
+    /** Show status / hint message in browser's message area.
+
+        @param message  [in]: the string to be displayed
      */
     [oneway] void showStatusMessage( [in] string message );
 
@@ -111,8 +118,12 @@ interface XPluginInstancePeer: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::enableScripting
-    /** indicates that the document is loaded successfully and scripting
+    /** Indicates to the plugin that the document was loaded successfully and scripting
         interfaces are now available.
+
+        @param document         [in]: the active document
+        @param servicemanager   [in]: the office servicemanager
+
      */
     [oneway] void enableScripting( [in] com::sun::star::uno::XInterface document, [in] com::sun::star::lang::XMultiServiceFactory servicemanager );
 
@@ -120,8 +131,13 @@ interface XPluginInstancePeer: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::newStream
-    /** creates a new stream of data produced by the plug-in and consumed by
+    /** Creates a new stream of data produced by the plug-in and consumed by
         the browser.
+
+        @param MIMEDesc [in]:   the MIME type of the plug-in to create
+        @param target   [in]:   the name of the target window or frame (supports _blank, _self)
+        @param data     [in]:   on success the outputstream will be associated with this instance
+
      */
     [oneway] void newStream(
         [in] string MIMEDesc,
@@ -133,7 +149,15 @@ interface XPluginInstancePeer: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::getURL
-    /** fetches an URL.
+    /** Fetches an URL into the target window. The parameters and their meaning map to the
+        corresponding Netscape-API call.
+
+        @param aURL             [in]: the URL to be fetched
+        @param target           [in]: the name of the target window or frame (supports _blank, _self)
+        @param alternativeHost  [in]: alternativeHost
+        @param referrer         [in]: referrer
+        @param sink             [in]: the sink is notified on success
+
      */
     [oneway] void getURL (
         [in] string aURL,
@@ -147,7 +171,17 @@ interface XPluginInstancePeer: com::sun::star::uno::XInterface
 
 
     // DocMerge from xml: method com::sun::star::mozilla::XPluginInstancePeer::postURL
-    /** Posts to a URL with post data and/or post headers.
+    /** Posts to a URL with post data and/or post headers. The parameters and their meaning
+        map to the corresponding Netscape-API call.
+
+        @param aURL             [in]: the URL to be posted to
+        @param postData         [in]: the data to be posted
+        @param target           [in]: the name of the target window or frame (supports _blank, _self)
+        @param alternativeHost  [in]: alternativeHost
+        @param referrer         [in]: referrer
+        @param postHeaders      [in]: the header to be posted
+        @param sink             [in]: the sink is notified on success
+
      */
     [oneway] void postURL (
         [in] string aURL,
@@ -167,6 +201,9 @@ interface XPluginInstancePeer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/16 16:41:29  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:25  mi
     moved from api
 

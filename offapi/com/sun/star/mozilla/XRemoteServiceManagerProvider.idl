@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteServiceManagerProvider.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:29 $
+ *  last change: $Author: ssa $ $Date: 2001-04-25 16:09:34 $
  *
  *  Copyright according the GNU Public License.
  *
@@ -30,9 +30,9 @@ module com { module sun { module star { module mozilla {
 interface XRemoteServiceManagerProvider: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** returns the remote service manager for the given session
+    /** Returns the remote service manager for the given session
 
-        @param sessionData: contains the sessiondata (host, user, ticket)
+        @param sessionData  [in]: contains the sessiondata (host, user, ticket)
     */
     com::sun::star::lang::XMultiServiceFactory getServiceManager( [in] any sessionData );
 };
