@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-22 09:33:01 $
+ *  last change: $Author: dbo $ $Date: 2001-10-17 13:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,16 +531,12 @@ class TestInterface : public XInterface
 {
 public:
     // XInterface
-    void SAL_CALL   acquire() { osl_incrementInterlockedCount( &nRefCount ); }
-    void SAL_CALL   release()
-    {
-        if( !osl_decrementInterlockedCount( &nRefCount ) )
-            delete this;
-    }
-    Any SAL_CALL    queryInterface( const Type & rType )
-    {
-        return cppu::queryInterface( rType, static_cast< XInterface* >( this ) );
-    }
+    void SAL_CALL acquire() throw ()
+        { osl_incrementInterlockedCount( &nRefCount ); }
+    void SAL_CALL release() throw ()
+        { if( !osl_decrementInterlockedCount( &nRefCount ) ) delete this; }
+    Any SAL_CALL queryInterface( const Type & rType ) throw (RuntimeException)
+        { return cppu::queryInterface( rType, static_cast< XInterface* >( this ) ); }
 
     TestInterface() : nRefCount( 0 ) {}
 
@@ -549,9 +545,11 @@ public:
 
 struct SimpleInterface : public TestInterface, public XSimpleInterface
 {
-    void SAL_CALL   acquire() { TestInterface::acquire(); }
-    void SAL_CALL   release() { TestInterface::release(); }
-    Any SAL_CALL    queryInterface( const Type & rType )
+    void SAL_CALL acquire() throw ()
+        { TestInterface::acquire(); }
+    void SAL_CALL release() throw ()
+        { TestInterface::release(); }
+    Any SAL_CALL queryInterface( const Type & rType ) throw (RuntimeException)
     {
         Any aRet( cppu::queryInterface( rType, static_cast< XSimpleInterface * >( this ) ) );
         return (aRet.hasValue() ? aRet : TestInterface::queryInterface( rType ));
