@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-15 15:40:35 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 09:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,13 @@
 
 #pragma hdrstop
 
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+
+#ifndef _SVX_TWOLINESITEM_HXX
+#include <svx/twolinesitem.hxx>
+#endif
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
 #endif
@@ -82,9 +89,6 @@
 #endif
 #ifndef _FCHRFMT_HXX //autogen
 #include <fchrfmt.hxx>
-#endif
-#ifndef _FMT2LINES_HXX
-#include <fmt2lines.hxx>
 #endif
 #ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
@@ -248,8 +252,8 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwTxtAttr& rAttr,
             if( SFX_ITEM_SET == pFmt->GetAttrSet().
                 GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) )
             {
-                pBracket->cPre = ((SwFmt2Lines*)pItem)->GetStartBracket();
-                pBracket->cPost = ((SwFmt2Lines*)pItem)->GetEndBracket();
+                pBracket->cPre = ((SvxTwoLinesItem*)pItem)->GetStartBracket();
+                pBracket->cPost = ((SvxTwoLinesItem*)pItem)->GetEndBracket();
             }
         }
         else
@@ -648,7 +652,7 @@ void SwRubyPortion::CalcRubyOffset()
  * the 2-line-formats has the same brackets.
  * --------------------------------------------------*/
 
-sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SwFmt2Lines* &rpRef,
+sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
     sal_Bool &rValue )
 {
     if( RES_CHRATR_TWO_LINES == rAttr.Which() )
@@ -672,12 +676,12 @@ sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SwFmt2Lines* &rpRef,
         if( SFX_ITEM_SET == pFmt->GetAttrSet().
             GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) )
         {
-            rValue = /* ((SwFmt2Lines*)pItem)->GetValue(); */ sal_True;
+            rValue = /* ((SvxTwoLinesItem*)pItem)->GetValue(); */ sal_True;
             if( !rpRef )
-                rpRef = (SwFmt2Lines*)pItem;
-            else if( ((SwFmt2Lines*)pItem)->GetEndBracket() !=
+                rpRef = (SvxTwoLinesItem*)pItem;
+            else if( ((SvxTwoLinesItem*)pItem)->GetEndBracket() !=
                         rpRef->GetEndBracket() ||
-                        ((SwFmt2Lines*)pItem)->GetStartBracket() !=
+                        ((SvxTwoLinesItem*)pItem)->GetStartBracket() !=
                         rpRef->GetStartBracket() )
                 rValue = sal_False;
             return sal_True;
@@ -692,7 +696,7 @@ const SwTxtAttr* SwTxtSizeInfo::GetMultiAttr( xub_StrLen &rPos ) const
     if( !pHints )
         return NULL;
     const SwTxtAttr *pRet = NULL;
-    const SwFmt2Lines* p2Lines = NULL;
+    const SvxTwoLinesItem* p2Lines = NULL;
     sal_Bool bTwo = sal_False;
     USHORT n2Lines = USHRT_MAX;
     USHORT nCount = pHints->Count();
@@ -709,7 +713,7 @@ const SwTxtAttr* SwTxtSizeInfo::GetMultiAttr( xub_StrLen &rPos ) const
                 pRet = pTmp;
             else
             {
-                const SwFmt2Lines* p2Tmp = NULL;
+                const SvxTwoLinesItem* p2Tmp = NULL;
                 if( lcl_Has2Lines( *pTmp, p2Tmp, bTwo ) )
                 {
                     n2Lines = bTwo ? i : nCount;
