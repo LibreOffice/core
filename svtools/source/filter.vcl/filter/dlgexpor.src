@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:39:46 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ czech ] = "Počet barev";
         Text[ hebrew ] = "‮רזולוצית צבע‬";
         Text[ hindi ] = "रंग का रॉज़ल्यूशन्";
+        Text[ slovak ] = "Počet farieb";
     };
     ListBox LB_COLORS
     {
@@ -405,6 +406,17 @@ ModalDialog DLG_EXPORT_PIX
         < "8Bit - Farbpalette" ; Default ; > ;
         < "24Bit - Echtfarben" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Pôvodný" ; Default ; > ;
+        < "1 bit - prahová hodnota" ; Default ; > ;
+        < "1 bit - dithering" ; Default ; > ;
+        < "4 bity - odtiene šedej" ; Default ; > ;
+        < "4 bity - farebná paleta" ; Default ; > ;
+        < "8 bitů - odtiene šedej" ; Default ; > ;
+        < "8 bitů - farebná paleta" ; Default ; > ;
+        < "24 bitů - skutočné farby" ; Default ; > ;
+    };
     };
     CheckBox CBX_RLE
     {
@@ -438,6 +450,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ czech ] = "RLE kódování";
         Text[ hebrew ] = "‮קידוד ‬RLE";
         Text[ hindi ] = "RLE कोड़िंग";
+        Text[ slovak ] = "RLE kódovanie";
     };
     FixedLine GRP_MODE_PIX
     {
@@ -470,6 +483,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ czech ] = "Režim";
         Text[ hebrew ] = "‮מצב עבודה‬";
         Text[ hindi ] = "प्रकार";
+        Text[ slovak ] = "Režim";
     };
     RadioButton RB_ORIGINAL_PIX
     {
@@ -503,6 +517,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ czech ] = "Původní";
         Text[ hebrew ] = "‮מקורי‬";
         Text[ hindi ] = "~यथार्थ";
+        Text[ slovak ] = "Pôv~odný";
     };
     RadioButton RB_RES_PIX
     {
@@ -536,6 +551,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ czech ] = "Rozlišení";
         Text[ hebrew ] = "‮רזולוציה‬";
         Text[ hindi ] = "~Resolution";
+        Text[ slovak ] = "~Rozlíšenie";
     };
     ComboBox CBB_RES_PIX
     {
@@ -583,6 +599,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ czech ] = "Velikost";
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "~परिमाण";
+        Text[ slovak ] = "Veľko~sť";
     };
     MetricField MTF_SIZEX_PIX
     {
@@ -632,6 +649,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
+        Text[ slovak ] = "Šírka";
     };
     MetricField MTF_SIZEY_PIX
     {
@@ -681,6 +699,7 @@ ModalDialog DLG_EXPORT_PIX
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई";
+        Text[ slovak ] = "Výška";
     };
     OKButton BTN_OK_PIX
     {
@@ -741,6 +760,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ czech ] = "Režim";
         Text[ hebrew ] = "‮מצב עבודה‬";
         Text[ hindi ] = "प्रकार";
+        Text[ slovak ] = "Režim";
     };
     RadioButton RB_ORIGINAL_VEC
     {
@@ -774,6 +794,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ czech ] = "Originál";
         Text[ hebrew ] = "‮מקורי‬";
         Text[ hindi ] = "~यथार्थ";
+        Text[ slovak ] = "~Originál";
     };
     RadioButton RB_SIZE_VEC
     {
@@ -807,6 +828,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ czech ] = "Velikost";
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "~परिमाण";
+        Text[ slovak ] = "Veľko~sť";
     };
     FixedLine GRP_SIZE_VEC
     {
@@ -839,6 +861,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ czech ] = "Velikost";
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
+        Text[ slovak ] = "Veľkosť";
     };
     FixedText FT_SIZEX_VEC
     {
@@ -871,6 +894,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
+        Text[ slovak ] = "Šírka";
     };
     MetricField MTF_SIZEX_VEC
     {
@@ -920,6 +944,7 @@ ModalDialog DLG_EXPORT_VEC
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई";
+        Text[ slovak ] = "Výška";
     };
     MetricField MTF_SIZEY_VEC
     {
@@ -958,6 +983,8 @@ ModalDialog DLG_EXPORT_VEC
         TabStop = TRUE ;
     };
 };
+
+
 
 
 
