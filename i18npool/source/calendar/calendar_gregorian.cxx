@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-13 18:11:39 $
+ *  last change: $Author: khong $ $Date: 2002-10-10 18:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,8 +329,8 @@ Calendar_gregorian::isValid() throw(RuntimeException)
 // NativeNumberMode has different meaning between Number and Calendar for Asian locales.
 // Here is the mapping table
 // calendar(q/y/m/d)    zh_CN           zh_TW           ja              ko
-// NatNum1              NatNum1/1/7/7   NatNum1/1/7/7   NatNum1/1/7/7   NatNum1/1/7/7
-// NatNum2              NatNum2/2/8/8   NatNum2/2/8/8   NatNum2/2/8/8   NatNum2/2/8/8
+// NatNum1              NatNum1/1/7/7   NatNum1/1/7/7   NatNum1/1/4/4   NatNum1/1/7/7
+// NatNum2              NatNum2/2/8/8   NatNum2/2/8/8   NatNum2/2/5/5   NatNum2/2/8/8
 // NatNum3              NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3
 // NatNum4                                                              NatNum9/9/11/11
 
@@ -341,18 +341,24 @@ static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& 
         nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR ||
         nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
         nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER;
+    sal_Bool isChinese = aLocale.Language.equalsAscii("zh");
+    sal_Bool isJapanese = aLocale.Language.equalsAscii("ja");
+    sal_Bool isKorean = aLocale.Language.equalsAscii("ko");
 
-    if (aLocale.Language.equalsAscii("zh") || aLocale.Language.equalsAscii("ja") ||
-            aLocale.Language.equalsAscii("ko")) {
+    if (isChinese || isJapanese || isKorean) {
         switch (nNativeNumberMode) {
             case NativeNumberMode::NATNUM1:
-                return isShort ? NativeNumberMode::NATNUM1 : NativeNumberMode::NATNUM7;
+        if (!isShort)
+            nNativeNumberMode = isJapanese ? NativeNumberMode::NATNUM4 : NativeNumberMode::NATNUM7;
+        break;
             case NativeNumberMode::NATNUM2:
-                return isShort ? NativeNumberMode::NATNUM2 : NativeNumberMode::NATNUM8;
+        if (!isShort)
+            nNativeNumberMode = isJapanese ? NativeNumberMode::NATNUM5 : NativeNumberMode::NATNUM8;
+        break;
             case NativeNumberMode::NATNUM3:
-                return NativeNumberMode::NATNUM3;
+        break;
             case NativeNumberMode::NATNUM4:
-                if (aLocale.Language.equalsAscii("ko"))
+                if (isKorean)
                     return isShort ? NativeNumberMode::NATNUM9 : NativeNumberMode::NATNUM11;
                 // fall through
             default: return 0;
