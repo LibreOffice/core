@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:14:56 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text = "Auswahl" ;
         Text [ English ] = "Choice" ;
         Text [ norwegian ] = "Choice" ;
-        Text [ italian ] = "Scelta" ;
+        Text [ italian ] = "Selezione" ;
         Text [ portuguese_brazilian ] = "Escolha" ;
         Text [ portuguese ] = "Opções" ;
         Text [ finnish ] = "Asetukset" ;
@@ -389,7 +389,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text[ russian ] = "Âûáîð";
         Text[ polish ] = "Wybór";
         Text[ japanese ] = "‘I‘ð";
-        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ chinese_traditional ] = "¿ï¨ú";
         Text[ arabic ] = "ÇÎÊíÇÑ";
         Text[ greek ] = "ÅðéëïãÞ";
         Text[ korean ] = "¼±ÅÃ";
@@ -662,5 +662,6 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ finnish ] = "Vastaavuushaku";
 };
  // ********************************************************************** EOF
+
 
 
