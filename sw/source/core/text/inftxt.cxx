@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-19 07:44:54 $
+ *  last change: $Author: fme $ $Date: 2002-06-19 11:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,11 @@ using namespace ::com::sun::star::beans;
 #define CHAR_TAB_RTL ((sal_Unicode)0x2190)
 #define CHAR_LINEBREAK ((sal_Unicode)0x21B5)
 #define CHAR_LINEBREAK_RTL ((sal_Unicode)0x21B3)
+
+#ifdef BIDI
+#define DRAW_SPECIAL_OPTIONS_CENTER 1
+#define DRAW_SPECIAL_OPTIONS_ROTATE 2
+#endif
 
 // steht im number.cxx
 extern const sal_Char __FAR_DATA sBulletFntName[];
@@ -903,16 +908,23 @@ void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
  * bRotate  - Rotate the character if character rotation is set
  *************************************************************************/
 
+#ifdef BIDI
+void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
+                      SwRect& rRect, const Color* pCol, sal_Unicode cChar,
+                      BYTE nOptions )
+{
+    sal_Bool bCenter = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_CENTER );
+    sal_Bool bRotate = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_ROTATE );
+
+    // rRect is given in absolute coordinates
+    if ( rInf.GetTxtFrm()->IsRightToLeft() )
+        rInf.GetTxtFrm()->SwitchRTLtoLTR( rRect );
+#else
 void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
                       SwRect& rRect, const Color* pCol, sal_Unicode cChar,
                       sal_Bool bCenter, sal_Bool bRotate )
 {
-    // rRect is given in absolute coordinates
-#ifdef BIDI
-    if ( rInf.GetTxtFrm()->IsRightToLeft() )
-        rInf.GetTxtFrm()->SwitchRTLtoLTR( rRect );
 #endif
-
     if ( rInf.GetTxtFrm()->IsVertical() )
         rInf.GetTxtFrm()->SwitchVerticalToHorizontal( rRect );
 
@@ -1066,7 +1078,16 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 #endif
 #endif
 
+#ifdef BIDI
+        const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ?
+                                  CHAR_TAB_RTL : CHAR_TAB;
+        const BYTE nOptions = DRAW_SPECIAL_OPTIONS_CENTER |
+                              DRAW_SPECIAL_OPTIONS_ROTATE;
+        lcl_DrawSpecial( *this, rPor, aRect, 0, cChar, nOptions );
+#else
         lcl_DrawSpecial( *this, rPor, aRect, 0, CHAR_TAB, sal_True, sal_True );
+#endif
+
     }
 }
 
@@ -1086,8 +1107,17 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
         lcl_CalcRect( this, rPor, &aRect, 0 );
 
         if( aRect.HasArea() )
+        {
+#ifdef BIDI
+            const sal_Unicode cChar = GetTxtFrm()->IsRightToLeft() ?
+                                      CHAR_LINEBREAK_RTL : CHAR_LINEBREAK;
+            const BYTE nOptions = 0;
+            lcl_DrawSpecial( *this, rPor, aRect, 0, cChar, nOptions );
+#else
             lcl_DrawSpecial( *this, rPor, aRect, 0, CHAR_LINEBREAK,
                              sal_False, sal_False );
+#endif
+        }
 
         ((SwLinePortion&)rPor).Width( nOldWidth );
     }
@@ -1126,7 +1156,14 @@ void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     Color aCol( COL_LIGHTRED );
 
     if( aRect.HasArea() )
+    {
+#ifdef BIDI
+        const BYTE nOptions = 0;
+        lcl_DrawSpecial( *this, rPor, aRect, &aCol, cChar, nOptions );
+#else
         lcl_DrawSpecial( *this, rPor, aRect, &aCol, cChar, sal_False, sal_False );
+#endif
+    }
 }
 
 
