@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:31:31 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,12 +107,15 @@ void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnec
         // transfer the (one and only) real ref to the aggregate to our member
         m_xProxyConnection = _rxProxyConnection;
         _rxProxyConnection = NULL;
+        ::comphelper::query_aggregation(m_xProxyConnection,m_xConnection);
+        m_xTypeProvider.set(m_xConnection,UNO_QUERY);
+        m_xUnoTunnel.set(m_xConnection,UNO_QUERY);
+        m_xServiceInfo.set(m_xConnection,UNO_QUERY);
 
         // set ourself as delegator
         Reference<XInterface> xIf = static_cast< XUnoTunnel* >( this );
         m_xProxyConnection->setDelegator( xIf );
 
-        ::comphelper::query_aggregation(m_xProxyConnection,m_xConnection);
     }
     osl_decrementInterlockedCount( &_rRefCount );
 }
@@ -135,10 +138,8 @@ OConnectionWrapper::~OConnectionWrapper()
 {
     // first collect the services which are supported by our aggregate
     Sequence< ::rtl::OUString > aSupported;
-    Reference< XServiceInfo > xAggregatedServices;
-    ::comphelper::query_aggregation( m_xProxyConnection, xAggregatedServices );
-    if ( xAggregatedServices.is() )
-        aSupported = xAggregatedServices->getSupportedServiceNames();
+    if ( m_xServiceInfo.is() )
+        aSupported = m_xServiceInfo->getSupportedServiceNames();
 
     // append our own service, if necessary
     ::rtl::OUString sConnectionService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.Connection" ) );
@@ -168,12 +169,9 @@ Any SAL_CALL OConnectionWrapper::queryInterface( const Type& _rType ) throw (Run
 // --------------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    Reference< XTypeProvider> xType;
-    comphelper::query_aggregation(m_xProxyConnection,xType);
-
     return ::comphelper::concatSequences(
         OConnection_BASE::getTypes(),
-        xType->getTypes()
+        m_xTypeProvider->getTypes()
     );
 }
 // -----------------------------------------------------------------------------
@@ -183,10 +181,8 @@ sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >&
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return (sal_Int64)this;
 
-    Reference<XUnoTunnel> xTunnel;
-    comphelper::query_aggregation(m_xProxyConnection,xTunnel);
-    if(xTunnel.is())
-        return xTunnel->getSomething(rId);
+    if(m_xUnoTunnel.is())
+        return m_xUnoTunnel->getSomething(rId);
     return 0;
 }
 
