@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2000-12-14 13:37:51 $
+ *  last change: $Author: th $ $Date: 2001-08-07 12:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,9 @@ public:
     BOOL                    mbGraphics;             // is Graphics used
     BOOL                    mbCaption;              // has window a caption
     BOOL                    mbBorder;               // has window a border
+    BOOL                    mbFixBorder;            // has window a fixed border
     BOOL                    mbSizeBorder;           // has window a sizeable border
+    BOOL                    mbNoIcon;               // is an window without an icon
     BOOL                    mbFullScreen;           // TRUE: in full screen mode
     BOOL                    mbPresentation;         // TRUE: Presentation Mode running
     BOOL                    mbInShow;               // innerhalb eines Show-Aufrufs
