@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderCache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:07:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,21 +74,15 @@ using namespace ::scripting_util;
 
 namespace func_provider
 {
-    ::rtl::OUString languageProviderName =
-        ::rtl::OUString::createFromAscii("com.sun.star.script.provider.LanguageScriptProvider" );
-    ::rtl::OUString providerKey =
-        ::rtl::OUString::createFromAscii("com.sun.star.script.provider.ScriptProviderFor" );
 
 ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, const Sequence< Any >& scriptContext )
     throw ( RuntimeException ) : m_Sctx( scriptContext ), m_xContext( xContext )
 {
-    OSL_TRACE("ProviderCache::ProviderCache() - ctor");
     // initialise m_hProviderDetailsCache with details of ScriptProviders
     // will use createContentEnumeration
 
     m_xMgr = m_xContext->getServiceManager();
     validateXRef( m_xMgr, "ProviderCache::ProviderCache() failed to obtain ServiceManager" );
-    OSL_TRACE("ProviderCache::ProviderCache() about to populateCache");
     populateCache();
 }
 
@@ -97,19 +91,16 @@ ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, co
     throw ( RuntimeException ) : m_Sctx( scriptContext ), m_xContext( xContext ), m_sBlackList( blackList )
 
 {
-    OSL_TRACE("ProviderCache::ProviderCache() - ctor");
     // initialise m_hProviderDetailsCache with details of ScriptProviders
     // will use createContentEnumeration
 
     m_xMgr = m_xContext->getServiceManager();
     validateXRef( m_xMgr, "ProviderCache::ProviderCache() failed to obtain ServiceManager" );
-    OSL_TRACE("ProviderCache::ProviderCache() about to populateCache");
     populateCache();
 }
 
 ProviderCache::~ProviderCache()
 {
-    OSL_TRACE("ProviderCache::ProviderCache() - dtor");
 }
 
 Reference< provider::XScriptProvider >
@@ -122,16 +113,10 @@ ProviderCache::getProvider( const ::rtl::OUString& providerName )
     {
         if (  h_it->second.provider.is() )
         {
-            OSL_TRACE("ProviderCache::getProvider(), service for %s already in cache",
-                ::rtl::OUStringToOString( h_it->first,
-                   RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             provider = h_it->second.provider;
         }
     else
     {
-            OSL_TRACE("ProviderCache::getProvider(), %s not in cache, try to create.",
-                ::rtl::OUStringToOString( h_it->first,
-                   RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         // need to create provider and insert into hash
             provider = createProvider( h_it->second );
     }
@@ -142,7 +127,6 @@ ProviderCache::getProvider( const ::rtl::OUString& providerName )
 Sequence < Reference< provider::XScriptProvider > >
 ProviderCache::getAllProviders() throw ( RuntimeException )
 {
-    OSL_TRACE("ProviderCache::getAllProviders()");
     Sequence < Reference< provider::XScriptProvider > > providers (  m_hProviderDetailsCache.size() );
     // need to create providers that haven't been created already
     // so check what providers exist and what ones don't
@@ -160,40 +144,28 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
             Reference< provider::XScriptProvider > xScriptProvider  = h_it->second.provider;
             if ( xScriptProvider.is() )
             {
-                OSL_TRACE("ProviderCache::getAllProviders(), service for %s already in cache",
-                    ::rtl::OUStringToOString( h_it->first,
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 providers[ providerIndex++ ] = xScriptProvider;
             }
             else
             {
-                OSL_TRACE("ProviderCache::getAllProviders(), no service in cache for %s",
-                    ::rtl::OUStringToOString( h_it->first,
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 // create provider
                 try
                 {
-                    OSL_TRACE("Trying to create provider %d ", index );
                     xScriptProvider  = createProvider( h_it->second );
                     providers[ providerIndex++ ] = xScriptProvider;
                 }
                 catch ( Exception& e )
                 {
-                    OSL_TRACE("failed to create provider ****");
                     ::rtl::OUString temp = OUSTR( "ProviderCache::getAllProviders: failed to create provider, " );
                     temp.concat( e.Message );
                     //throw RuntimeException( temp.concat( e.Message ),
                     //    Reference< XInterface >() );
-                    OSL_TRACE("ProviderCache::getAllProviders(), failed to create provider message is %s",
-                    ::rtl::OUStringToOString( temp,
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 }
             }
         }
 
         if ( providerIndex < index )
         {
-            OSL_TRACE("ProviderCache::getAllProviders(), reducing providers to return to %d index is %d", providerIndex, index );
             providers.realloc( providerIndex );
         }
 
@@ -208,12 +180,14 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
 void
 ProviderCache::populateCache() throw ( RuntimeException )
 {
-    OSL_TRACE("ProviderCache::populateCache()");
     // wrong name in services.rdb
     ::rtl::OUString serviceName;
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
     try
     {
+        ::rtl::OUString languageProviderName( RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.script.provider.LanguageScriptProvider" ) );
+
         Reference< container::XContentEnumerationAccess > xEnumAccess = Reference< container::XContentEnumerationAccess >( m_xMgr, UNO_QUERY_THROW );
         Reference< container::XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
 
@@ -223,28 +197,24 @@ ProviderCache::populateCache() throw ( RuntimeException )
             Reference< lang::XSingleComponentFactory > factory;
             if ( sal_False == ( xEnum->nextElement() >>= factory ) )
             {
-                OSL_TRACE("ProviderCache::populateCache() failed to extract factory from any");
                 throw new RuntimeException( ::rtl::OUString::createFromAscii( "  error extracting XSingleComponentFactory from Content enumeration. " ), Reference< XInterface >() );
             }
             validateXRef( factory, "ProviderCache::populateCache() invalid factory" );
             Reference< lang::XServiceInfo > xServiceInfo( factory, UNO_QUERY_THROW );
             validateXRef( xServiceInfo, "ProviderCache::populateCache() failed to get XServiceInfo from factory" );
-            OSL_TRACE("ProviderCache::populateCache() processing element for implementation name %s",
-                ::rtl::OUStringToOString( xServiceInfo->getImplementationName(),
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
             Sequence< ::rtl::OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
 
             if ( serviceNames.getLength() > 0 )
             {
+                ::rtl::OUString searchString( RTL_CONSTASCII_USTRINGPARAM (
+                    "com.sun.star.script.provider.ScriptProviderFor" ) );
+
                 for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )
                 {
-                    if ( serviceNames[ index ].indexOf( providerKey ) == 0 && !isInBlackList(  serviceNames[ index ] ) )
+                    if ( serviceNames[ index ].indexOf( searchString ) == 0 && !isInBlackList(  serviceNames[ index ] ) )
                     {
                         serviceName = serviceNames[ index ];
-                        OSL_TRACE("ProviderCache::populateCache(), creating entry with factory for service %s",
-                            ::rtl::OUStringToOString( serviceName,
-                                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                         ProviderDetails details;
                         details.factory = factory;
                         m_hProviderDetailsCache[ serviceName ] = details;
@@ -266,7 +236,6 @@ ProviderCache::populateCache() throw ( RuntimeException )
 Reference< provider::XScriptProvider >
 ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeException )
 {
-   OSL_TRACE("ProviderCache::createProvider()");
     try
     {
         details.provider  = Reference< provider::XScriptProvider >( details.factory->createInstanceWithArgumentsAndContext( m_Sctx, m_xContext ), UNO_QUERY_THROW );
@@ -274,7 +243,6 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
     }
     catch ( RuntimeException& e )
     {
-        OSL_TRACE("Error creating provider from factory!!!");
         ::rtl::OUString temp = ::rtl::OUString::createFromAscii("ProviderCache::createProvider() Error creating provider from factory!!!");
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
