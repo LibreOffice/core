@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-29 22:29:40 $
+ *  last change: $Author: fs $ $Date: 2000-11-30 08:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ public:
     virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
     /// get the SfxPoolItem ids used by this tab page
-    static sal_uInt16* getDetailIds();
+    static sal_Int32* getDetailIds();
 
 private:
     GroupBox            m_aFrame;
@@ -303,7 +303,7 @@ public:
     virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
     /// get the SfxPoolItem ids used by this tab page
-    static sal_uInt16* getDetailIds();
+    static sal_Int32* getDetailIds();
 
 private:
     FixedText           m_aDriverLabel;
@@ -327,7 +327,7 @@ public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
 
     /// get the SfxPoolItem ids used by this tab page
-    static sal_uInt16* getDetailIds();
+    static sal_Int32* getDetailIds();
 
 private:
     FixedLine           m_aSeparator1;
@@ -344,7 +344,7 @@ public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
 
     /// get the SfxPoolItem ids used by this tab page
-    static sal_uInt16* getDetailIds();
+    static sal_Int32* getDetailIds();
 
 private:
     FixedLine           m_aSeparator1;
@@ -362,7 +362,7 @@ public:
     virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
     /// get the SfxPoolItem ids used by this tab page
-    static sal_uInt16* getDetailIds();
+    static sal_Int32* getDetailIds();
 
 private:
     CheckBox    m_aHeader;
@@ -460,6 +460,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2000/11/29 22:29:40  fs
+ *  #80003# implementation of the character set map changed
+ *
  *  Revision 1.13  2000/11/28 13:47:31  fs
  *  #80152# m_bDisplayingDeleted renamed in m_bDisplayingInvalid
  *

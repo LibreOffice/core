@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-29 22:29:40 $
+ *  last change: $Author: fs $ $Date: 2000-11-30 08:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems)
             )
         {
             DATASOURCE_TYPE eType = aTypeLoop.getType();
-            sal_uInt16 nPos = m_aDatasourceType.InsertEntry(aTypeLoop.getDisplayName());
+            sal_Int32 nPos = m_aDatasourceType.InsertEntry(aTypeLoop.getDisplayName());
             m_aDatasourceType.SetEntryData(nPos, reinterpret_cast<void*>(eType));
         }
     }
@@ -632,8 +632,8 @@ IMPL_LINK(OGeneralPage, OnDatasourceTypeSelected, ListBox*, _pBox)
 //========================================================================
 //= OCommonBehaviourTabPage
 //========================================================================
-OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs,
-    sal_uInt16 nControlFlags)
+OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, USHORT nResId, const SfxItemSet& _rCoreAttrs,
+    USHORT nControlFlags)
 
     :OGenericAdministrationPage(pParent, ModuleRes(nResId), _rCoreAttrs)
     ,m_pUserNameLabel(NULL)
@@ -839,12 +839,12 @@ ODbaseDetailsPage::~ODbaseDetailsPage()
 }
 
 // -----------------------------------------------------------------------
-sal_uInt16* ODbaseDetailsPage::getDetailIds()
+sal_Int32* ODbaseDetailsPage::getDetailIds()
 {
-    static sal_uInt16* pRelevantIds = NULL;
+    static sal_Int32* pRelevantIds = NULL;
     if (!pRelevantIds)
     {
-        static sal_uInt16 nRelevantIds[] =
+        static sal_Int32 nRelevantIds[] =
         {
             DSID_SHOWDELETEDROWS,
             DSID_CHARSET,
@@ -950,12 +950,12 @@ OJdbcDetailsPage::~OJdbcDetailsPage()
 }
 
 // -----------------------------------------------------------------------
-sal_uInt16* OJdbcDetailsPage::getDetailIds()
+sal_Int32* OJdbcDetailsPage::getDetailIds()
 {
-    static sal_uInt16* pRelevantIds = NULL;
+    static sal_Int32* pRelevantIds = NULL;
     if (!pRelevantIds)
     {
-        static sal_uInt16 nRelevantIds[] =
+        static sal_Int32 nRelevantIds[] =
         {
             DSID_JDBCDRIVERCLASS,
             DSID_CHARSET,
@@ -1039,12 +1039,12 @@ SfxTabPage* OOdbcDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrS
 }
 
 // -----------------------------------------------------------------------
-sal_uInt16* OOdbcDetailsPage::getDetailIds()
+sal_Int32* OOdbcDetailsPage::getDetailIds()
 {
-    static sal_uInt16* pRelevantIds = NULL;
+    static sal_Int32* pRelevantIds = NULL;
     if (!pRelevantIds)
     {
-        static sal_uInt16 nRelevantIds[] =
+        static sal_Int32 nRelevantIds[] =
         {
             DSID_ADDITIONALOPTIONS,
             DSID_CHARSET,
@@ -1087,12 +1087,12 @@ SfxTabPage* OAdabasDetailsPage::Create( Window* pParent, const SfxItemSet& _rAtt
 }
 
 // -----------------------------------------------------------------------
-sal_uInt16* OAdabasDetailsPage::getDetailIds()
+sal_Int32* OAdabasDetailsPage::getDetailIds()
 {
-    static sal_uInt16* pRelevantIds = NULL;
+    static sal_Int32* pRelevantIds = NULL;
     if (!pRelevantIds)
     {
-        static sal_uInt16 nRelevantIds[] =
+        static sal_Int32 nRelevantIds[] =
         {
             DSID_CHARSET,
             0
@@ -1159,12 +1159,12 @@ OTextDetailsPage::~OTextDetailsPage()
 }
 
 // -----------------------------------------------------------------------
-sal_uInt16* OTextDetailsPage::getDetailIds()
+sal_Int32* OTextDetailsPage::getDetailIds()
 {
-    static sal_uInt16* pRelevantIds = NULL;
+    static sal_Int32* pRelevantIds = NULL;
     if (!pRelevantIds)
     {
-        static sal_uInt16 nRelevantIds[] =
+        static sal_Int32 nRelevantIds[] =
         {
             DSID_FIELDDELIMITER,
             DSID_TEXTDELIMITER,
@@ -1368,7 +1368,7 @@ sal_Bool OTextDetailsPage::FillItemSet( SfxItemSet& rSet )
 String OTextDetailsPage::GetSeparator( const ComboBox& rBox, const String& rList )
 {
     sal_Unicode nTok = '\t';
-    sal_uInt16  nRet(0);
+    sal_Int32   nRet(0);
     xub_StrLen  nPos(rBox.GetEntryPos( rBox.GetText() ));
 
     if( nPos == COMBOBOX_ENTRY_NOTFOUND )
@@ -1776,6 +1776,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2000/11/29 22:29:40  fs
+ *  #80003# implementation of the character set map changed
+ *
  *  Revision 1.16  2000/11/28 13:48:15  fs
  *  #80152# m_bDisplayingDeleted -> m_bDisplayingInvalid
  *

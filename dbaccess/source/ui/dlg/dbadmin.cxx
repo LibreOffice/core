@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-28 13:47:59 $
+ *  last change: $Author: fs $ $Date: 2000-11-30 08:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,7 +767,7 @@ sal_Bool ODbAdminDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverP
             aDlg.SetLoginRequestText(sLoginRequest);
             aDlg.SetSavePasswordText(ModuleRes(STR_REMEMBERPASSWORD_SESSION));
 
-            sal_uInt16 nResult = aDlg.Execute();
+            sal_Int32 nResult = aDlg.Execute();
             if (nResult != RET_OK)
                 return sal_False;
 
@@ -1216,7 +1216,7 @@ void ODbAdminDialog::implTranslateProperty(const Reference< XPropertySet >& _rxS
 }
 
 //-------------------------------------------------------------------------
-void ODbAdminDialog::implTranslateProperty(SfxItemSet& _rSet, sal_uInt16  _nId, const Any& _rValue)
+void ODbAdminDialog::implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, const Any& _rValue)
 {
     switch (_rValue.getValueType().getTypeClass())
     {
@@ -1413,10 +1413,10 @@ sal_Bool ODbAdminDialog::hasAuthentication(const SfxItemSet& _rSet) const
 }
 
 //-------------------------------------------------------------------------
-const sal_uInt16* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
+const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
 {
     DATASOURCE_TYPE eType = getDatasourceType(_rSet);
-    const sal_uInt16* pRelevantItems = NULL;
+    const sal_Int32* pRelevantItems = NULL;
     switch (eType)
     {
         case DST_ADABAS: pRelevantItems = OAdabasDetailsPage::getDetailIds(); break;
@@ -1436,7 +1436,7 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
     // us)
 
     // first determine which of all the items are relevant for the data source (depends on the connection url)
-    const sal_uInt16* pRelevantItems = getRelevantItems(_rSource);
+    const sal_Int32* pRelevantItems = getRelevantItems(_rSource);
     DBG_ASSERT(pRelevantItems, "ODbAdminDialog::translateProperties: invalid item ids got from the page!");
 
     // collect the translated property values for the relevant items
@@ -1519,6 +1519,8 @@ IMPL_LINK(ODbAdminDialog, OnNewDatasource, Window*, _pWindow)
         ShowServiceNotAvailableError(this, String(SERVICE_SDB_DATASOURCE), sal_True);
         return 1L;
     }
+
+    GetInputSetImpl()->ClearItem();
 
     // insert a new entry for the new DS
     m_aSelector.insertNew(sNewName);
@@ -1851,12 +1853,12 @@ ODatasourceSelector::ODatasourceSelector(Window* _pParent, const ResId& _rResId)
 //-------------------------------------------------------------------------
 ODatasourceSelector::~ODatasourceSelector()
 {
-    for (sal_uInt16 i=0; i<m_aDatasourceList.GetEntryCount(); ++i)
+    for (sal_Int32 i=0; i<m_aDatasourceList.GetEntryCount(); ++i)
         delete reinterpret_cast<EntryData*>(m_aDatasourceList.GetEntryData(i));
 }
 
 //-------------------------------------------------------------------------
-sal_uInt16 ODatasourceSelector::getImageId(DatasourceState _eState)
+sal_Int32 ODatasourceSelector::getImageId(DatasourceState _eState)
 {
     switch (_eState)
     {
@@ -1870,7 +1872,7 @@ sal_uInt16 ODatasourceSelector::getImageId(DatasourceState _eState)
 }
 
 //-------------------------------------------------------------------------
-DatasourceState ODatasourceSelector::getEntryState(sal_uInt16 _nPos) const
+DatasourceState ODatasourceSelector::getEntryState(sal_Int32 _nPos) const
 {
     EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData(_nPos));
     if (!pData)
@@ -1879,7 +1881,7 @@ DatasourceState ODatasourceSelector::getEntryState(sal_uInt16 _nPos) const
 }
 
 //-------------------------------------------------------------------------
-void ODatasourceSelector::setEntryState(sal_uInt16 _nPos, DatasourceState _eState)
+void ODatasourceSelector::setEntryState(sal_Int32 _nPos, DatasourceState _eState)
 {
     EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData(_nPos));
     if (pData ? _eState == pData->eState : CLEAN == _eState)
@@ -1903,7 +1905,7 @@ void ODatasourceSelector::setEntryState(sal_uInt16 _nPos, DatasourceState _eStat
 }
 
 //-------------------------------------------------------------------------
-sal_Int32 ODatasourceSelector::getAccessKey(sal_uInt16 _nPos) const
+sal_Int32 ODatasourceSelector::getAccessKey(sal_Int32 _nPos) const
 {
     EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData(_nPos));
     if (!pData)
@@ -1912,7 +1914,7 @@ sal_Int32 ODatasourceSelector::getAccessKey(sal_uInt16 _nPos) const
 }
 
 //-------------------------------------------------------------------------
-void ODatasourceSelector::setAccessKey(sal_uInt16 _nPos, sal_Int32 _nAccessKey)
+void ODatasourceSelector::setAccessKey(sal_Int32 _nPos, sal_Int32 _nAccessKey)
 {
     EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData(_nPos));
     DBG_ASSERT(pData, "ODatasourceSelector::setAccessKey: to be called for entry in DELETED state only!");
@@ -1925,7 +1927,7 @@ void ODatasourceSelector::setAccessKey(sal_uInt16 _nPos, sal_Int32 _nAccessKey)
 }
 
 //-------------------------------------------------------------------------
-void ODatasourceSelector::implDeleted(sal_uInt16 _nPos)
+void ODatasourceSelector::implDeleted(sal_Int32 _nPos)
 {
     // remove the entry
     m_aDatasourceList.RemoveEntry(_nPos);
@@ -1941,7 +1943,7 @@ void ODatasourceSelector::implDeleted(sal_uInt16 _nPos)
 //-------------------------------------------------------------------------
 void ODatasourceSelector::deleted(sal_Int32 _nAccessKey)
 {
-    sal_uInt16 nPos = getDeletedEntryPos(_nAccessKey);
+    sal_Int32 nPos = getDeletedEntryPos(_nAccessKey);
     if (-1 != nPos)
         implDeleted(nPos);
     else
@@ -1951,7 +1953,7 @@ void ODatasourceSelector::deleted(sal_Int32 _nAccessKey)
 //-------------------------------------------------------------------------
 void ODatasourceSelector::deleted(const String& _rName)
 {
-    sal_uInt16 nPos = getValidEntryPos(_rName);
+    sal_Int32 nPos = getValidEntryPos(_rName);
     if (-1 != nPos)
         implDeleted(nPos);
     else
@@ -1962,7 +1964,7 @@ void ODatasourceSelector::deleted(const String& _rName)
 void ODatasourceSelector::restoreDeleted(sal_Int32 _nAccessKey, DatasourceState _eState)
 {
     DBG_ASSERT(DELETED != _eState, "ODatasourceSelector::restoreDeleted: invalid datasource state!");
-    sal_uInt16 nPos = getDeletedEntryPos(_nAccessKey);
+    sal_Int32 nPos = getDeletedEntryPos(_nAccessKey);
     if (-1 == nPos)
     {
         DBG_ERROR("ODatasourceSelector::restoreDeleted: invalid access key!");
@@ -1978,7 +1980,7 @@ void ODatasourceSelector::restoreDeleted(sal_Int32 _nAccessKey, DatasourceState 
 //-------------------------------------------------------------------------
 void ODatasourceSelector::markDeleted(const String& _rName, sal_Int32 _nAccessKey)
 {
-    sal_uInt16 nPos = getValidEntryPos(_rName);
+    sal_Int32 nPos = getValidEntryPos(_rName);
     DBG_ASSERT(-1 != nPos, "ODatasourceSelector::markDeleted: no non-deleted entry wiht that name!");
     setEntryState(nPos, DELETED);
     DBG_ASSERT(_nAccessKey, "ODatasourceSelector::markDeleted: invalid access key!");
@@ -1989,15 +1991,15 @@ void ODatasourceSelector::markDeleted(const String& _rName, sal_Int32 _nAccessKe
 //-------------------------------------------------------------------------
 void ODatasourceSelector::modified(const String& _sName)
 {
-    sal_uInt16 nPos = getValidEntryPos(_sName);
+    sal_Int32 nPos = getValidEntryPos(_sName);
     DBG_ASSERT(-1 != nPos, "ODatasourceSelector::modified: invalid name!");
     setEntryState(nPos, MODIFIED);
 }
 
 //-------------------------------------------------------------------------
-sal_uInt16 ODatasourceSelector::getDeletedEntryPos(sal_Int32 _nAccessKey)
+sal_Int32 ODatasourceSelector::getDeletedEntryPos(sal_Int32 _nAccessKey)
 {
-    for (sal_uInt16 i=0; i<m_aDatasourceList.GetEntryCount(); ++i)
+    for (sal_Int32 i=0; i<m_aDatasourceList.GetEntryCount(); ++i)
         if ((DELETED == getEntryState(i)) && (_nAccessKey == getAccessKey(i)))
             return i;
 
@@ -2005,10 +2007,10 @@ sal_uInt16 ODatasourceSelector::getDeletedEntryPos(sal_Int32 _nAccessKey)
 }
 
 //-------------------------------------------------------------------------
-sal_uInt16 ODatasourceSelector::getValidEntryPos(const String& _rName)
+sal_Int32 ODatasourceSelector::getValidEntryPos(const String& _rName)
 {
     // first guess
-    sal_uInt16 nPos = m_aDatasourceList.GetEntryPos(_rName);
+    sal_Int32 nPos = m_aDatasourceList.GetEntryPos(_rName);
     while (DELETED == getEntryState(nPos))
     {
         // unfortunally we no such thing as "GetEntryPos(<name>, <startindex>) ... -> search manually
@@ -2026,7 +2028,7 @@ sal_uInt16 ODatasourceSelector::getValidEntryPos(const String& _rName)
 //-------------------------------------------------------------------------
 void ODatasourceSelector::renamed(const String& _rOldName, const String& _rNewName)
 {
-    sal_uInt16 nPos = getValidEntryPos(_rOldName);
+    sal_Int32 nPos = getValidEntryPos(_rOldName);
     DBG_ASSERT(-1 != nPos, "ODatasourceSelector::renamed: invalid old name!");
 
     // save the info about the entry
@@ -2041,7 +2043,7 @@ void ODatasourceSelector::renamed(const String& _rOldName, const String& _rNewNa
 }
 
 //-------------------------------------------------------------------------
-sal_uInt16 ODatasourceSelector::insert(const String& _rName)
+sal_Int32 ODatasourceSelector::insert(const String& _rName)
 {
     sal_Int16 nPos = m_aDatasourceList.InsertEntry(_rName, Image(ModuleRes(getImageId(CLEAN))));
     m_aDatasourceList.SetEntryData(nPos, static_cast<void*>(NULL));
@@ -2051,7 +2053,7 @@ sal_uInt16 ODatasourceSelector::insert(const String& _rName)
 //-------------------------------------------------------------------------
 void ODatasourceSelector::flushed(const String& _rName)
 {
-    sal_uInt16 nPos = getValidEntryPos(_rName);
+    sal_Int32 nPos = getValidEntryPos(_rName);
     DBG_ASSERT(-1 != nPos, "ODatasourceSelector::flushed: invalid data source name!");
 
     setEntryState(nPos, CLEAN);
@@ -2068,7 +2070,7 @@ void ODatasourceSelector::insertNew(const String& _rName)
 //-------------------------------------------------------------------------
 void ODatasourceSelector::select(const String& _rName)
 {
-    sal_uInt16 nPos = getValidEntryPos(_rName);
+    sal_Int32 nPos = getValidEntryPos(_rName);
     DBG_ASSERT(-1 != nPos, "ODatasourceSelector::select: invalid data source name (maybe deleted or not existent)!");
 
     m_aDatasourceList.SelectEntryPos(nPos);
@@ -2077,7 +2079,7 @@ void ODatasourceSelector::select(const String& _rName)
 //-------------------------------------------------------------------------
 void ODatasourceSelector::select(sal_Int32 _nAccessKey)
 {
-    sal_uInt16 nPos = getDeletedEntryPos(_nAccessKey);
+    sal_Int32 nPos = getDeletedEntryPos(_nAccessKey);
     DBG_ASSERT(-1 != nPos, "ODatasourceSelector::select: invalid access key (have no such entry)!");
 
     m_aDatasourceList.SelectEntryPos(nPos);
@@ -2143,7 +2145,7 @@ long ODatasourceSelector::Notify(NotifyEvent& _rNEvt)
         {
             const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
             const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
-            if ((0 == rKeyCode.GetAllModifier()) && ((sal_uInt16)-1 != m_aDatasourceList.GetSelectEntryPos()))
+            if ((0 == rKeyCode.GetAllModifier()) && ((sal_Int32)-1 != m_aDatasourceList.GetSelectEntryPos()))
                 switch (rKeyCode.GetCode())
                 {
                     case KEY_DELETE:
@@ -2192,6 +2194,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2000/11/28 13:47:59  fs
+ *  #80152# implApplyChanges: check the entry count of the listbox
+ *
  *  Revision 1.21  2000/11/28 11:41:42  oj
  *  #80827# check dbroot if dbconfig failed
  *
