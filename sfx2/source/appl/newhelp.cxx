@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 10:48:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,9 +296,6 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( \
             DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY ); \
     xTrans->parseStrict( aURL )
-
-#define GET_SLOT_NAME( nId ) \
-    SFX_SLOTPOOL().GetSlotName_Impl( nId )
 
 //.........................................................................
 namespace sfx2
@@ -2603,7 +2600,7 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 aMenu.CheckItem(TBI_SELECTIONMODE, bCheck);
             }
             aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_COPY, GET_SLOT_NAME( SID_COPY ),
+            aMenu.InsertItem( TBI_COPY, String( SfxResId( STR_HELP_MENU_TEXT_COPY ) ),
                 Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_COPY : IMG_HELP_TOOLBOX_COPY ) ) );
             aMenu.SetHelpId( TBI_COPY, SID_COPY );
             aMenu.EnableItem( TBI_COPY, HasSelection() );
