@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 15:57:35 $
+ *  last change: $Author: ssa $ $Date: 2001-12-13 15:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1473,7 +1473,7 @@ void DbgDialogTest( Window* pWindow )
                  (pChild->GetType() == WINDOW_TRISTATEBOX) ||
                  (pChild->GetType() == WINDOW_PUSHBUTTON) )
             {
-                if ( !cAccel && aText.Len() && !aText.EqualsAscii( "..." ) )
+                if ( aText.Len() && !aText.EqualsAscii( "..." ) )
                 {
                     const char* pClass;
                     if ( pChild->GetType() == WINDOW_RADIOBUTTON )
@@ -1488,11 +1488,43 @@ void DbgDialogTest( Window* pWindow )
                         pClass = "PushButton";
                     else
                         pClass = "Dontknow";
-                    DbgOutTypef( DBG_OUT_ERROR,
+                    if( !cAccel )
+                        DbgOutTypef( DBG_OUT_ERROR,
                                  "%s should have a mnemonic char (~): %s",
                                  pClass,
                                  ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+
+                    // check text width
+                    int aWidth=0;
+                    switch( pChild->GetType() )
+                    {
+                        case WINDOW_RADIOBUTTON:
+                        case WINDOW_IMAGERADIOBUTTON:
+                            aWidth = ((RadioButton*)pChild)->CalcMinimumSize(0).Width();
+                            break;
+                        case WINDOW_CHECKBOX:
+                        case WINDOW_TRISTATEBOX:
+                            aWidth = ((CheckBox*)pChild)->CalcMinimumSize(0).Width();
+                            break;
+                        case WINDOW_PUSHBUTTON:
+                            aWidth = ((PushButton*)pChild)->CalcMinimumSize(0).Width();
+                            break;
+                        default: break;
+                    }
+                    if( pChild->IsVisible() && pChild->GetSizePixel().Width() < aWidth )
+                        DbgOutTypef( DBG_OUT_ERROR,
+                                 "%s exceeds window width: %s",
+                                 pClass,
+                                 ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
                 }
+            }
+
+            if ( pChild->GetType() == WINDOW_FIXEDLINE )
+            {
+                if ( pChild->GetSizePixel().Width() < pChild->GetTextWidth( aText ) )
+                    DbgOutTypef( DBG_OUT_ERROR,
+                                 "FixedLine exceeds window width: %s",
+                                 ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
             }
 
             if ( pChild->GetType() == WINDOW_FIXEDTEXT )
@@ -1503,6 +1535,25 @@ void DbgDialogTest( Window* pWindow )
                     DbgOutTypef( DBG_OUT_ERROR,
                                  "FixedText greater than one line, but WordBreak is not set: %s",
                                  ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                }
+
+                if ( pChild->IsVisible() )
+                {
+                    int aWidth=0;
+                    if( nAccelPos != STRING_NOTFOUND )
+                    {
+                        aWidth = pChild->GetTextWidth( aText, 0, nAccelPos ) +
+                                 pChild->GetTextWidth( aText, nAccelPos+1, aText.Len() - nAccelPos - 1);
+                    }
+                    else
+                        aWidth = pChild->GetTextWidth( aText );
+
+                    if ( pChild->GetSizePixel().Width() < aWidth && !(pChild->GetStyle() & WB_WORDBREAK) )
+                        {
+                            DbgOutTypef( DBG_OUT_ERROR,
+                                         "FixedText exceeds window width: %s",
+                                         ByteString( aErrorText, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                        }
                 }
 
                 if ( (i+1 < nChildCount) && aText.Len() )
