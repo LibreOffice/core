@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextSection.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-02-10 13:26:12 $
+ *  last change:$Date: 2003-05-27 13:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ public class SwXTextSection extends TestCase {
     XTextDocument xTextDoc;
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-    SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+    SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
     try {
         log.println( "creating a textdocument" );
