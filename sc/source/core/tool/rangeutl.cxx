@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeutl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-09-24 18:20:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 BOOL ScRangeUtil::MakeArea( const String&   rAreaStr,
                             ScArea&         rArea,
                             ScDocument*     pDoc,
-                            USHORT          nTab ) const
+                            SCTAB           nTab ) const
 {
     // Eingabe in rAreaStr: "$Tabelle1.$A1:$D17"
 
@@ -91,8 +91,8 @@ BOOL ScRangeUtil::MakeArea( const String&   rAreaStr,
     USHORT      nPointPos   = rAreaStr.Search('.');
     USHORT      nColonPos   = rAreaStr.Search(':');
     String      aStrArea( rAreaStr );
-    ScRefTripel startPos;
-    ScRefTripel endPos;
+    ScRefAddress    startPos;
+    ScRefAddress    endPos;
 
     if ( nColonPos == STRING_NOTFOUND )
         if ( nPointPos != STRING_NOTFOUND )
@@ -104,9 +104,9 @@ BOOL ScRangeUtil::MakeArea( const String&   rAreaStr,
     nSuccess = ConvertDoubleRef( pDoc, aStrArea, nTab, startPos, endPos );
 
     if ( nSuccess )
-        rArea = ScArea( startPos.GetTab(),
-                        startPos.GetCol(),  startPos.GetRow(),
-                        endPos.GetCol(),    endPos.GetRow() );
+        rArea = ScArea( startPos.Tab(),
+                        startPos.Col(), startPos.Row(),
+                        endPos.Col(),   endPos.Row() );
 
     return nSuccess;
 }
@@ -167,15 +167,15 @@ BOOL ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
     if (   STRING_NOTFOUND != nColonPos
         && STRING_NOTFOUND != aTempAreaStr.Search('.') )
     {
-        ScRefTripel aStartPos;
-        ScRefTripel aEndPos;
+        ScRefAddress    aStartPos;
+        ScRefAddress    aEndPos;
 
         aStartPosStr = aTempAreaStr.Copy( 0,           nColonPos  );
         aEndPosStr   = aTempAreaStr.Copy( nColonPos+1, STRING_LEN );
 
         if ( ConvertSingleRef( pDoc, aStartPosStr, 0, aStartPos ) )
         {
-            if ( ConvertSingleRef( pDoc, aEndPosStr, aStartPos.GetTab(), aEndPos ) )
+            if ( ConvertSingleRef( pDoc, aEndPosStr, aStartPos.Tab(), aEndPos ) )
             {
                 aStartPos.SetRelCol( FALSE );
                 aStartPos.SetRelRow( FALSE );
@@ -188,14 +188,14 @@ BOOL ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
 
                 if ( pppAreas && pAreaCount ) // Array zurueckgegeben?
                 {
-                    USHORT      nStartTab   = aStartPos.GetTab();
-                    USHORT      nEndTab     = aEndPos.GetTab();
-                    USHORT      nTabCount   = nEndTab-nStartTab+1;
+                    SCTAB       nStartTab   = aStartPos.Tab();
+                    SCTAB       nEndTab     = aEndPos.Tab();
+                    USHORT      nTabCount   = static_cast<USHORT>(nEndTab-nStartTab+1);
                     ScArea**    theAreas    = new ScArea*[nTabCount];
-                    USHORT      nTab        = 0;
+                    SCTAB       nTab        = 0;
                     USHORT      i           = 0;
-                    ScArea      theArea( 0, aStartPos.GetCol(), aStartPos.GetRow(),
-                                            aEndPos.GetCol(), aEndPos.GetRow() );
+                    ScArea      theArea( 0, aStartPos.Col(), aStartPos.Row(),
+                                            aEndPos.Col(), aEndPos.Row() );
 
                     nTab = nStartTab;
                     for ( i=0; i<nTabCount; i++ )
@@ -218,14 +218,14 @@ BOOL ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
 
 BOOL ScRangeUtil::IsAbsArea( const String&  rAreaStr,
                              ScDocument*    pDoc,
-                             USHORT         nTab,
+                             SCTAB          nTab,
                              String*        pCompleteStr,
-                             ScRefTripel*   pStartPos,
-                             ScRefTripel*   pEndPos ) const
+                             ScRefAddress*  pStartPos,
+                             ScRefAddress*  pEndPos ) const
 {
     BOOL        bIsAbsArea = FALSE;
-    ScRefTripel startPos;
-    ScRefTripel endPos;
+    ScRefAddress    startPos;
+    ScRefAddress    endPos;
 
     bIsAbsArea = ConvertDoubleRef( pDoc, rAreaStr, nTab, startPos, endPos );
 
@@ -259,12 +259,12 @@ BOOL ScRangeUtil::IsAbsArea( const String&  rAreaStr,
 
 BOOL ScRangeUtil::IsAbsPos( const String&   rPosStr,
                             ScDocument*     pDoc,
-                            USHORT          nTab,
+                            SCTAB           nTab,
                             String*         pCompleteStr,
-                            ScRefTripel*    pPosTripel ) const
+                            ScRefAddress*   pPosTripel ) const
 {
     BOOL        bIsAbsPos = FALSE;
-    ScRefTripel thePos;
+    ScRefAddress    thePos;
 
     bIsAbsPos = ConvertSingleRef( pDoc, rPosStr, nTab, thePos );
 
@@ -288,14 +288,18 @@ BOOL ScRangeUtil::IsAbsPos( const String&   rPosStr,
 BOOL ScRangeUtil::MakeRangeFromName (
     const String&   rName,
     ScDocument*     pDoc,
-    USHORT          nCurTab,
+    SCTAB           nCurTab,
     ScRange&        rRange,
     RutlNameScope   eScope
                                   ) const
 {
     BOOL bResult=FALSE;
     ScRangeUtil     aRangeUtil;
-    USHORT          nTab, nColStart, nColEnd, nRowStart, nRowEnd;
+    SCTAB nTab;
+    SCCOL nColStart;
+    SCCOL nColEnd;
+    SCROW nRowStart;
+    SCROW nRowEnd;
 
     if( eScope==RUTL_NAMES )
     {
@@ -306,19 +310,19 @@ BOOL ScRangeUtil::MakeRangeFromName (
         {
             ScRangeData* pData = rRangeNames[nAt];
             String       aStrArea;
-            ScRefTripel  aStartPos;
-            ScRefTripel  aEndPos;
+            ScRefAddress     aStartPos;
+            ScRefAddress     aEndPos;
 
             pData->GetSymbol( aStrArea );
 
             if ( IsAbsArea( aStrArea, pDoc, nCurTab,
                                        NULL, &aStartPos, &aEndPos ) )
             {
-                nTab       = aStartPos.GetTab();
-                nColStart  = aStartPos.GetCol();
-                nRowStart  = aStartPos.GetRow();
-                nColEnd    = aEndPos.GetCol();
-                nRowEnd    = aEndPos.GetRow();
+                nTab       = aStartPos.Tab();
+                nColStart  = aStartPos.Col();
+                nRowStart  = aStartPos.Row();
+                nColEnd    = aEndPos.Col();
+                nRowEnd    = aEndPos.Row();
                 bResult    = TRUE;
             }
             else
@@ -328,9 +332,9 @@ BOOL ScRangeUtil::MakeRangeFromName (
                 if ( IsAbsPos( aStrArea, pDoc, nCurTab,
                                           NULL, &aStartPos ) )
                 {
-                    nTab       = aStartPos.GetTab();
-                    nColStart  = nColEnd = aStartPos.GetCol();
-                    nRowStart  = nRowEnd = aStartPos.GetRow();
+                    nTab       = aStartPos.Tab();
+                    nColStart  = nColEnd = aStartPos.Col();
+                    nRowStart  = nRowEnd = aStartPos.Row();
                     bResult    = TRUE;
                 }
             }
@@ -365,9 +369,9 @@ BOOL ScRangeUtil::MakeRangeFromName (
 
 //========================================================================
 
-ScArea::ScArea( USHORT tab,
-                USHORT colStart, USHORT rowStart,
-                USHORT colEnd,   USHORT rowEnd ) :
+ScArea::ScArea( SCTAB tab,
+                SCCOL colStart, SCROW rowStart,
+                SCCOL colEnd,   SCROW rowEnd ) :
         nTab     ( tab ),
         nColStart( colStart ),  nRowStart( rowStart ),
         nColEnd  ( colEnd ),    nRowEnd  ( rowEnd )
@@ -387,9 +391,9 @@ ScArea::ScArea( const ScArea& r ) :
 
 void ScArea::Clear()
 {
-    nTab =
-    nColStart = nRowStart =
-    nColEnd   = nRowEnd   = 0;
+    nTab = 0;
+    nColStart = nColEnd = 0;
+    nRowStart = nRowEnd = 0;
 }
 
 //------------------------------------------------------------------------
@@ -419,11 +423,14 @@ BOOL ScArea::operator==( const ScArea& r ) const
 
 SvStream& operator>> ( SvStream& rStream, ScArea& rArea )
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream >> rArea.nTab;
     rStream >> rArea.nColStart;
     rStream >> rArea.nRowStart;
     rStream >> rArea.nColEnd;
     rStream >> rArea.nRowEnd;
+#endif // SC_ROWLIMIT_STREAM_ACCESS
     return rStream;
 }
 
@@ -431,11 +438,14 @@ SvStream& operator>> ( SvStream& rStream, ScArea& rArea )
 
 SvStream& operator<< ( SvStream& rStream, const ScArea& rArea )
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream << rArea.nTab;
     rStream << rArea.nColStart;
     rStream << rArea.nRowStart;
     rStream << rArea.nColEnd;
     rStream << rArea.nRowEnd;
+#endif // SC_ROWLIMIT_STREAM_ACCESS
     return rStream;
 }
 
