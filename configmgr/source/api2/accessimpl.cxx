@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lla $ $Date: 2001-08-01 12:16:00 $
+ *  last change: $Author: dg $ $Date: 2001-09-18 19:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,6 @@ OUString implGetHierarchicalName( NodeAccess& rNode ) throw(RuntimeException)
 OUString implComposeHierarchicalName(NodeGroupInfoAccess& rNode, const OUString& sRelativeName )
     throw(css::lang::IllegalArgumentException, NoSupportException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implComposeHierarchicalName()");
-
     using configuration::validateRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails there
     OUString sRet;
     try
@@ -204,8 +202,6 @@ OUString implComposeHierarchicalName(NodeGroupInfoAccess& rNode, const OUString&
 OUString implComposeHierarchicalName(NodeSetInfoAccess& rNode, const OUString& sElementName )
     throw(css::lang::IllegalArgumentException, NoSupportException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implComposeHierarchicalName()");
-
     using configuration::validateElementPathComponent; // should actually be found by "Koenig" lookup, but MSVC6 fails there
     using configuration::Path::Component;
     OUString sRet;
@@ -249,8 +245,6 @@ OUString implComposeHierarchicalName(NodeSetInfoAccess& rNode, const OUString& s
 // for group nodes
 uno::Type implGetElementType(NodeGroupInfoAccess& rNode) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implGetElementType()");
-
     rNode.checkAlive();
     // group nodes have a mix of types
     // TODO(?): Discover single common type
@@ -260,8 +254,6 @@ uno::Type implGetElementType(NodeGroupInfoAccess& rNode) throw(RuntimeException)
 // for set nodes
 uno::Type implGetElementType(NodeSetInfoAccess& rNode) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implGetElementType()");
-
     uno::Type aRet;
     try
     {
@@ -282,9 +274,7 @@ uno::Type implGetElementType(NodeSetInfoAccess& rNode) throw(RuntimeException)
 // for group nodes
 sal_Bool implHasElements(NodeGroupInfoAccess& rNode) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implHasElements()");
-
-//  rNode.checkAlive();
+    //  rNode.checkAlive();
 //  return true;    // group nodes always have children
 
 // Better: cater for the case where we are reaching the depth limit
@@ -311,8 +301,6 @@ sal_Bool implHasElements(NodeGroupInfoAccess& rNode) throw(RuntimeException)
 // for set nodes
 sal_Bool implHasElements(NodeSetInfoAccess& rNode) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implHasElements()");
-
     try
     {
         GuardedNodeDataAccess impl( rNode ); // provider lock needed
@@ -460,8 +448,6 @@ namespace internal
 //..................................................................................................................
 OUString implGetExactName(NodeGroupInfoAccess& rNode, const OUString& rApproximateName ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implGetExactName()");
-
     // here we try to support both tree-fragment-local pathes and simple names (the latter ones are just an instance of the first)
     try
     {
@@ -503,7 +489,6 @@ OUString implGetExactName(NodeGroupInfoAccess& rNode, const OUString& rApproxima
 //..................................................................................................................
 OUString implGetExactName(NodeSetInfoAccess& rNode, const OUString& rApproximateName ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implGetExactName()");
 
     // here we can support only local names
     try
@@ -551,7 +536,6 @@ OUString implGetExactName(NodeSetInfoAccess& rNode, const OUString& rApproximate
 beans::Property implGetAsProperty(NodeAccess& rNode)
     throw(uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implGetAsProperty()");
 
     using beans::Property;
     try
@@ -588,8 +572,6 @@ beans::Property implGetAsProperty(NodeAccess& rNode)
 //-----------------------------------------------------------------------------------
 sal_Bool implHasByName(NodeAccess& rNode, const OUString& sName ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implHasByName()");
-
     using namespace com::sun::star::container;
     using configuration::hasChildOrElement;
     try
@@ -624,8 +606,6 @@ sal_Bool implHasByName(NodeAccess& rNode, const OUString& sName ) throw(RuntimeE
 Any implGetByName(NodeAccess& rNode, const OUString& sName )
     throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implGetByName()");
-
     using namespace com::sun::star::container;
     using configuration::getChildOrElement;
     try
@@ -675,8 +655,6 @@ Any implGetByName(NodeAccess& rNode, const OUString& sName )
 //-----------------------------------------------------------------------------------
 Sequence< OUString > implGetElementNames( NodeAccess& rNode ) throw( RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implGetElementNames()");
-
     CollectNodeNames aCollect;
 
     try
@@ -703,8 +681,6 @@ Sequence< OUString > implGetElementNames( NodeAccess& rNode ) throw( RuntimeExce
 //-----------------------------------------------------------------------------------
 sal_Bool implHasByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchicalName ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implHasByHierarchicalName()");
-
     using namespace com::sun::star::container;
     using configuration::validateAndReducePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
     using configuration::getDeepDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
@@ -739,7 +715,6 @@ sal_Bool implHasByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchi
 Any implGetByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchicalName )
     throw(css::container::NoSuchElementException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implGetByHierarchicalName()");
     // rtl::OUString aTmpStr(implGetHierarchicalName(rNode));
     // RTL_LOGFILE_CONTEXT_TRACE2(aLog, "Node: %s HierachicalName: %s",RTL_LOGFILE_OU2A(aTmpStr), RTL_LOGFILE_OU2A(sHierarchicalName));
 
@@ -797,8 +772,6 @@ Any implGetByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchicalNa
 OUString SAL_CALL implGetElementTemplateName(NodeSetInfoAccess& rNode)
     throw(uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implGetElementTemplateName()");
-
     GuardedNode<NodeSetInfoAccess> impl(rNode);
     return impl->getElementInfo().getTemplatePathString();
 }
@@ -808,8 +781,6 @@ OUString SAL_CALL implGetElementTemplateName(NodeSetInfoAccess& rNode)
 OUString SAL_CALL implEscapeString(NodeAccess& rNode, const OUString& aString)
     throw(css::lang::IllegalArgumentException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implEscapeString()");
-
     OUString sRet;
     try
     {
@@ -830,8 +801,6 @@ OUString SAL_CALL implEscapeString(NodeAccess& rNode, const OUString& aString)
 OUString SAL_CALL implUnescapeString(NodeAccess& rNode, const OUString& aEscapedString)
     throw(css::lang::IllegalArgumentException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::configapi", "jb99855", "implUnescapeString()");
-
     OUString sRet;
     try
     {
