@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-18 08:25:31 $
+ *  last change: $Author: pb $ $Date: 2001-09-25 13:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XVIEWSETTINGSSUPPLIER_HPP_
+#include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
@@ -751,7 +754,7 @@ void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 
 void IndexTabPage_Impl::SetFactory( const String& rFactory )
 {
-    if ( rFactory != aFactory )
+    if ( rFactory != aFactory && rFactory.Len() > 0 )
     {
         aFactory = rFactory;
         ClearIndex();
@@ -2100,6 +2103,16 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
     pIndexWin->GrabFocusBack();
     if ( pListener->IsSuccessful() )
     {
+        // set some view settings: "prevent help tips" and "helpid == 68245"
+        Reference < XController > xController = pTextWin->getFrame()->getController();
+        if ( xController.is() )
+        {
+            Reference < XViewSettingsSupplier > xSettings( xController, UNO_QUERY );
+            Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
+            xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("PreventHelpTips"), makeAny( sal_Bool( sal_True ) ) );
+            xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("HelpURL"), makeAny( DEFINE_CONST_OUSTRING("HID:68245") ) );
+        }
+
         // When the SearchPage opens the help doc, then select all words, which are equal to its text
         String sSearchText = pIndexWin->GetSearchText();
         if ( sSearchText.Len() > 0 )
@@ -2208,6 +2221,16 @@ void SfxHelpWindow_Impl::SetHelpURL( const String& rURL )
     INetURLObject aObj( rURL );
     SetFactory( aObj.GetHost() );
     pHelpInterceptor->SetStartURL( rURL );
+
+    URL aURL;
+    aURL.Complete = rURL;
+    PARSE_URL( aURL );
+
+    String aTarget( DEFINE_CONST_UNICODE("_self") );
+    Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
+    Reference < XDispatch > xDisp = xProv.is() ?
+        xProv->queryDispatch( aURL, aTarget, 0 ) : Reference < XDispatch >();
+    AddURLListener( aURL, xDisp );
 }
 
 // -----------------------------------------------------------------------
@@ -2300,12 +2323,21 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
     }
 }
 
+// -----------------------------------------------------------------------
+
 void SfxHelpWindow_Impl::UpdateToolbox()
 {
     pTextWin->GetToolBox().EnableItem( TBI_BACKWARD, pHelpInterceptor->HasHistoryPred() );
     pTextWin->GetToolBox().EnableItem( TBI_FORWARD, pHelpInterceptor->HasHistorySucc() );
 }
 
+// -----------------------------------------------------------------------
+
+void SfxHelpWindow_Impl::AddURLListener( const URL& aURL, Reference < XDispatch > xDisp  )
+{
+    if ( xDisp.is() )
+        ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
+}
 
 // class SfxAddHelpBookmarkDialog_Impl -----------------------------------
 

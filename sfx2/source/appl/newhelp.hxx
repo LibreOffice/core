@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-13 11:57:38 $
+ *  last change: $Author: pb $ $Date: 2001-09-25 13:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,8 @@ public:
     void                DoAction( USHORT nActionId );
 
     void                UpdateToolbox();
+    void                AddURLListener( const ::com::sun::star::util::URL& aURL,
+                                        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDisp );
 };
 
 class SfxAddHelpBookmarkDialog_Impl : public ModalDialog

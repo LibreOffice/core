@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-07 08:22:49 $
+ *  last change: $Author: pb $ $Date: 2001-09-25 13:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,9 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
 
     if ( !xResult.is() && m_xSlaveDispatcher.is() )
         xResult = m_xSlaveDispatcher->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
+
+    if ( aTargetFrameName.getLength() > 0 || nSearchFlags )
+        m_pWindow->AddURLListener( aURL, xResult );
 
     return xResult;
 }
