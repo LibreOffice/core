@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSource.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-17 07:01:55 $
+ *  last change: $Author: obo $ $Date: 2002-07-08 15:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,16 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
 #endif
 
+#ifndef __com_sun_star_sdbc_XDataSource_idl__
+#include <com/sun/star/sdbc/XDataSource.idl>
+#endif
 
  module com {  module sun {  module star {  module sdb {
 
 interface XCompletedConnection;
 interface XQueryDefinitionsSupplier;
 interface XBookmarksSupplier;
+interface XDataSource;
 
 /** is a factory to establish database connections. It should be registered at
     a NamingService.@see com::sun::star::sdb::DatabaseContext
@@ -194,6 +198,9 @@ service DataSource
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.8  2002/06/17 07:01:55  oj
+    interface XDataSource was missing.
+
     Revision 1.7.2.2  2002/06/17 07:00:12  oj
     interface XDataSource was missing.
 
