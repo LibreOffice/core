@@ -47,6 +47,11 @@ public class InformationWriter
 {
     Print maPrinter;
 
+    public InformationWriter ()
+    {
+        this(null);
+    }
+
     public InformationWriter (Print aPrinter)
     {
         maPrinter = aPrinter;
@@ -420,11 +425,17 @@ public class InformationWriter
 
     public  void    print (String text)
     {
-        maPrinter.print (text);
+        if (maPrinter == null)
+            System.out.print (text);
+        else
+            maPrinter.print (text);
     }
 
     public  void    println (String text)
     {
-        maPrinter.println (text);
+        if (maPrinter == null)
+            System.out.println (text);
+        else
+            maPrinter.println (text);
     }
 }
