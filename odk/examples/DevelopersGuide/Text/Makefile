@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:28:43 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:56:06 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,39 +48,55 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=TextExample
-OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
+SAMPLE_NAME=TextExample
+SAMPLE_CLASS_OUT = $(OUT_CLASS)/$(SAMPLE_NAME)
+SAMPLE_GEN_OUT = $(OUT_MISC)/$(SAMPLE_NAME)
 
-JAVAFILES  = \
-	   TextDocuments.java
-
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
+APP1_NAME=TextDocuments
+APP1_JAR=$(SAMPLE_CLASS_OUT)/$(APP1_NAME).jar
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
-		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+		$(PATH_SEPARATOR)$(SAMPLE_CLASS_OUT))
 
 
 # Targets
 .PHONY: ALL
 ALL : \
-    TextExample
+    $(SAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
-$(CLASSFILES) : $(JAVAFILES)
+$(SAMPLE_CLASS_OUT)/%.class : %.java
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(SAMPLE_CLASS_OUT) $<
 
-TextExample : $(CLASSFILES)
+$(SAMPLE_CLASS_OUT)/%.mf :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
+
+$(SAMPLE_CLASS_OUT)/%.jar : $(SAMPLE_CLASS_OUT)/%.mf $(SAMPLE_CLASS_OUT)/%.class
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	+cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_JAR) cvfm $(@F) $*.mf $*.class
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
+$(APP1_JAR) : $(SAMPLE_CLASS_OUT)/$(APP1_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP1_NAME).class
+
+$(SAMPLE_NAME) : $(APP1_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
-	@echo make TextDocuments.run
+	@echo make $(APP1_NAME).run
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_COMP_CLASS)/%.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
+%.run: $(SAMPLE_CLASS_OUT)/%.jar
+	-$(MKDIR) $(subst /,$(PS),$(SAMPLE_GEN_OUT)/savetest)
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $< "$(SAMPLE_GEN_OUT)/savetest"
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_CLASS_OUT))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
