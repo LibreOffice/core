@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importmergehandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:15:01 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,15 @@ void SAL_CALL ImportMergeHandler::endLayer(  )
     throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (isStarted())
+    try
+    {
         getOutputHandler()->endUpdate();
+    }
+    catch (lang::IllegalAccessException & iae)
+    {
+        OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM("ImportHandler - no write access to layer: "));
+        throw lang::WrappedTargetException(sMsg.concat(iae.Message),*this,uno::makeAny(iae));
+    }
 
     BasicImportHandler::endLayer();
 
@@ -228,8 +236,14 @@ void SAL_CALL ImportMergeHandler::overrideNode( const OUString& aName, sal_Int16
     throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if (!isStarted() && startComponent(aName))
+    try
     {
         (m_xOutputHandler = createOutputHandler())->startUpdate(  );
+    }
+    catch (lang::IllegalAccessException & iae)
+    {
+        OUString const sMsg(RTL_CONSTASCII_USTRINGPARAM("ImportHandler - no write access to layer: "));
+        throw lang::WrappedTargetException(sMsg.concat(iae.Message),*this,uno::makeAny(iae));
     }
 
     OSL_ENSURE(!bClear,"'clear' operation not supported properly on import");
