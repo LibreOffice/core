@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-19 12:35:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,17 +300,15 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
     if(pPage == NULL)
         throw uno::RuntimeException();
 
-    if( Index < 0 || Index >= (sal_Int32)pPage->GetObjCount())
+    if ( Index < 0 || Index >= (sal_Int32)pPage->GetObjCount() )
         throw lang::IndexOutOfBoundsException();
 
     SdrObject* pObj = pPage->GetObj( Index );
     if( pObj == NULL )
         throw uno::RuntimeException();
 
-    Reference< drawing::XShape >  xRet( pObj->getUnoShape(), uno::UNO_QUERY );
-    uno::Any aAny;
-    aAny <<= xRet;
-    return aAny;
+
+    return makeAny(Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY ));
 }
 
 
@@ -513,7 +511,9 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
 
                 PolyPolygon3D aNewPP(aNewP);
                 pObj->SetExtrudePolygon(aNewPP);
-                pObj->SetExtrudeCharacterMode(TRUE);
+
+                // #107245# pObj->SetExtrudeCharacterMode(TRUE);
+                pObj->SetItem(Svx3DCharacterModeItem(sal_True));
             }
             else if(pNewObj->ISA(E3dLatheObj))
             {
@@ -530,7 +530,9 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
 
                 PolyPolygon3D aNewPP(aNewP);
                 pObj->SetPolyPoly3D(aNewPP);
-                pObj->SetLatheCharacterMode(TRUE);
+
+                // #107245# pObj->SetLatheCharacterMode(TRUE);
+                pObj->SetItem(Svx3DCharacterModeItem(sal_True));
             }
         }
     }

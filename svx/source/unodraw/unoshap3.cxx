@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-14 15:35:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,6 @@ using namespace ::com::sun::star::container;
 /***********************************************************************
 * class Svx3DSceneObject                                               *
 ***********************************************************************/
-uno::Sequence< uno::Type > Svx3DSceneObject::maTypeSequence;
 
 //----------------------------------------------------------------------
 Svx3DSceneObject::Svx3DSceneObject( SdrObject* pObj, SvxDrawPage* pDrawPage ) throw()

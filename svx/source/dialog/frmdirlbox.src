@@ -2,8 +2,8 @@
  *
  *  $RCSfile: frmdirlbox.src,v $
  *
- *  $Revision: 1.2 $
- *  last change: $Author: kz $ $Date: 2002-09-18 19:20:45 $
+ *  $Revision: 1.3 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,18 +71,18 @@ String RID_SVXSTR_FRAMEDIR_LTR
     Text[ russian ] = "Left-to-right";
     Text[ greek ] = "Left-to-right";
     Text[ dutch ] = "Left-to-right";
-    Text[ french ] = "Left-to-right";
-    Text[ spanish ] = "Left-to-right";
+    Text[ french ] = "De gauche � droite";
+    Text[ spanish ] = "De izquierda a derecha";
     Text[ finnish ] = "Left-to-right";
-    Text[ italian ] = "Left-to-right";
+    Text[ italian ] = "Da sinistra a destra";
     Text[ danish ] = "Left-to-right";
-    Text[ swedish ] = "Left-to-right";
+    Text[ swedish ] = "V�nster-till-h�ger";
     Text[ polish ] = "Left-to-right";
     Text[ portuguese_brazilian ] = "Left-to-right";
-    Text[ japanese ] = "Left-to-right";
-    Text[ korean ] = "Left-to-right";
-    Text[ chinese_simplified ] = "Left-to-right";
-    Text[ chinese_traditional ] = "Left-to-right";
+    Text[ japanese ] = "左から右へ";
+    Text[ korean ] = "왼쪽에서 오른쪽으로";
+    Text[ chinese_simplified ] = "从左向右";
+    Text[ chinese_traditional ] = "從左向右";
     Text[ turkish ] = "Left-to-right";
     Text[ arabic ] = "Left-to-right";
     Text[ catalan ] = "Left-to-right";
@@ -98,18 +98,18 @@ String RID_SVXSTR_FRAMEDIR_RTL
     Text[ russian ] = "Right-to-left";
     Text[ greek ] = "Right-to-left";
     Text[ dutch ] = "Right-to-left";
-    Text[ french ] = "Right-to-left";
-    Text[ spanish ] = "Right-to-left";
+    Text[ french ] = "De droite � gauche";
+    Text[ spanish ] = "De derecha a izquierda";
     Text[ finnish ] = "Right-to-left";
-    Text[ italian ] = "Right-to-left";
+    Text[ italian ] = "Da destra a sinistra";
     Text[ danish ] = "Right-to-left";
-    Text[ swedish ] = "Right-to-left";
+    Text[ swedish ] = "H�ger-till-v�nster";
     Text[ polish ] = "Right-to-left";
     Text[ portuguese_brazilian ] = "Right-to-left";
-    Text[ japanese ] = "Right-to-left";
-    Text[ korean ] = "Right-to-left";
-    Text[ chinese_simplified ] = "Right-to-left";
-    Text[ chinese_traditional ] = "Right-to-left";
+    Text[ japanese ] = "右から左へ";
+    Text[ korean ] = "오른쪽에서 왼쪽으로";
+    Text[ chinese_simplified ] = "从右向左";
+    Text[ chinese_traditional ] = "從右向左";
     Text[ turkish ] = "Right-to-left";
     Text[ arabic ] = "Right-to-left";
     Text[ catalan ] = "Right-to-left";
@@ -125,18 +125,18 @@ String RID_SVXSTR_FRAMEDIR_SUPER
     Text[ russian ] = "Use superordinate object settings";
     Text[ greek ] = "Use superordinate object settings";
     Text[ dutch ] = "Use superordinate object settings";
-    Text[ french ] = "Use superordinate object settings";
-    Text[ spanish ] = "Use superordinate object settings";
+    Text[ french ] = "Utiliser les param�tres de l'objet sup�rieur";
+    Text[ spanish ] = "Utilizar la configuraci�n del objeto superior";
     Text[ finnish ] = "Use superordinate object settings";
-    Text[ italian ] = "Use superordinate object settings";
+    Text[ italian ] = "Usa le impostazioni dell'oggetto superiore";
     Text[ danish ] = "Use superordinate object settings";
-    Text[ swedish ] = "Use superordinate object settings";
+    Text[ swedish ] = "Anv�nd det �verordnade objektets inst�llningar";
     Text[ polish ] = "Use superordinate object settings";
     Text[ portuguese_brazilian ] = "Use superordinate object settings";
-    Text[ japanese ] = "Use superordinate object settings";
-    Text[ korean ] = "Use superordinate object settings";
-    Text[ chinese_simplified ] = "Use superordinate object settings";
-    Text[ chinese_traditional ] = "Use superordinate object settings";
+    Text[ japanese ] = "周りのテキストの文字方向に合わせる";
+    Text[ korean ] = "문자 방향의 상위 설정을 사용";
+    Text[ chinese_simplified ] = "沿用现有的文字方向的设定";
+    Text[ chinese_traditional ] = "沿用現有的文字方向的設定";
     Text[ turkish ] = "Use superordinate object settings";
     Text[ arabic ] = "Use superordinate object settings";
     Text[ catalan ] = "Use superordinate object settings";
@@ -154,18 +154,18 @@ String RID_SVXSTR_PAGEDIR_LTR_HORI
     Text[ russian ] = "Left-to-right (horizontal)";
     Text[ greek ] = "Left-to-right (horizontal)";
     Text[ dutch ] = "Left-to-right (horizontal)";
-    Text[ french ] = "Left-to-right (horizontal)";
-    Text[ spanish ] = "Left-to-right (horizontal)";
+    Text[ french ] = "De gauche � droite (horizontal)";
+    Text[ spanish ] = "De izquierda a derecha (horizontal)";
     Text[ finnish ] = "Left-to-right (horizontal)";
-    Text[ italian ] = "Left-to-right (horizontal)";
+    Text[ italian ] = "Da sinistra a destra (orizzontale)";
     Text[ danish ] = "Left-to-right (horizontal)";
-    Text[ swedish ] = "Left-to-right (horizontal)";
+    Text[ swedish ] = "V�nster-till-h�ger (horisontellt)";
     Text[ polish ] = "Left-to-right (horizontal)";
     Text[ portuguese_brazilian ] = "Left-to-right (horizontal)";
-    Text[ japanese ] = "Left-to-right (horizontal)";
-    Text[ korean ] = "Left-to-right (horizontal)";
-    Text[ chinese_simplified ] = "Left-to-right (horizontal)";
-    Text[ chinese_traditional ] = "Left-to-right (horizontal)";
+    Text[ japanese ] = "左から右へ(横書き)";
+    Text[ korean ] = "왼쪽에서 오른쪽으로 (가로)";
+    Text[ chinese_simplified ] = "从左向右(横写)";
+    Text[ chinese_traditional ] = "從左向右(橫書)";
     Text[ turkish ] = "Left-to-right (horizontal)";
     Text[ arabic ] = "Left-to-right (horizontal)";
     Text[ catalan ] = "Left-to-right (horizontal)";
@@ -181,18 +181,18 @@ String RID_SVXSTR_PAGEDIR_RTL_HORI
     Text[ russian ] = "Right-to-left (horizontal)";
     Text[ greek ] = "Right-to-left (horizontal)";
     Text[ dutch ] = "Right-to-left (horizontal)";
-    Text[ french ] = "Right-to-left (horizontal)";
-    Text[ spanish ] = "Right-to-left (horizontal)";
+    Text[ french ] = "De droite � gauche (horizontal)";
+    Text[ spanish ] = "De derecha a izquierda (horizontal)";
     Text[ finnish ] = "Right-to-left (horizontal)";
-    Text[ italian ] = "Right-to-left (horizontal)";
+    Text[ italian ] = "Da destra a sinistra (orizzontale)";
     Text[ danish ] = "Right-to-left (horizontal)";
-    Text[ swedish ] = "Right-to-left (horizontal)";
+    Text[ swedish ] = "H�ger-till-v�nster (horisontellt)";
     Text[ polish ] = "Right-to-left (horizontal)";
     Text[ portuguese_brazilian ] = "Right-to-left (horizontal)";
-    Text[ japanese ] = "Right-to-left (horizontal)";
-    Text[ korean ] = "Right-to-left (horizontal)";
-    Text[ chinese_simplified ] = "Right-to-left (horizontal)";
-    Text[ chinese_traditional ] = "Right-to-left (horizontal)";
+    Text[ japanese ] = "右から左へ(横書き)";
+    Text[ korean ] = "오른쪽에서 왼쪽으로 (가로)";
+    Text[ chinese_simplified ] = "从右向左(横写)";
+    Text[ chinese_traditional ] = "從右向左(橫書)";
     Text[ turkish ] = "Right-to-left (horizontal)";
     Text[ arabic ] = "Right-to-left (horizontal)";
     Text[ catalan ] = "Right-to-left (horizontal)";
@@ -208,18 +208,18 @@ String RID_SVXSTR_PAGEDIR_RTL_VERT
     Text[ russian ] = "Right-to-left (vertical)";
     Text[ greek ] = "Right-to-left (vertical)";
     Text[ dutch ] = "Right-to-left (vertical)";
-    Text[ french ] = "Right-to-left (vertical)";
-    Text[ spanish ] = "Right-to-left (vertical)";
+    Text[ french ] = "De droite � gauche (vertical)";
+    Text[ spanish ] = "De derecha a izquierda (vertical)";
     Text[ finnish ] = "Right-to-left (vertical)";
-    Text[ italian ] = "Right-to-left (vertical)";
+    Text[ italian ] = "Da destra a sinistra (verticale)";
     Text[ danish ] = "Right-to-left (vertical)";
-    Text[ swedish ] = "Right-to-left (vertical)";
+    Text[ swedish ] = "H�ger-till-v�nster (vertikalt)";
     Text[ polish ] = "Right-to-left (vertical)";
     Text[ portuguese_brazilian ] = "Right-to-left (vertical)";
-    Text[ japanese ] = "Right-to-left (vertical)";
-    Text[ korean ] = "Right-to-left (vertical)";
-    Text[ chinese_simplified ] = "Right-to-left (vertical)";
-    Text[ chinese_traditional ] = "Right-to-left (vertical)";
+    Text[ japanese ] = "右から左へ(縦書き)";
+    Text[ korean ] = "오른쪽에서 왼쪽으로 (세로)";
+    Text[ chinese_simplified ] = "从右向左(竖写)";
+    Text[ chinese_traditional ] = "從右向左(直書)";
     Text[ turkish ] = "Right-to-left (vertical)";
     Text[ arabic ] = "Right-to-left (vertical)";
     Text[ catalan ] = "Right-to-left (vertical)";
@@ -235,18 +235,18 @@ String RID_SVXSTR_PAGEDIR_LTR_VERT
     Text[ russian ] = "Left-to-right (vertical)";
     Text[ greek ] = "Left-to-right (vertical)";
     Text[ dutch ] = "Left-to-right (vertical)";
-    Text[ french ] = "Left-to-right (vertical)";
-    Text[ spanish ] = "Left-to-right (vertical)";
+    Text[ french ] = "De gauche � droite (vertical)";
+    Text[ spanish ] = "De izquierda a derecha (vertical)";
     Text[ finnish ] = "Left-to-right (vertical)";
-    Text[ italian ] = "Left-to-right (vertical)";
+    Text[ italian ] = "Da sinistra a destra (verticale)";
     Text[ danish ] = "Left-to-right (vertical)";
-    Text[ swedish ] = "Left-to-right (vertical)";
+    Text[ swedish ] = "V�nster-till-h�ger (vertikalt)";
     Text[ polish ] = "Left-to-right (vertical)";
     Text[ portuguese_brazilian ] = "Left-to-right (vertical)";
-    Text[ japanese ] = "Left-to-right (vertical)";
-    Text[ korean ] = "Left-to-right (vertical)";
-    Text[ chinese_simplified ] = "Left-to-right (vertical)";
-    Text[ chinese_traditional ] = "Left-to-right (vertical)";
+    Text[ japanese ] = "左から右へ(縦書き)";
+    Text[ korean ] = "왼쪽에서 오른쪽으로 (세로)";
+    Text[ chinese_simplified ] = "从左向右(竖写)";
+    Text[ chinese_traditional ] = "從左向右(直書)";
     Text[ turkish ] = "Left-to-right (vertical)";
     Text[ arabic ] = "Left-to-right (vertical)";
     Text[ catalan ] = "Left-to-right (vertical)";
@@ -254,4 +254,9 @@ String RID_SVXSTR_PAGEDIR_LTR_VERT
 };
 
 // ----------------------------------------------------------------------------
+
+
+
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdlayer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-11 15:34:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,7 +567,7 @@ SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
     sal_Int32 j;
     for (j=0; j<GetLayerCount(); j++)
     {
-        aSet.Set(GetLayer((sal_uInt16)j)->GetID());
+        aSet.Set(GetLayer(j)->GetID());
     }
     SdrLayerID i;
     if (!bDown)
@@ -620,7 +620,6 @@ const SdrLayerSet* SdrLayerAdmin::GetLayerSet(const XubString& rName, FASTBOOL b
     UINT16 i(0);
     const SdrLayerSet* pSet = NULL;
 
-    // #97995# <= is WRONG, GPFs at 0
     while(i <= GetLayerSetCount() && !pSet)
     {
         if(rName.Equals(GetLayerSet(i)->GetName()))

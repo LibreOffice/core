@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgname.src,v $
  *
- *  $Revision: 1.1.1.9 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:59:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,8 @@ ModalDialog RID_SVXDLG_NAME
     Text[ korean ] = "이름";
     Text[ turkish ] = "Ad";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nombre";
+    Text[ catalan ] = "Nom";
+    Text[ thai ] = "ชื่อ";
 };
  // RID_SVXDLG_MESSBOX -------------------------------------------------------
 ModalDialog RID_SVXDLG_MESSBOX
@@ -164,6 +165,9 @@ ModalDialog RID_SVXDLG_MESSBOX
     };
 };
  // ********************************************************************** EOF
+
+
+
 
 
 

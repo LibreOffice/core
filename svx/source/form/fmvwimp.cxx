@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-22 12:46:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,6 +499,7 @@ FmXFormView::FmXFormView(const ::com::sun::star::uno::Reference< ::com::sun::sta
     ,m_nAutoFocusEvent( 0 )
     ,m_pWatchStoredList( NULL )
     ,m_bFirstActivation( sal_True )
+    ,m_pMarkedGrid(NULL)
 {
 }
 
@@ -977,48 +978,24 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     OAutoDispose aDisposeConnection( xAutoDisposee );
 
 
-    Reference< XPreparedStatement >     xStatement;
+    OStaticDataAccessTools aDBATools;
+    Reference< XComponent > xKeepFieldsAlive;
     // go
     try
     {
         FmFormPage& rPage = *static_cast<FmFormPage*>(m_pView->GetPageViewPvNum(0)->GetPage());
-        // Festellen des Feldes
-        Reference< XNameAccess >    xFields;
-        Reference< XPropertySet >       _rxField;
-        switch (nCommandType)
-        {
-            case 0: // old : DataSelectionType_TABLE:
-            {
-                Reference< XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
-                Reference< XColumnsSupplier >  xSupplyColumns;
-                xSupplyTables->getTables()->getByName(sCommand) >>= xSupplyColumns;
-                xFields = xSupplyColumns->getColumns();
-            }
-            break;
-            case 1: // old : DataSelectionType_QUERY:
-            {
-                Reference< XQueriesSupplier >  xSupplyQueries(xConnection, UNO_QUERY);
-                Reference< XColumnsSupplier >  xSupplyColumns;
-                xSupplyQueries->getQueries()->getByName(sCommand) >>= xSupplyColumns;
-                xFields  = xSupplyColumns->getColumns();
-            }
-            break;
-            default:
-            {
-                xStatement = xConnection->prepareStatement(sCommand);
-                // not interested in any results
-                Reference< XPropertySet > (xStatement,UNO_QUERY)->setPropertyValue(::rtl::OUString::createFromAscii("MaxRows"),makeAny(sal_Int32(0)));
-                Reference< XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
-                if (xSupplyCols.is())
-                    xFields = xSupplyCols->getColumns();
-            }
-        }
+
+        // determine the table/query field which we should create a control for
+        Reference< XPropertySet >   xField;
+
+        Reference< XNameAccess >    xFields = aDBATools.getFieldsByCommandDescriptor(
+            xConnection, nCommandType, sCommand, xKeepFieldsAlive );
 
         if (xFields.is() && xFields->hasByName(sFieldName))
-            xFields->getByName(sFieldName) >>= _rxField;
+            xFields->getByName(sFieldName) >>= xField;
 
-        Reference< XNumberFormatsSupplier >  xSupplier = OStaticDataAccessTools().getNumberFormats(xConnection, sal_False);
-        if (!xSupplier.is() || !_rxField.is())
+        Reference< XNumberFormatsSupplier >  xSupplier = aDBATools.getNumberFormats(xConnection, sal_False);
+        if (!xSupplier.is() || !xField.is())
             return NULL;
 
         Reference< XNumberFormats >  xNumberFormats(xSupplier->getNumberFormats());
@@ -1028,8 +1005,8 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         // Vom Feld werden nun zwei Informationen benoetigt:
         // a.) Name des Feldes fuer Label und ControlSource
         // b.) FormatKey, um festzustellen, welches Feld erzeugt werden soll
-        sal_Int32 nDataType = ::comphelper::getINT32(_rxField->getPropertyValue(FM_PROP_FIELDTYPE));
-        sal_Int32 nFormatKey = ::comphelper::getINT32(_rxField->getPropertyValue(FM_PROP_FORMATKEY));
+        sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
+        sal_Int32 nFormatKey = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FORMATKEY));
 
         ::rtl::OUString sLabelPostfix;
 
@@ -1067,8 +1044,8 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         sal_Bool bDateNTimeField = sal_False;
 
         sal_Bool bIsCurrency = sal_False;
-        if (::comphelper::hasProperty(FM_PROP_ISCURRENCY, _rxField))
-            bIsCurrency = ::comphelper::getBOOL(_rxField->getPropertyValue(FM_PROP_ISCURRENCY));
+        if (::comphelper::hasProperty(FM_PROP_ISCURRENCY, xField))
+            bIsCurrency = ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY));
 
         if (bIsCurrency)
             nOBJID = OBJ_FM_CURRENCYFIELD;
@@ -1119,7 +1096,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 
         FmFormObj* pLabel;
         FmFormObj* pControl;
-        createControlLabelPair(_pOutDev, 0, _rxField, xNumberFormats, nOBJID, sLabelPostfix, pLabel, pControl);
+        createControlLabelPair(_pOutDev, 0, xField, xNumberFormats, nOBJID, sLabelPostfix, pLabel, pControl);
         if (!pLabel || !pControl)
         {
             delete pLabel;
@@ -1153,7 +1130,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         {   // wir haben bis jetzt nur ein Datums-Feld eingefuegt, brauchen aber noch ein extra Feld fuer
             // die Zeit-Komponente
             pLabel = pControl = NULL;
-            createControlLabelPair(_pOutDev, 1000, _rxField, xNumberFormats, OBJ_FM_TIMEFIELD,
+            createControlLabelPair(_pOutDev, 1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
                 UniString(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX)).GetToken(1, ';'),
                 pLabel, pControl);
 
@@ -1174,7 +1151,6 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     catch(const Exception&)
     {
         DBG_ERROR("FmXFormView::implCreateFieldControl: caught an exception while creating the control !");
-        ::comphelper::disposeComponent(xStatement);
     }
 
 
@@ -1599,11 +1575,22 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
 // -----------------------------------------------------------------------------
 void SAL_CALL FmXFormView::focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if ( m_xWindow.is() && m_pView )
+    {
+        m_pView->SetMoveOutside(TRUE);
+        m_pView->RefreshAllIAOManagers();
+    }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL FmXFormView::focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException)
 {
-    removeGridWindowListening();
+    // when switch the focus outside the office the mark didn't change
+    // so we can not remove us as focus listener
+    if ( m_xWindow.is() && m_pView )
+    {
+        m_pView->SetMoveOutside(FALSE);
+        m_pView->RefreshAllIAOManagers();
+    }
 }
 // -----------------------------------------------------------------------------
 void FmXFormView::removeGridWindowListening()

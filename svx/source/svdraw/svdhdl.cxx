@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-28 12:13:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,8 +660,25 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
     sal_Bool bIsHighContrast(rStyleSettings.GetHighContrastMode());
 
     // support bigger sizes
+    sal_Bool bForceBiggerSize(sal_False);
+
+    if(pHdlList->GetHdlSize() > 3)
+    {
+        bForceBiggerSize = sal_True;
+    }
+
     // #101928# ...for high contrast, too.
-    if(pHdlList->GetHdlSize() > 3 || bIsHighContrast)
+    if(!bForceBiggerSize && bIsHighContrast)
+    {
+        // #107925#
+        // ...but not for anchors, else they will not blink when activated
+        if(Anchor != eKindOfMarker && AnchorTR != eKindOfMarker)
+        {
+            bForceBiggerSize = sal_True;
+        }
+    }
+
+    if(bForceBiggerSize)
     {
         eKindOfMarker = GetNextBigger(eKindOfMarker);
     }

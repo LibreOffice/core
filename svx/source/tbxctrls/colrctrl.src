@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:26:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ DockingWindow RID_SVXCTRL_COLOR
     Text[ russian ] = "÷‚ÂÚ‡";
     Text[ polish ] = "Kolory";
     Text[ japanese ] = "Ëâ≤";
-    Text[ chinese_traditional ] = "È°îËâ≤";
+    Text[ chinese_traditional ] = "È°èËâ≤";
     Text[ arabic ] = "«·√·Ê«‰";
     Text[ dutch ] = "Kleuren";
     Text[ chinese_simplified ] = "È¢úËâ≤";
@@ -108,10 +108,18 @@ DockingWindow RID_SVXCTRL_COLOR
     Text[ korean ] = "ÏÉâÏÉÅ";
     Text[ turkish ] = "Renkler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Colores";
-    Text[ finnish ] = "V?rit";
+    Text[ catalan ] = "Colors";
+    Text[ finnish ] = "V‰rit";
+    Text[ thai ] = "‡∏™‡∏µ";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
 
 
 

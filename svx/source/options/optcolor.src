@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-09 11:42:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ greek ] = "Delete";
         Text[ dutch ] = "Delete";
         Text[ french ] = "Supprimer";
-        Text[ spanish ] = "Eliminar";
+        Text[ spanish ] = "Borrar";
         Text[ finnish ] = "Delete";
         Text[ italian ] = "Elimina";
         Text[ danish ] = "Delete";
@@ -197,25 +197,25 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Pos = MAP_APPFONT ( 6 , 34 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
 
-        Text = "Schema" ;
+        Text = "Benutzerdefinierte Farben" ;
         Text [ ENGLISH ] = "Scheme" ;
-        Text[ english_us ] = "Scheme";
+        Text[ english_us ] = "Custom colors";
         Text[ portuguese ] = "Scheme";
         Text[ russian ] = "Scheme";
         Text[ greek ] = "Scheme";
         Text[ dutch ] = "Scheme";
-        Text[ french ] = "Sch�ma";
-        Text[ spanish ] = "Esquema";
+        Text[ french ] = "Couleurs personnalis�es";
+        Text[ spanish ] = "Colores personalizados";
         Text[ finnish ] = "Scheme";
-        Text[ italian ] = "Schema";
+        Text[ italian ] = "Colori personalizzati";
         Text[ danish ] = "Scheme";
-        Text[ swedish ] = "Schema";
+        Text[ swedish ] = "Anv�ndardefinierade f�rger";
         Text[ polish ] = "Scheme";
         Text[ portuguese_brazilian ] = "Scheme";
         Text[ japanese ] = "パターン";
-        Text[ korean ] = "구성표";
-        Text[ chinese_simplified ] = "颜色图案";
-        Text[ chinese_traditional ] = "顏色圖案";
+        Text[ korean ] = "사용자 정의 색상";
+        Text[ chinese_simplified ] = "自定的颜色";
+        Text[ chinese_traditional ] = "自訂的顏色";
         Text[ turkish ] = "Scheme";
         Text[ arabic ] = "Scheme";
         Text[ catalan ] = "Scheme";
@@ -304,7 +304,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ polish ] = "Color setting";
             Text[ portuguese_brazilian ] = "Color setting";
             Text[ japanese ] = "色の設定";
-            Text[ korean ] = "색 설정";
+            Text[ korean ] = "색상 설정";
             Text[ chinese_simplified ] = "颜色的设定";
             Text[ chinese_traditional ] = "顔色的設定";
             Text[ turkish ] = "Color setting";
@@ -437,9 +437,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
             CheckBox CB_DOCBOUND
             {
                 CB_POS_SIZE( 2 );
-                Text = "Dokumentumrandung" ;
+                Text = "Textbegrenzungen" ;
                 Text [ ENGLISH ] = "Document boundaries" ;
-                Text[ english_us ] = "Document boundaries";
+                Text[ english_us ] = "Text boundaries";
                 Text[ portuguese ] = "Document boundaries";
                 Text[ russian ] = "Document boundaries";
                 Text[ greek ] = "Document boundaries";
@@ -558,22 +558,22 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ english_us ] = "Font color";
                 Text[ portuguese ] = "Font color";
                 Text[ russian ] = "Font color";
-                Text[ spanish ] = "Font color";
-                Text[ italian ] = "Font color";
-                Text[ swedish ] = "Font color";
+                Text[ spanish ] = "Color de la fuente";
+                Text[ italian ] = "Colore carattere";
+                Text[ swedish ] = "Teckenf�rg";
                 Text[ polish ] = "Font color";
                 Text[ portuguese_brazilian ] = "Font color";
-                Text[ japanese ] = "Font color";
-                Text[ korean ] = "Font color";
+                Text[ japanese ] = "フォントの色";
+                Text[ korean ] = "글꼴 색상";
                 Text[ turkish ] = "Font color";
                 Text[ thai ] = "Font color";
                 Text[ greek ] = "Font color";
                 Text[ dutch ] = "Font color";
-                Text[ french ] = "Font color";
+                Text[ french ] = "Couleur de police";
                 Text[ finnish ] = "Font color";
                 Text[ danish ] = "Font color";
-                Text[ chinese_simplified ] = "Font color";
-                Text[ chinese_traditional ] = "Font color";
+                Text[ chinese_simplified ] = "文字颜色";
+                Text[ chinese_traditional ] = "字型顏色";
                 Text[ arabic ] = "Font color";
                 Text[ catalan ] = "Font color";
             };
@@ -742,7 +742,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Field shadings";
                 Text[ portuguese_brazilian ] = "Field shadings";
                 Text[ japanese ] = "フィールドのシェーディング";
-                Text[ korean ] = "필드 음영 효과";
+                Text[ korean ] = "필드 음영";
                 Text[ chinese_simplified ] = "字段背景颜色";
                 Text[ chinese_traditional ] = "欄位背景顔色";
                 Text[ turkish ] = "Field shadings";
@@ -850,7 +850,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ greek ] = "Section boundaries";
                 Text[ dutch ] = "Section boundaries";
                 Text[ french ] = "Bordures des sections";
-                Text[ spanish ] = "Bordes del �rea";
+                Text[ spanish ] = "Bordes de la secci�n";
                 Text[ finnish ] = "Section boundaries";
                 Text[ italian ] = "Margini sezione";
                 Text[ danish ] = "Section boundaries";
@@ -858,7 +858,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Section boundaries";
                 Text[ portuguese_brazilian ] = "Section boundaries";
                 Text[ japanese ] = "範囲の境界";
-                Text[ korean ] = "영역 테두리";
+                Text[ korean ] = "구역 테두리";
                 Text[ chinese_simplified ] = "区域的边框";
                 Text[ chinese_traditional ] = "區域的邊框";
                 Text[ turkish ] = "Section boundaries";
@@ -873,6 +873,25 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 FT_POS_SIZE( 17 );
                 Text = "Seiten- und Spaltenumbr�che" ;
                 Text[ english_us ] = "Page and column breaks";
+                Text[ portuguese ] = "Page breaks";
+                Text[ russian ] = "Page breaks";
+                Text[ greek ] = "Page breaks";
+                Text[ dutch ] = "Page breaks";
+                Text[ french ] = "Sauts de page et de colonne";
+                Text[ spanish ] = "Saltos de p�gina y de columna";
+                Text[ finnish ] = "Page breaks";
+                Text[ italian ] = "Interruzioni di pagina e di colonna";
+                Text[ danish ] = "Page breaks";
+                Text[ swedish ] = "Sid- och kolumnbrytningar";
+                Text[ polish ] = "Page breaks";
+                Text[ japanese ] = "改ページ";
+                Text[ korean ] = "페이지 및 열 나누기";
+                Text[ chinese_simplified ] = "换页";
+                Text[ chinese_traditional ] = "換頁和換欄";
+                Text[ turkish ] = "Page breaks";
+                Text[ arabic ] = "Page breaks";
+                Text[ catalan ] = "Page breaks";
+                Text[ thai ] = "Page breaks";
             };
             LB_WN( WRITERPAGEBREAKS, 17 )
 
@@ -981,7 +1000,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Comment highlighting";
                 Text[ portuguese_brazilian ] = "Comment highlighting";
                 Text[ japanese ] = "コメントのハイライト";
-                Text[ korean ] = "주석 강조 표시";
+                Text[ korean ] = "설명 강조 표시";
                 Text[ chinese_simplified ] = "突出显示备注";
                 Text[ chinese_traditional ] = "突出顯示備註";
                 Text[ turkish ] = "Comment highlighting";
@@ -1010,7 +1029,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Keyword highlighting";
                 Text[ portuguese_brazilian ] = "Keyword highlighting";
                 Text[ japanese ] = "キーワードのハイライト";
-                Text[ korean ] = "핵심어 강조 표시";
+                Text[ korean ] = "키워드 강조 표시";
                 Text[ chinese_simplified ] = "突出显示关键字";
                 Text[ chinese_traditional ] = "突出顯示關鍵字";
                 Text[ turkish ] = "Keyword highlighting";
@@ -1096,7 +1115,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Grid lines";
                 Text[ portuguese_brazilian ] = "Grid lines";
                 Text[ japanese ] = "グリッド線";
-                Text[ korean ] = "그리드선";
+                Text[ korean ] = "눈금선";
                 Text[ chinese_simplified ] = "格子线条";
                 Text[ chinese_traditional ] = "格子線條";
                 Text[ turkish ] = "Grid lines";
@@ -1154,7 +1173,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Manual page breaks";
                 Text[ portuguese_brazilian ] = "Manual page breaks";
                 Text[ japanese ] = "手動改ページ";
-                Text[ korean ] = "수동 나누기";
+                Text[ korean ] = "수동 페이지 나누기";
                 Text[ chinese_simplified ] = "手工换页";
                 Text[ chinese_traditional ] = "手動換頁";
                 Text[ turkish ] = "Manual page breaks";
@@ -1233,7 +1252,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ greek ] = "Detective error";
                 Text[ dutch ] = "Detective error";
                 Text[ french ] = "Erreur d'audit";
-                Text[ spanish ] = "Error detective";
+                Text[ spanish ] = "Error de detective";
                 Text[ finnish ] = "Detective error";
                 Text[ italian ] = "Errore detective";
                 Text[ danish ] = "Detective error";
@@ -1382,7 +1401,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ finnish ] = "Basic Syntax Highlighting";
                 Text[ italian ] = "Mettere in rilievo sintassi base";
                 Text[ danish ] = "Basic Syntax Highlighting";
-                Text[ swedish ] = "Standardmarkering av syntax";
+                Text[ swedish ] = "Markering av Basic-syntax";
                 Text[ polish ] = "Basic Syntax Highlighting";
                 Text[ portuguese_brazilian ] = "Basic Syntax Highlighting";
                 Text[ japanese ] = "Basic シンタックスのハイライト";
@@ -1472,7 +1491,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Number";
                 Text[ portuguese_brazilian ] = "Number";
                 Text[ japanese ] = "数値";
-                Text[ korean ] = "개수";
+                Text[ korean ] = "수";
                 Text[ chinese_simplified ] = "数字";
                 Text[ chinese_traditional ] = "數字";
                 Text[ turkish ] = "Number";
@@ -1559,7 +1578,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Reserved expression";
                 Text[ portuguese_brazilian ] = "Reserved expression";
                 Text[ japanese ] = "予約語";
-                Text[ korean ] = "예약어";
+                Text[ korean ] = "예약식";
                 Text[ chinese_simplified ] = "保留的表达式";
                 Text[ chinese_traditional ] = "保留的表達式";
                 Text[ turkish ] = "Reserved expression";
@@ -1612,7 +1631,7 @@ QueryBox RID_SVXQB_DELETE_COLOR_CONFIG
     Message[ greek ] = "Do you really want to delete the color scheme?";
     Message[ dutch ] = "Do you really want to delete the color scheme?";
     Message[ french ] = "Voulez-vous vraiment supprimer le sch�ma de couleur ?";
-    Message[ spanish ] = "�Desea eliminar el esquema de colores?";
+    Message[ spanish ] = "�Desea borrar el esquema de colores?";
     Message[ finnish ] = "Do you really want to delete the color scheme?";
     Message[ italian ] = "Volete eliminare lo schema colori?";
     Message[ danish ] = "Do you really want to delete the color scheme?";
@@ -1637,7 +1656,7 @@ String RID_SVXSTR_COLOR_CONFIG_DELETE
     Text[ greek ] = "Color Scheme Deletion";
     Text[ dutch ] = "Color Scheme Deletion";
     Text[ french ] = "Confirmer la suppression du sch�ma";
-    Text[ spanish ] = "Confirmar la eliminaci�n del esquema";
+    Text[ spanish ] = "Confirmar la supresi�n del esquema";
     Text[ finnish ] = "Color Scheme Deletion";
     Text[ italian ] = "Conferma eliminazione dello schema";
     Text[ danish ] = "Color Scheme Deletion";
@@ -1703,4 +1722,9 @@ String RID_SVXSTR_COLOR_CONFIG_SAVE2
     Text[ catalan ] = "Name of color scheme";
     Text[ thai ] = "Name of color scheme";
 };
+
+
+
+
+
 

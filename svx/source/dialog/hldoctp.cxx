@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-14 10:07:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,8 @@
 sal_Char __READONLY_DATA sHash[]                = "#";
 sal_Char __READONLY_DATA sFileScheme[]          = INET_FILE_SCHEME;
 sal_Char __READONLY_DATA sPortalFileScheme[]    = "vnd.sun.star.wfs://";
-sal_Char __READONLY_DATA sNewsSRVScheme[] = INET_NEWS_SRV_SCHEME;
+sal_Char __READONLY_DATA sNewsSRVScheme[] = "news://";
+    // TODO news:// is nonsense
 sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
 
 /*************************************************************************

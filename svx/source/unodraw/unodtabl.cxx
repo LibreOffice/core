@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodtabl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:45:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,7 @@
 #include <svtools/itemset.hxx>
 #endif
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 #ifndef _SVX_UNONAMEITEMTABLE_HXX_
 #include "UnoNameItemTable.hxx"

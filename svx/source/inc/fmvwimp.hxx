@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-22 12:45:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>                   m_xWindow;
 
+    FmFormObj*      m_pMarkedGrid;
     FmFormView*     m_pView;
     sal_uInt32      m_nActivationEvent;
     sal_uInt32      m_nErrorMessageEvent;   // event for an asynchronous error message. See also m_aAsyncError

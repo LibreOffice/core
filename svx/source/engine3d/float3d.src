@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2002-11-27 16:28:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ dutch ] = "Toewijzen";
         QuickHelpText[ chinese_simplified ] = "ζ‡ε®";
         QuickHelpText[ greek ] = "Αντιστοίχιση";
-        QuickHelpText[ korean ] = "ν• λ‹Ή";
+        QuickHelpText[ korean ] = "μ§€μ •";
         QuickHelpText[ turkish ] = "Zuweisen";
         QuickHelpText[ catalan ] = "Assigna";
         QuickHelpText[ finnish ] = "Liitδ";
@@ -572,7 +572,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ dutch ] = "Alleen 3D-attributen toewijzen";
         QuickHelpText[ chinese_simplified ] = "εªζ‡ε® 3 η»΄ε±ζ€§";
         QuickHelpText[ greek ] = "Μόνο ιδιότητες 3Δ";
-        QuickHelpText[ korean ] = "3D-μ†μ„±λ§";
+        QuickHelpText[ korean ] = "3D μ†μ„±λ§ μ§€μ •";
         QuickHelpText[ turkish ] = "Nur 3D-Attribute zuweisen";
         QuickHelpText[ catalan ] = "Assigna nomιs atributs 3D";
         QuickHelpText[ finnish ] = "Vain kolmiulotteiset mδδritteet";
@@ -797,7 +797,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Diepte op schaal brengen";
         Text[ chinese_simplified ] = "ζ·±εΊ¦ζ―”δΎ‹";
         Text[ greek ] = "Κλίμακα βάθους";
-        Text[ korean ] = "κΉμ΄ λ°°μ¨";
+        Text[ korean ] = "κΉμ΄ λ°°μ¨ μ΅°μ •";
         Text[ turkish ] = "Derinlik φlηeklendirmesi";
         Text[ catalan ] = "Profunditat redimensionada";
         Text[ finnish ] = "Skaalattu syvyys";
@@ -864,7 +864,7 @@ DockingWindow RID_SVXFLOAT_3D
         CustomUnitText [ ENGLISH ] = " degree" ;
         CustomUnitText[ english_us ] = " degree(s)";
         CustomUnitText[ portuguese ] = " degree";
-        CustomUnitText[ russian ] = " γπΰδσρ(ξβ)";
+        CustomUnitText[ russian ] = " γπΰδσρξβ";
         CustomUnitText[ greek ] = " degree";
         CustomUnitText[ dutch ] = " graden";
         CustomUnitText[ french ] = " degrιs";
@@ -876,7 +876,7 @@ DockingWindow RID_SVXFLOAT_3D
         CustomUnitText[ polish ] = " stopni(e)";
         CustomUnitText[ portuguese_brazilian ] = " degree";
         CustomUnitText[ japanese ] = " εΊ¦";
-        CustomUnitText[ korean ] = "κ°λ„";
+        CustomUnitText[ korean ] = " λ„";
         CustomUnitText[ chinese_simplified ] = " εΊ¦";
         CustomUnitText[ chinese_traditional ] = " εΊ¦";
         CustomUnitText[ turkish ] = " degree";
@@ -955,7 +955,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Geometrie";
         Text[ chinese_simplified ] = "ε‡ δ½•";
         Text[ greek ] = "Γεωμετρία";
-        Text[ korean ] = "κΈ°ν•";
+        Text[ korean ] = "κΈ°ν•ν•™";
         Text[ turkish ] = "Geometri";
         Text[ catalan ] = "Geometria";
         Text[ finnish ] = "Geometria";
@@ -991,7 +991,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ dutch ] = "Objectspezifiek";
         QuickHelpText[ chinese_simplified ] = "η‰Ήζ®ε―Ήθ±΅";
         QuickHelpText[ greek ] = "Σχετικά με το αντικείμενο";
-        QuickHelpText[ korean ] = "κ°μ²΄-νΉμ ";
+        QuickHelpText[ korean ] = "κ°μ²΄ νΉμ ";
         QuickHelpText[ turkish ] = "Objektspezifisch";
         QuickHelpText[ catalan ] = "Especνfic de l'objecte";
         QuickHelpText[ finnish ] = "Objektikohtainen";
@@ -1419,7 +1419,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ dutch ] = "3D-schaduw in/-uitschakelen";
         QuickHelpText[ chinese_simplified ] = "ζΎη¤Ί/ιε…¥ 3 η»΄ι΄ε½±";
         QuickHelpText[ greek ] = "Σκια 3Δ Ναι/Όχι";
-        QuickHelpText[ korean ] = "3D-μμ μ μ©/μ μ© μ•ν•¨";
+        QuickHelpText[ korean ] = "3D κ·Έλ¦Όμ μ μ©/ν•΄μ ";
         QuickHelpText[ turkish ] = "3D-Schatten ein/-ausschalten";
         QuickHelpText[ catalan ] = "Activa/desactiva ombra 3D";
         QuickHelpText[ finnish ] = "Kolmiulotteinen varjostus on/off";
@@ -1473,7 +1473,7 @@ DockingWindow RID_SVXFLOAT_3D
         Last = 90 ;
         CustomUnitText[ english_us ] = " degree(s)";
         CustomUnitText[ portuguese ] = " degree";
-        CustomUnitText[ russian ] = " γπΰδσρ(ξβ)";
+        CustomUnitText[ russian ] = " γπΰδσρξβ";
         CustomUnitText[ greek ] = " degree";
         CustomUnitText[ dutch ] = " graden";
         CustomUnitText[ french ] = " degrιs";
@@ -1485,7 +1485,7 @@ DockingWindow RID_SVXFLOAT_3D
         CustomUnitText[ polish ] = " stopni(e)";
         CustomUnitText[ portuguese_brazilian ] = " degree";
         CustomUnitText[ japanese ] = " εΊ¦";
-        CustomUnitText[ korean ] = "κ°λ„";
+        CustomUnitText[ korean ] = " λ„";
         CustomUnitText[ chinese_simplified ] = " εΊ¦";
         CustomUnitText[ chinese_traditional ] = " εΊ¦";
         CustomUnitText[ turkish ] = " degree";
@@ -1517,7 +1517,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Schaduw";
         Text[ chinese_simplified ] = "ι΄ε½±";
         Text[ greek ] = "Σκιά";
-        Text[ korean ] = "μμ";
+        Text[ korean ] = "κ·Έλ¦Όμ";
         Text[ turkish ] = "Gφlge";
         Text[ catalan ] = "Ombra";
         Text[ finnish ] = "Varjo";
@@ -2421,7 +2421,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ dutch ] = "Textuur, schaduw en kleur";
         QuickHelpText[ chinese_simplified ] = "ηΊΉη†οΌι΄ε½±ε’ιΆθ‰²";
         QuickHelpText[ greek ] = "Υφή, σκίαση και χρώμμα";
-        QuickHelpText[ korean ] = "μ§κ°, μμ λ° μƒ‰μƒ";
+        QuickHelpText[ korean ] = "μ§κ°, κ·Έλ¦Όμ λ° μƒ‰μƒ";
         QuickHelpText[ turkish ] = "Textur, Schattierung und Farbe";
         QuickHelpText[ catalan ] = "Textura, ombra i color";
         QuickHelpText[ finnish ] = "Pintakuvio, varjostus ja vδri";
@@ -2486,7 +2486,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ dutch ] = "Passend bij object";
         QuickHelpText[ chinese_simplified ] = "η‰Ήζ®ε―Ήθ±΅";
         QuickHelpText[ greek ] = "Σχετικά με το αντικείμενο";
-        QuickHelpText[ korean ] = "κ°μ²΄-νΉμ μ";
+        QuickHelpText[ korean ] = "κ°μ²΄ νΉμ μ";
         QuickHelpText[ turkish ] = "Objektspezifisch";
         QuickHelpText[ catalan ] = "Especνfic de l'objecte";
         QuickHelpText[ finnish ] = "Objektikohtainen";
@@ -2621,7 +2621,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText[ dutch ] = "Passend bij object";
         QuickHelpText[ chinese_simplified ] = "η‰Ήζ®ε―Ήθ±΅";
         QuickHelpText[ greek ] = "Σχετικά με το αντικείμενο";
-        QuickHelpText[ korean ] = "κ°μ²΄-νΉμ μ";
+        QuickHelpText[ korean ] = "κ°μ²΄ νΉμ μ";
         QuickHelpText[ turkish ] = "Objektspezifisch";
         QuickHelpText[ catalan ] = "Especνfic de l'objecte";
         QuickHelpText[ finnish ] = "Objektikohtainen";
@@ -3027,7 +3027,7 @@ DockingWindow RID_SVXFLOAT_3D
         < "κΈ" ; > ;
         < "ν¬λ΅¬" ; > ;
         < "ν”λΌμ¤ν‹±" ; > ;
-        < "λ‚λ¬΄" ; > ;
+        < "λª©μ¬" ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -3099,7 +3099,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Objectkleur";
         Text[ chinese_simplified ] = "ε―Ήθ±΅ιΆθ‰²";
         Text[ greek ] = "Χρώμα αντικειμένου";
-        Text[ korean ] = "κ°μ²΄μƒ‰";
+        Text[ korean ] = "κ°μ²΄ μƒ‰μƒ";
         Text[ turkish ] = "Nesne rengi";
         Text[ catalan ] = "Color de l'objecte";
         Text[ finnish ] = "Objektin vδri";
@@ -3245,7 +3245,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Kleur";
         Text[ chinese_simplified ] = "ιΆθ‰²";
         Text[ greek ] = "Χρώμα";
-        Text[ korean ] = "μƒ‰";
+        Text[ korean ] = "μƒ‰μƒ";
         Text[ turkish ] = "Renk";
         Text[ catalan ] = "Color";
         Text[ finnish ] = "Vδri";
@@ -3364,7 +3364,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Glanspunt";
         Text[ chinese_simplified ] = "ε‘ε…‰η‚Ή";
         Text[ greek ] = "Σημείο ανάκλασης";
-        Text[ korean ] = "ν•μΌλΌμ΄νΈ";
+        Text[ korean ] = "λ°μ‚¬";
         Text[ turkish ] = "Parlama noktasύ";
         Text[ catalan ] = "Punt de brillantor";
         Text[ finnish ] = "Heijastus";
@@ -3827,6 +3827,11 @@ String RID_SVXFLOAT3D_FIX_B
     Text[ finnish ] = "B:";
 
 };
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:06:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,11 +243,13 @@ void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     ImpForceItemSet();
 
     fLatheScale = rDefault.GetDefaultLatheScale();
-    bLatheSmoothed = rDefault.GetDefaultLatheSmoothed();
-    bLatheSmoothFrontBack = rDefault.GetDefaultLatheSmoothFrontBack();
-    bLatheCharacterMode = rDefault.GetDefaultLatheCharacterMode();
-    bLatheCloseFront = rDefault.GetDefaultLatheCloseFront();
-    bLatheCloseBack = rDefault.GetDefaultLatheCloseBack();
+
+    // #107245#
+    mpObjectItemSet->Put(Svx3DSmoothNormalsItem(rDefault.GetDefaultLatheSmoothed()));
+    mpObjectItemSet->Put(Svx3DSmoothLidsItem(rDefault.GetDefaultLatheSmoothFrontBack()));
+    mpObjectItemSet->Put(Svx3DCharacterModeItem(rDefault.GetDefaultLatheCharacterMode()));
+    mpObjectItemSet->Put(Svx3DCloseFrontItem(rDefault.GetDefaultLatheCloseFront()));
+    mpObjectItemSet->Put(Svx3DCloseBackItem(rDefault.GetDefaultLatheCloseBack()));
 }
 
 /*************************************************************************
@@ -398,19 +400,19 @@ void E3dLatheObj::CreateGeometry()
                 aBack,
                 &aPrev,
                 &aNext,
-                (a == 0) && bCreateSides && bLatheCloseFront,
-                (a == nUpperBound-1) && bCreateSides && bLatheCloseBack,
+                (a == 0) && bCreateSides && GetCloseFront(), // #107245# bLatheCloseFront,
+                (a == nUpperBound-1) && bCreateSides && GetCloseBack(), // #107245# bLatheCloseBack,
                 ((double)GetPercentDiagonal() / 200.0)
                     * (double(nUpperBound) / 6.0),
-                GetLatheSmoothed(),
-                GetLatheSmoothed(),
-                GetLatheSmoothFrontBack(),
+                GetSmoothNormals(), // #107245# GetLatheSmoothed(),
+                GetSmoothNormals(), // #107245# GetLatheSmoothed(),
+                GetSmoothLids(), // #107245# GetLatheSmoothFrontBack(),
                 1.0,
                 fTmpStart,
                 fTmpLength,
                 GetCreateTexture(),
                 GetCreateNormals(),
-                GetLatheCharacterMode(),
+                GetCharacterMode(), // #107245# GetLatheCharacterMode(),
                 TRUE,
                 // #78972#
                 &maLinePolyPolygon);
@@ -541,12 +543,13 @@ void E3dLatheObj::operator=(const SdrObject& rObj)
     // #95519# copy LinePolygon info, too
     maLinePolyPolygon = r3DObj.maLinePolyPolygon;
 
-    // Ab Version 374 (15.12.97)
-    bLatheSmoothed = r3DObj.bLatheSmoothed;
-    bLatheSmoothFrontBack = r3DObj.bLatheSmoothFrontBack;
-    bLatheCharacterMode = r3DObj.bLatheCharacterMode;
-    bLatheCloseFront = r3DObj.bLatheCloseFront;
-    bLatheCloseBack = r3DObj.bLatheCloseBack;
+    // #107245# These properties are now items and are copied with the ItemSet
+    // // Ab Version 374 (15.12.97)
+    // bLatheSmoothed = r3DObj.bLatheSmoothed;
+    // bLatheSmoothFrontBack = r3DObj.bLatheSmoothFrontBack;
+    // bLatheCharacterMode = r3DObj.bLatheCharacterMode;
+    // bLatheCloseFront = r3DObj.bLatheCloseFront;
+    // bLatheCloseBack = r3DObj.bLatheCloseBack;
 }
 
 /*************************************************************************
@@ -618,9 +621,9 @@ void E3dLatheObj::WriteData(SvStream& rOut) const
 
     rOut << ((double)GetPercentDiagonal() / 200.0);
 
-    rOut << (BOOL)bLatheSmoothed;
-    rOut << (BOOL)bLatheSmoothFrontBack;
-    rOut << (BOOL)bLatheCharacterMode;
+    rOut << GetSmoothNormals(); // #107245# (BOOL)bLatheSmoothed;
+    rOut << GetSmoothLids(); // #107245# (BOOL)bLatheSmoothFrontBack;
+    rOut << GetCharacterMode(); // #107245# (BOOL)bLatheCharacterMode;
 
     // Ab Version 395 (8.6.98): Parameter aus dem Objekt
     // E3dCompoundObject. Da irgendwann mal jemand die Ableitungs-
@@ -663,8 +666,8 @@ void E3dLatheObj::WriteData(SvStream& rOut) const
 
     // Ab Version 513a (5.2.99): Parameter fuer das
     // Erzeugen der Vorder/Rueckwand
-    rOut << BOOL(bLatheCloseFront);
-    rOut << BOOL(bLatheCloseBack);
+    rOut << GetCloseFront(); // #107245# BOOL(bLatheCloseFront);
+    rOut << GetCloseBack(); // #107245# BOOL(bLatheCloseBack);
 
     // neu ab 534: (hat noch gefehlt)
     rOut << BOOL(GetTextureFilter());
@@ -700,6 +703,9 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         // dann die Member
         UINT16  nTmp16;
 
+        // #106240# Flag if poly was loaded (all versions above 3.0 and 3.1)
+        sal_Bool bPolyWasRead(sal_False);
+
         pSub->Load(rIn, *pPage);
 
         // Parameter aus E3dObject laden
@@ -726,6 +732,9 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             // rIn >> aPolyPoly3D;
             rIn >> aPolyPoly3D[0];
 
+            // #106240# OK, this file does have a saved polygon
+            bPolyWasRead = sal_True;
+
             rIn >> nTmp;
             mpObjectItemSet->Put(Svx3DHorizontalSegmentsItem(nTmp));
 
@@ -736,6 +745,40 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             mpObjectItemSet->Put(Svx3DDoubleSidedItem(bTmp));
 
             rIn >> fLatheScale;
+        }
+
+        // #106240# No PolyPolygon as base for the lathe object was saved.
+        // Reconstruct it from the objects in the SubList.
+        if(!bPolyWasRead)
+        {
+            // This is really a old 3.0 or 3.1 file, reconstruct
+            // the not saved polygon using the SubList.
+            SdrObjList* pSubList = GetSubList();
+
+            if(pSubList && pSubList->GetObjCount())
+            {
+                sal_uInt16 nHorSegCount = (sal_uInt16)GetHorizontalSegments() / 2;
+                sal_uInt16 nVerSegCount = (sal_uInt16)(pSubList->GetObjCount() / nHorSegCount);
+                Polygon3D aNewBasePoly;
+
+                for(sal_uInt16 a(0); a < nVerSegCount; a++)
+                {
+                    E3dPolyObj* pCandidate = (E3dPolyObj*)pSubList->GetObj(a * nHorSegCount);
+                    if(pCandidate->ISA(E3dPolyObj))
+                    {
+                        const PolyPolygon3D& rCandPoly = ((E3dPolyObj*)pCandidate)->GetPolyPolygon3D();
+
+                        if(rCandPoly[0].GetPointCount() > 1)
+                        {
+                            aNewBasePoly[a] = rCandPoly[0][1];
+                        }
+                    }
+                }
+
+                aPolyPoly3D.Clear();
+                aNewBasePoly.SetClosed(sal_True);
+                aPolyPoly3D.Insert(aNewBasePoly);
+            }
         }
 
         if (aCompat.GetBytesLeft())
@@ -768,9 +811,14 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             rIn >> fTmp;
             mpObjectItemSet->Put(Svx3DPercentDiagonalItem(sal_uInt16(fTmp * 200.0)));
 
-            rIn >> bTmp; bLatheSmoothed = bTmp;
-            rIn >> bTmp; bLatheSmoothFrontBack = bTmp;
-            rIn >> bTmp; bLatheCharacterMode = bTmp;
+            rIn >> bTmp; // #107245# bLatheSmoothed = bTmp;
+            mpObjectItemSet->Put(Svx3DSmoothNormalsItem(bTmp));
+
+            rIn >> bTmp; // #107245# bLatheSmoothFrontBack = bTmp;
+            mpObjectItemSet->Put(Svx3DSmoothLidsItem(bTmp));
+
+            rIn >> bTmp; // #107245# bLatheCharacterMode = bTmp;
+            mpObjectItemSet->Put(Svx3DCharacterModeItem(bTmp));
         }
         else
         {
@@ -779,9 +827,14 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 
             mpObjectItemSet->Put(Svx3DPercentDiagonalItem(10));
 
-            bLatheSmoothed = TRUE;
-            bLatheSmoothFrontBack = FALSE;
-            bLatheCharacterMode = FALSE;
+            // #107245# bLatheSmoothed = TRUE;
+            mpObjectItemSet->Put(Svx3DSmoothNormalsItem(sal_True));
+
+            // #107245# bLatheSmoothFrontBack = FALSE;
+            mpObjectItemSet->Put(Svx3DSmoothLidsItem(sal_False));
+
+            // #107245# bLatheCharacterMode = FALSE;
+            mpObjectItemSet->Put(Svx3DCharacterModeItem(sal_False));
         }
 
         if (aCompat.GetBytesLeft())
@@ -870,13 +923,19 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             // Erzeugen der Vorder/Rueckwand
             BOOL bTmp;
 
-            rIn >> bTmp; bLatheCloseFront = bTmp;
-            rIn >> bTmp; bLatheCloseBack = bTmp;
+            rIn >> bTmp; // #107245# bLatheCloseFront = bTmp;
+            mpObjectItemSet->Put(Svx3DCloseFrontItem(bTmp));
+
+            rIn >> bTmp; // #107245# bLatheCloseBack = bTmp;
+            mpObjectItemSet->Put(Svx3DCloseBackItem(bTmp));
         }
         else
         {
-            bLatheCloseFront = TRUE;
-            bLatheCloseBack = TRUE;
+            // #107245# bLatheCloseFront = TRUE;
+            mpObjectItemSet->Put(Svx3DCloseFrontItem(sal_True));
+
+            // #107245# bLatheCloseBack = TRUE;
+            mpObjectItemSet->Put(Svx3DCloseBackItem(sal_True));
         }
 
         // neu ab 534: (hat noch gefehlt)
@@ -979,50 +1038,55 @@ void E3dLatheObj::SetLatheScale(double fNew)
     }
 }
 
-void E3dLatheObj::SetLatheSmoothed(BOOL bNew)
-{
-    if(bLatheSmoothed != bNew)
-    {
-        bLatheSmoothed = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+// #107245#
+// void E3dLatheObj::SetLatheSmoothed(BOOL bNew)
+// {
+//  if(bLatheSmoothed != bNew)
+//  {
+//      bLatheSmoothed = bNew;
+//      bGeometryValid = FALSE;
+//  }
+// }
 
-void E3dLatheObj::SetLatheSmoothFrontBack(BOOL bNew)
-{
-    if(bLatheSmoothFrontBack != bNew)
-    {
-        bLatheSmoothFrontBack = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+// #107245#
+// void E3dLatheObj::SetLatheSmoothFrontBack(BOOL bNew)
+// {
+//  if(bLatheSmoothFrontBack != bNew)
+//  {
+//      bLatheSmoothFrontBack = bNew;
+//      bGeometryValid = FALSE;
+//  }
+// }
 
-void E3dLatheObj::SetLatheCharacterMode(BOOL bNew)
-{
-    if(bLatheCharacterMode != bNew)
-    {
-        bLatheCharacterMode = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+// #107245#
+// void E3dLatheObj::SetLatheCharacterMode(BOOL bNew)
+// {
+//  if(bLatheCharacterMode != bNew)
+//  {
+//      bLatheCharacterMode = bNew;
+//      bGeometryValid = FALSE;
+//  }
+// }
 
-void E3dLatheObj::SetLatheCloseFront(BOOL bNew)
-{
-    if(bLatheCloseFront != bNew)
-    {
-        bLatheCloseFront = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+// #107245#
+// void E3dLatheObj::SetLatheCloseFront(BOOL bNew)
+// {
+//  if(bLatheCloseFront != bNew)
+//  {
+//      bLatheCloseFront = bNew;
+//      bGeometryValid = FALSE;
+//  }
+// }
 
-void E3dLatheObj::SetLatheCloseBack(BOOL bNew)
-{
-    if(bLatheCloseBack != bNew)
-    {
-        bLatheCloseBack = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+// #107245#
+// void E3dLatheObj::SetLatheCloseBack(BOOL bNew)
+// {
+//  if(bLatheCloseBack != bNew)
+//  {
+//      bLatheCloseBack = bNew;
+//      bGeometryValid = FALSE;
+//  }
+// }
 
 //////////////////////////////////////////////////////////////////////////////
 // private support routines for ItemSet access

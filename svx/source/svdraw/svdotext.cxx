@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-26 15:34:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #include "svdtxhdl.hxx"  // DrawTextToPath
 #include "writingmodeitem.hxx"
 
-#ifndef _SVX_COLORCFG_HXX
-#include "colorcfg.hxx"
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 
 #ifndef _EEITEM_HXX //autogen
@@ -921,6 +921,23 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
     Point aTextPos(aAnkRect.TopLeft());
     Size aTextSiz(rOutliner.GetPaperSize()); // GetPaperSize() hat etwas Toleranz drauf, oder?
 
+    // #106653#
+    // For draw objects containing text correct hor/ver alignment if text is bigger
+    // than the object itself. Without that correction, the text would always be
+    // formatted to the left edge (or top edge when vertical) of the draw object.
+    if(!IsTextFrame())
+    {
+        if(aAnkRect.GetWidth() < aTextSiz.Width() && !IsVerticalWriting())
+        {
+            eHAdj = SDRTEXTHORZADJUST_CENTER;
+        }
+
+        if(aAnkRect.GetHeight() < aTextSiz.Height() && IsVerticalWriting())
+        {
+            eVAdj = SDRTEXTVERTADJUST_CENTER;
+        }
+    }
+
     if (eHAdj==SDRTEXTHORZADJUST_CENTER || eHAdj==SDRTEXTHORZADJUST_RIGHT)
     {
         long nFreeWdt=aAnkRect.GetWidth()-aTextSiz.Width();
@@ -1088,6 +1105,7 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 
     FASTBOOL bOk=TRUE;
     FASTBOOL bPrinter=rXOut.GetOutDev()->GetOutDevType()==OUTDEV_PRINTER;
+    FASTBOOL bPrintPreView=rXOut.GetOutDev()->GetOutDevViewType()==OUTDEV_VIEWTYPE_PRINTPREVIEW;
 
     if (bPrinter && bEmptyPresObj)
         return bOk; // Leere Praesentationsobjekte nicht drucken!
@@ -1104,7 +1122,11 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 
             {
                 SvtAccessibilityOptions aOptions;
-                rOutliner.ForceAutoColor( aOptions.GetIsAutomaticFontColor() );
+                FASTBOOL bForceAutoColor = aOptions.GetIsAutomaticFontColor();
+                //#106611# don't use automatic colors in WYSIWYG Print Previews
+                if(bPrintPreView&& !aOptions.GetIsForPagePreviews())
+                    bForceAutoColor = FALSE;
+                rOutliner.ForceAutoColor( bForceAutoColor );
             }
 
             FASTBOOL bContourFrame=IsContourTextFrame();
@@ -1280,8 +1302,8 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         if (bEmptyPresObj)
         {
             // leere Praesentationsobjekte bekommen einen grauen Rahmen
-            svx::ColorConfig aColorConfig;
-            svx::ColorConfigValue aColor( aColorConfig.GetColorValue( svx::OBJECTBOUNDARIES ) );
+            svtools::ColorConfig aColorConfig;
+            svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( svtools::OBJECTBOUNDARIES ) );
 
             if( aColor.bIsVisible )
             {
@@ -2579,7 +2601,7 @@ void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
     if( pModel->IsWriter() )
     {
         if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
-            aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+            aTranslate += Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
     }
 
     // build and set BaseRect (use scale)
@@ -2613,6 +2635,11 @@ void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
             (sal_Int32)FRound(aTranslate.X()),
             (sal_Int32)FRound(aTranslate.Y())));
     }
+}
+
+bool SdrTextObj::IsRealyEdited() const
+{
+    return pEdtOutl && pEdtOutl->IsModified();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////

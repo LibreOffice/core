@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-08-16 12:59:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
     text [ portuguese_brazilian ] = "unverkn?fte Grafik" ; \
     text [ portuguese ] = "Imagem não ligada" ; \
     text[ chinese_simplified ] = "æœªé“¾æ¥çš„å›¾å½¢";  \
-    text[ russian ] = "Íåñâÿçàííàÿ ãğàôèêà";    \
+    text[ russian ] = "Íåñâÿçàííûé ãğàôè÷åñêèé îáúåêò"; \
     text[ polish ] = "Nie po³¹czona grafika";   \
     text[ japanese ] = "ãƒªãƒ³ã‚¯ã•ã‚Œã¦ã„ãªã„å›³";    \
     text[ chinese_traditional ] = "æœªé€£çµçš„åœ–å½¢"; \
@@ -87,7 +87,7 @@
     text[ turkish ] = "Bağlantısız grafik"; \
     text[ language_user1 ] = " ";   \
     text[ finnish ] = "Linkittämätön kuva"; \
-    text[ catalan ] = "Imagen no vinculada";    \
+    text[ catalan ] = "Imatge no enllaçada";    \
     text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
 
  // pragma ----------------------------------------------------------------
@@ -135,11 +135,11 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ chinese_traditional ] = "ç•¶ä½œ(~S)";
         Text[ arabic ] = "ßÜ";
         Text[ greek ] = "Ùò";
-        Text[ korean ] = "ì–‘ì‹(~S)";
+        Text[ korean ] = "í˜•ì‹(~S)";
         Text[ turkish ] = "~Artalan";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Nimell?";
-        Text[ catalan ] = "~Como";
+        Text[ finnish ] = "T~äyttö";
+        Text[ catalan ] = "C~om a";
         Text[ thai ] = "à¹€à¸›à¹‡~à¸™";
     };
     ListBox LB_SELECTOR
@@ -212,7 +212,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     StringList [ russian ] =
     {
             < "Öâåò" ; Default ; > ;
-        < "Ãğàôèêà" ; Default ; > ;
+        < "Ãğàôè÷åñêèé îáúåêò" ; Default ; > ;
     };
     StringList [ polish ] =
     {
@@ -262,7 +262,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     StringList [ catalan ] =
     {
             < "Color" ; Default ; > ;
-        < "Imagen" ; Default ; > ;
+        < "Imatge" ; Default ; > ;
     };
     StringList [ thai ] =
     {
@@ -295,11 +295,11 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ chinese_traditional ] = "ç”¨æ–¼(~O)";
         Text[ arabic ] = "áÜ";
         Text[ greek ] = "Ãéá";
-        Text[ korean ] = "ëŒ€ìƒ(~O)";
+        Text[ korean ] = "ìš©ë„(~O)";
         Text[ turkish ] = "He~def";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Kohde";
-        Text[ catalan ] = "Pa~ra";
+        Text[ catalan ] = "P~er a";
         Text[ thai ] = "à¸ªà¸³~à¸«à¸£à¸±à¸š";
     };
     ListBox LB_TBL_BOX
@@ -421,7 +421,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     {
             < "ì…€" ; > ;
         < "í–‰" ; > ;
-        < "ì‹œíŠ¸" ; > ;
+        < "í‘œ" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -443,9 +443,9 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     StringList [ catalan ] =
     {
-            < "Celda" ; > ;
+            < "Cel.la" ; > ;
         < "Fila" ; > ;
-        < "Tabla" ; > ;
+        < "Taula" ; > ;
     };
     StringList [ thai ] =
     {
@@ -524,7 +524,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     StringList [ russian ] =
     {
             < "Àáçàö" ; > ;
-        < "Çíàê" ; > ;
+        < "Ñèìâîë" ; > ;
     };
     StringList [ polish ] =
     {
@@ -573,8 +573,8 @@ TabPage RID_SVXPAGE_BACKGROUND
     };
     StringList [ catalan ] =
     {
-            < "Párrafo" ; > ;
-        < "Carácter" ; > ;
+            < "Paràgraf" ; > ;
+        < "Caràcter" ; > ;
     };
     StringList [ thai ] =
     {
@@ -623,10 +623,10 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ chinese_traditional ] = "èƒŒæ™¯é¡è‰²";
         Text[ arabic ] = "áæä ÇáÎáİíÉ";
         Text[ greek ] = "×ñşìá öüíôïõ";
-        Text[ korean ] = "ë°°ê²½ìƒ‰ìƒ";
+        Text[ korean ] = "ë°°ê²½ ìƒ‰ìƒ";
         Text[ turkish ] = "Artalan rengi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Background color";
+        Text[ catalan ] = "Color del fons";
         Text[ thai ] = "à¸ªà¸µà¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
     };
     Window WIN_PREVIEW1
@@ -643,6 +643,26 @@ TabPage RID_SVXPAGE_BACKGROUND
         Size = MAP_APPFONT ( 50 , 8) ;
         Text = "~Transparenz" ;
         Text [ english_us ] = "~Transparency" ;
+        Text[ portuguese ] = "~Transparency";
+        Text[ russian ] = "~Transparency";
+        Text[ greek ] = "~Transparency";
+        Text[ dutch ] = "~Transparency";
+        Text[ french ] = "Transparence";
+        Text[ spanish ] = "Tran~sparencia";
+        Text[ finnish ] = "~Transparency";
+        Text[ italian ] = "Trasparenza";
+        Text[ danish ] = "~Transparency";
+        Text[ swedish ] = "~Transparens";
+        Text[ polish ] = "~Transparency";
+        Text[ portuguese_brazilian ] = "~Transparency";
+        Text[ japanese ] = "é€éæ€§";
+        Text[ korean ] = "íˆ¬ëª…í™”";
+        Text[ chinese_simplified ] = "é€æ˜(~T)";
+        Text[ chinese_traditional ] = "é€æ˜(~T)";
+        Text[ turkish ] = "~Transparency";
+        Text[ arabic ] = "~Transparency";
+        Text[ catalan ] = "~Transparency";
+        Text[ thai ] = "~Transparency";
     };
     MetricField MF_COL_TRANS
     {
@@ -689,7 +709,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Tiedosto";
-        Text[ catalan ] = "File";
+        Text[ catalan ] = "Fitxer";
         Text[ thai ] = "à¹à¸Ÿà¹‰à¸¡";
     };
     PushButton BTN_BROWSE
@@ -704,12 +724,12 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ swedish ] = "~Välj ut..." ;
         Text [ danish ] = "Gennemse..." ;
         Text [ italian ] = "~Sfoglia..." ;
-        Text [ spanish ] = "Seleccio~nar..." ;
+        Text [ spanish ] = "~Buscar..." ;
         Text [ french ] = "~Parcourir..." ;
-        Text [ dutch ] = "~Doorzoeken..." ;
+        Text [ dutch ] = "Bla~deren..." ;
         Text [ portuguese ] = "~Pesquisar..." ;
         Text[ chinese_simplified ] = "æµè§ˆ(~B)...";
-        Text[ russian ] = "Âûáğàòü...";
+        Text[ russian ] = "Îáçîğ...";
         Text[ polish ] = "Przegl¹d~aj...";
         Text[ japanese ] = "é¸æŠ(~B)...";
         Text[ chinese_traditional ] = "ç€è¦½(~B)...";
@@ -718,8 +738,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "ì„ íƒ(~B)...";
         Text[ turkish ] = "Seç...";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Selaa";
-        Text[ catalan ] = "Seleccio~nar...";
+        Text[ finnish ] = "Sel~aa...";
+        Text[ catalan ] = "~Navega...";
         Text[ thai ] = "à¹€~à¸£à¸µà¸¢à¸à¸”à¸¹...";
     };
     CheckBox BTN_LINK
@@ -739,7 +759,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ portuguese_brazilian ] = "~Verkn?fen" ;
         Text [ portuguese ] = "~Ligação" ;
         Text[ chinese_simplified ] = "é“¾æ¥(~L)";
-        Text[ russian ] = "Ñâÿçàòü";
+        Text[ russian ] = "Ñâÿçü ñ ôàéëîì";
         Text[ polish ] = "Po~³¹cz";
         Text[ japanese ] = "ãƒªãƒ³ã‚¯(~L)";
         Text[ chinese_traditional ] = "æ·å¾‘(~L)";
@@ -748,8 +768,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "ì—°ê²°(~L)";
         Text[ turkish ] = "Bağla";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Linkki";
-        Text[ catalan ] = "~Vincular";
+        Text[ finnish ] = "~Linkitä";
+        Text[ catalan ] = "~Enllaça";
         Text[ thai ] = "à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
     };
     FixedText FT_FILE
@@ -785,7 +805,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "ìœ í˜•";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Type";
+        Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi";
         Text[ thai ] = "à¸Šà¸™à¸´à¸”";
     };
@@ -815,8 +835,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "ìœ„ì¹˜(~P)";
         Text[ turkish ] = "O~rtala";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Sijainti";
-        Text[ catalan ] = "~Posición";
+        Text[ finnish ] = "S~ijainti";
+        Text[ catalan ] = "~Posició";
         Text[ thai ] = "~à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     RadioButton BTN_AREA
@@ -843,11 +863,11 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ chinese_traditional ] = "å¹³é¢(~E)";
         Text[ arabic ] = "ãÓÇÍÉ";
         Text[ greek ] = "ÅğéöÜíåéá";
-        Text[ korean ] = "ì˜ì—­(~E)";
+        Text[ korean ] = "ë©´(~E)";
         Text[ turkish ] = "Ser";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Alue";
-        Text[ catalan ] = "~Área";
+        Text[ catalan ] = "~Àrea";
         Text[ thai ] = "à¸à¸·à¹‰à¸™~à¸—à¸µà¹ˆ";
     };
     RadioButton BTN_TILE
@@ -876,8 +896,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "ë°”ë‘‘íŒì‹(~T)";
         Text[ turkish ] = "~Döşe";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Vierekk?in";
-        Text[ catalan ] = "~Mosaico";
+        Text[ finnish ] = "Vi~erekkäin";
+        Text[ catalan ] = "~Mosaic";
         Text[ thai ] = "~à¸‹à¹‰à¸­à¸™à¸—à¸±à¸š";
     };
     Control WND_POSITION
@@ -896,6 +916,26 @@ TabPage RID_SVXPAGE_BACKGROUND
         Size = MAP_APPFONT ( 153 , 8) ;
         Text = "Transparenz" ;
         Text [ english_us ] = "Transparency" ;
+        Text[ portuguese ] = "Transparency";
+        Text[ russian ] = "Transparency";
+        Text[ greek ] = "Transparency";
+        Text[ dutch ] = "Transparency";
+        Text[ french ] = "Transparence";
+        Text[ spanish ] = "Transparencia";
+        Text[ finnish ] = "Transparency";
+        Text[ italian ] = "Trasparenza";
+        Text[ danish ] = "Transparency";
+        Text[ swedish ] = "Transparens";
+        Text[ polish ] = "Transparency";
+        Text[ portuguese_brazilian ] = "Transparency";
+        Text[ japanese ] = "é€éæ€§";
+        Text[ korean ] = "íˆ¬ëª…í™”";
+        Text[ chinese_simplified ] = "é€æ˜";
+        Text[ chinese_traditional ] = "é€æ˜";
+        Text[ turkish ] = "Transparency";
+        Text[ arabic ] = "Transparency";
+        Text[ catalan ] = "Transparency";
+        Text[ thai ] = "Transparency";
     };
     MetricField MF_GRAPH_TRANS
     {
@@ -936,7 +976,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ portuguese ] = "~Previsualizar" ;
         Text [ portuguese_brazilian ] = "V~orschau" ;
         Text[ chinese_simplified ] = "é¢„è§ˆ(~V)";
-        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
         Text[ polish ] = "P~odgl¹d";
         Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼(~V)";
         Text[ chinese_traditional ] = "é è¦½(~V)";
@@ -947,14 +987,14 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ portuguese_brazilian ] = "V~orschau" ;
         Text [ portuguese ] = "~Previsualizar" ;
         Text[ chinese_simplified ] = "é¢„è§ˆ(~V)";
-        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
         Text[ polish ] = "P~odgl¹d";
         Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼(~V)";
         Text[ chinese_traditional ] = "é è¦½(~V)";
         Text[ arabic ] = "ãÚÇíäÉ";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Esi~katselu";
-        Text[ catalan ] = "Previsuali~zación";
+        Text[ catalan ] = "Previsualit~zació";
         Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸•à¸±~à¸§à¸­à¸¢à¹ˆà¸²à¸‡";
     };
     String STR_BROWSE
@@ -971,17 +1011,17 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ portuguese_brazilian ] = "Grafik suchen" ;
         Text [ portuguese ] = "Localizar imagem" ;
         Text[ chinese_simplified ] = "æœå¯»å›¾å½¢";
-        Text[ russian ] = "Íàéòè ãğàôèêó";
+        Text[ russian ] = "Íàéòè ãğàôè÷åñêèå îáúåêòû";
         Text[ polish ] = "Szukaj grafiki";
         Text[ japanese ] = "å›³ã‚’æ¤œç´¢";
         Text[ chinese_traditional ] = "æœå°‹åœ–å½¢";
         Text[ arabic ] = "ÇáÈÍË Úä ÑÓã";
         Text[ greek ] = "ÁíáæŞôçóç ãñáöéêïı";
-        Text[ korean ] = "ê·¸ë˜í”½ ì°¾ê¸°";
+        Text[ korean ] = "ê·¸ë¦¼ ì°¾ê¸°";
         Text[ turkish ] = "Grafik bul";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Etsi kuvat";
-        Text[ catalan ] = "Buscar imagen";
+        Text[ finnish ] = "Etsi grafiikka";
+        Text[ catalan ] = "Cerca imatge";
         Text[ thai ] = "à¸«à¸²à¸à¸£à¸²à¸Ÿà¸´à¸„";
     };
     String STR_UNLINKED
@@ -998,9 +1038,24 @@ TabPage RID_SVXPAGE_BACKGROUND
     Text[ korean ] = "ë°°ê²½";
     Text[ turkish ] = "Artalan";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fondo";
+    Text[ catalan ] = "Fons";
     Text[ thai ] = "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

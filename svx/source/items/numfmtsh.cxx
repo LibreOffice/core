@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-23 10:52:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,7 +966,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
     short           nIq=0;
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
-    sal_Bool            bTmpBanking;
+    sal_Bool        bTmpBanking, bAdaptSelPos;
     XubString       rSymbol;
     XubString       rBankSymbol;
 
@@ -980,13 +980,20 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
 
     if(pCurCurrencyEntry==NULL)
     {
+        bAdaptSelPos = sal_False;
         pCurCurrencyEntry=(NfCurrencyEntry*)pTmpCurrencyEntry;
         bBankingSymbol=bTmpBanking;
         nCurCurrencyEntryPos=FindCurrencyFormat(pTmpCurrencyEntry,bTmpBanking);
     }
     else
     {
-        pTmpCurrencyEntry=pCurCurrencyEntry;
+        if (pTmpCurrencyEntry == pCurCurrencyEntry)
+            bAdaptSelPos = sal_True;
+        else
+        {
+            bAdaptSelPos = sal_False;
+            pTmpCurrencyEntry = pCurCurrencyEntry;
+        }
         bTmpBanking=bBankingSymbol;
     }
 
@@ -1123,7 +1130,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
     {
         aCurrencyFormatList.Insert(new String(*rList[i]),aCurrencyFormatList.Count());
 
-        if ( nSelPos == SELPOS_NONE && aCurEntryList[i] == nCurFormatKey )
+        if ( nSelPos == SELPOS_NONE && bAdaptSelPos && aCurEntryList[i] == nCurFormatKey )
             nSelPos = i;
     }
 

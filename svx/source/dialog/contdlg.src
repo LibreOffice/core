@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:56:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ swedish ] = "Tilldela" ;
                 Text [ danish ] = "Tildel" ;
                 Text [ italian ] = "Assegna" ;
-                Text [ spanish ] = "Asignar" ;
+                Text [ spanish ] = "Aplicar" ;
                 Text [ french ] = "Assigner" ;
                 Text [ dutch ] = "Toewijzen" ;
                 Text[ chinese_simplified ] = "ζ‡ε®";
@@ -208,7 +208,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ chinese_traditional ] = "η©ε½Ά";
                 Text[ arabic ] = "γΣΚΨνα";
                 Text[ greek ] = "Ορθογώνιο";
-                Text[ korean ] = "μ‚¬κ°ν•";
+                Text[ korean ] = "μ§μ‚¬κ°ν•";
                 Text[ turkish ] = "Dikdφrtgen";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Rectangle";
@@ -312,7 +312,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ french ] = "Ιditer des points" ;
                 Text [ swedish ] = "Redigera punkter" ;
                 Text [ dutch ] = "Punten bewerken" ;
-                Text [ spanish ] = "Modificar puntos" ;
+                Text [ spanish ] = "Editar puntos" ;
                 Text [ english_us ] = "Edit Points" ;
                 AutoCheck = TRUE ;
                 Text[ chinese_simplified ] = "ηΌ–θΎ‘ζ¥η‚Ή";
@@ -407,7 +407,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ french ] = "Supprimer des points" ;
                 Text [ swedish ] = "Radera punkter" ;
                 Text [ dutch ] = "Punten verwijderen" ;
-                Text [ spanish ] = "Eliminar puntos" ;
+                Text [ spanish ] = "Borrar puntos" ;
                 Text [ english_us ] = "Delete Points" ;
                 Text[ chinese_simplified ] = "ε ι™¤ζ¥η‚Ή";
                 Text[ russian ] = "Σδΰλθςό σηλϋ";
@@ -448,7 +448,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ chinese_traditional ] = "θ‡ªε‹•θΌªε»“";
                 Text[ arabic ] = "ΞΨ ίέΗέν ΚαήΗΖν";
                 Text[ greek ] = "ΑυτοΠερίγραμμα";
-                Text[ korean ] = "μλ™ μ™Έν•μ„ ";
+                Text[ korean ] = "μλ™ μ¤κ³½";
                 Text[ turkish ] = "Otomatik kontur";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Contorn automΰtic";
@@ -514,7 +514,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ chinese_traditional ] = "ζΆεΎ©ζ’¤ζ¶ζ‡δ»¤";
                 Text[ arabic ] = "ΕΪΗΟΙ ";
                 Text[ greek ] = "Επαναφορά ";
-                Text[ korean ] = "λ³µμ›";
+                Text[ korean ] = "λ‹¤μ‹ μ‹¤ν–‰";
                 Text[ turkish ] = "Yinele ";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Restaurar  ";
@@ -736,7 +736,7 @@ String STR_CONTOURDLG_WORKPLACE
     Text [ swedish ] = "Definition av ett nytt arbetsomrεde\nleder till att konturen raderas.\nVill du fortsδtta δndε?" ;
     Text [ danish ] = "Hvis du definerer et nyt arbejdsomrεde\nbliver konturen slettet.\nEr du sikker pε at du vil fortsζtte?" ;
     Text [ italian ] = "L'impostazione di una nuova area di lavoro\ncauserΰ la cancellazione del contorno.\nVolete proseguire?" ;
-    Text [ spanish ] = "Al establecer una nueva αrea de trabajo\nse eliminarα el contorno.\nΏDesea realmente continuar?" ;
+    Text [ spanish ] = "Al establecer una nueva αrea de trabajo\nse borrarα el contorno.\nΏDesea realmente continuar?" ;
     Text [ french ] = "Assigner une nouvelle zone de travail\nsupprime le contour.\nSouhaitez-vous continuer ?" ;
     Text [ dutch ] = "Door het vastleggen van een nieuw werkbereik \nwordt de contour gewist.\nWilt u werkelijk doorgaan?" ;
     Text [ portuguese ] = "Ao definir uma nova αrea de\ntrabalho eliminarα o contorno.\nDeseja continuar?" ;
@@ -747,7 +747,7 @@ String STR_CONTOURDLG_WORKPLACE
     Text[ chinese_traditional ] = "ε®ηΎ©δΈ€ε€‹ζ–°η„η·¨θΌ―ε€εζƒζΈ…ι™¤θΌªε»“γ€‚\nζ‚¨ηθ¦ηΉΌηΊοΌ";
     Text[ arabic ] = "ΚΪννδ γΣΗΝΙ Ϊγα ΜΟνΟΙ Σζέ\nνΔΟν Εαμ ΝΠέ ΗαΞΨ ΗαίέΗέν. \nεα ΚΡνΟ ΗαγΚΗΘΪΙ ΘΗαέΪαΏ";
     Text[ greek ] = "Ο ορισμός μιας νέας περιοχής εργασίας\nέχει ως αποτέλεσμα τη διαγραφή του περιγράμματος.\nΘέλετε πραγματικά να συνεχίσετε;";
-    Text[ korean ] = "μƒ μ‘μ—… μμ—­μ„ μ„¤μ •ν•λ©΄\nμ¤κ³½μ΄ μ‚­μ λ©λ‹λ‹¤.\nκ·Έλλ„ κ³„μ†ν•κ² μµλ‹κΉ?";
+    Text[ korean ] = "μƒ μ‘μ—… μμ—­μ„ μ„¤μ •ν•λ©΄\nμ¤κ³½μ΄ μ‚­μ λ©λ‹λ‹¤.\nκ·Έλλ„ κ³„μ†ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "Yeni bir ηalύώma alanύ belirlenmesi durumunda\nkontur silinecek.\nDevam etmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "En establir una nova ΰrea de treball\ns'eliminarΰ el contorn.\nVoleu continuar realment?";
@@ -776,13 +776,18 @@ String STR_CONTOURDLG_LINKED
     Text[ chinese_traditional ] = "ι€™ε€‹ε–ε½Άζ―ε’ζ–‡δ»¶ι€£ηµη„γ€‚ζ‚¨θ¦ε–ζ¶ι€™ε€‹ι€£ηµοΉη·¨θΌ―ι€™ε€‹ε–ε½ΆοΌ";
     Text[ arabic ] = "εΠε ΗαΡΣγΙ γΡΚΘΨΙ ΘΗαγΣΚδΟ. εα ΚΡνΟ ΕÒΗαΙ ΗαΗΡΚΘΗΨ αίν ΚΚγίδ γδ ΚΝΡνΡ ΗαΡΣγΙΏ";
     Text[ greek ] = "Το γραφικό αυτό είναι συνδεδεμένο με το έγγραφο. Θέλετε να καταργηθεί η σύνδεση για να επεξεργάσετε το γραφικό;";
-    Text[ korean ] = "μ΄ κ·Έλν”½μ€ λ¬Έμ„μ— μ—°κ²°λμ–΄ μμµλ‹λ‹¤. νΈμ§‘ν•κΈ° μ„ν•΄ κ·Έλν”½ μ—°κ²°μ„ ν•΄μ ν•κ² μµλ‹κΉ?";
+    Text[ korean ] = "μ΄ κ·Έλ¦Όμ€ λ¬Έμ„μ— μ—°κ²°λμ–΄ μμµλ‹λ‹¤. νΈμ§‘ν•κΈ° μ„ν•΄ κ·Έλ¦Ό μ—°κ²°μ„ ν•΄μ ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "Bu grafik, belge ile baπlantύlύ. Grafiπi dόzenlemek iηin bu baπlantύyύ kaldύrmak istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aquesta imatge estΰ enllaηada al document. Voleu desfer l'enllaη per editar la imatge?";
     Text[ thai ] = "ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΈ΅ΰΉ‚ΰΈΆΰΈ‡ΰΈ§ΰΈ±ΰΈ•ΰΈ–ΰΈΈΰΈΰΈ£ΰΈ²ΰΈΰΈ΄ΰΈ„ΰΈ™ΰΈµΰΉ‰ΰΉ„ΰΈ›ΰΈΆΰΈ±ΰΈ‡ΰΉ€ΰΈ­ΰΈΰΈªΰΈ²ΰΈ£ ΰΈ„ΰΈΈΰΈ“ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΉ„ΰΈ΅ΰΉΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΈ΅ΰΉ‚ΰΈΆΰΈ‡ΰΈΰΈ£ΰΈ²ΰΈΰΈ΄ΰΈ„ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΉΰΈΰΉ‰ΰΉ„ΰΈ‚ΰΈ΅ΰΈ±ΰΈ™ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΉ„ΰΈ΅ΰΉ?";
 };
 /******************************************************************************/
+
+
+
+
+
 
 
 

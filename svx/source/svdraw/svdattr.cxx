@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-09 15:47:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,15 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_MODE - SDRATTR_START ] = new Svx3DTextureModeItem;
     ppPoolDefaults[ SDRATTR_3DOBJ_TEXTURE_FILTER - SDRATTR_START ] = new Svx3DTextureFilterItem;
 
-    for( i = SDRATTR_3DOBJ_RESERVED_01; i <= SDRATTR_3DOBJ_RESERVED_20; i++ )
+    // #107245# Add new items for 3d objects
+    ppPoolDefaults[ SDRATTR_3DOBJ_SMOOTH_NORMALS - SDRATTR_START ] = new Svx3DSmoothNormalsItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_SMOOTH_LIDS - SDRATTR_START ] = new Svx3DSmoothLidsItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_CHARACTER_MODE - SDRATTR_START ] = new Svx3DCharacterModeItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_CLOSE_FRONT - SDRATTR_START ] = new Svx3DCloseFrontItem;
+    ppPoolDefaults[ SDRATTR_3DOBJ_CLOSE_BACK - SDRATTR_START ] = new Svx3DCloseBackItem;
+
+    // #107245# Start with SDRATTR_3DOBJ_RESERVED_06 now
+    for( i = SDRATTR_3DOBJ_RESERVED_06; i <= SDRATTR_3DOBJ_RESERVED_20; i++ )
         ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
 
     // 3D Scene Attr (28092000 AW)
@@ -499,7 +507,7 @@ SdrItemPool::~SdrItemPool()
         unsigned nBeg=SDRATTR_SHADOW-SDRATTR_START;
         unsigned nEnd=SDRATTR_END-SDRATTR_START;
         for (unsigned i=nBeg; i<=nEnd; i++) {
-            SetRef(*ppPoolDefaults[i],0);
+            SetRefCount(*ppPoolDefaults[i],0);
             delete ppPoolDefaults[i];
             ppPoolDefaults[i]=NULL;
         }
@@ -2133,10 +2141,10 @@ sal_uInt16 SdrAutoShapeAdjustmentItem::GetVersion( sal_uInt16 nFileFormatVersion
 sal_Bool SdrAutoShapeAdjustmentItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_uInt32 i, nCount = GetCount();
-    uno::Sequence< sal_uInt32 > aSequence( nCount );
+    uno::Sequence< sal_Int32 > aSequence( nCount );
     if ( nCount )
     {
-        sal_uInt32* pPtr = aSequence.getArray();
+        sal_Int32* pPtr = aSequence.getArray();
         for ( i = 0; i < nCount; i++ )
             *pPtr++ = GetValue( i ).nValue;
     }
@@ -2146,7 +2154,7 @@ sal_Bool SdrAutoShapeAdjustmentItem::QueryValue( uno::Any& rVal, BYTE nMemberId 
 
 sal_Bool SdrAutoShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    uno::Sequence< sal_uInt32 > aSequence;
+    uno::Sequence< sal_Int32 > aSequence;
     if( !( rVal >>= aSequence ) )
         return sal_False;
 
@@ -2157,7 +2165,7 @@ sal_Bool SdrAutoShapeAdjustmentItem::PutValue( const uno::Any& rVal, BYTE nMembe
     sal_uInt32 i, nCount = aSequence.getLength();
     if ( nCount )
     {
-        const sal_uInt32* pPtr = aSequence.getConstArray();
+        const sal_Int32* pPtr = aSequence.getConstArray();
         for ( i = 0; i < nCount; i++ )
         {
             SdrAutoShapeAdjustmentValue* pItem = new SdrAutoShapeAdjustmentValue;

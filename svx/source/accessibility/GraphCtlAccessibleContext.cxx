@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-10-23 09:45:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,15 @@
 #ifndef _SFXSMPLHINT_HXX
 #include <svtools/smplhint.hxx>
 #endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
+#endif
+#ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
+#include <comphelper/accessibleeventnotifier.hxx>
+#endif
 
 //===== local includes ========================================================
 
@@ -160,7 +169,8 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     SvxGraphCtrlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
     mpControl( &rRepr ),
-    mbDisposed( sal_False )
+    mbDisposed( sal_False ),
+    mnClientId( 0 )
 {
     mpModel = mpControl->GetSdrModel();
     mpPage = (SdrPage*)mpModel->GetPage( 0 );
@@ -382,18 +392,8 @@ void SvxGraphCtrlAccessibleContext::CommitChange (
 /** sends an AccessibleEventObject to all added XAccessibleEventListeners */
 void SvxGraphCtrlAccessibleContext::FireEvent (const AccessibleEventObject& aEvent)
 {
-    AccessibleEventListenerListType::iterator I;
-
-    for (I=mxAccessibleEventListeners.begin(); I!=mxAccessibleEventListeners.end(); I++)
-    {
-        if ((*I).is())
-        {
-            OSL_TRACE ("Fireing event.");
-            (*I)->notifyEvent (aEvent);
-        }
-        else
-            OSL_TRACE ("listener invalid.");
-    }
+    if (mnClientId)
+        comphelper::AccessibleEventNotifier::addEvent( mnClientId, aEvent );
 }
 
 //-----------------------------------------------------------------------------
@@ -526,13 +526,12 @@ lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale( void ) throw( Il
 void SAL_CALL SvxGraphCtrlAccessibleContext::addEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if( xListener.is() )
+    if (xListener.is())
     {
-           mxAccessibleEventListeners.insert (
-            mxAccessibleEventListeners.begin(),
-            xListener);
+        OGuard aGuard( Application::GetSolarMutex() );
+        if (!mnClientId)
+            mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
+        comphelper::AccessibleEventNotifier::addEventListener( mnClientId, xListener );
     }
 }
 
@@ -541,10 +540,21 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::addEventListener( const Reference< 
 void SAL_CALL SvxGraphCtrlAccessibleContext::removeEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
+    if (xListener.is())
+    {
+        OGuard aGuard( Application::GetSolarMutex() );
 
-    if( xListener.is() )
-        mxAccessibleEventListeners.erase (xListener);
+        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
+        if ( !nListenerCount )
+        {
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+            mnClientId = 0;
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -604,7 +614,8 @@ Any SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleKeyBinding() throw( Run
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+    svtools::ColorConfig aColorConfig;
+    UINT32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -651,8 +662,8 @@ Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedService
 {
     Sequence< OUString > aSNs( 2 );
 
-    aSNs[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.accessibility.AccessibleContext" ) );
-    aSNs[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.accessibility.AccessibleComponent" ) );
+    aSNs[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.accessibility.Accessible" ) );
+    aSNs[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.accessibility.AccessibleContext" ) );
 
     return aSNs;
 }
@@ -824,64 +835,39 @@ void SvxGraphCtrlAccessibleContext::setDescription( const OUString& rDescr )
 
 void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( mbDisposed )
+        return;
+
+    mbDisposed = sal_True;
+
+    mpControl = NULL;       // object dies with representation
+    mpView = NULL;
+    mpPage = NULL;
+
     {
-        OGuard aGuard( Application::GetSolarMutex() );
+        ShapesMapType::iterator I;
 
-        if( mbDisposed )
-            return;
-
-        mbDisposed = sal_True;
-
-        mpControl = NULL;       // object dies with representation
-        mpView = NULL;
-        mpPage = NULL;
-
+        for (I=mxShapes.begin(); I!=mxShapes.end(); I++)
         {
-            ShapesMapType::iterator I;
+            XAccessible* pAcc = (*I).second;
+            Reference< XComponent > xComp( pAcc, UNO_QUERY );
+            if( xComp.is() )
+                xComp->dispose();
 
-            for (I=mxShapes.begin(); I!=mxShapes.end(); I++)
-            {
-                XAccessible* pAcc = (*I).second;
-                Reference< XComponent > xComp( pAcc, UNO_QUERY );
-                if( xComp.is() )
-                    xComp->dispose();
-
-                (*I).second->release();
-            }
-
-            mxShapes.clear();
+            (*I).second->release();
         }
 
-        {
-
-            lang::EventObject   aEvent;
-            aEvent.Source = static_cast< cppu::OWeakObject* >( this );
-
-            EventListenerListType::iterator I;
-
-            for (I=mxEventListeners.begin(); I!=mxEventListeners.end(); I++)
-            {
-                if ((*I).is())
-                {
-                    OSL_TRACE ("Fireing event.");
-                    try
-                    {
-                        (*I)->disposing( aEvent );
-                    }
-                    catch ( RuntimeException & )
-                    {
-                        // be robust, if e.g. a remote bridge has disposed already.
-                        // there is no way, to delegate the error to the caller :o(.
-                    }
-                }
-                else
-                    OSL_TRACE ("listener invalid.");
-            }
-        }
-
+        mxShapes.clear();
     }
 
-    CommitChange( AccessibleEventId::ACCESSIBLE_STATE_EVENT, Any(), Any() );
+    // Send a disposing to all listeners.
+    if ( mnClientId )
+    {
+        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
+        mnClientId =  0;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -894,21 +880,38 @@ Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBoxOnScreen( void ) throw( R
         throw DisposedException();
 
     return Rectangle(
-        mpControl->GetParent()->OutputToAbsoluteScreenPixel(
+        mpControl->GetAccessibleParentWindow()->OutputToAbsoluteScreenPixel(
             mpControl->GetPosPixel() ),
         mpControl->GetSizePixel() );
 }
 
 //-----------------------------------------------------------------------------
 
+/** Calculate the relative coordinates of the bounding box as difference
+    between the absolute coordinates of the bounding boxes of this control
+    and its parent in the accessibility tree.
+*/
 Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox( void ) throw( RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( NULL == mpControl )
+    Rectangle aBounds ( 0, 0, 0, 0 );
+
+    Window* pWindow = mpControl;
+    if (pWindow != NULL)
+    {
+        aBounds = pWindow->GetWindowExtentsRelative (NULL);
+        Window* pParent = pWindow->GetAccessibleParentWindow();
+        if (pParent != NULL)
+        {
+            Rectangle aParentRect = pParent->GetWindowExtentsRelative (NULL);
+            aBounds -= aParentRect.TopLeft();
+        }
+    }
+    else
         throw DisposedException();
 
-    return Rectangle( mpControl->GetPosPixel(), mpControl->GetSizePixel() );
+    return aBounds;
 }
 
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-12-02 14:00:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,10 @@ TabPage RID_SFXPAGE_SPELL
     Text [ portuguese ] = "Correcção ortográfica" ;
     Text [ finnish ] = "Oikeinkirjoituksen tarkistus" ;
     Text [ danish ] = "Stavekontrol" ;
-    Text [ french ] = "Orthographe" ;
+    Text [ french ] = "Vérification orthographique" ;
     Text [ swedish ] = "Rättstavning" ;
     Text [ dutch ] = "Spellingcontrole" ;
-    Text [ spanish ] = "Ortografía" ;
+    Text [ spanish ] = "Revisión ortográfica" ;
     Text [ english_us ] = "Spellcheck" ;
     PushButton BTN_BOOK
     {
@@ -93,7 +93,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ italian ] = "Modifica..." ;
         Text [ portuguese_brazilian ] = "~Editar..." ;
         Text [ portuguese ] = "~Editar..." ;
-        Text [ finnish ] = "~Muokkaa" ;
+        Text [ finnish ] = "~Muokkaa..." ;
         Text [ danish ] = "Rediger..." ;
         Text [ french ] = "Éditer..." ;
         Text [ swedish ] = "~Redigera..." ;
@@ -111,7 +111,8 @@ TabPage RID_SFXPAGE_SPELL
         Text[ korean ] = "í¸ì§‘(~E)...";
         Text[ turkish ] = "Düzenle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Editar...";
+        Text[ catalan ] = "~Edita...";
+        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚...";
     };
     MultiListBox LB_BOOK
     {
@@ -150,7 +151,8 @@ TabPage RID_SFXPAGE_SPELL
         Text[ korean ] = "ì‚¬ì „";
         Text[ turkish ] = "Sözlükler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Diccionarios";
+        Text[ catalan ] = "Diccionaris";
+        Text[ thai ] = "à¸à¸ˆà¸™à¸²à¸™à¸¸à¸à¸£à¸¡";
     };
     CheckBox BTN_CAPS
     {
@@ -179,10 +181,11 @@ TabPage RID_SFXPAGE_SPELL
         Text[ chinese_traditional ] = "å¤§å¯«å­—(~C)";
         Text[ arabic ] = "ÇáßáãÇÊ ÇáãßÊæÈÉ ÈÃÍÑİ ßÈíÑÉ";
         Text[ greek ] = "Ëİîåéò ìå êåöáëáßá ãñÜììáôá";
-        Text[ korean ] = "ëŒ€ë¬¸ìë¡œ ì“°ì¸ ë‹¨ì–´(~C)";
+        Text[ korean ] = "ëŒ€ë¬¸ìë¡œ ì‚¬ìš©ëœ ë‹¨ì–´(~C)";
         Text[ turkish ] = "Büyük harfli sözcükler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Palabras en mayúscula";
+        Text[ catalan ] = "~Paraules en majúscula";
+        Text[ thai ] = "à¸„à¸³à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰~à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ";
     };
     CheckBox BTN_NUMS
     {
@@ -196,11 +199,11 @@ TabPage RID_SFXPAGE_SPELL
         Text [ italian ] = "Parole con ~numeri " ;
         Text [ portuguese_brazilian ] = "~Palavras com n?eros " ;
         Text [ portuguese ] = "~Palavras com números " ;
-        Text [ finnish ] = "~Numeroita sis?lt?v?t sanat" ;
+        Text [ finnish ] = "~Numeroita sisältävät sanat " ;
         Text [ danish ] = "Ord med tal " ;
         Text [ french ] = "les mots comportant des ~chiffres  " ;
         Text [ swedish ] = "Ord med s~iffror  " ;
-        Text [ dutch ] = "~Woorden met cijfers  " ;
+        Text [ dutch ] = "~Woorden met cijfers" ;
         Text [ spanish ] = "P~alabras con números  " ;
         Text [ english_us ] = "~Words with numbers " ;
         TabStop = TRUE ;
@@ -211,10 +214,11 @@ TabPage RID_SFXPAGE_SPELL
         Text[ chinese_traditional ] = "å«æœ‰æ•¸å­—çš„è©(~W)";
         Text[ arabic ] = "ÇáßáãÇÊ ÇáÊí ÊÍÊæí Úáì ÃÑŞÇã ";
         Text[ greek ] = "Ëİîåéò ìå áñéèìïıò ";
-        Text[ korean ] = "ìˆ«ìê°€ ìˆëŠ” ë‹¨ì–´ (~W)";
+        Text[ korean ] = "ìˆ«ìê°€ í¬í•¨ëœ ë‹¨ì–´ (~W)";
         Text[ turkish ] = "Rakamlı sözcükler ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "P~alabras con números  ";
+        Text[ catalan ] = "~Paraules amb nombres ";
+        Text[ thai ] = "~à¸„à¸³à¸—à¸µà¹ˆà¸¡à¸µà¸•à¸±à¸§à¹€à¸¥à¸‚ ";
     };
     CheckBox BTN_UPLOW
     {
@@ -228,25 +232,26 @@ TabPage RID_SFXPAGE_SPELL
         Text [ italian ] = "Mai~uscole e minuscole " ;
         Text [ portuguese_brazilian ] = "~Caixa alta e baixa " ;
         Text [ portuguese ] = "~Maiúsculas & Minúsculas " ;
-        Text [ finnish ] = "~Kirjainkoon erottelu" ;
+        Text [ finnish ] = "~Kirjainkoon erottelu " ;
         Text [ danish ] = "Store og små bogstaver " ;
         Text [ french ] = "la ~casse  " ;
         Text [ swedish ] = "Versal~känslig " ;
-        Text [ dutch ] = "~Hoofd-/kleine letters belangrijk " ;
+        Text [ dutch ] = "~Hoofdletters/kleine letters " ;
         Text [ spanish ] = "~Mayúsculas y minúsculas  " ;
         Text [ english_us ] = "~Case sensitive " ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å­—æ¯å¤§å°å†™ (~C)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ ";
         Text[ polish ] = "Wielkie i ma³e litery ";
-        Text[ japanese ] = "å¤§æ–‡å­—/å°æ–‡å­—ã‚’åŒºåˆ¥ (~C)";
+        Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹(~C)";
         Text[ chinese_traditional ] = "å­—æ¯å¤§å°å¯«(~C)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ ";
         Text[ greek ] = "ĞåæÜ-Êåöáëáßá ";
         Text[ korean ] = "ëŒ€ë¬¸ìì™€ ì†Œë¬¸ì (~C)";
         Text[ turkish ] = "Büyük/küçük yazım ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Mayúsculas y minúsculas  ";
+        Text[ catalan ] = "~Majúscules i minúscules  ";
+        Text[ thai ] = "~à¸•à¸£à¸‡à¸•à¸²à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ-à¹€à¸¥à¹‡à¸ ";
     };
     FixedLine GB_AUDIT
     {
@@ -270,17 +275,18 @@ TabPage RID_SFXPAGE_SPELL
         Text[ chinese_simplified ] = "æ£€æŸ¥";
         Text[ russian ] = "Ïğîâåğÿòü";
         Text[ polish ] = "SprawdŸ";
-        Text[ japanese ] = "ï½½ï¾ï¾Ÿï¾™ï¾ï½ªï½¯ï½¸";
+        Text[ japanese ] = "ã‚¹ãƒšãƒ«ãƒã‚§ãƒƒã‚¯";
         Text[ chinese_traditional ] = "æª¢æŸ¥";
         Text[ arabic ] = "ÇáÊÏŞíŞ";
         Text[ greek ] = "¸ëåã÷ïò";
         Text[ korean ] = "ê²€ì‚¬";
         Text[ turkish ] = "Denetim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Revisar";
+        Text[ catalan ] = "Comprova";
+        Text[ thai ] = "à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸š";
     };
     Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥";
-    Text[ russian ] = "Ïğàâîïèñàíèå";
+    Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè";
     Text[ polish ] = "Pisownia";
     Text[ japanese ] = "æ–‡ç« æ ¡æ­£";
     Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥";
@@ -289,9 +295,12 @@ TabPage RID_SFXPAGE_SPELL
     Text[ korean ] = "ë§ì¶¤ë²• ê²€ì‚¬";
     Text[ turkish ] = "Yazım kılavuzu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ortografía";
+    Text[ catalan ] = "Ortografia";
+    Text[ thai ] = "à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸à¸²à¸£à¸ªà¸°à¸à¸”";
 };
  // ********************************************************************** EOF
+
+
 
 
 

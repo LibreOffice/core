@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-05 15:40:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #endif
 #include <toolkit/unohlp.hxx>
 #include <math.h>
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #include <eeitem.hxx>
@@ -953,7 +953,8 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             else
             {
                 double fPoints = MM100_TO_TWIP((long)nHeight) / 20.0;
-                float fRoundPoints = static_cast<float>(SolarMath::Round(fPoints, 1));
+                float fRoundPoints =
+                    static_cast<float>(::rtl::math::round(fPoints, 1));
                 rVal <<= fRoundPoints;
             }
         }
@@ -1153,7 +1154,7 @@ int SvxFontHeightItem::HasMetrics() const
 void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const USHORT nNewProp,
                                     SfxMapUnit eUnit )
 {
-    DBG_ASSERT( GetRef() == 0, "SetValue() with pooled item" );
+    DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
 #ifndef SVX_LIGHT
     if( SFX_MAPUNIT_RELATIVE != eUnit )
@@ -1173,7 +1174,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const USHORT nNewProp,
 void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, USHORT nNewProp,
                                  SfxMapUnit eMetric, SfxMapUnit eCoreMetric )
 {
-    DBG_ASSERT( GetRef() == 0, "SetValue() with pooled item" );
+    DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
 #ifndef SVX_LIGHT
     if( SFX_MAPUNIT_RELATIVE != eMetric )

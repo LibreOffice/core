@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verttexttbxctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:38:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,14 @@ public:
  ---------------------------------------------------------------------------*/
 class SvxCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl
 {
+    SfxStatusForwarder  aStateForwarder;
+
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxCTLTextTbxCtrl(USHORT nId, ToolBox& rTbx, SfxBindings& rBind) :
-        SvxVertCTLTextTbxCtrl( nId, rTbx, rBind ){SetVert(FALSE);};
+        SvxVertCTLTextTbxCtrl( nId, rTbx, rBind ),
+        aStateForwarder( SID_CTLFONT_STATE, *this )
+        {SetVert(FALSE);};
 
 };
 /* -----------------------------12.09.2002 11:50------------------------------
@@ -95,32 +99,14 @@ public:
  ---------------------------------------------------------------------------*/
 class SvxVertTextTbxCtrl : public SvxVertCTLTextTbxCtrl
 {
+    SfxStatusForwarder  aStateForwarder;
+
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxVertTextTbxCtrl(USHORT nId, ToolBox& rTbx, SfxBindings& rBind) :
-        SvxVertCTLTextTbxCtrl( nId, rTbx, rBind ){SetVert(TRUE);};
+        SvxVertCTLTextTbxCtrl( nId, rTbx, rBind ),
+        aStateForwarder( SID_VERTICALTEXT_STATE, *this )
+        {SetVert(TRUE);};
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshcol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 11:58:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,8 +235,8 @@ uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
 
     uno::Sequence< Reference< uno::XInterface> > xElements( maShapeContainer.getElements() );
 
-    Reference< drawing::XShape > xShape( xElements.getArray()[Index], UNO_QUERY );
-    return uno::Any( &xShape, getElementType() );
+
+    return uno::makeAny( Reference< XShape>(static_cast< drawing::XShape* >( xElements.getArray()[Index].get())) );
 }
 
 // XElementAccess

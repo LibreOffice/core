@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-13 14:31:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ void SvxOutlinerForwarder::SetParaAttribs( USHORT nPara, const SfxItemSet& rSet 
     if( pOldParent )
         ((SfxItemSet*)&rSet)->SetParent( NULL );
 
-    rOutliner.SetParaAttribs( nPara, rSet );
+    rOutliner.SetParaAttribs( nPara, rSet, true );
 
     if( pOldParent )
         ((SfxItemSet*)&rSet)->SetParent( pOldParent );

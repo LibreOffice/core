@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtspell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,14 +607,17 @@ sal_Bool EdtAutoCorrDoc::Replace( sal_uInt16 nPos, const String& rTxt )
     sal_uInt16 nEnd = nPos+rTxt.Len();
     if ( nEnd > pCurNode->Len() )
         nEnd = pCurNode->Len();
-    EditSelection aSel( EditPaM( pCurNode, nPos ), EditPaM( pCurNode, nEnd ) );
-    aSel = pImpEE->ImpDeleteSelection( aSel );
-    aSel = pImpEE->ImpInsertText( aSel, rTxt );
+
+    // #i5925# First insert new text behind to be deleted text, for keeping attributes.
+    pImpEE->ImpInsertText( EditSelection( EditPaM( pCurNode, nEnd ) ), rTxt );
+    pImpEE->ImpDeleteSelection( EditSelection( EditPaM( pCurNode, nPos ), EditPaM( pCurNode, nEnd ) ) );
+
     if ( nPos == nCursor )
         nCursor += rTxt.Len();
 
     if ( bAllowUndoAction && ( rTxt.Len() == 1 ) )
         ImplStartUndoAction();
+
     bAllowUndoAction = sal_False;
 
     return sal_True;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-22 13:54:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,7 +836,8 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
     sal_Bool bAllowIdle = sal_True;
     sal_Bool bReadOnly  = pEditView->IsReadOnly();
 
-    USHORT nShowCursorFlags = 0;
+    USHORT nNewCursorFlags = 0;
+    BOOL bSetCursorFlags = TRUE;
 
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     DBG_ASSERT( !aCurSel.IsInvalid(), "Blinde Selection in EditEngine::PostKeyEvent" );
@@ -953,6 +954,9 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             {
                 if ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                 {
+                    if ( pImpEditEngine->DoVisualCursorTraveling( aCurSel.Max().GetNode() ) && ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) /* || ( nCode == KEY_HOME ) || ( nCode == KEY_END ) */ ) )
+                        bSetCursorFlags = FALSE;    // Will be manipulated within visual cursor move
+
                     aCurSel = pImpEditEngine->MoveCursor( rKeyEvent, pEditView );
 
                     if ( aCurSel.HasRange() ) {
@@ -962,9 +966,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
 
                     bMoved = sal_True;
                     if ( nCode == KEY_HOME )
-                        nShowCursorFlags |= GETCRSR_STARTOFLINE;
+                        nNewCursorFlags |= GETCRSR_STARTOFLINE;
                     else if ( nCode == KEY_END )
-                        nShowCursorFlags |= GETCRSR_ENDOFLINE;
+                        nNewCursorFlags |= GETCRSR_ENDOFLINE;
+
                 }
 #ifdef DEBUG
                 GetLanguage( pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() ), aCurSel.Max().GetIndex() );
@@ -1151,7 +1156,19 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
 
     if ( ( !IsVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ) ||
          ( IsVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ))
+    {
         pEditView->pImpEditView->nTravelXPos = TRAVEL_X_DONTKNOW;
+    }
+
+    if ( /* ( nCode != KEY_HOME ) && ( nCode != KEY_END ) && */
+        ( !IsVertical() && ( nCode != KEY_LEFT ) && ( nCode != KEY_RIGHT ) ) ||
+         ( IsVertical() && ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) ))
+    {
+        pEditView->pImpEditView->SetCursorBidiLevel( 0xFFFF );
+    }
+
+    if ( bSetCursorFlags )
+        pEditView->pImpEditView->nExtraCursorFlags = nNewCursorFlags;
 
     if ( bModified )
     {
@@ -1166,7 +1183,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
     else if ( bMoved )
     {
         sal_Bool bGotoCursor = pEditView->pImpEditView->DoAutoScroll();
-        pEditView->pImpEditView->ShowCursor( bGotoCursor, sal_True, nShowCursorFlags );
+        pEditView->pImpEditView->ShowCursor( bGotoCursor, sal_True );
         pImpEditEngine->CallStatusHdl();
     }
 

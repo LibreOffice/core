@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-30 10:35:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 #endif
 #pragma hdrstop
 
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
+#endif
+
 #include <rtl/textenc.h>
 #include <ucsubset.hxx>
 
@@ -133,8 +137,8 @@ protected:
     virtual void    Paint( const Rectangle& );
 
 private:
-    long            nY;
-    BOOL            bCenter;
+    long            mnY;
+    BOOL            mbCenter;
 
 };
 
@@ -471,14 +475,14 @@ void SvxShowCharSet::DeSelect()
 }
 // -----------------------------------------------------------------------
 
-void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
+void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
 {
     if( n1 > LastInView() || n2 < FirstInView() )
         return;
 
     Size aOutputSize = GetOutputSizePixel();
-    if( aVscrollSB.IsVisible())
-        aOutputSize.setWidth( aOutputSize.Width() - SBWIDTH);
+    if( aVscrollSB.IsVisible() )
+        aOutputSize.setWidth( aOutputSize.Width() - SBWIDTH );
 
     int i;
     for ( i = 1; i < COLUMN_COUNT; ++i )
@@ -487,25 +491,58 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
         DrawLine( Point( 0, nY * i ), Point( aOutputSize.Width(), nY * i ) );
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aWindowTextColor( rStyleSettings.GetWindowTextColor() );
+    svtools::ColorConfig aColorConfig;
+    Color aWindowTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     Color aHighlightColor( rStyleSettings.GetHighlightColor() );
     Color aHighlightTextColor( rStyleSettings.GetHighlightTextColor() );
     Color aFaceColor( rStyleSettings.GetFaceColor() );
     Color aLightColor( rStyleSettings.GetLightColor() );
     Color aShadowColor( rStyleSettings.GetShadowColor() );
 
-    for ( i = n1; i <= n2; ++i)
+    for( i = n1; i <= n2; ++i )
     {
         Point pix = MapIndexToPixel( i );
         int x = pix.X();
         int y = pix.Y();
 
-        String aCharStr( MapIndexToUnicode( maFontCharMap, i ) );
-        int tx = x + ( nX - GetTextWidth(aCharStr) ) / 2;
+        sal_Unicode cChar = MapIndexToUnicode( maFontCharMap, i );
+        String aCharStr( cChar );
+        int nTextWidth = GetTextWidth(aCharStr);
+        int tx = x + ( nX - nTextWidth ) / 2;
         int ty = y + ( nY - GetTextHeight() ) / 2;
         Point aPointTxTy( tx, ty );
-        Color aTextCol = GetTextColor();
 
+        // adjust position before it gets out of bounds
+        Rectangle aBoundRect;
+        if( GetTextBoundRect( aBoundRect, aCharStr ) )
+        {
+            // zero advance width glyphs gets centered to middle
+            if( !nTextWidth )
+            {
+                aPointTxTy.X() = x - aBoundRect.Left();
+                aPointTxTy.X() += (nX - aBoundRect.GetWidth()) / 2;
+            }
+
+            aBoundRect += aPointTxTy;
+
+            // shift back vertically if needed
+            int nYLDelta = aBoundRect.Top() - y;
+            int nYHDelta = (y + nY) - aBoundRect.Bottom();
+            if( nYLDelta < 0 )
+                aPointTxTy.Y() -= nYLDelta;
+            else if( nYHDelta <= 0 )
+                aPointTxTy.Y() += nYHDelta - 1;
+
+            // shift back horizontally if needed
+            int nXLDelta = aBoundRect.Left() - x;
+            int nXHDelta = (x + nX) - aBoundRect.Right();
+            if( nXLDelta < 0 )
+                aPointTxTy.X() -= nXLDelta;
+            else if( nXHDelta <= 0 )
+                aPointTxTy.X() += nXHDelta - 1;
+        }
+
+        Color aTextCol = GetTextColor();
         if ( i != nSelectedIndex )
         {
             SetTextColor( aWindowTextColor );
@@ -555,7 +592,8 @@ void SvxShowCharSet::InitSettings( BOOL bForeground, BOOL bBackground )
 
     if ( bForeground )
     {
-        Color aTextColor = rStyleSettings.GetWindowTextColor();
+        svtools::ColorConfig aColorConfig;
+        Color aTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
 
         if ( IsControlForeground() )
             aTextColor = GetControlForeground();
@@ -813,9 +851,9 @@ sal_Int32 SvxShowCharSet::getMaxCharCount() const
 }
 // class SvxShowText =====================================================
 
-SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL _bCenter )
+SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL bCenter )
 :   Control( pParent, rResId ),
-    bCenter( _bCenter)
+    mbCenter( bCenter)
 {}
 
 // -----------------------------------------------------------------------
@@ -823,12 +861,50 @@ SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL _bCenter )
 void SvxShowText::Paint( const Rectangle& )
 {
     Color aTextCol = GetTextColor();
-    SetTextColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
 
-    String aText = GetText();
-    Point aPoint( bCenter? ( GetOutputSizePixel().Width() - GetTextWidth( aText ) ) / 2 : 2, nY );
+    svtools::ColorConfig aColorConfig;
+    Color aWindowTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+    SetTextColor( aWindowTextColor );
+
+    const String aText = GetText();
+    const Size aSize = GetOutputSizePixel();
+    Point aPoint( 2, mnY );
+
+    // adjust position before it gets out of bounds
+    Rectangle aBoundRect;
+    if( !GetTextBoundRect( aBoundRect, aText ) )
+        aPoint.X() = (aSize.Width() - GetTextWidth( aText )) / 2;
+    else
+    {
+        aBoundRect += aPoint;
+
+        // shift back vertically if needed
+        int nYLDelta = aBoundRect.Top();
+        int nYHDelta = aSize.Height() - aBoundRect.Bottom();
+        if( nYLDelta < 0 )
+            aPoint.Y() -= nYLDelta;
+        else if( nYHDelta <= 0 )
+            aPoint.Y() += nYHDelta - 1;
+
+        if( mbCenter )
+        {
+            // move left point so that glyph is in middle of cell
+            aPoint.X() = -aBoundRect.Left();
+            aPoint.X() += (aSize.Width() - aBoundRect.GetWidth()) / 2;
+        }
+        else
+        {
+            // shift back horizontally if needed
+            int nXLDelta = aBoundRect.Left();
+            int nXHDelta = aSize.Width() - aBoundRect.Right();
+            if( nXLDelta < 0 )
+                aPoint.X() -= nXLDelta;
+            else if( nXHDelta <= 0 )
+                aPoint.X() += nXHDelta - 1;
+        }
+    }
+
     DrawText( aPoint, aText );
-
     SetTextColor( aTextCol );
 }
 
@@ -840,10 +916,10 @@ void SvxShowText::SetFont( const Font& rFont )
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetAlign( ALIGN_TOP );
-    aFont.SetSize( PixelToLogic( Size( 0, nWinHeight-6 ) ) );
+    aFont.SetSize( PixelToLogic( Size( 0, (nWinHeight*3)/4 ) ) );
     aFont.SetTransparent( TRUE );
     Control::SetFont( aFont );
-    nY = ( nWinHeight - GetTextHeight() ) / 2;
+    mnY = ( nWinHeight - GetTextHeight() ) / 2;
 
     Invalidate();
 }
@@ -1170,7 +1246,7 @@ IMPL_LINK( SvxCharMapData, CharHighlightHdl, Control *, EMPTYARG )
     if ( bSelect )
     {
         // no sprintf or hex-formatter around :-(
-        char buf[16] = "0x0000";
+        char buf[16] = "U+0000";
         sal_Unicode c_Shifted = c;
         for( int i = 0; i < 4; ++i )
         {
@@ -1179,7 +1255,7 @@ IMPL_LINK( SvxCharMapData, CharHighlightHdl, Control *, EMPTYARG )
             c_Shifted >>= 4;
         }
         if( c < 256 )
-            sprintf( buf+6, " (%d)", c );
+            snprintf( buf+6, 10, " (%d)", c );
         aTemp = String::CreateFromAscii( buf );
     }
     aCharCodeText.SetText( aTemp );

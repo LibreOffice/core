@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedhlp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-29 10:17:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,11 +147,16 @@ void SvxEditSourceHint::SetEndValue( ULONG n )
                 return ::std::auto_ptr<SfxHint>( new SvxEditSourceHint( EDITSOURCE_HINT_SELECTIONCHANGED ) );
 
             case EE_NOTIFY_BLOCKNOTIFICATION_START:
+                return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_BLOCKNOTIFICATION_START, 0 ) );
+
             case EE_NOTIFY_BLOCKNOTIFICATION_END:
+                return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_BLOCKNOTIFICATION_END, 0 ) );
+
             case EE_NOTIFY_INPUT_START:
+                return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_INPUT_START, 0 ) );
+
             case EE_NOTIFY_INPUT_END:
-                // TODO
-                break;
+                return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_INPUT_END, 0 ) );
 
             default:
                 DBG_ERROR( "SvxEditSourceHelper::EENotification2Hint unknown notification" );
@@ -215,12 +220,14 @@ Point SvxEditSourceHelper::UserSpaceToEE( const Point& rPoint, const Size& rEESi
 
 Rectangle SvxEditSourceHelper::EEToUserSpace( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
 {
-    return Rectangle( EEToUserSpace(rRect.BottomLeft(), rEESize, bIsVertical),
-                      EEToUserSpace(rRect.TopRight(), rEESize, bIsVertical) );
+    // #106775# Don't touch rect if not vertical
+    return bIsVertical ? Rectangle( EEToUserSpace(rRect.BottomLeft(), rEESize, bIsVertical),
+                                    EEToUserSpace(rRect.TopRight(), rEESize, bIsVertical) ) : rRect;
 }
 
 Rectangle SvxEditSourceHelper::UserSpaceToEE( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
 {
-    return Rectangle( UserSpaceToEE(rRect.TopRight(), rEESize, bIsVertical),
-                      UserSpaceToEE(rRect.BottomLeft(), rEESize, bIsVertical) );
+    // #106775# Don't touch rect if not vertical
+    return bIsVertical ? Rectangle( UserSpaceToEE(rRect.TopRight(), rEESize, bIsVertical),
+                                    UserSpaceToEE(rRect.BottomLeft(), rEESize, bIsVertical) ) : rRect;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-13 08:42:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
+#endif
 
 #include "fntctrl.hxx"
 #include "dialogs.hrc"
@@ -457,7 +461,8 @@ void SvxFontPrevWindow::InitSettings( BOOL bForeground, BOOL bBackground )
 
     if ( bForeground )
     {
-        Color aTextColor = rStyleSettings.GetWindowTextColor();
+        svtools::ColorConfig aColorConfig;
+        Color aTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
 
         if ( IsControlForeground() )
             aTextColor = GetControlForeground();

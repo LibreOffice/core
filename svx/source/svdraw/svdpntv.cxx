@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-13 15:14:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 
 #ifndef _B2D_MTRI_HXX
 #include <goodies/b2dmtri.hxx>
+#endif
+
+#ifndef _GRFMGR_HXX
+#include <goodies/grfmgr.hxx>
 #endif
 
 using namespace ::rtl;
@@ -522,6 +526,8 @@ void SdrPaintView::ImpClearVars()
     bMasterBmp=FALSE;
     pMasterBmp=NULL;
     nMasterCacheMode = SDR_MASTERPAGECACHE_DEFAULT;
+
+    nGraphicManagerDrawMode = GRFMGR_DRAW_STANDARD;
 
     aComeBackTimer.SetTimeout(1);
     aComeBackTimer.SetTimeoutHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
@@ -2105,7 +2111,7 @@ void SdrPaintView::VisAreaChanged(const SdrPageViewWinRec& rPVWR)
 
         for (ULONG i = 0; i < rCList.GetCount(); i++)
         {
-            const SdrUnoControlRec& rControlRec = rCList[i];
+            const SdrUnoControlRec& rControlRec = rCList[ (sal_uInt16) i];
             uno::Reference< awt::XControl > xUnoControl = rControlRec.GetControl();
 
             if (xUnoControl.is())
@@ -2128,14 +2134,14 @@ void SdrPaintView::VisAreaChanged(const SdrPageViewWinRec& rPVWR)
 }
 
 
-const svx::ColorConfig& SdrPaintView::getColorConfig() const
+const svtools::ColorConfig& SdrPaintView::getColorConfig() const
 {
     return maColorConfig;
 }
 
 void SdrPaintView::onChangeColorConfig()
 {
-    SetGridColor( Color( maColorConfig.GetColorValue( svx::DRAWGRID ).nColor ) );
+    SetGridColor( Color( maColorConfig.GetColorValue( svtools::DRAWGRID ).nColor ) );
 }
 
 void SdrPaintView::SetGridColor( Color aColor )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-29 17:56:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #include <unotools/accessiblerelationsethelper.hxx>
 #endif
+#ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
+#include <comphelper/accessibleeventnotifier.hxx>
+#endif
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
@@ -119,7 +122,8 @@ AccessibleContextBase::AccessibleContextBase (
         mxStateSet (NULL),
         mxRelationSet (NULL),
         mxParent(rxParent),
-        maRole(aRole)
+        maRole(aRole),
+        mnClientId(0)
 {
     // Create the state set.
     ::utl::AccessibleStateSetHelper* pStateSet  = new ::utl::AccessibleStateSetHelper ();
@@ -284,7 +288,7 @@ sal_Int32 SAL_CALL
 */
 uno::Reference<XAccessible> SAL_CALL
     AccessibleContextBase::getAccessibleChild (long nIndex)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
     throw lang::IndexOutOfBoundsException (
@@ -484,14 +488,19 @@ void SAL_CALL
         const uno::Reference<XAccessibleEventListener >& rxListener)
     throw (uno::RuntimeException)
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (rxListener.is())
     {
-        uno::Reference<uno::XInterface> x ((lang::XComponent *)this, uno::UNO_QUERY);
-        rxListener->disposing (lang::EventObject (x));
-    }
-    else
-    {
-        rBHelper.addListener (::getCppuType (&rxListener), rxListener);
+        if (rBHelper.bDisposed || rBHelper.bInDispose)
+        {
+            uno::Reference<uno::XInterface> x ((lang::XComponent *)this, uno::UNO_QUERY);
+            rxListener->disposing (lang::EventObject (x));
+        }
+        else
+        {
+            if (!mnClientId)
+                mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
+            comphelper::AccessibleEventNotifier::addEventListener( mnClientId, rxListener );
+        }
     }
 }
 
@@ -504,7 +513,19 @@ void SAL_CALL
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    rBHelper.removeListener (::getCppuType(&rxListener), rxListener);
+    if (rxListener.is())
+    {
+        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
+        if ( !nListenerCount )
+        {
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+            mnClientId = 0;
+        }
+    }
 }
 
 
@@ -597,6 +618,15 @@ uno::Sequence<sal_Int8> SAL_CALL
 void SAL_CALL AccessibleContextBase::disposing (void)
 {
     SetState (AccessibleStateType::DEFUNC);
+
+    ::osl::MutexGuard aGuard (maMutex);
+
+    // Send a disposing to all listeners.
+    if ( mnClientId )
+    {
+        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
+        mnClientId =  0;
+    }
 }
 
 
@@ -681,41 +711,8 @@ void AccessibleContextBase::CommitChange (
 
 void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
 {
-    // Iterate over all listeners that are registered as accessibility event
-    // listeners and notify them of the specified event.
-    OSL_TRACE ("FireEvent %d", aEvent.EventId);
-    ::cppu::OInterfaceContainerHelper *pContainer = rBHelper.getContainer(
-        ::getCppuType((const uno::Reference<XAccessibleEventListener>*)0));
-    if (pContainer != NULL)
-    {
-        ::cppu::OInterfaceIteratorHelper I (*pContainer);
-        while (I.hasMoreElements())
-        {
-            Reference<XAccessibleEventListener> xListener =
-                static_cast<XAccessibleEventListener*>(I.next());
-
-            try
-            {
-                xListener->notifyEvent (aEvent);
-            }
-            catch (lang::DisposedException e)
-            {
-                // DisposedExceptions from the listener might indicate a
-                // broken connection to a different environment.
-
-                OSL_ENSURE(e.Context.is(), "caught dispose exception with empty Context field");
-                // If the exception stems from the listener then remove it
-                // from the list of listeners.  If the Context field of the
-                // exception is empty this is interpreted to indicate the
-                // listener as well.
-                if (e.Context == xListener
-                    || !e.Context.is())
-                    rBHelper.removeListener (::getCppuType(&xListener), xListener);
-            }
-            // Other events are not caught at the moment.  Might change in
-            // the future if there is demand to do so.
-        }
-    }
+    if (mnClientId)
+        comphelper::AccessibleEventNotifier::addEvent( mnClientId, aEvent );
 }
 
 
@@ -740,6 +737,12 @@ sal_Bool AccessibleContextBase::IsDisposed (void)
     return (rBHelper.bDisposed || rBHelper.bInDispose);
 }
 
+
+
+void AccessibleContextBase::SetAccessibleRole( sal_Int16 _nRole )
+{
+    maRole = _nRole;
+}
 
 
 } // end of namespace accessibility

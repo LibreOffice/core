@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 18:11:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XVETOABLECHANGELISTENER_HPP_
-#include <com/sun/star/beans/XVetoableChangeListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
@@ -99,7 +96,9 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
+#endif
 
 
 
@@ -196,11 +195,12 @@ public:
 };
 
 //========================================================================
-class FmXUndoEnvironment : public ::cppu::WeakImplHelper4< ::com::sun::star::beans::XVetoableChangeListener,
-                            ::com::sun::star::beans::XPropertyChangeListener,
-                           ::com::sun::star::container::XContainerListener,
-                           ::com::sun::star::script::XScriptListener>,
-                           public SfxListener
+class FmXUndoEnvironment
+    : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
+                                    ,   ::com::sun::star::container::XContainerListener
+                                    ,   ::com::sun::star::script::XScriptListener
+                                    >
+    , public SfxListener
                            //   public ::cppu::OWeakObject
 {
     friend class FmFormModel;
@@ -233,9 +233,6 @@ protected:
 
 // ::com::sun::star::beans::XPropertyChangeListener
     virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
-
-// XVetoableChangeListener
-    virtual void SAL_CALL vetoableChange(const ::com::sun::star::beans::PropertyChangeEvent& aEvent) throw( ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException );
 
 // ::com::sun::star::container::XContainerListener
     virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& rEvent) throw(::com::sun::star::uno::RuntimeException);

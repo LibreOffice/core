@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-06 10:35:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,6 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
 
 #ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
@@ -166,7 +163,7 @@
 #include <sfx2/frame.hxx>
 #endif
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
-#include <svx/dataaccessdescriptor.hxx>
+#include <dataaccessdescriptor.hxx>
 #endif
 
 const long STD_WIN_POS_X = 50;
@@ -181,8 +178,12 @@ const long MIN_WIN_SIZE_Y = 50;
 const long LISTBOX_BORDER = 2;
 
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
 using namespace ::svxform;
 using namespace ::svx;
 
@@ -410,7 +411,7 @@ sal_Bool FmFieldWin::Update(FmFormShell* pShell)
 //-----------------------------------------------------------------------
 sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xForm)
 {
-    // ::com::sun::star::form::ListBox loeschen
+    // ListBox loeschen
     pListBox->Clear();
     UniString aTitle(SVX_RES(RID_STR_FIELDSELECTION));
     SetText(aTitle);
@@ -418,74 +419,25 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
     if (!xForm.is())
         return sal_False;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >  xStatement;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XPreparedStatement >  xStatement;
+    Reference< XPropertySet >  xSet(xForm, UNO_QUERY);
 
     m_aObjectName   = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_COMMAND));
     m_aDatabaseName = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE));
     m_nObjectType   = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
 
-    // Festellen des Feldes
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  xFields;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField;
-    try
-    {
-        // get the connection of the form
-        Reference< XConnection > xConnection = OStaticDataAccessTools().calcConnection(Reference< XRowSet >(xForm, UNO_QUERY), ::comphelper::getProcessServiceFactory());
+    // get the connection of the form
+    Reference< XConnection > xConnection = OStaticDataAccessTools().calcConnection(Reference< XRowSet >(xForm, UNO_QUERY), ::comphelper::getProcessServiceFactory());
+    Sequence< ::rtl::OUString> aFieldNames;
+    // get the fields of the object
+    if ( xConnection.is() && m_aObjectName.getLength() )
+        aFieldNames = getFieldNamesByCommandDescriptor( xConnection, m_nObjectType, m_aObjectName );
 
-        if (!xConnection.is())
-            return sal_True;
-
-        switch (m_nObjectType)
-        {
-            case 0:
-            {
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >  xSupplyTables(xConnection, ::com::sun::star::uno::UNO_QUERY);
-                if (xSupplyTables.is() && xSupplyTables->getTables().is() && xSupplyTables->getTables()->hasByName(m_aObjectName))
-                {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
-                    xSupplyTables->getTables()->getByName(m_aObjectName) >>= xSupplyColumns;
-                    xFields = xSupplyColumns->getColumns();
-                }
-            }
-            break;
-            case 1:
-            {
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XQueriesSupplier >  xSupplyQueries(xConnection, ::com::sun::star::uno::UNO_QUERY);
-                if (xSupplyQueries.is() && xSupplyQueries->getQueries().is() && xSupplyQueries->getQueries()->hasByName(m_aObjectName))
-                {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
-                    xSupplyQueries->getQueries()->getByName(m_aObjectName) >>= xSupplyColumns;
-                    xFields  = xSupplyColumns->getColumns();
-                }
-            }
-            break;
-            default:
-            {
-                xStatement = xConnection->prepareStatement(m_aObjectName);
-                // not interested in any results
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (xStatement,::com::sun::star::uno::UNO_QUERY)->setPropertyValue(::rtl::OUString::createFromAscii("MaxRows"),::com::sun::star::uno::makeAny(sal_Int32(0)));
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), ::com::sun::star::uno::UNO_QUERY);
-                if (xSupplyCols.is())
-                    xFields = xSupplyCols->getColumns();
-            }
-        }
-    }
-    catch(Exception&)
-    {
-        DBG_WARNING("FmFieldWin::Update(::com::sun::star::form::XForm) : could not collect the fields of the current data source !");
-    }
-
-
-    if (xFields.is())
-    {
-        ::com::sun::star::uno::Sequence< ::rtl::OUString> aNames(xFields->getElementNames());
-        sal_Int32 nFieldsCount = aNames.getLength();
-        const ::rtl::OUString* pNames = aNames.getConstArray();
-
-        for (sal_Int32 i=0; i<nFieldsCount; i++)
-            pListBox->InsertEntry(pNames[i]);
-    }
+    // put them into the list
+    const ::rtl::OUString* pFieldNames = aFieldNames.getConstArray();
+    sal_Int32 nFieldsCount = aFieldNames.getLength();
+    for ( sal_Int32 i = 0; i < nFieldsCount; ++i, ++pFieldNames)
+        pListBox->InsertEntry( * pFieldNames);
 
     // Prefix setzen
     UniString  aPrefix;
@@ -493,10 +445,10 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
 
     switch (m_nObjectType)
     {
-        case ::com::sun::star::sdb::CommandType::TABLE:
+        case CommandType::TABLE:
             aPrefix = aPrefixes.GetToken(0);
             break;
-        case ::com::sun::star::sdb::CommandType::QUERY:
+        case CommandType::QUERY:
             aPrefix = aPrefixes.GetToken(1);
             break;
         default:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-16 09:29:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ String GetDicInfoStr( const String& rName, const USHORT nLang, const BOOL bNeg )
 {
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INET_PROT_FILE );
-    aURLObj.SetSmartURL( rName );
+    aURLObj.SetSmartURL( rName, INetURLObject::ENCODE_ALL );
     String aTmp( aURLObj.GetBase() );
     aTmp += sal_Unicode( ' ' );
 

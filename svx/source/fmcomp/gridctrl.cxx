@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-22 13:21:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,9 +161,11 @@
 #ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
 #endif
-
 #ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
+#endif
+#ifndef SVX_FORM_SDBDATACOLUMN_HXX
+#include "sdbdatacolumn.hxx"
 #endif
 
 #define CURSORPOSITION_UNKNOWN -2
@@ -175,12 +177,6 @@ String OBJECTTEXT   = String::CreateFromAscii("<OBJECT>");
 
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
-#include <connectivity/dbconversion.hxx>
 #endif
 #ifndef _COMPHELPER_DATETIME_HXX_
 #include <comphelper/datetime.hxx>
@@ -195,7 +191,6 @@ String OBJECTTEXT   = String::CreateFromAscii("<OBJECT>");
 
 #include <algorithm>
 
-using namespace ::dbtools;
 using namespace ::svxform;
 using namespace ::svt;
 using namespace ::com::sun::star::beans;
@@ -859,17 +854,25 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
     {
         Fraction aZoom = GetZoom();
 
-        m_aRecordText.SetZoom(aZoom);
-        m_aAbsolute.SetZoom(aZoom);
-        m_aRecordOf.SetZoom(aZoom);
-        m_aRecordCount.SetZoom(aZoom);
-        m_aFirstBtn.SetZoom(aZoom);
-        m_aPrevBtn.SetZoom(aZoom);
-        m_aNextBtn.SetZoom(aZoom);
-        m_aLastBtn.SetZoom(aZoom);
-        m_aNewBtn.SetZoom(aZoom);
-            // not all of these controls need to know the new zoom, but to be sure ...
+        Window* pWindows[] = {
+                                &m_aRecordText,
+                                &m_aAbsolute,
+                                &m_aRecordOf,
+                                &m_aRecordCount,
+                                &m_aFirstBtn,
+                                &m_aPrevBtn,
+                                &m_aNextBtn,
+                                &m_aLastBtn,
+                                &m_aNewBtn
+                            };
 
+        // not all of these controls need to know the new zoom, but to be sure ...
+        Font aFont( IsControlFont() ? GetControlFont() : GetPointFont());
+        for (sal_Int32 i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+        {
+            pWindows[i]->SetZoom(aZoom);
+            pWindows[i]->SetZoomedPointFont(aFont);
+        }
         // rearrange the controls
         m_nDefaultWidth = ArrangeControls();
     }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: pb $ $Date: 2002-12-02 07:56:57 $
+#   last change: $Author: hr $ $Date: 2003-03-27 15:03:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,6 @@ EXCEPTIONSFILES=\
 SLOFILES=\
     $(EXCEPTIONSFILES)	\
     $(SLO)$/asiancfg.obj	\
-    $(SLO)$/colorcfg.obj    \
     $(SLO)$/optcolor.obj    \
     $(SLO)$/optjsearch.obj  \
     $(SLO)$/optitems.obj	\

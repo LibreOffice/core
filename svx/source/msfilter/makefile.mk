@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-21 18:45:19 $
+#   last change: $Author: hr $ $Date: 2003-03-27 15:03:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,10 +68,7 @@ AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -83,21 +80,16 @@ SLOFILES=\
     $(SLO)$/msvbasic.obj	\
     $(SLO)$/msashape.obj	\
     $(SLO)$/svxmsbas.obj	\
-    $(SLO)$/msocximex.obj
+    $(SLO)$/msocximex.obj	\
+    $(SLO)$/msashape3d.obj	\
+    $(SLO)$/msfiltertracer.obj
 
 EXCEPTIONSFILES= \
     $(SLO)$/eschesdo.obj	\
     $(SLO)$/escherex.obj	\
     $(SLO)$/msdffimp.obj	\
-    $(SLO)$/msocximex.obj
-
-.IF "$(SVXLIGHT)"!=""
-EXCEPTIONSFILES+= \
-    $(OBJ)$/sxl_msdffimp.obj
-.ENDIF          # "$(SVXLIGHT)"!=""
-
-SVXLIGHTOBJFILES=\
-    $(OBJ)$/msdffimp.obj
+    $(SLO)$/msocximex.obj	\
+    $(SLO)$/msfiltertracer.obj
 
 .INCLUDE :  target.mk
 

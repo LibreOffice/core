@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2002-10-31 13:36:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,8 @@
     Text[ greek ] = "ÁğïèŞêåõóç";   \
     Text[ korean ] = "ì €ì¥";  \
     Text[ turkish ] = "Kaydet"; \
-    Text[ catalan ] = "Desa";
+    Text[ catalan ] = "Desa";   \
+    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸";
 
 TabPage RID_SFXPAGE_SAVE
 {
@@ -111,7 +112,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ dutch ] = "Laden";
         Text[ french ] = "Charger";
         Text[ spanish ] = "Cargar";
-        Text[ finnish ] = "Load";
+        Text[ finnish ] = "Lataa";
         Text[ italian ] = "Carica";
         Text[ danish ] = "Indlæs";
         Text[ swedish ] = "Ladda";
@@ -124,6 +125,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ turkish ] = "Load";
         Text[ arabic ] = "Load";
         Text[ catalan ] = "Carrega";
+        Text[ thai ] = "à¹‚à¸«à¸¥à¸”";
     };
     CheckBox CB_LOAD_SETTINGS
     {
@@ -133,12 +135,12 @@ TabPage RID_SFXPAGE_SAVE
         Text [ English ] = "Load user-defined settings with the document" ;
         Text[ english_us ] = "Load user-specific settings with the document";
         Text[ portuguese ] = "~Carregar definições personalizadas com o documento";
-        Text[ russian ] = "Çàãğóæàòü âìåñòå ñ äîêóìåíòîì íàñòğîéêè, çàäàííûå ïîëüçîâàòåëåì";
+        Text[ russian ] = "Çàãğóæàòü íàñòğîéêè ïîëüçîâàòåëÿ âìåñòå ñ äîêóìåíòîì";
         Text[ greek ] = "Load user-defined settings with the document";
         Text[ dutch ] = "Door gebruiker gedefinieerde instellingen samen met het document laden";
         Text[ french ] = "Chargement des paramètres utilisateur avec le document";
         Text[ spanish ] = "Cargar la configuración de usuario al cargar el documento";
-        Text[ finnish ] = "Load user-defined settings with the document";
+        Text[ finnish ] = "Lataa käyttäjän määrittämät asetukset asiakirjan kanssa";
         Text[ italian ] = "Carica le impostazioni personalizzate insieme al documento";
         Text[ danish ] = "Indlæs ~brugerspecifikke indstillinger sammen med dokumentet";
         Text[ swedish ] = "Ladda ~användarspecifika inställningar med dokumentet";
@@ -150,7 +152,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_traditional ] = "é€£åŒä½¿ç”¨è€…çš„è¨­å®šä¸€èµ·è¼‰å…¥æ–‡ä»¶";
         Text[ turkish ] = "Load user-defined settings with the document";
         Text[ arabic ] = "Load user-defined settings with the document";
-        Text[ catalan ] = "Load user-defined settings with the document";
+        Text[ catalan ] = "Carrega els paràmetres personalitzats amb el document";
+        Text[ thai ] = "à¹‚à¸«à¸¥à¸”à¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰à¹€à¸‰à¸à¸²à¸°à¸à¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£";
     };
     FixedLine GB_SAVE
     {
@@ -179,6 +182,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ korean ] = "ì €ì¥";
         Text[ turkish ] = "Kaydet";
         Text[ catalan ] = "Desa";
+        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸";
     };
     CheckBox BTN_DOCINFO
     {
@@ -205,9 +209,10 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_traditional ] = "å…ˆç·¨è¼¯å±¬æ€§(~E)";
         Text[ arabic ] = "ÊÍÑíÑ ÎÕÇÆÕ ÇáãÓÊäÏ ŞÈá ÇáÍİÙ";
         Text[ greek ] = "Åğåîåñã. ~éäéïôŞôùí åããñÜöïõ ğñéí ôçí áğïèŞêåõóç";
-        Text[ korean ] = "ë¬¸ì„œ ë“±ë¡ì •ë³´ ë¯¸ë¦¬ í¸ì§‘(~E)";
+        Text[ korean ] = "ë¬¸ì„œ ë“±ë¡ ì •ë³´ë¥¼ ì €ì¥ ì „ì— í¸ì§‘(~E)";
         Text[ turkish ] = "Önce özellikleri düzenle";
-        Text[ catalan ] = "Edi~tar propiedades previamente";
+        Text[ catalan ] = "~Edita les propietats del document abans de desar";
+        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´à¹€à¸­à¸à¸ªà¸²à¸£à¸à¹ˆà¸­à¸™à¸šà¸±à¸™à¸—à¸¶à¸";
     };
     CheckBox BTN_BACKUP
     {
@@ -219,7 +224,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ italian ] = "~Crea sempre copia di backup" ;
         Text [ portuguese_brazilian ] = "~Backup copy always" ;
         Text [ portuguese ] = "Criar sempre ~cópia de segurança" ;
-        Text [ finnish ] = "~Luo aina varmistuskopio" ;
+        Text [ finnish ] = "~Luo aina varmuuskopio" ;
         Text [ danish ] = "Opret altid sikkerhedskopi" ;
         Text [ french ] = "Toujours créer une copie de sauvegarde" ;
         Text [ swedish ] = "Skapa alltid ~säkerhetskopia" ;
@@ -227,7 +232,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ spanish ] = "Cre~ar siempre copia de seguridad" ;
         Text [ english_us ] = "Al~ways create backup copy" ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨å»ºç«‹å®‰å…¨å¤‡ä»¶(~W)";
-        Text[ russian ] = "Ñîçäàâàòü âñåãäà ğåçåğâíóş êîïèş";
+        Text[ russian ] = "Âñåãäà ñîçäàâàòü ğåçåğâíóş êîïèş";
         Text[ polish ] = "Twórz zawsze kopiê zapasow¹";
         Text[ japanese ] = "å¸¸æ™‚ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚³ãƒ”ãƒ¼ã®ä½œæˆ(~W)";
         Text[ chinese_traditional ] = "è‡ªå‹•è£½ä½œå®‰å…¨å‚™ä»½(~W)";
@@ -235,7 +240,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "ĞÜíôá äçìéïõñãßá áíôéãñÜöïõ á~óöáëåßáò";
         Text[ korean ] = "í•­ìƒ ë°±ì—… ë³µì‚¬(~W)";
         Text[ turkish ] = "~Her zaman yedekle";
-        Text[ catalan ] = "Cre~ar siempre copia de seguridad";
+        Text[ catalan ] = "Cre~a sempre còpia de seguretat";
+        Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸ªà¸³à¹€à¸™à¸²à¸ªà¸³à¸£à¸­à¸‡à¸—à¸¸à¸~à¸„à¸£à¸±à¹‰à¸‡";
     };
 
     CheckBox BTN_AUTOSAVE
@@ -256,15 +262,16 @@ TabPage RID_SFXPAGE_SAVE
         Text [ spanish ] = "~Guardar automáticamente cada" ;
         Text [ english_us ] = "~AutoSave every" ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨å­˜ç›˜é—´éš”æ—¶é—´(~A)";
-        Text[ russian ] = "Ñîõğàíÿòü àâòîìàòè÷åñêè êàæäûå";
+        Text[ russian ] = "Àâòîñîõğàíåíèå êàæäûå";
         Text[ polish ] = "Zapisuj automatycznie co";
         Text[ japanese ] = "è‡ªå‹•çš„ã«ä¿å­˜(~A)";
         Text[ chinese_traditional ] = "è‡ªå‹•å„²å­˜é–“éš”æ™‚é–“(~A)";
         Text[ arabic ] = "ÇáÍİÙ ÊáŞÇÆíÇğ ßá";
         Text[ greek ] = "Áõôüìáôç áğïèŞêåõóç üëùí";
-        Text[ korean ] = "ëª¨ë‘ ìë™ìœ¼ë¡œ ì €ì¥(~A)";
+        Text[ korean ] = "ìë™ìœ¼ë¡œ ì €ì¥(~A)";
         Text[ turkish ] = "Otomatik kaydetme sıklığı";
-        Text[ catalan ] = "~Guardar automáticamente cada";
+        Text[ catalan ] = "~Desa automàticament cada";
+        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸—à¸¸à¸à¸„à¸£à¸±à¹‰à¸‡";
     };
     NumericField ED_AUTOSAVE
     {
@@ -308,7 +315,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "ËåğôÜ";
         Text[ korean ] = "ë¶„";
         Text[ turkish ] = "Dakika";
-        Text[ catalan ] = "Minutos";
+        Text[ catalan ] = "Minuts";
+        Text[ thai ] = "à¸™à¸²à¸—à¸µ";
     };
     CheckBox BTN_AUTOSAVEPROMPT
     {
@@ -328,7 +336,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ spanish ] = "Con c~onsulta" ;
         Text [ english_us ] = "~Prompt to save" ;
         Text[ chinese_simplified ] = "æ˜¾ç¤ºè¯¢é—®(~P)";
-        Text[ russian ] = "Ñ çàïğîñîì";
+        Text[ russian ] = "Çàïğîñ íà ñî~õğàíåíèå";
         Text[ polish ] = "Potwierdzenie";
         Text[ japanese ] = "ç¢ºèªãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è¡¨ç¤º(~P)";
         Text[ chinese_traditional ] = "é¡¯ç¤ºè©¢å•(~P)";
@@ -336,7 +344,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "Ìå å~ñşôçóç äéåõêñßíéóçò";
         Text[ korean ] = "ì €ì¥í•  ë•Œ í™•ì¸(~P)";
         Text[ turkish ] = "~Önce sor";
-        Text[ catalan ] = "Con c~onsulta";
+        Text[ catalan ] = "~Pregunta per desar";
+        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸£à¸­à¸£à¸±à¸šà¸„à¹ˆà¸²à¹€à¸à¸·à¹ˆà¸­à¸šà¸±à¸™à¸—à¸¶à¸";
     };
 
     CheckBox BTN_NOPRETTYPRINTING
@@ -347,15 +356,15 @@ TabPage RID_SFXPAGE_SAVE
         Text [ english ] = "Size optimization for XML format (no pretty printing)" ;
         Text [ english_us ] = "Size optimization for XML format (no pretty printing)" ;
         Text[ portuguese ] = "Size optimization for XML files (no pretty printing)";
-        Text[ russian ] = "Size optimization for XML files (no pretty printing)";
+        Text[ russian ] = "Îïòèìèçàöèÿ ğàçìåğà äëÿ ôîğìàòà XML (íåêà÷åñòâåííàÿ ïå÷àòü)";
         Text[ greek ] = "Size optimization for XML files (no pretty printing)";
         Text[ dutch ] = "Grootte van ~XML-bestanden optimaliseren (zonder Pretty Printing)";
         Text[ french ] = "Optimisation de la taille pour le format XML (sans pretty printing)";
         Text[ spanish ] = "Optimar el tamaño del formato XML (sin pretty printing)";
-        Text[ finnish ] = "Size optimization for XML files (no pretty printing)";
+        Text[ finnish ] = "Koon optimointi ~XML-muodolle (ei siistittyä tulostusta)";
         Text[ italian ] = "Ottimizza dimensioni del formato XML (senza stampa elegante)";
         Text[ danish ] = "Optimer størrelse for XML-format (uden Pretty Printing)";
-        Text[ swedish ] = "Storleksoptimering för XML-format (utan pretty printing)";
+        Text[ swedish ] = "Storleksoptimering för XML-format (utan snygg utskrift)";
         Text[ polish ] = "Size optimization for XML files (no pretty printing)";
         Text[ portuguese_brazilian ] = "Size optimization for XML files (no pretty printing)";
         Text[ japanese ] = "XML å½¢å¼ã§ã‚µã‚¤ã‚ºã‚’æœ€é©åŒ–ã™ã‚‹(pretty printing ãªã—)";
@@ -364,7 +373,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_traditional ] = "æœ€ä½³åŒ– XML æ ¼å¼çš„å¤§å°(ä¸ä½¿ç”¨ Pretty Printing æŠ€è¡“)";
         Text[ turkish ] = "Size optimization for XML files (no pretty printing)";
         Text[ arabic ] = "Size optimization for XML files (no pretty printing)";
-        Text[ catalan ] = "Size optimization for XML files (no pretty printing)";
+        Text[ catalan ] = "Optimització de fitxers XML (menys qualitat)";
+        Text[ thai ] = "Size optimization for XML format (no pretty printing)";
     };
 
     FixedLine GB_RELATIVE
@@ -389,10 +399,11 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_traditional ] = "å„²å­˜ç›¸å°å¼ URL åœ°å€";
         Text[ arabic ] = "ÍİÙ ÇáÜ URLs ÍİÙÇğ äÓÈíÇğ İí";
         Text[ greek ] = "Ó÷åôéêŞ áğïèŞêåõóç ôùí URL";
-        Text[ korean ] = "URL ìƒëŒ€ì  ì €ì¥";
+        Text[ korean ] = "URLì„ ë‹¤ìŒ ê¸°ì¤€ìœ¼ë¡œ ì €ì¥";
         Text[ turkish ] = "URL göreceli kayıt yeri";
-        Text[ finnish ] = "URL-osoitteen viitelinkin aloituskohta";
-        Text[ catalan ] = "Guardar URLs relativamente";
+        Text[ finnish ] = "URL-osoitteen tallennus suhteessa kohteeseen";
+        Text[ catalan ] = "Desa els URL relatius a";
+        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸ URL à¸ªà¸±à¸¡à¸à¸±à¸—à¸˜à¹Œà¸à¸±à¸š";
     };
     CheckBox BTN_RELATIVE_FSYS
     {
@@ -403,7 +414,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ english_us ] = "~File system" ;
         Text [ dutch ] = "~naar bestandssysteem" ;
         Text [ italian ] = "Al file sys~tem" ;
-        Text [ spanish ] = "En el ~sistema de archivos" ;
+        Text [ spanish ] = "~Sistema de archivos" ;
         Text [ french ] = "~Système de fichiers" ;
         TabStop = TRUE ;
         Text [ swedish ] = "i fils~ystem" ;
@@ -411,7 +422,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ portuguese_brazilian ] = "im Da~teisystem" ;
         Text [ portuguese ] = "No sistema de ~ficheiros" ;
         Text[ chinese_simplified ] = "åœ¨æ–‡ä»¶ç³»ç»Ÿå†…(~F)";
-        Text[ russian ] = "â ñèñòåìå ôàéëîâ";
+        Text[ russian ] = "Ôàéëîâàÿ ñèñòåìà";
         Text[ polish ] = "W systemie pli~ków";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã‚·ã‚¹ãƒ†ãƒ (~F)";
         Text[ chinese_traditional ] = "åœ¨æª”æ¡ˆç³»çµ±å…§(~F)";
@@ -421,7 +432,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ language_user1 ] = "LS 21.12.99 Vorsicht, nicht viel Platz! - - - -";
         Text[ turkish ] = "Dosya sistemi";
         Text[ finnish ] = "~Tiedostojärjestelmä";
-        Text[ catalan ] = "En el ~sistema de archivos";
+        Text[ catalan ] = "Sistema de ~fitxers";
+        Text[ thai ] = "à¸£à¸°à¸šà¸šà¹~à¸Ÿà¹‰à¸¡";
     };
     CheckBox BTN_RELATIVE_INET
     {
@@ -432,14 +444,14 @@ TabPage RID_SFXPAGE_SAVE
         Text [ english_us ] = "~Internet" ;
         Text [ italian ] = "A Internet" ;
         Text [ spanish ] = "En ~Internet" ;
-        Text [ french ] = "Sur l'~Internet" ;
+        Text [ french ] = "Sur ~Internet" ;
         Text [ dutch ] = "~in Internet" ;
         Text [ swedish ] = "på Int~ernet" ;
         Text [ danish ] = "på Internettet" ;
         Text [ portuguese_brazilian ] = "im Int~ernet" ;
         Text [ portuguese ] = "Na Int~ernet" ;
         Text[ chinese_simplified ] = "åœ¨å›½é™…äº’è”ç½‘å†…(~I)";
-        Text[ russian ] = "â Èíòåğíåòå";
+        Text[ russian ] = "Èíòåğíåò";
         Text[ polish ] = "W I~nternecie";
         Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆ(~I)";
         Text[ chinese_traditional ] = "~Internet";
@@ -448,7 +460,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ korean ] = "ì¸í„°ë„·(~I)";
         Text[ turkish ] = "Internet";
         Text[ finnish ] = "~Internet";
-        Text[ catalan ] = "En ~Internet";
+        Text[ catalan ] = "~Internet";
+        Text[ thai ] = "~à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•";
     };
     FixedLine FL_FILTER
     {
@@ -458,7 +471,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ English ] = "Standard file format" ;
         Text[ english_us ] = "Standard file format";
         Text[ portuguese ] = "Formato de ficheiro padrão";
-        Text[ russian ] = "Ñòàíäàğòíûé ôîğìàò ôàéëà";
+        Text[ russian ] = "Ôîğìàò ôàéëà ïî óìîë÷àíèş";
         Text[ greek ] = "ÂáóéêŞ ìïñöŞ áñ÷åßïõ";
         Text[ dutch ] = "Standaardbestandsindeling";
         Text[ french ] = "Format de fichier standard";
@@ -475,7 +488,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ turkish ] = "Standard file format";
         Text[ arabic ] = "Standard file format";
         Text[ finnish ] = "Vakiotiedostomuoto";
-        Text[ catalan ] = "Standard file format";
+        Text[ catalan ] = "Format de fitxer estàndard";
+        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¹à¸Ÿà¹‰à¸¡à¸¡à¸²à¸•à¸£à¸à¸²à¸™";
     };
     FixedText FT_APP
     {
@@ -490,7 +504,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ dutch ] = "~Documenttype";
         Text[ french ] = "Type de document";
         Text[ spanish ] = "Tipo de documento";
-        Text[ finnish ] = "~Asiakirjan tyyppi";
+        Text[ finnish ] = "Asiakir~jan tyyppi";
         Text[ italian ] = "Tipo documento";
         Text[ danish ] = "~Dokumenttype";
         Text[ swedish ] = "~Dokumenttyp";
@@ -502,7 +516,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_traditional ] = "æ–‡ä»¶é¡å‹(~O)";
         Text[ turkish ] = "Document";
         Text[ arabic ] = "Document";
-        Text[ catalan ] = "Document";
+        Text[ catalan ] = "Tipus de document";
+        Text[ thai ] = "à¸Šà¸™à¸´à¸”à¹€à¸­~à¸à¸ªà¸²à¸£";
     };
     FixedText FT_FILTER
     {
@@ -529,7 +544,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_traditional ] = "è‡ªå‹•å¦å­˜ç‚º(~V)";
         Text[ turkish ] = "File formats";
         Text[ arabic ] = "File formats";
-        Text[ catalan ] = "File formats";
+        Text[ catalan ] = "Sempre desa com a";
+        Text[ thai ] = "à¸šà¸±à¸™~à¸—à¸¶à¸à¹€à¸›à¹‡à¸™à¹€à¸ªà¸¡à¸­";
     };
     ListBox LB_APP
     {
@@ -584,8 +600,8 @@ TabPage RID_SFXPAGE_SAVE
     StringList [ russian ] =
     {
             < "Òåêñòîâûé äîêóìåíò" ;     APP_WRITER    ; > ;
-        < "Äîêóìåíò HTML" ;    APP_WRITER_WEB;  > ;
-        < "Äîêóìåíò ıëåêòğîííîé òàáëèöû" ; APP_CALC      ; > ;
+        < "Âåá-ñòğàíèöà" ;    APP_WRITER_WEB;  > ;
+        < "İëåêòğîííàÿ òàáëèöà" ; APP_CALC      ; > ;
         < "Ïğåçåíòàöèÿ" ;     APP_IMPRESS   ; > ;
         < "Ğèñóíîê" ;        APP_DRAW      ; > ;
         < "Ôîğìóëà" ;           APP_MATH      ; > ;
@@ -631,7 +647,7 @@ TabPage RID_SFXPAGE_SAVE
             < "Tekstiasiakirja" ;     APP_WRITER    ; > ;
         < "HTML-asiakirja" ;    APP_WRITER_WEB;  > ;
         < "Laskentataulukko" ; APP_CALC      ; > ;
-        < "Esitys" ;     APP_IMPRESS   ; > ;
+        < "Diaesitys" ;     APP_IMPRESS   ; > ;
         < "Piirros" ;        APP_DRAW      ; > ;
         < "Kaava" ;           APP_MATH      ; > ;
         };
@@ -647,7 +663,7 @@ TabPage RID_SFXPAGE_SAVE
     StringList [ danish ] =
     {
             < "Tekstdokument" ;     APP_WRITER    ; > ;
-        < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+        < "HTML-dokument" ;    APP_WRITER_WEB;  > ;
         < "Regneark" ; APP_CALC      ; > ;
         < "Præsentation" ;     APP_IMPRESS   ; > ;
         < "Tegning" ;        APP_DRAW      ; > ;
@@ -691,9 +707,9 @@ TabPage RID_SFXPAGE_SAVE
         };
     StringList [ korean ] =
     {
-            < "ê¸€ ë¬¸ì„œ" ;     APP_WRITER    ; > ;
-        < "HTMLí˜• ë¬¸ì„œ" ;    APP_WRITER_WEB;  > ;
-        < "ìŠ¤í”„ë ˆë“œì‹œíŠ¸ ë¬¸ì„œ" ; APP_CALC      ; > ;
+            < "í…ìŠ¤íŠ¸ ë¬¸ì„œ" ;     APP_WRITER    ; > ;
+        < "HTML ë¬¸ì„œ" ;    APP_WRITER_WEB;  > ;
+        < "ìŠ¤í”„ë ˆë“œì‹œíŠ¸" ; APP_CALC      ; > ;
         < "í”„ë ˆì  í…Œì´ì…˜" ;     APP_IMPRESS   ; > ;
         < "ê·¸ë¦¬ê¸°" ;        APP_DRAW      ; > ;
         < "ìˆ˜ì‹" ;           APP_MATH      ; > ;
@@ -741,8 +757,17 @@ TabPage RID_SFXPAGE_SAVE
         < "Full de càlcul" ; APP_CALC      ; > ;
         < "Presentació" ;     APP_IMPRESS   ; > ;
         < "Dibuix" ;        APP_DRAW      ; > ;
-        < "Formel" ;           APP_MATH      ; > ;
+        < "Fórmula" ;           APP_MATH      ; > ;
         };
+    StringList [ thai ] =
+    {
+         < "à¹€à¸­à¸à¸ªà¸²à¸£à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡" ;     APP_WRITER    ; > ;
+        < "à¹€à¸­à¸à¸ªà¸²à¸£ HTML" ;    APP_WRITER_WEB;  > ;
+        < "à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“" ; APP_CALC      ; > ;
+        < "à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­" ;     APP_IMPRESS   ; > ;
+        < "à¸à¸²à¸£à¸§à¸²à¸”à¸£à¸¹à¸›" ;        APP_DRAW      ; > ;
+        < "à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“" ;           APP_MATH      ; > ;
+    };
     };
     ListBox LB_FILTER
     {
@@ -780,24 +805,25 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         "Should the changes be applied?" ;
         Text[ english_us ] = "Using \"%1\" as default file format may cause information loss.\n";
         Text[ portuguese ] = "Saving with \"%1\" may cause information loss.\n";
-        Text[ russian ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ russian ] = "Èñïîëüçîâàíèå \"%1\" â êà÷åñòâå ôîğìàòà ôàéëà ìîæåò ïğèâåñòè ê ïîòåğå èíôîğìàöèè.\n";
         Text[ greek ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ dutch ] = "Het gebruik van \"%1\" als standaardbestandsindeling kan leiden tot verlies van gegevens.\n";
         Text[ french ] = "L'application de \"%1\" comme format de fichier par défaut peut entraîner une perte d'information.\n";
         Text[ spanish ] = "El uso de \"%1\" como formato de archivo predeterminado puede causar una pérdida de información.\n";
-        Text[ finnish ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ finnish ] = "Jos oletustiedostomuotona käytetään muotoa \"%1\", tietoja voi hävitä.\n";
         Text[ italian ] = "L'uso di \"%1\" quale formato standard può causare la perdita di dati.\n";
         Text[ danish ] = "\"Brug af \"\"%1\"\" som standard-filformat kan medføre datatab.\n\"";
         Text[ swedish ] = "Att använda \"%1\" som standardfilformat kan leda till att information går förlorad.\n";
         Text[ polish ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ portuguese_brazilian ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ japanese ] = "\"%1\" ã‚’æ¨™æº–ãƒ•ã‚¡ã‚¤ãƒ«æ›¸å¼ã¨ã—ã¦ä½¿ç”¨ã™ã‚‹ã¨ã€æƒ…å ±ãŒå¤±ã‚ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚\n";
-        Text[ korean ] = "\"%1\"ë¡œ(ìœ¼ë¡œ) ì €ì¥í•˜ë©´ ì •ë³´ê°€ ì†ì‹¤ë  ìˆ˜ë„ ìˆìŠµë‹ˆë‹¤.\n";
+        Text[ korean ] = "\"%1\"ì„(ë¥¼) ê¸°ë³¸ íŒŒì¼ë¡œ ì‚¬ìš©í•˜ë©´ ì •ë³´ë¥¼ ì†ì‹¤í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n";
         Text[ chinese_simplified ] = "å°† \"%1\" å½“æˆæ ‡å‡†æ–‡ä»¶æ ¼å¼æ¥å­˜ç›˜æ–‡ä»¶å¯èƒ½ä¼šå¼•èµ·æ•°æ®æµå¤±ã€‚\n";
         Text[ chinese_traditional ] = "å°‡ \"%1\" ç•¶æˆæ¨™æº–æª”æ¡ˆæ ¼å¼ä¾†å„²å­˜æ–‡ä»¶å¯èƒ½æœƒå¼•èµ·è³‡æ–™æµå¤±ã€‚\n";
         Text[ turkish ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ arabic ] = "Saving with \"%1\" may cause information loss.\n";
-        Text[ catalan ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ catalan ] = "Desant-lo com a \"%1\" pot provocar pèrdues d'informació.\n";
+        Text[ thai ] = "Using \"%1\" as default file format may cause information loss.\n";
     };
 /*    CheckBox CB_DONT_SHOW_AGAIN
     {
@@ -819,6 +845,11 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Size = MAP_APPFONT( 50, 14 );
     };
 };
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-04 16:40:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <ucbhelper/content.hxx>
 #include <so3/svstor.hxx>
 #include <sot/formats.hxx>
+#include <sot/filelist.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <svtools/itempool.hxx>
@@ -1244,13 +1245,27 @@ BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< :
             if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xModelStm ) )
                 bRet = InsertModelStream( xModelStm, nInsertPos );
         }
-        else if( aDataHelper.HasFormat( FORMAT_FILE ) )
+        else if( aDataHelper.HasFormat( SOT_FORMAT_FILE_LIST ) ||
+                 aDataHelper.HasFormat( FORMAT_FILE ) )
         {
-            String aFile;
+            FileList aFileList;
 
-            if( aDataHelper.GetString( FORMAT_FILE, aFile ) && aFile.Len() )
+            if( aDataHelper.HasFormat( SOT_FORMAT_FILE_LIST ) )
+                aDataHelper.GetFileList( SOT_FORMAT_FILE_LIST, aFileList );
+            else
             {
-                INetURLObject aURL( aFile );
+                String aFile;
+
+                aDataHelper.GetString( FORMAT_FILE, aFile );
+
+                if( aFile.Len() )
+                    aFileList.AppendFile( aFile );
+            }
+
+            for( sal_uInt32 i = 0, nCount = aFileList.Count(); i < nCount; ++i )
+            {
+                const String    aFile( aFileList.GetFile( i ) );
+                INetURLObject   aURL( aFile );
 
                 if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
                 {
@@ -1286,6 +1301,7 @@ BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< :
 
             if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVIM ) )
             {
+
                 ImageMap aImageMap;
 
                 if( aDataHelper.GetImageMap( SOT_FORMATSTR_ID_SVIM, aImageMap ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-23 11:29:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,85 @@ const Graphic& SdrGrafObj::GetGraphic() const
 
 // -----------------------------------------------------------------------------
 
+void SdrGrafObj::ImpTransformBitmap( BitmapEx&          rBmpEx,
+                                     const GraphicAttr& rAttr,
+                                     const Size&        rCropLeftTop,
+                                     const Size&        rCropRightBottom,
+                                     const Rectangle&   rCropRect,
+                                     const Size&        rDstSize,
+                                     BOOL               bRotate,
+                                     BOOL               bEnlarge ) const
+{
+    // #104115# Crop the bitmap
+    if( rAttr.IsCropped() )
+    {
+        rBmpEx.Crop( rCropRect );
+
+        // #104115# Negative crop sizes mean: enlarge bitmap and pad
+        if( bEnlarge &&
+            rCropLeftTop.Width() < 0 ||
+            rCropLeftTop.Height() < 0 ||
+            rCropRightBottom.Width() < 0 ||
+            rCropRightBottom.Height() < 0 )
+        {
+            Size aBmpSize( rBmpEx.GetSizePixel() );
+            sal_Int32 nPadLeft( rCropLeftTop.Width() < 0 ? -rCropLeftTop.Width() : 0 );
+            sal_Int32 nPadTop( rCropLeftTop.Height() < 0 ? -rCropLeftTop.Height() : 0 );
+            sal_Int32 nPadTotalWidth( aBmpSize.Width() + nPadLeft + (rCropRightBottom.Width() < 0 ? -rCropRightBottom.Width() : 0) );
+            sal_Int32 nPadTotalHeight( aBmpSize.Height() + nPadTop + (rCropRightBottom.Height() < 0 ? -rCropRightBottom.Height() : 0) );
+
+            BitmapEx aBmpEx2;
+
+            if( rBmpEx.IsTransparent() )
+            {
+                if( rBmpEx.IsAlpha() )
+                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetAlpha() );
+                else
+                    aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), rBmpEx.GetMask() );
+            }
+            else
+            {
+                // #104115# Generate mask bitmap and init to zero
+                Bitmap aMask( aBmpSize, 1 );
+                aMask.Erase( Color(0,0,0) );
+
+                // #104115# Always generate transparent bitmap, we need the border transparent
+                aBmpEx2 = BitmapEx( rBmpEx.GetBitmap(), aMask );
+
+                // #104115# Add opaque mask to source bitmap, otherwise the destination remains transparent
+                rBmpEx = aBmpEx2;
+            }
+
+            aBmpEx2.SetSizePixel( Size(nPadTotalWidth, nPadTotalHeight) );
+            aBmpEx2.Erase( Color(0xFF,0,0,0) );
+            aBmpEx2.CopyPixel( Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), Rectangle( Point(0, 0), aBmpSize ), &rBmpEx );
+            rBmpEx = aBmpEx2;
+        }
+    }
+
+    const Size  aSizePixel( rBmpEx.GetSizePixel() );
+
+    if( bRotate )
+    {
+        if( aSizePixel.Width() && aSizePixel.Height() && rDstSize.Width() && rDstSize.Height() )
+        {
+            double fSrcWH = (double) aSizePixel.Width() / aSizePixel.Height();
+            double fDstWH = (double) rDstSize.Width() / rDstSize.Height();
+            double fScaleX = 1.0, fScaleY = 1.0;
+
+            // always choose scaling to shrink bitmap
+            if( fSrcWH < fDstWH )
+                fScaleY = aSizePixel.Width() / ( fDstWH * aSizePixel.Height() );
+            else
+                fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
+
+            rBmpEx.Scale( fScaleX, fScaleY );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
 {
     Graphic         aTransGraphic( GetGraphic() );
@@ -325,8 +404,8 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
     const Size      aSrcSize( aTransGraphic.GetPrefSize() );
     const Size      aDstSize( GetLogicRect().GetSize() );
     const BOOL      bMirror = ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_MIRROR ) != 0;
-    const BOOL      bRotate = ( ( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) != 0 ) &&
-                                ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_NONE != eType ) && !IsAnimated() );
+    const BOOL      bRotate = ( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) != 0 ) &&
+        ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_NONE != eType );
 
     // #104115# Need cropping info earlier
     ( (SdrGrafObj*) this )->ImpSetAttrToGrafInfo();
@@ -407,8 +486,6 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
     }
     else if( GRAPHIC_BITMAP == eType )
     {
-        BitmapEx    aBmpEx( aTransGraphic.GetBitmapEx() );
-
         // convert crops to pixel
         aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel( Size( aActAttr.GetLeftCrop(),
                                                                             aActAttr.GetTopCrop() ),
@@ -417,84 +494,86 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
                                                                                 aActAttr.GetBottomCrop() ),
                                                                           aMap100 );
 
-        // #104115# Crop the bitmap
-        if( aActAttr.IsCropped() )
+        // convert from prefmapmode to pixel
+        const Size aSrcSizePixel( Application::GetDefaultDevice()->LogicToPixel( aSrcSize,
+                                                                                 aMapGraph ) );
+
+        // setup crop rectangle in pixel
+        Rectangle aCropRect( aCropLeftTop.Width(), aCropLeftTop.Height(),
+                             aSrcSize.Width() - aCropRightBottom.Width(),
+                             aSrcSize.Height() - aCropRightBottom.Height() );
+
+        // #105641# Also crop animations
+        if( aTransGraphic.IsAnimated() )
         {
-            Size aSrcSize( aTransGraphic.GetPrefSize() );
+            int nFrame;
+            Animation aAnim( aTransGraphic.GetAnimation() );
 
-            // setup crop rectangle in prefmapmode system
-            Rectangle aCropRect( aCropLeftTop.Width(), aCropLeftTop.Height(),
-                                 aSrcSize.Width() - aCropRightBottom.Width(),
-                                 aSrcSize.Height() - aCropRightBottom.Height() );
+            for( nFrame=0; nFrame<aAnim.Count(); ++nFrame )
+            {
+                AnimationBitmap aAnimBmp( aAnim.Get( nFrame ) );
 
-            // convert from prefmapmode to pixel
-            aCropRect = Application::GetDefaultDevice()->LogicToPixel( aCropRect,
-                                                                       aMapGraph );
+                if( !aCropRect.IsInside( Rectangle(aAnimBmp.aPosPix, aAnimBmp.aSizePix) ) )
+                {
+                    // setup actual cropping (relative to frame position)
+                    Rectangle aCropRectRel( aCropRect );
+                    aCropRectRel.Move( -aAnimBmp.aPosPix.X(),
+                                       -aAnimBmp.aPosPix.Y() );
 
-            aBmpEx.Crop( aCropRect );
+                    // cropping affects this frame, apply it then
+                    // do _not_ apply enlargement, this is done below
+                    ImpTransformBitmap( aAnimBmp.aBmpEx, aActAttr, Size(), Size(),
+                                        aCropRectRel, aDstSize, bRotate, FALSE );
 
-            // #104115# Negative crop sizes mean: enlarge bitmap and pad
+                    aAnim.Replace( aAnimBmp, nFrame );
+                }
+                // else: bitmap completely within crop area,
+                // i.e. nothing is cropped away
+            }
+
+            // now, apply enlargement (if any) through global animation size
             if( aCropLeftTop.Width() < 0 ||
                 aCropLeftTop.Height() < 0 ||
                 aCropRightBottom.Width() < 0 ||
                 aCropRightBottom.Height() < 0 )
             {
-                Size aBmpSize( aBmpEx.GetSizePixel() );
-                sal_Int32 nPadLeft( aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0 );
-                sal_Int32 nPadTop( aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0 );
-                sal_Int32 nPadTotalWidth( aBmpSize.Width() + nPadLeft + (aCropRightBottom.Width() < 0 ? -aCropRightBottom.Width() : 0) );
-                sal_Int32 nPadTotalHeight( aBmpSize.Height() + nPadTop + (aCropRightBottom.Height() < 0 ? -aCropRightBottom.Height() : 0) );
-
-                BitmapEx aBmpEx2;
-
-                if( aBmpEx.IsTransparent() )
-                {
-                    if( aBmpEx.IsAlpha() )
-                        aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aBmpEx.GetAlpha() );
-                    else
-                        aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aBmpEx.GetMask() );
-                }
-                else
-                {
-                    // #104115# Generate mask bitmap and init to zero
-                    Bitmap aMask( aBmpSize, 1 );
-                    aMask.Erase( Color(0,0,0) );
-
-                    // #104115# Always generate transparent bitmap, we need the border transparent
-                    aBmpEx2 = BitmapEx( aBmpEx.GetBitmap(), aMask );
-
-                    // #104115# Add opaque mask to source bitmap, otherwise the destination remains transparent
-                    aBmpEx = aBmpEx2;
-                }
-
-                aBmpEx2.SetSizePixel( Size(nPadTotalWidth, nPadTotalHeight) );
-                aBmpEx2.Erase( Color(0xFF,0,0,0) );
-                aBmpEx2.CopyPixel( Rectangle( Point(nPadLeft, nPadTop), aBmpSize ), Rectangle( Point(0, 0), aBmpSize ), &aBmpEx );
-                aBmpEx = aBmpEx2;
+                Size aNewSize( aAnim.GetDisplaySizePixel() );
+                aNewSize.Width() += aCropRightBottom.Width() < 0 ? -aCropRightBottom.Width() : 0;
+                aNewSize.Width() += aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0;
+                aNewSize.Height() += aCropRightBottom.Height() < 0 ? -aCropRightBottom.Height() : 0;
+                aNewSize.Height() += aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0;
+                aAnim.SetDisplaySizePixel( aNewSize );
             }
-        }
 
-        const Size  aSizePixel( aBmpEx.GetSizePixel() );
-
-        if( bRotate && !IsAnimated() )
-        {
-            if( aSizePixel.Width() && aSizePixel.Height() && aDstSize.Width() && aDstSize.Height() )
+            // if topleft has changed, we must move all frames to the
+            // right and bottom, resp.
+            if( aCropLeftTop.Width() < 0 ||
+                aCropLeftTop.Height() < 0 )
             {
-                double fSrcWH = (double) aSizePixel.Width() / aSizePixel.Height();
-                double fDstWH = (double) aDstSize.Width() / aDstSize.Height();
-                double fScaleX = 1.0, fScaleY = 1.0;
+                Point aPosOffset( aCropLeftTop.Width() < 0 ? -aCropLeftTop.Width() : 0,
+                                  aCropLeftTop.Height() < 0 ? -aCropLeftTop.Height() : 0 );
 
-                // always choose scaling to shrink bitmap
-                if( fSrcWH < fDstWH )
-                    fScaleY = aSizePixel.Width() / ( fDstWH * aSizePixel.Height() );
-                else
-                    fScaleX = fDstWH * aSizePixel.Height() / aSizePixel.Width();
+                for( nFrame=0; nFrame<aAnim.Count(); ++nFrame )
+                {
+                    AnimationBitmap aAnimBmp( aAnim.Get( nFrame ) );
 
-                aBmpEx.Scale( fScaleX, fScaleY );
+                    aAnimBmp.aPosPix += aPosOffset;
+
+                    aAnim.Replace( aAnimBmp, nFrame );
+                }
             }
-        }
 
-        aTransGraphic = aBmpEx;
+            aTransGraphic = aAnim;
+        }
+        else
+        {
+            BitmapEx aBmpEx( aTransGraphic.GetBitmapEx() );
+
+            ImpTransformBitmap( aBmpEx, aActAttr, aCropLeftTop, aCropRightBottom,
+                                aCropRect, aDstSize, bRotate, TRUE );
+
+            aTransGraphic = aBmpEx;
+        }
 
         aTransGraphic.SetPrefSize( aDstSize );
         aTransGraphic.SetPrefMapMode( aDstMap );
@@ -840,35 +919,44 @@ FASTBOOL SdrGrafObj::ImpPaintEmptyPres( OutputDevice* pOutDev ) const
 
 void SdrGrafObj::ImpPaintReplacement(OutputDevice* pOutDev, const XubString& rText, const Bitmap* pBmp, FASTBOOL bFill) const
 {
+    Size aPixelSize( 1, 1 );
+    Size aBmpSize;
+
+    aPixelSize = Application::GetDefaultDevice()->PixelToLogic( aPixelSize, pOutDev->GetMapMode() );
+
     if( bFill )
     {
         pOutDev->SetLineColor();
         pOutDev->SetFillColor( COL_LIGHTGRAY );
     }
 
-    Rectangle aRect1(pOutDev->LogicToPixel(aRect));
-    Rectangle aTextRect(aRect1);
-    Rectangle aRect2(aRect1);
-    aRect2.Left()++; aRect2.Top()++; aRect2.Right()--; aRect2.Bottom()--;
-    Point aTopLeft(aRect1.TopLeft());
-    Point aBmpPos(aTopLeft);
+    Rectangle   aRect1( aRect );
+    Rectangle   aRect2( aRect1 );
+    Rectangle   aTextRect( aRect1 );
+    Point       aTopLeft( aRect1.TopLeft() );
+    Point       aBmpPos( aTopLeft );
+
+    aRect2.Left() += aPixelSize.Width();
+    aRect2.Top() += aPixelSize.Height();
+    aRect2.Right() -= aPixelSize.Width();
+    aRect2.Bottom() -= aPixelSize.Height();
 
     if( pBmp != NULL )
     {
-        Size        aBmpSize(pBmp->GetSizePixel());
-        long        nRectWdt=aTextRect.Right()-aTextRect.Left();
-        long        nRectHgt=aTextRect.Bottom()-aTextRect.Top();
-        long        nBmpWdt=aBmpSize.Width();
-        long        nBmpHgt=aBmpSize.Height();
-        BOOL        bText = rText.Len() > 0;
+        aBmpSize = Size( Application::GetDefaultDevice()->PixelToLogic( pBmp->GetSizePixel(), pOutDev->GetMapMode() ) );
 
-        long nMinWdt = nBmpWdt;
-        long nMinHgt = nBmpHgt;
+        long        nRectWdt = aTextRect.Right() - aTextRect.Left();
+        long        nRectHgt = aTextRect.Bottom() - aTextRect.Top();
+        long        nBmpWdt = aBmpSize.Width();
+        long        nBmpHgt = aBmpSize.Height();
+        long        nMinWdt = nBmpWdt;
+        long        nMinHgt = nBmpHgt;
+        BOOL        bText = rText.Len() > 0;
 
         if( bText )
         {
-            nMinWdt=2 + nBmpWdt * 2 + 3;
-            nMinHgt=2 + nBmpHgt * 2 + 3;
+            nMinWdt= 2 * nBmpWdt + 5 * aPixelSize.Width();
+            nMinHgt= 2 * nBmpHgt + 5 * aPixelSize.Height();
         }
 
         if( nRectWdt < nMinWdt || nRectHgt < nMinHgt )
@@ -878,160 +966,172 @@ void SdrGrafObj::ImpPaintReplacement(OutputDevice* pOutDev, const XubString& rTe
             aTextRect.Left() += nBmpWdt;
 
             if( bText )
-                aTextRect.Left()+=2+3;
+                aTextRect.Left() += 5 * aPixelSize.Width();
         }
 
-        aBmpPos.X() += 2;
-        aBmpPos.Y() += 2;
+        aBmpPos.X() += 2 * aPixelSize.Width();
+        aBmpPos.Y() += 2 * aPixelSize.Height();
 
-        if( aGeo.nDrehWink!=0 )
+        if( aGeo.nDrehWink != 0 )
         {
-            Point aRef(aBmpPos);
-            aRef.X()-=aBmpSize.Width()/2+2;
-            aRef.Y()-=aBmpSize.Height()/2+2;
-            double nSin=sin(aGeo.nDrehWink*nPi180);
-            double nCos=cos(aGeo.nDrehWink*nPi180);
-            RotatePoint(aBmpPos,aRef,nSin,nCos);
+            Point   aRef( aBmpPos.X() - aBmpSize.Width() / 2 + 2 * aPixelSize.Width(),
+                          aBmpPos.Y() - aBmpSize.Height() / 2 + 2 * aPixelSize.Height() );
+            double  nSin = sin( aGeo.nDrehWink * nPi180 );
+            double  nCos = cos( aGeo.nDrehWink * nPi180 );
+
+            RotatePoint( aBmpPos, aRef, nSin, nCos );
         }
     }
-
-    const BOOL bOldMap = pOutDev->IsMapModeEnabled();
-    pOutDev->EnableMapMode( FALSE );
 
     if( aGeo.nDrehWink == 0 && aGeo.nShearWink == 0 )
     {
-        if (bFill)
-            pOutDev->DrawRect(aRect);
-
-        if (pBmp!=NULL)
-            pOutDev->DrawBitmap(aBmpPos,*pBmp);
-
         const StyleSettings& rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
+
+        if( bFill )
+            pOutDev->DrawRect( aRect );
+
+        if( pBmp!=NULL )
+            pOutDev->DrawBitmap( aBmpPos, aBmpSize, *pBmp );
 
         pOutDev->SetFillColor();
         pOutDev->SetLineColor( rStyleSettings.GetShadowColor() );
-        pOutDev->DrawLine(aRect1.TopLeft(),aRect1.TopRight()); pOutDev->DrawLine(aRect1.TopLeft(),aRect1.BottomLeft());
-
-
-        pOutDev->SetLineColor( rStyleSettings.GetLightColor() );
-        pOutDev->DrawLine(aRect1.TopRight(),aRect1.BottomRight()); pOutDev->DrawLine(aRect1.BottomLeft(),aRect1.BottomRight());
+        pOutDev->DrawLine( aRect1.TopLeft(), aRect1.TopRight() );
+        pOutDev->DrawLine( aRect1.TopLeft(), aRect1.BottomLeft() );
 
         pOutDev->SetLineColor( rStyleSettings.GetLightColor() );
-        pOutDev->DrawLine(aRect2.TopLeft(),aRect2.TopRight()); pOutDev->DrawLine(aRect2.TopLeft(),aRect2.BottomLeft());
+        pOutDev->DrawLine( aRect1.TopRight(), aRect1.BottomRight() );
+        pOutDev->DrawLine( aRect1.BottomLeft(), aRect1.BottomRight() );
+
+        pOutDev->SetLineColor( rStyleSettings.GetLightColor() );
+        pOutDev->DrawLine( aRect2.TopLeft(), aRect2.TopRight() );
+        pOutDev->DrawLine( aRect2.TopLeft(), aRect2.BottomLeft() );
 
         pOutDev->SetLineColor( rStyleSettings.GetShadowColor() );
-        pOutDev->DrawLine(aRect2.TopRight(),aRect2.BottomRight()); pOutDev->DrawLine(aRect2.BottomLeft(),aRect2.BottomRight());
+        pOutDev->DrawLine( aRect2.TopRight(), aRect2.BottomRight() );
+        pOutDev->DrawLine( aRect2.BottomLeft(), aRect2.BottomRight() );
     }
     else
     {
-        Polygon aPoly1(Rect2Poly(aRect1,aGeo));
+        Polygon aPoly1( Rect2Poly( aRect1, aGeo ) );
         Polygon aPoly2(5);
-        aPoly2[0]=aRect2.TopLeft();
-        aPoly2[1]=aRect2.TopRight();
-        aPoly2[2]=aRect2.BottomRight();
-        aPoly2[3]=aRect2.BottomLeft();
-        aPoly2[4]=aRect2.TopLeft();
 
-        if (aGeo.nShearWink != 0)
-            ShearPoly(aPoly2,aTopLeft,aGeo.nTan);
+        aPoly2[0] = aRect2.TopLeft();
+        aPoly2[1] = aRect2.TopRight();
+        aPoly2[2] = aRect2.BottomRight();
+        aPoly2[3] = aRect2.BottomLeft();
+        aPoly2[4] = aRect2.TopLeft();
+
+        if( aGeo.nShearWink != 0 )
+            ShearPoly( aPoly2, aTopLeft, aGeo.nTan );
 
         if( aGeo.nDrehWink != 0 )
-            RotatePoly(aPoly2,aTopLeft,aGeo.nSin,aGeo.nCos);
+            RotatePoly( aPoly2, aTopLeft, aGeo.nSin, aGeo.nCos );
 
         if( bFill )
-            pOutDev->DrawPolygon(aPoly1);
+            pOutDev->DrawPolygon( aPoly1 );
 
         if( pBmp != NULL )
-            pOutDev->DrawBitmap( aBmpPos, *pBmp );
+            pOutDev->DrawBitmap( aBmpPos, aBmpSize, *pBmp );
 
         pOutDev->SetFillColor();
 
-        long        nHWink=NormAngle360(aGeo.nDrehWink);
-        long        nVWink=NormAngle360(aGeo.nDrehWink-aGeo.nShearWink);
-        FASTBOOL    bHorzChg=nHWink>13500 && nHWink<=31500;
-        FASTBOOL    bVertChg=nVWink>4500 && nVWink<=22500;
-
-        const StyleSettings& rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
-        Color a3DLightColor( rStyleSettings.GetLightColor() );
-        Color a3DShadowColor( rStyleSettings.GetShadowColor() );
-
-        pOutDev->SetLineColor( bHorzChg ? a3DShadowColor : a3DLightColor);
-        pOutDev->DrawLine(aPoly2[0],aPoly2[1]);
-
-        pOutDev->SetLineColor( bHorzChg ? a3DLightColor  : a3DShadowColor);
-        pOutDev->DrawLine(aPoly2[2],aPoly2[3]);
-
-        pOutDev->SetLineColor( bVertChg ? a3DLightColor  : a3DShadowColor);
-        pOutDev->DrawLine(aPoly2[1],aPoly2[2]);
-
-        pOutDev->SetLineColor( bVertChg ? a3DShadowColor : a3DLightColor);
-        pOutDev->DrawLine(aPoly2[3],aPoly2[4]);
-
-        pOutDev->SetLineColor( bHorzChg ? a3DLightColor  : a3DShadowColor);
-        pOutDev->DrawLine(aPoly1[0],aPoly1[1]);
+        const StyleSettings&    rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
+        Color                   a3DLightColor( rStyleSettings.GetLightColor() );
+        Color                   a3DShadowColor( rStyleSettings.GetShadowColor() );
+        long                    nHWink=NormAngle360( aGeo.nDrehWink );
+        long                    nVWink=NormAngle360( aGeo.nDrehWink-aGeo.nShearWink );
+        FASTBOOL                bHorzChg=nHWink>13500 && nHWink<=31500;
+        FASTBOOL                bVertChg=nVWink>4500 && nVWink<=22500;
 
         pOutDev->SetLineColor( bHorzChg ? a3DShadowColor : a3DLightColor);
-        pOutDev->DrawLine(aPoly1[2],aPoly1[3]);
+        pOutDev->DrawLine( aPoly2[0], aPoly2[1] );
 
-        pOutDev->SetLineColor( bVertChg ? a3DShadowColor : a3DLightColor);
-        pOutDev->DrawLine(aPoly1[1],aPoly1[2]);
+        pOutDev->SetLineColor( bHorzChg ? a3DLightColor  : a3DShadowColor);
+        pOutDev->DrawLine( aPoly2[2], aPoly2[3] );
 
         pOutDev->SetLineColor( bVertChg ? a3DLightColor  : a3DShadowColor);
-        pOutDev->DrawLine(aPoly1[3],aPoly1[4]);
+        pOutDev->DrawLine( aPoly2[1], aPoly2[2] );
+
+        pOutDev->SetLineColor( bVertChg ? a3DShadowColor : a3DLightColor);
+        pOutDev->DrawLine( aPoly2[3], aPoly2[4] );
+
+        pOutDev->SetLineColor( bHorzChg ? a3DLightColor  : a3DShadowColor);
+        pOutDev->DrawLine( aPoly1[0], aPoly1[1] );
+
+        pOutDev->SetLineColor( bHorzChg ? a3DShadowColor : a3DLightColor);
+        pOutDev->DrawLine( aPoly1[2], aPoly1[3] );
+
+        pOutDev->SetLineColor( bVertChg ? a3DShadowColor : a3DLightColor);
+        pOutDev->DrawLine( aPoly1[1], aPoly1[2] );
+
+        pOutDev->SetLineColor( bVertChg ? a3DLightColor  : a3DShadowColor);
+        pOutDev->DrawLine( aPoly1[3], aPoly1[4] );
     }
-    XubString aNam(rText);
 
-    if(aNam.Len())
+    XubString aNam( rText );
+
+    if( aNam.Len() )
     {
-        Size aOutSize(aTextRect.GetSize()); aOutSize.Width()-=6; aOutSize.Height()-=6;
+        Size aOutSize( aTextRect.GetWidth() - 6 * aPixelSize.Width(),
+                       aTextRect.GetHeight() - 6 * aPixelSize.Height() );
 
-        if (aOutSize.Width()>=4 || aOutSize.Height()>=4)
+        if( aOutSize.Width() >= ( 4 * aPixelSize.Width() ) ||
+            aOutSize.Height() >=  ( 4 * aPixelSize.Height() ) )
         {
-            Point aOutPos(aTextRect.TopLeft()); aOutPos.X()+=3; aOutPos.Y()+=3;
-            long nMaxOutY=aOutPos.Y()+aOutSize.Height();
-            Font aFontMerk(pOutDev->GetFont());
-            Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ) );
-            aFont.SetColor(COL_LIGHTRED);
-            aFont.SetTransparent(TRUE);
-            aFont.SetLineOrientation(USHORT(NormAngle360(aGeo.nDrehWink)/10));
+            Point   aOutPos( aTextRect.Left() + 3 * aPixelSize.Width(),
+                             aTextRect.Top() + 3 * aPixelSize.Height() );
+            long    nMaxOutY = aOutPos.Y() + aOutSize.Height();
+            Font    aFontMerk( pOutDev->GetFont() );
+            Font    aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ) );
 
-            if (IsLinkedGraphic())
-                aFont.SetUnderline(UNDERLINE_SINGLE);
-            Size aFontSize(Size(0,aGeo.nDrehWink % 9000==0 ? 12 : 14));
+            aFont.SetColor( COL_LIGHTRED );
+            aFont.SetTransparent( TRUE );
+            aFont.SetLineOrientation( USHORT( NormAngle360( aGeo.nDrehWink ) / 10 ) );
 
-            if (aFontSize.Height()>aOutSize.Height())
-                aFontSize.Height()=aOutSize.Height();
-            aFont.SetSize(aFontSize);
-            pOutDev->SetFont(aFont);
-            String aOutStr(aNam);
+            if( IsLinkedGraphic() )
+                aFont.SetUnderline( UNDERLINE_SINGLE );
 
-            while(aOutStr.Len() && aOutPos.Y() <= nMaxOutY)
+            Size aFontSize( 0, ( aGeo.nDrehWink % 9000 == 0 ? 12 : 14 ) * aPixelSize.Height() );
+
+            if( aFontSize.Height() > aOutSize.Height() )
+                aFontSize.Height() = aOutSize.Height();
+
+            aFont.SetSize( aFontSize );
+            pOutDev->SetFont( aFont );
+            String aOutStr( aNam );
+
+            while( aOutStr.Len() && aOutPos.Y() <= nMaxOutY )
             {
-                String aStr1(aOutStr);
-                INT32 nTextWidth = pOutDev->GetTextWidth(aStr1);
-                INT32 nTextHeight = pOutDev->GetTextHeight();
+                String  aStr1( aOutStr );
+                INT32   nTextWidth = pOutDev->GetTextWidth( aStr1 );
+                INT32   nTextHeight = pOutDev->GetTextHeight();
 
-                while(aStr1.Len() && nTextWidth > aOutSize.Width())
+                while( aStr1.Len() && nTextWidth > aOutSize.Width() )
                 {
-                    aStr1.Erase(aStr1.Len() - 1);
-                    nTextWidth = pOutDev->GetTextWidth(aStr1);
+                    aStr1.Erase( aStr1.Len() - 1 );
+                    nTextWidth = pOutDev->GetTextWidth( aStr1 );
                     nTextHeight = pOutDev->GetTextHeight();
                 }
-                Point aPos(aOutPos);
+
+                Point aPos( aOutPos );
                 aOutPos.Y() += nTextHeight;
 
-                if (aOutPos.Y()<=nMaxOutY)
+                if( aOutPos.Y() <= nMaxOutY )
                 {
-                    if (aGeo.nShearWink!=0) ShearPoint(aPos,aTopLeft,aGeo.nTan);
-                    if (aGeo.nDrehWink!=0) RotatePoint(aPos,aTopLeft,aGeo.nSin,aGeo.nCos);
-                    pOutDev->DrawText(aPos,aStr1);
-                    aOutStr.Erase(0, aStr1.Len());
+                    if( aGeo.nShearWink != 0 )
+                        ShearPoint( aPos, aTopLeft, aGeo.nTan );
+
+                    if( aGeo.nDrehWink != 0 )
+                        RotatePoint( aPos, aTopLeft, aGeo.nSin, aGeo.nCos );
+
+                    pOutDev->DrawText( aPos, aStr1 );
+                    aOutStr.Erase( 0, aStr1.Len() );
                 }
             }
-            pOutDev->SetFont(aFontMerk);
+
+            pOutDev->SetFont( aFontMerk );
         }
     }
-    pOutDev->EnableMapMode( bOldMap );
 }
 
 // -----------------------------------------------------------------------------
@@ -1083,6 +1183,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
         Point       aLogPos( aRect.TopLeft() );
         Size        aLogSize( pOutDev->PixelToLogic( pOutDev->LogicToPixel( aRect ).GetSize() ) );
         GraphicAttr aAttr( aGrafInfo );
+        const ULONG nGraphicManagerDrawMode = ( pView ? pView->GetGraphicManagerDrawMode() : GRFMGR_DRAW_STANDARD );
 
         aAttr.SetMirrorFlags( ( bHMirr ? BMP_MIRROR_HORZ : 0 ) | ( bVMirr ? BMP_MIRROR_VERT : 0 ) );
 
@@ -1099,28 +1200,22 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
                 SdrAnimationMode    eAnimMode = SDR_ANIMATION_ANIMATE;
                 FASTBOOL            bEnable = TRUE;
 
-                if( rInfoRec.pPV != NULL )
+                if( pView )
                 {
-                    eAnimMode= ((SdrPaintView&) rInfoRec.pPV->GetView()).GetAnimationMode();
-                    bEnable = eAnimMode != SDR_ANIMATION_DISABLE;
-                }
+                    eAnimMode= pView->GetAnimationMode();
+                    bEnable = ( eAnimMode != SDR_ANIMATION_DISABLE );
 
-                // #98825# Look if graphics animation is disabled by
-                // accessibility options
-                if(rInfoRec.pPV // #99632# This may be zero when it's an animated GIF /e.g.)
-                    && bEnable)
-                {
-                    const SdrView& rTargetView = rInfoRec.pPV->GetView();
-                    const SvtAccessibilityOptions& rOpt = ((SdrView&)rTargetView).getAccessibilityOptions();
-                    sal_Bool bIsAllowedAnimatedGraphics = rOpt.GetIsAllowAnimatedGraphics();
-
-                    if(!bIsAllowedAnimatedGraphics)
+                    if( bEnable )
                     {
-                        bEnable = FALSE;
+                        const SvtAccessibilityOptions& rOpt = const_cast< SdrView* >( pView )->getAccessibilityOptions();
+                        sal_Bool bIsAllowedAnimatedGraphics = rOpt.GetIsAllowAnimatedGraphics();
 
-                        // extra work to be done to make graphic visible at all
-                        pGraphic->StopAnimation();
-                        pGraphic->Draw(pOutDev, aLogPos, aLogSize, &aAttr);
+                        if( !bIsAllowedAnimatedGraphics )
+                        {
+                            pGraphic->StopAnimation();
+                            pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode );
+                            bEnable = FALSE;
+                        }
                     }
                 }
 
@@ -1132,7 +1227,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
                         pGraphic->StartAnimation( pOutDev, aLogPos, aLogSize, 0, &aAttr );
                     }
                     else if( eAnimMode == SDR_ANIMATION_DONT_ANIMATE )
-                        pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr );
+                        pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode );
                 }
             }
             else
@@ -1140,7 +1235,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
                 if( bRotate && !bRota180 )
                     aAttr.SetRotation( nDrehWink / 10 );
 
-                pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr );
+                pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode );
             }
         }
         else
@@ -1159,7 +1254,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
             if( bRotate && !bRota180 )
                 aAttr.SetRotation( nDrehWink / 10 );
 
-            pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr );
+            pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode );
             pOutDev->SetDrawMode( nOldDrawMode );
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-29 11:54:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,7 +798,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 else
                 {
                     ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_False ) )
+                    if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), sal_False, sal_True ) )
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:33:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ chinese_traditional ] = "ζΊι΅θ‰²";
         Text[ arabic ] = "Ηααζδ ΗαΓΥαν";
         Text[ greek ] = "Βασικό χρώμα";
-        Text[ korean ] = "μ†μ¤ μƒ‰μƒ";
+        Text[ korean ] = "μ›λ³Έ μƒ‰μƒ";
         Text[ turkish ] = "Kaynak renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Color font";
@@ -194,7 +194,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ chinese_traditional ] = "ζ›Ώδ»£ζ...";
         Text[ arabic ] = "ΗΣΚΘΟΗα Θά...";
         Text[ greek ] = "Αντικατάσταση με...";
-        Text[ korean ] = "λ°”κΏ€ μƒ‰μƒ...";
+        Text[ korean ] = "λ°”κΎΈκΈ°...";
         Text[ turkish ] = "Yeni renk...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplaηa amb...";
@@ -545,7 +545,29 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
     Text[ thai ] = "ΰΉ‚ΰΈ›ΰΈ£ΰΉΰΈ‡ΰΉΰΈªΰΈ‡";
 };
 
+String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
+{
+    // This string is used by the eyedropper dialog to denote a color in an image
+    // that will be replaced by another color.
+    Text = "Quellfarbe";
+    Text [ ENGLISH ] = "Source Color";
+    Text[ english_us ] = "Source Color";
+    Text[ french ] = "Source Color";
+    Text[ spanish ] = "Source Color";
+    Text[ italian ] = "Source Color";
+    Text[ swedish ] = "Source Color";
+    Text[ japanese ] = "Source Color";
+    Text[ korean ] = "Source Color";
+    Text[ chinese_simplified ] = "Source Color";
+    Text[ chinese_traditional ] = "Source Color";
+};
+
  // ********************************************************************** EOF
+
+
+
+
+
 
 
 

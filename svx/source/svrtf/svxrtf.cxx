@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-29 10:11:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #pragma hdrstop
 
@@ -1458,3 +1460,5 @@ RTFPardAttrMapIds ::RTFPardAttrMapIds ( const SfxItemPool& rPool )
     nForbRule = rPool.GetTrueWhich( SID_ATTR_PARA_FORBIDDEN_RULES, FALSE );
     nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, FALSE );
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-05 09:56:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include "confirmdelete.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_ROWCHANGEACTION_HPP_
 #include <com/sun/star/sdb/RowChangeAction.hpp>
 #endif
@@ -126,6 +129,18 @@
 #ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORM_XBOUNDCOMPONENT_HPP_
+#include <com/sun/star/form/XBoundComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
+#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
+#include <com/sun/star/sdb/ParametersRequest.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
@@ -145,10 +160,6 @@
 
 #ifndef _SVX_FMVIEW_HXX
 #include <fmview.hxx>
-#endif
-
-#ifndef _SVX_FMFILTER_HXX
-#include "fmfilter.hxx"
 #endif
 
 #ifndef _SV_MSGBOX_HXX //autogen wg. RET_YES
@@ -190,17 +201,11 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
 #ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
 #include <comphelper/propagg.hxx>
 #endif
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
-#include <connectivity/dbconversion.hxx>
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -223,14 +228,8 @@
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
-#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
-#include <com/sun/star/sdb/ParametersRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#ifndef _TOOLKIT_CONTROLS_UNOCONTROL_HXX_
+#include <toolkit/controls/unocontrol.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -244,7 +243,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
-using namespace ::dbtools;
 using namespace ::connectivity;
 using namespace ::svxform;
 using namespace ::connectivity::simple;
@@ -294,14 +292,10 @@ struct FmFieldInfo
 class FmXAutoControl: public UnoControl
 
 {
-    //  friend Reflection* ::getCppuType((const FmXAutoControl*)0);
     friend Reference< XInterface > SAL_CALL FmXAutoControl_NewInstance_Impl();
 
 public:
     FmXAutoControl(){}
-
-// automatisch auskommentiert - [getImplementation] - Wird von OWeakObject nicht weiter unterstützt!
-//  virtual void* getImplementation(Reflection * pRef);
 
     virtual ::rtl::OUString GetComponentServiceName() {return ::rtl::OUString::createFromAscii("Edit");}
     virtual void SAL_CALL createPeer( const Reference< ::com::sun::star::awt::XToolkit > & rxToolkit, const Reference< ::com::sun::star::awt::XWindowPeer >  & rParentPeer ) throw( ::com::sun::star::uno::RuntimeException );
@@ -315,7 +309,7 @@ void FmXAutoControl::createPeer( const Reference< ::com::sun::star::awt::XToolki
 {
     UnoControl::createPeer( rxToolkit, rParentPeer );
 
-    Reference< ::com::sun::star::awt::XTextComponent >  xText(mxPeer , UNO_QUERY);
+    Reference< ::com::sun::star::awt::XTextComponent >  xText(getPeer() , UNO_QUERY);
     if (xText.is())
     {
         xText->setText(::rtl::OUString(SVX_RES(RID_STR_AUTOFIELD)));
@@ -1162,9 +1156,9 @@ void FmXFormController::focusGained(const ::com::sun::star::awt::FocusEvent& e) 
 #endif
             DBG_ASSERT(m_xCurrentControl.is(), "kein CurrentControl gesetzt");
             // zunaechst das Control fragen ob es das IFace unterstuetzt
-            Reference< ::com::sun::star::form::XBoundComponent >  xBound(m_xCurrentControl, UNO_QUERY);
+            Reference< XBoundComponent >  xBound(m_xCurrentControl, UNO_QUERY);
             if (!xBound.is() && m_xCurrentControl.is())
-                xBound  = Reference< ::com::sun::star::form::XBoundComponent > (m_xCurrentControl->getModel(), UNO_QUERY);
+                xBound  = Reference< XBoundComponent > (m_xCurrentControl->getModel(), UNO_QUERY);
 
             // lock if we lose the focus during commit
             m_bCommitLock = sal_True;
@@ -1372,7 +1366,7 @@ void FmXFormController::removeFromEventAttacher(const Reference< ::com::sun::sta
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     // abmelden beim Eventattacher
     Reference< ::com::sun::star::form::XFormComponent >  xComp(xControl->getModel(), UNO_QUERY);
-    if (xComp.is() && xComp->getParent().is() && m_xModelAsIndex.is())
+    if ( xComp.is() && m_xModelAsIndex.is() )
     {
         // Und die Position des ControlModel darin suchen
         sal_uInt32 nPos = m_xModelAsIndex->getCount();
@@ -1416,7 +1410,7 @@ void FmXFormController::setContainer(const Reference< ::com::sun::star::awt::XCo
 
         // clear the filter map
         for (FmFilterControls::const_iterator iter = m_aFilterControls.begin();
-             iter != m_aFilterControls.end(); iter++)
+             iter != m_aFilterControls.end(); ++iter)
             (*iter).first->removeTextListener(this);
 
         m_aFilterControls.clear();
@@ -1469,11 +1463,11 @@ void FmXFormController::setContainer(const Reference< ::com::sun::star::awt::XCo
 
         // einsammeln der Controls
         sal_Int32 i, j;
-        for (i = 0, j = 0; i < nCount; i++ )
+        for (i = 0, j = 0; i < nCount; ++i )
         {
             Reference< ::com::sun::star::awt::XControlModel >  xCtrlModel = pModels[i];
             // Zum Model passendes Control suchen
-            Reference< ::com::sun::star::awt::XControl >  xCtrl = findControl( xCtrls, xCtrlModel );
+            Reference< ::com::sun::star::awt::XControl >  xCtrl = findControl( xCtrls, xCtrlModel,sal_False );
             if (xCtrl.is())
             {
                 pControls[j++] = xCtrl;
@@ -1808,14 +1802,14 @@ void FmXFormController::stopListening()
 
 
 //------------------------------------------------------------------------------
-Reference< ::com::sun::star::awt::XControl >  FmXFormController::findControl(Sequence< Reference< ::com::sun::star::awt::XControl > >& rCtrls, const Reference< ::com::sun::star::awt::XControlModel > & xCtrlModel ) const
+Reference< ::com::sun::star::awt::XControl >  FmXFormController::findControl(Sequence< Reference< ::com::sun::star::awt::XControl > >& rCtrls, const Reference< ::com::sun::star::awt::XControlModel > & xCtrlModel ,sal_Bool _bRemove) const
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     DBG_ASSERT( xCtrlModel.is(), "findControl - welches ?!" );
 
-    const Reference< ::com::sun::star::awt::XControl > * pCtrls = rCtrls.getConstArray();
+    Reference< ::com::sun::star::awt::XControl > * pCtrls = rCtrls.getArray();
     Reference< ::com::sun::star::awt::XControlModel >  xModel;
-    for ( sal_Int32 i = 0, nCount = rCtrls.getLength(); i < nCount; i++ )
+    for ( sal_Int32 i = 0, nCount = rCtrls.getLength(); i < nCount; ++i )
     {
         // #66449# Speicherueberschreiber durch folgende Zeile
         // Reference< ::com::sun::star::awt::XControlModel >  xModel(pCtrls[i].is() ? pCtrls[i]->getModel() : Reference< ::com::sun::star::awt::XControlModel > ());
@@ -1825,7 +1819,10 @@ Reference< ::com::sun::star::awt::XControl >  FmXFormController::findControl(Seq
             if ((::com::sun::star::awt::XControlModel*)xModel.get() == (::com::sun::star::awt::XControlModel*)xCtrlModel.get())
             {
                 Reference< ::com::sun::star::awt::XControl >  xCtrl( pCtrls[i] );
-                ::comphelper::removeElementAt(rCtrls, i);
+                if ( _bRemove )
+                    ::comphelper::removeElementAt(rCtrls, i);
+                else
+                    pCtrls[i] = Reference< ::com::sun::star::awt::XControl >();
                 return xCtrl;
             }
         }
@@ -2470,7 +2467,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
                                                                     ,xFormatter
                                                                     ,xField
                                                                     ,aAppLocale
-                                                                    ,aLocaleWrapper.getNumDecimalSep().GetChar(0)
+                                                                    ,(sal_Char)aLocaleWrapper.getNumDecimalSep().GetChar(0)
                                                                     ,getParseContext());
                                 aRow[(*iter).xText] = sCriteria;
                             }
@@ -2595,11 +2592,11 @@ void FmXFormController::startFiltering()
                     continue;
                 }
 
-                Reference< XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
-                if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+                Reference< XPropertySet >  xModel( xControl->getModel(), UNO_QUERY );
+                if (xModel.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xModel))
                 {
                     // does the model use a bound field ?
-                    Any aVal = xSet->getPropertyValue(FM_PROP_BOUNDFIELD);
+                    Any aVal = xModel->getPropertyValue(FM_PROP_BOUNDFIELD);
                     Reference< XPropertySet >  xField;
                     aVal >>= xField;
 
@@ -2615,9 +2612,22 @@ void FmXFormController::startFiltering()
                         {
                             // Setzen des FilterControls
                             SdrUnoControlRec& rControlRec = (SdrUnoControlRec&)rControlList[nCtrlNum];
-                            FmXFilterControl* pFilterControl = new FmXFilterControl(m_xORB,xSet, xField, xMetaData, xFormatter, m_pWindow);
-                            Reference< ::com::sun::star::awt::XControl >  xNewControl(pFilterControl);
-                            Reference< ::com::sun::star::awt::XTextComponent >  xText(pFilterControl);
+
+                            // create a filter control
+                            Sequence< Any > aCreationArgs( 3 );
+                            aCreationArgs[ 0 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "MessageParent" ), makeAny( VCLUnoHelper::GetInterface( m_pWindow ) ) );
+                            aCreationArgs[ 1 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "NumberFormatter" ), makeAny( xFormatter ) );
+                            aCreationArgs[ 2 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "ControlModel" ), makeAny( xModel ) );
+                            Reference< XControl > xFilterControl(
+                                m_xORB->createInstanceWithArguments(
+                                    ::rtl::OUString::createFromAscii( "com.sun.star.form.control.FilterControl" ),
+                                    aCreationArgs
+                                ),
+                                UNO_QUERY
+                            );
+                            DBG_ASSERT( xFilterControl.is(), "FmXFormController::startFiltering: could not create a filter control!" );
+
+                            Reference< XTextComponent >  xText( xFilterControl, UNO_QUERY );
 
                             // merken in der Map
                             aFieldInfos.push_back(FmFieldInfo(xField, xText));
@@ -2625,15 +2635,15 @@ void FmXFormController::startFiltering()
 
                             // setting the focus if the current control
                             // is the active one
-                            if ((::com::sun::star::awt::XControl*)m_xActiveControl.get() == (::com::sun::star::awt::XControl*)xControl.get())
+                            if (m_xActiveControl.get() == xControl.get())
                             {
-                                xNewActiveControl = xNewControl;
+                                xNewActiveControl = xFilterControl;
                                 m_xActiveControl = m_xCurrentControl = NULL;
                             }
-                            else if ((::com::sun::star::awt::XControl*)m_xCurrentControl.get() == (::com::sun::star::awt::XControl*)xControl.get())
-                                m_xCurrentControl = xNewControl;
+                            else if (m_xCurrentControl.get() == xControl.get())
+                                m_xCurrentControl = xFilterControl;
 
-                            rControlRec.ReplaceControl(xNewControl);
+                            rControlRec.ReplaceControl( xFilterControl );
                         }
                     }
                 }

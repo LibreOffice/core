@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2003-01-28 11:02:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,14 +109,29 @@
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
+#include <com/sun/star/awt/FontWeight.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
+#include <com/sun/star/awt/FontSlant.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
+#include <com/sun/star/awt/FontUnderline.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTSTRIKEOUT_HPP_
+#include <com/sun/star/awt/FontStrikeout.hpp>
+#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
 #ifndef _MSOCXIMEX_HXX
-#include <msocximex.hxx>
+#include "msocximex.hxx"
 #endif
 
 #ifndef C2S
@@ -143,12 +158,6 @@ using namespace cppu;
 static char sWW8_form[] = "WW-Standard";
 
 
-sal_uInt32 OCX_Control::pColor[25] = {
-0xC0C0C0, 0x008080, 0x000080, 0x808080, 0xC0C0C0, 0xFFFFFF, 0x000000,
-0x000000, 0x000000, 0xFFFFFF, 0xC0C0C0, 0xC0C0C0, 0x808080, 0x000080,
-0xFFFFFF, 0xC0C0C0, 0x808080, 0x808080, 0x000000, 0xC0C0C0, 0xFFFFFF,
-0x000000, 0xC0C0C0, 0x000000, 0xFFFFC0 };
-
 sal_uInt8 __READONLY_DATA OCX_Control::aObjInfo[4] = {
 0x00, 0x12, 0x03, 0x00, };
 
@@ -170,6 +179,42 @@ void Align(SvStorageStream *pS,int nAmount,BOOL bFill=FALSE)
 
 sal_uInt16 OCX_Control::nStandardId(0x0200);
 sal_uInt16 OCX_FontData::nStandardId(0x0200);
+
+sal_uInt32 OCX_Control::pColor[25] = {
+0xC0C0C0, 0x008080, 0x000080, 0x808080, 0xC0C0C0, 0xFFFFFF, 0x000000,
+0x000000, 0x000000, 0xFFFFFF, 0xC0C0C0, 0xC0C0C0, 0x808080, 0x000080,
+0xFFFFFF, 0xC0C0C0, 0x808080, 0x808080, 0x000000, 0xC0C0C0, 0xFFFFFF,
+0x000000, 0xC0C0C0, 0x000000, 0xFFFFC0 };
+
+void OCX_Control::FillSystemColors()
+{
+    // overwrite the predefined colors with available system colors
+    const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
+
+    pColor[ 0x00 ] = rSett.GetFaceColor().GetColor();
+    pColor[ 0x01 ] = rSett.GetWorkspaceColor().GetColor();
+    pColor[ 0x02 ] = rSett.GetActiveColor().GetColor();
+    pColor[ 0x03 ] = rSett.GetDeactiveColor().GetColor();
+    pColor[ 0x04 ] = rSett.GetMenuBarColor().GetColor();
+    pColor[ 0x05 ] = rSett.GetWindowColor().GetColor();
+    pColor[ 0x07 ] = rSett.GetMenuTextColor().GetColor();
+    pColor[ 0x08 ] = rSett.GetWindowTextColor().GetColor();
+    pColor[ 0x09 ] = rSett.GetActiveTextColor().GetColor();
+    pColor[ 0x0A ] = rSett.GetActiveBorderColor().GetColor();
+    pColor[ 0x0B ] = rSett.GetDeactiveBorderColor().GetColor();
+    pColor[ 0x0C ] = rSett.GetWorkspaceColor().GetColor();
+    pColor[ 0x0D ] = rSett.GetHighlightColor().GetColor();
+    pColor[ 0x0E ] = rSett.GetHighlightTextColor().GetColor();
+    pColor[ 0x0F ] = rSett.GetFaceColor().GetColor();
+    pColor[ 0x10 ] = rSett.GetShadowColor().GetColor();
+    pColor[ 0x12 ] = rSett.GetButtonTextColor().GetColor();
+    pColor[ 0x13 ] = rSett.GetDeactiveTextColor().GetColor();
+    pColor[ 0x14 ] = rSett.GetHighlightColor().GetColor();
+    pColor[ 0x15 ] = rSett.GetDarkShadowColor().GetColor();
+    pColor[ 0x16 ] = rSett.GetShadowColor().GetColor();
+    pColor[ 0x17 ] = rSett.GetHelpTextColor().GetColor();
+    pColor[ 0x18 ] = rSett.GetHelpColor().GetColor();
+}
 
 sal_uInt32 OCX_Control::ImportColor(sal_uInt32 nColor) const
 {
@@ -478,6 +523,7 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
 {
     sal_Bool bRet=sal_True;
 
+    sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(8);
 
     uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
@@ -517,12 +563,11 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
-    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell());
+    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
     bRet = aFontData.Export(rContents,rPropSet);
 
-    nFixedAreaLen-=4;
-    rContents->Seek(0);
+    rContents->Seek(nOldPos);
     *rContents << nStandardId;
     *rContents << nFixedAreaLen;
 
@@ -599,6 +644,7 @@ sal_Bool OCX_ImageButton::WriteContents(SvStorageStreamRef &rContents,
 {
     sal_Bool bRet=sal_True;
 
+    sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(8);
 
     uno::Any aTmp=rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
@@ -620,12 +666,11 @@ sal_Bool OCX_ImageButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
-    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell());
+    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
     bRet = aFontData.Export(rContents,rPropSet);
 
-    nFixedAreaLen-=4;
-    rContents->Seek(0);
+    rContents->Seek(nOldPos);
     *rContents << nStandardId;
     *rContents << nFixedAreaLen;
 
@@ -753,6 +798,7 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
 {
     sal_Bool bRet=sal_True;
 
+    sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(12);
 
     pBlockFlags[0] = 0;
@@ -819,11 +865,10 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
         rContents->Write(sByte.GetBuffer(),sByte.Len());
 
     Align(rContents,4,TRUE);
-    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell());
+    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
     bRet = aFontData.Export(rContents,rPropSet);
 
-    nFixedAreaLen-=4;
-    rContents->Seek(0);
+    rContents->Seek(nOldPos);
     *rContents << nStandardId;
     *rContents << nFixedAreaLen;
 
@@ -1004,6 +1049,7 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
     const awt::Size &rSize)
 {
     sal_Bool bRet=sal_True;
+    sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(12);
 
     pBlockFlags[0] = 0;
@@ -1109,12 +1155,11 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
 
     Align(rContents,4,TRUE);
 
-    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell());
+    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
     bRet = aFontData.Export(rContents,rPropSet);
 
-    nFixedAreaLen-=4;
-    rContents->Seek(0);
+    rContents->Seek(nOldPos);
     *rContents << nStandardId;
     *rContents << nFixedAreaLen;
 
@@ -1188,6 +1233,7 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
     const awt::Size &rSize)
 {
     sal_Bool bRet=sal_True;
+    sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(12);
 
     pBlockFlags[0] = 0;
@@ -1266,12 +1312,11 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
 
     Align(rContents,4,TRUE);
 
-    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell());
+    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
     bRet = aFontData.Export(rContents,rPropSet);
 
-    nFixedAreaLen-=4;
-    rContents->Seek(0);
+    rContents->Seek(nOldPos);
     *rContents << nStandardId;
     *rContents << nFixedAreaLen;
 
@@ -1372,6 +1417,10 @@ sal_Bool OCX_ToggleButton::Import(
         bTemp = sal_True;
     aTmp = bool2any(bTemp);
     xPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), aTmp);
+
+    bTemp = nMultiState;
+    aTmp = bool2any(bTemp);
+    xPropSet->setPropertyValue( WW8_ASCII2STR("TriState"), aTmp);
 
     aTmp <<= ImportColor(nForeColor);
     xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
@@ -1520,6 +1569,7 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     const awt::Size &rSize)
 {
     sal_Bool bRet=sal_True;
+    sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(12);
 
     pBlockFlags[0] = 0;
@@ -1613,12 +1663,11 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
 
     Align(rContents,4,TRUE);
 
-    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell());
+    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
     bRet = aFontData.Export(rContents,rPropSet);
 
-    nFixedAreaLen-=4;
-    rContents->Seek(0);
+    rContents->Seek(nOldPos);
     *rContents << nStandardId;
     *rContents << nFixedAreaLen;
 
@@ -1751,6 +1800,7 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     const awt::Size &rSize)
 {
     sal_Bool bRet=sal_True;
+    sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(12);
 
     pBlockFlags[0] = 0;
@@ -1835,12 +1885,11 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
 
     Align(rContents,4,TRUE);
 
-    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell());
+    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
     bRet = aFontData.Export(rContents,rPropSet);
 
-    nFixedAreaLen-=4;
-    rContents->Seek(0);
+    rContents->Seek(nOldPos);
     *rContents << nStandardId;
     *rContents << nFixedAreaLen;
 
@@ -1923,7 +1972,7 @@ sal_Bool OCX_ModernControl::Read(SvStorageStream *pS)
 
         fEnabled = (nTemp & 0x02) >> 1;
         fLocked = (nTemp & 0x04) >> 2;
-        fBackStyle = (nTemp & 0x02) >> 3;
+        fBackStyle = (nTemp & 0x08) >> 3;
 
         *pS >> nTemp;
 
@@ -2322,6 +2371,7 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
     const awt::Size &rSize)
 {
     sal_Bool bRet = sal_True;
+    sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(8);
     pBlockFlags[0] = 0x20;
     pBlockFlags[1] = 0;
@@ -2383,12 +2433,11 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
     Align(rContents,4,TRUE);
     *rContents << rSize.Width;
     *rContents << rSize.Height;
-    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell());
+    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
     bRet = aFontData.Export(rContents,rPropSet);
 
-    nFixedAreaLen-=4;
-    rContents->Seek(0);
+    rContents->Seek(nOldPos);
     *rContents << nStandardId;
     *rContents << nFixedAreaLen;
 
@@ -2516,6 +2565,13 @@ OCX_map aOCXTab[NO_OCX] =
     {&OCX_GroupBox::Create,"",
         form::FormComponentType::GROUPBOX,""}
 };
+
+SvxMSConvertOCXControls::SvxMSConvertOCXControls( SfxObjectShell *pDSh,SwPaM *pP ) :
+    pDocSh( pDSh ), pPaM(pP),nEdit( 0 ), nCheckbox( 0 )
+{
+    DBG_ASSERT( pDocSh, "No DocShell, Cannot do Controls" );
+    OCX_Control::FillSystemColors();
+}
 
 OCX_Control * SvxMSConvertOCXControls::OCX_Factory(const String &sName)
 {
@@ -2707,7 +2763,7 @@ sal_Bool SvxMSConvertOCXControls::WriteOCXStream( SvStorageRef& rSrc1,
 }
 
 
-//I think this should work for excel documents, create the Cnts stream
+//I think this should work for excel documents, create the "Ctls" stream
 //and give it here as rContents, we'll append out streams ole id and
 //contents here and that appears to be what Excel is doing
 sal_Bool SvxMSConvertOCXControls::WriteOCXExcelKludgeStream(
@@ -2737,6 +2793,8 @@ sal_Bool SvxMSConvertOCXControls::WriteOCXExcelKludgeStream(
         *pS << aName;
         bRet = pObj->WriteContents(rContents,xPropSet,rSize);
         delete pObj;
+        // export needs correct stream position
+        rContents->Seek( STREAM_SEEK_TO_END );
     }
     return bRet;
 }
@@ -2813,7 +2871,7 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
 
 {
     sal_Bool bRet=sal_True;
-
+    sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(12);
 
     pBlockFlags[0] = 0;
@@ -2883,10 +2941,9 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
         rContents->Write(sByte.GetBuffer(),sByte.Len());
 
     Align(rContents,4,TRUE);
-    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell());
+    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
     bRet = aFontData.Export(rContents,rPropSet);
-    nFixedAreaLen-=4;
-    rContents->Seek(0);
+    rContents->Seek(nOldPos);
     *rContents << nStandardId;
     *rContents << nFixedAreaLen;
 
@@ -3002,7 +3059,14 @@ sal_Bool OCX_FontData::Read(SvStorageStream *pS)
         *pS >> nLanguageID;
     }
     if (pBlockFlags[0] & 0x40)
+    {
         *pS >> nJustification;
+    }
+    if (pBlockFlags[0] & 0x80)  // font weight before font name
+    {
+        Align(pS,2);
+        *pS >> nFontWeight;
+    }
 
     if (nFontNameLen)
     {
@@ -3037,9 +3101,26 @@ void OCX_FontData::Import(uno::Reference< beans::XPropertySet > &rPropSet)
 
     if (fBold)
     {
-        float nBold=150;
-        aTmp.setValue(&nBold,getCppuType((float *)0));
+        aTmp <<= awt::FontWeight::BOLD;
         rPropSet->setPropertyValue( WW8_ASCII2STR("FontWeight"), aTmp);
+    }
+
+    if (fItalic)
+    {
+        aTmp <<= (sal_Int16)awt::FontSlant_ITALIC;
+        rPropSet->setPropertyValue( WW8_ASCII2STR("FontSlant"), aTmp);
+    }
+
+    if (fUnderline)
+    {
+        aTmp <<= awt::FontUnderline::SINGLE;
+        rPropSet->setPropertyValue( WW8_ASCII2STR("FontUnderline"), aTmp);
+    }
+
+    if (fStrike)
+    {
+        aTmp <<= awt::FontStrikeout::SINGLE;
+        rPropSet->setPropertyValue( WW8_ASCII2STR("FontStrikeout"), aTmp);
     }
 
     aTmp <<= sal_Int16(nFontSize/20);
@@ -3050,7 +3131,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     const uno::Reference< beans::XPropertySet > &rPropSet)
 {
     sal_uInt8 nFlags=0x00;
-    nFixedAreaLen = static_cast<sal_uInt16>(rContent->Tell());
+    sal_uInt32 nOldPos = rContent->Tell();
     rContent->SeekRel(8);
     ByteString sByte;
     uno::Any aTmp;
@@ -3090,12 +3171,12 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
         }
 
         aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("FontHeight"));
-        sal_Int16 nFontHeight;
+        float nFontHeight;
         aTmp >>= nFontHeight;
-        if (nFontHeight != 12)
+        if (nFontHeight)
         {
             nFlags |= 0x04;
-            nFontSize = nFontHeight*20;
+            nFontSize = static_cast<sal_uInt32>(nFontHeight*20);
             *rContent << nFontSize;
         }
 
@@ -3120,9 +3201,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     rContent->Write(sByte.GetBuffer(),sByte.Len());
     Align(rContent,4,TRUE);
 
-    UINT32 nOldPos = nFixedAreaLen;
-    nFixedAreaLen = static_cast<sal_uInt16>(rContent->Tell()-nFixedAreaLen);
-    nFixedAreaLen -= 4;
+    sal_uInt16 nFixedAreaLen = static_cast<sal_uInt16>(rContent->Tell()-nOldPos-4);
     rContent->Seek(nOldPos);
     *rContent << nStandardId;
     *rContent << nFixedAreaLen;
@@ -3140,7 +3219,7 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
     const awt::Size &rSize)
 {
     sal_Bool bRet=sal_True;
-
+    sal_uInt32 nOldPos = rContents->Tell();
     rContents->SeekRel(8);
 
     pBlockFlags[0] = 0;
@@ -3190,10 +3269,9 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
     *rContents << rSize.Height;
 
     Align(rContents,4,TRUE);
-    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell());
+    nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
 
-    nFixedAreaLen-=4;
-    rContents->Seek(0);
+    rContents->Seek(nOldPos);
     *rContents << nStandardId;
     *rContents << nFixedAreaLen;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1554,6 +1554,68 @@ void SdrDragCrook::TakeComment(XubString& rStr) const
         rStr += ImpGetResStr(STR_EditWithCopy);
 }
 
+// #96920#
+void ImplAddDragRaster(XPolyPolygon& rPolyPoly, const Rectangle& rRect,
+    sal_uInt32 nHorDiv, sal_uInt32 nVerDiv)
+{
+    const sal_uInt32 nXLen(rRect.GetWidth() / nHorDiv);
+    const sal_uInt32 nYLen(rRect.GetHeight() / nVerDiv);
+
+    sal_Int32 nYPos(rRect.Top());
+    const sal_uInt32 nXLenOneThird(nXLen / 3);
+
+    sal_uInt32 a, b;
+
+    for(a = 0; a <= nVerDiv; a++)
+    {
+        // hor lines
+        for(b = 0; b < nHorDiv; b++)
+        {
+            XPolygon aHorLineSegment(4);
+
+            aHorLineSegment[0] = Point(rRect.Left() + (b * nXLen), nYPos);
+            aHorLineSegment[3] = Point(aHorLineSegment[0].X() + nXLen, nYPos);
+            aHorLineSegment[1] = Point(aHorLineSegment[0].X() + nXLenOneThird, nYPos);
+            aHorLineSegment.SetFlags(1, XPOLY_CONTROL);
+            aHorLineSegment[2] = Point(aHorLineSegment[3].X() - nXLenOneThird, nYPos);
+            aHorLineSegment.SetFlags(2, XPOLY_CONTROL);
+            rPolyPoly.Insert(aHorLineSegment);
+        }
+
+        // increments
+        nYPos += nYLen;
+    }
+
+    sal_Int32 nXPos(rRect.Left());
+    const sal_uInt32 nYLenOneThird(nYLen / 3);
+
+    for(a = 0; a <= nHorDiv; a++)
+    {
+        // ver lines
+        for(b = 0; b < nVerDiv; b++)
+        {
+            XPolygon aVerLineSegment(4);
+
+            aVerLineSegment[0] = Point(nXPos, rRect.Top() + (b * nYLen));
+            aVerLineSegment[3] = Point(nXPos, aVerLineSegment[0].Y() + nYLen);
+            aVerLineSegment[1] = Point(nXPos, aVerLineSegment[0].Y() + nYLenOneThird);
+            aVerLineSegment.SetFlags(1, XPOLY_CONTROL);
+            aVerLineSegment[2] = Point(nXPos, aVerLineSegment[3].Y() - nYLenOneThird);
+            aVerLineSegment.SetFlags(2, XPOLY_CONTROL);
+            rPolyPoly.Insert(aVerLineSegment);
+        }
+
+        // increments
+        nXPos += nXLen;
+    }
+}
+
+// #96920# These defines parametrise the created raster
+// for interactions
+#define DRAG_CROOK_RASTER_MINIMUM   (4)
+#define DRAG_CROOK_RASTER_MAXIMUM   (15)
+#define DRAG_CROOK_RASTER_DISTANCE  (30)
+
 FASTBOOL SdrDragCrook::Beg()
 {
     bContortionAllowed=rView.IsCrookAllowed(FALSE);
@@ -1568,6 +1630,32 @@ FASTBOOL SdrDragCrook::Beg()
         aCenter=aMarkCenter;
         aStart=DragStat().GetStart();
         SetDragPolysSeparated();
+
+        // #96920# Add extended XOR frame raster
+        const sal_uInt16 nPageViewNum(rView.GetPageViewCount());
+        for(sal_uInt16 a(0); a < nPageViewNum; a++)
+        {
+            SdrPageView* pPV = rView.GetPageViewPvNum(a);
+            OutputDevice* pOut = (pPV->GetWinList())[0].GetOutputDevice();
+            Rectangle aPixelSize = pOut->LogicToPixel(aMarkRect);
+
+            sal_uInt32 nHorDiv(aPixelSize.GetWidth() / DRAG_CROOK_RASTER_DISTANCE);
+            sal_uInt32 nVerDiv(aPixelSize.GetHeight() / DRAG_CROOK_RASTER_DISTANCE);
+
+            if(nHorDiv > DRAG_CROOK_RASTER_MAXIMUM)
+                nHorDiv = DRAG_CROOK_RASTER_MAXIMUM;
+            if(nHorDiv < DRAG_CROOK_RASTER_MINIMUM)
+                nHorDiv = DRAG_CROOK_RASTER_MINIMUM;
+
+            if(nVerDiv > DRAG_CROOK_RASTER_MAXIMUM)
+                nVerDiv = DRAG_CROOK_RASTER_MAXIMUM;
+            if(nVerDiv < DRAG_CROOK_RASTER_MINIMUM)
+                nVerDiv = DRAG_CROOK_RASTER_MINIMUM;
+
+            ImplAddDragRaster(pPV->DragPoly0(), aMarkRect, nHorDiv, nVerDiv);
+            pPV->DragPoly() = pPV->DragPoly0();
+        }
+
         Show();
         return TRUE;
     } else {
@@ -1915,6 +2003,32 @@ FASTBOOL SdrDragDistort::Beg()
         aMarkRect=GetMarkedRect();
         aDistortedRect=XPolygon(aMarkRect);
         SetDragPolys();
+
+        // #96920# Add extended XOR frame raster
+        const sal_uInt16 nPageViewNum(rView.GetPageViewCount());
+        for(sal_uInt16 a(0); a < nPageViewNum; a++)
+        {
+            SdrPageView* pPV = rView.GetPageViewPvNum(a);
+            OutputDevice* pOut = (pPV->GetWinList())[0].GetOutputDevice();
+            Rectangle aPixelSize = pOut->LogicToPixel(aMarkRect);
+
+            sal_uInt32 nHorDiv(aPixelSize.GetWidth() / DRAG_CROOK_RASTER_DISTANCE);
+            sal_uInt32 nVerDiv(aPixelSize.GetHeight() / DRAG_CROOK_RASTER_DISTANCE);
+
+            if(nHorDiv > DRAG_CROOK_RASTER_MAXIMUM)
+                nHorDiv = DRAG_CROOK_RASTER_MAXIMUM;
+            if(nHorDiv < DRAG_CROOK_RASTER_MINIMUM)
+                nHorDiv = DRAG_CROOK_RASTER_MINIMUM;
+
+            if(nVerDiv > DRAG_CROOK_RASTER_MAXIMUM)
+                nVerDiv = DRAG_CROOK_RASTER_MAXIMUM;
+            if(nVerDiv < DRAG_CROOK_RASTER_MINIMUM)
+                nVerDiv = DRAG_CROOK_RASTER_MINIMUM;
+
+            ImplAddDragRaster(pPV->DragPoly0(), aMarkRect, nHorDiv, nVerDiv);
+            pPV->DragPoly() = pPV->DragPoly0();
+        }
+
         Show();
         return TRUE;
     } else {

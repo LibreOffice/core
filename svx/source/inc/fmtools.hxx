@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-14 13:48:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,10 +186,6 @@
 #include <sfx2/ctrlitem.hxx>
 #endif
 
-//  #ifndef _USR_ITERHLP_HXX //autogen wg. OInterfaceContainerHelper
-//  #include <usr/iterhlp.hxx>
-//  #endif
-
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
@@ -286,26 +282,9 @@ namespace svxform
 
 
 // Kopieren von Persistenten Objecten
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> clone(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>& _xObj);
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> cloneUsingProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>& _xObj);
-void CloneForms(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& _xSource, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& _xDest);
-
-// Suchen eines Wertes in einer StringListe
-// Fehler 0xFFFFFFFF (LIST_ENTRY_NOTFOUND)
-//------------------------------------------------------------------------------
-sal_uInt32 findValue(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& rList, const ::com::sun::star::uno::Any& rValue);
-
-::com::sun::star::uno::Sequence<sal_Int16> findValueINT16(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rList, const ::rtl::OUString& rValue, sal_Bool bOnlyFirst=sal_False );
-::com::sun::star::uno::Sequence<sal_Int16> findValue(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rList, const ::rtl::OUString& rValue, sal_Bool bOnlyFirst=sal_False );
-
-sal_uInt32 findValue1(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rList, const ::rtl::OUString& rValue);
-
-// geht von einer sortierten !!! sequence aus
-sal_Bool hasString(const ::rtl::OUString& aStr, const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rList);
 
 sal_Int32 findPos(const ::rtl::OUString& aStr, const ::com::sun::star::uno::Sequence< ::rtl::OUString>& rList);
-
-//  void checkArg(const ::com::sun::star::uno::Any& Element, Reflection* pRefl) throw( ::com::sun::star::lang::IllegalArgumentException );
 
 // Suchen in einer Indexliste nach einem Element
 sal_Bool  searchElement(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& xCont, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElement);
@@ -319,13 +298,6 @@ String getFormComponentAccessPath(const ::com::sun::star::uno::Reference< ::com:
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel> getXModel(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xIface);
 
 ::rtl::OUString getLabelName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xControlModel);
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> findConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xParent);
-
-// date conversion
-extern Date STANDARD_DATE;
-double ToStandardDate(const Date& rNullDate, double rVal);
-double ToNullDate(const Date& rNullDate, double rVal);
-
 
 // ===================================================================================================
 // = class CursorWrapper - eine Hilfsklasse, die parallel mit je einem ::com::sun::star::uno::Reference<XDatabaseUpdateCursor>,
@@ -391,7 +363,6 @@ public:
     sal_Bool isFirst() const                    { return m_xMoveOperations->isFirst(); }
     sal_Bool isLast() const                     { return m_xMoveOperations->isLast(); }
     void beforeFirst()                          { m_xMoveOperations->beforeFirst(); }
-//  void moveAfterLast()                    { m_xMoveOperations->moveAfterLast(); }
     sal_Bool first()                            { return m_xMoveOperations->first(); }
     sal_Bool last()                             { return m_xMoveOperations->last(); }
     sal_Int32 getRow() const                    { return m_xMoveOperations->getRow(); }
@@ -411,55 +382,6 @@ private:
 };
 
 
-//==================================================================
-// FmXSequenceIndexAccess - a class which wraps a ::com::sun::star::uno::Sequence so it's
-// elements may be accessed via XIndexAccess-methods
-//==================================================================
-
-template <class ElementType>
-class FmXSequenceIndexAccess : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XIndexAccess>
-{
-    ::com::sun::star::uno::Sequence<ElementType>    m_aElements;
-
-public:
-    FmXSequenceIndexAccess(const ::com::sun::star::uno::Sequence<ElementType>& _rElements) : m_aElements(_rElements) { }
-
-    // UNO
-    DECLARE_UNO3_DEFAULTS(FmXSequenceIndexAccess, cppu::WeakImplHelper1< ::com::sun::star::container::XIndexAccess> );
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
-
-    // XIndexAccess
-    virtual sal_Int32 getCount(void) const throw( ::com::sun::star::uno::RuntimeException ) { return m_aElements.getLength(); }
-    virtual ::com::sun::star::uno::Any getByIndex(sal_Int32 Index) const throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException )
-    {   // we implement this in-place as MSVC41 doesn't like a non-in-place template implementation with a throw-clause
-        if ((Index < 0) || (Index >= getCount()))
-        {
-            throw ::com::sun::star::lang::IndexOutOfBoundsException();
-        }
-
-        return ::com::sun::star::uno::Any(m_aElements.getConstArray() + Index, ::getReflection((ElementType*)NULL));
-    }
-
-    // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException)
-    { return ::getCppuType((ElementType*)NULL); }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException)
-    { return m_aElements.getLength() > 0; }
-
-protected:
-    ~FmXSequenceIndexAccess() { }
-};
-
-//------------------------------------------------------------------
-template <class ElementType>
-::com::sun::star::uno::Any SAL_CALL FmXSequenceIndexAccess<ElementType>::queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
-{
-    return cppu::WeakImplHelper1< ::com::sun::star::container::XIndexAccess >::queryInterface(type);
-}
-
-//==================================================================
-// Einfacher Adapter fuer Components
-//==================================================================
 class FmXDisposeMultiplexer;
 class FmXDisposeListener
 {
@@ -653,350 +575,22 @@ protected:
 };
 
 //==================================================================
-// Stringkonvertierung
-//==================================================================
-::rtl::OUString AnyToStr( const ::com::sun::star::uno::Any& aValue);
-::com::sun::star::uno::Any StringToAny( ::rtl::OUString aStr, ::com::sun::star::uno::TypeClass eTargetType );
-::com::sun::star::uno::Sequence< ::rtl::OUString> getEventMethods(const ::com::sun::star::uno::Type& type);
-
-//==================================================================
 // ...
 //==================================================================
-//sal_Int16 getControlTypeByModelName(const ::rtl::OUString& rModel);
-//::rtl::OUString   getModelNameByControlType(sal_Int16 nType);
 ::rtl::OUString     getServiceNameByControlType(sal_Int16 nType);
     // get a service name to create a model of the given type (OBJ_FM_...)
 sal_Int16       getControlTypeByObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject);
     // get the object type (OBJ_FM_...) from the services the object supports
 
-//  void TransferFormComponentProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xOld, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xNew);
 void TransferEventScripts(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xModel, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl,
     const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>& rTransferIfAvailable);
 
-sal_Int16   GridModel2ViewPos(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& rColumns, sal_Int16 nModelPos);
 sal_Int16   GridView2ModelPos(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& rColumns, sal_Int16 nViewPos);
-sal_Int16   GridViewColumnCount(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& rColumns);
 
 //==================================================================
 sal_Bool isLoadable(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xLoad);
 sal_Bool isRowSetAlive(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxRowSet);
     // checks if the ::com::sun::star::sdbcx::XColumnsSupplier provided by _rxRowSet supllies any columns
-
-
-//==================================================================
-//= a class wrapping an object implementing a sdb::DataColumn service
-//==================================================================
-class DataColumn
-{
-    // interfaces needed for sddb::Column
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>                m_xPropertySet;
-    // interfaces needed for sdb::DataColumn
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>                   m_xColumn;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>         m_xColumnUpdate;
-
-public:
-    DataColumn() { };
-    DataColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxIFace);
-    // if the object behind _rxIFace doesn't fully support the DataColumn service,
-    // (which is checked via the supported interfaces) _all_ members will be set to
-    // void !, even if the object has some of the needed interfaces.
-
-    sal_Bool is() const { return m_xColumn.is(); }
-    sal_Bool Is() const { return m_xColumn.is(); }
-    sal_Bool supportsUpdate() const { return m_xColumnUpdate.is(); }
-
-    DataColumn* operator ->() { return this; }
-    //  operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> () const { return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> m_xColumn; }
-    operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> () const{ return m_xColumn;; }
-
-    // 'conversions'
-    operator const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>&() const                { return m_xPropertySet; }
-    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>&() const                   { return m_xColumn; }
-    operator const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>&() const
-    {
-        DBG_ASSERT(m_xColumnUpdate.is() , "operator XColumnUpdate(): is NULL!");
-        return m_xColumnUpdate;
-    }
-
-    // das normale queryInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
-    { return m_xColumn->queryInterface(type); }
-
-    // ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> getPropertySetInfo() const throw( ::com::sun::star::uno::RuntimeException );
-    inline void setPropertyValue(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::uno::Any getPropertyValue(const ::rtl::OUString& PropertyName) const throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-    inline void addPropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>& xListener) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-    inline void removePropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>& aListener) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-    inline void addVetoableChangeListener(const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener>& aListener) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-    inline void removeVetoableChangeListener(const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener>& aListener) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
-
-    // ::com::sun::star::sdb::XColumn
-    inline sal_Bool wasNull() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::rtl::OUString getString() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline sal_Bool getBoolean() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline sal_Int8 getByte() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline sal_Int16 getShort() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline sal_Int32 getInt() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline sal_Int64 getLong() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline float getFloat() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline double getDouble() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::uno::Sequence< sal_Int8 > getBytes() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::util::Date getDate() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::util::Time getTime() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::util::DateTime  getTimestamp() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> getBinaryStream() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> getCharacterStream() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::uno::Any getObject(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& typeMap) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef> getRef() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob> getBlob() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob> getClob() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray> getArray() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-
-    // XColumnUpdate
-    inline void updateNull(void) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateBoolean(sal_Bool x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateByte(sal_Int8 x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateShort(sal_Int16 x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateInt(sal_Int32 x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateLong(sal_Int64 x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateFloat(float x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateDouble(double x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateString(const ::rtl::OUString& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateBytes(const ::com::sun::star::uno::Sequence< sal_Int8 >& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateDate(const com::sun::star::util::Date& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateTime(const ::com::sun::star::util::Time& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateTimestamp(const ::com::sun::star::util::DateTime& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateBinaryStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateCharacterStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateObject(const ::com::sun::star::uno::Any& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-    inline void updateNumericObject(const ::com::sun::star::uno::Any& x, sal_Int32 scale) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-};
-
-// ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> DataColumn::getPropertySetInfo() const throw( ::com::sun::star::uno::RuntimeException )
-{
-    return m_xPropertySet->getPropertySetInfo();
-}
-
-void DataColumn::setPropertyValue(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xPropertySet->setPropertyValue(aPropertyName, aValue);
-}
-
-::com::sun::star::uno::Any DataColumn::getPropertyValue(const ::rtl::OUString& PropertyName) const throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xPropertySet->getPropertyValue(PropertyName);
-}
-
-void DataColumn::addPropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>& xListener) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xPropertySet->addPropertyChangeListener(aPropertyName, xListener);
-}
-
-void DataColumn::removePropertyChangeListener(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>& aListener) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xPropertySet->removePropertyChangeListener(aPropertyName, aListener);
-}
-
-void DataColumn::addVetoableChangeListener(const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener>& aListener) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xPropertySet->addVetoableChangeListener(PropertyName, aListener);
-}
-
-void DataColumn::removeVetoableChangeListener(const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener>& aListener) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xPropertySet->removeVetoableChangeListener(PropertyName, aListener);
-}
-
-// ::com::sun::star::sdb::XColumn
-sal_Bool DataColumn::wasNull() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->wasNull();
-}
-
-::rtl::OUString DataColumn::getString() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getString();
-}
-
-sal_Bool DataColumn::getBoolean() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getBoolean();
-}
-
-sal_Int8 DataColumn::getByte() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getByte();
-}
-
-sal_Int16 DataColumn::getShort() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getShort();
-}
-
-sal_Int32 DataColumn::getInt() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getInt();
-}
-
-sal_Int64 DataColumn::getLong() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getLong();
-}
-
-float DataColumn::getFloat() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getFloat();
-}
-
-double DataColumn::getDouble() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getDouble();
-}
-
-::com::sun::star::uno::Sequence< sal_Int8 > DataColumn::getBytes() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getBytes();
-}
-
-::com::sun::star::util::Date DataColumn::getDate() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getDate();
-}
-
-::com::sun::star::util::Time DataColumn::getTime() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getTime();
-}
-
-::com::sun::star::util::DateTime DataColumn::getTimestamp() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getTimestamp();
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> DataColumn::getBinaryStream() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getBinaryStream();
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> DataColumn::getCharacterStream() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getCharacterStream();
-}
-
-::com::sun::star::uno::Any DataColumn::getObject(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& typeMap) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getObject(typeMap);
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef> DataColumn::getRef() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getRef();
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob> DataColumn::getBlob() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getBlob();
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob> DataColumn::getClob() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getClob();
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray> DataColumn::getArray() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    return m_xColumn->getArray();
-}
-
-// XColumnUpdate
-void DataColumn::updateNull() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateNull();
-}
-
-void DataColumn::updateBoolean(sal_Bool x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateBoolean(x);
-}
-
-void DataColumn::updateByte(sal_Int8 x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateByte(x);
-}
-
-void DataColumn::updateShort(sal_Int16 x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateShort(x);
-}
-
-void DataColumn::updateInt(sal_Int32 x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateInt(x);
-}
-
-void DataColumn::updateLong(sal_Int64 x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateLong(x);
-}
-
-void DataColumn::updateFloat(float x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateFloat(x);
-}
-
-void DataColumn::updateDouble(double x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateDouble(x);
-}
-
-void DataColumn::updateString(const ::rtl::OUString& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateString(x);
-}
-
-void DataColumn::updateBytes(const ::com::sun::star::uno::Sequence< sal_Int8 >& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateBytes(x);
-}
-
-void DataColumn::updateDate(const com::sun::star::util::Date& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateDate(x);
-}
-
-void DataColumn::updateTime(const ::com::sun::star::util::Time& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateTime(x);
-}
-
-void DataColumn::updateTimestamp(const ::com::sun::star::util::DateTime& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateTimestamp(x);
-}
-
-void DataColumn::updateBinaryStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateBinaryStream(x, length);
-}
-
-void DataColumn::updateCharacterStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateCharacterStream(x, length);
-}
-
-void DataColumn::updateObject(const ::com::sun::star::uno::Any& x) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateObject(x);
-}
-
-void DataColumn::updateNumericObject(const ::com::sun::star::uno::Any& x, sal_Int32 scale) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
-{
-    m_xColumnUpdate->updateNumericObject(x, scale);
-}
-
-
 
 #endif // _SVX_FMTOOLS_HXX
 

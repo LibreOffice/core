@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedprx.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-22 15:42:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,6 @@ void SvxAccessibleTextIndex::SetEEIndex( USHORT nEEIndex, const SvxTextForwarder
 
     // calculate unknowns
     USHORT                  nCurrField, nFieldCount = rTF.GetFieldCount( GetParagraph() );
-    sal_Int32               nTmp;
 
     mnIndex = nEEIndex;
 
@@ -283,9 +282,8 @@ void SvxAccessibleTextIndex::SetEEIndex( USHORT nEEIndex, const SvxTextForwarder
             break;
         }
 
-        // nCharIndex = Max(aFieldInfo.aCurrentText.Len(), 1);
-        nTmp = aFieldInfo.aCurrentText.Len();
-        mnIndex += nTmp > 1 ? nTmp-1 : 0 ;
+        // #106010#
+        mnIndex += ::std::max(aFieldInfo.aCurrentText.Len()-1, 0);
     }
 }
 
@@ -304,7 +302,6 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
 
     // calculate unknowns
     USHORT                  nCurrField, nFieldCount = rTF.GetFieldCount( GetParagraph() );
-    sal_Int32               nTmp;
 
     DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
@@ -339,21 +336,18 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
         if( aFieldInfo.aPosition.nIndex > mnEEIndex )
             break;
 
-        // this is: nEEIndex = Max(aFieldInfo.aCurrentText.Len(), 1);
-        nTmp = aFieldInfo.aCurrentText.Len();
-        mnEEIndex -= nTmp > 1 ? nTmp : 1 ;
+        // #106010#
+        mnEEIndex -= ::std::max(aFieldInfo.aCurrentText.Len()-1, 0);
 
         // we're within a field
-        if( aFieldInfo.aPosition.nIndex > mnEEIndex )
+        if( aFieldInfo.aPosition.nIndex >= mnEEIndex )
         {
             AreInField();
-            SetFieldOffset( aFieldInfo.aCurrentText.Len() - aFieldInfo.aPosition.nIndex + mnEEIndex, aFieldInfo.aCurrentText.Len() );
+            SetFieldOffset( ::std::max(aFieldInfo.aCurrentText.Len()-1, 0) - (aFieldInfo.aPosition.nIndex - mnEEIndex),
+                            aFieldInfo.aCurrentText.Len() );
             mnEEIndex = aFieldInfo.aPosition.nIndex ;
             break;
         }
-
-        // now we're after the field
-        mnEEIndex += 1;
     }
 }
 

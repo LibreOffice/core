@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 14:04:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,6 @@ class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
                     m_xBrowserComponentWindow;
 
 protected:
-    virtual void Resize();
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
     virtual void FillInfo( SfxChildWinInfo& rInfo ) const;
     virtual sal_Bool Close();

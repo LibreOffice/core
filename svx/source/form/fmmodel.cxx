@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-14 08:48:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,12 @@ struct FmFormModelImplData
     FmXUndoEnvironment*     pUndoEnv;
     XubString               sNextPageId;
     sal_Bool                bOpenInDesignIsDefaulted;
+    sal_Bool                bMovingPage;
 
     FmFormModelImplData()
         :pUndoEnv( NULL )
         ,bOpenInDesignIsDefaulted( sal_True )
+        ,bMovingPage( sal_False )
     {
     }
 };
@@ -336,14 +338,57 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     SdrModel::InsertPage( pPage, nPos );
 
 #ifndef SVX_LIGHT
-    if (pPage)
-        m_pImpl->pUndoEnv->AddForms(((FmFormPage*)pPage)->GetForms());
+    if ( !m_pImpl->bMovingPage )
+    {
+        // this flag here is kind of a hack.
+        // When a page is moved, the SdrModel::MovePage calls an InsertPage only, but
+        // no preceding RemovePage. Thus, we (as a derivee) don't have a chance to see
+        // that the page which is just being inserted is (in real) already a part of the
+        // model. Especially, we do not have a change to notice that the UndoEnvironment
+        // already _knows_ the forms we're just going to add below.
+        //
+        // The real solution to this would have been to fix SdrModel::MovePage, which
+        // is buggy in it's current form (as it violates the semantics of InsertPage, which
+        // is: insert a page which /currently is not part of any model/).
+        // However, this change in the SdrModel is much too risky.
+        //
+        // Another solution to this would have been to track (in the UndoEnv) which pages
+        // we know, and ignore any AddForms calls which are for such a page.
+        // But I refuse to do this (much more) work to hack a bug in the SdrModel.
+        //
+        // I the decision is to do this "small hack" here (which I don't consider really
+        // bad).
+        //
+        // 2002-01-10 - #i3235# - fs@openoffice.org
+        //
+        if ( pPage )
+            m_pImpl->pUndoEnv->AddForms( static_cast< FmFormPage* >( pPage )->GetForms() );
+    }
 #endif
 }
 
 /*************************************************************************
 |*
-|* InsertPage
+|* MovePage
+|*
+\************************************************************************/
+void FmFormModel::MovePage( USHORT nPgNum, USHORT nNewPos )
+{
+#ifndef SVX_LIGHT
+    m_pImpl->bMovingPage = sal_True;
+        // see InsertPage for this
+#endif
+
+    SdrModel::MovePage( nPgNum, nNewPos );
+
+#ifndef SVX_LIGHT
+    m_pImpl->bMovingPage = sal_False;
+#endif
+}
+
+/*************************************************************************
+|*
+|* RemovePage
 |*
 \************************************************************************/
 SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)

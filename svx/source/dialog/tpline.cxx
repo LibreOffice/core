@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 07:24:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,8 +1658,22 @@ IMPL_STATIC_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
     }
     if( pBmpInfo )
     {
-        Image aImage( pItem->GetGraphic()->GetBitmap() );
-        pPopup->SetItemImage( pBmpInfo->nItemId, aImage );
+        if( pItem->GetGraphic() )
+        {
+            Bitmap aBitmap(pItem->GetGraphic()->GetBitmap());
+            Size aSize(aBitmap.GetSizePixel());
+            if(aSize.Width()  > MAX_BMP_WIDTH ||
+               aSize.Height() > MAX_BMP_HEIGHT)
+            {
+                BOOL bWidth = aSize.Width() > aSize.Height();
+                double nScale = bWidth ?
+                    (double)MAX_BMP_WIDTH / (double)aSize.Width():
+                    (double)MAX_BMP_HEIGHT / (double)aSize.Height();
+                aBitmap.Scale(nScale, nScale);
+            }
+            Image aImage(aBitmap);
+            pPopup->SetItemImage( pBmpInfo->nItemId, aImage );
+        }
     }
 
     return 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 08:16:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ void FmXUndoEnvironment::Inserted(SdrObject* pObj)
     if (pObj->GetObjInventor() == FmFormInventor)
     {
         FmFormObj* pFormObj = PTR_CAST(FmFormObj, pObj);
-        Inserted(pFormObj);
+        Inserted( pFormObj );
     }
     else if (pObj->IsGroupObject())
     {
@@ -358,6 +358,10 @@ void FmXUndoEnvironment::Inserted(SdrObject* pObj)
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
 {
+    DBG_ASSERT( pObj, "FmXUndoEnvironment::Inserted: invalid object!" );
+    if ( !pObj )
+        return;
+
     // ist das Control noch einer Form zugeordnet
     Reference< XInterface >  xModel = pObj->GetUnoControlModel();
     Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
@@ -426,6 +430,10 @@ void FmXUndoEnvironment::Removed(SdrObject* pObj)
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 {
+    DBG_ASSERT( pObj, "FmXUndoEnvironment::Removed: invalid object!" );
+    if ( !pObj )
+        return;
+
     // ist das Control noch einer Form zugeordnet
     Reference< XInterface >  xModel = pObj->GetUnoControlModel();
     Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
@@ -620,23 +628,6 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
     }
 }
 
-// XVetoableChangeListener
-//------------------------------------------------------------------------------
-void SAL_CALL FmXUndoEnvironment::vetoableChange(const PropertyChangeEvent& aEvent) throw( PropertyVetoException, RuntimeException )
-{
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
-    if (aEvent.PropertyName == FM_PROP_DATASOURCE)
-    {
-        // if the database form belongs to a connection
-        // it is not possible to change the connection
-        if (findConnection(aEvent.Source).is())
-        {
-            ::rtl::OUString aMessage = ::rtl::OUString(SVX_RES(RID_STR_VETO_DATASOURCE));
-            throw(PropertyVetoException(aMessage, (XVetoableChangeListener*)this));
-        }
-    }
-}
-
 // XContainerListener
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
@@ -763,12 +754,7 @@ void FmXUndoEnvironment::AddElement(const Reference< XInterface > & Element)
         // auf Properties horchen
         Reference< XPropertySet >  xSet(Element, UNO_QUERY);
         if (xSet.is())
-        {
             xSet->addPropertyChangeListener(::rtl::OUString(), (XPropertyChangeListener*)this);
-            Reference< XForm >  xForm(xSet, UNO_QUERY);
-            if (xForm.is())
-                xSet->addVetoableChangeListener(FM_PROP_DATASOURCE, (XVetoableChangeListener*)this);
-        }
     }
 }
 
@@ -786,8 +772,6 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface > & Element)
             Reference< XForm >  xForm(xSet, UNO_QUERY);
             if (xForm.is())
             {
-                xSet->removeVetoableChangeListener(FM_PROP_DATASOURCE, (XVetoableChangeListener*)this);
-
                 // reset the ActiveConnection if the form is to be removed. This will (should) free the resources
                 // associated with this connection
                 // 86299 - 05/02/2001 - frank.schoenheit@germany.sun.com
@@ -966,11 +950,12 @@ void FmUndoPropertyAction::Redo()
 String FmUndoPropertyAction::GetComment() const
 {
     String aStr(static_STR_UNDO_PROPERTY);
-    sal_uInt16 nId = (sal_uInt16)FmPropertyInfoService::getPropertyId(aPropertyName);
-    if (nId)
-        aStr.SearchAndReplace('#', FmPropertyInfoService::getPropertyTranslation(nId));
-    else
-        aStr.SearchAndReplace('#', aPropertyName);
+
+    ::rtl::OUString sPropertyDisplayName = FmPropertyInfoService::getPropertyTranslation( aPropertyName );
+    if ( sPropertyDisplayName.getLength() )
+        sPropertyDisplayName = aPropertyName;
+
+    aStr.SearchAndReplace( '#', sPropertyDisplayName );
     return aStr;
 }
 

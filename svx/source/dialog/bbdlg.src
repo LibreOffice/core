@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bbdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:34:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabDialog RID_SVXDLG_BBDLG
     Text [ italian ] = "Bordo / Sfondo" ;
     Text [ portuguese_brazilian ] = "Margem / Fundo" ;
     Text [ portuguese ] = "Contorno/Plano de fundo" ;
-    Text [ finnish ] = "Reuna/tausta" ;
+    Text [ finnish ] = "Reuna / tausta" ;
     Text [ danish ] = "Ramme / Baggrund" ;
     Text [ french ] = "Bordure / Arri�re-plan" ;
     Text [ swedish ] = "Inramning/ Bakgrund" ;
@@ -104,7 +104,7 @@ TabDialog RID_SVXDLG_BBDLG
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
                 Text [ dutch ] = "Omranding" ;
-                Text [ spanish ] = "Borde" ;
+                Text [ spanish ] = "Bordes" ;
                 Text [ english_us ] = "Borders" ;
                 Text[ chinese_simplified ] = "边框";
                 Text[ russian ] = "����������";
@@ -116,7 +116,8 @@ TabDialog RID_SVXDLG_BBDLG
                 Text[ korean ] = "테두리";
                 Text[ turkish ] = "Kenarl�k";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Borde";
+                Text[ catalan ] = "Vores";
+                Text[ thai ] = "เส้นขอบ";
             };
             PageItem
             {
@@ -144,7 +145,8 @@ TabDialog RID_SVXDLG_BBDLG
                 Text[ korean ] = "배경";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Fondo";
+                Text[ catalan ] = "Fons";
+                Text[ thai ] = "พื้นหลัง";
             };
         };
     };
@@ -158,9 +160,13 @@ TabDialog RID_SVXDLG_BBDLG
     Text[ korean ] = "테두리 / 배경";
     Text[ turkish ] = "Kenarl�k / Artalan";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Bordes / Fondo";
+    Text[ catalan ] = "Vora / Fons";
+    Text[ thai ] = "เส้นขอบ / พื้นหลัง";
 };
  // ********************************************************************** EOF
+
+
+
 
 
 

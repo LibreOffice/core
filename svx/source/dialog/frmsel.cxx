@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-10-29 14:35:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,6 +954,7 @@ SvxFrameSelector::SvxFrameSelector( Window* pParent,
         bIsClicked      ( FALSE ),
         pImpl           ( new SvxFrameSelector_Impl( this ) )
 {
+    EnableRTL( false ); // #107808# don't mirror the mouse handling
 }
 /* -----------------------------01.02.2002 16:47------------------------------
 
@@ -1853,7 +1854,12 @@ void SvxFrameSelector::MouseButtonUp( const MouseEvent& rMEvt )
      * o Click auf die gleiche Linie -> Toggle SHOW/HIDE/DONT_CARE
      */
 
+    BOOL bWasSelected = IsAnyLineSelected_Impl();
     GrabFocus();
+    if ( !bWasSelected )
+        pImpl->aTopLine.bIsSelected = FALSE;
+
+
     if ( rMEvt.IsLeft() )
     {
         Point aBtnUpPos( rMEvt.GetPosPixel() );
@@ -1864,36 +1870,24 @@ void SvxFrameSelector::MouseButtonUp( const MouseEvent& rMEvt )
 
             // wenn Linien auf DontCare sind, muessen diese auf HIDE
             // gesetzt werden (ausser der aktuellen Linie)
+            typedef ::std::pair<SvxFrameLine*,Rectangle*> TOuterPair;
+            TOuterPair eTypes[] =   {
+                                        TOuterPair(&pImpl->aLeftLine,&pImpl->aSpotLeft),
+                                        TOuterPair(&pImpl->aRightLine,&pImpl->aSpotRight),
+                                        TOuterPair(&pImpl->aTopLine,&pImpl->aSpotTop),
+                                        TOuterPair(&pImpl->aBottomLine,&pImpl->aSpotBottom),
+                                        TOuterPair(&pImpl->aVerLine,&pImpl->aSpotVer),
+                                        TOuterPair(&pImpl->aHorLine,&pImpl->aSpotHor)
+                                    };
 
-            if ( pImpl->aLeftLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !pImpl->aSpotLeft.IsInside( aBtnUpPos ) )
+            for (sal_Int32 i=0; i < sizeof(eTypes)/sizeof(TOuterPair); ++i)
             {
-                pImpl->aLeftLine.SetStyle( SvxFrameLine::NO_LINE );
-            }
-            if ( pImpl->aRightLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !pImpl->aSpotRight.IsInside( aBtnUpPos ) )
-            {
-                pImpl->aRightLine.SetStyle( SvxFrameLine::NO_LINE );
-            }
-            if ( pImpl->aTopLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !pImpl->aSpotTop.IsInside( aBtnUpPos ) )
-            {
-                pImpl->aTopLine.SetStyle( SvxFrameLine::NO_LINE );
-            }
-            if ( pImpl->aBottomLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !pImpl->aSpotBottom.IsInside( aBtnUpPos ) )
-            {
-                pImpl->aBottomLine.SetStyle( SvxFrameLine::NO_LINE );
-            }
-            if ( pImpl->aVerLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !pImpl->aSpotVer.IsInside( aBtnUpPos ) )
-            {
-                pImpl->aVerLine.SetStyle( SvxFrameLine::NO_LINE );
-            }
-            if ( pImpl->aHorLine.aState == SVX_FRMLINESTATE_DONT_CARE &&
-                 !pImpl->aSpotHor.IsInside( aBtnUpPos ) )
-            {
-                pImpl->aHorLine.SetStyle( SvxFrameLine::NO_LINE );
+
+                if ( eTypes[i].first->aState == SVX_FRMLINESTATE_DONT_CARE &&
+                     !eTypes[i].second->IsInside( aBtnUpPos ) )
+                {
+                    eTypes[i].first->SetStyle( SvxFrameLine::NO_LINE );
+                }
             }
         }
 
@@ -2126,10 +2120,14 @@ void SvxFrameSelector::ToggleOneLine(SvxFrameLine &aCurLine)
     if (aCurLine.GetState() == SVX_FRMLINESTATE_HIDE)
     {
         aCurLine.SetState(SVX_FRMLINESTATE_SHOW);
+        //  aCurLine.aStyle = SvxFrameLine::THIN_LINE;
+        aCurLine.SetStyle( pImpl->aCurLineStyle );
+        aCurLine.aColor = pImpl->aCurLineCol;
     }
     else if (aCurLine.GetState() == SVX_FRMLINESTATE_SHOW)
     {
         aCurLine.SetState(SVX_FRMLINESTATE_HIDE);
+        aCurLine.SetStyle( SvxFrameLine::NO_LINE );
     }
     // No need to handle SVX_FRMLINESTATE_DONT_CARE
     // else
@@ -2139,7 +2137,7 @@ void SvxFrameSelector::ToggleOneLine(SvxFrameLine &aCurLine)
 
 void SvxFrameSelector::ToggleAllSelectedLines()
 {
-    SvxFrameSelectorLine eRet = SVX_FRMSELLINE_NONE;
+
     if( pImpl->aTopLine.bIsSelected )    ToggleOneLine(pImpl->aTopLine);
     if( pImpl->aLeftLine.bIsSelected )   ToggleOneLine(pImpl->aLeftLine);
     if( pImpl->aRightLine.bIsSelected )  ToggleOneLine(pImpl->aRightLine);

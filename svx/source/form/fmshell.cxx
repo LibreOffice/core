@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-14 14:24:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,9 +1186,11 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if ( pArgs )
             {
                 const SfxPoolItem* pItem;
-                if( (pArgs->GetItemState(SID_FM_RECORD_ABSOLUTE, sal_True, &pItem)) == SFX_ITEM_SET )
+                if( (pArgs->GetItemState(FN_PARAM_1, sal_True, &pItem)) == SFX_ITEM_SET )
                 {
-                    nRecord = Max((((const FmFormInfoItem*)pItem)->GetInfo().Pos), (sal_Int32)0);
+                    const SfxInt32Item* pTypedItem = PTR_CAST( SfxInt32Item, pItem );
+                    if ( pTypedItem )
+                        nRecord = Max( pTypedItem->GetValue(), sal_Int32(0) );
                 }
             }
             else
@@ -1196,9 +1198,9 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 FmInputRecordNoDialog dlg(NULL);
                 dlg.SetValue(xCursor->getRow());
                 if (dlg.Execute() == RET_OK)
-                {
-                    nRecord = dlg.GetValue() - 1;
-                }
+                    nRecord = dlg.GetValue();
+
+                rReq.AppendItem( SfxInt32Item( FN_PARAM_1, nRecord ) );
             }
 
             if (nRecord != -1)
@@ -1207,12 +1209,9 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 sal_Bool    bFinal      = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
                 sal_Int32  nRecordCount= ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_ROWCOUNT));
 
-                if (bFinal && (sal_Int32)nRecord >= nRecordCount)
-                {
-                    Sound::Beep();
-                    rReq.Done();
-                    break;
-                }
+                if ( bFinal && (sal_Int32)nRecord >= nRecordCount )
+                    nRecord = nRecordCount - 1;
+
                 if (GetImpl()->SaveModified(GetImpl()->getNavController()))
                     DO_SAFE( xCursor->absolute(nRecord); );
             }
@@ -1903,13 +1902,13 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                             {
                                 if (bIsNew)
                                     nPos = ++nCount;
-                                rSet.Put(FmFormInfoItem(nWhich, FmFormInfo(nPos, nCount, sal_False)));
+                                rSet.Put( SfxInt32Item( nWhich, nPos ) );
                                 bEnable = sal_True;
                             }
                         }
                         else
                         {
-                            rSet.Put(FmFormInfoItem(nWhich, FmFormInfo(nPos, -1, sal_False)));
+                            rSet.Put( SfxInt32Item( nWhich, nPos ) );
                             bEnable = sal_True;
                         }
                     }

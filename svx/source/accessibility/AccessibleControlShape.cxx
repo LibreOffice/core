@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-23 13:12:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,20 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
+#include <com/sun/star/form/FormComponentType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
+#include <unotools/accessiblestatesethelper.hxx>
 #endif
 #ifndef _SVDOUNO_HXX
 #include "svdouno.hxx"
@@ -92,35 +101,111 @@
 #ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 #include "SvxShapeTypes.hxx"
 #endif
+#ifndef SVX_ACCESSIBLE_WRAPPER_HXX
+#include "accessiblewrapper.hxx"
+#endif
 #include "svdstr.hrc"
 #include <algorithm>
 
-using namespace accessibility;
-using namespace ::rtl;
-using namespace ::com::sun::star;
+using namespace ::comphelper;
+using namespace ::accessibility;
 using namespace ::drafts::com::sun::star::accessibility;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::reflection::XProxyFactory;
-using ::com::sun::star::uno::XAggregation;
-using ::com::sun::star::lang::XComponent;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::reflection;
+using namespace ::com::sun::star::drawing;
 
-//=====  internal  ============================================================
+//--------------------------------------------------------------------
+namespace
+{
+    //................................................................
+    const ::rtl::OUString& lcl_getNamePropertyName( )
+    {
+        static ::rtl::OUString s_sNamePropertyName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
+        return s_sNamePropertyName;
+    }
+    //................................................................
+    const ::rtl::OUString& lcl_getDescPropertyName( )
+    {
+        static ::rtl::OUString s_sDescPropertyDesc( RTL_CONSTASCII_USTRINGPARAM( "HelpText" ) );
+        return s_sDescPropertyDesc;
+    }
+    //................................................................
+    const ::rtl::OUString& lcl_getLabelPropertyName( )
+    {
+        static ::rtl::OUString s_sLabelPropertyLabel( RTL_CONSTASCII_USTRINGPARAM( "Label" ) );
+        return s_sLabelPropertyLabel;
+    }
+    //................................................................
+    // return the property which should be used as AccessibleName
+    const ::rtl::OUString& lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
+    {
+        if ( _rxPSI.is() && _rxPSI->hasPropertyByName( lcl_getLabelPropertyName() ) )
+            return lcl_getLabelPropertyName();
+        else
+            return lcl_getNamePropertyName();
+    }
 
+    //................................................................
+    // determines whether or not a state which belongs to the inner context needs to be forwarded to the "composed"
+    // context
+    sal_Bool    isComposedState( const sal_Int16 _nState )
+    {
+        return  (   ( AccessibleStateType::INVALID != _nState )
+                &&  ( AccessibleStateType::DEFUNC != _nState )
+                &&  ( AccessibleStateType::ICONIFIED != _nState )
+                &&  ( AccessibleStateType::RESIZABLE != _nState )
+                &&  ( AccessibleStateType::SELECTABLE != _nState )
+                &&  ( AccessibleStateType::SHOWING != _nState )
+                &&  ( AccessibleStateType::MANAGES_DESCENDANT != _nState )
+                &&  ( AccessibleStateType::VISIBLE != _nState )
+                );
+    }
+
+    //................................................................
+    /** determines whether the given control is in alive mode
+    */
+    inline  sal_Bool    isAliveMode( const Reference< XControl >& _rxControl )
+    {
+        OSL_PRECOND( _rxControl.is(), "AccessibleControlShape::isAliveMode: invalid control" );
+        return _rxControl.is() && !_rxControl->isDesignMode();
+    }
+}
+
+//=============================================================================
+//= AccessibleControlShape
+//=============================================================================
+
+//-----------------------------------------------------------------------------
 AccessibleControlShape::AccessibleControlShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
     :      AccessibleShape (rShapeInfo, rShapeTreeInfo)
-    ,   mbListeningForName( sal_False )
-    ,   mbListeningForDesc( sal_False )
-    ,   mbDisposeNativeContext( sal_False )
+    ,   m_bListeningForName( sal_False )
+    ,   m_bListeningForDesc( sal_False )
+    ,   m_bDisposeNativeContext( sal_False )
+    ,   m_bMultiplexingStates( sal_False )
+    ,   m_pChildManager( new OWrappedAccessibleChildrenManager( getProcessServiceFactory() ) )
 {
+    m_pChildManager = new OWrappedAccessibleChildrenManager( getProcessServiceFactory() );
+    m_pChildManager->acquire();
+
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        m_pChildManager->setOwningAccessible( this );
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
-
-
-
+//-----------------------------------------------------------------------------
 AccessibleControlShape::~AccessibleControlShape (void)
 {
+    m_pChildManager->release();
+    m_pChildManager = NULL;
+
     if ( m_xControlContextProxy.is() )
         m_xControlContextProxy->setDelegator( NULL );
     m_xControlContextProxy.clear();
@@ -128,7 +213,7 @@ AccessibleControlShape::~AccessibleControlShape (void)
         // ourself) to this proxy, and thus delete it
 }
 
-//=============================================================================
+//-----------------------------------------------------------------------------
 SdrObject* AccessibleControlShape::getSdrObject() const
 {
     return GetSdrObjectFromXShape (mxShape);
@@ -175,19 +260,41 @@ void AccessibleControlShape::Init()
 
         if ( pViewWindow && pUnoObjectImpl )
         {
+            // .................................................................
             // get the context of the control - it will be our "inner" context
-            m_xControlModes = m_xControlModes.query( pUnoObjectImpl->GetUnoControl( pViewWindow ) );
-            Reference< XAccessible > xControlAccessible( m_xControlModes, uno::UNO_QUERY );
+            m_xUnoControl = pUnoObjectImpl->GetUnoControl( pViewWindow );
+            Reference< XModeChangeBroadcaster > xControlModes( m_xUnoControl, UNO_QUERY );
+            Reference< XAccessible > xControlAccessible( xControlModes, UNO_QUERY );
             Reference< XAccessibleContext > xNativeControlContext;
             if ( xControlAccessible.is() )
                 xNativeControlContext = xControlAccessible->getAccessibleContext();
             OSL_ENSURE( xNativeControlContext.is(), "AccessibleControlShape::Init: no AccessibleContext for the control!" );
+            m_aControlContext = WeakReference< XAccessibleContext >( xNativeControlContext );
 
-            // get a proxy for this context
+            // .................................................................
+            // add as listener to the context - we want to multiplex some states
+            if ( isAliveMode( m_xUnoControl ) && xNativeControlContext.is() )
+            {   // (but only in alive mode)
+                startStateMultiplexing( );
+            }
+
+            // now that we have all information about our control, do some adjustments
+            adjustAccessibleRole();
+            initializeComposedState();
+
+            // some initialization for our child manager, which is used in alive mode only
+            if ( isAliveMode( m_xUnoControl ) )
+            {
+                Reference< XAccessibleStateSet > xStates( getAccessibleStateSet( ) );
+                OSL_ENSURE( xStates.is(), "AccessibleControlShape::AccessibleControlShape: no inner state set!" );
+                m_pChildManager->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANT ) );
+            }
+
+            // .................................................................
+            // finally, aggregate a proxy for the control context
             // first a factory for the proxy
             Reference< XProxyFactory > xFactory;
-            xFactory = xFactory.query( ::comphelper::createProcessComponent(
-                ::rtl::OUString::createFromAscii( "com.sun.star.reflection.ProxyFactory" ) ) );
+            xFactory = xFactory.query( createProcessComponent( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ) ) );
             OSL_ENSURE( xFactory.is(), "AccessibleControlShape::Init: could not create a proxy factory!" );
             // then the proxy itself
             if ( xFactory.is() && xNativeControlContext.is() )
@@ -204,46 +311,52 @@ void AccessibleControlShape::Init()
                 }
                 osl_decrementInterlockedCount( &m_refCount );
 
-                mbDisposeNativeContext = sal_True;
+                m_bDisposeNativeContext = sal_True;
 
                 // Finally, we need to add ourself as mode listener to the control. In case the mode switches,
                 // we need to dispose ourself.
-                m_xControlModes->addModeChangeListener( this );
+                xControlModes->addModeChangeListener( this );
             }
         }
     }
-    catch( const uno::Exception& )
+    catch( const Exception& )
     {
         OSL_ENSURE( sal_False, "AccessibleControlShape::Init: could not \"aggregate\" the controls XAccessibleContext!" );
     }
 }
 
-//=====  XAccessible  =========================================================
-
-Reference<XAccessibleContext> SAL_CALL
-    AccessibleControlShape::getAccessibleContext (void)
-    throw (::com::sun::star::uno::RuntimeException)
+//-----------------------------------------------------------------------------
+Reference< XAccessibleContext > SAL_CALL AccessibleControlShape::getAccessibleContext(void) throw (RuntimeException)
 {
     return AccessibleShape::getAccessibleContext ();
 }
 
 
-//=====  XServiceInfo  ========================================================
-
-::rtl::OUString SAL_CALL
-    AccessibleControlShape::getImplementationName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+//-----------------------------------------------------------------------------
+void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleControlShape"));
+    if ( !isAliveMode( m_xUnoControl ) )
+    {
+        // in design mode, we simply forward the request to the base class
+        AccessibleShape::grabFocus();
+    }
+    else
+    {
+        Reference< XWindow > xWindow( m_xUnoControl, UNO_QUERY );
+        OSL_ENSURE( xWindow.is(), "AccessibleControlShape::grabFocus: invalid control!" );
+        if ( xWindow.is() )
+            xWindow->setFocus();
+    }
 }
 
+//-----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL AccessibleControlShape::getImplementationName(void) throw (RuntimeException)
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.accessibility.AccessibleControlShape" ) );
+}
 
-
-
-/// Set this object's name if is different to the current name.
-::rtl::OUString
-    AccessibleControlShape::CreateAccessibleBaseName (void)
-    throw (::com::sun::star::uno::RuntimeException)
+//-----------------------------------------------------------------------------
+::rtl::OUString AccessibleControlShape::CreateAccessibleBaseName(void) throw (RuntimeException)
 {
     ::rtl::OUString sName;
 
@@ -255,7 +368,7 @@ Reference<XAccessibleContext> SAL_CALL
             break;
         default:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleControlShape"));
-            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
+            Reference< XShapeDescriptor > xDescriptor (mxShape, UNO_QUERY);
             if (xDescriptor.is())
                 sName += ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM(": "))
                     + xDescriptor->getShapeType();
@@ -268,26 +381,9 @@ Reference<XAccessibleContext> SAL_CALL
 
 
 //--------------------------------------------------------------------
-namespace
-{
-    //................................................................
-    const ::rtl::OUString& lcl_getNamePropertyName( )
-    {
-        static ::rtl::OUString s_sNamePropertyName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) );
-        return s_sNamePropertyName;
-    }
-    //................................................................
-    const ::rtl::OUString& lcl_getDescPropertyName( )
-    {
-        static ::rtl::OUString s_sDescPropertyDesc( RTL_CONSTASCII_USTRINGPARAM( "HelpText" ) );
-        return s_sDescPropertyDesc;
-    }
-}
-
-//--------------------------------------------------------------------
 ::rtl::OUString
     AccessibleControlShape::CreateAccessibleDescription (void)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (RuntimeException)
 {
     DescriptionGenerator aDG (mxShape);
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
@@ -300,22 +396,22 @@ namespace
             if ( !sDesc.getLength() )
             {   // no -> use the default
                 aDG.Initialize (STR_ObjNameSingulUno);
-                aDG.AddProperty (OUString::createFromAscii ("ControlBackground"),
+                aDG.AddProperty (::rtl::OUString::createFromAscii ("ControlBackground"),
                     DescriptionGenerator::COLOR,
-                    OUString());
-                aDG.AddProperty (OUString::createFromAscii ("ControlBorder"),
+                    ::rtl::OUString());
+                aDG.AddProperty (::rtl::OUString::createFromAscii ("ControlBorder"),
                     DescriptionGenerator::INTEGER,
-                    OUString());
+                    ::rtl::OUString());
             }
             // ensure that we are listening to the Name property
-            mbListeningForDesc = ensureListeningState( mbListeningForDesc, sal_True, lcl_getDescPropertyName() );
+            m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, sal_True, lcl_getDescPropertyName() );
         }
         break;
 
         default:
             aDG.Initialize (::rtl::OUString::createFromAscii (
                 "Unknown accessible control shape"));
-            uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
+            Reference< XShapeDescriptor > xDescriptor (mxShape, UNO_QUERY);
             if (xDescriptor.is())
             {
                 aDG.AppendString (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("service name=")));
@@ -331,12 +427,14 @@ IMPLEMENT_FORWARD_REFCOUNT( AccessibleControlShape, AccessibleShape )
 IMPLEMENT_GET_IMPLEMENTATION_ID( AccessibleControlShape )
 
 //--------------------------------------------------------------------
-void SAL_CALL AccessibleControlShape::propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException)
+void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( maMutex );
 
     // check if it is the name or the description
-    if ( _rEvent.PropertyName.equals( lcl_getNamePropertyName() ) )
+    if  (   _rEvent.PropertyName.equals( lcl_getNamePropertyName() )
+        ||  _rEvent.PropertyName.equals( lcl_getLabelPropertyName( ) )
+        )
     {
         SetAccessibleName (CreateAccessibleName());
     }
@@ -353,9 +451,9 @@ void SAL_CALL AccessibleControlShape::propertyChange( const beans::PropertyChang
 }
 
 //--------------------------------------------------------------------
-uno::Any SAL_CALL AccessibleControlShape::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
+Any SAL_CALL AccessibleControlShape::queryInterface( const Type& _rType ) throw (RuntimeException)
 {
-    uno::Any aReturn = AccessibleShape::queryInterface( _rType );
+    Any aReturn = AccessibleShape::queryInterface( _rType );
     if ( !aReturn.hasValue() )
     {
         aReturn = AccessibleControlShape_Base::queryInterface( _rType );
@@ -366,24 +464,24 @@ uno::Any SAL_CALL AccessibleControlShape::queryInterface( const uno::Type& _rTyp
 }
 
 //--------------------------------------------------------------------
-uno::Sequence< uno::Type > SAL_CALL AccessibleControlShape::getTypes() throw (uno::RuntimeException)
+Sequence< Type > SAL_CALL AccessibleControlShape::getTypes() throw (RuntimeException)
 {
-    uno::Sequence< uno::Type > aShapeTypes = AccessibleShape::getTypes();
-    uno::Sequence< uno::Type > aOwnTypes = AccessibleControlShape_Base::getTypes();
+    Sequence< Type > aShapeTypes = AccessibleShape::getTypes();
+    Sequence< Type > aOwnTypes = AccessibleControlShape_Base::getTypes();
 
-    uno::Sequence< uno::Type > aAggregateTypes;
-    Reference< lang::XTypeProvider > xAggTypes;
-    if ( ::comphelper::query_aggregation( m_xControlContextProxy, xAggTypes ) )
+    Sequence< Type > aAggregateTypes;
+    Reference< XTypeProvider > xAggTypes;
+    if ( query_aggregation( m_xControlContextProxy, xAggTypes ) )
         aAggregateTypes = xAggTypes->getTypes();
 
-    uno::Sequence< uno::Type > aAllTypes = ::comphelper::concatSequences( aShapeTypes, aOwnTypes, aAggregateTypes );
+    Sequence< Type > aAllTypes = concatSequences( aShapeTypes, aOwnTypes, aAggregateTypes );
 
     // remove duplicates
-    uno::Type* pBegin = aAllTypes.getArray();
-    uno::Type* pEnd = pBegin + aAllTypes.getLength();
+    Type* pBegin = aAllTypes.getArray();
+    Type* pEnd = pBegin + aAllTypes.getLength();
     while ( pBegin != pEnd )
     {
-        uno::Type aThisRoundType = *pBegin;
+        Type aThisRoundType = *pBegin;
         if ( ++pBegin != pEnd )
         {
             pEnd = ::std::remove( pBegin, pEnd, aThisRoundType );
@@ -397,17 +495,53 @@ uno::Sequence< uno::Type > SAL_CALL AccessibleControlShape::getTypes() throw (un
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL AccessibleControlShape::modeChanged( const util::ModeChangeEvent& _rSource ) throw (uno::RuntimeException)
+void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& _rEvent ) throw (RuntimeException)
+{
+    if ( AccessibleEventId::ACCESSIBLE_STATE_EVENT == _rEvent.EventId )
+    {
+        // multiplex this change
+        sal_Int16 nLostState( 0 ), nGainedState( 0 );
+        _rEvent.OldValue >>= nLostState;
+        _rEvent.NewValue >>= nGainedState;
+
+        // don't multiplex states which the inner context is not resposible for
+        if  ( isComposedState( nLostState ) )
+            AccessibleShape::ResetState( nLostState );
+
+        if  ( isComposedState( nGainedState ) )
+            AccessibleShape::SetState( nGainedState );
+    }
+    else
+    {
+        AccessibleEventObject aTranslatedEvent( _rEvent );
+
+        {
+            ::osl::MutexGuard aGuard( maMutex );
+
+            // see if any of these notifications affect our child manager
+            m_pChildManager->handleChildNotification( _rEvent );
+
+            aTranslatedEvent.Source = *this;
+            m_pChildManager->translateAccessibleEvent( _rEvent, aTranslatedEvent );
+        }
+
+        FireEvent( aTranslatedEvent );
+    }
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL AccessibleControlShape::modeChanged( const ModeChangeEvent& _rSource ) throw (RuntimeException)
 {
     // did it come from our inner context (the real one, not it's proxy!)?
     OSL_TRACE ("AccessibleControlShape::modeChanged");
-    if ( _rSource.Source == m_xControlModes )
+    Reference< XControl > xSource( _rSource.Source, UNO_QUERY );    // for faster compare
+    if ( xSource.get() == m_xUnoControl.get() )
     {
         // If our "pseudo-aggregated" inner context does not live anymore,
         // we don't want to live, too.  This is accomplished by asking our
         // parent to replace this object with a new one.  Disposing this
-        // object and sending notifications about the replacement are the
-        // task of our parent.
+        // object and sending notifications about the replacement are in
+        // the responsibility of our parent.
         OSL_VERIFY( mpParent->ReplaceChild ( this, mxShape, mnIndex, maShapeTreeInfo ) );
     }
 #ifdef _DEBUG
@@ -417,7 +551,7 @@ void SAL_CALL AccessibleControlShape::modeChanged( const util::ModeChangeEvent& 
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL AccessibleControlShape::disposing (const lang::EventObject& _rSource) throw (uno::RuntimeException)
+void SAL_CALL AccessibleControlShape::disposing (const EventObject& _rSource) throw (RuntimeException)
 {
     AccessibleShape::disposing( _rSource );
 }
@@ -433,16 +567,18 @@ sal_Bool AccessibleControlShape::ensureListeningState(
 
     try
     {
-        if ( !mxModelPropsMeta.is() || mxModelPropsMeta->hasPropertyByName( _rPropertyName ) )
+        if ( !m_xModelPropsMeta.is() || m_xModelPropsMeta->hasPropertyByName( _rPropertyName ) )
         {
             // add or revoke as listener
             if ( _bNeedNewListening )
-                mxControlModel->addPropertyChangeListener( _rPropertyName, static_cast< beans::XPropertyChangeListener* >( this ) );
+                m_xControlModel->addPropertyChangeListener( _rPropertyName, static_cast< XPropertyChangeListener* >( this ) );
             else
-                mxControlModel->removePropertyChangeListener( _rPropertyName, static_cast< beans::XPropertyChangeListener* >( this ) );
+                m_xControlModel->removePropertyChangeListener( _rPropertyName, static_cast< XPropertyChangeListener* >( this ) );
         }
+        else
+            OSL_ENSURE( sal_False, "AccessibleControlShape::ensureListeningState: this property does not exist at this model!" );
     }
-    catch( const uno::Exception& e )
+    catch( const Exception& e )
     {
         e;  // make compiler happy
         OSL_ENSURE( sal_False, "AccessibleControlShape::ensureListeningState: could not change the listening state!" );
@@ -452,17 +588,74 @@ sal_Bool AccessibleControlShape::ensureListeningState(
 }
 
 //--------------------------------------------------------------------
-::rtl::OUString AccessibleControlShape::CreateAccessibleName (void) throw (uno::RuntimeException)
+sal_Int32 SAL_CALL AccessibleControlShape::getAccessibleChildCount( ) throw(RuntimeException)
 {
-    // check if we can obtain the "Name" property from the model
-    ::rtl::OUString sName( getControlModelStringProperty( lcl_getNamePropertyName() ) );
+    if ( !isAliveMode( m_xUnoControl ) )
+        // no special action required when in design mode
+        return AccessibleShape::getAccessibleChildCount( );
+    else
+    {
+        // in alive mode, we have the full control over our children - they are determined by the children
+        // of the context of our UNO control
+        Reference< XAccessibleContext > xControlContext( m_aControlContext );
+        OSL_ENSURE( xControlContext.is(), "AccessibleControlShape::getAccessibleChildCount: control context already dead! How this!" );
+        return xControlContext.is() ? xControlContext->getAccessibleChildCount() : 0;
+    }
+}
+
+//--------------------------------------------------------------------
+Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sal_Int32 i ) throw(IndexOutOfBoundsException, RuntimeException)
+{
+    Reference< XAccessible > xChild;
+    if ( !isAliveMode( m_xUnoControl ) )
+    {
+        // no special action required when in design mode - let the base class handle this
+        xChild = AccessibleShape::getAccessibleChild( i );
+    }
+    else
+    {
+        // in alive mode, we have the full control over our children - they are determined by the children
+        // of the context of our UNO control
+
+        Reference< XAccessibleContext > xControlContext( m_aControlContext );
+        OSL_ENSURE( xControlContext.is(), "AccessibleControlShape::getAccessibleChildCount: control context already dead! How this!" );
+        if ( xControlContext.is() )
+        {
+            Reference< XAccessible > xInnerChild( xControlContext->getAccessibleChild( i ) );
+            OSL_ENSURE( xInnerChild.is(), "AccessibleControlShape::getAccessibleChild: control context returned nonsense!" );
+            if ( xInnerChild.is() )
+            {
+                // we need to wrap this inner child into an own implementation
+                xChild = m_pChildManager->getAccessibleWrapperFor( xInnerChild );
+            }
+        }
+    }
+    return xChild;
+}
+
+//--------------------------------------------------------------------
+Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessibleRelationSet(  ) throw (RuntimeException)
+{
+    // TODO
+    return AccessibleShape::getAccessibleRelationSet( );
+}
+
+//--------------------------------------------------------------------
+::rtl::OUString AccessibleControlShape::CreateAccessibleName (void) throw (RuntimeException)
+{
+    ensureControlModelAccess();
+
+    // check if we can obtain the "Name" resp. "Label" property from the model
+    const ::rtl::OUString& rAccNameProperty = lcl_getPreferredAccNameProperty( m_xModelPropsMeta );
+
+    ::rtl::OUString sName( getControlModelStringProperty( rAccNameProperty ) );
     if ( !sName.getLength() )
     {   // no -> use the default
         sName = AccessibleShape::CreateAccessibleName();
     }
 
     // now that somebody first asked us for our name, ensure that we are listening to name changes on the model
-    mbListeningForName = ensureListeningState( mbListeningForName, sal_True, lcl_getNamePropertyName() );
+    m_bListeningForName = ensureListeningState( m_bListeningForName, sal_True, lcl_getPreferredAccNameProperty( m_xModelPropsMeta ) );
 
     return sName;
 }
@@ -471,31 +664,39 @@ sal_Bool AccessibleControlShape::ensureListeningState(
 void SAL_CALL AccessibleControlShape::disposing (void)
 {
     // ensure we're not listening
-    mbListeningForName = ensureListeningState( mbListeningForName, sal_False, lcl_getNamePropertyName() );
-    mbListeningForDesc = ensureListeningState( mbListeningForDesc, sal_False, lcl_getDescPropertyName() );
+    m_bListeningForName = ensureListeningState( m_bListeningForName, sal_False, lcl_getPreferredAccNameProperty( m_xModelPropsMeta ) );
+    m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, sal_False, lcl_getDescPropertyName() );
+
+    if ( m_bMultiplexingStates )
+        stopStateMultiplexing( );
+
+    // dispose the child cache/map
+    m_pChildManager->dispose();
 
     // release the model
-    mxControlModel.clear();
-    mxModelPropsMeta.clear();
+    m_xControlModel.clear();
+    m_xModelPropsMeta.clear();
+    m_aControlContext = WeakReference< XAccessibleContext >();
 
     // forward the disposel to our inner context
-    if ( mbDisposeNativeContext )
+    if ( m_bDisposeNativeContext )
     {
         // don't listen for mode changes anymore
-        OSL_ENSURE( m_xControlModes.is(), "AccessibleControlShape::disposing: don't have an mode broadcaster anymore!" );
-        if ( m_xControlModes.is() )
-            m_xControlModes->removeModeChangeListener( this );
+        Reference< XModeChangeBroadcaster > xControlModes( m_xUnoControl, UNO_QUERY );
+        OSL_ENSURE( xControlModes.is(), "AccessibleControlShape::disposing: don't have an mode broadcaster anymore!" );
+        if ( xControlModes.is() )
+            xControlModes->removeModeChangeListener( this );
 
         Reference< XComponent > xInnerComponent;
-        if ( ::comphelper::query_aggregation( m_xControlContextProxy, xInnerComponent ) )
+        if ( query_aggregation( m_xControlContextProxy, xInnerComponent ) )
             xInnerComponent->dispose();
         // do _not_ clear m_xControlContextProxy! This has to be done in the dtor for correct ref-count handling
 
         // no need to dispose the proxy/inner context anymore
-        mbDisposeNativeContext = sal_False;
+        m_bDisposeNativeContext = sal_False;
     }
 
-    m_xControlModes.clear();
+    m_xUnoControl.clear();
 
     // let the base do it's stuff
     AccessibleShape::disposing();
@@ -504,25 +705,62 @@ void SAL_CALL AccessibleControlShape::disposing (void)
 //--------------------------------------------------------------------
 sal_Bool AccessibleControlShape::ensureControlModelAccess() SAL_THROW(())
 {
-    if ( mxControlModel.is() )
+    if ( m_xControlModel.is() )
         return sal_True;
 
     try
     {
-        Reference< drawing::XControlShape > xShape( mxShape, uno::UNO_QUERY );
+        Reference< XControlShape > xShape( mxShape, UNO_QUERY );
         if ( xShape.is() )
-            mxControlModel = mxControlModel.query( xShape->getControl() );
+            m_xControlModel = m_xControlModel.query( xShape->getControl() );
 
-        if ( mxControlModel.is() )
-            mxModelPropsMeta = mxControlModel->getPropertySetInfo();
+        if ( m_xControlModel.is() )
+            m_xModelPropsMeta = m_xControlModel->getPropertySetInfo();
     }
-    catch( const uno::Exception& e )
+    catch( const Exception& e )
     {
         e;  // make compiler happy
         OSL_ENSURE( sal_False, "AccessibleControlShape::ensureControlModelAccess: caught an exception!" );
     }
 
-    return mxControlModel.is();
+    return m_xControlModel.is();
+}
+
+//--------------------------------------------------------------------
+void AccessibleControlShape::startStateMultiplexing()
+{
+    OSL_PRECOND( !m_bMultiplexingStates, "AccessibleControlShape::startStateMultiplexing: already multiplexing!" );
+
+#ifdef _DEBUG
+    // we should have a control, and it should be in alive mode
+    OSL_PRECOND( isAliveMode( m_xUnoControl ),
+        "AccessibleControlShape::startStateMultiplexing: should be done in alive mode only!" );
+#endif
+    // we should have the native context of the control
+    Reference< XAccessibleEventBroadcaster > xBroadcaster( m_aControlContext.get(), UNO_QUERY );
+    OSL_ENSURE( xBroadcaster.is(), "AccessibleControlShape::startStateMultiplexing: no AccessibleEventBroadcaster on the native context!" );
+
+    if ( xBroadcaster.is() )
+    {
+        xBroadcaster->addEventListener( this );
+        m_bMultiplexingStates = sal_True;
+    }
+}
+
+//--------------------------------------------------------------------
+void AccessibleControlShape::stopStateMultiplexing()
+{
+    OSL_PRECOND( m_bMultiplexingStates, "AccessibleControlShape::stopStateMultiplexing: not multiplexing!" );
+
+    // we should have the native context of the control
+    Reference< XAccessibleEventBroadcaster > xBroadcaster( m_aControlContext.get(), UNO_QUERY );
+    OSL_ENSURE( xBroadcaster.is(), "AccessibleControlShape::stopStateMultiplexing: no AccessibleEventBroadcaster on the native context!" );
+
+    if ( xBroadcaster.is() )
+    {
+        xBroadcaster->removeEventListener( this );
+        m_bMultiplexingStates = sal_False;
+    }
 }
 
 //--------------------------------------------------------------------
@@ -531,18 +769,95 @@ sal_Bool AccessibleControlShape::ensureControlModelAccess() SAL_THROW(())
     ::rtl::OUString sReturn;
     try
     {
-        if ( const_cast< AccessibleControlShape* >( this ) ->ensureControlModelAccess() )
+        if ( const_cast< AccessibleControlShape* >( this )->ensureControlModelAccess() )
         {
-            if ( !mxModelPropsMeta.is() ||  mxModelPropsMeta->hasPropertyByName( _rPropertyName ) )
+            if ( !m_xModelPropsMeta.is() || m_xModelPropsMeta->hasPropertyByName( _rPropertyName ) )
                 // ask only if a) the control does not have a PropertySetInfo object or b) it has, and the
                 // property in question is available
-                mxControlModel->getPropertyValue( _rPropertyName ) >>= sReturn;
+                m_xControlModel->getPropertyValue( _rPropertyName ) >>= sReturn;
         }
     }
-    catch( const uno::Exception& )
+    catch( const Exception& )
     {
         OSL_ENSURE( sal_False, "OAccessibleControlContext::getModelStringProperty: caught an exception!" );
     }
     return sReturn;
+}
+
+//--------------------------------------------------------------------
+void AccessibleControlShape::adjustAccessibleRole( )
+{
+    // if we're in design mode, we are a simple SHAPE, in alive mode, we use the role of our inner context
+    if ( !isAliveMode( m_xUnoControl ) )
+        return;
+
+    // we're in alive mode -> determine the role of the inner context
+    Reference< XAccessibleContext > xNativeContext( m_aControlContext );
+    OSL_PRECOND( xNativeContext.is(), "AccessibleControlShape::adjustAccessibleRole: no inner context!" );
+    if ( xNativeContext.is() )
+        SetAccessibleRole( xNativeContext->getAccessibleRole( ) );
+}
+
+#ifdef DBG_UTIL
+//--------------------------------------------------------------------
+sal_Bool AccessibleControlShape::SetState( sal_Int16 _nState )
+{
+    OSL_ENSURE( !isAliveMode( m_xUnoControl ) || !isComposedState( _nState ),
+        "AccessibleControlShape::SetState: a state which should be determined by the control context is set from outside!" );
+    return AccessibleShape::SetState( _nState );
+}
+#endif // DBG_UTIL
+
+//--------------------------------------------------------------------
+void AccessibleControlShape::initializeComposedState()
+{
+    if ( !isAliveMode( m_xUnoControl ) )
+        // no action necessary for design mode
+        return;
+
+    // get our own state set implementation
+    ::utl::AccessibleStateSetHelper* pComposedStates =
+        static_cast< ::utl::AccessibleStateSetHelper* >( mxStateSet.get() );
+    OSL_PRECOND( pComposedStates,
+        "AccessibleControlShape::initializeComposedState: no composed set!" );
+
+    // we need to reset some states of the composed set, because the either do not apply
+    // for controls in alive mode, or are in the responsibility of the UNO-control, anyway
+    pComposedStates->RemoveState( AccessibleStateType::ENABLED );       // this is controlled by the UNO-control
+    pComposedStates->RemoveState( AccessibleStateType::FOCUSABLE );     // this is controlled by the UNO-control
+    pComposedStates->RemoveState( AccessibleStateType::SELECTABLE );    // this does not hold for an alive UNO-control
+#ifdef _DEBUG
+    // now, only states which are not in the responsibility of the UNO control should be part of this state set
+    {
+        Sequence< sal_Int16 > aInitStates = pComposedStates->getStates();
+        for ( sal_Int32 i=0; i<aInitStates.getLength(); ++i )
+            OSL_ENSURE( !isComposedState( aInitStates.getConstArray()[i] ),
+                "AccessibleControlShape::initializeComposedState: invalid initial composed state (should be controlled by the UNO-control)!" );
+    }
+#endif
+
+    // get my inner context
+    Reference< XAccessibleContext > xInnerContext( m_aControlContext );
+    OSL_PRECOND( xInnerContext.is(), "AccessibleControlShape::initializeComposedState: no inner context!" );
+    if ( xInnerContext.is() )
+    {
+        // get all states of the inner context
+        Reference< XAccessibleStateSet > xInnerStates( xInnerContext->getAccessibleStateSet() );
+        OSL_ENSURE( xInnerStates.is(), "AccessibleControlShape::initializeComposedState: no inner states!" );
+        Sequence< sal_Int16 > aInnerStates;
+        if ( xInnerStates.is() )
+            aInnerStates = xInnerStates->getStates();
+
+        // look which one are to be propagated to the composed context
+        const sal_Int16* pStates = aInnerStates.getConstArray();
+        const sal_Int16* pStatesEnd = pStates + aInnerStates.getLength();
+        for ( ; pStates != pStatesEnd; ++pStates )
+        {
+            if ( isComposedState( *pStates ) && !pComposedStates->contains( *pStates ) )
+            {
+                pComposedStates->AddState( *pStates );
+            }
+        }
+    }
 }
 

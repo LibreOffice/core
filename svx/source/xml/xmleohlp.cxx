@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $
+ *  last change: $Author: hr $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,7 @@
 #include <so3/embobj.hxx>
 #endif
 
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
 
 #ifndef _XMLEOHLP_HXX
 #include "xmleohlp.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-13 15:14:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include "svdpagv.hxx"
 #include "svdoutl.hxx"
 
-#ifndef _SVX_COLORCFG_HXX
-#include "colorcfg.hxx"
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 
 #ifndef _SFXITEMSET_HXX
@@ -277,9 +277,9 @@ FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     if(bPaintArea)
     {
         OutputDevice& rOut=*rXOut.GetOutDev();
-        svx::ColorConfig aColorConfig;
-        svx::ColorConfigValue aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ) );
-        svx::ColorConfigValue aBorderColor( aColorConfig.GetColorValue( svx::DOCBOUNDARIES ) );
+        svtools::ColorConfig aColorConfig;
+        svtools::ColorConfigValue aDocColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ) );
+        svtools::ColorConfigValue aBorderColor( aColorConfig.GetColorValue( svtools::DOCBOUNDARIES ) );
 
         rOut.SetFillColor( aDocColor.nColor );
         rOut.SetLineColor( aBorderColor.bIsVisible ? aBorderColor.nColor: aDocColor.nColor );
@@ -435,8 +435,8 @@ FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 
     if(bPaintFrame)
     {
-        svx::ColorConfig aColorConfig;
-        svx::ColorConfigValue aColor( aColorConfig.GetColorValue( svx::OBJECTBOUNDARIES ) );
+        svtools::ColorConfig aColorConfig;
+        svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( svtools::OBJECTBOUNDARIES ) );
 
         if( aColor.bIsVisible )
         {

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: mt $ $Date: 2002-07-16 10:51:22 $
+#   last change: $Author: hr $ $Date: 2003-03-27 15:05:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJNAME=SVX
 TARGET=svx
 #svx.hid generieren
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 USE_LDUMP2=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -298,7 +299,6 @@ ALL:      \
             $(SLB)$/dl.lib  $(SLB)$/svx.lib \
             $(LB)$/dl.lib   $(LB)$/svx.lib \
           $(MISC)$/linkinc.ls                   \
-          $(SRS)$/hidother.hid                  \
           ALLTAR
 .ELSE
 ALL:      \
@@ -306,7 +306,6 @@ ALL:      \
             $(SLB)$/svx.lib \
             $(LB)$/svx.lib \
           $(MISC)$/linkinc.ls                   \
-          $(SRS)$/hidother.hid                  \
           ALLTAR
 .ENDIF
 
@@ -331,18 +330,6 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     +$(TYPE) dl.flt >$@
-
-$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
-
-$(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)$(CPU)"!="WNTI" || "$(product)"!="full"
-    @echo nix
-.ELSE
-.IF "$(BUILD_SOSL)"==""
-    @+echo NO HIDS!!!
-    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
-.ENDIF
-.ENDIF
 
 .INCLUDE :  target.mk
 

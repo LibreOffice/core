@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:15:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,7 @@ Resource RID_SVXSTR_BORDER_CONTROL
         < "위쪽 테두리" ; 3; > ;
         < "아래쪽 테두리" ; 4; > ;
         < "수평 테두리" ; 5; > ;
-        < "수직 테두리" ; 6; > ;
+        < "수직 테두리선" ; 6; > ;
     };
     ItemList [ chinese_simplified ] =
     {
@@ -552,4 +552,9 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     };
 };
+
+
+
+
+
 

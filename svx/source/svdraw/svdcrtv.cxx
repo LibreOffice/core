@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-02 10:01:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,6 +1027,20 @@ void SdrCreateView::ShowCreateObj(OutputDevice* pOut, BOOL bFull)
         }
         DrawCreateObj(pOut,bFull);
         aDragStat.SetShown(TRUE);
+
+        // #i3705# set shown state at views
+        if(pOut)
+        {
+            sal_uInt16 nw(aWinList.Find(pOut));
+
+            if(nw < GetWinCount() && SDRVIEWWIN_NOTFOUND != nw)
+            {
+                if(!IsShownXorVisibleWinNum(nw))
+                {
+                    SetShownXorVisible(nw, TRUE);
+                }
+            }
+        }
     }
 }
 
@@ -1035,6 +1049,20 @@ void SdrCreateView::HideCreateObj(OutputDevice* pOut, BOOL bFull)
     if (IsCreateObj() && aDragStat.IsShown()) {
         DrawCreateObj(pOut,bFull);
         aDragStat.SetShown(FALSE);
+
+        // #i3705# clear shown state at views
+        if(pOut)
+        {
+            sal_uInt16 nw(aWinList.Find(pOut));
+
+            if(nw < GetWinCount() && SDRVIEWWIN_NOTFOUND != nw)
+            {
+                if(IsShownXorVisibleWinNum(nw))
+                {
+                    SetShownXorVisible(nw, FALSE);
+                }
+            }
+        }
     }
 }
 

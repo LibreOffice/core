@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-05 10:23:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,18 +334,18 @@ TabPage RID_SVXPAGE_PAGE
         Text[ russian ] = "Νΰοπΰβλενθε ςεκρςΰ";
         Text[ greek ] = "~Text flow";
         Text[ dutch ] = "~Tekstverloop";
-        Text[ french ] = "Enchaξnements";
-        Text[ spanish ] = "Flujo de texto";
+        Text[ french ] = "Orientation du texte";
+        Text[ spanish ] = "~Direcciσn de escritura";
         Text[ finnish ] = "~Tekstin suunta";
         Text[ italian ] = "Testo";
         Text[ danish ] = "~Tekstretning";
-        Text[ swedish ] = "Textriktning";
+        Text[ swedish ] = "Te~xtriktning";
         Text[ polish ] = "~Text flow";
         Text[ portuguese_brazilian ] = "~Text flow";
-        Text[ japanese ] = "ζ–‡ε­—ζ–Ήε‘";
+        Text[ japanese ] = "ζ–‡ε­—ζ–Ήε‘(~T)";
         Text[ korean ] = "ν…μ¤νΈ λ°©ν–¥";
         Text[ chinese_simplified ] = "ζ–‡ε­—ζ–Ήε‘";
-        Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε‘";
+        Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε‘(~T)";
         Text[ turkish ] = "~Text flow";
         Text[ arabic ] = "~Text flow";
         Text[ catalan ] = "~Text flow";
@@ -373,7 +373,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ greek ] = "Δί~σκος χαρτιού";
         Text[ dutch ] = "~Papierlade";
         Text[ french ] = "Source du papier";
-        Text[ spanish ] = "~Origen del papel";
+        Text[ spanish ] = "~Bandeja de alimentaciσn";
         Text[ finnish ] = "Paperi~lokero";
         Text[ italian ] = "Ca~ssetto";
         Text[ danish ] = "~Papirkilde";
@@ -416,7 +416,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ polish ] = "Marginesy strony";
         Text[ portuguese_brazilian ] = "Margens";
         Text[ japanese ] = "δ½™η™½";
-        Text[ korean ] = "μΈ΅λ©΄ μ—¬λ°±";
+        Text[ korean ] = "νμ΄μ§€ μ—¬λ°±";
         Text[ chinese_simplified ] = "θΎΉθ·";
         Text[ chinese_traditional ] = "ι ιΆι‚θ·";
         Text[ turkish ] = "Marjlar";
@@ -488,7 +488,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ english_us ] = "~Right" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ε³(~R)";
-        Text[ russian ] = "Ροπΰβΰ";
+        Text[ russian ] = "Ρ~οπΰβΰ";
         Text[ polish ] = "Z prawej";
         Text[ japanese ] = "ε³(~R)";
         Text[ chinese_traditional ] = "ε‘ε³(~R)";
@@ -662,7 +662,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_traditional ] = "ι ιΆη‰εΌ";
         Text[ arabic ] = "ΚΞΨνΨ ΗαΥέΝΙ";
         Text[ greek ] = "Διάταξη σελίδας";
-        Text[ korean ] = "νμ΄μ§€ λ μ΄μ•„μ›ƒ";
+        Text[ korean ] = "νμ΄μ§€ λª¨μ–‘";
         Text[ turkish ] = "Sayfa dόzeni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Disseny de pΰgina";
@@ -735,7 +735,7 @@ TabPage RID_SVXPAGE_PAGE
             < "Pages de droite et de gauche" ; Default ; > ;
             < "Pages en vis-ΰ-vis" ; Default ; > ;
             < "Pages de droite" ; Default ; > ;
-            < "Page de gauche" ; Default ; > ;
+            < "Pages de gauche" ; Default ; > ;
         };
         StringList [ swedish ] =
         {
@@ -869,7 +869,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ polish ] = "For~mat";
         Text[ portuguese_brazilian ] = "For~mat";
         Text[ japanese ] = "η•ªε·δ»γ‘(~M)";
-        Text[ korean ] = "ν•μ‹(~M)";
+        Text[ korean ] = "λ²νΈ λ§¤κΈ°κΈ°(~M)";
         Text[ chinese_simplified ] = "ζ ΌεΌ(~M)";
         Text[ chinese_traditional ] = "ζ ΌεΌ(~M)";
         Text[ turkish ] = "For~matsύz";
@@ -1223,7 +1223,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ polish ] = "Dopasuj obiekt do formatu papieru";
         Text[ portuguese_brazilian ] = "~Fit to size";
         Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγ‚’η”¨η΄™γ‚µγ‚¤γ‚Ίγ«εγ‚γ›γ‚‹(~F)";
-        Text[ korean ] = "μ©μ§€ ν•μ‹μ— κ°μ²΄ λ§μ¶”κΈ°(~F)";
+        Text[ korean ] = "μ©μ§€ ν•μ‹μ— κ°μ²΄ λ§μ¶¤(~F)";
         Text[ chinese_simplified ] = "ε―Ήθ±΅ζ‰ι΅µιΆζ ΌεΌδ½θ°ƒζ•΄(~F)";
         Text[ chinese_traditional ] = "η‰©δ»¶δ½Ώη”¨ι ιΆζ ΌεΌ(~F)";
         Text[ turkish ] = "~Boya gφre ayarla";
@@ -1255,7 +1255,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_traditional ] = "ζ­£ει η„θ΅θ·η›Έη­‰";
         Text[ arabic ] = "ΚΤΫνα";
         Text[ greek ] = "~Ενεργοποίηση";
-        Text[ korean ] = "λ“±λ΅ ν™•μΈ";
+        Text[ korean ] = "μΈμ‡„ν•  λ• κ°€λ  λ§μ¶¤ ";
         Text[ turkish ] = "Ηalύ~ώtύr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Activa";
@@ -1285,7 +1285,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_traditional ] = "εƒη…§ζ–‡ζ®µθ½ζ¨£εΌ(~S)";
         Text[ arabic ] = "δγΨ έήΡΙ γΡΜΪν";
         Text[ greek ] = "Πρό~τυπο παραγράφου αναφοράς";
-        Text[ korean ] = "μ°Έμ΅° ν…ν”λ¦Ώ(~S)";
+        Text[ korean ] = "μ°Έμ΅° μ¤νƒ€μΌ(~S)";
         Text[ turkish ] = "Referans par~agraf biηimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estil de ~refθrencia";
@@ -1322,7 +1322,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_traditional ] = "ε‘ε…§(~N)";
         Text[ arabic ] = "ΟΗΞα";
         Text[ greek ] = "Εσωτερικά";
-        Text[ korean ] = "μ•(~N)";
+        Text[ korean ] = "λ‚΄λ¶€(~N)";
         Text[ turkish ] = "έ~η";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~nterior";
@@ -1349,7 +1349,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_traditional ] = "ε‘ε¤–(~U)";
         Text[ arabic ] = "ΞΗΡΜ";
         Text[ greek ] = "Εξωτερικά";
-        Text[ korean ] = "λ°–(~U)";
+        Text[ korean ] = "μ™Έλ¶€(~U)";
         Text[ turkish ] = "D~ύώ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~xterior";
@@ -1376,7 +1376,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_traditional ] = "ζ‚¨η„ι ι‚θ¨­ε®ζ‰θª¤οΉι ι‚δΈε¨ε—ε°η―„εδΉ‹ε…§γ€‚\n\nζ‚¨ι‚„ζ―θ¦ζ¥ε—ι€™ε€‹θ¨­ε®οΌ";
         Text[ arabic ] = "ΚήΪ ΕΪΟΗΟΗΚ ΗαεζΗγΤ ΞΗΡΜ δΨΗή ΗαΨΘΗΪΙ.\n\nεα ΚΡνΟ ΚΨΘνή εΠε ΗαΕΪΟΗΟΗΚ Ϊαμ ΗαΡΫγ γδ ΠαίΏ";
         Text[ greek ] = "Οι ρυθμίσεις των περιθωρίων είναι εκτός της περιοσής εκτύπωσης.\n\nΘέλετε να εφαρμοστούν οι ρυθμίσεις παρ΄όλα αυτά;";
-        Text[ korean ] = "μ—¬λ°± μ„¤μ •μ΄ μΈμ‡„ λ²”μ„λ¥Ό λ²—μ–΄λ‚¬μµλ‹λ‹¤.\n\nκ·Έλλ„ μ΄ μ„¤μ •μ„ μ μ©ν•κ² μµλ‹κΉ?";
+        Text[ korean ] = "μ—¬λ°± μ„¤μ •μ΄ μΈμ‡„ λ²”μ„λ¥Ό λ²—μ–΄λ‚¬μµλ‹λ‹¤.\n\nκ·Έλλ„ μ΄ μ„¤μ •μ„ μ μ©ν•μ‹κ² μµλ‹κΉ?";
         Text[ turkish ] = "Marj ayarlarύnύz, yazdύrma aralύπύnύn dύώύnda.\n\nBu ayarlarύ yine de uygulamak istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Amb aquesta definiciσ, els marges queden fora de l'ΰrea d'impressiσ.\n\nVoleu aplicar aquesta definiciσ de marges?";
@@ -1901,7 +1901,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
         < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
         < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
-        < "Letter" ; PAPERSIZE_LETTER ; > ;
+        < "Carta" ; PAPERSIZE_LETTER ; > ;
         < "Legal" ; PAPERSIZE_LEGAL ; > ;
         < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
         < "Usuario" ; PAPERSIZE_USER ; > ;
@@ -2138,12 +2138,12 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
         < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
         < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
-        < "B4 (JIS)l" ; PAPERSIZE_B4_JIS ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
         < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
         < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
         < "νΈμ§€" ; PAPERSIZE_LETTER ; > ;
-        < "λ¦¬κ°" ; PAPERSIZE_LEGAL ; > ;
-        < "νƒ€λΈ”λ΅μ΄λ“" ; PAPERSIZE_TABLOID ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
         < "μ‚¬μ©μ" ; PAPERSIZE_USER ; > ;
         < "C4" ; PAPERSIZE_C4 ; > ;
         < "C5" ; PAPERSIZE_C5 ; > ;
@@ -2505,7 +2505,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "Letter" ; PAPERSIZE_LETTER ; > ;
         < "Legal" ; PAPERSIZE_LEGAL ; > ;
         < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
-        < "Οξλόηξβΰςελό" ; PAPERSIZE_USER ; > ;
+        < "Οξλόηξβΰςελόρκθι" ; PAPERSIZE_USER ; > ;
         < "C4" ; PAPERSIZE_C4 ; > ;
         < "C5" ; PAPERSIZE_C5 ; > ;
         < "C6" ; PAPERSIZE_C6 ; > ;
@@ -2618,7 +2618,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
         < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
         < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
-        < "Letter" ; PAPERSIZE_LETTER ; > ;
+        < "Carta" ; PAPERSIZE_LETTER ; > ;
         < "Legal" ; PAPERSIZE_LEGAL ; > ;
         < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
         < "Usuario" ; PAPERSIZE_USER ; > ;
@@ -2850,9 +2850,9 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
         < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
         < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
-        < "λ ν„°" ; PAPERSIZE_LETTER ; > ;
-        < "λ¦¬κ°" ; PAPERSIZE_LEGAL ; > ;
-        < "νƒ€λΈ”λ΅μ΄λ“" ; PAPERSIZE_TABLOID ; > ;
+        < "νΈμ§€" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
         < "μ‚¬μ©μ" ; PAPERSIZE_USER ; > ;
         < "C4" ; PAPERSIZE_C4 ; > ;
         < "C5" ; PAPERSIZE_C5 ; > ;
@@ -3053,7 +3053,7 @@ String RID_SVXSTR_PAPERBIN
     Text [ french ] = "Bac" ;
     Text [ swedish ] = "Fack" ;
     Text [ dutch ] = "Papierlade" ;
-    Text [ spanish ] = "Origen del papel" ;
+    Text [ spanish ] = "Bandeja de alimentaciσn" ;
     Text [ english_us ] = "Paper tray" ;
     Text[ chinese_simplified ] = "ηΊΈεΌ ζ¥ζΊ";
     Text[ russian ] = "Οξδΰχΰ ασμΰγθ";
@@ -3062,7 +3062,7 @@ String RID_SVXSTR_PAPERBIN
     Text[ chinese_traditional ] = "η΄™εΌµδΎ†ζΊ";
     Text[ arabic ] = "ΟΡΜ ΗαζΡή";
     Text[ greek ] = "Δίσκος χαρτιού";
-    Text[ korean ] = "μ©μ§€ κ³µκΈ‰";
+    Text[ korean ] = "μ©μ§€ κ³µκΈ‰ν•¨";
     Text[ turkish ] = "Kaπύt kaynaπύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Font del paper";
@@ -3095,6 +3095,11 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ thai ] = "[ΰΈΰΈ²ΰΈΰΈΰΈ²ΰΈ£ΰΈΰΈ³ΰΈ«ΰΈ™ΰΈ”ΰΈ„ΰΉΰΈ²ΰΉ€ΰΈ„ΰΈ£ΰΈ·ΰΉΰΈ­ΰΈ‡ΰΈΰΈ΄ΰΈ΅ΰΈΰΉ]";
 };
  // ********************************************************************** EOF
+
+
+
+
+
 
 
 

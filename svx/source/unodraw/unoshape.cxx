@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-17 15:39:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,6 @@ struct SvxShapeImpl
 };
 
 //UNO3_GETIMPLEMENTATION_IMPL( SvxShape );
-uno::Sequence< uno::Type > SvxShape::maTypeSequence;
 
 SvxShape::SvxShape( SdrObject* pObject ) throw()
 :   aPropSet(aSvxMapProvider.GetMap(SVXMAP_SHAPE)),
@@ -1260,10 +1259,10 @@ OUString SAL_CALL SvxShape::getShapeType() throw(uno::RuntimeException)
     if( 0 == aShapeType.getLength() )
     {
         UHashMapEntry* pMap = pSdrShapeIdentifierMap;
-        while(pMap->aIdentifier.getLength() && ( pMap->nId != mpImpl->mnObjId ) )
-            pMap++;
+        while ( ( pMap->nId != mpImpl->mnObjId ) && pMap->aIdentifier.getLength() )
+            ++pMap;
 
-        if(pMap->aIdentifier)
+        if ( pMap->aIdentifier.getLength() )
         {
             return pMap->aIdentifier;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: gt $ $Date: 2002-12-04 15:07:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 #pragma hdrstop
 
 #define _SVX_TBCONTRL_CXX
+
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
+#endif
 
 #include "dialogs.hrc"
 #include "svxitems.hrc"
@@ -242,6 +246,7 @@ public:
                           nFtCount = pList->GetFontNameCount(); }
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 //========================================================================
@@ -1749,7 +1754,8 @@ void SvxLineWindow_Impl::CreateBitmaps( void )
     String                  aStr;
 
     const StyleSettings&    rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color                   aLineCol( rStyleSettings.GetWindowTextColor() );
+    svtools::ColorConfig aColorConfig;
+    Color                   aLineCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     Color                   aBackCol( rStyleSettings.GetWindowColor() );
     aLineSet.Clear();
 
@@ -2903,4 +2909,11 @@ BOOL lcl_FontChangedHint( const SfxHint &rHint )
                             ( pSimpleHint->GetId() & SFX_HINT_DATACHANGED ) );
     }
 }
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
+{
+    FillList();
+    return FontNameBox::CreateAccessible();
+}
+
 

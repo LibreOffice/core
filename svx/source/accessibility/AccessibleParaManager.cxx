@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-24 16:19:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@ namespace accessibility
             Release( nNumParas, maChildren.size() );
 
         maChildren.resize( nNumParas );
+
+        if( mnFocusedChild >= nNumParas )
+            mnFocusedChild = -1;
     }
 
     sal_uInt32 AccessibleParaManager::GetNum() const

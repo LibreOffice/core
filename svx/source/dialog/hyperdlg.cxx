@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: iha $ $Date: 2002-12-03 13:36:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     pEntry->SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
 
     // all tab pages set -> create mnemonics
-    CreateIconTextAutoMnemonics();
+    //  CreateIconTextAutoMnemonics();  #99671# not useful, because this is not what user expects when using mnemonics on the pages
 
     // create itemset for tabpages
     mpItemSet = new SfxItemSet( SFX_APP()->GetPool(), SID_HYPERLINK_GETLINK,
@@ -416,7 +416,8 @@ USHORT SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
             nPageId = RID_SVXPAGE_HYPERLINK_MAIL;
             break;
         default :
-            sal_Char const sNewsSrvScheme[] = INET_NEWS_SRV_SCHEME;
+            sal_Char const sNewsSrvScheme[] = "news://";
+                // TODO news:// is nonsense
 
             if ( aStrURL.SearchAscii( sNewsSrvScheme ) == 0 )
                 nPageId = RID_SVXPAGE_HYPERLINK_DOCUMENT;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-07 14:11:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,7 +885,7 @@ void Outliner::ImplInitDepth( USHORT nPara, USHORT nDepth, BOOL bCreateUndo, BOO
     }
 }
 
-void Outliner::SetParaAttribs( ULONG nPara, const SfxItemSet& rSet )
+void Outliner::SetParaAttribs( ULONG nPara, const SfxItemSet& rSet, bool bApiCall /* = false */ )
 {
     DBG_CHKTHIS(Outliner,0);
 
@@ -901,7 +901,7 @@ void Outliner::SetParaAttribs( ULONG nPara, const SfxItemSet& rSet )
 
         pEditEngine->SetParaAttribs( (USHORT)nPara, rSet );
 
-        if ( bLRSpaceChanged )
+        if ( !bApiCall && bLRSpaceChanged )
         {
             const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&)pEditEngine->GetParaAttrib( (USHORT)nPara, EE_PARA_NUMBULLET );
             Paragraph* pPara = pParaList->GetParagraph( nPara );
@@ -1059,21 +1059,27 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
             if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
             {
                 Font aBulletFont( ImpCalcBulletFont( nPara ) );
+                // #2338# Use base line
+                BOOL bSymbol = pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL;
+                aBulletFont.SetAlign( bSymbol ? ALIGN_BOTTOM : ALIGN_BASELINE );
                 Font aOldFont = pOutDev->GetFont();
                 pOutDev->SetFont( aBulletFont );
 
+                ParagraphInfos  aParaInfos = pEditEngine->GetParagraphInfos( nPara );
                 Point aTextPos;
                 if ( !bVertical )
                 {
-                    aTextPos.Y() = rStartPos.Y() + aBulletArea.Bottom();
+//                  aTextPos.Y() = rStartPos.Y() + aBulletArea.Bottom();
+                    aTextPos.Y() = rStartPos.Y() + ( bSymbol ? aBulletArea.Bottom() : aParaInfos.nFirstLineMaxAscent );
                     if ( !bRightToLeftPara )
                         aTextPos.X() = rStartPos.X() + aBulletArea.Left();
                     else
-                        aTextPos.X() = rStartPos.X() + GetPaperSize().Width() - aBulletArea.Right();
+                        aTextPos.X() = rStartPos.X() + GetPaperSize().Width() - aBulletArea.Left();
                 }
                 else
                 {
-                    aTextPos.X() = rStartPos.X() - aBulletArea.Bottom();
+//                  aTextPos.X() = rStartPos.X() - aBulletArea.Bottom();
+                    aTextPos.X() = rStartPos.X() - ( bSymbol ? aBulletArea.Bottom() : aParaInfos.nFirstLineMaxAscent );
                     aTextPos.Y() = rStartPos.Y() + aBulletArea.Left();
                 }
 
@@ -1100,6 +1106,13 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                         pOutDev->SetFont( aRotatedFont );
                     }
 
+                    // #105803# VCL will care for brackets and so on...
+                    ULONG nLayoutMode = pOutDev->GetLayoutMode();
+                    nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG);
+                    if ( bRightToLeftPara )
+                        nLayoutMode |= TEXT_LAYOUT_BIDI_RTL;
+                    pOutDev->SetLayoutMode( nLayoutMode );
+
                     pOutDev->DrawText( aTextPos, pPara->GetText() );
 
                     // HACK #47227#
@@ -1121,7 +1134,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                         // USHORT nScriptType = GetScriptTypeOfLanguage( eLang );
                         Font aNewFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, eLang, 0 ) );
                         aNewFont.SetSize( aFontSz );
-                        aNewFont.SetAlign( ALIGN_BOTTOM );
+                        aNewFont.SetAlign( aBulletFont.GetAlign() );
                         aNewFont.SetVertical( bVertical );
                         aNewFont.SetOrientation( bVertical ? 2700 : 0 );
                         aNewFont.SetColor( aBulletFont.GetColor() );
@@ -1811,6 +1824,9 @@ void Outliner::StyleSheetChanged( SfxStyleSheet* pStyle )
         {
             ImplCheckNumBulletItem( nPara );
             ImplCalcBulletText( nPara, FALSE, FALSE );
+            // #97333# EditEngine formats changed paragraphs before calling this method,
+            // so they are not reformatted now and use wrong bullet indent
+            pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 17:03:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ dutch ] = "~Aansluiting" ;
         Text [ english_us ] = "~Extension" ;
         Text [ italian ] = "Inizio linea" ;
-        Text [ spanish ] = "~Salida" ;
+        Text [ spanish ] = "~Extensión" ;
         Text [ french ] = "~Extension" ;
         Text [ swedish ] = "Fäste" ;
         Text [ danish ] = "Tilhæftning" ;
@@ -614,7 +614,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ chinese_traditional ] = "æ•¸å€¼(~B)";
         Text[ arabic ] = "ÈãŞÏÇÑ";
         Text[ greek ] = "ÊáôÜ";
-        Text[ korean ] = "ë§Œí¼(~B)";
+        Text[ korean ] = "ë°°ìœ¨(~B)";
         Text[ turkish ] = "~Değer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Per";
@@ -821,7 +821,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ chinese_traditional ] = "å–®é€£è§’å½¢ç·š";
         Text[ arabic ] = "ÎØ ÑÇÈØ Ğæ ÒÇæíÉ æÇÍÏÉ";
         Text[ greek ] = "ÃñáììŞ óıíäåóçò õğü ãùíßá";
-        Text[ korean ] = "ê°ì§„ ì„ ì„ í•œë²ˆ êº¾ìŒ";
+        Text[ korean ] = "êµ¬ë¶€ëŸ¬ì§„ ë‹¨ì¼ ì—°ê²°ì„ ";
         Text[ turkish ] = "Tek açılı çizgi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línia angular amb només un angle";
@@ -848,7 +848,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ chinese_traditional ] = "é›™é€£è§’å½¢ç·š";
         Text[ arabic ] = "ÎØ ãÒÏæÌ ÇáÒæÇíÇ";
         Text[ greek ] = "ÃñáììŞ - 2 ãùíßåò";
-        Text[ korean ] = "ê°ì§„ ì„ ì„ ë‘ë²ˆ êº¾ìŒ";
+        Text[ korean ] = "ì´ì¤‘ ê°ì§„ ì„ ";
         Text[ turkish ] = "Çift açılı çizgi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línia angular amb dos angles";
@@ -1004,7 +1004,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text[ chinese_traditional ] = "ä½ç½®å’Œå¤§å°";
                 Text[ arabic ] = "ÇáãæÖÚ æÇáÍÌã";
                 Text[ greek ] = "Èİóç êáé ìİãåèïò";
-                Text[ korean ] = "ìœ„ì¹˜ì™€ í¬ê¸°";
+                Text[ korean ] = "ìœ„ì¹˜ ë° í¬ê¸°";
                 Text[ turkish ] = "Konum ve boyut";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Posición y tamaño";
@@ -1056,4 +1056,9 @@ TabDialog RID_SVXDLG_CAPTION
     Text[ thai ] = "à¸„à¸³à¸šà¸£à¸£à¸¢à¸²à¸¢à¸ à¸²à¸";
 };
  // ********************************************************************** EOF
+
+
+
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-01 15:04:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,17 +299,14 @@ FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRe
 
             BOOL bDesignMode = pPV->GetView().IsDesignMode();
 
-            if (eOutDevType != OUTDEV_VIRDEV)
+            uno::Reference< awt::XWindow > xWindow(xUnoControl, uno::UNO_QUERY);
+            if (xWindow.is())
             {
-                uno::Reference< awt::XWindow > xWindow(xUnoControl, uno::UNO_QUERY);
-                if (xWindow.is() && eOutDevType != OUTDEV_VIRDEV)
-                {
-                    Point aPixPos(pOut->LogicToPixel(aRect.TopLeft()));
-                    Size aPixSize(pOut->LogicToPixel(aRect.GetSize()));
-                    xWindow->setPosSize(aPixPos.X(), aPixPos.Y(),
-                                              aPixSize.Width(), aPixSize.Height(),
-                                              awt::PosSize::POSSIZE);
-                }
+                Point aPixPos(pOut->LogicToPixel(aRect.TopLeft()));
+                Size aPixSize(pOut->LogicToPixel(aRect.GetSize()));
+                xWindow->setPosSize(aPixPos.X(), aPixPos.Y(),
+                                    aPixSize.Width(), aPixSize.Height(),
+                                    awt::PosSize::POSSIZE);
             }
 
             BOOL bInvalidatePeer = FALSE;
@@ -374,7 +371,7 @@ FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRe
                     bInvalidatePeer = TRUE;
                 }
             }
-            else if (eOutDevType == OUTDEV_PRINTER)
+            else if (eOutDevType == OUTDEV_PRINTER || eOutDevType == OUTDEV_VIRDEV)
             {
                 uno::Reference< beans::XPropertySet > xP(xUnoControl->getModel(), uno::UNO_QUERY);
                 if (xP.is())
@@ -393,10 +390,8 @@ FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRe
                     }
                 }
             }
-            else if (!bDesignMode)
-            {
-                bInvalidatePeer = TRUE;
-            }
+            else
+                DBG_ERROR( "SdrUnoObj::Paint: Ehm - what kind of device is this?" );
 
             if ( bInvalidatePeer )
             {

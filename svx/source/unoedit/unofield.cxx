@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-01 13:43:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
-#endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif

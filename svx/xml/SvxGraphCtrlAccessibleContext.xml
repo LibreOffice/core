@@ -12,7 +12,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>drafts::com::sun::star::accessibility::Accessible</supported-service>
         <supported-service>drafts::com::sun::star::accessibility::AccessibleContext</supported-service>
-        <supported-service>drafts::com::sun::star::accessibility::AccessibleComponent</supported-service>
     </component-description>
 </module-description>

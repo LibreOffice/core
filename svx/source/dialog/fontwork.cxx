@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-14 14:51:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,17 +467,22 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
         }
         aTbxStyle.Enable();
 
+        // Make sure that there is allways exactly one checked toolbox item.
         if ( pItem->GetValue() == XFT_NONE )
         {
             aTbxStyle.CheckItem(TBI_STYLE_ROTATE, FALSE);
             aTbxStyle.CheckItem(TBI_STYLE_UPRIGHT, FALSE);
             aTbxStyle.CheckItem(TBI_STYLE_SLANTX, FALSE);
             aTbxStyle.CheckItem(TBI_STYLE_SLANTY, FALSE);
+
+            aTbxStyle.CheckItem(TBI_STYLE_OFF, TRUE);
         }
         else
+        {
             aTbxStyle.CheckItem(TBI_STYLE_OFF, FALSE);
+            aTbxStyle.CheckItem(nId);
+        }
 
-        aTbxStyle.CheckItem(nId);
         nLastStyleTbxId = nId;
     }
     else
@@ -788,7 +793,12 @@ IMPL_LINK( SvxFontWorkDialog, SelectStyleHdl_Impl, void *, EMPTYARG )
 {
     USHORT nId = aTbxStyle.GetCurItemId();
 
-    if ( nId != nLastStyleTbxId )
+    // Execute this block when a different toolbox item has been clicked or
+    // when the off item has been clicked.  The later is necessary to
+    // override the toolbox behaviour of unchecking the item after second
+    // click on it: One of the items has to be checked at all times (when
+    // enabled that is.)
+    if (nId == TBI_STYLE_OFF || nId != nLastStyleTbxId )
     {
         XFormTextStyle eStyle = XFT_NONE;
 

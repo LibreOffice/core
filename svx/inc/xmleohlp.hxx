@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $
+ *  last change: $Author: hr $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,7 @@
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTRESOLVER_HPP_
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>

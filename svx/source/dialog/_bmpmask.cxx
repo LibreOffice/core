@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _bmpmask.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-09 09:24:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,6 +509,8 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
     aCbx3.SetClickHdl( LINK( pData, MaskData, CbxHdl ) );
     aCbx4.SetClickHdl( LINK( pData, MaskData, CbxHdl ) );
     aCbxTrans.SetClickHdl( LINK( pData, MaskData, CbxTransHdl ) );
+
+    SetAccessibleNames ();
 
     aLbColor1.SetGetFocusHdl( LINK( pData, MaskData, FocusLbHdl ) );
     aLbColor2.SetGetFocusHdl( LINK( pData, MaskData, FocusLbHdl ) );
@@ -1259,3 +1261,28 @@ void SvxBmpMask::ApplyStyle()
     aTbxPipette.SetItemImage( TBI_PIPETTE, bHighContrast ? maImgPipetteH : maImgPipette );
 }
 
+
+/** Set an accessible name for the source color check boxes.  Without this
+    the lengthy description is read.
+*/
+void SvxBmpMask::SetAccessibleNames (void)
+{
+    String sSourceColor (BMP_RESID( RID_SVXDLG_BMPMASK_STR_SOURCECOLOR));
+    String sSourceColorN;
+
+    sSourceColorN = sSourceColor;
+    sSourceColorN.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aCbx1.SetAccessibleName (sSourceColorN);
+
+    sSourceColorN = sSourceColor;
+    sSourceColorN.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aCbx2.SetAccessibleName (sSourceColorN);
+
+    sSourceColorN = sSourceColor;
+    sSourceColorN.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aCbx3.SetAccessibleName (sSourceColorN);
+
+    sSourceColorN = sSourceColor;
+    sSourceColorN.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 4"));
+    aCbx4.SetAccessibleName (sSourceColorN);
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-17 11:49:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,13 +370,11 @@ sal_Bool SvxXMLXTableExportComponent::exportTable() throw()
     {
         GetDocHandler()->startDocument();
 
-        const OUString sCDATA( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA ) );
-
         // export namespaces
         sal_uInt16 nPos = GetNamespaceMap().GetFirstKey();
         while( USHRT_MAX != nPos )
         {
-            GetAttrList().AddAttribute( GetNamespaceMap().GetAttrNameByKey( nPos ), sCDATA, GetNamespaceMap().GetNameByKey( nPos ) );
+            GetAttrList().AddAttribute( GetNamespaceMap().GetAttrNameByKey( nPos ), GetNamespaceMap().GetNameByKey( nPos ) );
             nPos = GetNamespaceMap().GetNextKey( nPos );
         }
 

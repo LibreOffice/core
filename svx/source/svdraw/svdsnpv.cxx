@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdsnpv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-10-11 11:40:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,9 +222,14 @@ USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     bPVOfs=TRUE;
     // !!!!!!hier stattdessen mal die GridFrames verwenden!!!!!!!!
     // SdrPage::GetOffset() kann dann entsorgt werden.
-    Point aWriterPageOffset(pPV->GetPage()->GetOffset());
-    xOffs=pPV->GetOffset().X()+aWriterPageOffset.X();
-    yOffs=pPV->GetOffset().Y()+aWriterPageOffset.Y();
+
+    // #i3694#
+    // The Page::GetOffset() method is not needed anymore, it even leads to errors.
+    // I will completely remove it, only Writer implements it (with a constant
+    // of (DOCUMENTBORDER, DOCUMENTBORDER ).
+    // Point aWriterPageOffset(pPV->GetPage()->GetOffset());
+    xOffs=pPV->GetOffset().X(); // +aWriterPageOffset.X();
+    yOffs=pPV->GetOffset().Y(); // +aWriterPageOffset.Y();
     x-=xOffs;
     y-=yOffs;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 11:43:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ chinese_traditional ] = "Ê∞¥Âπ≥";
         Text[ arabic ] = "√›ﬁÌ";
         Text[ turkish ] = "Yatay";
-        Text[ catalan ] = "Horizontal";
+        Text[ catalan ] = "Horitzontal";
         Text[ finnish ] = "Vaakataso";
+        Text[ thai ] = "‡πÅ‡∏ô‡∏ß‡∏ô‡∏≠‡∏ô";
     };
 
     RadioButton BTN_HOR_NONE
@@ -111,14 +112,14 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text [ ENGLISH ] = "~None" ;
         Text [ ENGLISH_US ] = "~None" ;
         Text[ portuguese ] = "~Nenhuma";
-        Text[ russian ] = "¡ÂÁ";
+        Text[ russian ] = "ÕÂÚ";
         Text[ greek ] = " ·Ì›Ì·";
         Text[ dutch ] = "~Geen";
         Text[ french ] = "Aucun(e)";
         Text[ spanish ] = "Ninguno";
         Text[ italian ] = "Senza";
-        Text[ danish ] = "Ingen";
-        Text[ swedish ] = "~Ingen";
+        Text[ danish ] = "~Ingen";
+        Text[ swedish ] = "In~gen";
         Text[ polish ] = "Brak";
         Text[ portuguese_brazilian ] = "None";
         Text[ japanese ] = "„Å™„Åó(~N)";
@@ -127,8 +128,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ chinese_traditional ] = "ÁÑ°(~N)";
         Text[ arabic ] = "»œÊ‰";
         Text[ turkish ] = "Yok";
-        Text[ catalan ] = "Ninguno";
+        Text[ catalan ] = "Cap";
         Text[ finnish ] = "Ei mit‰‰n";
+        Text[ thai ] = "‡πÑ~‡∏°‡πà‡∏°‡∏µ";
     };
 
     RadioButton BTN_HOR_LEFT
@@ -145,7 +147,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ french ] = "¿ gauche";
         Text[ spanish ] = "Izquierda";
         Text[ italian ] = "A sinistra";
-        Text[ danish ] = "Venstre";
+        Text[ danish ] = "~Venstre";
         Text[ swedish ] = "~V‰nster";
         Text[ polish ] = "Z lewej";
         Text[ portuguese_brazilian ] = "Left";
@@ -155,8 +157,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ chinese_traditional ] = "Â∑¶(~L)";
         Text[ arabic ] = "Ì”«—";
         Text[ turkish ] = "Sol";
-        Text[ catalan ] = "Izquierda";
+        Text[ catalan ] = "Esquerra";
         Text[ finnish ] = "Vasen";
+        Text[ thai ] = "~‡∏ã‡πâ‡∏≤‡∏¢";
     };
 
     RadioButton BTN_HOR_CENTER
@@ -170,10 +173,10 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ russian ] = "¬ ˆÂÌÚÂ";
         Text[ greek ] = " ›ÌÙÒÔ";
         Text[ dutch ] = "Midden";
-        Text[ french ] = "Milieu";
+        Text[ french ] = "Centre";
         Text[ spanish ] = "Centrado";
         Text[ italian ] = "Al centro";
-        Text[ danish ] = "Midte";
+        Text[ danish ] = "~Centreret";
         Text[ swedish ] = "~Mitten";
         Text[ polish ] = "Poúrodku";
         Text[ portuguese_brazilian ] = "Center";
@@ -183,8 +186,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ chinese_traditional ] = "‰∏≠ÂøÉ(~C)";
         Text[ arabic ] = "Ê”ÿ";
         Text[ turkish ] = "Orta";
-        Text[ catalan ] = "Centro";
-        Text[ finnish ] = "Keskell‰";
+        Text[ catalan ] = "Centre";
+        Text[ finnish ] = "Keskit‰";
+        Text[ thai ] = "~‡∏ï‡∏£‡∏á‡∏Å‡∏•‡∏≤‡∏á";
     };
 
     RadioButton BTN_HOR_DISTANCE
@@ -201,7 +205,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ french ] = "…cart";
         Text[ spanish ] = "Espacio";
         Text[ italian ] = "Distanza";
-        Text[ danish ] = "Afstand";
+        Text[ danish ] = "~Afstand";
         Text[ swedish ] = "~AvstÂnd";
         Text[ polish ] = "OdstÍp";
         Text[ portuguese_brazilian ] = "Distance";
@@ -211,8 +215,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ chinese_traditional ] = "ÈñìÈöî(~S)";
         Text[ arabic ] = "«· »«⁄œ";
         Text[ turkish ] = "Aral˝k";
-        Text[ catalan ] = "Espacio";
-        Text[ finnish ] = "Objektiv‰lit";
+        Text[ catalan ] = "Espaiat";
+        Text[ finnish ] = "V‰lit";
+        Text[ thai ] = "~‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á";
     };
 
     RadioButton BTN_HOR_RIGHT
@@ -229,7 +234,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ french ] = "¿ droite";
         Text[ spanish ] = "Derecha";
         Text[ italian ] = "A destra";
-        Text[ danish ] = "H¯jre";
+        Text[ danish ] = "H~¯jre";
         Text[ swedish ] = "Hˆge~r";
         Text[ polish ] = "Z prawej";
         Text[ portuguese_brazilian ] = "Right";
@@ -239,8 +244,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ chinese_traditional ] = "Âè≥(~R)";
         Text[ arabic ] = "Ì„Ì‰";
         Text[ turkish ] = "Sa";
-        Text[ catalan ] = "Derecha";
+        Text[ catalan ] = "Dreta";
         Text[ finnish ] = "Oikea";
+        Text[ thai ] = "~‡∏Ç‡∏ß‡∏≤";
     };
 
     FixedImage IMG_HOR_LOW {
@@ -309,6 +315,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ turkish ] = "Dikey";
         Text[ catalan ] = "Vertical";
         Text[ finnish ] = "Pystytaso";
+        Text[ thai ] = "‡πÅ‡∏ô‡∏ß‡∏ï‡∏±‡πâ‡∏á";
     };
 
     RadioButton BTN_VER_NONE
@@ -319,13 +326,13 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text [ ENGLISH ] = "N~one" ;
         Text [ ENGLISH_US ] = "N~one" ;
         Text[ portuguese ] = "~Nenhuma";
-        Text[ russian ] = "¡ÂÁ";
+        Text[ russian ] = "ÕÂÚ";
         Text[ greek ] = " ·Ì›Ì·";
         Text[ dutch ] = "~Geen";
         Text[ french ] = "Aucun(e)";
         Text[ spanish ] = "Ninguno";
         Text[ italian ] = "Senza";
-        Text[ danish ] = "Ingen";
+        Text[ danish ] = "Ing~en";
         Text[ swedish ] = "Ing~en";
         Text[ polish ] = "Brak";
         Text[ portuguese_brazilian ] = "None";
@@ -335,8 +342,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ chinese_traditional ] = "ÁÑ°(~O)";
         Text[ arabic ] = "»œÊ‰";
         Text[ turkish ] = "Yok";
-        Text[ catalan ] = "Ninguno";
+        Text[ catalan ] = "Cap";
         Text[ finnish ] = "Ei mit‰‰n";
+        Text[ thai ] = "‡πÑ‡∏°‡πà~‡∏°‡∏µ";
     };
 
     RadioButton BTN_VER_TOP
@@ -353,7 +361,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ french ] = "En haut";
         Text[ spanish ] = "Arriba";
         Text[ italian ] = "In alto";
-        Text[ danish ] = "Oppe";
+        Text[ danish ] = "T~op";
         Text[ swedish ] = "~Uppe";
         Text[ polish ] = "U gÛry";
         Text[ portuguese_brazilian ] = "Top";
@@ -363,8 +371,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ chinese_traditional ] = "‰∏ä(~T)";
         Text[ arabic ] = "√⁄·Ï";
         Text[ turkish ] = "‹st";
-        Text[ catalan ] = "Arriba";
-        Text[ finnish ] = "Yl‰osa";
+        Text[ catalan ] = "Superior";
+        Text[ finnish ] = "Yl‰reuna";
+        Text[ thai ] = "~‡∏ö‡∏ô";
     };
 
     RadioButton BTN_VER_CENTER
@@ -378,10 +387,10 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ russian ] = "¬ ˆÂÌÚÂ";
         Text[ greek ] = " ›ÌÙÒÔ";
         Text[ dutch ] = "~Midden";
-        Text[ french ] = "Milieu";
+        Text[ french ] = "Centre";
         Text[ spanish ] = "Centrado";
         Text[ italian ] = "Al centro";
-        Text[ danish ] = "Midte";
+        Text[ danish ] = "Ce~ntreret";
         Text[ swedish ] = "M~itten";
         Text[ polish ] = "Poúrodku";
         Text[ portuguese_brazilian ] = "Center";
@@ -391,8 +400,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ chinese_traditional ] = "‰∏≠ÂøÉ(~E)";
         Text[ arabic ] = "Ê”ÿ";
         Text[ turkish ] = "Orta";
-        Text[ catalan ] = "Centro";
-        Text[ finnish ] = "Keskell‰";
+        Text[ catalan ] = "Centre";
+        Text[ finnish ] = "Keskit‰";
+        Text[ thai ] = "‡∏ï~‡∏£‡∏á‡∏Å‡∏•‡∏≤‡∏á";
     };
 
     RadioButton BTN_VER_DISTANCE
@@ -409,7 +419,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ french ] = "…cart";
         Text[ spanish ] = "Espacio";
         Text[ italian ] = "Distanza";
-        Text[ danish ] = "Afstand";
+        Text[ danish ] = "A~fstand";
         Text[ swedish ] = "Av~stÂnd";
         Text[ polish ] = "OdstÍp";
         Text[ portuguese_brazilian ] = "Distance";
@@ -419,8 +429,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ chinese_traditional ] = "ÈñìÈöî(~P)";
         Text[ arabic ] = "«· »«⁄œ";
         Text[ turkish ] = "Aral˝k";
-        Text[ catalan ] = "Espacio";
-        Text[ finnish ] = "Objektiv‰lit";
+        Text[ catalan ] = "Espaiat";
+        Text[ finnish ] = "V‰lit";
+        Text[ thai ] = "‡∏£‡∏∞~‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á";
     };
 
     RadioButton BTN_VER_BOTTOM
@@ -437,7 +448,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ french ] = "En bas";
         Text[ spanish ] = "Abajo";
         Text[ italian ] = "In basso";
-        Text[ danish ] = "Nede";
+        Text[ danish ] = "~Bund";
         Text[ swedish ] = "~Nere";
         Text[ polish ] = "Na dole";
         Text[ portuguese_brazilian ] = "Bottom";
@@ -447,8 +458,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ chinese_traditional ] = "‰∏ã(~B)";
         Text[ arabic ] = "√”›·";
         Text[ turkish ] = "Alt";
-        Text[ catalan ] = "Abajo";
-        Text[ finnish ] = "Alaosa";
+        Text[ catalan ] = "Part inferior";
+        Text[ finnish ] = "Alareuna";
+        Text[ thai ] = "~‡∏•‡πà‡∏≤‡∏á";
     };
 
     FixedImage IMG_VER_HIGH {
@@ -508,8 +520,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     Text[ chinese_traditional ] = "ÂàÜÂ∏É";
     Text[ arabic ] = " Ê“Ì⁄";
     Text[ turkish ] = "Da˝l˝m";
-    Text[ catalan ] = "DistribuciÛn";
+    Text[ catalan ] = "DistribuciÛ";
     Text[ finnish ] = "Jakauma";
+    Text[ thai ] = "‡∏Å‡∏≤‡∏£‡πÅ‡∏à‡∏Å‡πÅ‡∏à‡∏á";
 
     Image IMG_HOR_LOW_H
     {
@@ -558,9 +571,15 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         ImageBitmap = Bitmap { File = "dstv_low_h.bmp" ; };
         MaskColor = STD_MASKCOLOR ;
     };
+
 };
 
 // ********************************************************************** EOF
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-07 12:31:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #endif
 #ifndef _SV_HATCH_HXX
 #include <vcl/hatch.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 
 #include "svxrectctaccessiblecontext.hxx"
@@ -204,6 +208,7 @@ void SvxRectCtl::InitBitmap( void )
         delete pBitmap;
 
     const StyleSettings&    rStyles = Application::GetSettings().GetStyleSettings();
+    svtools::ColorConfig aColorConfig;
 
     pBitmap = new Bitmap( SVX_RES( RID_SVXCTRL_RECTBTNS ) );
 
@@ -224,7 +229,7 @@ void SvxRectCtl::InitBitmap( void )
     pColorAry2[2] = rStyles.GetLightColor();
     pColorAry2[3] = rStyles.GetShadowColor();
     pColorAry2[4] = rStyles.GetDarkShadowColor();
-    pColorAry2[5] = rStyles.GetWindowTextColor();
+    pColorAry2[5] = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     pColorAry2[6] = rStyles.GetDialogColor();
 
 #ifdef DBG_UTIL
@@ -255,7 +260,8 @@ void SvxRectCtl::InitSettings( BOOL bForeground, BOOL bBackground )
 
     if( bForeground )
     {
-        Color aTextColor = rStyleSettings.GetWindowTextColor();
+        svtools::ColorConfig aColorConfig;
+        Color aTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
 
         if ( IsControlForeground() )
             aTextColor = GetControlForeground();
@@ -1952,7 +1958,8 @@ void SvxXLinePreview::InitSettings( BOOL bForeground, BOOL bBackground )
 
     if ( bForeground )
     {
-        Color aTextColor = rStyleSettings.GetWindowTextColor();
+        svtools::ColorConfig aColorConfig;
+        Color aTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
 
         if ( IsControlForeground() )
             aTextColor = GetControlForeground();
@@ -2053,7 +2060,8 @@ void SvxXRectPreview::InitSettings( BOOL bForeground, BOOL bBackground )
 
     if ( bForeground )
     {
-        Color aTextColor = rStyleSettings.GetWindowTextColor();
+        svtools::ColorConfig aColorConfig;
+        Color aTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
 
         if ( IsControlForeground() )
             aTextColor = GetControlForeground();
@@ -2144,7 +2152,8 @@ void SvxXShadowPreview::InitSettings( BOOL bForeground, BOOL bBackground )
 
     if ( bForeground )
     {
-        Color aTextColor = rStyleSettings.GetWindowTextColor();
+        svtools::ColorConfig aColorConfig;
+        Color aTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
 
         if ( IsControlForeground() )
             aTextColor = GetControlForeground();

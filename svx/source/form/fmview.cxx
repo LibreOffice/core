@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 13:30:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,8 +290,23 @@ void FmFormView::MarkListHasChanged()
 {
     E3dView::MarkListHasChanged();
 
-    if (pFormShell && IsDesignMode())
+    if ( pFormShell && IsDesignMode() )
+    {
+        FmFormObj* pObj = getMarkedGrid();
+        if ( pImpl->m_pMarkedGrid && pImpl->m_pMarkedGrid != pObj )
+        {
+            pImpl->m_pMarkedGrid = NULL;
+            if ( pImpl->m_xWindow.is() )
+            {
+                pImpl->m_xWindow->removeFocusListener(pImpl);
+                pImpl->m_xWindow = NULL;
+            }
+            SetMoveOutside(FALSE);
+            RefreshAllIAOManagers();
+        }
+
         pFormShell->GetImpl()->SetSelectionDelayed(this);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -647,30 +662,22 @@ BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
         &&  !rKeyCode.IsMod2()
         &&  rKeyCode.GetCode() == KEY_RETURN )
     {
-        const SdrMarkList& rMarkList = GetMarkList();
-        if ( 1 == rMarkList.GetMarkCount() )
+        FmFormObj* pObj = getMarkedGrid();
+        if ( pObj )
         {
-            SdrMark* pMark = rMarkList.GetMark(0);
-            if ( pMark )
+            Reference< ::com::sun::star::awt::XWindow> xWindow(pObj->GetUnoControl( pWin ),UNO_QUERY);
+            if ( xWindow.is() )
             {
-                FmFormObj* pObj = PTR_CAST(FmFormObj,pMark->GetObj());
-                if ( pObj && pObj->getType() == OBJ_FM_GRID )
-                {
-                    // get the context of the control - it will be our "inner" context
-                    Reference< ::com::sun::star::awt::XWindow> xWindow(pObj->GetUnoControl( pWin ),UNO_QUERY);
-                    if ( xWindow.is() )
-                    {
-                        pImpl->m_xWindow = xWindow;
-                        xWindow->addFocusListener(pImpl);
-                        SetMoveOutside(TRUE);
-                        RefreshAllIAOManagers();
-                        xWindow->setFocus();
-                        bDone = TRUE;
-                    }
-                }
+                pImpl->m_pMarkedGrid = pObj;
+                pImpl->m_xWindow = xWindow;
+                // add as listener to get notified when ESC will be pressed inside the grid
+                pImpl->m_xWindow->addFocusListener(pImpl);
+                SetMoveOutside(TRUE);
+                RefreshAllIAOManagers();
+                xWindow->setFocus();
+                bDone = TRUE;
             }
         }
-
     }
     if ( !bDone )
         bDone = E3dView::KeyInput(rKEvt,pWin);
@@ -683,6 +690,28 @@ sal_Bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
     Reference< ::com::sun::star::awt::XControl> xControl(pImpl->m_xWindow,UNO_QUERY);
     if ( bRet = ( !xControl.is() || !_xSource.is() || _xSource != xControl->getModel() ) )
         UnmarkAll();
+
     return bRet;
+}
+// -----------------------------------------------------------------------------
+FmFormObj* FmFormView::getMarkedGrid() const
+{
+    FmFormObj* pObj = NULL;
+    const SdrMarkList& rMarkList = GetMarkList();
+    if ( 1 == rMarkList.GetMarkCount() )
+    {
+        SdrMark* pMark = rMarkList.GetMark(0);
+        if ( pMark )
+        {
+            pObj = PTR_CAST(FmFormObj,pMark->GetObj());
+            if ( pObj )
+            {
+                Reference<XServiceInfo> xServInfo(pObj->GetUnoControlModel(),UNO_QUERY);
+                if ( !xServInfo.is() || !xServInfo->supportsService(FM_SUN_COMPONENT_GRIDCONTROL) )
+                    pObj = NULL;
+            }
+        }
+    }
+    return pObj;
 }
 // -----------------------------------------------------------------------------

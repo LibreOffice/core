@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-11 16:54:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,7 +815,6 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             {
                 SdrObject* pObj = (*aIter++);
                 Rectangle aR1(pObj->GetBoundRect());
-    //              aR1+=pM->GetPageView()->GetOffset();
                 if (aBound.IsEmpty())
                     aBound=aR1;
                 else
@@ -829,9 +828,9 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             aMtf.Clear();
             aMtf.Record( &aOut );
 
-            Point aOfs( -aBound.TopLeft().X(), -aBound.TopLeft().Y() );
-    //              aOfs+= pM->GetPageView()->GetOffset();
-//          aXOut.SetOffset( aOfs );
+            MapMode aOutMap( aMap );
+            aOutMap.SetOrigin( Point( -aBound.TopLeft().X(), -aBound.TopLeft().Y() ) );
+            aOut.SetRelativeMapMode( aOutMap );
 
             SdrPaintInfoRec aInfoRec;
             aInfoRec.nPaintMode|=SDRPAINTMODE_ANILIKEPRN;
@@ -850,14 +849,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             Size        aBoundSize( aBound.GetWidth() + ( aExtSize.Width() ),
                                     aBound.GetHeight() + ( aExtSize.Height() ) );
 
-            MapMode aNewMap( aMap );
-            Point aOrigin( aNewMap.GetOrigin() );
-            aOrigin -= aBound.TopLeft();
-            aNewMap.SetOrigin( aOrigin );
-
-            aMtf.SetPrefMapMode( aNewMap );
+            aMtf.SetPrefMapMode( aMap );
             aMtf.SetPrefSize( aBoundSize );
-//          aMtf.Move( -aBound.TopLeft().X(), -aBound.TopLeft().Y() );
 
             if( !bVectorType )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-13 15:14:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,10 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 
-#include "colorcfg.hxx"
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
+#endif
+
 #include "svdedxv.hxx"
 #include "svdpagv.hxx"
 #include "svdoutl.hxx"
@@ -819,10 +822,11 @@ void SdrPageView::ImpInsertControl(const SdrUnoObj* pSdrUnoObj,
                         }
                     }
 
-                    pRec->GetControlContainerRef()->addControl(pSdrUnoObj->GetUnoControlTypeName(), xUnoControl);
-
-                    // Designmodus erst setzen, wenn Peer bereits existiert!
+                    // #107049# set design mode before peer is created,
+                    // this is also needed for accessibility
                     xUnoControl->setDesignMode(GetView().IsDesignMode());
+
+                    pRec->GetControlContainerRef()->addControl(pSdrUnoObj->GetUnoControlTypeName(), xUnoControl);
 
                     SdrUnoControlRec* pUCR = new SdrUnoControlRec(&pRec->aControlList, (SdrUnoObj*)pSdrUnoObj, xUnoControl);
                     pRec->aControlList.Insert(pUCR);
@@ -1466,8 +1470,8 @@ void SdrPageView::DrawPaper(OutputDevice& rOut)
         }
         else
         {
-            const svx::ColorConfig aColorConfig;
-            rOut.SetFillColor( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+            const svtools::ColorConfig aColorConfig;
+            rOut.SetFillColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
         }
 
 
@@ -1480,7 +1484,8 @@ void SdrPageView::DrawPaperBorder(OutputDevice& rOut)
 {
     if( pPage )
     {
-        rOut.SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
+        svtools::ColorConfig aColorConfig;
+        rOut.SetLineColor( Color(aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor) );
         rOut.SetFillColor();
         rOut.DrawRect( GetPageRect() );
     }
@@ -1490,13 +1495,13 @@ void SdrPageView::DrawBorder(OutputDevice& rOut)
 {
     if( pPage && ( pPage->GetLftBorder() || pPage->GetUppBorder() || pPage->GetRgtBorder() || pPage->GetLwrBorder() ) )
     {
-        svx::ColorConfig    aColorConfig;
+        svtools::ColorConfig    aColorConfig;
         Color               aBorderColor;
 
         if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-            aBorderColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+            aBorderColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
         else
-            aBorderColor = aColorConfig.GetColorValue( svx::DOCBOUNDARIES ).nColor;
+            aBorderColor = aColorConfig.GetColorValue( svtools::DOCBOUNDARIES ).nColor;
 
         rOut.SetLineColor( aBorderColor );
         rOut.SetFillColor();

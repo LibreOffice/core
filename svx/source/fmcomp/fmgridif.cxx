@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 12:59:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ sal_Bool SAL_CALL FmXGridControl::setModel(const Reference< ::com::sun::star::aw
     if (!UnoControl::setModel(rModel))
         return sal_False;
 
-    Reference< XGridPeer > xGridPeer(mxPeer, UNO_QUERY);
+    Reference< XGridPeer > xGridPeer(getPeer(), UNO_QUERY);
     if (xGridPeer.is())
     {
         Reference< XIndexContainer > xCols(mxModel, UNO_QUERY);
@@ -608,7 +608,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
 
     // TODO: why the hell this whole class does not use any mutex?
 
-    if (!mxPeer.is())
+    if (!getPeer().is())
     {
         mbCreatingPeer = sal_True;
             // mbCreatingPeer is virtually the same as m_nPeerCreationLevel, but it's the base class' method
@@ -624,7 +624,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
 
         FmXGridPeer* pPeer = imp_CreatePeer(pParentWin);
         DBG_ASSERT(pPeer != NULL, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
-        mxPeer = pPeer;
+        setPeer( pPeer );
 
         // lesen der properties aus dem model
 //      ++m_nPeerCreationLevel;
@@ -641,8 +641,8 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
         // initialisieren.
 //      if (--m_nPeerCreationLevel == 0)
         {
-            DBG_ASSERT(mxPeer.is(), "FmXGridControl::createPeer : something went wrong ... no top level peer !");
-            pPeer = FmXGridPeer::getImplementation(mxPeer);
+            DBG_ASSERT(getPeer().is(), "FmXGridControl::createPeer : something went wrong ... no top level peer !");
+            pPeer = FmXGridPeer::getImplementation(getPeer());
 
             setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, ::com::sun::star::awt::PosSize::POSSIZE );
 
@@ -726,7 +726,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
                 xLocate->moveToBookmark(aOldCursorBookmark);
             }
 
-            Reference< ::com::sun::star::awt::XView >  xPeerView(mxPeer, UNO_QUERY);
+            Reference< ::com::sun::star::awt::XView >  xPeerView(getPeer(), UNO_QUERY);
             xPeerView->setZoom( maComponentInfos.nZoomX, maComponentInfos.nZoomY );
             xPeerView->setGraphics( mxGraphics );
         }
@@ -738,9 +738,9 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
 void FmXGridControl::addModifyListener(const Reference< ::com::sun::star::util::XModifyListener >& l) throw( RuntimeException )
 {
     m_aModifyListeners.addInterface( l );
-    if( mxPeer.is() && m_aModifyListeners.getLength() == 1 )
+    if( getPeer().is() && m_aModifyListeners.getLength() == 1 )
     {
-        Reference< ::com::sun::star::util::XModifyBroadcaster >  xGrid(mxPeer, UNO_QUERY);
+        Reference< ::com::sun::star::util::XModifyBroadcaster >  xGrid(getPeer(), UNO_QUERY);
         xGrid->addModifyListener( &m_aModifyListeners);
     }
 }
@@ -749,7 +749,7 @@ void FmXGridControl::addModifyListener(const Reference< ::com::sun::star::util::
 sal_Bool SAL_CALL FmXGridControl::select( const Any& _rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    Reference< XSelectionSupplier > xPeer(mxPeer, UNO_QUERY);
+    Reference< XSelectionSupplier > xPeer(getPeer(), UNO_QUERY);
     return xPeer->select(_rSelection);
 }
 
@@ -757,7 +757,7 @@ sal_Bool SAL_CALL FmXGridControl::select( const Any& _rSelection ) throw (Illega
 Any SAL_CALL FmXGridControl::getSelection(  ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    Reference< XSelectionSupplier > xPeer(mxPeer, UNO_QUERY);
+    Reference< XSelectionSupplier > xPeer(getPeer(), UNO_QUERY);
     return xPeer->getSelection();
 }
 
@@ -765,9 +765,9 @@ Any SAL_CALL FmXGridControl::getSelection(  ) throw (RuntimeException)
 void SAL_CALL FmXGridControl::addSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
 {
     m_aSelectionListeners.addInterface( _rxListener );
-    if( mxPeer.is() && 1 == m_aSelectionListeners.getLength() )
+    if( getPeer().is() && 1 == m_aSelectionListeners.getLength() )
     {
-        Reference< XSelectionSupplier > xGrid(mxPeer, UNO_QUERY);
+        Reference< XSelectionSupplier > xGrid(getPeer(), UNO_QUERY);
         xGrid->addSelectionChangeListener( &m_aSelectionListeners);
     }
 }
@@ -775,9 +775,9 @@ void SAL_CALL FmXGridControl::addSelectionChangeListener( const Reference< XSele
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& _rxListener ) throw (RuntimeException)
 {
-    if( mxPeer.is() && 1 == m_aSelectionListeners.getLength() )
+    if( getPeer().is() && 1 == m_aSelectionListeners.getLength() )
     {
-        Reference< XSelectionSupplier > xGrid(mxPeer, UNO_QUERY);
+        Reference< XSelectionSupplier > xGrid(getPeer(), UNO_QUERY);
         xGrid->removeSelectionChangeListener( &m_aSelectionListeners);
     }
     m_aSelectionListeners.removeInterface( _rxListener );
@@ -786,9 +786,9 @@ void SAL_CALL FmXGridControl::removeSelectionChangeListener( const Reference< XS
 //------------------------------------------------------------------------------
 Sequence< sal_Bool > SAL_CALL FmXGridControl::queryFieldDataType( const Type& xType ) throw(RuntimeException)
 {
-    if (mxPeer.is())
+    if (getPeer().is())
     {
-        Reference< XGridFieldDataSupplier >  xPeerSupplier(mxPeer, UNO_QUERY);
+        Reference< XGridFieldDataSupplier >  xPeerSupplier(getPeer(), UNO_QUERY);
         if (xPeerSupplier.is())
             return xPeerSupplier->queryFieldDataType(xType);
     }
@@ -799,9 +799,9 @@ Sequence< sal_Bool > SAL_CALL FmXGridControl::queryFieldDataType( const Type& xT
 //------------------------------------------------------------------------------
 Sequence< Any > SAL_CALL FmXGridControl::queryFieldData( sal_Int32 nRow, const Type& xType ) throw(RuntimeException)
 {
-    if (mxPeer.is())
+    if (getPeer().is())
     {
-        Reference< XGridFieldDataSupplier >  xPeerSupplier(mxPeer, UNO_QUERY);
+        Reference< XGridFieldDataSupplier >  xPeerSupplier(getPeer(), UNO_QUERY);
         if (xPeerSupplier.is())
             return xPeerSupplier->queryFieldData(nRow, xType);
     }
@@ -812,9 +812,9 @@ Sequence< Any > SAL_CALL FmXGridControl::queryFieldData( sal_Int32 nRow, const T
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::removeModifyListener(const Reference< ::com::sun::star::util::XModifyListener >& l) throw( RuntimeException )
 {
-    if( mxPeer.is() && m_aModifyListeners.getLength() == 1 )
+    if( getPeer().is() && m_aModifyListeners.getLength() == 1 )
     {
-        Reference< ::com::sun::star::util::XModifyBroadcaster >  xGrid(mxPeer, UNO_QUERY);
+        Reference< ::com::sun::star::util::XModifyBroadcaster >  xGrid(getPeer(), UNO_QUERY);
         xGrid->removeModifyListener( &m_aModifyListeners);
     }
     m_aModifyListeners.removeInterface( l );
@@ -833,7 +833,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    Reference< ::com::sun::star::sdb::XRowSetSupplier >  xGrid(mxPeer, UNO_QUERY);
+    Reference< ::com::sun::star::sdb::XRowSetSupplier >  xGrid(getPeer(), UNO_QUERY);
 
     if (xGrid.is() && (bOn != mbDesignMode || (!bOn && !xGrid->getRowSet().is())))
     {
@@ -854,9 +854,9 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
         mbDesignMode = bOn;
 
 #ifdef MACOSX
-                Reference< ::com::sun::star::awt::XVclWindowPeer> xVclWindowPeer(mxPeer, UNO_QUERY);
+                Reference< ::com::sun::star::awt::XVclWindowPeer> xVclWindowPeer(getPeer(), UNO_QUERY);
 #else
-        Reference< awt::XVclWindowPeer >  xVclWindowPeer(mxPeer, UNO_QUERY);
+        Reference< awt::XVclWindowPeer >  xVclWindowPeer(getPeer(), UNO_QUERY);
 #endif
         if (xVclWindowPeer.is())
             xVclWindowPeer->setDesignMode(bOn);
@@ -869,9 +869,9 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
 void SAL_CALL FmXGridControl::addUpdateListener(const Reference< XUpdateListener >& l) throw( RuntimeException )
 {
     m_aUpdateListeners.addInterface( l );
-    if( mxPeer.is() && m_aUpdateListeners.getLength() == 1 )
+    if( getPeer().is() && m_aUpdateListeners.getLength() == 1 )
     {
-        Reference< XBoundComponent >  xBound(mxPeer, UNO_QUERY);
+        Reference< XBoundComponent >  xBound(getPeer(), UNO_QUERY);
         xBound->addUpdateListener( &m_aUpdateListeners);
     }
 }
@@ -879,9 +879,9 @@ void SAL_CALL FmXGridControl::addUpdateListener(const Reference< XUpdateListener
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::removeUpdateListener(const Reference< XUpdateListener >& l) throw( RuntimeException )
 {
-    if( mxPeer.is() && m_aUpdateListeners.getLength() == 1 )
+    if( getPeer().is() && m_aUpdateListeners.getLength() == 1 )
     {
-        Reference< XBoundComponent >  xBound(mxPeer, UNO_QUERY);
+        Reference< XBoundComponent >  xBound(getPeer(), UNO_QUERY);
         xBound->removeUpdateListener( &m_aUpdateListeners);
     }
     m_aUpdateListeners.removeInterface( l );
@@ -890,7 +890,7 @@ void SAL_CALL FmXGridControl::removeUpdateListener(const Reference< XUpdateListe
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXGridControl::commit() throw( RuntimeException )
 {
-    Reference< XBoundComponent >  xBound(mxPeer, UNO_QUERY);
+    Reference< XBoundComponent >  xBound(getPeer(), UNO_QUERY);
     if (xBound.is())
         return xBound->commit();
     else
@@ -902,9 +902,9 @@ sal_Bool SAL_CALL FmXGridControl::commit() throw( RuntimeException )
 void SAL_CALL FmXGridControl::addContainerListener(const Reference< XContainerListener >& l) throw( RuntimeException )
 {
     m_aContainerListeners.addInterface( l );
-    if( mxPeer.is() && m_aContainerListeners.getLength() == 1 )
+    if( getPeer().is() && m_aContainerListeners.getLength() == 1 )
     {
-        Reference< XContainer >  xContainer(mxPeer, UNO_QUERY);
+        Reference< XContainer >  xContainer(getPeer(), UNO_QUERY);
         xContainer->addContainerListener( &m_aContainerListeners);
     }
 }
@@ -912,9 +912,9 @@ void SAL_CALL FmXGridControl::addContainerListener(const Reference< XContainerLi
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::removeContainerListener(const Reference< XContainerListener >& l) throw( RuntimeException )
 {
-    if( mxPeer.is() && m_aContainerListeners.getLength() == 1 )
+    if( getPeer().is() && m_aContainerListeners.getLength() == 1 )
     {
-        Reference< XContainer >  xContainer(mxPeer, UNO_QUERY);
+        Reference< XContainer >  xContainer(getPeer(), UNO_QUERY);
         xContainer->removeContainerListener( &m_aContainerListeners);
     }
     m_aContainerListeners.removeInterface( l );
@@ -923,7 +923,7 @@ void SAL_CALL FmXGridControl::removeContainerListener(const Reference< XContaine
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL FmXGridControl::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
-    Reference< ::com::sun::star::frame::XDispatchProvider >  xPeerProvider(mxPeer, UNO_QUERY);
+    Reference< ::com::sun::star::frame::XDispatchProvider >  xPeerProvider(getPeer(), UNO_QUERY);
     if (xPeerProvider.is())
         return xPeerProvider->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
     else
@@ -933,7 +933,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL FmXGridControl::queryD
 //------------------------------------------------------------------------------
 Sequence< Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL FmXGridControl::queryDispatches(const Sequence< ::com::sun::star::frame::DispatchDescriptor>& aDescripts) throw( RuntimeException )
 {
-    Reference< ::com::sun::star::frame::XDispatchProvider >  xPeerProvider(mxPeer, UNO_QUERY);
+    Reference< ::com::sun::star::frame::XDispatchProvider >  xPeerProvider(getPeer(), UNO_QUERY);
     if (xPeerProvider.is())
         return xPeerProvider->queryDispatches(aDescripts);
     else
@@ -943,7 +943,7 @@ Sequence< Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL FmXGridCont
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::registerDispatchProviderInterceptor(const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException )
 {
-    Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xPeerInterception(mxPeer, UNO_QUERY);
+    Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xPeerInterception(getPeer(), UNO_QUERY);
     if (xPeerInterception.is())
         xPeerInterception->registerDispatchProviderInterceptor(_xInterceptor);
 }
@@ -951,7 +951,7 @@ void SAL_CALL FmXGridControl::registerDispatchProviderInterceptor(const Referenc
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::releaseDispatchProviderInterceptor(const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& _xInterceptor) throw( RuntimeException )
 {
-    Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xPeerInterception(mxPeer, UNO_QUERY);
+    Reference< ::com::sun::star::frame::XDispatchProviderInterception >  xPeerInterception(getPeer(), UNO_QUERY);
     if (xPeerInterception.is())
         xPeerInterception->releaseDispatchProviderInterceptor(_xInterceptor);
 }
@@ -959,14 +959,14 @@ void SAL_CALL FmXGridControl::releaseDispatchProviderInterceptor(const Reference
 //------------------------------------------------------------------------------
 sal_Int16 SAL_CALL FmXGridControl::getCurrentColumnPosition() throw( RuntimeException )
 {
-    Reference< XGrid >  xGrid(mxPeer, UNO_QUERY);
+    Reference< XGrid >  xGrid(getPeer(), UNO_QUERY);
     return xGrid.is() ? xGrid->getCurrentColumnPosition() : -1;
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::setCurrentColumnPosition(sal_Int16 nPos) throw( RuntimeException )
 {
-    Reference< XGrid >  xGrid( mxPeer, UNO_QUERY );
+    Reference< XGrid >  xGrid( getPeer(), UNO_QUERY );
     if ( xGrid.is() )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -978,7 +978,7 @@ void SAL_CALL FmXGridControl::setCurrentColumnPosition(sal_Int16 nPos) throw( Ru
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXGridControl::hasElements() throw( RuntimeException )
 {
-    Reference< XElementAccess >  xPeer(mxPeer, UNO_QUERY);
+    Reference< XElementAccess >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->hasElements() : 0;
 }
 
@@ -992,7 +992,7 @@ Type SAL_CALL FmXGridControl::getElementType(  ) throw(RuntimeException)
 //------------------------------------------------------------------------------
 Reference< XEnumeration >  SAL_CALL FmXGridControl::createEnumeration() throw( RuntimeException )
 {
-    Reference< XEnumerationAccess >  xPeer(mxPeer, UNO_QUERY);
+    Reference< XEnumerationAccess >  xPeer(getPeer(), UNO_QUERY);
     if (xPeer.is())
         return xPeer->createEnumeration();
     else
@@ -1003,14 +1003,14 @@ Reference< XEnumeration >  SAL_CALL FmXGridControl::createEnumeration() throw( R
 //------------------------------------------------------------------------------
 sal_Int32 SAL_CALL FmXGridControl::getCount() throw( RuntimeException )
 {
-    Reference< XIndexAccess >  xPeer(mxPeer, UNO_QUERY);
+    Reference< XIndexAccess >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->getCount() : 0;
 }
 
 //------------------------------------------------------------------------------
 Any SAL_CALL FmXGridControl::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
-    Reference< XIndexAccess >  xPeer(mxPeer, UNO_QUERY);
+    Reference< XIndexAccess >  xPeer(getPeer(), UNO_QUERY);
     if (!xPeer.is())
         throw IndexOutOfBoundsException();
 
@@ -1021,7 +1021,7 @@ Any SAL_CALL FmXGridControl::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoun
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::setMode(const ::rtl::OUString& Mode) throw( NoSupportException, RuntimeException )
 {
-    Reference< ::com::sun::star::util::XModeSelector >  xPeer(mxPeer, UNO_QUERY);
+    Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     if (!xPeer.is())
         throw NoSupportException();
 
@@ -1031,21 +1031,21 @@ void SAL_CALL FmXGridControl::setMode(const ::rtl::OUString& Mode) throw( NoSupp
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FmXGridControl::getMode() throw( RuntimeException )
 {
-    Reference< ::com::sun::star::util::XModeSelector >  xPeer(mxPeer, UNO_QUERY);
+    Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->getMode() : ::rtl::OUString();
 }
 
 //------------------------------------------------------------------------------
 ::comphelper::StringSequence SAL_CALL FmXGridControl::getSupportedModes() throw( RuntimeException )
 {
-    Reference< ::com::sun::star::util::XModeSelector >  xPeer(mxPeer, UNO_QUERY);
+    Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->getSupportedModes() : ::comphelper::StringSequence();
 }
 
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXGridControl::supportsMode(const ::rtl::OUString& Mode) throw( RuntimeException )
 {
-    Reference< ::com::sun::star::util::XModeSelector >  xPeer(mxPeer, UNO_QUERY);
+    Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->supportsMode(Mode) : sal_False;
 }
 
@@ -1841,6 +1841,8 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
 //------------------------------------------------------------------------------
 void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
 
     // Handle Column beruecksichtigen
@@ -1895,6 +1897,8 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
 //------------------------------------------------------------------------------
 void FmXGridPeer::elementRemoved(const ContainerEvent& evt) throw( RuntimeException )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     FmGridControl* pGrid    = (FmGridControl*) GetWindow();
 
     // Handle Column beruecksichtigen
@@ -1913,236 +1917,230 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    sal_Int32 nId = FmPropertyInfoService::getPropertyId(PropertyName);
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
+
     sal_Bool bVoid = !Value.hasValue();
-    switch (nId)
+
+    if ( 0 == PropertyName.compareToAscii( FM_PROP_TEXTLINECOLOR ) )
     {
-        case FM_ATTR_TEXTLINECOLOR:
+        Color aTextLineColor(::comphelper::getINT32(Value));
+        if (bVoid)
         {
-            Color aTextLineColor(::comphelper::getINT32(Value));
-            if (bVoid)
-            {
-                pGrid->SetTextLineColor();
-                pGrid->GetDataWindow().SetTextLineColor();
-            }
-            else
-            {
-                pGrid->SetTextLineColor(aTextLineColor);
-                pGrid->GetDataWindow().SetTextLineColor(aTextLineColor);
-            }
-
-            // need to forward this to the columns
-            DbGridColumns& rColumns = const_cast<DbGridColumns&>(pGrid->GetColumns());
-            DbGridColumn* pLoop = rColumns.First();
-            while (pLoop)
-            {
-                FmXGridCell* pXCell = pLoop->GetCell();
-                if (pXCell)
-                    if (bVoid)
-                        pXCell->SetTextLineColor();
-                    else
-                        pXCell->SetTextLineColor(aTextLineColor);
-
-                pLoop = rColumns.Next();
-            }
-
-            if (isDesignMode())
-                pGrid->Invalidate();
+            pGrid->SetTextLineColor();
+            pGrid->GetDataWindow().SetTextLineColor();
         }
-        break;
-
-        case FM_ATTR_FONTEMPHASISMARK:
+        else
         {
-            Font aGridFont = pGrid->GetControlFont();
-            sal_Int16 nValue = ::comphelper::getINT16(Value);
-            aGridFont.SetEmphasisMark( nValue );
-            pGrid->SetControlFont( aGridFont );
+            pGrid->SetTextLineColor(aTextLineColor);
+            pGrid->GetDataWindow().SetTextLineColor(aTextLineColor);
         }
-        break;
 
-        case FM_ATTR_FONTRELIEF:
+        // need to forward this to the columns
+        DbGridColumns& rColumns = const_cast<DbGridColumns&>(pGrid->GetColumns());
+        DbGridColumn* pLoop = rColumns.First();
+        while (pLoop)
         {
-            Font aGridFont = pGrid->GetControlFont();
-            sal_Int16 nValue = ::comphelper::getINT16(Value);
-            aGridFont.SetRelief( (FontRelief)nValue );
-            pGrid->SetControlFont( aGridFont );
-        }
-        break;
-
-        case FM_ATTR_HELPURL:
-        {
-            String sHelpURL(::comphelper::getString(Value));
-            String sPattern;
-            sPattern.AssignAscii("HID:");
-            if (sHelpURL.Equals(sPattern, 0, sPattern.Len()))
-            {
-                String sID = sHelpURL.Copy(sPattern.Len());
-                pGrid->SetHelpId(sID.ToInt32());
-            }
-        }
-        break;
-        case FM_ATTR_DISPLAYSYNCHRON:
-            pGrid->setDisplaySynchron(::comphelper::getBOOL(Value));
-            break;
-        case FM_ATTR_CURSORCOLOR:
-            if (bVoid)
-                pGrid->SetCursorColor(COL_TRANSPARENT);
-            else
-                pGrid->SetCursorColor(Color(::comphelper::getINT32(Value)));
-            if (isDesignMode())
-                pGrid->Invalidate();
-            break;
-        case FM_ATTR_ALWAYSSHOWCURSOR:
-            pGrid->EnablePermanentCursor(::comphelper::getBOOL(Value));
-            if (isDesignMode())
-                pGrid->Invalidate();
-            break;
-        case FM_ATTR_FONT:
-        {
-            if ( bVoid )
-                pGrid->SetControlFont( Font() );
-            else
-            {
-                ::com::sun::star::awt::FontDescriptor aFont;
-                if (Value >>= aFont)
-                {
-                    Font aNewVclFont;
-                    if (::comphelper::operator!=(aFont, ::comphelper::getDefaultFont()))    // ist das der Default
-                        aNewVclFont = ImplCreateFont( aFont );
-
-                    // need to add relief and emphasis (they're stored in a VCL-Font, but not in a FontDescriptor
-                    Font aOldVclFont = pGrid->GetControlFont();
-                    aNewVclFont.SetRelief( aOldVclFont.GetRelief() );
-                    aNewVclFont.SetEmphasisMark( aOldVclFont.GetEmphasisMark() );
-
-                    // now set it ...
-                    pGrid->SetControlFont( aNewVclFont );
-
-                    // if our row-height property is void (which means "calculate it font-dependent") we have
-                    // to adjust the control's row height
-                    Reference< XPropertySet >  xModelSet(getColumns(), UNO_QUERY);
-                    if (xModelSet.is() && ::comphelper::hasProperty(FM_PROP_ROWHEIGHT, xModelSet))
-                    {
-                        Any aHeight = xModelSet->getPropertyValue(FM_PROP_ROWHEIGHT);
-                        if (!aHeight.hasValue())
-                            pGrid->SetDataRowHeight(0);
-                    }
-
-                }
-            }
-        }
-        break;
-        case FM_ATTR_BACKGROUNDCOLOR:
-            if ( bVoid )
-            {
-                pGrid->SetControlBackground();
-            }
-            else
-            {
-                Color aColor( ::comphelper::getINT32(Value) );
-                pGrid->SetBackground( aColor );
-                pGrid->SetControlBackground( aColor );
-            }
-        break;
-        case FM_ATTR_TEXTCOLOR:
-            if ( bVoid )
-            {
-                pGrid->SetControlForeground();
-            }
-            else
-            {
-                Color aColor( ::comphelper::getINT32(Value) );
-                pGrid->SetTextColor( aColor );
-                pGrid->SetControlForeground( aColor );
-            }
-        break;
-        case FM_ATTR_ROWHEIGHT:
-        {
-            sal_Int32 nLogHeight(0);
-            if (Value >>= nLogHeight)
-            {
-                sal_Int32 nHeight = pGrid->LogicToPixel(Point(0,nLogHeight),MAP_10TH_MM).Y();
-                // take the zoom factor into account
-                nHeight = pGrid->CalcZoom(nHeight);
-                pGrid->SetDataRowHeight(nHeight);
-            }
-            else if (bVoid)
-                pGrid->SetDataRowHeight(0);
-        }   break;
-        case FM_ATTR_HASNAVIGATION:
-        {
-            if (Value.getValueType() == ::getBooleanCppuType())
-                pGrid->EnableNavigationBar(*(sal_Bool*)Value.getValue());
-        }   break;
-        case FM_ATTR_RECORDMARKER:
-        {
-            if (Value.getValueType() == ::getBooleanCppuType())
-                pGrid->EnableHandle(*(sal_Bool*)Value.getValue());
-        }   break;
-        case FM_ATTR_ENABLED:
-        {
-            if (Value.getValueType() == ::getBooleanCppuType())
-            {
-                // Im DesignModus nur das Datenfenster disablen
-                // Sonst kann das Control nicht mehr konfiguriert werden
-                if (isDesignMode())
-                    pGrid->GetDataWindow().Enable(*(sal_Bool*)Value.getValue());
+            FmXGridCell* pXCell = pLoop->GetCell();
+            if (pXCell)
+                if (bVoid)
+                    pXCell->SetTextLineColor();
                 else
-                    pGrid->Enable(*(sal_Bool*)Value.getValue());
-            }
-        }   break;
-        default:
-            VCLXWindow::setProperty( PropertyName, Value );
+                    pXCell->SetTextLineColor(aTextLineColor);
+
+            pLoop = rColumns.Next();
+        }
+
+        if (isDesignMode())
+            pGrid->Invalidate();
     }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_FONTEMPHASISMARK ) )
+    {
+        Font aGridFont = pGrid->GetControlFont();
+        sal_Int16 nValue = ::comphelper::getINT16(Value);
+        aGridFont.SetEmphasisMark( nValue );
+        pGrid->SetControlFont( aGridFont );
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_FONTRELIEF ) )
+    {
+        Font aGridFont = pGrid->GetControlFont();
+        sal_Int16 nValue = ::comphelper::getINT16(Value);
+        aGridFont.SetRelief( (FontRelief)nValue );
+        pGrid->SetControlFont( aGridFont );
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_HELPURL ) )
+    {
+        String sHelpURL(::comphelper::getString(Value));
+        String sPattern;
+        sPattern.AssignAscii("HID:");
+        if (sHelpURL.Equals(sPattern, 0, sPattern.Len()))
+        {
+            String sID = sHelpURL.Copy(sPattern.Len());
+            pGrid->SetHelpId(sID.ToInt32());
+        }
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_DISPLAYSYNCHRON ) )
+    {
+        pGrid->setDisplaySynchron(::comphelper::getBOOL(Value));
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_CURSORCOLOR ) )
+    {
+        if (bVoid)
+            pGrid->SetCursorColor(COL_TRANSPARENT);
+        else
+            pGrid->SetCursorColor(Color(::comphelper::getINT32(Value)));
+        if (isDesignMode())
+            pGrid->Invalidate();
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_ALWAYSSHOWCURSOR ) )
+    {
+        pGrid->EnablePermanentCursor(::comphelper::getBOOL(Value));
+        if (isDesignMode())
+            pGrid->Invalidate();
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_FONT ) )
+    {
+        if ( bVoid )
+            pGrid->SetControlFont( Font() );
+        else
+        {
+            ::com::sun::star::awt::FontDescriptor aFont;
+            if (Value >>= aFont)
+            {
+                Font aNewVclFont;
+                if (::comphelper::operator!=(aFont, ::comphelper::getDefaultFont()))    // ist das der Default
+                    aNewVclFont = ImplCreateFont( aFont );
+
+                // need to add relief and emphasis (they're stored in a VCL-Font, but not in a FontDescriptor
+                Font aOldVclFont = pGrid->GetControlFont();
+                aNewVclFont.SetRelief( aOldVclFont.GetRelief() );
+                aNewVclFont.SetEmphasisMark( aOldVclFont.GetEmphasisMark() );
+
+                // now set it ...
+                pGrid->SetControlFont( aNewVclFont );
+
+                // if our row-height property is void (which means "calculate it font-dependent") we have
+                // to adjust the control's row height
+                Reference< XPropertySet >  xModelSet(getColumns(), UNO_QUERY);
+                if (xModelSet.is() && ::comphelper::hasProperty(FM_PROP_ROWHEIGHT, xModelSet))
+                {
+                    Any aHeight = xModelSet->getPropertyValue(FM_PROP_ROWHEIGHT);
+                    if (!aHeight.hasValue())
+                        pGrid->SetDataRowHeight(0);
+                }
+
+            }
+        }
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_BACKGROUNDCOLOR ) )
+    {
+        if ( bVoid )
+        {
+            pGrid->SetControlBackground();
+        }
+        else
+        {
+            Color aColor( ::comphelper::getINT32(Value) );
+            pGrid->SetBackground( aColor );
+            pGrid->SetControlBackground( aColor );
+        }
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_TEXTCOLOR ) )
+    {
+        if ( bVoid )
+        {
+            pGrid->SetControlForeground();
+        }
+        else
+        {
+            Color aColor( ::comphelper::getINT32(Value) );
+            pGrid->SetTextColor( aColor );
+            pGrid->SetControlForeground( aColor );
+        }
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_ROWHEIGHT ) )
+    {
+        sal_Int32 nLogHeight(0);
+        if (Value >>= nLogHeight)
+        {
+            sal_Int32 nHeight = pGrid->LogicToPixel(Point(0,nLogHeight),MAP_10TH_MM).Y();
+            // take the zoom factor into account
+            nHeight = pGrid->CalcZoom(nHeight);
+            pGrid->SetDataRowHeight(nHeight);
+        }
+        else if (bVoid)
+            pGrid->SetDataRowHeight(0);
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_HASNAVIGATION ) )
+    {
+        if (Value.getValueType() == ::getBooleanCppuType())
+            pGrid->EnableNavigationBar(*(sal_Bool*)Value.getValue());
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_RECORDMARKER ) )
+    {
+        if (Value.getValueType() == ::getBooleanCppuType())
+            pGrid->EnableHandle(*(sal_Bool*)Value.getValue());
+    }
+    else if ( 0 == PropertyName.compareToAscii( FM_PROP_ENABLED ) )
+    {
+        if (Value.getValueType() == ::getBooleanCppuType())
+        {
+            // Im DesignModus nur das Datenfenster disablen
+            // Sonst kann das Control nicht mehr konfiguriert werden
+            if (isDesignMode())
+                pGrid->GetDataWindow().Enable(*(sal_Bool*)Value.getValue());
+            else
+                pGrid->Enable(*(sal_Bool*)Value.getValue());
+        }
+    }
+    else
+        VCLXWindow::setProperty( PropertyName, Value );
 }
 
 //------------------------------------------------------------------------------
-Any FmXGridPeer::getProperty( const ::rtl::OUString& PropertyName ) throw( RuntimeException )
+Any FmXGridPeer::getProperty( const ::rtl::OUString& _rPropertyName ) throw( RuntimeException )
 {
     Any aProp;
     if (GetWindow())
     {
         FmGridControl* pGrid = (FmGridControl*) GetWindow();
         Window* pDataWindow  = &pGrid->GetDataWindow();
-        sal_Int32 nId = FmPropertyInfoService::getPropertyId(PropertyName);
-        switch (nId)
+
+        if ( 0 == _rPropertyName.compareToAscii( FM_PROP_NAME ) )
         {
-            case FM_ATTR_FONT:
-            {
-                Font aFont = pDataWindow->GetControlFont();
-                aProp <<= ImplCreateFontDescriptor( aFont );
-            }   break;
-            case FM_ATTR_TEXTCOLOR:
-                aProp <<= (sal_Int32)pDataWindow->GetControlForeground().GetColor();
-                break;
-            case FM_ATTR_BACKGROUNDCOLOR:
-                aProp <<= (sal_Int32)pDataWindow->GetControlBackground().GetColor();
-                break;
-            case FM_ATTR_ROWHEIGHT:
-            {
-                sal_Int32 nPixelHeight = pGrid->GetDataRowHeight();
-                // take the zoom factor into account
-                nPixelHeight = pGrid->CalcReverseZoom(nPixelHeight);
-                aProp <<= (sal_Int32)pGrid->PixelToLogic(Point(0,nPixelHeight),MAP_10TH_MM).Y();
-            }   break;
-            case FM_ATTR_HASNAVIGATION:
-            {
-                sal_Bool bHasNavBar = pGrid->HasNavigationBar();
-                aProp <<= (sal_Bool)bHasNavBar;
-            }   break;
-            case FM_ATTR_RECORDMARKER:
-            {
-                sal_Bool bHasHandle = pGrid->HasHandle();
-                aProp <<= (sal_Bool)bHasHandle;
-            }   break;
-            case FM_ATTR_ENABLED:
-            {
-                aProp <<= (sal_Bool)pDataWindow->IsEnabled();
-            }   break;
-            default:
-                aProp = VCLXWindow::getProperty( PropertyName );
+            Font aFont = pDataWindow->GetControlFont();
+            aProp <<= ImplCreateFontDescriptor( aFont );
         }
+        else if ( 0 == _rPropertyName.compareToAscii( FM_PROP_TEXTCOLOR ) )
+        {
+            aProp <<= (sal_Int32)pDataWindow->GetControlForeground().GetColor();
+        }
+        else if ( 0 == _rPropertyName.compareToAscii( FM_PROP_BACKGROUNDCOLOR ) )
+        {
+            aProp <<= (sal_Int32)pDataWindow->GetControlBackground().GetColor();
+        }
+        else if ( 0 == _rPropertyName.compareToAscii( FM_PROP_ROWHEIGHT ) )
+        {
+            sal_Int32 nPixelHeight = pGrid->GetDataRowHeight();
+            // take the zoom factor into account
+            nPixelHeight = pGrid->CalcReverseZoom(nPixelHeight);
+            aProp <<= (sal_Int32)pGrid->PixelToLogic(Point(0,nPixelHeight),MAP_10TH_MM).Y();
+        }
+        else if ( 0 == _rPropertyName.compareToAscii( FM_PROP_HASNAVIGATION ) )
+        {
+            sal_Bool bHasNavBar = pGrid->HasNavigationBar();
+            aProp <<= (sal_Bool)bHasNavBar;
+        }
+        else if ( 0 == _rPropertyName.compareToAscii( FM_PROP_RECORDMARKER ) )
+        {
+            sal_Bool bHasHandle = pGrid->HasHandle();
+            aProp <<= (sal_Bool)bHasHandle;
+        }
+        else if ( 0 == _rPropertyName.compareToAscii( FM_PROP_ENABLED ) )
+        {
+            aProp <<= (sal_Bool)pDataWindow->IsEnabled();
+        }
+        else
+            aProp = VCLXWindow::getProperty( _rPropertyName );
     }
     return aProp;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-22 10:37:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,15 +84,14 @@ DockingWindow RID_SVXDLG_FONTWORK
     Text [ dutch ] = "FontWork" ;
     Text [ spanish ] = "FontWork" ;
     Text [ danish ] = "FontWork" ;
-    Text [ swedish ] = "FontWork" ;
+    Text [ swedish ] = "Fontwork" ;
     Text [ finnish ] = "Fonttityö" ;
-    Text [ english_us ] = "FontWork" ;
+    Text [ english_us ] = "Fontwork" ;
     Moveable = TRUE ;
     Zoomable = TRUE ;
     Closeable = TRUE ;
     Dockable = TRUE ;
     EnableResizing = TRUE ;
-    DialogControl = TRUE ;
     Control VS_FORMS
     {
         HelpId = HID_FONTWORK_CTL_FORMS ;
@@ -105,7 +104,6 @@ DockingWindow RID_SVXDLG_FONTWORK
     {
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6 , 41 ) ;
-        TabStop = TRUE ;
         ItemList =
         {
             ToolBoxItem
@@ -134,8 +132,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "í•´ì œ";
                 Text[ turkish ] = "Kapalı";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Desactivado";
-                Text[ finnish ] = "Off";
+                Text[ catalan ] = "Desactivat";
+                Text[ finnish ] = "Poissa käytöstä";
                 Text[ thai ] = "à¸›à¸´à¸”";
             };
             ToolBoxItem
@@ -169,7 +167,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "íšŒì „";
                 Text[ turkish ] = "Çevir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Rodar";
+                Text[ catalan ] = "Gira";
                 Text[ finnish ] = "Kierrä";
                 Text[ thai ] = "à¸«à¸¡à¸¸à¸™";
             };
@@ -200,7 +198,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "ë˜‘ë°”ë¡œ";
                 Text[ turkish ] = "Dik";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Derecho";
+                Text[ catalan ] = "Dret";
                 Text[ finnish ] = "Pystyssä";
                 Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸•à¸£à¸‡";
             };
@@ -231,7 +229,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "ìˆ˜í‰ìœ¼ë¡œ ê¸°ìš¸ê¸°";
                 Text[ turkish ] = "Yatay eğim";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Inclinar horizontalmente";
+                Text[ catalan ] = "Inclina horitzontalment";
                 Text[ finnish ] = "Kallista vaakasuunnassa";
                 Text[ thai ] = "à¹à¸™à¸§à¸™à¸­à¸™à¹€à¸­à¸µà¸¢à¸‡";
             };
@@ -262,7 +260,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "ìˆ˜ì§ìœ¼ë¡œ ê¸°ìš¸ê¸°";
                 Text[ turkish ] = "Dikey eğim";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Inclinar verticalmente";
+                Text[ catalan ] = "Inclina verticalment";
                 Text[ finnish ] = "Kallista pystysuunnassa";
                 Text[ thai ] = "à¹à¸™à¸§à¸•à¸±à¹‰à¸‡à¹€à¸­à¸µà¸¢à¸‡";
             };
@@ -272,7 +270,6 @@ DockingWindow RID_SVXDLG_FONTWORK
     {
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6 , 63 ) ;
-        TabStop = TRUE ;
         ItemList =
         {
             ToolBoxItem
@@ -293,7 +290,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ portuguese ] = "Orientação" ;
                 Text [ portuguese_brazilian ] = "Laufrichtung" ;
                 Text[ chinese_simplified ] = "æ–¹å‘";
-                Text[ russian ] = "Íàïğàâëåíèå";
+                Text[ russian ] = "Îğèåíòàöèÿ";
                 Text[ polish ] = "Orientacja";
                 Text[ japanese ] = "æ–¹å‘";
                 Text[ chinese_traditional ] = "æ–¹å‘";
@@ -302,7 +299,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "ë°©í–¥";
                 Text[ turkish ] = "Metin yönü";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Orientación";
+                Text[ catalan ] = "Orientació";
                 Text[ finnish ] = "Suunta";
                 Text[ thai ] = "à¸à¸²à¸£à¸§à¸²à¸‡à¹à¸™à¸§";
             };
@@ -316,13 +313,15 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_ADJUST_LEFT ;
                 HelpId = HID_FONTWORK_TBI_ADJUST_LEFT ;
+                /* ### ACHTUNG: Neuer Text in Resource? Linksbündig : Linksb³ndig */
+                /* ### ACHTUNG: Neuer Text in Resource? Linksbündig : Linksb³ndig */
                 Text = "Linksbündig" ;
                 Text [ ENGLISH ] = "Left aligned" ;
                 Text [ dutch ] = "Links uitgelijnd" ;
                 Text [ english_us ] = "Align Left" ;
                 Text [ italian ] = "Allineato a sinistra" ;
                 Text [ spanish ] = "Alinear a la izquierda" ;
-                Text [ french ] = "Aligné à gauche" ;
+                Text [ french ] = "Aligner à gauche" ;
                 Text [ swedish ] = "Vänsterjusterat" ;
                 Text [ danish ] = "Venstrejusteret" ;
                 Text [ portuguese ] = "À esquerda" ;
@@ -334,10 +333,10 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ chinese_traditional ] = "å‘å·¦å°é½Š";
                 Text[ arabic ] = "ãÍÇĞÇÉ Åáì ÇáíÓÇÑ";
                 Text[ greek ] = "Óôïß÷éóç áñéóôåñÜ";
-                Text[ korean ] = "ì™¼ìª½ ë°°ì—´";
+                Text[ korean ] = "ì™¼ìª½ ë§ì¶¤";
                 Text[ turkish ] = "Sola hizala";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Alineado a la izquierda";
+                Text[ catalan ] = "Alinea a l'esquerra";
                 Text[ finnish ] = "Tasaa vasemmalle";
                 Text[ thai ] = "à¸Šà¸´à¸”à¸‹à¹‰à¸²à¸¢";
             };
@@ -368,7 +367,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "ê°€ìš´ë°";
                 Text[ turkish ] = "Ortala";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Centrado";
+                Text[ catalan ] = "Centre";
                 Text[ finnish ] = "Keskellä";
                 Text[ thai ] = "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡";
             };
@@ -378,12 +377,14 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_ADJUST_RIGHT ;
                 HelpId = HID_FONTWORK_TBI_ADJUST_RIGHT ;
+                /* ### ACHTUNG: Neuer Text in Resource? Rechtsbündig : Rechtsb³ndig */
+                /* ### ACHTUNG: Neuer Text in Resource? Rechtsbündig : Rechtsb³ndig */
                 Text = "Rechtsbündig" ;
                 Text [ ENGLISH ] = "Right aligned" ;
                 Text [ english_us ] = "Align Right" ;
                 Text [ italian ] = "Allineato a destra" ;
                 Text [ spanish ] = "Alinear a la derecha" ;
-                Text [ french ] = "Aligné à droite" ;
+                Text [ french ] = "Aligner à droite" ;
                 Text [ dutch ] = "Rechtslijnend" ;
                 Text [ swedish ] = "Högerjusterat" ;
                 Text [ danish ] = "Højrejusteret" ;
@@ -396,10 +397,10 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ chinese_traditional ] = "å‘å³å°é½Š";
                 Text[ arabic ] = "ãÍÇĞÇÉ Åáì Çáíãíä";
                 Text[ greek ] = "Óôïß÷éóç äåîéÜ";
-                Text[ korean ] = "ì˜¤ë¥¸ìª½ ë°°ì—´";
+                Text[ korean ] = "ì˜¤ë¥¸ìª½ ë§ì¶¤";
                 Text[ turkish ] = "Sağa hizala";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Alinear a la derecha";
+                Text[ catalan ] = "Alinea a la dreta";
                 Text[ finnish ] = "Tasaa oikealle";
                 Text[ thai ] = "à¸Šà¸´à¸”à¸‚à¸§à¸²";
             };
@@ -409,12 +410,14 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_ADJUST_AUTOSIZE ;
                 HelpId = HID_FONTWORK_TBI_ADJUST_AUTOSIZE ;
+                /* ### ACHTUNG: Neuer Text in Resource? Auto-Textgröße : Auto-Textgr÷˜e */
+                /* ### ACHTUNG: Neuer Text in Resource? Auto-Textgröße : Auto-Textgr÷˜e */
                 Text = "Auto-Textgröße" ;
                 Text [ ENGLISH ] = "Autosize" ;
                 Text [ dutch ] = "AutoTekstgrootte" ;
                 Text [ english_us ] = "AutoSize Text" ;
                 Text [ italian ] = "Dimensione testo automatico" ;
-                Text [ spanish ] = "Tamaño automático de texto" ;
+                Text [ spanish ] = "Texto - Tamaño automático" ;
                 Text [ french ] = "Taille du texte adaptée" ;
                 Text [ swedish ] = "AutoTextstorlek" ;
                 Text [ danish ] = "AutoTekststørrelse" ;
@@ -430,7 +433,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "ìë™í…ìŠ¤íŠ¸ í¬ê¸°";
                 Text[ turkish ] = "Otomatik metin boyu";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Tamaño automático de texto";
+                Text[ catalan ] = "Mida automàtica del text";
                 Text[ finnish ] = "Automaattinen tekstin koon määritys";
                 Text[ thai ] = "à¸‚à¸™à¸²à¸”à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
             };
@@ -477,10 +480,10 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ chinese_traditional ] = "é–“éš”";
         QuickHelpText[ arabic ] = "ÇáãÓÇİÉ";
         QuickHelpText[ greek ] = "Áğüóôáóç";
-        QuickHelpText[ korean ] = "ê°„ê²©";
+        QuickHelpText[ korean ] = "ê±°ë¦¬";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand";
-        QuickHelpText[ catalan ] = "Distancia";
+        QuickHelpText[ catalan ] = "Distància";
         QuickHelpText[ finnish ] = "Etäisyys";
         QuickHelpText[ thai ] = "Distance";
     };
@@ -525,7 +528,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ korean ] = "ë“¤ì—¬ì“°ê¸°";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Einzug";
-        QuickHelpText[ catalan ] = "Sangría";
+        QuickHelpText[ catalan ] = "Sangria";
         QuickHelpText[ finnish ] = "Sisennä";
         QuickHelpText[ thai ] = "Indent";
     };
@@ -533,7 +536,6 @@ DockingWindow RID_SVXDLG_FONTWORK
     {
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6 , 122 ) ;
-        TabStop = TRUE ;
         ItemList =
         {
             ToolBoxItem
@@ -563,7 +565,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ korean ] = "ìœ¤ê³½";
                 Text[ turkish ] = "Kontur";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Contorno";
+                Text[ catalan ] = "Contorn";
                 Text[ finnish ] = "Ääriviiva";
                 Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¹à¸ªà¸”à¸‡à¸£à¸¹à¸›à¸£à¹ˆà¸²à¸‡";
             };
@@ -585,16 +587,16 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ portuguese ] = "Contorno de caracteres" ;
                 Text [ portuguese_brazilian ] = "Buchstabenumrandung" ;
                 Text[ chinese_simplified ] = "å­—æ¯è½®å»“";
-                Text[ russian ] = "Êîíòóğû áóêâ";
+                Text[ russian ] = "Êîíòóğ òåêñòà";
                 Text[ polish ] = "Obramowanie liter";
                 Text[ japanese ] = "æ–‡å­—ã®è¼ªéƒ­";
                 Text[ chinese_traditional ] = "å­—æ¯è¼ªå»“";
                 Text[ arabic ] = "ÇáÎØ ÇáãÍíØ ááßÊÇÈÉ";
                 Text[ greek ] = "Ğåñßãñáììá ÷áñáêôŞñùí";
-                Text[ korean ] = "í…ìŠ¤íŠ¸ í…Œë‘ë¦¬ï¼";
+                Text[ korean ] = "ë¬¸ì ìœ¤ê³½";
                 Text[ turkish ] = "Metin konturu";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Contorno de caracteres";
+                Text[ catalan ] = "Contorn del text";
                 Text[ finnish ] = "Tekstin ääriviiva";
                 Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¹à¸ªà¸”à¸‡à¸£à¸¹à¸›à¸£à¹ˆà¸²à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
             };
@@ -620,16 +622,16 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ portuguese ] = "Desactivar" ;
                 Text [ portuguese_brazilian ] = "Aus" ;
                 Text[ chinese_simplified ] = "å–æ¶ˆé˜´å½±";
-                Text[ russian ] = "Âûêë.";
+                Text[ russian ] = "Áåç òåíè";
                 Text[ polish ] = "Wy³¹cz";
                 Text[ japanese ] = "å½±ãªã—";
                 Text[ chinese_traditional ] = "ä¸ä½¿ç”¨";
                 Text[ arabic ] = "ÅíŞÇİ";
                 Text[ greek ] = "Áğåíåñãïğïßçóç";
-                Text[ korean ] = "í•´ì œ";
+                Text[ korean ] = "ê·¸ë¦¼ì ì—†ìŒ";
                 Text[ turkish ] = "Kapalı";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Sin sombra";
+                Text[ catalan ] = "Sense ombra";
                 Text[ finnish ] = "Ei varjoa";
                 Text[ thai ] = "à¹„à¸¡à¹ˆà¹à¸£à¹€à¸‡à¸²";
             };
@@ -682,16 +684,16 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ portuguese ] = "Inclinar" ;
                 Text [ portuguese_brazilian ] = "Kippen" ;
                 Text[ chinese_simplified ] = "å€¾æ–œ";
-                Text[ russian ] = "Ãîğèçîíòàëüíî";
+                Text[ russian ] = "Íàêëîí";
                 Text[ polish ] = "Przerzuæ";
                 Text[ japanese ] = "æ–œæŠ•å½±";
                 Text[ chinese_traditional ] = "å‚¾æ–œ";
                 Text[ arabic ] = "Êãííá";
                 Text[ greek ] = "ÁíáôñïğŞ";
-                Text[ korean ] = "ê¸°ìš¸ì´ê¸°";
+                Text[ korean ] = "ê¸°ìš¸ê¸°";
                 Text[ turkish ] = "Eğim";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Inclinar";
+                Text[ catalan ] = "Inclina";
                 Text[ finnish ] = "Kallista";
                 Text[ thai ] = "à¹€à¸­à¸µà¸¢à¸‡";
             };
@@ -726,7 +728,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText [ spanish ] = "Grados" ;
         CustomUnitText [ danish ] = "grader" ;
         CustomUnitText [ swedish ] = " grader" ;
-        CustomUnitText [ finnish ] = " asteet" ;
+        CustomUnitText [ finnish ] = "  astetta" ;
         CustomUnitText [ english_us ] = " degrees" ;
         First = -5000000 ;
         Last = 5000000 ;
@@ -743,12 +745,12 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText [ portuguese_brazilian ] = "Abstand X" ;
         QuickHelpText [ swedish ] = "Avstånd X" ;
         CustomUnitText[ chinese_simplified ] = "åº¦";
-        CustomUnitText[ russian ] = "Ãğàäóñ";
+        CustomUnitText[ russian ] = " ãğàäóñîâ";
         CustomUnitText[ polish ] = "Stopieñ";
         CustomUnitText[ japanese ] = "åº¦";
         CustomUnitText[ chinese_traditional ] = "åº¦";
         CustomUnitText[ arabic ] = "ÏÑÌÉ/ÏÑÌÇÊ";
-        QuickHelpText[ russian ] = "Èíòåğâàë X";
+        QuickHelpText[ russian ] = "Ğàññòîÿíèå X";
         QuickHelpText[ polish ] = "Abstand X";
         QuickHelpText[ japanese ] = "é–“éš” X";
         QuickHelpText[ chinese_simplified ] = "é—´éš” X";
@@ -757,11 +759,11 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ greek ] = "ìïßñåò";
         CustomUnitText[ korean ] = "ë„";
         QuickHelpText[ greek ] = "Distance X";
-        QuickHelpText[ korean ] = "ê°„ê²© X";
+        QuickHelpText[ korean ] = "ê±°ë¦¬ X";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand X";
-        CustomUnitText[ catalan ] = "Grados";
+        CustomUnitText[ catalan ] = " graus";
         QuickHelpText[ catalan ] = "Distancia X";
         QuickHelpText[ finnish ] = "Etäisyys X";
         CustomUnitText[ thai ] = " à¸­à¸‡à¸¨à¸²";
@@ -822,7 +824,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ greek ] = "%";
         CustomUnitText[ korean ] = "%";
         QuickHelpText[ greek ] = "Áğüóôáóç Y";
-        QuickHelpText[ korean ] = "ê°„ê²© Y";
+        QuickHelpText[ korean ] = "ê±°ë¦¬ Y";
         CustomUnitText[ turkish ] = "%";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Abstand Y";
@@ -839,7 +841,6 @@ DockingWindow RID_SVXDLG_FONTWORK
         Pos = MAP_APPFONT ( 6 , 174 ) ;
         Size = MAP_APPFONT ( 71 , 60 ) ;
         DropDown = TRUE ;
-        TabStop = TRUE ;
         QuickHelpText = "Schattenfarbe" ;
         QuickHelpText [ portuguese ] = "Cor da sombra" ;
         QuickHelpText [ english_us ] = "Shadow Color" ;
@@ -911,22 +912,22 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ chinese_traditional ] = "é™°å½±é¡è‰²";
         QuickHelpText[ arabic ] = "áæä ÇáÙá";
         QuickHelpText[ greek ] = "Shadow Color";
-        QuickHelpText[ korean ] = "ìŒì˜ìƒ‰";
+        QuickHelpText[ korean ] = "ê·¸ë¦¼ì ìƒ‰ìƒ";
         Text[ greek ] = "×ñşìá óêéÜò";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Schattenfarbe";
-        QuickHelpText[ catalan ] = "Color sombra";
+        QuickHelpText[ catalan ] = "Color ombra";
         QuickHelpText[ finnish ] = "Varjon väri";
         QuickHelpText[ thai ] = "Shadow Color";
     };
     Text[ chinese_simplified ] = "ç¾å·¥å­—ä½“";
-    Text[ russian ] = "FontWork";
+    Text[ russian ] = "İôôåêòû";
     Text[ polish ] = "FontWork";
     Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆãƒ¯ãƒ¼ã‚¯";
     Text[ chinese_traditional ] = "ç¾è¡“å­—å‹";
     Text[ arabic ] = "FontWork";
     Text[ greek ] = "FontWork";
-    Text[ korean ] = "FontWork";
+    Text[ korean ] = "í°íŠ¸ì›Œí¬";
     Text[ turkish ] = "FontWork";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "FontWork";
@@ -1099,7 +1100,7 @@ String RID_SVXSTR_FONTWORK_FORM1
     Text[ korean ] = "ìœ„ìª½ ë°˜ì›";
     Text[ turkish ] = "Üst yarım daire";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Semicírculo superior";
+    Text[ catalan ] = "Semicercle superior";
     Text[ thai ] = "à¸„à¸£à¸¶à¹ˆà¸‡à¸§à¸‡à¸à¸¥à¸¡à¸šà¸™";
 };
 String RID_SVXSTR_FONTWORK_FORM2
@@ -1127,7 +1128,7 @@ String RID_SVXSTR_FONTWORK_FORM2
     Text[ korean ] = "ì•„ë˜ìª½ ë°˜ì›";
     Text[ turkish ] = "Alt yarım daire";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Semicírculo inferior";
+    Text[ catalan ] = "Semicercle inferior";
     Text[ thai ] = "à¸„à¸£à¸¶à¹ˆà¸‡à¸§à¸‡à¸à¸¥à¸¡à¸¥à¹ˆà¸²à¸‡";
 };
 String RID_SVXSTR_FONTWORK_FORM3
@@ -1155,7 +1156,7 @@ String RID_SVXSTR_FONTWORK_FORM3
     Text[ korean ] = "ì™¼ìª½ ë°˜ì›";
     Text[ turkish ] = "Sol yarım daire";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Semicírculo izquierdo";
+    Text[ catalan ] = "Semicercle esquerre";
     Text[ thai ] = "à¸„à¸£à¸¶à¹ˆà¸‡à¸§à¸‡à¸à¸¥à¸¡à¸‹à¹‰à¸²à¸¢";
 };
 String RID_SVXSTR_FONTWORK_FORM4
@@ -1183,7 +1184,7 @@ String RID_SVXSTR_FONTWORK_FORM4
     Text[ korean ] = "ì˜¤ë¥¸ìª½ ë°˜ì›";
     Text[ turkish ] = "Sağ yarım daire";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Semicírculo derecho";
+    Text[ catalan ] = "Semicercle dret";
     Text[ thai ] = "à¸„à¸£à¸¶à¹ˆà¸‡à¸§à¸‡à¸à¸¥à¸¡à¸‚à¸§à¸²";
 };
 String RID_SVXSTR_FONTWORK_FORM5
@@ -1211,7 +1212,7 @@ String RID_SVXSTR_FONTWORK_FORM5
     Text[ korean ] = "ìœ„ìª½ ì›í˜¸";
     Text[ turkish ] = "Üst yay";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Arco superior de círculo";
+    Text[ catalan ] = "Arc superior";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹‚à¸„à¹‰à¸‡à¸‚à¸­à¸‡à¸§à¸‡à¸à¸¥à¸¡à¸šà¸™";
 };
 String RID_SVXSTR_FONTWORK_FORM6
@@ -1239,7 +1240,7 @@ String RID_SVXSTR_FONTWORK_FORM6
     Text[ korean ] = "ì•„ë˜ìª½ ì›í˜¸";
     Text[ turkish ] = "Alt yay";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Arco inferior de círculo";
+    Text[ catalan ] = "Arc inferior";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹‚à¸„à¹‰à¸‡à¸‚à¸­à¸‡à¸§à¸‡à¸à¸¥à¸¡à¸¥à¹ˆà¸²à¸‡";
 };
 String RID_SVXSTR_FONTWORK_FORM7
@@ -1251,7 +1252,7 @@ String RID_SVXSTR_FONTWORK_FORM7
     Text [ portuguese_brazilian ] = "Left arc" ;
     Text [ portuguese ] = "Arco esquerdo" ;
     Text [ french ] = "Arc gauche" ;
-    Text [ dutch ] = "Linker boog" ;
+    Text [ dutch ] = "Linkerboog" ;
     Text [ spanish ] = "Arco izquierdo de círculo" ;
     Text [ danish ] = "Venstre bue" ;
     Text [ swedish ] = "Vänster cirkelbåge" ;
@@ -1267,7 +1268,7 @@ String RID_SVXSTR_FONTWORK_FORM7
     Text[ korean ] = "ì™¼ìª½ ì›í˜¸";
     Text[ turkish ] = "Sol yay";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Arco izquierdo de círculo";
+    Text[ catalan ] = "Arc esquerre";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹‚à¸„à¹‰à¸‡à¸‚à¸­à¸‡à¸§à¸‡à¸à¸¥à¸¡à¸‹à¹‰à¸²à¸¢";
 };
 String RID_SVXSTR_FONTWORK_FORM8
@@ -1279,7 +1280,7 @@ String RID_SVXSTR_FONTWORK_FORM8
     Text [ portuguese_brazilian ] = "Right arc" ;
     Text [ portuguese ] = "Arco direito" ;
     Text [ french ] = "Arc droit" ;
-    Text [ dutch ] = "Rechter boog" ;
+    Text [ dutch ] = "Rechterboog" ;
     Text [ spanish ] = "Arco derecho de círculo" ;
     Text [ danish ] = "Højre bue" ;
     Text [ swedish ] = "Höger cirkelbåge" ;
@@ -1295,7 +1296,7 @@ String RID_SVXSTR_FONTWORK_FORM8
     Text[ korean ] = "ì˜¤ë¥¸ìª½ ì›í˜¸";
     Text[ turkish ] = "Sağ yay";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Arco derecho de círculo";
+    Text[ catalan ] = "Arc dret";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹‚à¸„à¹‰à¸‡à¸‚à¸­à¸‡à¸§à¸‡à¸à¸¥à¸¡à¸‚à¸§à¸²";
 };
 String RID_SVXSTR_FONTWORK_FORM9
@@ -1323,7 +1324,7 @@ String RID_SVXSTR_FONTWORK_FORM9
     Text[ korean ] = "ì—´ë¦° ì›";
     Text[ turkish ] = "Açık daire";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Circulo abierto";
+    Text[ catalan ] = "Cercle obert";
     Text[ thai ] = "à¹€à¸›à¸´à¸”à¸§à¸‡à¸à¸¥à¸¡";
 };
 String RID_SVXSTR_FONTWORK_FORM10
@@ -1351,7 +1352,7 @@ String RID_SVXSTR_FONTWORK_FORM10
     Text[ korean ] = "ë‹«íŒ ì›";
     Text[ turkish ] = "Kapalı daire";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Círculo cerrado";
+    Text[ catalan ] = "Cercle tancat";
     Text[ thai ] = "à¸›à¸´à¸”à¸§à¸‡à¸à¸¥à¸¡";
 };
 String RID_SVXSTR_FONTWORK_FORM11
@@ -1379,7 +1380,7 @@ String RID_SVXSTR_FONTWORK_FORM11
     Text[ korean ] = "ë‹«íŒ ì› II";
     Text[ turkish ] = "Kapalı daire II";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Círculo cerrado II";
+    Text[ catalan ] = "Cercle tancat II";
     Text[ thai ] = "à¸›à¸´à¸”à¸§à¸‡à¸à¸¥à¸¡ II";
 };
 String RID_SVXSTR_FONTWORK_FORM12
@@ -1407,34 +1408,39 @@ String RID_SVXSTR_FONTWORK_FORM12
     Text[ korean ] = "ìˆ˜ì§ ì—´ë¦° ì›";
     Text[ turkish ] = "Dikey açık daire";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Círculo abierto vertical";
+    Text[ catalan ] = "Cercle obert vertical";
     Text[ thai ] = "à¹€à¸›à¸´à¸”à¸§à¸‡à¸à¸¥à¸¡à¹à¸™à¸§à¸•à¸±à¹‰à¸‡";
 };
 String RID_SVXSTR_FONTWORK_UNDOCREATE
 {
     Text = "FontWork-Objekt erzeugen" ;
     Text [ ENGLISH ] = "create FontWork object" ;
-    Text [ english_us ] = "Create FontWork object" ;
+    Text [ english_us ] = "Create Fontwork object" ;
     Text [ italian ] = "Crea un oggetto FontWork" ;
     Text [ spanish ] = "Crear objeto FontWork" ;
     Text [ french ] = "Créer un objet FontWork" ;
     Text [ dutch ] = "FontWork-object maken" ;
-    Text [ swedish ] = "Skapa FontWork-objekt" ;
+    Text [ swedish ] = "Skapa Fontwork-objekt" ;
     Text [ danish ] = "Opret FontWork-objekt" ;
     Text [ portuguese_brazilian ] = "FontWork-Objekt erzeugen" ;
     Text [ portuguese ] = "Criar objecto FontWork" ;
     Text[ chinese_simplified ] = "ç”Ÿæˆç¾å·¥å­—ä½“å¯¹è±¡";
-    Text[ russian ] = "Ñîçäàòü îáúåêò FontWork";
+    Text[ russian ] = "Ñîçäàòü ıôôåêò";
     Text[ polish ] = "Utwórz obiekt FontWork";
     Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆãƒ¯ãƒ¼ã‚¯ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ";
     Text[ chinese_traditional ] = "ç”¢ç”Ÿç¾è¡“å­—å‹ç‰©ä»¶";
     Text[ arabic ] = "ÅäÔÇÁ ßÇÆä FontWork";
     Text[ greek ] = "Äçìéïõñãßá áíôéêåéìİíïõ FontWork";
-    Text[ korean ] = "FontWork ê°œì²´ ìƒì„±";
+    Text[ korean ] = "í°íŠ¸ì›Œí¬ ê°œì²´ ë§Œë“¤ê¸°";
     Text[ turkish ] = "FontWork nesnesi oluştur";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Crear objeto FontWork";
-    Text[ finnish ] = "Luo fonttityöobjekti";
+    Text[ catalan ] = "Crea un objecte FontWork";
+    Text[ finnish ] = "Luo Fonttityöobjekti";
     Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸§à¸±à¸•à¸–à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¸‡à¸²à¸™";
 };
  // ********************************************************************** EOF
+
+
+
+
+

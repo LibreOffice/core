@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-12 11:28:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2435,6 +2435,9 @@ void FmXFormShell::setActiveController( const Reference< XFormController>& xCont
             Reference< XControl> xCurrentControl(m_xActiveController->getCurrentControl());
             if (xCurrentControl.is())
             {
+                Reference< XBoundComponent> xCurrentBoundComp(xCurrentControl,UNO_QUERY);
+                if ( xCurrentBoundComp.is() )
+                    xCurrentBoundComp->commit();
                 m_bSetFocus = sal_True;
                 Reference< XPropertySet>    xSet(getActiveForm(), UNO_QUERY);
                 if (IsModified(m_xActiveController))

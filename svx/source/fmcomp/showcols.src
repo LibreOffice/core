@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showcols.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-16 22:25:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
         Text [ ENGLISH ] = "The following columns are hidden currently. Please mark the fields you want to show and chosse OK";
         Text[ english_us ] = "The following columns are currently hidden. Please mark the fields you want to show and choose OK.";
         Text[ portuguese ] = "As seguintes colunas encontram-se ocultas. Seleccione as que deseja ver novamente e clique em OK.";
-        Text[ russian ] = "Ñëåäóşùèå êîëîíêè ñïğÿòàíû. Âûäåëèòå òå êîëîíêè, êîòîğûå íåîáõîäèìî ñíîâà ïîêàçàòü è íàæìèòå OK.";
+        Text[ russian ] = "Ñëåäóşùèå ñòîëáöû ñïğÿòàíû. Âûäåëèòå ñòîëáöû, êîòîğûå íåîáõîäèìî ïîêàçàòü è íàæìèòå Äà.";
         Text[ greek ] = "Ïé áêüëïõèåò óôŞëåò åßíáé êñõöİò ğñïò ôï ğáñüí. Ğáñáêáëş åğéëİîôå áõôİò ğïõ åğéèõìåßôå íá åìöáíéóôïıí êáé ğáôŞóôå óôç óõíİ÷åéá ôï 'OK'";
         Text[ dutch ] = "De volgende kolommen zijn momenteel verborgen. Markeer de kolommen die u weer zichtbaar wilt maken en klik op OK.";
         Text[ french ] = "Les colonnes suivantes sont cachées pour l'instant. Sélectionnez celles que vous souhaitez faire afficher et cliquez sur OK.";
@@ -92,13 +92,14 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
         Text[ polish ] = "Nastêpuj¹ce kolumny s¹ na razie ukryte. Nale¿y zaznaczyæ kolumny, które maj¹ zostaæ wyœwietlone i nacisn¹æ nastêpnie przycisk OK.";
         Text[ portuguese_brazilian ] = "The following columns are hidden currently. Please mark the fields you want to show and chosse OK";
         Text[ japanese ] = "æ¬¡ã®åˆ—ã¯ç¾åœ¨éš ã•ã‚Œã¦ã„ã¾ã™ã€‚è¡¨ç¤ºã™ã¹ãåˆ—ã‚’é¸æŠã—ã¦OKã‚’æŠ¼ã—ã¦ãã ã•ã„ã€‚";
-        Text[ korean ] = "ë‹¤ìŒ ì—´ë“¤ì€ í˜„ì¬ ìˆ¨ê²¨ì§„ ìƒíƒœì…ë‹ˆë‹¤. ë‹¤ì‹œ ë‚˜íƒ€ë‚´ê³ ì í•˜ëŠ” ì—´ì„ ì„ íƒ í‘œì‹œí•œ ë‹¤ìŒ OK (í™•ì¸) ë²„íŠ¼ì„ í´ë¦­í•˜ì‹­ì‹œì˜¤.";
+        Text[ korean ] = "ë‹¤ìŒ ì—´ë“¤ì€ í˜„ì¬ ìˆ¨ê²¨ì§„ ìƒíƒœì…ë‹ˆë‹¤. ë‹¤ì‹œ í‘œì‹œí•˜ë ¤ëŠ” ì—´ì„ ì„ íƒí•œ ë‹¤ìŒ í™•ì¸ ë²„íŠ¼ì„ í´ë¦­í•˜ì‹­ì‹œì˜¤.";
         Text[ chinese_simplified ] = "å·²ç»éšå…¥ä»¥ä¸‹çš„åˆ—ã€‚è¯·é€‰ä¸­è¦æ˜¾ç¤ºçš„åˆ—åŒºåŸŸ,ç„¶åç‚¹å‡»ç¡®å®šã€‚";
         Text[ chinese_traditional ] = "ä»¥ä¸‹çš„æ¬„æ˜¯éš±å…¥çš„ã€‚è«‹æ‚¨é¸å–è¦é¡¯ç¤ºçš„æ¬„ï¼Œç„¶åæŒ‰ä¸€ä¸‹ç¢ºå®šã€‚";
         Text[ arabic ] = "åĞå ÇáÃÚãÏÉ ãÎİíÉ ÍÇáíÇğ. ÇáÑÌÇÁ ÊÍÏíÏ ÇáÃÚãÏÉ ÇáÊí ÊÑíÏ ÅÙåÇÑåÇ¡ Ëã ÇáäŞÑ İæŞ \"ÍÓäÇğ\"";
         Text[ turkish ] = "Şu sütunlar şu an gizlenmiş durumda. Tekrar görüntülemek istediklerinizi seçin ve \"Tamam\" düğmesini tıklayın.";
-        Text[ catalan ] = "Las siguientes columnas están por ahora ocultas. Seleccione las que deban mostrarse y pulse sobre Aceptar.";
-        Text[ finnish ] = "Seuraavat sarakkeet on piilotettu. Merkitse n?ytett?v?t kent?t ja valitse sitten OK.";
+        Text[ catalan ] = "Les següents columnes estan ocultes. Seleccioneu les que s'han de mostrar i feu clic sobre Accepta.";
+        Text[ finnish ] = "Seuraavat sarakkeet on piilotettu. Merkitse näytettävät kentät ja valitse sitten OK.";
+        Text[ thai ] = "à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸™à¸µà¹‰à¸–à¸¹à¸à¸‹à¹ˆà¸­à¸™à¸­à¸¢à¸¹à¹ˆ à¸à¸£à¸¸à¸“à¸²à¸—à¸³à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹à¸ªà¸”à¸‡à¹à¸¥à¸°à¹€à¸¥à¸·à¸­à¸à¸•à¸à¸¥à¸‡";
     };
 
     ListBox 1
@@ -128,7 +129,7 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
     };
     Text[ english_us ] = "Show columns";
     Text[ portuguese ] = "Mostrar colunas";
-    Text[ russian ] = "Ïîêàçàòü êîëîíêè";
+    Text[ russian ] = "Ïîêàçàòü ñòîëáöû";
     Text[ greek ] = "ÅìöÜíéóç óôçëşí";
     Text[ dutch ] = "Kolommen weergeven";
     Text[ french ] = "Afficher les colonnes";
@@ -145,9 +146,16 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
     Text[ arabic ] = "ÅÙåÇÑ ÇáÃÚãÏÉ";
     Text[ turkish ] = "Sütunları görüntüle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mostrar columnas";
-    Text[ finnish ] = "N?yt? sarakkeet";
+    Text[ catalan ] = "Mostra les columnes";
+    Text[ finnish ] = "Näytä sarakkeet";
+    Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
+
+
+
+
+
+
 
 
 

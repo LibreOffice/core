@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-14 10:07:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1071,17 +1071,20 @@ IMPL_LINK( SvxColorTabPage, SelectColorModelHdl_Impl, void *, EMPTYARG )
 
                 // RGB-Werte im Bereich 0..255 verarbeiten (nicht in %),
                 // dazu MetricField's entsprechend einstellen
-                aMtrFldColorModel1.SetUnit (FUNIT_NONE);
-                aMtrFldColorModel1.SetMin (0);
-                aMtrFldColorModel1.SetMax (255);
+                aMtrFldColorModel1.SetUnit(FUNIT_NONE);
+                aMtrFldColorModel1.SetMin(0);
+                aMtrFldColorModel1.SetMax(255);
+                aMtrFldColorModel1.SetLast(255);
 
-                aMtrFldColorModel2.SetUnit (FUNIT_NONE);
-                aMtrFldColorModel2.SetMin (0);
-                aMtrFldColorModel2.SetMax (255);
+                aMtrFldColorModel2.SetUnit(FUNIT_NONE);
+                aMtrFldColorModel2.SetMin(0);
+                aMtrFldColorModel2.SetMax(255);
+                aMtrFldColorModel2.SetLast(255);
 
-                aMtrFldColorModel3.SetUnit (FUNIT_NONE);
-                aMtrFldColorModel3.SetMin (0);
-                aMtrFldColorModel3.SetMax (255);
+                aMtrFldColorModel3.SetUnit(FUNIT_NONE);
+                aMtrFldColorModel3.SetMin(0);
+                aMtrFldColorModel3.SetMax(255);
+                aMtrFldColorModel3.SetLast(255);
             }
             break;
 
@@ -1115,20 +1118,23 @@ IMPL_LINK( SvxColorTabPage, SelectColorModelHdl_Impl, void *, EMPTYARG )
                 // dazu MetricField's entsprechend einstellen
                 String aStrUnit( RTL_CONSTASCII_USTRINGPARAM( " %" ) );
 
-                aMtrFldColorModel1.SetUnit (FUNIT_CUSTOM);
-                aMtrFldColorModel1.SetCustomUnitText ( aStrUnit );
-                aMtrFldColorModel1.SetMin (0);
-                aMtrFldColorModel1.SetMax (100);
+                aMtrFldColorModel1.SetUnit(FUNIT_CUSTOM);
+                aMtrFldColorModel1.SetCustomUnitText( aStrUnit );
+                aMtrFldColorModel1.SetMin(0);
+                aMtrFldColorModel1.SetMax(100);
+                aMtrFldColorModel1.SetLast(100);
 
-                aMtrFldColorModel2.SetUnit (FUNIT_CUSTOM);
-                aMtrFldColorModel2.SetCustomUnitText ( aStrUnit );
-                aMtrFldColorModel2.SetMin (0);
-                aMtrFldColorModel2.SetMax (100);
+                aMtrFldColorModel2.SetUnit(FUNIT_CUSTOM);
+                aMtrFldColorModel2.SetCustomUnitText( aStrUnit );
+                aMtrFldColorModel2.SetMin(0);
+                aMtrFldColorModel2.SetMax(100);
+                aMtrFldColorModel2.SetLast(100);
 
-                aMtrFldColorModel3.SetUnit (FUNIT_CUSTOM);
-                aMtrFldColorModel3.SetCustomUnitText ( aStrUnit );
-                aMtrFldColorModel3.SetMin (0);
-                aMtrFldColorModel3.SetMax (100);
+                aMtrFldColorModel3.SetUnit(FUNIT_CUSTOM);
+                aMtrFldColorModel3.SetCustomUnitText( aStrUnit );
+                aMtrFldColorModel3.SetMin(0);
+                aMtrFldColorModel3.SetMax(100);
+                aMtrFldColorModel3.SetLast(100);
             }
             break;
         }

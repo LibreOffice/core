@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-06 10:34:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
+#ifndef SVX_DBTOOLSCLIENT_HXX
+#include "dbtoolsclient.hxx"
+#endif
 
 //==================================================================
 class FmFieldWin;
@@ -134,6 +137,7 @@ public:
 class FmFieldWin    :public SfxFloatingWindow
                     ,public SfxControllerItem
                     ,public ::comphelper::OPropertyChangeListener
+                    ,public ::svxform::OStaticDataAccessTools
 {
     ::osl::Mutex        m_aMutex;
     FmFieldWinListBox* pListBox;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-21 13:48:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,12 +124,20 @@
 #endif
 
 #include "unotext.hxx"
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 
 using namespace ::osl;
 using namespace ::vos;
 using namespace ::rtl;
 
 namespace css = ::com::sun::star;
+
 
 //------------------------------------------------------------------------
 // SvxTextEditSourceImpl
@@ -167,6 +175,7 @@ private:
     SdrOutliner*                    mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
     SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
+    css::uno::Reference< css::linguistic2::XLinguServiceManager > m_xLinguServiceManager;
     Point                           maTextOffset;
     BOOL                            mbDataValid;
     BOOL                            mbDestroyed;
@@ -530,12 +539,6 @@ void SvxTextEditSourceImpl::UpdateOutliner()
 
 //------------------------------------------------------------------------
 
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
 
 
 SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
@@ -575,13 +578,16 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             }
 
 // -
-            css::uno::Reference< css::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            css::uno::Reference< css::linguistic2::XLinguServiceManager > xLinguServiceManager(
-                xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))), css::uno::UNO_QUERY );
-
-            if ( xLinguServiceManager.is() )
+            if ( !m_xLinguServiceManager.is() )
             {
-                css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), css::uno::UNO_QUERY );
+                css::uno::Reference< css::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+                m_xLinguServiceManager = css::uno::Reference< css::linguistic2::XLinguServiceManager >(
+                    xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))), css::uno::UNO_QUERY );
+            }
+
+            if ( m_xLinguServiceManager.is() )
+            {
+                css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator( m_xLinguServiceManager->getHyphenator(), css::uno::UNO_QUERY );
                 if( xHyphenator.is() )
                     mpOutliner->SetHyphenator( xHyphenator );
             }
@@ -616,7 +622,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             mpOutliner->SetText( *mpOutlinerParaObject );
 
             // #91254# put text to object and set EmptyPresObj to FALSE
-            if( pTextObj && bTextEditActive && mpOutlinerParaObject && mpObject->IsEmptyPresObj() )
+            if( pTextObj && bTextEditActive && mpOutlinerParaObject && mpObject->IsEmptyPresObj() && pTextObj->IsRealyEdited() )
             {
                 mpObject->SetEmptyPresObj( FALSE );
                 pTextObj->SetOutlinerParaObject( mpOutlinerParaObject );

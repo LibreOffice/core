@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-06 10:38:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,6 @@ sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetSt
 /***********************************************************************
 * class SvxShapeGroup                                                  *
 ***********************************************************************/
-uno::Sequence< uno::Type > SvxShapeGroup::maTypeSequence;
 
 SvxShapeGroup::SvxShapeGroup( SdrObject* pObj, SvxDrawPage* pDrawPage  )  throw() :
     SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_GROUP) ),
@@ -421,7 +420,6 @@ uno::Sequence< OUString > SAL_CALL SvxShapeGroup::getSupportedServiceNames()
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-uno::Sequence< uno::Type > SvxShapeConnector::maTypeSequence;
 
 SvxShapeConnector::SvxShapeConnector( SdrObject* pObj )  throw() :
     SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CONNECTOR) )
@@ -589,7 +587,6 @@ uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames()
 * class SvxShapeControl                                                *
 ***********************************************************************/
 
-uno::Sequence< uno::Type > SvxShapeControl::maTypeSequence;
 
 SvxShapeControl::SvxShapeControl( SdrObject* pObj )  throw() :
     SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CONTROL) )
@@ -777,10 +774,13 @@ static struct
 }
 SvxShapeControlPropertyValueMapping[] =
 {
+    // note that order matters:
+    // valueAlignToParaAdjust and valueParaAdjustToAlign search this map from the _beginning_
+    // and use the first matching entry
     {style::ParagraphAdjust_LEFT,           (sal_Int16)awt::TextAlign::LEFT},
     {style::ParagraphAdjust_CENTER,         (sal_Int16)awt::TextAlign::CENTER},
     {style::ParagraphAdjust_RIGHT,          (sal_Int16)awt::TextAlign::RIGHT},
-    {style::ParagraphAdjust_BLOCK,          (sal_Int16)awt::TextAlign::LEFT},
+    {style::ParagraphAdjust_BLOCK,          (sal_Int16)awt::TextAlign::RIGHT},
     {style::ParagraphAdjust_STRETCH,        (sal_Int16)awt::TextAlign::LEFT},
     {style::ParagraphAdjust_MAKE_FIXED_SIZE,(sal_Int16)awt::TextAlign::LEFT},
     {-1,-1}
@@ -1062,11 +1062,12 @@ void SAL_CALL ImplSvxPolyPolygonToPointSequenceSequence( const drawing::PointSeq
 
     // Zeiger auf innere sequences holen
     const drawing::PointSequence* pInnerSequence = pOuterSequence->getConstArray();
+    const drawing::PointSequence* pInnerSeqEnd   = pInnerSequence + pOuterSequence->getLength();
 
     // #85920# Clear the given polygon, since the new one shall be SET, not ADDED
     rNewPolyPolygon.Clear();
 
-    for(sal_Int32 a=0;a<nOuterSequenceCount;a++)
+    for(;pInnerSequence != pInnerSeqEnd;++pInnerSequence)
     {
         sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
 
@@ -1074,14 +1075,15 @@ void SAL_CALL ImplSvxPolyPolygonToPointSequenceSequence( const drawing::PointSeq
         XPolygon aNewPolygon((USHORT)nInnerSequenceCount);
 
         // Zeiger auf Arrays holen
-        const awt::Point* pArray = pInnerSequence->getConstArray();
+        const awt::Point* pArray    = pInnerSequence->getConstArray();
+        const awt::Point* pArrayEnd = pArray + nInnerSequenceCount;
 
-        for(sal_Int32 b=0;b<nInnerSequenceCount;b++)
+        for(USHORT b=0;pArray != pArrayEnd;++b,++pArray)
         {
-            aNewPolygon[(USHORT)b] = Point( pArray->X, pArray->Y );
-            pArray++;
+            Point& rPoint = aNewPolygon[b];
+            rPoint.X() = pArray->X;
+            rPoint.Y() = pArray->Y;
         }
-        pInnerSequence++;
 
         // Neues Teilpolygon einfuegen
         rNewPolyPolygon.Insert(aNewPolygon);

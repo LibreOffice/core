@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-29 13:29:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #ifndef _SVX_FMITEMS_HXX
 #include "fmitems.hxx"
 #endif
+#ifndef _SVX_FMHELP_HRC
+#include "fmhelp.hrc"
+#endif
 
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
@@ -171,39 +174,44 @@ SvxFmAbsRecWin::~SvxFmAbsRecWin()
 }
 
 // -----------------------------------------------------------------------
-void SvxFmAbsRecWin::FirePosition()
+void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
 {
-    INT32 nRecord = GetValue();
-    if (nRecord < GetMin() || nRecord > GetMax())
+    if ( _bForce || ( GetText() != GetSavedValue() ) )
     {
-        Sound::Beep();
-        return;
+        INT32 nRecord = GetValue();
+        if (nRecord < GetMin() || nRecord > GetMax())
+        {
+            Sound::Beep();
+            return;
+        }
+
+        SfxInt32Item aPositionParam( FN_PARAM_1, nRecord );
+
+        m_pController->GetBindings().GetDispatcher()->Execute( SID_FM_RECORD_ABSOLUTE, SFX_CALLMODE_RECORD, &aPositionParam, 0L );
+
+        // to update our content we explicitly call StateChanged : a simple Invalidate(m_nId) is insufficient
+        // as our StateChanged won't be called if entered a invalid position which didn't cause the cursor
+        // to be moved.
+        SfxPoolItem* pState = NULL;
+        SfxItemState eState = m_pController->GetBindings().QueryState(m_pController->GetId(), pState);
+        ((SfxControllerItem*)m_pController)->StateChanged(m_pController->GetId(), eState, pState);
+        delete pState;
+
+        SaveValue();
     }
-
-    FmFormInfoItem aItem( SID_FM_RECORD_ABSOLUTE, FmFormInfo(nRecord,-1));
-
-    m_pController->GetBindings().GetDispatcher()->Execute( SID_FM_RECORD_ABSOLUTE, SFX_CALLMODE_RECORD, &aItem, 0L );
-
-    // to update our content we explicitly call StateChanged : a simple Invalidate(m_nId) is insufficient
-    // as our StateChanged won't be called if entered a invalid position which didn't cause the cursor
-    // to be moved.
-    SfxPoolItem* pState = NULL;
-    SfxItemState eState = m_pController->GetBindings().QueryState(m_pController->GetId(), pState);
-    ((SfxControllerItem*)m_pController)->StateChanged(m_pController->GetId(), eState, pState);
-    delete pState;
 }
 
 // -----------------------------------------------------------------------
 void SvxFmAbsRecWin::LoseFocus()
 {
-    FirePosition();
+    FirePosition( sal_False );
 }
 
 // -----------------------------------------------------------------------
 void SvxFmAbsRecWin::KeyInput( const KeyEvent& rKeyEvent )
 {
     if( rKeyEvent.GetKeyCode() == KEY_RETURN && GetText().Len() )
-        FirePosition();
+        FirePosition( sal_True );
     else
         NumericField::KeyInput( rKeyEvent );
 }
@@ -352,7 +360,7 @@ void SvxFmTbxCtlConfig::Select( USHORT nModifier )
 // class SvxFmTbxCtlAbsRec
 //========================================================================
 
-SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlAbsRec, FmFormInfoItem );
+SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlAbsRec, SfxInt32Item );
 DBG_NAME(SvxFmTbxCtlAbsRec);
 //-----------------------------------------------------------------------
 SvxFmTbxCtlAbsRec::SvxFmTbxCtlAbsRec( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings )
@@ -378,17 +386,9 @@ void SvxFmTbxCtlAbsRec::StateChanged( USHORT nSID, SfxItemState eState, const Sf
 
     if (pState)
     {
-        FmFormInfo aInfo = ((FmFormInfoItem*)pState)->GetInfo();
-        if (aInfo.Count > 0)
-        {
-            pWin->SetMax(aInfo.Count);
-        }
-        else
-        {
-            pWin->SetMax(LONG_MAX);
-        }
-        pWin->SetValue(aInfo.Pos);
-        pWin->SetReadOnly(aInfo.ReadOnly);
+        const SfxInt32Item* pItem = PTR_CAST( SfxInt32Item, pState );
+        DBG_ASSERT( pItem, "SvxFmTbxCtlAbsRec::StateChanged: invalid item!" );
+        pWin->SetValue( pItem ? pItem->GetValue() : -1 );
     }
 
     BOOL bEnable = SFX_ITEM_DISABLED != eState && pState;
@@ -405,6 +405,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( USHORT nSID, SfxItemState eState, const Sf
 Window* SvxFmTbxCtlAbsRec::CreateItemWindow( Window* pParent )
 {
     SvxFmAbsRecWin* pWin = new SvxFmAbsRecWin( pParent, this );
+    pWin->SetUniqueId( UID_ABSOLUTE_RECORD_WINDOW );
     return pWin;
 }
 

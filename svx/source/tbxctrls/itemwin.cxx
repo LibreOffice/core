@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-04 12:48:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,9 @@
 #include "dlgutil.hxx"
 #include "itemwin.hxx"
 #include "linectrl.hxx"
-#include "colorcfg.hxx"
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
+#endif
 
 #include "linectrl.hrc"
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-07 12:29:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,14 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         if (aTmpSiz.Width()!=0) aMaxSiz.Width()=aTmpSiz.Width();
         if (aTmpSiz.Height()!=0) aMaxSiz.Height()=aTmpSiz.Height();
     }
-    if (bTextFrame) {
+
+    // #106879#
+    // Done earlier since used in else tree below
+    SdrTextHorzAdjust eHAdj(GetTextHorizontalAdjust());
+    SdrTextVertAdjust eVAdj(GetTextVerticalAdjust());
+
+    if(IsTextFrame())
+    {
         long nMinWdt=GetMinTextFrameWidth();
         long nMinHgt=GetMinTextFrameHeight();
         long nMaxWdt=GetMaxTextFrameWidth();
@@ -229,12 +236,21 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         }
         aPaperMin.Width()=nMinWdt;
         aPaperMin.Height()=nMinHgt;
-    } else {
+    }
+    else
+    {
+        // #106879#
+        // aPaperMin needs to be set to object's size if full width is activated
+        // for hor or ver writing respectively
+        if((SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting())
+            || (SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting()))
+        {
+            aPaperMin = aAnkSiz;
+        }
+
         aPaperMax=aMaxSiz;
     }
 
-    SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
-    SdrTextVertAdjust eVAdj=GetTextVerticalAdjust();
     if (pViewMin!=NULL) {
         *pViewMin=aViewInit;
 
@@ -299,7 +315,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
             if(nParaAnz != 0)
             {
                 // Wirklich Textobjekt kreieren
-                pNewText = rOutl.CreateParaObject( 0, nParaAnz );
+                pNewText = rOutl.CreateParaObject( 0, (sal_uInt16)nParaAnz );
             }
         }
         SetOutlinerParaObject(pNewText);

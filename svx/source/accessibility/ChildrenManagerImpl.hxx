@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: af $ $Date: 2002-12-04 13:01:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ namespace accessibility {
 class AccessibleShape;
 
 class ChildDescriptor; // See below for declaration.
+typedef ::std::vector<ChildDescriptor> ChildDescriptorListType;
 
 // Re-using MutexOwner class defined in AccessibleContextBase.hxx
 
@@ -130,6 +131,10 @@ class ChildDescriptor; // See below for declaration.
     <p> The visible area which is used to determine the visibility of the
     shapes is taken from the view forwarder.  Thus, to signal a change of
     the visible area call <member>ViewForwarderChanged</member>.</p>
+
+    <p>The children manager adds itself as disposing() listener at every UNO
+    shape it creates an accessible object for so that when the UNO shape
+    passes away it can dispose() the associated accessible object.</p>
 
     @see ChildrenManager
 */
@@ -204,6 +209,8 @@ public:
         @param aChildDescriptor
             This object contains references to the original shape and its
             associated accessible object.
+        @param  _nIndex
+            The index which will be used in getAccessibleIndexInParent of the accessible shape.
         @return
             Returns a reference to the requested accessible child.  This
             reference is empty if it has not been possible to create the
@@ -211,7 +218,7 @@ public:
     */
     ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessible>
-        GetChild (ChildDescriptor& aChildDescriptor)
+        GetChild (ChildDescriptor& aChildDescriptor,sal_Int32 _nIndex)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Return the requested accessible child given a shape.  This method
@@ -352,7 +359,6 @@ protected:
         between updates (i.e. complete rebuilds of the list) and allows a
         fast (constant time) access to its elements for given indices.</p>
     */
-    typedef ::std::vector<ChildDescriptor> ChildDescriptorListType;
     ChildDescriptorListType maVisibleChildren;
 
     /** The original list of UNO shapes.  The visible shapes are inserted
@@ -407,6 +413,12 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
+    /** Names of new accessible objects are disambiguated with this index.
+        It gets increased every time a new object is created and (at the
+        moment) never reset.
+    */
+    sal_Int32 mnNewNameIndex;
+
     // Don't use the copy constructor or the assignment operator.  They are
     // not implemented (and are not intended to be).
     ChildrenManagerImpl (const ChildrenManagerImpl&);
@@ -470,6 +482,22 @@ private:
     */
     void RemoveShape (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& xShape);
+
+    /** Add the children manager as dispose listener at the given shape so
+        that the associated accessible object can be disposed when the shape
+        is disposed.
+        @param xShape
+            Register at this shape as dispose listener.
+    */
+    void RegisterAsDisposeListener (const ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape>& xShape);
+
+    /** Remove the children manager as dispose listener at the given shape
+        @param xShape
+            Unregister at this shape as dispose listener.
+    */
+    void UnregisterAsDisposeListener (const ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape>& xShape);
 };
 
 
@@ -509,6 +537,12 @@ public:
     */
     AccessibleShape* GetAccessibleShape (void) const;
 
+    /** set the index _nIndex at the accessible shape
+        @param  _nIndex
+            The new index in parent.
+    */
+    void setIndexAtAccessibleShape(sal_Int32 _nIndex);
+
     /** This flag is set during the visibility calculation and indicates
         that at one time in this process an event is sent that informs the
         listners of the creation of a new accessible object.  This flags is
@@ -529,9 +563,33 @@ public:
     explicit ChildDescriptor (const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxAccessibleShape);
 
+    ~ChildDescriptor (void);
 
-    bool operator == (const ChildDescriptor& aDescriptor);
-    bool operator < (const ChildDescriptor& aDescriptor);
+    /** Dispose the accessible object of this descriptor.  If that object
+        does not exist then do nothing.
+        @param rParent
+            The parent of the accessible object to dispose.  A child event
+            is sent in its name.
+    */
+    void disposeAccessibleObject (AccessibleContextBase& rParent);
+
+    /** Compare two child descriptors.  Take into account that a child
+        descriptor may be based on a UNO shape or, already, on an accessible
+        shape.
+    */
+    inline bool operator == (const ChildDescriptor& aDescriptor)
+    {
+        return (this == &aDescriptor || (mxShape.get() == aDescriptor.mxShape.get() ) && ( mxShape.is() || mxAccessibleShape.get() == aDescriptor.mxAccessibleShape.get()));
+    }
+
+    /** The ordering defined by this operator is only used in order to be able
+        to put child descriptors in some STL containers.  The ordering itself is
+        not so important, its 'features' are not used.
+    */
+    inline bool operator < (const ChildDescriptor& aDescriptor)
+    {
+        return (mxShape.get() < aDescriptor.mxShape.get());
+    }
 
 };
 

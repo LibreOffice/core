@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-12 10:52:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #include <scriptspaceitem.hxx>
 #include <charscaleitem.hxx>
 
+#include <svtools/colorcfg.hxx>
 
 #include <forbiddencharacterstable.hxx>
 
@@ -125,7 +126,6 @@
 #ifndef _COM_SUN_STAR_TEXT_CHARACTERCOMPRESSIONTYPE_HPP_
 #include <com/sun/star/text/CharacterCompressionType.hpp>
 #endif
-
 
 #include <comphelper/processfactory.hxx>
 
@@ -2167,7 +2167,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT n
         if ( STRING_LEN != nKashidaPos )
             rArray.Insert( nKashidaPos, rArray.Count() );
 
-        aWordSel = WordRight( aWordSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        aWordSel = WordRight( aWordSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
         aWordSel = SelectWord( aWordSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
     }
 }
@@ -2538,7 +2538,16 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
             {
                 DBG_ASSERT( ( pAttrib->Which() >= EE_CHAR_START ) && ( pAttrib->Which() <= EE_FEATURE_END ), "Unglueltiges Attribut in Seek() " );
                 if ( IsScriptItemValid( pAttrib->Which(), nScriptType ) )
+                {
                     pAttrib->SetFont( rFont, pOut );
+                    // #i1550# hard color attrib should win over text color from field
+                    if ( pAttrib->Which() == EE_FEATURE_FIELD )
+                    {
+                        EditCharAttrib* pColorAttr = pNode->GetCharAttribs().FindAttrib( EE_CHAR_COLOR, nPos );
+                        if ( pColorAttr )
+                            pColorAttr->SetFont( rFont, pOut );
+                    }
+                }
                 if ( pAttrib->Which() == EE_CHAR_FONTWIDTH )
                     nRelWidth = ((const SvxCharScaleWidthItem*)pAttrib->GetItem())->GetValue();
                 if ( pAttrib->Which() == EE_CHAR_LANGUAGE_CJK )
@@ -2745,6 +2754,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
     EditLine* pLine;
     Point aTmpPos;
+    Point aRedLineTmpPos;
     DBG_ASSERT( GetParaPortions().Count(), "Keine ParaPortion?!" );
     SvxFont aTmpFont( GetParaPortions()[0]->GetNode()->GetCharAttribs().GetDefFont() );
     Font aOldFont( pOutDev->GetFont() );
@@ -2966,6 +2976,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 long nTxtWidth = pTextPortion->GetSize().Width();
 
                                 Point aOutPos( aTmpPos );
+                                aRedLineTmpPos = aTmpPos;
 //L2R                                if ( pTextPortion->GetRightToLeft() )
 //L2R                                {
 //L2R                                    sal_uInt16 nNextPortion = y+1;
@@ -3002,6 +3013,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                                 aOutPos.Y() -= nDiff;
                                             else
                                                 aOutPos.X() += nDiff;
+                                            aRedLineTmpPos = aOutPos;
                                             aTmpFont.SetEscapement( 0 );
                                         }
 
@@ -3068,6 +3080,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         {
                                             aRealOutPos.X() += pTextPortion->GetExtraInfos()->nPortionOffsetX;
                                         }
+
                                         aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
                                         if ( bDrawFrame )
                                         {
@@ -3083,9 +3096,20 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 #ifndef SVX_LIGHT
                                     if ( GetStatus().DoOnlineSpelling() && GetStatus().DoDrawRedLines() && pPortion->GetNode()->GetWrongList()->HasWrongs() && pTextPortion->GetLen() )
                                     {
+                                        {//#105750# adjust LinePos for superscript or subscript text
+                                            short nEsc = aTmpFont.GetEscapement();
+                                            if( nEsc )
+                                            {
+                                                long nShift = ((nEsc*long(aTmpFont.GetSize().Height()))/ 100L);
+                                                if( !IsVertical() )
+                                                    aRedLineTmpPos.Y() -= nShift;
+                                                else
+                                                    aRedLineTmpPos.X() += nShift;
+                                            }
+                                        }
                                         Color aOldColor( pOutDev->GetLineColor() );
-                                        pOutDev->SetLineColor( Color( GetColorConfig().GetColorValue( svx::SPELL ).nColor ) );
-                                        lcl_DrawRedLines( pOutDev, aTmpFont.GetSize().Height(), aTmpPos, nIndex, nIndex + pTextPortion->GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical() );
+                                        pOutDev->SetLineColor( Color( GetColorConfig().GetColorValue( svtools::SPELL ).nColor ) );
+                                        lcl_DrawRedLines( pOutDev, aTmpFont.GetSize().Height(), aRedLineTmpPos, nIndex, nIndex + pTextPortion->GetLen(), pDXArray, pPortion->GetNode()->GetWrongList(), nOrientation, aOrigin, IsVertical() );
                                         pOutDev->SetLineColor( aOldColor );
                                     }
 #endif // !SVX_LIGHT
@@ -3137,6 +3161,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                             {
                                 if ( pTextPortion->GetExtraValue() && ( pTextPortion->GetExtraValue() != ' ' ) )
                                 {
+                                    SeekCursor( pPortion->GetNode(), nIndex+1, aTmpFont, pOutDev );
                                     aTmpFont.SetTransparent( sal_False );
                                     aTmpFont.SetEscapement( 0 );
                                     aTmpFont.SetPhysFont( pOutDev );
@@ -3888,6 +3913,9 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USH
         // CTL/Bidi checking neccessary
         // Don't use BIDI_STRONG, VCL must do some checks.
         nLayoutMode &= ~( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
+
+        if ( GetRightToLeft( nPara, nIndex ) )
+            nLayoutMode |= TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_TEXTORIGIN_LEFT;
     }
 
     pOutDev->SetLayoutMode( nLayoutMode );
@@ -3911,7 +3939,7 @@ Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()
 
 Color ImpEditEngine::GetAutoColor() const
 {
-    Color aColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+    Color aColor = const_cast<ImpEditEngine*>(this)->GetColorConfig().GetColorValue( svtools::FONTCOLOR ).nColor;
 
     if ( GetBackgroundColor() != COL_AUTO )
     {

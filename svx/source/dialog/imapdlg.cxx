@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-14 10:07:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,6 +710,8 @@ void SvxIMapDlg::DoOpen()
 
             delete pIStm;
         }
+
+        pIMapWnd->Invalidate();
     }
 }
 

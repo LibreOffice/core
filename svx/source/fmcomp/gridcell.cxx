@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-15 07:39:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _SVX_GRIDCOLS_HXX
 #include "gridcols.hxx"
 #endif
+#ifndef SVX_FORM_SDBDATACOLUMN_HXX
+#include "sdbdatacolumn.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_SDBC_XSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XStatement.hpp>
@@ -140,14 +143,8 @@
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
 #endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
-#include <connectivity/dbconversion.hxx>
-#endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
 #endif
 #ifndef _COMPHELPER_DATETIME_HXX_
 #include <comphelper/datetime.hxx>
@@ -282,8 +279,7 @@ void DbGridColumn::UpdateFromField(const DbGridRow* pRow, const Reference< ::com
         PTR_CAST(FmXFilterCell, m_pCell)->Update();
     else if (pRow && pRow->IsValid() && m_nFieldPos >= 0 && m_pCell && pRow->HasField(m_nFieldPos))
     {
-        const Reference< ::com::sun::star::sdb::XColumn >& xField = pRow->GetField(m_nFieldPos);
-        PTR_CAST(FmXDataCell, m_pCell)->UpdateFromField(xField, xFormatter);
+        PTR_CAST(FmXDataCell, m_pCell)->UpdateFromField( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter );
     }
 }
 
@@ -421,8 +417,7 @@ String DbGridColumn::GetCellText(const DbGridRow* pRow, const Reference< ::com::
         aText  = INVALIDTEXT;
     else if (pRow->HasField(m_nFieldPos))
     {
-        const Reference< ::com::sun::star::sdb::XColumn >& xField = pRow->GetField(m_nFieldPos);
-        aText = GetCellText(xField, xFormatter);
+        aText = GetCellText( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter );
     }
     return aText;
 }
@@ -449,7 +444,7 @@ Reference< ::com::sun::star::sdb::XColumn >  DbGridColumn::GetCurrentFieldValue(
     const DbGridRowRef xRow = m_rParent.GetCurrentRow();
     if (xRow.Is() && xRow->HasField(m_nFieldPos))
     {
-        xField = xRow->GetField(m_nFieldPos);
+        xField = xRow->GetField(m_nFieldPos).getColumn();
     }
     return xField;
 }
@@ -494,8 +489,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
         }
         else if (pRow->HasField(m_nFieldPos))
         {
-            const Reference< ::com::sun::star::sdb::XColumn >& xField = pRow->GetField(m_nFieldPos);
-            pDataCell->Paint(rDev, rRect, xField, xFormatter);
+            pDataCell->Paint(rDev, rRect, pRow->GetField( m_nFieldPos ).getColumn(), xFormatter);
         }
     }
     else if (!m_pCell)
@@ -662,14 +656,20 @@ sal_Bool DbCellControl::Commit()
 //------------------------------------------------------------------------------
 void DbCellControl::ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground)
 {
+    Window* pWindows[] = { m_pPainter,m_pWindow};
     if (bFont)
     {
         Font aFont( pParent->IsControlFont() ? pParent->GetControlFont() : pParent->GetPointFont());
         aFont.SetTransparent( isTransparent() );
-        if (m_pPainter)
-            m_pPainter->SetZoomedPointFont(aFont);
-        if (m_pWindow)
-            m_pWindow->SetZoomedPointFont(aFont);
+
+        for (sal_Int32 i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
+        {
+            if ( pWindows[i] )
+            {
+                pWindows[i]->SetZoomedPointFont(aFont);
+                pWindows[i]->SetZoom(pParent->GetZoom());
+            }
+        }
     }
 
     if (bFont || bForeground)
@@ -679,27 +679,19 @@ void DbCellControl::ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool b
         sal_Bool bTextLineColor = pParent->IsTextLineColor();
         Color aTextLineColor( pParent->GetTextLineColor() );
 
-        if (m_pPainter)
+        for (sal_Int32 i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
         {
-            m_pPainter->SetTextColor(aTextColor);
-            if (pParent->IsControlForeground())
-                m_pPainter->SetControlForeground(aTextColor);
+            if ( pWindows[i] )
+            {
+                pWindows[i]->SetTextColor(aTextColor);
+                if (pParent->IsControlForeground())
+                    pWindows[i]->SetControlForeground(aTextColor);
 
-            if (bTextLineColor)
-                m_pPainter->SetTextLineColor();
-            else
-                m_pPainter->SetTextLineColor(aTextLineColor);
-        }
-        if (m_pWindow)
-        {
-            m_pWindow->SetTextColor(aTextColor);
-            if (pParent->IsControlForeground())
-                m_pWindow->SetControlForeground(aTextColor);
-
-            if (bTextLineColor)
-                m_pWindow->SetTextLineColor();
-            else
-                m_pWindow->SetTextLineColor(aTextLineColor);
+                if (bTextLineColor)
+                    pWindows[i]->SetTextLineColor();
+                else
+                    pWindows[i]->SetTextLineColor(aTextLineColor);
+            }
         }
     }
 
@@ -708,28 +700,19 @@ void DbCellControl::ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool b
         if (pParent->IsControlBackground())
         {
             Color aColor( pParent->GetControlBackground());
-            if (m_pPainter)
+            for (sal_Int32 i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
             {
-                if ( isTransparent() )
-                    m_pPainter->SetBackground();
-                else
+                if ( pWindows[i] )
                 {
-                    m_pPainter->SetBackground(aColor);
-                    m_pPainter->SetControlBackground(aColor);
+                    if ( isTransparent() )
+                        pWindows[i]->SetBackground();
+                    else
+                    {
+                        pWindows[i]->SetBackground(aColor);
+                        pWindows[i]->SetControlBackground(aColor);
+                    }
+                    pWindows[i]->SetFillColor(aColor);
                 }
-                m_pPainter->SetFillColor(aColor);
-            }
-
-            if (m_pWindow)
-            {
-                if ( isTransparent() )
-                    m_pWindow->SetBackground();
-                else
-                {
-                    m_pWindow->SetBackground(aColor);
-                    m_pWindow->SetControlBackground(aColor);
-                }
-                m_pWindow->SetFillColor(aColor);
             }
         }
         else
@@ -884,7 +867,11 @@ double DbCellControl::GetValue(const Reference< ::com::sun::star::sdb::XColumn >
     double fValue = 0;
     if (m_rColumn.IsNumeric())
     {
-        fValue = _xVariant->getDouble();
+        try
+        {
+            fValue = _xVariant->getDouble();
+        }
+        catch(const Exception&) { }
     }
     else
     {
@@ -1475,7 +1462,10 @@ void DbCheckBox::Paint(OutputDevice& rDev, const Rectangle& rRect,
                           const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
     lcl_setCheckBoxState( _xVariant, static_cast<CheckBoxControl*>(m_pPainter) );
-    DbCellControl::Paint(rDev, rRect);
+    if ( m_pPainter->GetParent() != &rDev )
+        m_pPainter->Draw(&rDev,rRect.TopLeft(), rRect.GetSize(),0);
+    else
+        DbCellControl::Paint(rDev, rRect);
 }
 
 //------------------------------------------------------------------------------
@@ -2351,7 +2341,7 @@ String DbListBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn 
         String aText;
         if (m_bBound)
         {
-            Sequence<sal_Int16> aPosSeq = ::findValue(m_aValueList, _xVariant->getString(), sal_True);
+            Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, _xVariant->getString(), sal_True);
             if (aPosSeq.getLength())
                 aText = static_cast<ListBox*>(m_pWindow)->GetEntry(aPosSeq.getConstArray()[0]);
         }
@@ -2700,7 +2690,7 @@ void DbFilterField::SetText(const String& rText)
         case ::com::sun::star::form::FormComponentType::LISTBOX:
         {
             String aText;
-            Sequence<sal_Int16> aPosSeq = ::findValue(m_aValueList, m_aText, sal_True);
+            Sequence<sal_Int16> aPosSeq = ::comphelper::findValue(m_aValueList, m_aText, sal_True);
             if (aPosSeq.getLength())
                 static_cast<ListBox*>(m_pWindow)->SelectEntryPos(aPosSeq.getConstArray()[0], sal_True);
             else

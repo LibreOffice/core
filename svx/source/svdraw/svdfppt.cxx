@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-10 17:00:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERCONTAINER_HPP_
-#include <com/sun/star/container/XIdentifierContainer.hpp>
-#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -246,12 +242,6 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
-#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HPP_
-#include <com/sun/star/drawing/GluePoint2.hpp>
-#endif
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
@@ -260,9 +250,6 @@
 #endif
 #ifndef _SVX_WRITINGMODEITEM_HXX
 #include "writingmodeitem.hxx"
-#endif
-#ifndef _SVX_ESCHEREX_HXX
-#include <escherex.hxx>
 #endif
 #ifndef _SV_PRINT_HXX
 #include <vcl/print.hxx>
@@ -564,53 +551,6 @@ SvStream& operator>>( SvStream& rIn, PptColorSchemeAtom& rAtom )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SvStream& operator>>( SvStream& rIn, PptConnectorRule& rRule )
-{
-    rIn >> rRule.nRuleId
-        >> rRule.nShapeA
-        >> rRule.nShapeB
-        >> rRule.nShapeC
-        >> rRule.ncptiA
-        >> rRule.ncptiB;
-
-    return rIn;
-}
-
-PptSolverContainer::PptSolverContainer()
-{
-}
-
-PptSolverContainer::~PptSolverContainer()
-{
-    for ( PptConnectorRule* pPtr = (PptConnectorRule*)aCList.First();
-            pPtr; pPtr = (PptConnectorRule*)aCList.Next() )
-        delete pPtr;
-}
-
-SvStream& operator>>( SvStream& rIn, PptSolverContainer& rContainer )
-{
-    DffRecordHeader aHd;
-    rIn >> aHd;
-    if ( aHd.nRecType == DFF_msofbtSolverContainer )
-    {
-        DffRecordHeader aCRule;
-        while ( ( rIn.GetError() == 0 ) && ( rIn.Tell() < aHd.GetRecEndFilePos() ) )
-        {
-            rIn >> aCRule;
-            if ( aCRule.nRecType == DFF_msofbtConnectorRule )
-            {
-                PptConnectorRule* pRule = new PptConnectorRule;
-                rIn >> *pRule;
-                rContainer.aCList.Insert( pRule, LIST_APPEND );
-            }
-            aCRule.SeekToEndOfRecord( rIn );
-        }
-    }
-    return rIn;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
 {
     DffRecordHeader aHd;
@@ -739,23 +679,6 @@ SvStream& operator>>( SvStream& rIn, PptOEPlaceholderAtom& rAtom )
     return rIn;
 }
 
-PptBackgroundHelper::PptBackgroundHelper() :
-    pBObj           ( NULL ),
-    bIsTemporary    ( sal_True )
-{
-}
-
-void PptBackgroundHelper::SetBackground( sal_Bool _bIsTemporary, SdrObject* pObj )
-{
-    pBObj = pObj;
-    bIsTemporary = _bIsTemporary;
-}
-
-PptBackgroundHelper::~PptBackgroundHelper()
-{
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PptSlidePersistEntry::PptSlidePersistEntry() :
@@ -766,11 +689,12 @@ PptSlidePersistEntry::PptSlidePersistEntry() :
     pSolverContainer    ( NULL ),
     pPresentationObjects( NULL ),
     pStyleSheet         ( NULL ),
+    pBObj               ( NULL ),
+    bBObjIsTemporary    ( sal_True ),
     ePageKind           ( PPT_MASTERPAGE ),
     nDrawingDgId        ( 0xffffffff ),
     nBackgroundOffset   ( 0 )
 {
-    pBackgroundHelper = NULL;
 }
 
 
@@ -997,8 +921,9 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
     }
 }
 
-SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pRet )
+SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pOriginalObj )
 {
+    SdrObject* pRet = pOriginalObj;
     ProcessData& rData = *((ProcessData*)pData);
     PptSlidePersistEntry& rPersistEntry = rData.rPersistEntry;
 
@@ -1165,15 +1090,12 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             SdrTextVertAdjust eTVA;
             SdrTextHorzAdjust eTHA;
 
+            nTextFlags &= PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT   | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT
+                        | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
+
             if ( bVerticalText )
             {
-                if ( nTextFlags & PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK )
-                    nTextFlags |= PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER;
-
-                nTextFlags &= ( PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER
-                              | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT );
-
-                eTVA = SDRTEXTVERTADJUST_TOP;
+                eTVA = SDRTEXTVERTADJUST_BLOCK;
                 eTHA = SDRTEXTHORZADJUST_CENTER;
 
                 // Textverankerung lesen
@@ -1200,7 +1122,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         eTHA = SDRTEXTHORZADJUST_LEFT;
                     break;
                 }
-
                 // if there is a 100% use of following attributes, the textbox can been aligned also in vertical direction
                 switch ( eTextAnchor )
                 {
@@ -1219,8 +1140,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
                     default :
                     {
-                        if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER )
-                            eTVA = SDRTEXTVERTADJUST_CENTER;
+                        if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT )
+                            eTVA = SDRTEXTVERTADJUST_TOP;
                         else if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT )
                             eTVA = SDRTEXTVERTADJUST_BOTTOM;
                     }
@@ -1257,9 +1178,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         eTVA = SDRTEXTVERTADJUST_BOTTOM;
                     break;
                 }
-                nTextFlags &= PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT   | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT
-                            | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
-
                 // if there is a 100% usage of following attributes, the textbox can be aligned also in horizontal direction
                 switch ( eTextAnchor )
                 {
@@ -1476,21 +1394,36 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         }
         if ( rPersistEntry.pSolverContainer )
         {
-            for ( PptConnectorRule* pPtr = (PptConnectorRule*)rPersistEntry.pSolverContainer->aCList.First();
-                pPtr; pPtr = (PptConnectorRule*)rPersistEntry.pSolverContainer->aCList.Next() )
+            for ( SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)rPersistEntry.pSolverContainer->aCList.First();
+                pPtr; pPtr = (SvxMSDffConnectorRule*)rPersistEntry.pSolverContainer->aCList.Next() )
             {
                 if ( rObjData.nShapeId == pPtr->nShapeC )
                     pPtr->pCObj = pRet;
                 else
                 {
+                    SdrObject* pConnectObj = pRet;
+                    if ( pOriginalObj && pRet->ISA( SdrObjGroup ) )
+                    {   /* check if the original object from the escherimport is part of the group object,
+                        if this is the case, we will use the original object to connect to */
+                        SdrObjListIter aIter( *pRet, IM_DEEPWITHGROUPS );
+                        while( aIter.IsMore() )
+                        {
+                            SdrObject* pPartObj = aIter.Next();
+                            if ( pPartObj == pOriginalObj )
+                            {
+                                pConnectObj = pPartObj;
+                                break;
+                            }
+                        }
+                    }
                     if ( rObjData.nShapeId == pPtr->nShapeA )
                     {
-                        pPtr->pAObj = pRet;
+                        pPtr->pAObj = pConnectObj;
                         pPtr->nSpFlagsA = rObjData.nSpFlags;
                     }
                     if ( rObjData.nShapeId == pPtr->nShapeB )
                     {
-                        pPtr->pBObj = pRet;
+                        pPtr->pBObj = pConnectObj;
                         pPtr->nSpFlagsB = rObjData.nSpFlags;
                     }
                 }
@@ -1774,7 +1707,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
                                     }
                                     if ( SeekToRec( rStCtrl, DFF_msofbtSolverContainer, aPPTDgContainer.GetRecEndFilePos() ) )
                                     {
-                                        pE->pSolverContainer = new PptSolverContainer;
+                                        pE->pSolverContainer = new SvxMSDffSolverContainer;
                                         rStCtrl >> *( pE->pSolverContainer );
                                     }
                                     aPPTDgContainer.SeekToBegOfRecord( rStCtrl );
@@ -2905,245 +2838,6 @@ SdrPage* SdrPowerPointImport::MakeBlancPage( sal_Bool bMaster ) const
 }
 
 
-void SdrPowerPointImport::SolveSolver( const PptSolverContainer& rSolver )
-{
-    sal_Int32 i, nCount;
-    for ( i = 0, nCount = rSolver.aCList.Count(); i < nCount; i++ )
-    {
-        PptConnectorRule* pPtr = (PptConnectorRule*)rSolver.aCList.GetObject( i );
-        if ( pPtr->pCObj )
-        {
-            for ( int nN = 0; nN < 2; nN++ )
-            {
-                SdrObject*  pO;
-                sal_uInt32  nC, nSpFlags;
-                sal_Bool    bTail;
-                if ( !nN )
-                {
-                    bTail = sal_True;
-                    pO = pPtr->pAObj;
-                    nC = pPtr->ncptiA;
-                    nSpFlags = pPtr->nSpFlagsA;
-                }
-                else
-                {
-                    bTail = sal_False;
-                    pO = pPtr->pBObj;
-                    nC = pPtr->ncptiB;
-                    nSpFlags = pPtr->nSpFlagsB;
-                }
-                if ( pO )
-                {
-                    Any aAny;
-                    GluePoint2 aGluePoint;
-                    Reference< XShape > aXShape( pO->getUnoShape(), UNO_QUERY );
-                    Reference< XShape > aXConnector( pPtr->pCObj->getUnoShape(), UNO_QUERY );
-                    Reference< XGluePointsSupplier > aXGluePointsSupplier;
-                    Reference< XIdentifierContainer > aXGluePointContainer;
-                    try
-                    {
-                        if ( aXShape.is() && aXConnector.is() )
-                        {
-                            aXGluePointsSupplier = Reference< XGluePointsSupplier >( aXShape, UNO_QUERY );
-                            if ( aXGluePointsSupplier.is() )
-                                aXGluePointContainer = Reference< XIdentifierContainer >::query( aXGluePointsSupplier->getGluePoints() );
-                        }
-                        if ( aXGluePointContainer.is() )
-                        {
-                            sal_Int32 nIndex = 4;
-                            sal_Bool bValidGluePoint = sal_False;
-                            UINT32 nInventor = pO->GetObjInventor();
-                            if( nInventor == SdrInventor )
-                            {
-                                UINT32 nObjId = pO->GetObjIdentifier();
-                                if ( nObjId == OBJ_CIRC )
-                                {                           // an ellipse has 8 default points to connect in PowerPoint
-                                    if ( ! ( nC & 1 ) )     // we do only support 4, each second point can be mapped
-                                        nObjId = OBJ_RECT;
-                                    nC >>= 1;               // reducing points to 4
-                                }
-                                switch( nObjId )
-                                {
-                                    case OBJ_GRUP :
-                                    case OBJ_GRAF :
-                                    case OBJ_RECT :
-                                    case OBJ_TEXT :
-                                    case OBJ_PAGE :
-                                    case OBJ_TEXTEXT :
-                                    case OBJ_wegFITTEXT :
-                                    case OBJ_wegFITALLTEXT :
-                                    case OBJ_TITLETEXT :
-                                    case OBJ_OUTLINETEXT :
-                                    {
-                                        if ( nC & 1 )
-                                        {
-                                            if ( nSpFlags & SP_FFLIPH )
-                                                nC ^= 2;    // 1 <-> 3
-                                        }
-                                        else
-                                        {
-                                            if ( nSpFlags & SP_FFLIPV )
-                                                nC ^= 1;    // 0 <-> 2
-                                        }
-                                        switch( nC )
-                                        {
-                                            case 0 :
-                                                nIndex = 0; // SDRVERTALIGN_TOP;
-                                            break;
-                                            case 1 :
-                                                nIndex = 3; // SDRHORZALIGN_RIGHT;
-                                            break;
-                                            case 2 :
-                                                nIndex = 2; // SDRVERTALIGN_BOTTOM;
-                                            break;
-                                            case 3 :
-                                                nIndex = 1; // SDRHORZALIGN_LEFT;
-                                            break;
-                                        }
-                                        if ( nIndex <= 3 )
-                                            bValidGluePoint = sal_True;
-                                    }
-                                    break;
-
-                                    case OBJ_CIRC :
-                                    {
-                                        aGluePoint.IsRelative = sal_True;
-                                        if ( nSpFlags & SP_FFLIPH )
-                                            nC ^= 3;    // 0 <-> 3, 1 <-> 2
-                                        if ( nSpFlags & SP_FFLIPV )
-                                            nC ^= 1;    // 0 <-> 1, 2 <-> 3
-                                        switch ( nC )
-                                        {
-                                            case 0 :
-                                            {
-                                                aGluePoint.Escape = EscapeDirection_UP;
-                                                aGluePoint.Position.X = 1464;
-                                                aGluePoint.Position.Y = 1464;
-                                            }
-                                            break;
-                                            case 1 :
-                                            {
-                                                aGluePoint.Escape = EscapeDirection_DOWN;
-                                                aGluePoint.Position.X = 1464;
-                                                aGluePoint.Position.Y = 10000 - 1464;
-                                            }
-                                            break;
-                                            case 2 :
-                                            {
-                                                aGluePoint.Escape = EscapeDirection_DOWN;
-                                                aGluePoint.Position.X = 10000 - 1464;
-                                                aGluePoint.Position.Y = 10000 - 1464;
-                                            }
-                                            break;
-                                            case 3 :
-                                            {
-                                                aGluePoint.Escape = EscapeDirection_UP;
-                                                aGluePoint.Position.X = 10000 - 1464;
-                                                aGluePoint.Position.Y = 1464;
-                                            }
-                                            break;
-                                        }
-                                        bValidGluePoint = sal_True;
-                                    }
-                                    break;
-
-                                    case OBJ_POLY :
-                                    case OBJ_PLIN :
-                                    case OBJ_LINE :
-                                    case OBJ_PATHLINE :
-                                    case OBJ_PATHFILL :
-                                    case OBJ_FREELINE :
-                                    case OBJ_FREEFILL :
-                                    case OBJ_SPLNLINE :
-                                    case OBJ_SPLNFILL :
-                                    case OBJ_PATHPOLY :
-                                    case OBJ_PATHPLIN :
-                                    {
-                                        sal_Bool bNotFound = sal_True;
-
-                                        PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aXShape ) );
-                                        sal_uInt16 i, j, nPolySize = aPolyPoly.Count();
-                                        if ( nPolySize )
-                                        {
-                                            sal_uInt32  nPointCount = 0;
-                                            Rectangle aBoundRect( aPolyPoly.GetBoundRect() );
-                                            if ( aBoundRect.GetWidth() && aBoundRect.GetHeight() )
-                                            {
-                                                for ( i = 0; bNotFound && ( i < nPolySize ); i++ )
-                                                {
-                                                    const Polygon& rPolygon = aPolyPoly.GetObject( i );
-                                                    for ( j = 0; bNotFound && ( j < rPolygon.GetSize() ); j++ )
-                                                    {
-                                                        PolyFlags eFlags = rPolygon.GetFlags( j );
-                                                        if ( eFlags == POLY_NORMAL )
-                                                        {
-                                                            if ( nC == nPointCount )
-                                                            {
-                                                                const Point& rPoint = rPolygon.GetPoint( j );
-                                                                double fXRel = rPoint.X() - aBoundRect.Left();
-                                                                double fYRel = rPoint.Y() - aBoundRect.Top();
-                                                                fXRel = fXRel / aBoundRect.GetWidth() * 10000;
-                                                                fYRel = fYRel / aBoundRect.GetHeight() * 10000;
-                                                                aGluePoint.Position = awt::Point( (sal_Int32)fXRel, (sal_Int32)fYRel );
-                                                                aGluePoint.IsRelative = sal_True;
-                                                                bNotFound = sal_False;
-                                                            }
-                                                            nPointCount++;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if ( !bNotFound )
-                                        {
-                                            bValidGluePoint = sal_True;
-                                        }
-                                    }
-                                    break;
-                                }
-                                if ( bValidGluePoint )
-                                {
-                                    Reference< XPropertySet > xPropSet( aXConnector, UNO_QUERY );
-                                    if ( xPropSet.is() )
-                                    {
-                                        if ( nIndex > 3 )
-                                        {
-                                            aAny <<= aGluePoint;
-                                            nIndex = aXGluePointContainer->insert( aAny );
-                                        }
-                                        if ( nN )
-                                        {
-                                            String aPropName( RTL_CONSTASCII_USTRINGPARAM( "EndShape" ) );
-                                            aAny <<= aXShape;
-                                            SetPropValue( aAny, xPropSet, aPropName, sal_True );
-                                            aPropName  = String( RTL_CONSTASCII_USTRINGPARAM( "EndGluePointIndex" ) );
-                                            aAny <<= nIndex;
-                                            SetPropValue( aAny, xPropSet, aPropName, sal_True );
-                                        }
-                                        else
-                                        {
-                                            String aPropName( RTL_CONSTASCII_USTRINGPARAM( "StartShape" ) );
-                                            aAny <<= aXShape;
-                                            SetPropValue( aAny, xPropSet, aPropName, sal_True );
-                                            aPropName = String( RTL_CONSTASCII_USTRINGPARAM( "StartGluePointIndex" ) );
-                                            aAny <<= nIndex;
-                                            SetPropValue( aAny, xPropSet, aPropName, sal_True );
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch ( ::com::sun::star::uno::Exception& )
-                    {
-                        DBG_ERROR("SdrPowerPointImport::SolveSolver - something goes wrong");
-                    }
-                }
-            }
-        }
-    }
-}
-
 // be sure not to import masterpages with this method
 // be sure not to import masterpages with this method
 void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry* pMasterPersist )
@@ -3177,8 +2871,6 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
             }
         }
         ProcessData aProcessData( rSlidePersist, (SdPage*)pRet );
-        rSlidePersist.pBackgroundHelper = new PptBackgroundHelper();
-
         while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
         {
             DffRecordHeader aHd;
@@ -3245,7 +2937,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 sal_Bool bTemporary = ( rSlidePersist.aSlideAtom.nFlags & 2 ) != 0;
                                                 sal_uInt32 nPos = rStCtrl.Tell();
                                                 rStCtrl.Seek( pE->nBackgroundOffset );
-                                                rSlidePersist.pBackgroundHelper->SetBackground( bTemporary, ImportObj( rStCtrl, (void*)&aProcessData, NULL ) );
+                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                                rSlidePersist.bBObjIsTemporary = bTemporary;
                                                 rStCtrl.Seek( nPos );
                                             }
                                         }
@@ -3261,7 +2954,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             if ( nSpFlags & SP_FBACKGROUND )
                                             {
                                                 aEscherObjListHd.SeekToBegOfRecord( rStCtrl );
-                                                rSlidePersist.pBackgroundHelper->SetBackground( sal_False, ImportObj( rStCtrl, (void*)&aProcessData, NULL ) );
+                                                rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                                rSlidePersist.bBObjIsTemporary = sal_False;
                                             }
                                         }
                                     }
@@ -3333,13 +3027,13 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             List* pList = aProcessData.pBackgroundColoredObjects;
                             if ( pList )
                             {
-                                if ( rSlidePersist.pBackgroundHelper->pBObj )
+                                if ( rSlidePersist.pBObj )
                                 {
                                     void* pPtr;
                                     const SfxPoolItem* pPoolItem = NULL;
 
-                                    SfxItemState eState = rSlidePersist.pBackgroundHelper->
-                                        pBObj->GetItemSet().GetItemState( XATTR_FILLCOLOR, FALSE, &pPoolItem );
+                                    SfxItemState eState = rSlidePersist.pBObj->GetItemSet()
+                                        .GetItemState( XATTR_FILLCOLOR, FALSE, &pPoolItem );
                                     if ( pPoolItem )
                                     {
                                         for ( pPtr = pList->First(); pPtr; pPtr = pList->Next() )
@@ -3351,12 +3045,12 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                 }
                             }
                         }
-                        if ( rSlidePersist.pBackgroundHelper->pBObj )
+                        if ( rSlidePersist.pBObj )
                         {
-                            if ( rSlidePersist.pBackgroundHelper->bIsTemporary )
-                                delete rSlidePersist.pBackgroundHelper->pBObj;
+                            if ( rSlidePersist.bBObjIsTemporary )
+                                delete rSlidePersist.pBObj;
                             else
-                                pRet->SetBackgroundObj( rSlidePersist.pBackgroundHelper->pBObj );
+                                pRet->SetBackgroundObj( rSlidePersist.pBObj );
                         }
                     }
                 }
@@ -3366,8 +3060,6 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
         }
         if ( rSlidePersist.pSolverContainer )
             SolveSolver( *rSlidePersist.pSolverContainer );
-
-        delete rSlidePersist.pBackgroundHelper;
     }
     rStCtrl.Seek( nMerk );
 }
@@ -3388,7 +3080,7 @@ sal_Bool SdrPowerPointImport::IsNoteOrHandout( USHORT nPageNum, PptPageKind ePag
 {
     sal_Bool bNote = eAktPageKind == PPT_NOTEPAGE;
     if ( eAktPageKind == PPT_MASTERPAGE )
-        bNote = nPageNum == 0 || nPageNum == 2;
+        bNote = ( nPageNum & 1 ) == 0;
     return bNote;
 }
 
@@ -7423,8 +7115,8 @@ PPTParagraphObj* PPTTextObj::Next()
 
 const SfxItemSet* PPTTextObj::GetBackground() const
 {
-    if ( mpImplTextObj->mrPersistEntry.pBackgroundHelper->pBObj )
-        return &mpImplTextObj->mrPersistEntry.pBackgroundHelper->pBObj->GetItemSet();
+    if ( mpImplTextObj->mrPersistEntry.pBObj )
+        return &mpImplTextObj->mrPersistEntry.pBObj->GetItemSet();
     else
         return NULL;
 }

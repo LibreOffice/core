@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2002-11-21 09:29:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1561,7 +1561,7 @@ IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                 aFmt.SetCharFmtName( sNumCharFmtName );
 
                 Graphic aGraphic;
-                if(GalleryExplorer::GetGraphicObj( String::CreateFromAscii("Bullets"), nIdx, &aGraphic))
+                if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nIdx, &aGraphic))
                 {
                     Size aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
                     SvxFrameVertOrient eOrient = SVX_VERT_LINE_CENTER;
@@ -1609,11 +1609,10 @@ SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, co
 
     SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP ),
 //    rStrList    ( rStrNames ),
-    sBullets(String::CreateFromAscii("Bullets")),
     bGrfNotFound( FALSE )
 
 {
-    GalleryExplorer::BeginLocking(sBullets);
+    GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
     SetStyle( GetStyle() | WB_VSCROLL );
     SetLineCount( 3 );
     aFormatTimer.SetTimeout(300);
@@ -1626,7 +1625,7 @@ SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, co
 
  SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {
-    GalleryExplorer::EndLocking(sBullets);
+    GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
     aFormatTimer.Stop();
 }
 /*-----------------13.02.97 09.41-------------------
@@ -1646,7 +1645,7 @@ void    SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     Size aSize(nRectHeight/8, nRectHeight/8);
 
     Graphic aGraphic;
-    if(!GalleryExplorer::GetGraphicObj( sBullets, nItemId - 1,
+    if(!GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nItemId - 1,
                         &aGraphic, NULL))
     {
         bGrfNotFound = TRUE;
@@ -2660,7 +2659,7 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
     {
         aGrfName = *((String*)aGrfNames.GetObject( nItemId - MN_GALLERY_ENTRY));
         Graphic aGraphic;
-        if(GalleryExplorer::GetGraphicObj( String::CreateFromAscii("Bullets"), nItemId - MN_GALLERY_ENTRY, &aGraphic))
+        if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nItemId - MN_GALLERY_ENTRY, &aGraphic))
         {
             aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
             bSucc = sal_True;
@@ -2739,8 +2738,7 @@ IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, pMenu )
             pPopup->RemoveItem( pPopup->GetItemPos( NUM_NO_GRAPHIC ));
             String aEmptyStr;
             SfxObjectShell *pDocSh = SfxObjectShell::Current();
-            String sBullets(String::CreateFromAscii("Bullets"));
-            GalleryExplorer::BeginLocking(sBullets);
+            GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
 
             for(USHORT i = 0; i < aGrfNames.Count(); i++)
             {
@@ -2749,7 +2747,7 @@ IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, pMenu )
                 INetURLObject aObj(sGrfName);
                 if(aObj.GetProtocol() == INET_PROT_FILE)
                     sGrfName = aObj.PathToFileName();
-                if(GalleryExplorer::GetGraphicObj( String::CreateFromAscii("Bullets"), i, &aGraphic))
+                if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))
                 {
                     Bitmap aBitmap(aGraphic.GetBitmap());
                     Size aSize(aBitmap.GetSizePixel());
@@ -2773,7 +2771,7 @@ IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, pMenu )
                         MN_GALLERY_ENTRY + i, sGrfName, aImage );
                 }
             }
-            GalleryExplorer::EndLocking(sBullets);
+            GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
         }
         LeaveWait();
     }
@@ -3051,7 +3049,9 @@ USHORT lcl_DrawBullet(VirtualDevice* pVDev,
     aFont.SetSize(aTmpSize);
     aFont.SetTransparent(TRUE);
     Color aBulletColor = rFmt.GetBulletColor();
-    if(aBulletColor == pVDev->GetFillColor())
+    if(aBulletColor.GetColor() == COL_AUTO)
+        aBulletColor = Color(pVDev->GetFillColor().IsDark() ? COL_WHITE : COL_BLACK);
+    else if(aBulletColor == pVDev->GetFillColor())
         aBulletColor.Invert();
     aFont.SetColor(aBulletColor);
     pVDev->SetFont( aFont );
@@ -3172,7 +3172,9 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
                     Font aSaveFont = pVDev->GetFont();
                     Font aColorFont(aSaveFont);
                     Color aTmpBulletColor = rFmt.GetBulletColor();
-                    if(aBackColor == aTmpBulletColor)
+                    if(aTmpBulletColor.GetColor() == COL_AUTO)
+                        aTmpBulletColor = Color(aBackColor.IsDark() ? COL_WHITE : COL_BLACK);
+                    else if(aTmpBulletColor == aBackColor)
                         aTmpBulletColor.Invert();
                     aColorFont.SetColor(aTmpBulletColor);
                     pVDev->SetFont(aColorFont);
@@ -3228,7 +3230,9 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
                 {
                     Font aColorFont(aStdFont);
                     Color aTmpBulletColor = rFmt.GetBulletColor();
-                    if(aBackColor == aTmpBulletColor)
+                    if(aTmpBulletColor.GetColor() == COL_AUTO)
+                        aTmpBulletColor = Color(aBackColor.IsDark() ? COL_WHITE : COL_BLACK);
+                    else if(aTmpBulletColor == aBackColor)
                         aTmpBulletColor.Invert();
                     aColorFont.SetColor(aTmpBulletColor);
                     pVDev->SetFont(aColorFont);

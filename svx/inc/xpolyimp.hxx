@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpolyimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,15 @@ public:
     FASTBOOL operator==(const ImpXPolygon& rImpXPoly) const;
     FASTBOOL operator!=(const ImpXPolygon& rImpXPoly) const { return !operator==(rImpXPoly); }
 
-    void CheckPointDelete() { if ( bDeleteOldPoints )
-                              { delete pOldPointAry;
-                                bDeleteOldPoints = FALSE; } }
+    void CheckPointDelete()
+    {
+        if ( bDeleteOldPoints )
+        {
+            delete[] (char*)pOldPointAry;
+            bDeleteOldPoints = FALSE;
+        }
+    }
+
     void Resize( USHORT nNewSize, BOOL bDeletePoints = TRUE );
     void InsertSpace( USHORT nPos, USHORT nCount );
     void Remove( USHORT nPos, USHORT nCount );

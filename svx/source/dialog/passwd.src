@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-20 10:13:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ french ] = "Mot de passe" ;
         Text [ dutch ] = "~Wachtwoord" ;
         Text [ swedish ] = "~Lösenord" ;
-        Text [ danish ] = "Adgangskode" ;
+        Text [ danish ] = "~Adgangskode" ;
         Text [ portuguese_brazilian ] = "~Pa?wort" ;
         Text [ portuguese ] = "~Senha" ;
         Text[ chinese_simplified ] = "å¯†ç (~P)";
@@ -96,11 +96,12 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ chinese_traditional ] = "å¯†ç¢¼(~P)";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
         Text[ greek ] = "Êùäéêüò ğñüóâáóçò";
-        Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ(~P)";
+        Text[ korean ] = "ì•”í˜¸(~P)";
         Text[ turkish ] = "Şif~re";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Contraseña";
+        Text[ catalan ] = "~Contrasenya";
         Text[ finnish ] = "~Salasana";
+        Text[ thai ] = "~à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
     };
     Edit ED_OLD_PASSWD
     {
@@ -121,7 +122,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ french ] = "Ancien" ;
         Text [ dutch ] = "Oud wachtwoord" ;
         Text [ swedish ] = "Gammalt lösenord" ;
-        Text [ danish ] = "Gammel" ;
+        Text [ danish ] = "Gammel adgangskode" ;
         Text [ portuguese_brazilian ] = "Alt" ;
         Text [ portuguese ] = "Antiga" ;
         Text[ chinese_simplified ] = "æ—§å¯†ç ";
@@ -131,11 +132,12 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ chinese_traditional ] = "èˆŠå¯†ç¢¼";
         Text[ arabic ] = "ŞÏíãÉ";
         Text[ greek ] = "Ğáëéü";
-        Text[ korean ] = "ì´ì „ íŒ¨ìŠ¤ì›Œë“œ";
+        Text[ korean ] = "ì´ì „ ì•”í˜¸";
         Text[ turkish ] = "Eski";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Anterior";
         Text[ finnish ] = "Vanha salasana";
+        Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹€à¸à¹ˆà¸²";
     };
     FixedText FT_NEW_PASSWD
     {
@@ -149,7 +151,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ french ] = "Mot de passe" ;
         Text [ dutch ] = "W~achtwoord" ;
         Text [ swedish ] = "Lös~enord" ;
-        Text [ danish ] = "Adgangskode" ;
+        Text [ danish ] = "A~dgangskode" ;
         Text [ portuguese_brazilian ] = "Pa~?wort" ;
         Text [ portuguese ] = "~Senha" ;
         Text[ chinese_simplified ] = "å¯†ç (~S)";
@@ -159,11 +161,12 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ chinese_traditional ] = "å¯†ç¢¼(~S)";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
         Text[ greek ] = "Êùäéêüò ğñüóâáóçò";
-        Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ(~S)";
+        Text[ korean ] = "ì•”í˜¸(~S)";
         Text[ turkish ] = "~Şifre";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Co~ntraseña";
+        Text[ catalan ] = "Co~ntrasenya";
         Text[ finnish ] = "~Salasana";
+        Text[ thai ] = "à¸£à¸«à¸±~à¸ªà¸œà¹ˆà¸²à¸™";
     };
     Edit ED_NEW_PASSWD
     {
@@ -187,7 +190,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ spanish ] = "~Repetir";
         Text[ finnish ] = "~Vahvista";
         Text[ italian ] = "Ripeti";
-        Text[ danish ] = "Gentag";
+        Text[ danish ] = "~Bekræft";
         Text[ swedish ] = "~Bekräfta";
         Text[ polish ] = "PotwierdŸ";
         Text[ portuguese_brazilian ] = "~Wiederholen";
@@ -197,7 +200,8 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ chinese_traditional ] = "ç¢ºèª(~R)";
         Text[ turkish ] = "~Yinele";
         Text[ arabic ] = "ÅÚÇÏÉ";
-        Text[ catalan ] = "~Repetir";
+        Text[ catalan ] = "~Repeteix";
+        Text[ thai ] = "à¸¢à¸·~à¸™à¸¢à¸±à¸™";
     };
     Edit ED_REPEAT_PASSWD
     {
@@ -214,11 +218,11 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ English ] = "New password" ;
         Text [ english_us ] = "New password" ;
         Text [ italian ] = "Nuova password" ;
-        Text [ spanish ] = "Nueva" ;
+        Text [ spanish ] = "Contraseña nueva" ;
         Text [ french ] = "Nouveau" ;
         Text [ dutch ] = "Nieuw wachtwoord" ;
         Text [ swedish ] = "Nytt lösenord" ;
-        Text [ danish ] = "Ny" ;
+        Text [ danish ] = "Ny adgangskode" ;
         Text [ portuguese_brazilian ] = "Neu" ;
         Text [ portuguese ] = "Nova" ;
         Text[ chinese_simplified ] = "æ–°å¯†ç ";
@@ -228,11 +232,12 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ chinese_traditional ] = "æ–°å¯†ç¢¼";
         Text[ arabic ] = "ÌÏíÏÉ";
         Text[ greek ] = "Íİïò";
-        Text[ korean ] = "ìƒˆ íŒ¨ìŠ¤ì›Œë“œ";
+        Text[ korean ] = "ìƒˆ ì•”í˜¸";
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nueva";
+        Text[ catalan ] = "Nova";
         Text[ finnish ] = "Uusi salasana";
+        Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹ƒà¸«à¸¡à¹ˆ";
     };
     OKButton BTN_PASSWD_OK
     {
@@ -271,11 +276,12 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ chinese_traditional ] = "å¯†ç¢¼ç„¡æ•ˆ";
         Text[ arabic ] = "ßáãÉ ÓÑ ÛíÑ ÕÇáÍÉ";
         Text[ greek ] = "¢êõñïò êùäéêüò ğñüóâáóçò";
-        Text[ korean ] = "ìœ íš¨í•˜ì§€ ì•Šì€ íŒ¨ìŠ¤ì›Œë“œ";
+        Text[ korean ] = "ì•”í˜¸ê°€ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.";
         Text[ turkish ] = "Geçersiz şifre";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Contraseña no válida";
+        Text[ catalan ] = "La contrasenya no és correcta";
         Text[ finnish ] = "Virheellinen salasana";
+        Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
     };
     String STR_ERR_REPEAT_PASSWD
     {
@@ -287,7 +293,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ spanish ] = "Las contraseñas no coinciden" ;
         Text [ french ] = "Les mots de passe ne concordent pas." ;
         Text [ swedish ] = "Lösenord stämmer inte överens" ;
-        Text [ danish ] = "Adgangskode passer ikke" ;
+        Text [ danish ] = "Adgangskoder stemmer ikke overens" ;
         Text [ portuguese ] = "As senhas não combinam." ;
         Text [ portuguese_brazilian ] = "Pa?w?ter stimmen nicht ?erein" ;
         Text[ chinese_simplified ] = "å¯†ç ä¸ä¸€è‡´";
@@ -297,19 +303,20 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ chinese_traditional ] = "å¯†ç¢¼ç„¡æ•ˆ";
         Text[ arabic ] = "ßáãÇÊ ÇáÓÑ ÛíÑ ãÊØÇÈŞÉ";
         Text[ greek ] = "Ïé êùäéêïß ğñüóâáóçò äåí óõìğßğôïõí";
-        Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŒ";
+        Text[ korean ] = "ì•”í˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
         Text[ turkish ] = "Şifreler aynı değil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Las contraseñas no coinciden";
+        Text[ catalan ] = "Les contrasenyes no coincideixen";
         Text[ finnish ] = "Salasanat eivät vastaa toisiaan";
+        Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹„à¸¡à¹ˆà¸•à¸£à¸‡à¸à¸±à¸™";
     };
     Text [ english_us ] = "Change Password" ;
     Text [ italian ] = "Cambia password" ;
-    Text [ spanish ] = "Modificar contraseña" ;
+    Text [ spanish ] = "Cambiar contraseña" ;
     Text [ french ] = "Modification du mot de passe" ;
-    Text [ dutch ] = "Wachtwoord veranderen" ;
+    Text [ dutch ] = "Wachtwoord wijzigen" ;
     Text [ swedish ] = "Ändra lösenord" ;
-    Text [ danish ] = "Modificer adgangskode" ;
+    Text [ danish ] = "Rediger adgangskode" ;
     Text [ portuguese_brazilian ] = "Pa?wort ?ndern" ;
     Text [ portuguese ] = "Modificar senha" ;
     Text[ chinese_simplified ] = "æ›´æ”¹å¯†ç ";
@@ -319,10 +326,30 @@ ModalDialog RID_SVXDLG_PASSWORD
     Text[ chinese_traditional ] = "è®Šæ›´å¯†ç¢¼";
     Text[ arabic ] = "ÊÛííÑ ßáãÉ ÇáÓÑ";
     Text[ greek ] = "ÁëëáãŞ êùäéêïı ğñüóâáóçò";
-    Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ ë³€ê²½";
+    Text[ korean ] = "ì•”í˜¸ ë³€ê²½";
     Text[ turkish ] = "Şifre değiştirme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modificar contraseña";
+    Text[ catalan ] = "Canvia la contrasenya";
     Text[ finnish ] = "Muuta salasana";
+    Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

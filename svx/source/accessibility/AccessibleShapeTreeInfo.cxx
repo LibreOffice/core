@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShapeTreeInfo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-06-07 14:51:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,12 +109,15 @@ AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (const AccessibleShapeTreeInfo&
 
 AccessibleShapeTreeInfo& AccessibleShapeTreeInfo::operator= (const AccessibleShapeTreeInfo& rInfo)
 {
-    mxDocumentWindow = rInfo.mxDocumentWindow;
-    mxModelBroadcaster = rInfo.mxModelBroadcaster;
-    mpView = rInfo.mpView;
-    mxController = rInfo.mxController,
-    mpWindow = rInfo.mpWindow;
-    mpViewForwarder = rInfo.mpViewForwarder;
+    if ( this != &rInfo )
+    {
+        mxDocumentWindow = rInfo.mxDocumentWindow;
+        mxModelBroadcaster = rInfo.mxModelBroadcaster;
+        mpView = rInfo.mpView;
+        mxController = rInfo.mxController,
+        mpWindow = rInfo.mpWindow;
+        mpViewForwarder = rInfo.mpViewForwarder;
+    }
     return *this;
 }
 

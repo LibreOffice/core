@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtqry.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 03:29:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,20 +72,21 @@ String RID_SVXSTR_QRY_PRINT_TITLE
     Text[ danish ] = "Udskriv det markerede";
     Text[ french ] = "Imprimer la sélection";
     Text[ swedish ] = "Skriv ut markering";
-    Text[ dutch ] = "Afdrukken van de selectie";
+    Text[ dutch ] = "Selectie afdrukken";
     Text[ spanish ] = "Imprimir la selección";
     Text[ english_us ] = "Printing selection";
-    Text[ chinese_simplified ] = "´òÓ¡Ñ¡ÖĞµÄ²¿·Ö";
+    Text[ chinese_simplified ] = "æ‰“å°é€‰ä¸­çš„éƒ¨åˆ†";
     Text[ russian ] = "Ïå÷àòü âûäåëåííîãî ôğàãìåíòà";
     Text[ polish ] = "Drukuj zaznaczony obszar";
-    Text[ japanese ] = "‘I‘ğ‚µ‚½•”•ª‚Ìˆóü";
-    Text[ chinese_traditional ] = "¦C¦L¿ï¨ú³¡¥÷";
+    Text[ japanese ] = "é¸æŠã—ãŸéƒ¨åˆ†ã®å°åˆ·";
+    Text[ chinese_traditional ] = "åˆ—å°é¸å–éƒ¨ä»½";
     Text[ arabic ] = "ØÈÇÚÉ ÇáÊÍÏíÏ";
     Text[ greek ] = "Åêôığùóç åğéëïãŞò";
-    Text[ korean ] = "¼±ÅÃÇÑ ¹üÀ§ ÀÎ¼â";
+    Text[ korean ] = "ì„ íƒí•œ ë²”ìœ„ ì¸ì‡„";
     Text[ turkish ] = "Seçilen aralık yazdırılıyor";
-    Text[ catalan ] = "Imprimir la selección";
+    Text[ catalan ] = "Imprimeix la selecció";
     Text[ finnish ] = "Tulostusvalinta";
+    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸à¸´à¸¡à¸à¹Œà¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸";
 };
 String RID_SVXSTR_QRY_PRINT_MSG
 {
@@ -96,21 +97,22 @@ String RID_SVXSTR_QRY_PRINT_MSG
     Text[ portuguese ] = "Deseja imprimir a selecção ou o documento inteiro?";
     Text[ danish ] = "Vil du udskrive det markerede eller hele dokumentet?";
     Text[ french ] = "Souhaitez vous imprimer uniquement la sélection ou bien le document entier ?";
-    Text[ swedish ] = "Vill Du skriva ut det markerade eller hela dokumentet?";
+    Text[ swedish ] = "Vill du skriva ut det markerade eller hela dokumentet?";
     Text[ dutch ] = "Wilt u de selectie of het hele document afdrukken?";
     Text[ spanish ] = "¿Desea imprimir solo la selección o todo el documento?";
     Text[ english_us ] = "Do you want to print the selection or the entire document?";
-    Text[ chinese_simplified ] = "ÄúÒª´òÓ¡Ñ¡ÖĞµÄ²¿·Ö»¹ÊÇÒª´òÓ¡Õû¸öÎÄµµ£¿";
-    Text[ russian ] = "Âû õîòèòå íàïå÷àòàòü âåñü äîêóìåíò èëè òîëüêî âûäåëåíííûé ôğàãìåíò?";
+    Text[ chinese_simplified ] = "è¦æ‰“å°é€‰ä¸­çš„éƒ¨åˆ†è¿˜æ˜¯è¦æ‰“å°æ•´ä¸ªæ–‡æ¡£ï¼Ÿ";
+    Text[ russian ] = "Âû õîòèòå íàïå÷àòàòü âåñü äîêóìåíò èëè òîëüêî âûäåëåííûé ôğàãìåíò?";
     Text[ polish ] = "Czy wydrukowaæ tylko zaznaczony obszar, czy ca³y dokument?";
-    Text[ japanese ] = "ˆóü‚Í‘I‘ğ‚µ‚½•”•ª‚É‚µ‚Ü‚·‚©AÄŞ·­ÒİÄ‘S‘Ì‚µ‚Ü‚·‚©H";
-    Text[ chinese_traditional ] = "­n¦C¦L¿ï¨úªº³¡¥÷ÁÙ¬O­n¦C¦L¾ã­Ó¤å¥ó¡H";
+    Text[ japanese ] = "å°åˆ·ã¯é¸æŠã—ãŸéƒ¨åˆ†ã«ã—ã¾ã™ã‹ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆå…¨ä½“ã—ã¾ã™ã‹ï¼Ÿ";
+    Text[ chinese_traditional ] = "è¦åˆ—å°é¸å–çš„éƒ¨ä»½é‚„æ˜¯è¦åˆ—å°æ•´å€‹æ–‡ä»¶ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ØÈÇÚÉ ÇáÊÍÏíÏ İŞØ¡ Ãã ÇáãÓÊäÏ ÈÃßãáå¿";
     Text[ greek ] = "Èİëåôå íá åêôõğşóåôå ôçí åğéëåãìİíç ğåñéï÷Ş Ş ïëüêëçñï ôï İããñáöï;";
-    Text[ korean ] = "¼±ÅÃÇÑ ¹üÀ§ ¶Ç´Â ¹®¼­ ÀüÃ¼¸¦ ÀÎ¼âÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "ì„ íƒí•œ ë²”ìœ„ ë˜ëŠ” ë¬¸ì„œ ì „ì²´ë¥¼ ì¸ì‡„í•˜ê² ìŠµë‹ˆê¹Œ?";
     Text[ turkish ] = "Seçilen aralık ya da belgenin tümü mü yazdırılsın?";
-    Text[ catalan ] = "¿Desea imprimir solo la selección o todo el documento?";
+    Text[ catalan ] = "Voleu imprimir només la selecció o tot el document?";
     Text[ finnish ] = "Haluatko tulostaa vain valinnan vai koko asiakirjan?";
+    Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œà¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸à¸«à¸£à¸·à¸­à¸—à¸±à¹‰à¸‡à¹€à¸­à¸à¸ªà¸²à¸£?";
 };
 String RID_SVXSTR_QRY_PRINT_ALL
 {
@@ -125,17 +127,18 @@ String RID_SVXSTR_QRY_PRINT_ALL
     Text[ dutch ] = "~Alles";
     Text[ spanish ] = "~Todo";
     Text[ english_us ] = "~All";
-    Text[ chinese_simplified ] = "È«²¿(~A)";
+    Text[ chinese_simplified ] = "å…¨éƒ¨(~A)";
     Text[ russian ] = "Âñå";
     Text[ polish ] = "Wszystko";
-    Text[ japanese ] = "‚·‚×‚Ä(~A)";
-    Text[ chinese_traditional ] = "¥ş³¡(~A)";
+    Text[ japanese ] = "ã™ã¹ã¦(~A)";
+    Text[ chinese_traditional ] = "å…¨éƒ¨(~A)";
     Text[ arabic ] = "Çáßá";
     Text[ greek ] = "¼ë~á";
-    Text[ korean ] = "ÀüÃ¼(~A)";
+    Text[ korean ] = "ëª¨ë‘(~A)";
     Text[ turkish ] = "~Tümü";
-    Text[ catalan ] = "~Todo";
+    Text[ catalan ] = "~Tot";
     Text[ finnish ] = "~Kaikki";
+    Text[ thai ] = "~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
 };
 String RID_SVXSTR_QRY_PRINT_SELECTION
 {
@@ -150,17 +153,26 @@ String RID_SVXSTR_QRY_PRINT_SELECTION
     Text[ dutch ] = "~Selectie";
     Text[ spanish ] = "Sele~cción";
     Text[ english_us ] = "~Selection";
-    Text[ chinese_simplified ] = "Ñ¡ÖĞ(~S)";
+    Text[ chinese_simplified ] = "é€‰ä¸­(~S)";
     Text[ russian ] = "Âûäåëåíèå";
     Text[ polish ] = "Selekcja";
-    Text[ japanese ] = "‘I‘ğ”ÍˆÍ(~S)";
-    Text[ chinese_traditional ] = "¿ï¨ú(~S)";
+    Text[ japanese ] = "é¸æŠç¯„å›²(~S)";
+    Text[ chinese_traditional ] = "é¸å–(~S)";
     Text[ arabic ] = "ÇáÊÍÏíÏ";
     Text[ greek ] = "ÅğéëïãŞ";
-    Text[ korean ] = "¼±ÅÃÇÑ ¹üÀ§(~S)";
+    Text[ korean ] = "ì„ íƒí•œ ë²”ìœ„(~S)";
     Text[ turkish ] = "~Seçilen aralık";
-    Text[ catalan ] = "Sele~cción";
-    Text[ finnish ] = "~Valinta";
+    Text[ catalan ] = "~Selecció";
+    Text[ finnish ] = "V~alinta";
+    Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¹€~à¸¥à¸·à¸­à¸";
 };
+
+
+
+
+
+
+
+
 
 

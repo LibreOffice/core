@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-09 15:35:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,8 +819,16 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
                 AddUndo(new SdrUndoGeoObj(*pObj));
             }
 
+            // #i8508#
+            // If this is a text object also rescue the OutlinerParaObject since
+            // applying attributes to the object may change text layout when
+            // multiple portions exist with multiple formats. If a OutlinerParaObject
+            // really exists and needs to be rescued is evaluated in the undo
+            // implementation itself.
+            sal_Bool bRescueText(pObj->ISA(SdrTextObj));
+
             // add attribute undo
-            AddUndo(new SdrUndoAttrObj(*pObj,FALSE,bHasEEItems || bPossibleGeomChange));
+            AddUndo(new SdrUndoAttrObj(*pObj,FALSE,bHasEEItems || bPossibleGeomChange || bRescueText));
 
             SdrBroadcastItemChange aItemChange(*pObj);
             if(bReplaceAll)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verttexttbxctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:38:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,11 +102,20 @@ SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
 void SvxVertCTLTextTbxCtrl::StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
-    BOOL bVisible = GetToolBox().IsItemVisible(GetId());
-    BOOL bCalc = sal_False;
     SvtLanguageOptions aLangOptions;
-    sal_Bool bEnabled = bCheckVertical ?
-                aLangOptions.IsVerticalTextEnabled() : aLangOptions.IsCTLFontEnabled();
+    BOOL bCalc = sal_False;
+    BOOL bVisible = GetToolBox().IsItemVisible(GetId());
+    sal_Bool bEnabled = sal_False;
+    if ( nSID == SID_VERTICALTEXT_STATE )
+        bEnabled = aLangOptions.IsVerticalTextEnabled();
+    else if ( nSID == SID_CTLFONT_STATE )
+        bEnabled = aLangOptions.IsCTLFontEnabled();
+    else
+    {
+        SfxToolBoxControl::StateChanged(nSID, eState, pState);
+        return;
+    }
+
     if(bEnabled)
     {
         if(!bVisible)
@@ -132,7 +141,6 @@ void SvxVertCTLTextTbxCtrl::StateChanged( USHORT nSID, SfxItemState eState,
             pParent->SetOutputSizePixel( aSize );
         }
     }
-    SfxToolBoxControl::StateChanged(nSID, eState, pState);
 }
 /* -----------------------------27.04.01 15:50--------------------------------
 

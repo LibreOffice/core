@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-15 11:54:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,9 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
         // Insert into listbox
         if ( aDocumentUrl.getLength() )
         {
+            if ( aDocumentUrl.equalsAscii( "private:factory/simpress?slot=10425" ) )                // SJ: #106216# do not start
+                aDocumentUrl = String( RTL_CONSTASCII_USTRINGPARAM( "private:factory/simpress" ) ); // the AutoPilot for impress
+
             const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory ( aDocumentUrl );
             if ( pFactory )
             {
@@ -483,17 +486,19 @@ void SvxHyperlinkNewDocTp::DoApply ()
                                                                            &aFrame, &aReferer, 0L );
 
                     // save new doc
-                    const SfxViewFrameItem *pItem = PTR_CAST( SfxViewFrameItem, pReturn );
-                    pViewFrame = pItem->GetFrame();
-                    if (pViewFrame)
+                    const SfxViewFrameItem *pItem = PTR_CAST( SfxViewFrameItem, pReturn );  // SJ: pReturn is NULL if the Hyperlink
+                    if ( pItem )                                                            // creation is cancelled #106216#
                     {
-                        //SfxViewFrame *pViewFrame = pFrame->GetCurrentViewFrame();
-                        SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                        pViewFrame = pItem->GetFrame();
+                        if (pViewFrame)
+                        {
+                            //SfxViewFrame *pViewFrame = pFrame->GetCurrentViewFrame();
+                            SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
-                        pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
-                                                              SFX_CALLMODE_SYNCHRON,
-                                                              &aNewName, 0L );
-
+                            pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
+                                                                  SFX_CALLMODE_SYNCHRON,
+                                                                  &aNewName, 0L );
+                        }
                     }
                 }
 

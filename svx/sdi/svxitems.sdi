@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-19 13:50:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,6 +435,8 @@ item BOOL                   SdrShadowItem;
 item INT16                  SdrTextFitToSizeTypeItem;  // enum
 item String                 SfxStringListItem;  // serialized into one concatenated string
 
+item BYTE           SfxGlobalNameItem;
+
 //-------------------------------------------------------------------------
 
 struct SvxCrossedOut
@@ -633,14 +635,6 @@ struct Address
 item Address SvxAddressItem;
 
 //-------------------------------------------------------------------------
-
-struct FmFormInfo
-{
-    INT32 Pos MID_POS ;
-    INT32 Count MID_COUNT ;
-    BOOL ReadOnly MID_READONLY ;
-};
-item FmFormInfo FmFormInfoItem ;
 
 struct PageModel
 {

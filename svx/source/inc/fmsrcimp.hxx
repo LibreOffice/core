@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-22 16:30:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
 #endif
 
 // ===================================================================================================
@@ -248,6 +251,7 @@ class FmSearchEngine
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >        m_xFormatter;
 
     CharClass               m_aCharacterClassficator;
+    CollatorWrapper         m_aStringCompare;
 
     // die Sammlung aller interesanten Felder (bzw. ihre ::com::sun::star::data::XDatabaseVariant-Interfaces und ihre FormatKeys)
     struct FieldInfo

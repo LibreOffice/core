@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 13:04:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ String RID_SVXSTR_FRAME
     Text [ french ] = "Bordure" ;
     Text [ swedish ] = "Inramning" ;
     Text [ dutch ] = "Omranding" ;
-    Text [ spanish ] = "Borde" ;
+    Text [ spanish ] = "Bordes" ;
     Text [ english_us ] = "Borders" ;
     Text[ chinese_simplified ] = "θΎΉζ΅†";
     Text[ russian ] = "Ξαπΰμλενθε";
@@ -198,7 +198,7 @@ String RID_SVXSTR_FRAME_STYLE
     Text[ chinese_traditional ] = "ι‚ζ΅†ζ¨£εΌ";
     Text[ arabic ] = "δγΨ ΗαΝΟζΟ";
     Text[ greek ] = "Στυλ περιγράμματος";
-    Text[ korean ] = "ν…λ‘λ¦¬ μ ν•";
+    Text[ korean ] = "ν…λ‘λ¦¬ μ¤νƒ€μΌ";
     Text[ turkish ] = "Kenarlύk biηimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estil de la vora";
@@ -226,7 +226,7 @@ String RID_SVXSTR_FRAME_COLOR
     Text[ chinese_traditional ] = "ι‚ζ΅†ι΅θ‰²";
     Text[ arabic ] = "αζδ ΗαΝΟζΟ";
     Text[ greek ] = "Χρώματα περιγραμμάτων";
-    Text[ korean ] = "ν…λ‘λ¦¬ μƒ‰";
+    Text[ korean ] = "ν…λ‘λ¦¬ μƒ‰μƒ";
     Text[ turkish ] = "Kenarlύk rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color de la vora";
@@ -252,7 +252,7 @@ String RID_SVXSTR_EXTRAS_CHARBACKGROUND
     Text [ swedish ] = "Teckenbakgrund" ;
     Text [ danish ] = "Tegnbaggrund" ;
     Text [ italian ] = "Sfondo caratteri" ;
-    Text [ spanish ] = "Fondo de carαcter" ;
+    Text [ spanish ] = "Fondo del carαcter" ;
     Text [ french ] = "Trame de fond" ;
     Text [ dutch ] = "Tekenachtergrond" ;
     Text [ portuguese ] = "Destacar caracteres" ;
@@ -263,7 +263,7 @@ String RID_SVXSTR_EXTRAS_CHARBACKGROUND
     Text[ chinese_traditional ] = "ε­—ε…ƒθƒζ™―";
     Text[ arabic ] = "ΞαένΙ ΗαΞΨ";
     Text[ greek ] = "Φόντο χαρακτήρων";
-    Text[ korean ] = "κ°•μ΅°";
+    Text[ korean ] = "λ¬Έμ λ°°κ²½";
     Text[ turkish ] = "Vurgu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ressaltament";
@@ -326,6 +326,25 @@ String RID_SVXSTR_PAGES
 {
     Text = "Seiten";
     Text[ english_us ] = "Pages";
+    Text[ portuguese ] = "Pages";
+    Text[ russian ] = "Pages";
+    Text[ greek ] = "Pages";
+    Text[ dutch ] = "Pages";
+    Text[ french ] = "Pages";
+    Text[ spanish ] = "Pαginas";
+    Text[ finnish ] = "Pages";
+    Text[ italian ] = "Pagine";
+    Text[ danish ] = "Pages";
+    Text[ swedish ] = "Pages";
+    Text[ polish ] = "Pages";
+    Text[ japanese ] = "γƒγƒΌγ‚Έ";
+    Text[ korean ] = "νμ΄μ§€";
+    Text[ chinese_simplified ] = "ι΅µ";
+    Text[ chinese_traditional ] = "ι ";
+    Text[ turkish ] = "Pages";
+    Text[ arabic ] = "Pages";
+    Text[ catalan ] = "Pages";
+    Text[ thai ] = "Pages";
 };
 Image RID_SVXIMG_GRAF_RED
 {
@@ -399,3 +418,8 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE_H
 };
 
 // ********************************************************************** EOF
+
+
+
+
+

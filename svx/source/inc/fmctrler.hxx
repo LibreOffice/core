@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-05 09:58:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,7 @@ protected:
     void startFormListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly  );
     void stopFormListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm, sal_Bool _bPropertiesOnly );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> findControl(::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >& rCtrls, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& rxCtrlModel ) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> findControl(::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >& rCtrls, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& rxCtrlModel ,sal_Bool _bRemove = sal_True) const;
 
     void insertControl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);
     void removeControl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-03 18:14:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,7 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
         if( aDataHelper.GetFormatCount() )
         {
             if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) ||
+                aDataHelper.HasFormat( SOT_FORMAT_FILE_LIST ) ||
                 aDataHelper.HasFormat( FORMAT_FILE ) ||
                 aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) ||
                 aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) ||
@@ -486,6 +487,7 @@ sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDro
         if( !mpCurTheme->IsDragging() )
         {
             if( rTarget.IsDropFormatSupported( SOT_FORMATSTR_ID_DRAWING ) ||
+                rTarget.IsDropFormatSupported( SOT_FORMAT_FILE_LIST ) ||
                 rTarget.IsDropFormatSupported( FORMAT_FILE ) ||
                 rTarget.IsDropFormatSupported( SOT_FORMATSTR_ID_SVXB ) ||
                 rTarget.IsDropFormatSupported( FORMAT_GDIMETAFILE ) ||
@@ -541,6 +543,7 @@ void GalleryBrowser2::StartDrag( Window* pWindow, const Point* pDragPoint )
 void GalleryBrowser2::TogglePreview( Window* pWindow, const Point* pPreviewPoint )
 {
     SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
+    GetViewWindow()->GrabFocus();
 }
 
 // -----------------------------------------------------------------------------
@@ -927,6 +930,7 @@ void GalleryBrowser2::ImplSelectItemId( ULONG nItemId )
 {
     if( nItemId )
     {
+
         mpIconView->SelectItem( (USHORT) nItemId );
         mpListView->SelectRow( nItemId - 1 );
     }

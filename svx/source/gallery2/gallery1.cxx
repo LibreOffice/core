@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-31 17:04:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,24 +328,36 @@ void Gallery::ReleaseGallery( Gallery* pGallery )
 
 void Gallery::ImplLoad( const String& rMultiPath )
 {
-    const USHORT nTokenCount = rMultiPath.GetTokenCount( ';' );
+    INetURLObject   aCurURL;
+    const USHORT    nTokenCount = rMultiPath.GetTokenCount( ';' );
+    sal_Bool        bIsReadOnlyDir;
 
     bMultiPath = ( nTokenCount > 0 );
-    aUserURL = SvtPathOptions().GetConfigPath();
-    ImplLoadSubDirs( aUserURL, bMultiPath );
+
+    aCurURL = SvtPathOptions().GetConfigPath();
+    ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
+
+    if( !bIsReadOnlyDir )
+        aUserURL = aCurURL;
 
     if( bMultiPath )
     {
         aRelURL = INetURLObject( rMultiPath.GetToken( 0, ';' ) );
-        aUserURL = INetURLObject( rMultiPath.GetToken( nTokenCount - 1, ';' ) );
 
         for( USHORT i = 0UL; i < nTokenCount; i++ )
-            ImplLoadSubDirs( INetURLObject( rMultiPath.GetToken( i, ';' ) ), i < ( nTokenCount - 1 ) );
+        {
+            aCurURL = rMultiPath.GetToken( i, ';' );
+
+            ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
+
+            if( !bIsReadOnlyDir )
+                aUserURL = aCurURL;
+        }
     }
     else
         aRelURL = INetURLObject( rMultiPath );
 
-    DBG_ASSERT( aUserURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+    DBG_ASSERT( aUserURL.GetProtocol() != INET_PROT_NOT_VALID, "no writable Gallery user directory available" );
     DBG_ASSERT( aRelURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     ImplLoadImports();
@@ -353,17 +365,51 @@ void Gallery::ImplLoad( const String& rMultiPath )
 
 // ------------------------------------------------------------------------
 
-void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, BOOL bReadOnly )
+void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsReadOnly )
 {
+    rbDirIsReadOnly = sal_False;
+
     try
     {
-        uno::Reference< XCommandEnvironment > xEnv;
-        Content                               aCnt( rBaseURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+        uno::Reference< XCommandEnvironment >   xEnv;
+        Content                                 aCnt( rBaseURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
 
         uno::Sequence< OUString > aProps( 1 );
-        aProps.getArray()[ 0 ] == OUString::createFromAscii( "Url" );
+        aProps.getArray()[ 0 ] = OUString::createFromAscii( "Url" );
 
         uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, INCLUDE_DOCUMENTS_ONLY ) );
+
+        try
+        {
+            // check readonlyness the very hard way
+            INetURLObject   aTestURL( rBaseURL );
+            String          aTestFile( RTL_CONSTASCII_USTRINGPARAM( "cdefghij.klm" ) );
+
+            aTestURL.Append( aTestFile );
+            SvStream* pTestStm = ::utl::UcbStreamHelper::CreateStream( aTestURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
+
+            if( pTestStm )
+            {
+                *pTestStm << 1;
+
+                if( pTestStm->GetError() )
+                    rbDirIsReadOnly = sal_True;
+
+                delete pTestStm;
+                KillFile( aTestURL );
+            }
+            else
+                rbDirIsReadOnly = sal_True;
+        }
+        catch( const ContentCreationException& )
+        {
+        }
+        catch( const ::com::sun::star::uno::RuntimeException& )
+        {
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+        }
 
         if( xResultSet.is() )
         {
@@ -410,7 +456,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, BOOL bReadOnly )
                                     aSdvCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
                             }
 
-                            GalleryThemeEntry* pEntry = GalleryTheme::CreateThemeEntry( aThmURL, bReadOnly );
+                            GalleryThemeEntry* pEntry = GalleryTheme::CreateThemeEntry( aThmURL, rbDirIsReadOnly || bReadOnly );
 
                             if( pEntry )
                             {

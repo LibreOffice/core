@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2002-12-10 15:24:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,6 @@
 
 namespace accessibility
 {
-
     typedef ::cppu::WeakImplHelper6< ::drafts::com::sun::star::accessibility::XAccessible,
                                      ::drafts::com::sun::star::accessibility::XAccessibleContext,
                                      ::drafts::com::sun::star::accessibility::XAccessibleComponent,
@@ -376,6 +375,8 @@ namespace accessibility
          */
         sal_Bool IsVisible() const;
 
+        int getNotifierClientId() const;
+
         // retrieve text interface for given paragraph index
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleText > GetParaInterface( sal_Int32 nIndex );
 
@@ -433,13 +434,11 @@ namespace accessibility
         // the current state set (updated from SetState/UnSetState and guarded by solar mutex)
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > mxStateSet;
 
-        mutable osl::Mutex  maMutex;
-
         /// The shape we're the accessible for (unguarded)
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > mxParent;
 
         /// Our listeners (guarded by maMutex)
-        ::cppu::OInterfaceContainerHelper maStateListeners;
+        int mnNotifierClientId;
     };
 
 } // end of namespace accessibility

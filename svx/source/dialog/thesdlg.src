@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 03:44:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,22 +109,23 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ portuguese ] = "~Procurar" ;
         Text [ finnish ] = "~Etsi" ;
         Text [ danish ] = "Slå op" ;
-        Text [ french ] = "~Rechercher" ;
+        Text [ french ] = "Rechercher" ;
         Text [ swedish ] = "~Slå upp" ;
         Text [ dutch ] = "~Opzoeken" ;
         Text [ spanish ] = "~Buscar" ;
         Text [ english_us ] = "~Search" ;
-        Text[ chinese_simplified ] = "²éÑ°(~S)";
-        Text[ russian ] = "Ïîèñê";
+        Text[ chinese_simplified ] = "æŸ¥å¯»(~S)";
+        Text[ russian ] = "Íàéòè";
         Text[ polish ] = "Szukaj";
-        Text[ japanese ] = "ŒŸõ(~S)";
-        Text[ chinese_traditional ] = "¬d´M(~S)";
+        Text[ japanese ] = "æ¤œç´¢(~S)";
+        Text[ chinese_traditional ] = "æŸ¥å°‹(~S)";
         Text[ arabic ] = "ÈÍË";
         Text[ greek ] = "Á~íáæŞôçóç";
-        Text[ korean ] = "Ã£¾Æ º¸±â(~S)";
+        Text[ korean ] = "ì°¾ì•„ë³´ê¸°(~S)";
         Text[ turkish ] = "A~ra";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Buscar";
+        Text[ catalan ] = "~Cerca";
+        Text[ thai ] = "~à¸„à¹‰à¸™à¸«à¸²";
     };
     PushButton BTN_LANGUAGE
     {
@@ -141,18 +142,19 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ danish ] = "Sprog..." ;
         Text [ portuguese ] = "Lí~ngua..." ;
         Text [ portuguese_brazilian ] = "S~prache..." ;
-        Text[ chinese_simplified ] = "ÓïÑÔ(~L)...";
+        Text[ chinese_simplified ] = "è¯­è¨€(~L)...";
         Text[ russian ] = "ßçûê...";
         Text[ polish ] = "Jêzyk...";
-        Text[ japanese ] = "Œ¾Œê(~L)...";
-        Text[ chinese_traditional ] = "»y¨¥(~L)...";
+        Text[ japanese ] = "è¨€èª(~L)...";
+        Text[ chinese_traditional ] = "èªè¨€(~L)...";
         Text[ arabic ] = "ÇááÛÉ...";
         Text[ greek ] = "Ãëşóóá...";
-        Text[ korean ] = "¾ğ¾î(~L)...";
+        Text[ korean ] = "ì–¸ì–´(~L)...";
         Text[ turkish ] = "D~il...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Idioma...";
-        Text[ finnish ] = "~Kieli";
+        Text[ finnish ] = "~Kieli...";
+        Text[ thai ] = "~à¸ à¸²à¸©à¸²...";
     };
     HelpButton BTN_THES_HELP
     {
@@ -169,25 +171,26 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ italian ] = "Parola" ;
         Text [ portuguese_brazilian ] = "~Palavra" ;
         Text [ portuguese ] = "~Palavra" ;
-        Text [ finnish ] = "~Sana" ;
+        Text [ finnish ] = "Sa~na" ;
         Text [ danish ] = "Ord" ;
-        Text [ french ] = "~Mot" ;
+        Text [ french ] = "Mot" ;
         Text [ swedish ] = "~Ord" ;
         Text [ dutch ] = "~Woord" ;
         Text [ spanish ] = "~Palabra" ;
         Text [ english_us ] = "~Word" ;
         LEFT = TRUE ;
-        Text[ chinese_simplified ] = "×Ö(~W)";
+        Text[ chinese_simplified ] = "å­—(~W)";
         Text[ russian ] = "Ñëîâî";
         Text[ polish ] = "S³owo";
-        Text[ japanese ] = "’PŒê(~W)";
-        Text[ chinese_traditional ] = "µü(~W)";
+        Text[ japanese ] = "å˜èª(~W)";
+        Text[ chinese_traditional ] = "è©(~W)";
         Text[ arabic ] = "ÇáßáãÉ";
         Text[ greek ] = "Ëİîç";
-        Text[ korean ] = "´Ü¾î(~W)";
+        Text[ korean ] = "ë‹¨ì–´(~W)";
         Text[ turkish ] = "~Sözcük";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Palabra";
+        Text[ catalan ] = "~Paraula";
+        Text[ thai ] = "~à¸„à¸³";
     };
     ListBox LB_WORD
     {
@@ -209,21 +212,22 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ danish ] = "Betydning " ;
         Text [ french ] = "~Signification " ;
         Text [ swedish ] = "~Betydelse  " ;
-        Text [ dutch ] = "~Betekenis  " ;
+        Text [ dutch ] = "~Betekenis" ;
         Text [ spanish ] = "~Significado  " ;
         Text [ english_us ] = "~Meaning " ;
         LEFT = TRUE ;
-        Text[ chinese_simplified ] = "º¬Òå (~M)";
+        Text[ chinese_simplified ] = "å«ä¹‰ (~M)";
         Text[ russian ] = "Çíà÷åíèå  ";
         Text[ polish ] = "Znaczenie ";
-        Text[ japanese ] = "Œê‹`(~M)";
-        Text[ chinese_traditional ] = "§t¸q(~M)";
+        Text[ japanese ] = "èªç¾©(~M)";
+        Text[ chinese_traditional ] = "æ¶µç¾©(~M)";
         Text[ arabic ] = "ÇáãÚäì ";
         Text[ greek ] = "¸~ííïéá ";
-        Text[ korean ] = "ÀÇ¹Ì (~M)";
+        Text[ korean ] = "ì˜ë¯¸ (~M)";
         Text[ turkish ] = "~Anlamı ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Significado  ";
+        Text[ catalan ] = "~Significat";
+        Text[ thai ] = "~à¸„à¸§à¸²à¸¡à¸«à¸¡à¸²à¸¢ ";
     };
     ListBox LB_MEAN
     {
@@ -250,17 +254,18 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ spanish ] = "Si~nónimo" ;
         Text [ english_us ] = "Sy~nonym" ;
         LEFT = TRUE ;
-        Text[ chinese_simplified ] = "Í¬Òå´Ê(~N)";
+        Text[ chinese_simplified ] = "åŒä¹‰è¯(~N)";
         Text[ russian ] = "Ñèíîíèì";
         Text[ polish ] = "Synonim";
-        Text[ japanese ] = "—Ş‹`Œê(~N)";
-        Text[ chinese_traditional ] = "¦P¸qµü(~N)";
+        Text[ japanese ] = "é¡ç¾©èª(~N)";
+        Text[ chinese_traditional ] = "åŒç¾©è©(~N)";
         Text[ arabic ] = "ÇáãÑÇÏİ";
         Text[ greek ] = "~Óõíşíõìï";
-        Text[ korean ] = "µ¿ÀÇ¾î(~N)";
+        Text[ korean ] = "ë™ì˜ì–´(~N)";
         Text[ turkish ] = "~Eşanlamlı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Si~nónimo";
+        Text[ catalan ] = "Si~nònim";
+        Text[ thai ] = "à¸„à¸³à¹€~à¸«à¸¡à¸·à¸­à¸™";
     };
     ListBox LB_SYNON
     {
@@ -281,23 +286,24 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ portuguese ] = "S~ubstituir" ;
         Text [ finnish ] = "~Korvaa" ;
         Text [ danish ] = "Erstat" ;
-        Text [ french ] = "R~emplacer par" ;
+        Text [ french ] = "Remplacer par" ;
         Text [ swedish ] = "~Ersätt" ;
         Text [ dutch ] = "~Vervangen" ;
         Text [ spanish ] = "~Reemplazar" ;
         Text [ english_us ] = "~Replace" ;
         LEFT = TRUE ;
-        Text[ chinese_simplified ] = "¸üÌæ(~R)";
+        Text[ chinese_simplified ] = "æ›¿æ¢(~R)";
         Text[ russian ] = "Çàìåíèòü";
         Text[ polish ] = "Zamieñ";
-        Text[ japanese ] = "’uŠ·(~R)";
-        Text[ chinese_traditional ] = "´À¥N(~R)";
+        Text[ japanese ] = "ç½®æ›(~R)";
+        Text[ chinese_traditional ] = "æ›¿ä»£(~R)";
         Text[ arabic ] = "ÇÓÊÈÏÇá";
         Text[ greek ] = "ÁíôéêáôÜóôáóç";
-        Text[ korean ] = "´ëÃ¼(~R)";
+        Text[ korean ] = "ë°”ê¾¸ê¸°(~R)";
         Text[ turkish ] = "~Değiştir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Reemplazar";
+        Text[ catalan ] = "~Reemplaça";
+        Text[ thai ] = "à¹~à¸—à¸™à¸—à¸µà¹ˆ";
     };
     Edit ED_REPL
     {
@@ -316,24 +322,25 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ italian ] = "Variazioni" ;
         Text [ portuguese_brazilian ] = "Varia??es" ;
         Text [ portuguese ] = "Alternativas" ;
-        Text [ finnish ] = "Muunnelmat" ;
+        Text [ finnish ] = "Muunnokset" ;
         Text [ danish ] = "Variationer" ;
         Text [ french ] = "Suggestions" ;
         Text [ swedish ] = "Variationer" ;
         Text [ dutch ] = "Variaties" ;
         Text [ spanish ] = "Variaciones" ;
         Text [ english_us ] = "Variations" ;
-        Text[ chinese_simplified ] = "ÁíÑ¡×Ö´Ê";
+        Text[ chinese_simplified ] = "å¦é€‰å­—è¯";
         Text[ russian ] = "Âàğèàíòû";
         Text[ polish ] = "Odmiany";
-        Text[ japanese ] = "ÊŞØ´°¼®İ";
-        Text[ chinese_traditional ] = "¥t¿ï¦rµü";
+        Text[ japanese ] = "ãƒãƒªã‚¨ãƒ¼ã‚·ãƒ§ãƒ³";
+        Text[ chinese_traditional ] = "å¦é¸å­—è©";
         Text[ arabic ] = "ÊÛííÑÇÊ";
         Text[ greek ] = "Ğáñáëëáãİò";
-        Text[ korean ] = "º¯Çü";
+        Text[ korean ] = "ë³€í˜•";
         Text[ turkish ] = "Varyasyonlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Variaciones";
+        Text[ catalan ] = "Variacions";
+        Text[ thai ] = "à¸à¸²à¸£à¹à¸›à¸£à¸œà¸±à¸™";
     };
     String STR_ERR_WORDNOTFOUND
     {
@@ -348,31 +355,33 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ french ] = "Mot ne figurant pas dans le dictionnaire des synonymes" ;
         Text [ swedish ] = "Ordet finns inte i synonymordlistan" ;
         Text [ dutch ] = "Woord niet gevonden in de Thesaurus" ;
-        Text [ spanish ] = "Palabra no figura en el dic. de sinónimos" ;
+        Text [ spanish ] = "La palabra no figura en el diccionario de sinónimos." ;
         Text [ english_us ] = "Word not found in thesaurus" ;
-        Text[ chinese_simplified ] = "×Ö´ÊÃ»ÓĞÊÕÂ¼ÔÚ´ÊµäÄÚ";
-        Text[ russian ] = "Ñëîâî íå ñîäåğæèòñÿ â òåçàóğóñå";
+        Text[ chinese_simplified ] = "å­—è¯æ²¡æœ‰æ”¶å½•åœ¨åŒä¹‰è¯è¯å…¸å†…";
+        Text[ russian ] = "Ñëîâî íå íàéäåíî â òåçàóğóñå";
         Text[ polish ] = "S³owa nie ma w Tezaurusie";
-        Text[ japanese ] = "—Ş‹`Œê«“T‚É‚È‚¢’PŒê‚Å‚·";
-        Text[ chinese_traditional ] = "¦rµü¨S¦³¦¬¿ı¦bµü¨å¤º";
+        Text[ japanese ] = "é¡ç¾©èªè¾å…¸ã«ãªã„å˜èªã§ã™";
+        Text[ chinese_traditional ] = "å­—è©æ²’æœ‰æ”¶éŒ„åœ¨åŒç¾©è©è©å…¸å…§";
         Text[ arabic ] = "ÇáßáãÉ ÛíÑ ãæÌæÏÉ İí ŞÇãæÓ ÇáãÑÇÏİÇÊ";
         Text[ greek ] = "Ç ëİîç äåí âñİèçêå óôïí èçóáõñü ëİîåùí";
-        Text[ korean ] = "µ¿ÀÇ¾î »çÀü¿¡ ¾ø´Â ´Ü¾îÀÓ";
+        Text[ korean ] = "ë™ì˜ì–´ ì‚¬ì „ì— ì—†ëŠ” ë‹¨ì–´ì„";
         Text[ turkish ] = "Sözcük, sözlükte bulunamadı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Palabra no figura en el dic. de sinónimos";
+        Text[ catalan ] = "No s'ha trobat la paraula en el tesaurus";
+        Text[ thai ] = "à¹„à¸¡à¹ˆà¸à¸šà¸„à¸³à¹ƒà¸™à¸­à¸£à¸£à¸–à¸²à¸ à¸´à¸˜à¸²à¸™";
     };
-    Text[ chinese_simplified ] = "´Êµä";
+    Text[ chinese_simplified ] = "åŒä¹‰è¯è¯å…¸";
     Text[ russian ] = "Òåçàóğóñ";
     Text[ polish ] = "Tezaurus";
-    Text[ japanese ] = "—Ş‹`Œê«“T";
-    Text[ chinese_traditional ] = "µü¨å";
+    Text[ japanese ] = "é¡ç¾©èªè¾å…¸";
+    Text[ chinese_traditional ] = "åŒç¾©è©è©å…¸";
     Text[ arabic ] = "ŞÇãæÓ ÇáãÑÇÏİÇÊ";
     Text[ greek ] = "Èçóáõñüò ëİîåùí";
-    Text[ korean ] = "µ¿ÀÇ¾î »çÀü";
+    Text[ korean ] = "ë™ì˜ì–´ ì‚¬ì „";
     Text[ turkish ] = "Eşanlamlılar sözlüğü";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Diccionario de sinónimos";
+    Text[ catalan ] = "Tesaurus";
+    Text[ thai ] = "à¸­à¸£à¸£à¸–à¸²à¸ à¸´à¸˜à¸²à¸™";
 };
  // RID_SVXDLG_THES_LANGUAGE ----------------------------------------------
 ModalDialog RID_SVXDLG_THES_LANGUAGE
@@ -417,18 +426,19 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
         Text [ danish ] = "Udvalg" ;
         Text [ portuguese_brazilian ] = "Auswahl" ;
         Text [ portuguese ] = "Selecção" ;
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ chinese_simplified ] = "é€‰æ‹©";
         Text[ russian ] = "Âûáîğ";
         Text[ polish ] = "Wybór";
-        Text[ japanese ] = "‘I‘ğ";
-        Text[ chinese_traditional ] = "¿ï¨ú";
+        Text[ japanese ] = "é¸æŠ";
+        Text[ chinese_traditional ] = "é¸å–";
         Text[ arabic ] = "ÇáÇÎÊíÇÑ";
         Text[ greek ] = "ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ";
+        Text[ korean ] = "ì„ íƒ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Selección";
+        Text[ catalan ] = "Selecció";
         Text[ finnish ] = "Valinta";
+        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
     };
     OKButton BTN_LANG_OK
     {
@@ -446,20 +456,32 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
         Pos = MAP_APPFONT ( 114 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ chinese_simplified ] = "Ñ¡ÔñÓïÑÔ";
-    Text[ russian ] = "Âûáîğ ÿçûêà";
+    Text[ chinese_simplified ] = "é€‰æ‹©è¯­è¨€";
+    Text[ russian ] = "Âûáğàòü ÿçûê";
     Text[ polish ] = "Wybierz jêzyk";
-    Text[ japanese ] = "Œ¾Œê‚Ì‘I‘ğ";
-    Text[ chinese_traditional ] = "¿ï¾Ü»y¨¥";
+    Text[ japanese ] = "è¨€èªã®é¸æŠ";
+    Text[ chinese_traditional ] = "é¸æ“‡èªè¨€";
     Text[ arabic ] = "ÇÎÊíÇÑ ÇááÛÉ";
     Text[ greek ] = "ÅğéëïãŞ ãëşóóáò";
-    Text[ korean ] = "¾ğ¾î ¼±ÅÃ";
+    Text[ korean ] = "ì–¸ì–´ ì„ íƒ";
     Text[ turkish ] = "Dil seçimi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Seleccionar idioma";
+    Text[ catalan ] = "Seleccioneu l'idioma";
     Text[ finnish ] = "Valitse kieli";
+    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸ à¸²à¸©à¸²";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
 
 
 

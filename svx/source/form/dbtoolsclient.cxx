@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 15:06:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ namespace svxform
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdb;
+    using namespace ::com::sun::star::container;
 
     //====================================================================
     //= ODbtoolsClient
@@ -333,6 +334,36 @@ namespace svxform
         if (m_xDataAccessTools.is())
             bRet = m_xDataAccessTools->canDelete( _rxCursorSet );
         return bRet;
+    }
+
+    //----------------------------------------------------------------
+    Reference< XNameAccess > OStaticDataAccessTools::getFieldsByCommandDescriptor( const Reference< XConnection >& _rxConnection,
+        const sal_Int32 _nCommandType, const ::rtl::OUString& _rCommand,
+            Reference< XComponent >& _rxKeepFieldsAlive, ::dbtools::SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
+    {
+        Reference< XNameAccess > aFields;
+
+        checkIfLoaded();
+        if ( m_xDataAccessTools.is() )
+            aFields = m_xDataAccessTools->getFieldsByCommandDescriptor( _rxConnection, _nCommandType,
+                _rCommand, _rxKeepFieldsAlive, _pErrorInfo );
+
+        return aFields;
+    }
+
+    //----------------------------------------------------------------
+    Sequence< ::rtl::OUString > OStaticDataAccessTools::getFieldNamesByCommandDescriptor(
+        const Reference< XConnection >& _rxConnection, const sal_Int32 _nCommandType,
+        const ::rtl::OUString& _rCommand, ::dbtools::SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
+    {
+        Sequence< ::rtl::OUString > aNames;
+
+        checkIfLoaded();
+        if ( m_xDataAccessTools.is() )
+            aNames = m_xDataAccessTools->getFieldNamesByCommandDescriptor( _rxConnection, _nCommandType,
+                _rCommand, _pErrorInfo );
+
+        return aNames;
     }
 
 //........................................................................

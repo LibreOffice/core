@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 13:02:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #include <dialmgr.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
+#endif
 
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTableToolBoxControl,SfxUInt16Item);
@@ -142,7 +145,8 @@ TableWindow::TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx ) 
     rTbx(rParentTbx)
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    aLineColor = rStyles.GetWindowTextColor();
+    svtools::ColorConfig aColorConfig;
+    aLineColor = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     aHighlightLineColor = rStyles.GetHighlightTextColor();
     aFillColor = rStyles.GetWindowColor();
     aHighlightFillColor = rStyles.GetHighlightColor();
@@ -517,7 +521,8 @@ ColumnsWindow::ColumnsWindow( USHORT nId, SfxBindings& rBind,
 
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    aLineColor = rStyles.GetWindowTextColor();
+    svtools::ColorConfig aColorConfig;
+    aLineColor = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     aHighlightLineColor = rStyles.GetHighlightTextColor();
     aFillColor = rStyles.GetWindowColor();
     aHighlightFillColor = rStyles.GetHighlightColor();

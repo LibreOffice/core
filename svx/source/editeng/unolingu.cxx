@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-09 16:17:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1242,7 +1242,7 @@ String SvxGetDictionaryURL(const String &rDicName, sal_Bool bIsUserDic)
     aURLObj.SetSmartProtocol( INET_PROT_FILE );
     aURLObj.SetSmartURL( aDirName );
     DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
-    aURLObj.Append( rDicName );
+    aURLObj.Append( rDicName, INetURLObject::ENCODE_ALL );
     DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
 
     return aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );

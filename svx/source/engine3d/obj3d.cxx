@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-22 09:46:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,10 @@
 
 #ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 
 #ifndef _EEITEM_HXX
@@ -1676,6 +1680,22 @@ void E3dObject::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
 
     // call parent
     SdrAttrObj::ItemChange(nWhich, pNewItem);
+}
+
+// #107770# Like propagating ItemChange to the scene if scene items are changed,
+// do the same with the PostItemChange calls.
+void E3dObject::PostItemChange(const sal_uInt16 nWhich)
+{
+    // propagate item changes to scene
+    if(!nWhich || (nWhich >= SDRATTR_3DSCENE_FIRST && nWhich <= SDRATTR_3DSCENE_LAST))
+    {
+        E3dScene* pScene = GetScene();
+        if(pScene && pScene != this)
+            pScene->PostItemChange(nWhich);
+    }
+
+    // call parent
+    SdrAttrObj::PostItemChange(nWhich);
 }
 
 void E3dObject::ItemSetChanged( const SfxItemSet& rSet )
@@ -3480,7 +3500,10 @@ void E3dCompoundObject::ImpSet3DParForFill(ExtOutputDevice& rOut, Base3D* pBase3
                     }
                     else
                     {
-                        aLogicalSize = OutputDevice::LogicToLogic(aLogicalSize, aBmpEx.GetPrefMapMode(), MAP_100TH_MM);
+                        if ( aBmpEx.GetPrefMapMode() == MAP_PIXEL )
+                            aLogicalSize = Application::GetDefaultDevice()->PixelToLogic( aLogicalSize, MAP_100TH_MM );
+                        else
+                            aLogicalSize = OutputDevice::LogicToLogic( aLogicalSize, aBmpEx.GetPrefMapMode(), MAP_100TH_MM );
                     }
 
                     if(bLogSize)
@@ -3488,7 +3511,7 @@ void E3dCompoundObject::ImpSet3DParForFill(ExtOutputDevice& rOut, Base3D* pBase3
                         // logische Groesse
                         if(aSize.Width() == 0 && aSize.Height() == 0)
                         {
-                            // Originalgroesse benutzen, Original flag
+                            // Originalgroesse benutzen, Original flagy
 
                             // Um ein vernuenftiges Mapping bei defaults auch
                             // fuer 3D-Objekte zu erreichen, nimm die logische
@@ -3771,7 +3794,8 @@ void E3dCompoundObject::ImpSet3DParForLine(ExtOutputDevice& rOut, Base3D* pBase3
 
         if(pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_SETTINGSLINE)
         {
-            aColorLine = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+            svtools::ColorConfig aColorConfig;
+            aColorLine = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
         }
 
         if(nLineWidth && !bIsLineDraft)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:06:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,11 +169,13 @@ void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     ImpForceItemSet();
 
     fExtrudeScale = rDefault.GetDefaultExtrudeScale();
-    bExtrudeSmoothed = rDefault.GetDefaultExtrudeSmoothed();
-    bExtrudeSmoothFrontBack = rDefault.GetDefaultExtrudeSmoothFrontBack();
-    bExtrudeCharacterMode = rDefault.GetDefaultExtrudeCharacterMode();
-    bExtrudeCloseFront = rDefault.GetDefaultExtrudeCloseFront();
-    bExtrudeCloseBack = rDefault.GetDefaultExtrudeCloseBack();
+
+    // #107245#
+    mpObjectItemSet->Put(Svx3DSmoothNormalsItem(rDefault.GetDefaultExtrudeSmoothed()));
+    mpObjectItemSet->Put(Svx3DSmoothLidsItem(rDefault.GetDefaultExtrudeSmoothFrontBack()));
+    mpObjectItemSet->Put(Svx3DCharacterModeItem(rDefault.GetDefaultExtrudeCharacterMode()));
+    mpObjectItemSet->Put(Svx3DCloseFrontItem(rDefault.GetDefaultExtrudeCloseFront()));
+    mpObjectItemSet->Put(Svx3DCloseBackItem(rDefault.GetDefaultExtrudeCloseBack()));
 
     // Bei extrudes defaultmaessig StdTexture in X und Y
     mpObjectItemSet->Put(Svx3DTextureProjectionXItem(1));
@@ -290,18 +292,18 @@ void E3dExtrudeObj::CreateGeometry()
             aBackSide,
             0L,
             0L,
-            bExtrudeCloseFront,
-            bExtrudeCloseBack,
+            GetCloseFront(), // #107245# bExtrudeCloseFront,
+            GetCloseBack(), // #107245# bExtrudeCloseBack,
             (double)GetPercentDiagonal() / 200.0,
-            GetExtrudeSmoothed(),
-            GetExtrudeSmoothed(),
-            GetExtrudeSmoothFrontBack(),
+            GetSmoothNormals(), // #107245# GetExtrudeSmoothed(),
+            GetSmoothNormals(), // #107245# GetExtrudeSmoothed(),
+            GetSmoothLids(), // #107245# GetExtrudeSmoothFrontBack(),
             fSurroundFactor,
             fTextureStart,
             fTextureDepth,
             GetCreateNormals(),
             GetCreateTexture(),
-            bExtrudeCharacterMode,
+            GetCharacterMode(), // #107245# bExtrudeCharacterMode,
             FALSE,
             // #78972#
             &maLinePolyPolygon);
@@ -394,14 +396,14 @@ void E3dExtrudeObj::WriteData(SvStream& rOut) const
 
     rOut << (double)GetPercentDiagonal() / 200.0;
 
-    rOut << (BOOL)bExtrudeSmoothed;
-    rOut << (BOOL)bExtrudeSmoothFrontBack;
-    rOut << (BOOL)bExtrudeCharacterMode;
+    rOut << GetSmoothNormals(); // #107245# (BOOL)bExtrudeSmoothed;
+    rOut << GetSmoothLids(); // #107245# (BOOL)bExtrudeSmoothFrontBack;
+    rOut << GetCharacterMode(); // #107245# (BOOL)bExtrudeCharacterMode;
 
     // Ab Version 513a (5.2.99): Parameter fuer das
     // Erzeugen der Vorder/Rueckwand
-    rOut << (BOOL)bExtrudeCloseFront;
-    rOut << (BOOL)bExtrudeCloseBack;
+    rOut << GetCloseFront(); // #107245# (BOOL)bExtrudeCloseFront;
+    rOut << GetCloseBack(); // #107245# (BOOL)bExtrudeCloseBack;
 
     if(nVersion < 3800)
     {
@@ -445,9 +447,14 @@ void E3dExtrudeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             rIn >> fTmp;
             mpObjectItemSet->Put(Svx3DPercentDiagonalItem(sal_uInt16(fTmp * 200.0)));
 
-            rIn >> bTmp; bExtrudeSmoothed = bTmp;
-            rIn >> bTmp; bExtrudeSmoothFrontBack = bTmp;
-            rIn >> bTmp; bExtrudeCharacterMode = bTmp;
+            rIn >> bTmp; // #107245# bExtrudeSmoothed = bTmp;
+            mpObjectItemSet->Put(Svx3DSmoothNormalsItem(bTmp));
+
+            rIn >> bTmp; // #107245# bExtrudeSmoothFrontBack = bTmp;
+            mpObjectItemSet->Put(Svx3DSmoothLidsItem(bTmp));
+
+            rIn >> bTmp; // #107245# bExtrudeCharacterMode = bTmp;
+            mpObjectItemSet->Put(Svx3DCharacterModeItem(bTmp));
 
             bAllDone = TRUE;
 
@@ -457,13 +464,19 @@ void E3dExtrudeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 // Erzeugen der Vorder/Rueckwand
                 BOOL bTmp;
 
-                rIn >> bTmp; bExtrudeCloseFront = bTmp;
-                rIn >> bTmp; bExtrudeCloseBack = bTmp;
+                rIn >> bTmp; // #107245# bExtrudeCloseFront = bTmp;
+                mpObjectItemSet->Put(Svx3DCloseFrontItem(bTmp));
+
+                rIn >> bTmp; // #107245# bExtrudeCloseBack = bTmp;
+                mpObjectItemSet->Put(Svx3DCloseBackItem(bTmp));
             }
             else
             {
-                bExtrudeCloseFront = TRUE;
-                bExtrudeCloseBack = TRUE;
+                // #107245# bExtrudeCloseFront = TRUE;
+                mpObjectItemSet->Put(Svx3DCloseFrontItem(sal_True));
+
+                // #107245# bExtrudeCloseBack = TRUE;
+                mpObjectItemSet->Put(Svx3DCloseBackItem(sal_True));
             }
         }
     }
@@ -590,9 +603,14 @@ void E3dExtrudeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 
             mpObjectItemSet->Put(Svx3DPercentDiagonalItem(10));
 
-            bExtrudeSmoothed = TRUE;
-            bExtrudeSmoothFrontBack = FALSE;
-            bExtrudeCharacterMode = FALSE;
+            // #107245# bExtrudeSmoothed = TRUE;
+            mpObjectItemSet->Put(Svx3DSmoothNormalsItem(sal_True));
+
+            // #107245# bExtrudeSmoothFrontBack = FALSE;
+            mpObjectItemSet->Put(Svx3DSmoothLidsItem(sal_False));
+
+            // #107245# bExtrudeCharacterMode = FALSE;
+            mpObjectItemSet->Put(Svx3DCharacterModeItem(sal_False));
         }
     }
 
@@ -645,11 +663,12 @@ void E3dExtrudeObj::operator=(const SdrObject& rObj)
     // #95519# copy LinePolygon info, too
     maLinePolyPolygon = r3DObj.maLinePolyPolygon;
 
-    bExtrudeSmoothed = r3DObj.bExtrudeSmoothed;
-    bExtrudeSmoothFrontBack = r3DObj.bExtrudeSmoothFrontBack;
-    bExtrudeCharacterMode = r3DObj.bExtrudeCharacterMode;
-    bExtrudeCloseFront = r3DObj.bExtrudeCloseFront;
-    bExtrudeCloseBack = r3DObj.bExtrudeCloseBack;
+    // #107245# These properties are now items and are copied with the ItemSet
+    // bExtrudeSmoothed = r3DObj.bExtrudeSmoothed;
+    // bExtrudeSmoothFrontBack = r3DObj.bExtrudeSmoothFrontBack;
+    // bExtrudeCharacterMode = r3DObj.bExtrudeCharacterMode;
+    // bExtrudeCloseFront = r3DObj.bExtrudeCloseFront;
+    // bExtrudeCloseBack = r3DObj.bExtrudeCloseBack;
 }
 
 /*************************************************************************
@@ -676,50 +695,55 @@ void E3dExtrudeObj::SetExtrudeScale(double fNew)
     }
 }
 
-void E3dExtrudeObj::SetExtrudeSmoothed(BOOL bNew)
-{
-    if(bExtrudeSmoothed != bNew)
-    {
-        bExtrudeSmoothed = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+// #107245#
+// void E3dExtrudeObj::SetExtrudeSmoothed(BOOL bNew)
+// {
+//  if(bExtrudeSmoothed != bNew)
+//  {
+//      bExtrudeSmoothed = bNew;
+//      bGeometryValid = FALSE;
+//  }
+// }
 
-void E3dExtrudeObj::SetExtrudeSmoothFrontBack(BOOL bNew)
-{
-    if(bExtrudeSmoothFrontBack != bNew)
-    {
-        bExtrudeSmoothFrontBack = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+// #107245#
+// void E3dExtrudeObj::SetExtrudeSmoothFrontBack(BOOL bNew)
+// {
+//  if(bExtrudeSmoothFrontBack != bNew)
+//  {
+//      bExtrudeSmoothFrontBack = bNew;
+//      bGeometryValid = FALSE;
+//  }
+// }
 
-void E3dExtrudeObj::SetExtrudeCharacterMode(BOOL bNew)
-{
-    if(bExtrudeCharacterMode != bNew)
-    {
-        bExtrudeCharacterMode = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+// #107245#
+// void E3dExtrudeObj::SetExtrudeCharacterMode(BOOL bNew)
+// {
+//  if(bExtrudeCharacterMode != bNew)
+//  {
+//      bExtrudeCharacterMode = bNew;
+//      bGeometryValid = FALSE;
+//  }
+// }
 
-void E3dExtrudeObj::SetExtrudeCloseFront(BOOL bNew)
-{
-    if(bExtrudeCloseFront != bNew)
-    {
-        bExtrudeCloseFront = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+// #107245#
+// void E3dExtrudeObj::SetExtrudeCloseFront(BOOL bNew)
+// {
+//  if(bExtrudeCloseFront != bNew)
+//  {
+//      bExtrudeCloseFront = bNew;
+//      bGeometryValid = FALSE;
+//  }
+// }
 
-void E3dExtrudeObj::SetExtrudeCloseBack(BOOL bNew)
-{
-    if(bExtrudeCloseBack != bNew)
-    {
-        bExtrudeCloseBack = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+// #107245#
+// void E3dExtrudeObj::SetExtrudeCloseBack(BOOL bNew)
+// {
+//  if(bExtrudeCloseBack != bNew)
+//  {
+//      bExtrudeCloseBack = bNew;
+//      bGeometryValid = FALSE;
+//  }
+// }
 
 //////////////////////////////////////////////////////////////////////////////
 // private support routines for ItemSet access

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 15:19:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,12 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     {
         0x73, 0x00, 0x00, 0x01, 0x00, 0xFF
     };
+
+    static const sal_uInt8 aOfficeXPBE[] =
+    {
+        0x63, 0x00, 0x00, 0x0E, 0x00, 0xFF
+    };
+
     static const sal_uInt8 aOffice2000LE[] =
     {
         0x6D, 0x00, 0x00, 0x01, 0x00, 0xFF
@@ -242,6 +248,12 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
         bIsUnicode = true;
     }
+    else if (!(memcmp(aProduct, aOfficeXPBE, sizeof(aProduct))))
+    {
+        xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        bIsUnicode = false;
+        eCharSet = RTL_TEXTENCODING_APPLE_ROMAN;
+    }
     else if (!(memcmp(aProduct, aOffice2000LE, sizeof(aProduct))))
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -260,8 +272,22 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     }
     else
     {
-        DBG_ASSERT(!this, "unrecognized VBA macro version, report to cmc");
-        return 0;
+        switch (aProduct[3])
+        {
+            case 0x1:
+                xVBAProject->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+                bIsUnicode = true;
+                DBG_ASSERT(!this, "unrecognized VBA macro version, report to cmc. Guessing at unicode little endian");
+                break;
+            case 0xe:
+                xVBAProject->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+                bIsUnicode = false;
+                DBG_ASSERT(!this, "unrecognized VBA macro version, report to cmc. Guessing at 8bit big endian");
+                break;
+            default:
+                DBG_ASSERT(!this, "totally unrecognized VBA macro version, report to cmc");
+                return 0;
+        }
     }
 
     sal_uInt32 nLidA;  //Language identifiers

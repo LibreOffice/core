@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-30 15:15:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
@@ -905,9 +905,10 @@ void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
 
 String GraphCtrl::GetStringFromDouble( const double& rDouble )
 {
-    String aStr;
-    sal_Unicode cSep = SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0);
-    SolarMath::DoubleToString( aStr, rDouble, 'F', 2, cSep );
+    sal_Unicode cSep =
+        SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0);
+    String aStr( ::rtl::math::doubleToUString( rDouble,
+                rtl_math_StringFormat_F, 2, cSep ));
     return aStr;
 }
 

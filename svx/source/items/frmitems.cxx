@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-08-16 12:55:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3972,7 +3972,9 @@ IMPL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void*, EMPTYARG )
         int nRes;
         pStream->Seek( STREAM_SEEK_TO_BEGIN );
         nRes = GetGrfFilter()->
-            ImportGraphic( aGraphic, *pThis->pStrLink, *pStream );
+            ImportGraphic( aGraphic, *pThis->pStrLink, *pStream,
+                           GRFILTER_FORMAT_DONTKNOW, NULL, GRFILTER_I_FLAGS_DONT_SET_LOGSIZE_FOR_JPEG );
+
         if( nRes != GRFILTER_OK )
         {
             DELETEZ( pThis->pImpl->pGraphicObject );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 15:06:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,25 @@ namespace svxform
             @param      _rxCursorSet    the property set
         */
         sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
+
+        // ------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+            getFieldsByCommandDescriptor(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                const sal_Int32 _nCommandType,
+                const ::rtl::OUString& _rCommand,
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
+                ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
+            )   SAL_THROW( ( ) );
+
+        // ------------------------------------------------
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+            getFieldNamesByCommandDescriptor(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                const sal_Int32 _nCommandType,
+                const ::rtl::OUString& _rCommand,
+                ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
+            )   SAL_THROW( ( ) );
     };
 //........................................................................
 }   // namespace svxform

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:29:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian Layout";
                 Text[ japanese ] = "ζ—¥ζ¬θªγƒ¬γ‚¤γ‚Άγ‚¦γƒ";
-                Text[ korean ] = "ν•κΈ€ μ…λ ¥ μ²΄κ³„";
+                Text[ korean ] = "ν•κΈ€ κΈ€μκΌ΄";
                 Text[ chinese_simplified ] = "δΈ­ζ—¥ι©η‰εΌ";
                 Text[ chinese_traditional ] = "δΈ­ζ—¥ι“η‰εΌ";
                 Text[ turkish ] = "Asian Layout";
@@ -214,7 +214,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ chinese_traditional ] = "ηΈ®ζ’ε’ι–“ι”";
                 Text[ arabic ] = "ΗαΕÒΗΝΙ ζΗαΚΘΗΪΟ";
                 Text[ greek ] = "Εσοχές και αποστάσεις";
-                Text[ korean ] = "λ“¤μ—¬ μ“°κΈ°μ™€ κ°„κ²©";
+                Text[ korean ] = "λ“¤μ—¬μ“°κΈ° λ° κ°„κ²©";
                 Text[ turkish ] = "Girinti ve Aralύklar";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sagnats i espaiat";
@@ -284,7 +284,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Tipografia asiαtica";
-                Text[ russian ] = "ΐηθΰςρκθε ςθοξγπΰτρκΰÿ πΰημεςκΰ";
+                Text[ russian ] = "ΐηθΰςρκΰÿ ςθοξγπΰτρκΰÿ πΰημεςκΰ";
                 Text[ greek ] = "Ασιάτικη τυπογραφία";
                 Text[ dutch ] = "Aziatische typografie";
                 Text[ french ] = "Typographie asiatique";
@@ -548,7 +548,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ English ] = "~Remove characters" ;
         Text [ english_us ] = "~Remove characters" ;
         Text [ italian ] = "Elimina carattere" ;
-        Text [ spanish ] = "~Eliminar caracteres" ;
+        Text [ spanish ] = "~Borrar caracteres" ;
         Text [ french ] = "Caractθres en ~moins" ;
         Text [ dutch ] = "Tekens ver~wijderen" ;
         Text [ swedish ] = "~Ta bort tecken" ;
@@ -672,7 +672,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ chinese_traditional ] = "η›ΈδΌΌε­—ζε°‹";
     Text[ arabic ] = "ΗαΘΝΛ Ϊδ ίαγΗΚ γΚΤΗΘεΙ";
     Text[ greek ] = "Αναζήτηση ομοιότητας";
-    Text[ korean ] = "μ μ‚¬μ„± μ°ΎκΈ°";
+    Text[ korean ] = "μ μ‚¬μ„± κ²€μƒ‰";
     Text[ turkish ] = "Benzerleri ara";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cerca de similitud";
@@ -680,6 +680,11 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ thai ] = "ΰΈ„ΰΉ‰ΰΈ™ΰΈ«ΰΈ²ΰΈªΰΈ΄ΰΉΰΈ‡ΰΈ—ΰΈµΰΉΰΈ„ΰΈ¥ΰΉ‰ΰΈ²ΰΈΆΰΈΰΈ±ΰΈ™";
 };
  // ********************************************************************** EOF
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,19 +95,18 @@ SfxType0 aSfxUInt32Item_Impl =
 };
 
 /************************************************************/
-extern SfxType3 aFmFormInfoItem_Impl;
-SfxType3 aFmFormInfoItem_Impl =
-{
-    TYPE(FmFormInfoItem), 3, { {MID_POS,"Pos"}, {MID_COUNT,"Count"}, {MID_READONLY,"ReadOnly"} }
-};
-
-/************************************************************/
 extern SfxType0 aSfxObjectItem_Impl;
 SfxType0 aSfxObjectItem_Impl =
 {
     TYPE(SfxObjectItem), 0
 };
 
+/************************************************************/
+extern SfxType0 aSfxInt32Item_Impl;
+SfxType0 aSfxInt32Item_Impl =
+{
+    TYPE(SfxInt32Item), 0
+};
 // diese werden nur bei einer Aufteilung in 2 Dll's gebraucht
 #if 1
 #if defined(WNT) || defined(OS2)
@@ -142,6 +141,7 @@ SfxType0 aSfxBoolItem_Impl =
 {
     TYPE(SfxBoolItem), 0
 };
+
 
 #endif
 #endif

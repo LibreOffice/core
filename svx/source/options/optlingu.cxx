@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-04 13:03:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

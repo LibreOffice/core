@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 17:10:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ polish ] = "Rodzaj hiper³Ήcza";
         Text[ portuguese_brazilian ] = "Link Typ";
         Text[ japanese ] = "γƒγ‚¤γƒ‘γƒΌγƒªγƒ³γ‚―γ®η¨®ι΅";
-        Text[ korean ] = "ν•μ΄νΌλ§ν¬μ μΆ…λ¥";
+        Text[ korean ] = "ν•μ΄νΌλ§ν¬ μ ν•";
         Text[ chinese_simplified ] = "θ¶…ι“Ύζ¥η„η±»ε‹";
         Text[ chinese_traditional ] = "ζ·εΎ‘ι΅ε‹";
         Text[ arabic ] = "δζΪ ΗαΗΡΚΘΗΨ ΗαΚΤΪΘν";
@@ -252,7 +252,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ greek ] = "Όνομα σύνδεσης";
         Text[ dutch ] = "~Loginnaam";
         Text[ french ] = "~Login";
-        Text[ spanish ] = "~Login";
+        Text[ spanish ] = "~Nombre de registro";
         Text[ italian ] = "~Login";
         Text[ danish ] = "Loginnavn";
         Text[ swedish ] = "~Loginnamn";
@@ -293,7 +293,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ polish ] = "Has³o";
         Text[ portuguese_brazilian ] = "~Password";
         Text[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰(~P)";
-        Text[ korean ] = "ν¨μ¤μ›λ“(~P)";
+        Text[ korean ] = "μ•”νΈ(~P)";
         Text[ chinese_simplified ] = "ε―†η (~P)";
         Text[ chinese_traditional ] = "ε―†ηΆΌ(~P)";
         Text[ arabic ] = "ίαγΙ ΗαΣΡ";
@@ -361,7 +361,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ greek ] = "Πρόγραμμα ανάγνωσης ιστοσελίδων WWW";
         QuickHelpText[ dutch ] = "WWW-browser";
         QuickHelpText[ french ] = "Navigateur Web";
-        QuickHelpText[ spanish ] = "Navegador";
+        QuickHelpText[ spanish ] = "Navegador Web";
         QuickHelpText[ italian ] = "Browser Web";
         QuickHelpText[ danish ] = "WWW-browser";
         QuickHelpText[ swedish ] = "Webblδsare";
@@ -383,6 +383,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "Webblδsare";
         Text[ japanese ] = "WWWγƒ–γƒ©γ‚¦γ‚¶";
         Text[ chinese_simplified ] = "δΈ‡η»΄η½‘ζµθ§ε™¨";
+        Text[ spanish ] = "Navegador Web";
     };
     Image IMG_BROWSE_HC
     {
@@ -480,7 +481,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ greek ] = "~Πλαίσιο";
         Text[ dutch ] = "F~rame";
         Text[ french ] = "F~rame";
-        Text[ spanish ] = "F~rame";
+        Text[ spanish ] = "~Marco";
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
@@ -524,7 +525,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ polish ] = "Forma";
         Text[ portuguese_brazilian ] = "F~orm";
         Text[ japanese ] = "γƒ•γ‚©γƒΌγƒ (~O)";
-        Text[ korean ] = "μ–‘μ‹(~O)";
+        Text[ korean ] = "λ°©μ‹(~O)";
         Text[ chinese_simplified ] = "ζ–ΉεΌ(~O)";
         Text[ chinese_traditional ] = "ζ–ΉεΌ(~O)";
         Text[ arabic ] = "ΗαΤία";
@@ -859,18 +860,18 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text [ ENGLISH ] = "~EMail";
         Text[ english_us ] = "~E-mail";
         Text[ portuguese ] = "~E-mail";
-        Text[ russian ] = "έλ.οξχςΰ";
+        Text[ russian ] = "έλ. οξχςΰ";
         Text[ greek ] = "EMail";
         Text[ dutch ] = "~E-mail";
         Text[ french ] = "~E-mail";
-        Text[ spanish ] = "E-mail";
+        Text[ spanish ] = "~Correo-e";
         Text[ italian ] = "~eMail";
         Text[ danish ] = "E-mail";
         Text[ swedish ] = "~E-post";
         Text[ polish ] = "~e-mail";
         Text[ portuguese_brazilian ] = "~EMail";
         Text[ japanese ] = "~E-mail";
-        Text[ korean ] = "~E-mail";
+        Text[ korean ] = "~μ „μλ©”μΌ";
         Text[ chinese_simplified ] = "η”µε­ι‚®δ»¶(~E)";
         Text[ chinese_traditional ] = "ι›»ε­ιƒµδ»¶(~E)";
         Text[ arabic ] = "ΘΡνΟ ΕαίΚΡζδν";
@@ -1000,7 +1001,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ polish ] = "rσd³a danych...";
         QuickHelpText[ portuguese_brazilian ] = "Adressbook";
         QuickHelpText[ japanese ] = "γƒ‡γƒΌγ‚Ώγ‚½γƒΌγ‚Ή...";
-        QuickHelpText[ korean ] = "μ£Όμ†λ΅";
+        QuickHelpText[ korean ] = "λ°μ΄ν„° μ›λ³Έ...";
         QuickHelpText[ chinese_simplified ] = "ζ•°ζ®ζΊ";
         QuickHelpText[ chinese_traditional ] = "θ³‡ζ–™ζΊ...";
         QuickHelpText[ turkish ] = "Adressbuch";
@@ -1008,7 +1009,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ catalan ] = "Libreta de direccions";
         QuickHelpText[ finnish ] = "Osoitekirja";
         Text[ english_us ] = "Data Sources...";
-        Text[ korean ] = "λ°μ΄ν„° μ›λ³Έ";
+        Text[ korean ] = "λ°μ΄ν„° μ›λ³Έ...";
         Text[ chinese_traditional ] = "θ³‡ζ–™ζΊ...";
         Text[ french ] = "Sources de donnιes...";
         Text[ spanish ] = "Fuentes de datos...";
@@ -1063,7 +1064,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ greek ] = "~Πλαίσιο";
         Text[ dutch ] = "F~rame";
         Text[ french ] = "F~rame";
-        Text[ spanish ] = "F~rame";
+        Text[ spanish ] = "~Marco";
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
@@ -1107,7 +1108,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ polish ] = "Forma";
         Text[ portuguese_brazilian ] = "F~orm";
         Text[ japanese ] = "γƒ•γ‚©γƒΌγƒ (~O)";
-        Text[ korean ] = "μ–‘μ‹(~O)";
+        Text[ korean ] = "λ°©μ‹(~O)";
         Text[ chinese_simplified ] = "ζ–ΉεΌ(~O)";
         Text[ chinese_traditional ] = "ζ–ΉεΌ(~O)";
         Text[ arabic ] = "ΗαΤία";
@@ -1265,7 +1266,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "ζ–‡ε­—ε—(~X)";
-        Text[ korean ] = "ν…μ¤νΈ(~X)";
+        Text[ korean ] = "λ¬Έμμ—΄(~X)";
         Text[ chinese_simplified ] = "ζη¤Ίζ–‡ε­—(~X)";
         Text[ chinese_traditional ] = "ζ–‡ε­—(~X)";
         Text[ arabic ] = "ΗαδΥ";
@@ -1526,7 +1527,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ russian ] = "Φελό β δξκσμενςε";
         Text[ greek ] = "Σημείο προορισμού στο έγγραφο";
         Text[ dutch ] = "Doel in document";
-        Text[ french ] = "Cible ΰ l'intιrieur du document";
+        Text[ french ] = "Cible dans le document";
         Text[ spanish ] = "Destino en el documento";
         Text[ italian ] = "Destinazione nel documento";
         Text[ danish ] = "Mεl i dokumentet";
@@ -1534,7 +1535,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ polish ] = "Cel w dokumencie";
         Text[ portuguese_brazilian ] = "Target inside the document";
         Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ«γ‚γ‚‹γ‚ΏγƒΌγ‚²γƒƒγƒ";
-        Text[ korean ] = "λ¬Έμ„λ‚΄ λ€μƒ";
+        Text[ korean ] = "λ¬Έμ„ λ‚΄ μ—°κ²° λ€μƒ";
         Text[ chinese_simplified ] = "ζ–‡ζ΅£δΈ­η„θΏζ¥η›®ζ ‡";
         Text[ chinese_traditional ] = "ζ–‡δ»¶ε…§η„ι€£ηµη›®ζ¨™";
         Text[ arabic ] = "ΗαεΟέ έν ΗαγΣΚδΟ";
@@ -1725,7 +1726,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ greek ] = "~Πλαίσιο";
         Text[ dutch ] = "F~rame";
         Text[ french ] = "F~rame";
-        Text[ spanish ] = "F~rame";
+        Text[ spanish ] = "~Marco";
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
@@ -1769,7 +1770,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ polish ] = "Forma";
         Text[ portuguese_brazilian ] = "F~orm";
         Text[ japanese ] = "γƒ•γ‚©γƒΌγƒ (~O)";
-        Text[ korean ] = "μ–‘μ‹(~O)";
+        Text[ korean ] = "λ°©μ‹(~O)";
         Text[ chinese_simplified ] = "ζ–ΉεΌ(~O)";
         Text[ chinese_traditional ] = "ζ–ΉεΌ(~O)";
         Text[ arabic ] = "ΗαΤία";
@@ -2079,7 +2080,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ greek ] = "Δημιουργία εγγράφου";
         Text[ dutch ] = "Nieuw document";
         Text[ french ] = "Nouveau document";
-        Text[ spanish ] = "Nuevo documento";
+        Text[ spanish ] = "Documento nuevo";
         Text[ italian ] = "Nuovo documento";
         Text[ danish ] = "Nyt dokument";
         Text[ swedish ] = "Nytt dokument";
@@ -2316,7 +2317,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ greek ] = "~Πλαίσιο";
         Text[ dutch ] = "F~rame";
         Text[ french ] = "F~rame";
-        Text[ spanish ] = "F~rame";
+        Text[ spanish ] = "~Marco";
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
@@ -2360,7 +2361,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ polish ] = "Forma";
         Text[ portuguese_brazilian ] = "F~orm";
         Text[ japanese ] = "γƒ•γ‚©γƒΌγƒ (~O)";
-        Text[ korean ] = "μ–‘μ‹(~O)";
+        Text[ korean ] = "λ°©μ‹(~O)";
         Text[ chinese_simplified ] = "ζ–ΉεΌ(~O)";
         Text[ chinese_traditional ] = "ζ–ΉεΌ(~O)";
         Text[ arabic ] = "ΗαΤία";
@@ -2736,7 +2737,7 @@ String RID_SVXSTR_HYPDLG_MACROACT1
     Text[ polish ] = "Mysz nad obiektem";
     Text[ portuguese_brazilian ] = "Mouse over object";
     Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒη”¨γƒγ‚¦γ‚Ή";
-    Text[ korean ] = "λ§μ°μ¤λ¥Ό κ°μ²΄μ„μ—";
+    Text[ korean ] = "λ§μ°μ¤λ¥Ό κ°μ²΄ μ„μ—";
     Text[ chinese_simplified ] = "ιΌ ζ ‡ε¨ε―Ήθ±΅δΉ‹δΈ";
     Text[ chinese_traditional ] = "ιΌ ζ¨™ε¨η‰©δ»¶δΉ‹δΈ";
     Text[ arabic ] = "ΗαγΗζΣ έζή ΗαίΗΖδ";
@@ -2762,7 +2763,7 @@ String RID_SVXSTR_HYPDLG_MACROACT2
     Text[ polish ] = "Wykonaj hiper³Ήcze";
     Text[ portuguese_brazilian ] = "Release hyperlink";
     Text[ japanese ] = "γƒγ‚¤γƒ‘γƒΌγƒªγƒ³γ‚―γ‚’θ§£ι™¤";
-    Text[ korean ] = "ν•μ΄νΌλ§ν¬ μ‹¤ν–‰";
+    Text[ korean ] = "ν•μ΄νΌλ§ν¬ νΈλ¦¬κ±°";
     Text[ chinese_simplified ] = "ζ‰§θ΅θ¶…ι“Ύζ¥";
     Text[ chinese_traditional ] = "ε·θ΅θ¶…ι€£ηµ";
     Text[ arabic ] = "ΚδένΠ ΗαΗΡΚΘΗΨ ΗαΚΤΪΘν";
@@ -2918,7 +2919,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP_HELP
     Text[ swedish ] = "Hδr kan du skapa en hyperlδnk till en e-postadress eller diskussionsgrupp.";
     Text[ polish ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
     Text[ japanese ] = "E-mail γ‚Άγƒ‰γƒ¬γ‚ΉγΎγγ―γƒ‹γƒ¥γƒΌγ‚Ήγ‚°γƒ«γƒΌγƒ—γ«γƒγ‚¤γƒ‘γƒΌγƒªγƒ³γ‚―γ‚’δ½ζγ—γΎγ™γ€‚";
-    Text[ korean ] = "μ „μ μ°νΈ λλ” λ‰΄μ¤ κ·Έλ£ΉμΌλ΅ ν•μ΄νΌλ§ν¬λ¥Ό λ§λ“μ‹­μ‹μ¤.";
+    Text[ korean ] = "μ „μ λ©”μΌ λλ” λ‰΄μ¤κ·Έλ£ΉμΌλ΅ ν•μ΄νΌλ§ν¬λ¥Ό λ§λ“μ‹­μ‹μ¤.";
     Text[ chinese_simplified ] = "ε»Ίη«‹δΈ€δΈªη”µε­ι‚®δ»¶ε°ε€η„ζ–ζ–°ι—»ε°η»„η„θ¶…ι“Ύζ¥γ€‚";
     Text[ chinese_traditional ] = "ε»Ίη«‹δΈ€ε€‹ι›»ε­ιƒµδ»¶ε°ε€η„ζ–ζ–°θηΎ¤ηµ„η„θ¶…ι€£ηµγ€‚";
     Text[ turkish ] = "This is where you create a hyperlink to an e-mail address or newsgroup.";
@@ -2984,7 +2985,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP
     Text[ greek ] = "Δημιουργία εγγράφου";
     Text[ dutch ] = "Nieuw document";
     Text[ french ] = "Nouveau document";
-    Text[ spanish ] = "Nuevo documento";
+    Text[ spanish ] = "Documento nuevo";
     Text[ italian ] = "Nuovo doc.";
     Text[ danish ] = "Nyt dokument";
     Text[ swedish ] = "Nytt dokument";
@@ -3009,7 +3010,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP
     Text[ greek ] = "This is where you create a new document to which the new link points.";
     Text[ dutch ] = "This is where you create a new document to which the new link points.";
     Text[ french ] = "Crιez un nouveau document sur lequel le nouveau lien pointera.";
-    Text[ spanish ] = "Crea un documento nuevo al que el nuevo hiperenlace referirα. ";
+    Text[ spanish ] = "Crea un documento nuevo al que refiere el hiperenlace. ";
     Text[ finnish ] = "This is where you create a new document to which the new link points.";
     Text[ italian ] = "Crea un documento a cui fa riferimento l'hyperlink.";
     Text[ danish ] = "This is where you create a new document to which the new link points.";
@@ -3069,7 +3070,7 @@ String RID_SVXSTR_HYPERDLG_FROM_TEXT
     Text [ polish ] = "Tekst" ;
     Text [ portuguese_brazilian ] = "Text" ;
     Text [ japanese ] = "ζ–‡ε­—ε—" ;
-    Text [ korean ] = "ν…μ¤νΈ" ;
+    Text [ korean ] = "λ¬Έμμ—΄" ;
     Text [ chinese_simplified ] = "ζ–‡ε­—" ;
     Text [ chinese_traditional ] = "ζ–‡ε­—" ;
     Text [ arabic ] = "δΥ" ;
@@ -3101,7 +3102,7 @@ String RID_SVXSTR_HYPERDLG_QUERYOVERWRITE
     Text[ dutch ] = "Het bestand bestaat reeds. Overschrijven?";
     Text[ chinese_simplified ] = "θΏ™δΈªζ–‡δ»¶ε·²η»ε­ε¨γ€‚θ¦ζ”Ήε†™ε®ƒ?";
     Text[ greek ] = "Το αρχείο αυτό υπάρχει ήδη. Να αντικατασταθεί;";
-    Text[ korean ] = "νμΌμ΄ μ΄λ―Έ μμµλ‹λ‹¤. λ€μ²΄ν•μ‹κ² μµλ‹κΉ?";
+    Text[ korean ] = "μ΄ νμΌμ€ μ΄λ―Έ μμµλ‹λ‹¤. κ²Ήμ³μ“°μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "Dosya zaten mevcut. άzerine yazύlsύn mύ?";
     Text[ finnish ] = "Tiedosto on jo olemassa. Korvataanko?";
     Text[ catalan ] = "El fitxer ja existeix. Voleu sobreescriure'l?";
@@ -3155,4 +3156,9 @@ Image RID_SVXBMP_HLDOCNTP_H
     ImageBitmap = Bitmap { File = "hldocntp_h.bmp" ; };
     MASKCOLOR
 };
+
+
+
+
+
 

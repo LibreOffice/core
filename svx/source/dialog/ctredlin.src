@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:30:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,12 +302,12 @@ TabPage SID_REDLIN_FILTER_PAGE
     };
     StringList [ korean ] =
     {
-            < "λ‹¤μ μ΄μ „" ; Default ; > ;
-        < "λ‹¤μ λ¶€ν„°" ; Default ; > ;
+            < "λ‹¤μ μ‹μ κΉμ§€" ; Default ; > ;
+        < "λ‹¤μ μ‹μ λ¶€ν„°" ; Default ; > ;
         < "λ‹¤μ λ‚ μ§ λ‚΄" ; Default ; > ;
         < "λ‹¤μ λ‚ μ§ μ΄μ™Έ" ; Default ; > ;
         < "λ‹¤μ λ‚ μ§ μ‚¬μ΄" ; Default ; > ;
-        < "μ €μ¥ν•  λ•λ¶€ν„°" ; Default ; > ;
+        < "μµμΆ… μ €μ¥ μ΄ν›„" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
@@ -451,7 +451,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ chinese_traditional ] = "ε’";
         Text[ arabic ] = "ζ";
         Text[ greek ] = "και";
-        Text[ korean ] = "κ·Έλ¦¬κ³ ";
+        Text[ korean ] = "μ™€(κ³Ό)";
         Text[ turkish ] = "~ile";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "i";
@@ -589,7 +589,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text [ dutch ] = "~Bereik" ;
         Text [ portuguese ] = "Intervalo" ;
         Text[ chinese_simplified ] = "εΊε(~R)";
-        Text[ russian ] = "Ξαλΰρςό";
+        Text[ russian ] = "Δθΰοΰηξν";
         Text[ polish ] = "Zakres";
         Text[ japanese ] = "η―„ε›²(~R)";
         Text[ chinese_traditional ] = "ε€ε(~R)";
@@ -631,7 +631,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ chinese_traditional ] = "ε‹•δ½(~C)";
         Text[ arabic ] = "ΗαΕΜΡΗΑ";
         Text[ greek ] = "Ενέργεια";
-        Text[ korean ] = "μν–‰(~C)";
+        Text[ korean ] = "μ‘λ™(~C)";
         Text[ turkish ] = "έ~ώlem";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Acciσ";
@@ -813,7 +813,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ chinese_traditional ] = "ζ¥ε—(~A)";
         Text[ arabic ] = "ήΘζα";
         Text[ greek ] = "~Αποδοχή";
-        Text[ korean ] = "μλ½(~A)";
+        Text[ korean ] = "λ™μ(~A)";
         Text[ turkish ] = "~Kabul et";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Accepto";
@@ -833,7 +833,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ danish ] = "Forkast" ;
         Text [ italian ] = "~Rifiuta" ;
         Text [ spanish ] = "~Rechazar" ;
-        Text [ french ] = "~Refuser" ;
+        Text [ french ] = "~Rejeter" ;
         Text [ dutch ] = "V~erwerpen" ;
         Text [ portuguese ] = "~Rejeitar" ;
         Text[ chinese_simplified ] = "ζ‹’η»(~R)";
@@ -873,7 +873,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ chinese_traditional ] = "ε…¨ιƒ¨ζ¥ε—(~C)";
         Text[ arabic ] = "ήΘζα Ηαία";
         Text[ greek ] = "Αποδο~χή όλων";
-        Text[ korean ] = "λª¨λ‘ μλ½(~C)";
+        Text[ korean ] = "λª¨λ‘ λ™μ(~C)";
         Text[ turkish ] = "~Tόmόnό kabul et";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ho a~ccepto tot";
@@ -893,7 +893,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ danish ] = "Forkast alle" ;
         Text [ italian ] = "Rifiuta tutto" ;
         Text [ spanish ] = "Rechazar todo" ;
-        Text [ french ] = "Tout r~efuser" ;
+        Text [ french ] = "Tout rejeter" ;
         Text [ dutch ] = "Alle ver~werpen" ;
         Text [ portuguese ] = "Rejeitar ~tudo" ;
         Text[ chinese_simplified ] = "ε…¨ιƒ¨ζ‹’η»(~E)";
@@ -935,7 +935,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ chinese_traditional ] = "εΎ©ε";
         Text[ arabic ] = "ΚΡΗΜΪ";
         Text[ greek ] = "Αναίρεση";
-        Text[ korean ] = "μ‹¤ν–‰μ·¨μ†";
+        Text[ korean ] = "μ‹¤ν–‰ μ·¨μ†";
         Text[ turkish ] = "~Geri al";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Desfιs";
@@ -962,7 +962,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ chinese_traditional ] = "ε‹•δ½";
         Text[ arabic ] = "ΗαΕΜΡΗΑ";
         Text[ greek ] = "Ενέργεια";
-        Text[ korean ] = "μν–‰";
+        Text[ korean ] = "μ‘λ™";
         Text[ turkish ] = "έώlem";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Acciσ";
@@ -1078,6 +1078,11 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ thai ] = "ΰΈ‚ΰΉ‰ΰΈ­ΰΈ„ΰΈ΄ΰΈ”ΰΉ€ΰΈ«ΰΉ‡ΰΈ™";
     };
 };
+
+
+
+
+
 
 
 

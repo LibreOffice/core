@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-02 16:28:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,10 @@ public:
     GDIMetaFile*    pMetaFile;          // Metafile fuer GetMtf kopieren und merken
     GraphicObject*  pGraphicObject;
     String          aPersistName;       // name of object in persist
+
+    // #107645#
+    // New local var to avoid repeated loading if load of OLE2 fails
+    sal_Bool        mbLoadingOLEObjectFailed;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -262,6 +266,10 @@ void SdrOle2Obj::Init()
     pGraphic=NULL;
     mpImpl->pMetaFile=NULL;
     mpImpl->pGraphicObject=NULL;
+
+    // #107645#
+    // init to start situation, loading did not fail
+    mpImpl->mbLoadingOLEObjectFailed = sal_False;
 }
 
 // -----------------------------------------------------------------------------
@@ -651,8 +659,8 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
             if (aPos.X() >= aRect.Left() && aPos.Y() >= aRect.Top())
                 pGraphic->Draw(pOutDev,aPos, aDstSize);
 
-            svx::ColorConfig aColorConfig;
-            svx::ColorConfigValue aColor( aColorConfig.GetColorValue( svx::OBJECTBOUNDARIES ) );
+            svtools::ColorConfig aColorConfig;
+            svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( svtools::OBJECTBOUNDARIES ) );
 
             if( aColor.bIsVisible )
             {
@@ -1181,8 +1189,21 @@ const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
 #ifndef SVX_LIGHT
     if ( !ppObjRef->Is() && pModel && pModel->GetPersist() && !pModel->GetPersist()->IsHandsOff() )
     {
-        // Objekt laden
-        (*ppObjRef) = &( pModel->GetPersist()->GetObject( mpImpl->aPersistName ) );
+        // #107645#
+        // Only try loading if it did not wrent wrong up to now
+        if(!mpImpl->mbLoadingOLEObjectFailed)
+        {
+            // Objekt laden
+            (*ppObjRef) = &( pModel->GetPersist()->GetObject( mpImpl->aPersistName ) );
+
+            // #107645#
+            // If loading of OLE object failed, remember that to not invoke a endless
+            // loop trying to load it again and again.
+            if(!ppObjRef->Is())
+            {
+                mpImpl->mbLoadingOLEObjectFailed = sal_True;
+            }
+        }
 
         if ( ppObjRef->Is() )
         {

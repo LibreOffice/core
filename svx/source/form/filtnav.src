@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.src,v $
  *
- *  $Revision: 1.1.1.9 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-29 20:26:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ Menu RID_FM_FILTER_MENU
             Text [ swedish ] = "~Radera" ;
             Text [ danish ] = "Slet" ;
             Text [ italian ] = "~Elimina" ;
-            Text [ spanish ] = "~Eliminar" ;
+            Text [ spanish ] = "~Borrar" ;
             Text [ french ] = "~Supprimer" ;
             Text [ dutch ] = "Wi~ssen" ;
             Text [ portuguese ] = "E~liminar" ;
@@ -90,8 +90,9 @@ Menu RID_FM_FILTER_MENU
             Text[ korean ] = "ÏÇ≠Ï†ú(~D)";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar";
+            Text[ catalan ] = "~Suprimeix";
             Text[ finnish ] = "~Poista";
+            Text[ thai ] = "~‡∏•‡∏ö";
         };
         MenuItem
         {
@@ -102,7 +103,7 @@ Menu RID_FM_FILTER_MENU
             Text[ portuguese ] = "~Editar";
             Text[ russian ] = "~œ‡‚Í‡";
             Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·";
-            Text[ dutch ] = "~Bewerken";
+            Text[ dutch ] = "B~ewerken";
             Text[ french ] = "~…diter";
             Text[ spanish ] = "~Editar";
             Text[ italian ] = "~Modifica";
@@ -117,8 +118,9 @@ Menu RID_FM_FILTER_MENU
             Text[ arabic ] = "~ Õ—Ì—";
             Text[ turkish ] = "D¸zenle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Editar";
+            Text[ catalan ] = "~Edita";
             Text[ finnish ] = "~Muokkaa";
+            Text[ thai ] = "‡πÅ~‡∏Å‡πâ‡πÑ‡∏Ç";
         };
         MenuItem
         {
@@ -144,8 +146,9 @@ Menu RID_FM_FILTER_MENU
             Text[ chinese_traditional ] = "ÊòØÁ©∫Áº∫(~I)";
             Text[ arabic ] = "Œ«·Ì";
             Text[ turkish ] = "Bo˛";
-            Text[ catalan ] = "~VacÌo";
-            Text[ finnish ] = "~Ei p?de";
+            Text[ catalan ] = "~Buit";
+            Text[ finnish ] = "~Ei p‰de";
+            Text[ thai ] = "‡πÄ~‡∏õ‡πá‡∏ô Null";
         };
         MenuItem
         {
@@ -171,11 +174,19 @@ Menu RID_FM_FILTER_MENU
             Text[ chinese_traditional ] = "‰∏çÊòØÁ©∫Áº∫(~S)";
             Text[ arabic ] = "€Ì— Œ«·Ì";
             Text[ turkish ] = "Bo˛ deil";
-            Text[ catalan ] = "~No VacÌo";
-            Text[ finnish ] = "~P?tee";
+            Text[ catalan ] = "~No buit";
+            Text[ finnish ] = "~P‰tee";
+            Text[ thai ] = "‡πÑ~‡∏°‡πà‡πÄ‡∏õ‡πá‡∏ô  Null";
         };
     };
 };
+
+
+
+
+
+
+
 
 
 

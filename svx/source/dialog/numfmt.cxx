@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-11-19 07:24:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
+
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
+#endif
 
 #define _SVX_NUMFMT_CXX
 
@@ -177,7 +181,9 @@ void SvxNumberPreviewImpl::NotifyChange( const String& rPrevStr,
                                          const Color* pColor )
 {
     aPrevStr = rPrevStr;
-    aPrevCol = pColor ? *pColor : GetSettings().GetStyleSettings().GetWindowTextColor();
+    svtools::ColorConfig aColorConfig;
+    Color aWindowTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+    aPrevCol = pColor ? *pColor : aWindowTextColor;
     Invalidate();
     Update();
 }
@@ -216,7 +222,8 @@ void SvxNumberPreviewImpl::InitSettings( BOOL bForeground, BOOL bBackground )
 
     if ( bForeground )
     {
-        Color aTextColor = rStyleSettings.GetWindowTextColor();
+        svtools::ColorConfig aColorConfig;
+        Color aTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
 
         if ( IsControlForeground() )
             aTextColor = GetControlForeground();
@@ -662,6 +669,14 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     if(SFX_ITEM_SET == eState)
          pAutoEntryAttr = (const SfxBoolItem*)
                       GetItem( rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO );
+    // no_NO is an alias for nb_NO and normally isn't listed, we need it for
+    // backwards compatibility, but only if the format passed is of
+    // LanguageType no_NO.
+    if ( eLangType == LANGUAGE_NORWEGIAN )
+    {
+        aLbLanguage.RemoveLanguage( eLangType );    // in case we're already called
+        aLbLanguage.InsertLanguage( eLangType );
+    }
     aLbLanguage.SelectLanguage( eLangType );
     if(pAutoEntryAttr)
         AddAutomaticLanguage_Impl(eLangType, pAutoEntryAttr->GetValue());

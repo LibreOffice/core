@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-10 12:16:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <editstt2.hxx>
 #include <editdata.hxx>
 #include <svxacorr.hxx>
-#include <colorcfg.hxx>
 
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
@@ -126,6 +125,7 @@ DBG_NAMEEX( EditEngine );
 #define DEL_LEFT    1
 #define DEL_RIGHT   2
 #define TRAVEL_X_DONTKNOW   0xFFFFFFFF
+#define CURSOR_BIDILEVEL_DONTKNOW   0xFFFF
 #define MAXCHARSINPARA      0x3FFF-CHARPOSGROW  // Max 16K, because WYSIWYG array
 
 #define ATTRSPECIAL_WHOLEWORD   1
@@ -152,6 +152,8 @@ class SvxLRSpaceItem;
 class TextRanger;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
+class SvtCTLOptions;
+
 
 class SvUShorts;
 
@@ -163,6 +165,9 @@ namespace clipboard {
     class XClipboard;
 }}}}}
 
+namespace svtools {
+    class ColorConfig;
+}
 
 struct DragAndDropInfo
 {
@@ -266,9 +271,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
 
+    long                nInvMore;
     sal_uInt32          nControl;
     sal_uInt32          nTravelXPos;
-    long                nInvMore;
+    sal_uInt16          nExtraCursorFlags;
+    sal_uInt16          nCursorBidiLevel;
     sal_uInt16          nScrollDiffX;
     sal_Bool            bReadOnly;
     sal_Bool            bClickedInSelection;
@@ -304,6 +311,9 @@ public:
 
     sal_uInt16      GetScrollDiffX() const          { return nScrollDiffX; }
     void            SetScrollDiffX( sal_uInt16 n )  { nScrollDiffX = n; }
+
+    sal_uInt16      GetCursorBidiLevel() const      { return nCursorBidiLevel; }
+    void            SetCursorBidiLevel( sal_uInt16 n ) { nCursorBidiLevel = n; }
 
     Point           GetDocPos( const Point& rWindowPos ) const;
     Point           GetWindowPos( const Point& rDocPos ) const;
@@ -456,7 +466,8 @@ private:
     VirtualDevice*      pVirtDev;
     OutputDevice*       pRefDev;
 
-    svx::ColorConfig*   pColorConfig;
+    svtools::ColorConfig*   pColorConfig;
+    SvtCTLOptions*      pCTLOptions;
 
     SfxItemSet*         pEmptyItemSet;
     EditUndoManager*    pUndoManager;
@@ -628,6 +639,9 @@ private:
     EditPaM             StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     EditPaM             EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, BOOL bAcceptStartOfWord = TRUE );
+    EditPaM             CursorVisualLeftRight( EditView* pEditView, const EditPaM& rPaM, USHORT nCharacterIteratorMode, BOOL bToLeft );
+    EditPaM             CursorVisualStartEnd( EditView* pEditView, const EditPaM& rPaM, BOOL bStart );
+
 
     void                InitScriptTypes( USHORT nPara );
     USHORT              GetScriptType( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
@@ -732,6 +746,7 @@ public:
     void                    InitWritingDirections( USHORT nPara );
     BOOL                    IsRightToLeft( USHORT nPara ) const;
     BYTE                    GetRightToLeft( USHORT nPara, USHORT nChar, USHORT* pStart = NULL, USHORT* pEnd = NULL );
+    BOOL                    HasDifferentRTLLevels( const ContentNode* pNode );
 
     void                    SetTextRanger( TextRanger* pRanger );
     TextRanger*             GetTextRanger() const { return pTextRanger; }
@@ -850,7 +865,9 @@ public:
     void            FormatAndUpdate( EditView* pCurView = 0 );
     inline void     IdleFormatAndUpdate( EditView* pCurView = 0 );
 
-    svx::ColorConfig& GetColorConfig();
+    svtools::ColorConfig& GetColorConfig();
+    BOOL            IsVisualCursorTravelingEnabled();
+    BOOL            DoVisualCursorTraveling( const ContentNode* pNode );
 
     EditSelection           ConvertSelection( sal_uInt16 nStartPara, sal_uInt16 nStartPos, sal_uInt16 nEndPara, sal_uInt16 nEndPos ) const;
     inline EPaM             CreateEPaM( const EditPaM& rPaM );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-26 15:48:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,8 @@
 #endif
 
 // #98988#
-#ifndef _SVX_COLORCFG_HXX
-#include "colorcfg.hxx"
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 
 #define SPOTCOUNT   5
@@ -418,7 +418,10 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
         pWin->EnableMapMode(FALSE);
 
         PolyPolygon aPolyPoly( 2 );
-        const Hatch aHatch( HATCH_SINGLE, Application::GetSettings().GetStyleSettings().GetWindowTextColor(), 3, 450 );
+
+        svtools::ColorConfig aColorConfig;
+        Color aHatchCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+        const Hatch aHatch( HATCH_SINGLE, aHatchCol, 3, 450 );
 
         aPolyPoly.Insert( aOuterPix );
         aPolyPoly.Insert( aPixRect );
@@ -432,12 +435,12 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
 
 Color SdrObjEditView::ImpGetTextEditBackgroundColor() const
 {
-    svx::ColorConfig aColorConfig;
-    Color aBackground(aColorConfig.GetColorValue(svx::DOCCOLOR).nColor);
+    svtools::ColorConfig aColorConfig;
+    Color aBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
 
     // #98988# test if we are in High contrast mode; if yes, take
     // application background color
-    // #10049# wrong, always use svx::DOCCOLOR as default and use document settings if
+    // #10049# wrong, always use svtools::DOCCOLOR as default and use document settings if
     //         not hc mode
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 

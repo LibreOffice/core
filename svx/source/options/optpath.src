@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-12-03 16:27:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ TabPage RID_SFXPAGE_PATH
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ κ°’(~D)";
+        Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Per defecte";
@@ -238,13 +238,13 @@ TabPage RID_SFXPAGE_PATH
         Text [ spanish ] = "Predeterminado" ;
         Text [ english_us ] = "Default" ;
         Text[ chinese_simplified ] = "ζ ‡ε‡†";
-        Text[ russian ] = "Ρςΰνδΰπς";
+        Text[ russian ] = "Οξ σμξλχΰνθώ";
         Text[ polish ] = "Domylnie";
         Text[ japanese ] = "ζ¨™ζΊ–";
         Text[ chinese_traditional ] = "ζ¨™ζΊ–";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έ";
+        Text[ korean ] = "κΈ°λ³Έκ°’";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Per defecte";
@@ -291,7 +291,7 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message[ chinese_traditional ] = "ι…η½®ε’ε„²ε­ιƒµδ»¶η„η›®ι„δΈθƒ½η›Έεγ€‚\nθ«‹ζ‚¨ιΈζ“‡δΈ€ε€‹ζ–°η„η›®ι„γ€‚";
     Message[ arabic ] = "νΜΘ Γδ Κίζδ ΟαΗΖα ΗαΚίζνδ ζΗαΘΡνΟ γΞΚαέΙ.\nΗαΡΜΗΑ ΗΞΚνΗΡ γΣΗΡ ΜΟνΟ.";
     Message[ greek ] = "Οι κατάλογοι για την διαμόρφωση και την αποθήκευση των μηνυμάτων\nπρέπει να είναι διαφορετικοί.\nΠαρακαλώ ελέγξτε μια νέα διαδρομή.";
-    Message[ korean ] = "κµ¬μ„±μ© λ””λ ‰ν† λ¦¬μ™€ λ©”μΌμ €μ¥ λ””λ ‰ν† λ¦¬λ” κµ¬λ¶„λμ–΄μ•Ό ν•©λ‹λ‹¤.\nμƒ κ²½λ΅λ¥Ό μ„ νƒν•μ‹­μ‹μ¤.";
+    Message[ korean ] = "μ„¤μ •μ© λ””λ ‰ν† λ¦¬μ™€ λ©”μΌ μ €μ¥ λ””λ ‰ν† λ¦¬λ” κµ¬λ¶„λμ–΄μ•Ό ν•©λ‹λ‹¤.\nμƒ κ²½λ΅λ¥Ό μ„ νƒν•μ‹­μ‹μ¤.";
     Message[ turkish ] = "Konfigόrasyon ve ileti dizinlerinin ayrύ dizinler olarak\nbelirlenmesi gerekir.\nLόtfen yeni bir veri yolu seηin.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La configuraciσ i els directoris de correu electrςnic\ns'han d'especificar com a directoris separats.\nEscolliu un nou camν.";
@@ -299,5 +299,21 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message[ thai ] = "ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈ£ΰΈ°ΰΈΰΈΈΰΈΰΈ²ΰΈ£ΰΈΰΈ³ΰΈ«ΰΈ™ΰΈ”ΰΈ„ΰΉΰΈ²ΰΉΰΈ¥ΰΈ°ΰΉ„ΰΈ”ΰΉ€ΰΈ£ΰΉ‡ΰΈΰΈ—ΰΈ­ΰΈ£ΰΈµΰΉΰΉ€ΰΈ΅ΰΈ¥ΰΉΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΈªΰΈ²ΰΈ£ΰΈΰΈΰΈ—ΰΈµΰΉΰΉΰΈΆΰΈΰΈ­ΰΈ­ΰΈΰΈ΅ΰΈ²\nΰΈΰΈ£ΰΈΈΰΈ“ΰΈ²ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉ€ΰΈªΰΉ‰ΰΈ™ΰΈ—ΰΈ²ΰΈ‡ΰΉƒΰΈ«ΰΈ΅ΰΉ";
 };
  // ******************************************************************* EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: nf $ $Date: 2002-06-13 13:58:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ korean ] = "ìœ„ì¹˜";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Posición";
+        Text[ catalan ] = "Mostra";
         Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     FixedText FT_POS_X
@@ -135,7 +135,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ turkish ] = "~X konumu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posición ~X";
-        Text[ thai ] = "à¸¡à¸«à¸¿??ï‡à¸š ~X";
+        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡ ~X";
     };
     FixedText FT_POS_Y
     {
@@ -165,7 +165,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ turkish ] = "~Y konumu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posición ~Y";
-        Text[ thai ] = "à¸¡à¸«à¸¿??ï‡à¸š ~Y";
+        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡ ~Y";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -209,7 +209,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ greek ] = "Base point";
         Text[ dutch ] = "Basispunt";
         Text[ french ] = "Point de base";
-        Text[ spanish ] = "Punto base";
+        Text[ spanish ] = "Punto de base";
         Text[ finnish ] = "Peruspiste";
         Text[ italian ] = "Punto base";
         Text[ danish ] = "Base point";
@@ -223,7 +223,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ turkish ] = "Base point";
         Text[ arabic ] = "Base point";
         Text[ catalan ] = "Base point";
-        Text[ thai ] = "Base point";
+        Text[ thai ] = "à¸ˆà¸¸à¸”à¸à¸²à¸™";
     };
     Control CTL_POSRECT
     {
@@ -288,8 +288,8 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ korean ] = "í¬ê¸°";
         Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tamaño";
-        Text[ thai ] = "Size";
+        Text[ catalan ] = "Mida";
+        Text[ thai ] = "à¸‚à¸™à¸²à¸”";
     };
     FixedText FT_WIDTH
     {
@@ -318,8 +318,8 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ korean ] = "ë„ˆë¹„(~D)";
         Text[ turkish ] = "~Genişlik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~ncho";
-        Text[ thai ] = "Wi~dth";
+        Text[ catalan ] = "~Amplada";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸à¸§à¹‰à¸²à¸‡";
     };
     FixedText FT_HEIGHT
     {
@@ -349,7 +349,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ turkish ] = "Y~ükseklik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~ltura";
-        Text[ thai ] = "H~eight";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸ªà¸¹à¸‡";
     };
     MetricField MTR_FLD_WIDTH
     {
@@ -393,7 +393,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ greek ] = "Base point";
         Text[ dutch ] = "Basispunt";
         Text[ french ] = "Point de base";
-        Text[ spanish ] = "Punto base";
+        Text[ spanish ] = "Punto de base";
         Text[ finnish ] = "Peruspiste";
         Text[ italian ] = "Punto base";
         Text[ danish ] = "Base point";
@@ -407,7 +407,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ turkish ] = "Base point";
         Text[ arabic ] = "Base point";
         Text[ catalan ] = "Base point";
-        Text[ thai ] = "Base point";
+        Text[ thai ] = "à¸ˆà¸¸à¸”à¸à¸²à¸™";
     };
     Control CTL_SIZERECT
     {
@@ -451,7 +451,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         TabStop = TRUE ;
         Text [ english_us ] = "~Keep ratio" ;
         Text [ italian ] = "Adatta" ;
-        Text [ spanish ] = "~Igualar" ;
+        Text [ spanish ] = "~Proporcional" ;
         Text [ french ] = "Proportionnel" ;
         Text [ dutch ] = "~Synchroniseren" ;
         Text [ swedish ] = "Anpassa proportionellt" ;
@@ -465,12 +465,12 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ chinese_traditional ] = "èª¿æ•´(~K)";
         Text[ arabic ] = "ÊÒÇãä";
         Text[ greek ] = "~ÁíáëïãéêÜ";
-        Text[ korean ] = "ë¹„ìœ¨ ìœ ì§€(~K)";
+        Text[ korean ] = "ë¹„ìœ¨ì„ ê· ë“±í•˜ê²Œ ì¡°ì •(~K)";
         Text[ turkish ] = "~Eşitle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Igualar";
+        Text[ catalan ] = "~Iguala";
         Text[ finnish ] = "~Säilytä suhde";
-        Text[ thai ] = "~Keep ratio";
+        Text[ thai ] = "~?à¸°à¹?à¸ª?à¸°à¸¡?à¸ª?ï‡à¸£?";
     };
 
     // Protect
@@ -500,8 +500,8 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ chinese_traditional ] = "ä¿è­·";
         Text[ turkish ] = "Protect";
         Text[ arabic ] = "Protect";
-        Text[ catalan ] = "Protect";
-        Text[ thai ] = "Protect";
+        Text[ catalan ] = "Protegeix";
+        Text[ thai ] = "à¸›à¹‰à¸­à¸‡à¸à¸±à¸™";
     };
 
     TriStateBox TSB_POSPROTECT
@@ -531,7 +531,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ turkish ] = "Pozisyon";
         Text[ arabic ] = "ÇáãäÕÈ ÇáæÙíİí";
         Text[ catalan ] = "~Position";
-        Text[ thai ] = "Position";
+        Text[ thai ] = "~à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
 
     TriStateBox TSB_SIZEPROTECT
@@ -560,8 +560,8 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ chinese_traditional ] = "å¤§å°(~S)";
         Text[ turkish ] = "~Size";
         Text[ arabic ] = "~Size";
-        Text[ catalan ] = "~Size";
-        Text[ thai ] = "~Size";
+        Text[ catalan ] = "~Mida";
+        Text[ thai ] = "~à¸‚à¸™à¸²à¸”";
     };
 
     // Adjust
@@ -585,15 +585,15 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ polish ] = "Konfiguracja";
         Text[ portuguese_brazilian ] = "Adjust";
         Text[ japanese ] = "é©åˆ";
-        Text[ korean ] = "ë§ì¶”ê¸°";
+        Text[ korean ] = "ì¡°ì •";
         Text[ chinese_simplified ] = "è°ƒæ•´";
         Text[ chinese_traditional ] = "èª¿æ•´";
         Text[ arabic ] = "ÖÈØ";
         Text[ turkish ] = "Ayarla";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ajustar";
+        Text[ catalan ] = "Configura";
         Text[ finnish ] = "Sovita";
-        Text[ thai ] = "Adapt";
+        Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
@@ -618,12 +618,12 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ chinese_traditional ] = "å’Œå…§æ–‡å¯¬åº¦å°é½Š(~F)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ ááäÕ";
         Text[ greek ] = "ĞñïóáñìïãŞ ğëÜôïõò ùò ğñïò êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸ì— ë„ˆë¹„ ë§ì¶”ê¸°(~F)";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ì— ë„ˆë¹„ ë§ì¶¤(~F)";
         Text[ turkish ] = "Genişliği, metne göre a~yarla";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ajustar ~ancho al texto";
+        Text[ catalan ] = "~Adapta l'amplada al text";
         Text[ finnish ] = "~Sovita leveys tekstiin";
-        Text[ thai ] = "~Fit width to text";
+        Text[ thai ] = "~à¸ˆà¸±à¸”à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¸à¸­à¸”à¸µà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
@@ -648,12 +648,12 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ chinese_traditional ] = "å’Œå…§æ–‡é«˜åº¦å°é½Š(~H)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ááäÕ";
         Text[ greek ] = "ĞñïóáñìïãŞ ıøïõò ùò ğñïò êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸ì— ë†’ì´ ë§ì¶”ê¸°(~H)";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ì— ë†’ì´ ë§ì¶¤(~H)";
         Text[ turkish ] = "Yüksekliği, metne göre a~yarla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ajustar altura al texto";
         Text[ finnish ] = "~Sovita korkeus tekstiin";
-        Text[ thai ] = "Fit ~height to text";
+        Text[ thai ] = "à¸ˆà¸±à¸”à¸„à¸§à¸²à¸¡~à¸ªà¸¹à¸‡à¸à¸­à¸”à¸µà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
 
     FixedLine FL_DIVIDER
@@ -675,7 +675,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text [ dutch ] = "Verankering" ;
         Text [ english_us ] = "Anchor" ;
         Text [ italian ] = "Ancoraggio" ;
-        Text [ spanish ] = "Anclaje" ;
+        Text [ spanish ] = "Ancla" ;
         Text [ french ] = "Ancrage" ;
         Text [ swedish ] = "Förankring" ;
         Text [ danish ] = "Forankring" ;
@@ -688,12 +688,12 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ chinese_traditional ] = "é–å®š";
         Text[ arabic ] = "ÅÑÓÇÁ";
         Text[ greek ] = "Áãêıñùóç";
-        Text[ korean ] = "ì•µì»¤";
+        Text[ korean ] = "ê¸°ì¤€ ìœ„ì¹˜";
         Text[ turkish ] = "Sabitleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Anclaje";
         Text[ finnish ] = "Ankkuri";
-        Text[ thai ] = "Anchor";
+        Text[ thai ] = "???";
     };
     FixedText FT_ANCHOR
     {
@@ -715,15 +715,15 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ russian ] = "Ïğèâÿçêà";
         Text[ polish ] = "Kotwica";
         Text[ japanese ] = "ã‚¢ãƒ³ã‚«ãƒ¼è¨˜å·(~A)";
-        Text[ chinese_traditional ] = "ç¸®å®š(~A)";
+        Text[ chinese_traditional ] = "é–å®š(~A)";
         Text[ arabic ] = "ãÑÓÇÉ";
         Text[ greek ] = "Áãêıñùóç";
-        Text[ korean ] = "ì•µì»¤(~A)";
+        Text[ korean ] = "ê¸°ì¤€ ìœ„ì¹˜(~A)";
         Text[ turkish ] = "~Sabitleyici";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ancla";
         Text[ finnish ] = "~Ankkuri";
-        Text[ thai ] = "~Anchor";
+        Text[ thai ] = "~???";
     };
     ListBox LB_ANCHOR
     {
@@ -754,10 +754,10 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         };
         stringlist [ english_us ] =
         {
-            < "To Paragraph" ; > ;
+            < "To paragraph" ; > ;
             < "As character" ; > ;
             < "To page" ; > ;
-            < "To Frame" ; > ;
+            < "To frame" ; > ;
         };
         stringlist [ portuguese_brazilian ] =
         {
@@ -880,10 +880,10 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     StringList [ catalan ] =
     {
-            < "Al párrafo" ; > ;
-        < "Como carácter" ; > ;
+            < "Al par??graf" ; > ;
+        < "Com a car??cter" ; > ;
         < "A la página" ; > ;
-        < "Al marco" ; > ;
+        < "Al marc" ; > ;
     };
     StringList [ finnish ] =
     {
@@ -894,10 +894,10 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     StringList [ thai ] =
     {
-         < "To Paragraph" ; > ;
-        < "As character" ; > ;
-        < "To page" ; > ;
-        < "To Frame" ; > ;
+         < "à¹„à¸›à¸—à¸µà¹ˆà¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²" ; > ;
+        < "à¸³?ï‡¾?à¸¡à¸°à¸£?à¸°à¹à¹“?à¹" ; > ;
+        < "à¹„à¸›à¸—à¸µà¹ˆà¸«à¸™à¹‰à¸²" ; > ;
+        < "à¹„à¸›à¸—à¸µà¹ˆà¸à¸£à¸­à¸š" ; > ;
     };
     };
     FixedText FT_ORIENT
@@ -927,7 +927,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Text[ turkish ] = "O~rtala";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ catalan ] = "~Position";
-        Text[ thai ] = "P~osition";
+        Text[ thai ] = "~à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     ListBox LB_ORIENT
     {
@@ -963,7 +963,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         };
         stringlist [ english_us ] =
         {
-            < "From Top" ; > ;
+            < "From top" ; > ;
             < "Above" ; > ;
             < "Centered" ; > ;
             < "Below" ; > ;
@@ -1178,9 +1178,9 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         < "ë¬¸ì ìœ„" ; > ;
         < "ë¬¸ì ê°€ìš´ë°" ; > ;
         < "ë¬¸ì ì•„ë˜" ; > ;
-        < "í–‰ ìœ„" ; > ;
-        < "í–‰ ê°€ìš´ë°" ; > ;
-        < "í–‰ ì•„ë˜" ; > ;
+        < "ì¤„ ìœ„" ; > ;
+        < "ì¤„ ê°€ìš´ë°" ; > ;
+        < "ì¤„ ì•„ë˜" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -1210,16 +1210,16 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     StringList [ catalan ] =
     {
-            < "Desde arriba" ; > ;
-        < "Arriba" ; > ;
-        < "Centrado" ; > ;
-        < "Abajo" ; > ;
-        < "Carácter arriba" ; > ;
-        < "Carácter centrado" ; > ;
-        < "Carácter abajo" ; > ;
-        < "Línea superior" ; > ;
-        < "Línea centrada" ; > ;
-        < "Línea inferior" ; > ;
+            < "Des de la part superior" ; > ;
+        < "Amunt" ; > ;
+        < "Centrat" ; > ;
+        < "Avall" ; > ;
+        < "Car??cter amunt" ; > ;
+        < "Car??cter avall" ; > ;
+        < "Car??cter centrat" ; > ;
+        < "L'??rea superior" ; > ;
+        < "L'??rea centrada" ; > ;
+        < "L'??rea inferior" ; > ;
     };
     StringList [ finnish ] =
     {
@@ -1236,16 +1236,16 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     };
     StringList [ thai ] =
     {
-         < "From Top" ; > ;
-        < "Above" ; > ;
-        < "Centered" ; > ;
-        < "Below" ; > ;
-        < "Top of character" ; > ;
-        < "Center of character" ; > ;
-        < "Bottom of character" ; > ;
-        < "Top of line" ; > ;
-        < "Center of line" ; > ;
-        < "Bottom of line" ; > ;
+         < "à¸ˆà¸²à¸à¸”à¹‰à¸²à¸™à¸šà¸™" ; > ;
+        < "à¸‚à¸¶à¹‰à¸™" ; > ;
+        < "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡" ; > ;
+        < "à¸‚à¹‰à¸²à¸‡à¸¥à¹ˆà¸²à¸‡" ; > ;
+        < "?à¸ºà¸ª???à¹“?à¸šà¸¡à¸°à¸£?à¸°à¹à¹“?à¹" ; > ;
+        < "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡à¸‚à¸­à¸‡à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°" ; > ;
+        < "?à¸ºà¸ª??ï‡à¸ªà¸šà¹“?à¸šà¸¡à¸°à¸£?à¸°à¹à¹“?à¹" ; > ;
+        < "?à¸ºà¸ª???à¹“?à¸š???à¸ à¸°?" ; > ;
+        < "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡à¸‚à¸­à¸‡à¸šà¸£à¸£à¸—à¸±à¸”" ; > ;
+        < "?à¸ºà¸ª??ï‡à¸ªà¸šà¹“?à¸š???à¸ à¸°?" ; > ;
     };
     };
     Text[ portuguese ] = "Position and Size";
@@ -1261,13 +1261,13 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     Text[ polish ] = "Position and Size";
     Text[ portuguese_brazilian ] = "Position and Size";
     Text[ japanese ] = "ä½ç½®ã¨ã‚µã‚¤ã‚º";
-    Text[ korean ] = "ìœ„ì¹˜ì™€ í¬ê¸°";
+    Text[ korean ] = "ìœ„ì¹˜ ë° í¬ê¸°";
     Text[ chinese_simplified ] = "ä½ç½®å’Œå¤§å°";
     Text[ chinese_traditional ] = "ä½ç½®å’Œå¤§å°";
     Text[ turkish ] = "Position and Size";
     Text[ arabic ] = "Position and Size";
     Text[ catalan ] = "Position and Size";
-    Text[ thai ] = "Position and Size";
+    Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¹à¸¥à¸°à¸‚à¸™à¸²à¸”";
 };
 
  // RID_SVXPAGE_ANGLE --------------------------------------------------------
@@ -1299,7 +1299,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ italian ] = "Punto di rotazione" ;
         Text [ portuguese_brazilian ] = "Piv" ;
         Text [ portuguese ] = "Ponto de rotação" ;
-        Text [ finnish ] = "Pivot-piste" ;
+        Text [ finnish ] = "Keskipiste" ;
         Text [ danish ] = "Rotationspunkt" ;
         Text [ french ] = "Point de rotation" ;
         Text [ swedish ] = "Rotationspunkt" ;
@@ -1307,7 +1307,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ spanish ] = "Punto de rotación" ;
         Text [ english_us ] = "Pivot point" ;
         Text[ chinese_simplified ] = "æ—‹è½¬ç‚¹";
-        Text[ russian ] = "Òî÷êà ïîâîğîòà";
+        Text[ russian ] = "Öåíòğ âğàùåíèÿ";
         Text[ polish ] = "Punkt obrotu";
         Text[ japanese ] = "å›è»¢ãƒã‚¤ãƒ³ãƒˆ";
         Text[ chinese_traditional ] = "æ—‹è½‰é»";
@@ -1316,7 +1316,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ korean ] = "íšŒì „ì ";
         Text[ turkish ] = "Eksen noktası";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Punto de rotación";
+        Text[ catalan ] = "Punt de rotació";
         Text[ thai ] = "à¸ˆà¸¸à¸”à¸ªà¸³à¸„à¸±à¸";
     };
     FixedText FT_POS_X
@@ -1346,7 +1346,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ korean ] = "ìœ„ì¹˜ ~X";
         Text[ turkish ] = "~X konumu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Posición ~X";
+        Text[ catalan ] = "Posició ~X";
         Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡ ~X";
     };
     FixedText FT_POS_Y
@@ -1376,7 +1376,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ korean ] = "ìœ„ì¹˜ ~Y";
         Text[ turkish ] = "~Y konumu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Posición ~Y";
+        Text[ catalan ] = "Posició ~Y";
         Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡ ~Y";
     };
     MetricField MTR_FLD_POS_X
@@ -1417,14 +1417,14 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ ENGLISH ] = "Presets" ;
         Text[ english_us ] = "Default settings";
         Text[ portuguese ] = "Predefinições";
-        Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
+        Text[ russian ] = "Óñòàíîâêè ïî óìîë÷àíèş";
         Text[ greek ] = "Presets";
         Text[ dutch ] = "Standaardinstellingen";
         Text[ french ] = "Définitions";
-        Text[ spanish ] = "Predeterminaciones";
-        Text[ finnish ] = "Esiasetukset";
+        Text[ spanish ] = "Configuración predeterminada";
+        Text[ finnish ] = "Oletusasetukset";
         Text[ italian ] = "Preimpostazioni";
-        Text[ danish ] = "Presets";
+        Text[ danish ] = "Forudindstillinger";
         Text[ swedish ] = "Förinställningar";
         Text[ polish ] = "Ustawienia domyœlne";
         Text[ portuguese_brazilian ] = "Presets";
@@ -1434,7 +1434,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ chinese_traditional ] = "é è¨­";
         Text[ turkish ] = "Presets";
         Text[ arabic ] = "Presets";
-        Text[ catalan ] = "Presets";
+        Text[ catalan ] = "Predefinits";
         Text[ thai ] = "à¸ªà¸µà¸—à¸µà¹ˆà¸à¸³à¸«à¸™à¸”à¹„à¸§à¹‰";
     };
     Control CTL_RECT
@@ -1466,7 +1466,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Rotationspunkt";
-        QuickHelpText[ catalan ] = "Punto de rotación";
+        QuickHelpText[ catalan ] = "Punt de rotació";
         QuickHelpText[ finnish ] = "Kiertopiste";
         QuickHelpText[ thai ] = "Rotation point";
     };
@@ -1488,7 +1488,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ spanish ] = "Ángulo de rotación" ;
         Text [ english_us ] = "Rotation angle" ;
         Text[ chinese_simplified ] = "æ—‹è½¬è§’åº¦";
-        Text[ russian ] = "Óãîë ïîâîğîòà";
+        Text[ russian ] = "Óãîë âğàùåíèÿ";
         Text[ polish ] = "K¹t obrotowy";
         Text[ japanese ] = "å›è»¢åº¦";
         Text[ chinese_traditional ] = "æ—‹è½‰è§’åº¦";
@@ -1497,7 +1497,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ korean ] = "íšŒì „ê°";
         Text[ turkish ] = "Dönüş açısı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ángulo de rotación";
+        Text[ catalan ] = "Àngle de rotació";
         Text[ thai ] = "à¸¡à¸¸à¸¡à¸«à¸¡à¸¸à¸™";
     };
     FixedText FT_ANGLE
@@ -1527,7 +1527,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ korean ] = "ê°ë„(~A)";
         Text[ turkish ] = "~Açı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "An~gulo";
+        Text[ catalan ] = "~Angle";
         Text[ thai ] = "~à¸¡à¸¸à¸¡";
     };
     MetricField MTR_FLD_ANGLE
@@ -1556,7 +1556,7 @@ TabPage RID_SVXPAGE_ANGLE
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ portuguese ] = "Graus" ;
         CustomUnitText[ chinese_simplified ] = "åº¦";
-        CustomUnitText[ russian ] = "Ãğàäóñ";
+        CustomUnitText[ russian ] = "ãğàäóñîâ";
         CustomUnitText[ polish ] = "stopni(e)";
         CustomUnitText[ japanese ] = "åº¦";
         CustomUnitText[ chinese_traditional ] = "åº¦";
@@ -1565,8 +1565,8 @@ TabPage RID_SVXPAGE_ANGLE
         CustomUnitText[ korean ] = "ë„";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
-        CustomUnitText[ catalan ] = "grados";
-        CustomUnitText[ finnish ] = " asteet";
+        CustomUnitText[ catalan ] = " graus";
+        CustomUnitText[ finnish ] = "  astetta";
         CustomUnitText[ thai ] = " à¸­à¸‡à¸¨à¸²";
     };
     FixedText FT_ANGLEPRESETS
@@ -1577,14 +1577,14 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ ENGLISH ] = "Presets" ;
         Text[ english_us ] = "Default settings";
         Text[ portuguese ] = "Predefinições";
-        Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
+        Text[ russian ] = "Óñòàíîâêè ïî óìîë÷àíèş";
         Text[ greek ] = "Presets";
         Text[ dutch ] = "Standaardinstellingen";
         Text[ french ] = "Définitions";
-        Text[ spanish ] = "Predeterminaciones";
-        Text[ finnish ] = "Esiasetukset";
+        Text[ spanish ] = "Configuración predeterminada";
+        Text[ finnish ] = "Oletusasetukset";
         Text[ italian ] = "Preimpostazioni";
-        Text[ danish ] = "Presets";
+        Text[ danish ] = "Forudindstillinger";
         Text[ swedish ] = "Förinställningar";
         Text[ polish ] = "Ustawienia domyœlne";
         Text[ portuguese_brazilian ] = "Presets";
@@ -1594,7 +1594,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ chinese_traditional ] = "é è¨­";
         Text[ turkish ] = "Presets";
         Text[ arabic ] = "Presets";
-        Text[ catalan ] = "Presets";
+        Text[ catalan ] = "Predefinits";
         Text[ thai ] = "à¸ªà¸µà¸—à¸µà¹ˆà¸à¸³à¸«à¸™à¸”à¹„à¸§à¹‰";
     };
     Control CTL_ANGLE
@@ -1638,7 +1638,7 @@ TabPage RID_SVXPAGE_ANGLE
     Text[ korean ] = "ê°ë„";
     Text[ turkish ] = "Açı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ángulo";
+    Text[ catalan ] = "Angle";
     Text[ thai ] = "à¸¡à¸¸à¸¡";
 };
  // RID_SVXPAGE_SLANT -----------------------------------------------------
@@ -1653,7 +1653,7 @@ TabPage RID_SVXPAGE_SLANT
     Text [ italian ] = "Inclina / raggio d'angolo" ;
     Text [ spanish ] = "Inclinación/Radio de ángulo" ;
     Text [ french ] = "Inclinaison / rayon d'angle" ;
-    Text [ dutch ] = "Schuintrekken / hoekafronding" ;
+    Text [ dutch ] = "Schuintrekken / hoekradius" ;
     Text [ swedish ] = "Snedställ/hörnradie" ;
     Text [ danish ] = "Hældning / hjørneradius" ;
     Text [ portuguese ] = "Inclinar /Raio do ângulo" ;
@@ -1674,7 +1674,7 @@ TabPage RID_SVXPAGE_SLANT
         Text [ portuguese_brazilian ] = "Eckenradius" ;
         Text [ portuguese ] = "Raio do ângulo" ;
         Text[ chinese_simplified ] = "è§’åŠå¾„";
-        Text[ russian ] = "Ğàäèóñ (çàêğóãëåííîãî) óãëà";
+        Text[ russian ] = "Ğàäèóñ ñêğóãëåííîãî óãëà";
         Text[ polish ] = "Promieñ krzywizny";
         Text[ japanese ] = "è§’ã®åŠå¾„";
         Text[ chinese_traditional ] = "è§’åŠå¾‘";
@@ -1683,7 +1683,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ korean ] = "ëª¨ì„œë¦¬ ê°ë„";
         Text[ turkish ] = "Köşe çapı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Radio de ángulo";
+        Text[ catalan ] = "Radi d'angle";
         Text[ finnish ] = "Kulmasäde";
         Text[ thai ] = "à¸£à¸±à¸¨à¸¡à¸µà¸¡à¸¸à¸¡";
     };
@@ -1712,7 +1712,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ korean ] = "ë°˜ì§€ë¦„(~R)";
         Text[ turkish ] = "~Çap";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ra~dio";
+        Text[ catalan ] = "~Radi";
         Text[ finnish ] = "~Säde";
         Text[ thai ] = "~à¸£à¸±à¸¨à¸¡à¸µ";
     };
@@ -1747,7 +1747,7 @@ TabPage RID_SVXPAGE_SLANT
         Text [ portuguese_brazilian ] = "Schr?gstellen" ;
         Text [ portuguese ] = "Inclinar" ;
         Text[ chinese_simplified ] = "å€¾æ–œ";
-        Text[ russian ] = "Ïîä íàêëîíîì";
+        Text[ russian ] = "Íàêëîí";
         Text[ polish ] = "Pochyl";
         Text[ japanese ] = "å‚¾æ–œã•ã›ã‚‹";
         Text[ chinese_traditional ] = "å‚¾æ–œ";
@@ -1756,7 +1756,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ korean ] = "ê¸°ìš¸ê¸°";
         Text[ turkish ] = "Duruş eğimi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Inclinar";
+        Text[ catalan ] = "Inclina";
         Text[ finnish ] = "Kallista";
         Text[ thai ] = "à¹€à¸­à¸µà¸¢à¸‡";
     };
@@ -1785,7 +1785,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ korean ] = "ê°ë„(~A)";
         Text[ turkish ] = "~Açı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Á~ngulo";
+        Text[ catalan ] = "~Angle";
         Text[ finnish ] = "~Kulma";
         Text[ thai ] = "~à¸¡à¸¸à¸¡";
     };
@@ -1817,7 +1817,7 @@ TabPage RID_SVXPAGE_SLANT
         CustomUnitText [ portuguese_brazilian ] = "Grad" ;
         CustomUnitText [ portuguese ] = "Graus" ;
         CustomUnitText[ chinese_simplified ] = "åº¦";
-        CustomUnitText[ russian ] = "Ãğàäóñ";
+        CustomUnitText[ russian ] = "ãğàäóñîâ";
         CustomUnitText[ polish ] = "Stopieñ";
         CustomUnitText[ japanese ] = "åº¦";
         CustomUnitText[ chinese_traditional ] = "åº¦";
@@ -1826,12 +1826,12 @@ TabPage RID_SVXPAGE_SLANT
         CustomUnitText[ korean ] = "ë„";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
-        CustomUnitText[ catalan ] = "grados";
-        CustomUnitText[ finnish ] = " asteet";
+        CustomUnitText[ catalan ] = " graus";
+        CustomUnitText[ finnish ] = "  astetta";
         CustomUnitText[ thai ] = " à¸­à¸‡à¸¨à¸²";
     };
     Text[ chinese_simplified ] = "å€¾æ–œå’Œè§’åŠå¾„";
-    Text[ russian ] = "Íàêëîí / Ğàäèóñ çàêğóãëåííîãî óãëà";
+    Text[ russian ] = "Íàêëîí è ğàäèóñ ñêğóãëåííîãî óãëà";
     Text[ polish ] = "Pochyl / Promieñ naro¿nika";
     Text[ japanese ] = "å‚¾æ–œè§’åº¦/è§’ã®åŠå¾„";
     Text[ chinese_traditional ] = "å‚¾æ–œ/è§’åº¦";
@@ -1840,7 +1840,7 @@ TabPage RID_SVXPAGE_SLANT
     Text[ korean ] = "ê¸°ìš¸ê¸° / ëª¨ì„œë¦¬ ê°ë„";
     Text[ turkish ] = "Duruş eğimi / Köşe çapı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Inclinación/Radio de ángulo";
+    Text[ catalan ] = "Inclinació/Radi d'angle";
     Text[ finnish ] = "Kallistus- ja kulmasäde";
     Text[ thai ] = "à¹€à¸­à¸µà¸¢à¸‡à¹à¸¥à¸°à¸£à¸±à¸¨à¸¡à¸µà¸¡à¸¸à¸¡";
 };
@@ -1895,11 +1895,11 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ chinese_traditional ] = "ä½ç½®å’Œå¤§å°";
                 Text[ arabic ] = "ÇáãæÖÚ æÇáÍÌã";
                 Text[ greek ] = "Èİóç êáé ìİãåèïò";
-                Text[ korean ] = "ìœ„ì¹˜ì™€ í¬ê¸°";
+                Text[ korean ] = "ìœ„ì¹˜ ë° í¬ê¸°";
                 Text[ turkish ] = "Konum ve boyut";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Posición y tamaño";
-                Text[ thai ] = "Position and Size";
+                Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¹à¸¥à¸°à¸‚à¸™à¸²à¸”";
             };
             PageItem
             {
@@ -1928,7 +1928,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ korean ] = "íšŒì „";
                 Text[ turkish ] = "Dönüş";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Rotación";
+                Text[ catalan ] = "Gir";
                 Text[ thai ] = "à¸«à¸¡à¸¸à¸™";
             };
             PageItem
@@ -1941,13 +1941,13 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text [ italian ] = "Inclina / raggio d'angolo" ;
                 Text [ spanish ] = "Inclinación/Radio de ángulo" ;
                 Text [ french ] = "Inclinaison / rayon d'angle" ;
-                Text [ dutch ] = "Schuintrekken/hoekafronding" ;
+                Text [ dutch ] = "Schuintrekken/hoekradius" ;
                 Text [ swedish ] = "Snedställ/hörnradie" ;
                 Text [ danish ] = "Hældning / hjørneradius" ;
                 Text [ portuguese_brazilian ] = "Schr?gstellen / Eckenradius" ;
                 Text [ portuguese ] = "Inclinar / Raio do ângulo" ;
                 Text[ chinese_simplified ] = "å€¾æ–œå’Œè§’åŠå¾„";
-                Text[ russian ] = "Íàêëîí / Ğàäèóñ çàêğóãëåííîãî óãëà";
+                Text[ russian ] = "Íàêëîí è ğàäèóñ ñêğóãëåííîãî óãëà";
                 Text[ polish ] = "Pochyl / Promieñ naro¿nika";
                 Text[ japanese ] = "å‚¾æ–œè§’åº¦/è§’ã®åŠå¾„";
                 Text[ chinese_traditional ] = "å‚¾æ–œ/è§’åº¦";
@@ -1956,26 +1956,31 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ korean ] = "ê¸°ìš¸ê¸° / ëª¨ì„œë¦¬ ê°ë„";
                 Text[ turkish ] = "Duruş eğimi / Köşe çapı";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Inclinación/Radio de ángulo";
+                Text[ catalan ] = "Inclinació/Radi d'angle";
                 Text[ finnish ] = "Kallistus- ja kulmasäde";
                 Text[ thai ] = "à¹€à¸­à¸µà¸¢à¸‡à¹à¸¥à¸°à¸£à¸±à¸¨à¸¡à¸µà¸¡à¸¸à¸¡";
             };
         };
     };
     Text[ chinese_simplified ] = "ä½ç½®å’Œå¤§å°";
-    Text[ russian ] = "Ïîçèöèÿ è ğàçìåğ";
+    Text[ russian ] = "Ïîëîæåíèå è ğàçìåğ";
     Text[ polish ] = "Pozycja i rozmiar";
     Text[ japanese ] = "ä½ç½®ã¨ã‚µã‚¤ã‚º";
     Text[ chinese_traditional ] = "ä½ç½®å’Œå¤§å°";
     Text[ arabic ] = "ÇáãæÖÚ æÇáÍÌã";
     Text[ greek ] = "Èİóç êáé ìİãåèïò";
-    Text[ korean ] = "ìœ„ì¹˜ì™€ í¬ê¸°";
+    Text[ korean ] = "ìœ„ì¹˜ ë° í¬ê¸°";
     Text[ turkish ] = "Konum ve boyut";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Posición y tamaño";
+    Text[ catalan ] = "Posició i mida";
     Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¹à¸¥à¸°à¸‚à¸™à¸²à¸”";
 };
  // ********************************************************************** EOF
+
+
+
+
+
 
 
 

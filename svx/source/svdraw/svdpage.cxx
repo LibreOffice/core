@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-13 15:17:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1591,10 +1591,12 @@ INT32 SdrPage::GetLwrBorder() const
     return nBordLwr;
 }
 
-Point SdrPage::GetOffset() const
-{
-    return Point();
-}
+// #i3694#
+// This GetOffset() method is not needed anymore, it even leads to errors.
+//Point SdrPage::GetOffset() const
+//{
+//  return Point();
+//}
 
 void SdrPage::SetModel(SdrModel* pNewModel)
 {
@@ -2052,8 +2054,8 @@ Color SdrPage::GetBackgroundColor( SdrPageView* pView ) const
 
     if( (NULL == pView) || (pView->GetApplicationDocumentColor() == COL_AUTO) )
     {
-        svx::ColorConfig aColorConfig;
-        aColor = aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor;
+        svtools::ColorConfig aColorConfig;
+        aColor = aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor;
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:22:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,19 +154,20 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     Text[ french ] = "Filtres";
     Text[ spanish ] = "Filtros";
     Text[ italian ] = "Filtri";
-    Text[ danish ] = "Filtre";
+    Text[ danish ] = "Filter";
     Text[ swedish ] = "Filter";
     Text[ polish ] = "Filtr";
     Text[ portuguese_brazilian ] = "Filter";
-    Text[ japanese ] = "Ì¨ÙÀ";
-    Text[ korean ] = "ÇÊÅÍ";
-    Text[ chinese_simplified ] = "É¸Ñ¡";
-    Text[ chinese_traditional ] = "¿z¿ï";
+    Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿";
+    Text[ korean ] = "í•„í„°";
+    Text[ chinese_simplified ] = "ç­›é€‰";
+    Text[ chinese_traditional ] = "ç¯©é¸";
     Text[ arabic ] = "İáÇÊÑ";
     Text[ turkish ] = "Filtre";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Filtros";
+    Text[ catalan ] = "Filtres";
     Text[ finnish ] = "Suodattimet";
+    Text[ thai ] = "à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
 };
 
 // -----------
@@ -189,14 +190,15 @@ String RID_SVXSTR_UNDO_GRAFMODE
     Text[ danish ] = "Grafikmodus";
     Text[ polish ] = "Tryb grafiki";
     Text[ portuguese_brazilian ] = "Graphics mode";
-    Text[ japanese ] = "}Ó°ÄŞ";
-    Text[ korean ] = "±×·¡ÇÈ ¸ğµå";
-    Text[ chinese_simplified ] = "Í¼ĞÎÄ£Ê½";
-    Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡";
+    Text[ japanese ] = "å›³ãƒ¢ãƒ¼ãƒ‰";
+    Text[ korean ] = "ê·¸ë¦¼ ëª¨ë“œ";
+    Text[ chinese_simplified ] = "å›¾å½¢æ¨¡å¼";
+    Text[ chinese_traditional ] = "åœ–å½¢æ¨¡å¼";
     Text[ arabic ] = "æÖÚ ÇáÕæÑ";
     Text[ turkish ] = "Grafik kipi";
-    Text[ catalan ] = "Modo gráfico";
+    Text[ catalan ] = "Mode gràfic";
     Text[ finnish ] = "Grafiikkatila";
+    Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸à¸£à¸²à¸Ÿà¸´à¸„";
 };
 String RID_SVXSTR_UNDO_GRAFRED
 {
@@ -214,14 +216,15 @@ String RID_SVXSTR_UNDO_GRAFRED
     Text[ danish ] = "Rød-andel";
     Text[ polish ] = "Zawartoœæ czerw.";
     Text[ portuguese_brazilian ] = "Red portion";
-    Text[ japanese ] = "ÔF‚ÌŠ„‡";
-    Text[ korean ] = "Àû»ö";
-    Text[ chinese_simplified ] = "ºìÉ«±ÈÀı";
-    Text[ chinese_traditional ] = "¬õ¦â¤ñ¨Ò";
+    Text[ japanese ] = "èµ¤è‰²ã®å‰²åˆ";
+    Text[ korean ] = "ì ìƒ‰";
+    Text[ chinese_simplified ] = "çº¢è‰²æ¯”ä¾‹";
+    Text[ chinese_traditional ] = "ç´…è‰²æ¯”ä¾‹";
     Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
     Text[ turkish ] = "Kırmızı oranı";
-    Text[ catalan ] = "Proporción de rojo";
+    Text[ catalan ] = "Vermell";
     Text[ finnish ] = "Punainen";
+    Text[ thai ] = "à¹à¸”à¸‡";
 };
 String RID_SVXSTR_UNDO_GRAFGREEN
 {
@@ -239,14 +242,15 @@ String RID_SVXSTR_UNDO_GRAFGREEN
     Text[ danish ] = "Grøn-andel";
     Text[ polish ] = "Zawartoœæ zielonego";
     Text[ portuguese_brazilian ] = "Green portion";
-    Text[ japanese ] = "—ÎF‚ÌŠ„‡";
-    Text[ korean ] = "³ì»ö";
-    Text[ chinese_simplified ] = "ÂÌÉ«±ÈÀı";
-    Text[ chinese_traditional ] = "ºñ¦â¤ñ¨Ò";
+    Text[ japanese ] = "ç·‘è‰²ã®å‰²åˆ";
+    Text[ korean ] = "ë…¹ìƒ‰";
+    Text[ chinese_simplified ] = "ç»¿è‰²æ¯”ä¾‹";
+    Text[ chinese_traditional ] = "ç¶ è‰²æ¯”ä¾‹";
     Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
     Text[ turkish ] = "Yeşil oranı";
-    Text[ catalan ] = "Proporción de verde";
+    Text[ catalan ] = "Verd";
     Text[ finnish ] = "Vihreä";
+    Text[ thai ] = "à¹€à¸‚à¸µà¸¢à¸§";
 };
 String RID_SVXSTR_UNDO_GRAFBLUE
 {
@@ -264,14 +268,15 @@ String RID_SVXSTR_UNDO_GRAFBLUE
     Text[ danish ] = "Blå-andel";
     Text[ polish ] = "Zawartoœæ niebiesk.";
     Text[ portuguese_brazilian ] = "Blue portion";
-    Text[ japanese ] = "ÂF‚ÌŠ„‡";
-    Text[ korean ] = "Ã»»ö";
-    Text[ chinese_simplified ] = "À¶É«±ÈÀı";
-    Text[ chinese_traditional ] = "ÂÅ¦â¤ñ¨Ò";
+    Text[ japanese ] = "é’è‰²ã®å‰²åˆ";
+    Text[ korean ] = "ì²­ìƒ‰";
+    Text[ chinese_simplified ] = "è“è‰²æ¯”ä¾‹";
+    Text[ chinese_traditional ] = "è—è‰²æ¯”ä¾‹";
     Text[ arabic ] = "äÓÈÉ ÇáÃÒÑŞ";
     Text[ turkish ] = "Mavi oranı";
-    Text[ catalan ] = "Proporción de azul";
+    Text[ catalan ] = "Blau";
     Text[ finnish ] = "Sininen";
+    Text[ thai ] = "à¸™à¹‰à¸³à¹€à¸‡à¸´à¸™";
 };
 String RID_SVXSTR_UNDO_GRAFLUMINANCE
 {
@@ -289,14 +294,15 @@ String RID_SVXSTR_UNDO_GRAFLUMINANCE
     Text[ danish ] = "Lysstyrke";
     Text[ polish ] = "Jasnoœæ";
     Text[ portuguese_brazilian ] = "Luminance";
-    Text[ japanese ] = "–¾“x";
-    Text[ korean ] = "¹à±â";
-    Text[ chinese_simplified ] = "ÁÁ¶È";
-    Text[ chinese_traditional ] = "«G«×";
+    Text[ japanese ] = "æ˜åº¦";
+    Text[ korean ] = "ë°ê¸°";
+    Text[ chinese_simplified ] = "äº®åº¦";
+    Text[ chinese_traditional ] = "äº®åº¦";
     Text[ arabic ] = "ÇáÅÖÇÁÉ";
     Text[ turkish ] = "Parlaklık";
-    Text[ catalan ] = "Brillo";
+    Text[ catalan ] = "Brillantor";
     Text[ finnish ] = "Kirkkaus";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸§à¹ˆà¸²à¸‡";
 };
 String RID_SVXSTR_UNDO_GRAFCONTRAST
 {
@@ -311,17 +317,18 @@ String RID_SVXSTR_UNDO_GRAFCONTRAST
     Text[ swedish ] = "Kontrast";
     Text[ russian ] = "Êîíòğàñò";
     Text[ italian ] = "Contrasto";
-    Text[ danish ] = "- Kontrast";
+    Text[ danish ] = "Kontrast";
     Text[ polish ] = "Kontrast";
     Text[ portuguese_brazilian ] = "Contrast";
-    Text[ japanese ] = "ºİÄ×½Ä";
-    Text[ korean ] = "´ëºñ";
-    Text[ chinese_simplified ] = "¶Ô±È¶È";
-    Text[ chinese_traditional ] = "¹ï¤ñ«×";
+    Text[ japanese ] = "ã‚³ãƒ³ãƒˆãƒ©ã‚¹ãƒˆ";
+    Text[ korean ] = "ëŒ€ë¹„";
+    Text[ chinese_simplified ] = "å¯¹æ¯”åº¦";
+    Text[ chinese_traditional ] = "å°æ¯”åº¦";
     Text[ arabic ] = "ÇáÊÈÇíä";
     Text[ turkish ] = "Kontrastı azalt";
-    Text[ catalan ] = "Contraste";
+    Text[ catalan ] = "Contrast";
     Text[ finnish ] = "Kontrasti";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸„à¸¡à¸Šà¸±à¸”";
 };
 String RID_SVXSTR_UNDO_GRAFGAMMA
 {
@@ -339,14 +346,15 @@ String RID_SVXSTR_UNDO_GRAFGAMMA
     Text[ danish ] = "Gamma";
     Text[ polish ] = "Gama";
     Text[ portuguese_brazilian ] = "Gamma";
-    Text[ japanese ] = "¶ŞİÏ";
-    Text[ korean ] = "°¨¸¶";
-    Text[ chinese_simplified ] = "»ÒÉ«ÏµÊı";
-    Text[ chinese_traditional ] = "¦Ç¦â¨t¼Æ";
+    Text[ japanese ] = "ã‚¬ãƒ³ãƒ";
+    Text[ korean ] = "ê°ë§ˆ";
+    Text[ chinese_simplified ] = "ç°è‰²ç³»æ•°";
+    Text[ chinese_traditional ] = "ç°è‰²ç³»æ•¸";
     Text[ arabic ] = "ÛÇãÇ";
     Text[ turkish ] = "Gamma";
     Text[ catalan ] = "Gamma";
     Text[ finnish ] = "Gamma";
+    Text[ thai ] = "à¹à¸à¸¡à¸¡à¹ˆà¸²";
 };
 String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
 {
@@ -364,14 +372,15 @@ String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
     Text[ danish ] = "Transparens";
     Text[ polish ] = "Przezroczystoœæ";
     Text[ portuguese_brazilian ] = "Transparency";
-    Text[ japanese ] = "“§‰ß«";
-    Text[ korean ] = "Åõ¸í";
-    Text[ chinese_simplified ] = "Í¸Ã÷";
-    Text[ chinese_traditional ] = "³z©ú";
+    Text[ japanese ] = "é€éæ€§";
+    Text[ korean ] = "íˆ¬ëª…ë„";
+    Text[ chinese_simplified ] = "é€æ˜";
+    Text[ chinese_traditional ] = "é€æ˜";
     Text[ arabic ] = "ÔİÇİíÉ";
     Text[ turkish ] = "Saydamlık";
-    Text[ catalan ] = "Transparencia";
-    Text[ finnish ] = "Läpikuultavuus";
+    Text[ catalan ] = "Transparència";
+    Text[ finnish ] = "Läpinäkyvyys";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
 };
 String RID_SVXSTR_GRAFCROP
 {
@@ -379,27 +388,40 @@ String RID_SVXSTR_GRAFCROP
     Text[ english ] = "Crop";
     Text[ english_us ] = "Crop";
     Text[ portuguese ] = "Recortar";
-    Text[ russian ] = "Îáğåçàòü";
+    Text[ russian ] = "Êàäğèğîâàòü";
     Text[ greek ] = "ĞñïóáñìïãŞ";
     Text[ dutch ] = "Uitknippen";
     Text[ french ] = "Rogner";
     Text[ spanish ] = "Recortar";
     Text[ italian ] = "Taglia";
-    Text[ danish ] = "Crop";
+    Text[ danish ] = "Beskær";
     Text[ swedish ] = "Beskär";
     Text[ polish ] = "Przytnij";
     Text[ portuguese_brazilian ] = "Crop";
-    Text[ japanese ] = "ÄØĞİ¸Ş";
-    Text[ korean ] = "´Ùµë±â";
-    Text[ chinese_simplified ] = "²Ã¼ô";
-    Text[ chinese_traditional ] = "µô°Å";
+    Text[ japanese ] = "ãƒˆãƒªãƒŸãƒ³ã‚°";
+    Text[ korean ] = "ë‹¤ë“¬ê¸°";
+    Text[ chinese_simplified ] = "è£å‰ª";
+    Text[ chinese_traditional ] = "è£å‰ª";
     Text[ turkish ] = "Crop";
     Text[ arabic ] = "ÇŞÊÕÇÕ";
-    Text[ catalan ] = "Recortar";
+    Text[ catalan ] = "Retalla";
     Text[ finnish ] = "Rajaa";
+    Text[ thai ] = "à¸„à¸£à¸­à¸šà¸•à¸±à¸”";
 };
 
 // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

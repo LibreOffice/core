@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-11 14:36:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>               // UINTXX
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #pragma hdrstop
@@ -113,6 +113,21 @@
 #endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _SVX_ESCHEREX_HXX
+#include <escherex.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERCONTAINER_HPP_
+#include <com/sun/star/container/XIdentifierContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
+#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HPP_
+#include <com/sun/star/drawing/GluePoint2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
 #endif
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
@@ -275,13 +290,14 @@
 #include "impgrf.hxx"
 #endif
 
-#define _MSDFFIMP_CXX
-
 #ifndef _MSDFFIMP_HXX
 #include "msdffimp.hxx" // extern sichtbare Header-Datei
 #endif
 #ifndef _MSASHAPE_HXX
 #include "msashape.hxx"
+#endif
+#ifndef _MSASHAPE3D_HXX
+#include "msashape3d.hxx"
 #endif
 #ifndef _GALLERY_HXX_
 #include "gallery.hxx"
@@ -308,6 +324,12 @@
 #ifndef _VOS_NO_NAMESPACE
 using namespace vos;
 #endif
+
+using namespace ::com::sun::star    ;
+using namespace uno                 ;
+using namespace beans               ;
+using namespace drawing             ;
+using namespace container           ;
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
@@ -791,6 +813,237 @@ DffPropertyReader::~DffPropertyReader()
     delete pDefaultPropSet;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rRule )
+{
+    rIn >> rRule.nRuleId
+        >> rRule.nShapeA
+        >> rRule.nShapeB
+        >> rRule.nShapeC
+        >> rRule.ncptiA
+        >> rRule.ncptiB;
+
+    return rIn;
+}
+
+SvxMSDffSolverContainer::SvxMSDffSolverContainer()
+{
+}
+
+SvxMSDffSolverContainer::~SvxMSDffSolverContainer()
+{
+    for ( SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)aCList.First();
+            pPtr; pPtr = (SvxMSDffConnectorRule*)aCList.Next() )
+        delete pPtr;
+}
+
+SvStream& operator>>( SvStream& rIn, SvxMSDffSolverContainer& rContainer )
+{
+    DffRecordHeader aHd;
+    rIn >> aHd;
+    if ( aHd.nRecType == DFF_msofbtSolverContainer )
+    {
+        DffRecordHeader aCRule;
+        while ( ( rIn.GetError() == 0 ) && ( rIn.Tell() < aHd.GetRecEndFilePos() ) )
+        {
+            rIn >> aCRule;
+            if ( aCRule.nRecType == DFF_msofbtConnectorRule )
+            {
+                SvxMSDffConnectorRule* pRule = new SvxMSDffConnectorRule;
+                rIn >> *pRule;
+                rContainer.aCList.Insert( pRule, LIST_APPEND );
+            }
+            aCRule.SeekToEndOfRecord( rIn );
+        }
+    }
+    return rIn;
+}
+
+void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
+{
+    sal_Int32 i, nCount;
+    for ( i = 0, nCount = rSolver.aCList.Count(); i < nCount; i++ )
+    {
+        SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)rSolver.aCList.GetObject( i );
+        if ( pPtr->pCObj )
+        {
+            for ( int nN = 0; nN < 2; nN++ )
+            {
+                SdrObject*  pO;
+                sal_uInt32  nC, nSpFlags;
+                sal_Bool    bTail;
+                if ( !nN )
+                {
+                    bTail = sal_True;
+                    pO = pPtr->pAObj;
+                    nC = pPtr->ncptiA;
+                    nSpFlags = pPtr->nSpFlagsA;
+                }
+                else
+                {
+                    bTail = sal_False;
+                    pO = pPtr->pBObj;
+                    nC = pPtr->ncptiB;
+                    nSpFlags = pPtr->nSpFlagsB;
+                }
+                if ( pO )
+                {
+                    Any aAny;
+                    SdrGluePoint aGluePoint;
+                    Reference< XShape > aXShape( pO->getUnoShape(), UNO_QUERY );
+                    Reference< XShape > aXConnector( pPtr->pCObj->getUnoShape(), UNO_QUERY );
+                    SdrGluePointList* pList = pO->ForceGluePointList();
+
+                    sal_Bool bValidGluePoint = sal_False;
+                    sal_Int32 nId = nC;
+                    sal_uInt32 nInventor = pO->GetObjInventor();
+
+                    if( nInventor == SdrInventor )
+                    {
+                        if ( pList && ( pList->GetCount() > nC ) )
+                        {
+                            bValidGluePoint = sal_True;
+                            nId = (sal_Int32)((*pList)[ (sal_uInt16)nC].GetId() + 4 );
+                        }
+                        else
+                        {
+                            sal_uInt32 nObjId = pO->GetObjIdentifier();
+                            switch( nObjId )
+                            {
+                                case OBJ_GRUP :
+                                case OBJ_GRAF :
+                                case OBJ_RECT :
+                                case OBJ_TEXT :
+                                case OBJ_PAGE :
+                                case OBJ_TEXTEXT :
+                                case OBJ_wegFITTEXT :
+                                case OBJ_wegFITALLTEXT :
+                                case OBJ_TITLETEXT :
+                                case OBJ_OUTLINETEXT :
+                                {
+                                    if ( nC & 1 )
+                                    {
+                                        if ( nSpFlags & SP_FFLIPH )
+                                            nC ^= 2;    // 1 <-> 3
+                                    }
+                                    else
+                                    {
+                                        if ( nSpFlags & SP_FFLIPV )
+                                            nC ^= 1;    // 0 <-> 2
+                                    }
+                                    switch( nC )
+                                    {
+                                        case 0 :
+                                            nId = 0;    // SDRVERTALIGN_TOP;
+                                        break;
+                                        case 1 :
+                                            nId = 3;    // SDRHORZALIGN_RIGHT;
+                                        break;
+                                        case 2 :
+                                            nId = 2;    // SDRVERTALIGN_BOTTOM;
+                                        break;
+                                        case 3 :
+                                            nId = 1; // SDRHORZALIGN_LEFT;
+                                        break;
+                                    }
+                                    if ( nId <= 3 )
+                                        bValidGluePoint = sal_True;
+                                }
+                                break;
+                                case OBJ_POLY :
+                                case OBJ_PLIN :
+                                case OBJ_LINE :
+                                case OBJ_PATHLINE :
+                                case OBJ_PATHFILL :
+                                case OBJ_FREELINE :
+                                case OBJ_FREEFILL :
+                                case OBJ_SPLNLINE :
+                                case OBJ_SPLNFILL :
+                                case OBJ_PATHPOLY :
+                                case OBJ_PATHPLIN :
+                                {
+                                    sal_Bool bNotFound = sal_True;
+
+                                    PolyPolygon aPolyPoly( EscherPropertyContainer::GetPolyPolygon( aXShape ) );
+                                    sal_uInt16 i, j, nPolySize = aPolyPoly.Count();
+                                    if ( nPolySize )
+                                    {
+                                        sal_uInt32  nPointCount = 0;
+                                        Rectangle aBoundRect( aPolyPoly.GetBoundRect() );
+                                        if ( aBoundRect.GetWidth() && aBoundRect.GetHeight() )
+                                        {
+                                            for ( i = 0; bNotFound && ( i < nPolySize ); i++ )
+                                            {
+                                                const Polygon& rPolygon = aPolyPoly.GetObject( i );
+                                                for ( j = 0; bNotFound && ( j < rPolygon.GetSize() ); j++ )
+                                                {
+                                                    PolyFlags eFlags = rPolygon.GetFlags( j );
+                                                    if ( eFlags == POLY_NORMAL )
+                                                    {
+                                                        if ( nC == nPointCount )
+                                                        {
+                                                            const Point& rPoint = rPolygon.GetPoint( j );
+                                                            double fXRel = rPoint.X() - aBoundRect.Left();
+                                                            double fYRel = rPoint.Y() - aBoundRect.Top();
+                                                            fXRel = fXRel / aBoundRect.GetWidth() * 10000;
+                                                            fYRel = fYRel / aBoundRect.GetHeight() * 10000;
+                                                            aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
+                                                            aGluePoint.SetPercent( sal_True );
+                                                            aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
+                                                            aGluePoint.SetEscDir( SDRESC_SMART );
+                                                            nId = (sal_Int32)((*pList)[ pList->Insert( aGluePoint ) ].GetId() + 4 );
+                                                            bNotFound = sal_False;
+                                                        }
+                                                        nPointCount++;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if ( !bNotFound )
+                                    {
+                                        bValidGluePoint = sal_True;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        if ( bValidGluePoint )
+                        {
+                            Reference< XPropertySet > xPropSet( aXConnector, UNO_QUERY );
+                            if ( xPropSet.is() )
+                            {
+                                if ( nN )
+                                {
+                                    String aPropName( RTL_CONSTASCII_USTRINGPARAM( "EndShape" ) );
+                                    aAny <<= aXShape;
+                                    SetPropValue( aAny, xPropSet, aPropName, sal_True );
+                                    aPropName  = String( RTL_CONSTASCII_USTRINGPARAM( "EndGluePointIndex" ) );
+                                    aAny <<= nId;
+                                    SetPropValue( aAny, xPropSet, aPropName, sal_True );
+                                }
+                                else
+                                {
+                                    String aPropName( RTL_CONSTASCII_USTRINGPARAM( "StartShape" ) );
+                                    aAny <<= aXShape;
+                                    SetPropValue( aAny, xPropSet, aPropName, sal_True );
+                                    aPropName = String( RTL_CONSTASCII_USTRINGPARAM( "StartGluePointIndex" ) );
+                                    aAny <<= nId;
+                                    SetPropValue( aAny, xPropSet, aPropName, sal_True );
+                                }
+                                pO->SendRepaintBroadcast();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 static void GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd,
                             const MSO_LineEndWidth eLineWidth, const MSO_LineEndLength eLineLenght,
                                 sal_Int32& rnArrowWidth, XPolygon& rXPoly, sal_Bool& rbArrowCenter,
@@ -1075,7 +1328,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
             double nTrans = GetPropertyValue(DFF_Prop_lineOpacity, 0x10000);
             nTrans = (nTrans * 100) / 65536;
             rSet.Put(XLineTransparenceItem(
-                sal_uInt16(100 - SolarMath::Round(nTrans))));
+                sal_uInt16(100 - ::rtl::math::round(nTrans))));
         }
 
         rManager.ScaleEmu( nLineWidth );
@@ -1174,7 +1427,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
             double nTrans = GetPropertyValue(DFF_Prop_fillOpacity);
             nTrans = (nTrans * 100) / 65536;
             rSet.Put(XFillTransparenceItem(
-                sal_uInt16(100 - SolarMath::Round(nTrans))));
+                sal_uInt16(100 - ::rtl::math::round(nTrans))));
         }
 
         if ( eXFill == XFILL_GRADIENT )
@@ -1243,8 +1496,6 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
         }
         else if ( eXFill == XFILL_BITMAP )
         {
-            ULONG nWdt = GetPropertyValue( DFF_Prop_fillWidth, 0 );
-            ULONG nHgt = GetPropertyValue( DFF_Prop_fillHeight, 0 );
             if( IsProperty( DFF_Prop_fillBlip ) )
             {
                 Graphic aGraf;
@@ -1290,12 +1541,20 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
                         }
                         rSet.Put( XFillBitmapItem( String(), aXOBitmap ) );
                     }
+                    else if ( eMSO_FillType == mso_fillTexture )
+                    {
+                        XOBitmap aXBmp( aBmp, XBITMAP_STRETCH );
+                        rSet.Put( XFillBmpTileItem( sal_True ) );
+                        rSet.Put( XFillBitmapItem( String(), aXBmp ) );
+                        rSet.Put( XFillBmpSizeXItem( GetPropertyValue( DFF_Prop_fillWidth, 0 ) / 360 ) );
+                        rSet.Put( XFillBmpSizeYItem( GetPropertyValue( DFF_Prop_fillHeight, 0 ) / 360 ) );
+                        rSet.Put( XFillBmpSizeLogItem( sal_True ) );
+                    }
                     else
                     {
                         XOBitmap aXBmp( aBmp, XBITMAP_STRETCH );
                         rSet.Put( XFillBitmapItem( String(), aXBmp ) );
-                        if ( eMSO_FillType == mso_fillPicture )
-                            rSet.Put( XFillBmpTileItem( FALSE ) );
+                        rSet.Put( XFillBmpTileItem( sal_False ) );
                     }
                 }
             }
@@ -2204,411 +2463,11 @@ void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
         rStr.Erase();
 }
 
-static void Apply3dObjectRotation( E3dScene* pScene, sal_Int32 nXRotate, sal_Int32 nYRotate )
-{
-    // ## 3D changes
-    // create transformation for 3d object (rotation around
-    // Y-Axis, but aligned to front face)
-    Matrix4D aNewTransform;
-    const Volume3D& rVolume = pScene->GetBoundVolume();
-    const Matrix4D& rOldTransform = pScene->GetTransform();
-    Vector3D aObjCenter = pScene->GetCenter();
-
-    aNewTransform.Translate(-aObjCenter.X(), -aObjCenter.Y(), -rVolume.GetDepth());
-    if( nYRotate )
-        aNewTransform.RotateY((double)nYRotate * nPi180);
-    if( nXRotate )
-        aNewTransform.RotateX( (double)nXRotate * nPi180 );
-    aNewTransform.Translate(aObjCenter.X(), aObjCenter.Y(), rVolume.GetDepth());
-    pScene->SetTransform(aNewTransform * rOldTransform);
-}
-
-
-static void Apply3dSkewSettings( Camera3D& rCamera, E3dScene* pScene, sal_Int32 nSkewAmount, sal_Int32 nSkewAngle, double& fDepth )
-{
-
-    Rectangle aOldSnap( pScene->GetSnapRect() );
-
-    double fCaMX = 0.0;
-    double fCaMY = 0.0;
-
-    if ( nSkewAmount )
-    {
-        nSkewAngle %= 360;
-        if ( nSkewAngle < 0 )
-            nSkewAngle = 360 + nSkewAngle;
-
-        fCaMX = (double)aOldSnap.GetWidth() / 2;
-        fCaMY = (double)aOldSnap.GetHeight() / 2;
-
-        fCaMX += fDepth;
-        fCaMY += fDepth;
-
-        if ( nSkewAngle < 45 )
-        {
-            fCaMX *= -1.0;
-            fCaMY = 0.0;
-        }
-        else if ( nSkewAngle < 90 )
-        {
-            fCaMX *= -1.0;
-            fCaMY *= -1.0;
-        }
-        else if ( nSkewAngle < 135 )
-        {
-            fCaMX = 0.0;
-            fCaMY *= -1.0;
-        }
-        else if ( nSkewAngle < 180 )
-        {
-            fCaMY *= -1.0;
-        }
-        else if ( nSkewAngle < 225 )
-        {
-            fCaMY = 0.0;
-        }
-        else if ( nSkewAngle < 270 )
-        {
-            // default;
-        }
-        else if ( nSkewAngle < 315 )
-        {
-            fCaMX = 0.0;
-        }
-        else
-        {
-            fCaMX *= -1;
-        }
-    }
-    // ## 3D changes
-    Vector3D aNewCamPos( fCaMX, fCaMY, fDepth );
-    Vector3D aNewLookAt( fCaMX, fCaMY, 0 );
-    rCamera.SetPosAndLookAt( aNewCamPos, aNewLookAt );
-
-    pScene->SetCamera( rCamera );
-    pScene->FitSnapRectToBoundVol();
-    Rectangle aModifiedSnap( pScene->GetSnapRect() );
-    Point aPos( aOldSnap.TopLeft() );
-    if ( fCaMX < 0.0 )
-        aPos.X() -= ( aModifiedSnap.GetWidth() - aOldSnap.GetWidth() );
-    if ( fCaMY > 0.0 )
-        aPos.Y() -= ( aModifiedSnap.GetHeight() - aOldSnap.GetHeight() );
-    Rectangle aNewSnap( aPos, aModifiedSnap.GetSize() );
-    pScene->SetSnapRect( aNewSnap );
-}
-
-SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, Rectangle& aBoundRect, BOOL bIsAutoText ) const
-{
-    // pRet Umwandeln in Szene mit 3D Objekt
-    E3dDefaultAttributes a3DDefaultAttr;
-    a3DDefaultAttr.SetDefaultLatheCharacterMode( TRUE );
-    a3DDefaultAttr.SetDefaultExtrudeCharacterMode( TRUE );
-
-    E3dScene* pScene = new E3dPolyScene( a3DDefaultAttr );
-    double fDepth = 1270.0;
-    BOOL bSceneHasObjects( FALSE );
-
-    if( pRet->IsGroupObject() )
-    {
-        SdrObjListIter aIter( *pRet, IM_DEEPWITHGROUPS );
-        while( aIter.IsMore() )
-        {
-            SdrObject* pPartObj = aIter.Next();
-            SdrObject* pNewObj = pPartObj->ConvertToPolyObj( FALSE, FALSE );
-            SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
-
-            if( pPath )
-            {
-                E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr, pPath->GetPathPoly(), fDepth );
-                p3DObj->NbcSetLayer( pRet->GetLayer() );
-                aSet.Put( XLineStyleItem( XLINE_NONE ) );   // ... aber keine Linien
-                // Feststellen, ob ein FILL_Attribut gesetzt ist.
-                // Falls nicht, Fuellattribut hart setzen
-                XFillStyle eFillStyle = ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem );
-                if ( eFillStyle == XFILL_NONE )
-                    aSet.Put( XFillStyleItem( XFILL_SOLID ) );
-                pScene->Insert3DObj( p3DObj );
-                bSceneHasObjects = TRUE;
-            }
-            delete pNewObj; // Aufraeumen
-        }
-    }
-    else
-    {
-        sal_Bool bHasFillStyle = ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) != 0;
-        sal_Bool bHasLineStyle = ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 ) != 0;
-
-        if ( bHasFillStyle || bHasLineStyle )
-        {
-            SdrObject* pNewObj = pRet->ConvertToPolyObj( FALSE, FALSE );
-            SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
-
-            if ( pPath )
-            {
-                E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr, pPath->GetPathPoly(), fDepth );
-                p3DObj->NbcSetLayer( pRet->GetLayer() );
-                aSet.Put( XLineStyleItem( XLINE_NONE ) );// ... aber keine Linien
-                if ( !bHasFillStyle )
-                    aSet.Put( XFillStyleItem( XFILL_SOLID ) );
-                pScene->Insert3DObj( p3DObj );
-                bSceneHasObjects = TRUE;
-            }
-            delete pNewObj; // Aufraeumen
-        }
-    }
-
-    // Hat das Umwandeln geklappt?
-    if ( bSceneHasObjects )
-    {
-        // Returnwert aendern
-        delete pRet;
-        pRet = pScene;
-
-        aSet.Put( Svx3DPercentDiagonalItem( 1 ) );
-        aSet.Put( Svx3DShadeModeItem( 0 ) );
-        pScene->SetItemSet(aSet);
-
-        // Kameraeinstellungen, Perspektive ...
-        sal_Int32 nVal;
-        Camera3D& rCamera = (Camera3D&)pScene->GetCamera();
-        const Volume3D& rVolume = pScene->GetBoundVolume();
-        Point aCenter = aBoundRect.Center();
-        Matrix4D aMatrix;
-        // 3D-Objekt auf die Mitte des Gesamtrechtecks zentrieren
-        aMatrix.Translate( Vector3D( -aCenter.X(), aCenter.Y(), 0.0 ) );
-        pScene->SetTransform(aMatrix * pScene->GetTransform());
-        pScene->CorrectSceneDimensions();
-        pScene->NbcSetSnapRect( aBoundRect );
-
-        // InitScene replacement
-        double fW = rVolume.GetWidth();
-        double fH = rVolume.GetHeight();
-        double fCamZ = rVolume.MaxVec().Z() + ( ( fW + fH ) / 2.0 );
-
-        rCamera.SetAutoAdjustProjection( FALSE );
-        rCamera.SetViewWindow( -fW / 2, - fH / 2, fW, fH);
-        Vector3D aLookAt( 0.0, 0.0, 0.0 );
-        Vector3D aCamPos( 0.0, 0.0, 100.0 );
-
-        rCamera.SetDefaults( Vector3D( 0.0, 0.0, 100.0 ), aLookAt, 100.0 );
-        rCamera.SetPosAndLookAt( aCamPos, aLookAt );
-        rCamera.SetFocalLength( 100.0 );
-
-        // Default: non perspective
-//      rCamera.SetProjection( GetPropertyValue( DFF_Prop_fc3DFillHarsh, 0 ) & 4 ? PR_PARALLEL : PR_PERSPECTIVE );
-
-        // always set perspective mode because otherwise the camera positioning that reflects
-        // the skewangle will not work properly
-        rCamera.SetProjection( PR_PERSPECTIVE );
-        pScene->SetCamera( rCamera );
-
-        pScene->SetRectsDirty();
-
-        // Merker fuer Kameraaenderungen
-
-        if ( IsProperty( DFF_Prop_c3DRenderMode ) )
-        {
-            MSO_3DRenderMode eRenderMode = (MSO_3DRenderMode)GetPropertyValue( DFF_Prop_c3DRenderMode, 0 );
-            if ( eRenderMode == mso_Wireframe )
-            {
-                aSet.Put( XLineStyleItem( XLINE_SOLID ) );  // Linien: Durchgehend
-                aSet.Put( XFillStyleItem ( XFILL_NONE ) );  // Flaeche: unsichtbar
-                pScene->SetItemSet(aSet);
-
-                // 3D: Doppelseitig
-                SdrObjListIter aIter( *pScene, IM_DEEPWITHGROUPS );
-                while ( aIter.IsMore() )
-                {
-                    SdrObject* pSingleObj = aIter.Next();
-                    if ( pSingleObj->ISA(E3dExtrudeObj ) )
-                    {
-                        E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
-                        pSingleExtrude->SetItem(Svx3DDoubleSidedItem(TRUE));
-                    }
-                }
-            }
-        }
-
-        BOOL bUseBackSide = FALSE;
-        if ( IsProperty( DFF_Prop_c3DExtrudeBackward ) || IsProperty( DFF_Prop_c3DExtrudeForward ) )
-        {
-            nVal = GetPropertyValue( DFF_Prop_c3DExtrudeBackward, GetPropertyValue( DFF_Prop_c3DExtrudeForward, 0 ) );
-            ScaleEmu( nVal );
-            SdrObjListIter aIter( *pScene, IM_DEEPWITHGROUPS );
-            while( aIter.IsMore() )
-            {
-                SdrObject* pSingleObj = aIter.Next();
-                if ( pSingleObj->ISA( E3dExtrudeObj ) )
-                {
-                    E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
-                    sal_Int32 nSingleExtrudeDepth = pSingleExtrude->GetExtrudeDepth();
-                    if( nVal != nSingleExtrudeDepth )
-                    {
-                        if ( nVal == 338667 )
-                        {
-                            // MS unendlich
-                            pSingleExtrude->SetItem(Svx3DDepthItem(sal_uInt32((fDepth * 18.0)+0.5)));
-
-                            UINT16 nBackScale = (UINT16)((0.1 * 100.0) + 0.5);
-                            pSingleExtrude->SetItem(Svx3DBackscaleItem(nBackScale));
-
-                            UINT16 nPercentDiagonal = (UINT16)((0.01 * 200.0) + 0.5);
-                            pSingleExtrude->SetItem(Svx3DPercentDiagonalItem(nPercentDiagonal));
-
-                            Matrix4D aMirrorMat;
-                            aMirrorMat.Scale( 1.0, -1.0, -1.0 );
-                            pSingleExtrude->NbcSetTransform( pSingleExtrude->GetTransform() * aMirrorMat);
-                            bUseBackSide = TRUE;
-                        }
-                        else
-                            pSingleExtrude->SetItem(Svx3DDepthItem(sal_uInt32(nVal + 0.5)));
-                    }
-                }
-            }
-        }
-
-        // Ausgleichsrotation
-        if( (INT32)aCamPos.X() != 0 && (INT32)aCamPos.Y() != 0 )
-        {
-            // Ausgleichsdrehung notwendig...
-            double fArcTan = atan2( rCamera.GetVUV().Y(), rCamera.GetVUV().X() );
-            fArcTan = ( nPi / 2.0 ) - fArcTan;
-            rCamera.SetBankAngle( fArcTan );
-            pScene->SetCamera( rCamera );
-        }
-        if ( (INT32)aCamPos.X() == 0 && (INT32)aCamPos.Y() == 0 )
-        {
-            // Ausgleichsrotation fuer plane Flaechen
-            pScene->NbcRotateX( 0.5 * nPi180 );
-        }
-/*
-        sal_uInt32 nSpecular = GetPropertyValue( DFF_Prop_c3DSpecularAmt, 0 );
-        if ( nSpecular )
-        {
-            Color aSpecularCol( 204, 204, 204 );
-            aSet.Put( Svx3DMaterialSpecularItem( aSpecularCol ) );
-            aSet.Put( Svx3DMaterialSpecularIntensityItem( 15 ) );
-        }
-        sal_uInt32 nDiffuse = GetPropertyValue( DFF_Prop_c3DDiffuseAmt, 0 );
-        if ( nDiffuse )
-        {
-            Color aDiffuseCol( 45, 45, 45 );
-            aSet.Put( Svx3DMaterialSpecularItem( aDiffuseCol ) );
-            aSet.Put( Svx3DMaterialSpecularIntensityItem( 50 ) );
-        }
-*/
-        sal_Int32 nXRotate = GetPropertyValue( DFF_Prop_c3DXRotationAngle, 0 );
-        sal_Int32 nYRotate = GetPropertyValue( DFF_Prop_c3DYRotationAngle, 0 );
-        if ( nXRotate || nYRotate )
-            Apply3dObjectRotation( pScene, Fix16ToAngle( nXRotate ), Fix16ToAngle( nYRotate ) );
-
-        // set correct camera depth and evaluate new size
-        fDepth = pScene->GetBoundVolume().GetDepth();
-        if ( fDepth < 1.0 )
-            fDepth = 1.0;
-        fDepth = pScene->GetBoundVolume().GetDepth(); // 100.0;
-        Vector3D aNewCamPos( 0.0, 0.0, fDepth );
-        rCamera.SetPosAndLookAt( aNewCamPos, aLookAt );
-        pScene->SetCamera( rCamera );
-        pScene->FitSnapRectToBoundVol();
-
-        sal_Int32 nSkewAmount = GetPropertyValue( DFF_Prop_c3DSkewAmount, 30 );
-        if ( nSkewAmount )
-        {
-            Apply3dSkewSettings( rCamera, pScene, nSkewAmount,
-                ((sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAngle, 225 << 16 ) ) >> 16, fDepth);
-        }
-
-
-        ///////////
-        // light //
-        ///////////
-        sal_Int32 nLightKeyX = GetPropertyValue( DFF_Prop_c3DKeyX, 50000 );
-        sal_Int32 nLightKeyY = - ((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyY, 0 ));
-        sal_Int32 nLightKeyZ = GetPropertyValue( DFF_Prop_c3DKeyZ, 0 );
-        if ( nLightKeyX )
-            ScaleEmu( nLightKeyX );
-        if ( nLightKeyY )
-            ScaleEmu( nLightKeyY );
-        if ( nLightKeyZ )
-            ScaleEmu( nLightKeyZ );
-        else
-            nLightKeyZ = 1;
-        Vector3D aLightKey( (double)nLightKeyX, (double)nLightKeyY, (double)nLightKeyZ );
-        aLightKey.Normalize();
-        if ( bIsAutoText )
-            aLightKey = -aLightKey;
-
-        sal_uInt8 nAmbValGlobal = 102;
-        sal_uInt8 nAmbValSpot   = 204;
-        sal_uInt8 nAmbValCamera = 153;
-
-        Vector3D aSpotDirection = aLightKey;
-        Vector3D aCameraDirection(  0, 0, 1 );
-        Vector3D aPos = rCamera.GetPosition();
-        if ( aPos.X() > 0 )
-            aCameraDirection.X() = 1.0;
-        else if ( aPos.X() < 0 )
-            aCameraDirection.X() = -1.0;
-        if ( aPos.Y() > 0 )
-            aCameraDirection.Y() = 0.5;
-        else if ( aPos.Y() < 0 )
-            aCameraDirection.Y() = -0.5;
-
-        // aware, the ambient value does only matter for solid fill styles
-        if ( (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid ) == mso_fillSolid )
-        {
-            sal_uInt32 nAmbient = GetPropertyValue( DFF_Prop_c3DAmbientIntensity, 16000 );  // 16000->bright, 10000->normal, 4000->dim
-            if ( nAmbient < 7000 )          // dim
-            {
-                nAmbValGlobal = 51;
-                nAmbValSpot = 102;
-                nAmbValCamera = 153;
-            }
-            else if ( nAmbient < 13000 )    // normal
-            {
-                nAmbValGlobal = 76;
-                nAmbValSpot = 153;
-                nAmbValCamera = 153;
-            }
-            if ( ( nAmbValSpot > 102 ) && ( aSpotDirection.X() * aCameraDirection.X() >= 0 ) )
-                nAmbValSpot -= 50;
-            if ( ( nAmbValSpot > 102 ) && ( aSpotDirection.Y() * aCameraDirection.Y() >= 0 ) )
-                nAmbValSpot -= 50;
-        }
-        Color aGlobalAmbientColor( nAmbValGlobal, nAmbValGlobal, nAmbValGlobal );
-        aSet.Put( Svx3DAmbientcolorItem( aGlobalAmbientColor ) );
-
-        aSet.Put( Svx3DLightOnOff1Item( sal_True ) );
-        Color aAmbientSpotColor( nAmbValSpot, nAmbValSpot, nAmbValSpot );
-        aSet.Put( Svx3DLightcolor1Item( aAmbientSpotColor ) );
-        aSet.Put( Svx3DLightDirection1Item( aSpotDirection ) );
-
-        aSet.Put( Svx3DLightOnOff2Item( sal_True ) );
-        Color aAmbientCameraColor( nAmbValCamera, nAmbValCamera, nAmbValCamera );
-        aSet.Put( Svx3DLightcolor2Item( aAmbientCameraColor ) );
-        aSet.Put( Svx3DLightDirection2Item( aCameraDirection ) );
-
-
-        Color aSpecularCol( 51, 51, 51 );
-        aSet.Put( Svx3DMaterialSpecularItem( aSpecularCol ) );
-        aSet.Put( Svx3DMaterialSpecularIntensityItem( 85 ) );
-
-        pScene->SetModel( pSdrModel );
-        pScene->SetItemSet( aSet );
-        pScene->InitTransformationSet();
-    }
-    else
-        delete pScene;  // Aufraeumen
-    return pRet;
-}
-
 SdrObject* SvxMSDffManager::ImportWordArt( SvStream& rStCtrl, SfxItemSet& rSet, Rectangle& rBoundRect ) const
 {
     SdrObject*  pRet = NULL;
     String      aObjectText;
     String      aFontName;
-    INT32       nAngle = mnFix16Angle;
     BOOL        bTextRotate = FALSE;
 
     ((SvxMSDffManager*)this)->mnFix16Angle = 0; // we don't want to use this property in future
@@ -2659,15 +2518,10 @@ SdrObject* SvxMSDffManager::ImportWordArt( SvStream& rStCtrl, SfxItemSet& rSet, 
                 pRet->NbcSetSnapRect( rBoundRect );
                 delete pNewObj;
             }
-            if( nAngle || bTextRotate )
+            if( bTextRotate )
             {
-                if ( bTextRotate )
-                    nAngle = NormAngle360( nAngle + 9000 );
-                if( nAngle )
-                {
-                    double a = nAngle * nPi180;
-                    pRet->NbcRotate( rBoundRect.Center(), nAngle, sin( a ), cos( a ) );
-                }
+                double a = 9000 * nPi180;
+                pRet->NbcRotate( rBoundRect.Center(), 9000, sin( a ), cos( a ) );
             }
         }
     }
@@ -2934,7 +2788,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
                 {
                     try
                     {
-                        ::ucb::Content  aCnt( aName, ::com::sun::star::uno::Reference<
+                        ::ucb::Content  aCnt( aName, uno::Reference<
                             ::com::sun::star::ucb::XCommandEnvironment >() );
                         ::rtl::OUString     aTitle;
 
@@ -3128,6 +2982,8 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
 
                 sal_Bool    bIsConnector = ( ( aObjData.eShapeType >= mso_sptStraightConnector1 ) && ( aObjData.eShapeType <= mso_sptCurvedConnector5 ) );
                 sal_Bool    bIsAutoShape = FALSE;
+                sal_Int32   nObjectRotation = mnFix16Angle;
+                sal_uInt32  nSpFlags = aObjData.nSpFlags;
 
                 if ( bGraphic )
                 {
@@ -3177,7 +3033,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                             }
                         }
                     }
-                    aObjData.nSpFlags &=~ ( SP_FFLIPH | SP_FFLIPV );            // #68396#
+                    nSpFlags &=~ ( SP_FFLIPH | SP_FFLIPV );         // #68396#
                 }
                 else  if ( ( aObjData.eShapeType == mso_sptCurvedLeftArrow )    // #97935# not taking the autoshapes from msashape,
                         || ( aObjData.eShapeType == mso_sptCurvedRightArrow )   // instead we are using our precalculated ones
@@ -3190,7 +3046,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                 }
                 else
                 {
-                    SvxMSDffAutoShape aAutoShape( *this, rSt, aObjData, aBoundRect, mnFix16Angle );
+                    SvxMSDffAutoShape aAutoShape( *this, rSt, aObjData, aBoundRect, nObjectRotation );
                     if ( !aAutoShape.IsEmpty() )
                     {
                         ApplyAttributes( rSt, aSet, NULL );
@@ -3264,9 +3120,9 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                             Point aPoint2( aBoundRect.BottomRight() );
 
                             // Rotationen beachten
-                            if ( mnFix16Angle )
+                            if ( nObjectRotation )
                             {
-                                double a = mnFix16Angle * nPi180;
+                                double a = nObjectRotation * nPi180;
                                 Point aCenter( aBoundRect.Center() );
                                 double ss = sin(a);
                                 double cc = cos(a);
@@ -3276,19 +3132,19 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                             }
 
                             // Linie innerhalb des Bereiches zurechtdrehen/spiegeln
-                            if ( aObjData.nSpFlags & SP_FFLIPH )
+                            if ( nSpFlags & SP_FFLIPH )
                             {
                                 INT32 n = aPoint1.X();
                                 aPoint1.X() = aPoint2.X();
                                 aPoint2.X() = n;
                             }
-                            if ( aObjData.nSpFlags & SP_FFLIPV )
+                            if ( nSpFlags & SP_FFLIPV )
                             {
                                 INT32 n = aPoint1.Y();
                                 aPoint1.Y() = aPoint2.Y();
                                 aPoint2.Y() = n;
                             }
-                            aObjData.nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
+                            nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
 
                             pRet->NbcSetPoint(aPoint1, 0);  // Startpunkt
                             pRet->NbcSetPoint(aPoint2, 1);  // Endpunkt
@@ -3345,15 +3201,24 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                     {
                         // #81981# not all objects are effected by 3d effects
                         if ( !bGraphic )
-                            pRet = Import3DObject( pRet, aSet, aBoundRect, aObjData.bIsAutoText );
+                        {
+                            SdrObject* p3d = SvxMSDffAutoShape3D::Create3DObject( pRet, *this, aSet, aBoundRect, nSpFlags );
+                            if ( p3d )
+                            {
+                                nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
+                                nObjectRotation = 0;
+                                delete pRet;
+                                pRet = p3d;
+                            }
+                        }
                     }
                 }
                 if ( pRet )
                 {
-                    if( mnFix16Angle && !bIsConnector )
+                    if( nObjectRotation && !bIsConnector )
                     {
-                        double a = mnFix16Angle * nPi180;
-                        pRet->NbcRotate( aBoundRect.Center(), mnFix16Angle, sin( a ), cos( a ) );
+                        double a = nObjectRotation * nPi180;
+                        pRet->NbcRotate( aBoundRect.Center(), nObjectRotation, sin( a ), cos( a ) );
                     }
                     if ( nSpecialGroupSettings )
                     {
@@ -3376,7 +3241,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                         }
                     }
                     // Horizontal gespiegelt?
-                    if ( aObjData.nSpFlags & SP_FFLIPH )
+                    if ( nSpFlags & SP_FFLIPH )
                     {
                         Rectangle aBoundRect( pRet->GetSnapRect() );
                         Point aTop( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
@@ -3384,7 +3249,7 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                         pRet->NbcMirror( aTop, aBottom );
                     }
                     // Vertikal gespiegelt?
-                    if ( aObjData.nSpFlags & SP_FFLIPV )
+                    if ( nSpFlags & SP_FFLIPV )
                     {
                         Rectangle aBoundRect( pRet->GetSnapRect() );
                         Point aLeft( aBoundRect.Left(), ( aBoundRect.Top() + aBoundRect.Bottom() ) >> 1 );
@@ -3541,6 +3406,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if( !pObj )
                 ApplyAttributes( rSt, aSet, pTextObj );
 
+            bool bFitText = false;
             if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
             {
                 aSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
@@ -3548,6 +3414,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     aNewRect.Bottom() - aNewRect.Top() ) );
                 aSet.Put( SdrTextMinFrameWidthItem(
                     aNewRect.Right() - aNewRect.Left() ) );
+                bFitText = true;
             }
             else
             {
@@ -3560,6 +3427,11 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             {
                 case mso_wrapNone :
                     aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
+                    if (bFitText)
+                    {
+                        //can't do autowidth in flys #i107184#
+                        pTextImpRec->bReplaceByFly = false;
+                    }
                 break;
                 case mso_wrapByPoints :
                     aSet.Put( SdrTextContourFrameItem( TRUE ) );
@@ -5277,11 +5149,8 @@ SdrObject* SvxMSDffManager::GetAutoForm( MSO_SPT eTyp ) const
     return pRet;
 }
 
-sal_Bool SvxMSDffManager::SetPropValue(
-    const ::com::sun::star::uno::Any& rAny,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-            const String& rPropName,
-                sal_Bool bTestPropertyAvailability )
+sal_Bool SvxMSDffManager::SetPropValue( const uno::Any& rAny, const uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+            const String& rPropName, sal_Bool bTestPropertyAvailability )
 {
     sal_Bool bRetValue = sal_True;
     if ( bTestPropertyAvailability )
@@ -5289,12 +5158,12 @@ sal_Bool SvxMSDffManager::SetPropValue(
         bRetValue = sal_False;
         try
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+            uno::Reference< beans::XPropertySetInfo >
                 aXPropSetInfo( rXPropSet->getPropertySetInfo() );
             if ( aXPropSetInfo.is() )
                 bRetValue = aXPropSetInfo->hasPropertyByName( rPropName );
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( uno::Exception& )
         {
             bRetValue = sal_False;
         }
@@ -5306,7 +5175,7 @@ sal_Bool SvxMSDffManager::SetPropValue(
             rXPropSet->setPropertyValue( rPropName, rAny );
             bRetValue = sal_True;
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( uno::Exception& )
         {
             bRetValue = sal_False;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-20 16:28:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,11 @@
 
 #ifndef _OUTLOBJ_HXX //autogen
 #include <outlobj.hxx>
+#endif
+
+// #i11426#
+#ifndef _SVDOGRP_HXX
+#include <svdogrp.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -304,6 +309,10 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBO
     pRedoStyleSheet(NULL),
     pRepeatStyleSheet(NULL),
     pTextUndo(NULL),
+
+    // #i8508#
+    pTextRedo(NULL),
+
     pUndoGroup(NULL),
     bHaveToTakeRedoSet(TRUE)
 {
@@ -356,6 +365,10 @@ SdrUndoAttrObj::~SdrUndoAttrObj()
         delete pUndoGroup;
     if(pTextUndo)
         delete pTextUndo;
+
+    // #i8508#
+    if(pTextRedo)
+        delete pTextRedo;
 }
 
 void SdrUndoAttrObj::SetRepeatAttr(const SfxItemSet& rSet)
@@ -383,6 +396,15 @@ void SdrUndoAttrObj::Undo()
             pRedoSet->Put(pObj->GetItemSet());
             if(bStyleSheet)
                 pRedoStyleSheet=pObj->GetStyleSheet();
+
+            if(pTextUndo)
+            {
+                // #i8508#
+                pTextRedo = pObj->GetOutlinerParaObject();
+
+                if(pTextRedo)
+                    pTextRedo = pTextRedo->Clone();
+            }
         }
 
         if(bStyleSheet)
@@ -451,6 +473,12 @@ void SdrUndoAttrObj::Redo()
         }
 
         pObj->BroadcastItemChange(aItemChange);
+
+        // #i8508#
+        if(pTextRedo)
+        {
+            pObj->SetOutlinerParaObject(pTextRedo->Clone());
+        }
     }
 
     if(pUndoGroup)
@@ -690,9 +718,29 @@ void SdrUndoRemoveObj::Undo()
     ImpShowPageOfThisObject();
 
     DBG_ASSERT(!pObj->IsInserted(),"UndoRemoveObj: pObj ist bereits Inserted");
-    if (!pObj->IsInserted()) {
+    if (!pObj->IsInserted())
+    {
+        // #i11426#
+        // For UNDOs in Calc/Writer it is necessary to adapt the anchor
+        // pos of the target object.
+        Point aOwnerAnchorPos(0, 0);
+
+        if(pObjList
+            && pObjList->GetOwnerObj()
+            && pObjList->GetOwnerObj()->ISA(SdrObjGroup))
+        {
+            aOwnerAnchorPos = pObjList->GetOwnerObj()->GetAnchorPos();
+        }
+
         SdrInsertReason aReason(SDRREASON_UNDO);
         pObjList->InsertObject(pObj,nOrdNum,&aReason);
+
+        // #i11426#
+        if(aOwnerAnchorPos.X() || aOwnerAnchorPos.Y())
+        {
+            pObj->NbcSetAnchorPos(aOwnerAnchorPos);
+        }
+
         if(pObjList->GetOwnerObj() && pObjList->GetOwnerObj()->ISA(E3dObject) && pObj->ISA(E3dObject))
         {
             E3dScene* pScene = ((E3dObject*)pObjList->GetOwnerObj())->GetScene();

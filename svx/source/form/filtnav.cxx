@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-22 10:11:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,9 +161,6 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
-#ifndef _SVX_FMFILTER_HXX
-#include "fmfilter.hxx"
 #endif
 #ifndef _SVX_GRIDCELL_HXX
 #include "gridcell.hxx"
@@ -388,13 +385,13 @@ public:
 TYPEINIT1( FmFilterTextChangedHint, FmFilterHint );
 
 //========================================================================
-class FmFilterClearedHint : public SfxHint
+class FilterClearingHint : public SfxHint
 {
 public:
     TYPEINFO();
-    FmFilterClearedHint(){}
+    FilterClearingHint(){}
 };
-TYPEINIT1( FmFilterClearedHint, SfxHint );
+TYPEINIT1( FilterClearingHint, SfxHint );
 
 //========================================================================
 class FmFilterCurrentChangedHint : public SfxHint
@@ -672,6 +669,11 @@ FmFilterModel::~FmFilterModel()
 //------------------------------------------------------------------------
 void FmFilterModel::Clear()
 {
+    // notify
+    FilterClearingHint aClearedHint;
+    Broadcast( aClearedHint );
+
+    // loose endings
     if (m_pAdapter)
     {
         m_pAdapter->dispose();
@@ -688,10 +690,6 @@ void FmFilterModel::Clear()
         delete (*i);
 
     m_aChilds.clear();
-
-    // UI benachrichtigen
-    FmFilterClearedHint aClearedHint;
-    Broadcast( aClearedHint );
 }
 
 //------------------------------------------------------------------------
@@ -1384,13 +1382,12 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
         if (m_pModel->ValidateText((FmFilterItem*)pEntry->GetUserData(), aText, aErrorMsg))
         {
             GrabFocus();
-            m_pModel->SetText((FmFilterItem*)pEntry->GetUserData(), aText);
-            SetCursor(pEntry, sal_True);
-            SetEntryText(pEntry, aText);
+            // this will set the text at the FmFilterItem, as well as update any filter controls
+            // which are connected to this particular entry
+            m_pModel->SetText( static_cast< FmFilterItem* >( pEntry->GetUserData() ), aText );
 
-            // settting the text asynchron
-            sal_uInt32 nEvent;
-            PostUserEvent(nEvent, LINK(this, FmFilterNavigator, OnEdited), pEntry);
+            SetCursor( pEntry, sal_True );
+            SetEntryText( pEntry, aText );
         }
         else
         {
@@ -1405,14 +1402,6 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
         }
     }
     return sal_True;
-}
-
-//------------------------------------------------------------------------
-IMPL_LINK( FmFilterNavigator, OnEdited, SvLBoxEntry*, pEntry )
-{
-    // invalidate the entry to see the correct text
-    SetEntryText( pEntry, ((FmFilterItem*)pEntry->GetUserData())->GetText());
-    return 0L;
 }
 
 //------------------------------------------------------------------------
@@ -1654,7 +1643,7 @@ void FmFilterNavigator::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         FmFilterInsertedHint* pHint = (FmFilterInsertedHint*)&rHint;
         Insert(pHint->GetData(), pHint->GetPos());
     }
-    else if( rHint.ISA(FmFilterClearedHint) )
+    else if( rHint.ISA(FilterClearingHint) )
     {
         SvTreeListBox::Clear();
     }
@@ -2099,6 +2088,13 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
 //-----------------------------------------------------------------------
 sal_Bool FmFilterNavigatorWin::Close()
 {
+    if ( m_pNavigator && m_pNavigator->IsEditingActive() )
+        m_pNavigator->EndEditing();
+
+    if ( m_pNavigator && m_pNavigator->IsEditingActive() )
+        // the EndEditing was vetoed (perhaps of an syntax error or such)
+        return sal_False;
+
     Update( NULL );
     return SfxDockingWindow::Close();
 }

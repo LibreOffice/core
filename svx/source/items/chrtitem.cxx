@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-05 11:23:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #if defined UNX && !defined LINUX
 #include <wchar.h>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _UNOTOOLS_INTLWRAPPER_HXX
 #include <unotools/intlwrapper.hxx>
@@ -320,12 +320,11 @@ SfxItemPresentation SvxDoubleItem::GetPresentation
               SfxMapUnit ePresentationMetric, XubString& rText,
               const IntlWrapper * pIntlWrapper) const
 {
-    rText.Erase();
     DBG_ASSERT( pIntlWrapper, "SvxDoubleItem::GetPresentation: no IntlWrapper" );
     if ( pIntlWrapper )
     {
-        SolarMath::DoubleToString( rText, fVal, 'E', 4,
-            pIntlWrapper->getLocaleData()->getNumDecimalSep().GetChar(0), TRUE );
+        rText = ::rtl::math::doubleToUString( fVal, rtl_math_StringFormat_E, 4,
+            pIntlWrapper->getLocaleData()->getNumDecimalSep().GetChar(0), true );
     }
     else
         rText = GetValueText();

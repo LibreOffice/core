@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-01 16:55:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ struct mso_AutoShape
     sal_Int32                   nCoordHeight;
     sal_Int32                   nXRef;
     sal_Int32                   nYRef;
+    SvxMSDffVertPair*           pGluePoints;
+    sal_uInt32                  nGluePoints;
 };
 
 #define GEOMETRY_USED_LEFT              1
@@ -162,7 +164,8 @@ static const mso_AutoShape mso =
     (sal_Int32*)mso_sptDefault,
     (SvxMSDffTextRectangles*)mso_sptTextRect, sizeof( mso_sptTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptVert, sizeof( mso_sptVert ) / sizeof( SvxMSDffVertPair )
 };
 */
 
@@ -217,6 +220,10 @@ static const sal_Int32 mso_sptArcDefault[] =
 {
     2, 270 << 16, 0
 };
+static const SvxMSDffVertPair mso_sptStandardGluePoints[] =
+{
+    { 10800, 0 }, { 0, 10800 }, { 10800, 21600 }, { 21600, 10800 }
+};
 static const mso_AutoShape msoArc =
 {
     NULL, 0,
@@ -225,7 +232,8 @@ static const mso_AutoShape msoArc =
     (sal_Int32*)mso_sptArcDefault,
     NULL, 0,
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const mso_AutoShape msoRectangle =
@@ -233,10 +241,11 @@ static const mso_AutoShape msoRectangle =
     NULL, 0,
     NULL, 0,
     NULL, 0,
-    (sal_Int32*)mso_sptDefault0,
+    NULL,
     NULL, 0,
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffCalculationData mso_sptRoundRectangleCalc[] =  // adjustment1 : 0 - 10800
@@ -259,7 +268,8 @@ static const mso_AutoShape msoRoundRectangle =
     (sal_Int32*)mso_sptDefault3600,
     (SvxMSDffTextRectangles*)mso_sptRoundRectangleTextRect, sizeof( mso_sptRoundRectangleTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptRightTriangleVert[] =
@@ -270,6 +280,10 @@ static const SvxMSDffTextRectangles mso_sptRightTriangleTextRect[] =
 {
     { { 1900, 12700 }, { 12700, 19700 } }
 };
+static const SvxMSDffVertPair mso_sptRightTriangleGluePoints[] =
+{
+    { 10800, 0 }, { 5400, 10800 }, { 0, 21600 }, { 10800, 21600 }, { 21600, 21600 }, { 16200, 10800 }
+};
 static const mso_AutoShape msoRightTriangle =
 {
     (SvxMSDffVertPair*)mso_sptRightTriangleVert, sizeof( mso_sptRightTriangleVert ) / sizeof( SvxMSDffVertPair ),
@@ -278,12 +292,17 @@ static const mso_AutoShape msoRightTriangle =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptRightTriangleTextRect, sizeof( mso_sptRightTriangleTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptRightTriangleGluePoints, sizeof( mso_sptRightTriangleGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffTextRectangles mso_sptEllipseTextRect[] =
 {
     { { 3200, 3200 }, { 18400, 18400 } }
+};
+static const SvxMSDffVertPair mso_sptEllipseGluePoints[] =
+{
+    { 10800, 0 }, { 3160, 3160 }, { 0, 10800 }, { 3160, 18440 }, { 10800, 21600 }, { 18440, 18440 }, { 21600, 10800 }, { 18440, 3160 }
 };
 static const mso_AutoShape msoEllipse =
 {
@@ -293,7 +312,8 @@ static const mso_AutoShape msoEllipse =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, sizeof( mso_sptEllipseTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptParallelogramVert[] =  // adjustment1 : 0 - 21600
@@ -310,11 +330,24 @@ static const SvxMSDffCalculationData mso_sptParallelogramCalc[] =
     { 0x8000, 0, 21600, DFF_Prop_adjustValue },
     { 0x2001, DFF_Prop_adjustValue, 10, 24 },
     { 0x2000, 0x0402, 1750, 0 },
-    { 0x8000, 21600, 0, 0x0403 }
+    { 0x8000, 21600, 0, 0x0403 },
+    { 0x2001, 0x400, 1, 2 },
+    { 0x4000, 10800, 0x405, 0 },
+    { 0x2000, 0x400, 0, 10800 },
+    { 0x6006, 0x407, 0x40d, 0 },
+    { 0x8000, 10800, 0, 0x405 },
+    { 0x6006, 0x407, 0x40c, 21600 },
+    { 0x8000, 21600, 0, 0x405 },
+    { 0x8001, 21600, 10800, 0x400 },
+    { 0x8000, 21600, 0, 0x40c }
 };
 static const SvxMSDffTextRectangles mso_sptParallelogramTextRect[] =
 {
     { { 3 MSO_I, 3 MSO_I }, { 4 MSO_I, 4 MSO_I } }
+};
+static const SvxMSDffVertPair mso_sptParallelogramGluePoints[] =
+{
+    { 6 MSO_I, 0 }, { 10800, 8 MSO_I }, { 11 MSO_I, 10800 }, { 9 MSO_I, 21600 }, { 10800, 10 MSO_I }, { 5 MSO_I, 10800 }
 };
 static const mso_AutoShape msoParallelogram =
 {
@@ -324,7 +357,8 @@ static const mso_AutoShape msoParallelogram =
     (sal_Int32*)mso_sptDefault5400,
     (SvxMSDffTextRectangles*)mso_sptParallelogramTextRect, sizeof( mso_sptParallelogramTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptParallelogramGluePoints, sizeof( mso_sptParallelogramGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptDiamondVert[] =
@@ -343,7 +377,8 @@ static const mso_AutoShape msoDiamond =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptDiamondTextRect, sizeof( mso_sptDiamondTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptTrapezoidVert[] =      // adjustment1 : 0 - 10800
@@ -360,11 +395,17 @@ static const SvxMSDffCalculationData mso_sptTrapezoidCalc[] =
     { 0x2000, DFF_Prop_adjustValue, 0, 0 },
     { 0x2001, DFF_Prop_adjustValue, 10, 18 },
     { 0x2000, 0x0402, 1750, 0 },
-    { 0x8000, 21600, 0, 0x403 }
+    { 0x8000, 21600, 0, 0x403 },
+    { 0x2001, DFF_Prop_adjustValue, 1, 2 },
+    { 0x8000, 21600, 0, 0x405 }
 };
 static const SvxMSDffTextRectangles mso_sptTrapezoidTextRect[] =
 {
     { { 3 MSO_I, 3 MSO_I }, { 4 MSO_I, 4 MSO_I } }
+};
+static const SvxMSDffVertPair mso_sptTrapezoidGluePoints[] =
+{
+    { 6 MSO_I, 10800 }, { 10800, 21600 }, { 5 MSO_I, 10800 }, { 10800, 0 }
 };
 static const mso_AutoShape msoTrapezoid =
 {
@@ -374,13 +415,14 @@ static const mso_AutoShape msoTrapezoid =
     (sal_Int32*)mso_sptDefault5400,
     (SvxMSDffTextRectangles*)mso_sptTrapezoidTextRect, sizeof( mso_sptTrapezoidTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptTrapezoidGluePoints, sizeof( mso_sptTrapezoidGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptOctagonVert[] =        // adjustment1 : 0 - 10800
 {
-    { 0 MSO_I, 0 }, { 1 MSO_I, 0 }, { 21600, 0 MSO_I }, { 21600, 2 MSO_I },
-    { 1 MSO_I, 21600 }, { 0 MSO_I, 21600 }, { 0, 2 MSO_I }, { 0, 0 MSO_I }
+    { 0 MSO_I, 0 }, { 2 MSO_I, 0 }, { 21600, 1 MSO_I }, { 21600, 3 MSO_I },
+    { 2 MSO_I, 21600 }, { 0 MSO_I, 21600 }, { 0, 3 MSO_I }, { 0, 1 MSO_I }
 };
 static const sal_uInt16 mso_sptOctagonSegm[] =
 {
@@ -388,12 +430,15 @@ static const sal_uInt16 mso_sptOctagonSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptOctagonCalc[] =
 {
-    { 0x4000, 0, DFF_Prop_adjustValue, 0 },
+    { 0x6000, DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 },
+    { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
     { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
     { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
     { 0x2001, DFF_Prop_adjustValue, 1, 2 },
-    { 0xa000, DFF_Prop_geoRight, 0, 0x403 },
-    { 0xa000, DFF_Prop_geoBottom, 0, 0x403 }
+    { 0x6000, DFF_Prop_geoLeft, 0x404, 0 },
+    { 0x6000, DFF_Prop_geoTop, 0x404, 0 },
+    { 0xa000, DFF_Prop_geoRight, 0, 0x404 },
+    { 0xa000, DFF_Prop_geoBottom, 0, 0x404 }
 };
 static const sal_Int32 mso_sptOctagonDefault[] =
 {
@@ -401,7 +446,7 @@ static const sal_Int32 mso_sptOctagonDefault[] =
 };
 static const SvxMSDffTextRectangles mso_sptOctagonTextRect[] =
 {
-    { { 3 MSO_I, 3 MSO_I }, { 4 MSO_I, 5 MSO_I } }
+    { { 5 MSO_I, 6 MSO_I }, { 7 MSO_I, 8 MSO_I } }
 };
 static const mso_AutoShape msoOctagon =
 {
@@ -411,7 +456,8 @@ static const mso_AutoShape msoOctagon =
     (sal_Int32*)mso_sptOctagonDefault,
     (SvxMSDffTextRectangles*)mso_sptOctagonTextRect, sizeof( mso_sptOctagonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    10800, 10800
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptIsocelesTriangleVert[] =   // adjustment1 : 0 - 21600
@@ -428,13 +474,19 @@ static const SvxMSDffCalculationData mso_sptIsocelesTriangleCalc[] =
     { 0x2001, DFF_Prop_adjustValue, 1, 2 },
     { 0x2000, 0x401, 10800, 0 },
     { 0x2001, DFF_Prop_adjustValue, 2, 3 },
-    { 0x2000, 0x403, 7200, 0 }
-
+    { 0x2000, 0x403, 7200, 0 },
+    { 0x8000, 21600, 0, 0x400 },
+    { 0x2001, 0x405, 1, 2 },
+    { 0x8000, 21600, 0, 0x406 }
 };
 static const SvxMSDffTextRectangles mso_sptIsocelesTriangleTextRect[] =
 {
     { { 1 MSO_I, 10800 }, { 2 MSO_I, 18000 } },
     { { 3 MSO_I, 7200 }, { 4 MSO_I, 21600   } }
+};
+static const SvxMSDffVertPair mso_sptIsocelesTriangleGluePoints[] =
+{
+    { 10800, 0 }, { 1 MSO_I, 10800 }, { 0, 21600 }, { 10800, 21600 }, { 21600, 21600 }, { 7 MSO_I, 10800 }
 };
 static const mso_AutoShape msoIsocelesTriangle =
 {
@@ -444,7 +496,8 @@ static const mso_AutoShape msoIsocelesTriangle =
     (sal_Int32*)mso_sptDefault10800,
     (SvxMSDffTextRectangles*)mso_sptIsocelesTriangleTextRect, sizeof( mso_sptIsocelesTriangleTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptIsocelesTriangleGluePoints, sizeof( mso_sptIsocelesTriangleGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptHexagonVert[] =                // adjustment1 : 0 - 10800
@@ -476,18 +529,23 @@ static const mso_AutoShape msoHexagon =
     (sal_Int32*)mso_sptDefault5400,
     (SvxMSDffTextRectangles*)mso_sptHexagonTextRect, sizeof( mso_sptHexagonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
-
 
 static const SvxMSDffVertPair mso_sptPentagonVert[] =
 {
-    { 0, 8260 }, { 10800, 0 }, { 21600, 8260 }, { 17370, 21600 },
-    { 4230, 21600 }, { 0, 8260 }
+    { 10800, 0 }, { 0, 8260 }, { 4230, 21600 }, { 17370, 21600 },
+    { 21600, 8260 }, { 10800, 0 }
 };
 static const SvxMSDffTextRectangles mso_sptPentagonTextRect[] =
 {
     { { 4230, 5080 }, { 17370, 21600 } }
+};
+static const SvxMSDffVertPair mso_sptPentagonGluePoints[] =
+{
+    { 10800, 0 }, { 0, 8260 }, { 4230, 21600 }, { 10800, 21600 },
+    { 17370, 21600 }, { 21600, 8260 }
 };
 static const mso_AutoShape msoPentagon =
 {
@@ -497,7 +555,8 @@ static const mso_AutoShape msoPentagon =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptPentagonTextRect, sizeof( mso_sptPentagonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptPentagonGluePoints, sizeof( mso_sptPentagonGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptPlusVert[] =               // adjustment1 : 0 - 10800
@@ -524,7 +583,8 @@ static const mso_AutoShape msoPlus =
     (sal_Int32*)mso_sptDefault5400,
     (SvxMSDffTextRectangles*)mso_sptPlusTextRect, sizeof( mso_sptPlusTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    10800, 10800
+    10800, 10800,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptCanVert[] =        // adjustment1 : 0 - 10800
@@ -561,6 +621,10 @@ static const SvxMSDffTextRectangles mso_sptCanTextRect[] =
 {
     { { 0, 6 MSO_I }, { 88, 3 MSO_I } }
 };
+static const SvxMSDffVertPair mso_sptCanGluePoints[] =
+{
+    { 44, 6 MSO_I }, { 44, 0 }, { 0, 5400 }, { 44, 10800 }, { 88, 5400 }
+};
 static const sal_Int32 mso_sptCanBoundRect[] =
 {
     0, 0, 88, 10800
@@ -573,7 +637,8 @@ static const mso_AutoShape msoCan =
     (sal_Int32*)mso_sptDefault5400,
     (SvxMSDffTextRectangles*)mso_sptCanTextRect, sizeof( mso_sptCanTextRect ) / sizeof( SvxMSDffTextRectangles ),
     88, 10800,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptCanGluePoints, sizeof( mso_sptCanGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptArrowVert[] =  // adjustment1: x 0 - 21600
@@ -608,7 +673,8 @@ static const mso_AutoShape msoArrow =
     (sal_Int32*)mso_sptDefault16200and5400,
     (SvxMSDffTextRectangles*)mso_sptArrowTextRect, sizeof( mso_sptArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptLeftArrowVert[] =  // adjustment1: x 0 - 21600
@@ -636,7 +702,8 @@ static const mso_AutoShape msoLeftArrow =
     (sal_Int32*)mso_sptLeftArrowDefault,
     (SvxMSDffTextRectangles*)mso_sptLeftArrowTextRect, sizeof( mso_sptLeftArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptDownArrowVert[] =  // adjustment1: x 0 - 21600
@@ -660,7 +727,8 @@ static const mso_AutoShape msoDownArrow =
     (sal_Int32*)mso_sptDefault16200and5400,
     (SvxMSDffTextRectangles*)mso_sptDownArrowTextRect, sizeof( mso_sptDownArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptUpArrowVert[] =    // adjustment1: x 0 - 21600
@@ -688,7 +756,8 @@ static const mso_AutoShape msoUpArrow =
     (sal_Int32*)mso_sptUpArrowDefault,
     (SvxMSDffTextRectangles*)mso_sptUpArrowTextRect, sizeof( mso_sptUpArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptLeftRightArrowVert[] = // adjustment1: x 0 - 10800
@@ -730,7 +799,8 @@ static const mso_AutoShape msoLeftRightArrow =
     (sal_Int32*)mso_sptLeftRightArrowDefault,
     (SvxMSDffTextRectangles*)mso_sptLeftRightArrowTextRect, sizeof( mso_sptLeftRightArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptUpDownArrowVert[] =    // adjustment1: x 0 - 10800
@@ -759,7 +829,8 @@ static const mso_AutoShape msoUpDownArrow =
     (sal_Int32*)mso_sptUpDownArrowDefault,
     (SvxMSDffTextRectangles*)mso_sptUpDownArrowTextRect, sizeof( mso_sptUpDownArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptQuadArrowVert[] =  // adjustment1: x 0 - 10800, adjustment2: x 0 - 10800
@@ -800,7 +871,8 @@ static const mso_AutoShape msoQuadArrow =
     (sal_Int32*)mso_sptQuadArrowDefault,
     (SvxMSDffTextRectangles*)mso_sptQuadArrowTextRect, sizeof( mso_sptQuadArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptLeftRightUpArrowVert[] =   // adjustment1: x 0 - 10800, adjustment2: x 0 - 10800
@@ -840,7 +912,8 @@ static const mso_AutoShape msoLeftRightUpArrow =
     (sal_Int32*)mso_sptLeftRightUpArrowDefault,
     (SvxMSDffTextRectangles*)mso_sptLeftRightUpArrowTextRect, sizeof( mso_sptLeftRightUpArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptBentArrowVert[] =  // adjustment1 : x 12427 - 21600
@@ -877,7 +950,8 @@ static const mso_AutoShape msoBentArrow =
     (sal_Int32*)mso_sptBentArrowDefault,
     (SvxMSDffTextRectangles*)mso_sptBentArrowTextRect, sizeof( mso_sptBentArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptUturnArrowVert[] =
@@ -906,7 +980,8 @@ static const mso_AutoShape msoUturnArrow =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptUturnArrowTextRect, sizeof( mso_sptUturnArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptLeftUpArrowVert[] =    // adjustment1 : x 0 - 21600, adjustment2 : x 0 - 21600
@@ -947,7 +1022,8 @@ static const mso_AutoShape msoLeftUpArrow =
     (sal_Int32*)mso_sptLeftUpArrowDefault,
     (SvxMSDffTextRectangles*)mso_sptLeftUpArrowTextRect, sizeof( mso_sptLeftUpArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptBentUpArrowVert[] =    // adjustment1 : x 0 - 21600, adjustment2 : x 0 - 21600
@@ -989,7 +1065,8 @@ static const mso_AutoShape msoBentUpArrow =
     (sal_Int32*)mso_sptBentUpArrowDefault,
     (SvxMSDffTextRectangles*)mso_sptBentUpArrowTextRect, sizeof( mso_sptBentUpArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptCurvedArrowVert[] =    // adjustment1 : y 10800 - 21600, adjustment2 : y 16424 - 21600
@@ -1042,7 +1119,8 @@ static const mso_AutoShape msoCurvedArrow =
     (sal_Int32*)mso_sptCurvedArrowDefault,
     (SvxMSDffTextRectangles*)mso_sptCurvedArrowTextRect, sizeof( mso_sptCurvedArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptStripedRightArrowVert[] =  // adjustment1 : x 3375 - 21600
@@ -1079,7 +1157,8 @@ static const mso_AutoShape msoStripedRightArrow =
     (sal_Int32*)mso_sptDefault16200and5400,
     (SvxMSDffTextRectangles*)mso_sptStripedRightArrowTextRect, sizeof( mso_sptStripedRightArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptNotchedRightArrowVert[] =  // adjustment1 : x 0 - 21600    (default 16200)
@@ -1108,7 +1187,8 @@ static const mso_AutoShape msoNotchedRightArrow =
     (sal_Int32*)mso_sptDefault16200and5400,
     (SvxMSDffTextRectangles*)mso_sptNotchedRightArrowTextRect, sizeof( mso_sptNotchedRightArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptHomePlateVert[] =  // adjustment1 : x 0 - 21600
@@ -1140,7 +1220,8 @@ static const mso_AutoShape msoHomePlate =
     (sal_Int32*)mso_sptHomePlateDefault,
     (SvxMSDffTextRectangles*)mso_sptHomePlateTextRect, sizeof( mso_sptHomePlateTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptChevronVert[] =    // adjustment1 : x 0 - 21600
@@ -1173,7 +1254,8 @@ static const mso_AutoShape msoChevron =
     (sal_Int32*)mso_sptChevronDefault,
     (SvxMSDffTextRectangles*)mso_sptChevronTextRect, sizeof( mso_sptChevronTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptRightArrowCalloutVert[] =  // adjustment1 : x 0 - 21000
@@ -1211,7 +1293,8 @@ static const mso_AutoShape msoRightArrowCallout =
     (sal_Int32*)mso_sptRightArrowCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptRightArrowCalloutTextRect, sizeof( mso_sptRightArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptLeftArrowCalloutVert[] =   // adjustment1 : x 0 - 21600, adjustment2 : y 0 - 10800
@@ -1249,7 +1332,8 @@ static const mso_AutoShape msoLeftArrowCallout =
     (sal_Int32*)mso_sptLeftArrowCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptLeftArrowCalloutTextRect, sizeof( mso_sptLeftArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptUpArrowCalloutVert[] =
@@ -1287,7 +1371,8 @@ static const mso_AutoShape msoUpArrowCallout =
     (sal_Int32*)mso_sptUpArrowCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptUpArrowCalloutTextRect, sizeof( mso_sptUpArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptDownArrowCalloutVert[] =
@@ -1325,7 +1410,8 @@ static const mso_AutoShape msoDownArrowCallout =
     (sal_Int32*)mso_sptDownArrowCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptDownArrowCalloutTextRect, sizeof( mso_sptDownArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptLeftRightArrowCalloutVert[] =
@@ -1367,7 +1453,8 @@ static const mso_AutoShape msoLeftRightArrowCallout =
     (sal_Int32*)mso_sptLeftRightArrowCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptLeftRightArrowCalloutTextRect, sizeof( mso_sptLeftRightArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptUpDownArrowCalloutVert[] =
@@ -1409,7 +1496,8 @@ static const mso_AutoShape msoUpDownArrowCallout =
     (sal_Int32*)mso_sptUpDownArrowCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptUpDownArrowCalloutTextRect, sizeof( mso_sptUpDownArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptQuadArrowCalloutVert[] =
@@ -1454,7 +1542,8 @@ static const mso_AutoShape msoQuadArrowCallout =
     (sal_Int32*)mso_sptQuadArrowCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptQuadArrowCalloutTextRect, sizeof( mso_sptQuadArrowCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptCircularArrowVert[] =
@@ -1527,7 +1616,8 @@ static const mso_AutoShape msoCircularArrow =
     (sal_Int32*)mso_sptCircularArrowDefault,
     (SvxMSDffTextRectangles*)mso_sptCircularArrowTextRect, sizeof( mso_sptCircularArrowTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptCubeVert[] =
@@ -1549,7 +1639,12 @@ static const SvxMSDffCalculationData mso_sptCubeCalc[] =
     { 0x6000, DFF_Prop_geoTop, 0x400, 0 },
     { 0x6000, DFF_Prop_geoLeft, 0x400, 0 },
     { 0xa000, DFF_Prop_geoBottom, 0, 0x400 },
-    { 0xa000, DFF_Prop_geoRight, 0, 0x400 }
+    { 0xa000, DFF_Prop_geoRight, 0, 0x400 },
+    { 0x8000,  21600, 0, 0x402 },   // 5
+    { 0x2001, 0x405, 1, 2 },        // 6
+    { 0x6000, 0x402, 0x406, 0 },    // 7
+    { 0x2001, 0x404, 1, 2 }         // 8
+
 };
 static const SvxMSDffTextRectangles mso_sptCubeTextRect[] =
 {
@@ -1563,7 +1658,8 @@ static const mso_AutoShape msoCube =
     (sal_Int32*)mso_sptDefault5400,
     (SvxMSDffTextRectangles*)mso_sptCubeTextRect, sizeof( mso_sptCubeTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    10800, 10800
+    10800, 10800,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptBevelVert[] =
@@ -1599,7 +1695,8 @@ static const mso_AutoShape msoBevel =
     (sal_Int32*)mso_sptDefault2700,
     (SvxMSDffTextRectangles*)mso_sptBevelTextRect, sizeof( mso_sptBevelTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    10800, 10800
+    10800, 10800,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptFoldedCornerVert[] =   // adjustment1 : x 10800 - 21600
@@ -1644,7 +1741,8 @@ static const mso_AutoShape msoFoldedCorner =
     (sal_Int32*)mso_sptFoldedCornerDefault,
     (SvxMSDffTextRectangles*)mso_sptFoldedCornerTextRect, sizeof( mso_sptFoldedCornerTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonBlankVert[] =
@@ -1680,7 +1778,8 @@ static const mso_AutoShape msoActionButtonBlank =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonBlankTextRect, sizeof( mso_sptActionButtonBlankTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    10800, 10800
+    10800, 10800,
+    NULL, 0
 };
 
 static const SvxMSDffTextRectangles mso_sptActionButtonTextRect[] =
@@ -1766,7 +1865,8 @@ static const mso_AutoShape msoActionButtonHome =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonHelpVert[] =
@@ -1874,7 +1974,8 @@ static const mso_AutoShape msoActionButtonHelp =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonInformationVert[] =
@@ -1959,7 +2060,8 @@ static const mso_AutoShape msoActionButtonInformation =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonBackPreviousVert[] =
@@ -2010,7 +2112,8 @@ static const mso_AutoShape msoActionButtonBackPrevious =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonForwardNextVert[] =
@@ -2031,7 +2134,8 @@ static const mso_AutoShape msoActionButtonForwardNext =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonBeginningVert[] =
@@ -2096,7 +2200,8 @@ static const mso_AutoShape msoActionButtonBeginning =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonEndVert[] =
@@ -2119,7 +2224,8 @@ static const mso_AutoShape msoActionButtonEnd =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonReturnVert[] =
@@ -2206,7 +2312,8 @@ static const mso_AutoShape msoActionButtonReturn =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonDocumentVert[] =
@@ -2264,7 +2371,8 @@ static const mso_AutoShape msoActionButtonDocument =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonSoundVert[] =
@@ -2338,7 +2446,8 @@ static const mso_AutoShape msoActionButtonSound =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptActionButtonMovieVert[] =
@@ -2421,7 +2530,8 @@ static const mso_AutoShape msoActionButtonMovie =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptSmileyFaceVert[] = // adj value 15510 - 17520
@@ -2460,7 +2570,8 @@ static const mso_AutoShape msoSmileyFace =
     (sal_Int32*)mso_sptSmileyFaceDefault,
     (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, sizeof( mso_sptEllipseTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptDonutVert[] =  // adj value 0 - 10800
@@ -2484,7 +2595,8 @@ static const mso_AutoShape msoDonut =
     (sal_Int32*)mso_sptDefault5400,
     (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, sizeof( mso_sptEllipseTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptNoSmokingVert[] =  // adj value 0 - 7200
@@ -2525,7 +2637,8 @@ static const mso_AutoShape msoNoSmoking =
     (sal_Int32*)mso_sptDefault2700,
     (SvxMSDffTextRectangles*)mso_sptEllipseTextRect, sizeof( mso_sptEllipseTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptBlockArcVert[] =   // adj value 0 (degrees)
@@ -2562,7 +2675,8 @@ static const mso_AutoShape msoBlockArc =
     (sal_Int32*)mso_sptBlockArcDefault,
     NULL, 0,
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 // aware : control points are always part of the bounding box
@@ -2612,6 +2726,10 @@ static const SvxMSDffTextRectangles mso_sptHeartTextRect[] =
 {
     { { 5080, 2540 }, { 16520, 13550 } }
 };
+static const SvxMSDffVertPair mso_sptHeartGluePoints[] =
+{
+    { 10800, 2180 }, { 3090, 10800 }, { 10800, 21600 }, { 18490, 10800 }
+};
 static const sal_Int32 mso_sptHeartBoundRect[] =
 {
     -9, 0, 21606, 21602
@@ -2624,7 +2742,8 @@ static const mso_AutoShape msoHeart =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptHeartTextRect, sizeof( mso_sptHeartTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21615, 21602,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptHeartGluePoints, sizeof( mso_sptHeartGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptLightningBoldVert[] =
@@ -2637,6 +2756,11 @@ static const SvxMSDffTextRectangles mso_sptLightningBoldTextRect[] =
 {
     { { 8680, 7410 }, { 13970, 14190 } }
 };
+static const SvxMSDffVertPair mso_sptLightningBoldGluePoints[] =
+{
+    { 8458, 0 }, { 0, 3923 }, { 4993, 9720 }, { 9987, 14934 }, { 21600, 21600 },
+    { 16558, 12016 }, { 12831, 6120 }
+};
 static const mso_AutoShape msoLightningBold =
 {
     (SvxMSDffVertPair*)mso_sptLightningBoldVert, sizeof( mso_sptLightningBoldVert ) / sizeof( SvxMSDffVertPair ),
@@ -2645,7 +2769,8 @@ static const mso_AutoShape msoLightningBold =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptLightningBoldTextRect, sizeof( mso_sptLightningBoldTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptLightningBoldGluePoints, sizeof( mso_sptLightningBoldGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptSunVert[] =    // adj value 2700 -> 10125
@@ -2742,7 +2867,8 @@ static const mso_AutoShape msoSun =
     (sal_Int32*)mso_sptDefault5400,
     (SvxMSDffTextRectangles*)mso_sptSunTextRect, sizeof( mso_sptSunTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptMoonVert[] =   // adj value 0 -> 18900
@@ -2775,6 +2901,10 @@ static const SvxMSDffTextRectangles mso_sptMoonTextRect[] =
 {
     { { 9 MSO_I, 8 MSO_I }, { 0 MSO_I, 0xa MSO_I } }
 };
+static const SvxMSDffVertPair mso_sptMoonGluePoints[] =
+{
+    { 21600, 0 }, { 0, 10800 }, { 21600, 21600 }, { 0 MSO_I, 10800 }
+};
 static const mso_AutoShape msoMoon =
 {
     (SvxMSDffVertPair*)mso_sptMoonVert, sizeof( mso_sptMoonVert ) / sizeof( SvxMSDffVertPair ),
@@ -2783,7 +2913,8 @@ static const mso_AutoShape msoMoon =
     (sal_Int32*)mso_sptDefault10800,
     (SvxMSDffTextRectangles*)mso_sptMoonTextRect, sizeof( mso_sptMoonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptMoonGluePoints, sizeof( mso_sptMoonGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptBracketPairVert[] =    // adj value 0 -> 10800
@@ -2829,7 +2960,8 @@ static const mso_AutoShape msoBracketPair =
     (sal_Int32*)mso_sptDefault3700,
     (SvxMSDffTextRectangles*)mso_sptBracketPairTextRect, sizeof( mso_sptBracketPairTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const sal_uInt16 mso_sptPlaqueSegm[] =
@@ -2848,7 +2980,8 @@ static const mso_AutoShape msoPlaque =
     (sal_Int32*)mso_sptDefault3600,
     (SvxMSDffTextRectangles*)mso_sptPlaqueTextRect, sizeof( mso_sptPlaqueTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptBracePairVert[] =  // adj value 0 -> 5400
@@ -2894,7 +3027,8 @@ static const mso_AutoShape msoBracePair =
     (sal_Int32*)mso_sptDefault1800,
     (SvxMSDffTextRectangles*)mso_sptBracePairTextRect, sizeof( mso_sptBracePairTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffCalculationData mso_sptBracketCalc[] =
@@ -2918,6 +3052,10 @@ static const SvxMSDffTextRectangles mso_sptLeftBracketTextRect[] =
 {
     { { 6350, 3 MSO_I }, { 21600, 4 MSO_I } }
 };
+static const SvxMSDffVertPair mso_sptLeftBracketGluePoints[] =
+{
+    { 21600, 0 }, { 0, 10800 }, { 21600, 21600 }
+};
 static const mso_AutoShape msoLeftBracket =
 {
     (SvxMSDffVertPair*)mso_sptLeftBracketVert, sizeof( mso_sptLeftBracketVert ) / sizeof( SvxMSDffVertPair ),
@@ -2926,7 +3064,8 @@ static const mso_AutoShape msoLeftBracket =
     (sal_Int32*)mso_sptDefault1800,
     (SvxMSDffTextRectangles*)mso_sptLeftBracketTextRect, sizeof( mso_sptLeftBracketTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptLeftBracketGluePoints, sizeof( mso_sptLeftBracketGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 static const SvxMSDffVertPair mso_sptRightBracketVert[] =   // adj value 0 -> 10800
 {
@@ -2937,6 +3076,10 @@ static const SvxMSDffTextRectangles mso_sptRightBracketTextRect[] =
 {
     { { 0, 3 MSO_I }, { 15150, 4 MSO_I } }
 };
+static const SvxMSDffVertPair mso_sptRightBracketGluePoints[] =
+{
+    { 0, 0 }, { 0, 21600 }, { 21600, 10800 }
+};
 static const mso_AutoShape msoRightBracket =
 {
     (SvxMSDffVertPair*)mso_sptRightBracketVert, sizeof( mso_sptRightBracketVert ) / sizeof( SvxMSDffVertPair ),
@@ -2945,7 +3088,8 @@ static const mso_AutoShape msoRightBracket =
     (sal_Int32*)mso_sptDefault1800,
     (SvxMSDffTextRectangles*)mso_sptRightBracketTextRect, sizeof( mso_sptRightBracketTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptRightBracketGluePoints, sizeof( mso_sptRightBracketGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffCalculationData mso_sptBraceCalc[] =
@@ -2992,7 +3136,8 @@ static const mso_AutoShape msoLeftBrace =       // adj value0 0 -> 5400
     (sal_Int32*)mso_sptBraceDefault,
     (SvxMSDffTextRectangles*)mso_sptLeftBraceTextRect, sizeof( mso_sptLeftBraceTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptLeftBracketGluePoints, sizeof( mso_sptLeftBracketGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 static const SvxMSDffVertPair mso_sptRightBraceVert[] =
 {
@@ -3016,7 +3161,8 @@ static const mso_AutoShape msoRightBrace =      // adj value0 0 -> 5400
     (sal_Int32*)mso_sptBraceDefault,
     (SvxMSDffTextRectangles*)mso_sptRightBraceTextRect, sizeof( mso_sptRightBraceTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptRightBracketGluePoints, sizeof( mso_sptRightBracketGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptIrregularSeal1Vert[] =
@@ -3032,6 +3178,10 @@ static const SvxMSDffTextRectangles mso_sptIrregularSeal1TextRect[] =
 {
     { { 4680, 6570 }, { 16140, 13280 } }
 };
+static const SvxMSDffVertPair mso_sptIrregularSeal1GluePoints[] =
+{
+    { 14623, 106 }, { 106, 8718 }, { 8590, 21600 }, { 21600, 13393 }
+};
 static const mso_AutoShape msoIrregularSeal1 =
 {
     (SvxMSDffVertPair*)mso_sptIrregularSeal1Vert, sizeof( mso_sptIrregularSeal1Vert ) / sizeof( SvxMSDffVertPair ),
@@ -3040,7 +3190,8 @@ static const mso_AutoShape msoIrregularSeal1 =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptIrregularSeal1TextRect, sizeof( mso_sptIrregularSeal1TextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptIrregularSeal1GluePoints, sizeof( mso_sptIrregularSeal1GluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptIrregularSeal2Vert[] =
@@ -3058,6 +3209,10 @@ static const SvxMSDffTextRectangles mso_sptIrregularSeal2TextRect[] =
 {
     { { 5400, 6570 }, { 14160, 15290 } }
 };
+static const SvxMSDffVertPair mso_sptIrregularSeal2GluePoints[] =
+{
+    { 9722, 1887 }, { 0, 12875 }, { 11614, 18844 }, { 21600, 6646 }
+};
 static const mso_AutoShape msoIrregularSeal2 =
 {
     (SvxMSDffVertPair*)mso_sptIrregularSeal2Vert, sizeof( mso_sptIrregularSeal2Vert ) / sizeof( SvxMSDffVertPair ),
@@ -3066,7 +3221,8 @@ static const mso_AutoShape msoIrregularSeal2 =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptIrregularSeal2TextRect, sizeof( mso_sptIrregularSeal2TextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptIrregularSeal2GluePoints, sizeof( mso_sptIrregularSeal2GluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptSeal4Vert[] =      // adjustment1 : 0 - 10800
@@ -3095,7 +3251,8 @@ static const mso_AutoShape msoSeal4 =
     (sal_Int32*)mso_sptDefault8100,
     (SvxMSDffTextRectangles*)mso_sptSeal4TextRect, sizeof( mso_sptSeal4TextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptStarVert[] =
@@ -3116,7 +3273,8 @@ static const mso_AutoShape msoStar =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptStarTextRect, sizeof( mso_sptStarTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffCalculationData mso_sptSeal24Calc[] =
@@ -3243,7 +3401,8 @@ static const mso_AutoShape msoSeal8 =
     (sal_Int32*)mso_sptDefault2500,
     (SvxMSDffTextRectangles*)mso_sptSealTextRect, sizeof( mso_sptSealTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 static const SvxMSDffVertPair mso_sptSeal16Vert[] = // adj value 0 -> 10800
 {
@@ -3337,7 +3496,8 @@ static const mso_AutoShape msoSeal16 =
     (sal_Int32*)mso_sptDefault2500,
     (SvxMSDffTextRectangles*)mso_sptSealTextRect, sizeof( mso_sptSealTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 static const SvxMSDffVertPair mso_sptSeal24Vert[] =
 {
@@ -3363,7 +3523,8 @@ static const mso_AutoShape msoSeal24 =
     (sal_Int32*)mso_sptDefault2500,
     (SvxMSDffTextRectangles*)mso_sptSealTextRect, sizeof( mso_sptSealTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 static const SvxMSDffCalculationData mso_sptSeal32Calc[] =
 {
@@ -3529,7 +3690,8 @@ static const mso_AutoShape msoSeal32 =
     (sal_Int32*)mso_sptDefault2500,
     (SvxMSDffTextRectangles*)mso_sptSealTextRect, sizeof( mso_sptSealTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptRibbon2Vert[] =    // adjustment1 : x 2700  - 8100     def 5400
@@ -3617,7 +3779,8 @@ static const mso_AutoShape msoRibbon2 =
     (sal_Int32*)mso_sptRibbon2Default,
     (SvxMSDffTextRectangles*)mso_sptRibbon2TextRect, sizeof( mso_sptRibbon2TextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptVerticalScrollVert[] = // adjustment1 : 0 - 5400
@@ -3673,7 +3836,8 @@ static const mso_AutoShape msoVerticalScroll =
     (sal_Int32*)mso_sptDefault2700,
     (SvxMSDffTextRectangles*)mso_sptScrollTextRect, sizeof( mso_sptScrollTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    11000, 10800
+    11000, 10800,
+    NULL, 0
 };
 static const SvxMSDffVertPair mso_sptHorizontalScrollVert[] =   // adjustment1 : 0 - 5400
 {
@@ -3712,7 +3876,8 @@ static const mso_AutoShape msoHorizontalScroll =
     (sal_Int32*)mso_sptDefault2700,
     (SvxMSDffTextRectangles*)mso_sptScrollTextRect, sizeof( mso_sptScrollTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    10800, 11000
+    10800, 11000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptWaveVert[] =   // adjustment1 : 0 - 4459
@@ -3744,7 +3909,8 @@ static const mso_AutoShape msoWave =
     (sal_Int32*)mso_sptWaveDefault,
     (SvxMSDffTextRectangles*)mso_sptWaveTextRect, sizeof( mso_sptWaveTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartProcessVert[] =
@@ -3759,7 +3925,8 @@ static const mso_AutoShape msoFlowChartProcess =
     NULL,
     NULL, 0,
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartAlternateProcessVert[] =
@@ -3794,7 +3961,8 @@ static const mso_AutoShape msoFlowChartAlternateProcess =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartAlternateProcessTextRect, sizeof( mso_sptFlowChartAlternateProcessTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartDecisionVert[] =
@@ -3813,7 +3981,8 @@ static const mso_AutoShape msoFlowChartDecision =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartDecisionTextRect, sizeof( mso_sptFlowChartDecisionTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartInputOutputVert[] =
@@ -3824,6 +3993,10 @@ static const SvxMSDffTextRectangles mso_sptFlowChartInputOutputTextRect[] =
 {
     { { 4230, 0 }, { 17370, 21600 } }
 };
+static const SvxMSDffVertPair mso_sptFlowChartInputOutputGluePoints[] =
+{
+    { 12960, 0 }, { 10800, 0 }, { 2160, 10800 }, { 8600, 21600 }, { 10800, 21600 }, { 19400, 10800 }
+};
 static const mso_AutoShape msoFlowChartInputOutput =
 {
     (SvxMSDffVertPair*)mso_sptFlowChartInputOutputVert, sizeof( mso_sptFlowChartInputOutputVert ) / sizeof( SvxMSDffVertPair ),
@@ -3832,7 +4005,8 @@ static const mso_AutoShape msoFlowChartInputOutput =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartInputOutputTextRect, sizeof( mso_sptFlowChartInputOutputTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartInputOutputGluePoints, sizeof( mso_sptFlowChartInputOutputGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartPredefinedProcessVert[] =
@@ -3861,7 +4035,8 @@ static const mso_AutoShape msoFlowChartPredefinedProcess =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartPredefinedProcessTextRect, sizeof( mso_sptFlowChartPredefinedProcessTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartInternalStorageVert[] =
@@ -3890,7 +4065,8 @@ static const mso_AutoShape msoFlowChartInternalStorage =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartInternalStorageTextRect, sizeof( mso_sptFlowChartInternalStorageTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartDocumentVert[] =
@@ -3907,6 +4083,10 @@ static const SvxMSDffTextRectangles mso_sptFlowChartDocumentTextRect[] =
 {
     { { 0, 0 }, { 21600, 17360 } }
 };
+static const SvxMSDffVertPair mso_sptFlowChartDocumentGluePoints[] =
+{
+    { 10800, 0 }, { 0, 10800 }, { 10800, 20320 }, { 21600, 10800 }
+};
 static const mso_AutoShape msoFlowChartDocument =
 {
     (SvxMSDffVertPair*)mso_sptFlowChartDocumentVert, sizeof( mso_sptFlowChartDocumentVert ) / sizeof( SvxMSDffVertPair ),
@@ -3915,7 +4095,8 @@ static const mso_AutoShape msoFlowChartDocument =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartDocumentTextRect, sizeof( mso_sptFlowChartDocumentTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartDocumentGluePoints, sizeof( mso_sptFlowChartDocumentGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartMultidocumentVert[] =
@@ -3940,6 +4121,10 @@ static const SvxMSDffTextRectangles mso_sptFlowChartMultidocumentTextRect[] =
 {
     { { 0, 3600 }, { 21600 - 3000, 14409 + 3600 } }
 };
+static const SvxMSDffVertPair mso_sptFlowChartMultidocumentGluePoints[] =
+{
+    { 10800, 0 }, { 0, 10800 }, { 10800, 19890 }, { 21600, 10800 }
+};
 static const mso_AutoShape msoFlowChartMultidocument =
 {
     (SvxMSDffVertPair*)mso_sptFlowChartMultidocumentVert, sizeof( mso_sptFlowChartMultidocumentVert ) / sizeof( SvxMSDffVertPair ),
@@ -3948,7 +4133,8 @@ static const mso_AutoShape msoFlowChartMultidocument =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartMultidocumentTextRect, sizeof( mso_sptFlowChartMultidocumentTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartMultidocumentGluePoints, sizeof( mso_sptFlowChartMultidocumentGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartTerminatorVert[] =
@@ -3972,7 +4158,8 @@ static const mso_AutoShape msoFlowChartTerminator =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartTerminatorTextRect, sizeof( mso_sptFlowChartTerminatorTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartPreparationVert[] =
@@ -3992,7 +4179,8 @@ static const mso_AutoShape msoFlowChartPreparation =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartPreparationTextRect, sizeof( mso_sptFlowChartPreparationTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartManualInputVert[] =
@@ -4003,6 +4191,10 @@ static const SvxMSDffTextRectangles mso_sptFlowChartManualInputTextRect[] =
 {
     { { 0, 4300 }, { 21600, 21600 } }
 };
+static const SvxMSDffVertPair mso_sptFlowChartManualInputGluePoints[] =
+{
+    { 10800, 2150 }, { 0, 10800 }, { 10800, 19890 }, { 21600, 10800 }
+};
 static const mso_AutoShape msoFlowChartManualInput =
 {
     (SvxMSDffVertPair*)mso_sptFlowChartManualInputVert, sizeof( mso_sptFlowChartManualInputVert ) / sizeof( SvxMSDffVertPair ),
@@ -4011,7 +4203,8 @@ static const mso_AutoShape msoFlowChartManualInput =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartManualInputTextRect, sizeof( mso_sptFlowChartManualInputTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartManualInputGluePoints, sizeof( mso_sptFlowChartManualInputGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartManualOperationVert[] =
@@ -4022,6 +4215,10 @@ static const SvxMSDffTextRectangles mso_sptFlowChartManualOperationTextRect[] =
 {
     { { 4350, 0 }, { 17250, 21600 } }
 };
+static const SvxMSDffVertPair mso_sptFlowChartManualOperationGluePoints[] =
+{
+    { 10800, 0 }, { 2160, 10800 }, { 10800, 21600 }, { 19440, 10800 }
+};
 static const mso_AutoShape msoFlowChartManualOperation =
 {
     (SvxMSDffVertPair*)mso_sptFlowChartManualOperationVert, sizeof( mso_sptFlowChartManualOperationVert ) / sizeof( SvxMSDffVertPair ),
@@ -4030,7 +4227,8 @@ static const mso_AutoShape msoFlowChartManualOperation =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartManualOperationTextRect, sizeof( mso_sptFlowChartManualOperationTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartManualOperationGluePoints, sizeof( mso_sptFlowChartManualOperationGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartConnectorVert[] =
@@ -4053,7 +4251,8 @@ static const mso_AutoShape msoFlowChartConnector =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartConnectorTextRect, sizeof( mso_sptFlowChartConnectorTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartOffpageConnectorVert[] =
@@ -4073,7 +4272,8 @@ static const mso_AutoShape msoFlowChartOffpageConnector =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartOffpageConnectorTextRect, sizeof( mso_sptFlowChartOffpageConnectorTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartPunchedCardVert[] =
@@ -4093,7 +4293,8 @@ static const mso_AutoShape msoFlowChartPunchedCard =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartPunchedCardTextRect, sizeof( mso_sptFlowChartPunchedCardTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartPunchedTapeVert[] =
@@ -4117,6 +4318,10 @@ static const SvxMSDffTextRectangles mso_sptFlowChartPunchedTapeTextRect[] =
 {
     { { 0, 4360 }, { 21600, 17240 } }
 };
+static const SvxMSDffVertPair mso_sptFlowChartPunchedTapeGluePoints[] =
+{
+    { 10800, 2020 }, { 0, 10800 }, { 10800, 19320 }, { 21600, 10800 }
+};
 static const mso_AutoShape msoFlowChartPunchedTape =
 {
     (SvxMSDffVertPair*)mso_sptFlowChartPunchedTapeVert, sizeof( mso_sptFlowChartPunchedTapeVert ) / sizeof( SvxMSDffVertPair ),
@@ -4125,7 +4330,8 @@ static const mso_AutoShape msoFlowChartPunchedTape =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartPunchedTapeTextRect, sizeof( mso_sptFlowChartPunchedTapeTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartPunchedTapeGluePoints, sizeof( mso_sptFlowChartPunchedTapeGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartSummingJunctionVert[] =
@@ -4156,7 +4362,8 @@ static const mso_AutoShape msoFlowChartSummingJunction =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartSummingJunctionTextRect, sizeof( mso_sptFlowChartSummingJunctionTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartOrVert[] =
@@ -4185,7 +4392,8 @@ static const mso_AutoShape msoFlowChartOr =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartOrTextRect, sizeof( mso_sptFlowChartOrTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptEllipseGluePoints, sizeof( mso_sptEllipseGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartCollateVert[] =
@@ -4196,6 +4404,10 @@ static const SvxMSDffTextRectangles mso_sptFlowChartCollateTextRect[] =
 {
     { { 5400, 5400 }, { 16200, 16200 } }
 };
+static const SvxMSDffVertPair mso_sptFlowChartCollateGluePoints[] =
+{
+    { 10800, 0 }, { 10800, 10800 }, { 10800, 21600 }
+};
 static const mso_AutoShape msoFlowChartCollate =
 {
     (SvxMSDffVertPair*)mso_sptFlowChartCollateVert, sizeof( mso_sptFlowChartCollateVert ) / sizeof( SvxMSDffVertPair ),
@@ -4204,7 +4416,8 @@ static const mso_AutoShape msoFlowChartCollate =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartCollateTextRect, sizeof( mso_sptFlowChartCollateTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartCollateGluePoints, sizeof( mso_sptFlowChartCollateGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartSortVert[] =
@@ -4230,7 +4443,8 @@ static const mso_AutoShape msoFlowChartSort =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartSortTextRect, sizeof( mso_sptFlowChartSortTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartExtractVert[] =
@@ -4241,6 +4455,10 @@ static const SvxMSDffTextRectangles mso_sptFlowChartExtractTextRect[] =
 {
     { { 5400, 10800 }, { 16200, 21600 } }
 };
+static const SvxMSDffVertPair mso_sptFlowChartExtractGluePoints[] =
+{
+    { 10800, 0 }, { 5400, 10800 }, { 10800, 21600 }, { 16200, 10800 }
+};
 static const mso_AutoShape msoFlowChartExtract =
 {
     (SvxMSDffVertPair*)mso_sptFlowChartExtractVert, sizeof( mso_sptFlowChartExtractVert ) / sizeof( SvxMSDffVertPair ),
@@ -4249,7 +4467,8 @@ static const mso_AutoShape msoFlowChartExtract =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartExtractTextRect, sizeof( mso_sptFlowChartExtractTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartExtractGluePoints, sizeof( mso_sptFlowChartExtractGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartMergeVert[] =
@@ -4268,7 +4487,8 @@ static const mso_AutoShape msoFlowChartMerge =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartMergeTextRect, sizeof( mso_sptFlowChartMergeTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartExtractGluePoints, sizeof( mso_sptFlowChartExtractGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartOnlineStorageVert[] =
@@ -4284,6 +4504,10 @@ static const SvxMSDffTextRectangles mso_sptFlowChartOnlineStorageTextRect[] =
 {
     { { 3600, 0 }, { 18000, 21600 } }
 };
+static const SvxMSDffVertPair mso_sptFlowChartOnlineStorageGluePoints[] =
+{
+    { 10800, 0 }, { 0, 10800 }, { 10800, 21600 }, { 18000, 10800 }
+};
 static const mso_AutoShape msoFlowChartOnlineStorage =
 {
     (SvxMSDffVertPair*)mso_sptFlowChartOnlineStorageVert, sizeof( mso_sptFlowChartOnlineStorageVert ) / sizeof( SvxMSDffVertPair ),
@@ -4292,7 +4516,8 @@ static const mso_AutoShape msoFlowChartOnlineStorage =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartOnlineStorageTextRect, sizeof( mso_sptFlowChartOnlineStorageTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartOnlineStorageGluePoints, sizeof( mso_sptFlowChartOnlineStorageGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartDelayVert[] =
@@ -4316,7 +4541,8 @@ static const mso_AutoShape msoFlowChartDelay =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartDelayTextRect, sizeof( mso_sptFlowChartDelayTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartMagneticTapeVert[] =
@@ -4343,7 +4569,8 @@ static const mso_AutoShape msoFlowChartMagneticTape =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartMagneticTapeTextRect, sizeof( mso_sptFlowChartMagneticTapeTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartMagneticDiskVert[] =
@@ -4362,6 +4589,10 @@ static const SvxMSDffTextRectangles mso_sptFlowChartMagneticDiskTextRect[] =
 {
     { { 0, 6800 }, { 21600, 18200 } }
 };
+static const SvxMSDffVertPair mso_sptFlowChartMagneticDiskGluePoints[] =
+{
+    { 10800, 6800 }, { 10800, 0 }, { 0, 10800 }, { 10800, 21600 }, { 21600, 10800 }
+};
 static const mso_AutoShape msoFlowChartMagneticDisk =
 {
     (SvxMSDffVertPair*)mso_sptFlowChartMagneticDiskVert, sizeof( mso_sptFlowChartMagneticDiskVert ) / sizeof( SvxMSDffVertPair ),
@@ -4370,7 +4601,8 @@ static const mso_AutoShape msoFlowChartMagneticDisk =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartMagneticDiskTextRect, sizeof( mso_sptFlowChartMagneticDiskTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartMagneticDiskGluePoints, sizeof( mso_sptFlowChartMagneticDiskGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartMagneticDrumVert[] =
@@ -4389,6 +4621,10 @@ static const SvxMSDffTextRectangles mso_sptFlowChartMagneticDrumTextRect[] =
 {
     { { 3400, 0 }, { 14800, 21600 } }
 };
+static const SvxMSDffVertPair mso_sptFlowChartMagneticDrumGluePoints[] =
+{
+    { 10800, 0 }, { 0, 10800 }, { 10800, 21600 }, { 14800, 10800 }, { 21600, 10800 }
+};
 static const mso_AutoShape msoFlowChartMagneticDrum =
 {
     (SvxMSDffVertPair*)mso_sptFlowChartMagneticDrumVert, sizeof( mso_sptFlowChartMagneticDrumVert ) / sizeof( SvxMSDffVertPair ),
@@ -4397,7 +4633,8 @@ static const mso_AutoShape msoFlowChartMagneticDrum =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartMagneticDrumTextRect, sizeof( mso_sptFlowChartMagneticDrumTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptFlowChartMagneticDrumGluePoints, sizeof( mso_sptFlowChartMagneticDrumGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartDisplayVert[] =
@@ -4421,7 +4658,8 @@ static const mso_AutoShape msoFlowChartDisplay =
     NULL,
     (SvxMSDffTextRectangles*)mso_sptFlowChartDisplayTextRect, sizeof( mso_sptFlowChartDisplayTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair )
 };
 
 static const SvxMSDffVertPair mso_sptWedgeRectCalloutVert[] =
@@ -4444,7 +4682,8 @@ static const mso_AutoShape msoWedgeRectCallout =
     (sal_Int32*)mso_sptWedgeRectCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptWedgeRectCalloutTextRect, sizeof( mso_sptWedgeRectCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptWedgeRRectCalloutVert[] =
@@ -4472,7 +4711,8 @@ static const mso_AutoShape msoWedgeRRectCallout =
     (sal_Int32*)mso_sptWedgeRRectCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptWedgeRRectCalloutTextRect, sizeof( mso_sptWedgeRRectCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptWedgeEllipseCalloutVert[] =
@@ -4499,7 +4739,8 @@ static const mso_AutoShape msoWedgeEllipseCallout =
     (sal_Int32*)mso_sptWedgeEllipseCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptWedgeEllipseCalloutTextRect, sizeof( mso_sptWedgeEllipseCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 static const SvxMSDffVertPair mso_sptCloudCalloutVert[] =
@@ -4579,7 +4820,8 @@ static const mso_AutoShape msoCloudCallout =
     (sal_Int32*)mso_sptCloudCalloutDefault,
     (SvxMSDffTextRectangles*)mso_sptCloudCalloutTextRect, sizeof( mso_sptCloudCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000
+    0x80000000, 0x80000000,
+    NULL, 0
 };
 
 class SvxMSDffAdjustmentHandle
@@ -4596,6 +4838,137 @@ class SvxMSDffAdjustmentHandle
     void        SetDefaultValue( sal_Int32 nVal ) { nDefaultValue = nVal; };
     sal_Bool    IsDefault() const { return bIsDefault; };
 };
+
+const mso_AutoShape* GetAutoShapeContent( MSO_SPT eSpType )
+{
+    const mso_AutoShape* pAutoShape = NULL;
+    switch( eSpType )
+    {
+        case mso_sptArc :                       pAutoShape = &msoArc; break;
+        case mso_sptRectangle :                 pAutoShape = &msoRectangle; break;
+        case mso_sptParallelogram :             pAutoShape = &msoParallelogram; break;
+        case mso_sptTrapezoid :                 pAutoShape = &msoTrapezoid; break;
+        case mso_sptDiamond :                   pAutoShape = &msoDiamond; break;
+        case mso_sptRoundRectangle :            pAutoShape = &msoRoundRectangle; break;
+        case mso_sptOctagon :                   pAutoShape = &msoOctagon; break;
+        case mso_sptIsocelesTriangle :          pAutoShape = &msoIsocelesTriangle; break;
+        case mso_sptRightTriangle :             pAutoShape = &msoRightTriangle; break;
+        case mso_sptEllipse :                   pAutoShape = &msoEllipse; break;
+        case mso_sptHexagon :                   pAutoShape = &msoHexagon; break;
+        case mso_sptPlus :                      pAutoShape = &msoPlus; break;
+        case mso_sptPentagon :                  pAutoShape = &msoPentagon; break;
+        case mso_sptCan :                       pAutoShape = &msoCan; break;
+        case mso_sptCube :                      pAutoShape = &msoCube; break;
+        case mso_sptActionButtonBlank :         pAutoShape = &msoActionButtonBlank; break;
+        case mso_sptActionButtonHome :          pAutoShape = &msoActionButtonHome; break;
+        case mso_sptActionButtonHelp :          pAutoShape = &msoActionButtonHelp; break;
+        case mso_sptActionButtonInformation :   pAutoShape = &msoActionButtonInformation; break;
+        case mso_sptActionButtonBackPrevious :  pAutoShape = &msoActionButtonBackPrevious; break;
+        case mso_sptActionButtonForwardNext :   pAutoShape = &msoActionButtonForwardNext; break;
+        case mso_sptActionButtonBeginning :     pAutoShape = &msoActionButtonBeginning; break;
+        case mso_sptActionButtonEnd :           pAutoShape = &msoActionButtonEnd; break;
+        case mso_sptActionButtonReturn :        pAutoShape = &msoActionButtonReturn;    break;
+        case mso_sptActionButtonDocument :      pAutoShape = &msoActionButtonDocument; break;
+        case mso_sptActionButtonSound :         pAutoShape = &msoActionButtonSound; break;
+        case mso_sptActionButtonMovie :         pAutoShape = &msoActionButtonMovie; break;
+        case mso_sptBevel :                     pAutoShape = &msoBevel; break;
+        case mso_sptFoldedCorner :              pAutoShape = &msoFoldedCorner; break;
+        case mso_sptSmileyFace :                pAutoShape = &msoSmileyFace;    break;
+        case mso_sptDonut :                     pAutoShape = &msoDonut; break;
+        case mso_sptNoSmoking :                 pAutoShape = &msoNoSmoking; break;
+        case mso_sptBlockArc :                  pAutoShape = &msoBlockArc; break;
+        case mso_sptHeart :                     pAutoShape = &msoHeart; break;
+        case mso_sptLightningBolt :             pAutoShape = &msoLightningBold; break;
+        case mso_sptSun :                       pAutoShape = &msoSun; break;
+        case mso_sptMoon :                      pAutoShape = &msoMoon; break;
+        case mso_sptBracketPair :               pAutoShape = &msoBracketPair; break;
+        case mso_sptBracePair :                 pAutoShape = &msoBracePair; break;
+        case mso_sptPlaque :                    pAutoShape = &msoPlaque; break;
+        case mso_sptLeftBracket :               pAutoShape = &msoLeftBracket; break;
+        case mso_sptRightBracket :              pAutoShape = &msoRightBracket; break;
+        case mso_sptLeftBrace :                 pAutoShape = &msoLeftBrace; break;
+        case mso_sptRightBrace :                pAutoShape = &msoRightBrace; break;
+        case mso_sptArrow :                     pAutoShape = &msoArrow; break;
+        case mso_sptUpArrow :                   pAutoShape = &msoUpArrow; break;
+        case mso_sptDownArrow :                 pAutoShape = &msoDownArrow; break;
+        case mso_sptLeftArrow :                 pAutoShape = &msoLeftArrow; break;
+        case mso_sptLeftRightArrow :            pAutoShape = &msoLeftRightArrow; break;
+        case mso_sptUpDownArrow :               pAutoShape = &msoUpDownArrow; break;
+        case mso_sptQuadArrow :                 pAutoShape = &msoQuadArrow; break;
+        case mso_sptLeftRightUpArrow :          pAutoShape = &msoLeftRightUpArrow; break;
+        case mso_sptBentArrow :                 pAutoShape = &msoBentArrow; break;
+        case mso_sptUturnArrow :                pAutoShape = &msoUturnArrow; break;
+        case mso_sptLeftUpArrow :               pAutoShape = &msoLeftUpArrow; break;
+        case mso_sptBentUpArrow :               pAutoShape = &msoBentUpArrow; break;
+        case mso_sptCurvedRightArrow :          pAutoShape = &msoCurvedArrow; break;
+        case mso_sptCurvedLeftArrow :           pAutoShape = &msoCurvedArrow; break;
+        case mso_sptCurvedUpArrow :             pAutoShape = &msoCurvedArrow; break;
+        case mso_sptCurvedDownArrow :           pAutoShape = &msoCurvedArrow; break;
+        case mso_sptStripedRightArrow :         pAutoShape = &msoStripedRightArrow; break;
+        case mso_sptNotchedRightArrow :         pAutoShape = &msoNotchedRightArrow; break;
+        case mso_sptHomePlate :                 pAutoShape = &msoHomePlate; break;
+        case mso_sptChevron :                   pAutoShape = &msoChevron; break;
+        case mso_sptRightArrowCallout :         pAutoShape = &msoRightArrowCallout; break;
+        case mso_sptLeftArrowCallout :          pAutoShape = &msoLeftArrowCallout; break;
+        case mso_sptUpArrowCallout :            pAutoShape = &msoUpArrowCallout; break;
+        case mso_sptDownArrowCallout :          pAutoShape = &msoDownArrowCallout; break;
+        case mso_sptLeftRightArrowCallout :     pAutoShape = &msoLeftRightArrowCallout; break;
+        case mso_sptUpDownArrowCallout :        pAutoShape = &msoUpDownArrowCallout; break;
+        case mso_sptQuadArrowCallout :          pAutoShape = &msoQuadArrowCallout; break;
+        case mso_sptCircularArrow :             pAutoShape = &msoCircularArrow; break;
+        case mso_sptIrregularSeal1 :            pAutoShape = &msoIrregularSeal1; break;
+        case mso_sptIrregularSeal2 :            pAutoShape = &msoIrregularSeal2; break;
+        case mso_sptSeal4 :                     pAutoShape = &msoSeal4; break;
+        case mso_sptStar :                      pAutoShape = &msoStar; break;
+        case mso_sptSeal8 :                     pAutoShape = &msoSeal8; break;
+        case mso_sptSeal16 :                    pAutoShape = &msoSeal16; break;
+        case mso_sptSeal24 :                    pAutoShape = &msoSeal24; break;
+        case mso_sptSeal32 :                    pAutoShape = &msoSeal32; break;
+        case mso_sptRibbon2 :                   pAutoShape = &msoRibbon2; break;
+        case mso_sptRibbon :                    pAutoShape = &msoRibbon2; break;
+        case mso_sptEllipseRibbon2 :            pAutoShape = &msoRibbon2; break;    //!!!!!
+        case mso_sptEllipseRibbon :             pAutoShape = &msoRibbon2; break; //!!!!!
+        case mso_sptVerticalScroll :            pAutoShape = &msoVerticalScroll;    break;
+        case mso_sptHorizontalScroll :          pAutoShape = &msoHorizontalScroll; break;
+        case mso_sptFlowChartProcess :          pAutoShape = &msoFlowChartProcess; break;
+        case mso_sptFlowChartAlternateProcess : pAutoShape = &msoFlowChartAlternateProcess; break;
+        case mso_sptFlowChartDecision :         pAutoShape = &msoFlowChartDecision; break;
+        case mso_sptFlowChartInputOutput :      pAutoShape = &msoFlowChartInputOutput; break;
+        case mso_sptFlowChartPredefinedProcess :pAutoShape = &msoFlowChartPredefinedProcess; break;
+        case mso_sptFlowChartInternalStorage :  pAutoShape = &msoFlowChartInternalStorage; break;
+        case mso_sptFlowChartDocument :         pAutoShape = &msoFlowChartDocument; break;
+        case mso_sptFlowChartMultidocument :    pAutoShape = &msoFlowChartMultidocument; break;
+        case mso_sptFlowChartTerminator :       pAutoShape = &msoFlowChartTerminator; break;
+        case mso_sptFlowChartPreparation :      pAutoShape = &msoFlowChartPreparation; break;
+        case mso_sptFlowChartManualInput :      pAutoShape = &msoFlowChartManualInput; break;
+        case mso_sptFlowChartManualOperation :  pAutoShape = &msoFlowChartManualOperation; break;
+        case mso_sptFlowChartConnector :        pAutoShape = &msoFlowChartConnector; break;
+        case mso_sptFlowChartOffpageConnector : pAutoShape = &msoFlowChartOffpageConnector; break;
+        case mso_sptFlowChartPunchedCard :      pAutoShape = &msoFlowChartPunchedCard; break;
+        case mso_sptFlowChartPunchedTape :      pAutoShape = &msoFlowChartPunchedTape; break;
+        case mso_sptFlowChartSummingJunction :  pAutoShape = &msoFlowChartSummingJunction; break;
+        case mso_sptFlowChartOr :               pAutoShape = &msoFlowChartOr; break;
+        case mso_sptFlowChartCollate :          pAutoShape = &msoFlowChartCollate; break;
+        case mso_sptFlowChartSort :             pAutoShape = &msoFlowChartSort; break;
+        case mso_sptFlowChartExtract :          pAutoShape = &msoFlowChartExtract; break;
+        case mso_sptFlowChartMerge :            pAutoShape = &msoFlowChartMerge; break;
+        case mso_sptFlowChartOnlineStorage :    pAutoShape = &msoFlowChartOnlineStorage; break;
+        case mso_sptFlowChartDelay :            pAutoShape = &msoFlowChartDelay; break;
+        case mso_sptFlowChartMagneticTape :     pAutoShape = &msoFlowChartMagneticTape; break;
+        case mso_sptFlowChartMagneticDisk :     pAutoShape = &msoFlowChartMagneticDisk; break;
+        case mso_sptFlowChartMagneticDrum :     pAutoShape = &msoFlowChartMagneticDrum; break;
+        case mso_sptFlowChartDisplay :          pAutoShape = &msoFlowChartDisplay; break;
+        case mso_sptWedgeRectCallout :          pAutoShape = &msoWedgeRectCallout; break;
+        case mso_sptWedgeRRectCallout :         pAutoShape = &msoWedgeRRectCallout; break;
+        case mso_sptWedgeEllipseCallout :       pAutoShape = &msoWedgeEllipseCallout; break;
+        case mso_sptCloudCallout :              pAutoShape = &msoCloudCallout; break;
+//      case mso_sptWave :                      pAutoShape = &msoWave; break;
+        break;
+        default :
+        break;
+    }
+    return pAutoShape;
+}
 
 SvxMSDffAutoShape::~SvxMSDffAutoShape()
 {
@@ -4622,11 +4995,13 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
     nCalculationData    ( 0 ),
     nTextRectData       ( 0 ),
     nAdjustmentHandles  ( 0 ),
+    nGluePoints         ( 0 ),
     pAdjustmentHandles  ( NULL ),
     pVertData           ( NULL ),
     pSegData            ( NULL ),
     pCalculationData    ( NULL ),
     pTextRectData       ( NULL ),
+    pGluePoints         ( NULL ),
     bIsEmpty            ( TRUE ),
     bVertAlloc          ( FALSE ),
     bSegAlloc           ( FALSE ),
@@ -4658,280 +5033,65 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
             nHandlesUsed = nIndex + 1;
         }
     }
-
-    switch( eSpType )
+    pDefAutoShape = GetAutoShapeContent( eSpType );
+    if ( pDefAutoShape )
     {
-        case mso_sptArc :                   pDefAutoShape = &msoArc; break;
-        case mso_sptRectangle :             pDefAutoShape = &msoRectangle; break;
-        case mso_sptParallelogram :         pDefAutoShape = &msoParallelogram; break;
-        case mso_sptTrapezoid :             pDefAutoShape = &msoTrapezoid; break;
-        case mso_sptDiamond :               pDefAutoShape = &msoDiamond; break;
-        case mso_sptRoundRectangle :        pDefAutoShape = &msoRoundRectangle; break;
-        case mso_sptOctagon :               pDefAutoShape = &msoOctagon; break;
-        case mso_sptIsocelesTriangle :      pDefAutoShape = &msoIsocelesTriangle; break;
-        case mso_sptRightTriangle :         pDefAutoShape = &msoRightTriangle; break;
-        case mso_sptEllipse :               pDefAutoShape = &msoEllipse; break;
-        case mso_sptHexagon :               pDefAutoShape = &msoHexagon; break;
-        case mso_sptPlus :                  pDefAutoShape = &msoPlus; break;
-        case mso_sptPentagon :              pDefAutoShape = &msoPentagon; break;
-        case mso_sptCan :
+        switch( eSpType )
         {
-            pDefAutoShape = &msoCan;
-            nColorData = 0x20200000;
+            case mso_sptCan :                       nColorData = 0x20200000; break;
+            case mso_sptCube :                      nColorData = 0x302d0000; break;
+            case mso_sptActionButtonBlank :         nColorData = 0x502ad400; break;
+            case mso_sptActionButtonHome :          nColorData = 0x702ad4ad; break;
+            case mso_sptActionButtonHelp :          nColorData = 0x602ad4a0; break;
+            case mso_sptActionButtonInformation :   nColorData = 0x702ad4a5; break;
+            case mso_sptActionButtonBackPrevious :  nColorData = 0x602ad4a0; break;
+            case mso_sptActionButtonForwardNext :   nColorData = 0x602ad4a0; break;
+            case mso_sptActionButtonBeginning :     nColorData = 0x602ad4a0; break;
+            case mso_sptActionButtonEnd :           nColorData = 0x602ad4a0; break;
+            case mso_sptActionButtonReturn :        nColorData = 0x602ad4a0; break;
+            case mso_sptActionButtonDocument :      nColorData = 0x702ad4da; break;
+            case mso_sptActionButtonSound :         nColorData = 0x602ad4a0; break;
+            case mso_sptActionButtonMovie :         nColorData = 0x602ad4a0; break;
+            case mso_sptBevel :                     nColorData = 0x502ad400; break;
+            case mso_sptFoldedCorner :              nColorData = 0x20d00000; break;
+            case mso_sptSmileyFace :                nColorData = 0x20d00000; break;
+            case mso_sptCurvedLeftArrow :
+            {
+                if ( nHandlesSet & 4 )
+                    nHandles[ 2 ] = 21600 - nHandles[ 2 ];
+                nFlags |= DFF_AUTOSHAPE_FLIP_H;
+            }
+            break;
+            case mso_sptCurvedUpArrow :
+            {
+                if ( nHandlesSet & 4 )
+                    nHandles[ 2 ] = 21600 - nHandles[ 2 ];
+                nFlags |= DFF_AUTOSHAPE_FLIP_V | DFF_AUTOSHAPE_EXCH;
+            }
+            break;
+            case mso_sptCurvedDownArrow :           nFlags |= DFF_AUTOSHAPE_EXCH; break;
+            case mso_sptRibbon2 :                   nColorData = 0x30dd0000; break;
+            case mso_sptRibbon :
+            {
+                if ( nHandlesSet & 2 )
+                    nHandles[ 1 ] = 21600 - nHandles[ 1 ];
+                nFlags |= DFF_AUTOSHAPE_FLIP_V;
+                nColorData = 0x30dd0000;
+            }
+            break;
+            case mso_sptEllipseRibbon2 :            nColorData = 0x30dd0000; break;
+            case mso_sptEllipseRibbon :             // !!!!!!!!!!
+            {
+                if ( nHandlesSet & 2 )
+                    nHandles[ 1 ] = 21600 - nHandles[ 1 ];
+                nFlags |= DFF_AUTOSHAPE_FLIP_V;
+                nColorData = 0x30dd0000;
+            }
+            break;
+            case mso_sptVerticalScroll :            nColorData = 0x30dd0000; break;
+            case mso_sptHorizontalScroll :          nColorData = 0x30dd0000; break;
         }
-        break;
-        case mso_sptCube :
-        {
-            pDefAutoShape = &msoCube;
-            nColorData = 0x302d0000;
-        }
-        break;
-
-        case mso_sptActionButtonBlank :
-        {
-            pDefAutoShape = &msoActionButtonBlank;
-            nColorData = 0x502ad400;
-        }
-        break;
-        case mso_sptActionButtonHome :
-        {
-            pDefAutoShape = &msoActionButtonHome;
-            nColorData = 0x702ad4ad;
-        }
-        break;
-        case mso_sptActionButtonHelp :
-        {
-            pDefAutoShape = &msoActionButtonHelp;
-            nColorData = 0x602ad4a0;
-        }
-        break;
-        case mso_sptActionButtonInformation :
-        {
-            pDefAutoShape = &msoActionButtonInformation;
-            nColorData = 0x702ad4a5;
-        }
-        break;
-        case mso_sptActionButtonBackPrevious :
-        {
-            pDefAutoShape = &msoActionButtonBackPrevious;
-            nColorData = 0x602ad4a0;
-        }
-        break;
-        case mso_sptActionButtonForwardNext :
-        {
-            pDefAutoShape = &msoActionButtonForwardNext;
-            nColorData = 0x602ad4a0;
-        }
-        break;
-        case mso_sptActionButtonBeginning :
-        {
-            pDefAutoShape = &msoActionButtonBeginning;
-            nColorData = 0x602ad4a0;
-        }
-        break;
-        case mso_sptActionButtonEnd :
-        {
-            pDefAutoShape = &msoActionButtonEnd;
-            nColorData = 0x602ad4a0;
-        }
-        break;
-        case mso_sptActionButtonReturn :
-        {
-            pDefAutoShape = &msoActionButtonReturn;
-            nColorData = 0x602ad4a0;
-        }
-        break;
-        case mso_sptActionButtonDocument :
-        {
-            pDefAutoShape =&msoActionButtonDocument;
-            nColorData = 0x702ad4da;
-        }
-        break;
-        case mso_sptActionButtonSound :
-        {
-            pDefAutoShape = &msoActionButtonSound;
-            nColorData = 0x602ad4a0;
-        }
-        break;
-        case mso_sptActionButtonMovie :
-        {
-            pDefAutoShape = &msoActionButtonMovie;
-            nColorData = 0x602ad4a0;
-        }
-        break;
-        case mso_sptBevel :
-        {
-            pDefAutoShape = &msoBevel;
-            nColorData = 0x502ad400;
-        }
-        break;
-
-        case mso_sptFoldedCorner :
-        {
-            pDefAutoShape = &msoFoldedCorner;
-            nColorData = 0x20d00000;
-        }
-        break;
-        case mso_sptSmileyFace :
-        {
-            pDefAutoShape = &msoSmileyFace;
-            nColorData = 0x20d00000;
-        }
-        break;
-        case mso_sptDonut :                 pDefAutoShape = &msoDonut; break;
-        case mso_sptNoSmoking :             pDefAutoShape = &msoNoSmoking; break;
-        case mso_sptBlockArc :              pDefAutoShape = &msoBlockArc; break;
-        case mso_sptHeart :                 pDefAutoShape = &msoHeart; break;
-        case mso_sptLightningBolt :         pDefAutoShape = &msoLightningBold; break;
-        case mso_sptSun :                   pDefAutoShape = &msoSun; break;
-        case mso_sptMoon :                  pDefAutoShape = &msoMoon; break;
-        case mso_sptBracketPair :           pDefAutoShape = &msoBracketPair; break;
-        case mso_sptBracePair :             pDefAutoShape = &msoBracePair; break;
-        case mso_sptPlaque :                pDefAutoShape = &msoPlaque; break;
-        case mso_sptLeftBracket :           pDefAutoShape = &msoLeftBracket; break;
-        case mso_sptRightBracket :          pDefAutoShape = &msoRightBracket; break;
-        case mso_sptLeftBrace :             pDefAutoShape = &msoLeftBrace; break;
-        case mso_sptRightBrace :            pDefAutoShape = &msoRightBrace; break;
-        case mso_sptArrow :                 pDefAutoShape = &msoArrow; break;
-        case mso_sptUpArrow :               pDefAutoShape = &msoUpArrow; break;
-        case mso_sptDownArrow :             pDefAutoShape = &msoDownArrow; break;
-        case mso_sptLeftArrow :             pDefAutoShape = &msoLeftArrow; break;
-        case mso_sptLeftRightArrow :        pDefAutoShape = &msoLeftRightArrow; break;
-        case mso_sptUpDownArrow :           pDefAutoShape = &msoUpDownArrow; break;
-        case mso_sptQuadArrow :             pDefAutoShape = &msoQuadArrow; break;
-        case mso_sptLeftRightUpArrow :      pDefAutoShape = &msoLeftRightUpArrow; break;
-        case mso_sptBentArrow :             pDefAutoShape = &msoBentArrow; break;
-        case mso_sptUturnArrow :            pDefAutoShape = &msoUturnArrow; break;
-        case mso_sptLeftUpArrow :           pDefAutoShape = &msoLeftUpArrow; break;
-        case mso_sptBentUpArrow :           pDefAutoShape = &msoBentUpArrow; break;
-        case mso_sptCurvedRightArrow :
-        {
-            pDefAutoShape = &msoCurvedArrow;
-        }
-        break;
-        case mso_sptCurvedLeftArrow :
-        {
-            pDefAutoShape = &msoCurvedArrow;
-            if ( nHandlesSet & 4 )
-                nHandles[ 2 ] = 21600 - nHandles[ 2 ];
-            nFlags |= DFF_AUTOSHAPE_FLIP_H;
-        }
-        break;
-        case mso_sptCurvedUpArrow :
-        {
-            pDefAutoShape = &msoCurvedArrow;
-            if ( nHandlesSet & 4 )
-                nHandles[ 2 ] = 21600 - nHandles[ 2 ];
-            nFlags |= DFF_AUTOSHAPE_FLIP_V | DFF_AUTOSHAPE_EXCH;
-        }
-        break;
-        case mso_sptCurvedDownArrow :
-        {
-            pDefAutoShape = &msoCurvedArrow;
-            nFlags |= DFF_AUTOSHAPE_EXCH;
-        }
-        break;
-        case mso_sptStripedRightArrow :     pDefAutoShape = &msoStripedRightArrow; break;
-        case mso_sptNotchedRightArrow :     pDefAutoShape = &msoNotchedRightArrow; break;
-        case mso_sptHomePlate :             pDefAutoShape = &msoHomePlate; break;
-        case mso_sptChevron :               pDefAutoShape = &msoChevron; break;
-        case mso_sptRightArrowCallout :     pDefAutoShape = &msoRightArrowCallout; break;
-        case mso_sptLeftArrowCallout :      pDefAutoShape = &msoLeftArrowCallout; break;
-        case mso_sptUpArrowCallout :        pDefAutoShape = &msoUpArrowCallout; break;
-        case mso_sptDownArrowCallout :      pDefAutoShape = &msoDownArrowCallout; break;
-        case mso_sptLeftRightArrowCallout : pDefAutoShape = &msoLeftRightArrowCallout; break;
-        case mso_sptUpDownArrowCallout :    pDefAutoShape = &msoUpDownArrowCallout; break;
-        case mso_sptQuadArrowCallout :      pDefAutoShape = &msoQuadArrowCallout; break;
-        case mso_sptCircularArrow :         pDefAutoShape = &msoCircularArrow; break;
-        case mso_sptIrregularSeal1 :        pDefAutoShape = &msoIrregularSeal1; break;
-        case mso_sptIrregularSeal2 :        pDefAutoShape = &msoIrregularSeal2; break;
-        case mso_sptSeal4 :                 pDefAutoShape = &msoSeal4; break;
-        case mso_sptStar :                  pDefAutoShape = &msoStar; break;
-        case mso_sptSeal8 :                 pDefAutoShape = &msoSeal8; break;
-        case mso_sptSeal16 :                pDefAutoShape = &msoSeal16; break;
-        case mso_sptSeal24 :                pDefAutoShape = &msoSeal24; break;
-        case mso_sptSeal32 :                pDefAutoShape = &msoSeal32; break;
-        case mso_sptRibbon2 :
-        {
-            pDefAutoShape = &msoRibbon2;
-            nColorData = 0x30dd0000;
-        }
-        break;
-        case mso_sptRibbon :
-        {
-            pDefAutoShape = &msoRibbon2;
-            if ( nHandlesSet & 2 )
-                nHandles[ 1 ] = 21600 - nHandles[ 1 ];
-            nFlags |= DFF_AUTOSHAPE_FLIP_V;
-            nColorData = 0x30dd0000;
-        }
-        break;
-        case mso_sptEllipseRibbon2 :            // !!!!!!!!!!
-        {
-            pDefAutoShape = &msoRibbon2;
-            nColorData = 0x30dd0000;
-        }
-        break;
-        case mso_sptEllipseRibbon :             // !!!!!!!!!!
-        {
-            pDefAutoShape = &msoRibbon2;
-            if ( nHandlesSet & 2 )
-                nHandles[ 1 ] = 21600 - nHandles[ 1 ];
-            nFlags |= DFF_AUTOSHAPE_FLIP_V;
-            nColorData = 0x30dd0000;
-        }
-        break;
-        case mso_sptVerticalScroll :
-        {
-            pDefAutoShape = &msoVerticalScroll;
-            nColorData = 0x30dd0000;
-        }
-        break;
-        case mso_sptHorizontalScroll :
-        {
-            pDefAutoShape = &msoHorizontalScroll;
-            nColorData = 0x30dd0000;
-        }
-        break;
-        case mso_sptFlowChartProcess :          pDefAutoShape = &msoFlowChartProcess; break;
-        case mso_sptFlowChartAlternateProcess : pDefAutoShape = &msoFlowChartAlternateProcess; break;
-        case mso_sptFlowChartDecision :         pDefAutoShape = &msoFlowChartDecision; break;
-        case mso_sptFlowChartInputOutput :      pDefAutoShape = &msoFlowChartInputOutput; break;
-        case mso_sptFlowChartPredefinedProcess :pDefAutoShape = &msoFlowChartPredefinedProcess; break;
-        case mso_sptFlowChartInternalStorage :  pDefAutoShape = &msoFlowChartInternalStorage; break;
-        case mso_sptFlowChartDocument :         pDefAutoShape = &msoFlowChartDocument; break;
-        case mso_sptFlowChartMultidocument :    pDefAutoShape = &msoFlowChartMultidocument; break;
-        case mso_sptFlowChartTerminator :       pDefAutoShape = &msoFlowChartTerminator; break;
-        case mso_sptFlowChartPreparation :      pDefAutoShape = &msoFlowChartPreparation; break;
-        case mso_sptFlowChartManualInput :      pDefAutoShape = &msoFlowChartManualInput; break;
-        case mso_sptFlowChartManualOperation :  pDefAutoShape = &msoFlowChartManualOperation; break;
-        case mso_sptFlowChartConnector :        pDefAutoShape = &msoFlowChartConnector; break;
-        case mso_sptFlowChartOffpageConnector : pDefAutoShape = &msoFlowChartOffpageConnector; break;
-        case mso_sptFlowChartPunchedCard :      pDefAutoShape = &msoFlowChartPunchedCard; break;
-        case mso_sptFlowChartPunchedTape :      pDefAutoShape = &msoFlowChartPunchedTape; break;
-        case mso_sptFlowChartSummingJunction :  pDefAutoShape = &msoFlowChartSummingJunction; break;
-        case mso_sptFlowChartOr :               pDefAutoShape = &msoFlowChartOr; break;
-        case mso_sptFlowChartCollate :          pDefAutoShape = &msoFlowChartCollate; break;
-        case mso_sptFlowChartSort :             pDefAutoShape = &msoFlowChartSort; break;
-        case mso_sptFlowChartExtract :          pDefAutoShape = &msoFlowChartExtract; break;
-        case mso_sptFlowChartMerge :            pDefAutoShape = &msoFlowChartMerge; break;
-        case mso_sptFlowChartOnlineStorage :    pDefAutoShape = &msoFlowChartOnlineStorage; break;
-        case mso_sptFlowChartDelay :            pDefAutoShape = &msoFlowChartDelay; break;
-        case mso_sptFlowChartMagneticTape :     pDefAutoShape = &msoFlowChartMagneticTape; break;
-        case mso_sptFlowChartMagneticDisk :     pDefAutoShape = &msoFlowChartMagneticDisk; break;
-        case mso_sptFlowChartMagneticDrum :     pDefAutoShape = &msoFlowChartMagneticDrum; break;
-        case mso_sptFlowChartDisplay :          pDefAutoShape = &msoFlowChartDisplay; break;
-        case mso_sptWedgeRectCallout :          pDefAutoShape = &msoWedgeRectCallout; break;
-        case mso_sptWedgeRRectCallout :         pDefAutoShape = &msoWedgeRRectCallout; break;
-        case mso_sptWedgeEllipseCallout :       pDefAutoShape = &msoWedgeEllipseCallout; break;
-        case mso_sptCloudCallout :              pDefAutoShape = &msoCloudCallout; break;
-
-//      case mso_sptWave :                  pDefAutoShape = &msoWave; break;
-        break;
-        default :
-        break;
     }
-
     nCoordHeight = nCoordWidth  = 21600;
     if ( pDefAutoShape )
     {
@@ -4949,6 +5109,8 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         nCoordHeight = pDefAutoShape->nCoordHeight;
         nXRef = pDefAutoShape->nXRef;
         nYRef = pDefAutoShape->nYRef;
+        pGluePoints = pDefAutoShape->pGluePoints;
+        nGluePoints = pDefAutoShape->nGluePoints;
     }
     sal_Int32 nGeoRight = rPropReader.GetPropertyValue( DFF_Prop_geoRight, 0 );
     if ( nGeoRight )
@@ -5505,6 +5667,33 @@ Rectangle SvxMSDffAutoShape::GetTextRect() const
     return aRect;
 }
 
+sal_Bool SvxMSDffAutoShape::HasGluePointList( const MSO_SPT eShapeType )
+{
+    const mso_AutoShape* pAutoShape = GetAutoShapeContent( eShapeType );
+    return pAutoShape && pAutoShape->nGluePoints;
+}
+
+MSO_SPT SvxMSDffAutoShape::GetShapeTypeFromSdrObject(  const SdrObject* pObj )
+{
+    MSO_SPT eShapeType = mso_sptNil;
+    const SfxPoolItem* pAdjustItem = NULL;
+    const SfxItemSet&  rItemSet = pObj->GetItemSet();
+    rItemSet.GetItemState( SDRATTR_AUTOSHAPE_ADJUSTMENT, FALSE, &pAdjustItem );
+    if ( pAdjustItem )
+    {
+        SdrAutoShapeAdjustmentItem& rAdjustItem = *(SdrAutoShapeAdjustmentItem*)pAdjustItem;
+        sal_uInt32 nCount = rAdjustItem.GetCount();
+        if ( nCount >= 3 )
+        {
+            /* checking magic number, so we can get sure that the SdrObject was a autoshape
+               and we can get the autoshape type */
+            if ( rAdjustItem.GetValue( nCount - 1 ).GetValue() == 0x80001234 )
+                eShapeType = (MSO_SPT)((sal_uInt32)(rAdjustItem.GetValue( nCount - 2 ).GetValue()) >> 16);
+        }
+    }
+    return eShapeType;
+}
+
 SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, sal_Bool bSetAutoShapeAdjustItem )
 {
     SdrObject* pRet = NULL;
@@ -5991,6 +6180,31 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
     }
     if ( pRet )
     {
+        // some objects needs to have their own GluePoint list
+        if ( HasGluePointList( eSpType ) )
+        {
+            sal_uInt32 i;
+            const SvxMSDffVertPair* pTmp = pGluePoints;
+            for ( i = 0; i < nGluePoints; i++ )
+            {
+                SdrGluePoint aGluePoint;
+                const Point& rPoint = GetPoint( *pTmp++, sal_True );
+                double fXRel = rPoint.X();
+                double fYRel = rPoint.Y();
+                fXRel = fXRel / aSnapRect.GetWidth() * 10000;
+                fYRel = fYRel / aSnapRect.GetHeight() * 10000;
+                aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
+                aGluePoint.SetPercent( sal_True );
+                aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
+                aGluePoint.SetEscDir( SDRESC_SMART );
+                SdrGluePointList* pList = pRet->ForceGluePointList();
+                if( pList )
+                {
+                    sal_uInt16 nId = pList->Insert( aGluePoint );
+//                  sal_uInt16 nNewId = (sal_Int32)((*pList)[nId].GetId() + 4 );
+                }
+            }
+        }
         if ( bSetAutoShapeAdjustItem )
         {
             if ( pRet->ISA( SdrObjGroup ) || pRet->ISA( SdrPathObj ) )

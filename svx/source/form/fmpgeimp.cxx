@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:02:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,17 +649,17 @@ UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< 
 ::rtl::OUString FmFormPageImpl::getUniqueName(const ::rtl::OUString& rName, const Reference< ::com::sun::star::container::XNameAccess > & xNamedSet) const
 {
     Reference< ::com::sun::star::container::XIndexAccess >  xIndexSet(xNamedSet, UNO_QUERY);
-    ::rtl::OUString sName;
+    ::rtl::OUString sName( rName );
 
     if ( !xIndexSet.is() )
         return sName;
 
     sal_Int32 n = 0;
     ::rtl::OUString sClassName = rName;
-    do
-    {
+
+    while ( xNamedSet->hasByName( sName ) )
         sName = sClassName + ::rtl::OUString::valueOf(++n);
-    }   while (xNamedSet->hasByName(sName));
+
     return sName;
 }
 

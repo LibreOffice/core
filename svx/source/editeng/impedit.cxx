@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-05 09:44:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 
 #include <flditem.hxx>
 #include <svtools/intitem.hxx>
+#include <svtools/transfer.hxx>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -159,6 +160,8 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow ) :
     pPointer            = NULL;
     pBackgroundColor    = NULL;
     nScrollDiffX        = 0;
+    nExtraCursorFlags   = 0;
+    nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
     pCursor             = NULL;
        pDragAndDropInfo = NULL;
     bReadOnly           = sal_False;
@@ -727,7 +730,25 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
         pOutWin->SetCursor( GetCursor() );
 
     EditPaM aPaM( aEditSelection.Max() );
-    Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY|nShowCursorFlags );
+
+    USHORT nTextPortionStart = 0;
+    USHORT nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+    ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions().GetObject( nPara );
+
+    nShowCursorFlags |= nExtraCursorFlags;
+
+    nShowCursorFlags |= GETCRSR_TXTONLY;
+
+    // Use CursorBidiLevel 0/1 in meaning of
+    // 0: prefer portion end, normal mode
+    // 1: prefer portion start
+
+    if ( ( GetCursorBidiLevel() != CURSOR_BIDILEVEL_DONTKNOW ) && GetCursorBidiLevel() )
+    {
+        nShowCursorFlags |= GETCRSR_PREFERPORTIONSTART;
+    }
+
+    Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, nShowCursorFlags );
     if ( !IsInsertMode() && !aEditSelection.HasRange() )
     {
         if ( aPaM.GetNode()->Len() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
@@ -735,9 +756,6 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
             // If we are behind a portion, and the next portion has other direction, we must change position...
             aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY|GETCRSR_PREFERPORTIONSTART ).Left();
 
-            USHORT nTextPortionStart = 0;
-            USHORT nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
-            ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions().GetObject( nPara );
             USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, TRUE );
             TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
             if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
@@ -747,7 +765,10 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
             else
             {
                 EditPaM aNext = pEditEngine->pImpEditEngine->CursorRight( aPaM, (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
-                aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GETCRSR_TXTONLY ).Left();
+                Rectangle aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GETCRSR_TXTONLY );
+                if ( aTmpRect.Top() != aEditCursor.Top() )
+                    aTmpRect = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GETCRSR_TXTONLY|GETCRSR_ENDOFLINE );
+                aEditCursor.Right() = aTmpRect.Left();
             }
         }
     }
@@ -887,6 +908,21 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
                 aCursorSz.Height() = nCursorSz;
         }
         GetCursor()->SetSize( aCursorSz );
+
+        unsigned char nCursorDir = CURSOR_DIRECTION_NONE;
+        if ( IsInsertMode() && !aEditSelection.HasRange() && ( pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) ) )
+        {
+            USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, nShowCursorFlags & GETCRSR_PREFERPORTIONSTART ? TRUE : FALSE );
+            TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+            USHORT nRTLLevel = pTextPortion->GetRightToLeft();
+            if ( nRTLLevel%2 )
+                nCursorDir = CURSOR_DIRECTION_RTL;
+            else
+                nCursorDir = CURSOR_DIRECTION_LTR;
+
+        }
+        GetCursor()->SetDirection( nCursorDir );
+
         if ( bForceVisCursor )
             GetCursor()->Show();
 
@@ -1071,6 +1107,8 @@ sal_Bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
         }
     }
     nTravelXPos = TRAVEL_X_DONTKNOW;
+    nCursorBidiLevel = CURSOR_BIDILEVEL_DONTKNOW;
+    nExtraCursorFlags = 0;
     bClickedInSelection = sal_False;
 
     if ( rMouseEvent.IsMiddle() && !bReadOnly &&
@@ -1094,13 +1132,14 @@ sal_Bool ImpEditView::MouseButtonDown( const MouseEvent& rMouseEvent )
     if ( pEditEngine->pImpEditEngine->aStatus.NotifyCursorMovements() )
         pEditEngine->pImpEditEngine->aStatus.GetPrevParagraph() = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( GetEditSelection().Max().GetNode() );
     nTravelXPos = TRAVEL_X_DONTKNOW;
+    nExtraCursorFlags = 0;
+    nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
     bClickedInSelection = IsSelectionAtPoint( rMouseEvent.GetPosPixel() );
     return pEditEngine->pImpEditEngine->MouseButtonDown( rMouseEvent, GetEditViewPtr() );
 }
 
 sal_Bool ImpEditView::MouseMove( const MouseEvent& rMouseEvent )
 {
-    nTravelXPos = TRAVEL_X_DONTKNOW;
     return pEditEngine->pImpEditEngine->MouseMove( rMouseEvent, GetEditViewPtr() );
 }
 
@@ -1776,7 +1815,23 @@ void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTarg
     if ( !pDragAndDropInfo )
         pDragAndDropInfo = new DragAndDropInfo( );
 
-    pDragAndDropInfo->bHasValidData = sal_True; // !!!!!!!!
+    pDragAndDropInfo->bHasValidData = sal_False;
+
+    // Check for supported format...
+    // Only check for text, will also be there if bin or rtf
+    datatransfer::DataFlavor aTextFlavor;
+    SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aTextFlavor );
+    const ::com::sun::star::datatransfer::DataFlavor* pFlavors = rDTDEE.SupportedDataFlavors.getConstArray();
+    int nFlavors = rDTDEE.SupportedDataFlavors.getLength();
+    for ( int n = 0; n < nFlavors; n++ )
+    {
+        if( TransferableDataHelper::IsEqual( pFlavors[n], aTextFlavor ) )
+        {
+            pDragAndDropInfo->bHasValidData = sal_True;
+            break;
+        }
+    }
+
     dragOver( rDTDEE );
 }
 
@@ -1805,6 +1860,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
     if ( GetOutputArea().IsInside( aMousePos ) && !bReadOnly )
     {
         sal_Int8 nSupportedActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
+
         if ( pDragAndDropInfo->bHasValidData /* && ( nSupportedActions & rDTDE.DropAction ) MT: Default = 0x80 ?! */ )
         {
             bAccept = sal_True;

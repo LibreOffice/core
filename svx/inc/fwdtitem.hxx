@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwdtitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ public:
 
     void SetWidth( UINT16 nNewWidth, const USHORT nNewProp = 100 )
         {
-            DBG_ASSERT( GetRef() == 0, "SetValue() with pooled item" );
+            DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
             nWidth = UINT16(( (UINT32)nNewWidth * nNewProp ) / 100 );
             nProp = nNewProp;
         }
@@ -125,13 +125,13 @@ public:
 
     void SetWidthValue( UINT16 nNewWidth )
         {
-            DBG_ASSERT( GetRef() == 0, "SetValue() with pooled item" );
+            DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
             nWidth = nNewWidth;
         }
 
     void SetProp( const USHORT nNewProp )
         {
-            DBG_ASSERT( GetRef() == 0, "SetValue() with pooled item" );
+            DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
             nProp = nNewProp;
         }
 

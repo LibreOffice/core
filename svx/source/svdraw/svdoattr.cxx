@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-31 12:52:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,20 +180,8 @@
 #include <xfltrit.hxx>
 #endif
 
-#ifndef _SVX_XFLHTIT_HXX //autogen
-#include <xflhtit.hxx>
-#endif
-
-#ifndef _SVX_XLNEDIT_HXX //autogen
-#include <xlnedit.hxx>
-#endif
-
 #ifndef _SVX_XLNEDCIT_HXX //autogen
 #include <xlnedcit.hxx>
-#endif
-
-#ifndef _SVX_XLNSTIT_HXX //autogen
-#include <xlnstit.hxx>
 #endif
 
 #ifndef _SVX_ADJITEM_HXX
@@ -204,24 +192,30 @@
 #include "xflbckit.hxx"
 #endif
 
-#ifndef _SVX_XBTMPIT_HXX
-#include "xbtmpit.hxx"
-#endif
-
 #ifndef _XTABLE_HXX
 #include "xtable.hxx"
 #endif
 
+#ifndef _SVX_XBTMPIT_HXX
+#include "xbtmpit.hxx"
+#endif
 #ifndef _SVX_XLNDSIT_HXX
 #include "xlndsit.hxx"
 #endif
-
+#ifndef _SVX_XLNEDIT_HXX //autogen
+#include "xlnedit.hxx"
+#endif
 #ifndef _SVX_XFLGRIT_HXX
 #include "xflgrit.hxx"
 #endif
-
 #ifndef _SVX_XFLFTRIT_HXX
 #include "xflftrit.hxx"
+#endif
+#ifndef _SVX_XFLHTIT_HXX //autogen
+#include "xflhtit.hxx"
+#endif
+#ifndef _SVX_XLNSTIT_HXX
+#include "xlnstit.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1286,82 +1280,28 @@ void SdrAttrObj::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, 
         // call parent
         SdrObject::MigrateItemPool(pSrcPool, pDestPool, pNewModel);
 
-        // eigene Reaktion
-        if(pDestPool && pSrcPool && (pDestPool != pSrcPool))
+        if(mpObjectItemSet)
         {
-            if(mpObjectItemSet)
-            {
-                if( pNewModel == NULL )
-                    pNewModel = GetModel();
+            // migrate ItemSet to new pool. Scaling is NOT necessary
+            // because this functionality is used by UNDO only. Thus
+            // objects and ItemSets would be moved back to their original
+            // pool before usage.
 
-                // migrate ItemSet to new pool. Scaling is NOT necessary
-                // because this functionality is used by UNDO only. Thus
-                // objects and ItemSets would be moved back to their original
-                // pool before usage.
+            SfxItemSet* pOldSet = mpObjectItemSet;
+            SfxStyleSheet* pStySheet = GetStyleSheet();
 
-                SfxItemSet* pOldSet = mpObjectItemSet;
-                SfxStyleSheet* pStySheet = GetStyleSheet();
+            if(GetStyleSheet())
+                RemoveStyleSheet();
 
-                if(GetStyleSheet())
-                    RemoveStyleSheet();
+            mpObjectItemSet = CreateNewItemSet(*pDestPool);
 
-                mpObjectItemSet = CreateNewItemSet(*pDestPool);
+            GetModel()->MigrateItemSet( pOldSet, mpObjectItemSet, pNewModel );
 
-                SfxWhichIter aWhichIter(*pOldSet);
-                sal_uInt16 nWhich(aWhichIter.FirstWhich());
-                const SfxPoolItem *pPoolItem;
+            // set stylesheet (if used)
+            if(pStySheet)
+                AddStyleSheet(pStySheet, TRUE);
 
-                while(nWhich)
-                {
-                    if(SFX_ITEM_SET == pOldSet->GetItemState(nWhich, FALSE, &pPoolItem))
-                    {
-                        const SfxPoolItem* pItem = pPoolItem;
-
-                        switch( nWhich )
-                        {
-                        case XATTR_FILLBITMAP:
-                            pItem = ((XFillBitmapItem*)pItem)->checkForUniqueItem( pNewModel );
-                            break;
-                        case XATTR_LINEDASH:
-                            pItem = ((XLineDashItem*)pItem)->checkForUniqueItem( pNewModel );
-                            break;
-                        case XATTR_LINESTART:
-                            pItem = ((XLineStartItem*)pItem)->checkForUniqueItem( pNewModel );
-                            break;
-                        case XATTR_LINEEND:
-                            pItem = ((XLineEndItem*)pItem)->checkForUniqueItem( pNewModel );
-                            break;
-                        case XATTR_FILLGRADIENT:
-                            pItem = ((XFillGradientItem*)pItem)->checkForUniqueItem( pNewModel );
-                            break;
-                        case XATTR_FILLFLOATTRANSPARENCE:
-                            // #85953# allow all kinds of XFillFloatTransparenceItem to be set
-                            pItem = ((XFillFloatTransparenceItem*)pItem)->checkForUniqueItem( pNewModel );
-                            break;
-                        case XATTR_FILLHATCH:
-                            pItem = ((XFillHatchItem*)pItem)->checkForUniqueItem( pNewModel );
-                            break;
-                        }
-
-                        // set item
-                        if( pItem )
-                        {
-                            mpObjectItemSet->Put(*pItem);
-
-                            // delete item if it was a generated one
-                            if( pItem != pPoolItem)
-                                delete (SfxPoolItem*)pItem;
-                        }
-                    }
-                    nWhich = aWhichIter.NextWhich();
-                }
-
-                // set stylesheet (if used)
-                if(pStySheet)
-                    AddStyleSheet(pStySheet, TRUE);
-
-                delete pOldSet;
-            }
+            delete pOldSet;
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $
+ *  last change: $Author: hr $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,15 +77,9 @@
 #ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
 #endif
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-#ifndef __SGI_STL_SET
 #include <set>
-#endif
-#ifndef __SGI_STL_UTILITY
 #include <utility>
-#endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XGRAPHICOBJECTRESOLVER_HPP_
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>

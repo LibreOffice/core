@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-21 14:35:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,10 @@ Svx3DPreviewControl::~Svx3DPreviewControl()
 \************************************************************************/
 void Svx3DPreviewControl::Construct()
 {
+    // Do never mirror the preview window.  This explicitly includes right
+    // to left writing environments.
+    EnableRTL (FALSE);
+
     SetMapMode( MAP_100TH_MM );
 
     // Model
@@ -379,6 +383,10 @@ SvxRectCtl3D::SvxRectCtl3D( Window* pParent,
                         nRadius( nCircle)
 
 {
+    // Do never mirror the preview window.  This explicitly includes right
+    // to left writing environments.
+    EnableRTL (FALSE);
+
     SetMapMode( MAP_100TH_MM );
     SetBackground( Wallpaper( Color( COL_LIGHTGRAY ) ) );
 
@@ -1053,6 +1061,10 @@ SvxLightPrevievCtl3D::SvxLightPrevievCtl3D( Window* pParent, WinBits nStyle )
 
 void SvxLightPrevievCtl3D::Init()
 {
+    // Do never mirror the preview window.  This explicitly includes right
+    // to left writing environments.
+    EnableRTL (FALSE);
+
     // Lokale Parameter fuellen
     eSelectedLight = Base3DLightNone;
     fObjectRadius = 1.414;

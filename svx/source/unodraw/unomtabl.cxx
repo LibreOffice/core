@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-04 10:14:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,7 @@
 #include "xdef.hxx"
 #include "xflhtit.hxx"
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>

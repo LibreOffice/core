@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:20:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ XOutdevItemPool::~XOutdevItemPool()
             if ( *ppDefaultItem ) //Teile schon von abgel. Klasse abgeraeumt!
             {
 #ifndef PRODUCT
-                SetRef( **ppDefaultItem, 0 );
+                SetRefCount( **ppDefaultItem, 0 );
 #endif
                 delete *ppDefaultItem;
             }

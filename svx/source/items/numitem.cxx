@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-11-22 07:45:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,8 @@ SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
     {
         pBulletFont = new Font;
         rStream >> *pBulletFont;
+        if(!pBulletFont->GetCharSet())
+            pBulletFont->SetCharSet(rStream.GetStreamCharSet());
     }
     else
         pBulletFont = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-25 12:14:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ class SvxMSDffAutoShape
         SvxMSDffCalculationData*    pCalculationData;
         sal_uInt32                  nAdjustmentHandles;
         SvxMSDffAdjustmentHandle*   pAdjustmentHandles;
+        sal_uInt32                  nGluePoints;
+        SvxMSDffVertPair*           pGluePoints;
 
         sal_Bool                    bIsEmpty        : 1;
         sal_Bool                    bVertAlloc      : 1;
@@ -133,11 +135,12 @@ class SvxMSDffAutoShape
         sal_Bool                    IsEmpty() const;
 
         Rectangle                   GetTextRect() const;
+        static sal_Bool             HasGluePointList( const MSO_SPT eShapeType );
+        static MSO_SPT              GetShapeTypeFromSdrObject( const SdrObject* );
 
         SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvStream&,
                             DffObjData& rObjDat, Rectangle& rSnapRect, sal_Int32 nFix16Angle );
         ~SvxMSDffAutoShape();
-
 };
 
 #endif

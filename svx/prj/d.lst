@@ -1,7 +1,5 @@
 touch: ..\inc\hid.lst %_DEST%\bin%_EXT%\hid.lst
-..\%__SRC%\misc\svxinter.c %_DEST%\odk\src%_EXT%\svxinter.c
 ..\%__SRC%\misc\svx.hid %_DEST%\bin%_EXT%\svx.hid
-..\%__SRC%\inc\svxinter.h %_DEST%\odk\inc%_EXT%\svxinter.h
 ..\%__SRC%\inc\svxslots.ilb %_DEST%\inc%_EXT%\svxslots.ilb
 ..\%__SRC%\inc\fren\svxslots.ilb %_DEST%\inc%_EXT%\fren\svxslots.ilb
 ..\%__SRC%\inc\dtch\svxslots.ilb %_DEST%\inc%_EXT%\dtch\svxslots.ilb
@@ -22,7 +20,6 @@ touch: ..\inc\hid.lst %_DEST%\bin%_EXT%\hid.lst
 ..\%__SRC%\slb\dg.lib %_DEST%\lib%_EXT%\xdg.lib
 ..\%__SRC%\lib\svx.lib %_DEST%\lib%_EXT%\svx.lib
 ..\%__SRC%\slb\svx.lib %_DEST%\lib%_EXT%\xsvx.lib
-..\%__SRC%\lib\svxinter.lib %_DEST%\odk\lib%_EXT%\svxinter.lib
 ..\%__SRC%\lib\svl.lib %_DEST%\lib%_EXT%\svl.lib
 ..\%__SRC%\lib\dl1.lib %_DEST%\lib%_EXT%\dl1.lib
 ..\%__SRC%\lib\dl2.lib %_DEST%\lib%_EXT%\dl2.lib
@@ -69,7 +66,6 @@ hedabu: ..\inc\akrnitem.hxx %_DEST%\inc%_EXT%\svx\akrnitem.hxx
 hedabu: ..\inc\algitem.hxx %_DEST%\inc%_EXT%\svx\algitem.hxx
 hedabu: ..\inc\align.hxx %_DEST%\inc%_EXT%\svx\align.hxx
 hedabu: ..\inc\asiancfg.hxx %_DEST%\inc%_EXT%\svx\asiancfg.hxx
-hedabu: ..\inc\colorcfg.hxx %_DEST%\inc%_EXT%\svx\colorcfg.hxx
 hedabu: ..\inc\simptabl.hxx %_DEST%\inc%_EXT%\svx\simptabl.hxx
 hedabu: ..\inc\ctredlin.hxx %_DEST%\inc%_EXT%\svx\ctredlin.hxx
 hedabu: ..\inc\backgrnd.hxx %_DEST%\inc%_EXT%\svx\backgrnd.hxx
@@ -538,6 +534,7 @@ hedabu: ..\inc\e3dundo.hxx %_DEST%\inc%_EXT%\svx\e3dundo.hxx
 hedabu: ..\inc\anchorid.hxx %_DEST%\inc%_EXT%\svx\anchorid.hxx
 hedabu: ..\inc\msdffimp.hxx %_DEST%\inc%_EXT%\svx\msdffimp.hxx
 hedabu: ..\inc\msdffdef.hxx %_DEST%\inc%_EXT%\svx\msdffdef.hxx
+hedabu: ..\inc\msfiltertracer.hxx %_DEST%\inc%_EXT%\svx\msfiltertracer.hxx
 hedabu: ..\inc\unoshtxt.hxx %_DEST%\inc%_EXT%\svx\unoshtxt.hxx
 hedabu: ..\inc\numitem.hxx %_DEST%\inc%_EXT%\svx\numitem.hxx
 hedabu: ..\inc\numpages.hxx %_DEST%\inc%_EXT%\svx\numpages.hxx
@@ -643,6 +640,7 @@ hedabu: ..\inc\ParseContext.hxx %_DEST%\inc%_EXT%\svx\ParseContext.hxx
 ..\xml\AccessibleGraphicShape.xml %_DEST%\xml%_EXT%\AccessibleGraphicShape.xml
 ..\xml\AccessibleOLEShape.xml %_DEST%\xml%_EXT%\AccessibleOLEShape.xml
 ..\xml\AccessibleControlShape.xml %_DEST%\xml%_EXT%\AccessibleControlShape.xml
+..\xml\AccessibleEditableTextPara.xml %_DEST%\xml%_EXT%\AccessibleEditableTextPara.xml
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmitems.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 11:46:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,75 +69,6 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-
-//========================================================================
-// class FmFormInfoItem
-//========================================================================
-TYPEINIT1(FmFormInfoItem, SfxPoolItem);
-
-//------------------------------------------------------------------------------
-sal_Bool FmFormInfoItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId ) const
-{
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
-    nMemberId &= ~CONVERT_TWIPS;
-    switch ( nMemberId )
-    {
-        case MID_POS: rVal <<= aInfo.Pos; break;
-        case MID_COUNT: rVal <<= aInfo.Count; break;
-        case MID_READONLY : rVal <<= aInfo.ReadOnly; break;
-        default: DBG_ERROR("Wrong MemberId"); return sal_False;
-    }
-
-    return sal_True;
-}
-
-//------------------------------------------------------------------------------
-sal_Bool FmFormInfoItem::PutValue(const ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId )
-{
-    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
-    nMemberId &= ~CONVERT_TWIPS;
-    switch ( nMemberId )
-    {
-        case MID_POS: return( rVal >>= aInfo.Pos); break;
-        case MID_COUNT: return( rVal >>= aInfo.Count); break;
-        case MID_READONLY : return( rVal >>= aInfo.ReadOnly); break;
-        default: DBG_ERROR("Wrong MemberId"); return sal_False;
-    }
-
-    return sal_False;
-}
-
-//------------------------------------------------------------------------------
-int FmFormInfoItem::operator==( const SfxPoolItem& rAttr ) const
-{
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
-    return ( aInfo == ( (FmFormInfoItem&)rAttr ).GetInfo() );
-}
-
-//------------------------------------------------------------------------------
-SfxPoolItem* FmFormInfoItem::Clone( SfxItemPool* ) const
-{
-    return new FmFormInfoItem( *this );
-}
-
-//------------------------------------------------------------------------------
-SvStream& FmFormInfoItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
-{
-    rStrm << (long) aInfo.Pos;
-    rStrm << (long) aInfo.Count;
-    return rStrm;
-}
-
-//------------------------------------------------------------------------------
-SfxPoolItem* FmFormInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
-{
-    sal_Int32 nCount, nPos;
-    rStrm >> nPos >> nCount;
-
-    FmFormInfoItem* pAttr = new FmFormInfoItem(Which(), FmFormInfo(nPos, nCount) );
-    return pAttr;
-}
-
 
 //========================================================================
 // class FmInterfaceItem

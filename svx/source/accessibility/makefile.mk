@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: thb $ $Date: 2002-12-12 12:36:51 $
+#   last change: $Author: hr $ $Date: 2003-03-27 15:00:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,7 @@ CXXFILES =								\
     ShapeTypeHandler.cxx				\
     SvxShapeTypes.cxx					\
     AccessibleControlShape.cxx			\
+    accessiblewrapper.cxx
 
 SLOFILES =	\
     $(SLO)$/charmapacc.obj						\
@@ -123,7 +124,8 @@ SLOFILES =	\
     $(SLO)$/AccessibleImageBullet.obj			\
     $(SLO)$/ShapeTypeHandler.obj				\
     $(SLO)$/SvxShapeTypes.obj					\
-    $(SLO)$/AccessibleControlShape.obj
+    $(SLO)$/AccessibleControlShape.obj			\
+    $(SLO)$/accessiblewrapper.obj
 
 SRS2NAME = accessibility
 SRC2FILES = accessibility.src

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-10-29 15:18:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #ifndef _SVX_DIALMGR_HXX
 #include <dialmgr.hxx>
 #endif
+#ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
+#include <comphelper/accessibleeventnotifier.hxx>
+#endif
 
 
 using namespace ::cppu;
@@ -224,9 +227,9 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     SvxRectCtlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
     mpRepr( &rRepr ),
-    mpEventListeners( NULL ),
     mnSelectedChild( NOCHILDSELECTED ),
-    mbAngleMode( rRepr.GetNumOfChilds() == 8 )
+    mbAngleMode( rRepr.GetNumOfChilds() == 8 ),
+    mnClientId( 0 )
 {
     DBG_CTOR( SvxRectCtlAccessibleContext, NULL );
 
@@ -491,23 +494,33 @@ lang::Locale SAL_CALL SvxRectCtlAccessibleContext::getLocale( void ) throw( Ille
 void SAL_CALL SvxRectCtlAccessibleContext::addEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
-    if( xListener.is() )
+    if (xListener.is())
     {
         ::osl::MutexGuard   aGuard( m_aMutex );
-
-        if( !mpEventListeners )
-            mpEventListeners = new cppu::OInterfaceContainerHelper( m_aMutex );
-
-        mpEventListeners->addInterface( xListener );
+        if (!mnClientId)
+            mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
+        comphelper::AccessibleEventNotifier::addEventListener( mnClientId, xListener );
     }
 }
 
 void SAL_CALL SvxRectCtlAccessibleContext::removeEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
-    if( xListener.is() && mpEventListeners )
-        mpEventListeners->removeInterface( xListener );
+    if (xListener.is())
+    {
+        ::osl::MutexGuard   aGuard( m_aMutex );
+
+        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
+        if ( !nListenerCount )
+        {
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+            mnClientId = 0;
+        }
+    }
 }
 
 void SAL_CALL SvxRectCtlAccessibleContext::addFocusListener( const Reference< awt::XFocusListener >& xListener )
@@ -767,39 +780,8 @@ void SvxRectCtlAccessibleContext::setDescription( const OUString& rDescr )
 
 void SvxRectCtlAccessibleContext::CommitChange( const AccessibleEventObject& rEvent )
 {
-    ::osl::ClearableMutexGuard  aGuard( m_aMutex );
-    if( mpEventListeners )
-    {
-        //  Call all listeners.
-        Sequence< Reference< XInterface > > aListeners = mpEventListeners->getElements();
-
-        aGuard.clear();
-
-        sal_uInt32                          nLength( aListeners.getLength() );
-        if( nLength )
-        {
-            const Reference< XInterface >*  pInterfaces = aListeners.getConstArray();
-            sal_uInt32                      i = nLength;
-
-            while( i )
-            {   // double while because of performance lack of try-catch in loop
-                try
-                {
-                    while( i )
-                    {
-                        ( static_cast< XAccessibleEventListener* >( pInterfaces->get() ) )->notifyEvent( rEvent );
-                        --i;
-                        ++pInterfaces;
-                    }
-                }
-                catch( RuntimeException& )
-                {
-                    --i;
-                    ++pInterfaces;
-                }
-            }
-        }
-    }
+    if (mnClientId)
+        comphelper::AccessibleEventNotifier::addEvent( mnClientId, rEvent );
 }
 
 void SAL_CALL SvxRectCtlAccessibleContext::disposing()
@@ -826,23 +808,14 @@ void SAL_CALL SvxRectCtlAccessibleContext::disposing()
             mpChilds = NULL;
         }
 
-        const Reference< XInterface >   xSource( *this );
-        Any                             aDefunc;
-        aDefunc <<= AccessibleStateType::DEFUNC;
-        CommitChange( AccessibleEventObject( xSource, AccessibleEventId::ACCESSIBLE_STATE_EVENT, Any(), aDefunc ) );
-
         {
             ::osl::MutexGuard   aGuard( m_aMutex );
 
-            if( mpEventListeners )
+            // Send a disposing to all listeners.
+            if ( mnClientId )
             {
-                lang::EventObject   aEvent;
-                aEvent.Source = static_cast< cppu::OWeakObject* >( this );
-
-                mpEventListeners->disposeAndClear( aEvent );
-                delete mpEventListeners;
-
-                mpEventListeners = NULL;
+                comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
+                mnClientId =  0;
             }
 
             mxParent = Reference< XAccessible >();
@@ -909,11 +882,11 @@ SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     mxParent(rxParent),
     mrParentWindow( rParentWindow ),
     mpBoundingBox( new Rectangle( rBoundingBox ) ),
-    mpEventListeners( NULL ),
     msName( rName ),
     msDescription( rDescription ),
     mbIsChecked( sal_False ),
-    mnIndexInParent( nIndexInParent )
+    mnIndexInParent( nIndexInParent ),
+    mnClientId( 0 )
 {
     DBG_CTOR( SvxRectCtlChildAccessibleContext, NULL );
 }
@@ -923,20 +896,11 @@ SvxRectCtlChildAccessibleContext::~SvxRectCtlChildAccessibleContext()
 {
     DBG_DTOR( SvxRectCtlChildAccessibleContext, NULL );
 
-    osl_incrementInterlockedCount( &m_refCount );
-        // prevent to enter this a second time
-
-    if( mpEventListeners )
+    if( IsAlive() )
     {
-        lang::EventObject aEvent;
-        aEvent.Source = static_cast< cppu::OWeakObject* >( this );
-
-        mpEventListeners->disposeAndClear( aEvent );
-        delete mpEventListeners;
-        mpEventListeners = NULL;
+        osl_incrementInterlockedCount( &m_refCount );
+        dispose();      // set mpRepr = NULL & release all childs
     }
-
-    delete mpBoundingBox;
 }
 
 //=====  XAccessible  =========================================================
@@ -1130,12 +1094,12 @@ lang::Locale SAL_CALL SvxRectCtlChildAccessibleContext::getLocale( void ) throw(
 void SAL_CALL SvxRectCtlChildAccessibleContext::addEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
-    ::osl::MutexGuard   aGuard( maMutex );
-    if( xListener.is() )
+    if (xListener.is())
     {
-        if( !mpEventListeners )
-            mpEventListeners = new cppu::OInterfaceContainerHelper( maMutex );
-        mpEventListeners->addInterface( xListener );
+        ::osl::MutexGuard   aGuard( maMutex );
+        if (!mnClientId)
+            mnClientId = comphelper::AccessibleEventNotifier::registerClient( );
+        comphelper::AccessibleEventNotifier::addEventListener( mnClientId, xListener );
     }
 }
 
@@ -1145,9 +1109,21 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::addEventListener( const Referenc
 void SAL_CALL SvxRectCtlChildAccessibleContext::removeEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException )
 {
-    ::osl::MutexGuard   aGuard( maMutex );
-    if( xListener.is() && mpEventListeners )
-        mpEventListeners->removeInterface( xListener );
+    if (xListener.is())
+    {
+        ::osl::MutexGuard   aGuard( maMutex );
+
+        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
+        if ( !nListenerCount )
+        {
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+            mnClientId = 0;
+        }
+    }
 }
 
 //=====  XAccessibleValue  ================================================
@@ -1230,27 +1206,26 @@ Sequence< sal_Int8 > SAL_CALL SvxRectCtlChildAccessibleContext::getImplementatio
 
 void SvxRectCtlChildAccessibleContext::CommitChange( const AccessibleEventObject& rEvent )
 {
-    ::osl::ClearableMutexGuard  aGuard( maMutex );
-    if( mpEventListeners )
+    if (mnClientId)
+        comphelper::AccessibleEventNotifier::addEvent( mnClientId, rEvent );
+}
+
+void SAL_CALL SvxRectCtlChildAccessibleContext::disposing()
+{
+    if( !rBHelper.bDisposed )
     {
-        //  Call all listeners.
-        Sequence< Reference< XInterface > > aListeners = mpEventListeners->getElements();
+        ::osl::MutexGuard   aGuard( maMutex );
 
-        aGuard.clear();
-
-        sal_uInt32                                          nLength = aListeners.getLength();
-        if( nLength )
+        // Send a disposing to all listeners.
+        if ( mnClientId )
         {
-            const Reference< XInterface >*      pInterfaces = aListeners.getConstArray();
-            try
-            {
-                for( sal_uInt32 i = nLength ; i ; --i, ++pInterfaces )
-                    ( static_cast< XAccessibleEventListener* >( pInterfaces->get() ) )->notifyEvent( rEvent );
-            }
-            catch( RuntimeException& )
-            {
-            }
+            comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
+            mnClientId =  0;
         }
+
+        mxParent = Reference< XAccessible >();
+
+        delete mpBoundingBox;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-02-01 11:13:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 14:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,8 @@ public:
 
 class SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
 {
-    friend SvxGridTabPage;
+    // #i9076#
+    friend class SvxGridTabPage;
 
 public:
     SvxGridItem( USHORT nWhich) : SfxPoolItem(nWhich){};

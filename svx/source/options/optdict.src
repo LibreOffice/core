@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-19 20:14:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,14 @@ ModalDialog RID_SFXDLG_NEWDICT
     Text [ dutch ] = "Nieuw woordenboek" ;
     Text [ spanish ] = "Crear diccionario de usuario" ;
     Text [ english_us ] = "New Dictionary" ;
-    Text[ chinese_simplified ] = "½¨Á¢Ê¹ÓÃÕß´Êµä";
-    Text[ russian ] = "Ñîçäàòü ñëîâàğü ïîëüçîâàòåëÿ";
+    Text[ chinese_simplified ] = "å»ºç«‹ä½¿ç”¨è€…è¯å…¸";
+    Text[ russian ] = "Íîâûé ñëîâàğü";
     Text[ polish ] = "Utwórz w³asny s³ownik";
-    Text[ japanese ] = "Õ°»Ş°«‘‚Ìì¬";
-    Text[ chinese_traditional ] = "¦Û­q¦r¨å";
+    Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼è¾æ›¸ã®ä½œæˆ";
+    Text[ chinese_traditional ] = "è‡ªè¨‚å­—å…¸";
     Text[ arabic ] = "ÅäÔÇÁ ŞÇãæÓ ÇáãÓÊÎÏã";
     Text[ greek ] = "Äçìéïõñãßá ëåîéêïı";
-    Text[ korean ] = "»õ »ç¿ëÀÚ»çÀü";
+    Text[ korean ] = "ì‚¬ì „ ìƒˆë¡œ ë§Œë“¤ê¸°";
     Text[ turkish ] = "Kullanıcı sözlüğü oluştur";
     Text[ language_user1 ] = " ";
     FixedText FT_DICTNAME
@@ -110,23 +110,24 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ portuguese ] = "~Nome" ;
         Text [ finnish ] = "~Nimi" ;
         Text [ danish ] = "Navn" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ swedish ] = "~Namn" ;
         Text [ dutch ] = "~Naam" ;
         Text [ spanish ] = "~Nombre" ;
         Text [ english_us ] = "~Name" ;
         LeftLabel = TRUE ;
-        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ chinese_simplified ] = "åç§°(~N)";
         Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "–¼‘O(~N)";
-        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ japanese ] = "åå‰(~N)";
+        Text[ chinese_traditional ] = "åç¨±(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ korean ] = "ì´ë¦„(~N)";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nombre";
+        Text[ catalan ] = "~Nom";
+        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­";
     };
     Edit ED_DICTNAME
     {
@@ -147,23 +148,24 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ portuguese ] = "~Língua" ;
         Text [ finnish ] = "~Kieli" ;
         Text [ danish ] = "Sprog" ;
-        Text [ french ] = "~Langue" ;
+        Text [ french ] = "Langue" ;
         Text [ swedish ] = "~Språk" ;
         Text [ dutch ] = "~Taal" ;
         Text [ spanish ] = "I~dioma" ;
         Text [ english_us ] = "~Language" ;
         LeftLabel = TRUE ;
-        Text[ chinese_simplified ] = "ÓïÑÔ(~L)";
+        Text[ chinese_simplified ] = "è¯­è¨€(~L)";
         Text[ russian ] = "ßçûê";
         Text[ polish ] = "Jêzyk";
-        Text[ japanese ] = "Œ¾Œê(~L)";
-        Text[ chinese_traditional ] = "»y¨¥(~L)";
+        Text[ japanese ] = "è¨€èª(~L)";
+        Text[ chinese_traditional ] = "èªè¨€(~L)";
         Text[ arabic ] = "ÇááÛÉ";
         Text[ greek ] = "Ãëşóóá";
-        Text[ korean ] = "¾ğ¾î(~L)";
+        Text[ korean ] = "ì–¸ì–´(~L)";
         Text[ turkish ] = "Dil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "I~dioma";
+        Text[ catalan ] = "~Idioma";
+        Text[ thai ] = "~à¸ à¸²à¸©à¸²";
     };
     ListBox LB_DICTLANG
     {
@@ -189,17 +191,18 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ dutch ] = "~Uitzondering (-)" ;
         Text [ spanish ] = "~Excepción (-)" ;
         Text [ english_us ] = "~Exception (-)" ;
-        Text[ chinese_simplified ] = "ÀıÍâ(-)(~E)";
+        Text[ chinese_simplified ] = "ä¾‹å¤–(-)(~E)";
         Text[ russian ] = "Èñêëş÷åíèå (-)";
         Text[ polish ] = "Wyj¹tek (-)";
-        Text[ japanese ] = "—áŠO(-) (~E)";
-        Text[ chinese_traditional ] = "¨Ò¥~(-)(~E)";
+        Text[ japanese ] = "ä¾‹å¤–(-) (~E)";
+        Text[ chinese_traditional ] = "ä¾‹å¤–(-)(~E)";
         Text[ arabic ] = "ÇÓÊËäÇÁ (-)";
         Text[ greek ] = "Åî~áßñåóç (-)";
-        Text[ korean ] = "¿¹¿Ü (-)(~E)";
+        Text[ korean ] = "ì˜ˆì™¸ (-)(~E)";
         Text[ turkish ] = "İstisna (-)";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Excepción (-)";
+        Text[ catalan ] = "~Excepció (-)";
+        Text[ thai ] = "~à¸‚à¹‰à¸­à¸¢à¸à¹€à¸§à¹‰à¸™ (-)";
     };
     FixedLine GB_NEWDICT
     {
@@ -216,21 +219,22 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ finnish ] = "Sanasto" ;
         Text [ danish ] = "Ordbog" ;
         Text [ french ] = "Dictionnaire" ;
-        Text [ swedish ] = "Ordbok" ;
+        Text [ swedish ] = "Ordlista" ;
         Text [ dutch ] = "Woordenboek" ;
         Text [ spanish ] = "Diccionario" ;
         Text [ english_us ] = "Dictionary" ;
-        Text[ chinese_simplified ] = "×Öµä";
+        Text[ chinese_simplified ] = "å­—å…¸";
         Text[ russian ] = "Ñëîâàğü";
         Text[ polish ] = "S³ownik";
-        Text[ japanese ] = "«‘";
-        Text[ chinese_traditional ] = "µü¨å";
+        Text[ japanese ] = "è¾æ›¸";
+        Text[ chinese_traditional ] = "è©å…¸";
         Text[ arabic ] = "ÇáŞÇãæÓ";
         Text[ greek ] = "Ëåîéêü";
-        Text[ korean ] = "»çÀü";
+        Text[ korean ] = "ì‚¬ì „";
         Text[ turkish ] = "Sözlük";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Diccionario";
+        Text[ catalan ] = "Diccionari";
+        Text[ thai ] = "à¸à¸ˆà¸™à¸²à¸™à¸¸à¸à¸£à¸¡";
     };
     OKButton BTN_NEWDICT_OK
     {
@@ -249,7 +253,8 @@ ModalDialog RID_SFXDLG_NEWDICT
         Pos = MAP_APPFONT ( 157 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ catalan ] = "Crear diccionario de usuario";
+    Text[ catalan ] = "Diccionari nou";
+    Text[ thai ] = "à¸à¸ˆà¸™à¸²à¸™à¸¸à¸à¸£à¸¡à¹ƒà¸«à¸¡à¹ˆ";
 };
 
  // RID_SFXDLG_EDITDICT ---------------------------------------------------
@@ -275,7 +280,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     Text [ dutch ] = "Gebruikerswoordenboek bewerken" ;
     Text [ spanish ] = "Editar diccionario de usuario" ;
     Text [ english_us ] = "Edit Custom Dictionary" ;
-    Text[ chinese_simplified ] = "±à¼­Ê¹ÓÃÕß´Êµä";
+    Text[ chinese_simplified ] = "ç¼–è¾‘ä½¿ç”¨è€…è¯å…¸";
 
     Moveable = TRUE ;
     FixedText FT_BOOK
@@ -288,23 +293,24 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ dutch ] = "~Boek" ;
         Text [ italian ] = "Libro" ;
         Text [ spanish ] = "~Libro" ;
-        Text [ french ] = "~Livre" ;
+        Text [ french ] = "Livre" ;
         Text [ swedish ] = "~Bok" ;
         Text [ danish ] = "Bog" ;
         Text [ portuguese ] = "~Livro" ;
         Text [ portuguese_brazilian ] = "~Buch" ;
-        Text[ chinese_simplified ] = "Êé¼®(~B)";
+        Text[ chinese_simplified ] = "ä¹¦ç±(~B)";
         Text[ russian ] = "~Êíèãà";
         Text[ polish ] = "Ksi¹¿ka";
-        Text[ japanese ] = "ÌŞ¯¸(~B)";
-        Text[ chinese_traditional ] = "®Ñ(~B)";
+        Text[ japanese ] = "æœ¬(~B)";
+        Text[ chinese_traditional ] = "æ›¸(~B)";
         Text[ arabic ] = "ÇáßÊÇÈ";
         Text[ greek ] = "Âéâëßï";
-        Text[ korean ] = "Ã¥(~B)";
+        Text[ korean ] = "ì±…(~B)";
         Text[ turkish ] = "Kitap";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Libro";
+        Text[ catalan ] = "~Llibre";
         Text[ finnish ] = "~Kirja";
+        Text[ thai ] = "~à¸«à¸™à¸±à¸‡à¸ªà¸·à¸­";
     };
     ListBox LB_ALLDICTS
     {
@@ -323,23 +329,24 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ dutch ] = "T~aal" ;
         Text [ italian ] = "Lingua" ;
         Text [ spanish ] = "I~dioma" ;
-        Text [ french ] = "~Langue" ;
+        Text [ french ] = "Langue" ;
         Text [ swedish ] = "S~pråk" ;
         Text [ danish ] = "Sprog" ;
         Text [ portuguese_brazilian ] = "S~prache" ;
         Text [ portuguese ] = "~Língua" ;
-        Text[ chinese_simplified ] = "ÓïÑÔ(~L)";
+        Text[ chinese_simplified ] = "è¯­è¨€(~L)";
         Text[ russian ] = "ßçûê";
         Text[ polish ] = "Jêzyk";
-        Text[ japanese ] = "Œ¾Œê(~L)";
-        Text[ chinese_traditional ] = "»y¨¥(~L)";
+        Text[ japanese ] = "è¨€èª(~L)";
+        Text[ chinese_traditional ] = "èªè¨€(~L)";
         Text[ arabic ] = "ÇááÛÉ";
         Text[ greek ] = "Ãëşóóá";
-        Text[ korean ] = "¾ğ¾î(~L)";
+        Text[ korean ] = "ì–¸ì–´(~L)";
         Text[ turkish ] = "Dil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "I~dioma";
+        Text[ catalan ] = "~Idioma";
         Text[ finnish ] = "~Kieli";
+        Text[ thai ] = "~à¸ à¸²à¸©à¸²";
     };
     ListBox LB_DICTLANG
     {
@@ -373,16 +380,17 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ swedish ] = "~Ord";
         Text[ polish ] = "S³owo";
         Text[ portuguese_brazilian ] = "Word";
-        Text[ japanese ] = "’PŒê(~W)";
-        Text[ chinese_simplified ] = "×Ö(~W)";
-        Text[ chinese_traditional ] = "¦r(~W)";
+        Text[ japanese ] = "å˜èª(~W)";
+        Text[ chinese_simplified ] = "å­—(~W)";
+        Text[ chinese_traditional ] = "å­—(~W)";
         Text[ arabic ] = "ÇáßáãÉ";
         Text[ greek ] = "Ëİîç";
-        Text[ korean ] = "´Ü¾î(~W)";
+        Text[ korean ] = "ë‹¨ì–´(~W)";
         Text[ turkish ] = "Sözcük";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Palabra";
+        Text[ catalan ] = "~Paraula";
         Text[ finnish ] = "~Sana";
+        Text[ thai ] = "~à¸„à¸³";
     };
     Edit ED_WORD
     {
@@ -399,7 +407,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ English ] = "Replace ~By:" ;
         Text[ english_us ] = "Replace ~By:";
         Text[ portuguese ] = "~Sugestão";
-        Text[ russian ] = "Âàğèàíòû";
+        Text[ russian ] = "Çàìåíÿòü:";
         Text[ dutch ] = "~Voorstel";
         Text[ french ] = "Suggestion";
         Text[ spanish ] = "~Sugerencia";
@@ -408,16 +416,17 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ swedish ] = "~Förslag";
         Text[ polish ] = "Propozycja";
         Text[ portuguese_brazilian ] = "Replace ~By:";
-        Text[ japanese ] = "’ñˆÄ(~B):";
-        Text[ chinese_simplified ] = "½¨Òé(~B)";
-        Text[ chinese_traditional ] = "«ØÄ³(~B)";
+        Text[ japanese ] = "ææ¡ˆ(~B):";
+        Text[ chinese_simplified ] = "å»ºè®®(~B)";
+        Text[ chinese_traditional ] = "å»ºè­°(~B)";
         Text[ arabic ] = "ÇáÇŞÊÑÇÍ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ğñïôåéíüìåíá:";
-        Text[ korean ] = "Á¦¾È(~B):";
+        Text[ korean ] = "ì œì•ˆ(~B):";
         Text[ turkish ] = "Öneri";
-        Text[ catalan ] = "~Sugerencia";
+        Text[ catalan ] = "~Sugerència";
         Text[ finnish ] = "~Korvaus:";
+        Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆ~à¸”à¹‰à¸§à¸¢:";
     };
 
     Edit ED_REPLACE
@@ -444,18 +453,19 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ danish ] = "Ny" ;
         Text [ portuguese_brazilian ] = "~Neu" ;
         Text [ portuguese ] = "~Novo" ;
-        Text[ chinese_simplified ] = "ĞÂ×Ö´Ê(~N)";
-        Text[ russian ] = "Ñîçä~àòü";
+        Text[ chinese_simplified ] = "æ–°å­—è¯(~N)";
+        Text[ russian ] = "Ñîçäàòü";
         Text[ polish ] = "Nowy";
-        Text[ japanese ] = "V‹Kì¬(~N)";
-        Text[ chinese_traditional ] = "·s¦rµü(~N)";
+        Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";
+        Text[ chinese_traditional ] = "æ–°å­—è©(~N)";
         Text[ arabic ] = "ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "»õ·Î(~N)";
+        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nuevo";
+        Text[ catalan ] = "~Nou";
         Text[ finnish ] = "~Uusi";
+        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ";
     };
     PushButton PB_DELETE_REPLACE
     {
@@ -466,25 +476,26 @@ ModalDialog RID_SFXDLG_EDITDICT
         TabStop = TRUE ;
         Text [ english_us ] = "~Delete" ;
         Text [ italian ] = "Elimina" ;
-        Text [ spanish ] = "~Eliminar" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ spanish ] = "~Borrar" ;
+        Text [ french ] = "Supprimer" ;
         Text [ dutch ] = "~Wissen" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
         Text [ portuguese_brazilian ] = "~L?chen" ;
         Text [ portuguese ] = "E~liminar" ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
+        Text[ thai ] = "~à¸¥à¸š";
     };
     Control TLB_REPLACE
     {
@@ -504,22 +515,23 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ portuguese ] = "~Substituir" ;
         Text [ finnish ] = "~Korvaa" ;
         Text [ danish ] = "Erstat" ;
-        Text [ french ] = "~Remplacer" ;
+        Text [ french ] = "Remplacer" ;
         Text [ swedish ] = "~Ersätt" ;
         Text [ dutch ] = "~Vervangen" ;
         Text [ spanish ] = "~Reemplazar" ;
         Text [ english_us ] = "~Replace" ;
-        Text[ chinese_simplified ] = "¸üÌæ(~R)";
+        Text[ chinese_simplified ] = "æ›¿æ¢(~R)";
         Text[ russian ] = "Çàìåíèòü";
         Text[ polish ] = "Zamieñ";
-        Text[ japanese ] = "’uŠ·(~R)";
-        Text[ chinese_traditional ] = "´À¥N(~R)";
+        Text[ japanese ] = "ç½®æ›(~R)";
+        Text[ chinese_traditional ] = "æ›¿ä»£(~R)";
         Text[ arabic ] = "ÇÓÊÈÏÇá";
         Text[ greek ] = "ÁíôéêáôÜóôáóç";
-        Text[ korean ] = "¹Ù²Ù±â(~R)";
+        Text[ korean ] = "ë°”ê¾¸ê¸°(~R)";
         Text[ turkish ] = "Değiştir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Reemplazar";
+        Text[ catalan ] = "~Reemplaça";
+        Text[ thai ] = "à¹~à¸—à¸™à¸—à¸µà¹ˆ";
     };
 
 
@@ -545,33 +557,35 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ portuguese ] = "Fechar" ;
         Text [ finnish ] = "~Sulje" ;
         Text [ danish ] = "Luk" ;
-        Text [ french ] = "~Fermer" ;
+        Text [ french ] = "Fermer" ;
         Text [ swedish ] = "~Stäng" ;
         Text [ dutch ] = "~Sluiten" ;
         Text [ spanish ] = "~Cerrar" ;
         Text [ english_us ] = "~Close" ;
-        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ chinese_simplified ] = "å…³é—­(~C)";
         Text[ russian ] = "Çàêğûòü";
         Text[ polish ] = "Zamknij";
-        Text[ japanese ] = "•Â‚¶‚é(~C)";
-        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ japanese ] = "é–‰ã˜ã‚‹(~C)";
+        Text[ chinese_traditional ] = "é—œé–‰(~C)";
         Text[ arabic ] = "ÅÛáÇŞ";
         Text[ greek ] = "Êëåßóéìï";
-        Text[ korean ] = "´İ±â(~C)";
+        Text[ korean ] = "ë‹«ê¸°(~C)";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cerrar";
+        Text[ catalan ] = "~Tanca";
+        Text[ thai ] = "~à¸›à¸´à¸”";
     };
     Text[ russian ] = "Ïğàâêà ñëîâàğÿ ïîëüçîâàòåëÿ";
     Text[ polish ] = "Edytuj s³ownik u¿ytkownika";
-    Text[ japanese ] = "Õ°»Ş°«‘‚Ì•ÒW";
-    Text[ chinese_traditional ] = "½s¿è¦Û­q¦r¨å";
+    Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼è¾æ›¸ã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯è‡ªè¨‚å­—å…¸";
     Text[ arabic ] = "ÊÍÑíÑ ŞÇãæÓ ÇáãÓÊÎÏã";
     Text[ greek ] = "Åğåîåñãáóßá ëåîéêïı";
-    Text[ korean ] = "»ç¿ëÀÚ»çÀü ÆíÁı";
+    Text[ korean ] = "ì‚¬ìš©ì ì‚¬ì „ í¸ì§‘";
     Text[ turkish ] = "Kullanıcı sözlüğünü düzenle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editar diccionario de usuario";
+    Text[ catalan ] = "Edita el diccionari personalitzat";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸à¸ˆà¸™à¸²à¸™à¸¸à¸à¸£à¸¡à¹à¸šà¸šà¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
 };
 
  // Strings ---------------------------------------------------------------
@@ -588,18 +602,19 @@ String RID_SVXSTR_OPT_DOUBLE_DICTS
     Text [ danish ] = "Det angivne navn findes allerede.\nIndtast venligst et nyt navn." ;
     Text [ portuguese ] = "O nome fornecido já existe.\nPor favor introduza outro nome." ;
     Text [ portuguese_brazilian ] = "Der angegebene Name ist schon vorhanden.\nBitte geben Sie einen neuen Namen ein." ;
-    Text[ chinese_simplified ] = "Õâ¸ö¸ø¶¨µÄÃû³ÆÒÑ¾­´æÔÚ¡£\nÇëÄúÊäÈëÒ»¸öĞÂÃû³Æ¡£";
-    Text[ russian ] = "Çàäàííîå èìÿ óæå èìååòñÿ.\nÂâåäèòå, ïîæàëóéñòà, íîâîå èìÿ.";
+    Text[ chinese_simplified ] = "è¿™ä¸ªç»™å®šçš„åç§°å·²ç»å­˜åœ¨ã€‚\nè¯·æ‚¨è¾“å…¥ä¸€ä¸ªæ–°åç§°ã€‚";
+    Text[ russian ] = "Çàäàííîå èìÿ óæå ñóùåñòâóåò.\nÂâåäèòå íîâîå èìÿ.";
     Text[ polish ] = "Podana nazwa ju¿ istnieje.\nProszê wpisaæ now¹ nazwê.";
-    Text[ japanese ] = "“ü—Í‚µ‚½–¼‘O‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B\nV‚µ‚¢–¼‘O‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-    Text[ chinese_traditional ] = "³o­Ó¿é¤Jªº¦WºÙ¤w¸g¦s¦b¡C\n½Ğ±z¿é¤J¤@­Ó·s¦WºÙ¡C";
+    Text[ japanese ] = "å…¥åŠ›ã—ãŸåå‰ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚\næ–°ã—ã„åå‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
+    Text[ chinese_traditional ] = "é€™å€‹è¼¸å…¥çš„åç¨±å·²ç¶“å­˜åœ¨ã€‚\nè«‹æ‚¨è¼¸å…¥ä¸€å€‹æ–°åç¨±ã€‚";
     Text[ arabic ] = "ÇáÇÓã ÇáĞí ÃÏÎáÊå ãæÌæÏ ãÓÈŞÇğ.\nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÌÏíÏ.";
     Text[ greek ] = "Ôï üíïìá õğÜñ÷åé Şäç.\nĞáñáêáëş åğéëİîôå êÜğïéï Üëëï üíïìá.";
-    Text[ korean ] = "ÁöÁ¤µÈ ÀÌ¸§Àº ÀÌ¹Ì ÀÖ½À´Ï´Ù.\n»õ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À.";
+    Text[ korean ] = "ì§€ì •ëœ ì´ë¦„ì€ ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.\nìƒˆ ì´ë¦„ì„ ì…ë ¥í•˜ì‹­ì‹œì˜¤.";
     Text[ turkish ] = "Girilen ad mevcut durumda.\nLütfen başka bir ad girin.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Este nombre ya existe.\nPor favor escriba otro nombre.";
+    Text[ catalan ] = "Aquest nom ja existeix.\nEscribiu un altre nom.";
     Text[ finnish ] = "Määritetty nimi on jo käytössä.\nMääritä uusi nimi.";
+    Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸—à¸µà¹ˆà¸£à¸°à¸šà¸¸à¸¡à¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§\nà¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¹ƒà¸«à¸¡à¹ˆ";
 };
  // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
 QueryBox RID_SFXQB_SET_LANGUAGE
@@ -612,29 +627,43 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : M÷chten Sie die Sprache des W÷rterbuches '%1' õndern? */
     Message = "Möchten Sie die Sprache des Wörterbuches '%1' ändern?" ;
     Message [ English ] = "Do you want to replace the language of the dictionary '%1'?" ;
-    Message [ dutch ] = "Wilt u de taal van het woordenboek '%1' veranderen?" ;
+    Message [ dutch ] = "Wilt u de taal van het woordenboek '%1' wijzigen?" ;
     Message [ english_us ] = "Do you want to change the '%1' dictionary language?" ;
     Message [ italian ] = "Cambiare la lingua del dizionario '%1' ?" ;
     Message [ spanish ] = "¿Desea cambiar el idioma del diccionario '%1' ?" ;
     Message [ french ] = "Désirez-vous changer la langue du dictionnaire '%1' ?" ;
-    Message [ swedish ] = "Vill Du ändra språket i ordboken '%1'?" ;
+    Message [ swedish ] = "Vill du ändra språket i ordlistan '%1'?" ;
     Message [ danish ] = "Vil du ændre sproget i ordbogen '%1'?" ;
     Message [ portuguese ] = "Deseja mudar a língua do dicionário '%1'?" ;
     Message [ portuguese_brazilian ] = "M?hten Sie die Sprache des W?terbuches '%1' ?ndern?" ;
-    Message[ chinese_simplified ] = "ÄúÒª¸ü¸Ä´Êµä '%1' µÄÓïÑÔÂğ£¿";
-    Message[ russian ] = "Âû õîòèòå èçìåíèòü ÿçûê ñëîàâğÿ '%1'?";
+    Message[ chinese_simplified ] = "æ‚¨è¦æ›´æ”¹è¯å…¸ '%1' çš„è¯­è¨€å—ï¼Ÿ";
+    Message[ russian ] = "Èçìåíèòü ÿçûê ñëîâàğÿ '%1'?";
     Message[ polish ] = "Czy chcesz zmieniæ jêzyk s³ownika '%1'?";
-    Message[ japanese ] = "«‘u%1v‚ÌŒ¾Œê‚ğ•ÏX‚µ‚Ü‚·‚©H";
-    Message[ chinese_traditional ] = "±z­nªí®æµü¨å'%1'ªº»y¨¥¡H";
+    Message[ japanese ] = "è¾æ›¸ã€Œ%1ã€ã®è¨€èªã‚’å¤‰æ›´ã—ã¾ã™ã‹ï¼Ÿ";
+    Message[ chinese_traditional ] = "è¦è®Šæ›´è©å…¸<%1>çš„èªè¨€ï¼Ÿ";
     Message[ arabic ] = "åá ÊÑíÏ ÊÛííÑ áÛÉ ÇáŞÇãæÓ '%1'¿";
     Message[ greek ] = "Èİëåôå íá áëëÜîåôå ôçí ãëşóóá ôïõ ëåîéêïı '%1';";
-    Message[ korean ] = "»çÀü'%1'ÀÇ ¾ğ¾î¸¦ º¯°æÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "ì‚¬ì „ '%1'ì˜ ì–¸ì–´ë¥¼ ë³€ê²½í•˜ê² ìŠµë‹ˆê¹Œ?";
     Message[ turkish ] = "'%1' sözlüğünün dilini değiştirmek isityor musunuz?";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "¿Desea cambiar el idioma del diccionario '%1' ?";
+    Message[ catalan ] = "Voleu canviar l'idioma del diccionari '%1' ?";
     Message[ finnish ] = "Haluatko vaihtaa sanaston '%1' kieltä?";
+    Message[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™ '%1' à¸ à¸²à¸©à¸²à¸à¸ˆà¸™à¸²à¸™à¸¸à¸à¸£à¸¡à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

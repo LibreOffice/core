@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 06:19:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,15 +80,16 @@ String RID_SVXTBX_FORM_FILTER
     Text[ swedish ] = "Filterlist";
     Text[ polish ] = "Pasek filtru";
     Text[ portuguese_brazilian ] = "Filter toolbox";
-    Text[ japanese ] = "ï¾Œï½¨ï¾™ï¾€ï¾Šï¾ï½°";
+    Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿ãƒãƒ¼";
     Text[ korean ] = "í•„í„° ë„êµ¬ëª¨ìŒ";
     Text[ chinese_simplified ] = "ç­›é€‰æ ";
     Text[ chinese_traditional ] = "ç¯©é¸æ¬„";
     Text[ arabic ] = "ÔÑíØ ÇáİáÊÑ";
     Text[ turkish ] = "Filtre çubuğu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de filtros";
-    Text[ finnish ] = "Suodatinpalkki";
+    Text[ catalan ] = "Barra de filtre";
+    Text[ finnish ] = "Suodatusrivi";
+    Text[ thai ] = "à¹à¸–à¸šà¸•à¸±à¸§à¸à¸£à¸­à¸‡";
 };
 
  //------------------------------------------------------------------------
@@ -142,15 +143,16 @@ ToolBox RID_SVXTBX_FORM_FILTER
     Text[ swedish ] = "Filterlist";
     Text[ polish ] = "Pasek filtru";
     Text[ portuguese_brazilian ] = "Filter toolbox";
-    Text[ japanese ] = "ï¾Œï½¨ï¾™ï¾€ï¾Šï¾ï½°";
+    Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿ãƒãƒ¼";
     Text[ korean ] = "í•„í„° ë„êµ¬ëª¨ìŒ";
     Text[ chinese_simplified ] = "ç­›é€‰æ ";
     Text[ chinese_traditional ] = "ç¯©é¸æ¬„";
     Text[ arabic ] = "ÔÑíØ ÇáİáÊÑ";
     Text[ turkish ] = "Filtre çubuğu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de filtros";
-    Text[ finnish ] = "Suodatinpalkki";
+    Text[ catalan ] = "Barra de filtre";
+    Text[ finnish ] = "Suodatusrivi";
+    Text[ thai ] = "à¹à¸–à¸šà¸•à¸±à¸§à¸à¸£à¸­à¸‡";
 };
 
 String RID_SVXTBX_FORM_NAVIGATION
@@ -164,20 +166,21 @@ String RID_SVXTBX_FORM_NAVIGATION
     Text[ danish ] = "Databaselinje";
     Text[ french ] = "Barre de base de données";
     Text[ swedish ] = "Databaslist";
-    Text[ dutch ] = "Database-balk";
+    Text[ dutch ] = "Databasebalk";
     Text[ spanish ] = "Barra de base de datos";
     Text[ chinese_simplified ] = "æ•°æ®åº“å·¥å…·æ ";
-    Text[ russian ] = "Ïàíåëü èíñòğóìåíòîâ áàçû äàííûõ";
+    Text[ russian ] = "Ïàíåëü áàçû äàííûõ";
     Text[ polish ] = "Przybornik bazy danych";
-    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ï¾Šï¾ï½°";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãƒãƒ¼";
     Text[ chinese_traditional ] = "è³‡æ–™åº«å·¥å…·åˆ—";
     Text[ greek ] = "ÃñáììŞ âÜóçò äåäïìİíùí";
     Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ë„êµ¬ëª¨ìŒ";
     Text[ arabic ] = "ÔÑíØ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Veritabanı çubuğu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de base de datos";
-    Text[ finnish ] = "Tietokantapalkki";
+    Text[ catalan ] = "Barra de la base de dades";
+    Text[ finnish ] = "Tietolähdetyökalurivi";
+    Text[ thai ] = "à¹à¸–à¸šà¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
 
  //------------------------------------------------------------------------
@@ -320,19 +323,20 @@ ToolBox RID_SVXTBX_FORM_NAVIGATION
     Text [ italian ] = "Barra database" ;
     Text [ spanish ] = "Barra de base de datos" ;
     Text [ french ] = "Barre de base de données" ;
-    Text [ dutch ] = "Database-balk" ;
+    Text [ dutch ] = "Databasebalk" ;
     Text[ chinese_simplified ] = "æ•°æ®åº“å·¥å…·æ ";
     Text[ russian ] = "Ïàíåëü áàçû äàííûõ";
     Text[ polish ] = "Pasek bazy danych";
-    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ï¾Šï¾ï½°";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãƒãƒ¼";
     Text[ chinese_traditional ] = "è³‡æ–™åº«å·¥å…·åˆ—";
     Text[ greek ] = "ÃñáììŞ âÜóçò äåäïìİíùí";
-    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ëª¨ìŒ";
+    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ë„êµ¬ëª¨ìŒ";
     Text[ arabic ] = "ÔÑíØ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Veritabanı çubuğu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de base de datos";
-    Text[ finnish ] = "Tietokantapalkki";
+    Text[ catalan ] = "Barra de la base de dades";
+    Text[ finnish ] = "Tietolähdetyökalurivi";
+    Text[ thai ] = "à¹à¸–à¸šà¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
 
  //------------------------------------------------------------------------
@@ -538,22 +542,23 @@ FloatingWindow RID_SVXTBX_FORM
     Text [ swedish ] = "Formulärfunktioner" ;
     Text [ danish ] = "Formularfunktioner" ;
     Text [ italian ] = "Funzioni formulario" ;
-    Text [ spanish ] = "Funciones formulario" ;
+    Text [ spanish ] = "Funciones del formulario" ;
     Text [ french ] = "Fonctions de formulaire" ;
     Text [ dutch ] = "Formulierfuncties" ;
     Text [ portuguese ] = "Funções de formulário" ;
     Text[ chinese_simplified ] = "è¡¨å•åŠŸèƒ½";
-    Text[ russian ] = "Ôóíêöèè ôîğìóëÿğà";
+    Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ ôîğìàìè";
     Text[ polish ] = "Funkcje formularza";
-    Text[ japanese ] = "ï¾Œï½«ï½°ï¾‘ã®æ©Ÿèƒ½";
+    Text[ japanese ] = "ãƒ•ã‚©ãƒ¼ãƒ ã®æ©Ÿèƒ½";
     Text[ chinese_traditional ] = "è¡¨å–®åŠŸèƒ½";
     Text[ greek ] = "Ëåéôïõñãßåò öüñìáò";
     Text[ korean ] = "ì–‘ì‹ ê¸°ëŠ¥";
     Text[ arabic ] = "ãåÇã ÇáÇÓÊãÇÑÉ";
     Text[ turkish ] = "Form işlevleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Funciones formulario";
-    Text[ finnish ] = "Lomakkeen funktiot";
+    Text[ catalan ] = "Funcions del formulari";
+    Text[ finnish ] = "Lomaketoiminnot";
+    Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡";
 };
 
 ModalDialog RID_SVX_DLG_INPUTRECORDNO
@@ -576,7 +581,7 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     Text [ swedish ] = "Datapostnummer";
     Text [ polish ] = "Numer rekordu";
     Text [ portuguese_brazilian ] = "AbsoluteRecord";
-    Text [ japanese ] = "ï¾šï½ºï½°ï¾„ï¾ç•ªå·";
+    Text [ japanese ] = "ãƒ¬ã‚³ãƒ¼ãƒ‰ç•ªå·";
     Text [ chinese_simplified ] = "æ•°æ®æ¡ç›®ç¼–å·";
 
     FixedText 1
@@ -591,20 +596,21 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
         Text[ greek ] = "ìåôÜâáóç óôçí åããñáöŞ";
         Text[ dutch ] = "ga naar record";
         Text[ french ] = "Passer à l'enregistrement";
-        Text[ spanish ] = "ir a registro";
+        Text[ spanish ] = "Ir a registro";
         Text[ italian ] = "Vai al record di dati";
         Text[ danish ] = "gå til datapost";
         Text[ swedish ] = "gå till datapost";
         Text[ polish ] = "przejdŸ do rekordu";
         Text[ portuguese_brazilian ] = "go to record";
-        Text[ japanese ] = "ï¾šï½ºï½°ï¾„ï¾ã¸";
+        Text[ japanese ] = "ãƒ¬ã‚³ãƒ¼ãƒ‰ã¸";
         Text[ korean ] = "ë ˆì½”ë“œë¡œ ê°€ê¸°";
         Text[ chinese_simplified ] = "è½¬åˆ°æ•°æ®æ¡ç›®";
         Text[ chinese_traditional ] = "è½‰åˆ°è³‡æ–™æ¢ç›®";
         Text[ arabic ] = "ÇáÇäÊŞÇá Åáì ÇáÓÌá";
         Text[ turkish ] = "Veri kümesine git";
-        Text[ catalan ] = "ir a registro";
+        Text[ catalan ] = "vés al registre";
         Text[ finnish ] = "siirry tietueeseen";
+        Text[ thai ] = "à¹„à¸›à¸¢à¸±à¸‡à¸£à¸°à¹€à¸šà¸µà¸¢à¸™";
     };
     NumericField 1
     {
@@ -627,13 +633,20 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
         TabStop = TRUE ;
     };
     Text[ greek ] = "Áñéèìüò åããñáöŞò";
-    Text[ korean ] = "ë°ì´í„° ë ˆì½”ë“œ ë²ˆí˜¸";
+    Text[ korean ] = "ë ˆì½”ë“œ ë²ˆí˜¸";
     Text[ chinese_traditional ] = "è³‡æ–™æ¢ç›®ç·¨è™Ÿ";
     Text[ arabic ] = "ÑŞã ÇáÓÌá";
     Text[ turkish ] = "Veri kümesi no.";
-    Text[ catalan ] = "Número de registro";
+    Text[ catalan ] = "Número de registre";
     Text[ finnish ] = "Tietueen numero";
+    Text[ thai ] = "à¹€à¸¥à¸‚à¸£à¸°à¹€à¸šà¸µà¸¢à¸™";
 };
+
+
+
+
+
+
 
 
 

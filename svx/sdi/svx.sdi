@@ -27,7 +27,7 @@ SvxAddressItem _Address SID_ATTR_ADDRESS
 
 //--------------------------------------------------------------------------
 SfxBoolItem AbsoluteRecord SID_FM_RECORD_ABSOLUTE
-()
+(SfxInt32Item Position FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -43,7 +43,7 @@ SfxBoolItem AbsoluteRecord SID_FM_RECORD_ABSOLUTE
     Synchron;
 
     /* status: */
-    SlotType = FmFormInfoItem
+    SlotType = SfxInt32Item
 
     /* config: */
     AccelConfig = TRUE,
@@ -5648,7 +5648,7 @@ SfxVoidItem DefaultNumbering FN_NUM_NUMBERING_ON
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertObject SID_INSERT_OBJECT
-()
+( SfxGlobalNameItem ClassId SID_INSERT_OBJECT )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -11486,7 +11486,7 @@ SfxBoolItem TextRTL SID_RULER_TEXT_RIGHT_TO_LEFT
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem OpenHyperlink SID_OPEN_HYPERLINK
+SfxVoidItem OpenHyperlinkOnCursor SID_OPEN_HYPERLINK
 ()
 [
         /* flags: */

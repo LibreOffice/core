@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-10-29 15:19:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,8 +391,8 @@ private:
     /// array for all possible childs
     SvxRectCtlChildAccessibleContext**  mpChilds;
 
-    /// List of property change listeners.
-    cppu::OInterfaceContainerHelper*    mpEventListeners;
+    /// client id in the AccessibleEventNotifier queue
+    sal_uInt32 mnClientId;
 
     /// actual selected child
     long                                mnSelectedChild;
@@ -575,6 +575,8 @@ protected:
 
     void CommitChange( const drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent );
 
+    virtual void SAL_CALL disposing();
+
     /// @returns true if it's disposed or in disposing
     inline sal_Bool IsAlive( void ) const;
 
@@ -610,8 +612,8 @@ private:
     /// window of parent
     const Window&                       mrParentWindow;
 
-    /// List of property change listeners.
-    cppu::OInterfaceContainerHelper*    mpEventListeners;
+    /// client id in the AccessibleEventNotifier queue
+    sal_uInt32 mnClientId;
 
     /// index of child in parent
     long                                mnIndexInParent;

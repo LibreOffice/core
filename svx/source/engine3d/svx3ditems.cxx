@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx3ditems.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-06 16:46:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,131 @@ Svx3DShadowSlantItem::Svx3DShadowSlantItem(sal_uInt16 nVal)
 Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DSCENE_SHADE_MODE, nVal)
 {}
+
+//////////////////////////////////////////////////////////////////////////////
+// #107245#
+
+Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(BOOL bVal)
+:   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal)
+{}
+
+sal_uInt16 Svx3DSmoothNormalsItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+{
+    return 1;
+}
+
+SfxPoolItem* Svx3DSmoothNormalsItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+{
+    SfxBoolItem* pRetval = new Svx3DSmoothNormalsItem();
+
+    if(nItemVersion > 0)
+    {
+        SfxBoolItem aBoolItem(Which(), rIn);
+        pRetval->SetValue(aBoolItem.GetValue());
+    }
+
+    return pRetval;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// #107245#
+
+Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(BOOL bVal)
+:   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal)
+{}
+
+sal_uInt16 Svx3DSmoothLidsItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+{
+    return 1;
+}
+
+SfxPoolItem* Svx3DSmoothLidsItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+{
+    SfxBoolItem* pRetval = new Svx3DSmoothLidsItem();
+
+    if(nItemVersion > 0)
+    {
+        SfxBoolItem aBoolItem(Which(), rIn);
+        pRetval->SetValue(aBoolItem.GetValue());
+    }
+
+    return pRetval;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// #107245#
+
+Svx3DCharacterModeItem::Svx3DCharacterModeItem(BOOL bVal)
+:   SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal)
+{}
+
+sal_uInt16 Svx3DCharacterModeItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+{
+    return 1;
+}
+
+SfxPoolItem* Svx3DCharacterModeItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+{
+    SfxBoolItem* pRetval = new Svx3DCharacterModeItem();
+
+    if(nItemVersion > 0)
+    {
+        SfxBoolItem aBoolItem(Which(), rIn);
+        pRetval->SetValue(aBoolItem.GetValue());
+    }
+
+    return pRetval;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// #107245#
+
+Svx3DCloseFrontItem::Svx3DCloseFrontItem(BOOL bVal)
+:   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal)
+{}
+
+sal_uInt16 Svx3DCloseFrontItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+{
+    return 1;
+}
+
+SfxPoolItem* Svx3DCloseFrontItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+{
+    SfxBoolItem* pRetval = new Svx3DCloseFrontItem();
+
+    if(nItemVersion > 0)
+    {
+        SfxBoolItem aBoolItem(Which(), rIn);
+        pRetval->SetValue(aBoolItem.GetValue());
+    }
+
+    return pRetval;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// #107245#
+
+Svx3DCloseBackItem::Svx3DCloseBackItem(BOOL bVal)
+:   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal)
+{}
+
+sal_uInt16 Svx3DCloseBackItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+{
+    return 1;
+}
+
+SfxPoolItem* Svx3DCloseBackItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+{
+    SfxBoolItem* pRetval = new Svx3DCloseBackItem();
+
+    if(nItemVersion > 0)
+    {
+        SfxBoolItem aBoolItem(Which(), rIn);
+        pRetval->SetValue(aBoolItem.GetValue());
+    }
+
+    return pRetval;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-10-23 09:44:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,23 +318,6 @@ private:
     */
     ::rtl::OUString msName;
 
-    /// set of property change listeners.
-    cppu::OInterfaceContainerHelper* mpEventListeners;
-
-    /// set of Accessible event listeners.
-    typedef ::std::set< ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessibleEventListener> >
-        AccessibleEventListenerListType;
-
-    AccessibleEventListenerListType mxAccessibleEventListeners;
-
-    /// set of event listeners.
-    typedef ::std::set< ::com::sun::star::uno::Reference<
-            ::com::sun::star::document::XEventListener> >
-        EventListenerListType;
-
-    EventListenerListType mxEventListeners;
-
     /// map of accessible shapes
     struct SdrObjectCompareLess
     {
@@ -351,6 +334,9 @@ private:
     SdrModel* mpModel;
     SdrPage* mpPage;
     SdrView* mpView;
+
+    /// client id in the AccessibleEventNotifier queue
+    sal_uInt32 mnClientId;
 
     sal_Bool mbDisposed;
 };

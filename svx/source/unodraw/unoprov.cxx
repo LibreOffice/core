@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-15 15:35:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,10 @@ SfxItemPropertyMap* ImplGetSvx3DLatheObjectPropertyMap()
     static SfxItemPropertyMap a3DLatheObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DLATHEOBJECT_PROPERTIES
+
+        // #107245# New 3D properties which are possible for lathe and extrude 3d objects
+        SPECIAL_3DLATHEANDEXTRUDEOBJ_PROPERTIES
+
         SPECIAL_3DBACKSCALE_PROPERTIES
         MISC_3D_OBJ_PROPERTIES
         FILL_PROPERTIES
@@ -381,6 +385,10 @@ SfxItemPropertyMap* ImplGetSvx3DExtrudeObjectPropertyMap()
     static SfxItemPropertyMap a3DExtrudeObjectPropertyMap_Impl[] =
     {
         SPECIAL_3DEXTRUDEOBJECT_PROPERTIES
+
+        // #107245# New 3D properties which are possible for lathe and extrude 3d objects
+        SPECIAL_3DLATHEANDEXTRUDEOBJ_PROPERTIES
+
         SPECIAL_3DBACKSCALE_PROPERTIES
         MISC_3D_OBJ_PROPERTIES
         FILL_PROPERTIES
@@ -447,6 +455,10 @@ SfxItemPropertyMap* ImplGetSvxAllPropertyMap()
         SPECIAL_3DSPHEREOBJECT_PROPERTIES
         SPECIAL_3DLATHEOBJECT_PROPERTIES
         SPECIAL_3DEXTRUDEOBJECT_PROPERTIES
+
+        // #107245# New 3D properties which are possible for lathe and extrude 3d objects
+        SPECIAL_3DLATHEANDEXTRUDEOBJ_PROPERTIES
+
         SPECIAL_3DBACKSCALE_PROPERTIES
         SPECIAL_3DPOLYGONOBJECT_PROPERTIES
         AUTOSHAPE_PROPERTIES

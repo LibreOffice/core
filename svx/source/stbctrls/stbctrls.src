@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:28:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,7 @@ Menu RID_SVXMNU_ZOOM
             Text[ dutch ] = "Hele pagina";
             Text[ chinese_simplified ] = "ζ•΄ι΅µ";
             Text[ greek ] = "Ολόκληρη σελίδα";
-            Text[ korean ] = "νμ΄μ§€ μ „μ²΄";
+            Text[ korean ] = "μ „μ²΄ νμ΄μ§€";
             Text[ turkish ] = "Tόm sayfa";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Tota la pΰgina";
@@ -380,7 +380,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ dutch ] = "Gemiddelde";
             Text[ chinese_simplified ] = "εΉ³ε‡ε€Ό";
             Text[ greek ] = "Μέση τιμή";
-            Text[ korean ] = "μ¤‘κ°„κ°’";
+            Text[ korean ] = "ν‰κ· κ°’";
             Text[ turkish ] = "Ortalama";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Mitjana";
@@ -602,4 +602,9 @@ Image RID_SVXBMP_SIZE
         Blue = 0xFFFF ;
     };
 };
+
+
+
+
+
 

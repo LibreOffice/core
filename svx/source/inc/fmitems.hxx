@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmitems.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 11:46:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,53 +72,6 @@
 //  FORWARD_DECLARE_INTERFACE(awt,XControlContainer)
 FORWARD_DECLARE_INTERFACE(uno,Any)
 //  class ::com::sun::star::uno::Any;
-
-struct FmFormInfo
-{
-    sal_Int32   Pos;
-    sal_Int32   Count;
-    sal_Bool    ReadOnly;
-    FmFormInfo(sal_Int32 _Pos = 0, sal_Int32 _Count = -1, sal_Bool _ReadOnly = sal_False)
-        :Pos(_Pos)
-        ,Count(_Count)
-        ,ReadOnly(_ReadOnly){}
-    sal_Bool operator == (const FmFormInfo& rInfo) const
-        {return Pos == rInfo.Pos && Count == rInfo.Count && ReadOnly==rInfo.ReadOnly;}
-};
-
-//==================================================================
-class FmFormInfoItem : public SfxPoolItem
-{
-    FmFormInfo  aInfo;
-
-public:
-    TYPEINFO();
-
-    FmFormInfoItem(const sal_uInt16 nId, const FmFormInfo& rInfo = FmFormInfo())
-        :SfxPoolItem(nId)
-        ,aInfo(rInfo){}
-
-    inline FmFormInfoItem&   operator=( const FmFormInfoItem &rCpy );
-
-    // "pure virtual Methoden" vom SfxPoolItem
-    virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const ::com::sun::star::uno::Any& rVal, sal_Int8 nMemberId = 0 );
-
-    virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
-    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
-
-    const FmFormInfo& GetInfo() const { return aInfo; }
-    void              SetInfo(const FmFormInfo& rInfo) { aInfo = rInfo; }
-};
-
-inline FmFormInfoItem& FmFormInfoItem::operator=( const FmFormInfoItem &rCpy )
-{
-    aInfo = rCpy.aInfo;
-    return *this;
-}
-
 
 //==================================================================
 class FmInterfaceItem : public SfxPoolItem

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:24:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String RID_SVXSTR_FILELINK
     Text[ chinese_simplified ] = "æ–‡æ¡£";
     Text[ russian ] = "Äîêóìåíò";
     Text[ polish ] = "Dokument";
-    Text[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„";
+    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
     Text[ chinese_traditional ] = "æ–‡ä»¶";
     Text[ arabic ] = "ÇáãÓÊäÏ";
     Text[ dutch ] = "Document";
@@ -87,7 +87,8 @@ String RID_SVXSTR_FILELINK
     Text[ korean ] = "ë¬¸ì„œ";
     Text[ turkish ] = "Belge";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Documento";
+    Text[ catalan ] = "Document";
+    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£";
 };
 String RID_SVXSTR_GRAFIKLINK
 {
@@ -105,7 +106,7 @@ String RID_SVXSTR_GRAFIKLINK
     Text [ spanish ] = "Imagen" ;
     Text [ english_us ] = "Graphic" ;
     Text[ chinese_simplified ] = "å›¾å½¢";
-    Text[ russian ] = "Ãğàôèêà";
+    Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Grafika";
     Text[ japanese ] = "å›³";
     Text[ chinese_traditional ] = "åœ–å½¢";
@@ -116,7 +117,8 @@ String RID_SVXSTR_GRAFIKLINK
     Text[ korean ] = "ê·¸ë˜í”½";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imagen";
+    Text[ catalan ] = "Imatge";
+    Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
 };
 String RID_SVXSTR_EDITGRFLINK
 {
@@ -128,7 +130,7 @@ String RID_SVXSTR_EDITGRFLINK
     Text [ italian ] = "Collega immagine" ;
     Text [ portuguese_brazilian ] = "Ligar a Gr?fico" ;
     Text [ portuguese ] = "Ligar imagem" ;
-    Text [ finnish ] = "Linkit? kuvat" ;
+    Text [ finnish ] = "Linkitä kuvat" ;
     Text [ danish ] = "Kæd grafik" ;
     Text [ french ] = "Image du lien" ;
     Text [ swedish ] = "Länka till grafik" ;
@@ -136,18 +138,19 @@ String RID_SVXSTR_EDITGRFLINK
     Text [ spanish ] = "Enlazar imagen" ;
     Text [ english_us ] = "Link graphics" ;
     Text[ chinese_simplified ] = "é“¾æ¥å›¾å½¢";
-    Text[ russian ] = "Ñâÿçàòü ãğàôèêó";
+    Text[ russian ] = "Óñòàíîâëåíèå ñâÿçè";
     Text[ polish ] = "Po³¹cz grafikê";
-    Text[ japanese ] = "å›³ã‚’ï¾˜ï¾ï½¸ã™ã‚‹";
+    Text[ japanese ] = "å›³ã‚’ãƒªãƒ³ã‚¯ã™ã‚‹";
     Text[ chinese_traditional ] = "é€£çµåœ–å½¢";
     Text[ arabic ] = "ÑÈØ ÇáÑÓæãÇÊ";
     Text[ language_user1 ] = "LS 09.08.99 Wir wollen in der franz?ischen Version m?lichst Substantive als Dialog?erschriften haben. Hier wird die bestehende Verkn?fung ge?dert, d.h., es wird eine neue Grafik ausgew?lt";
     Text[ dutch ] = "Afbeelding koppelen";
     Text[ chinese_simplified ] = "é“¾æ¥å›¾å½¢";
     Text[ greek ] = "Óıíäåóç ãñáöéêïı";
-    Text[ korean ] = "ê·¸ë˜í”½ ì—°ê²°";
+    Text[ korean ] = "ê·¸ë¦¼ ì—°ê²°";
     Text[ turkish ] = "Grafik bağlantısı oluştur";
-    Text[ catalan ] = "Enlazar imagen";
+    Text[ catalan ] = "Enllaça la imatge";
+    Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸à¸£à¸²à¸Ÿà¸´à¸„";
 };
 String RID_SVXSTR_GRFLINKPROGRESS
 {
@@ -157,30 +160,40 @@ String RID_SVXSTR_GRFLINKPROGRESS
     Text [ english_us ] = "Importing graphic..." ;
     Text [ italian ] = "Importazione immagine..." ;
     Text [ spanish ] = "Importando imagen..." ;
-    Text [ french ] = "Import d'image en cours..." ;
+    Text [ french ] = "Import de l'image..." ;
     Text [ swedish ] = "Importerar grafik..." ;
     Text [ danish ] = "Importerer grafik..." ;
     Text [ portuguese ] = "A importar imagem..." ;
     Text [ portuguese_brazilian ] = "Importiere Grafik..." ;
     Text[ chinese_simplified ] = "è¾“å…¥å›¾å½¢...";
-    Text[ russian ] = "Èìïîğò ãğàôèêè...";
+    Text[ russian ] = "Èìïîğò ãğàôè÷åñêîãî îáúåêòà...";
     Text[ polish ] = "Importuj grafikê...";
-    Text[ japanese ] = "å›³ã®ï½²ï¾ï¾ï¾Ÿï½°ï¾„...";
+    Text[ japanese ] = "å›³ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ...";
     Text[ chinese_traditional ] = "åŒ¯å…¥åœ–å½¢...";
     Text[ arabic ] = "ÇÓÊíÑÇÏ ÑÓæãÇÊ...";
     Text[ dutch ] = "Bezig met het importeren van afbeelding...";
     Text[ chinese_simplified ] = "è¾“å…¥å›¾å½¢...";
     Text[ greek ] = "ÅéóáãùãŞ ãñáöéêïı...";
-    Text[ korean ] = "ê·¸ë˜í”½ ê°€ì ¸ ì˜¤ëŠ” ì¤‘...";
+    Text[ korean ] = "ê·¸ë¦¼ì„ ê°€ì ¸ì˜¤ê³  ìˆìŠµë‹ˆë‹¤...";
     Text[ turkish ] = "İçe aktar (grafik)...";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Importando imagen...";
+    Text[ catalan ] = "S'està important la imatge...";
     Text[ finnish ] = "Tuodaan grafiikkaa...";
+    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸™à¸³à¹€à¸‚à¹‰à¸²à¸à¸£à¸²à¸Ÿà¸´à¸„...";
 };
 Bitmap RID_SVXGRF_GRAPHICLOAD
 {
     File = "grfload.bmp" ;
 };
+
+
+
+
+
+
+
+
+
 
 
 

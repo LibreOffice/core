@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-26 17:01:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1430,7 +1430,11 @@ uno::Reference< uno::XInterface > SvxUnoTextRange_NewInstance()
 {
     SvxUnoText aText;
     uno::Reference< text::XTextRange > xRange( new SvxUnoTextRange( aText ) );
+#if (_MSC_VER < 1300)
     return xRange;
+#else
+    return (uno::Reference< uno::XInterface >)xRange;
+#endif
 }
 
 SvxUnoTextRange::SvxUnoTextRange( const SvxUnoTextBase& rParent, sal_Bool bPortion /* = sal_False */ ) throw()

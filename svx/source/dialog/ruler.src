@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 03:31:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,18 +80,19 @@ Menu RID_SVXMN_RULER
             Text [ danish ] = "Millimeter" ;
             Text [ portuguese ] = "Milímetro" ;
             Text [ portuguese_brazilian ] = "Millimeter" ;
-            Text[ chinese_simplified ] = "ºÁÃ×";
+            Text[ chinese_simplified ] = "æ¯«ç±³";
             Text[ russian ] = "Ìèëëèìåòğû";
             Text[ polish ] = "Milimetr";
-            Text[ japanese ] = "ĞØÒ°ÄÙ";
-            Text[ chinese_traditional ] = "²@¦Ì";
+            Text[ japanese ] = "ãƒŸãƒªãƒ¡ãƒ¼ãƒˆãƒ«";
+            Text[ chinese_traditional ] = "æ¯«ç±³";
             Text[ arabic ] = "ãíáíãÊÑ";
             Text[ greek ] = "×éëéïóôÜ";
-            Text[ korean ] = "¹Ğ¸®¹ÌÅÍ";
+            Text[ korean ] = "ë°€ë¦¬ë¯¸í„°";
             Text[ turkish ] = "Milimetre";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Milímetros";
+            Text[ catalan ] = "Milimetres";
             Text[ finnish ] = "Millimetri";
+            Text[ thai ] = "à¸¡à¸´à¸¥à¸¥à¸´à¹€à¸¡à¸•à¸£";
         };
         MenuItem
         {
@@ -110,17 +111,18 @@ Menu RID_SVXMN_RULER
             Text [ dutch ] = "Centimeter" ;
             Text [ spanish ] = "Centímetro" ;
             Text [ english_us ] = "Centimeter" ;
-            Text[ chinese_simplified ] = "ÀåÃ×";
+            Text[ chinese_simplified ] = "å˜ç±³";
             Text[ russian ] = "Ñàíòèìåòğû";
             Text[ polish ] = "Centymetr";
-            Text[ japanese ] = "¾İÁÒ°ÄÙ";
-            Text[ chinese_traditional ] = "Íù¦Ì";
+            Text[ japanese ] = "ã‚»ãƒ³ãƒãƒ¡ãƒ¼ãƒˆãƒ«";
+            Text[ chinese_traditional ] = "å˜ç±³";
             Text[ arabic ] = "ÓäÊíãÊÑ";
             Text[ greek ] = "ÅêáôïóôÜ";
-            Text[ korean ] = "¼¾Æ¼¹ÌÅÍ";
+            Text[ korean ] = "ì„¼í‹°ë¯¸í„°";
             Text[ turkish ] = "Santimetre";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Centímetro";
+            Text[ catalan ] = "Centímetres";
+            Text[ thai ] = "à¹€à¸‹à¸™à¸•à¸´à¹€à¸¡à¸•à¸£";
         };
         MenuItem
         {
@@ -137,18 +139,19 @@ Menu RID_SVXMN_RULER
             Text [ danish ] = "Meter" ;
             Text [ portuguese ] = "Metro" ;
             Text [ portuguese_brazilian ] = "Meter" ;
-            Text[ chinese_simplified ] = "Ã×";
+            Text[ chinese_simplified ] = "ç±³";
             Text[ russian ] = "Ìåòğû";
             Text[ polish ] = "Metr";
-            Text[ japanese ] = "Ò°ÄÙ";
-            Text[ chinese_traditional ] = "¦Ì";
+            Text[ japanese ] = "ãƒ¡ãƒ¼ãƒˆãƒ«";
+            Text[ chinese_traditional ] = "ç±³";
             Text[ arabic ] = "ãÊÑ";
             Text[ greek ] = "Ìİôñá";
-            Text[ korean ] = "¹ÌÅÍ";
+            Text[ korean ] = "ë¯¸í„°";
             Text[ turkish ] = "Metre";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Metro";
+            Text[ catalan ] = "Metres";
             Text[ finnish ] = "Metri";
+            Text[ thai ] = "à¹€à¸¡à¸•à¸£";
         };
         MenuItem
         {
@@ -165,18 +168,19 @@ Menu RID_SVXMN_RULER
             Text [ danish ] = "Kilometer" ;
             Text [ portuguese ] = "Quilómetro" ;
             Text [ portuguese_brazilian ] = "Kilometer" ;
-            Text[ chinese_simplified ] = "¹«Àï";
+            Text[ chinese_simplified ] = "å…¬é‡Œ";
             Text[ russian ] = "Êèëîìåòğû";
             Text[ polish ] = "Kilometr";
-            Text[ japanese ] = "·ÛÒ°ÄÙ";
-            Text[ chinese_traditional ] = "¤½¨½";
+            Text[ japanese ] = "ã‚­ãƒ­ãƒ¡ãƒ¼ãƒˆãƒ«";
+            Text[ chinese_traditional ] = "å…¬é‡Œ";
             Text[ arabic ] = "ßíáæãÊÑ";
             Text[ greek ] = "×éëéüìåôñï";
-            Text[ korean ] = "Å³·Î¹ÌÅÍ";
+            Text[ korean ] = "í‚¬ë¡œë¯¸í„°";
             Text[ turkish ] = "Kilometre";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Kilómetro";
+            Text[ catalan ] = "Kilòmetres";
             Text[ finnish ] = "Kilometri";
+            Text[ thai ] = "à¸à¸´à¹‚à¸¥à¹€à¸¡à¸•à¸£";
         };
         MenuItem
         {
@@ -184,7 +188,7 @@ Menu RID_SVXMN_RULER
             Checkable = TRUE ;
             Text = "Zoll" ;
             Text [ English ] = "Inch" ;
-            Text [ dutch ] = "Inch" ;
+            Text [ dutch ] = "Duim" ;
             Text [ english_us ] = "Inch" ;
             Text [ italian ] = "Pollice" ;
             Text [ spanish ] = "Pulgadas" ;
@@ -193,18 +197,19 @@ Menu RID_SVXMN_RULER
             Text [ danish ] = "Tommer" ;
             Text [ portuguese ] = "Polegada" ;
             Text [ portuguese_brazilian ] = "Zoll" ;
-            Text[ chinese_simplified ] = "Ó¢´ç";
+            Text[ chinese_simplified ] = "è‹±å¯¸";
             Text[ russian ] = "Äşéìû";
             Text[ polish ] = "Cal";
-            Text[ japanese ] = "²İÁ";
-            Text[ chinese_traditional ] = "­^¦T";
+            Text[ japanese ] = "ã‚¤ãƒ³ãƒ";
+            Text[ chinese_traditional ] = "è‹±å‹";
             Text[ arabic ] = "ÈæÕÉ";
             Text[ greek ] = "ºíôóá";
-            Text[ korean ] = "ÀÎÄ¡";
+            Text[ korean ] = "ì¸ì¹˜";
             Text[ turkish ] = "Inç";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Pulgadas";
+            Text[ catalan ] = "Polzades";
             Text[ finnish ] = "Tuuma";
+            Text[ thai ] = "à¸™à¸´à¹‰à¸§";
         };
         MenuItem
         {
@@ -223,18 +228,19 @@ Menu RID_SVXMN_RULER
             Text [ danish ] = "Fod" ;
             Text [ portuguese ] = "Pés" ;
             Text [ portuguese_brazilian ] = "Fu?" ;
-            Text[ chinese_simplified ] = "Ó¢³ß";
+            Text[ chinese_simplified ] = "è‹±å°º";
             Text[ russian ] = "Ôóòû";
             Text[ polish ] = "Stopa";
-            Text[ japanese ] = "Ì¨°Ä";
-            Text[ chinese_traditional ] = "­^¤Ø";
+            Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒˆ";
+            Text[ chinese_traditional ] = "è‹±å°º";
             Text[ arabic ] = "ŞÏã";
             Text[ greek ] = "Ğüäé";
-            Text[ korean ] = "ÇÇÆ®";
+            Text[ korean ] = "í”¼íŠ¸";
             Text[ turkish ] = "Ft";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Pie";
+            Text[ catalan ] = "Peus";
             Text[ finnish ] = "Jalka";
+            Text[ thai ] = "à¸Ÿà¸¸à¸•";
         };
         MenuItem
         {
@@ -251,18 +257,19 @@ Menu RID_SVXMN_RULER
             Text [ danish ] = "Mil" ;
             Text [ portuguese ] = "Milhas" ;
             Text [ portuguese_brazilian ] = "Meilen" ;
-            Text[ chinese_simplified ] = "Ó¢Àï";
+            Text[ chinese_simplified ] = "è‹±é‡Œ";
             Text[ russian ] = "Ìèëè";
             Text[ polish ] = "Mile";
-            Text[ japanese ] = "Ï²Ù";
-            Text[ chinese_traditional ] = "­^¨½";
+            Text[ japanese ] = "ãƒã‚¤ãƒ«";
+            Text[ chinese_traditional ] = "è‹±é‡Œ";
             Text[ arabic ] = "ÃãíÇá";
             Text[ greek ] = "Ìßëéá";
-            Text[ korean ] = "¸¶ÀÏ";
+            Text[ korean ] = "ë§ˆì¼";
             Text[ turkish ] = "Mil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Millas";
-            Text[ finnish ] = "Mailia";
+            Text[ catalan ] = "Milles";
+            Text[ finnish ] = "Mailit";
+            Text[ thai ] = "à¹„à¸¡à¸¥à¹Œ";
         };
         MenuItem
         {
@@ -281,17 +288,18 @@ Menu RID_SVXMN_RULER
             Text [ dutch ] = "Punt" ;
             Text [ spanish ] = "Punto" ;
             Text [ english_us ] = "Point" ;
-            Text[ chinese_simplified ] = "µã";
+            Text[ chinese_simplified ] = "ç‚¹";
             Text[ russian ] = "Ïóíêò";
             Text[ polish ] = "Punkt";
-            Text[ japanese ] = "Îß²İÄ";
-            Text[ chinese_traditional ] = "ÂI";
+            Text[ japanese ] = "ãƒã‚¤ãƒ³ãƒˆ";
+            Text[ chinese_traditional ] = "é»";
             Text[ arabic ] = "äŞØÉ";
             Text[ greek ] = "Óçìåßï";
-            Text[ korean ] = "Á¡";
+            Text[ korean ] = "ì ";
             Text[ turkish ] = "Nokta";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Punto";
+            Text[ catalan ] = "Punt";
+            Text[ thai ] = "à¸à¹‰à¸­à¸¢à¸—à¹Œ";
         };
         MenuItem
         {
@@ -316,17 +324,18 @@ String RID_SVXSTR_RULER_TAB_LEFT
     TEXT [ dutch ] = "Links" ;
     TEXT [ spanish ] = "Izquierda" ;
     TEXT [ english_us ] = "Left" ;
-    TEXT[ chinese_simplified ] = "×ó";
+    TEXT[ chinese_simplified ] = "å·¦";
     TEXT[ russian ] = "Ñëåâà";
     TEXT[ polish ] = "Z lewej";
-    TEXT[ japanese ] = "¶‘µ‚¦";
-    TEXT[ chinese_traditional ] = "¥ª";
+    TEXT[ japanese ] = "å·¦æƒãˆ";
+    TEXT[ chinese_traditional ] = "å·¦";
     TEXT[ arabic ] = "íÓÇÑ";
     TEXT[ greek ] = "ÁñéóôåñÜ";
-    TEXT[ korean ] = "¿ŞÂÊ";
+    TEXT[ korean ] = "ì™¼ìª½";
     TEXT[ turkish ] = "Sol";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Izquierda";
+    TEXT[ catalan ] = "Esquerra";
+    TEXT[ thai ] = "à¸‹à¹‰à¸²à¸¢";
 };
 String RID_SVXSTR_RULER_TAB_RIGHT
 {
@@ -343,17 +352,18 @@ String RID_SVXSTR_RULER_TAB_RIGHT
     TEXT [ dutch ] = "Rechts" ;
     TEXT [ spanish ] = "Derecha" ;
     TEXT [ english_us ] = "Right" ;
-    TEXT[ chinese_simplified ] = "ÏòÓÒ";
+    TEXT[ chinese_simplified ] = "å‘å³";
     TEXT[ russian ] = "Ñïğàâà";
     TEXT[ polish ] = "Z prawej";
-    TEXT[ japanese ] = "‰E‘µ‚¦";
-    TEXT[ chinese_traditional ] = "¦V¥k";
+    TEXT[ japanese ] = "å³æƒãˆ";
+    TEXT[ chinese_traditional ] = "å‘å³";
     TEXT[ arabic ] = "íãíä";
     TEXT[ greek ] = "ÄåîéÜ";
-    TEXT[ korean ] = "¿À¸¥ÂÊ";
+    TEXT[ korean ] = "ì˜¤ë¥¸ìª½";
     TEXT[ turkish ] = "Sağ";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Derecha";
+    TEXT[ catalan ] = "Dreta";
+    TEXT[ thai ] = "à¸‚à¸§à¸²";
 };
 String RID_SVXSTR_RULER_TAB_DECIMAL
 {
@@ -370,17 +380,18 @@ String RID_SVXSTR_RULER_TAB_DECIMAL
     TEXT [ dutch ] = "Decimaal" ;
     TEXT [ spanish ] = "Decimal" ;
     TEXT [ english_us ] = "Decimal" ;
-    TEXT[ chinese_simplified ] = "Ê®½øÎ»µÄ";
+    TEXT[ chinese_simplified ] = "åè¿›åˆ¶";
     TEXT[ russian ] = "Äåñÿòè÷íûé";
     TEXT[ polish ] = "Dziesiêtny";
-    TEXT[ japanese ] = "¬”“_‘µ‚¦";
-    TEXT[ chinese_traditional ] = "¤Q¶i¦ìªº";
+    TEXT[ japanese ] = "å°æ•°ç‚¹æƒãˆ";
+    TEXT[ chinese_traditional ] = "åé€²ä½";
     TEXT[ arabic ] = "ÚÔÑí";
     TEXT[ greek ] = "ÄåêáäéêÜ";
-    TEXT[ korean ] = "¼Ò¼ö";
+    TEXT[ korean ] = "ì†Œìˆ˜ì ";
     TEXT[ turkish ] = "Ondalık";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Decimal";
+    TEXT[ thai ] = "à¸—à¸¨à¸™à¸´à¸¢à¸¡";
 };
 String RID_SVXSTR_RULER_TAB_CENTER
 {
@@ -390,24 +401,38 @@ String RID_SVXSTR_RULER_TAB_CENTER
     TEXT [ italian ] = "Centrato" ;
     TEXT [ portuguese_brazilian ] = "Centralizado" ;
     TEXT [ portuguese ] = "Centrado" ;
-    TEXT [ finnish ] = "Keskitä" ;
+    TEXT [ finnish ] = "Keskellä" ;
     TEXT [ danish ] = "Centreret" ;
     TEXT [ french ] = "Centré" ;
     TEXT [ swedish ] = "Centrerat" ;
     TEXT [ dutch ] = "Gecentreerd" ;
     TEXT [ spanish ] = "Centrado" ;
     TEXT [ english_us ] = "Center" ;
-    TEXT[ chinese_simplified ] = "¾ÓÖĞ";
+    TEXT[ chinese_simplified ] = "å±…ä¸­";
     TEXT[ russian ] = "Ïî öåíòğó";
-    TEXT[ polish ] = "Wyœrodkuj";
-    TEXT[ japanese ] = "’†‰›‘µ‚¦";
-    TEXT[ chinese_traditional ] = "¸m¤¤";
+    TEXT[ polish ] = "Do œrodka";
+    TEXT[ japanese ] = "ä¸­å¤®æƒãˆ";
+    TEXT[ chinese_traditional ] = "ç½®ä¸­";
     TEXT[ arabic ] = "ÊæÓíØ";
     TEXT[ greek ] = "Êåíôñáñéóìİíá";
-    TEXT[ korean ] = "°¡¿îµ¥";
+    TEXT[ korean ] = "ê°€ìš´ë°";
     TEXT[ turkish ] = "Orta";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Centrado";
+    TEXT[ catalan ] = "Centre";
+    TEXT[ thai ] = "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

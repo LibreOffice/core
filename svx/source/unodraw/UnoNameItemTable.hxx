@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 15:34:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,7 @@
 
 #include <cppuhelper/implbase2.hxx>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 #ifndef _SFXLSTNER_HXX
 #include <svtools/lstner.hxx>

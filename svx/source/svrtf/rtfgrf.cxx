@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfgrf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-30 18:18:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #pragma hdrstop
 
@@ -575,4 +577,4 @@ void SvxRTFPictureType::ResetValues()
     nCropT = nCropB = nCropL = nCropR = 0;
 }
 
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

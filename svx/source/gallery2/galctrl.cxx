@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-21 11:31:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
             else
                 aGraphic = pObj->GetThumbMtf();
 
-            Size aSize( pDev->LogicToPixel( aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode() ) );
+            Size aSize( aGraphic.GetSizePixel( pDev ) );
 
             if ( aSize.Width() && aSize.Height() )
             {

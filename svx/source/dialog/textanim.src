@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2003-02-27 13:35:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,15 +112,15 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     Text [ dutch ] = "Tekstanimatie" ;
     Text [ english_us ] = "Animation" ;
     Text [ italian ] = "Animazione testo" ;
-    Text [ spanish ] = "Animación de texto" ;
+    Text [ spanish ] = "Animación" ;
     Text [ french ] = "Animation de texte" ;
     Text [ swedish ] = "Textanimation" ;
     Text [ danish ] = "Tekstanimation" ;
     Text [ portuguese ] = "Animação de texto" ;
-    Text [ portuguese_brazilian ] = "Animação de texto" ;
+    Text [ portuguese_brazilian ] = "Textanimation" ;
     Text[ chinese_simplified ] = "æ´»åŠ¨æ–‡å­—";
     Text[ russian ] = "Àíèìàöèÿ";
-    Text[ polish ] = "Animacja";
+    Text[ polish ] = "Animacje";
     Text[ japanese ] = "ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ";
     Text[ chinese_traditional ] = "å‹•æ…‹æ–‡å­—";
     Text[ greek ] = "Åöİ êßíçóçò êåéìİíïõ";
@@ -128,7 +128,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     Text[ arabic ] = "ÊÃËíÑÇÊ ãÊÍÑßÉ";
     Text[ turkish ] = "Metin canlandırma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Animación de texto";
+    Text[ catalan ] = "Animació de text";
     Text[ finnish ] = "Animaatio";
     FixedLine FL_EFFECT
     {
@@ -147,15 +147,16 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ italian ] = "Effetti di animazione";
         Text[ danish ] = "Effekter i animeret tekst";
         Text[ swedish ] = "Effekter animerad text";
-        Text[ polish ] = "Efekty animacji tekstu";
-        Text[ portuguese_brazilian ] = "Efeitos de animação de texto";
+        Text[ polish ] = "Efekty: animacja tekstu";
+        Text[ portuguese_brazilian ] = "Text Animation Effects";
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®åŠ¹æœ";
         Text[ korean ] = "í…ìŠ¤íŠ¸ ì• ë‹ˆë§¤ì´ì…˜ íš¨ê³¼";
         Text[ chinese_simplified ] = "æ´»åŠ¨æ–‡å­—çš„æ•ˆæœ";
         Text[ chinese_traditional ] = "å‹•æ…‹æ–‡å­—çš„æ•ˆæœ";
         Text[ turkish ] = "Text Animation Effects";
         Text[ arabic ] = "Text Animation Effects";
-        Text[ catalan ] = "Text Animation Effects";
+        Text[ catalan ] = "Efectes d'animació de text";
+        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸à¸²à¸£à¹€à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§à¸‚à¸­à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
 #define MA_CURR_Y       RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT
     FixedText FT_EFFECTS
@@ -176,15 +177,16 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ italian ] = "Effetto";
         Text[ danish ] = "E~ffekt";
         Text[ swedish ] = "E~ffekt";
-        Text[ polish ] = "E~fekt";
-        Text[ portuguese_brazilian ] = "Efeito";
+        Text[ polish ] = "Efekt";
+        Text[ portuguese_brazilian ] = "Effect";
         Text[ japanese ] = "åŠ¹æœ(~F)";
         Text[ korean ] = "íš¨ê³¼(~F)";
         Text[ chinese_simplified ] = "æ•ˆæœ(~F)";
         Text[ chinese_traditional ] = "æ•ˆæœ(~F)";
         Text[ turkish ] = "Effect";
         Text[ arabic ] = "Effect";
-        Text[ catalan ] = "~Efectes";
+        Text[ catalan ] = "Efecte";
+        Text[ thai ] = "à¸¥à¸±~à¸à¸©à¸“à¸°à¸à¸´à¹€à¸¨à¸©";
     };
     ListBox LB_EFFECT
     {
@@ -227,11 +229,11 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "Sem Efeito" ; Default ; > ;
-            < "Piscar" ; Default ; > ;
-            < "Rolar através" ; Default ; > ;
-            < "Rolar de um lado ao outro" ; Default ; > ;
-            < "Rolar em" ; Default ; > ;
+            < "Kein Effekt" ; Default ; > ;
+            < "Blinken" ; Default ; > ;
+            < "Durchlaufen" ; Default ; > ;
+            < "Hin- und zur?klaufen" ; Default ; > ;
+            < "Reinlaufen" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -259,7 +261,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         };
         stringlist [ spanish ] =
         {
-            < "Sin efecto" ; Default ; > ;
+            < "Sin efectos" ; Default ; > ;
             < "Intermitente" ; Default ; > ;
             < "Continuo" ; Default ; > ;
             < "De un lado al otro" ; Default ; > ;
@@ -332,9 +334,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     StringList [ korean ] =
     {
             < "íš¨ê³¼ ì—†ìŒ" ; Default ; > ;
-        < "ê¹œë°•ì´ê¸°" ; Default ; > ;
+        < "ê¹œë°•ì„ íš¨ê³¼" ; Default ; > ;
         < "ì „ì²´ ìŠ¤í¬ë¡¤" ; Default ; > ;
-        < "ì•ë’¤ë¡œ ìŠ¤í¬ë¡¤" ; Default ; > ;
+        < "ì• ë’¤ë¡œ ìŠ¤í¬ë¡¤" ; Default ; > ;
         < "ìŠ¤í¬ë¡¤ ì¸" ; Default ; > ;
     };
     StringList [ arabic ] =
@@ -363,10 +365,10 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     };
     StringList [ catalan ] =
     {
-            < "Sense cap efecte" ; Default ; > ;
-        < "Intermitente" ; Default ; > ;
-        < "Continuo" ; Default ; > ;
-        < "De un lado al otro" ; Default ; > ;
+            < "Sense efectes" ; Default ; > ;
+        < "Parpelleja" ; Default ; > ;
+        < "Continu" ; Default ; > ;
+        < "D'una banda a l'altra" ; Default ; > ;
         < "Entrar" ; Default ; > ;
     };
     StringList [ finnish ] =
@@ -376,6 +378,14 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         < "Vieritä läpi" ; Default ; > ;
         < "Vieritä edestakaisin" ; Default ; > ;
         < "Vieritä sisään" ; Default ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "à¹„à¸¡à¹ˆà¸¡à¸µà¸¥à¸±à¸à¸©à¸“à¸°à¸à¸´à¹€à¸¨à¸©" ; Default ; > ;
+        < "à¸à¸£à¸°à¸à¸£à¸´à¸š" ; Default ; > ;
+        < "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¸œà¹ˆà¸²à¸™" ; Default ; > ;
+        < "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¸à¸¥à¸±à¸šà¹à¸¥à¸°à¸­à¸­à¸à¹„à¸›" ; Default ; > ;
+        < "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¹ƒà¸™" ; Default ; > ;
     };
     };
     FixedText FT_DIRECTION
@@ -394,20 +404,21 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ greek ] = "Direction";
         Text[ dutch ] = "Looprichting";
         Text[ french ] = "Direction";
-        Text[ spanish ] = "Orientación";
+        Text[ spanish ] = "Dirección";
         Text[ finnish ] = "Suunta";
         Text[ italian ] = "Direzione";
         Text[ danish ] = "Retning";
         Text[ swedish ] = "Riktning";
-        Text[ polish ] = "Kierunek";
-        Text[ portuguese_brazilian ] = "Direção";
+        Text[ polish ] = "Orientacja";
+        Text[ portuguese_brazilian ] = "Direction";
         Text[ japanese ] = "æ–¹å‘";
         Text[ korean ] = "ë°©í–¥";
         Text[ chinese_simplified ] = "æ–¹å‘";
         Text[ chinese_traditional ] = "æ–¹å‘";
         Text[ turkish ] = "Direction";
         Text[ arabic ] = "Direction";
-        Text[ catalan ] = "Direction";
+        Text[ catalan ] = "Direcció";
+        Text[ thai ] = "à¸—à¸´à¸¨à¸—à¸²à¸‡";
     };
     ImageButton BTN_UP
     {
@@ -437,8 +448,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Oben";
-        QuickHelpText[ catalan ] = "Hacia arriba";
+        QuickHelpText[ catalan ] = "Cap amunt";
         QuickHelpText[ finnish ] = "Yläreunaan";
+        QuickHelpText[ thai ] = "To Top";
     };
     ImageButton BTN_LEFT
     {
@@ -468,8 +480,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Links";
-        QuickHelpText[ catalan ] = "Hacia la izquierda";
+        QuickHelpText[ catalan ] = "Cap a l'esquerra";
         QuickHelpText[ finnish ] = "Vasemmalle";
+        QuickHelpText[ thai ] = "To Left";
     };
     ImageButton BTN_RIGHT
     {
@@ -499,8 +512,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Rechts";
-        QuickHelpText[ catalan ] = "Hacia la derecha";
+        QuickHelpText[ catalan ] = "Cap a la dreta";
         QuickHelpText[ finnish ] = "Oikealle";
+        QuickHelpText[ thai ] = "To Right";
     };
     ImageButton BTN_DOWN
     {
@@ -530,8 +544,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Unten";
-        QuickHelpText[ catalan ] = "Hacia abajo";
+        QuickHelpText[ catalan ] = "Cap a avall";
         QuickHelpText[ finnish ] = "Alareunaan";
+        QuickHelpText[ thai ] = "To Bottom";
     };
 
     FixedLine FL_PROPERTIES
@@ -552,14 +567,15 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
-        Text[ portuguese_brazilian ] = "Propriedades";
+        Text[ portuguese_brazilian ] = "Properties";
         Text[ japanese ] = "å±æ€§";
-        Text[ korean ] = "ë“±ë¡ì •ë³´";
+        Text[ korean ] = "ë“±ë¡ ì •ë³´";
         Text[ chinese_simplified ] = "å±æ€§";
         Text[ chinese_traditional ] = "å±¬æ€§";
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
         Text[ catalan ] = "Propietats";
+        Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
     };
 #define MA_CURR_Y2      RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_START_INSIDE
@@ -577,10 +593,10 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ swedish ] = "Text synlig vid ~start" ;
         Text [ danish ] = "Te~kst synlig ved start" ;
         Text [ portuguese ] = "Texto visível ao ~iniciar" ;
-        Text [ portuguese_brazilian ] = "Texto visível ao ~iniciar" ;
+        Text [ portuguese_brazilian ] = "Text sichtbar beim ~Starten" ;
         Text[ chinese_simplified ] = "åœ¨å¯åŠ¨æ—¶æ˜¾ç¤ºæ–‡å­—(~T)";
         Text[ russian ] = "Çàïóñê èçíóòğè";
-        Text[ polish ] = "~Tekst widoczny przy rozpoczêciu";
+        Text[ polish ] = "Tekst widoczny przy rozpoczêciu";
         Text[ japanese ] = "é–‹å§‹æ™‚ã«ãƒ†ã‚­ã‚¹ãƒˆãŒè¦‹ãˆã‚‹(~T)";
         Text[ chinese_traditional ] = "åœ¨å•Ÿå‹•æ™‚é¡¯ç¤ºæ–‡å­—(~T)";
         Text[ greek ] = "Êåßìåíï ïñáôü êáôÜ ôçí åêêßíç~óç";
@@ -588,8 +604,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ arabic ] = "ÅÙåÇÑ ÇáäÕ ÚäÏ ÇáÈÏÇíÉ";
         Text[ turkish ] = "Metni, canlandırma başlarken ~görüntüle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Texto visible al ~iniciar";
+        Text[ catalan ] = "I~nicia a dins";
         Text[ finnish ] = "~Aloita kohteessa";
+        Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡à¸”à¹‰à¸²à¸™à¹ƒà¸™";
     };
 #define MA_CURR_Y3      MA_CURR_Y2 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     TriStateBox TSB_STOP_INSIDE
@@ -607,10 +624,10 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ swedish ] = "Text synlig vid a~vslutning" ;
         Text [ danish ] = "Tekst s~ynlig ved afslutning" ;
         Text [ portuguese ] = "Texto visível ao ~finalizar" ;
-        Text [ portuguese_brazilian ] = "Texto vísivel ao ~sair" ;
+        Text [ portuguese_brazilian ] = "Text sichtbar beim ~Beenden" ;
         Text[ chinese_simplified ] = "åœ¨ç»“æŸæ—¶æ˜¾ç¤ºæ–‡å­—";
         Text[ russian ] = "Ïîêàçûâàòü ~òåêñò ïğè âûõîäå";
-        Text[ polish ] = "Tekst widoczny przy koñczeniu";
+        Text[ polish ] = "Tekst widoczny przy zakoñczeniu";
         Text[ japanese ] = "çµ‚äº†æ™‚ã«ãƒ†ã‚­ã‚¹ãƒˆãŒè¦‹ãˆã‚‹";
         Text[ chinese_traditional ] = "åœ¨çµæŸæ™‚é¡¯ç¤ºæ–‡å­—";
         Text[ greek ] = "Êåßìåíï ïñáôü êáôÜ ôçí İîïäï";
@@ -618,8 +635,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ arabic ] = "ÅÙåÇÑ ÇáäÕ ÚäÏ ÇáÇäÊåÇÁ";
         Text[ turkish ] = "Metni, canlandırma bittiğinde gö~rüntüle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Texto visible al ~finalizar";
+        Text[ catalan ] = "Text visible al ~finaltizar";
         Text[ finnish ] = "Teksti näkyvissä poistuttaessa";
+        Text[ thai ] = "à¸ªà¸²à¸¡à¸²à¸£à¸–à¸¡à¸­à¸‡à¹€à¸«à¹‡à¸™à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¹€à¸¡à¸·à¹ˆà¸­à¸à¸³à¸¥à¸±à¸‡à¸­à¸­à¸";
     };
 #define MA_CURR_Y4      MA_CURR_Y3 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     FixedText FT_COUNT
@@ -636,20 +654,21 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ dutch ] = "Animatiecyclussen" ;
         Text [ swedish ] = "Antal" ;
         Text [ danish ] = "Animationsgentagelser" ;
-        Text [ portuguese_brazilian ] = "Ciclos de animação" ;
+        Text [ portuguese_brazilian ] = "Anzahl" ;
         Text [ portuguese ] = "Ciclos de animação" ;
         Text[ chinese_simplified ] = "åŠ¨ç”»å¾ªç¯çš„æ¬¡æ•°";
         Text[ russian ] = "Öèêëû àíèìàöèè";
-        Text[ polish ] = "Cykle animacji";
+        Text[ polish ] = "Animacje";
         Text[ japanese ] = "å›æ•°";
         Text[ chinese_traditional ] = "å‹•ç•«å¾ªç’°çš„æ¬¡æ•¸";
         Text[ greek ] = "ĞëŞèïò";
-        Text[ korean ] = "ê°œìˆ˜";
+        Text[ korean ] = "íš¨ê³¼ ì£¼ê¸°";
         Text[ arabic ] = "ÇáÚÏÏ";
         Text[ turkish ] = "Adet sayısı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cantidad";
+        Text[ catalan ] = "Quantitat";
         Text[ finnish ] = "Animaation kierto";
+        Text[ thai ] = "à¹€à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§à¹à¸šà¸šà¸§à¸‡à¸à¸¥à¸¡";
     };
 #define MA_CURR_Y5      MA_CURR_Y4 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_ENDLESS
@@ -667,19 +686,20 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ swedish ] = "~Kontinuerligt" ;
         Text [ danish ] = "Endeløs" ;
         Text [ portuguese ] = "~Contínuo" ;
-        Text [ portuguese_brazilian ] = "~Contínuo" ;
+        Text [ portuguese_brazilian ] = "~Endlos" ;
         Text[ chinese_simplified ] = "ä¸é—´æ–­(~C)";
         Text[ russian ] = "Áåñêîíå÷íî";
-        Text[ polish ] = "~Ci¹g³y";
+        Text[ polish ] = "Bez koñca";
         Text[ japanese ] = "ã‚¨ãƒ³ãƒ‰ãƒ¬ã‚¹ã«ç¶šã‘ã‚‹(~C)";
         Text[ chinese_traditional ] = "ä¸é–“æ–·(~C)";
         Text[ greek ] = "Óõíå÷Şò";
-        Text[ korean ] = "ì—°ì†(~C)";
+        Text[ korean ] = "ê³„ì†(~C)";
         Text[ arabic ] = "ÈáÇ äåÇíÉ";
         Text[ turkish ] = "~Sonsuz";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "S~ense fi";
+        Text[ catalan ] = "~Continu";
         Text[ finnish ] = "~Jatkuva";
+        Text[ thai ] = "~à¸•à¹ˆà¸­à¹€à¸™à¸·à¹ˆà¸­à¸‡";
     };
     NumericField NUM_FLD_COUNT
     {
@@ -708,11 +728,11 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ dutch ] = "Stapgrootte" ;
         Text [ swedish ] = "Steglängd" ;
         Text [ danish ] = "Trinvidde" ;
-        Text [ portuguese_brazilian ] = "Incremento" ;
+        Text [ portuguese_brazilian ] = "Schrittweite" ;
         Text [ portuguese ] = "Incremento" ;
         Text[ chinese_simplified ] = "é€’å¢";
         Text[ russian ] = "Øàã";
-        Text[ polish ] = "Przyrost";
+        Text[ polish ] = "Inkrement";
         Text[ japanese ] = "ã‚¹ãƒ†ãƒƒãƒ—æ•°";
         Text[ chinese_traditional ] = "æ¼¸é€²";
         Text[ greek ] = "ÂŞìá";
@@ -720,8 +740,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ arabic ] = "ÇáÊÒÇíÏ";
         Text[ turkish ] = "Adım";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Importància";
+        Text[ catalan ] = "Increment";
         Text[ finnish ] = "Lisäys";
+        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹€à¸à¸´à¹ˆà¸¡";
     };
 #define MA_CURR_Y7      MA_CURR_Y6 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_PIXEL
@@ -739,10 +760,10 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ swedish ] = "~Pixel" ;
         Text [ danish ] = "Pixel" ;
         Text [ portuguese ] = "~Pixel" ;
-        Text [ portuguese_brazilian ] = "~Pixels" ;
+        Text [ portuguese_brazilian ] = "~Pixel" ;
         Text[ chinese_simplified ] = "åƒç´ (~P)";
         Text[ russian ] = "Òî÷åê";
-        Text[ polish ] = "~Piksele";
+        Text[ polish ] = "Pi~ksel";
         Text[ japanese ] = "ãƒ”ã‚¯ã‚»ãƒ«(~P)";
         Text[ chinese_traditional ] = "åƒç´ (~P)";
         Text[ greek ] = "~Pixel";
@@ -752,6 +773,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pí~xel";
         Text[ finnish ] = "~Kuvapisteet";
+        Text[ thai ] = "~à¸à¸´à¸à¹€à¸‹à¸¥";
     };
     MetricField MTR_FLD_AMOUNT
     {
@@ -785,7 +807,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ dutch ] = "Vertraging" ;
         Text [ swedish ] = "Fördröjning" ;
         Text [ danish ] = "Trinforsinkelse" ;
-        Text [ portuguese_brazilian ] = "Atraso" ;
+        Text [ portuguese_brazilian ] = "Verzögerung" ;
         Text [ portuguese ] = "Retardar" ;
         Text[ chinese_simplified ] = "å»¶è¿Ÿ";
         Text[ russian ] = "Çàäåğæêà";
@@ -797,8 +819,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ arabic ] = "ÊÃÎíÑ";
         Text[ turkish ] = "Gecikme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Retardo";
+        Text[ catalan ] = "Retard";
         Text[ finnish ] = "Viivytä";
+        Text[ thai ] = "à¸«à¸™à¹ˆà¸§à¸‡à¹€à¸§à¸¥à¸²";
     };
 #define MA_CURR_Y9      MA_CURR_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_AUTO
@@ -816,10 +839,10 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ swedish ] = "~Automatisk" ;
         Text [ danish ] = "Automatisk" ;
         Text [ portuguese ] = "~Automaticamente" ;
-        Text [ portuguese_brazilian ] = "~Automático" ;
+        Text [ portuguese_brazilian ] = "~Automatisch" ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
         Text[ russian ] = "Àâòîìàòè÷åñêè";
-        Text[ polish ] = "~Automatycznie";
+        Text[ polish ] = "Automatycznie";
         Text[ japanese ] = "è‡ªå‹•(~A)";
         Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
         Text[ greek ] = "Áõôüìáôá";
@@ -829,6 +852,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Automàtic";
         Text[ finnish ] = "~Automaattinen";
+        Text[ thai ] = "~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     MetricField MTR_FLD_DELAY
     {
@@ -846,6 +870,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Maximum = 100000 ;
         Last = 100000 ;
     };
+    Text[ thai ] = "à¹€à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§";
 };
  // RID_SVXDLG_TEXT -------------------------------------------------------
 TabDialog RID_SVXDLG_TEXT
@@ -862,7 +887,7 @@ TabDialog RID_SVXDLG_TEXT
     Text [ dutch ] = "Tekst" ;
     Text [ swedish ] = "Text" ;
     Text [ danish ] = "Tekst" ;
-    Text [ portuguese_brazilian ] = "Texto" ;
+    Text [ portuguese_brazilian ] = "Text" ;
     Text [ portuguese ] = "Texto" ;
     Text[ chinese_simplified ] = "æ–‡å­—";
     Text[ russian ] = "Òåêñò";
@@ -874,7 +899,7 @@ TabDialog RID_SVXDLG_TEXT
     Text[ arabic ] = "äÕ";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
     Moveable = TRUE ;
     TabControl 1
@@ -897,7 +922,7 @@ TabDialog RID_SVXDLG_TEXT
                 Text [ dutch ] = "Tekst" ;
                 Text [ swedish ] = "Text" ;
                 Text [ danish ] = "Tekst" ;
-                Text [ portuguese_brazilian ] = "Texto" ;
+                Text [ portuguese_brazilian ] = "Text" ;
                 Text [ portuguese ] = "Texto" ;
                 Text[ chinese_simplified ] = "æ–‡å­—";
                 Text[ russian ] = "Òåêñò";
@@ -909,8 +934,9 @@ TabDialog RID_SVXDLG_TEXT
                 Text[ arabic ] = "äÕ";
                 Text[ turkish ] = "Metin";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Texto";
+                Text[ catalan ] = "Text";
                 Text[ finnish ] = "Teksti";
+                Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
             };
             PageItem
             {
@@ -925,7 +951,7 @@ TabDialog RID_SVXDLG_TEXT
                 Text [ dutch ] = "Tekstanimatie" ;
                 Text [ swedish ] = "Animerad text" ;
                 Text [ danish ] = "Animeret tekst" ;
-                Text [ portuguese_brazilian ] = "Texto animado" ;
+                Text [ portuguese_brazilian ] = "Lauftext" ;
                 Text [ portuguese ] = "Texto animado" ;
                 Text[ chinese_simplified ] = "æ´»åŠ¨æ–‡å­—";
                 Text[ russian ] = "Àíèìàöèÿ òåêñòà";
@@ -939,8 +965,15 @@ TabDialog RID_SVXDLG_TEXT
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Animació de text";
                 Text[ finnish ] = "Tekstianimaatio";
+                Text[ thai ] = "à¸à¸²à¸£à¹€à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§à¸‚à¸­à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
             };
         };
     };
+    Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
 };
  // ******************************************************************* EOF
+
+
+
+
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-12-10 15:24:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,6 @@
 
 namespace accessibility
 {
-
     typedef ::cppu::WeakImplHelper5< ::drafts::com::sun::star::accessibility::XAccessible,
                                      ::drafts::com::sun::star::accessibility::XAccessibleContext,
                                      ::drafts::com::sun::star::accessibility::XAccessibleComponent,
@@ -209,6 +208,12 @@ namespace accessibility
          */
         void SetEditSource( SvxEditSource* pEditSource );
 
+        /** Dispose this object
+
+            Notifies and deregisters the listeners, drops all references.
+         */
+        void Dispose();
+
         /** Set the current paragraph number
 
             @attention This method does not lock the SolarMutex,
@@ -245,6 +250,8 @@ namespace accessibility
         void UnSetState( const sal_Int16 nStateId );
 
         SvxEditSource& GetEditSource() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+
+        int getNotifierClientId() const;
 
         /** Query the SvxTextForwarder for EditEngine access.
 
@@ -287,7 +294,7 @@ namespace accessibility
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > mxParent;
 
         /// Our listeners (guarded by maMutex)
-        ::cppu::OInterfaceContainerHelper maStateListeners;
+        int mnNotifierClientId;
     };
 
 } // end of namespace accessibility

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-12 12:16:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,6 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
-#ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
-#include <com/sun/star/awt/XLayoutConstrains.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
 #endif
@@ -131,9 +128,6 @@
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -270,7 +264,7 @@ FmPropBrw::FmPropBrw(const Reference< XMultiServiceFactory >&   _xORB,
     DBG_CTOR(FmPropBrw,NULL);
 
     Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
-    SetMinOutputSizePixel( Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y) );
+    SetMinOutputSizePixel(Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y));
     SetOutputSizePixel(aPropWinSize);
     SetUniqueId(UID_FORMPROPBROWSER_FRAME);
 
@@ -332,13 +326,6 @@ FmPropBrw::FmPropBrw(const Reference< XMultiServiceFactory >&   _xORB,
                     xAsXController->attachFrame(m_xMeAsFrame);
                     m_xBrowserComponentWindow = m_xMeAsFrame->getComponentWindow();
                     DBG_ASSERT(m_xBrowserComponentWindow.is(), "FmPropBrw::FmPropBrw: attached the controller, but have no component window!");
-
-                    Reference< awt::XLayoutConstrains > xLayoutInfo( m_xBrowserController, UNO_QUERY );
-                    if ( xLayoutInfo.is() )
-                    {
-                        awt::Size aSize = xLayoutInfo->getMinimumSize( );
-                        SetMinOutputSizePixel( Size( aSize.Width, aSize.Height ) );
-                    }
                 }
             }
         }
@@ -357,17 +344,8 @@ FmPropBrw::FmPropBrw(const Reference< XMultiServiceFactory >&   _xORB,
     }
 
 
-    Point aPropWinPos = Point( WIN_BORDER, WIN_BORDER );
-    aPropWinSize.Width() -= (2*WIN_BORDER);
-    aPropWinSize.Height() -= (2*WIN_BORDER);
-
-    if (m_xBrowserComponentWindow.is())
-    {
-        m_xBrowserComponentWindow->setPosSize(aPropWinPos.X(), aPropWinPos.Y(), aPropWinSize.Width(), aPropWinSize.Height(),
-            ::com::sun::star::awt::PosSize::WIDTH | ::com::sun::star::awt::PosSize::HEIGHT |
-            ::com::sun::star::awt::PosSize::X | ::com::sun::star::awt::PosSize::Y);
-        m_xBrowserComponentWindow->setVisible(sal_True);
-    }
+    if ( m_xBrowserComponentWindow.is() )
+        m_xBrowserComponentWindow->setVisible( sal_True );
 }
 
 //------------------------------------------------------------------------
@@ -479,11 +457,7 @@ void FmPropBrw::implSetNewObject(const Reference< XPropertySet >& _rxObject)
                 bResize = sal_True;
             }
             if( bResize )
-            {
                 SetOutputSizePixel( aSize );
-                // the following Resize call is to circumvent a bug in VCL (or Windows?)
-                Resize();
-            }
         }
     }
 }
@@ -492,25 +466,6 @@ void FmPropBrw::implSetNewObject(const Reference< XPropertySet >& _rxObject)
 void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 {
     rInfo.bVisible = sal_False;
-}
-
-//------------------------------------------------------------------------
-void FmPropBrw::Resize()
-{
-    SfxFloatingWindow::Resize();
-
-    //////////////////////////////////////////////////////////////////////
-    // Groesse anpassen
-    Size  aSize = GetOutputSizePixel();
-    Size aPropWinSize( aSize );
-    aPropWinSize.Width() -= (2*WIN_BORDER);
-    aPropWinSize.Height() -= (2*WIN_BORDER);
-
-    if (m_xBrowserComponentWindow.is())
-    {
-        m_xBrowserComponentWindow->setPosSize(0, 0, aPropWinSize.Width(), aPropWinSize.Height(),
-            ::com::sun::star::awt::PosSize::WIDTH | ::com::sun::star::awt::PosSize::HEIGHT);
-    }
 }
 
 //-----------------------------------------------------------------------

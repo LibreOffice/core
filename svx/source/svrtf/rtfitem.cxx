@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-12 10:25:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #pragma hdrstop
 
@@ -503,6 +505,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 break;
 
             case RTF_LI:
+            case RTF_LIN:
                 if( PARDID->nLRSpace )
                 {
                     SvxLRSpaceItem aLR( GetLRSpace(*pSet, PARDID->nLRSpace ));
@@ -519,6 +522,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 break;
 
             case RTF_RI:
+            case RTF_RIN:
                 if( PARDID->nLRSpace )
                 {
                     SvxLRSpaceItem aLR( GetLRSpace(*pSet, PARDID->nLRSpace ));
@@ -603,7 +607,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     // (100%) und dem Leerraum ueber der Zeile (20%).
                     SvxLineSpacingItem aLSpace( 0, PARDID->nLinespacing );
 
-                    if( !nTokenValue || -1 == nTokenValue || 1000 == nTokenValue )
+                    if( !nTokenValue || 1000 == nTokenValue )
                         nTokenValue = 240;
 
                     SvxLineSpace eLnSpc;
@@ -716,7 +720,7 @@ SET_FONTALIGNMENT:
                     else
                     {
                         nEs = (short)-nTokenValue;
-                        nProp = DFLT_ESC_PROP;
+                        nProp = (nToken == RTF_SUB) ? DFLT_ESC_PROP : 100;
                     }
                     pSet->Put( SvxEscapementItem( nEs, nProp, nEsc ));
                 }
@@ -778,7 +782,10 @@ SET_FONTALIGNMENT:
                                     SID_ATTR_CHAR_FONT );
                     SetScriptAttr( eCharType, *pSet, aTmpItem );
                     if( RTF_F == nToken )
+                    {
                         SetEncoding( rSVFont.GetCharSet() );
+                        RereadLookahead();
+                    }
                 }
                 break;
 
@@ -962,7 +969,7 @@ ATTR_SETUNDERLINE:
                     else
                     {
                         nEs = (short)nTokenValue;
-                        nProp = DFLT_ESC_PROP;
+                        nProp = (nToken == RTF_SUPER) ? DFLT_ESC_PROP : 100;
                     }
                     pSet->Put( SvxEscapementItem( nEs, nProp, nEsc ));
                 }
@@ -2049,4 +2056,4 @@ void SvxRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
 {
 }
 
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

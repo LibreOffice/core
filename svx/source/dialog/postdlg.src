@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-06-21 14:36:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ ModalDialog RID_SVXDLG_POSTIT
     Text [ italian ] = "Nota" ;
     Text [ portuguese_brazilian ] = "Observa??o" ;
     Text [ portuguese ] = "Observaηγo" ;
-    Text [ finnish ] = "Huomautus:" ;
+    Text [ finnish ] = "Huomautus" ;
     Text [ danish ] = "Note" ;
     Text [ french ] = "Note" ;
     Text [ swedish ] = "Anteckning" ;
@@ -95,7 +95,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ italian ] = "Autore" ;
         Text [ portuguese_brazilian ] = "Autor" ;
         Text [ portuguese ] = "Autor" ;
-        Text [ finnish ] = "Laatija" ;
+        Text [ finnish ] = "Tekijδ" ;
         Text [ danish ] = "Forfatter" ;
         Text [ french ] = "Auteur" ;
         Text [ swedish ] = "Fφrfattare" ;
@@ -112,7 +112,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ greek ] = "Συντάκτης";
         Text[ korean ] = "μ‘μ„±μ";
         Text[ turkish ] = "Yazan";
-        Text[ catalan ] = "Remitent";
+        Text[ catalan ] = "Autor";
         Text[ thai ] = "ΰΈΰΈΉΰΉ‰ΰΉ€ΰΈ‚ΰΈµΰΈΆΰΈ™";
     };
     FixedText FT_LASTEDIT
@@ -148,7 +148,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ greek ] = "Κείμενο";
         Text[ korean ] = "ν…μ¤νΈ(~T)";
         Text[ turkish ] = "~Metin";
-        Text[ catalan ] = "Te~xto";
+        Text[ catalan ] = "~Text";
         Text[ thai ] = "~ΰΈ‚ΰΉ‰ΰΈ­ΰΈ„ΰΈ§ΰΈ²ΰΈ΅";
     };
     MultiLineEdit ED_EDIT
@@ -179,7 +179,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ spanish ] = "Contenido" ;
         Text [ english_us ] = "Contents" ;
         Text[ chinese_simplified ] = "ε†…ε®Ή";
-        Text[ russian ] = "Ρξδεπζθμξε";
+        Text[ russian ] = "Ρξδεπζΰνθε";
         Text[ polish ] = "Zawartoζ";
         Text[ japanese ] = "ε†…ε®Ή";
         Text[ chinese_traditional ] = "ε…§ε®Ή";
@@ -187,7 +187,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ greek ] = "Περιεχόμενα";
         Text[ korean ] = "λ‚΄μ©";
         Text[ turkish ] = "έηerik";
-        Text[ catalan ] = "Contenido";
+        Text[ catalan ] = "Contingut";
         Text[ thai ] = "ΰΉ€ΰΈ™ΰΈ·ΰΉ‰ΰΈ­ΰΈ«ΰΈ²";
     };
     OKButton BTN_POST_OK
@@ -224,6 +224,27 @@ ModalDialog RID_SVXDLG_POSTIT
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "E~infόgen" ;
         Text [ English ] = "~Insert" ;
+        Text[ english_us ] = "~Insert";
+        Text[ portuguese ] = "~Insert";
+        Text[ russian ] = "~Insert";
+        Text[ greek ] = "~Insert";
+        Text[ dutch ] = "~Insert";
+        Text[ french ] = "Insιrer";
+        Text[ spanish ] = "In~sertar";
+        Text[ finnish ] = "~Insert";
+        Text[ italian ] = "~Incolla";
+        Text[ danish ] = "~Insert";
+        Text[ swedish ] = "~Infoga";
+        Text[ polish ] = "~Insert";
+        Text[ japanese ] = "ζΏε…¥";
+        Text[ korean ] = "μ‚½μ…";
+        Text[ chinese_simplified ] = "ζ’ε…¥";
+        Text[ chinese_traditional ] = "ζ’ε…¥(~I)";
+        Text[ turkish ] = "~Insert";
+        Text[ arabic ] = "~Insert";
+        Text[ catalan ] = "~Enganxa";
+        Text[ thai ] = "~ΰΈ§ΰΈ²ΰΈ‡";
+        Text[ portuguese_brazilian ] = "Co~lar";
     };
     PushButton BTN_AUTHOR
     {
@@ -232,14 +253,14 @@ ModalDialog RID_SVXDLG_POSTIT
         Text = "Autor" ;
         Text [ ENGLISH ] = "Author" ;
         Text [ norwegian ] = "Forfatter" ;
-        Text [ italian ] = "Autore" ;
-        Text [ portuguese_brazilian ] = "Autor" ;
-        Text [ portuguese ] = "Autor" ;
-        Text [ finnish ] = "Laatija" ;
+        Text [ italian ] = "Mittente" ;
+        Text [ portuguese_brazilian ] = "~Autor" ;
+        Text [ portuguese ] = "~Autor" ;
+        Text [ finnish ] = "Tekijδ" ;
         Text [ danish ] = "Forfatter" ;
         Text [ french ] = "Auteur" ;
         Text [ swedish ] = "Skapad av" ;
-        Text [ dutch ] = "Auteur" ;
+        Text [ dutch ] = "~Auteur" ;
         Text [ spanish ] = "Autor" ;
         Text [ english_us ] = "Author" ;
         Text[ chinese_simplified ] = "δ½θ€…";
@@ -249,10 +270,10 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ chinese_traditional ] = "δ½θ€…";
         Text[ arabic ] = "ΗαγΔαέ";
         Text[ greek ] = "Συντάκτης";
-        Text[ korean ] = "μ‘μ„±μ)";
-        Text[ turkish ] = "Yazan";
-        Text[ catalan ] = "Autor";
-        Text[ thai ] = "ΰΈΰΈΉΰΉ‰ΰΉ€ΰΈ‚ΰΈµΰΈΆΰΈ™";
+        Text[ korean ] = "μ‘μ„±μ(~A)";
+        Text[ turkish ] = "~Yazan";
+        Text[ catalan ] = "~Autor";
+        Text[ thai ] = "~ΰΈΰΈΉΰΉ‰ΰΉ€ΰΈ‚ΰΈµΰΈΆΰΈ™";
     };
      // lokale Strings
     String STR_NOTIZ_EDIT
@@ -271,7 +292,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ spanish ] = "Editar nota" ;
         Text [ english_us ] = "Edit Note" ;
         Text[ chinese_simplified ] = "ηΌ–θΎ‘ε¤‡ζ³¨";
-        Text[ russian ] = "Οπΰβκΰ οπθμεχΰνθι";
+        Text[ russian ] = "Οπΰβκΰ οπθμεχΰνθÿ";
         Text[ polish ] = "Edytuj notatkκ";
         Text[ japanese ] = "γ‚³γƒ΅γƒ³γƒγ®η·¨ι›†";
         Text[ chinese_traditional ] = "η·¨θΌ―ε‚™θ¨»";
@@ -279,7 +300,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ greek ] = "Επεξεργασία σημείωσης";
         Text[ korean ] = "λ©”λª¨ νΈμ§‘";
         Text[ turkish ] = "Notu dόzenle";
-        Text[ catalan ] = "Editar nota";
+        Text[ catalan ] = "Edita la nota";
         Text[ thai ] = "ΰΉΰΈΰΉ‰ΰΉ„ΰΈ‚ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈΆΰΉΰΈ­";
     };
     String STR_NOTIZ_INSERT
@@ -300,7 +321,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ spanish ] = "Insertar nota" ;
         Text [ english_us ] = "Insert note" ;
         Text[ chinese_simplified ] = "ζ’ε…¥ε¤‡ζ³¨";
-        Text[ russian ] = "Βρςΰβθςό οξμεςκσ";
+        Text[ russian ] = "Βρςΰβθςό οπθμεχΰνθε";
         Text[ polish ] = "Wstaw notatkκ";
         Text[ japanese ] = "γ‚³γƒ΅γƒ³γƒγ®ζΏε…¥";
         Text[ chinese_traditional ] = "ζ’ε…¥ε‚™θ¨»";
@@ -308,11 +329,11 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ greek ] = "Εισαγωγή σημείωσης";
         Text[ korean ] = "λ©”λª¨ μ‚½μ…";
         Text[ turkish ] = "Not ekle";
-        Text[ catalan ] = "Insertar nota";
+        Text[ catalan ] = "Insereix una nota";
         Text[ thai ] = "ΰΉΰΈ—ΰΈ£ΰΈΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈΆΰΉΰΈ­";
     };
     Text[ chinese_simplified ] = "ε¤‡ζ³¨";
-    Text[ russian ] = "Οξμεςκΰ";
+    Text[ russian ] = "Οπθμεχΰνθε";
     Text[ polish ] = "Notatka";
     Text[ japanese ] = "γƒ΅γƒΆ";
     Text[ chinese_traditional ] = "ε‚™θ¨»";
@@ -324,5 +345,16 @@ ModalDialog RID_SVXDLG_POSTIT
     Text[ thai ] = "ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈΆΰΉΰΈ­";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
 
 

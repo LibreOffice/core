@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-21 07:01:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
     // save configuration at INI-Manager
     // and remove pages
     SvtViewOptions aTabDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
-    aTabDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( GetWindowState().GetBuffer() ) );
+    aTabDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
     aTabDlgOpt.SetPageID( mnCurrentPageId );
 
     const ULONG nCount = maPageList.Count();
@@ -1440,91 +1440,9 @@ void IconChoiceDialog::FocusOnIcon( USHORT nId )
 
 // -----------------------------------------------------------------------
 
-long IconChoiceDialog::PreNotify( NotifyEvent& rNEvt )
-{
-    const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-
-    DBG_ASSERT( rNEvt.GetType() != EVENT_KEYINPUT || ( rNEvt.GetType() == EVENT_KEYINPUT && pKEvt ),
-                    "-IconChoiceDialog::PreNotify(): no KeyEvent for key event?!" );
-
-    if( rNEvt.GetType() == EVENT_KEYINPUT && pKEvt->GetKeyCode().IsMod2() && pKEvt->GetCharCode() )
-    {   // catch only <ALT><something> for mnemonic-handling
-        long nRet = 0;
-
-        if( HasChildPathFocus() )
-        {   // focus is somewhere in the dialog
-            if( maIconCtrl.HasChildPathFocus() && maIconCtrl.HandleShortCutKey( *pKEvt ) )
-                nRet = 1;
-            else
-                nRet = ModalDialog::PreNotify( rNEvt );
-
-/*          TRY OF AN IMPLEMENTATION FOR 'CLEAN' HANDLING OF MNEMONICS... doesn't work at mark <---------
-                because Notify() is only handled on first page!
-            const Window*   pActFocusedWin = Application::GetFocusWindow();     // first get actual focused window
-
-            DBG_ASSERT( GetTabPage( GetCurPageId() ), "-IconChoiceDialog::PreNotify(): current page is null!" );
-
-#ifdef DBG_UTIL
-            ULONG           nNotified =
-#endif
-            GetTabPage( GetCurPageId() )->Notify( rNEvt );<---------    // try to handle key input in actual page
-
-            if( pActFocusedWin == Application::GetFocusWindow() )
-            {   // key not handled or only one mnemonic available for a control wich already has focus
-                //  -> ignore result of Notify() and give the icon select control a chance
-                if( maIconCtrl.HandleShortCutKey( *pKEvt ) )
-                {
-                    nRet = 1;
-                }
-            }
-            else
-            {   // key was handled -> try to detect overrun in mnemonic handling of dialog
-                DBG_ASSERT( nNotified != 0, "*IconChoiceDialog::PreNotify(): focus changed but nothing done in Notify()!?" );
-
-                nRet = 1;       // no matter what happens afterwards, the key was handled
-
-                Window*                 pActWin = Application::GetFocusWindow();    //->GetWindow( WINDOW_PREV );
-                DBG_ASSERT( IsChild( pActWin ), "*IconChoiceDialog::PreNotify(): this is not my child!" );
-
-                xub_Unicode             cMnem = pKEvt->GetCharCode();
-                UINT32                  nMnemCnt = 0;
-                const vcl::I18nHelper&  rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-
-                while( pActWin )
-                {
-                    switch( pActWin->GetType() )
-                    {
-                        case WINDOW_FIXEDTEXT:
-                        case WINDOW_RADIOBUTTON:
-                        case WINDOW_CHECKBOX:
-                        case WINDOW_TRISTATEBOX:
-                        case WINDOW_PUSHBUTTON:
-                            if( rI18nHelper.MatchMnemonic( pActWin->GetText(), cMnem ) )
-                                nMnemCnt++;
-                            break;
-                    }
-
-                    pActWin = pActWin->GetWindow( WINDOW_PREV );
-                }
-
-                DBG_ASSERT( nMnemCnt, "+IconChoiceDialog::PreNotify(): no matching fixed text before focused control!" );
-
-                if( nMnemCnt < 2 )
-                    // now the only possible scenario: handling of mnemonics wrapped at the end of childs
-                    maIconCtrl.HandleShortCutKey( *pKEvt );
-            }*/
-        }
-
-        return nRet;
-    }
-    else
-        return ModalDialog::PreNotify( rNEvt );
-}
-
-// -----------------------------------------------------------------------
-
 void IconChoiceDialog::CreateIconTextAutoMnemonics( void )
 {
+    // !!!!!!! this might be done by IconChoice control -> SvtIconChoiceCtrl::CreateAutoMnemonics() !!!!!!!
     MnemonicGenerator   aMnemonicGenerator;
     const ULONG         nEntryCount = maIconCtrl.GetEntryCount();
     ULONG               i;

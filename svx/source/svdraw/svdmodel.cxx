@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-11 16:50:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,36 @@
 #ifndef _STRING_H
 #include <tools/string.hxx>
 #endif
+
+#ifndef _SFX_WHITER_HXX
+#include <svtools/whiter.hxx>
+#endif
+
+#ifndef _SVX_XIT_HXX
+#include "xit.hxx"
+#endif
+#ifndef _SVX_XBTMPIT_HXX
+#include "xbtmpit.hxx"
+#endif
+#ifndef _SVX_XLNDSIT_HXX
+#include "xlndsit.hxx"
+#endif
+#ifndef _SVX_XLNEDIT_HXX //autogen
+#include "xlnedit.hxx"
+#endif
+#ifndef _SVX_XFLGRIT_HXX
+#include "xflgrit.hxx"
+#endif
+#ifndef _SVX_XFLFTRIT_HXX
+#include "xflftrit.hxx"
+#endif
+#ifndef _SVX_XFLHTIT_HXX //autogen
+#include "xflhtit.hxx"
+#endif
+#ifndef _SVX_XLNSTIT_HXX
+#include "xlnstit.hxx"
+#endif
+
 
 #include "svditext.hxx"
 #include "editeng.hxx"   // Fuer EditEngine::CreatePool()
@@ -2715,6 +2745,66 @@ void SdrModel::setLock( BOOL bLock )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel* pNewModel )
+{
+    if( pSourceSet && pDestSet && (pSourceSet != pDestSet ) )
+    {
+        if( pNewModel == NULL )
+            pNewModel = this;
+
+        SfxWhichIter aWhichIter(*pSourceSet);
+        sal_uInt16 nWhich(aWhichIter.FirstWhich());
+        const SfxPoolItem *pPoolItem;
+
+        while(nWhich)
+        {
+            if(SFX_ITEM_SET == pSourceSet->GetItemState(nWhich, FALSE, &pPoolItem))
+            {
+                const SfxPoolItem* pItem = pPoolItem;
+
+                switch( nWhich )
+                {
+                case XATTR_FILLBITMAP:
+                    pItem = ((XFillBitmapItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_LINEDASH:
+                    pItem = ((XLineDashItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_LINESTART:
+                    pItem = ((XLineStartItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_LINEEND:
+                    pItem = ((XLineEndItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_FILLGRADIENT:
+                    pItem = ((XFillGradientItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_FILLFLOATTRANSPARENCE:
+                    // #85953# allow all kinds of XFillFloatTransparenceItem to be set
+                    pItem = ((XFillFloatTransparenceItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_FILLHATCH:
+                    pItem = ((XFillHatchItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                }
+
+                // set item
+                if( pItem )
+                {
+                    pDestSet->Put(*pItem);
+
+                    // delete item if it was a generated one
+                    if( pItem != pPoolItem)
+                        delete (SfxPoolItem*)pItem;
+                }
+            }
+            nWhich = aWhichIter.NextWhich();
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void SdrModel::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars )
 {
     if( mpForbiddenCharactersTable )
@@ -2836,4 +2926,3 @@ SdrHint::SdrHint(const SdrObject& rNewObj, const Rectangle& rRect)
     bNeedRepaint = TRUE;
     eHint = HINT_OBJCHG;
 }
-

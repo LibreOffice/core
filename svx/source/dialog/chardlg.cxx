@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: iha $ $Date: 2002-11-28 19:19:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3431,7 +3431,15 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         }
         else
         {
-            m_a0degRB.Check( TRUE );
+            if( eState == SFX_ITEM_DONTCARE )
+            {
+                m_a0degRB.Check( FALSE );
+                m_a90degRB.Check( FALSE );
+                m_a270degRB.Check( FALSE );
+            }
+            else
+                m_a0degRB.Check( TRUE );
+
             m_aFitToLineCB.Check( FALSE );
         }
         m_aFitToLineCB.SetClickHdl( aOldLink );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-06 11:02:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -30,7 +30,7 @@
  *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330,  Boston,
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
  *
@@ -185,23 +185,23 @@ struct SvxOpenGrf_Impl
 {
     SvxOpenGrf_Impl         ();
 
-    sfx2::FileDialogHelper                  maFileDlg;
-    Reference < XFilePickerControlAccess >  mxCtrlAcc;
+    sfx2::FileDialogHelper                  aFileDlg;
+    Reference < XFilePickerControlAccess >  xCtrlAcc;
 };
 
 
 SvxOpenGrf_Impl::SvxOpenGrf_Impl() :
-    maFileDlg(SFXWB_GRAPHIC)
+    aFileDlg(SFXWB_GRAPHIC)
 {
-    Reference < XFilePicker > xFP = maFileDlg.GetFilePicker();
-    mxCtrlAcc = Reference < XFilePickerControlAccess >(xFP, UNO_QUERY);
+    Reference < XFilePicker > xFP = aFileDlg.GetFilePicker();
+    xCtrlAcc = Reference < XFilePickerControlAccess >(xFP, UNO_QUERY);
 }
 
 
 SvxOpenGraphicDialog::SvxOpenGraphicDialog( const String& rTitle ) :
     mpImpl( new SvxOpenGrf_Impl )
 {
-    mpImpl->maFileDlg.SetTitle(rTitle);
+    mpImpl->aFileDlg.SetTitle(rTitle);
 }
 
 
@@ -212,13 +212,13 @@ SvxOpenGraphicDialog::~SvxOpenGraphicDialog()
 
 GraphicFilter* GetGrfFilter();
 
-ErrCode SvxOpenGraphicDialog::Execute()
+short SvxOpenGraphicDialog::Execute()
 {
     USHORT  nImpRet;
     BOOL    bQuitLoop(FALSE);
 
     while( bQuitLoop == FALSE &&
-           mpImpl->maFileDlg.Execute() == ERRCODE_NONE )
+           mpImpl->aFileDlg.Execute() == ERRCODE_NONE )
     {
         if( GetPath().Len() )
         {
@@ -283,13 +283,13 @@ ErrCode SvxOpenGraphicDialog::Execute()
     }
 
     // cancel
-    return ERRCODE_ABORT;
+    return -1;
 }
 
 
 void SvxOpenGraphicDialog::SetPath( const String& rPath )
 {
-    mpImpl->maFileDlg.SetDisplayDirectory(rPath);
+    mpImpl->aFileDlg.SetDisplayDirectory(rPath);
 }
 
 void SvxOpenGraphicDialog::SetPath( const String& rPath, sal_Bool bLinkState )
@@ -301,11 +301,11 @@ void SvxOpenGraphicDialog::SetPath( const String& rPath, sal_Bool bLinkState )
 
 void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
 {
-    if( mpImpl->mxCtrlAcc.is() )
+    if( mpImpl->xCtrlAcc.is() )
     {
         try
         {
-            mpImpl->mxCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, state );
+            mpImpl->xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, state );
         }
         catch(IllegalArgumentException)
         {
@@ -319,12 +319,12 @@ void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
 
 void SvxOpenGraphicDialog::AsLink(sal_Bool  bState)
 {
-    if( mpImpl->mxCtrlAcc.is() )
+    if( mpImpl->xCtrlAcc.is() )
     {
         try
         {
             Any aAny; aAny <<= bState;
-            mpImpl->mxCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aAny );
+            mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aAny );
         }
         catch(IllegalArgumentException)
         {
@@ -340,9 +340,9 @@ sal_Bool SvxOpenGraphicDialog::IsAsLink() const
 {
     try
     {
-        if( mpImpl->mxCtrlAcc.is() )
+        if( mpImpl->xCtrlAcc.is() )
         {
-            Any aVal = mpImpl->mxCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
+            Any aVal = mpImpl->xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
             DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
             return aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_False;
         }
@@ -358,35 +358,35 @@ sal_Bool SvxOpenGraphicDialog::IsAsLink() const
 }
 
 
-ErrCode SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
+int SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
 {
-    return mpImpl->maFileDlg.GetGraphic(rGraphic);
+    return mpImpl->aFileDlg.GetGraphic(rGraphic);
 }
 
 
 String SvxOpenGraphicDialog::GetPath() const
 {
-    return mpImpl->maFileDlg.GetPath();
+    return mpImpl->aFileDlg.GetPath();
 }
 
 
 String SvxOpenGraphicDialog::GetCurrentFilter() const
 {
-    return mpImpl->maFileDlg.GetCurrentFilter();
+    return mpImpl->aFileDlg.GetCurrentFilter();
 }
 
 
 void SvxOpenGraphicDialog::SetCurrentFilter(const String&   rStr)
 {
-    mpImpl->maFileDlg.SetCurrentFilter(rStr);
+    mpImpl->aFileDlg.SetCurrentFilter(rStr);
 }
 
 void SvxOpenGraphicDialog::SetControlHelpIds( const INT16* _pControlId, const INT32* _pHelpId )
 {
-    mpImpl->maFileDlg.SetControlHelpIds( _pControlId, _pHelpId );
+    mpImpl->aFileDlg.SetControlHelpIds( _pControlId, _pHelpId );
 }
 
 void SvxOpenGraphicDialog::SetDialogHelpId( const INT32 _nHelpId )
 {
-    mpImpl->maFileDlg.SetDialogHelpId( _nHelpId );
+    mpImpl->aFileDlg.SetDialogHelpId( _nHelpId );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-11 16:27:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,9 @@
  ************************************************************************/
 
 #include <math.h>
-
+#ifndef _SVX_IMPGRF_HXX
+#include "impgrf.hxx"
+#endif
 #ifndef _ESCHESDO_HXX
 #include "eschesdo.hxx"
 #endif
@@ -740,6 +742,16 @@ void EscherPropertyContainer::CreateLineProperties(
     }
 }
 
+static Size lcl_SizeToEmu(Size aPrefSize, MapMode aPrefMapMode)
+{
+    Size aRetSize;
+    if (aPrefMapMode == MAP_PIXEL)
+        aRetSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
+    else
+        aRetSize = Application::GetDefaultDevice()->LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM );
+    return aRetSize;
+}
+
 void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                                                             sal_uInt32 nBlibId, sal_Bool bCreateCroppingAttributes )
 {
@@ -818,11 +830,7 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::sta
         MapMode aPrefMapMode;
         if ( pGraphicProvider->GetPrefSize( nBlibId, aPrefSize, aPrefMapMode ) )
         {
-            Size aCropSize;
-            if ( aPrefMapMode == MAP_PIXEL )
-                aCropSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
-            else
-                aCropSize = Application::GetDefaultDevice()->LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM );
+            Size aCropSize(lcl_SizeToEmu(aPrefSize, aPrefMapMode));
             if ( aCropSize.Width() && aCropSize.Height() )
             {
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicCrop" ) ) ) )
@@ -2023,7 +2031,35 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
             GraphicType eGraphicType = aGraphic.GetType();
             if ( ( eGraphicType == GRAPHIC_BITMAP ) || ( eGraphicType == GRAPHIC_GDIMETAFILE ) )
             {
-                sal_uInt32 nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_WMF );
+                sal_uInt32 nErrCode;
+                if ( !aGraphic.IsAnimated() )
+                    nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_WMF );
+                else
+                {   // to store a animation, a gif has to be included into the msOG chunk of a png  #I5583#
+                    GraphicFilter*  pFilter = GetGrfFilter();
+                    SvMemoryStream  aGIFStream;
+                    ByteString      aVersion( "MSOFFICE9.0" );
+                    aGIFStream.Write( aVersion.GetBuffer(), aVersion.Len() );
+                    nErrCode = pFilter->ExportGraphic( aGraphic, String(), aGIFStream,
+                        pFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( "GIF" ) ) ), sal_False, NULL );
+                    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aFilterData( 1 );
+                    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aAdditionalChunkSequence( 1 );
+                    sal_uInt32 nGIFSreamLen = aGIFStream.Tell();
+                    com::sun::star::uno::Sequence< sal_Int8 > aGIFSeq( nGIFSreamLen );
+                    sal_Int8* pSeq = aGIFSeq.getArray();
+                    aGIFStream.Seek( STREAM_SEEK_TO_BEGIN );
+                    aGIFStream.Read( pSeq, nGIFSreamLen );
+                    com::sun::star::beans::PropertyValue aChunkProp, aFilterProp;
+                    aChunkProp.Name = String( RTL_CONSTASCII_USTRINGPARAM( "msOG" ) );
+                    aChunkProp.Value <<= aGIFSeq;
+                    aAdditionalChunkSequence[ 0 ] = aChunkProp;
+                    aFilterProp.Name = String( RTL_CONSTASCII_USTRINGPARAM( "AdditionalChunks" ) );
+                    aFilterProp.Value <<= aAdditionalChunkSequence;
+                    aFilterData[ 0 ] = aFilterProp;
+                    nErrCode = pFilter->ExportGraphic( aGraphic, String(), aStream,
+                        pFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( "PNG" ) ) ), sal_False,
+                            &aFilterData );
+                }
                 if ( nErrCode == ERRCODE_NONE )
                 {
                     p_EscherBlibEntry->meBlibType = ( eGraphicType == GRAPHIC_BITMAP ) ? PNG : WMF;
@@ -2088,7 +2124,6 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                         rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
                     rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
 
-#if 1
                     /*
                      ##913##
                      For Word the stored size of the graphic is critical the
@@ -2099,16 +2134,12 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                      msoffice app may show strange behaviour as the size jumps
                      around, and the original size and scaling factor in word
                      will be a very strange figure
-
-                     The older code works in powerpoint probably because
-                     powerpoint uses the values of the graphic itself and
-                     ignores these ones.
-                     */
-                    Size aPrefSize = aGraphic.GetPrefSize();
-                    UINT32 nPrefWidth = aPrefSize.Width();
-                    UINT32 nPrefHeight = aPrefSize.Height();
-                    UINT32 nWidth = nPrefWidth * 360; //EMU
-                    UINT32 nHeight = nPrefHeight * 360; //EMU
+                    */
+                    UINT32 nPrefWidth = p_EscherBlibEntry->maPrefSize.Width();
+                    UINT32 nPrefHeight = p_EscherBlibEntry->maPrefSize.Height();
+                    Size aPrefSize(lcl_SizeToEmu(p_EscherBlibEntry->maPrefSize, p_EscherBlibEntry->maPrefMapMode));
+                    UINT32 nWidth = aPrefSize.Width() * 360;
+                    UINT32 nHeight = aPrefSize.Height() * 360;
 
                     rPicOutStrm << nUncompressedSize // WMFSize without FileHeader
                     << (sal_Int32)0     // da die Originalgroesse des WMF's (ohne FileHeader)
@@ -2120,22 +2151,6 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                     << p_EscherBlibEntry->mnSize
                     << (sal_uInt16)0xfe00;  // compression Flags
                     rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
-#else
-                    UINT32 nWidth = rBoundRect.GetWidth() * 360;
-                    UINT32 nHeight = rBoundRect.GetHeight() * 360;
-                    double fWidth = (double)rBoundRect.GetWidth() / 10000.0 * 1027.0;
-                    double fHeight = (double)rBoundRect.GetHeight() / 10000.0 * 1027.0;
-                    rPicOutStrm << nUncompressedSize    // WMFSize ohne FileHeader
-                                << (sal_Int32)0         // da die Originalgroesse des WMF's (ohne FileHeader)
-                                << (sal_Int32)0         // nicht mehr feststellbar ist, schreiben wir 10cm / x
-                                << (sal_Int32)fWidth
-                                << (sal_Int32)fHeight
-                                << nWidth
-                                << nHeight
-                                << p_EscherBlibEntry->mnSize
-                                << (sal_uInt16)0xfe00;  // compression Flags
-                    rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
-#endif
                 }
             }
             if ( nAtomSize )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-09-04 10:55:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase1.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 
 using namespace com::sun::star::uno;
@@ -851,8 +855,11 @@ void SvxRubyDialog::AssertOneEntry()
 void SvxRubyDialog::UpdateColors( void )
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
+    svtools::ColorConfig        aColorConfig;
+
     Font                    aFnt( aPreviewWin.GetFont() );
-    Color                   aNewTextCol( rStyleSettings.GetWindowTextColor() );
+
+    Color                   aNewTextCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     Color                   aNewFillCol( rStyleSettings.GetWindowColor() );
 
     if( aNewFillCol != aFnt.GetFillColor() || aNewTextCol != aFnt.GetColor() )

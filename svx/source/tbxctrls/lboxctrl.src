@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-02 15:18:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,24 +95,24 @@ String RID_SVXSTR_NUM_UNDO_ACTIONS
     Text [ENGLISH] = "Undo $(ARG1) action(s)" ;
     Text[ english_us ] = "Undo $(ARG1) action(s)";
     Text[ portuguese ] = "Anular operação $(ARG1)";
-    Text[ russian ] = "Îòìåíèòü äåéñòâèå(ÿ) $(ARG1)";
+    Text[ russian ] = "Îòìåíèòü $(ARG1)";
     Text[ greek ] = "Undo $(ARG1) action";
-    Text[ dutch ] = "Ongedaan $(ARG1) activiteit(en)";
+    Text[ dutch ] = "Ongedaan maken $(ARG1) activiteit(en)";
     Text[ french ] = "Annuler $(ARG1) opération(s)";
     Text[ spanish ] = "Deshacer $(ARG1) acción(es)";
-    Text[ finnish ] = "Peruuta $(ARG1) toimintoa";
+    Text[ finnish ] = "Kumoa $(ARG1) toiminto(a)";
     Text[ italian ] = "Annulla $(ARG1) operazione/i";
-    Text[ danish ] = "Undo $(ARG1) action";
+    Text[ danish ] = "Fortryd $(ARG1) handling(er)";
     Text[ swedish ] = "Ångra $(ARG1) åtgärd(er)";
     Text[ polish ] = "Cofnij $(ARG1) akcjê(e)";
     Text[ portuguese_brazilian ] = "Undo $(ARG1) action";
     Text[ japanese ] = "$(ARG1) ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’å…ƒã«æˆ»ã™";
-    Text[ korean ] = "$(ARG1) ì‘ì—… ì‹¤í–‰ ì·¨ì†Œ";
+    Text[ korean ] = "$(ARG1) ì‘ë™ ì‹¤í–‰ ì·¨ì†Œ";
     Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤ $(ARG1) æ“ä½œ";
     Text[ chinese_traditional ] = "å¾©åŸ $(ARG1) æŒ‡ä»¤";
     Text[ turkish ] = "Undo $(ARG1) action";
     Text[ arabic ] = "Undo $(ARG1) action";
-    Text[ catalan ] = "Undo $(ARG1) action";
+    Text[ catalan ] = "Desfés $(ARG1) acció/ns";
     Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³ $(ARG1) ";
 };
 
@@ -122,24 +122,38 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text [ENGLISH] = "Redo $(ARG1) action(s)" ;
     Text[ english_us ] = "Redo $(ARG1) action(s)";
     Text[ portuguese ] = "Restaurar operação $(ARG1)";
-    Text[ russian ] = "Âîññòàíîâèòü äåéñòâèå(ÿ) $(ARG1)";
+    Text[ russian ] = "Âåğíóòü $(ARG1)";
     Text[ greek ] = "ÅğáíáöïñÜ $(ARG1) åíİñãåéáò(şí)";
     Text[ dutch ] = "Herhalen $(ARG1) activiteit(en)";
     Text[ french ] = "Restaurer $(ARG1) opération(s)";
     Text[ spanish ] = "Restaurar $(ARG1) acción(es)";
-    Text[ finnish ] = "Toista $(ARG1) toimintoa";
+    Text[ finnish ] = "Toista $(ARG1) toiminto(a)";
     Text[ italian ] = "Ripeti $(ARG1) operazione/i";
-    Text[ danish ] = "Redo $(ARG1) action";
+    Text[ danish ] = "Gendan $(ARG1) handling(er)";
     Text[ swedish ] = "Återställ $(ARG1) åtgärd(er)";
     Text[ polish ] = "Odtwórz $(ARG1) akcjê(e)";
     Text[ portuguese_brazilian ] = "Redo $(ARG1) action";
     Text[ japanese ] = "$(ARG1) ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚„ã‚Šç›´ã—";
-    Text[ korean ] = "$(ARG1) ì‘ì—… ì‚­ì œ ì·¨ì†Œ";
+    Text[ korean ] = "$(ARG1) ì‘ë™ ë‹¤ì‹œ ì‹¤í–‰";
     Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤ $(ARG1) æ“ä½œ";
     Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆ $(ARG1) æŒ‡ä»¤";
     Text[ turkish ] = "Redo $(ARG1) action";
     Text[ arabic ] = "Redo $(ARG1) action";
-    Text[ catalan ] = "Redo $(ARG1) action";
+    Text[ catalan ] = "Refés $(ARG1) acció/ns";
     Text[ thai ] = "à¸—à¸³à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³ $(ARG1) à¸‹à¹‰à¸³";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

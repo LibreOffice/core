@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bm $ $Date: 2001-12-04 13:57:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ uno::Reference< beans::XPropertySetInfo > SvxInfoSetCache::getCachedPropertySetI
         return aIt->second.get();
 
     uno::Reference< beans::XPropertySetInfo > xInfo( new SvxCachedItemPropertySetInfo( pMap, mpGlobalCache ) );
-    mpGlobalCache->maInfoMap[pMap] = xInfo;
+    mpGlobalCache->maInfoMap.insert(InfoMap::value_type(pMap,xInfo));
 
     /* if this assertion is triggered this class is possible used with dynamicly created
        SfxItemPropertyMap pointers. This will cause a cache overflow as the current

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-29 12:18:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,10 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
     maNewTheme.SetHelpId( HID_GALLERY_NEWTHEME );
     maNewTheme.SetText( String( GAL_RESID( RID_SVXSTR_GALLERY_CREATETHEME ) ) );
     maNewTheme.SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
+
+    // disable creation of new themes if a writable directory is not available
+    if( mpGallery->GetUserURL().GetProtocol() == INET_PROT_NOT_VALID )
+        maNewTheme.Disable();
 
     mpThemes->SetHelpId( HID_GALLERY_THEMELIST );
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );

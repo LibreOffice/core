@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2003-02-27 13:01:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ String RID_SVXSTR_SEARCH_STYLES
     Text [ ENGLISH ] = "including st~ylesheets" ;
     Text [ norwegian ] = "inkludert stilark" ;
     Text [ italian ] = "Includi modelli" ;
-    Text [ portuguese_brazilian ] = "Incluir estilos" ;
+    Text [ portuguese_brazilian ] = "Inclusive folhas de estilo" ;
     Text [ portuguese ] = "Incluindo ~estilos" ;
     Text [ finnish ] = "Sisällytetään tyylit" ;
     Text [ danish ] = "Inklusive typografier" ;
@@ -88,10 +88,11 @@ String RID_SVXSTR_SEARCH_STYLES
     Text[ chinese_traditional ] = "åŒ…æ‹¬æ¨£å¼";
     Text[ arabic ] = "ÈãÇ İí Ğáß ÇáÃäãÇØ";
     Text[ greek ] = "Óõìğåñéëáìâ. ğñüôõğá";
-    Text[ korean ] = "í…œí”Œë¦¿ í¬í•¨";
+    Text[ korean ] = "ìŠ¤íƒ€ì¼ í¬í•¨";
     Text[ turkish ] = "Bi~çimler dahil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Incluir ~estilos";
+    Text[ catalan ] = "S'estan incloent els estils";
+    Text[ thai ] = "à¸£à¸§à¸¡à¸¥à¸±à¸à¸©à¸“à¸°";
 };
 String RID_SVXSTR_SEARCH
 {
@@ -118,7 +119,8 @@ String RID_SVXSTR_SEARCH
     Text[ korean ] = "(ì°¾ê¸°)";
     Text[ turkish ] = "(Ara)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "(Buscar)";
+    Text[ catalan ] = "(Cerca)";
+    Text[ thai ] = "(à¸„à¹‰à¸™à¸«à¸²)";
 };
 String RID_SVXSTR_REPLACE
 {
@@ -145,7 +147,8 @@ String RID_SVXSTR_REPLACE
     Text[ korean ] = "(ë°”ê¾¸ê¸°)";
     Text[ turkish ] = "(Değiştir)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "(Reemplazar)";
+    Text[ catalan ] = "(Reemplaça)";
+    Text[ thai ] = "(à¹à¸—à¸™à¸—à¸µà¹ˆ)";
 };
 
  // RID_SVXDLG_SEARCH -----------------------------------------------------
@@ -161,7 +164,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text [ ENGLISH ] = "Search & Replace" ;
     Text [ norwegian ] = "Søk og Erstatt" ;
     Text [ italian ] = "Cerca e sostituisci" ;
-    Text [ portuguese_brazilian ] = "Localizar & Substituir" ;
+    Text [ portuguese_brazilian ] = "Procurar & Substituir" ;
     Text [ portuguese ] = "Localizar & Substituir" ;
     Text [ finnish ] = "Etsi ja korvaa" ;
     Text [ danish ] = "Søg og erstat" ;
@@ -172,12 +175,12 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text [ english_us ] = "Find & Replace" ;
     Text[ chinese_simplified ] = "æœå¯»å’Œæ›¿æ¢";
     Text[ russian ] = "Íàéòè è çàìåíèòü";
-    Text[ polish ] = "Find & Replace";
+    Text[ polish ] = "ZnajdŸ i zamieñ";
     Text[ japanese ] = "æ¤œç´¢ã¨ç½®æ›";
     Text[ chinese_traditional ] = "æœå°‹å’Œæ›¿ä»£";
     Text[ arabic ] = "ÈÍË æÇÓÊÈÏÇá";
     Text[ greek ] = "ÁíáæŞôçóç êáé ÁíôéêáôÜóôáóç";
-    Text[ korean ] = "ì°¾ê¸°ì™€ ë°”ê¾¸ê¸°";
+    Text[ korean ] = "ì°¾ê¸° ë° ë°”ê¾¸ê¸°";
     Text[ turkish ] = "Ara ve değiştir";
     Text[ language_user1 ] = " ";
     Moveable = TRUE ;
@@ -189,7 +192,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "S~earch for" ;
         Text [ norwegian ] = "S~øk etter" ;
         Text [ italian ] = "C~erca" ;
-        Text [ portuguese_brazilian ] = "B~uscar por" ;
+        Text [ portuguese_brazilian ] = "P~rocurar por" ;
         Text [ portuguese ] = "L~ocalizar" ;
         Text [ finnish ] = "~Etsittävä" ;
         Text [ danish ] = "Sø~g efter" ;
@@ -200,15 +203,16 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ english_us ] = "~Search for" ;
         Text[ chinese_simplified ] = "æœå¯»å†…å®¹(~S)";
         Text[ russian ] = "Íàéòè";
-        Text[ polish ] = "~Szukaj";
+        Text[ polish ] = "Szukaj";
         Text[ japanese ] = "æ¤œç´¢ãƒ†ã‚­ã‚¹ãƒˆ(~S)";
         Text[ chinese_traditional ] = "æœå°‹å…§å®¹(~S)";
         Text[ arabic ] = "ÇáÈÍË Úä";
         Text[ greek ] = "AíáæŞôçóç ãéá";
-        Text[ korean ] = "ì°¾ì„ ëŒ€ìƒ(~S)";
+        Text[ korean ] = "ê²€ìƒ‰ ëŒ€ìƒ(~S)";
         Text[ turkish ] = "Arana~n";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "B~uscar";
+        Text[ catalan ] = "~Cerca";
+        Text[ thai ] = "~à¸„à¹‰à¸™à¸«à¸²à¸ªà¸³à¸«à¸£à¸±à¸š";
     };
     ComboBox ED_SEARCH
     {
@@ -235,6 +239,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Hide = TRUE ;
     };
     Text[ catalan ] = "Cerca i reemplaça";
+    Text[ thai ] = "Search & Replace";
 #if SUPD < 641 || defined( GT_DEBUG )
     MultiLineEdit ED_SEARCH_FORMATS
     {
@@ -270,7 +275,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ english_us ] = "Re~place with" ;
         Text[ chinese_simplified ] = "æ›¿æ¢æˆ(~P)";
         Text[ russian ] = "Çàìåíèòü íà";
-        Text[ polish ] = "Z~amieñ na";
+        Text[ polish ] = "Zamieñ na";
         Text[ japanese ] = "ç½®æ›ãƒ†ã‚­ã‚¹ãƒˆ(~P)";
         Text[ chinese_traditional ] = "æ›´æ›¿æˆ(~P)";
         Text[ arabic ] = "ÇáßáãÉ ÇáÈÏíáÉ";
@@ -278,7 +283,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ë°”ê¾¸ê¸°(~P)";
         Text[ turkish ] = "Yeni de~ğer";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ree~mplaça amb";
+        Text[ catalan ] = "Reemplaça ~amb";
+        Text[ thai ] = "à¹à¸—à¸™~à¸—à¸µà¹ˆà¸”à¹‰à¸§à¸¢";
     };
     ComboBox ED_REPLACE
     {
@@ -340,15 +346,16 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åªå…è®¸å•è¯(~D)";
         Text[ russian ] = "Òîëüêî âñå ñëîâî";
-        Text[ polish ] = "Tylko ~ca³e wyrazy";
+        Text[ polish ] = "Tylko ca³e s³owa";
         Text[ japanese ] = "å˜èªã¨ã—ã¦(~D)";
         Text[ chinese_traditional ] = "åƒ…æ˜¯å–®è©(~D)";
         Text[ arabic ] = "ßáãÇÊ ßÇãáÉ İŞØ";
         Text[ greek ] = "Ìüíï ïëüêëçñåò ëİîåéò";
-        Text[ korean ] = "ì „ì²´ ë‹¨ì–´ë§Œ(~D)";
+        Text[ korean ] = "ë‹¨ì–´ ë‹¨ìœ„ë¡œ(~D)";
         Text[ turkish ] = "Yalnızca tam s~özcük";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Solo pa~labras completas";
+        Text[ catalan ] = "Només pa~raules completes";
+        Text[ thai ] = "~à¸„à¸³à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
     };
     CheckBox CB_MATCH_CASE
     {
@@ -369,15 +376,16 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ italian ] = "Ricerca esatta";
         Text[ danish ] = "E~ksakt søgning";
         Text[ swedish ] = "Exakt sökning";
-        Text[ polish ] = "Uwzglêdniaj wielk~oœæ liter";
-        Text[ portuguese_brazilian ] = "Coincidir ~maiúscula/minúscula";
+        Text[ polish ] = "Dok³adne wyszukiwanie";
+        Text[ portuguese_brazilian ] = "Igua~lar Caixa";
         Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹";
-        Text[ korean ] = "ìì„¸íˆ ì°¾ê¸°(~T)";
+        Text[ korean ] = "ëŒ€ë¬¸ì ë° ì†Œë¬¸ìë¥¼ êµ¬ë¶„(~T)";
         Text[ chinese_simplified ] = "ç²¾ç¡®æœå¯»(~T)";
         Text[ chinese_traditional ] = "ç²¾ç¢ºæœå°‹(~T)";
         Text[ turkish ] = "~BÜYÜK/küçük harf duyarlı";
         Text[ arabic ] = "ÈÍË ÏŞíŞ";
-        Text[ catalan ] = "Coincidencia e~xacta";
+        Text[ catalan ] = "Coincidència e~xacta";
+        Text[ thai ] = "~à¸ˆà¸±à¸šà¸„à¸¹à¹ˆà¸à¸£à¸“à¸µ";
     };
     CheckBox BTN_BACKWARDS
     {
@@ -387,7 +395,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "Bac~kwards" ;
         Text [ norwegian ] = "Bako~ver" ;
         Text [ italian ] = "I~ndietro" ;
-        Text [ portuguese_brazilian ] = "~Para trás" ;
+        Text [ portuguese_brazilian ] = "Para ?tr~s" ;
         Text [ portuguese ] = "~Para trás" ;
         Text [ finnish ] = "~Taaksepäin" ;
         Text [ danish ] = "Til~bage" ;
@@ -399,7 +407,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å‘å(~K)";
         Text[ russian ] = "Îáğàòíûé";
-        Text[ polish ] = "~Wstecz";
+        Text[ polish ] = "Wstecz";
         Text[ japanese ] = "ãƒãƒƒã‚¯ã™ã‚‹(~K)";
         Text[ chinese_traditional ] = "å‘å¾Œ(~K)";
         Text[ arabic ] = "ááÎáİ";
@@ -407,7 +415,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ë’¤ë¡œ(~K)";
         Text[ turkish ] = "~Geri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Retroce~der";
+        Text[ catalan ] = "Cap ~enrere";
+        Text[ thai ] = "à¸‚à¹‰à¸²à¸‡~à¸«à¸¥à¸±à¸‡";
     };
     CheckBox BTN_SELECTIONS
     {
@@ -417,7 +426,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "Select~ions" ;
         Text [ norwegian ] = "Alternativ~er" ;
         Text [ italian ] = "Solo nella selez~ione" ;
-        Text [ portuguese_brazilian ] = "~Apenas selecionados" ;
+        Text [ portuguese_brazilian ] = "Sele~??s" ;
         Text [ portuguese ] = "Apenas ~selecção activa" ;
         Text [ finnish ] = "Vain nykyinen valinta" ;
         Text [ danish ] = "Kun det markerede" ;
@@ -429,7 +438,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åªå…è®¸å½“å‰çš„é€‰ä¸­(~O)";
         Text[ russian ] = "Òîëüêî òåêóùåå âûäåëåíèå";
-        Text[ polish ] = "~Tylko bie¿¹ce zaznaczenie";
+        Text[ polish ] = "Tylko za~znaczone";
         Text[ japanese ] = "é¸æŠç¯„å›²ã®ã¿(~O)";
         Text[ chinese_traditional ] = "åªå…è¨±ç›®å‰çš„é¸å–(~O)";
         Text[ arabic ] = "ÇáÊÍÏíÏ İŞØ";
@@ -437,7 +446,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "í˜„ì¬ ì„ íƒ ì‚¬í•­ë§Œ(~O)";
         Text[ turkish ] = "~Yalnızca seçilen aralık içinde";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Solo e~n la selección";
+        Text[ catalan ] = "Només e~n la selecció";
+        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™à¹€~à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
     };
     CheckBox BTN_REGEXP
     {
@@ -447,7 +457,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "Re~gular Expressions" ;
         Text [ norwegian ] = "Va~nlige Uttrykk" ;
         Text [ italian ] = "Espressione re~golare" ;
-        Text [ portuguese_brazilian ] = "Expressões Re~gulares" ;
+        Text [ portuguese_brazilian ] = "Express es Re~gulares" ;
         Text [ portuguese ] = "~Expressão regular" ;
         Text [ finnish ] = "Säänn~ölliset lausekkeet" ;
         Text [ danish ] = "Regulært udtryk" ;
@@ -459,15 +469,16 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¸¸è§„è¡¨è¾¾(~X)";
         Text[ russian ] = "Ğåãóëÿğíîå âûğàæåíèå";
-        Text[ polish ] = "Wyra¿~enie regularne";
+        Text[ polish ] = "Wyra¿enie regularne";
         Text[ japanese ] = "æ­£è¦è¡¨ç¾(~X)";
         Text[ chinese_traditional ] = "å¸¸è¦è¡¨é”(~X)";
         Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
         Text[ greek ] = "ÊáíïíéêŞ ğáñÜóôáóç";
-        Text[ korean ] = "ì¼ë°˜ í‘œí˜„(~X)";
+        Text[ korean ] = "ì •ê·œì‹(~X)";
         Text[ turkish ] = "Genel a~rama karakteri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Expresión re~gular";
+        Text[ catalan ] = "E~xpressions habituals";
+        Text[ thai ] = "à¸„à¸³~à¸­à¸˜à¸´à¸šà¸²à¸¢à¸›à¸à¸•à¸´";
     };
     CheckBox BTN_LAYOUTS
     {
@@ -477,7 +488,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "Search for St~ylesheets" ;
         Text [ norwegian ] = "Søk etter St~ilark" ;
         Text [ italian ] = "Cerca modelli" ;
-        Text [ portuguese_brazilian ] = "Procurar por ~Estilo" ;
+        Text [ portuguese_brazilian ] = "Procurar por Fo~lhas de estilo" ;
         Text [ portuguese ] = "Locali~zar estilos" ;
         Text [ finnish ] = "Etsittävät t~yylit" ;
         Text [ danish ] = "Søg efter typogra~fier" ;
@@ -489,15 +500,16 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æœå¯»æ ·å¼(~Y)";
         Text[ russian ] = "Ïîèñê ñòèëåé";
-        Text[ polish ] = "Szukaj sty~lów";
+        Text[ polish ] = "Szu~kaj stylów";
         Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã®æ¤œç´¢(~Y)";
         Text[ chinese_traditional ] = "æœå°‹æ¨£å¼(~Y)";
         Text[ arabic ] = "ÇáÈÍË Úä ÃäãÇØ";
         Text[ greek ] = "AíáæŞôçóç ãéá ğñüôõğá";
-        Text[ korean ] = "í…œí”Œë¦¿ ì°¾ê¸°(~Y)";
+        Text[ korean ] = "ìŠ¤íƒ€ì¼ ì°¾ê¸°(~Y)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Biçim ara";
-        Text[ catalan ] = "Buscar ~estilos";
+        Text[ catalan ] = "Cerca es~tils";
+        Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¸¥à¸±à¸~à¸©à¸“à¸°";
     };
     CheckBox CB_SIMILARITY
     {
@@ -513,7 +525,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ french ] = "Recherche de similarité" ;
         Text [ swedish ] = "Likhetssökning" ;
         Text [ danish ] = "S~øg lignende" ;
-        Text [ portuguese_brazilian ] = "~Busca por semelhança" ;
+        Text [ portuguese_brazilian ] = "~?hnlichkeitssuche" ;
         Text [ portuguese ] = "Pro~cura por semelhança" ;
         Text[ chinese_simplified ] = "ç±»ä¼¼æœå¯»(~I)";
         Text[ russian ] = "Ïîèñê ïîäîáíûõ";
@@ -522,11 +534,12 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_traditional ] = "ç›¸ä¼¼å­—æœå°‹(~I)";
         Text[ arabic ] = "ÇáÈÍË Úä ßáãÇÊ ãÊÔÇÈåÉ";
         Text[ greek ] = "ÁíáæŞôçóç ïìïéüôçôáò";
-        Text[ korean ] = "ìœ ì‚¬ì„± ì°¾ê¸°(~I)";
+        Text[ korean ] = "ìœ ì‚¬ì„± ê²€ìƒ‰(~I)";
         Text[ turkish ] = "~Benzerleri ara";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Búsqueda por se~mejanza";
+        Text[ catalan ] = "Cerca de s~imilitud";
         Text[ finnish ] = "Vastaavuus~haku";
+        Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¸ªà¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¸„~à¸¥à¹‰à¸²à¸¢à¸à¸±à¸™";
     };
     PushButton PB_SIMILARITY
     {
@@ -553,15 +566,16 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ italian ] = "Considera la larghezza dei caratteri";
         Text[ danish ] = "Halv-/nor~malbrede former";
         Text[ swedish ] = "Ta hänsyn till teckenbredd";
-        Text[ polish ] = "Uwz~glêdniaj szerokoœæ znaków";
-        Text[ portuguese_brazilian ] = "Largura do caracter";
+        Text[ polish ] = "Uwzglêdnij szerokoœæ znaków";
+        Text[ portuguese_brazilian ] = "Match half/full width forms";
         Text[ japanese ] = "å…¨è§’ã¨åŠè§’ã‚’åŒºåˆ¥ã™ã‚‹";
-        Text[ korean ] = "ë¬¸ì í­ì— ì£¼ì˜í•˜ì‹­ì‹œì˜¤";
+        Text[ korean ] = "ì „ìì™€ ë°˜ìë¥¼ êµ¬ë¶„";
         Text[ chinese_simplified ] = "é¡¾å…¨å­—ç¬¦å®½åº¦";
         Text[ chinese_traditional ] = "é¡§åŠå­—å…ƒå¯¬åº¦";
         Text[ turkish ] = "Match half/full width forms";
         Text[ arabic ] = "äãÇĞÌ äÕİ ÇáÚÑÖ/ÚÑÖ ÚÇÏí";
-        Text[ catalan ] = "Formas con ancho medio o normal";
+        Text[ catalan ] = "Formes amb mida mitjana o normal";
+        Text[ thai ] = "à¸ˆà¸±à¸šà¸„à¸¹à¹ˆà¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¸„à¸£à¸¶à¹ˆà¸‡/à¹€à¸•à¹‡à¸¡";
     };
     CheckBox CB_JAP_SOUNDS_LIKE
     {
@@ -580,16 +594,17 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ italian ] = "Ortografia simile (giapponese)";
         Text[ danish ] = "Lign. skrivemåde (Jap.)";
         Text[ swedish ] = "Likn. skrivsätt (japanska)";
-        Text[ polish ] = "~Podobna pisownia (japoñski)";
-        Text[ portuguese_brazilian ] = "Ortografia semelhante (Japonês)";
+        Text[ polish ] = "Podobna pisownia (japoñski)";
+        Text[ portuguese_brazilian ] = "Sounds like (Japanese)";
         Text[ japanese ] = "ã‚ã„ã¾ã„æ¤œç´¢(æ—¥æœ¬èª)";
-        Text[ korean ] = "ìœ ì‚¬í•œ ì² ìë²• (ì¼ë³¸ì–´)";
+        Text[ korean ] = "ë™ìŒì–´ ì°¾ê¸°(ì¼ë³¸ì–´)";
         Text[ chinese_simplified ] = "ç±»ä¼¼å­—ç¬¦(æ—¥æ–‡)";
         Text[ chinese_traditional ] = "é¡ä¼¼å­—å…ƒ(æ—¥æ–‡)";
         Text[ turkish ] = "Sounds like (Japanese)";
         Text[ arabic ] = "ßÊÇÈÉ ãÔÇÈåÉ(íÇÈÇäíÉ)";
-        Text[ catalan ] = "Ortografía similar (Japonés)";
+        Text[ catalan ] = "Ortografia similar (Japonès)";
         Text[ finnish ] = "Samankuuloinen kuin (japani)";
+        Text[ thai ] = "à¹€à¸ªà¸µà¸¢à¸‡à¹€à¸«à¸¡à¸·à¸­à¸™ (à¸ à¸²à¸©à¸²à¸à¸µà¹ˆà¸›à¸¸à¹ˆà¸™)";
     };
     PushButton PB_JAP_OPTIONS
     {
@@ -626,6 +641,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ì˜µì…˜";
         Text[ turkish ] = "Seçenekler";
         Text[ catalan ] = "Opcions";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     RadioButton BTN_FORMULAS
     {
@@ -635,7 +651,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "F~ormulas" ;
         Text [ norwegian ] = "F~ormler" ;
         Text [ italian ] = "F~ormule" ;
-        Text [ portuguese_brazilian ] = "F~órmulas" ;
+        Text [ portuguese_brazilian ] = "F~?mulas" ;
         Text [ portuguese ] = "F~órmulas" ;
         Text [ finnish ] = "~Kaavat" ;
         Text [ danish ] = "For~mler" ;
@@ -655,7 +671,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ìˆ˜ì‹(~O)";
         Text[ turkish ] = "F~ormül";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Fórmulas";
+        Text[ catalan ] = "~Fórmules";
+        Text[ thai ] = "à¸ªà¸¹~à¸•à¸£à¸„à¸³à¸™à¸§à¸“";
     };
     RadioButton BTN_VALUES
     {
@@ -677,7 +694,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Hide = TRUE ;
         Text[ chinese_simplified ] = "æ•°å€¼(~V)";
         Text[ russian ] = "Çíà÷åíèÿ";
-        Text[ polish ] = "wartoœciac~h";
+        Text[ polish ] = "wartoœc~iach";
         Text[ japanese ] = "å€¤(~V)";
         Text[ chinese_traditional ] = "æ•¸å€¼(~V)";
         Text[ arabic ] = "ÇáŞíã";
@@ -685,7 +702,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ê°’(~V)";
         Text[ turkish ] = "~Değer";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Valores";
+        Text[ catalan ] = "~Valors";
+        Text[ thai ] = "~à¸„à¹ˆà¸²";
     };
     RadioButton BTN_NOTES
     {
@@ -695,7 +713,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "~Notes" ;
         Text [ norwegian ] = "~Notes" ;
         Text [ italian ] = "~Note" ;
-        Text [ portuguese_brazilian ] = "~Anotações" ;
+        Text [ portuguese_brazilian ] = "~Observa??s" ;
         Text [ portuguese ] = "~Anotações" ;
         Text [ finnish ] = "Hu~omautukset" ;
         Text [ danish ] = "No~ter" ;
@@ -716,6 +734,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ turkish ] = "No~t";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Notes";
+        Text[ thai ] = "~à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
     };
     FixedLine FL_SEARCH
     {
@@ -742,10 +761,11 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_traditional ] = "æœå°‹ä½ç½®";
         Text[ arabic ] = "ÇáÈÍË İí";
         Text[ greek ] = "ÁíáæŞôçóç óå";
-        Text[ korean ] = "ì°¾ì„ ë²”ìœ„";
+        Text[ korean ] = "ê²€ìƒ‰ ìœ„ì¹˜";
         Text[ turkish ] = "Bakılacak yerler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Buscar en";
+        Text[ catalan ] = "Cerca a";
+        Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¹ƒà¸™";
     };
     FixedLine FL_SEARCHDIR_VERT
     {
@@ -761,7 +781,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "~Rows" ;
         Text [ norwegian ] = "~Rows" ;
         Text [ italian ] = "A riga" ;
-        Text [ portuguese_brazilian ] = "~Linhas" ;
+        Text [ portuguese_brazilian ] = "Filei~ras" ;
         Text [ portuguese ] = "~Linhas" ;
         Text [ finnish ] = "~Rivit" ;
         Text [ danish ] = "R~ækkevis" ;
@@ -773,7 +793,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Hide = TRUE ;
         Text[ chinese_simplified ] = "æŒ‰ç…§è¡Œ(~W)";
         Text[ russian ] = "Ñòğîêè";
-        Text[ polish ] = "Wie~rszami";
+        Text[ polish ] = "Wierszami";
         Text[ japanese ] = "è¡Œ(~W)";
         Text[ chinese_traditional ] = "æŒ‰ç…§åˆ—(~W)";
         Text[ arabic ] = "ÇáÕİæİ";
@@ -781,7 +801,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "í–‰(~W)";
         Text[ turkish ] = "Sat~ır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Por f~ilas";
+        Text[ catalan ] = "Fi~les";
+        Text[ thai ] = "à¹à¸–~à¸§";
     };
     RadioButton BTN_COLUMNS
     {
@@ -803,7 +824,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Hide = TRUE ;
         Text[ chinese_simplified ] = "æŒ‰ç…§åˆ—(~U)";
         Text[ russian ] = "Ñòîëáöû";
-        Text[ polish ] = "Kol~umnami";
+        Text[ polish ] = "Kolumnami";
         Text[ japanese ] = "åˆ—(~U)";
         Text[ chinese_traditional ] = "æŒ‰ç…§æ¬„(~U)";
         Text[ arabic ] = "ÇáÃÚãÏÉ";
@@ -811,7 +832,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ì—´(~U)";
         Text[ turkish ] = "S~ütun";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Por columna~s";
+        Text[ catalan ] = "Col~umnes";
+        Text[ thai ] = "à¸„à¸­~à¸¥à¸±à¸¡à¸™à¹Œ";
     };
     FixedLine FL_SEARCHDIR
     {
@@ -838,10 +860,11 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_traditional ] = "æœå°‹æ–¹å‘";
         Text[ arabic ] = "ÇÊÌÇå ÇáÈÍË";
         Text[ greek ] = "Êáôåıèõíóç áíáæŞôçóçò";
-        Text[ korean ] = "ì°¾ì„ ë°©í–¥";
+        Text[ korean ] = "ê²€ìƒ‰ ë°©í–¥";
         Text[ turkish ] = "Arama yönü";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Dirección de búsqueda";
+        Text[ catalan ] = "Direcció de cerca";
+        Text[ thai ] = "à¸—à¸´à¸¨à¸—à¸²à¸‡à¸à¸²à¸£à¸„à¹‰à¸™à¸«à¸²";
     };
     FixedLine FL_SEARCH_VERT
     {
@@ -858,7 +881,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Hide = TRUE ;
         Text [ portuguese ] = "~Procurar em todas as folhas" ;
         Text [ english_us ] = "Search in all sheets" ;
-        Text [ portuguese_brazilian ] = "~Buscar em todas as planilhas" ;
+        Text [ portuguese_brazilian ] = "~In allen Tabellen suchen" ;
         Text [ swedish ] = "Sök i alla tabeller" ;
         Text [ danish ] = "Søg ~i alle tabeller" ;
         Text [ italian ] = "~Cerca in tutte le tabelle" ;
@@ -875,8 +898,9 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ì „ì²´ ì‹œíŠ¸ì—ì„œ ì°¾ê¸°";
         Text[ turkish ] = "~Tüm tablolarda ara";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Buscar en todas las hojas";
+        Text[ catalan ] = "Cerca en tots els fulls";
         Text[ finnish ] = "Etsi kaikista taulukoista";
+        Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¹ƒà¸™à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
     };
     FixedLine FL_CALCEXTRAS
     {
@@ -886,7 +910,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "Extras" ;
         Hide = TRUE ;
         Text [ english_us ] = "Options" ;
-        Text [ portuguese_brazilian ] = "Opções" ;
+        Text [ portuguese_brazilian ] = "Extras" ;
         Text [ swedish ] = "Tillägg" ;
         Text [ danish ] = "Supplerende" ;
         Text [ italian ] = "Strumenti" ;
@@ -896,16 +920,17 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese ] = "Outros" ;
         Text[ chinese_simplified ] = "å…¶å®ƒ";
         Text[ russian ] = "Ïàğàìåòğû";
-        Text[ polish ] = "Opcje";
+        Text[ polish ] = "Narzêdzia";
         Text[ japanese ] = "ãã®ä»–";
         Text[ chinese_traditional ] = "å…¶å®ƒ";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ greek ] = "Ğñüóèåôá";
-        Text[ korean ] = "ë„êµ¬";
+        Text[ korean ] = "ì¶”ê°€ ì˜µì…˜";
         Text[ turkish ] = "Tablo seçenekleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opcions";
+        Text[ catalan ] = "Extres";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     PushButton BTN_SEARCH_ALL
     {
@@ -915,7 +940,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "Search ~All" ;
         Text [ norwegian ] = "Søk ~Alle" ;
         Text [ italian ] = "Cerca ~tutto" ;
-        Text [ portuguese_brazilian ] = "Localizar ~Tudo" ;
+        Text [ portuguese_brazilian ] = "Buscar ~Tudo" ;
         Text [ portuguese ] = "Localizar ~tudo" ;
         Text [ finnish ] = "Etsi k~aikki" ;
         Text [ danish ] = "Søg alle" ;
@@ -927,7 +952,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æœå¯»å…¨éƒ¨(~A)";
         Text[ russian ] = "Íàéòè âñå";
-        Text[ polish ] = "Znaj~dŸ wszystkie";
+        Text[ polish ] = "~ZnajdŸ wszystkie";
         Text[ japanese ] = "ã™ã¹ã¦æ¤œç´¢(~A)";
         Text[ chinese_traditional ] = "æœå°‹å…¨éƒ¨(~A)";
         Text[ arabic ] = "ÇáÈÍË Úä Çáßá";
@@ -935,7 +960,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ëª¨ë‘ ì°¾ê¸°(~A)";
         Text[ turkish ] = "Tümünü a~ra";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Buscar ~todo";
+        Text[ catalan ] = "Cerca-ho ~tot";
+        Text[ thai ] = "à¸«à¸²~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
     };
     PushButton BTN_SEARCH
     {
@@ -945,7 +971,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "~Search" ;
         Text [ norwegian ] = "~Søke" ;
         Text [ italian ] = "~Cerca" ;
-        Text [ portuguese_brazilian ] = "~Localizar" ;
+        Text [ portuguese_brazilian ] = "~Buscar" ;
         Text [ portuguese ] = "~Localizar" ;
         Text [ finnish ] = "Ets~i" ;
         Text [ danish ] = "~Søg" ;
@@ -958,7 +984,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         DefButton = TRUE ;
         Text[ chinese_simplified ] = "æœå¯»(~F)";
         Text[ russian ] = "Íàéòè";
-        Text[ polish ] = "Zna~jdŸ";
+        Text[ polish ] = "Szukaj";
         Text[ japanese ] = "æ¤œç´¢(~F)";
         Text[ chinese_traditional ] = "æœå°‹(~F)";
         Text[ arabic ] = "ÈÍË";
@@ -967,6 +993,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ turkish ] = "~Ara";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cerca";
+        Text[ thai ] = "~à¸«à¸²";
     };
     PushButton BTN_REPLACE_ALL
     {
@@ -988,7 +1015,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å…¨éƒ¨æ›¿æ¢(~L)";
         Text[ russian ] = "Çàìåíèòü âñå";
-        Text[ polish ] = "Zam~ieñ wszyst.";
+        Text[ polish ] = "Zamieñ wszyst.";
         Text[ japanese ] = "ã™ã¹ã¦ç½®æ›(~L)";
         Text[ chinese_traditional ] = "å…¨éƒ¨ä»£æ›¿(~L)";
         Text[ arabic ] = "ÇÓÊÈÏÇá Çáßá";
@@ -996,7 +1023,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ëª¨ë‘ ë°”ê¾¸ê¸°(~L)";
         Text[ turkish ] = "Tümünü değiş~tir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reemplazar t~odo";
+        Text[ catalan ] = "Reemplaça-ho t~ot";
+        Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆà¸—à¸±à¹‰~à¸‡à¸«à¸¡à¸”";
     };
     PushButton BTN_REPLACE
     {
@@ -1018,7 +1046,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ›¿æ¢(~R)";
         Text[ russian ] = "Çàìåíèòü";
-        Text[ polish ] = "~Zamieñ";
+        Text[ polish ] = "Zamieñ";
         Text[ japanese ] = "ç½®æ›(~R)";
         Text[ chinese_traditional ] = "æ›¿ä»£(~R)";
         Text[ arabic ] = "ÇÓÊÈÏÇá";
@@ -1027,6 +1055,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ turkish ] = "Deği~ştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Reemplaça";
+        Text[ thai ] = "à¹~à¸—à¸™à¸—à¸µà¹ˆ";
     };
     CancelButton BTN_CLOSE
     {
@@ -1048,7 +1077,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å…³é—­(~C)";
         Text[ russian ] = "~Çàêğûòü";
-        Text[ polish ] = "Zam~knij";
+        Text[ polish ] = "Zamknij";
         Text[ japanese ] = "é–‰ã˜ã‚‹(~C)";
         Text[ chinese_traditional ] = "é—œé–‰(~C)";
         Text[ arabic ] = "ÅÛáÇŞ";
@@ -1057,6 +1086,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ turkish ] = "~Kapat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tanca";
+        Text[ thai ] = "~à¸›à¸´à¸”";
     };
     HelpButton BTN_HELP
     {
@@ -1087,7 +1117,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Delta = 60 ;
         Text[ chinese_simplified ] = "é™„åŠ (~M)";
         Text[ russian ] = "Äåòàëè";
-        Text[ polish ] = "~Wiêcej";
+        Text[ polish ] = "~Dodatki";
         Text[ japanese ] = "è©³ç´°(~M)";
         Text[ chinese_traditional ] = "é™„åŠ (~M)";
         Text[ arabic ] = "ÅÖÇİÇÊ";
@@ -1095,7 +1125,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ì˜µì…˜(~M)";
         Text[ turkish ] = "~Diğer seçenekl.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Opciones";
+        Text[ catalan ] = "~Opcions";
+        Text[ thai ] = "~à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”";
     };
     PushButton BTN_ATTRIBUTE
     {
@@ -1117,7 +1148,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å±æ€§(~B)...";
         Text[ russian ] = "Àòğèáóòû...";
-        Text[ polish ] = "At~rybuty...";
+        Text[ polish ] = "Atrybuty...";
         Text[ japanese ] = "å±æ€§(~B)...";
         Text[ chinese_traditional ] = "å±¬æ€§(~B)...";
         Text[ arabic ] = "ÇáÓãÇÊ...";
@@ -1125,7 +1156,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ì†ì„±(~B)...";
         Text[ turkish ] = "Öznitelik~ler...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Atributos...";
+        Text[ catalan ] = "Atri~buts...";
+        Text[ thai ] = "à¸„à¸¸à¸“~à¸¥à¸±à¸à¸©à¸“à¸°...";
     };
     PushButton BTN_FORMAT
     {
@@ -1143,11 +1175,11 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ swedish ] = "Format..." ;
         Text [ dutch ] = "~Opmaak..." ;
         Text [ spanish ] = "~Formato..." ;
-        Text [ english_us ] = "~Format..." ;
+        Text [ english_us ] = "For~mat..." ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ ¼å¼(~F)...";
         Text[ russian ] = "Ôîğìàò...";
-        Text[ polish ] = "~Format...";
+        Text[ polish ] = "Format...";
         Text[ japanese ] = "æ›¸å¼(~F)...";
         Text[ chinese_traditional ] = "æ ¼å¼(~F)...";
         Text[ arabic ] = "ÇáÊäÓíŞ...";
@@ -1155,7 +1187,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "ì„œì‹(~F)...";
         Text[ turkish ] = "~Format...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Formato...";
+        Text[ catalan ] = "~Format...";
+        Text[ thai ] = "~à¸£à¸¹à¸›à¹à¸šà¸š...";
     };
     PushButton BTN_NOFORMAT
     {
@@ -1165,7 +1198,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ English ] = "~No format" ;
         Text [ norwegian ] = "~Ingen format" ;
         Text [ italian ] = "Senza formato" ;
-        Text [ portuguese_brazilian ] = "~Sem formato" ;
+        Text [ portuguese_brazilian ] = "~Nenhum formato" ;
         Text [ portuguese ] = "~Sem formato" ;
         Text [ finnish ] = "Ei ~muotoilua" ;
         Text [ danish ] = "Intet format" ;
@@ -1177,7 +1210,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ— æ ¼å¼(~N)";
         Text[ russian ] = "Áåç ôîğìàòà";
-        Text[ polish ] = "Bez format~u";
+        Text[ polish ] = "Bez f~ormatu";
         Text[ japanese ] = "æ›¸å¼ãªã—(~N)";
         Text[ chinese_traditional ] = "ç„¡æ ¼å¼(~N)";
         Text[ arabic ] = "ÈÏæä ÊäÓíŞ";
@@ -1185,7 +1218,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ greek ] = "Äß÷ùò ~ìïñöŞ";
         Text[ korean ] = "ì„œì‹ ì—†ìŒ(~N)";
         Text[ turkish ] = "For~matsız";
-        Text[ catalan ] = "S~in formato";
+        Text[ catalan ] = "~Sense format";
+        Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µà¸£à¸¹à¸›à¹à¸šà¸š";
     };
     String STR_WORDCALC
     {
@@ -1193,7 +1227,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "Comple~te Cells" ;
         Text [ norwegian ] = "Fullf~ør Celler" ;
         Text [ italian ] = "Celle intere" ;
-        Text [ portuguese_brazilian ] = "Células Comple~tas" ;
+        Text [ portuguese_brazilian ] = "C?lulas Comple~tas" ;
         Text [ portuguese ] = "Só células com~pletas" ;
         Text [ finnish ] = "Kaikki solut" ;
         Text [ danish ] = "K~un hele rækker" ;
@@ -1204,7 +1238,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ english_us ] = "~Entire cells" ;
         Text[ chinese_simplified ] = "åªæ˜¯æ•´ä¸ªå•å…ƒæ ¼å†…å®¹(~E)";
         Text[ russian ] = "ß÷åéêó öåëèêîì";
-        Text[ polish ] = "~Ca³e komórki";
+        Text[ polish ] = "Tylko ca³e komórki";
         Text[ japanese ] = "ã‚»ãƒ«å…¨ä½“(~E)";
         Text[ chinese_traditional ] = "åªæ˜¯æ•´å€‹å„²å­˜æ ¼(~E)";
         Text[ arabic ] = "ÎáÇíÇ ßÇãáÉ İŞØ";
@@ -1212,12 +1246,18 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ greek ] = "Ìüíï ï~ëüêëçñá êåëéÜ";
         Text[ korean ] = "ì „ì²´ ì…€ë§Œ(~E)";
         Text[ turkish ] = "Yalnızca ~tam hücreler";
-        Text[ catalan ] = "Solo cel~das completas";
+        Text[ catalan ] = "Només cel.l~es completes";
+        Text[ thai ] = "~à¸—à¸±à¹‰à¸‡à¹€à¸‹à¸¥à¸¥à¹Œ";
     };
     Text[ catalan ] = "Buscar y reemplazar";
 };
 
  // ********************************************************************** EOF
+
+
+
+
+
 
 
 

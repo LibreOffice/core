@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:23:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,18 +96,18 @@ String RID_SVXSTR_A11Y_TEXT_COLOR
     Text[ russian ] = "text color";
     Text[ greek ] = "text color";
     Text[ dutch ] = "text color";
-    Text[ french ] = "Couleur du texte";
-    Text[ spanish ] = "Color de texto";
+    Text[ french ] = "Couleur de police";
+    Text[ spanish ] = "Color de fuente";
     Text[ finnish ] = "text color";
-    Text[ italian ] = "Colore testo";
+    Text[ italian ] = "Colore carattere";
     Text[ danish ] = "text color";
-    Text[ swedish ] = "Textf�rg";
+    Text[ swedish ] = "Teckenf�rg";
     Text[ polish ] = "text color";
     Text[ portuguese_brazilian ] = "Cor da Fonte";
-    Text[ japanese ] = "テキストの色";
-    Text[ korean ] = "텍스트 색상";
+    Text[ japanese ] = "フォントの色";
+    Text[ korean ] = "글꼴 색상";
     Text[ chinese_simplified ] = "文字颜色";
-    Text[ chinese_traditional ] = "文字顏色";
+    Text[ chinese_traditional ] = "字型顏色";
     Text[ turkish ] = "text color";
     Text[ arabic ] = "text color";
     Text[ catalan ] = "Color del text";
@@ -131,7 +131,7 @@ String RID_SVXSTR_A11Y_BACKGROUND_COLOR
     Text[ polish ] = "background color";
     Text[ portuguese_brazilian ] = "background color";
     Text[ japanese ] = "背景色";
-    Text[ korean ] = "배경색";
+    Text[ korean ] = "배경 색상";
     Text[ chinese_simplified ] = "背景颜色";
     Text[ chinese_traditional ] = "背景顔色";
     Text[ turkish ] = "background color";
@@ -341,7 +341,7 @@ String RID_SVXSTR_A11Y_AND
     Text[ polish ] = "and";
     Text[ portuguese_brazilian ] = "and";
     Text[ japanese ] = "および";
-    Text[ korean ] = "기타 대상";
+    Text[ korean ] = "와(과)";
     Text[ chinese_simplified ] = "和";
     Text[ chinese_traditional ] = "和";
     Text[ turkish ] = "and";
@@ -370,7 +370,7 @@ String RID_SVXSTR_RECTCTL_ACC_CORN_NAME
     Text[ polish ] = "Corner control";
     Text[ portuguese_brazilian ] = "Corner control";
     Text[ japanese ] = "コーナーコントロール";
-    Text[ korean ] = "코너 조정";
+    Text[ korean ] = "모서리 컨트롤";
     Text[ chinese_simplified ] = "角控制";
     Text[ chinese_traditional ] = "角控制項";
     Text[ turkish ] = "Corner control";
@@ -422,7 +422,7 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_NAME
     Text[ polish ] = "Angle control";
     Text[ portuguese_brazilian ] = "Angle control";
     Text[ japanese ] = "アングルコントロール";
-    Text[ korean ] = "각도 조정";
+    Text[ korean ] = "각도 컨트롤";
     Text[ chinese_simplified ] = "角度控制";
     Text[ chinese_traditional ] = "角度控制項";
     Text[ turkish ] = "Angle control";
@@ -501,7 +501,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MT
     Text[ polish ] = "Top middle";
     Text[ portuguese_brazilian ] = "Top middle";
     Text[ japanese ] = "中央上";
-    Text[ korean ] = "중간 위";
+    Text[ korean ] = "위 가운데";
     Text[ chinese_simplified ] = "中上";
     Text[ chinese_traditional ] = "中上";
     Text[ turkish ] = "Top middle";
@@ -579,7 +579,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MM
     Text[ polish ] = "Center";
     Text[ portuguese_brazilian ] = "Center";
     Text[ japanese ] = "中央";
-    Text[ korean ] = "중간";
+    Text[ korean ] = "가운데";
     Text[ chinese_simplified ] = "中";
     Text[ chinese_traditional ] = "中";
     Text[ turkish ] = "Center";
@@ -657,7 +657,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_MB
     Text[ polish ] = "Bottom middle";
     Text[ portuguese_brazilian ] = "Bottom middle";
     Text[ japanese ] = "中央下";
-    Text[ korean ] = "중간 아래";
+    Text[ korean ] = "아래 가운데";
     Text[ chinese_simplified ] = "中下";
     Text[ chinese_traditional ] = "中下";
     Text[ turkish ] = "Bottom middle";
@@ -919,7 +919,7 @@ String RID_SVXSTR_GRAPHCTRL_ACC_NAME
     Text[ polish ] = "Graph control";
     Text[ portuguese_brazilian ] = "Graph control";
     Text[ japanese ] = "輪郭コントロール";
-    Text[ korean ] = "윤곽 조정";
+    Text[ korean ] = "윤곽 컨트롤";
     Text[ chinese_simplified ] = "轮廓控制";
     Text[ chinese_traditional ] = "輪廓控製項";
     Text[ turkish ] = "Graph control";
@@ -1026,7 +1026,7 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION
     Text[ polish ] = "Image bullet in paragraph: $(ARG)";
     Text[ portuguese_brazilian ] = "Image bullet in paragraph: $(ARG)";
     Text[ japanese ] = "段落の箇条書きシンボル: $(ARG)";
-    Text[ korean ] = "단락 내 글머리기호 이미지: $(ARG)";
+    Text[ korean ] = "단락 내 글머리 기호 이미지: $(ARG)";
     Text[ chinese_simplified ] = "段落之中的图形式项目符号：$(ARG)";
     Text[ chinese_traditional ] = "段落之中的圖形項目符號：$(ARG)";
     Text[ turkish ] = "Image bullet in paragraph: $(ARG)";
@@ -1053,7 +1053,7 @@ String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
     Text[ polish ] = "Image bullet";
     Text[ portuguese_brazilian ] = "Image bullet";
     Text[ japanese ] = "箇条書きシンボル";
-    Text[ korean ] = "글머리기호 이미지";
+    Text[ korean ] = "글머리 기호 이미지";
     Text[ chinese_simplified ] = "图形式的项目符号";
     Text[ chinese_traditional ] = "圖形式的項目符號";
     Text[ turkish ] = "Image bullet";
@@ -1080,7 +1080,7 @@ String RID_SVXSTR_CHARACTER_SELECTION
     Text[ polish ] = "Special character selection";
     Text[ portuguese_brazilian ] = "Special character selection";
     Text[ japanese ] = "記号と特殊文字の選択";
-    Text[ korean ] = "특수 문자 선택";
+    Text[ korean ] = "특수문자 선택";
     Text[ chinese_simplified ] = "选择特殊字符";
     Text[ chinese_traditional ] = "選擇特殊字元";
     Text[ turkish ] = "Special character selection";
@@ -1107,7 +1107,7 @@ String RID_SVXSTR_CHAR_SEL_DESC
     Text[ polish ] = "Select special characters in this area.";
     Text[ portuguese_brazilian ] = "Select special characters in this area.";
     Text[ japanese ] = "この範囲で記号と特殊文字を選択します。";
-    Text[ korean ] = "이 영역에서 특수 문자를 선택하십시오.";
+    Text[ korean ] = "이 영역에서 특수문자를 선택하십시오.";
     Text[ chinese_simplified ] = "在这个区域内选择特殊字符。";
     Text[ chinese_traditional ] = "在這個區域選擇特殊字元。";
     Text[ turkish ] = "Select special characters in this area.";
@@ -1143,4 +1143,9 @@ String RID_SVXSTR_CHARACTER_CODE
     Text[ catalan ] = "Character code ";
     Text[ thai ] = "Character code ";
 };
+
+
+
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-19 09:21:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,16 +756,24 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, BOOL bRemoveParaAttri
         // Optimieren: Wenn ganzer Absatz, dann RemoveCharAttribs( nPara )?!
         BOOL bChanged = aEditDoc.RemoveAttribs( pNode, nStartPos, nEndPos, nWhich );
         if ( bRemoveParaAttribs )
+        {
             SetParaAttribs( nNode, *pEmptyItemSet );    // Invalidiert
+        }
         else
         {
             // Bei 'Format-Standard' sollen auch die Zeichenattribute verschwinden,
             // die von der DrawingEngine als Absatzattribute eingestellt wurden.
             // Diese koennen sowieso nicht vom Anwender eingestellt worden sein.
-            SfxItemSet aAttribs( GetParaAttribs( nNode ) );
-            for ( USHORT nW = EE_CHAR_START; nW <= EE_CHAR_END; nW++ )
-                aAttribs.ClearItem( nW );
-            SetParaAttribs( nNode, aAttribs );
+
+            // #106871# Not when nWhich
+            // Would have been better to offer a separate method for format/standard...
+            if ( !nWhich )
+            {
+                SfxItemSet aAttribs( GetParaAttribs( nNode ) );
+                for ( USHORT nW = EE_CHAR_START; nW <= EE_CHAR_END; nW++ )
+                    aAttribs.ClearItem( nW );
+                SetParaAttribs( nNode, aAttribs );
+            }
         }
 
         if ( bChanged && !bRemoveParaAttribs )

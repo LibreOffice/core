@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeTypeHandler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-06-27 12:06:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,8 @@ ShapeTypeId ShapeTypeHandler::GetTypeId (const OUString& aServiceName) const
     tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));
     if (I != maServiceNameToSlotId.end())
     {
-        long nSlotId = maServiceNameToSlotId[aServiceName];
-        return maShapeTypeDescriptorList[nSlotId].mnShapeTypeId;
+        //  long nSlotId = maServiceNameToSlotId[aServiceName];
+        return maShapeTypeDescriptorList[I->second].mnShapeTypeId;
     }
     else
         return -1;
@@ -274,7 +274,7 @@ long ShapeTypeHandler::GetSlotId (const OUString& aServiceName) const
 {
     tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));
     if (I != maServiceNameToSlotId.end())
-        return maServiceNameToSlotId[aServiceName];
+        return I->second;
     else
         return 0;
 }

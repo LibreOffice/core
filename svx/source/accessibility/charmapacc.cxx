@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmapacc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-15 09:50:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,7 +758,7 @@ sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
         c_Shifted >>= 4;
     }
     if( c < 256 )
-        sprintf( buf+6, " (%d)", c );
+        snprintf( buf+6, 10, " (%d)", c );
     sDescription.AppendAscii(buf);
 
     return sDescription;

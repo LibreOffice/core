@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:31:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
     Text[ russian ] = "Φελό β δξκσμενςε";
     Text[ greek ] = "Σημείο προορισμού στο έγγραφο";
     Text[ dutch ] = "Doel in document";
-    Text[ french ] = "Cible ΰ l'intιrieur du document";
+    Text[ french ] = "Cible dans le document";
     Text[ spanish ] = "Destino en documento";
     Text[ italian ] = "Destinazione nel documento";
     Text[ danish ] = "Mεl i dokumentet";
@@ -159,7 +159,7 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
     Text[ polish ] = "Cel w dokumencie";
     Text[ portuguese_brazilian ] = "Target in document";
     Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ«γ‚γ‚‹γ‚ΏγƒΌγ‚²γƒƒγƒ";
-    Text[ korean ] = "λ¬Έμ„ λ‚΄ λ€μƒ";
+    Text[ korean ] = "λ¬Έμ„ λ‚΄ μ—°κ²° λ€μƒ";
     Text[ chinese_simplified ] = "ζ–‡ζ΅£δΈ­η„θΏζ¥η›®ζ ‡";
     Text[ chinese_traditional ] = "ζ–‡δ»¶ε…§η„ι€£ηµη›®ζ¨™";
     Text[ arabic ] = "ΗαεΟέ έν ΗαγΣΚδΟ";
@@ -222,3 +222,5 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text[ finnish ] = "Asiakirjan avaaminen ei onnistunut.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΉ€ΰΈ›ΰΈ΄ΰΈ”ΰΉ€ΰΈ­ΰΈΰΈªΰΈ²ΰΈ£ΰΉ„ΰΈ”ΰΉ‰";
 };
+
+

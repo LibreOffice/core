@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:33:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,24 +117,25 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT [ italian ] = "Parola" ;
         TEXT [ portuguese_brazilian ] = "Palavra" ;
         TEXT [ portuguese ] = "Pa~lavra" ;
-        TEXT [ finnish ] = "Sana" ;
-        TEXT [ danish ] = "Ord" ;
+        TEXT [ finnish ] = "~Sana" ;
+        TEXT [ danish ] = "~Ord" ;
         TEXT [ french ] = "Mot" ;
         TEXT [ swedish ] = "~Ord" ;
         TEXT [ dutch ] = "W~oord" ;
         TEXT [ spanish ] = "Palabra" ;
         TEXT [ english_us ] = "~Word" ;
-        TEXT[ chinese_simplified ] = "×Ö(~W)";
+        TEXT[ chinese_simplified ] = "å­—(~W)";
         TEXT[ russian ] = "Ñëîâî";
         TEXT[ polish ] = "S³owo";
-        TEXT[ japanese ] = "’PŒê(~W)";
-        TEXT[ chinese_traditional ] = "¦r(~W)";
+        TEXT[ japanese ] = "å˜èª(~W)";
+        TEXT[ chinese_traditional ] = "å­—(~W)";
         TEXT[ arabic ] = "ÇáßáãÉ";
         TEXT[ greek ] = "Ëİîç";
-        TEXT[ korean ] = "´Ü¾î(~W)";
+        TEXT[ korean ] = "ë‹¨ì–´(~W)";
         TEXT[ turkish ] = "Sözcük";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "Palabra";
+        TEXT[ catalan ] = "Paraula";
+        TEXT[ thai ] = "~à¸„à¸³";
     };
     PushButton BTN_HYPH_CONTINUE
     {
@@ -146,24 +147,25 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TABSTOP = TRUE ;
         Text [ dutch ] = "~Verder" ;
         Text [ italian ] = "Avanti" ;
-        Text [ spanish ] = "~Continuar" ;
-        Text [ french ] = "~Suivant" ;
+        Text [ spanish ] = "Continuar" ;
+        Text [ french ] = "Suivant" ;
         Text [ swedish ] = "~Nästa" ;
         Text [ danish ] = "Næste" ;
         Text [ portuguese ] = "~Continuar" ;
         Text [ portuguese_brazilian ] = "~Weiter" ;
-        Text[ chinese_simplified ] = "¼ÌĞø(~N)";
+        Text[ chinese_simplified ] = "ç»§ç»­(~N)";
         Text[ russian ] = "Äàëåå";
         Text[ polish ] = "Dalej";
-        Text[ japanese ] = "Ÿ‚Ö(~N)";
-        Text[ chinese_traditional ] = "Ä~Äò(~N)";
+        Text[ japanese ] = "æ¬¡ã¸(~N)";
+        Text[ chinese_traditional ] = "ç¹¼çºŒ(~N)";
         Text[ arabic ] = "ÇáÊÇáí";
         Text[ greek ] = "Åğüìåíï";
-        Text[ korean ] = "°è¼Ó(~N)";
+        Text[ korean ] = "ë‹¤ìŒ(~N)";
         Text[ turkish ] = "~Sonraki";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Siguiente";
+        Text[ catalan ] = "~Següent";
         Text[ finnish ] = "~Seuraava";
+        Text[ thai ] = "~à¸–à¸±à¸”à¹„à¸›";
     };
     PushButton BTN_HYPH_DELETE
     {
@@ -172,28 +174,29 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT = "~Entfernen" ;
         TEXT [ English ] = "~Erase" ;
         TEXT [ norwegian ] = "~Erase" ;
-        TEXT [ italian ] = "~Rimuovi" ;
+        TEXT [ italian ] = "Ri~muovi" ;
         TEXT [ portuguese_brazilian ] = "~Apagar" ;
         TEXT [ portuguese ] = "~Remover" ;
         TEXT [ finnish ] = "~Poista" ;
         TEXT [ danish ] = "Fjern" ;
-        TEXT [ french ] = "~Supprimer" ;
+        TEXT [ french ] = "Supprimer" ;
         TEXT [ swedish ] = "Ta ~bort" ;
         TEXT [ dutch ] = "Ver~wijderen" ;
-        TEXT [ spanish ] = "~Eliminar" ;
+        TEXT [ spanish ] = "~Borrar" ;
         TEXT [ english_us ] = "~Remove" ;
         TABSTOP = TRUE ;
-        TEXT[ chinese_simplified ] = "É¾³ı(~R)";
-        TEXT[ russian ] = "Óáğàòü";
+        TEXT[ chinese_simplified ] = "åˆ é™¤(~R)";
+        TEXT[ russian ] = "Óäàëèòü";
         TEXT[ polish ] = "Usuñ";
-        TEXT[ japanese ] = "íœ(~R)";
-        TEXT[ chinese_traditional ] = "§R°£(~R)";
+        TEXT[ japanese ] = "å‰Šé™¤(~R)";
+        TEXT[ chinese_traditional ] = "åˆªé™¤(~R)";
         TEXT[ arabic ] = "ÅÒÇáÉ";
         TEXT[ greek ] = "ÄéáãñáöŞ";
-        TEXT[ korean ] = "Á¦°Å(~R)";
+        TEXT[ korean ] = "ì œê±°(~R)";
         TEXT[ turkish ] = "~Kaldır";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Eliminar";
+        TEXT[ catalan ] = "~Suprimeix";
+        TEXT[ thai ] = "à¹€~à¸­à¸²à¸­à¸­à¸";
     };
     OKButton BTN_HYPH_CUT
     {
@@ -214,17 +217,18 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT [ english_us ] = "~Hyphenate" ;
         TABSTOP = TRUE ;
         DEFBUTTON = TRUE ;
-        TEXT[ chinese_simplified ] = "Á¬×Ö·û(~H)";
+        TEXT[ chinese_simplified ] = "è¿å­—ç¬¦(~H)";
         TEXT[ russian ] = "Ïåğåíåñòè";
         TEXT[ polish ] = "Podziel";
-        TEXT[ japanese ] = "•ª‚¯‚é(~H)";
-        TEXT[ chinese_traditional ] = "³s¦r²Å(~H)";
+        TEXT[ japanese ] = "åˆ†ã‘ã‚‹(~H)";
+        TEXT[ chinese_traditional ] = "é€£å­—ç¬¦(~H)";
         TEXT[ arabic ] = "İÕá ÇáãŞÇØÚ";
         TEXT[ greek ] = "Óõëëáâéóìüò";
-        TEXT[ korean ] = "ÇÏÀÌÇÂ ³Ö±â(~H)";
+        TEXT[ korean ] = "í•˜ì´í”ˆ ë„£ê¸°(~H)";
         TEXT[ turkish ] = "~Ayır";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Dividir";
+        TEXT[ catalan ] = "~Parteix els mots";
+        TEXT[ thai ] = "à¹ƒà¸ªà¹ˆ~à¸¢à¸±à¸•à¸´à¸ à¸±à¸‡à¸„à¹Œ";
     };
     CancelButton BTN_HYPH_CANCEL
     {
@@ -238,19 +242,32 @@ ModalDialog RID_SVXDLG_HYPHENATE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TABSTOP = TRUE ;
     };
-    Text[ chinese_simplified ] = "Á¬×Ö·û";
+    Text[ chinese_simplified ] = "è¿å­—ç¬¦";
     Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ";
     Text[ polish ] = "Dzielenie wyrazów";
-    Text[ japanese ] = "Ê²ÌÈ°¼®İ";
-    Text[ chinese_traditional ] = "³s¦r²Å";
+    Text[ japanese ] = "ãƒã‚¤ãƒ•ãƒãƒ¼ã‚·ãƒ§ãƒ³";
+    Text[ chinese_traditional ] = "é€£å­—ç¬¦";
     Text[ arabic ] = "İÕá ÇáãŞÇØÚ";
     Text[ greek ] = "Óõëëáâéóìüò";
-    Text[ korean ] = "ÇÏÀÌÇÂ ³Ö±â";
+    Text[ korean ] = "í•˜ì´í”ˆ ë„£ê¸°";
     Text[ turkish ] = "Heceleme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Separación silábica";
+    Text[ catalan ] = "Separació en síl.labes";
+    Text[ thai ] = "à¹ƒà¸ªà¹ˆà¸¢à¸±à¸•à¸´à¸ à¸±à¸‡à¸„à¹Œ";
 };
  // ******************************************************************* EOF
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

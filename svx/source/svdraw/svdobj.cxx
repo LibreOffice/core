@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-08 16:20:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,10 @@
 
 #ifndef _SVTOOLS_GRAPHICTOOLS_HXX_
 #include <svtools/graphictools.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -2095,7 +2099,8 @@ void SdrObject::ImpDrawLineGeometry(   ExtOutputDevice&     rXOut,
     }
     else if( ( nOldDrawMode & DRAWMODE_SETTINGSFILL ) && ( nOldDrawMode & DRAWMODE_SETTINGSLINE ) )
     {
-        aLineColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+        svtools::ColorConfig aColorConfig;
+        aLineColor = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
         rXOut.GetOutDev()->SetDrawMode( nOldDrawMode & (~DRAWMODE_SETTINGSFILL) );
     }
 
@@ -2383,25 +2388,26 @@ void SdrObject::ImpDrawLineGeometry(   ExtOutputDevice&     rXOut,
 
                     if( rPoly.GetSize() == 2 )
                     {
-                        const Line  aLine( rXOut.GetOutDev()->LogicToPixel( rPoly[ 0 ] ),
-                                           rXOut.GetOutDev()->LogicToPixel( rPoly[ 1 ] ) );
-
-                        if( aLine.GetLength() > 16000 )
+                        if ( !rXOut.GetOutDev()->GetConnectMetaFile() )
                         {
-                            Point       aPoint;
-                            Rectangle   aOutRect( aPoint, rXOut.GetOutDev()->GetOutputSizePixel() );
-                            Line        aIntersection;
+                            const Line  aLine( rXOut.GetOutDev()->LogicToPixel( rPoly[ 0 ] ),
+                                               rXOut.GetOutDev()->LogicToPixel( rPoly[ 1 ] ) );
 
-                            if( aLine.Intersection( aOutRect, aIntersection ) )
+                            if( aLine.GetLength() > 16000 )
                             {
-                                rXOut.GetOutDev()->DrawLine( rXOut.GetOutDev()->PixelToLogic( aIntersection.GetStart() ),
-                                                             rXOut.GetOutDev()->PixelToLogic( aIntersection.GetEnd() ) );
-                            }
+                                Point       aPoint;
+                                Rectangle   aOutRect( aPoint, rXOut.GetOutDev()->GetOutputSizePixel() );
+                                Line        aIntersection;
 
-                            bDrawn = TRUE;
+                                if( aLine.Intersection( aOutRect, aIntersection ) )
+                                {
+                                    rXOut.GetOutDev()->DrawLine( rXOut.GetOutDev()->PixelToLogic( aIntersection.GetStart() ),
+                                                                 rXOut.GetOutDev()->PixelToLogic( aIntersection.GetEnd() ) );
+                                }
+                                bDrawn = TRUE;
+                            }
                         }
                     }
-
                     if( !bDrawn )
                         rXOut.GetOutDev()->DrawPolyLine( rPoly );
                 }
@@ -4064,6 +4070,14 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
             PolyPolygon3D& rPolyPoly3D = aLineGeom->GetPolyPoly3D();
             PolyPolygon3D& rLinePoly3D = aLineGeom->GetLinePoly3D();
 
+            // #107201#
+            // Since this may in some cases lead to a count of 0 after
+            // the merge i moved the merge to the front.
+            if(rPolyPoly3D.Count())
+            {
+                rPolyPoly3D.Merge(TRUE);
+            }
+
             //  || rLinePoly3D.Count() removed; the conversion is ONLY
             // useful when new closed filled polygons are created
             if(rPolyPoly3D.Count() || (bForceLineDash && rLinePoly3D.Count()))
@@ -4074,7 +4088,8 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                 SdrPathObj* aLineLinePart = NULL;
                 BOOL bBuildGroup(FALSE);
 
-                rPolyPoly3D.Merge(TRUE);
+                // #107600#
+                sal_Bool bAddOriginalGeometry(sal_False);
 
                 if(rPolyPoly3D.Count())
                 {
@@ -4094,12 +4109,22 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
 
                 if(rLinePoly3D.Count())
                 {
-                    aLineLinePart = new SdrPathObj(OBJ_PATHFILL, rLinePoly3D.GetXPolyPolygon());
+                    // #106907#
+                    // OBJ_PATHLINE is necessary here, not OBJ_PATHFILL. This is intended
+                    // to get a non-filled object. If the poly is closed, the PathObj takes care for
+                    // the correct closed state.
+                    aLineLinePart = new SdrPathObj(OBJ_PATHLINE, rLinePoly3D.GetXPolyPolygon());
+
                     aLineLinePart->SetModel(pRet->GetModel());
 
                     aSet.Put(XLineWidthItem(0L));
                     aSet.Put(XFillStyleItem(XFILL_NONE));
                     aSet.Put(XLineStyleItem(XLINE_SOLID));
+
+                    // #106907#
+                    // it is also necessary to switch off line start and ends here
+                    aSet.Put(XLineStartWidthItem(0));
+                    aSet.Put(XLineEndWidthItem(0));
 
                     aLineLinePart->SetItemSet(aSet);
 
@@ -4107,52 +4132,72 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                         bBuildGroup = TRUE;
                 }
 
-                if(!bBuildGroup)
+                // #107600# This test does not depend on !bBuildGroup
+                SdrPathObj* pPath = PTR_CAST(SdrPathObj, pRet);
+                if(pPath && pPath->IsClosed())
                 {
-                    SdrPathObj* pPath = PTR_CAST(SdrPathObj, pRet);
-                    if(pPath && pPath->IsClosed())
+                    if(eOldFillStyle != XFILL_NONE)
                     {
-                        if(eOldFillStyle != XFILL_NONE)
-                            bBuildGroup = TRUE;
+                        // #107600# use new boolean here
+                        bAddOriginalGeometry = sal_True;
                     }
                 }
 
-                if(bBuildGroup)
+                // #107600# ask for new boolean, too.
+                if(bBuildGroup || bAddOriginalGeometry)
                 {
                     SdrObject* pGroup = new SdrObjGroup;
                     pGroup->SetModel(pRet->GetModel());
 
-                    aSet.ClearItem();
+                    if(bAddOriginalGeometry)
+                    {
+                        // #107600# Add a clone of the original geometry.
+                        aSet.ClearItem();
+                        aSet.Put(pRet->GetItemSet());
+                        aSet.Put(XLineStyleItem(XLINE_NONE));
+                        aSet.Put(XLineWidthItem(0L));
 
-                    aSet.Put(pRet->GetItemSet());
+                        SdrObject* pClone = pRet->Clone();
 
-                    aSet.Put(XLineStyleItem(XLINE_NONE));
-                    aSet.Put(XLineWidthItem(0L));
+                        pClone->SetModel(pRet->GetModel());
+                        pClone->SetItemSet(aSet);
 
-                    SdrObject* pClone = pRet->Clone();
-                    pClone->SetModel(pRet->GetModel());
-
-                    pClone->SetItemSet(aSet);
-
-                    pGroup->GetSubList()->NbcInsertObject( pClone );
+                        pGroup->GetSubList()->NbcInsertObject(pClone);
+                    }
 
                     if(aLinePolygonPart)
+                    {
                         pGroup->GetSubList()->NbcInsertObject(aLinePolygonPart);
+                    }
 
                     if(aLineLinePart)
+                    {
                         pGroup->GetSubList()->NbcInsertObject(aLineLinePart);
+                    }
 
                     pRet = pGroup;
+
+                    // #107201#
+                    // be more careful with the state describing bool
+                    bNoChange = FALSE;
                 }
                 else
                 {
                     if(aLinePolygonPart)
+                    {
                         pRet = aLinePolygonPart;
+                        // #107201#
+                        // be more careful with the state describing bool
+                        bNoChange = FALSE;
+                    }
                     else if(aLineLinePart)
+                    {
                         pRet = aLineLinePart;
+                        // #107201#
+                        // be more careful with the state describing bool
+                        bNoChange = FALSE;
+                    }
                 }
-
-                bNoChange = FALSE;
             }
         }
     }

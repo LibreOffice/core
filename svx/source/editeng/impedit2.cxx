@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-22 13:54:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,8 @@
 #include <eeobj.hxx>
 #include <txtrange.hxx>
 #include <svtools/urlbmk.hxx>
-
+#include <svtools/colorcfg.hxx>
+#include <svtools/ctloptions.hxx>
 
 #include <fhgtitem.hxx>
 #include <lrspitem.hxx>
@@ -188,6 +189,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pUndoMarkSelection  = NULL;
     pTextRanger         = NULL;
     pColorConfig        = NULL;
+    pCTLOptions         = NULL;
 
     nCurTextHeight      = 0;
     nBlockNotifications = 0;
@@ -266,6 +268,7 @@ ImpEditEngine::~ImpEditEngine()
     delete pTextRanger;
     delete mpIMEInfos;
     delete pColorConfig;
+    delete pCTLOptions;
     if ( bOwnerOfRefDev )
         delete pRefDev;
 }
@@ -867,6 +870,23 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
     BOOL bCtrl = aTranslatedKeyEvent.GetKeyCode().IsMod1() ? TRUE : FALSE;
     USHORT nCode = aTranslatedKeyEvent.GetKeyCode().GetCode();
 
+    if ( DoVisualCursorTraveling( aPaM.GetNode() ) )
+    {
+        // Only for simple cursor movement...
+        if ( !bCtrl && ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) ) )
+        {
+            aPaM = CursorVisualLeftRight( pEditView, aPaM, rKeyEvent.GetKeyCode().IsMod2() ? i18n::CharacterIteratorMode::SKIPCHARACTER : i18n::CharacterIteratorMode::SKIPCELL, rKeyEvent.GetKeyCode().GetCode() == KEY_LEFT );
+            nCode = 0;  // skip switch statement
+        }
+        /*
+        else if ( !bCtrl && ( ( nCode == KEY_HOME ) || ( nCode == KEY_END ) ) )
+        {
+            aPaM = CursorVisualStartEnd( pEditView, aPaM, nCode == KEY_HOME );
+            nCode = 0;  // skip switch statement
+        }
+        */
+    }
+
     switch ( nCode )
     {
         case KEY_UP:        aPaM = CursorUp( aPaM, pEditView );
@@ -916,19 +936,273 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
     return pEditView->pImpEditView->GetEditSelection();
 }
 
+EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM& rPaM, BOOL bStart )
+{
+    EditPaM aPaM( rPaM );
+
+    USHORT nPara = GetEditDoc().GetPos( aPaM.GetNode() );
+    ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+
+    USHORT nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), sal_False );
+    EditLine* pLine = pParaPortion->GetLines().GetObject( nLine );
+    BOOL bEmptyLine = pLine->GetStart() == pLine->GetEnd();
+
+    pEditView->pImpEditView->nExtraCursorFlags = 0;
+
+    if ( !bEmptyLine )
+    {
+        String aLine( *aPaM.GetNode(), pLine->GetStart(), pLine->GetEnd() - pLine->GetStart() );
+        USHORT nPosInLine = aPaM.GetIndex() - pLine->GetStart();
+
+        const sal_Unicode* pLineString = aLine.GetBuffer();
+
+        UErrorCode nError = U_ZERO_ERROR;
+        UBiDi* pBidi = ubidi_openSized( aLine.Len(), 0, &nError );
+
+        const BYTE nDefaultDir = IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR;
+        ubidi_setPara( pBidi, pLineString, aLine.Len(), nDefaultDir, NULL, &nError );
+
+        USHORT nVisPos = bStart ? 0 : aLine.Len()-1;
+        USHORT nLogPos = (USHORT)ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
+
+        ubidi_close( pBidi );
+
+        aPaM.GetIndex() = nLogPos + pLine->GetStart();
+
+        USHORT nTmp;
+        USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTmp, TRUE );
+        TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+        USHORT nRTLLevel = pTextPortion->GetRightToLeft();
+        BOOL bParaRTL = IsRightToLeft( nPara );
+        BOOL bPortionRTL = nRTLLevel%2 ? TRUE : FALSE;
+
+        if ( bStart )
+        {
+            pEditView->pImpEditView->SetCursorBidiLevel( bPortionRTL ? 0 : 1 );
+            // Maybe we must be *behind* the character
+            if ( bPortionRTL && pEditView->IsInsertMode() )
+                aPaM.GetIndex()++;
+        }
+        else
+        {
+            pEditView->pImpEditView->SetCursorBidiLevel( bPortionRTL ? 1 : 0 );
+            if ( !bPortionRTL && pEditView->IsInsertMode() )
+                aPaM.GetIndex()++;
+        }
+    }
+
+    return aPaM;
+}
+
+EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM& rPaM, USHORT nCharacterIteratorMode, BOOL bVisualToLeft )
+{
+    EditPaM aPaM( rPaM );
+
+    USHORT nPara = GetEditDoc().GetPos( aPaM.GetNode() );
+    ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+
+    USHORT nLine = pParaPortion->GetLines().FindLine( aPaM.GetIndex(), sal_False );
+    EditLine* pLine = pParaPortion->GetLines().GetObject( nLine );
+    BOOL bEmptyLine = pLine->GetStart() == pLine->GetEnd();
+
+    USHORT nCurrentCursorFlags = pEditView->pImpEditView->nExtraCursorFlags;
+    pEditView->pImpEditView->nExtraCursorFlags = 0;
+
+    BOOL bParaRTL = IsRightToLeft( nPara );
+
+    BOOL bDone = FALSE;
+
+    if ( bEmptyLine )
+    {
+        if ( bVisualToLeft )
+        {
+            aPaM = CursorUp( aPaM, pEditView );
+            if ( aPaM != rPaM )
+                aPaM = CursorVisualStartEnd( pEditView, aPaM, FALSE );
+        }
+        else
+        {
+            aPaM = CursorDown( aPaM, pEditView );
+            if ( aPaM != rPaM )
+                aPaM = CursorVisualStartEnd( pEditView, aPaM, TRUE );
+        }
+
+        bDone = TRUE;
+    }
+
+    BOOL bLogicalBackward = bParaRTL ? !bVisualToLeft : bVisualToLeft;
+
+    if ( !bDone && pEditView->IsInsertMode() )
+    {
+        // Check if we are within a portion and don't have overwrite mode, then it's easy...
+        USHORT nPortionStart;
+        USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, FALSE );
+        TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+
+        BOOL bPortionBoundary = ( aPaM.GetIndex() == nPortionStart ) || ( aPaM.GetIndex() == (nPortionStart+pTextPortion->GetLen()) );
+        USHORT nRTLLevel = pTextPortion->GetRightToLeft();
+
+        // Portion boundary doesn't matter if both have same RTL level
+        USHORT nRTLLevelNextPortion = 0xFFFF;
+        if ( bPortionBoundary && aPaM.GetIndex() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
+        {
+            USHORT nTmp;
+            USHORT nNextTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex()+1, nTmp, bLogicalBackward ? FALSE : TRUE );
+            TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nNextTextPortion );
+            nRTLLevelNextPortion = pNextTextPortion->GetRightToLeft();
+        }
+
+        if ( !bPortionBoundary || ( nRTLLevel == nRTLLevelNextPortion ) )
+        {
+            if ( ( bVisualToLeft && !(nRTLLevel%2) ) || ( !bVisualToLeft && (nRTLLevel%2) ) )
+            {
+                aPaM = CursorLeft( aPaM, nCharacterIteratorMode );
+                pEditView->pImpEditView->SetCursorBidiLevel( 1 );
+            }
+            else
+            {
+                aPaM = CursorRight( aPaM, nCharacterIteratorMode );
+                pEditView->pImpEditView->SetCursorBidiLevel( 0 );
+            }
+            bDone = TRUE;
+        }
+    }
+
+    if ( !bDone )
+    {
+        BOOL bGotoStartOfNextLine = FALSE;
+        BOOL bGotoEndOfPrevLine = FALSE;
+
+        String aLine( *aPaM.GetNode(), pLine->GetStart(), pLine->GetEnd() - pLine->GetStart() );
+        USHORT nPosInLine = aPaM.GetIndex() - pLine->GetStart();
+
+        const sal_Unicode* pLineString = aLine.GetBuffer();
+
+        UErrorCode nError = U_ZERO_ERROR;
+        UBiDi* pBidi = ubidi_openSized( aLine.Len(), 0, &nError );
+
+        const BYTE nDefaultDir = IsRightToLeft( nPara ) ? UBIDI_RTL : UBIDI_LTR;
+        ubidi_setPara( pBidi, pLineString, aLine.Len(), nDefaultDir, NULL, &nError );
+
+        if ( !pEditView->IsInsertMode() )
+        {
+            BOOL bEndOfLine = nPosInLine == aLine.Len();
+            USHORT nVisPos = (USHORT)ubidi_getVisualIndex( pBidi, !bEndOfLine ? nPosInLine : nPosInLine-1, &nError );
+            if ( bVisualToLeft )
+            {
+                bGotoEndOfPrevLine = nVisPos == 0;
+                if ( !bEndOfLine )
+                    nVisPos--;
+            }
+            else
+            {
+                bGotoStartOfNextLine = nVisPos == (aLine.Len() - 1);
+                if ( !bEndOfLine )
+                    nVisPos++;
+            }
+
+            if ( !bGotoEndOfPrevLine && !bGotoStartOfNextLine )
+            {
+                USHORT nLogPos = (USHORT)ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
+                aPaM.GetIndex() = pLine->GetStart() + nLogPos;
+                pEditView->pImpEditView->SetCursorBidiLevel( 0 );
+            }
+        }
+        else
+        {
+            BOOL bWasBehind = FALSE;
+            BOOL bBeforePortion = !nPosInLine || pEditView->pImpEditView->GetCursorBidiLevel() == 1;
+            if ( nPosInLine && ( !bBeforePortion ) ) // before the next portion
+                bWasBehind = TRUE;  // step one back, otherwise visual will be unusable when rtl portion follows.
+
+            USHORT nPortionStart;
+            USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, bBeforePortion );
+            TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+            BOOL bRTLPortion = (pTextPortion->GetRightToLeft() % 2) != 0;
+
+            // -1: We are 'behind' the character
+            long nVisPos = (long)ubidi_getVisualIndex( pBidi, bWasBehind ? nPosInLine-1 : nPosInLine, &nError );
+            if ( bVisualToLeft )
+            {
+                if ( !bWasBehind || bRTLPortion )
+                    nVisPos--;
+            }
+            else
+            {
+                if ( bWasBehind || bRTLPortion || bBeforePortion )
+                    nVisPos++;
+//                if ( bWasBehind && bRTLPortion )
+//                    nVisPos++;
+            }
+
+            bGotoEndOfPrevLine = nVisPos < 0;
+            bGotoStartOfNextLine = nVisPos >= aLine.Len();
+
+            if ( !bGotoEndOfPrevLine && !bGotoStartOfNextLine )
+            {
+                USHORT nLogPos = (USHORT)ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
+
+/*
+                if ( nLogPos == aPaM.GetIndex() )
+                {
+                    if ( bVisualToLeft )
+                        bGotoEndOfPrevLine = TRUE;
+                    else
+                        bGotoStartOfNextLine = TRUE;
+                }
+                else
+*/
+                {
+                    aPaM.GetIndex() = pLine->GetStart() + nLogPos;
+
+                    // RTL portion, stay visually on the left side.
+                    USHORT nPortionStart;
+                    // USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, !bRTLPortion );
+                    USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, TRUE );
+                    TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+                    if ( bVisualToLeft && !bRTLPortion && ( pTextPortion->GetRightToLeft() % 2 ) )
+                        aPaM.GetIndex()++;
+                    else if ( !bVisualToLeft && bRTLPortion && ( bWasBehind || !(pTextPortion->GetRightToLeft() % 2 )) )
+                        aPaM.GetIndex()++;
+
+                    pEditView->pImpEditView->SetCursorBidiLevel( nPortionStart );
+                }
+            }
+        }
+
+        ubidi_close( pBidi );
+
+        if ( bGotoEndOfPrevLine )
+        {
+            aPaM = CursorUp( aPaM, pEditView );
+            if ( aPaM != rPaM )
+                aPaM = CursorVisualStartEnd( pEditView, aPaM, FALSE );
+        }
+        else if ( bGotoStartOfNextLine )
+        {
+            aPaM = CursorDown( aPaM, pEditView );
+            if ( aPaM != rPaM )
+                aPaM = CursorVisualStartEnd( pEditView, aPaM, TRUE );
+        }
+    }
+    return aPaM;
+}
+
+
 EditPaM ImpEditEngine::CursorLeft( const EditPaM& rPaM, USHORT nCharacterIteratorMode )
 {
-    EditPaM aNewPaM( rPaM );
+    EditPaM aCurPaM( rPaM );
+    EditPaM aNewPaM( aCurPaM );
 
-    if ( rPaM.GetIndex() )
+    if ( aCurPaM.GetIndex() )
     {
-        uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         sal_Int32 nCount = 1;
-        aNewPaM.SetIndex( (USHORT)xBI->previousCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale( aNewPaM ), nCharacterIteratorMode, nCount, nCount ) );
+        uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+         aNewPaM.SetIndex( (USHORT)xBI->previousCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale( aNewPaM ), nCharacterIteratorMode, nCount, nCount ) );
     }
     else
     {
-        ContentNode* pNode = rPaM.GetNode();
+        ContentNode* pNode = aCurPaM.GetNode();
         pNode = GetPrevVisNode( pNode );
         if ( pNode )
         {
@@ -942,8 +1216,10 @@ EditPaM ImpEditEngine::CursorLeft( const EditPaM& rPaM, USHORT nCharacterIterato
 
 EditPaM ImpEditEngine::CursorRight( const EditPaM& rPaM, USHORT nCharacterIteratorMode )
 {
-    EditPaM aNewPaM( rPaM );
-    if ( rPaM.GetIndex() < rPaM.GetNode()->Len() )
+    EditPaM aCurPaM( rPaM );
+    EditPaM aNewPaM( aCurPaM );
+
+    if ( aCurPaM.GetIndex() < aCurPaM.GetNode()->Len() )
     {
         uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         sal_Int32 nCount = 1;
@@ -951,7 +1227,7 @@ EditPaM ImpEditEngine::CursorRight( const EditPaM& rPaM, USHORT nCharacterIterat
     }
     else
     {
-        ContentNode* pNode = rPaM.GetNode();
+        ContentNode* pNode = aCurPaM.GetNode();
         pNode = GetNextVisNode( pNode );
         if ( pNode )
         {
@@ -1544,6 +1820,27 @@ BOOL ImpEditEngine::IsRightToLeft( USHORT nPara ) const
 
     return bR2L;
 }
+
+BOOL ImpEditEngine::HasDifferentRTLLevels( const ContentNode* pNode )
+{
+    USHORT nPara = GetEditDoc().GetPos( (ContentNode*)pNode );
+    ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+
+    BOOL bHasDifferentRTLLevels = FALSE;
+
+    USHORT nRTLLevel = IsRightToLeft( nPara ) ? 1 : 0;
+    for ( USHORT n = 0; n < pParaPortion->GetTextPortions().Count(); n++ )
+    {
+        TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( n );
+        if ( pTextPortion->GetRightToLeft() != nRTLLevel )
+        {
+            bHasDifferentRTLLevels = TRUE;
+            break;
+        }
+    }
+    return bHasDifferentRTLLevels;
+}
+
 
 BYTE ImpEditEngine::GetRightToLeft( USHORT nPara, USHORT nPos, USHORT* pStart, USHORT* pEnd )
 {
@@ -2380,7 +2677,7 @@ BOOL ImpEditEngine::UpdateFields()
                 pField->Reset();
 
                 if ( aStatus.MarkFields() )
-                    pField->GetFldColor() = new Color( GetColorConfig().GetColorValue( svx::WRITERFIELDSHADINGS ).nColor );
+                    pField->GetFldColor() = new Color( GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor );
 
                 XubString aFldValue = GetEditEnginePtr()->CalcFieldValue(
                                         (const SvxFieldItem&)*pField->GetItem(),
@@ -3789,13 +4086,47 @@ void ImpEditEngine::SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTabl
     EE_DLL()->GetGlobalData()->SetForbiddenCharsTable( xForbiddenChars );
 }
 
-svx::ColorConfig& ImpEditEngine::GetColorConfig()
+svtools::ColorConfig& ImpEditEngine::GetColorConfig()
 {
     if ( !pColorConfig )
-        pColorConfig = new svx::ColorConfig;
+        pColorConfig = new svtools::ColorConfig;
 
     return *pColorConfig;
 }
+
+BOOL ImpEditEngine::IsVisualCursorTravelingEnabled()
+{
+    BOOL bVisualCursorTravaling = FALSE;
+
+    if( !pCTLOptions )
+        pCTLOptions = new SvtCTLOptions;
+
+    if ( pCTLOptions->IsCTLFontEnabled() && ( pCTLOptions->GetCTLCursorMovement() == SvtCTLOptions::MOVEMENT_VISUAL ) )
+    {
+        bVisualCursorTravaling = TRUE;
+    }
+
+    return bVisualCursorTravaling;
+
+}
+
+BOOL ImpEditEngine::DoVisualCursorTraveling( const ContentNode* pNode )
+{
+    // Don't check if it's necessary, because we also need it when leaving the paragraph
+    return IsVisualCursorTravelingEnabled();
+/*
+    BOOL bDoVisualCursorTraveling = FALSE;
+
+    if ( IsVisualCursorTravelingEnabled() && pNode->Len() )
+    {
+        // Only necessary when RTL text in LTR para or LTR text in RTL para
+        bDoVisualCursorTraveling = HasDifferentRTLLevels( pNode );
+    }
+
+    return bDoVisualCursorTraveling;
+*/
+}
+
 
 void ImpEditEngine::CallNotify( EENotify& rNotify )
 {

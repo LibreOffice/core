@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-12-02 13:53:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ String RID_EDITUNDO_DEL
     TEXT [ french ] = "Supprimer" ;
     TEXT [ swedish ] = "Radera" ;
     TEXT [ dutch ] = "Wissen" ;
-    TEXT [ spanish ] = "Eliminar" ;
+    TEXT [ spanish ] = "Borrar" ;
     TEXT [ english_us ] = "Delete" ;
     TEXT[ chinese_simplified ] = "åˆ é™¤";
     TEXT[ russian ] = "Óäàëèòü";
@@ -295,7 +295,7 @@ String RID_EDITUNDO_SETSTYLE
     TEXT[ dutch ] = "Opmaakprofielen toepassen";
     TEXT[ chinese_simplified ] = "ä½¿ç”¨æ ·å¼";
     TEXT[ greek ] = "ÅöáñìïãŞ ğñïôığùí";
-    TEXT[ korean ] = "í…œí”Œë¦¿ ì ìš©";
+    TEXT[ korean ] = "ìŠ¤íƒ€ì¼ ì ìš©";
     TEXT[ turkish ] = "Şablonları kullan";
     TEXT[ catalan ] = "Aplica els estils";
     TEXT[ thai ] = "à¹ƒà¸Šà¹‰à¸¥à¸±à¸à¸©à¸“à¸°";
@@ -318,7 +318,7 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[ polish ] = "Wielkie i ma³e litery";
     TEXT[ portuguese_brazilian ] = "Change case";
     TEXT[ japanese ] = "æ–‡å­—ç¨®ã®å¤‰æ›";
-    TEXT[ korean ] = "ëŒ€/ì†Œë¬¸ì";
+    TEXT[ korean ] = "ë¬¸ì ë°”ê¾¸ê¸°";
     TEXT[ chinese_simplified ] = "å˜åŒ–å­—æ¯å’Œå­—ä½“æ ¼å¼";
     TEXT[ chinese_traditional ] = "è®ŠåŒ–å­—æ¯å’Œå­—å‹æ ¼å¼";
     TEXT[ turkish ] = "Change case";
@@ -346,8 +346,8 @@ Menu RID_MENU_SPELL
             Text[ russian ] = "~Ïğîâåğêà îğôîãğàôèè";
             Text[ greek ] = "Ï~ñèïãñáößá";
             Text[ dutch ] = "~Spellingcontrole";
-            Text[ french ] = "~Orthographe...";
-            Text[ spanish ] = "Ortogra~fía...";
+            Text[ french ] = "~Vérification orthographique...";
+            Text[ spanish ] = "~Revisión ortográfica...";
             Text[ finnish ] = "~Oikeinkirjoituksen tarkistus";
             Text[ italian ] = "Controllo ~ortografico...";
             Text[ danish ] = "~Stavekontrol";
@@ -355,7 +355,7 @@ Menu RID_MENU_SPELL
             Text[ polish ] = "~Pisownia";
             Text[ portuguese_brazilian ] = "~Rechtschreibung";
             Text[ japanese ] = "æ–‡ç« æ ¡æ­£(~S)...";
-            Text[ korean ] = "ë§ì¶¤ë²•(~S)...";
+            Text[ korean ] = "ë§ì¶¤ë²• ê²€ì‚¬(~S)...";
             Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)...";
             Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥(~S)...";
             Text[ turkish ] = "~Yazım kılavuzu";
@@ -441,7 +441,7 @@ Menu RID_MENU_SPELL
             Text [ swedish ] = "Auto~Korrigering" ;
             Text [ danish ] = "Auto~Korrektur" ;
             Text [ italian ] = "~Correzione automatica" ;
-            Text [ spanish ] = "Auto~Corrección" ;
+            Text [ spanish ] = "~Corrección automática" ;
             Text [ french ] = "AutoCo~rrection" ;
             Text [ dutch ] = "~AutoCorrectie" ;
             Text [ portuguese ] = "Auto~Correcção" ;
@@ -454,7 +454,7 @@ Menu RID_MENU_SPELL
             Text[ dutch ] = "~AutoCorrectie";
             Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
             Text[ greek ] = "Áõôï~Äéüñèùóç";
-            Text[ korean ] = "ìë™ ê³ ì¹¨";
+            Text[ korean ] = "ìë™ ìˆ˜ì •";
             Text[ turkish ] = "Otomatik düzeltme";
             Text[ catalan ] = "Auto~correcció";
             Text[ finnish ] = "Automaattinen korjaus";
@@ -517,3 +517,5 @@ String RID_STR_PARAGRAPH
     Text[ catalan ] = "Paragraph is %x";
     Text[ thai ] = "Paragraph is %x";
 };
+
+

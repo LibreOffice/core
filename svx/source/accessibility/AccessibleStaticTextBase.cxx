@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-15 13:12:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,8 @@ namespace accessibility
     //
     //------------------------------------------------------------------------
 
+    DBG_NAME( AccessibleStaticTextBase_Impl );
+
     /** AccessibleStaticTextBase_Impl
 
         This class implements the AccessibleStaticTextBase
@@ -171,17 +173,38 @@ namespace accessibility
         AccessibleStaticTextBase_Impl();
         ~AccessibleStaticTextBase_Impl();
 
-        SvxEditSourceAdapter& GetEditSource() const SAL_THROW((uno::RuntimeException)) { return maEditSource; }
+        SvxEditSourceAdapter& GetEditSource() const SAL_THROW((uno::RuntimeException))
+        {
+            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
+            return maEditSource;
+        }
         void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException));
 
-        void SetEventSource( const uno::Reference< XAccessible >& rInterface ) { mxThis = rInterface; }
-        uno::Reference< XAccessible > GetEventSource() const { return mxThis; }
+        void SetEventSource( const uno::Reference< XAccessible >& rInterface )
+        {
+            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
+            mxThis = rInterface;
+        }
+        uno::Reference< XAccessible > GetEventSource() const
+        {
+            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
+            return mxThis;
+        }
 
         void SetOffset( const Point& );
-        Point GetOffset() const { ::osl::MutexGuard aGuard( maMutex ); Point aPoint( maOffset ); return aPoint; }
+        Point GetOffset() const
+        {
+            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
+            ::osl::MutexGuard aGuard( maMutex ); Point aPoint( maOffset );
+            return aPoint;
+        }
 
         void UpdateChildren();
-        void Dispose() { mxThis = NULL; }
+        void Dispose();
 
 #ifdef DBG_UTIL
         void CheckInvariants() const;
@@ -189,8 +212,18 @@ namespace accessibility
 
         AccessibleEditableTextPara& GetParagraph( sal_Int32 nPara ) const;
         sal_Int32                   GetParagraphCount() const;
-        EPosition                   Index2Internal( sal_Int32 nFlatIndex ) const { return ImpCalcInternal( nFlatIndex, false); }
-        EPosition                   Range2Internal( sal_Int32 nFlatIndex ) const { return ImpCalcInternal( nFlatIndex, true); }
+        EPosition                   Index2Internal( sal_Int32 nFlatIndex ) const
+        {
+            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
+            return ImpCalcInternal( nFlatIndex, false );
+        }
+        EPosition                   Range2Internal( sal_Int32 nFlatIndex ) const
+        {
+            DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
+            return ImpCalcInternal( nFlatIndex, true );
+        }
         sal_Bool                    SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                   sal_Int32 nEndPara, sal_Int32 nEndIndex );
         sal_Bool                    CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
@@ -206,7 +239,9 @@ namespace accessibility
         uno::Reference< XAccessible > mxThis;
 
         // implements our functionality, we're just an adapter (guarded by solar mutex)
-        mutable AccessibleEditableTextPara maTextParagraph;
+        mutable AccessibleEditableTextPara* mpTextParagraph;
+
+        uno::Reference< XAccessible > mxParagraph;
 
         // a wrapper for the text forwarders (guarded by solar mutex)
         mutable SvxEditSourceAdapter maEditSource;
@@ -227,37 +262,44 @@ namespace accessibility
 
     AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
         mxThis( NULL ),
-        maTextParagraph( NULL ),
+        mpTextParagraph( new AccessibleEditableTextPara(NULL) ),
+        mxParagraph( mpTextParagraph ),
         maEditSource(),
         maMutex(),
         maOffset(0,0)
     {
+        DBG_CTOR( AccessibleStaticTextBase_Impl, NULL );
+
         // TODO: this is still somewhat of a hack, all the more since
         // now the maTextParagraph has an empty parent reference set
-
-        // prevent automatic release of member variable
-        maTextParagraph.acquire();
     }
 
     AccessibleStaticTextBase_Impl::~AccessibleStaticTextBase_Impl()
     {
+        DBG_DTOR( AccessibleStaticTextBase_Impl, NULL );
     }
 
     void AccessibleStaticTextBase_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException))
     {
+        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
         maEditSource.SetEditSource( pEditSource );
-        maTextParagraph.SetEditSource( &maEditSource );
+        if( mpTextParagraph )
+            mpTextParagraph->SetEditSource( &maEditSource );
     }
 
     void AccessibleStaticTextBase_Impl::SetOffset( const Point& rPoint )
     {
+        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
         // guard against non-atomic access to maOffset data structure
         {
             ::osl::MutexGuard aGuard( maMutex );
             maOffset = rPoint;
         }
 
-        maTextParagraph.SetEEOffset( rPoint );
+        if( mpTextParagraph )
+            mpTextParagraph->SetEEOffset( rPoint );
 
         // in all cases, check visibility afterwards.
         UpdateChildren();
@@ -265,7 +307,23 @@ namespace accessibility
 
     void AccessibleStaticTextBase_Impl::UpdateChildren()
     {
+        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
         // currently no children
+    }
+
+    void AccessibleStaticTextBase_Impl::Dispose()
+    {
+        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
+        // we're the owner of the paragraph, so destroy it, too
+        if( mpTextParagraph )
+            mpTextParagraph->Dispose();
+
+        // drop references
+        mxParagraph = NULL;
+        mxThis = NULL;
+        mpTextParagraph = NULL;
     }
 
 #ifdef DBG_UTIL
@@ -277,20 +335,33 @@ namespace accessibility
 
     AccessibleEditableTextPara& AccessibleStaticTextBase_Impl::GetParagraph( sal_Int32 nPara ) const
     {
+        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
+        if( !mpTextParagraph )
+            throw lang::DisposedException (
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")), mxThis );
+
         // TODO: Have a differnt method on AccessibleEditableTextPara
         // that does not care about state changes
-        maTextParagraph.SetParagraphIndex( nPara );
+        mpTextParagraph->SetParagraphIndex( nPara );
 
-        return maTextParagraph;
+        return *mpTextParagraph;
     }
 
     sal_Int32 AccessibleStaticTextBase_Impl::GetParagraphCount() const
     {
-        return maTextParagraph.GetTextForwarder().GetParagraphCount();
+        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
+        if( !mpTextParagraph )
+            return 0;
+        else
+            return mpTextParagraph->GetTextForwarder().GetParagraphCount();
     }
 
     EPosition AccessibleStaticTextBase_Impl::ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const
     {
+        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
         if( nFlatIndex < 0 )
             throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds")),
                                                   mxThis);
@@ -332,9 +403,14 @@ namespace accessibility
     sal_Bool AccessibleStaticTextBase_Impl::SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                           sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
+        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
+        if( !mpTextParagraph )
+            return sal_False;
+
         try
         {
-            SvxEditViewForwarder& rCacheVF = maTextParagraph.GetEditViewForwarder( sal_True );
+            SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( sal_True );
             return rCacheVF.SetSelection( MakeSelection(nStartPara, nStartIndex, nEndPara, nEndIndex) );
         }
         catch( const uno::RuntimeException& )
@@ -346,10 +422,15 @@ namespace accessibility
     sal_Bool AccessibleStaticTextBase_Impl::CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                       sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
+        DBG_CHKTHIS( AccessibleStaticTextBase_Impl, NULL );
+
+        if( !mpTextParagraph )
+            return sal_False;
+
         try
         {
-            SvxEditViewForwarder& rCacheVF = maTextParagraph.GetEditViewForwarder( sal_True );
-            SvxTextForwarder& rCacheTF = maTextParagraph.GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( sal_True );
+            SvxTextForwarder& rCacheTF = mpTextParagraph->GetTextForwarder();   // MUST be after GetEditViewForwarder(), see method docs
             sal_Bool aRetVal;
 
             // save current selection
@@ -704,7 +785,15 @@ namespace accessibility
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
-            return mpImpl->GetParagraph( aPos.nPara ).getText();
+            // #106393# Special casing one behind last paragraph
+            if( aPos.nIndex == mpImpl->GetParagraph( aPos.nPara ).getCharacterCount() )
+            {
+                return ::rtl::OUString();
+            }
+            else
+            {
+                return mpImpl->GetParagraph( aPos.nPara ).getText();
+            }
         }
         else
         {

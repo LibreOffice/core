@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-04 12:48:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
+#include <com/sun/star/i18n/CollatorOptions.hpp>
+#endif
 
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
@@ -171,6 +174,9 @@
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 
 //#define COMPARE_BOOKMARKS(a, b) compareUsrAny(a, b)
 #define COMPARE_BOOKMARKS(a, b) ::comphelper::compare(a, b)
@@ -190,23 +196,10 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
 // ***************************************************************************************************
-
-//------------------------------------------------------------------------
-void buildUILocale(Locale& _rLocale)
-{
-    _rLocale = Application::GetSettings().GetUILocale();
-}
-
-//------------------------------------------------------------------------
-Locale buildUILocale()
-{
-    Locale aReturn;
-    buildUILocale(aReturn);
-    return aReturn;
-}
 
 // ***************************************************************************************************
 
@@ -445,6 +438,9 @@ INLINE_METHOD sal_Bool FmSearchEngine::MoveField(sal_Int32& nPos, FieldCollectio
 //------------------------------------------------------------------------
 void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< ::com::sun::star::container::XIndexAccess > & xAllFields, sal_Int32 nField)
 {
+    DBG_ASSERT( xAllFields.is() && ( nField >= 0 ) && ( nField < xAllFields->getCount() ),
+        "FmSearchEngine::BuildAndInsertFieldInfo: invalid field descriptor!" );
+
     // das Feld selber
     Reference< XInterface > xCurrentField;
     xAllFields->getByIndex(nField) >>= xCurrentField;
@@ -700,7 +696,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
         aParam.insertedChars = m_nLevLonger;
     }
     aParam.searchString = strExpression;
-    buildUILocale(aParam.Locale);
+    aParam.Locale = SvtSysLocale().GetLocaleData().getLocale();
     ::utl::TextSearch aLocalEngine(aParam);
 
     // --------------------------------------------------------------
@@ -806,7 +802,8 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
     ,m_eMode(eMode)
     ,m_bCancelAsynchRequest(sal_False)
     ,m_bSearchingCurrently(sal_False)
-    ,m_aCharacterClassficator(_rxORB, buildUILocale())
+    ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
+    ,m_aStringCompare( _rxORB )
 {
     DBG_CTOR(FmSearchEngine,NULL);
 
@@ -835,7 +832,8 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
     ,m_eMode(eMode)
     ,m_bCancelAsynchRequest(sal_False)
     ,m_bSearchingCurrently(sal_False)
-    ,m_aCharacterClassficator(_rxORB, buildUILocale())
+    ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
+    ,m_aStringCompare( _rxORB )
 {
     DBG_CTOR(FmSearchEngine,NULL);
 
@@ -928,11 +926,42 @@ void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
 //------------------------------------------------------------------------
 void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
 {
-    // die Felder der Tabelle auseinanderdroeseln
-    // ausserdem gleich das Mapping aufbauen: da die Liste der gueltigen Spalten durchaus kuerzer sein kann als die Liste der
-    // Spalten, die der Iterator verwaltet, brauche ich ein solches Mapping : die gueltige Spalte Nummer x entspricht der vom
-    // Iterator gelieferten Spalte y
+    // analyze the fields
+    // additionally, create the mapping: because the list of used columns can be shorter than the list
+    // of columns of the cursor, we need a mapping: "used column numer n" -> "cursor column m"
     m_arrFieldMapping.Remove(0, m_arrFieldMapping.Count());
+
+    // important: The case of the columns does not need to be exact - for instance:
+    // - a user created a form which works on a table, for which the driver returns a column name "COLUMN"
+    // - the driver itself works case-insensitve with column names
+    // - a control in the form is bound to "column" - not the different case
+    // In such a scenario, the form and the field would work okay, but we here need to case for the different case
+    // explicitly
+    // 2003-01-09 - #i8755# - fs@openoffice.org
+
+    // so first of all, check if the database handles identifiers case sensitive
+    Reference< XConnection > xConn;
+    Reference< XDatabaseMetaData > xMeta;
+    Reference< XPropertySet > xCursorProps( IFACECAST( m_xSearchCursor ), UNO_QUERY );
+    if ( xCursorProps.is() )
+    {
+        try
+        {
+            xCursorProps->getPropertyValue( FM_PROP_ACTIVE_CONNECTION ) >>= xConn;
+        }
+        catch( Exception& ) { /* silent this - will be asserted below */ }
+    }
+    if ( xConn.is() )
+        xMeta = xConn->getMetaData();
+    OSL_ENSURE( xMeta.is(), "FmSearchEngine::Init: very strange cursor (could not derive connection meta data from it)!" );
+
+    sal_Bool bCaseSensitiveIdentifiers = sal_True;  // assume case sensivity
+    if ( xMeta.is() )
+        bCaseSensitiveIdentifiers = xMeta->supportsMixedCaseQuotedIdentifiers();
+
+    // now that we have this information, we need a collator which is able to case (in)sentively compare strings
+    m_aStringCompare.loadDefaultCollator( SvtSysLocale().GetLocaleData().getLocale(),
+        bCaseSensitiveIdentifiers ? 0 : ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
 
     try
     {
@@ -955,7 +984,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
             sal_Int32 nFoundIndex = -1;
             for (sal_Int32 j=0; j<seqFieldNames.getLength(); ++j, ++pFieldNames)
             {
-                if (pFieldNames->equals(sCurrentField))
+                if ( 0 == m_aStringCompare.compareString( *pFieldNames, sCurrentField ) )
                 {
                     nFoundIndex = j;
                     break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: language.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 03:19:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,26 +73,36 @@ String RID_SVXSTR_LANGUAGE_ALL
     Text [ italian ] = "[Tutte]" ;
     Text [ portuguese_brazilian ] = "[Tudo]" ;
     Text [ portuguese ] = "[Todas]" ;
-    Text [ finnish ] = "All" ;
-    Text [ danish ] = "Alle" ;
+    Text [ finnish ] = "[Kaikki]" ;
+    Text [ danish ] = "[Alle]" ;
     Text [ french ] = "[Toutes]" ;
     Text [ swedish ] = "[Alla]" ;
-    Text [ dutch ] = "[Alle]  " ;
+    Text [ dutch ] = "[Alle]" ;
     Text [ spanish ] = "Todos" ;
     Text [ english_us ] = "[All]" ;
-    Text[ chinese_simplified ] = "[È«²¿]";
+    Text[ chinese_simplified ] = "[å…¨éƒ¨]";
     Text[ russian ] = "[Âñå]";
     Text[ polish ] = "[Wszystkie]";
-    Text[ japanese ] = "[‚·‚×‚Ä]";
+    Text[ japanese ] = "[ã™ã¹ã¦]";
     Text[ greek ] = "[¼ëá]";
-    Text[ korean ] = "¸ğµÎ";
-    Text[ chinese_traditional ] = "[¥ş³¡]";
+    Text[ korean ] = "ëª¨ë‘";
+    Text[ chinese_traditional ] = "[å…¨éƒ¨]";
     Text[ arabic ] = "[Çáßá]";
     Text[ turkish ] = "[Tümü]";
-    Text[ catalan ] = "Todas";
+    Text[ catalan ] = "[Tots]";
+    Text[ thai ] = "[à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”]";
 };
 
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 

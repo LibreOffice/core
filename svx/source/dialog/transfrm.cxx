@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-21 16:57:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,6 +794,7 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
     maTsbAutoGrowHeight             ( this, ResId( TSB_AUTOGROW_HEIGHT ) ),
 
     maFlDivider                     (this, ResId( FL_DIVIDER ) ),
+    mnProtectSizeState( STATE_NOCHECK ),
     mbProtectDisabled( false ),
     mbSizeDisabled( false ),
 
@@ -809,8 +810,6 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     mePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 
-    // Wird nicht mehr gebraucht:
-    // aTsbProtect.SetClickHdl( LINK( this, SvxPositionSizeTabPage, ClickProtectHdl ) );
     maDdLbAnchor.SetSelectHdl( LINK( this, SvxPositionSizeTabPage, SetAnchorHdl ) );
     maDdLbOrient.SetSelectHdl( LINK( this, SvxPositionSizeTabPage, SetOrientHdl ) );
 
@@ -825,7 +824,9 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
     maTsbAutoGrowHeight.Disable();
     maFlAdjust.Disable();
 
+    // #i2379# disable controls when protected
     maTsbPosProtect.SetClickHdl( LINK( this, SvxPositionSizeTabPage, ChangePosProtectHdl ) );
+    maTsbSizeProtect.SetClickHdl( LINK( this, SvxPositionSizeTabPage, ChangeSizeProtectHdl ) );
 
 }
 
@@ -1122,7 +1123,9 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet& rOutAttrs )
 
         maTsbPosProtect.SaveValue();
         maCtlPos.Reset();
-        ClickPosProtectHdl( this );
+
+        // #i2379# Disable controls for protected objects
+        ChangePosProtectHdl( this );
 
         if(maAnchorBox.IsVisible()) //nur fuer den Writer
         {
@@ -1228,6 +1231,9 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet& rOutAttrs )
     maTsbAutoGrowWidth.SaveValue();
     maTsbAutoGrowHeight.SaveValue();
     ClickSizeProtectHdl( NULL );
+
+    // #i2379# Disable controls for protected objects
+    ChangeSizeProtectHdl( this );
 }
 
 // -----------------------------------------------------------------------
@@ -1269,14 +1275,22 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* pSet )
         INT32 lX = maMtrPosX.GetValue();
         INT32 lY = maMtrPosY.GetValue();
 
-        // #101581# GetTopLeftPosition(...) needs coordinates
-        // after UI scaling, in real PagePositions. Thus I added
-        // that calculation here
-        Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        lX += maAnchorPos.X();
-        lX = Fraction( lX ) * aUIScale;
-        lY += maAnchorPos.Y();
-        lY = Fraction( lY ) * aUIScale;
+        // #106330#
+        // The below BugFix assumed that GetTopLeftPosition()
+        // needs special coordinate systems. This is not true,
+        // GetTopLeftPosition() just needs all parameters in one
+        // coor system. Thus, this part below is not necessary and
+        // leads to this new bug. Thus, i remove it again.
+        // I checked that #106330# works and #101581# is fixed, too.
+        //
+        // // #101581# GetTopLeftPosition(...) needs coordinates
+        // // after UI scaling, in real PagePositions. Thus I added
+        // // that calculation here
+        // Fraction aUIScale = mpView->GetModel()->GetUIScale();
+        // lX += maAnchorPos.X();
+        // lX = Fraction( lX ) * aUIScale;
+        // lY += maAnchorPos.Y();
+        // lY = Fraction( lY ) * aUIScale;
 
         GetTopLeftPosition( lX, lY, maRect );
 
@@ -1291,13 +1305,93 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* pSet )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxPositionSizeTabPage, ChangePosProtectHdl, void *, EMPTYARG )
+IMPL_LINK( SvxPositionSizeTabPage, ChangePosProtectHdl, void *, p )
 {
     maTsbSizeProtect.Enable( !mbProtectDisabled & (maTsbPosProtect.GetState() != STATE_CHECK) );
-    maTsbSizeProtect.SetState( maTsbPosProtect.GetState() );
+
+    // #106572# Remember user's last choice
+    maTsbSizeProtect.SetState( maTsbPosProtect.GetState() == STATE_CHECK ?
+                               STATE_CHECK : mnProtectSizeState );
+
+    DisableSizeControls();
+
+    if( maTsbPosProtect.GetState() == STATE_CHECK )
+    {
+        maFlPosition.Disable();
+        maFtPosX.Disable();
+        maMtrPosX.Disable();
+        maFtPosY.Disable();
+        maMtrPosY.Disable();
+        maFtPosReference.Disable();
+        maCtlPos.Disable();
+        maCtlPos.Invalidate();
+    }
+    else
+    {
+        maFlPosition.Enable();
+        maFtPosX.Enable();
+        maMtrPosX.Enable();
+        maFtPosY.Enable();
+        maMtrPosY.Enable();
+        maFtPosReference.Enable();
+        maCtlPos.Enable();
+        maCtlPos.Invalidate();
+    }
+
     return( 0L );
 }
-IMPL_LINK_INLINE_END( SvxPositionSizeTabPage, ChangePosProtectHdl, void *, EMPTYARG )
+
+//------------------------------------------------------------------------
+
+void SvxPositionSizeTabPage::DisableSizeControls()
+{
+    if( maTsbSizeProtect.GetState() == STATE_CHECK )
+    {
+        maFlSize.Disable();
+        maFtWidth.Disable();
+        maMtrWidth.Disable();
+        maFtHeight.Disable();
+        maMtrHeight.Disable();
+        maCbxScale.Disable();
+        maFtSizeReference.Disable();
+        maCtlSize.Disable();
+        maCtlSize.Invalidate();
+    }
+    else
+    {
+        maFlSize.Enable();
+        maFtWidth.Enable();
+        maMtrWidth.Enable();
+        maFtHeight.Enable();
+        maMtrHeight.Enable();
+        maCbxScale.Enable();
+        maFtSizeReference.Enable();
+        maCtlSize.Enable();
+        maCtlSize.Invalidate();
+    }
+}
+
+//------------------------------------------------------------------------
+
+IMPL_LINK( SvxPositionSizeTabPage, ChangeSizeProtectHdl, void *, p )
+{
+    if( maTsbSizeProtect.IsEnabled() )
+    {
+        // #106572# Remember user's last choice
+
+        // Note: this works only as long as the dialog is open.  When
+        // the user closes the dialog, there is no way to remember
+        // whether size was enabled or disabled befor pos protect was
+        // clicked. Thus, if pos protect is selected, the dialog is
+        // closed and reopened again, unchecking pos protect will
+        // always uncheck size protect, too. That's life.
+        mnProtectSizeState = maTsbSizeProtect.GetState();
+    }
+
+    DisableSizeControls();
+
+    return( 0L );
+}
 
 //------------------------------------------------------------------------
 
@@ -1510,13 +1604,6 @@ void SvxPositionSizeTabPage::GetTopLeftPosition( INT32& rX, INT32& rY,
             rY = rY- ( rRect.Bottom() - rRect.Top() );
             break;
     }
-}
-
-//------------------------------------------------------------------------
-
-IMPL_LINK( SvxPositionSizeTabPage, ClickPosProtectHdl, void *, p )
-{
-    return( 0L );
 }
 
 //------------------------------------------------------------------------

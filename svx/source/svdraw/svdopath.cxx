@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-01 12:10:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,36 @@ void SdrPathObj::ImpForceKind()
     if (eKind==OBJ_PLIN && (nPolyAnz==1 && nPoly1PointAnz==2)) eKind=OBJ_LINE;
 
     bClosedObj=IsClosed();
-    if (eKind==OBJ_LINE) ImpForceLineWink();
+
+    if (eKind==OBJ_LINE)
+    {
+        ImpForceLineWink();
+    }
+    else
+    {
+        // #i10659#, similar to #101412# but for polys with more than 2 points.
+        //
+        // Here i again need to fix something, because when Path-Polys are Copy-Pasted
+        // between Apps with different measurements (e.g. 100TH_MM and TWIPS) there is
+        // a scaling loop started from SdrExchangeView::Paste. This is principally nothing
+        // wrong, but aRect is wrong here and not even updated by RecalcSnapRect(). If
+        // this is the case, some size needs to be set here in aRect to avoid that the cyclus
+        // through Rect2Poly - Poly2Rect does something badly wrong since that cycle is
+        // BASED on aRect. That cycle is triggered in SdrTextObj::NbcResize() which is called
+        // from the local Resize() implementation.
+        //
+        // Basic problem is that the member aRect in SdrTextObj basically is a unrotated
+        // text rectangle for the text object itself and methods at SdrTextObj do handle it
+        // in that way. Many draw objects derived from SdrTextObj 'abuse' aRect as SnapRect
+        // which is basically wrong. To make the SdrText methods which deal with aRect directly
+        // work it is necessary to always keep aRect updated. This e.g. not done after a Clone()
+        // command for SdrPathObj. Since adding this update mechanism with #101412# to
+        // ImpForceLineWink() for lines was very successful, i add it to where ImpForceLineWink()
+        // was called, once here below and once on a 2nd place below.
+
+        // #i10659# for SdrTextObj, keep aRect up to date
+        aRect=aPathPolygon.GetBoundRect(); // fuer SdrTextObj
+    }
 }
 
 void SdrPathObj::ImpSetClosed(FASTBOOL bClose)
@@ -2295,7 +2324,17 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, USHORT nHdlNum)
         XPolygon& rXP=aPathPolygon[nPoly];
         rXP[nPnt]=rPnt;
         if (IsClosed() && nPnt==0) rXP[rXP.GetPointCount()-1]=rXP[0];
-        if (eKind==OBJ_LINE) ImpForceLineWink();
+
+        if (eKind==OBJ_LINE)
+        {
+            ImpForceLineWink();
+        }
+        else
+        {
+            // #i10659# for SdrTextObj, keep aRect up to date
+            aRect=aPathPolygon.GetBoundRect(); // fuer SdrTextObj
+        }
+
         SetRectsDirty();
     }
 }

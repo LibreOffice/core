@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-13 10:29:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@
 #include "svdmodel.hxx"
 #include "svdograf.hxx"
 #include "svdundo.hxx"
+#include "svdtrans.hxx"
 #include "grafctrl.hxx"
 
 // -----------
@@ -1055,7 +1056,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                 aCropDlgAttr.Put( SvxBrushItem( pObj->GetGraphic(), GPOS_MM, SID_ATTR_GRAF_GRAPHIC ) );
                 aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_PAGE_SIZE,
                                                Size( OutputDevice::LogicToLogic(
-                                                     Size( 100000, 100000 ), aMap100, aMapTwip ) ) ) );
+                                                     Size( 200000, 200000 ), aMap100, aMapTwip ) ) ) );
                 aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_GRAF_FRMSIZE, OutputDevice::LogicToLogic(
                                                pObj->GetLogicRect().GetSize(), aMap100, aMapTwip ) ) );
 
@@ -1102,10 +1103,41 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                             Size        aNewGrfSize( OutputDevice::LogicToLogic( rGrfSize, aMapTwip, aMap100 ) );
                             Size        aOldGrfSize( pObj->GetLogicRect().GetSize() );
 
-                            aNewOrigin.X() -= ( aNewGrfSize.Width() - aOldGrfSize.Width() ) >> 1;
-                            aNewOrigin.Y() -= ( aNewGrfSize.Height() - aOldGrfSize.Height() ) >> 1;
+                            Rectangle aNewRect( aNewOrigin, aNewGrfSize );
+                            Point aOffset( (aNewGrfSize.Width() - aOldGrfSize.Width()) >> 1,
+                                           (aNewGrfSize.Height() - aOldGrfSize.Height()) >> 1 );
 
-                            const Rectangle aNewRect( aNewOrigin, aNewGrfSize );
+                            // #106181# rotate snap rect before setting it
+                            const GeoStat& aGeo = pObj->GetGeoStat();
+
+                            if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0)
+                            {
+                                Polygon aPol(aNewRect);
+
+                                // also transform origin offset
+                                if (aGeo.nShearWink!=0)
+                                {
+                                    ShearPoly(aPol,
+                                              aNewRect.TopLeft(),
+                                              aGeo.nTan);
+                                    ShearPoint(aOffset, Point(0,0), aGeo.nTan);
+                                }
+                                if (aGeo.nDrehWink!=0)
+                                {
+                                    RotatePoly(aPol,
+                                               aNewRect.TopLeft(),
+                                               aGeo.nSin,aGeo.nCos);
+                                    RotatePoint(aOffset, Point(0,0), aGeo.nSin,aGeo.nCos);
+                                }
+
+                                // apply offset
+                                aPol.Move( -aOffset.X(), -aOffset.Y() );
+                                aNewRect=aPol.GetBoundRect();
+                            }
+                            else
+                            {
+                                aNewRect.Move( -aOffset.X(), -aOffset.Y() );
+                            }
 
                             if( !aSet.Count() )
                                 rView.SetMarkedObjRect( aNewRect );
