@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:44:26 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2606,8 +2606,8 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
                                 if ( nNewSize != aNew.GetHeight() )
                                 {
                                     aNew.SetHeight( nNewSize );
-                                    if ( ATT_VAR_SIZE == aNew.GetSizeType() )
-                                        aNew.SetSizeType( ATT_MIN_SIZE );
+                                    if ( ATT_VAR_SIZE == aNew.GetHeightSizeType() )
+                                        aNew.SetHeightSizeType( ATT_MIN_SIZE );
                                     const SwPosition aPos( *((SwTxtFrm*)pCntnt)->GetTxtNode() );
                                     const SwCursor aTmpCrsr( aPos );
                                     SetRowHeight( aTmpCrsr, aNew );
