@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jbu $ $Date: 2001-11-20 10:21:57 $
+ *  last change: $Author: os $ $Date: 2002-08-02 11:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,18 +594,20 @@ SwCalcExp* SwCalc::VarInsert( const String &rStr )
 SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
 {
     USHORT ii = 0;
+    String aStr( rStr );
+    pCharClass->toLower( aStr );
 
-    SwHash* pFnd = Find( rStr, VarTable, TBLSZ, &ii );
+    SwHash* pFnd = Find( aStr, VarTable, TBLSZ, &ii );
 
     if( !pFnd )
     {
         // dann sehen wir mal im Doc nach:
         SwHash** ppDocTbl = rDoc.GetUpdtFlds().GetFldTypeTable();
         for( SwHash* pEntry = *(ppDocTbl+ii); pEntry; pEntry = pEntry->pNext )
-            if( rStr == pEntry->aStr )
+            if( aStr == pEntry->aStr )
             {
                 // dann hier zufuegen
-                pFnd = new SwCalcExp( rStr, SwSbxValue(),
+                pFnd = new SwCalcExp( aStr, SwSbxValue(),
                                     ((SwCalcFldType*)pEntry)->pFldType );
                 pFnd->pNext = *(VarTable+ii);
                 *(VarTable+ii) = pFnd;
@@ -650,6 +652,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
 
     // Name(p)=Adress.PLZ oder Adress.DATENSATZNUMMER
     // DBSETNUMBERFLD = DatenSATZ-nummernfeld (NICHT "setze Datensatznummer!!!")
+    // #101436#: At this point the "real" case variable has to be used
     String sTmpName( rStr );
     ::ReplacePoint( sTmpName );
 
@@ -706,7 +709,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
     }
 
 
-    SwCalcExp* pNewExp = new SwCalcExp( rStr, SwSbxValue(), 0 );
+    SwCalcExp* pNewExp = new SwCalcExp( aStr, SwSbxValue(), 0 );
     pNewExp->pNext = VarTable[ ii ];
     VarTable[ ii ] = pNewExp;
 
@@ -837,17 +840,20 @@ if( !nUseOld )
         else if( aRes.TokenType & KParseType::IDENTNAME )
         {
             String aName( sCommand.Copy( nRealStt, aRes.EndPos - nRealStt ));
-            pCharClass->toLower( aName );
-
+            //#101436#: the variable may contain a database name it must not be converted to lower case
+            // instead all further comparisons must be done case-insensitive
+            //pCharClass->toLower( aName );
+            String sLowerCaseName(aName);
+            pCharClass->toLower( sLowerCaseName );
             // Currency-Symbol abfangen
-            if( aName == sCurrSym )
+            if( sLowerCaseName == sCurrSym )
             {
                 nCommandPos = (xub_StrLen)aRes.EndPos;
                 return GetToken();  // also nochmal aufrufen
             }
 
             // Operations abfangen
-            _CalcOp* pFnd = ::FindOperator( aName );
+            _CalcOp* pFnd = ::FindOperator( sLowerCaseName );
             if( pFnd )
             {
                 switch( ( eCurrOper = ((_CalcOp*)pFnd)->eOp ) )
