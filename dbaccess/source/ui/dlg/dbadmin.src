@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-22 21:06:32 $
+ *  last change: $Author: kz $ $Date: 2002-02-26 14:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3223,7 +3223,7 @@ String STR_ADDRESSBOOK_SYSTEM
     Text[ swedish ] = "Windows adressbok";
     Text[ polish ] = "Ksi��ka adresowa Windows";
     Text[ portuguese_brazilian ] = "Windows addressbook";
-    Text[ japanese ] = "Windows 住所録";
+    Text[ japanese ] = "Windows アドレス帳";
     Text[ korean ] = "Windows 주소록";
     Text[ chinese_simplified ] = "Windows 通讯簿";
     Text[ chinese_traditional ] = "Windows 通訊錄";
@@ -3273,7 +3273,7 @@ String STR_ADDRESSBOOK_MOZILLA
     Text[ swedish ] = "Mozilla adressbok";
     Text[ polish ] = "Ksi��ka adresowa Mozilla";
     Text[ portuguese_brazilian ] = "Mozilla addressbook";
-    Text[ japanese ] = "Mozilla 住所録";
+    Text[ japanese ] = "Mozilla アドレス帳";
     Text[ korean ] = "Mozilla 주소록";
     Text[ chinese_simplified ] = "Mozilla 通讯簿";
     Text[ chinese_traditional ] = "Mozilla 通訊錄";
@@ -3298,7 +3298,7 @@ String STR_ADDRESSBOOK_LDAP
     Text[ swedish ] = "LDAP adressbok";
     Text[ polish ] = "Ksi��ka adresowa LDAP";
     Text[ portuguese_brazilian ] = "LDAP addressbook";
-    Text[ japanese ] = "LDAP 住所録";
+    Text[ japanese ] = "LDAP アドレス帳";
     Text[ korean ] = "LDAP 주소록";
     Text[ chinese_simplified ] = "LDAP 通讯簿";
     Text[ chinese_traditional ] = "LDAP 通訊錄";
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.93  2002/02/22 21:06:32  vg
+ *  Merge SRC641: 22.02.02 - 22:05:53
+ *
  *  Revision 1.92  2002/02/20 11:54:18  kz
  *  Merge SRC641: 02/20/02 - 12:53:54
  *
