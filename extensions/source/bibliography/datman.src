@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:43:13 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ czech ] = "Názvy sloupců";
         Text[ hebrew ] = "Spaltennamen";
         Text[ hindi ] = "स्तंभ का नाम्";
+        Text[ slovak ] = "Názvy stĺpcov";
     };
     FixedText   FT_IDENTIFIER
     {
@@ -487,6 +488,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ czech ] = "<nic>";
         Text[ hebrew ] = "<kein>";
         Text[ hindi ] = "<कोई नहीं>";
+        Text[ slovak ] = "<nič>";
     };
     Text[ english_us ] = "Column Layout for Table %1";
     Text[ portuguese ] = "Atribui��o de colunas para a tabela %1";
@@ -513,6 +515,7 @@ ModalDialog RID_DLG_MAPPING
     Text[ czech ] = "Rozložení sloupců pro tabulku %1";
     Text[ hebrew ] = "Spaltenzuordnung für Tabelle %1";
     Text[ hindi ] = "सारणी %1 केलिए स्तंभ के अभिन्यास";
+    Text[ slovak ] = "Rozloženie stĺpcov pre tabuľku %1";
 };
 ModalDialog RID_DLG_DBCHANGE
 {
@@ -571,6 +574,7 @@ ModalDialog RID_DLG_DBCHANGE
         Text[ czech ] = "Položka";
         Text[ hebrew ] = "‮שורה‬";
         Text[ hindi ] = "प्रविष्टि";
+        Text[ slovak ] = "Položka";
     };
     Control LB_SELECTION
     {
@@ -609,7 +613,10 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ czech ] = "Vybrat zdroj dat...";
     Text[ hebrew ] = "Datenquelle auswählen";
     Text[ hindi ] = "ड़ॉटा मूल चुनो";
+    Text[ slovak ] = "Vyberte zdroj dát";
 };
+
+
 
 
 
