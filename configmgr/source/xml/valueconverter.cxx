@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-09 13:24:17 $
+ *  last change: $Author: lla $ $Date: 2001-04-12 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ void OValueConverter::splitListData(OUString const& aContent, StringList& rConte
         OSL_ENSURE( sSeparator.trim()==sSeparator,
                     "Unexpected whitespace in separator");
 
-        tokenizeListData( OTokenizeBySeparator(aContent), aContent, rContentList );
+        tokenizeListData( OTokenizeBySeparator(sSeparator), aContent, rContentList );
     }
 }
 // -----------------------------------------------------------------------------
