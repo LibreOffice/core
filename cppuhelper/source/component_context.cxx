@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 10:12:28 $
+ *  last change: $Author: dbo $ $Date: 2002-12-12 14:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#if (DIAG == all) || (DIAG == context)
+#ifdef DIAG
 #define CONTEXT_DIAG
 #endif
 
