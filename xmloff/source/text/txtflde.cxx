@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:55:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 
 #ifndef _XMLOFF_XMLTEXTCHARSTYLENAMESELEMENTEXPORT_HXX
 #include "XMLTextCharStyleNamesElementExport.hxx"
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
@@ -1185,7 +1188,8 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         if( bHasStyle )
         {
             // export <text:span> element
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME, sStyle );
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
+                            GetExport().EncodeStyleName( sStyle ) );
         }
         SvXMLElementExport aSpan( GetExport(), bHasStyle,
                                   XML_NAMESPACE_TEXT, XML_SPAN,
@@ -1242,7 +1246,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyVariableName, rPropSet));
         ProcessDisplay(GetBoolProperty(sPropertyIsVisible, rPropSet),
                        sal_False);
-        ProcessString(XML_FORMULA,
+        ProcessString(XML_FORMULA, XML_NAMESPACE_OOOW,
                       GetStringProperty(sPropertyContent, rPropSet),
                       sPresentation);
         ProcessValueAndType(IsStringField(nToken, rPropSet),
@@ -1283,7 +1287,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyHint , rPropSet));
         ProcessDisplay(GetBoolProperty(sPropertyIsVisible, rPropSet),
                        sal_False);
-        ProcessString(XML_FORMULA,
+        ProcessString(XML_FORMULA, XML_NAMESPACE_OOOW,
                       GetStringProperty(sPropertyContent, rPropSet),
                       sPresentation);
         ProcessValueAndType(IsStringField(nToken, rPropSet),
@@ -1342,7 +1346,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                           GetInt16Property(sPropertySequenceValue, rPropSet),
                           sName));
         ProcessString(XML_NAME, sName);
-        ProcessString(XML_FORMULA,
+        ProcessString(XML_FORMULA,  XML_NAMESPACE_OOOW,
                       GetStringProperty(sPropertyContent, rPropSet),
                       sPresentation);
         ProcessNumberingType(GetInt16Property(sPropertyNumberingType,
@@ -1355,7 +1359,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         // formula field: formula, format&value
         sal_Bool bCmd = GetBoolProperty(sPropertyIsShowFormula, rPropSet);
-        ProcessString(XML_FORMULA,
+        ProcessString(XML_FORMULA,  XML_NAMESPACE_OOOW,
                       GetStringProperty(sPropertyContent, rPropSet),
                       sPresentation);
         ProcessDisplay(sal_True, bCmd);
@@ -1485,7 +1489,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                 ProcessString(XML_SELECT_PAGE,
                               MapPageNumberName(rPropSet, nAdjust));
             }
-            ProcessInteger(XML_PAGE_ADJUST, nAdjust, 0);
+            ProcessIntegerDef(XML_PAGE_ADJUST, nAdjust, 0);
         }
         ExportElement(XML_PAGE_NUMBER, sPresentation);
         break;
@@ -1533,7 +1537,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
         ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
-        ProcessString(XML_CONDITION,
+        ProcessString(XML_CONDITION, XML_NAMESPACE_OOOW,
                       GetStringProperty(sPropertyCondition, rPropSet));
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for database next field");
@@ -1546,13 +1550,13 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
         ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
-        ProcessString(XML_CONDITION,
+        ProcessString(XML_CONDITION, XML_NAMESPACE_OOOW,
                       GetStringProperty(sPropertyCondition, rPropSet));
         ProcessInteger(XML_ROW_NUMBER,
                        GetIntProperty(sPropertySetNumber, rPropSet));
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for database select field");
-        ExportElement(XML_DATABASE_SELECT);
+        ExportElement(XML_DATABASE_ROW_SELECT);
         break;
 
     case FIELD_ID_DATABASE_DISPLAY:
@@ -1658,7 +1662,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         break;
 
     case FIELD_ID_CONDITIONAL_TEXT:
-        ProcessString(XML_CONDITION,
+        ProcessString(XML_CONDITION, XML_NAMESPACE_OOOW,
                       GetStringProperty(sPropertyCondition, rPropSet));
         ProcessString(XML_STRING_VALUE_IF_TRUE,
                       GetStringProperty(sPropertyTrueContent, rPropSet));
@@ -1671,7 +1675,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         break;
 
     case FIELD_ID_HIDDEN_TEXT:
-        ProcessString(XML_CONDITION,
+        ProcessString(XML_CONDITION, XML_NAMESPACE_OOOW,
                       GetStringProperty(sPropertyCondition, rPropSet));
         ProcessString(XML_STRING_VALUE,
                       GetStringProperty(sPropertyContent, rPropSet));
@@ -1682,7 +1686,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         break;
 
     case FIELD_ID_HIDDEN_PARAGRAPH:
-        ProcessString(XML_CONDITION,
+        ProcessString(XML_CONDITION, XML_NAMESPACE_OOOW,
                       GetStringProperty(sPropertyCondition, rPropSet));
         ProcessBoolean(XML_IS_HIDDEN,
                        GetBoolProperty(sPropertyIsHidden, rPropSet),
@@ -1729,7 +1733,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_REFPAGE_SET:
         ProcessBoolean(XML_ACTIVE,
                        GetBoolProperty(sPropertyOn, rPropSet), sal_True);
-        ProcessInteger(XML_PAGE_ADJUST,
+        ProcessIntegerDef(XML_PAGE_ADJUST,
                        GetInt16Property(sPropertyOffset, rPropSet), 0);
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation page variable field");
@@ -1852,16 +1856,6 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_ANNOTATION:
     {
-        // author
-        ProcessString(XML_AUTHOR,
-                      GetStringProperty(sPropertyAuthor, rPropSet),
-                      sal_True, XML_NAMESPACE_OFFICE);
-
-        // date time
-        ProcessDate(XML_CREATE_DATE,
-                    GetDateProperty(sPropertyDate, rPropSet),
-                    XML_NAMESPACE_OFFICE);
-
         // check for empty presentation (just in case)
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for annotation field");
@@ -1869,6 +1863,37 @@ void XMLTextFieldExport::ExportFieldHelper(
         // annotation element + content
         SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_OFFICE,
                                  XML_ANNOTATION, sal_False, sal_True);
+
+        // author
+        OUString aAuthor( GetStringProperty(sPropertyAuthor, rPropSet) );
+        if( aAuthor.getLength() )
+        {
+            SvXMLElementExport aCreatorElem( GetExport(), XML_NAMESPACE_DC,
+                                              XML_CREATOR, sal_True,
+                                              sal_False );
+            GetExport().Characters(aAuthor);
+        }
+
+        // date time
+        Date aDate( GetDateProperty(sPropertyDate, rPropSet) );
+        {
+            DateTime aDateTime;
+            aDateTime.Day = aDate.Day;
+            aDateTime.Month = aDate.Month;
+            aDateTime.Year = aDate.Year;
+            aDateTime.HundredthSeconds = 0;
+            aDateTime.Seconds = 0;
+            aDateTime.Minutes = 0;
+            aDateTime.Hours = 0;
+            OUStringBuffer aBuffer;
+            GetExport().GetMM100UnitConverter().convertDateTime(aBuffer,
+                                                                aDateTime);
+            SvXMLElementExport aDateElem( GetExport(), XML_NAMESPACE_DC,
+                                              XML_DATE, sal_True,
+                                              sal_False );
+            GetExport().Characters(aBuffer.makeStringAndClear());
+        }
+
         ProcessParagraphSequence(GetStringProperty(sPropertyContent,rPropSet));
         break;
     }
@@ -1890,7 +1915,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     }
 
     case FIELD_ID_TABLE_FORMULA:
-        ProcessString( XML_FORMULA,
+        ProcessString( XML_FORMULA,  XML_NAMESPACE_OOOW,
                        GetStringProperty(sPropertyContent, rPropSet) );
         ProcessDisplay( sal_True,
                         GetBoolProperty(sPropertyIsShowFormula, rPropSet),
@@ -2205,9 +2230,11 @@ void XMLTextFieldExport::ExportFieldDeclarations(
             else
             {
                 // string: write regardless of default
-                ProcessString(XML_VALUE_TYPE, XML_STRING);
+                ProcessString(XML_VALUE_TYPE, XML_STRING, sal_False,
+                              XML_NAMESPACE_OFFICE);
                 ProcessString(XML_STRING_VALUE,
-                              GetStringProperty(sPropertyContent, xPropSet));
+                              GetStringProperty(sPropertyContent, xPropSet),
+                              sal_False, XML_NAMESPACE_OFFICE );
             }
             ProcessString(XML_NAME, sVarName);
             ExportElement(XML_USER_FIELD_DECL, sal_True);
@@ -2240,7 +2267,8 @@ void XMLTextFieldExport::ExportFieldDeclarations(
             {
 
                 ProcessString(XML_NAME,
-                              GetStringProperty(sPropertyName, xPropSet));
+                              GetStringProperty(sPropertyName, xPropSet),
+                              sal_False, XML_NAMESPACE_OFFICE);
 
                 // export elements; can't use ProcessString because
                 // elements are in office namespace
@@ -2402,8 +2430,7 @@ void XMLTextFieldExport::ProcessValueAndType(
         if (bExportValue || bExportValueType)
         {
             XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
-                GetExport(), sContent, sDefault, XML_NAMESPACE_TEXT,
-                bExportValue);
+                GetExport(), sContent, sDefault, bExportValue);
         }
 
     }
@@ -2423,8 +2450,7 @@ void XMLTextFieldExport::ProcessValueAndType(
             {
                 XMLNumberFormatAttributesExportHelper::
                     SetNumberFormatAttributes(
-                        GetExport(), nFormatKey, fValue, XML_NAMESPACE_TEXT,
-                        bExportValue);
+                        GetExport(), nFormatKey, fValue, bExportValue);
             }
 
             if (bExportStyle)
@@ -2440,7 +2466,7 @@ void XMLTextFieldExport::ProcessValueAndType(
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                               XML_DATA_STYLE_NAME,
-                                              sDataStyleName );
+                                                sDataStyleName );
                 } // else: ignore (no valid number format)
             }  // else: ignore (no number format)
         }
@@ -2511,6 +2537,17 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
     GetExport().AddAttribute(nPrefix, eName, sValue);
 }
 
+void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
+                                       sal_uInt16 nValuePrefix,
+                                       const OUString& sValue,
+                                       sal_Bool bOmitEmpty,
+                                       sal_uInt16 nPrefix)
+{
+    OUString sQValue =
+        GetExport().GetNamespaceMap().GetQNameByKey( nValuePrefix, sValue );
+    ProcessString( eName, sQValue, bOmitEmpty, nPrefix );
+}
+
 /// export a string attribute
 void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
                                        const ::rtl::OUString& sValue,
@@ -2520,6 +2557,19 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
     if (sValue != sDefault)
     {
         ProcessString(eName, sValue, sal_False, nPrefix);
+    }
+}
+
+/// export a string attribute
+void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
+                                       sal_uInt16 nValuePrefix,
+                                       const ::rtl::OUString& sValue,
+                                       const ::rtl::OUString& sDefault,
+                                       sal_uInt16 nPrefix)
+{
+    if (sValue != sDefault)
+    {
+        ProcessString(eName, nValuePrefix, sValue, sal_False, nPrefix);
     }
 }
 
@@ -2585,7 +2635,7 @@ void XMLTextFieldExport::ProcessInteger(enum XMLTokenEnum eName,
 }
 
 /// export an integer attribute, omit if default
-void XMLTextFieldExport::ProcessInteger(enum XMLTokenEnum eName,
+void XMLTextFieldExport::ProcessIntegerDef(enum XMLTokenEnum eName,
                                         sal_Int32 nNum, sal_Int32 nDefault)
 {
     if (nNum != nDefault)
@@ -3165,10 +3215,8 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceSource(sal_Int16 nType)
             eElement = XML_BOOKMARK_REF;
             break;
         case ReferenceFieldSource::FOOTNOTE:
-            eElement = XML_FOOTNOTE_REF;
-            break;
         case ReferenceFieldSource::ENDNOTE:
-            eElement = XML_ENDNOTE_REF;
+            eElement = XML_NOTE_REF;
             break;
         default:
             DBG_ERROR("unkown reference source");
