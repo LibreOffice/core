@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:42:08 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,8 +719,6 @@ public:
     void                    SetTableOp( USHORT nCol, USHORT nRow ); // for TableOp export
 
     virtual UINT16          GetNum( void ) const;
-
-    static  BYTE ScErrorCodeToExc(UINT16 nErrorCode);
 };
 
 
