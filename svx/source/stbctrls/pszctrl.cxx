@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pszctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:40:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,10 +143,8 @@ String GetMetricStr_Impl( long nVal, SfxMapUnit eUnit )
         eInUnit = FUNIT_100TH_MM;
 
     String sMetric;
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
-    long nConvVal = MetricField::ConvertValue( nVal * 100, 0L, 0,
-                                               eInUnit, eOutUnit );
+    const sal_Unicode cSep = Application::GetSettings().GetLocaleDataWrapper().getNumDecimalSep().GetChar(0);
+    long nConvVal = MetricField::ConvertValue( nVal * 100, 0L, 0, eInUnit, eOutUnit );
 
     if ( nConvVal < 0 && ( nConvVal / 100 == 0 ) )
         sMetric += '-';
