@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2001-03-27 07:54:08 $
+ *  last change: $Author: jb $ $Date: 2001-09-25 16:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,17 +68,29 @@ namespace configmgr
         /// holds attributes a node in the schema
         struct Attributes
         {
-            bool bWritable      : 1;
-            bool bNullable      : 1;
-            bool bNotified      : 1;
-            bool bConstrained   : 1;
+            bool bWritable      : 1;    // write-protected, if false
+            bool bFinalized     : 1;    // write-protected, but not here
 
-            bool bReplacing     : 1;    // remember the state of a node
-            bool bLocalized     : 1;
-            bool bDefaultable   : 1;
+            bool bReplacing     : 1;    // node does not exist in the default layer
+            bool bDefaultable   : 1;    // values only: a default value does exist
 
-            Attributes():bWritable(true), bNullable(true), bNotified(true), bConstrained(false), bReplacing(false), bLocalized(false), bDefaultable(false){}
-            //! IMPORTANT: if this defaults are changed, you MUST change also the handling in CmXMLFormater::handleAttributes() and OValueHandler::startElement()
+            bool bNullable      : 1;    // values only: can be NULL
+            bool bLocalized     : 1;    // values only: value may depend on locale
+
+            bool bNotified      : 1;    // can register a listener for changes to this node
+            bool bConstrained   : 1;    // can register a veto listener to constrain changes to this node
+
+
+            Attributes()
+            : bWritable(true)
+            , bNullable(true)
+            , bNotified(true)
+            , bConstrained(false)
+            , bReplacing(false)
+            , bLocalized(false)
+            , bDefaultable(false)
+            , bFinalized(false)
+            {}
         };
 
     }
