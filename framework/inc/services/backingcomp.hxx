@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:50 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,15 +171,6 @@ class BackingComp : public  css::lang::XTypeProvider
                   , private ThreadHelpBase
                   , public  ::cppu::OWeakObject
 {
-    //______________________________________
-    // const
-
-        /** static implementation name for instances of this class. */
-        static const sal_Char* IMPLEMENTATIONNAME;
-
-        /** static uno service name for instances of this class. */
-        static const sal_Char* SERVICENAME;
-
     //______________________________________
     // member
 
