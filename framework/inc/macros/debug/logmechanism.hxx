@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logmechanism.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-04-11 11:24:13 $
+ *  last change: $Author: as $ $Date: 2001-06-05 10:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
         ( Use new scope in macro to declare pFile more then on time in same "parentscope"!
             Don't control pFile before access! What will you doing if its not valid? Log an error ...
               An error and an error is an error ... )
+
+        Attention:  You must use "%s" and STEXT as parameter ... because otherwise encoded strings (they include e.g. %...)
+                    are handled wrong.
     _____________________________________________________________________________________________________________*/
 
     #define WRITE_LOGFILE( SFILENAME, STEXT )                                                                   \
@@ -92,8 +95,8 @@
                     ::rtl::OString  _swriteLogfileFileName  ( SFILENAME );                                      \
                     ::rtl::OString  _swriteLogfileText      ( STEXT     );                                      \
                     FILE* pFile = fopen( _swriteLogfileFileName.getStr(), "a" );                                \
-                    fprintf( pFile, _swriteLogfileText.getStr() );                                              \
-                    fclose ( pFile                              );                                              \
+                    fprintf( pFile, "%s", _swriteLogfileText.getStr() );                                        \
+                    fclose ( pFile                                    );                                        \
                 }
 
     /*_____________________________________________________________________________________________________________
