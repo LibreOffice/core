@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-23 11:47:28 $
+ *  last change: $Author: mav $ $Date: 2002-04-30 12:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,9 @@ SfxMediumHandler_Impl::~SfxMediumHandler_Impl()
 void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest )
         throw( com::sun::star::uno::RuntimeException )
 {
+    if( !m_xInter.is() )
+        return;
+
     com::sun::star::uno::Any aRequest = xRequest->getRequest();
     com::sun::star::ucb::InteractiveIOException aIoException;
     if ( (aRequest >>= aIoException) && ( aIoException.Code == IOErrorCode_ACCESS_DENIED || aIoException.Code == IOErrorCode_LOCKING_VIOLATION ) )
