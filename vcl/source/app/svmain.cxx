@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-18 12:18:49 $
+ *  last change: $Author: hro $ $Date: 2001-12-04 13:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,16 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     pSVData->mpUserInfo = new UserOnPrintServer;
 #endif
 
+    // Sal initialisieren
+#ifndef REMOTE_APPSERVER
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
+    pSVData->mpDefInst = CreateSalInstance();
+    if ( !pSVData->mpDefInst )
+        return FALSE;
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} ::CreateSalInstance" );
+#endif
+
+    // Initialize application instance (should be done after initialization of VCL SAL part)
     if( pSVData->mpApp )
         // call init to initialize application class
         // soffice/sfx implementation creates the global service manager
@@ -368,15 +378,6 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 //    ImplInitRemotePrinterList();
     }
 
-#endif
-
-    // Sal initialisieren
-#ifndef REMOTE_APPSERVER
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
-    pSVData->mpDefInst = CreateSalInstance();
-    if ( !pSVData->mpDefInst )
-        return FALSE;
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} ::CreateSalInstance" );
 #endif
 
     // Den AppFileName gleich holen und absolut machen, bevor das
