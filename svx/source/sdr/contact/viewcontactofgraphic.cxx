@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofgraphic.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:45:11 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,13 @@ namespace sdr
         // Decide if graphic should be painted as draft
         sal_Bool ViewContactOfGraphic::DoPaintGraphicDraft(DisplayInfo& rDisplayInfo) const
         {
+            // #115931#
+            // Take care for SDRPAINTMODE_DRAFTGRAF
+            if(rDisplayInfo.IsDraftGraphic())
+            {
+                return sal_True;
+            }
+
             SdrGrafObj& rGrafObj = GetGrafObject();
 
             if(rGrafObj.IsSwappedOut())
@@ -557,6 +564,12 @@ namespace sdr
 
         sal_Bool ViewContactOfGraphic::SupportsAnimation() const
         {
+            // #116168# If object is in destruction, force animation support to sal_False
+            if(GetGrafObject().IsInDestruction())
+            {
+                return sal_False;
+            }
+
             // Is animation allowed?
             if(!GetGrafObject().IsGrafAnimationAllowed())
             {
