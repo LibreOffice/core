@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:13:22 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ class RegionData_Impl;
 
 namespace DocTempl {
 
-class EntryData_Impl
+class DocTempl_EntryData_Impl
 {
     RegionData_Impl*    mpParent;
     SfxObjectShellLock  mxObjShell;
@@ -267,7 +267,7 @@ private:
     RegionData_Impl*    GetParent() const { return mpParent; }
 
 public:
-                        EntryData_Impl( RegionData_Impl* pParent,
+                        DocTempl_EntryData_Impl( RegionData_Impl* pParent,
                                         const OUString& rTitle );
 
     const OUString&     GetTitle() const { return maTitle; }
@@ -288,7 +288,7 @@ public:
 
 using namespace ::DocTempl;
 
-DECLARE_LIST( EntryList_Impl, EntryData_Impl* );
+DECLARE_LIST( EntryList_Impl, DocTempl_EntryData_Impl* );
 
 // ------------------------------------------------------------------------
 
@@ -313,9 +313,9 @@ public:
     void                SetTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
-    EntryData_Impl*     GetEntry( ULONG nIndex ) const;
-    EntryData_Impl*     GetEntry( const OUString& rName ) const;
-    EntryData_Impl*     GetByTargetURL( const OUString& rName ) const;
+    DocTempl_EntryData_Impl*     GetEntry( ULONG nIndex ) const;
+    DocTempl_EntryData_Impl*     GetEntry( const OUString& rName ) const;
+    DocTempl_EntryData_Impl*     GetByTargetURL( const OUString& rName ) const;
 
     const OUString&     GetTitle() const { return maTitle; }
     const OUString&     GetTargetURL();
@@ -635,7 +635,7 @@ const String& SfxDocumentTemplates::GetName
 
     if ( pImp->Construct() )
     {
-        EntryData_Impl  *pEntry = NULL;
+        DocTempl_EntryData_Impl  *pEntry = NULL;
         RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
         if ( pRegion )
@@ -671,7 +671,7 @@ String SfxDocumentTemplates::GetFileName
     if ( !pImp->Construct() )
         return String();
 
-    EntryData_Impl  *pEntry = NULL;
+    DocTempl_EntryData_Impl  *pEntry = NULL;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
     if ( pRegion )
@@ -710,7 +710,7 @@ String SfxDocumentTemplates::GetPath
     if ( !pImp->Construct() )
         return String();
 
-    EntryData_Impl  *pEntry = NULL;
+    DocTempl_EntryData_Impl  *pEntry = NULL;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
     if ( pRegion )
@@ -745,7 +745,7 @@ String SfxDocumentTemplates::GetTemplatePath
     if ( !pImp->Construct() )
         return String();
 
-    EntryData_Impl  *pEntry = NULL;
+    DocTempl_EntryData_Impl  *pEntry = NULL;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
     if ( pRegion )
@@ -799,7 +799,7 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
     // group
     // --**-- perhaps we have to create it ???
     RegionData_Impl *pRegion = pImp->GetRegion( 0L );
-    EntryData_Impl  *pEntry = NULL;
+    DocTempl_EntryData_Impl  *pEntry = NULL;
 
     if ( pRegion )
         pEntry = pRegion->GetEntry( rLongName );
@@ -893,7 +893,7 @@ void SfxDocumentTemplates::NewTemplate
     if ( ! pImp->Construct() )
         return;
 
-    EntryData_Impl  *pEntry;
+    DocTempl_EntryData_Impl  *pEntry;
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
 
     // do nothing if there is no region with that index
@@ -983,7 +983,7 @@ BOOL SfxDocumentTemplates::CopyOrMove
     if ( !pSourceRgn )
         return FALSE;
 
-    EntryData_Impl *pSource = pSourceRgn->GetEntry( nSourceIdx );
+    DocTempl_EntryData_Impl *pSource = pSourceRgn->GetEntry( nSourceIdx );
     if ( !pSource )
         return FALSE;
 
@@ -1133,7 +1133,7 @@ BOOL SfxDocumentTemplates::CopyTo
     if ( !pSourceRgn )
         return FALSE;
 
-    EntryData_Impl *pSource = pSourceRgn->GetEntry( nIdx );
+    DocTempl_EntryData_Impl *pSource = pSourceRgn->GetEntry( nIdx );
     if ( !pSource )
         return FALSE;
 
@@ -1383,7 +1383,7 @@ BOOL SfxDocumentTemplates::Delete
     }
     else
     {
-        EntryData_Impl *pEntry = pRegion->GetEntry( nIdx );
+        DocTempl_EntryData_Impl *pEntry = pRegion->GetEntry( nIdx );
 
         if ( !pEntry )
             return FALSE;
@@ -1479,7 +1479,7 @@ BOOL SfxDocumentTemplates::SetName
         return FALSE;
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
-    EntryData_Impl *pEntry = NULL;
+    DocTempl_EntryData_Impl *pEntry = NULL;
 
     if ( !pRegion )
         return FALSE;
@@ -1589,7 +1589,7 @@ SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
         return NULL;
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
-    EntryData_Impl *pEntry = NULL;
+    DocTempl_EntryData_Impl *pEntry = NULL;
 
     if ( pRegion )
         pEntry = pRegion->GetEntry( nIdx );
@@ -1632,7 +1632,7 @@ BOOL SfxDocumentTemplates::DeleteObjectShell
         return TRUE;
 
     RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
-    EntryData_Impl *pEntry = NULL;
+    DocTempl_EntryData_Impl *pEntry = NULL;
 
     if ( pRegion )
         pEntry = pRegion->GetEntry( nIdx );
@@ -1680,7 +1680,7 @@ BOOL SfxDocumentTemplates::GetFull
     if ( ! pImp->Construct() )
         return FALSE;
 
-    EntryData_Impl* pEntry = NULL;
+    DocTempl_EntryData_Impl* pEntry = NULL;
     const USHORT nCount = GetRegionCount();
 
     for ( USHORT i = 0; i < nCount; ++i )
@@ -1744,7 +1744,7 @@ BOOL SfxDocumentTemplates::GetLogicNames
     OUString aPathTo = aFullPath.GetMainURL( INetURLObject::NO_DECODE );
 
     RegionData_Impl *pData = NULL;
-    EntryData_Impl  *pEntry = NULL;
+    DocTempl_EntryData_Impl  *pEntry = NULL;
     sal_Bool         bFound = sal_False;
 
     ULONG nCount = GetRegionCount();
@@ -1842,7 +1842,7 @@ void SfxDocumentTemplates::ReInitFromComponent()
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
-EntryData_Impl::EntryData_Impl( RegionData_Impl* pParent,
+DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
                                 const OUString& rTitle )
 {
     mpParent    = pParent;
@@ -1852,13 +1852,13 @@ EntryData_Impl::EntryData_Impl( RegionData_Impl* pParent,
 }
 
 // -----------------------------------------------------------------------
-int EntryData_Impl::Compare( const OUString& rTitle ) const
+int DocTempl_EntryData_Impl::Compare( const OUString& rTitle ) const
 {
     return maTitle.compareTo( rTitle );
 }
 
 //------------------------------------------------------------------------
-SfxObjectShellRef EntryData_Impl::CreateObjectShell()
+SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
 {
     if( ! mxObjShell.Is() )
     {
@@ -1924,7 +1924,7 @@ SfxObjectShellRef EntryData_Impl::CreateObjectShell()
 }
 
 //------------------------------------------------------------------------
-BOOL EntryData_Impl::DeleteObjectShell()
+BOOL DocTempl_EntryData_Impl::DeleteObjectShell()
 {
     BOOL bRet = TRUE;
 
@@ -1959,7 +1959,7 @@ BOOL EntryData_Impl::DeleteObjectShell()
 }
 
 // -----------------------------------------------------------------------
-const OUString& EntryData_Impl::GetHierarchyURL()
+const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
 {
     if ( !maOwnURL.getLength() )
     {
@@ -1977,7 +1977,7 @@ const OUString& EntryData_Impl::GetHierarchyURL()
 }
 
 // -----------------------------------------------------------------------
-const OUString& EntryData_Impl::GetTargetURL()
+const OUString& DocTempl_EntryData_Impl::GetTargetURL()
 {
     if ( !maTargetURL.getLength() )
     {
@@ -2013,7 +2013,7 @@ RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
 // -----------------------------------------------------------------------
 RegionData_Impl::~RegionData_Impl()
 {
-    EntryData_Impl *pData = maEntries.First();
+    DocTempl_EntryData_Impl *pData = maEntries.First();
 
     while ( pData )
     {
@@ -2032,7 +2032,7 @@ long RegionData_Impl::GetEntryPos( const OUString& rTitle,
 
     for ( i=0; i<nCount; i++ )
     {
-        EntryData_Impl *pData = maEntries.GetObject( i );
+        DocTempl_EntryData_Impl *pData = maEntries.GetObject( i );
 
         if ( pData->Compare( rTitle ) == 0 )
         {
@@ -2053,7 +2053,7 @@ long RegionData_Impl::GetEntryPos( const OUString& rTitle,
     long    nEnd = maEntries.Count() - 1;
     long    nMid;
 
-    EntryData_Impl* pMid;
+    DocTempl_EntryData_Impl* pMid;
 
     rFound = sal_False;
 
@@ -2095,7 +2095,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
                       INetURLObject::ENCODE_ALL );
     OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::NO_DECODE );
 
-    EntryData_Impl *pEntry;
+    DocTempl_EntryData_Impl *pEntry;
     sal_Bool        bFound = sal_False;
     long            nPos = GetEntryPos( rTitle, bFound );
 
@@ -2108,7 +2108,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
         if ( pPos )
             nPos = *pPos;
 
-        pEntry = new EntryData_Impl( this, rTitle );
+        pEntry = new DocTempl_EntryData_Impl( this, rTitle );
         pEntry->SetTargetURL( rTargetURL );
         pEntry->SetHierarchyURL( aLinkURL );
         maEntries.Insert( pEntry, nPos );
@@ -2163,7 +2163,7 @@ const OUString& RegionData_Impl::GetTargetURL()
 }
 
 // -----------------------------------------------------------------------
-EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) const
+DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) const
 {
     sal_Bool    bFound = sal_False;
     long        nPos = GetEntryPos( rName, bFound );
@@ -2175,9 +2175,9 @@ EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) const
 }
 
 // -----------------------------------------------------------------------
-EntryData_Impl* RegionData_Impl::GetByTargetURL( const OUString& rName ) const
+DocTempl_EntryData_Impl* RegionData_Impl::GetByTargetURL( const OUString& rName ) const
 {
-    EntryData_Impl *pEntry;
+    DocTempl_EntryData_Impl *pEntry;
 
     ULONG nCount = maEntries.Count();
 
@@ -2192,7 +2192,7 @@ EntryData_Impl* RegionData_Impl::GetByTargetURL( const OUString& rName ) const
 }
 
 // -----------------------------------------------------------------------
-EntryData_Impl* RegionData_Impl::GetEntry( ULONG nIndex ) const
+DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( ULONG nIndex ) const
 {
     return maEntries.GetObject( nIndex );
 }
@@ -2200,7 +2200,7 @@ EntryData_Impl* RegionData_Impl::GetEntry( ULONG nIndex ) const
 // -----------------------------------------------------------------------
 void RegionData_Impl::DeleteEntry( ULONG nIndex )
 {
-    EntryData_Impl *pEntry = maEntries.GetObject( nIndex );
+    DocTempl_EntryData_Impl *pEntry = maEntries.GetObject( nIndex );
 
     if ( pEntry )
     {
@@ -2453,7 +2453,7 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
 
                 OUString aId = xContentAccess->queryContentIdentifierString();
 
-                EntryData_Impl* pEntry = pRegion->GetByTargetURL( aId );
+                DocTempl_EntryData_Impl* pEntry = pRegion->GetByTargetURL( aId );
 
                 if ( ! pEntry )
                 {
