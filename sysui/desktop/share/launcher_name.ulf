@@ -21,11 +21,11 @@ he = "%PRODUCTNAME Drucker Verwaltung"
 ca = "%PRODUCTNAME Drucker Verwaltung"
 0pt = "%PRODUCTNAME Drucker Verwaltung"
 0ru = "%PRODUCTNAME Drucker Verwaltung"
-pt-BR = "%PRODUCTNAME Drucker Verwaltung"
+pt-BR = "Administrador de impressoras %PRODUCTNAME"
 tr = "%PRODUCTNAME Drucker Verwaltung"
 th = "%PRODUCTNAME Drucker Verwaltung"
 hi-IN = "%PRODUCTNAME Drucker Verwaltung"
-0ru = "%PRODUCTNAME Drucker Verwaltung"
+sk = "Správa tlačiarní %PRODUCTNAME"
 sk = "Správa tlačiarní %PRODUCTNAME"
 
 [template]
@@ -51,12 +51,14 @@ ar = "%PRODUCTNAME Aus Vorlage"
 he = "%PRODUCTNAME Aus Vorlage"
 ca = "%PRODUCTNAME Aus Vorlage"
 0pt = "%PRODUCTNAME Aus Vorlage"
-pt-BR = "%PRODUCTNAME Aus Vorlage"
+pt-BR = "A partir de um modelo %PRODUCTNAME"
 tr = "%PRODUCTNAME Aus Vorlage"
 th = "%PRODUCTNAME Aus Vorlage"
 hi-IN = "%PRODUCTNAME Aus Vorlage"
 
 sk = "%PRODUCTNAME Zo šablóny"
+
+
 
 
 
