@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-08 11:45:08 $
+ *  last change: $Author: nf $ $Date: 2001-02-08 14:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,10 +484,13 @@ CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
 //
 //  class Star
 //
+
 /*****************************************************************************/
 Star::Star()
 /*****************************************************************************/
-{}
+{
+    // this ctor is only used by StarWriter
+}
 
 /*****************************************************************************/
 Star::Star(UniString aFileName, USHORT nMode )
@@ -509,8 +512,7 @@ Star::Star(UniString aFileName, USHORT nMode )
         while (( aString = aSolarConfig.GetNext()) != "" )
             InsertToken (( char * ) aString.GetBuffer());
     }
-
-    // Die gefundenen Abhaengigkeiten rekursiv aufloesen
+    // resolve all dependencies recursive
     Expand_Impl();
 }
 
@@ -519,13 +521,15 @@ Star::Star( SolarFileList *pSolarFiles )
 /*****************************************************************************/
                 : nStarMode( STAR_MODE_MULTIPLE_PARSE )
 {
-    for ( ULONG i = 0; i < pSolarFiles->Count(); i++ ) {
+    // this ctor is used by StarBuilder to get the information for the whole workspace
+    while(  pSolarFiles->Count());
         ByteString aString;
 
-        SimpleConfig aSolarConfig( *pSolarFiles->GetObject( i ));
-        while ( (aString = aSolarConfig.GetNext()) != "")
-            InsertToken ( (char *) aString.GetBuffer() );
+        SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
+        while (( aString = aSolarConfig.GetNext()) != "" )
+            InsertToken (( char * ) aString.GetBuffer());
     }
+
     Expand_Impl();
 }
 
@@ -539,6 +543,7 @@ Star::~Star()
 UniString Star::CreateFileName( UniString sProject )
 /*****************************************************************************/
 {
+    // this method is used to find solarlist parts of nabours (other projects)
     UniString sPrjDir( UniString::CreateFromAscii( "prj" ));
     UniString sSolarFile( UniString::CreateFromAscii( "build.lst" ));
 
@@ -554,6 +559,7 @@ UniString Star::CreateFileName( UniString sProject )
 void Star::InsertSolarList( UniString sProject )
 /*****************************************************************************/
 {
+    // inserts a new solarlist part of another project
     UniString sFileName( CreateFileName( sProject ));
 
     for ( ULONG i = 0; i < aFileList.Count(); i++ ) {
