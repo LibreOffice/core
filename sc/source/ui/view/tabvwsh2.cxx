@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 17:58:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,6 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _SVX_FONTWORK_BAR_HXX
-#include <svx/fontworkbar.hxx>
-#endif
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
 #endif
@@ -193,11 +190,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             rReq.Done();
             return;
         }
-    }
-    else if ( nNewId == SID_FONTWORK_GALLERY_FLOATER )
-    {
-        svx::FontworkBar::execute( pView, rReq, GetViewFrame()->GetBindings() );
-        rReq.Ignore ();
     }
 
 
