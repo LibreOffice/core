@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-12 09:26:33 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   solvrdlg.src  $
  //   $Author: kz $
- //     $Date: 2001-02-12 09:26:33 $
- // $Revision: 1.7 $
+ //     $Date: 2001-05-04 21:10:12 $
+ // $Revision: 1.8 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -120,6 +120,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ greek ] = "Êåëß ôýðïõ";
         Text[ korean ] = "¼ö½Ä ¼¿";
         Text[ turkish ] = "~Formül hücresi";
+        Text[ catalan ] = "Celda de ~fórmula";
     };
     Edit ED_FORMULACELL
     {
@@ -155,6 +156,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     FixedText FT_TARGETVAL
     {
@@ -183,6 +185,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ korean ] = "¸ñÇ¥ °ª(~V)";
         Text[ turkish ] = "~Hedef deðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor ~destino";
     };
     Edit ED_TARGETVAL
     {
@@ -218,6 +221,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ korean ] = "°¡º¯ ¼¿(~C)";
         Text[ turkish ] = "~Deðiþken hücre";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Celda ~variable";
     };
     Edit ED_VARCELL
     {
@@ -253,6 +257,7 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     GroupBox GB_VARIABLES
     {
@@ -281,6 +286,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ korean ] = "±âº»°ª ¼³Á¤";
         Text[ turkish ] = "Varsayýlan belirle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Variables";
     };
     OKButton BTN_OK
     {
@@ -327,6 +333,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ korean ] = "Çã¿ëµÇÁö ¾Ê´Â ¸ñÇ¥°ª.";
         Text[ turkish ] = "Geçerli olmayan hedef deðer!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Valor de destino no válido!";
     };
     String STR_INVALIDVAR
     {
@@ -353,6 +360,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ korean ] = "°¡º¯ ¼¿·Î¼­¡¡Á¤ÀÇµÇÁö¡¡¾ÊÀº ÀÌ¸§";
         Text[ turkish ] = "Tanýmlanmamýþ hücresi için tanýmlanmamýþ ad!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Nombre no definido como celda de variable!";
     };
     String STR_INVALIDFORM
     {
@@ -379,6 +387,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ korean ] = "¼ö½Ä ¼¿·Î¼­¡¡Á¤ÀÇµÇÁö¡¡¾ÊÀº ÀÌ¸§.";
         Text[ turkish ] = "Formül hücresi için tanýmlanmamýþ ad!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Nombre no definido como celda de fórmula!";
     };
     String STR_NOFORMULA
     {
@@ -406,6 +415,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ korean ] = "¼¿¿¡´Â ¼ö½ÄÀÌ Æ÷ÇÔµÇ¾î¾ß¸¸ ÇÕ´Ï´Ù.";
         Text[ turkish ] = "Hücre, formül içermeli!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡La celda debe contener una fórmula!";
     };
     Text[ chinese_simplified ] = "µ¥±äÁ¿Çó½â";
     Text[ russian ] = "Ïîäáîð ïàðàìåòðà";
@@ -417,4 +427,5 @@ ModelessDialog RID_SCDLG_SOLVER
     Text[ korean ] = "¸ñÇ¥°ª Ã£±â";
     Text[ turkish ] = "Hedef deðer ara";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Buscar valor destino";
 };
