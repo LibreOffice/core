@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2002-08-06 13:21:19 $
+ *  last change: $Author: cl $ $Date: 2002-10-11 12:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -959,6 +959,24 @@ void SdrObjList::ReformatAllTextObjects()
         pObj->ReformatText();
         nAnz=GetObjCount();             // ReformatText may delete an object
         nNum++;
+    }
+}
+
+/** steps over all available objects and reformats all
+    edge objects that are connected to other objects so that
+    they may reposition itselfs.
+    #103122#
+*/
+void SdrObjList::ReformatAllEdgeObjects()
+{
+    const sal_uInt32 nCount=GetObjCount();
+    sal_uInt32 nObj;
+
+    for( nObj = 0; nObj < nCount; nObj++ )
+    {
+        SdrObject* pObj = GetObj(nObj);
+        if( pObj->ISA(SdrEdgeObj) )
+            static_cast<SdrEdgeObj*>(pObj)->Reformat();
     }
 }
 

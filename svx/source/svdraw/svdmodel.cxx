@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-09 15:47:42 $
+ *  last change: $Author: cl $ $Date: 2002-10-11 12:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1021,6 +1021,29 @@ void SdrModel::ImpReformatAllTextObjects()
     nAnz=GetPageCount();
     for (nNum=0; nNum<nAnz; nNum++) {
         GetPage(nNum)->ReformatAllTextObjects();
+    }
+}
+
+/** #103122#
+    steps over all available pages and sends notify messages to
+    all edge objects that are connected to other objects so that
+    they may reposition itselfs
+*/
+void SdrModel::ImpReformatAllEdgeObjects()
+{
+    if( isLocked() )
+        return;
+
+    sal_uInt16 nAnz=GetMasterPageCount();
+    sal_uInt16 nNum;
+    for (nNum=0; nNum<nAnz; nNum++)
+    {
+        GetMasterPage(nNum)->ReformatAllEdgeObjects();
+    }
+    nAnz=GetPageCount();
+    for (nNum=0; nNum<nAnz; nNum++)
+    {
+        GetPage(nNum)->ReformatAllEdgeObjects();
     }
 }
 
@@ -2681,8 +2704,12 @@ void SdrModel::setLock( BOOL bLock )
     if( mbModelLocked != bLock )
     {
         mbModelLocked = bLock;
-        if( bLock = sal_False )
-            ReformatAllTextObjects();
+        if( sal_False == bLock )
+        {
+            // ReformatAllTextObjects(); #103122# due to a typo in the above if, this code was never
+            //                           executed, so I remove it until we discover that we need it here
+            ImpReformatAllEdgeObjects();    // #103122#
+        }
     }
 }
 
