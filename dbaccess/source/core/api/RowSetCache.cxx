@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:19:27 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 11:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,6 +1386,7 @@ void SAL_CALL ORowSetCache::moveToInsertRow(  ) throw(SQLException, RuntimeExcep
 
     m_bNew      = sal_True;
     m_bInserted = sal_True;
+    m_bAfterLast= sal_False;
 
     m_aInsertRow = m_pInsertMatrix->begin();
     if(!m_aInsertRow->isValid())
@@ -1465,6 +1466,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2000/11/07 13:19:27  oj
+    read one row forward because of isLast
+
     Revision 1.8  2000/11/03 14:40:45  oj
     some problems with refcount resolved
 
