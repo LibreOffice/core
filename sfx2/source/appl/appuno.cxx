@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: as $ $Date: 2002-05-03 08:10:08 $
+ *  last change: $Author: mba $ $Date: 2002-05-21 07:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,8 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             return;
         }
 
-        pItem->SetWhich( nSlotId );
+        USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        pItem->SetWhich( nWhich );
         USHORT nSubCount = pType->nAttribs;
         if ( nSubCount == 0 )
         {
@@ -311,12 +312,18 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
-                const char* pName = ByteString( rProp.Name.getStr(), RTL_TEXTENCODING_UTF8 ).GetBuffer();
                 for ( USHORT nSub=0; nSub<nSubCount; nSub++ )
                 {
                     // search sub item by name
-                    if ( !strcmp( pType->aAttrib[nSub].pName, pName ) )
+                    ByteString aStr( pSlot->pUnoName );
+                    aStr += '.';
+                    aStr += ByteString( pType->aAttrib[nSub].pName );
+                    const char* pName = aStr.GetBuffer();
+                    if ( rProp.Name.compareToAscii( pName ) == COMPARE_EQUAL )
+                    {
                         pItem->PutValue( rProp.Value, (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID );
+                        break;
+                    }
                 }
 
                 rSet.Put( *pItem );
@@ -332,7 +339,8 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         {
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArgs );
             SfxPoolItem* pItem = rArg.CreateItem();
-            pItem->SetWhich( rArg.nSlotId );
+            USHORT nWhich = rSet.GetPool()->GetWhich(rArg.nSlotId);
+            pItem->SetWhich( nWhich );
             const SfxType* pType = rArg.pType;
             USHORT nSubCount = pType->nAttribs;
             if ( nSubCount == 0 )
@@ -358,16 +366,20 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
                     const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
-                    const char* pName = ByteString( rProp.Name.getStr(), RTL_TEXTENCODING_UTF8 ).GetBuffer();
                     for ( USHORT nSub=0; nSub<nSubCount; nSub++ )
                     {
                         // search sub item by name
-                        if ( !strcmp( pType->aAttrib[nSub].pName, pName ) )
+                        ByteString aStr( pSlot->pUnoName );
+                        aStr += '.';
+                        aStr += pType->aAttrib[nSub].pName;
+                        const char* pName = aStr.GetBuffer();
+                        if ( rProp.Name.compareToAscii( pName ) == COMPARE_EQUAL )
                         {
                             BOOL bSuccess = pItem->PutValue( rProp.Value, (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID );
                             DBG_ASSERT(bSuccess, "Property not convertable!");
                             if ( bSuccess )
                                 bDone = TRUE;
+                            break;
                         }
                     }
                 }
@@ -700,7 +712,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 {
                     //rPool.FillVariable( *pItem, *pVar, eUserMetric );
                     DBG_ASSERT( pType->aAttrib[n-1].nAID <= 255, "Member ID out of range" );
-                    pValue[nProps].Name = String( String::CreateFromAscii( pType->aAttrib[n-1].pName ) ) ;
+                    String aName( String::CreateFromAscii( pSlot->pUnoName ) ) ;
+                    aName += '.';
+                    aName += String( String::CreateFromAscii( pType->aAttrib[n-1].pName ) ) ;
+                    pValue[nProps].Name = aName;
                     if ( pItem && !pItem->QueryValue( pValue[nProps++].Value, (BYTE) (sal_Int8) pType->aAttrib[n-1].nAID ) )
                         DBG_ERROR("Item not convertable!");
                 }
@@ -733,7 +748,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     {
                         //rPool.FillVariable( rItem, *pVar, eUserMetric );
                         DBG_ASSERT( rArg.pType->aAttrib[n-1].nAID <= 255, "Member ID out of range" );
-                        pValue[nProps].Name = String( String::CreateFromAscii( rArg.pType->aAttrib[n-1].pName ) ) ;
+                        String aName( String::CreateFromAscii( pSlot->pUnoName ) ) ;
+                        aName += '.';
+                        aName += String( String::CreateFromAscii( rArg.pType->aAttrib[n-1].pName ) ) ;
+                        pValue[nProps].Name = aName;
                         if ( pItem && !pItem->QueryValue( pValue[nProps++].Value, (BYTE) (sal_Int8) rArg.pType->aAttrib[n-1].nAID ) )
                             DBG_ERROR("Item not convertable!");
                     }
