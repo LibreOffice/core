@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:10:03 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #ifndef _CHART2_PLOTTINGPOSITIONHELPER_HXX
 #define _CHART2_PLOTTINGPOSITIONHELPER_HXX
 
-#include "Clipping.hxx"
+#include "DoubleRectangle.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
 #include <drafts/com/sun/star/chart2/ExplicitScaleData.hpp>
@@ -113,6 +113,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTransformation >
                   getTransformationLogicToScene() const;
 
+    virtual ::com::sun::star::drawing::Position3D
+            transformLogicToScene( double fX, double fY, double fZ, bool bClip ) const;
+
     inline double getLogicMinX() const;
     inline double getLogicMinY() const;
     inline double getLogicMinZ() const;
@@ -123,12 +126,6 @@ public:
     inline bool isMathematicalOrientationX() const;
     inline bool isMathematicalOrientationY() const;
     inline bool isMathematicalOrientationZ() const;
-
-    void getLogicMinimum( ::com::sun::star::uno::Sequence< double >& rSeq ) const;
-    void getLogicMaximum( ::com::sun::star::uno::Sequence< double >& rSeq ) const;
-
-    void getScreenValuesForMinimum( ::com::sun::star::uno::Sequence< double >& rSeq ) const;
-    void getScreenValuesForMaximum( ::com::sun::star::uno::Sequence< double >& rSeq ) const;
 
     Rectangle           getTransformedClipRect() const;
     DoubleRectangle     getTransformedClipDoubleRect() const;
@@ -163,6 +160,8 @@ public:
     double  getWidthAngleDegree( double& fStartLogicValueOnAngleAxis, double& fEndLogicValueOnAngleAxis ) const;
     //
 
+    virtual ::com::sun::star::drawing::Position3D
+            transformLogicToScene( double fX, double fY, double fZ, bool bClip ) const;
     ::com::sun::star::drawing::Position3D
             transformLogicToScene( double fLogicValueOnAngleAxis, double fLogicValueOnRadiusAxis, double fLogicZ ) const;
 

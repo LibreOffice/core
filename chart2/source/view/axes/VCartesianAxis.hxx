@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCartesianAxis.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:55 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,17 @@
  *
  *
  ************************************************************************/
-#ifndef _CHART2_VAXIS_HXX
-#define _CHART2_VAXIS_HXX
+#ifndef _CHART2_VCARTESIANAXIS_HXX
+#define _CHART2_VCARTESIANAXIS_HXX
 
 #include "VMeterBase.hxx"
 #include "VAxisProperties.hxx"
+#include "TickmarkHelper.hxx"
+
+// header for class Vector2D
+#ifndef _VECTOR2D_HXX
+#include <tools/vector2d.hxx>
+#endif
 
 //.............................................................................
 namespace chart
@@ -75,17 +81,19 @@ namespace chart
 
 class NumberFormatterWrapper;
 
-class VAxis : public VMeterBase
+class VCartesianAxis : public VMeterBase
 {
     //-------------------------------------------------------------------------
     // public methods
     //-------------------------------------------------------------------------
 public:
-    VAxis( const AxisProperties& rAxisProperties
+    VCartesianAxis( const AxisProperties& rAxisProperties
            , NumberFormatterWrapper* pNumberFormatterWrapper
-           , sal_Int32 nDimensionCount=2 );
+           , sal_Int32 nDimensionCount
+           , PlottingPositionHelper* pPosHelper = NULL //takes ownership
+           );
 
-    virtual ~VAxis();
+    virtual ~VCartesianAxis();
 
     //-------------------------------------------------------------------------
     // partly chart2::XPlotter
@@ -97,6 +105,11 @@ public:
     */
 
     virtual void SAL_CALL createShapes();
+
+    //-------------------------------------------------------------------------
+    double      getLogicValueWhereMainLineCrossesOtherAxis() const;
+    bool        getLogicValueWhereExtraLineCrossesOtherAxis( double& fCrossesOtherAxis) const;
+    void        get2DAxisMainLine( Vector2D& rStart, Vector2D& rEnd, double fCrossesOtherAxis ) const;
 
     //-------------------------------------------------------------------------
     //Layout interface for cartesian axes:
@@ -118,6 +131,14 @@ public:
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
+
+protected: //methods
+    bool    createTextShapes( const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::drawing::XShapes >& xTarget
+                     , ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos
+                     , AxisLabelProperties& rAxisLabelProperties
+                     , TickmarkHelper_2D* pTickmarkHelper );
+
 private: //member
     AxisProperties              m_aAxisProperties;
     NumberFormatterWrapper*     m_pNumberFormatterWrapper;

@@ -15,51 +15,6 @@ using namespace ::com::sun::star;
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-DoublePoint DoublePoint::operator-( const DoublePoint& rP )
-{
-    DoublePoint aRet;
-    aRet.X = this->X - rP.X;
-    aRet.Y = this->Y - rP.Y;
-    return aRet;
-}
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
-DoubleRectangle::DoubleRectangle( double fLeft, double fTop, double fRight, double fBottom )
-        : Left(fLeft), Top(fTop), Right(fRight), Bottom(fBottom)
-{
-    //values grow to right
-    //and grow to bottom
-    if(Left>Right)
-    {
-        Right = fLeft;
-        Left = fRight;
-    }
-    if(Top>Bottom)
-    {
-        Bottom = fTop;
-        Top = fBottom;
-    }
-}
-bool DoubleRectangle::isInside( const DoublePoint& rP ) const
-{
-    if(rP.X<Left)
-        return false;
-    if(rP.X>Right)
-        return false;
-    if(rP.Y<Bottom)
-        return false;
-    if(rP.Y>Top)
-        return false;
-    return true;
-}
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 namespace{
 /** @descr  This is a supporting function for lcl_clip2d.  It computes a new parametric
             value for an entering (dTE) or leaving (dTL) intersection point with one

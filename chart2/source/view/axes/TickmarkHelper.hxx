@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TickmarkHelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,8 @@
 #ifndef _CHART2_TICKMARKHELPER_HXX
 #define _CHART2_TICKMARKHELPER_HXX
 
-#include <vector>
+#include "TickmarkProperties.hxx"
+#include "VAxisProperties.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITINCREMENTDATA_HPP_
 #include <drafts/com/sun/star/chart2/ExplicitIncrementData.hpp>
@@ -70,12 +71,23 @@
 #include <drafts/com/sun/star/chart2/ExplicitScaleData.hpp>
 #endif
 
+
+// header for class Vector2D
+#ifndef _VECTOR2D_HXX
+#include <tools/vector2d.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
+
+#include <vector>
 
 //.............................................................................
 namespace chart
@@ -91,8 +103,7 @@ struct TickInfo
     double      fScaledTickValue;
     double      fUnscaledTickValue;
 
-    sal_Int32   nScreenTickValue;
-
+    Vector2D    aTickScreenPosition;
     bool        bPaintIt;
 
     ::com::sun::star::uno::Reference<
@@ -190,6 +201,8 @@ public:
     static double getMinimumAtIncrement( double fMin, const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
     static double getMaximumAtIncrement( double fMax, const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement );
 
+    double        getScaledWidth() const;
+
 protected: //methods
     void        addSubTicks( sal_Int32 nDepth,
                         ::com::sun::star::uno::Sequence<
@@ -229,24 +242,31 @@ public:
     TickmarkHelper_2D(
          const ::drafts::com::sun::star::chart2::ExplicitScaleData& rScale
         , const ::drafts::com::sun::star::chart2::ExplicitIncrementData& rIncrement
-        , double fStrech_SceneToScreen, double fOffset_SceneToScreen );
+        , const Vector2D& rStartScreenPos, const Vector2D& rEndScreenPos );
+        //, double fStrech_SceneToScreen, double fOffset_SceneToScreen );
     virtual ~TickmarkHelper_2D();
 
     static sal_Int32    getTickScreenDistance( TickIter& rIter );
 
-    //methods more for axis line
-    sal_Int32           getScreenValueForMinimum() const;
-    sal_Int32           getScreenValueForMaximum() const;
+    void createPointSequenceForAxisMainLine( ::com::sun::star::drawing::PointSequenceSequence& rPoints ) const;
+    void addPointSequenceForTickLine( ::com::sun::star::drawing::PointSequenceSequence& rPoints
+                            , sal_Int32 nSequenceIndex
+                            , double fScaledLogicTickValue, double fInnerDirectionSign
+                            , const TickmarkProperties& rTickmarkProperties ) const;
+    Vector2D  getDistanceTickToText( const AxisProperties& rAxisProperties ) const;
 
 protected: //methods
     virtual void        updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
     virtual void        hideIdenticalScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const;
 
-    sal_Int32           transformScaledLogicTickToScreen( double fValue ) const;
+    Vector2D            getTickScreenPosition2D( double fScaledLogicTickValue ) const;
 
 private: //member
-    double  m_fStrech_LogicToScreen;
-    double  m_fOffset_LogicToScreen;
+    Vector2D    m_aAxisStartScreenPosition2D;
+    Vector2D    m_aAxisEndScreenPosition2D;
+
+    double      m_fStrech_LogicToScreen;
+    double      m_fOffset_LogicToScreen;
 };
 
 class TickmarkHelper_3D : public TickmarkHelper

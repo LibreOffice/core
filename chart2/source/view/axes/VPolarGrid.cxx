@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarGrid.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:59 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ using namespace ::drafts::com::sun::star::chart2;
 VPolarGrid::VPolarGrid( const uno::Reference< XGrid >& xGrid, sal_Int32 nDimensionCount )
             : VMeterBase( uno::Reference<XMeter>::query(xGrid), nDimensionCount )
             , m_pPosHelper( new PolarPlottingPositionHelper(false) )
+            , m_aIncrements()
 {
     PlotterBase::m_pPosHelper = m_pPosHelper;
 }
@@ -104,11 +105,8 @@ void VPolarGrid::setIncrements( const uno::Sequence< ExplicitIncrementData >& rI
 
 void VPolarGrid::getAllTickInfos( sal_Int32 nDimensionIndex, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
 {
-    TickmarkHelper_2D aTickmarkHelper(
-            m_pPosHelper->getScales()[nDimensionIndex], m_aIncrements[nDimensionIndex]
-            , m_aMatrixScreenToScene[nDimensionIndex][nDimensionIndex]
-            , m_aMatrixScreenToScene[nDimensionIndex][3]
-        );
+    TickmarkHelper aTickmarkHelper(
+            m_pPosHelper->getScales()[nDimensionIndex], m_aIncrements[nDimensionIndex] );
     aTickmarkHelper.getAllTicks( rAllTickInfos );
 }
 
@@ -132,7 +130,7 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         ; pTickInfo = aIter.nextInfo(), nTick++ )
     {
         if(nTick>=rPoints[0].getLength())
-            rPoints[0].realloc(rPoints.getLength()+30);
+            rPoints[0].realloc(rPoints[0].getLength()+30);
 
         pTickInfo->updateUnscaledValue( xInverseScaling );
         double fLogicAngle = pTickInfo->fUnscaledTickValue;
@@ -215,10 +213,11 @@ void VPolarGrid::create2DRadiusGrid( const uno::Reference< drawing::XShapes >& x
         , const ::std::vector<VLineProperties>& rLinePropertiesList )
 {
     const ExplicitScaleData&     rRadiusScale = m_pPosHelper->getScales()[1];
-    const ExplicitIncrementData& rRadiusIncrement = m_aIncrements[1];
-    uno::Reference< XScaling > xInverseScaling( NULL );
+    const ExplicitScaleData&     rAngleScale = m_pPosHelper->getScales()[0];
+    const ExplicitIncrementData& rAngleIncrement = m_aIncrements[0];
+    uno::Reference< XScaling > xInverseRadiusScaling( NULL );
     if( rRadiusScale.Scaling.is() )
-        xInverseScaling = rRadiusScale.Scaling->getInverseScaling();
+        xInverseRadiusScaling = rRadiusScale.Scaling->getInverseScaling();
 
     sal_Int32 nLinePropertiesCount = rLinePropertiesList.size();
     ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = rRadiusTickInfos.begin();
@@ -238,13 +237,13 @@ void VPolarGrid::create2DRadiusGrid( const uno::Reference< drawing::XShapes >& x
             if( !rTickInfo.bPaintIt )
                 continue;
 
-            rTickInfo.updateUnscaledValue( xInverseScaling );
+            rTickInfo.updateUnscaledValue( xInverseRadiusScaling );
             double fLogicRadius = rTickInfo.fUnscaledTickValue;
             double fLogicZ      = -0.5;//as defined
 
             drawing::PointSequenceSequence aPoints(1);
             VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, rAngleTickInfos
-                , rRadiusIncrement, rRadiusScale, m_pPosHelper, fLogicRadius, fLogicZ );
+                , rAngleIncrement, rAngleScale, m_pPosHelper, fLogicRadius, fLogicZ );
             appendPointSequence( aAllPoints, aPoints );
         }
 

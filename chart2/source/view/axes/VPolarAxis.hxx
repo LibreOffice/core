@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarAxis.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:58 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,13 @@ class VPolarAxis : public VMeterBase
 public:
     VPolarAxis( const AxisProperties& rAxisProperties
            , NumberFormatterWrapper* pNumberFormatterWrapper
-           , sal_Int32 nDimensionCount=2 );
+           , sal_Int32 nDimensionCount );
     virtual ~VPolarAxis();
 
     virtual void SAL_CALL createShapes();
+
+    void setIncrements( const ::com::sun::star::uno::Sequence<
+                    ::drafts::com::sun::star::chart2::ExplicitIncrementData >& rIncrements );
 
 private: //methods
     void create2DAngleAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
@@ -95,6 +98,8 @@ private: //member
     AxisProperties               m_aAxisProperties;
     NumberFormatterWrapper*      m_pNumberFormatterWrapper;
     PolarPlottingPositionHelper* m_pPosHelper;
+    ::com::sun::star::uno::Sequence<
+        ::drafts::com::sun::star::chart2::ExplicitIncrementData >   m_aIncrements;
 };
 
 //.............................................................................

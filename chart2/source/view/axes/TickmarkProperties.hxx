@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: VCartesianCoordinateSystem.cxx,v $
+ *  $RCSfile: TickmarkProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:34 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,77 +58,30 @@
  *
  *
  ************************************************************************/
-#include "VCartesianCoordinateSystem.hxx"
-#include "VCartesianGrid.hxx"
-#include "VCartesianAxis.hxx"
 
-//for auto_ptr
-#include <memory>
+#ifndef _CHART2_VTICKMARKPROPERTIES_HXX
+#define _CHART2_VTICKMARKPROPERTIES_HXX
+
+#include "VLineProperties.hxx"
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
-using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::chart2;
 
-VCartesianCoordinateSystem::VCartesianCoordinateSystem( const uno::Reference< XBoundedCoordinateSystem >& xCooSys )
-    : VCoordinateSystem(xCooSys)
+//-----------------------------------------------------------------------------
+/**
+*/
+
+struct TickmarkProperties
 {
-}
+    sal_Int32 RelativePos;//Position in screen values relative to the axis where the tickmark line starts
+    sal_Int32 Length;//Length of the tickmark line in screen values
 
-VCartesianCoordinateSystem::~VCartesianCoordinateSystem()
-{
-}
-
-void VCartesianCoordinateSystem::createGridShapes()
-{
-    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    for( sal_Int32 nDim=0; nDim<3; nDim++)
-    {
-        uno::Sequence< uno::Reference< XGrid > >& rGridList
-            = getGridListByDimension( nDim );
-        for( sal_Int32 nN=0; nN<rGridList.getLength(); nN++ )
-        {
-            VCartesianGrid aGrid(rGridList[nN],nDimensionCount);
-            aGrid.setMeterData( m_aExplicitScales[nDim], m_aExplicitIncrements[nDim] );
-
-            aGrid.init(m_xLogicTargetForGrids,m_xFinalTarget,m_xShapeFactory);
-            if(2==nDimensionCount)
-                aGrid.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-            aGrid.setScales( m_aExplicitScales );
-            aGrid.createShapes();
-        }
-    }
-}
-
-void VCartesianCoordinateSystem::createAxesShapes( const awt::Size& rReferenceSize, NumberFormatterWrapper* pNumberFormatterWrapper )
-{
-    sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    double fCoordinateOrigin[3] = { 0.0, 0.0, 0.0 };
-    for( sal_Int32 nDim = 0; nDim < 3; nDim++ )
-        fCoordinateOrigin[nDim] = this->getOriginByDimension( nDim );
-    for( nDim = 0; nDim < 3; nDim++ )
-    {
-        uno::Reference< XAxis > xAxis = this->getAxisByDimension(nDim);
-        if(!xAxis.is())
-            continue;
-        AxisProperties aAxisProperties(xAxis,rReferenceSize);
-        aAxisProperties.m_pfExrtaLinePositionAtOtherAxis =
-            new double(nDim==1?fCoordinateOrigin[0]:fCoordinateOrigin[1]);
-        aAxisProperties.m_bIsMainAxis = true;
-        aAxisProperties.init(true);
-        //-------------------
-        VCartesianAxis aAxis(aAxisProperties,pNumberFormatterWrapper,nDimensionCount);
-        aAxis.setMeterData( m_aExplicitScales[nDim], m_aExplicitIncrements[nDim] );
-        aAxis.init(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory);
-        if(2==nDimensionCount)
-            aAxis.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-        aAxis.setScales( m_aExplicitScales );
-        aAxis.createShapes();
-    }
-}
+    VLineProperties aLineProperties;
+};
 
 //.............................................................................
 } //namespace chart
 //.............................................................................
+#endif

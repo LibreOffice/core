@@ -1,6 +1,8 @@
 #ifndef _CHART2_CLIPPING_HXX
 #define _CHART2_CLIPPING_HXX
 
+#include "DoubleRectangle.hxx"
+
 #ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONSHAPE3D_HPP_
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #endif
@@ -13,28 +15,6 @@ namespace chart
 //-----------------------------------------------------------------------------
 /**
 */
-
-struct DoublePoint
-{
-    DoublePoint(double fX, double fY) : X(fX), Y(fY) {};
-    DoublePoint() : X(0.0), Y(0.0) {};
-    DoublePoint operator-( const DoublePoint& rP );
-
-    double X;
-    double Y;
-};
-
-struct DoubleRectangle
-{
-public:
-    DoubleRectangle( double fLeft, double fTop, double fRight, double fBottom );
-    bool isInside( const DoublePoint& rPoint ) const;
-
-    double Left;
-    double Top;
-    double Right;
-    double Bottom;
-};
 
 class Clipping
 {

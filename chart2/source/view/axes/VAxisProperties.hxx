@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VAxisProperties.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:55 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 #ifndef _CHART2_VAXIS_PROPERTIES_HXX
 #define _CHART2_VAXIS_PROPERTIES_HXX
 
-#include "VLineProperties.hxx"
+#include "TickmarkProperties.hxx"
 #include "PlottingPositionHelper.hxx"
+#include "LabelAlignment.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
 #include <drafts/com/sun/star/chart2/NumberFormat.hpp>
@@ -94,14 +95,6 @@ namespace chart
 //-----------------------------------------------------------------------------
 /**
 */
-
-struct TickmarkProperties
-{
-    sal_Int32 RelativePos;//Position in screen values relative to the axis where the tickmark line starts
-    sal_Int32 Length;//Length of the tickmark line in screen values
-
-    VLineProperties aLineProperties;
-};
 
 //These properties describe how a couple of labels are arranged one to another.
 //The couple can contain all labels for all tickmark depth or just the labels for one single depth or
@@ -144,24 +137,21 @@ struct AxisLabelProperties
 struct AxisProperties
 {
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XAxis > m_xAxisModel;
-
-    bool        m_bIsYAxis;
-    bool        m_bIsLeftOrBottomAxis;
-    double*     m_pfMainLinePositionAtOtherAxis;
-    double*     m_pfExrtaLinePositionAtOtherAxis;
-
-    /*
-    sal_Int32   m_nOrthogonalAxisScreenPosition;//gives a position in the direction orthogonal to the axis direction
-    //e.g. for an y-axis this value describes a x position on the screen
-    sal_Int32   m_nOrthogonalAxisExtraLineScreenPosition;//gives the screen value for an additional line ( e.g. a line at 0 ) at the other axis
-    */
-
-    enum RelativeLabelPosition { NONE, LEFTORBOTTOM_OF_DIAGRAM, RIGHTORTOP_OF_DIAGRAM,
-                        LEFTORBOTTOM_OF_AXIS, RIGHTORTOP_OF_AXIS };
-
-    RelativeLabelPosition m_eRelativeLabelPosition;
     ::com::sun::star::awt::Size m_aReferenceSize;
 
+    bool        m_bIsMainAxis;//not secondary axis
+    double*     m_pfMainLinePositionAtOtherAxis;
+    double*     m_pfExrtaLinePositionAtOtherAxis;
+    //this direction is used to indicate in which direction inner tickmarks are to be drawn
+    double      m_fInnerDirectionSign;
+    bool        m_bLabelsOutside;
+
+    LabelAlignment  m_aLabelAlignment;
+
+
+//    enum RelativeLabelPosition { NONE, LEFTORBOTTOM_OF_DIAGRAM, RIGHTORTOP_OF_DIAGRAM,
+//                        LEFTORBOTTOM_OF_AXIS, RIGHTORTOP_OF_AXIS };
+//    RelativeLabelPosition m_eRelativeLabelPosition;
 
     /*
     0: no tickmarks         1: inner tickmarks
@@ -174,14 +164,18 @@ struct AxisProperties
     VLineProperties                      m_aLineProperties;
 
     //methods:
-    AxisProperties();
+
+    AxisProperties( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XAxis >& xAxisModel
+                  , const ::com::sun::star::awt::Size& rReferenceSize );
     AxisProperties( const AxisProperties& rAxisProperties );
-    ~AxisProperties();
-    void init();//init from model data (m_xAxisModel)
+    virtual ~AxisProperties();
+    virtual void init(bool bCartesian=false);//init from model data (m_xAxisModel)
 
 private:
-    TickmarkProperties  makeTickmarkProperties( sal_Int32 nDepth ) const;
-    sal_Int32           calcTickLengthForDepth( sal_Int32 nDepth, sal_Int32 nTickmarkStyle ) const;
+    AxisProperties();
+
+protected:
+    virtual TickmarkProperties  makeTickmarkProperties( sal_Int32 nDepth ) const;
     VLineProperties      makeLinePropertiesForDepth( sal_Int32 nDepth ) const;
 };
 

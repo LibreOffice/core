@@ -10,6 +10,7 @@
 #include "Splines.hxx"
 #include "ChartTypeHelper.hxx"
 #include "LabelPositionHelper.hxx"
+#include "Clipping.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <drafts/com/sun/star/chart2/Symbol.hpp>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCartesianGrid.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:56 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,112 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::chart2;
 
+struct GridLinePoints
+{
+    uno::Sequence< double > P0;
+    uno::Sequence< double > P1;
+    uno::Sequence< double > P2;
+
+    GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_Int32 nDimensionIndex );
+    void update( double fScaledTickValue );
+
+    sal_Int32 m_nDimensionIndex;
+};
+
+GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_Int32 nDimensionIndex )
+                : m_nDimensionIndex(nDimensionIndex)
+{
+    double MinX = pPosHelper->getLogicMinX();
+    double MinY = pPosHelper->getLogicMinY();
+    double MinZ = pPosHelper->getLogicMinZ();
+    double MaxX = pPosHelper->getLogicMaxX();
+    double MaxY = pPosHelper->getLogicMaxY();
+    double MaxZ = pPosHelper->getLogicMaxZ();
+
+    pPosHelper->doLogicScaling( &MinX,&MinY,&MinZ );
+    pPosHelper->doLogicScaling( &MaxX,&MaxY,&MaxZ );
+
+    if(!pPosHelper->isMathematicalOrientationX())
+    {
+        double fHelp = MinX;
+        MinX = MaxX;
+        MaxX = fHelp;
+    }
+    if(!pPosHelper->isMathematicalOrientationY())
+    {
+        double fHelp = MinY;
+        MinY = MaxY;
+        MaxY = fHelp;
+    }
+    if(pPosHelper->isMathematicalOrientationZ())//z axis in draw is reverse to mathematical
+    {
+        double fHelp = MinZ;
+        MinZ = MaxZ;
+        MaxZ = fHelp;
+    }
+
+    P0.realloc(3);
+    P1.realloc(3);
+    P2.realloc(3);
+
+    P0[0]=P1[0]=P2[0]=MinX;
+    P0[1]=P1[1]=P2[1]=MinY;
+    P0[2]=P1[2]=P2[2]=MinZ;
+
+    if(m_nDimensionIndex==0)
+    {
+        P0[1]=MaxY;
+        P2[2]=MaxZ;
+    }
+    else if(m_nDimensionIndex==1)
+    {
+        P0[0]=MaxX;
+        P2[2]=MaxZ;
+    }
+    else if(m_nDimensionIndex==2)
+    {
+        P0[0]=MaxX;
+        P2[1]=MaxY;
+    }
+}
+
+void GridLinePoints::update( double fScaledTickValue )
+{
+    P0[m_nDimensionIndex] = P1[m_nDimensionIndex] = P2[m_nDimensionIndex] = fScaledTickValue;
+}
+
+void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
+             , const GridLinePoints& rScaledLogicPoints
+             , const uno::Reference< XTransformation > & xTransformation
+              )
+{
+    drawing::Position3D aPA = SequenceToPosition3D( xTransformation->transform( rScaledLogicPoints.P0 ) );
+    drawing::Position3D aPB = SequenceToPosition3D( xTransformation->transform( rScaledLogicPoints.P1 ) );
+
+    rPoints[nIndex].realloc(2);
+    rPoints[nIndex][0].X = static_cast<sal_Int32>(aPA.PositionX);
+    rPoints[nIndex][0].Y = static_cast<sal_Int32>(aPA.PositionY);
+    rPoints[nIndex][1].X = static_cast<sal_Int32>(aPB.PositionX);
+    rPoints[nIndex][1].Y = static_cast<sal_Int32>(aPB.PositionY);
+}
+
+void addLine3D( drawing::PolyPolygonShape3D& rPoints, sal_Int32 nIndex
+            , const GridLinePoints& rBasePoints
+            , const uno::Reference< XTransformation > & xTransformation )
+{
+    drawing::Position3D aPoint = SequenceToPosition3D( xTransformation->transform( rBasePoints.P0 ) );
+    AddPointToPoly( rPoints, aPoint, nIndex );
+    aPoint = SequenceToPosition3D( xTransformation->transform( rBasePoints.P1 ) );
+    AddPointToPoly( rPoints, aPoint, nIndex );
+    aPoint = SequenceToPosition3D( xTransformation->transform( rBasePoints.P2 ) );
+    AddPointToPoly( rPoints, aPoint, nIndex );
+}
+
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+
 VCartesianGrid::VCartesianGrid( const uno::Reference< XGrid >& xGrid, sal_Int32 nDimensionCount )
             : VMeterBase( uno::Reference<XMeter>::query(xGrid), nDimensionCount )
 {
@@ -107,64 +213,6 @@ void VCartesianGrid::fillLinePropertiesFromGridModel( ::std::vector<VLinePropert
     aLineProperties.initFromPropertySet( xProps );
     rLinePropertiesList.assign(2,aLineProperties);
 };
-
-void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
-             , bool bIsYGrid , sal_Int32 nScreenTickValue
-             , sal_Int32 nOrthogonalStart, sal_Int32 nOrthogonalEnd
-              )
-{
-    rPoints[nIndex].realloc(2);
-    rPoints[nIndex][0].X = bIsYGrid ? nOrthogonalStart : nScreenTickValue;
-    rPoints[nIndex][0].Y = bIsYGrid ? nScreenTickValue : nOrthogonalStart;
-    rPoints[nIndex][1].X = bIsYGrid ? nOrthogonalEnd   : nScreenTickValue;
-    rPoints[nIndex][1].Y = bIsYGrid ? nScreenTickValue : nOrthogonalEnd;
-}
-
-struct GridLinePoints
-{
-    uno::Sequence< double > P0;
-    uno::Sequence< double > P1;
-    uno::Sequence< double > P2;
-
-    GridLinePoints( const uno::Sequence< double >& rMinEdgeSeq, const uno::Sequence< double >& rMaxEdgeSeq );
-    void update( double fScaledTickValue );
-};
-
-GridLinePoints::GridLinePoints( const uno::Sequence< double >& rMinEdgeSeq
-                               , const uno::Sequence< double >& rMaxEdgeSeq )
-{
-    P0.realloc(3);
-    P0[0]=rMinEdgeSeq[0];
-    P0[1]=rMinEdgeSeq[1];
-    P0[2]=rMaxEdgeSeq[2];
-
-    P1.realloc(3);
-    P1[0]=rMinEdgeSeq[0];
-    P1[1]=rMaxEdgeSeq[1];
-    P1[2]=rMinEdgeSeq[2];
-
-    P2.realloc(3);
-    P2[0]=rMaxEdgeSeq[0];
-    P2[1]=rMaxEdgeSeq[1];
-    P2[2]=rMinEdgeSeq[2];
-}
-
-void GridLinePoints::update( double fScaledTickValue )
-{
-    P0[1] = P1[1] = P2[1] = fScaledTickValue;
-}
-
-void addLine3D( drawing::PolyPolygonShape3D& rPoints, sal_Int32 nIndex
-            , const GridLinePoints& rBasePoints
-            , const uno::Reference< XTransformation > & xTransformation )
-{
-    drawing::Position3D aPoint = SequenceToPosition3D( xTransformation->transform( rBasePoints.P0 ) );
-    AddPointToPoly( rPoints, aPoint, nIndex );
-    aPoint = SequenceToPosition3D( xTransformation->transform( rBasePoints.P1 ) );
-    AddPointToPoly( rPoints, aPoint, nIndex );
-    aPoint = SequenceToPosition3D( xTransformation->transform( rBasePoints.P2 ) );
-    AddPointToPoly( rPoints, aPoint, nIndex );
-}
 
 void SAL_CALL VCartesianGrid::createShapes()
 {
@@ -210,13 +258,6 @@ void SAL_CALL VCartesianGrid::createShapes()
 
     if(2==m_nDimension)
     {
-        uno::Sequence< double > aMinEdgeSeq, aMaxEdgeSeq;
-        m_pPosHelper->getScreenValuesForMinimum( aMinEdgeSeq );
-        m_pPosHelper->getScreenValuesForMaximum( aMaxEdgeSeq );
-        sal_Int32 nOrthogonalDimensionIndex = nDimensionIndex==1 ? 0 : 1;
-        sal_Int32 nOrthogonalScreenPositionStart=static_cast<sal_Int32>(aMinEdgeSeq[nOrthogonalDimensionIndex]);
-        sal_Int32 nOrthogonalScreenPositionEnd  =static_cast<sal_Int32>(aMaxEdgeSeq[nOrthogonalDimensionIndex]);
-
         drawing::PointSequenceSequence aHandlesPoints(1);
 
         sal_Int32 nLinePropertiesCount = aLinePropertiesList.size();
@@ -224,6 +265,8 @@ void SAL_CALL VCartesianGrid::createShapes()
             ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount
             ; aDepthIter++, nDepth++ )
         {
+            GridLinePoints aGridLinePoints( m_pPosHelper, nDimensionIndex );
+
             sal_Int32 nPointCount = (*aDepthIter).size();
             drawing::PointSequenceSequence aPoints(nPointCount);
 
@@ -234,8 +277,8 @@ void SAL_CALL VCartesianGrid::createShapes()
             {
                 if( !(*aTickIter).bPaintIt )
                     continue;
-                addLine2D( aPoints, nRealPointCount, 1==nDimensionIndex, (*aTickIter).nScreenTickValue
-                    , nOrthogonalScreenPositionStart, nOrthogonalScreenPositionEnd );
+                aGridLinePoints.update( (*aTickIter).fScaledTickValue );
+                addLine2D( aPoints, nRealPointCount, aGridLinePoints, m_pPosHelper->getTransformationLogicToScene() );
                 nRealPointCount++;
             }
             aPoints.realloc(nRealPointCount);
@@ -263,35 +306,13 @@ void SAL_CALL VCartesianGrid::createShapes()
             ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount
             ; aDepthIter++, nDepth++ )
         {
+            GridLinePoints aGridLinePoints( m_pPosHelper, nDimensionIndex );
+
             sal_Int32 nPointCount = (*aDepthIter).size();
             drawing::PolyPolygonShape3D aPoints;
             aPoints.SequenceX.realloc(nPointCount);
             aPoints.SequenceY.realloc(nPointCount);
             aPoints.SequenceZ.realloc(nPointCount);
-            uno::Sequence< double > aLogicMinEdge, aLogicMaxEdge;
-            m_pPosHelper->getLogicMinimum( aLogicMinEdge );
-            m_pPosHelper->getLogicMaximum( aLogicMaxEdge );
-
-            if(!m_pPosHelper->isMathematicalOrientationX())
-            {
-                double fHelp = aLogicMinEdge[0];
-                aLogicMinEdge[0] = aLogicMaxEdge[0];
-                aLogicMaxEdge[0] = fHelp;
-            }
-            if(!m_pPosHelper->isMathematicalOrientationY())
-            {
-                double fHelp = aLogicMinEdge[1];
-                aLogicMinEdge[1] = aLogicMaxEdge[1];
-                aLogicMaxEdge[1] = fHelp;
-            }
-            if(m_pPosHelper->isMathematicalOrientationZ())//z axis in draw is reverse to mathematical
-            {
-                double fHelp = aLogicMinEdge[2];
-                aLogicMinEdge[2] = aLogicMaxEdge[2];
-                aLogicMaxEdge[2] = fHelp;
-            }
-
-            GridLinePoints aGridLinePoints( aLogicMinEdge, aLogicMaxEdge );
 
             ::std::vector< TickInfo >::const_iterator       aTickIter = (*aDepthIter).begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();

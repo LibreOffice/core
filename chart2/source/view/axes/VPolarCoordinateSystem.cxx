@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-19 14:41:01 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ void VPolarCoordinateSystem::createGridShapes()
         {
             VPolarGrid aGrid(rGridList[nN],nDimensionCount);
             aGrid.setIncrements( m_aExplicitIncrements );
-
             aGrid.init(m_xLogicTargetForGrids,m_xFinalTarget,m_xShapeFactory);
             if(2==nDimensionCount)
                 aGrid.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
@@ -111,14 +110,13 @@ void VPolarCoordinateSystem::createAxesShapes( const awt::Size& rReferenceSize, 
         uno::Reference< XAxis > xAxis = this->getAxisByDimension(nDim);
         if(!xAxis.is())
             continue;
-        AxisProperties aAxisProperties;
-        aAxisProperties.m_xAxisModel = xAxis;
-        aAxisProperties.m_aReferenceSize = rReferenceSize;
+        AxisProperties aAxisProperties(xAxis,rReferenceSize);
         aAxisProperties.init();
         //-------------------
-        VPolarAxis aAxis(aAxisProperties,pNumberFormatterWrapper);
+        VPolarAxis aAxis(aAxisProperties,pNumberFormatterWrapper,nDimensionCount);
         aAxis.setMeterData( m_aExplicitScales[nDim], m_aExplicitIncrements[nDim] );
         aAxis.init(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory);
+        aAxis.setIncrements( m_aExplicitIncrements );
         if(2==nDimensionCount)
             aAxis.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
         aAxis.setScales( m_aExplicitScales );

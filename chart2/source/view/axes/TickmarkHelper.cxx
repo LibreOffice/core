@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TickmarkHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-26 12:42:02 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ using namespace ::rtl::math;
 TickInfo::TickInfo()
 : fScaledTickValue( 0.0 )
 , fUnscaledTickValue( 0.0 )
-, nScreenTickValue( 0 )
+, aTickScreenPosition(0.0,0.0)
 , bPaintIt( true )
 , xTextShape( NULL )
 {
@@ -344,6 +344,11 @@ double TickmarkHelper::getMaximumAtIncrement( double fMax, const ExplicitIncreme
             fRet += rIncrement.Distance;
     }
     return fRet;
+}
+
+double TickmarkHelper::getScaledWidth() const
+{
+    return m_fScaledVisibleMax - m_fScaledVisibleMin;
 }
 
 //-----------------------------------------------------------------------------
@@ -692,33 +697,29 @@ void TickmarkHelper::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::Sequence
 //-----------------------------------------------------------------------------
 TickmarkHelper_2D::TickmarkHelper_2D(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement
-          , double fStrech_SceneToScreen, double fOffset_SceneToScreen )
+          //, double fStrech_SceneToScreen, double fOffset_SceneToScreen )
+          , const Vector2D& rStartScreenPos, const Vector2D& rEndScreenPos )
           : TickmarkHelper( rScale, rIncrement )
+          , m_aAxisStartScreenPosition2D(rStartScreenPos)
+          , m_aAxisEndScreenPosition2D(rEndScreenPos)
           , m_fStrech_LogicToScreen(1.0)
           , m_fOffset_LogicToScreen(0.0)
 {
     double fWidthY = m_fScaledVisibleMax - m_fScaledVisibleMin;
     if( AxisOrientation_MATHEMATICAL==m_rScale.Orientation )
     {
-        m_fStrech_LogicToScreen = FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY * fStrech_SceneToScreen;
-        m_fOffset_LogicToScreen = -m_fScaledVisibleMin*m_fStrech_LogicToScreen + fOffset_SceneToScreen;
+        m_fStrech_LogicToScreen = 1.0/fWidthY;
+        m_fOffset_LogicToScreen = -m_fScaledVisibleMin;
     }
     else
     {
-        m_fStrech_LogicToScreen = -FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY * fStrech_SceneToScreen;
-        m_fOffset_LogicToScreen = -m_fScaledVisibleMax*m_fStrech_LogicToScreen + fOffset_SceneToScreen;
+        m_fStrech_LogicToScreen = -1.0/fWidthY;
+        m_fOffset_LogicToScreen = -m_fScaledVisibleMax;
     }
 }
 
 TickmarkHelper_2D::~TickmarkHelper_2D()
 {
-}
-
-sal_Int32 TickmarkHelper_2D::transformScaledLogicTickToScreen( double fValue ) const
-{
-    sal_Int32 nRet = static_cast<sal_Int32>(
-        fValue*m_fStrech_LogicToScreen + m_fOffset_LogicToScreen);
-    return nRet;
 }
 
 //static
@@ -732,26 +733,90 @@ sal_Int32 TickmarkHelper_2D::getTickScreenDistance( TickIter& rIter )
     if(!pSecondTickInfo  || !pFirstTickInfo)
         return -1;
 
-    sal_Int32 nRet = pSecondTickInfo->nScreenTickValue - pFirstTickInfo->nScreenTickValue;
+    Vector2D aDistance = pSecondTickInfo->aTickScreenPosition-pFirstTickInfo->aTickScreenPosition;
+    sal_Int32 nRet = static_cast<sal_Int32>(aDistance.GetLength());
     if(nRet<0)
         nRet *= -1;
     return nRet;
 }
 
-sal_Int32 TickmarkHelper_2D::getScreenValueForMinimum() const
+Vector2D TickmarkHelper_2D::getTickScreenPosition2D( double fScaledLogicTickValue ) const
 {
-    //return the screen value at the end of the axis where the scale has its minimum
-    //(lower end of axis line)
-    return this->transformScaledLogicTickToScreen(
-                    m_fScaledVisibleMin );
+    Vector2D aRet(m_aAxisStartScreenPosition2D);
+    aRet += (m_aAxisEndScreenPosition2D-m_aAxisStartScreenPosition2D)
+                *((fScaledLogicTickValue+m_fOffset_LogicToScreen)*m_fStrech_LogicToScreen);
+    return aRet;
 }
 
-sal_Int32 TickmarkHelper_2D::getScreenValueForMaximum() const
+void TickmarkHelper_2D::addPointSequenceForTickLine( drawing::PointSequenceSequence& rPoints
+                                , sal_Int32 nSequenceIndex
+                                , double fScaledLogicTickValue, double fInnerDirectionSign
+                                , const TickmarkProperties& rTickmarkProperties ) const
 {
-    //return the screen value at the end of the axis where the scale has its maximum
-    //(upper end of axis line)
-    return this->transformScaledLogicTickToScreen(
-                    m_fScaledVisibleMax );
+    if( fInnerDirectionSign==0.0 )
+        fInnerDirectionSign = 1.0;
+
+    Vector2D aTickScreenPosition = this->getTickScreenPosition2D(fScaledLogicTickValue);
+
+    Vector2D aMainDirection = m_aAxisEndScreenPosition2D-m_aAxisStartScreenPosition2D;
+    aMainDirection.Normalize();
+    Vector2D aOrthoDirection(-aMainDirection.Y(),aMainDirection.X());
+    aOrthoDirection *= fInnerDirectionSign;
+    aOrthoDirection.Normalize();
+
+    Vector2D aStart = aTickScreenPosition + aOrthoDirection*rTickmarkProperties.RelativePos;
+    Vector2D aEnd = aStart - aOrthoDirection*rTickmarkProperties.Length;
+
+    rPoints[nSequenceIndex].realloc(2);
+    rPoints[nSequenceIndex][0].X = static_cast<sal_Int32>(aStart.X());
+    rPoints[nSequenceIndex][0].Y = static_cast<sal_Int32>(aStart.Y());
+    rPoints[nSequenceIndex][1].X = static_cast<sal_Int32>(aEnd.X());
+    rPoints[nSequenceIndex][1].Y = static_cast<sal_Int32>(aEnd.Y());
+}
+
+Vector2D TickmarkHelper_2D::getDistanceTickToText( const AxisProperties& rAxisProperties ) const
+{
+    double fInnerDirectionSign = rAxisProperties.m_fInnerDirectionSign;
+    if( fInnerDirectionSign==0.0 )
+        fInnerDirectionSign = 1.0;
+
+    Vector2D aMainDirection = m_aAxisEndScreenPosition2D-m_aAxisStartScreenPosition2D;
+    aMainDirection.Normalize();
+    Vector2D aOrthoDirection(-aMainDirection.Y(),aMainDirection.X());
+    aOrthoDirection *= fInnerDirectionSign;
+    aOrthoDirection.Normalize();
+
+    Vector2D aStart(0,0), aEnd(0,0);
+    for( sal_Int32 nN=rAxisProperties.m_aTickmarkPropertiesList.size();nN--;)
+    {
+        const TickmarkProperties& rProps = rAxisProperties.m_aTickmarkPropertiesList[0];
+        Vector2D aNewStart = aOrthoDirection*rProps.RelativePos;
+        Vector2D aNewEnd = aNewStart - aOrthoDirection*rProps.Length;
+        if(aNewStart.GetLength()>aStart.GetLength())
+            aStart=aNewStart;
+        if(aNewEnd.GetLength()>aEnd.GetLength())
+            aEnd=aNewEnd;
+    }
+
+    Vector2D aLabelDirection(aStart);
+    if(!rAxisProperties.m_bLabelsOutside)
+        aLabelDirection = aEnd;
+
+    Vector2D aOrthoLabelDirection(aOrthoDirection);
+    if(!rAxisProperties.m_bLabelsOutside)
+        aOrthoLabelDirection*=-1.0;
+    aOrthoLabelDirection.Normalize();
+    aLabelDirection += aOrthoLabelDirection*AXIS2D_TICKLABELSPACING;
+    return aLabelDirection;
+}
+
+void TickmarkHelper_2D::createPointSequenceForAxisMainLine( drawing::PointSequenceSequence& rPoints ) const
+{
+    rPoints[0].realloc(2);
+    rPoints[0][0].X = static_cast<sal_Int32>(m_aAxisStartScreenPosition2D.X());
+    rPoints[0][0].Y = static_cast<sal_Int32>(m_aAxisStartScreenPosition2D.Y());
+    rPoints[0][1].X = static_cast<sal_Int32>(m_aAxisEndScreenPosition2D.X());
+    rPoints[0][1].Y = static_cast<sal_Int32>(m_aAxisEndScreenPosition2D.Y());
 }
 
 void TickmarkHelper_2D::updateScreenValues( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos ) const
@@ -766,9 +831,8 @@ void TickmarkHelper_2D::updateScreenValues( ::std::vector< ::std::vector< TickIn
         for( ; aTickIter != aTickEnd; aTickIter++ )
         {
             TickInfo& rTickInfo = (*aTickIter);
-            rTickInfo.nScreenTickValue =
-                this->transformScaledLogicTickToScreen(
-                    rTickInfo.fScaledTickValue );
+            rTickInfo.aTickScreenPosition =
+                this->getTickScreenPosition2D( rTickInfo.fScaledTickValue );
         }
     }
 }
@@ -785,7 +849,12 @@ void TickmarkHelper_2D::hideIdenticalScreenValues(
     pPreviousTickInfo->bPaintIt = true;
     for( TickInfo* pTickInfo = aIter.nextInfo(); pTickInfo; pTickInfo = aIter.nextInfo())
     {
-        pTickInfo->bPaintIt = pTickInfo->nScreenTickValue != pPreviousTickInfo->nScreenTickValue;
+        pTickInfo->bPaintIt =
+            ( static_cast<sal_Int32>(pTickInfo->aTickScreenPosition.X())
+            != static_cast<sal_Int32>(pPreviousTickInfo->aTickScreenPosition.X()) )
+            ||
+            ( static_cast<sal_Int32>(pTickInfo->aTickScreenPosition.Y())
+            != static_cast<sal_Int32>(pPreviousTickInfo->aTickScreenPosition.Y()) );
         pPreviousTickInfo = pTickInfo;
     }
 }

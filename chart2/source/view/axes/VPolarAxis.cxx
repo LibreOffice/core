@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarAxis.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:58 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #include "VPolarAxis.hxx"
 #include "VPolarGrid.hxx"
+#include "VCartesianAxis.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
 #include "CommonConverters.hxx"
@@ -113,6 +114,7 @@ VPolarAxis::VPolarAxis( const AxisProperties& rAxisProperties
             , m_aAxisProperties( rAxisProperties )
             , m_pNumberFormatterWrapper( pNumberFormatterWrapper )
             , m_pPosHelper( new PolarPlottingPositionHelper(false) )
+            , m_aIncrements()
 {
     PlotterBase::m_pPosHelper = m_pPosHelper;
 }
@@ -121,6 +123,11 @@ VPolarAxis::~VPolarAxis()
 {
     delete m_pPosHelper;
     m_pPosHelper = NULL;
+}
+
+void VPolarAxis::setIncrements( const uno::Sequence< ExplicitIncrementData >& rIncrements )
+{
+    m_aIncrements = rIncrements;
 }
 
 bool createTextShapes_ForAngleAxis( const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
@@ -171,20 +178,6 @@ bool createTextShapes_ForAngleAxis( const uno::Reference< lang::XMultiServiceFac
         //if NO OVERLAP -> don't create labels where the
         //anchor position is the same as for the last label
         //@todo
-        /*
-        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
-        {
-            if( lcl_doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->nScreenTickValue, bOverlapCheckDirectionIsY ) )
-            {
-                if( rAxisLabelProperties.bRhythmIsFix )
-                    continue;
-                rAxisLabelProperties.nRhythm++;
-                TickIter aRemoveIter( rAllTickInfos, rIncrement, 0, 0 );
-                removeShapesAtWrongRythm( aRemoveIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
-                return false;
-            }
-        }
-        */
 
         if(!pTickInfo->xTextShape.is())
         {
@@ -212,25 +205,6 @@ bool createTextShapes_ForAngleAxis( const uno::Reference< lang::XMultiServiceFac
 
         //if NO OVERLAP -> remove overlapping shapes
         //@todo
-        /*
-        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
-        {
-            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, bOverlapCheckDirectionIsY ) )
-            {
-                if( rAxisLabelProperties.bRhythmIsFix )
-                {
-                    xTarget->remove(pTickInfo->xTextShape);
-                    pTickInfo->xTextShape = NULL;
-                    continue;
-                }
-                rAxisLabelProperties.nRhythm++;
-                TickIter aRemoveIter( rAllTickInfos, rIncrement, 0, 0 );
-                removeShapesAtWrongRythm( aRemoveIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
-                return false;
-            }
-        }
-        */
-        //pLastVisibleNeighbourTickInfo = pTickInfo;
     }
     return true;
 }
@@ -272,49 +246,40 @@ void VPolarAxis::create2DAngleAxis( const uno::Reference< drawing::XShapes >& xT
 
 void VPolarAxis::create2DRadiusAxis( const uno::Reference< drawing::XShapes >& xTarget, ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos )
 {
-    /*
-    sal_Int32 nTickmarkPropertiesCount = m_aAxisProperties.m_aTickmarkPropertiesList.size();
-    for( sal_Int32 nDepth=0
-        ; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount
-        ; aDepthIter++, nDepth++ )
+    const ExplicitScaleData& rAngleScale         = m_pPosHelper->getScales()[0];
+    const ExplicitIncrementData& rAngleIncrement = m_aIncrements[0];
+
+    ::std::vector< ::std::vector< TickInfo > > aAngleTickInfos;
+    TickmarkHelper aAngleTickmarkHelper( rAngleScale, rAngleIncrement );
+    aAngleTickmarkHelper.getAllTicks( aAngleTickInfos );
+
+    uno::Reference< XScaling > xInverseScaling( NULL );
+    if( rAngleScale.Scaling.is() )
+        xInverseScaling = rAngleScale.Scaling->getInverseScaling();
+
+    AxisProperties aAxisProperties(m_aAxisProperties);
+    aAxisProperties.m_fInnerDirectionSign=0.0;
+    aAxisProperties.m_bLabelsOutside=true;
+    aAxisProperties.m_bIsMainAxis=false;
+    aAxisProperties.m_aLabelAlignment=LABEL_ALIGN_RIGHT;
+    aAxisProperties.init();
+
+    sal_Int32 nTick = 0;
+    TickIter aIter( aAngleTickInfos, rAngleIncrement, 0, 0 );
+    for( TickInfo* pTickInfo = aIter.firstInfo()
+        ; pTickInfo; pTickInfo = aIter.nextInfo(), nTick++ )
     {
-        const TickmarkProperties& rTickmarkProperties = m_aAxisProperties.m_aTickmarkPropertiesList[nDepth];
-
-        sal_Int32 nPointCount = (*aDepthIter).size();
-        drawing::PointSequenceSequence aPoints(nPointCount);
-
-        ::std::vector< TickInfo >::const_iterator       aTickIter = (*aDepthIter).begin();
-        const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
-        sal_Int32 nN = 0;
-        for( ; aTickIter != aTickEnd; aTickIter++ )
-        {
-            if( !(*aTickIter).bPaintIt )
-                continue;
-            //addLine( aPoints, nN
-             //   , (*aTickIter).nScreenTickValue, nMainLineScreenPosition
-              //  , rTickmarkProperties, bIsRadiusAxis);
-
-            nN++;
-        }
-        aPoints.realloc(nN);
-        m_pShapeFactory->createLine2D( xGroupShape_Shapes, aPoints
-                                     , rTickmarkProperties.aLineProperties );
+        pTickInfo->updateUnscaledValue( xInverseScaling );
+        aAxisProperties.m_pfMainLinePositionAtOtherAxis = &pTickInfo->fUnscaledTickValue;
+        //-------------------
+        VCartesianAxis aAxis(aAxisProperties,m_pNumberFormatterWrapper
+            ,2,new PolarPlottingPositionHelper(false));
+        aAxis.setMeterData( m_aScale, m_aIncrement );
+        aAxis.init(m_xLogicTarget,m_xFinalTarget,m_xShapeFactory);
+        aAxis.setTransformationSceneToScreen( Matrix4DToHomogenMatrix( m_aMatrixScreenToScene ) );
+        aAxis.setScales( m_pPosHelper->getScales() );
+        aAxis.createShapes();
     }
-
-    //-----------------------------------------
-    //create all scaled tickmark values
-    std::auto_ptr< TickmarkHelper > apTickmarkHelper( this->createTickmarkHelper() );
-    ::std::vector< ::std::vector< TickInfo > > aAllTickInfos;
-    apTickmarkHelper->getAllTicks( aAllTickInfos );
-
-    //-----------------------------------------
-    //create tick mark line shapes
-    ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = aAllTickInfos.begin();
-    const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = aAllTickInfos.end();
-
-    if(aDepthIter == aDepthEnd)//no tickmarks at all
-        return;
-    */
 }
 
 void SAL_CALL VPolarAxis::createShapes()
@@ -322,8 +287,6 @@ void SAL_CALL VPolarAxis::createShapes()
     DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
-
-    m_aAxisProperties.init();
 
     //-----------------------------------------
     //create named group shape
@@ -348,10 +311,11 @@ void SAL_CALL VPolarAxis::createShapes()
     if(2==m_nDimension)
     {
         sal_Int32 nDimensionIndex = m_xMeter->getRepresentedDimension();
-        if(nDimensionIndex==1)
-            this->create2DRadiusAxis( xGroupShape_Shapes, aAllTickInfos );
-        else
+        if(nDimensionIndex==0)
             this->create2DAngleAxis( xGroupShape_Shapes, aAllTickInfos );
+        else if(nDimensionIndex==1)
+            this->create2DRadiusAxis( xGroupShape_Shapes, aAllTickInfos );
+
     }
 }
 

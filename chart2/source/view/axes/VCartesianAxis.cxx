@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCartesianAxis.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:55 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,11 @@
 #include "CommonConverters.hxx"
 #include "macros.hxx"
 #include "ViewDefines.hxx"
-#include "TickmarkHelper.hxx"
 #include "PropertyMapper.hxx"
 #include "chartview/NumberFormatterWrapper.hxx"
 #include "chartview/ObjectIdentifier.hxx"
 #include "LabelPositionHelper.hxx"
+#include "DoubleRectangle.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
 #include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
@@ -105,409 +105,154 @@ using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::chart2;
 using namespace ::rtl::math;
 
-LabelAlignment lcl_getLabelAlignment( const AxisProperties& rAxisProperties )
-{
-    sal_Int16 nWritingMode( text::WritingMode2::LR_TB );//@todo get correct one
-    bool bIsYAxis = rAxisProperties.m_bIsYAxis;
-    bool bIsLeftOrBottomAxis = rAxisProperties.m_bIsLeftOrBottomAxis;
-
-    bool bTop = !bIsYAxis && !bIsLeftOrBottomAxis;
-    bool bLeft = true;
-    switch( nWritingMode )
-    {
-        case text::WritingMode2::RL_TB:
-        case text::WritingMode2::TB_RL:
-            bLeft = !( bIsYAxis && !bIsLeftOrBottomAxis );
-        case text::WritingMode2::TB_LR:
-        default:
-            bLeft = bIsYAxis && bIsLeftOrBottomAxis;
-    }
-
-    LabelAlignment aRet( LABEL_ALIGN_LEFT );
-    if(bTop)
-    {
-        if(bLeft)
-            aRet = LABEL_ALIGN_LEFT_TOP;
-        else
-            aRet = LABEL_ALIGN_RIGHT_TOP;
-    }
-    else
-    {
-        if(bLeft)
-            aRet = LABEL_ALIGN_LEFT_BOTTOM;
-        else
-            aRet = LABEL_ALIGN_RIGHT_BOTTOM;
-    }
-    return aRet;
-}
-
-sal_Int32 lcl_getAxisScreenPosition( double fCrossOtherAxis
-        , const PlottingPositionHelper& rPosHelper, bool bIsYAxis )
-{
-    double fX = bIsYAxis ? fCrossOtherAxis : rPosHelper.getLogicMinX();
-    double fY = bIsYAxis ? rPosHelper.getLogicMinY() : fCrossOtherAxis;
-
-    rPosHelper.clipLogicValues( &fX,&fY,0 );
-    rPosHelper.doLogicScaling( &fX,&fY,0 );
-    drawing::Position3D aPos( fX, fY, 0);
-
-    uno::Reference< XTransformation > xTransformation =
-        rPosHelper.getTransformationLogicToScene();
-    uno::Sequence< double > aSeq =
-        xTransformation->transform( Position3DToSequence(aPos) );
-
-    return static_cast<sal_Int32>(
-        bIsYAxis ? aSeq[0] : aSeq[1] );
-}
-
-sal_Int32 lcl_getMainLineScreenPosition(
-            const PlottingPositionHelper& rPosHelper
-          , const AxisProperties& rAxisProperties )
-{
-    double fMin = rAxisProperties.m_bIsYAxis ? rPosHelper.getLogicMinX() : rPosHelper.getLogicMinY();
-    double fMax = rAxisProperties.m_bIsYAxis ? rPosHelper.getLogicMaxX() : rPosHelper.getLogicMaxY();
-
-    double fCrossOtherAxis;
-    if(rAxisProperties.m_pfMainLinePositionAtOtherAxis)
-        fCrossOtherAxis = *rAxisProperties.m_pfMainLinePositionAtOtherAxis;
-    else
-    {
-        bool bMinimumForLeftAxis = ( rAxisProperties.m_bIsYAxis && rPosHelper.isMathematicalOrientationY() )
-                            || ( !rAxisProperties.m_bIsYAxis && rPosHelper.isMathematicalOrientationX() );
-        fCrossOtherAxis = ( bMinimumForLeftAxis && rAxisProperties.m_bIsLeftOrBottomAxis ) ? fMin : fMax;
-    }
-    sal_Int32 nRet = lcl_getAxisScreenPosition( fCrossOtherAxis, rPosHelper
-                        , rAxisProperties.m_bIsYAxis );
-    return nRet;
-}
-
-bool lcl_getExtraLineScreenPosition(
-            sal_Int32& rnExtraLineScreenPosition
-            , const PlottingPositionHelper& rPosHelper
-            , const AxisProperties& rAxisProperties )
-{
-    if( !rAxisProperties.m_pfExrtaLinePositionAtOtherAxis )
-        return false;
-
-    double fMin = rAxisProperties.m_bIsYAxis ? rPosHelper.getLogicMinX() : rPosHelper.getLogicMinY();
-    double fMax = rAxisProperties.m_bIsYAxis ? rPosHelper.getLogicMaxX() : rPosHelper.getLogicMaxY();
-    if( *rAxisProperties.m_pfExrtaLinePositionAtOtherAxis <= fMin
-        || *rAxisProperties.m_pfExrtaLinePositionAtOtherAxis >= fMax )
-        return false;
-    rnExtraLineScreenPosition = lcl_getAxisScreenPosition(
-                    *rAxisProperties.m_pfExrtaLinePositionAtOtherAxis
-                    , rPosHelper, rAxisProperties.m_bIsYAxis );
-    return true;
-}
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
-VAxis::VAxis( const AxisProperties& rAxisProperties
-            , NumberFormatterWrapper* pNumberFormatterWrapper
-            , sal_Int32 nDimensionCount )
-            : VMeterBase( uno::Reference<XMeter>::query(rAxisProperties.m_xAxisModel)
-                , nDimensionCount )
-            , m_aAxisProperties( rAxisProperties )
-            , m_pNumberFormatterWrapper( pNumberFormatterWrapper )
-{
-    m_pPosHelper = new PlottingPositionHelper();
-}
-
-VAxis::~VAxis()
-{
-    delete m_pPosHelper;
-    m_pPosHelper = NULL;
-}
-
 void lcl_correctRotation_Left( double& rfXCorrection, double& rfYCorrection
                            , double fAnglePositiveDegree, const awt::Size& aSize )
 {
-    //correct position for left y-axis with right top alignment
+    //correct label positions left of an axis with right centered alignment
     double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
     if( fAnglePositiveDegree==0.0 )
     {
-        rfXCorrection  = 0.0;
-        rfYCorrection = -aSize.Height/2.0;
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfXCorrection  = -aSize.Height*rtl::math::sin( fAnglePi );
-        rfYCorrection = -aSize.Height*rtl::math::cos( fAnglePi )/2.0;
+        rfXCorrection  = -aSize.Height*rtl::math::sin( fAnglePi )/2.0;
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        rfXCorrection  = -aSize.Width *rtl::math::sin( fAnglePi - F_PI/2.0 )
-                    -aSize.Height*rtl::math::cos( fAnglePi - F_PI/2.0 );
-        rfYCorrection = -aSize.Width *rtl::math::cos( fAnglePi - F_PI/2.0 )
-                    +aSize.Height*rtl::math::sin( fAnglePi - F_PI/2.0 )/2.0;
+        double beta = fAnglePi-F_PI/2.0;
+        rfXCorrection  = -aSize.Width *rtl::math::sin( beta )
+            -aSize.Height *rtl::math::cos( beta )/2.0;
+        rfYCorrection = -aSize.Width *rtl::math::cos( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
         double beta = fAnglePi - F_PI;
-        double gamma = 3*F_PI/2.0 - fAnglePi;
-        rfXCorrection  = -aSize.Width *rtl::math::cos( beta );
-        rfYCorrection = +aSize.Height*rtl::math::sin( gamma )/2.0
-                    +aSize.Width *rtl::math::sin( beta );
+        rfXCorrection  = -aSize.Width *rtl::math::cos( beta )
+            -aSize.Height*rtl::math::sin( beta )/2.0;
+        rfYCorrection = aSize.Width *rtl::math::sin( beta );
     }
     else
     {
-        rfXCorrection = 0.0;
-        rfYCorrection = -aSize.Height*rtl::math::cos( fAnglePi )/2.0;
+        double beta = 2*F_PI - fAnglePi;
+        rfXCorrection = -aSize.Height*rtl::math::sin( beta )/2.0;
+
     }
 }
 
 void lcl_correctRotation_Right( double& rfXCorrection, double& rfYCorrection
                            , double fAnglePositiveDegree, const awt::Size& aSize )
 {
-    //correct position for right y-axis with left top alignment
+    //correct label positions right of an axis with left centered alignment
     double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
-    if( fAnglePositiveDegree==0.0 )
+    if( fAnglePositiveDegree== 0.0 )
     {
-        rfXCorrection  = 0.0;
-        rfYCorrection = -aSize.Height/2.0;
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfXCorrection = 0.0;
-        rfYCorrection = -aSize.Height*rtl::math::cos( fAnglePi )/2.0;
+        rfXCorrection = aSize.Height*rtl::math::sin( fAnglePi )/2.0;
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
         double beta = F_PI - fAnglePi;
-        double gamma = fAnglePi - F_PI/2.0;
-        rfXCorrection  = aSize.Width *rtl::math::cos( beta );
-        rfYCorrection = +aSize.Height*rtl::math::sin( gamma )/2.0
-                    +aSize.Width *rtl::math::sin( beta );
+        rfXCorrection  = aSize.Width *rtl::math::cos( beta )
+            + aSize.Height*rtl::math::sin( beta )/2.0;
+        rfYCorrection  = aSize.Width *rtl::math::sin( beta );
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
         double beta = 3*F_PI/2.0 - fAnglePi;
         rfXCorrection  = aSize.Width *rtl::math::sin( beta )
-                    +aSize.Height*rtl::math::cos( beta );
-        rfYCorrection = -aSize.Width *rtl::math::cos( beta )
-                    +aSize.Height*rtl::math::sin( beta )/2.0;
+                    +aSize.Height*rtl::math::cos( beta )/2.0;
+        rfYCorrection  = -aSize.Width *rtl::math::cos( beta );
     }
     else
     {
-        rfXCorrection  = aSize.Height*rtl::math::sin( 2*F_PI - fAnglePi );
-        rfYCorrection = -aSize.Height*rtl::math::cos( 2*F_PI - fAnglePi )/2.0;
+        rfXCorrection  = aSize.Height*rtl::math::sin( 2*F_PI - fAnglePi )/2.0;
     }
 }
-void lcl_correctRotation_Bottom_Left( double& rfXCorrection, double& rfYCorrection
+
+void lcl_correctRotation_Top( double& rfXCorrection, double& rfYCorrection
                            , double fAnglePositiveDegree, const awt::Size& aSize )
 {
-    //correct position for bottom x-axis with left top alignment
+    //correct label positions on top of an axis with bottom centered alignment
     double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
-    if( fAnglePositiveDegree==0.0 )
+    if( fAnglePositiveDegree== 0.0 )
     {
-        rfXCorrection  = -aSize.Width/2.0;
-        rfYCorrection = 0.0;
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfXCorrection  = -aSize.Height*rtl::math::sin( fAnglePi )/2.0
-                    -aSize.Width *rtl::math::cos( fAnglePi );
-        rfYCorrection = aSize.Width *rtl::math::sin( fAnglePi );
+        rfXCorrection = aSize.Width*rtl::math::cos( fAnglePi )/2.0
+            +aSize.Height*rtl::math::sin( fAnglePi )/2.0;
+        rfYCorrection = -aSize.Width*rtl::math::sin( fAnglePi )/2.0;
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = F_PI - fAnglePi;
-        rfYCorrection = aSize.Width *rtl::math::sin( beta )
-                    +aSize.Height*rtl::math::cos( beta );
-        rfXCorrection  = aSize.Width *rtl::math::cos( beta )
-                    -aSize.Height*rtl::math::sin( beta )/2.0;
+        double beta = fAnglePi - F_PI/2.0;
+        rfYCorrection = -aSize.Width*rtl::math::cos( beta )/2.0
+            - aSize.Height*rtl::math::sin( beta );
+        rfXCorrection = - aSize.Width*rtl::math::sin( beta )/2.0
+            + aSize.Height*rtl::math::cos( beta )/2.0;
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
-        double beta = 3*F_PI/2.0 - fAnglePi;
-        rfXCorrection  = aSize.Height*rtl::math::cos( beta )/2.0;
-        rfYCorrection = aSize.Height*rtl::math::sin( beta );
+        double beta = fAnglePi - F_PI;
+        rfXCorrection = +aSize.Width *rtl::math::cos( beta )/2.0
+            -aSize.Height *rtl::math::sin( beta )/2.0; ;
+        rfYCorrection = -aSize.Width *rtl::math::sin( beta )/2.0
+            -aSize.Height *rtl::math::cos( beta );
     }
     else
     {
         double beta = 2*F_PI - fAnglePi;
-        rfXCorrection  = aSize.Height*rtl::math::sin( beta )/2.0;
-        rfYCorrection = 0.0;
+        rfXCorrection = -aSize.Width*rtl::math::cos( fAnglePi )/2.0
+            +aSize.Height*rtl::math::sin( fAnglePi )/2.0;
+        rfYCorrection = aSize.Width*rtl::math::sin( fAnglePi )/2.0;
     }
 }
 
-void lcl_correctRotation_Bottom_Right( double& rfXCorrection, double& rfYCorrection
+void lcl_correctRotation_Bottom( double& rfXCorrection, double& rfYCorrection
                            , double fAnglePositiveDegree, const awt::Size& aSize )
 {
-    //correct position for bottom x-axis with right top alignment
+    //correct label positions below of an axis with top centered alignment
     double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
     if( fAnglePositiveDegree==0.0 )
     {
-        rfXCorrection  = aSize.Width/2.0;
-        rfYCorrection = 0.0;
     }
     else if( fAnglePositiveDegree<= 90.0 )
     {
-        rfXCorrection  = -aSize.Height*rtl::math::sin( fAnglePi )/2.0;
-        rfYCorrection = 0.0;
+        rfXCorrection  = -aSize.Width *rtl::math::cos( fAnglePi )/2.0
+                         -aSize.Height*rtl::math::sin( fAnglePi )/2.0;
+        rfYCorrection = aSize.Width*rtl::math::sin( fAnglePi )/2.0;
     }
     else if( fAnglePositiveDegree<= 180.0 )
     {
-        double beta = F_PI - fAnglePi;
-        rfYCorrection = aSize.Height*rtl::math::cos( beta );
-        rfXCorrection  = -aSize.Height*rtl::math::sin( beta )/2.0;
+        double beta = fAnglePi-F_PI/2.0;
+        rfYCorrection = aSize.Width *rtl::math::cos( beta )/2.0
+            +aSize.Height*rtl::math::sin( beta );
+        rfXCorrection  = aSize.Width *rtl::math::sin( beta )/2.0
+                    -aSize.Height*rtl::math::cos( beta )/2.0;
     }
     else if( fAnglePositiveDegree<= 270.0 )
     {
         double beta = 3*F_PI/2.0 - fAnglePi;
-        rfXCorrection  = aSize.Height*rtl::math::cos( beta )/2.0
-                       -aSize.Width*rtl::math::sin( beta );
-
+        rfXCorrection  = -aSize.Width *rtl::math::sin( beta )/2.0
+                         +aSize.Height*rtl::math::cos( beta )/2.0;
         rfYCorrection = aSize.Height*rtl::math::sin( beta )
-                      +aSize.Width*rtl::math::cos( beta );
+                        +aSize.Width*rtl::math::cos( beta )/2.0;
     }
     else
     {
         double beta = 2*F_PI - fAnglePi;
         rfXCorrection  = aSize.Height*rtl::math::sin( beta )/2.0
-                      +aSize.Width*rtl::math::cos( beta );
-        rfYCorrection = aSize.Width*rtl::math::sin( beta );
+                        +aSize.Width*rtl::math::cos( beta )/2.0;
+        rfYCorrection = aSize.Width*rtl::math::sin( beta )/2.0;
     }
-}
-
-void lcl_correctRotation_Top_Left( double& rfXCorrection, double& rfYCorrection
-                           , double fAnglePositiveDegree, const awt::Size& aSize )
-{
-    //correct position for top x-axis with left top alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
-    if( fAnglePositiveDegree==0.0 )
-    {
-        rfXCorrection  = -aSize.Width/2.0;
-        rfYCorrection = 0.0;
-    }
-    else if( fAnglePositiveDegree<= 90.0 )
-    {
-        rfXCorrection  = +aSize.Height*rtl::math::sin( fAnglePi )/2.0;
-        rfYCorrection = 0.0;
-    }
-    else if( fAnglePositiveDegree<= 180.0 )
-    {
-        double beta = F_PI - fAnglePi;
-        rfYCorrection = -aSize.Height*rtl::math::cos( beta );
-        rfXCorrection  =  aSize.Height*rtl::math::sin( beta )/2.0;
-    }
-    else if( fAnglePositiveDegree<= 270.0 )
-    {
-        double beta = 3*F_PI/2.0 - fAnglePi;
-        rfXCorrection  = -aSize.Height*rtl::math::cos( beta )/2.0
-                        +aSize.Width *rtl::math::sin( beta );
-        rfYCorrection = -aSize.Width *rtl::math::cos( beta )
-                        -aSize.Height*rtl::math::sin( beta );
-    }
-    else
-    {
-        double beta = 2*F_PI - fAnglePi;
-        rfXCorrection  = - aSize.Width*rtl::math::cos( beta )
-                        - aSize.Height*rtl::math::sin( beta )/2.0;
-        rfYCorrection = - aSize.Width*rtl::math::sin( beta );
-    }
-}
-
-void lcl_correctRotation_Top_Right( double& rfXCorrection, double& rfYCorrection
-                           , double fAnglePositiveDegree, const awt::Size& aSize )
-{
-    //correct position for top x-axis with right top alignment
-    double fAnglePi = fAnglePositiveDegree*F_PI/180.0;
-    if( fAnglePositiveDegree==0.0 )
-    {
-        rfXCorrection  = aSize.Width/2.0;
-        rfYCorrection = 0.0;
-    }
-    else if( fAnglePositiveDegree<= 90.0 )
-    {
-        rfXCorrection  = aSize.Height*rtl::math::sin( fAnglePi )/2.0
-                       +aSize.Width*rtl::math::cos( fAnglePi );
-        rfYCorrection = -aSize.Width*rtl::math::sin( fAnglePi );
-    }
-    else if( fAnglePositiveDegree<= 180.0 )
-    {
-        double beta = F_PI - fAnglePi;
-        rfYCorrection = -aSize.Height*rtl::math::cos( beta )
-                       -aSize.Width*rtl::math::sin( beta );
-        rfXCorrection  = -aSize.Width*rtl::math::cos( beta )
-                       +aSize.Height*rtl::math::sin( beta )/2.0;
-    }
-    else if( fAnglePositiveDegree<= 270.0 )
-    {
-        double beta = 3*F_PI/2.0 - fAnglePi;
-        rfXCorrection  = -aSize.Height*rtl::math::cos( beta )/2.0;
-        rfYCorrection = -aSize.Height*rtl::math::sin( beta );
-    }
-    else
-    {
-        double beta = 2*F_PI - fAnglePi;
-        rfXCorrection  = - aSize.Height*rtl::math::sin( beta )/2.0;
-        rfYCorrection = - 0.0;
-    }
-}
-
-enum ShiftDirection { SHIFT_LEFT, SHIFT_TOP, SHIFT_RIGHT, SHIFT_BOTTOM };
-enum RotationCentre { ROTATE_LEFT_TOP, ROTATE_LEFT_BOTTOM, ROTATE_RIGHT_TOP, ROTATE_RIGHT_BOTTOM };
-
-ShiftDirection lcl_getLabelShiftDirection( const AxisProperties& rAxisProperties )
-{
-    ShiftDirection aShiftDirection = SHIFT_RIGHT;
-    if(rAxisProperties.m_bIsYAxis)
-    {
-        if(rAxisProperties.m_bIsLeftOrBottomAxis)
-            aShiftDirection = SHIFT_LEFT;
-    }
-    else
-    {
-        if(rAxisProperties.m_bIsLeftOrBottomAxis)
-            aShiftDirection = SHIFT_BOTTOM;
-        else
-            aShiftDirection = SHIFT_TOP;
-    }
-    return aShiftDirection;
-}
-
-RotationCentre lcl_getLabelRotationCentre(
-                const AxisProperties& rAxisProperties
-                , const AxisLabelProperties& rAxisLabelProperties )
-{
-    //indicate where the centre of the rotation lies (e.g. top left or bottom left corner of the text shape)
-    RotationCentre aRotationCentre = ROTATE_LEFT_TOP;
-    {
-        LabelAlignment eLabelAlignment( lcl_getLabelAlignment( rAxisProperties ) );
-        switch(eLabelAlignment)
-        {
-        case LABEL_ALIGN_LEFT_TOP:
-            aRotationCentre = ROTATE_RIGHT_BOTTOM;
-            break;
-        case LABEL_ALIGN_LEFT_BOTTOM:
-            aRotationCentre = ROTATE_RIGHT_TOP;
-            break;
-        case LABEL_ALIGN_RIGHT_TOP:
-            aRotationCentre = ROTATE_LEFT_BOTTOM;
-            break;
-        case LABEL_ALIGN_RIGHT_BOTTOM:
-            aRotationCentre = ROTATE_LEFT_TOP;
-            break;
-        case LABEL_ALIGN_LEFT:
-        case LABEL_ALIGN_TOP:
-        case LABEL_ALIGN_RIGHT:
-        case LABEL_ALIGN_BOTTOM:
-        default: //LABEL_ALIGN_CENTER
-            ROTATE_RIGHT_BOTTOM;
-            break;
-        };
-    }
-    return aRotationCentre;
 }
 
 void lcl_getPositionCorrectionForRotation(
                   double& rfXCorrection
                 , double& rfYCorrection
-                , const ShiftDirection& aShiftDirection
-                , const RotationCentre& aRotationCentre
+                , LabelAlignment eLabelAlignment
                 , const double fRotationAngle
                 , const awt::Size& aSize )
 {
@@ -515,41 +260,53 @@ void lcl_getPositionCorrectionForRotation(
     while(fAnglePositiveDegree<0.0)
         fAnglePositiveDegree+=360.0;
 
-    if( SHIFT_LEFT ==aShiftDirection )
+    switch(eLabelAlignment)
     {
-        DBG_ASSERT( ROTATE_RIGHT_TOP ==aRotationCentre, "it is assumed that rotation centre is at left top corner if labels are shifted to the right" );
-
-        lcl_correctRotation_Left( rfXCorrection, rfYCorrection, fAnglePositiveDegree, aSize );
-    }
-    else if( SHIFT_RIGHT ==aShiftDirection )
-    {
-        DBG_ASSERT( ROTATE_LEFT_TOP ==aRotationCentre, "it is assumed that rotation centre is at left top corner if labels are shifted to the right" );
-
-        lcl_correctRotation_Right( rfXCorrection, rfYCorrection, fAnglePositiveDegree, aSize );
-    }
-    else if( SHIFT_BOTTOM ==aShiftDirection )
-    {
-        DBG_ASSERT( ROTATE_LEFT_TOP ==aRotationCentre
-                 || ROTATE_RIGHT_TOP ==aRotationCentre
-                 , "it is assumed that rotation centre is at left or right top corner if labels are shifted to the bottom" );
-
-        if( ROTATE_LEFT_TOP ==aRotationCentre )
-            lcl_correctRotation_Bottom_Left( rfXCorrection, rfYCorrection, fAnglePositiveDegree, aSize );
-        else
-            lcl_correctRotation_Bottom_Right( rfXCorrection, rfYCorrection, fAnglePositiveDegree, aSize );
-    }
-    else if( SHIFT_TOP ==aShiftDirection )
-    {
-        DBG_ASSERT( ROTATE_LEFT_BOTTOM ==aRotationCentre
-                 || ROTATE_RIGHT_BOTTOM ==aRotationCentre
-                 , "it is assumed that rotation centre is at left or right bottom corner if labels are shifted to the top" );
-
-        if( ROTATE_LEFT_BOTTOM ==aRotationCentre )
-            lcl_correctRotation_Top_Left( rfXCorrection, rfYCorrection, fAnglePositiveDegree, aSize );
-        else
-            lcl_correctRotation_Top_Right( rfXCorrection, rfYCorrection, fAnglePositiveDegree, aSize );
+        case LABEL_ALIGN_LEFT:
+        case LABEL_ALIGN_LEFT_TOP:
+        case LABEL_ALIGN_LEFT_BOTTOM:
+            lcl_correctRotation_Left( rfXCorrection, rfYCorrection, fAnglePositiveDegree, aSize );
+            break;
+        case LABEL_ALIGN_RIGHT:
+        case LABEL_ALIGN_RIGHT_TOP:
+        case LABEL_ALIGN_RIGHT_BOTTOM:
+            lcl_correctRotation_Right( rfXCorrection, rfYCorrection, fAnglePositiveDegree, aSize );
+            break;
+        case LABEL_ALIGN_TOP:
+            lcl_correctRotation_Top( rfXCorrection, rfYCorrection, fAnglePositiveDegree, aSize );
+            break;
+        case LABEL_ALIGN_BOTTOM:
+            lcl_correctRotation_Bottom( rfXCorrection, rfYCorrection, fAnglePositiveDegree, aSize );
+        default: //LABEL_ALIGN_CENTER
+            break;
     }
 }
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+VCartesianAxis::VCartesianAxis( const AxisProperties& rAxisProperties
+            , NumberFormatterWrapper* pNumberFormatterWrapper
+            , sal_Int32 nDimensionCount
+            , PlottingPositionHelper* pPosHelper )//takes ownership
+            : VMeterBase( uno::Reference<XMeter>::query(rAxisProperties.m_xAxisModel)
+                , nDimensionCount )
+            , m_aAxisProperties( rAxisProperties )
+            , m_pNumberFormatterWrapper( pNumberFormatterWrapper )
+{
+    if( pPosHelper )
+        m_pPosHelper = pPosHelper;
+    else
+        m_pPosHelper = new PlottingPositionHelper();
+}
+
+VCartesianAxis::~VCartesianAxis()
+{
+    delete m_pPosHelper;
+    m_pPosHelper = NULL;
+}
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
@@ -571,18 +328,15 @@ uno::Reference< drawing::XShape > createSingleLabel(
     uno::Reference< drawing::XShape > xShape2DText = ShapeFactory(xShapeFactory)
                     .createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
     //-------------
-    //correctPositionForRotation()
+    //correctPositionForRotation
     awt::Point aOldPos = xShape2DText->getPosition();
     awt::Size  aSize   = xShape2DText->getSize();
-
-    ShiftDirection aShiftDirection = lcl_getLabelShiftDirection( rAxisProperties );
-    RotationCentre aRotationCentre = lcl_getLabelRotationCentre( rAxisProperties, rAxisLabelProperties );
 
     double fYCorrection = 0.0;
     double fXCorrection  = 0.0;
 
     lcl_getPositionCorrectionForRotation( fXCorrection, fYCorrection
-        , aShiftDirection, aRotationCentre
+        , rAxisProperties.m_aLabelAlignment
         , rAxisLabelProperties.fRotationAngleDegree, aSize );
 
     xShape2DText->setPosition( awt::Point(
@@ -594,41 +348,22 @@ uno::Reference< drawing::XShape > createSingleLabel(
 }
 
 bool lcl_doesOverlap( const uno::Reference< drawing::XShape >& xShape
-, sal_Int32 nScreenTickValue, bool bCheckDirectionIsY )
+        , const Vector2D& rTickScreenPosition )
 {
     if(!xShape.is())
         return false;
 
-    awt::Size  aSize = xShape->getSize();
-    awt::Point aPos  = xShape->getPosition();
-
-    sal_Int32 nMin = bCheckDirectionIsY ? aPos.Y : aPos.X;
-    sal_Int32 nMax = nMin + ( bCheckDirectionIsY ? aSize.Height : aSize.Width );
-
-    return  nMin <= nScreenTickValue && nScreenTickValue <= nMax;
+    DoublePoint aP(rTickScreenPosition.X(),rTickScreenPosition.Y());
+    DoubleRectangle aRect(xShape->getPosition(),xShape->getSize());
+    return aRect.isInside(aP);
 }
 
 bool doesOverlap( const uno::Reference< drawing::XShape >& xShape1
-                , const uno::Reference< drawing::XShape >& xShape2
-                , bool bCheckDirectionIsY )
+                , const uno::Reference< drawing::XShape >& xShape2 )
 {
-    awt::Size  aSize1 = xShape1->getSize();
-    awt::Point aPos1  = xShape1->getPosition();
-
-    sal_Int32 nMin1 = bCheckDirectionIsY ? aPos1.Y : aPos1.X;
-    sal_Int32 nMax1 = nMin1 + ( bCheckDirectionIsY ? aSize1.Height : aSize1.Width );
-
-    awt::Size  aSize2 = xShape2->getSize();
-    awt::Point aPos2  = xShape2->getPosition();
-
-    sal_Int32 nMin2 = bCheckDirectionIsY ? aPos2.Y : aPos2.X;
-    sal_Int32 nMax2 = nMin2 + ( bCheckDirectionIsY ? aSize2.Height : aSize2.Width );
-
-    if( nMax1 < nMin2 )
-        return false;
-    if( nMax2 < nMin1 )
-        return false;
-    return true;
+    DoubleRectangle aRect1(xShape1->getPosition(),xShape1->getSize());
+    DoubleRectangle aRect2(xShape2->getPosition(),xShape2->getSize());
+    return aRect1.isOverlap(aRect2);
 }
 
 void removeShapesAtWrongRythm( TickIter& rIter
@@ -736,14 +471,12 @@ TickInfo* LabelIterator::nextInfo()
     return pTickInfo;
 }
 
-sal_Int32 lcl_getStaggerDistance(
-            LabelIterator& rIter
-            , const ShiftDirection aShiftDirection )
+Vector2D lcl_getStaggerDistance( LabelIterator& rIter, const Vector2D& rStaggerDirection )
 {
     //calculates the height or width of the first line of labels
     //thus the second line of labels needs to be shifted for that distance
 
-    sal_Int32 nRet=0;
+    sal_Int32 nDistance=0;
     uno::Reference< drawing::XShape >  xShape2DText(NULL);
     for( TickInfo* pTickInfo = rIter.firstInfo()
         ; pTickInfo
@@ -753,27 +486,18 @@ sal_Int32 lcl_getStaggerDistance(
         DBG_ASSERT(xShape2DText.is(),"LabelIterator does not work correctly");
 
         awt::Size aSize  = xShape2DText->getSize();
-        switch(aShiftDirection)
-        {
-            case SHIFT_TOP:
-                nRet = ::std::max(nRet,aSize.Height); break;
-            case SHIFT_BOTTOM:
-                nRet = ::std::max(nRet,aSize.Height); break;
-            case SHIFT_LEFT:
-                nRet = ::std::max(nRet,aSize.Width); break;
-            case SHIFT_RIGHT:
-                nRet = ::std::max(nRet,aSize.Width); break;
-        }
+        if(rStaggerDirection.X()>rStaggerDirection.Y())
+            nDistance = ::std::max(nDistance,aSize.Width);
+        else
+            nDistance = ::std::max(nDistance,aSize.Height);
     }
-    return nRet;
+    return rStaggerDirection*nDistance;
 }
 
-void lcl_correctPositionForStaggering(
-            LabelIterator& rIter
-            , const ShiftDirection aShiftDirection
-            , sal_Int32 nStaggerDistance
-            )
+void lcl_correctPositionForStaggering( LabelIterator& rIter, const Vector2D& rStaggerDistance )
 {
+    if(rStaggerDistance.GetLength()==0.0)
+        return;
     uno::Reference< drawing::XShape >  xShape2DText(NULL);
     for( TickInfo* pTickInfo = rIter.firstInfo()
         ; pTickInfo
@@ -783,38 +507,33 @@ void lcl_correctPositionForStaggering(
         DBG_ASSERT(xShape2DText.is(),"LabelIterator does not work correctly");
 
         awt::Point aPos  = xShape2DText->getPosition();
-        switch(aShiftDirection)
-        {
-            case SHIFT_TOP:
-                aPos.Y -= nStaggerDistance; break;
-            case SHIFT_BOTTOM:
-                aPos.Y += nStaggerDistance; break;
-            case SHIFT_LEFT:
-                aPos.X -= nStaggerDistance; break;
-            case SHIFT_RIGHT:
-                aPos.X += nStaggerDistance; break;
-        }
+        aPos.X += static_cast<sal_Int32>(rStaggerDistance.X());
+        aPos.Y += static_cast<sal_Int32>(rStaggerDistance.Y());
         xShape2DText->setPosition( aPos );
     }
 }
 
-bool createTextShapes( const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
-                     , const uno::Reference< drawing::XShapes >& xTarget
+bool VCartesianAxis::createTextShapes(
+                       const uno::Reference< drawing::XShapes >& xTarget
                      , ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos
-                     , const ExplicitIncrementData& rIncrement
                      , AxisLabelProperties& rAxisLabelProperties
-                     , const AxisProperties& rAxisProperties
-                     , sal_Int32 nTextReferenceScreenPosition
-                     , const FixedNumberFormatter& rFixedNumberFormatter
-                     , const uno::Reference< XScaling >& xInverseScaling )
+                     , TickmarkHelper_2D* pTickmarkHelper )
 {
     //returns true if the text shapes have been created succesfully
     //otherwise false - in this case the AxisLabelProperties have changed
     //and contain new instructions for the next try for text shape creation
 
-    bool bOverlapCheckDirectionIsY = rAxisProperties.m_bIsYAxis;
+    uno::Reference< XScaling > xInverseScaling( NULL );
+    if( m_aScale.Scaling.is() )
+        xInverseScaling = m_aScale.Scaling->getInverseScaling();
+
+    FixedNumberFormatter aFixedNumberFormatter(
+                m_pNumberFormatterWrapper, rAxisLabelProperties.aNumberFormat );
+
+    Vector2D aTextToTickDistance( pTickmarkHelper->getDistanceTickToText( m_aAxisProperties ) );
+
     //@todo: iterate through all tick depth wich should be labeled
-    TickIter aIter( rAllTickInfos, rIncrement, 0, 0 );
+    TickIter aIter( rAllTickInfos, m_aIncrement, 0, 0 );
     TickInfo* pPreviousVisibleTickInfo = NULL;
     TickInfo* pPREPreviousVisibleTickInfo = NULL;
     TickInfo* pLastVisibleNeighbourTickInfo = NULL;
@@ -843,12 +562,12 @@ bool createTextShapes( const uno::Reference< lang::XMultiServiceFactory >& xShap
     tNameSequence aPropNames;
     tAnySequence aPropValues;
 
-    uno::Reference< beans::XPropertySet > xProps( rAxisProperties.m_xAxisModel, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel, uno::UNO_QUERY );
     PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false
-        , nLimitedSpaceForStaggering, rAxisProperties.m_bIsYAxis );
+        , nLimitedSpaceForStaggering, fabs(aTextToTickDistance.X()) > fabs(aTextToTickDistance.Y()) );
     LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
-        , rAxisProperties.m_aReferenceSize );
-    LabelPositionHelper::changeTextAdjustment( aPropValues, aPropNames, lcl_getLabelAlignment( rAxisProperties ) );
+        , m_aAxisProperties.m_aReferenceSize );
+    LabelPositionHelper::changeTextAdjustment( aPropValues, aPropNames, m_aAxisProperties.m_aLabelAlignment );
 
     uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,C2U("CharColor"));
     sal_Int32 nColor = Color( COL_AUTO ).GetColor();
@@ -876,12 +595,12 @@ bool createTextShapes( const uno::Reference< lang::XMultiServiceFactory >& xShap
         //with the text of the last neighbour tickmark
         if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
         {
-            if( lcl_doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->nScreenTickValue, bOverlapCheckDirectionIsY ) )
+            if( lcl_doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->aTickScreenPosition ) )
             {
                 if( rAxisLabelProperties.bRhythmIsFix )
                     continue;
                 rAxisLabelProperties.nRhythm++;
-                TickIter aRemoveIter( rAllTickInfos, rIncrement, 0, 0 );
+                TickIter aRemoveIter( rAllTickInfos, m_aIncrement, 0, 0 );
                 removeShapesAtWrongRythm( aRemoveIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
                 return false;
             }
@@ -891,31 +610,27 @@ bool createTextShapes( const uno::Reference< lang::XMultiServiceFactory >& xShap
 
         bool bHasExtraColor=false;
         sal_Int32 nExtraColor=0;
-        rtl::OUString aLabel = rFixedNumberFormatter.getFormattedString( pTickInfo->fUnscaledTickValue, nExtraColor, bHasExtraColor );
+        rtl::OUString aLabel = aFixedNumberFormatter.getFormattedString( pTickInfo->fUnscaledTickValue, nExtraColor, bHasExtraColor );
         if(pColorAny)
             *pColorAny = uno::makeAny(bHasExtraColor?nExtraColor:nColor);
 
-        awt::Point aAnchorScreenPosition2D;
-        {//get anchor position
-            sal_Int32 nAxisPos = nTextReferenceScreenPosition;
-            sal_Int32 nTickPos = pTickInfo->nScreenTickValue;
-            if( rAxisProperties.m_bIsYAxis )
-                aAnchorScreenPosition2D = awt::Point(nAxisPos,nTickPos);
-            else
-                aAnchorScreenPosition2D = awt::Point(nTickPos,nAxisPos);
-        }
+        Vector2D aTickScreenPos2D( pTickInfo->aTickScreenPosition );
+        aTickScreenPos2D += aTextToTickDistance;
+        awt::Point aAnchorScreenPosition2D(
+            static_cast<sal_Int32>(aTickScreenPos2D.X())
+            ,static_cast<sal_Int32>(aTickScreenPos2D.Y()));
 
         //create single label
         if(!pTickInfo->xTextShape.is())
-            pTickInfo->xTextShape = createSingleLabel( xShapeFactory, xTarget
+            pTickInfo->xTextShape = createSingleLabel( m_xShapeFactory, xTarget
                                     , aAnchorScreenPosition2D, aLabel
-                                    , rAxisLabelProperties, rAxisProperties
+                                    , rAxisLabelProperties, m_aAxisProperties
                                     , aPropNames, aPropValues );
 
         //if NO OVERLAP -> remove overlapping shapes
         if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
         {
-            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, bOverlapCheckDirectionIsY ) )
+            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape ) )
             {
                 if( rAxisLabelProperties.bRhythmIsFix )
                 {
@@ -924,7 +639,7 @@ bool createTextShapes( const uno::Reference< lang::XMultiServiceFactory >& xShap
                     continue;
                 }
                 rAxisLabelProperties.nRhythm++;
-                TickIter aRemoveIter( rAllTickInfos, rIncrement, 0, 0 );
+                TickIter aRemoveIter( rAllTickInfos, m_aIncrement, 0, 0 );
                 removeShapesAtWrongRythm( aRemoveIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
                 return false;
             }
@@ -936,76 +651,77 @@ bool createTextShapes( const uno::Reference< lang::XMultiServiceFactory >& xShap
     return true;
 }
 
-sal_Int32 lcl_getTextReferenceScreenPosition( const ::std::vector<TickmarkProperties>& rTickmarkPropertiesList
-                                   , bool bIsYAxis
-                                   , bool bIsLeftOrBottomAxis
-                                   , sal_Int32 nAxisPos )
+drawing::PointSequenceSequence lcl_makePointSequence( Vector2D& rStart, Vector2D& rEnd )
 {
-    sal_Int32 nRet = 0;
+    drawing::PointSequenceSequence aPoints(1);
+    aPoints[0].realloc(2);
+    aPoints[0][0].X = static_cast<sal_Int32>(rStart.X());
+    aPoints[0][0].Y = static_cast<sal_Int32>(rStart.Y());
+    aPoints[0][1].X = static_cast<sal_Int32>(rEnd.X());
+    aPoints[0][1].Y = static_cast<sal_Int32>(rEnd.Y());
+    return aPoints;
+}
 
-    bool bFindMin = (bIsYAxis && bIsLeftOrBottomAxis) || (!bIsYAxis && !bIsLeftOrBottomAxis);
-    ::std::vector<TickmarkProperties>::const_iterator aIter    = rTickmarkPropertiesList.begin();
-    const ::std::vector<TickmarkProperties>::const_iterator aIterEnd = rTickmarkPropertiesList.end();
-    for( ; aIter != aIterEnd; aIter++  )
+double VCartesianAxis::getLogicValueWhereMainLineCrossesOtherAxis() const
+{
+    sal_Int32 nDimensionIndex = m_aAxisProperties.m_xAxisModel->getRepresentedDimension();
+    double fMin = (nDimensionIndex==1) ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMinY();
+    double fMax = (nDimensionIndex==1) ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMaxY();
+
+    double fCrossesOtherAxis;
+    if(m_aAxisProperties.m_pfMainLinePositionAtOtherAxis)
+        fCrossesOtherAxis = *m_aAxisProperties.m_pfMainLinePositionAtOtherAxis;
+    else
     {
-        if( ( bFindMin && (*aIter).RelativePos < nRet )
-            ||
-            ( !bFindMin && (*aIter).RelativePos > nRet )
-            )
-        {
-            nRet = (*aIter).RelativePos;
-        }
+        bool bMinimumForLeftAxis = ( (nDimensionIndex==1) && m_pPosHelper->isMathematicalOrientationY() )
+                            || ( (nDimensionIndex!=1) && m_pPosHelper->isMathematicalOrientationX() );
+        fCrossesOtherAxis = ( bMinimumForLeftAxis && m_aAxisProperties.m_bIsMainAxis ) ? fMin : fMax;
     }
-    nRet+=nAxisPos;
+    return fCrossesOtherAxis;
+}
+bool VCartesianAxis::getLogicValueWhereExtraLineCrossesOtherAxis( double& fCrossesOtherAxis ) const
+{
+    if( !m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis )
+        return false;
+    sal_Int32 nDimensionIndex = m_aAxisProperties.m_xAxisModel->getRepresentedDimension();
+    double fMin = (nDimensionIndex==1) ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMinY();
+    double fMax = (nDimensionIndex==1) ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMaxY();
+    if( *m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis <= fMin
+        || *m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis >= fMax )
+        return false;
+    fCrossesOtherAxis = *m_aAxisProperties.m_pfExrtaLinePositionAtOtherAxis;
+    return true;
+}
+void VCartesianAxis::get2DAxisMainLine( Vector2D& rStart, Vector2D& rEnd, double fCrossesOtherAxis ) const
+{
+    sal_Int32 nDimensionIndex = m_aAxisProperties.m_xAxisModel->getRepresentedDimension();
+    double fXStart = (nDimensionIndex==1) ? fCrossesOtherAxis : m_pPosHelper->getLogicMinX();
+    double fYStart = (nDimensionIndex==1) ? m_pPosHelper->getLogicMinY() : fCrossesOtherAxis;
+    drawing::Position3D aSceneStart = m_pPosHelper->transformLogicToScene( fXStart, fYStart, 0, true );
 
-    if(bFindMin)
-        nRet-=AXIS2D_TICKLABELSPACING;
-    else
-        nRet+=AXIS2D_TICKLABELSPACING;
-    return nRet;
+    double fXEnd = (nDimensionIndex==1) ? fCrossesOtherAxis : m_pPosHelper->getLogicMaxX();
+    double fYEnd = (nDimensionIndex==1) ? m_pPosHelper->getLogicMaxY() : fCrossesOtherAxis;
+    drawing::Position3D aSceneEnd = m_pPosHelper->transformLogicToScene( fXEnd, fYEnd, 0, true );
+
+    rStart.X() = aSceneStart.PositionX;
+    rStart.Y() = aSceneStart.PositionY;
+    rEnd.X() = aSceneEnd.PositionX;
+    rEnd.Y() = aSceneEnd.PositionY;
 }
 
-void addLine( drawing::PointSequenceSequence&  rPoints, sal_Int32 nIndex
-             , sal_Int32 nScreenTickValue, sal_Int32 nOrthogonalAxisScreenPosition
-             , const TickmarkProperties& rTickmarkProperties, bool bIsYAxis )
+void SAL_CALL VCartesianAxis::createShapes()
 {
-    sal_Int32 nStartX = bIsYAxis ? nOrthogonalAxisScreenPosition + rTickmarkProperties.RelativePos : nScreenTickValue;
-    sal_Int32 nStartY = bIsYAxis ? nScreenTickValue : nOrthogonalAxisScreenPosition + rTickmarkProperties.RelativePos;
+    if(2!=m_nDimension) //@todo remove this restriction if 3D axes are available
+        return;
 
-    sal_Int32 nEndX = nStartX;
-    sal_Int32 nEndY = nStartY;
-    if( bIsYAxis )
-        nEndX += rTickmarkProperties.Length;
-    else
-        nEndY += rTickmarkProperties.Length;
-
-    rPoints[nIndex].realloc(2);
-    rPoints[nIndex][0].X = nStartX;
-    rPoints[nIndex][0].Y = nStartY;
-    rPoints[nIndex][1].X = nEndX;
-    rPoints[nIndex][1].Y = nEndY;
-}
-
-void createPointSequenceForAxisMainLine( drawing::PointSequenceSequence& rPoints,
-         bool bIsYAxis, sal_Int32 nOrthogonalPos, sal_Int32 nMin, sal_Int32 nMax )
-{
-    rPoints[0].realloc(2);
-    rPoints[0][0].X = bIsYAxis ? nOrthogonalPos : nMin;
-    rPoints[0][0].Y = bIsYAxis ? nMin : nOrthogonalPos;
-    rPoints[0][1].X = bIsYAxis ? nOrthogonalPos : nMax;
-    rPoints[0][1].Y = bIsYAxis ? nMax : nOrthogonalPos;
-}
-
-void SAL_CALL VAxis::createShapes()
-{
     DBG_ASSERT(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
-    m_aAxisProperties.init();
-    bool bIsYAxis = m_aAxisProperties.m_bIsYAxis;
-    bool bIsLeftOrBottomAxis = m_aAxisProperties.m_bIsLeftOrBottomAxis;
-    sal_Int32 nMainLineScreenPosition = lcl_getMainLineScreenPosition( *m_pPosHelper, m_aAxisProperties );
+    Vector2D aStart, aEnd;
+    this->get2DAxisMainLine( aStart, aEnd, this->getLogicValueWhereMainLineCrossesOtherAxis() );
+    std::auto_ptr< TickmarkHelper_2D > apTickmarkHelper(
+        new TickmarkHelper_2D( m_aScale, m_aIncrement, aStart, aEnd ) );
 
     //-----------------------------------------
     //create named group shape
@@ -1021,7 +737,6 @@ void SAL_CALL VAxis::createShapes()
 
     //-----------------------------------------
     //create all scaled tickmark values
-    std::auto_ptr< TickmarkHelper > apTickmarkHelper( this->createTickmarkHelper() );
     ::std::vector< ::std::vector< TickInfo > > aAllTickInfos;
     apTickmarkHelper->getAllTicks( aAllTickInfos );
 
@@ -1050,9 +765,8 @@ void SAL_CALL VAxis::createShapes()
         {
             if( !(*aTickIter).bPaintIt )
                 continue;
-            addLine( aPoints, nN
-                , (*aTickIter).nScreenTickValue, nMainLineScreenPosition
-                , rTickmarkProperties, bIsYAxis);
+            apTickmarkHelper->addPointSequenceForTickLine( aPoints, nN, (*aTickIter).fScaledTickValue
+                , m_aAxisProperties.m_fInnerDirectionSign, rTickmarkProperties );
             nN++;
         }
         aPoints.realloc(nN);
@@ -1069,10 +783,7 @@ void SAL_CALL VAxis::createShapes()
         //it serves also as the handle shape for the axis selection
         {
             drawing::PointSequenceSequence aPoints(1);
-            createPointSequenceForAxisMainLine( aPoints
-                , bIsYAxis, nMainLineScreenPosition
-                , aTickmarkHelper.getScreenValueForMinimum(), aTickmarkHelper.getScreenValueForMaximum() );
-
+            aTickmarkHelper.createPointSequenceForAxisMainLine( aPoints );
             uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                     xGroupShape_Shapes, aPoints
                     , m_aAxisProperties.m_aLineProperties );
@@ -1081,17 +792,14 @@ void SAL_CALL VAxis::createShapes()
         }
         //-----------------------------------------
         //create an additional line at NULL
-        sal_Int32 nExtraLineScreenPosition;
-        if( lcl_getExtraLineScreenPosition( nExtraLineScreenPosition, *m_pPosHelper, m_aAxisProperties ) )
+        double fExtraLineCrossesOtherAxis;
+        if( getLogicValueWhereExtraLineCrossesOtherAxis(fExtraLineCrossesOtherAxis) )
         {
-            drawing::PointSequenceSequence aPoints(1);
-            createPointSequenceForAxisMainLine( aPoints
-                , bIsYAxis, nExtraLineScreenPosition
-                , aTickmarkHelper.getScreenValueForMinimum(), aTickmarkHelper.getScreenValueForMaximum() );
-
+            Vector2D aStart, aEnd;
+            this->get2DAxisMainLine( aStart, aEnd, fExtraLineCrossesOtherAxis );
+            drawing::PointSequenceSequence aPoints( lcl_makePointSequence(aStart,aEnd) );
             uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
-                    xGroupShape_Shapes, aPoints
-                    , m_aAxisProperties.m_aLineProperties );
+                    xGroupShape_Shapes, aPoints, m_aAxisProperties.m_aLineProperties );
         }
     }
     //-----------------------------------------
@@ -1100,22 +808,9 @@ void SAL_CALL VAxis::createShapes()
     aAxisLabelProperties.init(m_aAxisProperties.m_xAxisModel);
     if( aAxisLabelProperties.bDisplayLabels )
     {
-        FixedNumberFormatter aFixedNumberFormatter(
-                m_pNumberFormatterWrapper, aAxisLabelProperties.aNumberFormat );
-
-        uno::Reference< XScaling > xInverseScaling( NULL );
-        if( m_aScale.Scaling.is() )
-            xInverseScaling = m_aScale.Scaling->getInverseScaling();
-
-        sal_Int32 nTextReferenceScreenPosition = lcl_getTextReferenceScreenPosition(
-                m_aAxisProperties.m_aTickmarkPropertiesList
-                , bIsYAxis, bIsLeftOrBottomAxis, nMainLineScreenPosition );
-
         //create tick mark text shapes
-        while( !createTextShapes( m_xShapeFactory, xGroupShape_Shapes, aAllTickInfos
-                        , m_aIncrement, aAxisLabelProperties, m_aAxisProperties
-                        , nTextReferenceScreenPosition
-                        , aFixedNumberFormatter, xInverseScaling
+        while( !createTextShapes( xGroupShape_Shapes, aAllTickInfos
+                        , aAxisLabelProperties, apTickmarkHelper.get()
                         ) )
         {
         };
@@ -1128,12 +823,12 @@ void SAL_CALL VAxis::createShapes()
             LabelIterator aOuterIter( aAllTickInfos, m_aIncrement
                 , aAxisLabelProperties.eStaggering, false, 0, 0 );
 
-            sal_Int32 nStaggerDistance = lcl_getStaggerDistance( aInnerIter
-                , lcl_getLabelShiftDirection( m_aAxisProperties ) );
+            Vector2D aStaggerDirection( apTickmarkHelper->getDistanceTickToText( m_aAxisProperties ) );
+            aStaggerDirection.Normalize();
 
             lcl_correctPositionForStaggering( aOuterIter
-                , lcl_getLabelShiftDirection( m_aAxisProperties )
-                , nStaggerDistance );
+                , lcl_getStaggerDistance( aInnerIter
+                    , aStaggerDirection ) );
         }
     }
 }

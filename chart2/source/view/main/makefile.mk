@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: iha $ $Date: 2004-01-17 13:10:08 $
+#   last change: $Author: iha $ $Date: 2004-01-22 19:20:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ ENABLE_EXCEPTIONS=	TRUE
 
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
 SLOFILES =  \
+            $(SLO)$/DoubleRectangle.obj \
             $(SLO)$/NumberFormatterWrapper.obj \
             $(SLO)$/ObjectIdentifier.obj \
             $(SLO)$/PropertyMapper.obj \

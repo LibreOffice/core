@@ -8,6 +8,7 @@
 #include "StatisticsHelper.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "LabelPositionHelper.hxx"
+#include "Clipping.hxx"
 
 //only for creation: @todo remove if all plotter are uno components and instanciated via servicefactory
 #include "BarChart.hxx"

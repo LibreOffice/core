@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VAxisProperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:55 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::chart2;
 
-sal_Int32 AxisProperties::calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle) const
+sal_Int32 lcl_calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle)
 {
     sal_Int32 nWidth = AXIS2D_TICKLENGTH; //@maybefuturetodo this length could be offered by the model
     double fPercent = 1.0;
@@ -111,7 +111,7 @@ sal_Int32 AxisProperties::calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTic
     return static_cast<sal_Int32>(nWidth*fPercent);
 }
 
-sal_Int32 getTickOffset(sal_Int32 nLength,sal_Int32 nTickmarkStyle)
+double lcl_getTickOffset(sal_Int32 nLength,sal_Int32 nTickmarkStyle)
 {
     double fPercent = 0.0; //0<=fPercent<=1
     //0.0: completly inner
@@ -136,7 +136,7 @@ sal_Int32 getTickOffset(sal_Int32 nLength,sal_Int32 nTickmarkStyle)
             fPercent = 0.5;
             break;
     }
-    return static_cast<sal_Int32>(fPercent*nLength);
+    return fPercent*nLength;
 }
 
 VLineProperties AxisProperties::makeLinePropertiesForDepth( sal_Int32 nDepth ) const
@@ -171,32 +171,32 @@ TickmarkProperties AxisProperties::makeTickmarkProperties(
         nTickmarkStyle = m_nMinorTickmarks;
     }
 
-    TickmarkProperties aTickmarkProperties;
-    aTickmarkProperties.Length = this->calcTickLengthForDepth(nDepth,nTickmarkStyle);
+    if( m_fInnerDirectionSign == 0.0 )
+    {
+        if( nTickmarkStyle != 0 )
+            nTickmarkStyle = 3; //inner and outer tickmarks
+    }
 
-    sal_Int32 nSign = m_bIsLeftOrBottomAxis ? 1 : -1;
-    if(m_bIsYAxis)
-        nSign *= -1;
-    aTickmarkProperties.RelativePos = nSign*getTickOffset(aTickmarkProperties.Length,nTickmarkStyle);
-    aTickmarkProperties.Length *= -nSign;
+    TickmarkProperties aTickmarkProperties;
+    aTickmarkProperties.Length = lcl_calcTickLengthForDepth(nDepth,nTickmarkStyle);
+    aTickmarkProperties.RelativePos = static_cast<sal_Int32>(lcl_getTickOffset(aTickmarkProperties.Length,nTickmarkStyle));
     aTickmarkProperties.aLineProperties = this->makeLinePropertiesForDepth( nDepth );
     return aTickmarkProperties;
 }
 
 //--------------------------------------------------------------------------
 
-AxisProperties::AxisProperties()
-    : m_xAxisModel(NULL)
-    , m_bIsYAxis(true)
-    , m_bIsLeftOrBottomAxis(true)
+AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
+                              , const ::com::sun::star::awt::Size& rReferenceSize )
+    : m_xAxisModel(xAxisModel)
+    , m_aReferenceSize(rReferenceSize)
+    , m_bIsMainAxis(true)
     , m_pfMainLinePositionAtOtherAxis(NULL)
     , m_pfExrtaLinePositionAtOtherAxis(NULL)
-    /*
-    , m_nOrthogonalAxisScreenPosition(0)
-    , m_nOrthogonalAxisExtraLineScreenPosition(0)
-    */
-    , m_eRelativeLabelPosition(LEFTORBOTTOM_OF_AXIS)
-    , m_aReferenceSize()
+    , m_fInnerDirectionSign(1.0)
+    , m_bLabelsOutside(true)
+    , m_aLabelAlignment(LABEL_ALIGN_RIGHT_TOP)
+//    , m_eRelativeLabelPosition(LEFTORBOTTOM_OF_AXIS)
     , m_nMajorTickmarks(1)
     , m_nMinorTickmarks(1)
     , m_aTickmarkPropertiesList()
@@ -206,12 +206,14 @@ AxisProperties::AxisProperties()
 
 AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     : m_xAxisModel( rAxisProperties.m_xAxisModel )
-    , m_bIsYAxis( rAxisProperties.m_bIsYAxis )
-    , m_bIsLeftOrBottomAxis( rAxisProperties.m_bIsLeftOrBottomAxis )
+    , m_aReferenceSize( rAxisProperties.m_aReferenceSize )
+    , m_bIsMainAxis( rAxisProperties.m_bIsMainAxis )
     , m_pfMainLinePositionAtOtherAxis( NULL )
     , m_pfExrtaLinePositionAtOtherAxis( NULL )
-    , m_eRelativeLabelPosition( rAxisProperties.m_eRelativeLabelPosition )
-    , m_aReferenceSize( rAxisProperties.m_aReferenceSize )
+    , m_fInnerDirectionSign( rAxisProperties.m_fInnerDirectionSign )
+    , m_bLabelsOutside( rAxisProperties.m_bLabelsOutside )
+    , m_aLabelAlignment( rAxisProperties.m_aLabelAlignment )
+//    , m_eRelativeLabelPosition( rAxisProperties.m_eRelativeLabelPosition )
     , m_nMajorTickmarks( rAxisProperties.m_nMajorTickmarks )
     , m_nMinorTickmarks( rAxisProperties.m_nMinorTickmarks )
     , m_aTickmarkPropertiesList( rAxisProperties.m_aTickmarkPropertiesList )
@@ -229,43 +231,87 @@ AxisProperties::~AxisProperties()
     delete m_pfExrtaLinePositionAtOtherAxis;
 }
 
-void AxisProperties::init()
+LabelAlignment lcl_getLabelAlignment( const AxisProperties& rAxisProperties, bool bIsYAxis )
 {
-    if( !m_xAxisModel.is() )
-        return;
-    sal_Int32 nDimension = m_xAxisModel->getRepresentedDimension();
-    m_bIsYAxis = (nDimension==1);
+    LabelAlignment aRet( LABEL_ALIGN_LEFT );
+    if(bIsYAxis)
+    {
+        if(rAxisProperties.m_bIsMainAxis)
+        {
+            if( rAxisProperties.m_bLabelsOutside )
+                aRet = LABEL_ALIGN_LEFT;
+            else
+                aRet = LABEL_ALIGN_RIGHT;
+        }
+        else
+        {
+            if( !rAxisProperties.m_bLabelsOutside )
+                aRet = LABEL_ALIGN_LEFT;
+            else
+                aRet = LABEL_ALIGN_RIGHT;
+        }
+    }
+    else
+    {
+        if(rAxisProperties.m_bIsMainAxis )
+        {
+            if(rAxisProperties.m_bLabelsOutside)
+                aRet = LABEL_ALIGN_BOTTOM;
+            else
+                aRet = LABEL_ALIGN_TOP;
+        }
+        else
+        {
+            if(!rAxisProperties.m_bLabelsOutside)
+                aRet = LABEL_ALIGN_BOTTOM;
+            else
+                aRet = LABEL_ALIGN_TOP;
+        }
+    }
+    return aRet;
+}
 
-    //init LineProperties
-    m_aLineProperties.initFromPropertySet( uno::Reference<beans::XPropertySet>::query( m_xAxisModel ) );
+void AxisProperties::init( bool bCartesian )
+{
+    if( bCartesian )
+    {
+        sal_Int32 nDimensionIndex = m_xAxisModel->getRepresentedDimension();
+        m_fInnerDirectionSign = m_bIsMainAxis ? 1 : -1;
+        if(nDimensionIndex==1)
+            m_fInnerDirectionSign*=-1;
+        m_aLabelAlignment = lcl_getLabelAlignment(*this,nDimensionIndex==1);
+    }
 
-    //init TickmarkProperties
     uno::Reference< beans::XPropertySet > xProp =
         uno::Reference<beans::XPropertySet>::query( this->m_xAxisModel );
-    if(xProp.is())
+    if( !xProp.is() )
+        return;
+
+    //init LineProperties
+    m_aLineProperties.initFromPropertySet( xProp );
+
+    //init TickmarkProperties
+    try
     {
-        try
-        {
-            xProp->getPropertyValue( C2U( "MajorTickmarks" ) ) >>= m_nMajorTickmarks;
-            xProp->getPropertyValue( C2U( "MinorTickmarks" ) ) >>= m_nMinorTickmarks;
+        xProp->getPropertyValue( C2U( "MajorTickmarks" ) ) >>= m_nMajorTickmarks;
+        xProp->getPropertyValue( C2U( "MinorTickmarks" ) ) >>= m_nMinorTickmarks;
 
-            sal_Int32 nMaxDepth = 0;
-            if(m_nMinorTickmarks!=0)
-                nMaxDepth=2;
-            else if(m_nMajorTickmarks!=0)
-                nMaxDepth=1;
+        sal_Int32 nMaxDepth = 0;
+        if(m_nMinorTickmarks!=0)
+            nMaxDepth=2;
+        else if(m_nMajorTickmarks!=0)
+            nMaxDepth=1;
 
-            this->m_aTickmarkPropertiesList.clear();
-            for( sal_Int32 nDepth=0; nDepth<nMaxDepth; nDepth++ )
-            {
-                TickmarkProperties aTickmarkProperties = this->makeTickmarkProperties( nDepth );
-                this->m_aTickmarkPropertiesList.push_back( aTickmarkProperties );
-            }
-        }
-        catch( uno::Exception& e )
+        this->m_aTickmarkPropertiesList.clear();
+        for( sal_Int32 nDepth=0; nDepth<nMaxDepth; nDepth++ )
         {
-             e;
+            TickmarkProperties aTickmarkProperties = this->makeTickmarkProperties( nDepth );
+            this->m_aTickmarkPropertiesList.push_back( aTickmarkProperties );
         }
+    }
+    catch( uno::Exception& e )
+    {
+            e;
     }
 }
 

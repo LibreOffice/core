@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:10:07 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,47 +153,19 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationLogic
     return m_xTransformationLogicToScene;
 }
 
-void PlottingPositionHelper::getScreenValuesForMinimum( uno::Sequence< double >& rSeq ) const
+drawing::Position3D PlottingPositionHelper::transformLogicToScene(
+    double fX, double fY, double fZ, bool bClip ) const
 {
-    double fX = this->getLogicMinX();
-    double fY = this->getLogicMinY();
-    double fZ = this->getLogicMinZ();
-
+    if(bClip)
+        this->clipLogicValues( &fX,&fY,&fZ );
     this->doLogicScaling( &fX,&fY,&fZ );
     drawing::Position3D aPos( fX, fY, fZ);
 
     uno::Reference< XTransformation > xTransformation =
-            this->getTransformationLogicToScene();
-    rSeq = xTransformation->transform( Position3DToSequence(aPos) );
-}
-
-void PlottingPositionHelper::getScreenValuesForMaximum( uno::Sequence< double >& rSeq ) const
-{
-    double fX = this->getLogicMaxX();
-    double fY = this->getLogicMaxY();
-    double fZ = this->getLogicMaxZ();
-
-    this->doLogicScaling( &fX,&fY,&fZ );
-    drawing::Position3D aPos( fX, fY, fZ);
-
-    uno::Reference< XTransformation > xTransformation =
-            this->getTransformationLogicToScene();
-    rSeq = xTransformation->transform( Position3DToSequence(aPos) );
-}
-
-void PlottingPositionHelper::getLogicMinimum( ::com::sun::star::uno::Sequence< double >& rSeq ) const
-{
-    rSeq.realloc(3);
-    rSeq[0] = this->getLogicMinX();
-    rSeq[1] = this->getLogicMinY();
-    rSeq[2] = this->getLogicMinZ();
-}
-void PlottingPositionHelper::getLogicMaximum( ::com::sun::star::uno::Sequence< double >& rSeq ) const
-{
-    rSeq.realloc(3);
-    rSeq[0] = this->getLogicMaxX();
-    rSeq[1] = this->getLogicMaxY();
-    rSeq[2] = this->getLogicMaxZ();
+        this->getTransformationLogicToScene();
+    uno::Sequence< double > aSeq =
+        xTransformation->transform( Position3DToSequence(aPos) );
+    return SequenceToPosition3D(aSeq);
 }
 
 Rectangle PlottingPositionHelper::getTransformedClipRect() const
@@ -399,6 +371,15 @@ double PolarPlottingPositionHelper::transformToRadius( double fLogicValueOnRadiu
         }
     }
     return fScaledLogicRadiusValue;
+}
+
+drawing::Position3D PolarPlottingPositionHelper::transformLogicToScene( double fX, double fY, double fZ, bool bClip ) const
+{
+    if(bClip)
+        this->clipLogicValues( &fX,&fY,&fZ );
+    double fLogicValueOnAngleAxis  = m_bRadiusAxisMapsToFirstDimension ? fY : fX;
+    double fLogicValueOnRadiusAxis = m_bRadiusAxisMapsToFirstDimension ? fX : fY;
+    return this->transformLogicToScene( fLogicValueOnAngleAxis, fLogicValueOnRadiusAxis, fZ );
 }
 
 drawing::Position3D PolarPlottingPositionHelper::transformLogicToScene( double fLogicValueOnAngleAxis, double fLogicValueOnRadiusAxis, double fLogicZ ) const
