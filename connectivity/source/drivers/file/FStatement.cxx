@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 07:54:18 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,15 +527,19 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
         m_xColNames     = m_pTable->getColumns();
         Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
         // set the binding of the resultrow
-        m_aRow          = new OValueVector(xNames->getCount());
-        (*m_aRow)[0].setBound(sal_True);
-        ::std::for_each(m_aRow->begin()+1,m_aRow->end(),TSetBound(sal_False));
+        m_aRow          = new OValueRefVector(xNames->getCount());
+        (*m_aRow)[0]->setBound(sal_True);
+        ::std::for_each(m_aRow->begin()+1,m_aRow->end(),TSetRefBound(sal_False));
 
         // set the binding of the resultrow
-        m_aEvaluateRow  = new OValueVector(xNames->getCount());
+        m_aEvaluateRow  = new OValueRefVector(xNames->getCount());
 
-        (*m_aEvaluateRow)[0].setBound(sal_True);
-        ::std::for_each(m_aEvaluateRow->begin()+1,m_aEvaluateRow->end(),TSetBound(sal_False));
+        (*m_aEvaluateRow)[0]->setBound(sal_True);
+        ::std::for_each(m_aEvaluateRow->begin()+1,m_aEvaluateRow->end(),TSetRefBound(sal_False));
+
+        // set the select row
+        m_aSelectRow = new OValueRefVector(m_aSQLIterator.getSelectColumns()->size());
+        ::std::for_each(m_aSelectRow->begin(),m_aSelectRow->end(),TSetRefBound(sal_True));
 
         // create the column mapping
         createColumnMapping();
@@ -563,7 +567,7 @@ void OStatement_Base::createColumnMapping()
 
     Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
     // now check which columns are bound
-    OResultSet::setBoundedColumns(m_aRow,xColumns,xNames,sal_True,m_xDBMetaData,m_aColMapping);
+    OResultSet::setBoundedColumns(m_aRow,m_aSelectRow,xColumns,xNames,sal_True,m_xDBMetaData,m_aColMapping);
 }
 // -----------------------------------------------------------------------------
 void OStatement_Base::initializeResultSet(OResultSet* _pResult)
@@ -577,8 +581,10 @@ void OStatement_Base::initializeResultSet(OResultSet* _pResult)
     _pResult->setColumnMapping(m_aColMapping);
     _pResult->setEvaluationRow(m_aEvaluateRow);
     _pResult->setAssignValues(m_aAssignValues);
+    _pResult->setSelectRow(m_aSelectRow);
 
-    m_pEvaluationKeySet = m_pSQLAnalyzer->bindResultRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
+    m_pSQLAnalyzer->bindSelectRow(m_aRow);
+    m_pEvaluationKeySet = m_pSQLAnalyzer->bindEvaluationRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
     _pResult->setEvaluationKeySet(m_pEvaluationKeySet);
 }
 // -----------------------------------------------------------------------------
@@ -677,7 +683,7 @@ void OStatement_Base::GetAssignValues()
                     }
                 }
                 else if(pRow_Value_Const->isToken())
-                    ParseAssignValues(aColumnNameList,pRow_Value_Const,i);
+                    ParseAssignValues(aColumnNameList,pRow_Value_Const,static_cast<xub_StrLen>(i));
                 else
                 {
                     if(pRow_Value_Const->count() == aColumnNameList.size())
@@ -795,7 +801,7 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
     // Alles geprueft und wir haben den Namen der Column.
     // Jetzt eine Value allozieren, den Wert setzen und die Value an die Row binden.
     if (bSetNull)
-        (*m_aAssignValues)[nId].setNull();
+        (*m_aAssignValues)[nId]->setNull();
     else
     {
         switch (::comphelper::getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
@@ -803,16 +809,16 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
             // Kriterium je nach Typ als String oder double in die Variable packen ...
             case DataType::CHAR:
             case DataType::VARCHAR:
-                (*m_aAssignValues)[nId] = aValue;
+                *(*m_aAssignValues)[nId] = ORowSetValue(aValue);
                 // Zeichensatz ist bereits konvertiert, da ja das gesamte Statement konvertiert wurde
                 break;
 
             case DataType::BIT:
                 {
                     if (aValue.EqualsIgnoreCaseAscii("TRUE")  || aValue.GetChar(0) == '1')
-                        (*m_aAssignValues)[nId] = sal_True;
+                        *(*m_aAssignValues)[nId] = sal_True;
                     else if (aValue.EqualsIgnoreCaseAscii("FALSE") || aValue.GetChar(0) == '0')
-                        (*m_aAssignValues)[nId] = sal_False;
+                        *(*m_aAssignValues)[nId] = sal_False;
                     else
                     {
                         //  aStatus.Set(SQL_STAT_ERROR);    // nyi: genauer!
@@ -831,7 +837,7 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
             case DataType::TIME:
             case DataType::TIMESTAMP:
             {
-                (*m_aAssignValues)[nId] = aValue; // .ToDouble
+                *(*m_aAssignValues)[nId] = ORowSetValue(aValue); // .ToDouble
 //              try
 //              {
 //                  double n = xValue->toDouble();
