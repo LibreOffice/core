@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:25:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1211,10 +1211,40 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
         rRepaint.Width( rRepaint.Width() - nChg );
     }
 
-    AdjustFrm( nChg, bHasToFit );
+    // OD 04.04.2003 #108446# - handle special case:
+    // If text frame contains no content and just has splitted, because of a
+    // line stop, it has to move forward. To force this forward move without
+    // unnecessary formatting of its footnotes and its follow, especially in
+    // columned sections, adjust frame height to zero (0) and do not perform
+    // the intrinsic format of the follow.
+    // The formating method <SwCntntFrm::MakeAll()> will initiate the move forward.
+    sal_Bool bForcedNoIntrinsicFollowCalc = sal_False;
+    if ( nEnd == 0 &&
+         rLine.IsStop() && HasFollow() && nNew == 1
+       )
+    {
+        AdjustFrm( -Frm().SSize().Height(), bHasToFit );
+        if ( FollowFormatAllowed() )
+        {
+            bForcedNoIntrinsicFollowCalc = sal_True;
+            ForbidFollowFormat();
+        }
+    }
+    else
+    {
+        AdjustFrm( nChg, bHasToFit );
+    }
 
     if( HasFollow() || IsInFtn() )
         _AdjustFollow( rLine, nEnd, nStrLen, nNew );
+
+    // OD 04.04.2003 #108446# - allow intrinsic format of follow, if above
+    // special case has forbit it.
+    if ( bForcedNoIntrinsicFollowCalc )
+    {
+        AllowFollowFormat();
+    }
+
     pPara->SetPrepMustFit( sal_False );
 
     UNDO_SWAP( this )
