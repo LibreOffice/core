@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:57:27 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,6 @@ protected:
     void implSelectDatasource(const ::com::sun::star::uno::Any& _aDataSourceName);
     /// reset the tag pages according to m_sCurrentDatasource and <arg>_rxDatasource</arg>
     void resetPages(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDatasource);
-
 
     enum ApplyResult
     {
