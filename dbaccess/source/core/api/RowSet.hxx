@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 12:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,15 +97,6 @@
 #endif
 #ifndef _CPPUHELPER_COMPBASE8_HXX_
 #include <cppuhelper/compbase8.hxx>
-#endif
-#ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
-#include <connectivity/sqliterator.hxx>
-#endif
-#ifndef _CONNECTIVITY_SQLPARSE_HXX
-#include <connectivity/sqlparse.hxx>
-#endif
-#ifndef _CONNECTIVITY_SQLNODE_HXX
-#include <connectivity/sqlnode.hxx>
 #endif
 #ifndef DBACCESS_CORE_API_ROWSETVALUE_HXX
 #include "RowSetValue.hxx"
@@ -419,6 +410,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/10/17 10:18:12  oj
+    some changes for the rowset
+
     Revision 1.3  2000/10/11 11:18:11  fs
     replace unotools with comphelper
 
