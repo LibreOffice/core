@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2001-04-02 11:07:54 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,7 +561,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         CustomUnitText[ italian ] = "grado";
         CustomUnitText[ danish ] = "grader";
         CustomUnitText[ swedish ] = " grader";
-        CustomUnitText[ polish ] = "stopnie";
+        CustomUnitText[ polish ] = "stopni(e)";
         CustomUnitText[ portuguese_brazilian ] = "degree";
         CustomUnitText[ japanese ] = "“x";
         CustomUnitText[ korean ] = "µµ";
@@ -2510,7 +2510,7 @@ TabPage RID_SVXPAGE_HATCH
         Text [ portuguese ] = "Linha" ;
         Text [ finnish ] = "Viiva" ;
         Text [ danish ] = "Streg" ;
-        Text [ french ] = "Trait" ;
+        Text [ french ] = "Ligne" ;
         Text [ swedish ] = "Linje" ;
         Text [ dutch ] = "Lijn" ;
         Text [ spanish ] = "Lνnea" ;
@@ -3317,7 +3317,7 @@ TabPage RID_SVXPAGE_GRADIENT
         SpinSize = 15 ;
         CustomUnitText[ chinese_simplified ] = "¶Θ";
         CustomUnitText[ russian ] = "γπΰδσρξβ";
-        CustomUnitText[ polish ] = "Stopni";
+        CustomUnitText[ polish ] = "stopni(e)";
         CustomUnitText[ japanese ] = "“x";
         CustomUnitText[ chinese_traditional ] = "«Χ";
         CustomUnitText[ arabic ] = "ΟΡΜΙ";
@@ -4413,9 +4413,9 @@ TabPage RID_SVXPAGE_COLOR
         Text[ english_us ] = "Color system";
         Text[ portuguese ] = "Color system";
         Text[ russian ] = "Μξδελό φβεςΰ";
-        Text[ greek ] = "Δείγμα χρώματος";
+        Text[ greek ] = "Σύστημα χρωμάτων";
         Text[ dutch ] = "Color system";
-        Text[ french ] = "Color system";
+        Text[ french ] = "Modθle";
         Text[ spanish ] = "Color system";
         Text[ italian ] = "Color system";
         Text[ danish ] = "Color system";
@@ -4427,7 +4427,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ chinese_simplified ] = "ΡΥΙ«ΐΰΠΝ";
         Text[ chinese_traditional ] = "ΓC¦βΓώ«¬";
         Text[ turkish ] = "Color system";
-        Text[ arabic ] = "Color system";
+        Text[ arabic ] = "ΪνδΙ Ηααζδ";
     };
     ImageButton BTN_LOAD
     {
