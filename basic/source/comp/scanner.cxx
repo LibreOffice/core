@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-27 11:44:32 $
+ *  last change: $Author: vg $ $Date: 2001-08-28 15:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #pragma hdrstop
 #include <stdio.h>  // sprintf()
 #include <string.h>
+#include <ctype.h>
 #if defined (ICC) || defined (WTC) || defined(__powerc) || defined ( MAC ) || defined UNX
 #include <stdlib.h>
 #else
