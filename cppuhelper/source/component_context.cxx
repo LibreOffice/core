@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:20:36 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,20 +78,21 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
 
 #include <hash_map>
+#include <memory>
 
 #define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
 #define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"
@@ -304,14 +305,6 @@ static void dumpEntry( OUString const & key, Any const & value )
 }
 #endif
 //--------------------------------------------------------------------------------------------------
-template< class T >
-static inline beans::PropertyValue createPropertyValue(
-    OUString const & name, T const & value )
-    SAL_THROW( () )
-{
-    return beans::PropertyValue( name, -1, makeAny( value ), beans::PropertyState_DIRECT_VALUE );
-}
-//--------------------------------------------------------------------------------------------------
 static inline void try_dispose( Reference< XInterface > const & xInstance )
     SAL_THROW( (RuntimeException) )
 {
@@ -374,13 +367,15 @@ void DisposingForwarder::disposing( lang::EventObject const & rSource )
 //==================================================================================================
 struct MutexHolder
 {
+protected:
     Mutex m_mutex;
 };
 //==================================================================================================
 
 class ComponentContext
-    : public MutexHolder
-    , public WeakComponentImplHelper1< XComponentContext >
+    : private MutexHolder
+    , public WeakComponentImplHelper2< XComponentContext,
+                                       container::XNameContainer >
 {
 protected:
     Reference< XComponentContext > m_xDelegate;
@@ -401,17 +396,7 @@ protected:
     Reference< lang::XMultiComponentFactory > m_xSMgr;
 
 protected:
-    void throw_RT(
-        OUString const & str1, OUString const & str2 = OUString() )
-        SAL_THROW( (RuntimeException ) );
-    void throw_RT(
-        OUString const & str1, OUString const & str2,
-        OUString const & str3, OUString const & str4 = OUString() )
-        SAL_THROW( (RuntimeException ) );
-
     Any lookupMap( OUString const & rName )
-        SAL_THROW( (RuntimeException) );
-    virtual Sequence< Any > readInitialArguments( const OUString & rName )
         SAL_THROW( (RuntimeException) );
 
     virtual void SAL_CALL disposing();
@@ -425,57 +410,143 @@ public:
     // XComponentContext
     virtual Any SAL_CALL getValueByName( OUString const & rName )
         throw (RuntimeException);
-    virtual Reference< lang::XMultiComponentFactory > SAL_CALL getServiceManager()
+    virtual Reference<lang::XMultiComponentFactory> SAL_CALL getServiceManager()
         throw (RuntimeException);
+
+    // XNameContainer
+    virtual void SAL_CALL insertByName(
+        OUString const & name, Any const & element )
+        throw (lang::IllegalArgumentException, container::ElementExistException,
+               lang::WrappedTargetException, RuntimeException);
+    virtual void SAL_CALL removeByName( OUString const & name )
+        throw (container::NoSuchElementException,
+               lang::WrappedTargetException, RuntimeException);
+    // XNameReplace
+    virtual void SAL_CALL replaceByName(
+        OUString const & name, Any const & element )
+        throw (lang::IllegalArgumentException,container::NoSuchElementException,
+               lang::WrappedTargetException, RuntimeException);
+    // XNameAccess
+    virtual Any SAL_CALL getByName( OUString const & name )
+        throw (container::NoSuchElementException,
+               lang::WrappedTargetException, RuntimeException);
+    virtual Sequence<OUString> SAL_CALL getElementNames()
+        throw (RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( OUString const & name )
+        throw (RuntimeException);
+    // XElementAccess
+    virtual Type SAL_CALL getElementType() throw (RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
-void ComponentContext::throw_RT(
-    OUString const & str1, OUString const & str2 )
-    SAL_THROW( (RuntimeException ) )
+
+// XNameContainer
+//______________________________________________________________________________
+void ComponentContext::insertByName(
+    OUString const & name, Any const & element )
+    throw (lang::IllegalArgumentException, container::ElementExistException,
+           lang::WrappedTargetException, RuntimeException)
 {
-    OUStringBuffer buf( 64 );
-    buf.append( str1 );
-    buf.append( str2 );
-    OUString msg( buf.makeStringAndClear() );
-#if OSL_DEBUG_LEVEL > 0
-    OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
-    ::fprintf( stderr, "### %s\n", str.getStr() );
-#endif
-    throw RuntimeException( msg, (OWeakObject *)this );
+    ::std::auto_ptr<ContextEntry> entry(
+        new ContextEntry(
+            element,
+            /* lateInit_: */
+            name.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("/singletons/") ) &&
+            !element.hasValue() ) );
+    MutexGuard guard( m_mutex );
+    ::std::pair<t_map::iterator, bool> insertion( m_map.insert(
+        t_map::value_type( name, entry.get() ) ) );
+    if (! insertion.second)
+        throw container::ElementExistException(
+            OUSTR("element already exists: ") + name,
+            static_cast<OWeakObject *>(this) );
+    entry.release();
 }
-//__________________________________________________________________________________________________
-void ComponentContext::throw_RT(
-    OUString const & str1, OUString const & str2,
-    OUString const & str3, OUString const & str4 )
-    SAL_THROW( (RuntimeException ) )
+
+//______________________________________________________________________________
+void ComponentContext::removeByName( OUString const & name )
+        throw (container::NoSuchElementException,
+               lang::WrappedTargetException, RuntimeException)
 {
-    OUStringBuffer buf( 64 );
-    buf.append( str1 );
-    buf.append( str2 );
-    buf.append( str3 );
-    buf.append( str4 );
-    OUString msg( buf.makeStringAndClear() );
-#if OSL_DEBUG_LEVEL > 0
-    OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
-    ::fprintf( stderr, "### %s\n", str.getStr() );
-#endif
-    throw RuntimeException( msg, (OWeakObject *)this );
+    MutexGuard guard( m_mutex );
+    ::std::size_t erased = m_map.erase( name );
+    if (erased == 0)
+        throw container::NoSuchElementException(
+            OUSTR("no such element: ") + name,
+            static_cast<OWeakObject *>(this) );
 }
-//__________________________________________________________________________________________________
-Sequence< Any > ComponentContext::readInitialArguments(
-    const OUString & rName )
-    SAL_THROW( (RuntimeException) )
+
+// XNameReplace
+//______________________________________________________________________________
+void ComponentContext::replaceByName(
+    OUString const & name, Any const & element )
+    throw (lang::IllegalArgumentException,container::NoSuchElementException,
+           lang::WrappedTargetException, RuntimeException)
 {
-    Any args( ComponentContext::getValueByName( rName + OUSTR("/arguments") ) );
-    if (::getCppuType( (Sequence< Any > const *)0 ) == args.getValueType())
+    MutexGuard guard( m_mutex );
+    t_map::const_iterator const iFind( m_map.find( name ) );
+    if (iFind == m_map.end())
+        throw container::NoSuchElementException(
+            OUSTR("no such element: ") + name,
+            static_cast<OWeakObject *>(this) );
+    if (name.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("/singletons/") ) &&
+        !element.hasValue())
     {
-        return Sequence< Any >( *(Sequence< Any > const *)args.getValue() );
+        iFind->second->value.clear();
+        iFind->second->lateInit = true;
     }
     else
     {
-        return Sequence< Any >();
+        iFind->second->value = element;
+        iFind->second->lateInit = false;
     }
 }
+
+// XNameAccess
+//______________________________________________________________________________
+Any ComponentContext::getByName( OUString const & name )
+    throw (container::NoSuchElementException,
+           lang::WrappedTargetException, RuntimeException)
+{
+    return getValueByName( name );
+}
+
+//______________________________________________________________________________
+Sequence<OUString> ComponentContext::getElementNames()
+    throw (RuntimeException)
+{
+    MutexGuard guard( m_mutex );
+    Sequence<OUString> ret( m_map.size() );
+    OUString * pret = ret.getArray();
+    sal_Int32 pos = 0;
+    t_map::const_iterator iPos( m_map.begin() );
+    t_map::const_iterator const iEnd( m_map.end() );
+    for ( ; iPos != iEnd; ++iPos )
+        pret[pos++] = iPos->first;
+    return ret;
+}
+
+//______________________________________________________________________________
+sal_Bool ComponentContext::hasByName( OUString const & name )
+    throw (RuntimeException)
+{
+    MutexGuard guard( m_mutex );
+    return m_map.find( name ) != m_map.end();
+}
+
+// XElementAccess
+//______________________________________________________________________________
+Type ComponentContext::getElementType() throw (RuntimeException)
+{
+    return ::getVoidCppuType();
+}
+
+//______________________________________________________________________________
+sal_Bool ComponentContext::hasElements() throw (RuntimeException)
+{
+    MutexGuard guard( m_mutex );
+    return ! m_map.empty();
+}
+
 //__________________________________________________________________________________________________
 Any ComponentContext::lookupMap( OUString const & rName )
     SAL_THROW( (RuntimeException) )
@@ -500,96 +571,124 @@ Any ComponentContext::lookupMap( OUString const & rName )
     }
 #endif
 
-    /** map is anytime untouched, if an uninit value will be inited, synch is done on mutex.
-    */
-    t_map::const_iterator const iFind( m_map.find( rName ) );
+    ResettableMutexGuard guard( m_mutex );
+    t_map::const_iterator iFind( m_map.find( rName ) );
+    if (iFind == m_map.end())
+        return Any();
+
+    ContextEntry * pEntry = iFind->second;
+    if (! pEntry->lateInit)
+        return pEntry->value;
+
+    // late init singleton entry
+    Reference< XInterface > xInstance;
+    guard.clear();
+
+    try
+    {
+        Any usesService( getValueByName( rName + OUSTR("/service") ) );
+        Any args_( getValueByName( rName + OUSTR("/arguments") ) );
+        Sequence<Any> args;
+        if (args_.hasValue() && !(args_ >>= args))
+        {
+            args.realloc( 1 );
+            args[ 0 ] = args_;
+        }
+
+        Reference< lang::XSingleComponentFactory > xFac;
+        if (usesService >>= xFac) // try via factory
+        {
+            xInstance = args.getLength()
+                ? xFac->createInstanceWithArgumentsAndContext( args, this )
+                : xFac->createInstanceWithContext( this );
+        }
+        else
+        {
+            Reference< lang::XSingleServiceFactory > xFac;
+            if (usesService >>= xFac)
+            {
+                // try via old XSingleServiceFactory
+#if OSL_DEBUG_LEVEL > 0
+                ::fprintf(
+                    stderr,
+                    "### omitting context for service instanciation!\n" );
+#endif
+                xInstance = args.getLength()
+                    ? xFac->createInstanceWithArguments( args )
+                    : xFac->createInstance();
+            }
+            else if (m_xSMgr.is()) // optionally service name
+            {
+                OUString serviceName;
+                if ((usesService >>= serviceName) &&
+                    serviceName.getLength())
+                {
+                    xInstance = args.getLength()
+                        ? m_xSMgr->createInstanceWithArgumentsAndContext(
+                            serviceName, args, this )
+                        : m_xSMgr->createInstanceWithContext(
+                            serviceName, this );
+                }
+            }
+        }
+    }
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (Exception & exc) // rethrow as WrappedTargetRuntimeException
+    {
+        Any caught( getCaughtException() );
+        OUStringBuffer buf;
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
+                             "exception occured raising singleton \"") );
+        buf.append( rName );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\": ") );
+        buf.append( exc.Message );
+        throw lang::WrappedTargetRuntimeException(
+            buf.makeStringAndClear(), static_cast<OWeakObject *>(this),caught );
+    }
+
+    if (! xInstance.is())
+    {
+        throw RuntimeException(
+            OUSTR("no service object raising singleton ") + rName,
+            static_cast<OWeakObject *>(this) );
+    }
+
+    Any ret;
+    guard.reset();
+    iFind = m_map.find( rName );
     if (iFind != m_map.end())
     {
         ContextEntry * pEntry = iFind->second;
         if (pEntry->lateInit)
         {
-            // late init singleton entry
-            Reference< XInterface > xInstance;
-
-            try
-            {
-                Any usesService( getValueByName( rName + OUSTR("/service") ) );
-                Sequence< Any > args( readInitialArguments( rName ) );
-
-                Reference< lang::XSingleComponentFactory > xFac;
-                if (usesService >>= xFac) // try via factory
-                {
-                    xInstance = args.getLength()
-                        ? xFac->createInstanceWithArgumentsAndContext( args, this )
-                        : xFac->createInstanceWithContext( this );
-                }
-                else
-                {
-                    Reference< lang::XSingleServiceFactory > xFac;
-                    if (usesService >>= xFac) // try via old XSingleServiceFactory
-                    {
-#if OSL_DEBUG_LEVEL > 0
-                        ::fprintf( stderr, "### omitting context for service instanciation!\n" );
-#endif
-                        xInstance = args.getLength()
-                            ? xFac->createInstanceWithArguments( args )
-                            : xFac->createInstance();
-                    }
-                    else if (m_xSMgr.is()) // optionally service name
-                    {
-                        OUString serviceName;
-                        if ((usesService >>= serviceName) && serviceName.getLength())
-                        {
-                            xInstance = args.getLength()
-                                ? m_xSMgr->createInstanceWithArgumentsAndContext( serviceName, args, this )
-                                : m_xSMgr->createInstanceWithContext( serviceName, this );
-                        }
-                    }
-                }
-            }
-            catch (RuntimeException &)
-            {
-                throw;
-            }
-            catch (Exception & exc) // rethrow as RuntimeException
-            {
-                throw_RT(
-                    OUSTR("exception occured raising singleton \""), rName,
-                    OUSTR("\": "), exc.Message );
-            }
-
-            if (! xInstance.is())
-            {
-                throw_RT(
-                    OUSTR("no service object raising singleton "), rName );
-            }
-
-            ClearableMutexGuard guard( m_mutex );
-            if (pEntry->lateInit)
-            {
-                pEntry->value.setValue( &xInstance, ::getCppuType( &xInstance ) );
-                pEntry->lateInit = false;
-            }
-            else // inited in the meantime
-            {
-                guard.clear();
-                // service has entered the context in the meantime
-                // => try to dispose this object
-                try_dispose( xInstance );
-            }
+            pEntry->value <<= xInstance;
+            pEntry->lateInit = false;
+            return pEntry->value;
         }
-
-        return pEntry->value;
+        else
+            ret = pEntry->value;
     }
-    else
-    {
-        return Any();
-    }
+    guard.clear();
+    try_dispose( xInstance );
+    return ret;
 }
+
 //__________________________________________________________________________________________________
 Any ComponentContext::getValueByName( OUString const & rName )
     throw (RuntimeException)
 {
+    // to determine the root context:
+    if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_root") ))
+    {
+        if (m_xDelegate.is())
+            return m_xDelegate->getValueByName( rName );
+        else
+            return makeAny( Reference<XComponentContext>(this) );
+    }
+
     Any ret( lookupMap( rName ) );
     if (!ret.hasValue() && m_xDelegate.is())
     {
@@ -690,8 +789,9 @@ void ComponentContext::disposing()
 ComponentContext::ComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     Reference< XComponentContext > const & xDelegate )
-    : WeakComponentImplHelper1< XComponentContext >( m_mutex )
-    , m_xDelegate( xDelegate )
+    : WeakComponentImplHelper2< XComponentContext, container::XNameContainer >(
+        m_mutex ),
+      m_xDelegate( xDelegate )
 {
     for ( sal_Int32 nPos = 0; nPos < nEntries; ++nPos )
     {
@@ -751,370 +851,6 @@ ComponentContext::ComponentContext(
     }
 }
 
-//==================================================================================================
-class ConfigurationComponentContext : public ComponentContext
-{
-protected:
-    Reference< lang::XMultiServiceFactory > m_xCfgProvider;
-
-    typedef ::std::hash_map< OUString, Reference< XInterface >, OUStringHash > t_singletons;
-    t_singletons m_singletons;
-
-protected:
-    Reference< container::XNameAccess > getCfgNode( OUString const & rName )
-        SAL_THROW( (RuntimeException) );
-    Reference< XInterface > createSingletonFromCfg( OUString const & rName )
-        SAL_THROW( (RuntimeException) );
-
-    Sequence< Any > readInitialArguments( const OUString & rName )
-        SAL_THROW( (RuntimeException) );
-
-    virtual void SAL_CALL disposing();
-
-public:
-    inline ConfigurationComponentContext(
-        ContextEntry_Init const * pEntries, sal_Int32 nEntries,
-        Reference< XComponentContext > const & xDelegate )
-        : ComponentContext( pEntries, nEntries, xDelegate )
-        {}
-
-    // XComponentContext
-    Any SAL_CALL getValueByName( OUString const & rName )
-        throw (RuntimeException);
-};
-//__________________________________________________________________________________________________
-Reference< container::XNameAccess > ConfigurationComponentContext::getCfgNode(
-    OUString const & rName )
-    SAL_THROW( (RuntimeException) )
-{
-    if (! m_xCfgProvider.is())
-    {
-        Reference< lang::XMultiServiceFactory > xCfgProvider;
-
-        // don't run into recursion trouble
-        lookupMap( OUSTR("/singletons/com.sun.star.bootstrap.theConfigurationProvider") ) >>= xCfgProvider;
-        if (!xCfgProvider.is() && m_xDelegate.is())
-        {
-            m_xDelegate->getValueByName(
-                OUSTR("/singletons/com.sun.star.bootstrap.theConfigurationProvider") ) >>= xCfgProvider;
-        }
-
-        if (xCfgProvider.is())
-        {
-            ClearableMutexGuard guard( m_mutex );
-            if (! m_xCfgProvider.is())
-            {
-                m_xCfgProvider = xCfgProvider;
-            }
-            else
-            {
-                guard.clear();
-                try_dispose( xCfgProvider );
-            }
-        }
-        else
-        {
-            throw RuntimeException(
-                OUSTR("\"/singletons/com.sun.star.bootstrap.theConfigurationProvider\" not available!"),
-                (OWeakObject *)this );
-        }
-    }
-
-    try
-    {
-        Sequence< Any > args( 1 );
-        args[ 0 ] <<= createPropertyValue( OUSTR("nodepath"), OUSTR("/uno.components") + rName );
-        Reference< container::XNameAccess > xNA( m_xCfgProvider->createInstanceWithArguments(
-            OUSTR("com.sun.star.configuration.ConfigurationAccess"), args ), UNO_QUERY );
-        return xNA;
-    }
-    catch (RuntimeException &)
-    {
-        throw;
-    }
-    catch (Exception & exc)
-    {
-#ifdef CONTEXT_DIAG
-        OString str( OUStringToOString( rName, RTL_TEXTENCODING_ASCII_US ) );
-        OString str2( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        ::fprintf( stderr, "### accessing node %s from cfg failed: %s\n", str.getStr(), str2.getStr() );
-#endif
-        return Reference< container::XNameAccess >();
-    }
-}
-//__________________________________________________________________________________________________
-Sequence< Any > ConfigurationComponentContext::readInitialArguments(
-    const OUString & rName )
-    SAL_THROW( (RuntimeException) )
-{
-    Sequence< Any > args( ComponentContext::readInitialArguments( rName ) );
-    if (!args.getLength() && m_xCfgProvider.is()) // no recursion trouble
-    {
-        Reference< container::XNameAccess > xNA(
-            getCfgNode( rName + OUSTR("/arguments") ) );
-        if (xNA.is())
-        {
-            ::std::vector< Any > ar;
-            ar.reserve( 3 );
-
-            sal_Int32 nNum = 0;
-            for (;;)
-            {
-                try
-                {
-                    Any arg( xNA->getByName( OUString::valueOf( nNum++ ) ) );
-                    ar.push_back( arg );
-                }
-                catch (RuntimeException &)
-                {
-                    throw;
-                }
-                catch (Exception &)
-                {
-                    break;
-                }
-            }
-
-            return Sequence< Any >( &ar[ 0 ], ar.size() );
-        }
-    }
-    return args;
-}
-//__________________________________________________________________________________________________
-Reference< XInterface > ConfigurationComponentContext::createSingletonFromCfg(
-    OUString const & rName )
-    SAL_THROW( (RuntimeException) )
-{
-    OUString serviceName;
-
-    Reference< container::XNameAccess > xNA( getCfgNode( rName ) );
-    if (! xNA.is())
-    {
-        return Reference< XInterface >();
-    }
-
-    if (! (xNA->getByName( OUSTR("service") ) >>= serviceName))
-    {
-        throw_RT(
-            OUSTR("missing \"service\" entry for singleton "), rName );
-    }
-    if (! m_xSMgr.is())
-    {
-        throw_RT(
-            OUSTR("no service manager instance available creating singleton "), rName );
-    }
-
-    Sequence< Any > args( readInitialArguments( rName ) );
-
-    Reference< XInterface > xInstance;
-    try
-    {
-        xInstance = args.getLength()
-            ? m_xSMgr->createInstanceWithArgumentsAndContext( serviceName, args, this )
-            : m_xSMgr->createInstanceWithContext( serviceName, this );
-        if (xInstance.is())
-        {
-            return xInstance;
-        }
-        throw_RT( OUSTR("no service object raising singleton \""), rName );
-        // is here for dummy
-        return Reference< XInterface >();
-    }
-    catch (RuntimeException &)
-    {
-        throw;
-    }
-    catch (Exception & exc)
-    {
-        throw_RT(
-            OUSTR("exception occured raising singleton \""), rName,
-            OUSTR("\": "), exc.Message );
-    }
-}
-//__________________________________________________________________________________________________
-Any ConfigurationComponentContext::getValueByName( OUString const & rName )
-    throw (RuntimeException)
-{
-    Any ret( lookupMap( rName ) );
-    if (ret.hasValue())
-    {
-        return ret;
-    }
-
-#ifdef CONTEXT_DIAG
-    if (rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("dump_maps") ))
-    {
-        ::fprintf( stderr, ">>> dumping out ConfigurationComponentContext %p m_singletons:\n", this );
-        typedef ::std::map< OUString, Any > t_sorted; // sorted map
-        t_sorted sorted;
-        {
-        MutexGuard guard( m_mutex );
-        for ( t_singletons::const_iterator iPos( m_singletons.begin() ); iPos != m_singletons.end(); ++iPos )
-        {
-            sorted[ iPos->first ] = makeAny( iPos->second );
-        }
-        }
-        {
-        for ( t_sorted::const_iterator iPos( sorted.begin() ); iPos != sorted.end(); ++iPos )
-        {
-            dumpEntry( iPos->first, iPos->second );
-        }
-        }
-        if (m_xDelegate.is())
-        {
-            // dump more contexts
-            return m_xDelegate->getValueByName( rName );
-        }
-        return Any();
-    }
-#endif
-
-    // analyze name
-    if (rName.getLength() > sizeof("/singletons/") &&
-        0 == rName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("/singletons/") )) // singleton lookup
-    {
-        {
-        // try singletons map
-        MutexGuard guard( m_mutex );
-        t_singletons::const_iterator const iFind( m_singletons.find( rName ) );
-        if (iFind != m_singletons.end()) // entry in map
-        {
-            return makeAny( iFind->second );
-        }
-        }
-
-        Reference< XInterface > xInstance( createSingletonFromCfg( rName ) );
-
-        if (xInstance.is())
-        {
-            // inserted in the meantime?
-            ClearableMutexGuard guard( m_mutex );
-            t_singletons::const_iterator const iFind( m_singletons.find( rName ) );
-            if (iFind == m_singletons.end())
-            {
-                ::std::pair< t_singletons::iterator, bool > insertion(
-                    m_singletons.insert( t_singletons::value_type( rName, xInstance ) ) );
-                OSL_ENSURE( insertion.second, "### inserting new singleton failed?!" );
-                return makeAny( xInstance );
-            }
-            else // inited in the meantime
-            {
-                guard.clear();
-                // => try to dispose created object
-                try_dispose( xInstance );
-                return makeAny( iFind->second );
-            }
-        }
-    }
-    else // try regular config lookup
-    {
-        sal_Int32 last = rName.lastIndexOf( '/' );
-        if (last >= 0)
-        {
-            Reference< container::XNameAccess > xNA( getCfgNode( rName.copy( 0, last ) ) );
-            if (xNA.is())
-            {
-                try
-                {
-                    return xNA->getByName( rName.copy( last +1 ) );
-                }
-                catch (RuntimeException &)
-                {
-                    throw;
-                }
-                catch (Exception & exc)
-                {
-#ifdef CONTEXT_DIAG
-                    OString str( OUStringToOString( rName, RTL_TEXTENCODING_ASCII_US ) );
-                    OString str2( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-                    ::fprintf( stderr, "### accessing node %s from cfg failed: %s\n", str.getStr(), str2.getStr() );
-#endif
-                }
-            }
-        }
-    }
-
-    if (m_xDelegate.is())
-    {
-        return m_xDelegate->getValueByName( rName );
-    }
-
-    return Any();
-}
-//__________________________________________________________________________________________________
-void ConfigurationComponentContext::disposing()
-{
-#ifdef CONTEXT_DIAG
-    ::fprintf( stderr, "> disposing cfg context %p\n", this );
-#endif
-
-    Reference< XInterface > xSMgr, xTDMgr, xAC, xPolicy;
-
-    // first dispose all context objects
-    t_singletons::const_iterator iPos( m_singletons.begin() );
-    t_singletons::const_iterator iEnd( m_singletons.end() );
-    while (iPos != iEnd)
-    {
-        // to be disposed separately
-        if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(SMGR_SINGLETON) ))
-        {
-            xSMgr = iPos->second;
-        }
-        else if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(TDMGR_SINGLETON) ))
-        {
-            xTDMgr = iPos->second;
-        }
-        else if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(AC_SINGLETON) ))
-        {
-            xAC = iPos->second;
-        }
-        else if (iPos->first.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(AC_POLICY) ))
-        {
-            xPolicy = iPos->second;
-        }
-        else // dispose immediately
-        {
-            try_dispose( iPos->second );
-        }
-        ++iPos;
-    }
-    m_singletons.clear();
-
-    // dispose service manager
-    try_dispose( xSMgr );
-    // dispose ac
-    try_dispose( xAC );
-    // dispose policy
-    try_dispose( xPolicy );
-    // dispose tdmgr; revokes callback from cppu runtime
-    try_dispose( xTDMgr );
-
-    // dispose context values map
-    ComponentContext::disposing();
-}
-
-//==================================================================================================
-Reference< XComponentContext > SAL_CALL createInitialCfgComponentContext(
-    ContextEntry_Init const * pEntries, sal_Int32 nEntries,
-    Reference< XComponentContext > const & xDelegate )
-    SAL_THROW( () )
-{
-    try
-    {
-        ConfigurationComponentContext * p =
-            new ConfigurationComponentContext( pEntries, nEntries, xDelegate );
-        Reference< XComponentContext > xContext( p );
-        // listen delegate for disposing, to dispose this (wrapping) context first.
-        DisposingForwarder::listen( Reference< lang::XComponent >::query( xDelegate ), p );
-        return xContext;
-    }
-    catch (Exception & exc)
-    {
-        OSL_ENSURE( 0, OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-        return Reference< XComponentContext >();
-    }
-}
 
 //##################################################################################################
 Reference< XComponentContext > SAL_CALL createComponentContext(
