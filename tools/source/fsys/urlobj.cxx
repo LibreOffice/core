@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:12:06 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 11:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,11 @@ using namespace com::sun;
    ; private
    vnd-sun-star-tdoc-url = "VND.SUN.STAR.TDOC:/" segment *("/" segment)
    segment = *pchar
+
+
+   ; private
+   unknown-url = scheme ":" 1*uric
+   scheme = ALPHA *(alphanum / "+" / "-" / ".")
  */
 
 //============================================================================
@@ -357,19 +362,26 @@ inline void INetURLObject::SubString::operator +=(sal_Int32 nDelta)
 }
 
 //============================================================================
-bool INetURLObject::SubString::equals(SubString const & rOther,
+int INetURLObject::SubString::compare(SubString const & rOther,
                                       UniString const & rThisString,
                                       UniString const & rOtherString) const
 {
-    if (m_nLength != rOther.m_nLength)
-        return false;
+    xub_StrLen len = std::min(m_nLength, rOther.m_nLength);
     sal_Unicode const * p1 = rThisString.GetBuffer() + m_nBegin;
-    sal_Unicode const * p1End = p1 + m_nLength;
+    sal_Unicode const * end = p1 + len;
     sal_Unicode const * p2 = rOtherString.GetBuffer() + rOther.m_nBegin;
-    while (p1 != p1End)
-        if (*p1++ != *p2++)
-            return false;
-    return true;
+    while (p1 != end) {
+        if (*p1 < *p2) {
+            return -1;
+        } else if (*p1 > *p2) {
+            return 1;
+        }
+        ++p1;
+        ++p2;
+    }
+    return m_nLength < rOther.m_nLength ? -1
+        : m_nLength > rOther.m_nLength ? 1
+        : 0;
 }
 
 //============================================================================
@@ -462,7 +474,8 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "vnd.sun.star.expand", "vnd.sun.star.expand:", 0, false, false, false,
           false, false, false, false, false },
         { "vnd.sun.star.tdoc", "vnd.sun.star.tdoc:", 0, false, false, false,
-          false, false, false, true, false } };
+          false, false, false, true, false },
+        { "", "", 0, false, false, false, false, false, false, false, false } };
 
 // static
 inline INetURLObject::SchemeInfo const &
@@ -651,6 +664,7 @@ void INetURLObject::setInvalid()
 {
     m_aAbsURIRef.Erase();
     m_eScheme = INET_PROT_NOT_VALID;
+    m_aScheme.clear();
     m_aUser.clear();
     m_aAuth.clear();
     m_aHost.clear();
@@ -708,6 +722,23 @@ guessFSysStyleByCounting(sal_Unicode const * pBegin,
                    INetURLObject::FSYS_DOS : INetURLObject::FSYS_MAC;
 }
 
+UniString parseScheme(sal_Unicode const ** begin, sal_Unicode const * end) {
+    sal_Unicode const * p = *begin;
+    if (p != end && INetMIME::isAlpha(*p)) {
+        do {
+            ++p;
+        } while (p != end
+                 && (INetMIME::isAlphanumeric(*p) || *p == '+' || *p == '-'
+                     || *p == '.'));
+        if (p != end && *p == ':') {
+            UniString scheme = UniString(*begin, p - *begin).ToLowerAscii();
+            *begin = p + 1;
+            return scheme;
+        }
+    }
+    return UniString();
+}
+
 }
 
 bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
@@ -738,6 +769,8 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                                                  >= PrefixInfo::EXTERNAL ?
                                              pPrefix->m_pTranslatedPrefix :
                                              pPrefix->m_pPrefix);
+        m_aScheme = SubString(
+            0, aSynAbsURIRef.Search(static_cast< sal_Unicode >(':')));
     }
     else
     {
@@ -849,10 +882,23 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                           && p[3] == '.' ?
                               INET_PROT_FTP : INET_PROT_HTTP; // 3rd, 4th
             }
+        }
 
-            if (m_eScheme == INET_PROT_NOT_VALID && pPos != pEnd
-                && *pPos != nFragmentDelimiter)
-                m_eScheme = m_eSmartScheme;
+        UniString aSynScheme;
+        if (m_eScheme == INET_PROT_NOT_VALID) {
+            sal_Unicode const * p = pPos;
+            aSynScheme = parseScheme(&p, pEnd);
+            if (aSynScheme.Len() != 0 && p != pEnd && *p != nFragmentDelimiter)
+            {
+                m_eScheme = INET_PROT_GENERIC;
+                pPos = p;
+            }
+        }
+
+        if (bSmart && m_eScheme == INET_PROT_NOT_VALID && pPos != pEnd
+            && *pPos != nFragmentDelimiter)
+        {
+            m_eScheme = m_eSmartScheme;
         }
 
         if (m_eScheme == INET_PROT_NOT_VALID)
@@ -861,7 +907,10 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
             return false;
         }
 
-        aSynAbsURIRef = UniString::CreateFromAscii(getSchemeInfo().m_pScheme);
+        if (m_eScheme != INET_PROT_GENERIC) {
+            aSynScheme = UniString::CreateFromAscii(getSchemeInfo().m_pScheme);
+        }
+        m_aScheme.set(aSynAbsURIRef, aSynScheme, aSynAbsURIRef.Len());
         aSynAbsURIRef += ':';
     }
 
@@ -1821,15 +1870,21 @@ bool INetURLObject::convertAbsToRel(UniString const & rTheAbsURIRef,
     }
 
     // Check for differing scheme or authority parts:
-    if (m_eScheme != aSubject.m_eScheme
-        || !m_aUser.equals(aSubject.m_aUser, m_aAbsURIRef,
-                           aSubject.m_aAbsURIRef)
-        || !m_aAuth.equals(aSubject.m_aAuth, m_aAbsURIRef,
-                           aSubject.m_aAbsURIRef)
-        || !m_aHost.equals(aSubject.m_aHost, m_aAbsURIRef,
-                           aSubject.m_aAbsURIRef)
-        || !m_aPort.equals(aSubject.m_aPort, m_aAbsURIRef,
-                           aSubject.m_aAbsURIRef))
+    if ((m_aScheme.compare(
+             aSubject.m_aScheme, m_aAbsURIRef, aSubject.m_aAbsURIRef)
+         != 0)
+        || (m_aUser.compare(
+                aSubject.m_aUser, m_aAbsURIRef, aSubject.m_aAbsURIRef)
+            != 0)
+        || (m_aAuth.compare(
+                aSubject.m_aAuth, m_aAbsURIRef, aSubject.m_aAbsURIRef)
+            != 0)
+        || (m_aHost.compare(
+                aSubject.m_aHost, m_aAbsURIRef, aSubject.m_aAbsURIRef)
+            != 0)
+        || (m_aPort.compare(
+                aSubject.m_aPort, m_aAbsURIRef, aSubject.m_aAbsURIRef)
+            != 0))
     {
         rTheRelURIRef = aSubject.GetMainURL(eDecodeMechanism, eCharset);
         return false;
@@ -2836,6 +2891,20 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                                PART_PCHAR, '%', eCharset, false);
             }
             break;
+
+        case INET_PROT_GENERIC:
+            while (pPos < pEnd && *pPos != nFragmentDelimiter)
+            {
+                EscapeType eEscapeType;
+                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
+                                             '%', eMechanism,
+                                             eCharset, eEscapeType);
+                appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
+                           PART_URIC, '%', eCharset, true);
+            }
+            if (aTheSynPath.Len() == 0)
+                return false;
+            break;
     }
 
     *pBegin = pPos;
@@ -3389,7 +3458,10 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
         return false;
     if (m_eScheme == INET_PROT_NOT_VALID)
         return (m_aAbsURIRef == rObject.m_aAbsURIRef) != false;
-    if (GetUser(NO_DECODE) != rObject.GetUser(NO_DECODE)
+    if ((m_aScheme.compare(
+             rObject.m_aScheme, m_aAbsURIRef, rObject.m_aAbsURIRef)
+         != 0)
+        || GetUser(NO_DECODE) != rObject.GetUser(NO_DECODE)
         || GetPass(NO_DECODE) != rObject.GetPass(NO_DECODE)
         || !GetHost(NO_DECODE).EqualsIgnoreCaseAscii(rObject.
                                                          GetHost(NO_DECODE))
@@ -3438,13 +3510,12 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
 //============================================================================
 bool INetURLObject::operator <(INetURLObject const & rObject) const
 {
-    switch (GetScheme(m_eScheme).CompareTo(GetScheme(rObject.m_eScheme)))
-    {
-        case COMPARE_LESS:
-            return true;
-
-        case COMPARE_GREATER:
-            return false;
+    int n = m_aScheme.compare(
+        rObject.m_aScheme, m_aAbsURIRef, rObject.m_aAbsURIRef);
+    if (n < 0) {
+        return true;
+    } else if (n > 0) {
+        return false;
     }
     sal_uInt32 nPort1 = GetPort();
     sal_uInt32 nPort2 = rObject.GetPort();
@@ -3510,7 +3581,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
 {
     setInvalid();
     m_eScheme = eTheScheme;
-    if (HasError())
+    if (HasError() || m_eScheme == INET_PROT_GENERIC)
         return false;
     m_aAbsURIRef.AssignAscii(getSchemeInfo().m_pScheme);
     m_aAbsURIRef += ':';
