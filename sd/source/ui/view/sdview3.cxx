@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:01:44 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,100 +651,107 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             xStm->Seek( 0 );
 
             com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
-            bReturn = SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Impress.XMLImporter" );
+            bReturn = SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Impress.XMLOasisImporter" );
 
             pModel->SetStreamingSdrModel( FALSE );
 
-            if( bReturn )
+            if( pModel->GetPageCount() == 0 )
             {
-                if( pModel->GetPage( 0 )->GetObjCount() == 1 )
-                {
-                    // only one object
-                    SdrObject*      pObj = pModel->GetPage( 0 )->GetObj( 0 );
-                    SdrObject*      pPickObj = NULL;
-                    SdrPageView*    pPV = NULL;
-                    BOOL            bPickObj = PickObj( rPos, pPickObj, pPV );
-
-                    if( ( nAction & DND_ACTION_MOVE ) && pPickObj && pObj )
-                    {
-                        // replace object
-                        SdrObject*  pNewObj = pObj->Clone();
-                        Rectangle   aPickObjRect( pPickObj->GetCurrentBoundRect() );
-                        Size        aPickObjSize( aPickObjRect.GetSize() );
-                        Point       aVec( aPickObjRect.TopLeft() );
-                        Rectangle   aObjRect( pNewObj->GetCurrentBoundRect() );
-                        Size        aObjSize( aObjRect.GetSize() );
-
-                        Fraction aScaleWidth( aPickObjSize.Width(), aObjSize.Width() );
-                        Fraction aScaleHeight( aPickObjSize.Height(), aObjSize.Height() );
-                        pNewObj->NbcResize( aObjRect.TopLeft(), aScaleWidth, aScaleHeight );
-
-                        aVec -= aObjRect.TopLeft();
-                        pNewObj->NbcMove( Size( aVec.X(), aVec.Y() ) );
-
-                        BegUndo( String( SdResId(STR_UNDO_DRAGDROP ) ) );
-                        pNewObj->NbcSetLayer( pPickObj->GetLayer() );
-                        SdrPage* pWorkPage = GetPageViewPvNum( 0 )->GetPage();
-                        pWorkPage->InsertObject( pNewObj );
-                        AddUndo( new SdrUndoNewObj( *pNewObj ) );
-                        AddUndo( new SdrUndoDelObj( *pPickObj ) );
-                        pWorkPage->RemoveObject( pPickObj->GetOrdNum() );
-                        EndUndo();
-                        bChanged = TRUE;
-                        nAction = DND_ACTION_COPY;
-                    }
-                    else if( ( nAction & DND_ACTION_LINK ) && pPickObj && pObj && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) )
-                    {
-                        SfxItemSet aSet( pDoc->GetPool() );
-
-                        // set new attributes to object
-                        BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
-                        AddUndo( new SdrUndoAttrObj( *pPickObj ) );
-                        aSet.Put( pObj->GetMergedItemSet() );
-
-                        // Eckenradius soll nicht uebernommen werden.
-                        // In der Gallery stehen Farbverlauefe (Rechtecke)
-                        // welche den Eckenradius == 0 haben. Dieser soll
-                        // nicht auf das Objekt uebertragen werden.
-                        aSet.ClearItem( SDRATTR_ECKENRADIUS );
-
-                        pPickObj->SetMergedItemSetAndBroadcast( aSet );
-
-                        if( pPickObj->ISA( E3dObject ) && pObj->ISA( E3dObject ) )
-                        {
-                            // Zusaetzlich 3D Attribute handeln
-                            SfxItemSet aNewSet( pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
-                            SfxItemSet aOldSet( pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
-
-                            aOldSet.Put(pPickObj->GetMergedItemSet());
-                            aNewSet.Put( pObj->GetMergedItemSet() );
-
-                            AddUndo( new E3dAttributesUndoAction( *pDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, FALSE ) );
-                            pPickObj->SetMergedItemSetAndBroadcast( aNewSet );
-                        }
-
-                        EndUndo();
-                        bChanged = TRUE;
-                    }
-                }
+                DBG_ERROR("empty or invalid drawing xml document on clipboard!" );
             }
-
-            if( !bChanged )
+            else
             {
-                SdrPage* pWorkPage = pModel->GetPage( 0 );
-
-                pWorkPage->SetRectsDirty();
-
-                if( pOwnData )
+                if( bReturn )
                 {
-                    // #104148# Use SnapRect, not BoundRect
-                    Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
+                    if( pModel->GetPage( 0 )->GetObjCount() == 1 )
+                    {
+                        // only one object
+                        SdrObject*      pObj = pModel->GetPage( 0 )->GetObj( 0 );
+                        SdrObject*      pPickObj = NULL;
+                        SdrPageView*    pPV = NULL;
+                        BOOL            bPickObj = PickObj( rPos, pPickObj, pPV );
 
-                    aDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
-                    aDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
+                        if( ( nAction & DND_ACTION_MOVE ) && pPickObj && pObj )
+                        {
+                            // replace object
+                            SdrObject*  pNewObj = pObj->Clone();
+                            Rectangle   aPickObjRect( pPickObj->GetCurrentBoundRect() );
+                            Size        aPickObjSize( aPickObjRect.GetSize() );
+                            Point       aVec( aPickObjRect.TopLeft() );
+                            Rectangle   aObjRect( pNewObj->GetCurrentBoundRect() );
+                            Size        aObjSize( aObjRect.GetSize() );
+
+                            Fraction aScaleWidth( aPickObjSize.Width(), aObjSize.Width() );
+                            Fraction aScaleHeight( aPickObjSize.Height(), aObjSize.Height() );
+                            pNewObj->NbcResize( aObjRect.TopLeft(), aScaleWidth, aScaleHeight );
+
+                            aVec -= aObjRect.TopLeft();
+                            pNewObj->NbcMove( Size( aVec.X(), aVec.Y() ) );
+
+                            BegUndo( String( SdResId(STR_UNDO_DRAGDROP ) ) );
+                            pNewObj->NbcSetLayer( pPickObj->GetLayer() );
+                            SdrPage* pWorkPage = GetPageViewPvNum( 0 )->GetPage();
+                            pWorkPage->InsertObject( pNewObj );
+                            AddUndo( new SdrUndoNewObj( *pNewObj ) );
+                            AddUndo( new SdrUndoDelObj( *pPickObj ) );
+                            pWorkPage->RemoveObject( pPickObj->GetOrdNum() );
+                            EndUndo();
+                            bChanged = TRUE;
+                            nAction = DND_ACTION_COPY;
+                        }
+                        else if( ( nAction & DND_ACTION_LINK ) && pPickObj && pObj && !pPickObj->ISA( SdrGrafObj ) && !pPickObj->ISA( SdrOle2Obj ) )
+                        {
+                            SfxItemSet aSet( pDoc->GetPool() );
+
+                            // set new attributes to object
+                            BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
+                            AddUndo( new SdrUndoAttrObj( *pPickObj ) );
+                            aSet.Put( pObj->GetMergedItemSet() );
+
+                            // Eckenradius soll nicht uebernommen werden.
+                            // In der Gallery stehen Farbverlauefe (Rechtecke)
+                            // welche den Eckenradius == 0 haben. Dieser soll
+                            // nicht auf das Objekt uebertragen werden.
+                            aSet.ClearItem( SDRATTR_ECKENRADIUS );
+
+                            pPickObj->SetMergedItemSetAndBroadcast( aSet );
+
+                            if( pPickObj->ISA( E3dObject ) && pObj->ISA( E3dObject ) )
+                            {
+                                // Zusaetzlich 3D Attribute handeln
+                                SfxItemSet aNewSet( pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
+                                SfxItemSet aOldSet( pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
+
+                                aOldSet.Put(pPickObj->GetMergedItemSet());
+                                aNewSet.Put( pObj->GetMergedItemSet() );
+
+                                AddUndo( new E3dAttributesUndoAction( *pDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, FALSE ) );
+                                pPickObj->SetMergedItemSetAndBroadcast( aNewSet );
+                            }
+
+                            EndUndo();
+                            bChanged = TRUE;
+                        }
+                    }
                 }
 
-                bReturn = Paste( *pModel, aDropPos, pPage, nPasteOptions );
+                if( !bChanged )
+                {
+                    SdrPage* pWorkPage = pModel->GetPage( 0 );
+
+                    pWorkPage->SetRectsDirty();
+
+                    if( pOwnData )
+                    {
+                        // #104148# Use SnapRect, not BoundRect
+                        Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
+
+                        aDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
+                        aDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
+                    }
+
+                    bReturn = Paste( *pModel, aDropPos, pPage, nPasteOptions );
+                }
             }
         }
     }
@@ -986,7 +993,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
         if( aDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
         {
 
-
+/*
 SvFileStream    aSvOutputStream( String( RTL_CONSTASCII_USTRINGPARAM( "/tmp/test.png" ) ), STREAM_WRITE | STREAM_TRUNC );
 Graphic         aMtfGraphic( aMtf );
 Size            aPreviewSizePixel( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_PIXEL ) );
@@ -1009,9 +1016,7 @@ if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
         // Success
     }
 }
-
-
-
+*/
             Point aInsertPos( rPos );
 
             if( pOwnData && pOwnData->GetWorkDocument() )
