@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:45:18 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1122,12 +1122,12 @@ public class ReportWizard {
     if (DefaultName.equals(OldDefaultName) == false){
         OldDefaultName = DefaultName;
         DefaultPath = CurReportPaths.UserTemplatePath + "/" + DefaultName + ".stw";
-        DefaultPath = Tools.convertfromURLNotation(DefaultPath);
+        DefaultPath = Tools.convertfromURLNotation(xMSF, DefaultPath);
         CurUNODialog.assignPropertyToDialogControl("txtSavePath_1", "Text", DefaultPath);
         baskbeforeOverwrite[0] = true;
         bmodifiedbySaveAsDialog[0] = false;
         DefaultPath = CurReportPaths.WorkPath + "/" + DefaultName + ".sxw";
-        DefaultPath = Tools.convertfromURLNotation(DefaultPath);
+        DefaultPath = Tools.convertfromURLNotation(xMSF, DefaultPath);
         CurUNODialog.assignPropertyToDialogControl("txtSavePath_2", "Text", DefaultPath);
         baskbeforeOverwrite[1] = true;
         bmodifiedbySaveAsDialog[1] = false;
@@ -1415,7 +1415,7 @@ public class ReportWizard {
         CurReportDocument.removeAllTextSections();
         CurReportDocument.removeAllTextTables();
         CurDBMetaData.OldFieldNames = CurDBMetaData.FieldNames;
-        // Todo: Nur ausführen, when FieldNames anders als vorher -> dann muss auch Selektionslistbox leer gemacht werden.
+        // Todo: Nur ausf?hren, when FieldNames anders als vorher -> dann muss auch Selektionslistbox leer gemacht werden.
         CurUNODialog.assignPropertyToDialogControl("lstGroup", "StringItemList", CurDBMetaData.FieldTitles);
         xSelGroupListBox.removeItems((short) 0, xSelGroupListBox.getItemCount());
         GroupFieldVector = new java.util.Vector(CurDBMetaData.FieldNames.length);
