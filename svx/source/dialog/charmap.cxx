@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-22 10:27:56 $
+ *  last change: $Author: hdu $ $Date: 2000-12-06 16:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,72 @@
 #include "charmap.hxx"
 #include "dialmgr.hxx"
 
-// class SvxShowCharSet --------------------------------------------------
+// =======================================================================
+// TODO: LastInMap(), UnicodeToMapIndex() and MapIndexToUnicode() should be in Font,
+// we let them mature here though because it is currently the only use
+
+int             FirstInMap( const Font& );
+int             LastInMap( const Font& );
+int             UnicodeToMapIndex( const Font&, sal_Unicode c );
+sal_Unicode     MapIndexToUnicode( const Font&, int );
+bool            ContainsSurrogates( const Font& );
+int             CountGlyphs( const Font& );
+
+#define FIRST_UNICODE   sal_Unicode(0x0020)     /* ASCII space code */
+#define LAST_UNICODE    sal_Unicode(0xFFFD)     /* end of UCS2 */
+#define FIRST_SYMBOL    sal_Unicode(0xF020)
+#define LAST_SYMBOL     sal_Unicode(0xF0FF)
+#define FIRST_SURROGATE sal_Unicode(0xD800)
+#define LAST_SURROGATE  sal_Unicode(0xDFFF)
+#define COUNT_SURROGATES    (LAST_SURROGATE - FIRST_SURROGATE + 1);
+
+// -----------------------------------------------------------------------
+
+static bool ContainsSurrogates( const Font& rFont )
+{
+    return (rFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL );
+}
+
+static int FirstInMap( const Font& rFont )
+{
+    if( rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
+        return FIRST_SYMBOL;
+    return FIRST_UNICODE;
+}
+
+static int LastInMap( const Font& rFont )
+{
+    int n = LAST_UNICODE;
+    if( rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
+        n = LAST_SYMBOL;
+    if( (n >= FIRST_SURROGATE) && ContainsSurrogates( rFont ) )
+        n -= COUNT_SURROGATES;
+    return n;
+}
+
+static int UnicodeToMapIndex( const Font& rFont, sal_Unicode c )
+{
+    int nMapIndex = c;
+    if( (c > LAST_SURROGATE) && ContainsSurrogates( rFont ) )   // surrogates are not in map
+        nMapIndex -= COUNT_SURROGATES;
+    return nMapIndex;
+}
+
+static sal_Unicode MapIndexToUnicode( const Font& rFont, int nMapIndex )
+{
+    sal_Unicode c = nMapIndex;
+    if( (c >= FIRST_SURROGATE) && ContainsSurrogates( rFont ) ) // surrogates are not in map
+        c += COUNT_SURROGATES;
+    return c;
+}
+
+static int CountGlyphs( const Font& rFont )
+{
+    int nCount = LastInMap(rFont) - FirstInMap(rFont) + 1;
+    return nCount;
+}
+
+// class SvxShowCharSet ==================================================
 
 long SvxShowCharSet::nSelectedIndex = 0;
 
@@ -98,18 +163,13 @@ SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
     Control( pParent, rResId ),
     aVscrollSB( this, WB_VERT)
 {
-    if( nSelectedIndex > LastInMap() )
-        nSelectedIndex = LastInMap();
-    if( nSelectedIndex < FirstInMap() )
-        nSelectedIndex = FirstInMap();
-
     aOrigSize = GetOutputSizePixel();
     aOrigPos = GetPosPixel();
 
     SetStyle( GetStyle() | WB_CLIPCHILDREN );
     aVscrollSB.SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
-    aVscrollSB.EnableDrag( TRUE);
-    // other aVscroll settings depend on selected font => see SetFont
+    aVscrollSB.EnableDrag( TRUE );
+    // other settings like aVscroll depend on selected font => see SetFont
 
     bDrag = FALSE;
     InitSettings( TRUE, TRUE );
@@ -221,76 +281,34 @@ void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 }
 
 // -----------------------------------------------------------------------
-// TODO: LastInMap(), UnicodeToMapIndex() and MapIndexToUnicode() should be in Font,
-// we let them mature here though because it is currently the only use
 
-#define FIRST_UNICODE   sal_Unicode(0x0020)     // ASCII space code
-#define LAST_UNICODE    sal_Unicode(0xFFFF)     // end of UCS2
-#define FIRST_SURROGATE sal_Unicode(0xD800)
-#define LAST_SURROGATE  sal_Unicode(0xDFFF)
-#define COUNT_SURROGATE (LAST_SURROGATE - FIRST_SURROGATE + 1);
-
-int SvxShowCharSet::FirstInMap( void) const
+inline int SvxShowCharSet::FirstInView( void ) const
 {
-    return 0;
-}
-
-inline int SvxShowCharSet::LastInMap( void) const
-{
-    if( GetFont().GetCharSet() == RTL_TEXTENCODING_SYMBOL)
-        return (0x0FF - 0x020);
-    return (LAST_UNICODE - FIRST_UNICODE) - COUNT_SURROGATE;
-}
-
-inline int SvxShowCharSet::UnicodeToMapIndex( sal_Unicode c) const
-{
-    //TODO: should depend on font and encoding, change when Font can provide info
-    int nMapIndex = c - FIRST_UNICODE;
-    if( c > LAST_SURROGATE)         // skip surrogate unicode subset
-        nMapIndex -= COUNT_SURROGATE;
-    if( nMapIndex < FirstInMap() || nMapIndex > LastInMap())
-        nMapIndex = FirstInMap();
-    return nMapIndex;
-}
-
-inline sal_Unicode SvxShowCharSet::MapIndexToUnicode( int index) const
-{
-    //TODO: should depend on font and encoding, change when Font can provide info
-    sal_Unicode c = FIRST_UNICODE + index;
-    if( c >= FIRST_SURROGATE)       // skip surrogate unicode subset
-        c += COUNT_SURROGATE;
-    return c;
-}
-
-// -----------------------------------------------------------------------
-
-inline int SvxShowCharSet::FirstInView( void) const
-{
-    int nIndex = FirstInMap();
-    if( aVscrollSB.IsVisible())
+    int nIndex = FirstInMap( GetFont() );
+    if( aVscrollSB.IsVisible() )
         nIndex += aVscrollSB.GetThumbPos() * COLUMN_COUNT;
     return nIndex;
 }
 
-inline int SvxShowCharSet::LastInView( void) const
+inline int SvxShowCharSet::LastInView( void ) const
 {
     int nIndex = FirstInView();
     nIndex += ROW_COUNT * COLUMN_COUNT - 1;
-    return Min( nIndex, LastInMap());
+    return Min( nIndex, LastInMap( GetFont() ) );
 }
 
-inline Point SvxShowCharSet::MapIndexToPixel( int index) const
+inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
 {
-    int base = FirstInView();
-    int x = ((index - base) % COLUMN_COUNT) * nX;
-    int y = ((index - base) / COLUMN_COUNT) * nY;
-    return Point( x, y);
+    const int nBase = FirstInView();
+    int x = ((nIndex - nBase) % COLUMN_COUNT) * nX;
+    int y = ((nIndex - nBase) / COLUMN_COUNT) * nY;
+    return Point( x, y );
 }
 
 int SvxShowCharSet::PixelToMapIndex( const Point point) const
 {
-    int base = FirstInView();
-    return (base + (point.X()/nX) + (point.Y()/nY) * COLUMN_COUNT);
+    int nBase = FirstInView();
+    return (nBase + (point.X()/nX) + (point.Y()/nY) * COLUMN_COUNT);
 }
 
 // -----------------------------------------------------------------------
@@ -306,8 +324,8 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
     }
 
     sal_Unicode cChar = (sal_Unicode)rKEvt.GetCharCode();
-    int mapIndex = UnicodeToMapIndex( cChar);
-    if ( mapIndex>FirstInMap() && mapIndex<=LastInMap())
+    int mapIndex = UnicodeToMapIndex( GetFont(), cChar );
+    if ( mapIndex>FirstInMap( GetFont() ) && mapIndex<=LastInMap( GetFont() ))
     {
         SelectIndex( mapIndex );
         aPreSelectHdl.Call( this );
@@ -340,17 +358,17 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
             tmpSelected += ROW_COUNT * COLUMN_COUNT;
             break;
         case KEY_HOME:
-            tmpSelected = FirstInMap();
+            tmpSelected = FirstInMap( GetFont() );
             break;
         case KEY_END:
-            tmpSelected = LastInMap();
+            tmpSelected = LastInMap( GetFont() );
             break;
         default:
             Control::KeyInput( rKEvt );
-            tmpSelected = FirstInMap() - 1; // mark as invalid
+            tmpSelected = FirstInMap(  GetFont() ) - 1; // mark as invalid
     }
 
-    if ( tmpSelected >= FirstInMap() && tmpSelected <= LastInMap() ) {
+    if ( tmpSelected >= FirstInMap( GetFont() ) && tmpSelected <= LastInMap( GetFont() ) ) {
         SelectIndex( tmpSelected, TRUE);
         aPreSelectHdl.Call( this );
     }
@@ -360,14 +378,14 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
 
 void SvxShowCharSet::Paint( const Rectangle& )
 {
-    DrawChars_Impl( FirstInView(), LastInView());
+    DrawChars_Impl( FirstInView(), LastInView() );
 }
 
 // -----------------------------------------------------------------------
 
 void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
 {
-    if( n1 > LastInView() || n2 < FirstInView())
+    if( n1 > LastInView() || n2 < FirstInView() )
         return;
 
     Size aOutputSize = GetOutputSizePixel();
@@ -375,14 +393,14 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
         aOutputSize.setWidth( aOutputSize.Width() - SBWIDTH);
 
     int i;
-    for ( i = 1; i < COLUMN_COUNT; ++i)
+    for ( i = 1; i < COLUMN_COUNT; ++i )
         DrawLine( Point( nX * i, 0 ), Point( nX * i, aOutputSize.Height() ) );
     for ( i = 1; i < ROW_COUNT; ++i )
         DrawLine( Point( 0, nY * i ), Point( aOutputSize.Width(), nY * i ) );
 
     for ( i = n1; i <= n2; ++i)
     {
-        Point pix = MapIndexToPixel( i);
+        Point pix = MapIndexToPixel( i );
         int x = pix.X();
         int y = pix.Y();
 
@@ -406,7 +424,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
             SetFillColor( aFillCol );
         }
 
-        String aCharStr( MapIndexToUnicode( i ) );
+        String aCharStr( MapIndexToUnicode( GetFont(), i ) );
         x += ( nX - GetTextWidth(aCharStr) ) / 2;
         y += ( nY - GetTextHeight() ) / 2;
         DrawText( Point( x, y ), aCharStr );
@@ -443,47 +461,48 @@ void SvxShowCharSet::InitSettings( BOOL bForeground, BOOL bBackground )
 
 sal_Unicode SvxShowCharSet::GetSelectCharacter() const
 {
-    return MapIndexToUnicode( nSelectedIndex );
+    return MapIndexToUnicode( GetFont(), nSelectedIndex );
 }
 
 // -----------------------------------------------------------------------
 
 void SvxShowCharSet::SetFont( const Font& rFont )
 {
-    sal_Unicode cSelectedChar = MapIndexToUnicode( nSelectedIndex );
-    if( nSelectedIndex < FirstInView() || nSelectedIndex > LastInView() )
-        cSelectedChar = MapIndexToUnicode( FirstInView() );
+    // save last selected unicode
+    sal_Unicode cSelectedChar = MapIndexToUnicode( GetFont(), nSelectedIndex );
 
     Font aFont = rFont;
-
     aFont.SetWeight( WEIGHT_LIGHT );
     aFont.SetSize( Size( 0, 12 ) );
     aFont.SetTransparent( TRUE );
     Control::SetFont( aFont );
 
     // hide scrollbar when there is nothing to scroll
-    BOOL bNeedVscroll = ( LastInMap()-FirstInMap()+1 > ROW_COUNT*COLUMN_COUNT );
+    BOOL bNeedVscroll = (CountGlyphs(aFont) > ROW_COUNT*COLUMN_COUNT);
 
     nX = (aOrigSize.Width() - (bNeedVscroll ? SBWIDTH : 0)) / COLUMN_COUNT;
     nY = aOrigSize.Height() / ROW_COUNT;
 
     if( bNeedVscroll)
     {
-        aVscrollSB.SetPosSizePixel( nX * COLUMN_COUNT, 0, SBWIDTH, nY * ROW_COUNT);
+        aVscrollSB.SetPosSizePixel( nX * COLUMN_COUNT, 0, SBWIDTH, nY * ROW_COUNT );
         aVscrollSB.SetRangeMin( 0 );
-        int nLastRow = (LastInMap() - FirstInMap() + COLUMN_COUNT) / COLUMN_COUNT;
-        aVscrollSB.SetRangeMax( nLastRow);
-        aVscrollSB.SetPageSize( ROW_COUNT-1);
-        aVscrollSB.SetVisibleSize( ROW_COUNT);
+        int nLastRow = (CountGlyphs( aFont ) - 1 + COLUMN_COUNT) / COLUMN_COUNT;
+        aVscrollSB.SetRangeMax( nLastRow );
+        aVscrollSB.SetPageSize( ROW_COUNT-1 );
+        aVscrollSB.SetVisibleSize( ROW_COUNT );
     }
 
     // rearrange CharSet element in sync with nX- and nY-multiples
-    Size aNewSize( nX * COLUMN_COUNT + (bNeedVscroll ? SBWIDTH : 0), nY * ROW_COUNT);
-    Point aNewPos = aOrigPos + Point( (aOrigSize.Width() - aNewSize.Width()) / 2, 0);
-    SetPosPixel( aNewPos);
-    SetOutputSizePixel( aNewSize);
+    Size aNewSize( nX * COLUMN_COUNT + (bNeedVscroll ? SBWIDTH : 0), nY * ROW_COUNT );
+    Point aNewPos = aOrigPos + Point( (aOrigSize.Width() - aNewSize.Width()) / 2, 0 );
+    SetPosPixel( aNewPos );
+    SetOutputSizePixel( aNewSize );
 
-    int nMapIndex = UnicodeToMapIndex( cSelectedChar );
+    // restore last selected unicode
+    int nMapIndex = UnicodeToMapIndex( aFont, cSelectedChar );
+    if( nMapIndex < FirstInView() || nMapIndex > LastInView() )
+        cSelectedChar = MapIndexToUnicode( aFont, FirstInView() );
     SelectIndex( nMapIndex );
     aVscrollSB.Show( bNeedVscroll );
 
@@ -501,7 +520,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
         // need to scroll up to see selected item
         int nNewPos = aVscrollSB.GetThumbPos();
         nNewPos -= (FirstInView() - nNewIndex + COLUMN_COUNT-1) / COLUMN_COUNT;
-        aVscrollSB.SetThumbPos( nNewPos);
+        aVscrollSB.SetThumbPos( nNewPos );
         nSelectedIndex = nNewIndex;
         Invalidate();
     }
@@ -509,7 +528,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
         // need to scroll down to see selected item
         int nNewPos = aVscrollSB.GetThumbPos();
         nNewPos += (nNewIndex - LastInView() + COLUMN_COUNT) / COLUMN_COUNT;
-        aVscrollSB.SetThumbPos( nNewPos);
+        aVscrollSB.SetThumbPos( nNewPos );
         nSelectedIndex = nNewIndex;
         Invalidate();
     } else {
@@ -519,9 +538,9 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
         SetLineColor();
         SetFillColor( GetBackground().GetColor() );
 
-        Point aOldPixel = MapIndexToPixel( nSelectedIndex);
+        Point aOldPixel = MapIndexToPixel( nSelectedIndex );
         aOldPixel.Move( +1, +1);
-        DrawRect( Rectangle( aOldPixel, Size( nX-1, nY-1)));
+        DrawRect( Rectangle( aOldPixel, Size( nX-1, nY-1 ) ) );
         SetLineColor( aLineCol );
         SetFillColor( aFillCol );
 
@@ -538,11 +557,11 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
 
 void SvxShowCharSet::SelectCharacter( sal_Unicode cNew, BOOL bFocus )
 {
-    int nMapIndex = UnicodeToMapIndex( cNew);
+    int nMapIndex = UnicodeToMapIndex( GetFont(), cNew );
     SelectIndex( nMapIndex, bFocus);
     if( !bFocus) {
-        // move selected item to top row if unfocused
-        aVscrollSB.SetThumbPos( (nMapIndex - FirstInMap()) / COLUMN_COUNT);
+        // move selected item to top row if not in focus
+        aVscrollSB.SetThumbPos( (nMapIndex - FirstInMap( GetFont() )) / COLUMN_COUNT );
         Invalidate();
     }
 }
@@ -551,8 +570,8 @@ void SvxShowCharSet::SelectCharacter( sal_Unicode cNew, BOOL bFocus )
 
 IMPL_LINK_INLINE_START( SvxShowCharSet, VscrollHdl, ScrollBar *, EMPTYARG )
 {
-    if( nSelectedIndex < FirstInView() || nSelectedIndex > LastInView())
-        SelectIndex( FirstInView());
+    if( nSelectedIndex < FirstInView() || nSelectedIndex > LastInView() )
+        SelectIndex( FirstInView() );
 
     Invalidate();
     return 0;
@@ -565,11 +584,10 @@ SvxShowCharSet::~SvxShowCharSet()
 {
 }
 
-// class SvxShowText -----------------------------------------------------
+// class SvxShowText =====================================================
 
-SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL _bCenter) :
-
-    Control( pParent, rResId ),
+SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, BOOL _bCenter )
+:   Control( pParent, rResId ),
     bCenter( _bCenter)
 {
 }
@@ -614,10 +632,9 @@ void SvxShowText::SetText( const String& rText )
 // -----------------------------------------------------------------------
 
 SvxShowText::~SvxShowText()
-{
-}
+{}
 
-// class SvxCharacterMap -------------------------------------------------
+// class SvxCharacterMap =================================================
 
 SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne ) :
 
@@ -863,7 +880,16 @@ IMPL_LINK( SvxCharacterMap, CharHighlightHdl, Control *, EMPTYARG )
     aShowChar.SetText( aTemp );
     aShowChar.Update();
     if ( bSelect )
-        aTemp = String::CreateFromInt32( (USHORT)c );
+    {
+        // no sprintf or hex-formatter around :-(
+        char buf[8] = "0x0000";
+        for( int i = 0; i < 4; ++i )
+        {
+            char h = (c >> (4*i)) & 0x0F;
+            buf[5-i] = (h > 9) ? (h - 10 + 'A') : (h + '0');
+        }
+        aTemp = String::CreateFromAscii( buf );
+    }
     aCharCodeText.SetText( aTemp );
     return 0;
 }
@@ -890,11 +916,9 @@ IMPL_LINK_INLINE_END( SvxCharacterMap, DeleteHdl, PushButton *, EMPTYARG )
 // -----------------------------------------------------------------------
 
 SvxCharacterMap::~SvxCharacterMap()
-{
-}
+{}
 
-
-// class SubsetMap -------------------------------------------------------
+// class SubsetMap =======================================================
 // TODO: should be moved into Font Attributes stuff
 // we let it mature here though because it is currently the only use
 
