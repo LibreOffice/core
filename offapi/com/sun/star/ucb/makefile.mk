@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kso $ $Date: 2001-07-03 10:59:27 $
+#   last change: $Author: dv $ $Date: 2001-07-27 11:26:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -205,6 +205,7 @@ IDLFILES=\
     SendMediaTypes.idl\
     ServiceNotFoundException.idl\
     SimpleFileAccess.idl\
+    SortedDynamicResultSetFactory.idl\
     SortingInfo.idl\
     Store.idl\
     SynchronizePolicy.idl\
