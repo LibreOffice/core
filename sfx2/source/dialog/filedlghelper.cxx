@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:41:08 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
+#include <svtools/securityoptions.hxx>
 #endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
@@ -1452,6 +1455,13 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
         // the password will be set in case user decide so
         rpSet->ClearItem( SID_PASSWORD );
+    }
+
+    if ( mbHasPassword && !mbPwdCheckBoxState )
+    {
+        SvtSecurityOptions aSecOpt;
+        mbPwdCheckBoxState = (
+            aSecOpt.IsOptionSet( SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD ) );
     }
 
     rpURLList = NULL;
