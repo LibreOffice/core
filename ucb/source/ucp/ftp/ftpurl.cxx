@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-24 16:43:05 $
+ *  last change: $Author: abi $ $Date: 2002-10-25 12:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,13 @@ void FTPURL::parse(const rtl::OUString& url)
                         m_aUsername,
                         aPassword,
                         aAccount);
+
+    // now check for something like ";type=i" at end of url
+    if(m_aPathSegmentVec.size() &&
+       (l = m_aPathSegmentVec.back().indexOf(sal_Unicode(';'))) != -1) {
+        m_aType = m_aPathSegmentVec.back().copy(l);
+        m_aPathSegmentVec.back() = m_aPathSegmentVec.back().copy(0,l);
+    }
 }
 
 
@@ -319,6 +326,7 @@ rtl::OUString FTPURL::ident(bool withslash,bool internal) const
         if(bff.getLength() && bff[bff.getLength()-1] != sal_Unicode('/'))
             bff.append(sal_Unicode('/'));
 
+    bff.append(m_aType);
     return bff.makeStringAndClear();
 }
 
@@ -370,6 +378,7 @@ rtl::OUString FTPURL::parent(bool internal) const
     else if(last.equalsAscii(".."))
         bff.append(last).appendAscii("/..");
 
+    bff.append(m_aType);
     return bff.makeStringAndClear();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-24 16:43:05 $
+ *  last change: $Author: abi $ $Date: 2002-10-25 12:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ namespace ftp {
         bool m_bShowPassword;
         mutable rtl::OUString m_aHost;
         mutable rtl::OUString m_aPort;
+        mutable rtl::OUString m_aType;
 
         /** Contains the decoded pathsegments of the url.
          */
