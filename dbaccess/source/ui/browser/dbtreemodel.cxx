@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-16 14:22:02 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,18 +88,27 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
-    sal_uInt16 DBTreeListModel::getImageResId(SbaTableQueryBrowser::EntryType _eType)
+    sal_uInt16 DBTreeListModel::getImageResId(SbaTableQueryBrowser::EntryType _eType,
+                                                sal_Bool _bHiContrast)
     {
         switch (_eType)
         {
             case SbaTableQueryBrowser::etTable:
-                return TABLE_TREE_ICON;
+                return _bHiContrast ? TABLE_TREE_ICON_SCH : TABLE_TREE_ICON;
             case SbaTableQueryBrowser::etView:
-                return VIEW_TREE_ICON;
+                return _bHiContrast ? VIEW_TREE_ICON_SCH : VIEW_TREE_ICON;
             case SbaTableQueryBrowser::etQuery:
-                return QUERY_TREE_ICON;
+                return _bHiContrast ? QUERY_TREE_ICON_SCH : QUERY_TREE_ICON;
             case SbaTableQueryBrowser::etBookmark:
-                return BOOKMARK_TREE_ICON;
+                return _bHiContrast ? BOOKMARK_TREE_ICON_SCH : BOOKMARK_TREE_ICON;
+            case SbaTableQueryBrowser::etDatasource:
+                return _bHiContrast ? IMG_DATABASE_SCH : IMG_DATABASE;
+            case SbaTableQueryBrowser::etBookmarkContainer:
+                return _bHiContrast ? BOOKMARKFOLDER_TREE_ICON_SCH : BOOKMARKFOLDER_TREE_ICON;
+            case SbaTableQueryBrowser::etQueryContainer:
+                return _bHiContrast ? QUERYFOLDER_TREE_ICON_SCH : QUERYFOLDER_TREE_ICON;
+            case SbaTableQueryBrowser::etTableContainer:
+                return _bHiContrast ? TABLEFOLDER_TREE_ICON_SCH : TABLEFOLDER_TREE_ICON;
         }
         OSL_ENSURE(sal_False, "DBTreeListModel::getImageResId: invalid entry type!");
         return 0;
@@ -110,6 +119,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/08/16 14:22:02  hr
+ *  #65293#: syntax
+ *
  *  Revision 1.9  2001/08/15 13:14:59  oj
  *  #88644# correct getImplementationId and insert some DBG's
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace dbaui
             ~DBTreeListUserData();
         };
 
-        static sal_uInt16 getImageResId(SbaTableQueryBrowser::EntryType _eType);
+        static sal_uInt16 getImageResId(SbaTableQueryBrowser::EntryType _eType,sal_Bool _bHiContrast);
     };
 }
 
