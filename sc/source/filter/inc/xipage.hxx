@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:47:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XIPAGE_HXX
 #define SC_XIPAGE_HXX
 
@@ -80,6 +79,9 @@ public:
 
     /** Returns read-only access to the page data. */
     inline const XclPageData& GetPageData() const { return maData; }
+
+    /** Initializes the object to be used for a new sheet. */
+    void                Initialize();
 
     /** Reads a SETUP record and inserts contained data. */
     void                ReadSetup( XclImpStream& rStrm );
@@ -104,7 +106,7 @@ public:
     inline void         SetFitToPages( bool bFitToPages ) { maData.mbFitToPages = bFitToPages; }
 
     /** Creates a page stylesheet from current settings and sets it at current sheet. */
-    void                CreatePageStyle();
+    void                Finalize();
 
 private:
     XclPageData         maData;         /// Page settings data.
