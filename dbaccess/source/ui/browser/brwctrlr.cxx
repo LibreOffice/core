@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:31:22 $
+ *  last change: $Author: oj $ $Date: 2002-03-04 13:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1722,7 +1722,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         }
         else
         {
-            DlgOrderCrit aDlg(getBrowserView(),xCon,m_xParser,xSup->getColumns());
+            DlgOrderCrit aDlg(getBrowserView(),xCon,m_xParser,xSup->getColumns(),xColSet);
             String aOrder;
             if(!aDlg.Execute())
             {
