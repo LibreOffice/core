@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvalidJavaSettingsException.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:55:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com { module sun { module star { module java {
     by distributors to determine what versions are supported. If this
     file is modified, then the current settings are regarded as invalid.</p>
 
-    @since OOo2.0.0
+    @since OOo 2.0.0
  */
 exception InvalidJavaSettingsException: JavaInitializationException
 {
