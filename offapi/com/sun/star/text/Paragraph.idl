@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Paragraph.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:50 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 #ifndef __com_sun_star_style_ParagraphProperties_idl__
 #include <com/sun/star/style/ParagraphProperties.idl>
 #endif
+#ifndef __com_sun_star_style_ParagraphPropertiesAsian_idl__
+#include <com/sun/star/style/ParagraphPropertiesAsian.idl>
+#endif
+#ifndef __com_sun_star_style_ParagraphPropertiesComplex_idl__
+#include <com/sun/star/style/ParagraphPropertiesComplex.idl>
+#endif
 
 #ifndef __com_sun_star_style_CharacterProperties_idl__
 #include <com/sun/star/style/CharacterProperties.idl>
@@ -113,6 +119,12 @@ service Paragraph
     [optional] service com::sun::star::style::ParagraphProperties;
     /** This service is present when the paragraph object refers
         to a text range */
+    [optional] service com::sun::star::style::ParagraphPropertiesAsian;
+    /** This service is present when the paragraph object refers
+        to a text range */
+    [optional] service com::sun::star::style::ParagraphPropertiesComplex;
+    /** This service is present when the paragraph object refers
+        to a text range */
     [optional] service com::sun::star::style::CharacterProperties;
     /** This service is present when the paragraph object refers
         to a text range */
@@ -120,7 +132,6 @@ service Paragraph
     /** This service is present when the paragraph object refers
         to a text range */
     [optional] service com::sun::star::style::CharacterPropertiesComplex;
-
     /** This service is present when the paragraph object refers
         to a text table */
     [optional] service com::sun::star::text::TextTable;
