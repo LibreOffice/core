@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combtransition.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:08:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,207 +59,163 @@
  *
  ************************************************************************/
 
-#include <canvas/debug.hxx>
-#include <combtransition.hxx>
+#include "combtransition.hxx"
+#include "canvas/debug.hxx"
+#include "basegfx/polygon/b2dpolygontools.hxx"
+#include "basegfx/polygon/b2dpolypolygontools.hxx"
 
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
+namespace presentation {
+namespace internal {
 
+namespace {
 
-namespace presentation
+basegfx::B2DPolyPolygon createClipPolygon(
+    const ::basegfx::B2DVector& rDirection,
+    const ::basegfx::B2DSize& rSlideSize,
+    int nNumStrips, int nOffset )
 {
-    namespace internal
+    // create clip polygon in standard orientation (will later
+    // be rotated to match direction vector)
+    ::basegfx::B2DPolyPolygon aClipPoly;
+
+    // create nNumStrips/2 vertical strips
+    for( int i=nOffset; i<nNumStrips; i+=2 )
     {
-        namespace
-        {
-            ::basegfx::B2DPolyPolygon createClipPolygon( const ::basegfx::B2DVector& rDirection,
-                                                         const ::basegfx::B2DSize&   rSlideSize,
-                                                         int                         nNumStrips,
-                                                         int                         nOffset )
-            {
-                // create clip polygon in standard orientation (will later
-                // be rotated to match direction vector)
-                ::basegfx::B2DPolyPolygon aClipPoly;
-
-                // create nNumStrips/2 vertical strips
-                for( int i=nOffset; i<nNumStrips; i+=2 )
-                {
-                    aClipPoly.append(
-                        ::basegfx::tools::createPolygonFromRect(
-                            ::basegfx::B2DRectangle( (double)i/nNumStrips, 0.0,
-                                                     (double)(i+1)/nNumStrips, 1.0) ) );
-
-                }
-
-                // rotate polygons, such that the strips are parallel to
-                // the given direction vector
-                const ::basegfx::B2DVector aUpVec(0.0, 1.0);
-                ::basegfx::B2DHomMatrix    aMatrix;
-
-                aMatrix.translate( -0.5, -0.5 );
-                aMatrix.rotate( aUpVec.angle( rDirection ) );
-                aMatrix.translate( 0.5, 0.5 );
-
-                // blow up clip polygon to slide size
-                aMatrix.scale( rSlideSize.getX(),
-                               rSlideSize.getY() );
-
-                aClipPoly.transform( aMatrix );
-
-                return aClipPoly;
-            }
-        }
-
-        CombTransition::CombTransition( const SlideBitmapSharedPtr& rLeavingBitmap,
-                                        const SlideBitmapSharedPtr& rEnteringBitmap,
-                                        const ::basegfx::B2DVector& rPushDirection,
-                                        sal_Int32                   nNumStripes,
-                                        const SoundPlayerSharedPtr& rSoundPlayer ) :
-            maViews(),
-            mpLeavingBitmap( rLeavingBitmap ),
-            mpEnteringBitmap( rEnteringBitmap ),
-            maBitmapSize( getBitmapSize() ),
-            maClipPolygon1( createClipPolygon( rPushDirection,
-                                               maBitmapSize,
-                                               nNumStripes,
-                                               0 ) ),
-            maClipPolygon2( createClipPolygon( rPushDirection,
-                                               maBitmapSize,
-                                               nNumStripes,
-                                               1 ) ),
-            maPushDirection( maBitmapSize *
-                             rPushDirection ),
-            mpSoundPlayer( rSoundPlayer )
-        {
-            ENSURE_AND_THROW(
-                rEnteringBitmap.get(),
-                "CombTransition::CombTransition(): Invalid entering bitmap" );
-        }
-
-        ::basegfx::B2DSize CombTransition::getBitmapSize() const
-        {
-            return ::basegfx::B2DSize(
-                ::basegfx::B2DTuple( mpEnteringBitmap->getSize() ) );
-        }
-
-        void CombTransition::start( const AnimatableShapeSharedPtr&,
-                                    const ShapeAttributeLayerSharedPtr& )
-        {
-            // TODO(F1): Maybe we've got to create separate bitmaps
-            // for every view, should the canvas not allow for
-            // cross-canvas bitmap rendering
-            if( mpSoundPlayer.get() )
-                mpSoundPlayer->startPlayback();
-        }
-
-        void CombTransition::end()
-        {
-            if( mpSoundPlayer.get() )
-                mpSoundPlayer->stopPlayback();
-
-            // drop all references
-            mpLeavingBitmap.reset();
-            mpEnteringBitmap.reset();
-
-            maViews.clear();
-        }
-
-        bool CombTransition::operator()( double t )
-        {
-            if( !mpEnteringBitmap.get() )
-            {
-                return false;
-            }
-
-            for( ::std::size_t i=0, nEntries=maViews.size(); i<nEntries; ++i )
-            {
-                // calc bitmap offsets. The enter/leaving bitmaps are only
-                // as large as the actual slides. For scaled-down
-                // presentations, we have to move the left, top edge of
-                // those bitmaps to the actual position, governed by the
-                // given view transform. The aBitmapPosPixel local
-                // variable is already in device coordinate space
-                // (i.e. pixel).
-
-                ::cppcanvas::CanvasSharedPtr pCanvas( maViews[i]->getCanvas() );
-
-                ENSURE_AND_THROW( pCanvas.get(),
-                                  "CombTransition::operator(): Invalid canvas" );
-
-                // TODO(F2): Properly respect clip here. Might have to be transformed, too.
-                const ::basegfx::B2DHomMatrix   aViewTransform( pCanvas->getTransformation() );
-                const ::basegfx::B2DPoint       aPageOrigin( aViewTransform * ::basegfx::B2DPoint() );
-
-                // change transformation on cloned canvas to be in
-                // device pixel
-                pCanvas = pCanvas->clone();
-                pCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
-
-                // TODO(Q2): Use basegfx bitmaps here
-                // TODO(F1): SlideBitmap is not fully portable between different canvases!
-
-                if( mpLeavingBitmap.get() )
-                {
-                    // render odd strips
-                    mpLeavingBitmap->move( aPageOrigin + t*maPushDirection );
-                    mpLeavingBitmap->clip( maClipPolygon1 );
-                    mpLeavingBitmap->draw( pCanvas );
-
-                    // render even strips
-                    mpLeavingBitmap->move( aPageOrigin - t*maPushDirection );
-                    mpLeavingBitmap->clip( maClipPolygon2 );
-                    mpLeavingBitmap->draw( pCanvas );
-                }
-
-                // TODO(Q2): Use basegfx bitmaps here
-                // TODO(F1): SlideBitmap is not fully portable between different canvases!
-
-                // render odd strips
-                mpEnteringBitmap->move( aPageOrigin + (t-1.0)*maPushDirection );
-                mpEnteringBitmap->clip( maClipPolygon1 );
-                mpEnteringBitmap->draw( pCanvas );
-
-                // render even strips
-                mpEnteringBitmap->move( aPageOrigin + (1.0-t)*maPushDirection );
-                mpEnteringBitmap->clip( maClipPolygon2 );
-                mpEnteringBitmap->draw( pCanvas );
-            }
-
-            return true;
-        }
-
-        double CombTransition::getUnderlyingValue() const
-        {
-            return 0.0;     // though this should be used in concert with
-                            // ActivitiesFactory::createSimpleActivity, better
-                            // explicitely name our start value.
-                            // Permissible range for operator() above is [0,1]
-        }
-
-        void CombTransition::addView( const ViewSharedPtr& rView )
-        {
-            // TODO(Q2): Try to use UnoViewContainer here.
-            maViews.push_back( rView );
-        }
-
-        bool CombTransition::removeView( const ViewSharedPtr& rView )
-        {
-            // remove locally
-            const ViewVector::iterator aEnd( maViews.end() );
-            ViewVector::iterator aIter;
-            if( (aIter=::std::remove( maViews.begin(),
-                                      aEnd,
-                                      rView)) == aEnd )
-            {
-                // view seemingly was not added, failed
-                return false;
-            }
-
-            // actually erase from container
-            maViews.erase( aIter, aEnd );
-
-            return true;
-        }
+        aClipPoly.append(
+            ::basegfx::tools::createPolygonFromRect(
+                ::basegfx::B2DRectangle( (double)i/nNumStrips, 0.0,
+                                         (double)(i+1)/nNumStrips, 1.0) ) );
 
     }
+
+    // rotate polygons, such that the strips are parallel to
+    // the given direction vector
+    const ::basegfx::B2DVector aUpVec(0.0, 1.0);
+    ::basegfx::B2DHomMatrix    aMatrix;
+
+    aMatrix.translate( -0.5, -0.5 );
+    aMatrix.rotate( aUpVec.angle( rDirection ) );
+    aMatrix.translate( 0.5, 0.5 );
+
+    // blow up clip polygon to slide size
+    aMatrix.scale( rSlideSize.getX(),
+                   rSlideSize.getY() );
+
+    aClipPoly.transform( aMatrix );
+
+    return aClipPoly;
 }
+
+}
+
+CombTransition::CombTransition(
+    boost::optional<SlideSharedPtr> const & leavingSlide,
+    const SlideSharedPtr& pEnteringSlide,
+    const SoundPlayerSharedPtr& pSoundPlayer,
+    const ::basegfx::B2DVector& rPushDirection,
+    sal_Int32                   nNumStripes )
+    : SlideChangeBase( leavingSlide, pEnteringSlide, pSoundPlayer,
+                       false /* no leaving sprite */,
+                       false /* no entering sprite */ ),
+      maPushDirectionUnit( rPushDirection ),
+      mnNumStripes( nNumStripes )
+{
+}
+
+void CombTransition::renderComb(
+    double t, UnoViewSharedPtr const & pView ) const
+{
+    const cppcanvas::CanvasSharedPtr pCanvas_ = pView->getCanvas();
+
+    // calc bitmap offsets. The enter/leaving bitmaps are only
+    // as large as the actual slides. For scaled-down
+    // presentations, we have to move the left, top edge of
+    // those bitmaps to the actual position, governed by the
+    // given view transform. The aBitmapPosPixel local
+    // variable is already in device coordinate space
+    // (i.e. pixel).
+
+    ENSURE_AND_THROW( pCanvas_.get(),
+                      "CombTransition::renderComb(): Invalid canvas" );
+
+    // TODO(F2): Properly respect clip here. Might have to be transformed, too.
+    const basegfx::B2DHomMatrix viewTransform( pCanvas_->getTransformation() );
+    const basegfx::B2DPoint pageOrigin( viewTransform * basegfx::B2DPoint() );
+
+    // change transformation on cloned canvas to be in
+    // device pixel
+    cppcanvas::CanvasSharedPtr pCanvas( pCanvas_->clone() );
+    basegfx::B2DHomMatrix transform;
+    basegfx::B2DPoint p;
+
+    // TODO(Q2): Use basegfx bitmaps here
+    // TODO(F1): SlideBitmap is not fully portable between different canvases!
+
+    const basegfx::B2DSize enteringSizePixel(
+        getEnteringSizePixel(pView) );
+
+    const basegfx::B2DVector aPushDirection = basegfx::B2DVector(
+        enteringSizePixel * maPushDirectionUnit );
+    const basegfx::B2DPolyPolygon aClipPolygon1 = basegfx::B2DPolyPolygon(
+        createClipPolygon( maPushDirectionUnit,
+                           enteringSizePixel,
+                           mnNumStripes, 0 ) );
+    const basegfx::B2DPolyPolygon aClipPolygon2 = basegfx::B2DPolyPolygon(
+        createClipPolygon( maPushDirectionUnit,
+                           enteringSizePixel,
+                           mnNumStripes, 1 ) );
+
+    SlideBitmapSharedPtr const & pLeavingBitmap = getLeavingBitmap();
+    if (pLeavingBitmap.get() != 0) {
+        // render odd strips:
+        pLeavingBitmap->clip( aClipPolygon1 );
+        // don't modify bitmap object (no move!):
+        p = basegfx::B2DPoint( pageOrigin + (t * aPushDirection) );
+        transform.translate( p.getX(), p.getY() );
+        pCanvas->setTransformation( transform );
+        pLeavingBitmap->draw( pCanvas );
+
+        // render even strips:
+        pLeavingBitmap->clip( aClipPolygon2 );
+        // don't modify bitmap object (no move!):
+        transform.identity();
+        p = basegfx::B2DPoint( pageOrigin - (t * aPushDirection) );
+        transform.translate( p.getX(), p.getY() );
+        pCanvas->setTransformation( transform );
+        pLeavingBitmap->draw( pCanvas );
+    }
+
+    // TODO(Q2): Use basegfx bitmaps here
+    // TODO(F1): SlideBitmap is not fully portable between different canvases!
+
+    // render odd strips:
+    SlideBitmapSharedPtr const & pEnteringBitmap = getEnteringBitmap();
+    pEnteringBitmap->clip( aClipPolygon1 );
+    // don't modify bitmap object (no move!):
+    transform.identity();
+    p = basegfx::B2DPoint( pageOrigin + ((t - 1.0) * aPushDirection) );
+    transform.translate( p.getX(), p.getY() );
+    pCanvas->setTransformation( transform );
+    pEnteringBitmap->draw( pCanvas );
+
+    // render even strips:
+    pEnteringBitmap->clip( aClipPolygon2 );
+    // don't modify bitmap object (no move!):
+    transform.identity();
+    p = basegfx::B2DPoint( pageOrigin + ((1.0 - t) * aPushDirection) );
+    transform.translate( p.getX(), p.getY() );
+    pCanvas->setTransformation( transform );
+    pEnteringBitmap->draw( pCanvas );
+}
+
+bool CombTransition::operator()( double t )
+{
+    SlideBitmapSharedPtr const & pSlideBitmap = getEnteringBitmap();
+    if (pSlideBitmap.get() == 0)
+        return false;
+    for_each_view( boost::bind( &CombTransition::renderComb, this, t, _1 ) );
+    return true;
+}
+
+} // namespace internal
+} // namespace presentation
