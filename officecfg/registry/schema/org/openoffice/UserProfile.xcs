@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UserProfile.xcs,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:49:40 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,39 +62,12 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="UserProfile" oor:package="org.openoffice" xml:lang="en-US"> <info>
 		<author>DG</author>
-		<desc xml:lang="en-US">Contains user-related information, such as name and address.</desc>
+		<desc >Contains user-related information, such as name and address.</desc>
 	</info>
 	<component>
 		<group oor:name="Data">
 			<info>
-				<desc xml:lang="en-US">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="el">Περιέχει πληροφορίες για το χρήστη, όπως όνομα και διεύθυνση.</desc>
-				<desc xml:lang="nl">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="fr">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="fi">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="cs">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="da">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="zh-CN">含有与使用者相关的信息，如姓名和地址。</desc>
-				<desc xml:lang="zh-TW">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="ar">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="he">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="ca">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="pt">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="ru">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="es">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="it">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="sv">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="pl">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="pt-BR">Contém informações relacionadas ao usuário, tal como nome e endereço.</desc>
-				<desc xml:lang="ja">名前や住所など、ユーザーに関連する情報が含まれます。</desc>
-				<desc xml:lang="ko">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="tr">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="th">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="hi-IN">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="x-comment">; Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="sk">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="hu">Contains user-related information, such as name and address.</desc>
-				<desc xml:lang="sl">Contains user-related information, such as name and address.</desc>
+				<desc>Contains user-related information, such as name and address.</desc>
 			</info>
 			<prop oor:name="o" oor:type="xs:string">
 				<!-- OldPath: User -->
@@ -102,34 +75,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="el">Ορίζει το όνομα της εταιρείας του χρήστη.</desc>
-					<desc xml:lang="nl">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="fr">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="fi">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="cs">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="da">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="zh-CN">指定使用者公司的名称。</desc>
-					<desc xml:lang="zh-TW">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="ar">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="he">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="ca">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="pt">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="ru">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="es">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="it">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="sv">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="pl">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="pt-BR">Especifica o nome da empresa do usuário.</desc>
-					<desc xml:lang="ja">ユーザーの会社名を指定します。</desc>
-					<desc xml:lang="ko">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="tr">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="th">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="hi-IN">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="x-comment">; Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="sk">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="hu">Specifies the name of the user&apos;s company.</desc>
-					<desc xml:lang="sl">Specifies the name of the user&apos;s company.</desc>
+					<desc>Specifies the name of the user&apos;s company.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -140,34 +86,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the first name of the user.</desc>
-					<desc xml:lang="el">Ορίζει το όνομα του χρήστη.</desc>
-					<desc xml:lang="nl">Specifies the first name of the user.</desc>
-					<desc xml:lang="fr">Specifies the first name of the user.</desc>
-					<desc xml:lang="fi">Specifies the first name of the user.</desc>
-					<desc xml:lang="cs">Specifies the first name of the user.</desc>
-					<desc xml:lang="da">Specifies the first name of the user.</desc>
-					<desc xml:lang="zh-CN">指定使用者的名字。</desc>
-					<desc xml:lang="zh-TW">Specifies the first name of the user.</desc>
-					<desc xml:lang="ar">Specifies the first name of the user.</desc>
-					<desc xml:lang="he">Specifies the first name of the user.</desc>
-					<desc xml:lang="ca">Specifies the first name of the user.</desc>
-					<desc xml:lang="pt">Specifies the first name of the user.</desc>
-					<desc xml:lang="ru">Specifies the first name of the user.</desc>
-					<desc xml:lang="es">Specifies the first name of the user.</desc>
-					<desc xml:lang="it">Specifies the first name of the user.</desc>
-					<desc xml:lang="sv">Specifies the first name of the user.</desc>
-					<desc xml:lang="pl">Specifies the first name of the user.</desc>
-					<desc xml:lang="pt-BR">Especifica o primeiro nome do usuário.</desc>
-					<desc xml:lang="ja">ユーザーの名を指定します。</desc>
-					<desc xml:lang="ko">Specifies the first name of the user.</desc>
-					<desc xml:lang="tr">Specifies the first name of the user.</desc>
-					<desc xml:lang="th">Specifies the first name of the user.</desc>
-					<desc xml:lang="hi-IN">Specifies the first name of the user.</desc>
-					<desc xml:lang="x-comment">; Specifies the first name of the user.</desc>
-					<desc xml:lang="sk">Specifies the first name of the user.</desc>
-					<desc xml:lang="hu">Specifies the first name of the user.</desc>
-					<desc xml:lang="sl">Specifies the first name of the user.</desc>
+					<desc>Specifies the first name of the user.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -178,34 +97,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the last name of the user.</desc>
-					<desc xml:lang="el">Ορίζει το επίθετο του χρήστη.</desc>
-					<desc xml:lang="nl">Specifies the last name of the user.</desc>
-					<desc xml:lang="fr">Specifies the last name of the user.</desc>
-					<desc xml:lang="fi">Specifies the last name of the user.</desc>
-					<desc xml:lang="cs">Specifies the last name of the user.</desc>
-					<desc xml:lang="da">Specifies the last name of the user.</desc>
-					<desc xml:lang="zh-CN">指定使用者的姓氏。</desc>
-					<desc xml:lang="zh-TW">Specifies the last name of the user.</desc>
-					<desc xml:lang="ar">Specifies the last name of the user.</desc>
-					<desc xml:lang="he">Specifies the last name of the user.</desc>
-					<desc xml:lang="ca">Specifies the last name of the user.</desc>
-					<desc xml:lang="pt">Specifies the last name of the user.</desc>
-					<desc xml:lang="ru">Specifies the last name of the user.</desc>
-					<desc xml:lang="es">Specifies the last name of the user.</desc>
-					<desc xml:lang="it">Specifies the last name of the user.</desc>
-					<desc xml:lang="sv">Specifies the last name of the user.</desc>
-					<desc xml:lang="pl">Specifies the last name of the user.</desc>
-					<desc xml:lang="pt-BR">Especifica o sobrenome do usuário.</desc>
-					<desc xml:lang="ja">ユーザーの姓を指定します。</desc>
-					<desc xml:lang="ko">Specifies the last name of the user.</desc>
-					<desc xml:lang="tr">Specifies the last name of the user.</desc>
-					<desc xml:lang="th">Specifies the last name of the user.</desc>
-					<desc xml:lang="hi-IN">Specifies the last name of the user.</desc>
-					<desc xml:lang="x-comment">; Specifies the last name of the user.</desc>
-					<desc xml:lang="sk">Specifies the last name of the user.</desc>
-					<desc xml:lang="hu">Specifies the last name of the user.</desc>
-					<desc xml:lang="sl">Specifies the last name of the user.</desc>
+					<desc>Specifies the last name of the user.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -216,34 +108,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="el">Ορίζει τα αρχικά του χρήστη.</desc>
-					<desc xml:lang="nl">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="fr">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="fi">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="cs">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="da">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="zh-CN">指定使用者的缩写。</desc>
-					<desc xml:lang="zh-TW">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="ar">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="he">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="ca">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="pt">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="ru">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="es">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="it">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="sv">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="pl">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="pt-BR">Especifica as iniciais do usuário.</desc>
-					<desc xml:lang="ja">ユーザーのイニシャルを指定します。</desc>
-					<desc xml:lang="ko">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="tr">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="th">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="hi-IN">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="x-comment">; Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="sk">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="hu">Specifies the user&apos;s initials.</desc>
-					<desc xml:lang="sl">Specifies the user&apos;s initials.</desc>
+					<desc>Specifies the user&apos;s initials.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -254,34 +119,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the street where the use lives.</desc>
-					<desc xml:lang="el">Ορίζει το δρόμο στον οποίο κατοικεί ο χρήστης.</desc>
-					<desc xml:lang="nl">Specifies the street where the use lives.</desc>
-					<desc xml:lang="fr">Specifies the street where the use lives.</desc>
-					<desc xml:lang="fi">Specifies the street where the use lives.</desc>
-					<desc xml:lang="cs">Specifies the street where the use lives.</desc>
-					<desc xml:lang="da">Specifies the street where the use lives.</desc>
-					<desc xml:lang="zh-CN">指定使用者所在的街道。</desc>
-					<desc xml:lang="zh-TW">Specifies the street where the use lives.</desc>
-					<desc xml:lang="ar">Specifies the street where the use lives.</desc>
-					<desc xml:lang="he">Specifies the street where the use lives.</desc>
-					<desc xml:lang="ca">Specifies the street where the use lives.</desc>
-					<desc xml:lang="pt">Specifies the street where the use lives.</desc>
-					<desc xml:lang="ru">Specifies the street where the use lives.</desc>
-					<desc xml:lang="es">Specifies the street where the use lives.</desc>
-					<desc xml:lang="it">Specifies the street where the use lives.</desc>
-					<desc xml:lang="sv">Specifies the street where the use lives.</desc>
-					<desc xml:lang="pl">Specifies the street where the use lives.</desc>
-					<desc xml:lang="pt-BR">Especifica a rua onde o usuário vive</desc>
-					<desc xml:lang="ja">ユーザーの住所の番地を指定します。</desc>
-					<desc xml:lang="ko">Specifies the street where the use lives.</desc>
-					<desc xml:lang="tr">Specifies the street where the use lives.</desc>
-					<desc xml:lang="th">Specifies the street where the use lives.</desc>
-					<desc xml:lang="hi-IN">Specifies the street where the use lives.</desc>
-					<desc xml:lang="x-comment">; Specifies the street where the use lives.</desc>
-					<desc xml:lang="sk">Specifies the street where the use lives.</desc>
-					<desc xml:lang="hu">Specifies the street where the use lives.</desc>
-					<desc xml:lang="sl">Specifies the street where the use lives.</desc>
+					<desc>Specifies the street where the use lives.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -292,34 +130,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the city where the user lives.</desc>
-					<desc xml:lang="el">Ορίζει την πόλη στην οποία κατοικεί ο χρήστης.</desc>
-					<desc xml:lang="nl">Specifies the city where the user lives.</desc>
-					<desc xml:lang="fr">Specifies the city where the user lives.</desc>
-					<desc xml:lang="fi">Specifies the city where the user lives.</desc>
-					<desc xml:lang="cs">Specifies the city where the user lives.</desc>
-					<desc xml:lang="da">Specifies the city where the user lives.</desc>
-					<desc xml:lang="zh-CN">指定使用者所在的城市。</desc>
-					<desc xml:lang="zh-TW">Specifies the city where the user lives.</desc>
-					<desc xml:lang="ar">Specifies the city where the user lives.</desc>
-					<desc xml:lang="he">Specifies the city where the user lives.</desc>
-					<desc xml:lang="ca">Specifies the city where the user lives.</desc>
-					<desc xml:lang="pt">Specifies the city where the user lives.</desc>
-					<desc xml:lang="ru">Specifies the city where the user lives.</desc>
-					<desc xml:lang="es">Specifies the city where the user lives.</desc>
-					<desc xml:lang="it">Specifies the city where the user lives.</desc>
-					<desc xml:lang="sv">Specifies the city where the user lives.</desc>
-					<desc xml:lang="pl">Specifies the city where the user lives.</desc>
-					<desc xml:lang="pt-BR">Especifica a cidade onde o usuário vive</desc>
-					<desc xml:lang="ja">ユーザーの住所の市町村を指定します。</desc>
-					<desc xml:lang="ko">Specifies the city where the user lives.</desc>
-					<desc xml:lang="tr">Specifies the city where the user lives.</desc>
-					<desc xml:lang="th">Specifies the city where the user lives.</desc>
-					<desc xml:lang="hi-IN">Specifies the city where the user lives.</desc>
-					<desc xml:lang="x-comment">; Specifies the city where the user lives.</desc>
-					<desc xml:lang="sk">Specifies the city where the user lives.</desc>
-					<desc xml:lang="hu">Specifies the city where the user lives.</desc>
-					<desc xml:lang="sl">Specifies the city where the user lives.</desc>
+					<desc>Specifies the city where the user lives.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -330,34 +141,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the state where the user lives.</desc>
-					<desc xml:lang="el">Ορίζει την πολιτεία στην οποία κατοικεί ο χρήστης.</desc>
-					<desc xml:lang="nl">Specifies the state where the user lives.</desc>
-					<desc xml:lang="fr">Specifies the state where the user lives.</desc>
-					<desc xml:lang="fi">Specifies the state where the user lives.</desc>
-					<desc xml:lang="cs">Specifies the state where the user lives.</desc>
-					<desc xml:lang="da">Specifies the state where the user lives.</desc>
-					<desc xml:lang="zh-CN">指定使用者所在的省/市/自治区。</desc>
-					<desc xml:lang="zh-TW">Specifies the state where the user lives.</desc>
-					<desc xml:lang="ar">Specifies the state where the user lives.</desc>
-					<desc xml:lang="he">Specifies the state where the user lives.</desc>
-					<desc xml:lang="ca">Specifies the state where the user lives.</desc>
-					<desc xml:lang="pt">Specifies the state where the user lives.</desc>
-					<desc xml:lang="ru">Specifies the state where the user lives.</desc>
-					<desc xml:lang="es">Specifies the state where the user lives.</desc>
-					<desc xml:lang="it">Specifies the state where the user lives.</desc>
-					<desc xml:lang="sv">Specifies the state where the user lives.</desc>
-					<desc xml:lang="pl">Specifies the state where the user lives.</desc>
-					<desc xml:lang="pt-BR">Especifica o estado onde o usuário vive</desc>
-					<desc xml:lang="ja">ユーザーの住所の州を指定します。</desc>
-					<desc xml:lang="ko">Specifies the state where the user lives.</desc>
-					<desc xml:lang="tr">Specifies the state where the user lives.</desc>
-					<desc xml:lang="th">Specifies the state where the user lives.</desc>
-					<desc xml:lang="hi-IN">Specifies the state where the user lives.</desc>
-					<desc xml:lang="x-comment">; Specifies the state where the user lives.</desc>
-					<desc xml:lang="sk">Specifies the state where the user lives.</desc>
-					<desc xml:lang="hu">Specifies the state where the user lives.</desc>
-					<desc xml:lang="sl">Specifies the state where the user lives.</desc>
+					<desc>Specifies the state where the user lives.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -368,34 +152,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="el">Ορίζει τον Ταχ. κώδικα του χρήστη.</desc>
-					<desc xml:lang="nl">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="fr">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="fi">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="cs">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="da">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="zh-CN">指定使用者所在地的邮政编码。</desc>
-					<desc xml:lang="zh-TW">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="ar">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="he">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="ca">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="pt">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="ru">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="es">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="it">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="sv">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="pl">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="pt-BR">Especifica o CEP do usuário</desc>
-					<desc xml:lang="ja">ユーザーの郵便番号を指定します。</desc>
-					<desc xml:lang="ko">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="tr">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="th">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="hi-IN">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="x-comment">; Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="sk">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="hu">Specifies the user&apos;s ZIP-code.</desc>
-					<desc xml:lang="sl">Specifies the user&apos;s ZIP-code.</desc>
+					<desc>Specifies the user&apos;s ZIP-code.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -406,34 +163,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the country where the user lives.</desc>
-					<desc xml:lang="el">Ορίζει τη χώρα στην οποία κατοικεί ο χρήστης.</desc>
-					<desc xml:lang="nl">Specifies the country where the user lives.</desc>
-					<desc xml:lang="fr">Specifies the country where the user lives.</desc>
-					<desc xml:lang="fi">Specifies the country where the user lives.</desc>
-					<desc xml:lang="cs">Specifies the country where the user lives.</desc>
-					<desc xml:lang="da">Specifies the country where the user lives.</desc>
-					<desc xml:lang="zh-CN">指定使用者所在的国家/地区。</desc>
-					<desc xml:lang="zh-TW">Specifies the country where the user lives.</desc>
-					<desc xml:lang="ar">Specifies the country where the user lives.</desc>
-					<desc xml:lang="he">Specifies the country where the user lives.</desc>
-					<desc xml:lang="ca">Specifies the country where the user lives.</desc>
-					<desc xml:lang="pt">Specifies the country where the user lives.</desc>
-					<desc xml:lang="ru">Specifies the country where the user lives.</desc>
-					<desc xml:lang="es">Specifies the country where the user lives.</desc>
-					<desc xml:lang="it">Specifies the country where the user lives.</desc>
-					<desc xml:lang="sv">Specifies the country where the user lives.</desc>
-					<desc xml:lang="pl">Specifies the country where the user lives.</desc>
-					<desc xml:lang="pt-BR">Especifica o país onde o usuário vive</desc>
-					<desc xml:lang="ja">ユーザーの住所の国名を指定します。</desc>
-					<desc xml:lang="ko">Specifies the country where the user lives.</desc>
-					<desc xml:lang="tr">Specifies the country where the user lives.</desc>
-					<desc xml:lang="th">Specifies the country where the user lives.</desc>
-					<desc xml:lang="hi-IN">Specifies the country where the user lives.</desc>
-					<desc xml:lang="x-comment">; Specifies the country where the user lives.</desc>
-					<desc xml:lang="sk">Specifies the country where the user lives.</desc>
-					<desc xml:lang="hu">Specifies the country where the user lives.</desc>
-					<desc xml:lang="sl">Specifies the country where the user lives.</desc>
+					<desc>Specifies the country where the user lives.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -444,34 +174,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="el">Ορίζει τον τίτλο του χρήστη.</desc>
-					<desc xml:lang="nl">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="fr">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="fi">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="cs">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="da">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="zh-CN">指定使用者的头衔。</desc>
-					<desc xml:lang="zh-TW">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="ar">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="he">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="ca">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="pt">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="ru">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="es">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="it">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="sv">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="pl">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="pt-BR">Especifica o título do usuário</desc>
-					<desc xml:lang="ja">ユーザーの肩書きを指定します。</desc>
-					<desc xml:lang="ko">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="tr">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="th">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="hi-IN">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="x-comment">; Specifies the user&apos;s title.</desc>
-					<desc xml:lang="sk">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="hu">Specifies the user&apos;s title.</desc>
-					<desc xml:lang="sl">Specifies the user&apos;s title.</desc>
+					<desc>Specifies the user&apos;s title.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -482,34 +185,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="el">Ορίζει τη θέση του χρήστη. Αυτό το πεδίο υπάρχει μόνο για συμβατότητα προς τα πίσω. Δεν ορίζεται για το ldap orgPerson.</desc>
-					<desc xml:lang="nl">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="fr">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="fi">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="cs">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="da">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="zh-CN">指定使用者的职务。此字段仅用于保持向后兼容。ldap orgPerson 未定义此字段。</desc>
-					<desc xml:lang="zh-TW">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="ar">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="he">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="ca">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="pt">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="ru">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="es">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="it">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="sv">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="pl">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="pt-BR">Especifica o cargo do usuário. Este campo só permanece para que haja compatibilidade com versões anteriores. Ele não está definido para ldap orgPerson.</desc>
-					<desc xml:lang="ja">ユーザーの部署を指定します。このフィールドは、下位互換性のためにのみ存在します。LDAP orgPerson に対して定義されていません。</desc>
-					<desc xml:lang="ko">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="tr">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="th">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="hi-IN">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="x-comment">; Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="sk">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="hu">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
-					<desc xml:lang="sl">Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
+					<desc>Specifies the users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -520,34 +196,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="el">Ορίζει το ιδιωτικό τηλέφωνο του χρήστη.</desc>
-					<desc xml:lang="nl">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="fr">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="fi">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="cs">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="da">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="zh-CN">指定使用者的私人电话号码。</desc>
-					<desc xml:lang="zh-TW">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="ar">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="he">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="ca">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="pt">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="ru">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="es">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="it">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="sv">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="pl">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="pt-BR">Especifica o número de telefone pessoal do usuário.</desc>
-					<desc xml:lang="ja">ユーザーの私用の電話番号を指定します。</desc>
-					<desc xml:lang="ko">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="tr">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="th">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="hi-IN">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="x-comment">; Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="sk">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="hu">Specifies the user&apos;s private telephone number.</desc>
-					<desc xml:lang="sl">Specifies the user&apos;s private telephone number.</desc>
+					<desc>Specifies the user&apos;s private telephone number.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -558,34 +207,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="el">Ορίζει το τηλέφωνο του χρήστη στην εργασία.</desc>
-					<desc xml:lang="nl">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="fr">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="fi">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="cs">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="da">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="zh-CN">指定使用者办公室的电话号码。</desc>
-					<desc xml:lang="zh-TW">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="ar">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="he">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="ca">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="pt">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="ru">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="es">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="it">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="sv">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="pl">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="pt-BR">Especifica o número de telefone comercial do usuário.</desc>
-					<desc xml:lang="ja">ユーザーの仕事用の電話番号を指定します。</desc>
-					<desc xml:lang="ko">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="tr">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="th">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="hi-IN">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="x-comment">; Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="sk">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="hu">Specifies the user&apos;s telephone number at work.</desc>
-					<desc xml:lang="sl">Specifies the user&apos;s telephone number at work.</desc>
+					<desc>Specifies the user&apos;s telephone number at work.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -596,34 +218,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="el">Ορίζει τον αριθμό fax του χρήστη.</desc>
-					<desc xml:lang="nl">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="fr">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="fi">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="cs">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="da">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="zh-CN">指定使用者的传真号码。</desc>
-					<desc xml:lang="zh-TW">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="ar">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="he">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="ca">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="pt">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="ru">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="es">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="it">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="sv">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="pl">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="pt-BR">Especifica o número de fax do usuário.</desc>
-					<desc xml:lang="ja">ユーザーの Fax 番号を指定します。</desc>
-					<desc xml:lang="ko">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="tr">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="th">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="hi-IN">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="x-comment">; Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="sk">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="hu">Specifies the user&apos;s fax number.</desc>
-					<desc xml:lang="sl">Specifies the user&apos;s fax number.</desc>
+					<desc>Specifies the user&apos;s fax number.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -634,34 +229,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="el">Ορίζει τη διεύθυνση e-mail του χρήστη.</desc>
-					<desc xml:lang="nl">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="fr">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="fi">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="cs">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="da">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="zh-CN">指定使用者的电子邮件地址。</desc>
-					<desc xml:lang="zh-TW">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="ar">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="he">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="ca">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="pt">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="ru">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="es">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="it">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="sv">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="pl">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="pt-BR">Especifica o e-mail do usuário.</desc>
-					<desc xml:lang="ja">ユーザーの E-mail アドレスを指定します。</desc>
-					<desc xml:lang="ko">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="tr">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="th">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="hi-IN">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="x-comment">; Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="sk">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="hu">Specifies the user&apos;s e-mail address.</desc>
-					<desc xml:lang="sl">Specifies the user&apos;s e-mail address.</desc>
+					<desc>Specifies the user&apos;s e-mail address.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -672,34 +240,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="el">Το πεδίο αυτό διατηρείται για λόγους συμβατότητας.</desc>
-					<desc xml:lang="nl">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="fr">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="fi">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="cs">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="da">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="zh-CN">此字段仅用于保持向后兼容。</desc>
-					<desc xml:lang="zh-TW">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="ar">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="he">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="ca">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="pt">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="ru">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="es">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="it">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="sv">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="pl">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="pt-BR">Este campo é mantido para compatibilidade com versões anteriores.</desc>
-					<desc xml:lang="ja">下位互換性のためにのみ存続しているフィールドです。</desc>
-					<desc xml:lang="ko">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="tr">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="th">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="hi-IN">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="x-comment">; This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="sk">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="hu">This field is kept for backwards compatibility.</desc>
-					<desc xml:lang="sl">This field is kept for backwards compatibility.</desc>
+					<desc>This field is kept for backwards compatibility.</desc>
 				</info>
 				<value>UserGroup</value>
 			</prop>
