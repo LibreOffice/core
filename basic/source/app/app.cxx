@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-14 11:07:03 $
+ *  last change: $Author: gh $ $Date: 2000-11-29 12:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,10 @@ void BasicApp::Main( )
 
     pFrame->Show();
 
-    GetpApp()->PostUserEvent( LINK( this, BasicApp, LateInit ) );
+    SetDefModalDialogParent( pFrame );
+    SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
+
+    PostUserEvent( LINK( this, BasicApp, LateInit ) );
     Execute();
 
     // Loeschen der Members:
