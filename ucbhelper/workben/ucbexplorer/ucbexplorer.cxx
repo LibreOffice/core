@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 09:52:18 $
+ *  last change: $Author: kso $ $Date: 2000-11-10 09:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,11 +687,7 @@ void UcbExplorerTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
                             Application::AcquireSolarMutex( n );
 
                             InsertEntry(
-#if SUPD>611
                                 xContentAccess->queryContentIdentifierString(),
-#else
-                                xContentAccess->queryContentIdentfierString(),
-#endif
                                 pParent );
 
                             n = Application::ReleaseSolarMutex();
@@ -1087,8 +1083,6 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
     }
     catch ( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        DBG_ERROR(
-            "UcbExplorerTreeListBox::InsertEntry - CommandAbortedException!" );
     }
     catch ( Exception& )
     {
