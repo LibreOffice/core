@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-09 07:31:18 $
+ *  last change: $Author: thb $ $Date: 2002-09-30 15:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,7 +941,10 @@ IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
         {
             ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAccParent( pParent->GetAccessible() );
 
-            if( xAccParent.is() )
+            // #103856# Disable accessibility if no model/view data available
+            if( pView &&
+                pModel &&
+                xAccParent.is() )
             {
                 mpAccContext = new SvxGraphCtrlAccessibleContext( xAccParent, *this );
                 mpAccContext->acquire();
