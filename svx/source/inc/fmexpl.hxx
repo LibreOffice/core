@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-15 15:47:45 $
+ *  last change: $Author: fs $ $Date: 2002-05-08 06:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,17 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
+#include <com/sun/star/form/XForm.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
+#include <com/sun/star/container/XContainerListener.hpp>
 #endif
 
 
@@ -148,80 +153,84 @@
 #endif
 
 class SdrObjListIter;
+class FmFormShell;
+class SdrObject;
+class FmFormModel;
+
 //========================================================================
 class FmEntryData;
-class FmExplInsertedHint : public SfxHint
+class FmNavInsertedHint : public SfxHint
 {
     FmEntryData* pEntryData;
     sal_uInt32 nPos;
 
 public:
     TYPEINFO();
-    FmExplInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos );
-    virtual ~FmExplInsertedHint();
+    FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos );
+    virtual ~FmNavInsertedHint();
 
     FmEntryData* GetEntryData() const { return pEntryData; }
     sal_uInt32 GetRelPos() const { return nPos; }
 };
 
 //========================================================================
-class FmExplModelReplacedHint : public SfxHint
+class FmNavModelReplacedHint : public SfxHint
 {
     FmEntryData* pEntryData;    // die Daten des Eintrages, der ein neues Model bekommen hat
 
 public:
     TYPEINFO();
-    FmExplModelReplacedHint( FmEntryData* pAffectedEntryData );
-    virtual ~FmExplModelReplacedHint();
+    FmNavModelReplacedHint( FmEntryData* pAffectedEntryData );
+    virtual ~FmNavModelReplacedHint();
 
     FmEntryData* GetEntryData() const { return pEntryData; }
 };
 
 //========================================================================
-class FmExplRemovedHint : public SfxHint
+class FmNavRemovedHint : public SfxHint
 {
     FmEntryData* pEntryData;
 
 public:
     TYPEINFO();
-    FmExplRemovedHint( FmEntryData* pInsertedEntryData );
-    virtual ~FmExplRemovedHint();
+    FmNavRemovedHint( FmEntryData* pInsertedEntryData );
+    virtual ~FmNavRemovedHint();
 
     FmEntryData* GetEntryData() const { return pEntryData; }
 };
 
 //========================================================================
-class FmExplNameChangedHint : public SfxHint
+class FmNavNameChangedHint : public SfxHint
 {
     FmEntryData*    pEntryData;
     ::rtl::OUString          aNewName;
 
 public:
     TYPEINFO();
-    FmExplNameChangedHint( FmEntryData* pData, const ::rtl::OUString& rNewName );
-    virtual ~FmExplNameChangedHint();
+    FmNavNameChangedHint( FmEntryData* pData, const ::rtl::OUString& rNewName );
+    virtual ~FmNavNameChangedHint();
 
     FmEntryData*    GetEntryData() const { return pEntryData; }
     ::rtl::OUString          GetNewName() const { return aNewName; }
 };
 
 //========================================================================
-class FmExplClearedHint : public SfxHint
+class FmNavClearedHint : public SfxHint
 {
 public:
     TYPEINFO();
-    FmExplClearedHint();
-    virtual ~FmExplClearedHint();
+    FmNavClearedHint();
+    virtual ~FmNavClearedHint();
 };
 
 //========================================================================
-class FmExplViewMarksChanged : public SfxHint
+class FmNavViewMarksChanged : public SfxHint
 {
     FmFormView* pView;
 public:
     TYPEINFO();
-    FmExplViewMarksChanged(FmFormView* pWhichView) { pView = pWhichView; }
-    virtual ~FmExplViewMarksChanged() {}
+    FmNavViewMarksChanged(FmFormView* pWhichView) { pView = pWhichView; }
+    virtual ~FmNavViewMarksChanged() {}
 
     FmFormView* GetAffectedView() { return pView; }
 };
@@ -272,19 +281,19 @@ public:
 };
 
 //========================================================================
-// FmExplRequestSelectHint - jemand teilt dem FmExplorer mit, dass er bestimmte Eintraege selektieren soll
+// FmNavRequestSelectHint - jemand teilt dem NavigatorTree mit, dass er bestimmte Eintraege selektieren soll
 
 typedef FmEntryData* FmEntryDataPtr;
 SV_DECL_PTRARR_SORT( FmEntryDataArray, FmEntryDataPtr, 16, 16 )
 
-class FmExplRequestSelectHint : public SfxHint
+class FmNavRequestSelectHint : public SfxHint
 {
     FmEntryDataArray    m_arredToSelect;
     sal_Bool                m_bMixedSelection;
 public:
     TYPEINFO();
-    FmExplRequestSelectHint() { }
-    virtual ~FmExplRequestSelectHint() {}
+    FmNavRequestSelectHint() { }
+    virtual ~FmNavRequestSelectHint() {}
 
     void SetMixedSelection(sal_Bool bMixedSelection) { m_bMixedSelection = bMixedSelection; }
     sal_Bool IsMixedSelection() { return m_bMixedSelection; }
@@ -337,21 +346,18 @@ public:
     void ModelReplaced(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xNew, const ImageList& ilNavigatorImages);
 };
 
+
 //========================================================================
-class FmExplorerModel;
-class FmXExplPropertyChangeList : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener,
+namespace svxform { class NavigatorTreeModel; };
+class FmXNavPropertyObserver : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener,
                                   ::com::sun::star::container::XContainerListener>
 {
-    FmExplorerModel* m_pExplModel;
+    ::svxform::NavigatorTreeModel*  m_pNavModel;
     sal_uInt32 m_nLocks;
     sal_Bool   m_bCanUndo;
 
 public:
-    FmXExplPropertyChangeList(FmExplorerModel* pModel);
-
-    // UNO-Anbindung
-    //  DECLARE_UNO3_AGG_DEFAULTS( FmXExplPropertyChangeList, UsrObject );
-    //  virtual sal_Bool queryInterface(::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rOut);
+    FmXNavPropertyObserver( ::svxform::NavigatorTreeModel* pModel );
 
 // XEventListenerListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);
@@ -369,242 +375,248 @@ public:
     void UnLock() { m_nLocks--; }
     sal_Bool IsLocked() const { return m_nLocks != 0; }
     sal_Bool CanUndo() const { return m_bCanUndo; }
-    void ReleaseModel() { m_pExplModel = NULL; }
+    void ReleaseModel() { m_pNavModel = NULL; }
 protected:
     void Insert(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xIface, sal_Int32 nIndex);
 };
 
-//========================================================================
-class FmFormShell;
-class SdrObject;
-class FmFormModel;
-class FmExplorerModel : public SfxBroadcaster
-                       ,public SfxListener
+//............................................................................
+namespace svxform
 {
-    friend class FmExplorer;
-    friend class FmXExplPropertyChangeList;
+//............................................................................
 
-    FmEntryDataList*            m_pRootList;
-    FmFormShell*                m_pFormShell;
-    FmFormPage*                 m_pFormPage;
-    FmFormModel*                m_pFormModel;
-    FmXExplPropertyChangeList*  m_pPropChangeList;
+    //========================================================================
+    class NavigatorTreeModel : public SfxBroadcaster
+                           ,public SfxListener
+    {
+        friend class NavigatorTree;
+        friend class FmXNavPropertyObserver;
 
-    const ImageList             m_ilNavigatorImages;
+        FmEntryDataList*            m_pRootList;
+        FmFormShell*                m_pFormShell;
+        FmFormPage*                 m_pFormPage;
+        FmFormModel*                m_pFormModel;
+        FmXNavPropertyObserver*  m_pPropChangeList;
 
-    void Update( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xForms );
-    FmControlData* CreateControlData( ::com::sun::star::form::XFormComponent* pFormComponent );
+        const ImageList             m_ilNavigatorImages;
 
-    void InsertForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm, sal_uInt32 nRelPos);
-    void RemoveForm(FmFormData* pFormData);
+        void Update( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xForms );
+        FmControlData* CreateControlData( ::com::sun::star::form::XFormComponent* pFormComponent );
 
-    void InsertFormComponent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xComp, sal_uInt32 nRelPos);
-    void RemoveFormComponent(FmControlData* pControlData);
-    void InsertSdrObj(const SdrObject* pSdrObj);
-    void RemoveSdrObj(const SdrObject* pSdrObj);
+        void InsertForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm, sal_uInt32 nRelPos);
+        void RemoveForm(FmFormData* pFormData);
 
-    void ReplaceFormComponent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xOld, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xNew);
+        void InsertFormComponent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xComp, sal_uInt32 nRelPos);
+        void RemoveFormComponent(FmControlData* pControlData);
+        void InsertSdrObj(const SdrObject* pSdrObj);
+        void RemoveSdrObj(const SdrObject* pSdrObj);
 
-    void BroadcastMarkedObjects(const SdrMarkList& mlMarked);
-        // einen RequestSelectHint mit den aktuell markierten Objekten broadcasten
-    sal_Bool InsertFormComponent(FmExplRequestSelectHint& rHint, SdrObject* pObject);
-        // ist ein Helper fuer vorherige, managet das Abteigen in SdrObjGroups
-        // Rueckgabe sal_True, wenn das Objekt eine FormComponent ist (oder rekursiv nur aus solchen besteht)
+        void ReplaceFormComponent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xOld, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xNew);
 
-public:
-    FmExplorerModel(const ImageList& ilNavigatorImages);
-    virtual ~FmExplorerModel();
+        void BroadcastMarkedObjects(const SdrMarkList& mlMarked);
+            // einen RequestSelectHint mit den aktuell markierten Objekten broadcasten
+        sal_Bool InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject);
+            // ist ein Helper fuer vorherige, managet das Abteigen in SdrObjGroups
+            // Rueckgabe sal_True, wenn das Objekt eine FormComponent ist (oder rekursiv nur aus solchen besteht)
 
-    void FillBranch( FmFormData* pParentData );
-    void ClearBranch( FmFormData* pParentData );
-    void Update( FmFormShell* pNewShell );
+    public:
+        NavigatorTreeModel(const ImageList& ilNavigatorImages);
+        virtual ~NavigatorTreeModel();
 
-    void Insert( FmEntryData* pEntryData, sal_uInt32 nRelPos = LIST_APPEND,
-                                          sal_Bool bAlterModel = sal_False );
-    void Remove( FmEntryData* pEntryData, sal_Bool bAlterModel = sal_False );
+        void FillBranch( FmFormData* pParentData );
+        void ClearBranch( FmFormData* pParentData );
+        void Update( FmFormShell* pNewShell );
 
-    sal_Bool Rename( FmEntryData* pEntryData, const ::rtl::OUString& rNewText );
-    sal_Bool IsNameAlreadyDefined( const ::rtl::OUString& rName, FmFormData* pParentData );
-    void Clear();
-    sal_Bool CheckEntry( FmEntryData* pEntryData );
-    void SetModified( sal_Bool bMod=sal_True );
+        void Insert( FmEntryData* pEntryData, sal_uInt32 nRelPos = LIST_APPEND,
+                                              sal_Bool bAlterModel = sal_False );
+        void Remove( FmEntryData* pEntryData, sal_Bool bAlterModel = sal_False );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >    GetForms() const;
-    FmFormShell*        GetFormShell() const { return m_pFormShell; }
-    FmFormPage*         GetFormPage() const { return m_pFormPage; }
-    FmEntryData*        FindData( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElement, FmEntryDataList* pDataList, sal_Bool bRecurs=sal_True );
-    FmEntryData*        FindData( const ::rtl::OUString& rText, FmFormData* pParentData, sal_Bool bRecurs=sal_True );
-    FmEntryDataList*    GetRootList() const { return m_pRootList; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
-    SdrObject*          GetSdrObj( FmControlData* pControlData );
-    SdrObject*          Search(SdrObjListIter& rIter, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xComp);
+        sal_Bool Rename( FmEntryData* pEntryData, const ::rtl::OUString& rNewText );
+        sal_Bool IsNameAlreadyDefined( const ::rtl::OUString& rName, FmFormData* pParentData );
+        void Clear();
+        sal_Bool CheckEntry( FmEntryData* pEntryData );
+        void SetModified( sal_Bool bMod=sal_True );
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-};
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >    GetForms() const;
+        FmFormShell*        GetFormShell() const { return m_pFormShell; }
+        FmFormPage*         GetFormPage() const { return m_pFormPage; }
+        FmEntryData*        FindData( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElement, FmEntryDataList* pDataList, sal_Bool bRecurs=sal_True );
+        FmEntryData*        FindData( const ::rtl::OUString& rText, FmFormData* pParentData, sal_Bool bRecurs=sal_True );
+        FmEntryDataList*    GetRootList() const { return m_pRootList; }
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
+        SdrObject*          GetSdrObj( FmControlData* pControlData );
+        SdrObject*          Search(SdrObjListIter& rIter, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xComp);
 
+        virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    };
 
-//========================================================================
-typedef SvLBoxEntry* SvLBoxEntryPtr;
-SV_DECL_PTRARR_SORT( SvLBoxEntrySortedArray, SvLBoxEntryPtr, 16, 16 )
+    //========================================================================
+    typedef SvLBoxEntry* SvLBoxEntryPtr;
+    SV_DECL_PTRARR_SORT( SvLBoxEntrySortedArray, SvLBoxEntryPtr, 16, 16 )
 
-class FmExplorer : public SvTreeListBox, public SfxListener
-{
-    enum DROP_ACTION        { DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
-    enum SELDATA_ITEMS      { SDI_DIRTY, SDI_ALL, SDI_NORMALIZED, SDI_NORMALIZED_FORMARK };
+    class NavigatorTree : public SvTreeListBox, public SfxListener
+    {
+        enum DROP_ACTION        { DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
+        enum SELDATA_ITEMS      { SDI_DIRTY, SDI_ALL, SDI_NORMALIZED, SDI_NORMALIZED_FORMARK };
 
-    // beim Droppen will ich scrollen und Folder aufklappen koennen, dafuer :
-    AutoTimer           m_aDropActionTimer;
-    Timer               m_aSynchronizeTimer;
-    // die Meta-Daten ueber meine aktuelle Selektion
-    SvLBoxEntrySortedArray  m_arrCurrentSelection;
-    // die Images, die ich brauche (und an FormDatas und EntryDatas weiterreiche)
-    ImageList           m_ilNavigatorImages;
+        // beim Droppen will ich scrollen und Folder aufklappen koennen, dafuer :
+        AutoTimer           m_aDropActionTimer;
+        Timer               m_aSynchronizeTimer;
+        // die Meta-Daten ueber meine aktuelle Selektion
+        SvLBoxEntrySortedArray  m_arrCurrentSelection;
+        // die Images, die ich brauche (und an FormDatas und EntryDatas weiterreiche)
+        ImageList           m_ilNavigatorImages;
 
-    ::svxform::OControlExchangeHelper   m_aControlExchange;
+        ::svxform::OControlExchangeHelper   m_aControlExchange;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
-    FmExplorerModel*    m_pExplModel;
-    SvLBoxEntry*        m_pRootEntry;
-    SvLBoxEntry*        m_pEditEntry;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
+        NavigatorTreeModel*    m_pNavModel;
+        SvLBoxEntry*        m_pRootEntry;
+        SvLBoxEntry*        m_pEditEntry;
 
-    sal_uInt32              nEditEvent;
+        sal_uInt32              nEditEvent;
 
-    Image               m_aCollapsedNodeImg;
-    Image               m_aExpandedNodeImg;
-    Image               m_aRootImg;
+        Image               m_aCollapsedNodeImg;
+        Image               m_aExpandedNodeImg;
+        Image               m_aRootImg;
 
-    SELDATA_ITEMS       m_sdiState;
-    Point               m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
-    DROP_ACTION         m_aDropActionType;
+        SELDATA_ITEMS       m_sdiState;
+        Point               m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
+        DROP_ACTION         m_aDropActionType;
 
-    sal_uInt16              m_nSelectLock;
-    sal_uInt16              m_nFormsSelected;
-    sal_uInt16              m_nControlsSelected;
-    sal_uInt16              m_nHiddenControls;      // (die Zahl geht in m_nControlsSelected mit ein)
+        sal_uInt16              m_nSelectLock;
+        sal_uInt16              m_nFormsSelected;
+        sal_uInt16              m_nControlsSelected;
+        sal_uInt16              m_nHiddenControls;      // (die Zahl geht in m_nControlsSelected mit ein)
 
-    unsigned short      m_aTimerCounter;
+        unsigned short      m_aTimerCounter;
 
-    sal_Bool                m_bShellOrPageChanged:1;    // wird in jedem Update(FmFormShell*) auf sal_True gesetzt
-    sal_Bool                m_bDragDataDirty:1;     // dito
-    sal_Bool                m_bPrevSelectionMixed:1;
-    sal_Bool                m_bMarkingObjects:1;  // wenn das sal_True ist, brauche ich auf die RequestSelectHints nicht reagieren
-    sal_Bool                m_bRootSelected:1;
-    sal_Bool                m_bInitialUpdate:1;   // bin ich das erste Mal im Update ?
-
-
-    void            Update();
-    sal_Bool            IsDeleteAllowed();
-    FmControlData*  NewControl( const ::rtl::OUString& rServiceName, SvLBoxEntry* pParentEntry, sal_Bool bEditName = sal_True );
-    void            NewForm( SvLBoxEntry* pParentEntry );
-    SvLBoxEntry*    Insert( FmEntryData* pEntryData, sal_uInt32 nRelPos=LIST_APPEND );
-    void            Remove( FmEntryData* pEntryData );
+        sal_Bool                m_bShellOrPageChanged:1;    // wird in jedem Update(FmFormShell*) auf sal_True gesetzt
+        sal_Bool                m_bDragDataDirty:1;     // dito
+        sal_Bool                m_bPrevSelectionMixed:1;
+        sal_Bool                m_bMarkingObjects:1;  // wenn das sal_True ist, brauche ich auf die RequestSelectHints nicht reagieren
+        sal_Bool                m_bRootSelected:1;
+        sal_Bool                m_bInitialUpdate:1;   // bin ich das erste Mal im Update ?
 
 
-    void CollectSelectionData(SELDATA_ITEMS sdiHow);
-        // sammelt in m_arrCurrentSelection die aktuell selektierten Eintraege, normalisiert die Liste wenn verlangt
-        // SDI_NORMALIZED bedeutet einfach, dass alle Eintraege, die schon einen selektierten Vorfahren haben, nicht mit gesammelt
-        // werden.
-        // SDI_NORMALIZED_FORMARK bedeutet, dass wie bei SDI_NORMALIZED verfahren wird, aber Eintraege, deren direktes Elter nicht
-        // selektiert ist, aufgenommen werden (unabhaengig vom Status weiterer Vorfahren), desgleichen Formulare, die selektiert sind,
-        // unabhaengig vom Status irgendwelcher Vorfahren
-        // Bei beiden Normalized-Modi enthalten die m_nFormsSelected, ... die richtige Anzahl, auch wenn nicht alle dieser Eintraege
-        // in m_arrCurrentSelection landen.
-        // SDI_DIRTY ist natuerlich nicht erlaubt als Parameter
-
-    // ein einziges Interface fuer alle selektierten Eintraege zusammensetzen
-    void    ShowSelectionProperties(sal_Bool bForce = sal_False);
-    // alle selektierten Elemnte loeschen
-    void    DeleteSelection();
-
-    void SynchronizeSelection(FmEntryDataArray& arredToSelect);
-        // nach dem Aufruf dieser Methode sind genau die Eintraege selektiert, die in dem Array bezeichnet sind
-    void SynchronizeSelection();
-        // macht das selbe, nimmt die MarkList der ::com::sun::star::sdbcx::View
-    void SynchronizeMarkList();
-        // umgekehrte Richtung von SynchronizeMarkList : markiert in der ::com::sun::star::sdbcx::View alle der aktuellen Selektion entsprechenden Controls
-
-    // im Select aktualisiere ich normalerweise die Marklist der zugehoerigen ::com::sun::star::sdbcx::View, mit folgenden Funktionen
-    // kann ich das Locking dieses Verhaltens steuern
-    void LockSelectionHandling() { ++m_nSelectLock; }
-    void UnlockSelectionHandling() { --m_nSelectLock; }
-    sal_Bool IsSelectionHandlingLocked() const { return m_nSelectLock>0; }
-
-    sal_Bool IsHiddenControl(FmEntryData* pEntryData);
-
-    DECL_LINK( OnEdit, void* );
-    DECL_LINK( OnDropActionTimer, void* );
-
-    DECL_LINK(OnEntrySelDesel, FmExplorer*);
-    DECL_LINK(OnSynchronizeTimer, void*);
-
-protected:
-    virtual void Command( const CommandEvent& rEvt );
-
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
-
-    sal_Int8            implAcceptDrop( sal_Int8 _nAction, const Point& _rDropPos );
-
-public:
-    FmExplorer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&  _xORB, Window* pParent );
-    virtual ~FmExplorer();
-
-    void Clear();
-    void Update( FmFormShell* pFormShell );
-    void MarkViewObj( FmFormData* pFormData, sal_Bool bMark, sal_Bool bDeep = sal_False );
-    void MarkViewObj( FmControlData* pControlData, sal_Bool bMarkHandles, sal_Bool bMark );
-    void UnmarkAllViewObj();
-
-    sal_Bool IsFormEntry( SvLBoxEntry* pEntry );
-    sal_Bool IsFormComponentEntry( SvLBoxEntry* pEntry );
-
-    ::rtl::OUString GenerateName( FmEntryData* pEntryData );
-
-    FmExplorerModel*    GetExplModel() const { return m_pExplModel; }
-    SvLBoxEntry*        FindEntry( FmEntryData* pEntryData );
-
-    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
-    virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
-    virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& );
-    virtual void MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual void KeyInput( const KeyEvent& rKEvt );
-};
+        void            Update();
+        sal_Bool            IsDeleteAllowed();
+        FmControlData*  NewControl( const ::rtl::OUString& rServiceName, SvLBoxEntry* pParentEntry, sal_Bool bEditName = sal_True );
+        void            NewForm( SvLBoxEntry* pParentEntry );
+        SvLBoxEntry*    Insert( FmEntryData* pEntryData, sal_uInt32 nRelPos=LIST_APPEND );
+        void            Remove( FmEntryData* pEntryData );
 
 
-//========================================================================
-class FmFormShell;
-class FmExplorerWin : public SfxDockingWindow, public SfxControllerItem
-{
-private:
-    FmExplorer* m_pFmExplorer;
+        void CollectSelectionData(SELDATA_ITEMS sdiHow);
+            // sammelt in m_arrCurrentSelection die aktuell selektierten Eintraege, normalisiert die Liste wenn verlangt
+            // SDI_NORMALIZED bedeutet einfach, dass alle Eintraege, die schon einen selektierten Vorfahren haben, nicht mit gesammelt
+            // werden.
+            // SDI_NORMALIZED_FORMARK bedeutet, dass wie bei SDI_NORMALIZED verfahren wird, aber Eintraege, deren direktes Elter nicht
+            // selektiert ist, aufgenommen werden (unabhaengig vom Status weiterer Vorfahren), desgleichen Formulare, die selektiert sind,
+            // unabhaengig vom Status irgendwelcher Vorfahren
+            // Bei beiden Normalized-Modi enthalten die m_nFormsSelected, ... die richtige Anzahl, auch wenn nicht alle dieser Eintraege
+            // in m_arrCurrentSelection landen.
+            // SDI_DIRTY ist natuerlich nicht erlaubt als Parameter
 
-protected:
-    virtual void Resize();
-    virtual sal_Bool Close();
-    virtual void GetFocus();
-    virtual Size CalcDockingSize( SfxChildAlignment );
-    virtual SfxChildAlignment CheckAlignment( SfxChildAlignment, SfxChildAlignment );
+        // ein einziges Interface fuer alle selektierten Eintraege zusammensetzen
+        void    ShowSelectionProperties(sal_Bool bForce = sal_False);
+        // alle selektierten Elemnte loeschen
+        void    DeleteSelection();
 
-public:
-    FmExplorerWin( SfxBindings *pBindings, SfxChildWindow *pMgr,
-                   Window* pParent );
-    virtual ~FmExplorerWin();
+        void SynchronizeSelection(FmEntryDataArray& arredToSelect);
+            // nach dem Aufruf dieser Methode sind genau die Eintraege selektiert, die in dem Array bezeichnet sind
+        void SynchronizeSelection();
+            // macht das selbe, nimmt die MarkList der ::com::sun::star::sdbcx::View
+        void SynchronizeMarkList();
+            // umgekehrte Richtung von SynchronizeMarkList : markiert in der ::com::sun::star::sdbcx::View alle der aktuellen Selektion entsprechenden Controls
 
-    void Update( FmFormShell* pFormShell );
-    void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    void FillInfo( SfxChildWinInfo& rInfo ) const;
-};
+        // im Select aktualisiere ich normalerweise die Marklist der zugehoerigen ::com::sun::star::sdbcx::View, mit folgenden Funktionen
+        // kann ich das Locking dieses Verhaltens steuern
+        void LockSelectionHandling() { ++m_nSelectLock; }
+        void UnlockSelectionHandling() { --m_nSelectLock; }
+        sal_Bool IsSelectionHandlingLocked() const { return m_nSelectLock>0; }
 
-//========================================================================
-class FmExplorerWinMgr : public SfxChildWindow
-{
-public:
-    FmExplorerWinMgr( Window *pParent, sal_uInt16 nId, SfxBindings *pBindings,
-                      SfxChildWinInfo *pInfo );
-    SFX_DECL_CHILDWINDOW( FmExplorerWinMgr );
-};
+        sal_Bool IsHiddenControl(FmEntryData* pEntryData);
+
+        DECL_LINK( OnEdit, void* );
+        DECL_LINK( OnDropActionTimer, void* );
+
+        DECL_LINK(OnEntrySelDesel, NavigatorTree*);
+        DECL_LINK(OnSynchronizeTimer, void*);
+
+    protected:
+        virtual void    Command( const CommandEvent& rEvt );
+
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+
+    public:
+        NavigatorTree(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&   _xORB, Window* pParent );
+        virtual ~NavigatorTree();
+
+        void Clear();
+        void Update( FmFormShell* pFormShell );
+        void MarkViewObj( FmFormData* pFormData, sal_Bool bMark, sal_Bool bDeep = sal_False );
+        void MarkViewObj( FmControlData* pControlData, sal_Bool bMarkHandles, sal_Bool bMark );
+        void UnmarkAllViewObj();
+
+        sal_Bool IsFormEntry( SvLBoxEntry* pEntry );
+        sal_Bool IsFormComponentEntry( SvLBoxEntry* pEntry );
+
+        ::rtl::OUString GenerateName( FmEntryData* pEntryData );
+
+        NavigatorTreeModel*    GetNavModel() const { return m_pNavModel; }
+        SvLBoxEntry*        FindEntry( FmEntryData* pEntryData );
+
+        virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+        virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
+        virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& );
+        virtual void MouseButtonUp( const MouseEvent& rMEvt );
+        virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+        virtual void KeyInput( const KeyEvent& rKEvt );
+
+    private:
+        sal_Int8    implAcceptDrop( sal_Int8 _nAction, const Point& _rDropPos );
+        // fills m_aControlExchange in preparation of a DnD or clipboard operation
+        sal_Bool    implPrepareExchange( );
+    };
+
+    //========================================================================
+    class NavigatorFrame : public SfxDockingWindow, public SfxControllerItem
+    {
+    private:
+        ::svxform::NavigatorTree* m_pNavigatorTree;
+
+    protected:
+        virtual void Resize();
+        virtual sal_Bool Close();
+        virtual void GetFocus();
+        virtual Size CalcDockingSize( SfxChildAlignment );
+        virtual SfxChildAlignment CheckAlignment( SfxChildAlignment, SfxChildAlignment );
+
+    public:
+        NavigatorFrame( SfxBindings *pBindings, SfxChildWindow *pMgr,
+                       Window* pParent );
+        virtual ~NavigatorFrame();
+
+        void Update( FmFormShell* pFormShell );
+        void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+        void FillInfo( SfxChildWinInfo& rInfo ) const;
+    };
+
+    //========================================================================
+    class NavigatorFrameManager : public SfxChildWindow
+    {
+    public:
+        NavigatorFrameManager( Window *pParent, sal_uInt16 nId, SfxBindings *pBindings,
+                          SfxChildWinInfo *pInfo );
+        SFX_DECL_CHILDWINDOW( NavigatorFrameManager );
+    };
+
+//............................................................................
+}   // namespace svxform
+//............................................................................
 
 #endif // _SVX_FMEXPL_HXX
 
