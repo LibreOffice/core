@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:51:16 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #include <tools/svwin.h>
 #endif
 
-#define _SV_SALBMP_CXX
-
 #ifndef _SV_WINCOMP_HXX
 #include <wincomp.hxx>
 #endif
@@ -81,10 +79,6 @@
 #include <salbmp.h>
 #endif
 #include <string.h>
-
-#ifdef WIN
-#define BI_BITFIELDS    3
-#endif
 
 // -----------
 // - Inlines -
@@ -399,7 +393,7 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBits, const Bitm
                 const USHORT nMinCount = Min( nColors, rPal.GetEntryCount() );
 
                 if( nMinCount )
-                    HMEMCPY( pBI->bmiColors, rPal.ImplGetColorBuffer(), nMinCount * sizeof( RGBQUAD ) );
+                    memcpy( pBI->bmiColors, rPal.ImplGetColorBuffer(), nMinCount * sizeof( RGBQUAD ) );
             }
 
             GlobalUnlock( hDIB );
@@ -421,7 +415,7 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
 
         if ( hCopy = GlobalAlloc( GHND, nSize  ) )
         {
-            HMEMCPY( (LPSTR) GlobalLock( hCopy ), (LPSTR) GlobalLock( hHdl ), nSize );
+            memcpy( (LPSTR) GlobalLock( hCopy ), (LPSTR) GlobalLock( hHdl ), nSize );
 
             GlobalUnlock( hCopy );
             GlobalUnlock( hHdl );
@@ -480,7 +474,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( bool bReadOnly )
                 BYTE*               pOldBits = (PBYTE) pBI + nOffset;
                 BYTE*               pNewBits = (PBYTE) pNewBI + nOffset;
 
-                HMEMCPY( pNewBI, pBI, nOffset );
+                memcpy( pNewBI, pBI, nOffset );
                 pNewBIH->biCompression = 0;
                 ImplDecodeRLEBuffer( pOldBits, pNewBits, aSizePix, pBIH->biCompression == BI_RLE4 );
 
@@ -516,7 +510,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( bool bReadOnly )
                     const USHORT nPalCount = ImplGetDIBColorCount( mhDIB );
 
                     pBuffer->maPalette.SetEntryCount( nPalCount );
-                    HMEMCPY( pBuffer->maPalette.ImplGetColorBuffer(), pBI->bmiColors, nPalCount * sizeof( RGBQUAD ) );
+                    memcpy( pBuffer->maPalette.ImplGetColorBuffer(), pBI->bmiColors, nPalCount * sizeof( RGBQUAD ) );
                     pBuffer->mpBits = (PBYTE) pBI + *(DWORD*) pBI + nPalCount * sizeof( RGBQUAD );
                 }
                 else if( ( pBIH->biBitCount == 16 ) || ( pBIH->biBitCount == 32 ) )
@@ -567,7 +561,7 @@ void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
                 PBITMAPINFO     pBI = (PBITMAPINFO) GlobalLock( mhDIB );
                 const USHORT    nCount = pBuffer->maPalette.GetEntryCount();
 
-                HMEMCPY( pBI->bmiColors, pBuffer->maPalette.ImplGetColorBuffer(), nCount * sizeof( RGBQUAD ) );
+                memcpy( pBI->bmiColors, pBuffer->maPalette.ImplGetColorBuffer(), nCount * sizeof( RGBQUAD ) );
                 GlobalUnlock( mhDIB );
             }
 
@@ -624,7 +618,7 @@ void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
                     }
                     else
                     {
-                        HMEMCPY( &pDIB[ nX ], pRLE, nRunByte );
+                        memcpy( &pDIB[ nX ], pRLE, nRunByte );
                         pRLE += nRunByte;
                         nX += nRunByte;
 
