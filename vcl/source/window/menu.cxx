@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-10 11:19:16 $
+ *  last change: $Author: ssa $ $Date: 2002-10-01 16:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,10 @@
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <controllayout.hxx>
 #endif
+#ifndef _SV_TOOLBOX_HXX
+#include <toolbox.hxx>
+#endif
+#include <tools/stream.hxx>
 
 #pragma hdrstop
 
@@ -188,6 +192,9 @@ DBG_NAME( Menu );
 
 #define EXTRASPACEY         2
 #define EXTRAITEMHEIGHT     4
+
+// document closer
+#define IID_DOCUMENTCLOSE 1
 
 inline BOOL ImplIsMouseFollow()
 {
@@ -461,6 +468,85 @@ public:
     void            revokeAccessibleParent();
 };
 
+// To get the transparent mouse-over look, the closer is actually a toolbox
+// overload DataChange to handle style changes correctly
+class DecoToolBox : public ToolBox
+{
+    long lastSize;
+public:
+            DecoToolBox( Window* pParent, WinBits nStyle = 0 );
+            DecoToolBox( Window* pParent, const ResId& rResId );
+
+    void    DataChanged( const DataChangedEvent& rDCEvt );
+    void    Resize();
+
+    void    SetImages();
+
+    Image   maImage;
+    Image   maImageHC;
+};
+
+DecoToolBox::DecoToolBox( Window* pParent, WinBits nStyle ) :
+    ToolBox( pParent, nStyle )
+{
+    lastSize = -1;
+}
+DecoToolBox::DecoToolBox( Window* pParent, const ResId& rResId ) :
+    ToolBox( pParent, rResId )
+{
+    lastSize = -1;
+}
+void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+
+    if ( rDCEvt.GetFlags() & SETTINGS_STYLE )
+    {
+        SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetMenuBarColor() ) );
+        SetImages();
+    }
+}
+
+void DecoToolBox::SetImages()
+{
+    if( lastSize != -1 )
+    {
+        BitmapEx aBmp( maImage.GetBitmap(), Color( COL_LIGHTMAGENTA ) );
+        aBmp.SetSizePixel( Size( lastSize, lastSize ) );
+        // TODO: erase transparent !!!
+        aBmp.Erase( GetSettings().GetStyleSettings().GetMenuBarColor() );
+
+        Rectangle aSrcRect( Point(0,0), maImage.GetSizePixel() );
+        Rectangle aDestRect( Point((lastSize - maImage.GetSizePixel().Width())/2, (lastSize - maImage.GetSizePixel().Height())/2 ),
+            maImage.GetSizePixel() );
+
+        BitmapEx aBmpSrc(
+            GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ?
+            maImageHC.GetBitmap() : maImage.GetBitmap(),
+            Color( COL_LIGHTMAGENTA ) );
+        aBmp.CopyPixel( aDestRect, aSrcRect, &aBmpSrc );
+        Image aImg( aBmp );
+
+        SetItemImage( IID_DOCUMENTCLOSE, aImg );
+    }
+}
+
+void DecoToolBox::Resize()
+{
+    Size aOutSz = GetOutputSizePixel();
+    long n      = aOutSz.Height();
+    if( n > 9 )
+    {
+        n -= 8;
+        if( n != lastSize )
+        {
+            lastSize = n;
+            SetImages();
+        }
+    }
+
+    ToolBox::Resize();
+}
 
 // Eine Basicklasse fuer beide (wegen pActivePopup, Timer, ...) waere nett,
 // aber dann musste eine 'Container'-Klasse gemacht werden, da von
@@ -481,7 +567,7 @@ private:
     BOOL            bIgnoreFirstMove;
     BOOL            bStayActive;
 
-    PushButton      aCloser;
+    DecoToolBox     aCloser;
     PushButton      aFloatBtn;
     PushButton      aHideBtn;
 
@@ -3828,7 +3914,7 @@ void MenuFloatingWindow::revokeAccessibleParent()
 
 MenuBarWindow::MenuBarWindow( Window* pParent ) :
     Window( pParent, 0 ),
-    aCloser( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ),
+    aCloser( this ),
     aFloatBtn( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ),
     aHideBtn( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE )
 {
@@ -3843,12 +3929,25 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     bStayActive = FALSE;
 
     ResMgr* pResMgr = ImplGetResMgr();
+
+    Bitmap aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, pResMgr ) );
+    Bitmap aBitmapHC( ResId( SV_RESID_BITMAP_CLOSEDOCHC, pResMgr ) );
+
+    aCloser.maImage = Image( aBitmap, Color( COL_LIGHTMAGENTA ) );
+    aCloser.maImageHC = Image( aBitmapHC, Color( COL_LIGHTMAGENTA ) );
+
+    aCloser.SetOutStyle( TOOLBOX_STYLE_FLAT );
+    aCloser.SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetMenuBarColor() ) );
+
+    aCloser.InsertItem( IID_DOCUMENTCLOSE,
+        GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ? aCloser.maImageHC : aCloser.maImage, 0 );
     aCloser.SetClickHdl( LINK( this, MenuBarWindow, CloserHdl ) );
-    aCloser.SetSymbol( SYMBOL_CLOSE );
-    aCloser.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_CLOSE, pResMgr ) ) );
+    aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, pResMgr ) ) );
+
     aFloatBtn.SetClickHdl( LINK( this, MenuBarWindow, FloatHdl ) );
     aFloatBtn.SetSymbol( SYMBOL_FLOAT );
     aFloatBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_RESTORE, pResMgr ) ) );
+
     aHideBtn.SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
     aHideBtn.SetSymbol( SYMBOL_HIDE );
     aHideBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_MINIMIZE, pResMgr ) ) );
@@ -3874,7 +3973,7 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     ImplInitMenuWindow( this, TRUE, TRUE );
     if ( pMen )
     {
-        aCloser.Show( pMen->HasCloser() );
+        aCloser.Show( TRUE /*pMen->HasCloser()*/ );
         aFloatBtn.Show( pMen->HasFloatButton() );
         aHideBtn.Show( pMen->HasHideButton() );
     }
@@ -4399,10 +4498,12 @@ void MenuBarWindow::Resize()
         aHideBtn.SetSymbol( SYMBOL_OS2HIDE );
     else
         aHideBtn.SetSymbol( SYMBOL_HIDE );
+    /*
     if ( nStyle & STYLE_OPTION_OS2STYLE )
         aCloser.SetSymbol( SYMBOL_OS2CLOSE );
     else
         aCloser.SetSymbol( SYMBOL_CLOSE );
+        */
 }
 
 USHORT MenuBarWindow::ImplFindEntry( const Point& rMousePos ) const

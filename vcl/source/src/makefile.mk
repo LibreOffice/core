@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+#   last change: $Author: ssa $ $Date: 2002-10-01 16:23:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,10 @@ RESLIB1BMPS=		check.bmp			\
                     splhpin.bmp 		\
                     splvpin.bmp 		\
                     splharw.bmp 		\
-                    splvarw.bmp
+                    splvarw.bmp         \
+                    closedoc.bmp 		\
+                    closedochc.bmp
+                    
 
 # --- Targets ------------------------------------------------------
 
