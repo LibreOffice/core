@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-02 16:38:36 $
+ *  last change: $Author: mba $ $Date: 2001-11-02 17:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1387,14 +1387,8 @@ String SfxConfigDialog::FileDialog_Impl( Window *pParent, WinBits nBits, const S
 
     sfx2::FileDialogHelper aFileDlg( nDialogType, 0 );
     aFileDlg.SetTitle( rTitle );
-    aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_CFG)),DEFINE_CONST_UNICODE("*.cfg") );
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_ALL) ), DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
-
-    INetURLObject aFilePath( SvtPathOptions().GetUserConfigPath() );
-    aFilePath.setFinalSlash();
-    String aCfgName = aFilePath.PathToFileName();
-
-    aFileDlg.SetDisplayDirectory( aCfgName );
+    aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_CFG)),DEFINE_CONST_UNICODE("*.cfg") );
     if ( ERRCODE_NONE == aFileDlg.Execute() )
         return aFileDlg.GetPath();
     else
