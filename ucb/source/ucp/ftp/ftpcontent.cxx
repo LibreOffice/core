@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 13:04:03 $
+ *  last change: $Author: abi $ $Date: 2002-10-15 13:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,20 +339,20 @@ Any SAL_CALL FTPContent::execute(
             }
 
 
-            if(aCommand.Name.compareToAscii(
-                "getPropertyValues") == 0 &&
-               action != NOACTION) {
-                // It is not allowed to throw if
-                // command is getPropertyValues
-                vos::ORef<ucb::PropertyValueSet> xRow =
-                    new ucb::PropertyValueSet(m_xSMgr);
-                Sequence<Property> Properties;
-                aCommand.Argument >>= Properties;
-                for(int i = 0; i < Properties.getLength(); ++i)
-                    xRow->appendVoid(Properties[i]);
-                aRet <<= Reference<XRow>(xRow.getBodyPtr());
-                return aRet;
-            }
+//              if(aCommand.Name.compareToAscii(
+//                  "getPropertyValues") == 0 &&
+//                 action != NOACTION) {
+//                  // It is not allowed to throw if
+//                  // command is getPropertyValues
+//                  vos::ORef<ucb::PropertyValueSet> xRow =
+//                      new ucb::PropertyValueSet(m_xSMgr);
+//                  Sequence<Property> Properties;
+//                  aCommand.Argument >>= Properties;
+//                  for(int i = 0; i < Properties.getLength(); ++i)
+//                      xRow->appendVoid(Properties[i]);
+//                  aRet <<= Reference<XRow>(xRow.getBodyPtr());
+//                  return aRet;
+//              }
 
             if(action == THROWAUTHENTICATIONREQUEST) {
                 ucbhelper::cancelCommandExecution(
