@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
+ *  last change: $Author: rt $ $Date: 2000-10-24 14:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ namespace dbaccess
 //==========================================================================
 //= OQuery_LINUX
 //==========================================================================
-DBG_NAME(OQuery_LINUX);
+DBG_NAME(OQuery_LINUX)
 //--------------------------------------------------------------------------
 OQuery_LINUX::OQuery_LINUX(const Reference< XPropertySet >& _rxCommandDefinition, const Reference< XConnection >& _rxConn)
     :OConfigurationFlushable(m_aMutex)
