@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 15:41:52 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,18 +1128,18 @@ String RID_GRAPHIC_OBJECTBAR
     Text = "Grafikobjektleiste" ;
     Text [ ENGLISH ] = "Toolbar for graphic objects" ;
     Text[ english_us ] = "Graphics Object Bar";
-    Text[ portuguese ] = "Toolbar for graphic objects";
-    Text[ russian ] = "Toolbar for graphic objects";
+    Text[ portuguese ] = "Barra de objectos grαficos";
+    Text[ russian ] = "Οΰνελό ξαϊεκςξβ δλÿ γπΰτθκθ";
     Text[ greek ] = "Γραμμή εργαλείων για αντικείμενα γραφικών";
     Text[ dutch ] = "Toolbar for graphic objects";
     Text[ french ] = "Barre d'objets graphiques";
     Text[ spanish ] = "Barra de objetos grαficos";
-    Text[ italian ] = "Toolbar for graphic objects";
+    Text[ italian ] = "Barra degli oggetti grafici";
     Text[ danish ] = "Toolbar for graphic objects";
     Text[ swedish ] = "Grafikobjektlist";
     Text[ polish ] = "Pasek obiektσw graficznych";
     Text[ portuguese_brazilian ] = "Toolbar for graphic objects";
-    Text[ japanese ] = "Toolbar for graphic objects";
+    Text[ japanese ] = "ΈήΧΜ¨―ΈµΜήΌήªΈΔΚή°";
     Text[ korean ] = "Toolbar for graphic objects";
     Text[ chinese_simplified ] = "ΝΌΠΞ¶ΤΟσΐΈ";
     Text[ chinese_traditional ] = "ΉΟ¤ωª«¥σ¦C";
