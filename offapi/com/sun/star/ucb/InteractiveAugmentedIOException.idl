@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractiveAugmentedIOException.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-18 11:00:21 $
+ *  last change: $Author: sb $ $Date: 2001-08-29 09:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@ exception InteractiveAugmentedIOException : com::sun::star::ucb::InteractiveIOEx
 {
     //-------------------------------------------------------------------------
     /** Additional arguments.
+
+        <P>See <type>com::sun::star::task::InteractionHandler</type> for a
+        description of well-known arguments.</P>
     */
         sequence< any > Arguments;
 };

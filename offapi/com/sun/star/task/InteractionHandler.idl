@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractionHandler.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-27 08:48:12 $
+ *  last change: $Author: sb $ $Date: 2001-08-29 09:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,44 @@ module com { module sun { module star { module task {
         <IL>Approve, Disapprove</IL>
         <IL>Approve, Disapprove, Abort</IL>
     </UL></P>
+
+    <P>A <type>com::sun::star::ucb::InteractiveAugmentedIOException</type>
+    carries with it a sequence of arguments, which should be
+    <type>com::sun::star::beans::PropertyValue</type>s.  The following details
+    which properties are interpreted by the interaction handler, depending on
+    the request's <type>com::sun::star::ucb::IOErrorCode</type>:
+    <DL>
+        <DT><code>"Uri"</code></DT>
+        <DD>All error codes except <const>DIFFERENT_DEVICES</const>.  The URI
+        of the involved resource (a <atom>string</atom>).</DD>
+
+        <DT><code>"ResourceName"</code></DT>
+        <DD>All error codes except <const>DIFFERENT_DEVICES</const>.  A name
+        for the involved resource (a <atom>string</atom>) that might be more
+        meaningful to the user than the URI.  For example, a
+        (platform-dependent) path notation for file system resources.</DD>
+
+        <DT><code>"ResourceType"</code></DT>
+        <DD><const>DEVICE_NOT_READY</const> and <const>NOT_EXISTING</const>
+        only.  An identifier for the type of resource involved (a
+        <atom>string</atom>).  Currently understood values are
+        <code>"volume"</code> (e.g., a file system volume) and
+        <code>"folder"</code> (i.e., a resource that contains other
+        resources).</DD>
+
+        <DT><code>"Removable"</code></DT>
+        <DD><const>NOT_EXISTING</const> only.  A flag indicating whether the
+        resource resides on a storage medium that can be removed by the user
+        (a <atom>boolean</atom>).</DD>
+
+        <DT><code>"Folder"</code></DT>
+        <DD><const>CANT_CREATE</const>only.  The name of the foler in which a
+        resource cannot be created (a <atom>string</atom>).</DD>
+
+        <DT><code>"Volume"</code> and <code>"OtherVolume"</code></DT>
+        <DD><const>DIFFERENT_DEVICES</const> only.  The names of the two
+        volumes involved (two <atom>string</atom>s).</DD>
+    </DL></P>
  */
 service InteractionHandler
 {

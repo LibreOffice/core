@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IOErrorCode.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-22 14:04:28 $
+ *  last change: $Author: sb $ $Date: 2001-08-29 09:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,693 +68,163 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** Types of input/output errors.
+
+    <P>See <type>com::sun::star::task::InteractionHandler</type> for a
+    description of what kinds of arguments
+    <type>com::sun::star::ucb::InteractiveAugmentedIOException</type> should
+    use with each of these error codes.</P>
 */
 enum IOErrorCode
 {
     //-------------------------------------------------------------------------
     /** An operation was aborted.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object accessed when the error occured./td>
-        </tr>
-        </table>
     */
     ABORT,
 
     //-------------------------------------------------------------------------
     /** An object cannot be accessed due to insufficient user rights.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object to which the access was denied.</td>
-        </tr>
-        </table>
     */
     ACCESS_DENIED,
 
     //-------------------------------------------------------------------------
     /** An object already exists.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object that does already exist.</td>
-        </tr>
-        </table>
     */
     ALREADY_EXISTING,
 
     //-------------------------------------------------------------------------
     /** A bad checksum.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object with the bad checksum.</td>
-        </tr>
-        </table>
     */
     BAD_CRC,
 
     //-------------------------------------------------------------------------
     /** An object could not be created.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the new object. This can be an empty
-            string if the URL/name for the new object is only available after
-            it was successfully created.</td>
-        </tr>
-        <tr align=left>
-            <td>2</td>
-            <td>string</td>
-            <td>The name or URL of the parent object of the object that could not
-                be created.</td>
-        </tr>
-        </table>
     */
     CANT_CREATE,
 
     //-------------------------------------------------------------------------
     /** Data could not be read from a file.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object from that no data could be read.</td>
-        </tr>
-        </table>
     */
     CANT_READ,
 
     //-------------------------------------------------------------------------
     /** A seek operation could not be run.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object on which the seek operation failed.</td>
-        </tr>
-        </table>
     */
     CANT_SEEK,
 
     //-------------------------------------------------------------------------
     /** A tell operation could not be run.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object on which the tell operation failed.</td>
-        </tr>
-        </table>
     */
     CANT_TELL,
 
     //-------------------------------------------------------------------------
     /** Data could not be written to a file.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object to that no data could be written.</td>
-        </tr>
-        </table>
     */
     CANT_WRITE,
 
     //-------------------------------------------------------------------------
     /** A function is not possible because the path contains the current
         directory.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the invalid path.</td>
-        </tr>
-        </table>
     */
     CURRENT_DIRECTORY,
 
     //-------------------------------------------------------------------------
     /** A device (drive) not ready.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the device that is not ready.</td>
-        </tr>
-        </table>
     */
     DEVICE_NOT_READY,
 
     //-------------------------------------------------------------------------
     /** A function is not possible because the devices (drives) are not
         identical.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the first device.</td>
-        </tr>
-        <tr align=left>
-            <td>2</td>
-            <td>string</td>
-            <td>The name or URL of the second device.</td>
-        </tr>
-        </table>
     */
     DIFFERENT_DEVICES,
 
     //-------------------------------------------------------------------------
     /** A general input/output error.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object accessed when the error occured./td>
-        </tr>
-        </table>
     */
     GENERAL,
 
     //-------------------------------------------------------------------------
     /** An invalid attempt was made to access an object.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object that rejected access.</td>
-        </tr>
-        </table>
     */
     INVALID_ACCESS,
 
     //-------------------------------------------------------------------------
     /** A file name contains invalid characters.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL with the invalid characters.</td>
-        </tr>
-        <tr align=left>
-            <td>2..n</td>
-            <td>long</td>
-            <td>The position of an invalid character. -1 means that the
-            position is unknown.</td>
-        </tr>
-        </table>
     */
     INVALID_CHARACTER,
 
     //-------------------------------------------------------------------------
     /** A specified device is invalid.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the invalid device.</td>
-        </tr>
-        </table>
     */
     INVALID_DEVICE,
 
     //-------------------------------------------------------------------------
     /** Invalid data length.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object with the errornous data.</td>
-        </tr>
-        </table>
     */
     INVALID_LENGTH,
 
     //-------------------------------------------------------------------------
     /** An operation was started with an invalid parameter.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object accessed when the error occured./td>
-        </tr>
-        </table>
     */
     INVALID_PARAMETER,
 
     //-------------------------------------------------------------------------
     /** An operation cannot be run on file names containing wildcards.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object with the invalid name./td>
-        </tr>
-        </table>
     */
     IS_WILDCARD,
 
     //-------------------------------------------------------------------------
     /** A locking problem.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object on that the locking violation occured.</td>
-        </tr>
-        </table>
     */
     LOCKING_VIOLATION,
 
     //-------------------------------------------------------------------------
     /** An invalid file name.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name.</td>
-        </tr>
-        <tr align=left>
-            <td>2</td>
-            <td>long</td>
-            <td>The position of the misplaced charcter. -1 means that the
-            position is unknown.</td>
-        </tr>
-        </table>
     */
     MISPLACED_CHARACTER,
 
     //-------------------------------------------------------------------------
     /** A file name is too long.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name (not the URL!).</td>
-        </tr>
-        </table>
     */
     NAME_TOO_LONG,
 
     //-------------------------------------------------------------------------
     /** A nonexistent object.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the non-existing object.</td>
-        </tr>
-        </table>
     */
     NOT_EXISTING,
 
     //-------------------------------------------------------------------------
     /** The path to a file does not exist.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The full name or URL of the non-existing path.</td>
-        </tr>
-        </table>
     */
     NOT_EXISTING_PATH,
 
     //-------------------------------------------------------------------------
     /** An action is not supported.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the related object.</td>
-        </tr>
-        </table>
     */
     NOT_SUPPORTED,
 
     //-------------------------------------------------------------------------
     /** An object is not a directory.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object that is not a directory.</td>
-        </tr>
-        </table>
     */
     NO_DIRECTORY,
 
     //-------------------------------------------------------------------------
     /** An object is not a file.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object that is not a file.</td>
-        </tr>
-        </table>
     */
     NO_FILE,
 
     //-------------------------------------------------------------------------
     /** No more space on a device.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object accessed when the error occured./td>
-        </tr>
-        </table>
     */
     OUT_OF_DISK_SPACE,
 
     //-------------------------------------------------------------------------
     /** No more file handles available.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object accessed when the error occured./td>
-        </tr>
-        </table>
     */
     OUT_OF_FILE_HANDLES,
 
     //-------------------------------------------------------------------------
     /** An operation could not be run due to insufficient memory.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object accessed when the error occured./td>
-        </tr>
-        </table>
     */
     OUT_OF_MEMORY,
 
@@ -765,116 +235,26 @@ enum IOErrorCode
 
     //-------------------------------------------------------------------------
     /** An object cannot be copied into itself.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The full name or URL of the source object.</td>
-        </tr>
-        <tr align=left>
-            <td>2</td>
-            <td>string</td>
-            <td>The full name or URL of the target object.</td>
-        </tr>
-        </table>
     */
     RECURSIVE,
 
     //-------------------------------------------------------------------------
     /** An unknown I/O error has occurred.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object accessed when the error occured./td>
-        </tr>
-        </table>
     */
     UNKNOWN,
 
     //-------------------------------------------------------------------------
     /** A function is not possible because the object is write protected.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object that is write protected./td>
-        </tr>
-        </table>
     */
     WRITE_PROTECTED,
 
     //-------------------------------------------------------------------------
     /** An incorrect file format.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object with the wrong file format./td>
-        </tr>
-        </table>
     */
     WRONG_FORMAT,
 
     //-------------------------------------------------------------------------
     /** An incorrect file version.
-
-        <p>If used with an <type>InteractiveAugmentedIOException</type>,
-        <member>InteractiveAugmentedIOException::Arguments</member> should be
-        filled as follows:
-
-        <table border=1>
-        <tr align=left>
-            <th>argument #</th>
-            <th>argument type</th>
-            <th>description</th>
-        </tr>
-        <tr align=left>
-            <td>1</td>
-            <td>string</td>
-            <td>The name or URL of the object with the wrong file version./td>
-        </tr>
-        </table>
     */
     WRONG_VERSION
 
