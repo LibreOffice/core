@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-10 11:02:58 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -959,8 +959,11 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
         aCOL += ::rtl::OUStringToOString(*pBegin,m_nTextEncoding);
         aCOL += pComma;
     }
-    if(aCOL.getLength())
+    if ( aCOL.getLength() )
+    {
+        aCOL = aCOL.replaceAt(aCOL.getLength()-1,1,pComma);
         pCOL = aCOL.getStr();
+    }
     else
         pCOL = SQL_ALL_TABLE_TYPES;
 
