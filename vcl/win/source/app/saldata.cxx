@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-06 16:50:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _SVWIN_H
 #include <tools/svwin.h>
 #endif
+#include "rtl/tencinfo.h"
 
 #define _SV_SALDATA_CXX
 
@@ -81,54 +82,10 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
     UINT nAnsiCodePage = GetACP();
     if ( nAnsiCodePage != nOldAnsiCodePage )
     {
-        switch ( nAnsiCodePage )
-        {
-            case 1252:
-                eEncoding = RTL_TEXTENCODING_MS_1252;
-                break;
-            case 1250:
-                eEncoding = RTL_TEXTENCODING_MS_1250;
-                break;
-            case 1251:
-                eEncoding = RTL_TEXTENCODING_MS_1251;
-                break;
-            case 1253:
-                eEncoding = RTL_TEXTENCODING_MS_1253;
-                break;
-            case 1254:
-                eEncoding = RTL_TEXTENCODING_MS_1254;
-                break;
-            case 1255:
-                eEncoding = RTL_TEXTENCODING_MS_1255;
-                break;
-            case 1256:
-                eEncoding = RTL_TEXTENCODING_MS_1256;
-                break;
-            case 1257:
-                eEncoding = RTL_TEXTENCODING_MS_1257;
-                break;
-            case 1258:
-                eEncoding = RTL_TEXTENCODING_MS_1258;
-                break;
-            case 874:
-                eEncoding = RTL_TEXTENCODING_MS_874;
-                break;
-            case 932:
-                eEncoding = RTL_TEXTENCODING_MS_932;
-                break;
-            case 936:
-                eEncoding = RTL_TEXTENCODING_MS_936;
-                break;
-            case 949:
-                eEncoding = RTL_TEXTENCODING_MS_949;
-                break;
-            case 950:
-                eEncoding = RTL_TEXTENCODING_MS_950;
-                break;
-//            case 1381:
-//                eEncoding = RTL_TEXTENCODING_MS_1381;
-//                break;
-        }
+        rtl_TextEncoding nEnc
+            = rtl_getTextEncodingFromWindowsCodePage(nAnsiCodePage);
+        if (nEnc != RTL_TEXTENCODING_DONTKNOW)
+            eEncoding = nEnc;
     }
 
     return eEncoding;
