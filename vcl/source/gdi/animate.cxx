@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:14:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
+#ifndef _SV_ANIMATE_HXX
+#include <animate.hxx>
+#endif
+
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -70,19 +74,17 @@
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
 #endif
+
 #ifndef _SV_VIRDEV_HXX
 #include <virdev.hxx>
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <window.hxx>
 #endif
+
 #ifndef _SV_IMPANMVW_HXX
 #include <impanmvw.hxx>
 #endif
-#ifndef _SV_ANIMATE_HXX
-#include <animate.hxx>
-#endif
-
 DBG_NAME( Animation );
 
 // -----------
