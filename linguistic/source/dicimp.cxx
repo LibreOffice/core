@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-11 17:41:04 $
+ *  last change: $Author: tl $ $Date: 2001-03-19 14:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,29 @@ using namespace linguistic;
 #define BUFSIZE              256
 #define VERS2_NOLANGUAGE    1024
 
-static const sal_Char*      aIntExt     = "int";
-static const sal_Char*      aVerStr2    = "WBSWG2";
-static const sal_Char*      aVerStr5    = "WBSWG5";
+static const sal_Char*      pDicExt     = "dic";
+static const sal_Char*      pVerStr2    = "WBSWG2";
+static const sal_Char*      pVerStr5    = "WBSWG5";
+static const sal_Char*      pVerStr6    = "WBSWG6";
+
+int GetDicVersion( const sal_Char *pVerStr )
+{
+    if (pVerStr)
+    {
+        if (0 == strcmp( pVerStr, pVerStr6 ))
+            return 6;
+        if (0 == strcmp( pVerStr, pVerStr5 ))
+            return 5;
+        if (0 == strcmp( pVerStr, pVerStr2 ))
+            return 2;
+    }
+    return -1;
+}
+
+const String GetDicExtension()
+{
+    return String::CreateFromAscii( pDicExt );
+}
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -134,6 +154,7 @@ DictionaryNeo::DictionaryNeo() :
     nLanguage       (LANGUAGE_NONE)
 {
     nCount       = 0;
+    nDicVersion  = -1;
     bNeedEntries = FALSE;
     bIsModified  = bIsActive = FALSE;
     bIsReadonly  = FALSE;
@@ -149,6 +170,7 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
     aMainURL        (rMainURL)
 {
     nCount       = 0;
+    nDicVersion  = -1;
     bNeedEntries = TRUE;
     bIsModified  = bIsActive = FALSE;
 
@@ -167,6 +189,9 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
         }
         if (!bExists)
         {
+            // save new dictionaries with in 6.0 Format (uses UTF8)
+            nDicVersion  = 6;
+
             //! create physical representation of an **empty** dictionary
             //! that could be searched for (see DicList::searchForDictionaries)
             // (Note: empty dictionaries are not just empty files!)
@@ -235,9 +260,15 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
         return nErr;
     *(aWordBuf + nLen) = 0;
 
-    // Version 2.0  ?
-    if(!strcmp(aWordBuf, aVerStr2) ||
-       !strcmp(aWordBuf, aVerStr5) )
+    nDicVersion = GetDicVersion( aWordBuf );
+
+    rtl_TextEncoding eEnc = RTL_TEXTENCODING_MS_1252;
+    if (6 == nDicVersion)
+        eEnc = RTL_TEXTENCODING_UTF8;
+
+    if (6 == nDicVersion ||
+        5 == nDicVersion ||
+        2 == nDicVersion)
     {
         bSkip = TRUE;
         // Sprache des Dictionaries
@@ -281,7 +312,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
         if(*aWordBuf)
         {
             ByteString aDummy( aWordBuf );
-            String aText( aDummy, RTL_TEXTENCODING_MS_1252 );
+            String aText( aDummy, eEnc );
             Reference< XDictionaryEntry > xEntry =
                     new DicEntry( aText, bNegativ );
             addEntry_Impl( xEntry , TRUE ); //! don't launch events here
@@ -339,7 +370,12 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
     sal_Char aWordBuf[BUFSIZE];
 
     // write version
-    strcpy( aWordBuf, eDicType == DictionaryType_POSITIVE ? aVerStr2 : aVerStr5 );
+    const sal_Char *pVerStr = NULL;
+    if (6 == nDicVersion)
+        pVerStr = pVerStr6;
+    else
+        pVerStr = eDicType == DictionaryType_POSITIVE ? pVerStr2 : pVerStr5;
+    strcpy( aWordBuf, pVerStr );
     USHORT nLen = strlen( aWordBuf );
     *pStream << nLen;
     if ((nErr = pStream->GetError()))
@@ -355,11 +391,15 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
     if ((nErr = pStream->GetError()))
         return nErr;
 
+    rtl_TextEncoding eEnc = GetTextEncoding();
+    if (6 == nDicVersion)
+        eEnc = RTL_TEXTENCODING_UTF8;
+
     const Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
     for (INT32 i = 0;  i < nCount;  i++)
     {
         BOOL    bIsNegativEntry = pEntry[i]->isNegative();
-        rtl_TextEncoding eEnc = GetTextEncoding();
+
         ByteString  aTmp1 ( pEntry[i]->getDictionaryWord().getStr(),  eEnc ),
                     aTmp2 ( pEntry[i]->getReplacementText().getStr(), eEnc );
         if (bIsNegativEntry)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-01 18:58:41 $
+ *  last change: $Author: tl $ $Date: 2001-03-19 14:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 
 #define DIC_MAX_ENTRIES     2000
 
+int             GetDicVersion( const sal_Char *pVerStr );
+const String    GetDicExtension();
+
 ///////////////////////////////////////////////////////////////////////////
 
 class DictionaryNeo :
@@ -106,6 +109,7 @@ class DictionaryNeo :
     ::com::sun::star::linguistic2::DictionaryType               eDicType;
     INT16                                                       nCount;
     INT16                                                       nLanguage;
+    INT16                                                       nDicVersion;
     BOOL                                                        bNeedEntries;
     BOOL                                                        bIsModified;
     BOOL                                                        bIsActive;
