@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
+#   last change: $Author: thb $ $Date: 2001-06-19 12:42:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,7 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         copydlg.cxx  \
         dlgolbul.cxx \
         tpoption.cxx \
-        docdlg.cxx   \
+        filedlg.cxx   \
         unchss.cxx   \
         dlgassim.cxx	\
         dlgass.cxx   \
@@ -143,7 +143,6 @@ SRCFILES =\
     dlgsnap.src\
     copydlg.src\
     tpoption.src\
-    docdlg.src\
     dlgass.src\
     pubdlg.src\
     navigatr.src\
@@ -183,7 +182,7 @@ SLOFILES =  \
         $(SLO)$/copydlg.obj  \
         $(SLO)$/dlgolbul.obj \
         $(SLO)$/tpoption.obj \
-        $(SLO)$/docdlg.obj   \
+        $(SLO)$/filedlg.obj   \
         $(SLO)$/unchss.obj  \
         $(SLO)$/dlgassim.obj	\
         $(SLO)$/dlgass.obj  \

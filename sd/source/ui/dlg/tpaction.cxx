@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 17:26:33 $
+ *  last change: $Author: thb $ $Date: 2001-06-19 12:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,6 @@
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
 #endif
-#ifndef _SFXFILEDLG_HXX //autogen
-#include <sfx2/iodlg.hxx>
-#endif
 #ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
 #endif
@@ -126,6 +123,10 @@
 #include <svtools/urihelper.hxx>
 #endif
 
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+
 #include "tpeffect.hxx"
 #include "strmname.h"
 #include "sdview.hxx"
@@ -134,6 +135,7 @@
 #include "docshell.hxx"
 #include "strings.hrc"
 #include "res_bmp.hrc"
+#include "filedlg.hxx"
 
 using namespace ::com::sun::star;
 
@@ -705,48 +707,20 @@ void SdTPAction::OpenFileDialog()
 
         if( bSound )
         {
-            pFileDialog = new SfxFileDialog ( this, WB_OPEN | WB_3DLOOK | WB_STDMODAL );
-            pBtnPreview = new PushButton( pFileDialog, SdResId( RID_PREVIEW_BUTTON ) );
-            pFileDialog->AddControl( pBtnPreview );
-            pBtnPreview->SetClickHdl( LINK( this, SdTPAnimation, ClickPreviewHdl ) );
-            pBtnPreview->Show();
+            SdOpenSoundFileDialog   aFileDialog;
 
-#ifdef MAC
-            String aDescr1;
-            aDescr1 = String(SdResId(STR_SOUNDFILE1));
-            pFileDialog->AddFilter (aDescr1, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.snd" ) ), "sfil0");
-
-            String aDescr2;
-            aDescr2 = String(SdResId(STR_SOUNDFILE2));
-            pFileDialog->AddFilter (aDescr2, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.aif" ) ), "AIFF0");
-
-            pFileDialog->SetDefaultExt("snd");
-#else
-            String aDescr;
-            aDescr = String(SdResId(STR_WAV_FILE));
-            pFileDialog->AddFilter (aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.wav" ) ) );
-            aDescr = String(SdResId(STR_MIDI_FILE));
-            pFileDialog->AddFilter (aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.mid" ) ) );
-
-            pFileDialog->SetDefaultExt( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "wav" ) ) );
-#endif
+            String aFile( GetEditText() );
 
             if( !aFile.Len() )
                 aFile = SvtPathOptions().GetGraphicPath();
 
-            pFileDialog->SetPath( aFile );
+            aFileDialog.SetPath( aFile );
 
-            if ( pFileDialog->Execute() )
+            if( aFileDialog.Execute() == ERRCODE_NONE )
             {
-                aFile = pFileDialog->GetPath();
+                aFile = aFileDialog.GetPath();
                 SetEditText( aFile );
             }
-
-            if( aSound.IsPlaying() )
-                aSound.Stop();
-
-            delete pFileDialog;
-            pBtnPreview = NULL;
         }
         else if (bMacro)
         {
@@ -780,22 +754,20 @@ void SdTPAction::OpenFileDialog()
         }
         else
         {
-            SfxFileDialog* pSfxFileDlg = new SfxFileDialog ( this, WB_OPEN | WB_3DLOOK | WB_STDMODAL );
+            sfx2::FileDialogHelper aFileDialog(WB_OPEN | WB_3DLOOK | WB_STDMODAL );
 
             if (bDocument && !aFile.Len())
                 aFile = SvtPathOptions().GetWorkPath();
 
-            pSfxFileDlg->SetPath( aFile );
+            aFileDialog.SetDisplayDirectory( aFile );
 
-            if( pSfxFileDlg->Execute() )
+            if( aFileDialog.Execute() )
             {
-                aFile = pSfxFileDlg->GetPath();
+                aFile = aFileDialog.GetPath();
                 SetEditText( aFile );
             }
             if( bDocument )
                 CheckFileHdl( NULL );
-
-            delete pSfxFileDlg;
         }
     }
 }
