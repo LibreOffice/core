@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkpnts.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ void BreakpointWindow::SetBPsInModule()
     while ( pBrk )
     {
         pModule->SetBP( (USHORT)pBrk->nLine );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         DBG_ASSERT( pModule->IsBP( (USHORT)pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" )
 #endif
         pBrk = Next();
@@ -195,7 +195,7 @@ void BreakpointWindow::InsertBreakpoint( USHORT nLine )
 
     if ( pModule->SetBP( nLine ) )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         DBG_ASSERT( pModule->IsBP( nLine ), "Brechpunkt wurde nicht gesetzt" )
 #endif
         if ( StarBASIC::IsRunning() )
@@ -208,7 +208,7 @@ void BreakpointWindow::InsertBreakpoint( USHORT nLine )
             }
         }
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT( pModule->IsBP( nLine ), "Brechpunkt wurde nicht gesetzt" )
 #endif
 }
@@ -325,7 +325,7 @@ void BreakpointWindow::Paint( const Rectangle& )
     Breakpoint* pBrk = First();
     while ( pBrk )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         DBG_ASSERT( pModule->IsBP( pBrk->nLine ), "Brechpunkt wurde nicht gesetzt" )
 #endif
         ULONG nLine = pBrk->nLine-1;
