@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-15 09:23:58 $
+ *  last change: $Author: mba $ $Date: 2001-06-19 17:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,14 +196,20 @@ sal_Bool ShallSetBaseURL_Impl( SfxMedium &rMed )
 
 sal_Bool SfxObjectShell::Save()
 {
-    return SaveInfoAndConfig_Impl( GetMedium()->GetStorage() );
+    if( SOFFICE_FILEFORMAT_60 <= GetStorage()->GetVersion() )
+        return TRUE;
+    else
+        return SaveInfoAndConfig_Impl( GetMedium()->GetStorage() );
 }
 
 //--------------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::SaveAs( SvStorage* pNewStg )
 {
-    return SaveInfoAndConfig_Impl( pNewStg );
+    if( SOFFICE_FILEFORMAT_60 <= pNewStg->GetVersion() )
+        return TRUE;
+    else
+        return SaveInfoAndConfig_Impl( pNewStg );
 }
 
 //-------------------------------------------------------------------------
@@ -639,8 +645,9 @@ sal_Bool SfxObjectShell::DoSave()
         bOk = Save();
     }
 
-    if ( bOk )
-        SetModified( sal_False );
+//#88046
+//    if ( bOk )
+//        SetModified( sal_False );
     return bOk;
 }
 
