@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 05:54:49 $
+ *  last change: $Author: cp $ $Date: 2001-09-06 12:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,13 @@ String STR_SVT_COLLATE_RADICAL
     Text[ arabic ] = "Radical";
     Text[ catalan ] = "Radical";
     Text[ finnish ] = "Radical";
+};
+
+String STR_SVT_COLLATE_UNICODE
+{
+    /* sorting according to the unicode code point of the character */
+    Text = "Unicode" ;
+    Text [ ENGLISH ] = "Unicode" ;
 };
 
 String STR_SVT_COLLATE_ZHUYIN
