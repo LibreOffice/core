@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:31:24 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ class SdPage;
 class SfxPrinter;
 struct SdrDocumentStreamInfo;
 struct SpellCallbackInfo;
-class SvxNameDialog;
+class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
 
 #ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
 #define SO2_DECL_SVSTORAGESTREAM_DEFINED
@@ -253,7 +253,7 @@ public:
     */
     virtual OutputDevice* GetDocumentRefDev (void);
 
-    DECL_LINK( RenameSlideHdl, SvxNameDialog* );
+    DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
 
 #ifndef SVX_LIGHT
                             // #91457# ExecuteSpellPopup now handled by DrawDocShell
