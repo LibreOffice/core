@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:14:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,8 @@
 #endif
 #include "sdresid.hxx"
 #include "DrawDocShell.hxx"
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
@@ -176,6 +176,9 @@
 #include <sfx2/request.hxx>
 #endif
 #include "SpellDialogChildWindow.hxx"
+
+#include "Window.hxx"
+#include "fupoor.hxx"
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -245,7 +248,7 @@ ViewShell::ViewShell (
       pFuActual(NULL),
       pFuOld(NULL),
       pFuSearch(NULL),
-      pFuSlideShow(NULL),
+      mpSlideShow(NULL),
       pZoomList(NULL),
       aViewPos(),
       aViewSize(),
@@ -285,7 +288,7 @@ ViewShell::ViewShell(
       pFuActual(NULL),
       pFuOld(NULL),
       pFuSearch(NULL),
-      pFuSlideShow(NULL),
+      mpSlideShow(NULL),
       pZoomList(NULL),
       aViewPos(),
       aViewSize(),
@@ -512,12 +515,11 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=NULL);
         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_EFFECT_STATE, TRUE, FALSE );
         rBindings.Invalidate( SID_3D_STATE, TRUE, FALSE );
 
-        if (pFuSlideShow && !pFuSlideShow->IsTerminated() )
+        if (mpSlideShow && !mpSlideShow->isTerminated() )
         {
-            pFuSlideShow->Activate();
+            mpSlideShow->activate();
         }
         if (pFuActual)
         {
@@ -578,9 +580,9 @@ void ViewShell::Deactivate(BOOL bIsMDIActivate)
 
     if (bIsMDIActivate)
     {
-        if (pFuSlideShow)
+        if (mpSlideShow)
         {
-            pFuSlideShow->Deactivate();
+            mpSlideShow->deactivate();
         }
         if (pFuActual)
         {
@@ -654,9 +656,9 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     if(!bReturn)
     {
-        if(pFuSlideShow)
+        if(mpSlideShow)
         {
-            bReturn = pFuSlideShow->KeyInput(rKEvt);
+            bReturn = mpSlideShow->keyInput(rKEvt);
         }
         else if(pFuActual)
         {
@@ -706,9 +708,9 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if (GetView() != NULL)
         GetView()->SetMouseEvent(rMEvt);
 
-    if (pFuSlideShow)
+    if(mpSlideShow)
     {
-        pFuSlideShow->MouseButtonDown(rMEvt);
+        mpSlideShow->mouseButtonDown(rMEvt);
     }
     else if (pFuActual)
     {
@@ -733,9 +735,9 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if (GetView() != NULL)
         GetView()->SetMouseEvent(rMEvt);
 
-    if (pFuSlideShow)
+    if(mpSlideShow)
     {
-        pFuSlideShow->MouseMove(rMEvt);
+        mpSlideShow->mouseMove(rMEvt);
     }
     else if (pFuActual)
     {
@@ -760,9 +762,9 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if (GetView() != NULL)
         GetView()->SetMouseEvent(rMEvt);
 
-    if (pFuSlideShow)
+    if(mpSlideShow)
     {
-        pFuSlideShow->MouseButtonUp(rMEvt);
+        mpSlideShow->mouseButtonUp(rMEvt);
     }
     else if (pFuActual)
     {
@@ -827,9 +829,9 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
     if( !bDone )
     {
-        if (pFuSlideShow)
+        if(mpSlideShow)
         {
-            pFuSlideShow->Command(rCEvt);
+            mpSlideShow->command(rCEvt);
         }
         else if (pFuActual)
         {
@@ -843,10 +845,7 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
 void ViewShell::SetupRulers (void)
 {
-    if (mbHasRulers
-        && mpContentWindow.get() != NULL
-        && (pFuSlideShow==NULL
-            || pFuSlideShow->GetAnimationMode()==ANIMATIONMODE_PREVIEW))
+    if (mbHasRulers && (mpContentWindow.get() != NULL) && (mpSlideShow==NULL) )
     {
         long nHRulerOfs = 0;
 
@@ -1046,10 +1045,10 @@ void ViewShell::ArrangeGUIElements (void)
     // The size of the window of the center pane is set differently from
     // that of the windows in the docking windows.
     bool bSlideShowActive =
-        pFuSlideShow != NULL
-        && ! pFuSlideShow->IsTerminated()
-        && ! pFuSlideShow->IsFullScreen()
-        && pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW;
+        mpSlideShow != NULL
+        && ! mpSlideShow->isTerminated()
+        && ! mpSlideShow->isFullScreen()
+        && mpSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW;
     if ( ! bSlideShowActive)
     {
         // der Sfx darf immer nur das erste Fenster setzen
@@ -1406,6 +1405,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
                     break;
             }
 
+/*
             SfxChildWindow* pPreviewChildWindow =
                 GetViewFrame()->GetChildWindow(
                     PreviewChildWindow::GetChildWindowId());
@@ -1423,7 +1423,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
                 pShow->Resize( pShowWindow->GetOutputSizePixel() );
                 pShowWindow->Invalidate();
             }
-
+*/
             pFrameView->SetPreviewDrawMode( nMode );
             SdOptions* pOptions = SD_MOD()->GetSdOptions (
                 GetDoc()->GetDocumentType() );
@@ -1567,13 +1567,14 @@ void ViewShell::SetOldFunction (FuPoor* pFunction)
 
 
 
-void ViewShell::SetSlideShowFunction (FuSlideShow* pFunction)
+void ViewShell::SetSlideShow(sd::Slideshow* pSlideShow)
 {
-    pFuSlideShow = pFunction;
+
+    if( mpSlideShow )
+        delete mpSlideShow;
+
+    mpSlideShow = pSlideShow;
 }
-
-
-
 
 bool ViewShell::IsMainViewShell (void) const
 {
