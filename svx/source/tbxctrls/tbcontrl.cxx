@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:43:24 $
+ *  last change: $Author: obo $ $Date: 2004-07-07 13:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 // include ---------------------------------------------------------------
+
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
@@ -1175,35 +1176,37 @@ void SvxColorWindow_Impl::StateChanged( USHORT nSID, SfxItemState eState, const 
         {
             XColorTable* pColorTable = pState ? ((SvxColorTableItem *)pState)->GetColorTable() : NULL;
 
-    if ( pColorTable )
-    {
-        // Die Liste der Farben (ColorTable) hat sich ge"andert:
-        short i = 0;
-        long nCount = pColorTable->Count();
-        XColorEntry* pEntry = NULL;
-        Color aColWhite( COL_WHITE );
-        String aStrWhite( SVX_RES( RID_SVXITEMS_COLOR_WHITE ) );
+            if ( pColorTable )
+            {
+                // Die Liste der Farben (ColorTable) hat sich ge"andert:
+                short i = 0;
+                long nCount = pColorTable->Count();
+                XColorEntry* pEntry = NULL;
+                Color aColWhite( COL_WHITE );
+                String aStrWhite( SVX_RES( RID_SVXITEMS_COLOR_WHITE ) );
 
-        // ScrollBar an oder aus
-        WinBits nBits = aColorSet.GetStyle();
-        if ( nCount > PALETTE_SIZE )
-            nBits &= ~WB_VSCROLL;
-        else
-            nBits |= WB_VSCROLL;
-        aColorSet.SetStyle( nBits );
+                // ScrollBar an oder aus
+                WinBits nBits = aColorSet.GetStyle();
+                if ( nCount > PALETTE_SIZE )
+                    nBits &= ~WB_VSCROLL;
+                else
+                    nBits |= WB_VSCROLL;
+                aColorSet.SetStyle( nBits );
 
-        for ( i = 0; i < nCount; ++i )
-        {
-            pEntry = pColorTable->Get(i);
-            aColorSet.SetItemColor( i + 1, pEntry->GetColor() );
-            aColorSet.SetItemText ( i + 1, pEntry->GetName() );
-        }
+                for ( i = 0; i < nCount; ++i )
+                {
+                    pEntry = pColorTable->Get(i);
+                    aColorSet.SetItemColor( i + 1, pEntry->GetColor() );
+                    aColorSet.SetItemText ( i + 1, pEntry->GetName() );
+                }
 
-        while ( i < PALETTE_SIZE )
-        {
-            aColorSet.SetItemColor( i + 1, aColWhite );
-            aColorSet.SetItemText ( i + 1, aStrWhite );
-            i++;
+                while ( i < PALETTE_SIZE )
+                {
+                    aColorSet.SetItemColor( i + 1, aColWhite );
+                    aColorSet.SetItemText ( i + 1, aStrWhite );
+                    i++;
+                }
+            }
         }
     }
 }
