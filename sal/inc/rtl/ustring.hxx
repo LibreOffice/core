@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:28:31 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 11:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,6 +670,26 @@ public:
     {
         return rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                                           asciiStr, asciiStrLength ) == 0;
+    }
+
+    /**
+      Check whether this string ends with a given ASCII string, ignoring the
+      case of ASCII letters.
+
+      @param asciiStr a sequence of at least asciiStrLength ASCII characters
+          (bytes in the range 0x00--0x7F)
+      @param asciiStrLen the length of asciiStr; must be non-negative
+      @return true if this string ends with asciiStr, ignoring the case of ASCII
+      letters ("A"--"Z" and "a"--"z"); otherwise, false is returned
+     */
+    inline bool endsWithIgnoreAsciiCaseAsciiL(
+        char const * asciiStr, sal_Int32 asciiStrLength) const
+    {
+        return asciiStrLength <= pData->length
+            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                    pData->buffer + pData->length - asciiStrLength,
+                    asciiStrLength, asciiStr, asciiStrLength)
+                == 0);
     }
 
     friend sal_Bool     operator == ( const OUString& rStr1,    const OUString& rStr2 ) SAL_THROW(())
