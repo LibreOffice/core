@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 12:59:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { "odp",   FALSE, STR_DESCRIPTION_OO_IMPRESS_DOC,        IMG_OO_IMPRESS_DOC },
     { "ods",   FALSE, STR_DESCRIPTION_OO_CALC_DOC,           IMG_OO_CALC_DOC },
     { "odt",   FALSE, STR_DESCRIPTION_OO_WRITER_DOC,         IMG_OO_WRITER_DOC },
-    { "otd",   FALSE, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      IMG_OO_DRAW_TEMPLATE },
+    { "otg",   FALSE, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      IMG_OO_DRAW_TEMPLATE },
     { "otp",   FALSE, STR_DESCRIPTION_OO_IMPRESS_TEMPLATE,   IMG_OO_IMPRESS_TEMPLATE },
     { "ots",   FALSE, STR_DESCRIPTION_OO_CALC_TEMPLATE,      IMG_OO_CALC_TEMPLATE },
     { "ott",   FALSE, STR_DESCRIPTION_OO_WRITER_TEMPLATE,    IMG_OO_WRITER_TEMPLATE },
