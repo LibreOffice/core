@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-08 12:07:30 $
+#   last change: $Author: rt $ $Date: 2002-12-11 14:00:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ nodep=true
 .INCLUDE : settings.mk
 
 dot=.
-
+UWINAPILIB=$(0)
 
 CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS -DINCLUDEDIR=\".\"
 

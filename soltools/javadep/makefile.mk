@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-08 12:07:30 $
+#   last change: $Author: rt $ $Date: 2002-12-11 14:00:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,8 @@ NO_DEFAULT_STL=TRUE
 
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
+
+UWINAPILIB=$(0)
 
 # --- Files --------------------------------------------------------
 
