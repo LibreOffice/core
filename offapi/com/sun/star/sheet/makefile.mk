@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 12:36:33 $
+#   last change: $Author: obo $ $Date: 2004-06-04 13:52:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,7 +138,16 @@ IDLFILES=\
     DataImportMode.idl\
     DataPilotDescriptor.idl\
     DataPilotField.idl\
+    DataPilotFieldAutoShowInfo.idl\
+    DataPilotFieldLayoutInfo.idl\
+    DataPilotFieldLayoutMode.idl\
     DataPilotFieldOrientation.idl\
+    DataPilotFieldReference.idl\
+    DataPilotFieldReferenceType.idl\
+    DataPilotFieldReferenceItemType.idl\
+    DataPilotFieldShowItemsMode.idl\
+    DataPilotFieldSortInfo.idl\
+    DataPilotFieldSortMode.idl\
     DataPilotFields.idl\
     DataPilotFieldsEnumeration.idl\
     DataPilotSource.idl\
