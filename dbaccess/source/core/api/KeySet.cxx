@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 13:07:17 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 10:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,9 +464,12 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     OColumnNamePos::const_iterator aIter = m_aColumnNames.begin();
     for(;aIter != m_aColumnNames.end();++aIter)
     {
-        aSql += ::dbtools::quoteName( aQuote,aIter->first);
-        aSql += aComma;
-        aValues += aPara;
+        if((*_rInsertRow)[aIter->second].isModified())
+        {
+            aSql += ::dbtools::quoteName( aQuote,aIter->first);
+            aSql += aComma;
+            aValues += aPara;
+        }
     }
 
     aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
@@ -478,18 +481,15 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
     OColumnNamePos::const_iterator aPosIter = m_aColumnNames.begin();
-    //  for(aIter = _rInsertRow->begin()+1; aIter != _rInsertRow->end();++aIter,++i)
-    for(sal_Int32 i = 1;aPosIter != m_aColumnNames.end();++aPosIter,++i)
+    for(sal_Int32 i = 1;aPosIter != m_aColumnNames.end();++aPosIter)
     {
-        if((*_rInsertRow)[aPosIter->second].isNull())
-            xParameter->setNull(i,(*_rInsertRow)[aPosIter->second].getTypeKind());
-        else
-            setParameter(i,xParameter,(*_rInsertRow)[aPosIter->second]);
-
-//          if(aIter->isNull())
-//              xParameter->setNull(i,aIter->getTypeKind());
-//          else
-//              setParameter(i,xParameter,*aIter);
+        if((*_rInsertRow)[aPosIter->second].isModified())
+        {
+            if((*_rInsertRow)[aPosIter->second].isNull())
+                xParameter->setNull(i++,(*_rInsertRow)[aPosIter->second].getTypeKind());
+            else
+                setParameter(i++,xParameter,(*_rInsertRow)[aPosIter->second]);
+        }
     }
 
     m_bInserted = xPrep->executeUpdate() > 0;
@@ -1149,6 +1149,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.18  2001/06/22 13:07:17  oj
+    #88012# change rowdeleted
+
     Revision 1.17  2001/05/22 13:08:22  oj
     #87199# check column names
 
