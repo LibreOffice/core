@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 08:28:20 $
+ *  last change: $Author: tl $ $Date: 2001-07-23 08:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
+#endif
+#ifndef _SVX_SUBSETMAP_HXX
+#include <svx/ucsubset.hxx>
 #endif
 
 
@@ -1695,6 +1698,22 @@ IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox *, pListBox )
 }
 
 
+IMPL_LINK( SmSymDefineDialog, SubsetChangeHdl, ListBox *, pListBox )
+{
+    USHORT nPos = aFontsSubsetLB.GetSelectEntryPos();
+    if (LISTBOX_ENTRY_NOTFOUND != nPos)
+    {
+        const Subset* pSubset = reinterpret_cast<const Subset*> (aFontsSubsetLB.GetEntryData( nPos ));
+        if (pSubset)
+        {
+            sal_Unicode cFirst = pSubset->GetRangeMin();
+            aCharsetDisplay.SelectCharacter( cFirst );
+        }
+    }
+    return 0;
+}
+
+
 IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, pComboBox )
 {
     DBG_ASSERT(pComboBox == &aStyles, "Sm : falsches Argument");
@@ -1707,11 +1726,15 @@ IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, pComboBox )
 IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
 {
     sal_Unicode cChar = aCharsetDisplay.GetSelectCharacter();
-/*
-    const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
-    if (pSubset)
-        aFontsSubsetLB.SelectEntry( pSubset->GetName() );
-*/
+
+    DBG_ASSERT( pSubsetMap, "SubsetMap missing" )
+    if (pSubsetMap)
+    {
+        const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
+        if (pSubset)
+            aFontsSubsetLB.SelectEntry( pSubset->GetName() );
+    }
+
     aSymbolDisplay.SetChar( cChar );
     UpdateButtons();
     return 0;
@@ -1914,6 +1937,7 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent, SmSymSetManager &rMgr, BO
     aCancelBtn          (this, ResId(1)),
     aRightArrow         (this, ResId(1)),
     pFontList           (NULL),
+    pSubsetMap          (NULL),
     rSymSetMgr          (rMgr)
 {
     if (bFreeRes)
@@ -1954,6 +1978,7 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent, SmSymSetManager &rMgr, BO
     aOldSymbols    .SetModifyHdl(LINK(this, SmSymDefineDialog, ModifyHdl));
     aStyles        .SetModifyHdl(LINK(this, SmSymDefineDialog, ModifyHdl));
     aFonts         .SetSelectHdl(LINK(this, SmSymDefineDialog, FontChangeHdl));
+    aFontsSubsetLB .SetSelectHdl(LINK(this, SmSymDefineDialog, SubsetChangeHdl));
     aStyles        .SetSelectHdl(LINK(this, SmSymDefineDialog, StyleChangeHdl));
     aAddBtn        .SetClickHdl (LINK(this, SmSymDefineDialog, AddClickHdl));
     aChangeBtn     .SetClickHdl (LINK(this, SmSymDefineDialog, ChangeClickHdl));
@@ -1965,6 +1990,7 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent, SmSymSetManager &rMgr, BO
 SmSymDefineDialog::~SmSymDefineDialog()
 {
     delete pFontList;
+    delete pSubsetMap;
 }
 
 
@@ -2168,6 +2194,30 @@ void SmSymDefineDialog::SetFont(const XubString &rFontName, const XubString &rSt
 
     aCharsetDisplay.SetFont(aFI);
     aSymbolDisplay.SetFont(aFI);
+
+    // update subset listbox for new font's unicode subsets
+    FontCharMap aFontCharMap;
+    aCharsetDisplay.GetFontCharMap( aFontCharMap );
+    if (pSubsetMap)
+        delete pSubsetMap;
+    pSubsetMap = new SubsetMap( &aFontCharMap );
+    //
+    aFontsSubsetLB.Clear();
+    if (pSubsetMap->GetSubsetCount() > 0)
+    {
+        const Subset* pSubset = 0;
+        for (USHORT i = 0;  0 != (pSubset = pSubsetMap->GetSubsetByIndex(i));  ++i)
+        {
+            USHORT nPos = aFontsSubsetLB.InsertEntry( pSubset->GetName());
+            aFontsSubsetLB.SetEntryData( nPos, (void *) pSubset );
+            // subset must live at least as long as the selected font !!!
+        }
+        aFontsSubsetLB.SelectEntryPos( 0 );
+        BOOL bEnable = aFontsSubsetLB.GetEntryCount() > 1;
+        if (!bEnable)
+            aFontsSubsetLB.SetNoSelection();
+        aFontsSubsetLB.Enable( bEnable );
+    }
 }
 
 
