@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-17 11:04:21 $
+ *  last change: $Author: tl $ $Date: 2001-11-06 13:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,8 @@ rtl_TextEncoding GetTextEncoding( INT16 nLanguage )
 
     if (nLastLanguage != nLanguage)
     {
+        //!! IPR uses textencodings Latin-1, Latin-2, Latin-5 and Latin-7 !!
+
         nLastLanguage = nLanguage;
         switch (nLanguage)
         {
@@ -166,15 +168,15 @@ rtl_TextEncoding GetTextEncoding( INT16 nLanguage )
             case LANGUAGE_NORWEGIAN_BOKMAL :
             case LANGUAGE_NORWEGIAN_NYNORSK :
             case LANGUAGE_AFRIKAANS :
-                    nEncoding = RTL_TEXTENCODING_MS_1252;   break;
+                    nEncoding = RTL_TEXTENCODING_ISO_8859_1;   break;
             case LANGUAGE_CZECH :
             case LANGUAGE_HUNGARIAN :
             case LANGUAGE_POLISH :
-                    nEncoding = RTL_TEXTENCODING_MS_1250;   break;
+                    nEncoding = RTL_TEXTENCODING_ISO_8859_2;   break;
             case LANGUAGE_RUSSIAN :
-                    nEncoding = RTL_TEXTENCODING_MS_1251;   break;
+                    nEncoding = RTL_TEXTENCODING_ISO_8859_5;   break;
             case LANGUAGE_GREEK :
-                    nEncoding = RTL_TEXTENCODING_MS_1253;   break;
+                    nEncoding = RTL_TEXTENCODING_ISO_8859_7;   break;
             default:
                     DBG_ERROR( "unexpected language" );
         }
