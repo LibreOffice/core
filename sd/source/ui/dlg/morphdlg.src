@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:05:27 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ ModalDialog DLG_MORPH
         Text [ dutch ] = "Instellingen" ;
         Text [ swedish ] = "Inställningar" ;
         Text [ danish ] = "Indstillinger" ;
-        Text [ portuguese ] = "Predefinições" ;
+        Text [ portuguese ] = "Definições" ;
         Text [ portuguese_brazilian ] = "Einstellungen" ;
         Text[ chinese_simplified ] = "Éè¶¨";
         Text[ russian ] = "Óñòàíîâêè";
