@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-08-01 10:33:18 $
+ *  last change: $Author: jp $ $Date: 2001-08-06 17:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,12 +303,12 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                     rSet.Put( SfxBoolItem( nWhich, !GetView().IsDrawSelMode()));
             break;
 
-            case FN_TOOL_VMIRROR:
+            case FN_FLIP_HORZ_GRAFIC:
                 if ( !pSdrView->IsMirrorAllowed() || bProtected )
                     rSet.DisableItem( nWhich );
                 break;
 
-            case FN_TOOL_HMIRROR:
+            case FN_FLIP_VERT_GRAFIC:
                 if ( !pSdrView->IsMirrorAllowed() || bProtected )
                     rSet.DisableItem( nWhich );
                 break;
@@ -449,6 +449,9 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/08/01 10:33:18  os
+      #90191# double configurated entries corrected
+
       Revision 1.1.1.1  2000/09/18 17:14:46  hr
       initial import
 
