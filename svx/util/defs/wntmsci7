@@ -21368,3 +21368,12 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?SetFocusHdl@SdrHdlList@@QAEXPAVSdrHdl@@@Z
 ?TravelFocusHdl@SdrHdlList@@QAEXE@Z
 ?StateChanged@FmFormNavigationDispatcher@@MAEXGGPBVSfxPoolItem@@@Z
+?GetFocus@MaskSet@@UAEXXZ
+?KeyInput@MaskSet@@UAEXABVKeyEvent@@@Z
+?onEditColor@MaskSet@@QAEXXZ
+?onSelect@SvxBmpMask@@QAEXPAVMaskSet@@@Z
+?GetFocus@SvxLightCtl3D@@UAEXXZ
+?KeyInput@SvxLightCtl3D@@UAEXABVKeyEvent@@@Z
+?LoseFocus@SvxLightCtl3D@@UAEXXZ
+?move@SvxLightCtl3D@@IAEXNN@Z
+?CreatePageVDev@svx@@YAPAVVirtualDevice@@PAVSdrPage@@KK@Z
