@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 20:03:01 $
+ *  last change: $Author: nn $ $Date: 2000-11-21 11:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #define SC_UNONAME_CFONT            "CharFont"
 #define SC_UNONAME_COUTL            "CharContoured"
 #define SC_UNONAME_CFNAME           "CharFontName"
+#define SC_UNONAME_CFSTYLE          "CharFontStyleName"
+#define SC_UNONAME_CFFAMIL          "CharFontFamily"
+#define SC_UNONAME_CFCHARS          "CharFontCharSet"
+#define SC_UNONAME_CFPITCH          "CharFontPitch"
 
 //  CellProperties
 #define SC_UNONAME_CELLSTYL         "CellStyle"
