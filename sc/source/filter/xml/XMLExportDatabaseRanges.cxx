@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-14 14:07:55 $
+ *  last change: $Author: sab $ $Date: 2002-01-18 08:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,59 +263,54 @@ void ScXMLExportDatabaseRanges::WriteImportDescriptor(const uno::Sequence <beans
 
 rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const sheet::FilterOperator aFilterOperator, const sal_Bool bUseRegularExpressions) const
 {
-    if (bUseRegularExpressions)
+    switch (aFilterOperator)
     {
-        switch (aFilterOperator)
+        case sheet::FilterOperator_EQUAL :
         {
-            case sheet::FilterOperator_EQUAL :
+            if (bUseRegularExpressions)
                 return GetXMLToken(XML_MATCH);
-                break;
-            case sheet::FilterOperator_NOT_EQUAL :
-                return GetXMLToken(XML_NOMATCH);
-                break;
-        }
-    }
-    else
-    {
-        switch (aFilterOperator)
-        {
-            case sheet::FilterOperator_EQUAL :
+            else
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-                break;
-            case sheet::FilterOperator_NOT_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
-                break;
-            case sheet::FilterOperator_BOTTOM_PERCENT :
-                return GetXMLToken(XML_BOTTOM_PERCENT);
-                break;
-            case sheet::FilterOperator_BOTTOM_VALUES :
-                return GetXMLToken(XML_BOTTOM_VALUES);
-                break;
-            case sheet::FilterOperator_EMPTY :
-                return GetXMLToken(XML_EMPTY);
-                break;
-            case sheet::FilterOperator_GREATER :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
-                break;
-            case sheet::FilterOperator_GREATER_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
-                break;
-            case sheet::FilterOperator_LESS :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
-                break;
-            case sheet::FilterOperator_LESS_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
-                break;
-            case sheet::FilterOperator_NOT_EMPTY :
-                return GetXMLToken(XML_NOEMPTY);
-                break;
-            case sheet::FilterOperator_TOP_PERCENT :
-                return GetXMLToken(XML_TOP_PERCENT);
-                break;
-            case sheet::FilterOperator_TOP_VALUES :
-                return GetXMLToken(XML_TOP_VALUES);
-                break;
         }
+        break;
+        case sheet::FilterOperator_NOT_EQUAL :
+        {
+            if (bUseRegularExpressions)
+                return GetXMLToken(XML_NOMATCH);
+            else
+                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
+        }
+        break;
+        case sheet::FilterOperator_BOTTOM_PERCENT :
+            return GetXMLToken(XML_BOTTOM_PERCENT);
+            break;
+        case sheet::FilterOperator_BOTTOM_VALUES :
+            return GetXMLToken(XML_BOTTOM_VALUES);
+            break;
+        case sheet::FilterOperator_EMPTY :
+            return GetXMLToken(XML_EMPTY);
+            break;
+        case sheet::FilterOperator_GREATER :
+            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
+            break;
+        case sheet::FilterOperator_GREATER_EQUAL :
+            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
+            break;
+        case sheet::FilterOperator_LESS :
+            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
+            break;
+        case sheet::FilterOperator_LESS_EQUAL :
+            return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
+            break;
+        case sheet::FilterOperator_NOT_EMPTY :
+            return GetXMLToken(XML_NOEMPTY);
+            break;
+        case sheet::FilterOperator_TOP_PERCENT :
+            return GetXMLToken(XML_TOP_PERCENT);
+            break;
+        case sheet::FilterOperator_TOP_VALUES :
+            return GetXMLToken(XML_TOP_VALUES);
+            break;
     }
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
 }
