@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:04:29 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,6 +464,8 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
 
     BOOL TryRemoveIndent(); // #i23725#
 
+    String GetSelDescr() const;
+
 private:
 
     SW_DLLPRIVATE void  OpenMark();
@@ -594,8 +596,6 @@ private:
     SW_DLLPRIVATE FASTBOOL MoveBookMark(    BookMarkMove eFuncId,
                             USHORT nPos = 0,
                             BOOL bStart = TRUE );
-
-
 };
 
 inline void SwWrtShell::ResetCursorStack()
