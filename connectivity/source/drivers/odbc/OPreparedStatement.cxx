@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-30 15:21:36 $
+ *  last change: $Author: oj $ $Date: 2000-12-01 13:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,9 +560,11 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
 
     sal_Int8* lenBuf = getLengthBuf (parameterIndex);
-    *lenBuf = SQL_NULL_DATA;
+    *(SDWORD*)lenBuf = SQL_NULL_DATA;
+
+
     UDWORD  prec = 0;
-    if (sqlType == SQL_CHAR)
+    if (sqlType == SQL_CHAR || sqlType == SQL_VARCHAR || sqlType == SQL_LONGVARCHAR)
         prec = 1;
 
     SQLSMALLINT fCType = 0;
@@ -579,7 +581,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
                             nDecimalDigits,
                             nColumnSize,
                             NULL,
-                            0,
+                            prec,
                             (SDWORD*)lenBuf
                             );
     OTools::ThrowException(nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
