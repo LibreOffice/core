@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:23:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,9 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+#ifndef _XMLOFF_XMLBASE64EXPORT_HXX_
+#include <xmloff/XMLBase64Export.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -152,6 +155,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
 enum SvEmbeddedObjectTypes
@@ -162,6 +166,8 @@ enum SvEmbeddedObjectTypes
     SV_EMBEDDED_PLUGIN,
     SV_EMBEDDED_FRAME
 };
+
+const sal_Char sObjectReplacements[] = "ObjectReplacements/";
 
 // ---------------------------------------------------------------------
 
@@ -283,6 +289,7 @@ SwXMLTextParagraphExport::SwXMLTextParagraphExport(
     XMLTextParagraphExport( rExp, rAutoStylePool ),
     sTextTable( RTL_CONSTASCII_USTRINGPARAM( "TextTable" ) ),
     sEmbeddedObjectProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) ),
+    sGraphicObjectProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) ),
     aAppletClassId( SO3_APPLET_CLASSID ),
     aPluginClassId( SO3_PLUGIN_CLASSID ),
     aIFrameClassId( SO3_IFRAME_CLASSID ),
@@ -794,6 +801,22 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             }
             break;
         }
+    }
+    if( SV_EMBEDDED_OUTPLACE==nType || SV_EMBEDDED_OWN==nType )
+    {
+        OUString sURL( sGraphicObjectProtocol );
+        sURL += rOLEObj.GetCurrentPersistName();
+        if( (rExport.getExportFlags() & EXPORT_EMBEDDED) == 0 )
+        {
+            sURL = GetExport().AddEmbeddedObject( sURL );
+            lcl_addURL( rExport, sURL, sal_False );
+        }
+
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                                  XML_IMAGE, sal_False, sal_True );
+
+        if( (rExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
+            GetExport().AddEmbeddedObjectAsBase64( sURL );
     }
 
     // Lastly the stuff common to each of Applet/Plugin/Floating Frame
