@@ -1,0 +1,204 @@
+/*************************************************************************
+ *
+ *  $RCSfile: c_rcode.cxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: np $ $Date: 2002-03-08 14:45:29 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <precomp.h>
+#include "c_rcode.hxx"
+
+
+// NOT FULLY DECLARED SERVICES
+#include <ary/cpp/c_rwgate.hxx>
+#include <ary/cpp/c_namesp.hxx>
+// #include <ary/cpp/c_groups.hxx>
+#include <ary/loc/l_rwgate.hxx>
+#include "cpp_pe.hxx"
+#include <adc_cl.hxx>
+#include <x_parse.hxx>
+#include "pe_file.hxx"
+
+
+
+const uintt C_nNO_TRY = uintt(-1);
+
+
+namespace cpp {
+
+
+CodeExplorer::CodeExplorer( ary::cpp::RwGate & io_rAryGate )
+    :   aGlobalParseContext(io_rAryGate),
+        // aEnvironments,
+        pPE_File(0),
+        pGate(&io_rAryGate),
+        dpCurToken(0)
+{
+    pPE_File = new PE_File( aGlobalParseContext );
+}
+
+CodeExplorer::~CodeExplorer()
+{
+}
+
+void
+CodeExplorer::StartNewFile()
+{
+    csv::erase_container(aEnvironments);
+
+    aEnvironments.push_back( pPE_File.MutablePtr() );
+    pPE_File->Enter(push);
+}
+
+void
+CodeExplorer::Process_Token( DYN cpp::Token & let_drToken )
+{
+if (DEBUG_ShowTokens())
+{
+    Cout() << let_drToken.Text() << Endl();
+}
+    dpCurToken = &let_drToken;
+    aGlobalParseContext.ResetResult();
+
+    do {
+        CurToken().Trigger( CurEnv() );
+        AcknowledgeResult();
+    } while ( dpCurToken );
+}
+
+void
+CodeExplorer::AcknowledgeResult()
+{
+    if (CurResult().eDone == done)
+        dpCurToken = 0;
+
+    switch ( CurResult().eStackAction )
+    {
+        case stay:
+                break;
+        case push:
+                CurEnv().Leave(push);
+                aEnvironments.push_back( &PushEnv() );
+                PushEnv().Enter(push);
+                break;
+        case pop_success:
+                CurEnv().Leave(pop_success);
+                aEnvironments.pop_back();
+                CurEnv().Enter(pop_success);
+                break;
+        case pop_failure:
+        {
+                Cpp_PE * pRecover = 0;
+                do {
+                    CurEnv().Leave(pop_failure);
+                    aEnvironments.pop_back();
+                    if ( aEnvironments.empty() )
+                        break;
+                    pRecover = CurEnv().Handle_ChildFailure();
+                } while ( pRecover == 0 );
+                if ( pRecover != 0 )
+                {
+                    aEnvironments.push_back(pRecover);
+                    pRecover->Enter(push);
+                }
+                else
+                {
+                    throw X_Parser( X_Parser::x_UnexpectedToken, CurToken().Text(), aGlobalParseContext.CurFileName(), aGlobalParseContext.LineCount() );
+                }
+        }       break;
+        default:
+            csv_assert(false);
+    }   // end switch(CurResult().eStackAction)
+}
+
+ary::Cid
+CodeExplorer::CurFile() const
+{
+    // KORR
+    return 0;
+}
+
+const Token &
+CodeExplorer::CurToken() const
+{
+    csv_assert(dpCurToken);
+
+    return *dpCurToken;
+}
+
+Cpp_PE &
+CodeExplorer::CurEnv() const
+{
+    csv_assert(aEnvironments.size() > 0);
+    csv_assert(aEnvironments.back() != 0);
+
+    return *aEnvironments.back();
+}
+
+Cpp_PE &
+CodeExplorer::PushEnv() const
+{
+    TokenProcessing_Result & rCurResult = const_cast< TokenProcessing_Result& >(aGlobalParseContext.CurResult());
+    Cpp_PE * ret = dynamic_cast< Cpp_PE* >(rCurResult.pEnv2Push);
+    csv_assert( ret != 0 );
+    return *ret;
+}
+
+
+
+}   // namespace cpp
+

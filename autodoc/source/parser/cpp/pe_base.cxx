@@ -1,0 +1,256 @@
+/*************************************************************************
+ *
+ *  $RCSfile: pe_base.cxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: np $ $Date: 2002-03-08 14:45:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <precomp.h>
+#include "pe_base.hxx"
+
+
+// NOT FULLY DECLARED SERVICES
+#include <cosv/template/tpltools.hxx>
+#include <ary/cpp/c_rwgate.hxx>
+#include <ary/cpp/ca_type.hxx>
+#include "pe_type.hxx"
+
+
+
+
+namespace cpp {
+
+static const PE_Base::Base aNullBase_;
+
+
+PE_Base::PE_Base( Cpp_PE * i_pParent )
+    :   Cpp_PE(i_pParent),
+        pStati(new PeStatusArray<PE_Base>)
+        // aBaseIds,
+        // pSpType,
+        // pSpuBaseName
+{
+    Setup_StatusFunctions();
+    aBaseIds.reserve(4);
+
+    pSpType         = new SP_Type(*this);
+    pSpuBaseName    = new SPU_BaseName(*pSpType, 0, &PE_Base::SpReturn_BaseName);
+}
+
+
+PE_Base::~PE_Base()
+{
+}
+
+void
+PE_Base::Call_Handler( const cpp::Token & i_rTok )
+{
+    pStati->Cur().Call_Handler(i_rTok.TypeId(), i_rTok.Text());
+}
+
+void
+PE_Base::Setup_StatusFunctions()
+{
+    typedef CallFunction<PE_Base>::F_Tok    F_Tok;
+    static F_Tok stateF_startOfNext[] =     { On_startOfNext_Identifier,
+                                              On_startOfNext_public,
+                                              On_startOfNext_protected,
+                                              On_startOfNext_private,
+                                              On_startOfNext_virtual,
+                                              On_startOfNext_DoubleColon };
+    static INT16 stateT_startOfNext[] =     { Tid_Identifier,
+                                              Tid_public,
+                                              Tid_protected,
+                                              Tid_private,
+                                              Tid_virtual,
+                                              Tid_DoubleColon };
+    static F_Tok stateF_inName[] =          { On_inName_Identifier,
+                                              On_inName_virtual,
+                                              On_inName_SwBracket_Left,
+                                              On_inName_DoubleColon,
+                                              On_inName_Comma };
+    static INT16 stateT_inName[] =          { Tid_Identifier,
+                                              Tid_virtual,
+                                              Tid_SwBracket_Left,
+                                              Tid_DoubleColon,
+                                              Tid_Comma };
+
+    SEMPARSE_CREATE_STATUS(PE_Base, startOfNext, Hdl_SyntaxError);
+    SEMPARSE_CREATE_STATUS(PE_Base, inName, Hdl_SyntaxError);
+}
+
+void
+PE_Base::Hdl_SyntaxError( const char * i_sText)
+{
+    StdHandlingOfSyntaxError(i_sText);
+}
+
+void
+PE_Base::InitData()
+{
+    pStati->SetCur(startOfNext);
+    csv::erase_container(aBaseIds);
+    aBaseIds.push_back(aNullBase_);
+}
+
+void
+PE_Base::TransferData()
+{
+    // Does nothing.
+}
+
+void
+PE_Base::SpReturn_BaseName()
+{
+    CurObject().nId = pSpuBaseName->Child().Result_Type().Id();
+
+    static StreamStr aBaseName(100);
+    aBaseName.seekp(0);
+    pSpuBaseName->Child().Result_Type().Get_Text( aBaseName, Env().AryGate().RoGate() );
+
+    Env().Event_Class_FinishedBase(aBaseName.c_str());
+}
+
+void
+PE_Base::On_startOfNext_public(const char *)
+{
+    SetTokenResult(done, stay);
+    pStati->SetCur(inName);
+
+    CurObject().eProtection = ary::cpp::PROTECT_public;
+}
+
+void
+PE_Base::On_startOfNext_protected(const char *)
+{
+    SetTokenResult(done, stay);
+    pStati->SetCur(inName);
+
+    CurObject().eProtection = ary::cpp::PROTECT_protected;
+}
+
+void
+PE_Base::On_startOfNext_private(const char *)
+{
+    SetTokenResult(done, stay);
+    pStati->SetCur(inName);
+
+    CurObject().eProtection = ary::cpp::PROTECT_private;
+}
+
+void
+PE_Base::On_startOfNext_virtual(const char *)
+{
+    SetTokenResult(done, stay);
+
+    CurObject().eVirtuality = ary::cpp::VIRTUAL_virtual;
+}
+
+void
+PE_Base::On_startOfNext_Identifier(const char * i_sText)
+{
+    pSpuBaseName->Push(not_done);
+}
+
+void
+PE_Base::On_startOfNext_DoubleColon(const char *)
+{
+    pSpuBaseName->Push(not_done);
+}
+
+void
+PE_Base::On_inName_Identifier(const char * i_sText)
+{
+    pSpuBaseName->Push(not_done);
+}
+
+void
+PE_Base::On_inName_virtual(const char *)
+{
+    SetTokenResult(done, stay);
+
+    CurObject().eVirtuality = ary::cpp::VIRTUAL_virtual;
+}
+
+void
+PE_Base::On_inName_DoubleColon(const char *)
+{
+    pSpuBaseName->Push(not_done);
+}
+
+void
+PE_Base::On_inName_Comma(const char *)
+{
+    SetTokenResult(done, stay);
+    pStati->SetCur(startOfNext);
+
+    aBaseIds.push_back( aNullBase_ );
+}
+
+void
+PE_Base::On_inName_SwBracket_Left(const char *)
+{
+    SetTokenResult(not_done, pop_success);
+}
+
+
+}   // namespace cpp
+
+
+
+
+
