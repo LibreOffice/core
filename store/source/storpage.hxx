@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storpage.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,33 +54,24 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_STORPAGE_HXX_
-#define _STORE_STORPAGE_HXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_STORPAGE_HXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
-#ifndef _VOS_MACROS_HXX_
-#include <vos/macros.hxx>
-#endif
-#ifndef _VOS_OBJECT_HXX_
-#include <vos/object.hxx>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
-#ifndef _STORE_TYPES_H_
-#include <store/types.h>
-#endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
+#ifndef _STORE_OBJECT_HXX_
+#include <store/object.hxx>
 #endif
 #ifndef _STORE_LOCKBYTE_HXX_
 #include <store/lockbyte.hxx>
@@ -93,9 +84,8 @@
 #include <stordmon.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 struct OStoreBTreeEntry;
 struct OStoreBTreeNodeData;
@@ -112,10 +102,8 @@ class  OStorePageCache;
  * OStorePageManager interface.
  *
  *======================================================================*/
-class OStorePageManager : public NAMESPACE_STORE(OStorePageBIOS)
+class OStorePageManager : public store::OStorePageBIOS
 {
-    VOS_DECLARE_CLASSINFO (VOS_NAMESPACE (OStorePageManager, store));
-
 public:
     /** Construction.
      */
@@ -206,8 +194,12 @@ public:
         ILockBytes *pSrcLB,
         ILockBytes *pDstLB);
 
+    /** IStoreHandle.
+     */
+    virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
+
 protected:
-    /** Destruction (OReference).
+    /** Destruction.
     */
     virtual ~OStorePageManager (void);
 
@@ -225,11 +217,19 @@ private:
     typedef OStoreIndirectionPageData indirect;
     typedef OStoreDataPageData        data;
 
+    /** IStoreHandle TypeId.
+     */
+    static const sal_uInt32 m_nTypeId;
+
+    /** IStoreHandle query() template function specialization.
+     */
+    friend inline OStorePageManager*
+    SAL_CALL query (IStoreHandle *pHandle, OStorePageManager*);
+
     /** Representation.
     */
-    typedef NAMESPACE_VOS(ORef)<OStorePageDaemon> OStorePageDaemonRef;
-    OStorePageDaemonRef m_xDaemon;
-    OStorePageCache    *m_pCache;
+    rtl::Reference<OStorePageDaemon>  m_xDaemon;
+    OStorePageCache                  *m_pCache;
 
     page               *m_pNode[3];
     inode              *m_pDirect;
@@ -263,14 +263,24 @@ inline sal_Bool OStorePageManager::isValid (void) const
     return (base::isValid() && (m_nPageSize > 0));
 }
 
+inline OStorePageManager*
+SAL_CALL query (IStoreHandle *pHandle, OStorePageManager*)
+{
+    if (pHandle && pHandle->isKindOf (OStorePageManager::m_nTypeId))
+    {
+        // Handle is kind of OStorePageManager.
+        return static_cast<OStorePageManager*>(pHandle);
+    }
+    return 0;
+}
+
 /*========================================================================
  *
  * The End.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-}
-#endif
+
+} // namespace store
 
 #endif /* !_STORE_STORPAGE_HXX_ */
 

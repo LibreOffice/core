@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storpage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:32 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:45:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,12 +54,12 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
-#define _STORE_STORPAGE_CXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_STORPAGE_CXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -71,19 +71,19 @@
 #ifndef _RTL_STRING_H_
 #include <rtl/string.h>
 #endif
-
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
-#endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
 #endif
 #ifndef _STORE_OBJECT_HXX_
 #include <store/object.hxx>
@@ -112,20 +112,14 @@
 #include <storpage.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
 using namespace store;
-#endif
 
 /*========================================================================
  *
  * OStorePageManager implementation.
  *
  *======================================================================*/
-VOS_IMPLEMENT_CLASSINFO(
-    VOS_CLASSNAME (OStorePageManager, store),
-    VOS_NAMESPACE (OStorePageManager, store),
-    VOS_NAMESPACE (OStorePageBIOS, store),
-    0);
+const sal_uInt32 OStorePageManager::m_nTypeId = sal_uInt32(0x62190120);
 
 /*
  * OStorePageManager.
@@ -148,8 +142,7 @@ OStorePageManager::OStorePageManager (void)
     m_pLink[2] = NULL;
 
     // Daemon (kflushd :-).
-    if (OStorePageDaemon::getOrCreate (m_xDaemon))
-        m_xDaemon->insert (this);
+    OStorePageDaemon::getOrCreate (m_xDaemon);
 }
 
 /*
@@ -157,9 +150,12 @@ OStorePageManager::OStorePageManager (void)
  */
 OStorePageManager::~OStorePageManager (void)
 {
-    NAMESPACE_VOS(OGuard) aGuard (*this);
-    if (m_xDaemon.isValid())
+    osl::MutexGuard aGuard (*this);
+    if (m_xDaemon.is())
+    {
         m_xDaemon->remove (this);
+        m_xDaemon.clear();
+    }
 
     delete m_pCache;
     delete m_pDirect;
@@ -175,6 +171,14 @@ OStorePageManager::~OStorePageManager (void)
 }
 
 /*
+ * isKindOf.
+ */
+sal_Bool SAL_CALL OStorePageManager::isKindOf (sal_uInt32 nTypeId)
+{
+    return (nTypeId == m_nTypeId);
+}
+
+/*
  * initialize (two-phase construction).
  * Precond: none.
  */
@@ -184,7 +188,7 @@ storeError OStorePageManager::initialize (
     sal_uInt16       nPageSize)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check arguments.
     if (!pLockBytes)
@@ -211,7 +215,7 @@ storeError OStorePageManager::initialize (
 
     // Obtain page size.
     eErrCode = base::getPageSize (m_nPageSize);
-    VOS_POSTCOND(
+    OSL_POSTCOND(
         eErrCode == store_E_None,
         "OStorePageManager::initialize(): getPageSize() failed");
     if (eErrCode != store_E_None)
@@ -236,6 +240,12 @@ storeError OStorePageManager::initialize (
     {
         m_pNode[1] = new(m_nPageSize) page(m_nPageSize);
         m_pNode[2] = new(m_nPageSize) page(m_nPageSize);
+
+        if (m_xDaemon.is())
+        {
+            // Request to be flushed.
+            m_xDaemon->insert (this);
+        }
     }
 
     // Initialize page cache.
@@ -252,7 +262,7 @@ storeError OStorePageManager::initialize (
 storeError OStorePageManager::free (OStorePageObject &rPage)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -282,7 +292,7 @@ storeError OStorePageManager::free (OStorePageObject &rPage)
 storeError OStorePageManager::load (OStorePageObject &rPage)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -329,7 +339,7 @@ storeError OStorePageManager::load (OStorePageObject &rPage)
 storeError OStorePageManager::save (OStorePageObject &rPage)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -388,7 +398,7 @@ storeError OStorePageManager::save (OStorePageObject &rPage)
 storeError OStorePageManager::flush (void)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -400,7 +410,7 @@ storeError OStorePageManager::flush (void)
 
     // Flush cache.
     storeError eErrCode = m_pCache->flush (*this, NULL);
-    VOS_POSTCOND(
+    OSL_POSTCOND(
         eErrCode == store_E_None,
         "OStorePageManager::flush(): cache::flush() failed");
 
@@ -601,7 +611,7 @@ storeError OStorePageManager::remove (
         result = rEntry.compare (rPage.m_pData[i]);
     }
 
-    VOS_POSTCOND(
+    OSL_POSTCOND(
         result != entry::COMPARE_LESS,
         "OStorePageManager::remove(): find failed");
 
@@ -626,7 +636,7 @@ storeError OStorePageManager::load (
     OStoreDirectoryPageObject &rPage)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -678,7 +688,7 @@ storeError OStorePageManager::save (
     OStoreDirectoryPageObject &rPage)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -702,7 +712,7 @@ storeError OStorePageManager::save (
     {
         // Compare entry.
         entry::CompareResult result = e.compare (m_pNode[0]->m_pData[i]);
-        VOS_POSTCOND(
+        OSL_POSTCOND(
             result != entry::COMPARE_LESS,
             "OStorePageManager::save(): find failed");
 
@@ -765,7 +775,7 @@ storeError OStorePageManager::attrib (
     sal_uInt32          &rAttrib)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -840,7 +850,7 @@ storeError OStorePageManager::link (
     const OStorePageKey &rDstKey)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -896,7 +906,7 @@ storeError OStorePageManager::link (
     {
         // Compare entry.
         entry::CompareResult result = e.compare (m_pNode[0]->m_pData[i]);
-        VOS_POSTCOND(
+        OSL_POSTCOND(
             result != entry::COMPARE_LESS,
             "OStorePageManager::link(): find failed");
 
@@ -931,7 +941,7 @@ storeError OStorePageManager::symlink (
     const OStorePageKey &rDstKey)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -966,7 +976,7 @@ storeError OStorePageManager::symlink (
     {
         // Compare entry.
         entry::CompareResult result = e.compare (m_pNode[0]->m_pData[i]);
-        VOS_POSTCOND(
+        OSL_POSTCOND(
             result != entry::COMPARE_LESS,
             "OStorePageManager::symlink(): find failed");
 
@@ -1034,7 +1044,7 @@ storeError OStorePageManager::rename (
     const rtl_String    *pDstName)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -1125,7 +1135,7 @@ storeError OStorePageManager::rename (
     {
         // Compare entry.
         entry::CompareResult result = e.compare (m_pNode[0]->m_pData[i]);
-        VOS_POSTCOND(
+        OSL_POSTCOND(
             result != entry::COMPARE_LESS,
             "OStorePageManager::rename(): find failed");
 
@@ -1185,7 +1195,7 @@ storeError OStorePageManager::rename (
 storeError OStorePageManager::remove (const OStorePageKey &rKey)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -1297,7 +1307,7 @@ storeError OStorePageManager::iterate (
     sal_uInt32       &rAttrib)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check precond.
     if (!self::isValid())
@@ -1322,7 +1332,7 @@ storeError OStorePageManager::iterate (
 
     // Compare entry.
     entry::CompareResult result = e.compare (m_pNode[0]->m_pData[i]);
-    VOS_POSTCOND(
+    OSL_POSTCOND(
         result != entry::COMPARE_LESS,
         "OStorePageManager::iterate(): find failed");
 
@@ -1353,8 +1363,8 @@ struct RebuildContext
 {
     /** Representation.
     */
-    NAMESPACE_VOS(ORef)<OStorePageBIOS> m_xBIOS;
-    OStorePageBIOS::ScanContext         m_aCtx;
+    rtl::Reference<OStorePageBIOS> m_xBIOS;
+    OStorePageBIOS::ScanContext    m_aCtx;
 
     /** Construction.
      */
@@ -1408,7 +1418,7 @@ storeError OStorePageManager::rebuild (
     ILockBytes *pSrcLB, ILockBytes *pDstLB)
 {
     // Acquire exclusive access.
-    NAMESPACE_VOS(OGuard) aGuard(*this);
+    osl::MutexGuard aGuard(*this);
 
     // Check arguments.
     storeError eErrCode = store_E_InvalidParameter;
@@ -1426,6 +1436,9 @@ storeError OStorePageManager::rebuild (
     eErrCode = aCtx.getPageSize (nPageSize);
     if (eErrCode != store_E_None)
         return eErrCode;
+
+    // Prevent flush() attempt from daemon during exclusive access.
+    m_xDaemon.clear();
 
     // Initialize as 'Destination' with 'Source' page size.
     eErrCode = self::initialize (pDstLB, store_AccessCreate, nPageSize);
@@ -1491,8 +1504,8 @@ storeError OStorePageManager::rebuild (
                 m_pData->m_aDescr.m_nSize = m_nPageSize;
 
                 // Read 'Source' data page.
-                OStorePageBIOS &rBIOS = *(aCtx.m_xBIOS);
-                NAMESPACE_VOS(IMutex) &rMutex = rBIOS;
+                OStorePageBIOS &rBIOS  = *(aCtx.m_xBIOS);
+                osl::Mutex     &rMutex = rBIOS;
 
                 eErrCode = aSrcPage.get (
                     i, m_pLink[0], m_pLink[1], m_pLink[2],
@@ -1511,6 +1524,9 @@ storeError OStorePageManager::rebuild (
             eErrCode = base::save (aDstPage);
         }
     }
+
+    // Save directory scan results.
+    flush();
 
     // Scan 'Source' BTree nodes.
     page *pNode = new(m_nPageSize) page(m_nPageSize);
@@ -1552,6 +1568,9 @@ storeError OStorePageManager::rebuild (
         }
     }
 
+    // Save BTree node scan results.
+    flush();
+
     // Cleanup.
     delete pDirect;
     delete pNode;
@@ -1559,4 +1578,3 @@ storeError OStorePageManager::rebuild (
     // Done.
     return store_E_None;
 }
-
