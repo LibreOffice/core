@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:03:31 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,42 @@ namespace dbaui
             pTransfer->CopyToClipboard(getView());
     }
     // -----------------------------------------------------------------------------
+    void SbaTableQueryBrowser::clearTreeModel()
+    {
+        if (m_pTreeModel)
+        {
+            // clear the user data of the tree model
+            SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
+            while (pEntryLoop)
+            {
+                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
+                if(pData)
+                {
+                    pEntryLoop->SetUserData(NULL);
+                    Reference< XContainer > xContainer(pData->xObject, UNO_QUERY);
+                    if (xContainer.is())
+                        xContainer->removeContainerListener(this);
+
+                    Reference<XConnection> xCon(pData->xObject,UNO_QUERY);
+                    if(xCon.is())
+                    {
+                        Reference< XComponent >  xComponent(xCon, UNO_QUERY);
+                        if (xComponent.is())
+                        {
+                            Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+                            xComponent->removeEventListener(xEvtL);
+                        }
+                        ::comphelper::disposeComponent(pData->xObject);
+                    }
+
+                    pData->xObject.clear();
+                    delete pData;
+                }
+                pEntryLoop = m_pTreeModel->Next(pEntryLoop);
+            }
+        }
+        m_pCurrentlyDisplayed = NULL;
+    }
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
