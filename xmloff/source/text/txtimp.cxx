@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-28 09:44:41 $
+ *  last change: $Author: dvo $ $Date: 2002-09-18 18:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1182,6 +1182,52 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     }
 
     return sStyleName;
+}
+
+void XMLTextImportHelper::FindOutlineStyleName(
+    ::rtl::OUString& rStyleName,
+    sal_Int8 nLevel )
+{
+    // style name empty?
+    if( rStyleName.getLength() == 0 )
+    {
+        // Empty? Then we need o do stuff. Let's do error checking first.
+        if( xChapterNumbering.is() &&
+            ( nLevel > 0 ) &&
+            ( nLevel <= xChapterNumbering->getCount() ) )
+        {
+            nLevel--;   // for the remainder, the level's are 0-based
+
+            // empty style name: look-up previously used name
+
+            // if we don't have a previously used name, we'll use the default
+            if( pOutlineStyles == NULL )
+                pOutlineStyles = new OUString[xChapterNumbering->getCount()];
+
+            if( pOutlineStyles[nLevel] == NULL )
+            {
+                // no other name used previously? Then use default
+
+                // iterate over property value sequence to find the style name
+                Sequence<PropertyValue> aProperties;
+                xChapterNumbering->getByIndex( nLevel ) >>= aProperties;
+                for( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
+                {
+                    if( aProperties[i].Name == sHeadingStyleName )
+                    {
+                        aProperties[i].Value >>= pOutlineStyles[nLevel];
+                        break;  // early out, if we found it!.
+                    }
+                }
+            }
+
+            // finally, we'll use the previously used style name for this
+            // format (or the default we've just put into that style)
+            rStyleName = pOutlineStyles[nLevel];
+        }
+        // else: nothing we can do, so we'll leave it empty
+    }
+    // else: we already had a style name, so we let it pass.
 }
 
 void XMLTextImportHelper::SetOutlineStyle(

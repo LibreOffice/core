@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dvo $ $Date: 2002-07-03 16:18:46 $
+ *  last change: $Author: dvo $ $Date: 2002-09-18 18:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1935,6 +1935,10 @@ XMLParaContext::~XMLParaContext()
     Reference < XTextCursor > xAttrCursor=
         xTxtImport->GetText()->createTextCursorByRange( xStart );
     xAttrCursor->gotoRange( xEnd, sal_True );
+
+    // #103445# for headings without style name, find the proper style
+    if( bHeading && (sStyleName.getLength() == 0) )
+        xTxtImport->FindOutlineStyleName( sStyleName, nOutlineLevel );
 
     // set style and hard attributes at the previous paragraph
     sStyleName = xTxtImport->SetStyleAndAttrs( xAttrCursor, sStyleName, sal_True );
