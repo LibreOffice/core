@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:13:12 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1210,6 +1210,8 @@ void XMLFilterSettingsDialog::initFilterList()
                     continue;
 
                 // get filter information from userdata
+                pTempFilter->maImportService = aUserData[2];
+                pTempFilter->maExportService = aUserData[3];
                 pTempFilter->maImportXSLT = aUserData[4];
                 pTempFilter->maExportXSLT = aUserData[5];
                 if( aUserData.getLength() >= 7 )
@@ -1353,7 +1355,36 @@ std::vector< application_info_impl* >& getApplicationInfos()
             aResId4,
             "com.sun.star.comp.Draw.XMLImporter",
             "com.sun.star.comp.Draw.XMLExporter" ) );
-    }
+
+        // --- oasis file formats...
+        ResId aResId5( STR_APPL_NAME_OASIS_WRITER, getXSLTDialogResMgr() );
+        aInfos.push_back( new application_info_impl(
+            "com.sun.star.text.TextDocument",
+            aResId5,
+            "com.sun.star.comp.Writer.XMLOasisImporter",
+            "com.sun.star.comp.Writer.XMLOasisExporter" ) );
+
+        ResId aResId6( STR_APPL_NAME_OASIS_CALC, getXSLTDialogResMgr() );
+        aInfos.push_back( new application_info_impl(
+            "com.sun.star.sheet.SpreadsheetDocument",
+            aResId6,
+            "com.sun.star.comp.Calc.XMLOasisImporter",
+            "com.sun.star.comp.Calc.XMLOasisExporter" ) );
+
+        ResId aResId7( STR_APPL_NAME_OASIS_IMPRESS, getXSLTDialogResMgr() );
+        aInfos.push_back( new application_info_impl(
+            "com.sun.star.presentation.PresentationDocument",
+            aResId7,
+            "com.sun.star.comp.Impress.XMLOasisImporter",
+            "com.sun.star.comp.Impress.XMLOasisExporter" ) );
+
+        ResId aResId8( STR_APPL_NAME_OASIS_DRAW, getXSLTDialogResMgr() );
+        aInfos.push_back( new application_info_impl(
+            "com.sun.star.drawing.DrawingDocument",
+            aResId8,
+            "com.sun.star.comp.Draw.XMLOasisImporter",
+            "com.sun.star.comp.Draw.XMLOasisExporter" ) );
+}
 
     return aInfos;
 }
@@ -1366,7 +1397,9 @@ const application_info_impl* getApplicationInfo( const OUString& rServiceName )
     std::vector< application_info_impl* >::iterator aIter( rInfos.begin() );
     while( aIter != rInfos.end() )
     {
-        if( rServiceName == (*aIter)->maDocumentService )
+        // if( rServiceName == (*aIter)->maDocumentService )
+        if( rServiceName == (*aIter)->maXMLExporter ||
+            rServiceName == (*aIter)->maXMLImporter)
         {
             return (*aIter);
         }
@@ -1590,7 +1623,11 @@ String XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
 {
     String aEntryStr( pInfo->maFilterName );
     aEntryStr += '\t';
-    aEntryStr += String( getApplicationUIName( pInfo->maDocumentService ) );
+    // aEntryStr += String( getApplicationUIName( pInfo->maDocumentService ) );
+    if ( pInfo->maExportService.getLength() > 0 )
+        aEntryStr += String( getApplicationUIName( pInfo->maExportService ) );
+    else
+        aEntryStr += String( getApplicationUIName( pInfo->maImportService ) );
     aEntryStr += ' ';
     aEntryStr += '-';
     aEntryStr += ' ';
@@ -1644,6 +1681,8 @@ filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
     maDTD( rInfo.maDTD ),
     maExportXSLT( rInfo.maExportXSLT ),
     maImportXSLT( rInfo.maImportXSLT ),
+    maExportService( rInfo.maExportService ),
+    maImportService( rInfo.maImportService ),
     maImportTemplate( rInfo.maImportTemplate ),
     maFlags( rInfo.maFlags ),
     maFileFormatVersion( rInfo.maFileFormatVersion ),
@@ -1667,6 +1706,8 @@ int filter_info_impl::operator==( const filter_info_impl& r ) const
         maDTD != r.maDTD ||
         maExportXSLT != r.maExportXSLT ||
         maImportXSLT != r.maImportXSLT ||
+        maExportService != r.maExportService ||
+        maImportService != r.maImportService ||
         maImportTemplate != r.maImportTemplate ||
         maFlags != r.maFlags ||
         maFileFormatVersion != r.maFileFormatVersion )
@@ -1682,12 +1723,16 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
     Sequence< OUString > aUserData(8);
 
     aUserData[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" ) );
+    /*
     const application_info_impl* pInfo = getApplicationInfo( maDocumentService );
     if( pInfo )
     {
         aUserData[2] = pInfo->maXMLImporter;
         aUserData[3] = pInfo->maXMLExporter;
     }
+    */
+    aUserData[2] = maImportService;
+    aUserData[3] = maExportService;
     aUserData[4] = maImportXSLT;
     aUserData[5] = maExportXSLT;
     aUserData[6] = maDTD;
