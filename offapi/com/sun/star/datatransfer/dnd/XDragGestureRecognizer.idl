@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragGestureRecognizer.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:19 $
+ *  last change: $Author: arellano $ $Date: 2001-07-27 20:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,9 @@ interface XDragGestureListener;
     operations.
 
     <p>Different to Java, the association between view and interface is fixed
-    and can not be changed. Otherwise the awt messaging would have to be
-    implemented for any window supporting Drag and Drop operations, what would
-    be a real performance issue.</p>
+    and cannot be changed. Otherwise, the awt messaging would have to be
+    implemented for any window supporting Drag and Drop operations, which would
+    be a performance issue.</p>
 */
 
 interface XDragGestureRecognizer: com::sun::star::uno::XInterface
@@ -103,7 +103,7 @@ interface XDragGestureRecognizer: com::sun::star::uno::XInterface
     [oneway] void removeDragGestureListener( [in] XDragGestureListener dgl );
 
     //-------------------------------------------------------------------------
-    /** reset the Recognizer, if its currently recognizing a gesture, ignore it.
+    /** reset the Recognizer. If it is currently recognizing a gesture, ignore it.
     */
 
     void resetRecognizer();
