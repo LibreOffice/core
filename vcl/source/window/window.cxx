@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.191 $
+ *  $Revision: 1.192 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 15:18:01 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@
 #include <sysdata.hxx>
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
+#include <button.hxx> // Button::GetStandardText
 #endif
 #include <com/sun/star/awt/XWindowPeer.hpp>
 
@@ -321,14 +324,39 @@ void Window::ImplInitAppFontData( Window* pWindow )
 
 // -----------------------------------------------------------------------
 
+bool Window::ImplCheckUIFont( const Font& rFont )
+{
+    ImplInitFontList();
+
+    String aTestText;
+    aTestText.Append( Button::GetStandardText( BUTTON_OK ) );
+    aTestText.Append( Button::GetStandardText( BUTTON_CANCEL ) );
+    aTestText.Append( Button::GetStandardText( BUTTON_YES ) );
+    aTestText.Append( Button::GetStandardText( BUTTON_NO ) );
+    aTestText.Append( Button::GetStandardText( BUTTON_RETRY ) );
+    aTestText.Append( Button::GetStandardText( BUTTON_HELP ) );
+    aTestText.Append( Button::GetStandardText( BUTTON_CLOSE ) );
+    aTestText.Append( Button::GetStandardText( BUTTON_MORE ) );
+    aTestText.Append( Button::GetStandardText( BUTTON_ABORT ) );
+
+    return HasGlyphs( rFont, aTestText ) >= aTestText.Len();
+}
+
+// -----------------------------------------------------------------------
+
 void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
 {
     // Verify availability of the configured UI font, otherwise choose "Andale Sans UI"
     String aUserInterfaceFont;
-    if ( !rSettings.GetStyleSettings().GetUseSystemUIFonts() )
+    bool bUseSystemFont = rSettings.GetStyleSettings().GetUseSystemUIFonts();
+
+    // check whether system UI font can display a typical UI text
+    if( bUseSystemFont )
+        bUseSystemFont = ImplCheckUIFont( rSettings.GetStyleSettings().GetAppFont() );
+
+    if ( !bUseSystemFont )
     {
         ImplInitFontList();
-
         String aConfigFont = vcl::DefaultFontConfigItem::get()->getUserInterfaceFont( rSettings.GetUILocale() );
         xub_StrLen nIndex = 0;
         while( nIndex != STRING_NOTFOUND )
@@ -349,7 +377,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         }
     }
 
-    if ( !rSettings.GetStyleSettings().GetUseSystemUIFonts() && aUserInterfaceFont.Len() )
+    if ( !bUseSystemFont && aUserInterfaceFont.Len() )
     {
         StyleSettings aStyleSettings = rSettings.GetStyleSettings();
         Font aFont = aStyleSettings.GetAppFont();
@@ -394,77 +422,74 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         rSettings.SetStyleSettings( aStyleSettings );
     }
 
-    if( 1 )
-    {
-        StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-        // #97047: Force all fonts except Menu and Help to a fixed height
-        // to avoid UI scaling due to large fonts
-        // - but allow bigger fonts on bigger screens (i16682, i21238)
-        //   dialogs were designed to fit 800x600 with an 8pt font, so scale accordingly
-        int maxFontheight = 9; // #107886#: 9 is default for some asian systems, so always allow if requested
-        if( GetDesktopRectPixel().getHeight() > 600 )
-            maxFontheight = (int) ((( 8 * (double) GetDesktopRectPixel().getHeight()) / 600.) + 0.5);
+    StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+    // #97047: Force all fonts except Menu and Help to a fixed height
+    // to avoid UI scaling due to large fonts
+    // - but allow bigger fonts on bigger screens (i16682, i21238)
+    //   dialogs were designed to fit 800x600 with an 8pt font, so scale accordingly
+    int maxFontheight = 9; // #107886#: 9 is default for some asian systems, so always allow if requested
+    if( GetDesktopRectPixel().getHeight() > 600 )
+        maxFontheight = (int) ((( 8 * (double) GetDesktopRectPixel().getHeight()) / 600.) + 0.5);
 
-        Font aFont = aStyleSettings.GetMenuFont();
-        int defFontheight = aFont.GetHeight();
-        if( defFontheight > maxFontheight )
-            defFontheight = maxFontheight;
+    Font aFont = aStyleSettings.GetMenuFont();
+    int defFontheight = aFont.GetHeight();
+    if( defFontheight > maxFontheight )
+        defFontheight = maxFontheight;
 
-        // if the UI is korean, always use 9pt
-        LanguageType aLang = Application::GetSettings().GetUILanguage();
-        if( aLang == LANGUAGE_KOREAN || aLang == LANGUAGE_KOREAN_JOHAB )
-            defFontheight = Max(9, defFontheight);
+    // if the UI is korean, always use 9pt
+    LanguageType aLang = Application::GetSettings().GetUILanguage();
+    if( aLang == LANGUAGE_KOREAN || aLang == LANGUAGE_KOREAN_JOHAB )
+        defFontheight = Max(9, defFontheight);
 
-        // i22098, toolfont will be scaled differently to avoid bloated rulers and status bars for big fonts
-        int toolfontheight = defFontheight;
-        if( toolfontheight > 9 )
-            toolfontheight = (defFontheight+8) / 2;
+    // i22098, toolfont will be scaled differently to avoid bloated rulers and status bars for big fonts
+    int toolfontheight = defFontheight;
+    if( toolfontheight > 9 )
+        toolfontheight = (defFontheight+8) / 2;
 
-        aFont = aStyleSettings.GetAppFont();
-        aFont.SetHeight( defFontheight );
-        aStyleSettings.SetAppFont( aFont );
-        //aFont = aStyleSettings.GetHelpFont();
-        //aFont.SetHeight( defFontheight );
-        //aStyleSettings.SetHelpFont( aFont );
-        aFont = aStyleSettings.GetTitleFont();
-        aFont.SetHeight( defFontheight );
-        aStyleSettings.SetTitleFont( aFont );
-        aFont = aStyleSettings.GetFloatTitleFont();
-        aFont.SetHeight( defFontheight );
-        aStyleSettings.SetFloatTitleFont( aFont );
-        //aFont = aStyleSettings.GetMenuFont();
-        //aFont.SetHeight( defFontheight );
-        //aStyleSettings.SetMenuFont( aFont );
+    aFont = aStyleSettings.GetAppFont();
+    aFont.SetHeight( defFontheight );
+    aStyleSettings.SetAppFont( aFont );
+    //aFont = aStyleSettings.GetHelpFont();
+    //aFont.SetHeight( defFontheight );
+    //aStyleSettings.SetHelpFont( aFont );
+    aFont = aStyleSettings.GetTitleFont();
+    aFont.SetHeight( defFontheight );
+    aStyleSettings.SetTitleFont( aFont );
+    aFont = aStyleSettings.GetFloatTitleFont();
+    aFont.SetHeight( defFontheight );
+    aStyleSettings.SetFloatTitleFont( aFont );
+    //aFont = aStyleSettings.GetMenuFont();
+    //aFont.SetHeight( defFontheight );
+    //aStyleSettings.SetMenuFont( aFont );
 
-        // use different height for toolfont
-        aFont = aStyleSettings.GetToolFont();
-        aFont.SetHeight( toolfontheight );
-        aStyleSettings.SetToolFont( aFont );
+    // use different height for toolfont
+    aFont = aStyleSettings.GetToolFont();
+    aFont.SetHeight( toolfontheight );
+    aStyleSettings.SetToolFont( aFont );
 
-        aFont = aStyleSettings.GetLabelFont();
-        aFont.SetHeight( defFontheight );
-        aStyleSettings.SetLabelFont( aFont );
-        aFont = aStyleSettings.GetInfoFont();
-        aFont.SetHeight( defFontheight );
-        aStyleSettings.SetInfoFont( aFont );
-        aFont = aStyleSettings.GetRadioCheckFont();
-        aFont.SetHeight( defFontheight );
-        aStyleSettings.SetRadioCheckFont( aFont );
-        aFont = aStyleSettings.GetPushButtonFont();
-        aFont.SetHeight( defFontheight );
-        aStyleSettings.SetPushButtonFont( aFont );
-        aFont = aStyleSettings.GetFieldFont();
-        aFont.SetHeight( defFontheight );
-        aStyleSettings.SetFieldFont( aFont );
-        aFont = aStyleSettings.GetIconFont();
-        aFont.SetHeight( defFontheight );
-        aStyleSettings.SetIconFont( aFont );
-        aFont = aStyleSettings.GetGroupFont();
-        aFont.SetHeight( defFontheight );
-        aStyleSettings.SetGroupFont( aFont );
+    aFont = aStyleSettings.GetLabelFont();
+    aFont.SetHeight( defFontheight );
+    aStyleSettings.SetLabelFont( aFont );
+    aFont = aStyleSettings.GetInfoFont();
+    aFont.SetHeight( defFontheight );
+    aStyleSettings.SetInfoFont( aFont );
+    aFont = aStyleSettings.GetRadioCheckFont();
+    aFont.SetHeight( defFontheight );
+    aStyleSettings.SetRadioCheckFont( aFont );
+    aFont = aStyleSettings.GetPushButtonFont();
+    aFont.SetHeight( defFontheight );
+    aStyleSettings.SetPushButtonFont( aFont );
+    aFont = aStyleSettings.GetFieldFont();
+    aFont.SetHeight( defFontheight );
+    aStyleSettings.SetFieldFont( aFont );
+    aFont = aStyleSettings.GetIconFont();
+    aFont.SetHeight( defFontheight );
+    aStyleSettings.SetIconFont( aFont );
+    aFont = aStyleSettings.GetGroupFont();
+    aFont.SetHeight( defFontheight );
+    aStyleSettings.SetGroupFont( aFont );
 
-        rSettings.SetStyleSettings( aStyleSettings );
-    }
+    rSettings.SetStyleSettings( aStyleSettings );
 
 
     // #104427# auto detect HC mode ?
