@@ -20,6 +20,7 @@ Public nMaxColRightX as Long
 Public nMaxTCWidth as Long
 Public nMaxRowRightX as Long
 Public nMaxRowY as Long
+Public nSecMaxRowY as Long
 Public MaxIndex as Integer
 Public Const cVertDistance = 200
 Public Const cHoriDistance = 300
@@ -225,10 +226,16 @@ Dim oModel as Object
 				ToggleAlignGroup(False)
 			Case Else &apos; cColumnarTop,cLeftJustified, cTopJustified
 				ToggleAlignGroup(CurArrangement = cColumnarLeft)
+				If CurArrangement = cColumnarTop Then
+					If CurAlignMode = com.sun.star.awt.TextAlign.RIGHT Then
+						oDialogModel.optAlign0.State = 1
+						CurAlignMode = com.sun.star.awt.TextAlign.LEFT
+						OldAlignMode = com.sun.star.awt.TextAlign.RIGHT
+					End If
+				End If
 				ControlCaptionstoStandardLayout()
 				oDBForm.Load
 		End Select
-		
 	End If
 End Sub
 

@@ -244,7 +244,7 @@ Sub InitializeLayoutSettings()
 	ToggleAlignGroup(bControlsAreCreated)
 	ArrangeControls()
 	If OldAlignMode &lt;&gt; 0 Then
-		DlgFormDB.GetControl(&quot;cmdAlign&quot; &amp; OldAlignmode).Model.State = 0
+		DlgFormDB.GetControl(&quot;optAlign2&quot;).Model.State = 0
 	End If
 End Sub
 
@@ -276,11 +276,4 @@ Dim oFilters() as Object
 	If bDocIsStored Then
 		DlgFormDB.EndExecute()
 	End If
-End Sub
-
-
-Sub HelperDialog()
-&apos;Todo: The String &quot;start&quot; can be replaced by a HelpIndex
-	StarDesktop.LoadComponentfromUrl(&quot;vnd.sun.star.help://&quot; &amp; sDocType &amp; &quot;/start&quot;, &quot;_OFFICE_HELP&quot;, 64, NoArgs())
-End Sub
-</script:module>
+End Sub</script:module>

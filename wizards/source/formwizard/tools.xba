@@ -21,10 +21,10 @@ Dim oControl as Object
 	If Not IsMissing(LocText) Then
 		aPeerSize = GetPeerSize(oModel, oControl, LocText)
 	Else
-		aPeerSize = GetPeerSize(oModel, oControl
+		aPeerSize = GetPeerSize(oModel, oControl)
 	End If
 	nWidth = aPeerSize.Width
-	GetPreferredWidth = PixelTo100thmm(nWidth)
+	GetPreferredWidth = nWidth * XPixelFactor	&apos; PixelTo100thmm(nWidth)
 End Function
 
 
@@ -39,8 +39,9 @@ Dim oControl as Object
 		aPeerSize = GetPeerSize(oModel, oControl)
 	End If
 	nHeight = aPeerSize.Height
-	GetPreferredHeight = PixelTo100thmm(nHeight)
+	GetPreferredHeight = nHeight * YPixelFactor 	&apos; PixelTo100thmm(nHeight)
 End Function
+
 
 
 Function GetPeerSize(oModel as Object, oControl as Object, Optional LocText)	
@@ -48,8 +49,11 @@ Dim oPeer as Object
 Dim aPeerSize as new com.sun.star.awt.Size
 	oControl = oController.GetControl(oModel)
 	oPeer = oControl.GetPeer()
+	
 	If oControl.Model.PropertySetInfo.HasPropertybyName(&quot;EffectiveMax&quot;) Then
 &apos; Todo: Remove this Hack due to Bug #88391
+Dim Blubber		
+		blubber = oControl.Model.EffectiveMax
 		oControl.Model.EffectiveValue = oControl.Model.EffectiveMax
 		aPeerSize = oPeer.PreferredSize()
 	ElseIf Not IsMissing(LocText) Then
@@ -79,8 +83,19 @@ Function TwipToPixel(BYVAL nValue as long) as long &apos; nur ungefaehre Berechn
 End function
 
 
-Function PixelTo100thMM(BYVAL nValue as long) as long
-	 PixelTo100thMM = nValue * 28		&apos; nur ungefähre Berechnung 
+Function PixelTo100thMMX(oControl as Object) as long
+	oPeer = oControl.GetPeer()
+	PixelTo100mmX = Clng(Peer.GetInfo.PixelPerMeterX/100000)
+
+&apos;	 PixelTo100thMM = nValue * 28		&apos; nur ungefähre Berechnung 
+End function
+
+
+Function PixelTo100thMMY(oControl as Object) as long
+	oPeer = oControl.GetPeer()
+	PixelTo100mmX = Clng(Peer.GetInfo.PixelPerMeterY/100000)
+
+&apos;	 PixelTo100thMM = nValue * 28		&apos; nur ungefähre Berechnung 
 End function
 
 
@@ -104,6 +119,7 @@ Sub	ImportStyles()
 Dim CurIndex as Integer
 Dim sImportPath as String
 Dim bWithBackGraphic as Boolean
+	ToggleLayoutPage(False)
 	oDocument.LockControllers
 	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
 	sImportPath = Styles(8,CurIndex)
@@ -112,6 +128,7 @@ Dim bWithBackGraphic as Boolean
 	ToggleOptionButtons(oDialogModel, bWithBackGraphic)	
 	ConfigurePageStyle()	
 	oDocument.UnlockControllers
+	ToggleLayoutPage(True)	
 End Sub
 
 

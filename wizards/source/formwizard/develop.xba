@@ -15,8 +15,8 @@ Public bIsVeryFirstValueField as Boolean
 &apos; This boolean variable refers to the following Controltypes: cTextBox, cCheckBox, cDateBox, cTimeBox, cNumericBox, cCurrencyBox
 
 Public bControlsareCreated as Boolean
-Public nDBRefWidth as Integer
-Public nDBRefHeight as Integer
+Public nDBRefWidth as Long
+Public nDBRefHeight as Long
 Public nXTCPos&amp;, nYTCPos&amp;, nXDBPos&amp;, nYDBPos&amp;, nTCHeight&amp;, nTCWidth&amp;, nDBHeight&amp;, nDBWidth&amp;
 Public CurControlType as Integer
 Public CurFieldlength as Double
@@ -35,6 +35,8 @@ Dim i as Integer
 	bIsVeryFirstValueField = True
 	a = 0
 	StartA = 0
+	nMaxRowY = 0
+	nSecMaxRowY = 0
 	For i = 0 To MaxIndex
 		CurFieldType = FieldMetaValues(i,0)
 		CurFieldLength = CDbl(FieldMetaValues(i,1))
@@ -118,7 +120,7 @@ Dim oLocDBShape as Object
 		nDBHeight = oLocDBShape.Size.Height
 		aPoint = GetPoint(nXDBPos,nYDBPos)
 		oLocDBShape.SetPosition(aPoint)
-		CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight)
+		CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, True)
 &apos;		GroupShapes(oDrawPage, oLocTextShape, oLocDBShape)
 	Next i
 End Sub
@@ -154,8 +156,12 @@ Dim aSize As New com.sun.star.awt.Size
 		nTCWidth = oShape.Size.Width
 		nTCHeight = oShape.Size.Height
 		oShape.Position = GetPoint(nXTCPos, nYTCPos)
+		If CurArrangement = cColumnarTop Then
+			oModel.Align = com.sun.star.awt.TextAlign.LEFT
+		End If
 	Else
 		oModel = CreateUnoService(oModelService(cLabel))
+
 &apos;		oModel.Label = CurFieldName &apos; + nFieldPostfixes(i) (Todo: Was ist ein fieldPostfix?)
 &apos; Todo: According to FS this handling should be verified. I should not rely on the shape to create a model on its
 &apos; own. therefor the model should be inserted before the shape
@@ -181,7 +187,7 @@ Dim aSize As New com.sun.star.awt.Size
 			nMaxTCWidth = nTCWidth
 		End If
 	End If
-	CheckOuterPoints(oShape.Position.X, nTCWidth, nYTCPos, nTCHeight)
+	CheckOuterPoints(oShape.Position.X, nTCWidth, nYTCPos, nTCHeight, False)
 	Select Case CurArrangement
 		Case cLeftJustified
 			nXDBPos = nMaxColRightX
@@ -205,7 +211,7 @@ Dim oControl as Object
 Dim iColRightX as Long
 
 	If Not bIsVeryFirstValueField Then
-		nDBWidth = CInt(CurFieldLength/2 * nDBRefWidth)
+		nDBWidth = Clng(CurFieldLength/2 * nDBRefWidth)
 	Else
 		nDBWidth = 1
 	End If
@@ -234,7 +240,7 @@ Dim iColRightX as Long
 		nDBWidth = 2000
 		nDBHeight = 2000
 	Else
-		If bIsVeryFirstValueField Then
+		If bIsVeryFirstValueField Then		
 			nDBRefWidth = GetPreferredWidth(oDBModel,True)
 			&apos; Todo: Hier wird vereinfachend davon ausgegangen, dass es sich bei DB-Feldern immer um Textfelder handelt!
 			nDBRefHeight = GetPreferredHeight(oDBModel)
@@ -251,7 +257,7 @@ Dim iColRightX as Long
 	End If
 	aSize = GetSize(nDBWidth,nDBHeight)
 	oShape.SetSize(aSize)
-	CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight)
+	CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, True)
 	oDBModel.DataField = CurFieldName
 End Sub
 
@@ -266,7 +272,7 @@ Dim nBaseWidth as Long
 	nLeftDist = nMaxColRightX - nBaseWidth
 	nRightDist = nBaseWidth - nXTCPos + cHoriDistance
 	If nLeftDist &lt; 0.5 * nRightDist and iReduceWidth &gt; 2 Then
-		&apos; Können die Felder in der Reihe gestaucht werden?
+		&apos; Fieldwidths in the line can be made smaller
 		AdjustLineWidth(StartA, a, nLeftDist, - 1)
 		If CurArrangement = cLeftjustified Then
 			nYDBPos = nMaxRowY + cVertDistance
@@ -283,8 +289,13 @@ Dim nBaseWidth as Long
 	Else
 		Set oLocDBShape = oDBShapeList(a)
 		Set oLocTextShape = oTCShapeList(a)
-		nYTCPos = nMaxRowY + cVertDistance
 		If CurArrangement = cLeftJustified Then
+			If nYDBPos + nDBHeight = nMaxRowY Then
+				&apos; The last Control was the highes in the row
+				nYTCPos = nSecMaxRowY + cVertDistance
+			Else
+				nYTCPos = nMaxRowY + cVertDistance
+			End If
 			nYDBPos = nYTCPos
 			nXDBPos = cXOffset + nTCWidth
 			oLocTextShape.Position = GetPoint(cXOffset, nYTCPos)
@@ -292,9 +303,15 @@ Dim nBaseWidth as Long
 			&apos; PosSizes for the next two Controls
 			nXTCPos = oLocDBShape.Position.X + oLocDBShape.Size.Width + cHoriDistance
 			bIsFirstRun = True
-			CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight)
+			CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, True)
 			nXDBPos = nMaxColRightX + cHoriDistance
-		Else
+		Else		&apos; cTopJustified
+			If nYDBPos + nDBHeight = nMaxRowY Then
+				&apos; The last Control was the highest in the row
+				nYTCPos = nSecMaxRowY + cVertDistance
+			Else
+				nYTCPos = nMaxRowY + cVertDistance
+			End If
 			nYDBPos = nYTCPOS + nTCHeight
 			nXDBPos = cXOffset
 			nXTCPos = cXOffset
@@ -302,9 +319,9 @@ Dim nBaseWidth as Long
 			oLocDBShape.Position = GetPoint(cXOffset, nYDBPos)
 			bIsFirstRun = True
 			If nDBWidth &gt; nTCWidth Then
-				CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight)
+				CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, True)
 			Else
-				CheckOuterPoints(nXDBPos, nTCWidth, nYDBPos, nDBHeight)
+				CheckOuterPoints(nXDBPos, nTCWidth, nYDBPos, nDBHeight, True)
 			End If
 			nXTCPos = nMaxColRightX + cHoriDistance
 			nXDBPos = nXTCPos
@@ -363,18 +380,26 @@ Dim ShapeCount as Integer
 End Sub
 
 
-Sub CheckOuterPoints(nXPos, nWidth, nYPos, nHeight)
-Dim nColRightX
-Dim nRowY
+Sub CheckOuterPoints(nXPos, nWidth, nYPos, nHeight, bIsDBField as Boolean)
+Dim nColRightX as Long
+Dim nRowY as Long
+Dim nOldMaxRowY as Long
+
 	If CurArrangement = cLeftJustified Or CurArrangement = cTopJustified Then
-		If bIsFirstRun Then
-			nMaxRowY = nYPos + nHeight
-		Else
-			nRowY = nYPos + nHeight
-			If nRowY &gt; nMaxRowY Then
-				nMaxRowY = nRowY
+		If bIsDBField Then
+			&apos; Only at DBControls you can measure the Value of nMaxRowY
+			If bIsFirstRun Then
+				nMaxRowY = nYPos + nHeight
+				nSecMaxRowY = nMaxRowY
+			Else
+				nRowY = nYPos + nHeight
+				If nRowY &gt;= nMaxRowY Then
+					nOldMaxRowY = nMaxRowY
+					nSecMaxRowY = nOldMaxRowY
+					nMaxRowY = nRowY
+				End If
 			End If
-		End If
+		End If 
 	End If
 	&apos; Find the outer right point
 	If bIsFirstRun Then
@@ -406,16 +431,19 @@ Dim nWidth as Long
 	nWidth = 0
 	For n = 0 to MaxIndex
 		CurFieldType = FieldMetaValues(n,0)
-&apos;		CurControlType = FieldMetaValues(n,2)
+		CurControlType = FieldMetaValues(n,2)
 	    CurFieldName = FieldNames(n)
 		If CurControlType = cImageControl Then
+&apos;Todo: Hier muss in der Hilfe vermittelt werden, dass Image Controls nicht dargestellt werden können
 			CurControlName = &quot;TextField&quot;			
+			oColumn = oGridModel.CreateColumn(CurControlName)
+			oColumn.Name = CalcUniqueContentName(oGridModel, CurControlName)
 			oColumn.Hidden = True
 		Else
 			CurControlName = FieldMetaValues(n,3)
-			oColumn = oGridModel.CreateColumn(CurControlName)
-		End If
+		oColumn = oGridModel.CreateColumn(CurControlName)
 		oColumn.Name = CalcUniqueContentName(oGridModel, CurControlName)
+		End If
 		SetNumerics(oColumn)
 		oColumn.DataField = CurFieldName
 		oColumn.Label = CurFieldName  &apos;+ nFieldPostfixes(n); Todo: Was hat das nFieldPostfix hier zu suchen?
