@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:10:11 $
+ *  last change: $Author: kz $ $Date: 2001-07-27 06:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,7 +778,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text [ danish ] = "Indstil printer" ;
     Text [ italian ] = "Imposta stampante" ;
     Text [ spanish ] = "Configurar impresora" ;
-    Text [ french ] = "Imprimante sélectionnée" ;
+    Text [ french ] = "Paramétrage de l'imprimante" ;
     Text [ dutch ] = "Printer instellen" ;
     Text [ portuguese ] = "Configurar impressora" ;
     FixedLine FL_PRINTER
@@ -1039,6 +1039,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text[ catalan ] = "Configurar impresora";
     Text[ finnish ] = "Tulostimen asetukset";
 };
+
 
 
 
