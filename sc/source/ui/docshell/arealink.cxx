@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 13:27:56 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,14 @@
 #include "markdata.hxx"
 #include "hints.hxx"
 #include "htmlimp.hxx"
-#include "linkarea.hxx"         // dialog
+//CHINA001 #include "linkarea.hxx"          // dialog
 
 #include "attrib.hxx"           // raus, wenn ResetAttrib am Dokument
 #include "patattr.hxx"          // raus, wenn ResetAttrib am Dokument
 #include "docpool.hxx"          // raus, wenn ResetAttrib am Dokument
 
+#include "sc.hrc" //CHINA001
+#include "scabstdlg.hxx" //CHINA001
 TYPEINIT1(ScAreaLink,::so3::SvBaseLink);
 
 //------------------------------------------------------------------------
@@ -129,7 +131,12 @@ BOOL __EXPORT ScAreaLink::Edit(Window* pParent)
     //  ein Optionen-Dialog kommt...
 
     BOOL bRet = FALSE;
-    ScLinkedAreaDlg* pDlg = new ScLinkedAreaDlg( pParent );
+    //CHINA001 ScLinkedAreaDlg* pDlg = new ScLinkedAreaDlg( pParent );
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+    AbstractScLinkedAreaDlg* pDlg = pFact->CreateScLinkedAreaDlg( pParent, ResId(RID_SCDLG_LINKAREA));
+    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
     if (pDlg->Execute() == RET_OK)
     {
