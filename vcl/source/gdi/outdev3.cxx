@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:17:53 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 10:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2906,7 +2906,7 @@ void OutputDevice::ImplInitFont()
             // decide if antialiasing is appropriate
             bool bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-            bNonAntialiased |= (rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0;
+            bNonAntialiased |= ((rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0);
             bNonAntialiased |= (rStyleSettings.GetAntialiasingMinPixelHeight() > mpFontEntry->maFontSelData.mnHeight);
             mpFontEntry->maFontSelData.mbNonAntialiased = (BOOL)bNonAntialiased;
         }
@@ -5861,15 +5861,21 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         pSalLayout = NULL;
     }
 
+    ImplLayoutArgs aMultiArgs = aLayoutArgs;
+#ifdef WNT
+    // TODO: reenable multi glyph fallback on Win32 which got disabled for Beta2
+    if( (aLayoutArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
+#else
+    if( 1
+#endif
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
-    if( mpFontEntry && (mpFontEntry->maFontSelData.mnHeight >= 6)
-    && (pSalLayout && aLayoutArgs.PrepareFallback()) )
+    &&  mpFontEntry && (mpFontEntry->maFontSelData.mnHeight >= 6)
+    && (pSalLayout && aMultiArgs.PrepareFallback()) )
     {
         // prepare multi level glyph fallback
         MultiSalLayout* pMultiSalLayout = NULL;
-        ImplLayoutArgs aMultiArgs = aLayoutArgs;
-        aLayoutArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
+        aMultiArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
 
         ImplFontSelectData aFontSelData = mpFontEntry->maFontSelData;
         Size aFontSize( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight );
@@ -5895,11 +5901,11 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nLevel );
 
             // create and add fallback layout to multilayout
-            aLayoutArgs.ResetPos();
-            SalLayout* pFallback = mpGraphics->GetTextLayout( aLayoutArgs, nLevel );
+            aMultiArgs.ResetPos();
+            SalLayout* pFallback = mpGraphics->GetTextLayout( aMultiArgs, nLevel );
             if( pFallback )
             {
-                if( pFallback->LayoutText( aLayoutArgs ) )
+                if( pFallback->LayoutText( aMultiArgs ) )
                 {
                     if( !pMultiSalLayout )
                         pMultiSalLayout = new MultiSalLayout( *pSalLayout );
@@ -5912,12 +5918,14 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             mpFontCache->Release( pFallbackFont );
 
             // break when this fallback was sufficient
-            if( !aLayoutArgs.PrepareFallback() )
+            if( !aMultiArgs.PrepareFallback() )
                 break;
         }
 
         if( pMultiSalLayout )
         {
+            aMultiArgs = aLayoutArgs;
+            aMultiArgs.PrepareFallback();
             pMultiSalLayout->LayoutText( aMultiArgs );
             pSalLayout = pMultiSalLayout;
         }
