@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailclient.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-12-07 12:36:20 $
+ *  last change: $Author: tra $ $Date: 2001-12-11 08:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@
 #include <osl/file.hxx>
 #endif
 
+#include <process.h>
+
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
@@ -126,6 +128,15 @@ namespace // private
                     aAddress.getLength( ),
                     osl_getThreadTextEncoding( ) );
     }
+
+    struct MAPISendMailParam
+    {
+        CSimpleMapi* pSimpleMapi;
+        LHANDLE lhSession;
+        ULONG ulUIParam;
+        lpMapiMessage lpMessage;
+        FLAGS flFlags;
+    };
 
 } // end private namespace
 
@@ -177,12 +188,14 @@ void SAL_CALL CSmplMailClient::sendSimpleMailMessage( const Reference< XSimpleMa
         initMapiMessage( xSimpleMailMessage, mapiMsg );
         initMapiSendMailFlags( aFlag, flFlags );
 
-        ULONG ulRet = m_pSimpleMapi->MAPISendMail(
-            m_hMapiSession,          // we use an existing session #93077#
-            0,          // no parent window
-            &mapiMsg,   // a configured mapi message struct
-            flFlags,    // some flags
-            0 );        // reserved
+        // fix for #95743 we must create a separate thread because
+        // again simple mapi works only from within a STA thread :-(
+        ULONG ulRet = threadExecuteMAPISendMail(
+            m_pSimpleMapi,
+            m_hMapiSession, // we use an existing session #93077#
+            0,              // no parent window
+            &mapiMsg,       // a configured mapi message struct
+            flFlags );      // reserved
 
         if ( SUCCESS_SUCCESS != ulRet )
         {
@@ -195,6 +208,59 @@ void SAL_CALL CSmplMailClient::sendSimpleMailMessage( const Reference< XSimpleMa
     {
         OSL_ASSERT( sal_False );
     }
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+ULONG SAL_CALL CSmplMailClient::threadExecuteMAPISendMail( CSimpleMapi* pSimpleMapi, LHANDLE lhSession, ULONG ulUIParam, lpMapiMessage lpMessage, FLAGS flFlags )
+{
+    ULONG    ulRet = MAPI_E_FAILURE;
+    unsigned ThreadId;
+
+    MAPISendMailParam param;
+
+    param.pSimpleMapi = pSimpleMapi;
+    param.lhSession   = lhSession;
+    param.ulUIParam   = ulUIParam;
+    param.lpMessage   = lpMessage;
+    param.flFlags     = flFlags;
+
+    HANDLE hThread = reinterpret_cast< HANDLE >(
+        _beginthreadex( 0, 0, CSmplMailClient::threadProc, &param, 0, &ThreadId ) );
+
+    OSL_ENSURE( hThread, "could not create STA thread" );
+
+    if ( hThread )
+    {
+        // stop the calling thread until the sta thread has ended
+        WaitForSingleObject( hThread, INFINITE );
+        GetExitCodeThread( hThread, &ulRet );
+        CloseHandle( hThread );
+    }
+
+    return ulRet;
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+unsigned __stdcall CSmplMailClient::threadProc( void* pParam )
+{
+    MAPISendMailParam* param = reinterpret_cast< MAPISendMailParam* >( pParam );
+
+    CSimpleMapi* pSimpleMapi = param->pSimpleMapi;
+
+    OSL_ENSURE( pSimpleMapi, "invalid thread parameter" );
+
+    return pSimpleMapi->MAPISendMail(
+        param->lhSession,  // we use an existing session #93077#
+        param->ulUIParam,  // no parent window
+        param->lpMessage,  // a configured mapi message struct
+        param->flFlags,    // some flags
+        0 );              // reserved
 }
 
 //------------------------------------------------
@@ -405,7 +471,7 @@ void CSmplMailClient::initAttachementList(
 void CSmplMailClient::initMapiSendMailFlags( sal_Int32 aFlags, FLAGS& aMapiFlags )
 {
     // #93077#
-    OSL_ASSERT( !( aFlags & NO_LOGON_DIALOG ), "Flag NO_LOGON_DIALOG has currently no effect" );
+    OSL_ENSURE( !( aFlags & NO_LOGON_DIALOG ), "Flag NO_LOGON_DIALOG has currently no effect" );
 
     aMapiFlags = 0; // we should not use MAPI_UNICODE else
                     // Netscape interprets all string as UNICODE!

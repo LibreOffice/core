@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailclient.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-15 10:50:05 $
+ *  last change: $Author: tra $ $Date: 2001-12-11 08:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,10 @@ private:
         const ::com::sun::star::uno::Reference< ::com::sun::star::system::XSimpleMailMessage >& xSimpleMailMessage );
 
     rtl::OUString getMapiErrorMsg( ULONG ulMapiError );
+
+    // fix for #95743
+    ULONG SAL_CALL threadExecuteMAPISendMail( CSimpleMapi* pSimpleMapi, LHANDLE lhSession, ULONG ulUIParam, lpMapiMessage lpMessage, FLAGS flFlags );
+    static unsigned __stdcall threadProc( void* pParam );
 
 private:
     LHANDLE                         m_hMapiSession;
