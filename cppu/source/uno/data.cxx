@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:55:43 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,19 @@
  *
  ************************************************************************/
 
+#include "cppu/macros.hxx"
+
+#include "osl/mutex.hxx"
+
 #include "constr.hxx"
 #include "destr.hxx"
 #include "copy.hxx"
 #include "assign.hxx"
 #include "eq.hxx"
 
-using namespace cppu;
-using namespace rtl;
-using namespace com::sun::star::uno;
+using namespace ::cppu;
+using namespace ::rtl;
+using namespace ::osl;
 
 
 namespace cppu
@@ -75,7 +79,74 @@ namespace cppu
 
 uno_Sequence g_emptySeq = { 1, 0, { 0 } }; // static empty sequence
 typelib_TypeDescriptionReference * g_pVoidType = 0;
-typelib_TypeDescription * g_pQITD = 0;
+
+//--------------------------------------------------------------------------------------------------
+void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * pDestType )
+{
+    // init queryInterface() td
+    static typelib_TypeDescription * g_pQITD = 0;
+    if (0 == g_pQITD)
+    {
+        MutexGuard aGuard( Mutex::getGlobalMutex() );
+        if (0 == g_pQITD)
+        {
+            typelib_TypeDescriptionReference * type_XInterface =
+                * typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE );
+            typelib_InterfaceTypeDescription * pTXInterfaceDescr = 0;
+            TYPELIB_DANGER_GET( (typelib_TypeDescription **) &pTXInterfaceDescr, type_XInterface );
+            OSL_ASSERT( pTXInterfaceDescr->ppAllMembers );
+            typelib_typedescriptionreference_getDescription(
+                &g_pQITD, pTXInterfaceDescr->ppAllMembers[ 0 ] );
+            TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *) pTXInterfaceDescr );
+        }
+    }
+
+    uno_Any aRet, aExc;
+    uno_Any * pExc = &aExc;
+    void * aArgs[ 1 ];
+    aArgs[ 0 ] = &pDestType;
+    (*((uno_Interface *) pUnoI)->pDispatcher)(
+        (uno_Interface *) pUnoI, g_pQITD, &aRet, aArgs, &pExc );
+
+    uno_Interface * ret = 0;
+    if (0 == pExc)
+    {
+        typelib_TypeDescriptionReference * ret_type = aRet.pType;
+        switch (ret_type->eTypeClass)
+        {
+        case typelib_TypeClass_VOID: // common case
+            typelib_typedescriptionreference_release( ret_type );
+            break;
+        case typelib_TypeClass_INTERFACE:
+            // tweaky... avoiding acquire/ release pair
+            typelib_typedescriptionreference_release( ret_type );
+            ret = (uno_Interface *) aRet.pReserved; // serving acquired interface
+            break;
+        default:
+            _destructAny( &aRet, 0 );
+            break;
+        }
+    }
+    else
+    {
+#if defined DEBUG
+        OUStringBuffer buf( 128 );
+        buf.appendAscii(
+            RTL_CONSTASCII_STRINGPARAM("### exception occured querying for interface ") );
+        buf.append( * reinterpret_cast< OUString const * >( &pDestType->pTypeName ) );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(": [") );
+        buf.append( * reinterpret_cast< OUString const * >( &pExc->pType->pTypeName ) );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );
+        // Message is very first member
+        buf.append( * reinterpret_cast< OUString const * >( pExc->pData ) );
+        OString cstr(
+            OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+        OSL_ENSURE( 0, cstr.getStr() );
+#endif
+        uno_any_destruct( pExc, 0 );
+    }
+    return ret;
+}
 
 //==================================================================================================
 void defaultConstructStruct(
@@ -293,47 +364,17 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
     }
 
     // query
-    if (!pFrom)
+    if (0 == pFrom)
         return sal_False;
     void * pInterface = *(void **)pFrom;
-    if (! pInterface)
+    if (0 == pInterface)
         return sal_False;
 
-    if (queryInterface)
-    {
-        void * p = (*queryInterface)( pInterface, pAssignable );
-        if (p)
-        {
-            (*release)( p );
-        }
-        return (0 != p);
-    }
-    else /* bin UNO */
-    {
-        uno_Any aRet, aExc;
-        uno_Any * pExc = &aExc;
-
-        void * aArgs[1];
-        aArgs[0] = &pAssignable;
-
-        typelib_TypeDescription * pMTqueryInterface = _getQueryInterfaceTypeDescr();
-        (*((uno_Interface *)pInterface)->pDispatcher)(
-            (uno_Interface *)pInterface, pMTqueryInterface, &aRet, aArgs, &pExc );
-        ::typelib_typedescription_release( pMTqueryInterface );
-
-        OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
-        if (pExc)
-        {
-            _destructAny( pExc, 0 );
-            return sal_False;
-        }
-        else
-        {
-            sal_Bool ret = (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass);
-            _destructAny( &aRet, 0 );
-            return ret;
-        }
-    }
+    if (0 == queryInterface)
+        queryInterface = binuno_queryInterface;
+    void * p = (*queryInterface)( pInterface, pAssignable );
+    _release( p, release );
+    return (0 != p);
 }
 }
 
@@ -364,7 +405,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
     if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %d instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
 
-#ifdef CPPU_ASSERTIONS
+#if defined DEBUG
 #if defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD)) && (defined(INTEL) || defined(POWERPC) || defined(X86_64) || defined(S390))
 #define BINTEST_VERIFYSIZE( s, n ) \
     fprintf( stderr, "> sizeof(" #s ") = %d; __alignof__ (" #s ") = %d\n", sizeof(s), __alignof__ (s) ); \
@@ -374,7 +415,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
     fprintf( stderr, "> sizeof(" #s ") = %d\n", sizeof(s) ); \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
 #endif
-#else // ! CPPU_ASSERTIONS
+#else // ! DEBUG
 #define BINTEST_VERIFYSIZE( s, n ) \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
 #endif
@@ -483,6 +524,15 @@ struct Char4
     Char3 chars;
     char c;
 };
+class Ref
+{
+    void * p;
+};
+enum Enum
+{
+    v = SAL_MAX_ENUM
+};
+
 
 class BinaryCompatible_Impl
 {
@@ -504,16 +554,15 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     // sequence
     BINTEST_VERIFY( (SAL_SEQUENCE_HEADER_SIZE % 8) == 0 );
     // enum
-    BINTEST_VERIFY( sizeof( TypeClass ) == sizeof( sal_Int32 ) );
+    BINTEST_VERIFY( sizeof( Enum ) == sizeof( sal_Int32 ) );
     // any
     BINTEST_VERIFY( sizeof(void *) >= sizeof(sal_Int32) );
-    BINTEST_VERIFY( sizeof( Any ) == sizeof( uno_Any ) );
-    BINTEST_VERIFY( sizeof( Any ) == sizeof( void * ) * 3 );
-    BINTEST_VERIFYOFFSET( Any, pType, 0 );
-    BINTEST_VERIFYOFFSET( Any, pData, 1 * sizeof (void *) );
-    BINTEST_VERIFYOFFSET( Any, pReserved, 2 * sizeof (void *) );
+    BINTEST_VERIFY( sizeof( uno_Any ) == sizeof( void * ) * 3 );
+    BINTEST_VERIFYOFFSET( uno_Any, pType, 0 );
+    BINTEST_VERIFYOFFSET( uno_Any, pData, 1 * sizeof (void *) );
+    BINTEST_VERIFYOFFSET( uno_Any, pReserved, 2 * sizeof (void *) );
     // interface
-    BINTEST_VERIFY( sizeof( Reference< XInterface > ) == sizeof( XInterface * ) );
+    BINTEST_VERIFY( sizeof( Ref ) == sizeof( void * ) );
     // string
     BINTEST_VERIFY( sizeof( OUString ) == sizeof( rtl_uString * ) );
     // struct
