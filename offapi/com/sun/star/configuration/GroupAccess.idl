@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupAccess.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:02:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 14:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,43 +145,25 @@ service GroupAccess
 
 /** provides access to the state of child elements of an implementation. [optional]
 
- <p>This interface may be missing if the hierarchy (or a hierarchy fragment
- that contains this implementation as element) does not support default values.
+ <p>This interface should be present, if the hierarchy supports default values
+ for simple (non-object) properties and the group contains such properties.
  </p>
 
- <p>If elements that are not simple values, but objects themselves, support
- a default state (as indicated by
- <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
- they should implement
- <type scope="com::sun::star::beans">XPropertyWithState</type>, in which case
- the <type scope="com::sun::star::beans">PropertyState</type> applies to all
- their children and recursively to all descendants.
+ <p>For properties that are objects themselves, the semantic documented for
+ service <type>HierarchyAccess</type> applies.
  </p>
-
- <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
- attempts to change property states will fail.
- </p>
-*/
+ */
     [optional] interface com::sun::star::beans::XPropertyState;
 
 /** provides access to the states of multiple child elements of
  an implementation. [optional]
 
- <p>This interface may be missing if the hierarchy (or a hierarchy fragment
- that contains this implementation as element) does not support default values.
+ <p>This interface should be present, if the hierarchy supports default values
+ for simple (non-object) properties and the group contains such properties.
  </p>
 
- <p>If elements that are not simple values, but objects themselves, support
- a default state (as indicated by
- <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
- they should implement
- <type scope="com::sun::star::beans">XPropertyWithState</type>, in which case
- the <type scope="com::sun::star::beans">PropertyState</type> applies to all
- their children and recursively to all descendants.
- </p>
-
- <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
- attempts to change property states will fail.
+ <p>For properties that are objects themselves, the semantic documented for
+ service <type>HierarchyAccess</type> applies.
  </p>
 */
     [optional] interface com::sun::star::beans::XMultiPropertyStates;
