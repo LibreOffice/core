@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gh $ $Date: 2001-03-14 09:54:34 $
+ *  last change: $Author: gh $ $Date: 2001-03-16 11:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1350,3 +1350,8 @@ String S_UNPACKING_STORAGE_FAILED
     Text[ turkish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ arabic ] = "›‘·  ⁄„·Ì… ›ﬂ ÷€ÿ  Œ“Ì‰\"($Arg1)\"  ≈·Ï \"($Arg2)\"";
 };
+String S_NO_LIST_BOX_BUTTON
+{
+    Text = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ english_us ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+}
