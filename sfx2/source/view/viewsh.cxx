@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:23:50 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #include <svtools/ehdl.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1486,7 +1486,7 @@ SfxMenuBarManager* SfxViewShell::GetMenuBar_Impl( BOOL bPlugin )
     Reference < XPropertySet > xPropSet( GetViewFrame()->GetFrame()->GetFrameInterface(), UNO_QUERY );
     if ( xPropSet.is() )
     {
-        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
 
         if ( xPropSet.is() )
         {
@@ -1497,7 +1497,7 @@ SfxMenuBarManager* SfxViewShell::GetMenuBar_Impl( BOOL bPlugin )
         if ( xLayoutManager.is() )
         {
             rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
-            Reference< drafts::com::sun::star::ui::XUIElement > xMenuBarElement( xLayoutManager->getElement( aMenuBarURL ));
+            Reference< ::com::sun::star::ui::XUIElement > xMenuBarElement( xLayoutManager->getElement( aMenuBarURL ));
             if ( !xMenuBarElement.is() )
                 GetObjectShell()->CreateMenuBarManager_Impl( GetViewFrame() );
         }
