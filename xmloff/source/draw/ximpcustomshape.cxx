@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpcustomshape.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:36:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -139,12 +143,6 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEOPERATION_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeOperation.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETER_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
-#endif
 #ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPAIR_HPP_
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #endif
@@ -169,6 +167,7 @@
 #ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #endif
+#include <hash_map>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -302,6 +301,29 @@ void GetVector3D( std::vector< com::sun::star::beans::PropertyValue >& rDest,
     }
 }
 
+sal_Bool GetEquationName( const rtl::OUString& rEquation, const sal_Int32 nStart, rtl::OUString& rEquationName )
+{
+    sal_Int32 nIndex = nStart;
+    while( nIndex < rEquation.getLength() )
+    {
+        sal_Unicode nChar = rEquation[ nIndex ];
+        if (
+            ( ( nChar >= 'a' ) && ( nChar <= 'z' ) )
+            || ( ( nChar >= 'A' ) && ( nChar <= 'Z' ) )
+            || ( ( nChar >= '0' ) && ( nChar <= '9' ) )
+            )
+        {
+            nIndex++;
+        }
+        else
+            break;
+    }
+    sal_Bool bValid = ( nIndex - nStart ) != 0;
+    if ( bValid )
+        rEquationName = rEquation.copy( nStart, nIndex - nStart );
+    return bValid;
+}
+
 sal_Bool GetNextParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const rtl::OUString& rParaString )
 {
     if ( nIndex >= rParaString.getLength() )
@@ -312,17 +334,24 @@ sal_Bool GetNextParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeP
     sal_Bool bMustBePositiveWholeNumbered = sal_False;
 
     rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL;
-    if ( rParaString[ nIndex ] == (sal_Unicode)'#' )
+    if ( rParaString[ nIndex ] == (sal_Unicode)'$' )
     {
         rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT;
         bMustBePositiveWholeNumbered = sal_True;
         nIndex++;
     }
-    else if ( rParaString[ nIndex ] == (sal_Unicode)'@' )
+    else if ( rParaString[ nIndex ] == (sal_Unicode)'?' )
     {
-        rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION;
-        bMustBePositiveWholeNumbered = sal_True;
         nIndex++;
+        bNumberRequired = sal_False;
+        rtl::OUString aEquationName;
+        bValid = GetEquationName( rParaString, nIndex, aEquationName );
+        if ( bValid )
+        {
+            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION;
+            rParameter.Value <<= aEquationName;
+            nIndex += aEquationName.getLength();
+        }
     }
     else if ( rParaString[ nIndex ] > (sal_Unicode)'9' )
     {
@@ -347,10 +376,45 @@ sal_Bool GetNextParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeP
             rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM;
             nIndex += 6;
         }
-        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "center", 6, nIndex ) )
+        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "xstretch", 8, nIndex ) )
         {
-            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::CENTER;
+            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::XSTRETCH;
+            nIndex += 8;
+        }
+        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "ystretch", 8, nIndex ) )
+        {
+            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::YSTRETCH;
+            nIndex += 8;
+        }
+        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "hasstroke", 9, nIndex ) )
+        {
+            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::HASSTROKE;
+            nIndex += 9;
+        }
+        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "hasfill", 7, nIndex ) )
+        {
+            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::HASFILL;
+            nIndex += 7;
+        }
+        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "width", 5, nIndex ) )
+        {
+            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::WIDTH;
+            nIndex += 5;
+        }
+        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "height", 6, nIndex ) )
+        {
+            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::HEIGHT;
             nIndex += 6;
+        }
+        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "logwidth", 8, nIndex ) )
+        {
+            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGWIDTH;
+            nIndex += 8;
+        }
+        else if ( rParaString.matchIgnoreAsciiCaseAsciiL( "logheight", 9, nIndex ) )
+        {
+            rParameter.Type = drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::LOGHEIGHT;
+            nIndex += 9;
         }
         else
             bValid = sal_False;
@@ -548,7 +612,6 @@ void GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::Prope
     drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameter;
 
     sal_Int32 nIndex = 0;
-
     while ( GetNextParameter( aParameter.First, nIndex, rValue )
             && GetNextParameter( aParameter.Second, nIndex, rValue ) )
     {
@@ -571,7 +634,7 @@ void GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::Prope
     }
 }
 
-void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,      // e.g. draw:text-frames
+void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,      // e.g. draw:text-areas
                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame > vTextFrame;
@@ -739,8 +802,8 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
             }
             break;
 
-            case '#' :
-            case '@' :
+            case '$' :
+            case '?' :
             case '0' :
             case '1' :
             case '2' :
@@ -768,7 +831,15 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
                 nIndex++;
             break;
         }
-        if ( nParameterCount >= nParametersNeeded )
+        if ( !nParameterCount && !nParametersNeeded )
+        {
+            drafts::com::sun::star::drawing::EnhancedCustomShapeSegment aSegment;
+            aSegment.Command = nLatestSegmentCommand;
+            aSegment.Count = 0;
+            vSegments.push_back( aSegment );
+            nParametersNeeded = 0x7fffffff;
+        }
+        else if ( nParameterCount >= nParametersNeeded )
         {
             // check if the last command is identical,
             // if so, we just need to increment the count
@@ -813,133 +884,25 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
     rDest.push_back( aProp );
 }
 
-void GetEnhancedCustomShapeEquation( std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeEquation >& rDest,        // draw:formula
-                        const rtl::OUString& rValue )
-{
-    drafts::com::sun::star::drawing::EnhancedCustomShapeEquation aEquation;
-
-    rtl::OUString aString( rValue.trim() );     // removing white spaces
-    sal_Int32 i = aString.indexOf( (sal_Char)' ', 0 );
-    if ( ( !i ) || ( i == -1 ) )
-        aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::UNKNOWN;
-    else
-    {
-        rtl::OUString aOperation( aString.copy( 0, i ) );
-        rtl::OUString aParaString( aString.copy( i + 1 ).trim() );
-
-        aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::UNKNOWN;
-        switch( aOperation.getLength() )
-        {
-            case 2 :
-            {
-                if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "if" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::IF;
-            }
-            break;
-            case 3 :
-            {
-                if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "sum" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SUM;
-                else if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "mid" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MID;
-                else if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "abs" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ABS;
-                else if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "min" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MIN;
-                else if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "max" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MAX;
-                else if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "mod" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MOD;
-                else if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "sin" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SIN;
-                else if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "cos" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::COS;
-                else if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "tan" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::TAN;
-            }
-            break;
-            case 4 :
-            {
-                if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "sqrt" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SQRT;
-            }
-            break;
-            case 5 :
-            {
-                if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "atan2" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ATAN2;
-
-            }
-            break;
-            case 7 :
-            {
-                if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "product" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::PROD;
-                else if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "ellipse" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ELLIPSE;
-            }
-            break;
-            case 8 :
-            {
-                if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "cosatan2" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::COSATAN2;
-                else if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "sinatan2" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SINATAN2;
-                else if ( aOperation.equalsIgnoreAsciiCase( rtl::OUString::createFromAscii( "sumangle" ) ) )
-                    aEquation.Operation = drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SUMANGLE;
-            }
-            break;
-        }
-        i = 0;
-        std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeParameter > aParameters;
-        drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aParameter;
-
-        while( GetNextParameter( aParameter, i, aParaString ) )
-        {
-            aParameters.push_back( aParameter );
-        }
-        if ( aParameters.size() )
-        {
-            uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameter > aParaPropSeq( aParameters.size() );
-            std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeParameter >::const_iterator aIter = aParameters.begin();
-            std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeParameter >::const_iterator aEnd = aParameters.end();
-            drafts::com::sun::star::drawing::EnhancedCustomShapeParameter* pValues = aParaPropSeq.getArray();
-
-            while ( aIter != aEnd )
-                *pValues++ = *aIter++;
-
-            aEquation.Parameters = aParaPropSeq;
-        }
-    }
-    rDest.push_back( aEquation );
-}
-
 void GetAdjustmentValues( std::vector< com::sun::star::beans::PropertyValue >& rDest,               // draw:adjustments
                         const rtl::OUString& rValue )
 {
     std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > vAdjustmentValue;
+    drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aParameter;
     sal_Int32 nIndex = 0;
-    do
+    while ( GetNextParameter( aParameter, nIndex, rValue ) )
     {
         drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue aAdj;
-        rtl::OUString aToken( rValue.getToken( 0, ',', nIndex ) );
-
-        // the adjustment value can be double or integer, we use GetNextParameter
-        // to determine the correct type
-        sal_Int32 nIndex = 0;
-        drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aParameter;
-        if ( GetNextParameter( aParameter, nIndex, aToken )
-            && ( aParameter.Type == drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL ) )
+        if ( aParameter.Type == drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::NORMAL )
         {
             aAdj.Value <<= aParameter.Value;
             aAdj.State = beans::PropertyState_DIRECT_VALUE;
         }
         else
-            aAdj.State = beans::PropertyState_DEFAULT_VALUE;
+            aAdj.State = beans::PropertyState_DEFAULT_VALUE;    // this should not be, but better than setting nothing
 
         vAdjustmentValue.push_back( aAdj );
     }
-    while ( nIndex >= 0 );
 
     sal_Int32 nAdjustmentValues = vAdjustmentValue.size();
     if ( nAdjustmentValues )
@@ -965,10 +928,6 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
     if ( nLength )
     {
         sal_Int32               nAttrNumber;
-
-        sal_Bool    bStretchPointUsed = sal_False;
-        awt::Point  aStretchPoint( 0, 0 );
-
         for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
         {
             rtl::OUString aLocalName;
@@ -977,8 +936,8 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
 
             switch( EASGet( aLocalName ) )
             {
-                case EAS_predefined_type :
-                    GetString( mrCustomShapeGeometry, rValue, EAS_PredefinedType );
+                case EAS_type :
+                    GetString( mrCustomShapeGeometry, rValue, EAS_Type );
                 break;
                 case EAS_mirror_horizontal :
                     GetBool( mrCustomShapeGeometry, rValue, EAS_MirroredX );
@@ -1142,8 +1101,10 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 {
                     if ( SvXMLUnitConverter::convertNumber( nAttrNumber, rValue ) )
                     {
-                        bStretchPointUsed = sal_True;
-                        aStretchPoint.X = nAttrNumber;
+                        beans::PropertyValue aProp;
+                        aProp.Name = EASGet( EAS_StretchX );
+                        aProp.Value <<= nAttrNumber;
+                        maPath.push_back( aProp );
                     }
                 }
                 break;
@@ -1151,12 +1112,14 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 {
                     if ( SvXMLUnitConverter::convertNumber( nAttrNumber, rValue ) )
                     {
-                        bStretchPointUsed = sal_True;
-                        aStretchPoint.Y = nAttrNumber;
+                        beans::PropertyValue aProp;
+                        aProp.Name = EASGet( EAS_StretchY );
+                        aProp.Value <<= nAttrNumber;
+                        maPath.push_back( aProp );
                     }
                 }
                 break;
-                case EAS_text_frames :
+                case EAS_text_areas :
                     GetEnhancedRectangleSequence( maPath, rValue, EAS_TextFrames );
                 break;
                 case EAS_glue_points :
@@ -1191,17 +1154,10 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                 case EAS_text_path_same_letter_heights :
                     GetBool( maTextPath, rValue, EAS_SameLetterHeights );
                 break;
-                case EAS_adjustments :
+                case EAS_modifiers :
                     GetAdjustmentValues( mrCustomShapeGeometry, rValue );
                 break;
             }
-        }
-        if ( bStretchPointUsed )
-        {
-            beans::PropertyValue aProp;
-            aProp.Name = EASGet( EAS_StretchPoint );
-            aProp.Value <<= aStretchPoint;
-            maPath.push_back( aProp );
         }
     }
 }
@@ -1228,15 +1184,15 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
 }
 
 void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::PropertyValue >& rPropVec,
-                                    const std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeEquation >& rElement,
+                                    const std::vector< rtl::OUString >& rElement,
                                         const rtl::OUString& rElementName )
 {
     if ( rElement.size() )
     {
-        uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeEquation > aPropSeq( rElement.size() );
-        std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeEquation >::const_iterator aIter = rElement.begin();
-        std::vector< drafts::com::sun::star::drawing::EnhancedCustomShapeEquation >::const_iterator aEnd = rElement.end();
-        drafts::com::sun::star::drawing::EnhancedCustomShapeEquation* pValues = aPropSeq.getArray();
+        uno::Sequence< rtl::OUString > aPropSeq( rElement.size() );
+        std::vector< rtl::OUString >::const_iterator aIter = rElement.begin();
+        std::vector< rtl::OUString >::const_iterator aEnd = rElement.end();
+        rtl::OUString* pValues = aPropSeq.getArray();
 
         while ( aIter != aEnd )
             *pValues++ = *aIter++;
@@ -1269,8 +1225,147 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
     }
 }
 
+typedef std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash, OUStringEqFunc> EquationHashMap;
+
+/* if rPara.Type is from type EnhancedCustomShapeParameterType::EQUATION, the name of the equation
+   will be converted from rtl::OUString to index */
+void CheckAndResolveEquationParameter( drafts::com::sun::star::drawing::EnhancedCustomShapeParameter& rPara, EquationHashMap* pH )
+{
+    if ( rPara.Type == drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION )
+    {
+        rtl::OUString aEquationName;
+        if ( rPara.Value >>= aEquationName )
+        {
+            sal_Int32 nIndex = 0;
+            EquationHashMap::iterator aHashIter( pH->find( aEquationName ) );
+            if ( aHashIter != pH->end() )
+                nIndex = (*aHashIter).second;
+            rPara.Value <<= nIndex;
+        }
+    }
+}
+
 void XMLEnhancedCustomShapeContext::EndElement()
 {
+    // resolve properties that are indexing a Equation
+    if ( maEquations.size() )
+    {
+        // creating hash map containing the name and index of each equation
+        EquationHashMap* pH = new EquationHashMap;
+        std::vector< rtl::OUString >::iterator aEquationNameIter = maEquationNames.begin();
+        std::vector< rtl::OUString >::iterator aEquationNameEnd  = maEquationNames.end();
+        while( aEquationNameIter != aEquationNameEnd )
+        {
+            (*pH)[ *aEquationNameIter ] = (sal_Int32)( aEquationNameIter - maEquationNames.begin() );
+            aEquationNameIter++;
+        }
+
+        // resolve equation
+        std::vector< rtl::OUString >::iterator aEquationIter = maEquations.begin();
+        std::vector< rtl::OUString >::iterator aEquationEnd  = maEquations.end();
+        while( aEquationIter != aEquationEnd )
+        {
+            sal_Int32 nIndexOf = 0;
+            do
+            {
+                nIndexOf = aEquationIter->indexOf( '?', nIndexOf );
+                if ( nIndexOf != -1 )
+                {
+                    rtl::OUString aEquationName;
+                    if ( GetEquationName( *aEquationIter, nIndexOf + 1, aEquationName ) )
+                    {
+                        // copying first characters inclusive '?'
+                        rtl::OUString aNew( aEquationIter->copy( 0, nIndexOf + 1 ) );
+                        sal_Int32 nIndex = 0;
+                        EquationHashMap::iterator aHashIter( pH->find( aEquationName ) );
+                        if ( aHashIter != pH->end() )
+                            nIndex = (*aHashIter).second;
+                        aNew += rtl::OUString::valueOf( nIndex );
+                        aNew += aEquationIter->copy( nIndexOf + aEquationName.getLength() + 1 );
+                        *aEquationIter = aNew;
+                    }
+                    nIndexOf++;
+                }
+            }
+            while( nIndexOf != -1 );
+            aEquationIter++;
+        }
+
+        // Path
+        sal_Int32 i;
+        std::vector< beans::PropertyValue >::iterator aPathIter = maPath.begin();
+        std::vector< beans::PropertyValue >::iterator aPathEnd  = maPath.end();
+        while ( aPathIter != aPathEnd )
+        {
+            switch( EASGet( aPathIter->Name ) )
+            {
+                case EAS_Coordinates :
+                case EAS_GluePoints :
+                {
+                    uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair >& rSeq =
+                        *((uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair >*)
+                            aPathIter->Value.getValue());
+                    for ( i = 0; i < rSeq.getLength(); i++ )
+                    {
+                        CheckAndResolveEquationParameter( rSeq[ i ].First, pH );
+                        CheckAndResolveEquationParameter( rSeq[ i ].Second, pH );
+                    }
+                }
+                break;
+                case EAS_TextFrames :
+                {
+                    uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame >& rSeq =
+                        *((uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame >*)
+                            aPathIter->Value.getValue());
+                    for ( i = 0; i < rSeq.getLength(); i++ )
+                    {
+                        CheckAndResolveEquationParameter( rSeq[ i ].TopLeft.First, pH );
+                        CheckAndResolveEquationParameter( rSeq[ i ].TopLeft.Second, pH );
+                        CheckAndResolveEquationParameter( rSeq[ i ].BottomRight.First, pH );
+                        CheckAndResolveEquationParameter( rSeq[ i ].BottomRight.Second, pH );
+                    }
+                }
+                break;
+            }
+            aPathIter++;
+        }
+        std::vector< beans::PropertyValues >::iterator aHandleIter = maHandles.begin();
+        std::vector< beans::PropertyValues >::iterator aHandleEnd  = maHandles.end();
+        while ( aHandleIter != aHandleEnd )
+        {
+            beans::PropertyValue* pValues = aHandleIter->getArray();
+            for ( i = 0; i < aHandleIter->getLength(); i++ )
+            {
+                switch( EASGet( pValues->Name ) )
+                {
+                    case EAS_Position :
+                    case EAS_RangeYMinimum :
+                    case EAS_RangeYMaximum :
+                    case EAS_RangeXMinimum :
+                    case EAS_RangeXMaximum :
+                    case EAS_RadiusRangeMinimum :
+                    case EAS_RadiusRangeMaximum :
+                    {
+                        CheckAndResolveEquationParameter( *((drafts::com::sun::star::drawing::EnhancedCustomShapeParameter*)
+                            pValues->Value.getValue()), pH );
+                    }
+                    break;
+                    case EAS_Polar :
+                    {
+                        CheckAndResolveEquationParameter( (*((drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair*)
+                            pValues->Value.getValue())).First, pH );
+                        CheckAndResolveEquationParameter( (*((drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair*)
+                            pValues->Value.getValue())).Second, pH );
+                    }
+                    break;
+                }
+                pValues++;
+            }
+            aHandleIter++;
+        }
+        delete pH;
+    }
+
     SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maExtrusion, EASGet( EAS_Extrusion ) );
     SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maPath,      EASGet( EAS_Path ) );
     SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maTextPath,  EASGet( EAS_TextPath ) );
@@ -1288,13 +1383,28 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( USHORT nP
         sal_Int16 nLength = xAttrList->getLength();
         if ( nLength )
         {
+            rtl::OUString aFormula;
+            rtl::OUString aFormulaName;
             for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
             {
                 rtl::OUString aLocalName;
                 const rtl::OUString& rValue = xAttrList->getValueByIndex( nAttr );
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
-                if ( EASGet( aLocalName ) == EAS_formula )
-                    GetEnhancedCustomShapeEquation( maEquations, rValue );
+
+                switch( EASGet( aLocalName ) )
+                {
+                    case EAS_formula :
+                        aFormula = rValue;
+                    break;
+                    case EAS_name :
+                        aFormulaName = rValue;
+                    break;
+                }
+            }
+            if ( aFormulaName.getLength() || aFormula.getLength() )
+            {
+                maEquations.push_back( aFormula );
+                maEquationNames.push_back( aFormulaName );
             }
         }
     }
@@ -1355,5 +1465,3 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( USHORT nP
     }
     return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 }
-
-
