@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:15:16 $
+#   last change: $Author: kz $ $Date: 2003-12-11 11:56:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,7 +119,8 @@ SLOFILES=   \
             $(SLO)$/vclxtopwindow.obj 					\
             $(SLO)$/vclxwindow.obj 						\
             $(SLO)$/vclxwindow1.obj 						\
-            $(SLO)$/vclxwindows.obj
+            $(SLO)$/vclxwindows.obj                     \
+            $(SLO)$/vclxspinbutton.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\
