@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:01:48 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1147,7 +1147,7 @@ void GraphicFilter::ImplInit()
     if( bUseConfig )
     {
         SvtPathOptions aPathOpt;
-        aFilterPath = aPathOpt.GetFilterPath();
+        aFilterPath = aPathOpt.GetModulePath();
     }
 
     pErrorEx = new FilterErrorEx;
@@ -1670,7 +1670,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         xub_StrLen i, nTokenCount = aFilterPath.GetTokenCount( ';' );
         ImpFilterLibCache &rCache = Cache::get();
         for( i = 0; ( i < nTokenCount ) && ( pFilter == NULL ); i++ )
-            pFilter = rCache.GetFilter( aFilterPath, aFilterName );
+            pFilter = rCache.GetFilter( aFilterPath.GetToken(i), aFilterName );
         if( !pFilter )
             nStatus = GRFILTER_FILTERERROR;
         else
@@ -2107,6 +2107,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                 {
                     if ( !(*pFunc)( rOStm, aGraphic, &ImpFilterCallback, &aCallbackData, &aConfigItem, sal_False ) )
                         nStatus = GRFILTER_FORMATERROR;
+                    break;
                 }
                 else
                     nStatus = GRFILTER_FILTERERROR;
