@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:27 $
+ *  last change: $Author: er $ $Date: 2003-12-16 13:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,20 @@ class ImageList;
 class Bitmap;
 class SfxItemSet;
 class Color;
+
+// USHORT typedefs
+// Use in all new code instead of USHORT nCol, USHORT nRow, USHORT nTab
+// until integration of cws_src680_rowlimit, upon which they must be removed.
+typedef USHORT SCROW;
+typedef USHORT SCCOL;
+typedef USHORT SCTAB;
+
+// short typedefs
+// Use in all new code instead of short nCol, short nRow, short nTab
+// until integration of cws_src680_rowlimit, upon which they must be removed.
+typedef short SCsROW;
+typedef short SCsCOL;
+typedef short SCsTAB;
 
 
 #ifdef WIN
