@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:11:01 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,9 +323,10 @@ using namespace container           ;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-PowerPointImportParam::PowerPointImportParam( SvStream& rDocStrm, sal_uInt32 nFlags ) :
+PowerPointImportParam::PowerPointImportParam( SvStream& rDocStrm, sal_uInt32 nFlags, MSFilterTracer* pT ) :
     rDocStream      ( rDocStrm ),
-    nImportFlags    ( nFlags )
+    nImportFlags    ( nFlags ),
+    pTracer         ( pT )
 {
 }
 
@@ -714,7 +715,7 @@ PptSlidePersistEntry::~PptSlidePersistEntry()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam ) :
-    SvxMSDffManager         ( rParam.rDocStream ),
+    SvxMSDffManager         ( rParam.rDocStream, rParam.pTracer ),
     pFonts                  ( NULL ),
     nStreamLen              ( 0 ),
     nTextStylesIndex        ( 0xffff ),
@@ -2249,6 +2250,9 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                 aFont.SetPitch( pFont->ePitch );
                 aFont.SetHeight( 100 );
 
+                if ( mbTracing && !pFont->bAvailable )
+                    mpTracer->Trace( rtl::OUString::createFromAscii( "sd1000" ), pFont->aName );
+
                 SvxFont aTmpFont( aFont );
                 if ( !pVDev )
                     pVDev = new VirtualDevice;
@@ -2836,6 +2840,11 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
     DffRecordHeader aPageHd;
     if ( SeekToAktPage( &aPageHd ) )
     {
+        if ( mbTracing )
+            mpTracer->AddAttribute( eAktPageKind == PPT_SLIDEPAGE
+                                    ? rtl::OUString::createFromAscii( "Page" )
+                                    : rtl::OUString::createFromAscii( "NotesPage" ),
+                                    rtl::OUString::valueOf( (sal_Int32)nAktPageNum + 1 ) );
         HeaderFooterEntry* pHFE = NULL;
         if ( pHFEM )
         {
@@ -3038,6 +3047,10 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
         }
         if ( rSlidePersist.pSolverContainer )
             SolveSolver( *rSlidePersist.pSolverContainer );
+        if ( mbTracing )
+            mpTracer->RemoveAttribute( eAktPageKind == PPT_SLIDEPAGE
+                                        ? rtl::OUString::createFromAscii( "Page" )
+                                        : rtl::OUString::createFromAscii( "NotesPage" ) );
     }
     rStCtrl.Seek( nMerk );
 }
