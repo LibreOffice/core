@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ sal_uInt32 SwHTMLWriter::WriteStream()
     nHeaderFooterSpace = 0;
     nTxtAttrsToIgnore = 0;
     nCSS1OutMode = 0;
-    sal_uInt16 nScript = GetScriptTypeOfLanguage(
+    sal_uInt16 nScript = SvtLanguageOptions::GetScriptTypeOfLanguage(
             static_cast< LanguageType >( GetAppLanguage() ) );
     switch( nScript )
     {
@@ -1257,7 +1257,9 @@ void SwHTMLWriter::OutBookmarks()
 
     while( nPos < aOutlineMarkPoss.Count() && aOutlineMarkPoss[nPos] == nNode )
     {
-        OutAnchor( *aOutlineMarks[nPos] );
+        String sMark( *aOutlineMarks[nPos] );
+        sMark.SearchAndReplaceAll( '?', '_' );  // '?' causes problems in IE/Netscape 5
+        OutAnchor( sMark );
         aOutlineMarkPoss.Remove( nPos, 1 );
         aOutlineMarks.DeleteAndDestroy( nPos, 1 );
     }
@@ -1274,10 +1276,41 @@ void SwHTMLWriter::OutImplicitMark( const String& rMark,
         sal_uInt16 nPos;
         if( aImplicitMarks.Seek_Entry( &sMark, &nPos ) )
         {
+            sMark.SearchAndReplaceAll( '?', '_' );  // '?' causes problems in IE/Netscape 5
             OutAnchor( sMark );
             aImplicitMarks.DeleteAndDestroy( nPos, 1 );
         }
     }
+}
+
+void SwHTMLWriter::OutHyperlinkHRefValue( const String& rURL )
+{
+    String sURL( rURL );
+    xub_StrLen nPos = sURL.SearchBackward( cMarkSeperator );
+    if( STRING_NOTFOUND != nPos )
+    {
+        String sCmp( sURL.Copy( nPos+1 ) );
+        sCmp.EraseAllChars();
+        if( sCmp.Len() )
+        {
+            sCmp.ToLowerAscii();
+            if( sCmp.EqualsAscii( pMarkToRegion ) ||
+                sCmp.EqualsAscii( pMarkToFrame ) ||
+                sCmp.EqualsAscii( pMarkToGraphic ) ||
+                sCmp.EqualsAscii( pMarkToOLE ) ||
+                sCmp.EqualsAscii( pMarkToTable ) ||
+                sCmp.EqualsAscii( pMarkToOutline ) ||
+                sCmp.EqualsAscii( pMarkToText ) )
+            {
+                sURL.SearchAndReplaceAll( '?', '_' );   // '?' causes problems in IE/Netscape 5
+            }
+        }
+    }
+
+    sURL = INetURLObject::AbsToRel( sURL, INetURLObject::WAS_ENCODED,
+                                    INetURLObject::DECODE_UNAMBIGUOUS);
+    HTMLOutFuncs::Out_String( Strm(), sURL, eDestEnc,
+                              &aNonConvertableCharacters );
 }
 
 void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
