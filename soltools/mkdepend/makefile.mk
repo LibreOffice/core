@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: armin $ $Date: 2001-06-12 07:54:28 $
+#   last change: $Author: vg $ $Date: 2001-07-02 14:21:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJNAME=soltools
 TARGET=make_makedepend
 PRJ=..
 TARGETTYPE=CUI
+TARGETTHREAD=ST
 LIBTARGET=NO
 NO_DEFAULT_STL=TRUE
 nodep=true
@@ -73,7 +74,7 @@ nodep=true
 dot=.
 
 
-CDEFS+=-DNO_X11 -DOBJSUFFIX=\".obj\" -DXP_PC -DHW_THREADS -DINCLUDEDIR=\".\"
+CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS -DINCLUDEDIR=\".\"
 
 OBJFILES=  \
         $(OBJ)$/cppsetup.obj \
