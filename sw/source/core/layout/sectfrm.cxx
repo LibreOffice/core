@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:08:32 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1994,7 +1994,7 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, BOOL bTst )
                 // the footer. This may not happen, because shrinking the footer
                 // would cause the top of the section frame to overlap with the
                 // fly frame again, this would result in a perfect loop.
-                if( !GetUpper()->IsFooterFrm() )
+                if( GetUpper() && !GetUpper()->IsFooterFrm() )
                     nReal = GetUpper()->Shrink( nDist, bTst );
 
                 if( Lower() && Lower()->IsColumnFrm() && Lower()->GetNext() )
