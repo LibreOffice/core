@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:10:24 $
+ *  last change: $Author: os $ $Date: 2002-06-05 14:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,7 @@ const struct SwTableEntry ChrFmtProgNameTable [] =
     ENTRY( "Footnote anchor" ),
     ENTRY( "Endnote anchor" ),
     ENTRY( "Rubies" ), // RES_POOLCHR_RUBYTEXT
+    ENTRY( "Vertical Numbering Symbols" ), // RES_POOLCHR_VERT_NUMBER
     { 0, NULL }
 };
 
