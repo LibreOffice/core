@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedsrc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-11 12:33:11 $
+ *  last change: $Author: thb $ $Date: 2002-02-11 15:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ SvxEditSource::~SvxEditSource()
 }
 
 //------------------------------------------------------------------------
+
+TYPEINIT1( SvxEditSourceHint, TextHint );
 
 SvxEditSourceHint::SvxEditSourceHint( ULONG nId ) : TextHint( nId )
 {
