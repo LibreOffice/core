@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 07:54:04 $
+ *  last change: $Author: fs $ $Date: 2001-01-17 08:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3108,10 +3108,12 @@ sal_Bool SAL_CALL FmXFormController::confirmDelete(const ::com::sun::star::sdb::
         UniString aTitle;
         sal_Int32 nLength = aEvent.Rows;
         if (nLength > 1)
+        {
             aTitle = SVX_RES(RID_STR_DELETECONFIRM_RECORDS);
+            aTitle.SearchAndReplace('#', String::CreateFromInt32(nLength));
+        }
         else
             aTitle = SVX_RES(RID_STR_DELETECONFIRM_RECORD);
-        aTitle.SearchAndReplace('#', UniString(long(nLength)));
 
         SvxDBMsgBox aDlg(getDialogParentWindow(), aTitle,
                          SVX_RES(RID_STR_DELETECONFIRM), WB_YES_NO | WB_DEF_NO, SvxDBMsgBox::Warning);
