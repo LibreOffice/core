@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:26:21 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,15 +911,18 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
             break;
         case HTMLIMP_END:
             if ( pInfo->aSelection.nEndPos )
-            {   // falls noch Text: letzten Absatz erzeugen
-                // Zeile weiterschalten ohne CloseEntry aufzurufen
-                bInCell = FALSE;
-                NextRow( pInfo );
-                bInCell = TRUE;
+            {
+                // If text remains: create paragraph, without calling CloseEntry().
+                if( bInCell )   // #108269# ...but only in opened table cells.
+                {
+                    bInCell = FALSE;
+                    NextRow( pInfo );
+                    bInCell = TRUE;
+                }
                 CloseEntry( pInfo );
             }
             while ( nTableLevel > 0 )
-                TableOff( pInfo );      // vergessene </TABLE> ausbuegeln
+                TableOff( pInfo );      // close tables, if </TABLE> missing
             break;
         case HTMLIMP_SETATTR:
             break;
@@ -2231,12 +2234,15 @@ void ScHTMLTable::DataOff( const ImportInfo& rInfo )
 
 void ScHTMLTable::BodyOn( const ImportInfo& rInfo )
 {
-    PushEntry( rInfo );
+    bool bPushed = PushEntry( rInfo );
     if( !mpParentTable )
     {
-        ImplRowOn();
-        ProcessFormatOptions( *mpRowItemSet, rInfo );
-        ImplDataOn( ScHTMLSize( 1, 1 ) );
+        // #108269# do not start new row, if nothing (no title) precedes the body.
+        if( bPushed || !mbRowOn )
+            ImplRowOn();
+        if( bPushed || !mbDataOn )
+            ImplDataOn( ScHTMLSize( 1, 1 ) );
+        ProcessFormatOptions( *mpDataItemSet, rInfo );
     }
     CreateNewEntry( rInfo );
 }
@@ -2367,8 +2373,9 @@ void ScHTMLTable::ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryP
     mrEEParseList.Insert( rpEntry.release(), LIST_APPEND );
 }
 
-void ScHTMLTable::PushEntry( ScHTMLEntryPtr& rpEntry )
+bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rpEntry )
 {
+    bool bPushed = false;
     if( rpEntry.get() && rpEntry->HasContents() )
     {
         if( mpCurrEntryList )
@@ -2380,17 +2387,20 @@ void ScHTMLTable::PushEntry( ScHTMLEntryPtr& rpEntry )
                 mbPushEmptyLine = false;
             }
             ImplPushEntryToList( *mpCurrEntryList, rpEntry );
+            bPushed = true;
         }
         else if( mpParentTable )
-            mpParentTable->PushEntry( rpEntry );
+            bPushed = mpParentTable->PushEntry( rpEntry );
         else
             DBG_ERRORFILE( "ScHTMLTable::PushEntry - cannot push entry, no parent found" );
     }
+    return bPushed;
 }
 
-void ScHTMLTable::PushEntry( const ImportInfo& rInfo, bool bLastInCell )
+bool ScHTMLTable::PushEntry( const ImportInfo& rInfo, bool bLastInCell )
 {
     DBG_ASSERT( mpCurrEntry.get(), "ScHTMLTable::PushEntry - no current entry" );
+    bool bPushed = false;
     if( mpCurrEntry.get() )
     {
         mpCurrEntry->AdjustEnd( rInfo );
@@ -2405,19 +2415,22 @@ void ScHTMLTable::PushEntry( const ImportInfo& rInfo, bool bLastInCell )
                 mbPushEmptyLine = false;
         }
 
-        PushEntry( mpCurrEntry );
+        bPushed = PushEntry( mpCurrEntry );
         mpCurrEntry.reset();
     }
+    return bPushed;
 }
 
-void ScHTMLTable::PushTableEntry( ScHTMLTableId nTableId )
+bool ScHTMLTable::PushTableEntry( ScHTMLTableId nTableId )
 {
     DBG_ASSERT( nTableId != SC_HTML_GLOBAL_TABLE, "ScHTMLTable::PushTableEntry - cannot push global table" );
+    bool bPushed = false;
     if( nTableId != SC_HTML_GLOBAL_TABLE )
     {
         ScHTMLEntryPtr pEntry( new ScHTMLEntry( maTableItemSet, nTableId ) );
-        PushEntry( pEntry );
+        bPushed = PushEntry( pEntry );
     }
+    return bPushed;
 }
 
 ScHTMLTable* ScHTMLTable::GetExistingTable( ScHTMLTableId nTableId ) const
