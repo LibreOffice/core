@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:25:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2292,15 +2292,25 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                 if( m_pData->m_pObjectShell->IsOwnStorageFormat_Impl( *pMedium ) )
                 {
                     // untitled document must be based on temporary storage
+                    // the medium should not dispose the storage in this case
                     uno::Reference < embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
                     m_pData->m_pObjectShell->GetStorage()->copyToStorage( xTmpStor );
                     pMedium->SetStorage_Impl( xTmpStor );
+
                     m_pData->m_pObjectShell->ForgetMedium();
                     if( !m_pData->m_pObjectShell->DoSaveCompleted( pMedium ) )
                         nError = ERRCODE_IO_GENERAL;
-                    else if ( !bSalvage )
-                        // some further initializations for templates
-                        SetTemplate_Impl( aName, aTemplateName, m_pData->m_pObjectShell );
+                    else
+                    {
+                        if ( !bSalvage )
+                        {
+                            // some further initializations for templates
+                            SetTemplate_Impl( aName, aTemplateName, m_pData->m_pObjectShell );
+                        }
+
+                        // the medium should not dispose the storage
+                        pMedium->CanDisposeStorage_Impl( sal_False );
+                    }
                 }
                 else
                 {
