@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-05 08:22:01 $
+ *  last change: $Author: jmarmion $ $Date: 2002-09-26 09:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ sal_Bool OResultSet::fetchRow(sal_uInt32 rowIndex) throw(SQLException, RuntimeEx
 
     (*m_aRow)[0] = (sal_Int32)rowIndex;
     sal_Int32 nCount = m_aColumnNames.getLength();
-    for( sal_Int32 i = 1; i < nCount; i++ )
+    for( sal_Int32 i = 1; i <= nCount; i++ )
     {
         if ( (*m_aRow)[i].isBound() )
         {
