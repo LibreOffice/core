@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _FillProperties.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-05 10:35:54 $
+ *  last change:$Date: 2003-09-08 10:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.drawing;
 
-import com.sun.star.awt.XBitmap;
 import lib.MultiPropertyTest;
+
+import com.sun.star.awt.XBitmap;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 
