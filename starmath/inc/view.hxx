@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-15 13:46:38 $
+ *  last change: $Author: tl $ $Date: 2002-05-31 14:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,6 @@ class SmGraphicWindow : public ScrollableWindow
 
 protected:
     void        SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
-    Point       GetFormulaDrawPos() const { return aFormulaDrawPos; }
     void        SetIsCursorVisible(BOOL bVis) { bIsCursorVisible = bVis; }
     void        SetCursor(const SmNode *pNode);
     void        SetCursor(const Rectangle &rRect);
@@ -142,6 +141,8 @@ public:
     void   SetZoom(USHORT Factor);
     USHORT GetZoom() const { return nZoom; }
 
+    const Point &   GetFormulaDrawPos() const { return aFormulaDrawPos; }
+
     void ZoomToFitInWindow();
     void SetTotalSize();
 
@@ -151,6 +152,8 @@ public:
 
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+
+    SmAccessibility *   GetAccessibility()  { return pAccessible; }
 };
 
 /**************************************************************************/

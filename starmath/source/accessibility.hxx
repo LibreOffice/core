@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 07:48:49 $
+ *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
 #endif
-
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
 #endif
@@ -79,6 +78,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -100,6 +102,10 @@ class Window;
 class SmGraphicWindow;
 class SmDocShell;
 
+namespace drafts { namespace com { namespace sun { namespace star { namespace accessibility {
+struct AccessibleEventObject;
+}}}}};
+
 //////////////////////////////////////////////////////////////////////
 
 typedef
@@ -117,7 +123,6 @@ class SmAccessibility :
     public SmAccessibilityBaseClass
 {
     //vos::ORefCount    aRefCount;  // number of references to object
-    cppu::OInterfaceContainerHelper     aFocusListeners;
     cppu::OInterfaceContainerHelper     aAccEventListeners;
     osl::Mutex                          aListenerMutex;
 
@@ -137,10 +142,10 @@ public:
 
     SmGraphicWindow *   GetWin()    { return pWin; }
     void                ClearWin();     // to be called when view is destroyed
-
-    void    LaunchFocusEvent( USHORT nGetFocusFlags, BOOL bFocusGained,
-                ::com::sun::star::uno::Reference<
-                    ::drafts::com::sun::star::accessibility::XAccessible > &rxAccessible );
+    void                LaunchEvent(
+                            const sal_Int16 nAccesibleEventId,
+                            const ::com::sun::star::uno::Any &rOldVal,
+                            const ::com::sun::star::uno::Any &rNewVal);
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -155,8 +160,11 @@ public:
     virtual sal_Bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
+    //
+    // already removed from interface in latest version
     virtual void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    //
     virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
 

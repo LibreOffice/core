@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 07:48:49 $
+ *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,7 @@ SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     eType      = eNodeType;
     eScaleMode = SCALE_NONE;
     aNodeToken = rNodeToken;
+    nAccIndex  = -1;
 }
 
 
@@ -604,12 +605,40 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
     return pResult;
 }
 
-String SmNode::GetAccessibleText() const
+void SmNode::GetAccessibleText( String &rText ) const
 {
     DBG_ERROR( "SmNode: GetAccessibleText not overloaded" );
-    return String();
 }
 
+const SmNode * SmNode::FindNodeWithAccessibleIndex(xub_StrLen nAccIndex) const
+{
+    const SmNode *pResult = 0;
+
+    sal_Int32 nIdx = GetAccessibleIndex();
+    String aTxt;
+    if (nIdx >= 0)
+        GetAccessibleText( aTxt );  // get text if used in following 'if' statement
+
+    if (nIdx >= 0
+        &&  nIdx <= nAccIndex  &&  nAccIndex < nIdx + aTxt.Len())
+        pResult = this;
+    else
+    {
+        USHORT  nNumSubNodes = GetNumSubNodes();
+        for (USHORT  i = 0;  i < nNumSubNodes;  i++)
+        {
+            const SmNode *pNode = GetSubNode(i);
+            if (!pNode)
+                continue;
+
+            pResult = pNode->FindNodeWithAccessibleIndex(nAccIndex);
+            if (pResult)
+                return pResult;
+        }
+    }
+
+    return pResult;
+}
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -697,21 +726,21 @@ SmNode * SmStructureNode::GetSubNode(USHORT nIndex)
 }
 
 
-String SmStructureNode::GetAccessibleText() const
+void SmStructureNode::GetAccessibleText( String &rText ) const
 {
-    String aTxt;
     USHORT nNodes = GetNumSubNodes();
     for (USHORT i = 0;  i < nNodes;  ++i)
     {
         const SmNode *pNode = ((SmStructureNode *) this)->GetSubNode(i);
         if (pNode)
         {
-            aTxt += pNode->GetAccessibleText();
-            if (aTxt.Len()  &&  ' ' != aTxt.GetChar( aTxt.Len() - 1 ))
-                aTxt += String::CreateFromAscii( " " );
+            if (pNode->IsVisible())
+                ((SmStructureNode *) pNode)->nAccIndex = rText.Len();
+            pNode->GetAccessibleText( rText );
+            if (rText.Len()  &&  ' ' != rText.GetChar( rText.Len() - 1 ))
+                rText += String::CreateFromAscii( " " );
         }
     }
-    return aTxt;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -737,9 +766,9 @@ SmNode * SmVisibleNode::GetSubNode(USHORT nIndex)
 
 ///////////////////////////////////////////////////////////////////////////
 
-String SmGraphicNode::GetAccessibleText() const
+void SmGraphicNode::GetAccessibleText( String &rText ) const
 {
-    return String::CreateFromAscii( " " );
+    rText += GetToken().aText;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -2326,6 +2355,10 @@ void SmPolygonNode::Draw(OutputDevice &rDev, const Point &rPosition) const
 #endif
 }
 
+void SmPolygonNode::GetAccessibleText( String &rText ) const
+{
+    rText += String( GetToken().cMathChar );
+}
 
 /**************************************************************************/
 
@@ -2587,9 +2620,9 @@ void SmTextNode::Draw(OutputDevice &rDev, const Point& rPosition) const
 #endif
 }
 
-String SmTextNode::GetAccessibleText() const
+void SmTextNode::GetAccessibleText( String &rText ) const
 {
-    return aText;
+    rText += aText;
 }
 
 /**************************************************************************/
@@ -2780,7 +2813,7 @@ void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
     if (aFntSize.Width() == 0)
     {
         OutputDevice &rDevNC = (OutputDevice &) rDev;
-        rDevNC.Push(PUSH_FONT);
+        rDevNC.Push(PUSH_FONT | PUSH_MAPMODE);
         rDevNC.SetFont(rFace);
         aFntSize.Width() = rDev.GetFontMetric().GetSize().Width();
         rDevNC.Pop();

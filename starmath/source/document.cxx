@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 07:48:49 $
+ *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 #pragma hdrstop
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
@@ -234,6 +241,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
+using namespace ::drafts::com::sun::star::accessibility;
 
 #define A2OU(x)        rtl::OUString::createFromAscii( x )
 
@@ -356,6 +364,17 @@ void SmDocShell::SetText(const String& rBuffer)
         if ( bIsEnabled )
             EnableSetModified( bIsEnabled );
         SetModified(TRUE);
+
+        // launch accessible event if necessary
+        SmAccessibility *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessibility() : 0;
+        if (pAcc)
+        {
+            uno::Any aOldValue, aNewValue;
+            aOldValue <<= rtl::OUString( aText );
+            aNewValue <<= rtl::OUString( rBuffer );
+            pAcc->LaunchEvent( AccessibleEventId::ACCESSIBLE_TEXT_EVENT,
+                    aOldValue, aNewValue );
+        }
     }
 }
 
@@ -371,13 +390,15 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
 
 String SmDocShell::GetAccessibleText()
 {
-    String aAccTxt;
-    if (!pTree)
-        Parse();
-    DBG_ASSERT( pTree, "Tree missing" );
-    if (pTree)
-        aAccTxt = pTree->GetAccessibleText();
-    return aAccTxt;
+    if (!IsFormulaArranged())
+        ArrangeFormula();
+    if (0 == aAccText.Len())
+    {
+        DBG_ASSERT( pTree, "Tree missing" );
+        if (pTree)
+            pTree->GetAccessibleText( aAccText );
+    }
+    return aAccText;
 }
 
 void SmDocShell::Parse()
@@ -422,6 +443,9 @@ void SmDocShell::ArrangeFormula()
     pTree->Arrange(*pOutDev, rFormat);
 
     SetFormulaArranged(TRUE);
+
+    // invalidate accessible text
+    aAccText = String();
 }
 
 

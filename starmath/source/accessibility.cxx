@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-05-28 16:45:06 $
+ *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_FOCUSEVENT_HPP_
 #include <com/sun/star/awt/FocusEvent.hpp>
 #endif
@@ -125,7 +131,6 @@ using namespace drafts::com::sun::star::accessibility;
 
 SmAccessibility::SmAccessibility( SmGraphicWindow *pGraphicWin ) :
     pWin                (pGraphicWin),
-    aFocusListeners     (aListenerMutex),
     aAccEventListeners  (aListenerMutex)
 {
     DBG_ASSERT( pWin, "SmAccessibility: window missing" );
@@ -134,7 +139,6 @@ SmAccessibility::SmAccessibility( SmGraphicWindow *pGraphicWin ) :
 
 
 SmAccessibility::SmAccessibility( const SmAccessibility &rSmAcc ) :
-    aFocusListeners     (aListenerMutex),
     aAccEventListeners  (aListenerMutex)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
@@ -176,33 +180,29 @@ void SmAccessibility::ClearWin()
 
     EventObject aEvtObj;
     aEvtObj.Source = (XAccessible *) this;
-    aFocusListeners   .disposeAndClear( aEvtObj );
     aAccEventListeners.disposeAndClear( aEvtObj );
 }
 
-void SmAccessibility::LaunchFocusEvent( USHORT nGetFocusFlags, BOOL bFocusGained,
-        Reference< XAccessible > &rxAccessible )
+void SmAccessibility::LaunchEvent(
+        const sal_Int16 nAccesibleEventId,
+        const uno::Any &rOldVal,
+        const uno::Any &rNewVal)
 {
-    if (rxAccessible.is())
-    {
-        awt::FocusEvent  aEvt;
-        aEvt.Source = rxAccessible;
+    AccessibleEventObject aEvt;
+    aEvt.Source     = (XAccessible *) this;
+    aEvt.EventId    = nAccesibleEventId;
+    aEvt.OldValue   = rOldVal;
+    aEvt.NewValue   = rNewVal ;
 
-        cppu::OInterfaceIteratorHelper aIt( aFocusListeners );
-        while (aIt.hasMoreElements())
-        {
-            Reference< awt::XFocusListener > xRef( aIt.next(), UNO_QUERY );
-            if (xRef.is())
-            {
-                if (bFocusGained)
-                    xRef->focusGained( aEvt );
-                else
-                    xRef->focusLost( aEvt );
-            }
-        }
+    // pass event on to event-listener's
+    cppu::OInterfaceIteratorHelper aIt( aAccEventListeners );
+    while (aIt.hasMoreElements())
+    {
+        Reference< XAccessibleEventListener > xRef( aIt.next(), UNO_QUERY );
+        if (xRef.is())
+            xRef->notifyEvent( aEvt );
     }
 }
-
 
 uno::Reference< XAccessibleContext > SAL_CALL SmAccessibility::getAccessibleContext()
     throw (RuntimeException)
@@ -310,17 +310,12 @@ void SAL_CALL SmAccessibility::addFocusListener(
         const uno::Reference< awt::XFocusListener >& xListener )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
-    if (pWin)   // not disposing (about to destroy view shell)
-        aFocusListeners.addInterface( xListener );
 }
 
 void SAL_CALL SmAccessibility::removeFocusListener(
         const uno::Reference< awt::XFocusListener >& xListener )
     throw (RuntimeException)
 {
-    //vos::OGuard aGuard(Application::GetSolarMutex());
-    aFocusListeners.removeInterface( xListener );
 }
 
 void SAL_CALL SmAccessibility::grabFocus()
@@ -505,7 +500,61 @@ awt::Rectangle SAL_CALL SmAccessibility::getCharacterBounds( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return awt::Rectangle();
+
+    awt::Rectangle aRes;
+
+    if (!pWin)
+        throw RuntimeException();
+    else
+    {
+        // get accessible text
+        SmViewShell *pView = pWin->GetView();
+        SmDocShell  *pDoc  = pView ? pView->GetDoc() : 0;
+        if (!pDoc)
+            throw RuntimeException();
+        String aTxt( GetAccessibleText_Impl() );
+        if (!(0 <= nIndex  &&  nIndex <= aTxt.Len()))
+            throw IndexOutOfBoundsException();
+
+        const SmNode *pTree = pDoc->GetFormulaTree();
+        const SmNode *pNode = pTree->FindNodeWithAccessibleIndex( (xub_StrLen) nIndex );
+        //! pNode may be 0 if the index belongs to a char that was inserted
+        //! only for the accessible text!
+        if (pNode)
+        {
+            sal_Int32 nAccIndex = pNode->GetAccessibleIndex();
+            DBG_ASSERT( nAccIndex >= 0, "invalid accessible index" );
+            DBG_ASSERT( nIndex >= nAccIndex, "index out of range" );
+
+            String    aNodeText;
+            pNode->GetAccessibleText( aNodeText );
+            sal_Int32 nNodeIndex = nIndex - nAccIndex;
+            if (0 <= nNodeIndex  &&  nNodeIndex < aNodeText.Len())
+            {
+                // get appropriate rectangle
+                Point aOffset(pNode->GetTopLeft() - pTree->GetTopLeft());
+                Point aTLPos (pWin->GetFormulaDrawPos() + aOffset);
+                aTLPos.X() -= pNode->GetItalicLeftSpace();
+                Size  aSize (pNode->GetItalicSize());
+
+                long *pXAry = new long[ aNodeText.Len() ];
+                pWin->SetFont( pNode->GetFont() );
+                pWin->GetTextArray( aNodeText, pXAry, 0, aNodeText.Len() );
+                aTLPos.X()    += nNodeIndex > 0 ? pXAry[nNodeIndex - 1] : 0;
+                aSize.Width()  = nNodeIndex > 0 ? pXAry[nNodeIndex] - pXAry[nNodeIndex - 1] : pXAry[nNodeIndex];
+                delete[] pXAry;
+
+                aTLPos = pWin->LogicToPixel( aTLPos );
+                aSize  = pWin->LogicToPixel( aSize );
+                aRes.X = aTLPos.X();
+                aRes.Y = aTLPos.Y();
+                aRes.Width  = aSize.Width();
+                aRes.Height = aSize.Height();
+            }
+        }
+    }
+
+    return aRes;
 }
 
 sal_Int32 SAL_CALL SmAccessibility::getCharacterCount()
@@ -519,7 +568,59 @@ sal_Int32 SAL_CALL SmAccessibility::getIndexAtPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return -1;
+
+    sal_Int32 nRes = -1;
+    if (pWin)
+    {
+        const SmNode *pTree = pWin->GetView()->GetDoc()->GetFormulaTree();
+        //! kann NULL sein! ZB wenn bereits beim laden des Dokuments (bevor der
+        //! Parser angeworfen wurde) ins Fenster geklickt wird.
+        if (!pTree)
+            return nRes;
+
+        // get position relativ to formula draw position
+        Point  aPos( aPoint.X, aPoint.Y );
+        aPos = pWin->PixelToLogic( aPos );
+        aPos -= pWin->GetFormulaDrawPos();
+
+        // if it was inside the formula then get the appropriate node
+        const SmNode *pNode = 0;
+        if (pTree->OrientedDist(aPos) <= 0)
+            pNode = pTree->FindRectClosestTo(aPos);
+
+        if (pNode)
+        {
+            // get appropriate rectangle
+            Point   aOffset( pNode->GetTopLeft() - pTree->GetTopLeft() );
+            Point   aTLPos ( pWin->GetFormulaDrawPos() + aOffset );
+            aTLPos.X() -= pNode->GetItalicLeftSpace();
+            Size  aSize( pNode->GetItalicSize() );
+
+            Rectangle aRect( aTLPos, aSize );
+            if (aRect.IsInside( aPos ))
+            {
+                DBG_ASSERT( pNode->IsVisible(), "node is not a leaf" );
+                String aTxt( GetAccessibleText_Impl() );
+                DBG_ASSERT( aTxt.Len(), "no accessible text available" );
+
+                long *pXAry = new long[ aTxt.Len() ];
+                pWin->SetFont( pNode->GetFont() );
+                pWin->GetTextArray( aTxt, pXAry, 0, aTxt.Len() );
+                for (sal_Int32 i = 0;  i < aTxt.Len() - 1  &&  nRes == -1;  ++i)
+                {
+                    if (pXAry[i] > aPos.X())
+                        nRes = i;
+                }
+                delete[] pXAry;
+                DBG_ASSERT( nRes >= 0  &&  nRes < aTxt.Len(), "index out of range" );
+                DBG_ASSERT( pNode->GetAccessibleIndex() >= 0,
+                        "invalid accessible index" );
+
+                nRes = pNode->GetAccessibleIndex() + nRes;
+            }
+        }
+    }
+    return nRes;
 }
 
 OUString SAL_CALL SmAccessibility::getSelectedText()

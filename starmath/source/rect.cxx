@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-27 14:36:27 $
+ *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,7 +824,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
 
     const FontMetric  aDevFM (rDev.GetFontMetric());
 
-    pGlyphDev->Push(PUSH_FONT);
+    pGlyphDev->Push(PUSH_FONT | PUSH_MAPMODE);
     Font aFnt(rDev.GetFont());
     aFnt.SetAlign(ALIGN_TOP);
     pGlyphDev->SetFont(aFnt);
@@ -843,8 +843,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     xub_Unicode  cChar = rText.GetChar(0);
     if (cChar != xub_Unicode(' '))
     {
-        bSuccess &= pGlyphDev->GetGlyphBoundRect(cChar, aTmp, bOptimize);
-        //bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
+        bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
         if (!aTmp.IsEmpty())
         {
             // linken Rand am 'rDev' ermitteln
@@ -860,8 +859,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     cChar = rText.GetChar(nLen - 1);
     if (cChar != xub_Unicode(' '))
     {
-        bSuccess &= pGlyphDev->GetGlyphBoundRect(cChar, aTmp, bOptimize);
-        //bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
+        bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
         if (!aTmp.IsEmpty())
         {
             // rechten Rand am 'rDev' ermitteln (analog wie beim linken Rand)
@@ -886,8 +884,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
         {
             //! Anmerkung: Leerzeichen *können* leere Rechtecke ergeben, aber
             //! der Returnwert sollte auch dann TRUE sein.
-            bSuccess &= pGlyphDev->GetGlyphBoundRect(cChar, aTmp, bOptimize);
-            //bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
+            bSuccess &= pGlyphDev->GetTextBoundRect(aTmp, cChar, 0, 0);
 
             if (!aTmp.IsEmpty()  &&  aTmp.Top() < nTop)
                 nTop = aTmp.Top();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-17 14:38:59 $
+ *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,18 @@
 
 #pragma hdrstop
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
-#include <drafts/com/sun/star/accessibility/XAccessible.hdl>
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
-
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
 
 #ifndef _SV_MENU_HXX //autogen
 #include <vcl/menu.hxx>
@@ -196,7 +204,6 @@ SmGraphicWindow::~SmGraphicWindow()
     // xAccessible is released.
 }
 
-
 void SmGraphicWindow::StateChanged( StateChangedType eType )
 {
     if ( eType == STATE_CHANGE_INITSHOW )
@@ -280,15 +287,27 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 void SmGraphicWindow::GetFocus()
 {
     ScrollableWindow::GetFocus();
-    if (pAccessible)
-        pAccessible->LaunchFocusEvent( GetGetFocusFlags(), TRUE, xAccessible );
+    if (xAccessible.is())
+    {
+        uno::Any aOldValue, aNewValue;
+        // aOldValue remains empty
+        aNewValue <<= AccessibleStateType::FOCUSED;
+        pAccessible->LaunchEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+                aOldValue, aNewValue );
+    }
 }
 
 void SmGraphicWindow::LoseFocus()
 {
     ScrollableWindow::LoseFocus();
-    if (pAccessible)
-        pAccessible->LaunchFocusEvent( GetGetFocusFlags(), FALSE, xAccessible );
+    if (xAccessible.is())
+    {
+        uno::Any aOldValue, aNewValue;
+        aOldValue <<= AccessibleStateType::FOCUSED;
+        // aNewValue remains empty
+        pAccessible->LaunchEvent( AccessibleEventId::ACCESSIBLE_STATE_EVENT,
+                aOldValue, aNewValue );
+    }
 }
 
 void SmGraphicWindow::ShowCursor(BOOL bShow)

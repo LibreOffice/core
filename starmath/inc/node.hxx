@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 07:47:24 $
+ *  last change: $Author: tl $ $Date: 2002-05-31 14:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ enum SmNodeType
 
 class SmNode : public SmRect
 {
-    SmFace  aFace;
+    SmFace          aFace;
 
     SmToken         aNodeToken;
     SmNodeType      eType;
@@ -133,6 +133,9 @@ class SmNode : public SmRect
                     bIsDebug;
 protected:
     SmNode(SmNodeType eNodeType, const SmToken &rNodeToken);
+
+    // index in accessible text -1 if not (yet) applicable
+    sal_Int32       nAccIndex;
 
 public:
     virtual             ~SmNode();
@@ -188,7 +191,9 @@ public:
 
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 
-    virtual String  GetAccessibleText() const;
+    virtual void    GetAccessibleText( String &rText ) const;
+    sal_Int32       GetAccessibleIndex() const { return nAccIndex; }
+    const SmNode *  FindNodeWithAccessibleIndex(xub_StrLen nAccIndex) const;
 
     USHORT  GetRow() const    { return (USHORT)aNodeToken.nRow; }
     USHORT  GetColumn() const { return (USHORT)aNodeToken.nCol; }
@@ -238,7 +243,7 @@ public:
 
     virtual SmStructureNode & operator = ( const SmStructureNode &rNode );
 
-    virtual String  GetAccessibleText() const;
+    virtual void  GetAccessibleText( String &rText ) const;
 };
 
 
@@ -272,7 +277,7 @@ protected:
 
 public:
 
-    virtual String  GetAccessibleText() const;
+    virtual void  GetAccessibleText( String &rText ) const;
 };
 
 
@@ -348,6 +353,8 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
     void CreateTextFromNode(String &rText);
+
+    virtual void  GetAccessibleText( String &rText ) const;
 };
 
 inline const SmPolygon & SmPolygonNode::GetPolygon() const
@@ -383,8 +390,8 @@ public:
 
 class SmTextNode : public SmVisibleNode
 {
-    XubString  aText;
-    USHORT    nFontDesc;
+    XubString   aText;
+    USHORT      nFontDesc;
 
 protected:
     SmTextNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT nFontDescP)
@@ -411,7 +418,7 @@ public:
 
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 
-    virtual String  GetAccessibleText() const;
+    virtual void  GetAccessibleText( String &rText ) const;
 };
 
 
