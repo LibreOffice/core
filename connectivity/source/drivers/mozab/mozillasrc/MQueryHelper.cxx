@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQueryHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-09-26 10:09:40 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,6 +618,11 @@ void MQueryHelper::getCardValues(nsIAbCard *card)
     addCardAttributeAndValue(getAttribute(index_CellularNumber),sValue,resEntry);
 
     card->GetHomeAddress(getter_Copies(sValue));
+    PRInt32 offset;
+    nsXPIDLString space;
+    space.Assign(NS_LITERAL_STRING(" "));
+    while ((offset = sValue.FindChar('\r')) >= 0) sValue.Replace(offset, 1, space);
+    while ((offset = sValue.FindChar('\n')) >= 0) sValue.Replace(offset, 1, space);
     addCardAttributeAndValue(getAttribute(index_HomeAddress),sValue,resEntry);
 
     card->GetHomeAddress2(getter_Copies(sValue));
@@ -636,6 +641,8 @@ void MQueryHelper::getCardValues(nsIAbCard *card)
     addCardAttributeAndValue(getAttribute(index_HomeCountry),sValue,resEntry);
 
     card->GetWorkAddress(getter_Copies(sValue));
+    while ((offset = sValue.FindChar('\r')) >= 0) sValue.Replace(offset, 1, space);
+    while ((offset = sValue.FindChar('\n')) >= 0) sValue.Replace(offset, 1, space);
     addCardAttributeAndValue(getAttribute(index_WorkAddress),sValue,resEntry);
 
     card->GetWorkAddress2(getter_Copies(sValue));
