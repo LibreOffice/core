@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 15:18:42 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 13:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2000-11-26 15:18:42 $ $Revision: 1.7 $
+ // $Author: kz $ $Date: 2000-11-29 13:01:18 $ $Revision: 1.8 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -151,7 +151,7 @@ String SCSTR_QHELP_POSWND
     Text[ chinese_traditional ] = "¤u§@ªν°Ο°μ";
     Text[ arabic ] = "δΨΗή ΗαΜΟζα";
     Text[ greek ] = "Περιοχή πίνακα";
-    Text[ korean ] = "½ΓΖ® ΏµΏª";
+    Text[ korean ] = "µµΗ¥ ΏµΏª";
     Text[ turkish ] = "Tablo bφlόmό";
     Text[ language_user1 ] = " ";
 };
@@ -231,7 +231,7 @@ String SCSTR_QHELP_BTNOK
     Text[ polish ] = "Zaakceptuj";
     Text[ japanese ] = "OK";
     Text[ chinese_traditional ] = "±µ¨ό";
-    Text[ arabic ] = "ήΘζα";
+    Text[ arabic ] = "ΕΟΞΗα";
     Text[ greek ] = "Accept";
     Text[ korean ] = "ΐϋΏλ";
     Text[ turkish ] = "Kabul";
@@ -525,7 +525,7 @@ String RID_PLUGINTOOLBOX
     Text[ chinese_simplified ] = "Plug-In Ή¦ΔάΐΈ";
     Text[ russian ] = "Οΰνελό τσνκφθι δλÿ Plug-Ins";
     Text[ polish ] = "Pasek funkcji dla dodatkσw PlugIn";
-    Text[ japanese ] = "ΜίΧΈή²έ—pΜ§έΈΌ®έΚή°";
+    Text[ japanese ] = "ΜίΧΈή²έ‚ΜΜ§έΈΌ®έΚή°";
     Text[ chinese_traditional ] = "Plug-In ¥\\―ΰ¦C";
     Text[ arabic ] = "ΤΡνΨ ζΩνέΙ Plug-Ins";
     Text[ greek ] = "Γραμμή λειτουργιών για συνδεόμενες υπομονάδες";
