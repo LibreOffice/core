@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-13 14:54:56 $
+ *  last change: $Author: cl $ $Date: 2002-07-02 13:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -930,7 +930,7 @@ String RID_SVXSTR_GRAPHCTRL_ACC_NAME
 
 String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
 {
-    Text = "Kontur bearbeiten" ;
+    Text = "Hier können Sie die Kontur bearbeiten." ;
     Text [ english_us ] = "This is where you can edit the contour." ;
     Text[ portuguese ] = "Editing of a graph";
     Text[ russian ] = "Editing of a graph";
