@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:37 $
+ *  last change: $Author: cd $ $Date: 2002-11-19 07:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,7 +1257,7 @@
 						<author>MBA</author>
 						<desc xml:lang="en-US">Specifies the base directory used by the Office to store temp files.</desc>
 					</info>
-					<value>$(userurl)/temp</value>
+					<value>$(temp)</value>
 				</prop>
 				<prop oor:name="Template" oor:type="oor:string-list">
 					<info>
@@ -1292,7 +1292,7 @@
 						<author>MBA</author>
 						<desc xml:lang="en-US">Specifies the path of the work folder, which can be modified according to the user's needs. The path specified here can be seen in the Open or Save dialog.</desc>
 					</info>
-					<value>$(userurl)/work</value>
+					<value>$(work)</value>
 				</prop>
 			</group>
 			<group oor:name="Default">
@@ -1406,7 +1406,7 @@
 					<info>
 						<desc xml:lang="en-US">Specifies the default directory that is used as a base directory for all temporary Office files.</desc>
 					</info>
-					<value>$(userurl)/temp</value>
+					<value>$(temp)</value>
 				</prop>
 				<prop oor:name="Template" oor:type="oor:string-list">
 					<info>
@@ -1436,7 +1436,7 @@
 					<info>
 						<desc xml:lang="en-US">Specifies the default working directory where user stores documents.</desc>
 					</info>
-					<value>$(userurl)/work</value>
+					<value>$(work)</value>
 				</prop>
 			</group>
 		</group>
