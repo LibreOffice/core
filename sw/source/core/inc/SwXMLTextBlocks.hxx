@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-26 13:35:00 $
+ *  last change: $Author: mtg $ $Date: 2001-03-19 11:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,6 @@ public:
 
     // Methods for the new Autocorrecter
     ULONG GetText( const String& rShort, String& );
-    SwDoc* GetDoc() const { return pDoc; }
 
     virtual BOOL IsOnlyTextBlock( const String& rShort ) const;
     virtual BOOL IsOnlyTextBlock( USHORT nIdx ) const;
@@ -160,6 +159,8 @@ public:
     void WriteInfo();
 
 public:
+    SwDoc* GetDoc() const { return pDoc; }
+    void  SetDoc( SwDoc * pNewDoc);
     ULONG StartPutBlock( const String& rShort, const String& rPackageName );
     ULONG PutBlock( SwPaM& rPaM, const String& rLong );
     ULONG GetBlockText( const String& rShort, String& rText );
