@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-05 21:52:48 $
+ *  last change: $Author: aw $ $Date: 2002-03-22 10:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1225,6 +1225,9 @@
 #define SCSTR_50_LONG_DOCNAME   (STR_START + 85)
 #define SCSTR_CHG_PROTECT       (STR_START + 86)
 #define SCSTR_CHG_UNPROTECT     (STR_START + 87)
+
+// #98185#
+#define STR_CAPTION_DEFAULT_TEXT    (STR_START + 88)
 
 // Items
 
