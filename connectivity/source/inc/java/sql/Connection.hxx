@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:46:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,8 @@ namespace connectivity
                                             //  of all the Statement objects
                                             //  for this Connection
         java_sql_Driver*    m_pDriver;
-        sal_Bool            m_bParameterSubstitution;
+        sal_Bool        m_bParameterSubstitution;
+        sal_Bool        m_bIgnoreDriverPrivileges;
 
         /** transform named parameter into unnamed one.
             @param  _sSQL
@@ -132,8 +133,10 @@ namespace connectivity
                                 ,java_sql_Driver* _pDriver
                                 ,const ::rtl::OUString& _sGeneredStmt
                                 ,sal_Bool _bGenEnabled
-                                ,sal_Bool _bParameterSubstitution);
+                                ,sal_Bool _bParameterSubstitution
+                                ,sal_Bool _bIgnoreDriverPrivileges);
 
+        inline  sal_Bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
         // OComponentHelper
         virtual void SAL_CALL disposing(void);
         // XInterface
