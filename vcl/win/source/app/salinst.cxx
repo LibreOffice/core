@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 15:21:06 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1053,3 +1053,12 @@ SalI18NImeStatus* WinSalInstance::CreateI18NImeStatus()
 {
     return new WinImeStatus();
 }
+
+// -----------------------------------------------------------------------
+
+const ::rtl::OUString& SalGetDesktopEnvironment()
+{
+    static ::rtl::OUString aDesktopEnvironment( RTL_CONSTASCII_USTRINGPARAM( "Windows" ) );
+    return aDesktopEnvironment;
+}
+
