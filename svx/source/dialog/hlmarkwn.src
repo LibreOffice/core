@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-19 20:33:41 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Text[ portuguese_brazilian ] = "Apply";
         Text[ japanese ] = "“K—p";
         Text[ korean ] = "Àû¿ë";
-        Text[ chinese_simplified ] = "Ì×ÓÃ";
+        Text[ chinese_simplified ] = "²ÉÓÃ";
         Text[ chinese_traditional ] = "±Ä¥Î";
         Text[ arabic ] = "ÊØÈíÞ";
         Text[ turkish ] = "Uygula";
@@ -226,6 +226,7 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text[ catalan ] = "No se pudo abrir el documento.";
     Text[ finnish ] = "Asiakirjan avaaminen ei onnistunut.";
 };
+
 
 
 
