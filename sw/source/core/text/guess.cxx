@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:26:27 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     SwTwips nLineWidth = rInf.Width() - rInf.X();
     const xub_StrLen nMaxLen = Min( xub_StrLen(rInf.GetTxt().Len() - rInf.GetIdx()),
                                 rInf.GetLen() );
-    // special case: char width > line width
-    if( !nMaxLen || !nLineWidth )
+    if( !nMaxLen )
         return sal_False;
 
     KSHORT nItalic = 0;
