@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:02:36 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 11:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,6 +510,54 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     Text[ turkish ] = "Daðýlým";
     Text[ catalan ] = "Distribución";
     Text[ finnish ] = "Jakauma";
+
+    Image IMG_HOR_LOW_H
+    {
+        ImageBitmap = Bitmap { File = "dsth_low_h.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+
+    Image IMG_HOR_DISTANCE_H
+    {
+        ImageBitmap = Bitmap { File = "dsth_dst_h.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+
+    Image IMG_HOR_CENTER_H
+    {
+        ImageBitmap = Bitmap { File = "dsth_cen_h.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+
+    Image IMG_HOR_HIGH_H
+    {
+        ImageBitmap = Bitmap { File = "dsth_hig_h.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+
+    Image IMG_VER_HIGH_H
+    {
+        ImageBitmap = Bitmap { File = "dstv_hig_h.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+
+    Image IMG_VER_CENTER_H
+    {
+        ImageBitmap = Bitmap { File = "dstv_cen_h.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+
+    Image IMG_VER_DISTANCE_H
+    {
+        ImageBitmap = Bitmap { File = "dstv_dst_h.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+
+    Image IMG_VER_LOW_H
+    {
+        ImageBitmap = Bitmap { File = "dstv_low_h.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
 };
 
 // ********************************************************************** EOF
