@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 09:00:13 $
+ *  last change: $Author: kso $ $Date: 2002-09-03 13:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,14 @@ class NeonSession : public DAVSession
         com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
+        // @@@ This should really be per-request data. A NeonSession
+        // instance can handle multiple requests at a time!!!
+        // Username/password entered during last request. Cleared, if
+        // request was processed successfully. Kept as long as request
+        // returns with an error.
+        rtl::OUString m_aPrevUserName;
+        rtl::OUString m_aPrevPassWord;
+
     protected:
         virtual ~NeonSession();
 
@@ -125,12 +133,6 @@ class NeonSession : public DAVSession
         virtual void setServerAuthListener(DAVAuthListener * inDAVAuthListener);
         virtual void setProxyAuthListener(DAVAuthListener * inDAVAuthListener);
 
-        virtual void OPTIONS( const ::rtl::OUString &  inPath,
-                              DAVCapabilities & outCapabilities,
-                              const com::sun::star::uno::Reference<
-                                com::sun::star::ucb::XCommandEnvironment >& inEnv )
-            throw ( DAVException );
-
         DAVAuthListener * getServerAuthListener() const
         { return m_pListener; }
 
@@ -141,6 +143,18 @@ class NeonSession : public DAVSession
         const rtl::OUString & getHostName() const { return m_aHostName; }
 
         const void * getRequestData() const { return m_pRequestData; }
+
+        const rtl::OUString & getUserName() const { return m_aPrevUserName; }
+        const rtl::OUString & getPassWord() const { return m_aPrevPassWord; }
+
+        void setUserName( const rtl::OUString & rUserName );
+        void setPassWord( const rtl::OUString & rPassWord );
+
+        virtual void OPTIONS( const ::rtl::OUString &  inPath,
+                              DAVCapabilities & outCapabilities,
+                              const com::sun::star::uno::Reference<
+                                com::sun::star::ucb::XCommandEnvironment >& inEnv )
+            throw ( DAVException );
 
         // allprop & named
         virtual void PROPFIND( const ::rtl::OUString &                inPath,

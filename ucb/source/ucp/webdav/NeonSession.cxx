@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 09:00:13 $
+ *  last change: $Author: kso $ $Date: 2002-09-03 13:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,12 +232,21 @@ extern "C" void NeonSession_ResponseBlockWriter( void *       inUserData,
     }
 }
 
-extern "C" int NeonAuth( void *     inUserData,
-                         const char *   inRealm,
-                         int          attempt,
-                         char *       inoutUserName,
-                         char *       inoutPassWord )
+extern "C" int NeonSession_NeonAuth( void *       inUserData,
+                                     const char * inRealm,
+                                     int          attempt,
+                                     char *       inoutUserName,
+                                     char *       inoutPassWord )
 {
+#if 0
+    // Give'em only a limited mumber of retries..
+    if ( attempt > 9 )
+    {
+        // abort
+        return -1;
+    }
+#endif
+
     NeonSession * theSession = static_cast< NeonSession * >( inUserData );
     if ( !theSession->getServerAuthListener() )
     {
@@ -253,6 +262,14 @@ extern "C" int NeonAuth( void *     inUserData,
                     //   (last checked: 0.22.0).
                     rtl::OUString::createFromAscii( inoutPassWord ) ); */
 
+    // #102871# - Supply username and password from previous try. Password
+    // container service depends on this!
+    if ( theUserName.getLength() == 0 )
+        theUserName = theSession->getUserName();
+
+    if ( thePassWord.getLength() == 0 )
+        thePassWord = theSession->getPassWord();
+
     int theRetVal = theSession->getServerAuthListener()->authenticate(
                             rtl::OUString::createFromAscii( inRealm ),
                             theSession->getHostName(),
@@ -264,6 +281,10 @@ extern "C" int NeonAuth( void *     inUserData,
 
     strcpy( inoutPassWord,
             rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
+
+    // #102871# - Remember username and password.
+    theSession->setUserName( theUserName );
+    theSession->setPassWord( thePassWord );
 
     return theRetVal;
 }
@@ -433,8 +454,12 @@ void NeonSession::setServerAuthListener( DAVAuthListener * inDAVAuthListener )
     //     Calling ne_set_server_auth more than once sometimes crashes Neon!
     if ( m_pListener == 0 )
     {
-        m_pListener = inDAVAuthListener;
-        ne_set_server_auth( m_pHttpSession, NeonAuth, this );
+        osl::Guard< osl::Mutex > theGuard( m_aMutex );
+        if ( m_pListener == 0 )
+        {
+            m_pListener = inDAVAuthListener;
+            ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
+        }
     }
 }
 
@@ -442,6 +467,20 @@ void NeonSession::setServerAuthListener( DAVAuthListener * inDAVAuthListener )
 void NeonSession::setProxyAuthListener( DAVAuthListener * inDAVAuthListener )
 {
     // Note: Content is currently not using proxy auth
+}
+
+// -------------------------------------------------------------------
+void NeonSession::setUserName( const rtl::OUString & rUserName )
+{
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+    m_aPrevUserName = rUserName;
+}
+
+// -------------------------------------------------------------------
+void NeonSession::setPassWord( const rtl::OUString & rPassWord )
+{
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+    m_aPrevPassWord = rPassWord;
 }
 
 // -------------------------------------------------------------------
@@ -964,7 +1003,9 @@ void NeonSession::HandleError( int nError )
     switch ( nError )
     {
         case NE_OK:
-            break;
+            // Cleanup.
+            m_aPrevUserName = m_aPrevPassWord = rtl::OUString();
+            return;
 
         case NE_ERROR:        // Generic error
         {
