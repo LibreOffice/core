@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:43:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,26 +105,26 @@ public:
     explicit                    XclExpTabInfo( const XclExpRoot& rRoot );
 
     /** Returns true, if the specified Calc sheet will be exported. */
-    bool                        IsExportTab( USHORT nScTab ) const;
+    bool                        IsExportTab( SCTAB nScTab ) const;
     /** Returns true, if the specified Calc sheet is used to store external cell contents. */
-    bool                        IsExternalTab( USHORT nScTab ) const;
+    bool                        IsExternalTab( SCTAB nScTab ) const;
     /** Returns true, if the specified Calc sheet is visible and will be exported. */
-    bool                        IsVisibleTab( USHORT nScTab ) const;
+    bool                        IsVisibleTab( SCTAB nScTab ) const;
     /** Returns true, if the specified Calc sheet is selected and will be exported. */
-    bool                        IsSelectedTab( USHORT nScTab ) const;
+    bool                        IsSelectedTab( SCTAB nScTab ) const;
     /** Returns true, if the specified Calc sheet is the active displayed sheet. */
-    bool                        IsActiveTab( USHORT nScTab ) const;
+    bool                        IsActiveTab( SCTAB nScTab ) const;
 
     /** Returns the Excel sheet index for a given Calc sheet. */
-    sal_uInt16                  GetXclTab( USHORT nScTab ) const;
+    sal_uInt16                  GetXclTab( SCTAB nScTab ) const;
 
     /** Returns the Calc sheet index of the nSortedTab-th entry in the sorted sheet names list. */
-    USHORT                      GetRealScTab( USHORT nSortedTab ) const;
+    SCTAB                       GetRealScTab( sal_uInt16 nSortedTab ) const;
     /** Returns the index of the passed Calc sheet in the sorted sheet names list. */
-    USHORT                      GetSortedScTab( USHORT nScTab ) const;
+    sal_uInt16                  GetSortedScTab( SCTAB nScTab ) const;
 
     /** Returns the number of Calc sheets. */
-    inline USHORT               GetScTabCount() const { return mnScCnt; }
+    inline SCTAB               GetScTabCount() const { return mnScCnt; }
 
     /** Returns the number of Excel sheets to be exported. */
     inline sal_uInt16           GetXclTabCount() const { return mnXclCnt; }
@@ -151,9 +151,9 @@ public:
 
 private:
     /** Returns true, if any of the passed flags is set for the specified Calc sheet. */
-    bool                        GetFlag( USHORT nScTab, sal_uInt8 nFlags ) const;
+    bool                        GetFlag( SCTAB nScTab, sal_uInt8 nFlags ) const;
     /** Sets or clears (depending on bSet) all passed flags for the specified Calc sheet. */
-    void                        SetFlag( USHORT nScTab, sal_uInt8 nFlags, bool bSet = true );
+    void                        SetFlag( SCTAB nScTab, sal_uInt8 nFlags, bool bSet = true );
 
     /** Searches for sheets not to be exported. */
     void                        CalcXclIndexes();
@@ -166,7 +166,7 @@ private:
 
     ScTabInfoVec                maTabInfoVec;       /// Array of Calc sheet index information.
 
-    USHORT                      mnScCnt;            /// Count of Calc sheets.
+    SCTAB                       mnScCnt;            /// Count of Calc sheets.
     sal_uInt16                  mnXclCnt;           /// Count of Excel sheets to be exported.
     sal_uInt16                  mnXclExtCnt;        /// Count of external link sheets.
     sal_uInt16                  mnXclCodeCnt;       /// Count of codepages.
