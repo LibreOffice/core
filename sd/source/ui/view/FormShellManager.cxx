@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormShellManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-03 07:45:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,30 +62,36 @@
 #include "FormShellManager.hxx"
 
 #include "ViewShell.hxx"
+#include "PaneManager.hxx"
 #include "ViewShellBase.hxx"
 #include "ObjectBarManager.hxx"
+#include "Window.hxx"
 #include <svx/fmshell.hxx>
 
 namespace sd {
 
 
-FormShellManager::FormShellManager (const ViewShellBase& rBase)
+FormShellManager::FormShellManager (ViewShellBase& rBase)
     : mrBase(rBase),
       meStackPosition(SP_UNKNOWN)
 {
-    ViewShell* pShell = mrBase.GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = mrBase.GetMainViewShell();
 
     if (pShell != NULL)
     {
-        // Register at the window of the center pane.
-        mrBase.GetWindow()->AddEventListener(
+        RegisterAtCenterPane (pShell);
+
+        // Register at the PaneManager to be informed about changes in the
+        // center pane.
+        mrBase.GetPaneManager().AddEventListener (
             LINK(
                 this,
                 FormShellManager,
-                WindowEventHandler));
+                PaneManagerEventHandler));
 
         // Register at the form shell.
-        FmFormShell* pFormShell = pShell->GetObjectBarManager().GetFormShell();
+        FmFormShell* pFormShell = static_cast<FmFormShell*>(
+            pShell->GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
         if (pFormShell != NULL)
         {
             pFormShell->SetControlActivationHandler(
@@ -102,19 +108,23 @@ FormShellManager::FormShellManager (const ViewShellBase& rBase)
 
 FormShellManager::~FormShellManager (void)
 {
-    ViewShell* pShell = mrBase.GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = mrBase.GetMainViewShell();
 
     if (pShell != NULL)
     {
-        // Unregister at the window of the center pane.
-        mrBase.GetWindow()->RemoveEventListener(
+        UnregisterAtCenterPane (pShell);
+
+        // Unregister at the PaneManager.
+        mrBase.GetPaneManager().RemoveEventListener (
             LINK(
                 this,
                 FormShellManager,
-                WindowEventHandler));
+                PaneManagerEventHandler));
+
 
         // Unregister at the form shell.
-        FmFormShell* pFormShell = pShell->GetObjectBarManager().GetFormShell();
+        FmFormShell* pFormShell = static_cast<FmFormShell*>(
+            pShell->GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
         if (pFormShell != NULL)
         {
             pFormShell->SetControlActivationHandler(Link());
@@ -125,16 +135,70 @@ FormShellManager::~FormShellManager (void)
 
 
 
+void FormShellManager::RegisterAtCenterPane (ViewShell* pShell)
+{
+    ::Window* pWindow = NULL;
+    if (pShell != NULL)
+        pWindow = pShell->GetActiveWindow();
+    if (pWindow != NULL)
+        pWindow->AddEventListener(
+            LINK(
+                this,
+                FormShellManager,
+                WindowEventHandler));
+}
+
+
+
+
+void FormShellManager::UnregisterAtCenterPane (ViewShell* pShell)
+{
+    ::Window* pWindow = NULL;
+    if (pShell != NULL)
+        pWindow = pShell->GetActiveWindow();
+    if (pWindow != NULL)
+        pWindow->RemoveEventListener(
+            LINK(
+                this,
+                FormShellManager,
+                WindowEventHandler));
+}
+
+
+
+
 IMPL_LINK(FormShellManager, FormControlActivated, FmFormShell*, EMPTYARG)
 {
     // The form shell has been actived.  To give it priority in reacting to
     // slot calls the form shell is moved to the top of the object bar shell
     // stack.
-    ViewShell* pShell = mrBase.GetSubShellManager().GetMainSubShell();
+    ViewShell* pShell = mrBase.GetMainViewShell();
     if (pShell!=NULL && meStackPosition!=SP_ABOVE_VIEW_SHELL)
     {
         pShell->GetObjectBarManager().MoveToTop (RID_FORMLAYER_TOOLBOX);
         meStackPosition = SP_ABOVE_VIEW_SHELL;
+    }
+
+    return 0;
+}
+
+
+
+
+IMPL_LINK(FormShellManager, PaneManagerEventHandler, PaneManagerEvent*, pEvent)
+{
+    if (pEvent->mePane == PaneManager::PT_CENTER)
+    {
+        switch (pEvent->meEventId)
+        {
+            case PaneManagerEvent::EID_VIEW_SHELL_REMOVED:
+                UnregisterAtCenterPane (pEvent->mpShell);
+                break;
+
+            case PaneManagerEvent::EID_VIEW_SHELL_ADDED:
+                RegisterAtCenterPane (pEvent->mpShell);
+                break;
+        }
     }
 
     return 0;
@@ -157,8 +221,7 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
                 // The window of the center pane got the focus.  Therefore
                 // the form shell is moved to the bottom of the object bar
                 // stack.
-                ViewShell* pShell
-                    = mrBase.GetSubShellManager().GetMainSubShell();
+                ViewShell* pShell = mrBase.GetMainViewShell();
                 if (pShell!=NULL && meStackPosition!=SP_BELOW_VIEW_SHELL)
                 {
                     pShell->GetObjectBarManager().MoveBelowShell (
