@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:44:00 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:20:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,6 @@ DATABASE_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Database$/sdbcx.java
 
 DATABASEDRIVERSKELETON_FILES=\
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Database$/DriverSkeleton$/exports.dxp \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Database$/DriverSkeleton$/How_to_write_my_own_driver.txt \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Database$/DriverSkeleton$/Makefile \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Database$/DriverSkeleton$/OSubComponent.hxx \
