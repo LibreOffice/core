@@ -317,6 +317,7 @@ hedabu: ..\inc\stringtransfer.hxx %_DEST%\inc%_EXT%\svtools\stringtransfer.hxx
 hedabu: ..\inc\ivctrl.hxx %_DEST%\inc%_EXT%\svtools\ivctrl.hxx
 hedabu: ..\inc\fileview.hxx %_DEST%\inc%_EXT%\svtools\fileview.hxx
 hedabu: ..\inc\templdlg.hxx %_DEST%\inc%_EXT%\svtools\templdlg.hxx
+hedabu: ..\inc\asynclink.hxx %_DEST%\inc%_EXT%\svtools\asynclink.hxx
 
 hedabu: ..\inc\controldims.hrc %_DEST%\inc%_EXT%\svtools\controldims.hrc
 
