@@ -2,9 +2,9 @@
 *
 *  $RCSfile: RecordParser.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-17 11:20:17 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:53:57 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.db;
 
 import com.sun.star.lang.XMultiServiceFactory;
@@ -65,6 +64,7 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbcx.XColumnsSupplier;
+import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -72,9 +72,9 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.sdb.XCompletedExecution;
 import com.sun.star.lang.Locale;
-import com.sun.star.util.XNumberFormats;
 import com.sun.star.wizards.common.InvalidQueryException;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.task.XInteractionHandler;
 
@@ -91,8 +91,8 @@ public class RecordParser extends QueryMetaData {
     public FieldColumn[] GroupFieldColumns;
     public FieldColumn[] RecordFieldColumns;
 
-    public RecordParser(XMultiServiceFactory _xMSF, Locale _CharLocale, XNumberFormats _NumberFormats) {
-        super(_xMSF, _CharLocale, _NumberFormats);
+    public RecordParser(XMultiServiceFactory _xMSF, Locale _aLocale, NumberFormatter _oNumberFormatter) {
+        super(_xMSF, _aLocale, _oNumberFormatter);
         getInterfaces();
     }
 
@@ -133,19 +133,20 @@ public class RecordParser extends QueryMetaData {
         try {
             Double DblValue;
             if (bisDate)
-                DblValue = new Double(xResultSetRow.getDouble(ColIndex) + (double) lDateCorrection);
+                DblValue = new Double(xResultSetRow.getDouble(ColIndex) + (double) super.getNullDateCorrection());
             else
                 DblValue = new Double(xResultSetRow.getDouble(ColIndex));
-            return DblValue;
+//          if (!xResultSetRow.wasNull())
+                return DblValue;
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
-            return null;
         }
+        return Any.VOID;
     }
 
     public Object getColumnValue(int ColIndex, int iType) {
         boolean bResult;
-        Object oAny = null;
+        Object oAny = Any.VOID;
         switch (iType) {
             case DataType.BIT : // ==  -7;
             case DataType.BOOLEAN : // ==  16;
@@ -234,9 +235,7 @@ public class RecordParser extends QueryMetaData {
             xResultSetRow = (com.sun.star.sdbc.XRow) UnoRuntime.queryInterface(com.sun.star.sdbc.XRow.class, ResultSet);
             XColumnsSupplier xDBCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, ResultSet);
             xColumns = xDBCols.getColumns();
-            String[] sElementNames = xColumns.getElementNames();
             setCommandType(com.sun.star.sdb.CommandType.COMMAND);
-
             if (binitializeDBColumns == true)
                 setFieldNames(FieldNames, xColumns);
 //              super.setFieldColumns(false);
@@ -296,5 +295,6 @@ public class RecordParser extends QueryMetaData {
     public void dispose() {
         if (xRowSetComponent != null)
             xRowSetComponent.dispose();
+        super.dispose();
     }
 }
