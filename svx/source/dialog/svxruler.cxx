@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-11-07 10:40:46 $
+ *  last change: $Author: os $ $Date: 2002-11-29 17:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,6 @@
 #include "tstpitem.hxx"
 #include "lrspitem.hxx"
 #include "protitem.hxx"
-
-#ifndef RULER_TAB_RTL
-#define RULER_TAB_RTL           ((USHORT)0x0010)
-#endif
 
 // STATIC DATA -----------------------------------------------------------
 
