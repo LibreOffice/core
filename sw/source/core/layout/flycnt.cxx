@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:30:36 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 |*************************************************************************/
 //Wir brauchen ein Paar Hilfsklassen zur Kontrolle der Ozillation und ein paar
 //Funktionen um die Uebersicht zu gewaehrleisten.
-
+// OD 2004-08-25 #i3317# - re-factoring of the position stack
 class SwOszControl
 {
     static const SwFlyFrm *pStk1;
@@ -278,12 +278,15 @@ class SwOszControl
     static const SwFlyFrm *pStk5;
 
     const SwFlyFrm *pFly;
-    Point aStk1, aStk2, aStk3, aStk4, aStk5;
+    // --> OD 2004-08-25 #i3317#
+    sal_uInt8 mnPosStackSize;
+    std::vector<Point*> maObjPositions;
+    // <--
 
 public:
     SwOszControl( const SwFlyFrm *pFrm );
     ~SwOszControl();
-    FASTBOOL ChkOsz();
+    bool ChkOsz();
     static FASTBOOL IsInProgress( const SwFlyFrm *pFly );
 };
 const SwFlyFrm *SwOszControl::pStk1 = 0;
@@ -292,8 +295,11 @@ const SwFlyFrm *SwOszControl::pStk3 = 0;
 const SwFlyFrm *SwOszControl::pStk4 = 0;
 const SwFlyFrm *SwOszControl::pStk5 = 0;
 
-SwOszControl::SwOszControl( const SwFlyFrm *pFrm ) :
-    pFly( pFrm )
+SwOszControl::SwOszControl( const SwFlyFrm *pFrm )
+    : pFly( pFrm ),
+      // --> OD 2004-08-25 #i3317#
+      mnPosStackSize( 20 )
+      // <--
 {
     if ( !SwOszControl::pStk1 )
         SwOszControl::pStk1 = pFly;
@@ -319,6 +325,15 @@ SwOszControl::~SwOszControl()
         SwOszControl::pStk4 = 0;
     else if ( SwOszControl::pStk5 == pFly )
         SwOszControl::pStk5 = 0;
+    // --> OD 2004-08-25 #i3317#
+    while ( !maObjPositions.empty() )
+    {
+        Point* pPos = maObjPositions.back();
+        delete pPos;
+
+        maObjPositions.pop_back();
+    }
+    // <--
 }
 
 FASTBOOL SwOszControl::IsInProgress( const SwFlyFrm *pFly )
@@ -336,26 +351,37 @@ FASTBOOL SwOszControl::IsInProgress( const SwFlyFrm *pFly )
     return FALSE;
 }
 
-FASTBOOL SwOszControl::ChkOsz()
+bool SwOszControl::ChkOsz()
 {
-    FASTBOOL bRet = TRUE;
-    Point aTmp = pFly->Frm().Pos();
-    if( aTmp == Point() )
-        aTmp.X() = 1;
-    //Ist der Stack am Ende?
-    if ( aStk1 != Point() )
-        return TRUE;
-    if ( aTmp != aStk1 && aTmp != aStk2 && aTmp != aStk3 &&
-         aTmp != aStk4 && aTmp != aStk5 )
+    bool bOscillationDetected = false;
+
+    if ( maObjPositions.size() == mnPosStackSize )
     {
-        aStk1 = aStk2;
-        aStk2 = aStk3;
-        aStk3 = aStk4;
-        aStk4 = aStk5;
-        aStk5 = aTmp;
-        bRet = FALSE;
+        // position stack is full -> oscillation
+        bOscillationDetected = true;
     }
-    return bRet;
+    else
+    {
+        Point* pNewObjPos = new Point( pFly->GetObjRect().Pos() );
+        for ( std::vector<Point*>::iterator aObjPosIter = maObjPositions.begin();
+              aObjPosIter != maObjPositions.end();
+              ++aObjPosIter )
+        {
+            if ( *(pNewObjPos) == *(*aObjPosIter) )
+            {
+                // position already occured -> oscillation
+                bOscillationDetected = true;
+                delete pNewObjPos;
+                break;
+            }
+        }
+        if ( !bOscillationDetected )
+        {
+            maObjPositions.push_back( pNewObjPos );
+        }
+    }
+
+    return bOscillationDetected;
 }
 
 //
@@ -442,16 +468,26 @@ void SwFlyAtCntFrm::MakeAll()
             const SwFrm* pFooter = GetAnchorFrm()->FindFooterOrHeader();
             if( pFooter && !pFooter->IsFooterFrm() )
                 pFooter = NULL;
-            FASTBOOL bOsz = FALSE;
+            bool bOsz = false;
             FASTBOOL bExtra = Lower() && Lower()->IsColumnFrm();
-
+            // --> OD 2004-08-25 #i3317# - boolean, to apply temporarly the
+            // 'straightforward positioning process' for the frame due to its
+            // overlapping with a previous column.
+            bool bConsiderWrapInfluenceDueToOverlapPrevCol( false );
+            // <--
             do {
                 SWRECTFN( this )
                 Point aOldPos( (Frm().*fnRect->fnGetPos)() );
                 SwFlyFreeFrm::MakeAll();
                 const bool bPosChgDueToOwnFormat =
                                         aOldPos != (Frm().*fnRect->fnGetPos)();
-
+                // --> OD 2004-08-25 #i3317#
+                if ( !ConsiderObjWrapInfluenceOnObjPos() &&
+                     OverlapsPrevColumn() )
+                {
+                    bConsiderWrapInfluenceDueToOverlapPrevCol = true;
+                }
+                // <--
                 // OD 2004-05-12 #i28701# - no format of anchor frame, if
                 // wrapping style influence is considered on object positioning
                 if ( !ConsiderObjWrapInfluenceOnObjPos() &&
@@ -479,52 +515,19 @@ void SwFlyAtCntFrm::MakeAll()
                     bExtra = FALSE; // Sicherhaltshalber gibt es nur eine Ehrenrunde.
                 }
             } while ( !IsValid() && !bOsz &&
+                      // --> OD 2004-08-25 #i3317#
+                      !bConsiderWrapInfluenceDueToOverlapPrevCol &&
+                      // <--
                       GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
 
-            if ( bOsz )
+            // --> OD 2004-08-25 #i3317# - instead of attribute change apply
+            // temporarly the 'straightforward positioning process'.
+            if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol )
             {
-#ifdef DEBUG
-                ASSERT( false,
-                        "<SwFlyAtCntFrm::MakeAll()> - loop detected, perform attribute changes to avoid the loop" );
-#endif
-                SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
-                pFmt->LockModify();
-                SwFmtSurround aMain( pFmt->GetSurround() );
-                // Im Notfall setzen wir automatisch positionierte Rahmen mit
-                // Rekursion auf Durchlauf, das duerfte beruhigend wirken.
-                if( IsAutoPos() && aMain.GetSurround() != SURROUND_THROUGHT )
-                {
-                    aMain.SetSurround( SURROUND_THROUGHT );
-                    pFmt->SetAttr( aMain );
-                }
-                else
-                {
-                    SwFmtVertOrient aOrient( pFmt->GetVertOrient() );
-                    aOrient.SetVertOrient( VERT_TOP );
-                    pFmt->SetAttr( aOrient );
-                    //Wenn der Rahmen auf "Kein Umlauf" steht, versuchen wir es mal
-                    //mit Seitenumlauf.
-                    if ( aMain.GetSurround() == SURROUND_NONE )
-                    {
-                        aMain.SetSurround( SURROUND_PARALLEL );
-                        pFmt->SetAttr( aMain );
-                    }
-                }
-                pFmt->UnlockModify();
-
-                _InvalidatePos();
-                SwFlyFreeFrm::MakeAll();
-                if( !bLockedAnchor )
-                    GetAnchorFrm()->Calc();
-                if ( !GetValidPosFlag() )
-                {
-                    SwFlyFreeFrm::MakeAll();
-                    if( !bLockedAnchor )
-                        GetAnchorFrm()->Calc();
-                }
-                // validate fly frame
-                bValidPos = bValidSize = bValidPrtArea = TRUE;
+                SetTmpConsiderWrapInfluence( true );
+                SetRestartLayoutProcess( true );
             }
+            // <--
             bSetCompletePaintOnInvalidate = FALSE;
         }
     }
@@ -1312,112 +1315,63 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
                              FALSE );
 }
 
-/*************************************************************************
-|*
-|*  SwFlyAtCntFrm::MakeFlyPos()
-|*
-|*  Beschreibung:
-|*
-|*      virtueller Anker: Der virtuelle Anker eines Flys ist der Anker selbst
-|*                        oder einer seiner Follows. Es ist genau derjenige
-|*                        Cntnt, der dem Fly aktuell am naechsten liegt,
-|*                        genauer der aktuellen relativen Position des Fly
-|*                        (siehe auch VertPos, Fix). Es wird nur die
-|*                        vertikale Entfernung gemessen.
-|*                        Der virtuelle Anker fuer die Horizontale Ausrichtung
-|*                        muss nicht ein CntntFrm sein, denn wenn der Fly
-|*                        z.B. ueber einer leeren Spalte steht, so muss eben
-|*                        der LayoutFrm als virtueller Anker dienen, der im
-|*                        Textfluss des Ankers liegt.
-|*
-|*      HoriPos:
-|*          - Automatisch: Die automatische Ausrichtung orientiert sich
-|*            an einem SwFrm der folgendermassen ermittelt wird: Abhaengig
-|*            vom Attriut und ausgehend vom virtuellen Anker wird der
-|*            Bezugsframe gesucht (CntntFrm, LayoutFrm).
-|*          - Fix: Der Wert der relativen Entfernung aus dem Attribut ist
-|*                 die relative Entfernung vom virtuellen Anker.
-|*      VertPos:
-|*          - Automatisch: Die automatische Ausrichtung orientiert sich immer
-|*            am virtuellen Anker.
-|*          - Fix: Der Fly muss nicht in der Umgebung untergebracht sein, in
-|*                 der sein Anker steht; er folgt aber stets dem Textfluss dem
-|*                 der Anker folgt. Geclippt (Drawing) wird der Fly am Rootfrm.
-|*                 Damit die erstgenannte Bedingung erreicht wird, wird der
-|*                 Fly ggf. entsprechend verschoben. Dabei bleibt die relative
-|*                 Position des Attributes erhalten, die tatsaechliche relative
-|*                 Position verhaelt sich zu der des Attributes etwa wie ein
-|*                 Teleskoparm. Der Betrag der relativen Position ist die
-|*                 Entfernung zur AbsPos des Ankers im Textfluss.
-|*
-|*      Es wird immer zuerst die vertikale Position bestimmt, denn erst dann
-|*      steht der virtuelle Anker fest.
-|*      Die tatsaechliche relative Position (Member aRelPos) ist immer die
-|*      die Entfernung zum Anker - sie muss also nicht mit den im Attribut
-|*      angegebenen Werten uebereinstimmen, denn diese geben die Entfernung
-|*      'im Textfluss' an.
-|*
-|*  Ersterstellung      MA 19. Nov. 92
-|*  Letzte Aenderung    MA 14. Nov. 96
-|*
-|*************************************************************************/
+// OD 2004-08-12 #i32795# - Note: method no longer used in <flyincnt.cxx>
+//void DeepCalc( const SwFrm *pFrm )
+//{
+//    if( pFrm->IsSctFrm() ||
+//        ( pFrm->IsFlyFrm() && ((SwFlyFrm*)pFrm)->IsFlyInCntFrm() ) )
+//      return;
+//    const SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( pFrm );
+//    if( pFlow && pFlow->IsAnyJoinLocked() )
+//        return;
 
-void DeepCalc( const SwFrm *pFrm )
-{
-    if( pFrm->IsSctFrm() ||
-        ( pFrm->IsFlyFrm() && ((SwFlyFrm*)pFrm)->IsFlyInCntFrm() ) )
-        return;
-    const SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( pFrm );
-    if( pFlow && pFlow->IsAnyJoinLocked() )
-        return;
+//    USHORT nCnt = 0;
 
-    USHORT nCnt = 0;
+//  FASTBOOL bContinue = FALSE;
+//  do
+//    {
+//        if ( ++nCnt == 10 )
+//      {
+//          ASSERT( !nCnt, "DeepCalc: Loop detected1?" );
+//          break;
+//      }
 
-    FASTBOOL bContinue = FALSE;
-    do
-    {   if ( ++nCnt == 10 )
-        {
-            ASSERT( !nCnt, "DeepCalc: Loop detected1?" );
-            break;
-        }
+//      const FASTBOOL bSetComplete = !pFrm->IsValid();
+//      const SwRect aOldFrm( pFrm->Frm() );
+//      const SwRect aOldPrt( pFrm->Prt() );
 
-        const FASTBOOL bSetComplete = !pFrm->IsValid();
-        const SwRect aOldFrm( pFrm->Frm() );
-        const SwRect aOldPrt( pFrm->Prt() );
+//      const SwFrm *pUp = pFrm->GetUpper();
+//      if ( pUp )
+//      {
+//          //Nicht weiter wenn der Up ein Fly mit Spalten ist.
+//          if( ( !pUp->IsFlyFrm() || !((SwLayoutFrm*)pUp)->Lower() ||
+//               !((SwLayoutFrm*)pUp)->Lower()->IsColumnFrm() ) &&
+//               !pUp->IsSctFrm() )
+//          {
+//                SWRECTFN( pUp )
+//                const Point aPt( (pUp->Frm().*fnRect->fnGetPos)() );
+//              ::DeepCalc( pUp );
+//                bContinue = aPt != (pUp->Frm().*fnRect->fnGetPos)();
+//          }
+//      }
+//      else
+//          pUp = pFrm;
 
-        const SwFrm *pUp = pFrm->GetUpper();
-        if ( pUp )
-        {
-            //Nicht weiter wenn der Up ein Fly mit Spalten ist.
-            if( ( !pUp->IsFlyFrm() || !((SwLayoutFrm*)pUp)->Lower() ||
-                 !((SwLayoutFrm*)pUp)->Lower()->IsColumnFrm() ) &&
-                 !pUp->IsSctFrm() )
-            {
-                SWRECTFN( pUp )
-                const Point aPt( (pUp->Frm().*fnRect->fnGetPos)() );
-                ::DeepCalc( pUp );
-                bContinue = aPt != (pUp->Frm().*fnRect->fnGetPos)();
-            }
-        }
-        else
-            pUp = pFrm;
+//      pFrm->Calc();
+//      if ( bSetComplete && (aOldFrm != pFrm->Frm() || aOldPrt != pFrm->Prt()))
+//          pFrm->SetCompletePaint();
 
-        pFrm->Calc();
-        if ( bSetComplete && (aOldFrm != pFrm->Frm() || aOldPrt != pFrm->Prt()))
-            pFrm->SetCompletePaint();
-
-//      bContinue = !pUp->IsValid();
-        if ( pUp->IsFlyFrm() )
-        {
-            if ( ((SwFlyFrm*)pUp)->IsLocked() ||
-                 (((SwFlyFrm*)pUp)->IsFlyAtCntFrm() &&
-                  SwOszControl::IsInProgress( (const SwFlyFrm*)pUp )) )
-            {
-                bContinue = FALSE;
-            }
-        }
-    } while ( bContinue );
-}
+//      if ( pUp->IsFlyFrm() )
+//      {
+//          if ( ((SwFlyFrm*)pUp)->IsLocked() ||
+//               (((SwFlyFrm*)pUp)->IsFlyAtCntFrm() &&
+//                SwOszControl::IsInProgress( (const SwFlyFrm*)pUp )) )
+//          {
+//              bContinue = FALSE;
+//          }
+//      }
+//  } while ( bContinue );
+//}
 
 /** method to assure that anchored object is registered at the correct
     page frame
