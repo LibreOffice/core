@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-07 13:14:17 $
+ *  last change: $Author: sj $ $Date: 2001-05-11 08:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,14 @@
 #ifndef _SD_FRMVIEW_HXX
 #include "../inc/frmview.hxx"
 #endif
+#ifndef SVX_LIGHT
 #ifndef _SD_SPOUTLINER_HXX
 #include <sdoutl.hxx>
+#endif
+#else
+#ifndef _SVDOUTL_HXX
+#include <svx/svdoutl.hxx>
+#endif
 #endif
 #ifndef _EDITSTAT_HXX
 #include <svx/editstat.hxx>
