@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontrollermodel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: mt $ $Date: 2001-09-04 08:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #define _TOOLKIT_CONTROLS_STDTABCONTROLLERMODEL_HXX_
 
 
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
 #endif
@@ -81,6 +84,14 @@
 
 #ifndef _CPPUHELPER_WEAKAGG_HXX_
 #include <cppuhelper/weakagg.hxx>
+#endif
+
+#ifndef _TOOLKIT_HELPER_MACROS_HXX_
+#include <toolkit/helper/macros.hxx>
+#endif
+
+#ifndef _TOOLKIT_HELPER_SERVICENAMES_HXX_
+#include <toolkit/helper/servicenames.hxx>
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -132,6 +143,7 @@ DECLARE_LIST( ComponentEntryList, ComponentEntry* );
 #define CONTROLPOS_NOTFOUND 0xFFFFFFFF
 
 class StdTabControllerModel :   public ::com::sun::star::awt::XTabControllerModel,
+                                public ::com::sun::star::lang::XServiceInfo,
                                 public ::com::sun::star::io::XPersistObject,
                                 public ::com::sun::star::lang::XTypeProvider,
                                 public ::cppu::OWeakAggObject
@@ -177,6 +189,9 @@ public:
     ::rtl::OUString SAL_CALL getServiceName(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void SAL_CALL read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    DECLIMPL_SERVICEINFO( StdTabControllerModel, ::rtl::OUString::createFromAscii( szServiceName2_TabControllerModel ) )
 };
 
 

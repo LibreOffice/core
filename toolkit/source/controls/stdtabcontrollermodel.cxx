@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtabcontrollermodel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: mt $ $Date: 2001-09-04 08:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,7 @@ void ImplWriteControls( const ::com::sun::star::uno::Reference< ::com::sun::star
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XTabControllerModel*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::lang::XServiceInfo*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::io::XPersistObject*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
     return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
@@ -244,6 +245,7 @@ void ImplWriteControls( const ::com::sun::star::uno::Reference< ::com::sun::star
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( StdTabControllerModel )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>* ) NULL )
 IMPL_XTYPEPROVIDER_END
 
