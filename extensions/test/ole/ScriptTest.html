@@ -159,6 +159,7 @@ for(i in _ret)
     }
 }
 Log.print( bOk, "methodXInterface");
+			
 
 ret= oletest.methodXEventListeners( arEventListener);
 _ret= new VBArray(ret).toArray();
@@ -321,6 +322,7 @@ for(i in _ret)
     }
 }
 Log.print( bOk, "methodXInterface");
+
 document.writeln("<br>");
 
 oletest.testout_methodByte( outVal );
@@ -398,7 +400,6 @@ var obj= outVal[0];
 Log.print( outVal[0].AttrAny2 == "Property Any", "testout_methodXInterface");
 
 document.writeln("<p>");
-
 
 outVal[0]= 100;
 oletest.testinout_methodByte( outVal );
@@ -504,7 +505,6 @@ Log.print( obj == ret, "methodAnyTest1");
 
 document.writeln("<p>");
 
-
 i= 100;
 oletest.AttrAny2= i;
 ret= oletest.AttrAny2;
@@ -553,7 +553,6 @@ oletest.AttrStruct=  astruct;
 var ret= oletest.AttrStruct;
 Log.print( ret.Attributes == 127 && ret.Handle == 255 && ret.Name == "OleTest_Property", "AttrStruct");
 
-
 // The function returns the struct. Since structs are passed by value the returned struct
 // will be wrapped in another IDispatch object
 astruct.Attributes= 1;
@@ -564,6 +563,15 @@ Log.print( ret.Attributes == 1 && ret.Handle == 2 && ret.Name == "Property", "me
 
 
 document.writeln("<p>");
+// Test Identity from COM objects in UNO
+var listener1= new XEventListener_Impl();
+oletest.setObject(listener1);
+ret= oletest.isSame(listener1);
+Log.print2( ret, "Ok Testing identity of COM objects<br>","Failed Testing identity of COM objects<br>");
+
+var oletest2= oletest.getThis();
+ret= oletest === oletest2;
+Log.print2(ret, "Ok Testing identity of UNO objects<br>","Failed Testing identity of UNO objects<br>");
 }
 
 
@@ -648,9 +656,6 @@ Function runVBTest( Log)
 document.writeln("================================================================================<br>")
 document.writeln("VB Script<br>")
 document.writeln("================================================================================<p>")
-'Set	factory= CreateObject("", "com.sun.star.ServiceManager")
-Set	factory= CreateObject("com.sun.star.ServiceManager")
-Set	oletest= factory.createInstance("oletest.OleTest")
     
 Dim arrInt
 arrInt= Array(1,2,3,-4,-5, 0)
@@ -683,14 +688,12 @@ Next
 Dim arrXEvent(2)
 For i= 0 To 2
   Set arrXEvent(i)= new VBEventListener
-  arrXEvent(i).Init
 Next
 
 Dim arrXEvent2(2,1)
 For i= 0 To 1
   For j= 0 To 2
    Set arrXEvent2(j,i)= new VBEventListener
-   arrXEvent2(j,i).Init
   Next
 Next
 
@@ -934,8 +937,101 @@ Log.print outVal = "I am a string in an any", "testout_methodAny"
 oletest.testout_methodSequence outVal 
 Log.print isEqualVBAr(outVal, Array( 0,1,2,3,4,5,6,7,8,9)), "testout_methodSequence"
 
+oletest.testout_methodSequence2 outVal
+count= UBound( outVal) - LBound( outVal) + 1
+ret= False
+If count = 10 Then 
+  For Each ar In outVal
+    ret= isEqualVBAr(ar, Array( 0,1,2,3,4,5,6,7,8,9))
+    If ret = false Then
+      Exit For
+    End If
+  Next
+End If
+Log.print ret, "testout_methodSequence2"
 
-document.writeln("<p>###carry on here<p>")
+outVal= Empty
+outVal2= Empty
+oletest.testout_methodMulParams1 outVal, outVal2
+ret= false
+If outVal = 999 AND outVal2 = 1111 Then
+  ret= true
+End If
+Log.print ret, "testout_methodMulParams1"
+
+outVal= Empty
+outVal2= Empty
+outVal3= Empty
+oletest.testout_methodMulParams2 outVal, outVal2, outVal3
+ret = false
+If outVal = 1111 AND outVal2 = 1222 AND outVal3 = " another string" Then
+  ret= true
+End If
+Log.print ret, "testout_methodMulParams2"
+
+document.writeln("missing: testout_methodMulParams3 <br>")
+document.writeln("missing: testout_methodMulParams4 <br>")
+
+outVal= Empty
+oletest.testout_methodXInterface outVal
+ret= false
+If outVal Is oletest Then
+  ret= true
+End If
+Log.print ret, "testout_methodXInterface"
+
+Set outVal= Nothing
+document.writeln("missing: testout_methodXInterface <br>")
+
+outVal= 1
+oletest.testinout_methodByte outVal
+ret= false
+If outVal = 2 Then
+  ret= true
+End if
+Log.print ret, "testinout_methodByte"
+
+
+document.writeln("missing: testinout_methodFloat  <br>")
+document.writeln("missing: testinout_methodDouble  <br>")
+document.writeln("missing: testinout_methodBool  <br>")
+document.writeln("missing: testinout_methodShort  <br>")
+document.writeln("missing: testinout_methodUShort  <br>")
+document.writeln("missing: testinout_methodLong  <br>")
+document.writeln("missing: testinout_methodULong  <br>")
+document.writeln("missing: testinout_methodChar  <br>")
+document.writeln("missing: testinout_methodString  <br>")
+document.writeln("missing: testinout_methodAny  <br>")
+document.writeln("missing: testinout_methodSequence  <br>")
+document.writeln("missing: testinout_methodSequence2  <br>")
+document.writeln("missing: testinout_methodXInterface  <br>")
+document.writeln("missing: methodAnyTest1  <br>")
+document.writeln("missing: methodAnyTest1  <br>")
+document.writeln("missing: methodAnyTest1  <br>")
+document.writeln("missing: methodAnyTest1  <br>")
+document.writeln("missing: methodAnyTest1  <br>")
+document.writeln("missing: AttrAny2  <br>")
+document.writeln("missing: methodAnyTest1  <br>")
+document.writeln("missing: methodAnyTest1  <br>")
+document.writeln("missing: methodAnyTest1  <br>")
+document.writeln("missing: methodAnyTest1  <br>")
+document.writeln("missing: methodAnyTest1  <br>")
+document.writeln("missing: retMethodStruct  <br>")
+document.writeln("missing: AttrStruct  <br>")
+document.writeln("missing: methodStruct2  <br>")
+
+' Test Identity from COM objects in UNO
+Dim listener1
+Set listener1= new VBEventListener
+call oletest.setObject( listener1)
+ret= oletest.isSame(listener1)
+Log.print2 ret, "Ok Testing identity of COM objects <br>","Failed Testing identity of COM objects<br>"
+' Test identity of UNO objects
+
+set oletest2= oletest.getThis()
+ret= oletest Is  oletest2
+Log.print2 ret, "Ok Testing identity of UNO objects<br>","Failed Testing identity of UNO objects<br>"
+
 End Function    
 
         
@@ -964,12 +1060,12 @@ Class VBEventListener
   Dim Bridge_ImplementedInterfaces(0)
   Dim bDisposingCalled
 
-'XEventListener::dispoding
+'XEventListener::disposing
   Function disposing( source)
     bDisposingCalled= true
   End Function
-
-  Sub Init
+  
+  Sub Class_Initialize()
     bDisposingCalled= false
     Bridge_ImplementedInterfaces(0)= "com.sun.star.lang.XEventListener"
   End Sub
@@ -1021,17 +1117,7 @@ sub callBasic(id)
 	select case id
 
 	// Out Parameter
-		case 150
-			dim rOut
-			oletest.testout_methodByte rOut 
-			MsgBox rOut
-//	void testout_methodFloat( [out] float rOut);
-//	void testout_methodDouble( [out] double rOut);
-//	void testout_methodBool( [out] boolean rOut);
-//	void testout_methodShort( [out] short rOut);
-//	void testout_methodUShort( [out] unsigned short rOut);
-//	void testout_methodLong( [out]  long rOut);
-//	void testout_methodULong( [out] unsigned long rOut);
+
 
 
  // In Out Parameter --------------------------------------------------
@@ -1308,25 +1394,32 @@ var oletest= factory.createInstance("oletest.OleTest");
 
 Log= new Logger();
 
-runVBTest(Log);
-runJScriptTest(Log);
 
+runJScriptTest(Log);
+runVBTest(Log);
 Log.summarize();
 
 
 function Logger()
 {
     this.print= logger_print;
+    this.print2= logger_print2;
     this.summarize= logger_summarize;
     this.bAllOk= true;
 }
 function logger_print( bool, method)
 {
+    this.print2(bool, "Ok &nbsp;&nbsp;&nbsp;&nbsp;" + arFunctions[method] + "<br>",
+               "Failed &nbsp;&nbsp;&nbsp;&nbsp;" + arFunctions[method] + "<br>");
+}
+
+function logger_print2( bool, okString, failedString)
+{
     if( bool)
-        document.writeln( "Ok &nbsp;&nbsp;&nbsp;&nbsp;" + arFunctions[method] + "<br>");
+        document.writeln( okString);
     else
     {
-        document.writeln( "Failed &nbsp;&nbsp;&nbsp;&nbsp;" + arFunctions[method] + "<br>");
+        document.writeln( failedString);    
         this.bAllOk= this.bAllOk && false;
     }
 }
@@ -1343,67 +1436,7 @@ function logger_summarize()
 
 </script>
 
-
-<div id=out> </div>
-
-<!-- Insert HTML here -->
-
-
-
-
-<p>
-
-
-<h2> Visual Basic Tests </h2>
-
-
-IN/Out parameter <br>
-Template: <b> void method(type  ) </b> <br>
-<button onclick='callBasic(100)'>byte</button>
-<button onclick='callBasic(101)'>double</button>
-<button onclick='callBasic(102)'>boolean</button>
-<button onclick='callBasic(103)'>short</button>
-<button onclick='callBasic(104)'>u short</button>
-<button onclick='callBasic(105)'>long</button>
-<button onclick='callBasic(106)'>u long</button>
-<button onclick='callBasic(107)'>string</button>	 
-<button onclick='callBasic(108)'>char</button>	
-<button onclick='callBasic(109)'>any</button> <br>
-
-Simple out parameter<br>
-<button onclick='callBasic(150)'>byte</button>
-<!--<button onclick='callBasic(151)'>double</button>
-<button onclick='callBasic(152)'>boolean</button>
-<button onclick='callBasic(153)'>short</button>
-<button onclick='callBasic(155)'>long</button>
-<button onclick='callBasic(157)'>string</button>	 
-<button onclick='callBasic(158)'>char</button>	
-<button onclick='callBasic(159)'>any</button> <br>
-//-->
-<br>
-
-
-Tests Array/Sequence conversion with <b>Attributes</b>. All params are of type Sequence and 
- the element type of the Sequence is written on the buttons. <br>
-<button onclick='callBasic( 200)'>byte </Button>
-<button onclick='callBasic( 201)'>double</Button>
-<button onclick='callBasic( 202)'>boolean</Button>
-<button onclick='callBasic( 203)'>short</Button>
-<button onclick='callBasic( 204)'>unsigned short</Button>
-<button onclick='callBasic( 205)'>long</Button>
-<button onclick='callBasic( 206)'>unsigned long</Button>
-<button onclick='callBasic( 207)'>string</Button>
-<button onclick='callBasic( 208)'>char</Button>
-<button onclick='callBasic( 209)'>any</Button>
-<button onclick='callBasic( 210)'>sequence&ltlong&gt </Button> <br>
-
-In Out parameter <br>
-<button onclick='callBasic( 300)'>byte</Button>
-<p>
-Structs <br>
-<button onclick='callBasic(400)'>methodStruct</button>
-<button onclick='callBasic(401)'>return Struct</button>
-<button onclick='callBasic(402)'>struct attribute</button>
-
+</body>
+</html>
 
 
