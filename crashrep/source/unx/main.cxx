@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:27:56 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ using namespace std;
 static bool g_bDebugMode = false;
 static int  g_signal = 0;
 
+static string g_strProductKey;
 static string g_strReportServer;
 static unsigned short g_uReportPort = 80;
 static string g_buildid;
@@ -287,16 +288,16 @@ bool write_report( const hash_map< string, string >& rSettings )
        "</reportmail:mail>\n"
        "<officeinfo:officeinfo xmlns:officeinfo=\"http://openoffice.org/2002/officeinfo\" build=\"%s\" platform=\"%s\" language=\"%s\" exceptiontype=\"%d\" product=\"%s\" procpath=\"%s\"/>\n"
        ,
-       pszUserType ? pszUserType : "",
+       pszUserType ? xml_encode( pszUserType ).c_str() : "",
        xml_encode(rSettings.find( "CONTACT" )->second).c_str(),
        xml_encode(rSettings.find( "EMAIL" )->second).c_str(),
        xml_encode(rSettings.find( "TITLE" )->second).c_str(),
-       g_buildid.length() ? g_buildid.c_str() : "unknown",
+       g_buildid.length() ? xml_encode( g_buildid ).c_str() : "unknown",
        _INPATH,
        g_strDefaultLanguage.c_str(),
        g_signal,
-       pszProductName ? pszProductName : "unknown",
-       getprogramdir().c_str()
+       g_strProductKey.length() ? xml_encode(g_strProductKey).c_str() : "unknown",
+       xml_encode(getprogramdir()).c_str()
        );
 
     struct utsname  info;
@@ -308,12 +309,12 @@ bool write_report( const hash_map< string, string >& rSettings )
        "<systeminfo:systeminfo xmlns:systeminfo=\"http://openoffice.org/2002/systeminfo\">\n"
        "<systeminfo:System name=\"%s\" version=\"%s\" build=\"%s\" locale=\"%s\"/>\n"
        ,
-       info.sysname,
-       info.version,
-       info.release,
-       getlocale()
+       xml_encode( info.sysname ).c_str(),
+       xml_encode( info.version ).c_str(),
+       xml_encode( info.release ).c_str(),
+       xml_encode( getlocale() ).c_str()
        );
-    fprintf( fp, "<systeminfo:CPU type=\"%s\"/>\n", info.machine );
+    fprintf( fp, "<systeminfo:CPU type=\"%s\"/>\n", xml_encode( info.machine ).c_str() );
     fprintf( fp, "</systeminfo:systeminfo>\n" );
 
     FILE *fpxml = fopen( g_strXMLFileName.c_str(), "r" );
@@ -996,6 +997,8 @@ static bool setup_version()
     if ( !getenv( "PRODUCTNAME" ) )
     {
         string productkey = get_profile_string( "bootstraprc", "Bootstrap", "ProductKey" );
+
+        g_strProductKey = productkey;
 
         if ( productkey.length() )
         {
