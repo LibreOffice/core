@@ -2,9 +2,7 @@ oa	offapi	:	udkapi solenv NULL
 oa	offapi									usr1	-	all	oa_mkout NULL
 oa	offapi\drafts\com\sun\star\accessibility nmake	-	all	oa_accessibility_drafts NULL
 oa	offapi\drafts\com\sun\star\accessibility\bridge nmake	-	all	oa_accessbridge_drafts oa_accessibility_drafts NULL
-oa	offapi\drafts\com\sun\star\auth			nmake	-	all	oa_auth_drafts NULL
 oa	offapi\drafts\com\sun\star\awt nmake	-	all	oa_awt_drafts NULL
-oa	offapi\drafts\com\sun\star\configuration\backend	nmake	-	all	oa_configbackend_drafts NULL
 oa	offapi\drafts\com\sun\star\drawing		nmake	-	all	oa_drawing_drafts NULL
 oa      offapi\drafts\com\sun\star\formula              nmake   -       all     oa_formula_drafts NULL
 oa	offapi\drafts\com\sun\star\frame		nmake	-	all	oa_frame_drafts NULL
@@ -13,9 +11,13 @@ oa	offapi\drafts\com\sun\star\sheet		nmake	-	all	oa_sheet_drafts NULL
 oa	offapi\drafts\com\sun\star\table		nmake	-	all	oa_table_drafts NULL
 oa	offapi\drafts\com\sun\star\text 		nmake	-	all	oa_text_drafts NULL
 oa  offapi\drafts\com\sun\star\chart        nmake   -   all oa_chart_drafts NULL
+oa	offapi\com\sun\star\auth				nmake	-	all	oa_auth NULL
 oa	offapi\com\sun\star\awt					nmake	-	all	oa_awt NULL
 oa	offapi\com\sun\star\chart				nmake	-	all	oa_chart NULL
 oa	offapi\com\sun\star\configuration		nmake	-	all	oa_config NULL
+oa	offapi\com\sun\star\configuration\bootstrap	nmake	-	all	oa_configbootstrap NULL
+oa	offapi\com\sun\star\configuration\backend	nmake	-	all	oa_configbackend NULL
+oa	offapi\com\sun\star\configuration\backend\xml	nmake	-	all	oa_configbackend_xml NULL
 oa	offapi\com\sun\star\datatransfer		nmake	-	all	oa_datatransfer NULL
 oa	offapi\com\sun\star\datatransfer\clipboard			nmake	-	all	oa_datatrans_clip NULL
 oa	offapi\com\sun\star\datatransfer\dnd	nmake	-	all	oa_datatrans_dnd oa_awt NULL
@@ -28,6 +30,7 @@ oa	offapi\com\sun\star\formula				nmake	-	all	oa_formula NULL
 oa	offapi\com\sun\star\frame				nmake	-	all	oa_frame NULL
 oa	offapi\com\sun\star\i18n				nmake	-	all	oa_i18n NULL
 oa	offapi\com\sun\star\installation		nmake	-	all	oa_inst NULL
+oa	offapi\com\sun\star\ldap			    nmake	-	all	oa_ldap NULL
 oa	offapi\com\sun\star\linguistic2			nmake	-	all	oa_ling2 NULL
 oa	offapi\com\sun\star\mozilla				nmake	-	all	oa_mozilla NULL
 oa	offapi\com\sun\star\packages			nmake	-	all	oa_packages NULL
@@ -62,4 +65,4 @@ oa	offapi\com\sun\star\image				nmake	-	all	oa_image NULL
 oa	offapi\com\sun\star\ui  				nmake	-	all	oa_ui NULL
 oa	offapi\com\sun\star\ui\dialogs			nmake	-	all	oa_ui_dialogs NULL
 oa	offapi\com\sun\star  				nmake	-	all	- NULL
-oa  offapi\util                             nmake   -   all oa_util oa_accessbridge_drafts oa_awt oa_chart oa_config oa_configbackend_drafts oa_auth_drafts oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_fcomp oa_fcontr oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ling2 oa_mozilla oa_packages oa_manifest oa_zippackage oa_plug oa_pres oa_putil oa_resrc oa_sax oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_formula_drafts oa_frame_drafts oa_i18n_drafts oa_sync2 oa_system oa_table oa_task oa_text oa_textfield oa_docinfo oa_ucb oa_view oa_xml oa_image oa_ui oa_ui_dialogs oa_accessibility_drafts oa_awt_drafts oa_drawing_drafts oa_sheet_drafts oa_table_drafts oa_text_drafts oa_chart_drafts NULL
+oa  offapi\util                             nmake   -   all oa_util oa_accessbridge_drafts oa_auth oa_awt oa_chart oa_config oa_configbootstrap oa_configbackend oa_configbackend_xml oa_datatrans_clip oa_datatrans_dnd oa_datatransfer oa_docu oa_draw oa_fcomp oa_fcontr oa_fieldmaster oa_form oa_formula oa_frame oa_i18n oa_inst oa_ldap oa_ling2 oa_mozilla oa_packages oa_manifest oa_zippackage oa_plug oa_pres oa_putil oa_resrc oa_sax oa_scan oa_sdb oa_sdbc oa_sdbcx oa_setup oa_sheet oa_style oa_svg oa_sync oa_formula_drafts oa_frame_drafts oa_i18n_drafts oa_sync2 oa_system oa_table oa_task oa_text oa_textfield oa_docinfo oa_ucb oa_view oa_xml oa_image oa_ui oa_ui_dialogs oa_accessibility_drafts oa_awt_drafts oa_drawing_drafts oa_sheet_drafts oa_table_drafts oa_text_drafts oa_chart_drafts NULL
