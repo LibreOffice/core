@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Basic.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-03 09:03:49 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,205 +59,170 @@
  *
  ************************************************************************/
 #include "stdafx.h"
-#include "AxTestComponents.h"
+//#include "AxTestComponents.h"
 #include "Basic.h"
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CBasic
-CBasic::CBasic():   m_cPrpByte(0),m_nPrpShort(0),m_lPrpLong(0),m_fPrpFloat(0), m_dPrpDouble(0),m_PrpArray(0)
+CBasic::CBasic():   m_cPrpByte(0),m_nPrpShort(0),m_lPrpLong(0),m_fPrpFloat(0), m_dPrpDouble(0),m_PrpArray(0),
+m_safearray(NULL), m_bool(VARIANT_FALSE),
+m_arByte(0), m_arShort(0), m_arLong(0), m_arString(0), m_arVariant(0), m_arFloat(0),
+m_arDouble(0), m_arObject(0), m_arByteDim2(0), m_date(0.), m_scode(0)
+
 {
+    memset(&m_cy, 0, sizeof(CY));
+    memset(&m_decimal, 0, sizeof(DECIMAL));
 }
 
 CBasic::~CBasic()
 {
-}
+    SafeArrayDestroy(m_safearray);
+    SafeArrayDestroy(m_arByte);
+    SafeArrayDestroy(m_arShort);
+    SafeArrayDestroy(m_arLong);
+    SafeArrayDestroy(m_arString);
+    SafeArrayDestroy(m_arVariant);
+    SafeArrayDestroy(m_arFloat);
+    SafeArrayDestroy(m_arDouble);
+    SafeArrayDestroy(m_arObject);
+    SafeArrayDestroy(m_arByteDim2);
 
+}
+STDMETHODIMP CBasic::inBool(VARIANT_BOOL val)
+{
+    m_bool = val;
+    return S_OK;
+}
 STDMETHODIMP CBasic::inByte(unsigned char val)
 {
-    USES_CONVERSION;
-    char buf[256];
-    sprintf( buf, "inByte: value= %d", val);
-    MessageBox( NULL, _T(A2T(buf)), _T("AxTestComponents.Basic"), MB_OK);
+    m_byte = val;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inShort(short val)
 {
-    USES_CONVERSION;
-    char buf[256];
-    sprintf( buf, "inShort: value= %d", val);
-    MessageBox( NULL, _T(A2T(buf)), _T("AxTestComponents.Basic"), MB_OK);
-
+    m_short = val;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inLong(long val)
 {
-    USES_CONVERSION;
-    char buf[256];
-    sprintf( buf, "inLong: value= %d", val);
-    MessageBox( NULL, _T(A2T(buf)), _T("AxTestComponents.Basic"), MB_OK);
+    m_long = val;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inString(BSTR val)
 {
-    USES_CONVERSION;
-    char buf[256];
-    sprintf( buf, "inString: value= %S", val);
-    MessageBox( NULL, _T(A2T(buf)), _T("AxTestComponents.Basic"), MB_OK);
-
+    m_bstr = val;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inFloat(float val)
 {
-    USES_CONVERSION;
-    char buf[256];
-    sprintf( buf, "inFloat: value= %f", val);
-    MessageBox( NULL, _T(A2T(buf)), _T("AxTestComponents.Basic"), MB_OK);
+    m_float = val;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inDouble(double val)
 {
-    USES_CONVERSION;
-    char buf[256];
-    sprintf( buf, "inDouble: value= %g", val);
-    MessageBox( NULL, _T(A2T(buf)), _T("AxTestComponents.Basic"), MB_OK);
+    m_double = val;
+
+    CComVariant varDest;
+    CComVariant varSource(val);
+    HRESULT hr = VariantChangeType(&varDest, &varSource, 0, VT_BSTR);
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inVariant(VARIANT val)
 {
-    USES_CONVERSION;
-    CComVariant var;
-    VariantCopyInd( &var, &val);
-    if( var.vt == VT_BSTR)
-    {
-        char buf[256];
-        sprintf( buf, "inVariant: value= %S", var.bstrVal);
-        MessageBox( NULL, _T(A2T(buf)), _T("AxTestComponents.Basic"), MB_OK);
-    }
-
+    m_var1 = val;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inArray(LPSAFEARRAY val)
 {
-    HRESULT hr= S_OK;
-    long lbound= 0;
-
-    long ubound= 0;
-    hr= SafeArrayGetLBound( val, 1, &lbound);
-    hr= SafeArrayGetUBound( val, 1, &ubound);
-    long length= ubound - lbound +1;
-
-    CComVariant varElement;
-    char buf[4096];
-    ZeroMemory( buf, 10);
-    for( long i= 0; i < length ; i++)
-    {
-        varElement.Clear();
-        hr= SafeArrayGetElement( val, &i, &varElement);
-
-        if( varElement.vt == VT_BSTR)
-        {   char bufTmp[256];
-            sprintf( bufTmp, " %d  string: = %S \n", i, varElement.bstrVal);
-            strcat( buf, bufTmp);
-        }
-    }
-    MessageBox( NULL, _T(A2T(buf)), _T("AxTestComponents.Basic"), MB_OK);
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy(m_safearray)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(val, &m_safearray)))
+        return hr;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inObject(IDispatch *val)
 {
-    // We expect the object to be an AxTestComponent.Basic object
-    // with the property prpString set.
-    HRESULT hr= S_OK;
-    USES_CONVERSION;
-    char buf[256];
-    CComDispatchDriver disp( val);
-    CComBSTR bstr;
-    if( disp)
-    {
-        CComVariant var;
-        hr= disp.GetPropertyByName(L"prpString", &var);
-        if( var.vt== VT_BSTR)
-            bstr= var.bstrVal;
-    }
-    sprintf( buf, "inObject: value= %S", bstr.m_str);
-    MessageBox( NULL, _T(A2T(buf)), _T("AxTestComponents.Basic"), MB_OK);
+    m_obj = val;
+    return S_OK;
+}
 
+STDMETHODIMP CBasic::inoutBool(VARIANT_BOOL* val)
+{
+    VARIANT_BOOL aBool = *val;
+    *val = m_bool;
+    m_bool = aBool;
     return S_OK;
 }
 
 
-
 STDMETHODIMP CBasic::inoutByte(unsigned char* val)
 {
-    *val+= 1;
+    unsigned char aByte = *val;
+    *val = m_byte;
+    m_byte = aByte;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inoutShort(short *val)
 {
-    *val+= 1;
-
+    short aShort = *val;
+    *val = m_short;
+    m_short = aShort;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inoutLong(long *val)
 {
-    *val+= 1;
-
+    long aLong = *val;
+    *val = m_long;
+    m_long = aLong;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inoutString(BSTR *val)
 {
-//  MessageBoxW( NULL, *val, L"AxTestComponents.Basic", MB_OK);
-
-    // str contains now a different string
-    CComBSTR str;
-    str.Attach(*val);
-    str.Append(L"out");
-
-    SysFreeString(*val);
-//  BSTR s= SysAllocString(L"out");
-
-    *val= str;
-    str.Detach();
+    CComBSTR aStr = *val;
+    HRESULT hr = S_OK;
+    if (FAILED( hr = m_bstr.CopyTo(val)))
+        return hr;
+    m_bstr = aStr;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inoutFloat(float *val)
 {
-    *val+= 1;
-
+    float aFloat = *val;
+    *val = m_float;
+    m_float = aFloat;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inoutDouble(double *val)
 {
-    *val+= 1;
-
+    double aDouble = *val;
+    *val = m_double;
+    m_double  = aDouble;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inoutVariant(VARIANT *val)
 {
-    CComBSTR str;
-    if( val->vt & VT_BSTR)
-    {
-        str= val->bstrVal;
-        str.Append("out");
-    }
-
-    VariantClear(val);
-    CComVariant var(str);
-    var.Detach(val);
+    CComVariant aVar = *val;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = VariantCopy(val, &m_var1)))
+        return hr;
+    m_var1 = aVar;
     return S_OK;
 }
 
@@ -266,126 +231,110 @@ STDMETHODIMP CBasic::inoutVariant(VARIANT *val)
 */
 STDMETHODIMP CBasic::inoutArray(LPSAFEARRAY *val)
 {
-//  inArray(*val);
-    // we assume dimension is one
-    HRESULT hr= S_OK;
-    long nLBound= 0;
-    long nUBound= 0;
-
-    hr= SafeArrayGetLBound(*val, 1, &nLBound);
-    hr= SafeArrayGetUBound(*val, 1, &nUBound);
-
-
-     long ix= 0;
-    for(int i= nLBound; i <= nUBound; i++)
-    {
-        CComVariant var;
-        hr= SafeArrayGetElement(*val, &ix, &var);
-
-        if(var.vt == VT_BSTR)
-        {
-            CComBSTR s= var.bstrVal;
-            s.Append("out");
-            var.bstrVal= s;
-            s.Detach();
-
-            hr= SafeArrayPutElement(*val, &ix, &var);
-        }
-        ix++;
-    }
-
-//  SafeArrayDestroy(*val);
-//  outArray( val);
+    SAFEARRAY* aAr = NULL;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayCopy(*val, &aAr)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(m_safearray, val)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(aAr, & m_safearray)))
+        return hr;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inoutObject(IDispatch **val)
 {
-    inObject( *val);
-    outObject( val);
+    CComPtr<IDispatch> disp = *val;
+    if (*val)
+        (*val)->Release();
+    *val = m_obj;
+    if (*val)
+        (*val)->AddRef();
+    m_obj = disp;
     return S_OK;
 }
 
 
+STDMETHODIMP CBasic::outBool(VARIANT_BOOL* val)
+{
+    *val = m_bool;
+    return S_OK;
+}
 
 STDMETHODIMP CBasic::outByte(unsigned char *val)
 {
-    *val= 111;
+    *val= m_byte;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::outShort(short *val)
 {
-    *val= 1111;
+    *val= m_short;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::outLong(long *val)
 {
-    *val= 111111;
+    *val= m_long;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::outString(BSTR *val)
 {
-    *val= SysAllocString(L"out");
+    *val= SysAllocString(m_bstr);
     return S_OK;
 }
 
 STDMETHODIMP CBasic::outFloat(float *val)
 {
-    *val= 3.14f;
+    *val= m_float;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::outDouble(double *val)
 {
-    *val= 3.145;
+    *val= m_double;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::outVariant(VARIANT *val)
 {
-    val->vt = VT_BSTR;
-    val->bstrVal= SysAllocString(L"out");
+    HRESULT hr = S_OK;
+    if (FAILED(hr = VariantCopy(val, &m_var1)))
+        return hr;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::outArray(LPSAFEARRAY *val)
 {
-    HRESULT hr= S_OK;
-    SAFEARRAY* ar= SafeArrayCreateVector( VT_VARIANT, 0, 3);
-    CComVariant arStrings[3]; //BSTR arStrings[3];
-    arStrings[0].bstrVal= SysAllocString(L"out1");
-    arStrings[0].vt= VT_BSTR;
-    arStrings[1].bstrVal= SysAllocString( L"out2");
-    arStrings[1].vt= VT_BSTR;
-    arStrings[2].bstrVal= SysAllocString( L"out3");
-    arStrings[2].vt= VT_BSTR;
-    for( long i= 0; i < 3; i++)
-    {
-        SafeArrayPutElement( ar, &i, (void*) &arStrings[i]);
-    }
-    *val= ar;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayCopy(m_safearray, val)))
+        return false;
     return S_OK;
 }
 
 STDMETHODIMP CBasic::outObject(IDispatch* *val)
 {
-    HRESULT hr= S_OK;
-    CComPtr< IUnknown > spUnk;
-    hr= spUnk.CoCreateInstance(L"AxTestComponents.Basic");
-    CComDispatchDriver disp( spUnk);
-    CComVariant varVal( L"out");
-    hr= disp.PutPropertyByName( L"prpString", &varVal);
-    if(*val)
-        (*val)->Release();
-    *val= disp;
-    (*val)->AddRef();
+    *val = m_obj;
+    if (m_obj)
+        (*val)->AddRef();
+
     return S_OK;
 }
 
 
+STDMETHODIMP CBasic::get_prpBool(VARIANT_BOOL* pVal)
+{
+    if (!pVal) return E_POINTER;
+    *pVal = m_bool;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::put_prpBool(VARIANT_BOOL val)
+{
+    m_bool = val;
+    return S_OK;
+}
 
 
 STDMETHODIMP CBasic::get_prpByte(unsigned char *pVal)
@@ -476,8 +425,10 @@ STDMETHODIMP CBasic::get_prpVariant(VARIANT *pVal)
 {
     if( !pVal)
         return E_POINTER;
-    VariantCopy( pVal, &m_PropVariant);
-    return S_OK;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = VariantCopy( pVal, &m_PropVariant)))
+        return hr;
+    return hr;
 }
 
 STDMETHODIMP CBasic::put_prpVariant(VARIANT newVal)
@@ -490,16 +441,20 @@ STDMETHODIMP CBasic::get_prpArray(LPSAFEARRAY *pVal)
 {
     if( !pVal)
         return E_POINTER;
-    SafeArrayCopy( m_PrpArray, pVal);
-    return S_OK;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayCopy( m_PrpArray, pVal)))
+        return hr;
+    return hr;
 }
 
 STDMETHODIMP CBasic::put_prpArray(LPSAFEARRAY newVal)
 {
-    SafeArrayDestroy( m_PrpArray);
-    SafeArrayCopy( newVal, &m_PrpArray);
-
-    return S_OK;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy( m_PrpArray)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy( newVal, &m_PrpArray)))
+        return hr;
+    return hr;
 }
 
 STDMETHODIMP CBasic::get_prpObject(IDispatch **pVal)
@@ -519,32 +474,15 @@ STDMETHODIMP CBasic::put_prpObject(IDispatch *newVal)
 }
 
 STDMETHODIMP CBasic::mixed1(
-            /* [in] */ unsigned char aChar,
-            /* [out] */ unsigned char __RPC_FAR *outChar,
-            /* [out][in] */ unsigned char __RPC_FAR *inoutChar,
-            /* [in] */ VARIANT var,
-            /* [out] */ VARIANT __RPC_FAR *outVar,
-            /* [out][in] */ VARIANT __RPC_FAR *inoutVar,
-            /* [in] */ SAFEARRAY __RPC_FAR * ar,
-            /* [out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *outAr,
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *inoutAr,
-            /* [in] */ IDispatch __RPC_FAR *disp,
-            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *outDisp,
-            /* [out][in] */ IDispatch __RPC_FAR *__RPC_FAR *inoutDisp)
+            /* [out][in] */ unsigned char *aChar,
+            /* [out][in] */ float *aFloat,
+            /* [out][in] */ VARIANT *aVar)
+
 {
     HRESULT hr= S_OK;
-    inByte( aChar);
-    outByte( outChar);
-    inoutByte( inoutChar);
-    inVariant( var);
-    outVariant( outVar);
-    inoutVariant( inoutVar);
-    inArray( ar);
-    outArray( outAr);
-    inoutArray( inoutAr);
-    inObject( disp);
-    outObject( outDisp);
-    inoutObject( inoutDisp);
+    inoutByte(aChar);
+    inoutFloat(aFloat);
+    inoutVariant(aVar);
     return hr;
 }
 
@@ -555,45 +493,72 @@ STDMETHODIMP CBasic::mixed1(
 
 STDMETHODIMP CBasic::inSequenceLong(LPSAFEARRAY val)
 {
-    printArray( val, CComBSTR(L"inSequenceLong\n"), VT_I4);
-    return S_OK;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy(m_arLong)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(val, & m_arLong)))
+        return hr;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inSequenceByte( LPSAFEARRAY val)
 {
-    printArray( val, CComBSTR(L"inSequenceByte\n"), VT_UI1);
-    return S_OK;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy(m_arByte)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(val, & m_arByte)))
+        return hr;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inSequenceShort(LPSAFEARRAY val)
 {
-    printArray( val, CComBSTR(L"inSequenceShort\n"), VT_I2);
-    return S_OK;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy(m_arShort)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(val, & m_arShort)))
+        return hr;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inSequenceString(LPSAFEARRAY val)
 {
-    printArray( val, CComBSTR(L"inSequenceString\n"), VT_BSTR);
-    return S_OK;
-
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy(m_arString)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(val, & m_arString)))
+        return hr;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inSequenceFloat(LPSAFEARRAY val)
 {
-    printArray( val, CComBSTR(L"inSequenceFloat\n"), VT_R4);
-    return S_OK;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy(m_arFloat)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(val, & m_arFloat)))
+        return hr;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inSequenceDouble(LPSAFEARRAY val)
 {
-    printArray( val, CComBSTR(L"inSequenceDouble\n"), VT_R8);
-    return S_OK;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy(m_arDouble)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(val, & m_arDouble)))
+        return hr;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inSequenceObject(LPSAFEARRAY val)
 {
-    printArray( val, CComBSTR(L"inSequenceObject\n"), VT_DISPATCH);
-    return S_OK;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy(m_arObject)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(val, & m_arObject)))
+        return hr;
+    return hr;
 }
 
 void CBasic::printArray( LPSAFEARRAY val, BSTR message, VARTYPE type)
@@ -667,190 +632,134 @@ void CBasic::printArray( LPSAFEARRAY val, BSTR message, VARTYPE type)
 STDMETHODIMP CBasic::outSequenceByte(LPSAFEARRAY* val)
 {
     HRESULT hr= S_OK;
-
-    SAFEARRAY* ar=  SafeArrayCreateVector( VT_UI1, 0, 3);
-    for( long i=0; i< 3; i++)
-    {
-        unsigned char charVal= i +1;
-        hr= SafeArrayPutElement( ar, &i, &charVal);
-    }
-
-    *val= ar;
+    hr = SafeArrayCopy(m_arByte, val);
     return hr;
 }
 
 STDMETHODIMP CBasic::outSequenceShort(LPSAFEARRAY* val)
 {
     HRESULT hr= S_OK;
-
-    SAFEARRAY* ar=  SafeArrayCreateVector( VT_I2, 0, 3);
-    for( long i=0; i< 3; i++)
-    {
-        short shortVal= i +1;
-        hr= SafeArrayPutElement( ar, &i, &shortVal);
-    }
-
-    *val= ar;
+    hr = SafeArrayCopy(m_arShort, val);
     return hr;
 }
 
 STDMETHODIMP CBasic::outSequenceLong(LPSAFEARRAY* val)
 {
     HRESULT hr= S_OK;
-
-    SAFEARRAY* ar=  SafeArrayCreateVector( VT_I4, 0, 3);
-    for( long i=0; i< 3; i++)
-    {
-        long longVal= i +1;
-        hr= SafeArrayPutElement( ar, &i, &longVal);
-    }
-
-    *val= ar;
+    hr = SafeArrayCopy(m_arLong, val);
     return hr;
 }
 
 STDMETHODIMP CBasic::outSequenceString(LPSAFEARRAY* val)
 {
     HRESULT hr= S_OK;
-
-    SAFEARRAY* ar=  SafeArrayCreateVector( VT_BSTR, 0, 3);
-    BSTR strings[3];
-    strings[0]= SysAllocString(L"string 1");
-    strings[1]= SysAllocString(L"string 2");
-    strings[2]= SysAllocString(L"string 3");
-    for( long i=0; i< 3; i++)
-    {
-        hr= SafeArrayPutElement( ar, &i, strings[i]);
-    }
-
-    *val= ar;
+    hr = SafeArrayCopy(m_arString, val);
     return hr;
 }
 
 STDMETHODIMP CBasic::outSequenceFloat(LPSAFEARRAY* val)
 {
     HRESULT hr= S_OK;
-
-    SAFEARRAY* ar=  SafeArrayCreateVector( VT_R4, 0, 3);
-    float arfloats[]= { 3.14f, 31.4f, 314.f};
-    for( long i=0; i< 3; i++)
-    {
-        hr= SafeArrayPutElement( ar, &i, &arfloats[i]);
-    }
-
-    *val= ar;
+    hr = SafeArrayCopy(m_arFloat, val);
     return hr;
 }
 
 STDMETHODIMP CBasic::outSequenceDouble(LPSAFEARRAY* val)
 {
     HRESULT hr= S_OK;
-
-    SAFEARRAY* ar=  SafeArrayCreateVector( VT_R8, 0, 3);
-    double arDouble[]= { 3.14f, 31.4f, 314.f};
-    for( long i=0; i< 3; i++)
-    {
-        hr= SafeArrayPutElement( ar, &i, &arDouble[i]);
-    }
-    *val= ar;
+    hr = SafeArrayCopy(m_arDouble, val);
     return hr;
 }
 
 STDMETHODIMP CBasic::outSequenceObject(LPSAFEARRAY* val)
 {
-    CComPtr<IDispatch> ob1;
-    CComPtr<IDispatch> ob2;
-    CComPtr<IDispatch> ob3;
-
-    ob1.CoCreateInstance(L"AxTestComponents.Basic");
-    ob2.CoCreateInstance(L"AxTestComponents.Basic");
-    ob3.CoCreateInstance(L"AxTestComponents.Basic");
-
-    CComDispatchDriver disp( ob1);
-    CComVariant param;
-    param= L"this property prpString (1)";
-    disp.PutPropertyByName(L"prpString", &param);
-
-    disp= ob2;
-    param= L"this property prpString (2)";
-    disp.PutPropertyByName(L"prpString", &param);
-
-    disp= ob3;
-    param= L"this property prpString (3)";
-    disp.PutPropertyByName(L"prpString", &param);
-
-    SAFEARRAY* ar=  SafeArrayCreateVector( VT_DISPATCH, 0, 3);
-    long i= 0;
-    SafeArrayPutElement( ar, &i, ob1.p);
-    i++;
-    SafeArrayPutElement( ar, &i, ob2.p);
-    i++;
-    SafeArrayPutElement( ar, &i, ob3.p);
-
-    *val= ar;
+    HRESULT hr = S_OK;
+    hr = SafeArrayCopy(m_arObject, val);
     return S_OK;
 }
 
 STDMETHODIMP CBasic::inoutSequenceByte(LPSAFEARRAY* val)
 {
-    inSequenceByte( *val);
-    SafeArrayDestroy( *val);
-    outSequenceByte( val);
-    return S_OK;
+    HRESULT hr = S_OK;
+    SAFEARRAY *arTemp = NULL;
+    if (FAILED(hr = SafeArrayCopy(*val, &arTemp)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(m_arByte, val)))
+        return hr;
+    m_arByte = arTemp;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inoutSequenceShort(LPSAFEARRAY* val)
 {
-    inSequenceShort( *val);
-    SafeArrayDestroy( *val);
-    outSequenceShort( val);
-
-    return S_OK;
+    HRESULT hr = S_OK;
+    SAFEARRAY *arTemp = NULL;
+    if (FAILED(hr = SafeArrayCopy(*val, &arTemp)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(m_arShort, val)))
+        return hr;
+    m_arShort = arTemp;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inoutSequenceLong(LPSAFEARRAY* val)
 {
-    inSequenceLong( *val);
-    SafeArrayDestroy( *val);
-    outSequenceLong( val);
-
-    return S_OK;
+    HRESULT hr = S_OK;
+    SAFEARRAY *arTemp = NULL;
+    if (FAILED(hr = SafeArrayCopy(*val, &arTemp)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(m_arLong, val)))
+        return hr;
+    m_arLong = arTemp;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inoutSequenceString(LPSAFEARRAY* val)
 {
-    inSequenceString( *val);
-    SafeArrayDestroy( *val);
-    outSequenceString( val);
-
-    return S_OK;
+    HRESULT hr = S_OK;
+    SAFEARRAY *arTemp = NULL;
+    if (FAILED(hr = SafeArrayCopy(*val, &arTemp)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(m_arString, val)))
+        return hr;
+    m_arString = arTemp;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inoutSequenceFloat(LPSAFEARRAY* val)
 {
-    inSequenceFloat( *val);
-    SafeArrayDestroy( *val);
-    outSequenceFloat( val);
-
-    return S_OK;
+    HRESULT hr = S_OK;
+    SAFEARRAY *arTemp = NULL;
+    if (FAILED(hr = SafeArrayCopy(*val, &arTemp)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(m_arFloat, val)))
+        return hr;
+    m_arFloat = arTemp;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inoutSequenceDouble(LPSAFEARRAY* val)
 {
-    inSequenceDouble( *val);
-    SafeArrayDestroy( *val);
-    outSequenceDouble( val);
-
-    return S_OK;
+    HRESULT hr = S_OK;
+    SAFEARRAY *arTemp = NULL;
+    if (FAILED(hr = SafeArrayCopy(*val, &arTemp)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(m_arDouble, val)))
+        return hr;
+    m_arDouble = arTemp;
+    return hr;
 }
 
 STDMETHODIMP CBasic::inoutSequenceObject(LPSAFEARRAY* val)
 {
-    inSequenceObject( *val);
-    SafeArrayDestroy( *val);
-    outSequenceObject( val);
-
-    return S_OK;
+    HRESULT hr = S_OK;
+    SAFEARRAY *arTemp = NULL;
+    if (FAILED(hr = SafeArrayCopy(*val, &arTemp)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(m_arObject, val)))
+        return hr;
+    m_arObject = arTemp;
+    return hr;
 }
 
 // 2-dimensional Array
@@ -880,15 +789,19 @@ STDMETHODIMP CBasic::inMulDimArrayVariant2(LPSAFEARRAY val)
 
 STDMETHODIMP CBasic::inMulDimArrayByte(LPSAFEARRAY val)
 {
-    // TODO: Add your implementation code here
-
-    return S_OK;
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy(m_arByteDim2)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(val, & m_arByteDim2)))
+        return hr;
+    return hr;
 }
 // 3-dimensionales array
 STDMETHODIMP CBasic::inMulDimArrayByte2(LPSAFEARRAY val)
 {
+
     // TODO: Add your implementation code here
-    printMulArray( val, VT_UI1);
+    //printMulArray( val, VT_UI1);
     return S_OK;
 }
 
@@ -1018,5 +931,468 @@ STDMETHODIMP CBasic::outMore(long* val1, long* val2)
     *val2= 112;
     return S_OK;
 }
+// If an optional parameter was not provided then the respective member will
+// not be set
+STDMETHODIMP CBasic::optional1(/*[in]*/ long val1, /*[in, optional]*/ VARIANT* val2)
+{
+    m_long = val1;
+    if (val2->vt != VT_ERROR)
+        m_var1 = *val2;
+    return S_OK;
+}
 
-//VT_BYREF BSTR
+STDMETHODIMP CBasic::optional2(/*[out]*/ long* val1,/*[out, optional]*/ VARIANT* val2)
+{
+    HRESULT hr = S_OK;
+    *val1 = m_long;
+
+    if (val2->vt != VT_ERROR)
+        hr = VariantCopy(val2, & m_var1);
+    return hr;
+}
+
+STDMETHODIMP CBasic::optional3(/*[in, optional]*/ VARIANT* val1,/*[in, optional]*/ VARIANT* val2)
+{
+    //if (val1->vt != VT_ERROR)
+        m_var1 = *val1;
+
+    //if (val2->vt != VT_ERROR)
+        m_var2 = *val2;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::optional4(/*[in, out, optional]*/ VARIANT* val1,
+                               /*[in, out, optional]*/ VARIANT* val2)
+{
+    HRESULT hr = S_OK;
+    //return the previously set in values
+    if (val1->vt != VT_ERROR)
+    {
+        CComVariant var1(*val1);
+        if (FAILED(hr = VariantCopy(val1, & m_var1)))
+            return hr;
+        m_var1 = var1;
+    }
+    if (val2->vt != VT_ERROR)
+    {
+        CComVariant var2(*val2);
+        if (FAILED(hr = VariantCopy(val2, & m_var2)))
+            return hr;
+        m_var2 = var2;
+    }
+    return hr;
+}
+
+STDMETHODIMP CBasic::optional5(/*[out, optional]*/ VARIANT* val1,
+                               /*[out, optional]*/ VARIANT* val2)
+{
+    HRESULT hr = S_OK;
+    if (FAILED(hr = VariantCopy(val1, &m_var1)))
+        return hr;
+    if (FAILED(hr = VariantCopy(val2, &m_var2)))
+        return hr;
+    return hr;
+}
+
+STDMETHODIMP CBasic::defaultvalue1(/*[in, defaultvalue(10)]*/ long val1,
+                                   /*[in, defaultvalue(3.14)]*/ double* val2,
+                                //   /*[in, defaultvalue(10)]*/ VARIANT val3,
+                                   /*[in, defaultvalue(100)]*/ VARIANT* val4)
+{
+    m_long = val1;
+    m_double = *val2;
+//  m_var1 = val3;
+    m_var2 = *val4;
+    return S_OK;
+}
+STDMETHODIMP CBasic::defaultvalue2(/*[in, out, defaultvalue(10)]*/ long* val1,
+                                   /*[in, out, defaultvalue(3.14)]*/ double* val2,
+                                //   /*[in, out, defaultvalue(10)]*/ VARIANT* val3,
+                                   /*[in, out, defaultvalue(100)]*/ VARIANT* val4)
+{
+    HRESULT hr = S_OK;
+    long aLong = *val1;
+    double aDouble = *val2;
+//  CComVariant var1(*val3);
+    CComVariant var2(*val4);
+    *val1 = m_long;
+    *val2 = m_double;
+    //if (FAILED(hr = VariantCopy(val3, &m_var1)))
+    //  return hr;
+    if (FAILED(hr = VariantCopy(val4, &m_var2)))
+        return hr;
+    m_long = aLong;
+    m_double = aDouble;
+//  m_var1 = var1;
+    m_var2 = var2;
+    return hr;
+}
+/* val2 contains the variable argument list. If no such arguments are supplied
+    then the safearray is invalid. SafeArrayCopy then returns E_INVALIDARG
+*/
+STDMETHODIMP CBasic::varargfunc1(/*[in]*/ long val1,/*[in]*/ LPSAFEARRAY val2)
+{
+    m_long = val1;
+
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy(m_safearray)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(val2, & m_safearray)))
+    {
+        if (hr != E_INVALIDARG)
+            return hr;
+    }
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::varargfunc2(/*[out]*/ long* val1, /*[out]*/ SAFEARRAY ** val2)
+{
+    *val1 = m_long;
+    HRESULT hr = SafeArrayCopy(m_safearray, val2);
+    return hr;
+}
+
+STDMETHODIMP CBasic::inSequenceByteDim2(LPSAFEARRAY val)
+{
+    HRESULT hr = S_OK;
+    if (FAILED(hr = SafeArrayDestroy(m_arByteDim2)))
+        return hr;
+    if (FAILED(hr = SafeArrayCopy(val, & m_arByteDim2)))
+        return hr;
+    return hr;
+}
+
+
+STDMETHODIMP CBasic::inCurrency(CY val)
+{
+    m_cy = val;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::outCurrency(CY* val)
+{
+    *val = m_cy;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inoutCurrency(CY* val)
+{
+    CY tmp = *val;
+    *val = m_cy;
+    m_cy = tmp;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inDate(DATE val)
+{
+    m_date = val;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::outDate(DATE* val)
+{
+    *val = m_date;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inoutDate(DATE* val)
+{
+    DATE tmp = *val;
+    *val = m_date;
+    m_date = tmp;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::get_prpCurrency(CY* pVal)
+{
+    *pVal = m_cy;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::put_prpCurrency(CY newVal)
+{
+    m_cy = newVal;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::get_prpDate(DATE* pVal)
+{
+    *pVal = m_date;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::put_prpDate(DATE newVal)
+{
+    m_date = newVal;
+    return S_OK;
+}
+
+//VT_I4 DECIMAL_NEG //tagVARIANT DISPATCH_PROPERTYPUT
+STDMETHODIMP CBasic::inDecimal(DECIMAL val)
+{
+    m_decimal = val;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::outDecimal(DECIMAL* val)
+{
+    * val = m_decimal;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inoutDecimal(DECIMAL* val)
+{
+    DECIMAL tmp;
+    tmp = * val;
+    * val = m_decimal;
+    m_decimal = tmp;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::get_prpDecimal(DECIMAL* pVal)
+{
+    * pVal = m_decimal;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::put_prpDecimal(DECIMAL newVal)
+{
+    m_decimal = newVal;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inSCode(SCODE val)
+{
+    m_scode = val;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::outScode(SCODE* val)
+{
+    * val = m_scode;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inoutSCode(SCODE* val)
+{
+    SCODE tmp = *val;
+    * val = m_scode;
+    m_scode = tmp;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::get_prpSCode(SCODE* pVal)
+{
+    * pVal = m_scode;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::put_prpSCode(SCODE newVal)
+{
+    m_scode = newVal;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inrefLong(LONG* val)
+{
+    m_long = * val;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inrefVariant(VARIANT* val)
+{
+    HRESULT hr = S_OK;
+    if (FAILED(hr = VariantCopy( & m_var1, val)))
+        return hr;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inrefDecimal(DECIMAL* val)
+{
+    m_decimal = * val;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::get_prpRefLong(long* pVal)
+{
+    *pVal = m_long;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::putref_prpRefLong(long* newVal)
+{
+    m_long = * newVal;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::get_prprefVariant(VARIANT* pVal)
+{
+    HRESULT hr = S_OK;
+    hr = VariantCopy(pVal, & m_var1);
+    return hr;
+}
+
+STDMETHODIMP CBasic::putref_prprefVariant(VARIANT* newVal)
+{
+    m_var1 = * newVal;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::get_prprefDecimal(DECIMAL* pVal)
+{
+    * pVal = m_decimal;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::putref_prprefDecimal(DECIMAL* newVal)
+{
+    m_decimal = *newVal;
+    return S_OK;
+}
+
+
+STDMETHODIMP CBasic::optional6(VARIANT* val1, VARIANT* val2, VARIANT* val3, VARIANT* val4)
+{
+    HRESULT hr = S_OK;
+    if (FAILED(hr = m_var1.Copy(val1)))
+        return hr;
+    if (FAILED(hr = m_var2.Copy(val2)))
+        return hr;
+    if (FAILED(hr = m_var3.Copy(val3)))
+        return hr;
+    if (FAILED(hr = m_var4.Copy(val4)))
+        return hr;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::optional7(VARIANT* val1, VARIANT* val2, VARIANT* val3, VARIANT* val4)
+{
+    HRESULT hr = S_OK;
+    if (FAILED(hr = VariantCopy(val1, & m_var1)))
+        return hr;
+    if (FAILED(hr = VariantCopy(val2, & m_var2)))
+        return hr;
+    if (FAILED(hr = VariantCopy(val3, & m_var3)))
+        return hr;
+    if (FAILED(hr = VariantCopy(val4, & m_var4)))
+        return hr;
+
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::get_prpMultiArg1(VARIANT* val1, VARIANT* val2, VARIANT* pVal)
+{
+    HRESULT hr = S_OK;
+    CComVariant tmp1(*val1);
+    CComVariant tmp2(*val2);
+
+    if (FAILED(hr = VariantCopy(val1, & m_var1)))
+        return hr;
+    if (FAILED(hr = VariantCopy(val2, & m_var2)))
+        return hr;
+    m_var1 = tmp1;
+    m_var2 = tmp2;
+    if  (FAILED(hr = VariantCopy(pVal, & m_var3)))
+        return hr;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::put_prpMultiArg1(VARIANT* val1, VARIANT* val2, VARIANT* newVal)
+{
+    HRESULT hr = S_OK;
+    CComVariant tmp1( * val1);
+    CComVariant tmp2( * val2);
+
+    if (FAILED(hr = VariantCopy(val1, & m_var1)))
+        return hr;
+    if (FAILED(hr = VariantCopy(val2, & m_var2)))
+        return hr;
+    m_var1 = tmp1;
+    m_var2 = tmp2;
+
+    m_var3 = *newVal;
+    return S_OK;
+}
+
+// tagVARIANT DISPATCH_PROPERTYPUT DISPID_PROPERTYPUT VARIANTARG LOCALE_USER_DEFAULT
+
+STDMETHODIMP CBasic::get_prpMultiArg2(VARIANT val1, VARIANT* pVal)
+{
+    HRESULT hr = S_OK;
+    m_var1 =  val1;
+
+    if (FAILED(hr = VariantCopy(pVal, & m_var2)))
+        return hr;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::put_prpMultiArg2(VARIANT val1, VARIANT newVal)
+{
+    m_var1 = val1;
+    m_var2 = newVal;
+    return S_OK;
+}
+
+// returns the values set by prpMultiArg2
+STDMETHODIMP CBasic::prpMultiArg2GetValues(VARIANT* val1, VARIANT* valProperty)
+{
+    HRESULT hr = S_OK;
+    if (FAILED(VariantCopy(val1, & m_var1)))
+        return hr;
+    if (FAILED(VariantCopy(valProperty, & m_var2)))
+        return hr;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::get_prpMultiArg3(LONG* val1, LONG* pVal)
+{
+    long aLong = *val1;
+    *val1 = m_long;
+    m_long = aLong;
+
+    * pVal = m_long2;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::put_prpMultiArg3(LONG* val1, LONG newVal)
+{
+    long aLong = *val1;
+    *val1 = m_long;
+    m_long = aLong;
+
+    m_long2 = newVal;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inUnknown(IUnknown* val)
+{
+    m_unknown = val;
+
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::outUnknown(IUnknown** val)
+{
+    m_unknown.CopyTo(val);
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::inoutUnknown(IUnknown** val)
+{
+    CComPtr<IUnknown> tmp = *val;
+    m_unknown.CopyTo(val);
+    m_unknown = tmp;
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::get_prpUnknown(IUnknown** pVal)
+{
+    m_prpUnknown.CopyTo(pVal);
+    return S_OK;
+}
+
+STDMETHODIMP CBasic::put_prpUnknown(IUnknown* newVal)
+{
+    m_prpUnknown = newVal;
+    return S_OK;
+}
