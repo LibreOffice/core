@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mh $ $Date: 2002-10-02 13:15:50 $
+ *  last change: $Author: dbo $ $Date: 2002-10-23 10:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,8 +364,8 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
     if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %d instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
 
-#ifdef DEBUG
-#if defined(__GNUC__) && defined(LINUX) && (defined(INTEL) || defined(POWERPC))
+#ifdef CPPU_ASSERTIONS
+#if defined(__GNUC__) && defined(LINUX) && (defined(INTEL) || defined(POWERPC) || defined(X86_64))
 #define BINTEST_VERIFYSIZE( s, n ) \
     fprintf( stderr, "> sizeof(" #s ") = %d; __alignof__ (" #s ") = %d\n", sizeof(s), __alignof__ (s) ); \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
@@ -374,7 +374,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
     fprintf( stderr, "> sizeof(" #s ") = %d\n", sizeof(s) ); \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
 #endif
-#else // ! DEBUG
+#else // ! CPPU_ASSERTIONS
 #define BINTEST_VERIFYSIZE( s, n ) \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
 #endif
@@ -510,8 +510,8 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     BINTEST_VERIFY( sizeof( Any ) == sizeof( uno_Any ) );
     BINTEST_VERIFY( sizeof( Any ) == sizeof( void * ) * 3 );
     BINTEST_VERIFYOFFSET( Any, pType, 0 );
-    BINTEST_VERIFYOFFSET( Any, pData, 4 );
-    BINTEST_VERIFYOFFSET( Any, pReserved, 8 );
+    BINTEST_VERIFYOFFSET( Any, pData, 1 * sizeof (void *) );
+    BINTEST_VERIFYOFFSET( Any, pReserved, 2 * sizeof (void *) );
     // interface
     BINTEST_VERIFY( sizeof( Reference< XInterface > ) == sizeof( XInterface * ) );
     // string
