@@ -24,6 +24,7 @@ wz      wizards\com\sun\star\wizards\web\export                 nmake           
 wz      wizards\com\sun\star\wizards\table                      nmake           -       all     wz_tablewiz wz_commonwiz wz_reportwiz NULL
 wz      wizards\com\sun\star\wizards\form                       nmake           -       all     wz_formwiz wz_commonwiz wz_tablewiz NULL
 wz      wizards\com\sun\star\wizards\web                        nmake           -       all     wz_webwiz wz_webexport wz_agendawiz NULL
+wz      wizards\com\sun\star\wizards\tutorial                   nmake           -       all     wz_tut wz_tutcre wz_tutexe NULL
 wz      wizards\com\sun\star\wizards\tutorial\executer\util     nmake           -       all     wz_tutexeutil wz_webwiz NULL
 wz      wizards\com\sun\star\wizards\tutorial\executer\officeHelper      nmake -        all     wz_tutexehelper wz_tutexeutil wz_webwiz NULL
 wz      wizards\com\sun\star\wizards\tutorial\creator\frame\objectFinder  nmake -       all     wz_tutcrefrafinder wz_tutexehelper wz_webwiz NULL
