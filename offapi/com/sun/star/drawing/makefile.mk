@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:53:46 $
+#   last change: $Author: rt $ $Date: 2003-04-08 15:39:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ PACKAGE=com$/sun$/star$/drawing
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    AccessibleGraphControl.idl\
     Alignment.idl\
     AppletShape.idl\
     Arrangement.idl\
