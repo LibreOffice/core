@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-12 09:49:27 $
+ *  last change: $Author: ama $ $Date: 2001-03-12 12:20:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ public:
     inline void SetFntChg( const BOOL bNew ) { bFntChg = bNew; }
 
     // die gekapselten SV-Font-Methoden (setzen bFntChg auf TRUE)
-    inline void SetColor( const Color& rColor );
+    inline void SetColor( const Color& rColor, BOOL bCheckAuto = TRUE );
     inline void SetFillColor( const Color& rColor );
     inline void SetAlign( const FontAlign eAlign );
     inline void SetUnderline( const FontUnderline eUnderline );
@@ -466,12 +466,14 @@ public:
         { bFntChg = bOrgChg = TRUE; }
 };
 
-inline void SwFont::SetColor( const Color& rColor )
+inline void SwFont::SetColor( const Color& rColor, BOOL bCheckAuto )
 {
     bFntChg = TRUE;
     aSub[0].SetColor( rColor );
     aSub[1].SetColor( rColor );
     aSub[2].SetColor( rColor );
+    if( bCheckAuto )
+        SetAutomaticCol( COL_AUTO == rColor.GetColor() );
 }
 
 // gekapselte SV-Font-Methode

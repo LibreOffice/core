@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-07 11:49:12 $
+ *  last change: $Author: ama $ $Date: 2001-03-12 12:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-#define DARK_COLOR 153
+#define DARK_COLOR 154
 
 // steht im number.cxx
 extern const sal_Char __FAR_DATA sBulletFntName[];
@@ -506,10 +506,10 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
                 pCol = &pItem->GetColor();
         }
         if( pCol &&
-            DARK_COLOR < pCol->GetRed() + pCol->GetGreen() + pCol->GetBlue() )
+            DARK_COLOR > pCol->GetRed() + pCol->GetGreen() + pCol->GetBlue() )
             bBlack = FALSE;
         Color aCol( bBlack ? COL_BLACK : COL_WHITE );
-        GetFont()->SetColor( aCol );
+        GetFont()->SetColor( aCol, FALSE );
     }
     else
         pOldCol = NULL;
