@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:17:46 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ hebrew ] = "Wählen Sie eine Datenquelle:";
         Text[ hindi ] = "एक ड़ॉटा मूल चुनो:";
         Text[ slovak ] = "Vybrať zdroj dát:";
+        Text[ hungarian ] = "Válasszon adatforrást:";
+        Text[ slovenian ] = "Izberite vir podatkov:";
     };
     ListBox LB_DATASOURCE
     {
@@ -193,6 +195,8 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ hebrew ] = "‮ניהול...‬";
         Text[ hindi ] = "व्यवस्था करना...";
         Text[ slovak ] = "Usporiadať...";
+        Text[ hungarian ] = "Szervező...";
+        Text[ slovenian ] = "Organiziraj...";
     };
     String STR_LOCAL_DATASOURCES
     {
@@ -224,6 +228,8 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ hebrew ] = "lokale Datenquellen";
         Text[ hindi ] = "स्थानिक ड़ॉटा मूल";
         Text[ slovak ] = "Lokálne zdroje dát";
+        Text[ hungarian ] = "Helyi adatforrások";
+        Text[ slovenian ] = "lokalni viri podatkov";
     };
     String STR_COULDNOTLOAD_CONFIGLIB
     {
@@ -254,6 +260,8 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ hebrew ] = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Konfiguration ist nicht verfügbar.";
         Text[ hindi ] = "प्रोग्राम लैब्ररी #lib# को लोड़ नहीं कर सकते है अथवा दोषयुक्त है । ODBC ड़ॉटा मूल रूपरेखा अनुपलब्ध है ।";
         Text[ slovak ] = "Programová knižnica #lib# nemohla byť načítaná, alebo je poškodená. Nastavenie ODBC zdroja dát nieje možné.";
+        Text[ hungarian ] = "A következő programkönyvtár nem tölthető be: #lib#. Az ODBC-adatforrás beállításai nem érhetőek el.";
+        Text[ slovenian ] = "Programske knjižnice #lib# ni mogoče naložiti ali pa je okvarjena. Konfiguracija ODBC vira podatkov ni na voljo.";
     };
     Text[ catalan ] = "Font de dades";
     Text[ thai ] = "แหล่งข้อมูล";
@@ -261,11 +269,23 @@ ModalDialog DLG_DATASOURCE_SELECTION
     Text[ hebrew ] = "‮מקור הנתונים‬";
     Text[ hindi ] = "ड़ॉटा मूल";
     Text[ slovak ] = "Zdroj dát";
+    Text[ hungarian ] = "Adatforrás";
+    Text[ slovenian ] = "Vir podatkov";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.37.72.1  2003/12/16 11:05:12  hr
+ *  #111934#: join CWS ooo111fix1
+ *
+ *  Revision 1.37.34.1  2003/11/24 13:10:14  ihi
+ *  OOo 1.1.1 merge
+ *
+ *  Revision 1.37  2003/07/17 12:17:46  hr
+ *  INTEGRATION: CWS mergerc3 (1.36.6); FILE MERGED
+ *  2003/07/16 17:11:12 ihi 1.36.6.1: rc-3 merge all languages
+ *
  *  Revision 1.36.6.1  2003/07/16 17:11:12  ihi
  *  rc-3 merge all languages
  *
@@ -413,6 +433,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
  *
  *  Revision 1.0 24.10.00 09:42:47  fs
  ************************************************************************/
+
 
 
 
