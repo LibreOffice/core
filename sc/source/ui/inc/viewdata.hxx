@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:14 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,10 +320,9 @@ public:
     double          GetPPTY() const { return nPPTY; }
 
     BOOL            GetSimpleArea( USHORT& rStartCol, USHORT& rStartRow, USHORT& rStartTab,
-                                    USHORT& rEndCol, USHORT& rEndRow, USHORT& rEndTab,
-                                    BOOL bMergeMark = TRUE );
-    BOOL            GetSimpleArea( ScRange& rRange, BOOL bMergeMark = TRUE );
-    void            GetMultiArea( ScRangeListRef& rRange, BOOL bMergeMark = TRUE );
+                                    USHORT& rEndCol, USHORT& rEndRow, USHORT& rEndTab );
+    BOOL            GetSimpleArea( ScRange& rRange );
+    void            GetMultiArea( ScRangeListRef& rRange );
 
     BOOL            SimpleColMarked();
     BOOL            SimpleRowMarked();
