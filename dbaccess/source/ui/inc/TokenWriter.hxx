@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 06:57:57 $
+ *  last change: $Author: vg $ $Date: 2001-03-30 12:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ namespace dbaui
         virtual BOOL Write()    = 0; // Export
         virtual BOOL Read()     = 0; // Import
 
-        void initialize();;
+        void initialize();
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
     };
 
