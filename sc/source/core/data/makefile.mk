@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 18:42:43 $
+#   last change: $Author: obo $ $Date: 2004-06-04 10:26:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,6 @@
 #
 #*************************************************************************
 
-
 PRJ=..$/..$/..
 
 PRJNAME=sc
@@ -82,7 +81,6 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
-    bclist.cxx \
     bcaslot.cxx \
     docpool.cxx \
     poolhelp.cxx \
@@ -140,7 +138,6 @@ CXXFILES = \
     sortparam.cxx
 
 SLOFILES =  \
-    $(SLO)$/bclist.obj \
     $(SLO)$/bcaslot.obj \
     $(SLO)$/docpool.obj \
     $(SLO)$/poolhelp.obj \
