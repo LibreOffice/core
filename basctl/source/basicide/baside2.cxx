@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-09 16:57:00 $
+ *  last change: $Author: tbe $ $Date: 2001-05-21 09:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,21 @@
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
-#ifndef _IODLG_HXX //autogen
-#include <sfx2/iodlg.hxx>
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
+#include <com/sun/star/ui/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
+#include <com/sun/star/ui/FilePickerElementID.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
 #endif
 
 #ifndef _SFXDOCFILE_HXX //autogen
@@ -127,7 +140,12 @@
 #define FILTERMASK_ALL "*.*"
 #endif
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui;
 using namespace utl;
+using namespace comphelper;
+
 
 DBG_NAME( ModulWindow );
 
@@ -427,18 +445,30 @@ BOOL ModulWindow::LoadBasic()
     DBG_CHKTHIS( ModulWindow, 0 );
     BOOL bDone = FALSE;
 
-    SfxFileDialog aFileDialogBox( this, WinBits( WB_OPEN | WB_3DLOOK ) );
-    if ( aCurPath.Len() )
-        aFileDialogBox.SetPath( aCurPath );
-    aFileDialogBox.SetText( String( IDEResId( RID_STR_OPEN ) ) );
-    aFileDialogBox.AddFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
-    aFileDialogBox.AddFilter( String( RTL_CONSTASCII_USTRINGPARAM( "StarScript" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.sjs" ) ) );
-    aFileDialogBox.AddFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
-    aFileDialogBox.SetCurFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
-
-    if ( aFileDialogBox.Execute() )
+    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+    Reference < XFilePicker > xFP;
+    if( xMSF.is() )
     {
-        aCurPath = aFileDialogBox.GetPath();
+        Sequence <Any> aProps(1);
+        aProps.getArray()[0] <<= ::rtl::OUString::createFromAscii("FileOpen");
+        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.FilePicker" ) ), aProps ), UNO_QUERY );
+    }
+
+    if ( aCurPath.Len() )
+        xFP->setDisplayDirectory ( aCurPath );
+
+    //xFP->setTitle( String( IDEResId( RID_STR_OPEN ) ) );
+
+    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
+    xFltMgr->appendFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
+    xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->setCurrentFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
+
+    if( xFP->execute() == RET_OK )
+    {
+        Sequence< ::rtl::OUString > aPaths = xFP->getPath();
+        aCurPath = aPaths[0];
         SfxMedium aMedium( aCurPath, STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE, TRUE );
         SvStream* pStream = aMedium.GetInStream();
         if ( pStream )
@@ -466,26 +496,38 @@ BOOL ModulWindow::LoadBasic()
 }
 
 
-
 BOOL ModulWindow::SaveBasicSource()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     BOOL bDone = FALSE;
-    SfxFileDialog aFileDialogBox( this, WinBits( WB_SAVEAS | WB_3DLOOK ) );
-    if ( aCurPath.Len() )
-        aFileDialogBox.SetPath( aCurPath );
-    aFileDialogBox.SetText( String( IDEResId( RID_STR_SAVE ) ) );
 
-    aFileDialogBox.AddFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
-    aFileDialogBox.AddFilter( String( RTL_CONSTASCII_USTRINGPARAM( "StarScript" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.sjs" ) ) );
-    aFileDialogBox.AddFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
-
-    aFileDialogBox.SetDefaultExt( String( RTL_CONSTASCII_USTRINGPARAM( "bas" ) ) );
-    aFileDialogBox.SetCurFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
-
-    if ( aFileDialogBox.Execute() )
+    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+    Reference < XFilePicker > xFP;
+    if( xMSF.is() )
     {
-        aCurPath = aFileDialogBox.GetPath();
+        Sequence <Any> aProps(1);
+        aProps.getArray()[0] <<= ::rtl::OUString::createFromAscii("FileSave_AutoextPwdBox");
+        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.FilePicker" ) ), aProps ), UNO_QUERY );
+    }
+
+    Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
+    xFPControl->enableControl(FilePickerElementID::CBX_PASSWORD, sal_False);
+
+    if ( aCurPath.Len() )
+        xFP->setDisplayDirectory ( aCurPath );
+
+    //xFP->setTitle( String( IDEResId( RID_STR_SAVE ) ) );
+
+    Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
+    xFltMgr->appendFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
+    xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
+    xFltMgr->setCurrentFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
+
+    if( xFP->execute() == RET_OK )
+    {
+        Sequence< ::rtl::OUString > aPaths = xFP->getPath();
+        aCurPath = aPaths[0];
         SfxMedium aMedium( aCurPath, STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC, TRUE, FALSE );
         SvStream* pStream = aMedium.GetOutStream();
         if ( pStream )
@@ -1144,11 +1186,7 @@ void ModulWindow::Deactivating()
 }
 
 USHORT ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, BOOL bFromStart )
-
 {
-
-#if SUPD >= 625
-
     // Mann koennte fuer das blinde Alle-Ersetzen auch auf
     // Syntaxhighlighting/Formatierung verzichten...
     AssertValidEditEngine();
@@ -1181,58 +1219,6 @@ USHORT ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, BOO
         pView->SetSelection( aSel );
 
     return nFound;
-
-#else // SUPD >= 625
-
-    // Mann koennte fuer das blinde Alle-Ersetzen auch auf
-    // Syntaxhighlighting/Formatierung verzichten...
-    AssertValidEditEngine();
-    ExtTextView* pView = GetEditView();
-    TextSelection aSel;
-    if ( bFromStart )
-    {
-        aSel = pView->GetSelection();
-        if ( !rSearchItem.GetBackward() )
-            pView->SetSelection( TextSelection() );
-        else
-            pView->SetSelection( TextSelection( TextPaM( 0xFFFFFFFF, 0xFFFF ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
-    }
-
-    SearchParam aSearchParam( rSearchItem.GetSearchString(),
-                        SearchParam::SRCH_NORMAL, rSearchItem.GetExact(),
-                        rSearchItem.GetWordOnly(), rSearchItem.GetSelection() );
-    if ( rSearchItem.GetRegExp() )
-        aSearchParam.SetSrchType( SearchParam::SRCH_REGEXP );
-    else if ( rSearchItem.IsLevenshtein() )
-    {
-        aSearchParam.SetSrchType( SearchParam::SRCH_LEVDIST );
-        aSearchParam.SetSrchRelaxed( rSearchItem.IsLEVRelaxed() ? TRUE : FALSE );
-        aSearchParam.SetLEVOther( rSearchItem.GetLEVOther() );
-        aSearchParam.SetLEVShorter( rSearchItem.GetLEVShorter() );
-        aSearchParam.SetLEVLonger( rSearchItem.GetLEVLonger() );
-    }
-    BOOL bForward = !rSearchItem.GetBackward();
-    USHORT nFound = 0;
-    if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND ) ||
-         ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL ) )
-    {
-        nFound = pView->Search( aSearchParam, bForward );
-    }
-    else if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE ) ||
-              ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL ) )
-    {
-        aSearchParam.SetReplaceStr( rSearchItem.GetReplaceString() );
-        BOOL bAll = rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
-        nFound = pView->Replace( aSearchParam, bAll, bForward );
-    }
-
-    if ( bFromStart && !nFound )
-        pView->SetSelection( aSel );
-
-    return nFound;
-
-#endif // SUPD >= 625
-
 }
 
 SfxUndoManager* __EXPORT ModulWindow::GetUndoManager()
