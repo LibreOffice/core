@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: er $ $Date: 2002-08-05 16:33:23 $
+ *  last change: $Author: er $ $Date: 2002-09-06 13:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2818,24 +2818,12 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                         CalendarDisplayCode::LONG_MONTH_NAME, nNatNum ).GetChar(0);
             break;
             case NF_KEY_Q:                  // Q
-            {
-                if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += rLoc().getQuarterAbbreviation( nVal / 3 );
-                if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_QUARTER, nNatNum );
             break;
             case NF_KEY_QQ:                 // QQ
-            {
-                if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += rLoc().getQuarterWord( nVal / 3 );
-                if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_QUARTER, nNatNum );
             break;
             case NF_KEY_D:                  // D
                 OutString += rCal.getDisplayString(
@@ -3141,24 +3129,12 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                         CalendarDisplayCode::LONG_MONTH_NAME, nNatNum ).GetChar(0);
             break;
             case NF_KEY_Q:                  // Q
-            {
-                if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += rLoc().getQuarterAbbreviation( nVal / 3 );
-                if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::SHORT_QUARTER, nNatNum );
             break;
             case NF_KEY_QQ:                 // QQ
-            {
-                if ( bOtherCalendar )
-                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
-                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-                OutString += rLoc().getQuarterWord( nVal / 3 );
-                if ( bOtherCalendar )
-                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
-            }
+                OutString += rCal.getDisplayString(
+                        CalendarDisplayCode::LONG_QUARTER, nNatNum );
             break;
             case NF_KEY_D:                  // D
                 OutString += rCal.getDisplayString(
