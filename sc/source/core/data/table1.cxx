@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-20 10:28:32 $
+ *  last change: $Author: nn $ $Date: 2001-01-22 14:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1044,9 +1044,31 @@ BOOL ScTable::GetNextMarkedCell( USHORT& rCol, USHORT& rRow, const ScMarkData& r
     return FALSE;                               // alle Spalten durch
 }
 
+void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHORT nRow1, USHORT nTab1,
+                                    USHORT nCol2, USHORT nRow2, USHORT nTab2,
+                                    short nDx, short nDy, short nDz )
+{
+    if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // only within the table
+    {
+        ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
+        if ( eUpdateRefMode != URM_COPY && pDrawLayer )
+        {
+            if ( eUpdateRefMode == URM_MOVE )
+            {                                               // source range
+                nCol1 -= nDx;
+                nRow1 -= nDy;
+                nCol2 -= nDx;
+                nRow2 -= nDy;
+            }
+            pDrawLayer->MoveArea( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy,
+                                    (eUpdateRefMode == URM_INSDEL) );
+        }
+    }
+}
+
 void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHORT nRow1, USHORT nTab1,
                      USHORT nCol2, USHORT nRow2, USHORT nTab2, short nDx, short nDy, short nDz,
-                     ScDocument* pUndoDoc )
+                     ScDocument* pUndoDoc, BOOL bIncludeDraw )
 {
     USHORT i;
     USHORT iMax;
@@ -1064,100 +1086,83 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHOR
         aCol[i].UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
                                     nDx, nDy, nDz, pUndoDoc );
 
-    //      Drawing Layer - nCol1 etc werden veraendert!
+    if ( bIncludeDraw )
+        UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
 
-    if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // nur wenn innerhalb der Tabelle
+    if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // print ranges: only within the table
     {
-        ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
-        if ( eUpdateRefMode != URM_COPY && pDrawLayer )
-        {
-            if ( eUpdateRefMode == URM_MOVE )
-            {                                             // Quellbereich
-                nCol1 -= nDx;
-                nRow1 -= nDy;
-                nCol2 -= nDx;
-                nRow2 -= nDy;
+        USHORT nSTab,nETab,nSCol,nSRow,nECol,nERow;
+        BOOL bRecalcPages = FALSE;
+
+        if ( pPrintRanges && nPrintRangeCount )
+            for ( i=0; i<nPrintRangeCount; i++ )
+            {
+                nSTab = nETab = pPrintRanges[i].aStart.Tab();
+                nSCol = pPrintRanges[i].aStart.Col();
+                nSRow = pPrintRanges[i].aStart.Row();
+                nECol = pPrintRanges[i].aEnd.Col();
+                nERow = pPrintRanges[i].aEnd.Row();
+
+                if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
+                                          nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
+                                          nDx,nDy,nDz,
+                                          nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
+                {
+                    pPrintRanges[i] = ScRange( nSCol, nSRow, nSTab, nECol, nERow, nSTab );
+                    bRecalcPages = TRUE;
+                }
             }
-            pDrawLayer->MoveArea( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy,
-                                    (eUpdateRefMode == URM_INSDEL) );
+
+        if ( pRepeatColRange )
+        {
+            nSTab = nETab = pRepeatColRange->aStart.Tab();
+            nSCol = pRepeatColRange->aStart.Col();
+            nSRow = pRepeatColRange->aStart.Row();
+            nECol = pRepeatColRange->aEnd.Col();
+            nERow = pRepeatColRange->aEnd.Row();
+
+            if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
+                                      nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
+                                      nDx,nDy,nDz,
+                                      nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
+            {
+                *pRepeatColRange = ScRange( nSCol, nSRow, nSTab, nECol, nERow, nSTab );
+                bRecalcPages = TRUE;
+                nRepeatStartX = nSCol;  // fuer UpdatePageBreaks
+                nRepeatEndX = nECol;
+            }
         }
 
+        if ( pRepeatRowRange )
         {
-            // war ScStyleSheetPool::UpdateReference()
+            nSTab = nETab = pRepeatRowRange->aStart.Tab();
+            nSCol = pRepeatRowRange->aStart.Col();
+            nSRow = pRepeatRowRange->aStart.Row();
+            nECol = pRepeatRowRange->aEnd.Col();
+            nERow = pRepeatRowRange->aEnd.Row();
 
-            USHORT nSTab,nETab,nSCol,nSRow,nECol,nERow;
-            BOOL bRecalcPages = FALSE;
-
-            if ( pPrintRanges && nPrintRangeCount )
-                for ( i=0; i<nPrintRangeCount; i++ )
-                {
-                    nSTab = nETab = pPrintRanges[i].aStart.Tab();
-                    nSCol = pPrintRanges[i].aStart.Col();
-                    nSRow = pPrintRanges[i].aStart.Row();
-                    nECol = pPrintRanges[i].aEnd.Col();
-                    nERow = pPrintRanges[i].aEnd.Row();
-
-                    if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
-                                              nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
-                                              nDx,nDy,nDz,
-                                              nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
-                    {
-                        pPrintRanges[i] = ScRange( nSCol, nSRow, nSTab, nECol, nERow, nSTab );
-                        bRecalcPages = TRUE;
-                    }
-                }
-
-            if ( pRepeatColRange )
+            if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
+                                      nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
+                                      nDx,nDy,nDz,
+                                      nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
             {
-                nSTab = nETab = pRepeatColRange->aStart.Tab();
-                nSCol = pRepeatColRange->aStart.Col();
-                nSRow = pRepeatColRange->aStart.Row();
-                nECol = pRepeatColRange->aEnd.Col();
-                nERow = pRepeatColRange->aEnd.Row();
-
-                if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
-                                          nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
-                                          nDx,nDy,nDz,
-                                          nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
-                {
-                    *pRepeatColRange = ScRange( nSCol, nSRow, nSTab, nECol, nERow, nSTab );
-                    bRecalcPages = TRUE;
-                    nRepeatStartX = nSCol;  // fuer UpdatePageBreaks
-                    nRepeatEndX = nECol;
-                }
+                *pRepeatRowRange = ScRange( nSCol, nSRow, nSTab, nECol, nERow, nSTab );
+                bRecalcPages = TRUE;
+                nRepeatStartY = nSRow;  // fuer UpdatePageBreaks
+                nRepeatEndY = nERow;
             }
+        }
 
-            if ( pRepeatRowRange )
-            {
-                nSTab = nETab = pRepeatRowRange->aStart.Tab();
-                nSCol = pRepeatRowRange->aStart.Col();
-                nSRow = pRepeatRowRange->aStart.Row();
-                nECol = pRepeatRowRange->aEnd.Col();
-                nERow = pRepeatRowRange->aEnd.Row();
+        //  updating print ranges is not necessary with multiple print ranges
+        if ( bRecalcPages && GetPrintRangeCount() <= 1 )
+        {
+            UpdatePageBreaks(NULL);
 
-                if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
-                                          nCol1,nRow1,nTab1, nCol2,nRow2,nTab2,
-                                          nDx,nDy,nDz,
-                                          nSCol,nSRow,nSTab, nECol,nERow,nETab ) )
-                {
-                    *pRepeatRowRange = ScRange( nSCol, nSRow, nSTab, nECol, nERow, nSTab );
-                    bRecalcPages = TRUE;
-                    nRepeatStartY = nSRow;  // fuer UpdatePageBreaks
-                    nRepeatEndY = nERow;
-                }
-            }
-
-            //  Umbrueche updaten ist bei mehreren Druckbereichen nicht noetig
-            if ( bRecalcPages && GetPrintRangeCount() <= 1 )
-            {
-                UpdatePageBreaks(NULL);
-
-                SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
-                if (pDocSh)
-                    pDocSh->Broadcast( ScPaintHint(
-                                        ScRange(0,0,nTab,MAXCOL,MAXROW,nTab),
-                                        PAINT_GRID ) );
-            }
+            SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
+            if (pDocSh)
+                pDocSh->Broadcast( ScPaintHint(
+                                    ScRange(0,0,nTab,MAXCOL,MAXROW,nTab),
+                                    PAINT_GRID ) );
         }
     }
 }

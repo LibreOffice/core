@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-14 14:31:41 $
+ *  last change: $Author: nn $ $Date: 2001-01-22 14:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,7 +733,8 @@ void ScDocument::BroadcastUno( const SfxHint &rHint )
 void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     USHORT nCol1, USHORT nRow1, USHORT nTab1,
                                     USHORT nCol2, USHORT nRow2, USHORT nTab2,
-                                    short nDx, short nDy, short nDz, ScDocument* pUndoDoc )
+                                    short nDx, short nDy, short nDz,
+                                    ScDocument* pUndoDoc, BOOL bIncludeDraw )
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
@@ -776,7 +777,8 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
         for ( ; i<=iMax; i++)
             if (pTab[i])
                 pTab[i]->UpdateReference(
-                    eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, pUndoDoc );
+                    eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
+                    nDx, nDy, nDz, pUndoDoc, bIncludeDraw );
 
         if ( bIsEmbedded )
         {

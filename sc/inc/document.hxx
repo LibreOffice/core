@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-14 14:31:12 $
+ *  last change: $Author: nn $ $Date: 2001-01-22 14:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,7 +949,8 @@ public:
 
     void            UpdateReference( UpdateRefMode eUpdateRefMode, USHORT nCol1, USHORT nRow1, USHORT nTab1,
                                      USHORT nCol2, USHORT nRow2, USHORT nTab2,
-                                     short nDx, short nDy, short nDz, ScDocument* pUndoDoc = NULL );
+                                     short nDx, short nDy, short nDz,
+                                     ScDocument* pUndoDoc = NULL, BOOL bIncludeDraw = TRUE );
 
     void            UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDoc,
                                         const ScMarkData& rMark, ScDocument* pUndoDoc = NULL );
