@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:26:33 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #ifndef _PSPRINT_FONTMANAGER_HXX_
 #include <psprint/fontmanager.hxx>
 #endif
-#ifdef SOLARIS
+#if defined(SOLARIS) || defined(IRIX)
 #include <alloca.h>
 #endif
 #ifndef __SGI_STL_SET
