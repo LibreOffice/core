@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataPointProperties.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:35 $
+ *  last change: $Author: bm $ $Date: 2000-11-20 14:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_awt_XBitmap_idl__
+#include <com/sun/star/awt/XBitmap.idl>
+#endif
 
 //=============================================================================
 
@@ -138,15 +141,17 @@ service ChartDataPointProperties
     // DocMerge from xml: property com::sun::star::chart::ChartDataPointProperties::SymbolType
     /** specifies the type of symbol.
 
-
-
-
-
-
         @optional@see ChartSymbolType
      */
     [optional, property] long SymbolType;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies the type of symbol.
+
+        @optional@see ChartSymbolType
+     */
+    [optional, property] com::sun::star::awt::XBitmap SymbolBitmapURL;
 };
 
 //=============================================================================
@@ -156,6 +161,9 @@ service ChartDataPointProperties
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:35  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:01  hjs
     initial import
 
