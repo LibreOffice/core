@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-01 14:00:53 $
+ *  last change: $Author: sab $ $Date: 2002-12-02 12:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,13 +86,13 @@ ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::
     : fOldPercent(0.0),
     nRange(nDefaultProgressBarRange),
     xStatusIndicator(xTempStatusIndicator),
-    nReference(0),
+    nReference(100),
     nValue(0),
 #ifndef PRODUCT
     bFailure(sal_False),
 #endif
     bStrict(bTempStrict),
-    bRepeat(sal_False)
+    bRepeat(sal_True)
 {
 }
 
