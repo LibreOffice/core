@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-17 14:53:51 $
+ *  last change: $Author: sj $ $Date: 2001-08-27 14:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2720,7 +2720,10 @@ void EscherEx::AddAtom( UINT32 nAtomSize, UINT16 nRecType, int nRecVersion, int 
 void EscherEx::AddClientAnchor( const Rectangle& rRect )
 {
     AddAtom( 8, ESCHER_ClientAnchor );
-    *mpOutStrm << (INT16)rRect.Top() << (INT16)rRect.Left() << (INT16)rRect.Right() << (INT16)rRect.Bottom();
+    *mpOutStrm << (sal_Int16)rRect.Top()
+               << (sal_Int16)rRect.Left()
+               << (sal_Int16)( rRect.GetWidth()  + rRect.Left() )
+               << (sal_Int16)( rRect.GetHeight() + rRect.Top() );
 }
 
 // ---------------------------------------------------------------------------------------------
