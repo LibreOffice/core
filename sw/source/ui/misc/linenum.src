@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ TabPage TP_LINENUMBERING
         Text[ chinese_traditional ] = "Åã¥Ü½s¸¹";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÑŞíã";
         Text[ greek ] = "Åíåñãïğïßçóç áñßèìçóçò";
-        Text[ korean ] = "¹øÈ£ º¸ÀÌ±â(~S)";
+        Text[ korean ] = "¹øÈ£¸Å±â±â¡¡Àû¿ë";
         Text[ turkish ] = "~Numaralamayı etkinleştir";
         Text[ language_user1 ] = " ";
     };
@@ -127,7 +127,7 @@ TabPage TP_LINENUMBERING
         Text[ russian ] = "Ñòèëü çíàêîâ";
         Text[ polish ] = "Styl znaku";
         Text[ japanese ] = "•¶š½À²Ù";
-        Text[ chinese_traditional ] = "¤å¦r¼Ë¦¡";
+        Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
         Text[ korean ] = "¹®ÀÚ À¯Çü";
@@ -461,7 +461,7 @@ TabPage TP_LINENUMBERING
         Text[ chinese_traditional ] = "¦æ";
         Text[ arabic ] = "ÃÓØÑ";
         Text[ greek ] = "Ãñáììİò";
-        Text[ korean ] = "¼±";
+        Text[ korean ] = "Çà";
         Text[ turkish ] = "Satır";
         Text[ language_user1 ] = " ";
     };
@@ -589,7 +589,7 @@ TabPage TP_LINENUMBERING
         Text[ chinese_traditional ] = "¦æ";
         Text[ arabic ] = "ÃÓØÑ";
         Text[ greek ] = "Ãñáììİò";
-        Text[ korean ] = "¼±";
+        Text[ korean ] = "Çà";
         Text[ turkish ] = "Satır";
         Text[ language_user1 ] = " ";
     };
@@ -669,7 +669,7 @@ TabPage TP_LINENUMBERING
         Text[ chinese_traditional ] = "¤å¦r¤è¶ô¤ºªº¦æ";
         Text[ arabic ] = "ÃÓØÑ İí ßÇÏÑ ÇáäÕ";
         Text[ greek ] = "Ãñáììİò óå ğëáßóéï êåéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓÀÇ ¼±";
+        Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓÀÇ Çà";
         Text[ turkish ] = "Metin kutusu içindeki sa~tırlar";
         Text[ language_user1 ] = " ";
     };
@@ -693,7 +693,7 @@ TabPage TP_LINENUMBERING
         Text[ polish ] = "Ponowne uruchomienie na pocz¹tku strony";
         Text[ portuguese_brazilian ] = "~Restart each new page";
         Text[ japanese ] = "Íß°¼Ş‚²‚Æ‚É‚P‚©‚ç(~R)";
-        Text[ korean ] = "»õ ÆäÀÌÁö ½ÃÀÛ½Ã¿¡ ´Ù½Ã½ÃÀÛ";
+        Text[ korean ] = "»õ ÂÊ Ã³À½ºÎºĞ¿¡¼­ ´Ù½Ã½ÃÀÛ";
         Text[ chinese_simplified ] = "ÔÚÒ³Ê×ÖØĞÂ¿ªÊ¼(~R)";
         Text[ chinese_traditional ] = "±q­¶­º­«·s¶}©l(~R)";
         Text[ turkish ] = "~Restart each new page";
@@ -715,7 +715,7 @@ TabPage TP_LINENUMBERING
         Text [ dutch ] = "Tellen" ;
         Text [ portuguese ] = "Contar" ;
         Text[ chinese_simplified ] = "¼ÆÊı";
-        Text[ russian ] = "×èñëà";
+        Text[ russian ] = "Ó÷èòûâàòü";
         Text[ polish ] = "Licz";
         Text[ japanese ] = "”‚¦‚é";
         Text[ chinese_traditional ] = "­p¼Æ";
@@ -738,10 +738,10 @@ TabPage TP_LINENUMBERING
     Text[ russian ] = "Íóìåğàöèÿ ñòğîê";
     Text[ polish ] = "Numeracja wierszy";
     Text[ japanese ] = "s”Ô†•t‚¯";
-    Text[ chinese_traditional ] = "¦æ¼Æ";
+    Text[ chinese_traditional ] = "¦æ½s¸¹";
     Text[ arabic ] = "ÊÑŞíã ÇáÃÓØÑ";
     Text[ greek ] = "Áñßèìçóç ãñáììşí";
-    Text[ korean ] = "¼± ¹øÈ£";
+    Text[ korean ] = "Çà ¹øÈ£¸Å±â±â";
     Text[ turkish ] = "Satır numaralaması";
     Text[ language_user1 ] = " ";
 };
