@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:57:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1304,9 +1304,9 @@ void UnoDialogControl::setMenuBar( const Reference< XMenuBar >& rxMenuBar ) thro
 }
 
 // XPropertiesChangeListener
-void UnoDialogControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvents ) throw(RuntimeException)
+void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent >& rEvents ) throw(RuntimeException)
 {
-    if( !isDesignMode() && !IsUpdatingModel() && !mbCreatingCompatiblePeer )
+    if( !isDesignMode() && !mbCreatingCompatiblePeer )
     {
         ::rtl::OUString s1( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) );
         ::rtl::OUString s2( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) );
@@ -1338,7 +1338,7 @@ void UnoDialogControl::propertiesChange( const Sequence< PropertyChangeEvent >& 
         }
     }
 
-    UnoControlContainer::propertiesChange( rEvents );
+    UnoControlContainer::ImplModelPropertiesChanged( rEvents );
 }
 
 void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(RuntimeException)
