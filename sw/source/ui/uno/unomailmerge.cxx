@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:23:55 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
+
+#include <sfx2/viewfrm.hxx>
+
 
 #ifndef _UNOMAILMERGE_HXX_
 #include <unomailmerge.hxx>
