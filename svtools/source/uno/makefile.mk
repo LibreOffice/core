@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:19:27 $
+#   last change: $Author: mt $ $Date: 2001-03-09 10:19:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -239,8 +239,6 @@ SLOFILES= \
             $(SLO)$/genericunodialog.obj \
             $(SLO)$/registerservices.obj \
                         $(SLO)$/registerlight.obj \
-            $(SLO)$/unoifac3.obj	\
-            $(SLO)$/unoifac2.obj	\
             $(SLO)$/unoiface.obj	\
             $(SLO)$/imgprod.obj
 
@@ -249,8 +247,6 @@ LIB1OBJFILES=  \
             $(SLO)$/addrtempuno.obj	\
             $(SLO)$/genericunodialog.obj \
             $(SLO)$/registerservices.obj \
-            $(SLO)$/unoifac3.obj	\
-            $(SLO)$/unoifac2.obj	\
             $(SLO)$/unoiface.obj	\
             $(SLO)$/imgprod.obj
 

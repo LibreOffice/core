@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 18:22:48 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 10:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
     }
 
 // -------------------------------------------------------------------------------------
-IMPL_CREATEINSTANCE( SvtTextLoader )
+// IMPL_CREATEINSTANCE( SvtTextLoader )
 IMPL_CREATEINSTANCE2( ExtVCLXToolkit )
 DECLARE_CREATEINSTANCE( SvNumberFormatsSupplierServiceObject )
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
@@ -125,13 +125,13 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
         xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.ExtVCLXToolkit/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ExtToolkit" ) );
 
-        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/UNO/SERVICES" ) );
-        xNewKey->createKey( ::rtl::OUString::createFromAscii( "stardiv.one.frame.FrameLoader" ) );
-        xNewKey->createKey( ::rtl::OUString::createFromAscii( "stardiv.one.frame.TextLoader" ) );
-        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/UNO/Loader" ) );
-        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xLoaderKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/Loader" ) );
-        xNewKey = xLoaderKey->createKey( ::rtl::OUString::createFromAscii( "Pattern" ) );
-        xNewKey->setAsciiValue( ::rtl::OUString::createFromAscii( ".component:Text*" ) );
+//      xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/UNO/SERVICES" ) );
+//      xNewKey->createKey( ::rtl::OUString::createFromAscii( "stardiv.one.frame.FrameLoader" ) );
+//      xNewKey->createKey( ::rtl::OUString::createFromAscii( "stardiv.one.frame.TextLoader" ) );
+//      xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/UNO/Loader" ) );
+//      ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xLoaderKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.svtools.SvtTextLoader/Loader" ) );
+//      xNewKey = xLoaderKey->createKey( ::rtl::OUString::createFromAscii( "Pattern" ) );
+//      xNewKey->setAsciiValue( ::rtl::OUString::createFromAscii( ".component:Text*" ) );
 
         xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" ) );
@@ -152,14 +152,14 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
         ::com::sun::star::lang::XMultiServiceFactory* pServiceManager = reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( _pServiceManager );
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
 
-        if ( rtl_str_compare( sImplementationName, "stardiv.svtools.SvtTextLoader") == 0 )
-        {
-            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(2);
-            aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "stardiv.one.frame.FrameLoader" );
-            aServiceNames.getArray()[1] = ::rtl::OUString::createFromAscii( "stardiv.one.frame.TextLoader" );
-            xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvtTextLoader_CreateInstance, aServiceNames );
-        }
-        else if ( rtl_str_compare( sImplementationName, "stardiv.svtools.ExtVCLXToolkit" ) == 0 )
+//      if ( rtl_str_compare( sImplementationName, "stardiv.svtools.SvtTextLoader") == 0 )
+//      {
+//          ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(2);
+//          aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "stardiv.one.frame.FrameLoader" );
+//          aServiceNames.getArray()[1] = ::rtl::OUString::createFromAscii( "stardiv.one.frame.TextLoader" );
+//          xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvtTextLoader_CreateInstance, aServiceNames );
+//      }
+        if ( rtl_str_compare( sImplementationName, "stardiv.svtools.ExtVCLXToolkit" ) == 0 )
         {
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.ExtToolkit" );
