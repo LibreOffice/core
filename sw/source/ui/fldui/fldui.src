@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:27:28 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 09:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,7 +874,7 @@ String STR_DBFLD
     TEXT [ swedish ] = "Standardbrevfält" ;
     TEXT [ dutch ] = "Standaardbriefveld" ;
     TEXT [ spanish ] = "Campo de carta en serie" ;
-    TEXT [ english_us ] = "Mail merge field" ;
+    TEXT [ english_us ] = "Mail merge fields" ;
     TEXT[ chinese_simplified ] = "é‚®ä»¶åˆå¹¶å­—æ®µ";
     TEXT[ russian ] = "Ïîëÿ áàç äàííûõ";
     TEXT[ polish ] = "Pole korespondencji seryjnej";
