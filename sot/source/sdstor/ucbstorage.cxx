@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mav $ $Date: 2001-12-10 09:03:36 $
+ *  last change: $Author: mba $ $Date: 2001-12-14 17:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ public:
     String                      m_aURL;         // the full path name to create the content
     String                      m_aContentType;
     String                      m_aOriginalContentType;
+    ByteString                  m_aKey;
     ::ucb::Content*             m_pContent;     // the content that provides the data
     ::utl::TempFile*            m_pTempFile;    // temporary file for transacted mode
     Reference<XInputStream>     m_rSource;      // the stream covering the original data of the content
@@ -469,6 +470,8 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
 
         if ( pKey )
         {
+            m_aKey = *pKey;
+
             // stream is encrypted and should be decrypted (without setting the key we'll get the raw data)
             sal_uInt8 aBuffer[RTL_DIGEST_LENGTH_SHA1];
             rtlDigestError nError = rtl_digest_SHA1( pKey->GetBuffer(), pKey->Len(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
@@ -2412,26 +2415,33 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
             {
                 DBG_ERROR("Stream is already open!" );
                 SetError( SVSTREAM_ACCESS_DENIED );  // ???
+                return NULL;
             }
             else
             {
-                BOOL bIsWritable = ( pElement->m_xStream->m_nMode & STREAM_WRITE );
-                if ( !bIsWritable && ( nMode & STREAM_WRITE ) )
-                    pElement->m_xStream->SwitchToWritable( nMode, bDirect );
-//              DBG_ASSERT( bDirect == pElement->m_xStream->m_bDirect, "Wrong DirectMode!" );
-                pElement->m_xStream->m_pStream->Seek( 0 );
-                return new UCBStorageStream( pElement->m_xStream );
+                // check if stream is opened with the same keyword as before
+                // if not, generate a new stream because it could be encrypted vs. decrypted!
+                ByteString aKey;
+                if ( pKey )
+                    aKey = *pKey;
+                if ( pElement->m_xStream->m_aKey == aKey )
+                {
+                    BOOL bIsWritable = ( pElement->m_xStream->m_nMode & STREAM_WRITE );
+                    if ( !bIsWritable && ( nMode & STREAM_WRITE ) )
+                        pElement->m_xStream->SwitchToWritable( nMode, bDirect );
+    //              DBG_ASSERT( bDirect == pElement->m_xStream->m_bDirect, "Wrong DirectMode!" );
+                    pElement->m_xStream->m_pStream->Seek( 0 );
+                    return new UCBStorageStream( pElement->m_xStream );
+                }
             }
         }
-        else
-        {
-            // stream is opened the first time
-            pImp->OpenStream( pElement, nMode, bDirect, pKey );
 
-            // if name has been changed before creating the stream: set name!
-            pElement->m_xStream->m_aName = rEleName;
-            return new UCBStorageStream( pElement->m_xStream );
-        }
+        // stream is opened the first time
+        pImp->OpenStream( pElement, nMode, bDirect, pKey );
+
+        // if name has been changed before creating the stream: set name!
+        pElement->m_xStream->m_aName = rEleName;
+        return new UCBStorageStream( pElement->m_xStream );
     }
 
     return NULL;
