@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:15:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,39 +1120,76 @@ BOOL lcl_IsInColSct( const SwFrm *pUp )
 |*    Letzte Aenderung  MA 05. May. 95
 |*
 |*************************************************************************/
-BOOL SwFrm::IsMoveable() const
+/** determine, if frame is moveable in given environment
+
+    OD 08.08.2003 #110978#
+    method replaced 'old' method <BOOL IsMoveable() const>.
+    Determines, if frame is moveable in given environment. if no environment
+    is given (parameter _pLayoutFrm == 0L), the movability in the actual
+    environment (<this->GetUpper()) is checked.
+
+    @author OD
+*/
+bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
 {
-    if ( IsFlowFrm() )
+    bool bRetVal = false;
+
+    if ( !_pLayoutFrm )
     {
-        if( IsInSct() && lcl_IsInColSct( GetUpper() ) )
-            return TRUE;
-        if( IsInFly() || IsInDocBody() || IsInFtn() )
+        _pLayoutFrm = GetUpper();
+    }
+
+    if ( _pLayoutFrm && IsFlowFrm() )
+    {
+        if ( _pLayoutFrm->IsInSct() && lcl_IsInColSct( _pLayoutFrm ) )
         {
-            BOOL bRet = TRUE;
-
-            if ( IsInTab() && !IsTabFrm() &&
-                    ( !IsCntntFrm() || ( NULL == IsInSplitTableRow() ) ) )
-                return FALSE;
-
-            if ( IsInFly() )
+            bRetVal = true;
+        }
+        else if ( _pLayoutFrm->IsInFly() ||
+                  _pLayoutFrm->IsInDocBody() ||
+                  _pLayoutFrm->IsInFtn() )
+        {
+            if ( _pLayoutFrm->IsInTab() && !IsTabFrm() &&
+                 ( !IsCntntFrm() || ( NULL == IsInSplitTableRow() ) ) )
             {
-                //Wenn der Fly noch einen Follow hat ist der Inhalt auf jeden
-                //Fall moveable
-                if ( !((SwFlyFrm*)FindFlyFrm())->GetNextLink() )
+                bRetVal = false;
+            }
+            else
+            {
+                if ( _pLayoutFrm->IsInFly() )
                 {
-                    //Fuer Inhalt innerhab von Spaltigen Rahmen ist nur der Inhalt
-                    //der letzten Spalte nicht moveable.
-                    const SwFrm *pCol = GetUpper();
-                    while ( pCol && !pCol->IsColumnFrm() )
-                        pCol = pCol->GetUpper();
-                    if ( !pCol || (pCol && !pCol->GetNext()) )
-                        bRet = FALSE;
+                    // if fly frame has a follow (next linked fly frame),
+                    // frame is moveable.
+                    if ( const_cast<SwLayoutFrm*>(_pLayoutFrm)->FindFlyFrm()->GetNextLink() )
+                    {
+                        bRetVal = true;
+                    }
+                    else
+                    {
+                        // if environment is columned, frame is moveable, if
+                        // it isn't in last column.
+                        // search for column frame
+                        const SwFrm* pCol = _pLayoutFrm;
+                        while ( pCol && !pCol->IsColumnFrm() )
+                        {
+                            pCol = pCol->GetUpper();
+                        }
+                        // frame is moveable, if found column frame isn't last one.
+                        if ( pCol && pCol->GetNext() )
+                        {
+                            bRetVal = true;
+                        }
+                    }
+                }
+                else
+                {
+                    bRetVal = true;
                 }
             }
-            return bRet;
         }
     }
-    return FALSE;
+
+    return bRetVal;
 }
 
 
