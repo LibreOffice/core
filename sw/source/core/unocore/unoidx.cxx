@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2001-11-14 13:42:35 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,8 +416,11 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
     vos::OGuard aGuard(Application::GetSolarMutex());
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                         _pMap, rPropertyName);
-    if(!pMap)
-        throw UnknownPropertyException();
+    if (!pMap)
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+    if ( pMap->nFlags & PropertyAttribute::READONLY)
+        throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+
     SwTOXBase* pTOXBase;
     if(GetFmt())
         pTOXBase = (SwTOXBaseSection*)GetFmt()->GetSection();
@@ -679,8 +682,8 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                     _pMap, rPropertyName);
-    if(!pMap)
-        throw UnknownPropertyException();
+    if (!pMap)
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     SwTOXBase* pTOXBase;
     if(GetFmt())
         pTOXBase = (SwTOXBaseSection*)GetFmt()->GetSection();
@@ -1613,11 +1616,10 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
     SwTOXType* pType = ((SwXDocumentIndexMark*)this)->GetTOXType();
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                         _pMap, rPropertyName);
-    if(!pMap)
-        throw UnknownPropertyException();
-    if(pMap->nFlags & PropertyAttribute::READONLY)
-        throw IllegalArgumentException();
-
+    if (!pMap)
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+    if ( pMap->nFlags & PropertyAttribute::READONLY)
+        throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
     if(pType)
     {
         SwDoc* pLocalDoc = m_pDoc;
@@ -1736,8 +1738,8 @@ uno::Any SwXDocumentIndexMark::getPropertyValue(const OUString& rPropertyName)
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                         _pMap, rPropertyName);
 
-    if(!pMap)
-        throw UnknownPropertyException();
+    if (!pMap)
+        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
      if(SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName, pMap->nWID))
         return aRet;
     if(pType)
