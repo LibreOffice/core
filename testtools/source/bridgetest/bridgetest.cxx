@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: svesik $ $Date: 2004-04-21 13:48:58 $
-#*    $Revision: 1.10 $
+#*    last change   $Author: obo $ $Date: 2004-06-03 15:00:13 $
+#*    $Revision: 1.11 $
 #*
 #*    $Logfile: $
 #*
@@ -28,9 +28,15 @@
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Type.hxx"
 
-#include <com/sun/star/test/bridge/XBridgeTest.hpp>
-#include <com/sun/star/test/bridge/XBridgeTest2.hpp>
+#include "test/testtools/bridgetest/TestPolyStruct.hpp"
+#include "test/testtools/bridgetest/XBridgeTest.hpp"
+#include "test/testtools/bridgetest/XBridgeTest2.hpp"
+#include "test/testtools/bridgetest/XMulti.hpp"
+
+#include "multi.hxx"
 
 using namespace rtl;
 using namespace osl;
@@ -39,7 +45,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::bridge;
-using namespace com::sun::star::test::bridge;
+using namespace test::testtools::bridgetest;
 
 #define SERVICENAME     "com.sun.star.test.bridge.BridgeTest"
 #define IMPLNAME        "com.sun.star.comp.bridge.BridgeTest"
@@ -271,7 +277,7 @@ private:
 
 public:
     void SAL_CALL callRecursivly(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::test::bridge::XRecursiveCall >& xCall,
+        const ::com::sun::star::uno::Reference< XRecursiveCall >& xCall,
         sal_Int32 nToCall )
         throw(::com::sun::star::uno::RuntimeException)
         {
@@ -480,6 +486,80 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
         aRet2 = xLBT->getStruct();
 
         bRet = check( equals( aData, aRet ) && equals( aData, aRet2 ) , "struct comparison test") && bRet;
+
+        // Test extended attributes that raise exceptions:
+        try {
+            xLBT->getRaiseAttr1();
+            bRet &= check(false, "getRaiseAttr1 did not throw");
+        } catch (RuntimeException &) {
+        } catch (...) {
+            bRet &= check(false, "getRaiseAttr1 threw wrong type");
+        }
+        try {
+            xLBT->setRaiseAttr1(0);
+            bRet &= check(false, "setRaiseAttr1 did not throw");
+        } catch (IllegalArgumentException &) {
+        } catch (...) {
+            bRet &= check(false, "setRaiseAttr1 threw wrong type");
+        }
+        try {
+            xLBT->getRaiseAttr2();
+            bRet &= check(false, "getRaiseAttr2 did not throw");
+        } catch (IllegalArgumentException &) {
+        } catch (...) {
+            bRet &= check(false, "getRaiseAttr2 threw wrong type");
+        }
+
+        // Test instantiated polymorphic struct types:
+        {
+        bRet &= check(
+            xLBT->transportPolyBoolean(TestPolyStruct< sal_Bool >(true)).member,
+            "transportPolyBoolean");
+        TestPolyStruct< sal_uInt64 > tps1(12345);
+        xLBT->transportPolyUnsignedHyper(tps1);
+        bRet &= check(tps1.member == 12345, "transportPolyUnsignedHyper");
+        Sequence< Any > seq(2);
+        seq[0] <<= static_cast< sal_uInt32 >(33);
+        seq[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ABC"));
+        TestPolyStruct< Sequence< Any > > tps2(seq);
+        TestPolyStruct< Sequence< Any > > tps3;
+        xLBT->transportPolySequence(tps2, tps3);
+        bRet &= check(
+            tps3.member.getLength() == 2, "transportPolySequence, length");
+        sal_uInt32 v0;
+        tps3.member[0] >>= v0;
+        bRet &= check(v0 == 33, "transportPolySequence, element 0");
+        rtl::OUString v1;
+        tps3.member[1] >>= v1;
+        bRet &= check(
+            v1.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ABC")),
+            "transportPolySequence, element 1");
+        bRet &= check(xLBT->getNullPolyLong().member == 0, "getNullPolyLong");
+        bRet &= check(
+            xLBT->getNullPolyString().member.getLength() == 0,
+            "getNullPolyString");
+        bRet &= check(
+            xLBT->getNullPolyType().member == Type(), "getNullPolyType");
+        Any nullAny(xLBT->getNullPolyAny().member);
+        bRet &= check(
+            (((nullAny.getValueTypeName()
+               == rtl::OUString(
+                   RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.XInterface")))
+              && !static_cast< Reference< XInterface > const * >(
+                  nullAny.getValue())->is())
+             || nullAny == Any()),
+            "getNullPolyAny");
+        bRet &= check(
+            xLBT->getNullPolySequence().member.getLength() == 0,
+            "getNullPolySequence");
+        bRet &= check(
+            xLBT->getNullPolyEnum().member == TestEnum_TEST, "getNullPolyEnum");
+        bRet &= check(
+            xLBT->getNullPolyStruct().member.member == 0, "getNullPolyStruct");
+        bRet &= check(
+            !xLBT->getNullPolyInterface().member.is(), "getNullPolyInterface");
+        }
+
         // any test
         bRet = check( performAnyTest( xLBT , aData ) , "any test" ) && bRet;
 
@@ -490,6 +570,19 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
         bRet = check( performRecursiveCallTest( xLBT ) , "recursive test" ) && bRet;
 
         bRet = (equals( aData, aRet ) && equals( aData, aRet2 )) && bRet ;
+
+        // multiple inheritance test
+        Reference< XMulti > multi1(xLBT->getMulti());
+        bRet &= check(multi1->f1() == 1, "multi1, f1");
+        bRet &= check(multi1->f2() == 2, "multi1, f2");
+        bRet &= check(multi1->f3() == 3, "multi1, f3");
+        multi1->seta(4);
+        bRet &= check(multi1->geta() == 4, "multi1, a");
+        Reference< XMulti > multi2(new testtools::bridgetest::Multi);
+        bRet &= check(xLBT->testMultiF1(multi2) == 1, "multi2, f1");
+        bRet &= check(xLBT->testMultiF2(multi2) == 2, "multi2, f2");
+        bRet &= check(xLBT->testMultiF3(multi2) == 3, "multi2, f3");
+        bRet &= check(xLBT->testMultiA(multi2, 4) == 4, "multi2, a");
         }
 
     }
