@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:56:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1581,7 +1581,7 @@ MOVEPAGE:
             //  print preview is now always in the same frame as the tab view
             //  -> always switch this frame back to normal view
             //  (ScTabViewShell ctor reads stored view data)
-            GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, NULL, 0, SFX_CALLMODE_ASYNCHRON );
+            GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, 0, 0, SFX_CALLMODE_ASYNCHRON );
             break;
         case FN_INSERT_BREAK:
         {
