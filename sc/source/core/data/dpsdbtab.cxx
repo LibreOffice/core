@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsdbtab.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:57 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,6 +580,15 @@ BOOL ScDatabaseDPData::GetNextRow( const ScDPTableIteratorParam& rParam )
                     rParam.pRowData[i].SetString( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("x")) );
                 else
                     lcl_FillItemData( rParam.pRowData[i], xRow, nDim+1, pImpl->pTypes[nDim], FALSE, pImpl );
+            }
+
+            for (i=0; i<rParam.nPageCount; i++)
+            {
+                long nDim = rParam.pPages[i];
+                if ( getIsDataLayoutDimension(nDim) )
+                    rParam.pPageData[i].SetString( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("x")) );
+                else
+                    lcl_FillItemData( rParam.pPageData[i], xRow, nDim+1, pImpl->pTypes[nDim], FALSE, pImpl );
             }
 
             for (i=0; i<rParam.nDatCount; i++)
