@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_dlg.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:27:07 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 07:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,20 +84,21 @@
 #define STR_COULD_NOT_CREATE_DIRECTORY      RID_STR_DLG_START + 16
 #define STR_ADDRESSBOOK_SYSTEM              RID_STR_DLG_START + 17
 #define STR_ADDRESSBOOK_MOZILLA             RID_STR_DLG_START + 18
-#define STR_ADDRESSBOOK_LDAP                RID_STR_DLG_START + 19
-#define STR_ADDRESSBOOK_OUTLOOK             RID_STR_DLG_START + 20
-#define STR_COMMAND_EXECUTED_SUCCESSFULLY   RID_STR_DLG_START + 21
-#define STR_DIRECTSQL_CONNECTIONLOST        RID_STR_DLG_START + 22
-#define STR_CALCDOC_DOESNOTEXIST            RID_STR_DLG_START + 23
-#define STR_HINT_READONLY_CONNECTION        RID_STR_DLG_START + 24
-#define STR_HINT_CONNECTION_NOT_CAPABLE     RID_STR_DLG_START + 25
-#define STR_LINKEDDOC_DOESNOTEXIST          RID_STR_DLG_START + 26
-#define STR_TAB_INDEX_SORTORDER             RID_STR_DLG_START + 27
-#define STR_TAB_INDEX_FIELD                 RID_STR_DLG_START + 28
-#define STR_ORDER_ASCENDING                 RID_STR_DLG_START + 29
-#define STR_ORDER_DESCENDING                RID_STR_DLG_START + 30
-#define STR_CONFIRM_DROP_INDEX              RID_STR_DLG_START + 31
-#define STR_LOGICAL_INDEX_NAME              RID_STR_DLG_START + 32
+#define STR_ADDRESSBOOK_EVOLUTION           RID_STR_DLG_START + 19
+#define STR_ADDRESSBOOK_LDAP                RID_STR_DLG_START + 20
+#define STR_ADDRESSBOOK_OUTLOOK             RID_STR_DLG_START + 21
+#define STR_COMMAND_EXECUTED_SUCCESSFULLY   RID_STR_DLG_START + 22
+#define STR_DIRECTSQL_CONNECTIONLOST        RID_STR_DLG_START + 23
+#define STR_CALCDOC_DOESNOTEXIST            RID_STR_DLG_START + 24
+#define STR_HINT_READONLY_CONNECTION        RID_STR_DLG_START + 25
+#define STR_HINT_CONNECTION_NOT_CAPABLE     RID_STR_DLG_START + 26
+#define STR_LINKEDDOC_DOESNOTEXIST          RID_STR_DLG_START + 27
+#define STR_TAB_INDEX_SORTORDER             RID_STR_DLG_START + 28
+#define STR_TAB_INDEX_FIELD                 RID_STR_DLG_START + 29
+#define STR_ORDER_ASCENDING                 RID_STR_DLG_START + 30
+#define STR_ORDER_DESCENDING                RID_STR_DLG_START + 31
+#define STR_CONFIRM_DROP_INDEX              RID_STR_DLG_START + 32
+#define STR_LOGICAL_INDEX_NAME              RID_STR_DLG_START + 33
 
 // please adjust checking before insert new strings
 
