@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 09:32:17 $
+ *  last change: $Author: pb $ $Date: 2001-01-31 14:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,11 +160,11 @@ void SvxLineBox::Select()
     if ( !IsTravelSelect() )
     {
         XLineStyle eXLS;
-        USHORT nPos = GetSelectEntryPos();
+        nCurPos = GetSelectEntryPos();
         SfxDispatcher* pDisp = rBindings.GetDispatcher();
         DBG_ASSERT( pDisp, "invalid Dispatcher" );
 
-        switch ( nPos )
+        switch ( nCurPos )
         {
             case 0:
                 eXLS = XLINE_NONE;
@@ -178,7 +178,7 @@ void SvxLineBox::Select()
             {
                 eXLS = XLINE_DASH;
 
-                if ( nPos != LISTBOX_ENTRY_NOTFOUND &&
+                if ( nCurPos != LISTBOX_ENTRY_NOTFOUND &&
                      SfxObjectShell::Current()  &&
                      SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) )
                 {
@@ -187,7 +187,7 @@ void SvxLineBox::Select()
                     SvxDashListItem aItem( *(const SvxDashListItem*)(
                         SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) ) );
                     XLineDashItem aLineDashItem( GetSelectEntry(),
-                        aItem.GetDashList()->Get( nPos - 2 )->GetDash() );
+                        aItem.GetDashList()->Get( nCurPos - 2 )->GetDash() );
                     pDisp->Execute( SID_ATTR_LINE_DASH, SFX_CALLMODE_RECORD, &aLineDashItem, 0L );
                 }
             }
@@ -208,6 +208,8 @@ long SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         nCurPos = GetSelectEntryPos();
+    else if ( EVENT_LOSEFOCUS == nType && GetSelectEntryPos() != nCurPos )
+        SelectEntryPos( nCurPos );
 
     return LineLB::PreNotify( rNEvt );
 }
@@ -321,6 +323,7 @@ void SvxColorBox::Select()
 {
     if ( !IsTravelSelect() )
     {
+        nCurPos = GetSelectEntryPos();
         XLineColorItem aLineColorItem( GetSelectEntry(), GetSelectEntryColor() );
         rBindings.GetDispatcher()->Execute( nId, SFX_CALLMODE_RECORD, &aLineColorItem, 0L );
         ReleaseFocus_Impl();
@@ -335,6 +338,8 @@ long SvxColorBox::PreNotify( NotifyEvent& rNEvt )
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         nCurPos = GetSelectEntryPos();
+    else if ( EVENT_LOSEFOCUS == nType && GetSelectEntryPos() != nCurPos )
+        SelectEntryPos( nCurPos );
 
     return ColorLB::PreNotify( rNEvt );
 }
@@ -651,6 +656,8 @@ long SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         nCurPos = GetSelectEntryPos();
+    else if ( EVENT_LOSEFOCUS == nType && GetSelectEntryPos() != nCurPos )
+        SelectEntryPos( nCurPos );
 
     return FillAttrLB::PreNotify( rNEvt );
 }
@@ -669,6 +676,7 @@ long SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
         {
             case KEY_RETURN:
                 ( (Link&)GetSelectHdl() ).Call( this );
+                nCurPos = GetSelectEntryPos();
                 nHandled = 1;
                 break;
 
@@ -680,6 +688,15 @@ long SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
         }
     }
     return nHandled;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxFillAttrBox::Select()
+{
+    FillAttrLB::Select();
+    if ( !IsTravelSelect() )
+        nCurPos = GetSelectEntryPos();
 }
 
 // -----------------------------------------------------------------------
