@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BuildParcelAction.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-20 11:59:21 $
+ *  last change: $Author: toconnor $ $Date: 2003-03-04 12:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,16 @@ import org.openide.compiler.Compiler;
 import org.openide.compiler.CompilerJob;
 import org.openide.compiler.CompilerTask;
 
+import org.openoffice.netbeans.modules.office.utils.FrameworkJarChecker;
+
 public class BuildParcelAction extends BuildAllAction {
     public String getName() {
         return "Build";
     }
 
     protected void performAction(Node[] activatedNodes) {
+        FrameworkJarChecker.mountDependencies();
+
         for (int i = 0; i < activatedNodes.length; i++) {
             Vector v = new Vector(1);
             v.addElement(activatedNodes[i]);

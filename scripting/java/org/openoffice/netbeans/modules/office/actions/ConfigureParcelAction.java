@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigureParcelAction.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-20 11:59:21 $
+ *  last change: $Author: toconnor $ $Date: 2003-03-04 12:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@ import org.openide.util.HelpCtx;
 import org.openide.util.RequestProcessor;
 import org.openide.util.actions.CookieAction;
 
+import org.openoffice.netbeans.modules.office.utils.FrameworkJarChecker;
+
 public class ConfigureParcelAction extends CookieAction {
 
     public java.lang.String getName() {
@@ -86,6 +88,8 @@ public class ConfigureParcelAction extends CookieAction {
 
     protected void performAction(final Node[] activatedNodes)
     {
+        FrameworkJarChecker.mountDependencies();
+
         RequestProcessor.getDefault().post(new Runnable() {
             public void run() {
                 for (int i = 0; i < activatedNodes.length; i++) {

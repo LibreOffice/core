@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CompileParcelAction.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-20 11:59:21 $
+ *  last change: $Author: toconnor $ $Date: 2003-03-04 12:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,15 @@ package org.openoffice.netbeans.modules.office.actions;
 import org.openide.nodes.Node;
 import org.openide.actions.CompileAllAction;
 
+import org.openoffice.netbeans.modules.office.utils.FrameworkJarChecker;
+
 public class CompileParcelAction extends CompileAllAction {
     public String getName() {
         return "Compile";
     }
 
     protected void performAction(Node[] activatedNodes) {
+        FrameworkJarChecker.mountDependencies();
         super.performAction(activatedNodes);
     }
 }
