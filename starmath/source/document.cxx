@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:58:16 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,8 +346,11 @@ void SmDocShell::SetText(const String& rBuffer)
             EnableSetModified( FALSE );
 
         aText = rBuffer;
+        SetFormulaArranged( FALSE );
+
         Parse();
         //Repaint();
+
         SmViewShell *pViewSh = SmGetActiveView();
         if( pViewSh )
         {
@@ -422,16 +425,17 @@ void SmDocShell::ArrangeFormula()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ArrangeFormula" );
 
-    //! Nur fuer die Dauer der Existenz dieses Objekts sind am Drucker die
+    if (IsFormulaArranged())
+        return;
+
+    //! Nur für die Dauer der Existenz dieses Objekts sind am Drucker die
     //! richtigen Einstellungen garantiert.
     SmPrinterAccess  aPrtAcc(*this);
 //  OutputDevice    *pOutDev = aPrtAcc.GetPrinter();
     OutputDevice* pOutDev = aPrtAcc.GetRefDev();
 
-#ifndef PRODUCT
     if (!pOutDev)
-        DBG_WARNING("Sm : kein Drucker vorhanden");
-#endif
+        DBG_ERROR("!! SmDocShell::ArrangeFormula: reference device missing !!");
 
     // falls naetig ein anderes OutputDevice holen fuer das formatiert wird
     if (!pOutDev)
@@ -440,7 +444,8 @@ void SmDocShell::ArrangeFormula()
         if (pView)
             pOutDev = &pView->GetGraphicWindow();
         else
-        {   pOutDev = &SM_MOD1()->GetDefaultVirtualDev();
+        {
+            pOutDev = &SM_MOD1()->GetDefaultVirtualDev();
             pOutDev->SetMapMode( MapMode(MAP_100TH_MM) );
         }
     }
@@ -805,9 +810,7 @@ void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
 
 void SmDocShell::Repaint()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Resize" );
-
-    Size aVisSize = GetSize();
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Repaint" );
 
     BOOL bIsEnabled = IsEnableSetModified();
     if ( bIsEnabled )
@@ -815,6 +818,7 @@ void SmDocShell::Repaint()
 
     SetFormulaArranged( FALSE );
 
+    Size aVisSize = GetSize();
     SetVisAreaSize( aVisSize );
     SmViewShell *pViewSh = SmGetActiveView();
     if (pViewSh)
@@ -877,34 +881,6 @@ BOOL SmDocShell::SetData( const String& rData )
     return TRUE;
 }
 
-void SmDocShell::ConvertText( String &rText, SmConvert eConv )
-    // adapts the text 'rText' that suits one office version to be
-    // usable in another office version.
-    // Example: "2 over sin x" acts very different in 4.0 and 5.0,
-    // and from 5.2 to 6.0 many symbol names were renamed.
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ConvertText" );
-
-    if (pTree)
-        delete pTree;
-
-    SmConvert  eTmpConv = aInterpreter.GetConversion();
-
-    // parse in old style and make changes for new style
-    aInterpreter.SetConversion(eConv);
-    pTree = aInterpreter.Parse(rText);
-    // get to new version converted text
-    rText = aInterpreter.GetText();
-
-    aInterpreter.SetConversion(eTmpConv);
-
-    // clean up tree parsed in old style
-    if (pTree)
-    {   delete pTree;
-        pTree = NULL;
-    }
-}
-
 
 BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
 {
@@ -944,13 +920,17 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
             }
             else
             {
-                bSuccess = ImportSM20File( pStream );
+                //bSuccess = ImportSM20File( pStream );
             }
         }
     }
 
     if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        OnDocumentPrinterChanged(0);
+    {
+        //???OnDocumentPrinterChanged(0);
+        SetFormulaArranged( FALSE );
+        Repaint();
+    }
 
     FinishedLoading( SFX_LOADED_ALL );
     return bSuccess;
@@ -977,7 +957,7 @@ BOOL SmDocShell::InsertFrom(SfxMedium &rMedium)
         }
         else
         {
-            bSuccess = ImportSM20File( pStream );
+            //bSuccess = ImportSM20File( pStream );
         }
     }
 
@@ -1044,7 +1024,11 @@ BOOL SmDocShell::Load( SfxMedium& rMedium )
     }
 
     if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        OnDocumentPrinterChanged(0);
+    {
+        //???OnDocumentPrinterChanged(0);
+        SetFormulaArranged( FALSE );
+        Repaint();
+    }
 
     FinishedLoading( SFX_LOADED_ALL );
     return bRet;
@@ -1101,24 +1085,6 @@ BOOL SmDocShell::Insert( SfxMedium& rMedium )
 
 //------------------------------------------------------------------
 
-void SmDocShell::ImplSave( SvStorageStreamRef xStrm )
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ImplSave" );
-
-    String aTmp( aText );
-    if (SOFFICE_FILEFORMAT_50 >= xStrm->GetVersion())
-        ConvertText( aTmp, CONVERT_60_TO_50 );
-    ByteString exString( ExportString( aTmp ) );
-
-    *xStrm  << SM304AIDENT << SM50VERSION
-            << 'T';
-    xStrm->WriteByteString(exString);
-    *xStrm  << 'F' << aFormat
-            << 'S';
-    xStrm->WriteByteString( ExportString(C2S("unknown")) );
-    *xStrm  << (USHORT) 0
-            << '\0';
-}
 
 BOOL SmDocShell::Save()
 {
@@ -1209,8 +1175,6 @@ BOOL SmDocShell::ConvertTo( SfxMedium &rMedium )
             aEquation.SetFlat(sal_True);
             bRet = aEquation.Export(rMedium);
         }
-        else if( pFlt->GetFilterName().EqualsAscii("MathType 3.x"))
-            bRet = WriteAsMathType3( rMedium );
     }
     return bRet;
 }
@@ -1221,77 +1185,6 @@ BOOL SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::s
 
     if( SfxObjectShell::SaveCompleted( xStorage ))
         return TRUE;
-
-    return FALSE;
-}
-
-
-
-BOOL SmDocShell::ImportSM20File(SvStream *pStream)
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ImportSM20File" );
-
-    void ReadSM20SymSet(SvStream*, SmSymSet*);
-
-    char         cTag;
-    ULONG        lIdent, lVersion;
-    long         lTime;
-    ULONG        lDate;
-    String       aBuffer;
-    ByteString   aByteStr;
-    SmSymSet    *pSymbolSet;
-    ULONG        FilePos = pStream->Tell();
-
-    *pStream >> lIdent >> lVersion;
-
-    if (lIdent == FRMIDENT)
-    {
-        DBG_ASSERT((lVersion == FRMVERSION), "Illegal file version");
-
-        *pStream >> cTag;
-        rtl_TextEncoding eEnc = RTL_TEXTENCODING_MS_1252;
-        while (cTag && !pStream->IsEof())
-        {
-            switch (cTag)
-            {
-                case 'T':
-                    pStream->ReadByteString( aByteStr );
-                    aText = ImportString( aByteStr );
-                    Parse();
-                    break;
-
-                case 'D':
-                    {
-                        pStream->ReadByteString(aBuffer, eEnc);
-                        pStream->ReadByteString(aBuffer, eEnc);
-                        *pStream >> lDate >> lTime;
-                        pStream->ReadByteString(aBuffer, eEnc);
-                        *pStream >> lDate >> lTime;
-                        pStream->ReadByteString(aBuffer, eEnc);
-                    }
-                    break;
-
-                case 'F':
-                    aFormat.ReadSM20Format(*pStream);
-                    aFormat.From300To304a();
-                    break;
-
-                case 'S':
-                    pSymbolSet = new SmSymSet();
-                    ReadSM20SymSet(pStream, pSymbolSet);
-                    delete pSymbolSet;
-                    break;
-
-                default:
-                    DBG_ASSERT((cTag != 0), "Illegal data tag");
-            }
-            *pStream >> cTag;
-        }
-
-        return TRUE;
-    }
-
-    pStream->Seek(FilePos);
 
     return FALSE;
 }
@@ -1775,191 +1668,6 @@ void SmDocShell::SetVisArea(const Rectangle & rVisArea)
 }
 
 
-BOOL SmDocShell::Try3x (SvStorage *pStor,
-                        StreamMode eMode)
-
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Try3x" );
-
-    BOOL bRet = FALSE;
-
-    SvStorageStreamRef aTempStream = pStor->OpenSotStream(
-                                String::CreateFromAscii(pStarMathDoc), eMode);
-    aTempStream->SetVersion (pStor->GetVersion ());
-    GetPool().SetFileFormatVersion (USHORT(pStor->GetVersion()));
-    aTempStream->SetBufferSize(DOCUMENT_BUFFER_SIZE);
-    aTempStream->SetKey( pStor->GetKey() ); // Passwort setzen
-
-    if (aTempStream->GetError() == 0)
-    {
-        SvStream*    pSvStream = aTempStream;
-        char         cTag;
-        ULONG        lIdent, lVersion;
-        long         lTime;
-        ULONG        lDate;
-        String       aBuffer;
-        ByteString   aByteStr;
-
-        *pSvStream >> lIdent >> lVersion;
-
-        if ((lIdent == SM30IDENT) || (lIdent == SM30BIDENT) || (lIdent == SM304AIDENT))
-        {
-            DBG_ASSERT((lVersion == SM30VERSION) ||
-                       (lVersion == SM50VERSION), "Illegal file version");
-
-            *pSvStream >> cTag;
-            rtl_TextEncoding eEnc = RTL_TEXTENCODING_MS_1252;
-            while (cTag && !pSvStream->IsEof())
-            {
-                switch (cTag)
-                {
-                    case 'T':
-                        pSvStream->ReadByteString( aByteStr );
-                        aText = ImportString( aByteStr );
-                        Parse();
-                        break;
-
-                    case 'D':
-                        pSvStream->ReadByteString(aBuffer, eEnc);
-                        pSvStream->ReadByteString(aBuffer, eEnc);
-                        *pSvStream >> lDate >> lTime;
-                        pSvStream->ReadByteString(aBuffer, eEnc);
-                        *pSvStream >> lDate >> lTime;
-                        pSvStream->ReadByteString(aBuffer, eEnc);
-                        break;
-
-                    case 'F':
-                        *pSvStream >> aFormat;
-                        if (lIdent != SM304AIDENT)
-                            aFormat.From300To304a ();
-                        else if ( lVersion == SM30VERSION )
-                        {
-                            aFormat.SetDistance(DIS_LEFTSPACE, 100);
-                            aFormat.SetDistance(DIS_RIGHTSPACE, 100);
-                            aFormat.SetDistance(DIS_TOPSPACE, 100);
-                            aFormat.SetDistance(DIS_BOTTOMSPACE, 100);
-                        }
-                        break;
-
-                    case 'S':
-                    {
-                        String      aTmp;
-                        USHORT      n;
-                        pSvStream->ReadByteString(aTmp, eEnc);
-                        *pSvStream >> n;
-                        break;
-                    }
-
-                    default:
-                        DBG_ASSERT((cTag != 0), "Illegal data tag");
-                }
-                *pSvStream >> cTag;
-            }
-
-            bRet = TRUE;
-        }
-    }
-
-    if (!bRet)
-    {
-        // kein Passwort gesetzt --> Datei marode
-        if (pStor->GetKey().Len() == 0)
-        {
-            SetError(ERRCODE_SFX_DOLOADFAILED);
-        }
-        // Passwort gesetzt --> war wohl falsch
-        else
-        {
-            SetError(ERRCODE_SFX_WRONGPASSWORD);
-        }
-    }
-
-    return bRet;
-}
-
-
-
-BOOL SmDocShell::Try2x (SvStorage *pStor,
-                        StreamMode eMode)
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Try2x" );
-
-    SvStorageStreamRef aTempStream = pStor->OpenSotStream(C2S("\1Ole10Native"), eMode);
-    aTempStream->SetVersion (pStor->GetVersion ());
-    GetPool().SetFileFormatVersion(USHORT(pStor->GetVersion ()));
-
-    if (aTempStream->GetError() == SVSTREAM_OK)
-    {
-        void ReadSM20SymSet(SvStream*, SmSymSet*);
-
-        SvStream*    pSvStream = aTempStream;
-        char         cTag;
-        ULONG        lIdent, lVersion;
-        long         lTime;
-        ULONG        lDate;
-        UINT32       lDataSize;
-        String       aBuffer;
-        ByteString   aByteStr;
-        SmSymSet    *pSymbolSet;
-
-        *pSvStream >> lDataSize >> lIdent >> lVersion;
-
-        if (lIdent == FRMIDENT)
-        {
-            DBG_ASSERT((lVersion == FRMVERSION), "Illegal file version");
-
-            *pSvStream >> cTag;
-            rtl_TextEncoding eEnc = RTL_TEXTENCODING_MS_1252;
-            while (cTag && !pSvStream->IsEof())
-            {
-                switch (cTag)
-                {
-                    case 'T':
-                        pSvStream->ReadByteString( aByteStr );
-                        aText = ImportString( aByteStr );
-                        Parse();
-                        break;
-
-                    case 'D':
-                        {
-                            pSvStream->ReadByteString(aBuffer, eEnc);
-                            pSvStream->ReadByteString(aBuffer, eEnc);
-                            *pSvStream >> lDate >> lTime;
-                            pSvStream->ReadByteString(aBuffer, eEnc);
-                            *pSvStream >> lDate >> lTime;
-                            pSvStream->ReadByteString(aBuffer, eEnc);
-                        }
-                        break;
-
-                    case 'F':
-                        {
-                            //SmFormat aFormat;
-                            aFormat.ReadSM20Format(*pSvStream);
-                            aFormat.From300To304a ();
-                        }
-                        break;
-
-                    case 'S':
-                    {
-                        pSymbolSet = new SmSymSet();
-                        ReadSM20SymSet(pSvStream, pSymbolSet);
-                        delete pSymbolSet;
-                        break;
-                    }
-
-                    default:
-                        DBG_ASSERT((cTag != 0), "Illegal data tag");
-                }
-                *pSvStream >> cTag;
-            }
-
-            return TRUE;
-        }
-    }
-
-    return FALSE;
-}
-
 void SmDocShell::UIActivate (BOOL bActivate)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::UIActivate" );
@@ -2030,16 +1738,5 @@ void SmDocShell::SetModified(BOOL bModified)
         SfxObjectShell::SetModified( bModified );
     Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
 }
-
-BOOL SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::WriteAsMathType3" );
-
-    MathType aEquation( aText, pTree );
-
-    BOOL bRet = 0 != aEquation.ConvertFromStarMath( rMedium );
-    return bRet;
-}
-
 
 
