@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 08:16:56 $
+#   last change: $Author: rt $ $Date: 2004-09-17 13:48:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -156,6 +156,7 @@ SLOFILES =  \
         $(SLO)$/brkdlg.obj      \
         $(SLO)$/vectdlg.obj		\
         $(SLO)$/docprev.obj     \
+        $(SLO)$/SpellDialogChildWindow.obj \
         $(SLO)$/AnimationChildWindow.obj	\
         $(SLO)$/EffectChildWindow.obj		\
         $(SLO)$/LayerDialogChildWindow.obj	\
@@ -210,8 +211,9 @@ LIB1OBJFILES= \
         $(SLO)$/PreviewWindow.obj			\
         $(SLO)$/PreviewChildWindow.obj		\
         $(SLO)$/SlideChangeChildWindow.obj	\
+        $(SLO)$/SpellDialogChildWindow.obj \
         $(SLO)$/TemplateScanner.obj \
-                $(SLO)$/sdabstdlg.obj 		\
+                $(SLO)$/sdabstdlg.obj \
         $(SLO)$/PaneChildWindows.obj		\
         $(SLO)$/PaneDockingWindow.obj
 
