@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:34 $
+ *  last change:$Date: 2003-02-12 14:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ public class OfficeProvider implements AppProvider {
      */
     public Object getManager(lib.TestParameters param) {
         String cncstr = "uno:"+param.get("ConnectionString")+
-                                                ";urp;StarOffice.NamingService";
+                                                ";urp;StarOffice.ServiceManager";
         debug = ((Boolean) param.get("DebugIsActive")).booleanValue();
         XMultiServiceFactory msf = null;
         String exc = "";
@@ -185,16 +185,12 @@ public class OfficeProvider implements AppProvider {
 
         Object rInitialObject = urlResolver.resolve( connectStr );
 
-        XNamingService rName = (XNamingService)UnoRuntime.queryInterface(
-                                        XNamingService.class, rInitialObject );
-
         XMultiServiceFactory xMSF = null;
-        if( rName != null ) {
-            if (debug) System.out.println( "got the remote naming service !" );
-            Object rXsmgr = rName.getRegisteredObject("StarOffice.ServiceManager" );
 
+        if( rInitialObject != null ) {
+            if (debug) System.out.println( "resolved url" );
             xMSF = (XMultiServiceFactory)
-            UnoRuntime.queryInterface( XMultiServiceFactory.class, rXsmgr );
+            UnoRuntime.queryInterface( XMultiServiceFactory.class, rInitialObject );
         }
 
         return ( xMSF );
