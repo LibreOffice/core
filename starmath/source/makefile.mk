@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 09:04:13 $
+#   last change: $Author: pjunck $ $Date: 2004-11-02 15:58:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,6 +141,9 @@ LIB1OBJFILES = \
 CDEFS+=-DUSE_POLYGON
 .ENDIF
 
+LOCALIZE_ME =  menu_tmpl.src
+
+
 .INCLUDE :  target.mk
 
 $(INCCOM)$/dllname.hxx: makefile.mk
@@ -156,4 +159,7 @@ $(INCCOM)$/dllname.hxx: makefile.mk
 .ENDIF
 
 $(SRS)$/smres.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
+
+
+$(SRS)$/$(SRS2NAME).srs  : $(LOCALIZE_ME_DEST)
 
