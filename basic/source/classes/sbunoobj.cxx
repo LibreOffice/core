@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:35:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 //#include <stl_queue.h>
 
 #ifndef _VOS_MUTEX_HXX_ //autogen
@@ -1138,24 +1137,33 @@ String Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Reference<
     return aRetStr;
 }
 
-String getDbgObjectName( const String& rClassName, SbUnoObject* pUnoObj )
+String getDbgObjectNameImpl( SbUnoObject* pUnoObj )
 {
-    String aName = rClassName;
-    if( !rClassName.Len() )
+    String aName;
+    if( pUnoObj )
     {
-        Any aToInspectObj = pUnoObj->getUnoAny();
-        TypeClass eType = aToInspectObj.getValueType().getTypeClass();
-        Reference< XInterface > xObj;
-        if( eType == TypeClass_INTERFACE )
-            xObj = *(Reference< XInterface >*)aToInspectObj.getValue();
-        if( xObj.is() )
+        aName = pUnoObj->GetClassName();
+        if( !aName.Len() )
         {
-            Reference< XServiceInfo > xServiceInfo( xObj, UNO_QUERY );
-            if( xServiceInfo.is() )
-                aName = xServiceInfo->getImplementationName();
+            Any aToInspectObj = pUnoObj->getUnoAny();
+            TypeClass eType = aToInspectObj.getValueType().getTypeClass();
+            Reference< XInterface > xObj;
+            if( eType == TypeClass_INTERFACE )
+                xObj = *(Reference< XInterface >*)aToInspectObj.getValue();
+            if( xObj.is() )
+            {
+                Reference< XServiceInfo > xServiceInfo( xObj, UNO_QUERY );
+                if( xServiceInfo.is() )
+                    aName = xServiceInfo->getImplementationName();
+            }
         }
     }
+    return aName;
+}
 
+String getDbgObjectName( SbUnoObject* pUnoObj )
+{
+    String aName = getDbgObjectNameImpl( pUnoObj );
     if( !aName.Len() )
         aName.AppendAscii( "Unknown" );
 
@@ -1168,8 +1176,21 @@ String getDbgObjectName( const String& rClassName, SbUnoObject* pUnoObj )
     return aRet;
 }
 
+String getBasicObjectTypeName( SbxObject* pObj )
+{
+    String aName;
+    if( pObj )
+    {
+        SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
+        if( pUnoObj )
+            aName = getDbgObjectNameImpl( pUnoObj );
+    }
+    return aName;
+}
+
+
 // Dbg-Hilfsmethode zum Auslesen der in einem Object implementierten Interfaces
-String Impl_GetSupportedInterfaces( const String& rClassName, SbUnoObject* pUnoObj )
+String Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
 {
     Any aToInspectObj = pUnoObj->getUnoAny();
 
@@ -1191,14 +1212,13 @@ String Impl_GetSupportedInterfaces( const String& rClassName, SbUnoObject* pUnoO
         Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
 
         aRet.AssignAscii( "Supported interfaces by object " );
-        String aObjName = getDbgObjectName( rClassName, pUnoObj );
+        String aObjName = getDbgObjectName( pUnoObj );
         aRet += aObjName;
         aRet.AppendAscii( "\n" );
         if( xTypeProvider.is() )
         {
             // Interfaces der Implementation holen
             Sequence< Type > aTypeSeq = xTypeProvider->getTypes();
-            //Sequence< Reference< XIdlClass > > aClassSeq = xTypeProvider->getTypes();
             const Type* pTypeArray = aTypeSeq.getConstArray();
             UINT32 nIfaceCount = aTypeSeq.getLength();
             for( UINT32 j = 0 ; j < nIfaceCount ; j++ )
@@ -1277,10 +1297,10 @@ String Dbg_SbxDataType2String( SbxDataType eType )
 }
 
 // Dbg-Hilfsmethode zum Anzeigen der Properties eines SbUnoObjects
-String Impl_DumpProperties( const String& rClassName, SbUnoObject* pUnoObj )
+String Impl_DumpProperties( SbUnoObject* pUnoObj )
 {
     String aRet( RTL_CONSTASCII_USTRINGPARAM("Properties of object ") );
-    String aObjName = getDbgObjectName( rClassName, pUnoObj );
+    String aObjName = getDbgObjectName( pUnoObj );
     aRet += aObjName;
 
     // Uno-Infos auswerten, um Arrays zu erkennen
@@ -1354,10 +1374,10 @@ String Impl_DumpProperties( const String& rClassName, SbUnoObject* pUnoObj )
 }
 
 // Dbg-Hilfsmethode zum Anzeigen der Methoden eines SbUnoObjects
-String Impl_DumpMethods( const String& rClassName, SbUnoObject* pUnoObj )
+String Impl_DumpMethods( SbUnoObject* pUnoObj )
 {
     String aRet( RTL_CONSTASCII_USTRINGPARAM("Methods of object ") );
-    String aObjName = getDbgObjectName( rClassName, pUnoObj );
+    String aObjName = getDbgObjectName( pUnoObj );
     aRet += aObjName;
 
     // XIntrospectionAccess, um die Typen der Parameter auch ausgeben zu koennen
@@ -1469,7 +1489,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     // Id == -1: Implementierte Interfaces gemaess ClassProvider anzeigen
                     if( nId == -1 )     // Property ID_DBG_SUPPORTEDINTERFACES"
                     {
-                        String aRetStr = Impl_GetSupportedInterfaces( GetClassName(), this );
+                        String aRetStr = Impl_GetSupportedInterfaces( this );
                         pVar->PutString( aRetStr );
                     }
                     // Id == -2: Properties ausgeben
@@ -1477,7 +1497,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     {
                         // Jetzt muessen alle Properties angelegt werden
                         implCreateAll();
-                        String aRetStr = Impl_DumpProperties( GetClassName(), this );
+                        String aRetStr = Impl_DumpProperties( this );
                         pVar->PutString( aRetStr );
                     }
                     // Id == -3: Methoden ausgeben
@@ -1485,7 +1505,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     {
                         // Jetzt muessen alle Properties angelegt werden
                         implCreateAll();
-                        String aRetStr = Impl_DumpMethods( GetClassName(), this );
+                        String aRetStr = Impl_DumpMethods( this );
                         pVar->PutString( aRetStr );
                     }
                     return;
@@ -2263,6 +2283,7 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
     return pRes;
 }
 
+
 // Hilfs-Methode zum Anlegen der dbg_-Properties
 void SbUnoObject::implCreateDbgProperties( void )
 {
@@ -2401,6 +2422,20 @@ SbxObjectRef GetSbUnoObject( const String& aName, const Any& aUnoObj_ )
 {
     return new SbUnoObject( aName, aUnoObj_ );
 }
+
+// Force creation of all properties for debugging
+void createAllObjectProperties( SbxObject* pObj )
+{
+    if( !pObj )
+        return;
+
+    SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
+    if( pUnoObj )
+        pUnoObj->createAllProperties();
+    else
+        pObj->GetAll( SbxCLASS_DONTCARE );
+}
+
 
 void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
