@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-26 01:35:34 $
+ *  last change: $Author: khong $ $Date: 2002-11-19 20:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_th_alphanumeric )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_Unicode )
 IMPL_CREATEINSTANCE_MSF( CalendarImpl )
 IMPL_CREATEINSTANCE( Calendar_gregorian )
-IMPL_CREATEINSTANCE( Calendar_hanja_yoil )
+IMPL_CREATEINSTANCE( Calendar_hanja )
 IMPL_CREATEINSTANCE( Calendar_gengou )
 IMPL_CREATEINSTANCE( Calendar_ROC )
 IMPL_CREATEINSTANCE( Calendar_hijri )
@@ -447,7 +447,10 @@ static const struct InstancesArray {
         &Calendar_ROC_CreateInstance },
     {   "com.sun.star.i18n.Calendar_hanja_yoil",
         "com.sun.star.i18n.Calendar_hanja_yoil",
-        &Calendar_hanja_yoil_CreateInstance },
+        &Calendar_hanja_CreateInstance },
+    {   "com.sun.star.i18n.Calendar_hanja",
+        "com.sun.star.i18n.Calendar_hanja",
+        &Calendar_hanja_CreateInstance },
     {   "com.sun.star.i18n.Calendar_hijri",
         "com.sun.star.i18n.Calendar_hijri",
         &Calendar_hijri_CreateInstance },
