@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:42:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ InterfaceRef SAL_CALL OImageButtonModel_CreateInstance(const Reference<XMultiSer
 
 //------------------------------------------------------------------
 OImageButtonModel::OImageButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                    :OImageModel( _rxFactory, VCL_CONTROLMODEL_IMAGEBUTTON, FRM_SUN_CONTROL_IMAGEBUTTON )
+                    :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_IMAGEBUTTON, FRM_SUN_CONTROL_IMAGEBUTTON )
                                     // use the old control name for compytibility reasons
 {
     DBG_CTOR(OImageButtonModel, NULL);
@@ -115,7 +115,7 @@ OImageButtonModel::OImageButtonModel(const Reference<XMultiServiceFactory>& _rxF
 
 //------------------------------------------------------------------
 OImageButtonModel::OImageButtonModel( const OImageButtonModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory)
-    :OImageModel( _pOriginal, _rxFactory )
+    :OClickableImageBaseModel( _pOriginal, _rxFactory )
 {
     DBG_CTOR(OImageButtonModel, NULL);
     implInitializeImageURL();
@@ -141,7 +141,7 @@ Reference<XPropertySetInfo> SAL_CALL OImageButtonModel::getPropertySetInfo() thr
 //------------------------------------------------------------------------------
 StringSequence  OImageButtonModel::getSupportedServiceNames() throw()
 {
-    StringSequence aSupported = OControlModel::getSupportedServiceNames();
+    StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
     ::rtl::OUString*pArray = aSupported.getArray();
@@ -154,7 +154,7 @@ void OImageButtonModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_DESCRIBE_PROPERTIES( 5, OImageModel )
+    BEGIN_DESCRIBE_PROPERTIES( 5, OClickableImageBaseModel )
         DECL_PROP1(BUTTONTYPE,          FormButtonType,     BOUND);
         DECL_PROP1(DISPATCHURLINTERNAL, sal_Bool,           BOUND);
         DECL_PROP1(TARGET_URL,          ::rtl::OUString,    BOUND);
@@ -244,14 +244,14 @@ Sequence<Type> OImageButtonControl::_getTypes()
 {
     static Sequence<Type> aTypes;
     if (!aTypes.getLength())
-        aTypes = concatSequences(OImageControl::_getTypes(), OImageButtonControl_BASE::getTypes());
+        aTypes = concatSequences(OClickableImageBaseControl::_getTypes(), OImageButtonControl_BASE::getTypes());
     return aTypes;
 }
 
 //------------------------------------------------------------------------------
 StringSequence  OImageButtonControl::getSupportedServiceNames() throw()
 {
-    StringSequence aSupported = OControl::getSupportedServiceNames();
+    StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
     ::rtl::OUString*pArray = aSupported.getArray();
@@ -261,7 +261,7 @@ StringSequence  OImageButtonControl::getSupportedServiceNames() throw()
 
 //------------------------------------------------------------------------------
 OImageButtonControl::OImageButtonControl(const Reference<XMultiServiceFactory>& _rxFactory)
-            :OImageControl(_rxFactory, VCL_CONTROL_IMAGEBUTTON)
+            :OClickableImageBaseControl(_rxFactory, VCL_CONTROL_IMAGEBUTTON)
 {
     increment(m_refCount);
     {
@@ -271,15 +271,14 @@ OImageButtonControl::OImageButtonControl(const Reference<XMultiServiceFactory>& 
         if (xComp.is())
             xComp->addMouseListener((XMouseListener*)this);
     }
-    // Refcount bei 1 fuer angemeldeten Listener
-    sal_Int32 n = decrement(m_refCount);
+    decrement(m_refCount);
 }
 
 // UNO Anbindung
 //------------------------------------------------------------------------------
 Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
-    Any aReturn = OImageControl::queryAggregation(_rType);
+    Any aReturn = OClickableImageBaseControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
         aReturn = OImageButtonControl_BASE::queryInterface(_rType);
 
@@ -297,15 +296,9 @@ void OImageButtonControl::mousePressed(const MouseEvent& e) throw ( ::com::sun::
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if( m_aApproveActionListeners.getLength() )
     {
-        // Wenn es ApproveAction-Lisener gibt, muss ein eigener Thread
-        // aufgemacht werden.
-        if( !m_pThread )
-        {
-            m_pThread = new OImageControlThread_Impl( this );
-            m_pThread->acquire();
-            m_pThread->create();
-        }
-        m_pThread->OComponentEventThread::addEvent( &e );
+        // if there are listeners, start the action in an own thread, to not allow
+        // them to block us here (we're in the application's main thread)
+        getImageProducerThread()->OComponentEventThread::addEvent( &e );
     }
     else
     {
