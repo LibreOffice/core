@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-08 09:37:10 $
+ *  last change: $Author: dbo $ $Date: 2000-11-15 17:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,9 @@ static oslModule loadModule( const OUString & rLibName, sal_Int32 nMode )
 #endif
             }
 
-            if (0 == aAbs.indexOf( aBaseDir )) // still part of it?
+            if (0 == aAbs.indexOf( aBaseDir ) && // still part of it?
+                aBaseDir.getLength() < aAbs.getLength() &&
+                aAbs[ aBaseDir.getLength() -1 ] == '/') // dir boundary
             {
                 // load from absolute path
                 oslModule lib = ::osl_loadModule( aAbs.pData, nMode );
