@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Resource.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:37:47 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:52:15 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.common;
 
 import com.sun.star.lang.IllegalArgumentException;
@@ -125,7 +124,7 @@ public class Resource {
 
     public static void showCommonResourceError(XMultiServiceFactory xMSF) {
         String ProductName = Configuration.getProductName(xMSF);
-        String sError = "The files required could not be found.\\nPlease start the %PRODUCTNAME Setup and choose 'Repair'.";
+        String sError = "The files required could not be found.\nPlease start the %PRODUCTNAME Setup and choose 'Repair'.";
         sError = JavaTools.replaceSubString(sError, ProductName, "%PRODUCTNAME");
         SystemDialog.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sError);
     }
