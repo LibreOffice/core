@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:17:13 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Ê¹ÓÃÕß×ÔÉè(~U)";
         Text[ russian ] = "Îïğåäåëÿåìûé ïîëüçîâàòåëåì";
-        Text[ polish ] = "Zdefinowany przez u¿ytkownika";
+        Text[ polish ] = "Ustawienia indywidualne";
         Text[ japanese ] = "Õ°»Ş°’è‹`(~U)";
         Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q(~U)";
         Text[ arabic ] = "ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";
@@ -417,13 +417,13 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     StringList [ chinese_traditional ] =
     {
-            < "Á`­p" ; Default ; > ;
+            < "¤p­p" ; Default ; > ;
         < "­p¼Æ" ; Default ; > ;
         < "¥­§¡­È" ; Default ; > ;
         < "³Ì¤j" ; Default ; > ;
         < "³Ì¤p" ; Default ; > ;
         < "­¼¿n" ; Default ; > ;
-        < "­p¼Æ(¥u¬O¼Æ¦r)" ; Default ; > ;
+        < "¼Æ¥Ø(¥u¬O¼Æ¦r)" ; Default ; > ;
         < "¼Ğ·Ç°¾®t(©â¼Ë)" ; Default ; > ;
         < "¼Ğ·Ç°¾®t(¥ş³¡°ò¼Æ)" ; Default ; > ;
         < "¤è®t(©â¼Ë)" ; Default ; > ;
@@ -465,10 +465,10 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "ÃÖ´ë" ; Default ; > ;
         < "ÃÖ¼Ò" ; Default ; > ;
         < "°ö" ; Default ; > ;
-        < "°³¼ö (¼ıÀÚ¸¸)" ; Default ; > ;
-        < "StDev (Ç¥º»)" ; Default ; > ;
-        < "£Ó£ô£Á£â£÷£Î (¸ğÁı´Ü)" ; Default ; > ;
-        < "ºĞ»ê (Ç¥º»)" ; Default ; > ;
+        < "¼ö (¼ıÀÚ¸¸)" ; Default ; > ;
+        < "StDev (»ùÇÃ)" ; Default ; > ;
+        < "£ÓtDevP (¸ğÁı´Ü)" ; Default ; > ;
+        < "ºĞ»ê (»ùÇÃ)" ; Default ; > ;
         < "ºĞ»ê (¸ğÁı´Ü)" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -664,7 +664,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ russian ] = "Ïîëå äàííûõ";
     Text[ polish ] = "Pole danych";
     Text[ japanese ] = "ÃŞ°ÀÌ¨°ÙÄŞ";
-    Text[ chinese_traditional ] = "¸ê®ÆÄæ";
+    Text[ chinese_traditional ] = "¸ê®ÆÄæ¦ì";
     Text[ arabic ] = "ÍŞá ÈíÇäÇÊ";
     Text[ greek ] = "Ğåäßï äåäïìİíùí";
     Text[ korean ] = "µ¥ÀÌÅÍ ÇÊµå";
@@ -673,6 +673,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ catalan ] = "Campo de datos";
     Text[ finnish ] = "Tietokenttä";
 };
+
 
 
 
