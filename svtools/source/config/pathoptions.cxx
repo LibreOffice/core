@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-26 12:52:03 $
+ *  last change: $Author: pb $ $Date: 2000-11-02 08:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,16 +107,16 @@ using namespace com::sun::star::uno;
 #define PATH_ADDIN                      0
 #define PATH_AUTOCORRECT                1
 #define PATH_AUTOPILOT                  2
-#define PATH_BACKUP                     3
-#define PATH_BASIC                      4
-#define PATH_BITMAP                     5
-#define PATH_CONFIG                     6
-#define PATH_DATABASE                   7
-#define PATH_DICTIONARY                 8
-#define PATH_FAVORITES                  9
-#define PATH_FILTER                     10
-#define PATH_GALLERY                    11
-#define PATH_GLOSSARY                   12
+#define PATH_AUTOTEXT                   3
+#define PATH_BACKUP                     4
+#define PATH_BASIC                      5
+#define PATH_BITMAP                     6
+#define PATH_CONFIG                     7
+#define PATH_DATABASE                   8
+#define PATH_DICTIONARY                 9
+#define PATH_FAVORITES                  10
+#define PATH_FILTER                     11
+#define PATH_GALLERY                    12
 #define PATH_GRAPHIC                    13
 #define PATH_HELP                       14
 #define PATH_LINGUISTIC                 15
@@ -200,6 +200,7 @@ private:
     String          m_aAddinPath;
     String          m_aAutoCorrectPath;
     String          m_aAutoPilotPath;
+    String          m_aAutoTextPath;
     String          m_aBackupPath;
     String          m_aBasicPath;
     String          m_aBitmapPath;
@@ -209,7 +210,6 @@ private:
     String          m_aFavoritesPath;
     String          m_aFilterPath;
     String          m_aGalleryPath;
-    String          m_aGlossaryPath;
     String          m_aGraphicPath;
     String          m_aHelpPath;
     String          m_aLinguisticPath;
@@ -254,6 +254,7 @@ public:
     const String&   GetAddinPath() { return GetPath( &SvtPathOptions_Impl::m_aAddinPath ); }
     const String&   GetAutoCorrectPath() { return GetPath( &SvtPathOptions_Impl::m_aAutoCorrectPath); }
     const String&   GetAutoPilotPath() { return GetPath( &SvtPathOptions_Impl::m_aAutoPilotPath); }
+    const String&   GetAutoTextPath() { return GetPath( &SvtPathOptions_Impl::m_aAutoTextPath); }
     const String&   GetBackupPath() { return GetPath( &SvtPathOptions_Impl::m_aBackupPath); }
     const String&   GetBasicPath() { return GetPath( &SvtPathOptions_Impl::m_aBasicPath); }
     const String&   GetBitmapPath() { return GetPath( &SvtPathOptions_Impl::m_aBitmapPath); }
@@ -263,7 +264,6 @@ public:
     const String&   GetFavoritesPath() { return GetPath( &SvtPathOptions_Impl::m_aFavoritesPath); }
     const String&   GetFilterPath() { return GetPath( &SvtPathOptions_Impl::m_aFilterPath); }
     const String&   GetGalleryPath() { return GetPath( &SvtPathOptions_Impl::m_aGalleryPath); }
-    const String&   GetGlossaryPath() { return GetPath( &SvtPathOptions_Impl::m_aGlossaryPath); }
     const String&   GetGraphicPath() { return GetPath( &SvtPathOptions_Impl::m_aGraphicPath); }
     const String&   GetHelpPath() { return GetPath( &SvtPathOptions_Impl::m_aHelpPath); }
     const String&   GetLinguisticPath() { return GetPath( &SvtPathOptions_Impl::m_aLinguisticPath); }
@@ -284,6 +284,7 @@ public:
     void            SetAddinPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAddinPath, rPath ); }
     void            SetAutoCorrectPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAutoCorrectPath, rPath ); }
     void            SetAutoPilotPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAutoPilotPath, rPath ); }
+    void            SetAutoTextPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAutoTextPath, rPath ); }
     void            SetBackupPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBackupPath, rPath ); }
     void            SetBasicPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBasicPath, rPath ); }
     void            SetBitmapPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBitmapPath, rPath ); }
@@ -293,7 +294,6 @@ public:
     void            SetFavoritesPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aFavoritesPath, rPath ); }
     void            SetFilterPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aFilterPath, rPath ); }
     void            SetGalleryPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aGalleryPath, rPath ); }
-    void            SetGlossaryPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aGlossaryPath, rPath ); }
     void            SetGraphicPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aGraphicPath, rPath ); }
     void            SetHelpPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aHelpPath, rPath ); }
     void            SetLinguisticPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aLinguisticPath, rPath ); }
@@ -327,6 +327,7 @@ Sequence< OUString > GetPathPropertyNames()
         "Addin",            // PATH_ADDIN
         "AutoCorrect",      // PATH_AUTOCORRECT
         "AutoPilot",        // PATH_AUTOPILOT
+        "AutoText",         // PATH_AUTOTEXT
         "Backup",           // PATH_BACKUP
         "Basic",            // PATH_BASIC
         "Bitmap",           // PATH_BITMAP
@@ -336,7 +337,6 @@ Sequence< OUString > GetPathPropertyNames()
         "Favorite",         // PATH_FAVORITES
         "Filter",           // PATH_FILTER
         "Gallery",          // PATH_GALLERY
-        "AutoText",         // PATH_GLOSSARY
         "Graphic",          // PATH_GRAPHIC
         "Help",             // PATH_HELP
         "Linguistic",       // PATH_LINGUISTIC
@@ -821,6 +821,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                     case PATH_ADDIN:            m_aAddinPath = String( aFullPath );         break;
                     case PATH_AUTOCORRECT:      m_aAutoCorrectPath = String( aFullPath );   break;
                     case PATH_AUTOPILOT:        m_aAutoPilotPath = String( aFullPath );     break;
+                    case PATH_AUTOTEXT:         m_aAutoTextPath = String( aFullPath );      break;
                     case PATH_BACKUP:           m_aBackupPath = String( aFullPath );        break;
                     case PATH_BASIC:            m_aBasicPath = String( aFullPath );         break;
                     case PATH_BITMAP:           m_aBitmapPath = String( aFullPath );        break;
@@ -830,7 +831,6 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                     case PATH_FAVORITES:        m_aFavoritesPath = String( aFullPath );     break;
                     case PATH_FILTER:           m_aFilterPath = String( aFullPath );        break;
                     case PATH_GALLERY:          m_aGalleryPath = String( aFullPath );       break;
-                    case PATH_GLOSSARY:         m_aGlossaryPath = String( aFullPath );      break;
                     case PATH_GRAPHIC:          m_aGraphicPath = String( aFullPath );       break;
                     case PATH_HELP:             m_aHelpPath = String( aFullPath );          break;
                     case PATH_LINGUISTIC:       m_aLinguisticPath = String( aFullPath );    break;
@@ -875,11 +875,12 @@ void SvtPathOptions_Impl::Commit()
         {
             // multi pathes
             case PATH_AUTOCORRECT:      aTempStr = OUString( m_aAutoCorrectPath );  bList = sal_True; break;
-            case PATH_GLOSSARY:         aTempStr = OUString( m_aGlossaryPath );     bList = sal_True; break;
+            case PATH_AUTOTEXT:         aTempStr = OUString( m_aAutoTextPath );     bList = sal_True; break;
             case PATH_BASIC:            aTempStr = OUString( m_aBasicPath );        bList = sal_True; break;
             case PATH_GALLERY:          aTempStr = OUString( m_aGalleryPath );      bList = sal_True; break;
             case PATH_PLUGIN:           aTempStr = OUString( m_aPluginPath );       bList = sal_True; break;
             case PATH_TEMPLATE:         aTempStr = OUString( m_aTemplatePath );     bList = sal_True; break;
+
             // single pathes
             case PATH_ADDIN:            aTempStr = OUString( m_aAddinPath );            break;
             case PATH_AUTOPILOT:        aTempStr = OUString( m_aAutoPilotPath );        break;
@@ -980,6 +981,13 @@ const String& SvtPathOptions::GetAutoPilotPath() const
 
 // -----------------------------------------------------------------------
 
+const String& SvtPathOptions::GetAutoTextPath() const
+{
+    return pImp->GetAutoTextPath();
+}
+
+// -----------------------------------------------------------------------
+
 const String& SvtPathOptions::GetBackupPath() const
 {
     return pImp->GetBackupPath();
@@ -1042,12 +1050,12 @@ const String& SvtPathOptions::GetGalleryPath() const
 }
 
 // -----------------------------------------------------------------------
-
+#if SUPD < 612
 const String& SvtPathOptions::GetGlossaryPath() const
 {
-    return pImp->GetGlossaryPath();
+    return pImp->GetAutoTextPath();
 }
-
+#endif
 // -----------------------------------------------------------------------
 
 const String& SvtPathOptions::GetGraphicPath() const
@@ -1176,6 +1184,13 @@ void SvtPathOptions::SetAutoPilotPath( const String& rPath )
 
 // -----------------------------------------------------------------------
 
+void SvtPathOptions::SetAutoTextPath( const String& rPath )
+{
+    pImp->SetAutoTextPath( rPath );
+}
+
+// -----------------------------------------------------------------------
+
 void SvtPathOptions::SetBackupPath( const String& rPath )
 {
     pImp->SetBackupPath( rPath );
@@ -1238,12 +1253,12 @@ void SvtPathOptions::SetGalleryPath( const String& rPath )
 }
 
 // -----------------------------------------------------------------------
-
+#if SUPD < 612
 void SvtPathOptions::SetGlossaryPath( const String& rPath )
 {
-    pImp->SetGlossaryPath( rPath );
+    pImp->SetAutoTextPath( rPath );
 }
-
+#endif
 // -----------------------------------------------------------------------
 
 void SvtPathOptions::SetGraphicPath( const String& rPath )
