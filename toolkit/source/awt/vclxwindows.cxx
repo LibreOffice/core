@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-26 12:24:37 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 07:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,7 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                         ((PushButton*)pButton)->SetState( (TriState)n );
                 }
             }
+            break;
             case BASEPROPERTY_IMAGEALIGN:
             {
                 if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
