@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablemgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:47:45 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,10 @@
 #include "tablemgr.hxx"
 #include "frmfmt.hxx"
 #include "instable.hxx"
-#include "colwd.hxx"
+//CHINA001 #include "colwd.hxx"
 #include "swerror.h"
 #include "table.hrc"
-
+#include "swabstdlg.hxx" //CHINA001
 
 
 /*------------------------------------------------------------------------
@@ -101,7 +101,12 @@
 void SwTableFUNC::ColWidthDlg( Window *pParent )
 {
     InitTabCols();
-    SwTableWidthDlg *pDlg = new SwTableWidthDlg( pParent, *this );
+    //CHINA001 SwTableWidthDlg *pDlg = new SwTableWidthDlg( pParent, *this );
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+    VclAbstractDialog* pDlg = pFact->CreateSwTableWidthDlg( pParent, *this ,ResId( DLG_COL_WIDTH ));
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     pDlg->Execute();
     delete pDlg;
 }
