@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-30 14:19:37 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,6 +570,55 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     };
     Text [ de ] = "Datenfeld-Optionen";
     Text [ en-US ] = "Data Field Options";
+};
+
+// ----------------------------------------------------------------------------
+
+ModalDialog RID_SCDLG_DPSHOWDETAIL
+{
+    OutputSize = TRUE;
+    HelpId = HID_SC_DPSHOWDETAIL;
+    SVLook = TRUE;
+    Size = MAP_APPFONT( 200, 116 );
+    Moveable = TRUE;
+    Closeable = FALSE;
+    FixedText FT_DIMS
+    {
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 132, 24 );
+        WordBreak = TRUE;
+        Text [ de ]  = "~Wählen Sie das Feld, dessen Detail Sie hinzufügen möchten";
+        Text [ en-US ] = "~Choose the field containing the detail you want to show";
+    };
+    ListBox LB_DIMS
+    {
+        Pos = MAP_APPFONT( 6, 30 );
+        Size = MAP_APPFONT( 132, 80 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = FALSE;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT( 144, 6 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+        DefButton = TRUE;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT( 144, 23 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT( 144, 43 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+    Text [ de ] = "Detail einblenden";
+    Text [ en-US ] = "Show Detail";
 };
 
 // ----------------------------------------------------------------------------
