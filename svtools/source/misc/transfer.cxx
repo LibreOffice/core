@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-22 17:08:17 $
+ *  last change: $Author: jp $ $Date: 2001-01-30 13:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include "urlbmk.hxx"
 #include "imap.hxx"
 #include "transfer.hxx"
+#include "inetimg.hxx"
 
 // --------------
 // - Namespaces -
@@ -479,6 +480,16 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         default:
         break;
     }
+
+    return( maAny.hasValue() );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
+                const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+{
+    maAny <<= ::rtl::OUString( rINtImg.CopyExchange() );
 
     return( maAny.hasValue() );
 }
