@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 12:53:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1656,9 +1656,9 @@ void SdViewShell::ExecReq( SfxRequest& rReq )
     classes for more interesting examples.
 */
 ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible>
+    ::com::sun::star::accessibility::XAccessible>
 SdViewShell::CreateAccessibleDocumentView (SdWindow* pWindow)
 {
     return ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> ();
+        ::com::sun::star::accessibility::XAccessible> ();
 }
