@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFixedTextModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:09 $
+ *  last change:$Date: 2003-05-27 12:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._forms;
 
 import com.sun.star.drawing.XControlShape;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.XInterface;
@@ -124,7 +125,7 @@ public class OFixedTextModel extends TestCase {
     * Creates Draw document where controls are placed.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a draw document" );
@@ -164,7 +165,7 @@ public class OFixedTextModel extends TestCase {
         log.println( "creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         //get TextModel
         String objName = "FixedText";
