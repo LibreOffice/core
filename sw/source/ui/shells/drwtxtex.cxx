@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: os $ $Date: 2000-09-26 14:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,26 +357,15 @@ void SwDrawTextShell::Execute(SfxRequest &rReq)
                 aDlgAttr.Put( SvxKerningItem() );
 
                 SwCharDlg* pDlg = new SwCharDlg(pView->GetWindow(), *pView, aDlgAttr, 0, sal_True);
-
-                sal_uInt16 nResult = pDlg->Execute();
-
-                switch( nResult )
-                {
-                    case RET_OK:
-                    {
-                        pArgs = rReq.GetArgs();
-                    }
-                    break;
-
-                    default:
-                    {
-                        delete pDlg;
-                    }
-                    return; // Abbruch
-                }
+                USHORT nRet = pDlg->Execute();
+                if(RET_OK == nRet )
+                    aNewAttr.Put(*pDlg->GetOutputItemSet());
                 delete( pDlg );
+                if(RET_OK != nRet)
+                    return ;
             }
-            aNewAttr.Put(*pArgs);
+            else
+                aNewAttr.Put(*pArgs);
         }
         break;
 
@@ -411,25 +400,15 @@ void SwDrawTextShell::Execute(SfxRequest &rReq)
 
                 SwParaDlg* pDlg = new SwParaDlg(GetView().GetWindow(), GetView(), aDlgAttr, DLG_STD, 0, sal_True);
 
-                sal_uInt16 nResult = pDlg->Execute();
-
-                switch( nResult )
-                {
-                    case RET_OK:
-                    {
-                        pArgs = rReq.GetArgs();
-                    }
-                    break;
-
-                    default:
-                    {
-                        delete pDlg;
-                    }
-                    return; // Abbruch
-                }
+                USHORT nRet = pDlg->Execute();
+                if(RET_OK == nRet)
+                    aNewAttr.Put(*pDlg->GetOutputItemSet());
                 delete( pDlg );
+                if(RET_OK != nRet)
+                    return;
             }
-            aNewAttr.Put(*pArgs);
+            else
+                aNewAttr.Put(*pArgs);
         }
         break;
         case SID_AUTOSPELL_MARKOFF:
@@ -778,243 +757,6 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
         nWhich = aIter.NextWhich();
     }
 }
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.69  2000/09/18 16:06:03  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.68  2000/09/07 15:59:29  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.67  2000/05/26 07:21:32  os
-      old SW Basic API Slots removed
-
-      Revision 1.66  2000/04/18 14:58:23  os
-      UNICODE
-
-      Revision 1.65  2000/03/23 07:49:14  os
-      UNO III
-
-      Revision 1.64  2000/02/16 21:00:17  tl
-      #72219# Locale Umstellung
-
-      Revision 1.63  2000/02/11 14:57:32  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.62  2000/01/21 13:34:45  tl
-      #70503# GetState method added for FN_THESAURUS_DLG
-
-      Revision 1.61  1999/11/30 09:44:05  jp
-      StateClpbrd: pObj contains sometimes no Pointer
-
-      Revision 1.60  1999/09/24 14:38:32  os
-      hlnkitem.hxx now in SVX
-
-      Revision 1.59  1999/08/04 09:09:50  JP
-      have to change: Outliner -> SdrOutlines
-
-
-      Rev 1.58   04 Aug 1999 11:09:50   JP
-   have to change: Outliner -> SdrOutlines
-
-      Rev 1.57   18 Mar 1999 14:41:18   OS
-   #61169# #61489# Masseinheiten fuer Text u. HTML am Module setzen, nicht an der App
-
-      Rev 1.56   04 Nov 1998 17:29:54   OM
-   #58904# Assertion umpropelt
-
-      Rev 1.55   08 Sep 1998 17:03:08   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.54   25 Jun 1998 14:11:18   JP
-   SvDataObject -> SotObject
-
-      Rev 1.53   08 Apr 1998 13:47:22   OM
-   #42505 Keine util::URL-Buttons in Html-Dokumenten
-
-      Rev 1.52   12 Mar 1998 11:28:12   OM
-   #48017# GPF entfernt
-
-      Rev 1.51   05 Feb 1998 14:48:14   OS
-   Absatzdialog enthaelt keinen TableMode
-
-      Rev 1.50   29 Nov 1997 15:52:12   MA
-   includes
-
-      Rev 1.49   24 Nov 1997 09:47:00   MA
-   includes
-
-      Rev 1.48   03 Nov 1997 13:55:46   MA
-   precomp entfernt
-
-      Rev 1.47   17 Sep 1997 13:09:18   OM
-   Editierbare Links in DrawText-Objekten
-
-      Rev 1.46   01 Sep 1997 13:24:00   OS
-   DLL-Umstellung
-
-      Rev 1.45   11 Aug 1997 08:50:18   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.44   08 Aug 1997 17:28:46   OM
-   Headerfile-Umstellung
-
-      Rev 1.43   07 Jul 1997 12:28:14   OM
-   #41258# Execute: Nur benoetigte Items putten
-
-      Rev 1.42   17 Jun 1997 16:00:00   MA
-   DrawTxtShell nicht von BaseShell ableiten + Opts
-
-      Rev 1.41   04 Jun 1997 11:24:06   TRI
-   svwin.h nur unter WIN oder WNT includen
-
-      Rev 1.40   04 Jun 1997 09:50:08   NF
-   Includes...
-
-      Rev 1.39   28 May 1997 15:06:30   OM
-   #40067# DontCare-State fuer Absatzausrichtung beruecksichtigen
-
-      Rev 1.38   16 May 1997 17:16:40   OM
-   Links aus Hyperlinkleiste in DrawText-Objekte einfuegen
-
-      Rev 1.37   19 Mar 1997 12:48:42   AMA
-   Fix #37035: Speller am Outliner setzen.
-
-      Rev 1.36   23 Feb 1997 18:20:08   AMA
-   Fix #36843#: GPF in der EditEngine durch nicht gesetzten SpellChecker
-
-      Rev 1.35   22 Jan 1997 18:42:26   MH
-   add: include
-
-      Rev 1.34   16 Jan 1997 16:36:52   OS
-   Metric vor Dialogaufruf an der App setzen
-
-      Rev 1.33   14 Jan 1997 09:31:34   TRI
-   includes
-
-      Rev 1.32   16 Dec 1996 19:10:40   HJS
-   includes
-
-      Rev 1.31   13 Dec 1996 16:38:22   OS
-   Autospell fuer aktives DrawTextObject
-
-      Rev 1.30   22 Nov 1996 14:53:32   OS
-   FN_SET_JUSTIFY_PARA -> SID_ATTR_PARA_ADJUST_BLOCK
-
-      Rev 1.29   28 Aug 1996 15:55:10   OS
-   includes
-
-      Rev 1.28   22 Mar 1996 15:14:32   TRI
-   sfxiiter.hxx included
-
-      Rev 1.27   05 Feb 1996 17:28:42   OM
-   Parent-Win an Par/Chardlg uebergeben
-
-      Rev 1.26   12 Dec 1995 17:43:58   OM
-   Text-Attribute richtig setzen
-
-      Rev 1.25   11 Dec 1995 18:21:26   OM
-   Neuer DrawText Dialog
-
-      Rev 1.24   08 Dec 1995 18:10:28   OM
-   CharAttr-Stati richtig updaten
-
-      Rev 1.23   07 Dec 1995 18:25:36   OM
-   Neu: GetDrawTxtCtrlState
-
-      Rev 1.22   24 Nov 1995 16:59:34   OM
-   PCH->PRECOMPILED
-
-      Rev 1.21   10 Nov 1995 18:24:24   OM
-   Init-Fkt optimiert/repariert
-
-      Rev 1.20   09 Nov 1995 18:00:12   OS
-   Id fuer FormatPage/CharDlg auf SID_ umgestellt
-
-      Rev 1.19   31 Oct 1995 18:40:42   OM
-   GetFrameWindow entfernt
-
-      Rev 1.18   17 Oct 1995 19:27:14   OM
-   Clipboard fuer Drawtext
-
-      Rev 1.17   14 Oct 1995 17:58:10   OM
-   Prophylaktische Absturzvorsorge...
-
-      Rev 1.16   14 Oct 1995 17:33:44   OM
-   Bug 20805: DrawTextShell komplettiert
-
-      Rev 1.15   05 Oct 1995 18:40:44   OM
-   Aufgeraeumt
-
-      Rev 1.14   04 Oct 1995 18:43:10   OM
-   Text-Reset angefangen
-
-      Rev 1.13   13 Sep 1995 17:28:06   OM
-   Modified fuer Drawtext-Objekte geaendert
-
-      Rev 1.12   28 Aug 1995 19:03:34   MA
-   Renovierung: IDL, Shells, Textshell-Doktrin aufgegeben
-
-      Rev 1.11   21 Aug 1995 21:00:00   MA
-   chg: svxitems-header entfernt
-
-      Rev 1.10   16 Aug 1995 17:50:12   MA
-   Riesenheader dialogs entfernt.
-
-      Rev 1.9   09 Aug 1995 18:39:10   OM
-   Statusmethode abgesichert
-
-      Rev 1.8   07 Aug 1995 18:41:54   OM
-   Zeichendialog richtig attributiert
-
-      Rev 1.7   06 Aug 1995 18:27:32   OM
-   DrawTextShell-Popup
-
-      Rev 1.6   23 Jul 1995 17:04:24   OS
-   Zeilenabstand kann nur 100/150/200 sein
-
-      Rev 1.5   14 Jul 1995 18:16:40   OM
-   Farbcontroller rausgeschmissen
-
-      Rev 1.4   04 May 1995 10:10:04   JP
-   Items Optimierung
-
-      Rev 1.3   03 May 1995 23:32:52   ER
-   add: editdata.hxx
-
-      Rev 1.2   28 Mar 1995 20:07:58   ER
-   header-adder
-
-      Rev 1.1   05 Mar 1995 20:44:44   OM
-   Linienabstand, drawing::Alignment, ...
-
-      Rev 1.0   05 Mar 1995 16:36:00   OM
-   Textfarbe setzen
-
-      Rev 1.6   04 Mar 1995 19:20:44   OM
-   Aenderungen fuer 241
-
-      Rev 1.5   04 Mar 1995 19:03:18   OM
-   Execute und State fuer Texthintergrund
-
-      Rev 1.4   03 Mar 1995 18:16:06   OM
-   virtual GetPool implementiert
-
-      Rev 1.3   03 Mar 1995 02:07:32   OM
-   State-Methode fuer Font-Controller entfernt
-
-      Rev 1.2   02 Mar 1995 19:19:26   OM
-   Font-Controller eingebunden
-
-      Rev 1.1   01 Mar 1995 19:07:18   OM
-   DrawTextShell 2.Runde
-
-      Rev 1.0   28 Feb 1995 19:45:08   OM
-   Initial revision.
-
-*************************************************************************/
 
 
 
