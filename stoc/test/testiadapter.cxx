@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testiadapter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-22 14:42:23 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,23 +1042,8 @@ static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr 
     return (performTest( xLBT ) && raiseException( xLBT ));
 }
 
-#ifdef UNX
-#define REG_PREFIX      "lib"
-#ifdef MACOSX
-#define DLL_POSTFIX     ".dylib"
-#else
-#define DLL_POSTFIX     ".so"
-#endif
-#else
-#define REG_PREFIX      ""
-#define DLL_POSTFIX     ".dll"
-#endif
 
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int __cdecl main( int argc, char * argv[] )
-#endif
+int SAL_CALL main( int argc, char * argv[] )
 {
     Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
@@ -1068,29 +1053,31 @@ int __cdecl main( int argc, char * argv[] )
     {
         Reference< XImplementationRegistration > xImplReg(
             xMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration") ) ),
+                OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.registry.ImplementationRegistration") ) ),
             UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii(REG_PREFIX "invadp" DLL_POSTFIX),
+            OUString::createFromAscii("invocadapt.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii(REG_PREFIX "tcv" DLL_POSTFIX),
+            OUString::createFromAscii("typeconverter.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii(REG_PREFIX "inv" DLL_POSTFIX),
+            OUString::createFromAscii("invocation.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii(REG_PREFIX "corefl" DLL_POSTFIX),
+            OUString::createFromAscii("corereflection.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii(REG_PREFIX "insp" DLL_POSTFIX),
+            OUString::createFromAscii("introspection.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
 
         if (test_adapter( xMgr ))
