@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 10:55:47 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
-#include <offmgr/app.hxx>
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -392,7 +391,7 @@ void ScTpContentOptions::InitGridOpt()
                 pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
         }
         else
-            pColorTable = OFF_APP()->GetStdColorTable();
+            pColorTable = XColorTable::GetStdColorTable();
 
         if ( !pColorTable )
             return;
