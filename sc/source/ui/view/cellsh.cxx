@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 15:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <svtools/slstitm.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/whiter.hxx>
+#include <svtools/moduleoptions.hxx>
 #include <offmgr/sbasltid.hrc>
 #include <sot/formats.hxx>
 #include <svx/hlnkitem.hxx>
@@ -418,7 +419,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
         switch ( nWhich )
         {
             case SID_OPENDLG_CHART:
-                if ( bOle || bTabProt || !pSfxApp->HasFeature(SFX_FEATURE_SCHART) )
+                if ( bOle || bTabProt || !SvtModuleOptions().IsChart() )
                     rSet.DisableItem( nWhich );
                 break;
 
