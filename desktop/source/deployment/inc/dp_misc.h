@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:05:36 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,17 +64,22 @@
 
 #include "rtl/ustrbuf.hxx"
 #include "osl/mutex.hxx"
+#include "osl/process.h"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/lang/DisposedException.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-#define ARLEN(x) sizeof (x) / sizeof *(x)
+#define ARLEN(x) (sizeof (x) / sizeof *(x))
 
 
 namespace css = ::com::sun::star;
 
 namespace dp_misc
 {
+
+const sal_Char CR = 0x0d;
+const sal_Char LF = 0x0a;
 
 //==============================================================================
 class MutexHolder
@@ -85,29 +90,14 @@ protected:
 };
 
 //==============================================================================
-inline void try_dispose( css::uno::Reference< css::uno::XInterface > const & x )
+inline void try_dispose( css::uno::Reference<css::uno::XInterface> const & x )
 {
-    css::uno::Reference< css::lang::XComponent > xComp(
-        x, css::uno::UNO_QUERY );
+    css::uno::Reference<css::lang::XComponent> xComp( x, css::uno::UNO_QUERY );
     if (xComp.is())
         xComp->dispose();
 }
 
 //##############################################################################
-
-//==============================================================================
-template< typename T >
-inline T extract_throw( css::uno::Any const & a )
-{
-    T v;
-    if (! (a >>= v))
-    {
-        throw css::uno::RuntimeException(
-            OUSTR("expected ") + ::getCppuType( &v ).getTypeName(),
-            css::uno::Reference< css::uno::XInterface >() );
-    }
-    return v;
-}
 
 //==============================================================================
 template< typename T >
@@ -117,18 +107,50 @@ inline void extract_throw( T * p, css::uno::Any const & a )
     {
         throw css::uno::RuntimeException(
             OUSTR("expected ") + ::getCppuType( p ).getTypeName(),
-            css::uno::Reference< css::uno::XInterface >() );
+            css::uno::Reference<css::uno::XInterface>() );
     }
 }
 
 //==============================================================================
-::rtl::OUString expand_reg_url(
-    ::rtl::OUString const & url,
-    css::uno::Reference< css::uno::XComponentContext > const & xContext );
+template< typename T >
+inline T extract_throw( css::uno::Any const & a )
+{
+    T v;
+    extract_throw<T>( &v, a );
+    return v;
+}
+
+//##############################################################################
 
 //==============================================================================
-bool office_is_running(
-    css::uno::Reference< css::uno::XComponentContext > const & xContext );
+::rtl::OUString const & getPlatformString();
+
+//==============================================================================
+bool platform_fits( ::rtl::OUString const & platform_string );
+
+//==============================================================================
+::rtl::OUString make_url(
+    ::rtl::OUString const & base_url, ::rtl::OUString const & url );
+
+//==============================================================================
+::rtl::OUString expand_url( ::rtl::OUString const & url );
+
+//==============================================================================
+::rtl::OUString generateRandomPipeId();
+
+class AbortChannel;
+//==============================================================================
+css::uno::Reference<css::uno::XInterface> resolveUnoURL(
+    ::rtl::OUString const & connectString,
+    css::uno::Reference<css::uno::XComponentContext> const & xLocalContext,
+    AbortChannel * abortChannel = 0 );
+
+//==============================================================================
+bool office_is_running();
+
+//==============================================================================
+oslProcess raiseProcess( ::rtl::OUString const & appURL,
+                         css::uno::Sequence< ::rtl::OUString > const & args );
 
 }
 
