@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 15:15:41 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ private:
     BOOL            bIsActive : 1;
     BOOL            bControllersUnBound : 1;
     BOOL            bWasHighContrast : 1;
+    BOOL            bIsAddonPopupMenu : 1;
 
 private:
     void            Construct_Impl();
@@ -118,7 +119,7 @@ private:
 
 protected:
     SfxVirtualMenu( USHORT nOwnId, SfxVirtualMenu* pParent, Menu& rMenu, BOOL bWithHelp,
-                        SfxBindings &rBind, BOOL bOLEServer=FALSE, BOOL bRes=FALSE );
+                        SfxBindings &rBind, BOOL bOLEServer=FALSE, BOOL bRes=FALSE, BOOL bIsAddonMenu=FALSE );
 
     void            CreateFromSVMenu();
     DECL_LINK( Highlight, Menu * );
@@ -129,11 +130,12 @@ protected:
     // Used for runtime popup menus
     void            UpdateImages( Menu* pMenu );
     void            RemoveMenuImages( Menu* pMenu );
+    void            InsertAddOnsMenuItem( Menu* pMenu );
 
 public:
                     ~SfxVirtualMenu();
                     SfxVirtualMenu( Menu *pStarViewMenu, BOOL bWithHelp,
-                        SfxBindings &rBind, BOOL bOLEServer=FALSE, BOOL bRes=FALSE );
+                        SfxBindings &rBind, BOOL bOLEServer=FALSE, BOOL bRes=FALSE, BOOL bIsAddonMenu=FALSE );
     void            CheckItem( USHORT nItemId, BOOL bCheck );
     void            EnableItem( USHORT nItemId, BOOL bEnable );
     void            SetItemText( USHORT nItemId, const String& rText );
