@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_xrefpage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 class HF_IdlXrefs : public HtmlFactory_Idl
 {
   public:
+    typedef void (*F_GET_SUBLIST)(dyn_ce_list&, const client&);
 
                         HF_IdlXrefs(
                             Environment &       io_rEnv,
@@ -83,11 +84,10 @@ class HF_IdlXrefs : public HtmlFactory_Idl
     virtual             ~HF_IdlXrefs();
 
     /** @descr
-        Only lists which are tried to be produced by this, will occur
-        in the content directory of the page. They will have links,
-        if the list has at least one element, else the list is
-        mentioned in the directory without link and won't appear as
-        a list below.
+        Only lists which are tried to be produced by Produce_List() or
+        Produce_Tree(), will occur in the content directory of the page.
+        They will have links, if the list or tree has at least one element,
+        else the list is mentioned in the directory without link.
 
         @param i_label [*i_label == '#']
     */
@@ -97,6 +97,19 @@ class HF_IdlXrefs : public HtmlFactory_Idl
                             ce_list &           i_iterator ) const;
     void                Write_ManualLinks(
                             const client &      i_ce ) const;
+    /** @descr
+        Only lists which are tried to be produced by Produce_List() or
+        Produce_Tree(), will occur in the content directory of the page.
+        They will have links, if the list or tree has at least one element,
+        else the list is mentioned in the directory without link.
+
+        @param i_label [*i_label == '#']
+    */
+    void                Produce_Tree(
+                            const char *        i_title,
+                            const char *        i_label,
+                            const client &      i_ce,
+                            F_GET_SUBLIST       i_sublistcreator ) const;
 
   private:
     // Locals
@@ -105,6 +118,14 @@ class HF_IdlXrefs : public HtmlFactory_Idl
                             const client &      i_ce ) const;
     void                make_Navibar(
                             const client &      i_ce ) const;
+    /// @return true if there are any elements in sub lists.
+    void                recursive_make_ListInTree(
+                            Xml::Element &      o_rDisplay,
+                            uintt               i_level,    /// 0 is highest
+                            const client &      i_ce,
+                            ce_list &           i_iterator,
+                            F_GET_SUBLIST       i_sublistcreator ) const;
+
     // DATA
     Xml::Element &      rContentDirectory;
     const client *      pClient;
