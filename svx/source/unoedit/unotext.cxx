@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-28 09:52:13 $
+ *  last change: $Author: cl $ $Date: 2000-09-28 12:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@
 #include "unomid.hxx"
 #include "unonrule.hxx"
 #include "unofdesc.hxx"
+#include "unoapi.hxx"
 
 using namespace ::rtl;
 using namespace ::vos;
@@ -426,16 +427,15 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
             {
                 SvxUnoNumberingRules *pNumRules = SvxUnoNumberingRules::getImplementation( xNumRule );
 
-                if( pNumRules )
+                if( pNumRules && pNumRules->GetNumBulletItem())
                 {
-                    SvxNumRule aRule( *pNumRules->GetNumRule() );
-                    SvxNumBulletItem aItem( aRule, EE_PARA_NUMBULLET );
-                    rNewSet.Put(aItem);
+                    rNewSet.Put(*pNumRules->GetNumBulletItem());
                     return sal_True;
                 }
             }
         }
         break;
+
     case WID_NUMLEVEL:
         {
             SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : NULL;
@@ -464,6 +464,20 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
                             return sal_True;
                         }
                     }
+                }
+            }
+        }
+        break;
+    case WID_NUMNAME:
+        {
+            OUString aName;
+            if( aValue >>= aName )
+            {
+                SvxNumBulletItem* pNumItem = SvxGetNumBulletItemByName( rOldSet.GetPool(), aName );
+                if( pNumItem )
+                {
+                    rNewSet.Put(*pNumItem);
+                    return sal_True;
                 }
             }
         }
@@ -537,19 +551,20 @@ sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const S
         break;
 
     case EE_PARA_NUMBULLET:
+    case WID_NUMNAME:
         {
             if((rSet.GetItemState( EE_PARA_NUMBULLET, sal_True ) & (SFX_ITEM_SET|SFX_ITEM_DEFAULT)) == 0)
                 throw uno::RuntimeException();
 
-            SvxNumBulletItem aBulletItem( *(SvxNumBulletItem*)rSet.GetItem( EE_PARA_NUMBULLET, sal_True ) );
+            SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)rSet.GetItem( EE_PARA_NUMBULLET, sal_True );
 
-            if( aBulletItem.GetNumRule() == NULL )
+            if( pBulletItem == NULL )
                 throw uno::RuntimeException();
 
-            SvxNumRule aRule( *aBulletItem.GetNumRule() );
-            uno::Reference< container::XIndexReplace > xNumRule( new SvxUnoNumberingRules(aRule) );
-
-            aAny.setValue( &xNumRule, ::getCppuType((const uno::Reference< container::XIndexReplace >*)0) );
+            if( pMap->nWID == EE_PARA_NUMBULLET )
+                aAny <<= pBulletItem->getUnoNumRule();
+            else
+                aAny <<= pBulletItem->getName();
         }
         break;
 
@@ -674,6 +689,9 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const OUStr
         }
         break;
 
+    case WID_NUMNAME:
+        nWID = EE_PARA_NUMBULLET;
+        break;
     case WID_NUMLEVEL:
         eItemState = SFX_ITEM_SET;
         break;
@@ -753,6 +771,10 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(const OUString& PropertyName, sa
         SvxUnoFontDescriptor::setPropertyToDefault( aSet );
         break;
 
+    case WID_NUMNAME:
+        {
+        }
+        break;
     case WID_NUMLEVEL:
         {
             sal_Int16 nLevel = 0;
@@ -803,6 +825,14 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
     case WID_FONTDESC:
         return SvxUnoFontDescriptor::getPropertyDefault( pPool );
 
+    case WID_NUMNAME:
+        {
+            OUString aEmpty;
+            uno::Any aValue;
+            aValue <<= aEmpty;
+            return aValue;
+        }
+        break;
     case WID_NUMLEVEL:
         {
             uno::Any aValue;
