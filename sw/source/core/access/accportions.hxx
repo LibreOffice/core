@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-01 13:26:42 $
+ *  last change: $Author: dvo $ $Date: 2002-03-20 10:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,12 @@ class SwAccessiblePortionData : public SwPortionHandler
     Positions_t aModelPositions;    /// position of portion breaks in the model
     Positions_t aAccessiblePositions;   /// portion breaks in sAccessibleString
 
-    Positions_t* pWords;        /// positions of word breaks
     Positions_t* pSentences;    /// positions of sentence breaks
 
     size_t nBeforePortions;     /// # of portions before first model character
     sal_Bool bLastIsSpecial;    /// set if last portion was 'Special()'
+
+    sal_Bool bAutoSpellPortions;    /// are AutoSpell pseudo portions included?
 
     /// returns the index of the first position whose value is smaller
     /// or equal, and whose following value is equal or larger
@@ -123,6 +124,10 @@ class SwAccessiblePortionData : public SwPortionHandler
                       const Positions_t& rPositions,
                       size_t nPos );
 
+    // add pseudo-portions induced by auto-spell
+    void AddAutoSpellPortions( const SwTxtNode* pNode );
+
+
 public:
     SwAccessiblePortionData( const String& rCoreString );
     virtual ~SwAccessiblePortionData();
@@ -133,7 +138,6 @@ public:
     virtual void LineBreak();
     virtual void Skip(USHORT nLength);
     virtual void Finish();
-
 
 
     // access to the portion data
@@ -167,12 +171,22 @@ public:
     // get boundaries of words/sentences. The data structures are
     // created on-demand.  The SwTxtNode is needed to get the language
     // for the words.
-    void GetWordBoundary( com::sun::star::i18n::Boundary& rBound,
-                          sal_Int32 nPos,
-                          const SwTxtNode* pNode );
     void GetSentenceBoundary( com::sun::star::i18n::Boundary& rBound,
                               sal_Int32 nPos,
                               const SwTxtNode* pNode );
+
+    // get (a) boundary for attribut change
+    // The SwTxtNode is needed to add the AutoSpell portions (if necessary)
+    void GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
+                               sal_Int32 nPos,
+                               const SwTxtNode* pNode );
+
+    /// Have AutoSpell pseudo portions already been included in the
+    /// portions arrays?
+    sal_Bool HasAutoSpellPortions()
+    {
+        return bAutoSpellPortions;
+    }
 };
 
 

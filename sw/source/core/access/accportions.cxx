@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-01 13:26:42 $
+ *  last change: $Author: dvo $ $Date: 2002-03-20 10:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,13 @@
 #include <txttypes.hxx>
 #endif
 
+// for portion replacement in Special()
+#ifndef _ACCESS_HRC
+#include "access.hrc"
+#endif
+#ifndef _TOOLS_RESID_HXX
+#include <tools/resid.hxx>
+#endif
 
 // for GetWordBoundary(...), GetSentenceBoundary(...):
 #ifndef _BREAKIT_HXX
@@ -103,11 +110,10 @@
 using rtl::OUString;
 using com::sun::star::i18n::Boundary;
 
-// for GetWordBoundary
-using com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES;
 
-
+// 'portion type' for terminating portions
 #define POR_TERMINATE 0
+
 
 SwAccessiblePortionData::SwAccessiblePortionData(
     const String& rCoreString ) :
@@ -120,11 +126,9 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     aLineBreaks(),
     aModelPositions(),
     aAccessiblePositions(),
-    pWords( NULL ),
     pSentences( NULL ),
     nBeforePortions( 0 ),
     bLastIsSpecial( sal_False )
-
 {
     // reserve some space to reduce memory allocations
     aLineBreaks.reserve( 5 );
@@ -137,7 +141,6 @@ SwAccessiblePortionData::SwAccessiblePortionData(
 
 SwAccessiblePortionData::~SwAccessiblePortionData()
 {
-    delete pWords;
     delete pSentences;
 }
 
@@ -174,16 +177,25 @@ void SwAccessiblePortionData::Special(
 
     DBG_ASSERT( !bFinished, "We are already done!" );
 
-    // ignore zero/zero portions (except our terminators)
+    // ignore zero/zero portions (except for terminators)
     if( (nLength == 0) && (rText.Len() == 0) && (nType != POR_TERMINATE) )
         return;
 
-    // special case portions: (none so far)
-    // switch( nType )
-    // {
-    //      default:
-    //          break;
-    // }
+    // construct string with representation; either directly from
+    // rText, or use resources for special case portions
+    String sDisplay;
+    switch( nType )
+    {
+        case POR_POSTITS:
+            sDisplay = SW_RES(STR_ACCESS_REPLACEMENT_POSTIT);
+            break;
+        case POR_FLYCNT:
+            sDisplay = SW_RES(STR_ACCESS_REPLACEMENT_FRAME);
+            break;
+        default:
+            sDisplay = rText;
+            break;
+    }
 
     // special treatment for zero length portion at the beginning:
     // count as 'before' portion
@@ -196,7 +208,7 @@ void SwAccessiblePortionData::Special(
     aAccessiblePositions.push_back( aBuffer.getLength() );
 
     // update buffer + nModelPosition
-    aBuffer.append( OUString(rText) );
+    aBuffer.append( OUString(sDisplay) );
     nModelPosition += nLength;
 
     // remember 'last' special portion (unless it's our own 'closing'
@@ -235,6 +247,13 @@ void SwAccessiblePortionData::Finish()
     sAccessibleString = aBuffer.makeStringAndClear();
     bFinished = sal_True;
 }
+
+
+void SwAccessiblePortionData::AddAutoSpellPortions( const SwTxtNode* pNode )
+{
+    // not implemented!
+}
+
 
 const OUString& SwAccessiblePortionData::GetAccessibleString()
 {
@@ -365,60 +384,6 @@ size_t SwAccessiblePortionData::FindLastBreak(
 }
 
 
-void SwAccessiblePortionData::GetWordBoundary(
-    Boundary& rBound,
-    sal_Int32 nPos,
-    const SwTxtNode* pNode )
-{
-     DBG_ASSERT( nPos >= 0, "illegal position; check before" );
-     DBG_ASSERT( nPos < sAccessibleString.getLength(), "illegal position" );
-
-     if( pWords == NULL )
-     {
-         DBG_ASSERT( pBreakIt != NULL, "We always need a break." );
-         DBG_ASSERT( pBreakIt->xBreak.is(), "No break-iterator." );
-         if( pBreakIt->xBreak.is() )
-         {
-             pWords = new Positions_t();
-             pWords->reserve(100);
-
-             // use xBreak->nextWord to iterate over all words; store
-             // positions in pWords
-             sal_Int32 nCurrent = 0;
-             sal_Int32 nLength = sAccessibleString.getLength();
-             const USHORT nWordType = ANYWORD_IGNOREWHITESPACES;
-             do
-             {
-                 pWords->push_back( nCurrent );
-
-                 USHORT nModelPos = GetModelPosition( nCurrent );
-
-                 nCurrent = pBreakIt->xBreak->nextWord(
-                     sAccessibleString, nCurrent,
-                     pBreakIt->GetLocale( pNode->GetLang( nModelPos ) ),
-                     nWordType ).startPos;
-
-                 if( (nCurrent < 0) && (nCurrent > nLength) )
-                     nCurrent = nLength;
-             }
-             while (nCurrent < nLength);
-
-             // finish with two terminators
-             pWords->push_back( nLength );
-             pWords->push_back( nLength );
-         }
-         else
-         {
-             // no break iterator -> empty word
-             rBound.startPos = 0;
-             rBound.endPos = 0;
-             return;
-         }
-     }
-
-     FillBoundary( rBound, *pWords, FindBreak( *pWords, nPos ) );
-}
-
 void SwAccessiblePortionData::GetSentenceBoundary(
     Boundary& rBound,
     sal_Int32 nPos,
@@ -474,6 +439,23 @@ void SwAccessiblePortionData::GetSentenceBoundary(
 
     FillBoundary( rBound, *pSentences, FindBreak( *pSentences, nPos ) );
 }
+
+void SwAccessiblePortionData::GetAttributeBoundary(
+    Boundary& rBound,
+    sal_Int32 nPos,
+    const SwTxtNode* pNode)
+{
+    DBG_ASSERT( pNode != NULL, "Need SwTxtNode!" );
+
+    // include auto spell portions, if not already available
+    if( ! HasAutoSpellPortions() )
+        AddAutoSpellPortions( pNode );
+
+    // attribute boundaries can only occur on portion boundaries
+    // (if autospell pseudo-portion are included)
+    FillBoundary( rBound, aModelPositions, FindBreak( aModelPositions, nPos ));
+}
+
 
 sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( USHORT nPos )
 {

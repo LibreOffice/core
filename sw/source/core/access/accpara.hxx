@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: dvo $ $Date: 2002-03-20 10:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,29 @@ class SwAccessibleParagraph : public    SwAccessibleContext,
     // get the current care position
     sal_Int32 GetCaretPos();
 
-    /// determine whether the current selection. Fill the values with
+    /// determine the current selection. Fill the values with
     /// -1 if there is no selection in the this paragraph
     sal_Bool GetSelection(sal_Int32& nStart, sal_Int32& nEnd);
     SwPaM* GetCrsr();          /// helper for GetSelection and getCaretPosition
     SwCrsrShell* GetCrsrShell();    /// helper for GetCrsr and setSelection
 
+    /// for cut/copy/paste: execute a particular slot at the view shell
+    void ExecuteAtViewShell( UINT16 nSlot );
+
+
+    // methods for checking the parameter range:
+
+    /// does nPos point to a char?
+    sal_Bool IsValidChar(sal_Int32 nPos, sal_Int32 nLength);
+
+    /// does nPos point to a position? (may be behind the last character)
+    sal_Bool IsValidPosition(sal_Int32 nPos, sal_Int32 nLength);
+
+    /// is nBegin...nEnd a valid range? (nEnd points past the last character)
+    sal_Bool IsValidRange(sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength);
+
+
+public:
 
     sal_Bool IsHeading() const;
 
@@ -159,31 +176,34 @@ protected:
 
     //=====  helpers for word boundaries  ====================================
 
-    void GetCharBoundary( com::sun::star::i18n::Boundary& rBound,
-                          const rtl::OUString& rText,
-                          sal_Int32 nPos );
-    void GetWordBoundary( com::sun::star::i18n::Boundary& rBound,
-                          const rtl::OUString& rText,
-                          sal_Int32 nPos );
-    void GetSentenceBoundary( com::sun::star::i18n::Boundary& rBound,
+    sal_Bool GetCharBoundary( com::sun::star::i18n::Boundary& rBound,
                               const rtl::OUString& rText,
                               sal_Int32 nPos );
-    void GetLineBoundary( com::sun::star::i18n::Boundary& rBound,
-                          const rtl::OUString& rText,
-                          sal_Int32 nPos );
-    void GetParagraphBoundary( com::sun::star::i18n::Boundary& rBound,
-                               const rtl::OUString& rText,
-                               sal_Int32 nPos );
+    sal_Bool GetWordBoundary( com::sun::star::i18n::Boundary& rBound,
+                              const rtl::OUString& rText,
+                              sal_Int32 nPos );
+    sal_Bool GetSentenceBoundary( com::sun::star::i18n::Boundary& rBound,
+                                  const rtl::OUString& rText,
+                                  sal_Int32 nPos );
+    sal_Bool GetLineBoundary( com::sun::star::i18n::Boundary& rBound,
+                              const rtl::OUString& rText,
+                              sal_Int32 nPos );
+    sal_Bool GetParagraphBoundary( com::sun::star::i18n::Boundary& rBound,
+                                   const rtl::OUString& rText,
+                                   sal_Int32 nPos );
+    sal_Bool  GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
+                                    const rtl::OUString& rText,
+                                    sal_Int32 nPos );
 
     /// generate an empty boundary
     void GetEmptyBoundary( com::sun::star::i18n::Boundary& rBound );
 
     /// get boundaries of word/sentence/etc. for specified text type
     /// Does all argument checking, and then delegates to helper methods above.
-    void GetTextBoundary( com::sun::star::i18n::Boundary& rBound,
-                          const rtl::OUString& rText,
-                          sal_Int32 nPos,
-                          sal_Int16 aTextType )
+    sal_Bool GetTextBoundary( com::sun::star::i18n::Boundary& rBound,
+                              const rtl::OUString& rText,
+                              sal_Int32 nPos,
+                              sal_Int16 aTextType )
         throw (
             ::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException);

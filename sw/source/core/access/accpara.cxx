@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: dvo $ $Date: 2002-03-20 10:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,26 @@
 #include "accportions.hxx"
 #endif
 
+#ifndef _SFXSIDS_HRC
+#include <sfx2/sfxsids.hrc>     // for copy/cut/pasteText(...)
+#endif
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>      // for ExecuteAtViewShell(...)
+#endif
+#ifndef _SFXDISPATCH_HXX
+#include <sfx2/dispatch.hxx>    // for ExecuteAtViewShell(...)
+#endif
+
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>   // for GetWordBoundary
+#endif
+#ifndef _SWTYPES_HXX
+#include "swtypes.hxx"
+#endif
+
+#include <algorithm>
+
+
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -150,6 +170,8 @@ using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
 
 using ::com::sun::star::beans::PropertyValue;
+using std::max;
+using std::min;
 
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
@@ -463,9 +485,6 @@ void SwAccessibleParagraph::UpdatePortionData()
     DBG_ASSERT( pPortionData != NULL, "UpdatePortionData() failed" );
 }
 
-
-// text boundaries
-
 void SwAccessibleParagraph::ClearPortionData()
 {
     delete pPortionData;
@@ -473,46 +492,132 @@ void SwAccessibleParagraph::ClearPortionData()
 }
 
 
-void SwAccessibleParagraph::GetCharBoundary(
+void SwAccessibleParagraph::ExecuteAtViewShell( UINT16 nSlot )
+{
+    DBG_ASSERT( GetMap() != NULL, "no map?" );
+    ViewShell* pViewShell = GetMap()->GetShell();
+
+    DBG_ASSERT( pViewShell != NULL, "View shell exptected!" );
+    SfxViewShell* pSfxShell = pViewShell->GetSfxViewShell();
+    if( pSfxShell != NULL )
+    {
+        pSfxShell->GetDispatcher()->Execute( nSlot );
+    }
+}
+
+
+//
+// range checking for parameter
+//
+
+sal_Bool SwAccessibleParagraph::IsValidChar(
+    sal_Int32 nPos, sal_Int32 nLength)
+{
+    return (nPos >= 0) && (nPos < nLength);
+}
+
+sal_Bool SwAccessibleParagraph::IsValidPosition(
+    sal_Int32 nPos, sal_Int32 nLength)
+{
+    return (nPos >= 0) && (nPos <= nLength);
+}
+
+sal_Bool SwAccessibleParagraph::IsValidRange(
+    sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength)
+{
+    return (nBegin >= 0) && (nBegin <= nEnd) && (nEnd <= nLength);
+}
+
+
+//
+// text boundaries
+//
+
+
+sal_Bool SwAccessibleParagraph::GetCharBoundary(
     Boundary& rBound,
     const OUString& rText,
     sal_Int32 nPos )
 {
     rBound.startPos = nPos;
     rBound.endPos = nPos+1;
+    return sal_True;
 }
 
-void SwAccessibleParagraph::GetWordBoundary(
+sal_Bool SwAccessibleParagraph::GetWordBoundary(
     Boundary& rBound,
     const OUString& rText,
     sal_Int32 nPos )
 {
-    GetPortionData().GetWordBoundary( rBound, nPos, GetTxtNode() );
+    sal_Bool bRet = sal_False;
+
+    // now ask the Break-Iterator for the word
+    DBG_ASSERT( pBreakIt != NULL, "We always need a break." );
+    DBG_ASSERT( pBreakIt->xBreak.is(), "No break-iterator." );
+    if( pBreakIt->xBreak.is() )
+    {
+        // get locale for this position
+        USHORT nModelPos = GetPortionData().GetModelPosition( nPos );
+        Locale aLocale = pBreakIt->GetLocale(
+                              GetTxtNode()->GetLang( nModelPos ) );
+
+        // which type of word are we interested in?
+        // (DICTIONARY_WORD includes punctuation, ANY_WORD doesn't.)
+        const USHORT nWordType = WordType::ANY_WORD;
+
+        // get word boundary, as the Break-Iterator sees fit.
+        rBound = pBreakIt->xBreak->getWordBoundary(
+            rText, nPos, aLocale, nWordType, sal_True );
+
+        // It's a word if the first character is an alpha-numeric character.
+        bRet = GetAppCharClass().isLetterNumeric(
+            rText.getStr()[ rBound.startPos ] );
+    }
+    else
+    {
+        // no break Iterator -> no word
+        rBound.startPos = nPos;
+        rBound.endPos = nPos;
+    }
+
+    return bRet;
 }
 
-void SwAccessibleParagraph::GetSentenceBoundary(
+sal_Bool SwAccessibleParagraph::GetSentenceBoundary(
     Boundary& rBound,
     const OUString& rText,
     sal_Int32 nPos )
 {
     GetPortionData().GetSentenceBoundary( rBound, nPos, GetTxtNode() );
+    return sal_True;
 }
 
-void SwAccessibleParagraph::GetLineBoundary(
+sal_Bool SwAccessibleParagraph::GetLineBoundary(
     Boundary& rBound,
     const OUString& rText,
     sal_Int32 nPos )
 {
     GetPortionData().GetLineBoundary( rBound, nPos );
+    return sal_True;
 }
 
-void SwAccessibleParagraph::GetParagraphBoundary(
+sal_Bool SwAccessibleParagraph::GetParagraphBoundary(
     Boundary& rBound,
     const OUString& rText,
     sal_Int32 nPos )
 {
     rBound.startPos = 0;
     rBound.endPos = rText.getLength();
+    return sal_True;
+}
+
+sal_Bool SwAccessibleParagraph::GetAttributeBoundary(
+    Boundary& rBound,
+    const OUString& rText,
+    sal_Int32 nPos )
+{
+    GetPortionData().GetAttributeBoundary( rBound, nPos, GetTxtNode() );
+    return sal_True;
 }
 
 void SwAccessibleParagraph::GetEmptyBoundary( Boundary& rBound )
@@ -522,7 +627,7 @@ void SwAccessibleParagraph::GetEmptyBoundary( Boundary& rBound )
 }
 
 
-void SwAccessibleParagraph::GetTextBoundary(
+sal_Bool SwAccessibleParagraph::GetTextBoundary(
     Boundary& rBound,
     const OUString& rText,
     sal_Int32 nPos,
@@ -531,37 +636,47 @@ void SwAccessibleParagraph::GetTextBoundary(
         IndexOutOfBoundsException,
         RuntimeException)
 {
-    if( (nPos < 0) || (nPos >= rText.getLength()) )
+    // error checking
+    if( ! IsValidChar( nPos, rText.getLength() ) )
         throw IndexOutOfBoundsException();
+
+    sal_Bool bRet;
 
     switch( nTextType )
     {
         case AccessibleTextType::WORD:
-            GetWordBoundary( rBound, rText, nPos );
+            bRet = GetWordBoundary( rBound, rText, nPos );
             break;
 
         case AccessibleTextType::SENTENCE:
-            GetSentenceBoundary( rBound, rText, nPos );
+            bRet = GetSentenceBoundary( rBound, rText, nPos );
             break;
 
         case AccessibleTextType::PARAGRAPH:
-            GetParagraphBoundary( rBound, rText, nPos );
+            bRet = GetParagraphBoundary( rBound, rText, nPos );
             break;
 
         case AccessibleTextType::CHARACTER:
-            GetCharBoundary( rBound, rText, nPos );
+            bRet = GetCharBoundary( rBound, rText, nPos );
             break;
 
         case AccessibleTextType::LINE:
-            GetLineBoundary( rBound, rText, nPos );
+            bRet = GetLineBoundary( rBound, rText, nPos );
+            break;
+
+        case /* AccessibleTextType::ATTRIBUTE */ 6:
+            bRet = GetAttributeBoundary( rBound, rText, nPos );
             break;
 
         default:
             // The specification asks us to return an empty string
             // if the text type is no valid.
             GetEmptyBoundary( rBound );
+            bRet = sal_True;
             break;
     }
+
+    return bRet;
 }
 
 OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
@@ -678,7 +793,8 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
 
     OUString sText( GetString() );
 
-    if( (nIndex >= 0) && (nIndex < sText.getLength()) )
+    // return character (if valid)
+    if( IsValidChar(nIndex, sText.getLength() ) )
     {
         return sText.getStr()[nIndex];
     }
@@ -686,7 +802,8 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
         throw IndexOutOfBoundsException();
 }
 
-Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes( sal_Int32 nIndex )
+Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
+    sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     // HACK: dummy implementation
@@ -702,7 +819,7 @@ com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 
     CHECK_FOR_DEFUNC( XAccessibleContext ); // we have a frame?
 
-    if( (nIndex < 0) || (nIndex >= GetString().getLength()) )
+    if( ! IsValidChar( nIndex, GetString().getLength() ) )
         throw IndexOutOfBoundsException();
 
     // get model position & prepare GetCharRect() arguments
@@ -821,10 +938,7 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
 
     // parameter checking
     sal_Int32 nLength = GetString().getLength();
-    if ( (nStartIndex <= 0) ||
-         (nStartIndex > nLength) ||
-         (nEndIndex <= 0) ||
-         (nEndIndex > nLength) )
+    if ( ! IsValidRange( nStartIndex, nEndIndex, nLength ) )
     {
         throw IndexOutOfBoundsException();
     }
@@ -873,9 +987,7 @@ OUString SwAccessibleParagraph::getTextRange(
 
     OUString sText( GetString() );
 
-    if ( (nStartIndex <= nEndIndex) &&
-         (nStartIndex >= 0) &&
-         (nEndIndex < sText.getLength()) )
+    if ( IsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
     {
         return sText.copy(nStartIndex, nEndIndex-nStartIndex+1 );
     }
@@ -893,13 +1005,17 @@ OUString SwAccessibleParagraph::getTextAtIndex(
 
     const OUString rText = GetString();
 
+    // with error checking
     Boundary aBound;
-    GetTextBoundary( aBound, rText, nIndex, nTextType );
+    sal_Bool bIsWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
 
     DBG_ASSERT( aBound.startPos >= 0,               "illegal boundary" );
     DBG_ASSERT( aBound.startPos <= aBound.endPos,   "illegal boundary" );
 
-    return rText.copy( aBound.startPos, aBound.endPos - aBound.startPos );
+    // return word (if present)
+    return bIsWord ?
+        rText.copy( aBound.startPos, aBound.endPos - aBound.startPos ) :
+        OUString();
 }
 
 OUString SwAccessibleParagraph::getTextBeforeIndex(
@@ -912,14 +1028,24 @@ OUString SwAccessibleParagraph::getTextBeforeIndex(
 
     const OUString rText = GetString();
 
+    // get first word
     Boundary aBound;
     GetTextBoundary( aBound, rText, nIndex, nTextType );
-    if( aBound.startPos > 0 )
-        GetTextBoundary( aBound, rText, aBound.startPos-1, nTextType );
-    else
-        GetEmptyBoundary( aBound );
 
-    return rText.copy( aBound.startPos, aBound.endPos - aBound.startPos );
+    // now skip to previous word
+    sal_Bool bWord = sal_False;
+    while( !bWord )
+    {
+        nIndex = min( nIndex, aBound.startPos ) - 1;
+        if( nIndex >= 0 )
+            bWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
+        else
+            break;  // exit if beginning of string is reached
+    }
+
+    return bWord ?
+        rText.copy( aBound.startPos, aBound.endPos - aBound.startPos ) :
+        OUString();
 }
 
 OUString SwAccessibleParagraph::getTextBehindIndex(
@@ -932,21 +1058,34 @@ OUString SwAccessibleParagraph::getTextBehindIndex(
 
     const OUString rText = GetString();
 
+    // get first word, then skip to next word
     Boundary aBound;
     GetTextBoundary( aBound, rText, nIndex, nTextType );
-    if( aBound.endPos < (rText.getLength()-1) )
-        GetTextBoundary( aBound, rText, aBound.endPos+1, nTextType );
-    else
-        GetEmptyBoundary( aBound );
+    sal_Bool bWord = sal_False;
+    while( !bWord )
+    {
+        nIndex = max( sal_Int32(nIndex+1), aBound.endPos );
+        if( nIndex < rText.getLength() )
+            bWord = GetTextBoundary( aBound, rText, nIndex, nTextType );
+        else
+            break;  // exit if end of string is reached
+    }
 
-    return rText.copy( aBound.startPos, aBound.endPos - aBound.startPos );
+    return bWord ?
+        rText.copy( aBound.startPos, aBound.endPos - aBound.startPos ) :
+        OUString();
 }
 
 sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    // HACK: dummy implementation
-    return sal_False;
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // select and copy (through dispatch mechanism)
+    setSelection( nStartIndex, nEndIndex );
+    ExecuteAtViewShell( SID_COPY );
+    return sal_True;
 }
 
 
@@ -957,15 +1096,25 @@ sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
 sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    // HACK: dummy implementation
-    return sal_False;
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // select and cut (through dispatch mechanism)
+    setSelection( nStartIndex, nEndIndex );
+    ExecuteAtViewShell( SID_CUT );
+    return sal_True;
 }
 
 sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    // HACK: dummy implementation
-    return sal_False;
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // select and paste (through dispatch mechanism)
+    setSelection( nIndex, nIndex );
+    ExecuteAtViewShell( SID_PASTE );
+    return sal_True;
 }
 
 sal_Bool SwAccessibleParagraph::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
@@ -991,9 +1140,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
 
     const OUString& rText = GetString();
 
-    if( (nStartIndex >= 0) &&
-        (nEndIndex <= rText.getLength()) &&
-        (nStartIndex <= nEndIndex) )
+    if( IsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
     {
         SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
