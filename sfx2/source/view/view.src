@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-09 13:45:26 $
+ *  last change: $Author: obo $ $Date: 2001-03-09 20:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ String STR_ERROR_SAVE_TEMPLATE
     Text[ japanese ] = "ÃİÌßÚ°Ä‚Ì‘‚«‚İ‚Ì´×° ";
     Text[ chinese_traditional ] = "¼g¤J¼Ë¦¡®Éµo¥Í¤@­Ó¿ù»~ ";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôçí åããñáöŞ ôïõ ğñïôığïõ ";
-    Text[ korean ] = "¼­½ÄÆÄÀÏ ¾²±â¿¡ ¿À·ù ¹ß»ı ";
+    Text[ korean ] = "¼­½ÄÆÄÀÏ ¾²±â¿¡¼­ ¿À·ù ¹ß»ı ";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÇáŞÇáÈ ";
     Text[ turkish ] = "Şablon hazırlamada hata ";
     Text[ language_user1 ] = " ";
@@ -528,7 +528,7 @@ String STR_PREVIEW_DOCINFO
     Text[ japanese ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>Ã°Ï:</b><dd>$(THEME)<dt><b>·°Ü°ÄŞ:</b><dd>$(KEYWORDS)<dt><b>à–¾:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ chinese_traditional ] = "html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>¼ĞÃD¡G</b><dd>$(TITEL)<dt><b>¥DÃD¡G</b><dd>$(THEME)<dt><b>ÃöÁä¦r¡G</b><dd>$(KEYWORDS)<dt><b>´y­z¡G</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ greek ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Ôßôëïò:</b><dd>$(TITEL)<dt><b>Èİìá:</b><dd>$(THEME)<dt><b>Ëİîåéò-êëåéäéÜ:</b><dd>$(KEYWORDS)<dt><b>ĞåñéãñáöŞ:</b><dd>$(TEXT)</dl></font></body></html>";
-    Text[ korean ] = "<html><body BGCOLOR=\"#c0c0c0\"><foFACE=\"Arial\"><dl><dt><b>¤Á¤Á:</b><dd>$(TIdt><b>Subject:</b><dd>$(THEME)<dt><b>Keywords:</b><dd>$(KEYWORDS)<dt><b>Description:</b><dd>$(TEXT)</dl></font></body></html>";
+    Text[ korean ] = "<html><body BGCOLOR=\"#c0c0c0\"><foFACE=\"Arial\"><dl><dt><b>¤Á¤Á:</b><dd>$(TIdt><b>ÁÖÁ¦:</b><dd>$(THEME)<dt><b>Å°¿öµå:</b><dd>$(KEYWORDS)<dt><b>±â¼ú:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ arabic ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Title:</b><dd>$(TITEL)<dt><b>Subject:</b><dd>$(THEME)<dt><b>Keywords:</b><dd>$(KEYWORDS)<dt><b>Description:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ turkish ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>Konu:</b><dd>$(THEME)<dt><b>Anahtar sözcük:</b><dd>$(KEYWORDS)<dt><b>Tanım:</b><dd>$(TEXT)</dl></font></body></html>";
     Text[ language_user1 ] = " ";
@@ -586,7 +586,7 @@ InfoBox MSG_CANT_CLOSE
 {
     Message = "Das Dokument kann zur Zeit nicht geschlossen werden,\nda noch ein Druckauftrag läuft." ;
     Message [ English ] = "Can't close the document,\na print job is running." ;
-    Message [ english_us ] = "The document cannot be closed, because a\n print job is running." ;
+    Message [ english_us ] = "The document cannot be closed because a\n print job is being carried out." ;
     Message [ italian ] = "Non è possibile chiudere il documento poiché,\nc'è una stampa in corso." ;
     Message [ spanish ] = "El documento no se puede cerrar por ahora\nya que todavía se está imprimiendo." ;
     Message [ french ] = "Impossible de fermer le document \nparce que l'imprimante est active." ;
@@ -596,10 +596,10 @@ InfoBox MSG_CANT_CLOSE
     Message [ portuguese_brazilian ] = "Das Dokument kann zur Zeit nicht geschlossen werden,\nda noch ein Druckauftrag läuft." ;
     Message [ portuguese ] = "De momento é impossível fechar o documento,\n por ainda estar a ser impresso." ;
     Message[ chinese_simplified ] = "Ä¿Ç°ÎŞ·¨¹Ø±ÕÕâ¸öÎÄ¼ş£¬\nÒòÎªÕıÔÚÖ´ĞĞÒ»¸ö´òÓ¡ÈÎÎñ¡£";
-    Message[ russian ] = "Çàêğûòü ıòîò äîêóìåíò ïîêà íåâîçìîæíî,\nò.ê. ôóíêöèÿ ïå÷àòè íàõîäèòñÿ åùå â äåéñòâèè.";
-    Message[ polish ] = "Dokumentu nie mo¿na teraz zamkn¹æ,\nponiewa¿ wykonywane s¹ zadania wydruku.";
+    Message[ russian ] = "Çàêğûòü ıòîò äîêóìåíò â íàñòîÿùèé ìîìåíò íåâîçìîæíî,\nïîñêîëüêó âûïîëíÿåòñÿ åùå îäíî çàäàíèå ïå÷àòè.";
+    Message[ polish ] = "Dokumentu nie mo¿na na razie zamkn¹æ,\nponiewa¿ wykonywane jest polecenie wydruku.";
     Message[ japanese ] = "ˆóü’†‚Ì‚½‚ß\n¡ÄŞ·­ÒİÄ‚ğ•Â‚¶‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB";
-    Message[ chinese_traditional ] = "¥¿¦b°õ¦æ¤@­Ó¦C¦L¤u§@¡A\nµLªkÃö³¬³o­Ó¤å¥ó¡C";
+    Message[ chinese_traditional ] = "¥¿¦b°õ¦æ¤@­Ó¦C¦L¥ô°È¡A\n¦]¦¹µLªkÃö³¬³o­Ó¤å¥ó¡C";
     Message[ greek ] = "Äåí åßíáé äõíáôüí íá êëåßóåôå áõôü ôï İããñáöï\n åğåéäŞ åêôåëåßôáé ìéá åñãáóßá åêôığùóçò.";
     Message[ korean ] = "ÀÎ¼âÀÛ¾÷ÀÌ ¾ÆÁ÷ ÁøÇàÁßÀÌ±â ¶§¹®¿¡ \n ÇöÀç ¹®¼­¸¦ ´İÀ» ¼ö ¾ø½À´Ï´Ù.";
     Message[ arabic ] = "áÇ íãßä ÅÛáÇŞ ÇáãÓÊäÏ ÍÇáíÇğ¡\náÃä åäÇáß ÚãáíÉ ØÈÇÚÉ ŞíÏ ÇáÊäİíĞ.";
@@ -983,7 +983,7 @@ ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
     Message[ japanese ] = "²İÀ°È¯Ä‚ÅÒ¯¾°¼Ş‚ğ‘—M‚·‚é‚É‚Í\nE-mail±ÄŞÚ½‚ÆSMTP »°ÊŞ°‚ª•K—v‚Å‚·B\nÒ¯¾°¼Ş‚ğÄ‘—M‚·‚é‘O‚É\n‚±‚Ìİ’è‚ğ\n[Â°Ù\\µÌß¼®İ\\‘S”Ê...\\Õ°»Ş°ÃŞ°À \\E-mail]‚¨‚æ‚Ñ\n[Â°Ù\\µÌß¼®İ\\²İÀ°È¯Ä\\Ò°Ù/Æ­°½\\Ò¯¾°¼Ş‘—M]‚É“o˜^‚µ‚Ä‰º‚³‚¢B";
     Message[ chinese_traditional ] = "³z¹L Internet ¶Ç°e¹q¤l¶l¥ó\n»İ­n±zªº¹q¤l¶l¥ó¦a§}©M¤@­Ó SMTP ¦øªA¾¹¡C\n½Ğ¦b­«·s¶Ç°e¹q¤l¶l¥ó¤§«e¦b\n¡u¤u¨ã¡v-¡u¿ï¶µ¡v-¡u¤@¯ë¡v-¡u¨Ï¥ÎªÌ¸ê®Æ¡v©M¡u¤u¨ã¡v-¡u¿ï¶µ¡v-¡uInternet¡v-¡u¹q¤l¶l¥ó¡v-¡u·s»D¡v-¡u¶Ç°e¹q¤l¶l¥ó¡v¡¨³B§@¬ÛÃöªº³]©w¡C";
     Message[ greek ] = "Ãéá íá İ÷åôå ôç äõíáôüôçôá áğïóôïëŞò ìçíıìáôïò ìİóù ôïõ Internet\nğñİğåé íá ïñßóåôå ôç äéêŞ óáò äéåıèõíóç E-mail êáé İíáí äéáêïìéóôŞ SMTP.\nĞáñáêáëş åéóÜãåôå áõôİò ôéò ñõèìßóåéò óôï\n\"Åñãáëåßá\\Åğéëïãİò\\ÃåíéêÜ...\\ĞñïóùğéêÜ äåäïìİíá\\E-Mail\" êáé\n\"Åñãáëåßá\\Åğéëïãİò\\Internet\\Áëëçëïãñáößá/ÓõæçôŞóåéò\\ÁğïóôïëŞ ìçíõìÜôùí\".\nğñéí áğïóôåßëåôå îáíÜ êÜğïéï ìŞíõìá.";
-    Message[ korean ] = "¸Ş½ÃÁö¸¦ ÀÎÅÍ³İÀ¸·Î º¸³»·Á¸é \nE-Mail ÁÖ¼Ò¿Í SMTP ¼­¹ö°¡ ÇÊ¿äÇÕ´Ï´Ù. \n»õ·Î ¸Ş½ÃÁö¸¦ º¸³»±â Àü¿¡ \n\"µµ±¸\\¿É¼Ç\\ÀÏ¹İ...\\»ç¿ëÀÚ µ¥ÀÌÅÍ\\E-Mail\"°ú \n\"µµ±¸\\¿É¼Ç\\ÀÎÅÍ³İ\\¸ŞÀÏ/´º½º\\¸Ş½ÃÁö º¸³»±â\"¿¡ µû¶ó ¼³Á¤ÇÏ¿© ÀÔ·ÂÇÏ½Ê½Ã¿À.";
+    Message[ korean ] = "¸Ş½ÃÁö¸¦ ÀÎÅÍ³İÀ¸·Î º¸³»·Á¸é \nE-Mail ÁÖ¼Ò¿Í SMTP ¼­¹ö°¡ ÇÊ¿äÇÕ´Ï´Ù. \n»õ·Î ¸Ş½ÃÁö¸¦ ´Ù½Ã¡¡º¸³»±â Àü¿¡ \n\"µµ±¸\\¿É¼Ç\\ÀÏ¹İ...\\»ç¿ëÀÚ µ¥ÀÌÅÍ\\E-Mail\"°ú \n\"µµ±¸\\¿É¼Ç\\ÀÎÅÍ³İ\\¸ŞÀÏ/´º½º\\¸Ş½ÃÁö º¸³»±â\"¿¡ µû¶ó ¼³Á¤ÇÏ¿© ÀÔ·ÂÇÏ½Ê½Ã¿À.";
     Message[ arabic ] = "ÅÑÓÇá ÑÓÇáÉ ãä ÎáÇá ÇáÅäÊÑäÊ¡\níÊØáÈ æÌæÏ ÚäæÇä ÈÑíÏ ÅáßÊÑæäí æãÒæøÏ SMTP.\nÇáÑÌÇÁ ÅÏÑÇÌ åĞå ÇáÅÚÏÇÏÇÊ ÊÍÊ\n\"ÃÏæÇÊ/ÎíÇÑÇÊ/ÚÇã.../ÈíÇäÇÊ ÇáãÓÊÎÏã/ÈÑíÏ ÅáßÊÑæäí\"¡ Ëã ÊÍÊ\n\"ÃÏæÇÊ/ÎíÇÑÇÊ/ÅäÊÑäÊ/ÇáÈÑíÏ \\ãÌãæÚÇÊ ÇáÃÎÈÇÑ/ÅÑÓÇá ÇáÈÑíÏ\"¡\nËã ÍÇæá ÅÑÓÇá åĞå ÇáÑÓÇáÉ ãÑÉ ÃÎÑì.";
     Message[ language_user1 ] = " ";
     Message[ turkish ] = "Internet üzerinden ileti gönderebilmek için önce\n e-posta adresinizi ve bir SMTP sunucusu belirtmeniz gerekiyor.\nİleti göndermeden önce bu ayarlar için,\n\"Araçlar\\Seçenekler\\Genel...\\Kullanıcı\\E-Posta\" ve\n\"Araçlar\\Seçenekler\\Internet\\E-Posta/Haber Grubu\\Giden Posta\" \nalanlarına girin.";
