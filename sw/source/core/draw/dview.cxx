@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:54:11 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ const SwFrm *SwDrawView::CalcAnchor()
         }
     }
     if( pAnch && !pAnch->IsProtected() )
-        aAnchorPoint = pAnch->GetAnchorPos();
+        aAnchorPoint = pAnch->GetFrmAnchorPos( ::HasWrap( pObj ) );
     else
         pAnch = 0;
     return pAnch;
