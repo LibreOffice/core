@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:12 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef _DBA_COREAPI_RESULTSET_HXX_
 #include <resultset.hxx>
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -88,6 +88,9 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 using namespace ::com::sun::star::sdbc;
 //using namespace ::com::sun::star::sdbcx;
@@ -97,6 +100,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace dbaccess;
+using namespace dbtools;
 
 DBG_NAME(OStatementBase);
 

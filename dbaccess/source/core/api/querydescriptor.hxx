@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #ifndef _DBA_CORE_COMMANDBASE_HXX_
 #include "commandbase.hxx"
 #endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
+
 
 //........................................................................
 namespace dbaccess
@@ -147,7 +151,7 @@ typedef ::cppu::WeakImplHelper3<
 
 class OQueryDescriptor
         :public OQueryDescriptor_Base
-        ,public OMutexAndBroadcastHelper
+        ,public comphelper::OMutexAndBroadcastHelper
         ,public ODataSettings
         ,public OCommandBase
         ,public ::comphelper::OPropertyArrayUsageHelper< OQueryDescriptor >

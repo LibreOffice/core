@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetColumn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -77,6 +77,10 @@
 #ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
 #include <com/sun/star/sdb/XColumn.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
 
 using namespace dbaccess;
 //  using namespace connectivity;
@@ -121,11 +125,11 @@ Any SAL_CALL ORowSetColumn::queryInterface( const Type & _rType ) throw (Runtime
         DECL_PROP0_IFACE(CONTROLMODEL,      XPropertySet                );
         DECL_PROP1(DISPLAYSIZE,             sal_Int32,          READONLY);
         DECL_PROP1(NUMBERFORMAT,            sal_Int32,          MAYBEVOID);
+        DECL_PROP0_BOOL(HIDDEN                                          );
         DECL_PROP1_BOOL(ISAUTOINCREMENT,                        READONLY);
         DECL_PROP1_BOOL(ISCASESENSITIVE,                        READONLY);
         DECL_PROP1_BOOL(ISCURRENCY,                             READONLY);
         DECL_PROP1_BOOL(ISDEFINITELYWRITABLE,                   READONLY);
-        DECL_PROP0_BOOL(HIDDEN                                          );
         DECL_PROP1(ISNULLABLE,              sal_Int32,          READONLY);
         DECL_PROP1_BOOL(ISREADONLY,                             READONLY);
         DECL_PROP1_BOOL(ISSEARCHABLE,                           READONLY);

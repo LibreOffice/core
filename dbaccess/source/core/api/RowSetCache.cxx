@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef DBACCESS_CORE_API_KEYSET_HXX
 #include "KeySet.hxx"
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
@@ -89,17 +89,21 @@
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #endif
-#ifndef _DBASHARED_APITOOLS_HXX_
-#include "apitools.hxx"
-#endif
+//#ifndef _DBASHARED_APITOOLS_HXX_
+//#include "apitools.hxx"
+//#endif
 #ifndef _DBACORE_DATACOLUMN_HXX_
 #include "CRowSetDataColumn.hxx"
 #endif
 #ifndef DBACCESS_CORE_API_CROWSETCOLUMN_HXX
 #include "CRowSetColumn.hxx"
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 
 using namespace dbaccess;
+using namespace dbtools;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -979,8 +983,7 @@ sal_Bool ORowSetCache::moveWindow()
             // the rows behind this can be reused
             ORowSetMatrix::iterator aIter = m_pMatrix->begin();
             ORowSetMatrix::iterator aEnd  = m_pMatrix->begin() + nNewStartPos - m_nStartPos -1;
-            m_pCacheSet->absolute(m_nStartPos+m_nFetchSize);
-            sal_Bool bCheck = sal_True;
+            sal_Bool bCheck = m_pCacheSet->absolute(m_nStartPos+m_nFetchSize);
             for(; bCheck && aIter != aEnd;)
             {
                 if(bCheck = m_pCacheSet->next()) // resultset stands on right position
@@ -999,18 +1002,20 @@ sal_Bool ORowSetCache::moveWindow()
             else
             {   // the end was reached before end() so we can set the start before nNewStartPos
 
+                m_nStartPos += (aIter - m_pMatrix->begin());
                 ::std::rotate(m_pMatrix->begin(),aIter,m_pMatrix->end());
                 if(!m_bRowCountFinal)
                 {
                     m_pCacheSet->previous(); // because we stand after the last row
-                    // TODO check if +1 is correct
-                    m_nRowCount = m_pCacheSet->getRow() ; // here we have the row count + 1
+                    m_nRowCount = m_pCacheSet->getRow() ; // here we have the row count
                     m_bRowCountFinal = sal_True;
                 }
                 // TODO check
-                m_nStartPos = m_nRowCount - m_nFetchSize ;   // must be -1
+                //  m_nStartPos = (nNewStartPos+m_nRowCount) - m_nFetchSize ;
+                if(m_nStartPos < 0)
+                    m_nStartPos = 0;
             }
-            // here we need only to check if the begining row is valid. If not we ave to fetch it.
+            // here we need only to check if the begining row is valid. If not we have to fetch it.
             if(!m_pMatrix->begin()->isValid())
             {
                 aIter = m_pMatrix->begin();
@@ -1032,6 +1037,7 @@ sal_Bool ORowSetCache::moveWindow()
 
     if(!m_bRowCountFinal)
        m_nRowCount = max(m_nPosition,m_nRowCount);
+    OSL_ENSHURE(m_nStartPos >= 0,"ORowSetCache::moveWindow: m_nStartPos is less than 0!");
 
     return bRet;
 }
@@ -1152,7 +1158,6 @@ sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, Ru
         if(!m_bAfterLast)
         {
             moveWindow();
-            m_aMatrixIter = m_pMatrix->begin() + (m_nPosition - m_nStartPos) - 1; // must be -1
             if(m_bRowCountFinal) // check again
             {
                 m_bAfterLast    = m_nPosition > m_nRowCount;
@@ -1160,6 +1165,10 @@ sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, Ru
                 if(m_bAfterLast)
                     m_nPosition = 0;//m_nRowCount;
             }
+            if(!m_bAfterLast)
+                m_aMatrixIter = m_pMatrix->begin() + (m_nPosition - m_nStartPos) - 1; // must be -1
+            else
+                m_aMatrixIter = m_pMatrix->end();
         }
         else
             m_aMatrixIter = m_pMatrix->end();
@@ -1416,6 +1425,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/10/17 10:18:12  oj
+    some changes for the rowset
+
     Revision 1.5  2000/10/11 11:18:11  fs
     replace unotools with comphelper
 

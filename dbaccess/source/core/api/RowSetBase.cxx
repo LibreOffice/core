@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-24 13:17:01 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef DBACCESS_CORE_API_ROWSETBASE_HXX
 #include "RowSetBase.hxx"
+#endif
 #ifndef DBACCESS_CORE_API_CROWSETDATACOLUMN_HXX
 #include "CRowSetDataColumn.hxx"
 #endif
@@ -68,17 +70,17 @@
 #ifndef DBACCESS_CORE_API_ROWSETCACHE_HXX
 #include "RowSetCache.hxx"
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 #ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 #include <connectivity/sqliterator.hxx>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
-#include "apitools.hxx"
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -89,13 +91,14 @@
 #ifndef _COMPHELPER_SEQSTREAM_HXX
 #include <comphelper/seqstream.hxx>
 #endif
-#ifndef _SOLAR_H
-#include <tools/solar.h>
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 
 using namespace dbaccess;
 using namespace connectivity;
 using namespace comphelper;
+using namespace dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -187,7 +190,8 @@ void SAL_CALL ORowSetBase::disposing(void)
     if(m_pColumns)
     {
         m_pColumns->disposing();
-        DELETEZ(m_pColumns);
+        delete m_pColumns;
+        m_pColumns = NULL;
     }
 
     m_pCache    = NULL;

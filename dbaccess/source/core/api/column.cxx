@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:16:39 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBA_COREAPI_COLUMN_HXX_
 #include "column.hxx"
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -121,6 +121,9 @@
 #endif
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 
 using namespace dbaccess;
@@ -815,7 +818,7 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
         m_pTable->getPropertyValue(PROPERTY_NAME)           >>= aTable;
 
         ::rtl::OUString aComposedName;
-        composeTableName(m_pTable->getConnection()->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
+        dbtools::composeTableName(m_pTable->getConnection()->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
 
         aSql += aComposedName;
         aSql += ::rtl::OUString::createFromAscii(" ADD ");
@@ -899,7 +902,7 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
         m_pTable->getPropertyValue(PROPERTY_NAME)           >>= aTable;
 
         ::rtl::OUString aComposedName;
-        composeTableName(m_pTable->getConnection()->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
+        dbtools::composeTableName(m_pTable->getConnection()->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
 
         aSql += aComposedName;
         aSql += ::rtl::OUString::createFromAscii(" DROP ");

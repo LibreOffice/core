@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:11 $
+ *  last change: $Author: oj $ $Date: 2000-10-25 07:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,17 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
+#include "dbastrings.hrc"
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
 using namespace ::com::sun::star::sdbc;
@@ -139,9 +142,9 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
         DECL_PROP0(DEFAULTVALUE,            ::rtl::OUString     );
         DECL_PROP0(DESCRIPTION,         ::rtl::OUString     );
         DECL_PROP1(NUMBERFORMAT,        sal_Int32           ,MAYBEVOID);
+        DECL_PROP0_BOOL(HIDDEN                              );
         DECL_PROP0_BOOL(ISAUTOINCREMENT                     );
         DECL_PROP0_BOOL(ISCURRENCY                      );
-        DECL_PROP0_BOOL(HIDDEN                              );
         DECL_PROP0(ISNULLABLE,          sal_Int32           );
         DECL_PROP0_BOOL(ISROWVERSION                        );
         DECL_PROP0(NAME,                ::rtl::OUString     );
@@ -373,9 +376,9 @@ Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (Ru
         DECL_PROP1(DEFAULTVALUE,        ::rtl::OUString,    READONLY);
         DECL_PROP1(DESCRIPTION,         ::rtl::OUString,    READONLY);
         DECL_PROP2(NUMBERFORMAT,        sal_Int32,          BOUND, MAYBEVOID);
+        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
         DECL_PROP1_BOOL(ISAUTOINCREMENT,                    READONLY);
         DECL_PROP1_BOOL(ISCURRENCY,                 READONLY);
-        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
         DECL_PROP1(ISNULLABLE,          sal_Int32,          READONLY);
         DECL_PROP1_BOOL(ISROWVERSION,                       READONLY);
         DECL_PROP1(NAME,                ::rtl::OUString,    READONLY);
@@ -535,9 +538,9 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
         }
 
         DECL_PROP1(NUMBERFORMAT,        sal_Int32,          MAYBEVOID);
+        DECL_PROP0_BOOL(HIDDEN                              );
         DECL_PROP0_BOOL(ISAUTOINCREMENT                     );
         DECL_PROP0_BOOL(ISCURRENCY                          );
-        DECL_PROP0_BOOL(HIDDEN                              );
         DECL_PROP0(ISNULLABLE,          sal_Int32           );
 
         if (nId & HAS_ROWVERSION)
@@ -705,9 +708,10 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
         }
 
         DECL_PROP2(NUMBERFORMAT,        sal_Int32,          BOUND, MAYBEVOID);
+        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
         DECL_PROP1_BOOL(ISAUTOINCREMENT,                    READONLY);
         DECL_PROP1_BOOL(ISCURRENCY,                         READONLY);
-        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
+
         DECL_PROP1(ISNULLABLE,          sal_Int32,          READONLY);
 
         if (nId & HAS_ROWVERSION)
