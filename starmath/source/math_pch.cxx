@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math_pch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:39:37 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,6 @@
 #include <types.hxx>
 #include <config.hxx>
 #include <svtools/confitem.hxx>
-#include <xchar.hxx>
 #include <tools/poly.hxx>
 #include <svx/xpoly.hxx>
 #include <rect.hxx>
