@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInputStream.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-03 12:26:14 $
+ *  last change: $Author: jbu $ $Date: 2001-05-03 12:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ interface XInputStream: com::sun::star::uno::XInterface
                    or different processes ).
              </ol>
 
-             If the same 'optinized' code runs against an interface in a different process,
+             If the same 'optimized' code runs against an interface in a different process,
              there is a unnecessary memory allocation/deallocation (the out parameter
              is of course NOT transported over the connection), but this should
              be negligible compared to a synchron call.
@@ -192,6 +192,9 @@ interface XInputStream: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/05/03 12:26:14  jbu
+    improved documentation for the readBytes()-call
+
     Revision 1.6  2001/03/16 15:10:36  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 
