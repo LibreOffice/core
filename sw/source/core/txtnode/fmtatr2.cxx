@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:35:03 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ using namespace ::rtl;
 |*
 *************************************************************************/
 
-
+TYPEINIT1_AUTOFACTORY(SwFmtINetFmt, SfxPoolItem);
 
 SwFmtCharFmt::SwFmtCharFmt( SwCharFmt *pFmt )
     : SfxPoolItem( RES_TXTATR_CHARFMT ),
@@ -207,7 +207,13 @@ BOOL SwFmtCharFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 |*
 *************************************************************************/
 
-
+SwFmtINetFmt::SwFmtINetFmt()
+    : SfxPoolItem( RES_TXTATR_INETFMT ),
+    pTxtAttr( 0 ),
+    pMacroTbl( 0 ),
+    nINetId( 0 ),
+    nVisitedId( 0 )
+{}
 
 SwFmtINetFmt::SwFmtINetFmt( const XubString& rURL, const XubString& rTarget )
     : SfxPoolItem( RES_TXTATR_INETFMT ),
