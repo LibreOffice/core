@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _SV_FONTCVT_HXX
+#include <vcl/fontcvt.hxx>
+#endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
@@ -93,6 +96,9 @@
 #endif
 #ifndef SC_ADDINCOL_HXX
 #include "addincol.hxx"
+#endif
+#ifndef __GLOBSTR_HRC_
+#include "globstr.hrc"
 #endif
 
 #ifndef SC_XISTREAM_HXX
@@ -294,7 +300,6 @@ double XclTools::GetInchFromTwips( sal_uInt16 nTwips )
     return static_cast< double >( nTwips ) / EXC_TWIPS_PER_INCH;
 }
 
-
 sal_uInt16 XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
 {
     double fScWidth = static_cast< double >( nXclWidth ) / 256.0 * nScCharWidth + 0.5;
@@ -307,62 +312,222 @@ sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
     return static_cast< sal_uInt16 >( ::std::min( fXclWidth, 65535.0 ) );
 }
 
+// font names -----------------------------------------------------------------
+
+String XclTools::GetXclFontName( const String& rFontName )
+{
+    // #106246# substitute with MS fonts
+    String aNewName( GetSubsFontName( rFontName, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
+    if( aNewName.Len() )
+        return aNewName;
+    return rFontName;
+}
 
 // built-in names -------------------------------------------------------------
 
-static const sal_Char* ppNames[] =
+const String XclTools::maDefNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
+
+static const sal_Char* ppcDefNames[] =
 {
-    "BuiltIn_Consolidate_Area",
-    "BuiltIn_Auto_Open",
-    "BuiltIn_Auto_Close",
-    "BuiltIn_Extract",
-    "BuiltIn_Database",
-    "BuiltIn_Criteria",
-    "BuiltIn_Print_Area",
-    "BuiltIn_Print_Titles",
-    "BuiltIn_Recorder",
-    "BuiltIn_Data_Form",
-    "BuiltIn_Auto_Activate",
-    "BuiltIn_Auto_Deactivate",
-    "BuiltIn_SheetTitle",
-    "BuiltIn_AutoFilter",
-    "BuiltIn_UNKNOWN"
+    "Consolidate_Area",
+    "Auto_Open",
+    "Auto_Close",
+    "Extract",
+    "Database",
+    "Criteria",
+    "Print_Area",
+    "Print_Titles",
+    "Recorder",
+    "Data_Form",
+    "Auto_Activate",
+    "Auto_Deactivate",
+    "Sheet_Title",
+    "_FilterDatabase"
 };
 
-const sal_Char* XclTools::GetBuiltInName( sal_Unicode nIndex )
+String XclTools::GetBuiltInName( sal_Unicode nIndex )
 {
-    DBG_ASSERT( STATIC_TABLE_SIZE( ppNames ) == EXC_BUILTIN_UNKNOWN + 1,
-        "XclTools::GetBuiltInName - Built-in name list modified" );
-    if(  (nIndex < 0) || (nIndex > EXC_BUILTIN_UNKNOWN) )
-        nIndex = EXC_BUILTIN_UNKNOWN;
-    return ppNames[ nIndex ];
+    DBG_ASSERT( STATIC_TABLE_SIZE( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
+        "XclTools::GetBuiltInName - built-in defined name list modified" );
+
+    String aName( maDefNamePrefix );
+    if( nIndex < STATIC_TABLE_SIZE( ppcDefNames ) )
+        aName.AppendAscii( ppcDefNames[ nIndex ] );
+    else
+        aName.Append( String::CreateFromInt32( nIndex ) );
+    return aName;
 }
 
-void XclTools::GetBuiltInName( String& rName, sal_Unicode nIndex, sal_uInt16 nSheet )
+String XclTools::GetBuiltInName( sal_Unicode nIndex, sal_uInt16 nSheet )
 {
-    rName.AssignAscii( GetBuiltInName( nIndex ) );
-    rName.AppendAscii( "___" );
-    rName += String::CreateFromInt32( nSheet );
+    return GetBuiltInName( nIndex ).Append( '_' ).Append( String::CreateFromInt32( nSheet ) );
 }
 
 bool XclTools::IsBuiltInName( sal_uInt16& rnSheet, const String& rName, sal_Unicode nIndex )
 {
-    String aBuiltIn;
-    aBuiltIn.AssignAscii( GetBuiltInName( nIndex ) );
-    aBuiltIn.AppendAscii( "___" );
-    if( !rName.EqualsIgnoreCaseAscii( aBuiltIn, 0, aBuiltIn.Len() ) )
+    String aTestName( GetBuiltInName( nIndex ).Append( '_' ) );
+    if( !rName.EqualsIgnoreCaseAscii( aTestName, 0, aTestName.Len() ) )
         return false;
-    sal_Int32 nTab = rName.Copy( aBuiltIn.Len() ).ToInt32();
+    sal_Int32 nTab = rName.Copy( aTestName.Len() ).ToInt32();
     if( (nTab < 1) || (nTab > MAXTAB + 1) )
         return false;
-    if( String::CreateFromInt32( nTab ).Len() != (rName.Len() - aBuiltIn.Len()) )
+    if( String::CreateFromInt32( nTab ).Len() != (rName.Len() - aTestName.Len()) )
         return false;
     rnSheet = static_cast< sal_uInt16 >( nTab );
     return true;
 }
 
 
-// Languages ------------------------------------------------------------------
+// built-in style names -------------------------------------------------------
+
+const String XclTools::maStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
+
+static const sal_Char* ppcStyleNames[] =
+{
+    "",                 // "Normal" not used directly, but localized "Default"
+    "RowLevel_",        // outline level will be appended
+    "ColumnLevel_",     // outline level will be appended
+    "Comma",
+    "Currency",
+    "Percent",
+    "Comma_0",
+    "Currency_0"
+};
+
+String XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel )
+{
+    String aStyleName;
+
+    if( nStyleId == EXC_STYLE_NORMAL )  // "Normal" becomes "Default" style
+        aStyleName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
+    else if( nStyleId < STATIC_TABLE_SIZE( ppcStyleNames ) )
+        aStyleName.Assign( maStyleNamePrefix ).AppendAscii( ppcStyleNames[ nStyleId ] );
+
+    if( (nStyleId == EXC_STYLE_ROWLEVEL) || (nStyleId == EXC_STYLE_COLLEVEL) )
+        aStyleName.Append( String::CreateFromInt32( nLevel + 1 ) );
+
+    return aStyleName;
+}
+
+bool XclTools::IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleId, xub_StrLen* pnNextChar )
+{
+    // "Default" becomes "Normal"
+    if( rStyleName == ScGlobal::GetRscString( STR_STYLENAME_STANDARD ) )
+    {
+        if( pnStyleId ) *pnStyleId = EXC_STYLE_NORMAL;
+        if( pnNextChar ) *pnNextChar = rStyleName.Len();
+        return true;
+    }
+
+    // try the other built-in styles
+    xub_StrLen nPrefixLen = maStyleNamePrefix.Len();
+    sal_uInt8 nFoundId;
+    xub_StrLen nNextChar = 0;
+    if( rStyleName.EqualsIgnoreCaseAscii( maStyleNamePrefix, 0, nPrefixLen ) )
+    {
+        String aShortName;
+        for( sal_uInt8 nId = 0; nId < STATIC_TABLE_SIZE( ppcStyleNames ); ++nId )
+        {
+            if( nId != EXC_STYLE_NORMAL )
+            {
+                aShortName.AssignAscii( ppcStyleNames[ nId ] );
+                if( rStyleName.EqualsIgnoreCaseAscii( aShortName, nPrefixLen, aShortName.Len() ) &&
+                    (nNextChar < nPrefixLen + aShortName.Len()) )
+                {
+                    nFoundId = nId;
+                    nNextChar = nPrefixLen + aShortName.Len();
+                }
+            }
+        }
+    }
+
+    if( nNextChar > 0 )
+    {
+        if( pnStyleId ) *pnStyleId = nFoundId;
+        if( pnNextChar ) *pnNextChar = nNextChar;
+        return true;
+    }
+
+    if( pnStyleId ) *pnStyleId = EXC_STYLE_USERDEF;
+    if( pnNextChar ) *pnNextChar = 0;
+    return false;
+}
+
+bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, const String& rStyleName )
+{
+    sal_uInt8 nStyleId;
+    xub_StrLen nNextChar;
+    if( IsBuiltInStyleName( rStyleName, &nStyleId, &nNextChar ) )
+    {
+        if( (nStyleId == EXC_STYLE_ROWLEVEL) || (nStyleId == EXC_STYLE_COLLEVEL) )
+        {
+            String aLevel( rStyleName, nNextChar, STRING_LEN );
+            sal_Int32 nLevel = aLevel.ToInt32();
+            if( (String::CreateFromInt32( nLevel ) == aLevel) && (nLevel > 0) && (nLevel <= EXC_STYLE_LEVELCOUNT) )
+            {
+                rnStyleId = nStyleId;
+                rnLevel = static_cast< sal_uInt8 >( nLevel - 1 );
+                return true;
+            }
+        }
+        else if( rStyleName.Len() == nNextChar )
+        {
+            rnStyleId = nStyleId;
+            rnLevel = EXC_STYLE_NOLEVEL;
+            return true;
+        }
+    }
+    rnStyleId = EXC_STYLE_USERDEF;
+    rnLevel = EXC_STYLE_NOLEVEL;
+    return false;
+}
+
+sal_uInt16 XclTools::GetBuiltInXFIndex( sal_uInt8 nStyleId, sal_uInt8 nLevel )
+{
+    switch( nStyleId )
+    {
+        case EXC_STYLE_NORMAL:      return EXC_XF_DEFAULTSTYLE;
+        case EXC_STYLE_ROWLEVEL:
+            DBG_ASSERT( nLevel < EXC_STYLE_LEVELCOUNT, "XclTools::GetBuiltInXFIndex - invalid level" );
+            return 1 + 2 * nLevel;
+        case EXC_STYLE_COLLEVEL:
+            DBG_ASSERT( nLevel < EXC_STYLE_LEVELCOUNT, "XclTools::GetBuiltInXFIndex - invalid level" );
+            return 2 + 2 * nLevel;
+        case EXC_STYLE_COMMA:       return 16;
+        case EXC_STYLE_COMMA_0:     return 17;
+        case EXC_STYLE_CURRENCY:    return 18;
+        case EXC_STYLE_CURRENCY_0:  return 19;
+        case EXC_STYLE_PERCENT:     return 20;
+        default:
+            DBG_ERRORFILE( "XclTools::GetBuiltInXFIndex - unknown style id" );
+    }
+    return EXC_XF_DEFAULTSTYLE;
+}
+
+
+// conditional formatting style names -----------------------------------------
+
+const String XclTools::maCFStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_CondFormat_" ) );
+
+String XclTools::GetCondFormatStyleName( sal_Int32 nFormat, sal_uInt16 nCondition )
+{
+    return String( maCFStyleNamePrefix ).Append( String::CreateFromInt32( nFormat + 1 ) ).
+                Append( '_' ).Append( String::CreateFromInt32( nCondition + 1 ) );
+}
+
+bool XclTools::IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar )
+{
+    xub_StrLen nPrefixLen = maCFStyleNamePrefix.Len();
+    if( rStyleName.EqualsIgnoreCaseAscii( maCFStyleNamePrefix, 0, nPrefixLen ) )
+    {
+        if( pnNextChar ) *pnNextChar = nPrefixLen;
+        return true;
+    }
+    return false;
+}
+
+
+// languages ------------------------------------------------------------------
 
 /** Table entry for Excel country -> Calc language conversion. */
 struct XclLanguageEntry
