@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2000-12-01 15:55:39 $
+#   last change: $Author: hjs $ $Date: 2001-02-20 14:49:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -211,6 +211,7 @@ BSTRPLIB=-lbtstrp
 VCLLIBST=-lvcl
 VCLLIB=$(SVLIB)
 FREETYPELIB=-lfreetype
+FREETYPELIBST=$(STATIC) -lfreetype $(DYNAMIC)
 XPLIB=-l_xp
 TKLIB=-ltk$(UPD)$(DLLPOSTFIX)
 SVTOOLLIB=-lsvt$(UPD)$(DLLPOSTFIX)
