@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Numeric.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 16:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ StringSequence ONumericModel::getSupportedServiceNames() throw()
     aSupported.realloc(aSupported.getLength() + 2);
 
     ::rtl::OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.starform");
+    pArray[aSupported.getLength()-2] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseNumericField");
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_NUMERICFIELD;
     return aSupported;
 }
