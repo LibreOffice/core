@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: tra $ $Date: 2001-02-27 09:48:17 $
+#   last change: $Author: jl $ $Date: 2001-08-06 13:28:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ IDLFILES=\
     UnsupportedFlavorException.idl \
     XTransferable.idl \
     XTransferableEx.idl \
+    XSystemTransferable.idl \
     XTransferableSource.idl \
     XTransferDataAccess.idl \
     XMimeContentType.idl \
