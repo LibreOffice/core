@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prof_usl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:43:11 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ void TTProfiler::GetSysdepProfileSnapshot( SysdepProfileSnapshot *pSysdepProfile
 
 #define DIFF2( aFirst, aSecond, Membername ) ( aSecond.Membername - aFirst.Membername )
 #define CALC_MS( nSec, nNSec ) ( nSec * 1000 + (nNSec+500000) / 1000000 )
-#define DIFF_MS( pStart, pEnd, Member ) ( CALC_MS( DIFF2( pStart->Member, pEnd->Member, tv_sec ), DIFF2( pStart->Member, pEnd->Member, tv_nsec ) ) )
+#define DIFF_MS( pStart, pEnd, Member ) ( CALC_MS( pEnd->Member.tv_sec, pEnd->Member.tv_nsec ) - CALC_MS( pStart->Member.tv_sec, pStart->Member.tv_nsec ) )
 // Informationszeile zusammenbauen
 String TTProfiler::GetSysdepProfileLine( SysdepProfileSnapshot *pStart, SysdepProfileSnapshot *pStop )
 {
