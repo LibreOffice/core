@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _DocumentInfo.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:00 $
+ *  last change:$Date: 2003-02-04 09:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ public class _DocumentInfo extends MultiPropertyTest {
     class DatePropertyTester extends PropertyTester {
         protected Object getNewValue(String propName,
                 Object oldValue) {
-            if (oldValue == null) {
+            if (oldValue == null || util.utils.isVoid(oldValue)) {
                 DateTime dt = new DateTime();
 
                 dt.Year = 2000;
