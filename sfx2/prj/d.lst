@@ -35,6 +35,7 @@ touch: ..\%__SRC%\misc\sfx2.hid %_DEST%\bin%_EXT%\sfx2.hid
 ..\%__SRC%\srs\sfxslots.srs %_DEST%\res%_EXT%\sfxslots.srs
 ..\%__SRC%\res\sfx.srs %_DEST%\res%_EXT%\sfx.srs
 ..\util\svdbt.dll %_DEST%\bin%_EXT%\svdbt.dll
+..\util\sfx.xml %_DEST%\xml%_EXT%\sfx.xml
 ..\%__SRC%\misc\sfx2.csv %_DEST%\inc%_EXT%\sfx2.csv
 ..\%__SRC%\inc\macropg.hxx %_DEST%\inc%_EXT%\macropg.hxx
 ..\%__SRC%\bin\odk?????.dll %_DEST%\odk\bin%_EXT%\odk?????.dll
