@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TabController.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-11-18 16:31:40 $
+ *  last change:$Date: 2004-01-05 20:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.FormTools;
-import util.WriterTools;
-import util.utils;
 
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
@@ -86,72 +75,94 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.view.XControlAccess;
 
-public class TabController extends TestCase{
+import java.io.PrintWriter;
 
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.FormTools;
+import util.WriterTools;
+import util.utils;
+
+
+public class TabController extends TestCase {
     XTextDocument xTextDoc = null;
 
     protected void initialize(TestParameters param, PrintWriter log) {
         try {
-            log.println( "creating a textdocument" );
-            xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)param.getMSF());
-        } catch ( Exception e ) {
+            log.println("creating a textdocument");
+            xTextDoc = WriterTools.createTextDoc(
+                               (XMultiServiceFactory) param.getMSF());
+        } catch (Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
     }
 
     protected void cleanup(TestParameters param, PrintWriter log) {
-        log.println( "disposing xTextDoc" );
-        xTextDoc.dispose();
+        log.println("disposing xTextDoc");
+        util.DesktopTools.closeDoc(xTextDoc);
+        ;
     }
 
     public TestEnvironment createTestEnvironment(TestParameters param,
-                                                    PrintWriter log) {
+                                                 PrintWriter log) {
         XInterface oObj = null;
         XControl xCtrl1 = null;
         XTabControllerModel tabCtrlModel = null;
         XControlContainer aCtrlContainer = null;
 
+
         // create object relations
         FormTools.insertForm(xTextDoc,
-                FormTools.getForms(WriterTools.getDrawPage(xTextDoc)),"MyForm");
+                             FormTools.getForms(WriterTools.getDrawPage(
+                                                        xTextDoc)), "MyForm");
 
-        XControlShape aShape = FormTools.createUnoControlShape(
-                                xTextDoc,3000,4500,15000,10000,"CommandButton",
-                                "UnoControlButton");
+        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000,
+                                                               4500, 15000,
+                                                               10000,
+                                                               "CommandButton",
+                                                               "UnoControlButton");
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
         XControlModel model = aShape.getControl();
-        XControlAccess access = (XControlAccess) UnoRuntime.queryInterface
-                (XControlAccess.class,xTextDoc.getCurrentController());
+        XControlAccess access = (XControlAccess) UnoRuntime.queryInterface(
+                                        XControlAccess.class,
+                                        xTextDoc.getCurrentController());
 
         try {
             xCtrl1 = access.getControl(model);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         XForm form = null;
+
         try {
             form = (XForm) AnyConverter.toObject(new Type(XForm.class),
-                             (FormTools.getForms(
-                        WriterTools.getDrawPage(xTextDoc))).getByName("MyForm"));
-        }
-        catch ( Exception e ) {
+                                                 (FormTools.getForms(
+                                                         WriterTools.getDrawPage(
+                                                                 xTextDoc)))
+                                                     .getByName("MyForm"));
+        } catch (Exception e) {
             log.println("Couldn't get Form");
             e.printStackTrace(log);
         }
 
-        tabCtrlModel = (XTabControllerModel) UnoRuntime.
-                        queryInterface(XTabControllerModel.class, form);
+        tabCtrlModel = (XTabControllerModel) UnoRuntime.queryInterface(
+                               XTabControllerModel.class, form);
 
-        aCtrlContainer = (XControlContainer)
-                        UnoRuntime.queryInterface(XControlContainer.class,
-                        xCtrl1.getContext());
+        aCtrlContainer = (XControlContainer) UnoRuntime.queryInterface(
+                                 XControlContainer.class, xCtrl1.getContext());
+
         // create object
         try {
-            oObj = (XInterface)((XMultiServiceFactory)param.getMSF()).
-                            createInstance ("com.sun.star.awt.TabController");
-        } catch (Exception e) {}
+            oObj = (XInterface) ((XMultiServiceFactory) param.getMSF()).createInstance(
+                           "com.sun.star.awt.TabController");
+        } catch (Exception e) {
+        }
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
@@ -159,8 +170,8 @@ public class TabController extends TestCase{
         tEnv.addObjRelation("OBJNAME", "toolkit." + objName);
         tEnv.addObjRelation("MODEL", tabCtrlModel);
         tEnv.addObjRelation("CONTAINER", aCtrlContainer);
-        System.out.println("ImplementationName: " + utils.getImplName(oObj ));
+        System.out.println("ImplementationName: " + utils.getImplName(oObj));
+
         return tEnv;
     }
 }
-
