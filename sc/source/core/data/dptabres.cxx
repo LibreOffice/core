@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabres.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
+ *  last change: $Author: nn $ $Date: 2001-11-01 13:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,6 +859,14 @@ void ScDPDataMember::ProcessData( const ScDPItemData* pChildMembers, const ScDPV
     long nOldSub = nColSubTotalFunc;
     //! Test !!!!
 
+    if ( bLateInit && !pChildDimension && pResultMember && pResultMember->GetChildDimension() )
+    {
+        //  if this DataMember doesn't have a child dimension because the ResultMember's
+        //  child dimension wasn't there yet during this DataMembers's creation,
+        //  create the child dimension now
+        InitFrom( pResultMember->GetChildDimension() );
+    }
+
     long nUserSubCount = pResultMember ? pResultMember->GetSubTotalCount() : 0;
     if ( !nUserSubCount || !pChildDimension )           //! Test
         nUserSubCount = 1;                              //! Test
@@ -972,11 +980,15 @@ void ScDPDataMember::FillDataRow( const ScDPResultMember* pRefMember,
 
         const ScDPDataDimension* pDataChild = pDataMember->GetChildDimension();
         const ScDPResultDimension* pRefChild = pRefMember->GetChildDimension();
-        BOOL bHasChild = ( pDataChild && pRefChild );
+
+        //  leave space for children even if the DataMember hasn't been initialized
+        //  (pDataChild is null then, this happens when no values for it are in this row)
+        BOOL bHasChild = ( pRefChild != NULL );
 
         if ( bHasChild )
         {
-            pDataChild->FillDataRow( pRefChild, rSequence, rCol, nMeasure, bIsSubTotalRow );
+            if ( pDataChild )
+                pDataChild->FillDataRow( pRefChild, rSequence, rCol, nMeasure, bIsSubTotalRow );
             rCol += (USHORT)pRefMember->GetSize( nMeasure );
         }
 
@@ -1291,9 +1303,15 @@ void ScDPDataDimension::InitFrom( ScDPResultDimension* pDim )
         ScDPDataMember* pNew = new ScDPDataMember( pResultData, pResMem );
         aMembers.Insert( pNew, aMembers.Count() );
 
-        ScDPResultDimension* pChildDim = pResMem->GetChildDimension();
-        if ( pChildDim )
-            pNew->InitFrom( pChildDim );
+        if ( !bLateInit )
+        {
+            //  with bLateInit, pResMem hasn't necessarily been initialized yet,
+            //  so InitFrom for the new result member is called from its ProcessData method
+
+            ScDPResultDimension* pChildDim = pResMem->GetChildDimension();
+            if ( pChildDim )
+                pNew->InitFrom( pChildDim );
+        }
     }
 }
 
