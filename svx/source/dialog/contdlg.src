@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:28:23 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ chinese_simplified ] = "±ΰΌ­ΗψΣς";
                 Text[ russian ] = "Πΰαξχΰÿ ξαλΰρςό";
                 Text[ polish ] = "Obszar roboczy";
-                Text[ japanese ] = "μ‹Ζ—Μζ";
+                Text[ japanese ] = "ƒ[ƒNƒXƒy[ƒX";
                 Text[ chinese_traditional ] = "½sΏθ°Ο°μ";
                 Text[ arabic ] = "γΣΗΝΙ ΗαΪγα";
                 Text[ greek ] = "Περιοχή εργασίας";
@@ -745,7 +745,7 @@ String STR_CONTOURDLG_WORKPLACE
     Text[ chinese_simplified ] = "¶¨ÒεÒ»ΈφΠΒµΔ±ΰΌ­ΗψΣς»αΙΎ³ύµτΒΦΐª΅£\\ΔϊΥζÒªΌΜΠψ£Ώ";
     Text[ russian ] = "Σρςΰνξβκΰ νξβξι πΰαξχει ξαλΰρςθ\nοπθβεδες κ οξςεπε κξνςσπΰ.\nΒϋ δειρςβθςελόνξ υξςθςε οπξδξλζθςό?";
     Text[ polish ] = "Ustawienie nowego obszaru roboczego \nprowadzi do usuniκcia konturu.\nCzy chcesz kontynuowaζ?";
-    Text[ japanese ] = "V‚µ‚Άμ‹Ζ—Μζ‚Μέ’θ‚Ι‚ζ‚Α‚ΔA\n—Φsό‚ªν‚³‚κ‚ά‚·B\n‘±s‚µ‚ά‚·‚©H";
+    Text[ japanese ] = "V‚µ‚Άƒ[ƒNƒXƒy[ƒX‚Μέ’θ‚Ι‚ζ‚θ\n—Φsό‚ªν‚³‚κ‚ά‚·B\n‘±s‚µ‚ά‚·‚©H";
     Text[ chinese_traditional ] = "©wΈq¤@­Σ·sªΊ½sΏθ°Ο°μ·|²M°£½όΉψ΅C\n±z―u­nΔ~Δς΅H";
     Text[ arabic ] = "ΚΪννδ γΣΗΝΙ Ϊγα ΜΟνΟΙ Σζέ\nνΔΟν Εαμ ΝΠέ ΗαΞΨ ΗαίέΗέν. \nεα ΚΡνΟ ΗαγΚΗΘΪΙ ΘΗαέΪαΏ";
     Text[ greek ] = "Ο ορισμός μιας νέας περιοχής εργασίας\nέχει ως αποτέλεσμα τη διαγραφή του περιγράμματος.\nΘέλετε πραγματικά να συνεχίσετε;";
