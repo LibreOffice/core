@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-21 21:00:49 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ InfoBox MSG_NO_RULER
     Message[ chinese_simplified ] = "ÔÚ»­ÀÈÖ÷Ìâ'³¤ÌõĞÎ'ÄÚÎŞÈÎºÎÍ¼ĞÎ¡£";
     Message[ russian ] = "Â òåìå ãàëåğåè 'Ëèíåéêè' ğèñóíêîâ íå èìååòñÿ.";
     Message[ polish ] = "Nie ma ¿adnych grafik w temacie galerii \"Obramowania\"";
-    Message[ japanese ] = "·Ş¬×Ø¥Ã°Ï‚ÌuÙ°×°v‚É‚Í¸Ş×Ì¨¯¸‚Í‚ ‚è‚Ü‚¹‚ñB";
+    Message[ japanese ] = "·Ş¬×ØÃ°Ï‚ÌuÙ°×°v‚ÉA}‚Í‚ ‚è‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "µe´Y¥DÃD[ªø±ø§Î]¤ºµL¥ô¦ó¹Ï§Î¡C";
     Message[ arabic ] = "áÇ ÊæÌÏ ÃíÉ ÕæÑ İí ãæÖæÚ ÇáÌÇáíÑí 'ãÓÇØÑ'.";
     Message[ dutch ] = "Onder het gallery-onderwerp 'Rulers' komen geen afbeeldingen voor.";
@@ -109,7 +109,7 @@ String STR_GRFILTER_OPENERROR
     Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÍ¼ĞÎÎÄ¼ş";
     Text[ russian ] = "Îòêğûòü ãğàôè÷åñêèé ôàéë íåâîçìîæíî";
     Text[ polish ] = "Pliku graficznego nie mo¿na by³o otworzyæ";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ğŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñB";
+    Text[ japanese ] = "‰æ‘œÌ§²Ù‚ğŠJ‚¯‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "µLªk¶}±Ò¹Ï§ÎÀÉ®×";
     Text[ arabic ] = "áÇ íãßä İÊÍ ãáİ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Grafisch bestand kan niet worden geopend";
@@ -137,7 +137,7 @@ String STR_GRFILTER_IOERROR
     Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡Í¼ĞÎÎÄ¼ş";
     Text[ russian ] = "Ïğî÷èòàòü ãğàôè÷åñêèé ôàéë íåâîçìîæíî";
     Text[ polish ] = "Pliku graficznego nie mo¿na by³o odczytaæ";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ª“Ç‚ß‚Ü‚¹‚ñB";
+    Text[ japanese ] = "‰æ‘œÌ§²Ù‚Í“Ç‚ß‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "µLªkÅª¨ú¹Ï§ÎÀÉ®×";
     Text[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ãáİ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Grafisch bestand is onleesbaar";
@@ -165,7 +165,7 @@ String STR_GRFILTER_FORMATERROR
     Text[ chinese_simplified ] = "²»Ã÷µÄÍ¼ĞÎ¸ñÊ½";
     Text[ russian ] = "Íåèçâåñòíûé ãğàôè÷åñêèé ôîğìàò";
     Text[ polish ] = "Nieznany format graficzny";
-    Text[ japanese ] = "•s–¾‚È¸Ş×Ì¨¯¸‘®";
+    Text[ japanese ] = "•s–¾‚È}‚Ì‘®";
     Text[ chinese_traditional ] = "¤£©úªº¹Ï§Î®æ¦¡";
     Text[ arabic ] = "ÊäÓíŞ ÑÓæãÇÊ ÛíÑ ãÚÑæİ";
     Text[ dutch ] = "Onbekend grafisch formaat";
@@ -193,7 +193,7 @@ String STR_GRFILTER_VERSIONERROR
     Text[ chinese_simplified ] = "²»Ö§³ÖÕâ¸ö°æ±¾µÄÍ¼ĞÎÎÄ¼ş";
     Text[ russian ] = "Âåğñèÿ ãğàôè÷åñêîãî ôàéëà íå ïîääåğæèâàåòñÿ";
     Text[ polish ] = "Wersja pliku graficznego nie bêdzie obs³ugiwana";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ÌÊŞ°¼Ş®İ‚ÍA»Îß°Ä‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+    Text[ japanese ] = "‰æ‘œÌ§²Ù‚ÌÊŞ°¼Ş®İ‚Í»Îß°Ä‚³‚ê‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "¤£¤ä´©³o­Óª©¥»ªº¹Ï§Î¤å¥ó";
     Text[ arabic ] = "áÇ íÊã ÏÚã ÅÕÏÇÑ ãáİ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Deze versie van het grafisch bestand wordt niet ondersteund";
@@ -221,7 +221,7 @@ String STR_GRFILTER_FILTERERROR
     Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Í¼ĞÎ¹ıÂËÆ÷";
     Text[ russian ] = "Ãğàôè÷åñêèé ôèëüåğ íå íàéäåí";
     Text[ polish ] = "Nie znaleziono filtrów graficznych";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì¨ÙÀ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+    Text[ japanese ] = "‰æ‘œÌ¨ÙÀ‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "¨S¦³§ä¨ì¹Ï§Î¹LÂo¾¹";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Grafische filter niet gevonden";
@@ -1226,7 +1226,7 @@ String RID_DRAW_TOOLBOX
     Text [ english_us ] = "Draw Object Bar" ;
     Text[ chinese_simplified ] = "»æÍ¼¶ÔÏóÀ¸";
     Text[ russian ] = "Ïàíåëü ãğàôè÷åñêîãî îáúåêòà";
-    Text[ polish ] = "Pasek obiektów rysunkowych";
+    Text[ polish ] = "Pasek obiektów graficznych";
     Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸ÄÊŞ°";
     Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó¦C";
     Text[ arabic ] = "ÔÑíØ ÇáßÇÆäÇÊ ÇáÑÓæãíÉ";
