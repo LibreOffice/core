@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:10:42 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _SVX_LANGBOX_HXX
 #include <langbox.hxx>
+#endif
+#ifndef _SVX_READONLYIMAGE_HXX
+#include <readonlyimage.hxx>
 #endif
 #define FOLDERWEBVIEW_DEFAULTFILE   "folder.so"
 
@@ -191,37 +194,42 @@ public:
 /* -----------------------------23.11.00 13:04--------------------------------
 
  ---------------------------------------------------------------------------*/
-//class LanguageConfig_Impl;
+struct LanguageConfig_Impl;
 class OfaLanguagesTabPage : public SfxTabPage
 {
     FixedLine       aUILanguageGB;
+    ReadOnlyImage   aLocaleSettingFI;
     FixedText       aLocaleSettingFT;
     SvxLanguageBox  aLocaleSettingLB;
-
+    ReadOnlyImage   aCurrencyFI;
     FixedText       aDecimalSeparatorFT;
     CheckBox        aDecimalSeparatorCB;
-
     FixedText       aCurrencyFT;
     ListBox         aCurrencyLB;
 
     FixedLine       aLinguLanguageGB;
+    ReadOnlyImage   aWesternLanguageFI;
     FixedText       aWesternLanguageFT;
     SvxLanguageBox  aWesternLanguageLB;
+    ReadOnlyImage   aAsianLanguageFI;
     FixedText       aAsianLanguageFT;
     SvxLanguageBox  aAsianLanguageLB;
+    ReadOnlyImage   aComplexLanguageFI;
     FixedText       aComplexLanguageFT;
     SvxLanguageBox  aComplexLanguageLB;
     CheckBox        aCurrentDocCB;
     FixedLine       aAsianSupportFL;
+    ReadOnlyImage   aAsianSupportFI;
     CheckBox        aAsianSupportCB;
     FixedLine       aCTLSupportFL;
+    ReadOnlyImage   aCTLSupportFI;
     CheckBox        aCTLSupportCB;
 
     const String    sDecimalSeparatorLabel;
 
     sal_Bool        m_bOldAsian;
     sal_Bool        m_bOldCtl;
-//  LanguageConfig_Impl*    pLangConfig;
+    LanguageConfig_Impl*    pLangConfig;
 
     DECL_LINK(  SupportHdl, CheckBox* ) ;
     DECL_LINK(  LocaleSettingHdl, SvxLanguageBox* ) ;
@@ -249,6 +257,7 @@ class OfaHelperProgramsTabPage : public SfxTabPage
     FixedText       aHelpFI;
 
     FixedLine       aMailFL;
+    ReadOnlyImage      aProgramFI;
     FixedText       aProgramFT;
     FixedText       aAdditionalMailFT;
     ListBox         aProfilesLB;
@@ -256,22 +265,27 @@ class OfaHelperProgramsTabPage : public SfxTabPage
     PushButton      aMailerURLPB;
 
     FixedLine       aLinkFL;
+    ReadOnlyImage   aHTTPFI;
     FixedText       aHTTPFT;
     Edit            aHTTPED;
     PushButton      aHTTPPB;
 
+    ReadOnlyImage   aHTTPSFI;
     FixedText       aHTTPSFT;
     Edit            aHTTPSED;
     PushButton      aHTTPSPB;
 
+    ReadOnlyImage   aFTPFI;
     FixedText       aFTPFT;
     Edit            aFTPED;
     PushButton      aFTPPB;
 
+    ReadOnlyImage   aMailerFI;
     FixedText       aMailerFT;
     Edit            aMailerED;
     PushButton      aMailerPB;
 
+    ReadOnlyImage   aDocManagerFI;
     FixedLine       aDocManagerFL;
     FixedText       aDocManagerFT;
     Edit            aDocManagerED;
