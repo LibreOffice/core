@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:09:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,10 @@
 
 SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pAnch ),
-    pPage( 0 )
+    pPage( 0 ),
+    // --> OD 2004-10-29 #i36347#
+    mbNoCheckClip( false )
+    // <--
 {
 }
 
@@ -224,7 +227,19 @@ void SwFlyFreeFrm::MakeAll()
     const SwFlyNotify aNotify( this );
 
     if ( IsClipped() )
-        bValidPos = bValidSize = bHeightClipped = bWidthClipped = FALSE;
+    {
+        // --> OD 2004-11-03 #114798# - no invalidation of position,
+        // if anchored object is anchored inside a Writer fly frame,
+        // its position is already locked, and it follows the text flow.
+        bValidSize = bHeightClipped = bWidthClipped = FALSE;
+        if ( !( PositionLocked() &&
+                GetAnchorFrm()->IsInFly() &&
+                GetFrmFmt().GetFollowTextFlow().GetValue() ) )
+        {
+            bValidPos = FALSE;
+        }
+        // <--
+    }
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea || bFormatHeightOnly )
     {
@@ -282,8 +297,13 @@ void SwFlyFreeFrm::MakeAll()
                     bValidSize = FALSE;
             }
         }
-        if ( bValidPos && bValidSize )
+        // --> OD 2004-10-29 #i36347# - calling of method <CheckClip(..)> now
+        // depends on flag <mbNoCheckClip>.
+        if ( !IsNoCheckClip() && bValidPos && bValidSize )
+        // <--
+        {
             CheckClip( *pSz );
+        }
     }
     Unlock();
 
@@ -375,7 +395,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             // If the fly moves, some paragraphs has to be formatted, this
             // could cause a change of the height of the headerframe,
             // now the flyframe can change its position and so on ...
-            if( !pHeader || !pHeader->IsHeaderFrm() )
+            if ( !pHeader || !pHeader->IsHeaderFrm() )
             {
                 const long nOld = Frm().Top();
                 Frm().Pos().Y() = Max( aClip.Top(), nClipBot - Frm().Height() );
@@ -529,6 +549,11 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             }
         }
     }
+
+    // --> OD 2004-10-14 #i26945#
+    ASSERT( Frm().Height() >= 0,
+            "<SwFlyFreeFrm::CheckClip(..)> - fly frame has negative height now." );
+    // <--
 }
 
 /*************************************************************************
@@ -1067,6 +1092,17 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 const SwLayoutFrm* pClipFrm = pVertPosOrientFrm->FindPageFrm();
                 rRect = bMove ? pClipFrm->GetUpper()->Frm()
                               : pClipFrm->Frm();
+                // --> OD 2004-10-14 #i26945# - consider that a table, during
+                // its format, can exceed its upper printing area bottom.
+                // Thus, enlarge the clip rectangle, if such a case occured
+                if ( pFly->GetAnchorFrm()->IsInTab() )
+                {
+                    const SwTabFrm* pTabFrm = const_cast<SwFlyFrm*>(pFly)
+                                ->GetAnchorFrmContainingAnchPos()->FindTabFrm();
+                    SwRect aTmp( pTabFrm->Prt() );
+                    aTmp += pTabFrm->Frm().Pos();
+                    rRect.Union( aTmp );
+                }
             }
             else if ( rV.GetRelationOrient() == REL_PG_FRAME ||
                       rV.GetRelationOrient() == REL_PG_PRTAREA )
@@ -1099,7 +1135,10 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             }
             else
             {
-                const SwFrm *pClip = pFly->GetAnchorFrm();
+                // --> OD 2004-10-11 #i26945#
+                const SwFrm *pClip =
+                        const_cast<SwFlyFrm*>(pFly)->GetAnchorFrmContainingAnchPos();
+                // <--
                 SWRECTFN( pClip )
                 const SwLayoutFrm *pUp = pClip->GetUpper();
                 const SwFrm *pCell = pUp->IsCellFrm() ? pUp : 0;
