@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ToolPanel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:08:46 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 14:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,12 @@ ToolPanel::~ToolPanel (void)
 
 
 
-void ToolPanel::AddControl (
+sal_uInt32 ToolPanel::AddControl (
     ::std::auto_ptr<TreeNode> pControl,
-    const String& rTitle)
+    const String& rTitle,
+    ULONG nHelpId)
 {
-    ::std::auto_ptr<TreeNode> pChild (new TitledControl (
+    TitledControl* pTitledControl = new TitledControl (
         this,
         pControl,
         rTitle,
@@ -130,7 +131,9 @@ void ToolPanel::AddControl (
             FocusManager::Instance().RegisterUpLink (pChild->GetWindow(), pParent);
     }
 
-    mpControlContainer->AddControl (pChild);
+    pTitledControl->GetTitleBar()->SetHelpId(nHelpId);
+
+    return mpControlContainer->AddControl (pChild);
 }
 
 
