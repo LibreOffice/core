@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:34:24 $
+ *  last change: $Author: thb $ $Date: 2002-11-21 13:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ private:
     BOOL                            mbNeedsUpdate;
     BOOL                            mbOldUndoMode;
     BOOL                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
+    BOOL                            mbShapeIsEditMode;          // #104157# only true, if HINT_BEGEDIT was received
     BOOL                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
 
     SvxTextForwarder*               GetBackgroundTextForwarder();
@@ -181,12 +182,13 @@ private:
     SvxDrawOutlinerViewForwarder*   CreateViewForwarder();
 
     void                            SetupOutliner();
+    void                            UpdateOutliner();
 
     sal_Bool                        HasView() const { return mpView ? sal_True : sal_False; }
     sal_Bool                        IsEditMode() const
                                     {
                                         SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-                                        return pTextObj && pTextObj->IsTextEditActive() ? sal_True : sal_False;
+                                        return mbShapeIsEditMode && pTextObj && pTextObj->IsTextEditActive() ? sal_True : sal_False;
                                     }
 
 public:
@@ -236,6 +238,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
     mbNeedsUpdate   ( FALSE ),
     mbOldUndoMode   ( FALSE ),
     mbForwarderIsEditMode ( FALSE ),
+    mbShapeIsEditMode     ( FALSE ),
     mbNotificationsDisabled ( FALSE )
 {
     DBG_ASSERT( mpObject, "invalid pObject!" );
@@ -261,12 +264,16 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView
     mbNeedsUpdate   ( FALSE ),
     mbOldUndoMode   ( FALSE ),
     mbForwarderIsEditMode ( FALSE ),
+    mbShapeIsEditMode     ( TRUE ),
     mbNotificationsDisabled ( FALSE )
 {
     if( mpModel )
         StartListening( *mpModel );
     if( mpView )
         StartListening( *mpView );
+
+    // #104157# Init edit mode state from shape info (IsTextEditActive())
+    mbShapeIsEditMode = IsEditMode();
 }
 
 //------------------------------------------------------------------------
@@ -339,12 +346,15 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                 if( HasView() )
                 {
+                    // #104157# Update maTextOffset, object has changed
+                    // #105196#, #105203#: Cannot call that // here,
+                    // since TakeTextRect() (called from there) //
+                    // changes outliner content.
+                    // UpdateOutliner();
+
                     // #101029# Broadcast object changes, as they might change visible attributes
                     SvxViewHint aHint(SVX_HINT_VIEWCHANGED);
                     Broadcast( aHint );
-
-                    // #101029# Update outliner setup and
-                    SetupOutliner();
                 }
                 break;
             }
@@ -390,6 +400,9 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if( mpView && mpView->GetTextEditOutliner() )
                         mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
 
+                    // #104157# Only now we're really in edit mode
+                    mbShapeIsEditMode = TRUE;
+
                     Broadcast( *pSdrHint );
                 }
                 break;
@@ -397,11 +410,14 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case HINT_ENDEDIT:
                 if( mpObject == pSdrHint->GetObject() )
                 {
+                    Broadcast( *pSdrHint );
+
+                    // #104157# We're no longer in edit mode
+                    mbShapeIsEditMode = FALSE;
+
                     // remove as listener - outliner might outlive ourselves
                     if( mpView && mpView->GetTextEditOutliner() )
                         mpView->GetTextEditOutliner()->SetNotifyHdl( Link() );
-
-                    Broadcast( *pSdrHint );
 
                     // destroy view forwarder, OutlinerView no longer
                     // valid (no need for UpdateData(), it's been
@@ -491,6 +507,29 @@ void SvxTextEditSourceImpl::SetupOutliner()
 
 //------------------------------------------------------------------------
 
+void SvxTextEditSourceImpl::UpdateOutliner()
+{
+    // #104157#
+    // only for UAA edit source: update outliner equivalently as in
+    // SdrTextObj::Paint(), such that formatting equals screen
+    // layout
+    if( mpObject && mpOutliner )
+    {
+        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        Rectangle aPaintRect;
+        if( pTextObj )
+        {
+            Rectangle aBoundRect( pTextObj->GetBoundRect() );
+            pTextObj->UpdateOutlinerFormatting( *mpOutliner, aPaintRect );
+
+            // #101029# calc text offset from shape anchor
+            maTextOffset = aPaintRect.TopLeft() - aBoundRect.TopLeft();
+        }
+    }
+}
+
+//------------------------------------------------------------------------
+
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #endif
@@ -510,6 +549,12 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
     {
         if( mpOutliner == NULL )
         {
+            if( HasView() )
+            {
+                // #101029#, #104157# Setup outliner _before_ filling it
+                SetupOutliner();
+            }
+
             SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
             USHORT nOutlMode = OUTLINERMODE_TEXTOBJECT;
             if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
@@ -615,10 +660,8 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
     if( bCreated && mpOutliner && HasView() )
     {
-        // #101029#
-        SetupOutliner();
-
         // register as listener - need to broadcast state change messages
+        // registration delayed until outliner is completely set up
         mpOutliner->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
     }
 
