@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basdoc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 09:59:58 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include <svx/xmlsecctrl.hxx>
 
 #include <basdoc.hxx>
-#include <basidesh.hrc>
 
 #define BasicDocShell
 #include <basslots.hxx>
@@ -86,13 +85,7 @@
 TYPEINIT1(BasicDocShell, SfxObjectShell);
 DBG_NAME(BasicDocShell);
 
-SFX_IMPL_SIMPLE_OBJECTFACTORY( BasicDocShell, SFXOBJECTSHELL_STD_NORMAL, sbasic )
-{
-    Factory().SetExplorerImageId( IMG_MACROLIB );
-    Factory().RegisterHelpFile( String( RTL_CONSTASCII_USTRINGPARAM( "sbasic" ) ) );
-    Factory().SetDocumentServiceName( String::CreateFromAscii("com.sun.star.script.BasicIDE") );
-    Factory().RegisterMenuBar( IDEResId(RID_BASICMENU) );
-}
+SFX_IMPL_OBJECTFACTORY( BasicDocShell, SvGlobalName(), SFXOBJECTSHELL_STD_NORMAL, "sbasic" )
 
 SFX_IMPL_INTERFACE( BasicDocShell, SfxObjectShell, IDEResId( 0 ) )
 {
@@ -107,30 +100,18 @@ BasicDocShell::BasicDocShell( SfxObjectCreateMode eMode ) : SfxObjectShell( eMod
     SetModel( new SIDEModel(this) );
 }
 
-
-
-
 __EXPORT BasicDocShell::~BasicDocShell()
 {
     delete pPrinter;
 }
 
-
-
-
 void __EXPORT BasicDocShell::Execute( SfxRequest& rReq )
 {
 }
 
-
-
-
 void __EXPORT BasicDocShell::GetState(SfxItemSet &rSet)
 {
 }
-
-
-
 
 SfxPrinter* BasicDocShell::GetPrinter( BOOL bCreate )
 {
@@ -140,9 +121,6 @@ SfxPrinter* BasicDocShell::GetPrinter( BOOL bCreate )
     return pPrinter;
 }
 
-
-
-
 void BasicDocShell::SetPrinter( SfxPrinter* pPr )
 {
     if ( pPr != pPrinter )
@@ -151,7 +129,6 @@ void BasicDocShell::SetPrinter( SfxPrinter* pPr )
         pPrinter = pPr;
     }
 }
-
 
 void BasicDocShell::FillStatusBar( StatusBar& rStatusBar )
 {
@@ -189,4 +166,15 @@ void BasicDocShell::FillStatusBar( StatusBar& rStatusBar )
 
 }
 
+void BasicDocShell::FillClass( SvGlobalName * pClassName,
+                               sal_uInt32 * pFormat,
+                               String * pAppName,
+                               String * pFullTypeName,
+                               String * pShortTypeName,
+                               sal_Int32 nVersion ) const
+{}
+
+void BasicDocShell::Draw( OutputDevice *, const JobSetup & rSetup,
+                          USHORT nAspect )
+{}
 
