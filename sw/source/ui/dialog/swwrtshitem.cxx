@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swwrtshitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:00:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-17 08:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,9 @@ SwWrtShellItem::SwWrtShellItem( USHORT nWhich, SwWrtShell* pSh )
 {
 
 }
-SwWrtShellItem::SwWrtShellItem( const SwWrtShellItem& rItem)
-    : SfxPoolItem( rItem.Which() )
+SwWrtShellItem::SwWrtShellItem( const SwWrtShellItem& rItem) :
+    SfxPoolItem( rItem.Which() ),
+    pWrtSh( rItem.pWrtSh )
 {
 }
 
