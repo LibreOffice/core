@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-28 16:02:34 $
+ *  last change: $Author: pb $ $Date: 2001-12-05 18:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,11 +179,13 @@
 #define STR_DESCRIPTION_DRAW_TEMPLATE               (RID_DESCRIPTION_START + 36)
 #define STR_DESCRIPTION_IMPRESS_TEMPLATE            (RID_DESCRIPTION_START + 37)
 #define STR_DESCRIPTION_WRITER_TEMPLATE             (RID_DESCRIPTION_START + 38)
-#define STR_DESCRIPTION_REMOTE_VOLUME               (RID_DESCRIPTION_START + 39)
-#define STR_DESCRIPTION_LOCALE_VOLUME               (RID_DESCRIPTION_START + 40)
+#define STR_DESCRIPTION_LOCALE_VOLUME               (RID_DESCRIPTION_START + 39)
+#define STR_DESCRIPTION_FLOPPY_VOLUME               (RID_DESCRIPTION_START + 40)
 #define STR_DESCRIPTION_CDROM_VOLUME                (RID_DESCRIPTION_START + 41)
-#define STR_DESCRIPTION_POWERPOINT                  (RID_DESCRIPTION_START + 42)
-#define STR_DESCRIPTION_POWERPOINT_TEMPLATE         (RID_DESCRIPTION_START + 43)
-#define STR_DESCRIPTION_POWERPOINT_SHOW             (RID_DESCRIPTION_START + 44)
+#define STR_DESCRIPTION_REMOTE_VOLUME               (RID_DESCRIPTION_START + 42)
+#define STR_DESCRIPTION_POWERPOINT                  (RID_DESCRIPTION_START + 43)
+#define STR_DESCRIPTION_POWERPOINT_TEMPLATE         (RID_DESCRIPTION_START + 44)
+#define STR_DESCRIPTION_POWERPOINT_SHOW             (RID_DESCRIPTION_START + 45)
+
 #endif
 
