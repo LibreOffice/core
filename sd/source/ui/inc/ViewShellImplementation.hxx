@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:55:32 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@ class ViewShell::Implementation
 public:
     bool mbIsShowingUIControls;
     bool mbIsMainViewShell;
+    /// Set to true when the ViewShell::Init() method has been called.
+    bool mbIsInitialized;
 
     Implementation (ViewShell& rViewShell);
     ~Implementation (void);
@@ -84,6 +86,7 @@ public:
         SfxRequest& rRequest,
         SdPage* pCurrentPage,
         PageKind ePageKind);
+
 
 private:
     ViewShell& mrViewShell;
