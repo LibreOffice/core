@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:39:29 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,16 +514,22 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
 
     for( sal_Int32 nIndex = 0; nIndex < nAnyCount; nIndex++, pAny++ )
     {
+        // #b6236750# use isAssignableFrom instead of comparing the types to
+        // allow XExtendedDocumentHandler instead of XDocumentHandler (used in
+        // writeOasis2OOoLibraryElement in sfx2).
+        // The Any shift operator can't be used to query the type because it
+        // uses queryInterface, and the model also has a XPropertySet interface.
+
         // document handler
-        if( pAny->getValueType() == ::getCppuType( (const Reference< XDocumentHandler >*) 0 ) )
+        if( ::getCppuType( (const Reference< XDocumentHandler >*) 0 ).isAssignableFrom( pAny->getValueType() ) )
             m_xHandler.set( *pAny, UNO_QUERY );
 
         // property set to transport data across
-        if( pAny->getValueType() == ::getCppuType( (const Reference< XPropertySet >*) 0 ) )
+        if( ::getCppuType( (const Reference< XPropertySet >*) 0 ).isAssignableFrom( pAny->getValueType() ) )
             m_xPropSet.set( *pAny, UNO_QUERY );
 
         // xmodel
-        if( pAny->getValueType() == ::getCppuType( (const Reference< ::com::sun::star::frame::XModel >*) 0 ) )
+        if( ::getCppuType( (const Reference< ::com::sun::star::frame::XModel >*) 0 ).isAssignableFrom( pAny->getValueType() ) )
             mxModel.set( *pAny, UNO_QUERY );
     }
 
