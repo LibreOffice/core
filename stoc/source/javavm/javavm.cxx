@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-25 08:55:30 $
+ *  last change: $Author: jl $ $Date: 2002-08-08 08:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1300,10 +1300,10 @@ static void initVMConfiguration(JVM * pjvm,
     {
         getJavaPropsFromConfig(&jvm, xSMgr,xCtx);
     }
-    catch(JavaNotConfiguredException& e)
-    {
-        throw;
-    }
+//     catch(JavaNotConfiguredException& e)
+//     {
+//         throw;
+//     }
     catch(Exception & exception) {
 #ifdef DEBUG
         OString message = OUStringToOString(exception.Message, RTL_TEXTENCODING_ASCII_US);
