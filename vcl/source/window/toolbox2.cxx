@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: gh $ $Date: 2004-07-09 07:38:00 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2153,15 +2153,18 @@ void ToolBox::ImplUpdateCustomMenu()
     }
 
     // add menu items, starting from the end and inserting at pos 0
-    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.end();
-    while ( --it >= mpData->m_aItems.begin() )
+    if ( mpData->m_aItems.size() > 0 )
     {
-        if( it->meType == TOOLBOXITEM_BUTTON && it->mbVisible && it->maRect.IsEmpty() )
+        std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.end();
+        while ( --it >= mpData->m_aItems.begin() )
         {
-            USHORT id = it->mnId + TOOLBOX_MENUITEM_START;
-            pMenu->InsertItem( id, it->maText, it->maImage, 0, 0 );
-            pMenu->EnableItem( id, it->mbEnabled );
-            pMenu->CheckItem( id, it->meState == STATE_CHECK );
+            if( it->meType == TOOLBOXITEM_BUTTON && it->mbVisible && it->maRect.IsEmpty() )
+            {
+                USHORT id = it->mnId + TOOLBOX_MENUITEM_START;
+                pMenu->InsertItem( id, it->maText, it->maImage, 0, 0 );
+                pMenu->EnableItem( id, it->mbEnabled );
+                pMenu->CheckItem( id, it->meState == STATE_CHECK );
+            }
         }
     }
 }
