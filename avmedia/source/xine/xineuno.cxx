@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xineuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 15:57:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,9 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
         {
             uno::Reference< registry::XRegistryKey > xNewKey1(
                 static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                ::rtl::OUString::createFromAscii( "/com.sun.star.comp.media.Manager_DirectX/UNO/SERVICES/com.sun.star.media.Manager_Xine" ) ) );
+                ::rtl::OUString::createFromAscii(
+                    "/" AVMEDIA_XINE_MANAGER_IMPLEMENTATIONNAME "/UNO/SERVICES/"
+                    AVMEDIA_XINE_MANAGER_SERVICENAME ) ) );
 
             bRet = sal_True;
         }
