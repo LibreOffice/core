@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: as $ $Date: 2001-07-02 13:40:07 $
+#   last change: $Author: as $ $Date: 2001-08-10 11:55:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,14 +82,13 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
 SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/otasksaccess.obj	 					\
-                    $(SLO)$/ostatusindicatorfactory.obj				\
                     $(SLO)$/otasksenumeration.obj					\
                     $(SLO)$/ocomponentaccess.obj 					\
                     $(SLO)$/ocomponentenumeration.obj				\
                     $(SLO)$/oframes.obj								\
                     $(SLO)$/opluginframedispatcher.obj				\
-                    $(SLO)$/ostatusindicatorfactory.obj				\
-                    $(SLO)$/ostatusindicator.obj					\
+                    $(SLO)$/statusindicatorfactory.obj				\
+                    $(SLO)$/statusindicator.obj						\
                     $(SLO)$/imageproducer.obj						\
                     $(SLO)$/xmldocproperties.obj
 

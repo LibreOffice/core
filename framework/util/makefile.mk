@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: as $ $Date: 2001-07-31 06:58:46 $
+#   last change: $Author: as $ $Date: 2001-08-10 11:55:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,10 +123,10 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/asyncquit.obj				\
                 $(SLO)$/oframes.obj					\
                 $(SLO)$/opluginframedispatcher.obj	\
-                $(SLO)$/ostatusindicatorfactory.obj	\
+                $(SLO)$/statusindicatorfactory.obj	\
                 $(SLO)$/ocomponentaccess.obj		\
                 $(SLO)$/otasksaccess.obj			\
-                $(SLO)$/ostatusindicator.obj		\
+                $(SLO)$/statusindicator.obj			\
                 $(SLO)$/otasksenumeration.obj		\
                 $(SLO)$/ocomponentenumeration.obj	\
                 $(SLO)$/interceptionhelper.obj		\
