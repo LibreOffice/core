@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:17:44 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ Menu MN_READONLY_POPUP
             Text [ portuguese ] = "Texto ~fonte HTML" ;
             Text [ portuguese_brazilian ] = "HTM~L - Quelltext" ;
             Text[ chinese_simplified ] = "~HTML Ô´ÎÄ±¾";
-            Text[ russian ] = "Èñòî÷íèê HTM~L";
+            Text[ russian ] = "Èñõîäíûé òåêñò HTM~L";
             Text[ polish ] = "Tekst Ÿród³owy HTML";
             Text[ japanese ] = "HTML¿°½(~M)";
             Text[ chinese_traditional ] = "~HTML ­ì©lÀÉ";
@@ -985,7 +985,7 @@ String STR_CHAIN_SELF
     Text [ portuguese ] = "Impossível uma sequência fechada." ;
     Text [ english_us ] = "A closed link is not possible." ;
     Text [ portuguese_brazilian ] = "Eine geschlossene Kette ist nicht möglich." ;
-    Text [ swedish ] = "Det är inte möjligt med en sluten kedja." ;
+    Text [ swedish ] = "En sluten kedja är inte möjlig." ;
     Text [ danish ] = "En lukket kæde er ikke mulig." ;
     Text [ italian ] = "Un collegamento chiuso non è possibile." ;
     Text [ spanish ] = "No es posible una secuencia cerrada." ;
