@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:22:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,12 +171,16 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
         if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
             aDataHelper.GetInputStream( nFormatId, xStm ) )
         {
-            uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromInputStream( xStm );
             if ( aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_60 ) )
             {
+                uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromInputStream( xStm );
+
+                // mba: BaseURL doesn't make sense for clipboard
+                SfxMedium aMedium( xStore, String() );
+
                 //  TODO/LATER: is it a problem that we don't support binary formats here?
                 ScDocShellRef xDocShRef = new ScDocShell(SFX_CREATE_MODE_EMBEDDED);
-                if (xDocShRef->DoLoad(xStore))
+                if (xDocShRef->DoLoad(&aMedium))
                 {
                     ScDocument* pSrcDoc = xDocShRef->GetDocument();
                     SCTAB nSrcTab = pSrcDoc->GetVisibleTab();
@@ -208,6 +212,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     delete pClipDoc;
                     bRet = TRUE;
                 }
+
                 xDocShRef->DoClose();
                 xDocShRef.Clear();
             }
@@ -278,7 +283,8 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             ::rtl::OUString aStr;
             SotStorageStreamRef xStream;
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.Is() )
-                bRet = aObj.ImportStream( *xStream, nFormatId );
+                // mba: clipboard always must contain absolute URLs (could be from alien source)
+                bRet = aObj.ImportStream( *xStream, String(), nFormatId );
             else if ( aDataHelper.GetString( nFormatId, aStr ) )
                 bRet = aObj.ImportString( aStr, nFormatId );
 
