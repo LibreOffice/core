@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-20 14:18:49 $
+ *  last change: $Author: cmc $ $Date: 2002-08-22 15:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
           74, 0, L_VAR, // "sprmCSymbol", // chp.fSpec, chp.chSym and chp.ftcSym
           75, 1, L_FIX, //  "sprmCFOle2", // chp.fOle2 1 or 0   bit
 
+          79, 0, L_VAR, // unknown
           80, 2, L_FIX, // "sprmCIstd", // chp.istd istd, see stylesheet definition short
           81, 0, L_VAR, // "sprmCIstdPermute", // chp.istd permutation vector (see below)
           82, 0, L_VAR, // "sprmCDefault", // whole CHP (see below) none variable length
@@ -330,6 +331,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
          110, 2, L_FIX, // "sprmCCondHyhen", // chp.ysri ysri short
          111, 2, L_FIX, // unknown
          112, 2, L_FIX, // unknown
+         116, 0, L_VAR, // unknown
          117, 1, L_FIX, //  "sprmCFSpec", // chp.fSpec  1 or 0 bit
          118, 1, L_FIX, //  "sprmCFObj", // chp.fObj 1 or 0 bit
          119, 1, L_FIX, // "sprmPicBrcl", // pic.brcl brcl (see PIC structure definition) byte
@@ -770,12 +772,9 @@ SprmInfo wwSprmParser::GetSprmInfo(sal_uInt16 nId) const
                     aSrch.nLen = 3;
                     break;
             }
-            pFound = &aSrch;
-#if 0
-        ASSERT( pFound,
-           "Unknown undocumented sprm, report to complete word import");
-#endif
         }
+
+        pFound = &aSrch;
     }
     return *pFound;
 }
