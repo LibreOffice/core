@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:15:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,6 +753,15 @@ public:
 
     inline void InvalidateNextPos( BOOL bNoFtn = FALSE );
     void ImplInvalidateNextPos( BOOL bNoFtn = FALSE );
+
+    /** method to invalidate printing area of next frame
+
+        OD 09.01.2004 #i11859#
+
+        @author OD
+    */
+    void InvalidateNextPrtArea();
+
     void InvalidatePage( const SwPageFrm *pPage = 0 ) const;
 
     virtual BOOL    GetCrsrOfst( SwPosition *, Point&,
