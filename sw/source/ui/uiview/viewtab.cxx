@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:01:55 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1214,8 +1214,11 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aDistLR.SetRight((USHORT)rBox.GetDistance(BOX_LINE_RIGHT));
 
                         //add the paragraph border distance
-                        rSh.GetAttr( aCoreSet );
-                        const SvxBoxItem& rParaBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
+                        SfxItemSet aCoreSet1( GetPool(),
+                                                RES_BOX, RES_BOX,
+                                                0 );
+                        rSh.GetAttr( aCoreSet1 );
+                        const SvxBoxItem& rParaBox = (const SvxBoxItem&)aCoreSet1.Get(RES_BOX);
                         aDistLR.SetLeft(aDistLR.GetLeft() + (USHORT)rParaBox.GetDistance(BOX_LINE_LEFT ));
                         aDistLR.SetRight(aDistLR.GetRight() + (USHORT)rParaBox.GetDistance(BOX_LINE_RIGHT));
                     }
@@ -1241,8 +1244,11 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aDistLR.SetRight((USHORT)rBox.GetDistance(BOX_LINE_RIGHT));
 
                     //add the border distance of the paragraph
-                    rSh.GetAttr( aCoreSet );
-                    const SvxBoxItem& rParaBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
+                    SfxItemSet aCoreSet1( GetPool(),
+                                            RES_BOX, RES_BOX,
+                                            0 );
+                    rSh.GetAttr( aCoreSet1 );
+                    const SvxBoxItem& rParaBox = (const SvxBoxItem&)aCoreSet1.Get(RES_BOX);
                     aDistLR.SetLeft(aDistLR.GetLeft() + (USHORT)rParaBox.GetDistance(BOX_LINE_LEFT ));
                     aDistLR.SetRight(aDistLR.GetRight() + (USHORT)rParaBox.GetDistance(BOX_LINE_RIGHT));
                     rSet.Put(aDistLR);
