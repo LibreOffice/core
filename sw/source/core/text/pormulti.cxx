@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-27 13:31:34 $
+ *  last change: $Author: ama $ $Date: 2000-12-01 12:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,6 +926,16 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
     SwSpaceManipulator aManip( GetInfo(), rMulti );
 
+    SwFontSave *pFontSave;
+    if( rMulti.IsDouble() )
+    {
+        SwFont* pTmpFnt = new SwFont( *GetInfo().GetFont() );
+        pTmpFnt->SetProportion( 50 );
+        pFontSave = new SwFontSave( GetInfo(), pTmpFnt );
+    }
+    else
+        pFontSave = NULL;
+
     if( rMulti.HasBrackets() )
     {
         SeekAndChg( GetInfo() );
@@ -1015,6 +1025,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     // Restore the saved values
     GetInfo().X( nOldX );
     GetInfo().SetLen( nOldLen );
+    delete pFontSave;
 }
 
 /*-----------------13.10.00 16:46-------------------
@@ -1052,6 +1063,16 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 {
     SwTwips nMaxWidth = rInf.Width();
     SeekAndChg( rInf );
+    SwFontSave *pFontSave;
+    if( rMulti.IsDouble() )
+    {
+        SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
+        pTmpFnt->SetProportion( 50 );
+        pFontSave = new SwFontSave( rInf, pTmpFnt );
+    }
+    else
+        pFontSave = NULL;
+
     if( rMulti.HasBrackets() )
         ((SwDoubleLinePortion&)rMulti).FormatBrackets( rInf, nMaxWidth );
 
@@ -1254,6 +1275,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     rInf.SetTxt( *pOldTxt );
     delete pFirstRest;
     delete pSecondRest;
+    delete pFontSave;
     return bRet;
 }
 
