@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:24:02 $
+ *  last change: $Author: obo $ $Date: 2004-07-08 08:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,11 +870,6 @@ String RID_STR_ALIGNMENT
     Text [ en-US ] = "Left;Center;Right" ;
     Text [ x-comment ] = " ";
 };
-String RID_STR_ENUM_SIDE_ALIGN
-{
-    Text [ de ] = "Links;Oben;Rechts;Unten" ;
-    Text [ en-US ] = "Left;Top;Right;Bottom" ;
-};
 String RID_STR_ENUM_BUTTONTYPE
 {
     Text [ de ]= "Keine;Formular übertragen;Formular zurücksetzen;Dokument/Webseite öffnen;Erster Datensatz;Vorheriger Datensatz;Nächster Datensatz;Letzter Datensatz;Datensatz speichern;Rückgängig: Dateneingabe;Neuer Datensatz;Datensatz löschen;Formular aktualisieren";
@@ -1408,134 +1403,114 @@ Resource RID_RSC_ENUM_COMMAND_TYPE
 };
 String RID_STR_TOGGLE
 {
-    Text = "Umschalten";
-    Text [ english ] = "Toggle";
-    Text [ english_us ] = "Toggle";
+    Text [ de ]  = "Umschalten";
+    Text [ en-US ] = "Toggle";
 };
 
 String RID_STR_FOCUSONCLICK
 {
-    Text = "Fokussieren bei Klick";
-    Text [ english ] = "Take Focus on Click";
-    Text [ english_us ] = "Take Focus on Click";
+    Text [ de ]  = "Fokussieren bei Klick";
+    Text [ en-US ] = "Take Focus on Click";
 };
 
 String RID_STR_HIDEINACTIVESELECTION
 {
-    Text = "Auswahl verstecken";
-    Text [ english ] = "Hide selection";
-    Text [ english_us ] = "Hide selection";
+    Text [ de ]  = "Auswahl verstecken";
+    Text [ en-US ] = "Hide selection";
 };
 
 String RID_STR_VISUALEFFECT
 {
-    Text = "Stil";
-    Text [ english ] = "Style";
-    Text [ english_us ] = "Style";
+    Text [ de ]  = "Stil";
+    Text [ en-US ] = "Style";
 };
 
 Resource RID_RSC_ENUM_VISUALEFFECT
 {
     String 1
     {
-        Text = "3D";
-        Text [ english ] = "3D";
-        Text [ english_us ] = "3D";
+        Text [ de ]  = "3D";
+        Text [ en-US ] = "3D";
     };
     String 2
     {
-        Text = "Flach";
-        Text [ english ] = "Flat";
-        Text [ english_us ] = "Flat";
+        Text [ de ]  = "Flach";
+        Text [ en-US ] = "Flat";
     };
 };
 
 String RID_STR_BORDERCOLOR
 {
-    Text = "Umrandungsfarbe";
-    Text [ english ] = "Border color";
-    Text [ english_us ] = "Border color";
+    Text [ de ]  = "Umrandungsfarbe";
+    Text [ en-US ] = "Border color";
 };
 
 Resource RID_RSC_ENUM_IMAGE_POSITION
 {
     String 1
     {
-        Text = "Links oben";
-        Text [ english ] = "Left top";
-        Text [ english_us ] = "Left top";
+        Text [ de ]  = "Links oben";
+        Text [ en-US ] = "Left top";
     };
     String 2
     {
-        Text = "Links zentriert";
-        Text [ english ] = "Left centered";
-        Text [ english_us ] = "Left centered";
+        Text [ de ]  = "Links zentriert";
+        Text [ en-US ] = "Left centered";
     };
     String 3
     {
-        Text = "Links unten";
-        Text [ english ] = "Left bottom";
-        Text [ english_us ] = "Left bottom";
+        Text [ de ]  = "Links unten";
+        Text [ en-US ] = "Left bottom";
     };
     String 4
     {
-        Text = "Rechts oben";
-        Text [ english ] = "Right top";
-        Text [ english_us ] = "Right top";
+        Text [ de ]  = "Rechts oben";
+        Text [ en-US ] = "Right top";
     };
     String 5
     {
-        Text = "Rechts zentriert";
-        Text [ english ] = "Right centered";
-        Text [ english_us ] = "Right centered";
+        Text [ de ]  = "Rechts zentriert";
+        Text [ en-US ] = "Right centered";
     };
     String 6
     {
-        Text = "Rechts unten";
-        Text [ english ] = "Right bottom";
-        Text [ english_us ] = "Right bottom";
+        Text [ de ]  = "Rechts unten";
+        Text [ en-US ] = "Right bottom";
     };
     String 7
     {
-        Text = "Oben links";
-        Text [ english ] = "Above left";
-        Text [ english_us ] = "Above left";
+        Text [ de ]  = "Oben links";
+        Text [ en-US ] = "Above left";
     };
     String 8
     {
-        Text = "Oben zentriert";
-        Text [ english ] = "Above centered";
-        Text [ english_us ] = "Above centered";
+        Text [ de ]  = "Oben zentriert";
+        Text [ en-US ] = "Above centered";
     };
     String 9
     {
-        Text = "Oben rechts";
-        Text [ english ] = "Above right";
-        Text [ english_us ] = "Above right";
+        Text [ de ]  = "Oben rechts";
+        Text [ en-US ] = "Above right";
     };
     String 10
     {
-        Text = "Unten links";
-        Text [ english ] = "Below left";
-        Text [ english_us ] = "Below left";
+        Text [ de ]  = "Unten links";
+        Text [ en-US ] = "Below left";
     };
     String 11
     {
-        Text = "Unten zentriert";
-        Text [ english ] = "Below centered";
-        Text [ english_us ] = "Below centered";
+        Text [ de ]  = "Unten zentriert";
+        Text [ en-US ] = "Below centered";
     };
     String 12
     {
-        Text = "Unten rechts";
-        Text [ english ] = "Below right";
-        Text [ english_us ] = "Below right";
+        Text [ de ]  = "Unten rechts";
+        Text [ en-US ] = "Below right";
     };
     String 13
     {
-        Text = "Zentriert";
-        Text [ english ] = "Centered";
-        Text [ english_us ] = "Centered";
+        Text [ de ]  = "Zentriert";
+        Text [ en-US ] = "Centered";
     };
 };
 
