@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:22:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ czech ] = "Tabulka";
         Text[ hebrew ] = "‮טבלה‬";
         Text[ hindi ] = "~सारणी";
+        Text[ slovak ] = "~Tabuľka";
     };
     ComboBox CB_TABLES
     {
@@ -228,6 +229,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ czech ] = "Přiřazení";
         Text[ hebrew ] = "‮השמה‬";
         Text[ hindi ] = "निर्दिष्ट करना";
+        Text[ slovak ] = "Priradenie";
     };
     FixedText FT_TABLEINDEXES
     {
@@ -259,6 +261,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ czech ] = "Rejstříky tabulky";
         Text[ hebrew ] = "‮מפתחות מטבלה‬";
         Text[ hindi ] = "~सारणी अनुक्रमणी";
+        Text[ slovak ] = "Indexy t~abuľky";
     };
     ListBox LB_TABLEINDEXES
     {
@@ -298,6 +301,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ czech ] = "Volné rejstříky";
         Text[ hebrew ] = "‮מפתחות חופשיים‬";
         Text[ hindi ] = "~मुक्त अनुक्रमणी";
+        Text[ slovak ] = "~Voľné indexy";
     };
     ListBox LB_FREEINDEXES
     {
@@ -402,11 +406,20 @@ ModalDialog DLG_DBASE_INDEXES
     Text[ czech ] = "Rejstříky";
     Text[ hebrew ] = "Indizes";
     Text[ hindi ] = "अनुक्रमणी";
+    Text[ slovak ] = "Indexy";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27.24.1  2003/06/12 10:57:51  gh
+ *  final Merge RC
+ *
+ *  Revision 1.27  2003/04/29 17:22:22  hr
+ *  INTEGRATION: CWS mergem8 (1.26.8); FILE MERGED
+ *  2003/04/29 08:33:57 gh 1.26.8.2: final merge for Beta2
+ *  2003/04/14 15:03:55 gh 1.26.8.1: merging all languages
+ *
  *  Revision 1.26.8.2  2003/04/29 08:33:57  gh
  *  final merge for Beta2
  *
@@ -511,6 +524,8 @@ ModalDialog DLG_DBASE_INDEXES
  *
  *  Revision 1.0 26.09.00 17:03:30  fs
  ************************************************************************/
+
+
 
 
 
