@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:33:48 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,13 @@ namespace basegfx
         // Subdivide all contained curves. Use distanceBound value if given.
         ::basegfx::B2DPolyPolygon adaptiveSubdivideByDistance(const ::basegfx::B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);
 
-        // Subdivide all contained curves. Use distanceBound value if given.
-        ::basegfx::B2DPolyPolygon adaptiveSubdivideByAngle(const ::basegfx::B2DPolyPolygon& rCandidate, double fAngleBound = 5.0);
+        // Subdivide all contained curves. Use distanceBound value if given. Else, a convenient one
+        // is created.
+        ::basegfx::B2DPolyPolygon adaptiveSubdivideByAngle(const ::basegfx::B2DPolyPolygon& rCandidate, double fAngleBound = 0.0);
+
+        // Subdivide all contained curves. Use nCount divisions if given. Else, a convenient one
+        // is created.
+        ::basegfx::B2DPolyPolygon adaptiveSubdivideByCount(const ::basegfx::B2DPolyPolygon& rCandidate, sal_uInt32 nCount = 0L);
 
         // get size of PolyPolygon. Control vectors are included in that ranges.
         ::basegfx::B2DRange getRange(const ::basegfx::B2DPolyPolygon& rCandidate);
