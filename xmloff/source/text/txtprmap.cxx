@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:39:40 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,6 +372,10 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_ED( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
 
     M_E( "ParaIsConnectBorder", STYLE, JOIN_BORDER,  XML_TYPE_BOOL, 0 ),
+
+    // RES_ROW_SPLIT: only occurs in table rows, but we need to
+    // read/write the default for this item
+    M_ED( "IsSplitAllowed", STYLE, KEEP_TOGETHER, XML_TYPE_BOOL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_KEEP_TOGETHER ),
 
     M_END()
 };
