@@ -2,9 +2,9 @@
  *
  *  $RCSfile: list.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:14:04 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: list.c,v 1.2 2003-04-15 16:14:04 vg Exp $ */
+/* $Id: list.c,v 1.3 2004-02-04 11:51:28 hr Exp $ */
 
 /*[]---------------------------------------------------[]*/
 /*|                                                     |*/
@@ -72,7 +72,9 @@
 #include <stdlib.h>
 
 #if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
+#  ifndef NDEBUG
+#    define NDEBUG
+#  endif
 #endif
 #include <assert.h>
 
