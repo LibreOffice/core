@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:39:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
         aImageURL >>= sImageURL;
 
         ::osl::MutexGuard aGuard( m_aMutex );   // handleNewImageURL expects this
-        handleNewImageURL( sImageURL );
+        handleNewImageURL( sImageURL, eOther );
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -307,7 +307,7 @@ void OImageControlModel::_propertyChanged( const PropertyChangeEvent& _rEvent )
         _rEvent.NewValue >>= sImageURL;
 
         ::osl::MutexGuard aGuard( m_aMutex );   // handleNewImageURL expects this
-        handleNewImageURL( sImageURL );
+        handleNewImageURL( sImageURL, eOther );
     }
 }
 
@@ -431,7 +431,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OImageControlModel::handleNewImageURL( const ::rtl::OUString& _rURL )
+sal_Bool OImageControlModel::handleNewImageURL( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
 
     // if the image URL has been set, we have to forward this to the image producer
@@ -476,7 +476,7 @@ sal_Bool OImageControlModel::handleNewImageURL( const ::rtl::OUString& _rURL )
         if ( m_xColumnUpdate.is() )
             updateColumnWithStream( xInStream );
         else
-            setControlValue( makeAny( xInStream ) );
+            setControlValue( makeAny( xInStream ), _eInstigator );
 
         // close the stream, just to be on the safe side (should have been done elsewhere ...)
         try
@@ -492,7 +492,7 @@ sal_Bool OImageControlModel::handleNewImageURL( const ::rtl::OUString& _rURL )
         if ( m_xColumnUpdate.is() )
             updateColumnWithStream( NULL );
         else
-            setControlValue( Any() );
+            setControlValue( Any(), _eInstigator );
     }
 
     return sal_True;
@@ -513,7 +513,7 @@ sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
 
         ::rtl::OUString sImageURL;
         m_xAggregateSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sImageURL;
-        return handleNewImageURL( sImageURL );
+        return handleNewImageURL( sImageURL, eDbColumnBinding );
     }
 
     return sal_True;
@@ -544,9 +544,9 @@ Any OImageControlModel::translateDbColumnToControlValue()
 }
 
 //------------------------------------------------------------------------------
-void OImageControlModel::setControlValue( const Any& _rValue )
+void OImageControlModel::doSetControlValue( const Any& _rValue )
 {
-    DBG_ASSERT( GetImageProducer() && m_xImageProducer.is(), "OImageControlModel::setControlValue: no image producer!" );
+    DBG_ASSERT( GetImageProducer() && m_xImageProducer.is(), "OImageControlModel::doSetControlValue: no image producer!" );
     if ( !GetImageProducer() || !m_xImageProducer.is() )
         return;
 
@@ -575,7 +575,7 @@ void OImageControlModel::disposing()
 
     {
         ::osl::MutexGuard aGuard( m_aMutex ); // setControlValue expects this
-        setControlValue( Any() );
+        setControlValue( Any(), eOther );
     }
 }
 
