@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.42 $
- *  last change: $Author: kz $ $Date: 2001-05-21 10:55:20 $
+ *  $Revision: 1.43 $
+ *  last change: $Author: kz $ $Date: 2001-05-21 13:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #if defined(WIN32)
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
+#undef CreateFont
 #endif
 #endif
 
