@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:36:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ public:
     MasterPageDescriptor (
         const String& rURL,
         const String& rPageName,
+        const String& rStyleName,
         SdPage* pMasterPage,
         SdPage* pSlide,
         const Image& rPreview,
@@ -168,6 +169,7 @@ public:
         )
         : msURL(rURL),
           msPageName(rPageName),
+          msStyleName(rStyleName),
           mpMasterPage(pMasterPage),
           mpSlide(pSlide),
           maPreview(rPreview),
@@ -176,6 +178,7 @@ public:
     MasterPageDescriptor (const MasterPageDescriptor& rDescriptor)
         : msURL(rDescriptor.msURL),
           msPageName(rDescriptor.msPageName),
+          msStyleName(rDescriptor.msStyleName),
           mpMasterPage(rDescriptor.mpMasterPage),
           mpSlide(rDescriptor.mpSlide),
           maPreview(rDescriptor.maPreview),
@@ -185,7 +188,10 @@ public:
     {}
 
     String msURL;
+    /// Taken from the title of the template file.
     String msPageName;
+    /// Taken from the master page object.
+    String msStyleName;
     /// The actual master page.
     SdPage* mpMasterPage;
     /// A slide that uses the master page.
@@ -209,6 +215,12 @@ class PageNameComparator { public:
     bool operator() (const MasterPageContainerType::value_type& rDescriptor)
     { return rDescriptor.msPageName.CompareTo(msPageName)==0; }
 };
+class StyleNameComparator { public:
+    String msStyleName;
+    StyleNameComparator (const String& sStyleName) : msStyleName(sStyleName) {};
+    bool operator() (const MasterPageContainerType::value_type& rDescriptor)
+    { return rDescriptor.msStyleName.CompareTo(msStyleName)==0; }
+};
 class PageObjectComparator { public:
     const SdPage* mpMasterPage;
     PageObjectComparator (const SdPage* pPageObject)
@@ -219,13 +231,16 @@ class PageObjectComparator { public:
 class AllComparator { public:
     String msURL;
     String msPageName;
+    String msStyleName;
     const SdPage* mpMasterPage;
     AllComparator (
         const String& sURL,
         const String& sPageName,
+        const String& sStyleName,
         const SdPage* pPageObject)
         : msURL(sURL),
           msPageName(sPageName),
+          msStyleName(sStyleName),
           mpMasterPage(pPageObject)
     {}
     bool operator() (const MasterPageContainerType::value_type& rDescriptor)
@@ -235,6 +250,8 @@ class AllComparator { public:
                 &&rDescriptor.msURL.CompareTo(msURL)==0)
             || (msPageName.Len()>0
                 && rDescriptor.msPageName.CompareTo(msPageName)==0)
+            || (msStyleName.Len()>0
+                && rDescriptor.msStyleName.CompareTo(msStyleName)==0)
             || (mpMasterPage!=NULL
                 && rDescriptor.mpMasterPage==mpMasterPage);
     }
@@ -279,6 +296,7 @@ public:
     Token PutMasterPage (
         const String& sURL,
         const String& sPageName,
+        const String& sStyleName,
         SdPage* pMasterPage,
         Image aPreview);
     Image GetPreviewForToken (
@@ -290,6 +308,9 @@ public:
         const Link& rCallback,
         void* pUserData);
     void RemoveCallback (const Link& rCallback);
+    Image GetPreviewForPage (
+        SdPage* pPage,
+        int nWidth);
 
 private:
     Timer maDelayedPreviewCreationTimer;
@@ -406,12 +427,14 @@ MasterPageContainer::~MasterPageContainer (void)
 MasterPageContainer::Token MasterPageContainer::PutMasterPage (
     const String& sURL,
     const String& sPageName,
+    const String& sStyleName,
     SdPage* pMasterPage,
     Image aPreview)
 {
     return mpImpl->PutMasterPage (
         sURL,
         sPageName,
+        sStyleName,
         pMasterPage,
         aPreview);
 }
@@ -478,6 +501,25 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForPageName (
 
 
 
+MasterPageContainer::Token MasterPageContainer::GetTokenForStyleName (const String& sStyleName)
+{
+    Token aResult (NIL_TOKEN);
+    if (sStyleName.Len() > 0)
+    {
+        MasterPageContainerType::iterator aEntry (
+            ::std::find_if (
+                mpImpl->maContainer.begin(),
+                mpImpl->maContainer.end(),
+                StyleNameComparator(sStyleName)));
+        if (aEntry != mpImpl->maContainer.end())
+            return aEntry->maToken;
+    }
+    return aResult;
+}
+
+
+
+
 MasterPageContainer::Token MasterPageContainer::GetTokenForPageObject (
     const SdPage* pPage)
 {
@@ -515,6 +557,18 @@ String MasterPageContainer::GetPageNameForToken (
 {
     if (aToken>=0 && (unsigned)aToken<mpImpl->maContainer.size())
         return mpImpl->maContainer[aToken].msPageName;
+    else
+        return String();
+}
+
+
+
+
+String MasterPageContainer::GetStyleNameForToken (
+    MasterPageContainer::Token aToken)
+{
+    if (aToken>=0 && (unsigned)aToken<mpImpl->maContainer.size())
+        return mpImpl->maContainer[aToken].msStyleName;
     else
         return String();
 }
@@ -563,6 +617,16 @@ Image MasterPageContainer::GetPreviewForToken (
             nWidth,
             rCallback,
             pUserData);
+}
+
+
+
+
+Image MasterPageContainer::GetPreviewForPage (
+    SdPage* pPage,
+    int nWidth)
+{
+    return mpImpl->GetPreviewForPage(pPage, nWidth);
 }
 
 
@@ -719,6 +783,7 @@ IMPL_LINK(MasterPageContainer::Implementation,
 MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
     const String& sURL,
     const String& sPageName,
+    const String& sStyleName,
     SdPage* pMasterPage,
     Image aPreview)
 {
@@ -728,7 +793,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
         ::std::find_if (
             maContainer.begin(),
             maContainer.end(),
-            AllComparator(sURL,sPageName,pMasterPage)));
+            AllComparator(sURL,sPageName,sStyleName,pMasterPage)));
     if (aEntry == maContainer.end())
     {
         bool bIgnore = false;
@@ -752,6 +817,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
             maContainer.push_back (MasterPageDescriptor (
                 sURL,
                 sPageName,
+                sStyleName,
                 pLocalMasterPage,
                 pLocalSlide,
                 aPreview,
@@ -765,6 +831,8 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
             aEntry->msURL = sURL;
         if (aEntry->msPageName.Len() == 0)
             aEntry->msPageName = sPageName;
+        if (aEntry->msStyleName.Len() == 0)
+            aEntry->msStyleName = sStyleName;
         if (aEntry->mpMasterPage == NULL)
             aEntry->mpMasterPage = pMasterPage;
         Size aImageSize (aEntry->maPreview.GetSizePixel());
@@ -805,7 +873,7 @@ SdPage* MasterPageContainer::Implementation::GetPageObjectForToken (
                     maContainer[aToken].mpMasterPage = pPageObject;
                     maContainer[aToken].mpSlide
                         = GetSlideForMasterPage(pPageObject);
-                    maContainer[aToken].msPageName = pPageObject->GetName();
+                    maContainer[aToken].msStyleName = pPageObject->GetName();
                     // Delete an existing substitution. The next request for
                     // a preview will create the real one.
                     maContainer[aToken].maPreview = Image();
@@ -1140,28 +1208,42 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
     }
 
     bool bShowSubstitution = false;
-    if (aPreview.GetSizePixel().Width() != nWidth)
-        if (pPage != NULL)
-        {
-            // The page object exists so we can create the preview right now.
-            aPreview = maPreviewRenderer.RenderPage(
+    Size aSize (aPreview.GetSizePixel());
+    if (aPreview.GetSizePixel().Width() == nWidth)
+    {
+        // The existing preview already has the right size so use that.
+        bShowSubstitution = false;
+    }
+    else if (pPage != NULL)
+    {
+        // We have the page in memory so we can render it in the desired
+        // size.
+        aPreview = maPreviewRenderer.RenderPage(
                 maContainer[aToken].mpMasterPage,
                 nWidth,
                 String::CreateFromAscii(""));
-            maContainer[aToken].maPreview = aPreview;
-            bShowSubstitution = false;
-        }
-        else
-        {
-            // The page object has to be loaded.  That takes so long that we
-            // do it asynchronously.
-            AddPreviewCreationRequest(
-                aToken,
-                nWidth,
-                rCallback,
-                pUserData);
-            bShowSubstitution = true;
-        }
+        maContainer[aToken].maPreview = aPreview;
+        bShowSubstitution = false;
+    }
+    else if (nWidth>0 && aPreview.GetSizePixel().Width()>0)
+    {
+        // We already have a preview so we scale that to the desired size.
+        aPreview = maPreviewRenderer.ScaleBitmap (
+            aPreview.GetBitmapEx(),
+            nWidth);
+        bShowSubstitution = false;
+    }
+    else
+    {
+        // The page object has to be loaded.  That takes so long that we
+        // do it asynchronously.
+        AddPreviewCreationRequest(
+            aToken,
+            nWidth,
+            rCallback,
+            pUserData);
+        bShowSubstitution = true;
+    }
 
     if (bShowSubstitution)
     {
@@ -1172,6 +1254,19 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
     }
 
     return aPreview;
+}
+
+
+
+
+Image MasterPageContainer::Implementation::GetPreviewForPage (
+    SdPage* pPage,
+    int nWidth)
+{
+    return maPreviewRenderer.RenderPage(
+        pPage,
+        nWidth,
+        String::CreateFromAscii(""));
 }
 
 
@@ -1373,6 +1468,29 @@ BitmapEx MasterPageContainer::Implementation::LoadPreviewFromURL (
 
 void MasterPageContainer::Implementation::FillContainer (void)
 {
+    //add a default master page
+    if(mpDocument)
+    {
+        Image aPreview;
+        String aEmpty;
+        Token aResult = maContainer.size();
+        USHORT nDefaultMasterIndex = 0;
+        SdPage* pLocalMasterPage = mpDocument->GetMasterSdPage(
+                                                nDefaultMasterIndex, PK_STANDARD);
+        if(pLocalMasterPage)
+        {
+            maContainer.push_back (MasterPageDescriptor (
+                aEmpty/*sURL*/,
+                pLocalMasterPage->GetName()/*sPageName*/,
+                pLocalMasterPage->GetName()/*rStyleName*/,
+                pLocalMasterPage,
+                GetSlideForMasterPage(pLocalMasterPage)/*pLocalSlide*/,
+                aPreview,
+                aResult));
+        }
+    }
+
+    //add all master pages from the template directories
     TemplateScanner aScanner;
     aScanner.Scan ();
 
@@ -1405,6 +1523,7 @@ void MasterPageContainer::Implementation::AddTemplate (
     PutMasterPage (
         rsPath,
         rsTitle,
+        String(),
         NULL,
         Image());
 }
