@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:46:53 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,27 @@ namespace sdr
         {
             // invalidate all associated windows.
             GetPageViewWindow().Invalidate(rRectangle);
+        }
+
+        // #i37394# Non-painted object was changed. Test for potentially
+        // getting visible
+        void ObjectContactOfPageView::ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const
+        {
+            const Rectangle& rOrigObjectRectangle = rVOC.GetViewContact().GetPaintRectangle();
+            OutputDevice& rOutDev = GetPageViewWindow().GetOutputDevice();
+            const Point aEmptyPoint;
+            const Rectangle aVisiblePixel(aEmptyPoint, rOutDev.GetOutputSizePixel());
+            const Rectangle aObjectPixel(rOutDev.LogicToPixel(rOrigObjectRectangle));
+
+            // compare with the visible rectangle
+            if(aObjectPixel.IsOver(aVisiblePixel))
+            {
+                // invalidate
+                GetPageViewWindow().Invalidate(rOrigObjectRectangle);
+            }
+
+            // call parent
+            ObjectContact::ObjectGettingPotentiallyVisible(rVOC);
         }
 
         // Get info about the need to visualize GluePoints
