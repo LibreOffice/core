@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-06 12:13:22 $
+ *  last change: $Author: oj $ $Date: 2002-11-22 12:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,8 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
     void AttachControls( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >&, sal_Bool bDetach );
 
     FmFormShell* GetFormShell() const;
+
+    void removeGridWindowListening();
 
 protected:
     FmXFormView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
