@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-02-21 21:35:12 $
+ *  last change: $Author: bustamam $ $Date: 2002-03-26 12:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,50 @@
 #include <localedata.hxx>
 #include <numberformatcode.hxx>
 #include <defaultnumberingprovider.hxx>
+#include <servicename.hxx>
+
+#define TRANSLITERATION_ALL
+#include <transliterationImpl.hxx>
+#include <transliteration_body.hxx>
+#include <transliteration_caseignore.hxx>
+#include <transliteration_Ignore.hxx>
+#include <transliteration_OneToOne.hxx>
+#include <textToPronounce_zh.hxx>
+#include <numtotext_cjk.hxx>
+#include <numtochar.hxx>
+
+#include <calendarImpl.hxx>
+#include <calendar_gregorian.hxx>
+#include <calendar_hijri.hxx>
+#include <calendar_jewish.hxx>
+
+#define BREAKITERATOR_ALL
+#include <breakiteratorImpl.hxx>
+#include <breakiterator_cjk.hxx>
+#include <breakiterator_th.hxx>
+#include <breakiterator_unicode.hxx>
+
+#define INDEXENTRYSUPPLIER_ALL
 #include <indexentrysupplier.hxx>
-#include <indexentrysupplier_CJK.hxx>
-#include <indexentrysupplier_Euro.hxx>
-#include <indexentrysupplier_Unicode.hxx>
+#include <indexentrysupplier_cjk.hxx>
+#include <indexentrysupplier_euro.hxx>
+#include <indexentrysupplier_unicode.hxx>
+
+#define CCLASS_ALL
+#include <characterclassificationImpl.hxx>
+#include <scripttypedetector.hxx>
+#include <cclass_unicode.hxx>
+
+#define COLLATOR_ALL
+#include <collatorImpl.hxx>
+#include <chaptercollator.hxx>
+#include <collator_unicode.hxx>
+#include <collator_icu.hxx>
+#include <collator_simple.hxx>
+#include <collator_cjk.hxx>
+
+#include <inputsequencechecker.hxx>
+#include <inputsequencechecker_th.hxx>
 
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
@@ -114,6 +154,11 @@ typedef ::com::sun::star::uno::Reference<
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory >& );
 
+#define IMPL_TRANSLITERATION_ITEM( implName ) \
+    {       TRLT_SERVICELNAME_L10N, \
+        TRLT_IMPLNAME_PREFIX  #implName, \
+        &implName##_CreateInstance }
+
 // -------------------------------------------------------------------------------------
 
 using namespace ::com::sun::star::i18n;
@@ -122,24 +167,116 @@ IMPL_CREATEINSTANCE_MSF( NumberFormatCodeMapper )
 IMPL_CREATEINSTANCE( LocaleData )
 IMPL_CREATEINSTANCE_MSF( DefaultNumberingProvider )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_CN_pinyin )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_CN_radical )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_CN_stroke )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_zhuyin )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_radical )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_stroke )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ko_KR_dict )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ko_KR_charset )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_en_US_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_en_AU_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_it_IT_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_sv_SE_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_no_NO_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_nl_BE_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_da_DK_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_fi_FI_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_is_IS_alphanumeric )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_Unicode )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_pinyin )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_radical )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_stroke )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_zhuyin )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_TW_radical )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_zh_TW_stroke )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_ko_dict )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_alphanumeric )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_nl_alphanumeric )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_da_alphanumeric )
+IMPL_CREATEINSTANCE( IndexEntrySupplier_Unicode )
+IMPL_CREATEINSTANCE_MSF( CalendarImpl )
+IMPL_CREATEINSTANCE( Calendar_gregorian )
+IMPL_CREATEINSTANCE( Calendar_hanja_yoil )
+IMPL_CREATEINSTANCE( Calendar_gengou )
+IMPL_CREATEINSTANCE( Calendar_ROC )
+IMPL_CREATEINSTANCE( Calendar_hijri )
+IMPL_CREATEINSTANCE( Calendar_jewish )
+IMPL_CREATEINSTANCE( Calendar_buddhist )
+IMPL_CREATEINSTANCE_MSF( BreakIteratorImpl )
+IMPL_CREATEINSTANCE( BreakIterator_Unicode )
+IMPL_CREATEINSTANCE( BreakIterator_ja )
+IMPL_CREATEINSTANCE( BreakIterator_zh )
+IMPL_CREATEINSTANCE( BreakIterator_th )
+IMPL_CREATEINSTANCE_MSF( ChapterCollator )
+IMPL_CREATEINSTANCE_MSF( CollatorImpl )
+IMPL_CREATEINSTANCE( Collator_ICU )
+IMPL_CREATEINSTANCE( Collator_Simple )
+IMPL_CREATEINSTANCE( Collator_Unicode )
+IMPL_CREATEINSTANCE( Collator_zh_pinyin )
+IMPL_CREATEINSTANCE( Collator_zh_radical )
+IMPL_CREATEINSTANCE( Collator_zh_stroke )
+IMPL_CREATEINSTANCE( Collator_zh_zhuyin )
+IMPL_CREATEINSTANCE( Collator_zh_TW_radical )
+IMPL_CREATEINSTANCE( Collator_zh_TW_stroke )
+IMPL_CREATEINSTANCE( Collator_ko_dict )
+IMPL_CREATEINSTANCE( Collator_ko_charset )
+IMPL_CREATEINSTANCE( Collator_zh_charset )
+IMPL_CREATEINSTANCE( Collator_ja_charset )
+IMPL_CREATEINSTANCE( Collator_zh_TW_charset )
+
+IMPL_CREATEINSTANCE_MSF( CharacterClassificationImpl )
+IMPL_CREATEINSTANCE_MSF( cclass_Unicode )
+IMPL_CREATEINSTANCE_MSF( TransliterationImpl )
+IMPL_CREATEINSTANCE( ScriptTypeDetector )
+
+IMPL_CREATEINSTANCE_MSF( InputSequenceCheckerImpl )
+IMPL_CREATEINSTANCE( InputSequenceChecker_th )
+
+IMPL_CREATEINSTANCE( Transliteration_u2l )
+IMPL_CREATEINSTANCE( Transliteration_l2u )
+IMPL_CREATEINSTANCE( Transliteration_caseignore )
+IMPL_CREATEINSTANCE( hiraganaToKatakana )
+IMPL_CREATEINSTANCE( katakanaToHiragana )
+IMPL_CREATEINSTANCE( ignoreKana )
+IMPL_CREATEINSTANCE( fullwidthToHalfwidth )
+IMPL_CREATEINSTANCE( halfwidthToFullwidth )
+IMPL_CREATEINSTANCE( ignoreWidth )
+
+IMPL_CREATEINSTANCE( smallToLarge_ja_JP)
+IMPL_CREATEINSTANCE( largeToSmall_ja_JP)
+IMPL_CREATEINSTANCE( ignoreTraditionalKanji_ja_JP)
+IMPL_CREATEINSTANCE( ignoreTraditionalKana_ja_JP)
+IMPL_CREATEINSTANCE( ignoreMinusSign_ja_JP)
+IMPL_CREATEINSTANCE( ignoreIterationMark_ja_JP)
+IMPL_CREATEINSTANCE( ignoreSeparator_ja_JP)
+IMPL_CREATEINSTANCE( ignoreZiZu_ja_JP)
+IMPL_CREATEINSTANCE( ignoreBaFa_ja_JP)
+IMPL_CREATEINSTANCE( ignoreTiJi_ja_JP)
+IMPL_CREATEINSTANCE( ignoreHyuByu_ja_JP)
+IMPL_CREATEINSTANCE( ignoreSeZe_ja_JP)
+IMPL_CREATEINSTANCE( ignoreIandEfollowedByYa_ja_JP)
+IMPL_CREATEINSTANCE( ignoreKiKuFollowedBySa_ja_JP)
+IMPL_CREATEINSTANCE( ignoreSize_ja_JP)
+IMPL_CREATEINSTANCE( ignoreProlongedSoundMark_ja_JP)
+IMPL_CREATEINSTANCE( ignoreMiddleDot_ja_JP)
+IMPL_CREATEINSTANCE( ignoreSpace_ja_JP)
+
+IMPL_CREATEINSTANCE( TextToChuyin_zh_TW )
+IMPL_CREATEINSTANCE( TextToPinyin_zh_CN )
+
+IMPL_CREATEINSTANCE( NumToTextLower_zh_CN )
+IMPL_CREATEINSTANCE( NumToTextUpper_zh_CN )
+IMPL_CREATEINSTANCE( NumToCharLower_zh_CN )
+IMPL_CREATEINSTANCE( NumToCharUpper_zh_CN )
+
+IMPL_CREATEINSTANCE( NumToCharLower_zh_TW )
+IMPL_CREATEINSTANCE( NumToCharUpper_zh_TW )
+IMPL_CREATEINSTANCE( NumToTextLower_zh_TW )
+IMPL_CREATEINSTANCE( NumToTextUpper_zh_TW )
+
+IMPL_CREATEINSTANCE( NumToCharHangul_ko )
+IMPL_CREATEINSTANCE( NumToCharLower_ko )
+IMPL_CREATEINSTANCE( NumToCharUpper_ko )
+IMPL_CREATEINSTANCE( NumToCharFullwidth )
+IMPL_CREATEINSTANCE( NumToCharKanjiShort_ja_JP )
+IMPL_CREATEINSTANCE( NumToTextFormalHangul_ko )
+IMPL_CREATEINSTANCE( NumToTextFormalLower_ko )
+IMPL_CREATEINSTANCE( NumToTextFormalUpper_ko )
+IMPL_CREATEINSTANCE( NumToTextInformalHangul_ko )
+IMPL_CREATEINSTANCE( NumToTextInformalUpper_ko )
+IMPL_CREATEINSTANCE( NumToTextInformalLower_ko )
+
+IMPL_CREATEINSTANCE( NumToCharIndic_ar )
+IMPL_CREATEINSTANCE( NumToCharEastIndic_ar )
+IMPL_CREATEINSTANCE( NumToCharIndic_hi )
+IMPL_CREATEINSTANCE( NumToChar_th )
+
+IMPL_CREATEINSTANCE( NumToTextKanjiLongModern_ja_JP )
+IMPL_CREATEINSTANCE( NumToTextKanjiLongTraditional_ja_JP )
 
 static const struct InstancesArray {
         const sal_Char* pServiceNm;
@@ -158,231 +295,220 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.IndexEntrySupplier",
         "com.sun.star.i18n.IndexEntrySupplier",
         &IndexEntrySupplier_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_pinyin",
-        "com.sun.star.i18n.zh_CN_pinyin_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_CN_pinyin_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_radical",
-        "com.sun.star.i18n.zh_CN_radical_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_CN_radical_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_stroke",
-        "com.sun.star.i18n.zh_CN_stroke_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_CN_stroke_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_pinyin",
-        "com.sun.star.i18n.zh_SG_pinyin_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_CN_pinyin_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_radical",
-        "com.sun.star.i18n.zh_SG_radical_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_CN_radical_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_stroke",
-        "com.sun.star.i18n.zh_SG_stroke_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_CN_stroke_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_pinyin",
+        "com.sun.star.i18n.IndexEntrySupplier_zh_pinyin",
+        &IndexEntrySupplier_zh_pinyin_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_radical",
+        "com.sun.star.i18n.IndexEntrySupplier_zh_radical",
+        &IndexEntrySupplier_zh_radical_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_stroke",
+        "com.sun.star.i18n.IndexEntrySupplier_zh_stroke",
+        &IndexEntrySupplier_zh_stroke_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_zh_zhuyin",
+        "com.sun.star.i18n.IndexEntrySupplier_zh_zhuyin",
+        &IndexEntrySupplier_zh_zhuyin_CreateInstance },
     {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_radical",
-        "com.sun.star.i18n.zh_HK_radical_IndexEntrySupplier",
+        "com.sun.star.i18n.IndexEntrySupplier_zh_TW_radical",
         &IndexEntrySupplier_zh_TW_radical_CreateInstance },
     {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_stroke",
-        "com.sun.star.i18n.zh_HK_stroke_IndexEntrySupplier",
+        "com.sun.star.i18n.IndexEntrySupplier_zh_TW_stroke",
         &IndexEntrySupplier_zh_TW_stroke_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_radical",
-        "com.sun.star.i18n.zh_MO_radical_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_TW_radical_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_stroke",
-        "com.sun.star.i18n.zh_MO_stroke_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_TW_stroke_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_zhuyin",
-        "com.sun.star.i18n.zh_TW_zhuyin_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_TW_zhuyin_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_CN_pinyin",
-        "com.sun.star.i18n.zh_TW_pinyin_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_CN_pinyin_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_radical",
-        "com.sun.star.i18n.zh_TW_radical_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_TW_radical_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_zh_TW_stroke",
-        "com.sun.star.i18n.zh_TW_stroke_IndexEntrySupplier",
-        &IndexEntrySupplier_zh_TW_stroke_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_ko_KR_dict",
-        "com.sun.star.i18n.ko_KR_dict_IndexEntrySupplier",
-        &IndexEntrySupplier_ko_KR_dict_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_ko_KR_charset",
-        "com.sun.star.i18n.ko_KR_charset_IndexEntrySupplier",
-        &IndexEntrySupplier_ko_KR_charset_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_en_US_alphanumeric",
-        "com.sun.star.i18n.en_US_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_US_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_it_IT_alphanumeric",
-        "com.sun.star.i18n.it_IT_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_it_IT_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_sv_SE_alphanumeric",
-        "com.sun.star.i18n.sv_SE_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_sv_SE_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.en_AU_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_no_NO_alphanumeric",
-        "com.sun.star.i18n.no_NO_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_no_NO_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_fi_FI_alphanumeric",
-        "com.sun.star.i18n.fi_FI_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_fi_FI_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_is_IS_alphanumeric",
-        "com.sun.star.i18n.is_IS_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_is_IS_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_da_DK_alphanumeric",
-        "com.sun.star.i18n.da_DK_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_da_DK_alphanumeric_CreateInstance },
-    {   "com.sun.star.i18n.IndexEntrySupplier_nl_BE_alphanumeric",
-        "com.sun.star.i18n.nl_BE_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_nl_BE_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.ca_ES_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.de_AT_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_AR_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.fr_BE_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.nl_NL_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.pt_PT_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.de_CH_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.de_LI_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.de_LU_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.en_BZ_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.en_CA_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.en_CB_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.en_IE_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.en_JM_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.en_NZ_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.en_PH_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.en_TT_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.en_ZA_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.en_ZW_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_BO_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_CL_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_CO_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_CR_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_DO_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_EC_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_GT_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_HN_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_MX_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_NI_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_PA_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_PE_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_PR_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_PY_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_SV_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_UY_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.es_VE_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.fr_CA_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.fr_CH_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.fr_LU_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.fr_MC_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_AU_alphanumeric",
-        "com.sun.star.i18n.pt_BR_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_AU_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_US_alphanumeric",
-        "com.sun.star.i18n.de_DE_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_US_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_US_alphanumeric",
-        "com.sun.star.i18n.en_GB_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_US_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_US_alphanumeric",
-        "com.sun.star.i18n.es_ES_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_US_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_en_US_alphanumeric",
-        "com.sun.star.i18n.fr_FR_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_en_US_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_no_NO_alphanumeric",
-        "com.sun.star.i18n.nb_NO_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_no_NO_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_no_NO_alphanumeric",
-        "com.sun.star.i18n.nn_NO_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_no_NO_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_it_IT_alphanumeric",
-        "com.sun.star.i18n.it_CH_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_it_IT_alphanumeric_CreateInstance },
-    {       "com.sun.star.i18n.IndexEntrySupplier_sv_SE_alphanumeric",
-        "com.sun.star.i18n.sv_FI_alphanumeric_IndexEntrySupplier",
-        &IndexEntrySupplier_sv_SE_alphanumeric_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_ko_dict",
+        "com.sun.star.i18n.IndexEntrySupplier_ko_dict",
+        &IndexEntrySupplier_ko_dict_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_ko_charset",
+        "com.sun.star.i18n.IndexEntrySupplier_ko_charset",
+        &IndexEntrySupplier_ko_dict_CreateInstance },   // share same table with ko_dict
+    {   "com.sun.star.i18n.IndexEntrySupplier_da_alphanumeric",
+        "com.sun.star.i18n.IndexEntrySupplier_da_alphanumeric",
+        &IndexEntrySupplier_da_alphanumeric_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_nl_alphanumeric",
+        "com.sun.star.i18n.IndexEntrySupplier_nl_alphanumeric",
+        &IndexEntrySupplier_nl_alphanumeric_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_alphanumeric",
+        "com.sun.star.i18n.IndexEntrySupplier_alphanumeric",
+        &IndexEntrySupplier_alphanumeric_CreateInstance },
     {       "com.sun.star.i18n.IndexEntrySupplier_Unicode",
-        "com.sun.star.i18n.Unicode_IndexEntrySupplier",
+        "com.sun.star.i18n.IndexEntrySupplier_Unicode",
         &IndexEntrySupplier_Unicode_CreateInstance },
+    {   "com.sun.star.i18n.Calendar",
+        "com.sun.star.i18n.CalendarImpl",
+        &CalendarImpl_CreateInstance },
+    {   "com.sun.star.i18n.Calendar_gregorian",
+        "com.sun.star.i18n.Calendar_gregorian",
+        &Calendar_gregorian_CreateInstance },
+    {   "com.sun.star.i18n.Calendar_gengou",
+        "com.sun.star.i18n.Calendar_gengou",
+        &Calendar_gengou_CreateInstance },
+    {   "com.sun.star.i18n.Calendar_ROC",
+        "com.sun.star.i18n.Calendar_ROC",
+        &Calendar_ROC_CreateInstance },
+    {   "com.sun.star.i18n.Calendar_hanja_yoil",
+        "com.sun.star.i18n.Calendar_hanja_yoil",
+        &Calendar_hanja_yoil_CreateInstance },
+    {   "com.sun.star.i18n.Calendar_hijri",
+        "com.sun.star.i18n.Calendar_hijri",
+        &Calendar_hijri_CreateInstance },
+    {   "com.sun.star.i18n.Calendar_jewish",
+        "com.sun.star.i18n.Calendar_jewish",
+        &Calendar_jewish_CreateInstance },
+    {   "com.sun.star.i18n.Calendar_buddhist",
+        "com.sun.star.i18n.Calendar_buddhist",
+        &Calendar_buddhist_CreateInstance },
+    {   "com.sun.star.i18n.BreakIterator",
+        "com.sun.star.i18n.BreakIterator",
+        &BreakIteratorImpl_CreateInstance },
+    {   "com.sun.star.i18n.BreakIterator_Unicode",
+        "com.sun.star.i18n.BreakIterator_Unicode",
+        &BreakIterator_Unicode_CreateInstance },
+    {   "com.sun.star.i18n.BreakIterator_ja",
+        "com.sun.star.i18n.BreakIterator_ja",
+        &BreakIterator_ja_CreateInstance },
+    {   "com.sun.star.i18n.BreakIterator_zh",
+        "com.sun.star.i18n.BreakIterator_zh",
+        &BreakIterator_zh_CreateInstance },
+    {   "com.sun.star.i18n.BreakIterator_th",
+        "com.sun.star.i18n.BreakIterator_th",
+        &BreakIterator_th_CreateInstance },
+        {       "com.sun.star.i18n.Collator",
+                "com.sun.star.i18n.Collator",
+                &CollatorImpl_CreateInstance },
+        {       "com.sun.star.i18n.ChapterCollator",
+                "com.sun.star.i18n.ChapterCollator",
+                &ChapterCollator_CreateInstance },
+        {       "com.sun.star.i18n.Collator_Unicode",
+                "com.sun.star.i18n.Collator_Unicode",
+                &Collator_Unicode_CreateInstance },
+        {       "com.sun.star.i18n.Collator_ICU",
+                "com.sun.star.i18n.Collator_ICU",
+                &Collator_ICU_CreateInstance },
+        {       "com.sun.star.i18n.Collator_Simple",
+                "com.sun.star.i18n.Collator_Simple",
+                &Collator_Simple_CreateInstance },
+        {       "com.sun.star.i18n.Collator_zh_pinyin",
+                "com.sun.star.i18n.Collator_zh_pinyin",
+                &Collator_zh_pinyin_CreateInstance },
+        {       "com.sun.star.i18n.Collator_zh_radical",
+                "com.sun.star.i18n.Collator_zh_radical",
+                &Collator_zh_radical_CreateInstance },
+        {       "com.sun.star.i18n.Collator_zh_stroke",
+                "com.sun.star.i18n.Collator_zh_stroke",
+                &Collator_zh_stroke_CreateInstance },
+        {       "com.sun.star.i18n.Collator_zh_zhuyin",
+                "com.sun.star.i18n.Collator_zh_zhuyin",
+                &Collator_zh_zhuyin_CreateInstance },
+        {       "com.sun.star.i18n.Collator_zh_TW_radical",
+                "com.sun.star.i18n.Collator_zh_TW_radical",
+                &Collator_zh_TW_radical_CreateInstance },
+        {       "com.sun.star.i18n.Collator_zh_TW_stroke",
+                "com.sun.star.i18n.Collator_zh_TW_stroke",
+                &Collator_zh_TW_stroke_CreateInstance },
+        {       "com.sun.star.i18n.Collator_ko_dict",
+                "com.sun.star.i18n.Collator_ko_dict",
+                &Collator_ko_dict_CreateInstance },
+        {       "com.sun.star.i18n.Collator_ko_charset",
+                "com.sun.star.i18n.Collator_ko_charset",
+                &Collator_ko_charset_CreateInstance },
+        {       "com.sun.star.i18n.Collator_ja_charset",
+                "com.sun.star.i18n.Collator_ja_charset",
+                &Collator_ja_charset_CreateInstance },
+        {       "com.sun.star.i18n.Collator_zh_charset",
+                "com.sun.star.i18n.Collator_zh_charset",
+                &Collator_zh_charset_CreateInstance },
+        {       "com.sun.star.i18n.Collator_zh_TW_charset",
+                "com.sun.star.i18n.Collator_zh_TW_charset",
+                &Collator_zh_TW_charset_CreateInstance },
+    {   "com.sun.star.i18n.ScriptTypeDetector",
+        "com.sun.star.i18n.ScriptTypeDetector",
+        &ScriptTypeDetector_CreateInstance },
+    {   "com.sun.star.i18n.CharacterClassification",
+        "com.sun.star.i18n.CharacterClassification",
+        &CharacterClassificationImpl_CreateInstance },
+    {   "com.sun.star.i18n.CharacterClassification_Unicode",
+        "com.sun.star.i18n.CharacterClassification_Unicode",
+        &cclass_Unicode_CreateInstance },
+    {   "com.sun.star.i18n.InputSequenceChecker",
+        "com.sun.star.i18n.InputSequenceChecker",
+        &InputSequenceCheckerImpl_CreateInstance },
+    {   "com.sun.star.i18n.InputSequenceChecker_th",
+        "com.sun.star.i18n.InputSequenceChecker_th",
+        &InputSequenceChecker_th_CreateInstance },
+    {   TRLT_SERVICELNAME,
+        TRLT_IMPLNAME ,
+        &TransliterationImpl_CreateInstance },
+    {       TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "UPPERCASE_LOWERCASE",
+        &Transliteration_u2l_CreateInstance },
+    {       TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "LOWERCASE_UPPERCASE",
+        &Transliteration_l2u_CreateInstance },
+    {       TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "IGNORE_CASE",
+        &Transliteration_caseignore_CreateInstance },
+    {       TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "HIRAGANA_KATAKANA",
+        &hiraganaToKatakana_CreateInstance },
+    {       TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "KATAKANA_HIRAGANA",
+        &katakanaToHiragana_CreateInstance },
+    {       TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "IGNORE_KANA",
+        &ignoreKana_CreateInstance },
+    {       TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "FULLWIDTH_HALFWIDTH",
+        &fullwidthToHalfwidth_CreateInstance },
+    {       TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "HALFWIDTH_FULLWIDTH",
+        &halfwidthToFullwidth_CreateInstance },
+    {       TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "IGNORE_WIDTH",
+        &ignoreWidth_CreateInstance },
+    IMPL_TRANSLITERATION_ITEM (smallToLarge_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (largeToSmall_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreTraditionalKanji_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreTraditionalKana_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreKana),
+    IMPL_TRANSLITERATION_ITEM (ignoreMinusSign_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreIterationMark_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreSeparator_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreZiZu_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreBaFa_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreTiJi_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreHyuByu_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreSeZe_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreIandEfollowedByYa_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreKiKuFollowedBySa_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreSize_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreProlongedSoundMark_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreMiddleDot_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (ignoreSpace_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (TextToPinyin_zh_CN),
+    IMPL_TRANSLITERATION_ITEM (TextToChuyin_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (NumToTextUpper_zh_CN),
+    IMPL_TRANSLITERATION_ITEM (NumToTextLower_zh_CN),
+    IMPL_TRANSLITERATION_ITEM (NumToCharUpper_zh_CN),
+    IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_CN),
+    IMPL_TRANSLITERATION_ITEM (NumToTextUpper_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (NumToTextLower_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (NumToCharUpper_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (NumToCharLower_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToCharUpper_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToCharHangul_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToCharFullwidth),
+    IMPL_TRANSLITERATION_ITEM (NumToCharKanjiShort_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (NumToTextInformalHangul_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToTextInformalLower_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToTextInformalUpper_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToTextFormalHangul_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToTextFormalLower_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToTextFormalUpper_ko),
+    IMPL_TRANSLITERATION_ITEM (NumToCharIndic_ar),
+    IMPL_TRANSLITERATION_ITEM (NumToCharEastIndic_ar),
+    IMPL_TRANSLITERATION_ITEM (NumToCharIndic_hi),
+    IMPL_TRANSLITERATION_ITEM (NumToChar_th),
+    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongModern_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongTraditional_ja_JP),
 
 // add here new services !!
     { 0, 0, 0 }
