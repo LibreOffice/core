@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:20:59 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ Window WIN_HELP_INDEX
                 Text[ chinese_traditional ] = "Ø¡§ﬁ";
                 Text[ turkish ] = "Index";
                 Text[ arabic ] = "›Â—”";
+                Text[ catalan ] = "Õndice";
             };
             PageItem
             {
@@ -153,6 +154,7 @@ Window WIN_HELP_INDEX
                 Text[ chinese_traditional ] = "∑j¥M";
                 Text[ turkish ] = "Search";
                 Text[ arabic ] = "»ÕÀ";
+                Text[ catalan ] = "Buscar";
             };
         };
     };
@@ -185,6 +187,7 @@ TabPage TP_HELP_INDEX
         Text[ chinese_traditional ] = "∑j¥M∂µ•ÿ(~S)";
         Text[ turkish ] = "~Suchbegriff";
         Text[ arabic ] = "„’ÿ·Õ «·»ÕÀ";
+        Text[ catalan ] = "~TÈrmino de b˙squeda";
     };
     Edit ED_EXPRESSION
     {
@@ -221,6 +224,7 @@ TabPage TP_HELP_INDEX
         Text[ chinese_traditional ] = "≈„•‹(~D)";
         Text[ turkish ] = "~Display";
         Text[ arabic ] = "⁄—÷";
+        Text[ catalan ] = "~Visualizar";
     };
 };
 
@@ -251,6 +255,7 @@ TabPage TP_HELP_SEARCH
         Text[ chinese_traditional ] = "∑j¥M∂µ•ÿ(~E)";
         Text[ turkish ] = "~Suchbegriff";
         Text[ arabic ] = "„’ÿ·Õ «·»ÕÀ";
+        Text[ catalan ] = "~TÈrmino de b˙squeda";
     };
     ComboBox ED_SEARCH
     {
@@ -282,6 +287,7 @@ TabPage TP_HELP_SEARCH
         Text[ chinese_traditional ] = "∑j¥M(~F)";
         Text[ turkish ] = "Search";
         Text[ arabic ] = "»ÕÀ";
+        Text[ catalan ] = "Buscar";
     };
     ListBox LB_RESULT
     {
@@ -312,30 +318,32 @@ TabPage TP_HELP_SEARCH
         Text[ chinese_traditional ] = "≈„•‹(~D)";
         Text[ turkish ] = "~Display";
         Text[ arabic ] = "⁄—÷";
+        Text[ catalan ] = "~Visualizar";
     };
     CheckBox CB_SCOPE
     {
         Pos = MAP_APPFONT ( 6, 69 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Nur Titel suchen" ;
-        Text [ english_us ] = "~Search headings only";
+        Text [ english_us ] = "Find ~headings only";
         Text[ portuguese ] = "~Procurar sÛ tÌtulo";
         Text[ russian ] = "~»ÒÍ‡Ú¸ ÚÓÎ¸ÍÓ Á‡„ÓÎÓ‚ÍË";
         Text[ greek ] = "~Search headings only";
-        Text[ dutch ] = "~Search headings only";
-        Text[ french ] = "~Search headings only";
+        Text[ dutch ] = "~Alleen titels zoeken";
+        Text[ french ] = "~Uniquement recherche de titres";
         Text[ spanish ] = "~Buscar solo tÌtulo";
         Text[ italian ] = "~Cerca solo intestazioni";
         Text[ danish ] = "~Search headings only";
         Text[ swedish ] = "Sˆk bara ~rubriker";
         Text[ polish ] = "Szukaj tylko tytu≥Ûw";
         Text[ portuguese_brazilian ] = "~Search headings only";
-        Text[ japanese ] = "~Search headings only";
+        Text[ japanese ] = "¿≤ƒŸÇÃÇ›Ç≈åüçı";
         Text[ korean ] = "~Search headings only";
         Text[ chinese_simplified ] = "~Search headings only";
         Text[ chinese_traditional ] = "~Search headings only";
         Text[ turkish ] = "~Search headings only";
         Text[ arabic ] = "~Search headings only";
+        Text[ catalan ] = "~Search headings only";
     };
 };
 
@@ -391,6 +399,7 @@ String STR_HELP_WINDOW_TITLE
     Text[ chinese_traditional ] = "%PRODUCTNAME ª°©˙";
     Text[ turkish ] = "%PRODUCTNAME Help";
     Text[ arabic ] = "%PRODUCTNAME „”«⁄œ…";
+    Text[ catalan ] = "%PRODUCTNAME Ayuda";
 };
 String STR_HELP_BUTTON_INDEX
 {
@@ -413,6 +422,7 @@ String STR_HELP_BUTTON_INDEX
     Text[ chinese_traditional ] = "Ø¡§ﬁ";
     Text[ turkish ] = "Index";
     Text[ arabic ] = "›Â—”";
+    Text[ catalan ] = "Õndice";
 };
 String STR_HELP_BUTTON_START
 {
@@ -435,6 +445,7 @@ String STR_HELP_BUTTON_START
     Text[ chinese_traditional ] = "≠∫≠∂";
     Text[ turkish ] = "Start page";
     Text[ arabic ] = "’›Õ… «·»œ¡";
+    Text[ catalan ] = "P·gina de inicio";
 };
 String STR_HELP_BUTTON_PREV
 {
@@ -457,6 +468,7 @@ String STR_HELP_BUTTON_PREV
     Text[ chinese_traditional ] = "§W§@≠∂";
     Text[ turkish ] = "Backward";
     Text[ arabic ] = "«·’›Õ… «·”«»ﬁ…";
+    Text[ catalan ] = "P·gina anterior";
 };
 String STR_HELP_BUTTON_NEXT
 {
@@ -479,6 +491,7 @@ String STR_HELP_BUTTON_NEXT
     Text[ chinese_traditional ] = "§U§@≠∂";
     Text[ turkish ] = "Forward";
     Text[ arabic ] = "«·’›Õ… «· «·Ì…";
+    Text[ catalan ] = "P·gina siguiente";
 };
 String STR_HELP_BUTTON_PRINT
 {
@@ -501,6 +514,7 @@ String STR_HELP_BUTTON_PRINT
     Text[ chinese_traditional ] = "¶C¶L";
     Text[ turkish ] = "Print";
     Text[ arabic ] = "ÿ»«⁄…";
+    Text[ catalan ] = "Imprimir";
 };
 
 String STR_HELP_BUTTON_SOURCEVIEW
@@ -526,6 +540,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ greek ] = " ÂﬂÏÂÌÔ ÒÔ›ÎÂıÛÁÚ HTML";
     Text[ korean ] = "HTML º“Ω∫≈ÿΩ∫∆Æ";
     Text[ turkish ] = "HTML kaynak kodu";
+    Text[ catalan ] = "HTML Source";
 };
 
 String STR_HELP_FIRST_MESSAGE
@@ -535,20 +550,21 @@ String STR_HELP_FIRST_MESSAGE
     Text[ portuguese ] = "A iniciar Ajuda...";
     Text[ russian ] = "«‡ÔÛÒÍ ÒÔ‡‚ÍË...";
     Text[ greek ] = "Help is started...";
-    Text[ dutch ] = "Help is started...";
-    Text[ french ] = "Help is started...";
+    Text[ dutch ] = "Help wordt gestart...";
+    Text[ french ] = "DÈmarrage de l'aide...";
     Text[ spanish ] = "Se ha iniciado la Ayuda...";
     Text[ italian ] = "Avvio della Guida...";
     Text[ danish ] = "Help is started...";
     Text[ swedish ] = "Hj‰lpen startas...";
     Text[ polish ] = "Uruchamianie Pomocy...";
     Text[ portuguese_brazilian ] = "Help is started...";
-    Text[ japanese ] = "Help is started...";
+    Text[ japanese ] = "ÕŸÃﬂÇäJénÇµÇƒÇ¢Ç‹Ç∑...";
     Text[ korean ] = "Help is started...";
     Text[ chinese_simplified ] = "Help is started...";
     Text[ chinese_traditional ] = "Help is started...";
     Text[ turkish ] = "Help is started...";
     Text[ arabic ] = "Help is started...";
+    Text[ catalan ] = "Help is started...";
 };
 
 String STR_HELP_FIRST_HTML
