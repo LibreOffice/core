@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: er $ $Date: 2001-11-23 19:25:50 $
+ *  last change: $Author: sj $ $Date: 2001-11-27 10:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     pPersist=pPers;
     pDrawOutliner=NULL;
     pHitTestOutliner=NULL;
-    nDefTextHgt=SdrEngineDefaults::GetFontHeight();
     pRefOutDev=NULL;
     nProgressAkt=0;
     nProgressMax=0;
@@ -375,7 +374,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
 #endif
     bExtColorTable=bUseExtColorTable;
 
-    if (pPool==NULL) {
+    if ( pPool == NULL )
+    {
         pItemPool=new SdrItemPool(SDRATTR_START, SDRATTR_END, bLoadRefCounts);
         // Der Outliner hat keinen eigenen Pool, deshalb den der EditEngine
         SfxItemPool* pOutlPool=EditEngine::CreatePool( bLoadRefCounts );
@@ -385,8 +385,15 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
         bMyPool=TRUE;
     }
     pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
-    SetTextDefaults();
 
+// SJ: #95129# using static SdrEngineDefaults only if default SvxFontHeight item is not available
+    const SfxPoolItem* pPoolItem = pItemPool->GetPoolDefaultItem( ITEMID_FONTHEIGHT );
+    if ( pPoolItem )
+        nDefTextHgt = ((SvxFontHeightItem*)pPoolItem)->GetHeight();
+    else
+        nDefTextHgt = SdrEngineDefaults::GetFontHeight();
+
+    SetTextDefaults();
     pLayerAdmin=new SdrLayerAdmin;
     pLayerAdmin->SetModel(this);
     ImpSetUIUnit();
