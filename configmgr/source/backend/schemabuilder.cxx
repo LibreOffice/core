@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:17:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,15 +95,15 @@ namespace configmgr
 
         namespace SchemaAttribute = backenduno::SchemaAttribute;
 // -----------------------------------------------------------------------------
-        static void check_if_complete()
+        static void check_if_complete(MergedComponentData & md)
         {
             uno::Reference< backenduno::XSchemaHandler >
-                 test(new SchemaBuilder(OUString()));
+                 test(new SchemaBuilder(OUString(),md,NULL));
         }
 // -----------------------------------------------------------------------------
 
-SchemaBuilder::SchemaBuilder( const OUString& aExpectedComponentName, ITemplateDataProvider* aTemplateProvider )
-: m_aData()
+SchemaBuilder::SchemaBuilder( const OUString& aExpectedComponentName, MergedComponentData & rData, ITemplateDataProvider* aTemplateProvider )
+: m_aData(rData)
 , m_aContext(static_cast<backenduno::XSchemaHandler*>(this), aExpectedComponentName, aTemplateProvider )
 , m_aFactory()
 , m_aTemplateProvider(aTemplateProvider)
