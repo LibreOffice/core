@@ -2,9 +2,9 @@
  *
  *  $RCSfile: units.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-28 16:43:11 $
+ *  last change: $Author: vg $ $Date: 2002-11-28 16:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ ItemList [ language_user1 ] =
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
         < "pi" ; FUNIT_PICA ; > ;
-        < "\""" ; FUNIT_INCH ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "inch" ; FUNIT_INCH ; > ;
         < "'" ; FUNIT_FOOT ; > ;
