@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:51:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,13 +131,6 @@ namespace dbaui
         virtual void            StateChanged( StateChangedType nStateChange );
         virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
-        /** will be called whenthe id of the image list is needed.
-            @param  _eBitmapSet
-                <svtools/imgdef.hxx>
-            @param  _bHiContast
-                <TRUE/> when in high contrast mode.
-        */
-        virtual sal_Int16       getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
 
         /** will be called when the controls need to be resized.
         */
