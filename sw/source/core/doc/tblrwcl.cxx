@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 15:11:14 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2913,8 +2913,9 @@ void lcl_DelSelBox_CorrLowers( SwTableLine& rLine, CR_SetBoxWidth& rParam,
     // 1. Schritt die eigene Breite feststellen
     SwTableBoxes& rBoxes = rLine.GetTabBoxes();
     SwTwips nBoxWidth = 0;
+    USHORT n;
 
-    for( USHORT n = rBoxes.Count(); n; )
+    for( n = rBoxes.Count(); n; )
         nBoxWidth += rBoxes[ --n ]->GetFrmFmt()->GetFrmSize().GetWidth();
 
     if( COLFUZZY < Abs( nWidth - nBoxWidth ))
@@ -3179,8 +3180,9 @@ BOOL lcl_DelSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             long nLowerDiff = 0;
             long nOldLower = rParam.nLowerDiff;
             USHORT nOldRemain = rParam.nRemainWidth;
+            USHORT i;
 
-            for( USHORT i = pBox->GetTabLines().Count(); i; )
+            for( i = pBox->GetTabLines().Count(); i; )
             {
                 rParam.nLowerDiff = nDelWidth + nOldLower;
                 rParam.nRemainWidth = nOldRemain;
@@ -4052,7 +4054,9 @@ BOOL lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
         SwDoc* pDoc = pLine->GetFrmFmt()->GetDoc();
         if( !rParam.bBigger )
         {
-            for( USHORT n = rBoxes.Count(); n; )
+            USHORT n;
+
+            for( n = rBoxes.Count(); n; )
                 ::lcl_SaveUpperLowerBorder( rParam.pTblNd->GetTable(),
                                                     *rBoxes[ --n ],
                                                     rParam.aShareFmts );
