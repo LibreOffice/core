@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:17:00 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,38 +422,6 @@ USHORT  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
         m_pDataArr->Insert( new SwAuthEntry( rInsert ), nRet );
 
     return nRet;
-}
-
-/*-- 11.10.99 08:49:23---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwAuthorityFieldType::MergeFieldType( const SwAuthorityFieldType& rNew,
-                                            SvUShorts& rMap )
-{
-    DBG_ASSERT( !rMap.Count(), "array not empty!")
-    for( USHORT i = 0; i < rNew.m_pDataArr->Count(); ++i )
-    {
-        USHORT  nNewPos = AppendField(*rNew.m_pDataArr->GetObject(i));
-        rMap.Insert(nNewPos, i);
-    }
-}
-
-/*-- 11.10.99 08:49:23---------------------------------------------------
-    Description:    After import is done some of the array members may have a
-
-  -----------------------------------------------------------------------*/
-void SwAuthorityFieldType::RemoveUnusedFields()
-{
-    for( USHORT j = m_pDataArr->Count(); j; )
-    {
-        SwAuthEntry* pTemp = m_pDataArr->GetObject( --j );
-        if( !pTemp->GetRefCount() )
-        {
-            m_pDataArr->Remove( j );
-            delete pTemp;
-        }
-    }
-    DelSequenceArray();
 }
 
 /*-- 11.10.99 08:49:24---------------------------------------------------
