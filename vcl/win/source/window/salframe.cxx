@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-20 17:15:33 $
+ *  last change: $Author: ssa $ $Date: 2002-11-22 15:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,18 @@
 #endif
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
+
+// misssing prototypes and constants for LayeredWindows
+extern "C" {
+WINUSERAPI BOOL WINAPI UpdateLayeredWindow(HWND,HDC,POINT *,SIZE *,HDC,POINT *,COLORREF,BLENDFUNCTION *,DWORD);
+WINUSERAPI BOOL WINAPI SetLayeredWindowAttributes(HWND,COLORREF,BYTE,DWORD);
+};
+#define LWA_COLORKEY            0x00000001
+#define LWA_ALPHA               0x00000002
+#define ULW_COLORKEY            0x00000001
+#define ULW_ALPHA               0x00000002
+#define ULW_OPAQUE              0x00000004
+#define WS_EX_LAYERED           0x00080000
 
 // =======================================================================
 
@@ -340,6 +352,19 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     DWORD       nExSysStyle = 0;
     BOOL        bSubFrame = FALSE;
 
+    static int bLayeredAPI = -1;
+    if( bLayeredAPI == -1 )
+    {
+        bLayeredAPI = 0;
+        OSVERSIONINFO aVerInfo;
+        aVerInfo.dwOSVersionInfoSize = sizeof( aVerInfo );
+        if ( GetVersionEx( &aVerInfo ) )
+            // check for W2k and XP
+            if ( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && aVerInfo.dwMajorVersion >= 5 )
+                bLayeredAPI = 1;
+    }
+    static const char* pEnvTransparentFloats = getenv("SAL_TRANSPARENT_FLOATS" );
+
     // determine creation data
     if ( nSalFrameStyle & SAL_FRAME_STYLE_CHILD )
         nSysStyle |= WS_CHILD;
@@ -360,7 +385,8 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
             else
             {
                 nSysStyle |= WS_POPUP;
-                nExSysStyle |= WS_EX_TOOLWINDOW;    // avoid taskbar appearance, for eg splash screen
+                if ( !(nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE) )
+                    nExSysStyle |= WS_EX_TOOLWINDOW;    // avoid taskbar appearance, for eg splash screen
             }
         }
 
@@ -397,12 +423,18 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
         {
             pFrame->maFrameData.mbNoIcon = TRUE;
             nExSysStyle |= WS_EX_TOOLWINDOW;
+            if ( pEnvTransparentFloats && bLayeredAPI == 1 /*&& !(nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE) */)
+                nExSysStyle |= WS_EX_LAYERED;
         }
     }
     if ( nSalFrameStyle & SAL_FRAME_STYLE_FLOAT )
     {
         nExSysStyle |= WS_EX_TOOLWINDOW;
         pFrame->maFrameData.mbFloatWin = TRUE;
+
+        if ( pEnvTransparentFloats && bLayeredAPI == 1 /*&& !(nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE) */)
+            nExSysStyle |= WS_EX_LAYERED;
+
     }
     // init frame data
     pFrame->maFrameData.mnStyle = nSalFrameStyle;
@@ -455,6 +487,9 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
         hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
                                 CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
                                 hWndParent, 0, pInst->maInstData.mhInst, (void*)pFrame );
+        // set transparency value
+        if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
+            SetLayeredWindowAttributes( hWnd, 0, 230, LWA_ALPHA );
     }
     else
     {
