@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 06:16:03 $
+#   last change: $Author: pluby $ $Date: 2001-03-04 22:12:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,11 @@ CDEFS+=-Dcomponent_getImplementationEnvironment=lib$(SYMBOLPREFIX)component_getI
   -Dcomponent_getDescriptionFunc=lib$(SYMBOLPREFIX)component_getDescriptionFunc \
   -Duno_initEnvironment=lib$(SYMBOLPREFIX)uno_initEnvironment \
   -Duno_ext_getMapping=lib$(SYMBOLPREFIX)uno_ext_getMapping
+.ENDIF
+.IF "$(PRJNAME)"=="registry"
+CDEFS+=-DinitRegistry_Api=lib$(REGLIB:s/-l//)initRegistry_Api \
+  -DinitRegistryTypeReader_Api=lib$(REGLIB:s/-l//)initRegistryTypeReader_Api \
+  -DinitRegistryTypeWriter_Api=lib$(REGLIB:s/-l//)initRegistryTypeWriter_Api
 .ENDIF
 
 # Name of library where static data members are initialized
