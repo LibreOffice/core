@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeblop.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:24:15 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,9 @@ void writeMethodData( RegistryTypeWriter& rWriter, sal_uInt32 calculatedMemberOf
                           methodMode, paramCount, exceptionCount, OUString());
 
     RTParamMode paramMode = RT_PARAM_IN;
-    for (sal_uInt16 i=0; i < paramCount; i++)
+    sal_uInt16 i;
+
+    for ( i=0; i < paramCount; i++)
     {
         Reference< XMethodParameter > xParam = parameters[i];
         if ( xParam->isIn() && xParam->isOut())
@@ -394,8 +396,9 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
 
                     sal_uInt16 memberCount = (sal_uInt16)memberTypes.getLength();
                     sal_uInt16 constCount = 0;
+                    sal_Int16 i;
 
-                    for (sal_Int16 i=0; i < memberCount; i++)
+                    for ( i=0; i < memberCount; i++)
                     {
                         if ( TypeClass_CONSTANT == memberTypes[i]->getTypeClass() )
                             constCount++;
@@ -437,8 +440,9 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                     sal_uInt16 memberCount = (sal_uInt16)memberTypes.getLength();
                     sal_uInt16 attrCount = 0;
                     sal_uInt16 inheritedMemberCount = 0;
+                    sal_Int32 i;
 
-                    for (sal_Int32 i=0; i < memberCount; i++)
+                    for ( i=0; i < memberCount; i++)
                     {
                         xAttr = Reference< XInterfaceAttributeTypeDescription >(memberTypes[i], UNO_QUERY);
                         if ( xAttr.is() )
