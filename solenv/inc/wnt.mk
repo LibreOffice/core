@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-07 14:04:44 $
+#   last change: $Author: hjs $ $Date: 2001-08-07 14:17:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -385,6 +385,10 @@ CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
 CDEFS+=-D_MT
 .ENDIF
 .IF "$(COMEX)"=="7"
+CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
+CDEFS+=-D_MT
+.ENDIF
+.IF "$(COMEX)"=="8"
 CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
 CDEFS+=-D_MT
 .ENDIF
