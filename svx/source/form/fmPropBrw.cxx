@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 17:05:00 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
+#include <com/sun/star/awt/PosSize.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -292,7 +295,16 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
         m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")), UNO_QUERY);
         if (m_xMeAsFrame.is())
         {
-            m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
+            // create an intermediate window, which is to be the container window of the frame
+            // Do *not* use |this| as container window for the frame, this would result in undefined
+            // responsiblity for this window (as soon as we initialize a frame with a window, the frame
+            // is responsible for it's life time, but |this| is controlled by the belonging SfxChildWindow)
+            // #i34249# - 2004-09-27 - fs@openoffice.org
+            Window* pContainerWindow = new Window( this );
+            pContainerWindow->Show();
+            m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
+
+            m_xMeAsFrame->initialize( m_xFrameContainerWindow );
             m_xMeAsFrame->setName(::rtl::OUString::createFromAscii("form property browser"));
             if ( pBindings->GetDispatcher() )
             {
@@ -300,6 +312,8 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
                         xSupp ( pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
 //                if ( xSupp.is() )
 //                    xSupp->getFrames()->append( m_xMeAsFrame );
+                // Don't append frame to frame hierachy to prevent UI_DEACTIVATE messages
+                // #i31834# - 2004-07-27 - cd@openoffice.org
             }
         }
     }
@@ -370,6 +384,25 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
 }
 
 //------------------------------------------------------------------------
+void FmPropBrw::Resize()
+{
+    SfxFloatingWindow::Resize();
+
+    if ( m_xFrameContainerWindow.is() )
+    {
+        try
+        {
+            Size aSize( GetOutputSizePixel() );
+            m_xFrameContainerWindow->setPosSize( 0, 0, aSize.Width(), aSize.Height(), awt::PosSize::POSSIZE );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmPropBrw::Resize: caught an exception!" );
+        }
+    }
+}
+
+//------------------------------------------------------------------------
 FmPropBrw::~FmPropBrw()
 {
     if (m_xBrowserController.is())
@@ -404,7 +437,16 @@ void FmPropBrw::implDetachController()
 
     implSetNewObject(Reference< XPropertySet >());
     if (m_xMeAsFrame.is())
-        m_xMeAsFrame->setComponent(NULL, NULL);
+    {
+        try
+        {
+            m_xMeAsFrame->setComponent(NULL, NULL);
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmPropBrw::implDetachController: caught an exception while resetting the component!" );
+        }
+    }
 
     // we attached a frame to the controller manually, so we need to manually tell it that it's detached, too
     // 96068 - 09.01.2002 - fs@openoffice.org
