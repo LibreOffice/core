@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,23 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text = "Welche ~Bezeichnungen sollen die Optionsfelder erhalten?";
         Text [ english ] = "Which ~names do you want to give the Option Fields?";
         Text [ english_us ] = "Which ~names do you want to give the Option Fields?";
+        Text[ portuguese ] = "Quais os ~nomes para os botões de opção?";
+        Text[ russian ] = "Êàêèå îáîçíà÷åíèÿ äîëæíû ñîäåğæàòü ïîëÿ ïàğàìåòğîâ?";
+        Text[ greek ] = "Which ~names do you want to give the Option Fields?";
+        Text[ dutch ] = "Which ~names do you want to give the Option Fields?";
+        Text[ french ] = "Which ~names do you want to give the Option Fields?";
+        Text[ spanish ] = "¿Qué ~nombres deben contener los campos de opción?";
+        Text[ italian ] = "Which ~names do you want to give the Option Fields?";
+        Text[ danish ] = "Which ~names do you want to give the Option Fields?";
+        Text[ swedish ] = "Vilka ~beteckningar skall alternativfälten få?";
+        Text[ polish ] = "Jakie okreœlenia powinny zawieraæ pola opcji?";
+        Text[ portuguese_brazilian ] = "Which ~names do you want to give the Option Fields?";
+        Text[ japanese ] = "µÌß¼®İÌ¨°ÙÄŞ‚É‚Ç‚Ì–¼‘O‚ğ‚Â‚¯‚Ü‚·‚©B";
+        Text[ korean ] = "Which ~names do you want to give the Option Fields?";
+        Text[ chinese_simplified ] = "Which ~names do you want to give the Option Fields?";
+        Text[ chinese_traditional ] = "­n¨Ï¥Îªº¿ï¶µÄæ¦ìªº¦WºÙ¡H";
+        Text[ turkish ] = "Which ~names do you want to give the Option Fields?";
+        Text[ arabic ] = "ßíİ ÊÑíÏ ÊÓãíÉ ÃÒÑÇÑ ÇáÎíÇÑ¿";
     };
     Edit ET_RADIOLABELS
     {
@@ -113,6 +130,23 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text = "~Optionsfelder";
         Text [ english ] = "~Option Fields";
         Text [ english_us ] = "~Option Fields";
+        Text[ portuguese ] = "~Botões de opção";
+        Text[ russian ] = "~Ïîëÿ ïàğàìåòğîâ";
+        Text[ greek ] = "~Option Fields";
+        Text[ dutch ] = "~Option Fields";
+        Text[ french ] = "~Option Fields";
+        Text[ spanish ] = "~Campos de opción";
+        Text[ italian ] = "~Option Fields";
+        Text[ danish ] = "~Option Fields";
+        Text[ swedish ] = "~Alternativfält";
+        Text[ polish ] = "Pola opcji";
+        Text[ portuguese_brazilian ] = "~Option Fields";
+        Text[ japanese ] = "µÌß¼®İÌ¨°ÙÄŞ(~O)";
+        Text[ korean ] = "~Option Fields";
+        Text[ chinese_simplified ] = "~Option Fields";
+        Text[ chinese_traditional ] = "¿ï¶µÄæ¦ì";
+        Text[ turkish ] = "~Option Fields";
+        Text[ arabic ] = "ÃÒÑÇÑ ÇáÎíÇÑ";
     };
     ListBox LB_RADIOBUTTONS
     {
@@ -123,6 +157,23 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         AutoHScroll = TRUE ;
         Sort = FALSE;
     };
+    Text[ portuguese ] = "Dados";
+    Text[ russian ] = "Äàííûå";
+    Text[ greek ] = "Äåäïìİíá";
+    Text[ dutch ] = "Data";
+    Text[ french ] = "Data";
+    Text[ spanish ] = "Datos";
+    Text[ italian ] = "Data";
+    Text[ danish ] = "Data";
+    Text[ swedish ] = "Data";
+    Text[ polish ] = "Dane";
+    Text[ portuguese_brazilian ] = "Data";
+    Text[ japanese ] = "”z—ñ";
+    Text[ korean ] = "Data";
+    Text[ chinese_simplified ] = "Data";
+    Text[ chinese_traditional ] = "¸ê®Æ";
+    Text[ turkish ] = "Data";
+    Text[ arabic ] = "ÈíÇäÇÊ";
 };
 
 TabPage RID_PAGE_DEFAULTFIELDSELECTION
@@ -147,6 +198,23 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text = "Soll ein Optionsfeld standardmäßig ausgewählt sein?";
         Text [ english ] = "Should one option field be selected as a default?";
         Text [ english_us ] = "Should one option field be selected as a default?";
+        Text[ portuguese ] = "Seleccionar um campo de opção como padrão?";
+        Text[ russian ] = "Âûáğàòü êàêîå-ëèáî ïîëå ïàğàìåòğîâ â êà÷åñòâå ñòàíäàğòíîãî?";
+        Text[ greek ] = "Should one option field be selected as a default?";
+        Text[ dutch ] = "Should one option field be selected as a default?";
+        Text[ french ] = "Should one option field be selected as a default?";
+        Text[ spanish ] = "¿Desea que se seleccione un botón de opción de forma predeterminada?";
+        Text[ italian ] = "Should one option field be selected as a default?";
+        Text[ danish ] = "Should one option field be selected as a default?";
+        Text[ swedish ] = "Skall ett alternativfält vara utvalt som standard ?";
+        Text[ polish ] = "Czy wybraæ domyœlne pole opcji?";
+        Text[ portuguese_brazilian ] = "Should one option field be selected as a default?";
+        Text[ japanese ] = "µÌß¼®İÌ¨°ÙÄŞ‚P‚Â‚Í•W€‚Æ‚µ‚Ä‘I‘ğ‚µ‚Ü‚·‚©B";
+        Text[ korean ] = "Should one option field be selected as a default?";
+        Text[ chinese_simplified ] = "Should one option field be selected as a default?";
+        Text[ chinese_traditional ] = "­n¿ï¾Ü¨Ï¥Î¼Ğ·ÇÄæ¦ì¡H";
+        Text[ turkish ] = "Should one option field be selected as a default?";
+        Text[ arabic ] = "åá ÊÑíÏ ÇÎÊíÇÑ ÃÍÏ ÃÒÑÇÑ ÇáÎíÇÑÇÊ ßÇİÊÑÇÖí¿";
     };
     RadioButton RB_DEFSELECTION_YES
     {
@@ -157,6 +225,23 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text = "~Ja, und zwar folgendes:";
         Text [ english ] = "~Yes, the following:";
         Text [ english_us ] = "~Yes, the following:";
+        Text[ portuguese ] = "~Sim, o seguinte:";
+        Text[ russian ] = "Äà. Ñëåäóşùåå ïîëå:";
+        Text[ greek ] = "Íáé, ôï å~îŞò:";
+        Text[ dutch ] = "~Yes, the following:";
+        Text[ french ] = "~Yes, the following:";
+        Text[ spanish ] = "~Sí, el siguiente:";
+        Text[ italian ] = "~Yes, the following:";
+        Text[ danish ] = "~Yes, the following:";
+        Text[ swedish ] = "~Ja, följande:";
+        Text[ polish ] = "Tak, wybierz nastêpuj¹ce:";
+        Text[ portuguese_brazilian ] = "~Yes, the following:";
+        Text[ japanese ] = "‚Í‚¢AˆÈ‰º‚É¦‚·Ì¨°ÙÄŞ(~Y):";
+        Text[ korean ] = "~Yes, the following:";
+        Text[ chinese_simplified ] = "~Yes, the following:";
+        Text[ chinese_traditional ] = "¬O¡A¿ï¾Ü¥H¤Uªº¡G";
+        Text[ turkish ] = "~Yes, the following:";
+        Text[ arabic ] = "äÚã¡ ÇáÍŞá ÇáÊÇáí:";
     };
     ListBox LB_DEFSELECTIONFIELD
     {
@@ -177,7 +262,41 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text = "Nein, kein Feld soll ausgewählt sein.";
         Text [ english ] = "No, one particular field is not going to be selected.";
         Text [ english_us ] = "No, one particular field is not going to be selected.";
+        Text[ portuguese ] = "Não, nenhum.";
+        Text[ russian ] = "Íåò. Ïîëå íå âûáèğàòü.";
+        Text[ greek ] = "¼÷é, íá ìçí åßíáé åğéëåãìİíï êÜğïéï ğåäßï.";
+        Text[ dutch ] = "No, one particular field is not going to be selected.";
+        Text[ french ] = "No, one particular field is not going to be selected.";
+        Text[ spanish ] = "No, no debe ser seleccionado ningún campo.";
+        Text[ italian ] = "No, one particular field is not going to be selected.";
+        Text[ danish ] = "No, one particular field is not going to be selected.";
+        Text[ swedish ] = "Nej, inget fält skall vara utvalt.";
+        Text[ polish ] = "Nie, nie wybieraj ¿adnego pola.";
+        Text[ portuguese_brazilian ] = "No, one particular field is not going to be selected.";
+        Text[ japanese ] = "‚¢‚¢‚¦AÌ¨°ÙÄŞ‚Í‘I‘ğ‚µ‚Ü‚¹‚ñB";
+        Text[ korean ] = "No, one particular field is not going to be selected.";
+        Text[ chinese_simplified ] = "No, one particular field is not going to be selected.";
+        Text[ chinese_traditional ] = "§_¡A¤£­n¿ï¾Ü¡C";
+        Text[ turkish ] = "No, one particular field is not going to be selected.";
+        Text[ arabic ] = "ßáÇ¡ áÇ ÃÑíÏ ÇÎÊíÇÑ Ãí ÍŞá.";
     };
+    Text[ portuguese ] = "Selecção do campo padrão";
+    Text[ russian ] = "Âûáîğ ïîëÿ ïî óìîë÷àíèş";
+    Text[ greek ] = "ÅğéëïãŞ ğåäßïõ ğñïåğéëïãŞò";
+    Text[ dutch ] = "Default Field Selection";
+    Text[ french ] = "Default Field Selection";
+    Text[ spanish ] = "Selección de campo predeterminado";
+    Text[ italian ] = "Default Field Selection";
+    Text[ danish ] = "Default Field Selection";
+    Text[ swedish ] = "Standardfälturval";
+    Text[ polish ] = "Wybór pól domyœlnych";
+    Text[ portuguese_brazilian ] = "Default Field Selection";
+    Text[ japanese ] = "•W€Ì¨°ÙÄŞ‘I‘ğ";
+    Text[ korean ] = "Default Field Selection";
+    Text[ chinese_simplified ] = "Default Field Selection";
+    Text[ chinese_traditional ] = "¿ï¾Ü¼Ğ·ÇÄæ¦ì";
+    Text[ turkish ] = "Default Field Selection";
+    Text[ arabic ] = "Default Field Selection";
 };
 
 TabPage RID_PAGE_OPTIONVALUES
@@ -208,16 +327,16 @@ TabPage RID_PAGE_OPTIONVALUES
         Text [ spanish ] = "Si elige una opción, se le asignará al grupo de opciones un determinado valor.";
         Text [ italian ] = "Selezionando un'opzione, verrà assegnato un dato valore al gruppo di opzioni.";
         Text [ danish ] = "Hvis du vælger et alternativ, får alternativgruppen tildelt en bestemt værdi.";
-        Text [ swedish ] = "Om Du väljer ett alternativ tilldelas alternativgruppen ett visst värde.";
-        Text [ polish ] = "Jeœli wybierzesz opcjê, to grupie opcji zostanie przypisana okreœlona wartoœæ.";
+        Text [ swedish ] = "Om du väljer ett alternativ tilldelas alternativgruppen ett visst värde.";
+        Text [ polish ] = "Po wybraniu opcji grupie opcji zostanie przypisana okreœlona wartoœæ.";
         Text [ portuguese_brazilian ] = "Wenn Sie eine Option auswählen, wird der Optionsgruppe ein bestimmter Wert zugewiesen.";
-        Text [ japanese ] = "µÌß¼®İ‚ğ‘I‘ğ‚·‚é‚ÆAµÌß¼®İ¸ŞÙ°Ìß‚É‚ ‚éŒˆ‚Ü‚Á‚½’l‚ªŠ„‚è“–‚Ä‚ç‚ê‚Ü‚·B";
+        Text [ japanese ] = "µÌß¼®İ‚ğ‚P‚Â‘I‘ğ‚·‚é‚ÆAµÌß¼®İ¸ŞÙ°Ìß‚É–¾—Ä’l‚ªŠ„‚è“–‚Ä‚ç‚ê‚Ü‚·B";
         Text [ chinese_simplified ] = "Èç¹ûÑ¡ÖĞÁËÒ»¸öÑ¡Ïî£¬Õâ¸öÑ¡ÏîĞ¡×é¾Í»á»ñµÃÒ»¸öÊıÖµ¡£";
-        Text [ chinese_traditional ] = "¦pªG±z¿ï¾Ü¤F¤@­Ó¿ï¶µ¡A¿ï¶µ¸s²Õ´N·|±o¨ì¤@­Ó¼Æ­È¡C";
+        Text [ chinese_traditional ] = "¦pªG¿ï¾Ü¤F¤@­Ó¿ï¶µ¡A¿ï¶µ¸s²Õ´N·|®M¥Î¬Y¤@³]©w¦nªº¼Æ­È¡C";
         Text [ arabic ] = "ÚäÏ ÇÎÊíÇÑß áÃÍÏ ÇáÎíÇÑÇÊ¡ Óæİ íÊã ÊÚííä ŞíãÉ ãÚíäÉ áãÌãæÚÉ ÇáÎíÇÑÇÊ.";
         Text [ dutch ] = "Als u een optie kiest wordt er een bepaalde waarde toegewezen aan de optiegroep.";
         Text [ chinese_simplified ] = "Èç¹ûÑ¡ÖĞÁËÒ»¸öÑ¡Ïî£¬Õâ¸öÑ¡ÏîĞ¡×é¾Í»á»ñµÃÒ»¸öÊıÖµ¡£";
-        Text [ greek ] = "Áí åğéëİîåôå ìßá åğéëïãŞ èá äïèåß óôçí ïìÜäá åğéëïãşí ìéá óõãêåêñéìİíç ôéìŞ";
+        Text [ greek ] = "Áí åğéëİîåôå ìßá åğéëïãŞ èá äïèåß óôçí ïìÜäá åğéëïãŞò ìéá óõãêåêñéìİíç ôéìŞ";
         Text [ korean ] = "É¼ÇÀ» ¼±ÅÃÇÏ¸é ¿É¼Ç ±×·ì¿¡ Æ¯Á¤°ªÀÌ ÇÒ´çµË´Ï´Ù.";
         Text [ turkish ] = "Bir seçenek belirlendiğinde, seçenek grubuna belirli bir değer atanır.";
     };
@@ -230,19 +349,19 @@ TabPage RID_PAGE_OPTIONVALUES
         Text = "Welchen ~Wert möchten Sie jeder Option zuweisen?";
         Text [ english ] = "Which ~value do you want to assign to each option?";
         Text [ english_us ] = "Which ~value do you want to assign to each option?";
-        Text [ portuguese ] = "Qual o valor a atribuir a cada opção?";
+        Text [ portuguese ] = "Qual o ~valor a atribuir a cada opção?";
         Text [ russian ] = "Êàêîå çíà÷åíèå Âû õîòåëè áû ïğèñâîèòü êàæäîìó ïàğàìåòğó?";
         Text [ dutch ] = "Welke waarde wilt u toewijzen aan de opties ?";
         Text [ french ] = "Quelle valeur souhaitez-vous attribuer à chaque option ?";
         Text [ spanish ] = "¿Qué valor desea asignarle a cada opción?";
         Text [ italian ] = "Quale valore desiderate assegnare a ogni opzione?";
         Text [ danish ] = "Hvilken værdi til du tildele hvert alternativ?";
-        Text [ swedish ] = "Vilket värde vill Du tilldela varje alternativ ?";
+        Text [ swedish ] = "Vilket ~värde vill du tilldela varje alternativ ?";
         Text [ polish ] = "Jak¹ wartoœæ przypisaæ pojedynczym opcjom?";
         Text [ portuguese_brazilian ] = "Welchen Wert möchten Sie jeder Option zuweisen ?";
-        Text [ japanese ] = "µÌß¼®İ‚É‚Ç‚Ì’l‚ğŠ„‚è“–‚Ä‚Ü‚·‚©?";
+        Text [ japanese ] = "ŠeµÌß¼®İ‚É‚Ç‚Ì’l‚ğŠ„‚è“–‚Ä‚Ü‚·‚©B";
         Text [ chinese_simplified ] = "ÄúÒª·ÖÅä¸øÑ¡ÏîµÄÊıÖµÊÇ£¿";
-        Text [ chinese_traditional ] = "­n«ü©w¨C­Ó¿ï¶µªº¼Æ­È¡H";
+        Text [ chinese_traditional ] = "­n«ü©w¨C­Ó¿ï¶µ®M¥Îªº¼Æ­È¡H";
         Text [ arabic ] = "ãÇ åí ÇáŞíãÉ ÇáÊí ÊÑíÏ ÊÚííäåÇ áßá ÎíÇÑ¿";
         Text [ dutch ] = "Welke waarde wilt u toewijzen aan de opties ?";
         Text [ chinese_simplified ] = "ÄúÒª·ÖÅä¸øÑ¡ÏîµÄÊıÖµÊÇ£¿";
@@ -265,11 +384,11 @@ TabPage RID_PAGE_OPTIONVALUES
         Text = "~Optionsfelder";
         Text [ english ] = "~Option Fields";
         Text [ english_us ] = "~Option Fields";
-        Text [ portuguese ] = "~campos de opção";
+        Text [ portuguese ] = "~Botões de opção";
         Text [ russian ] = "~Ïîëÿ ïàğàìåòğîâ";
         Text [ dutch ] = "~Optievelden";
         Text [ french ] = "~Boutons radio";
-        Text [ spanish ] = "~Botón radio";
+        Text [ spanish ] = "~Campos de opción";
         Text [ italian ] = "~Campi di opzione";
         Text [ danish ] = "A~lternativfelter";
         Text [ swedish ] = "~Alternativfält";
@@ -277,8 +396,8 @@ TabPage RID_PAGE_OPTIONVALUES
         Text [ portuguese_brazilian ] = "~Optionsfelder";
         Text [ japanese ] = "µÌß¼®İÌ¨°ÙÄŞ(~O)";
         Text [ chinese_simplified ] = "Ñ¡Ïî×Ö¶Î(~O)";
-        Text [ chinese_traditional ] = "¿ï¶µÄæ¦ì(~O)";
-        Text [ arabic ] = "~ÃÒÑÇÑ ÎíÇÑ";
+        Text [ chinese_traditional ] = "¿ï¶µÄæ¦ì";
+        Text [ arabic ] = "ÃÒÑÇÑ ÇáÎíÇÑ";
         Text [ dutch ] = "~Optievelden";
         Text [ chinese_simplified ] = "Ñ¡Ïî×Ö¶Î(~O)";
         Text [ greek ] = "Ğåäßá åğéë~ïãşí";
@@ -294,6 +413,23 @@ TabPage RID_PAGE_OPTIONVALUES
         AutoHScroll = TRUE ;
         DropDown = FALSE;
     };
+    Text[ portuguese ] = "Valores de campo";
+    Text[ russian ] = "Çíà÷åíèÿ ïîëÿ";
+    Text[ greek ] = "Ôéìİò ğåäßùí";
+    Text[ dutch ] = "Field Values";
+    Text[ french ] = "Field Values";
+    Text[ spanish ] = "Valores de campo";
+    Text[ italian ] = "Field Values";
+    Text[ danish ] = "Field Values";
+    Text[ swedish ] = "Fältvärden";
+    Text[ polish ] = "Wartoœci pola";
+    Text[ portuguese_brazilian ] = "Field Values";
+    Text[ japanese ] = "Ì¨°ÙÄŞ’l";
+    Text[ korean ] = "Field Values";
+    Text[ chinese_simplified ] = "Field Values";
+    Text[ chinese_traditional ] = "Äæ¦ì¼Æ­È";
+    Text[ turkish ] = "Field Values";
+    Text[ arabic ] = "Field Values";
 };
 
 TabPage RID_PAGE_OPTIONS_FINAL
@@ -315,11 +451,11 @@ TabPage RID_PAGE_OPTIONS_FINAL
     Text [ portuguese_brazilian ] = "Optionsgruppe erstellen";
     Text [ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚Ìì¬";
     Text [ chinese_simplified ] = "£ºÖÆ×÷Ñ¡ÏîĞ¡×é";
-    Text [ chinese_traditional ] = "¡G«Ø¥ß¿ï¶µ¸s²Õ";
+    Text [ chinese_traditional ] = "·s«Ø¿ï¶µ¸s²Õ";
     Text [ arabic ] = "ÅäÔÇÁ ãÌãæÚÉ ÎíÇÑÇÊ";
     Text [ dutch ] = "optiegroep maken";
     Text [ chinese_simplified ] = "£ºÖÆ×÷Ñ¡ÏîĞ¡×é";
-    Text [ greek ] = "Äçìéïõñãßá ïìÜäáò åğéëïãŞò";
+    Text [ greek ] = "Äçìéïõñãßá ïìÜäáò åğéëïãşí";
     Text [ korean ] = "¿É¼Ç ±×·ì ¸¸µé±â";
     Text [ turkish ] = "Seçenek grubu oluştur";
 
@@ -337,22 +473,22 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Text [ english ] = "Which ~caption is to be given to your option group?";
         Text [ english_us ] = "Which ~caption is to be given to your option group?";
         Text [ portuguese ] = "Qual o título a atribuir ao grupo de opções?";
-        Text [ russian ] = "Êàêîå íàçâàíèå äîëæíà ïîëó÷èòü Âàøà ãğóïïà ïàğàìåòğîâ ?";
+        Text [ russian ] = "Êàêóş ïîäïèñü äîëæíà ïîëó÷èòü Âàøà ãğóïïà ïàğàìåòğîâ?";
         Text [ dutch ] = "Welk naam wilt u uw optiegroep geven ?";
         Text [ french ] = "Quelle étiquette souhaitez-vous attribuer au groupe d'options ?";
-        Text [ spanish ] = "¿Qué título debe tener el grupo de opciones?";
+        Text [ spanish ] = "¿Qué título debe tener su grupo de opciones?";
         Text [ italian ] = "Quale dicitura volete assegnare al gruppo di opzioni ?";
         Text [ danish ] = "Hvilken etiket skal din alternativgruppe have?";
-        Text [ swedish ] = "Vilken beteckning skall Din alternativgrupp ha ?";
-        Text [ polish ] = "Jakie etykiety powinna zawieraæ twoja grupa opcji ?";
+        Text [ swedish ] = "Vilken ~beteckning skall din alternativgrupp ha?";
+        Text [ polish ] = "Jakie etykiety powinna zawieraæ Twoja grupa opcji ?";
         Text [ portuguese_brazilian ] = "Welche  Beschriftung soll Ihre Options- gruppe haben ?";
-        Text [ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚É‚Ç‚Ì‚æ‚¤‚È–¼‘O‚ğ•t‚¯‚Ü‚·‚©?";
+        Text [ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚É‚Ç‚Ì–¼‘O‚ğ•t‚¯‚Ü‚·‚©B";
         Text [ chinese_simplified ] = "Ñ¡ÏîĞ¡×éµÄÃû³Æ£¿";
-        Text [ chinese_traditional ] = "¿ï¶µ¸s²Õªº¦WºÙ¡H";
+        Text [ chinese_traditional ] = "¿ï¶µ¸s²Õªº¼ĞÃD¡H";
         Text [ arabic ] = "ßíİ ÊÑíÏ ÊÓãíÉ ãÌãæÚÉ ÇáÎíÇÑÇÊ ÇáÎÇÕÉ Èß¿";
         Text [ dutch ] = "Welk naam wilt u uw optiegroep geven ?";
         Text [ chinese_simplified ] = "Ñ¡ÏîĞ¡×éµÄÃû³Æ£¿";
-        Text [ greek ] = "ĞïéÜ åğéãñáöŞ èİëåôå íá ÷ñçóéìïğïéçèåß ãéá ôç äéêŞ óáò ïìÜäá åğéëïãşí;";
+        Text [ greek ] = "Åğéëİîôå ôçí åğéãñáöŞ ãéá ôçí ïìÜäá óáò åğéëïãşí;";
         Text [ korean ] = "¿É¼Ç ±×·ì¿¡ ¾î´À Ä¸¼ÇÀ» ÁöÁ¤ÇÏ½Ã°Ú½À´Ï±î?";
         Text [ turkish ] = "Seçenek grubunuza hangi resim altyazısı verilsin?";
     };
@@ -379,12 +515,12 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Text [ spanish ] = "Ya se dispone de las informaciones necesarias para crear el grupo de opciones.";
         Text [ italian ] = "Tutte le informazioni necessarie per creare il gruppo di opzioni sono state indicate.";
         Text [ danish ] = "Det var alle informationer, som kræves for at kunne oprette en alternativgruppe.";
-        Text [ swedish ] = "Det var alla uppgifter som behövdes för att skapa alternativgruppen.";
-        Text [ polish ] = "To by³y dane, które potrzebne s¹ do utworzenia grupy opcji.";
+        Text [ swedish ] = "Detta var alla uppgifter som behövdes för att alternativgruppen ska kunna skapas.";
+        Text [ polish ] = "By³y to ju¿ wszystkie dane wymagane do utworzenia grupy opcji.";
         Text [ portuguese_brazilian ] = "Dies waren alle Angaben, die zur Erstellung der Optionsgruppe notwendig waren.";
-        Text [ japanese ] = "‚±‚ê‚ç‚ªµÌß¼®İ¸ŞÙ°Ìß‚Ìì¬‚É•K—v‚È‚·‚×‚Ä‚Ì–€‚Å‚·B";
+        Text [ japanese ] = "µÌß¼®İ¸ŞÙ°Ìß‚Ìì¬‚É•K—v‚È–€‚ÍA‚±‚ê‚Å‘S•”‚Å‚·B";
         Text [ chinese_simplified ] = "ÕâĞ©ÊÇÖÆ×÷Ñ¡ÏîĞ¡×éËùĞèµÄËùÓĞ×ÊÁÏ¡£";
-        Text [ chinese_traditional ] = "³o¨Ç¬O¨î§@¿ï¶µ¸s²Õ©Ò»İªº¥ş³¡¸ê®Æ¡C";
+        Text [ chinese_traditional ] = "³o¨Ç¬O¥Î©ó»s§@¿ï¶µ¸s²Õ©Ò»İªº¥ş³¡ªº³]©w¸ê®Æ¡C";
         Text [ arabic ] = "ßÇäÊ åĞå åí ßÇİÉ ÇáÈíÇäÇÊ ÇááÇÒãÉ áÅäÔÇÁ ãÌãæÚÉ ÇáÎíÇÑÇÊ.";
         Text [ dutch ] = "De gegevens voor het maken van de optiegroep zijn nu compleet.";
         Text [ chinese_simplified ] = "ÕâĞ©ÊÇÖÆ×÷Ñ¡ÏîĞ¡×éËùĞèµÄËùÓĞ×ÊÁÏ¡£";
@@ -423,6 +559,9 @@ String RID_STR_GROUPWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/28 09:18:30  fs
+ *  finalized the list/combo wizard
+ *
  *  Revision 1.1  2001/02/21 09:23:45  fs
  *  initial checkin - form control auto pilots
  *
