@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:09:09 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,18 @@ BOOL ScModelObj::AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, USHORT nTab 
     if (pDocShell)
         return pDocShell->AdjustRowHeight( nStartRow, nEndRow, nTab );
     return FALSE;
+}
+
+void ScModelObj::BeforeXMLLoading()
+{
+    if (pDocShell)
+        pDocShell->BeforeXMLLoading();
+}
+
+void ScModelObj::AfterXMLLoading(sal_Bool bRet)
+{
+    if (pDocShell)
+        pDocShell->AfterXMLLoading(bRet);
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
