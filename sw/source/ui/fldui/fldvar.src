@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:51:55 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 21:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ TabPage TP_FLD_VAR
         Text[ korean ] = "ÇÊµåÀ¯Çü(~T)";
         Text[ turkish ] = "A~lan tipi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tipo de campo";
     };
     ListBox LB_VARTYPE
     {
@@ -135,6 +136,7 @@ TabPage TP_FLD_VAR
         Text[ korean ] = "¼±ÅÃ(~E)";
         Text[ turkish ] = "~Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Selección";
     };
     ListBox LB_VARSELECTION
     {
@@ -170,6 +172,7 @@ TabPage TP_FLD_VAR
         Text[ korean ] = "¼­½Ä";
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "F~ormato";
     };
     ListBox LB_VARFORMAT
     {
@@ -215,6 +218,7 @@ TabPage TP_FLD_VAR
         TEXT[ korean ] = "¾Èº¸ÀÓ(~B)";
         TEXT[ turkish ] = "Görünmez";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Invisi~ble";
     };
     FixedText FT_VARCHAPTERHEADER
     {
@@ -242,6 +246,7 @@ TabPage TP_FLD_VAR
         Text[ korean ] = "Àåº°·Î ¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Bölüme göre numaralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Numeración de capítulos";
     };
     FixedText FT_VARCHAPTERLEVEL
     {
@@ -269,6 +274,7 @@ TabPage TP_FLD_VAR
         Text[ korean ] = "¼öÁØ(~L)";
         Text[ turkish ] = "D~üzey";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nivel";
     };
     ListBox LB_VARCHAPTERLEVEL
     {
@@ -362,6 +368,10 @@ TabPage TP_FLD_VAR
     {
              < "Yok" ; > ;
     };
+    StringList [ catalan ] =
+    {
+             < "Ninguno" ; > ;
+    };
     };
     FixedText FT_VARSEPARATOR
     {
@@ -389,6 +399,7 @@ TabPage TP_FLD_VAR
         Text[ korean ] = "±¸ºÐÀÚ(~S)";
         Text[ turkish ] = "A~yýrma iþareti";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Separador";
     };
     Edit ED_VARSEPARATOR
     {
@@ -425,6 +436,7 @@ TabPage TP_FLD_VAR
         Text[ korean ] = "ÀÌ¸§(~M)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nombre";
     };
     Edit ED_VARNAME
     {
@@ -462,6 +474,7 @@ TabPage TP_FLD_VAR
         Text[ korean ] = "°ª(~V)";
         Text[ turkish ] = "De~ðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Valor";
     };
     Edit ED_VARVALUE
     {
@@ -506,6 +519,7 @@ TabPage TP_FLD_VAR
                 Text[ korean ] = "Àû¿ë";
                 Text[ turkish ] = "Kullan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Aplicar";
             };
             ToolBoxItem
             {
@@ -535,6 +549,7 @@ TabPage TP_FLD_VAR
                 Text[ korean ] = "»èÁ¦";
                 Text[ turkish ] = "Sil";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Eliminar";
             };
         };
     };
@@ -557,4 +572,5 @@ TabPage TP_FLD_VAR
     Text[ korean ] = "º¯¼ö";
     Text[ turkish ] = "Deðiþkenler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Variables";
 };
