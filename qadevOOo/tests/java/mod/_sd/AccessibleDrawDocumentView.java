@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-04-28 12:30:30 $
+ *  last change:$Date: 2003-05-27 13:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XDrawView;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.accessibility.XAccessible;
@@ -108,7 +109,8 @@ public class AccessibleDrawDocumentView extends TestCase {
         XInterface oObj = null;
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                (XMultiServiceFactory)Param.getMSF());
 
         // get the drawpage of drawing here
         log.println( "getting Drawpage" );
@@ -143,7 +145,8 @@ public class AccessibleDrawDocumentView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow (Param.getMSF(),aModel);
+        XWindow xWindow = at.getCurrentWindow (
+                            (XMultiServiceFactory)Param.getMSF(),aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         //com.sun.star.accessibility.AccessibleRole
@@ -197,7 +200,8 @@ public class AccessibleDrawDocumentView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                    (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println( "creating a draw document" );
