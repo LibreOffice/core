@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:11:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ public:
     void    SetActionMode(BOOL bOn) { bActionMode = bOn; }
     BOOL    IsActionMode() const { return bActionMode; }
 
-    virtual void MakeVisible(const Rectangle&, Window& rWin);
+    virtual void MakeVisible(const Rectangle& rRect, ::Window& rWin);
     virtual void HidePage(SdrPageView* pPV);
 
     void    PresPaint(const Region& rRegion);
