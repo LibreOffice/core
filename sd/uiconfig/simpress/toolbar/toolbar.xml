@@ -5,13 +5,22 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:helpid="helpid:10096" toolbar:text="" toolbar:style="radio dropdown" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:TextToolbox" toolbar:helpid="helpid:10398" toolbar:text="" toolbar:style="radio dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:RectangleToolbox" toolbar:helpid="helpid:10399" toolbar:text="" toolbar:style="radio dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:EllipseToolbox" toolbar:helpid="helpid:10400" toolbar:text="" toolbar:style="radio dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:Objects3DToolbox" toolbar:helpid="helpid:27295" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:helpid="helpid:10398" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:helpid="helpid:10398" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="helpid:10104" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="helpid:10110" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="helpid:10102" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineToolbox" toolbar:helpid="helpid:10401" toolbar:text="" toolbar:style="radio dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:ArrowsToolbox" toolbar:helpid="helpid:27171" toolbar:text="" toolbar:style="radio dropdown" />
  <toolbar:toolbaritem xlink:href=".uno:ConnectorToolbox" toolbar:helpid="helpid:27028" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater" toolbar:helpid="helpid:10977" />
+ <toolbar:toolbaritem xlink:href=".uno:Objects3DToolbox" toolbar:helpid="helpid:27295" toolbar:text="" toolbar:style="radio dropdown" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="helpid:11002" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:helpid="helpid:11003" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:helpid="helpid:11004" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:helpid="helpid:11005" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:helpid="helpid:11006" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:helpid="helpid:11007" toolbar:text="" toolbar:style="radio dropdown" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:helpid="helpid:10129" toolbar:text="" toolbar:style="radio" />
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="helpid:10130" toolbar:text="" toolbar:style="dropdown" />
