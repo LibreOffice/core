@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:21:42 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 10:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@ void doTestCode()
     // set duration of 3 sec for first page
     aWriter.SetAutoAdvanceTime( 3 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
+
+    aWriter.SetFillColor( Color( COL_LIGHTRED ) );
+    aWriter.SetLineColor( Color( COL_LIGHTGREEN ) );
+    aWriter.DrawRect( Rectangle( Point( 2000, 200 ), Size( 8000, 3000 ) ), 5000, 2000 );
 
     aWriter.SetFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 500 ) ) );
     aWriter.SetTextColor( Color( COL_BLACK ) );
@@ -1235,6 +1239,29 @@ void PDFWriterImpl::emitComment( const char* pComment )
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
+bool PDFWriterImpl::compressStream( SvMemoryStream* pStream )
+{
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
+    pStream->Seek( STREAM_SEEK_TO_END );
+    ULONG nEndPos = pStream->Tell();
+    pStream->Seek( STREAM_SEEK_TO_BEGIN );
+    ZCodec* pCodec = new ZCodec( 0x4000, 0x4000 );
+    SvMemoryStream aStream;
+    pCodec->BeginCompression();
+    pCodec->Write( aStream, (const BYTE*)pStream->GetData(), nEndPos );
+    pCodec->EndCompression();
+    delete pCodec;
+    nEndPos = aStream.Tell();
+    pStream->Seek( STREAM_SEEK_TO_BEGIN );
+    aStream.Seek( STREAM_SEEK_TO_BEGIN );
+    pStream->SetStreamSize( nEndPos );
+    pStream->Write( aStream.GetData(), nEndPos );
+    return true;
+#else
+    return false;
+#endif
+}
+
 void PDFWriterImpl::beginCompression()
 {
 #ifndef DEBUG_DISABLE_PDFCOMPRESSION
@@ -1741,6 +1768,7 @@ const sal_Char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeV
         aValueStrings[ PDFWriter::Middle ]                  = "Middle";
         aValueStrings[ PDFWriter::Normal ]                  = "Normal";
         aValueStrings[ PDFWriter::Underline ]               = "Underline";
+        aValueStrings[ PDFWriter::Overline ]                = "Overline";
         aValueStrings[ PDFWriter::LineThrough ]             = "LineThrough";
         aValueStrings[ PDFWriter::Disc ]                    = "Disc";
         aValueStrings[ PDFWriter::Circle ]                  = "Circle";
@@ -2693,7 +2721,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
     CHECK_RETURN( writeBuffer( aContents.getStr(), aContents.getLength() ) );
 #endif
     aLine.setLength( 0 );
-    aLine.append( "endstream\r\n"
+    aLine.append( "\r\nendstream\r\n"
                   "endobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     return nStream;
@@ -3698,7 +3726,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     // create appearance streams
     sal_Char cMark = '8';
-    sal_Int32 nCharXOffset = 1000-m_aBuiltinFonts[13].m_aWidths[cMark];
+    sal_Int32 nCharXOffset = 1000-m_aBuiltinFonts[13].m_aWidths[sal_Int32(cMark)];
     nCharXOffset *= aCheckRect.GetHeight();
     nCharXOffset /= 2000;
     sal_Int32 nCharYOffset = 1000-
@@ -3859,12 +3887,13 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
                 SvMemoryStream* pApppearanceStream = stream_it->second;
                 dict_it->second[ stream_it->first ] = NULL;
 
+                bool bDeflate = compressStream( pApppearanceStream );
+
                 pApppearanceStream->Seek( STREAM_SEEK_TO_END );
                 sal_Int64 nStreamLen = pApppearanceStream->Tell();
                 pApppearanceStream->Seek( STREAM_SEEK_TO_BEGIN );
                 sal_Int32 nObject = createObject();
                 CHECK_RETURN( updateObject( nObject ) );
-                OStringBuffer aTranslation;
                 OStringBuffer aLine;
                 aLine.append( nObject );
 
@@ -3880,13 +3909,14 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
                 aLine.append( getResourceDictObj() );
                 aLine.append( " 0 R\r\n"
                               "   /Length " );
-                aLine.append( nStreamLen+aTranslation.getLength() );
-                aLine.append( "\r\n"
-                              ">>\r\nstream\r\n" );
+                aLine.append( nStreamLen );
+                aLine.append( "\r\n" );
+                if( bDeflate )
+                    aLine.append( "   /Filter /FlateDecode\r\n" );
+                aLine.append( ">>\r\nstream\r\n" );
                 CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-                CHECK_RETURN( writeBuffer( aTranslation.getStr(), aTranslation.getLength() ) );
                 CHECK_RETURN( writeBuffer( pApppearanceStream->GetData(), nStreamLen ) );
-                CHECK_RETURN( writeBuffer( "endstream\r\nendobj\r\n\r\n", 21 ) );
+                CHECK_RETURN( writeBuffer( "\r\nendstream\r\nendobj\r\n\r\n", 23 ) );
 
                 if( bUseSubDict )
                 {
@@ -4789,8 +4819,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     bool bPop = false;
     bool bABold = false;
     // artificial bold necessary ?
-    int nBoldness = (int)m_aCurrentPDFState.m_aFont.GetWeight() - (int)m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->meWeight;
-    if( nBoldness > 1 )
+    if( m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->meWeight <= WEIGHT_MEDIUM &&
+        m_aCurrentPDFState.m_aFont.GetWeight() > WEIGHT_MEDIUM )
     {
         if( ! bPop )
             aLine.append( "q " );
@@ -5963,12 +5993,14 @@ void PDFWriterImpl::drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nT
 
     // create XObject
     m_aTransparentObjects.push_back( TransparencyEmit() );
-    m_aTransparentObjects.back().m_aBoundRect   = rPolyPoly.GetBoundRect();
+    // FIXME: polygons with beziers may yield incorrect bound rect
+    m_aTransparentObjects.back().m_aBoundRect     = rPolyPoly.GetBoundRect();
     // convert rectangle to default user space
     m_aPages.back().convertRect( m_aTransparentObjects.back().m_aBoundRect );
-    m_aTransparentObjects.back().m_nObject      = createObject();
-    m_aTransparentObjects.back().m_fAlpha       = (double)(100-nTransparentPercent) / 100.0;
-    m_aTransparentObjects.back().m_pContentStream = new SvMemoryStream( 256, 256 );
+    m_aTransparentObjects.back().m_nObject          = createObject();
+    m_aTransparentObjects.back().m_nExtGStateObject = createObject();
+    m_aTransparentObjects.back().m_fAlpha           = (double)(100-nTransparentPercent) / 100.0;
+    m_aTransparentObjects.back().m_pContentStream   = new SvMemoryStream( 256, 256 );
     // create XObject's content stream
     OStringBuffer aContent( 256 );
     m_aPages.back().appendPolyPolygon( rPolyPoly, aContent );
@@ -5983,9 +6015,12 @@ void PDFWriterImpl::drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nT
 
     OStringBuffer aLine( 80 );
     // insert XObject
+    aLine.append( "q /EGS" );
+    aLine.append( m_aTransparentObjects.back().m_nExtGStateObject );
+    aLine.append( " gs " );
     aLine.append( "/Tr" );
     aLine.append( m_aTransparentObjects.back().m_nObject );
-    aLine.append( " Do\r\n" );
+    aLine.append( " Do Q\r\n" );
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
@@ -6136,8 +6171,8 @@ void PDFWriterImpl::drawRectangle( const Rectangle& rRect, sal_uInt32 nHorzRound
 
     if( nHorzRound > (sal_uInt32)rRect.GetWidth()/2 )
         nHorzRound = rRect.GetWidth()/2;
-    if( nVertRound > (sal_uInt32)rRect.GetWidth()/2 )
-        nVertRound = rRect.GetWidth()/2;
+    if( nVertRound > (sal_uInt32)rRect.GetHeight()/2 )
+        nVertRound = rRect.GetHeight()/2;
 
     Point aPoints[16];
     const double kappa = 0.5522847498;
@@ -6409,6 +6444,76 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const LineInfo& rInfo )
     writeBuffer( "Q\r\n", 3 );
 }
 
+void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLineInfo& rInfo )
+{
+    MARK( "drawPolyLine with ExtLineInfo" );
+
+    updateGraphicsState();
+
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) )
+        return;
+
+    if( rInfo.m_fTransparency >= 1.0 )
+        return;
+
+    if( rInfo.m_fTransparency != 0.0 )
+        beginTransparencyGroup();
+
+    OStringBuffer aLine;
+    aLine.append( "q " );
+    m_aPages.back().appendMappedLength( rInfo.m_fLineWidth, aLine );
+    aLine.append( " w" );
+    switch( rInfo.m_eCap )
+    {
+        default:
+        case PDFWriter::capButt:   aLine.append( " 0 J" );break;
+        case PDFWriter::capRound:  aLine.append( " 1 J" );break;
+        case PDFWriter::capSquare: aLine.append( " 2 J" );break;
+    }
+    switch( rInfo.m_eJoin )
+    {
+        default:
+        case PDFWriter::joinMiter:
+        aLine.append( " 0 j " );
+        m_aPages.back().appendMappedLength( rInfo.m_fMiterLimit, aLine );
+        aLine.append( " M" );
+        break;
+        case PDFWriter::joinRound:  aLine.append( " 1 j" );break;
+        case PDFWriter::joinBevel:  aLine.append( " 2 j" );break;
+    }
+    if( rInfo.m_aDashArray.size() > 0 )
+    {
+        aLine.append( " [ " );
+        for( std::vector<double>::const_iterator it = rInfo.m_aDashArray.begin();
+             it != rInfo.m_aDashArray.end(); ++it )
+        {
+            m_aPages.back().appendMappedLength( *it, aLine );
+            aLine.append( ' ' );
+        }
+        aLine.append( "] 0 d" );
+    }
+    aLine.append( "\r\n" );
+    writeBuffer( aLine.getStr(), aLine.getLength() );
+    drawPolyLine( rPoly );
+    writeBuffer( "Q\r\n", 3 );
+
+    if( rInfo.m_fTransparency != 0.0 )
+    {
+        // FIXME: actually this may be incorrect with bezier polygons
+        Rectangle aBoundRect( rPoly.GetBoundRect() );
+        // avoid clipping with thick lines
+        if( rInfo.m_fLineWidth > 0.0 )
+        {
+            sal_Int32 nLW = sal_Int32(rInfo.m_fLineWidth);
+            aBoundRect.Top()    -= nLW;
+            aBoundRect.Left()   -= nLW;
+            aBoundRect.Right()  += nLW;
+            aBoundRect.Bottom() += nLW;
+        }
+        endTransparencyGroup( aBoundRect, (USHORT)(100.0*rInfo.m_fTransparency) );
+    }
+}
+
 void PDFWriterImpl::drawPixel( const Point& rPoint, const Color& rColor )
 {
     MARK( "drawPixel" );
@@ -6480,8 +6585,7 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
 {
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
 
-    OStringBuffer aProlog;
-
+    bool bFlateFilter = compressStream( rObject.m_pContentStream );
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_END );
     ULONG nSize = rObject.m_pContentStream->Tell();
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_BEGIN );
@@ -6505,15 +6609,17 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     aLine.append( getResourceDictObj() );
     aLine.append( " 0 R\r\n"
                   "   /Length " );
-    aLine.append( (sal_Int32)(nSize+aProlog.getLength()) );
-    aLine.append( "\r\n"
-                  ">>\r\n"
+    aLine.append( (sal_Int32)(nSize) );
+    aLine.append( "\r\n" );
+    if( bFlateFilter )
+        aLine.append( "   /Filter /FlateDecode\r\n" );
+    aLine.append( ">>\r\n"
                   "stream\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-    CHECK_RETURN( writeBuffer( aProlog.getStr(), aProlog.getLength() ) );
     CHECK_RETURN( writeBuffer( rObject.m_pContentStream->GetData(), nSize ) );
     aLine.setLength( 0 );
-    aLine.append( "endstream\r\n"
+    aLine.append( "\r\n"
+                  "endstream\r\n"
                   "endobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
