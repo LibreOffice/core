@@ -17,6 +17,8 @@ IDLDIRLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT)$/com -type d -print))}
 DIRLIST = \
     $(DESTDIRDOCU) \
     $(DESTDIRDOCUIMAGES) \
+    $(DESTDIRDOCU)$/DevStudioWizards \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images \
     $(DESTDIREXAMPLES)		 	\
     $(DESTDIRCLASSES)		 	\
     $(DESTDIRCPPEXAMPLES)		 	\
@@ -347,7 +349,69 @@ EXAMPLESLIST= \
     $(OLE_EXAMPLES_ACTIVEX)                \
     $(DESTDIRJAVAEXAMPLES)$/debugging_java.html
 
-DOCUHTMLFILES= \
+DOCUSTUDIO4INTEGRATIONHTMLFILES= \
+    $(DESTDIRDOCU)$/DevStudioWizards$/CalcAddinWizard.html \
+    $(DESTDIRDOCU)$/DevStudioWizards$/DeployingComponents.html \
+    $(DESTDIRDOCU)$/DevStudioWizards$/IDLWizard.html \
+    $(DESTDIRDOCU)$/DevStudioWizards$/UNOComponentWizard.html \
+    $(DESTDIRDOCU)$/DevStudioWizards$/wizards.html
+
+DOCUSTUDIO4INTEGRATIONGRAPHICSFILES= \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/AddInsDescription.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/ChooseIDL.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/DesignIDL.jpg \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/ExecuteAntScript.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/GeneratedJavaCalcAddins.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/InterfacesToImplementCalcAddins.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/InterfacesToImplementCalcAddinsExtended.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/MountWorkingDirectory.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/NewObjectName.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/NewOfficeIDL.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/NewOfficeObject.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/OutputWindowBuild.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/ReturnCommand.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/SelectModule.jpg \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/ServiceSetupPanelCalcAddins.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/ServiceSetupPanelCalcAddinsExtended.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/mount_directory.jpg \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office01.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office02.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office03.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office04.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office05.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office06.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office07.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office08.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office09.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot10.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot11.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot12.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot13.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot14.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot15.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot16b.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot17b.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot18b.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot20b.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot21.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot22.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot23.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot24.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot25.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot26.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot27b.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot3.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot32b.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot33b.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot34b.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot35b.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot42b.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot43b.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot8.png \
+    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot9.png
+
+DOCUHTMLFILES+= \
+    $(DOCUSTUDIO4INTEGRATIONHTMLFILES) \
     $(DESTDIR)$/index.html \
     $(DESTDIRDOCU)$/tools.html \
     $(DESTDIRDOCU)$/notsupported.html \
@@ -357,6 +421,7 @@ DOCUHTMLFILES= \
 
 DOCUFILES+= \
     $(DOCUHTMLFILES) \
+    $(DOCUSTUDIO4INTEGRATIONGRAPHICSFILES) \
     $(DESTDIRDOCUIMAGES)$/black_dot.gif \
     $(DESTDIRDOCUIMAGES)$/logo.gif \
     $(DESTDIRDOCUIMAGES)$/sdk_logo.gif \
@@ -417,7 +482,31 @@ $(DESTDIRDOCU)$/install.html : $(PRJ)$/docs$/install.html
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs/images$/%
+$(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs$/images$/%
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $? $@
+
+$(DESTDIRDOCU)$/DevStudioWizards$/CalcAddinWizard.html : $(PRJ)$/docs$/DevStudioWizards$/CalcAddinWizard.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/DevStudioWizards$/DeployingComponents.html : $(PRJ)$/docs$/DevStudioWizards$/DeployingComponents.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/DevStudioWizards$/IDLWizard.html : $(PRJ)$/docs$/DevStudioWizards$/IDLWizard.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/DevStudioWizards$/UNOComponentWizard.html : $(PRJ)$/docs$/DevStudioWizards$/UNOComponentWizard.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/DevStudioWizards$/wizards.html : $(PRJ)$/docs$/DevStudioWizards$/wizards.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/DevStudioWizards$/images$/% : $(PRJ)$/docs$/DevStudioWizards$/images$/%
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $? $@
 
