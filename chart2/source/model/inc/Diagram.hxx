@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-08 15:45:52 $
+ *  last change: $Author: bm $ $Date: 2003-12-09 16:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include "MutexContainer.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
-#include <cppuhelper/implbase8.hxx>
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -99,9 +99,6 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
 #include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
-#include <drafts/com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
@@ -117,15 +114,14 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper8<
+typedef ::cppu::WeakImplHelper7<
     ::drafts::com::sun::star::chart2::XDiagram,
     ::com::sun::star::lang::XServiceInfo,
     ::drafts::com::sun::star::chart2::XAxisContainer,
     ::drafts::com::sun::star::chart2::XBoundedCoordinateSystemContainer,
     ::drafts::com::sun::star::chart2::XGridContainer,
     ::drafts::com::sun::star::chart2::XTitled,
-    ::drafts::com::sun::star::chart2::XIdentifiable,
-    ::drafts::com::sun::star::chart2::XRegressionCurveContainer >
+    ::drafts::com::sun::star::chart2::XIdentifiable >
     Diagram_Base;
 }
 
@@ -261,28 +257,12 @@ protected:
     virtual ::rtl::OUString SAL_CALL getIdentifier()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // ____ XRegressionCurveContainer ____
-    virtual void SAL_CALL addRegressionCurve(
-        const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XRegressionCurve >& aRegressionCurve )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeRegressionCurve(
-        const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XRegressionCurve >& aRegressionCurve )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference<
-                    ::drafts::com::sun::star::chart2::XRegressionCurve > > SAL_CALL getRegressionCurves()
-        throw (::com::sun::star::uno::RuntimeException);
-
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext >                    m_xContext;
+     ::com::sun::star::uno::Reference<
+         ::com::sun::star::uno::XComponentContext >                m_xContext;
 
     ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > m_xSeriesTree;
+        ::drafts::com::sun::star::chart2::XDataSeriesTreeParent >  m_xSeriesTree;
 
     typedef
         ::std::map<
@@ -294,15 +274,9 @@ private:
             ::rtl::OUString,
             ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XGrid > >
         tGridContainerType;
-    typedef
-        ::std::map<
-            ::rtl::OUString,
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XRegressionCurve > >
-        tRegressionCurveContainerType;
 
     tAxisContainerType  m_aAxes;
     tGridContainerType  m_aGrids;
-    tRegressionCurveContainerType m_aRegressionCurves;
 
 //     ::std::set< ::com::sun::star::uno::Reference<
 //         ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > >
