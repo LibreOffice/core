@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:01:41 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 13:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@
 #include <svtools/saveopt.hxx>
 #endif
 #include <hash_set>
+#include <stringhash.hxx>
 
 // for locking SolarMutex: svapp + mutex
 #ifndef _SV_SVAPP_HXX
@@ -192,6 +193,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::drawing;
 using namespace ::xmloff::token;
+using namespace ::std;
 
 struct OUStringEquals
 {
@@ -907,7 +909,8 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 
     long nTmp;
     sal_Bool bShowRedlineChanges = sal_False, bBrowseMode = sal_False,
-             bShowFooter = sal_False, bShowHeader = sal_False;
+        bShowFooter = sal_False, bShowHeader = sal_False;
+
     sal_Bool bChangeShowRedline = sal_False, bChangeBrowseMode = sal_False,
              bChangeFooter = sal_False, bChangeHeader = sal_False;
 
@@ -970,6 +973,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         pDoc->SetFootInBrowse ( bShowFooter );
     if (bChangeBrowseMode)
         pDoc->SetBrowseMode ( bBrowseMode );
+
     if (bChangeShowRedline)
         GetTextImport()->SetShowChanges( bShowRedlineChanges );
 }
@@ -991,171 +995,32 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
-    // static array of setting names which are not loaded.
-    // This table is created with the iout commended procedure. This will
-    // be need if anybody add more or change strings!!!
-    /*
-        program to calculate the best hash parameters for the property names.
------------------------------------------------------------------
-#include <stdio.h>
-#include <string.h>
-
- const char* aNmArr[] = {
- "ForbiddenCharacters" ,
- "IsKernAsianPunctuation" ,
- "CharacterCompressionType" ,
- "LinkUpdateMode" ,
- "FieldAutoUpdate" ,
- "ChartAutoUpdate" ,
- "AddParaTableSpacing" ,
- "AddParaTableSpacingAtStart" ,
- "PrintAnnotationMode" ,
- "PrintBlackFonts" ,
- "PrintControls" ,
- "PrintDrawings" ,
- "PrintGraphics" ,
- "PrintLeftPages" ,
- "PrintPageBackground" ,
- "PrintProspect" ,
- "PrintReversed" ,
- "PrintRightPages" ,
- "PrintFaxName" ,
- "PrintPaperFromSetup" ,
- "PrintTables" ,
- "PrintSingleJobs",
- "UpdateFromTemplate"
-  };
-#define TBL_MAX 100
-
-typedef unsigned long ULONG;
-
-ULONG aArr[ TBL_MAX ];
-ULONG nPrime, nSub;
-
-
-ULONG lcl_hash( const char* p, ULONG nPrime, ULONG nSub )
-{
-    ULONG n = 0;
-    while( *p )
-        n = (n * nPrime) ^ ( *p++ - nSub );
-    return n;
-}
-
-int Chk_Unique_hashValue( unsigned short nTblSize )
-{
-    memset( aArr, 0, sizeof( aArr ) );
-    ULONG ii;
-    for( int n = 0; n < sizeof( aNmArr ) / sizeof( aNmArr[0] ); ++n )
-    {
-        ii = lcl_hash( aNmArr[ n ], nPrime, nSub ) % nTblSize;
-        if( aArr[ ii ] )
-            break;
-        aArr[ ii ] = 1;
-    }
-    return n == ( sizeof( aNmArr ) / sizeof( aNmArr[0] ) );
-}
-
-void Show_Result( unsigned short nTblSize, int nPrime, int nSub )
-{
-    printf( "\tstatic const struct\n"
-            "\t{\n"
-            "\t\tconst sal_Char* pName;\n"
-            "\t\tsal_uInt16 nLen;\n"
-            "\t} aNotSetArr[%d] =\n"
-            "\t{\n",
-            nTblSize );
-
-    for( unsigned long ii = 0; ii < nTblSize; ++ii )
-    {
-        int found = -1;
-        for( int n = 0; n < sizeof( aNmArr ) / sizeof( aNmArr[0] ); ++n )
-        {
-            if( ii == ( lcl_hash( aNmArr[ n ], nPrime, nSub ) % nTblSize ) )
-                found = n;
-        }
-        printf( "\t\t/" "*%2d*" "/ {", ii );
-        printf( ( found == -1 ) ? "0,0" : "RTL_CONSTASCII_STRINGPARAM(\"%s\")", aNmArr[found] );
-        printf( "}%s\n", (ii==nTblSize-1) ? "" : "," );
-    }
-
-    printf( "\t};\n"
-            "\tconst ULONG nPrime = %d;\n"
-            "\tconst ULONG nSub = %d;\n",
-            nPrime, nSub );
-}
-
-void main()
-{
-    int nPrm = nPrime, nSb = nSub;
-    unsigned short nLTbl = TBL_MAX, nTblSize;
-
-    for( nSub = ' '; nSub < 127; ++nSub )
-        for( nPrime = 13 ; nPrime < 99; ++nPrime )
-            for( nTblSize = sizeof( aNmArr ) / sizeof( aNmArr[0] );
-                    nTblSize < TBL_MAX; ++nTblSize )
-                if( Chk_Unique_hashValue( nTblSize ))
-                {
-                    if( nLTbl > nTblSize )
-                    {
-                        nLTbl = nTblSize;
-                        nPrm = nPrime;
-                        nSb = nSub;
-                    }
-                    break;
-                }
-
-    nPrime = nPrm;
-    nSub = nSb;
-    nTblSize = nLTbl;
-
-    Show_Result( nTblSize, nPrime, nSub );
-}
------------------------------------------------------------------
-    */
-    static const struct
-    {
-        const sal_Char* pName;
-        sal_uInt16 nLen;
-    } aNotSetArr[35] =
-    {
-        /* 0*/ {RTL_CONSTASCII_STRINGPARAM("PrintPageBackground")},
-        /* 1*/ {RTL_CONSTASCII_STRINGPARAM("PrintControls")},
-        /* 2*/ {0,0},
-        /* 3*/ {0,0},
-        /* 4*/ {RTL_CONSTASCII_STRINGPARAM("PrintReversed")},
-        /* 5*/ {RTL_CONSTASCII_STRINGPARAM("ForbiddenCharacters")},
-        /* 6*/ {RTL_CONSTASCII_STRINGPARAM("PrintAnnotationMode")},
-        /* 7*/ {RTL_CONSTASCII_STRINGPARAM("PrintFaxName")},
-        /* 8*/ {0,0},
-        /* 9*/ {0,0},
-        /*10*/ {RTL_CONSTASCII_STRINGPARAM("PrintProspect")},
-        /*11*/ {0,0},
-        /*12*/ {RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacingAtStart")},
-        /*13*/ {RTL_CONSTASCII_STRINGPARAM("PrintPaperFromSetup")},
-        /*14*/ {RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacing")},
-        /*15*/ {RTL_CONSTASCII_STRINGPARAM("PrintDrawings")},
-        /*16*/ {RTL_CONSTASCII_STRINGPARAM("FieldAutoUpdate")},
-        /*17*/ {0,0},
-        /*18*/ {RTL_CONSTASCII_STRINGPARAM("LinkUpdateMode")},
-        /*19*/ {RTL_CONSTASCII_STRINGPARAM("UpdateFromTemplate")},
-        /*20*/ {RTL_CONSTASCII_STRINGPARAM("PrintTables")},
-        /*21*/ {RTL_CONSTASCII_STRINGPARAM("IsKernAsianPunctuation")},
-        /*22*/ {RTL_CONSTASCII_STRINGPARAM("PrintLeftPages")},
-        /*23*/ {RTL_CONSTASCII_STRINGPARAM("PrintSingleJobs")},
-        /*24*/ {RTL_CONSTASCII_STRINGPARAM("CharacterCompressionType")},
-        /*25*/ {0,0},
-        /*26*/ {RTL_CONSTASCII_STRINGPARAM("PrintGraphics")},
-        /*27*/ {0,0},
-        /*28*/ {0,0},
-        /*29*/ {0,0},
-        /*30*/ {RTL_CONSTASCII_STRINGPARAM("PrintBlackFonts")},
-        /*31*/ {RTL_CONSTASCII_STRINGPARAM("PrintRightPages")},
-        /*32*/ {RTL_CONSTASCII_STRINGPARAM("ChartAutoUpdate")},
-        /*33*/ {0,0},
-        /*34*/ {0,0}
-    };
-    const ULONG nPrime = 43;
-    const ULONG nSub = 116;
+    // #111955#
+    hash_set< const String, StringHashRef, StringEqRef > aSet;
+    aSet.insert(String("ForbiddenCharacters", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("IsKernAsianPunctuation", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("CharacterCompressionType", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("LinkUpdateMode", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("FieldAutoUpdate", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("ChartAutoUpdate", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("AddParaTableSpacing", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("AddParaTableSpacingAtStart", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintAnnotationMode", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintBlackFonts", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintControls", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintDrawings", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintGraphics", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintLeftPages", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintPageBackground", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintProspect", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintReversed", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintRightPages", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintFaxName", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintPaperFromSetup", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintTables", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrintSingleJobs", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("UpdateFromTemplate", RTL_TEXTENCODING_ASCII_US));
+    aSet.insert(String("PrinterIndependentLayout", RTL_TEXTENCODING_ASCII_US));
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1168,6 +1033,7 @@ void main()
     // default if they're missing. So we watch for them in the loop
     // below, and set them if not found
     bool bPrinterIndependentLayout = false;
+    bool bUseOldNumbering = false; // #111955#
     bool bAddExternalLeading = false;
     // DVO, OD 12.01.2004 #i11859#
     bool bUseFormerLineSpacing = false;
@@ -1178,14 +1044,9 @@ void main()
         if( !bIsUserSetting )
         {
             // test over the hash value if the entry is in the table.
-            const sal_Unicode* p = pValues->Name;
-            for( ULONG nLen = pValues->Name.getLength(); nLen; --nLen, ++p )
-                nHash = (nHash * nPrime) ^ ( *p - nSub );
-            nHash %= sizeof( aNotSetArr ) / sizeof( aNotSetArr[0] );
-            bSet = 0 == aNotSetArr[ nHash ].pName ||
-                    !pValues->Name.equalsAsciiL(
-                            aNotSetArr[ nHash ].pName,
-                            aNotSetArr[ nHash ].nLen );
+            String aStr(pValues->Name);
+
+            bSet = aSet.find(aStr) == aSet.end();
         }
 
         if( bSet )
@@ -1205,6 +1066,11 @@ void main()
                 // DVO, OD 12.01.2004 #i11859#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseFormerLineSpacing")) )
                     bUseFormerLineSpacing = true;
+
+                // #111955#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseOldNumbering")) )
+                    bUseOldNumbering = true;
+
             }
             catch( Exception& )
             {
@@ -1237,6 +1103,17 @@ void main()
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("UseFormerLineSpacing")), makeAny( true ) );
     }
+
+    if( ! bUseOldNumbering) // #111955#
+    {
+        Any aAny;
+        sal_Bool bOldNum = true;
+        aAny.setValue(&bOldNum, ::getBooleanCppuType());
+        xProps->setPropertyValue
+            (OUString( RTL_CONSTASCII_USTRINGPARAM("UseOldNumbering")),
+                       aAny );
+    }
+
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
